@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Run the commands in a jobs file, N at a time. Usage: bash pod/runq.sh <jobsfile> <N>
+# Each line: <name> <command...>  ; stdout/stderr -> artifacts/p2/<name>.log ; a line is skipped if artifacts/p2/<name>.done exists.
+cd /workspace/nd-takehome
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+mkdir -p artifacts/p2 ckpts/p2
+J=$1; N=${2:-3}
+run_one() {
+  name=$1; shift
+  [ -f artifacts/p2/$name.done ] && { echo "skip $name"; return; }
+  echo "$(date -u +%H:%M:%S) start $name"
+  bash -c "$*" > artifacts/p2/$name.log 2>&1 && touch artifacts/p2/$name.done && echo "$(date -u +%H:%M:%S) done $name" || echo "$(date -u +%H:%M:%S) FAILED $name"
+}
+export -f run_one
+grep -v '^#' "$J" | grep -v '^\s*$' | while IFS= read -r line; do
+  while [ "$(jobs -rp | wc -l)" -ge "$N" ]; do sleep 15; done
+  run_one $line &
+  sleep 5
+done
+wait
+echo "$(date -u +%H:%M:%S) QUEUE DONE $J"
