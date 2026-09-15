@@ -35,6 +35,7 @@ def main():
     ap.add_argument('--rl2', default=None)
     ap.add_argument('--control2', default=None)
     ap.add_argument('--stage1', default=None)
+    ap.add_argument('--arms', nargs='*', default=None, help='arms to compare at their final common round (figures/arms.png)')
     a = ap.parse_args()
     os.makedirs('figures', exist_ok=True)
     R, C = rounds(a.rl), rounds(a.control)
@@ -47,9 +48,10 @@ def main():
     fig, ax = plt.subplots(figsize=(7, 4))
     per_length(ax, R[n - 1]['transfer_cum'], f'expert iteration, cumulative {n*k} attempts', C_RL)
     per_length(ax, C[n - 1]['transfer_cum'], f'frozen Stage-1 model, cumulative {n*k} attempts', C_CTRL)
-    if R2 and C2 and len(R2) >= n and len(C2) >= n:
-        per_length(ax, R2[n - 1]['transfer_cum'], 'expert iteration, seed 2', C_RL, ls='--')
-        per_length(ax, C2[n - 1]['transfer_cum'], 'frozen, seed 2', C_CTRL, ls='--')
+    if R2 and C2:
+        m = min(len(R2), len(C2))
+        per_length(ax, R2[m - 1]['transfer_cum'], f'expert iteration, seed 1, cumulative {m*k} attempts', C_RL, ls='--')
+        per_length(ax, C2[m - 1]['transfer_cum'], f'frozen, seed 1, cumulative {m*k} attempts', C_CTRL, ls='--')
     ax.set_xlabel('generating proof length of transfer theorem (upper bound on shortest proof)')
     ax.set_ylabel('fraction solved (verified proof of prompted sequent)')
     ax.set_ylim(0, 1); ax.grid(alpha=.3); ax.legend(fontsize=8)
@@ -108,6 +110,24 @@ def main():
         ax.set_xlabel('held-out proof length'); ax.set_ylabel('greedy solve rate'); ax.set_ylim(0, 1); ax.grid(alpha=.3)
         ax.set_title(f'Stage-1 held-out (n={s["n"]}), 95% Wilson CIs')
         fig.tight_layout(); fig.savefig('figures/stage1_heldout.png', dpi=150); plt.close(fig)
+    if a.arms:
+        arms = [(nm, rounds(nm)) for nm in a.arms]
+        m = min(len(r) for _, r in arms)
+        fig, axes = plt.subplots(1, 3, figsize=(13, 3.6))
+        xs = list(range(len(arms)))
+        names = [nm for nm, _ in arms]
+        cols = [C_CTRL if 'frozen' in nm else C_RL for nm in names]
+        axes[0].bar(xs, [r[m - 1]['transfer_cum']['rate'] for _, r in arms], color=cols)
+        axes[0].set_ylabel(f'transfer solved, cumulative {m*k} attempts'); axes[0].set_ylim(0, 1)
+        axes[1].bar(xs, [r[m - 1]['transfer_greedy']['rate'] for _, r in arms], color=cols)
+        axes[1].set_ylabel('transfer greedy pass@1'); axes[1].set_ylim(0, 1)
+        for n_, hatch in ((8, ''), (9, '//')):
+            axes[2].bar([x + (0.2 if n_ == 9 else -0.2) for x in xs], [sum(v for kk, v in r[m - 1]['transfer_cum']['written_hist'].items() if int(kk) >= n_) for _, r in arms], width=0.4, color=cols, hatch=hatch, label=f'written ≥{n_}')
+        axes[2].set_yscale('symlog'); axes[2].set_ylabel('distinct verified transfer proofs'); axes[2].legend(fontsize=7)
+        for ax in axes:
+            ax.set_xticks(xs); ax.set_xticklabels(names, rotation=25, fontsize=7); ax.grid(alpha=.3, axis='y')
+        fig.suptitle(f'Arms at round {m} (transfer set, n={arms[0][1][m-1]["transfer_cum"]["n"]}); blue = trained arms, grey = frozen controls', fontsize=9)
+        fig.tight_layout(); fig.savefig('figures/arms.png', dpi=150); plt.close(fig)
     print('figures written')
 
 

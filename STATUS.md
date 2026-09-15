@@ -1,6 +1,6 @@
 # STATUS
 
-Updated: 2026-09-15 05:25 UTC
+Updated: 2026-09-15 07:42 UTC
 
 ## Plan
 1. 03:25–04:30  gen.py (forward random generator with lazy premises + goal completion for ORE branches, dependency pruning, verify every proof), tokenizer.py (two modes: `rel` relative refs, `abs` absolute refs with random start offset), model.py (4L d256 RoPE decoder), train.py, sample.py (batched KV-cache sampling), prove.py. Unit tests vs verifier.
@@ -21,13 +21,11 @@ Updated: 2026-09-15 05:25 UTC
 - writeup.md sections 2 and 3.1 written; numbers.md Stage-1 part; README reproduction draft; figures/data_stats.png.
 - EI round 2 (after one fine-tune): transfer pass@32 62.0% (r1 47.0%), greedy 45.1% (32.2%), held-out 94.5%; written-8 proofs 6 -> 98 per round.
 
-## Running on pod (queue2: EI-long s0, EI s1, frozen s1, abs-fixed ablation; queue3 afterwards: EI s0 rounds 9-16 + frozen s0 rounds 9-16)
-- artifacts/ei_abs_long_s0.log, ei_abs_s1.log, frozen_abs_s1.log, stage1_absfixed.log, val36_rounds_ei_abs_s0.log
-- expected done ~07:00; continuation ~08:30
+## Running on pod
+- artifacts/val36_rounds_rest.log : validation-36 per round for ei_abs_s0_cont (9-16), ei_abs_s1, ei_abs_long_s0
 
-## Done (Stage 2 seed 0)
-- figures/transfer_by_length.png, found_length_hist.png, rounds.png, artifacts/tables_s0.md; ckpts pulled (ckpts/ei_abs_s0_r*.pt)
-- final numbers in log.md 05:20
+## Done
+- All 7 arms finished 07:36; artifacts + ckpts pulled; figures regenerated (rounds.png 16 rounds + seed 1; arms.png); tables_all.md; log/numbers updated.
 
 ## Next step
-- val36 per-round results -> existence proof; write section 3.2/4/5 of writeup; when seed 1 + EI-long land: re-plot with seed 2, tables; then final model choice, test set once (create artifacts/TEST_RUN_DONE first).
+- val36 result for cont r16 -> confirm final = ckpts/ei_abs_s0_cont_r16.pt -> copy to ckpts/final.pt -> test_run_once.sh (creates artifacts/TEST_RUN_DONE) -> writeup 3.3, exec summary, section 4 table -> README reproduction final -> push. DONE by ~09:30.
