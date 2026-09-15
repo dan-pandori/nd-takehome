@@ -9,12 +9,13 @@ Phase 1 (now): novelty.py log-probs + reachability; coverage.py base-model sampl
 - 19:20 read prior run, wrote Phase 1 plan (log.md)
 - 19:40 novelty.py log-probs done (artifacts/novelty_phase1_*.jsonl); minlen labels for val36/transfer/targets; patterns.py tests pass; phase1_analysis.py + figures/phase1_*.png (partial coverage data)
 
-## Running on pods (21:05 UTC)
-- p1: coverage shards 0,1 finishing (~21:35); precursor extraction done; next: rows 2-3 Stage-1 (pod/p2jobs/rows23_s1_p1.txt) + derived_ore EI arms (row1_ei_p1.txt)
-- p2: Stage-1 derived_ore_f0_s1, f0.02 s0/s1 (~21:15); EI depth3_f0.1 s0/s1 + frozen running (round 1); coverage shard 2 (slow, ~91 min); depth3_f0 ckpts copied from p3
-- p3: EI reductio_f0 s0/s1, reductio_f0.1 s0 (round 1 done at 1,330 s/round; 8 rounds ~3 h); frozen + reductio_f0.1_s1 queued
-- base pass@1e4 on pattern targets: paused (GPU congestion); rerun on 300 targets per pattern when EI arms finish
+## Running on pods (22:40 UTC)
+- p1: row-1 derived_ore: ei f0.02_s1 + frozen f0_s0 + frozen f0.02_s0 (~23:10); coverage shard 1 (~23:10); rows 2-3 Stage-1 done
+- p2: row-1 depth3_f0 s0/s1 + frozen (~23:05); row-3 EI arms (reductio/depth3 f1e-4, f1e-2, ...; 3 running, 3 queued); coverage shard 2 (~00:00)
+- p3: row-2 EI arms (f=1e-3 x 3 patterns x 2 seeds; 3 running, 3 queued); base pass@1e4 reductio_f0_s0 on 300 targets (~00:30)
+- Done: row-1 reductio (5 arms), depth3 f0.1 (2 arms), derived_ore f0/f0.02 s0 (3 arms) -> artifacts/p2/metrics_*_partial.json, numbers.md
 
 ## Next step
-- 21:35 phase1_analysis.py on full coverage -> finalise phase1.md; copy derived_ore ckpts p2->p1, start p1 EI queue; start rows 2-3 Stage-1 on p1 (reniced)
-- Phase 3 prep done: data/p3/textbook_targets.jsonl (623), data/p3/precursors.jsonl (on p1), expert_iter --extra_train
+- as arms finish: pullarm, phase2_metrics, numbers.md; base pass@1e4 (300 targets) for depth3_f0_s0 (p2) and derived_ore_f0_s0 (p1) when their GPUs free
+- Phase 3 on p3 after row 2 (pod/p2jobs/phase3_p1.txt, data staged on p3)
+- Phase 1: finalise phase1.md when both coverage shards complete
