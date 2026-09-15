@@ -315,8 +315,8 @@ final (ckpts/final.pt) : test_short_prompts.jsonl: 73.0% passed  (195/267; 95% C
 final (ckpts/final.pt) : test_long_prompts.jsonl: 14.5% passed  (77/532; 95% CI 11.7–17.7%)
 ```
 
-The short set is unchanged (identical count, not just rate); the long set gains 4.7 pp with overlapping intervals
-(paired on the same 532 theorems the gain is 25 theorems, SE ≈ 8, so it is real but small). Against the +32 pp greedy
+The short set is unchanged (identical count, not just rate); the long set gains 4.7 pp (25 more theorems of 532) with
+overlapping intervals — suggestive, not established; per-theorem verdicts were not computed, so no paired test. Against the +32 pp greedy
 gain on the generator's own transfer distribution, this is the clearest statement of §5 barrier 3.
 
 ### 4.2 What the final model writes on the validation `> 6` bin

@@ -1,6 +1,6 @@
 # STATUS
 
-Updated: 2026-09-15 07:42 UTC
+Updated: 2026-09-15 07:45 UTC
 
 ## Plan
 1. 03:25–04:30  gen.py (forward random generator with lazy premises + goal completion for ORE branches, dependency pruning, verify every proof), tokenizer.py (two modes: `rel` relative refs, `abs` absolute refs with random start offset), model.py (4L d256 RoPE decoder), train.py, sample.py (batched KV-cache sampling), prove.py. Unit tests vs verifier.
@@ -22,10 +22,10 @@ Updated: 2026-09-15 07:42 UTC
 - EI round 2 (after one fine-tune): transfer pass@32 62.0% (r1 47.0%), greedy 45.1% (32.2%), held-out 94.5%; written-8 proofs 6 -> 98 per round.
 
 ## Running on pod
-- artifacts/val36_rounds_rest.log : validation-36 per round for ei_abs_s0_cont (9-16), ei_abs_s1, ei_abs_long_s0
+- artifacts/k128.log : pass@128 on transfer for final and Stage-1 (budget check; optional extra for writeup §3.3)
 
 ## Done
-- All 7 arms finished 07:36; artifacts + ckpts pulled; figures regenerated (rounds.png 16 rounds + seed 1; arms.png); tables_all.md; log/numbers updated.
+- Everything: all arms, figures, tables, test run (07:38 UTC, artifacts/TEST_RUN_DONE), writeup.md (exec summary draft + all sections), numbers.md, log.md, README reproduction, ckpts/stage1_abs.pt + ckpts/final.pt in git.
 
 ## Next step
-- val36 result for cont r16 -> confirm final = ckpts/ei_abs_s0_cont_r16.pt -> copy to ckpts/final.pt -> test_run_once.sh (creates artifacts/TEST_RUN_DONE) -> writeup 3.3, exec summary, section 4 table -> README reproduction final -> push. DONE by ~09:30.
+- fold pass@128 numbers into writeup §3.3 when done; final push; DONE.
