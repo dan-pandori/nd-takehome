@@ -29,8 +29,11 @@ def judge(recs, proofs_per, lenfield):
     rows = []
     for r, ps in zip(recs, proofs_per):
         good, wl, pl, reasons = [], [], [], []
+        fail_example = None
         for p in ps:
             ok, reason, nl = verify_text(r['prompt'] + ' ' + p)
+            if not ok and fail_example is None:
+                fail_example = p
             if ok:
                 if p not in good:
                     good.append(p)
@@ -40,7 +43,7 @@ def judge(recs, proofs_per, lenfield):
                 reasons.append(reason.split(' (line')[0])
         rows.append({'name': r.get('name', r.get('thm')), 'thm': r.get('thm'), 'prompt': r['prompt'],
                      lenfield: r.get(lenfield), 'solved': bool(good), 'n_ok': sum(1 for p in ps if p in good),
-                     'n_tried': len(ps), 'proofs': good, 'written_lens': wl, 'pruned_lens': pl, 'reasons': reasons})
+                     'n_tried': len(ps), 'proofs': good, 'written_lens': wl, 'pruned_lens': pl, 'reasons': reasons, 'fail_example': fail_example})
     return rows
 
 
