@@ -121,7 +121,40 @@ and writes 6× more length-7 proofs. `abs` was used for Stage 2. (Validation-36 
   Stage 2 has to move.
 
 ## 3. Stage 2 — expert iteration against the verifier
-_(protocol, arms, control; per-round table; figures)_
+
+### 3.1 Protocol (`expert_iter.py`)
+
+Reward = `nd_verify` accepts the emitted proof **of the prompted sequent** (premises match, last line is the
+conclusion). Nothing else counts; a valid proof of a different theorem is discarded (the `--relabel` option
+exists but was not used in any reported arm).
+
+Each round, for every arm:
+1. Sample **k = 32** proofs per RL target at **T = 0.8** (3,000 targets → 96,000 attempts), verify, keep the
+   distinct accepted proofs (accumulated across rounds). Record written length and dependency-pruned length of each.
+2. Sample k = 32 per **transfer** theorem (1,638, never trained on), verify, record only.
+3. Greedy pass@1 on transfer and on the Stage-1 **held-out** set (in-distribution tracking).
+4. *(RL arms only)* Fine-tune the current model for 600 steps (lr 3e-4 → 3e-5, batch 128) on a mix of
+   ≤ 4 accepted proofs per solved target (each repeated 4×) plus 20,000 random Stage-1 training records
+   (so the ≤ 6 regime is not forgotten). Save the checkpoint; the next round samples from it.
+
+Arms (all from `ckpts/stage1_abs.pt`, seed 0, same pools, same k, same temperature, 8 rounds):
+
+| arm | training data per round | what it tests |
+|---|---|---|
+| **frozen** (`frozen_abs_s0`) | none — Stage-1 model resampled | the control: what resampling alone finds with the same attempts |
+| **EI** (`ei_abs_s0`) | 4 random accepted proofs per solved target | standard expert iteration / rejection-sampling fine-tuning |
+| **EI-long** (`ei_abs_long_s0`) | the 4 accepted proofs with the longest *dependency-pruned* length per solved target | does selecting for long dependency chains (not padding) move the length prior further? |
+
+Round 1 of every arm is the same model with the same seed, so round-1 numbers coincide by construction; the
+control at round r has received exactly the same r × 32 attempts per theorem as the RL arms.
+
+**Metrics reported every round:** RL-target solve rate (this round and cumulative), transfer solve rate by
+generating length (cumulative), found-proof-length histogram (written and pruned), robust frontier
+L (longest length with ≥ 5 distinct verified proofs, computed on the transfer set unless stated), transfer greedy
+pass@1, Stage-1 held-out greedy. Padding is measured as written − pruned length.
+
+### 3.2 Results
+_(per-round table; figures)_
 
 ## 4. Stage 3 — evaluation
 _(the table; validation-36 by bin; test set lines verbatim)_
