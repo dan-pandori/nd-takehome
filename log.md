@@ -36,3 +36,4 @@
 - 05:32  Ablation abs-fixed (absolute indices, NO random start offset; only N1..N6 ever trained): held-out greedy 95.4% [94.8,96.0] — as good as the others in distribution — but transfer greedy 27.2% with written-length histogram {2:13, 3:31, 4:103, 5:123, 6:176} and ZERO proofs of length 7 (abs with offsets: 42 at greedy, 501 at pass@16). The model cannot emit N7. This is the tokenisation barrier, measured. pass@16 pending.
 - 05:32  Validation-36 EI r8: greedy 9/36, pass@32 11/36 (contraposition again the only >6 solve).
 - 05:34  abs-fixed pass@16 on transfer: 38.5% [36.2,40.9] (abs 44.7%, rel 40.5%); written histogram {2:13, 3:48, 4:145, 5:209, 6:359}, zero proofs of length >=7 in 26k samples.
+- 06:02  All five arms running (~16 min/round). Continuation r10: transfer greedy 64.9%, cumulative 84.0% (320 attempts), held-out 95.1%. Seed 1 r2 targets 1875 (seed 0: 1874); frozen s1 r2 1502 (s0 1496).
