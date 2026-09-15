@@ -27,6 +27,7 @@ class Tokenizer:
         self.stoi = {s: i for i, s in enumerate(self.itos)}
         self.pad = 0
         self.eos = self.stoi['QED']
+        self.shift = True
 
     @property
     def vocab_size(self):
@@ -98,7 +99,7 @@ class Tokenizer:
 
     def shift_abs(self, ids, rng):
         """abs mode augmentation: add a random offset to every N<k> id in the proof."""
-        if self.mode != 'abs':
+        if self.mode != 'abs' or not self.shift:
             return ids
         mx = max((x - self.ref0 + 1 for x in ids if x >= self.ref0), default=0)
         if mx == 0:

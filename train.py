@@ -73,6 +73,7 @@ def main():
     ap.add_argument('--seed', type=int, default=0)
     ap.add_argument('--out', required=True)
     ap.add_argument('--log_every', type=int, default=200)
+    ap.add_argument('--no_shift', action='store_true', help='abs mode ablation: no random start-index offset (N1..N6 only ever seen)')
     a = ap.parse_args()
     torch.manual_seed(a.seed)
     rng = random.Random(a.seed)
@@ -83,7 +84,8 @@ def main():
     else:
         tok = Tokenizer(a.mode)
         model = GPT(tok.vocab_size, a.n_layer, a.d, a.n_head).to(dev)
-    print('params', model.n_params(), 'mode', tok.mode, flush=True)
+    tok.shift = not a.no_shift
+    print('params', model.n_params(), 'mode', tok.mode, 'shift', tok.shift, flush=True)
     data = load(a.data, tok, a.cap, check_verify=(a.cap > 0))
     held = load(a.heldout, tok, 0)[:2000] if a.heldout else None
     print('train records', len(data), 'max len', max(len(p) + len(q) for p, q in data), flush=True)
