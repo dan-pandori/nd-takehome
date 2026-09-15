@@ -1,6 +1,6 @@
 # STATUS
 
-Updated: 2026-09-15 04:13 UTC
+Updated: 2026-09-15 04:25 UTC
 
 ## Plan
 1. 03:25–04:30  gen.py (forward random generator with lazy premises + goal completion for ORE branches, dependency pruning, verify every proof), tokenizer.py (two modes: `rel` relative refs, `abs` absolute refs with random start offset), model.py (4L d256 RoPE decoder), train.py, sample.py (batched KV-cache sampling), prove.py. Unit tests vs verifier.
