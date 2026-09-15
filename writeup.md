@@ -187,7 +187,7 @@ pass@1, Stage-1 held-out greedy. Padding is measured as written − pruned lengt
 
 ![rounds](figures/rounds.png)
 
-*Left to right: (1) fraction of RL targets / transfer theorems solved, cumulative over attempts; (2) greedy pass@1 on transfer and on the Stage-1 held-out set; (3) robust frontier L on the transfer set; (4) number of distinct verified transfer proofs of written length ≥ 7 / ≥ 8 / ≥ 9.*
+*Seed 0, rounds 1–16. Left to right: (1) fraction of RL targets / transfer theorems solved, cumulative over attempts; (2) greedy pass@1 on transfer and on the Stage-1 held-out set; (3) robust frontier L on the transfer set; (4) number of distinct verified transfer proofs of written length ≥ 7 / ≥ 8 / ≥ 9.*
 
 | round | attempts / theorem | transfer solved, cumulative — EI | — frozen | transfer greedy — EI | — frozen | held-out greedy — EI | distinct transfer proofs written ≥ 8 — EI | — frozen | frontier L (written / pruned) — EI | — frozen |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -207,12 +207,12 @@ frozen model is weakest (7–8-line theorems, which in this generator are domina
 
 ![transfer by length](figures/transfer_by_length.png)
 
-**Found-proof-length histogram across rounds.** Every round shifts mass to the right; the frozen control with the same
-256 attempts stops at 8. Pruned lengths (right) are ~1 line shorter than written lengths — see padding below.
+**Found-proof-length histogram across rounds** (RL targets, all 16 rounds). Every round shifts mass to the right; the frozen
+control with the same attempts (512 per theorem by round 16) stops at 8. Pruned lengths (right) are ~1 line shorter than written lengths — see padding below.
 
 ![found length](figures/found_length_hist.png)
 
-**Where the gain is** (`analyze_transfer.py`, cumulative, EI round 5 vs frozen round 4 — the numbers at round 8 are in `artifacts/`):
+**Where the gain is** (`analyze_transfer.py`, cumulative, EI round 5 vs frozen round 4 — round 8 and round 16 are in `artifacts/transfer_breakdown.md`; same picture):
 
 | property of the transfer theorem's generating proof | n | EI | frozen |
 |---|---|---|---|
