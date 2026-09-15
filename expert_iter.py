@@ -85,6 +85,8 @@ def main():
     ap.add_argument('--select', default='random', choices=['random', 'longest'], help='which <=max_per_thm proofs of a theorem to train on: random, or longest dependency-pruned length')
     ap.add_argument('--batch', type=int, default=1024)
     ap.add_argument('--start_round', type=int, default=1)
+    ap.add_argument('--extra_train', default=None, help='Phase 3 precursor injection: jsonl of verified <=6-line generator proofs added to the retained slice every round')
+    ap.add_argument('--extra_weight', type=int, default=1, help='repeat each extra_train record this many times per round')
     ap.add_argument('--resume_found', default=None, help='artifacts dir of a previous run of the same arm; loads found_<start_round-1>.jsonl and found_transfer_<start_round-1>.jsonl')
     a = ap.parse_args()
     out = f'artifacts/{a.name}'
@@ -96,6 +98,9 @@ def main():
     eval_keys = {r['key'] for r in transfer} | {r['key'] for r in heldout} | {r['key'] for r in targets}
     eval_keys |= {canon_key(json.loads(l)['thm'].strip()) for l in open('targets/validation_36.jsonl')}
     train_recs = read(a.train)
+    extra_recs = read(a.extra_train) if a.extra_train else []
+    for x in extra_recs:
+        assert x['n_lines'] <= 6, x
     rng = random.Random(a.seed)
     ckpt = a.init
     found = collections.defaultdict(list)     # target name -> list of {proof, written, pruned, round}
@@ -199,6 +204,10 @@ def main():
                         f.write(json.dumps({'prompt': x['prompt'], 'proof': x['proof'], 'n_lines': x['n_lines']}) + '\n'); n_rl += 1
                 for x in rng.sample(train_recs, min(a.retain, len(train_recs))):
                     f.write(json.dumps({'prompt': x['prompt'], 'proof': x['proof'], 'n_lines': x['n_lines']}) + '\n')
+                for x in extra_recs:
+                    for _ in range(a.extra_weight):
+                        f.write(json.dumps({'prompt': x['prompt'], 'proof': x['proof'], 'n_lines': x['n_lines']}) + '\n')
+            stats['mix_extra_records'] = len(extra_recs) * a.extra_weight
             stats['mix_rl_records'] = n_rl
             if n_rl == 0:
                 print('no accepted proofs: skipping training this round', flush=True)

@@ -3,6 +3,7 @@
 # Each line: <name> <command...>  ; stdout/stderr -> artifacts/p2/<name>.log ; a line is skipped if artifacts/p2/<name>.done exists.
 cd /workspace/nd-takehome
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export OMP_NUM_THREADS=2 MKL_NUM_THREADS=2
 mkdir -p artifacts/p2 ckpts/p2
 J=$1; N=${2:-3}
 run_one() {
