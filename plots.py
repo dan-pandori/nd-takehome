@@ -66,13 +66,13 @@ def main():
         h = C[n - 1]['targets_cum'][key]
         ax.plot(Ls, [h.get(str(L), 0) for L in Ls], marker='s', ms=3, color=C_CTRL, ls='--', label=f'frozen, {n*k} attempts')
         ax.axhline(5, color='k', lw=.8, ls=':'); ax.axvline(6.5, color=C_S1, lw=.8, ls=':')
-        ax.set_xlabel(title + ' of distinct verified proofs (RL targets, cumulative)'); ax.set_yscale('symlog'); ax.grid(alpha=.3)
+        ax.set_xlabel(title + ' of distinct verified proofs (RL targets, cumulative)'); ax.set_yscale('symlog'); ax.set_xlim(1.5, 13.5); ax.grid(alpha=.3)
     axes[0].set_ylabel('number of distinct verified proofs'); axes[1].legend(fontsize=7)
     fig.suptitle('Found-proof-length histogram; dotted line = 5 proofs (robust-frontier threshold), orange = training cap 6')
     fig.tight_layout(); fig.savefig('figures/found_length_hist.png', dpi=150); plt.close(fig)
 
     # Fig 3: per-round curves: target solve (cum), transfer solve (cum), heldout greedy, frontier
-    fig, axes = plt.subplots(1, 3, figsize=(13, 3.8))
+    fig, axes = plt.subplots(1, 4, figsize=(17, 3.8))
     xs = [r['round'] for r in R[:n]]
     def curve(ax, key, sub, label, color, ls='-', arm=None):
         arm = arm or R
@@ -92,6 +92,12 @@ def main():
         axes[2].plot(xs, [r[key][sub] for r in R[:n]], marker='o', ms=4, color=col, ls='-' if 'written' in sub else '-.', label=lab + ' (EI)')
         axes[2].plot(xs, [r[key][sub] for r in C[:n]], marker='s', ms=4, color=C_CTRL, ls='--' if 'written' in sub else ':', label=lab + ' (frozen)')
     axes[2].axhline(6, color=C_S1, ls=':', lw=.8); axes[2].set_xlabel('round'); axes[2].set_ylabel('robust frontier L (≥5 distinct proofs)'); axes[2].legend(fontsize=7); axes[2].grid(alpha=.3)
+    def ge(r, n_):
+        return sum(v for kk, v in r['transfer_cum']['written_hist'].items() if int(kk) >= n_)
+    for n_, ls in ((7, '-'), (8, '--'), (9, ':')):
+        axes[3].plot(xs, [ge(r, n_) for r in R[:n]], marker='o', ms=4, color=C_RL, ls=ls, label=f'EI, written ≥{n_}')
+        axes[3].plot(xs, [ge(r, n_) for r in C[:n]], marker='s', ms=4, color=C_CTRL, ls=ls, label=f'frozen, written ≥{n_}')
+    axes[3].set_yscale('symlog'); axes[3].set_xlabel('round'); axes[3].set_ylabel('distinct verified transfer proofs (cumulative)'); axes[3].legend(fontsize=7); axes[3].grid(alpha=.3)
     fig.tight_layout(); fig.savefig('figures/rounds.png', dpi=150); plt.close(fig)
 
     # Fig 4: Stage-1 held-out by length

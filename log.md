@@ -24,3 +24,11 @@
 - 04:38  Found why memory blew up: the sampler re-concatenated the KV cache every step; each arm grew to ~22 GB reserved. Fixed (preallocated cache, empty_cache between chunks). Running arms keep the old code in memory; queued arms use the fix. abs-fixed ablation OOM'd at start and is re-queued.
 - 04:45  EI round 5: transfer this-round pass@32 75.7%, cumulative 79.5%; greedy 59.5% (r4 59.3%, flattening); held-out 94.5%. Frontier (transfer, written/pruned): EI 9/9 at round 4 (31 distinct 9-line proofs), frozen 8/8 at round 3 (27 distinct 8-line proofs). Counts of distinct transfer proofs with written length >=8: EI 765 vs frozen 27 after 128 vs 96 attempts.
 - 04:47  Where the gain is (analyze_transfer.py, EI r5 vs frozen r4, transfer): by max box depth of the generating proof: depth 1: 91% vs 80%; depth 2: 81% vs 63%; depth 3: 74% vs 34%. By premises: 0 premises 77% vs 19% (pure tautologies need every line to come from nested boxes). Theorems whose generating proof has no ORE: 74% vs 28%. So the RL gain is concentrated on theorems that need deep nesting — exactly the ones a 6-line proof cannot express.
+- 05:20  Seed-0 arms finished (8 rounds, 256 attempts per theorem, ~10.5 min per round with 2-3 jobs on the GPU). FINAL seed 0:
+  - transfer (n=1638): EI cumulative 82.8% [80.9,84.6] vs frozen 55.3% [52.9,57.7]; per-round pass@32 77.3% vs 48.6%; greedy 64.2% vs 32.2%.
+  - RL targets (n=3000): EI cumulative 81.4% vs frozen 54.0%.
+  - held-out greedy (n=5000): EI 94.9% (dipped to 93.1% at round 4, recovered) vs 94.8%.
+  - robust frontier (>=5 distinct verified proofs), transfer: EI written 9 / pruned 9; frozen 8 / 8. RL targets: EI 10 / 10; frozen 8 / 8.
+  - distinct transfer proofs of written length >=8 / >=9: EI 2028 / 195; frozen 54 / 0.
+  - greedy failure reasons shift: frozen IMPE 199, IMPI 140, ANDI 132, bad box cite 80; EI ANDI 114, DN 78, NEGE 68 (IMPE 47, IMPI 26, bad box cite 27) — the structural errors (box handling, MP chains) are what RL fixed.
+- 05:20  Queue started: ei_abs_long_s0, ei_abs_s1, frozen_abs_s1, abs-fixed ablation. GPU memory with the fixed sampler: 4.8 GB for 3 arms (was 22 GB per arm). Continuation arms (rounds 9-16 for EI s0 and frozen s0) start after those.

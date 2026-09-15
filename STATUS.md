@@ -1,6 +1,6 @@
 # STATUS
 
-Updated: 2026-09-15 04:25 UTC
+Updated: 2026-09-15 05:25 UTC
 
 ## Plan
 1. 03:25–04:30  gen.py (forward random generator with lazy premises + goal completion for ORE branches, dependency pruning, verify every proof), tokenizer.py (two modes: `rel` relative refs, `abs` absolute refs with random start offset), model.py (4L d256 RoPE decoder), train.py, sample.py (batched KV-cache sampling), prove.py. Unit tests vs verifier.
@@ -21,11 +21,13 @@ Updated: 2026-09-15 04:25 UTC
 - writeup.md sections 2 and 3.1 written; numbers.md Stage-1 part; README reproduction draft; figures/data_stats.png.
 - EI round 2 (after one fine-tune): transfer pass@32 62.0% (r1 47.0%), greedy 45.1% (32.2%), held-out 94.5%; written-8 proofs 6 -> 98 per round.
 
-## Running on pod (each round ~10-12 min with 3 jobs; 8 rounds -> done ~05:30)
-- artifacts/ei_abs_s0.log      : expert iteration, 8 rounds k=32 (ckpts/ei_abs_s0_r<r>.pt)
-- artifacts/frozen_abs_s0.log  : frozen control, same attempts
-- artifacts/ei_abs_long_s0.log : EI-long arm (--select longest)
-- DONE: artifacts/stage1_transfer2_cmp.log (frozen rel/abs on transfer v2)
+## Running on pod (queue2: EI-long s0, EI s1, frozen s1, abs-fixed ablation; queue3 afterwards: EI s0 rounds 9-16 + frozen s0 rounds 9-16)
+- artifacts/ei_abs_long_s0.log, ei_abs_s1.log, frozen_abs_s1.log, stage1_absfixed.log, val36_rounds_ei_abs_s0.log
+- expected done ~07:00; continuation ~08:30
+
+## Done (Stage 2 seed 0)
+- figures/transfer_by_length.png, found_length_hist.png, rounds.png, artifacts/tables_s0.md; ckpts pulled (ckpts/ei_abs_s0_r*.pt)
+- final numbers in log.md 05:20
 
 ## Next step
-- when rounds land: plots.py, look at 10-20 found proofs, check for padding; decide Stage 2b (second seed vs relabel arm).
+- val36 per-round results -> existence proof; write section 3.2/4/5 of writeup; when seed 1 + EI-long land: re-plot with seed 2, tables; then final model choice, test set once (create artifacts/TEST_RUN_DONE first).
