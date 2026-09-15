@@ -8,12 +8,12 @@ per-theorem records `artifacts/novelty_phase1_theorems.jsonl`; base-model sampli
 (k = 10⁴ per transfer theorem) and `artifacts/cov_base_val36_k1e5.s0.jsonl` (k = 10⁵ per validation theorem).
 
 **Answer in one paragraph.** The frontier gain was *elicitation for the theorems and creation for the proofs*. Per theorem,
-the base model resampled at the same budget (512) already solves 56% of the transfer set, and at 10⁴ samples it solves
-65%; the final RL model's 512-attempt solve rate (86%) therefore contains a block of theorems — 221 of the 819 RL-solved
-theorems with coverage data so far (27%) — that the base model does not reach in 10⁴ samples, and their found proofs have
+the base model resampled at the same budget (512) already solves 57% of the transfer set (934/1,638), and at 10⁴ samples it
+solves 66% (1,080/1,638); the final RL model's 512-attempt solve rate (86%, 1,411/1,638) therefore contains a block of
+theorems — 348 of the 1,411 RL-solved theorems (25%) — that the base model does not reach in 10⁴ samples, and their found proofs have
 predicted base probabilities that put them beyond 10⁵ samples as well (median log p ≈ −25; every 9-line proof is below
 10⁻³⁰). So the distinction between "rare but reachable" and "unreachable by sampling" holds at every budget that was
-actually used (512) and at the two budgets checked empirically (10⁴, 10⁵), for roughly a quarter of what RL solved and
+actually used (512) and at the two budgets checked empirically (10⁴, 10⁵), for a quarter of what RL solved and
 for essentially all of the ≥ 8-line proofs. The log-probability prediction is trustworthy: on the theorems where it
 predicts a measurable rate, the measured frequency of *exactly the RL-found proofs* in 10⁴ base samples agrees with the
 prediction to a median of 0.00 nats (100% within a factor of 3). Where the improbability sits is narrow and repeatable:
@@ -78,23 +78,23 @@ normalised sample verified once, only successes and per-theorem counts stored; v
 *Left: predicted probability of exactly the RL-found proofs vs their measured frequency among 10⁴ base samples. Right:
 the same x-axis vs the measured rate of ANY verified proof. Red points had 0 hits.*
 
-- **The prediction is calibrated.** For the 525 theorems (so far) with predicted rate ≥ 10/k, the median of
+- **The prediction is calibrated.** For the 941 theorems with predicted rate ≥ 10/k, the median of
   log(measured / predicted) for exactly the RL-found proofs is 0.00 nats and 100% are within a factor of 3.
-- **Other proofs exist but rarely rescue a theorem.** Of the 242 theorems whose RL-found proofs have predicted total
-  p < 10⁻⁴, the base model solved 24 (10%) in 10⁴ samples with a *different* proof. The found-proof estimate is
+- **Other proofs exist but rarely rescue a theorem.** Of the 380 theorems whose RL-found proofs have predicted total
+  p < 10⁻⁴, the base model solved 40 (11%) in 10⁴ samples with a *different* proof. The found-proof estimate is
   therefore a slightly pessimistic but essentially correct reachability label.
-- **Base-model pass@B on the transfer set** (927 theorems with data so far; the take-home's frozen control at 512
-  attempts gave 57% on all 1,638): 32: 48%, 128: 52%, 512: 56%, 10³: 59%, 10⁴: 65%. Going from 512 to 10⁴ samples buys 9 pp.
+- **Base-model pass@B on the transfer set** (all 1,638 theorems; the take-home's frozen control at 512 attempts gave
+  57.3%): 32: 48.1%, 128: 52.4%, 512: 57.0%, 10³: 59.6%, 10⁴: 65.9%. Going from 512 to 10⁴ samples buys 9 pp; the final RL
+  model at 512 attempts is at 86.1%.
 
 ### Headline table — transfer theorems RL solved that the base did not solve in 10⁴ samples
 
-*(numbers from 927 of 1,638 theorems; the full-set table is in `artifacts/phase1_tables.md` and
-`artifacts/phase1_unsolved_by_base.jsonl` — updated when the run completes)*
+*(full table: `artifacts/phase1_tables.md`; every row: `artifacts/phase1_unsolved_by_base.jsonl`)*
 
-221 of the 819 RL-solved theorems with data (27%) are unsolved by the base in 10⁴ samples. By the shortest RL-found
-written length: 3: 2, 4: 3, 5: 30, 6: 30, 7: 89, 8: 56, 9: 11. By the bounded minimal length (`minlen.py`, ≤ 8):
-5: 32, 6: 47, 7: 87, 8: 41, none ≤ 8: 7 — i.e. about a third of them *have* a ≤ 6-line proof the base model does not
-find either, and two thirds genuinely need 7–8 lines. The top of the table (lowest base probability first):
+**348 of the 1,411 RL-solved transfer theorems (25%) are unsolved by the base model in 10⁴ samples.** By the shortest
+RL-found written length: 3: 3, 4: 4, 5: 45, 6: 72, 7: 128, 8: 82, 9: 14 (all 14 nine-line-only theorems are in this
+set). By the bounded minimal length (`minlen.py`, ≤ 8): 3: 3, 4: 7, 5: 48, 6: 95, 7: 125, 8: 60, none ≤ 8: 10 — i.e.
+44% of them *have* a ≤ 6-line proof that the base model does not find either, and 56% need at least 7 lines. The top of the table (lowest base probability first):
 
 | log p_base(any found) | theorem | shortest RL proof | # RL proofs | first round | min_lines_ub |
 |---:|---|---:|---:|---:|---:|
