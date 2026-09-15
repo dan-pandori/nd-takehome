@@ -58,8 +58,10 @@ def parse_thm(prompt):
 
 
 class Search:
-    def __init__(self, prem, concl, deadline=None, lemmas=True):
+    def __init__(self, prem, concl, deadline=None, lemmas=True, max_depth=None, no_derived_ore=False):
         self.prem, self.concl = prem, concl
+        self.max_depth = max_depth
+        self.no_derived_ore = no_derived_ore
         sub = set()
         for f in prem + [concl]:
             subformulas(f, sub)
@@ -76,11 +78,11 @@ class Search:
         self.lemmas = lemmas
         self.calls = 0
 
-    def best(self, G, A, b):
-        """-> (cost, template) or None. A: frozenset of citable formulas."""
+    def best(self, G, A, b, d=0):
+        """-> (cost, template) or None. A: frozenset of citable formulas; d: current box depth."""
         if b <= 0:
             return None
-        key = (G, A, b)
+        key = (G, A, b, d)
         if key in self.memo:
             return self.memo[key]
         self.calls += 1
@@ -90,18 +92,19 @@ class Search:
         if G in A:
             res = (1, ('R', G))
         else:
-            res = self._search(G, A, b)
+            res = self._search(G, A, b, d)
         self.memo[key] = res
         return res
 
-    def inp(self, G, A, b):
+    def inp(self, G, A, b, d=0):
         """A rule INPUT: cost 0 if G is already citable, else a derivation of it."""
         if G in A:
             return (0, ('R0', G))
-        return self.best(G, A, b)
+        return self.best(G, A, b, d)
 
-    def _search(self, G, A, b):
+    def _search(self, G, A, b, d=0):
         bestc, bestt = b + 1, None
+        can_box = self.max_depth is None or d < self.max_depth
 
         def consider(c, t):
             nonlocal bestc, bestt
@@ -113,53 +116,53 @@ class Search:
         if b >= 1:
             for C in self.conj:
                 if C[1] == G or C[2] == G:
-                    r = self.inp(C, A, min(b, bestc) - 1)
+                    r = self.inp(C, A, min(b, bestc) - 1, d)
                     if r:
                         consider(r[0] + 1, ('ANDE1' if C[1] == G else 'ANDE2', G, r[1]))
         # IMPE
         if b >= 1:
             for I in self.imps:
                 if I[2] == G:
-                    r = self.inp(I, A, min(b, bestc) - 1)
+                    r = self.inp(I, A, min(b, bestc) - 1, d)
                     if r:
-                        r2 = self.inp(I[1], A | {I}, min(b, bestc) - 1 - r[0])
+                        r2 = self.inp(I[1], A | {I}, min(b, bestc) - 1 - r[0], d)
                         if r2:
                             consider(r[0] + r2[0] + 1, ('IMPE', G, r[1], r2[1]))
         # DN
         if b >= 1:
             nn = ('not', ('not', G))
-            r = self.inp(nn, A, min(b, bestc) - 1)
+            r = self.inp(nn, A, min(b, bestc) - 1, d)
             if r:
                 consider(r[0] + 1, ('DN', G, r[1]))
         # BOTE
         if G != BOT and b >= 1:
-            r = self.inp(BOT, A, min(b, bestc) - 1)
+            r = self.inp(BOT, A, min(b, bestc) - 1, d)
             if r:
                 consider(r[0] + 1, ('BOTE', G, r[1]))
         # intro rules
         if G[0] == 'and' and b >= 1:
-            r = self.inp(G[1], A, min(b, bestc) - 1)
+            r = self.inp(G[1], A, min(b, bestc) - 1, d)
             if r:
-                r2 = self.inp(G[2], A | {G[1]}, min(b, bestc) - 1 - r[0])
+                r2 = self.inp(G[2], A | {G[1]}, min(b, bestc) - 1 - r[0], d)
                 if r2:
                     consider(r[0] + r2[0] + 1, ('ANDI', G, r[1], r2[1]))
         if G[0] == 'or' and b >= 1:
-            r = self.inp(G[1], A, min(b, bestc) - 1)
+            r = self.inp(G[1], A, min(b, bestc) - 1, d)
             if r:
                 consider(r[0] + 1, ('ORI1', G, r[1]))
-            r = self.inp(G[2], A, min(b, bestc) - 1)
+            r = self.inp(G[2], A, min(b, bestc) - 1, d)
             if r:
                 consider(r[0] + 1, ('ORI2', G, r[1]))
         if G[0] == 'imp' and b >= 2:
             a, c = G[1], G[2]
-            if a == c:
+            if a == c and can_box:
                 consider(2, ('IMPI', G, a, None))
-            elif b >= 3:
-                r = self.best(c, A | {a}, min(b, bestc) - 2)
+            elif b >= 3 and can_box:
+                r = self.best(c, A | {a}, min(b, bestc) - 2, d + 1)
                 if r:
                     consider(r[0] + 2, ('IMPI', G, a, r[1]))
-        if G[0] == 'not' and b >= 3:
-            r = self.best(BOT, A | {G[1]}, min(b, bestc) - 2)
+        if G[0] == 'not' and b >= 3 and can_box:
+            r = self.best(BOT, A | {G[1]}, min(b, bestc) - 2, d + 1)
             if r:
                 consider(r[0] + 2, ('NEGI', G, G[1], r[1]))
         if G == BOT and b >= 1:
@@ -168,43 +171,45 @@ class Search:
                 if NX not in self.S and NX not in A:
                     continue
                 if NX in A:
-                    r = self.inp(X, A, min(b, bestc) - 1)
+                    r = self.inp(X, A, min(b, bestc) - 1, d)
                     if r:
                         consider(r[0] + 1, ('NEGE', BOT, r[1], ('R0', NX)))
                 elif X in A:
-                    r = self.inp(NX, A, min(b, bestc) - 1)
+                    r = self.inp(NX, A, min(b, bestc) - 1, d)
                     if r:
                         consider(r[0] + 1, ('NEGE', BOT, ('R0', X), r[1]))
                 else:
-                    r = self.inp(X, A, min(b, bestc) - 2)
+                    r = self.inp(X, A, min(b, bestc) - 2, d)
                     if r:
-                        r2 = self.inp(NX, A | {X}, min(b, bestc) - 1 - r[0])
+                        r2 = self.inp(NX, A | {X}, min(b, bestc) - 1 - r[0], d)
                         if r2:
                             consider(r[0] + r2[0] + 1, ('NEGE', BOT, r[1], r2[1]))
         # classical reductio: assume ~G, derive F, NEGI -> ~~G, DN
-        if G != BOT and G[0] != 'not' and b >= 4:
-            r = self.best(BOT, A | {('not', G)}, min(b, bestc) - 3)
+        if G != BOT and G[0] != 'not' and b >= 4 and can_box:
+            r = self.best(BOT, A | {('not', G)}, min(b, bestc) - 3, d + 1)
             if r:
                 consider(r[0] + 3, ('RAA', G, r[1]))
         # ORE over a disjunction in S
-        if b >= 3:
+        if b >= 3 and can_box:
             for D in self.disj:
                 if D == G:
                     continue
-                r = self.inp(D, A, min(b, bestc) - 3)
+                if self.no_derived_ore and D not in self.prem:
+                    continue
+                r = self.inp(D, A, min(b, bestc) - 3, d)
                 if not r:
                     continue
                 a, c = D[1], D[2]
                 A2 = A | {D}
                 ca = (1, None) if a == G else None
                 if ca is None:
-                    ra = self.best(G, A2 | {a}, min(b, bestc) - r[0] - 3)
+                    ra = self.best(G, A2 | {a}, min(b, bestc) - r[0] - 3, d + 1)
                     ca = (ra[0] + 1, ra[1]) if ra else None
                 if ca is None:
                     continue
                 cb = (1, None) if c == G else None
                 if cb is None:
-                    rb = self.best(G, A2 | {c}, min(b, bestc) - r[0] - ca[0] - 1)
+                    rb = self.best(G, A2 | {c}, min(b, bestc) - r[0] - ca[0] - 1, d + 1)
                     cb = (rb[0] + 1, rb[1]) if rb else None
                 if cb is None:
                     continue
@@ -214,10 +219,10 @@ class Search:
             for L in self.S:
                 if L in A or L == G:
                     continue
-                r = self.best(L, A, min(b, bestc) - 1)
+                r = self.best(L, A, min(b, bestc) - 1, d)
                 if not r:
                     continue
-                r2 = self.best(G, A | {L}, min(b, bestc) - r[0])
+                r2 = self.best(G, A | {L}, min(b, bestc) - r[0], d)
                 if r2:
                     consider(r[0] + r2[0], ('LEMMA', G, L, r[1], r2[1]))
         return (bestc, bestt) if bestt is not None else None
@@ -311,9 +316,9 @@ class Search:
         return None
 
 
-def minlen(prompt, bound=8, time_limit=20.0, lemmas=True):
+def minlen(prompt, bound=8, time_limit=20.0, lemmas=True, max_depth=None, no_derived_ore=False):
     prem, concl = parse_thm(prompt)
-    s = Search(prem, concl, deadline=time.time() + time_limit if time_limit else None, lemmas=lemmas)
+    s = Search(prem, concl, deadline=time.time() + time_limit if time_limit else None, lemmas=lemmas, max_depth=max_depth, no_derived_ore=no_derived_ore)
     try:
         r = s.run(bound)
     except Timeout:
@@ -328,9 +333,9 @@ def minlen(prompt, bound=8, time_limit=20.0, lemmas=True):
 
 
 def _work(args):
-    rec, bound, tl = args
+    rec, bound, tl, md, ndo = args
     t0 = time.time()
-    r = minlen(rec['prompt'], bound, tl)
+    r = minlen(rec['prompt'], bound, tl, max_depth=md, no_derived_ore=ndo)
     r['secs'] = time.time() - t0
     return r
 
@@ -375,6 +380,8 @@ def main():
     ap.add_argument('--procs', type=int, default=8)
     ap.add_argument('--limit', type=int, default=None)
     ap.add_argument('--selftest', action='store_true')
+    ap.add_argument('--max_depth', type=int, default=None, help='restricted search: no boxes deeper than this')
+    ap.add_argument('--no_derived_ore', action='store_true', help='restricted search: ORE only over premise disjunctions')
     a = ap.parse_args()
     if a.selftest:
         selftest(); return
@@ -384,7 +391,7 @@ def main():
     import multiprocessing as mp
     t0 = time.time()
     with mp.Pool(a.procs) as pool, open(a.out, 'w') as fo:
-        for i, (rec, r) in enumerate(zip(recs, pool.imap(_work, [(r, a.bound, a.time) for r in recs], chunksize=4))):
+        for i, (rec, r) in enumerate(zip(recs, pool.imap(_work, [(r, a.bound, a.time, a.max_depth, a.no_derived_ore) for r in recs], chunksize=4))):
             out = {k: rec[k] for k in ('name', 'thm', 'prompt') if k in rec}
             out['gen_lines'] = rec.get('n_lines', rec.get('gen_lines'))
             out.update(r)

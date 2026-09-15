@@ -38,6 +38,7 @@ def main():
     ap.add_argument('--max_new', type=int, default=400)
     ap.add_argument('--shard', default='0/1', help='i/n: process theorems i, i+n, i+2n, ...')
     ap.add_argument('--limit', type=int, default=None)
+    ap.add_argument('--reverse', action='store_true', help='process the shard in reverse order, writing <out>.s<shard>r.jsonl (to split a shard across two pods)')
     ap.add_argument('--lenfield', default='n_lines')
     a = ap.parse_args()
     si, sn = map(int, a.shard.split('/'))
@@ -47,8 +48,10 @@ def main():
     recs = [r for i, r in enumerate(recs) if i % sn == si]
     if a.limit:
         recs = recs[:a.limit]
+    if a.reverse:
+        recs = recs[::-1]
     os.makedirs(os.path.dirname(a.out) or '.', exist_ok=True)
-    out_fn = f'{a.out}.s{si}.jsonl'
+    out_fn = f'{a.out}.s{si}{"r" if a.reverse else ""}.jsonl'
     done = set()
     if os.path.exists(out_fn):
         for l in open(out_fn):
