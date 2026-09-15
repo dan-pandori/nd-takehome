@@ -13,6 +13,7 @@ Each round r:
      proofs capped at --max_per_thm) mixed with --retain random Stage-1 training records; save ckpt.
 Stats per round -> artifacts/<name>/round_<r>.json ; accepted proofs -> artifacts/<name>/found_<r>.jsonl.
 With --no_train, round r of the control has seen exactly the same r*k attempts per theorem as the RL arm.
+--select longest: train on each theorem's longest dependency-pruned proofs (arm "EI-long").
 --relabel: also keep by-product proofs (valid proof of a *different* conclusion from the same premises)
   as extra training data, if their theorem class is not in any evaluation pool and the proof has >= 7 lines.
 """
@@ -81,6 +82,7 @@ def main():
     ap.add_argument('--max_per_thm', type=int, default=4)
     ap.add_argument('--rl_weight', type=int, default=4, help='repeat RL proofs this many times in the mix')
     ap.add_argument('--relabel', action='store_true')
+    ap.add_argument('--select', default='random', choices=['random', 'longest'], help='which <=max_per_thm proofs of a theorem to train on: random, or longest dependency-pruned length')
     ap.add_argument('--batch', type=int, default=1024)
     a = ap.parse_args()
     out = f'artifacts/{a.name}'
@@ -179,6 +181,8 @@ def main():
                 for t in targets:
                     fs = found[t['name']]
                     rng.shuffle(fs)
+                    if a.select == 'longest':
+                        fs = sorted(fs, key=lambda x: -x['pruned'])
                     for x in fs[:a.max_per_thm]:
                         for _ in range(a.rl_weight):
                             f.write(json.dumps({'prompt': t['prompt'], 'proof': x['proof'], 'n_lines': x['written']}) + '\n'); n_rl += 1
