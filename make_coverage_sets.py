@@ -113,6 +113,7 @@ def cmd_merge(a):
                     stats['dup_class'] += 1
                     continue
                 seen.add(r['key'])
+                r['name'] = f'{a.prefix}_{stats["written"]}'
                 L = r['n_lines']
                 per[L]['n'] += 1
                 for p in PATTERNS:
@@ -347,7 +348,7 @@ def main():
     g.add_argument('--cap_np', type=int, default=1500, help='per worker, per length cap on pattern-free proofs')
     g.add_argument('--cap_pat', type=int, default=3000, help='per worker cap per pattern')
     g.add_argument('--seed', type=int, default=1000)
-    m = sub.add_parser('merge'); m.add_argument('--glob', required=True); m.add_argument('--out', required=True)
+    m = sub.add_parser('merge'); m.add_argument('--glob', required=True); m.add_argument('--out', required=True); m.add_argument('--prefix', default='pool')
     s = sub.add_parser('assemble'); s.add_argument('--pool', required=True); s.add_argument('--outdir', required=True)
     s.add_argument('--size', type=int, default=155000); s.add_argument('--heldout', type=int, default=5000); s.add_argument('--seed', type=int, default=0)
     s.add_argument('--freqs', default='0,0.0001,0.001,0.01,0.1'); s.add_argument('--patterns', default=None)
