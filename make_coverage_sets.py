@@ -220,10 +220,22 @@ def cmd_assemble(a):
     # proofs WITHOUT that pattern. To hold the other two patterns' frequencies fixed across f, use the
     # natural per-length rate of each pattern among ALL pool proofs, scaled to the quota.
     quota = a.size // len(LENS)
-    baseline = {}
-    for L in LENS:
-        n = len(by_len[L])
-        baseline[L] = {p: int(round(quota * sum(r['pat'][p] for r in by_len[L]) / n)) for p in PATTERNS}
+    # Baseline = the generator's NATURAL per-length pattern rates (the pool itself is pattern-enriched by the
+    # output caps, so its rates are not the natural ones). Measured on the take-home's unfiltered cap-6 pool
+    # data/raw_cap6.jsonl (32,000 proofs per length; patterns.py --stats, log.md 2026-09-15 19:40):
+    NATURAL = {2: {'derived_ore': 0, 'reductio': 0, 'depth3': 0}, 3: {'derived_ore': 0, 'reductio': 0, 'depth3': 0},
+               4: {'derived_ore': 0, 'reductio': 0, 'depth3': 0},
+               5: {'derived_ore': 28 / 32000, 'reductio': 5549 / 32000, 'depth3': 0},
+               6: {'derived_ore': 63 / 32000, 'reductio': 5338 / 32000, 'depth3': 5870 / 32000}}
+    if a.baseline_ref:
+        cnt = collections.defaultdict(collections.Counter)
+        for l in open(a.baseline_ref):
+            r = json.loads(l); cl = classify(r['proof']); cnt[r['n_lines']]['n'] += 1
+            for p in PATTERNS:
+                cnt[r['n_lines']][p] += cl[p]
+        NATURAL = {L: {p: cnt[L][p] / max(cnt[L]['n'], 1) for p in PATTERNS} for L in LENS}
+    baseline = {L: {p: int(round(quota * NATURAL[L][p])) for p in PATTERNS} for L in LENS}
+    print('natural per-length rates used as baseline', NATURAL)
     print('pool per length', {L: len(by_len[L]) for L in LENS})
     print('baseline pattern counts per length (natural rate x quota)', baseline)
     report = {}
@@ -339,6 +351,7 @@ def main():
     s = sub.add_parser('assemble'); s.add_argument('--pool', required=True); s.add_argument('--outdir', required=True)
     s.add_argument('--size', type=int, default=155000); s.add_argument('--heldout', type=int, default=5000); s.add_argument('--seed', type=int, default=0)
     s.add_argument('--freqs', default='0,0.0001,0.001,0.01,0.1'); s.add_argument('--patterns', default=None)
+    s.add_argument('--baseline_ref', default=None, help='unfiltered generator pool to measure natural per-length pattern rates (default: hard-coded take-home numbers)')
     t = sub.add_parser('targets'); t.add_argument('--pool', required=True); t.add_argument('--minlen', default=None); t.add_argument('--outdir', required=True)
     t.add_argument('--exclude', nargs='*', default=[]); t.add_argument('--n_targets', type=int, default=1000); t.add_argument('--n_transfer', type=int, default=500)
     t.add_argument('--require_long', action='store_true'); t.add_argument('--seed', type=int, default=0)
