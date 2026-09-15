@@ -265,3 +265,36 @@ exactly; we hope you enjoy it.
 
 
 
+
+---
+
+# Reproduction (this fork's submission)
+
+Hardware: 1× NVIDIA A40 (48 GB), PyTorch 2.8 + CUDA 12.8, Python 3.11; code edited on a
+2-vCPU VPS and run on the pod. All seeds are fixed as shown. Wall-clock figures are in
+`log.md` and `numbers.md`. Only PyTorch, numpy and matplotlib are used (`requirements.txt`).
+
+```bash
+# Stage 1 data: procedural generator -> 160k cap-6 proofs (32k per length), 7k long proofs (strict mode)
+python gen.py --n 160000 --per_len 32000 --out data/raw_cap6.jsonl --seed 1            # ~130 s CPU
+python gen.py --n 7000 --min 7 --max 16 --per_len 700 --long --out data/raw_long.jsonl --seed 2
+python make_splits.py --cap6 data/raw_cap6.jsonl --long data/raw_long.jsonl \
+       --heldout_per_len 1000 --targets 3000 --transfer 2000                             # -> data/{train,heldout,rl_targets,transfer}.jsonl
+# (data/train.jsonl is stored gzipped in git: gunzip -k data/train.jsonl.gz)
+
+# Stage 1 model (4 layers, d=256, 8 heads, RoPE, 3,210,240 params), both tokenizer modes
+python train.py --data data/train.jsonl --heldout data/heldout.jsonl --mode abs --steps 6000 --bs 128 --out ckpts/stage1_abs.pt --cap 6 --seed 0   # ~12 min on A40
+python train.py --data data/train.jsonl --heldout data/heldout.jsonl --mode rel --steps 6000 --bs 128 --out ckpts/stage1_rel.pt --cap 6 --seed 0
+bash stage1_eval.sh ckpts/stage1_abs.pt stage1_abs      # held-out greedy by length, transfer greedy + pass@16, validation-36
+
+# Stage 2: expert iteration vs frozen control (same attempts), 8 rounds, k=32 samples/theorem at T=0.8
+python expert_iter.py --init ckpts/stage1_abs.pt --name ei_abs_s0 --rounds 8 --k 32 --temperature 0.8 --seed 0
+python expert_iter.py --init ckpts/stage1_abs.pt --name frozen_abs_s0 --rounds 8 --k 32 --temperature 0.8 --seed 0 --no_train
+python plots.py --rl ei_abs_s0 --control frozen_abs_s0 --stage1 artifacts/stage1_abs_heldout_greedy.json
+
+# Stage 3: validation set and (once) the test set
+python prove.py --ckpt ckpts/final.pt --in targets/validation_36.jsonl --out artifacts/final_val36.jsonl --greedy
+python eval_targets.py --proofs artifacts/final_val36.jsonl
+python prove.py --ckpt ckpts/final.pt --in targets/test_short_prompts.jsonl --out artifacts/test_short_final.jsonl --greedy
+python score_test.py artifacts/test_short_final.jsonl
+```
