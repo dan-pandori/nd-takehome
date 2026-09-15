@@ -98,11 +98,11 @@ set). By the bounded minimal length (`minlen.py`, ≤ 8): 3: 3, 4: 7, 5: 48, 6: 
 
 | log p_base(any found) | theorem | shortest RL proof | # RL proofs | first round | min_lines_ub |
 |---:|---|---:|---:|---:|---:|
-| −90.9 | `( ~ ( ( ~ ( ~ S ) ) v Q ) ) \|- ( ( ~ ( ~ ( Q & S ) ) ) > ( ( ~ ( ~ S ) ) > ( ( Q v ( R & S ) ) > ( ( ~ ( ( ~ ( ~ S ) ) v Q ) ) & ( Q & S ) ) ) ) )` | 9 | 1 | 8 | 8 |
-| −88.4 | `( ~ P ) \|- ( ( ~ ( ~ P ) ) > ( ( ~ ( ~ P ) ) > ( P > ( ( ~ S ) > S ) ) ) )` | 9 | 1 | 6 | 7 |
-| −81.1 | `( R > ( S > S ) ) \|- ( ( ( R & S ) > ( R v Q ) ) > ( R > ( ( ~ ( S > S ) ) > ( … ) ) ) )` | 9 | 1 | 10 | 8 |
-| −77.4 | `S , ( ( Q & S ) > ( ~ Q ) ) \|- ( ( ~ ( ~ Q ) ) > ( ( ~ Q ) > ( Q > ( ( ( Q & S ) > ( ~ Q ) ) & S ) ) ) )` | 9 | 1 | 5 | 7 |
-| −56.5 | `( ~ ( Q & S ) ) \|- ( ( ( Q & P ) v ( R v Q ) ) > ( ( ~ ( … ) ) > ( Q > ( ( ~ ( Q & S ) ) v R ) ) ) )` | 8 | 1 | 6 | 8 |
+| -90.9 | `( ~ ( ( ~ ( ~ S ) ) v Q ) ) \|- ( ( ~ ( ~ ( Q & S ) ) ) > ( ( ~ ( ~ S ) ) > ( ( Q v ( R & S ) ) > (  … )` | 9 | 1 | 8 | 8 |
+| -81.1 | `( R > ( S > S ) ) \|- ( ( ( R & S ) > ( R v Q ) ) > ( R > ( ( ~ ( S > S ) ) > ( ( ( R & S ) > ( R v  … )` | 9 | 1 | 10 | None |
+| -77.4 | `S , ( ( Q & S ) > ( ~ Q ) ) \|- ( ( ~ ( ~ Q ) ) > ( ( ~ Q ) > ( Q > ( ( ( Q & S ) > ( ~ Q ) ) & S ) ) ) )` | 9 | 1 | 5 | 8 |
+| -72.9 | `( ( P & Q ) > ( S & Q ) ) , ( P & Q ) \|- ( ( P & Q ) > ( ( ~ ( ~ Q ) ) > ( ( P & Q ) > ( ( ( P & Q  … )` | 9 | 2 | 8 | None |
+| -69.9 | `( R v ( ~ ( Q v Q ) ) ) \|- ( S > ( ( ( Q v S ) & ( R > Q ) ) > ( ( ~ Q ) > ( ( S v ( Q > S ) ) & (  … )` | 9 | 1 | 8 | None |
 
 Every one of the deepest entries is a theorem whose conclusion is three nested implications: the proof must open three
 boxes and prove something inside the innermost one from lines of the outer contexts.
