@@ -38,7 +38,7 @@
 - 05:34  abs-fixed pass@16 on transfer: 38.5% [36.2,40.9] (abs 44.7%, rel 40.5%); written histogram {2:13, 3:48, 4:145, 5:209, 6:359}, zero proofs of length >=7 in 26k samples.
 - 06:02  All five arms running (~16 min/round). Continuation r10: transfer greedy 64.9%, cumulative 84.0% (320 attempts), held-out 95.1%. Seed 1 r2 targets 1875 (seed 0: 1874); frozen s1 r2 1502 (s0 1496).
 - 06:32  Round 4 across arms (transfer, cumulative 128 attempts / greedy / distinct written >=8 / >=9): EI s0 77.1% / 59.3% / 765 / 31; EI s1 76.2% / 57.8% / 881 / 26; EI-long s0 75.6% / 55.9% / 950 / 10; frozen s0 52.7% / 32.2% / 32 / 0; frozen s1 53.0% / 32.2% / 33 / 0. Seed 1 reproduces seed 0 within ~1.5pp. EI-long is not ahead: slightly more 8-line proofs, fewer 9-line, lower greedy. Continuation r12 (384 attempts): cum 84.9%, greedy 64.8%, >=9: 317, >=10: 0; transfer frontier still 9/9 — plateau in length after round 4.
-- 07:40  ALL ARMS DONE (pod time 07:36). Final numbers, transfer set n=1638 (cumulative solved / per-round pass@32 / greedy / held-out greedy / distinct transfer proofs written >=8, >=9 / frontier written=pruned):
+- 07:37  ALL ARMS DONE (pod time 07:36). Final numbers, transfer set n=1638 (cumulative solved / per-round pass@32 / greedy / held-out greedy / distinct transfer proofs written >=8, >=9 / frontier written=pruned):
   - EI seed 0, r8 (256 attempts): 82.8% [80.9,84.6] / 77.3% / 64.2% [61.9,66.5] / 94.9% / 2028, 195 / 9
   - EI seed 1, r8: 82.6% [80.7,84.4] / 77.6% / 64.6% [62.2,66.9] / 94.9% / 2204, 176 / 9
   - frozen seed 0, r8: 55.3% [52.9,57.7] / 48.6% / 32.2% / 94.8% / 54, 0 / 8
@@ -47,4 +47,11 @@
   - EI seed 0 continued to r16 (512 attempts): 86.1% [84.4,87.7] / 79.4% / 66.8% [64.5,69.0] / 95.3% / 3628, 397 / 9; RL-target frontier 10 (151 distinct >=10-line target proofs), 0 of >=11.
   - frozen seed 0 continued to r16 (512 attempts): 57.3% [54.9,59.7] / 48.4% / 32.2% / 94.7% / 92, 0 / 8.
   Seed-to-seed differences are <=0.5pp on every metric; the EI-minus-frozen difference is ~27pp cumulative and ~32pp greedy. Robust frontier: L=9 (transfer) / 10 (RL targets) vs P=8 -> L-P = 1 (transfer), 2 (targets). Written and pruned frontiers coincide.
-- 07:42  Decision: final model = ckpts/ei_abs_s0_cont_r16.pt (best transfer greedy 66.8%, held-out 95.3%), pending its validation-36 check (running).
+- 07:38  Decision: final model = ckpts/ei_abs_s0_cont_r16.pt (best transfer greedy 66.8%, held-out 95.3%), pending its validation-36 check (running).
+- 07:38  TEST SET RUN ONCE (artifacts/TEST_RUN_DONE created at 07:38:07 UTC before the run; prove.py --greedy, one run per checkpoint per file, no inspection of per-theorem results). score_test.py verbatim:
+  stage1 (ckpts/stage1_abs.pt) : test_short_prompts.jsonl: 73.0% passed  (195/267; 95% CI 67.4–78.0%)
+  stage1 (ckpts/stage1_abs.pt) : test_long_prompts.jsonl: 9.8% passed  (52/532; 95% CI 7.5–12.6%)
+  final (ckpts/final.pt) : test_short_prompts.jsonl: 73.0% passed  (195/267; 95% CI 67.4–78.0%)
+  final (ckpts/final.pt) : test_long_prompts.jsonl: 14.5% passed  (77/532; 95% CI 11.7–17.7%)
+  final = ckpts/ei_abs_s0_cont_r16.pt copied to ckpts/final.pt. The long-set gain (+4.7pp) is small relative to the transfer-set gain (+32pp greedy): textbook theorems are a different distribution from the generator's (see writeup §5, barrier 3).
+- 07:38  Validation-36 for the continuation: r9-r16 greedy 8-11/36, pass@32 11-12/36 (r14: 12). Final (r16): greedy 9/36, pass@32 11/36.
