@@ -1,6 +1,6 @@
 # STATUS
 
-Updated: 2026-09-15 07:45 UTC
+Updated: 2026-09-15 07:52 UTC
 
 ## Plan
 1. 03:25–04:30  gen.py (forward random generator with lazy premises + goal completion for ORE branches, dependency pruning, verify every proof), tokenizer.py (two modes: `rel` relative refs, `abs` absolute refs with random start offset), model.py (4L d256 RoPE decoder), train.py, sample.py (batched KV-cache sampling), prove.py. Unit tests vs verifier.
@@ -22,10 +22,14 @@ Updated: 2026-09-15 07:45 UTC
 - EI round 2 (after one fine-tune): transfer pass@32 62.0% (r1 47.0%), greedy 45.1% (32.2%), held-out 94.5%; written-8 proofs 6 -> 98 per round.
 
 ## Running on pod
-- artifacts/k128.log : pass@128 on transfer for final and Stage-1 (budget check; optional extra for writeup §3.3)
+- nothing (all results pulled: artifacts/, ckpts/ (all per-round checkpoints local, only stage1_abs.pt + final.pt in git), data/)
 
 ## Done
-- Everything: all arms, figures, tables, test run (07:38 UTC, artifacts/TEST_RUN_DONE), writeup.md (exec summary draft + all sections), numbers.md, log.md, README reproduction, ckpts/stage1_abs.pt + ckpts/final.pt in git.
+- Stage 1: generator, splits, three tokenizer variants, evals. Stage 2: EI vs frozen (2 seeds), EI-long, 16-round continuation, pass@128 budget check. Stage 3: validation-36 per round, test set run ONCE at 07:38 UTC (artifacts/TEST_RUN_DONE).
+- Deliverables: writeup.md (exec summary marked DRAFT for the human), numbers.md, log.md, README.md reproduction, figures/, data/, prove.py, requirements.txt, ckpts/stage1_abs.pt, ckpts/final.pt. All pushed to github.com/dan-pandori/nd-takehome main.
 
-## Next step
-- fold pass@128 numbers into writeup §3.3 when done; final push; DONE.
+## Headline
+- Robust frontier L = 9 (transfer) / 10 (RL targets) vs P = 8 for the frozen model with the same attempts; L - P = 1 / 2.
+- Transfer: EI 86.1% cumulative / 66.8% greedy vs frozen 57.3% / 32.2% (n=1638, 2 seeds agree to 0.5pp). Test: short 73.0% -> 73.0%, long 9.8% -> 14.5%.
+
+DONE 2026-09-15 07:52 UTC
