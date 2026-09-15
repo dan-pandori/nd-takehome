@@ -235,7 +235,41 @@ _(pending)_
 _(the table; validation-36 by bin; test set lines verbatim)_
 
 ## 5. What limits the frontier
-_(evidence)_
+
+**Barrier 1 — the model cannot emit a token it has never been trained to emit (fixed).** Three Stage-1 models,
+identical except for how line references are tokenised, on the transfer pool (n = 1,638, T = 0.8, 16 samples each):
+
+| reference scheme | held-out greedy (≤ 6) | transfer pass@16 | distinct verified proofs of length 7 / 8 | longest written |
+|---|---|---|---|---|
+| `abs-fixed`: `N<i>` verbatim, numbering always starts at 1 | 95.4% | 38.5% [36.2, 40.9] | **0 / 0** | 6 |
+| `rel`: "k lines back" (`B<k>`) | 95.5% | 40.5% [38.2, 42.9] | 79 / 0 | 7 |
+| `abs`: `N<i>` with random start offset in training | 94.8% | 44.7% [42.3, 47.1] | 501 / 1 | 8 |
+
+With `abs-fixed`, `N7` is an output row whose logit has been pushed down at every step of training; in 26,208
+samples the model never wrote a seventh line. In-distribution accuracy is identical, so nothing in Stage-1
+evaluation would reveal this. `rel` moves the untrained token from "line 7" to "cite 7 lines back", which is a
+softer ceiling (most 7–8-line proofs cite within 6 lines) but still a ceiling. `abs` with a random start offset
+makes every index a trained token and turns citation into copying an index that is in context; it is the only
+scheme that produced 8-line proofs before any RL. The whole Stage-2 result is conditional on this choice: with
+`abs-fixed`, expert iteration would have had nothing beyond 6 to select.
+
+**Barrier 2 — the length prior (moved by RL, not removed).** The Stage-1 model plans the right proof shape and
+skips a step to land inside 6 lines (§2.4, `export`/`import`). Expert iteration moves the written-length
+distribution outwards by about one line per two rounds early on and then saturates: the number of ≥ 9-line
+transfer proofs grows 0 → 31 → 87 → 135 → 157 → 195 over rounds 3–8, while ≥ 10 stays at 0 on transfer and 30 on
+the RL targets. Two mechanisms are visible in the data:
+- *Selection pressure is on solving, not on length.* 79% of the accepted proofs of "7–16-line" targets are ≤ 6
+  lines because the targets admit short proofs; the fine-tuning mix is dominated by them. The EI-long arm (§3.3)
+  tests the obvious fix.
+- *Signal at the frontier is rare.* At round 8 only 5,499 new distinct proofs appear per 96,000 attempts and the
+  per-round transfer pass@32 has flattened (75.7 → 76.4 → 76.1 → 77.3%). The remaining ~17% of transfer theorems
+  are the ones where 32 attempts per round give ~0 successes — the all-fail groups the brief warned about.
+
+**Barrier 3 — the generator's theorem distribution.** Validation-36 makes this concrete: the model learned to
+prove `contraposition` (a nested `IMPI`/`NEGI` shape the generator produces often) but none of the De Morgan,
+distribution, or Peirce theorems, whose proofs need an `ORE` over a *derived* (not premise) disjunction or an
+excluded-middle detour — shapes that the generator emits rarely or never. RL can only amplify what the sampler
+already produces with non-zero probability.
 
 ## 6. Limitations
 
