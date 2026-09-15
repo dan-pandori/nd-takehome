@@ -164,7 +164,42 @@ _(evidence)_
 
 ## 6. Limitations
 
+- **"Length" of a theorem is an upper bound.** Every pool is labelled by the length of the proof that generated
+  it; many of those theorems have much shorter proofs (the frozen model proves 47% of the "7–16-line" pool with
+  ≤ 6-line proofs). All headline numbers are therefore stated in terms of the length of the proof the model
+  actually *wrote*, and additionally in dependency-pruned length so that padding cannot inflate them. A bounded
+  minimal-length prover for the targets would make the pools sharper; it was not built.
+- **One model size, one generator.** Everything is 4 layers / d = 256 and one generator design. The generator's
+  distribution (nested `IMPI` boxes, `ORE` over disjunction premises) shapes what "long" means here, and the RL
+  targets come from the same generator as the training data (strict mode), so transfer to *textbook* theorems
+  is measured only on validation-36 and the test files.
+- **Expert iteration is off-policy in spirit.** Each round fine-tunes on a growing set of past successes; the
+  policy can drift towards theorem types it already solves (the retained Stage-1 slice guards the ≤ 6 regime,
+  and held-out greedy is reported every round, but the RL-target pool itself is fixed).
+- **Seeds.** Two seeds for the main comparison; one seed for the EI-long arm; single training seed for Stage 1.
+  Wilson intervals are per-set; differences between arms on the same set are paired, so their SE is smaller
+  than the intervals suggest.
+- **Validation-36 is n = 36.** Its numbers are reported as counts, not rates, and no conclusion rests on them alone.
+- **Compute sharing.** Wall-clock figures were measured with 2–4 jobs sharing one A40; per-job times are ~2–3× what a
+  dedicated GPU would give.
+- **What was not done:** GRPO / on-policy policy gradient, hindsight relabelling of by-products (implemented as
+  `--relabel`, not run), search at inference time, a minimal-length prover for target labelling.
+
 ## 7. What I would do next with another week
+
+1. **Label targets with a bounded prover** (minimal proof length ≤ N by iterative deepening over the 14 rules) so
+   that "solved a 12-line theorem" means a 12-line proof was necessary. Then the frontier curve is against true
+   length and the pools can be enriched at the true frontier.
+2. **Curriculum by measured difficulty**, not generating length: allocate more samples (k = 128–256) to targets
+   with a low per-sample success rate and stop sampling saturated ones; success at the frontier is rare and
+   that is where the attempts should go.
+3. **Fix the padding incentive.** 40% of accepted proofs carry a dead line. Train on the dependency-pruned proof
+   instead of the written one (it is still verifier-valid), so RL rewards structure rather than length.
+4. **GRPO with a fixed loss divisor and no KL** as a second RL family, to check whether the on-policy variant
+   moves the length prior faster than rejection-sampling fine-tuning at the same sample budget.
+5. **Textbook-style targets.** A second target pool built from classical patterns (De Morgan, distribution,
+   contraposition and their converses) with fresh atoms, disjoint from validation-36 by renaming class, to see
+   whether the transfer to validation-36 is limited by theorem *type* rather than by length.
 
 ## Appendix: reproduction
 See `README.md` (Reproduction section), `numbers.md`, `log.md`.
