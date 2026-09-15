@@ -22,7 +22,7 @@ def generate_ids(model, tok, prompt_ids, greedy=True, temperature=1.0, max_new=4
     causal = torch.tril(torch.ones(L, L, dtype=torch.bool, device=dev))
     mask = causal[None, None] & keep[:, None, None, :]
     mask = mask | torch.eye(L, dtype=torch.bool, device=dev)[None, None]  # pads attend to self (avoid NaN)
-    caches = [dict() for _ in model.blocks]
+    caches = [{'max': L + max_new} for _ in model.blocks]
     logits = model(idx, pos=pos, mask=mask, caches=caches)[:, -1]
     out = torch.full((B, max_new), tok.pad, dtype=torch.long, device=dev)
     done = torch.zeros(B, dtype=torch.bool, device=dev)
@@ -60,4 +60,7 @@ def generate(model, tok, prompts, greedy=True, temperature=1.0, max_new=400, bat
             outs = generate_ids(model, tok, [ids[i] for i in chunk], greedy, temperature, max_new, gen)
         for i, o in zip(chunk, outs):
             res[i] = tok.decode(o)
+        del outs
+    if dev.type == 'cuda':
+        torch.cuda.empty_cache()   # hand reserved memory back to co-tenant jobs
     return res

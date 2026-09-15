@@ -37,10 +37,16 @@ class Block(nn.Module):
         q, k, v = self.qkv(x).view(B, T, 3, self.h, D // self.h).permute(2, 0, 3, 1, 4)
         q, k = apply_rope(q, cos, sin), apply_rope(k, cos, sin)
         if cache is not None:
-            if 'k' in cache:
-                k = torch.cat([cache['k'], k], 2)
-                v = torch.cat([cache['v'], v], 2)
-            cache['k'], cache['v'] = k, v
+            # preallocated KV cache (avoids per-step torch.cat growth / allocator fragmentation)
+            if 'k' not in cache:
+                cache['k'] = k.new_empty(B, self.h, cache['max'], D // self.h)
+                cache['v'] = v.new_empty(B, self.h, cache['max'], D // self.h)
+                cache['n'] = 0
+            n0, n1 = cache['n'], cache['n'] + T
+            cache['k'][:, :, n0:n1] = k
+            cache['v'][:, :, n0:n1] = v
+            cache['n'] = n1
+            k, v = cache['k'][:, :, :n1], cache['v'][:, :, :n1]
             y = F.scaled_dot_product_attention(q, k, v, attn_mask=mask)
         else:
             y = F.scaled_dot_product_attention(q, k, v, attn_mask=mask, is_causal=mask is None)
