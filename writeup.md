@@ -153,8 +153,83 @@ generating length (cumulative), found-proof-length histogram (written and pruned
 L (longest length with ≥ 5 distinct verified proofs, computed on the transfer set unless stated), transfer greedy
 pass@1, Stage-1 held-out greedy. Padding is measured as written − pruned length.
 
-### 3.2 Results
-_(per-round table; figures)_
+### 3.2 Results (seed 0; seed 1 and the EI-long arm are in 3.3)
+
+![rounds](figures/rounds.png)
+
+*Left to right: (1) fraction of RL targets / transfer theorems solved, cumulative over attempts; (2) greedy pass@1 on transfer and on the Stage-1 held-out set; (3) robust frontier L on the transfer set; (4) number of distinct verified transfer proofs of written length ≥ 7 / ≥ 8 / ≥ 9.*
+
+| round | attempts / theorem | transfer solved, cumulative — EI | — frozen | transfer greedy — EI | — frozen | held-out greedy — EI | distinct transfer proofs written ≥ 8 — EI | — frozen | frontier L (written / pruned) — EI | — frozen |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | 32 | 47.0% | 47.0% | 32.2% | 32.2% | 94.8% | 6 | 6 | 8 / 7 | 8 / 7 |
+| 2 | 64 | 64.0% | 49.7% | 45.1% | 32.2% | 94.5% | 104 | 16 | 8 / 8 | 8 / 7 |
+| 3 | 96 | 72.3% | 51.5% | 54.3% | 32.2% | 94.3% | 429 | 27 | 8 / 8 | 8 / 8 |
+| 4 | 128 | 77.1% | 52.6% | 59.3% | 32.2% | 93.1% | 765 | 33 | **9 / 9** | 8 / 8 |
+| 5 | 160 | 79.5% | 53.4% | 59.5% | 32.2% | 94.5% | 1,126 | 37 | 9 / 9 | 8 / 8 |
+| 6 | 192 | 81.2% | 54.0% | 62.5% | 32.2% | 95.2% | 1,472 | 42 | 9 / 9 | 8 / 8 |
+| 7 | 224 | 82.2% | 54.6% | 62.7% | 32.2% | 95.1% | 1,711 | 47 | 9 / 9 | 8 / 8 |
+| 8 | 256 | **82.8%** [80.9, 84.6] | **55.3%** [52.9, 57.7] | **64.2%** [61.9, 66.5] | **32.2%** [30.0, 34.5] | **94.9%** [94.2, 95.4] | **2,028** | **54** | **9 / 9** | **8 / 8** |
+
+n = 1,638 transfer theorems, 5,000 held-out; frozen held-out greedy is 94.8% throughout. Per-round pass@32 (not cumulative) at round 8: EI 77.3%, frozen 48.6%. On the RL targets themselves (n = 3,000): EI 81.4% vs frozen 54.0% cumulative; the target frontier is 10 / 10 (EI, 30 distinct 10-line proofs) vs 8 / 8 (frozen). Full per-round tables: `artifacts/tables_s0.md`.
+
+**Transfer by generating length, with the control.** The RL gain is present at every length and is largest where the
+frozen model is weakest (7–8-line theorems, which in this generator are dominated by nested boxes).
+
+![transfer by length](figures/transfer_by_length.png)
+
+**Found-proof-length histogram across rounds.** Every round shifts mass to the right; the frozen control with the same
+256 attempts stops at 8. Pruned lengths (right) are ~1 line shorter than written lengths — see padding below.
+
+![found length](figures/found_length_hist.png)
+
+**Where the gain is** (`analyze_transfer.py`, cumulative, EI round 5 vs frozen round 4 — the numbers at round 8 are in `artifacts/`):
+
+| property of the transfer theorem's generating proof | n | EI | frozen |
+|---|---|---|---|
+| max box depth 1 | 314 | 91% | 80% |
+| max box depth 2 | 565 | 81% | 63% |
+| max box depth 3 | 758 | 74% | **34%** |
+| 0 premises (pure tautology) | 168 | 77% | **19%** |
+| 1 / 2 / 3 premises | 571 / 719 / 180 | 79% / 82% / 77% | 56% / 57% / 54% |
+| generating proof uses `ORE` | 1,202 | 82% | 62% |
+| generating proof has no `ORE` | 436 | 74% | **28%** |
+
+The frozen model's failures are structural: at round 8 its greedy failure reasons on transfer are `IMPE` 199,
+`IMPI` 140, `ANDI` 132, `bad box cite` 80 — modus-ponens chains and box discharge. After EI they are `ANDI` 114,
+`DN` 78, `NEGE` 68, `IMPE` 47, `IMPI` 26, `bad box cite` 27: the box machinery beyond depth 2 has been learned;
+what remains are local rule slips.
+
+**Padding.** 42% of accepted proofs (round 1) contain at least one line the conclusion does not depend on (mean
+1.07 lines); reiteration is rare (0.09 `R` lines per proof). Padding is a property of the Stage-1 policy, not something
+RL introduced: the written − pruned gap on transfer is 1.0 line at round 1 and 0.9 at round 8, and the pruned
+frontier moves in lockstep with the written one (9 / 9). Nothing in the headline depends on it.
+
+**In-distribution.** Held-out greedy stays at 94.9% (frozen 94.8%); it dipped to 93.1% at round 4 and recovered
+with the retained Stage-1 slice.
+
+**Validation-36 across rounds** (greedy through `prove.py` / pass@32 at T = 0.8): Stage 1 7/36 / 10/36; EI rounds
+1–7: 8/36 → 10/36 greedy, 10–11/36 pass@32. The `>6` bin moves from 0/24 to **1/24**: `contraposition`
+(`( P > Q ) |- ( ( ~ Q ) > ( ~ P ) )`, 7 lines) is proved from round 2 on — 12–22 distinct 7-line proofs per 32
+samples — and greedily at rounds 3 and 7. Labelled as an existence proof, not a rate:
+
+```
+THM ( P > Q ) SEQ ( ( ~ Q ) > ( ~ P ) ) PRF
+N25 ( P > Q ) : PR ;
+N26 | ( ~ Q ) : AS ;
+N27 | | P : AS ;
+N28 | | Q : IMPE N25 N27 ;
+N29 | | F : NEGE N28 N26 ;
+N30 | ( ~ P ) : NEGI N27 N29 ;
+N31 ( ( ~ Q ) > ( ~ P ) ) : IMPI N26 N30 ;
+QED
+```
+(The model chose to start numbering at N25; the verifier accepts any start index — this is the `abs` scheme's
+random-offset augmentation showing through.) `explosion` and `consequentia_mirabilis` (`<=6` bin) stay unsolved by
+every checkpoint, as does the rest of the `>6` bin (10–18 reference lines): the RL pools are drawn from the same
+generator as Stage 1, and De Morgan / distribution shapes are simply not in it (see §5).
+
+### 3.3 Second seed and the EI-long arm
+_(pending)_
 
 ## 4. Stage 3 — evaluation
 _(the table; validation-36 by bin; test set lines verbatim)_
