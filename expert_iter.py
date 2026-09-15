@@ -84,6 +84,8 @@ def main():
     ap.add_argument('--relabel', action='store_true')
     ap.add_argument('--select', default='random', choices=['random', 'longest'], help='which <=max_per_thm proofs of a theorem to train on: random, or longest dependency-pruned length')
     ap.add_argument('--batch', type=int, default=1024)
+    ap.add_argument('--start_round', type=int, default=1)
+    ap.add_argument('--resume_found', default=None, help='artifacts dir of a previous run of the same arm; loads found_<start_round-1>.jsonl and found_transfer_<start_round-1>.jsonl')
     a = ap.parse_args()
     out = f'artifacts/{a.name}'
     os.makedirs(out, exist_ok=True)
@@ -97,8 +99,16 @@ def main():
     rng = random.Random(a.seed)
     ckpt = a.init
     found = collections.defaultdict(list)     # target name -> list of {proof, written, pruned, round}
+    found_t = collections.defaultdict(list)
     relabelled = {}                           # thm -> record
-    for r in range(1, a.rounds + 1):
+    if a.resume_found:
+        r0 = a.start_round - 1
+        for l in open(f'{a.resume_found}/found_{r0}.jsonl'):
+            x = json.loads(l); found[x['name']].append({'proof': x['proof'], 'written': x['written'], 'pruned': x['pruned'], 'round': x['round']})
+        for l in open(f'{a.resume_found}/found_transfer_{r0}.jsonl'):
+            x = json.loads(l); found_t[x['name']].append({'proof': x['proof'], 'written': x['written'], 'pruned': x['pruned'], 'round': x['round']})
+        print(f'resumed {sum(len(v) for v in found.values())} target proofs, {sum(len(v) for v in found_t.values())} transfer proofs', flush=True)
+    for r in range(a.start_round, a.start_round + a.rounds):
         t0 = time.time()
         model, tok, _ = load_ckpt(ckpt, dev)
         seed = a.seed * 1000 + r
@@ -148,8 +158,6 @@ def main():
         stats['transfer_round'] = summarize(rows_t, 'n_lines', f'[{a.name} r{r}] transfer (this round, pass@{a.k})')
         stats['transfer_sample_acc'] = sum(x['n_ok'] for x in rows_t) / sum(x['n_tried'] for x in rows_t)
         # cumulative transfer (union of attempts so far)
-        if r == 1:
-            found_t = collections.defaultdict(list)
         for t, row in zip(transfer, rows_t):
             have = {x['proof'] for x in found_t[t['name']]}
             for p, wl, pl in zip(row['proofs'], row['written_lens'], row['pruned_lens']):
