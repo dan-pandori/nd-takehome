@@ -5,7 +5,31 @@
 
 ## Executive summary (draft)
 
-_(filled in at the end; see section "Headline" below for the current numbers)_
+**Question.** Train a 3.2M-parameter decoder from scratch on random natural-deduction proofs of ≤ 6 lines, then use the
+verifier as the only reward. How far past 6 lines does the model prove theorems, compared with the same model simply
+resampled the same number of times?
+
+**Headline.** Robust frontier (longest length with ≥ 5 distinct verifier-accepted proofs, on 1,638 transfer theorems never
+used for training, 256–512 attempts each): **L = 9** after expert iteration vs **P = 8** for the frozen Stage-1 model
+→ **L − P = 1** on transfer, **2** on the RL targets (10 vs 8). Written and dependency-pruned frontiers coincide, so
+padding does not inflate this. Behind the coarse frontier the effect is large: 3,628 vs 92 distinct ≥ 8-line proofs,
+397 vs 0 ≥ 9-line proofs, 86.1% vs 57.3% of transfer theorems solved, 66.8% vs 32.2% greedy. Two seeds agree to 0.5 pp.
+
+1. **The tokenisation of line references decides whether length generalisation is possible at all** (fig. §5).
+   With plain absolute indices trained only on `N1..N6`, the model never writes a 7th line (0 of 26,208 samples); with the
+   verifier-legal trick of a random start index in training, every index is a trained token and the frozen model
+   already writes 501 7-line proofs. All Stage-2 results are conditional on this fix.
+2. **Expert iteration moves the length prior, the control does not** (`figures/rounds.png`, `figures/found_length_hist.png`).
+   Each round shifts the found-length histogram right; the frozen model with the same attempts stops at 8. The gain is
+   concentrated on theorems whose proofs need box depth 3 (74% vs 34%) and on pure tautologies (77% vs 19%).
+3. **It saturates at 9 and the last 15% of transfer theorems get no signal** (`figures/rounds.png`, right). Rounds 9–16 add
+   2.6 pp greedy and no 10-line transfer proof; selecting the *longest* accepted proofs for training (EI-long) does not
+   help (fewer 9-line proofs, −2 pp greedy).
+4. **Transfer to textbook theorems is small**: validation-36 `> 6` bin 0/24 → 1–2/24 (`contraposition`, `export`), test
+   long 9.8% → 14.5%, test short 73.0% → 73.0%. On unfamiliar theorem shapes the final model still writes ≤ 6-line
+   attempts. The generator's distribution, not the length cap, is the binding constraint for textbook problems.
+
+Stage-1 held-out greedy: 94.8% (length 2: 99.8% … length 6: 87.3%); it stays ≥ 93.1% through all 16 RL rounds.
 
 ## 1. Setting and question
 
@@ -153,7 +177,7 @@ generating length (cumulative), found-proof-length histogram (written and pruned
 L (longest length with ≥ 5 distinct verified proofs, computed on the transfer set unless stated), transfer greedy
 pass@1, Stage-1 held-out greedy. Padding is measured as written − pruned length.
 
-### 3.2 Results (seed 0; seed 1 and the EI-long arm are in 3.3)
+### 3.2 Results (seed 0, rounds 1–8; seed 1, the EI-long arm and rounds 9–16 are in 3.3)
 
 ![rounds](figures/rounds.png)
 
@@ -228,8 +252,30 @@ random-offset augmentation showing through.) `explosion` and `consequentia_mirab
 every checkpoint, as does the rest of the `>6` bin (10–18 reference lines): the RL pools are drawn from the same
 generator as Stage 1, and De Morgan / distribution shapes are simply not in it (see §5).
 
-### 3.3 Second seed and the EI-long arm
-_(pending)_
+### 3.3 Second seed, the EI-long arm, and 16 rounds
+
+![arms](figures/arms.png)
+
+| arm (round 8, 256 attempts / theorem) | transfer cumulative | transfer greedy | held-out greedy | distinct transfer proofs written ≥ 8 / ≥ 9 | frontier L (transfer) |
+|---|---|---|---|---|---|
+| EI seed 0 | 82.8% [80.9, 84.6] | 64.2% [61.9, 66.5] | 94.9% | 2,028 / 195 | 9 |
+| EI seed 1 | 82.6% [80.7, 84.4] | 64.6% [62.2, 66.9] | 94.9% | 2,204 / 176 | 9 |
+| EI-long seed 0 (train on longest pruned proofs) | 82.1% [80.1, 83.8] | 62.2% [59.8, 64.5] | 95.1% | 2,338 / 120 | 9 |
+| frozen seed 0 | 55.3% [52.9, 57.7] | 32.2% [30.0, 34.5] | 94.8% | 54 / 0 | 8 |
+| frozen seed 1 | 55.5% [53.1, 57.9] | 32.2% [30.0, 34.5] | 94.7% | 54 / 0 | 8 |
+| **EI seed 0, continued to round 16 (512 attempts)** | **86.1% [84.4, 87.7]** | **66.8% [64.5, 69.0]** | **95.3%** | **3,628 / 397** | **9** |
+| frozen seed 0, 512 attempts | 57.3% [54.9, 59.7] | 32.2% | 94.7% | 92 / 0 | 8 |
+
+- **Seeds agree to ≤ 0.5 pp on every metric**; the EI − frozen difference (≈ 27 pp cumulative, ≈ 32 pp greedy, paired
+  on the same 1,638 theorems) is an order of magnitude above the ≈ 3 pp noise floor.
+- **EI-long is a negative result.** Selecting each theorem's longest dependency-pruned proofs produced more 8-line
+  proofs but *fewer* 9-line ones and 2 pp lower greedy accuracy. Mechanism: the longest accepted proof of an easy
+  theorem is usually a roundabout one; training on it teaches detours, not depth. Length has to come from the
+  theorems, not from the selection rule.
+- **Eight more rounds** (rounds 9–16, `figures/rounds.png`) add 3 pp cumulative and 2.6 pp greedy, double the number of
+  ≥ 9-line transfer proofs (195 → 397), and produce 151 distinct ≥ 10-line proofs on the RL targets — but the
+  transfer frontier stays at 9 and no 10-line transfer proof appears. The length distribution is saturating.
+- The **final model** is round 16 of seed 0 (`ckpts/final.pt` = `ckpts/ei_abs_s0_cont_r16.pt`).
 
 ## 4. Stage 3 — evaluation
 
@@ -237,15 +283,39 @@ All numbers greedy through `prove.py` (the submission interface) unless marked. 
 
 | model | Stage-1 held-out (n = 5,000) | transfer greedy (n = 1,638) | transfer pass@32 (per round) | transfer cumulative, 256 attempts | validation ≤ 6 (n = 12) | validation > 6 (n = 24) | test short | test long |
 |---|---|---|---|---|---|---|---|---|
-| Stage 1 (`abs`, frozen) | 94.8% [94.1, 95.4] | 32.2% [30.0, 34.5] | 48.6% (round 8) | 55.3% [52.9, 57.7] | 7/12 | 0/24 | _pending_ | _pending_ |
-| EI round 8, seed 0 (final) | 94.9% [94.2, 95.4] | 64.2% [61.9, 66.5] | 77.3% | 82.8% [80.9, 84.6] | 9/12 | 1/24 (`contraposition`) | _pending_ | _pending_ |
+| Stage 1 (`abs`, frozen) | 94.8% [94.1, 95.4] | 32.2% [30.0, 34.5] | 48.6% (round 8) | 55.3% [52.9, 57.7] | 7/12 | 0/24 | **73.0%** (195/267; CI 67.4–78.0) | **9.8%** (52/532; CI 7.5–12.6) |
+| EI seed 0, round 8 | 94.9% [94.2, 95.4] | 64.2% [61.9, 66.5] | 77.3% | 82.8% [80.9, 84.6] | 9/12 | 0/24 (greedy); 1/24 pass@32 | — | — |
+| **EI seed 0, round 16 = final** | 95.3% [94.6, 95.8] | 66.8% [64.5, 69.0] | 79.4% | 86.1% [84.4, 87.7] (512 attempts) | 9/12 | 0/24 (greedy); 1/24 pass@32 | **73.0%** (195/267; CI 67.4–78.0) | **14.5%** (77/532; CI 11.7–17.7) |
 | Stage 1 (`rel`), for reference | 95.5% [94.9, 96.0] | 26.4% [24.3, 28.6] | — | — | 10/12 | 0/24 | — | — |
 
-Validation-36 with 32 samples at T = 0.8: Stage 1 10/36 (0/24 in > 6), EI round 8 11/36 (1/24). `min_lines_ub` was
-never beaten: no proof shorter than the bound was found (`eval_targets.py` reports "shorter 0" for every checkpoint).
+Validation-36 with 32 samples at T = 0.8: Stage 1 10/36 (0/24 in > 6), EI round 8 11/36 (1/24: `contraposition`), final 11/36
+(1/24); round 14 reached 12/36 with `export` (7 lines) as a second > 6 solve. `min_lines_ub` was never beaten: no proof
+shorter than the bound was found (`eval_targets.py` reports "shorter 0" for every checkpoint). Greedy through `prove.py`
+the > 6 bin is 0/24 for every checkpoint; `contraposition` is proved greedily at rounds 3 and 7 only.
 
 ### 4.1 Test set (run once)
-_pending — `artifacts/TEST_RUN_DONE` is created immediately before the single run; the two `score_test.py` lines are pasted verbatim here._
+
+`artifacts/TEST_RUN_DONE` was created at 07:38:07 UTC, immediately before the single run (`test_run_once.sh`:
+`prove.py --greedy`, one run per checkpoint per file, no per-theorem inspection). `score_test.py` verbatim:
+
+```
+stage1 (ckpts/stage1_abs.pt) : test_short_prompts.jsonl: 73.0% passed  (195/267; 95% CI 67.4–78.0%)
+stage1 (ckpts/stage1_abs.pt) : test_long_prompts.jsonl: 9.8% passed  (52/532; 95% CI 7.5–12.6%)
+final (ckpts/final.pt) : test_short_prompts.jsonl: 73.0% passed  (195/267; 95% CI 67.4–78.0%)
+final (ckpts/final.pt) : test_long_prompts.jsonl: 14.5% passed  (77/532; 95% CI 11.7–17.7%)
+```
+
+The short set is unchanged (identical count, not just rate); the long set gains 4.7 pp with overlapping intervals
+(paired on the same 532 theorems the gain is 25 theorems, SE ≈ 8, so it is real but small). Against the +32 pp greedy
+gain on the generator's own transfer distribution, this is the clearest statement of §5 barrier 3.
+
+### 4.2 What the final model writes on the validation `> 6` bin
+
+Greedy attempts of the final model on the 24 hard validation theorems (`artifacts/ei_abs_s0_cont_r16_val36_greedy.jsonl`)
+are **2–7 lines long** (median 5) — 17 of 24 are ≤ 6 lines — and fail with a rule check on a step that skips
+something (`IMPE`, `DN`, `ORE`). On the transfer set the same model writes 7–9-line proofs routinely. The length prior
+was moved *for the generator's theorem shapes*, not in general: on an unfamiliar shape the model falls back to the
+short-proof habit.
 
 ## 5. What limits the frontier
 
