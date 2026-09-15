@@ -33,11 +33,16 @@ def arm_metrics(arm, pattern, n_targets=None, n_transfer=None):
                'transfer_solved': st['transfer_cum']['solved'], 'transfer_n': st['transfer_cum']['n'],
                'transfer_greedy': st['transfer_greedy']['rate'], 'heldout_greedy': st['heldout_greedy']['rate'],
                'targets_round_rate': st['targets_round']['rate'], 'transfer_round_rate': st['transfer_round']['rate']}
-        for pool, fn in (('targets', f'{arm}/found_{r}.jsonl'), ('transfer', f'{arm}/found_transfer_{r}.jsonl')):
+        for pool, base in (('targets', 'found'), ('transfer', 'found_transfer')):
+            fn = f'{arm}/{base}_{r}.jsonl'
+            if not os.path.exists(fn):   # intermediate found files removed: use the last cumulative file, filtered by round
+                last = max(rounds); fn = f'{arm}/{base}_{last}.jsonl'
             seen = set(); thm_pat = set(); n_pat = 0; first = None
             other = collections.Counter(); wh = collections.Counter(); ph = collections.Counter(); thms = set()
             examples = []
             for x in rd(fn):
+                if x['round'] > r:
+                    continue
                 pn = norm(x['proof'])
                 k = (x['name'], pn)
                 if k in seen:
