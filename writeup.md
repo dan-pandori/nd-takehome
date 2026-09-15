@@ -98,7 +98,8 @@ the per-length table below lets the reader ignore it.
 
 ### 2.3 Tokenisation: the choice that decides whether length generalisation is possible
 
-One symbol per token (vocab 99). The only design question is how to cite lines. Two schemes were trained and compared:
+One symbol per token (vocab 99). The only design question is how to cite lines. Two schemes were trained and compared
+here (a third, `abs` *without* the offset, is the ablation in §5):
 
 - **`rel`** — line numbers are dropped (regenerated at decode) and a citation becomes "k lines back" (`B<k>`).
   Under cap 6 the model never sees `B6+`, so a 7-line proof that cites its first premise from its last line
@@ -133,8 +134,11 @@ and writes 6× more length-7 proofs. `abs` was used for Stage 2. (Validation-36 
   absolute positions, so no untrained position rows past the Stage-1 sequence lengths). **3,210,240 parameters.**
 - Loss on proof tokens only (prompt masked). AdamW, lr 1e-3 warm-up 200 then cosine to 1e-4, batch 128,
   6,000 steps, weight decay 0.1, bf16 autocast, seed 0. ~12 min per run on the A40 (two runs sharing it).
-  Final val loss 0.0018 (`rel`); `abs` sits higher (≈ 0.09) because the random start index is irreducible entropy.
-- **Held-out by length** (table above): length 6 is harder than length 3 *inside* the training range (87–89% vs 99%).
+  Final val loss 0.0018 (`rel`); `abs` sits at 0.087 because the random start index is irreducible entropy (≈ log 59 nats spread over ~50 proof tokens).
+- **Held-out by length** (table above and `figures/stage1_heldout.png`): length 6 is harder than length 3 *inside* the training
+  range (87–89% vs 99%).
+
+  ![stage1](figures/stage1_heldout.png)
 - **Failures** (`abs`, 261/5000): almost all are `rule check failed` on a well-formed proof (ANDI 71, IMPE 45,
   ORI2 25, NEGE 24, IMPI 17); only 15 end on the wrong formula and 0 are parse errors. Failure rate is highest
   for theorems whose generating proof uses the rare rules (ANDE2 24%, ORE 20%, ANDE1 16% vs 4–7% for the common
@@ -161,13 +165,15 @@ Each round, for every arm:
    ≤ 4 accepted proofs per solved target (each repeated 4×) plus 20,000 random Stage-1 training records
    (so the ≤ 6 regime is not forgotten). Save the checkpoint; the next round samples from it.
 
-Arms (all from `ckpts/stage1_abs.pt`, seed 0, same pools, same k, same temperature, 8 rounds):
+Arms (all from `ckpts/stage1_abs.pt`, same pools, same k, same temperature; seed 0 unless stated):
 
 | arm | training data per round | what it tests |
 |---|---|---|
 | **frozen** (`frozen_abs_s0`) | none — Stage-1 model resampled | the control: what resampling alone finds with the same attempts |
 | **EI** (`ei_abs_s0`) | 4 random accepted proofs per solved target | standard expert iteration / rejection-sampling fine-tuning |
 | **EI-long** (`ei_abs_long_s0`) | the 4 accepted proofs with the longest *dependency-pruned* length per solved target | does selecting for long dependency chains (not padding) move the length prior further? |
+| **EI / frozen, seed 1** (`ei_abs_s1`, `frozen_abs_s1`) | as EI / frozen, sampling seed 1 | seed-to-seed variance of the main comparison |
+| **EI / frozen, rounds 9–16** (`*_cont`) | as EI / frozen, continued from round 8 with the cumulative bookkeeping resumed | does the frontier keep moving with 2× the attempts? |
 
 Round 1 of every arm is the same model with the same seed, so round-1 numbers coincide by construction; the
 control at round r has received exactly the same r × 32 attempts per theorem as the RL arms.
