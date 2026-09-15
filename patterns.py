@@ -78,6 +78,30 @@ def derived_ore(lines):
     return any(ln['rule'] == 'ORE' and ln['refs'] and byidx.get(ln['refs'][0], {}).get('rule') != 'PR' for ln in lines)
 
 
+def derived_ore_strict(lines):
+    """Stricter P1 variant (reported alongside): the disjunction line is obtained by a RULE (not PR, not AS) and its two
+    disjuncts differ (excludes the degenerate ( X v X ) -> X extraction)."""
+    byidx = {ln['idx']: ln for ln in lines}
+    for ln in lines:
+        if ln['rule'] != 'ORE' or not ln['refs']:
+            continue
+        d = byidx.get(ln['refs'][0])
+        if d and d['rule'] not in ('PR', 'AS') and d['formula'][0] == 'or' and d['formula'][1] != d['formula'][2]:
+            return True
+    return False
+
+
+def ore_shape(lines):
+    """For every ORE line: (rule of the disjunction line, disjuncts equal?, both boxes one-line?)."""
+    byidx = {ln['idx']: ln for ln in lines}
+    out = []
+    for ln in lines:
+        if ln['rule'] == 'ORE' and len(ln['refs']) == 5:
+            d = byidx.get(ln['refs'][0]); j, s1, e1, s2, e2 = ln['refs']
+            out.append((d['rule'] if d else '?', bool(d and d['formula'][0] == 'or' and d['formula'][1] == d['formula'][2]), s1 == e1 and s2 == e2))
+    return out
+
+
 def reductio(lines):
     byidx = {ln['idx']: ln for ln in lines}
     for ln in lines:
@@ -103,7 +127,8 @@ def classify(proof, pruned=True):
         return None
     if pruned:
         lines = prune_lines(lines)
-    return {'derived_ore': derived_ore(lines), 'reductio': reductio(lines), 'depth3': depth3(lines), 'pruned_len': len(lines)}
+    return {'derived_ore': derived_ore(lines), 'reductio': reductio(lines), 'depth3': depth3(lines), 'pruned_len': len(lines),
+            'derived_ore_strict': derived_ore_strict(lines), 'ore_shapes': ore_shape(lines)}
 
 
 def test():
