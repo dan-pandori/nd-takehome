@@ -285,13 +285,13 @@ All numbers greedy through `prove.py` (the submission interface) unless marked. 
 |---|---|---|---|---|---|---|---|---|
 | Stage 1 (`abs`, frozen) | 94.8% [94.1, 95.4] | 32.2% [30.0, 34.5] | 48.6% (round 8) | 55.3% [52.9, 57.7] | 7/12 | 0/24 | **73.0%** (195/267; CI 67.4–78.0) | **9.8%** (52/532; CI 7.5–12.6) |
 | EI seed 0, round 8 | 94.9% [94.2, 95.4] | 64.2% [61.9, 66.5] | 77.3% | 82.8% [80.9, 84.6] | 9/12 | 0/24 (greedy); 1/24 pass@32 | — | — |
-| **EI seed 0, round 16 = final** | 95.3% [94.6, 95.8] | 66.8% [64.5, 69.0] | 79.4% | 86.1% [84.4, 87.7] (512 attempts) | 9/12 | 0/24 (greedy); 1/24 pass@32 | **73.0%** (195/267; CI 67.4–78.0) | **14.5%** (77/532; CI 11.7–17.7) |
+| **EI seed 0, round 16 = final** | 95.3% [94.6, 95.8] | 66.8% [64.5, 69.0] | 79.4% | 86.1% [84.4, 87.7] (512 attempts) | 8/12 | 1/24 (`contraposition`, greedy and pass@32) | **73.0%** (195/267; CI 67.4–78.0) | **14.5%** (77/532; CI 11.7–17.7) |
 | Stage 1 (`rel`), for reference | 95.5% [94.9, 96.0] | 26.4% [24.3, 28.6] | — | — | 10/12 | 0/24 | — | — |
 
 Validation-36 with 32 samples at T = 0.8: Stage 1 10/36 (0/24 in > 6), EI round 8 11/36 (1/24: `contraposition`), final 11/36
 (1/24); round 14 reached 12/36 with `export` (7 lines) as a second > 6 solve. `min_lines_ub` was never beaten: no proof
-shorter than the bound was found (`eval_targets.py` reports "shorter 0" for every checkpoint). Greedy through `prove.py`
-the > 6 bin is 0/24 for every checkpoint; `contraposition` is proved greedily at rounds 3 and 7 only.
+shorter than the bound was found (`eval_targets.py` reports "shorter 0" for every checkpoint). Greedy through `prove.py`,
+`contraposition` is proved at rounds 3, 7, 11 and 16 (the final model) and at no other; the other 23 are 0 at every checkpoint.
 
 ### 4.1 Test set (run once)
 
@@ -312,8 +312,8 @@ gain on the generator's own transfer distribution, this is the clearest statemen
 ### 4.2 What the final model writes on the validation `> 6` bin
 
 Greedy attempts of the final model on the 24 hard validation theorems (`artifacts/ei_abs_s0_cont_r16_val36_greedy.jsonl`)
-are **2–7 lines long** (median 5) — 17 of 24 are ≤ 6 lines — and fail with a rule check on a step that skips
-something (`IMPE`, `DN`, `ORE`). On the transfer set the same model writes 7–9-line proofs routinely. The length prior
+are **2–7 lines long** (median 5; 21 of 24 are ≤ 6 lines; the one success, `contraposition`, is 7) and fail with a rule
+check on a step that skips something (`IMPE`, `DN`, `ORE`). On the transfer set the same model writes 7–9-line proofs routinely. The length prior
 was moved *for the generator's theorem shapes*, not in general: on an unfamiliar shape the model falls back to the
 short-proof habit.
 

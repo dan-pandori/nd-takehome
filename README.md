@@ -270,31 +270,59 @@ exactly; we hope you enjoy it.
 
 # Reproduction (this fork's submission)
 
-Hardware: 1× NVIDIA A40 (48 GB), PyTorch 2.8 + CUDA 12.8, Python 3.11; code edited on a
-2-vCPU VPS and run on the pod. All seeds are fixed as shown. Wall-clock figures are in
-`log.md` and `numbers.md`. Only PyTorch, numpy and matplotlib are used (`requirements.txt`).
+Hardware: 1× NVIDIA A40 (48 GB), PyTorch 2.8 + CUDA 12.8, Python 3.11 on a RunPod pod; code edited on a
+2-vCPU VPS. Dependencies: `requirements.txt` (torch, numpy, matplotlib). Seeds as shown. Wall-clock: Stage-1
+data 130 s (CPU), Stage-1 training ~12 min per model (two sharing the GPU), one expert-iteration round
+610–670 s with 2–3 jobs on the GPU (930–980 s with 5), test run 20 s. Total pod time ≈ 4.5 h. Everything
+below is in `log.md` with times, and every number is indexed in `numbers.md`.
 
 ```bash
 # Stage 1 data: procedural generator -> 160k cap-6 proofs (32k per length), 7k long proofs (strict mode)
-python gen.py --n 160000 --per_len 32000 --out data/raw_cap6.jsonl --seed 1            # ~130 s CPU
+python gen.py --n 160000 --per_len 32000 --out data/raw_cap6.jsonl --seed 1
 python gen.py --n 7000 --min 7 --max 16 --per_len 700 --long --out data/raw_long.jsonl --seed 2
-python make_splits.py --cap6 data/raw_cap6.jsonl --long data/raw_long.jsonl \
-       --heldout_per_len 1000 --targets 3000 --transfer 2000                             # -> data/{train,heldout,rl_targets,transfer}.jsonl
-# (data/train.jsonl is stored gzipped in git: gunzip -k data/train.jsonl.gz)
+python make_splits.py --cap6 data/raw_cap6.jsonl --long data/raw_long.jsonl --heldout_per_len 1000 --targets 3000 --transfer 2000
+# -> data/{train,heldout,rl_targets,transfer}.jsonl (train.jsonl is stored gzipped in git: gunzip -k data/train.jsonl.gz)
 
-# Stage 1 model (4 layers, d=256, 8 heads, RoPE, 3,210,240 params), both tokenizer modes
-python train.py --data data/train.jsonl --heldout data/heldout.jsonl --mode abs --steps 6000 --bs 128 --out ckpts/stage1_abs.pt --cap 6 --seed 0   # ~12 min on A40
+# Stage 1 model (4 layers, d=256, 8 heads, RoPE, 3,210,240 params); three tokenizer variants
+python train.py --data data/train.jsonl --heldout data/heldout.jsonl --mode abs --steps 6000 --bs 128 --out ckpts/stage1_abs.pt --cap 6 --seed 0
 python train.py --data data/train.jsonl --heldout data/heldout.jsonl --mode rel --steps 6000 --bs 128 --out ckpts/stage1_rel.pt --cap 6 --seed 0
-bash stage1_eval.sh ckpts/stage1_abs.pt stage1_abs      # held-out greedy by length, transfer greedy + pass@16, validation-36
+python train.py --data data/train.jsonl --heldout data/heldout.jsonl --mode abs --no_shift --steps 6000 --bs 128 --out ckpts/stage1_absfixed.pt --cap 6 --seed 0
+bash stage1_eval.sh ckpts/stage1_abs.pt stage1_abs          # held-out greedy by length, transfer greedy + pass@16, validation-36
 
-# Stage 2: expert iteration vs frozen control (same attempts), 8 rounds, k=32 samples/theorem at T=0.8
-python expert_iter.py --init ckpts/stage1_abs.pt --name ei_abs_s0 --rounds 8 --k 32 --temperature 0.8 --seed 0
+# Stage 2: expert iteration vs frozen control, k=32 samples/theorem at T=0.8 (round r of the control = same r*32 attempts)
+python expert_iter.py --init ckpts/stage1_abs.pt --name ei_abs_s0     --rounds 8 --k 32 --temperature 0.8 --seed 0
 python expert_iter.py --init ckpts/stage1_abs.pt --name frozen_abs_s0 --rounds 8 --k 32 --temperature 0.8 --seed 0 --no_train
-python plots.py --rl ei_abs_s0 --control frozen_abs_s0 --stage1 artifacts/stage1_abs_heldout_greedy.json
+python expert_iter.py --init ckpts/stage1_abs.pt --name ei_abs_s1     --rounds 8 --k 32 --temperature 0.8 --seed 1
+python expert_iter.py --init ckpts/stage1_abs.pt --name frozen_abs_s1 --rounds 8 --k 32 --temperature 0.8 --seed 1 --no_train
+python expert_iter.py --init ckpts/stage1_abs.pt --name ei_abs_long_s0 --rounds 8 --k 32 --temperature 0.8 --seed 0 --select longest
+# rounds 9-16 of seed 0 (cumulative bookkeeping resumed from round 8)
+python expert_iter.py --init ckpts/ei_abs_s0_r8.pt --name ei_abs_s0_cont --start_round 9 --resume_found artifacts/ei_abs_s0 --rounds 8 --k 32 --temperature 0.8 --seed 0
+python expert_iter.py --init ckpts/stage1_abs.pt   --name frozen_abs_s0_cont --start_round 9 --resume_found artifacts/frozen_abs_s0 --rounds 8 --k 32 --temperature 0.8 --seed 0 --no_train
+cp ckpts/ei_abs_s0_cont_r16.pt ckpts/final.pt
 
-# Stage 3: validation set and (once) the test set
-python prove.py --ckpt ckpts/final.pt --in targets/validation_36.jsonl --out artifacts/final_val36.jsonl --greedy
-python eval_targets.py --proofs artifacts/final_val36.jsonl
-python prove.py --ckpt ckpts/final.pt --in targets/test_short_prompts.jsonl --out artifacts/test_short_final.jsonl --greedy
-python score_test.py artifacts/test_short_final.jsonl
+# Figures and tables (artifacts/<arm>/round_<r>.json)
+mkdir -p artifacts/ei_abs_s0_all artifacts/frozen_abs_s0_all
+cp artifacts/ei_abs_s0/round_*.json artifacts/ei_abs_s0_cont/round_*.json artifacts/ei_abs_s0_all/
+cp artifacts/frozen_abs_s0/round_*.json artifacts/frozen_abs_s0_cont/round_*.json artifacts/frozen_abs_s0_all/
+python plots.py --rl ei_abs_s0_all --control frozen_abs_s0_all --rl2 ei_abs_s1 --control2 frozen_abs_s1 \
+       --stage1 artifacts/stage1_abs_heldout_greedy.json --arms ei_abs_s0 ei_abs_s1 ei_abs_long_s0 frozen_abs_s0 frozen_abs_s1
+python make_tables.py --arms ei_abs_s0_all frozen_abs_s0_all ei_abs_s1 frozen_abs_s1 ei_abs_long_s0 > artifacts/tables_all.md
+python gen_stats_plot.py
+python analyze_transfer.py --found artifacts/ei_abs_s0/found_transfer_8.jsonl artifacts/frozen_abs_s0/found_transfer_8.jsonl
+python analyze_found.py artifacts/ei_abs_s0/found_transfer_8.jsonl
+
+# Stage 3: validation-36 per round checkpoint, and the test set (exactly once; the script refuses a second run)
+bash eval_val36_rounds.sh ei_abs_s0 8
+bash test_run_once.sh ckpts/stage1_abs.pt ckpts/final.pt      # -> artifacts/test_scores.txt, artifacts/TEST_RUN_DONE
+
+# The submission interface
+python prove.py --ckpt ckpts/final.pt --in targets/validation_36.jsonl --out out.jsonl --greedy && python eval_targets.py --proofs out.jsonl
 ```
+
+Files: `gen.py` (generator), `make_splits.py`, `tokenizer.py`, `model.py`, `train.py`, `sample.py` (batched KV-cache
+sampling), `prove.py` (required interface), `eval_set.py`, `prune.py` (dependency-pruned length), `expert_iter.py`,
+`plots.py`, `make_tables.py`, `analyze_transfer.py`, `analyze_found.py`, `gen_stats_plot.py`, `stage1_eval.sh`,
+`eval_val36_rounds.sh`, `test_run_once.sh`, `pod/` (job-queue scripts used on the pod). Checkpoints in git:
+`ckpts/stage1_abs.pt`, `ckpts/final.pt` (12.9 MB each); all per-round checkpoints were kept off git.
+Large per-proof artifacts (`artifacts/*/found_*.jsonl`, sampled outputs) are excluded from git; the per-round
+JSON summaries, tables, validation outputs and test scores are included.
