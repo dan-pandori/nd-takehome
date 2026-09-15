@@ -71,6 +71,7 @@ class Gen:
         self.atoms = atoms
         self.bot_p = bot_p
         self.ore_steps = 3
+        self.strict = False   # long pools: no lazy (Z>G)/G fallback, no F, fewer garbage intros
 
     # ---------- formulas ----------
     def rf(self, depth=None):
@@ -242,6 +243,8 @@ class Gen:
             ln = o[1]
             return self.emit(G, 'ANDE1' if ln.f[1] == G else 'ANDE2', [ln])
         # lazy premise: (Z > G) for some available Z (prefer the current box's last line)
+        if self.strict:
+            raise Fail('strict: no lazy goal premise')
         av = self.avail()
         if av and rng.random() < 0.85:
             z = last if (last is not None and rng.random() < 0.6) else rng.choice(av)
@@ -260,7 +263,10 @@ class Gen:
         if self.depth > 0 and len(self.levels[-1]) >= 1:
             acts += ['close'] * 3
         if av:
-            acts += ['andi'] * 2 + ['ori'] * 2 + ['impe'] * 4 + ['nege'] * 3 + ['ande'] * 2 + ['dn'] * 2 + ['bote'] + ['ore'] * 5
+            if self.strict:
+                acts += ['andi', 'ori'] + ['impe'] * 4 + ['nege'] * 3 + ['ande'] * 3 + ['dn'] * 2 + ['bote'] + ['ore'] * 6
+            else:
+                acts += ['andi'] * 2 + ['ori'] * 2 + ['impe'] * 4 + ['nege'] * 3 + ['ande'] * 2 + ['dn'] * 2 + ['bote'] + ['ore'] * 5
             if self.depth > 0:
                 acts.append('r')
         else:
@@ -336,7 +342,7 @@ class Gen:
                     else:
                         return
                 self.emit_new(im.f[2], 'IMPE', [im, ant])
-            else:
+            elif not self.strict:
                 x = rng.choice(av)
                 if len(self.prem) < self.max_prem and rng.random() < 0.6:
                     im = self.add_premise(('imp', x.f, self.rf()))
@@ -507,6 +513,11 @@ class Gen:
             raise Fail('trivial: conclusion is a premise')
         if any(p.f == BOT for p in prem):
             raise Fail('trivial: F premise')
+        if self.strict:
+            if last.rule in ('ANDI', 'ORI1', 'ORI2', 'BOTE', 'R'):
+                raise Fail('strict: intro conclusion')
+            if any('F' in fstr(p.f) for p in prem) or 'F' in fstr(last.f):
+                raise Fail('strict: F in theorem')
         toks = []
         for ln in lines:
             toks.append(f'N{ln.idx}')
@@ -543,6 +554,8 @@ def canon_key(thm):
 
 def sample_one(g, rng, long=False):
     g.ore_steps = 3 if long else 1
+    g.strict = long
+    g.bot_p = 0.0 if long else 0.02
     if long:
         mode = 'goal' if rng.random() < 0.5 else 'forward'
         if mode == 'forward':
