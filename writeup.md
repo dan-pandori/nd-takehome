@@ -232,7 +232,20 @@ generator as Stage 1, and De Morgan / distribution shapes are simply not in it (
 _(pending)_
 
 ## 4. Stage 3 — evaluation
-_(the table; validation-36 by bin; test set lines verbatim)_
+
+All numbers greedy through `prove.py` (the submission interface) unless marked. Test-set rows are filled in once, at the end (§4.1).
+
+| model | Stage-1 held-out (n = 5,000) | transfer greedy (n = 1,638) | transfer pass@32 (per round) | transfer cumulative, 256 attempts | validation ≤ 6 (n = 12) | validation > 6 (n = 24) | test short | test long |
+|---|---|---|---|---|---|---|---|---|
+| Stage 1 (`abs`, frozen) | 94.8% [94.1, 95.4] | 32.2% [30.0, 34.5] | 48.6% (round 8) | 55.3% [52.9, 57.7] | 7/12 | 0/24 | _pending_ | _pending_ |
+| EI round 8, seed 0 (final) | 94.9% [94.2, 95.4] | 64.2% [61.9, 66.5] | 77.3% | 82.8% [80.9, 84.6] | 9/12 | 1/24 (`contraposition`) | _pending_ | _pending_ |
+| Stage 1 (`rel`), for reference | 95.5% [94.9, 96.0] | 26.4% [24.3, 28.6] | — | — | 10/12 | 0/24 | — | — |
+
+Validation-36 with 32 samples at T = 0.8: Stage 1 10/36 (0/24 in > 6), EI round 8 11/36 (1/24). `min_lines_ub` was
+never beaten: no proof shorter than the bound was found (`eval_targets.py` reports "shorter 0" for every checkpoint).
+
+### 4.1 Test set (run once)
+_pending — `artifacts/TEST_RUN_DONE` is created immediately before the single run; the two `score_test.py` lines are pasted verbatim here._
 
 ## 5. What limits the frontier
 
