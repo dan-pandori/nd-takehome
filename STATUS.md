@@ -9,13 +9,12 @@ Phase 1 (now): novelty.py log-probs + reachability; coverage.py base-model sampl
 - 19:20 read prior run, wrote Phase 1 plan (log.md)
 - 19:40 novelty.py log-probs done (artifacts/novelty_phase1_*.jsonl); minlen labels for val36/transfer/targets; patterns.py tests pass; phase1_analysis.py + figures/phase1_*.png (partial coverage data)
 
-## Running on pods (20:20 UTC)
-- p1: coverage.py base transfer k=1e4 shards 0,1 (ETA ~21:35); then Phase-2 EI arms for derived_ore (queue pod/p2jobs/row1_ei_p1.txt)
-- p2: coverage shard 2 (slowed by sharing); Phase-2 Stage-1 row 1 (depth3_f0.1, derived_ore_f0, derived_ore_f0.02 x 2 seeds) then EI/frozen depth3 arms (pod/p2jobs/row1_*_p2.txt)
-- p3: Phase-2 Stage-1 row 1 (reductio_f0, reductio_f0.1, depth3_f0 x 2 seeds) then EI/frozen reductio arms (pod/p2jobs/row1_*_p3.txt)
-- Phase-2 pools built and pulled: data/p2/ (820k-class cap-6 pool on p1; 15 train sets of 155k; targets/transfer per pattern; minlen + intuit labels)
+## Running on pods (21:05 UTC)
+- p1: coverage shards 0,1 finishing (~21:35); precursor extraction done; next: rows 2-3 Stage-1 (pod/p2jobs/rows23_s1_p1.txt) + derived_ore EI arms (row1_ei_p1.txt)
+- p2: Stage-1 derived_ore_f0_s1, f0.02 s0/s1 (~21:15); EI depth3_f0.1 s0/s1 + frozen running (round 1); coverage shard 2 (slow, ~91 min); depth3_f0 ckpts copied from p3
+- p3: EI reductio_f0 s0/s1, reductio_f0.1 s0 (round 1 done at 1,330 s/round; 8 rounds ~3 h); frozen + reductio_f0.1_s1 queued
+- base pass@1e4 on pattern targets: paused (GPU congestion); rerun on 300 targets per pattern when EI arms finish
 
 ## Next step
-- when Stage-1 row 1 finishes: copy depth3_f0 ckpts p3->p2, derived_ore ckpts p2->p1, start p1 EI queue
-- when coverage finishes: rerun phase1_analysis.py, write phase1.md; queue base pass@1e4 on pattern targets for f=0 seed-0 models
-- rows 2-3 (f=1e-3 x2 seeds; f=1e-4,1e-2 x1 seed): sets exist, push + queue after row 1
+- 21:35 phase1_analysis.py on full coverage -> finalise phase1.md; copy derived_ore ckpts p2->p1, start p1 EI queue; start rows 2-3 Stage-1 on p1 (reniced)
+- Phase 3 prep done: data/p3/textbook_targets.jsonl (623), data/p3/precursors.jsonl (on p1), expert_iter --extra_train
