@@ -223,10 +223,14 @@ The frozen model's failures are structural: at round 8 its greedy failure reason
 `DN` 78, `NEGE` 68, `IMPE` 47, `IMPI` 26, `bad box cite` 27: the box machinery beyond depth 2 has been learned;
 what remains are local rule slips.
 
-**Padding.** 42% of accepted proofs (round 1) contain at least one line the conclusion does not depend on (mean
-1.07 lines); reiteration is rare (0.09 `R` lines per proof). Padding is a property of the Stage-1 policy, not something
-RL introduced: the written − pruned gap on transfer is 1.0 line at round 1 and 0.9 at round 8, and the pruned
-frontier moves in lockstep with the written one (9 / 9). Nothing in the headline depends on it.
+**Padding.** 42% of the proofs accepted in round 1 contain at least one line the conclusion does not depend on
+(mean gap written − pruned 0.45 lines; 0.09 reiterations per proof); the frozen model's 47k accepted transfer proofs
+over 16 rounds have the same profile (47%, gap 0.53). **RL increases padding**: among new distinct proofs found per
+round, the padded fraction rises 42% → 56% (round 8) → 61% (round 16) and the gap 0.45 → 0.69 → 0.84 lines,
+reiterations 0.09 → 0.18 per proof (`analyze_found.py`, per-round breakdown in `log.md`). This is the reward-hacking
+direction the brief warned about, at a modest level: the *pruned* frontier moves exactly as the written one (9 / 9 on
+transfer at every round from 4 on; 10 / 10 on targets), and the ≥ 9-line count in pruned length is 272 vs 397 written.
+Every headline number is given in both lengths.
 
 **In-distribution.** Held-out greedy stays at 94.9% (frozen 94.8%); it dipped to 93.1% at round 4 and recovered
 with the retained Stage-1 slice.
@@ -365,6 +369,8 @@ already produces with non-zero probability.
   distribution (nested `IMPI` boxes, `ORE` over disjunction premises) shapes what "long" means here, and the RL
   targets come from the same generator as the training data (strict mode), so transfer to *textbook* theorems
   is measured only on validation-36 and the test files.
+- **Padding grows under RL** (42% → 61% of new proofs carry a dead line, +0.4 lines on average over 16 rounds). It does
+  not change the frontier here, but a longer run would need the pruned proof as the training target (§7).
 - **Expert iteration is off-policy in spirit.** Each round fine-tunes on a growing set of past successes; the
   policy can drift towards theorem types it already solves (the retained Stage-1 slice guards the ≤ 6 regime,
   and held-out greedy is reported every round, but the RL-target pool itself is fixed).

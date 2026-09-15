@@ -67,3 +67,8 @@
 | Stage 1 short / long | 73.0% (195/267; CI 67.4–78.0) / 9.8% (52/532; CI 7.5–12.6) | `artifacts/test_scores.txt` |
 | final (EI s0 r16) short / long | 73.0% (195/267; CI 67.4–78.0) / 14.5% (77/532; CI 11.7–17.7) | `artifacts/test_scores.txt` |
 | validation-36 final greedy / pass@32 | 9/36 / 11/36 | `artifacts/ei_abs_s0_cont_r16_val36_greedy.txt`, `_k32.json` |
+| padding by round (padded fraction / mean written−pruned / R per proof) | r1 0.42/0.45/0.09; r8 0.56/0.69/0.14; r16 0.61/0.84/0.18; frozen 0.47/0.53 | `analyze_found.py` on `artifacts/ei_abs_s0_cont/found_transfer_16.jsonl`, `artifacts/frozen_abs_s0_cont/found_transfer_16.jsonl` (log.md 07:50) |
+| transfer breakdown by generating length / depth / premises (r8, r16) | table | `artifacts/transfer_breakdown.md` |
+| pruned ≥9-line transfer proofs, final | 272 (written 397) | `artifacts/ei_abs_s0_cont/round_16.json` `transfer_cum.pruned_hist` |
+| validation >6 greedy attempt lengths, final | 2–7, median 5, 21/24 ≤6 | `artifacts/ei_abs_s0_cont_r16_val36_greedy.jsonl` + verifier |
+| EI-long validation-36 r8 greedy / pass@32 | 8/36 / 9/36 | `artifacts/ei_abs_long_s0_r8_val36_*` |

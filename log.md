@@ -55,3 +55,5 @@
   final (ckpts/final.pt) : test_long_prompts.jsonl: 14.5% passed  (77/532; 95% CI 11.7–17.7%)
   final = ckpts/ei_abs_s0_cont_r16.pt copied to ckpts/final.pt. The long-set gain (+4.7pp) is small relative to the transfer-set gain (+32pp greedy): textbook theorems are a different distribution from the generator's (see writeup §5, barrier 3).
 - 07:38  Validation-36 for the continuation: r9-r16 greedy 8-11/36, pass@32 11-12/36 (r14: 12). Final (r16): greedy 9/36, pass@32 11/36.
+- 07:50  Padding by round (new distinct transfer proofs found in that round; written>pruned fraction / mean gap / R per proof): r1 0.42/0.45/0.09, r4 0.52/0.60/0.10, r8 0.56/0.69/0.14, r12 0.59/0.75/0.13, r16 0.61/0.84/0.18. Frozen (47,393 proofs over 16 rounds): 0.47/0.53. So RL does increase padding modestly; the pruned frontier still equals the written one (9/9 transfer, 10/10 targets). Reported in writeup §3.2 and Limitations.
+- 07:50  EI-long validation-36 r8: greedy 8/36, pass@32 9/36 (lower than EI 9/11).
