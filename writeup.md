@@ -17,17 +17,108 @@ _(filled in at the end; see section "Headline" below for the current numbers)_
 
 ## 2. Stage 1 — data and supervised model
 
+
 ### 2.1 Generator (`gen.py`)
-_(method text: forward mode, goal mode, lazy premises, ORE completion, dependency pruning, verification; histograms)_
+
+Every training proof comes from a procedural random generator; nothing is written by hand and no
+target is ever given to it. It samples proofs, not theorems: the theorem is whatever the proof ends up proving.
+
+- **Forward mode.** Start with 0–3 random premises (formulas over `P Q R S`, nesting ≤ 2, `F` as a leaf with
+  probability 0.02). Repeatedly pick a rule at random and apply it to the lines that are currently citable;
+  open a box with a random hypothesis (or the antecedent of a citable implication, or `~~X`); close the
+  innermost box with `IMPI`, or `NEGI` when it ends in `F`. When a rule needs a formula that is not citable
+  (the antecedent for `IMPE`, the partner for `NEGE`, a disjunction for `ORE`) it may **introduce that formula
+  as a premise** (lazily, capped at 3 premises). This is what makes premises fit together: `modus ponens`
+  shapes appear because an `IMPE` step asked for its antecedent, not because anyone wrote them down.
+- **Goal mode.** Sample a random conclusion and *complete* it with `reach(G)`: decompose by the main connective
+  (`ANDI`, `ORI`, a box for `IMPI`, a box ending in `F` for `NEGI`, or classical reductio: assume `~G`, reach
+  `F`, `NEGI`, `DN`), or use a citable line (`R`, `IMPE`, `ANDE`, `DN`, `BOTE`), or add a lazy premise `(Z > G)`.
+  It never fails and never backtracks — it is a random generator with a goal, not a prover.
+- **`ORE`.** The second branch is completed with `reach` to the first branch's end formula, so both boxes end in the same `G`.
+- **Dependency pruning.** Only lines the conclusion transitively cites are kept (box citations keep the `AS`
+  line and the box's last line); unused premises are dropped. Then the proof is renumbered and passed to
+  `nd_verify.verify_text`; anything rejected is discarded and counted. **0 of 160,000 emitted cap-6 proofs
+  and 0 of 7,000 long proofs were rejected.**
+- **Filters.** Conclusion literally a premise and `F` as a premise are rejected (`trivial`). Dedup by theorem
+  *class* (atoms relabelled in order of first appearance). Length histogram flattened by a per-length cap.
+
+Figure: pool sizes by length, rule usage, premise counts.
+
+![data stats](figures/data_stats.png)
+
+Trivial-pattern audit of the 160k cap-6 pool (`make_splits.py`): 1,382 (0.9%) are `A |- A v A` / `A |- A & A`
+shapes; 9,803 (6.1%) have a contradictory premise pair (kept in Stage 1, removed from the RL pools);
+20% of the pool is length 2 by construction (single rule application), not counted as trivial here but
+the per-length table below lets the reader ignore it.
 
 ### 2.2 Splits (`make_splits.py`)
-_(disjoint by atom-renaming class; validation classes removed; renaming-overlap estimate; trivial fraction)_
+
+| pool | n | lengths | role |
+|---|---|---|---|
+| `data/train.jsonl` | 154,990 | 2–6, ~31k each | Stage-1 supervised (every record asserted ≤ 6 at load) |
+| `data/heldout.jsonl` | 5,000 | 2–6, 1,000 each | in-distribution greedy tracking |
+| `data/rl_targets.jsonl` | 3,000 | 7–16, 300 each | RL samples against these |
+| `data/transfer.jsonl` | 1,638 | 7–16, 125–200 each | never sampled for training |
+
+- Disjoint **by atom-renaming class** across all four pools (stricter than by sequent string): the class key
+  relabels atoms in order of first appearance, so `( P > Q ) , P |- Q` and `( R > S ) , R |- S` are one class.
+  Renaming overlap of held-out with train is therefore 0 by construction. For calibration: inside the generator
+  run, 78,931 distinct theorem *strings* were renamings of an already-emitted class (≈ 33% of distinct strings),
+  so a split by exact string would have leaked about that much.
+- The 36 validation classes are removed from every pool (10 hits in the cap-6 pool, 6 in the long pool — e.g.
+  modus ponens is generated naturally). The test files were never opened or filtered against.
+- Long pools use a **strict** generator mode (no lazy `(Z > G)` goal premise, no `F` in the theorem, final rule must
+  be an elimination/discharge rule, contradictory premise pairs removed). A first version without these
+  restrictions was too easy: 85% of what the frozen model solved, it solved with a ≤ 6-line proof (`log.md` 03:50).
+  The generating length is stored as `n_lines` but is only an **upper bound** on the theorem's shortest proof.
 
 ### 2.3 Tokenisation: the choice that decides whether length generalisation is possible
-_(rel vs abs with random start offset; results table)_
+
+One symbol per token (vocab 99). The only design question is how to cite lines. Two schemes were trained and compared:
+
+- **`rel`** — line numbers are dropped (regenerated at decode) and a citation becomes "k lines back" (`B<k>`).
+  Under cap 6 the model never sees `B6+`, so a 7-line proof that cites its first premise from its last line
+  needs a token the model has never emitted, and its logit has been pushed down for 6,000 steps.
+- **`abs`** — keep `N<i>` verbatim, but during training shift every index in a proof by a random offset
+  (the verifier accepts any starting index). All of `N1..N64` are trained tokens; the line number is a
+  successor function the model has seen everywhere in `1..64`; citing a line is *copying an index token that is
+  in context*, which is length-agnostic.
+
+| Stage-1 held-out, greedy (n = 1,000 per length) | `rel` | `abs` |
+|---|---|---|
+| length 2 | 99.8% [99.3, 99.9] | 99.8% [99.3, 99.9] |
+| length 3 | 99.1% [98.3, 99.5] | 98.6% [97.7, 99.2] |
+| length 4 | 97.1% [95.9, 98.0] | 96.2% [94.8, 97.2] |
+| length 5 | 92.9% [91.1, 94.3] | 92.0% [90.2, 93.5] |
+| length 6 | 88.6% [86.5, 90.4] | 87.3% [85.1, 89.2] |
+| all (n = 5,000) | **95.5% [94.9, 96.0]** | **94.8% [94.1, 95.4]** |
+
+| Beyond the cap, frozen Stage-1 model, transfer pool (n = 1,638) | `rel` | `abs` |
+|---|---|---|
+| greedy pass@1 | 26.4% [24.3, 28.6] | 32.2% [30.0, 34.5] |
+| pass@16, T = 0.8 | 40.5% [38.2, 42.9] | 44.7% [42.3, 47.1] |
+| distinct verified proofs of written length 7 / 8 (pass@16) | 79 / 0 | 501 / 1 |
+| validation-36 greedy | 10/36 (10/12 in ≤6, 0/24 in >6) | 7/36 (7/12, 0/24) |
+
+In-distribution the two are equal within noise; beyond the cap `abs` is 4–6 pp better (SE of the difference ≈ 1.7 pp)
+and writes 6× more length-7 proofs. `abs` was used for Stage 2. (Validation-36 is n = 36; the 3-theorem gap there is noise.)
 
 ### 2.4 Model and training
-_(4L d256 RoPE, 3,210,240 params, hyper-parameters, wall-clock; held-out by length; failure analysis)_
+
+- Decoder-only transformer from scratch: 4 layers, d = 256, 8 heads, GELU MLP ×4, pre-LN, **RoPE** (no learned
+  absolute positions, so no untrained position rows past the Stage-1 sequence lengths). **3,210,240 parameters.**
+- Loss on proof tokens only (prompt masked). AdamW, lr 1e-3 warm-up 200 then cosine to 1e-4, batch 128,
+  6,000 steps, weight decay 0.1, bf16 autocast, seed 0. ~12 min per run on the A40 (two runs sharing it).
+  Final val loss 0.0018 (`rel`); `abs` sits higher (≈ 0.09) because the random start index is irreducible entropy.
+- **Held-out by length** (table above): length 6 is harder than length 3 *inside* the training range (87–89% vs 99%).
+- **Failures** (`abs`, 261/5000): almost all are `rule check failed` on a well-formed proof (ANDI 71, IMPE 45,
+  ORI2 25, NEGE 24, IMPI 17); only 15 end on the wrong formula and 0 are parse errors. Failure rate is highest
+  for theorems whose generating proof uses the rare rules (ANDE2 24%, ORE 20%, ANDE1 16% vs 4–7% for the common
+  ones) and for 3-premise theorems (16% vs 4–6%).
+- What the failures look like on validation-36 (`explosion`, `export`, `import`): the model has the right shape and
+  **skips one step** — e.g. for `export` it writes `R : IMPE N20 N21` citing `P` where `( P & Q )` was needed (one
+  `ANDI` short), for `import` it closes the box one `IMPE` early. That is a length prior, and it is exactly what
+  Stage 2 has to move.
 
 ## 3. Stage 2 — expert iteration against the verifier
 _(protocol, arms, control; per-round table; figures)_
