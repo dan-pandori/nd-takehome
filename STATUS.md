@@ -1,6 +1,6 @@
 # STATUS
 
-Updated: 2026-09-15 03:53 UTC
+Updated: 2026-09-15 04:13 UTC
 
 ## Plan
 1. 03:25–04:30  gen.py (forward random generator with lazy premises + goal completion for ORE branches, dependency pruning, verify every proof), tokenizer.py (two modes: `rel` relative refs, `abs` absolute refs with random start offset), model.py (4L d256 RoPE decoder), train.py, sample.py (batched KV-cache sampling), prove.py. Unit tests vs verifier.
@@ -18,10 +18,14 @@ Updated: 2026-09-15 03:53 UTC
 - Stage 1 trained + evaluated both modes (see log.md 03:55). Chosen: abs. ckpts/stage1_abs.pt, ckpts/stage1_rel.pt.
 - Long pools regenerated in strict mode (v2); v1 kept as data/*_v1.jsonl.
 
-## Running on pod
-- artifacts/ei_abs_s0.log  : expert iteration, 8 rounds k=32 (ckpts/ei_abs_s0_r<r>.pt)
-- artifacts/frozen_abs_s0.log : frozen control, same attempts
-- artifacts/stage1_transfer2_cmp.log : frozen rel/abs pass@16 on transfer v2
+- writeup.md sections 2 and 3.1 written; numbers.md Stage-1 part; README reproduction draft; figures/data_stats.png.
+- EI round 2 (after one fine-tune): transfer pass@32 62.0% (r1 47.0%), greedy 45.1% (32.2%), held-out 94.5%; written-8 proofs 6 -> 98 per round.
+
+## Running on pod (each round ~10-12 min with 3 jobs; 8 rounds -> done ~05:30)
+- artifacts/ei_abs_s0.log      : expert iteration, 8 rounds k=32 (ckpts/ei_abs_s0_r<r>.pt)
+- artifacts/frozen_abs_s0.log  : frozen control, same attempts
+- artifacts/ei_abs_long_s0.log : EI-long arm (--select longest)
+- DONE: artifacts/stage1_transfer2_cmp.log (frozen rel/abs on transfer v2)
 
 ## Next step
 - when rounds land: plots.py, look at 10-20 found proofs, check for padding; decide Stage 2b (second seed vs relabel arm).
