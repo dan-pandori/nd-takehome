@@ -67,7 +67,11 @@ def rformula(rng, depth):
     if r < 0.25:
         return N(rformula(rng, depth - 1))
     op = rng.choice(['and', 'or', 'imp'])
-    return (op, rformula(rng, depth - 1), rformula(rng, depth - 1))
+    for _ in range(10):
+        l, r_ = rformula(rng, depth - 1), rformula(rng, depth - 1)
+        if l != r_:          # avoid degenerate ( X op X ) sub-formulas
+            return (op, l, r_)
+    return N(rformula(rng, depth - 1))
 
 
 def main():
@@ -96,6 +100,8 @@ def main():
             # metavariables: mostly small compound formulas, sometimes atoms (but then arranged so the class differs from val-36)
             depth = rng.choice([1, 1, 2])
             A, B, C, D = (rformula(rng, depth) for _ in range(4))
+            if len({A, B, C, D}) < 4:
+                stats['degenerate'] += 1; continue
             prem, concl = SCHEMATA[name](A, B, C, D)
             # skip degenerate instances (a premise equal to the conclusion, duplicate premises)
             if concl in prem or len(set(prem)) != len(prem):
