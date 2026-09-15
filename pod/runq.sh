@@ -12,10 +12,10 @@ run_one() {
   bash -c "$*" > artifacts/p2/$name.log 2>&1 && touch artifacts/p2/$name.done && echo "$(date -u +%H:%M:%S) done $name" || echo "$(date -u +%H:%M:%S) FAILED $name"
 }
 export -f run_one
-grep -v '^#' "$J" | grep -v '^\s*$' | while IFS= read -r line; do
+while IFS= read -r line; do
   while [ "$(jobs -rp | wc -l)" -ge "$N" ]; do sleep 15; done
   run_one $line &
   sleep 5
-done
+done < <(grep -v '^#' "$J" | grep -v '^\s*$')
 wait
 echo "$(date -u +%H:%M:%S) QUEUE DONE $J"
