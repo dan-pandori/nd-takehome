@@ -72,3 +72,4 @@
 | pruned ≥9-line transfer proofs, final | 272 (written 397) | `artifacts/ei_abs_s0_cont/round_16.json` `transfer_cum.pruned_hist` |
 | validation >6 greedy attempt lengths, final | 2–7, median 5, 21/24 ≤6 | `artifacts/ei_abs_s0_cont_r16_val36_greedy.jsonl` + verifier |
 | EI-long validation-36 r8 greedy / pass@32 | 8/36 / 9/36 | `artifacts/ei_abs_long_s0_r8_val36_*` |
+| pass@128 one shot (seed 7), final / Stage 1 | 82.6% [80.7,84.4] / 52.9% [50.4,55.3]; written 8/9/10: 2215/335/2 vs 32/0/0; frontier 9 / 8 | `artifacts/final_transfer_k128.json`, `artifacts/stage1_transfer_k128.json` |

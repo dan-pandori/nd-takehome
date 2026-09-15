@@ -57,3 +57,4 @@
 - 07:38  Validation-36 for the continuation: r9-r16 greedy 8-11/36, pass@32 11-12/36 (r14: 12). Final (r16): greedy 9/36, pass@32 11/36.
 - 07:50  Padding by round (new distinct transfer proofs found in that round; written>pruned fraction / mean gap / R per proof): r1 0.42/0.45/0.09, r4 0.52/0.60/0.10, r8 0.56/0.69/0.14, r12 0.59/0.75/0.13, r16 0.61/0.84/0.18. Frozen (47,393 proofs over 16 rounds): 0.47/0.53. So RL does increase padding modestly; the pruned frontier still equals the written one (9/9 transfer, 10/10 targets). Reported in writeup §3.2 and Limitations.
 - 07:50  EI-long validation-36 r8: greedy 8/36, pass@32 9/36 (lower than EI 9/11).
+- 07:49  pass@128 in one shot (fresh seed 7) on transfer: final 82.6% [80.7,84.4] vs Stage 1 52.9% [50.4,55.3]; written 8/9/10-line distinct proofs 2215/335/2 vs 32/0/0; frontier 9 vs 8 (pruned identical). Sampling 210k proofs in 168 s with the fixed sampler alone on the GPU.

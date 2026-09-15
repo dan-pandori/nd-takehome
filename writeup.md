@@ -285,6 +285,10 @@ generator as Stage 1, and De Morgan / distribution shapes are simply not in it (
 - **Eight more rounds** (rounds 9–16, `figures/rounds.png`) add 3 pp cumulative and 2.6 pp greedy, double the number of
   ≥ 9-line transfer proofs (195 → 397), and produce 151 distinct ≥ 10-line proofs on the RL targets — but the
   transfer frontier stays at 9 and no 10-line transfer proof appears. The length distribution is saturating.
+- **Budget check, 128 fresh samples per transfer theorem in one shot** (T = 0.8, seed 7, `eval_set.py --k 128`): final
+  model 82.6% [80.7, 84.4] vs Stage 1 52.9% [50.4, 55.3]; distinct proofs of written length 8 / 9 / 10: **2,215 / 335 / 2**
+  vs **32 / 0 / 0**. The first two 10-line transfer proofs appear here; the ≥ 5-proof frontier is still 9 vs 8. More
+  attempts do not close the gap: the frozen model's length distribution ends at 8 whatever the budget.
 - The **final model** is round 16 of seed 0 (`ckpts/final.pt` = `ckpts/ei_abs_s0_cont_r16.pt`).
 
 ## 4. Stage 3 — evaluation
