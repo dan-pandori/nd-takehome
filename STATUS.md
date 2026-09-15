@@ -7,9 +7,13 @@ Phase 1 (now): novelty.py log-probs + reachability; coverage.py base-model sampl
 
 ## Done
 - 19:20 read prior run, wrote Phase 1 plan (log.md)
+- 19:40 novelty.py log-probs done (artifacts/novelty_phase1_*.jsonl); minlen labels for val36/transfer/targets; patterns.py tests pass; phase1_analysis.py + figures/phase1_*.png (partial coverage data)
 
 ## Running on pods
-- (none yet)
+- p1: coverage.py base transfer k=1e4 shards 0,1 (ETA ~21:00 UTC); make_coverage_sets.py gen (Phase 2 pools, CPU)
+- p2: coverage.py val36 k=1e5 then transfer shard 2
+- p3: created 19:35, idle until Phase 2 pools exist
 
 ## Next step
-- write coverage.py, push data+ckpts to p1, launch transfer k=1e4 sampling
+- assemble Phase 2 sets (make_coverage_sets.py assemble/targets), minlen-label long pool, start Stage-1 row 1 on p3
+- when coverage finishes: rerun phase1_analysis.py, write phase1.md
