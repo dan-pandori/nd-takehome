@@ -326,3 +326,16 @@ sampling), `prove.py` (required interface), `eval_set.py`, `prune.py` (dependenc
 `ckpts/stage1_abs.pt`, `ckpts/final.pt` (12.9 MB each); all per-round checkpoints were kept off git.
 Large per-proof artifacts (`artifacts/*/found_*.jsonl`, sampled outputs) are excluded from git; the per-round
 JSON summaries, tables, validation outputs and test scores are included.
+
+### Post-run review: normalised counts and overlap audit
+
+```bash
+python normalize.py            # recount distinct proofs with the start index renumbered from N1
+                               # -> artifacts/<arm>_norm/, artifacts/*_norm.json, artifacts/normalized_summary.md
+python audit_test_overlap.py   # renaming-class / exact-string overlap of eval files with the pools (counts only)
+mkdir -p artifacts/ei_abs_s0_all_norm artifacts/frozen_abs_s0_all_norm   # done by normalize.py
+python plots.py --rl ei_abs_s0_all_norm --control frozen_abs_s0_all_norm --rl2 ei_abs_s1_norm --control2 frozen_abs_s1_norm \
+  --arms ei_abs_s0_all_norm frozen_abs_s0_all_norm ei_abs_s1_norm frozen_abs_s1_norm ei_abs_long_s0_norm
+python make_tables.py --arms ei_abs_s0_all_norm frozen_abs_s0_all_norm ei_abs_s1_norm frozen_abs_s1_norm ei_abs_long_s0_norm > artifacts/tables_all_norm.md
+```
+`normalize.py` needs the `found_*.jsonl` files (not in git; ~3.7 GB on the run host). The writeup's proof counts are the normalised ones; see the correction box at the top of `writeup.md`.
