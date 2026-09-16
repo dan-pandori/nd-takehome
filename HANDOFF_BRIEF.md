@@ -160,3 +160,34 @@ Deliverables: `ignition.md` (≤ 400 words + figures `figures/ignition_*.png`: a
 base rate, ignition round vs base rate, per-round curves for all arms, intervention outcomes),
 `numbers.md` and `log.md` sections, `STATUS.md` with `DONE`. A separate reviewer session will
 re-derive your counts afterwards, so keep every count reproducible from the files you pull back.
+
+---
+
+## Addendum from Dan, relayed 2026-09-16 (read this as overriding the tone above)
+
+The brief above is more prescriptive than Dan intends. What he actually wants:
+
+- **The only hard rule is: do not contact or involve other humans** (no reviewers, no
+  messages, nothing sent to Dmitry or anyone else). Everything else in this and earlier briefs
+  is either a *standard with a reason* or a *suggestion*.
+- **Standards with reasons** (keep them, and say when you deviate and why): the take-home's
+  own rules (cap 6 on supervised data, at most one test-file run, `nd_verify` unmodified, no
+  hand-written or LLM-written training proofs), and the things that were learned from real
+  bugs (start-index-normalised counts, a frozen control at equal attempts, a base-reachability
+  number with every "RL solved X", two seeds before calling a difference, expectations written
+  down before a run, splits disjoint by renaming class). They exist because each one was
+  violated once and produced a wrong number.
+- **Suggestions**: the experiment designs, the pod counts, the budget lines, the deadlines,
+  the deliverable formats. Use your own judgment. If a different experiment, a bigger one, a
+  different kind of pod, or more compute would answer the project's questions better, propose
+  it or do it. The $100 figure is a comfort level, not a wall; the RunPod balance is the only
+  real cap. Dan is open to using the budget in other ways.
+- **Dan is reachable.** He is not watching live, but he reads `STATUS.md` and will answer
+  questions. Put anything you want to ask him in `QUESTIONS.md` at the repo root (dated, with
+  the default you will follow if unanswered), commit it, and proceed on that default rather
+  than blocking. Questions about direction, scope, spend, and what he would find most useful
+  are all welcome.
+- **The goal** is the SPAR project's question — to what extent does RL against a verifier
+  produce genuinely new capability rather than eliciting rare-but-known behaviour, and what
+  limits it — not any particular design in these briefs. Work that answers that better than
+  the plan is better than the plan.
