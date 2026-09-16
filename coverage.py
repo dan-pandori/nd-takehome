@@ -15,7 +15,7 @@ invariant under renumbering), and writes ONE record per theorem to <out>.s<shard
 Failures are not stored. Resumable: theorems already present in the output file are skipped.
 Samples are i.i.d. per theorem, so first_hit <= B is one Bernoulli draw of pass@B and n_ok/n_tried estimates the per-sample rate.
 """
-import argparse, json, os, sys, time, collections
+import argparse, json, os, sys, time, collections, multiprocessing
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import torch
 from model import load_ckpt
@@ -26,6 +26,19 @@ from normalize import norm
 from patterns import classify, PATTERNS
 
 BUDGETS = (32, 128, 512, 1000, 10000, 100000)
+PATS = list(PATTERNS) + ['derived_ore_strict', 'derived_dn']
+
+
+def _verify_one(args):
+    """verify + classify one distinct normalised string (CPU); run in a fork pool (--procs) since the verifier dominates
+    the wall clock on hard targets where ~every sample is distinct. Pure function of (prompt, s): output identical to the
+    sequential version."""
+    prompt, s = args
+    ok, reason, nl = verify_text(prompt + ' ' + s)
+    if not ok:
+        return None
+    cl = classify(s) or {}
+    return {'written': nl, 'pruned': pruned_length(prompt, s), 'pat': {p: bool(cl.get(p)) for p in PATS}}
 
 
 def main():
@@ -42,7 +55,9 @@ def main():
     ap.add_argument('--limit', type=int, default=None)
     ap.add_argument('--reverse', action='store_true', help='process the shard in reverse order, writing <out>.s<shard>r.jsonl (to split a shard across two pods)')
     ap.add_argument('--lenfield', default='n_lines')
+    ap.add_argument('--procs', type=int, default=1, help='verification workers (fork pool, created before CUDA init)')
     a = ap.parse_args()
+    pool = multiprocessing.get_context('fork').Pool(a.procs) if a.procs > 1 else None
     si, sn = map(int, a.shard.split('/'))
     dev = 'cuda'
     model, tok, _ = load_ckpt(a.ckpt, dev)
@@ -85,13 +100,11 @@ def main():
                         first_idx[s] = n + j + 1
                 n += b
             # verify distinct strings once
-            ok_proofs = []
-            for s, c in counts.items():
-                ok, reason, nl = verify_text(r['prompt'] + ' ' + s)
-                if ok:
-                    cl = classify(s) or {}
-                    pat = {p: bool(cl.get(p)) for p in list(PATTERNS) + ['derived_ore_strict', 'derived_dn']}
-                    ok_proofs.append({'proof': s, 'count': c, 'written': nl, 'pruned': pruned_length(r['prompt'], s), 'first': first_idx[s], 'pat': pat})
+            strs = list(counts.keys())
+            jobs = [(r['prompt'], s) for s in strs]
+            res = pool.map(_verify_one, jobs, chunksize=32) if pool else [_verify_one(j) for j in jobs]
+            ok_proofs = [{'proof': s, 'count': counts[s], 'written': x['written'], 'pruned': x['pruned'], 'first': first_idx[s], 'pat': x['pat']}
+                         for s, x in zip(strs, res) if x]
             n_ok = sum(p['count'] for p in ok_proofs)
             # pass@B from sample order: we know the first index of each distinct success and its total count, but not
             # the position of every repeat; hits_within counts distinct successes whose first occurrence is within B,
@@ -104,7 +117,7 @@ def main():
             # complete bookkeeping (review caveat 3): every one of the n samples maps to exactly one distinct normalised
             # string; every distinct string was verified; every verified one is stored with its hit count and pattern
             # labels, so sum(count) == n_ok and hits_by_pattern is re-derivable from `proofs`.
-            hits_by_pattern = {p: sum(x['count'] for x in ok_proofs if x['pat'][p]) for p in list(PATTERNS) + ['derived_ore_strict', 'derived_dn']}
+            hits_by_pattern = {p: sum(x['count'] for x in ok_proofs if x['pat'][p]) for p in PATS}
             distinct_by_pattern = {p: sum(1 for x in ok_proofs if x['pat'][p]) for p in hits_by_pattern}
             assert sum(x['count'] for x in ok_proofs) == n_ok
             rec = {'name': name, 'thm': r.get('thm'), 'prompt': r['prompt'], 'gen_lines': r.get(a.lenfield),
