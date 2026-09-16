@@ -82,13 +82,24 @@ def arm_rows(arm, pattern, thr):
         return None
     ign = next((x['round'] for x in rows if x['acq_targets_theorems'] >= thr), None)
     last = rows[-1]
+    # rounds before any training happened are frozen samples of the Stage-1 model on ALL targets (expert_iter skips
+    # training when nothing was found): count them and the pattern hits they contain -> a full-pool pre-training rate.
+    pre_rounds = 0
+    for x in rows:
+        st = json.load(open(f"{arm}/round_{x['round']}.json"))
+        if st.get('mix_rl_records', 0) > 0 or x['targets_solved'] > 0:
+            break
+        pre_rounds += 1
+    pre_samples = pre_rounds * rows[0]['attempts'] * last['targets_n']   # attempts per round = k
+    pre_hits = rows[pre_rounds - 1]['n_pattern_proofs_targets'] if pre_rounds else 0
     return {'arm': arm, 'rounds_done': last['round'],
             'per_round_pattern_theorems': [x['acq_targets_theorems'] for x in rows],
             'per_round_pattern_proofs': [x['n_pattern_proofs_targets'] for x in rows],
             'per_round_solved': [x['targets_solved'] for x in rows],
             'per_round_transfer_pattern_theorems': [x['acq_transfer_theorems'] for x in rows],
             'first_pattern_round': last['first_round_pattern_targets'],
-            'ignition_round': ign, 'final_acq': last['acq_targets'], 'final_pattern_theorems': last['acq_targets_theorems'],
+            'ignition_round': ign, 'untrained_rounds': pre_rounds, 'untrained_samples': pre_samples, 'untrained_pattern_proofs': pre_hits,
+            'final_acq': last['acq_targets'], 'final_pattern_theorems': last['acq_targets_theorems'],
             'final_pattern_proofs': last['n_pattern_proofs_targets'], 'final_solved': last['targets_solved'],
             'final_transfer_acq': last['acq_transfer'], 'heldout_greedy': last['heldout_greedy'],
             'examples': last['pattern_examples_targets'][:5]}
@@ -139,6 +150,7 @@ def main():
                           'per_round': ar and ar['per_round_pattern_theorems'],
                           'round1_pattern_theorems': ar and ar['per_round_pattern_theorems'][0],  # round 1 = 32 samples per target from the Stage-1 model, all targets
                           'round1_pattern_proofs': ar and ar['per_round_pattern_proofs'][0],
+                          'untrained_rounds': ar and ar['untrained_rounds'], 'untrained_samples': ar and ar['untrained_samples'],
                           'interventions': {k: {'ignition_round': v['ignition_round'], 'per_round': v['per_round_pattern_theorems'],
                                                 'final_acq': v['final_acq'], 'rounds_done': v['rounds_done']} for k, v in ivs.get(s, {}).items()}})
         # base generalisation over every coverage draw of this pattern (all sets)
