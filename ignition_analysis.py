@@ -137,6 +137,8 @@ def main():
                           'rounds_done': ar and ar['rounds_done'], 'final_acq': ar and ar['final_acq'],
                           'final_pattern_theorems': ar and ar['final_pattern_theorems'], 'final_solved': ar and ar['final_solved'],
                           'per_round': ar and ar['per_round_pattern_theorems'],
+                          'round1_pattern_theorems': ar and ar['per_round_pattern_theorems'][0],  # round 1 = 32 samples per target from the Stage-1 model, all targets
+                          'round1_pattern_proofs': ar and ar['per_round_pattern_proofs'][0],
                           'interventions': {k: {'ignition_round': v['ignition_round'], 'per_round': v['per_round_pattern_theorems'],
                                                 'final_acq': v['final_acq'], 'rounds_done': v['rounds_done']} for k, v in ivs.get(s, {}).items()}})
         # base generalisation over every coverage draw of this pattern (all sets)
@@ -150,13 +152,13 @@ def main():
                                                   'rates_when_present': {k: cov[k]['rate_pattern'] for k in draws if cov[k]['hits_pattern'] > 0}}}
         print(f'== {sname}: {len(cov)} coverage files, {len(arms)} arms, {sum(len(v) for v in ivs.values())} intervention arms; '
               f'base generalisation {n_with}/{len(draws)} (95% CI {lo:.2f}-{hi:.2f})')
-        print('seed  base_rate   hits  tgts  frz256  pred_r1  first  ign  r8_acq  per_round')
+        print('seed  base_rate   hits  tgts  frz256  pred_r1  r1hits  first  ign  r8_acq  per_round')
         for t in table:
             br = t['base_rate']
             print(f"{t['seed']:>4}  {('-' if br is None else f'{br:.2e}'):>9}  {t['base_hits'] if t['base_hits'] is not None else '-':>5}  "
                   f"{t['base_targets_with_pattern'] if t['base_targets_with_pattern'] is not None else '-':>4}  {t['frozen256'] if t['frozen256'] is not None else '-':>6}  "
                   f"{(f'{t['pred_first_round']:.2f}' if t['pred_first_round'] else 'inf') if br is not None else '-':>7}  "
-                  f"{t['first_pattern_round'] if t['first_pattern_round'] is not None else '-':>5}  {t['ignition_round'] if t['ignition_round'] is not None else '-':>3}  "
+                  f"{t['round1_pattern_theorems'] if t['round1_pattern_theorems'] is not None else '-':>6}  {t['first_pattern_round'] if t['first_pattern_round'] is not None else '-':>5}  {t['ignition_round'] if t['ignition_round'] is not None else '-':>3}  "
                   f"{(f'{t['final_acq']:.3f}' if t['final_acq'] is not None else '-'):>6}  {t['per_round']}  {t['interventions'] and {k: v['per_round'] for k, v in t['interventions'].items()}}")
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
     json.dump(summary, open(a.out, 'w'), indent=1)
