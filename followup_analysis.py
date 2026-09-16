@@ -65,7 +65,7 @@ def novelty_stats(tag_suffix, seed, f):
     if not os.path.exists(fn):
         return None
     from patterns import classify
-    lp = []
+    lp = []; above = set(); above4 = set()
     for l in open(fn):
         r = json.loads(l)
         if r['src'] != 'ei_targets':
@@ -73,11 +73,16 @@ def novelty_stats(tag_suffix, seed, f):
         cl = classify(r['proof'])
         if cl and cl['depth3']:
             lp.append(r['base_logp_T08'])
+            if r['base_logp_T08'] > math.log(1 / 256):
+                above.add(r['name'])
+            if r['base_logp_T08'] > math.log(1e-4):
+                above4.add(r['name'])
     if not lp:
         return {'n': 0}
     lp.sort()
     return {'n': len(lp), 'below_1_256': sum(v < math.log(1 / 256) for v in lp), 'below_1e-4': sum(v < math.log(1e-4) for v in lp),
-            'below_1e-5': sum(v < math.log(1e-5) for v in lp), 'max_logp': max(lp), 'median_logp': lp[len(lp) // 2]}
+            'below_1e-5': sum(v < math.log(1e-5) for v in lp), 'max_logp': max(lp), 'median_logp': lp[len(lp) // 2],
+            'theorems_above_1_256': len(above), 'theorems_above_1e-4': len(above4)}
 
 
 def main():
@@ -130,7 +135,7 @@ def main():
     print(f"{'kind':6s} {'f':4s} {'set':4s} {'seed':4s} {'r':2s} {'solved':7s} {'acq':6s} {'thms':5s} {'proofs':6s} {'first':5s} {'xfer acq':8s} {'H greedy':8s}  novelty(depth-3 proofs: n / <1e-5 / max logp)")
     for x in sorted(arms, key=lambda x: (x['f'], x['set'], x['seed'], x['kind'])):
         nv = x['novelty']
-        nvs = f"{nv['n']} / {nv.get('below_1e-5')} / {nv.get('max_logp', float('nan')):.1f}" if nv and nv.get('n') else ('-' if nv is None else '0')
+        nvs = f"{nv['n']} / {nv.get('below_1e-5')} / {nv.get('max_logp', float('nan')):.1f} / thms>1/256 {nv.get('theorems_above_1_256')}" if nv and nv.get('n') else ('-' if nv is None else '0')
         print(f"{x['kind']:6s} {x['f']:<4g} {x['set']:4s} {x['seed']:<4d} {x['round']:<2d} {x['targets_solved']:<7d} {x['acq']:<6.3f} {x['acq_theorems']:<5d} {x['n_depth3_proofs']:<6d} {str(x['first_round']):5s} {x['acq_transfer']:<8.3f} {x['heldout_greedy']:<8.3f}  {nvs}")
     for f in (0, 0.1):
         r = res[f'f{f:g}']
