@@ -6,8 +6,10 @@ for arm in sorted(glob.glob('artifacts/p2/ei_*') + glob.glob('artifacts/p2/froze
     if not os.path.isdir(arm): continue
     fs = [f for f in glob.glob(arm + '/found_*.jsonl') if 'transfer' not in f]
     if not fs: continue
-    last = max(fs, key=lambda f: int(f.split('_')[-1].split('.')[0]))
-    r = int(last.split('_')[-1].split('.')[0])
+    rj = [int(f.split('_')[-1].split('.')[0]) for f in glob.glob(arm + '/round_*.json')]
+    if not rj: continue
+    r = max(rj); last = f'{arm}/found_{r}.jsonl'
+    if not os.path.exists(last): continue
     seen = set(); pat = {'depth3': set(), 'reductio': set(), 'derived_dn': set(), 'derived_ore_strict': set()}; first = {}
     for l in open(last):
         x = json.loads(l); pn = norm(x['proof'])

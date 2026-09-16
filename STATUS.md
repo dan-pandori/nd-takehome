@@ -9,16 +9,18 @@ Started 2026-09-16 18:29 UTC. Brief: HANDOFF_BRIEF.md. Previous: STATUS_campaign
 ## Done
 - 18:33 Task 1: proposal committed to nd-rl (82775b2, branch dan_orchestration), draft PR https://github.com/chainik1125/nd-rl/pull/3 (no reviewers).
 - 18:37 Task 2 plan + pre-registered expectations committed (fbdde13) before the first pod was created (18:41).
-- 2026-09-16T18:30:31Z read CAMPAIGN_BRIEF, campaign, followup, review_campaign, review_followup, nd-rl AGENTS.md / docs layout / STATE.md; pod helpers; driver loop; no pods registered.
+- 18:41–21:58 Task 2 run: 16 Stage-1 models, 27 pre-RL samples, 16 EI arms, 33 intervention arms; everything pulled; pods deleted.
+- 22:20 Task 2 written: ignition.md, figures/ignition_*.png (4), numbers.md §Ignition, log.md; self-check 0 verifier failures on 2,383 counted proofs.
 
 ## Running on pods
 (none — p2 deleted 21:41, p3 21:55, p1 21:58 UTC; `runpodctl pod list` = []). Pod time: p1 3090 3.3 h ≈ $1.7; p2 A100 3.0 h ≈ $4.8; p3 A100 3.05 h ≈ $4.9; orphan ≈ $0.1 → ≈ $11.5 this run (≈ $30 cumulative of the $100 policy).
 
-## Interim observations (pod peeks, partly pulled)
-- Depth-3 a1 (8 new seeds): s2 ignited r2 (336), s9 r2 (354), s8 r4–5 (312), s3 r5 (295), s4 never (4 theorems, first at r7), s7 never (0 through r8, 318 solved without a third box); s5, s6 running on p1.
-- Reductio (8 new seeds): s7 ignited r1–2 (112/606 at r8); s5, s6 0/606 at r8; s3, s8, s9 0 at r5; s4, s10 early rounds.
-- Interventions running: depth-3 s7 (p2), s3 (p2), s4 (p3); reductio s5, s6 (p3), s3 (p2), s8, s9 (p3). First result: sibling transfer ignited reductio s5 (91/606 at r8); k = 128 and T = 1.0 did not (0).
-- Pre-RL pass@2000 × 300: depth-3 s2 and s7 both 0 depth-3 samples in 600k (so the 600k sample does not separate an r2 igniter from a never-igniter); reductio s5 0. The arms' round-1 counts (32 attempts on every target, pre-training) are recorded as a second base-rate measure.
+## Results (ignition.md)
+- Reductio: ignition is the pre-RL base rate — 4 of 11 draws emit the pattern before RL and exactly those 4 ignite, in rate order; 7 zero-rate draws stay at 0/606. 1/(r·k·N) predicts the first-proof round within ~2.5×.
+- Depth-3: base rate ≥ 2.5·10⁻⁴ → ignition by round 3; zero-rate draws split 3 ignite / 2 never (decided during training, not by sampling). Round-8 acquisition depends only on ignition (0.30–0.36 vs ≤ 0.004).
+- Interventions: sibling transfer 11/11 ignite at once and reach the plateau; k = 128 and T = 1.0 only accelerate arms that would have ignited anyway (2/11 each), never the zero-rate ones.
+- Base generalisation: depth-3 10/16 draws (CI 0.35–0.85), reductio 4/11 (0.11–0.69).
+- Deviations: 3090 + 2×A100 instead of A40s; reductio candidates uncapped (7), depth-3 4; reductio s0 pre-RL sample = follow-up pass@10⁴ file; intervention (c) as one training step.
 
 ## Next step
-Poll the pods; write the analysis script while Stage-1 and coverage run; interventions after round 4 of the arms.
+None. A separate reviewer session should re-derive the counts from `artifacts/p2/ei_*` (found_1..8.jsonl kept), `artifacts/ign/cov_*.s0.jsonl` and `artifacts/ign/summary.json`.

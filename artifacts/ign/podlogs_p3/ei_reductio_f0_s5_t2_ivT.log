@@ -1,0 +1,75 @@
+resumed 0 target proofs, 0 transfer proofs
+[p2/ei_reductio_f0_s5_t2_ivT r5] targets (this round, pass@32) SOLVED 0/606 = 0.000 [0.000,0.006]
+  len 7: 0/61 = 0.000 [0.000,0.059]
+  len 8: 0/156 = 0.000 [0.000,0.024]
+  len 9: 0/386 = 0.000 [0.000,0.010]
+  len 12: 0/3 = 0.000 [0.000,0.562]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 6097), ('rule check failed: ANDI', 2410), ('rule check failed: IMPI', 2044), ('rule check failed: ORI2', 1471), ('bad line cite', 1140), ('rule check failed: NEGE', 1109)]
+[p2/ei_reductio_f0_s5_t2_ivT r5] targets (cumulative 160 attempts) SOLVED 0/606 = 0.000 [0.000,0.006]
+  len 7: 0/61 = 0.000 [0.000,0.059]
+  len 8: 0/156 = 0.000 [0.000,0.024]
+  len 9: 0/386 = 0.000 [0.000,0.010]
+  len 12: 0/3 = 0.000 [0.000,0.562]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons []
+[p2/ei_reductio_f0_s5_t2_ivT r5] transfer (this round, pass@32) SOLVED 0/300 = 0.000 [0.000,0.013]
+  len 7: 0/30 = 0.000 [0.000,0.114]
+  len 8: 0/75 = 0.000 [0.000,0.049]
+  len 9: 0/195 = 0.000 [0.000,0.019]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 3063), ('rule check failed: ANDI', 1230), ('rule check failed: IMPI', 955), ('rule check failed: ORI2', 815), ('rule check failed: DN', 630), ('bad line cite', 525)]
+[p2/ei_reductio_f0_s5_t2_ivT r5] transfer (cumulative 160 attempts) SOLVED 0/300 = 0.000 [0.000,0.013]
+  len 7: 0/30 = 0.000 [0.000,0.114]
+  len 8: 0/75 = 0.000 [0.000,0.049]
+  len 9: 0/195 = 0.000 [0.000,0.019]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons []
+[p2/ei_reductio_f0_s5_t2_ivT r5] transfer greedy SOLVED 0/300 = 0.000 [0.000,0.013]
+  len 7: 0/30 = 0.000 [0.000,0.114]
+  len 8: 0/75 = 0.000 [0.000,0.049]
+  len 9: 0/195 = 0.000 [0.000,0.019]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 98), ('rule check failed: ANDI', 45), ('rule check failed: ORI2', 31), ('rule check failed: IMPI', 30), ('rule check failed: DN', 20), ('bad line cite', 17)]
+[p2/ei_reductio_f0_s5_t2_ivT r5] heldout greedy SOLVED 4401/5000 = 0.880 [0.871,0.889]
+  len 2: 998/1000 = 0.998 [0.993,0.999]
+  len 3: 986/1000 = 0.986 [0.977,0.992]
+  len 4: 967/1000 = 0.967 [0.954,0.976]
+  len 5: 568/1000 = 0.568 [0.537,0.598]
+  len 6: 882/1000 = 0.882 [0.861,0.901]
+  written hist {2: 1061, 3: 976, 4: 1027, 5: 591, 6: 745, 7: 1}
+  pruned hist {2: 1062, 3: 978, 4: 1031, 5: 585, 6: 744, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: ANDI', 117), ('rule check failed: IMPE', 69), ('rule check failed: IMPI', 67), ('rule check failed: ORI2', 51), ('rule check failed: DN', 45), ('final formula is not the conclusion', 37)]
+no accepted proofs: skipping training this round
+=== round 5 done in 185s; new proofs 0; cum targets solved 0
+resumed 0 target proofs, 0 transfer proofs
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/expert_iter.py", line 227, in <module>
+    main()
+  File "/workspace/nd-takehome/expert_iter.py", line 118, in main
+    model, tok, _ = load_ckpt(ckpt, dev)
+                    ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 102, in load_ckpt
+    ck = torch.load(path, map_location=device)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 1484, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 759, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 740, in __init__
+    super().__init__(open(name, mode))
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'ckpts/p2/ei_reductio_f0_s5_t2_ivT_r5.pt'
