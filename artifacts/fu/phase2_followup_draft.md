@@ -11,33 +11,38 @@ Three new f = 0 depth-3 sets (assembler seeds 1, 2, 3) and two new f = 0.1 sets 
 
 | f | set | seed | arm | solved | **acquisition** (theorems / depth-3 proofs) | first round | transfer acq | held-out greedy | base reachability of the arm's depth-3 proofs: n / below 10⁻⁵ / max log p (T = 0.8) / theorems with p > 1/256 |
 |---|---|---|---|---:|---|---|---:|---:|---|
-| 0 | a0 | 0 | EI | 628 | **0.341** (341 / 400) | 3 | 0.366 | 0.940 | 400 / 400 / -22.6 / 0 |
+| 0 | a0 | 0 | EI | 628 | **0.341** (341 / 400) | 2 | 0.366 | 0.940 | 400 / 400 / -22.6 / 0 |
 | 0 | a0 | 0 | frozen | 55 | **0.000** (0 / 0) | – | 0.000 | 0.874 | – |
-| 0 | a0 | 1 | EI | 587 | **0.271** (271 / 327) | 5 | 0.280 | 0.911 | 327 / 324 / -9.9 / 0 |
-| 0 | a1 | 0 | EI | 645 | **0.335** (335 / 409) | 2 | 0.372 | 0.907 | 409 / 394 / -3.3 / 3 |
+| 0 | a0 | 1 | EI | 587 | **0.271** (271 / 327) | 4 | 0.280 | 0.911 | 327 / 324 / -9.9 / 0 |
+| 0 | a1 | 0 | EI | 645 | **0.335** (335 / 409) | 1 | 0.372 | 0.907 | 409 / 394 / -3.3 / 3 |
 | 0 | a1 | 0 | frozen | 175 | **0.005** (5 / 5) | 1 | 0.004 | 0.883 | – |
 | 0 | a1 | 1 | EI | 698 | **0.364** (364 / 426) | 1 | 0.366 | 0.930 | 426 / 413 / -1.8 / 3 |
 | 0 | a1 | 1 | frozen | 175 | **0.005** (5 / 5) | 1 | 0.004 | 0.883 | – |
-| 0 | a2 | 0 | EI | 589 | **0.350** (350 / 430) | 2 | 0.368 | 0.945 | 430 / 413 / -2.4 / 3 |
+| 0 | a2 | 0 | EI | 589 | **0.350** (350 / 430) | 1 | 0.368 | 0.945 | 430 / 413 / -2.4 / 3 |
 | 0 | a2 | 0 | frozen | 166 | **0.004** (4 / 4) | 1 | 0.004 | 0.894 | – |
-| 0 | a2 | 1 | EI | 652 | **0.341** (341 / 426) | 4 | 0.358 | 0.903 | 426 / 423 / -7.3 / 0 |
+| 0 | a2 | 1 | EI | 652 | **0.341** (341 / 426) | 3 | 0.358 | 0.903 | 426 / 423 / -7.3 / 0 |
 | 0 | a2 | 1 | frozen | 144 | **0.000** (0 / 0) | – | 0.000 | 0.880 | – |
-| 0 | a3 | 0 | EI | 605 | **0.361** (361 / 435) | 2 | 0.386 | 0.945 | 435 / 432 / -2.7 / 1 |
+| 0 | a3 | 0 | EI | 605 | **0.361** (361 / 435) | 1 | 0.386 | 0.945 | 435 / 432 / -2.7 / 1 |
+| 0 | a3 | 0 | frozen | 98 | **0.001** (1 / 1) | 1 | 0.002 | 0.874 | – |
 | 0 | a3 | 1 | EI | 583 | **0.352** (352 / 425) | 1 | 0.378 | 0.919 | 425 / 406 / -1.3 / 9 |
-| 0.1 | b0 | 0 | EI | 594 | **0.355** (355 / 424) | 2 | 0.382 | 0.964 | – |
+| 0 | a3 | 1 | frozen | 127 | **0.010** (10 / 11) | 1 | 0.004 | 0.878 | – |
+| 0.1 | b0 | 0 | EI | 594 | **0.355** (355 / 424) | 1 | 0.382 | 0.964 | – |
 | 0.1 | b0 | 0 | frozen | 127 | **0.012** (12 / 17) | 1 | 0.012 | 0.966 | – |
 | 0.1 | b0 | 1 | EI | 607 | **0.316** (316 / 388) | 1 | 0.348 | 0.962 | – |
 | 0.1 | b1 | 0 | EI | 657 | **0.349** (349 / 426) | 1 | 0.388 | 0.964 | 426 / 413 / -1.0 / 3 |
-| 0.1 | b2 | 0 | EI | 604 | **0.352** (352 / 410) | 3 | 0.388 | 0.965 | 410 / 408 / -9.5 / 0 |
+| 0.1 | b1 | 0 | frozen | 172 | **0.005** (5 / 5) | 1 | 0.002 | 0.961 | – |
+| 0.1 | b1 | 1 | EI | 484 | **0.122** (122 / 141) | 1 | 0.124 | 0.979 | 141 / 139 / -1.2 / 1 |
+| 0.1 | b1 | 1 | frozen | 165 | **0.002** (2 / 2) | 1 | 0.002 | 0.976 | – |
+| 0.1 | b2 | 0 | EI | 604 | **0.352** (352 / 410) | 2 | 0.388 | 0.965 | 410 / 408 / -9.5 / 0 |
 | 0.1 | b2 | 0 | frozen | 137 | **0.000** (0 / 0) | – | 0.004 | 0.968 | – |
-| 0.1 | b2 | 1 | EI | 596 | **0.347** (347 / 428) | 2 | 0.380 | 0.971 | 428 / 357 / -0.9 / 7 |
+| 0.1 | b2 | 1 | EI | 596 | **0.347** (347 / 428) | 1 | 0.380 | 0.971 | 428 / 357 / -0.9 / 7 |
 | 0.1 | b2 | 1 | frozen | 173 | **0.010** (10 / 10) | 1 | 0.014 | 0.967 | – |
 
 ![strips](figures/followup_depth3_strips.png)
 
 - **f = 0, 8 arms:** 0.341, 0.271, 0.335, 0.364, 0.350, 0.341, 0.361, 0.352 — mean **0.339 ± 0.029** (SD), min 0.271. **f = 0.1, 6 arms:** 0.355, 0.316 (campaign-1 set), 0.349, **0.122**, 0.352, 0.347 — mean **0.307 ± 0.092** (0.344 ± 0.016 without the late-igniting b1 s1, whose depth-3 count went 1 / 2 / 2 / 2 / 2 / 5 / 27 / 122 over the rounds and was still climbing). The distributions overlap completely (6 of 8 f = 0 arms inside the f = 0.1 range and 5 of 6 f = 0.1 arms inside the f = 0 range; permutation test on the difference of means p ≈ 0.5); **no f = 0 arm is near zero**; the low outlier of the whole family is an f = 0.1 arm.
 - **Variance decomposition** (one-way random effects, sets as groups, 2 seeds per set): at f = 0, between-set SD 0.012 vs between-training-seed SD 0.027 (set share 17%, F = 1.4 — indistinguishable from pure seed noise at 4 groups); at f = 0.1 between-set SD 0 (F = 0.9; the b1 s1 outlier is a seed effect, its set-mate is at 0.349). The pretraining draw does not matter; the training seed does — expert iteration on these targets can ignite late.
-- **First depth-3 proof:** FIRSTROUNDS.
+- **First depth-3 proof** (minimum round over all raw records of a proof; see the bookkeeping fix in log.md 05:10): at f = 0 rounds 1, 1, 1, 1, 1, 2, 3, 4 (median 1), at f = 0.1 rounds 1, 1, 1, 1, 1, 2.
 - **Frozen controls (256 attempts per target):** depth-3 theorems a0 s0 0, a1 s0 5, a1 s1 5, a2 s0 4, a2 s1 0, a3 s0 1, a3 s1 10; f = 0.1: b0 s0 12, b2 s0 0, b2 s1 10, b1 s0 5, b1 s1 2. So the review's "expected 0" is *not* what the new controls show: four of the six new f = 0 models produce a three-nested-`IMPI` proof of the `A > (B > (C > D))` shape on 4–5 of the 1,000 targets within 256 samples.
 - **Base reachability** (novelty.py, each arm's own Stage-1 model, T = 0.8, start-index marginalised, every depth-3 proof of the arm): 94–100% of each arm's depth-3 proofs are below 10⁻⁵ (table); but the *most* probable proof per arm ranges from log p −22.6 (campaign-1 model) to −1.3 (a3 s1: p ≈ 0.27, third-box `AS` line costing 0.4 nats), and the number of targets with any depth-3 proof above 1/256 is 0 / 0 / 3 / 3 / 3 / 0 / 1 / 9 across the eight f = 0 arms. The frozen controls find exactly those theorems (a1 s1: all 3 high-p theorems are among its 5 frozen finds).
 
@@ -78,6 +83,6 @@ Three new f = 0 depth-3 sets (assembler seeds 1, 2, 3) and two new f = 0.1 sets 
 | EI f = 10⁻² s0 | 218 | **0.022** (11 / 14) | 1 | 2 4 6 7 8 9 9 11 | 126 / 2 | 0.933 | 14 / 6 / 1 / −1.9 |
 | frozen f = 0 s0 | 159 | 0.006 (3 / 4) | 1 | 2 2 2 2 2 3 3 3 | 94 / 1 | 0.918 | – |
 | frozen f = 0 s1 | 161 | 0.004 (2 / 4) | 1 | 2 2 2 2 2 2 2 2 | 97 / 1 | 0.931 | – |
-| base pass@10⁴, f = 0 s0, 300 targets | COV_C8 | | | | | | |
+| base pass@10⁴, f = 0 s0, first 300 targets | 118 (87 within 512) | 7 targets with a strict proof (3,780 of 3·10⁶ samples; one target at p ≈ 0.37, others 10⁻⁴–5·10⁻³) | – | – | – | – | – |
 
-**Reading.** The dial is flat: 1–2% strict acquisition at every f from 0 to 10⁻² (the latter being roughly the generator's own cap-8 rate), against my pre-registered 10–35% for f ≥ 10⁻³. The arms solve ~40% of the targets, three-quarters of them with depth-3 proofs, i.e. they route around the disjunction elimination. The few strict proofs that do appear are 9-line `ANDE/IMPE → ORE` with distinct disjuncts and are mostly *reachable* under their own base (max log p −0.6 to −2.9; 0–5 of them below 10⁻⁵) — the cap-8 base models, which have seen ORE over premise disjunctions and (at f = 0) 743 degenerate derived OREs, already assign 10⁻¹–10⁻³ to a strict derived ORE on a couple of targets, and RL neither needs nor selects the pattern beyond that. So the non-degenerate derived ORE behaves like reductio, not like depth-3: no composition across f = 0, and not even amplification when the reward does not require the pattern. This is a cap-8 result and is not pooled with the cap-6 dial.
+**Reading.** The dial is flat: 1–2% strict acquisition at every f from 0 to 10⁻² (the latter being roughly the generator's own cap-8 rate), against my pre-registered 10–35% for f ≥ 10⁻³. The arms solve ~40% of the targets, three-quarters of them with depth-3 proofs, i.e. they route around the disjunction elimination. The few strict proofs that do appear are 9-line `ANDE/IMPE → ORE` with distinct disjuncts and are mostly *reachable* under their own base (max log p −0.6 to −2.9; 0–5 of them below 10⁻⁵); base pass@10⁴ for the f = 0 s0 model solves 118 of 300 targets and produces the strict shape on 7 of them (one at p ≈ 0.37) — the cap-8 base models, which have seen ORE over premise disjunctions and (at f = 0) 743 degenerate derived OREs, already generalise to a strict derived ORE on a few targets, and RL neither needs nor selects the pattern beyond that (EI: 4 of those targets). So the non-degenerate derived ORE behaves like reductio, not like depth-3: no composition across f = 0, and not even amplification when the reward does not require the pattern. This is a cap-8 result and is not pooled with the cap-6 dial.
