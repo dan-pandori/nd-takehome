@@ -16,6 +16,8 @@ already makes — but it does not invent unseen rule sequences, and it ignores p
   precursor injection, which buys the one theorem (export, p ≈ 10⁻⁸) that sampling cannot reach. De Morgan and
   distribution stay at 0.
 
+> **Review (2026-09-16, `review_campaign.md`).** The depth-3 headline was re-derived from the raw files with independent code and holds. Two changes of wording: the reductio result is *not tested*, not a wall — its 56 classical-only targets were all solved by `DN` on a *given* double negation, so no target required the reductio shape; and the seed-to-seed spread (609 vs 170) is instability with n = 2, not bistability. Every f = 0 level has two training seeds; treat levels as ±3× until more seeds run.
+
 **Rule of thumb:** RL crosses zero coverage when the missing pattern is a structural repetition of a learned move,
 not when it is a new rule sequence or a shape with no short instances.
 

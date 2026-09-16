@@ -1,3 +1,5 @@
+> **Review note (2026-09-16):** see `review_campaign.md`. Depth-3 f = 0 numbers re-derived independently and confirmed (first depth-3 proofs at rounds **3 / 5** per the found files). The reductio dial is uninformative: its classical-only targets need only `DN` on a given `( ~ ( ~ X ) )`. Seed spread is instability at n = 2, not bistability.
+
 # Phase 2 — Controlled-coverage pretraining: does RL need the pattern in pretraining?
 
 Three proof patterns, each defined as a predicate on the dependency-pruned proof (`patterns.py`, 12 verifier-checked
