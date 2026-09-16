@@ -143,7 +143,7 @@ def main():
         draws = sorted(cov)
         n_with = sum(1 for k in draws if cov[k]['hits_pattern'] > 0)
         lo, hi = clopper_pearson(n_with, len(draws))
-        summary[sname] = {'pattern': P, 'n_targets_pool': N, 'ignition_threshold': S['thr'], 'k': K,
+        summary[sname] = {'pattern': P, 'n_targets_pool': N, 'ignition_threshold': S['thr'], 'k': K, 'plateau': S['plateau'],
                           'table': table, 'coverage': cov, 'arms': arms, 'interventions': ivs,
                           'base_generalisation': {'draws': draws, 'n_draws': len(draws), 'n_with_pattern': n_with,
                                                   'fraction': n_with / len(draws) if draws else None, 'ci95': [lo, hi],
