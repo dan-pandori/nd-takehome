@@ -68,4 +68,18 @@ Three new f = 0 depth-3 sets (assembler seeds 1, 2, 3) and two new f = 0.1 sets 
 
 ## C. Cap-8 dial for the non-degenerate derived ORE
 
-BLOCKC_SECTION
+**Pool.** Cap-8 raw pool from the unchanged generator's short mode with no per-length caps (`pool_cap8.jsonl`, 2,435,041 classes; strict derived-ORE = disjunction obtained by a rule, disjuncts differ: 2.4% of 7-line and 11.8% of 8-line proofs, ≈ 2% of a flat 2–8 set). Sets (`--simple`, 22,142 per length 2–8, new cap-8 held-out): strict derived-ORE **0 / 155 / 1,550** (f = 0 asserted in pruned and written form), everything else at its natural cap-8 rate conditional on non-strict: degenerate/other derived-ORE 743 / 732 / 676 (0.48%), reductio 5.4%, depth-3 7.1%. Stage-1 with `--cap 8` (val loss 0.08x), two seeds at f = 0, one at 10⁻³ and 10⁻². Targets (`targets_c8`, 500 + 250 transfer): strict-derived-ORE theorems generated at 9–16 lines for which minlen (bound 8) finds **no ≤ 8-line proof** — only 0.5% of the 9–14-line and 1.6% of the 12–16-line generator theorems qualify (the generator's strict ORE is, like its reductio, almost always redundant), 300 of the 500 are also depth-3 shapes. Like campaign 1's pools these are theorems whose *generating* proof uses the pattern, not theorems that provably need it.
+
+| cap 8 arm | solved / 500 | **strict acquisition** (theorems / proofs) | first round | per round (strict theorems) | transfer solved / strict (250) | held-out (cap 8) greedy | strict proofs' base p: n / below 1/256 / below 10⁻⁵ / max log p |
+|---|---:|---|---|---|---|---:|---|
+| EI f = 0 s0 | 197 | **0.008** (4 / 5) | 3 | 0 0 2 2 2 2 3 4 | 120 / 1 | 0.926 | 5 / 2 / 0 / −1.2 |
+| EI f = 0 s1 | 200 | **0.008** (4 / 5) | 2 | 0 1 1 1 2 3 4 4 | 118 / 1 | 0.936 | 5 / 2 / 0 / −2.9 |
+| EI f = 10⁻³ s0 | 202 | **0.022** (11 / 17) | 4 | 2 2 4 4 5 7 8 11 | 124 / 1 | 0.929 | 17 / 13 / 5 / −0.6 |
+| EI f = 10⁻² s0 | 218 | **0.022** (11 / 14) | 3 | 2 4 6 7 8 9 9 11 | 126 / 2 | 0.933 | 14 / 6 / 1 / −1.9 |
+| frozen f = 0 s0 | FROZEN_C8_S0 | | | | | | |
+| frozen f = 0 s1 | FROZEN_C8_S1 | | | | | | |
+| base pass@10⁴, f = 0 s0, 300 targets | COV_C8 | | | | | | |
+
+(per-round strict counts for the f = 0 arms are reconstructed from the round field of the final found file.)
+
+**Reading.** The dial is flat: 1–2% strict acquisition at every f from 0 to 10⁻² (the latter being roughly the generator's own cap-8 rate), against my pre-registered 10–35% for f ≥ 10⁻³. The arms solve ~40% of the targets, three-quarters of them with depth-3 proofs, i.e. they route around the disjunction elimination. The few strict proofs that do appear are 9-line `ANDE/IMPE → ORE` with distinct disjuncts and are mostly *reachable* under their own base (max log p −0.6 to −2.9; 0–5 of them below 10⁻⁵) — the cap-8 base models, which have seen ORE over premise disjunctions and (at f = 0) 743 degenerate derived OREs, already assign 10⁻¹–10⁻³ to a strict derived ORE on a couple of targets, and RL neither needs nor selects the pattern beyond that. So the non-degenerate derived ORE behaves like reductio, not like depth-3: no composition across f = 0, and not even amplification when the reward does not require the pattern. This is a cap-8 result and is not pooled with the cap-6 dial.

@@ -8,7 +8,8 @@ Block A (depth-3 replication: 3 new f=0 sets x 2 seeds, 2 new f=0.1 sets x 2 see
 ## Done
 - Block A: 13/14 EI arms + 6/10 frozen done; f = 0 (8 arms) mean 0.339 SD 0.029, f = 0.1 (5 arms so far) mean 0.344 — replicates; novelty on every arm (artifacts/fu/blockA_summary.json, figures/followup_depth3_strips.png)
 - Block B: done (5 EI + 5 frozen + coverage + novelty; artifacts/fu/blockB_summary.json, figures/followup_reductio.png)
-- Block C: sets, targets, 4 Stage-1, 2 EI (f = 0) done; f = 1e-3 / 1e-2 EI at round 5
+- Block C: all 4 EI arms done (strict acquisition 0.008 / 0.008 / 0.022 / 0.022); novelty done; frozen x2 + coverage running on p1
+- Drafts: artifacts/fu/phase2_followup_draft.md, artifacts/fu/followup_draft.md (to be finalised after p1 finishes)
 - RESUMED 2026-09-16 02:09 UTC after an unexplained session end at ~02:07 (possibly a usage limit; no LIMIT message was seen). Pod jobs unaffected.
 - 01:41 five new depth-3 sets assembled and verified (0 written depth-3 in every f = 0 set); block-A queues launched on p1/p2/p3
 
