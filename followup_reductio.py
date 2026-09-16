@@ -69,10 +69,16 @@ def main():
     import matplotlib.pyplot as plt
     COL = {0: '#2a78d6', 0.1: '#eb6834'}
     fig, ax = plt.subplots(figsize=(7, 4))
+    zeros = []
     for k, v in res['arms'].items():
         x = list(range(1, len(v['per_round_strict']) + 1)); y = [c / n for c in v['per_round_strict']]
         ax.plot(x, y, '-' if v['kind'] == 'ei' else '--', color=COL[v['f']], lw=2 if v['kind'] == 'ei' else 1.2, marker='o' if v['kind'] == 'ei' else 'x', ms=4)
-        ax.annotate(f"{'EI' if v['kind'] == 'ei' else 'frozen'} f={v['f']:g} s{v['seed']}", (x[-1], y[-1]), textcoords='offset points', xytext=(4, 0), fontsize=6.5, color='#52514e', va='center')
+        lab = f"{'EI' if v['kind'] == 'ei' else 'frozen'} f={v['f']:g} s{v['seed']}"
+        if y[-1] == 0:
+            zeros.append(lab); continue
+        ax.annotate(lab, (x[-1], y[-1]), textcoords='offset points', xytext=(4, 0), fontsize=6.5, color='#52514e', va='center')
+    if zeros:
+        ax.annotate(' = 0: ' + ', '.join(zeros), (x[-1], 0), textcoords='offset points', xytext=(4, -9), fontsize=6.5, color='#52514e', va='center')
     ax.set_xlabel('expert-iteration round (32 attempts per target per round)'); ax.set_ylabel(f'strict reductio acquisition (fraction of {n} targets)')
     ax.set_xlim(0.8, 9.6); ax.spines[['top', 'right']].set_visible(False); ax.grid(color='#e8e7e3', lw=0.6); ax.set_axisbelow(True)
     from matplotlib.lines import Line2D

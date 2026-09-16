@@ -13,7 +13,7 @@ Block A (depth-3 replication: 3 new f=0 sets x 2 seeds, 2 new f=0.1 sets x 2 see
 - 01:41 five new depth-3 sets assembled and verified (0 written depth-3 in every f = 0 set); block-A queues launched on p1/p2/p3
 
 ## Running on pods
-- p1 only (p2, p3 deleted 04:20 UTC after pulling everything): block-A tail (EI b1 s1, frozen a3 s0/s1, frozen b1 s0/s1), block C (EI f=1e-3 / f=1e-2 cap-8, frozen f=0 x2, coverage k=1e4, novelty jobs)
+- p1 only (p2, p3 deleted 04:16 UTC after pulling everything): block-A tail (EI b1 s1, frozen a3 s0/s1, frozen b1 s0/s1), block C (EI f=1e-3 / f=1e-2 cap-8, frozen f=0 x2, coverage k=1e4, novelty jobs)
 
 ## Next step
 - finish block C on p1, pull, delete p1; write phase2.md section, followup.md, numbers/log; DONE
