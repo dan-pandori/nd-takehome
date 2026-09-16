@@ -39,7 +39,7 @@ def arm_metrics(arm, pattern, n_targets=None, n_transfer=None):
                 last = max(rounds); fn = f'{arm}/{base}_{last}.jsonl'
             seen = set(); thm_pat = set(); n_pat = 0; first = None
             other = collections.Counter(); wh = collections.Counter(); ph = collections.Counter(); thms = set()
-            examples = []; strict_thms = set()
+            examples = []; strict_thms = set(); loose_thms = set(); anydn_thms = set()
             for x in rd(fn):
                 if x['round'] > r:
                     continue
@@ -56,8 +56,13 @@ def arm_metrics(arm, pattern, n_targets=None, n_transfer=None):
                     continue
                 for p in PATTERNS:
                     other[p] += cl[p]
-                if pattern == 'derived_ore' and cl.get('derived_ore_strict'):
+                if pattern in ('derived_ore', 'derived_ore_strict') and cl.get('derived_ore_strict'):
                     other['derived_ore_strict'] += 1; strict_thms.add(x['name'])
+                if pattern == 'reductio':
+                    if cl.get('derived_dn'):
+                        other['derived_dn'] += 1; loose_thms.add(x['name'])
+                    if ' DN ' in pn:
+                        other['any_dn'] += 1; anydn_thms.add(x['name'])
                 if cl[pattern]:
                     n_pat += 1; thm_pat.add(x['name'])
                     if first is None or x['round'] < first:
@@ -72,6 +77,11 @@ def arm_metrics(arm, pattern, n_targets=None, n_transfer=None):
             row[f'distinct_proofs_{pool}'] = len(seen)
             row[f'other_patterns_{pool}'] = dict(other)
             row[f'acq_strict_{pool}_theorems'] = len(strict_thms)
+            row[f'acq_loose_{pool}_theorems'] = len(loose_thms)      # reductio arms: DN citing a rule-derived line
+            row[f'acq_anydn_{pool}_theorems'] = len(anydn_thms)      # reductio arms: any DN at all (upper bound)
+            row[f'solved_names_{pool}'] = sorted(thms)
+            row[f'pattern_names_{pool}'] = sorted(thm_pat)
+            row[f'loose_names_{pool}'] = sorted(loose_thms)
             row[f'written_hist_{pool}'] = dict(sorted(wh.items()))
             row[f'frontier_written_{pool}'] = max([L for L, c in wh.items() if c >= 5], default=0)
             row[f'frontier_pruned_{pool}'] = max([L for L, c in ph.items() if c >= 5], default=0)
