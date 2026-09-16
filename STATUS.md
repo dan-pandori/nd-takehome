@@ -12,10 +12,7 @@ Started 2026-09-16 18:29 UTC. Brief: HANDOFF_BRIEF.md. Previous: STATUS_campaign
 - 2026-09-16T18:30:31Z read CAMPAIGN_BRIEF, campaign, followup, review_campaign, review_followup, nd-rl AGENTS.md / docs layout / STATE.md; pod helpers; driver loop; no pods registered.
 
 ## Running on pods
-- p1 = RTX 3090 24 GB ($0.50/h, zel7y1am7auj6u): depth-3 a1 seeds 2–6 (Stage-1 → EI) + coverage a1 s0/s1, a0 s0/s1, a1 s2–6.
-- p2 = A100 80 GB ($1.59/h, luonpo569opsq1): depth-3 a1 seeds 7–9 + reductio seeds 3–4; coverage a2/a3 s0/s1 + new.
-- p3 = A100 80 GB ($1.59/h, dreiq5frmuu0xt): reductio seeds 5–10; coverage reductio s0–2 + new.
-- DEVIATION: no A40 in stock (all CUDA versions, Secure Cloud, 18:38–18:53 UTC); one 3090 and two A100s used instead. Cost ≈ $3.7/h for three pods. An orphan duplicate A100 (z2d9kk2bej4q0n, created by a timed-out attempt) was deleted at 18:53, ≈ 2 min of billing.
+(none — p2 deleted 21:41, p3 21:55, p1 21:58 UTC; `runpodctl pod list` = []). Pod time: p1 3090 3.3 h ≈ $1.7; p2 A100 3.0 h ≈ $4.8; p3 A100 3.05 h ≈ $4.9; orphan ≈ $0.1 → ≈ $11.5 this run (≈ $30 cumulative of the $100 policy).
 
 ## Interim observations (pod peeks, partly pulled)
 - Depth-3 a1 (8 new seeds): s2 ignited r2 (336), s9 r2 (354), s8 r4–5 (312), s3 r5 (295), s4 never (4 theorems, first at r7), s7 never (0 through r8, 318 solved without a third box); s5, s6 running on p1.
