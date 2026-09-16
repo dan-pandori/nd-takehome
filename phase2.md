@@ -119,7 +119,7 @@ that pool is dominated by 11–12-line theorems.
 
 | pattern, f = 0 | RL pattern proofs | with base p (T = 0.8) < 1/256 / < 10⁻⁴ / < 10⁻⁵ | most probable | frozen control (256/target) | base pass@10⁴ on 300 targets |
 |---|---:|---|---:|---:|---|
-| depth-3, seed 0 | 610 | 610 / 610 / 610 | log p = −21.8 (round 4) | 0 depth-3 proofs, 55 solved | *running* |
+| depth-3, seed 0 | 610 | 610 / 610 / 610 | log p = −21.8 (round 4) | 0 depth-3 proofs, 55 solved | 3 solved, 0 with a depth-3 proof (3·10⁶ samples) |
 | depth-3, seed 1 | 491 | 491 / 489 / 485 | log p = −7.1 (round 6) | – | – |
 | derived-ORE, seed 0 | 10 | 10 / 8 / 8 | log p = −6.4 (round 3) | 1 derived-ORE proof, 180 solved | 3 solved, 2 with a derived-ORE proof (strict 0) |
 | derived-ORE, seed 1 | 4 | 4 / 2 / 2 | log p = −6.3 (round 8) | – | – |
