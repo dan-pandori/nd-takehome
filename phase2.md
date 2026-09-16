@@ -182,6 +182,14 @@ amplifies is a *lexical* one (a specific rule sequence), and the one it ignores 
 
 ## 5. Limitations
 
+- **What "derived ORE" can mean in ≤ 6 lines.** 97% of the generator's own derived-ORE proofs of ≤ 6 lines (3,014 of
+  3,100 in the f = 0.02 set) are the degenerate form — a `( X v X )` disjunction eliminated with two one-line boxes —
+  because a non-degenerate derived ORE needs ≥ 7 lines. The arms learn exactly that distribution (f = 0.02 arm: 290 of
+  294 derived-ORE proofs degenerate, 4 with an assumed non-degenerate disjunction; every f = 0 proof degenerate),
+  while 511 of the 1,000 P1 targets were generated with a non-degenerate derived ORE. So the P1 dial measures the
+  acquisition of the degenerate template; the non-degenerate derived ORE that De Morgan-style theorems need is
+  essentially absent from every arm (≤ 4 proofs) at every f, consistent with the take-home's validation-36 result.
+
 - One model size, one generator, 8 rounds at k = 32; row 3 has one seed. P1's dial stops at f = 0.02.
 - Targets were filtered by a bounded (≤ 8-line, restricted formula space) minimal-length search; "provably needs the
   pattern" is likewise bounded.
