@@ -15,9 +15,9 @@ Block A (depth-3 replication: 3 new f=0 sets x 2 seeds, 2 new f=0.1 sets x 2 see
 - 01:41 five new depth-3 sets assembled and verified (0 written depth-3 in every f = 0 set); block-A queues launched on p1/p2/p3
 
 ## Running on pods
-- none (p2, p3 deleted 04:16 UTC; p1 deleted 05:50 UTC)
+- none (p2, p3 deleted 04:16 UTC; p1 deleted 05:45 UTC)
 
 ## Next step
 - none
 
-DONE 2026-09-16 05:55 UTC
+DONE 2026-09-16 05:47 UTC
