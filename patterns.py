@@ -116,6 +116,13 @@ def reductio(lines):
     return False
 
 
+def derived_dn(lines):
+    """Loose reductio predicate (follow-up block B): a DN line whose cited line is neither a premise (PR) nor a
+    hypothesis (AS), i.e. the double negation it eliminates was DERIVED by a rule."""
+    byidx = {ln['idx']: ln for ln in lines}
+    return any(ln['rule'] == 'DN' and ln['refs'] and byidx.get(ln['refs'][0], {}).get('rule') not in ('PR', 'AS', None) for ln in lines)
+
+
 def depth3(lines):
     return max((ln['depth'] for ln in lines), default=0) >= 3
 
@@ -128,7 +135,7 @@ def classify(proof, pruned=True):
     if pruned:
         lines = prune_lines(lines)
     return {'derived_ore': derived_ore(lines), 'reductio': reductio(lines), 'depth3': depth3(lines), 'pruned_len': len(lines),
-            'derived_ore_strict': derived_ore_strict(lines), 'ore_shapes': ore_shape(lines)}
+            'derived_ore_strict': derived_ore_strict(lines), 'ore_shapes': ore_shape(lines), 'derived_dn': derived_dn(lines)}
 
 
 def test():
@@ -176,8 +183,14 @@ def test():
          'N10 | Q : AS ; N11 | R : DN N3 ; N12 | ( R v S ) : ORI1 N11 ; N13 ( R v S ) : ORE N2 N4 N9 N10 N12 ; QED',
          {'derived_ore': True, 'reductio': True}),
     ]
+    # loose reductio (derived_dn) expectations, keyed by case index: DN citing a NEGI line -> True; DN of a PR line -> False
+    loose = {4: True, 6: False, 11: True}
     bad = 0
-    for prompt, proof, exp in cases:
+    for ci, (prompt, proof, exp) in enumerate(cases):
+        if ci in loose:
+            got_l = classify(proof)['derived_dn']
+            print(('ok   ' if got_l == loose[ci] else 'FAIL ') + f'derived_dn case {ci}: {got_l}')
+            bad += got_l != loose[ci]
         ok, reason, nl = verify_text(prompt + ' ' + proof)
         assert ok, (reason, prompt, proof)
         pr = prune_proof(proof)

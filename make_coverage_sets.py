@@ -24,7 +24,7 @@ LENS = (2, 3, 4, 5, 6)
 
 
 def worker(args):
-    seed, tries, mn, mx, long, cap_np, cap_pat, out = args
+    seed, tries, mn, mx, long, cap_np, cap_pat, out, only = args
     rng = random.Random(seed)
     g = Gen(rng)
     seen = set()
@@ -53,7 +53,15 @@ def worker(args):
                 stats['dup'] += 1
                 continue
             cl = classify(r['proof'])
+            if only == 'reductio_nodn' and not (cl['reductio'] and '( ~ ( ~' not in r['thm']):
+                stats['only_out'] += 1
+                continue
+            if only == 'derived_ore_strict' and not cl['derived_ore_strict']:
+                stats['only_out'] += 1
+                continue
             pats = [p for p in PATTERNS if cl[p]]
+            if only:
+                pats = pats or ['only']
             if not pats:
                 if per_len[L] >= cap_np:
                     stats['np_full'] += 1
@@ -72,6 +80,7 @@ def worker(args):
                 per_pat[p] += 1
             r['key'] = key
             r['pat'] = {p: cl[p] for p in PATTERNS}
+            r['pat']['derived_ore_strict'] = cl['derived_ore_strict']
             r.pop('text', None)
             fo.write(json.dumps(r) + '\n')
             n_out += 1
@@ -81,7 +90,7 @@ def worker(args):
 def cmd_gen(a):
     import multiprocessing as mp
     os.makedirs(os.path.dirname(a.out) or '.', exist_ok=True)
-    jobs = [(a.seed + i, a.tries, a.min, a.max, a.long, a.cap_np, a.cap_pat, f'{a.out}.w{i}.jsonl') for i in range(a.workers)]
+    jobs = [(a.seed + i, a.tries, a.min, a.max, a.long, a.cap_np, a.cap_pat, f'{a.out}.w{i}.jsonl', a.only) for i in range(a.workers)]
     t0 = time.time()
     with mp.Pool(a.workers) as pool:
         res = pool.map(worker, jobs)
@@ -116,15 +125,15 @@ def cmd_merge(a):
                 r['name'] = f'{a.prefix}_{stats["written"]}'
                 L = r['n_lines']
                 per[L]['n'] += 1
-                for p in PATTERNS:
-                    per[L][p] += r['pat'][p]
-                per[L]['none'] += not any(r['pat'].values())
+                for p in list(PATTERNS) + ['derived_ore_strict']:
+                    per[L][p] += bool(r['pat'].get(p))
+                per[L]['none'] += not any(r['pat'].get(p) for p in PATTERNS)
                 fo.write(json.dumps(r) + '\n')
                 stats['written'] += 1
     print(json.dumps({'files': len(files), 'stats': dict(stats)}, indent=1))
     for L in sorted(per):
         d = per[L]
-        print(f'len {L}: n {d["n"]:7d} none {d["none"]:7d} ' + ' '.join(f'{p} {d[p]:6d} ({d[p]/d["n"]:.4%})' for p in PATTERNS))
+        print(f'len {L}: n {d["n"]:7d} none {d["none"]:7d} ' + ' '.join(f'{p} {d[p]:6d} ({d[p]/d["n"]:.4%})' for p in list(PATTERNS) + ['derived_ore_strict']))
 
 
 def read(fn):
@@ -200,9 +209,52 @@ def assemble_set(pool_by_len, pattern, f, size, rng, baseline):
     return out, achieved
 
 
+def assemble_simple(pool_by_len, pattern, f, size, rng, lens):
+    """Generic assembler (used for the cap-8 strict-derived-ORE dial): pattern proofs = round(f*size) drawn at random
+    across lengths in proportion to availability; the rest of each length quota drawn uniformly at random from the
+    proofs WITHOUT the pattern, so every other pattern sits at its natural (pool) rate conditional on not-pattern."""
+    quota = {L: size // len(lens) for L in lens}
+    avail = {L: [r for r in pool_by_len[L] if r['pat'].get(pattern)] for L in lens}
+    tot_avail = sum(len(v) for v in avail.values())
+    n_pat_total = int(round(f * size))
+    if n_pat_total > tot_avail:
+        return None, f'only {tot_avail} {pattern} proofs available, need {n_pat_total}'
+    n_pat = {L: int(round(n_pat_total * len(avail[L]) / tot_avail)) for L in lens} if tot_avail else {L: 0 for L in lens}
+    diff = n_pat_total - sum(n_pat.values())
+    for L in sorted(lens, key=lambda L: -len(avail[L])):
+        if diff == 0:
+            break
+        step = 1 if diff > 0 else -1
+        if 0 <= n_pat[L] + step <= len(avail[L]):
+            n_pat[L] += step; diff -= step
+    out = []; achieved = collections.defaultdict(collections.Counter)
+    for L in lens:
+        chosen = rng.sample(avail[L], n_pat[L]) if n_pat[L] else []
+        rest = [r for r in pool_by_len[L] if not r['pat'].get(pattern)]
+        if len(rest) < quota[L] - len(chosen):
+            return None, f'length {L}: only {len(rest) + len(chosen)} proofs for quota {quota[L]}'
+        sel = chosen + rng.sample(rest, quota[L] - len(chosen))
+        rng.shuffle(sel); out += sel
+        achieved[L]['n'] = len(sel)
+        for p in list(PATTERNS) + ['derived_ore_strict']:
+            achieved[L][p] = sum(bool(r['pat'].get(p)) for r in sel)
+    return out, achieved
+
+
 def cmd_assemble(a):
+    global LENS
     rng = random.Random(a.seed)
     pool = read(a.pool)
+    lo, hi = map(int, a.lens.split('-'))
+    LENS = tuple(range(lo, hi + 1))
+    excl = set()
+    for fn in a.exclude:
+        excl |= {r['key'] for r in read(fn)}
+    if a.heldout_file:
+        excl |= {r['key'] for r in read(a.heldout_file)}
+    if excl:
+        n0 = len(pool); pool = [r for r in pool if r['key'] not in excl]
+        print(f'excluded {n0 - len(pool)} pool records by class ({len(excl)} excluded classes)')
     rng.shuffle(pool)
     # held-out: pattern-free proofs? No: in-distribution held-out drawn like the f=0 baseline would be
     # pattern-dependent; use a fixed held-out of `heldout` proofs drawn uniformly per length from the pool
@@ -210,12 +262,16 @@ def cmd_assemble(a):
     by_len = collections.defaultdict(list)
     for r in pool:
         by_len[r['n_lines']].append(r)
-    heldout = []
-    for L in LENS:
-        heldout += by_len[L][:a.heldout // len(LENS)]
-        by_len[L] = by_len[L][a.heldout // len(LENS):]
     os.makedirs(a.outdir, exist_ok=True)
-    write_set(f'{a.outdir}/heldout.jsonl', heldout, 'heldout')
+    if a.heldout_file:
+        heldout = read(a.heldout_file)
+        print(f'reusing held-out set {a.heldout_file} ({len(heldout)} records, excluded from the pool)')
+    else:
+        heldout = []
+        for L in LENS:
+            heldout += by_len[L][:a.heldout // len(LENS)]
+            by_len[L] = by_len[L][a.heldout // len(LENS):]
+        write_set(f'{a.outdir}/heldout{a.suffix}.jsonl', heldout, 'heldout')
     hk = {r['key'] for r in heldout}
     # baseline per length: pattern counts in the f=0 set of each pattern are just the natural rates among
     # proofs WITHOUT that pattern. To hold the other two patterns' frequencies fixed across f, use the
@@ -228,6 +284,8 @@ def cmd_assemble(a):
                4: {'derived_ore': 0, 'reductio': 0, 'depth3': 0},
                5: {'derived_ore': 28 / 32000, 'reductio': 5549 / 32000, 'depth3': 0},
                6: {'derived_ore': 63 / 32000, 'reductio': 5338 / 32000, 'depth3': 5870 / 32000}}
+    if a.simple:
+        NATURAL = {L: {p: 0 for p in PATTERNS} for L in LENS}
     if a.baseline_ref:
         cnt = collections.defaultdict(collections.Counter)
         for l in open(a.baseline_ref):
@@ -243,8 +301,8 @@ def cmd_assemble(a):
     freqs = [float(x) for x in a.freqs.split(',')]
     for pattern in (a.patterns.split(',') if a.patterns else PATTERNS):
         for f in freqs:
-            tag = f'{pattern}_f{f:g}'
-            sel, ach = assemble_set(by_len, pattern, f, a.size, rng, baseline)
+            tag = f'{pattern}_f{f:g}{a.suffix}'
+            sel, ach = assemble_simple(by_len, pattern, f, a.size, rng, LENS) if a.simple else assemble_set(by_len, pattern, f, a.size, rng, baseline)
             if sel is None:
                 print(f'{tag}: FAILED: {ach}')
                 report[tag] = {'error': ach}
@@ -252,27 +310,28 @@ def cmd_assemble(a):
             fn = f'{a.outdir}/train_{tag}.jsonl'
             write_set(fn, sel, f'train_{tag}')
             # re-classify the written file (independent check)
-            cnt = collections.Counter(); n = 0
+            cnt = collections.Counter(); n = 0; wcnt = collections.Counter()
             for l in open(fn):
                 r = json.loads(l); n += 1
                 cl = classify(r['proof'])
-                for p in PATTERNS:
-                    cnt[p] += cl[p]
-                assert r['key'] not in hk
+                clw = classify(r['proof'], pruned=False)   # written form, independent of pruning
+                for p in list(PATTERNS) + ['derived_ore_strict']:
+                    cnt[p] += cl[p]; wcnt[p] += clw[p]
+                assert r['key'] not in hk and r['key'] not in excl
             if f == 0:
-                assert cnt[pattern] == 0, (tag, cnt)
-            rep = {'n': n, 'achieved_freq': {p: cnt[p] / n for p in PATTERNS}, 'achieved_count': dict(cnt),
-                   'target_freq': f, 'per_len': {L: dict(ach[L]) for L in LENS}}
+                assert cnt[pattern] == 0 and wcnt[pattern] == 0, (tag, cnt, wcnt)
+            rep = {'n': n, 'achieved_freq': {p: cnt[p] / n for p in cnt}, 'achieved_count': dict(cnt), 'written_form_count': dict(wcnt),
+                   'target_freq': f, 'per_len': {L: dict(ach[L]) for L in LENS}, 'assembler_seed': a.seed}
             report[tag] = rep
             print(f'{tag}: n {n} ' + ' '.join(f'{p} {cnt[p]} ({cnt[p]/n:.5f})' for p in PATTERNS))
-    json.dump(report, open(f'{a.outdir}/assemble_report.json', 'w'), indent=1)
+    json.dump(report, open(f'{a.outdir}/assemble_report{a.suffix}.json', 'w'), indent=1)
 
 
 def write_set(fn, recs, prefix):
     with open(fn, 'w') as f:
         for i, r in enumerate(recs):
             ok, reason, nl = verify_text(r['prompt'] + ' ' + r['proof'])
-            assert ok and nl == r['n_lines'] <= 6 or nl == r['n_lines'], (reason, r)
+            assert ok and nl == r['n_lines'] <= max(LENS), (reason, r)
             rec = {'name': f'{prefix}_{i}', 'thm': r['thm'], 'key': r['key'], 'prompt': r['prompt'], 'proof': r['proof'],
                    'text': r['prompt'] + ' ' + r['proof'], 'n_lines': r['n_lines'], 'rules': r['rules'], 'n_prem': r['n_prem'], 'pat': r['pat']}
             f.write(json.dumps(rec) + '\n')
@@ -293,18 +352,24 @@ def cmd_targets(a):
         m = ml.get(r.get('name'))
         r['min_lines_ub'] = m['min_lines_ub'] if m else None
         r['minlen_timeout'] = m['timeout'] if m else None
-    # keep only theorems with NO <=6-line proof found by minlen (min_lines_ub >= 7 or None)
+    # keep only theorems with NO short proof found by minlen (min_lines_ub >= min_ub or None)
     if a.require_long:
-        pool = [r for r in pool if r['min_lines_ub'] is None or r['min_lines_ub'] >= 7]
+        pool = [r for r in pool if r['min_lines_ub'] is None or r['min_lines_ub'] >= a.min_ub]
+    if a.nodn:
+        pool = [r for r in pool if '( ~ ( ~' not in r['thm']]
+    if a.intuit:
+        it = {r['name']: r for r in read(a.intuit)}
+        pool = [r for r in pool if r['name'] in it and it[r['name']]['classical_only']]
+    print('candidate pool after filters:', len(pool))
     rng.shuffle(pool)
     used = set()
     os.makedirs(a.outdir, exist_ok=True)
     summary = {}
-    for pattern in list(PATTERNS) + ['none']:
+    for pattern in (a.patterns.split(',') if a.patterns else list(PATTERNS) + ['none']):
         if pattern == 'none':
-            cands = [r for r in pool if not any(r['pat'].values()) and r['key'] not in used]
+            cands = [r for r in pool if not any(r['pat'].get(p) for p in PATTERNS) and r['key'] not in used]
         else:
-            cands = [r for r in pool if r['pat'][pattern] and r['key'] not in used]
+            cands = [r for r in pool if r['pat'].get(pattern) and r['key'] not in used]
         # per generating length balance
         by = collections.defaultdict(list)
         for r in cands:
@@ -325,10 +390,10 @@ def cmd_targets(a):
         for r in targets + transfer:
             used.add(r['key'])
         for name, recs in (('targets', targets), ('transfer', transfer)):
-            fn = f'{a.outdir}/{name}_{pattern}.jsonl'
+            fn = f'{a.outdir}/{name}_{pattern}{a.suffix}.jsonl'
             with open(fn, 'w') as f:
                 for i, r in enumerate(recs):
-                    rec = {'name': f'{name}_{pattern}_{i}', 'thm': r['thm'], 'key': r['key'], 'prompt': r['prompt'], 'n_lines': r['n_lines'],
+                    rec = {'name': f'{name}_{pattern}{a.suffix}_{i}', 'thm': r['thm'], 'key': r['key'], 'prompt': r['prompt'], 'n_lines': r['n_lines'],
                            'rules': r['rules'], 'n_prem': r['n_prem'], 'pat': r['pat'], 'gen_proof': r['proof'],
                            'min_lines_ub': r['min_lines_ub'], 'minlen_timeout': r['minlen_timeout']}
                     f.write(json.dumps(rec) + '\n')
@@ -336,7 +401,7 @@ def cmd_targets(a):
                                             'min_lines_ub_hist': dict(sorted(collections.Counter(str(r['min_lines_ub']) for r in recs).items())),
                                             'other_patterns': {p: sum(r['pat'][p] for r in recs) for p in PATTERNS}}
             print(name, pattern, json.dumps(summary[f'{name}_{pattern}']))
-    json.dump(summary, open(f'{a.outdir}/targets_summary.json', 'w'), indent=1)
+    json.dump(summary, open(f'{a.outdir}/targets_summary{a.suffix}.json', 'w'), indent=1)
 
 
 def main():
@@ -348,14 +413,25 @@ def main():
     g.add_argument('--cap_np', type=int, default=1500, help='per worker, per length cap on pattern-free proofs')
     g.add_argument('--cap_pat', type=int, default=3000, help='per worker cap per pattern')
     g.add_argument('--seed', type=int, default=1000)
+    g.add_argument('--only', default=None, choices=[None, 'reductio_nodn', 'derived_ore_strict'], help='output filter: keep only proofs with this property (reductio_nodn = reductio pattern and no ( ~ ( ~ subformula in the sequent)')
     m = sub.add_parser('merge'); m.add_argument('--glob', required=True); m.add_argument('--out', required=True); m.add_argument('--prefix', default='pool')
     s = sub.add_parser('assemble'); s.add_argument('--pool', required=True); s.add_argument('--outdir', required=True)
     s.add_argument('--size', type=int, default=155000); s.add_argument('--heldout', type=int, default=5000); s.add_argument('--seed', type=int, default=0)
     s.add_argument('--freqs', default='0,0.0001,0.001,0.01,0.1'); s.add_argument('--patterns', default=None)
     s.add_argument('--baseline_ref', default=None, help='unfiltered generator pool to measure natural per-length pattern rates (default: hard-coded take-home numbers)')
+    s.add_argument('--heldout_file', default=None, help='reuse an existing held-out set (its classes are excluded from the pool) instead of drawing a new one')
+    s.add_argument('--exclude', nargs='*', default=[], help='jsonl files whose classes (key) are excluded from the pool (target / transfer pools)')
+    s.add_argument('--suffix', default='', help='suffix appended to every set tag, e.g. _a1')
+    s.add_argument('--lens', default='2-6', help='length range of the flat histogram, e.g. 2-8 for the cap-8 pool')
+    s.add_argument('--simple', action='store_true', help='generic assembler: pattern proofs at f, the rest uniform from non-pattern proofs (natural rates)')
     t = sub.add_parser('targets'); t.add_argument('--pool', required=True); t.add_argument('--minlen', default=None); t.add_argument('--outdir', required=True)
     t.add_argument('--exclude', nargs='*', default=[]); t.add_argument('--n_targets', type=int, default=1000); t.add_argument('--n_transfer', type=int, default=500)
     t.add_argument('--require_long', action='store_true'); t.add_argument('--seed', type=int, default=0)
+    t.add_argument('--min_ub', type=int, default=7, help='with --require_long: keep min_lines_ub >= this or None')
+    t.add_argument('--nodn', action='store_true', help='drop theorems whose sequent contains a ( ~ ( ~ X ) ) subformula')
+    t.add_argument('--intuit', default=None, help='intuit.py output; keep only classical_only theorems')
+    t.add_argument('--patterns', default=None, help='comma list of pattern keys to build pools for (default: all + none)')
+    t.add_argument('--suffix', default='', help='suffix for output file names, e.g. 2 -> targets_reductio2.jsonl')
     a = ap.parse_args()
     {'gen': cmd_gen, 'merge': cmd_merge, 'assemble': cmd_assemble, 'targets': cmd_targets}[a.cmd](a)
 

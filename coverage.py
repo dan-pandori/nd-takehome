@@ -7,10 +7,11 @@
 For every theorem: samples k proofs (T), decodes, START-INDEX-NORMALISES each proof (normalize.norm),
 verifies each DISTINCT normalised string once (the verifier accepts any start index, so validity is
 invariant under renumbering), and writes ONE record per theorem to <out>.s<shard>.jsonl:
-  {name, thm, prompt, gen_lines, n_tried, n_ok, n_distinct_ok, first_hit (1-based sample index of the
+  {name, thm, prompt, gen_lines, n_tried, n_ok, n_distinct_ok, hits_by_pattern, distinct_by_pattern, first_hit (1-based sample index of the
    first verified sample, or null), solved_within: {32:.., 128:.., 512:.., 1000:.., 10000:.., 100000:..}
    (first_hit <= B, an exact pass@B draw), written_hist, pruned_hist,
-   proofs: [{proof (normalised), count, written, pruned}]  -- verified successes only}
+   proofs: [{proof (normalised), count, written, pruned, first, pat}]  -- EVERY distinct verified success with its
+   hit count and pattern labels (sum of count == n_ok; asserted), so any per-pattern sample count is re-derivable}
 Failures are not stored. Resumable: theorems already present in the output file are skipped.
 Samples are i.i.d. per theorem, so first_hit <= B is one Bernoulli draw of pass@B and n_ok/n_tried estimates the per-sample rate.
 """
@@ -22,6 +23,7 @@ from sample import generate_ids
 from nd_verify import verify_text
 from prune import pruned_length
 from normalize import norm
+from patterns import classify, PATTERNS
 
 BUDGETS = (32, 128, 512, 1000, 10000, 100000)
 
@@ -87,7 +89,9 @@ def main():
             for s, c in counts.items():
                 ok, reason, nl = verify_text(r['prompt'] + ' ' + s)
                 if ok:
-                    ok_proofs.append({'proof': s, 'count': c, 'written': nl, 'pruned': pruned_length(r['prompt'], s), 'first': first_idx[s]})
+                    cl = classify(s) or {}
+                    pat = {p: bool(cl.get(p)) for p in list(PATTERNS) + ['derived_ore_strict', 'derived_dn']}
+                    ok_proofs.append({'proof': s, 'count': c, 'written': nl, 'pruned': pruned_length(r['prompt'], s), 'first': first_idx[s], 'pat': pat})
             n_ok = sum(p['count'] for p in ok_proofs)
             # pass@B from sample order: we know the first index of each distinct success and its total count, but not
             # the position of every repeat; hits_within counts distinct successes whose first occurrence is within B,
@@ -97,10 +101,17 @@ def main():
             for p in ok_proofs:
                 wh[p['written']] += 1; ph[p['pruned']] += 1
             ok_proofs.sort(key=lambda p: -p['count'])
+            # complete bookkeeping (review caveat 3): every one of the n samples maps to exactly one distinct normalised
+            # string; every distinct string was verified; every verified one is stored with its hit count and pattern
+            # labels, so sum(count) == n_ok and hits_by_pattern is re-derivable from `proofs`.
+            hits_by_pattern = {p: sum(x['count'] for x in ok_proofs if x['pat'][p]) for p in list(PATTERNS) + ['derived_ore_strict', 'derived_dn']}
+            distinct_by_pattern = {p: sum(1 for x in ok_proofs if x['pat'][p]) for p in hits_by_pattern}
+            assert sum(x['count'] for x in ok_proofs) == n_ok
             rec = {'name': name, 'thm': r.get('thm'), 'prompt': r['prompt'], 'gen_lines': r.get(a.lenfield),
                    'n_tried': n, 'n_ok': n_ok, 'n_distinct_ok': len(ok_proofs), 'n_distinct_all': len(counts),
                    'first_hit': first_hit, 'solved_within': {str(B): bool(first_hit is not None and first_hit <= B) for B in BUDGETS},
-                   'written_hist': dict(sorted(wh.items())), 'pruned_hist': dict(sorted(ph.items())), 'proofs': ok_proofs}
+                   'written_hist': dict(sorted(wh.items())), 'pruned_hist': dict(sorted(ph.items())),
+                   'hits_by_pattern': hits_by_pattern, 'distinct_by_pattern': distinct_by_pattern, 'proofs': ok_proofs}
             fo.write(json.dumps(rec) + '\n'); fo.flush()
             torch.cuda.empty_cache()
             n_done += 1
