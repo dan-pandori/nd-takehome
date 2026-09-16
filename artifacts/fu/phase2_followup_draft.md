@@ -35,10 +35,10 @@ Three new f = 0 depth-3 sets (assembler seeds 1, 2, 3) and two new f = 0.1 sets 
 
 ![strips](figures/followup_depth3_strips.png)
 
-- **f = 0, 8 arms:** 0.341, 0.271, 0.335, 0.364, 0.350, 0.341, 0.361, 0.352 — mean **0.339 ± 0.029** (SD), min 0.271. **f = 0.1, 6 arms:** F01_LIST — mean F01_MEAN. The distributions overlap completely (5 of 8 f = 0 arms inside the f = 0.1 range and vice-versa; permutation test on the difference of means p ≈ 0.8); **no f = 0 arm is near zero**, and the campaign-1 seed-1 arm (0.271) is the low outlier of the whole family.
-- **Variance decomposition** (one-way random effects, sets as groups, 2 seeds per set): at f = 0, between-set SD 0.012 vs between-training-seed SD 0.027 (set share 17%, F = 1.4 — indistinguishable from pure seed noise at 4 groups); at f = 0.1 between-set SD 0 (F = 0.5). The pretraining draw does not matter; the training seed matters a little.
-- **First depth-3 proof:** rounds 1–5 at f = 0 (median 2), rounds 1–3 at f = 0.1.
-- **Frozen controls (256 attempts per target):** depth-3 theorems a0 s0 0, a1 s0 5, a1 s1 5, a2 s0 4, a2 s1 0, FROZEN_A3; f = 0.1: b0 s0 12, b2 s0 0, b2 s1 10, FROZEN_B1. So the review's "expected 0" is *not* what the new controls show: four of the six new f = 0 models produce a three-nested-`IMPI` proof of the `A > (B > (C > D))` shape on 4–5 of the 1,000 targets within 256 samples.
+- **f = 0, 8 arms:** 0.341, 0.271, 0.335, 0.364, 0.350, 0.341, 0.361, 0.352 — mean **0.339 ± 0.029** (SD), min 0.271. **f = 0.1, 6 arms:** 0.355, 0.316 (campaign-1 set), 0.349, **0.122**, 0.352, 0.347 — mean **0.307 ± 0.092** (0.344 ± 0.016 without the late-igniting b1 s1, whose depth-3 count went 1 / 2 / 2 / 2 / 2 / 5 / 27 / 122 over the rounds and was still climbing). The distributions overlap completely (6 of 8 f = 0 arms inside the f = 0.1 range and 5 of 6 f = 0.1 arms inside the f = 0 range; permutation test on the difference of means p ≈ 0.5); **no f = 0 arm is near zero**; the low outlier of the whole family is an f = 0.1 arm.
+- **Variance decomposition** (one-way random effects, sets as groups, 2 seeds per set): at f = 0, between-set SD 0.012 vs between-training-seed SD 0.027 (set share 17%, F = 1.4 — indistinguishable from pure seed noise at 4 groups); at f = 0.1 between-set SD 0 (F = 0.9; the b1 s1 outlier is a seed effect, its set-mate is at 0.349). The pretraining draw does not matter; the training seed does — expert iteration on these targets can ignite late.
+- **First depth-3 proof:** FIRSTROUNDS.
+- **Frozen controls (256 attempts per target):** depth-3 theorems a0 s0 0, a1 s0 5, a1 s1 5, a2 s0 4, a2 s1 0, a3 s0 1, a3 s1 10; f = 0.1: b0 s0 12, b2 s0 0, b2 s1 10, b1 s0 5, b1 s1 2. So the review's "expected 0" is *not* what the new controls show: four of the six new f = 0 models produce a three-nested-`IMPI` proof of the `A > (B > (C > D))` shape on 4–5 of the 1,000 targets within 256 samples.
 - **Base reachability** (novelty.py, each arm's own Stage-1 model, T = 0.8, start-index marginalised, every depth-3 proof of the arm): 94–100% of each arm's depth-3 proofs are below 10⁻⁵ (table); but the *most* probable proof per arm ranges from log p −22.6 (campaign-1 model) to −1.3 (a3 s1: p ≈ 0.27, third-box `AS` line costing 0.4 nats), and the number of targets with any depth-3 proof above 1/256 is 0 / 0 / 3 / 3 / 3 / 0 / 1 / 9 across the eight f = 0 arms. The frozen controls find exactly those theorems (a1 s1: all 3 high-p theorems are among its 5 frozen finds).
 
 **Reading.** The headline replicates and sharpens: with zero depth-3 proofs in pretraining, expert iteration reaches the f = 0.1 level in every one of eight arms. What changes is the mechanism's starting point. The campaign-1 model was one where the third box was a < 10⁻⁵ event everywhere (0 in 3·10⁶ base samples) and the first depth-3 proofs appeared at rounds 3 / 5 out of models fine-tuned on depth ≤ 2 successes; four of the six new models already assign 10⁻²–10⁻³ to a third box on a handful of targets and EI starts from those at round 1–2. Both routes end at 0.34. The honest one-line version is therefore: *the base model's willingness to open a third box is a rare, draw-dependent generalisation of the depth-2 nesting it was trained on (0 to 9 reachable targets per 1,000), and RL turns it into 340 targets in every case.* "The frozen control and the base model produce none" (campaign.md) holds for the campaign-1 model and for a2 s1 / b2 s0, not in general; it should read "produce at most a handful".
@@ -72,14 +72,12 @@ Three new f = 0 depth-3 sets (assembler seeds 1, 2, 3) and two new f = 0.1 sets 
 
 | cap 8 arm | solved / 500 | **strict acquisition** (theorems / proofs) | first round | per round (strict theorems) | transfer solved / strict (250) | held-out (cap 8) greedy | strict proofs' base p: n / below 1/256 / below 10⁻⁵ / max log p |
 |---|---:|---|---|---|---|---:|---|
-| EI f = 0 s0 | 197 | **0.008** (4 / 5) | 3 | 0 0 2 2 2 2 3 4 | 120 / 1 | 0.926 | 5 / 2 / 0 / −1.2 |
-| EI f = 0 s1 | 200 | **0.008** (4 / 5) | 2 | 0 1 1 1 2 3 4 4 | 118 / 1 | 0.936 | 5 / 2 / 0 / −2.9 |
-| EI f = 10⁻³ s0 | 202 | **0.022** (11 / 17) | 4 | 2 2 4 4 5 7 8 11 | 124 / 1 | 0.929 | 17 / 13 / 5 / −0.6 |
-| EI f = 10⁻² s0 | 218 | **0.022** (11 / 14) | 3 | 2 4 6 7 8 9 9 11 | 126 / 2 | 0.933 | 14 / 6 / 1 / −1.9 |
-| frozen f = 0 s0 | FROZEN_C8_S0 | | | | | | |
-| frozen f = 0 s1 | FROZEN_C8_S1 | | | | | | |
+| EI f = 0 s0 | 197 | **0.008** (4 / 5) | 1 | 2 2 2 3 3 3 3 4 | 120 / 1 | 0.926 | 5 / 2 / 0 / −1.2 |
+| EI f = 0 s1 | 200 | **0.008** (4 / 5) | 1 | 2 3 4 4 4 4 4 4 | 118 / 1 | 0.936 | 5 / 2 / 0 / −2.9 |
+| EI f = 10⁻³ s0 | 202 | **0.022** (11 / 17) | 1 | 2 2 4 4 5 7 8 11 | 124 / 1 | 0.929 | 17 / 13 / 5 / −0.6 |
+| EI f = 10⁻² s0 | 218 | **0.022** (11 / 14) | 1 | 2 4 6 7 8 9 9 11 | 126 / 2 | 0.933 | 14 / 6 / 1 / −1.9 |
+| frozen f = 0 s0 | 159 | 0.006 (3 / 4) | 1 | 2 2 2 2 2 3 3 3 | 94 / 1 | 0.918 | – |
+| frozen f = 0 s1 | 161 | 0.004 (2 / 4) | 1 | 2 2 2 2 2 2 2 2 | 97 / 1 | 0.931 | – |
 | base pass@10⁴, f = 0 s0, 300 targets | COV_C8 | | | | | | |
-
-(per-round strict counts for the f = 0 arms are reconstructed from the round field of the final found file.)
 
 **Reading.** The dial is flat: 1–2% strict acquisition at every f from 0 to 10⁻² (the latter being roughly the generator's own cap-8 rate), against my pre-registered 10–35% for f ≥ 10⁻³. The arms solve ~40% of the targets, three-quarters of them with depth-3 proofs, i.e. they route around the disjunction elimination. The few strict proofs that do appear are 9-line `ANDE/IMPE → ORE` with distinct disjuncts and are mostly *reachable* under their own base (max log p −0.6 to −2.9; 0–5 of them below 10⁻⁵) — the cap-8 base models, which have seen ORE over premise disjunctions and (at f = 0) 743 degenerate derived OREs, already assign 10⁻¹–10⁻³ to a strict derived ORE on a couple of targets, and RL neither needs nor selects the pattern beyond that. So the non-degenerate derived ORE behaves like reductio, not like depth-3: no composition across f = 0, and not even amplification when the reward does not require the pattern. This is a cap-8 result and is not pooled with the cap-6 dial.

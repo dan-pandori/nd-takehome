@@ -37,14 +37,20 @@ def arm_metrics(arm, pattern, n_targets=None, n_transfer=None):
             fn = f'{arm}/{base}_{r}.jsonl'
             if not os.path.exists(fn):   # intermediate found files removed: use the last cumulative file, filtered by round
                 last = max(rounds); fn = f'{arm}/{base}_{last}.jsonl'
+            # the found files are written from lists that the training step shuffles in place, so the FIRST record of a
+            # (theorem, normalised proof) pair is not necessarily its earliest round: take the minimum round per pair.
+            recs = rd(fn); minround = {}
+            for x in recs:
+                k0 = (x['name'], norm(x['proof'])); minround[k0] = min(minround.get(k0, 99), x['round'])
             seen = set(); thm_pat = set(); n_pat = 0; first = None
             other = collections.Counter(); wh = collections.Counter(); ph = collections.Counter(); thms = set()
             examples = []; strict_thms = set(); loose_thms = set(); anydn_thms = set()
-            for x in rd(fn):
-                if x['round'] > r:
-                    continue
+            for x in recs:
                 pn = norm(x['proof'])
                 k = (x['name'], pn)
+                x = dict(x); x['round'] = minround[k]
+                if x['round'] > r:
+                    continue
                 if k in seen:
                     continue
                 seen.add(k); thms.add(x['name'])

@@ -68,7 +68,7 @@ def main():
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     COL = {0: '#2a78d6', 0.1: '#eb6834'}
-    fig, ax = plt.subplots(figsize=(7, 4))
+    fig, ax = plt.subplots(figsize=(8, 4.2))
     zeros = []
     for k, v in res['arms'].items():
         x = list(range(1, len(v['per_round_strict']) + 1)); y = [c / n for c in v['per_round_strict']]
@@ -78,13 +78,13 @@ def main():
             zeros.append(lab); continue
         ax.annotate(lab, (x[-1], y[-1]), textcoords='offset points', xytext=(4, 0), fontsize=6.5, color='#52514e', va='center')
     if zeros:
-        ax.annotate(' = 0: ' + ', '.join(zeros), (x[-1], 0), textcoords='offset points', xytext=(4, -9), fontsize=6.5, color='#52514e', va='center')
+        ax.annotate('at 0 throughout: ' + ', '.join(zeros), (4.5, 0), textcoords='offset points', xytext=(0, -11), fontsize=6.5, color='#52514e', va='center', ha='center')
     ax.set_xlabel('expert-iteration round (32 attempts per target per round)'); ax.set_ylabel(f'strict reductio acquisition (fraction of {n} targets)')
-    ax.set_xlim(0.8, 9.6); ax.spines[['top', 'right']].set_visible(False); ax.grid(color='#e8e7e3', lw=0.6); ax.set_axisbelow(True)
+    ax.set_xlim(0.8, 9.3); ax.set_ylim(-0.012, 0.17); ax.spines[['top', 'right']].set_visible(False); ax.grid(color='#e8e7e3', lw=0.6); ax.set_axisbelow(True)
     from matplotlib.lines import Line2D
     ax.legend(handles=[Line2D([], [], color=COL[0], lw=2, label='f = 0 (no reductio in pretraining)'), Line2D([], [], color=COL[0.1], lw=2, label='f = 0.1'),
                        Line2D([], [], color='#52514e', ls='--', label='frozen control')], fontsize=7.5, frameon=False, loc='upper left')
-    ax.set_title('Block B: targets whose double negation must be derived — solved with the strict reductio shape', fontsize=9)
+    ax.set_title('Block B: targets that need a derived double negation, solved with the strict reductio shape', fontsize=9)
     fig.tight_layout(); fig.savefig(a.fig, dpi=160); print('wrote', a.out, a.fig)
 
 
