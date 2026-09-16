@@ -47,6 +47,8 @@ disjunction shapes that the other 22 theorems need, consistent with Phase 2's P1
 | 6 | 160 | 203 | 222 |
 | 8 (256 attempts) | 161 | 213 | 222 |
 
+![schemata](figures/phase3_schemata.png)
+
 Per schema at round 8 (theorems solved of 24; schemata not listed are 0–2 in every arm):
 
 | schema | frozen | ei_textbook | ei_textbook_precursor |
