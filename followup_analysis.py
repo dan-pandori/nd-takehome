@@ -149,34 +149,37 @@ def main():
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     COL = {0: '#2a78d6', 0.1: '#eb6834'}     # validated categorical slots 1 and 2 (dataviz reference palette)
-    fig, ax = plt.subplots(figsize=(7.5, 3.2))
+    fig, ax = plt.subplots(figsize=(7.5, 3.8))
     rng = random.Random(1)
+    order = ['a0', 'a1', 'a2', 'a3', 'b0', 'b1', 'b2']
     for i, f in enumerate((0, 0.1)):
         y0 = 1 - i
-        for x in arms:
-            if x['f'] != f or x['round'] != a.round and x['kind'] == 'ei':
-                continue
-            jit = (['a0', 'a1', 'a2', 'a3', 'b0', 'b1', 'b2'].index(x['set']) % 4 - 1.5) * 0.06
-            if x['kind'] == 'ei':
-                ax.scatter([x['acq']], [y0 + jit], s=70 if x['campaign1'] else 55, facecolors=COL[f], edgecolors='white', linewidths=1.5,
-                           marker='D' if x['campaign1'] else 'o', zorder=3)
-                ax.annotate(f"{x['set']}s{x['seed']}", (x['acq'], y0 + jit), textcoords='offset points', xytext=(0, 7), ha='center', fontsize=6.5, color='#52514e')
-            else:
-                ax.scatter([x['acq']], [y0 + jit], s=45, facecolors='none', edgecolors=COL[f], linewidths=1.5, marker='o', zorder=3)
-        vals = [x['acq'] for x in arms if x['f'] == f and x['kind'] == 'ei' and x['round'] == a.round]
+        ei_arms = sorted([x for x in arms if x['f'] == f and x['kind'] == 'ei' and x['round'] == a.round], key=lambda x: (order.index(x['set']), x['seed']))
+        fr_arms = sorted([x for x in arms if x['f'] == f and x['kind'] == 'frozen'], key=lambda x: (order.index(x['set']), x['seed']))
+        for arr in (ei_arms, fr_arms):
+            k = len(arr)
+            for j, x in enumerate(arr):
+                jit = (j - (k - 1) / 2) * (0.5 / max(k - 1, 1)) if k > 1 else 0.0
+                if x['kind'] == 'ei':
+                    ax.scatter([x['acq']], [y0 + jit], s=70 if x['campaign1'] else 55, facecolors=COL[f], edgecolors='white', linewidths=1.5,
+                               marker='D' if x['campaign1'] else 'o', zorder=3)
+                    ax.annotate(f"{x['set']} s{x['seed']}", (x['acq'], y0 + jit), textcoords='offset points', xytext=(9, -2.5), ha='left', fontsize=6, color='#52514e')
+                else:
+                    ax.scatter([x['acq']], [y0 + jit], s=45, facecolors='none', edgecolors=COL[f], linewidths=1.5, marker='o', zorder=3)
+        vals = [x['acq'] for x in ei_arms]
         if vals:
             m = sum(vals) / len(vals)
-            ax.plot([m, m], [y0 - 0.3, y0 + 0.3], color=COL[f], lw=2, zorder=2)
+            ax.plot([m, m], [y0 - 0.32, y0 + 0.32], color=COL[f], lw=2, zorder=2)
     ax.set_yticks([1, 0]); ax.set_yticklabels(['f = 0\n(zero depth-3 proofs\nin pretraining)', 'f = 0.1'])
-    ax.set_ylim(-0.6, 1.6); ax.set_xlim(-0.02, 0.5)
-    ax.set_xlabel('depth-3 acquisition after 8 EI rounds (fraction of 1,000 targets solved with a depth-3 proof)')
+    ax.set_ylim(-0.5, 1.5); ax.set_xlim(-0.02, 0.46)
+    ax.set_xlabel('depth-3 acquisition after 8 rounds (fraction of 1,000 targets solved with a depth-3 proof)', fontsize=8.5)
     ax.spines[['top', 'right']].set_visible(False); ax.grid(axis='x', color='#e8e7e3', lw=0.6); ax.set_axisbelow(True)
     from matplotlib.lines import Line2D
     ax.legend(handles=[Line2D([], [], marker='o', ls='', color='#52514e', label='EI arm (new set)'),
                        Line2D([], [], marker='D', ls='', color='#52514e', label='EI arm (campaign-1 set)'),
                        Line2D([], [], marker='o', ls='', markerfacecolor='none', color='#52514e', label='frozen control'),
-                       Line2D([], [], color='#52514e', lw=2, label='mean of EI arms')], fontsize=7.5, loc='lower right', frameon=False)
-    ax.set_title('Depth-3 acquisition at f = 0 vs f = 0.1: every set x training seed (label = set, seed)', fontsize=9.5)
+                       Line2D([], [], color='#52514e', lw=2, label='mean of EI arms')], fontsize=7.5, loc='center left', bbox_to_anchor=(0.22, 0.5), frameon=False)
+    ax.set_title('Depth-3 acquisition: every pretraining set x training seed (label = set, seed)', fontsize=9.5)
     fig.tight_layout(); os.makedirs(os.path.dirname(a.fig), exist_ok=True); fig.savefig(a.fig, dpi=160)
     print('wrote', a.out, a.fig)
 
