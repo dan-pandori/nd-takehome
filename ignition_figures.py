@@ -35,14 +35,15 @@ def _seq_color(r, rates):
 def acq_vs_base(summary, out):
     fig, axes = plt.subplots(1, 2, figsize=(10, 4.2))
     for ax, (sname, S) in zip(axes, summary.items()):
-        _style(ax)
+        _style(ax); used = {}
         for t in S['table']:
             if t['final_acq'] is None or t['base_rate'] is None:
                 continue
             ign = t['ignition_round']
             mk = 'o' if (ign is not None and ign <= 4) else ('s' if ign is not None else 'x')
             ax.plot(_x(t['base_rate']), t['final_acq'], mk, color=CAT[0], markersize=7, markerfacecolor=CAT[0] if mk != 's' else 'white', markeredgewidth=1.5)
-            ax.annotate(f"s{t['seed']}", (_x(t['base_rate']), t['final_acq']), textcoords='offset points', xytext=(5, 3), fontsize=8, color=INK2)
+            key = (round(math.log10(_x(t['base_rate'])), 1), round(t['final_acq'], 2)); k = used.get(key, 0); used[key] = k + 1
+            ax.annotate(f"s{t['seed']}", (_x(t['base_rate']), t['final_acq']), textcoords='offset points', xytext=(5, 3 + 9 * k), fontsize=8, color=INK2)
             for iv, v in (t.get('interventions') or {}).items():
                 if v['final_acq'] is not None:
                     ax.plot(_x(t['base_rate']), v['final_acq'], marker='$%s$' % iv, color=CAT[1], markersize=8, linestyle='none')
@@ -60,7 +61,7 @@ def acq_vs_base(summary, out):
 def round_vs_base(summary, out):
     fig, axes = plt.subplots(1, 2, figsize=(10, 4.2))
     for ax, (sname, S) in zip(axes, summary.items()):
-        _style(ax)
+        _style(ax); used = {}
         N, k = S['n_targets_pool'], S['k']
         xs = [10 ** (i / 20) for i in range(-130, -50)]
         ax.plot(xs, [1 / (r * k * N) for r in xs], color=GREY, linewidth=1.5, label='1 / (r·k·N)')
@@ -72,7 +73,8 @@ def round_vs_base(summary, out):
             fr = t['first_pattern_round']; ig = t['ignition_round']
             ax.plot(x, fr if fr is not None else 9, 'o', color=CAT[0], markersize=7, label='first pattern proof' if 'f' not in done_lbl else None); done_lbl.add('f')
             ax.plot(x, ig if ig is not None else 9, 's', color=CAT[1], markersize=7, markerfacecolor='white', markeredgewidth=1.5, label='ignition (≥ 2 % of targets)' if 'i' not in done_lbl else None); done_lbl.add('i')
-            ax.annotate(f"s{t['seed']}", (x, ig if ig is not None else 9), textcoords='offset points', xytext=(5, 3), fontsize=8, color=INK2)
+            key = (round(math.log10(x), 1), ig); k = used.get(key, 0); used[key] = k + 1
+            ax.annotate(f"s{t['seed']}", (x, ig if ig is not None else 9), textcoords='offset points', xytext=(5 + 16 * k, 3), fontsize=8, color=INK2)
         ax.set_xscale('log'); ax.set_xlim(ZERO_X / 1.5, 3e-3); ax.set_ylim(0.5, 9.6)
         ax.set_yticks(range(1, 10)); ax.set_yticklabels([str(i) for i in range(1, 9)] + ['never'])
         ax.set_xticks([ZERO_X, 1e-6, 1e-5, 1e-4, 1e-3]); ax.set_xticklabels(['0', '1e-6', '1e-5', '1e-4', '1e-3'])
@@ -96,7 +98,7 @@ def curves(summary, out):
             ax.annotate(f"s{t['seed']}", (xs[-1], ys[-1]), textcoords='offset points', xytext=(4, -3), fontsize=7, color=INK2)
         ax.axhline(S['ignition_threshold'], color=GREY, linestyle=':', linewidth=1)
         ax.text(1, S['ignition_threshold'] * 1.15, 'ignition threshold (2 %)', fontsize=8, color=INK2)
-        ax.set_yscale('symlog', linthresh=10); ax.set_xticks(range(1, 9))
+        ax.set_yscale('symlog', linthresh=10); ax.set_ylim(bottom=-0.5); ax.set_xticks(range(1, 9))
         ax.set_xlabel('round', color=INK2, fontsize=9); ax.set_ylabel(f"target theorems with a {S['pattern']} proof (cumulative)", color=INK2, fontsize=9)
         ax.set_title(f"{sname}: one line per arm, darker = higher pre-RL base rate (grey = not sampled)", fontsize=9, color=INK)
     fig.tight_layout(); fig.savefig(out, dpi=150); plt.close(fig)
@@ -122,7 +124,7 @@ def interventions(summary, out):
             yv = v['per_round']; x0 = 5
             ax.plot([4] + list(range(x0, x0 + len(yv))), [ys[3]] + yv, '-', color=CAT[i], linewidth=2, label=names[iv])
         ax.axhline(S['ignition_threshold'], color=GREY, linestyle=':', linewidth=1)
-        ax.set_yscale('symlog', linthresh=10); ax.set_xticks(range(1, 9))
+        ax.set_yscale('symlog', linthresh=10); ax.set_ylim(bottom=-0.5); ax.set_xticks(range(1, 9))
         ax.set_title(f"{sname} s{t['seed']}  r = {t['base_rate']:.1e}" if t['base_rate'] is not None else f"{sname} s{t['seed']}", fontsize=9, color=INK)
         ax.set_xlabel('round', fontsize=8, color=INK2); ax.set_ylabel('pattern theorems', fontsize=8, color=INK2)
     for ax in list(axes.flat)[n:]:
