@@ -162,9 +162,56 @@ def main():
                   f"{(f'{t['final_acq']:.3f}' if t['final_acq'] is not None else '-'):>6}  {t['per_round']}  {t['interventions'] and {k: v['per_round'] for k, v in t['interventions'].items()}}")
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
     json.dump(summary, open(a.out, 'w'), indent=1)
+    write_tables(summary, a.out.replace('.json', '_table.md'), a.out.replace('.json', '_examples.md'))
     if a.figs:
         import ignition_figures
         ignition_figures.make_all(summary, a.figs)
+
+
+
+def write_tables(summary, out_md, out_ex):
+    """Markdown tables (per seed; interventions) and five printed example proofs per pattern set."""
+    L = []
+    for sname, S in summary.items():
+        L.append(f"\n### {sname} (pool n = {S['n_targets_pool']}, k = {S['k']}, ignition threshold {S['ignition_threshold']} theorems)\n")
+        L.append('| seed | pre-RL rate r (600k) | r hits | targets w/ pattern | frozen@256 | 1/(r·k·N) | round-1 hits (32×N) | first pattern round | ignition round | round-8 pattern theorems / proofs | solved r8 | acq r8 |')
+        L.append('|---|---|---|---|---|---|---|---|---|---|---|---|')
+        for t in S['table']:
+            br = t['base_rate']; c = S['coverage'].get(t['model'], {})
+            inc = ' (incomplete)' if c.get('INCOMPLETE') else ''
+            ar = S['arms'].get(t['seed'])
+            L.append(f"| {t['seed']} | {('-' if br is None else f'{br:.1e}') + inc} | {t['base_hits'] if t['base_hits'] is not None else '-'} | {t['base_targets_with_pattern'] if t['base_targets_with_pattern'] is not None else '-'} | {t['frozen256'] if t['frozen256'] is not None else '-'} | "
+                     f"{('∞' if not t['pred_first_round'] else f'{t['pred_first_round']:.1f}') if br is not None else '-'} | {t['round1_pattern_theorems'] if t['round1_pattern_theorems'] is not None else '-'} | "
+                     f"{t['first_pattern_round'] if t['first_pattern_round'] is not None else 'never'} | {t['ignition_round'] if t['ignition_round'] is not None else 'never'} | "
+                     f"{ar['final_pattern_theorems'] if ar else '-'} / {ar['final_pattern_proofs'] if ar else '-'} | {t['final_solved'] if t['final_solved'] is not None else '-'} | {('%.3f' % t['final_acq']) if t['final_acq'] is not None else '-'} |")
+        ivrows = [(t, iv, v) for t in S['table'] for iv, v in sorted((t.get('interventions') or {}).items())]
+        if ivrows:
+            L.append(f"\n**Interventions ({sname})**, from the round-4 state; per-round cumulative pattern theorems (rounds 5–8); attempts per target: parent 4×32 = 128 before, then K: 128 + 3×32, T/S: 4×32.\n")
+            L.append('| seed | parent r1–8 | intervention | r5–8 pattern theorems | ignition round | r8 acquisition |')
+            L.append('|---|---|---|---|---|---|')
+            for t, iv, v in ivrows:
+                L.append(f"| {t['seed']} | {t['per_round']} | {iv} | {v['per_round']} | {v['ignition_round'] if v['ignition_round'] is not None else 'never'} | {('%.3f' % v['final_acq']) if v['final_acq'] is not None else '-'} |")
+        bg = S['base_generalisation']
+        L.append(f"\nBase generalisation ({sname}): {bg['n_with_pattern']} of {bg['n_draws']} Stage-1 draws produce ≥ 1 pattern sample in 600k pre-RL samples; 95 % CI {bg['ci95'][0]:.2f}–{bg['ci95'][1]:.2f}.")
+        r1 = [t for t in S['table'] if t['round1_pattern_theorems'] is not None]
+        n1 = sum(1 for t in r1 if t['round1_pattern_theorems'] > 0)
+        lo, hi = clopper_pearson(n1, len(r1))
+        L.append(f"Round-1 (32 × N pre-training samples): {n1} of {len(r1)} arms had ≥ 1 pattern theorem; 95 % CI {lo:.2f}–{hi:.2f}.")
+    open(out_md, 'w').write('\n'.join(L) + '\n')
+    E = []
+    for sname, S in summary.items():
+        E.append(f"\n## {sname}: five pattern proofs found by EI (normalised), with round\n")
+        n = 0
+        for seed, ar in sorted(S['arms'].items()):
+            for ex in ar['examples']:
+                if n >= 5: break
+                E.append(f"- seed {seed}, round {ex['round']}, `{ex['thm']}` ({ex['written']} lines):\n\n```\n{ex['proof']}\n```\n"); n += 1
+            if n >= 5: break
+        E.append(f"\n## {sname}: pre-RL pattern samples (top targets by hit count, per model)\n")
+        for m, c in sorted(S['coverage'].items()):
+            for pt in c['per_target'][:2]:
+                E.append(f"- {m}: `{pt['thm']}` hits {pt['hits']}/{pt['n_tried']} (first at sample {pt['first']})")
+    open(out_ex, 'w').write('\n'.join(E) + '\n')
 
 
 if __name__ == '__main__':
