@@ -24,3 +24,5 @@ Started 2026-09-16 18:29 UTC. Brief: HANDOFF_BRIEF.md. Previous: STATUS_campaign
 
 ## Next step
 None. A separate reviewer session should re-derive the counts from `artifacts/p2/ei_*` (found_1..8.jsonl kept), `artifacts/ign/cov_*.s0.jsonl` and `artifacts/ign/summary.json`.
+
+DONE 2026-09-16T22:17:56Z
