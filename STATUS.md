@@ -17,5 +17,9 @@ Started 2026-09-16 18:29 UTC. Brief: HANDOFF_BRIEF.md. Previous: STATUS_campaign
 - p3 = A100 80 GB ($1.59/h, dreiq5frmuu0xt): reductio seeds 5–10; coverage reductio s0–2 + new.
 - DEVIATION: no A40 in stock (all CUDA versions, Secure Cloud, 18:38–18:53 UTC); one 3090 and two A100s used instead. Cost ≈ $3.7/h for three pods. An orphan duplicate A100 (z2d9kk2bej4q0n, created by a timed-out attempt) was deleted at 18:53, ≈ 2 min of billing.
 
+## Interim observations (pod peeks, unpulled)
+- reductio s7: 47 pattern theorems at round 3 (first round 1); s5, s6: 0 after 5 rounds → interventions K/T/S from the Stage-1 model with s7 as sibling, on p3.
+- depth-3 a1 s2: ignited round 2 (88 theorems at round 3).
+
 ## Next step
 Poll the pods; write the analysis script while Stage-1 and coverage run; interventions after round 4 of the arms.
