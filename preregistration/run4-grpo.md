@@ -164,3 +164,24 @@ outcome, the primary GRPO design becomes **two learning rates on every draw and 
 expected to hold at 3e-5 and is at risk at 1e-4. One pod per draw (six `r4-*` 3090 pods). Expected pod
 spend rises to ≈ $25–30; the drop order under the $50 cap is unchanged (lr check first, then second
 seeds, then draws s25, s24).
+
+## Amendment 2 — 2026-09-17 23:25 UTC (after round 1 of the first arms, before any coverage / base-rate file exists)
+
+Round 1 of the s20 arms (40 updates, 32,000 samples) already shows 365 / 327 / 240 depth-3 target
+theorems (G = 8 lr 1e-4 / G = 8 lr 3e-5 / G = 32 lr 1e-4; `found_1.jsonl` re-verified with `run4_check.py`:
+0 failures). E3/E4 are on course to fail in the direction "GRPO ignites faster than EI". Two additions,
+declared now so they are not chosen on the base-rate results:
+
+1. **Zero-rate draws.** The question is about ignition from a *zero* base rate. If fewer than 2 of the 6
+   draws s20–s25 are zero-rate (0 depth-3 hits in the 600,000-sample coverage file), train 6 more draws
+   (s26–s31, same command), screen each with the same coverage job, and run the primary GRPO arms
+   (G = 8 and 32, lr 1e-4 and 3e-5, one seed) plus paired EI on every zero-rate draw found (≤ $6 for the
+   screen, ≈ $2 per zero-rate draw). Expectation: GRPO ignites on zero-rate draws too, with the first
+   depth-3 sample appearing after the policy has moved on depth ≤ 2 successes (first pattern sample at
+   update ≥ 5 rather than ≤ 2), and EI ignites on a subset of them as before (ignition study: 3 of 5).
+2. **Sprint-sized budget.** The sprint's GRPO ran 100 steps × 4 prompts × 8 samples = 3,200 samples. One
+   exploratory arm per draw with exactly that shape (`--batch 32 --group 8 --updates_per_round 100
+   --rounds 1`) at lr 1e-4 and at the sprint's lr 1e-5 (`grpo_sprint_<tag>_lr<lr>`; 12 arms, ≈ 3 min each).
+   Expectation: at lr 1e-4, ≥ 1 depth-3 theorem in 5 of 6 draws but < 20 (no ignition by the 2 % rule)
+   because 100 updates of 4 groups carry ≈ 30 signal-bearing updates; at lr 1e-5, 0 depth-3 theorems in
+   ≥ 5 of 6 draws — the sprint's null reproduced by budget and lr alone.
