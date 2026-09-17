@@ -186,7 +186,7 @@ declared now so they are not chosen on the base-rate results:
    because 100 updates of 4 groups carry ≈ 30 signal-bearing updates; at lr 1e-5, 0 depth-3 theorems in
    ≥ 5 of 6 draws — the sprint's null reproduced by budget and lr alone.
 
-## Amendment 3 — 2026-09-17 23:30 UTC (exploratory mechanism ablations, declared before their arms start)
+## Amendment 3 — 2026-09-17 23:26 UTC, commit d9002fd (exploratory mechanism ablations, declared before their arms start)
 
 GRPO ignites within round 1 on the first draws, and even the sprint-sized budget (3,200 samples) gave 60
 depth-3 targets on s20 at lr 1e-4. To say *why* GRPO is faster than EI at equal samples, two cheap
