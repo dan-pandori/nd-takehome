@@ -83,3 +83,13 @@ Skip the 85M / relative-codec arm (no access to that code); note it as not run.
 `STATUS.md` section ending in `RUN<N> DONE <UTC>`. Final line of `STATUS.md` when all five are
 done or the time is up: `DONE <UTC>`. Pods deleted before that line. Keep every count
 reproducible from files pulled back; a reviewer session will re-derive them.
+
+---
+
+## Update 2026-09-17 22:50 UTC (from Dan, relayed): runs 1 and 4 moved to parallel executors
+
+Proposals 1 (Lean / Qwen) and 4 (GRPO) are now being executed by two other sessions on a second
+host, on their own branches (`dan_run1_lean`, `dan_run4_grpo`). **Do not run them here.** Finish
+run 2 and run 3, then end `STATUS.md` with `DONE <UTC>`. If you have already started work on
+run 1 or 4, stop it, note what exists in `STATUS.md`, and leave it on a clearly named branch;
+the parallel executors own those runs.
