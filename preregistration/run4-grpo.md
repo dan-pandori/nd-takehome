@@ -165,7 +165,7 @@ expected to hold at 3e-5 and is at risk at 1e-4. One pod per draw (six `r4-*` 30
 spend rises to ≈ $25–30; the drop order under the $50 cap is unchanged (lr check first, then second
 seeds, then draws s25, s24).
 
-## Amendment 2 — 2026-09-17 23:25 UTC (after round 1 of the first arms, before any coverage / base-rate file exists)
+## Amendment 2 — 2026-09-17 23:21 UTC (commit d0d5ed0) (after round 1 of the first arms, before any coverage / base-rate file exists)
 
 Round 1 of the s20 arms (40 updates, 32,000 samples) already shows 365 / 327 / 240 depth-3 target
 theorems (G = 8 lr 1e-4 / G = 8 lr 3e-5 / G = 32 lr 1e-4; `found_1.jsonl` re-verified with `run4_check.py`:
