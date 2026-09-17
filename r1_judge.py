@@ -77,6 +77,15 @@ def judge_nd(prompt, body):
     return ok, reason
 
 
+def judge_nd_lenient(prompt, body):
+    """Secondary metric: formula parentheses repaired (nd2lean.repair_proof) before verification."""
+    if body is None:
+        return False, 'no proof found'
+    rb = L.repair_proof(body)
+    ok, reason, nl = verify_text(prompt + ' ' + rb)
+    return ok, reason
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--gen', required=True)
@@ -97,18 +106,15 @@ def main():
         outs = ([('greedy', r['greedy'])] if r.get('greedy') is not None else []) + [(f's{i}', s) for i, s in enumerate(r['samples'])]
         r['judged'] = {}
         for k, txt in outs:
-            if r['form'] == 'tokens':
-                body = extract_tokens(txt)
+            if r['form'] in ('tokens', 'english'):
+                body = extract_tokens(txt) if r['form'] == 'tokens' else extract_english(txt)
                 ok, reason = judge_nd(nd_prompt, body)
-                r['judged'][k] = {'ok': ok, 'reason': reason, 'proof': body}
-            elif r['form'] == 'english':
-                body = extract_english(txt)
-                ok, reason = judge_nd(nd_prompt, body)
-                r['judged'][k] = {'ok': ok, 'reason': reason, 'proof': body}
+                okl, reasonl = judge_nd_lenient(nd_prompt, body)
+                r['judged'][k] = {'ok': ok, 'reason': reason, 'proof': body, 'ok_lenient': okl, 'reason_lenient': reasonl}
             else:
                 body = extract_lean(txt)
                 if body is None:
-                    r['judged'][k] = {'ok': False, 'reason': 'no proof found', 'proof': None}
+                    r['judged'][k] = {'ok': False, 'reason': 'no proof found', 'proof': None, 'ok_lenient': False, 'reason_lenient': 'no proof found'}
                 else:
                     r['judged'][k] = {'ok': None, 'reason': None, 'proof': body}
                     lean_items.append((header, body))
@@ -121,27 +127,31 @@ def main():
             outs = pool.map(L.lean_check_many, chunks, chunksize=1)
         flat = [x for o in outs for x in o]
         for (r, k), (ok, msg) in zip(lean_slots, flat):
-            r['judged'][k] = {'ok': ok, 'reason': msg if not ok else 'ok', 'proof': r['judged'][k]['proof']}
+            r['judged'][k] = {'ok': ok, 'reason': msg if not ok else 'ok', 'proof': r['judged'][k]['proof'], 'ok_lenient': ok, 'reason_lenient': msg if not ok else 'ok'}
     for r in recs:
         j = r['judged']
         r['greedy_ok'] = j['greedy']['ok'] if 'greedy' in j else None
         r['sample_ok'] = [j[f's{i}']['ok'] for i in range(len(r['samples']))]
+        r['greedy_ok_lenient'] = j['greedy']['ok_lenient'] if 'greedy' in j else None
+        r['sample_ok_lenient'] = [j[f's{i}']['ok_lenient'] for i in range(len(r['samples']))]
         r['n_lines'] = {k: (verify_text(meta[r['id']][0] + ' ' + v['proof'])[2] if (v['ok'] and r['form'] != 'lean') else None) for k, v in j.items()}
     with open(a.out, 'w') as f:
         for r in recs:
             f.write(json.dumps(r, ensure_ascii=False) + '\n')
     # summary
-    agg = collections.defaultdict(lambda: [0, 0, 0, 0])
+    agg = collections.defaultdict(lambda: [0, 0, 0, 0, 0, 0])
     for r in recs:
         g = agg[(r['model'], r['form'])]
         g[0] += 1
         g[1] += bool(r['greedy_ok'])
         g[2] += sum(r['sample_ok']) / max(1, len(r['sample_ok']))
         g[3] += any(r['sample_ok'])
-    print('| model | form | n | greedy | pass@1 | pass@n |')
-    print('|---|---|---:|---:|---:|---:|')
-    for (m, fm), (n, g, p1, pn) in sorted(agg.items()):
-        print(f'| {m} | {fm} | {n} | {g / n:.3f} | {p1 / n:.3f} | {pn / n:.3f} |')
+        g[4] += bool(r['greedy_ok_lenient'])
+        g[5] += any(r['sample_ok_lenient'])
+    print('| model | form | n | greedy | pass@1 | pass@n | greedy lenient | pass@n lenient |')
+    print('|---|---|---:|---:|---:|---:|---:|---:|')
+    for (m, fm), (n, g, p1, pn, gl, pnl) in sorted(agg.items()):
+        print(f'| {m} | {fm} | {n} | {g / n:.3f} | {p1 / n:.3f} | {pn / n:.3f} | {gl / n:.3f} | {pnl / n:.3f} |')
 
 
 if __name__ == '__main__':

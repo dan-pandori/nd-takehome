@@ -393,6 +393,72 @@ def english_to_tokens(text):
     return ' '.join(body) + ' QED'
 
 
+# ---------------------------------------------------------------- lenient formula repair (secondary metric)
+class _Tol(Exception):
+    pass
+
+
+def _tol_unary(t, i):
+    if i >= len(t):
+        raise _Tol('eof')
+    x = t[i]
+    if x == '~':
+        sub, j = _tol_unary(t, i + 1)
+        return ('not', sub), j
+    if x == '(':
+        f, j = _tol_expr(t, i + 1)
+        if j >= len(t) or t[j] != ')':
+            raise _Tol('missing )')
+        return f, j + 1
+    if x in ('P', 'Q', 'R', 'S'):
+        return ('atom', x), i + 1
+    if x == 'F':
+        return ('bot',), i + 1
+    raise _Tol(f'bad token {x}')
+
+
+def _tol_expr(t, i):
+    left, j = _tol_unary(t, i)
+    if j < len(t) and t[j] in ('&', 'v', '>'):
+        op = {'&': 'and', 'v': 'or', '>': 'imp'}[t[j]]
+        right, k = _tol_unary(t, j + 1)
+        if k < len(t) and t[k] in ('&', 'v', '>'):
+            raise _Tol('ambiguous chain of binary operators')
+        return (op, left, right), k
+    return left, j
+
+
+def repair_proof(body):
+    """Lenient re-parse of every line formula in a token proof body: tolerates a missing outer pair of parentheses
+    and unparenthesised negation (`~ P`), re-emitting the fully parenthesised form. Anything else is left as is.
+    Returns the repaired body (or the input if a line cannot be split)."""
+    out = []
+    for line in body.split(';'):
+        toks = line.split()
+        if not toks or toks == ['QED']:
+            out.append(line)
+            continue
+        if ':' not in toks:
+            out.append(line)
+            continue
+        c = toks.index(':')
+        head = [toks[0]]
+        k = 1
+        while k < c and toks[k] == '|':
+            head.append('|')
+            k += 1
+        ftoks = toks[k:c]
+        try:
+            f, j = _tol_expr(ftoks, 0)
+            if j != len(ftoks):
+                raise _Tol('trailing')
+            ftoks = tok_f(f).split()
+        except _Tol:
+            pass
+        out.append(' ' + ' '.join(head + ftoks + toks[c:]) + ' ')
+    return ';'.join(out).strip()
+
+
 # ---------------------------------------------------------------- mutations
 def mutate(prompt, proof, rng):
     """One random single-token edit. Returns (kind, new_proof)."""

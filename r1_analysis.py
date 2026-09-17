@@ -50,11 +50,14 @@ def step2(recs):
     for r in recs:
         g = bool(r['greedy_ok'])
         s = r['sample_ok']
+        gl = bool(r.get('greedy_ok_lenient', g))
+        sl = r.get('sample_ok_lenient', s)
         metric[(r['form'], r['draw'], r['name'])] = {'greedy': float(g), 'pass1': float(np.mean(s)) if s else float('nan'),
-                                                    'pass8': float(any(s)), 'group': group_of(r['stratum']), 'stratum': r['stratum']}
+                                                    'pass8': float(any(s)), 'greedy_len': float(gl), 'pass8_len': float(any(sl)),
+                                                    'group': group_of(r['stratum']), 'stratum': r['stratum']}
     out = {'n_records': len(recs), 'forms': forms, 'draws': draws, 'by_form': {}, 'by_form_group': {}, 'delta': {}, 'by_form_draw': {}}
     for f in forms:
-        for m in ('greedy', 'pass1', 'pass8'):
+        for m in ('greedy', 'pass1', 'pass8', 'greedy_len', 'pass8_len'):
             vals = [v[m] for (ff, d, nm), v in metric.items() if ff == f]
             out['by_form'][f'{f}/{m}'] = float(np.nanmean(vals))
             for d in draws:
@@ -66,7 +69,7 @@ def step2(recs):
     for f in forms:
         if f == 'tokens':
             continue
-        for m in ('greedy', 'pass8', 'pass1'):
+        for m in ('greedy', 'pass8', 'pass1', 'greedy_len', 'pass8_len'):
             for g in ['all'] + GROUPS:
                 by_thm = collections.defaultdict(list)
                 for (ff, d, nm), v in metric.items():
@@ -257,10 +260,10 @@ def main():
     json.dump({'step2': s2, 'step3': s3}, open(a.out, 'w'), indent=1)
     figures(s2, metric, s3, theorems, a.fig)
     if s2:
-        print('| form | greedy | pass@1 | pass@8 |')
-        print('|---|---:|---:|---:|')
+        print('| form | greedy | pass@1 | pass@8 | greedy lenient | pass@8 lenient |')
+        print('|---|---:|---:|---:|---:|---:|')
         for f in s2['forms']:
-            print(f"| {f} | {s2['by_form'][f + '/greedy']:.3f} | {s2['by_form'][f + '/pass1']:.3f} | {s2['by_form'][f + '/pass8']:.3f} |")
+            print(f"| {f} | {s2['by_form'][f + '/greedy']:.3f} | {s2['by_form'][f + '/pass1']:.3f} | {s2['by_form'][f + '/pass8']:.3f} | {s2['by_form'][f + '/greedy_len']:.3f} | {s2['by_form'][f + '/pass8_len']:.3f} |")
         print('\n| form / metric | ' + ' | '.join(GROUPS) + ' |')
         print('|---|' + '---:|' * len(GROUPS))
         for f in s2['forms']:
