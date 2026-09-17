@@ -240,3 +240,30 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 - 22:25  Run 2, arms finished so far (pulled; `run2_analysis.py`): depth4 f = 0 s0 / s1 **0 / 500 solved through 8 rounds**; impe_chain4 s0 **0 / 500** (s1 at round 7, 0); impi_ore s0 / s1 **0 / 500**; negi_ande_hyp s0 **0 / 400**, **s1 59 / 400 = 0.147, all 59 with the pattern**, first proof round 4, ignition round 5 (per round 0 / 0 / 0 / 1 / 15 / 40 / 49 / 59), none on the required stratum (its 97 required targets 0 solved); nested_ore 0 at round 2. Controls (peeks): the cap-8 f = 0 model on the depth-4 pool has **344 / 500** solved at round 3 — the pool is easy for a model whose data contained 8-line depth-4 proofs; the natural-rate struct model on impi_ore 78 / 500 at round 4. Drift measurement queued for negi s1 (pass@2,000 on the 300 shortest targets for its round-1…4 checkpoints, `pod/r2/drift_p2.txt`).
 - 22:25  Run 3 first peeks: reductio s1 with **1** sibling proof: 6 / 606 solved at round 5, with 4 proofs 21 / 606; depth-3 s4 sib1: 355 solved at round 5 (pattern counts after the pull).
 - 22:26  Lean 4.34.0 installed on the VPS via elan (`~/.elan/bin/lean`, core only). Run 1 step 1 (`nd2lean.py`) starts while runs 2 and 3 compute.
+
+## run1-lean — ND → Lean 4; in-context surface forms; novelty by scale (2026-09-17/18, executor)
+
+- 22:50  Start. Read `AGENT_POLICY.md`, `BRIEF_RUN1_LEAN.md`, `BRIEF_ROUND2.md` (the proposal document
+  `~/nd-rl/docs/proposals/2026-09-17-proposals-round-2.md` named in the brief does not exist on this host; the
+  round-2 brief's restatement of proposal 1 is what I followed). `~/.elan` was absent on this host despite the
+  22:26 entry above (that install was on the other VPS); installed Lean 4.34.0 via elan (core only) at 22:56.
+- 22:57  Pre-registration committed (cd817b9) — before any pod. STATUS started.
+- 23:00  `nd2lean.py` written; agreement sweep started on the VPS (`pod/r1_agree.sh`, 2 procs, 100 theorems per Lean file,
+  failures re-checked singly). First results: heldout 5,000 / 5,000, transfer generator proofs 1,638 / 1,638, RL targets
+  3,000 / 3,000, Phase-1 found proofs 12,761 / 12,761, val-36 reference 36 / 36 Lean-accepted.
+- 23:01  DEVIATION (order): pod `r1-a100` created at 23:01 for *setup only* (vLLM install, model download) while the
+  agreement sweep ran; step-2 generation was launched at 23:09, after the translator commit (3b73501, 23:09). The
+  first A100 pod (0vh9250b25ehtt) inherited the template's 20 GB volume — too small for a 60 GB model — and was
+  deleted after ~1 min unused; recreated with a 300 GB volume (e8znvjt75z1e26, A100-SXM4-80GB, $1.59 / h).
+  The pod's pip is PEP-668-locked: `--break-system-packages`. vLLM 0.29.0 / torch 2.13 cu130.
+- 23:05  Mutation check (old translator, 2,000 single-edit mutations of heldout proofs; 2,000 of RL-target proofs):
+  `nd_verify` rejects 1,999 / 1,994; Lean accepted 61 / 121 of the rejected ones — 54 / 117 were `IMPI`/`NEGI`/`ORE`
+  box cites with the wrong *end* line (the translator ignored the end ref), 7 / 4 were `NEGI` written where `IMPI`
+  was meant (Lean unfolds `¬A` to `A → False`, so the name did not matter). Both tightened at 23:07: a box cite whose
+  end is not the box's last line is now Untranslatable; `NEGI` is ascribed `(b : ¬A)`. Re-run on 400 mutations: 0
+  disagreements. Full mutation re-run queued after the train sweep. `artifacts/minlen_transfer.jsonl` skipped (records
+  with `proof: null` — timeouts; fixed to skip them, rerun queued).
+- 23:09  Step 2 generation launched on r1-a100 (`pod/r1_gen_coder.sh` → `artifacts/r1/gen_coder30b.jsonl`): 3,540 prompts
+  (236 theorems × 3 forms × 5 draws), greedy + 8 samples at T = 0.7, max 2,048 new tokens, prefix caching, ordered by
+  draw so draw 0 finishes first. Prompt sizes (`data/r1/prompt_stats.json`): mean user message ≈ 11.5k / 12.6k / 12.3k
+  characters (tokens / lean / english).
