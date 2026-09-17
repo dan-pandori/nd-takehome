@@ -17,6 +17,8 @@ ap.add_argument('--min_ub', type=int, default=7); ap.add_argument('--n_targets',
 ap.add_argument('--strata', default='schema', help="record field to stratify on ('schema' or 'gen_lines')")
 ap.add_argument('--exclude', nargs='*', default=[]); ap.add_argument('--out', required=True); ap.add_argument('--out_transfer', required=True)
 ap.add_argument('--seed', type=int, default=0); ap.add_argument('--prefix', default='req')
+ap.add_argument('--mode', default='requires', choices=['requires', 'uses', 'gen'], help="requires: oracle-required; uses: the shortest found proof contains the pattern; gen: the generating proof contains it (pat2 field) and min_lines_ub >= min_ub")
+ap.add_argument('--gen_pattern', default=None, help='pattern key in pat2 for --mode gen')
 a = ap.parse_args()
 rng = random.Random(a.seed)
 excl = {canon_key(json.loads(l)['thm'].strip()) for l in open('targets/validation_36.jsonl')}
@@ -28,8 +30,10 @@ recs, seen = [], set(); st = collections.Counter()
 for fn in a.nec:
     for l in open(fn):
         r = json.loads(l); st['n'] += 1
-        if not r['requires']: st['not_required'] += 1; continue
-        if r['min_lines_ub'] < a.min_ub: st['too_short'] += 1; continue
+        if a.mode == 'requires' and not r['requires']: st['not_required'] += 1; continue
+        if a.mode == 'uses' and not r.get('uses'): st['not_uses'] += 1; continue
+        if a.mode == 'gen' and not (r.get('pat2') or {}).get(a.gen_pattern or a.pattern): st['not_gen'] += 1; continue
+        if r['min_lines_ub'] is None or r['min_lines_ub'] < a.min_ub: st['too_short_or_unreachable'] += 1; continue
         if not r['oracle_ok'] or r['timeout'] or r['r_timeout']: st['oracle_flag'] += 1; continue
         key = r.get('key') or canon_key(r['thm'].strip())
         if key in excl: st['excluded'] += 1; continue
@@ -56,7 +60,7 @@ for tag, rows, fn in (('targets', targets, a.out), ('transfer', transfer, a.out_
             o = {'name': f'{tag}_{a.pattern}_{a.prefix}_{i}', 'thm': r['thm'], 'key': r['key'], 'prompt': r['prompt'], 'n_lines': r['min_lines_ub'],
                  'n_prem': r.get('n_prem', r['prompt'].split(' SEQ ')[0].count(' , ') + (0 if r['prompt'].startswith('THM SEQ') else 1)),
                  'schema': r.get('schema'), 'source': r.get('source', 'generator'), 'gen_lines': r.get('gen_lines'), 'min_lines_ub': r['min_lines_ub'],
-                 'r_min_lines_ub': r['r_min_lines_ub'], 'requires': r['requires'], 'oracle_proof': r['proof'], 'proof_pat': r['proof_pat'],
+                 'r_min_lines_ub': r['r_min_lines_ub'], 'requires': r['requires'], 'uses': r.get('uses'), 'mode': a.mode, 'oracle_proof': r['proof'], 'proof_pat': r['proof_pat'], 'gen_proof': r.get('proof_gen'),
                  'pat': {'derived_ore': a.pattern == 'derived_ore_strict', 'reductio': a.pattern == 'reductio', 'depth3': False, 'derived_ore_strict': a.pattern == 'derived_ore_strict'}}
             f.write(json.dumps(o) + '\n')
     print(tag, len(rows), 'min_lines_ub', dict(sorted(collections.Counter(r['min_lines_ub'] for r in rows).items())), 'strata', dict(sorted(collections.Counter(str(r.get(a.strata)) for r in rows).items())), '->', fn)
