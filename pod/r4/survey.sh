@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Compact survey of all r4-* pods: per arm the latest round line (round, depth-3 targets, solved, heldout), queue done counts, failures.
+for p in $(ls ~/.config/nd-rl/pods | grep '^r4-'); do
+  echo "## $p $(podrun $p 'cd /workspace/nd-takehome; echo done=$(ls artifacts/r4/*.done 2>/dev/null | wc -l) fail=$(grep -h FAILED artifacts/r4/queue_*.log | grep -v smoke | wc -l) running=$(ps aux | grep -c "[p]ython3 \(grpo\|expert_iter\|coverage\|novelty\)"); for f in artifacts/r4/*.log; do n=$(basename $f .log); case $n in queue*|smoke*|stage1*) continue;; esac; l=$(grep -h "===" $f | tail -n 1); if [ -n "$l" ]; then r=$(echo "$l" | grep -o "round [0-9]*" | head -n 1); d=$(echo "$l" | grep -o "cum depth3 targets [0-9]*" | grep -o "[0-9]*$"); s=$(echo "$l" | grep -o "cum \(targets \)\?solved [0-9]*" | grep -o "[0-9]*$"); h=$(echo "$l" | grep -o "heldout [0-9.]*" | grep -o "[0-9.]*$"); echo "  $n: $r d3=${d:--} solved=$s H=${h:--}"; else u=$(grep -h "upd" $f | tail -n 1 | grep -o "upd [0-9]*"); echo "  $n: ${u:-starting}"; fi; done')"
+done
