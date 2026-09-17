@@ -93,12 +93,19 @@ def main():
     ap.add_argument('--out', required=True)
     ap.add_argument('--procs', type=int, default=2)
     ap.add_argument('--batch', type=int, default=40)
+    ap.add_argument('--resume', action='store_true', help='keep records already judged in --out; judge only new ids')
     a = ap.parse_args()
+    old = []
+    if a.resume and os.path.exists(a.out):
+        old = [json.loads(l) for l in open(a.out) if l.strip()]
+    old_ids = {r['id'] for r in old}
     meta = {}
     for l in open(a.prompts):
         p = json.loads(l)
         meta[p['id']] = (p['nd_prompt'], p['lean_header'], p['stratum'], p['src'], p['gen_lines'])
     recs = [json.loads(l) for l in open(a.gen) if l.strip()]
+    recs = [r for r in recs if r['id'] not in old_ids]
+    print(f'{len(old)} already judged, {len(recs)} new', flush=True)
     lean_items, lean_slots = [], []
     for r in recs:
         nd_prompt, header, stratum, src, gl = meta[r['id']]
@@ -135,6 +142,7 @@ def main():
         r['greedy_ok_lenient'] = j['greedy']['ok_lenient'] if 'greedy' in j else None
         r['sample_ok_lenient'] = [j[f's{i}']['ok_lenient'] for i in range(len(r['samples']))]
         r['n_lines'] = {k: (verify_text(meta[r['id']][0] + ' ' + v['proof'])[2] if (v['ok'] and r['form'] != 'lean') else None) for k, v in j.items()}
+    recs = old + recs
     with open(a.out, 'w') as f:
         for r in recs:
             f.write(json.dumps(r, ensure_ascii=False) + '\n')
