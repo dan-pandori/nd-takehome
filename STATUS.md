@@ -8,6 +8,7 @@ Started 2026-09-17. Brief: BRIEF_ROUND2.md. Policy: AGENT_POLICY.md. Previous: S
 - RUN5 DONE 2026-09-17 22:05 UTC
 
 ## Run 2
+- 2026-09-17 23:25 UTC  NOTE: seven pods not created by this session (`r4-1`…`r4-6`, `r1-a100`) are running on the account since ≈ 23:00 UTC; see QUESTIONS.md (kill switch scope, HF token echo).
 - 2026-09-17 22:05 UTC  In progress: classes and expectations pre-registered (log.md 19:47); six pools built (three from generator knobs / schemata, disclosed in QUESTIONS.md); four sets assembled (f = 0 asserted); 8 Stage-1 done or finishing; 12 EI arms launched 21:58–22:01 on p1–p3.
 
 ## Run 3
