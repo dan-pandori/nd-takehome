@@ -19,15 +19,32 @@ import argparse, json, os, sys, time, collections
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from minlen import minlen
 from patterns import classify
+from patterns2 import classify2
 
-FORBID = {'reductio': ('DN',), 'derived_ore_strict': ('ORE_DERIVED',), 'derived_ore': ('ORE_DERIVED_LOOSE',)}
+
+def pats(proof, pattern):
+    if proof is None:
+        return None
+    c = classify(proof); c2 = classify2(proof)
+    out = {k: c[k] for k in ('reductio', 'derived_ore', 'derived_ore_strict', 'depth3')}
+    out.update({k: c2[k] for k in P2}); out['impe_chain'] = c2['impe_chain']; out['ore_nesting'] = c2['ore_nesting']
+    return out
+
+FORBID = {'reductio': ('DN',), 'derived_ore_strict': ('ORE_DERIVED',), 'derived_ore': ('ORE_DERIVED_LOOSE',),
+          'impi_ore': ('ORE_IN_IMPI',), 'negi_ande_hyp': ('ANDE_NEGI_HYP',), 'nested_ore': ('ORE_IN_ORE',),
+          'depth4': (), 'impe_chain4': None, 'ori_ore': None}     # depth4: restricted = --max_depth 3; None: no restriction ("uses" only)
+MAXDEPTH = {'depth4': 3}
+P2 = ('depth4', 'impe_chain4', 'nested_ore', 'impi_ore', 'negi_ande_hyp', 'ori_ore')
 
 
 def label(rec, pattern, bound, tl, classical_only=False):
     t0 = time.time()
     u = minlen(rec['prompt'], bound, tl)
     t1 = time.time()
-    r = minlen(rec['prompt'], bound, tl, forbid=FORBID[pattern])
+    if FORBID[pattern] is None:      # no restriction exists: "uses" only
+        r = {'min_lines_ub': None, 'proof': None, 'timeout': False, 'calls': 0, 'no_restriction': True}
+    else:
+        r = minlen(rec['prompt'], bound, tl, forbid=FORBID[pattern], max_depth=MAXDEPTH.get(pattern))
     t2 = time.time()
     out = {k: rec[k] for k in ('name', 'thm', 'key', 'prompt', 'schema', 'source', 'n_prem') if k in rec}
     out['gen_lines'] = rec.get('n_lines', rec.get('gen_lines'))
@@ -35,16 +52,18 @@ def label(rec, pattern, bound, tl, classical_only=False):
                 'r_min_lines_ub': r['min_lines_ub'], 'r_proof': r['proof'], 'r_timeout': r['timeout'],
                 'secs_u': t1 - t0, 'secs_r': t2 - t1, 'calls_u': u['calls'], 'calls_r': r['calls']})
     reach = u['min_lines_ub'] is not None
-    rfail = r['min_lines_ub'] is None and not r['timeout']
+    rfail = r['min_lines_ub'] is None and not r['timeout'] and not r.get('no_restriction')
     out['requires'] = bool(reach and rfail)
+    out['no_restriction'] = bool(r.get('no_restriction'))
     out['classical_only'] = bool(classical_only)
     out['requires_wide'] = bool(out['requires'] or (classical_only and rfail and pattern == 'reductio'))
-    cl = classify(u['proof']) if u['proof'] else None
-    out['proof_pat'] = {k: cl[k] for k in ('reductio', 'derived_ore', 'derived_ore_strict', 'depth3')} if cl else None
+    cl = pats(u['proof'], pattern)
+    out['proof_pat'] = cl
+    out['uses'] = bool(cl and cl[pattern])          # the shortest found proof contains the pattern
     out['oracle_ok'] = (not out['requires']) or (cl is not None and bool(cl[pattern]))
     if r['proof']:
-        clr = classify(r['proof'])
-        out['r_proof_pat'] = {k: clr[k] for k in ('reductio', 'derived_ore', 'derived_ore_strict', 'depth3')} if clr else None
+        clr = pats(r['proof'], pattern)
+        out['r_proof_pat'] = clr
         # the restricted proof must NOT contain the pattern (a check on the restriction itself)
         out['restriction_ok'] = clr is not None and not clr[pattern]
     return out
@@ -87,7 +106,7 @@ def main():
     c = collections.Counter()
     for r in rs:
         c['n'] += 1; c['reach'] += r['min_lines_ub'] is not None; c['u_timeout'] += r['timeout']; c['r_timeout'] += r['r_timeout']
-        c['requires'] += r['requires']; c['requires_wide'] += r['requires_wide']; c['oracle_bad'] += not r['oracle_ok']
+        c['requires'] += r['requires']; c['requires_wide'] += r['requires_wide']; c['oracle_bad'] += not r['oracle_ok']; c['uses'] += r.get('uses', False)
         c['restriction_bad'] += not r.get('restriction_ok', True)
     print(json.dumps(c))
     print('min_lines_ub (unrestricted):', dict(sorted(collections.Counter(str(r['min_lines_ub']) for r in rs).items())))

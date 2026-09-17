@@ -24,9 +24,9 @@ LENS = (2, 3, 4, 5, 6)
 
 
 def worker(args):
-    seed, tries, mn, mx, long, cap_np, cap_pat, out, only = args
+    seed, tries, mn, mx, long, cap_np, cap_pat, out, only, gmp, gmd = args
     rng = random.Random(seed)
-    g = Gen(rng)
+    g = Gen(rng, max_prem=gmp, max_depth=gmd)     # generator knobs (defaults 3 / 3 = the take-home generator); target pools only
     seen = set()
     per_len = collections.Counter()
     per_pat = collections.Counter()
@@ -106,7 +106,7 @@ def worker(args):
 def cmd_gen(a):
     import multiprocessing as mp
     os.makedirs(os.path.dirname(a.out) or '.', exist_ok=True)
-    jobs = [(a.seed + i, a.tries, a.min, a.max, a.long, a.cap_np, a.cap_pat, f'{a.out}.w{i}.jsonl', a.only) for i in range(a.workers)]
+    jobs = [(a.seed + i, a.tries, a.min, a.max, a.long, a.cap_np, a.cap_pat, f'{a.out}.w{i}.jsonl', a.only, a.gen_max_prem, a.gen_max_depth) for i in range(a.workers)]
     t0 = time.time()
     with mp.Pool(a.workers) as pool:
         res = pool.map(worker, jobs)
@@ -429,6 +429,8 @@ def main():
     g.add_argument('--cap_np', type=int, default=1500, help='per worker, per length cap on pattern-free proofs')
     g.add_argument('--cap_pat', type=int, default=3000, help='per worker cap per pattern')
     g.add_argument('--seed', type=int, default=1000)
+    g.add_argument('--gen_max_prem', type=int, default=3, help='generator knob (Gen.max_prem); default = the take-home generator. Raised only for run-2 TARGET pools (IMPE chains need >= 5 premises)')
+    g.add_argument('--gen_max_depth', type=int, default=3, help='generator knob (Gen.max_depth); default = the take-home generator. Raised only for run-2 TARGET pools (box depth 4)')
     g.add_argument('--only', default=None, help="reductio_nodn | reductio_nodn_co | derived_ore_strict | p2:<pattern>[+<pattern>..] (patterns2.py); " + 'output filter: keep only proofs with this property (reductio_nodn = reductio pattern and no ( ~ ( ~ subformula in the sequent)')
     m = sub.add_parser('merge'); m.add_argument('--glob', required=True); m.add_argument('--out', required=True); m.add_argument('--prefix', default='pool')
     s = sub.add_parser('assemble'); s.add_argument('--pool', required=True); s.add_argument('--outdir', required=True)
