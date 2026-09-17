@@ -102,7 +102,7 @@ def translate(prompt, proof):
                 raise TranslationError('extra PR')
             n_pr += 1
             formulas[i] = f
-            root.lines.append(f'have n{i} : {lf(f)} := h{i}')     # type-checked against the declared premise
+            root.lines.append(f'have n{i} : {lf(f)} := h{n_pr}')     # k-th PR line vs the k-th declared premise (line indices may start anywhere)
             root.last = i; root.last_formula = f
             continue
         if d > cur:
