@@ -10,7 +10,8 @@ Classes (pre-registered):
   nine     : theorems of artifacts/novelty_phase1_theorems.jsonl (final transfer + targets) with min_written >= 9 (60)
 Each record carries the Phase-1 base log-probability of its RL-found proof(s) (base_logp_T08_any; base_logp_T1_any),
 the RL proof with the highest base log-prob, its written length, and the source arm.
-Prompt schema = data/r1/prompts.jsonl (form 'lean', draw 0) so r1_gen.py / r1_judge.py run unchanged.
+Prompt schema = data/r1/prompts.jsonl (forms 'lean' and 'tokens', draw 0) so r1_gen.py / r1_judge.py run unchanged;
+the tokens form is an extra (Coder-30B only): the exact task RL solved, in-context.
 """
 import argparse, json, os, sys, random, collections
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -99,14 +100,16 @@ def main():
     with open(f'{a.out}/scale_examples.jsonl', 'w') as f:
         for e in ex:
             f.write(json.dumps(e) + '\n')
-    body = CARD['lean'] + '\n\nWorked examples:\n\n' + '\n\n'.join(render_example('lean', e['prompt'], e['proof'], k + 1) for k, e in enumerate(ex))
+    bodies = {form: CARD[form] + '\n\nWorked examples:\n\n' + '\n\n'.join(render_example(form, e['prompt'], e['proof'], k + 1) for k, e in enumerate(ex))
+              for form in ('lean', 'tokens')}
     with open(f'{a.out}/scale_theorems.jsonl', 'w') as f:
         for t in thms:
             f.write(json.dumps(t) + '\n')
     with open(f'{a.out}/scale_prompts.jsonl', 'w') as f:
+      for form in ('lean', 'tokens'):
         for t in thms:
-            user = body + '\n\n' + render_target('lean', t['prompt'])
-            rec = {'id': f'lean/d0/{t["cls"]}/{t["name"]}', 'form': 'lean', 'draw': 0, 'name': t['name'], 'src': t['src'],
+            user = bodies[form] + '\n\n' + render_target(form, t['prompt'])
+            rec = {'id': f'{form}/d0/{t["cls"]}/{t["name"]}', 'form': form, 'draw': 0, 'name': t['name'], 'src': t['src'],
                    'stratum': t['cls'], 'gen_lines': t['gen_lines'], 'nd_prompt': t['prompt'],
                    'lean_header': L.lean_header(t['prompt'], name='target'),
                    'messages': [{'role': 'system', 'content': SYSTEM}, {'role': 'user', 'content': user}]}
