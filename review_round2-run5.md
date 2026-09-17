@@ -162,3 +162,85 @@ the base-reachable 27); s1: 24 with 7 new (frozen 11, all within base). Reductio
 every number above from `artifacts/r5/`, `data/p2/` and `targets/`; outputs in `artifacts/review_r5/`.
 Not re-derived: pod spend, kill-switch timing, and the minlen searches themselves (I checked their outputs
 for internal consistency and, for reductio, replaced the bounded search by an unbounded logical argument).
+
+## Compare (phase 2: `run5.md`, `numbers.md` §Run 5, `log.md`, `STATUS.md`, `artifacts/r5/summary.json`, figures)
+
+Gate 0: the expectations R5-E1…E4 were committed in d0d8f16 at 19:05:46 UTC; the log records the first pod
+at 19:12 and the queue files were committed at 19:26 (fe14f1f). The results-vs-expectations entry (log
+22:05) reports the f = 0.1 level, the derived-ORE levels and the derived-ORE frozen gap as misses. Two misses
+are softened or not mentioned: R5-E1 is called "held" although the derived-ORE required fraction was 4–8 %
+against a written 15–25 %, and the R5-E2 frozen prediction "≤ 3 targets each" (actual 4 / 27 / 21) is not
+listed. Deviation logged before the queue: Stage-1 seed 7 (the strongest igniter of the ignition study) was
+never pulled and was not run (QUESTIONS.md 20:30).
+
+| claim (executor) | my independent value | verdict |
+|---|---|---|
+| `nd_verify` unmodified; test set run once | tree hash = origin/main; `TEST_RUN_DONE` identical | reproduces |
+| pools class-disjoint from every training set, held-out, val-36 | 0 overlap in every pair that an arm uses | reproduces |
+| oracle: 0 inconsistencies, 0 timeouts in 945 + 1,568 + 1,381 + 5,040 | 0 / 0 by my predicate on every stored proof | reproduces |
+| `--forbid DN` proves 0 / 945; unrestricted ≤ 10 for 559 (45/90/230/140/54) | same; and all 450 pool theorems are G4ip-unprovable, so DN is needed unboundedly | reproduces, strengthened |
+| derived-ORE required 120 / 68 / 196 (7.7 / 4.9 / 3.9 %) | same; 384 records = 365 classes = the pools | reproduces |
+| reductio pool 300 (52/133/82/33), 16 schemata, "26 each for 11 of them" | 300 (52/133/82/33); 10 schemata at 26, contraposition_conv 27 | differs trivially (27 for one) |
+| ten targets per pool hand-checked | reductio 10 at 19:23 (before the arms), cap-8 10 at 22:00 (after the arms, before the write-up); all 815 oracle proofs machine-checked by me | reproduces (timing noted) |
+| "0 violations in 9,600 target-arm pairs" | 0 violations; pairs: 18 arms × 300 = 5,400 (8,920 with transfer and the 5 coverage runs). 9,600 not derivable | 0 reproduces; count differs |
+| reductio f = 0 s1, s2: 0 / 300; base 0 and 1 hits in 3·10⁶ | 0 / 300; 0 and 1 (3.3·10⁻⁷) | reproduces |
+| f = 0 s0: base 3.8·10⁻⁵, 6 targets at 10⁴, all nand_neg; EI 51 / 300 (0.170), 52 proofs, 2/11/25/47/51…; transfer 25 | same, incl. first hits 139…4,899 | reproduces |
+| f = 0.1: 53 / 52 (0.177 / 0.173), transfer 27 / 27; frozen 4 / 0 / 0 and 27 / 21 | same | reproduces |
+| solved = the two 7-line schemata; "8–10-line schemata stay at 0 / 26 each in every arm, including f = 0.1" | 51 = 26 + 25; 53 = 26 + 26 + **1 chain_neg (8 lines)**; 52 = 26 + 26; 0 of the other 247 | reword: "≤ 1 of 26" |
+| "Block B's numbers on the 606 pool were the same phenomenon: … confined to the shortest schema, extended by RL to its 7-line sibling **and no further**" | my recount of the block-B / ignition files on the 606 pool (same checkpoints, same k = 32, 8 rounds, T = 0.8): f = 0.1 s0 solved 95 = 61 seven-line + **25 eight-line** + 9 longer (neg_both 22/30, chain_neg 11/30), reaching them in rounds 5–8; f = 0 s7 solved 112 = 62 + **31** + 19; eight sibling-injected arms 5–34 eight-line. 197 of the 300 required targets are in the 606 pool; **33 of its 8–9-line ones were solved by at least one 606-pool arm, 19 of them by the very f = 0.1 s0 checkpoint that solved 1 eight-liner in run 5** | **not supported** |
+| "length-limited at 7 lines for every f" | true of the three run-5 arms within 8 rounds (n = 1 igniting f = 0 draw, 2 f = 0.1 draws); false for the same models on the 606 pool | must be reworded |
+| derived-ORE f = 0 0.087 / 0.080; f = 10⁻² 0.160 / 0.210; frozen 0.043 / 0.037, 0.070 / 0.093 | same | reproduces |
+| "monotone in f and 10× block C at f = 0" | two f values, both seeds higher at 10⁻²; 0.087 / 0.008 = 10.9, 0.080 / 0.008 = 10.0 (block C's 0.008 taken from numbers.md, not re-derived here) | reproduces; "monotone" over two points → "higher" |
+| base f = 0 strict shape on 27 / 300 at 10⁴ (5.7·10⁻³, 5.3·10⁻³), concentrated; 13 / 11 within 256 | same (top hit counts 5,601 / 4,133 / 2,664 …; 13 / 11) | reproduces |
+| EI 26 / 24 = 18 / 17 base-reachable + 8 / 7 EI-only; 2× frozen | same; frozen 13 / 11 all base-reachable | reproduces |
+| solve rate = strict acquisition, 0 pattern-free solves | 0 in all 18 arms and 5 coverage files | reproduces |
+| "reductio at f = 0 is exactly the ignition study's rule (base rate 0 → 0 / 300; base rate > 0 → elicitation)" | s1 (0 hits) → 0; s2 (1 hit in 3·10⁶) → 0; s0 (113) → 51. Three draws; s2's rate is not 0 | consistent; say "≤ 1 hit" |
+| "acquired in proportion to f and to the base rate, once required" | f: two levels, 2 seeds each, both higher at 10⁻²; base rate: both f = 0 seeds have the same base reachability (27 / 300), so the base-rate dependence was not tested in this run | reword |
+| STATUS "9 + 8 arms + 5 base runs" | 10 + 8 arms (5 EI + 5 frozen reductio) + 5 coverage | differs trivially |
+| `run5.md` ≤ 400 words | 542 words excluding figure lines (executor logged 535) | over the brief's length |
+| bucket `hf://buckets/dan-pandori/nd-rl/round2/run5/{artifacts,ckpts,data}` | the three directories exist (22:03 UTC) | reproduces (contents not compared) |
+| pod spend ≈ $3, kill switch re-armed | not verifiable from files | not derivable |
+| figures `run5_dials.png`, `run5_curves.png` | every plotted point matches my table | reproduces |
+
+## Verdict
+
+**What stands.** Every count in `numbers.md` §Run 5 and `artifacts/r5/summary.json` reproduces from the
+raw files with independent code, and every counted proof re-verifies. The oracle is sound on this evidence:
+no target of either pool was ever solved without the pattern (18 arms, 5 coverage runs), and for reductio
+the necessity of `DN` holds unboundedly (all 450 theorems classically valid and intuitionistically
+unprovable). Split disjointness holds by renaming class. The two clean results are: (i) reductio at f = 0
+with a zero-hit base draw stays at 0 / 300 even when every target needs the pattern (two draws), while the
+one draw with a non-zero base rate is elicited to the 7-line stratum in 4 rounds, 13× its frozen control;
+(ii) strict derived-ORE on a required pool is amplification, not absence — the f = 0 base models already
+produce the strict shape on 27 / 300 targets at pass@10⁴, EI doubles the frozen control in both seeds
+(26 / 13, 24 / 11) and adds 8 / 7 targets the base does not reach at 10⁴, and both f = 10⁻² seeds are
+higher. Block C's flat dial was indeed an artefact of a pool where ≈ 92 % of targets did not need the
+pattern.
+
+**What must be reworded.** The reductio "7-line wall for every f" and the sentence that block B was "the
+same phenomenon … and no further" are contradicted by the executor's own earlier files: on the 606 pool
+the identical f = 0.1 s0 checkpoint acquired 25 eight-line targets (neg_both 22 / 30, chain_neg 11 / 30)
+in rounds 5–8, and the f = 0 s7 draw acquired 31; 19 of the required pool's own 8–9-line targets were
+solved by that f = 0.1 s0 model on the 606 pool and not in run 5. Run 5 therefore shows that the 8-line
+stratum did not ignite within 8 rounds in three arms, not that it cannot. The honest statement is: "in this
+run no arm passed the 7-line stratum in 8 rounds; the same models passed it on the 606 pool, so the second
+stratum ignites stochastically and its probability per run was not measured." Related wording: "0 / 26 each
+in every arm" → "≤ 1 of 26"; "monotone in f" → "higher at 10⁻² in both seeds"; "in proportion to the base
+rate" is untested here (both f = 0 seeds share the same base reachability); "9,600 target-arm pairs" →
+5,400. The omission of seed 7 (logged) removed the f = 0 draw most likely to show the 8-line stratum.
+
+**Not supported.** The claim that block B's 0.096 / 0.157 / 0.104 were "the same phenomenon" as run 5's
+7-line-only acquisition — block B's f = 0.1 s0 figure contains 25 eight-line and 9 longer targets.
+
+**Flags, not quarantine.** The cap-8 Stage-1 sets contain 44,284 proofs of 7–8 lines; the brief prescribes
+this setting, but the derived-ORE half of the run is outside the take-home's cap-6 rule and must be
+labelled as such wherever it is quoted. The cap-8 hand check was done after the arms ran (harmless: the
+pool was fixed before the arms, and I machine-checked all 365). `run5.md` is 542 words against the brief's
+400.
+
+**Next measurement.** Rerun reductio f = 0.1 s0 / s1 and f = 0 s7 on the required pool with two sampling
+seeds each and 16 rounds (or k = 64 to match the 606 pool's per-round sample budget), reporting acquisition
+per length stratum (7 / 8 / 9 / 10) rather than pooled; that gives the ignition probability of the 8-line
+stratum, which is the quantity the "wall" wording presupposes. For derived-ORE, add f = 10⁻³ (a third point
+for "monotone") and two f = 0 seeds with different base reachability (the campaign's f = 0 s0 and a fresh
+draw with pass@10⁴ ≠ 27 / 300) to test "in proportion to the base rate".
