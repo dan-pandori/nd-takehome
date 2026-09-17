@@ -268,7 +268,7 @@ def lean_check_many(items, timeout=600):
             src += f'theorem dummy{i} : True := trivial\n'
             continue
         starts.append(src.count('\n') + 1)
-        src += h.replace('theorem thm', f'theorem t{i}', 1) + '\n' + b.rstrip('\n') + '\n'
+        src += re.sub(r'^theorem\s+\S+', f'theorem t{i}', h, count=1) + '\n' + b.rstrip('\n') + '\n'
     ok, out = run_lean(src, timeout=timeout)
     if out == 'timeout':
         for i in range(n):
