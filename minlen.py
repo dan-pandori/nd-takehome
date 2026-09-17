@@ -27,6 +27,7 @@ from nd_verify.verify import parse_formula
 from gen import fstr
 
 BOT = ('bot',)
+FORBID = ('DN', 'ORE_DERIVED', 'ORE_DERIVED_LOOSE')   # rule restrictions for the necessity oracle (necessity.py)
 
 
 class Timeout(Exception):
@@ -58,10 +59,20 @@ def parse_thm(prompt):
 
 
 class Search:
-    def __init__(self, prem, concl, deadline=None, lemmas=True, max_depth=None, no_derived_ore=False):
+    def __init__(self, prem, concl, deadline=None, lemmas=True, max_depth=None, no_derived_ore=False, forbid=()):
         self.prem, self.concl = prem, concl
         self.max_depth = max_depth
-        self.no_derived_ore = no_derived_ore
+        forbid = set(forbid)
+        if no_derived_ore:
+            forbid.add('ORE_DERIVED_LOOSE')
+        unknown = forbid - set(FORBID)
+        assert not unknown, f'unknown --forbid {unknown}; known: {FORBID}'
+        self.forbid = forbid
+        self.forbid_dn = 'DN' in forbid
+        # ORE restriction: LOOSE = ORE only over premise disjunctions (patterns.derived_ore == False);
+        # STRICT = additionally allow ORE over an open hypothesis or over ( X v X ) (patterns.derived_ore_strict == False)
+        self.ore_mode = 'loose' if 'ORE_DERIVED_LOOSE' in forbid else ('strict' if 'ORE_DERIVED' in forbid else None)
+        self.track_h = self.ore_mode == 'strict'
         sub = set()
         for f in prem + [concl]:
             subformulas(f, sub)
@@ -78,11 +89,12 @@ class Search:
         self.lemmas = lemmas
         self.calls = 0
 
-    def best(self, G, A, b, d=0):
-        """-> (cost, template) or None. A: frozenset of citable formulas; d: current box depth."""
+    def best(self, G, A, b, d=0, H=frozenset()):
+        """-> (cost, template) or None. A: frozenset of citable formulas; d: current box depth; H: open hypotheses
+        (only part of the memo key when the strict ORE restriction is active)."""
         if b <= 0:
             return None
-        key = (G, A, b, d)
+        key = (G, A, b, d, H if self.track_h else None)
         if key in self.memo:
             return self.memo[key]
         self.calls += 1
@@ -92,17 +104,17 @@ class Search:
         if G in A:
             res = (1, ('R', G))
         else:
-            res = self._search(G, A, b, d)
+            res = self._search(G, A, b, d, H)
         self.memo[key] = res
         return res
 
-    def inp(self, G, A, b, d=0):
+    def inp(self, G, A, b, d=0, H=frozenset()):
         """A rule INPUT: cost 0 if G is already citable, else a derivation of it."""
         if G in A:
             return (0, ('R0', G))
-        return self.best(G, A, b, d)
+        return self.best(G, A, b, d, H)
 
-    def _search(self, G, A, b, d=0):
+    def _search(self, G, A, b, d=0, H=frozenset()):
         bestc, bestt = b + 1, None
         can_box = self.max_depth is None or d < self.max_depth
 
@@ -116,41 +128,41 @@ class Search:
         if b >= 1:
             for C in self.conj:
                 if C[1] == G or C[2] == G:
-                    r = self.inp(C, A, min(b, bestc) - 1, d)
+                    r = self.inp(C, A, min(b, bestc) - 1, d, H)
                     if r:
                         consider(r[0] + 1, ('ANDE1' if C[1] == G else 'ANDE2', G, r[1]))
         # IMPE
         if b >= 1:
             for I in self.imps:
                 if I[2] == G:
-                    r = self.inp(I, A, min(b, bestc) - 1, d)
+                    r = self.inp(I, A, min(b, bestc) - 1, d, H)
                     if r:
-                        r2 = self.inp(I[1], A | {I}, min(b, bestc) - 1 - r[0], d)
+                        r2 = self.inp(I[1], A | {I}, min(b, bestc) - 1 - r[0], d, H)
                         if r2:
                             consider(r[0] + r2[0] + 1, ('IMPE', G, r[1], r2[1]))
         # DN
-        if b >= 1:
+        if b >= 1 and not self.forbid_dn:
             nn = ('not', ('not', G))
-            r = self.inp(nn, A, min(b, bestc) - 1, d)
+            r = self.inp(nn, A, min(b, bestc) - 1, d, H)
             if r:
                 consider(r[0] + 1, ('DN', G, r[1]))
         # BOTE
         if G != BOT and b >= 1:
-            r = self.inp(BOT, A, min(b, bestc) - 1, d)
+            r = self.inp(BOT, A, min(b, bestc) - 1, d, H)
             if r:
                 consider(r[0] + 1, ('BOTE', G, r[1]))
         # intro rules
         if G[0] == 'and' and b >= 1:
-            r = self.inp(G[1], A, min(b, bestc) - 1, d)
+            r = self.inp(G[1], A, min(b, bestc) - 1, d, H)
             if r:
-                r2 = self.inp(G[2], A | {G[1]}, min(b, bestc) - 1 - r[0], d)
+                r2 = self.inp(G[2], A | {G[1]}, min(b, bestc) - 1 - r[0], d, H)
                 if r2:
                     consider(r[0] + r2[0] + 1, ('ANDI', G, r[1], r2[1]))
         if G[0] == 'or' and b >= 1:
-            r = self.inp(G[1], A, min(b, bestc) - 1, d)
+            r = self.inp(G[1], A, min(b, bestc) - 1, d, H)
             if r:
                 consider(r[0] + 1, ('ORI1', G, r[1]))
-            r = self.inp(G[2], A, min(b, bestc) - 1, d)
+            r = self.inp(G[2], A, min(b, bestc) - 1, d, H)
             if r:
                 consider(r[0] + 1, ('ORI2', G, r[1]))
         if G[0] == 'imp' and b >= 2:
@@ -158,11 +170,11 @@ class Search:
             if a == c and can_box:
                 consider(2, ('IMPI', G, a, None))
             elif b >= 3 and can_box:
-                r = self.best(c, A | {a}, min(b, bestc) - 2, d + 1)
+                r = self.best(c, A | {a}, min(b, bestc) - 2, d + 1, H | {a})
                 if r:
                     consider(r[0] + 2, ('IMPI', G, a, r[1]))
         if G[0] == 'not' and b >= 3 and can_box:
-            r = self.best(BOT, A | {G[1]}, min(b, bestc) - 2, d + 1)
+            r = self.best(BOT, A | {G[1]}, min(b, bestc) - 2, d + 1, H | {G[1]})
             if r:
                 consider(r[0] + 2, ('NEGI', G, G[1], r[1]))
         if G == BOT and b >= 1:
@@ -171,22 +183,22 @@ class Search:
                 if NX not in self.S and NX not in A:
                     continue
                 if NX in A:
-                    r = self.inp(X, A, min(b, bestc) - 1, d)
+                    r = self.inp(X, A, min(b, bestc) - 1, d, H)
                     if r:
                         consider(r[0] + 1, ('NEGE', BOT, r[1], ('R0', NX)))
                 elif X in A:
-                    r = self.inp(NX, A, min(b, bestc) - 1, d)
+                    r = self.inp(NX, A, min(b, bestc) - 1, d, H)
                     if r:
                         consider(r[0] + 1, ('NEGE', BOT, ('R0', X), r[1]))
                 else:
-                    r = self.inp(X, A, min(b, bestc) - 2, d)
+                    r = self.inp(X, A, min(b, bestc) - 2, d, H)
                     if r:
-                        r2 = self.inp(NX, A | {X}, min(b, bestc) - 1 - r[0], d)
+                        r2 = self.inp(NX, A | {X}, min(b, bestc) - 1 - r[0], d, H)
                         if r2:
                             consider(r[0] + r2[0] + 1, ('NEGE', BOT, r[1], r2[1]))
         # classical reductio: assume ~G, derive F, NEGI -> ~~G, DN
-        if G != BOT and G[0] != 'not' and b >= 4 and can_box:
-            r = self.best(BOT, A | {('not', G)}, min(b, bestc) - 3, d + 1)
+        if G != BOT and G[0] != 'not' and b >= 4 and can_box and not self.forbid_dn:
+            r = self.best(BOT, A | {('not', G)}, min(b, bestc) - 3, d + 1, H | {('not', G)})
             if r:
                 consider(r[0] + 3, ('RAA', G, r[1]))
         # ORE over a disjunction in S
@@ -194,22 +206,24 @@ class Search:
             for D in self.disj:
                 if D == G:
                     continue
-                if self.no_derived_ore and D not in self.prem:
+                if self.ore_mode == 'loose' and D not in self.prem:
                     continue
-                r = self.inp(D, A, min(b, bestc) - 3, d)
+                if self.ore_mode == 'strict' and D not in self.prem and D not in H and D[1] != D[2]:
+                    continue
+                r = self.inp(D, A, min(b, bestc) - 3, d, H)
                 if not r:
                     continue
                 a, c = D[1], D[2]
                 A2 = A | {D}
                 ca = (1, None) if a == G else None
                 if ca is None:
-                    ra = self.best(G, A2 | {a}, min(b, bestc) - r[0] - 3, d + 1)
+                    ra = self.best(G, A2 | {a}, min(b, bestc) - r[0] - 3, d + 1, H | {a})
                     ca = (ra[0] + 1, ra[1]) if ra else None
                 if ca is None:
                     continue
                 cb = (1, None) if c == G else None
                 if cb is None:
-                    rb = self.best(G, A2 | {c}, min(b, bestc) - r[0] - ca[0] - 1, d + 1)
+                    rb = self.best(G, A2 | {c}, min(b, bestc) - r[0] - ca[0] - 1, d + 1, H | {c})
                     cb = (rb[0] + 1, rb[1]) if rb else None
                 if cb is None:
                     continue
@@ -219,10 +233,10 @@ class Search:
             for L in self.S:
                 if L in A or L == G:
                     continue
-                r = self.best(L, A, min(b, bestc) - 1, d)
+                r = self.best(L, A, min(b, bestc) - 1, d, H)
                 if not r:
                     continue
-                r2 = self.best(G, A | {L}, min(b, bestc) - r[0], d)
+                r2 = self.best(G, A | {L}, min(b, bestc) - r[0], d, H)
                 if r2:
                     consider(r[0] + r2[0], ('LEMMA', G, L, r[1], r2[1]))
         return (bestc, bestt) if bestt is not None else None
@@ -316,9 +330,9 @@ class Search:
         return None
 
 
-def minlen(prompt, bound=8, time_limit=20.0, lemmas=True, max_depth=None, no_derived_ore=False):
+def minlen(prompt, bound=8, time_limit=20.0, lemmas=True, max_depth=None, no_derived_ore=False, forbid=()):
     prem, concl = parse_thm(prompt)
-    s = Search(prem, concl, deadline=time.time() + time_limit if time_limit else None, lemmas=lemmas, max_depth=max_depth, no_derived_ore=no_derived_ore)
+    s = Search(prem, concl, deadline=time.time() + time_limit if time_limit else None, lemmas=lemmas, max_depth=max_depth, no_derived_ore=no_derived_ore, forbid=forbid)
     try:
         r = s.run(bound)
     except Timeout:
@@ -333,9 +347,9 @@ def minlen(prompt, bound=8, time_limit=20.0, lemmas=True, max_depth=None, no_der
 
 
 def _work(args):
-    rec, bound, tl, md, ndo = args
+    rec, bound, tl, md, ndo, forbid = args
     t0 = time.time()
-    r = minlen(rec['prompt'], bound, tl, max_depth=md, no_derived_ore=ndo)
+    r = minlen(rec['prompt'], bound, tl, max_depth=md, no_derived_ore=ndo, forbid=forbid)
     r['secs'] = time.time() - t0
     return r
 
@@ -368,6 +382,34 @@ def selftest():
             v = verify_text(prompt + ' ' + r['proof'])
             assert v[0], v
             print('   ', r['proof'])
+    # rule restrictions (--forbid): (prompt, forbid, expected min_lines_ub at bound 10, pattern the found proof must / must not contain)
+    from patterns import classify
+    rcases = [
+        ('THM ( ~ ( ~ P ) ) SEQ P PRF', ('DN',), None, None),
+        ('THM ( ( ~ P ) > Q ) , ( ~ Q ) SEQ P PRF', (), 7, ('reductio', True)),            # negimp_to_pos: classical-only
+        ('THM ( ( ~ P ) > Q ) , ( ~ Q ) SEQ P PRF', ('DN',), None, None),
+        ('THM ( P > Q ) , ( ~ Q ) SEQ ( ~ P ) PRF', ('DN',), 6, ('reductio', False)),     # intuitionistic: unaffected
+        ('THM ( ( P v Q ) & R ) SEQ ( Q v P ) PRF', (), 7, ('derived_ore_strict', True)),
+        ('THM ( ( P v Q ) & R ) SEQ ( Q v P ) PRF', ('ORE_DERIVED',), None, None),
+        ('THM ( ( P v Q ) & R ) SEQ ( Q v P ) PRF', ('ORE_DERIVED_LOOSE',), None, None),
+        ('THM ( P v Q ) SEQ ( Q v P ) PRF', ('ORE_DERIVED',), 6, ('derived_ore', False)),   # ORE over a premise: allowed
+        ('THM SEQ ( ( P v Q ) > ( Q v P ) ) PRF', ('ORE_DERIVED',), 7, ('derived_ore_strict', False)),  # ORE over a hypothesis: allowed in strict mode
+        ('THM SEQ ( ( P v Q ) > ( Q v P ) ) PRF', ('ORE_DERIVED_LOOSE',), None, None),
+        ('THM ( P & ( Q v R ) ) SEQ ( ( P & Q ) v ( P & R ) ) PRF', (), 10, ('derived_ore_strict', True)),   # distribution
+        ('THM ( P & ( Q v R ) ) SEQ ( ( P & Q ) v ( P & R ) ) PRF', ('ORE_DERIVED',), None, None),
+        ('THM ( P > ( Q v R ) ) , P , ( ~ Q ) SEQ R PRF', (), 9, ('derived_ore_strict', True)),
+        ('THM ( P > ( Q v R ) ) , P , ( ~ Q ) SEQ R PRF', ('ORE_DERIVED',), None, None),
+        ('THM ( P > ( Q v R ) ) , P , ( ~ Q ) SEQ R PRF', ('DN',), 9, ('derived_ore_strict', True)),
+    ]
+    for prompt, fb, exp, pat in rcases:
+        r = minlen(prompt, 10, 60, forbid=fb)
+        got = r['min_lines_ub']; good = got == exp and not r['timeout']
+        if r['proof']:
+            assert verify_text(prompt + ' ' + r['proof'])[0]
+            if pat:
+                good = good and classify(r['proof'])[pat[0]] == pat[1]
+        ok_all = ok_all and good
+        print(f"{'ok' if good else 'MISMATCH':9s} forbid {fb} exp {exp} got {got} {prompt}")
     print('SELFTEST', 'PASS' if ok_all else 'FAIL')
 
 
@@ -381,7 +423,8 @@ def main():
     ap.add_argument('--limit', type=int, default=None)
     ap.add_argument('--selftest', action='store_true')
     ap.add_argument('--max_depth', type=int, default=None, help='restricted search: no boxes deeper than this')
-    ap.add_argument('--no_derived_ore', action='store_true', help='restricted search: ORE only over premise disjunctions')
+    ap.add_argument('--no_derived_ore', action='store_true', help='restricted search: ORE only over premise disjunctions (= --forbid ORE_DERIVED_LOOSE)')
+    ap.add_argument('--forbid', nargs='*', default=[], help=f'rule restrictions: {FORBID}. DN also disables the reductio template; ORE_DERIVED forbids ORE over a disjunction that is not a premise, not an open hypothesis and not ( X v X ) (the complement of patterns.derived_ore_strict); ORE_DERIVED_LOOSE forbids ORE over any non-premise line')
     a = ap.parse_args()
     if a.selftest:
         selftest(); return
@@ -391,7 +434,7 @@ def main():
     import multiprocessing as mp
     t0 = time.time()
     with mp.Pool(a.procs) as pool, open(a.out, 'w') as fo:
-        for i, (rec, r) in enumerate(zip(recs, pool.imap(_work, [(r, a.bound, a.time, a.max_depth, a.no_derived_ore) for r in recs], chunksize=4))):
+        for i, (rec, r) in enumerate(zip(recs, pool.imap(_work, [(r, a.bound, a.time, a.max_depth, a.no_derived_ore, tuple(a.forbid)) for r in recs], chunksize=4))):
             out = {k: rec[k] for k in ('name', 'thm', 'prompt') if k in rec}
             out['gen_lines'] = rec.get('n_lines', rec.get('gen_lines'))
             out.update(r)
