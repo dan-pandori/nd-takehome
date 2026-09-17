@@ -267,3 +267,10 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   (236 theorems × 3 forms × 5 draws), greedy + 8 samples at T = 0.7, max 2,048 new tokens, prefix caching, ordered by
   draw so draw 0 finishes first. Prompt sizes (`data/r1/prompt_stats.json`): mean user message ≈ 11.5k / 12.6k / 12.3k
   characters (tokens / lean / english).
+- 23:29  Step 1 complete. Agreement table `artifacts/r1/agreement.md`: **181,464 / 181,464** verifier-accepted proofs (every pool
+  in the brief plus the minlen oracle proofs and the round-2 found files) are Lean-accepted; among 4,000 single-edit mutations
+  the final translator has **0** Lean-accepts-verifier-rejects and 0 the other way. The semantic divergence is the one
+  pre-registered (Lean unfolds `¬A` to `A → False`, so a rule applied across the two spellings passes Lean and fails
+  `nd_verify`), shown on 6 handcrafted cases; bookkeeping-only rules (PR placement, line numbering) diverge too. E1 held
+  (100 % ⇒ direction; the 2–8 % predicted for the ⇐ direction was 3 % / 6 % with the first translator and 0 % after the
+  two tightenings, which are conventions about what a box cite means rather than logic).
