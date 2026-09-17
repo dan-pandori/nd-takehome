@@ -185,3 +185,16 @@ declared now so they are not chosen on the base-rate results:
    Expectation: at lr 1e-4, ≥ 1 depth-3 theorem in 5 of 6 draws but < 20 (no ignition by the 2 % rule)
    because 100 updates of 4 groups carry ≈ 30 signal-bearing updates; at lr 1e-5, 0 depth-3 theorems in
    ≥ 5 of 6 draws — the sprint's null reproduced by budget and lr alone.
+
+## Amendment 3 — 2026-09-17 23:30 UTC (exploratory mechanism ablations, declared before their arms start)
+
+GRPO ignites within round 1 on the first draws, and even the sprint-sized budget (3,200 samples) gave 60
+depth-3 targets on s20 at lr 1e-4. To say *why* GRPO is faster than EI at equal samples, two cheap
+ablations on draws s20 and s21 (one seed each, ≈ $0.40 per arm):
+- `ei_<tag>_noretain`: `expert_iter.py --retain 0` — EI without the 20,000 retained Stage-1 records in each
+  fine-tuning mix (everything else identical). Expectation: ignites in round 1–2 and reaches acquisition
+  ≥ 0.30 by round 4, i.e. the retained cap-6 slice is what slows EI; held-out greedy falls below 0.85.
+- `grpo_g8_<tag>_posonly`: `grpo.py --pos_only` — advantage = reward (verified samples weight 1, failures
+  0; no group baseline, so it is on-policy positive-only REINFORCE, the closest policy-gradient analogue of
+  EI's keep-any-success rule). Expectation: acquisition curve within 0.05 of the G = 8 lr 1e-4 arm at every
+  round (the negative half of the group baseline is not what makes GRPO fast).

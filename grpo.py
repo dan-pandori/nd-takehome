@@ -116,6 +116,7 @@ def main():
     ap.add_argument('--pattern', default='depth3')
     ap.add_argument('--clip', type=float, default=1.0)
     ap.add_argument('--std_norm', action='store_true', help='(not used in the pre-registered arms) divide advantages by the group std')
+    ap.add_argument('--pos_only', action='store_true', help='(exploratory, amendment 3) advantage = reward (no baseline): verified samples get weight 1, failures 0')
     ap.add_argument('--no_step_on_zero', action='store_true', help='(not used in the pre-registered arms) skip the optimizer step when no group has variance')
     a = ap.parse_args()
     assert a.batch % a.group == 0
@@ -183,7 +184,7 @@ def main():
                 for g, rw in zip(grp, rew):
                     pid, rid, ptxt = g
                     seqs.append(pid + rid); plens.append(len(pid))
-                    advs.append((rw - mean) / (std if std > 0 else 1.0))
+                    advs.append(rw if a.pos_only else (rw - mean) / (std if std > 0 else 1.0))
                     resp_len += len(rid)
                     if tok.eos not in rid:
                         n_unterm += 1
