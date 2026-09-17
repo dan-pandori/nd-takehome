@@ -1,6 +1,6 @@
 # Pre-registration: run4-grpo — does GRPO ignite from zero coverage?
 
-Written 2026-09-17 23:05 UTC, before any pod of this run was created (gate 0: compare this
+Written 2026-09-17 23:00 UTC (committed 23:00:11), before any pod of this run was created (gate 0: compare this
 file's commit time with `~/pods.log`). Executor: agent:claude. Branch `dan_run4_grpo`.
 
 ## Question
