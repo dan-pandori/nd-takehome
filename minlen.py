@@ -27,7 +27,7 @@ from nd_verify.verify import parse_formula
 from gen import fstr
 
 BOT = ('bot',)
-FORBID = ('DN', 'ORE_DERIVED', 'ORE_DERIVED_LOOSE')   # rule restrictions for the necessity oracle (necessity.py)
+FORBID = ('DN', 'ORE_DERIVED', 'ORE_DERIVED_LOOSE', 'ORE_IN_IMPI', 'ANDE_NEGI_HYP', 'ORE_IN_ORE')   # rule restrictions for the necessity oracle (necessity.py)
 
 
 class Timeout(Exception):
@@ -72,7 +72,11 @@ class Search:
         # ORE restriction: LOOSE = ORE only over premise disjunctions (patterns.derived_ore == False);
         # STRICT = additionally allow ORE over an open hypothesis or over ( X v X ) (patterns.derived_ore_strict == False)
         self.ore_mode = 'loose' if 'ORE_DERIVED_LOOSE' in forbid else ('strict' if 'ORE_DERIVED' in forbid else None)
-        self.track_h = self.ore_mode == 'strict'
+        # run-2 restrictions: ORE_IN_IMPI = no ORE inside an IMPI box; ORE_IN_ORE = no ORE inside an ORE branch;
+        # ANDE_NEGI_HYP = no ANDE1/2 whose input is the hypothesis of an enclosing NEGI box.  Context is carried in H as
+        # tagged entries: ('#impi',) / ('#ore',) flags and ('#neghyp', formula) markers; they never match formulas.
+        self.ctx_impi = 'ORE_IN_IMPI' in forbid; self.ctx_ore = 'ORE_IN_ORE' in forbid; self.ctx_neg = 'ANDE_NEGI_HYP' in forbid
+        self.track_h = self.ore_mode == 'strict' or self.ctx_impi or self.ctx_ore or self.ctx_neg
         sub = set()
         for f in prem + [concl]:
             subformulas(f, sub)
@@ -128,6 +132,8 @@ class Search:
         if b >= 1:
             for C in self.conj:
                 if C[1] == G or C[2] == G:
+                    if self.ctx_neg and ('#neghyp', C) in H:
+                        continue
                     r = self.inp(C, A, min(b, bestc) - 1, d, H)
                     if r:
                         consider(r[0] + 1, ('ANDE1' if C[1] == G else 'ANDE2', G, r[1]))
@@ -170,11 +176,11 @@ class Search:
             if a == c and can_box:
                 consider(2, ('IMPI', G, a, None))
             elif b >= 3 and can_box:
-                r = self.best(c, A | {a}, min(b, bestc) - 2, d + 1, H | {a})
+                r = self.best(c, A | {a}, min(b, bestc) - 2, d + 1, H | {a} | ({('#impi',)} if self.ctx_impi else set()))
                 if r:
                     consider(r[0] + 2, ('IMPI', G, a, r[1]))
         if G[0] == 'not' and b >= 3 and can_box:
-            r = self.best(BOT, A | {G[1]}, min(b, bestc) - 2, d + 1, H | {G[1]})
+            r = self.best(BOT, A | {G[1]}, min(b, bestc) - 2, d + 1, H | {G[1]} | ({('#neghyp', G[1])} if self.ctx_neg else set()))
             if r:
                 consider(r[0] + 2, ('NEGI', G, G[1], r[1]))
         if G == BOT and b >= 1:
@@ -202,7 +208,7 @@ class Search:
             if r:
                 consider(r[0] + 3, ('RAA', G, r[1]))
         # ORE over a disjunction in S
-        if b >= 3 and can_box:
+        if b >= 3 and can_box and not (self.ctx_impi and ('#impi',) in H) and not (self.ctx_ore and ('#ore',) in H):
             for D in self.disj:
                 if D == G:
                     continue
@@ -217,13 +223,13 @@ class Search:
                 A2 = A | {D}
                 ca = (1, None) if a == G else None
                 if ca is None:
-                    ra = self.best(G, A2 | {a}, min(b, bestc) - r[0] - 3, d + 1, H | {a})
+                    ra = self.best(G, A2 | {a}, min(b, bestc) - r[0] - 3, d + 1, H | {a} | ({('#ore',)} if self.ctx_ore else set()))
                     ca = (ra[0] + 1, ra[1]) if ra else None
                 if ca is None:
                     continue
                 cb = (1, None) if c == G else None
                 if cb is None:
-                    rb = self.best(G, A2 | {c}, min(b, bestc) - r[0] - ca[0] - 1, d + 1, H | {c})
+                    rb = self.best(G, A2 | {c}, min(b, bestc) - r[0] - ca[0] - 1, d + 1, H | {c} | ({('#ore',)} if self.ctx_ore else set()))
                     cb = (rb[0] + 1, rb[1]) if rb else None
                 if cb is None:
                     continue
@@ -401,13 +407,29 @@ def selftest():
         ('THM ( P > ( Q v R ) ) , P , ( ~ Q ) SEQ R PRF', ('ORE_DERIVED',), None, None),
         ('THM ( P > ( Q v R ) ) , P , ( ~ Q ) SEQ R PRF', ('DN',), 9, ('derived_ore_strict', True)),
     ]
+    from patterns2 import classify2
+    rcases += [
+        ('THM ( P v Q ) , ( P > R ) SEQ ( ( Q > R ) > R ) PRF', (), 9, None),                     # IMPI box containing an ORE
+        ('THM ( P v Q ) , ( P > R ) SEQ ( ( Q > R ) > R ) PRF', ('ORE_IN_IMPI',), 11, None),   # ORE moved outside: +2 lines
+        ('THM ( P v Q ) SEQ ( R > ( Q v P ) ) PRF', ('ORE_IN_IMPI',), 9, None),                    # ORE outside then IMPI: allowed (+1 line)
+        ('THM ( ~ P ) SEQ ( ~ ( P & Q ) ) PRF', (), 5, None),
+        ('THM ( ~ P ) SEQ ( ~ ( P & Q ) ) PRF', ('ANDE_NEGI_HYP',), 7, None),                    # detour: assume ~~(P&Q), DN, ANDE (+2 lines)
+        ('THM ( P & ( ~ Q ) ) SEQ ( ~ Q ) PRF', ('ANDE_NEGI_HYP',), 2, None),                     # ANDE on a premise: unaffected
+        ('THM ( ( P v Q ) v R ) SEQ ( P v ( Q v R ) ) PRF', (), 12, None),                        # nested ORE
+        ('THM ( ( P v Q ) v R ) SEQ ( P v ( Q v R ) ) PRF', ('ORE_IN_ORE',), None, None),
+        ('THM ( P v Q ) , ( R v S ) SEQ ( ( Q v P ) & ( S v R ) ) PRF', ('ORE_IN_ORE',), 13, None),   # sequential OREs: allowed
+    ]
+    P2 = {'ORE_IN_IMPI': 'impi_ore', 'ANDE_NEGI_HYP': 'negi_ande_hyp', 'ORE_IN_ORE': 'nested_ore'}
     for prompt, fb, exp, pat in rcases:
-        r = minlen(prompt, 10, 60, forbid=fb)
+        r = minlen(prompt, 13, 120, forbid=fb)
         got = r['min_lines_ub']; good = got == exp and not r['timeout']
         if r['proof']:
             assert verify_text(prompt + ' ' + r['proof'])[0]
             if pat:
                 good = good and classify(r['proof'])[pat[0]] == pat[1]
+            for fbk, p2 in P2.items():          # a proof found under a run-2 restriction must not contain that pattern
+                if fbk in fb:
+                    good = good and not classify2(r['proof'])[p2]
         ok_all = ok_all and good
         print(f"{'ok' if good else 'MISMATCH':9s} forbid {fb} exp {exp} got {got} {prompt}")
     print('SELFTEST', 'PASS' if ok_all else 'FAIL')

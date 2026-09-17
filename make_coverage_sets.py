@@ -67,6 +67,14 @@ def worker(args):
             if only == 'derived_ore_strict' and not cl['derived_ore_strict']:
                 stats['only_out'] += 1
                 continue
+            if only and only.startswith('p2:'):      # run-2 patterns (patterns2.py): keep proofs with ANY of the listed patterns
+                from patterns2 import classify2
+                cl2 = classify2(r['proof'])
+                want = only[3:].split('+')
+                if not any(cl2[p] for p in want):
+                    stats['only_out'] += 1
+                    continue
+                r['pat2'] = {p: cl2[p] for p in want}
             pats = [p for p in PATTERNS if cl[p]]
             if only:
                 pats = pats or ['only']
@@ -421,7 +429,7 @@ def main():
     g.add_argument('--cap_np', type=int, default=1500, help='per worker, per length cap on pattern-free proofs')
     g.add_argument('--cap_pat', type=int, default=3000, help='per worker cap per pattern')
     g.add_argument('--seed', type=int, default=1000)
-    g.add_argument('--only', default=None, choices=[None, 'reductio_nodn', 'reductio_nodn_co', 'derived_ore_strict'], help='output filter: keep only proofs with this property (reductio_nodn = reductio pattern and no ( ~ ( ~ subformula in the sequent)')
+    g.add_argument('--only', default=None, help="reductio_nodn | reductio_nodn_co | derived_ore_strict | p2:<pattern>[+<pattern>..] (patterns2.py); " + 'output filter: keep only proofs with this property (reductio_nodn = reductio pattern and no ( ~ ( ~ subformula in the sequent)')
     m = sub.add_parser('merge'); m.add_argument('--glob', required=True); m.add_argument('--out', required=True); m.add_argument('--prefix', default='pool')
     s = sub.add_parser('assemble'); s.add_argument('--pool', required=True); s.add_argument('--outdir', required=True)
     s.add_argument('--size', type=int, default=155000); s.add_argument('--heldout', type=int, default=5000); s.add_argument('--seed', type=int, default=0)
