@@ -151,3 +151,16 @@ Pods: RTX 3090 (≈ $0.50/h), 3–4 pods named `r4-*`, 3 jobs per pod; A40/A100 
   left to finish and reported as collapsed.
 - Counts: every number in `numbers.md` names its file; acquisition via
   `phase2_metrics.arm_metrics` (normalised, min-round rule) on the pulled `found_<r>.jsonl`.
+
+## Amendment 1 — 2026-09-17 23:10 UTC (before any Stage-1 draw finished; no arm has started)
+
+The smoke test of `grpo.py` on the take-home `stage1_abs.pt` (transfer pool as targets, batch 512, G = 8,
+lr 1e-4, 6 updates) moved the policy fast: held-out greedy 0.964 → 0.818, 26 depth-3 targets in 6 updates.
+With Adam the fixed loss divisor scales the gradient but not the step, so every update with at least one
+variance group moves each weight by ≈ lr. To keep "lr was wrong" from being the explanation of either
+outcome, the primary GRPO design becomes **two learning rates on every draw and both seeds: lr 1e-4
+(arm names as before) and lr 3e-5 (`_lr3e-5` suffix)**; the exploratory check on s20 becomes lr 1e-5 and
+3e-4. Expectations E3–E6, E8 apply to each lr separately; E7 (held-out within 0.05 of Stage-1) is
+expected to hold at 3e-5 and is at risk at 1e-4. One pod per draw (six `r4-*` 3090 pods). Expected pod
+spend rises to ≈ $25–30; the drop order under the $50 cap is unchanged (lr check first, then second
+seeds, then draws s25, s24).
