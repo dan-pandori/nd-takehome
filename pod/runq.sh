@@ -4,7 +4,7 @@
 cd /workspace/nd-takehome
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export OMP_NUM_THREADS=2 MKL_NUM_THREADS=2
-mkdir -p artifacts/p2 ckpts/p2 ckpts/p3 artifacts/p3 artifacts/r5 ckpts/r5 artifacts/r2 ckpts/r2
+mkdir -p artifacts/p2 ckpts/p2 ckpts/p3 artifacts/p3 artifacts/r5 ckpts/r5 artifacts/r2 ckpts/r2 artifacts/r3 ckpts/r3 artifacts/r4 ckpts/r4
 J=$1; N=${2:-3}
 run_one() {
   name=$1; shift

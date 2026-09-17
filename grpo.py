@@ -62,6 +62,7 @@ def main():
     ap.add_argument('--temperature', type=float, default=0.8); ap.add_argument('--lr', type=float, default=1e-4); ap.add_argument('--divisor', type=float, default=None)
     ap.add_argument('--max_new', type=int, default=400); ap.add_argument('--seed', type=int, default=0); ap.add_argument('--batch', type=int, default=512)
     ap.add_argument('--eval_k', type=int, default=32, help='transfer pass@k at each boundary')
+    ap.add_argument('--lp_batch', type=int, default=128, help='sequences per forward/backward chunk in the update (memory)')
     a = ap.parse_args()
     out = f'artifacts/{a.name}'; os.makedirs(out, exist_ok=True); os.makedirs('ckpts/' + os.path.dirname(a.name), exist_ok=True)
     json.dump(vars(a), open(f'{out}/args.json', 'w'), indent=1)
@@ -114,11 +115,13 @@ def main():
         # ---- one policy-gradient update with the group-mean baseline, fixed divisor
         loss = torch.zeros((), device=dev)
         if adv.abs().sum() > 0:
-            for s in range(0, len(pid), a.batch):
-                lp = seq_logprobs(model, tok, pid[s:s + a.batch], comps[s:s + a.batch])
-                loss = loss + (-(adv[s:s + a.batch] * lp).sum() / (a.prompts * a.group * divisor))
             opt.zero_grad(set_to_none=True)
-            loss.backward()
+            for s in range(0, len(pid), a.lp_batch):      # chunked forward/backward: gradients accumulate, memory stays bounded
+                sel = [j for j in range(s, min(s + a.lp_batch, len(pid))) if adv[j] != 0]
+                if not sel: continue
+                lp = seq_logprobs(model, tok, [pid[j] for j in sel], [comps[j] for j in sel])
+                l = -(adv[sel] * lp).sum() / (a.prompts * a.group * divisor)
+                l.backward(); loss = loss + l.detach()
             gn = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
             opt.step()
         else:
