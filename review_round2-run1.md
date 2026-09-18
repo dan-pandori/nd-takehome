@@ -162,3 +162,79 @@ re-checks of disagreements), `python3 review_run1_lean_single.py` (≈ 45 min: t
 `data/r1/`, `artifacts/r1/gens_*.jsonl`, `artifacts/r1/scored_*.jsonl` and `artifacts/r1/lean_*.jsonl`; outputs in
 `artifacts/review_r1/`. Not re-derived: pod spend, the bucket contents beyond `upload.log` (`round2/run1/{artifacts/r1,data/r1}`, 42 files),
 the vLLM sampling itself.
+
+## Compare (phase 2: `run1.md`, `numbers.md` §Round 2 — Run 1, `log.md` 23:20–01:32, `STATUS.md` §Run 1, `artifacts/r1/summary.json`, `scale_summary.json`, `figures/run1_forms.png`, `run1_scale.png`)
+
+Two corrections to my phase-1 process notes. (1) The proposal document
+(`~/nd-rl` `dan_proposals`, `docs/proposals/2026-09-17-proposals-round-2.md`, committed 2026-09-17 18:44 UTC, before
+any run-1 job) does carry the run's predictions ("Lean helps ≥ 10 pp, most on nested-box-heavy proofs"; "scale of
+first success correlates with base log-probability but ranks depth-3 proofs easier"), and the executor's 01:32 log
+entry scores them. So the predictions were pre-registered there; what is missing is a numeric expectation per step
+in `log.md` as the other four runs have, and any prediction for step 3's absolute levels. (2) The brief update
+(22:52) is not mentioned anywhere in `STATUS.md`, `log.md` or `QUESTIONS.md`; the run went ahead in parallel with
+`dan_run1_lean` without a note. The results are not affected by either point.
+
+| claim (executor) | my independent value | verdict |
+|---|---|---|
+| `numbers.md` step 1: twelve agreement rows (n, both accept, nd-only, Lean-only, both reject) | identical in every cell; nd labels re-verified on all 257,482 records; the six pre-fix files reproduce under the current translator | reproduces |
+| `run1.md`: "0 disagreements with nd_verify on … 75,085 RL-found transfer proofs; 4,012 / 4,012 corrupted proofs rejected by both. The project has a second checker" | positives 253,470 / 253,470 (the write-up omits the 137,828 target proofs and the run-2 / run-5 pools, which are in `numbers.md`). Of the 4,012 negatives, 2,906 never reach Lean — they are rejected by the translator's Python mirror of the verifier's structural rules; Lean itself rejects 1,106 (`numbers.md` says this correctly, "by Lean or by the translator's structural mirror"; `run1.md` does not). And Lean identifies `( ~ A )` with `( A > F )`, which `nd_verify` does not (two reviewer-made proofs: ND rejects, Lean accepts) | numbers reproduce; **reword** "rejected by both" → "rejected by the translator's structural checks (2,906) or by Lean (1,106)", and "second checker" → "a second checker for the logical content, with the structural rules re-implemented rather than delegated, and one known identification (`¬A ≡ A → False`) that the mutation set cannot exercise" |
+| step-2 table: Lean 0.563 / 0.675, tokens 0.258 / 0.326, English 0.292 / 0.386; val-36 `> 6` greedy 0.458 / 0.158 / 0.100; all 36 bin rows in `numbers.md` with Wilson intervals | identical (own extraction, own English parser, own Lean batching; every accepted Lean body also verified alone in its own file) | reproduces |
+| "pass@8" column | is greedy ∪ 8 samples (9 attempts; `run1_analysis.py` `s or g`); samples-only pass@8 is 0.672 / 0.320 / 0.378 — a difference of ≤ 0.008 | reproduces; label it pass@9 or say "greedy or any of 8 samples" |
+| "Paired Lean − tokens over 236 theorems: +0.31 [0.26, 0.35] greedy, +0.35 [0.30, 0.40] pass@8" | +0.305 [+0.257, +0.353] and +0.348 [+0.298, +0.400] (own bootstrap, 4,000 resamples) | reproduces |
+| "The gain is largest on the shortest theorems (+0.34 at 7 lines, +0.15 at 16), the opposite of the proposal's prediction" | by-bin greedy delta +0.343 (7) … +0.145 (16), largest at val36 `<=6` (+0.433); reproduces. But "length" is the generator's line count of one proof, not the shortest proof or the box depth, and token accuracy is flat from 7 to 15 lines (0.31, 0.27, 0.24, 0.26, 0.16, 0.21, 0.31, 0.31, 0.28) — the bins are not a difficulty or nesting ladder, so the proposal's "nested-box-heavy" prediction has not been tested against a nesting measure | reproduces; the inference against the proposal needs a box-depth (or shortest-length) stratification, which the data allow (`nd2lean`'s translation gives the depth of every reference proof) |
+| "The English control sits with the tokens: the cost is the calculus-as-string, not the rule names" | English − tokens +0.035 [−0.003, +0.072] greedy, +0.059 [+0.018, +0.101] pass@9; Lean − English +0.270 / +0.289 | reproduces. One caveat belongs next to it: the Lean form is scored by Lean's elaborator, which accepts any well-typed term (1,822 of the 5,943 accepted bodies are term-style rather than the prompt's line format; 18 use `match` / `Classical.em`), while the two ND forms must hit one exact line format — the ND rejections are dominated by citation and arity errors (`rule check failed: NEGE` 117 / 146, `bad box cite` 100 / 100, `bad line cite` 99 / 88, `wrong ref count for ORE` 79 / 98 of 876 / 835 greedy rejections). Part of the +0.31 is therefore "Lean tolerates more ways of being right", not only "the model is better at Lean". No accepted Lean body uses automation (0 of 5,943), so none of it is Lean doing the proving |
+| step 3: "Nothing below 4B proves them; median smallest size 8B for all three classes; fraction proved at 4B / 8B / 14B / 32B 0.30 / 0.65 / 0.93 / 1.00, 0.10 / 0.53 / 0.65 / 0.85, 0.35 / 0.69 / 0.96 / 0.96" | first-size counts identical (`scale_summary.json` = my table); cumulative any-pass 12 / 26 / 37 / 40, 4 / 21 / 26 / 34, 9 / 18 / 25 / 25 → the stated fractions; median 8B in each class. 0.6B proves 1 of the 26 transfer theorems (`numbers.md` has 0.04; "nothing below 4B" is off by that one). "The rule sequence keeps 15 % beyond 14B": 6 first at 32B + 1 never = 7 / 40 = 17.5 % not proved by 14B (15 % is the 32B share alone) | reproduces; two small rewords |
+| "Spearman −0.24 on the 26 transfer theorems" | −0.237 (own rank correlation with ties) on the only 26 theorems that carry a Phase-1 log-probability; the depth-3 and reductio classes have none, so the brief's ordering comparison covers one class of three | reproduces; say so |
+| "ranks depth-3 proofs easier than their base probability (< 10⁻⁵) suggested" | not derivable from run-1 files (no base log-probabilities for the depth-3 theorems in `scale_prompts.jsonl`); the "< 10⁻⁵" is the campaign's pre-RL pattern rate, a different quantity (per-sample rate on a pool, not a per-theorem log-probability) | not re-derived; label the source |
+| class sizes "40 / 40 / 26" | 40 / 40 / 26 (the brief asked ≥ 30 per class; the third has 26 — every 9-line RL transfer proof there is) | reproduces; state the shortfall |
+| examples "class-disjoint from the test theorems, identical across forms" | 0 overlap by my key; one example list per draw shared by the three forms and all 236 theorems; scale set uses draw 0's list, 0 overlap with the 106 | reproduces |
+| `run1.md` ≤ 400 words | 464 words excluding the figure lines | over the brief's length |
+| figures `run1_forms.png`, `run1_scale.png` | every curve and bar matches my tables | reproduces |
+| pods ≈ $3.4 (p6 23:22 → 01:30); bucket `round2/run1/{artifacts/r1,data/r1}` | `upload.log` lists 40 + 2 files synced; spend not derivable | not derivable / reproduces |
+
+## Verdict
+
+**What stands.** Every number in `run1.md`, `numbers.md` §Run 1, `summary.json` and `scale_summary.json` reproduces
+from the raw generations with independent code: all 21,240 token / English outputs re-judged with my own extraction
+and parser, all 21,432 Lean outputs re-checked with my own batching, and all 9,430 accepted Lean bodies re-verified
+one per file — 0 differences anywhere, 0 `sorry` / search tactics among the accepted, 0 theorem-header mismatches.
+The translator agrees with `nd_verify` on 253,470 valid proofs of every kind the project has produced (including the
+shifted-index RL proofs after the 23:19 fix) and rejects all 4,012 mutations. The prompts are fair in the sense the
+brief asked for: same theorems, same 20 examples per draw in all three forms, examples class-disjoint from every
+test theorem and from the training set. The three clean results are: (i) Qwen3-Coder-30B in context proves 56 % of
+the theorems greedily when they are posed in Lean against 26 % in the take-home token format and 29 % in plain
+English (paired +0.31 [+0.26, +0.35], the same ordering in all five example draws); (ii) the English control shows
+the token format's opacity is not the cause; (iii) on the RL-found classes the smallest Qwen3 that writes a Lean
+proof is 4B–14B for 90 % of the theorems, median 8B in every class, with nothing at 1.7B and one theorem at 0.6B.
+
+**What must be reworded.** (1) "4,012 / 4,012 rejected by both" and "the project has a second checker": 2,906 of
+the negatives are rejected by the translator's own re-implementation of the structural rules and never reach Lean;
+Lean's judgement is exercised only on the 1,106 atom / rule mutations that survive translation, and Lean identifies
+`¬A` with `A → False` where `nd_verify` does not. The honest statement is "Lean checks the logical content of every
+valid proof we have and rejects every content mutation; the structural rules are mirrored in Python, not delegated".
+(2) The step-2 comparison is between a type checker that accepts any correct term and two formats that demand one
+exact line syntax; ND rejections are mostly citation / arity slips. The +0.31 is real as a statement about *what a
+checker accepts from the model*, but "Lean makes the model better at natural deduction" needs a format-tolerant
+ND judge (or a Lean judge restricted to the have–exact fragment) to separate the two. (3) The length result
+("largest gain on the shortest theorems, opposite to the prediction") uses generator length, which is not
+difficulty (token accuracy is flat over 7–15) and not nesting; the proposal's prediction is about box depth and
+is untested as such. (4) The base-log-probability comparison exists for 26 transfer theorems only, and the depth-3
+"< 10⁻⁵" is a pool rate, not a per-theorem log-probability. Minor: pass@8 is greedy ∪ 8; 0.6B proves one theorem;
+"15 % beyond 14B" is 17.5 %; 26 < 30 in the third class; 464 words.
+
+**Flags.** No numeric pre-registration in `log.md` for steps 2–3 (the proposal's qualitative predictions were
+committed before the run and are scored at 01:32); the 22:52 brief update reassigning run 1 was neither followed nor
+acknowledged, so a second, independent run-1 result on `dan_run1_lean` exists and the two should be compared before
+either is quoted. No training happened in this run; nothing here touches the take-home's submission constraints.
+
+**Next measurement.** (1) Fairness of the judge: re-score the token and English outputs with a *repair-tolerant*
+judge (accept a proof if a single citation index or arity fix makes it verify — the run-3 review's one-token repair
+search already exists) and, symmetrically, restrict the Lean judge to bodies that translate back into the calculus;
+report the paired delta under both. If the delta survives, Lean's advantage is in the model, not the checker.
+(2) Stratify step 2 by the reference proof's box depth and by shortest proof length (`minlen.py`), which is what the
+proposal predicted on; the current length bins cannot test it. (3) Give the depth-3 and reductio scale theorems the
+Phase-1 per-theorem base log-probability (one pass of the take-home base model on the RL proof, as was done for the
+transfer pool) so the ordering comparison covers all three classes and the "ranks depth-3 easier" claim becomes a
+number; and top the third class up to ≥ 30 with 9-line proofs from the round-9–16 continuation. (4) Reconcile with
+`dan_run1_lean`: same translator claims, same prompts? If the two agreement tables and the two paired deltas agree,
+the result is replicated for free.
