@@ -354,45 +354,88 @@ def table(summary):
 
 
 def figures(summary, figdir):
+    """Static figures.  Palette: the dataviz reference instance (slot 1 blue, slot 2 orange, fixed order), neutral grey +
+    a distinct marker for zero-hit draws so identity is never colour alone; light surface; recessive grid."""
     import matplotlib; matplotlib.use('Agg'); import matplotlib.pyplot as plt
+    BLUE, ORANGE, GREY, INK, MUTED, SURF = '#2a78d6', '#eb6834', '#8a8983', '#0b0b0b', '#52514e', '#fcfcfb'
+    plt.rcParams.update({'figure.facecolor': SURF, 'axes.facecolor': SURF, 'savefig.facecolor': SURF, 'axes.edgecolor': '#c9c8c2',
+                         'axes.labelcolor': MUTED, 'xtick.color': MUTED, 'ytick.color': MUTED, 'text.color': INK, 'axes.spines.top': False,
+                         'axes.spines.right': False, 'axes.grid': True, 'grid.color': '#e6e5e0', 'grid.linewidth': 0.6, 'font.size': 9})
     os.makedirs(figdir, exist_ok=True)
     sets = summary['sets']; ext = summary.get('external') or {}
-    # 1. generalisation fraction with CI, new vs ignition stratum
-    fig, ax = plt.subplots(figsize=(6, 3.6)); xs = []; labels = []
+    nice = {'depth3': 'depth-3\n(structural)', 'reductio': 'reductio\n(rule sequence)', 'derived_ore': 'strict derived-ORE\n(rule sequence)'}
+    # 1. generalisation fraction with CI: this run vs ignition study; deep pass "either" as hollow marker
+    fig, ax = plt.subplots(figsize=(6.4, 3.8))
     for i, (name, o) in enumerate(sets.items()):
-        if o['ci95']:
-            ax.errorbar([i], [o['fraction']], yerr=[[o['fraction'] - o['ci95'][0]], [o['ci95'][1] - o['fraction']]], fmt='o', color='C0', capsize=4,
-                        label='this run (24 seeds, full pool)' if i == 0 else None)
+        f, ci = o['fraction'], o['ci95']
+        ax.errorbar([i - 0.12], [f], yerr=[[f - ci[0]], [ci[1] - f]], fmt='o', color=BLUE, capsize=3, lw=2, ms=7, label='this run: 24 seeds, full pool, 600k-2M samples' if i == 0 else None)
+        ax.annotate(f"{o['n_with_pattern']}/{o['n_draws_sampled']}", (i - 0.12, ci[1]), textcoords='offset points', xytext=(0, 5), ha='center', color=INK, fontsize=9)
         e = ext.get(o.get('ign_key') or '')
         if e:
-            ax.errorbar([i + 0.2], [e['fraction']], yerr=[[e['fraction'] - e['ci95'][0]], [e['ci95'][1] - e['fraction']]], fmt='s', color='C1', capsize=4,
-                        label='ignition study (300 targets)' if i == 0 else None)
-        xs.append(i); labels.append(f"{name}\n{o['n_with_pattern']}/{o['n_draws_sampled']}")
-    ax.set_xticks(xs); ax.set_xticklabels(labels); ax.set_ylim(0, 1); ax.set_ylabel('fraction of Stage-1 draws with >= 1 pattern sample'); ax.legend(fontsize=8)
-    ax.set_title('Base generalisation per pattern class (Clopper-Pearson 95 %)', fontsize=10); fig.tight_layout(); fig.savefig(os.path.join(figdir, 'r3_3_generalisation.png'), dpi=130); plt.close(fig)
-    # 2. rate histograms
-    fig, axs = plt.subplots(1, len(sets), figsize=(3.4 * len(sets), 3.2), sharey=True)
+            ax.errorbar([i + 0.12], [e['fraction']], yerr=[[e['fraction'] - e['ci95'][0]], [e['ci95'][1] - e['fraction']]], fmt='s', color=ORANGE, capsize=3, lw=2, ms=6,
+                        label='ignition study: 300-target sample (separate stratum)' if i == 0 else None)
+            ax.annotate(f"{e['n_with_pattern']}/{e['n_draws']}", (i + 0.12, e['ci95'][1]), textcoords='offset points', xytext=(0, 5), ha='center', color=INK, fontsize=9)
+        dp = o.get('deep')
+        if dp and dp.get('n_draws') == o['n_draws_sampled']:
+            ep = dp['either_pass']; fe = ep['k'] / ep['n']
+            ax.errorbar([i - 0.30], [fe], yerr=[[fe - ep['ci95'][0]], [ep['ci95'][1] - fe]], fmt='D', mfc=SURF, mec=BLUE, color=BLUE, capsize=3, lw=1.2, ms=6,
+                        label='this run: main or deep pass (k = 20,000 on a-priori targets)' if i == 0 else None)
+            ax.annotate(f"{ep['k']}/{ep['n']}", (i - 0.30, ep['ci95'][1]), textcoords='offset points', xytext=(0, 5), ha='center', color=INK, fontsize=9)
+    ax.set_xticks(range(len(sets))); ax.set_xticklabels([nice[n] for n in sets]); ax.set_ylim(0, 1.08); ax.set_xlim(-0.6, len(sets) - 0.4)
+    ax.set_ylabel('fraction of draws with >= 1 pattern sample'); ax.grid(axis='x', visible=False)
+    ax.legend(fontsize=7.5, loc='upper right', frameon=False); ax.set_title('Base generalisation before any RL (Clopper-Pearson 95 %)', fontsize=10, loc='left')
+    fig.tight_layout(); fig.savefig(os.path.join(figdir, 'r3_3_generalisation.png'), dpi=140); plt.close(fig)
+    # 2. rate histograms (floor-decade bins), zero-hit draws as a separate grey bar
+    fig, axs = plt.subplots(1, len(sets), figsize=(3.3 * len(sets), 3.0), sharey=True)
+    decs = list(range(-7, -2))
     for ax, (name, o) in zip(axs, sets.items()):
         vals = [v for v in o['rates'].values() if v]; zeros = sum(1 for v in o['rates'].values() if v == 0)
-        bins = list(range(-7, -1))
-        ax.hist([math.log10(v) for v in vals], bins=[b - 0.5 for b in bins] + [bins[-1] + 0.5], color='C0', alpha=0.8)
-        ax.bar([-8], [zeros], color='grey', width=0.9); ax.set_xticks([-8] + bins); ax.set_xticklabels(['0'] + [f'1e{b}' for b in bins], fontsize=7)
-        ax.set_title(f"{name}: {o['n_with_pattern']}/{o['n_draws_sampled']} generalise", fontsize=9); ax.set_xlabel('per-sample pattern rate')
-    axs[0].set_ylabel('draws'); fig.tight_layout(); fig.savefig(os.path.join(figdir, 'r3_3_rate_hist.png'), dpi=130); plt.close(fig)
-    # 3. predictor scatter: primary first-half rate vs pattern rate; held-out val vs pattern rate
-    fig, axs = plt.subplots(2, len(sets), figsize=(3.4 * len(sets), 6))
-    for j, (name, o) in enumerate(sets.items()):
-        floor = 1e-7
-        for row, (key, xl) in enumerate(((f"fh_{o['primary_fh']}", f"first-half rate ({o['primary_fh']})"), ('heldout_val', 'held-out loss (final)'))):
-            ax = axs[row, j]; p = o['predictors'].get(key)
+        cnt = collections.Counter(math.floor(math.log10(v)) for v in vals)
+        ax.bar([-8], [zeros], color=GREY, width=0.8); ax.bar(decs, [cnt.get(d, 0) for d in decs], color=BLUE, width=0.8)
+        for x, h in [(-8, zeros)] + [(d, cnt.get(d, 0)) for d in decs]:
+            if h: ax.annotate(str(h), (x, h), textcoords='offset points', xytext=(0, 2), ha='center', fontsize=8, color=INK)
+        ax.set_xticks([-8] + decs); ax.set_xticklabels(['no hit'] + [f'1e{d}' for d in decs], fontsize=7); ax.grid(axis='x', visible=False)
+        ax.set_title(nice[name].replace('\n', ' '), fontsize=9, loc='left'); ax.set_xlabel('per-sample pattern rate (decade, lower edge)', fontsize=8)
+    axs[0].set_ylabel('draws (of 24)'); fig.tight_layout(); fig.savefig(os.path.join(figdir, 'r3_3_rate_hist.png'), dpi=140); plt.close(fig)
+    # 3. predictors (depth-3 and reductio): primary first-half rate, held-out loss, and the strongest exploratory predictor
+    rows = [n for n in ('depth3', 'reductio') if n in sets]
+    fig, axs = plt.subplots(len(rows), 3, figsize=(10.2, 3.1 * len(rows)))
+    for i, name in enumerate(rows):
+        o = sets[name]; floor = 1.2e-7
+        best = max(((k, abs(v['vs_generalises']['rho'])) for k, v in o['predictors'].items() if v['vs_generalises']['rho'] is not None and not k.startswith('fh_') and k != 'heldout_val'), key=lambda kv: kv[1], default=(None, 0))[0]
+        for j, (key, xl) in enumerate(((f"fh_{o['primary_fh']}", f"first-half attempt rate ({o['primary_fh']})"), ('heldout_val', 'held-out loss (final, 2-3-line proofs)'), (best, f'exploratory: held-out loss, {best} (1 of 41 tested)'))):
+            ax = axs[i, j]; p = o['predictors'].get(key)
             if not p: ax.set_visible(False); continue
-            for s, x in p['values'].items():
-                r = o['rates'][int(s)] if isinstance(s, str) else o['rates'][s]
-                ax.scatter([x], [max(r, floor)], color='C0' if r else 'grey', s=22)
-            ax.set_yscale('log'); ax.set_xlabel(xl, fontsize=8); ax.set_ylabel('pattern rate (0 at floor)', fontsize=8)
-            if row == 0 and p['values'] and min(p['values'].values()) > 0: ax.set_xscale('log')
-            a = p['vs_generalises']; ax.set_title(f"{name}: rho vs generalises {a['rho']:.2f} (p {a['p']:.3f})" if a['rho'] is not None else name, fontsize=8)
-    fig.tight_layout(); fig.savefig(os.path.join(figdir, 'r3_3_predictors.png'), dpi=130); plt.close(fig)
+            gx, gy, zx = [], [], []
+            for sd, x in p['values'].items():
+                r = o['rates'][sd] if sd in o['rates'] else o['rates'][int(sd)]
+                (gx.append(x), gy.append(r)) if r else zx.append(x)
+            ax.scatter(gx, gy, color=BLUE, s=26, label='>= 1 pattern sample', zorder=3, edgecolor=SURF, linewidth=0.8)
+            ax.scatter(zx, [floor] * len(zx), color=GREY, marker='x', s=26, label='no pattern sample (drawn at floor)', zorder=3)
+            ax.set_yscale('log'); ax.set_xlabel(xl, fontsize=8); ax.set_ylabel('pattern rate per sample' if j == 0 else '', fontsize=8)
+            if j == 0: ax.set_xscale('log')
+            a, b = p['vs_generalises'], p['vs_log_rate_among_generalisers']
+            fmt = lambda z: 'n/a' if z is None else f'{z:.2f}'
+            ax.set_title(f"{nice[name].split(chr(10))[0]}\nrho vs generalises {fmt(a['rho'])} (p {a['p']:.3f}); vs log rate {fmt(b['rho'])} (p {fmt(b['p'])})", fontsize=7.5, loc='left')
+            if i == 0 and j == 0: ax.legend(fontsize=7, frameon=False, loc='center left')
+    fig.tight_layout(); fig.savefig(os.path.join(figdir, 'r3_3_predictors.png'), dpi=140); plt.close(fig)
+    # 4. deep pass vs main pass on the a-priori targets
+    have = [n for n in rows if sets[n].get('deep') and sets[n]['deep'].get('n_draws')]
+    if have:
+        fig, axs = plt.subplots(1, len(have), figsize=(4.2 * len(have), 3.8), squeeze=False)
+        for ax, name in zip(axs[0], have):
+            dp = sets[name]['deep']; fl = 3e-7
+            D = {s: d for s, d in dp['draws'].items() if 'deep_hits' in d}
+            xs = [max(d['main_rate_on_deep_pool'] or 0, fl) for d in D.values()]; ys = [max(d['deep_rate'], fl) for d in D.values()]
+            zero_main = [d['main_hits_all'] == 0 for d in D.values()]
+            ax.plot([fl, 1e-1], [fl, 1e-1], color='#c9c8c2', lw=1, zorder=1)
+            ax.scatter([x for x, z in zip(xs, zero_main) if not z], [y for y, z in zip(ys, zero_main) if not z], color=BLUE, s=28, zorder=3, edgecolor=SURF, linewidth=0.8, label='>= 1 hit in the main pass')
+            ax.scatter([x for x, z in zip(xs, zero_main) if z], [y for y, z in zip(ys, zero_main) if z], color=GREY, marker='x', s=30, zorder=3, label='0 hits in the main pass')
+            ax.set_xscale('log'); ax.set_yscale('log'); ax.set_xlabel(f"main pass rate on the {dp['n_targets']} a-priori targets (k = 2,000; 0 at floor)", fontsize=8)
+            ax.set_ylabel('deep pass rate (k = 20,000, new sampling seed; 0 at floor)', fontsize=8)
+            ax.set_title(f"{nice[name].split(chr(10))[0]}: {len(dp['main_zero_with_deep_hit'])} of {len(dp['main_zero_draws'])} main-pass zeros hit in the deep pass", fontsize=8.5, loc='left')
+            ax.legend(fontsize=7, frameon=False, loc='upper left')
+        fig.tight_layout(); fig.savefig(os.path.join(figdir, 'r3_3_deep.png'), dpi=140); plt.close(fig)
 
 
 def main():
