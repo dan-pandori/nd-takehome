@@ -1,0 +1,1807 @@
+{
+ "30": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [],
+  "fh_all": {
+   "d2_two_boxes": 75865,
+   "d3_as_as": 2264,
+   "d3_written": 2380,
+   "derived_disj": 31585,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 2
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 0,
+   "d3_as_as": 0,
+   "d3_written": 0,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {},
+  "frozen256_any_targets": 0,
+  "frozen256_pattern_targets": 0,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 1,
+  "n_ok": 14,
+  "n_parsed": 849167,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 1,
+  "other_pattern_hits": {},
+  "pattern_distinct": 0,
+  "pattern_first": {},
+  "pattern_hits": 0,
+  "pattern_hits_by_written_len": {},
+  "pattern_targets": {},
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "31": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [
+   {
+    "count": 5,
+    "name": "targets_depth3_111",
+    "prompt": "THM SEQ ( ( ~ ( R v R ) ) > ( Q > ( ( ~ ( ~ ( ~ R ) ) ) > ( ~ R ) ) ) ) PRF",
+    "proof": "N1 | ( ~ ( R v R ) ) : AS ; N2 | | Q : AS ; N3 | | | ( ~ ( ~ ( ~ R ) ) ) : AS ; N4 | | | ( ~ R ) : DN N3 ; N5 | | ( ( ~ ( ~ ( ~ R ) ) ) > ( ~ R ) ) : IMPI N3 N4 ; N6 | ( Q > ( ( ~ ( ~ ( ~ R ) ) ) > ( ~ R ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( R v R ) ) > ( Q > ( ( ~ ( ~ ( ~ R ) ) ) > ( ~ R ) ) ) ) : IMPI N1 N6 ; QED"
+   },
+   {
+    "count": 5,
+    "name": "targets_depth3_125",
+    "prompt": "THM SEQ ( ( ~ ( ~ ( P & R ) ) ) > ( ( P & R ) > ( ( ~ ( ~ ( S v Q ) ) ) > R ) ) ) PRF",
+    "proof": "N1 | ( ~ ( ~ ( P & R ) ) ) : AS ; N2 | | ( P & R ) : AS ; N3 | | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N4 | | | R : ANDE2 N2 ; N5 | | ( ( ~ ( ~ ( S v Q ) ) ) > R ) : IMPI N3 N4 ; N6 | ( ( P & R ) > ( ( ~ ( ~ ( S v Q ) ) ) > R ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( P & R ) ) ) > ( ( P & R ) > ( ( ~ ( ~ ( S v Q ) ) ) > R ) ) ) : IMPI N1 N6 ; QED"
+   },
+   {
+    "count": 3,
+    "name": "targets_depth3_159",
+    "prompt": "THM SEQ ( ( S & P ) > ( R > ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) ) ) PRF",
+    "proof": "N1 | ( S & P ) : AS ; N2 | | R : AS ; N3 | | | ( ~ ( ~ Q ) ) : AS ; N4 | | ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) : IMPI N3 N3 ; N5 | | ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) : ANDI N4 N4 ; N6 | ( R > ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) ) : IMPI N2 N5 ; N7 ( ( S & P ) > ( R > ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) ) ) : IMPI N1 N6 ; QED"
+   }
+  ],
+  "fh_all": {
+   "d2_two_boxes": 16333,
+   "d3_as_as": 155825,
+   "d3_written": 240931,
+   "derived_disj": 27462,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 1284,
+   "d3_as_as": 13,
+   "d3_written": 13,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 1284,
+   "d3_as_as": 13,
+   "d3_written": 13
+  },
+  "frozen256_any_targets": 1,
+  "frozen256_pattern_targets": 0,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 6,
+  "n_ok": 1339,
+  "n_parsed": 868073,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 4,
+  "other_pattern_hits": {},
+  "pattern_distinct": 3,
+  "pattern_first": {
+   "targets_depth3_111": 1335,
+   "targets_depth3_125": 1073,
+   "targets_depth3_159": 10746
+  },
+  "pattern_hits": 13,
+  "pattern_hits_by_written_len": {
+   "7": 13
+  },
+  "pattern_targets": {
+   "targets_depth3_111": 5,
+   "targets_depth3_125": 5,
+   "targets_depth3_159": 3
+  },
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "32": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [],
+  "fh_all": {
+   "d2_two_boxes": 94680,
+   "d3_as_as": 76,
+   "d3_written": 164,
+   "derived_disj": 18346,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 44
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 2046,
+   "d3_as_as": 0,
+   "d3_written": 0,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 2046
+  },
+  "frozen256_any_targets": 2,
+  "frozen256_pattern_targets": 0,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 5,
+  "n_ok": 6041,
+  "n_parsed": 883417,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 3,
+  "other_pattern_hits": {},
+  "pattern_distinct": 0,
+  "pattern_first": {},
+  "pattern_hits": 0,
+  "pattern_hits_by_written_len": {},
+  "pattern_targets": {},
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "33": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [
+   {
+    "count": 427,
+    "name": "targets_depth3_18",
+    "prompt": "THM SEQ ( ( ~ ( ~ ( S > R ) ) ) > ( R > ( ( ~ ( ~ ( S > R ) ) ) > ( S > R ) ) ) ) PRF",
+    "proof": "N1 | ( ~ ( ~ ( S > R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ~ ( ~ ( S > R ) ) ) : AS ; N4 | | | ( S > R ) : DN N1 ; N5 | | ( ( ~ ( ~ ( S > R ) ) ) > ( S > R ) ) : IMPI N3 N4 ; N6 | ( R > ( ( ~ ( ~ ( S > R ) ) ) > ( S > R ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( S > R ) ) ) > ( R > ( ( ~ ( ~ ( S > R ) ) ) > ( S > R ) ) ) ) : IMPI N1 N6 ; QED"
+   },
+   {
+    "count": 33,
+    "name": "targets_depth3_49",
+    "prompt": "THM SEQ ( P > ( ( Q & R ) > ( ( ~ ( ~ ( ~ Q ) ) ) > Q ) ) ) PRF",
+    "proof": "N1 | P : AS ; N2 | | ( Q & R ) : AS ; N3 | | | ( ~ ( ~ ( ~ Q ) ) ) : AS ; N4 | | | Q : ANDE1 N2 ; N5 | | ( ( ~ ( ~ ( ~ Q ) ) ) > Q ) : IMPI N3 N4 ; N6 | ( ( Q & R ) > ( ( ~ ( ~ ( ~ Q ) ) ) > Q ) ) : IMPI N2 N5 ; N7 ( P > ( ( Q & R ) > ( ( ~ ( ~ ( ~ Q ) ) ) > Q ) ) ) : IMPI N1 N6 ; QED"
+   },
+   {
+    "count": 56,
+    "name": "targets_depth3_145",
+    "prompt": "THM SEQ ( ( ~ ( ~ S ) ) > ( ( P & Q ) > ( ( ~ ( ~ ( R > S ) ) ) > ( R > S ) ) ) ) PRF",
+    "proof": "N1 | ( ~ ( ~ S ) ) : AS ; N2 | | ( P & Q ) : AS ; N3 | | | ( ~ ( ~ ( R > S ) ) ) : AS ; N4 | | | ( R > S ) : DN N3 ; N5 | | ( ( ~ ( ~ ( R > S ) ) ) > ( R > S ) ) : IMPI N3 N4 ; N6 | ( ( P & Q ) > ( ( ~ ( ~ ( R > S ) ) ) > ( R > S ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ S ) ) > ( ( P & Q ) > ( ( ~ ( ~ ( R > S ) ) ) > ( R > S ) ) ) ) : IMPI N1 N6 ; QED"
+   }
+  ],
+  "fh_all": {
+   "d2_two_boxes": 9593,
+   "d3_as_as": 28475,
+   "d3_written": 29716,
+   "derived_disj": 40261,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 2
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 58,
+   "d3_as_as": 516,
+   "d3_written": 516,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 58,
+   "d3_as_as": 516,
+   "d3_written": 516
+  },
+  "frozen256_any_targets": 2,
+  "frozen256_pattern_targets": 1,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 5,
+  "n_ok": 3050,
+  "n_parsed": 853575,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 4,
+  "other_pattern_hits": {},
+  "pattern_distinct": 3,
+  "pattern_first": {
+   "targets_depth3_145": 284,
+   "targets_depth3_18": 45,
+   "targets_depth3_49": 1352
+  },
+  "pattern_hits": 516,
+  "pattern_hits_by_written_len": {
+   "7": 516
+  },
+  "pattern_targets": {
+   "targets_depth3_145": 56,
+   "targets_depth3_18": 427,
+   "targets_depth3_49": 33
+  },
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "34": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [
+   {
+    "count": 3,
+    "name": "targets_depth3_49",
+    "prompt": "THM SEQ ( P > ( ( Q & R ) > ( ( ~ ( ~ ( ~ Q ) ) ) > Q ) ) ) PRF",
+    "proof": "N1 | P : AS ; N2 | | ( Q & R ) : AS ; N3 | | | ( ~ ( ~ ( ~ Q ) ) ) : AS ; N4 | | | Q : ANDE1 N2 ; N5 | | ( ( ~ ( ~ ( ~ Q ) ) ) > Q ) : IMPI N3 N4 ; N6 | ( ( Q & R ) > ( ( ~ ( ~ ( ~ Q ) ) ) > Q ) ) : IMPI N2 N5 ; N7 ( P > ( ( Q & R ) > ( ( ~ ( ~ ( ~ Q ) ) ) > Q ) ) ) : IMPI N1 N6 ; QED"
+   },
+   {
+    "count": 16,
+    "name": "targets_depth3_125",
+    "prompt": "THM SEQ ( ( ~ ( ~ ( P & R ) ) ) > ( ( P & R ) > ( ( ~ ( ~ ( S v Q ) ) ) > R ) ) ) PRF",
+    "proof": "N1 | ( ~ ( ~ ( P & R ) ) ) : AS ; N2 | | ( P & R ) : AS ; N3 | | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N4 | | | R : ANDE2 N2 ; N5 | | ( ( ~ ( ~ ( S v Q ) ) ) > R ) : IMPI N3 N4 ; N6 | ( ( P & R ) > ( ( ~ ( ~ ( S v Q ) ) ) > R ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( P & R ) ) ) > ( ( P & R ) > ( ( ~ ( ~ ( S v Q ) ) ) > R ) ) ) : IMPI N1 N6 ; QED"
+   },
+   {
+    "count": 3594,
+    "name": "targets_depth3_145",
+    "prompt": "THM SEQ ( ( ~ ( ~ S ) ) > ( ( P & Q ) > ( ( ~ ( ~ ( R > S ) ) ) > ( R > S ) ) ) ) PRF",
+    "proof": "N1 | ( ~ ( ~ S ) ) : AS ; N2 | | ( P & Q ) : AS ; N3 | | | ( ~ ( ~ ( R > S ) ) ) : AS ; N4 | | | ( R > S ) : DN N3 ; N5 | | ( ( ~ ( ~ ( R > S ) ) ) > ( R > S ) ) : IMPI N3 N4 ; N6 | ( ( P & Q ) > ( ( ~ ( ~ ( R > S ) ) ) > ( R > S ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ S ) ) > ( ( P & Q ) > ( ( ~ ( ~ ( R > S ) ) ) > ( R > S ) ) ) ) : IMPI N1 N6 ; QED"
+   }
+  ],
+  "fh_all": {
+   "d2_two_boxes": 6905,
+   "d3_as_as": 17513,
+   "d3_written": 72869,
+   "derived_disj": 28542,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 4
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 2649,
+   "d3_as_as": 3615,
+   "d3_written": 3615,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 2649,
+   "d3_as_as": 3615,
+   "d3_written": 3615
+  },
+  "frozen256_any_targets": 2,
+  "frozen256_pattern_targets": 1,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 7,
+  "n_ok": 13123,
+  "n_parsed": 866209,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 6,
+  "other_pattern_hits": {},
+  "pattern_distinct": 4,
+  "pattern_first": {
+   "targets_depth3_125": 287,
+   "targets_depth3_145": 1,
+   "targets_depth3_147": 14117,
+   "targets_depth3_49": 914
+  },
+  "pattern_hits": 3615,
+  "pattern_hits_by_written_len": {
+   "7": 3615
+  },
+  "pattern_targets": {
+   "targets_depth3_125": 16,
+   "targets_depth3_145": 3594,
+   "targets_depth3_147": 2,
+   "targets_depth3_49": 3
+  },
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "35": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [
+   {
+    "count": 1733,
+    "name": "targets_depth3_12",
+    "prompt": "THM SEQ ( ( S v R ) > ( ( ~ Q ) > ( Q > ( Q v ( ( R & S ) & Q ) ) ) ) ) PRF",
+    "proof": "N1 | ( S v R ) : AS ; N2 | | ( ~ Q ) : AS ; N3 | | | Q : AS ; N4 | | | ( Q v ( ( R & S ) & Q ) ) : ORI1 N3 ; N5 | | ( Q > ( Q v ( ( R & S ) & Q ) ) ) : IMPI N3 N4 ; N6 | ( ( ~ Q ) > ( Q > ( Q v ( ( R & S ) & Q ) ) ) ) : IMPI N2 N5 ; N7 ( ( S v R ) > ( ( ~ Q ) > ( Q > ( Q v ( ( R & S ) & Q ) ) ) ) ) : IMPI N1 N6 ; QED"
+   }
+  ],
+  "fh_all": {
+   "d2_two_boxes": 21259,
+   "d3_as_as": 168773,
+   "d3_written": 169629,
+   "derived_disj": 34120,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 14
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 10646,
+   "d3_as_as": 1733,
+   "d3_written": 1733,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 10646,
+   "d3_as_as": 1733,
+   "d3_written": 1733
+  },
+  "frozen256_any_targets": 2,
+  "frozen256_pattern_targets": 1,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 4,
+  "n_ok": 17524,
+  "n_parsed": 856982,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 3,
+  "other_pattern_hits": {},
+  "pattern_distinct": 1,
+  "pattern_first": {
+   "targets_depth3_12": 28
+  },
+  "pattern_hits": 1733,
+  "pattern_hits_by_written_len": {
+   "7": 1733
+  },
+  "pattern_targets": {
+   "targets_depth3_12": 1733
+  },
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "36": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [
+   {
+    "count": 2,
+    "name": "targets_depth3_9",
+    "prompt": "THM SEQ ( ( ~ ( ~ Q ) ) > ( ( Q v P ) > ( ( ~ ( ~ ( ~ P ) ) ) > ( ~ P ) ) ) ) PRF",
+    "proof": "N1 | ( ~ ( ~ Q ) ) : AS ; N2 | | ( Q v P ) : AS ; N3 | | | ( ~ ( ~ ( ~ P ) ) ) : AS ; N4 | | | ( ~ P ) : DN N3 ; N5 | | ( ( ~ ( ~ ( ~ P ) ) ) > ( ~ P ) ) : IMPI N3 N4 ; N6 | ( ( Q v P ) > ( ( ~ ( ~ ( ~ P ) ) ) > ( ~ P ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ Q ) ) > ( ( Q v P ) > ( ( ~ ( ~ ( ~ P ) ) ) > ( ~ P ) ) ) ) : IMPI N1 N6 ; QED"
+   },
+   {
+    "count": 342,
+    "name": "targets_depth3_18",
+    "prompt": "THM SEQ ( ( ~ ( ~ ( S > R ) ) ) > ( R > ( ( ~ ( ~ ( S > R ) ) ) > ( S > R ) ) ) ) PRF",
+    "proof": "N1 | ( ~ ( ~ ( S > R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ~ ( ~ ( S > R ) ) ) : AS ; N4 | | | ( S > R ) : DN N1 ; N5 | | ( ( ~ ( ~ ( S > R ) ) ) > ( S > R ) ) : IMPI N3 N4 ; N6 | ( R > ( ( ~ ( ~ ( S > R ) ) ) > ( S > R ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( S > R ) ) ) > ( R > ( ( ~ ( ~ ( S > R ) ) ) > ( S > R ) ) ) ) : IMPI N1 N6 ; QED"
+   },
+   {
+    "count": 16,
+    "name": "targets_depth3_18",
+    "prompt": "THM SEQ ( ( ~ ( ~ ( S > R ) ) ) > ( R > ( ( ~ ( ~ ( S > R ) ) ) > ( S > R ) ) ) ) PRF",
+    "proof": "N1 | ( ~ ( ~ ( S > R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ~ ( ~ ( S > R ) ) ) : AS ; N4 | | | ( S > R ) : DN N3 ; N5 | | ( ( ~ ( ~ ( S > R ) ) ) > ( S > R ) ) : IMPI N3 N4 ; N6 | ( R > ( ( ~ ( ~ ( S > R ) ) ) > ( S > R ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( S > R ) ) ) > ( R > ( ( ~ ( ~ ( S > R ) ) ) > ( S > R ) ) ) ) : IMPI N1 N6 ; QED"
+   }
+  ],
+  "fh_all": {
+   "d2_two_boxes": 14896,
+   "d3_as_as": 158103,
+   "d3_written": 223833,
+   "derived_disj": 43830,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 6
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 18,
+   "d3_as_as": 13973,
+   "d3_written": 13973,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 18,
+   "d3_as_as": 13973,
+   "d3_written": 13973
+  },
+  "frozen256_any_targets": 3,
+  "frozen256_pattern_targets": 3,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 14,
+  "n_ok": 14017,
+  "n_parsed": 865644,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 11,
+  "other_pattern_hits": {},
+  "pattern_distinct": 10,
+  "pattern_first": {
+   "targets_depth3_111": 8601,
+   "targets_depth3_125": 475,
+   "targets_depth3_126": 1,
+   "targets_depth3_145": 1770,
+   "targets_depth3_18": 40,
+   "targets_depth3_49": 9538,
+   "targets_depth3_9": 580,
+   "targets_depth3_91": 240
+  },
+  "pattern_hits": 13973,
+  "pattern_hits_by_written_len": {
+   "7": 13973
+  },
+  "pattern_targets": {
+   "targets_depth3_111": 2,
+   "targets_depth3_125": 98,
+   "targets_depth3_126": 13383,
+   "targets_depth3_145": 106,
+   "targets_depth3_18": 358,
+   "targets_depth3_49": 1,
+   "targets_depth3_9": 2,
+   "targets_depth3_91": 23
+  },
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "37": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [
+   {
+    "count": 24,
+    "name": "targets_depth3_159",
+    "prompt": "THM SEQ ( ( S & P ) > ( R > ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) ) ) PRF",
+    "proof": "N1 | ( S & P ) : AS ; N2 | | R : AS ; N3 | | | ( ~ ( ~ Q ) ) : AS ; N4 | | ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) : IMPI N3 N3 ; N5 | | ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) : ANDI N4 N4 ; N6 | ( R > ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) ) : IMPI N2 N5 ; N7 ( ( S & P ) > ( R > ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) ) ) : IMPI N1 N6 ; QED"
+   }
+  ],
+  "fh_all": {
+   "d2_two_boxes": 132184,
+   "d3_as_as": 36096,
+   "d3_written": 36710,
+   "derived_disj": 30979,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 1227,
+   "d3_as_as": 24,
+   "d3_written": 24,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 1227,
+   "d3_as_as": 24,
+   "d3_written": 24
+  },
+  "frozen256_any_targets": 2,
+  "frozen256_pattern_targets": 0,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 4,
+  "n_ok": 3750,
+  "n_parsed": 866270,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 2,
+  "other_pattern_hits": {},
+  "pattern_distinct": 1,
+  "pattern_first": {
+   "targets_depth3_159": 1117
+  },
+  "pattern_hits": 24,
+  "pattern_hits_by_written_len": {
+   "7": 24
+  },
+  "pattern_targets": {
+   "targets_depth3_159": 24
+  },
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "38": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [
+   {
+    "count": 298,
+    "name": "targets_depth3_10",
+    "prompt": "THM SEQ ( ( ( R v P ) & Q ) > ( Q > ( ( R & ( ~ S ) ) > ( Q & ( ( R v P ) & Q ) ) ) ) ) PRF",
+    "proof": "N1 | ( ( R v P ) & Q ) : AS ; N2 | | Q : AS ; N3 | | | ( R & ( ~ S ) ) : AS ; N4 | | | ( Q & ( ( R v P ) & Q ) ) : ANDI N2 N1 ; N5 | | ( ( R & ( ~ S ) ) > ( Q & ( ( R v P ) & Q ) ) ) : IMPI N3 N4 ; N6 | ( Q > ( ( R & ( ~ S ) ) > ( Q & ( ( R v P ) & Q ) ) ) ) : IMPI N2 N5 ; N7 ( ( ( R v P ) & Q ) > ( Q > ( ( R & ( ~ S ) ) > ( Q & ( ( R v P ) & Q ) ) ) ) ) : IMPI N1 N6 ; QED"
+   },
+   {
+    "count": 15,
+    "name": "targets_depth3_12",
+    "prompt": "THM SEQ ( ( S v R ) > ( ( ~ Q ) > ( Q > ( Q v ( ( R & S ) & Q ) ) ) ) ) PRF",
+    "proof": "N1 | ( S v R ) : AS ; N2 | | ( ~ Q ) : AS ; N3 | | | Q : AS ; N4 | | | ( Q v ( ( R & S ) & Q ) ) : ORI1 N3 ; N5 | | ( Q > ( Q v ( ( R & S ) & Q ) ) ) : IMPI N3 N4 ; N6 | ( ( ~ Q ) > ( Q > ( Q v ( ( R & S ) & Q ) ) ) ) : IMPI N2 N5 ; N7 ( ( S v R ) > ( ( ~ Q ) > ( Q > ( Q v ( ( R & S ) & Q ) ) ) ) ) : IMPI N1 N6 ; QED"
+   },
+   {
+    "count": 1,
+    "name": "targets_depth3_16",
+    "prompt": "THM SEQ ( ( S > ( ~ S ) ) > ( ( ~ ( ~ ( Q v R ) ) ) > ( ( R > ( R & Q ) ) > ( Q v R ) ) ) ) PRF",
+    "proof": "N1 | ( S > ( ~ S ) ) : AS ; N2 | | ( ~ ( ~ ( Q v R ) ) ) : AS ; N3 | | | ( R > ( R & Q ) ) : AS ; N4 | | | ( Q v R ) : DN N2 ; N5 | | ( ( R > ( R & Q ) ) > ( Q v R ) ) : IMPI N3 N4 ; N6 | ( ( ~ ( ~ ( Q v R ) ) ) > ( ( R > ( R & Q ) ) > ( Q v R ) ) ) : IMPI N2 N5 ; N7 ( ( S > ( ~ S ) ) > ( ( ~ ( ~ ( Q v R ) ) ) > ( ( R > ( R & Q ) ) > ( Q v R ) ) ) ) : IMPI N1 N6 ; QED"
+   }
+  ],
+  "fh_all": {
+   "d2_two_boxes": 21664,
+   "d3_as_as": 12871,
+   "d3_written": 49023,
+   "derived_disj": 36013,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 270,
+   "d3_as_as": 726,
+   "d3_written": 726,
+   "derived_disj": 1,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 270,
+   "d3_as_as": 726,
+   "d3_written": 726,
+   "derived_disj": 1
+  },
+  "frozen256_any_targets": 4,
+  "frozen256_pattern_targets": 3,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 13,
+  "n_ok": 5287,
+  "n_parsed": 884433,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 12,
+  "other_pattern_hits": {},
+  "pattern_distinct": 11,
+  "pattern_first": {
+   "targets_depth3_10": 2,
+   "targets_depth3_110": 44,
+   "targets_depth3_12": 110,
+   "targets_depth3_125": 1791,
+   "targets_depth3_140": 1264,
+   "targets_depth3_16": 7655,
+   "targets_depth3_164": 1385,
+   "targets_depth3_43": 388,
+   "targets_depth3_49": 4204,
+   "targets_depth3_61": 1008,
+   "targets_depth3_80": 1214
+  },
+  "pattern_hits": 726,
+  "pattern_hits_by_written_len": {
+   "7": 726
+  },
+  "pattern_targets": {
+   "targets_depth3_10": 298,
+   "targets_depth3_110": 257,
+   "targets_depth3_12": 15,
+   "targets_depth3_125": 7,
+   "targets_depth3_140": 4,
+   "targets_depth3_16": 1,
+   "targets_depth3_164": 11,
+   "targets_depth3_43": 114,
+   "targets_depth3_49": 1,
+   "targets_depth3_61": 15,
+   "targets_depth3_80": 3
+  },
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "39": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [],
+  "fh_all": {
+   "d2_two_boxes": 16059,
+   "d3_as_as": 3222,
+   "d3_written": 7690,
+   "derived_disj": 17192,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 3
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 1369,
+   "d3_as_as": 0,
+   "d3_written": 0,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 1369
+  },
+  "frozen256_any_targets": 1,
+  "frozen256_pattern_targets": 0,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 2,
+  "n_ok": 2999,
+  "n_parsed": 885169,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 1,
+  "other_pattern_hits": {},
+  "pattern_distinct": 0,
+  "pattern_first": {},
+  "pattern_hits": 0,
+  "pattern_hits_by_written_len": {},
+  "pattern_targets": {},
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "40": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [
+   {
+    "count": 1293,
+    "name": "targets_depth3_9",
+    "prompt": "THM SEQ ( ( ~ ( ~ Q ) ) > ( ( Q v P ) > ( ( ~ ( ~ ( ~ P ) ) ) > ( ~ P ) ) ) ) PRF",
+    "proof": "N1 | ( ~ ( ~ Q ) ) : AS ; N2 | | ( Q v P ) : AS ; N3 | | | ( ~ ( ~ ( ~ P ) ) ) : AS ; N4 | | | ( ~ P ) : DN N3 ; N5 | | ( ( ~ ( ~ ( ~ P ) ) ) > ( ~ P ) ) : IMPI N3 N4 ; N6 | ( ( Q v P ) > ( ( ~ ( ~ ( ~ P ) ) ) > ( ~ P ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ Q ) ) > ( ( Q v P ) > ( ( ~ ( ~ ( ~ P ) ) ) > ( ~ P ) ) ) ) : IMPI N1 N6 ; QED"
+   },
+   {
+    "count": 23,
+    "name": "targets_depth3_10",
+    "prompt": "THM SEQ ( ( ( R v P ) & Q ) > ( Q > ( ( R & ( ~ S ) ) > ( Q & ( ( R v P ) & Q ) ) ) ) ) PRF",
+    "proof": "N1 | ( ( R v P ) & Q ) : AS ; N2 | | Q : AS ; N3 | | | ( R & ( ~ S ) ) : AS ; N4 | | | ( Q & ( ( R v P ) & Q ) ) : ANDI N2 N1 ; N5 | | ( ( R & ( ~ S ) ) > ( Q & ( ( R v P ) & Q ) ) ) : IMPI N3 N4 ; N6 | ( Q > ( ( R & ( ~ S ) ) > ( Q & ( ( R v P ) & Q ) ) ) ) : IMPI N2 N5 ; N7 ( ( ( R v P ) & Q ) > ( Q > ( ( R & ( ~ S ) ) > ( Q & ( ( R v P ) & Q ) ) ) ) ) : IMPI N1 N6 ; QED"
+   },
+   {
+    "count": 858,
+    "name": "targets_depth3_12",
+    "prompt": "THM SEQ ( ( S v R ) > ( ( ~ Q ) > ( Q > ( Q v ( ( R & S ) & Q ) ) ) ) ) PRF",
+    "proof": "N1 | ( S v R ) : AS ; N2 | | ( ~ Q ) : AS ; N3 | | | Q : AS ; N4 | | | ( Q v ( ( R & S ) & Q ) ) : ORI1 N3 ; N5 | | ( Q > ( Q v ( ( R & S ) & Q ) ) ) : IMPI N3 N4 ; N6 | ( ( ~ Q ) > ( Q > ( Q v ( ( R & S ) & Q ) ) ) ) : IMPI N2 N5 ; N7 ( ( S v R ) > ( ( ~ Q ) > ( Q > ( Q v ( ( R & S ) & Q ) ) ) ) ) : IMPI N1 N6 ; QED"
+   }
+  ],
+  "fh_all": {
+   "d2_two_boxes": 16742,
+   "d3_as_as": 253582,
+   "d3_written": 444810,
+   "derived_disj": 14577,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 1
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 2,
+   "d3_as_as": 52474,
+   "d3_written": 52474,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 2,
+   "d3_as_as": 52474,
+   "d3_written": 52474
+  },
+  "frozen256_any_targets": 14,
+  "frozen256_pattern_targets": 13,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 24,
+  "n_ok": 52806,
+  "n_parsed": 811127,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 23,
+  "other_pattern_hits": {},
+  "pattern_distinct": 22,
+  "pattern_first": {
+   "targets_depth3_10": 697,
+   "targets_depth3_110": 13062,
+   "targets_depth3_111": 7,
+   "targets_depth3_115": 17,
+   "targets_depth3_12": 23,
+   "targets_depth3_124": 1,
+   "targets_depth3_126": 214,
+   "targets_depth3_140": 1,
+   "targets_depth3_145": 28,
+   "targets_depth3_162": 1,
+   "targets_depth3_164": 1549,
+   "targets_depth3_18": 50,
+   "targets_depth3_212": 11566,
+   "targets_depth3_28": 3312,
+   "targets_depth3_49": 4911,
+   "targets_depth3_51": 1,
+   "targets_depth3_61": 1535,
+   "targets_depth3_68": 8178,
+   "targets_depth3_73": 36,
+   "targets_depth3_80": 2,
+   "targets_depth3_9": 37
+  },
+  "pattern_hits": 52474,
+  "pattern_hits_by_written_len": {
+   "7": 52474
+  },
+  "pattern_targets": {
+   "targets_depth3_10": 23,
+   "targets_depth3_110": 1,
+   "targets_depth3_111": 595,
+   "targets_depth3_115": 712,
+   "targets_depth3_12": 858,
+   "targets_depth3_124": 9491,
+   "targets_depth3_126": 351,
+   "targets_depth3_140": 8263,
+   "targets_depth3_145": 663,
+   "targets_depth3_162": 13080,
+   "targets_depth3_164": 26,
+   "targets_depth3_18": 256,
+   "targets_depth3_212": 1,
+   "targets_depth3_28": 3,
+   "targets_depth3_49": 12,
+   "targets_depth3_51": 11200,
+   "targets_depth3_61": 10,
+   "targets_depth3_68": 1,
+   "targets_depth3_73": 804,
+   "targets_depth3_80": 4831,
+   "targets_depth3_9": 1293
+  },
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "41": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [
+   {
+    "count": 3,
+    "name": "targets_depth3_0",
+    "prompt": "THM SEQ ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) PRF",
+    "proof": "N1 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ( Q v Q ) > R ) : AS ; N4 | | ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) : IMPI N3 N3 ; N5 | | ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) : ORI2 N4 ; N6 | ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) : IMPI N1 N6 ; QED"
+   }
+  ],
+  "fh_all": {
+   "d2_two_boxes": 29701,
+   "d3_as_as": 360226,
+   "d3_written": 391604,
+   "derived_disj": 22895,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 1
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 646,
+   "d3_as_as": 3,
+   "d3_written": 3,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 646,
+   "d3_as_as": 3,
+   "d3_written": 3
+  },
+  "frozen256_any_targets": 1,
+  "frozen256_pattern_targets": 0,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 5,
+  "n_ok": 3912,
+  "n_parsed": 855624,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 2,
+  "other_pattern_hits": {},
+  "pattern_distinct": 1,
+  "pattern_first": {
+   "targets_depth3_0": 1817
+  },
+  "pattern_hits": 3,
+  "pattern_hits_by_written_len": {
+   "7": 3
+  },
+  "pattern_targets": {
+   "targets_depth3_0": 3
+  },
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "42": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [],
+  "fh_all": {
+   "d2_two_boxes": 2599,
+   "d3_as_as": 125170,
+   "d3_written": 155503,
+   "derived_disj": 25135,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 1
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 0,
+   "d3_as_as": 0,
+   "d3_written": 0,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {},
+  "frozen256_any_targets": 0,
+  "frozen256_pattern_targets": 0,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 0,
+  "n_ok": 0,
+  "n_parsed": 848866,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 0,
+  "other_pattern_hits": {},
+  "pattern_distinct": 0,
+  "pattern_first": {},
+  "pattern_hits": 0,
+  "pattern_hits_by_written_len": {},
+  "pattern_targets": {},
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "43": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [
+   {
+    "count": 1,
+    "name": "targets_depth3_102",
+    "prompt": "THM SEQ ( R > ( ( ( ~ ( ~ ( ~ Q ) ) ) > ( R > R ) ) v Q ) ) PRF",
+    "proof": "N1 | R : AS ; N2 | | ( ~ ( ~ ( ~ Q ) ) ) : AS ; N3 | | | R : AS ; N4 | | ( R > R ) : IMPI N3 N3 ; N5 | ( ( ~ ( ~ ( ~ Q ) ) ) > ( R > R ) ) : IMPI N2 N4 ; N6 | ( ( ( ~ ( ~ ( ~ Q ) ) ) > ( R > R ) ) v Q ) : ORI1 N5 ; N7 ( R > ( ( ( ~ ( ~ ( ~ Q ) ) ) > ( R > R ) ) v Q ) ) : IMPI N1 N6 ; QED"
+   }
+  ],
+  "fh_all": {
+   "d2_two_boxes": 2717,
+   "d3_as_as": 24007,
+   "d3_written": 83848,
+   "derived_disj": 74599,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 25
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 717,
+   "d3_as_as": 1,
+   "d3_written": 1,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 717,
+   "d3_as_as": 1,
+   "d3_written": 1
+  },
+  "frozen256_any_targets": 1,
+  "frozen256_pattern_targets": 0,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 2,
+  "n_ok": 718,
+  "n_parsed": 857513,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 2,
+  "other_pattern_hits": {},
+  "pattern_distinct": 1,
+  "pattern_first": {
+   "targets_depth3_102": 6195
+  },
+  "pattern_hits": 1,
+  "pattern_hits_by_written_len": {
+   "7": 1
+  },
+  "pattern_targets": {
+   "targets_depth3_102": 1
+  },
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "44": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [],
+  "fh_all": {
+   "d2_two_boxes": 63890,
+   "d3_as_as": 156651,
+   "d3_written": 160210,
+   "derived_disj": 12776,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 2
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 0,
+   "d3_as_as": 0,
+   "d3_written": 0,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {},
+  "frozen256_any_targets": 1,
+  "frozen256_pattern_targets": 0,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 1,
+  "n_ok": 162,
+  "n_parsed": 890784,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 1,
+  "other_pattern_hits": {},
+  "pattern_distinct": 0,
+  "pattern_first": {},
+  "pattern_hits": 0,
+  "pattern_hits_by_written_len": {},
+  "pattern_targets": {},
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "45": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [
+   {
+    "count": 1,
+    "name": "targets_depth3_5",
+    "prompt": "THM SEQ ( ( S v ( R > P ) ) > ( ( ~ ( ~ R ) ) > ( ( ~ ( ~ ( P & Q ) ) ) > ( P v ( ~ ( ~ R ) ) ) ) ) ) PRF",
+    "proof": "N1 | ( S v ( R > P ) ) : AS ; N2 | | ( ~ ( ~ R ) ) : AS ; N3 | | | ( ~ ( ~ ( P & Q ) ) ) : AS ; N4 | | | ( P v ( ~ ( ~ R ) ) ) : ORI2 N2 ; N5 | | ( ( ~ ( ~ ( P & Q ) ) ) > ( P v ( ~ ( ~ R ) ) ) ) : IMPI N3 N4 ; N6 | ( ( ~ ( ~ R ) ) > ( ( ~ ( ~ ( P & Q ) ) ) > ( P v ( ~ ( ~ R ) ) ) ) ) : IMPI N2 N5 ; N7 ( ( S v ( R > P ) ) > ( ( ~ ( ~ R ) ) > ( ( ~ ( ~ ( P & Q ) ) ) > ( P v ( ~ ( ~ R ) ) ) ) ) ) : IMPI N1 N6 ; QED"
+   },
+   {
+    "count": 6,
+    "name": "targets_depth3_77",
+    "prompt": "THM SEQ ( ( P v ( P v S ) ) > ( Q > ( ( ~ ( ~ ( S v P ) ) ) > ( S v P ) ) ) ) PRF",
+    "proof": "N1 | ( P v ( P v S ) ) : AS ; N2 | | Q : AS ; N3 | | | ( ~ ( ~ ( S v P ) ) ) : AS ; N4 | | | ( S v P ) : DN N3 ; N5 | | ( ( ~ ( ~ ( S v P ) ) ) > ( S v P ) ) : IMPI N3 N4 ; N6 | ( Q > ( ( ~ ( ~ ( S v P ) ) ) > ( S v P ) ) ) : IMPI N2 N5 ; N7 ( ( P v ( P v S ) ) > ( Q > ( ( ~ ( ~ ( S v P ) ) ) > ( S v P ) ) ) ) : IMPI N1 N6 ; QED"
+   },
+   {
+    "count": 3,
+    "name": "targets_depth3_103",
+    "prompt": "THM SEQ ( ( ~ ( Q v Q ) ) > ( ( ~ ( ~ P ) ) > ( ( R & ( R & Q ) ) > P ) ) ) PRF",
+    "proof": "N1 | ( ~ ( Q v Q ) ) : AS ; N2 | | ( ~ ( ~ P ) ) : AS ; N3 | | | ( R & ( R & Q ) ) : AS ; N4 | | | P : DN N2 ; N5 | | ( ( R & ( R & Q ) ) > P ) : IMPI N3 N4 ; N6 | ( ( ~ ( ~ P ) ) > ( ( R & ( R & Q ) ) > P ) ) : IMPI N2 N5 ; N7 ( ( ~ ( Q v Q ) ) > ( ( ~ ( ~ P ) ) > ( ( R & ( R & Q ) ) > P ) ) ) : IMPI N1 N6 ; QED"
+   }
+  ],
+  "fh_all": {
+   "d2_two_boxes": 23999,
+   "d3_as_as": 85457,
+   "d3_written": 117255,
+   "derived_disj": 23627,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 44
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 2435,
+   "d3_as_as": 11,
+   "d3_written": 11,
+   "derived_disj": 6,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 2435,
+   "d3_as_as": 11,
+   "d3_written": 11,
+   "derived_disj": 6
+  },
+  "frozen256_any_targets": 1,
+  "frozen256_pattern_targets": 0,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 6,
+  "n_ok": 2932,
+  "n_parsed": 864088,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 5,
+  "other_pattern_hits": {},
+  "pattern_distinct": 4,
+  "pattern_first": {
+   "targets_depth3_103": 786,
+   "targets_depth3_145": 9375,
+   "targets_depth3_5": 2508,
+   "targets_depth3_77": 4646
+  },
+  "pattern_hits": 11,
+  "pattern_hits_by_written_len": {
+   "7": 11
+  },
+  "pattern_targets": {
+   "targets_depth3_103": 3,
+   "targets_depth3_145": 1,
+   "targets_depth3_5": 1,
+   "targets_depth3_77": 6
+  },
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "46": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [
+   {
+    "count": 1,
+    "name": "targets_depth3_12",
+    "prompt": "THM SEQ ( ( S v R ) > ( ( ~ Q ) > ( Q > ( Q v ( ( R & S ) & Q ) ) ) ) ) PRF",
+    "proof": "N1 | ( S v R ) : AS ; N2 | | ( ~ Q ) : AS ; N3 | | | Q : AS ; N4 | | | ( Q v ( ( R & S ) & Q ) ) : ORI1 N3 ; N5 | | ( Q > ( Q v ( ( R & S ) & Q ) ) ) : IMPI N3 N4 ; N6 | ( ( ~ Q ) > ( Q > ( Q v ( ( R & S ) & Q ) ) ) ) : IMPI N2 N5 ; N7 ( ( S v R ) > ( ( ~ Q ) > ( Q > ( Q v ( ( R & S ) & Q ) ) ) ) ) : IMPI N1 N6 ; QED"
+   }
+  ],
+  "fh_all": {
+   "d2_two_boxes": 17875,
+   "d3_as_as": 233266,
+   "d3_written": 249088,
+   "derived_disj": 18359,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 1899
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 4268,
+   "d3_as_as": 1,
+   "d3_written": 1,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 4268,
+   "d3_as_as": 1,
+   "d3_written": 1
+  },
+  "frozen256_any_targets": 1,
+  "frozen256_pattern_targets": 0,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 4,
+  "n_ok": 6142,
+  "n_parsed": 889888,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 3,
+  "other_pattern_hits": {},
+  "pattern_distinct": 1,
+  "pattern_first": {
+   "targets_depth3_12": 9618
+  },
+  "pattern_hits": 1,
+  "pattern_hits_by_written_len": {
+   "7": 1
+  },
+  "pattern_targets": {
+   "targets_depth3_12": 1
+  },
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "47": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [
+   {
+    "count": 2,
+    "name": "targets_depth3_0",
+    "prompt": "THM SEQ ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) PRF",
+    "proof": "N1 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ( Q v Q ) > R ) : AS ; N4 | | ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) : IMPI N3 N3 ; N5 | | ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) : ORI2 N4 ; N6 | ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) : IMPI N1 N6 ; QED"
+   }
+  ],
+  "fh_all": {
+   "d2_two_boxes": 67526,
+   "d3_as_as": 7559,
+   "d3_written": 9630,
+   "derived_disj": 25144,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 2
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 4666,
+   "d3_as_as": 2,
+   "d3_written": 2,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 4666,
+   "d3_as_as": 2,
+   "d3_written": 2
+  },
+  "frozen256_any_targets": 3,
+  "frozen256_pattern_targets": 0,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 6,
+  "n_ok": 7182,
+  "n_parsed": 893711,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 3,
+  "other_pattern_hits": {},
+  "pattern_distinct": 1,
+  "pattern_first": {
+   "targets_depth3_0": 4955
+  },
+  "pattern_hits": 2,
+  "pattern_hits_by_written_len": {
+   "7": 2
+  },
+  "pattern_targets": {
+   "targets_depth3_0": 2
+  },
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "48": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [
+   {
+    "count": 61,
+    "name": "targets_depth3_159",
+    "prompt": "THM SEQ ( ( S & P ) > ( R > ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) ) ) PRF",
+    "proof": "N1 | ( S & P ) : AS ; N2 | | R : AS ; N3 | | | ( ~ ( ~ Q ) ) : AS ; N4 | | ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) : IMPI N3 N3 ; N5 | | ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) : ANDI N4 N4 ; N6 | ( R > ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) ) : IMPI N2 N5 ; N7 ( ( S & P ) > ( R > ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) ) ) : IMPI N1 N6 ; QED"
+   }
+  ],
+  "fh_all": {
+   "d2_two_boxes": 15082,
+   "d3_as_as": 55696,
+   "d3_written": 61555,
+   "derived_disj": 60217,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 3
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 154,
+   "d3_as_as": 61,
+   "d3_written": 61,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 154,
+   "d3_as_as": 61,
+   "d3_written": 61
+  },
+  "frozen256_any_targets": 2,
+  "frozen256_pattern_targets": 0,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 4,
+  "n_ok": 608,
+  "n_parsed": 877613,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 2,
+  "other_pattern_hits": {},
+  "pattern_distinct": 1,
+  "pattern_first": {
+   "targets_depth3_159": 526
+  },
+  "pattern_hits": 61,
+  "pattern_hits_by_written_len": {
+   "7": 61
+  },
+  "pattern_targets": {
+   "targets_depth3_159": 61
+  },
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "49": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [
+   {
+    "count": 3,
+    "name": "targets_depth3_159",
+    "prompt": "THM SEQ ( ( S & P ) > ( R > ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) ) ) PRF",
+    "proof": "N1 | ( S & P ) : AS ; N2 | | R : AS ; N3 | | | ( ~ ( ~ Q ) ) : AS ; N4 | | ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) : IMPI N3 N3 ; N5 | | ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) : ANDI N4 N4 ; N6 | ( R > ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) ) : IMPI N2 N5 ; N7 ( ( S & P ) > ( R > ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) ) ) : IMPI N1 N6 ; QED"
+   }
+  ],
+  "fh_all": {
+   "d2_two_boxes": 39203,
+   "d3_as_as": 49030,
+   "d3_written": 84699,
+   "derived_disj": 13848,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 39,
+   "d3_as_as": 3,
+   "d3_written": 3,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 39,
+   "d3_as_as": 3,
+   "d3_written": 3
+  },
+  "frozen256_any_targets": 1,
+  "frozen256_pattern_targets": 0,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 3,
+  "n_ok": 44,
+  "n_parsed": 888079,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 2,
+  "other_pattern_hits": {},
+  "pattern_distinct": 1,
+  "pattern_first": {
+   "targets_depth3_159": 687
+  },
+  "pattern_hits": 3,
+  "pattern_hits_by_written_len": {
+   "7": 3
+  },
+  "pattern_targets": {
+   "targets_depth3_159": 3
+  },
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "50": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [],
+  "fh_all": {
+   "d2_two_boxes": 16837,
+   "d3_as_as": 67705,
+   "d3_written": 67840,
+   "derived_disj": 45434,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 2
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 68,
+   "d3_as_as": 0,
+   "d3_written": 0,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 68
+  },
+  "frozen256_any_targets": 1,
+  "frozen256_pattern_targets": 0,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 2,
+  "n_ok": 133,
+  "n_parsed": 872367,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 1,
+  "other_pattern_hits": {},
+  "pattern_distinct": 0,
+  "pattern_first": {},
+  "pattern_hits": 0,
+  "pattern_hits_by_written_len": {},
+  "pattern_targets": {},
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "51": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [
+   {
+    "count": 3,
+    "name": "targets_depth3_159",
+    "prompt": "THM SEQ ( ( S & P ) > ( R > ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) ) ) PRF",
+    "proof": "N1 | ( S & P ) : AS ; N2 | | R : AS ; N3 | | | ( ~ ( ~ Q ) ) : AS ; N4 | | ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) : IMPI N3 N3 ; N5 | | ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) : ANDI N4 N4 ; N6 | ( R > ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) ) : IMPI N2 N5 ; N7 ( ( S & P ) > ( R > ( ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > ( ~ ( ~ Q ) ) ) ) ) ) : IMPI N1 N6 ; QED"
+   }
+  ],
+  "fh_all": {
+   "d2_two_boxes": 10791,
+   "d3_as_as": 191451,
+   "d3_written": 195072,
+   "derived_disj": 36464,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 42
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 4209,
+   "d3_as_as": 3,
+   "d3_written": 3,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 4209,
+   "d3_as_as": 3,
+   "d3_written": 3
+  },
+  "frozen256_any_targets": 1,
+  "frozen256_pattern_targets": 0,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 3,
+  "n_ok": 6731,
+  "n_parsed": 874958,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 1,
+  "other_pattern_hits": {},
+  "pattern_distinct": 1,
+  "pattern_first": {
+   "targets_depth3_159": 7763
+  },
+  "pattern_hits": 3,
+  "pattern_hits_by_written_len": {
+   "7": 3
+  },
+  "pattern_targets": {
+   "targets_depth3_159": 3
+  },
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "52": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [
+   {
+    "count": 8,
+    "name": "targets_depth3_9",
+    "prompt": "THM SEQ ( ( ~ ( ~ Q ) ) > ( ( Q v P ) > ( ( ~ ( ~ ( ~ P ) ) ) > ( ~ P ) ) ) ) PRF",
+    "proof": "N1 | ( ~ ( ~ Q ) ) : AS ; N2 | | ( Q v P ) : AS ; N3 | | | ( ~ ( ~ ( ~ P ) ) ) : AS ; N4 | | | ( ~ P ) : DN N3 ; N5 | | ( ( ~ ( ~ ( ~ P ) ) ) > ( ~ P ) ) : IMPI N3 N4 ; N6 | ( ( Q v P ) > ( ( ~ ( ~ ( ~ P ) ) ) > ( ~ P ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ Q ) ) > ( ( Q v P ) > ( ( ~ ( ~ ( ~ P ) ) ) > ( ~ P ) ) ) ) : IMPI N1 N6 ; QED"
+   },
+   {
+    "count": 7,
+    "name": "targets_depth3_12",
+    "prompt": "THM SEQ ( ( S v R ) > ( ( ~ Q ) > ( Q > ( Q v ( ( R & S ) & Q ) ) ) ) ) PRF",
+    "proof": "N1 | ( S v R ) : AS ; N2 | | ( ~ Q ) : AS ; N3 | | | Q : AS ; N4 | | | ( Q v ( ( R & S ) & Q ) ) : ORI1 N3 ; N5 | | ( Q > ( Q v ( ( R & S ) & Q ) ) ) : IMPI N3 N4 ; N6 | ( ( ~ Q ) > ( Q > ( Q v ( ( R & S ) & Q ) ) ) ) : IMPI N2 N5 ; N7 ( ( S v R ) > ( ( ~ Q ) > ( Q > ( Q v ( ( R & S ) & Q ) ) ) ) ) : IMPI N1 N6 ; QED"
+   },
+   {
+    "count": 1,
+    "name": "targets_depth3_16",
+    "prompt": "THM SEQ ( ( S > ( ~ S ) ) > ( ( ~ ( ~ ( Q v R ) ) ) > ( ( R > ( R & Q ) ) > ( Q v R ) ) ) ) PRF",
+    "proof": "N1 | ( S > ( ~ S ) ) : AS ; N2 | | ( ~ ( ~ ( Q v R ) ) ) : AS ; N3 | | | ( R > ( R & Q ) ) : AS ; N4 | | | ( Q v R ) : DN N2 ; N5 | | ( ( R > ( R & Q ) ) > ( Q v R ) ) : IMPI N3 N4 ; N6 | ( ( ~ ( ~ ( Q v R ) ) ) > ( ( R > ( R & Q ) ) > ( Q v R ) ) ) : IMPI N2 N5 ; N7 ( ( S > ( ~ S ) ) > ( ( ~ ( ~ ( Q v R ) ) ) > ( ( R > ( R & Q ) ) > ( Q v R ) ) ) ) : IMPI N1 N6 ; QED"
+   }
+  ],
+  "fh_all": {
+   "d2_two_boxes": 26434,
+   "d3_as_as": 23948,
+   "d3_written": 109059,
+   "derived_disj": 44583,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 17
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 4343,
+   "d3_as_as": 5879,
+   "d3_written": 5879,
+   "derived_disj": 1,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 4343,
+   "d3_as_as": 5879,
+   "d3_written": 5879,
+   "derived_disj": 1
+  },
+  "frozen256_any_targets": 4,
+  "frozen256_pattern_targets": 4,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 19,
+  "n_ok": 10531,
+  "n_parsed": 868015,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 15,
+  "other_pattern_hits": {},
+  "pattern_distinct": 17,
+  "pattern_first": {
+   "targets_depth3_103": 260,
+   "targets_depth3_115": 16758,
+   "targets_depth3_12": 1825,
+   "targets_depth3_140": 40,
+   "targets_depth3_144": 265,
+   "targets_depth3_145": 1214,
+   "targets_depth3_159": 19,
+   "targets_depth3_16": 7963,
+   "targets_depth3_52": 1940,
+   "targets_depth3_61": 4428,
+   "targets_depth3_68": 11987,
+   "targets_depth3_69": 939,
+   "targets_depth3_73": 15,
+   "targets_depth3_9": 535,
+   "targets_depth3_91": 3
+  },
+  "pattern_hits": 5879,
+  "pattern_hits_by_written_len": {
+   "7": 5879
+  },
+  "pattern_targets": {
+   "targets_depth3_103": 137,
+   "targets_depth3_115": 1,
+   "targets_depth3_12": 7,
+   "targets_depth3_140": 572,
+   "targets_depth3_144": 126,
+   "targets_depth3_145": 18,
+   "targets_depth3_159": 1586,
+   "targets_depth3_16": 1,
+   "targets_depth3_52": 1,
+   "targets_depth3_61": 3,
+   "targets_depth3_68": 1,
+   "targets_depth3_69": 1,
+   "targets_depth3_73": 88,
+   "targets_depth3_9": 8,
+   "targets_depth3_91": 3329
+  },
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ },
+ "53": {
+  "dup_names": 0,
+  "dup_proofs_after_my_normalise": 0,
+  "examples": [
+   {
+    "count": 3,
+    "name": "targets_depth3_102",
+    "prompt": "THM SEQ ( R > ( ( ( ~ ( ~ ( ~ Q ) ) ) > ( R > R ) ) v Q ) ) PRF",
+    "proof": "N1 | R : AS ; N2 | | ( ~ ( ~ ( ~ Q ) ) ) : AS ; N3 | | | R : AS ; N4 | | ( R > R ) : IMPI N3 N3 ; N5 | ( ( ~ ( ~ ( ~ Q ) ) ) > ( R > R ) ) : IMPI N2 N4 ; N6 | ( ( ( ~ ( ~ ( ~ Q ) ) ) > ( R > R ) ) v Q ) : ORI1 N5 ; N7 ( R > ( ( ( ~ ( ~ ( ~ Q ) ) ) > ( R > R ) ) v Q ) ) : IMPI N1 N6 ; QED"
+   }
+  ],
+  "fh_all": {
+   "d2_two_boxes": 14498,
+   "d3_as_as": 817,
+   "d3_written": 13291,
+   "derived_disj": 27749,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_file": {
+   "d2_two_boxes": 156,
+   "d3_as_as": 3,
+   "d3_written": 3,
+   "derived_disj": 0,
+   "neg_goal_hyp": 0,
+   "negi_neggoal": 0,
+   "negi_neggoal_nodn": 0,
+   "ore_on_derived": 0
+  },
+  "fh_ok_mine": {
+   "d2_two_boxes": 156,
+   "d3_as_as": 3,
+   "d3_written": 3
+  },
+  "frozen256_any_targets": 1,
+  "frozen256_pattern_targets": 0,
+  "k_expected": 20000,
+  "label_diff": 0,
+  "log_done": true,
+  "log_shard_lines": [
+   "shard 0/1: 45 theorems, 0 already done; k=20000 T=0.8 batch=2000"
+  ],
+  "n_distinct_ok": 2,
+  "n_ok": 159,
+  "n_parsed": 887639,
+  "n_records": 45,
+  "n_tried": 900000,
+  "n_tried_set": [
+   20000
+  ],
+  "names_match_pool": true,
+  "ok_targets": 2,
+  "other_pattern_hits": {},
+  "pattern_distinct": 1,
+  "pattern_first": {
+   "targets_depth3_102": 11916
+  },
+  "pattern_hits": 3,
+  "pattern_hits_by_written_len": {
+   "7": 3
+  },
+  "pattern_targets": {
+   "targets_depth3_102": 3
+  },
+  "prompts_match_pool": true,
+  "sum_count_ne_n_ok": 0,
+  "verify_fail": 0
+ }
+}

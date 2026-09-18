@@ -1,0 +1,167 @@
+== 1. E1 / E2: draws with >= 1 verified pattern sample (reviewer predicates, every stored proof re-verified)
+ samples per draw: red {600000} d3p1 {600000} d3p2 {1400000} dos6 {600000} deepred {1040000} deepd3 {900000}
+ reductio  main (300 req, 600k):        12/24 = 0.500 [0.291, 0.709]
+ depth-3   main p1+p2 (1000, 2M):       15/24 = 0.625 [0.406, 0.812]
+ depth-3   part 1 only (300, 600k):     15/24 = 0.625 [0.406, 0.812]
+ derived-ORE strict (300, 600k):        0/24 = 0.000 [0.000, 0.142]
+ depth-3   required@8 stratum only (142 targets, 284k): 4/24 = 0.167 [0.047, 0.374]  hits [0, 0, 0, 0, 0, 0, 6, 0, 64, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0]
+ depth-3   share of all main-pass depth-3 hits on required@8 targets: 77 / 11320
+ reductio  deep (52, 1.04M):            17/24 = 0.708 [0.489, 0.874]
+ depth-3   deep (45, 0.9M):             18/24 = 0.750 [0.533, 0.902]
+ reductio  either pass:                 17/24 = 0.708 [0.489, 0.874]  zero in both: ['30', '33', '36', '43', '46', '50', '52']
+ depth-3   either pass:                 19/24 = 0.792 [0.578, 0.929]  zero in both: ['32', '39', '42', '44', '50']
+ Fisher exact depth-3 vs reductio, main: 0.561214940972018  either pass: 0.7399674996131713
+ draws with main-pass rate >= 1e-06: reductio 12  depth-3 p1 15 | deep-pass rate >= 1e-06: reductio 13  depth-3 18
+ draws with main-pass rate >= 1e-05: reductio 4  depth-3 p1 9 | deep-pass rate >= 1e-05: reductio 7  depth-3 11
+ draws with main-pass rate >= 0.0001: reductio 2  depth-3 p1 6 | deep-pass rate >= 0.0001: reductio 2  depth-3 7
+
+== 2. per-draw table (seed: main hits / targets / frozen@256 | deep hits / targets)
+  reductio
+   s30:     0 /  0 /  0 |      0 /  0   top-target share main 0/0
+   s31:     1 /  1 /  0 |      1 /  1   top-target share main 1/1
+   s32:     0 /  0 /  0 |     13 /  1   top-target share main 0/0
+   s33:     0 /  0 /  0 |      0 /  0   top-target share main 0/0
+   s34:     2 /  1 /  0 |      1 /  1   top-target share main 2/2
+   s35:     1 /  1 /  0 |      8 /  4   top-target share main 1/1
+   s36:     0 /  0 /  0 |      0 /  0   top-target share main 0/0
+   s37:     3 /  2 /  0 |     28 /  6   top-target share main 2/3
+   s38:     1 /  1 /  0 |      6 /  4   top-target share main 1/1
+   s39:     7 /  4 /  1 |     80 / 11   top-target share main 2/7
+   s40:     6 /  1 /  1 |     40 /  2   top-target share main 6/6
+   s41:     0 /  0 /  0 |      6 /  4   top-target share main 0/0
+   s42:     1 /  1 /  0 |      9 /  2   top-target share main 1/1
+   s43:     0 /  0 /  0 |      0 /  0   top-target share main 0/0
+   s44:     2 /  2 /  0 |     10 /  3   top-target share main 1/2
+   s45:     0 /  0 /  0 |      1 /  1   top-target share main 0/0
+   s46:     0 /  0 /  0 |      0 /  0   top-target share main 0/0
+   s47:   421 / 23 / 13 |   4451 / 30   top-target share main 90/421
+   s48:     0 /  0 /  0 |      1 /  1   top-target share main 0/0
+   s49:   453 /  7 /  5 |   4616 / 13   top-target share main 387/453
+   s50:     0 /  0 /  0 |      0 /  0   top-target share main 0/0
+   s51:     1 /  1 /  0 |     19 /  3   top-target share main 1/1
+   s52:     0 /  0 /  0 |      0 /  0   top-target share main 0/0
+   s53:     0 /  0 /  0 |      8 /  4   top-target share main 0/0
+  depth-3 (p1; p2 in brackets)
+   s30:     1 /  1 /  0 [p2 0/0/0] |      0 /  0   top-target share main 1/1
+   s31:     1 /  1 /  0 [p2 0/0/0] |     13 /  3   top-target share main 1/1
+   s32:     0 /  0 /  0 [p2 0/0/0] |      0 /  0   top-target share main 0/0
+   s33:    56 /  3 /  2 [p2 0/0/0] |    516 /  3   top-target share main 50/56
+   s34:   353 /  6 /  3 [p2 0/0/0] |   3615 /  4   top-target share main 343/353
+   s35:   156 /  2 /  1 [p2 0/0/0] |   1733 /  1   top-target share main 155/156
+   s36:  2490 / 14 / 10 [p2 0/0/0] |  13973 /  8   top-target share main 1346/2490
+   s37:     2 /  1 /  0 [p2 0/0/0] |     24 /  1   top-target share main 2/2
+   s38:   109 / 12 /  6 [p2 19/1/1] |    726 / 11   top-target share main 47/109
+   s39:     0 /  0 /  0 [p2 0/0/0] |      0 /  0   top-target share main 0/0
+   s40:  5446 / 33 / 25 [p2 55/3/2] |  52474 / 21   top-target share main 1273/5446
+   s41:     0 /  0 /  0 [p2 0/0/0] |      3 /  1   top-target share main 0/0
+   s42:     0 /  0 /  0 [p2 0/0/0] |      0 /  0   top-target share main 0/0
+   s43:     0 /  0 /  0 [p2 0/0/0] |      1 /  1   top-target share main 0/0
+   s44:     0 /  0 /  0 [p2 0/0/0] |      0 /  0   top-target share main 0/0
+   s45:    14 /  4 /  1 [p2 2/1/0] |     11 /  4   top-target share main 11/14
+   s46:     0 /  0 /  0 [p2 0/0/0] |      1 /  1   top-target share main 0/0
+   s47:     2 /  1 /  0 [p2 0/0/0] |      2 /  1   top-target share main 2/2
+   s48:     7 /  1 /  0 [p2 0/0/0] |     61 /  1   top-target share main 7/7
+   s49:     0 /  0 /  0 [p2 0/0/0] |      3 /  1   top-target share main 0/0
+   s50:     0 /  0 /  0 [p2 0/0/0] |      0 /  0   top-target share main 0/0
+   s51:     2 /  2 /  0 [p2 0/0/0] |      3 /  1   top-target share main 1/2
+   s52:  2566 / 27 / 13 [p2 38/3/2] |   5879 / 15   top-target share main 1215/2566
+   s53:     1 /  1 /  1 [p2 0/0/0] |      3 /  1   top-target share main 1/1
+
+== 3. E3: rates and schemata
+ reductio main: generalisers 12, rate min 1.67e-06 max 7.55e-04, span 2.66 decades; at 1-3 hits: 8
+ depth-3 p1+p2: generalisers 15, rate min 5.00e-07 max 2.75e-03, span 3.74 decades; at 1-3 hits: 6
+ depth-3 p1: generalisers 15, rate min 1.67e-06 max 9.08e-03, span 3.74 decades; at 1-3 hits: 6
+ reductio deep: generalisers 17, rate min 9.62e-07 max 4.44e-03, span 3.66 decades; at 1-3 hits: 4
+ depth-3 deep: generalisers 18, rate min 1.11e-06 max 5.83e-02, span 4.72 decades; at 1-3 hits: 7
+ reductio main-pass hits by (schema, min lines): {('nand_neg', 7): 416, ('negimp_to_pos', 7): 483}  draws per schema: {'nand_neg': 11, 'negimp_to_pos': 3}
+ reductio deep-pass hits by (schema, min lines): {('nand_neg', 7): 4361, ('negimp_to_pos', 7): 4937}
+ reductio main: pattern hits by written length: {'7': 899}
+ reductio main: n_ok == pattern hits in every draw (nothing else is solved): True
+ any verified proof on an 8+-line reductio schema target (any draw): 0
+
+== 4. E5 depth-3 full-pool effect
+ draws with 0 on part 1 and >= 1 on part 2: 0 ; share of hits in part 1: 11206 / 11320 = 0.9899
+ part-2 hits per draw: {'38': 19, '40': 55, '45': 2, '52': 38}
+ distinct depth-3 targets hit in main pass: 76 ; of which required@8: 4 ; min_lines_ub of hit targets: {7: 76} ; gen n_lines: {7: 71, 10: 4, 8: 1}
+ top targets (hits, draws, required8): [('targets_depth3_126', 1377, 2, False), ('targets_depth3_162', 1273, 1, False), ('targets_depth3_153', 1240, 4, False), ('targets_depth3_51', 1129, 1, False), ('targets_depth3_99', 974, 1, False), ('targets_depth3_124', 945, 1, False)]
+ main-pass hit targets inside the deep-45 pool: 30 of 76 ; hits inside: 7723 of 11320
+ deep-45 pool: required@8 3 of 45
+
+== 5. E4 / E7 predictors (Spearman rho, 10,000-permutation p)
+ reductio: final val (4-decimal log value) distinct values 7, range 0.0822-0.0829; breakdown mean range 0.0920-0.1141
+   val vs indicator rho, p = 0.025, 0.9367 | breakdown mean vs indicator -0.337, 0.1129 | vs either-pass indicator -0.364, 0.0884
+   primary first-half (negi_neggoal_nodn) rate vs indicator 0.144, 0.5156 | vs either-pass indicator -0.099, 0.6685
+   among generalisers: first-half rate vs log rate rho, p = 0.487, 0.1059
+   main-pass first-half rate vs DEEP-pass indicator (independent samples) -0.099, 0.6685 | vs deep-pass hits 0.029, 0.8979
+   first-half rate, generalisers vs not (main): ['1.0e-02', '1.0e-02', '1.2e-02', '1.5e-02', '1.8e-02', '1.8e-03', '2.2e-02', '2.5e-03', '2.9e-03', '4.0e-03', '5.0e-03', '8.6e-03'] vs ['1.0e-02', '1.4e-02', '1.7e-02', '2.0e-03', '2.7e-03', '3.4e-03', '4.1e-03', '4.2e-03', '6.2e-03', '6.9e-03', '7.9e-03', '9.0e-03']
+   E7 first-half / verified rate among generalisers: min 16.2, draws below 10x: 0 of 12
+   strongest per-rule / per-class loss correlations with the indicator (no multiplicity correction, 38 tests): [('by_rule', 'AS', -0.45), ('by_rule_name_pos', 'ORI2', 0.43), ('by_rule_name_pos', 'ORI1', -0.39), ('by_class', 'formula', -0.39)]
+ depth-3: final val (4-decimal log value) distinct values 8, range 0.0822-0.0831; breakdown mean range 0.0618-0.0763
+   val vs indicator rho, p = -0.096, 0.6828 | breakdown mean vs indicator -0.242, 0.2613 | vs either-pass indicator -0.422, 0.0440
+   primary first-half (d3_written) rate vs indicator 0.044, 0.8694 | vs either-pass indicator 0.274, 0.2077
+   among generalisers: first-half rate vs log rate rho, p = 0.525, 0.0425
+   main-pass first-half rate vs DEEP-pass indicator (independent samples) 0.403, 0.0572 | vs deep-pass hits 0.412, 0.0459
+   first-half rate, generalisers vs not (main): ['1.0e-02', '1.1e-02', '1.3e-02', '2.3e-02', '2.6e-02', '3.4e-04', '3.7e-02', '4.1e-03', '4.3e-02', '5.2e-03', '5.8e-02', '6.9e-02', '7.0e-02', '8.0e-03', '9.2e-03'] vs ['1.1e-02', '2.2e-02', '2.9e-02', '3.4e-02', '3.8e-02', '4.1e-03', '6.2e-05', '6.8e-02', '9.0e-03']
+   E7 first-half / verified rate among generalisers: min 20.0, draws below 10x: 0 of 15
+   strongest per-rule / per-class loss correlations with the indicator (no multiplicity correction, 38 tests): [('by_rule', 'NEGI', -0.74), ('by_rule', 'IMPE', -0.49), ('by_rule_name_pos', 'NEGI', -0.43), ('by_rule_name_pos', 'IMPI', -0.4)]
+ depth-3: d3_written rate on part 2 vs part-1 indicator 0.019, 0.9551
+ depth-3 zero-hit draws d3_written rate: [('32', '6.2e-05'), ('39', '4.1e-03'), ('41', '6.8e-02'), ('42', '2.9e-02'), ('43', '3.4e-02'), ('44', '2.2e-02'), ('46', '3.8e-02'), ('49', '9.0e-03'), ('50', '1.1e-02')]  below 1e-4: 1 of 9
+ fh_ok counts: file vs reviewer on verified proofs, any difference: 0
+ derived-ORE: ore_on_derived / derived_disj first-half rate per draw (all samples): ['6.8e-04', '2.1e-03', '4.2e-04', '1.6e-04', '2.9e-04', '1.6e-03', '2.1e-04', '9.1e-04'] ... max 0.00383
+ derived-ORE: verified samples with ore_on_derived: 4
+
+== 6. derived-ORE pool: what is solved
+ ok targets per draw (of 300): [113, 145, 146, 108, 130, 144, 130, 136, 139, 126, 157, 156, 125, 159, 128, 170, 159, 114, 147, 140, 140, 114, 118, 162]
+
+== 7. deep-pass addendum DA1-DA5
+ DA1 reductio main-zero draws with a deep hit: 5 of 12 ['32', '41', '45', '48', '53']
+ DA2 >= 2 main hits confirmed: 7 of 7 ; exactly 1 confirmed: 5 of 5
+ DA3 depth-3 main-zero draws with a deep hit: 4 of 9 ['41', '43', '46', '49'] ; main >= 1 but deep 0: ['30']
+ DA4 reductio (seed, main hits on deep pool, deep hits, deep/main rate ratio): [('47', 421, 4451, 1.06), ('49', 453, 4616, 1.02)]
+ DA4 depth-3 (seed, main hits on deep pool, deep hits, deep/main rate ratio): [('33', 56, 516, 0.92), ('34', 345, 3615, 1.05), ('35', 155, 1733, 1.12), ('36', 1402, 13973, 1.0), ('38', 88, 726, 0.83), ('40', 5114, 52474, 1.03), ('52', 547, 5879, 1.07)]
+ DA5 reductio zero in both passes: 7 of 24 (< 8 triggers the "sampling budget" reading)
+ expected main-pass hits on the 52 targets given the deep rate (draws with main 0 on reductio): [('32', 1.3), ('41', 0.6), ('45', 0.1), ('48', 0.1), ('53', 0.8)]
+
+== 8. external stratum (ignition study, 300-target samples, recounted)
+ depth-3 f0_a1: 5/10 = 0.500 [0.187, 0.813]  n_tried [600000]  hits [152, 370, 0, 0, 1, 0, 3, 0, 0, 1112]
+ depth-3 other sets: 5/6 = 0.833 [0.359, 0.996]  n_tried [600000]  hits [301, 3, 6, 1128, 0, 1]
+ reductio: 4/11 = 0.364 [0.109, 0.692]  n_tried [600000, 3000000]  hits [92, 0, 0, 0, 12, 0, 0, 0, 137, 0, 5]
+== 9. like-for-like: required targets only
+ required@8 depth-3 targets by unrestricted min length: {8: 136, 7: 6}
+ depth-3 hits on required@8 targets, (7-line, 8-line) per draw: {'36': (6, 0), '38': (64, 0), '40': (4, 0), '52': (3, 0)}
+ depth-3 required-only: 4/24 = 0.167 [0.047, 0.374]  reductio (all required): 12/24 = 0.500 [0.291, 0.709]  Fisher p = 0.0305
+ per-sample rate on required targets, pooled over 24 draws: depth-3 77 / 6816000  reductio 7-line 899 / 2496000  reductio whole pool 899 / 14400000
+ depth-3 hit targets: is a depth<=2 proof of the same length available?  (min_lines_ub, md2_min_lines_ub) of the 76 hit targets: {(7, 8): 103, (7, None): 6, (7, 7): 8}
+
+== 10. post-hoc predictor robustness (depth-3 by_rule NEGI loss; reductio by_rule AS loss)
+ depth-3 NEGI: vs main indicator -0.740, 0.00010 | vs deep-pass indicator -0.417, 0.04780 | vs either -0.615, 0.00170 | vs deep hits -0.469, 0.02380
+   loss range 0.0001 0.0009
+ reductio AS: vs main indicator -0.445, 0.03390 | vs deep-pass indicator -0.377, 0.07719 | vs either -0.377, 0.07719 | vs deep hits -0.352, 0.09209
+   loss range 0.1911 0.2498
+ reductio negi_neggoal: range 2.0e-03-2.3e-02; vs main indicator 0.144, 0.5180 | vs deep hits 0.054, 0.8052
+ reductio neg_goal_hyp: range 7.9e-02-2.0e-01; vs main indicator 0.217, 0.3208 | vs deep hits 0.160, 0.4511
+ reductio negi_neggoal_nodn: range 1.8e-03-2.2e-02; vs main indicator 0.144, 0.5156 | vs deep hits 0.029, 0.8979
+ depth-3 d3_as_as (part 1): range 2.3e-05-1.5e-01; vs main indicator -0.019, 0.9507 | vs deep hits 0.326, 0.1211
+ depth-3 d2_two_boxes (part 1): range 3.3e-03-6.6e-02; vs main indicator -0.143, 0.5197 | vs deep hits -0.248, 0.2371
+ depth-3 d3_written (part 1): range 4.7e-05-1.9e-01; vs main indicator 0.031, 0.9103 | vs deep hits 0.416, 0.0444
+ reductio deep pass: negi_neggoal_nodn rate on the 52 seven-line targets vs deep hits 0.048, 0.8318 | vs MAIN indicator 0.181, 0.4153
+ depth-3 deep pass: d3_written rate on the 45 targets vs deep hits 0.340, 0.1039 | vs MAIN indicator -0.056, 0.8175
+
+== 11. derived-ORE: required targets
+  {'opt_loose_ok': 4, 'opt_n_ok': 1609309, 'opt_ore_on_derived_all': 1673, 'opt_solved': 3306, 'opt_targets': 6600, 'req_loose_ok': 0, 'req_n_ok': 0, 'req_ore_on_derived_all': 11240, 'req_solved': 0, 'req_targets': 600}
+
+== 12. cross-set: do same-seed draws co-generalise? (seed is the only shared factor)
+ reductio vs depth-3 main indicators, Fisher p: 1.0
+== 13. depth-3 pool by (unrestricted min, depth<=2 min at bound 8): targets, depth-3 hits, other verified samples, draws with a depth-3 hit
+  min 7, depth<=2 min 7: targets  402  depth-3 hits   1132  other verified  2496326  draws with depth-3 hit 7
+  min 7, depth<=2 min 8: targets  167  depth-3 hits  10111  other verified        0  draws with depth-3 hit 12
+  min 7, depth<=2 min None: targets    6  depth-3 hits     77  other verified        0  draws with depth-3 hit 4
+  min 8, depth<=2 min 8: targets  104  depth-3 hits      0  other verified       73  draws with depth-3 hit 0
+  min 8, depth<=2 min None: targets  136  depth-3 hits      0  other verified        0  draws with depth-3 hit 0
+  min None, depth<=2 min None: targets  185  depth-3 hits      0  other verified        0  draws with depth-3 hit 0
+ depth-3 hits by written length: {'7': 11320}
+== 14. like-for-like at the 7-line horizon: targets whose 7-line proof needs the pattern
+ depth-3: 173 such targets (159 in part 1); draws with a hit on them: 12/24 = 0.500 [0.291, 0.709] ; pooled rate 10188 / 8304000 = 1.23e-03
+ reductio: 52 such targets; draws with a hit: 12/24 = 0.500 [0.291, 0.709] ; pooled rate 899 / 2496000 = 3.60e-04
+ per-draw rate on 7-line-pattern-needed targets, sorted: depth-3 ['1.0e-03', '1.3e-02', '1.6e-04', '2.9e-06', '2.9e-06', '2.9e-06', '2.9e-06', '3.7e-04', '4.5e-04', '4.6e-05', '7.0e-03', '7.2e-03'] | reductio ['1.9e-05', '1.9e-05', '2.9e-05', '4.0e-03', '4.4e-03', '5.8e-05', '6.7e-05', '9.6e-06', '9.6e-06', '9.6e-06', '9.6e-06', '9.6e-06']
+ median over generalisers: depth-3 0.0003670520231213873  reductio 1.923076923076923e-05
