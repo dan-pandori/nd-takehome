@@ -23,3 +23,8 @@ Phase-1 method.
 Deliverables: `run4.md` (≤ 400 words + figures), `numbers.md` and `log.md` sections, bucket
 upload to `hf://buckets/dan-pandori/nd-rl/run4-grpo/`, `STATUS.md` ending `RUN4 DONE <UTC>`, then
 `touch ~/runs/run4-grpo/executor.done`. Pods deleted first.
+
+
+## Note 2026-09-18 02:20 UTC (from Dan, relayed)
+
+The round-2 executor on the other host completed its own version of this run before it saw the instruction to stop (results on branch dan_novelty: run4.md, numbers.md, review_round2-run4.md). Your run therefore serves as an **independent replication** by a different executor with different code. Finish it as planned; in your write-up add a short section comparing your numbers with theirs, claim by claim, and say where they agree and disagree. Do not copy their code or numbers into yours.
