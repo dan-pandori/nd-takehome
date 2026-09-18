@@ -1,0 +1,424 @@
+[r3_1/ei_depth3_s25_mix r1] targets (this round, pass@32) SOLVED 67/600 = 0.112 [0.089,0.139]
+  len 7: 67/256 = 0.262 [0.212,0.319]
+  len 8: 0/344 = 0.000 [0.000,0.011]
+  written hist {7: 928}
+  pruned hist {5: 8, 6: 839, 7: 81}
+  frontier written 7 pruned 7
+  reasons [('rule check failed: IMPE', 2401), ('rule check failed: ANDI', 2062), ('rule check failed: DN', 1715), ('final formula is not the conclusion', 1420), ('bad box cite', 1363), ('rule check failed: ORI2', 1331)]
+[r3_1/ei_depth3_s25_mix r1] targets (cumulative 32 attempts) SOLVED 67/600 = 0.112 [0.089,0.139]
+  len 7: 67/256 = 0.262 [0.212,0.319]
+  len 8: 0/344 = 0.000 [0.000,0.011]
+  written hist {7: 928}
+  pruned hist {5: 8, 6: 839, 7: 81}
+  frontier written 7 pruned 7
+  reasons []
+[r3_1/ei_depth3_s25_mix r1] transfer (this round, pass@32) SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: ANDI', 485), ('rule check failed: ORI1', 369), ('final formula is not the conclusion', 354), ('rule check failed: IMPI', 328), ('rule check failed: IMPE', 279), ('bad box cite', 235)]
+[r3_1/ei_depth3_s25_mix r1] transfer (cumulative 32 attempts) SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons []
+[r3_1/ei_depth3_s25_mix r1] transfer greedy SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: ORI1', 15), ('rule check failed: ANDI', 15), ('rule check failed: IMPI', 12), ('final formula is not the conclusion', 11), ('rule check failed: DN', 9), ('bad box cite', 9)]
+[r3_1/ei_depth3_s25_mix r1] heldout greedy SOLVED 4467/5000 = 0.893 [0.885,0.902]
+  len 2: 997/1000 = 0.997 [0.991,0.999]
+  len 3: 993/1000 = 0.993 [0.986,0.997]
+  len 4: 970/1000 = 0.970 [0.957,0.979]
+  len 5: 960/1000 = 0.960 [0.946,0.970]
+  len 6: 547/1000 = 0.547 [0.516,0.578]
+  written hist {2: 1025, 3: 981, 4: 957, 5: 1005, 6: 498, 7: 1}
+  pruned hist {2: 1025, 3: 981, 4: 961, 5: 1003, 6: 496, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('bad box cite', 92), ('rule check failed: DN', 83), ('rule check failed: ANDI', 48), ('rule check failed: IMPE', 47), ('rule check failed: IMPI', 45), ('rule check failed: ANDE2', 41)]
+python3 train.py --data artifacts/r3_1/ei_depth3_s25_mix/mix_1.jsonl --init ckpts/r3_1/stage1_depth3_f0_a1_s25.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/r3_1/ei_depth3_s25_mix_r1.pt --seed 25001 --log_every 200
+params 3210240 mode abs shift True
+train records 20948 max len 422
+step 200 loss 0.0608 lr 2.53e-04 29s
+step 400 loss 0.0590 lr 1.09e-04 52s
+step 600 loss 0.0602 lr 3.00e-05 73s
+saved ckpts/r3_1/ei_depth3_s25_mix_r1.pt
+=== round 1 done in 250s; new proofs 928; cum targets solved 67
+[r3_1/ei_depth3_s25_mix r2] targets (this round, pass@32) SOLVED 88/600 = 0.147 [0.121,0.177]
+  len 7: 87/256 = 0.340 [0.285,0.400]
+  len 8: 1/344 = 0.003 [0.001,0.016]
+  written hist {7: 1718, 8: 21}
+  pruned hist {5: 13, 6: 1568, 7: 158}
+  frontier written 8 pruned 7
+  reasons [('bad box cite', 2553), ('rule check failed: IMPI', 2542), ('rule check failed: ANDI', 1833), ('final formula is not the conclusion', 1373), ('rule check failed: DN', 1330), ('rule check failed: R', 1141)]
+[r3_1/ei_depth3_s25_mix r2] targets (cumulative 64 attempts) SOLVED 88/600 = 0.147 [0.121,0.177]
+  len 7: 87/256 = 0.340 [0.285,0.400]
+  len 8: 1/344 = 0.003 [0.001,0.016]
+  written hist {7: 2333, 8: 21}
+  pruned hist {5: 20, 6: 2123, 7: 211}
+  frontier written 8 pruned 7
+  reasons []
+[r3_1/ei_depth3_s25_mix r2] transfer (this round, pass@32) SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPI', 746), ('rule check failed: ANDI', 496), ('final formula is not the conclusion', 361), ('bad box cite', 317), ('rule check failed: ORI1', 310), ('rule check failed: ORI2', 180)]
+[r3_1/ei_depth3_s25_mix r2] transfer (cumulative 64 attempts) SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons []
+[r3_1/ei_depth3_s25_mix r2] transfer greedy SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPI', 23), ('rule check failed: ANDI', 17), ('final formula is not the conclusion', 14), ('rule check failed: ORI1', 11), ('bad box cite', 9), ('rule check failed: ORI2', 5)]
+[r3_1/ei_depth3_s25_mix r2] heldout greedy SOLVED 4394/5000 = 0.879 [0.869,0.888]
+  len 2: 997/1000 = 0.997 [0.991,0.999]
+  len 3: 992/1000 = 0.992 [0.984,0.996]
+  len 4: 969/1000 = 0.969 [0.956,0.978]
+  len 5: 956/1000 = 0.956 [0.941,0.967]
+  len 6: 480/1000 = 0.480 [0.449,0.511]
+  written hist {2: 1013, 3: 981, 4: 949, 5: 1008, 6: 442, 7: 1}
+  pruned hist {2: 1013, 3: 983, 4: 959, 5: 998, 6: 441}
+  frontier written 6 pruned 6
+  reasons [('bad box cite', 163), ('rule check failed: IMPI', 89), ('rule check failed: ANDI', 54), ('rule check failed: DN', 48), ('rule check failed: ORI2', 39), ('rule check failed: IMPE', 34)]
+python3 train.py --data artifacts/r3_1/ei_depth3_s25_mix/mix_2.jsonl --init ckpts/r3_1/ei_depth3_s25_mix_r1.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/r3_1/ei_depth3_s25_mix_r2.pt --seed 25002 --log_every 200
+params 3210240 mode abs shift True
+train records 21396 max len 322
+step 200 loss 0.0554 lr 2.53e-04 30s
+step 400 loss 0.0519 lr 1.09e-04 53s
+step 600 loss 0.0565 lr 3.00e-05 77s
+saved ckpts/r3_1/ei_depth3_s25_mix_r2.pt
+=== round 2 done in 250s; new proofs 1426; cum targets solved 88
+[r3_1/ei_depth3_s25_mix r3] targets (this round, pass@32) SOLVED 95/600 = 0.158 [0.131,0.190]
+  len 7: 94/256 = 0.367 [0.311,0.428]
+  len 8: 1/344 = 0.003 [0.001,0.016]
+  written hist {7: 1488, 8: 23}
+  pruned hist {5: 2, 6: 1345, 7: 164}
+  frontier written 8 pruned 7
+  reasons [('rule check failed: IMPI', 2688), ('bad box cite', 1673), ('rule check failed: DN', 1620), ('final formula is not the conclusion', 1561), ('rule check failed: ORI2', 1488), ('rule check failed: ANDI', 1439)]
+[r3_1/ei_depth3_s25_mix r3] targets (cumulative 96 attempts) SOLVED 95/600 = 0.158 [0.131,0.190]
+  len 7: 94/256 = 0.367 [0.311,0.428]
+  len 8: 1/344 = 0.003 [0.001,0.016]
+  written hist {7: 2959, 8: 38}
+  pruned hist {5: 22, 6: 2682, 7: 293}
+  frontier written 8 pruned 7
+  reasons []
+[r3_1/ei_depth3_s25_mix r3] transfer (this round, pass@32) SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPI', 849), ('rule check failed: ANDI', 478), ('bad box cite', 289), ('final formula is not the conclusion', 242), ('rule check failed: ORI2', 216), ('rule check failed: DN', 174)]
+[r3_1/ei_depth3_s25_mix r3] transfer (cumulative 96 attempts) SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons []
+[r3_1/ei_depth3_s25_mix r3] transfer greedy SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPI', 26), ('rule check failed: ANDI', 14), ('final formula is not the conclusion', 10), ('rule check failed: ORI2', 8), ('bad box cite', 7), ('rule check failed: DN', 6)]
+[r3_1/ei_depth3_s25_mix r3] heldout greedy SOLVED 4388/5000 = 0.878 [0.868,0.886]
+  len 2: 997/1000 = 0.997 [0.991,0.999]
+  len 3: 994/1000 = 0.994 [0.987,0.997]
+  len 4: 960/1000 = 0.960 [0.946,0.970]
+  len 5: 956/1000 = 0.956 [0.941,0.967]
+  len 6: 481/1000 = 0.481 [0.450,0.512]
+  written hist {2: 1023, 3: 987, 4: 945, 5: 985, 6: 448}
+  pruned hist {2: 1023, 3: 988, 4: 948, 5: 986, 6: 443}
+  frontier written 6 pruned 6
+  reasons [('bad box cite', 160), ('rule check failed: IMPI', 67), ('rule check failed: DN', 64), ('rule check failed: ANDI', 46), ('rule check failed: BOTE', 45), ('rule check failed: IMPE', 42)]
+python3 train.py --data artifacts/r3_1/ei_depth3_s25_mix/mix_3.jsonl --init ckpts/r3_1/ei_depth3_s25_mix_r2.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/r3_1/ei_depth3_s25_mix_r3.pt --seed 25003 --log_every 200
+params 3210240 mode abs shift True
+train records 21472 max len 328
+step 200 loss 0.0609 lr 2.53e-04 29s
+step 400 loss 0.0553 lr 1.09e-04 61s
+step 600 loss 0.0570 lr 3.00e-05 84s
+saved ckpts/r3_1/ei_depth3_s25_mix_r3.pt
+=== round 3 done in 265s; new proofs 643; cum targets solved 95
+[r3_1/ei_depth3_s25_mix r4] targets (this round, pass@32) SOLVED 98/600 = 0.163 [0.136,0.195]
+  len 7: 97/256 = 0.379 [0.322,0.440]
+  len 8: 1/344 = 0.003 [0.001,0.016]
+  written hist {7: 1664, 8: 27}
+  pruned hist {5: 10, 6: 1410, 7: 271}
+  frontier written 8 pruned 7
+  reasons [('bad box cite', 2524), ('rule check failed: ANDI', 1890), ('rule check failed: IMPI', 1766), ('rule check failed: ORI2', 1724), ('rule check failed: DN', 1534), ('final formula is not the conclusion', 1369)]
+[r3_1/ei_depth3_s25_mix r4] targets (cumulative 128 attempts) SOLVED 98/600 = 0.163 [0.136,0.195]
+  len 7: 97/256 = 0.379 [0.322,0.440]
+  len 8: 1/344 = 0.003 [0.001,0.016]
+  written hist {7: 3429, 8: 52}
+  pruned hist {5: 26, 6: 3017, 7: 438}
+  frontier written 8 pruned 7
+  reasons []
+[r3_1/ei_depth3_s25_mix r4] transfer (this round, pass@32) SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: ANDI', 609), ('rule check failed: IMPI', 597), ('bad box cite', 463), ('final formula is not the conclusion', 253), ('rule check failed: ORI1', 243), ('rule check failed: ORI2', 201)]
+[r3_1/ei_depth3_s25_mix r4] transfer (cumulative 128 attempts) SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons []
+[r3_1/ei_depth3_s25_mix r4] transfer greedy SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPI', 19), ('rule check failed: ANDI', 17), ('bad box cite', 16), ('rule check failed: ORI2', 8), ('final formula is not the conclusion', 8), ('rule check failed: ORI1', 7)]
+[r3_1/ei_depth3_s25_mix r4] heldout greedy SOLVED 4431/5000 = 0.886 [0.877,0.895]
+  len 2: 997/1000 = 0.997 [0.991,0.999]
+  len 3: 994/1000 = 0.994 [0.987,0.997]
+  len 4: 970/1000 = 0.970 [0.957,0.979]
+  len 5: 957/1000 = 0.957 [0.943,0.968]
+  len 6: 513/1000 = 0.513 [0.482,0.544]
+  written hist {2: 1021, 3: 991, 4: 961, 5: 984, 6: 474}
+  pruned hist {2: 1021, 3: 991, 4: 966, 5: 982, 6: 471}
+  frontier written 6 pruned 6
+  reasons [('bad box cite', 161), ('rule check failed: DN', 68), ('rule check failed: IMPI', 58), ('rule check failed: ANDI', 52), ('rule check failed: IMPE', 41), ('rule check failed: NEGE', 40)]
+python3 train.py --data artifacts/r3_1/ei_depth3_s25_mix/mix_4.jsonl --init ckpts/r3_1/ei_depth3_s25_mix_r3.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/r3_1/ei_depth3_s25_mix_r4.pt --seed 25004 --log_every 200
+params 3210240 mode abs shift True
+train records 21556 max len 422
+step 200 loss 0.0615 lr 2.53e-04 29s
+step 400 loss 0.0493 lr 1.09e-04 61s
+step 600 loss 0.0548 lr 3.00e-05 91s
+saved ckpts/r3_1/ei_depth3_s25_mix_r4.pt
+=== round 4 done in 265s; new proofs 484; cum targets solved 98
+[r3_1/ei_depth3_s25_mix r5] targets (this round, pass@32) SOLVED 101/600 = 0.168 [0.141,0.200]
+  len 7: 100/256 = 0.391 [0.333,0.452]
+  len 8: 1/344 = 0.003 [0.001,0.016]
+  written hist {7: 1672, 8: 25}
+  pruned hist {5: 9, 6: 1413, 7: 275}
+  frontier written 8 pruned 7
+  reasons [('rule check failed: IMPI', 2555), ('bad box cite', 2029), ('rule check failed: ANDI', 1758), ('final formula is not the conclusion', 1318), ('rule check failed: DN', 1297), ('rule check failed: IMPE', 1164)]
+[r3_1/ei_depth3_s25_mix r5] targets (cumulative 160 attempts) SOLVED 101/600 = 0.168 [0.141,0.200]
+  len 7: 100/256 = 0.391 [0.333,0.452]
+  len 8: 1/344 = 0.003 [0.001,0.016]
+  written hist {7: 3756, 8: 56}
+  pruned hist {5: 30, 6: 3247, 7: 535}
+  frontier written 8 pruned 7
+  reasons []
+[r3_1/ei_depth3_s25_mix r5] transfer (this round, pass@32) SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPI', 780), ('rule check failed: ANDI', 476), ('rule check failed: ORI1', 294), ('bad box cite', 265), ('final formula is not the conclusion', 244), ('rule check failed: DN', 177)]
+[r3_1/ei_depth3_s25_mix r5] transfer (cumulative 160 attempts) SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons []
+[r3_1/ei_depth3_s25_mix r5] transfer greedy SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPI', 26), ('rule check failed: ANDI', 14), ('final formula is not the conclusion', 8), ('rule check failed: ORI1', 8), ('bad box cite', 7), ('rule check failed: DN', 6)]
+[r3_1/ei_depth3_s25_mix r5] heldout greedy SOLVED 4428/5000 = 0.886 [0.876,0.894]
+  len 2: 996/1000 = 0.996 [0.990,0.998]
+  len 3: 995/1000 = 0.995 [0.988,0.998]
+  len 4: 963/1000 = 0.963 [0.949,0.973]
+  len 5: 957/1000 = 0.957 [0.943,0.968]
+  len 6: 517/1000 = 0.517 [0.486,0.548]
+  written hist {2: 1021, 3: 986, 4: 940, 5: 1005, 6: 476}
+  pruned hist {2: 1022, 3: 987, 4: 947, 5: 998, 6: 474}
+  frontier written 6 pruned 6
+  reasons [('bad box cite', 121), ('rule check failed: DN', 68), ('final formula is not the conclusion', 65), ('rule check failed: IMPI', 54), ('rule check failed: ANDI', 49), ('rule check failed: IMPE', 43)]
+python3 train.py --data artifacts/r3_1/ei_depth3_s25_mix/mix_5.jsonl --init ckpts/r3_1/ei_depth3_s25_mix_r4.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/r3_1/ei_depth3_s25_mix_r5.pt --seed 25005 --log_every 200
+params 3210240 mode abs shift True
+train records 21600 max len 422
+step 200 loss 0.0573 lr 2.53e-04 27s
+step 400 loss 0.0550 lr 1.09e-04 55s
+step 600 loss 0.0506 lr 3.00e-05 87s
+saved ckpts/r3_1/ei_depth3_s25_mix_r5.pt
+=== round 5 done in 258s; new proofs 331; cum targets solved 101
+[r3_1/ei_depth3_s25_mix r6] targets (this round, pass@32) SOLVED 101/600 = 0.168 [0.141,0.200]
+  len 7: 100/256 = 0.391 [0.333,0.452]
+  len 8: 1/344 = 0.003 [0.001,0.016]
+  written hist {7: 1847, 8: 25}
+  pruned hist {5: 12, 6: 1563, 7: 297}
+  frontier written 8 pruned 7
+  reasons [('rule check failed: IMPI', 2916), ('bad box cite', 1724), ('final formula is not the conclusion', 1713), ('rule check failed: ANDI', 1535), ('rule check failed: DN', 1305), ('rule check failed: ORI2', 1222)]
+[r3_1/ei_depth3_s25_mix r6] targets (cumulative 192 attempts) SOLVED 101/600 = 0.168 [0.141,0.200]
+  len 7: 100/256 = 0.391 [0.333,0.452]
+  len 8: 1/344 = 0.003 [0.001,0.016]
+  written hist {7: 4067, 8: 61}
+  pruned hist {5: 36, 6: 3482, 7: 610}
+  frontier written 8 pruned 7
+  reasons []
+[r3_1/ei_depth3_s25_mix r6] transfer (this round, pass@32) SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPI', 1012), ('final formula is not the conclusion', 343), ('rule check failed: ANDI', 331), ('bad box cite', 255), ('rule check failed: ORI1', 199), ('rule check failed: DN', 192)]
+[r3_1/ei_depth3_s25_mix r6] transfer (cumulative 192 attempts) SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons []
+[r3_1/ei_depth3_s25_mix r6] transfer greedy SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPI', 30), ('rule check failed: ANDI', 12), ('final formula is not the conclusion', 12), ('rule check failed: DN', 7), ('bad box cite', 7), ('parse: missing )', 6)]
+[r3_1/ei_depth3_s25_mix r6] heldout greedy SOLVED 4434/5000 = 0.887 [0.878,0.895]
+  len 2: 997/1000 = 0.997 [0.991,0.999]
+  len 3: 995/1000 = 0.995 [0.988,0.998]
+  len 4: 976/1000 = 0.976 [0.965,0.984]
+  len 5: 956/1000 = 0.956 [0.941,0.967]
+  len 6: 510/1000 = 0.510 [0.479,0.541]
+  written hist {2: 1021, 3: 986, 4: 956, 5: 986, 6: 485}
+  pruned hist {2: 1021, 3: 986, 4: 962, 5: 981, 6: 484}
+  frontier written 6 pruned 6
+  reasons [('bad box cite', 128), ('final formula is not the conclusion', 71), ('rule check failed: DN', 67), ('rule check failed: IMPI', 57), ('rule check failed: ANDI', 41), ('rule check failed: IMPE', 34)]
+python3 train.py --data artifacts/r3_1/ei_depth3_s25_mix/mix_6.jsonl --init ckpts/r3_1/ei_depth3_s25_mix_r5.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/r3_1/ei_depth3_s25_mix_r6.pt --seed 25006 --log_every 200
+params 3210240 mode abs shift True
+train records 21616 max len 422
+step 200 loss 0.0574 lr 2.53e-04 22s
+step 400 loss 0.0545 lr 1.09e-04 46s
+step 600 loss 0.0537 lr 3.00e-05 73s
+saved ckpts/r3_1/ei_depth3_s25_mix_r6.pt
+=== round 6 done in 244s; new proofs 316; cum targets solved 101
+[r3_1/ei_depth3_s25_mix r7] targets (this round, pass@32) SOLVED 104/600 = 0.173 [0.145,0.206]
+  len 7: 102/256 = 0.398 [0.340,0.459]
+  len 8: 2/344 = 0.006 [0.002,0.021]
+  written hist {7: 1593, 8: 22}
+  pruned hist {5: 6, 6: 1363, 7: 246}
+  frontier written 8 pruned 7
+  reasons [('rule check failed: IMPI', 3061), ('final formula is not the conclusion', 1765), ('rule check failed: ANDI', 1711), ('bad box cite', 1676), ('rule check failed: DN', 1355), ('rule check failed: ORI2', 1087)]
+[r3_1/ei_depth3_s25_mix r7] targets (cumulative 224 attempts) SOLVED 104/600 = 0.173 [0.145,0.206]
+  len 7: 102/256 = 0.398 [0.340,0.459]
+  len 8: 2/344 = 0.006 [0.002,0.021]
+  written hist {7: 4203, 8: 65}
+  pruned hist {5: 38, 6: 3595, 7: 635}
+  frontier written 8 pruned 7
+  reasons []
+[r3_1/ei_depth3_s25_mix r7] transfer (this round, pass@32) SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPI', 864), ('final formula is not the conclusion', 385), ('rule check failed: ANDI', 369), ('bad box cite', 244), ('rule check failed: ORI1', 177), ('rule check failed: ORI2', 168)]
+[r3_1/ei_depth3_s25_mix r7] transfer (cumulative 224 attempts) SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons []
+[r3_1/ei_depth3_s25_mix r7] transfer greedy SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPI', 25), ('final formula is not the conclusion', 15), ('rule check failed: ANDI', 11), ('bad box cite', 9), ('rule check failed: ORI1', 7), ('rule check failed: IMPE', 6)]
+[r3_1/ei_depth3_s25_mix r7] heldout greedy SOLVED 4432/5000 = 0.886 [0.877,0.895]
+  len 2: 997/1000 = 0.997 [0.991,0.999]
+  len 3: 995/1000 = 0.995 [0.988,0.998]
+  len 4: 966/1000 = 0.966 [0.953,0.976]
+  len 5: 958/1000 = 0.958 [0.944,0.969]
+  len 6: 516/1000 = 0.516 [0.485,0.547]
+  written hist {2: 1019, 3: 990, 4: 946, 5: 985, 6: 492}
+  pruned hist {2: 1020, 3: 990, 4: 956, 5: 976, 6: 490}
+  frontier written 6 pruned 6
+  reasons [('bad box cite', 107), ('rule check failed: DN', 78), ('rule check failed: IMPI', 75), ('rule check failed: ANDI', 50), ('rule check failed: IMPE', 44), ('rule check failed: NEGE', 41)]
+python3 train.py --data artifacts/r3_1/ei_depth3_s25_mix/mix_7.jsonl --init ckpts/r3_1/ei_depth3_s25_mix_r6.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/r3_1/ei_depth3_s25_mix_r7.pt --seed 25007 --log_every 200
+params 3210240 mode abs shift True
+train records 21632 max len 444
+step 200 loss 0.0566 lr 2.53e-04 25s
+step 400 loss 0.0546 lr 1.09e-04 46s
+step 600 loss 0.0545 lr 3.00e-05 67s
+saved ckpts/r3_1/ei_depth3_s25_mix_r7.pt
+=== round 7 done in 247s; new proofs 140; cum targets solved 104
+[r3_1/ei_depth3_s25_mix r8] targets (this round, pass@32) SOLVED 106/600 = 0.177 [0.148,0.209]
+  len 7: 104/256 = 0.406 [0.348,0.467]
+  len 8: 2/344 = 0.006 [0.002,0.021]
+  written hist {7: 1757, 8: 40}
+  pruned hist {5: 6, 6: 1475, 7: 316}
+  frontier written 8 pruned 7
+  reasons [('rule check failed: IMPI', 2900), ('rule check failed: ANDI', 2001), ('bad box cite', 1667), ('rule check failed: DN', 1458), ('final formula is not the conclusion', 1358), ('rule check failed: R', 1089)]
+[r3_1/ei_depth3_s25_mix r8] targets (cumulative 256 attempts) SOLVED 106/600 = 0.177 [0.148,0.209]
+  len 7: 104/256 = 0.406 [0.348,0.467]
+  len 8: 2/344 = 0.006 [0.002,0.021]
+  written hist {7: 4372, 8: 82}
+  pruned hist {5: 40, 6: 3723, 7: 691}
+  frontier written 8 pruned 7
+  reasons []
+[r3_1/ei_depth3_s25_mix r8] transfer (this round, pass@32) SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPI', 884), ('rule check failed: ANDI', 487), ('final formula is not the conclusion', 294), ('bad box cite', 250), ('rule check failed: ORI1', 225), ('rule check failed: DN', 150)]
+[r3_1/ei_depth3_s25_mix r8] transfer (cumulative 256 attempts) SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons []
+[r3_1/ei_depth3_s25_mix r8] transfer greedy SOLVED 0/100 = 0.000 [0.000,0.037]
+  len 7: 0/6 = 0.000 [0.000,0.390]
+  len 8: 0/94 = 0.000 [0.000,0.039]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPI', 27), ('rule check failed: ANDI', 17), ('final formula is not the conclusion', 11), ('bad box cite', 8), ('rule check failed: ORI1', 7), ('rule check failed: DN', 5)]
+[r3_1/ei_depth3_s25_mix r8] heldout greedy SOLVED 4418/5000 = 0.884 [0.874,0.892]
+  len 2: 997/1000 = 0.997 [0.991,0.999]
+  len 3: 992/1000 = 0.992 [0.984,0.996]
+  len 4: 970/1000 = 0.970 [0.957,0.979]
+  len 5: 969/1000 = 0.969 [0.956,0.978]
+  len 6: 490/1000 = 0.490 [0.459,0.521]
+  written hist {2: 1018, 3: 984, 4: 953, 5: 1016, 6: 447}
+  pruned hist {2: 1019, 3: 987, 4: 954, 5: 1013, 6: 445}
+  frontier written 6 pruned 6
+  reasons [('bad box cite', 103), ('rule check failed: ORI2', 82), ('rule check failed: DN', 73), ('rule check failed: IMPI', 66), ('rule check failed: ANDI', 56), ('rule check failed: NEGE', 39)]
+python3 train.py --data artifacts/r3_1/ei_depth3_s25_mix/mix_8.jsonl --init ckpts/r3_1/ei_depth3_s25_mix_r7.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/r3_1/ei_depth3_s25_mix_r8.pt --seed 25008 --log_every 200
+params 3210240 mode abs shift True
+train records 21672 max len 422
+step 200 loss 0.0545 lr 2.53e-04 30s
+step 400 loss 0.0576 lr 1.09e-04 55s
+step 600 loss 0.0530 lr 3.00e-05 73s
+saved ckpts/r3_1/ei_depth3_s25_mix_r8.pt
+=== round 8 done in 267s; new proofs 186; cum targets solved 106

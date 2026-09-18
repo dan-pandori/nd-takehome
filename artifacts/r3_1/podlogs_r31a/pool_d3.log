@@ -1,0 +1,21 @@
+MD2B8_DONE
+labelled 1200 required@8 among new candidates: 472 timeouts: 0
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/r3_1_pools.py", line 283, in <module>
+    globals()[a.cmd](a)
+  File "/workspace/nd-takehome/r3_1_pools.py", line 105, in d3select
+    assert ok and cl['depth3'] and nl == r['min_lines_ub'], (r['name'], reason, nl)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('targets_depth3_414', 'ok', 9)
+MD2B10_DONE
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/r3_1_pools.py", line 283, in <module>
+    globals()[a.cmd](a)
+  File "/workspace/nd-takehome/r3_1_pools.py", line 112, in d3build
+    pre = read(f'{D}/depth3_req_pre.jsonl')
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/r3_1_pools.py", line 30, in read
+    return [json.loads(l) for l in open(fn) if l.strip()]
+                                   ^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/r3_1/depth3_req_pre.jsonl'
+D3_DONE

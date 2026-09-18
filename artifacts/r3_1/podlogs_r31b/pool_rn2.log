@@ -1,0 +1,44 @@
+GEN2_DONE
+{
+ "total": {
+  "n_out": 5334,
+  "pat_only": 4117,
+  "pat_derived_ore": 962,
+  "pat_reductio": 121,
+  "pat_depth3": 174,
+  "tries": 16000000,
+  "len_out": 3151662,
+  "fail": 11939026,
+  "only_out": 728584,
+  "contra": 173986,
+  "dup": 1408
+ },
+ "secs": 246.20620942115784
+}
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/r3_1_pools.py", line 286, in <module>
+    globals()[a.cmd](a)
+  File "/workspace/nd-takehome/r3_1_pools.py", line 163, in rncands
+    for r in read(f'{P2}/pool_long_minlen.jsonl'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/r3_1_pools.py", line 30, in read
+    return [json.loads(l) for l in open(fn) if l.strip()]
+                                   ^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/p2/pool_long_minlen.jsonl'
+U8_DONE
+0 theorems; labelled 0; timeouts 0; errors 0
+min_lines_ub hist {}
+by generating length: (gen_lines, has <=6 proof) -> {}
+candidates with unrestricted min 7-8: 167
+NODN_DONE
+167 theorems; labelled 159; timeouts 0; errors 0
+min_lines_ub hist {7: 93, 8: 42, 9: 15, 10: 9}
+by generating length: (gen_lines, has <=6 proof) -> {(7, False): 120, (8, False): 47}
+data/r3_1/reductio_nb_cands_all.jsonl: 167 theorems, classical-only 0 (0.0%)
+candidates with unrestricted min 7-8: 167 (pool_long 167 )
+neighbours (no-DN proof <= 10 found, intuitionistically provable): 159 Counter({(7, 7): 93, (8, 8): 39, (7, 9): 14, (8, 10): 5, (7, 10): 4, (7, 8): 3, (8, 9): 1})
+data/r3_1/reductio_req.jsonl 300
+data/r3_1/reductio_req_transfer.jsonl 150
+data/r3_1/reductio_nb.jsonl 159
+data/r3_1/reductio_mix.jsonl 459
+RN2_DONE

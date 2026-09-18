@@ -1,0 +1,28 @@
+GEN_DONE
+ },
+ "secs": 93.83972978591919
+}
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/r3_1_pools.py", line 286, in <module>
+    globals()[a.cmd](a)
+  File "/workspace/nd-takehome/r3_1_pools.py", line 159, in rncands
+    excl = excluded_keys([TRAIN['depth3'], TRAIN['reductio']])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/r3_1_pools.py", line 50, in excluded_keys
+    for r in read(fn):
+             ^^^^^^^^
+  File "/workspace/nd-takehome/r3_1_pools.py", line 30, in read
+    return [json.loads(l) for l in open(fn) if l.strip()]
+                                   ^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/p2/train_depth3_f0_a1.jsonl'
+U8_DONE
+candidates with unrestricted min 7-8: 167
+NODN_DONE
+data/r3_1/reductio_nb_cands_all.jsonl: 167 theorems, classical-only 0 (0.0%)
+candidates with unrestricted min 7-8: 167 (pool_long 167 )
+neighbours (no-DN proof <= 10 found, intuitionistically provable): 159 Counter({(7, 7): 93, (8, 8): 39, (7, 9): 14, (8, 10): 5, (7, 10): 4, (7, 8): 3, (8, 9): 1})
+data/r3_1/reductio_req.jsonl 300
+data/r3_1/reductio_req_transfer.jsonl 150
+data/r3_1/reductio_nb.jsonl 159
+data/r3_1/reductio_mix.jsonl 459
+RN_DONE

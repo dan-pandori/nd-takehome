@@ -52,7 +52,8 @@ for j, pat in enumerate(('depth3', 'reductio')):
         rs = sorted(int(r) for r in d)
         ax.plot(rs, [d[str(r)]['hits'] for r in rs], marker='o', label=f's{s}' + (' (zero-rate)' if P['draws'].get(s, {}).get('zero_rate') else ''))
     ax.set_xlabel('drift-arm round (checkpoint)', fontsize=9, color=INK2); ax.set_ylabel('pattern hits on the required pool (k = 1,000 x 300)', fontsize=9, color=INK2)
-    ax.set_title(f'{pat}: drift arms (neighbours only, pattern proofs excluded from training)', fontsize=10); ax.legend(fontsize=8, frameon=False)
+    ax.set_yscale('symlog', linthresh=1); ax.set_ylim(-0.2, 2000)
+    ax.set_title(f'{pat}: drift arms (neighbours only, pattern proofs never trained on)', fontsize=9); ax.legend(fontsize=7, frameon=False, ncol=2)
 fig.tight_layout(); fig.savefig('figures/r3_1_drift.png', dpi=150)
 
 fig, axes = plt.subplots(1, 2, figsize=(11, 4))

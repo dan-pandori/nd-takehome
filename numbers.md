@@ -480,3 +480,139 @@
 - EI reference ei_depth3_f0_a3_s1: solved 583, acquisition 0.352, per round [7, 92, 227, 319, 338, 345, 346, 352], held-out greedy 0.919
 - Summary: G = 8 acquisition mean 0.474 (range 0.447–0.505, n = 6), G = 32 mean 0.426 (0.395–0.467); EI mean 0.351 (0.335–0.364). Held-out greedy at the end: G = 8 [0.34, 0.53, 0.56, 0.62, 0.64, 0.67], G = 32 [0.38, 0.52, 0.56, 0.61, 0.64, 0.66].
 - The 85M / relative-codec arm of the proposal was not run (no access to that code). Pods: p4 / p5 (RTX 3090) from 23:09 to 01:36 UTC ≈ 2 × 2.4 h ≈ $2.4 (shared with run 3). Bucket: `hf://buckets/dan-pandori/nd-rl/round2/run4/{artifacts/r4,ckpts/r4}`.
+
+## Round 3 run 1 — pool composition or pattern class? (2026-09-18; `r3_1_analysis.py --verify_all` → `artifacts/r3_1/summary.json`, `summary_table.md`; tables below printed by `r3_1_numbers.py`; pre-registration `preregistration/round3-run1.md` committed 05:09:48 UTC, first pod 05:16:09 UTC; job files `pod/r3_1/`; pod queue logs `artifacts/r3_1/podlogs_r31{a,b,c,d}/` and `artifacts/r3_1/q/`)
+
+- **Pools** (`data/r3_1/`, builder `r3_1_pools.py`, summary `artifacts/r3_1/pools_summary.json`). Depth-3 required@8: 1,200 candidates (seed-0 draw from 7,136 long-pool theorems whose 7–8-line minlen proof has depth 3, class-disjoint) labelled with `minlen.py --max_depth 2 --bound 8 --time 20`: **472 None, 0 timeouts** (`depth3_cands_md2b8.jsonl`, `artifacts/r3_1/minlen_d3_b8.log`); + the 142 known = **614** (`depth3_req_pre.jsonl`). Bound-10 depth-≤ 2 alternative (`depth3_req_md2b10.jsonl`): 9 lines 589 (95.9 %), 10 lines 2, none 23 (3.7 %), 0 timeouts. Kept: `depth3_req.jsonl` **300** (min 7 / 8 lines: 6 / 294; alternative 9 / 10 / none: 288 / 1 / 11), `depth3_req_transfer.jsonl` 100, `depth3_nb.jsonl` **300** of the 673 neighbours (unrestricted min / depth-≤ 2 min: 7/7 178, 7/8 72, 8/8 50), `depth3_mix.jsonl` 600. Reductio required: `reductio_req.jsonl` 300 and `reductio_req_transfer.jsonl` 150 (run 5's pools + `stratum`). Reductio neighbours: 5,334 generated `( ~ ( ~ X ) )`-conclusion theorems (`gen --long --only concl_nn`, 4 × 4M tries, `artifacts/r3_1/gen_nn2.log`) → 4,662 class-distinct and outside every excluded class (`reductio_nb_cands_gen.jsonl`) → 1,150 with unrestricted min 7–8 (`reductio_nb_gen_u8.jsonl`) + 167 from the long pool = 1,317 (`reductio_nb_cands_all.jsonl`); `--forbid DN --bound 10 --time 40` finds a proof for **1,264** (0 timeouts; `reductio_nb_cands_nodn.jsonl`); `intuit.py`: 1,317 of 1,317 provable; shortest no-DN proof closes with NEGI of an assumed `( ~ X )` (prereg amendment 05:50): **759**; kept `reductio_nb.jsonl` **300** (min 7 / 8: 212 / 88; no-DN length 7 / 8 / 9 / 10: 162 / 77 / 40 / 21), `reductio_mix.jsonl` 600. Class overlap of every pool with train_depth3_f0_a1 / train_reductio_f0 / both held-outs / val-36 / each other: **0**. Oracle inconsistencies: 0 (no required target solved without the pattern in 48 arms, 16 pre-RL samples, 60 drift samples).
+- **Stage-1**: `train.py --mode abs --steps 6000 --bs 128 --cap 6`, seeds 20–27 on `train_depth3_f0_a1.jsonl` and on `train_reductio_f0.jsonl` (`ckpts/r3_1/stage1_*`; logs `artifacts/r3_1/q/s1_*.log`). Arms: `expert_iter.py --rounds 8 --k 32 --temperature 0.8 --batch 768`, seed = model seed; `drift` adds `--exclude_pattern <pattern>`.
+- **Re-verification**: every counted pattern proof on a required target re-run through `nd_verify`: depth-3 **25,309 proofs, 0 failures**; reductio **7,460, 0 failures** (`summary.json` `verify_sample` / `verify_failures` per arm).
+
+**depth3 — pre-RL rate per draw** (`artifacts/r3_1/cov_depth3_s<seed>.s0.jsonl`, `coverage.py --k 2000 --temperature 0.8` on the 300 required targets = 600,000 samples per draw; hits = Σ per-proof `count` of verified proofs with `patterns.depth3`; frozen@256 = targets whose first pattern proof has sample index ≤ 256):
+
+| draw | pattern hits / 600k | rate | targets with a pattern proof | any verified proof (targets) | frozen@256 pattern targets | zero-rate |
+|---|---|---|---|---|---|---|
+| s20 | 0 | 0.0e+00 | 0 | 0 | 0 | yes |
+| s21 | 0 | 0.0e+00 | 0 | 0 | 0 | yes |
+| s22 | 2 | 3.3e-06 | 1 | 1 | 0 | no |
+| s23 | 0 | 0.0e+00 | 0 | 0 | 0 | yes |
+| s24 | 26 | 4.3e-05 | 3 | 3 | 2 | no |
+| s25 | 0 | 0.0e+00 | 0 | 0 | 0 | yes |
+| s26 | 0 | 0.0e+00 | 0 | 0 | 0 | yes |
+| s27 | 0 | 0.0e+00 | 0 | 0 | 0 | yes |
+
+n₀ = 6 of 8.
+
+**depth3 — arms** (`artifacts/r3_1/ei_depth3_s<seed>_<arm>/found_<r>.jsonl`, start-index normalised, min-round rule, `patterns.depth3` on the pruned proof; ignition = ≥ 20 required targets with a pattern proof, cumulative; `nd_verify` re-run on 100 counted pattern proofs per arm or all if fewer):
+
+| arm | zero-rate | ignition round | first pattern proof (round) | required targets with pattern proof, rounds 1–8 | required solved | required solved without pattern | neighbours solved / n | neighbours solved with pattern | held-out greedy r8 | verify fails / checked |
+|---|---|---|---|---|---|---|---|---|---|---|
+| s20_req | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 0 / 0 | 0 | 0.871 | 0 / 0 |
+| s20_mix | yes | — | 8 | [0, 0, 0, 0, 0, 0, 0, 1] | 1 | 0 | 126 / 300 | 0 | 0.879 | 0 / 2 |
+| s20_drift | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 109 / 300 | 0 | 0.877 | 0 / 0 |
+| s21_req | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 0 / 0 | 0 | 0.878 | 0 / 0 |
+| s21_mix | yes | 4 | 3 | [0, 0, 2, 75, 202, 229, 238, 241] | 241 | 0 | 207 / 300 | 98 | 0.909 | 0 / 5454 |
+| s21_drift | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 119 / 300 | 2 | 0.880 | 0 / 0 |
+| s22_req | no | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 0 / 0 | 0 | 0.892 | 0 / 0 |
+| s22_mix | no | 6 | 2 | [0, 1, 1, 2, 8, 84, 178, 211] | 211 | 0 | 216 / 300 | 82 | 0.923 | 0 / 3472 |
+| s22_drift | no | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 105 / 300 | 0 | 0.891 | 0 / 0 |
+| s23_req | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 0 / 0 | 0 | 0.884 | 0 / 0 |
+| s23_mix | yes | 4 | 3 | [0, 0, 5, 55, 183, 239, 250, 255] | 255 | 0 | 239 / 300 | 92 | 0.940 | 0 / 4787 |
+| s23_drift | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 162 / 300 | 1 | 0.892 | 0 / 0 |
+| s24_req | no | — | 2 | [0, 1, 1, 2, 4, 5, 5, 5] | 5 | 0 | 0 / 0 | 0 | 0.898 | 0 / 243 |
+| s24_mix | no | 3 | 2 | [0, 15, 136, 193, 215, 224, 231, 233] | 233 | 0 | 208 / 300 | 100 | 0.921 | 0 / 5900 |
+| s24_drift | no | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 122 / 300 | 18 | 0.894 | 0 / 0 |
+| s25_req | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 0 / 0 | 0 | 0.893 | 0 / 0 |
+| s25_mix | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 106 / 300 | 0 | 0.884 | 0 / 0 |
+| s25_drift | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 111 / 300 | 2 | 0.882 | 0 / 0 |
+| s26_req | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 0 / 0 | 0 | 0.882 | 0 / 0 |
+| s26_mix | yes | 2 | 2 | [0, 21, 169, 209, 227, 237, 238, 239] | 239 | 0 | 220 / 300 | 102 | 0.926 | 0 / 5451 |
+| s26_drift | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 154 / 300 | 19 | 0.893 | 0 / 0 |
+| s27_req | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 0 / 0 | 0 | 0.874 | 0 / 0 |
+| s27_mix | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 141 / 300 | 1 | 0.886 | 0 / 0 |
+| s27_drift | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 138 / 300 | 0 | 0.884 | 0 / 0 |
+
+**depth3 — drift arms, pattern rate on the required pool** (`artifacts/r3_1/dcov_depth3_s<seed>_r<round>.s0.jsonl`, `coverage.py --k 1000` on the 300 required targets from the drift arm's round-r checkpoint = 300,000 samples; the drift arm trains on neighbours only with `--exclude_pattern depth3`; excluded = found neighbour proofs with the pattern dropped from the mix, cumulative at round 8):
+
+| draw | zero-rate | r2 hits (targets) | r4 | r6 | r8 | excluded proofs at r8 |
+|---|---|---|---|---|---|---|
+| s20 | yes | 0 / 300k (0) | 0 / 300k (0) | 0 / 300k (0) | 0 / 300k (0) | 0 |
+| s21 | yes | 1 / 300k (1) | 13 / 300k (2) | 0 / 300k (0) | 2 / 300k (1) | 52 |
+| s22 | no | 112 / 300k (1) | 0 / 300k (0) | 0 / 300k (0) | 3 / 300k (1) | 0 |
+| s23 | yes | 2 / 300k (1) | 9 / 300k (2) | 2 / 300k (1) | 0 / 300k (0) | 3 |
+| s24 | no | 2 / 300k (2) | 280 / 300k (5) | 185 / 300k (2) | 0 / 300k (0) | 137 |
+| s25 | yes | 0 / 300k (0) | 0 / 300k (0) | 0 / 300k (0) | 0 / 300k (0) | 20 |
+| s26 | yes | 13 / 300k (4) | 0 / 300k (0) | 3 / 300k (1) | 114 / 300k (2) | 114 |
+| s27 | yes | 0 / 300k (0) | 19 / 300k (1) | 0 / 300k (0) | 0 / 300k (0) | 0 |
+
+**reductio — pre-RL rate per draw** (`artifacts/r3_1/cov_reductio_s<seed>.s0.jsonl`, `coverage.py --k 2000 --temperature 0.8` on the 300 required targets = 600,000 samples per draw; hits = Σ per-proof `count` of verified proofs with `patterns.reductio`; frozen@256 = targets whose first pattern proof has sample index ≤ 256):
+
+| draw | pattern hits / 600k | rate | targets with a pattern proof | any verified proof (targets) | frozen@256 pattern targets | zero-rate |
+|---|---|---|---|---|---|---|
+| s20 | 0 | 0.0e+00 | 0 | 0 | 0 | yes |
+| s21 | 0 | 0.0e+00 | 0 | 0 | 0 | yes |
+| s22 | 0 | 0.0e+00 | 0 | 0 | 0 | yes |
+| s23 | 0 | 0.0e+00 | 0 | 0 | 0 | yes |
+| s24 | 1 | 1.7e-06 | 1 | 1 | 0 | no |
+| s25 | 0 | 0.0e+00 | 0 | 0 | 0 | yes |
+| s26 | 6 | 1.0e-05 | 2 | 2 | 0 | no |
+| s27 | 16 | 2.7e-05 | 1 | 1 | 1 | no |
+
+n₀ = 5 of 8.
+
+**reductio — arms** (`artifacts/r3_1/ei_reductio_s<seed>_<arm>/found_<r>.jsonl`, start-index normalised, min-round rule, `patterns.reductio` on the pruned proof; ignition = ≥ 12 required targets with a pattern proof, cumulative; `nd_verify` re-run on 100 counted pattern proofs per arm or all if fewer):
+
+| arm | zero-rate | ignition round | first pattern proof (round) | required targets with pattern proof, rounds 1–8 | required solved | required solved without pattern | neighbours solved / n | neighbours solved with pattern | held-out greedy r8 | verify fails / checked |
+|---|---|---|---|---|---|---|---|---|---|---|
+| s20_req | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 0 / 0 | 0 | 0.876 | 0 / 0 |
+| s20_mix | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 177 / 300 | 0 | 0.879 | 0 / 0 |
+| s20_drift | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 181 / 300 | 0 | 0.876 | 0 / 0 |
+| s21_req | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 0 / 0 | 0 | 0.899 | 0 / 0 |
+| s21_mix | yes | 5 | 3 | [0, 0, 1, 7, 23, 35, 43, 52] | 52 | 0 | 180 / 300 | 0 | 0.905 | 0 / 1613 |
+| s21_drift | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 184 / 300 | 0 | 0.906 | 0 / 0 |
+| s22_req | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 0 / 0 | 0 | 0.886 | 0 / 0 |
+| s22_mix | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 182 / 300 | 0 | 0.895 | 0 / 0 |
+| s22_drift | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 192 / 300 | 0 | 0.890 | 0 / 0 |
+| s23_req | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 0 / 0 | 0 | 0.874 | 0 / 0 |
+| s23_mix | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 157 / 300 | 0 | 0.883 | 0 / 0 |
+| s23_drift | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 161 / 300 | 0 | 0.878 | 0 / 0 |
+| s24_req | no | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 0 / 0 | 0 | 0.886 | 0 / 0 |
+| s24_mix | no | 3 | 2 | [0, 4, 21, 40, 47, 52, 53, 53] | 53 | 0 | 170 / 300 | 0 | 0.894 | 0 / 1865 |
+| s24_drift | no | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 170 / 300 | 0 | 0.886 | 0 / 0 |
+| s25_req | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 0 / 0 | 0 | 0.868 | 0 / 0 |
+| s25_mix | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 170 / 300 | 0 | 0.882 | 0 / 0 |
+| s25_drift | yes | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 157 / 300 | 0 | 0.875 | 0 / 0 |
+| s26_req | no | 7 | 6 | [0, 0, 0, 0, 0, 1, 13, 33] | 33 | 0 | 0 / 0 | 0 | 0.882 | 0 / 640 |
+| s26_mix | no | 5 | 3 | [0, 0, 1, 7, 31, 49, 52, 53] | 53 | 0 | 182 / 300 | 1 | 0.891 | 0 / 1680 |
+| s26_drift | no | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 181 / 300 | 0 | 0.883 | 0 / 0 |
+| s27_req | no | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 0 / 0 | 0 | 0.851 | 0 / 0 |
+| s27_mix | no | 6 | 4 | [0, 0, 0, 1, 7, 39, 46, 52] | 52 | 0 | 143 / 300 | 0 | 0.857 | 0 / 1662 |
+| s27_drift | no | — | — | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | 0 | 143 / 300 | 0 | 0.858 | 0 / 0 |
+
+**reductio — drift arms, pattern rate on the required pool** (`artifacts/r3_1/dcov_reductio_s<seed>_r<round>.s0.jsonl`, `coverage.py --k 1000` on the 300 required targets from the drift arm's round-r checkpoint = 300,000 samples; the drift arm trains on neighbours only with `--exclude_pattern reductio`; excluded = found neighbour proofs with the pattern dropped from the mix, cumulative at round 8):
+
+| draw | zero-rate | r2 hits (targets) | r4 | r6 | r8 | excluded proofs at r8 |
+|---|---|---|---|---|---|---|
+| s20 | yes | 0 / 300k (0) | 0 / 300k (0) | 0 / 300k (0) | 0 / 300k (0) | 0 |
+| s21 | yes | 1 / 300k (1) | 1 / 300k (1) | 151 / 300k (8) | 6 / 300k (1) | 0 |
+| s22 | yes | 0 / 300k (0) | 0 / 300k (0) | 4 / 300k (1) | 1 / 300k (1) | 0 |
+| s23 | yes | 1 / 300k (1) | 0 / 300k (0) | 0 / 300k (0) | 0 / 300k (0) | 0 |
+| s24 | no | 2 / 300k (2) | 0 / 300k (0) | 0 / 300k (0) | 667 / 300k (9) | 0 |
+| s25 | yes | 0 / 300k (0) | 0 / 300k (0) | 0 / 300k (0) | 0 / 300k (0) | 0 |
+| s27 | no | 0 / 300k (0) | 1 / 300k (1) | 0 / 300k (0) | 0 / 300k (0) | 0 |
+
+**Expectations vs outcomes** (pre-registered in `preregistration/round3-run1.md`):
+
+| | expectation | outcome | verdict |
+|---|---|---|---|
+| n₀ | depth-3 ≈ 3–5 of 8; reductio ≈ 4–5 of 8 | 6 of 8; 5 of 8 | depth-3 one above the range; reductio in range |
+| E1 pools | ≥ 250 required@8, 0 timeouts; ≥ 90 % with a 9-line alternative, ≤ 5 % none; ≥ 250 reductio neighbours; 0 oracle inconsistencies; every draw solves ≥ 40 % of its `mix` neighbour stratum by round 8 | 614 (300 kept), 0 timeouts; 95.9 % / 3.7 %; 759 (300 kept); 0; neighbour stratum solved 35–80 % (depth-3, s25 at 106 / 300 = 35 %) and 48–61 % (reductio) | held except the 40 % floor for depth-3 s25 (35 %) |
+| E2 depth-3 `req` | zero-rate draws ignite 0 of n₀, ≤ 5 targets; non-zero ignite ≥ 80 % by round 5 | 0 of 6, 0 targets each, no training step ever taken; non-zero 0 of 2 (s24 5 targets, s22 0) | zero-rate part held; non-zero part wrong |
+| E3 depth-3 `mix` | zero-rate ignite in ≥ 40 %, after ≥ 1 round of neighbour-only successes | 3 of 6 (s26 round 2, s21 4, s23 4; 239 / 241 / 255 targets); s20 1 target at round 8; s25, s27 0; first pattern proof always after 49–109 neighbours were solved | held |
+| E4 reductio `mix` | proposer: 1–2 of n₀ zero-rate draws ignite; standing rule: 0; non-zero ignite on both pools | **1 of 5** (s21, round 5, 52 / 300); non-zero: `mix` 3 of 3 (rounds 3, 5, 6; 52–53), `req` 1 of 3 (s26 round 7, 33) | proposer's number held; standing rule's 0 wrong; "both pools" wrong for `req` |
+| E5 drift | depth-3: ≥ 3 hits / 300k by round 8 in ≥ 2 of n₀ arms; reductio: ≤ 1 hit / 300k at every checkpoint in every zero-rate arm | depth-3: 4 of 6 zero-rate arms reach ≥ 3 hits at some checkpoint (s21 13 @ r4, s23 9 @ r4, s26 13 @ r2 and 114 @ r8, s27 19 @ r4), 1 of 6 at the round-8 checkpoint itself; reductio: **s21 151 @ r6 (8 targets), 6 @ r8; s22 4 @ r6** | depth-3 held (rates are bursty, not monotone); reductio wrong |
+| E6 route choice | required solved without the pattern ≤ 5 % (depth-3), 0 (reductio) | 0 in all 48 arms | held |
+
+Falsifiers: clause (3) — E2's zero-rate part held, so by the pre-registered criterion it dies (structural ignition without neighbours is as base-rate-gated as reductio; here it is *more* gated: even the two non-zero depth-3 draws did not ignite on `req`). Clause (2) — "≥ 2 zero-rate reductio draws ignite on `mix`": 1, not met; "any zero-rate reductio arm drifts to ≥ 10⁻⁵": met twice (s21 5.0·10⁻⁴ at round 6, s22 1.3·10⁻⁵ at round 6), so it dies by that criterion. Mixed-pool ignition of zero-rate draws, depth-3 3 / 6 vs reductio 1 / 5: Fisher exact two-sided p = 0.55 — no evidence of a class difference in rate, and no power to exclude one. In the reductio drift arms `--exclude_pattern` dropped 0 proofs (no neighbour was ever solved with a strict reductio), so those arms are plain neighbours-only expert iteration; in the depth-3 drift arms it dropped 0–137 proofs per arm.
+
+- **Frozen control at matched attempts** (pre-RL sample restricted to sample index ≤ 256 per target; column "frozen@256" above): 0 pattern targets for every draw except depth-3 s24 (2) and reductio s27 (1), against 0–255 (`mix`) after RL.
+- **Spend**: four A40 pods at $0.49/h, 05:16–08:54 UTC, **13.3 pod-hours ≈ $6.5** (`~/pods.log`; ceiling $50). Pods r31a–d deleted 08:54 after a listing diff (no remote-only file). **Bucket**: `hf://buckets/dan-pandori/nd-rl/round3-run1/artifacts/r3_1` (all arms with `found_1..8`, pre-RL and drift samples, logs), `…/ckpts/r3_1` (16 Stage-1 checkpoints `stage1_depth3_f0_a1_s{20..27}.pt`, `stage1_reductio_f0_s{20..27}.pt`; 64 drift checkpoints r2/4/6/8; round-8 checkpoints of the 16 `mix` arms and the 2 `req` arms that trained), `…/data/r3_1` (pools with oracle fields, labelling files, generator shards).

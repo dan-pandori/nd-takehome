@@ -1,0 +1,480 @@
+[r3_1/ei_reductio_s24_drift r1] targets (this round, pass@32) SOLVED 59/300 = 0.197 [0.156,0.245]
+  len 7: 55/212 = 0.259 [0.205,0.322]
+  len 8: 4/88 = 0.045 [0.018,0.111]
+  written hist {7: 335, 8: 31}
+  pruned hist {5: 14, 6: 82, 7: 243, 8: 27}
+  frontier written 8 pruned 8
+  reasons [('rule check failed: NEGE', 3355), ('rule check failed: IMPE', 921), ('rule check failed: ANDI', 893), ('rule check failed: DN', 569), ('bad box cite', 464), ('rule check failed: ORI2', 440)]
+[r3_1/ei_reductio_s24_drift r1] targets (cumulative 32 attempts) SOLVED 59/300 = 0.197 [0.156,0.245]
+  len 7: 55/212 = 0.259 [0.205,0.322]
+  len 8: 4/88 = 0.045 [0.018,0.111]
+  written hist {7: 335, 8: 31}
+  pruned hist {5: 14, 6: 82, 7: 243, 8: 27}
+  frontier written 8 pruned 8
+  reasons []
+[r3_1/ei_reductio_s24_drift r1] transfer (this round, pass@32) SOLVED 0/150 = 0.000 [0.000,0.025]
+  len 7: 0/27 = 0.000 [0.000,0.125]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 1529), ('rule check failed: ANDI', 695), ('bad line cite', 414), ('rule check failed: DN', 372), ('rule check failed: IMPI', 309), ('rule check failed: NEGE', 303)]
+[r3_1/ei_reductio_s24_drift r1] transfer (cumulative 32 attempts) SOLVED 0/150 = 0.000 [0.000,0.025]
+  len 7: 0/27 = 0.000 [0.000,0.125]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons []
+[r3_1/ei_reductio_s24_drift r1] transfer greedy SOLVED 0/150 = 0.000 [0.000,0.025]
+  len 7: 0/27 = 0.000 [0.000,0.125]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 48), ('rule check failed: ANDI', 20), ('rule check failed: DN', 12), ('bad line cite', 12), ('rule check failed: NEGE', 11), ('rule check failed: IMPI', 8)]
+[r3_1/ei_reductio_s24_drift r1] heldout greedy SOLVED 4431/5000 = 0.886 [0.877,0.895]
+  len 2: 999/1000 = 0.999 [0.994,1.000]
+  len 3: 997/1000 = 0.997 [0.991,0.999]
+  len 4: 978/1000 = 0.978 [0.967,0.985]
+  len 5: 561/1000 = 0.561 [0.530,0.591]
+  len 6: 896/1000 = 0.896 [0.876,0.913]
+  written hist {2: 1049, 3: 989, 4: 1056, 5: 598, 6: 739}
+  pruned hist {2: 1050, 3: 991, 4: 1059, 5: 592, 6: 739}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: ANDI', 95), ('rule check failed: IMPE', 77), ('rule check failed: NEGE', 50), ('final formula is not the conclusion', 40), ('bad line cite', 36), ('parse: missing ) after ~', 34)]
+[r3_1/ei_reductio_s24_drift r1] exclude_pattern=reductio: dropped 0 proofs of 0 theorems from the mix
+python3 train.py --data artifacts/r3_1/ei_reductio_s24_drift/mix_1.jsonl --init ckpts/r3_1/stage1_reductio_f0_s24.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/r3_1/ei_reductio_s24_drift_r1.pt --seed 24001 --log_every 200
+params 3210240 mode abs shift True
+train records 20640 max len 602
+step 200 loss 0.0573 lr 2.53e-04 21s
+step 400 loss 0.0574 lr 1.09e-04 51s
+step 600 loss 0.0581 lr 3.00e-05 78s
+saved ckpts/r3_1/ei_reductio_s24_drift_r1.pt
+=== round 1 done in 181s; new proofs 366; cum targets solved 59
+[r3_1/ei_reductio_s24_drift r2] targets (this round, pass@32) SOLVED 105/300 = 0.350 [0.298,0.406]
+  len 7: 97/212 = 0.458 [0.392,0.525]
+  len 8: 8/88 = 0.091 [0.047,0.169]
+  written hist {7: 1766, 8: 141}
+  pruned hist {5: 101, 6: 441, 7: 1242, 8: 123}
+  frontier written 8 pruned 8
+  reasons [('rule check failed: NEGE', 2692), ('rule check failed: IMPE', 832), ('rule check failed: DN', 700), ('rule check failed: ANDI', 602), ('bad box cite', 342), ('rule check failed: ORI2', 274)]
+[r3_1/ei_reductio_s24_drift r2] targets (cumulative 64 attempts) SOLVED 105/300 = 0.350 [0.298,0.406]
+  len 7: 97/212 = 0.458 [0.392,0.525]
+  len 8: 8/88 = 0.091 [0.047,0.169]
+  written hist {7: 1974, 8: 164}
+  pruned hist {5: 109, 6: 489, 7: 1398, 8: 142}
+  frontier written 8 pruned 8
+  reasons []
+[r3_1/ei_reductio_s24_drift r2] transfer (this round, pass@32) SOLVED 0/150 = 0.000 [0.000,0.025]
+  len 7: 0/27 = 0.000 [0.000,0.125]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 1445), ('rule check failed: ANDI', 673), ('bad line cite', 375), ('rule check failed: DN', 375), ('rule check failed: IMPI', 348), ('bad box cite', 281)]
+[r3_1/ei_reductio_s24_drift r2] transfer (cumulative 64 attempts) SOLVED 0/150 = 0.000 [0.000,0.025]
+  len 7: 0/27 = 0.000 [0.000,0.125]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons []
+[r3_1/ei_reductio_s24_drift r2] transfer greedy SOLVED 0/150 = 0.000 [0.000,0.025]
+  len 7: 0/27 = 0.000 [0.000,0.125]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 47), ('rule check failed: ANDI', 18), ('rule check failed: DN', 14), ('bad line cite', 12), ('bad box cite', 11), ('rule check failed: IMPI', 8)]
+[r3_1/ei_reductio_s24_drift r2] heldout greedy SOLVED 4411/5000 = 0.882 [0.873,0.891]
+  len 2: 997/1000 = 0.997 [0.991,0.999]
+  len 3: 994/1000 = 0.994 [0.987,0.997]
+  len 4: 972/1000 = 0.972 [0.960,0.981]
+  len 5: 553/1000 = 0.553 [0.522,0.584]
+  len 6: 895/1000 = 0.895 [0.874,0.913]
+  written hist {2: 1046, 3: 993, 4: 1013, 5: 601, 6: 757, 7: 1}
+  pruned hist {2: 1051, 3: 991, 4: 1016, 5: 597, 6: 756}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: ANDI', 102), ('rule check failed: IMPE', 91), ('line index mismatch at position 5', 67), ('rule check failed: DN', 38), ('final formula is not the conclusion', 36), ('rule check failed: NEGE', 34)]
+[r3_1/ei_reductio_s24_drift r2] exclude_pattern=reductio: dropped 0 proofs of 0 theorems from the mix
+python3 train.py --data artifacts/r3_1/ei_reductio_s24_drift/mix_2.jsonl --init ckpts/r3_1/ei_reductio_s24_drift_r1.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/r3_1/ei_reductio_s24_drift_r2.pt --seed 24002 --log_every 200
+params 3210240 mode abs shift True
+train records 21532 max len 516
+step 200 loss 0.0552 lr 2.53e-04 24s
+step 400 loss 0.0561 lr 1.09e-04 52s
+step 600 loss 0.0529 lr 3.00e-05 78s
+saved ckpts/r3_1/ei_reductio_s24_drift_r2.pt
+=== round 2 done in 154s; new proofs 1772; cum targets solved 105
+[r3_1/ei_reductio_s24_drift r3] targets (this round, pass@32) SOLVED 133/300 = 0.443 [0.388,0.500]
+  len 7: 118/212 = 0.557 [0.489,0.622]
+  len 8: 15/88 = 0.170 [0.106,0.262]
+  written hist {7: 2207, 8: 223, 9: 2}
+  pruned hist {5: 104, 6: 538, 7: 1604, 8: 184, 9: 2}
+  frontier written 8 pruned 8
+  reasons [('rule check failed: NEGE', 1773), ('rule check failed: DN', 796), ('rule check failed: IMPE', 592), ('rule check failed: ANDI', 515), ('bad box cite', 334), ('rule check failed: ANDE2', 281)]
+[r3_1/ei_reductio_s24_drift r3] targets (cumulative 96 attempts) SOLVED 133/300 = 0.443 [0.388,0.500]
+  len 7: 118/212 = 0.557 [0.489,0.622]
+  len 8: 15/88 = 0.170 [0.106,0.262]
+  written hist {7: 3467, 8: 335, 9: 2}
+  pruned hist {5: 162, 6: 851, 7: 2507, 8: 282, 9: 2}
+  frontier written 8 pruned 8
+  reasons []
+[r3_1/ei_reductio_s24_drift r3] transfer (this round, pass@32) SOLVED 0/150 = 0.000 [0.000,0.025]
+  len 7: 0/27 = 0.000 [0.000,0.125]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 1313), ('rule check failed: ANDI', 740), ('rule check failed: NEGE', 470), ('rule check failed: DN', 368), ('bad line cite', 297), ('rule check failed: ORI2', 250)]
+[r3_1/ei_reductio_s24_drift r3] transfer (cumulative 96 attempts) SOLVED 0/150 = 0.000 [0.000,0.025]
+  len 7: 0/27 = 0.000 [0.000,0.125]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons []
+[r3_1/ei_reductio_s24_drift r3] transfer greedy SOLVED 0/150 = 0.000 [0.000,0.025]
+  len 7: 0/27 = 0.000 [0.000,0.125]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 41), ('rule check failed: ANDI', 22), ('rule check failed: NEGE', 15), ('rule check failed: DN', 14), ('line index mismatch at position 3', 11), ('rule check failed: ANDE2', 8)]
+[r3_1/ei_reductio_s24_drift r3] heldout greedy SOLVED 4447/5000 = 0.889 [0.880,0.898]
+  len 2: 999/1000 = 0.999 [0.994,1.000]
+  len 3: 993/1000 = 0.993 [0.986,0.997]
+  len 4: 971/1000 = 0.971 [0.959,0.980]
+  len 5: 594/1000 = 0.594 [0.563,0.624]
+  len 6: 890/1000 = 0.890 [0.869,0.908]
+  written hist {2: 1082, 3: 991, 4: 1030, 5: 590, 6: 754}
+  pruned hist {2: 1085, 3: 993, 4: 1036, 5: 581, 6: 752}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: IMPE', 112), ('rule check failed: ANDI', 84), ('rule check failed: DN', 54), ('final formula is not the conclusion', 34), ('rule check failed: NEGE', 31), ('bad line cite', 23)]
+[r3_1/ei_reductio_s24_drift r3] exclude_pattern=reductio: dropped 0 proofs of 0 theorems from the mix
+python3 train.py --data artifacts/r3_1/ei_reductio_s24_drift/mix_3.jsonl --init ckpts/r3_1/ei_reductio_s24_drift_r2.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/r3_1/ei_reductio_s24_drift_r3.pt --seed 24003 --log_every 200
+params 3210240 mode abs shift True
+train records 22040 max len 493
+step 200 loss 0.0554 lr 2.53e-04 29s
+step 400 loss 0.0529 lr 1.09e-04 59s
+step 600 loss 0.0540 lr 3.00e-05 84s
+saved ckpts/r3_1/ei_reductio_s24_drift_r3.pt
+=== round 3 done in 158s; new proofs 1666; cum targets solved 133
+[r3_1/ei_reductio_s24_drift r4] targets (this round, pass@32) SOLVED 146/300 = 0.487 [0.431,0.543]
+  len 7: 128/212 = 0.604 [0.537,0.667]
+  len 8: 18/88 = 0.205 [0.133,0.300]
+  written hist {7: 2218, 8: 291, 9: 13}
+  pruned hist {5: 87, 6: 553, 7: 1674, 8: 195, 9: 13}
+  frontier written 9 pruned 9
+  reasons [('rule check failed: NEGE', 1523), ('rule check failed: DN', 691), ('rule check failed: IMPE', 565), ('bad box cite', 521), ('rule check failed: ANDI', 499), ('parse: missing binop', 204)]
+[r3_1/ei_reductio_s24_drift r4] targets (cumulative 128 attempts) SOLVED 146/300 = 0.487 [0.431,0.543]
+  len 7: 128/212 = 0.604 [0.537,0.667]
+  len 8: 18/88 = 0.205 [0.133,0.300]
+  written hist {7: 4366, 8: 502, 9: 14}
+  pruned hist {5: 189, 6: 1080, 7: 3222, 8: 377, 9: 14}
+  frontier written 9 pruned 9
+  reasons []
+[r3_1/ei_reductio_s24_drift r4] transfer (this round, pass@32) SOLVED 1/150 = 0.007 [0.001,0.037]
+  len 7: 1/27 = 0.037 [0.007,0.183]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {7: 1}
+  pruned hist {7: 1}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 1581), ('rule check failed: ANDI', 640), ('rule check failed: NEGE', 433), ('rule check failed: IMPI', 331), ('rule check failed: DN', 315), ('bad line cite', 280)]
+[r3_1/ei_reductio_s24_drift r4] transfer (cumulative 128 attempts) SOLVED 1/150 = 0.007 [0.001,0.037]
+  len 7: 1/27 = 0.037 [0.007,0.183]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {7: 1}
+  pruned hist {7: 1}
+  frontier written 0 pruned 0
+  reasons []
+[r3_1/ei_reductio_s24_drift r4] transfer greedy SOLVED 0/150 = 0.000 [0.000,0.025]
+  len 7: 0/27 = 0.000 [0.000,0.125]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 50), ('rule check failed: ANDI', 21), ('rule check failed: NEGE', 12), ('rule check failed: DN', 11), ('bad box cite', 10), ('bad line cite', 10)]
+[r3_1/ei_reductio_s24_drift r4] heldout greedy SOLVED 4412/5000 = 0.882 [0.873,0.891]
+  len 2: 999/1000 = 0.999 [0.994,1.000]
+  len 3: 994/1000 = 0.994 [0.987,0.997]
+  len 4: 978/1000 = 0.978 [0.967,0.985]
+  len 5: 549/1000 = 0.549 [0.518,0.580]
+  len 6: 892/1000 = 0.892 [0.871,0.910]
+  written hist {2: 1047, 3: 994, 4: 1034, 5: 590, 6: 746, 7: 1}
+  pruned hist {2: 1049, 3: 993, 4: 1040, 5: 583, 6: 746, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: IMPE', 85), ('rule check failed: ANDI', 81), ('line index mismatch at position 5', 81), ('final formula is not the conclusion', 49), ('bad box cite', 41), ('rule check failed: NEGE', 32)]
+[r3_1/ei_reductio_s24_drift r4] exclude_pattern=reductio: dropped 0 proofs of 0 theorems from the mix
+python3 train.py --data artifacts/r3_1/ei_reductio_s24_drift/mix_4.jsonl --init ckpts/r3_1/ei_reductio_s24_drift_r3.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/r3_1/ei_reductio_s24_drift_r4.pt --seed 24004 --log_every 200
+params 3210240 mode abs shift True
+train records 22272 max len 456
+step 200 loss 0.0534 lr 2.53e-04 26s
+step 400 loss 0.0504 lr 1.09e-04 54s
+step 600 loss 0.0491 lr 3.00e-05 75s
+saved ckpts/r3_1/ei_reductio_s24_drift_r4.pt
+=== round 4 done in 166s; new proofs 1078; cum targets solved 146
+[r3_1/ei_reductio_s24_drift r5] targets (this round, pass@32) SOLVED 154/300 = 0.513 [0.457,0.569]
+  len 7: 135/212 = 0.637 [0.570,0.699]
+  len 8: 19/88 = 0.216 [0.143,0.313]
+  written hist {7: 2272, 8: 304, 9: 12}
+  pruned hist {5: 99, 6: 555, 7: 1694, 8: 228, 9: 12}
+  frontier written 9 pruned 9
+  reasons [('rule check failed: NEGE', 1366), ('rule check failed: DN', 659), ('rule check failed: IMPE', 635), ('rule check failed: ANDI', 504), ('bad box cite', 305), ('bad line cite', 221)]
+[r3_1/ei_reductio_s24_drift r5] targets (cumulative 160 attempts) SOLVED 154/300 = 0.513 [0.457,0.569]
+  len 7: 135/212 = 0.637 [0.570,0.699]
+  len 8: 19/88 = 0.216 [0.143,0.313]
+  written hist {7: 4964, 8: 617, 9: 19}
+  pruned hist {5: 207, 6: 1221, 7: 3684, 8: 469, 9: 19}
+  frontier written 9 pruned 9
+  reasons []
+[r3_1/ei_reductio_s24_drift r5] transfer (this round, pass@32) SOLVED 0/150 = 0.000 [0.000,0.025]
+  len 7: 0/27 = 0.000 [0.000,0.125]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 1422), ('rule check failed: ANDI', 649), ('rule check failed: DN', 384), ('rule check failed: NEGE', 377), ('bad line cite', 355), ('rule check failed: IMPI', 336)]
+[r3_1/ei_reductio_s24_drift r5] transfer (cumulative 160 attempts) SOLVED 1/150 = 0.007 [0.001,0.037]
+  len 7: 1/27 = 0.037 [0.007,0.183]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {7: 1}
+  pruned hist {7: 1}
+  frontier written 0 pruned 0
+  reasons []
+[r3_1/ei_reductio_s24_drift r5] transfer greedy SOLVED 0/150 = 0.000 [0.000,0.025]
+  len 7: 0/27 = 0.000 [0.000,0.125]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 47), ('rule check failed: ANDI', 19), ('rule check failed: DN', 14), ('line index mismatch at position 3', 12), ('rule check failed: NEGE', 11), ('rule check failed: IMPI', 9)]
+[r3_1/ei_reductio_s24_drift r5] heldout greedy SOLVED 4434/5000 = 0.887 [0.878,0.895]
+  len 2: 1000/1000 = 1.000 [0.996,1.000]
+  len 3: 995/1000 = 0.995 [0.988,0.998]
+  len 4: 970/1000 = 0.970 [0.957,0.979]
+  len 5: 558/1000 = 0.558 [0.527,0.589]
+  len 6: 911/1000 = 0.911 [0.892,0.927]
+  written hist {2: 1053, 3: 990, 4: 1052, 5: 591, 6: 744, 7: 4}
+  pruned hist {2: 1054, 3: 994, 4: 1057, 5: 584, 6: 743, 7: 2}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: ANDI', 74), ('rule check failed: IMPE', 73), ('line index mismatch at position 5', 72), ('final formula is not the conclusion', 44), ('rule check failed: DN', 37), ('rule check failed: NEGE', 35)]
+[r3_1/ei_reductio_s24_drift r5] exclude_pattern=reductio: dropped 0 proofs of 0 theorems from the mix
+python3 train.py --data artifacts/r3_1/ei_reductio_s24_drift/mix_5.jsonl --init ckpts/r3_1/ei_reductio_s24_drift_r4.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/r3_1/ei_reductio_s24_drift_r5.pt --seed 24005 --log_every 200
+params 3210240 mode abs shift True
+train records 22420 max len 452
+step 200 loss 0.0541 lr 2.53e-04 31s
+step 400 loss 0.0542 lr 1.09e-04 59s
+step 600 loss 0.0480 lr 3.00e-05 80s
+saved ckpts/r3_1/ei_reductio_s24_drift_r5.pt
+=== round 5 done in 173s; new proofs 718; cum targets solved 154
+[r3_1/ei_reductio_s24_drift r6] targets (this round, pass@32) SOLVED 162/300 = 0.540 [0.483,0.596]
+  len 7: 142/212 = 0.670 [0.604,0.730]
+  len 8: 20/88 = 0.227 [0.152,0.325]
+  written hist {7: 2379, 8: 319, 9: 12}
+  pruned hist {5: 102, 6: 550, 7: 1804, 8: 242, 9: 12}
+  frontier written 9 pruned 9
+  reasons [('rule check failed: NEGE', 1273), ('rule check failed: DN', 698), ('rule check failed: IMPE', 531), ('rule check failed: ANDI', 418), ('bad box cite', 343), ('bad line cite', 214)]
+[r3_1/ei_reductio_s24_drift r6] targets (cumulative 192 attempts) SOLVED 162/300 = 0.540 [0.483,0.596]
+  len 7: 142/212 = 0.670 [0.604,0.730]
+  len 8: 20/88 = 0.227 [0.152,0.325]
+  written hist {7: 5406, 8: 693, 9: 22}
+  pruned hist {5: 235, 6: 1312, 7: 4023, 8: 529, 9: 22}
+  frontier written 9 pruned 9
+  reasons []
+[r3_1/ei_reductio_s24_drift r6] transfer (this round, pass@32) SOLVED 0/150 = 0.000 [0.000,0.025]
+  len 7: 0/27 = 0.000 [0.000,0.125]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 1533), ('rule check failed: ANDI', 717), ('rule check failed: DN', 383), ('rule check failed: NEGE', 314), ('bad line cite', 307), ('rule check failed: IMPI', 261)]
+[r3_1/ei_reductio_s24_drift r6] transfer (cumulative 192 attempts) SOLVED 1/150 = 0.007 [0.001,0.037]
+  len 7: 1/27 = 0.037 [0.007,0.183]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {7: 1}
+  pruned hist {7: 1}
+  frontier written 0 pruned 0
+  reasons []
+[r3_1/ei_reductio_s24_drift r6] transfer greedy SOLVED 0/150 = 0.000 [0.000,0.025]
+  len 7: 0/27 = 0.000 [0.000,0.125]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 48), ('rule check failed: ANDI', 25), ('rule check failed: DN', 12), ('rule check failed: NEGE', 11), ('bad line cite', 9), ('rule check failed: ANDE2', 8)]
+[r3_1/ei_reductio_s24_drift r6] heldout greedy SOLVED 4420/5000 = 0.884 [0.875,0.893]
+  len 2: 999/1000 = 0.999 [0.994,1.000]
+  len 3: 996/1000 = 0.996 [0.990,0.998]
+  len 4: 977/1000 = 0.977 [0.966,0.985]
+  len 5: 545/1000 = 0.545 [0.514,0.576]
+  len 6: 903/1000 = 0.903 [0.883,0.920]
+  written hist {2: 1038, 3: 991, 4: 1035, 5: 597, 6: 756, 7: 3}
+  pruned hist {2: 1038, 3: 995, 4: 1040, 5: 589, 6: 755, 7: 3}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: IMPE', 110), ('rule check failed: ANDI', 89), ('rule check failed: ORI2', 56), ('final formula is not the conclusion', 42), ('rule check failed: NEGE', 40), ('rule check failed: DN', 39)]
+[r3_1/ei_reductio_s24_drift r6] exclude_pattern=reductio: dropped 0 proofs of 0 theorems from the mix
+python3 train.py --data artifacts/r3_1/ei_reductio_s24_drift/mix_6.jsonl --init ckpts/r3_1/ei_reductio_s24_drift_r5.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/r3_1/ei_reductio_s24_drift_r6.pt --seed 24006 --log_every 200
+params 3210240 mode abs shift True
+train records 22548 max len 469
+step 200 loss 0.0524 lr 2.53e-04 25s
+step 400 loss 0.0487 lr 1.09e-04 53s
+step 600 loss 0.0513 lr 3.00e-05 77s
+saved ckpts/r3_1/ei_reductio_s24_drift_r6.pt
+=== round 6 done in 168s; new proofs 521; cum targets solved 162
+[r3_1/ei_reductio_s24_drift r7] targets (this round, pass@32) SOLVED 165/300 = 0.550 [0.493,0.605]
+  len 7: 145/212 = 0.684 [0.619,0.743]
+  len 8: 20/88 = 0.227 [0.152,0.325]
+  written hist {7: 2291, 8: 348, 9: 14}
+  pruned hist {5: 103, 6: 532, 7: 1740, 8: 264, 9: 14}
+  frontier written 9 pruned 9
+  reasons [('rule check failed: NEGE', 1235), ('rule check failed: DN', 587), ('rule check failed: IMPE', 539), ('bad box cite', 355), ('rule check failed: ANDI', 339), ('bad line cite', 234)]
+[r3_1/ei_reductio_s24_drift r7] targets (cumulative 224 attempts) SOLVED 165/300 = 0.550 [0.493,0.605]
+  len 7: 145/212 = 0.684 [0.619,0.743]
+  len 8: 20/88 = 0.227 [0.152,0.325]
+  written hist {7: 5742, 8: 773, 9: 24}
+  pruned hist {5: 257, 6: 1379, 7: 4285, 8: 594, 9: 24}
+  frontier written 9 pruned 9
+  reasons []
+[r3_1/ei_reductio_s24_drift r7] transfer (this round, pass@32) SOLVED 0/150 = 0.000 [0.000,0.025]
+  len 7: 0/27 = 0.000 [0.000,0.125]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 1365), ('rule check failed: ANDI', 589), ('bad line cite', 453), ('rule check failed: NEGE', 377), ('rule check failed: DN', 367), ('bad box cite', 288)]
+[r3_1/ei_reductio_s24_drift r7] transfer (cumulative 224 attempts) SOLVED 1/150 = 0.007 [0.001,0.037]
+  len 7: 1/27 = 0.037 [0.007,0.183]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {7: 1}
+  pruned hist {7: 1}
+  frontier written 0 pruned 0
+  reasons []
+[r3_1/ei_reductio_s24_drift r7] transfer greedy SOLVED 0/150 = 0.000 [0.000,0.025]
+  len 7: 0/27 = 0.000 [0.000,0.125]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 46), ('rule check failed: ANDI', 19), ('rule check failed: DN', 14), ('rule check failed: NEGE', 14), ('bad line cite', 10), ('bad box cite', 8)]
+[r3_1/ei_reductio_s24_drift r7] heldout greedy SOLVED 4441/5000 = 0.888 [0.879,0.897]
+  len 2: 998/1000 = 0.998 [0.993,0.999]
+  len 3: 995/1000 = 0.995 [0.988,0.998]
+  len 4: 977/1000 = 0.977 [0.966,0.985]
+  len 5: 566/1000 = 0.566 [0.535,0.596]
+  len 6: 905/1000 = 0.905 [0.885,0.922]
+  written hist {2: 1052, 3: 999, 4: 1047, 5: 597, 6: 745, 7: 1}
+  pruned hist {2: 1054, 3: 1003, 4: 1052, 5: 587, 6: 745}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: IMPE', 99), ('rule check failed: ANDI', 71), ('rule check failed: ORI2', 43), ('line index mismatch at position 5', 43), ('final formula is not the conclusion', 38), ('bad line cite', 34)]
+[r3_1/ei_reductio_s24_drift r7] exclude_pattern=reductio: dropped 0 proofs of 0 theorems from the mix
+python3 train.py --data artifacts/r3_1/ei_reductio_s24_drift/mix_7.jsonl --init ckpts/r3_1/ei_reductio_s24_drift_r6.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/r3_1/ei_reductio_s24_drift_r7.pt --seed 24007 --log_every 200
+params 3210240 mode abs shift True
+train records 22616 max len 602
+step 200 loss 0.0509 lr 2.53e-04 25s
+step 400 loss 0.0504 lr 1.09e-04 49s
+step 600 loss 0.0521 lr 3.00e-05 70s
+saved ckpts/r3_1/ei_reductio_s24_drift_r7.pt
+=== round 7 done in 130s; new proofs 418; cum targets solved 165
+[r3_1/ei_reductio_s24_drift r8] targets (this round, pass@32) SOLVED 170/300 = 0.567 [0.510,0.622]
+  len 7: 150/212 = 0.708 [0.643,0.765]
+  len 8: 20/88 = 0.227 [0.152,0.325]
+  written hist {7: 2416, 8: 344, 9: 9}
+  pruned hist {5: 117, 6: 573, 7: 1807, 8: 263, 9: 9}
+  frontier written 9 pruned 9
+  reasons [('rule check failed: NEGE', 1255), ('rule check failed: DN', 777), ('rule check failed: IMPE', 416), ('rule check failed: ANDI', 379), ('bad box cite', 223), ('rule check failed: ORI2', 172)]
+[r3_1/ei_reductio_s24_drift r8] targets (cumulative 256 attempts) SOLVED 170/300 = 0.567 [0.510,0.622]
+  len 7: 150/212 = 0.708 [0.643,0.765]
+  len 8: 20/88 = 0.227 [0.152,0.325]
+  written hist {7: 6041, 8: 819, 9: 24}
+  pruned hist {5: 280, 6: 1462, 7: 4488, 8: 630, 9: 24}
+  frontier written 9 pruned 9
+  reasons []
+[r3_1/ei_reductio_s24_drift r8] transfer (this round, pass@32) SOLVED 0/150 = 0.000 [0.000,0.025]
+  len 7: 0/27 = 0.000 [0.000,0.125]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 1564), ('rule check failed: ANDI', 595), ('rule check failed: IMPI', 364), ('rule check failed: NEGE', 359), ('rule check failed: DN', 348), ('bad line cite', 266)]
+[r3_1/ei_reductio_s24_drift r8] transfer (cumulative 256 attempts) SOLVED 1/150 = 0.007 [0.001,0.037]
+  len 7: 1/27 = 0.037 [0.007,0.183]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {7: 1}
+  pruned hist {7: 1}
+  frontier written 0 pruned 0
+  reasons []
+[r3_1/ei_reductio_s24_drift r8] transfer greedy SOLVED 0/150 = 0.000 [0.000,0.025]
+  len 7: 0/27 = 0.000 [0.000,0.125]
+  len 8: 0/67 = 0.000 [0.000,0.054]
+  len 9: 0/41 = 0.000 [0.000,0.086]
+  len 10: 0/15 = 0.000 [0.000,0.204]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: IMPE', 49), ('rule check failed: ANDI', 20), ('rule check failed: DN', 13), ('rule check failed: NEGE', 11), ('line index mismatch at position 3', 9), ('rule check failed: IMPI', 7)]
+[r3_1/ei_reductio_s24_drift r8] heldout greedy SOLVED 4430/5000 = 0.886 [0.877,0.895]
+  len 2: 1000/1000 = 1.000 [0.996,1.000]
+  len 3: 996/1000 = 0.996 [0.990,0.998]
+  len 4: 974/1000 = 0.974 [0.962,0.982]
+  len 5: 551/1000 = 0.551 [0.520,0.582]
+  len 6: 909/1000 = 0.909 [0.890,0.925]
+  written hist {2: 1044, 3: 1002, 4: 1036, 5: 591, 6: 756, 7: 1}
+  pruned hist {2: 1046, 3: 1004, 4: 1041, 5: 584, 6: 755}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: IMPE', 95), ('rule check failed: ANDI', 57), ('rule check failed: DN', 49), ('rule check failed: ORI2', 48), ('bad line cite', 48), ('line index mismatch at position 4', 42)]
+[r3_1/ei_reductio_s24_drift r8] exclude_pattern=reductio: dropped 0 proofs of 0 theorems from the mix
+python3 train.py --data artifacts/r3_1/ei_reductio_s24_drift/mix_8.jsonl --init ckpts/r3_1/ei_reductio_s24_drift_r7.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/r3_1/ei_reductio_s24_drift_r8.pt --seed 24008 --log_every 200
+params 3210240 mode abs shift True
+train records 22696 max len 410
+step 200 loss 0.0521 lr 2.53e-04 22s
+step 400 loss 0.0523 lr 1.09e-04 44s
+step 600 loss 0.0470 lr 3.00e-05 64s
+saved ckpts/r3_1/ei_reductio_s24_drift_r8.pt
+=== round 8 done in 107s; new proofs 345; cum targets solved 170
