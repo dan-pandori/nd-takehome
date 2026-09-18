@@ -78,7 +78,7 @@ def draw(tag, covfn, armdir, s1log=None, gatefn=None, cov10k=None, verify_all=Fa
         D[a] = None if (a == 'frozen' and D['frozen_skipped']) else arm(armdir.format(arm=a), verify_all)
     if cov10k:
         D['base_1e4'] = cov(cov10k)
-    D['optional_pool_pre_rl'] = cov(covfn.replace('/cov_depth3_', '/optcov_depth3_')) if '/cov_depth3_' in covfn and 'r3_4b' in covfn else None
+    D['optional_pool_pre_rl'] = cov(f'{A}/optcov_depth3_{tag}.s0.jsonl') if 'r3_4b' in covfn else None
     if D.get('req') and D.get('base_1e4'):
         acq = set(D['req']['pattern_required_names']); base = set(D['base_1e4']['pattern_targets'])
         base_u = base | set(D['pre_rl']['pattern_targets']) if D['pre_rl'] else base
@@ -110,7 +110,7 @@ def main():
             T = f'{size}_s{s}'
             if not os.path.exists(f'{A}/q/s1_{T}.log'):
                 continue
-            S['sizes'][size][f's{s}'] = draw(T, f'{A}/cov_depth3_{T}.s0.jsonl', f'{A}/ei_depth3_{T}_{{arm}}', f'{A}/q/s1_{T}.log',
+            S['sizes'][size][f's{s}'] = draw(T, merge_shards(f'{A}/cov_depth3_{T}') if os.path.exists(f'{A}/cov_depth3_{T}.s0r.jsonl') else f'{A}/cov_depth3_{T}.s0.jsonl', f'{A}/ei_depth3_{T}_{{arm}}', f'{A}/q/s1_{T}.log',
                                              f'{A}/heldout_greedy_{T}.json', merge_shards(f'{A}/cov1e4_depth3_{T}'), a.verify_all)
     S['sizes']['3.2M'] = {f's{s}': draw(f'3.2M_s{s}', f'artifacts/r3_1/cov_depth3_s{s}.s0.jsonl', f'artifacts/r3_1/ei_depth3_s{s}_{{arm}}', verify_all=a.verify_all)
                           for s in range(20, 28)}
