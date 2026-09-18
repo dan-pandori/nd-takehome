@@ -55,3 +55,11 @@ mirabilis) are absent. By-source split per bin: `pools_summary.json` → `by_L_t
 Record fields: `name, thm, key (renaming class), prompt, n_lines (= L_true, used for binning by the driver), L_true,
 minlen_bound, source, schema, gen_lines, n_prem, rules, gen_proof (generator targets only: the generating proof, an upper
 bound; read by T5 for shapes; never trained on)`.
+
+## Amendment 01:50 UTC (before any rung result): RL-target pool v2
+Round 1 of T1 s0 and T2 s0 (k = 32) accepted a proof for only **16 of 2,295** targets: the pool's `L_true` 7 bin was 236/300
+textbook instances (contraposition, export, …, which the base model almost never writes) and only 64 generator theorems, so
+expert iteration had almost no positives to train on. The targets are a *training* pool; to give every rung the same
+foothold, **1,500 generator theorems at `L_true` 7 and 700 at `L_true` 8** were moved from the reserve into `rl_targets.jsonl`
+(now **4,495**: 7: 1,800, 8: 1,000, 9: 1,004, 10: 456, 11: 99, 12: 106, 13: 16, 14: 14; generator 3,735 / textbook 760).
+The transfer pool is unchanged. Class-disjointness re-asserted. The sample budget stays 256 per target (8 × 32).

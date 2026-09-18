@@ -78,3 +78,11 @@ frozen solved 89/297 at `L_true` 7 and 0/127 at 8; EI (s0, 16 rounds) 237/297, 6
   are reported as incomplete; the leaderboard is written with what is pulled back.
 - If the transfer pool cannot reach 1,500 theorems at `L_true` 7–14 within 3 pod-hours of prover time, the run
   proceeds with the pool as built and says so.
+
+## Amendment 2026-09-18 01:50 UTC (after the pool build and a killed round 1; before any rung result)
+- **RL-target pool v2** (see `data/ladder/POOLS.md`): the first target pool gave the base model a foothold of 16/2,295 targets
+  at k = 32 (round 1 of T1 s0 and T2 s0, both killed), because its `L_true`-7 bin was almost all textbook schemata. 1,500
+  generator theorems at `L_true` 7 and 700 at `L_true` 8 were moved from the reserve into the target pool (4,495 targets).
+  Transfer pool, budget per target, predictions and falsifiers unchanged; the target-pool `L*` predictions now refer to the
+  v2 pool. The killed round-1 outputs were deleted and are not reused.
+- Samplers run at `--batch 512` (two at 1,024 exceeded the 3090's 24 GB); this changes nothing statistically.
