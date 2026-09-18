@@ -997,14 +997,14 @@
      },
      "base10k": {
       "file": "artifacts/r3_4a/cov_m25_s1_b10k.s0.jsonl",
-      "targets_sampled": 31,
-      "samples": 310000,
-      "acquired_covered": 31,
-      "acquired_base_reachable": 4,
-      "ei_only": 27,
-      "ei_only_fraction": 0.8709677419354839,
-      "rate": 0.0012483870967741936,
-      "base_reachable_all_sampled": 4,
+      "targets_sampled": 52,
+      "samples": 520000,
+      "acquired_covered": 52,
+      "acquired_base_reachable": 11,
+      "ei_only": 41,
+      "ei_only_fraction": 0.7884615384615384,
+      "rate": 0.007594230769230769,
+      "base_reachable_all_sampled": 11,
       "solved_without_pattern": 0
      },
      "stage1": {
@@ -1335,12 +1335,19 @@
       }
      },
      "frozen": {
-      "rounds": 1,
+      "rounds": 8,
       "solved": 0,
       "acquired": 0,
       "solved_without_pattern": 0,
       "distinct_pattern_proofs": 0,
       "acq_by_round": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
        0
       ],
       "acq_by_stratum": {
@@ -1353,14 +1360,21 @@
       "acquired_names": [],
       "ignition_round": null,
       "first_proof_round": null,
-      "transfer_acquired": 0,
+      "transfer_acquired": 1,
       "transfer_by_stratum": {
-       "7": 0,
+       "7": 1,
        "8": 0,
        "9": 0,
        "10": 0
       },
       "heldout_greedy_by_round": [
+       0.9104,
+       0.9104,
+       0.9104,
+       0.9104,
+       0.9104,
+       0.9104,
+       0.9104,
        0.9104
       ],
       "trained_rounds": 0,
@@ -1417,12 +1431,14 @@
       "targets_hit_within_2000": 0
      },
      "ei": {
-      "rounds": 6,
+      "rounds": 8,
       "solved": 0,
       "acquired": 0,
       "solved_without_pattern": 0,
       "distinct_pattern_proofs": 0,
       "acq_by_round": [
+       0,
+       0,
        0,
        0,
        0,
@@ -1453,6 +1469,8 @@
        0.8972,
        0.8972,
        0.8972,
+       0.8972,
+       0.8972,
        0.8972
       ],
       "trained_rounds": 0,
@@ -1468,7 +1486,62 @@
        "train": "data/r3_4a/train_reductio_f0_b1.jsonl"
       }
      },
-     "frozen": null,
+     "frozen": {
+      "rounds": 8,
+      "solved": 0,
+      "acquired": 0,
+      "solved_without_pattern": 0,
+      "distinct_pattern_proofs": 0,
+      "acq_by_round": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      "acq_by_stratum": {
+       "7": 0,
+       "8": 0,
+       "9": 0,
+       "10": 0
+      },
+      "acq_by_schema": {},
+      "acquired_names": [],
+      "ignition_round": null,
+      "first_proof_round": null,
+      "transfer_acquired": 0,
+      "transfer_by_stratum": {
+       "7": 0,
+       "8": 0,
+       "9": 0,
+       "10": 0
+      },
+      "heldout_greedy_by_round": [
+       0.8972,
+       0.8972,
+       0.8972,
+       0.8972,
+       0.8972,
+       0.8972,
+       0.8972,
+       0.8972
+      ],
+      "trained_rounds": 0,
+      "args": {
+       "ft_lr": 0.0003,
+       "ft_steps": 600,
+       "batch": 1024,
+       "k": 32,
+       "rounds": 8,
+       "seed": 1,
+       "no_train": true,
+       "init": "ckpts/r3_4a/stage1_reductio_f0_b1_m25B_s1.pt",
+       "train": "data/r3_4a/train_reductio_f0_b1.jsonl"
+      }
+     },
      "stage1": {
       "params": 25321472,
       "steps": 12000,
@@ -1518,40 +1591,101 @@
       "targets_hit_within_2000": 5
      },
      "ei": {
-      "rounds": 2,
-      "solved": 1,
-      "acquired": 1,
+      "rounds": 8,
+      "solved": 48,
+      "acquired": 48,
       "solved_without_pattern": 0,
-      "distinct_pattern_proofs": 1,
+      "distinct_pattern_proofs": 48,
       "acq_by_round": [
        0,
-       1
+       1,
+       9,
+       31,
+       39,
+       43,
+       44,
+       48
       ],
       "acq_by_stratum": {
-       "7": 1,
+       "7": 48,
        "8": 0,
        "9": 0,
        "10": 0
       },
       "acq_by_schema": {
-       "negimp_to_pos": 1
+       "nand_neg": 26,
+       "negimp_to_pos": 22
       },
       "acquired_names": [
-       "targets_reductio_req_262"
+       "targets_reductio_req_105",
+       "targets_reductio_req_111",
+       "targets_reductio_req_115",
+       "targets_reductio_req_120",
+       "targets_reductio_req_122",
+       "targets_reductio_req_127",
+       "targets_reductio_req_13",
+       "targets_reductio_req_131",
+       "targets_reductio_req_138",
+       "targets_reductio_req_140",
+       "targets_reductio_req_142",
+       "targets_reductio_req_152",
+       "targets_reductio_req_165",
+       "targets_reductio_req_174",
+       "targets_reductio_req_183",
+       "targets_reductio_req_184",
+       "targets_reductio_req_193",
+       "targets_reductio_req_195",
+       "targets_reductio_req_196",
+       "targets_reductio_req_198",
+       "targets_reductio_req_2",
+       "targets_reductio_req_230",
+       "targets_reductio_req_236",
+       "targets_reductio_req_238",
+       "targets_reductio_req_241",
+       "targets_reductio_req_247",
+       "targets_reductio_req_262",
+       "targets_reductio_req_264",
+       "targets_reductio_req_268",
+       "targets_reductio_req_269",
+       "targets_reductio_req_27",
+       "targets_reductio_req_281",
+       "targets_reductio_req_292",
+       "targets_reductio_req_31",
+       "targets_reductio_req_40",
+       "targets_reductio_req_51",
+       "targets_reductio_req_60",
+       "targets_reductio_req_67",
+       "targets_reductio_req_71",
+       "targets_reductio_req_72",
+       "targets_reductio_req_73",
+       "targets_reductio_req_74",
+       "targets_reductio_req_81",
+       "targets_reductio_req_85",
+       "targets_reductio_req_86",
+       "targets_reductio_req_88",
+       "targets_reductio_req_95",
+       "targets_reductio_req_97"
       ],
-      "ignition_round": null,
+      "ignition_round": 3,
       "first_proof_round": 2,
-      "transfer_acquired": 0,
+      "transfer_acquired": 20,
       "transfer_by_stratum": {
-       "7": 0,
+       "7": 20,
        "8": 0,
        "9": 0,
        "10": 0
       },
       "heldout_greedy_by_round": [
-       0.9104
+       0.9104,
+       0.9104,
+       0.9054,
+       0.9014,
+       0.8992,
+       0.8942,
+       0.8944,
+       0.9024
       ],
-      "trained_rounds": 0,
+      "trained_rounds": 7,
       "args": {
        "ft_lr": 0.0001,
        "ft_steps": 600,
@@ -1564,7 +1698,79 @@
        "train": "data/r3_4a/train_reductio_f0_b1.jsonl"
       }
      },
-     "frozen": null,
+     "frozen": {
+      "rounds": 8,
+      "solved": 2,
+      "acquired": 2,
+      "solved_without_pattern": 0,
+      "distinct_pattern_proofs": 2,
+      "acq_by_round": [
+       0,
+       1,
+       1,
+       1,
+       2,
+       2,
+       2,
+       2
+      ],
+      "acq_by_stratum": {
+       "7": 2,
+       "8": 0,
+       "9": 0,
+       "10": 0
+      },
+      "acq_by_schema": {
+       "negimp_to_pos": 2
+      },
+      "acquired_names": [
+       "targets_reductio_req_196",
+       "targets_reductio_req_262"
+      ],
+      "ignition_round": null,
+      "first_proof_round": 2,
+      "transfer_acquired": 0,
+      "transfer_by_stratum": {
+       "7": 0,
+       "8": 0,
+       "9": 0,
+       "10": 0
+      },
+      "heldout_greedy_by_round": [
+       0.9104,
+       0.9104,
+       0.9104,
+       0.9104,
+       0.9104,
+       0.9104,
+       0.9104,
+       0.9104
+      ],
+      "trained_rounds": 0,
+      "args": {
+       "ft_lr": 0.0003,
+       "ft_steps": 600,
+       "batch": 1024,
+       "k": 32,
+       "rounds": 8,
+       "seed": 2,
+       "no_train": true,
+       "init": "ckpts/r3_4a/stage1_reductio_f0_b1_m25B_s2.pt",
+       "train": "data/r3_4a/train_reductio_f0_b1.jsonl"
+      }
+     },
+     "base10k": {
+      "file": "artifacts/r3_4a/cov_m25B_s2_b10k.s0.jsonl",
+      "targets_sampled": 48,
+      "samples": 480000,
+      "acquired_covered": 48,
+      "acquired_base_reachable": 10,
+      "ei_only": 38,
+      "ei_only_fraction": 0.7916666666666666,
+      "rate": 0.0014020833333333333,
+      "base_reachable_all_sampled": 10,
+      "solved_without_pattern": 0
+     },
      "stage1": {
       "params": 25321472,
       "steps": 12000,
@@ -2216,8 +2422,8 @@
      "tag": "m85B_s0",
      "pre_rl": {
       "file": "artifacts/r3_4a/cov_m85B_s0_pre.s0.jsonl",
-      "targets": 236,
-      "samples": 472000,
+      "targets": 300,
+      "samples": 600000,
       "n_ok": 0,
       "strict_hits": 0,
       "targets_hit": 0,
@@ -2238,11 +2444,121 @@
       "hits_by_schema": {},
       "pass_at_256_targets": 0,
       "rate": 0.0,
-      "complete": false,
+      "complete": true,
       "targets_hit_within_2000": 0
      },
-     "ei": null,
-     "frozen": null,
+     "ei": {
+      "rounds": 8,
+      "solved": 0,
+      "acquired": 0,
+      "solved_without_pattern": 0,
+      "distinct_pattern_proofs": 0,
+      "acq_by_round": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      "acq_by_stratum": {
+       "7": 0,
+       "8": 0,
+       "9": 0,
+       "10": 0
+      },
+      "acq_by_schema": {},
+      "acquired_names": [],
+      "ignition_round": null,
+      "first_proof_round": null,
+      "transfer_acquired": 0,
+      "transfer_by_stratum": {
+       "7": 0,
+       "8": 0,
+       "9": 0,
+       "10": 0
+      },
+      "heldout_greedy_by_round": [
+       0.916,
+       0.916,
+       0.916,
+       0.916,
+       0.916,
+       0.916,
+       0.916,
+       0.916
+      ],
+      "trained_rounds": 0,
+      "args": {
+       "ft_lr": 0.0001,
+       "ft_steps": 600,
+       "batch": 1024,
+       "k": 32,
+       "rounds": 8,
+       "seed": 0,
+       "no_train": false,
+       "init": "ckpts/r3_4a/stage1_reductio_f0_b1_m85B_s0.pt",
+       "train": "data/r3_4a/train_reductio_f0_b1.jsonl"
+      }
+     },
+     "frozen": {
+      "rounds": 8,
+      "solved": 0,
+      "acquired": 0,
+      "solved_without_pattern": 0,
+      "distinct_pattern_proofs": 0,
+      "acq_by_round": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      "acq_by_stratum": {
+       "7": 0,
+       "8": 0,
+       "9": 0,
+       "10": 0
+      },
+      "acq_by_schema": {},
+      "acquired_names": [],
+      "ignition_round": null,
+      "first_proof_round": null,
+      "transfer_acquired": 0,
+      "transfer_by_stratum": {
+       "7": 0,
+       "8": 0,
+       "9": 0,
+       "10": 0
+      },
+      "heldout_greedy_by_round": [
+       0.916,
+       0.916,
+       0.916,
+       0.916,
+       0.916,
+       0.916,
+       0.916,
+       0.916
+      ],
+      "trained_rounds": 0,
+      "args": {
+       "ft_lr": 0.0003,
+       "ft_steps": 600,
+       "batch": 1024,
+       "k": 32,
+       "rounds": 8,
+       "seed": 0,
+       "no_train": true,
+       "init": "ckpts/r3_4a/stage1_reductio_f0_b1_m85B_s0.pt",
+       "train": "data/r3_4a/train_reductio_f0_b1.jsonl"
+      }
+     },
      "stage1": {
       "params": 85208064,
       "steps": 12000,
@@ -2258,39 +2574,150 @@
      "tag": "m85B_s1",
      "pre_rl": {
       "file": "artifacts/r3_4a/cov_m85B_s1_pre.s0.jsonl",
-      "targets": 117,
-      "samples": 234000,
-      "n_ok": 3,
-      "strict_hits": 3,
-      "targets_hit": 2,
+      "targets": 300,
+      "samples": 600000,
+      "n_ok": 4,
+      "strict_hits": 4,
+      "targets_hit": 3,
       "targets_hit_names": [
        "targets_reductio_req_115",
+       "targets_reductio_req_152",
        "targets_reductio_req_86"
       ],
       "solved_without_pattern": 0,
       "hits_by_stratum": {
-       "7": 3,
+       "7": 4,
        "8": 0,
        "9": 0,
        "10": 0
       },
       "targets_hit_by_stratum": {
-       "7": 2,
+       "7": 3,
        "8": 0,
        "9": 0,
        "10": 0
       },
       "hits_by_schema": {
        "nand_neg": 2,
-       "negimp_to_pos": 1
+       "negimp_to_pos": 2
       },
       "pass_at_256_targets": 0,
-      "rate": 1.282051282051282e-05,
-      "complete": false,
-      "targets_hit_within_2000": 2
+      "rate": 6.666666666666667e-06,
+      "complete": true,
+      "targets_hit_within_2000": 3
      },
-     "ei": null,
-     "frozen": null,
+     "ei": {
+      "rounds": 8,
+      "solved": 0,
+      "acquired": 0,
+      "solved_without_pattern": 0,
+      "distinct_pattern_proofs": 0,
+      "acq_by_round": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      "acq_by_stratum": {
+       "7": 0,
+       "8": 0,
+       "9": 0,
+       "10": 0
+      },
+      "acq_by_schema": {},
+      "acquired_names": [],
+      "ignition_round": null,
+      "first_proof_round": null,
+      "transfer_acquired": 1,
+      "transfer_by_stratum": {
+       "7": 1,
+       "8": 0,
+       "9": 0,
+       "10": 0
+      },
+      "heldout_greedy_by_round": [
+       0.9152,
+       0.9152,
+       0.9152,
+       0.9152,
+       0.9152,
+       0.9152,
+       0.9152,
+       0.9152
+      ],
+      "trained_rounds": 0,
+      "args": {
+       "ft_lr": 0.0001,
+       "ft_steps": 600,
+       "batch": 1024,
+       "k": 32,
+       "rounds": 8,
+       "seed": 1,
+       "no_train": false,
+       "init": "ckpts/r3_4a/stage1_reductio_f0_b1_m85B_s1.pt",
+       "train": "data/r3_4a/train_reductio_f0_b1.jsonl"
+      }
+     },
+     "frozen": {
+      "rounds": 8,
+      "solved": 0,
+      "acquired": 0,
+      "solved_without_pattern": 0,
+      "distinct_pattern_proofs": 0,
+      "acq_by_round": [
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      "acq_by_stratum": {
+       "7": 0,
+       "8": 0,
+       "9": 0,
+       "10": 0
+      },
+      "acq_by_schema": {},
+      "acquired_names": [],
+      "ignition_round": null,
+      "first_proof_round": null,
+      "transfer_acquired": 1,
+      "transfer_by_stratum": {
+       "7": 1,
+       "8": 0,
+       "9": 0,
+       "10": 0
+      },
+      "heldout_greedy_by_round": [
+       0.9152,
+       0.9152,
+       0.9152,
+       0.9152,
+       0.9152,
+       0.9152,
+       0.9152,
+       0.9152
+      ],
+      "trained_rounds": 0,
+      "args": {
+       "ft_lr": 0.0003,
+       "ft_steps": 600,
+       "batch": 1024,
+       "k": 32,
+       "rounds": 8,
+       "seed": 1,
+       "no_train": true,
+       "init": "ckpts/r3_4a/stage1_reductio_f0_b1_m85B_s1.pt",
+       "train": "data/r3_4a/train_reductio_f0_b1.jsonl"
+      }
+     },
      "stage1": {
       "params": 85208064,
       "steps": 12000,
@@ -2353,8 +2780,8 @@
      }
     }
    },
-   "n_draws_sampled": 0,
-   "n_nonzero": 0
+   "n_draws_sampled": 2,
+   "n_nonzero": 1
   },
   "m3_run5": {
    "label": "3.2M original set (run 5)",
