@@ -10,9 +10,52 @@ Ignition = first round with >= 20 depth-3 target theorems (2 % of 1,000), as in 
 """
 import argparse, json, os, sys, glob, re, collections
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from phase2_metrics import arm_metrics
+from phase2_metrics import arm_metrics as slow_arm_metrics
+from normalize import norm
+from patterns import classify
 
 IGN = 20
+
+
+def arm_metrics(arm, pattern):
+    """Single-pass equivalent of phase2_metrics.arm_metrics for the fields this script uses: reads the LAST cumulative
+    found_<r>.jsonl / found_transfer_<r>.jsonl once, takes the minimum round per (theorem, normalised proof) and filters
+    per round r (exactly what arm_metrics does when intermediate files are absent). Checked equal to the original on
+    grpo_g8_depth3_f0_a1_s20 and ei_depth3_f0_a1_s22 (log.md 01:10)."""
+    rounds = sorted(int(f.split('_')[-1].split('.')[0]) for f in glob.glob(f'{arm}/round_*.json'))
+    last = max(rounds)
+    pools = {}
+    for pool, base in (('targets', 'found'), ('transfer', 'found_transfer')):
+        recs = [json.loads(l) for l in open(f'{arm}/{base}_{last}.jsonl') if l.strip()]
+        minround = {}
+        for x in recs:
+            k = (x['name'], norm(x['proof'])); minround[k] = min(minround.get(k, 99), x['round'])
+        cache = {}
+        items = []
+        for k, r0 in minround.items():
+            pn = k[1]
+            if pn not in cache:
+                cache[pn] = classify(pn)
+            cl = cache[pn]
+            items.append((k[0], r0, bool(cl and cl[pattern])))
+        pools[pool] = items
+    out = []
+    for r in rounds:
+        st = json.load(open(f'{arm}/round_{r}.json'))
+        row = {'round': r, 'attempts': r * st['k'], 'targets_solved': st['targets_cum']['solved'], 'targets_n': st['targets_cum']['n'],
+               'transfer_solved': st['transfer_cum']['solved'], 'transfer_n': st['transfer_cum']['n'],
+               'transfer_greedy': st['transfer_greedy']['rate'], 'heldout_greedy': st['heldout_greedy']['rate']}
+        for pool in ('targets', 'transfer'):
+            items = [it for it in pools[pool] if it[1] <= r]
+            thm_pat = {it[0] for it in items if it[2]}
+            n_pat = sum(1 for it in items if it[2])
+            first = min((it[1] for it in items if it[2]), default=None)
+            n = row[f'{pool}_n']
+            row[f'acq_{pool}'] = len(thm_pat) / n; row[f'acq_{pool}_theorems'] = len(thm_pat)
+            row[f'n_pattern_proofs_{pool}'] = n_pat; row[f'first_round_pattern_{pool}'] = first
+            row[f'distinct_proofs_{pool}'] = len(items)
+        out.append(row)
+    return out
 
 
 def parse_arm(name):
