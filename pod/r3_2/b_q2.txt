@@ -1,0 +1,4 @@
+# pod r32b: six-line coverage runs after q1 (coverage never co-scheduled), N = 1
+cov6_reductio_f0_s1 python3 coverage.py --ckpt ckpts/p2/stage1_reductio_f0_s1.pt --in data/r3_2/targets_reductio_six.jsonl --out artifacts/r3_2/cov6_reductio_f0_s1 --k 10000 --temperature 0.8 --batch 1024 --seed 0 --procs 3
+cov6_reductio_f0_s2 python3 coverage.py --ckpt ckpts/p2/stage1_reductio_f0_s2.pt --in data/r3_2/targets_reductio_six.jsonl --out artifacts/r3_2/cov6_reductio_f0_s2 --k 10000 --temperature 0.8 --batch 1024 --seed 0 --procs 3
+cov6_reductio_f0_s0 python3 coverage.py --ckpt ckpts/p2/stage1_reductio_f0_s0.pt --in data/r3_2/targets_reductio_six.jsonl --out artifacts/r3_2/cov6_reductio_f0_s0 --k 10000 --temperature 0.8 --batch 1024 --seed 0 --procs 3

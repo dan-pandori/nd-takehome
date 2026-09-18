@@ -1,6 +1,6 @@
 # Pre-registration: round3-run2 — the 8-line reductio stratum and the derived-ORE base-rate dependence
 
-Written 2026-09-18 05:25 UTC, before any pod exists. Executor branch `dan_round3-run2`. Brief: `BRIEF_stratum-ignition.md`;
+Written 2026-09-18 05:13 UTC (commit time), before any pod exists. Executor branch `dan_round3-run2`. Brief: `BRIEF_stratum-ignition.md`;
 policy: `AGENT_POLICY.md`. Prior results this run builds on: `run5.md`, `review_round2-run5.md` (§Verdict, "Next measurement").
 
 ## Question
