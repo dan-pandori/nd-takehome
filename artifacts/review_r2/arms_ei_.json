@@ -1,0 +1,4609 @@
+[
+ {
+  "arm": "ei_depth4_s0",
+  "pattern": "depth4",
+  "args": {
+   "init": "ckpts/r2/stage1_r2_struct_s0.pt",
+   "targets": "data/r2/targets_depth4.jsonl",
+   "transfer": "data/r2/transfer_depth4.jsonl",
+   "train": "data/r2/train_r2_struct.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 0,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 500,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=10)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "8": [
+     269,
+     0,
+     0
+    ],
+    "9": [
+     53,
+     0,
+     0
+    ],
+    "10": [
+     178,
+     0,
+     0
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "requires": [
+     176,
+     0,
+     0
+    ],
+    "uses-only": [
+     324,
+     0,
+     0
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "generator": [
+     500,
+     0,
+     0
+    ]
+   }
+  },
+  "transfer": {
+   "n": 200,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=4)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.957,
+   0.957,
+   0.957,
+   0.957,
+   0.957,
+   0.957,
+   0.957,
+   0.957
+  ],
+  "transfer_greedy_r8": 0.0,
+  "mix_rl_records_by_round": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ {
+  "arm": "ei_depth4_s1",
+  "pattern": "depth4",
+  "args": {
+   "init": "ckpts/r2/stage1_r2_struct_s1.pt",
+   "targets": "data/r2/targets_depth4.jsonl",
+   "transfer": "data/r2/transfer_depth4.jsonl",
+   "train": "data/r2/train_r2_struct.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 1,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 500,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=10)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "8": [
+     269,
+     0,
+     0
+    ],
+    "9": [
+     53,
+     0,
+     0
+    ],
+    "10": [
+     178,
+     0,
+     0
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "requires": [
+     176,
+     0,
+     0
+    ],
+    "uses-only": [
+     324,
+     0,
+     0
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "generator": [
+     500,
+     0,
+     0
+    ]
+   }
+  },
+  "transfer": {
+   "n": 200,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=4)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.959,
+   0.959,
+   0.959,
+   0.959,
+   0.959,
+   0.959,
+   0.959,
+   0.959
+  ],
+  "transfer_greedy_r8": 0.0,
+  "mix_rl_records_by_round": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ {
+  "arm": "ei_impe_chain4_s0",
+  "pattern": "impe_chain4",
+  "args": {
+   "init": "ckpts/r2/stage1_r2_struct_s0.pt",
+   "targets": "data/r2/targets_impe_chain4.jsonl",
+   "transfer": "data/r2/transfer_impe_chain4.jsonl",
+   "train": "data/r2/train_r2_struct.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 0,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 500,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=10)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "8": [
+     110,
+     0,
+     0
+    ],
+    "9": [
+     246,
+     0,
+     0
+    ],
+    "10": [
+     144,
+     0,
+     0
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "uses-only": [
+     500,
+     0,
+     0
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "major_conj3": [
+     82,
+     0,
+     0
+    ],
+    "minor_chain": [
+     60,
+     0,
+     0
+    ],
+    "major_conj2": [
+     110,
+     0,
+     0
+    ],
+    "minor_chain2": [
+     80,
+     0,
+     0
+    ],
+    "mixed": [
+     82,
+     0,
+     0
+    ],
+    "mixed2": [
+     82,
+     0,
+     0
+    ],
+    "major_conj3b": [
+     4,
+     0,
+     0
+    ]
+   }
+  },
+  "transfer": {
+   "n": 200,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=4)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.957,
+   0.957,
+   0.957,
+   0.957,
+   0.957,
+   0.957,
+   0.957,
+   0.957
+  ],
+  "transfer_greedy_r8": 0.0,
+  "mix_rl_records_by_round": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ {
+  "arm": "ei_impe_chain4_s1",
+  "pattern": "impe_chain4",
+  "args": {
+   "init": "ckpts/r2/stage1_r2_struct_s1.pt",
+   "targets": "data/r2/targets_impe_chain4.jsonl",
+   "transfer": "data/r2/transfer_impe_chain4.jsonl",
+   "train": "data/r2/train_r2_struct.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 1,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 500,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=10)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "8": [
+     110,
+     0,
+     0
+    ],
+    "9": [
+     246,
+     0,
+     0
+    ],
+    "10": [
+     144,
+     0,
+     0
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "uses-only": [
+     500,
+     0,
+     0
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "major_conj3": [
+     82,
+     0,
+     0
+    ],
+    "minor_chain": [
+     60,
+     0,
+     0
+    ],
+    "major_conj2": [
+     110,
+     0,
+     0
+    ],
+    "minor_chain2": [
+     80,
+     0,
+     0
+    ],
+    "mixed": [
+     82,
+     0,
+     0
+    ],
+    "mixed2": [
+     82,
+     0,
+     0
+    ],
+    "major_conj3b": [
+     4,
+     0,
+     0
+    ]
+   }
+  },
+  "transfer": {
+   "n": 200,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=4)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.959,
+   0.959,
+   0.959,
+   0.959,
+   0.959,
+   0.959,
+   0.959,
+   0.959
+  ],
+  "transfer_greedy_r8": 0.0,
+  "mix_rl_records_by_round": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ {
+  "arm": "ei_nested_ore_s0",
+  "pattern": "nested_ore",
+  "args": {
+   "init": "ckpts/r2/stage1_r2_struct_s0.pt",
+   "targets": "data/r2/targets_nested_ore.jsonl",
+   "transfer": "data/r2/transfer_nested_ore.jsonl",
+   "train": "data/r2/train_r2_struct.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 0,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 300,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=6)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "11": [
+     113,
+     0,
+     0
+    ],
+    "12": [
+     172,
+     0,
+     0
+    ],
+    "13": [
+     15,
+     0,
+     0
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "requires": [
+     300,
+     0,
+     0
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "assoc_rev": [
+     81,
+     0,
+     0
+    ],
+    "swap3": [
+     72,
+     0,
+     0
+    ],
+    "or_and": [
+     57,
+     0,
+     0
+    ],
+    "assoc": [
+     70,
+     0,
+     0
+    ],
+    "or_imp": [
+     20,
+     0,
+     0
+    ]
+   }
+  },
+  "transfer": {
+   "n": 41,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=1)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.957,
+   0.957,
+   0.957,
+   0.957,
+   0.957,
+   0.957,
+   0.957,
+   0.957
+  ],
+  "transfer_greedy_r8": 0.0,
+  "mix_rl_records_by_round": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ {
+  "arm": "ei_nested_ore_s1",
+  "pattern": "nested_ore",
+  "args": {
+   "init": "ckpts/r2/stage1_r2_struct_s1.pt",
+   "targets": "data/r2/targets_nested_ore.jsonl",
+   "transfer": "data/r2/transfer_nested_ore.jsonl",
+   "train": "data/r2/train_r2_struct.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 1,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 300,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=6)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "11": [
+     113,
+     0,
+     0
+    ],
+    "12": [
+     172,
+     0,
+     0
+    ],
+    "13": [
+     15,
+     0,
+     0
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "requires": [
+     300,
+     0,
+     0
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "assoc_rev": [
+     81,
+     0,
+     0
+    ],
+    "swap3": [
+     72,
+     0,
+     0
+    ],
+    "or_and": [
+     57,
+     0,
+     0
+    ],
+    "assoc": [
+     70,
+     0,
+     0
+    ],
+    "or_imp": [
+     20,
+     0,
+     0
+    ]
+   }
+  },
+  "transfer": {
+   "n": 41,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=1)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.959,
+   0.959,
+   0.959,
+   0.959,
+   0.959,
+   0.959,
+   0.959,
+   0.959
+  ],
+  "transfer_greedy_r8": 0.0,
+  "mix_rl_records_by_round": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ {
+  "arm": "ei_impi_ore_s0",
+  "pattern": "impi_ore",
+  "args": {
+   "init": "ckpts/r2/stage1_r2_impi_ore_f0_s0.pt",
+   "targets": "data/r2/targets_impi_ore.jsonl",
+   "transfer": "data/r2/transfer_impi_ore.jsonl",
+   "train": "data/r2/train_r2_impi_ore_f0.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 0,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 500,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=10)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "7": [
+     144,
+     0,
+     0
+    ],
+    "8": [
+     171,
+     0,
+     0
+    ],
+    "9": [
+     132,
+     0,
+     0
+    ],
+    "10": [
+     53,
+     0,
+     0
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "requires": [
+     109,
+     0,
+     0
+    ],
+    "uses-only": [
+     391,
+     0,
+     0
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "generator": [
+     500,
+     0,
+     0
+    ]
+   }
+  },
+  "transfer": {
+   "n": 200,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=4)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.946,
+   0.946,
+   0.946,
+   0.946,
+   0.946,
+   0.946,
+   0.946,
+   0.946
+  ],
+  "transfer_greedy_r8": 0.0,
+  "mix_rl_records_by_round": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ {
+  "arm": "ei_impi_ore_s1",
+  "pattern": "impi_ore",
+  "args": {
+   "init": "ckpts/r2/stage1_r2_impi_ore_f0_s1.pt",
+   "targets": "data/r2/targets_impi_ore.jsonl",
+   "transfer": "data/r2/transfer_impi_ore.jsonl",
+   "train": "data/r2/train_r2_impi_ore_f0.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 1,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 500,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=10)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "7": [
+     144,
+     0,
+     0
+    ],
+    "8": [
+     171,
+     0,
+     0
+    ],
+    "9": [
+     132,
+     0,
+     0
+    ],
+    "10": [
+     53,
+     0,
+     0
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "requires": [
+     109,
+     0,
+     0
+    ],
+    "uses-only": [
+     391,
+     0,
+     0
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "generator": [
+     500,
+     0,
+     0
+    ]
+   }
+  },
+  "transfer": {
+   "n": 200,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=4)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.961,
+   0.961,
+   0.961,
+   0.961,
+   0.961,
+   0.961,
+   0.961,
+   0.961
+  ],
+  "transfer_greedy_r8": 0.0,
+  "mix_rl_records_by_round": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ {
+  "arm": "ei_negi_ande_hyp_s0",
+  "pattern": "negi_ande_hyp",
+  "args": {
+   "init": "ckpts/r2/stage1_r2_negi_ande_hyp_f0_s0.pt",
+   "targets": "data/r2/targets_negi_ande_hyp.jsonl",
+   "transfer": "data/r2/transfer_negi_ande_hyp.jsonl",
+   "train": "data/r2/train_r2_negi_ande_hyp_f0.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 0,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 400,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=8)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "7": [
+     213,
+     0,
+     0
+    ],
+    "8": [
+     86,
+     0,
+     0
+    ],
+    "9": [
+     83,
+     0,
+     0
+    ],
+    "10": [
+     18,
+     0,
+     0
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "uses-only": [
+     303,
+     0,
+     0
+    ],
+    "requires": [
+     97,
+     0,
+     0
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "generator": [
+     400,
+     0,
+     0
+    ]
+   }
+  },
+  "transfer": {
+   "n": 94,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=2)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.944,
+   0.944,
+   0.944,
+   0.944,
+   0.944,
+   0.944,
+   0.944,
+   0.944
+  ],
+  "transfer_greedy_r8": 0.0,
+  "mix_rl_records_by_round": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ {
+  "arm": "ei_negi_ande_hyp_s1",
+  "pattern": "negi_ande_hyp",
+  "args": {
+   "init": "ckpts/r2/stage1_r2_negi_ande_hyp_f0_s1.pt",
+   "targets": "data/r2/targets_negi_ande_hyp.jsonl",
+   "transfer": "data/r2/transfer_negi_ande_hyp.jsonl",
+   "train": "data/r2/train_r2_negi_ande_hyp_f0.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 1,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 400,
+   "attempts_per_target": 256,
+   "solved": 59,
+   "solve_rate": 0.1475,
+   "acquired": 59,
+   "acq_rate": 0.1475,
+   "acquired_unpruned": 59,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    1,
+    15,
+    40,
+    49,
+    59
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    1,
+    15,
+    40,
+    49,
+    59
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    1,
+    15,
+    40,
+    49,
+    59
+   ],
+   "first_acq_round": 4,
+   "ignition_round(thr=8)": 5,
+   "distinct_norm_proofs": 60,
+   "distinct_pattern_proofs": 60,
+   "raw_records_round8": 1912,
+   "written_hist": {
+    "7": 53,
+    "8": 7
+   },
+   "pruned_hist": {
+    "7": 53,
+    "8": 7
+   },
+   "depth_hist": {
+    "2": 60
+   },
+   "chain_hist": {
+    "0": 60
+   },
+   "frontier_written_ge5": 8,
+   "verified": 60,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "60/60",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    1,
+    15,
+    40,
+    49,
+    59
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "7": [
+     213,
+     52,
+     52
+    ],
+    "8": [
+     86,
+     7,
+     7
+    ],
+    "9": [
+     83,
+     0,
+     0
+    ],
+    "10": [
+     18,
+     0,
+     0
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "uses-only": [
+     303,
+     59,
+     59
+    ],
+    "requires": [
+     97,
+     0,
+     0
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "generator": [
+     400,
+     59,
+     59
+    ]
+   }
+  },
+  "transfer": {
+   "n": 94,
+   "attempts_per_target": 256,
+   "solved": 12,
+   "solve_rate": 0.1276595744680851,
+   "acquired": 12,
+   "acq_rate": 0.1276595744680851,
+   "acquired_unpruned": 12,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    2,
+    8,
+    8,
+    12
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    2,
+    8,
+    8,
+    12
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    2,
+    8,
+    8,
+    12
+   ],
+   "first_acq_round": 5,
+   "ignition_round(thr=2)": 5,
+   "distinct_norm_proofs": 12,
+   "distinct_pattern_proofs": 12,
+   "raw_records_round8": 341,
+   "written_hist": {
+    "7": 11,
+    "8": 1
+   },
+   "pruned_hist": {
+    "7": 11,
+    "8": 1
+   },
+   "depth_hist": {
+    "2": 12
+   },
+   "chain_hist": {
+    "0": 12
+   },
+   "frontier_written_ge5": 7,
+   "verified": 12,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "12/12",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    2,
+    8,
+    8,
+    12
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.973,
+   0.973,
+   0.973,
+   0.973,
+   0.974,
+   0.968,
+   0.967,
+   0.97
+  ],
+  "transfer_greedy_r8": 0.09574468085106383,
+  "mix_rl_records_by_round": [
+   0,
+   0,
+   0,
+   4,
+   168,
+   628,
+   740,
+   920
+  ]
+ },
+ {
+  "arm": "ei_ori_ore_s0",
+  "pattern": "ori_ore",
+  "args": {
+   "init": "ckpts/r2/stage1_r2_ori_ore_f0_s0.pt",
+   "targets": "data/r2/targets_ori_ore.jsonl",
+   "transfer": "data/r2/transfer_ori_ore.jsonl",
+   "train": "data/r2/train_r2_ori_ore_f0.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 0,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 400,
+   "attempts_per_target": 256,
+   "solved": 217,
+   "solve_rate": 0.5425,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 217,
+   "cum_solved_by_round": [
+    118,
+    162,
+    180,
+    194,
+    202,
+    213,
+    216,
+    217
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=8)": null,
+   "distinct_norm_proofs": 264,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 8988,
+   "written_hist": {
+    "7": 232,
+    "8": 32
+   },
+   "pruned_hist": {
+    "7": 233,
+    "8": 31
+   },
+   "depth_hist": {
+    "0": 5,
+    "1": 49,
+    "2": 198,
+    "3": 12
+   },
+   "chain_hist": {
+    "0": 222,
+    "1": 42
+   },
+   "frontier_written_ge5": 8,
+   "verified": 264,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "264/264",
+   "executor_cum_solved_by_round": [
+    118,
+    162,
+    180,
+    194,
+    202,
+    213,
+    216,
+    217
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "7": [
+     310,
+     195,
+     0
+    ],
+    "8": [
+     81,
+     22,
+     0
+    ],
+    "9": [
+     8,
+     0,
+     0
+    ],
+    "10": [
+     1,
+     0,
+     0
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "uses-only": [
+     400,
+     217,
+     0
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "generator": [
+     400,
+     217,
+     0
+    ]
+   }
+  },
+  "transfer": {
+   "n": 160,
+   "attempts_per_target": 256,
+   "solved": 94,
+   "solve_rate": 0.5875,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 94,
+   "cum_solved_by_round": [
+    53,
+    65,
+    73,
+    80,
+    85,
+    89,
+    93,
+    94
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=3)": null,
+   "distinct_norm_proofs": 154,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 3188,
+   "written_hist": {
+    "7": 126,
+    "8": 27,
+    "9": 1
+   },
+   "pruned_hist": {
+    "7": 136,
+    "8": 17,
+    "9": 1
+   },
+   "depth_hist": {
+    "0": 1,
+    "1": 33,
+    "2": 111,
+    "3": 9
+   },
+   "chain_hist": {
+    "0": 134,
+    "1": 20
+   },
+   "frontier_written_ge5": 8,
+   "verified": 154,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "154/154",
+   "executor_cum_solved_by_round": [
+    53,
+    65,
+    73,
+    80,
+    85,
+    89,
+    93,
+    94
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.961,
+   0.963,
+   0.962,
+   0.964,
+   0.961,
+   0.961,
+   0.966,
+   0.967
+  ],
+  "transfer_greedy_r8": 0.3125,
+  "mix_rl_records_by_round": [
+   1568,
+   2420,
+   2824,
+   3056,
+   3188,
+   3348,
+   3436,
+   3460
+  ]
+ },
+ {
+  "arm": "ei_ori_ore_s1",
+  "pattern": "ori_ore",
+  "args": {
+   "init": "ckpts/r2/stage1_r2_ori_ore_f0_s1.pt",
+   "targets": "data/r2/targets_ori_ore.jsonl",
+   "transfer": "data/r2/transfer_ori_ore.jsonl",
+   "train": "data/r2/train_r2_ori_ore_f0.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 1,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 400,
+   "attempts_per_target": 256,
+   "solved": 219,
+   "solve_rate": 0.5475,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 219,
+   "cum_solved_by_round": [
+    145,
+    183,
+    193,
+    207,
+    213,
+    217,
+    219,
+    219
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=8)": null,
+   "distinct_norm_proofs": 281,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 9895,
+   "written_hist": {
+    "7": 249,
+    "8": 32
+   },
+   "pruned_hist": {
+    "7": 254,
+    "8": 27
+   },
+   "depth_hist": {
+    "0": 5,
+    "1": 55,
+    "2": 221
+   },
+   "chain_hist": {
+    "0": 236,
+    "1": 45
+   },
+   "frontier_written_ge5": 8,
+   "verified": 281,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "281/281",
+   "executor_cum_solved_by_round": [
+    145,
+    183,
+    193,
+    207,
+    213,
+    217,
+    219,
+    219
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "7": [
+     310,
+     202,
+     0
+    ],
+    "8": [
+     81,
+     17,
+     0
+    ],
+    "9": [
+     8,
+     0,
+     0
+    ],
+    "10": [
+     1,
+     0,
+     0
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "uses-only": [
+     400,
+     219,
+     0
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "generator": [
+     400,
+     219,
+     0
+    ]
+   }
+  },
+  "transfer": {
+   "n": 160,
+   "attempts_per_target": 256,
+   "solved": 97,
+   "solve_rate": 0.60625,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 97,
+   "cum_solved_by_round": [
+    60,
+    76,
+    83,
+    88,
+    90,
+    91,
+    94,
+    97
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=3)": null,
+   "distinct_norm_proofs": 162,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 3511,
+   "written_hist": {
+    "7": 138,
+    "8": 23,
+    "9": 1
+   },
+   "pruned_hist": {
+    "7": 142,
+    "8": 19,
+    "9": 1
+   },
+   "depth_hist": {
+    "0": 2,
+    "1": 43,
+    "2": 116,
+    "3": 1
+   },
+   "chain_hist": {
+    "0": 140,
+    "1": 22
+   },
+   "frontier_written_ge5": 8,
+   "verified": 162,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "162/162",
+   "executor_cum_solved_by_round": [
+    60,
+    76,
+    83,
+    88,
+    90,
+    91,
+    94,
+    97
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.968,
+   0.965,
+   0.966,
+   0.966,
+   0.966,
+   0.969,
+   0.968,
+   0.969
+  ],
+  "transfer_greedy_r8": 0.2875,
+  "mix_rl_records_by_round": [
+   2044,
+   2808,
+   3020,
+   3196,
+   3352,
+   3452,
+   3484,
+   3504
+  ]
+ },
+ {
+  "arm": "ei_depth4_c8ctl_s0",
+  "pattern": "depth4",
+  "args": {
+   "init": "ckpts/p2/stage1_derived_ore_strict_f0_c8_s0.pt",
+   "targets": "data/r2/targets_depth4.jsonl",
+   "transfer": "data/r2/transfer_depth4.jsonl",
+   "train": "data/p2/train_derived_ore_strict_f0_c8.jsonl",
+   "heldout": "data/p2/heldout_c8.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 0,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 500,
+   "attempts_per_target": 256,
+   "solved": 485,
+   "solve_rate": 0.97,
+   "acquired": 485,
+   "acq_rate": 0.97,
+   "acquired_unpruned": 485,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    123,
+    313,
+    344,
+    381,
+    453,
+    479,
+    484,
+    485
+   ],
+   "cum_acquired_by_round": [
+    123,
+    312,
+    344,
+    381,
+    453,
+    479,
+    484,
+    485
+   ],
+   "cum_acquired_unpruned_by_round": [
+    123,
+    312,
+    344,
+    381,
+    453,
+    479,
+    484,
+    485
+   ],
+   "first_acq_round": 1,
+   "ignition_round(thr=10)": 1,
+   "distinct_norm_proofs": 520,
+   "distinct_pattern_proofs": 517,
+   "raw_records_round8": 15327,
+   "written_hist": {
+    "8": 269,
+    "9": 84,
+    "10": 163,
+    "11": 4
+   },
+   "pruned_hist": {
+    "8": 269,
+    "9": 84,
+    "10": 163,
+    "11": 4
+   },
+   "depth_hist": {
+    "3": 3,
+    "4": 378,
+    "5": 139
+   },
+   "chain_hist": {
+    "0": 514,
+    "1": 6
+   },
+   "frontier_written_ge5": 10,
+   "verified": 520,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "520/520",
+   "executor_cum_solved_by_round": [
+    123,
+    313,
+    344,
+    381,
+    453,
+    479,
+    484,
+    485
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "8": [
+     269,
+     269,
+     269
+    ],
+    "9": [
+     53,
+     53,
+     53
+    ],
+    "10": [
+     178,
+     163,
+     163
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "requires": [
+     176,
+     162,
+     162
+    ],
+    "uses-only": [
+     324,
+     323,
+     323
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "generator": [
+     500,
+     485,
+     485
+    ]
+   }
+  },
+  "transfer": {
+   "n": 200,
+   "attempts_per_target": 256,
+   "solved": 187,
+   "solve_rate": 0.935,
+   "acquired": 187,
+   "acq_rate": 0.935,
+   "acquired_unpruned": 187,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    59,
+    119,
+    129,
+    147,
+    179,
+    186,
+    187,
+    187
+   ],
+   "cum_acquired_by_round": [
+    59,
+    119,
+    129,
+    147,
+    179,
+    186,
+    187,
+    187
+   ],
+   "cum_acquired_unpruned_by_round": [
+    59,
+    119,
+    129,
+    147,
+    179,
+    186,
+    187,
+    187
+   ],
+   "first_acq_round": 1,
+   "ignition_round(thr=4)": 1,
+   "distinct_norm_proofs": 201,
+   "distinct_pattern_proofs": 199,
+   "raw_records_round8": 5863,
+   "written_hist": {
+    "8": 106,
+    "9": 33,
+    "10": 62
+   },
+   "pruned_hist": {
+    "8": 106,
+    "9": 34,
+    "10": 61
+   },
+   "depth_hist": {
+    "3": 2,
+    "4": 144,
+    "5": 55
+   },
+   "chain_hist": {
+    "0": 201
+   },
+   "frontier_written_ge5": 10,
+   "verified": 201,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "201/201",
+   "executor_cum_solved_by_round": [
+    59,
+    119,
+    129,
+    147,
+    179,
+    186,
+    187,
+    187
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.918,
+   0.918,
+   0.916,
+   0.923,
+   0.925,
+   0.921,
+   0.924,
+   0.924
+  ],
+  "transfer_greedy_r8": 0.89,
+  "mix_rl_records_by_round": [
+   1712,
+   4744,
+   5452,
+   5972,
+   7156,
+   7620,
+   7720,
+   7760
+  ]
+ },
+ {
+  "arm": "ei_depth4_c8ctl_s1",
+  "pattern": "depth4",
+  "args": {
+   "init": "ckpts/p2/stage1_derived_ore_strict_f0_c8_s1.pt",
+   "targets": "data/r2/targets_depth4.jsonl",
+   "transfer": "data/r2/transfer_depth4.jsonl",
+   "train": "data/p2/train_derived_ore_strict_f0_c8.jsonl",
+   "heldout": "data/p2/heldout_c8.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 1,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 500,
+   "attempts_per_target": 256,
+   "solved": 481,
+   "solve_rate": 0.962,
+   "acquired": 481,
+   "acq_rate": 0.962,
+   "acquired_unpruned": 481,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    148,
+    281,
+    322,
+    349,
+    456,
+    476,
+    479,
+    481
+   ],
+   "cum_acquired_by_round": [
+    147,
+    280,
+    321,
+    348,
+    455,
+    475,
+    479,
+    481
+   ],
+   "cum_acquired_unpruned_by_round": [
+    147,
+    280,
+    321,
+    348,
+    455,
+    475,
+    479,
+    481
+   ],
+   "first_acq_round": 1,
+   "ignition_round(thr=10)": 1,
+   "distinct_norm_proofs": 507,
+   "distinct_pattern_proofs": 506,
+   "raw_records_round8": 15770,
+   "written_hist": {
+    "8": 268,
+    "9": 68,
+    "10": 164,
+    "11": 7
+   },
+   "pruned_hist": {
+    "8": 268,
+    "9": 68,
+    "10": 164,
+    "11": 7
+   },
+   "depth_hist": {
+    "3": 1,
+    "4": 365,
+    "5": 141
+   },
+   "chain_hist": {
+    "0": 503,
+    "1": 4
+   },
+   "frontier_written_ge5": 11,
+   "verified": 507,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "507/507",
+   "executor_cum_solved_by_round": [
+    148,
+    281,
+    322,
+    349,
+    456,
+    476,
+    479,
+    481
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "8": [
+     269,
+     268,
+     268
+    ],
+    "9": [
+     53,
+     50,
+     50
+    ],
+    "10": [
+     178,
+     163,
+     163
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "requires": [
+     176,
+     162,
+     162
+    ],
+    "uses-only": [
+     324,
+     319,
+     319
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "generator": [
+     500,
+     481,
+     481
+    ]
+   }
+  },
+  "transfer": {
+   "n": 200,
+   "attempts_per_target": 256,
+   "solved": 189,
+   "solve_rate": 0.945,
+   "acquired": 189,
+   "acq_rate": 0.945,
+   "acquired_unpruned": 189,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    67,
+    113,
+    121,
+    133,
+    178,
+    189,
+    189,
+    189
+   ],
+   "cum_acquired_by_round": [
+    67,
+    113,
+    121,
+    133,
+    178,
+    189,
+    189,
+    189
+   ],
+   "cum_acquired_unpruned_by_round": [
+    67,
+    113,
+    121,
+    133,
+    178,
+    189,
+    189,
+    189
+   ],
+   "first_acq_round": 1,
+   "ignition_round(thr=4)": 1,
+   "distinct_norm_proofs": 197,
+   "distinct_pattern_proofs": 197,
+   "raw_records_round8": 6174,
+   "written_hist": {
+    "8": 107,
+    "9": 27,
+    "10": 63
+   },
+   "pruned_hist": {
+    "8": 107,
+    "9": 27,
+    "10": 63
+   },
+   "depth_hist": {
+    "4": 141,
+    "5": 56
+   },
+   "chain_hist": {
+    "0": 197
+   },
+   "frontier_written_ge5": 10,
+   "verified": 197,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "197/197",
+   "executor_cum_solved_by_round": [
+    67,
+    113,
+    121,
+    133,
+    178,
+    189,
+    189,
+    189
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.931,
+   0.925,
+   0.924,
+   0.923,
+   0.933,
+   0.932,
+   0.93,
+   0.934
+  ],
+  "transfer_greedy_r8": 0.87,
+  "mix_rl_records_by_round": [
+   1920,
+   4392,
+   5092,
+   5464,
+   7120,
+   7616,
+   7648,
+   7672
+  ]
+ },
+ {
+  "arm": "ei_depth4_c8f0_s0",
+  "pattern": "depth4",
+  "args": {
+   "init": "ckpts/r2/stage1_r2_c8_depth4_f0_s0.pt",
+   "targets": "data/r2/targets_depth4.jsonl",
+   "transfer": "data/r2/transfer_depth4.jsonl",
+   "train": "data/r2/train_r2_c8_depth4_f0.jsonl",
+   "heldout": "data/p2/heldout_c8.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 0,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 500,
+   "attempts_per_target": 256,
+   "solved": 481,
+   "solve_rate": 0.962,
+   "acquired": 481,
+   "acq_rate": 0.962,
+   "acquired_unpruned": 481,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    174,
+    297,
+    331,
+    417,
+    469,
+    474,
+    479,
+    481
+   ],
+   "cum_acquired_by_round": [
+    174,
+    297,
+    331,
+    417,
+    469,
+    474,
+    479,
+    481
+   ],
+   "cum_acquired_unpruned_by_round": [
+    174,
+    297,
+    331,
+    417,
+    469,
+    474,
+    479,
+    481
+   ],
+   "first_acq_round": 1,
+   "ignition_round(thr=10)": 1,
+   "distinct_norm_proofs": 515,
+   "distinct_pattern_proofs": 515,
+   "raw_records_round8": 15998,
+   "written_hist": {
+    "8": 269,
+    "9": 71,
+    "10": 169,
+    "11": 6
+   },
+   "pruned_hist": {
+    "8": 269,
+    "9": 71,
+    "10": 169,
+    "11": 6
+   },
+   "depth_hist": {
+    "4": 375,
+    "5": 140
+   },
+   "chain_hist": {
+    "0": 510,
+    "1": 5
+   },
+   "frontier_written_ge5": 11,
+   "verified": 515,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "515/515",
+   "executor_cum_solved_by_round": [
+    174,
+    297,
+    331,
+    417,
+    469,
+    474,
+    479,
+    481
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "8": [
+     269,
+     269,
+     269
+    ],
+    "9": [
+     53,
+     50,
+     50
+    ],
+    "10": [
+     178,
+     162,
+     162
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "requires": [
+     176,
+     161,
+     161
+    ],
+    "uses-only": [
+     324,
+     320,
+     320
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "generator": [
+     500,
+     481,
+     481
+    ]
+   }
+  },
+  "transfer": {
+   "n": 200,
+   "attempts_per_target": 256,
+   "solved": 187,
+   "solve_rate": 0.935,
+   "acquired": 187,
+   "acq_rate": 0.935,
+   "acquired_unpruned": 187,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    78,
+    111,
+    133,
+    160,
+    184,
+    186,
+    186,
+    187
+   ],
+   "cum_acquired_by_round": [
+    78,
+    111,
+    133,
+    160,
+    184,
+    186,
+    186,
+    187
+   ],
+   "cum_acquired_unpruned_by_round": [
+    78,
+    111,
+    133,
+    160,
+    184,
+    186,
+    186,
+    187
+   ],
+   "first_acq_round": 1,
+   "ignition_round(thr=4)": 1,
+   "distinct_norm_proofs": 199,
+   "distinct_pattern_proofs": 199,
+   "raw_records_round8": 6198,
+   "written_hist": {
+    "8": 107,
+    "9": 27,
+    "10": 64,
+    "11": 1
+   },
+   "pruned_hist": {
+    "8": 107,
+    "9": 27,
+    "10": 64,
+    "11": 1
+   },
+   "depth_hist": {
+    "4": 143,
+    "5": 56
+   },
+   "chain_hist": {
+    "0": 198,
+    "1": 1
+   },
+   "frontier_written_ge5": 10,
+   "verified": 199,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "199/199",
+   "executor_cum_solved_by_round": [
+    78,
+    111,
+    133,
+    160,
+    184,
+    186,
+    186,
+    187
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.921,
+   0.918,
+   0.922,
+   0.92,
+   0.921,
+   0.919,
+   0.919,
+   0.923
+  ],
+  "transfer_greedy_r8": 0.885,
+  "mix_rl_records_by_round": [
+   2532,
+   4560,
+   5204,
+   6468,
+   7476,
+   7572,
+   7624,
+   7688
+  ]
+ },
+ {
+  "arm": "ei_depth4_c8f0_s1",
+  "pattern": "depth4",
+  "args": {
+   "init": "ckpts/r2/stage1_r2_c8_depth4_f0_s1.pt",
+   "targets": "data/r2/targets_depth4.jsonl",
+   "transfer": "data/r2/transfer_depth4.jsonl",
+   "train": "data/r2/train_r2_c8_depth4_f0.jsonl",
+   "heldout": "data/p2/heldout_c8.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 1,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 500,
+   "attempts_per_target": 256,
+   "solved": 482,
+   "solve_rate": 0.964,
+   "acquired": 482,
+   "acq_rate": 0.964,
+   "acquired_unpruned": 482,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    131,
+    297,
+    332,
+    338,
+    348,
+    414,
+    474,
+    482
+   ],
+   "cum_acquired_by_round": [
+    131,
+    297,
+    332,
+    338,
+    348,
+    414,
+    474,
+    482
+   ],
+   "cum_acquired_unpruned_by_round": [
+    131,
+    297,
+    332,
+    338,
+    348,
+    414,
+    474,
+    482
+   ],
+   "first_acq_round": 1,
+   "ignition_round(thr=10)": 1,
+   "distinct_norm_proofs": 515,
+   "distinct_pattern_proofs": 515,
+   "raw_records_round8": 15003,
+   "written_hist": {
+    "8": 269,
+    "9": 80,
+    "10": 163,
+    "11": 3
+   },
+   "pruned_hist": {
+    "8": 270,
+    "9": 79,
+    "10": 163,
+    "11": 3
+   },
+   "depth_hist": {
+    "4": 377,
+    "5": 138
+   },
+   "chain_hist": {
+    "0": 510,
+    "1": 5
+   },
+   "frontier_written_ge5": 10,
+   "verified": 515,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "515/515",
+   "executor_cum_solved_by_round": [
+    131,
+    297,
+    332,
+    338,
+    348,
+    414,
+    474,
+    482
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "8": [
+     269,
+     269,
+     269
+    ],
+    "9": [
+     53,
+     51,
+     51
+    ],
+    "10": [
+     178,
+     162,
+     162
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "requires": [
+     176,
+     161,
+     161
+    ],
+    "uses-only": [
+     324,
+     321,
+     321
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "generator": [
+     500,
+     482,
+     482
+    ]
+   }
+  },
+  "transfer": {
+   "n": 200,
+   "attempts_per_target": 256,
+   "solved": 187,
+   "solve_rate": 0.935,
+   "acquired": 187,
+   "acq_rate": 0.935,
+   "acquired_unpruned": 187,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    59,
+    118,
+    130,
+    131,
+    137,
+    154,
+    186,
+    187
+   ],
+   "cum_acquired_by_round": [
+    59,
+    118,
+    130,
+    131,
+    137,
+    154,
+    186,
+    187
+   ],
+   "cum_acquired_unpruned_by_round": [
+    59,
+    118,
+    130,
+    131,
+    137,
+    154,
+    186,
+    187
+   ],
+   "first_acq_round": 1,
+   "ignition_round(thr=4)": 1,
+   "distinct_norm_proofs": 195,
+   "distinct_pattern_proofs": 195,
+   "raw_records_round8": 5841,
+   "written_hist": {
+    "8": 107,
+    "9": 28,
+    "10": 60
+   },
+   "pruned_hist": {
+    "8": 107,
+    "9": 28,
+    "10": 60
+   },
+   "depth_hist": {
+    "4": 140,
+    "5": 55
+   },
+   "chain_hist": {
+    "0": 195
+   },
+   "frontier_written_ge5": 10,
+   "verified": 195,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "195/195",
+   "executor_cum_solved_by_round": [
+    59,
+    118,
+    130,
+    131,
+    137,
+    154,
+    186,
+    187
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.923,
+   0.922,
+   0.926,
+   0.925,
+   0.927,
+   0.932,
+   0.93,
+   0.932
+  ],
+  "transfer_greedy_r8": 0.915,
+  "mix_rl_records_by_round": [
+   1708,
+   4648,
+   5240,
+   5392,
+   5516,
+   6440,
+   7516,
+   7712
+  ]
+ },
+ {
+  "arm": "ei_impi_ore_natctl_s0",
+  "pattern": "impi_ore",
+  "args": {
+   "init": "ckpts/r2/stage1_r2_struct_s0.pt",
+   "targets": "data/r2/targets_impi_ore.jsonl",
+   "transfer": "data/r2/transfer_impi_ore.jsonl",
+   "train": "data/r2/train_r2_struct.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 0,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 500,
+   "attempts_per_target": 256,
+   "solved": 95,
+   "solve_rate": 0.19,
+   "acquired": 95,
+   "acq_rate": 0.19,
+   "acquired_unpruned": 95,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    5,
+    30,
+    51,
+    78,
+    88,
+    92,
+    92,
+    95
+   ],
+   "cum_acquired_by_round": [
+    5,
+    30,
+    51,
+    78,
+    88,
+    92,
+    92,
+    95
+   ],
+   "cum_acquired_unpruned_by_round": [
+    5,
+    30,
+    51,
+    78,
+    88,
+    92,
+    92,
+    95
+   ],
+   "first_acq_round": 1,
+   "ignition_round(thr=10)": 2,
+   "distinct_norm_proofs": 98,
+   "distinct_pattern_proofs": 98,
+   "raw_records_round8": 4223,
+   "written_hist": {
+    "7": 81,
+    "8": 17
+   },
+   "pruned_hist": {
+    "7": 82,
+    "8": 16
+   },
+   "depth_hist": {
+    "2": 98
+   },
+   "chain_hist": {
+    "0": 87,
+    "1": 11
+   },
+   "frontier_written_ge5": 8,
+   "verified": 98,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "98/98",
+   "executor_cum_solved_by_round": [
+    5,
+    30,
+    51,
+    78,
+    88,
+    92,
+    92,
+    95
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "7": [
+     144,
+     79,
+     79
+    ],
+    "8": [
+     171,
+     16,
+     16
+    ],
+    "9": [
+     132,
+     0,
+     0
+    ],
+    "10": [
+     53,
+     0,
+     0
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "requires": [
+     109,
+     4,
+     4
+    ],
+    "uses-only": [
+     391,
+     91,
+     91
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "generator": [
+     500,
+     95,
+     95
+    ]
+   }
+  },
+  "transfer": {
+   "n": 200,
+   "attempts_per_target": 256,
+   "solved": 34,
+   "solve_rate": 0.17,
+   "acquired": 34,
+   "acq_rate": 0.17,
+   "acquired_unpruned": 34,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    1,
+    10,
+    20,
+    29,
+    32,
+    32,
+    33,
+    34
+   ],
+   "cum_acquired_by_round": [
+    1,
+    10,
+    20,
+    29,
+    32,
+    32,
+    33,
+    34
+   ],
+   "cum_acquired_unpruned_by_round": [
+    1,
+    10,
+    20,
+    29,
+    32,
+    32,
+    33,
+    34
+   ],
+   "first_acq_round": 1,
+   "ignition_round(thr=4)": 2,
+   "distinct_norm_proofs": 37,
+   "distinct_pattern_proofs": 37,
+   "raw_records_round8": 1306,
+   "written_hist": {
+    "6": 1,
+    "7": 32,
+    "8": 4
+   },
+   "pruned_hist": {
+    "6": 1,
+    "7": 33,
+    "8": 3
+   },
+   "depth_hist": {
+    "2": 37
+   },
+   "chain_hist": {
+    "0": 34,
+    "1": 3
+   },
+   "frontier_written_ge5": 7,
+   "verified": 37,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "37/37",
+   "executor_cum_solved_by_round": [
+    1,
+    10,
+    20,
+    29,
+    32,
+    32,
+    33,
+    34
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.957,
+   0.961,
+   0.964,
+   0.965,
+   0.964,
+   0.967,
+   0.964,
+   0.966
+  ],
+  "transfer_greedy_r8": 0.13,
+  "mix_rl_records_by_round": [
+   44,
+   384,
+   724,
+   1168,
+   1376,
+   1452,
+   1472,
+   1500
+  ]
+ },
+ {
+  "arm": "ei_impi_ore_natctl_s1",
+  "pattern": "impi_ore",
+  "args": {
+   "init": "ckpts/r2/stage1_r2_struct_s1.pt",
+   "targets": "data/r2/targets_impi_ore.jsonl",
+   "transfer": "data/r2/transfer_impi_ore.jsonl",
+   "train": "data/r2/train_r2_struct.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 1,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 500,
+   "attempts_per_target": 256,
+   "solved": 111,
+   "solve_rate": 0.222,
+   "acquired": 111,
+   "acq_rate": 0.222,
+   "acquired_unpruned": 111,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    9,
+    37,
+    53,
+    64,
+    89,
+    100,
+    105,
+    111
+   ],
+   "cum_acquired_by_round": [
+    9,
+    37,
+    53,
+    64,
+    89,
+    100,
+    105,
+    111
+   ],
+   "cum_acquired_unpruned_by_round": [
+    9,
+    37,
+    53,
+    64,
+    89,
+    100,
+    105,
+    111
+   ],
+   "first_acq_round": 1,
+   "ignition_round(thr=10)": 2,
+   "distinct_norm_proofs": 116,
+   "distinct_pattern_proofs": 116,
+   "raw_records_round8": 4278,
+   "written_hist": {
+    "6": 4,
+    "7": 104,
+    "8": 8
+   },
+   "pruned_hist": {
+    "6": 4,
+    "7": 104,
+    "8": 8
+   },
+   "depth_hist": {
+    "2": 116
+   },
+   "chain_hist": {
+    "0": 115,
+    "1": 1
+   },
+   "frontier_written_ge5": 8,
+   "verified": 116,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "116/116",
+   "executor_cum_solved_by_round": [
+    9,
+    37,
+    53,
+    64,
+    89,
+    100,
+    105,
+    111
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "7": [
+     144,
+     103,
+     103
+    ],
+    "8": [
+     171,
+     8,
+     8
+    ],
+    "9": [
+     132,
+     0,
+     0
+    ],
+    "10": [
+     53,
+     0,
+     0
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "requires": [
+     109,
+     4,
+     4
+    ],
+    "uses-only": [
+     391,
+     107,
+     107
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "generator": [
+     500,
+     111,
+     111
+    ]
+   }
+  },
+  "transfer": {
+   "n": 200,
+   "attempts_per_target": 256,
+   "solved": 45,
+   "solve_rate": 0.225,
+   "acquired": 45,
+   "acq_rate": 0.225,
+   "acquired_unpruned": 45,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    6,
+    18,
+    22,
+    30,
+    35,
+    43,
+    43,
+    45
+   ],
+   "cum_acquired_by_round": [
+    6,
+    18,
+    22,
+    30,
+    35,
+    43,
+    43,
+    45
+   ],
+   "cum_acquired_unpruned_by_round": [
+    6,
+    18,
+    22,
+    30,
+    35,
+    43,
+    43,
+    45
+   ],
+   "first_acq_round": 1,
+   "ignition_round(thr=4)": 1,
+   "distinct_norm_proofs": 48,
+   "distinct_pattern_proofs": 48,
+   "raw_records_round8": 1600,
+   "written_hist": {
+    "6": 2,
+    "7": 42,
+    "8": 4
+   },
+   "pruned_hist": {
+    "6": 2,
+    "7": 42,
+    "8": 4
+   },
+   "depth_hist": {
+    "2": 48
+   },
+   "chain_hist": {
+    "0": 47,
+    "1": 1
+   },
+   "frontier_written_ge5": 7,
+   "verified": 48,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "48/48",
+   "executor_cum_solved_by_round": [
+    6,
+    18,
+    22,
+    30,
+    35,
+    43,
+    43,
+    45
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.959,
+   0.958,
+   0.956,
+   0.955,
+   0.96,
+   0.96,
+   0.961,
+   0.963
+  ],
+  "transfer_greedy_r8": 0.19,
+  "mix_rl_records_by_round": [
+   64,
+   536,
+   812,
+   996,
+   1344,
+   1548,
+   1668,
+   1728
+  ]
+ },
+ {
+  "arm": "ei_negi_ande_hyp_natctl_s0",
+  "pattern": "negi_ande_hyp",
+  "args": {
+   "init": "ckpts/r2/stage1_r2_struct_s0.pt",
+   "targets": "data/r2/targets_negi_ande_hyp.jsonl",
+   "transfer": "data/r2/transfer_negi_ande_hyp.jsonl",
+   "train": "data/r2/train_r2_struct.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 0,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 400,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=8)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "7": [
+     213,
+     0,
+     0
+    ],
+    "8": [
+     86,
+     0,
+     0
+    ],
+    "9": [
+     83,
+     0,
+     0
+    ],
+    "10": [
+     18,
+     0,
+     0
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "uses-only": [
+     303,
+     0,
+     0
+    ],
+    "requires": [
+     97,
+     0,
+     0
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "generator": [
+     400,
+     0,
+     0
+    ]
+   }
+  },
+  "transfer": {
+   "n": 94,
+   "attempts_per_target": 256,
+   "solved": 0,
+   "solve_rate": 0.0,
+   "acquired": 0,
+   "acq_rate": 0.0,
+   "acquired_unpruned": 0,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "first_acq_round": null,
+   "ignition_round(thr=2)": null,
+   "distinct_norm_proofs": 0,
+   "distinct_pattern_proofs": 0,
+   "raw_records_round8": 0,
+   "written_hist": {},
+   "pruned_hist": {},
+   "depth_hist": {},
+   "chain_hist": {},
+   "frontier_written_ge5": 0,
+   "verified": 0,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "0/0",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.957,
+   0.957,
+   0.957,
+   0.957,
+   0.957,
+   0.957,
+   0.957,
+   0.957
+  ],
+  "transfer_greedy_r8": 0.0,
+  "mix_rl_records_by_round": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ {
+  "arm": "ei_negi_ande_hyp_natctl_s1",
+  "pattern": "negi_ande_hyp",
+  "args": {
+   "init": "ckpts/r2/stage1_r2_struct_s1.pt",
+   "targets": "data/r2/targets_negi_ande_hyp.jsonl",
+   "transfer": "data/r2/transfer_negi_ande_hyp.jsonl",
+   "train": "data/r2/train_r2_struct.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "rounds": 8,
+   "k": 32,
+   "temperature": 0.8,
+   "seed": 1,
+   "no_train": false,
+   "retain": 20000,
+   "max_per_thm": 4,
+   "rl_weight": 4,
+   "ft_steps": 600
+  },
+  "targets": {
+   "n": 400,
+   "attempts_per_target": 256,
+   "solved": 11,
+   "solve_rate": 0.0275,
+   "acquired": 11,
+   "acq_rate": 0.0275,
+   "acquired_unpruned": 11,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    0,
+    0,
+    1,
+    1,
+    3,
+    11,
+    11
+   ],
+   "cum_acquired_by_round": [
+    0,
+    0,
+    0,
+    1,
+    1,
+    3,
+    11,
+    11
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    0,
+    0,
+    1,
+    1,
+    3,
+    11,
+    11
+   ],
+   "first_acq_round": 4,
+   "ignition_round(thr=8)": 7,
+   "distinct_norm_proofs": 11,
+   "distinct_pattern_proofs": 11,
+   "raw_records_round8": 394,
+   "written_hist": {
+    "7": 11
+   },
+   "pruned_hist": {
+    "7": 11
+   },
+   "depth_hist": {
+    "2": 11
+   },
+   "chain_hist": {
+    "0": 11
+   },
+   "frontier_written_ge5": 7,
+   "verified": 11,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "11/11",
+   "executor_cum_solved_by_round": [
+    0,
+    0,
+    0,
+    1,
+    1,
+    3,
+    11,
+    11
+   ],
+   "solved_matches_executor_all_rounds": true,
+   "by_min_lines(n,solved,acq)": {
+    "7": [
+     213,
+     11,
+     11
+    ],
+    "8": [
+     86,
+     0,
+     0
+    ],
+    "9": [
+     83,
+     0,
+     0
+    ],
+    "10": [
+     18,
+     0,
+     0
+    ]
+   },
+   "by_requires(n,solved,acq)": {
+    "uses-only": [
+     303,
+     11,
+     11
+    ],
+    "requires": [
+     97,
+     0,
+     0
+    ]
+   },
+   "by_schema(n,solved,acq)": {
+    "generator": [
+     400,
+     11,
+     11
+    ]
+   }
+  },
+  "transfer": {
+   "n": 94,
+   "attempts_per_target": 256,
+   "solved": 3,
+   "solve_rate": 0.031914893617021274,
+   "acquired": 3,
+   "acq_rate": 0.031914893617021274,
+   "acquired_unpruned": 3,
+   "n_solved_without_pattern": 0,
+   "cum_solved_by_round": [
+    0,
+    1,
+    1,
+    1,
+    2,
+    2,
+    3,
+    3
+   ],
+   "cum_acquired_by_round": [
+    0,
+    1,
+    1,
+    1,
+    2,
+    2,
+    3,
+    3
+   ],
+   "cum_acquired_unpruned_by_round": [
+    0,
+    1,
+    1,
+    1,
+    2,
+    2,
+    3,
+    3
+   ],
+   "first_acq_round": 2,
+   "ignition_round(thr=2)": 5,
+   "distinct_norm_proofs": 3,
+   "distinct_pattern_proofs": 3,
+   "raw_records_round8": 121,
+   "written_hist": {
+    "7": 3
+   },
+   "pruned_hist": {
+    "7": 3
+   },
+   "depth_hist": {
+    "2": 3
+   },
+   "chain_hist": {
+    "0": 3
+   },
+   "frontier_written_ge5": 0,
+   "verified": 3,
+   "verify_failures": 0,
+   "unparsable": 0,
+   "unknown_names": 0,
+   "per_round_files_nested": true,
+   "round_field_agrees": "3/3",
+   "executor_cum_solved_by_round": [
+    0,
+    1,
+    1,
+    1,
+    2,
+    2,
+    3,
+    3
+   ],
+   "solved_matches_executor_all_rounds": true
+  },
+  "heldout_greedy_by_round": [
+   0.959,
+   0.959,
+   0.959,
+   0.959,
+   0.96,
+   0.959,
+   0.959,
+   0.961
+  ],
+  "transfer_greedy_r8": 0.031914893617021274,
+  "mix_rl_records_by_round": [
+   0,
+   0,
+   0,
+   4,
+   16,
+   36,
+   172,
+   176
+  ]
+ }
+]
