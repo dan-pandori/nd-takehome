@@ -53,12 +53,12 @@ def draw(tag, covfn, armdir, s1log=None, gatefn=None, cov10k=None, verify_all=Fa
     if gatefn and os.path.exists(gatefn):
         g = json.load(open(gatefn)); D['heldout_greedy'] = g.get('rate', g.get('overall', g)); D['heldout_greedy_file'] = gatefn
     D['pre_rl'] = cov(covfn)
+    D['frozen_skipped'] = os.path.exists(f"{A}/q/frozen_{tag}.skipped")   # req never trained -> frozen would be a bit-identical copy; a partial frozen dir may exist (killed)
     for a in ('req', 'frozen', 'mix'):
-        D[a] = arm(armdir.format(arm=a), verify_all)
+        D[a] = None if (a == 'frozen' and D['frozen_skipped']) else arm(armdir.format(arm=a), verify_all)
     if cov10k:
         D['base_1e4'] = cov(cov10k)
     D['optional_pool_pre_rl'] = cov(covfn.replace('/cov_depth3_', '/optcov_depth3_')) if '/cov_depth3_' in covfn and 'r3_4b' in covfn else None
-    D['frozen_skipped'] = os.path.exists(f"{A}/q/frozen_{tag}.skipped")
     if D.get('req') and D.get('base_1e4'):
         acq = set(D['req']['pattern_required_names']); base = set(D['base_1e4']['pattern_targets'])
         base_u = base | set(D['pre_rl']['pattern_targets']) if D['pre_rl'] else base

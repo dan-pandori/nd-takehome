@@ -145,3 +145,15 @@ rounds and the pass@10⁴ samples of its igniting draws are pulled, or at $45.
 - **A2, same time — E6 (`mix`) stands as written, but for the record my guess after the diagnostic is lower:** I now expect
   ≤ 1 of 3 to ignite on `mix` at 85M (the models write ≤ 6 lines in 95–99 % of samples and the neighbours need 7–8), and I would
   not be surprised by 0 of 6. The pre-registered E6 (≥ half) is what gets scored.
+- **A3, 2026-09-18 20:59 UTC — EI-only fraction moved to the `mix` arm; pass@10⁴ not yet run when written.** No `req` arm
+  ignites at any size (seen: 25M, 25Mr, 85M first schedule all 0–1 of 300), so E4b / E4c as written are vacuous. Seen also: the
+  gate-passing retry draws 25Mr s0 and s1 ignite on `mix` (106 and 113 required targets by rounds 4 and 3) from pre-RL rates of 0
+  and 1.5·10⁻⁵. For every draw whose **`mix`** arm ignites (≥ 20 required targets), I run the brief's pass@10⁴ on the 300 required
+  targets from its Stage-1 checkpoint (`coverage.py --k 10000 --seed 1`, independent of the seed-0 600k sample; files
+  `artifacts/r3_4b/cov1e4_depth3_<tag>.s*.jsonl`) and report EI-only = required targets acquired by the mix arm with no pattern
+  proof in those 10⁴ samples ÷ acquired. **Expectation:** base-reachable at 10⁴ ≤ 10 of 300 targets for every such draw and
+  EI-only fraction **≥ 0.95** at 25M (retry) and, if any 85M draw ignites on `mix`, at 85M too — i.e. no fall with size, because
+  on a required pool the base reaches almost nothing at any size and what EI acquires comes through the neighbours. Wrong if any
+  igniting draw's fraction is < 0.9. The 3.2M comparison (run 1's `mix` igniters) has no 10⁴ sample; its 600k-sample analogue is
+  reported, labelled as such.
+
