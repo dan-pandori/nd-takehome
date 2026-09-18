@@ -136,8 +136,9 @@ first found at rounds 3–7), `reductio_f0` 40 (from run 5's `targets_reductio_r
 ≥ 30 per class; the third class has 26. 106 distinct classes, 0 overlap with the example classes, 0 overlap with the
 step-2 test set. Outputs: 6 sizes × 106 × 17 = 10,812 Lean bodies. My re-check reproduces every verdict (0.6B 1, 1.7B 0, 4B 166,
 8B 804, 14B 1,194, 32B 1,322 accepted of 1,802 each; chunk-level differences 0 / 0 / 0 / 37 / 0 / 24, all resolved
-in the executor's favour by single-file checks); every accepted body (3,487) also compiles alone in its own file. Automation attempts (`sorry`, `simp`, `assumption`, `by_contra`,
-`trivial`, `contradiction`, …): 0 / 40 / 52 / 14 / 3 / 4 by size, **all rejected**; no accepted body contains any.
+in the executor's favour by single-file checks); every accepted body (3,487) also compiles alone in its own file. All 3,487 accepted bodies also verify alone in their own file. Automation attempts (`sorry`, `simp`, `assumption`,
+`by_contra`, `trivial`, `contradiction`, …): 0 / 40 / 52 / 14 / 3 / 4 by size, **all rejected**; no accepted body
+contains any.
 
 | class | n | 0.6B | 1.7B | 4B | 8B | 14B | 32B | none | theorems with ≥ 1 accepted output at 4B / 8B / 14B / 32B |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---|
@@ -155,10 +156,9 @@ at 8B / 14B / none; the 8 highest (−30 … −8) at 0.6B / 4B / 4B / 4B / 8B /
 
 ### Reproducibility
 
-`python3 review_run1_lean_recheck.py` (≈ 1 h on the VPS: 21,432 Lean bodies in 536 chunk files plus individual
-re-checks) then `python3 review_run1_recount.py` in the repository root regenerate every number above from
+`python3 review_run1_lean_recheck.py` (≈ 25 min on the VPS: 21,432 Lean bodies in 536 chunk files plus individual
+re-checks of disagreements), `python3 review_run1_lean_single.py` (≈ 45 min: the 9,430 accepted bodies one per file),
+`python3 review_run1_agreement.py A` / `B` (step 1) and `python3 review_run1_recount.py` in the repository root regenerate every number above from
 `data/r1/`, `artifacts/r1/gens_*.jsonl`, `artifacts/r1/scored_*.jsonl` and `artifacts/r1/lean_*.jsonl`; outputs in
-`artifacts/review_r1/`. `/tmp`-only helpers for the agreement recount and re-run are reproduced by
-`agreement_recount.json` / `agreement_rerun.json` (their code is in the commit as `review_run1_agreement.py`).
-Not re-derived: pod spend, the bucket contents beyond `upload.log` (`round2/run1/{artifacts/r1,data/r1}`, 42 files),
+`artifacts/review_r1/`. Not re-derived: pod spend, the bucket contents beyond `upload.log` (`round2/run1/{artifacts/r1,data/r1}`, 42 files),
 the vLLM sampling itself.
