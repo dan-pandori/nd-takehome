@@ -295,3 +295,85 @@
   - other4: rounds 5–8 pattern theorems 0 / 0 / 0 / 0, solved 0 / 0 / 0 / 0, ignition round None, round-8 acquisition 0.0; injected 4 (valid 4, with pattern 4), own proofs in the mix 0
   - inv4: rounds 5–8 pattern theorems 0 / 1 / 4 / 14, solved 0 / 1 / 4 / 14, ignition round 8, round-8 acquisition 0.023; injected 4 (valid 0, with pattern 4), own proofs in the mix 0
 - Pods: p4 (depth-3 jobs, from 22:05) and p5 (reductio, from 22:17), RTX 3090s, shared with run 4 from 23:09; run-3 share ≈ 2 × 1.6 h ≈ $1.6. Bucket: `hf://buckets/dan-pandori/nd-rl/round2/run3/{artifacts/r3,data/r3,ckpts/r3}` (ckpts: the injected-step checkpoints `*_r4t.pt` and the round-8 checkpoints).
+
+## Round 2 — Run 1: ND → Lean and novelty by scale (2026-09-17/18; `nd2lean.py`, `lean_prompts.py`, `run_vllm.py`, `scale_prompts.py`, `run1_analysis.py` → `artifacts/r1/summary.json`)
+- Step 1 agreement (`artifacts/r1/lean_<pool>.jsonl`, one record per proof with nd_verify and Lean verdicts; Lean 4.34.0 core via elan on the VPS; `lean_check` 40 theorems per file, re-split on Lean's ~100-error cap):
+  - examples: n 21, both accept 21, nd-only 0, Lean-only 0, both reject 0
+  - found_targets16: n 137828, both accept 137828, nd-only 0, Lean-only 0, both reject 0
+  - found_transfer16: n 75085, both accept 75085, nd-only 0, Lean-only 0, both reject 0
+  - heldout: n 5000, both accept 5000, nd-only 0, Lean-only 0, both reject 0
+  - negatives: n 4012, both accept 0, nd-only 0, Lean-only 0, both reject 4012
+  - r2_depth4_found: n 15327, both accept 15327, nd-only 0, Lean-only 0, both reject 0
+  - r5_c8_found: n 3264, both accept 3264, nd-only 0, Lean-only 0, both reject 0
+  - r5_reductio_found: n 2271, both accept 2271, nd-only 0, Lean-only 0, both reject 0
+  - rl_targets: n 3000, both accept 3000, nd-only 0, Lean-only 0, both reject 0
+  - train10k: n 10000, both accept 10000, nd-only 0, Lean-only 0, both reject 0
+  - transfer: n 1638, both accept 1638, nd-only 0, Lean-only 0, both reject 0
+  - val36_ref: n 36, both accept 36, nd-only 0, Lean-only 0, both reject 0
+  - The found_transfer16 row above is the corrected re-run (the first run rejected 67,773 proofs that start above N1 because premise hypotheses were named by line index; fixed 23:20 UTC). Negatives: 4,012 corrupted proofs (cited line ±k 508, rule swapped 874, atom swapped 874, box bar added/removed 874, line dropped 874, plus the 8 run-3 invalid strings), all rejected by nd_verify, all rejected by Lean or by the translator's structural mirror.
+- Step 2 (`data/r1/prompts.jsonl`: 236 theorems = validation-36 + 200 transfer stratified by generating length 7–16 (21 per length, 11 at 16) × 5 example-set draws × 3 forms; 20 worked examples per draw = 12 held-out generator proofs (lengths 2–6) + 8 RL-found transfer proofs of 7–9 written lines, class-disjoint from the test theorems, identical across forms; Qwen3-Coder-30B-A3B-Instruct, vLLM 0.29 on p6 (A100 80 GB), greedy + 8 samples at T = 0.7, top-p 0.95, max 1,200 tokens; `artifacts/r1/gens_qwen30b.jsonl`, `scored_qwen30b.jsonl` (31,860 rows; Lean outputs checked with Lean, token and English outputs with nd_verify after a deterministic parse back to tokens)):
+  - english|val36_<=6: n 60 (theorem × draw), greedy 0.500 [0.377, 0.623], pass@8 0.550 [0.425, 0.669]
+  - english|val36_>6: n 120 (theorem × draw), greedy 0.100 [0.058, 0.167], pass@8 0.117 [0.071, 0.186]
+  - english|transfer_7: n 105 (theorem × draw), greedy 0.276 [0.200, 0.368], pass@8 0.371 [0.285, 0.467]
+  - english|transfer_8: n 105 (theorem × draw), greedy 0.400 [0.311, 0.496], pass@8 0.476 [0.383, 0.571]
+  - english|transfer_9: n 105 (theorem × draw), greedy 0.219 [0.151, 0.307], pass@8 0.286 [0.208, 0.378]
+  - english|transfer_10: n 105 (theorem × draw), greedy 0.381 [0.294, 0.476], pass@8 0.457 [0.365, 0.552]
+  - english|transfer_11: n 105 (theorem × draw), greedy 0.238 [0.167, 0.328], pass@8 0.381 [0.294, 0.476]
+  - english|transfer_12: n 105 (theorem × draw), greedy 0.248 [0.175, 0.338], pass@8 0.352 [0.268, 0.447]
+  - english|transfer_13: n 105 (theorem × draw), greedy 0.390 [0.303, 0.486], pass@8 0.543 [0.448, 0.635]
+  - english|transfer_14: n 105 (theorem × draw), greedy 0.314 [0.233, 0.408], pass@8 0.457 [0.365, 0.552]
+  - english|transfer_15: n 105 (theorem × draw), greedy 0.276 [0.200, 0.368], pass@8 0.390 [0.303, 0.486]
+  - english|transfer_16: n 55 (theorem × draw), greedy 0.273 [0.173, 0.402], pass@8 0.327 [0.218, 0.459]
+  - english|all: n 1180 (theorem × draw), greedy 0.292 [0.267, 0.319], pass@8 0.386 [0.358, 0.414]
+  - lean|val36_<=6: n 60 (theorem × draw), greedy 0.867 [0.758, 0.931], pass@8 0.900 [0.799, 0.953]
+  - lean|val36_>6: n 120 (theorem × draw), greedy 0.458 [0.372, 0.547], pass@8 0.542 [0.453, 0.628]
+  - lean|transfer_7: n 105 (theorem × draw), greedy 0.648 [0.553, 0.732], pass@8 0.762 [0.672, 0.833]
+  - lean|transfer_8: n 105 (theorem × draw), greedy 0.600 [0.504, 0.689], pass@8 0.705 [0.612, 0.784]
+  - lean|transfer_9: n 105 (theorem × draw), greedy 0.552 [0.457, 0.644], pass@8 0.733 [0.642, 0.809]
+  - lean|transfer_10: n 105 (theorem × draw), greedy 0.600 [0.504, 0.689], pass@8 0.667 [0.572, 0.750]
+  - lean|transfer_11: n 105 (theorem × draw), greedy 0.505 [0.411, 0.599], pass@8 0.657 [0.562, 0.741]
+  - lean|transfer_12: n 105 (theorem × draw), greedy 0.552 [0.457, 0.644], pass@8 0.667 [0.572, 0.750]
+  - lean|transfer_13: n 105 (theorem × draw), greedy 0.581 [0.485, 0.671], pass@8 0.686 [0.592, 0.767]
+  - lean|transfer_14: n 105 (theorem × draw), greedy 0.562 [0.466, 0.653], pass@8 0.657 [0.562, 0.741]
+  - lean|transfer_15: n 105 (theorem × draw), greedy 0.505 [0.411, 0.599], pass@8 0.600 [0.504, 0.689]
+  - lean|transfer_16: n 55 (theorem × draw), greedy 0.382 [0.265, 0.514], pass@8 0.600 [0.468, 0.719]
+  - lean|all: n 1180 (theorem × draw), greedy 0.563 [0.534, 0.591], pass@8 0.675 [0.647, 0.701]
+  - tokens|val36_<=6: n 60 (theorem × draw), greedy 0.433 [0.316, 0.559], pass@8 0.517 [0.393, 0.638]
+  - tokens|val36_>6: n 120 (theorem × draw), greedy 0.158 [0.104, 0.234], pass@8 0.200 [0.138, 0.280]
+  - tokens|transfer_7: n 105 (theorem × draw), greedy 0.305 [0.225, 0.398], pass@8 0.333 [0.250, 0.428]
+  - tokens|transfer_8: n 105 (theorem × draw), greedy 0.267 [0.191, 0.358], pass@8 0.343 [0.259, 0.438]
+  - tokens|transfer_9: n 105 (theorem × draw), greedy 0.238 [0.167, 0.328], pass@8 0.324 [0.242, 0.418]
+  - tokens|transfer_10: n 105 (theorem × draw), greedy 0.257 [0.183, 0.348], pass@8 0.305 [0.225, 0.398]
+  - tokens|transfer_11: n 105 (theorem × draw), greedy 0.162 [0.104, 0.244], pass@8 0.295 [0.216, 0.388]
+  - tokens|transfer_12: n 105 (theorem × draw), greedy 0.210 [0.143, 0.297], pass@8 0.257 [0.183, 0.348]
+  - tokens|transfer_13: n 105 (theorem × draw), greedy 0.314 [0.233, 0.408], pass@8 0.400 [0.311, 0.496]
+  - tokens|transfer_14: n 105 (theorem × draw), greedy 0.314 [0.233, 0.408], pass@8 0.362 [0.276, 0.457]
+  - tokens|transfer_15: n 105 (theorem × draw), greedy 0.276 [0.200, 0.368], pass@8 0.343 [0.259, 0.438]
+  - tokens|transfer_16: n 55 (theorem × draw), greedy 0.236 [0.144, 0.363], pass@8 0.345 [0.234, 0.477]
+  - tokens|all: n 1180 (theorem × draw), greedy 0.258 [0.233, 0.283], pass@8 0.326 [0.300, 0.354]
+  - paired Lean − tokens (greedy): mean 0.305, bootstrap 95 % [0.257, 0.354] over 236 theorems (per theorem: mean over 5 draws of the 0/1 difference)
+  - paired greedy|val36_<=6: 0.433 (n 12)
+  - paired greedy|val36_>6: 0.300 (n 24)
+  - paired greedy|transfer_7: 0.343 (n 21)
+  - paired greedy|transfer_8: 0.333 (n 21)
+  - paired greedy|transfer_9: 0.314 (n 21)
+  - paired greedy|transfer_10: 0.343 (n 21)
+  - paired greedy|transfer_11: 0.343 (n 21)
+  - paired greedy|transfer_12: 0.343 (n 21)
+  - paired greedy|transfer_13: 0.267 (n 21)
+  - paired greedy|transfer_14: 0.248 (n 21)
+  - paired greedy|transfer_15: 0.229 (n 21)
+  - paired greedy|transfer_16: 0.145 (n 11)
+  - paired Lean − tokens (pass8): mean 0.348, bootstrap 95 % [0.298, 0.397] over 236 theorems (per theorem: mean over 5 draws of the 0/1 difference)
+  - paired pass8|val36_<=6: 0.383 (n 12)
+  - paired pass8|val36_>6: 0.342 (n 24)
+  - paired pass8|transfer_7: 0.429 (n 21)
+  - paired pass8|transfer_8: 0.362 (n 21)
+  - paired pass8|transfer_9: 0.410 (n 21)
+  - paired pass8|transfer_10: 0.362 (n 21)
+  - paired pass8|transfer_11: 0.362 (n 21)
+  - paired pass8|transfer_12: 0.410 (n 21)
+  - paired pass8|transfer_13: 0.286 (n 21)
+  - paired pass8|transfer_14: 0.295 (n 21)
+  - paired pass8|transfer_15: 0.257 (n 21)
+  - paired pass8|transfer_16: 0.255 (n 11)
