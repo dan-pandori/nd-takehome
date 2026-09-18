@@ -12,6 +12,7 @@ Started 2026-09-17. Brief: BRIEF_ROUND2.md. Policy: AGENT_POLICY.md. Previous: S
 - 2026-09-17 22:05 UTC  In progress: classes and expectations pre-registered (log.md 19:47); six pools built (three from generator knobs / schemata, disclosed in QUESTIONS.md); four sets assembled (f = 0 asserted); 8 Stage-1 done or finishing; 12 EI arms launched 21:58–22:01 on p1–p3.
 
 ## Run 3
+- RUN3 DONE 2026-09-18 01:06 UTC — uploaded to `hf://buckets/dan-pandori/nd-rl/round2/run3/{artifacts/r3,data/r3,ckpts/r3}`.
 - 2026-09-18 01:01 UTC  All 30 arms done; `run3.md`, numbers.md §Run 3, `figures/run3_ignition.png` written; upload pending (checkpoints pulling). One proof ignites every arm; the other pattern never; invalid strings with the box tokens ignite one depth-3 draw.
 - 2026-09-17 22:18 UTC  Started (in parallel with run 2's tail): plan + expectations log.md 22:14; 30 injection arms (5 arms × 6 conditions) on p4 (depth-3) and p5 (reductio), RTX 3090s.
 
