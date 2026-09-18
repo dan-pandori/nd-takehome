@@ -254,6 +254,75 @@ def analyse_set(name, cfg, seeds, root):
     return out
 
 
+
+def deep_pass(name, cfg, seeds, root, main):
+    """ADDENDUM (pre-registered 2026-09-18 09:45): deep second-seed pass, k = 20,000, sampling seed 1, on an a-priori pool.
+    Compares, per draw, main-pass hits (whole pool, and restricted to the deep-pool targets) with deep-pass hits."""
+    pat = cfg['pattern']; tag = cfg['tag']
+    pool_fn = {'depth3': 'data/r3_3/targets_depth3_deep45.jsonl', 'reductio': 'data/r3_3/targets_reductio_deep52.jsonl'}.get(name)
+    if not pool_fn:
+        return None
+    names = set(load_pool(os.path.join(root, pool_fn)))
+    out = {'pool': pool_fn, 'n_targets': len(names), 'draws': {}}
+    for s in seeds:
+        fn = os.path.join(root, f'artifacts/r3_3/deep_{tag}_s{s}.s0.jsonl')
+        if not os.path.exists(fn):
+            continue
+        recs = [json.loads(l) for l in open(fn) if l.strip()]
+        if len(recs) != len(names):
+            out['draws'][s] = {'partial': len(recs)}; continue
+        hits = 0; n = 0; tw = 0
+        for r in recs:
+            assert sum(p['count'] for p in r['proofs']) == r['n_ok']
+            hp = sum(p['count'] for p in r['proofs'] if p['pat'][pat]); assert hp == r['hits_by_pattern'][pat]
+            hits += hp; n += r['n_tried']; tw += bool(hp)
+        # main-pass hits restricted to the deep-pool targets
+        mh = 0; mn = 0
+        for p in cfg['pools']:
+            for l in open(os.path.join(root, f'artifacts/r3_3/cov_{tag}_s{s}_{p}.s0.jsonl')):
+                r = json.loads(l)
+                if r['name'] in names:
+                    mh += r['hits_by_pattern'][pat]; mn += r['n_tried']
+        out['draws'][s] = {'deep_hits': hits, 'deep_n': n, 'deep_targets_with_pattern': tw, 'deep_rate': hits / n,
+                           'main_hits_all': main['hits'][s], 'main_hits_on_deep_pool': mh, 'main_n_on_deep_pool': mn,
+                           'main_rate_on_deep_pool': mh / mn if mn else None}
+    D = {s: d for s, d in out['draws'].items() if 'deep_hits' in d}
+    out['n_draws'] = len(D)
+    zero_main = [s for s, d in D.items() if d['main_hits_all'] == 0]
+    out['main_zero_draws'] = zero_main
+    out['main_zero_with_deep_hit'] = [s for s in zero_main if D[s]['deep_hits'] > 0]
+    out['main_ge2_confirmed'] = [sum(1 for s, d in D.items() if d['main_hits_all'] >= 2 and d['deep_hits'] > 0), sum(1 for d in D.values() if d['main_hits_all'] >= 2)]
+    out['main_eq1_confirmed'] = [sum(1 for s, d in D.items() if d['main_hits_all'] == 1 and d['deep_hits'] > 0), sum(1 for d in D.values() if d['main_hits_all'] == 1)]
+    either = sum(1 for d in D.values() if d['main_hits_all'] > 0 or d['deep_hits'] > 0); both0 = len(D) - either
+    out['either_pass'] = {'k': either, 'n': len(D), 'ci95': list(clopper_pearson(either, len(D))) if D else None}
+    out['zero_in_both'] = {'k': both0, 'n': len(D), 'ci95': list(clopper_pearson(both0, len(D))) if D else None}
+    out['rate_ratio_deep_over_main'] = {s: d['deep_rate'] / d['main_rate_on_deep_pool'] for s, d in D.items() if d['main_hits_on_deep_pool'] >= 20}
+    out['deep_rates'] = {s: d['deep_rate'] for s, d in D.items()}
+    return out
+
+
+def selfcheck(seeds, root):
+    """Re-verify every stored pattern proof (main + deep files) with nd_verify and recompute its pattern label."""
+    from nd_verify import verify_text
+    from patterns import classify
+    out = {}
+    for name, cfg in SETS.items():
+        n = 0; bad = 0
+        files = [f'artifacts/r3_3/cov_{cfg["tag"]}_s{s}_{p}.s0.jsonl' for s in seeds for p in cfg['pools']] + [f'artifacts/r3_3/deep_{cfg["tag"]}_s{s}.s0.jsonl' for s in seeds]
+        for fn in files:
+            fn = os.path.join(root, fn)
+            if not os.path.exists(fn): continue
+            for l in open(fn):
+                r = json.loads(l)
+                for p in r['proofs']:
+                    if p['pat'][cfg['pattern']]:
+                        n += 1
+                        ok, _, nl = verify_text(r['prompt'] + ' ' + p['proof'])
+                        cl = classify(p['proof'])
+                        bad += (not ok) or (not cl[cfg['pattern']]) or nl != p['written']
+        out[name] = {'pattern_proofs_checked': n, 'failures': bad}
+    return out
+
 def external_stratum(root):
     fn = os.path.join(root, 'artifacts/ign/summary.json')
     if not os.path.exists(fn):
@@ -329,18 +398,22 @@ def figures(summary, figdir):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--out', default='artifacts/r3_3/summary.json'); ap.add_argument('--figs', default=None)
-    ap.add_argument('--seeds', default='30-53'); ap.add_argument('--root', default=os.path.dirname(os.path.abspath(__file__)))
+    ap.add_argument('--selfcheck', action='store_true'); ap.add_argument('--seeds', default='30-53'); ap.add_argument('--root', default=os.path.dirname(os.path.abspath(__file__)))
     a = ap.parse_args()
     lo, hi = map(int, a.seeds.split('-')); seeds = list(range(lo, hi + 1))
     summary = {'sets': {}, 'external': external_stratum(a.root)}
     for name, cfg in SETS.items():
-        o = analyse_set(name, cfg, seeds, a.root); o['ign_key'] = cfg['ign']; summary['sets'][name] = o
+        o = analyse_set(name, cfg, seeds, a.root); o['ign_key'] = cfg['ign']; o['deep'] = deep_pass(name, cfg, seeds, a.root, o); summary['sets'][name] = o
+        if o['deep'] and o['deep']['n_draws']:
+            dp = o['deep']; print(f"  deep pass: {dp['n_draws']} draws; main-zero {len(dp['main_zero_draws'])}, of which deep hit {len(dp['main_zero_with_deep_hit'])}; either pass {dp['either_pass']}; zero in both {dp['zero_in_both']}", flush=True)
         print(f"{name}: {o['n_with_pattern']}/{o['n_draws_sampled']} generalise (complete {o['n_draws_complete']}), CI {o['ci95']}, rate hist {o['rate_hist']}", flush=True)
     # E2
     d3, rd = summary['sets']['depth3'], summary['sets']['reductio']
     if d3['ci95'] and rd['ci95']:
         summary['E2_intervals_separate'] = d3['ci95'][0] > rd['ci95'][1]
         print('E2 separate:', summary['E2_intervals_separate'], d3['ci95'], rd['ci95'])
+    if a.selfcheck:
+        summary['selfcheck'] = selfcheck(seeds, a.root); print('selfcheck', summary['selfcheck'], flush=True)
     os.makedirs(os.path.dirname(a.out) or '.', exist_ok=True)
     json.dump(summary, open(a.out, 'w'), indent=1, default=str)
     open(a.out.replace('.json', '_table.md'), 'w').write(table(summary) + '\n')
