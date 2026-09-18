@@ -1,0 +1,477 @@
+[la_T3_s1 r1] targets (this round) SOLVED 313/4495 = 0.070 [0.063,0.077]
+  len 7: 311/1800 = 0.173 [0.156,0.191]
+  len 8: 2/1000 = 0.002 [0.001,0.007]
+  len 9: 0/1004 = 0.000 [0.000,0.004]
+  len 10: 0/456 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 3164, 8: 11}
+  pruned hist {5: 33, 6: 1343, 7: 1790, 8: 9}
+  frontier written 8 pruned 8
+  reasons [('rule check failed: IMPI', 24124), ('rule check failed: ANDI', 19308), ('rule check failed: IMPE', 16683), ('rule check failed: ORI2', 10226), ('bad box cite', 8310), ('rule check failed: DN', 7824)]
+[la_T3_s1 r1] transfer (this round, pass@32) SOLVED 16/2285 = 0.007 [0.004,0.011]
+  len 7: 14/300 = 0.047 [0.028,0.077]
+  len 8: 2/300 = 0.007 [0.002,0.024]
+  len 9: 0/1010 = 0.000 [0.000,0.004]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 78, 8: 2}
+  pruned hist {5: 2, 6: 19, 7: 57, 8: 2}
+  frontier written 7 pruned 7
+  reasons [('rule check failed: ANDI', 11561), ('rule check failed: IMPE', 10635), ('rule check failed: IMPI', 8934), ('rule check failed: ORI2', 4986), ('rule check failed: NEGE', 4576), ('rule check failed: DN', 3811)]
+[la_T3_s1 r1] transfer greedy SOLVED 4/2285 = 0.002 [0.001,0.004]
+  len 7: 4/300 = 0.013 [0.005,0.034]
+  len 8: 0/300 = 0.000 [0.000,0.013]
+  len 9: 0/1010 = 0.000 [0.000,0.004]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 4}
+  pruned hist {6: 1, 7: 3}
+  frontier written 0 pruned 0
+  reasons [('rule check failed: ANDI', 399), ('rule check failed: IMPE', 350), ('rule check failed: IMPI', 307), ('rule check failed: ORI2', 159), ('rule check failed: NEGE', 134), ('rule check failed: DN', 121)]
+[la_T3_s1 r1] heldout greedy SOLVED 4738/5000 = 0.948 [0.941,0.953]
+  len 2: 998/1000 = 0.998 [0.993,0.999]
+  len 3: 986/1000 = 0.986 [0.977,0.992]
+  len 4: 962/1000 = 0.962 [0.948,0.972]
+  len 5: 920/1000 = 0.920 [0.902,0.935]
+  len 6: 872/1000 = 0.872 [0.850,0.891]
+  written hist {2: 1027, 3: 974, 4: 930, 5: 918, 6: 888, 7: 1}
+  pruned hist {2: 1030, 3: 973, 4: 934, 5: 914, 6: 886, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: ANDI', 71), ('rule check failed: IMPE', 44), ('rule check failed: ORI2', 25), ('rule check failed: NEGE', 24), ('rule check failed: IMPI', 18), ('final formula is not the conclusion', 16)]
+[la_T3_s1 r1] targets cumulative: solved 313/4495 L*=7 ge={7: 313, 8: 2, 9: 0, 10: 0, 11: 0, 12: 0}
+[la_T3_s1 r1] transfer cumulative: solved 16/2285 L*=7 ge={7: 16, 8: 2, 9: 0, 10: 0, 11: 0, 12: 0}
+python3 train.py --data artifacts/ladder/la_T3_s1/mix_1.jsonl --init ckpts/stage1_abs.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/ladder/la_T3_s1_r1.pt --seed 1001 --log_every 200
+params 3210240 mode abs shift True
+train records 21548 max len 503
+step 200 loss 0.0573 lr 2.53e-04 11s
+step 400 loss 0.0556 lr 1.09e-04 29s
+step 600 loss 0.0578 lr 3.00e-05 46s
+saved ckpts/ladder/la_T3_s1_r1.pt
+=== round 1 done in 722s; new proofs 371; cum targets solved 313 L*=7; transfer L*=7
+[la_T3_s1 r2] targets (this round) SOLVED 1009/4495 = 0.224 [0.213,0.237]
+  len 7: 897/1800 = 0.498 [0.475,0.521]
+  len 8: 112/1000 = 0.112 [0.094,0.133]
+  len 9: 0/1004 = 0.000 [0.000,0.004]
+  len 10: 0/456 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 15133, 8: 1163}
+  pruned hist {5: 150, 6: 3409, 7: 11683, 8: 1054}
+  frontier written 8 pruned 8
+  reasons [('rule check failed: ANDI', 20913), ('rule check failed: IMPI', 14822), ('rule check failed: IMPE', 14702), ('rule check failed: DN', 9737), ('rule check failed: ORI2', 9572), ('bad box cite', 7325)]
+[la_T3_s1 r2] transfer (this round, pass@32) SOLVED 69/2285 = 0.030 [0.024,0.038]
+  len 7: 46/300 = 0.153 [0.117,0.198]
+  len 8: 22/300 = 0.073 [0.049,0.109]
+  len 9: 1/1010 = 0.001 [0.000,0.006]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 600, 8: 181, 9: 3}
+  pruned hist {5: 2, 6: 68, 7: 545, 8: 166, 9: 3}
+  frontier written 8 pruned 8
+  reasons [('rule check failed: ANDI', 13456), ('rule check failed: IMPE', 9767), ('rule check failed: IMPI', 7358), ('rule check failed: ORI2', 5625), ('rule check failed: DN', 4573), ('rule check failed: NEGE', 4470)]
+[la_T3_s1 r2] transfer greedy SOLVED 32/2285 = 0.014 [0.010,0.020]
+  len 7: 27/300 = 0.090 [0.063,0.128]
+  len 8: 5/300 = 0.017 [0.007,0.038]
+  len 9: 0/1010 = 0.000 [0.000,0.004]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 27, 8: 5}
+  pruned hist {6: 3, 7: 24, 8: 5}
+  frontier written 8 pruned 8
+  reasons [('rule check failed: ANDI', 394), ('rule check failed: IMPE', 323), ('rule check failed: IMPI', 220), ('rule check failed: ORI2', 166), ('rule check failed: DN', 152), ('rule check failed: NEGE', 145)]
+[la_T3_s1 r2] heldout greedy SOLVED 4764/5000 = 0.953 [0.947,0.958]
+  len 2: 996/1000 = 0.996 [0.990,0.998]
+  len 3: 987/1000 = 0.987 [0.978,0.992]
+  len 4: 967/1000 = 0.967 [0.954,0.976]
+  len 5: 934/1000 = 0.934 [0.917,0.948]
+  len 6: 880/1000 = 0.880 [0.858,0.899]
+  written hist {2: 1027, 3: 975, 4: 966, 5: 927, 6: 869}
+  pruned hist {2: 1030, 3: 978, 4: 965, 5: 923, 6: 868}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: ANDI', 66), ('rule check failed: IMPE', 37), ('rule check failed: ORI2', 19), ('rule check failed: IMPI', 15), ('rule check failed: DN', 14), ('rule check failed: NEGE', 14)]
+[la_T3_s1 r2] targets cumulative: solved 1009/4495 L*=8 ge={7: 1009, 8: 112, 9: 0, 10: 0, 11: 0, 12: 0}
+[la_T3_s1 r2] transfer cumulative: solved 73/2285 L*=8 ge={7: 73, 8: 24, 9: 1, 10: 0, 11: 0, 12: 0}
+python3 train.py --data artifacts/ladder/la_T3_s1/mix_2.jsonl --init ckpts/ladder/la_T3_s1_r1.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/ladder/la_T3_s1_r2.pt --seed 1002 --log_every 200
+params 3210240 mode abs shift True
+train records 24800 max len 503
+step 200 loss 0.0448 lr 2.53e-04 11s
+step 400 loss 0.0465 lr 1.09e-04 31s
+step 600 loss 0.0510 lr 3.00e-05 50s
+saved ckpts/ladder/la_T3_s1_r2.pt
+=== round 2 done in 675s; new proofs 803; cum targets solved 1009 L*=8; transfer L*=8
+[la_T3_s1 r3] targets (this round) SOLVED 1578/4495 = 0.351 [0.337,0.365]
+  len 7: 1149/1800 = 0.638 [0.616,0.660]
+  len 8: 400/1000 = 0.400 [0.370,0.431]
+  len 9: 29/1004 = 0.029 [0.020,0.041]
+  len 10: 0/456 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 18483, 8: 5875, 9: 142}
+  pruned hist {5: 200, 6: 4148, 7: 14679, 8: 5362, 9: 111}
+  frontier written 9 pruned 9
+  reasons [('rule check failed: ANDI', 22273), ('rule check failed: IMPE', 13558), ('rule check failed: DN', 9690), ('rule check failed: NEGE', 8518), ('rule check failed: ORI2', 8127), ('rule check failed: IMPI', 5739)]
+[la_T3_s1 r3] transfer (this round, pass@32) SOLVED 177/2285 = 0.077 [0.067,0.089]
+  len 7: 77/300 = 0.257 [0.211,0.309]
+  len 8: 71/300 = 0.237 [0.192,0.288]
+  len 9: 29/1010 = 0.029 [0.020,0.041]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 1205, 8: 917, 9: 153}
+  pruned hist {5: 3, 6: 69, 7: 1195, 8: 902, 9: 106}
+  frontier written 9 pruned 9
+  reasons [('rule check failed: ANDI', 15843), ('rule check failed: IMPE', 9443), ('rule check failed: NEGE', 6046), ('rule check failed: ORI2', 5610), ('rule check failed: DN', 5114), ('rule check failed: IMPI', 4067)]
+[la_T3_s1 r3] transfer greedy SOLVED 102/2285 = 0.045 [0.037,0.054]
+  len 7: 59/300 = 0.197 [0.156,0.245]
+  len 8: 43/300 = 0.143 [0.108,0.188]
+  len 9: 0/1010 = 0.000 [0.000,0.004]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 56, 8: 46}
+  pruned hist {6: 4, 7: 57, 8: 41}
+  frontier written 8 pruned 8
+  reasons [('rule check failed: ANDI', 491), ('rule check failed: IMPE', 306), ('rule check failed: NEGE', 187), ('rule check failed: ORI2', 172), ('rule check failed: DN', 162), ('rule check failed: IMPI', 127)]
+[la_T3_s1 r3] heldout greedy SOLVED 4772/5000 = 0.954 [0.948,0.960]
+  len 2: 999/1000 = 0.999 [0.994,1.000]
+  len 3: 993/1000 = 0.993 [0.986,0.997]
+  len 4: 967/1000 = 0.967 [0.954,0.976]
+  len 5: 933/1000 = 0.933 [0.916,0.947]
+  len 6: 880/1000 = 0.880 [0.858,0.899]
+  written hist {2: 1036, 3: 983, 4: 954, 5: 920, 6: 878, 7: 1}
+  pruned hist {2: 1040, 3: 983, 4: 953, 5: 921, 6: 875}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: ANDI', 67), ('rule check failed: IMPE', 34), ('rule check failed: DN', 19), ('rule check failed: ORI2', 17), ('rule check failed: ORI1', 13), ('rule check failed: NEGE', 13)]
+[la_T3_s1 r3] targets cumulative: solved 1578/4495 L*=9 ge={7: 1578, 8: 429, 9: 29, 10: 0, 11: 0, 12: 0}
+[la_T3_s1 r3] transfer cumulative: solved 184/2285 L*=9 ge={7: 184, 8: 103, 9: 30, 10: 0, 11: 0, 12: 0}
+python3 train.py --data artifacts/ladder/la_T3_s1/mix_3.jsonl --init ckpts/ladder/la_T3_s1_r2.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/ladder/la_T3_s1_r3.pt --seed 1003 --log_every 200
+params 3210240 mode abs shift True
+train records 27644 max len 420
+step 200 loss 0.0443 lr 2.53e-04 13s
+step 400 loss 0.0431 lr 1.09e-04 27s
+step 600 loss 0.0443 lr 3.00e-05 38s
+saved ckpts/ladder/la_T3_s1_r3.pt
+=== round 3 done in 647s; new proofs 709; cum targets solved 1578 L*=9; transfer L*=9
+[la_T3_s1 r4] targets (this round) SOLVED 1941/4495 = 0.432 [0.417,0.446]
+  len 7: 1289/1800 = 0.716 [0.695,0.736]
+  len 8: 520/1000 = 0.520 [0.489,0.551]
+  len 9: 130/1004 = 0.129 [0.110,0.152]
+  len 10: 2/456 = 0.004 [0.001,0.016]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 19800, 8: 5947, 9: 816, 10: 4}
+  pruned hist {5: 301, 6: 4391, 7: 15921, 8: 5347, 9: 603, 10: 4}
+  frontier written 9 pruned 9
+  reasons [('rule check failed: ANDI', 19350), ('rule check failed: DN', 10662), ('rule check failed: IMPE', 10495), ('rule check failed: NEGE', 7686), ('rule check failed: ORI2', 6164), ('rule check failed: ORI1', 6060)]
+[la_T3_s1 r4] transfer (this round, pass@32) SOLVED 345/2285 = 0.151 [0.137,0.166]
+  len 7: 113/300 = 0.377 [0.324,0.433]
+  len 8: 103/300 = 0.343 [0.292,0.399]
+  len 9: 129/1010 = 0.128 [0.109,0.150]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 1752, 8: 906, 9: 690, 10: 5}
+  pruned hist {5: 2, 6: 104, 7: 1731, 8: 999, 9: 517}
+  frontier written 10 pruned 9
+  reasons [('rule check failed: ANDI', 15306), ('rule check failed: IMPE', 7678), ('rule check failed: DN', 6140), ('rule check failed: NEGE', 5725), ('rule check failed: ORI1', 4108), ('rule check failed: ORI2', 3924)]
+[la_T3_s1 r4] transfer greedy SOLVED 178/2285 = 0.078 [0.068,0.090]
+  len 7: 88/300 = 0.293 [0.245,0.347]
+  len 8: 76/300 = 0.253 [0.207,0.305]
+  len 9: 14/1010 = 0.014 [0.008,0.023]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 84, 8: 80, 9: 14}
+  pruned hist {6: 7, 7: 84, 8: 76, 9: 11}
+  frontier written 9 pruned 9
+  reasons [('rule check failed: ANDI', 472), ('rule check failed: IMPE', 248), ('rule check failed: DN', 193), ('rule check failed: NEGE', 184), ('line index mismatch at position 9', 159), ('rule check failed: ORI1', 125)]
+[la_T3_s1 r4] heldout greedy SOLVED 4757/5000 = 0.951 [0.945,0.957]
+  len 2: 998/1000 = 0.998 [0.993,0.999]
+  len 3: 985/1000 = 0.985 [0.975,0.991]
+  len 4: 959/1000 = 0.959 [0.945,0.970]
+  len 5: 925/1000 = 0.925 [0.907,0.940]
+  len 6: 890/1000 = 0.890 [0.869,0.908]
+  written hist {2: 1033, 3: 976, 4: 933, 5: 904, 6: 909, 7: 2}
+  pruned hist {2: 1036, 3: 978, 4: 936, 5: 904, 6: 902, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: ANDI', 68), ('rule check failed: IMPE', 40), ('rule check failed: ORI2', 18), ('rule check failed: DN', 17), ('rule check failed: NEGE', 17), ('rule check failed: ANDE2', 14)]
+[la_T3_s1 r4] targets cumulative: solved 1941/4495 L*=9 ge={7: 1941, 8: 652, 9: 132, 10: 2, 11: 0, 12: 0}
+[la_T3_s1 r4] transfer cumulative: solved 352/2285 L*=9 ge={7: 352, 8: 235, 9: 130, 10: 0, 11: 0, 12: 0}
+python3 train.py --data artifacts/ladder/la_T3_s1/mix_4.jsonl --init ckpts/ladder/la_T3_s1_r3.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/ladder/la_T3_s1_r4.pt --seed 1004 --log_every 200
+params 3210240 mode abs shift True
+train records 29548 max len 471
+step 200 loss 0.0393 lr 2.53e-04 13s
+step 400 loss 0.0403 lr 1.09e-04 26s
+step 600 loss 0.0409 lr 3.00e-05 39s
+saved ckpts/ladder/la_T3_s1_r4.pt
+=== round 4 done in 665s; new proofs 493; cum targets solved 1941 L*=9; transfer L*=9
+[la_T3_s1 r5] targets (this round) SOLVED 2102/4495 = 0.468 [0.453,0.482]
+  len 7: 1340/1800 = 0.744 [0.724,0.764]
+  len 8: 571/1000 = 0.571 [0.540,0.601]
+  len 9: 187/1004 = 0.186 [0.163,0.212]
+  len 10: 4/456 = 0.009 [0.003,0.022]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 20332, 8: 6381, 9: 1139, 10: 10}
+  pruned hist {5: 340, 6: 4065, 7: 16838, 8: 5772, 9: 840, 10: 7}
+  frontier written 10 pruned 10
+  reasons [('rule check failed: ANDI', 18019), ('rule check failed: IMPE', 11088), ('rule check failed: DN', 8264), ('rule check failed: NEGE', 6149), ('rule check failed: ORI2', 6112), ('rule check failed: ORI1', 5262)]
+[la_T3_s1 r5] transfer (this round, pass@32) SOLVED 412/2285 = 0.180 [0.165,0.197]
+  len 7: 123/300 = 0.410 [0.356,0.466]
+  len 8: 111/300 = 0.370 [0.317,0.426]
+  len 9: 175/1010 = 0.173 [0.151,0.198]
+  len 10: 3/451 = 0.007 [0.002,0.019]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 2029, 8: 960, 9: 876, 10: 6}
+  pruned hist {5: 2, 6: 117, 7: 1997, 8: 1105, 9: 648, 10: 2}
+  frontier written 10 pruned 9
+  reasons [('rule check failed: ANDI', 15051), ('rule check failed: IMPE', 9081), ('rule check failed: DN', 5373), ('rule check failed: NEGE', 5095), ('rule check failed: ORI2', 4143), ('rule check failed: ORI1', 3621)]
+[la_T3_s1 r5] transfer greedy SOLVED 312/2285 = 0.137 [0.123,0.151]
+  len 7: 105/300 = 0.350 [0.298,0.406]
+  len 8: 96/300 = 0.320 [0.270,0.375]
+  len 9: 111/1010 = 0.110 [0.092,0.131]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 102, 8: 94, 9: 116}
+  pruned hist {6: 7, 7: 100, 8: 116, 9: 89}
+  frontier written 9 pruned 9
+  reasons [('rule check failed: ANDI', 481), ('rule check failed: IMPE', 280), ('rule check failed: DN', 177), ('rule check failed: NEGE', 156), ('rule check failed: ORI2', 127), ('rule check failed: ORI1', 122)]
+[la_T3_s1 r5] heldout greedy SOLVED 4789/5000 = 0.958 [0.952,0.963]
+  len 2: 998/1000 = 0.998 [0.993,0.999]
+  len 3: 988/1000 = 0.988 [0.979,0.993]
+  len 4: 970/1000 = 0.970 [0.957,0.979]
+  len 5: 938/1000 = 0.938 [0.921,0.951]
+  len 6: 895/1000 = 0.895 [0.874,0.913]
+  written hist {2: 1030, 3: 979, 4: 940, 5: 928, 6: 911, 7: 1}
+  pruned hist {2: 1033, 3: 979, 4: 943, 5: 927, 6: 906, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: ANDI', 60), ('rule check failed: IMPE', 36), ('rule check failed: ORI2', 22), ('rule check failed: NEGE', 19), ('rule check failed: R', 11), ('rule check failed: DN', 10)]
+[la_T3_s1 r5] targets cumulative: solved 2102/4495 L*=9 ge={7: 2102, 8: 762, 9: 191, 10: 4, 11: 0, 12: 0}
+[la_T3_s1 r5] transfer cumulative: solved 429/2285 L*=9 ge={7: 429, 8: 300, 9: 186, 10: 3, 11: 0, 12: 0}
+python3 train.py --data artifacts/ladder/la_T3_s1/mix_5.jsonl --init ckpts/ladder/la_T3_s1_r4.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/ladder/la_T3_s1_r5.pt --seed 1005 --log_every 200
+params 3210240 mode abs shift True
+train records 30472 max len 448
+step 200 loss 0.0441 lr 2.53e-04 16s
+step 400 loss 0.0394 lr 1.09e-04 27s
+step 600 loss 0.0428 lr 3.00e-05 42s
+saved ckpts/ladder/la_T3_s1_r5.pt
+=== round 5 done in 673s; new proofs 241; cum targets solved 2102 L*=9; transfer L*=9
+[la_T3_s1 r6] targets (this round) SOLVED 2234/4495 = 0.497 [0.482,0.512]
+  len 7: 1375/1800 = 0.764 [0.744,0.783]
+  len 8: 608/1000 = 0.608 [0.577,0.638]
+  len 9: 240/1004 = 0.239 [0.214,0.266]
+  len 10: 11/456 = 0.024 [0.014,0.043]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 21997, 8: 6786, 9: 1429, 10: 27}
+  pruned hist {5: 354, 6: 4427, 7: 18219, 8: 6164, 9: 1061, 10: 14}
+  frontier written 10 pruned 10
+  reasons [('rule check failed: ANDI', 16343), ('rule check failed: IMPE', 9620), ('rule check failed: DN', 7460), ('rule check failed: NEGE', 6173), ('rule check failed: ORI2', 5593), ('rule check failed: ORI1', 4915)]
+[la_T3_s1 r6] transfer (this round, pass@32) SOLVED 488/2285 = 0.214 [0.197,0.231]
+  len 7: 126/300 = 0.420 [0.366,0.477]
+  len 8: 121/300 = 0.403 [0.349,0.460]
+  len 9: 224/1010 = 0.222 [0.197,0.248]
+  len 10: 17/451 = 0.038 [0.024,0.060]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 2104, 8: 1004, 9: 1105, 10: 46}
+  pruned hist {5: 7, 6: 109, 7: 2107, 8: 1153, 9: 855, 10: 28}
+  frontier written 10 pruned 10
+  reasons [('rule check failed: ANDI', 13761), ('rule check failed: IMPE', 7996), ('rule check failed: NEGE', 5533), ('rule check failed: DN', 4744), ('rule check failed: ORI2', 4213), ('rule check failed: ORI1', 3538)]
+[la_T3_s1 r6] transfer greedy SOLVED 337/2285 = 0.147 [0.134,0.163]
+  len 7: 103/300 = 0.343 [0.292,0.399]
+  len 8: 98/300 = 0.327 [0.276,0.382]
+  len 9: 136/1010 = 0.135 [0.115,0.157]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 99, 8: 98, 9: 139, 10: 1}
+  pruned hist {6: 6, 7: 102, 8: 120, 9: 109}
+  frontier written 9 pruned 9
+  reasons [('rule check failed: ANDI', 438), ('rule check failed: IMPE', 251), ('rule check failed: NEGE', 167), ('rule check failed: DN', 146), ('rule check failed: ORI2', 134), ('rule check failed: ANDE2', 103)]
+[la_T3_s1 r6] heldout greedy SOLVED 4772/5000 = 0.954 [0.948,0.960]
+  len 2: 997/1000 = 0.997 [0.991,0.999]
+  len 3: 988/1000 = 0.988 [0.979,0.993]
+  len 4: 967/1000 = 0.967 [0.954,0.976]
+  len 5: 931/1000 = 0.931 [0.914,0.945]
+  len 6: 889/1000 = 0.889 [0.868,0.907]
+  written hist {2: 1032, 3: 979, 4: 935, 5: 943, 6: 882, 7: 1}
+  pruned hist {2: 1036, 3: 979, 4: 938, 5: 942, 6: 876, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: ANDI', 57), ('rule check failed: IMPE', 38), ('rule check failed: NEGE', 26), ('rule check failed: ORI2', 19), ('rule check failed: DN', 19), ('rule check failed: R', 13)]
+[la_T3_s1 r6] targets cumulative: solved 2234/4495 L*=10 ge={7: 2234, 8: 859, 9: 251, 10: 11, 11: 0, 12: 0}
+[la_T3_s1 r6] transfer cumulative: solved 505/2285 L*=10 ge={7: 505, 8: 371, 9: 247, 10: 17, 11: 0, 12: 0}
+python3 train.py --data artifacts/ladder/la_T3_s1/mix_6.jsonl --init ckpts/ladder/la_T3_s1_r5.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/ladder/la_T3_s1_r6.pt --seed 1006 --log_every 200
+params 3210240 mode abs shift True
+train records 31304 max len 425
+step 200 loss 0.0404 lr 2.53e-04 11s
+step 400 loss 0.0362 lr 1.09e-04 21s
+step 600 loss 0.0387 lr 3.00e-05 30s
+saved ckpts/ladder/la_T3_s1_r6.pt
+=== round 6 done in 633s; new proofs 214; cum targets solved 2234 L*=10; transfer L*=10
+[la_T3_s1 r7] targets (this round) SOLVED 2340/4495 = 0.521 [0.506,0.535]
+  len 7: 1406/1800 = 0.781 [0.761,0.800]
+  len 8: 633/1000 = 0.633 [0.603,0.662]
+  len 9: 284/1004 = 0.283 [0.256,0.312]
+  len 10: 17/456 = 0.037 [0.023,0.059]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 20961, 8: 6883, 9: 1632, 10: 51}
+  pruned hist {5: 345, 6: 4426, 7: 17303, 8: 6251, 9: 1175, 10: 27}
+  frontier written 10 pruned 10
+  reasons [('rule check failed: ANDI', 15121), ('rule check failed: IMPE', 9394), ('rule check failed: DN', 7074), ('rule check failed: NEGE', 5619), ('rule check failed: ORI2', 5569), ('rule check failed: ANDE2', 4663)]
+[la_T3_s1 r7] transfer (this round, pass@32) SOLVED 524/2285 = 0.229 [0.213,0.247]
+  len 7: 126/300 = 0.420 [0.366,0.477]
+  len 8: 124/300 = 0.413 [0.359,0.470]
+  len 9: 256/1010 = 0.253 [0.228,0.281]
+  len 10: 18/451 = 0.040 [0.025,0.062]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 2007, 8: 1029, 9: 1204, 10: 46, 11: 2}
+  pruned hist {6: 132, 7: 1974, 8: 1232, 9: 924, 10: 25, 11: 1}
+  frontier written 10 pruned 10
+  reasons [('rule check failed: ANDI', 13475), ('rule check failed: IMPE', 7777), ('rule check failed: NEGE', 5310), ('rule check failed: DN', 4879), ('rule check failed: ORI2', 4238), ('rule check failed: ORI1', 3437)]
+[la_T3_s1 r7] transfer greedy SOLVED 367/2285 = 0.161 [0.146,0.176]
+  len 7: 109/300 = 0.363 [0.311,0.419]
+  len 8: 100/300 = 0.333 [0.282,0.388]
+  len 9: 158/1010 = 0.156 [0.135,0.180]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 105, 8: 99, 9: 163}
+  pruned hist {6: 7, 7: 105, 8: 129, 9: 126}
+  frontier written 9 pruned 9
+  reasons [('rule check failed: ANDI', 435), ('rule check failed: IMPE', 240), ('rule check failed: DN', 160), ('rule check failed: NEGE', 153), ('rule check failed: ORI2', 133), ('rule check failed: ORI1', 111)]
+[la_T3_s1 r7] heldout greedy SOLVED 4775/5000 = 0.955 [0.949,0.960]
+  len 2: 996/1000 = 0.996 [0.990,0.998]
+  len 3: 984/1000 = 0.984 [0.974,0.990]
+  len 4: 964/1000 = 0.964 [0.951,0.974]
+  len 5: 931/1000 = 0.931 [0.914,0.945]
+  len 6: 900/1000 = 0.900 [0.880,0.917]
+  written hist {2: 1030, 3: 975, 4: 942, 5: 927, 6: 898, 7: 3}
+  pruned hist {2: 1032, 3: 977, 4: 942, 5: 930, 6: 891, 7: 3}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: ANDI', 65), ('rule check failed: IMPE', 34), ('rule check failed: ORI2', 21), ('rule check failed: DN', 18), ('rule check failed: NEGE', 16), ('rule check failed: R', 11)]
+[la_T3_s1 r7] targets cumulative: solved 2340/4495 L*=10 ge={7: 2340, 8: 934, 9: 301, 10: 17, 11: 0, 12: 0}
+[la_T3_s1 r7] transfer cumulative: solved 558/2285 L*=10 ge={7: 558, 8: 421, 9: 291, 10: 21, 11: 0, 12: 0}
+python3 train.py --data artifacts/ladder/la_T3_s1/mix_7.jsonl --init ckpts/ladder/la_T3_s1_r6.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/ladder/la_T3_s1_r7.pt --seed 1007 --log_every 200
+params 3210240 mode abs shift True
+train records 32052 max len 503
+step 200 loss 0.0385 lr 2.53e-04 11s
+step 400 loss 0.0418 lr 1.09e-04 20s
+step 600 loss 0.0364 lr 3.00e-05 30s
+saved ckpts/ladder/la_T3_s1_r7.pt
+=== round 7 done in 515s; new proofs 197; cum targets solved 2340 L*=10; transfer L*=10
+[la_T3_s1 r8] targets (this round) SOLVED 2407/4495 = 0.535 [0.521,0.550]
+  len 7: 1426/1800 = 0.792 [0.773,0.810]
+  len 8: 646/1000 = 0.646 [0.616,0.675]
+  len 9: 309/1004 = 0.308 [0.280,0.337]
+  len 10: 25/456 = 0.055 [0.037,0.080]
+  len 11: 1/99 = 0.010 [0.002,0.055]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 21254, 8: 7550, 9: 1880, 10: 81, 11: 1}
+  pruned hist {5: 345, 6: 4700, 7: 17476, 8: 6848, 9: 1359, 10: 37, 11: 1}
+  frontier written 10 pruned 10
+  reasons [('rule check failed: ANDI', 13829), ('rule check failed: IMPE', 9575), ('rule check failed: DN', 7625), ('rule check failed: NEGE', 6436), ('rule check failed: ORI2', 5085), ('rule check failed: ANDE2', 4256)]
+[la_T3_s1 r8] transfer (this round, pass@32) SOLVED 555/2285 = 0.243 [0.226,0.261]
+  len 7: 125/300 = 0.417 [0.362,0.473]
+  len 8: 123/300 = 0.410 [0.356,0.466]
+  len 9: 285/1010 = 0.282 [0.255,0.311]
+  len 10: 22/451 = 0.049 [0.032,0.073]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 1930, 8: 1074, 9: 1484, 10: 81, 11: 1}
+  pruned hist {5: 6, 6: 98, 7: 1960, 8: 1320, 9: 1137, 10: 49}
+  frontier written 10 pruned 10
+  reasons [('rule check failed: ANDI', 12711), ('rule check failed: IMPE', 8415), ('rule check failed: DN', 5838), ('rule check failed: NEGE', 5695), ('rule check failed: ORI2', 4436), ('rule check failed: ANDE2', 3091)]
+[la_T3_s1 r8] transfer greedy SOLVED 409/2285 = 0.179 [0.164,0.195]
+  len 7: 111/300 = 0.370 [0.317,0.426]
+  len 8: 102/300 = 0.340 [0.289,0.395]
+  len 9: 187/1010 = 0.185 [0.162,0.210]
+  len 10: 9/451 = 0.020 [0.011,0.037]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 107, 8: 100, 9: 193, 10: 9}
+  pruned hist {6: 6, 7: 110, 8: 134, 9: 153, 10: 6}
+  frontier written 10 pruned 10
+  reasons [('rule check failed: ANDI', 400), ('rule check failed: IMPE', 256), ('rule check failed: DN', 191), ('rule check failed: NEGE', 170), ('rule check failed: ORI2', 137), ('rule check failed: ANDE2', 95)]
+[la_T3_s1 r8] heldout greedy SOLVED 4782/5000 = 0.956 [0.950,0.962]
+  len 2: 997/1000 = 0.997 [0.991,0.999]
+  len 3: 988/1000 = 0.988 [0.979,0.993]
+  len 4: 965/1000 = 0.965 [0.952,0.975]
+  len 5: 934/1000 = 0.934 [0.917,0.948]
+  len 6: 898/1000 = 0.898 [0.878,0.915]
+  written hist {2: 1032, 3: 982, 4: 940, 5: 918, 6: 907, 7: 3}
+  pruned hist {2: 1035, 3: 983, 4: 946, 5: 918, 6: 898, 7: 2}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: ANDI', 60), ('rule check failed: IMPE', 38), ('rule check failed: ORI2', 25), ('rule check failed: NEGE', 19), ('rule check failed: DN', 14), ('final formula is not the conclusion', 9)]
+[la_T3_s1 r8] targets cumulative: solved 2407/4495 L*=10 ge={7: 2407, 8: 981, 9: 335, 10: 26, 11: 1, 12: 0}
+[la_T3_s1 r8] transfer cumulative: solved 601/2285 L*=10 ge={7: 601, 8: 462, 9: 328, 10: 26, 11: 0, 12: 0}
+python3 train.py --data artifacts/ladder/la_T3_s1/mix_8.jsonl --init ckpts/ladder/la_T3_s1_r7.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/ladder/la_T3_s1_r8.pt --seed 1008 --log_every 200
+params 3210240 mode abs shift True
+train records 32572 max len 486
+step 200 loss 0.0371 lr 2.53e-04 11s
+step 400 loss 0.0374 lr 1.09e-04 21s
+step 600 loss 0.0364 lr 3.00e-05 30s
+saved ckpts/ladder/la_T3_s1_r8.pt
+=== round 8 done in 512s; new proofs 153; cum targets solved 2407 L*=10; transfer L*=10
+transfer: 811 normalised-distinct proofs, 601 theorems
+targets: 1327 normalised-distinct proofs, 981 theorems
+scoring under base (ckpts/stage1_abs.pt)
+  scored 768/120958 sequences (0s)
+wrote artifacts/ladder/la_T3_s1/novelty_proofs.jsonl artifacts/ladder/la_T3_s1/novelty_theorems.jsonl

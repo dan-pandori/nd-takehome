@@ -295,3 +295,24 @@
   - other4: rounds 5–8 pattern theorems 0 / 0 / 0 / 0, solved 0 / 0 / 0 / 0, ignition round None, round-8 acquisition 0.0; injected 4 (valid 4, with pattern 4), own proofs in the mix 0
   - inv4: rounds 5–8 pattern theorems 0 / 1 / 4 / 14, solved 0 / 1 / 4 / 14, ignition round 8, round-8 acquisition 0.023; injected 4 (valid 0, with pattern 4), own proofs in the mix 0
 - Pods: p4 (depth-3 jobs, from 22:05) and p5 (reductio, from 22:17), RTX 3090s, shared with run 4 from 23:09; run-3 share ≈ 2 × 1.6 h ≈ $1.6. Bucket: `hf://buckets/dan-pandori/nd-rl/round2/run3/{artifacts/r3,data/r3,ckpts/r3}` (ckpts: the injected-step checkpoints `*_r4t.pt` and the round-8 checkpoints).
+
+## ladder-A (RL technique ladder, Phase A; 2026-09-18)
+
+Every number below is produced by `python3 ladder_analysis.py` → `ladder.md`, `artifacts/ladder/summary.json` (+ `.full`), from
+`artifacts/ladder/<arm>/{found_transfer_8,found_8,found_union_8,novelty_proofs}.jsonl`, `alloc_8.json`, `round_<r>.json` and the
+pools `data/ladder/{transfer,rl_targets}.jsonl`. Figures: `python3 ladder_figures.py` → `figures/ladder_*.png`.
+
+- Pools (`data/ladder/POOLS.md`, `pools_summary.json`): transfer 2,285, RL targets v2 4,495, `L_true` 7–14 by `minlen.py` bound 14; 4 of 67,139 labelled theorems unresolved (textbook timeouts), excluded.
+- Budget per arm: 8 rounds × 143,840 target samples (= 4,495 × 32; `round_<r>.json: target_samples`), 256 transfer attempts per theorem; frozen control identical without training. T6: two siblings × 71,920.
+- `L*` transfer (source: `ladder.md` main table): frozen **7 / 7** (s0 / s1); T1 **10 / 10**; T2 10 / 10; T3 10 / 10; T4 10 / 10; T5 10 / 10; T6 10 / 10. `L*` targets: frozen 8 / 8, every trained rung 10 / 10. `L* − L*_frozen` = **+3 for every rung on both seeds**. Labels-corrected `L*` identical (42 theorems have a proof one line shorter than their label, all via `ORE` citing one box twice; `summary.json.full: labels_contradicted`).
+- Transfer theorems solved at `L_true` ≥ 9 / ≥ 10 / ≥ 11 (s0; s1): frozen 0 / 0 / 0; 0 / 0 / 0. T1 335 / 35 / 1; 346 / 34 / 0. T2 362 / 39 / 1; 354 / 37 / 1. T3 390 / 47 / 1; 328 / 26 / 0. T4 357 / 43 / 2; 327 / 31 / 1. T5 351 / 37 / 2; 368 / 35 / 0. T6 (sibling union) 409 / 46 / 1; 395 / 42 / 1. T6 single siblings (128 attempts): 371, 376, 357, 366 at ≥ 9.
+- Transfer bins (T1 s0; Wilson 95 %): `L_true` 7 140/300 (46.7 %), 8 137/300 (45.7 %), 9 300/1,010 (29.7 % [27.0, 32.6]), 10 34/451 (7.5 % [5.4, 10.4]), 11 1/99, 12–14 0/125. Frozen s0: 20/300, 2/300, 0/1,010, 0 beyond.
+- Paired vs T1, same seed, transfer `L_true` ≥ 9, arm-only / T1-only (exact sign test): T1 s1 vs T1 s0 44 / 33 (p 0.25); T2 52 / 25 (0.003), 49 / 41 (0.46); T3 73 / 18 (< 0.001), 27 / 45 (0.044); T4 52 / 30 (0.020), 29 / 48 (0.040); T5 43 / 27 (0.072), 56 / 34 (0.026); T6 88 / 14 (< 0.001), 72 / 23 (< 0.001).
+- Base reachability (`novelty_proofs.jsonl`, base = `stage1_abs.pt`, T = 0.8, max over a theorem's counted proofs): solved transfer theorems at `L_true` ≥ 9 with base p ≥ 1e-5: **0 of 327–409 in every arm**; at `L_true` ≥ 8: 3–6 of 459–556; at `L_true` ≥ 7 (all solved): 57–66 of 601–694; at exactly `L_true` 7 (≥ 7 minus ≥ 8): 54–61 of 137–148 = 36.5–42.4 %. Frozen: 22 / 22 and 24 / 24 above 1e-5.
+- By source (transfer): generator 511–613 / 1,525 (33.5–40.2 %); textbook schemata 80–94 / 760 (10.5–12.4 %), of which `contraposition` + `export` (both `L_true` 7) are 79–80; no schema instance with `L_true` ≥ 9 solved by any arm. T5 schemata: 85 and 82 vs T1 83 and 83.
+- `L_true` 11–13 targets (221): samples per target / targets solved — T1 256 / 1 and 0; T2 351 / 2 and 1; T4 **706** / 3 and 0; T6 (per sibling 128) 3, 3, 2, 1.
+- Mechanisms fired: T2 round-8 weights 0 on 2,222 saturated targets; T4 window 11–13 from round 5 (k 128); T3 by-products 49 (s0) and 55 (s1) theorems in total vs ≈ 12,000 RL records; T5 2,505 / 2,509 cap-6 records injected in round 4.
+- Held-out greedy (final round): 0.953–0.959 for every trained arm (frozen 0.948).
+- T3 s0: rounds 1–5 first session; crashed round 6 (`artifacts/ladder/la_T3_s0.crash_r6.log`); rounds 6–8 resumed on la-6 (`la_T3_s0.log`, `args.json` = resume args, `args_rounds1-5.json` = original). Its lead over T1 s0 predates the resume (cumulative ≥ 9 at round 5: 240 vs 204; `round_5.json`).
+- Cost ≈ $39 (≈ $7.5 productive, ≈ $31.6 idle pods 04:42–17:20 after the session was cut off, $0.25 resume); source `~/pods.log` + the resume note's deletion time; estimate, not a bill.
+- Bucket: `hf://buckets/dan-pandori/nd-rl/ladder-A/{artifacts/ladder,data/ladder,ckpts/ladder}` (all per-arm files incl. `found_<r>`, `mix_<r>`, `novelty_*`; 136 round checkpoints; the 63k generator pool and the T5 injection reservoir).

@@ -15,7 +15,7 @@ BINS = list(range(7, 15))
 def _style(ax):
     for s in ('top', 'right'):
         ax.spines[s].set_visible(False)
-    ax.grid(True, axis='y', color='#e6e5e1', linewidth=0.8)
+    ax.grid(True, axis='y', color='#e6e5e1', linewidth=0.8); ax.set_axisbelow(True)
     ax.tick_params(colors=INK2, labelsize=9)
 
 
@@ -64,7 +64,7 @@ def lstar(summ, out):
 
 def reach(summ, out):
     fig, ax = plt.subplots(figsize=(8, 3.8)); _style(ax)
-    arms = [a for a, r in summ.items() if r['transfer'].get('reachability')]
+    arms = [a for a, r in summ.items() if r['transfer'].get('reachability') and r['rung'] != 'T6sib']
     xs = range(len(arms))
     el = [summ[a]['transfer']['reachability']['8']['elicit_1e-5'] for a in arms]
     sc = [summ[a]['transfer']['reachability']['8']['scored'] for a in arms]
@@ -78,12 +78,36 @@ def reach(summ, out):
     fig.tight_layout(); fig.savefig(out, dpi=150); plt.close(fig)
 
 
+def counts(summ, out):
+    """L* saturates at 10 for every trained rung, so the rungs are separated by how many transfer theorems they solve at the frontier."""
+    fig, axes = plt.subplots(1, 2, figsize=(9, 3.8))
+    rungs = [f'T{i}' for i in range(1, 7)]
+    for ax, L in zip(axes, (9, 10)):
+        _style(ax)
+        t1 = [r['transfer']['ge'][str(L)] for r in summ.values() if r['rung'] == 'T1']
+        if t1:
+            ax.axhspan(min(t1), max(t1), color='#e6e5e1', alpha=0.7, linewidth=0, label='T1 seed range')
+        for i, rung in enumerate(rungs):
+            for r in [r for r in summ.values() if r['rung'] == rung]:
+                dx = -0.12 if r['seed'] == '0' else 0.12
+                v = r['transfer']['ge'][str(L)]
+                ax.plot([i + dx], [v], marker='o', markersize=8, color=CAT[rung], linestyle='none', markeredgecolor='white', markeredgewidth=1)
+                ax.annotate(f"s{r['seed']}{'' if r['rounds'] == 8 else ' (r' + str(r['rounds']) + ')'}", (i + dx, v), textcoords='offset points', xytext=(0, 8), ha='center', fontsize=7, color=INK2)
+        ax.set_xticks(range(len(rungs))); ax.set_xticklabels(rungs); ax.set_xlim(-0.6, len(rungs) - 0.4)
+        ax.set_title(f'Transfer theorems solved at L_true ≥ {L}', color=INK, fontsize=10, loc='left')
+        ax.set_ylim(0, ax.get_ylim()[1] * 1.12)
+    axes[0].set_ylabel('theorems solved (256 attempts each)', color=INK2); axes[0].legend(frameon=False, fontsize=8, loc='lower right')
+    fig.text(0.01, 0.01, 'Frozen control at equal attempts: 0 at L_true ≥ 9 (both seeds). Two seeds per rung.', fontsize=8, color=INK2)
+    fig.tight_layout(rect=(0, 0.04, 1, 1)); fig.savefig(out, dpi=150); plt.close(fig)
+
+
 def main():
     summ = json.load(open(sys.argv[1] if len(sys.argv) > 1 else 'artifacts/ladder/summary.json'))
     os.makedirs('figures', exist_ok=True)
     solve_by_L(summ, 'transfer', 'figures/ladder_solve_transfer.png')
     solve_by_L(summ, 'targets', 'figures/ladder_solve_targets.png')
     lstar(summ, 'figures/ladder_lstar.png')
+    counts(summ, 'figures/ladder_frontier_counts.png')
     if any(r['transfer'].get('reachability') for r in summ.values()):
         reach(summ, 'figures/ladder_reachability.png')
     print('figures written')
