@@ -368,22 +368,22 @@ def figures(summary, figdir):
     fig, ax = plt.subplots(figsize=(6.4, 3.8))
     for i, (name, o) in enumerate(sets.items()):
         f, ci = o['fraction'], o['ci95']
-        ax.errorbar([i - 0.12], [f], yerr=[[f - ci[0]], [ci[1] - f]], fmt='o', color=BLUE, capsize=3, lw=2, ms=7, label='this run: 24 seeds, full pool, 600k-2M samples' if i == 0 else None)
+        ax.errorbar([i - 0.12], [f], yerr=[[f - ci[0]], [ci[1] - f]], fmt='o', color=BLUE, capsize=3, lw=2, ms=7, label='main pass (24 seeds, full pool)' if i == 0 else None)
         ax.annotate(f"{o['n_with_pattern']}/{o['n_draws_sampled']}", (i - 0.12, ci[1]), textcoords='offset points', xytext=(0, 5), ha='center', color=INK, fontsize=9)
         e = ext.get(o.get('ign_key') or '')
         if e:
             ax.errorbar([i + 0.12], [e['fraction']], yerr=[[e['fraction'] - e['ci95'][0]], [e['ci95'][1] - e['fraction']]], fmt='s', color=ORANGE, capsize=3, lw=2, ms=6,
-                        label='ignition study: 300-target sample (separate stratum)' if i == 0 else None)
+                        label='ignition study (separate stratum)' if i == 0 else None)
             ax.annotate(f"{e['n_with_pattern']}/{e['n_draws']}", (i + 0.12, e['ci95'][1]), textcoords='offset points', xytext=(0, 5), ha='center', color=INK, fontsize=9)
         dp = o.get('deep')
         if dp and dp.get('n_draws') == o['n_draws_sampled']:
             ep = dp['either_pass']; fe = ep['k'] / ep['n']
             ax.errorbar([i - 0.30], [fe], yerr=[[fe - ep['ci95'][0]], [ep['ci95'][1] - fe]], fmt='D', mfc=SURF, mec=BLUE, color=BLUE, capsize=3, lw=1.2, ms=6,
-                        label='this run: main or deep pass (k = 20,000 on a-priori targets)' if i == 0 else None)
+                        label='main or deep pass (k = 20,000)' if i == 0 else None)
             ax.annotate(f"{ep['k']}/{ep['n']}", (i - 0.30, ep['ci95'][1]), textcoords='offset points', xytext=(0, 5), ha='center', color=INK, fontsize=9)
-    ax.set_xticks(range(len(sets))); ax.set_xticklabels([nice[n] for n in sets]); ax.set_ylim(0, 1.08); ax.set_xlim(-0.6, len(sets) - 0.4)
+    ax.set_xticks(range(len(sets))); ax.set_xticklabels([nice[n] for n in sets]); ax.set_ylim(0, 1.08); ax.set_xlim(-0.6, len(sets) - 0.25)
     ax.set_ylabel('fraction of draws with >= 1 pattern sample'); ax.grid(axis='x', visible=False)
-    ax.legend(fontsize=7.5, loc='upper right', frameon=False); ax.set_title('Base generalisation before any RL (Clopper-Pearson 95 %)', fontsize=10, loc='left')
+    ax.legend(fontsize=7.5, loc='upper right', frameon=False, bbox_to_anchor=(1.0, 0.98)); ax.set_title('Base generalisation before any RL (Clopper-Pearson 95 %)', fontsize=10, loc='left')
     fig.tight_layout(); fig.savefig(os.path.join(figdir, 'r3_3_generalisation.png'), dpi=140); plt.close(fig)
     # 2. rate histograms (floor-decade bins), zero-hit draws as a separate grey bar
     fig, axs = plt.subplots(1, len(sets), figsize=(3.3 * len(sets), 3.0), sharey=True)
