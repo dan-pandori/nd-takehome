@@ -160,15 +160,19 @@ def rncands(a):
     for fn in (f'{P2}/targets_depth3.jsonl', f'{P2}/transfer_depth3.jsonl', f'{P2}/targets_reductio_req.jsonl', f'{P2}/transfer_reductio_req.jsonl'):
         excl |= {key_of(r) for r in read(fn)}
     seen, out = set(), []
-    for r in read(f'{P2}/pool_long_minlen.jsonl'):
-        if r['min_lines_ub'] not in (7, 8) or not r['thm'].split('|-')[1].strip().startswith('( ~ ( ~'):
-            continue
-        k = canon_key(r['thm'].strip())
-        if k in seen or k in excl:
-            continue
-        seen.add(k)
-        out.append({'name': f'rn_pl_{len(out)}', 'thm': r['thm'], 'key': k, 'prompt': r['prompt'], 'n_lines': r['min_lines_ub'],
-                    'min_lines_ub': r['min_lines_ub'], 'u_proof': r['proof'], 'src': 'pool_long'})
+    if os.path.exists(f'{D}/reductio_nb_cands_pl.jsonl'):      # the long pool (46 MB) lives on the VPS; the pod reuses the committed file
+        out = read(f'{D}/reductio_nb_cands_pl.jsonl')
+        seen = {r['key'] for r in out}
+    else:
+        for r in read(f'{P2}/pool_long_minlen.jsonl'):
+            if r['min_lines_ub'] not in (7, 8) or not r['thm'].split('|-')[1].strip().startswith('( ~ ( ~'):
+                continue
+            k = canon_key(r['thm'].strip())
+            if k in seen or k in excl:
+                continue
+            seen.add(k)
+            out.append({'name': f'rn_pl_{len(out)}', 'thm': r['thm'], 'key': k, 'prompt': r['prompt'], 'n_lines': r['min_lines_ub'],
+                        'min_lines_ub': r['min_lines_ub'], 'u_proof': r['proof'], 'src': 'pool_long'})
     n_pl = len(out)
     gen = []
     for fn in sorted(glob.glob(f'{D}/raw_nn.w*.jsonl')):
@@ -182,6 +186,22 @@ def rncands(a):
     print('pool_long candidates (min 7-8):', n_pl, '; generated candidates (unlabelled):', len(gen))
     write(f'{D}/reductio_nb_cands_pl.jsonl', out)
     write(f'{D}/reductio_nb_cands_gen.jsonl', gen)
+
+
+def negi_close(proof):
+    """The dependency-pruned proof ends with NEGI closing a box whose hypothesis is ( ~ X ), yielding ( ~ ( ~ X ) ):
+    the reductio shape minus its DN step. Neighbours whose shortest no-DN proof gets ( ~ ( ~ X ) ) by explosion (BOTE) from
+    contradictory premises are excluded (amendment 2026-09-18 05:50, before any mix/drift arm ran)."""
+    from patterns import parse, prune_lines
+    lines = parse(proof)
+    if not lines:
+        return False
+    lines = prune_lines(lines)
+    last = lines[-1]
+    if last['rule'] != 'NEGI' or len(last['refs']) != 2:
+        return False
+    hyp = {ln['idx']: ln for ln in lines}.get(last['refs'][0])
+    return bool(hyp and hyp['rule'] == 'AS' and last['formula'] == ('not', hyp['formula']) and hyp['formula'][0] == 'not')
 
 
 def rnbuild(a):
@@ -209,8 +229,12 @@ def rnbuild(a):
         cl = classify(f['proof'])
         assert ok and not cl['reductio'] and 'DN' not in f['proof'].split() and nl == f['min_lines_ub'], r['name']
         r['stratum'] = 'neighbour'
+        r['negi_close'] = negi_close(f['proof'])
         keep.append(r)
     print('neighbours (no-DN proof <= 10 found, intuitionistically provable):', len(keep),
+          collections.Counter((r['min_lines_ub'], r['nodn_min_lines_ub']) for r in keep))
+    keep = [r for r in keep if r['negi_close']]
+    print('of which the shortest no-DN proof closes with NEGI of ( ~ X ):', len(keep),
           collections.Counter((r['min_lines_ub'], r['nodn_min_lines_ub']) for r in keep))
     rng.shuffle(keep)
     keep = keep[:a.n_nb]

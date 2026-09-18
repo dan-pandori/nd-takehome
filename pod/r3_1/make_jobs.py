@@ -23,7 +23,7 @@ elif cmd == 'arms':
     for s in sys.argv[4:]:
         ck = CK[pat].format(s=s)
         extra = f' --exclude_pattern {pat}' if arm == 'drift' else ''
-        print(f'ei_{pat}_s{s}_{arm} python3 expert_iter.py --init {ck} --name r3_1/ei_{pat}_s{s}_{arm} --targets {POOL[arm][pat]} --transfer {TR[pat]} '
+        print(f'ei_{pat}_s{s}_{arm} until [ -f {ck} ]; do sleep 60; done; sleep 30; python3 expert_iter.py --init {ck} --name r3_1/ei_{pat}_s{s}_{arm} --targets {POOL[arm][pat]} --transfer {TR[pat]} '
               f'--heldout data/p2/heldout.jsonl --train {TRAIN[pat]} --rounds 8 --k 32 --temperature 0.8 --seed {s} --batch 768{extra}')
 elif cmd == 'drift_cov':
     for s in sys.argv[3:]:

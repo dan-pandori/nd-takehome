@@ -127,4 +127,10 @@ checkpoints, `~/runs/round3-run1/executor.done`.
 
 ## Amendments
 
-(none yet)
+- **2026-09-18 05:50 UTC (before any `mix` or `drift` arm ran; `req` arms had started at 05:44).** Reductio-neighbour
+  definition tightened: besides "conclusion `( ~ ( ~ X ) )`, `--forbid DN` finds a ≤ 10-line proof, `intuit.py` provable,
+  unrestricted min 7–8", the shortest no-DN proof must **close with NEGI of an assumed `( ~ X )`** (the reductio shape
+  minus its DN step). Reason: the hand-check of the first build (`reductio_nb` v1, 159 → 300 of 1,264 candidates) showed
+  that about 40 % of the shortest no-DN proofs obtain `( ~ ( ~ X ) )` by explosion (`BOTE`) from contradictory premises,
+  which rewards nothing adjacent to reductio. 759 of the 1,264 candidates satisfy the tightened rule; the pool is 300 of
+  them (seed 0). No expectation number changed.
