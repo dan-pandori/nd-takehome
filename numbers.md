@@ -315,4 +315,4 @@ pools `data/ladder/{transfer,rl_targets}.jsonl`. Figures: `python3 ladder_figure
 - Held-out greedy (final round): 0.953–0.959 for every trained arm (frozen 0.948).
 - T3 s0: rounds 1–5 first session; crashed round 6 (`artifacts/ladder/la_T3_s0.crash_r6.log`); rounds 6–8 resumed on la-6 (`la_T3_s0.log`, `args.json` = resume args, `args_rounds1-5.json` = original). Its lead over T1 s0 predates the resume (cumulative ≥ 9 at round 5: 240 vs 204; `round_5.json`).
 - Cost ≈ $39 (≈ $7.5 productive, ≈ $31.6 idle pods 04:42–17:20 after the session was cut off, $0.25 resume); source `~/pods.log` + the resume note's deletion time; estimate, not a bill.
-- Bucket: `hf://buckets/dan-pandori/nd-rl/ladder-A/{artifacts/ladder,data/ladder,ckpts/ladder}` (all per-arm files incl. `found_<r>`, `mix_<r>`, `novelty_*`; 136 round checkpoints; the 63k generator pool and the T5 injection reservoir).
+- Bucket: `hf://buckets/dan-pandori/nd-rl/ladder-A/{artifacts/ladder,data/ladder,ckpts/ladder}` (all per-arm files incl. `found_<r>`, `mix_<r>`, `novelty_*`; 112 round checkpoints; the 63k generator pool and the T5 injection reservoir).
