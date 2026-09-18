@@ -23,3 +23,6 @@ Started 2026-09-17 22:50 UTC (executor). Pre-registration `preregistration/run1-
 ## Running on pods
 - r1-a100 (A100-SXM4-80GB, $1.59 / h, created 23:02): step-3 scale ladder Qwen3 0.6B → 32B on the 208 class theorems
   (0.6B done 01:18, 0 / 208), then the Coder-30B token-format extra. Judged on the VPS as each model finishes.
+
+## Ended 2026-09-18 (session lost Claude authentication ~08:00 UTC; pods pulled and deleted 17:20 UTC)
+Partial results are on this branch; large artifacts were pulled to the host but are not committed. This replication was not completed.
