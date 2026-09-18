@@ -17,7 +17,7 @@ cmd = sys.argv[1]
 if cmd == 'cov':
     for s in sys.argv[3:]:
         ck = CK[pat].format(s=s)
-        print(f'cov_{pat}_s{s} python3 coverage.py --ckpt {ck} --in {REQ[pat]} --out artifacts/r3_1/cov_{pat}_s{s} --k 2000 --temperature 0.8 --batch 2000 --seed 0 --procs 2')
+        print(f'cov_{pat}_s{s} until [ -f {ck} ]; do sleep 60; done; sleep 30; python3 coverage.py --ckpt {ck} --in {REQ[pat]} --out artifacts/r3_1/cov_{pat}_s{s} --k 2000 --temperature 0.8 --batch 2000 --seed 0 --procs 2')
 elif cmd == 'arms':
     arm = sys.argv[3]
     for s in sys.argv[4:]:
