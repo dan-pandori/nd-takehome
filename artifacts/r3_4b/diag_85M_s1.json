@@ -1,0 +1,79 @@
+{
+ "ckpt": "ckpts/r3_4b/stage1_depth3_f0_a1_85M_s1.pt",
+ "n_targets": 60,
+ "k": 64,
+ "temperature": 0.8,
+ "samples": 3840,
+ "verified": 0,
+ "ends_with_QED": 3840,
+ "written_max_depth_hist": {
+  "1": 1,
+  "2": 3837,
+  "3": 2
+ },
+ "frac_depth_ge3": 0.0005208333333333333,
+ "targets_with_a_depth3_attempt": 1,
+ "verified_depth_ge3": 0,
+ "lines_written_hist": {
+  "4": 4,
+  "5": 472,
+  "6": 3176,
+  "7": 148,
+  "8": 40
+ },
+ "top_reasons": [
+  [
+   "rule check failed: IMPI (line #)",
+   517
+  ],
+  [
+   "parse: missing )",
+   469
+  ],
+  [
+   "rule check failed: ANDI (line #)",
+   439
+  ],
+  [
+   "rule check failed: ORI# (line #)",
+   419
+  ],
+  [
+   "final formula is not the conclusion",
+   409
+  ],
+  [
+   "rule check failed: ANDE# (line #)",
+   342
+  ],
+  [
+   "rule check failed: BOTE (line #)",
+   298
+  ],
+  [
+   "rule check failed: DN (line #)",
+   208
+  ]
+ ],
+ "depth_ge3_reasons": [
+  [
+   "depth jump at line #",
+   2
+  ]
+ ],
+ "depth_ge3_lines_hist": {
+  "6": 2
+ },
+ "depth_ge3_examples": [
+  {
+   "thm": " |- ( ( ~ ( ~ ( R & R ) ) ) > ( ( ~ ( ~ P ) ) > ( ( ~ ( ~ ( ~ P ) ) ) > ( ( ~ ( ~ ( R & R ) ) ) & R ) ) ) )",
+   "proof": "N1 | ( ~ ( ~ ( R & R ) ) ) : AS ; N2 | | ( ~ ( ~ P ) ) : AS ; N3 | | | ( ~ ( ~ ( ~ P ) ) ) : ORI2 N2 ; N4 | | ( ( ~ ( ~ ( ~ P ) ) ) > ( ( ~ ( ~ ( R & R ) ) ) & R ) ) : ORI1 N3 ; N5 | ( ( ~ ( ~ P ) ) > ( ( ~ ( ~ ( ~ P ) ) ) > ( ( ~ ( ~ ( R & R ) ) ) & R ) ) ) : IMPI N2 N4 ; N6 ( ( ~ ( ~ ( R & R ) ) ) > ( ( ~ ( ~ P ) ) > ( ( ~ ( ~ ( ~ P ) ) ) > ( ( ~ ( ~ ( R & R ) ) ) & R ) ) ) ) : IMPI N1 N5 ; QED",
+   "verdict": "depth jump at line 3"
+  },
+  {
+   "thm": " |- ( ( ~ ( ~ ( R & R ) ) ) > ( ( ~ ( ~ P ) ) > ( ( ~ ( ~ ( ~ P ) ) ) > ( ( ~ ( ~ ( R & R ) ) ) & R ) ) ) )",
+   "proof": "N17 | ( ~ ( ~ ( R & R ) ) ) : AS ; N18 | | ( ~ ( ~ P ) ) : AS ; N19 | | | ( ~ ( ~ ( ~ P ) ) ) : ORI2 N18 ; N20 | | ( ( ~ ( ~ ( ~ P ) ) ) > ( ( ~ ( ~ ( R & R ) ) ) & R ) ) : ORI1 N17 ; N21 | ( ( ~ ( ~ P ) ) > ( ( ~ ( ~ ( ~ P ) ) ) > ( ( ~ ( ~ ( R & R ) ) ) & R ) ) ) : IMPI N18 N20 ; N22 ( ( ~ ( ~ ( R & R ) ) ) > ( ( ~ ( ~ P ) ) > ( ( ~ ( ~ ( ~ P ) ) ) > ( ( ~ ( ~ ( R & R ) ) ) & R ) ) ) ) : IMPI N17 N21 ; QED",
+   "verdict": "depth jump at line 19"
+  }
+ ]
+}

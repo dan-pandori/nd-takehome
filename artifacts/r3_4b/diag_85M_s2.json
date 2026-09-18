@@ -1,0 +1,71 @@
+{
+ "ckpt": "ckpts/r3_4b/stage1_depth3_f0_a1_85M_s2.pt",
+ "n_targets": 60,
+ "k": 64,
+ "temperature": 0.8,
+ "samples": 3840,
+ "verified": 0,
+ "ends_with_QED": 3840,
+ "written_max_depth_hist": {
+  "2": 3839,
+  "3": 1
+ },
+ "frac_depth_ge3": 0.00026041666666666666,
+ "targets_with_a_depth3_attempt": 1,
+ "verified_depth_ge3": 0,
+ "lines_written_hist": {
+  "5": 444,
+  "6": 3344,
+  "7": 52
+ },
+ "top_reasons": [
+  [
+   "rule check failed: IMPI (line #)",
+   942
+  ],
+  [
+   "rule check failed: ANDE# (line #)",
+   644
+  ],
+  [
+   "rule check failed: ORI# (line #)",
+   466
+  ],
+  [
+   "rule check failed: IMPE (line #)",
+   463
+  ],
+  [
+   "rule check failed: ANDI (line #)",
+   299
+  ],
+  [
+   "rule check failed: DN (line #)",
+   179
+  ],
+  [
+   "parse: missing )",
+   177
+  ],
+  [
+   "final formula is not the conclusion",
+   163
+  ]
+ ],
+ "depth_ge3_reasons": [
+  [
+   "parse: missing )",
+   1
+  ]
+ ],
+ "depth_ge3_lines_hist": {
+  "6": 1
+ },
+ "depth_ge3_examples": [
+  {
+   "thm": " |- ( ( ~ ( ~ R ) ) > ( R > ( ( ~ R ) > ( ( R & ( ~ ( ~ R ) ) ) & ( ~ R ) ) ) ) )",
+   "proof": "N11 | ( ~ ( ~ R ) ) : AS ; N12 | | R : AS ; N13 | | | ( R & ( ~ ( ~ R ) ) ) : ANDI N12 N11 ; N14 | | ( ( R & ( ~ ( ~ R ) ) ) & ( ~ R ) ) : ANDI N13 N11 ; N15 | ( R > ( ( ~ R ) > ( ( R & ( ~ ( ~ R ) ) ) & ( ~ R ) ) ) : IMPI N12 N14 ; N16 ( ( ~ ( ~ R ) ) > ( R > ( ( ~ R ) > ( ( R & ( ~ ( ~ R ) ) ) & ( ~ R ) ) ) ) : IMPI N11 N15 ; QED",
+   "verdict": "parse: missing )"
+  }
+ ]
+}
