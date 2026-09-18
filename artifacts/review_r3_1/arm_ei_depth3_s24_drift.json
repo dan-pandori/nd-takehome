@@ -1,0 +1,181 @@
+{
+ "args_ok": true,
+ "arm": "ei_depth3_s24_drift",
+ "cum_check": {
+  "1": [
+   842,
+   842
+  ],
+  "2": [
+   2329,
+   2329
+  ],
+  "3": [
+   3431,
+   3431
+  ],
+  "4": [
+   3878,
+   3878
+  ],
+  "5": [
+   4215,
+   4215
+  ],
+  "6": [
+   4484,
+   4484
+  ],
+  "7": [
+   4678,
+   4678
+  ],
+  "8": [
+   4834,
+   4834
+  ]
+ },
+ "depth_hist_distinct": {
+  "neighbour_d2": 110,
+  "neighbour_d3": 19
+ },
+ "distinct_norm_proofs": 129,
+ "excluded_pattern_proofs_json": [
+  18,
+  19,
+  61,
+  61,
+  77,
+  93,
+  100,
+  137
+ ],
+ "found_files": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8
+ ],
+ "heldout_greedy": [
+  4383,
+  4383,
+  4475,
+  4365,
+  4401,
+  4430,
+  4409,
+  4470
+ ],
+ "heldout_n": 5000,
+ "init": {
+  "batch": 768,
+  "exclude_pattern": "depth3",
+  "extra_train": null,
+  "extra_weight": 1,
+  "ft_lr": 0.0003,
+  "ft_steps": 600,
+  "heldout": "data/p2/heldout.jsonl",
+  "init": "ckpts/r3_1/stage1_depth3_f0_a1_s24.pt",
+  "k": 32,
+  "max_per_thm": 4,
+  "name": "r3_1/ei_depth3_s24_drift",
+  "no_train": false,
+  "relabel": false,
+  "resume_found": null,
+  "retain": 20000,
+  "rl_weight": 4,
+  "rounds": 8,
+  "seed": 24,
+  "select": "random",
+  "start_round": 1,
+  "targets": "data/r3_1/depth3_nb.jsonl",
+  "temperature": 0.8,
+  "train": "data/p2/train_depth3_f0_a1.jsonl",
+  "transfer": "data/r3_1/depth3_req_transfer.jsonl"
+ },
+ "mix_rl_records": [
+  860,
+  1360,
+  1540,
+  1604,
+  1640,
+  1664,
+  1664,
+  1664
+ ],
+ "neighbour_n": 300,
+ "neighbour_pattern_cum": [
+  4,
+  4,
+  11,
+  11,
+  15,
+  16,
+  16,
+  18
+ ],
+ "neighbour_solved_cum": [
+  66,
+  91,
+  108,
+  112,
+  119,
+  120,
+  120,
+  122
+ ],
+ "neighbour_solved_only_nonpattern_names": [
+  "d3nb_4",
+  "d3nb_7",
+  "d3nb_9",
+  "d3nb_11",
+  "d3nb_14",
+  "d3nb_15",
+  "d3nb_16",
+  "d3nb_24",
+  "d3nb_27",
+  "d3nb_31",
+  "d3nb_36",
+  "d3nb_38",
+  "d3nb_47",
+  "d3nb_48",
+  "d3nb_55",
+  "d3nb_65",
+  "d3nb_70",
+  "d3nb_77",
+  "d3nb_79",
+  "d3nb_82"
+ ],
+ "neighbour_solved_without_pattern": 104,
+ "pattern_distinct_proofs": 19,
+ "prompt_mismatch": 0,
+ "raw_records": 4834,
+ "targets_cum_solved_json": [
+  66,
+  91,
+  108,
+  112,
+  119,
+  120,
+  120,
+  122
+ ],
+ "transfer_cum_solved_json": [
+  0,
+  0,
+  0,
+  0,
+  0,
+  1,
+  1,
+  1
+ ],
+ "unknown_name": 0,
+ "unparsed": 0,
+ "verified_raw": 4834,
+ "verify_fail": 0
+}
