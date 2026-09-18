@@ -60,13 +60,16 @@ def arm_metrics(arm, pattern):
 
 def parse_arm(name):
     # grpo_g8_depth3_f0_a1_s20[_lr3e-5][_e2] | grpo_sprint_depth3_f0_a1_s20_lr1e-5 | ei_depth3_f0_a1_s20[_e2] | frozen_depth3_f0_a1_s20
-    m = re.match(r'(grpo_g(\d+)|grpo_sprint|ei|frozen)_depth3_f0_a1_s(\d+)(_lr[0-9e.-]+)?(_e2)?$', name)
+    m = re.match(r'(grpo_g(\d+)|grpo_sprint|ei|frozen)_depth3_f0_a1_s(\d+)(_lr[0-9e.-]+)?(_e2)?(_noretain|_posonly)?$', name)
     if not m:
         return None
     kind = m.group(1)
     G = int(m.group(2)) if m.group(2) else None
     lr = m.group(4)[3:] if m.group(4) else ('1e-4' if kind.startswith('grpo') else None)
-    return {'arm': name, 'kind': 'grpo' if kind.startswith('grpo_g') else kind, 'G': G, 'draw': int(m.group(3)), 'lr': lr, 'seed2': bool(m.group(5))}
+    kind = 'grpo' if kind.startswith('grpo_g') else kind
+    if m.group(6):
+        kind += m.group(6)          # ei_noretain / grpo_posonly (amendment-3 ablations)
+    return {'arm': name, 'kind': kind, 'G': G, 'draw': int(m.group(3)), 'lr': lr, 'seed2': bool(m.group(5))}
 
 
 def coverage(draw):
