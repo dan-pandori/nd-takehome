@@ -10,6 +10,7 @@ case $SIZE in
   85M|85Mr) ARCH="--n_layer 12 --d 768 --n_head 12"; FTLR=3e-5; CB=1000; EB=768;;
   *) echo "size?"; exit 1;;
 esac
+CB=${COVB:-$CB}   # COVB: smaller pre-RL batch when the sample shares the GPU with an 85M fine-tune step
 T=${SIZE}_s${S}; Q=artifacts/r3_4b/q; CK=ckpts/r3_4b/stage1_depth3_f0_a1_$T.pt
 mkdir -p $Q ckpts/r3_4b
 PROCS=$(( $(nproc) > 8 ? 8 : $(nproc) ))
