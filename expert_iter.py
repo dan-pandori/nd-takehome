@@ -16,16 +16,17 @@ With --no_train, round r of the control has seen exactly the same r*k attempts p
 --select longest: train on each theorem's longest dependency-pruned proofs (arm "EI-long").
 --relabel: also keep by-product proofs (valid proof of a *different* conclusion from the same premises)
   as extra training data, if their theorem class is not in any evaluation pool and the proof has >= 7 lines.
+--exclude_pattern <depth3|reductio|...> (round3-run1 'drift' arms): every found proof is still recorded in
+  found_<r>.jsonl, but a proof whose dependency-pruned form has the pattern (patterns.classify) is never put
+  into the training mix; the number of excluded proofs / theorems is logged per round.
+  python expert_iter.py --test_exclude   # verifier-checked test of the exclusion filter
 """
 import argparse, json, os, sys, random, collections, subprocess, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import torch
-from model import load_ckpt
-from sample import generate
 from nd_verify import verify_text
 from prune import pruned_length
 from gen import canon_key
-from eval_set import judge, summarize
+from patterns import classify, PATTERNS
 
 
 def read(fn):
@@ -63,8 +64,59 @@ def relabel(prompt, proof):
     return newp, f'{prem} |- {form}', nl
 
 
+def has_pattern(proof, pattern):
+    """True iff the dependency-pruned proof has `pattern` (unparsable -> False)."""
+    cl = classify(proof)
+    return bool(cl and cl.get(pattern))
+
+
+def test_exclude():
+    """Verifier-checked test of the --exclude_pattern filter: pattern proofs are dropped from a training mix, the rest kept."""
+    cases = [  # (prompt, proof, {pattern: should be EXCLUDED under --exclude_pattern pattern})
+        ('THM SEQ ( P > ( Q > ( R > R ) ) ) PRF',
+         'N1 | P : AS ; N2 | | Q : AS ; N3 | | | R : AS ; N4 | | ( R > R ) : IMPI N3 N3 ; N5 | ( Q > ( R > R ) ) : IMPI N2 N4 ; N6 ( P > ( Q > ( R > R ) ) ) : IMPI N1 N5 ; QED',
+         {'depth3': True, 'reductio': False}),
+        ('THM SEQ ( P > ( Q > P ) ) PRF',
+         'N1 | P : AS ; N2 | | Q : AS ; N3 | | P : R N1 ; N4 | ( Q > P ) : IMPI N2 N3 ; N5 ( P > ( Q > P ) ) : IMPI N1 N4 ; QED',
+         {'depth3': False, 'reductio': False}),
+        # depth-3 box that is padding: pruned form is depth 2 -> NOT excluded
+        ('THM SEQ ( P > ( Q > P ) ) PRF',
+         'N1 | P : AS ; N2 | | Q : AS ; N3 | | | R : AS ; N4 | | ( R > R ) : IMPI N3 N3 ; N5 | | P : R N1 ; N6 | ( Q > P ) : IMPI N2 N5 ; N7 ( P > ( Q > P ) ) : IMPI N1 N6 ; QED',
+         {'depth3': False, 'reductio': False}),
+        ('THM ( ~ ( ~ P ) ) SEQ P PRF',
+         'N1 ( ~ ( ~ P ) ) : PR ; N2 | ( ~ P ) : AS ; N3 | F : NEGE N2 N1 ; N4 ( ~ ( ~ P ) ) : NEGI N2 N3 ; N5 P : DN N4 ; QED',
+         {'depth3': False, 'reductio': True}),
+        ('THM ( ~ ( ~ P ) ) SEQ P PRF', 'N1 ( ~ ( ~ P ) ) : PR ; N2 P : DN N1 ; QED', {'depth3': False, 'reductio': False}),
+        ('THM ( P > Q ) , ( ~ Q ) SEQ ( ~ P ) PRF',
+         'N1 ( P > Q ) : PR ; N2 ( ~ Q ) : PR ; N3 | P : AS ; N4 | Q : IMPE N1 N3 ; N5 | F : NEGE N4 N2 ; N6 ( ~ P ) : NEGI N3 N5 ; QED',
+         {'depth3': False, 'reductio': False}),
+    ]
+    bad = 0
+    for prompt, proof, exp in cases:
+        ok, reason, nl = verify_text(prompt + ' ' + proof)
+        assert ok, (reason, prompt, proof)
+        for pat, want in exp.items():
+            got = has_pattern(proof, pat)
+            bad += got != want
+            print(('ok   ' if got == want else 'FAIL ') + f'exclude_pattern={pat}: excluded={got} {prompt[:50]}')
+    # the mix-building rule itself: a found list with 3 proofs (2 pattern) under max_per_thm=4 keeps exactly the 1 non-pattern one
+    fs = [{'proof': cases[0][1]}, {'proof': cases[1][1]}, {'proof': cases[0][1] + ' '}]
+    kept = [x for x in fs if not has_pattern(x['proof'], 'depth3')]
+    bad += len(kept) != 1 or kept[0]['proof'] != cases[1][1]
+    print(('ok   ' if len(kept) == 1 else 'FAIL ') + f'mix rule keeps {len(kept)} of {len(fs)} (expected 1)')
+    print('EXCLUDE_PATTERN TESTS', 'PASS' if not bad else f'FAIL ({bad})')
+    return bad == 0
+
+
 def main():
     ap = argparse.ArgumentParser()
+    if '--test_exclude' in sys.argv:
+        sys.exit(0 if test_exclude() else 1)
+    global torch, load_ckpt, generate, judge, summarize
+    import torch
+    from eval_set import judge, summarize
+    from model import load_ckpt
+    from sample import generate
     ap.add_argument('--init', required=True)
     ap.add_argument('--name', required=True)
     ap.add_argument('--targets', default='data/rl_targets.jsonl')
@@ -87,6 +139,7 @@ def main():
     ap.add_argument('--start_round', type=int, default=1)
     ap.add_argument('--extra_train', default=None, help='Phase 3 precursor injection: jsonl of verified <=6-line generator proofs added to the retained slice every round')
     ap.add_argument('--extra_weight', type=int, default=1, help='repeat each extra_train record this many times per round')
+    ap.add_argument('--exclude_pattern', default=None, choices=list(PATTERNS) + ['derived_ore_strict'], help='drift arms: never train on a found proof whose pruned form has this pattern (still recorded in found_<r>.jsonl)')
     ap.add_argument('--resume_found', default=None, help='artifacts dir of a previous run of the same arm; loads found_<start_round-1>.jsonl and found_transfer_<start_round-1>.jsonl')
     a = ap.parse_args()
     out = f'artifacts/{a.name}'
@@ -190,10 +243,16 @@ def main():
         if not a.no_train:
             mix = f'{out}/mix_{r}.jsonl'
             n_rl = 0
+            n_excl = n_excl_thm = 0
             with open(mix, 'w') as f:
                 for t in targets:
                     fs = found[t['name']]
                     rng.shuffle(fs)
+                    if a.exclude_pattern:
+                        keep = [x for x in fs if not has_pattern(x['proof'], a.exclude_pattern)]
+                        n_excl += len(fs) - len(keep)
+                        n_excl_thm += len(keep) < len(fs)
+                        fs = keep
                     if a.select == 'longest':
                         fs = sorted(fs, key=lambda x: -x['pruned'])
                     for x in fs[:a.max_per_thm]:
@@ -209,6 +268,11 @@ def main():
                         f.write(json.dumps({'prompt': x['prompt'], 'proof': x['proof'], 'n_lines': x['n_lines']}) + '\n')
             stats['mix_extra_records'] = len(extra_recs) * a.extra_weight
             stats['mix_rl_records'] = n_rl
+            if a.exclude_pattern:
+                stats['excluded_pattern'] = a.exclude_pattern
+                stats['excluded_pattern_proofs'] = n_excl          # cumulative found proofs dropped from this round's mix
+                stats['excluded_pattern_theorems'] = n_excl_thm    # targets with >= 1 dropped proof
+                print(f'[{a.name} r{r}] exclude_pattern={a.exclude_pattern}: dropped {n_excl} proofs of {n_excl_thm} theorems from the mix', flush=True)
             if n_rl == 0:
                 print('no accepted proofs: skipping training this round', flush=True)
             else:
