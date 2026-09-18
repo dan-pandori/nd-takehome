@@ -155,3 +155,111 @@ cover it: these shorter proofs use only subformulas of the theorem.
    restored correctly (49 → 55 relabelled; checkpoint `r5`). T3 s0 is the best single-model arm, so this did not hurt it, but it is
    not protocol-identical to T3 s1.
 5. Frozen at `L_true` 7 is 6.7–7.0 % because 236 of the 300 transfer theorems in that bin are textbook instances the base model cannot write.
+
+---
+
+## Compare (phase 2 — after reading `run_ladder_A.md`, `ladder.md`, `numbers.md` §ladder-A, `log.md` §ladder-A, `STATUS.md`, `QUESTIONS.md`)
+
+Erratum to my §Recount: "at `L_true` 7, 40–44 % of proofs are ≥ 1e-5" should read **38.9–42.9 % of proofs** (68/175 … 70/163); per
+*theorem* (best counted proof) it is 36.5–42.4 %. The table was right; the sentence was not.
+
+| # | executor's claim (source) | my independent value | verdict |
+|---|---|---|---|
+| 1 | Transfer `L*` = 10 for T1–T6 on both seeds; frozen 7; +3 everywhere (`run_ladder_A.md`, `ladder.md`, `numbers.md`) | 10 × 12 arms; frozen 7 / 7; also with my corrected labels | **reproduces** |
+| 2 | Target-pool `L*`: trained 10 / 10, frozen 8 / 8 | same | reproduces |
+| 3 | Transfer / targets solved, thms at ≥ 8 / 9 / 10 / 11, every row of the `ladder.md` main table incl. T6 single siblings (644, 657, 636, 642; 371, 376, 357, 366 at ≥ 9) | identical in all 18 rows | reproduces |
+| 4 | Transfer and target bins with Wilson intervals (`ladder.md`) | identical counts; my Wilson bounds agree to the printed digit | reproduces |
+| 5 | "≤ 2 of 99 transfer theorems at `L_true` 11, none of 125 at 12–14, in any arm" | max 2/99 (T4 s0, T5 s0); 0/125 everywhere | reproduces |
+| 6 | "T4 spent 706 samples on each of 221 targets at `L_true` 11–13 and solved 3 and 0"; T2 351 / 2 and 1; T1 256 / 1 and 0 | 156,014 / 221 = 706, solved 3 (s0), 0 (s1); T2 s0 77,490 → 351, 2; T1 s0 1 | reproduces |
+| 7 | T6 beats T1 on both seeds at ≥ 9: 409 / 395 vs 335 / 346; siblings alone 357–376 at half the attempts | same | reproduces |
+| 8 | "paired p < 0.001 twice" (T6 vs T1, exact sign test; `ladder.md` paired table) | 88 / 14 and 72 / 23, p < 0.001; T1 s1 vs s0 44 / 33, p 0.25 — all reproduce. **But the same test gives T3 s0 vs T1 s0 73 / 18, p < 0.001 and T3 s1 vs T1 s1 27 / 45, p 0.044**, and T3 is T1 plus 55 records | numbers reproduce; **the inference does not hold** — the test's unit is the theorem, the noise is the training run. It rejects "these two checkpoints are equal", not "T6 = T1" |
+| 9 | Base reachability: 0 of 327–409 transfer theorems solved at ≥ 9 have base p ≥ 1e-5; at 7, 37–42 % (predicted 40–60 %) | 0 of 327–409; 36.5–42.4 % per theorem; my own re-scoring of 1,370 proofs agrees (max 1.28 nats, 1 flip at the line) | reproduces. The 7-bin is a **miss at the low edge in 5 of 12 arms' terms** (range straddles 40 %); the write-up lists it without a verdict |
+| 10 | Frozen: 7 % at 7 (predicted 25–35 %) — listed under "held" because `L*` = 7 held | 6.7 / 7.0 % | reproduces; the **rate prediction is a miss** and should be labelled so (cause: 236 / 300 of the bin are textbook instances) |
+| 11 | T1 prediction wrong (10, not 9); headline "no rung reaches +3" wrong; T2 / T4 target `L*` prediction wrong; T5 + 5 points wrong (85, 82 vs 83, 83) | all as stated; by the pre-registered falsifiers T1, T2, T3 (transfer `L*` ≥ 10 on both seeds), T4 and T6 (same) are falsified, T5's falsifier ("≤ T1's on both seeds") is met on s1 only | reproduces; misses are reported as misses. **T3's and T6's falsified `L*` predictions are not listed** in `run_ladder_A.md` |
+| 12 | Held-out greedy ≥ 0.953 final round (`numbers.md`: 0.953–0.959; frozen 0.948) | read from `round_8.json`: 0.9532–0.9594; all rounds ≥ 0.9476 | reproduces (not re-derivable: generations not saved) |
+| 13 | "all generator-shaped at ≥ 9"; schemata beyond contraposition / export unsolved; no schema instance with `L_true` ≥ 9 solved | same (0 textbook at ≥ 9 in every arm; 79–80 of 80–94 textbook solves are those two schemata) | reproduces |
+| 14 | 42 (run summary, `numbers.md`) / 43 (`ladder.md`) labels one line too long; `L*` unchanged | 43 by written proofs (13 transfer + 30 targets); **76** (18 + 58) when duplicate ORE boxes in counted proofs are merged and re-verified; `L*` unchanged | differs in count (42 vs 43 internally; 76 by my stronger check), same conclusion |
+| 15 | T3 by-products "≈ 50"; `numbers.md`: "49 (s0) and 55 (s1)"; `ladder.md`: 55 and 55 | 55 and 55 at round 8 | `numbers.md` is stale by 6 for s0 (49 was round 6); immaterial |
+| 16 | T3 s0's lead predates the resume (≥ 9 at round 5: 240 vs 204) | 240 vs 204 | reproduces |
+| 17 | Log 18:00: "the only difference from an uninterrupted run is the Python `rng` stream used to shuffle the training mix" | the restarted stream also re-draws the 20,000 Stage-1 retention records: rounds 6–8 repeat 97 / 94 / 91 % of rounds 1–3's | **understated**, effect on results unknown but probably small |
+| 18 | "Run-to-run spread (round-3 counts 16–58)" | 16–59 with the T6 union (58 without) | reproduces |
+| 19 | Cost ≈ $39 (≈ $7.5 productive, ≈ $31.6 idle) | `~/pods.log` creation times to 17:20 at $0.50/h: 78.1 pod-h = $39.1 + $0.25 | reproduces as an estimate; the deletion time comes from the resume note, not a file |
+| 20 | Gate 0: expectations committed before the first pod | `b3845eb` 01:14 < first `args.json` 01:42:53; amendment `4cfbf6e` 01:40 (text says 01:50) changes the training pool only and was made after a killed round 1 on it, as disclosed | holds |
+| 21 | Bucket paths in `numbers.md` | not checked (no listing pulled); out of scope of the recount | not derived |
+
+### Wording against n
+- **"The wall is at 11" / "do not move the wall" / "beneath it"** (`run_ladder_A.md`; "wall at `L_true` 11" in `STATUS.md`). Not supported as
+  worded. Evidence for: 8 rounds, 0–2 of 99 at 11, T4's 706 samples per target for 0–3 solves. Evidence against calling it a wall: the
+  count at ≥ 10 is still rising every round in every arm at round 8 (T1 s0 2 → 12 → 23 → 27 → 35); each earlier length went from 0–2
+  solved to ≥ 5 within one or two rounds of first appearing (10: round 4 → round 5); the Wilson upper bound at 11 is 5.5–7.1 %; and
+  the executor's own Phase B proposal (a) is to find out "whether the wall at 11 is a rate limit or a hard limit". What the data say is
+  **"no arm reaches 11 in 8 rounds"**.
+- **"two seeds rank nothing except T6"**. The T6 ranking satisfies the standing two-seed rule (both T6 seeds above both T1 seeds in
+  total, ≥ 8, ≥ 9, ≥ 10 — I checked each). But the reference noise the write-up itself identifies (T3 ≈ T1: 328 and 390 at ≥ 9) puts
+  T6 (395, 409) 5–19 theorems above the best T1-like run. Treating T1 s0, T1 s1, T3 s0, T3 s1 as four T1-like runs (335, 346, 390,
+  328; mean 350, sd 28) against T6's two (mean 402): pooled-variance t = 2.45 on 4 df (p ≈ 0.07); Welch t = 3.35 on ≈ 4 df (p ≈ 0.03),
+  with T6's variance estimated from two runs, and with "T3 counts as T1" being my post-hoc assumption. **"T6 is ahead on both
+  seeds; likely but not established"** is what n supports. The single-sibling result (each sibling alone, at 128 attempts, beats T1 at 256) is the
+  stronger piece of evidence and deserves the prominence the p-values now have.
+- Not said anywhere in the executor's files and needed by a reader: **T6 trains two models, i.e. twice the gradient steps per round**, and
+  its pod time is 111 vs 65–93 min. "Equal sample budget" is true; "equal compute" is not.
+- "Plain EI moves a never-trained frontier three lines past what 256 frozen samples reach, with proofs the base assigns < 1e-5,
+  all generator-shaped at ≥ 9" — every part reproduces. It omits what my rule-family predicate shows (§Recount): at `L_true` ≥ 10 the
+  counted proofs contain **no ORE / NEGI / NEGE / BOTE at all in ten arms and one such proof in two**; they are AS/IMPI towers around
+  ANDI / ORI / IMPE. For the SPAR question this matters more than the rung ranking: the +3 in `L*` is one already-known proof family
+  being written longer (depth 3–4 instead of ≤ 3, ≥ 10 lines instead of ≤ 6), while theorems whose generating proof needs NEGI are
+  0 / 48 at `L_true` 10 and 17 of 19 textbook schemata stay at 0 under every technique. "Base p < 1e-5" and "same rule family as the
+  base model's 6-line proofs" are both true of these proofs; the write-up reports only the first.
+
+## Verdict
+
+**Hard constraints:** all hold (`nd_verify` identical to `origin/main`; `TEST_RUN_DONE` untouched; no evaluation file in training
+code; supervised data ≤ 6 lines; every trained-on proof is model-written or generator-written and verifier-accepted). No quarantine.
+Every one of the 12,515 + 46,471 counted proof records verifies against its pool prompt. Pools are disjoint by the pre-registered
+renaming class from every training file; under premise permutation 2 target classes coincide with transfer classes (neither was
+trained on in any arm's mix × transfer intersection) — worth fixing in the key for the next pools, immaterial here.
+
+**What stands**
+- Every count, rate, interval, `L*`, reachability figure and budget figure in `ladder.md` / `numbers.md` §ladder-A reproduces from the
+  raw files with independent code. The executor's bookkeeping is clean.
+- Transfer `L*` 10 vs frozen 7 at equal attempts, on both seeds, for every rung; no rung differs from T1 in `L*`. Frozen solves 0 of
+  1,685 transfer theorems at `L_true` ≥ 9 in 2 × 256 attempts; no solved theorem at ≥ 9 has a counted proof with base p ≥ 1e-5.
+- T2, T3, T4, T5 are not distinguishable from T1 with two seeds; the executor says so.
+- The pre-registered misses (T1, headline, T2 / T4 targets, T5) are reported as misses; expectations were committed before the first pod.
+
+**What must be reworded**
+1. "The wall is at 11", "do not move the wall", "beneath it", and `STATUS.md`'s "wall at `L_true` 11" → "no arm reaches 11 within 8
+   rounds (≤ 2 / 99); counts at 10 were still rising when the runs stopped".
+2. Drop "paired p < 0.001 twice" as support for T6 (row 8), or add next to it that the same test gives p < 0.001 for T3 s0 over T1 s0
+   and p = 0.04 for T1 s1 over T3 s1. Replace with: both T6 seeds exceed both T1 seeds in every bin ≥ 8; each sibling alone at 128
+   attempts exceeds T1 at 256; margin over the best T1-like run is 5–19 theorems at ≥ 9; T6 uses 2 × the training compute.
+3. "Frozen `L*` 7: held (7 % solved at 7; predicted 25–35 %)" → `L*` held, rate prediction missed. Add T3's and T6's falsified transfer-`L*`
+   predictions (both pre-registered "9", falsifier "≥ 10 on both seeds" met) to the expectations list. Give the `L_true`-7 elicitation share a verdict
+   (36.5–42.4 % vs predicted 40–60 %: low edge).
+4. Label errors: 42 / 43 → say which; my merge check finds 76 among solved theorems, and the unsolved ones cannot be checked this way.
+5. `log.md` 18:00 on the T3 s0 resume: the restarted RNG also repeats > 90 % of rounds 1–3's Stage-1 retention draws in rounds 6–8.
+6. `numbers.md`: T3 s0 by-products 49 → 55.
+
+**What is not supported**
+- A length wall, in the sense of a limit that more rounds would not move.
+- T6 > T1 as an established technique effect (it is the run's best lead, not its finding).
+- Nothing in the run supports reading "+3 lines of `L*`" as new *kinds* of proof: by my predicates the gain is confined to the
+  implication-tower family on generator-shaped theorems. The executor does not claim otherwise, but the interpretation paragraph
+  ("with proofs the base assigns < 1e-5") invites that reading and should carry the rule-family fact beside it.
+
+**Next measurements that would settle what is open**
+1. *Rate limit or wall:* T1 continued to 16–24 rounds from the existing round-8 checkpoints (2 seeds exist; add 2), reporting solved
+   counts at 10, 11, 12 per round. Prediction to write down first: if 11 behaves like 10 did, ≥ 5 at 11 appears within ≈ 2–4 more
+   rounds. Cheap (≈ 8 min per round per arm on a 3090).
+2. *Is T6 real and why:* 4 seeds each of T1 and T6, plus the executor's proposed control (one policy trained on the union of two
+   independent samplers' finds, which equalises training compute per model and removes the second policy), plus T1 with 1,200 steps
+   per round (equal total compute).
+3. *Length vs kind:* report every frontier number split by rule family (implication-tower vs uses ORE / NEGI / NEGE / BOTE), and
+   compute `L*` on the second family alone — from the existing files that is a re-analysis, no pods. My count says it will be 9 in
+   every arm (5–21 such theorems at 9, i.e. 0.5–2 % of the bin against 30–36 % overall; ≤ 1 at ≥ 10), against frozen's 7. That — +2 on a
+   handful of theorems, not +3 on hundreds — is the size of the gain on the harder family. (The predicate is on the written proof: a
+   proof that uses ORE need not need it.)
+4. Fix `minlen.py` to try `ORE` with one box cited twice, relabel, and make the class key premise-order-invariant before building
+   Phase B pools.
+
+Reviewer finished 2026-09-18 UTC. Files: `review_ladder-A.md`, `rv_recount.py`, `rv_labelcheck.py`, `rv_reach.py`, `rv_disjoint.py`, `review_out/`.
