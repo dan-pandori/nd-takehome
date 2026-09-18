@@ -1,6 +1,6 @@
 # Run 2: six new patterns, classes pre-registered
 
-Run 2026-09-17/18; numbers in `numbers.md` §Round 2 — Run 2; classes and expectations in `log.md` 19:47 UTC (before any set was assembled). **Question:** does "RL crosses zero coverage for a structural repetition of a learned move, not for a new rule sequence" survive six patterns chosen in advance?
+Run 2026-09-17/18; numbers in `numbers.md` §Round 2 — Run 2; classes and expectations pre-registered in `log.md` 19:47 UTC. **Question:** does "RL crosses zero coverage for a structural repetition of a learned move, not for a new rule sequence" survive six patterns chosen in advance?
 
 **Setup.** Cap-6 sets of 155,000 generator proofs: a uniform draw (`struct`; no ≤ 6-line proof can hold a fourth box, an IMPE chain ≥ 4 or a nested ORE, so it is f = 0 for all three) and three draws with one rule-sequence pattern removed (f = 0 asserted on the written files). Pools of 300–500 theorems whose shortest found proof uses the pattern (`necessity.py`, required subset flagged), two Stage-1 seeds, expert iteration (k = 32, 8 rounds), frozen controls, pre-RL pass@2,000. The generator cannot make three of the shapes: depth-4 candidates came from it with its box-depth cap raised to 5, chains and nested OREs from schemata (`QUESTIONS.md`).
 
@@ -15,7 +15,7 @@ Run 2026-09-17/18; numbers in `numbers.md` §Round 2 — Run 2; classes and expe
 
 **What happened.** Nothing at f = 0 crossed zero except negi_ande_hyp seed 1, whose base already emitted the shape at 5·10⁻⁶ — elicitation, as the ignition rule predicts; its round-4 checkpoint, trained once on the first proof, emits the shape on 28 / 300 targets at 8.6·10⁻³ (the drift measurement: nothing drifts before the first proof because nothing is trained before it). The structural negatives are length, not structure: a fourth box needs ≥ 8 lines, two beyond cap 6, and the cap-6 base never writes one; at cap 8 the base models — four draws, **zero** depth-4 proofs in their data — already write a fourth box in 11–20 % of samples and RL takes them to 96–97 %. The decoration control solves 217 / 219 targets and never writes the pointless ORI-then-ORE. "Structural → acquired" held at cap 8 and failed at cap 6; "rule sequence → ≈ 0 unless the base generalised" held in all six arms.
 
-**Restated rule.** Zero-coverage acquisition needs a base rate above zero, and the base rate of a structural repetition is above zero only when the proof length it needs is inside the pretraining cap; rule sequences get a non-zero base rate only by draw-level generalisation. The class labels predicted the outcome only through the base rate, which is the ignition study's variable, not the pattern's syntax.
+**Restated rule.** Zero-coverage acquisition needs a base rate above zero; a structural repetition has one only when the proof length it needs is inside the pretraining cap, and a rule sequence only by draw-level generalisation. The class labels predicted outcomes only through the base rate — the ignition study's variable, not the pattern's syntax.
 
 ![acquisition](figures/run2_acq.png)
 ![curves](figures/run2_curves.png)
