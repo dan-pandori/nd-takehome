@@ -141,3 +141,26 @@ checkpoints), `~/runs/round3-run3/executor.done`.
   first draft said "any rule other than PR/AS", under which every ordinary proof of a disjunction goal
   (ORI, or the final IMPE/ORE line) would count and the predictor would be meaningless; the final line
   is also excluded. Found by the unit tests.
+
+- 2026-09-18 10:00 UTC — **ADDENDUM: deep second-seed pass (pre-registered before its first job).** Reason: the
+  reductio main pass is complete (12 / 24 draws with ≥ 1 hit; all hits on `nand_neg` / `negimp_to_pos`), and 8 of
+  the 12 generalisers have only 1–3 hits in 600k samples, i.e. they sit at the detection floor (1.7·10⁻⁶). A draw
+  with a true rate at the floor shows ≥ 1 hit with probability ≈ 0.63, so the zero / non-zero split — the quantity
+  this run exists to measure — is partly sampling noise at this budget. Depth-3 part 1 shows the same bottom-heavy
+  shape (5 of 15 generalisers with 1–2 hits).
+  **Design.** `coverage.py --k 20000 --temperature 0.8 --batch 2000 --procs 4 --seed 1` (independent samples; the
+  main pass used seed 0) for all 24 draws of each set on a pool fixed without reference to this run's hits:
+  reductio — the 52 seven-line targets of the required pool (26 `nand_neg` + 26 `negimp_to_pos`;
+  `data/r3_3/targets_reductio_deep52.jsonl`; 1.04M samples per draw); depth-3 — the 45 targets that any of the
+  ignition study's 16 draws hit (`artifacts/ign/summary.json`; `targets_depth3_deep45.jsonl`, all in part 1; 0.9M
+  samples per draw). Output `artifacts/r3_3/deep_<tag>_s<seed>.s0.jsonl`. No deep pass for derived-ORE unless its
+  main pass shows a hit. The main-pass counts stay the registered E1 / E2 quantities; the deep pass is reported
+  beside them ("≥ 1 hit in either pass").
+  **Expectations.** DA1: of the 12 reductio draws with 0 main-pass hits, **3–7** show ≥ 1 strict reductio sample in
+  the deep pass. DA2: all 7 reductio draws with ≥ 2 main-pass hits are confirmed (≥ 1 deep hit); of the 5 with
+  exactly 1 hit, 3–5 are confirmed. DA3: of the depth-3 draws with 0 hits over the full main pool, **2–5** show
+  ≥ 1 depth-3 sample in the deep pass. DA4: for draws with ≥ 20 main-pass hits on the deep-pool targets, the deep /
+  main per-sample rate ratio on those targets lies in [0.5, 2]. DA5 (consequence): if fewer than one third of the
+  reductio draws are zero in both passes, clause (2)'s "or nothing" is a statement about the sampling budget (rates
+  continuous down to ≤ 10⁻⁷), not a dichotomy between draws, and will be reported as such.
+  **Budget.** ≈ 10 pod-hours on the existing 3090s (≈ $5); run total stays under the $35 stop.

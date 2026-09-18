@@ -38,7 +38,8 @@ def coverage_stats(fn, pattern, pool):
     recs = [json.loads(l) for l in open(fn) if l.strip()]
     st = dict(file=fn, n_targets=len(recs), n_tried=0, n_ok=0, solved_any=0, hits=0, targets_with_pattern=0, distinct_pattern_proofs=0,
               frozen256_pattern_theorems=0, frozen256_solved_any=0, n_parsed=0, fh=collections.Counter(), fh_ok=collections.Counter(),
-              written_hist=collections.Counter(), per_target=[], hits_required=0, targets_required_with_pattern=0, hits_by_stratum=collections.Counter())
+              written_hist=collections.Counter(), per_target=[], hits_required=0, targets_required_with_pattern=0, hits_by_stratum=collections.Counter(),
+              hits_all_patterns=collections.Counter(), solved_by_stratum=collections.Counter())
     for r in recs:
         ps = r['proofs']
         assert sum(p['count'] for p in ps) == r['n_ok'], fn
@@ -46,10 +47,12 @@ def coverage_stats(fn, pattern, pool):
         assert hp == r['hits_by_pattern'][pattern], (fn, r['name'])
         st['n_tried'] += r['n_tried']; st['n_ok'] += r['n_ok']; st['solved_any'] += bool(r['n_ok']); st['hits'] += hp
         st['n_parsed'] += r.get('n_parsed', 0)
+        for k, v in r['hits_by_pattern'].items(): st['hits_all_patterns'][k] += v
         for k, v in (r.get('fh_by_pred') or {}).items(): st['fh'][k] += v
         for k, v in (r.get('fh_ok_by_pred') or {}).items(): st['fh_ok'][k] += v
         tgt = pool.get(r['name'], {})
         stratum = tgt.get('stratum') or ('required' if tgt.get('requires') else 'other')
+        st['solved_by_stratum'][stratum] += bool(r['n_ok'])
         if hp:
             st['targets_with_pattern'] += 1; st['distinct_pattern_proofs'] += sum(1 for p in ps if p['pat'][pattern])
             first_p = min(p['first'] for p in ps if p['pat'][pattern])
@@ -64,7 +67,7 @@ def coverage_stats(fn, pattern, pool):
         if r['first_hit'] is not None and r['first_hit'] <= 256:
             st['frozen256_solved_any'] += 1
     st['per_target'].sort(key=lambda x: -x['hits'])
-    for k in ('fh', 'fh_ok', 'written_hist', 'hits_by_stratum'):
+    for k in ('fh', 'fh_ok', 'written_hist', 'hits_by_stratum', 'hits_all_patterns', 'solved_by_stratum'):
         st[k] = dict(sorted(st[k].items(), key=lambda kv: str(kv[0])))
     return st
 
@@ -142,6 +145,11 @@ def analyse_set(name, cfg, seeds, root):
         d['frozen256_pattern_theorems'] = sum(st['frozen256_pattern_theorems'] for st in have)
         d['hits_required'] = sum(st['hits_required'] for st in have)
         d['n_parsed'] = sum(st['n_parsed'] for st in have)
+        d['n_ok'] = sum(st['n_ok'] for st in have); d['solved_any'] = sum(st['solved_any'] for st in have)
+        hap = collections.Counter(); sbs = collections.Counter()
+        for st in have:
+            hap.update(st['hits_all_patterns']); sbs.update(st['solved_by_stratum'])
+        d['hits_all_patterns'] = dict(hap); d['solved_by_stratum'] = dict(sbs)
         fh = collections.Counter()
         for st in have:
             fh.update(st['fh'])
@@ -163,6 +171,23 @@ def analyse_set(name, cfg, seeds, root):
            'val': {d['seed']: (d['train'] or {}).get('val') for d in draws.values()},
            'primary_fh': cfg['primary_fh'], 'primary_fh_rate': {d['seed']: d['primary_fh_rate'] for d in done},
            'fh_rates': {d['seed']: d['fh_rate'] for d in done}, 'draws': {}}
+    out['n_ok'] = {d['seed']: d['n_ok'] for d in done}; out['solved_any'] = {d['seed']: d['solved_any'] for d in done}
+    out['hits_all_patterns'] = {d['seed']: d['hits_all_patterns'] for d in done}
+    out['solved_by_stratum'] = {d['seed']: d['solved_by_stratum'] for d in done}
+    pos = sorted(d['rate'] for d in done if d['rate'])
+    out['rate_span'] = {'min': pos[0], 'max': pos[-1], 'orders_of_magnitude': math.log10(pos[-1] / pos[0])} if pos else None
+    ratios = [d['primary_fh_rate'] / d['rate'] for d in done if d['rate'] and d['primary_fh_rate'] is not None]
+    out['attempt_over_success_summary'] = {'n': len(ratios), 'min': min(ratios), 'median': sorted(ratios)[len(ratios) // 2], 'n_below_10x': sum(1 for x in ratios if x < 10)} if ratios else None
+    zero = [d['primary_fh_rate'] for d in done if d['rate'] == 0 and d['primary_fh_rate'] is not None]
+    out['primary_fh_rate_in_zero_hit_draws'] = {'n': len(zero), 'min': min(zero), 'max': max(zero), 'n_below_1e-4': sum(1 for x in zero if x < 1e-4)} if zero else None
+    # POST-HOC (not pre-registered): fraction of draws with rate above fixed thresholds, robust to the detection floor of
+    # '>= 1 hit' (1 / n_tried, which differs between pools: 1.7e-6 at 600k samples, 5e-7 at 2M)
+    out['fraction_above'] = {}
+    for thr in (1e-5, 1e-4):
+        ka = sum(1 for d in done if d['rate'] and d['rate'] >= thr)
+        out['fraction_above'][str(thr)] = {'k': ka, 'n': n, 'ci95': list(clopper_pearson(ka, n)) if n else None}
+    out['detection_floor'] = {d['seed']: 1.0 / d['n_tried'] for d in done if d['n_tried']}
+    out['hits'] = {d['seed']: d['hits'] for d in done}
     # rate histogram (log10 bins) with zero-hit draws separate
     hist = collections.Counter()
     for d in done:
@@ -184,6 +209,11 @@ def analyse_set(name, cfg, seeds, root):
         out['hits_on_8plus_line_schema'] = sum(t['hits'] for d in done for t in d['hit_targets'] if (t['n_lines'] or 0) >= 8)
     # E5 for depth3: part 1 vs part 2
     if name == 'depth3':
+        p1d = [d for d in draws.values() if d['pools'].get('p1') and not d['pools']['p1'].get('partial')]
+        k1 = sum(1 for d in p1d if d['pools']['p1']['hits'] > 0)
+        out['p1_only'] = {'n_draws': len(p1d), 'n_with_pattern': k1, 'ci95': list(clopper_pearson(k1, len(p1d))) if p1d else None,
+                          'rates': {d['seed']: d['pools']['p1']['hits'] / d['pools']['p1']['n_tried'] for d in p1d},
+                          'frozen256_pattern_theorems': {d['seed']: d['pools']['p1']['frozen256_pattern_theorems'] for d in p1d}}
         both = [d for d in full]
         out['p1_vs_p2'] = {'draws_with_both_parts': len(both),
                            'hits_p1': sum(d['pools']['p1']['hits'] for d in both), 'hits_p2': sum(d['pools']['p2']['hits'] for d in both),
