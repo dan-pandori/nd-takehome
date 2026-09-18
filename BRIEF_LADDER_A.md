@@ -24,3 +24,15 @@ Order of work:
    `touch ~/runs/ladder-A/executor.done`. Pods deleted first. If Phase A shows a rung with
    `L* − L*_frozen ≥ 2` on transfer on both seeds, say so in `QUESTIONS.md` and ask Dan for
    Phase B.
+
+---
+
+## Resume note 2026-09-18 17:40 UTC (from Dan, relayed)
+
+Your previous session ended at ~08:00 UTC when this host's Claude authentication expired; the pods
+were deleted at 17:20 after their files were pulled back into this worktree (`artifacts/`,
+`data/`, `ckpts/`, `ladder.md` if it existed, `numbers.md`, `log.md`, `STATUS.md`). Read
+`STATUS.md`, `log.md` and `preregistration/` first, keep what is done (pools, pre-registration,
+any finished rungs), and continue from there — do not rebuild pools that exist. Create new pods
+as needed. Record in `log.md` that the run was interrupted and resumed, and which rungs (if
+any) had to be rerun.
