@@ -18,6 +18,7 @@ Started 2026-09-17. Brief: BRIEF_ROUND2.md. Policy: AGENT_POLICY.md. Previous: S
 - 2026-09-17 22:18 UTC  Started (in parallel with run 2's tail): plan + expectations log.md 22:14; 30 injection arms (5 arms × 6 conditions) on p4 (depth-3) and p5 (reductio), RTX 3090s.
 
 ## Run 1
+- RUN1 DONE 2026-09-18 01:32 UTC — `run1.md`, numbers.md §Run 1, `figures/run1_forms.png`, `run1_scale.png`; uploaded to `hf://buckets/dan-pandori/nd-rl/round2/run1/{artifacts/r1,data/r1}`. Lean agrees with nd_verify on every pool (0 disagreements, 4,012 / 4,012 negatives rejected); Lean form +0.31 greedy over the token format (paired, 236 theorems); smallest Qwen3 that proves the RL-found theorems in Lean: median 8B for all three classes.
 - 2026-09-18 01:01 UTC  Step 1 done: `nd2lean.py`, agreement 100 % on 95k+ positives and 4,012 negatives (75,085 RL transfer proofs re-checked after a premise-naming fix). Step 2 generated (Qwen3-Coder-30B-A3B on p6, A100), scoring; step 3 running (0.6B, 1.7B done).
 
 ## Run 4
