@@ -19,6 +19,26 @@ PAT = 'depth3'
 REQ = {json.loads(l)['name']: json.loads(l) for l in open('data/r3_1/depth3_req.jsonl')}
 
 
+def merge_shards(prefix):
+    """pass@10^4 runs are split over pods (forward .s0.jsonl and reverse .s0r.jsonl): one record per target, forward file first."""
+    import glob
+    fns = sorted(glob.glob(prefix + '.s[0-9]*.jsonl'))
+    if not fns:
+        return prefix + '.none'
+    seen = {}; overlap = 0
+    for fn in fns:
+        for l in open(fn):
+            if l.strip():
+                r = json.loads(l)
+                if r['name'] in seen:
+                    overlap += 1
+                else:
+                    seen[r['name']] = l
+    out = prefix + '.merged.jsonl'
+    open(out, 'w').writelines(seen.values())
+    return out
+
+
 def cov(fn):
     if not os.path.exists(fn):
         return None
@@ -65,6 +85,15 @@ def draw(tag, covfn, armdir, s1log=None, gatefn=None, cov10k=None, verify_all=Fa
         D['ei_only'] = {'acquired': len(acq), 'base_reachable_1e4': len(base), 'acquired_and_base': len(acq & base), 'ei_only': len(acq - base),
                         'fraction': len(acq - base) / len(acq) if acq else None, 'base_only': len(base - acq),
                         'ei_only_vs_union_with_600k': len(acq - base_u)}
+    if D.get('mix') and D.get('base_1e4'):
+        acq = set(D['mix']['pattern_required_names']); base = set(D['base_1e4']['pattern_targets']); cov_names = D['base_1e4']['n_targets']
+        D['ei_only_mix'] = {'acquired': len(acq), 'base_targets_sampled': cov_names, 'base_reachable_1e4': len(base), 'acquired_and_base': len(acq & base),
+                            'ei_only': len(acq - base), 'fraction': len(acq - base) / len(acq) if acq else None, 'base_only': len(base - acq)}
+    if D.get('mix') and D.get('pre_rl'):
+        acq = set(D['mix']['pattern_required_names']); base = set(D['pre_rl']['pattern_targets'])
+        D['ei_only_mix_at_2000'] = {'acquired': len(acq), 'base_reachable_2000': len(base), 'ei_only': len(acq - base), 'fraction': len(acq - base) / len(acq) if acq else None}
+    if D.get('req') and D.get('base_1e4'):
+        pass
     elif D.get('req') and D.get('pre_rl'):   # no 10^4 sample: the 600k (k = 2,000) sample stands in, labelled as such
         acq = set(D['req']['pattern_required_names']); base = set(D['pre_rl']['pattern_targets'])
         D['ei_only_at_2000'] = {'acquired': len(acq), 'base_reachable_2000': len(base), 'ei_only': len(acq - base),
@@ -82,7 +111,7 @@ def main():
             if not os.path.exists(f'{A}/q/s1_{T}.log'):
                 continue
             S['sizes'][size][f's{s}'] = draw(T, f'{A}/cov_depth3_{T}.s0.jsonl', f'{A}/ei_depth3_{T}_{{arm}}', f'{A}/q/s1_{T}.log',
-                                             f'{A}/heldout_greedy_{T}.json', f'{A}/cov1e4_depth3_{T}.s0.jsonl', a.verify_all)
+                                             f'{A}/heldout_greedy_{T}.json', merge_shards(f'{A}/cov1e4_depth3_{T}'), a.verify_all)
     S['sizes']['3.2M'] = {f's{s}': draw(f'3.2M_s{s}', f'artifacts/r3_1/cov_depth3_s{s}.s0.jsonl', f'artifacts/r3_1/ei_depth3_s{s}_{{arm}}', verify_all=a.verify_all)
                           for s in range(20, 28)}
     for size, dr in S['sizes'].items():
@@ -91,17 +120,17 @@ def main():
         S.setdefault('by_size', {})[size] = {'draws_sampled': len(pre), 'non_zero': sum(not p['zero_rate'] for p in pre),
                                              'median_rate': rates[len(rates) // 2] if len(rates) % 2 else (sum(rates[len(rates) // 2 - 1:len(rates) // 2 + 1]) / 2 if rates else None)}
     json.dump(S, open(f'{A}/summary.json', 'w'), indent=1)
-    L = ['| size | draw | params | held-out greedy | optional-pool hits / tried (targets) | pre-RL hits / tried | rate | targets w/ pattern | frozen@256 | req: ignition (>= 20) | req pattern targets r1-8 | req solved w/o pattern | trained rounds | frozen arm r8 | mix r1-8 | base@1e4 targets | EI-only / acquired | verify fail |',
+    L = ['| size | draw | params | held-out greedy | optional-pool hits / tried (targets) | pre-RL hits / tried | rate | targets w/ pattern | frozen@256 | req: ignition (>= 20) | req pattern targets r1-8 | req solved w/o pattern | trained rounds | frozen arm r8 | mix r1-8 | base@1e4 pattern targets (of sampled) | mix: EI-only / acquired | verify fail |',
          '|' + '---|' * 18]
     for size in ('3.2M', '25M', '25Mr', '85M', '85Mr'):
         for k, d in S['sizes'][size].items():
-            p, r, f, m, e = d.get('pre_rl'), d.get('req'), d.get('frozen'), d.get('mix'), d.get('ei_only')
+            p, r, f, m, e = d.get('pre_rl'), d.get('req'), d.get('frozen'), d.get('mix'), d.get('ei_only_mix')
             hg = d.get('heldout_greedy'); hg = f'{hg:.3f}' if isinstance(hg, float) else (hg or '-')
             o = d.get('optional_pool_pre_rl'); o = f"{o['hits']} / {o['n_tried']} ({o['targets_with_pattern']})" if o else '-'
             L.append(f"| {size} | {k} | {d.get('params', '-')} | {hg} | {o} | " + (f"{p['hits']} / {p['n_tried']} | {p['rate']:.1e} | {p['targets_with_pattern']} | {p['frozen256_pattern_theorems']}" if p else '- | - | - | -') + ' | ' +
                      (f"{r['ignition_round']} | {[x['pattern_required'] for x in r['per_round']]} | {len(r['required_solved_without_pattern'])} | {r['trained_rounds']}" if r else '- | - | - | -') + ' | ' +
                      (f"{f['final_pattern_required']}" if f else ('= req (skipped)' if d.get('frozen_skipped') else '-')) + ' | ' + (f"{[x['pattern_required'] for x in m['per_round']]}" if m else '-') + ' | ' +
-                     (f"{e['base_reachable_1e4']} | {e['ei_only']} / {e['acquired']}" if e else '- | -') + ' | ' +
+                     (f"{e['base_reachable_1e4']} ({e['base_targets_sampled']}) | {e['ei_only']} / {e['acquired']}" if e else '- | -') + ' | ' +
                      (f"{r['verify_failures']} / {r['verify_sample']}" if r else '-') + ' |')
     L.append('\n' + json.dumps(S['by_size']))
     open(f'{A}/summary_table.md', 'w').write('\n'.join(L) + '\n')
