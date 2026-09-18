@@ -256,3 +256,42 @@
 - Campaign numbers on the non-required pools, for the side-by-side: block B reductio2 (606) EI f = 0 s0/s1/s2 0.096/0/0, f = 0.1 0.157/0.104, frozen 0.005/0/0, 0.041/0.048; block C c8 (500) strict acquisition f = 0 0.008/0.008, f = 10⁻³ 0.022, f = 10⁻² 0.022, frozen 0.006/0.004, plain solve 0.39–0.44.
 - Pods: p1, p2 RTX 3090 $0.50/h from 19:12 / 19:20 UTC (shared with run 2 from 21:34); run-5 share ≈ 2 × 2.8 h ≈ $3. Balance 19:00 → 22:05: $121.40 → see log.
 - Bucket: `hf://buckets/dan-pandori/nd-rl/round2/run5/artifacts/r5` (arm dirs with `round_*.json`, `found_8.jsonl`, `found_transfer_8.jsonl`, coverage files, `summary.json`), `…/run5/ckpts/r5` (round-8 EI checkpoints of the 7 arms that trained), `…/run5/data/r5` (the two pools, transfer sets, oracle labels and candidate files).
+
+## Round 2 — Run 3: minimum outside data for ignition (2026-09-17/18; `run3_inject.py`, `run3_analysis.py` → `artifacts/r3/summary.json`; arms `artifacts/r3/<arm>_<cond>/round_{5..8}.json`, `found_8.jsonl`; injected records in `artifacts/p2/<arm>_<cond>_manifest.json`; injection files `data/r3/inject_*.jsonl`)
+- Conditions per arm (from the round-4 state; one 600-step fine-tune on own found_4 ≤ 4/theorem ×4 + injected ×4 + 20k retained; then rounds 5–8, k = 32): sib1 / sib4 / sib16 = sibling pattern proofs of distinct theorems (depth-3 from a1 s2's found_4, reductio from s7's found_4); gen4 = 4 verifier-valid 6-line generator proofs with the pattern (class-disjoint from every target/transfer pool); other4 = 4 generator proofs of the other pattern; inv4 = 4 strings with the pattern's tokens and one corrupted citation (nd_verify reasons stored in the file; `train.py --cap 0` does not verify). Ignition threshold 20 / 1,000 (depth-3), 12 / 606 (reductio). Counts: cumulative pattern theorems per round (patterns.py on the normalised proof, min-round rule), acquisition at round 8.
+- ei_depth3_f0_a1_s4 (depth3; parent per round [0, 0, 0, 0, 0, 0, 1, 4]):
+  - sib1: rounds 5–8 pattern theorems 8 / 91 / 195 / 264, solved 256 / 355 / 473 / 555, ignition round 6, round-8 acquisition 0.264; injected 1 (valid 1, with pattern 1), own proofs in the mix 910
+  - sib4: rounds 5–8 pattern theorems 105 / 250 / 308 / 322, solved 361 / 522 / 591 / 613, ignition round 5, round-8 acquisition 0.322; injected 4 (valid 4, with pattern 4), own proofs in the mix 910
+  - sib16: rounds 5–8 pattern theorems 236 / 303 / 336 / 344, solved 484 / 564 / 612 / 627, ignition round 5, round-8 acquisition 0.344; injected 16 (valid 16, with pattern 16), own proofs in the mix 910
+  - gen4: rounds 5–8 pattern theorems 1 / 27 / 98 / 167, solved 252 / 294 / 397 / 480, ignition round 6, round-8 acquisition 0.167; injected 4 (valid 4, with pattern 4), own proofs in the mix 910
+  - other4: rounds 5–8 pattern theorems 0 / 0 / 0 / 0, solved 253 / 289 / 312 / 333, ignition round None, round-8 acquisition 0.0; injected 4 (valid 4, with pattern 4), own proofs in the mix 910
+  - inv4: rounds 5–8 pattern theorems 4 / 56 / 173 / 252, solved 250 / 312 / 444 / 537, ignition round 6, round-8 acquisition 0.252; injected 4 (valid 0, with pattern 4), own proofs in the mix 910
+- ei_depth3_f0_a1_s5 (depth3; parent per round [0, 0, 0, 0, 0, 0, 0, 0]):
+  - sib1: rounds 5–8 pattern theorems 23 / 135 / 198 / 262, solved 296 / 439 / 528 / 607, ignition round 5, round-8 acquisition 0.262; injected 1 (valid 1, with pattern 1), own proofs in the mix 968
+  - sib4: rounds 5–8 pattern theorems 91 / 241 / 291 / 316, solved 372 / 541 / 618 / 661, ignition round 5, round-8 acquisition 0.316; injected 4 (valid 4, with pattern 4), own proofs in the mix 968
+  - sib16: rounds 5–8 pattern theorems 143 / 250 / 294 / 312, solved 413 / 533 / 587 / 625, ignition round 5, round-8 acquisition 0.312; injected 16 (valid 16, with pattern 16), own proofs in the mix 968
+  - gen4: rounds 5–8 pattern theorems 2 / 54 / 170 / 235, solved 276 / 351 / 496 / 583, ignition round 6, round-8 acquisition 0.235; injected 4 (valid 4, with pattern 4), own proofs in the mix 968
+  - other4: rounds 5–8 pattern theorems 0 / 0 / 0 / 0, solved 276 / 303 / 335 / 346, ignition round None, round-8 acquisition 0.0; injected 4 (valid 4, with pattern 4), own proofs in the mix 968
+  - inv4: rounds 5–7 pattern theorems 0 / 0 / 0, solved 272 / 300 / 321, ignition round None, round-8 acquisition None; injected 4 (valid 0, with pattern 4), own proofs in the mix 968
+- ei_depth3_f0_a1_s3 (depth3; parent per round [0, 0, 1, 3, 28, 166, 265, 295]):
+  - sib1: rounds 5–8 pattern theorems 69 / 228 / 286 / 322, solved 311 / 479 / 553 / 599, ignition round 5, round-8 acquisition 0.322; injected 1 (valid 1, with pattern 1), own proofs in the mix 916
+  - sib4: rounds 5–8 pattern theorems 101 / 258 / 298 / 326, solved 348 / 516 / 565 / 595, ignition round 5, round-8 acquisition 0.326; injected 4 (valid 4, with pattern 4), own proofs in the mix 916
+  - sib16: rounds 5–8 pattern theorems 201 / 284 / 327 / 344, solved 447 / 537 / 588 / 610, ignition round 5, round-8 acquisition 0.344; injected 16 (valid 16, with pattern 16), own proofs in the mix 916
+  - gen4: rounds 5–8 pattern theorems 84 / 238 / 290 / 322, solved 325 / 490 / 551 / 589, ignition round 5, round-8 acquisition 0.322; injected 4 (valid 4, with pattern 4), own proofs in the mix 916
+  - other4: rounds 5–8 pattern theorems 42 / 197 / 274 / 294, solved 291 / 473 / 570 / 602, ignition round 5, round-8 acquisition 0.294; injected 4 (valid 4, with pattern 4), own proofs in the mix 916
+  - inv4: rounds 5–8 pattern theorems 45 / 183 / 267 / 305, solved 288 / 436 / 532 / 579, ignition round 5, round-8 acquisition 0.305; injected 4 (valid 0, with pattern 4), own proofs in the mix 916
+- ei_reductio_f0_s1_t2 (reductio; parent per round [0, 0, 0, 0, 0, 0, 0, 0]):
+  - sib1: rounds 5–8 pattern theorems 6 / 24 / 31 / 44, solved 6 / 24 / 31 / 44, ignition round 6, round-8 acquisition 0.073; injected 1 (valid 1, with pattern 1), own proofs in the mix 0
+  - sib4: rounds 5–8 pattern theorems 21 / 36 / 41 / 43, solved 21 / 36 / 41 / 43, ignition round 5, round-8 acquisition 0.071; injected 4 (valid 4, with pattern 4), own proofs in the mix 0
+  - sib16: rounds 5–8 pattern theorems 51 / 62 / 75 / 80, solved 51 / 62 / 75 / 80, ignition round 5, round-8 acquisition 0.132; injected 16 (valid 16, with pattern 16), own proofs in the mix 0
+  - gen4: rounds 5–8 pattern theorems 0 / 0 / 0 / 0, solved 0 / 0 / 0 / 0, ignition round None, round-8 acquisition 0.0; injected 4 (valid 4, with pattern 4), own proofs in the mix 0
+  - other4: rounds 5–8 pattern theorems 0 / 0 / 0 / 0, solved 0 / 0 / 0 / 0, ignition round None, round-8 acquisition 0.0; injected 4 (valid 4, with pattern 4), own proofs in the mix 0
+  - inv4: rounds 5–8 pattern theorems 0 / 0 / 0 / 0, solved 0 / 0 / 0 / 0, ignition round None, round-8 acquisition 0.0; injected 4 (valid 0, with pattern 4), own proofs in the mix 0
+- ei_reductio_f0_s2_t2 (reductio; parent per round [0, 0, 0, 0, 0, 0, 0, 0]):
+  - sib1: rounds 5–8 pattern theorems 17 / 43 / 61 / 65, solved 17 / 43 / 61 / 65, ignition round 5, round-8 acquisition 0.107; injected 1 (valid 1, with pattern 1), own proofs in the mix 0
+  - sib4: rounds 5–8 pattern theorems 32 / 57 / 65 / 65, solved 32 / 57 / 65 / 65, ignition round 5, round-8 acquisition 0.107; injected 4 (valid 4, with pattern 4), own proofs in the mix 0
+  - sib16: rounds 5–8 pattern theorems 50 / 66 / 72 / 95, solved 50 / 66 / 72 / 95, ignition round 5, round-8 acquisition 0.157; injected 16 (valid 16, with pattern 16), own proofs in the mix 0
+  - gen4: rounds 5–8 pattern theorems 5 / 29 / 53 / 61, solved 5 / 29 / 53 / 61, ignition round 6, round-8 acquisition 0.101; injected 4 (valid 4, with pattern 4), own proofs in the mix 0
+  - other4: rounds 5–8 pattern theorems 0 / 0 / 0 / 0, solved 0 / 0 / 0 / 0, ignition round None, round-8 acquisition 0.0; injected 4 (valid 4, with pattern 4), own proofs in the mix 0
+  - inv4: rounds 5–8 pattern theorems 0 / 1 / 4 / 14, solved 0 / 1 / 4 / 14, ignition round 8, round-8 acquisition 0.023; injected 4 (valid 0, with pattern 4), own proofs in the mix 0
+- Pods: p4 (depth-3 jobs) 22:05 → and p5 (reductio) 22:17 → shared with run 4 from 23:09; run-3 share ≈ 2 × 1.6 h ≈ $1.6. Bucket: `hf://buckets/dan-pandori/nd-rl/round2/run3/{artifacts/r3,data/r3,ckpts/r3}` (ckpts: the injected-step checkpoints `*_r4t.pt` and the round-8 checkpoints).
