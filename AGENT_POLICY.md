@@ -46,6 +46,14 @@ useful" are all fair questions.
 - VPS: 4 GB / 2 vCPU. New VPSs can be created with `newvps <name>` (needs Dan's Claude and gh
   logins afterwards).
 
+## nd-rl target branch
+
+Dan's integration branch in `~/nd-rl` is **`dan`**. Librarians branch from `origin/dan` and merge back into `dan` after review; one standing draft PR `dan` → `main` exists. Never merge into `main`.
+
+## Pause (2026-09-18)
+
+No new experiment launches until Dan gives the go-ahead. Runs already started finish; their reviewer and librarian steps complete.
+
 ## Artifacts
 
 At `DONE`, upload the run's `ckpts/`, `artifacts/` and `data/` to the public HF bucket:
