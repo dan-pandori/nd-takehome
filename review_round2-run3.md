@@ -187,3 +187,74 @@ contain exactly the manifest's records ×4 plus 20,000 Stage-1 records (the 18 d
 pulled). Not re-derived: the pre-RL coverage counts (taken from the ignition study's summary, which the
 ignition review reproduced), pod spend, kill-switch timing, and the bucket contents beyond the existence of
 `round2/run3/{artifacts,ckpts,data}` (01:05 UTC).
+
+## Compare (phase 2: `run3.md`, `numbers.md` §Round 2 — Run 3, `log.md`, `STATUS.md` §Run 3, `artifacts/r3/summary.json`, `figures/run3_ignition.png`)
+
+Gate 0: expectations R3-E1…E4 committed 22:14:24 UTC, first injection step 22:14:41 (met). The
+results-vs-expectations entry (log 01:06) reports R3-E4 as wrong for depth-3 and marginal for reductio, and
+lists the counted-in reference s3 separately ("3 / 4 without it") — honest. The two OOM re-runs (depth-3 s5
+`inv4` round 8; reductio s2 `inv4` whole arm) are disclosed in `numbers.md` together with the killed
+attempt's 6 / 47, and the rsync nesting incident (gen4 briefly run twice, outputs deleted) is logged at 22:47;
+the files on disk are single clean runs (checkpoint chains and mtimes consistent).
+
+| claim (executor) | my independent value | verdict |
+|---|---|---|
+| `artifacts/r3/summary.json`: per-round pattern theorems, solved, ignition round, round-8 acquisition for 30 arms; parents' per-round lists | identical element for element in all 30 arms and 5 parents (own predicate, own normaliser, first-appearance round) | reproduces |
+| `run3.md` table (24 cells, s4 / s5 / s1 / s2) | identical | reproduces |
+| all injected records "verifier-valid, with the pattern" (sib, gen4); `inv4` "rejected by the verifier" | sib 1 / 4 / 16 valid and pattern in all 15 arms; gen4 4 / 4; inv4 0 / 4 valid, reasons as stored | reproduces |
+| `numbers.md`: other4 "injected 4 (valid 4, with pattern 4)" | 4 valid, **0** with the arm's pattern (4 with the *other* pattern; the job passed `--pattern <other>` so the manifest flag records the other pattern) | reword |
+| "sibling pattern proofs of distinct theorems" (numbers.md); pre-registration: "the injected theorems are not targets" | the sibling theorems **are targets** of the arm's own pool in every `sib*` arm (1 / 4 / 16); every one is re-found by the arm. Excluding them: sib16 r8 328 / 296 / 328 (depth-3), 64 / 79 (reductio); sib1 263 / 261, 43 / 64; no ignition round changes at the pre-registered thresholds | must be disclosed; conclusions unchanged |
+| "A single verifier-valid sibling proof ignites 4 / 4 arms (0.26 depth-3, 0.07–0.11 reductio by round 8)" | 0.264 / 0.262; 0.073 / 0.107 (0.263 / 0.261; 0.071 / 0.106 excluding the injected theorem) | reproduces |
+| "16 proofs reach the plateau a round earlier" | sib16 236 / 143 / 201 at round 5 vs sib1 8 / 23 / 69; sib16 within 10 of the full-sibling ivS plateau (330–336) by round 7–8, sib1 still rising at round 8 | reproduces |
+| "It must be the right pattern: the other pattern ignites 0 / 4" | 0 pattern theorems through round 8 in s4, s5, s1, s2; but the "other" pattern is present in each arm's Stage-1 set (10,547 reductio proofs in the depth-3 set, 5,687 depth-3 proofs in the reductio set), so `other4` shows that the extra fine-tuning step on four valid proofs without the pattern does not ignite — it does not test a second *novel* pattern | reproduces; add the caveat |
+| "Four short generator instances of the shape ignite 3 / 4" | s4 (r6), s5 (r6), s2 (r6); s1 never (0 valid proofs of any kind) | reproduces |
+| "four *invalid* strings that merely carry three box bars ignite depth-3 s4 (0.252, not s5) … for the structural pattern the seed can be a token statistic, not a proof" | s4 252 (r6), s5 0, s3 305 (reference); s2 14 at r8 (killed same-seed attempt 47 at r6), s1 0. The strings do not "merely carry three box bars": each is a complete 6-line depth-3 (or reductio) proof with **one** citation index changed — exactly one single-token repair makes each verify. Box structure, formulas and rule sequence are those of a correct pattern proof | numbers reproduce; **interpretation not supported** — reword to "a structurally correct pattern example that the verifier rejects for one bad citation ignites one of the two depth-3 test draws; the verifier's stamp is not what transfers, the structure is" |
+| "these are not proofs" (inv4) | correct; and the 5 `inv4` checkpoints were fine-tuned on them | reproduces; label the checkpoints |
+| "parents: 0–4 throughout" (table caption) | true of s4, s5, s1, s2 (the table's columns); s3 (not in the table) reaches 295 | reproduces |
+| pre-registration: s3 "0 pattern theorems at round 4" | 3 (first at round 3), trained on at round 4 | wrong in the pre-registration; s3 is correctly excluded from the tallies |
+| held-out intact | greedy 0.869–0.905 in all 30 arms, parents 0.870–0.902 | reproduces (not claimed in run3.md; worth one clause) |
+| transfer generalisation | not reported by the executor: depth-3 sib1 137 / 133 of 500, gen4 88 / 118, inv4 s4 127; reductio sib1 17 / 30 of 300 | add: the pattern reaches never-trained theorems in every igniting arm |
+| STATUS "invalid strings with the box tokens ignite one depth-3 draw" | s4 yes, s5 no (s3 reference also) | reproduces |
+| `run3.md` ≤ 400 words | 489 words excluding the figure line | over the brief's length |
+| figure `run3_ignition.png` | every curve matches my table | reproduces |
+| bucket `round2/run3/{artifacts,ckpts,data}`; pods ≈ $1.6 | the three directories exist (01:05 UTC); spend not derivable | reproduces / not derivable |
+
+## Verdict
+
+**What stands.** Every number in `run3.md`, `numbers.md` §Run 3 and `artifacts/r3/summary.json` reproduces
+from the raw per-round files with independent code, every counted pattern proof re-verifies (5,000+ distinct
+proofs, 0 failures), the per-round files are internally consistent, the checkpoints were trained from the
+stated states on the stated mixes, the two Stage-1 sets are exactly f = 0, and every pool is class-disjoint
+from every training set. The three clean results are: (i) one verifier-valid sibling proof, repeated four
+times inside one 600-step fine-tune against 20,000 retained records, ignites all four test arms (two depth-3
+draws with 0–1 pattern hits in 600k pre-RL samples, two reductio draws with 0 valid proofs of any kind), and
+four proofs reach the full-sibling plateau within four rounds; (ii) the same step with four valid proofs
+that lack the pattern ignites nothing (0 / 4), so it is the injected pattern and not the extra training that
+ignites; (iii) four 6-line generator instances of the pattern on unrelated theorems ignite 3 / 4 — the
+pattern transfers from short, easy, class-disjoint examples to 7–12-line targets and to the never-trained
+transfer pool.
+
+**What must be reworded.** The `inv4` sentence. The injected strings are not "strings that merely carry
+three box bars": they are complete pattern proofs one citation token away from verifying, so the control
+did not separate "surface tokens" from "valid structure" — it separated *verifier acceptance* from
+structure. The supported statement is that a structurally correct example need not be verifier-valid to
+seed the pattern (1 clear of 2 depth-3 draws; 0 and a marginal 14 / 606 for reductio, where the killed
+same-seed attempt had reached 47 at round 6). The pre-registered inference "token statistics, not valid
+structure" does not follow from this design. Two disclosures are missing: the sibling-injected theorems
+are targets of the arm's own pool (all are re-found; the effect on every count is ≤ 16 theorems and no
+ignition round moves), and `other4`'s pattern is not novel to the models (it is in each Stage-1 set at
+4–7 %). Minor: `numbers.md`'s "with pattern 4" for `other4` means the other pattern; the pre-registration's
+"s3: 0 pattern theorems at round 4" is 3; `run3.md` is 489 words against the brief's 400.
+
+**Flags, not quarantine.** The five `inv4` checkpoints were fine-tuned on verifier-rejected strings (the
+brief's control, run under the standard `--cap 0` EI recipe) and must not be quoted as take-home models. The
+code that built the four injection files is not in the repository; the files are.
+
+**Next measurement.** (1) Repeat `inv4` with strings whose *structure* is broken while the token statistics
+are kept — e.g. the same three box bars with the IMPI chain scrambled or the closing formulas randomised —
+on s4, s5 and the two reductio draws, two sampling seeds each; this is the control the pre-registration
+described, and the same-seed disagreement on reductio s2 (47 vs 1 at round 6) says single runs of marginal
+cells are not enough. (2) Find the floor below one proof: one sibling proof at weight 1 instead of 4, or at
+a tenth of the learning rate, to measure how much gradient the ignition needs. (3) Inject sibling proofs of
+non-target theorems (the sibling's transfer finds are evaluation data, so use gen4-style class-disjoint
+theorems at 7–9 lines) to make the sibling condition free of the target leak.
