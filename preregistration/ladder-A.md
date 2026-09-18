@@ -1,6 +1,6 @@
 # Pre-registration — ladder-A (RL technique ladder, Phase A, rungs T1–T6)
 
-Written 2026-09-18 01:35 UTC, before the first pod of this run. Executor: agent:claude. Branch `dan_ladder_a`.
+Written 2026-09-18 01:14 UTC, before the first pod of this run. Executor: agent:claude. Branch `dan_ladder_a`.
 Proposal: `~/nd-rl/docs/proposals/2026-09-17-rl-technique-ladder.md` (metric section binding). Policy: `AGENT_POLICY.md`.
 
 ## Question
