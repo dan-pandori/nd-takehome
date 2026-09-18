@@ -1,6 +1,6 @@
 # Pre-registration: round3-run1 — pool composition or pattern class?
 
-Written 2026-09-18 05:20 UTC, before any pod of this run was created (gate 0). Executor:
+Written 2026-09-18 05:09 UTC, before any pod of this run was created (gate 0). Executor:
 agent:claude. Branch `dan_round3-run1`. Governing brief: `BRIEF_pool-composition.md` (the
 round-3 proposal, §1); policy: `AGENT_POLICY.md`. Edits to the numbers below get a dated
 reason in §Amendments at the end of this file.
