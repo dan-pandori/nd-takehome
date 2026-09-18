@@ -68,6 +68,7 @@ def cov(fn, T, within=None):
         return None
     strat = {t['name']: t['min_lines_ub'] for t in T}; schema = {t['name']: t['schema'] for t in T}
     rs = read(fn)
+    assert len({r['name'] for r in rs}) == len(rs) and {r['name'] for r in rs} <= set(strat), fn
     hit = [r for r in rs if r['hits_by_pattern'].get('reductio', 0) > 0]
     out = {'file': fn, 'targets': len(rs), 'samples': sum(r['n_tried'] for r in rs), 'n_ok': sum(r['n_ok'] for r in rs),
            'strict_hits': sum(r['hits_by_pattern'].get('reductio', 0) for r in rs), 'targets_hit': len(hit),
@@ -121,11 +122,19 @@ def main():
     for sz, label in SIZES:
         tags = sorted({re.findall(r'stage1_(' + sz + r'_s\d+)\.done', f)[0] for f in glob.glob(f'{A}/stage1_{sz}_s*.done')})
         cell = {'label': label, 'draws': {}}
+        extra = {'label': label + ' EXTRA draws (exploratory, coverage only)', 'draws': {}}
+        for tag in [t for t in tags if int(t.split('_s')[1]) >= 3]:
+            D = draw(tag, T, TR); D['stage1'] = stage1(tag); extra['draws'][tag] = D
+        tags = [t for t in tags if int(t.split('_s')[1]) < 3]
         for tag in tags:
             D = draw(tag, T, TR); D['stage1'] = stage1(tag); cell['draws'][tag] = D
         ds = [d for d in cell['draws'].values() if d['pre_rl'] and d['pre_rl']['complete']]
         cell['n_draws_sampled'] = len(ds); cell['n_nonzero'] = sum(1 for d in ds if d['pre_rl']['targets_hit_within_2000'] > 0)
         res['sizes'][sz] = cell
+        if extra['draws']:
+            ds = [d for d in extra['draws'].values() if d['pre_rl'] and d['pre_rl']['complete']]
+            extra['n_draws_sampled'] = len(ds); extra['n_nonzero'] = sum(1 for d in ds if d['pre_rl']['targets_hit_within_2000'] > 0)
+            res['sizes'][sz + 'x'] = extra
     # run 5's 3.2M draws on the ORIGINAL set (reviewed files; pre-RL = the pass@1e4 coverage file, 3e6 samples)
     old = {'label': '3.2M original set (run 5)', 'draws': {}}
     for s in (0, 1, 2):
@@ -134,6 +143,8 @@ def main():
         if os.path.exists(nm['cov']):
             old['draws'][f'r5_s{s}'] = draw(f'r5_s{s}', T, TR, names=nm)
     res['sizes']['m3_run5'] = old
+    # exploratory extras (not pre-registered): ft_lr 3e-5 on 85M-A s0; rounds 9-16 on 85M-A s2
+    res['extras'] = {k: arm(f'{A}/{k}', T, TR) for k in ('x_ei_m85_s0_lr3e-5', 'x_ei_m85_s2_r9-16') if os.path.isdir(f'{A}/{k}')}
     json.dump(res, open(a.out, 'w'), indent=1)
     # console table
     print(f"{'draw':10s} {'params':>9s} {'val':>6s} {'held':>6s} | {'hits':>6s} {'rate':>8s} {'tg':>3s} | {'EI acq':>6s} {'7/8/9/10':>12s} {'ign':>3s} {'viol':>4s} | {'frz':>4s} | {'b10k reach/acq':>14s} {'EI-only':>7s}")
@@ -150,9 +161,9 @@ def main():
 
 def figures(res, outdir):
     import matplotlib; matplotlib.use('Agg'); import matplotlib.pyplot as plt
-    PAR = {'m3': 3.21e6, 'm3_run5': 3.21e6, 'm25': 25.3e6, 'm25B': 25.3e6 * 1.25, 'm85': 85.2e6, 'm85B': 85.2e6 * 1.25}
-    COL = {'m3': '#4477AA', 'm3_run5': '#BBBBBB', 'm25': '#EE6677', 'm25B': '#AA3377', 'm85': '#228833', 'm85B': '#117733'}
-    fig, ax = plt.subplots(1, 3, figsize=(13.5, 3.8))
+    PAR = {'m3': 3.21e6, 'm3_run5': 3.21e6, 'm25': 25.3e6, 'm25B': 25.3e6 * 1.25, 'm85': 85.2e6, 'm85B': 85.2e6 * 1.25, 'm85x': 85.2e6 * 0.8}
+    COL = {'m3': '#4477AA', 'm3_run5': '#BBBBBB', 'm25': '#EE6677', 'm25B': '#AA3377', 'm85': '#228833', 'm85B': '#117733', 'm85x': '#99CC99'}
+    fig, ax = plt.subplots(1, 3, figsize=(13.5, 4.3))
     for sz, cell in res['sizes'].items():
         ds = [d for d in cell['draws'].values() if d['pre_rl']]
         if not ds:
@@ -168,15 +179,15 @@ def figures(res, outdir):
                     ax[1].scatter([x], [d['frozen']['acquired']], facecolors='none', edgecolors=COL[sz], s=45, zorder=3)
             if d.get('base10k'):
                 ax[2].scatter([x], [d['base10k']['ei_only_fraction']], color=COL[sz], s=45, zorder=3)
-        ax[0].scatter([], [], color=COL[sz], label=f"{cell['label']}: {sum(1 for d in ds if d['pre_rl']['strict_hits'] > 0)}/{len(ds)} non-zero")
-    ax[0].set_yscale('log'); ax[0].set_ylabel('pre-RL strict-reductio rate per sample\n(× = 0 hits, drawn at 1e-7)'); ax[0].legend(fontsize=7, frameon=False)
+        ax[0].scatter([], [], color=COL[sz], label=f"{cell['label'].replace(' (exploratory, coverage only)', '')}: {sum(1 for d in ds if d['pre_rl']['targets_hit_within_2000'] > 0)}/{len(ds)} non-zero in 600k")
+    ax[0].set_yscale('log'); ax[0].set_ylabel('pre-RL strict-reductio rate per sample\n(× = 0 hits, drawn at 1e-7)'); fig.legend(*ax[0].get_legend_handles_labels(), fontsize=7.5, frameon=False, ncol=4, loc='lower center')
     ax[1].set_ylabel('targets acquired / 300 after 8 rounds\n(filled EI, open frozen twin)')
     ax[2].set_ylabel('EI-only fraction\n(acquired, not base-reachable at 1e4)'); ax[2].set_ylim(-0.03, 1.03)
     for x in ax:
         x.set_xscale('log'); x.set_xlabel('parameters'); x.set_xlim(2e6, 1.5e8); x.grid(alpha=0.25, lw=0.5)
         for s in ('top', 'right'):
             x.spines[s].set_visible(False)
-    fig.tight_layout(); os.makedirs(outdir, exist_ok=True); fig.savefig(f'{outdir}/run4a_size.png', dpi=150); plt.close(fig)
+    fig.tight_layout(rect=(0, 0.1, 1, 1)); os.makedirs(outdir, exist_ok=True); fig.savefig(f'{outdir}/run4a_size.png', dpi=150); plt.close(fig)
     # per-round curves
     fig, ax = plt.subplots(1, 1, figsize=(5.5, 3.8))
     for sz, cell in res['sizes'].items():
