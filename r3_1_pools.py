@@ -79,9 +79,12 @@ def d3cands(a):
     rng.shuffle(cands)
     cands = cands[:a.n]
     write(f'{D}/depth3_cands.jsonl', cands)
+    # the 7-8-line depth-3 proof of a known target is minlen's proof in pool_long_minlen (targets_depth3 stores only the generator's)
+    ml = {canon_key(r['thm'].strip()): r for r in read(f'{P2}/pool_long_minlen.jsonl') if r['min_lines_ub'] in (7, 8)}
     kn = [{'name': n, 'thm': d3[n]['thm'], 'key': d3[n]['key'], 'prompt': d3[n]['prompt'], 'n_lines': d3[n]['min_lines_ub'],
-           'min_lines_ub': d3[n]['min_lines_ub'], 'oracle_proof': d3[n]['gen_proof'], 'src': 'targets_depth3',
+           'min_lines_ub': d3[n]['min_lines_ub'], 'oracle_proof': ml[d3[n]['key']]['proof'], 'gen_proof': d3[n]['gen_proof'], 'src': 'targets_depth3',
            'r8_min_lines_ub': None, 'r8_timeout': False} for n in known]
+    assert all(ml[d3[n]['key']]['min_lines_ub'] == d3[n]['min_lines_ub'] for n in known)
     write(f'{D}/depth3_known_req.jsonl', kn)
 
 
