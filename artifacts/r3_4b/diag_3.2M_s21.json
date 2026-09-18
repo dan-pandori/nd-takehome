@@ -1,0 +1,91 @@
+{
+ "ckpt": "ckpts/r3_1/stage1_depth3_f0_a1_s21.pt",
+ "n_targets": 60,
+ "k": 64,
+ "temperature": 0.8,
+ "samples": 3840,
+ "verified": 0,
+ "ends_with_QED": 3840,
+ "written_max_depth_hist": {
+  "0": 1,
+  "1": 13,
+  "2": 3823,
+  "3": 3
+ },
+ "frac_depth_ge3": 0.00078125,
+ "targets_with_a_depth3_attempt": 2,
+ "verified_depth_ge3": 0,
+ "lines_written_hist": {
+  "2": 1,
+  "3": 1,
+  "4": 15,
+  "5": 461,
+  "6": 3244,
+  "7": 118
+ },
+ "top_reasons": [
+  [
+   "rule check failed: ANDI (line #)",
+   808
+  ],
+  [
+   "rule check failed: ORI# (line #)",
+   688
+  ],
+  [
+   "rule check failed: IMPI (line #)",
+   495
+  ],
+  [
+   "bad box cite (line #)",
+   430
+  ],
+  [
+   "rule check failed: DN (line #)",
+   347
+  ],
+  [
+   "rule check failed: ANDE# (line #)",
+   345
+  ],
+  [
+   "rule check failed: BOTE (line #)",
+   164
+  ],
+  [
+   "rule check failed: R (line #)",
+   150
+  ]
+ ],
+ "depth_ge3_reasons": [
+  [
+   "depth jump at line #",
+   2
+  ],
+  [
+   "rule check failed: NEGI (line #)",
+   1
+  ]
+ ],
+ "depth_ge3_lines_hist": {
+  "5": 2,
+  "6": 1
+ },
+ "depth_ge3_examples": [
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( ~ R ) ) ) > ( ( ~ ( ~ R ) ) > P ) ) )",
+   "proof": "N3 | S : AS ; N4 | | ( ~ ( ~ ( ~ R ) ) ) : AS ; N5 | | | ( ( ~ ( ~ R ) ) > P ) : DN N4 ; N6 | ( ( ~ ( ~ ( ~ R ) ) ) > ( ( ~ ( ~ R ) ) > P ) ) : IMPI N4 N5 ; N7 ( S > ( ( ~ ( ~ ( ~ R ) ) ) > ( ( ~ ( ~ R ) ) > P ) ) ) : IMPI N3 N6 ; QED",
+   "verdict": "depth jump at line 5"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( ~ R ) ) ) > ( ( ~ ( ~ R ) ) > P ) ) )",
+   "proof": "N54 | S : AS ; N55 | | ( ~ ( ~ ( ~ R ) ) ) : AS ; N56 | | | ( ( ~ ( ~ R ) ) > P ) : BOTE N54 ; N57 | ( ( ~ ( ~ ( ~ R ) ) ) > ( ( ~ ( ~ R ) ) > P ) ) : IMPI N55 N56 ; N58 ( S > ( ( ~ ( ~ ( ~ R ) ) ) > ( ( ~ ( ~ R ) ) > P ) ) ) : IMPI N54 N57 ; QED",
+   "verdict": "depth jump at line 56"
+  },
+  {
+   "thm": " |- ( ( ( S > R ) v ( P & R ) ) > ( S > R ) )",
+   "proof": "N46 | ( ( S > R ) v ( P & R ) ) : AS ; N47 | | ( S > R ) : AS ; N48 | | | ( P & R ) : AS ; N49 | | ( S > R ) : NEGI N48 N48 ; N50 | ( S > R ) : ORE N46 N47 N47 N48 N49 ; N51 ( ( ( S > R ) v ( P & R ) ) > ( S > R ) ) : IMPI N46 N50 ; QED",
+   "verdict": "rule check failed: NEGI (line 49)"
+  }
+ ]
+}

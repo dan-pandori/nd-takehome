@@ -1,0 +1,137 @@
+{
+ "ckpt": "ckpts/r3_4b/stage1_depth3_f0_a1_25Mr_s0.pt",
+ "n_targets": 60,
+ "k": 64,
+ "temperature": 0.8,
+ "samples": 3840,
+ "verified": 0,
+ "ends_with_QED": 3808,
+ "written_max_depth_hist": {
+  "2": 3552,
+  "3": 288
+ },
+ "frac_depth_ge3": 0.075,
+ "targets_with_a_depth3_attempt": 5,
+ "verified_depth_ge3": 0,
+ "lines_written_hist": {
+  "4": 1,
+  "5": 276,
+  "6": 3245,
+  "7": 318
+ },
+ "top_reasons": [
+  [
+   "rule check failed: ORI# (line #)",
+   755
+  ],
+  [
+   "bad box cite (line #)",
+   489
+  ],
+  [
+   "rule check failed: IMPI (line #)",
+   446
+  ],
+  [
+   "rule check failed: BOTE (line #)",
+   380
+  ],
+  [
+   "rule check failed: DN (line #)",
+   311
+  ],
+  [
+   "rule check failed: ANDE# (line #)",
+   301
+  ],
+  [
+   "rule check failed: ANDI (line #)",
+   262
+  ],
+  [
+   "rule check failed: IMPE (line #)",
+   231
+  ]
+ ],
+ "depth_ge3_reasons": [
+  [
+   "rule check failed: DN (line #)",
+   62
+  ],
+  [
+   "bad box cite (line #)",
+   55
+  ],
+  [
+   "rule check failed: IMPI (line #)",
+   55
+  ],
+  [
+   "rule check failed: ORI# (line #)",
+   30
+  ],
+  [
+   "rule check failed: ANDI (line #)",
+   25
+  ],
+  [
+   "bad line cite (line #)",
+   21
+  ],
+  [
+   "parse: bad rule name",
+   17
+  ],
+  [
+   "depth jump at line #",
+   6
+  ]
+ ],
+ "depth_ge3_lines_hist": {
+  "5": 2,
+  "6": 274,
+  "7": 12
+ },
+ "depth_ge3_examples": [
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N17 | S : AS ; N18 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N19 | | | ( ~ ( S v Q ) ) : AS ; N20 | | ( Q v ( S v Q ) ) : ORI2 N19 ; N21 | ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N19 N20 ; N22 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) ) : IMPI N17 N21 ; QED",
+   "verdict": "bad line cite (line 20)"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N58 | S : AS ; N59 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N60 | | | ( ~ ( S v Q ) ) : AS ; N61 | | ( Q v ( S v Q ) ) : ORI1 N58 ; N62 | ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N60 N61 ; N63 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) ) : IMPI N58 N62 ; QED",
+   "verdict": "rule check failed: ORI1 (line 61)"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N18 | S : AS ; N19 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N20 | | | ( ~ ( S v Q ) ) : AS ; N21 | | ( Q v ( S v Q ) ) : ORE N20 N20 N20 N21 N20 ; N22 | ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N19 N21 ; N23 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) ) : IMPI N18 N22 ; QED",
+   "verdict": "bad line cite (line 21)"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N34 | S : AS ; N35 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N36 | | | ( ~ ( S v Q ) ) : AS ; N37 | | ( Q v ( S v Q ) ) : ORI1 N34 ; N38 | ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N36 N37 ; N39 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) ) : IMPI N34 N38 ; QED",
+   "verdict": "rule check failed: ORI1 (line 37)"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N15 | S : AS ; N16 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N17 | | | ( ~ ( S v Q ) ) : AS ; N18 | | ( Q v ( S v Q ) ) : ORI1 N15 ; N19 | ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N17 N18 ; N20 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) ) : IMPI N15 N19 ; QED",
+   "verdict": "rule check failed: ORI1 (line 18)"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N10 | S : AS ; N11 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N12 | | | ( ~ ( S v Q ) ) : AS ; N13 | | ( Q v ( S v Q ) ) : ORI2 N12 ; N14 | ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N12 N13 ; N15 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) ) : IMPI N10 N14 ; QED",
+   "verdict": "bad line cite (line 13)"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N1 | S : AS ; N2 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N3 | | | ( ~ ( S v Q ) ) : AS ; N4 | | ( Q v ( S v Q ) ) : ORI1 N1 ; N5 | ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N3 N4 ; N6 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) ) : IMPI N1 N5 ; QED",
+   "verdict": "rule check failed: ORI1 (line 4)"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N18 | S : AS ; N19 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N20 | | | ( ~ ( S v Q ) ) : AS ; N21 | | ( Q v ( S v Q ) ) : ORI2 N20 ; N22 | ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N20 N21 ; N23 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) ) : IMPI N18 N22 ; QED",
+   "verdict": "bad line cite (line 21)"
+  }
+ ]
+}

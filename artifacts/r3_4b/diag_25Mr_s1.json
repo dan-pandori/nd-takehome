@@ -1,0 +1,139 @@
+{
+ "ckpt": "ckpts/r3_4b/stage1_depth3_f0_a1_25Mr_s1.pt",
+ "n_targets": 60,
+ "k": 64,
+ "temperature": 0.8,
+ "samples": 3840,
+ "verified": 0,
+ "ends_with_QED": 3840,
+ "written_max_depth_hist": {
+  "1": 5,
+  "2": 3528,
+  "3": 307
+ },
+ "frac_depth_ge3": 0.07994791666666666,
+ "targets_with_a_depth3_attempt": 9,
+ "verified_depth_ge3": 0,
+ "lines_written_hist": {
+  "4": 64,
+  "5": 235,
+  "6": 3135,
+  "7": 401,
+  "8": 5
+ },
+ "top_reasons": [
+  [
+   "rule check failed: ANDI (line #)",
+   722
+  ],
+  [
+   "rule check failed: ORI# (line #)",
+   702
+  ],
+  [
+   "rule check failed: IMPI (line #)",
+   652
+  ],
+  [
+   "bad box cite (line #)",
+   424
+  ],
+  [
+   "final formula is not the conclusion",
+   266
+  ],
+  [
+   "rule check failed: ANDE# (line #)",
+   255
+  ],
+  [
+   "rule check failed: DN (line #)",
+   211
+  ],
+  [
+   "rule check failed: BOTE (line #)",
+   198
+  ]
+ ],
+ "depth_ge3_reasons": [
+  [
+   "final formula is not the conclusion",
+   101
+  ],
+  [
+   "rule check failed: IMPI (line #)",
+   52
+  ],
+  [
+   "rule check failed: ORI# (line #)",
+   48
+  ],
+  [
+   "rule check failed: ANDI (line #)",
+   45
+  ],
+  [
+   "rule check failed: DN (line #)",
+   17
+  ],
+  [
+   "parse: bad formula token '>'",
+   17
+  ],
+  [
+   "line index mismatch at position #",
+   12
+  ],
+  [
+   "bad line cite (line #)",
+   3
+  ]
+ ],
+ "depth_ge3_lines_hist": {
+  "5": 1,
+  "6": 195,
+  "7": 111
+ },
+ "depth_ge3_examples": [
+  {
+   "thm": " |- ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) )",
+   "proof": "N16 | ( ~ ( ~ ( P v S ) ) ) : AS ; N17 | | ( ~ ( ~ ( R > Q ) ) ) : AS ; N18 | | | ( ~ ( P v S ) ) : AS ; N19 | | ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) : IMPI N18 N18 ; N20 | ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) : IMPI N16 N19 ; N21 ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) ) : IMPI N16 N20 ; QED",
+   "verdict": "rule check failed: IMPI (line 19)"
+  },
+  {
+   "thm": " |- ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) )",
+   "proof": "N9 | ( ~ ( ~ ( P v S ) ) ) : AS ; N10 | | ( ~ ( ~ ( R > Q ) ) ) : AS ; N11 | | | ( ~ ( P v S ) ) : AS ; N12 | | ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) : IMPI N11 N11 ; N13 | ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) : IMPI N9 N12 ; N14 ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) ) : IMPI N9 N13 ; QED",
+   "verdict": "rule check failed: IMPI (line 12)"
+  },
+  {
+   "thm": " |- ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) )",
+   "proof": "N29 | ( ~ ( ~ ( P v S ) ) ) : AS ; N30 | | ( ~ ( ~ ( R > Q ) ) ) : AS ; N31 | | | ( ~ ( P v S ) ) : AS ; N32 | | ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) : IMPI N31 N31 ; N33 | ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) : IMPI N29 N32 ; N34 ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) ) : IMPI N29 N33 ; QED",
+   "verdict": "rule check failed: IMPI (line 32)"
+  },
+  {
+   "thm": " |- ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) )",
+   "proof": "N16 | ( ~ ( ~ ( P v S ) ) ) : AS ; N17 | | ( ~ ( ~ ( R > Q ) ) ) : AS ; N18 | | | ( ~ ( P v S ) ) : AS ; N19 | | ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) : IMPI N18 N18 ; N20 | ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) : IMPI N16 N19 ; N21 ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) ) : IMPI N16 N20 ; QED",
+   "verdict": "rule check failed: IMPI (line 19)"
+  },
+  {
+   "thm": " |- ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) )",
+   "proof": "N17 | ( ~ ( ~ ( P v S ) ) ) : AS ; N18 | | ( ~ ( ~ ( R > Q ) ) ) : AS ; N19 | | | ( ~ ( P v S ) ) : AS ; N20 | | ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) : IMPI N19 N19 ; N21 | ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) : IMPI N17 N20 ; N22 ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) ) : IMPI N17 N21 ; QED",
+   "verdict": "rule check failed: IMPI (line 20)"
+  },
+  {
+   "thm": " |- ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) )",
+   "proof": "N26 | ( ~ ( ~ ( P v S ) ) ) : AS ; N27 | | ( ~ ( ~ ( R > Q ) ) ) : AS ; N28 | | | ( ~ ( P v S ) ) : AS ; N29 | | ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) : IMPI N28 N28 ; N30 | ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) : IMPI N26 N29 ; N31 ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) ) : IMPI N26 N30 ; QED",
+   "verdict": "rule check failed: IMPI (line 29)"
+  },
+  {
+   "thm": " |- ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) )",
+   "proof": "N17 | ( ~ ( ~ ( P v S ) ) ) : AS ; N18 | | ( ~ ( ~ ( R > Q ) ) ) : AS ; N19 | | | ( ~ ( P v S ) ) : AS ; N20 | | ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) : IMPI N19 N19 ; N21 | ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) : IMPI N17 N20 ; N22 ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) ) : IMPI N17 N21 ; QED",
+   "verdict": "rule check failed: IMPI (line 20)"
+  },
+  {
+   "thm": " |- ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) )",
+   "proof": "N45 | ( ~ ( ~ ( P v S ) ) ) : AS ; N46 | | ( ~ ( ~ ( R > Q ) ) ) : AS ; N47 | | | ( ~ ( P v S ) ) : AS ; N48 | | ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) : IMPI N47 N47 ; N49 | ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) : IMPI N45 N48 ; N50 ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) ) : IMPI N45 N49 ; QED",
+   "verdict": "rule check failed: IMPI (line 48)"
+  }
+ ]
+}

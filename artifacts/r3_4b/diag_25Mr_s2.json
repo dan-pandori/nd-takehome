@@ -1,0 +1,117 @@
+{
+ "ckpt": "ckpts/r3_4b/stage1_depth3_f0_a1_25Mr_s2.pt",
+ "n_targets": 60,
+ "k": 64,
+ "temperature": 0.8,
+ "samples": 3840,
+ "verified": 0,
+ "ends_with_QED": 3840,
+ "written_max_depth_hist": {
+  "1": 8,
+  "2": 3812,
+  "3": 20
+ },
+ "frac_depth_ge3": 0.005208333333333333,
+ "targets_with_a_depth3_attempt": 2,
+ "verified_depth_ge3": 0,
+ "lines_written_hist": {
+  "4": 4,
+  "5": 283,
+  "6": 3444,
+  "7": 109
+ },
+ "top_reasons": [
+  [
+   "bad box cite (line #)",
+   1240
+  ],
+  [
+   "rule check failed: IMPI (line #)",
+   499
+  ],
+  [
+   "rule check failed: ORI# (line #)",
+   460
+  ],
+  [
+   "rule check failed: ANDE# (line #)",
+   366
+  ],
+  [
+   "rule check failed: ANDI (line #)",
+   280
+  ],
+  [
+   "rule check failed: DN (line #)",
+   244
+  ],
+  [
+   "final formula is not the conclusion",
+   195
+  ],
+  [
+   "rule check failed: BOTE (line #)",
+   170
+  ]
+ ],
+ "depth_ge3_reasons": [
+  [
+   "rule check failed: IMPI (line #)",
+   8
+  ],
+  [
+   "depth jump at line #",
+   8
+  ],
+  [
+   "bad line cite (line #)",
+   4
+  ]
+ ],
+ "depth_ge3_lines_hist": {
+  "6": 16,
+  "7": 4
+ },
+ "depth_ge3_examples": [
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N20 | S : AS ; N21 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N22 | | | ( ~ ( S v Q ) ) : AS ; N23 | | ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) : IMPI N22 N22 ; N24 | ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N21 N23 ; N25 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) ) : IMPI N20 N24 ; QED",
+   "verdict": "rule check failed: IMPI (line 23)"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N4 | S : AS ; N5 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N6 | | | ( ~ ( S v Q ) ) : AS ; N7 | | ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) : IMPI N6 N6 ; N8 | ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N5 N7 ; N9 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) ) : IMPI N4 N8 ; QED",
+   "verdict": "rule check failed: IMPI (line 7)"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N10 | S : AS ; N11 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N12 | | | ( ~ ( S v Q ) ) : AS ; N13 | | ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) : IMPI N12 N12 ; N14 | ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N11 N13 ; N15 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) ) : IMPI N10 N14 ; QED",
+   "verdict": "rule check failed: IMPI (line 13)"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N37 | S : AS ; N38 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N39 | | | ( ~ ( S v Q ) ) : AS ; N40 | | ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) : IMPI N39 N39 ; N41 | ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N38 N40 ; N42 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) ) : IMPI N37 N41 ; QED",
+   "verdict": "rule check failed: IMPI (line 40)"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N11 | S : AS ; N12 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N13 | | | ( ~ ( S v Q ) ) : AS ; N14 | | ( Q v ( S v Q ) ) : IMPI N13 N13 ; N15 | ( ( ~ ( ~ ( S v Q ) ) ) > ( Q v ( S v Q ) ) ) : IMPI N12 N14 ; N16 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) ) : IMPI N11 N15 ; QED",
+   "verdict": "rule check failed: IMPI (line 14)"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N35 | S : AS ; N36 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N37 | | | ( ~ ( S v Q ) ) : AS ; N38 | | ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) : IMPI N37 N37 ; N39 | ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N36 N38 ; N40 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) ) : IMPI N35 N39 ; QED",
+   "verdict": "rule check failed: IMPI (line 38)"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N27 | S : AS ; N28 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N29 | | | ( ~ ( S v Q ) ) : AS ; N30 | | ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) : IMPI N29 N29 ; N31 | ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N28 N30 ; N32 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) ) : IMPI N27 N31 ; QED",
+   "verdict": "rule check failed: IMPI (line 30)"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N37 | S : AS ; N38 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N39 | | | ( ~ ( S v Q ) ) : AS ; N40 | | ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) : IMPI N39 N39 ; N41 | ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N38 N40 ; N42 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) ) : IMPI N37 N41 ; QED",
+   "verdict": "rule check failed: IMPI (line 40)"
+  }
+ ]
+}

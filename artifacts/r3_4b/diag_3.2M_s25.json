@@ -1,0 +1,133 @@
+{
+ "ckpt": "ckpts/r3_1/stage1_depth3_f0_a1_s25.pt",
+ "n_targets": 60,
+ "k": 64,
+ "temperature": 0.8,
+ "samples": 3840,
+ "verified": 0,
+ "ends_with_QED": 3840,
+ "written_max_depth_hist": {
+  "1": 2,
+  "2": 3730,
+  "3": 108
+ },
+ "frac_depth_ge3": 0.028125,
+ "targets_with_a_depth3_attempt": 7,
+ "verified_depth_ge3": 0,
+ "lines_written_hist": {
+  "5": 187,
+  "6": 2893,
+  "7": 757,
+  "8": 3
+ },
+ "top_reasons": [
+  [
+   "rule check failed: ORI# (line #)",
+   708
+  ],
+  [
+   "rule check failed: ANDE# (line #)",
+   528
+  ],
+  [
+   "rule check failed: ANDI (line #)",
+   471
+  ],
+  [
+   "rule check failed: IMPE (line #)",
+   453
+  ],
+  [
+   "rule check failed: DN (line #)",
+   362
+  ],
+  [
+   "final formula is not the conclusion",
+   332
+  ],
+  [
+   "rule check failed: IMPI (line #)",
+   302
+  ],
+  [
+   "bad box cite (line #)",
+   213
+  ]
+ ],
+ "depth_ge3_reasons": [
+  [
+   "final formula is not the conclusion",
+   77
+  ],
+  [
+   "rule check failed: DN (line #)",
+   15
+  ],
+  [
+   "bad line cite (line #)",
+   7
+  ],
+  [
+   "line index mismatch at position #",
+   6
+  ],
+  [
+   "parse: missing binop",
+   1
+  ],
+  [
+   "rule check failed: IMPI (line #)",
+   1
+  ],
+  [
+   "rule check failed: NEGI (line #)",
+   1
+  ]
+ ],
+ "depth_ge3_lines_hist": {
+  "6": 40,
+  "7": 68
+ },
+ "depth_ge3_examples": [
+  {
+   "thm": " |- ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) )",
+   "proof": "N21 | ( ~ ( ~ ( P v S ) ) ) : AS ; N22 | | ( ~ ( ~ ( R > Q ) ) ) : AS ; N23 | | | ( ~ ( P v S ) ) : AS ; N24 | | ( Q v ( P v S ) ) : DN N21 ; N25 | | ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) : IMPI N23 N24 ; N26 | ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) : IMPI N22 N25 ; N27 ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) ) : IMPI N21 N26 ; QED",
+   "verdict": "rule check failed: DN (line 24)"
+  },
+  {
+   "thm": " |- ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) )",
+   "proof": "N19 | ( ~ ( ~ ( P v S ) ) ) : AS ; N20 | | ( ~ ( ~ ( R > Q ) ) ) : AS ; N21 | | | ( ~ ( P v S ) ) : AS ; N22 | | ( Q v ( P v S ) ) : DN N19 ; N23 | | ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) : IMPI N21 N22 ; N24 | ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) : IMPI N20 N23 ; N25 ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) ) : IMPI N19 N24 ; QED",
+   "verdict": "rule check failed: DN (line 22)"
+  },
+  {
+   "thm": " |- ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) )",
+   "proof": "N40 | ( ~ ( ~ ( P v S ) ) ) : AS ; N41 | | ( ~ ( ~ ( R > Q ) ) ) : AS ; N42 | | | ( ~ ( P v S ) ) : AS ; N43 | | ( Q v ( P v S ) ) : DN N40 ; N44 | | ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) : IMPI N42 N43 ; N45 | ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) : IMPI N41 N44 ; N46 ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ ( ~ ( R > Q ) ) ) > ( ( ~ ( P v S ) ) > ( Q v ( P v S ) ) ) ) ) : IMPI N40 N45 ; QED",
+   "verdict": "rule check failed: DN (line 43)"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N14 | S : AS ; N15 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N16 | | | ( ~ ( S v Q ) ) : AS ; N17 | | ( Q v ( S v Q ) ) : DN N15 ; N18 | | ( Q v ( S v Q ) ) : ORI2 N17 ; N19 | ( ( ~ ( ~ ( S v Q ) ) ) > ( Q v ( S v Q ) ) ) : IMPI N16 N18 ; N20 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N14 N19 ; QED",
+   "verdict": "final formula is not the conclusion"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N56 | S : AS ; N57 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N58 | | | ( ~ ( S v Q ) ) : AS ; N59 | | ( Q v ( S v Q ) ) : DN N57 ; N60 | | ( Q v ( S v Q ) ) : ORI2 N59 ; N61 | ( ( ~ ( ~ ( S v Q ) ) ) > ( Q v ( S v Q ) ) ) : IMPI N58 N60 ; N62 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N56 N61 ; QED",
+   "verdict": "final formula is not the conclusion"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N5 | S : AS ; N6 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N7 | | | ( ~ ( S v Q ) ) : AS ; N8 | | ( Q v ( S v Q ) ) : ORI2 N7 ; N9 | | ( Q v ( S v Q ) ) : ORI2 N8 ; N10 | ( ( ~ ( ~ ( S v Q ) ) ) > ( Q v ( S v Q ) ) ) : IMPI N7 N9 ; N11 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N5 N10 ; QED",
+   "verdict": "final formula is not the conclusion"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N53 | S : AS ; N54 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N55 | | | ( ~ ( S v Q ) ) : AS ; N56 | | ( Q v ( S v Q ) ) : DN N54 ; N57 | | ( Q v ( S v Q ) ) : ORI2 N56 ; N58 | ( ( ~ ( ~ ( S v Q ) ) ) > ( Q v ( S v Q ) ) ) : IMPI N55 N57 ; N58 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N53 N57 ; QED",
+   "verdict": "line index mismatch at position 7"
+  },
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( ( ~ ( S v Q ) ) > ( Q v ( S v Q ) ) ) ) )",
+   "proof": "N3 | S : AS ; N4 | | ( ~ ( ~ ( S v Q ) ) ) : AS ; N5 | | | ( ~ ( S v Q ) ) : AS ; N6 | | ( Q v ( S v Q ) ) : ORI1 N3 ; N7 | | ( Q v ( S v Q ) ) : ORI2 N6 ; N8 | ( ( ~ ( ~ ( S v Q ) ) ) > ( Q v ( S v Q ) ) ) : IMPI N5 N7 ; N9 ( S > ( ( ~ ( ~ ( S v Q ) ) ) > ( Q v ( S v Q ) ) ) ) : IMPI N3 N8 ; QED",
+   "verdict": "final formula is not the conclusion"
+  }
+ ]
+}

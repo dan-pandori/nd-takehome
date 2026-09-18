@@ -12,6 +12,6 @@ stage() { n=$1; shift; [ -f $Q/${n}_$T.done ] && { echo "skip $n"; return 0; }
 until [ -f $Q/frozen_$T.done ] || [ -f $Q/frozen_$T.skipped ]; do sleep 30; done
 stage mix "python3 expert_iter.py --init $CK --name r3_4b/ei_depth3_${T}_mix --targets data/r3_1/depth3_mix.jsonl --transfer data/r3_1/depth3_req_transfer.jsonl --heldout data/p2/heldout.jsonl --train data/p2/train_depth3_f0_a1.jsonl --rounds 8 --k 32 --temperature 0.8 --retain 20000 --ft_steps 600 --ft_lr $FTLR --seed $S --batch $EB"
 until [ -f $Q/s1_${SIZE}r_s$S.done ] || [ -f $Q/noretry ] || [ ${SIZE%r} != $SIZE ]; do sleep 30; done
-sleep $((RANDOM % 30)); while pgrep -f "coverage.p[y]" > /dev/null; do sleep $((20 + RANDOM % 20)); done   # one pre-RL sampler per GPU at a time
+sleep $((RANDOM % 30)); while pgrep -f "python3 coverage.p[y]" > /dev/null; do sleep $((20 + RANDOM % 20)); done   # one pre-RL sampler per GPU at a time
 stage optcov "python3 coverage.py --ckpt $CK --in data/p2/targets_depth3.jsonl --limit 300 --out artifacts/r3_4b/optcov_depth3_$T --k 2000 --temperature 0.8 --batch $CB --seed 0 --procs $PROCS"
 echo "$(date -u +%FT%TZ) POST DONE $T"
