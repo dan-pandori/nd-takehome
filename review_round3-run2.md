@@ -139,3 +139,92 @@ draws were run; I report all four.
 ### R5. Not derivable in phase 1
 
 Heldout / transfer greedy numbers (GPU); pod spend; bucket upload. Checked against the log and `numbers.md` in phase 2.
+
+## Compare (phase 2 — `run2.md`, `numbers.md` §Round 3 run 2, `log.md` §Round 3 — Run 2, `STATUS.md`, read after commit `75cb89d`)
+
+Every number in `numbers.md` §Round 3 run 2 that I could re-derive is identical to my recount: all 21 reductio arms (per-stratum acquired, first-proof and
+ignition rounds, 8-line curves, transfer per stratum, violations), the three six-line coverage lines, all 20 derived-ORE arm lines, all 10 base-reachability
+lines, and the 10 EI / base / EI-only decompositions. I found no differing value. The rows below are the claims of `run2.md`.
+
+| # | claim (`run2.md`) | my independent value | verdict |
+|---|---|---|---|
+| 1 | 345 targets = run 5's 300 + 45 six-line `nor_neg_ante`; 21 arms; 0 oracle violations | 345 (45 / 52 / 133 / 82 / 33); 300 / 300 records unchanged; 11 EI + 10 frozen; 0 solved-without-pattern, 0 verify failures in 80 917 raw records | reproduces |
+| 2 | E1 predicted 3–5 of 6; 1 of 6 ignited | 1 of 6 | reproduces; reported as a miss |
+| 3 | `f0.1_s0` ss0: 54 of 133 eight-liners, first proof round 4, ten by round 9, then 25 of 82 nine-liners | 54 / 133, first 4, ignition 9 (curve … 6 14 …); 25 / 82, ignition 13 | reproduces |
+| 4 | same checkpoint with seed 1 and the four other arms: 0–3 eight-liners in 512 attempts | 1, 0, 0, 1, 3 | reproduces |
+| 5 | "f is irrelevant" | 8-line ignition in 1 of 4 f = 0.1 sixteen-round arms and 1 of 4 f = 0 sixteen-round arms (s0 ss0, s0 ss1, s1, s2); Wilson 95 % for 1 / 4: 0.05–0.70 | numbers reproduce; **wording too strong** — "no f effect detectable at 4 arms per level" |
+| 6 | 10-line stratum stays at 0 | 0 / 33 in all 33 arms | reproduces ("stays" = within 16 rounds × 32) |
+| 7 | E2 held: k = 64 × 8 ignited 0 of 3 | 0 of 3 (8-liners 1 / 3 / 0) | reproduces |
+| 8 | "— the crossing needs training rounds, not samples" (also STATUS: "needs rounds not samples") | k = 32 × 16 on the same three (checkpoint, seed 0) pairs: 1 of 3; their seed-1 replicates: 0 of 3; f0 s2 ignited at **round 7** with k = 32 (224 attempts); B f0.1 s1 ss0 was rising 1 → 3 at its last two rounds | **not supported.** 0 / 3 vs 1 / 3 (or 1 / 6) is no difference, the one arm-pair that differs (54 vs 1) is matched by an equally large same-checkpoint seed difference (54 vs 1), and one arm crossed inside 8 rounds at k = 32 |
+| 9 | E3 falsified: 13 and 26 of 45 six-liners at pass@10⁴ | 13 / 45 (44 samples), 26 / 45 (2 139 samples); all listed proofs verify | reproduces; reported as a miss |
+| 10 | run 5 saw 0 and 1 hit in 3·10⁶ samples at 7–10 lines | run-5 coverage files, my predicate: s1 0 targets / 0 samples; s2 1 target / 1 sample (a 7-line `negimp_to_pos`); 0 at 8–10 lines for s0, s1, s2 | reproduces |
+| 11 | both zero-rate draws enter through the six-liners and reach the 7-line stratum; s2 crosses to 8 lines (27 of 133, round 7) and 9 lines (25 of 82) | s1 45 / 51 / 0; s2 45 / 52 / 27 / 25, ignition rounds 2 / 3 / 7 / 9 | reproduces. The 16-round extension is a disclosed, post-hoc deviation (log 05:58); at the pre-registered 8 rounds the values are s1 11 / 0 / 0 and s2 45 / 52 / 23 / 9, so the conclusion does not depend on the extension for s2 but does for s1's 7-line entry |
+| 12 | frozen controls: 0 eight-liners | 0 in all 10 frozen arms (512 or 256 attempts) | reproduces |
+| 13 | E4: f = 10⁻³ acquisition 0.133 / 0.143 (in band) | 40 / 300, 43 / 300 | reproduces |
+| 14 | EI means 0.101, 0.138, 0.185 at f = 0, 10⁻³, 10⁻² | 0.1006 (n = 6), 0.1383 (n = 2), 0.185 (n = 2) | reproduces; f = 0 range 0.023–0.150 contains both f = 10⁻³ values, so only the f = 0 vs 10⁻² contrast (n = 6 vs 2) is suggestive; no per-f difference is separable |
+| 15 | base reachability spans 9–43 and EI follows it (Pearson 0.81) | r = 0.809 over the 10 draws; **0.62 over the six f = 0 draws, 0.62 without s3, −0.50 over the five f = 0 draws other than s3**; Spearman 0.27 at f = 0 | number reproduces; **interpretation needs a caveat**: the correlation is carried by one low draw (s3) and by the f > 0 draws, i.e. by f; among the five f = 0 draws at r = 20–27, EI spans 24–45 with no positive relation |
+| 16 | two f = 0 draws with base 20 and 27 acquire 43 and 45 — 26 and 25 of them targets the base never reaches at 10⁴ | s4 43 (26 EI-only), s5 45 (25 EI-only) | reproduces |
+| 17 | "the kept fresh draw (base 9) acquires 7" | s3: r = 9, EI 7. But s4 (r = 20) also passes the keep rule (`numbers.md` says so) | reproduces; **wording**: there are two kept draws, and the other one (s4) is the one that breaks the band |
+| 18 | EI-only ≥ 20 in 3 of 10 draws | s4 26, s5 25, f = 10⁻² s1 24 | reproduces |
+| 19 | 7 → 8 crossing: 2 of 11 trained arms, 0 of 8 frozen | 2 / 11 (2 / 8 among sixteen-round arms), 0 / 8 frozen-16 | reproduces |
+| 20 | "every draw has a non-zero base rate at the schema's shortest instance" | 3 of 3 f = 0 draws tested (s0, s1, s2) have six-line hits; the six-liners are a **different schema** (`nor_neg_ante`, 45 / 45), not shorter instances of the 7–10-line schemata | numbers reproduce; **reword**: "at the shortest reductio-requiring targets (one six-line schema)"; "every" = 3 draws |
+| 21 | "RL … carries it one stratum up in every arm" | 7-line stratum 51–52 / 52 in 11 / 11 EI arms | reproduces |
+| 22 | "once crossed, the 9-line stratum follows within four rounds" | 8 → 9-line ignition gaps 4 and 2 rounds; in both arms the nine-liners are exactly `chain_neg` 25 / 25 | reproduces at n = 2; it is one schema following, not the stratum (57 of 82 nine-liners are at 0 in every arm) |
+| 23 | "after entry RL produces schemata and lengths the base never emits" | f = 0 draws: 0 strict proofs at 8–10 lines in 2.5·10⁶ base samples each (run-5 coverage) and 0 in frozen-16. For the f = 0.1 s0 checkpoint there is **no 10⁴ coverage** at 8–9 lines, only the frozen arm (0 in 133 × 512 = 68 096 samples) | supported for s2 at the 10⁴ level; for f0.1 s0 "never" rests on 512 attempts per target — say "not in 512 attempts" |
+| 24 | "per-run probability ≈ 0.2 in 16 rounds" | 2 / 11 = 0.18 mixes 8-round B arms in; sixteen-round arms 2 / 8 = 0.25, Wilson 95 % 0.07–0.59; two of the non-igniting arms were still rising at the stop | **needs the interval and the denominator**; "≈ 0.2" reads more exact than 2 events allow |
+| 25 | "derived-ORE amplification is proportional to base reachability on average — f raises the base rate, not the multiplier" | EI / base by f: 0.78–2.15 (mean 1.30, n = 6), 1.08–1.26 (n = 2), 1.33–1.47 (n = 2); base reach 9–27 / 34–37 / 36–43 | reproduces as description; the pre-registration said that E4 outside 0.5–2 × means "'amplification in proportion to the base rate' is dropped" — s4 is at 2.15. The write-up reports the miss but keeps the clause softened ("a trend, not a per-draw law") rather than dropping it; see §Verdict |
+| 26 | "the multiplier varies 0.8–2.2 × between draws of equal reachability" | at r = 26–27 (five draws) the multiplier is 0.89–1.67; 0.78 is s3 (r = 9) and 2.15 is s4 (r = 20) | **reword**: "0.9–1.7 × at equal reachability (r = 26–27), 0.8–2.2 × over all f = 0 draws" |
+| 27 | spend ≈ 9.4 pod-hours ≈ $4.7 | queue logs span 05:17–08:3x on r32a / r32b and end ≈ 07:55 on r32c, consistent with 3.35 + 3.35 + 2.67 h × $0.50; balance attribution to foreign pods not checkable by me | consistent; within the $50 budget and the $8 estimate |
+| 28 | bucket paths | `hf buckets ls`: `round3-run2/{artifacts,ckpts,data}` exist; `ckpts/r3_2` holds the 19 EI final checkpoints + 5 Stage-1 draws | reproduces ("21 trained arms" in `numbers.md` should read 17 EI arms / 19 checkpoints) |
+
+Gate 0 and misses: expectations were committed (05:13:01 UTC) before the first job (05:17:50 UTC). E1, E3 and the E4 band / EI-only misses are reported as misses in
+`run2.md`, `numbers.md` and `STATUS.md`. Two sub-expectations are not scored anywhere in the write-up: **E1c** ("9- and 10-line strata ≤ 3 targets in every arm" — missed, 25 in the
+igniting arm) and **E1b** (first 8-line proof between rounds 6 and 12 — 2 of the 4 A arms with a proof; rounds 4 and 14 fall outside). The pre-registered **per-schema** report is
+computed (`summary.json` `by_schema`) but absent from `run2.md` and `numbers.md`, and it changes the reading (below). Deviations (C extension, co-scheduling, the extra
+coverage runs, starting the s2 / s3 arms before the keep rule was evaluated) are all disclosed in `log.md`.
+
+## Verdict
+
+**No hard-constraint violation; no number differs.** This is the cleanest recount of the series: 33 arms, 13 coverage files and the pools reproduce exactly, and the
+write-up reports its own misses.
+
+**What stands.**
+1. EI at 512 attempts per target carried the 8-line reductio stratum past 10 targets in 1 of 6 pre-registered sixteen-round arms and 0 of 3 k = 64 arms (E1 missed, E2 hit);
+   no frozen control produced any 8–10-line proof; the 10-line stratum is 0 everywhere.
+2. Run 5's "zero-rate" f = 0 draws are not zero-rate on six-line targets (13 / 45 and 26 / 45 at pass@10⁴, from a training file with 0 reductio proofs in 155 000), and both
+   enter the pool through that stratum; s2 then reaches 27 eight- and 25 nine-line targets that its base did not hit in 2.5·10⁶ samples. E3 is falsified, and with it run 5's
+   reading of the 7-line result as a pattern gate. Two seeds (s1, s2) show the entry; one shows the onward crossing.
+3. The same checkpoint with two sampling seeds gives 54 vs 1 eight-liners: the crossing is a per-run stochastic event.
+4. Derived-ORE: f = 10⁻³ lands in the pre-registered band on two seeds; two of four fresh f = 0 draws exceed 1.5 × base reach with 25–26 EI-only targets against pass@10⁴
+   — the pre-registered "EI-only ≥ 20" criterion for "RL adds substantially beyond the base's reach" is met in 3 of 10 draws.
+
+**What must be reworded.**
+- "the crossing needs training rounds, not samples" (row 8; also in `STATUS.md`) → "k = 64 × 8 ignited 0 of 3 and k = 32 × 16 ignited 1 of the same 3 seed-0 pairs (0 of 3 seed-1
+  replicates); the design cannot separate rounds from samples, and one f = 0 draw crossed within 8 rounds at k = 32."
+- "f is irrelevant" → "no f effect detectable (1 of 4 vs 1 of 4 sixteen-round arms)."
+- "per-run probability ≈ 0.2" → "2 of 8 sixteen-round arms (Wilson 95 % 0.07–0.59); two further arms were still rising when stopped."
+- "the schema's shortest instance" → the six-liners are one separate schema; "every draw" = 3 draws.
+- "schemata and lengths the base never emits" → "never" holds at 10⁴ for the f = 0 draws only; for f0.1 s0 it is "0 in 512 attempts".
+- "the kept fresh draw" → two draws pass the keep rule (s3, s4). "0.8–2.2 × between draws of equal reachability" → 0.9–1.7 × at equal reachability.
+- Score E1b and E1c explicitly; correct "21 trained arms".
+
+**What is not supported as written.**
+- *Stratum* as the unit of ignition. Acquisition above 7 lines is schema-complete in every case: 54 = `contraposition_conv` 27 / 27 + `neg_both` 26 / 26 + `chain_neg` 1 / 1;
+  27 = `neg_both` 26 / 26 + 1; both 25s = `chain_neg` 25 / 25; the "1 eight-liner" of four other arms is the single 8-line `chain_neg`; `consequentia_cond`, `nand_to_imp`,
+  `excluded_middle`, `negcond_ante` (26 each) are 0 in all 11 arms. "The 8-line stratum ignites with probability p" should be "a schema ignites", with 2 of 5 large 8-line
+  schemata ever acquired. The "7 → 8 crossing … then the 9-line stratum follows" narrative is one schema family (`chain_neg`) spanning 8–9 lines. This is the pre-registered
+  per-schema report and it belongs in `numbers.md`.
+- "Amplification proportional to base reachability on average." By the run's own falsifier (any kept draw outside 0.5–2 ×) the clause was to be dropped; s4 (kept) is at
+  2.15 ×. The 0.81 correlation is between-f and one low draw; within the five comparable f = 0 draws it is absent (r = −0.50, EI 24–45 at base 20–27). What the data
+  support: base reach ≈ 0 → EI ≈ 0 (one draw, s3), and above that acquisition is not predicted by base reach at n = 5.
+
+**Next measurements that would settle what is open** (all small; ≈ $3–5 total on one 3090):
+1. *Rounds vs samples, and the ignition probability:* the three seed-0 checkpoints × sampling seeds 2–5 at k = 32 × 16 and k = 64 × 8 (24 arms, ≈ 0.5 h each at N = 3); score
+   per schema. With ≥ 6 arms per cell a 0.25 vs 0 difference is still not resolvable, so pre-register the comparison as "pooled ignition count with interval", not a contrast —
+   or extend the two rising arms (A f0 s0 ss1, B f0.1 s1 ss0) to 24 rounds first, which is cheaper and tells whether "non-ignition" is just "late".
+2. *"Never emits" for the f = 0.1 draw:* `coverage.py --k 10000` of `stage1_reductio_f0.1_s0` on the 54 + 25 acquired 8- / 9-line targets (≈ 20 min).
+3. *Derived-ORE base-reach dependence:* needs draws with base reach between 0 and 20, which seeds do not supply on demand (five of six f = 0 draws are at 20–27). Either train
+   ≈ 6 more cap-8 f = 0 seeds and keep whatever spread appears, or vary Stage-1 steps (2 000 / 4 000) on one seed to move base reach deliberately; pre-register a rank
+   correlation within f = 0, not a Pearson across f.
+4. *Is the six-line entry special to `nor_neg_ante`?* One arm per f = 0 draw on the 300 pool plus six-liners of a second schema (if `necessity.py` yields any) would say whether
+   "entry at the shortest instance" is about length or about that schema.
