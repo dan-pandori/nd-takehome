@@ -142,7 +142,7 @@ checkpoints), `~/runs/round3-run3/executor.done`.
   (ORI, or the final IMPE/ORE line) would count and the predictor would be meaningless; the final line
   is also excluded. Found by the unit tests.
 
-- 2026-09-18 10:00 UTC — **ADDENDUM: deep second-seed pass (pre-registered before its first job).** Reason: the
+- 2026-09-18 09:45 UTC — **ADDENDUM: deep second-seed pass (pre-registered before its first job).** Reason: the
   reductio main pass is complete (12 / 24 draws with ≥ 1 hit; all hits on `nand_neg` / `negimp_to_pos`), and 8 of
   the 12 generalisers have only 1–3 hits in 600k samples, i.e. they sit at the detection floor (1.7·10⁻⁶). A draw
   with a true rate at the floor shows ≥ 1 hit with probability ≈ 0.63, so the zero / non-zero split — the quantity
