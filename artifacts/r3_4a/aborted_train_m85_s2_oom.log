@@ -1,0 +1,15 @@
+params 85208064 mode abs shift True
+train records 155000 max len 585
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/train.py", line 126, in <module>
+    main()
+  File "/workspace/nd-takehome/train.py", line 108, in main
+    loss.backward()
+  File "/usr/local/lib/python3.12/dist-packages/torch/_tensor.py", line 647, in backward
+    torch.autograd.backward(
+  File "/usr/local/lib/python3.12/dist-packages/torch/autograd/__init__.py", line 354, in backward
+    _engine_run_backward(
+  File "/usr/local/lib/python3.12/dist-packages/torch/autograd/graph.py", line 829, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 108.00 MiB. GPU 0 has a total capacity of 79.25 GiB of which 1.81 MiB is free. Process 2219 has 30.41 GiB memory in use. Process 3379 has 25.84 GiB memory in use. Including non-PyTorch memory, this process has 22.98 GiB memory in use. Of the allocated memory 22.09 GiB is allocated by PyTorch, and 399.81 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

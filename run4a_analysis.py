@@ -16,7 +16,7 @@ from patterns import classify
 A = 'artifacts/r3_4a'
 TARGETS = 'data/p2/targets_reductio_req.jsonl'
 TRANSFER = 'data/p2/transfer_reductio_req.jsonl'
-SIZES = [('m3', '3.2M same-set'), ('m25', '25M'), ('m85', '85M')]
+SIZES = [('m3', '3.2M same-set'), ('m25', '25M config A'), ('m25B', '25M config B'), ('m85', '85M config A'), ('m85B', '85M config B')]
 IGNITE = 6            # >= 2 % of 300 targets acquired (cumulative)
 
 
@@ -78,6 +78,7 @@ def cov(fn, T, within=None):
            'hits_by_schema': dict(sorted(collections.Counter({s: sum(r['hits_by_pattern']['reductio'] for r in hit if schema[r['name']] == s) for s in {schema[r['name']] for r in hit}}).items())),
            'pass_at_256_targets': sum(1 for r in rs if r['first_hit'] is not None and r['first_hit'] <= 256)}
     out['rate'] = out['strict_hits'] / max(1, out['samples'])
+    out['complete'] = len(rs) == len(T)
     return out
 
 
@@ -116,11 +117,11 @@ def main():
     T, TR = read(TARGETS), read(TRANSFER)
     res = {'targets': TARGETS, 'n_targets': len(T), 'strata': dict(sorted(collections.Counter(t['min_lines_ub'] for t in T).items())), 'sizes': {}}
     for sz, label in SIZES:
-        tags = sorted({re.findall(r'stage1_(' + sz + r'B?_s\d+)\.done', f)[0] for f in glob.glob(f'{A}/stage1_{sz}*_s*.done')})
+        tags = sorted({re.findall(r'stage1_(' + sz + r'_s\d+)\.done', f)[0] for f in glob.glob(f'{A}/stage1_{sz}_s*.done')})
         cell = {'label': label, 'draws': {}}
         for tag in tags:
             D = draw(tag, T, TR); D['stage1'] = stage1(tag); cell['draws'][tag] = D
-        ds = [d for d in cell['draws'].values() if d['pre_rl']]
+        ds = [d for d in cell['draws'].values() if d['pre_rl'] and d['pre_rl']['complete']]
         cell['n_draws_sampled'] = len(ds); cell['n_nonzero'] = sum(1 for d in ds if d['pre_rl']['strict_hits'] > 0)
         res['sizes'][sz] = cell
     # run 5's 3.2M draws on the ORIGINAL set (reviewed files; pre-RL = the pass@1e4 coverage file, 3e6 samples)
@@ -147,8 +148,8 @@ def main():
 
 def figures(res, outdir):
     import matplotlib; matplotlib.use('Agg'); import matplotlib.pyplot as plt
-    PAR = {'m3': 3.21e6, 'm3_run5': 3.21e6, 'm25': 25.3e6, 'm85': 85.2e6}
-    COL = {'m3': '#4477AA', 'm3_run5': '#BBBBBB', 'm25': '#EE6677', 'm85': '#228833'}
+    PAR = {'m3': 3.21e6, 'm3_run5': 3.21e6, 'm25': 25.3e6, 'm25B': 25.3e6 * 1.25, 'm85': 85.2e6, 'm85B': 85.2e6 * 1.25}
+    COL = {'m3': '#4477AA', 'm3_run5': '#BBBBBB', 'm25': '#EE6677', 'm25B': '#AA3377', 'm85': '#228833', 'm85B': '#117733'}
     fig, ax = plt.subplots(1, 3, figsize=(13.5, 3.8))
     for sz, cell in res['sizes'].items():
         ds = [d for d in cell['draws'].values() if d['pre_rl']]

@@ -1,0 +1,59 @@
+shard 0/1: 300 theorems, 0 already done; k=2000 T=0.8 batch=2000
+targets_reductio_req_0: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (18s; 1 done, 18s/thm, ETA 91 min)
+targets_reductio_req_1: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (18s; 2 done, 18s/thm, ETA 90 min)
+targets_reductio_req_2: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (17s; 3 done, 18s/thm, ETA 88 min)
+targets_reductio_req_3: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (16s; 4 done, 17s/thm, ETA 85 min)
+targets_reductio_req_4: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (22s; 5 done, 18s/thm, ETA 90 min)
+targets_reductio_req_5: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (16s; 6 done, 18s/thm, ETA 87 min)
+targets_reductio_req_6: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (15s; 7 done, 17s/thm, ETA 85 min)
+targets_reductio_req_7: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (18s; 8 done, 17s/thm, ETA 85 min)
+targets_reductio_req_8: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (15s; 9 done, 17s/thm, ETA 84 min)
+targets_reductio_req_9: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (14s; 10 done, 17s/thm, ETA 82 min)
+targets_reductio_req_10: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (15s; 11 done, 17s/thm, ETA 80 min)
+targets_reductio_req_11: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (18s; 12 done, 17s/thm, ETA 81 min)
+targets_reductio_req_12: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (18s; 13 done, 17s/thm, ETA 81 min)
+targets_reductio_req_13: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (16s; 14 done, 17s/thm, ETA 80 min)
+targets_reductio_req_14: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (47s; 15 done, 19s/thm, ETA 89 min)
+targets_reductio_req_15: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (16s; 16 done, 19s/thm, ETA 88 min)
+targets_reductio_req_16: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (16s; 17 done, 18s/thm, ETA 87 min)
+targets_reductio_req_17: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (17s; 18 done, 18s/thm, ETA 86 min)
+targets_reductio_req_18: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (16s; 19 done, 18s/thm, ETA 85 min)
+targets_reductio_req_19: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (19s; 20 done, 18s/thm, ETA 85 min)
+targets_reductio_req_20: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (18s; 21 done, 18s/thm, ETA 85 min)
+targets_reductio_req_21: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (17s; 22 done, 18s/thm, ETA 84 min)
+targets_reductio_req_22: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (43s; 23 done, 19s/thm, ETA 89 min)
+targets_reductio_req_23: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (15s; 24 done, 19s/thm, ETA 88 min)
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/coverage.py", line 138, in <module>
+    main()
+  File "/workspace/nd-takehome/coverage.py", line 95, in main
+    outs = generate_ids(model, tok, [pid] * b, greedy=False, temperature=a.temperature, max_new=a.max_new, gen=gen)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/sample.py", line 26, in generate_ids
+    logits = model(idx, pos=pos, mask=mask, caches=caches)[:, -1]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 92, in forward
+    x = b(x, cos, sin, mask, None if caches is None else caches[i])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 56, in forward
+    x = x + self.attn(self.ln1(x), cos, sin, mask, cache)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 42, in attn
+    cache['k'] = k.new_empty(B, self.h, cache['max'], D // self.h)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.62 GiB. GPU 0 has a total capacity of 79.25 GiB of which 889.44 MiB is free. Process 2117 has 30.62 GiB memory in use. Process 2471 has 14.00 GiB memory in use. Process 2615 has 5.88 GiB memory in use. Including non-PyTorch memory, this process has 3.62 GiB memory in use. Process 3112 has 564.00 MiB memory in use. Process 3295 has 23.25 GiB memory in use. Process 3310 has 432.00 MiB memory in use. Of the allocated memory 3.05 GiB is allocated by PyTorch, and 66.17 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
