@@ -12,7 +12,7 @@ T=data/p2/targets_reductio_req.jsonl; TR=data/p2/transfer_reductio_req.jsonl
 for st in ${STAGES//,/ }; do
   [ -f $A/${st}_$TAG.done ] && continue
   case $st in
-    cov)    python3 coverage.py --ckpt $CK --in $T --out $A/cov_${TAG}_pre --k 2000 --temperature 0.8 --seed 0 --batch 2000 --procs 8 --lenfield min_lines_ub > $A/cov_${TAG}_pre.log 2>&1;;
+    cov)    python3 coverage.py --ckpt $CK --in $T --out $A/cov_${TAG}_pre --k 2000 --temperature 0.8 --seed 0 --batch ${COVB:-2000} --procs 8 --lenfield min_lines_ub > $A/cov_${TAG}_pre.log 2>&1;;
     ei)     python3 expert_iter.py --init $CK --name r3_4a/ei_$TAG --targets $T --transfer $TR --heldout data/p2/heldout.jsonl --train data/r3_4a/train_reductio_f0_b1.jsonl \
               --rounds 8 --k 32 --temperature 0.8 --retain 20000 --max_per_thm 4 --ft_steps 600 --ft_lr $FTLR --seed $S --batch $B > $A/ei_$TAG.log 2>&1
             # keep only the final EI checkpoint on the pod's 20 GB disk
