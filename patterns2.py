@@ -168,6 +168,120 @@ def test():
     return bad == 0
 
 
+
+# ---- First-half predicates (round3-run3) ------------------------------------------------------------------------
+# Evaluated on the WRITTEN sample as decoded (unverified, unpruned, may be an invalid proof); the only requirement is
+# that the text parses (patterns.parse).  G = the goal formula of the prompt (goal_of).  Used by coverage.py to count,
+# over every decoded sample, how often a draw attempts the first half of a pattern before any RL.
+FIRSTHALF = ('d3_written', 'd3_as_as', 'd2_two_boxes', 'neg_goal_hyp', 'negi_neggoal', 'negi_neggoal_nodn', 'derived_disj', 'ore_on_derived')
+
+
+def goal_of(prompt):
+    """'THM <premises> SEQ <goal> PRF' -> parsed goal formula."""
+    from nd_verify.verify import parse_formula
+    toks = prompt.split()
+    f, _ = parse_formula(toks, toks.index('SEQ') + 1)
+    return f
+
+
+def firsthalf(lines, goal):
+    """lines: parsed (unpruned) proof lines; goal: parsed goal formula.  -> dict predicate -> bool."""
+    byidx = {ln['idx']: ln for ln in lines}
+    ng = ('not', goal)
+    out = {}
+    out['d3_written'] = any(ln['depth'] >= 3 for ln in lines)
+    out['d3_as_as'] = any(a['rule'] == 'AS' and a['depth'] == 2 and b['rule'] == 'AS' and b['depth'] == 3 for a, b in zip(lines, lines[1:]))
+    out['d2_two_boxes'] = sum(1 for ln in lines if ln['rule'] == 'AS' and ln['depth'] == 2) >= 2
+    out['neg_goal_hyp'] = any(ln['rule'] == 'AS' and ln['formula'] == ng for ln in lines)
+    negis = [ln for ln in lines if ln['rule'] == 'NEGI' and ln['refs'] and byidx.get(ln['refs'][0], {}).get('rule') == 'AS'
+             and byidx[ln['refs'][0]]['formula'] == ng]
+    out['negi_neggoal'] = bool(negis)
+    dn_cites = {ln['refs'][0] for ln in lines if ln['rule'] == 'DN' and ln['refs']}
+    out['negi_neggoal_nodn'] = any(n['idx'] not in dn_cites for n in negis)
+    # an INTERMEDIATE disjunction (not the final line) obtained by a rule that is not an introduction of it (ORI1/ORI2 =
+    # the ordinary way to prove a disjunction goal) and not a copy / premise / hypothesis: the model derived a disjunction
+    # and went on, which is what a case split on a derived disjunction starts with
+    out['derived_disj'] = any(ln['rule'] not in ('PR', 'AS', 'ORI1', 'ORI2', 'R') and ln['formula'][0] == 'or' and ln['formula'][1] != ln['formula'][2] for ln in lines[:-1])
+    out['ore_on_derived'] = any(ln['rule'] == 'ORE' and ln['refs'] and byidx.get(ln['refs'][0], {}).get('rule') not in ('PR', 'AS', None) for ln in lines)
+    return out
+
+
+def firsthalf_text(proof, prompt):
+    """-> dict predicate -> bool on the written text, or None if it does not parse."""
+    lines = parse(proof)
+    if lines is None:
+        return None
+    return firsthalf(lines, goal_of(prompt))
+
+
+def test_firsthalf():
+    """Cases: (prompt, written sample, valid?, expected true predicates).  Valid ones are verifier-checked; invalid ones
+    (the first half without the second) are checked to FAIL the verifier, as they must."""
+    cases = [
+        # complete strict reductio (valid): negi_neggoal true, neg_goal_hyp true, _nodn false (DN present)
+        ('THM ( ~ ( ( ~ ( Q & R ) ) & ( Q > P ) ) ) , ( Q > P ) SEQ ( Q & R ) PRF',
+         'N1 ( ~ ( ( ~ ( Q & R ) ) & ( Q > P ) ) ) : PR ; N2 ( Q > P ) : PR ; N3 | ( ~ ( Q & R ) ) : AS ; N4 | ( ( ~ ( Q & R ) ) & ( Q > P ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( Q & R ) ) ) : NEGI N3 N5 ; N7 ( Q & R ) : DN N6 ; QED',
+         True, {'neg_goal_hyp', 'negi_neggoal'}),
+        # the same proof stopped after NEGI (invalid: conclusion is ~~G, not G): first half without DN
+        ('THM ( ~ ( ( ~ ( Q & R ) ) & ( Q > P ) ) ) , ( Q > P ) SEQ ( Q & R ) PRF',
+         'N1 ( ~ ( ( ~ ( Q & R ) ) & ( Q > P ) ) ) : PR ; N2 ( Q > P ) : PR ; N3 | ( ~ ( Q & R ) ) : AS ; N4 | ( ( ~ ( Q & R ) ) & ( Q > P ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( Q & R ) ) ) : NEGI N3 N5 ; QED',
+         False, {'neg_goal_hyp', 'negi_neggoal', 'negi_neggoal_nodn'}),
+        # NEGI of a hypothesis that is NOT the negated goal (valid): none of the reductio predicates
+        ('THM ( ~ P ) SEQ ( ~ ( P & Q ) ) PRF',
+         'N1 ( ~ P ) : PR ; N2 | ( P & Q ) : AS ; N3 | P : ANDE1 N2 ; N4 | F : NEGE N3 N1 ; N5 ( ~ ( P & Q ) ) : NEGI N2 N4 ; QED',
+         True, set()),
+        # hypothesis ~G opened but closed by IMPI, not NEGI (valid): neg_goal_hyp only
+        ('THM SEQ ( ( ~ P ) > ( ~ P ) ) PRF',
+         'N1 | ( ~ ( ( ~ P ) > ( ~ P ) ) ) : AS ; N2 | ( ~ ( ( ~ P ) > ( ~ P ) ) ) : R N1 ; N3 ( ( ~ ( ( ~ P ) > ( ~ P ) ) ) > ( ~ ( ( ~ P ) > ( ~ P ) ) ) ) : IMPI N1 N2 ; QED',
+         False, {'neg_goal_hyp'}),
+        # depth 3 written (valid, 7 lines): d3_written, d3_as_as (AS depth 2 then AS depth 3)
+        ('THM SEQ ( P > ( Q > ( R > R ) ) ) PRF',
+         'N1 | P : AS ; N2 | | Q : AS ; N3 | | | R : AS ; N4 | | ( R > R ) : IMPI N3 N3 ; N5 | ( Q > ( R > R ) ) : IMPI N2 N4 ; N6 ( P > ( Q > ( R > R ) ) ) : IMPI N1 N5 ; QED',
+         True, {'d3_written', 'd3_as_as'}),
+        # depth 3 written but the third box is opened after a non-AS line (invalid attempt): d3_written only
+        ('THM SEQ ( P > ( Q > ( R > R ) ) ) PRF',
+         'N1 | P : AS ; N2 | | Q : AS ; N3 | | Q : R N2 ; N4 | | | R : AS ; N5 | | ( R > R ) : IMPI N4 N4 ; N6 | ( Q > ( R > R ) ) : IMPI N2 N5 ; N7 ( P > ( Q > ( R > R ) ) ) : IMPI N1 N6 ; QED',
+         True, {'d3_written'}),
+        # depth 2 with two boxes at depth 2 (ORE inside an IMPI box; valid): d2_two_boxes, no depth 3
+        ('THM ( P v Q ) , ( P > R ) SEQ ( ( Q > R ) > R ) PRF',
+         'N1 ( P v Q ) : PR ; N2 ( P > R ) : PR ; N3 | ( Q > R ) : AS ; N4 | | P : AS ; N5 | | R : IMPE N2 N4 ; N6 | | Q : AS ; N7 | | R : IMPE N3 N6 ; N8 | R : ORE N1 N4 N5 N6 N7 ; N9 ( ( Q > R ) > R ) : IMPI N3 N8 ; QED',
+         True, {'d2_two_boxes'}),
+        # plain depth 2 (valid): nothing
+        ('THM SEQ ( P > ( Q > P ) ) PRF',
+         'N1 | P : AS ; N2 | | Q : AS ; N3 | | P : R N1 ; N4 | ( Q > P ) : IMPI N2 N3 ; N5 ( P > ( Q > P ) ) : IMPI N1 N4 ; QED',
+         True, set()),
+        # strict derived ORE (valid): derived_disj (ANDE1 yields ( P v Q )) and ore_on_derived
+        ('THM ( ( P v Q ) & R ) SEQ ( Q v P ) PRF',
+         'N1 ( ( P v Q ) & R ) : PR ; N2 ( P v Q ) : ANDE1 N1 ; N3 | P : AS ; N4 | ( Q v P ) : ORI2 N3 ; N5 | Q : AS ; N6 | ( Q v P ) : ORI1 N5 ; N7 ( Q v P ) : ORE N2 N3 N4 N5 N6 ; QED',
+         True, {'derived_disj', 'ore_on_derived'}),
+        # derived disjunction with equal disjuncts then ORE on it (valid): ore_on_derived only (not strict)
+        ('THM ( Q & ( R v R ) ) SEQ ( ( ( ~ R ) > P ) > R ) PRF',
+         'N1 ( Q & ( R v R ) ) : PR ; N2 | ( ( ~ R ) > P ) : AS ; N3 | ( R v R ) : ANDE2 N1 ; N4 | | R : AS ; N5 | | R : AS ; N6 | R : ORE N3 N4 N4 N5 N5 ; N7 ( ( ( ~ R ) > P ) > R ) : IMPI N2 N6 ; QED',
+         True, {'ore_on_derived', 'd2_two_boxes'}),
+        # ORI-made disjunction (valid): NOT derived_disj (introductions excluded)
+        ('THM P SEQ ( P v Q ) PRF', 'N1 P : PR ; N2 ( P v Q ) : ORI1 N1 ; QED', True, set()),
+        # intermediate derived disjunction (IMPE) never used by an ORE (valid): derived_disj only
+        ('THM P , ( P > ( Q v R ) ) SEQ ( ( Q v R ) & P ) PRF', 'N1 P : PR ; N2 ( P > ( Q v R ) ) : PR ; N3 ( Q v R ) : IMPE N2 N1 ; N4 ( ( Q v R ) & P ) : ANDI N3 N1 ; QED', True, {'derived_disj'}),
+        # derived disjunction that is the FINAL line (valid): not counted (the target, not the habit, dictates it)
+        ('THM P , ( P > ( Q v R ) ) SEQ ( Q v R ) PRF', 'N1 P : PR ; N2 ( P > ( Q v R ) ) : PR ; N3 ( Q v R ) : IMPE N2 N1 ; QED', True, set()),
+        # ORE over a premise (valid): nothing (the ORI lines inside the branches are introductions)
+        ('THM ( P v Q ) SEQ ( Q v P ) PRF',
+         'N1 ( P v Q ) : PR ; N2 | P : AS ; N3 | ( Q v P ) : ORI2 N2 ; N4 | Q : AS ; N5 | ( Q v P ) : ORI1 N4 ; N6 ( Q v P ) : ORE N1 N2 N3 N4 N5 ; QED',
+         True, set()),
+    ]
+    bad = 0
+    for prompt, proof, valid, exp in cases:
+        ok, reason, nl = verify_text(prompt + ' ' + proof)
+        assert ok == valid, ('validity mismatch', ok, reason, prompt, proof)
+        got = firsthalf_text(proof, prompt)
+        g = {p for p in FIRSTHALF if got[p]}
+        flag = 'ok' if g == exp else 'FAIL'; bad += g != exp
+        print(f"{flag:5s} valid={str(ok):5s} {prompt[:50]:50s} {' '.join(sorted(g)) or '-'}")
+    assert firsthalf_text('N1 P : PR ; garbage', 'THM P SEQ P PRF') is None
+    print('FIRSTHALF TESTS', 'PASS' if not bad else f'FAIL ({bad})')
+    return bad == 0
+
+
 def stats(fn, limit=None):
     c = collections.Counter(); n = 0; by_len = collections.defaultdict(collections.Counter); chain = collections.Counter(); nest = collections.Counter()
     for l in open(fn):
@@ -192,6 +306,6 @@ if __name__ == '__main__':
     ap = argparse.ArgumentParser(); ap.add_argument('--test', action='store_true'); ap.add_argument('--stats', nargs='*'); ap.add_argument('--limit', type=int, default=None)
     a = ap.parse_args()
     if a.test:
-        sys.exit(0 if test() else 1)
+        sys.exit(0 if (test() and test_firsthalf()) else 1)
     for fn in a.stats or []:
         stats(fn, a.limit)

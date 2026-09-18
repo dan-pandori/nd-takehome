@@ -23,7 +23,8 @@ from sample import generate_ids
 from nd_verify import verify_text
 from prune import pruned_length
 from normalize import norm
-from patterns import classify, PATTERNS
+from patterns import classify, PATTERNS, parse
+from patterns2 import firsthalf, goal_of, FIRSTHALF
 
 BUDGETS = (32, 128, 512, 1000, 10000, 100000)
 PATS = list(PATTERNS) + ['derived_ore_strict', 'derived_dn']
@@ -31,14 +32,17 @@ PATS = list(PATTERNS) + ['derived_ore_strict', 'derived_dn']
 
 def _verify_one(args):
     """verify + classify one distinct normalised string (CPU); run in a fork pool (--procs) since the verifier dominates
-    the wall clock on hard targets where ~every sample is distinct. Pure function of (prompt, s): output identical to the
-    sequential version."""
-    prompt, s = args
+    the wall clock on hard targets where ~every sample is distinct. Pure function of (prompt, s, goal): output identical
+    to the sequential version.  Returns {'ok': bool, 'fh': first-half flags on the written text (None if unparsable)}
+    plus, for verified samples, written / pruned lengths and pattern labels (round3-run3: fh added for every sample)."""
+    prompt, s, goal = args
     ok, reason, nl = verify_text(prompt + ' ' + s)
+    lines = parse(s)
+    fh = firsthalf(lines, goal) if lines is not None else None
     if not ok:
-        return None
+        return {'ok': False, 'fh': fh}
     cl = classify(s) or {}
-    return {'written': nl, 'pruned': pruned_length(prompt, s), 'pat': {p: bool(cl.get(p)) for p in PATS}}
+    return {'ok': True, 'fh': fh, 'written': nl, 'pruned': pruned_length(prompt, s), 'pat': {p: bool(cl.get(p)) for p in PATS}}
 
 
 def main():
@@ -101,10 +105,15 @@ def main():
                 n += b
             # verify distinct strings once
             strs = list(counts.keys())
-            jobs = [(r['prompt'], s) for s in strs]
+            goal = goal_of(r['prompt'])
+            jobs = [(r['prompt'], s, goal) for s in strs]
             res = pool.map(_verify_one, jobs, chunksize=32) if pool else [_verify_one(j) for j in jobs]
             ok_proofs = [{'proof': s, 'count': counts[s], 'written': x['written'], 'pruned': x['pruned'], 'first': first_idx[s], 'pat': x['pat']}
-                         for s, x in zip(strs, res) if x]
+                         for s, x in zip(strs, res) if x['ok']]
+            # first-half predicates over EVERY decoded sample (valid or not), sample-weighted; and over verified ones only
+            n_parsed = sum(counts[s] for s, x in zip(strs, res) if x['fh'] is not None)
+            fh_by_pred = {p: sum(counts[s] for s, x in zip(strs, res) if x['fh'] is not None and x['fh'][p]) for p in FIRSTHALF}
+            fh_ok_by_pred = {p: sum(counts[s] for s, x in zip(strs, res) if x['ok'] and x['fh'] is not None and x['fh'][p]) for p in FIRSTHALF}
             n_ok = sum(p['count'] for p in ok_proofs)
             # pass@B from sample order: we know the first index of each distinct success and its total count, but not
             # the position of every repeat; hits_within counts distinct successes whose first occurrence is within B,
@@ -124,7 +133,8 @@ def main():
                    'n_tried': n, 'n_ok': n_ok, 'n_distinct_ok': len(ok_proofs), 'n_distinct_all': len(counts),
                    'first_hit': first_hit, 'solved_within': {str(B): bool(first_hit is not None and first_hit <= B) for B in BUDGETS},
                    'written_hist': dict(sorted(wh.items())), 'pruned_hist': dict(sorted(ph.items())),
-                   'hits_by_pattern': hits_by_pattern, 'distinct_by_pattern': distinct_by_pattern, 'proofs': ok_proofs}
+                   'hits_by_pattern': hits_by_pattern, 'distinct_by_pattern': distinct_by_pattern,
+                   'n_parsed': n_parsed, 'fh_by_pred': fh_by_pred, 'fh_ok_by_pred': fh_ok_by_pred, 'proofs': ok_proofs}
             fo.write(json.dumps(rec) + '\n'); fo.flush()
             torch.cuda.empty_cache()
             n_done += 1

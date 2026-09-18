@@ -1,6 +1,6 @@
 # Pre-registration: round3-run3 — base generalisation by pattern class, many seeds, no RL
 
-Written 2026-09-18 05:40 UTC, before any pod of this run was created (gate 0). Executor:
+Written 2026-09-18 05:16 UTC, before any pod of this run was created (gate 0). Executor:
 agent:claude. Branch `dan_round3-run3`. Governing brief: `BRIEF_base-generalisation.md`
 (round-3 proposal §3); policy: `AGENT_POLICY.md`. Edits to the numbers below get a dated
 reason in §Amendments at the end of this file.
@@ -23,7 +23,7 @@ refinement 3; review_followup.md, block B caution).
 and ignition studies, `train.py --mode abs --steps 6000 --bs 128 --cap 6 --heldout
 data/p2/heldout.jsonl`, on
 
-- `data/p2/train_depth3_f0_a1.jsonl` (155,000; re-classified 05:35 UTC: depth3 0, max
+- `data/p2/train_depth3_f0_a1.jsonl` (155,000; re-classified 05:14 UTC: depth3 0, max
   length 6),
 - `data/p2/train_reductio_f0.jsonl` (155,000; reductio 0),
 - `data/p2/train_derived_ore_f0.jsonl` (155,000; derived_ore 0, derived_ore_strict 0 — so
@@ -72,8 +72,9 @@ first-half predicates below (new functions in `patterns2.py`, verifier-checked t
 - reductio: `negi_neggoal_nodn` (a NEGI closing a box whose hypothesis is `~G`, so it yields
   `~~G`, with no DN citing it; primary), `negi_neggoal` (with or without DN), `neg_goal_hyp`
   (an AS line `~G` anywhere).
-- derived-ORE strict: `derived_disj` (a line obtained by a rule other than PR/AS whose formula
-  is a disjunction with distinct disjuncts; primary), `ore_on_derived` (an ORE whose
+- derived-ORE strict: `derived_disj` (an intermediate line, not the final one, obtained by a rule
+  other than PR/AS/ORI1/ORI2/R whose formula is a disjunction with distinct disjuncts, i.e. a
+  disjunction derived by elimination or DN and then used further; primary), `ore_on_derived` (an ORE whose
   disjunction line is not PR/AS).
 
 **Definitions.** A draw *generalises* a pattern iff ≥ 1 verified sample over the pool
@@ -136,4 +137,7 @@ checkpoints), `~/runs/round3-run3/executor.done`.
 
 ## Amendments
 
-(none yet)
+- 2026-09-18 05:28 UTC (before any pod): `derived_disj` excludes ORI1/ORI2/R-made disjunctions; the
+  first draft said "any rule other than PR/AS", under which every ordinary proof of a disjunction goal
+  (ORI, or the final IMPE/ORE line) would count and the predictor would be meaningless; the final line
+  is also excluded. Found by the unit tests.
