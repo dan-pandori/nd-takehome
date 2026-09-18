@@ -157,7 +157,7 @@ pool with three such targets. No registered draw-level property predicts general
 | reductio: 45 (draw, target) pairs, 31 distinct targets, only `nand_neg` / `negimp_to_pos`, 0 on 8-line-or-longer schemata; 387 of s49's 453 on one target | same | reproduced |
 | frozen@256: depth-3 9 draws > 0 (max 27), reductio s39 1, s40 1, s47 13, s49 5 | same | reproduced |
 | derived-ORE oracle: 363 → 25 required (3 / 16 / 3 / 3), 0 inconsistencies; loose derived-ORE 4 hits in 2 draws | same | reproduced |
-| self-check: 211 depth-3 + 137 reductio distinct pattern proofs, 0 failures | same counts with my verifier loop and predicates; plus all 10,479 stored non-pattern proofs | reproduced |
+| self-check: 211 depth-3 + 137 reductio distinct pattern proofs, 0 failures | same counts with my verifier loop and predicates; plus the 10,131 stored non-pattern proofs (10,479 distinct proofs in all) | reproduced |
 | predictors: loss −0.10 / 0.02; first-half 0.04 / 0.14; among generalisers 0.53 / 0.49; NEGI −0.74, either-pass −0.62; AS −0.45 | same to two decimals (mine: 0.03 for reductio loss) | reproduced |
 | first-half rates and E7 ratios (min 21 / 16) | min 20 / 16 with `n_tried` rather than `n_parsed` as denominator; **not re-derivable beyond the verified subset** (R0) | consistent |
 | thresholds: rate ≥ 10⁻⁵ depth-3 7 / 24, ≥ 10⁻⁴ 4 / 24 | on the 2M denominator, yes; on part 1 alone (the same 600k budget as reductio) 9 / 24 and 6 / 24 — the 1.4M part-2 samples that hit almost nothing dilute the depth-3 rate 3.3× | reproduced; denominator matters |
