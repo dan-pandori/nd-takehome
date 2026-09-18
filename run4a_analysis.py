@@ -79,6 +79,8 @@ def cov(fn, T, within=None):
            'pass_at_256_targets': sum(1 for r in rs if r['first_hit'] is not None and r['first_hit'] <= 256)}
     out['rate'] = out['strict_hits'] / max(1, out['samples'])
     out['complete'] = len(rs) == len(T)
+    # comparable 'non-zero in the first 2000 samples per target' flag for files sampled at larger k (run 5's pass@1e4 files)
+    out['targets_hit_within_2000'] = sum(1 for r in rs if any(p['pat'].get('reductio') and p['first'] <= 2000 for p in r['proofs']))
     return out
 
 
@@ -122,7 +124,7 @@ def main():
         for tag in tags:
             D = draw(tag, T, TR); D['stage1'] = stage1(tag); cell['draws'][tag] = D
         ds = [d for d in cell['draws'].values() if d['pre_rl'] and d['pre_rl']['complete']]
-        cell['n_draws_sampled'] = len(ds); cell['n_nonzero'] = sum(1 for d in ds if d['pre_rl']['strict_hits'] > 0)
+        cell['n_draws_sampled'] = len(ds); cell['n_nonzero'] = sum(1 for d in ds if d['pre_rl']['targets_hit_within_2000'] > 0)
         res['sizes'][sz] = cell
     # run 5's 3.2M draws on the ORIGINAL set (reviewed files; pre-RL = the pass@1e4 coverage file, 3e6 samples)
     old = {'label': '3.2M original set (run 5)', 'draws': {}}
