@@ -13,7 +13,7 @@ from patterns2 import classify2, CLASS
 PATS = ['depth4', 'impe_chain4', 'nested_ore', 'impi_ore', 'negi_ande_hyp', 'ori_ore']
 THRESH = 0.02
 ARMS = {p: [('ei', f's{s}') for s in (0, 1)] + [('frozen', f's{s}') for s in (0, 1)] for p in PATS}
-ARMS['depth4'] += [('ei', f'c8ctl_s{s}') for s in (0, 1)] + [('frozen', f'c8ctl_s{s}') for s in (0, 1)]
+ARMS['depth4'] += [('ei', f'c8ctl_s{s}') for s in (0, 1)] + [('frozen', f'c8ctl_s{s}') for s in (0, 1)] + [('ei', f'c8f0_s{s}') for s in (0, 1)] + [('frozen', f'c8f0_s{s}') for s in (0, 1)]
 for p in ('impi_ore', 'negi_ande_hyp'):
     ARMS[p] += [('ei', f'natctl_s{s}') for s in (0, 1)] + [('frozen', f'natctl_s{s}') for s in (0, 1)]
 
@@ -91,7 +91,7 @@ def main():
             d = f'artifacts/r2/{kind}_{p}_{tag}'
             m = arm_rounds(d, p, T)
             if m: P['arms'][f'{kind}_{tag}'] = m
-        for tag in ('s0', 's1', 'c8ctl_s0', 'c8ctl_s1', 'natctl_s0', 'natctl_s1'):
+        for tag in ('s0', 's1', 'c8ctl_s0', 'c8ctl_s1', 'natctl_s0', 'natctl_s1', 'c8f0_s0', 'c8f0_s1'):
             c = coverage(f'artifacts/r2/cov_{p}_{tag}.s0.jsonl', p)
             if c: P['coverage'][tag] = c
         for fn in sorted(glob.glob(f'artifacts/r2/drift_{p}_*.s0.jsonl')):
@@ -109,7 +109,7 @@ def main():
             print(f"  drift {k}: {v}")
     import matplotlib; matplotlib.use('Agg'); import matplotlib.pyplot as plt
     fig, axes = plt.subplots(2, 3, figsize=(12, 6.5)); axes = axes.ravel()
-    COL = {'s0': '#2a78d6', 's1': '#2a78d6', 'c8ctl_s0': '#eb6834', 'c8ctl_s1': '#eb6834', 'natctl_s0': '#eb6834', 'natctl_s1': '#eb6834'}
+    COL = {'s0': '#2a78d6', 's1': '#2a78d6', 'c8ctl_s0': '#eb6834', 'c8ctl_s1': '#eb6834', 'natctl_s0': '#eb6834', 'natctl_s1': '#eb6834', 'c8f0_s0': '#2ca02c', 'c8f0_s1': '#2ca02c'}
     for ax, p in zip(axes, PATS):
         P = res[p]; n = P['n_targets']
         for k, v in P['arms'].items():
