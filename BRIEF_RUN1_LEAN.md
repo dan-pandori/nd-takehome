@@ -33,3 +33,8 @@ push. Gate 0 checks its commit time against `~/pods.log`.
 Deliverables: `run1.md` (≤ 400 words + figures), `numbers.md` and `log.md` sections, bucket upload
 to `hf://buckets/dan-pandori/nd-rl/run1-lean/`, `STATUS.md` ending `RUN1 DONE <UTC>`, then
 `touch ~/runs/run1-lean/executor.done`. Pods deleted first.
+
+
+## Note 2026-09-18 02:20 UTC (from Dan, relayed)
+
+The round-2 executor on the other host completed its own version of this run before it saw the instruction to stop (results on branch dan_novelty: run1.md, numbers.md, review_round2-run1.md). Your run therefore serves as an **independent replication** by a different executor with different code. Finish it as planned; in your write-up add a short section comparing your numbers with theirs, claim by claim, and say where they agree and disagree. Do not copy their code or numbers into yours.
