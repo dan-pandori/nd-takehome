@@ -1,0 +1,23 @@
+{
+ "own": "artifacts/p2/ei_depth3_f0_a1_s3",
+ "own_proofs": 916,
+ "own_theorems": 233,
+ "inject_file": "artifacts/p2/ei_depth3_f0_a1_s2/found_4.jsonl",
+ "tag": "sib1",
+ "n_injected": 1,
+ "injected_valid": [
+  true
+ ],
+ "injected_has_pattern": [
+  true
+ ],
+ "injected": [
+  {
+   "prompt": "THM ( ( P v R ) & ( R > R ) ) SEQ ( ( ~ ( ~ ( ~ S ) ) ) > ( ( ( Q > R ) & ( ~ S ) ) > ( ( ~ ( ~ S ) ) > ( ( ( P v R ) & ( R > R ) ) v Q ) ) ) ) PRF",
+   "proof": "N36 ( ( P v R ) & ( R > R ) ) : PR ; N37 | ( ~ ( ~ ( ~ S ) ) ) : AS ; N38 | | ( ( Q > R ) & ( ~ S ) ) : AS ; N39 | | | ( ~ ( ~ S ) ) : AS ; N40 | | | ( ( ( P v R ) & ( R > R ) ) v Q ) : ORI1 N36 ; N41 | | ( ( ~ ( ~ S ) ) > ( ( ( P v R ) & ( R > R ) ) v Q ) ) : IMPI N39 N40 ; N42 | ( ( ( Q > R ) & ( ~ S ) ) > ( ( ~ ( ~ S ) ) > ( ( ( P v R ) & ( R > R ) ) v Q ) ) ) : IMPI N38 N41 ; N43 ( ( ~ ( ~ ( ~ S ) ) ) > ( ( ( Q > R ) & ( ~ S ) ) > ( ( ~ ( ~ S ) ) > ( ( ( P v R ) & ( R > R ) ) v Q ) ) ) ) : IMPI N37 N42 ; QED"
+  }
+ ],
+ "init": "ckpts/p2/ei_depth3_f0_a1_s3_r4.pt",
+ "out": "ckpts/r3/ei_depth3_f0_a1_s3_sib1_r4t.pt",
+ "retain": 20000
+}

@@ -1,0 +1,113 @@
+{
+ "own": "artifacts/p2/ei_depth3_f0_a1_s3",
+ "own_proofs": 916,
+ "own_theorems": 233,
+ "inject_file": "artifacts/p2/ei_depth3_f0_a1_s2/found_4.jsonl",
+ "tag": "sib16",
+ "n_injected": 16,
+ "injected_valid": [
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true
+ ],
+ "injected_has_pattern": [
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true
+ ],
+ "injected": [
+  {
+   "prompt": "THM SEQ ( R > ( ( ( P & P ) > S ) > ( ( P & P ) > P ) ) ) PRF",
+   "proof": "N43 | R : AS ; N44 | | ( ( P & P ) > S ) : AS ; N45 | | | ( P & P ) : AS ; N46 | | | P : ANDE1 N45 ; N47 | | ( ( P & P ) > P ) : IMPI N45 N46 ; N48 | ( ( ( P & P ) > S ) > ( ( P & P ) > P ) ) : IMPI N44 N47 ; N49 ( R > ( ( ( P & P ) > S ) > ( ( P & P ) > P ) ) ) : IMPI N43 N48 ; QED"
+  },
+  {
+   "prompt": "THM SEQ ( ( ~ ( ( P v S ) & R ) ) > ( ( Q > Q ) > ( ( ( P v S ) & R ) > ( P v ( ( P v S ) & R ) ) ) ) ) PRF",
+   "proof": "N56 | ( ~ ( ( P v S ) & R ) ) : AS ; N57 | | ( Q > Q ) : AS ; N58 | | | ( ( P v S ) & R ) : AS ; N59 | | | ( P v ( ( P v S ) & R ) ) : ORI2 N58 ; N60 | | ( ( ( P v S ) & R ) > ( P v ( ( P v S ) & R ) ) ) : IMPI N58 N59 ; N61 | ( ( Q > Q ) > ( ( ( P v S ) & R ) > ( P v ( ( P v S ) & R ) ) ) ) : IMPI N57 N60 ; N62 ( ( ~ ( ( P v S ) & R ) ) > ( ( Q > Q ) > ( ( ( P v S ) & R ) > ( P v ( ( P v S ) & R ) ) ) ) ) : IMPI N56 N61 ; QED"
+  },
+  {
+   "prompt": "THM SEQ ( ( ~ ( ~ S ) ) > ( ( R v R ) > ( ( ~ ( ~ S ) ) > S ) ) ) PRF",
+   "proof": "N22 | ( ~ ( ~ S ) ) : AS ; N23 | | ( R v R ) : AS ; N24 | | | ( ~ ( ~ S ) ) : AS ; N25 | | | S : DN N22 ; N26 | | ( ( ~ ( ~ S ) ) > S ) : IMPI N24 N25 ; N27 | ( ( R v R ) > ( ( ~ ( ~ S ) ) > S ) ) : IMPI N23 N26 ; N28 ( ( ~ ( ~ S ) ) > ( ( R v R ) > ( ( ~ ( ~ S ) ) > S ) ) ) : IMPI N22 N27 ; QED"
+  },
+  {
+   "prompt": "THM S SEQ ( ( ~ ( P > Q ) ) > ( Q > ( ( R v S ) > ( S & ( ~ ( P > Q ) ) ) ) ) ) PRF",
+   "proof": "N12 S : PR ; N13 | ( ~ ( P > Q ) ) : AS ; N14 | | Q : AS ; N15 | | | ( R v S ) : AS ; N16 | | | ( S & ( ~ ( P > Q ) ) ) : ANDI N12 N13 ; N17 | | ( ( R v S ) > ( S & ( ~ ( P > Q ) ) ) ) : IMPI N15 N16 ; N18 | ( Q > ( ( R v S ) > ( S & ( ~ ( P > Q ) ) ) ) ) : IMPI N14 N17 ; N19 ( ( ~ ( P > Q ) ) > ( Q > ( ( R v S ) > ( S & ( ~ ( P > Q ) ) ) ) ) ) : IMPI N13 N18 ; QED"
+  },
+  {
+   "prompt": "THM SEQ ( ( ~ Q ) > ( ( ~ S ) > ( S > ( S v ( ~ R ) ) ) ) ) PRF",
+   "proof": "N34 | ( ~ Q ) : AS ; N35 | | ( ~ S ) : AS ; N36 | | | S : AS ; N37 | | | ( S v ( ~ R ) ) : ORI1 N36 ; N38 | | ( S > ( S v ( ~ R ) ) ) : IMPI N36 N37 ; N39 | ( ( ~ S ) > ( S > ( S v ( ~ R ) ) ) ) : IMPI N35 N38 ; N40 ( ( ~ Q ) > ( ( ~ S ) > ( S > ( S v ( ~ R ) ) ) ) ) : IMPI N34 N39 ; QED"
+  },
+  {
+   "prompt": "THM SEQ ( ( ~ ( ~ P ) ) > ( ( ( ~ R ) & ( P & P ) ) > ( ( ~ ( ~ ( ~ P ) ) ) > ( ~ R ) ) ) ) PRF",
+   "proof": "N52 | ( ~ ( ~ P ) ) : AS ; N53 | | ( ( ~ R ) & ( P & P ) ) : AS ; N54 | | | ( ~ ( ~ ( ~ P ) ) ) : AS ; N55 | | | ( ~ R ) : ANDE1 N53 ; N56 | | ( ( ~ ( ~ ( ~ P ) ) ) > ( ~ R ) ) : IMPI N54 N55 ; N57 | ( ( ( ~ R ) & ( P & P ) ) > ( ( ~ ( ~ ( ~ P ) ) ) > ( ~ R ) ) ) : IMPI N53 N56 ; N58 ( ( ~ ( ~ P ) ) > ( ( ( ~ R ) & ( P & P ) ) > ( ( ~ ( ~ ( ~ P ) ) ) > ( ~ R ) ) ) ) : IMPI N52 N57 ; QED"
+  },
+  {
+   "prompt": "THM SEQ ( ( ~ ( ~ ( P v R ) ) ) > ( P > ( ( ~ ( P v R ) ) > ( ( ~ ( P v R ) ) & ( ~ ( P v R ) ) ) ) ) ) PRF",
+   "proof": "N52 | ( ~ ( ~ ( P v R ) ) ) : AS ; N53 | | P : AS ; N54 | | | ( ~ ( P v R ) ) : AS ; N55 | | | ( ( ~ ( P v R ) ) & ( ~ ( P v R ) ) ) : ANDI N54 N54 ; N56 | | ( ( ~ ( P v R ) ) > ( ( ~ ( P v R ) ) & ( ~ ( P v R ) ) ) ) : IMPI N54 N55 ; N57 | ( P > ( ( ~ ( P v R ) ) > ( ( ~ ( P v R ) ) & ( ~ ( P v R ) ) ) ) ) : IMPI N53 N56 ; N58 ( ( ~ ( ~ ( P v R ) ) ) > ( P > ( ( ~ ( P v R ) ) > ( ( ~ ( P v R ) ) & ( ~ ( P v R ) ) ) ) ) ) : IMPI N52 N57 ; QED"
+  },
+  {
+   "prompt": "THM SEQ ( ( Q & S ) > ( R > ( Q > ( R v Q ) ) ) ) PRF",
+   "proof": "N57 | ( Q & S ) : AS ; N58 | | R : AS ; N59 | | | Q : AS ; N60 | | | ( R v Q ) : ORI2 N59 ; N61 | | ( Q > ( R v Q ) ) : IMPI N59 N60 ; N62 | ( R > ( Q > ( R v Q ) ) ) : IMPI N58 N61 ; N63 ( ( Q & S ) > ( R > ( Q > ( R v Q ) ) ) ) : IMPI N57 N62 ; QED"
+  },
+  {
+   "prompt": "THM R SEQ ( ( ( Q > Q ) & ( S > Q ) ) > ( Q > ( ( ~ ( ~ ( P > Q ) ) ) > ( ( ~ ( ~ ( P > Q ) ) ) & R ) ) ) ) PRF",
+   "proof": "N57 R : PR ; N58 | ( ( Q > Q ) & ( S > Q ) ) : AS ; N59 | | Q : AS ; N60 | | | ( ~ ( ~ ( P > Q ) ) ) : AS ; N61 | | | ( ( ~ ( ~ ( P > Q ) ) ) & R ) : ANDI N60 N57 ; N62 | | ( ( ~ ( ~ ( P > Q ) ) ) > ( ( ~ ( ~ ( P > Q ) ) ) & R ) ) : IMPI N60 N61 ; N63 | ( Q > ( ( ~ ( ~ ( P > Q ) ) ) > ( ( ~ ( ~ ( P > Q ) ) ) & R ) ) ) : IMPI N59 N62 ; N64 ( ( ( Q > Q ) & ( S > Q ) ) > ( Q > ( ( ~ ( ~ ( P > Q ) ) ) > ( ( ~ ( ~ ( P > Q ) ) ) & R ) ) ) ) : IMPI N58 N63 ; QED"
+  },
+  {
+   "prompt": "THM SEQ ( Q > ( ( S > S ) > ( ( ( S & S ) v ( R v R ) ) > ( Q v ( Q & ( ~ S ) ) ) ) ) ) PRF",
+   "proof": "N56 | Q : AS ; N57 | | ( S > S ) : AS ; N58 | | | ( ( S & S ) v ( R v R ) ) : AS ; N59 | | | ( Q v ( Q & ( ~ S ) ) ) : ORI1 N56 ; N60 | | ( ( ( S & S ) v ( R v R ) ) > ( Q v ( Q & ( ~ S ) ) ) ) : IMPI N58 N59 ; N61 | ( ( S > S ) > ( ( ( S & S ) v ( R v R ) ) > ( Q v ( Q & ( ~ S ) ) ) ) ) : IMPI N57 N60 ; N62 ( Q > ( ( S > S ) > ( ( ( S & S ) v ( R v R ) ) > ( Q v ( Q & ( ~ S ) ) ) ) ) ) : IMPI N56 N61 ; QED"
+  },
+  {
+   "prompt": "THM ( ( R > Q ) > S ) SEQ ( ( R & ( ~ R ) ) > ( ( R > Q ) > ( ( ~ ( ~ R ) ) > ( ( Q v ( P & R ) ) v ( ( R > Q ) > S ) ) ) ) ) PRF",
+   "proof": "N56 ( ( R > Q ) > S ) : PR ; N57 | ( R & ( ~ R ) ) : AS ; N58 | | ( R > Q ) : AS ; N59 | | | ( ~ ( ~ R ) ) : AS ; N60 | | | ( ( Q v ( P & R ) ) v ( ( R > Q ) > S ) ) : ORI2 N56 ; N61 | | ( ( ~ ( ~ R ) ) > ( ( Q v ( P & R ) ) v ( ( R > Q ) > S ) ) ) : IMPI N59 N60 ; N62 | ( ( R > Q ) > ( ( ~ ( ~ R ) ) > ( ( Q v ( P & R ) ) v ( ( R > Q ) > S ) ) ) ) : IMPI N58 N61 ; N63 ( ( R & ( ~ R ) ) > ( ( R > Q ) > ( ( ~ ( ~ R ) ) > ( ( Q v ( P & R ) ) v ( ( R > Q ) > S ) ) ) ) ) : IMPI N57 N62 ; QED"
+  },
+  {
+   "prompt": "THM SEQ ( ( ~ ( ~ Q ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) ) PRF",
+   "proof": "N52 | ( ~ ( ~ Q ) ) : AS ; N53 | | Q : AS ; N54 | | | ( ~ ( ~ R ) ) : AS ; N55 | | | R : DN N54 ; N56 | | ( ( ~ ( ~ R ) ) > R ) : IMPI N54 N55 ; N57 | ( Q > ( ( ~ ( ~ R ) ) > R ) ) : IMPI N53 N56 ; N58 ( ( ~ ( ~ Q ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) ) : IMPI N52 N57 ; QED"
+  },
+  {
+   "prompt": "THM ( S v R ) SEQ ( S > ( Q > ( S > ( Q & ( S v R ) ) ) ) ) PRF",
+   "proof": "N32 ( S v R ) : PR ; N33 | S : AS ; N34 | | Q : AS ; N35 | | | S : AS ; N36 | | | ( Q & ( S v R ) ) : ANDI N34 N32 ; N37 | | ( S > ( Q & ( S v R ) ) ) : IMPI N35 N36 ; N38 | ( Q > ( S > ( Q & ( S v R ) ) ) ) : IMPI N34 N37 ; N39 ( S > ( Q > ( S > ( Q & ( S v R ) ) ) ) ) : IMPI N33 N38 ; QED"
+  },
+  {
+   "prompt": "THM SEQ ( ( ~ ( ~ ( Q > P ) ) ) > ( Q > ( ( ~ ( Q > P ) ) > ( ( ~ ( ~ ( Q > P ) ) ) v S ) ) ) ) PRF",
+   "proof": "N37 | ( ~ ( ~ ( Q > P ) ) ) : AS ; N38 | | Q : AS ; N39 | | | ( ~ ( Q > P ) ) : AS ; N40 | | | ( ( ~ ( ~ ( Q > P ) ) ) v S ) : ORI1 N37 ; N41 | | ( ( ~ ( Q > P ) ) > ( ( ~ ( ~ ( Q > P ) ) ) v S ) ) : IMPI N39 N40 ; N42 | ( Q > ( ( ~ ( Q > P ) ) > ( ( ~ ( ~ ( Q > P ) ) ) v S ) ) ) : IMPI N38 N41 ; N43 ( ( ~ ( ~ ( Q > P ) ) ) > ( Q > ( ( ~ ( Q > P ) ) > ( ( ~ ( ~ ( Q > P ) ) ) v S ) ) ) ) : IMPI N37 N42 ; QED"
+  },
+  {
+   "prompt": "THM ( Q > ( ~ ( S v Q ) ) ) SEQ ( ( ~ ( ~ ( ~ P ) ) ) > ( Q > ( Q > ( Q & ( Q > ( ~ ( S v Q ) ) ) ) ) ) ) PRF",
+   "proof": "N54 ( Q > ( ~ ( S v Q ) ) ) : PR ; N55 | ( ~ ( ~ ( ~ P ) ) ) : AS ; N56 | | Q : AS ; N57 | | | Q : AS ; N58 | | | ( Q & ( Q > ( ~ ( S v Q ) ) ) ) : ANDI N56 N54 ; N59 | | ( Q > ( Q & ( Q > ( ~ ( S v Q ) ) ) ) ) : IMPI N57 N58 ; N60 | ( Q > ( Q > ( Q & ( Q > ( ~ ( S v Q ) ) ) ) ) ) : IMPI N56 N59 ; N61 ( ( ~ ( ~ ( ~ P ) ) ) > ( Q > ( Q > ( Q & ( Q > ( ~ ( S v Q ) ) ) ) ) ) ) : IMPI N55 N60 ; QED"
+  },
+  {
+   "prompt": "THM SEQ ( ( ~ ( ~ ( Q > R ) ) ) > ( ( ~ ( ~ P ) ) > ( P > ( ( ~ ( P v R ) ) v ( ~ ( ~ P ) ) ) ) ) ) PRF",
+   "proof": "N37 | ( ~ ( ~ ( Q > R ) ) ) : AS ; N38 | | ( ~ ( ~ P ) ) : AS ; N39 | | | P : AS ; N40 | | | ( ( ~ ( P v R ) ) v ( ~ ( ~ P ) ) ) : ORI2 N38 ; N41 | | ( P > ( ( ~ ( P v R ) ) v ( ~ ( ~ P ) ) ) ) : IMPI N39 N40 ; N42 | ( ( ~ ( ~ P ) ) > ( P > ( ( ~ ( P v R ) ) v ( ~ ( ~ P ) ) ) ) ) : IMPI N38 N41 ; N43 ( ( ~ ( ~ ( Q > R ) ) ) > ( ( ~ ( ~ P ) ) > ( P > ( ( ~ ( P v R ) ) v ( ~ ( ~ P ) ) ) ) ) ) : IMPI N37 N42 ; QED"
+  }
+ ],
+ "init": "ckpts/p2/ei_depth3_f0_a1_s3_r4.pt",
+ "out": "ckpts/r3/ei_depth3_f0_a1_s3_sib16_r4t.pt",
+ "retain": 20000
+}

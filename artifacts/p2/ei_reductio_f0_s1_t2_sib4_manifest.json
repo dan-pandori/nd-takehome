@@ -1,0 +1,41 @@
+{
+ "own": "artifacts/p2/ei_reductio_f0_s1_t2",
+ "own_proofs": 0,
+ "own_theorems": 0,
+ "inject_file": "artifacts/p2/ei_reductio_f0_s7_t2/found_4.jsonl",
+ "tag": "sib4",
+ "n_injected": 4,
+ "injected_valid": [
+  true,
+  true,
+  true,
+  true
+ ],
+ "injected_has_pattern": [
+  true,
+  true,
+  true,
+  true
+ ],
+ "injected": [
+  {
+   "prompt": "THM ( ~ ( ( ~ ( Q v S ) ) & ( ~ Q ) ) ) , ( ~ Q ) SEQ ( Q v S ) PRF",
+   "proof": "N1 ( ~ ( ( ~ ( Q v S ) ) & ( ~ Q ) ) ) : PR ; N2 ( ~ Q ) : PR ; N3 | ( ~ ( Q v S ) ) : AS ; N4 | ( ( ~ ( Q v S ) ) & ( ~ Q ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( Q v S ) ) ) : NEGI N3 N5 ; N7 ( Q v S ) : DN N6 ; QED"
+  },
+  {
+   "prompt": "THM ( ( ~ ( ( ~ S ) v P ) ) > R ) , ( ~ R ) SEQ ( ( ~ S ) v P ) PRF",
+   "proof": "N7 ( ( ~ ( ( ~ S ) v P ) ) > R ) : PR ; N8 ( ~ R ) : PR ; N9 | ( ~ ( ( ~ S ) v P ) ) : AS ; N10 | R : IMPE N7 N9 ; N11 | F : NEGE N10 N8 ; N12 ( ~ ( ~ ( ( ~ S ) v P ) ) ) : NEGI N9 N11 ; N13 ( ( ~ S ) v P ) : DN N12 ; QED"
+  },
+  {
+   "prompt": "THM ( ~ ( ( ~ ( R > P ) ) & ( Q v P ) ) ) , ( Q v P ) SEQ ( R > P ) PRF",
+   "proof": "N48 ( ~ ( ( ~ ( R > P ) ) & ( Q v P ) ) ) : PR ; N49 ( Q v P ) : PR ; N50 | ( ~ ( R > P ) ) : AS ; N51 | ( ( ~ ( R > P ) ) & ( Q v P ) ) : ANDI N50 N49 ; N52 | F : NEGE N51 N48 ; N53 ( ~ ( ~ ( R > P ) ) ) : NEGI N50 N52 ; N54 ( R > P ) : DN N53 ; QED"
+  },
+  {
+   "prompt": "THM ( ~ ( ( ~ ( Q > P ) ) & ( ~ R ) ) ) , ( ~ R ) SEQ ( Q > P ) PRF",
+   "proof": "N6 ( ~ ( ( ~ ( Q > P ) ) & ( ~ R ) ) ) : PR ; N7 ( ~ R ) : PR ; N8 | ( ~ ( Q > P ) ) : AS ; N9 | ( ( ~ ( Q > P ) ) & ( ~ R ) ) : ANDI N8 N7 ; N10 | F : NEGE N9 N6 ; N11 ( ~ ( ~ ( Q > P ) ) ) : NEGI N8 N10 ; N12 ( Q > P ) : DN N11 ; QED"
+  }
+ ],
+ "init": "ckpts/p2/stage1_reductio_f0_s1.pt",
+ "out": "ckpts/r3/ei_reductio_f0_s1_t2_sib4_r4t.pt",
+ "retain": 20000
+}

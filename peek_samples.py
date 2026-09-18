@@ -5,7 +5,7 @@ from model import load_ckpt
 from sample import generate
 from nd_verify import verify_text
 ck, fn, n, k = sys.argv[1], sys.argv[2], int(sys.argv[3]), int(sys.argv[4])
-model, tok = load_ckpt(ck)
+model, tok, _ = load_ckpt(ck, "cuda")
 T = [json.loads(l) for l in open(fn)][:n]
 outs = generate(model, tok, [t['prompt'] for t in T for _ in range(k)], greedy=False, temperature=0.8, batch=256)
 for i, t in enumerate(T):

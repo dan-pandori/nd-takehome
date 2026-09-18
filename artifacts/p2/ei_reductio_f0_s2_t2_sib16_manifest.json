@@ -1,0 +1,113 @@
+{
+ "own": "artifacts/p2/ei_reductio_f0_s2_t2",
+ "own_proofs": 0,
+ "own_theorems": 0,
+ "inject_file": "artifacts/p2/ei_reductio_f0_s7_t2/found_4.jsonl",
+ "tag": "sib16",
+ "n_injected": 16,
+ "injected_valid": [
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true
+ ],
+ "injected_has_pattern": [
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true
+ ],
+ "injected": [
+  {
+   "prompt": "THM ( ( ~ ( R v Q ) ) > ( P & R ) ) , ( ~ ( P & R ) ) SEQ ( R v Q ) PRF",
+   "proof": "N55 ( ( ~ ( R v Q ) ) > ( P & R ) ) : PR ; N56 ( ~ ( P & R ) ) : PR ; N57 | ( ~ ( R v Q ) ) : AS ; N58 | ( P & R ) : IMPE N55 N57 ; N59 | F : NEGE N58 N56 ; N60 ( ~ ( ~ ( R v Q ) ) ) : NEGI N57 N59 ; N61 ( R v Q ) : DN N60 ; QED"
+  },
+  {
+   "prompt": "THM ( ( ~ ( P v ( ~ S ) ) ) > Q ) , ( ~ Q ) SEQ ( P v ( ~ S ) ) PRF",
+   "proof": "N44 ( ( ~ ( P v ( ~ S ) ) ) > Q ) : PR ; N45 ( ~ Q ) : PR ; N46 | ( ~ ( P v ( ~ S ) ) ) : AS ; N47 | Q : IMPE N44 N46 ; N48 | F : NEGE N47 N45 ; N49 ( ~ ( ~ ( P v ( ~ S ) ) ) ) : NEGI N46 N48 ; N50 ( P v ( ~ S ) ) : DN N49 ; QED"
+  },
+  {
+   "prompt": "THM ( ~ ( ( ~ ( R > P ) ) & ( Q v P ) ) ) , ( Q v P ) SEQ ( R > P ) PRF",
+   "proof": "N48 ( ~ ( ( ~ ( R > P ) ) & ( Q v P ) ) ) : PR ; N49 ( Q v P ) : PR ; N50 | ( ~ ( R > P ) ) : AS ; N51 | ( ( ~ ( R > P ) ) & ( Q v P ) ) : ANDI N50 N49 ; N52 | F : NEGE N51 N48 ; N53 ( ~ ( ~ ( R > P ) ) ) : NEGI N50 N52 ; N54 ( R > P ) : DN N53 ; QED"
+  },
+  {
+   "prompt": "THM ( ~ ( ( ~ ( P & S ) ) & ( S > P ) ) ) , ( S > P ) SEQ ( P & S ) PRF",
+   "proof": "N42 ( ~ ( ( ~ ( P & S ) ) & ( S > P ) ) ) : PR ; N43 ( S > P ) : PR ; N44 | ( ~ ( P & S ) ) : AS ; N45 | ( ( ~ ( P & S ) ) & ( S > P ) ) : ANDI N44 N43 ; N46 | F : NEGE N45 N42 ; N47 ( ~ ( ~ ( P & S ) ) ) : NEGI N44 N46 ; N48 ( P & S ) : DN N47 ; QED"
+  },
+  {
+   "prompt": "THM ( ~ ( ( ~ ( P v R ) ) & ( S & Q ) ) ) , ( S & Q ) SEQ ( P v R ) PRF",
+   "proof": "N13 ( ~ ( ( ~ ( P v R ) ) & ( S & Q ) ) ) : PR ; N14 ( S & Q ) : PR ; N15 | ( ~ ( P v R ) ) : AS ; N16 | ( ( ~ ( P v R ) ) & ( S & Q ) ) : ANDI N15 N14 ; N17 | F : NEGE N16 N13 ; N18 ( ~ ( ~ ( P v R ) ) ) : NEGI N15 N17 ; N19 ( P v R ) : DN N18 ; QED"
+  },
+  {
+   "prompt": "THM ( ~ ( ( ~ ( Q > P ) ) & ( ~ R ) ) ) , ( ~ R ) SEQ ( Q > P ) PRF",
+   "proof": "N53 ( ~ ( ( ~ ( Q > P ) ) & ( ~ R ) ) ) : PR ; N54 ( ~ R ) : PR ; N55 | ( ~ ( Q > P ) ) : AS ; N56 | ( ( ~ ( Q > P ) ) & ( ~ R ) ) : ANDI N55 N54 ; N57 | F : NEGE N56 N53 ; N58 ( ~ ( ~ ( Q > P ) ) ) : NEGI N55 N57 ; N59 ( Q > P ) : DN N58 ; QED"
+  },
+  {
+   "prompt": "THM ( ( ~ ( ( ~ S ) v P ) ) > R ) , ( ~ R ) SEQ ( ( ~ S ) v P ) PRF",
+   "proof": "N56 ( ( ~ ( ( ~ S ) v P ) ) > R ) : PR ; N57 ( ~ R ) : PR ; N58 | ( ~ ( ( ~ S ) v P ) ) : AS ; N59 | R : IMPE N56 N58 ; N60 | F : NEGE N59 N57 ; N61 ( ~ ( ~ ( ( ~ S ) v P ) ) ) : NEGI N58 N60 ; N62 ( ( ~ S ) v P ) : DN N61 ; QED"
+  },
+  {
+   "prompt": "THM ( ( ~ ( P v R ) ) > Q ) , ( ~ Q ) SEQ ( P v R ) PRF",
+   "proof": "N51 ( ( ~ ( P v R ) ) > Q ) : PR ; N52 ( ~ Q ) : PR ; N53 | ( ~ ( P v R ) ) : AS ; N54 | Q : IMPE N51 N53 ; N55 | F : NEGE N54 N52 ; N56 ( ~ ( ~ ( P v R ) ) ) : NEGI N53 N55 ; N57 ( P v R ) : DN N56 ; QED"
+  },
+  {
+   "prompt": "THM ( ( ~ ( ( R > S ) > ( S v P ) ) ) > P ) , ( ~ P ) SEQ ( ( R > S ) > ( S v P ) ) PRF",
+   "proof": "N18 ( ( ~ ( ( R > S ) > ( S v P ) ) ) > P ) : PR ; N19 ( ~ P ) : PR ; N20 | ( ~ ( ( R > S ) > ( S v P ) ) ) : AS ; N21 | P : IMPE N18 N20 ; N22 | F : NEGE N21 N19 ; N23 ( ~ ( ~ ( ( R > S ) > ( S v P ) ) ) ) : NEGI N20 N22 ; N24 ( ( R > S ) > ( S v P ) ) : DN N23 ; QED"
+  },
+  {
+   "prompt": "THM ( ( ~ ( ( R & S ) & Q ) ) > P ) , ( ( ~ ( ( R & S ) & Q ) ) > ( ~ P ) ) SEQ ( ( R & S ) & Q ) PRF",
+   "proof": "N54 ( ( ~ ( ( R & S ) & Q ) ) > P ) : PR ; N55 ( ( ~ ( ( R & S ) & Q ) ) > ( ~ P ) ) : PR ; N56 | ( ~ ( ( R & S ) & Q ) ) : AS ; N57 | P : IMPE N54 N56 ; N58 | ( ~ P ) : IMPE N55 N56 ; N59 | F : NEGE N57 N58 ; N60 ( ~ ( ~ ( ( R & S ) & Q ) ) ) : NEGI N56 N59 ; N61 ( ( R & S ) & Q ) : DN N60 ; QED"
+  },
+  {
+   "prompt": "THM ( ~ ( ( ~ ( Q & R ) ) & ( R > P ) ) ) , ( R > P ) SEQ ( Q & R ) PRF",
+   "proof": "N8 ( ~ ( ( ~ ( Q & R ) ) & ( R > P ) ) ) : PR ; N9 ( R > P ) : PR ; N10 | ( ~ ( Q & R ) ) : AS ; N11 | ( ( ~ ( Q & R ) ) & ( R > P ) ) : ANDI N10 N9 ; N12 | F : NEGE N11 N8 ; N13 ( ~ ( ~ ( Q & R ) ) ) : NEGI N10 N12 ; N14 ( Q & R ) : DN N13 ; QED"
+  },
+  {
+   "prompt": "THM ( ( ~ ( Q & S ) ) > ( P v R ) ) , ( ~ ( P v R ) ) SEQ ( Q & S ) PRF",
+   "proof": "N25 ( ( ~ ( Q & S ) ) > ( P v R ) ) : PR ; N26 ( ~ ( P v R ) ) : PR ; N27 | ( ~ ( Q & S ) ) : AS ; N28 | ( P v R ) : IMPE N25 N27 ; N29 | F : NEGE N28 N26 ; N30 ( ~ ( ~ ( Q & S ) ) ) : NEGI N27 N29 ; N31 ( Q & S ) : DN N30 ; QED"
+  },
+  {
+   "prompt": "THM ( ( ~ ( ( R > S ) v R ) ) > Q ) , ( ~ Q ) SEQ ( ( R > S ) v R ) PRF",
+   "proof": "N22 ( ( ~ ( ( R > S ) v R ) ) > Q ) : PR ; N23 ( ~ Q ) : PR ; N24 | ( ~ ( ( R > S ) v R ) ) : AS ; N25 | Q : IMPE N22 N24 ; N26 | F : NEGE N25 N23 ; N27 ( ~ ( ~ ( ( R > S ) v R ) ) ) : NEGI N24 N26 ; N28 ( ( R > S ) v R ) : DN N27 ; QED"
+  },
+  {
+   "prompt": "THM ( ~ ( ( ~ ( S v R ) ) & ( ~ R ) ) ) , ( ~ R ) SEQ ( S v R ) PRF",
+   "proof": "N23 ( ~ ( ( ~ ( S v R ) ) & ( ~ R ) ) ) : PR ; N24 ( ~ R ) : PR ; N25 | ( ~ ( S v R ) ) : AS ; N26 | ( ( ~ ( S v R ) ) & ( ~ R ) ) : ANDI N25 N24 ; N27 | F : NEGE N26 N23 ; N28 ( ~ ( ~ ( S v R ) ) ) : NEGI N25 N27 ; N29 ( S v R ) : DN N28 ; QED"
+  },
+  {
+   "prompt": "THM ( ~ ( ( ~ ( ( P & R ) & Q ) ) & ( ( Q & S ) > R ) ) ) , ( ( Q & S ) > R ) SEQ ( ( P & R ) & Q ) PRF",
+   "proof": "N44 ( ~ ( ( ~ ( ( P & R ) & Q ) ) & ( ( Q & S ) > R ) ) ) : PR ; N45 ( ( Q & S ) > R ) : PR ; N46 | ( ~ ( ( P & R ) & Q ) ) : AS ; N47 | ( ( ~ ( ( P & R ) & Q ) ) & ( ( Q & S ) > R ) ) : ANDI N46 N45 ; N48 | F : NEGE N47 N44 ; N49 ( ~ ( ~ ( ( P & R ) & Q ) ) ) : NEGI N46 N48 ; N50 ( ( P & R ) & Q ) : DN N49 ; QED"
+  },
+  {
+   "prompt": "THM ( ~ ( ( ~ ( Q & R ) ) & ( Q > P ) ) ) , ( Q > P ) SEQ ( Q & R ) PRF",
+   "proof": "N12 ( ~ ( ( ~ ( Q & R ) ) & ( Q > P ) ) ) : PR ; N13 ( Q > P ) : PR ; N14 | ( ~ ( Q & R ) ) : AS ; N15 | ( ( ~ ( Q & R ) ) & ( Q > P ) ) : ANDI N14 N13 ; N16 | F : NEGE N15 N12 ; N17 ( ~ ( ~ ( Q & R ) ) ) : NEGI N14 N16 ; N18 ( Q & R ) : DN N17 ; QED"
+  }
+ ],
+ "init": "ckpts/p2/stage1_reductio_f0_s2.pt",
+ "out": "ckpts/r3/ei_reductio_f0_s2_t2_sib16_r4t.pt",
+ "retain": 20000
+}
