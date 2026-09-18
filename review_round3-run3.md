@@ -143,3 +143,76 @@ patterns at 600k samples and 70–80 % with ≈ 1M more samples on easy targets;
 the two classes are tied at 12 / 24. What separates outcomes is not class but **length: every pre-RL pattern proof in either class is
 cap + 1 lines**, the registered required@8 depth-3 stratum is reached only through its six 7-line members, and derived-ORE's zero reflects a
 pool with three such targets. No registered draw-level property predicts generalisation.
+
+## Compare (phase 2 — `run3-3.md`, `numbers.md` §Round 3 — Run 3, `STATUS.md`, `QUESTIONS.md`, read after commit `0d46113`)
+
+| claim (executor) | recount | status |
+|---|---|---|
+| generalising draws: depth-3 15 / 24 (0.41–0.81), reductio 12 / 24 (0.29–0.71), strict derived-ORE 0 / 24 (0–0.14) | same | **reproduced** |
+| hits per draw, both vectors (depth-3 parts 1 + 2 summed; reductio) | identical in all 48 entries | reproduced |
+| either pass 19 / 24 and 17 / 24; zero in both s32, 39, 42, 44, 50 and s30, 33, 36, 43, 46, 50, 52 | same seeds | reproduced |
+| deep rescues 4 of 9 (s41, 43, 46, 49) and 5 of 12 (s32, 41, 45, 48, 53), with the stated hit counts | same | reproduced |
+| confirmation 12 / 12, 7 / 7, 2 / 3 (s30), 5 / 5; rate ratios 0.83–1.12 and 1.06, 1.02 | same | reproduced |
+| part 1 11,206 hits, part 2 114; no draw rescued by part 2; required@8 77 hits in s36, 38, 40, 52; 76 targets ever hit | same | reproduced |
+| reductio: 45 (draw, target) pairs, 31 distinct targets, only `nand_neg` / `negimp_to_pos`, 0 on 8-line-or-longer schemata; 387 of s49's 453 on one target | same | reproduced |
+| frozen@256: depth-3 9 draws > 0 (max 27), reductio s39 1, s40 1, s47 13, s49 5 | same | reproduced |
+| derived-ORE oracle: 363 → 25 required (3 / 16 / 3 / 3), 0 inconsistencies; loose derived-ORE 4 hits in 2 draws | same | reproduced |
+| self-check: 211 depth-3 + 137 reductio distinct pattern proofs, 0 failures | same counts with my verifier loop and predicates; plus all 10,479 stored non-pattern proofs | reproduced |
+| predictors: loss −0.10 / 0.02; first-half 0.04 / 0.14; among generalisers 0.53 / 0.49; NEGI −0.74, either-pass −0.62; AS −0.45 | same to two decimals (mine: 0.03 for reductio loss) | reproduced |
+| first-half rates and E7 ratios (min 21 / 16) | min 20 / 16 with `n_tried` rather than `n_parsed` as denominator; **not re-derivable beyond the verified subset** (R0) | consistent |
+| thresholds: rate ≥ 10⁻⁵ depth-3 7 / 24, ≥ 10⁻⁴ 4 / 24 | on the 2M denominator, yes; on part 1 alone (the same 600k budget as reductio) 9 / 24 and 6 / 24 — the 1.4M part-2 samples that hit almost nothing dilute the depth-3 rate 3.3× | reproduced; denominator matters |
+| ignition stratum "depth-3 10 / 16" | 10 / 16 pools four training sets; on this run's recipe (`f0_a1`) it is 5 / 10 | reproduced; not disclosed |
+| gate 0: own first pod after the pre-registration commit; the flagged pod is run 2's | `~/pods.log`: r33a 05:23:43, commit 05:16:17 | confirmed |
+| spend ≈ 28 pod-hours ≈ $14; pods deleted; bucket holds 72 checkpoints, artefacts, data | pod-log start times match; no `r33*` pod on the account at 13:50 UTC; bucket lists 72 checkpoints, 144 coverage files, 7 data files | confirmed |
+| all expectation marks (E1–E7, DA1–DA5) | same marks | reproduced |
+
+Every number in the write-up reproduces. The executor's E-marks are honest, including the two large misses (derived-ORE 18–24 → 0; first-half
+ρ > 0.5 → 0.04 / 0.14), and the NEGI correlation is labelled exploratory with its either-pass weakening reported.
+
+**Where my reading differs from `run3-3.md`.**
+
+1. *"The full depth-3 pool changed nothing: 99 % of hits … lie in the 300 shortest"* and *"every reductio hit is on a 7-line target"* are
+   reported as two separate facts. They are one fact, and it is the main structure in the data: **all 12,219 main-pass pattern hits in
+   both classes are 7-line proofs (cap + 1)**, and 90 % of the depth-3 hits fall on the 173 targets whose 7-line proof needs depth 3 while the
+   depth-≤ 2 alternative is 8 lines (never sampled once on those targets). The write-up does not mention written length for depth-3.
+2. *"The pattern, not its class, sets the base rate"* and *"'or nothing' fits … every strict derived-ORE draw."* The derived-ORE pool has
+   **three** required targets inside the 7-line horizon (6,000 samples per draw, floor 1.7·10⁻⁴); the other 22 required ones are 8–10 lines,
+   where depth-3 (240 targets) and reductio (248 targets) also score exactly 0. On like-for-like targets depth-3 and reductio are tied at
+   12 / 24; derived-ORE has not been measured like-for-like. What does stand is the weaker statement in R3: strict derived-ORE is never chosen
+   when a same-length alternative exists (0 of 1.61M verified samples; depth-3 is chosen 1,132 times in 7 draws in the analogous stratum).
+3. The required@8 stratum result (4 / 24, 0.05–0.37) is given as a count without the consequence: on the stratum the *previous reviews asked
+   for*, depth-3 generalises in **fewer** draws than reductio does on its all-required pool (Fisher p = 0.03) — entirely because 136 of its
+   142 targets are 8-line. Any future "base rate on the required pool" must be quoted per minimum length.
+4. `deep45` is outcome-selected by sibling draws (R4); the either-pass depth-3 figure (19 / 24) is therefore a little more favourable to
+   depth-3 than reductio's 17 / 24 by construction. It does not change E2.
+
+## Verdict
+
+**The counts are right, the pre-registered test is decisive, and the run's discipline is good** (expectations and addendum committed before
+their jobs, a priori deep pools, honest ✗ marks, complete pulls, $14 of $50). E2 fails at n = 24 each; per the brief the base-level class
+claim is dropped, and clause (2)'s "or nothing" is a statement about a sampling budget for about a third of apparent zero-rate draws.
+
+Two conclusions in `run3-3.md` go past the data: the derived-ORE zero is read as a property of the pattern when the pool gives it three
+reachable required targets, and the dominant regularity — **pre-RL pattern proofs exist only at cap + 1 lines, in every class, in all 72
+draws** — is not stated. That regularity also re-reads earlier results: run 5's and the ignition study's "7-line entry" for reductio is not a
+property of `nand_neg`; it is where the base model's length reach ends. Whether a draw "generalises a pattern" is, in these data, whether it
+emits a valid proof one line past the cap that happens to need the pattern; no registered draw-level property predicts it, and the one
+post-hoc candidate (NEGI-line loss, ρ = −0.74 → −0.42 on independent samples) needs fresh draws.
+
+Standards: start-index-normalised counts ✓ (`coverage.py` normalises before counting; my recount agrees); expectations before the run ✓; splits
+disjoint by renaming class ✓; "every count reproducible from pulled files" ✓ for all hit counts, **✗ for first-half rates** (failures are not
+stored; a 1-in-100 sample of failed strings per target would fix it at negligible size). Frozen control, base reachability and two seeds do
+not apply (no RL; 24 seeds).
+
+## Next measurement
+
+One experiment, reusing the 72 bucket checkpoints, ≈ $5–8, no training:
+
+**Length-matched required pools, deep sampling.** For each class build a schema pool of **≥ 50 targets whose minimum proof is 7 lines and
+needs the pattern at bound 10**, and a second of ≥ 50 at **8 lines** (depth-3: the existing 173 + 136; reductio: the existing 52 + the
+8-line schemata; strict derived-ORE: new schema instances, since the generator yields only 3 — see the run-2 note that generator pools are
+mostly redundant). Sample all 24 draws per class at 20,000 per target. Pre-register: (a) 7-line generalisation fractions for the three
+classes with intervals — the first like-for-like class comparison; (b) the 8-line fraction, expected ≈ 0 / 24 in every class if the horizon
+reading is right, and > 0 somewhere if "7-line entry" is schema-specific; (c) NEGI-line loss vs the depth-3 7-line indicator, registered as
+ρ < −0.4, tested on these independent samples. If (b) is ≈ 0 everywhere, the follow-up that speaks to the SPAR question is a cap-7 Stage-1
+on the same seeds: does the horizon move to 8 lines (length reach is what RL has to elicit from) or stay at the schemata?
