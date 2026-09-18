@@ -100,6 +100,38 @@ def solved_names(d, pattern):
     return names
 
 
+def md_bullets(res):
+    """numbers.md-ready bullets (every number from the files named in each line)."""
+    L = []
+    R = res['reductio']
+    L.append(f"- Reductio pool `{R['pool']}` (345; strata 6 / 7 / 8 / 9 / 10 = " + ' / '.join(str(R['strata'][s]) for s in ('6', '7', '8', '9', '10')) + "; `data/r3_2/pool_report.json`); transfer `data/p2/transfer_reductio_req.jsonl` (150). Acquisition = targets with a normalised proof containing `patterns.reductio`, min-round rule; ignition = ≥ 10 targets of a stratum; violations = solved without the pattern.")
+    for grp, pre, lab in (('A', 'ei16_', 'arm A, 16 rounds × k = 32'), ('B', 'ei8k64_', 'arm B, 8 rounds × k = 64'), ('C', 'ei8_', 'arm C, zero-rate draws, 16 rounds × k = 32 (rounds 9–16 resumed from the round-8 checkpoint)'), ('F16', 'frozen16_', 'frozen controls, 16 × 32 attempts, no training'), ('F8', 'frozen8_', 'frozen controls, 8 × 32')):
+        arms = {n: m for n, m in R['arms'].items() if n.startswith(pre) and 'targets' in m}
+        if not arms:
+            continue
+        L.append(f"- {lab} (`artifacts/r3_2/<arm>/found_<last>.jsonl`, `round_*.json`):")
+        for n, m in sorted(arms.items()):
+            t = m['targets']; ps = t['per_stratum']
+            L.append(f"  - `{n}`: rounds {m['rounds']}, attempts {m['attempts']}; acquired **{t['acquired']} / {t['n']}** (per stratum 6 / 7 / 8 / 9 / 10: " + ' / '.join(str(ps[s]['acquired']) for s in ('6', '7', '8', '9', '10')) + "; first-proof round " + ' / '.join(str(ps[s]['first_round']) for s in ('6', '7', '8', '9', '10')) + "; ignition round " + ' / '.join(str(ps[s]['ignition_round']) for s in ('6', '7', '8', '9', '10')) + f"); violations {t['violations']}; transfer {m['transfer']['acquired']} / {m['transfer']['n']} (per stratum 7 / 8 / 9 / 10: " + ' / '.join(str(m['transfer']['per_stratum'][s]['acquired']) for s in ('7', '8', '9', '10')) + f"); heldout greedy {m['heldout_greedy'][-1]:.3f}; 8-line cumulative per round {ps['8']['cum_acquired']}")
+    for grp, v in R['ignition_summary'].items():
+        if v['n_arms']:
+            L.append(f"- Ignition {grp} ({v['n_arms']} arms): 6 / 7 / 8 / 9 / 10-line strata ignited in " + ' / '.join(str(v[s]['ignited_arms']) for s in ('6', '7', '8', '9', '10')) + " arms.")
+    for tag, c in R['coverage_six'].items():
+        L.append(f"- Six-line base rate {tag} (`{c['file']}`): {c['targets']} targets × 10⁴ = {c['samples']:,} samples; targets with a strict reductio proof **{c['targets_with_pattern_proof']} / 45**, hits {c['pattern_hits']:,} ({c['rate_per_sample']:.2e} per sample), solved within 256 {c['solved_within_256']}, solved without the pattern {c['solved_without_pattern']}.")
+    D = res['derived_ore_strict']
+    L.append(f"- Derived-ORE (**{D['label']}**) pool `{D['pool']}` (300), transfer (65); acquisition = targets with a `patterns.derived_ore_strict` proof.")
+    for n, m in sorted(D['arms'].items()):
+        if 'targets' in m:
+            L.append(f"  - `{n}`: acquired **{m['targets']['acquired']} / 300 ({m['targets']['acquired'] / 300:.3f})**, per round {m['targets']['cum_acquired']}, pattern proofs {m['targets']['pattern_proofs']}, violations {m['targets']['violations']}, transfer {m['transfer']['acquired']} / 65, heldout greedy {m['heldout_greedy'][-1]:.3f}")
+    for tag, c in D['coverage'].items():
+        L.append(f"  - base reachability {tag} (`{c['file']}`): **{c['targets_with_pattern_proof']} / 300** targets with a strict proof at pass@10⁴, {c['pattern_hits']:,} hits ({c['rate_per_sample']:.2e} per sample), {c['solved_within_256']} within 256, solved without the pattern {c['solved_without_pattern']}; top per-target hits {c['per_target_hits'][:6]}")
+    for tag, v in D['draws'].items():
+        L.append(f"  - draw {tag} (f = {v['f']:g}): base-reachable {v['base_reachable']}, EI {v['ei_acquired']} = {v['ei_base_reachable']} base-reachable + **{v['ei_only']} EI-only**, frozen {v['frozen_acquired']}; EI / base {v['ei_over_base']:.2f}, EI / frozen {v['ei_over_frozen']:.2f}")
+    for f, v in D['f_dial'].items():
+        L.append(f"  - f = {f}: EI " + ', '.join(f"{k.split('/')[-1]} {x:.3f}" for k, x in v['ei'].items()) + (f" (mean {v['ei_mean']:.3f})" if v['ei_mean'] is not None else '') + "; frozen " + ', '.join(f"{x:.3f}" for x in v['frozen'].values()))
+    return L
+
+
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--out', default='artifacts/r3_2/summary.json'); ap.add_argument('--figs', default='figures'); ap.add_argument('--no_figs', action='store_true')
     a = ap.parse_args()
@@ -144,27 +176,32 @@ def main():
         m = arm(d, 'derived_ore_strict', infoD, tinfoD)
         if m:
             D['arms']['r5/' + os.path.basename(d)] = m
-    covs = {'f0_c8_s0': 'artifacts/r5/cov_derived_ore_strict_f0_c8_s0_req.s0.jsonl', 'f0_c8_s1': 'artifacts/r5/cov_derived_ore_strict_f0_c8_s1_req.s0.jsonl',
-            'f0_c8_s2': 'artifacts/r3_2/cov_dore_f0_c8_s2.s0.jsonl', 'f0_c8_s3': 'artifacts/r3_2/cov_dore_f0_c8_s3.s0.jsonl'}
+    covs = {'f0_c8_s0': 'artifacts/r5/cov_derived_ore_strict_f0_c8_s0_req.s0.jsonl', 'f0_c8_s1': 'artifacts/r5/cov_derived_ore_strict_f0_c8_s1_req.s0.jsonl'}
+    for tag in ('f0_c8_s2', 'f0_c8_s3', 'f0_c8_s4', 'f0_c8_s5', 'f0.001_c8_s0', 'f0.001_c8_s1', 'f0.01_c8_s0', 'f0.01_c8_s1'):
+        covs[tag] = f'artifacts/r3_2/cov_dore_{tag}.s0.jsonl'
     for tag, fn in covs.items():
         c = coverage(fn, 'derived_ore_strict')
-        if c:
+        if c and c['targets'] == 300:
             D['coverage'][tag] = c
     # EI acquisition vs base reachability for the f = 0 draws (EI-only = acquired but not base-reachable at 1e4)
-    D['f0_draws'] = {}
+    D['draws'] = {}
     pairs = {'f0_c8_s0': ('artifacts/r5/ei_derived_ore_strict_f0_c8_s0_req', 'artifacts/r5/frozen_derived_ore_strict_f0_c8_s0_req'),
              'f0_c8_s1': ('artifacts/r5/ei_derived_ore_strict_f0_c8_s1_req', 'artifacts/r5/frozen_derived_ore_strict_f0_c8_s1_req'),
-             'f0_c8_s2': ('artifacts/r3_2/ei_dore_f0_c8_s2', 'artifacts/r3_2/frozen_dore_f0_c8_s2'), 'f0_c8_s3': ('artifacts/r3_2/ei_dore_f0_c8_s3', 'artifacts/r3_2/frozen_dore_f0_c8_s3')}
+             'f0.01_c8_s0': ('artifacts/r5/ei_derived_ore_strict_f0.01_c8_s0_req', 'artifacts/r5/frozen_derived_ore_strict_f0.01_c8_s0_req'),
+             'f0.01_c8_s1': ('artifacts/r5/ei_derived_ore_strict_f0.01_c8_s1_req', 'artifacts/r5/frozen_derived_ore_strict_f0.01_c8_s1_req')}
+    for tag in ('f0_c8_s2', 'f0_c8_s3', 'f0_c8_s4', 'f0_c8_s5', 'f0.001_c8_s0', 'f0.001_c8_s1'):
+        pairs[tag] = (f'artifacts/r3_2/ei_dore_{tag}', f'artifacts/r3_2/frozen_dore_{tag}')
     for tag, (ei, fr) in pairs.items():
         if tag in D['coverage'] and glob.glob(f'{ei}/round_*.json'):
             reach = set(D['coverage'][tag]['reachable_names']); got = solved_names(ei, 'derived_ore_strict')
             frn = solved_names(fr, 'derived_ore_strict') if glob.glob(f'{fr}/round_*.json') else set()
             r = len(reach)
-            D['f0_draws'][tag] = {'base_reachable': r, 'ei_acquired': len(got), 'ei_acq': len(got) / 300, 'ei_base_reachable': len(got & reach), 'ei_only': len(got - reach),
-                                  'frozen_acquired': len(frn), 'ei_over_base': len(got) / r if r else None, 'ei_over_frozen': len(got) / len(frn) if frn else None,
-                                  'base_rate_per_sample': D['coverage'][tag]['rate_per_sample'], 'source': [ei, fr, D['coverage'][tag]['file']]}
+            D['draws'][tag] = {'f': float(tag.split('_')[0][1:]), 'base_reachable': r, 'ei_acquired': len(got), 'ei_acq': len(got) / 300, 'ei_base_reachable': len(got & reach), 'ei_only': len(got - reach),
+                               'frozen_acquired': len(frn), 'frozen_only': len(frn - reach), 'ei_over_base': len(got) / r if r else None, 'ei_over_frozen': len(got) / len(frn) if frn else None,
+                               'base_rate_per_sample': D['coverage'][tag]['rate_per_sample'], 'source': [ei, fr, D['coverage'][tag]['file']]}
+    D['f0_draws'] = {k: v for k, v in D['draws'].items() if v['f'] == 0}
     D['f_dial'] = {}
-    for f, names in ((0, ['r5/ei_derived_ore_strict_f0_c8_s0_req', 'r5/ei_derived_ore_strict_f0_c8_s1_req', 'ei_dore_f0_c8_s2', 'ei_dore_f0_c8_s3']),
+    for f, names in ((0, ['r5/ei_derived_ore_strict_f0_c8_s0_req', 'r5/ei_derived_ore_strict_f0_c8_s1_req', 'ei_dore_f0_c8_s2', 'ei_dore_f0_c8_s3', 'ei_dore_f0_c8_s4', 'ei_dore_f0_c8_s5']),
                      (0.001, ['ei_dore_f0.001_c8_s0', 'ei_dore_f0.001_c8_s1']), (0.01, ['r5/ei_derived_ore_strict_f0.01_c8_s0_req', 'r5/ei_derived_ore_strict_f0.01_c8_s1_req'])):
         vals = {n: D['arms'][n]['targets']['acquired'] / 300 for n in names if n in D['arms']}
         frs = {n: D['arms'][n.replace('ei_', 'frozen_').replace('r5/ei_', 'r5/frozen_')]['targets']['acquired'] / 300 for n in names if n.replace('ei_', 'frozen_').replace('r5/ei_', 'r5/frozen_') in D['arms']}
@@ -188,14 +225,17 @@ def main():
             print(f"  {name:44s} r{m['rounds']} acq {m['targets']['acquired']:3d}/300 ({m['targets']['acquired'] / 300:.3f}) viol {m['targets']['violations']} per-round {m['targets']['cum_acquired']} transfer {m.get('transfer', {}).get('acquired')}/65")
     for tag, c in D['coverage'].items():
         print(f"  cov {tag}: base-reachable {c['targets_with_pattern_proof']}/300 hits {c['pattern_hits']} rate {c['rate_per_sample']:.2e} within256 {c['solved_within_256']} solved-without {c['solved_without_pattern']}")
-    for tag, v in D['f0_draws'].items():
-        print(f"  f0 draw {tag}: base {v['base_reachable']} EI {v['ei_acquired']} (= {v['ei_base_reachable']} base-reachable + {v['ei_only']} EI-only) frozen {v['frozen_acquired']} EI/base {v['ei_over_base']} EI/frozen {v['ei_over_frozen']}")
+    for tag, v in D['draws'].items():
+        print(f"  draw {tag}: base {v['base_reachable']} EI {v['ei_acquired']} (= {v['ei_base_reachable']} base-reachable + {v['ei_only']} EI-only) frozen {v['frozen_acquired']} EI/base {v['ei_over_base']} EI/frozen {v['ei_over_frozen']}")
     for f, v in D['f_dial'].items():
         print(f"  f = {f}: EI {v['ei']} frozen {v['frozen']}")
-    print('wrote', a.out)
+    with open(a.out.replace('.json', '_numbers.md'), 'w') as f:
+        f.write('\n'.join(md_bullets(res)) + '\n')
+    print('wrote', a.out, 'and', a.out.replace('.json', '_numbers.md'))
     if a.no_figs:
         return
     import matplotlib; matplotlib.use('Agg'); import matplotlib.pyplot as plt
+    from matplotlib.lines import Line2D
     os.makedirs(a.figs, exist_ok=True)
     COL = {'6': '#8c8a85', '7': '#2a78d6', '8': '#eb6834', '9': '#4fa36b', '10': '#9b59b6'}
     A = [n for n in R['arms'] if n.startswith('ei16_') and 'targets' in R['arms'][n]]
@@ -220,18 +260,20 @@ def main():
         fig.suptitle('Reductio required pool (345): cumulative acquisition per length stratum, 16 rounds', fontsize=10)
         fig.tight_layout(); fig.savefig(f'{a.figs}/r3_2_strata.png', dpi=160)
     # derived-ORE: EI acquisition vs base reachability, f as marker
-    if D['f0_draws'] or D['f_dial']:
-        fig, ax = plt.subplots(figsize=(5.2, 4))
-        MK = {'0': 'o', '0.001': 's', '0.01': '^'}
-        for tag, v in D['f0_draws'].items():
-            ax.scatter([v['base_reachable'] / 300], [v['ei_acq']], marker='o', s=70, color='#2a78d6', zorder=4)
-            ax.scatter([v['base_reachable'] / 300], [v['frozen_acquired'] / 300], marker='o', s=50, facecolors='none', edgecolors='#2a78d6', zorder=4)
-            ax.annotate(tag.replace('f0_c8_', 's'), (v['base_reachable'] / 300, v['ei_acq']), textcoords='offset points', xytext=(5, 3), fontsize=7)
+    if D['draws'] or D['f_dial']:
+        fig, ax = plt.subplots(figsize=(5.4, 4.2))
+        MK = {'0': 'o', '0.001': 's', '0.01': '^'}; FC = {'0': '#2a78d6', '0.001': '#7aa6db', '0.01': '#eb6834'}
+        for tag, v in D['draws'].items():
+            fk = f"{v['f']:g}"
+            ax.scatter([v['base_reachable'] / 300], [v['ei_acq']], marker=MK[fk], s=70, color=FC[fk], zorder=4)
+            ax.scatter([v['base_reachable'] / 300], [v['frozen_acquired'] / 300], marker=MK[fk], s=50, facecolors='none', edgecolors=FC[fk], zorder=4)
+            ax.annotate(tag.replace('_c8_', ' '), (v['base_reachable'] / 300, v['ei_acq']), textcoords='offset points', xytext=(5, 3), fontsize=6.5)
+        ax.legend(handles=[Line2D([], [], marker=MK[k], color=FC[k], lw=0, label=f'f = {k} (filled EI, open frozen)') for k in MK], fontsize=7, frameon=False, loc='upper left')
         xs = [0, 0.3]; ax.plot(xs, xs, color='#b4b2ad', lw=1, ls=':'); ax.plot(xs, [2 * x for x in xs], color='#d9d7d2', lw=1, ls=':'); ax.plot(xs, [0.5 * x for x in xs], color='#d9d7d2', lw=1, ls=':')
         ax.set_xlabel('base strict reachability at pass@10⁴ (fraction of 300)'); ax.set_ylabel('EI acquisition after 8 rounds (fraction of 300)')
-        ax.set_title('strict derived ORE, cap 8 (not a submission result): f = 0 draws', fontsize=9)
+        ax.set_title('strict derived ORE, cap 8 (not a submission result): EI vs base reachability', fontsize=9)
         ax.spines[['top', 'right']].set_visible(False); ax.grid(color='#e8e7e3', lw=0.6); ax.set_axisbelow(True)
-        ax.set_xlim(0, max(0.15, max([v['base_reachable'] / 300 for v in D['f0_draws'].values()] + [0.1]) * 1.3)); ax.set_ylim(0, None)
+        ax.set_xlim(0, max(0.15, max([v['base_reachable'] / 300 for v in D['draws'].values()] + [0.1]) * 1.3)); ax.set_ylim(0, None)
         fig.tight_layout(); fig.savefig(f'{a.figs}/r3_2_dore_base.png', dpi=160)
         fig, ax = plt.subplots(figsize=(5.2, 3.6))
         for f, v in D['f_dial'].items():
