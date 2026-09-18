@@ -132,4 +132,16 @@ rounds and the pass@10⁴ samples of its igniting draws are pulled, or at $45.
 
 ## Amendments
 
-(none yet)
+- **A1, 2026-09-18 19:00 UTC — optional-pool pre-RL sample added (not yet run when written).** Reason: the brief's 3.2M
+  reference (10 / 16 non-zero, rates 0–1.9·10⁻³) is on the ignition study's pool — the first 300 of `data/p2/targets_depth3.jsonl`
+  (7 / 8 lines: 166 / 134; depth-3 optional; 44 of its classes are also in the required pool) — so a like-for-like E1 / E2 needs the
+  same sample from the new draws: `coverage.py --in data/p2/targets_depth3.jsonl --limit 300 --k 2000 --temperature 0.8 --seed 0`
+  per draw → `artifacts/r3_4b/optcov_depth3_<size>_s<seed>.s0.jsonl`. **What I had already seen when writing this:** all six
+  first-schedule models miss the E5 gate (0.885–0.891); the three 25M `req` arms are 0 / 300 after 8 rounds; the required-pool
+  samples in progress have 0 verified proofs; the writing diagnostic (log.md 18:55) shows the larger models open a third box and
+  exceed 6 lines *less* often than the 3.2M draws. **Expectation given that:** non-zero draws on the optional pool **≤ 1 of 3 at
+  25M and 0 of 3 at 85M** (3.2M: 10 / 16), every rate < 2.5·10⁻⁴ — i.e. the brief's E1 / E2 fail in the direction opposite to
+  the one it guarded against. Wrong if ≥ 2 of 3 are non-zero at either size.
+- **A2, same time — E6 (`mix`) stands as written, but for the record my guess after the diagnostic is lower:** I now expect
+  ≤ 1 of 3 to ignite on `mix` at 85M (the models write ≤ 6 lines in 95–99 % of samples and the neighbours need 7–8), and I would
+  not be surprised by 0 of 6. The pre-registered E6 (≥ half) is what gets scored.
