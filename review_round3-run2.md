@@ -174,7 +174,7 @@ lines, and the 10 EI / base / EI-only decompositions. I found no differing value
 | 24 | "per-run probability ≈ 0.2 in 16 rounds" | 2 / 11 = 0.18 mixes 8-round B arms in; sixteen-round arms 2 / 8 = 0.25, Wilson 95 % 0.07–0.59; two of the non-igniting arms were still rising at the stop | **needs the interval and the denominator**; "≈ 0.2" reads more exact than 2 events allow |
 | 25 | "derived-ORE amplification is proportional to base reachability on average — f raises the base rate, not the multiplier" | EI / base by f: 0.78–2.15 (mean 1.30, n = 6), 1.08–1.26 (n = 2), 1.33–1.47 (n = 2); base reach 9–27 / 34–37 / 36–43 | reproduces as description; the pre-registration said that E4 outside 0.5–2 × means "'amplification in proportion to the base rate' is dropped" — s4 is at 2.15. The write-up reports the miss but keeps the clause softened ("a trend, not a per-draw law") rather than dropping it; see §Verdict |
 | 26 | "the multiplier varies 0.8–2.2 × between draws of equal reachability" | at r = 26–27 (five draws) the multiplier is 0.89–1.67; 0.78 is s3 (r = 9) and 2.15 is s4 (r = 20) | **reword**: "0.9–1.7 × at equal reachability (r = 26–27), 0.8–2.2 × over all f = 0 draws" |
-| 27 | spend ≈ 9.4 pod-hours ≈ $4.7 | queue logs span 05:17–08:3x on r32a / r32b and end ≈ 07:55 on r32c, consistent with 3.35 + 3.35 + 2.67 h × $0.50; balance attribution to foreign pods not checkable by me | consistent; within the $50 budget and the $8 estimate |
+| 27 | spend ≈ 9.4 pod-hours ≈ $4.7 | r32a / r32b queue logs span 05:17–08:33 UTC, consistent with 3.35 h each; r32c's queue logs were not pulled (its 18 job logs and done markers were), so its 2.67 h rests on `log.md`; balance attribution to foreign pods not checkable by me | consistent; within the $50 budget and the $8 estimate |
 | 28 | bucket paths | `hf buckets ls`: `round3-run2/{artifacts,ckpts,data}` exist; `ckpts/r3_2` holds the 19 EI final checkpoints + 5 Stage-1 draws | reproduces ("21 trained arms" in `numbers.md` should read 17 EI arms / 19 checkpoints) |
 
 Gate 0 and misses: expectations were committed (05:13:01 UTC) before the first job (05:17:50 UTC). E1, E3 and the E4 band / EI-only misses are reported as misses in
@@ -211,8 +211,8 @@ write-up reports its own misses.
 **What is not supported as written.**
 - *Stratum* as the unit of ignition. Acquisition above 7 lines is schema-complete in every case: 54 = `contraposition_conv` 27 / 27 + `neg_both` 26 / 26 + `chain_neg` 1 / 1;
   27 = `neg_both` 26 / 26 + 1; both 25s = `chain_neg` 25 / 25; the "1 eight-liner" of four other arms is the single 8-line `chain_neg`; `consequentia_cond`, `nand_to_imp`,
-  `excluded_middle`, `negcond_ante` (26 each) are 0 in all 11 arms. "The 8-line stratum ignites with probability p" should be "a schema ignites", with 2 of 5 large 8-line
-  schemata ever acquired. The "7 → 8 crossing … then the 9-line stratum follows" narrative is one schema family (`chain_neg`) spanning 8–9 lines. This is the pre-registered
+  `excluded_middle`, `negcond_ante` (26 each) are 0 in all 11 arms. "The 8-line stratum ignites with probability p" should be "a schema ignites", with 2 of the 5 large 8-line
+  schemata ever acquired in full (a third, `neg_to_contra`, at 2 / 26 in one arm at its last round). The "7 → 8 crossing … then the 9-line stratum follows" narrative is one schema family (`chain_neg`) spanning 8–9 lines. This is the pre-registered
   per-schema report and it belongs in `numbers.md`.
 - "Amplification proportional to base reachability on average." By the run's own falsifier (any kept draw outside 0.5–2 ×) the clause was to be dropped; s4 (kept) is at
   2.15 ×. The 0.81 correlation is between-f and one low draw; within the five comparable f = 0 draws it is absent (r = −0.50, EI 24–45 at base 20–27). What the data
