@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # round3-run4b: run sampler jobs strictly one after another on this pod (one coverage.py holds 23-25 GB). On the pod: bash pod/r3_4b/seq.sh <name> "<job>" "<job>" ...
-# job = "<kind> <tag> <seed> <batch>", kind in: opt (optional pool, 600k) | rev (required pool, reverse half) | fwd (required pool, forward) | e4 / e4r (pass@10^4 fwd / reverse)
+# job = "<kind> <tag> <seed> <batch>", kind in: opt (optional pool, 600k) | rev (required pool, reverse half) | fwd (required pool, forward) | e4 / e4r (pass@10^4 fwd / reverse) | e4s (pass@10^4, 5th field = shard i/n)
 cd /workspace/nd-takehome; mkdir -p artifacts/r3_4b/q
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True OMP_NUM_THREADS=1 MKL_NUM_THREADS=1
 NAME=$1; shift
@@ -11,6 +11,7 @@ NAME=$1; shift
       rev) python3 coverage.py --ckpt $CK --in data/r3_1/depth3_req.jsonl --out artifacts/r3_4b/cov_depth3_$T --k 2000 --temperature 0.8 --batch $B --seed 0 --reverse --procs 8 >> $Q/covrev_$T.log 2>&1 && touch $Q/covrev_$T.done;;
       fwd) python3 coverage.py --ckpt $CK --in data/r3_1/depth3_req.jsonl --out artifacts/r3_4b/cov_depth3_$T --k 2000 --temperature 0.8 --batch $B --seed 0 --procs 8 >> $Q/cov_$T.log 2>&1 && touch $Q/cov_$T.done;;
       e4)  python3 coverage.py --ckpt $CK --in data/r3_1/depth3_req.jsonl --out artifacts/r3_4b/cov1e4_depth3_$T --k 10000 --temperature 0.8 --batch $B --seed 1 --procs 16 >> $Q/cov1e4_${T}_sh0.log 2>&1 && touch $Q/cov1e4_${T}_sh0.done;;
+      e4s) python3 coverage.py --ckpt $CK --in data/r3_1/depth3_req.jsonl --out artifacts/r3_4b/cov1e4_depth3_$T --k 10000 --temperature 0.8 --batch $B --seed 1 --shard $5 --procs 16 >> $Q/cov1e4_${T}_sh${5%/*}of${5#*/}.log 2>&1 && touch $Q/cov1e4_${T}_sh${5%/*}of${5#*/}.done;;
       e4r) python3 coverage.py --ckpt $CK --in data/r3_1/depth3_req.jsonl --out artifacts/r3_4b/cov1e4_depth3_$T --k 10000 --temperature 0.8 --batch $B --seed 1 --reverse --procs 16 >> $Q/cov1e4_${T}_sh0r.log 2>&1 && touch $Q/cov1e4_${T}_sh0r.done;;
     esac; echo "$(date -u +%FT%TZ) finished $job"
   done; echo "$(date -u +%FT%TZ) SEQ DONE" ) > artifacts/r3_4b/q/seq_$NAME.log 2>&1 < /dev/null &

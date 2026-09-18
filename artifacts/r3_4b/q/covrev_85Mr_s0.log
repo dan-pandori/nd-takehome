@@ -1,0 +1,66 @@
+shard 0/1: 300 theorems, 0 already done; k=2000 T=0.8 batch=1000
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/coverage.py", line 138, in <module>
+    main()
+  File "/workspace/nd-takehome/coverage.py", line 95, in main
+    outs = generate_ids(model, tok, [pid] * b, greedy=False, temperature=a.temperature, max_new=a.max_new, gen=gen)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/sample.py", line 26, in generate_ids
+    logits = model(idx, pos=pos, mask=mask, caches=caches)[:, -1]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 92, in forward
+    x = b(x, cos, sin, mask, None if caches is None else caches[i])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 56, in forward
+    x = x + self.attn(self.ln1(x), cos, sin, mask, cache)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 42, in attn
+    cache['k'] = k.new_empty(B, self.h, cache['max'], D // self.h)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.25 GiB. GPU 0 has a total capacity of 44.42 GiB of which 760.56 MiB is free. Process 688 has 23.41 GiB memory in use. Including non-PyTorch memory, this process has 20.26 GiB memory in use. Of the allocated memory 19.87 GiB is allocated by PyTorch, and 80.69 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+shard 0/1: 300 theorems, 0 already done; k=2000 T=0.8 batch=1000
+d3req_299: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (8s; 1 done, 8s/thm, ETA 40 min)
+d3req_298: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (14s; 2 done, 11s/thm, ETA 56 min)
+d3req_297: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (8s; 3 done, 10s/thm, ETA 50 min)
+d3req_296: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (12s; 4 done, 11s/thm, ETA 52 min)
+d3req_295: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (5s; 5 done, 9s/thm, ETA 46 min)
+d3req_294: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (6s; 6 done, 9s/thm, ETA 43 min)
+d3req_293: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (11s; 7 done, 9s/thm, ETA 44 min)
+d3req_292: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (10s; 8 done, 9s/thm, ETA 45 min)
+d3req_291: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (12s; 9 done, 10s/thm, ETA 47 min)
+d3req_290: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (18s; 10 done, 10s/thm, ETA 51 min)
+d3req_289: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (11s; 11 done, 10s/thm, ETA 50 min)
+d3req_288: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (7s; 12 done, 10s/thm, ETA 49 min)
+d3req_287: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (9s; 13 done, 10s/thm, ETA 48 min)
+d3req_286: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (8s; 14 done, 10s/thm, ETA 47 min)
+d3req_285: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (10s; 15 done, 10s/thm, ETA 47 min)
+d3req_284: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (4s; 16 done, 10s/thm, ETA 45 min)
+d3req_283: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (10s; 17 done, 10s/thm, ETA 45 min)
+d3req_282: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (8s; 18 done, 10s/thm, ETA 45 min)
+d3req_281: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (8s; 19 done, 9s/thm, ETA 44 min)
+d3req_280: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (7s; 20 done, 9s/thm, ETA 43 min)
+d3req_279: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (8s; 21 done, 9s/thm, ETA 43 min)
+d3req_278: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (12s; 22 done, 9s/thm, ETA 43 min)
+d3req_277: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (7s; 23 done, 9s/thm, ETA 43 min)
+d3req_276: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (8s; 24 done, 9s/thm, ETA 42 min)
+d3req_275: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (6s; 25 done, 9s/thm, ETA 42 min)
+d3req_274: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (9s; 26 done, 9s/thm, ETA 41 min)
+d3req_273: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (8s; 27 done, 9s/thm, ETA 41 min)
+d3req_272: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (7s; 28 done, 9s/thm, ETA 41 min)
+d3req_271: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (7s; 29 done, 9s/thm, ETA 40 min)
+d3req_270: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (9s; 30 done, 9s/thm, ETA 40 min)

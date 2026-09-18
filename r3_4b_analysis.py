@@ -43,6 +43,8 @@ def cov(fn):
     if not os.path.exists(fn):
         return None
     c = coverage_stats(fn, PAT)
+    if not c['n_targets']:
+        return None
     return {'file': fn, 'n_targets': c['n_targets'], 'n_tried': c['n_tried'], 'hits': c['hits_pattern'], 'rate': c['rate_pattern'],
             'targets_with_pattern': c['targets_with_pattern'], 'pattern_targets': sorted(t['name'] for t in c['per_target']),
             'distinct_pattern_proofs': c['distinct_pattern_proofs'], 'frozen256_pattern_theorems': c['frozen256_pattern_theorems'],

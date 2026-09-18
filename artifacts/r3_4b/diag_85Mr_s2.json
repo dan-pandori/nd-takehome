@@ -1,0 +1,103 @@
+{
+ "ckpt": "ckpts/r3_4b/stage1_depth3_f0_a1_85Mr_s2.pt",
+ "n_targets": 60,
+ "k": 64,
+ "temperature": 0.8,
+ "samples": 3840,
+ "verified": 0,
+ "ends_with_QED": 3840,
+ "written_max_depth_hist": {
+  "1": 3,
+  "2": 3831,
+  "3": 6
+ },
+ "frac_depth_ge3": 0.0015625,
+ "targets_with_a_depth3_attempt": 3,
+ "verified_depth_ge3": 0,
+ "lines_written_hist": {
+  "4": 15,
+  "5": 366,
+  "6": 3335,
+  "7": 124
+ },
+ "top_reasons": [
+  [
+   "rule check failed: IMPI (line #)",
+   678
+  ],
+  [
+   "rule check failed: ANDE# (line #)",
+   548
+  ],
+  [
+   "bad box cite (line #)",
+   522
+  ],
+  [
+   "rule check failed: ORI# (line #)",
+   401
+  ],
+  [
+   "final formula is not the conclusion",
+   312
+  ],
+  [
+   "rule check failed: IMPE (line #)",
+   252
+  ],
+  [
+   "rule check failed: R (line #)",
+   228
+  ],
+  [
+   "rule check failed: ANDI (line #)",
+   207
+  ]
+ ],
+ "depth_ge3_reasons": [
+  [
+   "depth jump at line #",
+   3
+  ],
+  [
+   "bad box cite (line #)",
+   3
+  ]
+ ],
+ "depth_ge3_lines_hist": {
+  "5": 5,
+  "6": 1
+ },
+ "depth_ge3_examples": [
+  {
+   "thm": " |- ( S > ( ( ~ ( ~ ( ~ R ) ) ) > ( ( ~ ( ~ R ) ) > P ) ) )",
+   "proof": "N54 | S : AS ; N55 | | ( ~ ( ~ ( ~ R ) ) ) : AS ; N56 | | | ( ~ ( ~ R ) ) : DN N55 ; N57 | | P : DN N56 ; N58 | ( ( ~ ( ~ ( ~ R ) ) ) > ( ( ~ ( ~ R ) ) > P ) ) : IMPI N55 N57 ; N59 ( S > ( ( ~ ( ~ ( ~ R ) ) ) > ( ( ~ ( ~ R ) ) > P ) ) ) : IMPI N54 N58 ; QED",
+   "verdict": "depth jump at line 56"
+  },
+  {
+   "thm": " |- ( ( ( S > R ) v ( P & R ) ) > ( S > R ) )",
+   "proof": "N2 | ( ( S > R ) v ( P & R ) ) : AS ; N3 | | S : AS ; N4 | | | R : AS ; N5 | ( S > R ) : IMPI N4 N4 ; N6 ( ( ( S > R ) v ( P & R ) ) > ( S > R ) ) : IMPI N2 N5 ; QED",
+   "verdict": "bad box cite (line 5)"
+  },
+  {
+   "thm": " |- ( ( ( S > R ) v ( P & R ) ) > ( S > R ) )",
+   "proof": "N59 | ( ( S > R ) v ( P & R ) ) : AS ; N60 | | S : AS ; N61 | | | R : AS ; N62 | ( S > R ) : IMPI N60 N61 ; N63 ( ( ( S > R ) v ( P & R ) ) > ( S > R ) ) : IMPI N59 N62 ; QED",
+   "verdict": "bad box cite (line 62)"
+  },
+  {
+   "thm": " |- ( ( ( S > R ) v ( P & R ) ) > ( S > R ) )",
+   "proof": "N58 | ( ( S > R ) v ( P & R ) ) : AS ; N59 | | S : AS ; N60 | | | R : AS ; N61 | ( S > R ) : IMPI N60 N60 ; N62 ( ( ( S > R ) v ( P & R ) ) > ( S > R ) ) : IMPI N58 N61 ; QED",
+   "verdict": "bad box cite (line 61)"
+  },
+  {
+   "thm": " |- ( ( ( S > R ) v ( P & R ) ) > ( S > R ) )",
+   "proof": "N36 | ( ( S > R ) v ( P & R ) ) : AS ; N37 | | S : AS ; N38 | | | R : ANDE2 N36 ; N39 | ( S > R ) : IMPI N37 N38 ; N40 ( ( ( S > R ) v ( P & R ) ) > ( S > R ) ) : IMPI N36 N39 ; QED",
+   "verdict": "depth jump at line 38"
+  },
+  {
+   "thm": " |- ( ( ~ ( ~ ( S v Q ) ) ) > ( R > ( P > ( R & ( S v Q ) ) ) ) )",
+   "proof": "N36 | ( ~ ( ~ ( S v Q ) ) ) : AS ; N37 | | R : AS ; N38 | | | ( P > ( R & ( S v Q ) ) ) : BOTE N37 ; N39 | ( R > ( P > ( R & ( S v Q ) ) ) ) : IMPI N37 N38 ; N40 ( ( ~ ( ~ ( S v Q ) ) ) > ( R > ( P > ( R & ( S v Q ) ) ) ) ) : IMPI N36 N39 ; QED",
+   "verdict": "depth jump at line 38"
+  }
+ ]
+}

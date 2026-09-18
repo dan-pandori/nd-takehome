@@ -1,0 +1,40 @@
+shard 0/1: 300 theorems, 0 already done; k=2000 T=0.8 batch=500
+d3req_0: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (12s; 1 done, 12s/thm, ETA 57 min)
+d3req_1: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (12s; 2 done, 12s/thm, ETA 59 min)
+d3req_2: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (12s; 3 done, 12s/thm, ETA 60 min)
+d3req_3: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (21s; 4 done, 14s/thm, ETA 71 min)
+d3req_4: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (20s; 5 done, 15s/thm, ETA 76 min)
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/coverage.py", line 138, in <module>
+    main()
+  File "/workspace/nd-takehome/coverage.py", line 95, in main
+    outs = generate_ids(model, tok, [pid] * b, greedy=False, temperature=a.temperature, max_new=a.max_new, gen=gen)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/sample.py", line 26, in generate_ids
+    logits = model(idx, pos=pos, mask=mask, caches=caches)[:, -1]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 92, in forward
+    x = b(x, cos, sin, mask, None if caches is None else caches[i])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 56, in forward
+    x = x + self.attn(self.ln1(x), cos, sin, mask, cache)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 42, in attn
+    cache['k'] = k.new_empty(B, self.h, cache['max'], D // self.h)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 656.00 MiB. GPU 0 has a total capacity of 44.42 GiB of which 291.25 MiB is free. Including non-PyTorch memory, this process has 9.85 GiB memory in use. Process 1373 has 20.34 GiB memory in use. Process 1401 has 13.93 GiB memory in use. Of the allocated memory 9.46 GiB is allocated by PyTorch, and 80.39 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
