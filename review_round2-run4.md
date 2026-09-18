@@ -163,3 +163,75 @@ above from `artifacts/r4/`, `artifacts/p2/ei_depth3_f0_*`, `artifacts/ign/cov_de
 Checkpoint provenance was read without torch from the 12 `.pt` files' stored `extra` dicts. Not re-derived: the
 greedy / pass@32 evaluations themselves (they need a GPU; I re-verified every proof the files contain but did not
 re-sample), pod spend, kill-switch timing, and the bucket contents beyond the listings above.
+
+## Compare (phase 2: `run4.md`, `numbers.md` §Round 2 — Run 4, `log.md`, `STATUS.md` §Run 4, `artifacts/r4/summary.json`, `figures/run4_grpo_vs_ei.png`, `QUESTIONS.md`)
+
+Gate 0: expectations R4-E1…E4 committed 23:07:23 UTC, first arm started 23:09:19 (met). The results-vs-expectations
+entry (log 01:45) scores E1 and E2 as wrong and E4 as met — honest; E3 is scored generously (below). The three
+bookkeeping losses (one arm at round-equivalent 7, one round-1 file from a killed duplicate, one arm re-run after
+its pod was deleted unpulled) are disclosed in `numbers.md` and `log.md`, and the files on disk are consistent with
+those accounts (mtimes, nesting, checkpoint `extra`). The figure is the recount's numbers (two label collisions at
+the right edge, cosmetic).
+
+One correction to my phase-1 table: for `g8_a2_s1` my "files rule" counted 475 depth-3 theorems and 1,392 distinct
+proofs because `found_1.jsonl` is the killed duplicate's and holds 28 proofs (3 depth-3 theorems) the surviving run
+never sampled. The surviving run's count — the executor's 472 / 790 pattern proofs, which my "round field" rule
+reproduces — is the right one; the same applies to that arm's written-length histogram (658 / 464, not 661 / 472).
+
+| claim (executor) | my independent value | verdict |
+|---|---|---|
+| per-arm depth-3 acquisition and solved at the last round-equivalent (12 arms, `numbers.md`) | identical in all 12 arms (`g8_a2_s1` with the round-field rule); pattern-proof counts, written-length histograms, per-round acquisition and solved lists, reward and variance-fraction lists, held-out greedy, transfer pass@32 and its depth-3 count: identical | **reproduced** |
+| EI references: 0.335 / 0.364 / 0.350 / 0.341 / 0.361 / 0.352, solved 645 / 698 / 589 / 652 / 605 / 583, per-round lists | identical (my predicate on my normalised proofs, min round per proof) | **reproduced** |
+| means: G = 8 0.474 (0.447–0.505), G = 32 0.426 (0.395–0.467), EI 0.351 | 0.4745 / 0.4257 / 0.3505 | **reproduced** |
+| "the first 32,000 samples already give 124–373 depth-3 theorems where expert iteration's first round gives 0–8" | 124–373 (the surviving `g8_a2_s1` run: 351); EI 0–7 | **reproduced** |
+| "groups of 8 beat groups of 32" | on all six draws, in acquisition (+31 to +77) and in solved (+50 to +89) | **reproduced** |
+| "held-out greedy falls from 0.87–0.95 to 0.34–0.67" | ends 0.340–0.672; already 0.73–0.91 at the first boundary; minimum 0.310 (`g32_a3_s0`, r7) | **reproduced** |
+| R4-E2 scored "wrong — the fraction of groups with reward variance starts at 0.31–0.51 and falls; it never rises" | at *step 1* it is 0.03–0.12, i.e. the pre-registered start (0.05–0.20) was right; it rises inside the first 1–2 round-equivalents to round means of 0.31–0.51 and then falls to 0.05–0.28. The verdict "wrong" stands (it does not end ≥ 0.4), the stated trajectory does not | **verdict right, description imprecise** |
+| R4-E3 "held at the top of the band (solved 691–819 vs EI 583–698)" | paired per draw, G = 8 / EI = 1.17, 1.32, 1.23, 1.23, 1.34 and 1.25 (a1 s0 at r7): 5 of 6 outside ±20 %; G = 32 / EI = 1.11–1.25, 1 of 6 outside | **mis-scored**: not met for G = 8 (GRPO solves more than the band allowed); comparing ranges instead of pairs hides it. No effect on the conclusion's direction |
+| R4-E4 "held in 12 / 12 (held-out greedy 0.34–0.67 at the end)" | the pre-registered criterion was "< 0.5 at some boundary": 2 of 12 arms meet it (both a3 s0); all 12 end 0.2–0.6 below Stage-1. The expectation ("≥ 1 of 12") is met either way | **met**; the "12 / 12" uses a looser criterion than the one registered |
+| `g8_a2_s1` "round_1.json … excluded from the per-round table" (`numbers.md`) | the per-round lists printed for that arm still carry the duplicate's round-1 values (329 depth-3, 605 solved, reward 0.38, variance 0.31); the surviving run's round-1 values from its own `round` field are 351 / 625 | **minor inconsistency**, one cell |
+| "on-policy, binary verifier reward, group-mean baseline, fixed loss divisor, no KL, one AdamW step per batch; 512 samples per step, 500 steps = 256,000 = EI's budget" | as implemented and as run (`args.json`, `round_<r>.json` samples, `extra` of the checkpoints); each target receives exactly 256 samples under both algorithms. The divisor and the clip are inert under Adam (grad norms ≤ 0.13) | **reproduced**; the inert knobs are worth a sentence |
+| "the arm is the algorithm as the sprint ran it" / "the difference must sit in the sprint's model, codec or targets" | not checkable here (no sprint code). See the verdict: the six draws are not zero-base-rate draws, so the run does not test the sprint's setting even if the algorithm matches | **unverifiable**, and the "must" overreaches |
+| transfer | `run4.md` gives no transfer comparison; `numbers.md` lists GRPO's boundary pass@32 without the EI counterpart. On like terms GRPO is ahead there too (last boundary 302–381 / 174–229 depth-3 vs EI's round-8 samples 206–241 / 125–140; unions 347–422 / 206–264 vs 304–337 / 179–193) | **omission**, in GRPO's favour |
+| base-model reachability | `run4.md` cites none. The six draws' Stage-1 depth-3 rates are 5·10⁻⁶ – 1.9·10⁻³ per sample (3 – 1,128 hits in 600k; 1–12 of 300 targets) — the ignition study's numbers, which the write-up should quote next to "crosses zero coverage" | **standards gap** (policy: a base-model number with every "RL solved X") |
+| spend | `STATUS.md` says run 4 ≈ $1.6, `numbers.md` ≈ $2.4 (p4 / p5 shared with run 3); both far inside $50 | **inconsistent by $0.8**, not re-derived |
+| bucket | `round2/run4/{artifacts/r4 (301 files), ckpts/r4 (12)}` present | **reproduced** (listing only) |
+
+### Verdict
+
+Every number in the write-up reproduces from the raw files with independent code, the implementation is what the
+brief asked for, and the losses are disclosed. The result is solid and the direction is not in doubt: at an equal
+sample budget on the same six Stage-1 draws, on-policy GRPO reaches the depth-3 pattern in the first 62 updates on
+every draw and ends 0.40–0.51 against expert iteration's 0.34–0.36, solving 11–34 % more targets, at the cost of
+the in-distribution model (held-out greedy 0.34–0.67 vs 0.90–0.95) — the expected price of no KL and no retained
+data.
+
+Two things the write-up says, or implies, that the data do not support:
+
+1. **"Crosses zero coverage" is the campaign's term for f = 0 in the supervised set, not for a zero prior.** All six
+   draws have a non-zero Stage-1 depth-3 rate (3 – 1,128 hits per 600k samples), and the acquired sets nest: on every
+   draw the EI arm's depth-3 theorems are, to within 1–3, a subset of the GRPO arm's, and the extra 89–144 are the
+   longer targets (oracle length 9–12). GRPO here is a faster and less conservative eliciter of a prior that is rare
+   but present — exactly the "rare-but-known" side of the project's question — and it tells us nothing yet about
+   igniting from a true zero. The run-3 / ignition-study draws with **0** hits in 600k (depth-3 a1 s5, reductio s1 /
+   s2) are the ones that would test that, and they were not run under GRPO.
+2. **The sprint contrast is not settled.** "GRPO saw nothing" in the sprint may be a property of a zero-prior model
+   (the 85M / relative-codec draw), of its targets, or of the algorithm; this run removes only the third possibility
+   *for non-zero priors*. The sentence "the difference must sit in the sprint's model, codec or targets" should be
+   "…or in the base rate of its draw".
+
+Smaller points: R4-E3 should be scored as not met for G = 8 (paired ratios, not ranges); R4-E2's description should
+say the signal starts at 0.03–0.12, peaks within two round-equivalents and then decays; the one duplicate-run cell
+should be replaced by the survivor's 351 / 625; the write-up should carry the six base rates and an EI transfer
+column; and the two spend figures should agree.
+
+### Next measurement
+
+GRPO on the zero-base-rate draws, same recipe and budget: depth-3 a1 s5 (0 hits in 600k; EI never ignited by round
+8 without injection), reductio s1 and s2 (0 valid samples of any kind at Stage-1), G = 8, two sampling seeds each
+(≈ 6 × 15 min on one RTX 3090, ≈ $1). Expected if run 4's reading is right: 0 pattern theorems throughout (the
+group-mean baseline has no gradient when every group is all-zero; the variance fraction stays 0). If any of them
+ignites, GRPO differs from EI in kind, not only in rate, and the sprint's negative needs a different explanation.
+A second, cheap variant that would separate "faster" from "different": EI on the same six draws with the update
+applied every 512 samples (one fine-tuning step per batch on the verified samples, no retained data) — if that
+matches GRPO's curves, the gain is update frequency, not the policy gradient.
