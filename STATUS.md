@@ -15,6 +15,11 @@ Started 2026-09-17 22:50 UTC (executor). Pre-registration `preregistration/run1-
 
 ## Done
 - 22:57 pre-registration committed and pushed.
+- 23:29 Step 1: `nd2lean.py` + agreement table (`artifacts/r1/agreement.md`): 181,464 / 181,464 verifier-accepted proofs
+  Lean-accepted; 0 / 4,000 mutation disagreements; the only semantic divergence is Lean's `¬A ≡ A → False` (handcrafted cases).
+- 01:20 Step 2: Qwen3-Coder-30B in-context, 236 theorems × 3 forms × 5 draws: greedy tokens 0.201 / lean 0.547 / english 0.225;
+  paired lean − tokens +0.347 [+0.300, +0.393], flat across lengths; english − tokens +0.025 [−0.012, +0.061].
 
 ## Running on pods
-(none yet)
+- r1-a100 (A100-SXM4-80GB, $1.59 / h, created 23:02): step-3 scale ladder Qwen3 0.6B → 32B on the 208 class theorems
+  (0.6B done 01:18, 0 / 208), then the Coder-30B token-format extra. Judged on the VPS as each model finishes.
