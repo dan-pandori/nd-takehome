@@ -48,7 +48,7 @@ def relabel(prompt, proof):
     if not lines or cur:
         return None
     last = lines[-1]
-    if last[1] == '|':
+    if len(last) < 2 or last[1] == '|':   # a bare ';' line (seen in ladder-A T3 s0 round 6) is not a proof line
         return None
     try:
         form = ' '.join(last[1:last.index(':')])

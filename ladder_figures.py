@@ -29,9 +29,9 @@ def solve_by_L(summ, pool, out):
             continue
         col = GREY if rung == 'frozen' else CAT[rung]
         for r in by_rung[rung]:
-            ys = [100 * (r[pool]['bins'][L]['rate'] or 0) for L in BINS]
+            ys = [100 * (r[pool]['bins'][str(L)]['rate'] or 0) for L in BINS]
             ax.plot(BINS, ys, color=col, linewidth=1.0, alpha=0.5, linestyle='--' if rung == 'frozen' else '-')
-        mean = [100 * sum((r[pool]['bins'][L]['rate'] or 0) for r in by_rung[rung]) / len(by_rung[rung]) for L in BINS]
+        mean = [100 * sum((r[pool]['bins'][str(L)]['rate'] or 0) for r in by_rung[rung]) / len(by_rung[rung]) for L in BINS]
         ax.plot(BINS, mean, color=col, linewidth=2, marker='o', markersize=6, linestyle='--' if rung == 'frozen' else '-', label=f"{LABEL[rung]} (n seeds = {len(by_rung[rung])})")
     ax.set_xlabel('true minimal length L_true (minlen.py, bound 14, restricted space)', color=INK2)
     ax.set_ylabel(f'{pool} theorems solved (%), 256 attempts', color=INK2)
@@ -66,8 +66,8 @@ def reach(summ, out):
     fig, ax = plt.subplots(figsize=(8, 3.8)); _style(ax)
     arms = [a for a, r in summ.items() if r['transfer'].get('reachability')]
     xs = range(len(arms))
-    el = [summ[a]['transfer']['reachability']['8']['elicit_1e-5'] if '8' in summ[a]['transfer']['reachability'] else summ[a]['transfer']['reachability'][8]['elicit_1e-5'] for a in arms]
-    sc = [summ[a]['transfer']['reachability'].get('8', summ[a]['transfer']['reachability'].get(8))['scored'] for a in arms]
+    el = [summ[a]['transfer']['reachability']['8']['elicit_1e-5'] for a in arms]
+    sc = [summ[a]['transfer']['reachability']['8']['scored'] for a in arms]
     cr = [s - e for s, e in zip(sc, el)]
     ax.bar(xs, el, color='#86b6ef', width=0.6, label='elicitation (base p ≥ 1e-5)')
     ax.bar(xs, cr, bottom=el, color='#2a78d6', width=0.6, label='creation (base p < 1e-5)', edgecolor='white', linewidth=2)

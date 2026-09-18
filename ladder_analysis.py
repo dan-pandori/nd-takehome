@@ -12,7 +12,15 @@ L_true >= L, base-reachability split of the counted proofs (p >= 1e-5: elicitati
 import argparse, json, os, sys, glob, collections, math
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from normalize import norm
-from eval_set import wilson
+
+
+def wilson(k, n, z=1.96):
+    if n == 0:
+        return 0.0, 0.0
+    p = k / n; d = 1 + z * z / n
+    c = (p + z * z / (2 * n)) / d
+    h = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
+    return max(0.0, c - h), min(1.0, c + h)
 
 RUNGS = {'frozen': 'frozen control', 'T1': 'EI baseline', 'T2': 'EI + difficulty-weighted sampling', 'T3': 'EI + hindsight relabelling',
          'T4': 'EI + moving target window', 'T5': 'EI + precursor injection', 'T6': 'EI + sibling ensemble (2 x k=16)'}

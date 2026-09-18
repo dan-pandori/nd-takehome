@@ -192,6 +192,9 @@ def main():
             x = json.loads(l); found[x['name']].append({k: x[k] for k in ('proof', 'norm', 'written', 'pruned', 'round')})
         for l in open(f'{out}/found_transfer_{r0}.jsonl'):
             x = json.loads(l); found_t[x['name']].append({k: x[k] for k in ('proof', 'norm', 'written', 'pruned', 'round')})
+        if a.relabel and os.path.exists(f'{out}/relabelled_{r0}.jsonl'):
+            for l in open(f'{out}/relabelled_{r0}.jsonl'):
+                x = json.loads(l); relabelled[x['thm']] = x
         al = json.load(open(f'{out}/alloc_{r0}.json'))
         tried.update(al['tried']); okc.update(al['accepted'])
         if not a.no_train:
