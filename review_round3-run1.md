@@ -178,3 +178,116 @@ met by s21 (151 / 300k = 5.0·10⁻⁴ at r6, 2.0·10⁻⁵ at r8) and, at the t
 5. **Held-out greedy** (of 5,000, r8) is highest in the igniting `mix` arms (depth-3 s23: 4,702 vs 4,418 for its `req`
    arm; reductio s21: 4,527 vs 4,496) and within ± 60 of the `req` arm's value everywhere else (lowest relative
    value: depth-3 s25 `drift` 4,410 vs `req` 4,467). I have no pre-RL held-out number per draw in the artefacts.
+
+## Comparison with the executor's write-up (phase 2)
+
+Read after the §Recount commit (c3f6f09): `round3_run1.md`, `numbers.md` §Round 3 run 1, `log.md` §round3-run1,
+`STATUS.md`, `QUESTIONS.md`.
+
+| # | claim (where) | my independent value | verdict |
+|---|---|---|---|
+| 1 | n₀ = 6 of 8 depth-3, 5 of 8 reductio; per-draw hits 0 0 2 0 26 0 0 0 and 0 0 0 0 1 0 6 16 per 600k; targets 1, 3 / 1, 2, 1 (numbers) | same | reproduces |
+| 2 | frozen@256: 0 everywhere except depth-3 s24 (2), reductio s27 (1) | same | reproduces |
+| 3 | pools: 300 / 100 / 300 / 600 depth-3, 300 / 150 / 300 / 600 reductio; alternative 9 / 10 / none = 288 / 1 / 11; neighbour lengths 178 / 72 / 50; 0 overlaps | same (7/7 178, 7/8 72, 8/8 50 follows from my 250 / 50 and 178 / 122) | reproduces; the candidate-stage numbers (472 None of 1,200, 614, 1,264, 759) are **not re-derived** — I did not re-run `minlen.py` / `intuit.py`; the logs agree with the files |
+| 4 | all 11 zero-rate `req` arms 0 / 300 without ever training | 0 found records, `mix_rl_records` 0, no checkpoint | reproduces |
+| 5 | non-zero `req`: depth-3 0 and 5 targets; reductio 0, 0, one ignition (r7, 33) | s22 0, s24 5; s24 0, s27 0, s26 r7 33 | reproduces |
+| 6 | depth-3 `mix`: 3 of 6 zero-rate ignite, rounds 2, 4, 4, 239–255 targets; per-round vectors (numbers) | s26 r2 239, s21 r4 241, s23 r4 255; all eight vectors identical | reproduces |
+| 7 | reductio `mix`: 1 of 5 (s21, r5, 52, "the two 7-line schemata"); non-zero 3 of 3 (r3, 5, 6; 52–53) | same; `nand_neg` 26 + `negimp_to_pos` 25 + 1 `chain_neg` | reproduces |
+| 8 | "First pattern proofs followed ≥ 49 solved neighbours" / "after 49–109 neighbours were solved" | 49 (s22), 62, 64, 74, 109; reductio 53–90 | reproduces as a count — but see rewording 1: in four of the five igniting depth-3 arms some of the neighbours solved *before* the first required proof were solved **with depth-3 proofs** |
+| 9 | 0 required targets solved without the pattern in 48 arms | 0 (also 0 in all coverage files) | reproduces |
+| 10 | 32,769 counted proofs re-verify (25,309 + 7,460) | 25,309 and 7,460 raw pattern records on required targets, per-arm numbers identical; I verified all 227,870 raw records, 0 failures | reproduces |
+| 11 | drift tables (hits and targets at r2 / 4 / 6 / 8, excluded counts) | identical in all 60 files; excluded counts match my own per-round count | reproduces |
+| 12 | "4 of 6 zero-rate depth-3 drift arms reach ≥ 3 hits at some checkpoint (up to 114)"; numbers: 1 of 6 at the r8 checkpoint | same | reproduces; both readings are disclosed (log deviation 9). numbers.md's verdict "held" should read "held under one reading, missed under the other" |
+| 13 | reductio drift: s21 151 / 300k on 8 targets at r6, 6 at r8; s22 4; other three ≤ 1 | same | reproduces |
+| 14 | Fisher p = 0.55 for 3 / 6 vs 1 / 5 | 0.545 | reproduces |
+| 15 | neighbour floor miss: depth-3 s25 35 % | 106 / 300 = 35.3 % | reproduces, reported as a miss |
+| 16 | held-out greedy r8 per arm | same numerators (e.g. 4,702 / 5,000 = 0.940) | reproduces |
+| 17 | spend 13.3 pod-hours ≈ $6.5; pods deleted 08:54 | four creations in `~/pods.log` 05:16–05:46; no `r31*` pod in `podls` at 09:20; hours × $0.49 not independently metered | consistent; cost **not derivable** by me beyond that |
+| 18 | bucket `…/round3-run1/{artifacts,ckpts,data}` | the three prefixes exist (listed 09:20); contents not diffed | consistent |
+| 19 | gate 0: prereg 05:09:48 before first pod 05:16:09; amendment before any `mix` / `drift` arm | same; amendment commit 05:50:37, first `mix` `round_1.json` 06:00:10 | reproduces |
+
+Expectations were written before the run, every miss I found is reported as a miss by the executor (E2 non-zero
+clause, E4 "both pools", E5 reductio, the 40 % floor, n₀ above range), and the nine deviations in `log.md` cover
+everything I noticed independently (A40s instead of 3090s, co-scheduling, s26 reductio drift not sampled, the
+two readings of E5). No hard-constraint violation.
+
+## Verdict
+
+**What stands.** Every number in `round3_run1.md` and `numbers.md` §Round 3 run 1 that I could recount reproduces
+exactly. The three empirical findings stand as counts:
+
+- On the required-only pool, no zero-rate draw of either pattern gets a single proof (0 of 11), and only 1 of 5
+  non-zero draws ignites; on the mixed pool 4 of 11 zero-rate and 5 of 5 non-zero draws ignite. The strongest form of
+  this is one the write-up does not use: over all 16 draws, `req` 1 / 16 vs `mix` 9 / 16 (Fisher two-sided
+  p = 0.006); non-zero draws alone 1 / 5 vs 5 / 5 (p = 0.048). The zero-rate subset alone is 0 / 11 vs 4 / 11
+  (p = 0.09), and its `req` half could hardly have come out otherwise: with no reward there is no training step, so a
+  `req` arm is 76,800 more samples from a model that gave 0 in 600,000. Pool composition decides ignition; that
+  conclusion rests on 16 draws, two patterns, and is safe.
+- Reductio s21 is a clean case of a pattern absent at 0 / 600k appearing under training that never rewarded it: the
+  neighbour stratum holds no strict-reductio and no `DN`-of-`NEGI` proof before ignition in any `mix` arm, the drift
+  arm logged 0 exclusions because there was nothing to exclude, and the required-pool rate still reached
+  5·10⁻⁴.
+- No required target was ever solved off-pattern; the oracle labels held against 27.6 M coverage samples and the ≈ 4.9 M samples of the 48 arms.
+
+**What must be reworded.**
+
+1. *"300 pattern-free neighbours" and "With neighbours both patterns ignite from zero" (depth-3).* The depth-3
+   neighbours are pattern-optional, and the models used the option. In all three zero-rate igniters the first
+   depth-3 proof is on a neighbour target, a round before the first required one, and the igniting arms end with
+   depth-3 proofs of 82–102 neighbour targets — all of them rewarded and trained on. One of the three, **s26, is
+   not a zero-rate draw for the pattern at all**: the untouched Stage-1 model writes 22 depth-3 proofs on 3–4
+   neighbour targets in the 19,200 round-1 samples of its `mix` and `drift` arms (≈ 1.1·10⁻³ per sample; the
+   non-zero draw s24 gives 40). It is zero-rate on the required pool only. s21 and s23 are 0 / 19,200 on
+   neighbours at round 1 and get their first neighbour depth-3 proof at round 2, after one round on flat proofs.
+   So the depth-3 `mix` result is "the pattern is first rewarded where it is optional and cheap, then carries to
+   where it is required" — a ladder through pattern-*bearing* neighbours in 3 of 3 cases, and from a non-zero
+   neighbour base rate in 1 of 3. "Drift: the prior moves before any pattern proof is rewarded" is true of the
+   `drift` arms and of reductio `mix`; it is not what happened in depth-3 `mix`. numbers.md has the column
+   ("neighbours solved with pattern" 98 / 92 / 102) but neither file says which came first.
+2. *"The asymmetry was the pools: expert iteration composes an absent pattern only through rewarded neighbours."*
+   Supported: neighbours are sufficient to produce ignition and their absence sufficient to prevent it, in both
+   classes. Not supported: that the class asymmetry is thereby explained away. With the pools as built the two
+   classes were not given the same kind of neighbour — depth-3 neighbours could carry the pattern and did;
+   reductio neighbours could not (2 of 300 have a reductio shortest proof; 0 were found before ignition). And the
+   outcomes differ in extent: depth-3 igniters acquire 239–255 of 300 required targets, reductio igniters 52–53 of
+   300 — exactly the two schemata (`nand_neg`, `negimp_to_pos`) whose proof is a rewarded NEGI-closing neighbour
+   proof plus one appended `DN` line, the shape the 05:50 amendment selected for. The other 14 schemata (248
+   targets, reductio embedded in a longer proof, 8–10 lines) stay at 0–1 in every arm. "Only" also needs a
+   qualifier: one non-zero draw (reductio s26) ignited on `req`.
+   Suggested: "Pool composition is sufficient to switch ignition on and off in both classes (1 / 16 vs 9 / 16).
+   For reductio the composed step is one appended `DN` on two of 16 schemata; for depth-3 the neighbours rewarded
+   the pattern itself before any required target was solved."
+3. *"Clause (2) dies by its drift criterion (two zero-rate reductio arms reached ≥ 10⁻⁵)."* By the letter, yes.
+   By weight: s21 carries it (151 hits on 8 targets at r6, and the same Stage-1 draw is the one `mix` igniter, so
+   the `mix` and `drift` evidence is one draw, not two); s22 is 4 hits on a single target at one checkpoint
+   (1.3·10⁻⁵, at the threshold) and 1 at the next. "One draw clearly, a second at threshold" is what the counts
+   say. The result does not need more than that, but the sentence should not read as two independent arms of equal
+   strength.
+4. *"Clause (3) dies as pre-registered."* Correct as a statement about the pre-registered criterion. It should say
+   that the criterion's `req` half was close to guaranteed for zero-rate draws (see above) and lean on the
+   16-draw comparison instead.
+5. *Hit counts.* Rates per 300k are dominated by single targets (112 of 112 on one target; 533 of 667; 96 of 151)
+   and fall back to 0 at the next checkpoint in several arms. The write-up says "bursty" and the tables carry
+   target counts; the figure and any rate quoted without its target count should carry the same caveat. "Up to
+   114" is 2 targets.
+
+**What is not supported.** Nothing in the write-up is contradicted by the files. The one reading I would not let
+through is the design paragraph's symmetric description of the two neighbour pools as pattern-free, because the
+answer paragraph's mechanism ("composes an absent pattern … through rewarded neighbours", "the prior moves before
+any pattern proof is rewarded") depends on it for depth-3, and for depth-3 the run contains no arm that tests it:
+`mix` rewarded depth-3 proofs on neighbours, `drift` excluded them everywhere and then never offered a required
+target to the trained model as a training target.
+
+**The next measurement.** One arm settles the depth-3 mechanism: `mix` with `--exclude_pattern depth3` applied
+to the **neighbour stratum only** (a depth-3 proof of a required target is trained on, a depth-3 proof of a
+neighbour is dropped) on the six zero-rate draws, same seeds, 8 rounds. If s21 and s23 still ignite, depth-3
+composes through genuinely pattern-free neighbours, as reductio s21 did; if only `mix`-as-run ignites, the depth-3
+ladder is the pattern's own non-zero rate on easier targets, and the class asymmetry survives in a new form
+(reductio can be composed from pattern-free parts by one appended step; depth-3 was only ever amplified). The
+change is a per-record stratum test in the exclusion filter; six arms ≈ 3.5 pod-hours ≈ $2. Pre-RL depth-3 rate on
+the *neighbour* pool (k = 2,000 × 300, the same 600k as on the required pool) for all eight draws should go with
+it, so that "zero-rate" is defined on the pool the ladder starts from. For reductio, the executor's proposed 16
+more seeds (`mix` only) answers "is 1 / 5 narrower than 3 / 6"; the complementary question raised here — does the
+ladder reach beyond append-`DN` — needs neighbours for the 8–10-line schemata (the embedded reductio box minus its
+`DN`, as intermediate rather than final line) and the per-schema table, which should be in every reductio result
+from now on.
