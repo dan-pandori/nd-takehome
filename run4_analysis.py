@@ -85,9 +85,9 @@ def main():
     cov = {s: coverage(s) for s in draws}
     summary = {'ignition_threshold': IGN, 'arms': arms, 'coverage': cov}
     # console table
-    print(f"{'arm':44s} {'draw':4s} {'kind':6s} {'G':>3s} {'lr':>5s} {'ign':>4s} {'acq':>6s} {'thms':>5s} {'solved':>6s} {'xfer':>6s} {'H8':>6s} {'var1':>6s} {'varL':>6s} {'1stpat':>6s} {'ignU':>5s}")
+    print(f"{'arm':44s} {'draw':4s} {'kind':6s} {'G':>3s} {'lr':>5s} {'rnds':>4s} {'ign':>4s} {'acq':>6s} {'thms':>5s} {'solved':>6s} {'xfer':>6s} {'H8':>6s} {'var1':>6s} {'varL':>6s} {'1stpat':>6s} {'ignU':>5s}")
     for name, p in sorted(arms.items(), key=lambda x: (x[1]['draw'], x[1]['kind'], x[1]['G'] or 0, x[1]['lr'] or '', x[1]['seed2'])):
-        print(f"{name:44s} {p['draw']:<4d} {p['kind']:6s} {str(p['G'] or '-'):>3s} {str(p['lr'] or '-'):>5s} {str(p['ignition_round']):>4s} {p['acq']:6.3f} {p['acq_theorems']:5d} {p['targets_solved']:6d} {p['transfer_acq']:6.3f} {p['heldout_greedy_by_round'][-1]:6.3f} "
+        print(f"{name:44s} {p['draw']:<4d} {p['kind']:6s} {str(p['G'] or '-'):>3s} {str(p['lr'] or '-'):>5s} {p['rounds']:4d} {str(p['ignition_round']):>4s} {p['acq']:6.3f} {p['acq_theorems']:5d} {p['targets_solved']:6d} {p['transfer_acq']:6.3f} {p['heldout_greedy_by_round'][-1]:6.3f} "
               f"{p.get('var_frac_update1', float('nan')):6.3f} {p.get('var_frac_last40', float('nan')):6.3f} {str(p.get('first_pattern_update', '-')):>6s} {str(p.get('ignition_update', '-')):>5s}")
     for s in draws:
         c = cov[s]
