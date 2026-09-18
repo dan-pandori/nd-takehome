@@ -4,6 +4,7 @@
 set -e
 cd /workspace/nd-takehome
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export OMP_NUM_THREADS=${OMP_NUM_THREADS:-1} MKL_NUM_THREADS=1   # pods have a ~13-CPU cgroup quota on a 256-core host; torch defaults to 256 threads
 TAG=$1; S=$2; FTLR=$3; B=$4; STAGES=${5:-cov,ei,frozen}
 CK=ckpts/r3_4a/stage1_reductio_f0_b1_$TAG.pt
 A=artifacts/r3_4a
