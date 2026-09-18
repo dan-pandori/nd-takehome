@@ -132,7 +132,7 @@ rounds and the pass@10⁴ samples of its igniting draws are pulled, or at $45.
 
 ## Amendments
 
-- **A1, 2026-09-18 19:00 UTC — optional-pool pre-RL sample added (not yet run when written).** Reason: the brief's 3.2M
+- **A1, 2026-09-18 18:58 UTC — optional-pool pre-RL sample added (not yet run when written).** Reason: the brief's 3.2M
   reference (10 / 16 non-zero, rates 0–1.9·10⁻³) is on the ignition study's pool — the first 300 of `data/p2/targets_depth3.jsonl`
   (7 / 8 lines: 166 / 134; depth-3 optional; 44 of its classes are also in the required pool) — so a like-for-like E1 / E2 needs the
   same sample from the new draws: `coverage.py --in data/p2/targets_depth3.jsonl --limit 300 --k 2000 --temperature 0.8 --seed 0`

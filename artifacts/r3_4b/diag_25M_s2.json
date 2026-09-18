@@ -1,0 +1,84 @@
+{
+ "ckpt": "ckpts/r3_4b/stage1_depth3_f0_a1_25M_s2.pt",
+ "n_targets": 60,
+ "k": 64,
+ "temperature": 0.8,
+ "samples": 3840,
+ "verified": 0,
+ "ends_with_QED": 3840,
+ "written_max_depth_hist": {
+  "1": 19,
+  "2": 3819,
+  "3": 2
+ },
+ "frac_depth_ge3": 0.0005208333333333333,
+ "targets_with_a_depth3_attempt": 2,
+ "verified_depth_ge3": 0,
+ "lines_written_hist": {
+  "3": 1,
+  "4": 1,
+  "5": 324,
+  "6": 3297,
+  "7": 217
+ },
+ "top_reasons": [
+  [
+   "rule check failed: ORI# (line #)",
+   681
+  ],
+  [
+   "rule check failed: ANDE# (line #)",
+   541
+  ],
+  [
+   "rule check failed: IMPI (line #)",
+   514
+  ],
+  [
+   "bad box cite (line #)",
+   388
+  ],
+  [
+   "rule check failed: DN (line #)",
+   337
+  ],
+  [
+   "final formula is not the conclusion",
+   278
+  ],
+  [
+   "rule check failed: ANDI (line #)",
+   268
+  ],
+  [
+   "rule check failed: IMPE (line #)",
+   250
+  ]
+ ],
+ "depth_ge3_reasons": [
+  [
+   "depth jump at line #",
+   1
+  ],
+  [
+   "bad line cite (line #)",
+   1
+  ]
+ ],
+ "depth_ge3_lines_hist": {
+  "5": 1,
+  "6": 1
+ },
+ "depth_ge3_examples": [
+  {
+   "thm": " |- ( ( ~ ( ~ ( S v Q ) ) ) > ( R > ( P > ( R & ( S v Q ) ) ) ) )",
+   "proof": "N59 | ( ~ ( ~ ( S v Q ) ) ) : AS ; N60 | | R : AS ; N61 | | | ( R & ( S v Q ) ) : DN N59 ; N62 | ( R > ( P > ( R & ( S v Q ) ) ) ) : IMPI N60 N61 ; N63 ( ( ~ ( ~ ( S v Q ) ) ) > ( R > ( P > ( R & ( S v Q ) ) ) ) ) : IMPI N59 N62 ; QED",
+   "verdict": "depth jump at line 61"
+  },
+  {
+   "thm": " |- ( R > ( ( S v Q ) > ( ( S v P ) > ( R & ( S v Q ) ) ) ) )",
+   "proof": "N39 | R : AS ; N40 | | ( S v Q ) : AS ; N41 | | | ( S v P ) : AS ; N42 | | ( R & ( S v Q ) ) : ANDI N39 N41 ; N43 | ( ( S v Q ) > ( ( S v P ) > ( R & ( S v Q ) ) ) ) : IMPI N40 N42 ; N44 ( R > ( ( S v Q ) > ( ( S v P ) > ( R & ( S v Q ) ) ) ) ) : IMPI N39 N43 ; QED",
+   "verdict": "bad line cite (line 42)"
+  }
+ ]
+}
