@@ -267,3 +267,21 @@
 | same, first translator (box-cite end ignored; NEGI = IMPI): Lean-accepted among verifier-rejected | 61 / 121 (box cite wrong end 54 / 117; NEGI-for-IMPI 7 / 4) | `agree_mut_heldout.jsonl`, `agree_mut_rl_targets.jsonl` (log.md 23:05) |
 | handcrafted divergences: Lean accepts, verifier rejects | 8 of 10 cases: `¬A` ≡ `A → False` unfolding (NEGE / IMPE / IMPI / NEGI / DN / R across the two spellings: 6), PR after a non-PR line, non-consecutive line indices; both reject: PR lines in the wrong order (type mismatch), proof ending inside a box | `agree_handcrafted.jsonl` |
 | Lean check cost on the VPS (2 vCPU, 100 theorems per file) | train 154,990 proofs in 17.7 min | `agree_sweep.log` |
+
+### Step 2 — in-context surface forms, Qwen3-Coder-30B-A3B-Instruct (vLLM 0.29, bf16, A100-80GB; `artifacts/r1/gen_coder30b.jsonl` raw, `judged_coder30b.jsonl` judged, `summary.json` = `r1_analysis.py`; prompts `data/r1/prompts.jsonl` = `r1_prompts.py`, theorems `data/r1/theorems.jsonl`, examples `data/r1/examples.jsonl`)
+| number | value | source |
+|---|---|---|
+| theorems / forms / draws / prompts; outputs per prompt | 236 (val-36 + 200 transfer, 20 per generating length 7–16) / 3 / 5 / 3,540; 1 greedy + 8 samples at T = 0.7, max 2,048 new tokens | `data/r1/prompt_stats.json`, `gen_coder30b.log` (7,150 s) |
+| greedy accuracy, mean over 5 draws: tokens / lean / english | **0.201 / 0.547 / 0.225** | `summary.json` `step2.by_form` |
+| pass@1 (mean of 8 samples) / pass@8: tokens; lean; english | 0.202 / 0.290; 0.538 / 0.654; 0.219 / 0.300 | same |
+| lenient (formula parentheses repaired, `nd2lean.repair_proof`; secondary): tokens greedy / pass@8; english greedy / pass@8 | 0.214 / 0.303; 0.258 / 0.340 | same, `*_len` |
+| per-draw greedy: tokens d0–d4; lean d0–d4; english d0–d4 | 0.182 0.220 0.182 0.220 0.199; 0.542 0.572 0.483 0.547 0.593; 0.186 0.233 0.216 0.263 0.229 | `step2.by_form_draw` |
+| greedy by stratum (val-36 ≤ 6 / val-36 > 6 / L7–8 / L9–11 / L12–16): tokens; lean; english | 0.500 / 0.208 / 0.165 / 0.187 / 0.186; 0.850 / 0.617 / 0.525 / 0.540 / 0.508; 0.483 / 0.275 / 0.195 / 0.193 / 0.214 | `step2.by_form_group` |
+| **paired lean − tokens, greedy, all 236 theorems (bootstrap over theorems, 10⁴)** | **+0.347 [+0.300, +0.393]** | `step2.delta` |
+| lean − tokens by stratum, greedy: val-36 ≤ 6 / > 6 / L7–8 / L9–11 / L12–16 | +0.350 [+0.167, +0.550] / +0.408 [+0.233, +0.575] / +0.360 [+0.255, +0.470] / +0.353 [+0.267, +0.443] / +0.322 [+0.252, +0.392] | same |
+| lean − tokens, pass@8, all; lenient greedy, all | +0.364 [+0.317, +0.410]; +0.334 [+0.287, +0.381] | same |
+| english − tokens, greedy / pass@8 / lenient greedy | +0.025 [−0.012, +0.061] / +0.010 [−0.030, +0.049] / +0.044 [+0.008, +0.079] | same |
+| greedy failure reasons, tokens (of 943 failures): bad line cite / NEGE rule / bad box cite / parse / premise block / ORI1 / ORE / ANDI / IMPI | 132 / 130 / 116 / 76 / 65 / 55 / 44 / 41 / 36 | `step2.greedy_failure_reasons` |
+| greedy failures that are format-only (parse or no proof found): tokens / english; lean failures = type errors (no forbidden tokens, no tactics) | 105 / 943; 258 / 914; lean 342 type mismatch + 63 parse of 535 | `judged_coder30b.jsonl` |
+| outputs hitting the 2,048-token limit (greedy): tokens / lean / english | 19 / 25 / 52 of 1,180 each | same, `greedy_finish` |
+| accepted Lean proofs' vocabulary (all outputs): fun / And.intro / Or.inl / Or.elim / Or.inr / False.elim / Classical.not_not.mp / Classical.em | 4,196 / 990 / 596 / 411 / 344 / 335 / 197 / 20 | `judged_coder30b.jsonl` (log.md 00:11) |

@@ -274,3 +274,21 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   `nd_verify`), shown on 6 handcrafted cases; bookkeeping-only rules (PR placement, line numbering) diverge too. E1 held
   (100 % ⇒ direction; the 2–8 % predicted for the ⇐ direction was 3 % / 6 % with the first translator and 0 % after the
   two tightenings, which are conventions about what a box cite means rather than logic).
+- 23:49  Step 2, draw 0 judged (`artifacts/r1/judged_coder30b_partial.jsonl`, first 600 records: english 236, lean 236, tokens 128
+  in prompt order): greedy accuracy **lean 0.542**, english 0.186, tokens 0.180 (tokens on its first 128 theorems only);
+  pass@8 0.631 / 0.233 / 0.273. Far larger than the pre-registered +0.10. Failure reasons in the ND forms are mostly
+  Fitch bookkeeping (bad line / box cites, NEGE argument order) plus formatting slips (a missing outer parenthesis pair,
+  bare `¬P`): a deterministic formula-repair re-parse (`nd2lean.repair_proof`, secondary "lenient" metric, strict stays
+  primary as pre-registered) lifts english to 0.225 / tokens to 0.188 greedy — the Lean lead is not a syntax artefact.
+  Lean failures are type mismatches (wrong proof), not syntax. Balance $110.40 at 23:42 (all pods on the account).
+- 23:52  Extra queued behind the scale ladder (`pod/r1_gen_scale2.sh`): Coder-30B on the 208 class theorems in the *token*
+  format (the exact task RL solved), k = 16 + greedy — a direct "was it reachable in-context in the same format" number.
+- 01:12  Step 2 generation done (7,150 s for 3,540 prompts × 9 outputs on the A100; ≈ $3.2). Judged incrementally on the
+  VPS (`r1_judge.py --resume`; 10,620 Lean checks in batches of 40). Scale ladder started automatically (0.6B done 01:18).
+- 01:20  Step 2 result (`numbers.md` §Run 1 step 2, `figures/run1_forms.png`, `run1_delta.png`): greedy tokens **0.201**,
+  lean **0.547**, english 0.225; paired lean − tokens **+0.347 [+0.300, +0.393]**, flat across strata (+0.32 … +0.41), the
+  same at pass@8 (+0.364) and under the lenient re-parse (+0.334); english − tokens +0.025 [−0.012, +0.061]. E2 was wrong in
+  magnitude (I said +0.10, with the gain concentrated on long proofs): the gain is 3.5× larger and does not grow with
+  length. E2's pass@8 − greedy prediction (0.15–0.25) was also too high: +0.09 / +0.11 / +0.075. The token-form
+  failures are Fitch bookkeeping (line / box cites 248 of 943, NEGE argument order 130, premise block 65), not syntax
+  (105 parse failures); Lean failures are type errors. Balance $296 at 01:19 (Dan topped up).
