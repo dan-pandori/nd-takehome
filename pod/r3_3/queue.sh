@@ -15,8 +15,8 @@ if [ -n "$POOLS_OVERRIDE" ]; then NP=""; for pool in $POOLS; do for t in $POOLS_
 train_one() { s=$1; CK=ckpts/r3_3/stage1_${TAG}_s$s.pt; L=artifacts/r3_3/train_${TAG}_s$s.log
   if [ -f "$CK" ] && grep -q '^saved' "$L" 2>/dev/null; then echo "skip train $s"; return; fi
   echo "$(date -u +%FT%TZ) train $TAG s$s start"
-  python -u train.py --data $DATA --heldout data/p2/heldout.jsonl --mode abs --steps 6000 --bs 128 --cap 6 --seed $s --out $CK > $L 2>&1
-  echo "$(date -u +%FT%TZ) train $TAG s$s rc=$? $(tail -c 300 $L | grep -o 'val [0-9.]*' | tail -1)"; }
+  python -u train.py --data $DATA --heldout data/p2/heldout.jsonl --mode abs --steps 6000 --bs 128 --cap 6 --seed $s --out $CK > $L 2>&1; rc=$?
+  echo "$(date -u +%FT%TZ) train $TAG s$s rc=$rc $(grep -o 'val [0-9.]*' $L | tail -1)"; }
 train_worker() { for s in $*; do train_one $s; done; }
 A=""; B=""; i=0; for s in $SEEDS; do if [ $((i%2)) = 0 ]; then A="$A $s"; else B="$B $s"; fi; i=$((i+1)); done
 if [ -z "$SKIP_TRAIN" ]; then train_worker $A & train_worker $B & wait; fi
@@ -26,8 +26,8 @@ for pool in $POOLS; do P=${pool%%:*}; F=${pool#*:}
     N=$(wc -l < $F); [ -f "$CK" ] || { echo "MISSING $CK"; continue; }
     if [ -f "$OUT.s0.jsonl" ] && [ "$(wc -l < $OUT.s0.jsonl)" = "$N" ]; then echo "skip cov $s $P"; continue; fi
     echo "$(date -u +%FT%TZ) cov $TAG s$s $P start"
-    python -u coverage.py --ckpt $CK --in $F --k 2000 --temperature 0.8 --batch 2000 --procs 4 --seed 0 --out $OUT > artifacts/r3_3/cov_${TAG}_s${s}_$P.log 2>&1
-    echo "$(date -u +%FT%TZ) cov $TAG s$s $P rc=$? records $(wc -l < $OUT.s0.jsonl)"
+    python -u coverage.py --ckpt $CK --in $F --k 2000 --temperature 0.8 --batch 2000 --procs 4 --seed 0 --out $OUT > artifacts/r3_3/cov_${TAG}_s${s}_$P.log 2>&1; rc=$?
+    echo "$(date -u +%FT%TZ) cov $TAG s$s $P rc=$rc records $(wc -l < $OUT.s0.jsonl)"
   done
 done
 echo "$(date -u +%FT%TZ) QUEUE DONE $TAG"; touch artifacts/r3_3/QUEUE_DONE_$TAG
