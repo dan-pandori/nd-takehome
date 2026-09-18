@@ -1,0 +1,743 @@
+{
+ "arm": "ei16_reductio_f0.1_s1_ss0",
+ "args": {
+  "init": "ckpts/p2/stage1_reductio_f0.1_s1.pt",
+  "targets": "data/r3_2/targets_reductio_req6.jsonl",
+  "transfer": "data/p2/transfer_reductio_req.jsonl",
+  "heldout": "data/p2/heldout.jsonl",
+  "train": "data/p2/train_reductio_f0.1.jsonl",
+  "rounds": 16,
+  "k": 32,
+  "temperature": 0.8,
+  "seed": 0,
+  "no_train": false,
+  "start_round": 1,
+  "resume_found": null,
+  "max_per_thm": 4,
+  "retain": 20000,
+  "batch": 768
+ },
+ "rounds": 16,
+ "attempts_per_target": 512,
+ "round_seeds": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16
+ ],
+ "round_ckpts_first_last": [
+  "ckpts/p2/stage1_reductio_f0.1_s1.pt",
+  "ckpts/r3_2/ei16_reductio_f0.1_s1_ss0_r15.pt"
+ ],
+ "ckpt_chain_ok": true,
+ "exec_targets_cum_solved": 97,
+ "exec_transfer_cum_solved": 27,
+ "heldout_greedy_by_round": [
+  0.967,
+  0.9704,
+  0.9694,
+  0.9718,
+  0.9704,
+  0.9714,
+  0.9714,
+  0.9712,
+  0.9706,
+  0.9708,
+  0.9746,
+  0.9706,
+  0.9736,
+  0.9756,
+  0.9756,
+  0.9746
+ ],
+ "transfer_greedy_by_round": [
+  2,
+  19,
+  25,
+  26,
+  26,
+  27,
+  25,
+  26,
+  24,
+  25,
+  27,
+  25,
+  27,
+  27,
+  26,
+  25
+ ],
+ "targets": {
+  "rounds_present": [
+   1,
+   16,
+   16
+  ],
+  "rounds_ok": true,
+  "raw_records_last": 5039,
+  "distinct_norm_proofs": 97,
+  "earlier_files_subset_of_last": true,
+  "round_field_agrees_with_first_file": "97/97",
+  "n": 345,
+  "solved": 97,
+  "acquired": 97,
+  "acq_rate": 0.2812,
+  "acquired_unpruned_predicate": 97,
+  "solved_without_pattern": [],
+  "first_acq_round": 1,
+  "cum_acquired_by_round": [
+   59,
+   90,
+   97,
+   97,
+   97,
+   97,
+   97,
+   97,
+   97,
+   97,
+   97,
+   97,
+   97,
+   97,
+   97,
+   97
+  ],
+  "cum_solved_by_round": [
+   59,
+   90,
+   97,
+   97,
+   97,
+   97,
+   97,
+   97,
+   97,
+   97,
+   97,
+   97,
+   97,
+   97,
+   97,
+   97
+  ],
+  "verified": 97,
+  "verify_failures": 0,
+  "unparsable": 0,
+  "unknown_names": 0,
+  "written_hist": {
+   "6": 45,
+   "7": 52
+  },
+  "pruned_hist": {
+   "6": 45,
+   "7": 52
+  },
+  "pattern_written_hist": {
+   "6": 45,
+   "7": 52
+  },
+  "max_depth_hist": {
+   "1": 97
+  },
+  "frontier_written_ge5": 7,
+  "by_stratum": {
+   "6": {
+    "n": 45,
+    "solved": 45,
+    "acquired": 45,
+    "cum_acquired_by_round": [
+     44,
+     45,
+     45,
+     45,
+     45,
+     45,
+     45,
+     45,
+     45,
+     45,
+     45,
+     45,
+     45,
+     45,
+     45,
+     45
+    ],
+    "first_proof_round": 1,
+    "ignition_round": 1
+   },
+   "7": {
+    "n": 52,
+    "solved": 52,
+    "acquired": 52,
+    "cum_acquired_by_round": [
+     15,
+     45,
+     52,
+     52,
+     52,
+     52,
+     52,
+     52,
+     52,
+     52,
+     52,
+     52,
+     52,
+     52,
+     52,
+     52
+    ],
+    "first_proof_round": 1,
+    "ignition_round": 1
+   },
+   "8": {
+    "n": 133,
+    "solved": 0,
+    "acquired": 0,
+    "cum_acquired_by_round": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "first_proof_round": null,
+    "ignition_round": null
+   },
+   "9": {
+    "n": 82,
+    "solved": 0,
+    "acquired": 0,
+    "cum_acquired_by_round": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "first_proof_round": null,
+    "ignition_round": null
+   },
+   "10": {
+    "n": 33,
+    "solved": 0,
+    "acquired": 0,
+    "cum_acquired_by_round": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "first_proof_round": null,
+    "ignition_round": null
+   }
+  },
+  "by_schema_stratum(n,acquired)": {
+   "cases_neg|10": [
+    2,
+    0
+   ],
+   "cases_neg|9": [
+    3,
+    0
+   ],
+   "chain_neg|8": [
+    1,
+    0
+   ],
+   "chain_neg|9": [
+    25,
+    0
+   ],
+   "consequentia_cond|8": [
+    26,
+    0
+   ],
+   "contraposition_conv|8": [
+    27,
+    0
+   ],
+   "demorgan_nor_neg|10": [
+    1,
+    0
+   ],
+   "excluded_middle|9": [
+    26,
+    0
+   ],
+   "imp_cases_or|10": [
+    1,
+    0
+   ],
+   "impimp_to_or|10": [
+    1,
+    0
+   ],
+   "nand_neg|7": [
+    26,
+    26
+   ],
+   "nand_to_imp|8": [
+    26,
+    0
+   ],
+   "neg_both|8": [
+    26,
+    0
+   ],
+   "neg_to_contra|8": [
+    26,
+    0
+   ],
+   "negcond_ante|9": [
+    26,
+    0
+   ],
+   "negimp_to_or|10": [
+    2,
+    0
+   ],
+   "negimp_to_or|8": [
+    1,
+    0
+   ],
+   "negimp_to_or|9": [
+    2,
+    0
+   ],
+   "negimp_to_pos|7": [
+    26,
+    26
+   ],
+   "nor_neg_ante|6": [
+    45,
+    45
+   ],
+   "peirce_seq|10": [
+    26,
+    0
+   ]
+  },
+  "acquired_names": [
+   "targets_reductio_req6_300",
+   "targets_reductio_req6_301",
+   "targets_reductio_req6_302",
+   "targets_reductio_req6_303",
+   "targets_reductio_req6_304",
+   "targets_reductio_req6_305",
+   "targets_reductio_req6_306",
+   "targets_reductio_req6_307",
+   "targets_reductio_req6_308",
+   "targets_reductio_req6_309",
+   "targets_reductio_req6_310",
+   "targets_reductio_req6_311",
+   "targets_reductio_req6_312",
+   "targets_reductio_req6_313",
+   "targets_reductio_req6_314",
+   "targets_reductio_req6_315",
+   "targets_reductio_req6_316",
+   "targets_reductio_req6_317",
+   "targets_reductio_req6_318",
+   "targets_reductio_req6_319",
+   "targets_reductio_req6_320",
+   "targets_reductio_req6_321",
+   "targets_reductio_req6_322",
+   "targets_reductio_req6_323",
+   "targets_reductio_req6_324",
+   "targets_reductio_req6_325",
+   "targets_reductio_req6_326",
+   "targets_reductio_req6_327",
+   "targets_reductio_req6_328",
+   "targets_reductio_req6_329",
+   "targets_reductio_req6_330",
+   "targets_reductio_req6_331",
+   "targets_reductio_req6_332",
+   "targets_reductio_req6_333",
+   "targets_reductio_req6_334",
+   "targets_reductio_req6_335",
+   "targets_reductio_req6_336",
+   "targets_reductio_req6_337",
+   "targets_reductio_req6_338",
+   "targets_reductio_req6_339",
+   "targets_reductio_req6_340",
+   "targets_reductio_req6_341",
+   "targets_reductio_req6_342",
+   "targets_reductio_req6_343",
+   "targets_reductio_req6_344",
+   "targets_reductio_req_105",
+   "targets_reductio_req_107",
+   "targets_reductio_req_111",
+   "targets_reductio_req_115",
+   "targets_reductio_req_116",
+   "targets_reductio_req_120",
+   "targets_reductio_req_122",
+   "targets_reductio_req_127",
+   "targets_reductio_req_13",
+   "targets_reductio_req_131",
+   "targets_reductio_req_138",
+   "targets_reductio_req_140",
+   "targets_reductio_req_142",
+   "targets_reductio_req_152",
+   "targets_reductio_req_165",
+   "targets_reductio_req_174",
+   "targets_reductio_req_183",
+   "targets_reductio_req_184",
+   "targets_reductio_req_193",
+   "targets_reductio_req_195",
+   "targets_reductio_req_196",
+   "targets_reductio_req_198",
+   "targets_reductio_req_2",
+   "targets_reductio_req_230",
+   "targets_reductio_req_236",
+   "targets_reductio_req_238",
+   "targets_reductio_req_241",
+   "targets_reductio_req_247",
+   "targets_reductio_req_260",
+   "targets_reductio_req_262",
+   "targets_reductio_req_264",
+   "targets_reductio_req_266",
+   "targets_reductio_req_268",
+   "targets_reductio_req_269",
+   "targets_reductio_req_27",
+   "targets_reductio_req_281",
+   "targets_reductio_req_292",
+   "targets_reductio_req_31",
+   "targets_reductio_req_40",
+   "targets_reductio_req_51",
+   "targets_reductio_req_60",
+   "targets_reductio_req_67",
+   "targets_reductio_req_71",
+   "targets_reductio_req_72",
+   "targets_reductio_req_73",
+   "targets_reductio_req_74",
+   "targets_reductio_req_81",
+   "targets_reductio_req_85",
+   "targets_reductio_req_86",
+   "targets_reductio_req_88",
+   "targets_reductio_req_95",
+   "targets_reductio_req_97"
+  ]
+ },
+ "transfer": {
+  "rounds_present": [
+   1,
+   16,
+   16
+  ],
+  "rounds_ok": true,
+  "raw_records_last": 1402,
+  "distinct_norm_proofs": 27,
+  "earlier_files_subset_of_last": true,
+  "round_field_agrees_with_first_file": "27/27",
+  "n": 150,
+  "solved": 27,
+  "acquired": 27,
+  "acq_rate": 0.18,
+  "acquired_unpruned_predicate": 27,
+  "solved_without_pattern": [],
+  "first_acq_round": 1,
+  "cum_acquired_by_round": [
+   5,
+   22,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27
+  ],
+  "cum_solved_by_round": [
+   5,
+   22,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27,
+   27
+  ],
+  "verified": 27,
+  "verify_failures": 0,
+  "unparsable": 0,
+  "unknown_names": 0,
+  "written_hist": {
+   "7": 27
+  },
+  "pruned_hist": {
+   "7": 27
+  },
+  "pattern_written_hist": {
+   "7": 27
+  },
+  "max_depth_hist": {
+   "1": 27
+  },
+  "frontier_written_ge5": 7,
+  "by_stratum": {
+   "7": {
+    "n": 27,
+    "solved": 27,
+    "acquired": 27,
+    "cum_acquired_by_round": [
+     5,
+     22,
+     27,
+     27,
+     27,
+     27,
+     27,
+     27,
+     27,
+     27,
+     27,
+     27,
+     27,
+     27,
+     27,
+     27
+    ],
+    "first_proof_round": 1,
+    "ignition_round": 2
+   },
+   "8": {
+    "n": 67,
+    "solved": 0,
+    "acquired": 0,
+    "cum_acquired_by_round": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "first_proof_round": null,
+    "ignition_round": null
+   },
+   "9": {
+    "n": 41,
+    "solved": 0,
+    "acquired": 0,
+    "cum_acquired_by_round": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "first_proof_round": null,
+    "ignition_round": null
+   },
+   "10": {
+    "n": 15,
+    "solved": 0,
+    "acquired": 0,
+    "cum_acquired_by_round": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "first_proof_round": null,
+    "ignition_round": null
+   }
+  },
+  "by_schema_stratum(n,acquired)": {
+   "cases_neg|10": [
+    1,
+    0
+   ],
+   "cases_neg|9": [
+    1,
+    0
+   ],
+   "chain_neg|9": [
+    13,
+    0
+   ],
+   "consequentia_cond|8": [
+    14,
+    0
+   ],
+   "contraposition_conv|8": [
+    13,
+    0
+   ],
+   "excluded_middle|9": [
+    13,
+    0
+   ],
+   "nand_neg|7": [
+    13,
+    13
+   ],
+   "nand_to_imp|8": [
+    13,
+    0
+   ],
+   "neg_both|8": [
+    13,
+    0
+   ],
+   "neg_to_contra|8": [
+    13,
+    0
+   ],
+   "negcond_ante|8": [
+    1,
+    0
+   ],
+   "negcond_ante|9": [
+    13,
+    0
+   ],
+   "negimp_to_or|10": [
+    1,
+    0
+   ],
+   "negimp_to_or|9": [
+    1,
+    0
+   ],
+   "negimp_to_pos|7": [
+    14,
+    14
+   ],
+   "peirce_seq|10": [
+    13,
+    0
+   ]
+  },
+  "acquired_names": [
+   "transfer_reductio_req_10",
+   "transfer_reductio_req_101",
+   "transfer_reductio_req_103",
+   "transfer_reductio_req_11",
+   "transfer_reductio_req_112",
+   "transfer_reductio_req_12",
+   "transfer_reductio_req_120",
+   "transfer_reductio_req_13",
+   "transfer_reductio_req_14",
+   "transfer_reductio_req_142",
+   "transfer_reductio_req_149",
+   "transfer_reductio_req_15",
+   "transfer_reductio_req_18",
+   "transfer_reductio_req_23",
+   "transfer_reductio_req_24",
+   "transfer_reductio_req_35",
+   "transfer_reductio_req_50",
+   "transfer_reductio_req_54",
+   "transfer_reductio_req_6",
+   "transfer_reductio_req_63",
+   "transfer_reductio_req_70",
+   "transfer_reductio_req_78",
+   "transfer_reductio_req_85",
+   "transfer_reductio_req_89",
+   "transfer_reductio_req_9",
+   "transfer_reductio_req_90",
+   "transfer_reductio_req_93"
+  ]
+ },
+ "solved_matches_exec": [
+  true,
+  true
+ ]
+}

@@ -1,0 +1,331 @@
+{
+ "arm": "ei_dore_f0.001_c8_s0",
+ "args": {
+  "init": "ckpts/p2/stage1_derived_ore_strict_f0.001_c8_s0.pt",
+  "targets": "data/p2/targets_derived_ore_req.jsonl",
+  "transfer": "data/p2/transfer_derived_ore_req.jsonl",
+  "heldout": "data/p2/heldout_c8.jsonl",
+  "train": "data/p2/train_derived_ore_strict_f0.001_c8.jsonl",
+  "rounds": 8,
+  "k": 32,
+  "temperature": 0.8,
+  "seed": 0,
+  "no_train": false,
+  "start_round": 1,
+  "resume_found": null,
+  "max_per_thm": 4,
+  "retain": 20000,
+  "batch": 768
+ },
+ "rounds": 8,
+ "attempts_per_target": 256,
+ "round_seeds": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8
+ ],
+ "round_ckpts_first_last": [
+  "ckpts/p2/stage1_derived_ore_strict_f0.001_c8_s0.pt",
+  "ckpts/r3_2/ei_dore_f0.001_c8_s0_r7.pt"
+ ],
+ "ckpt_chain_ok": true,
+ "exec_targets_cum_solved": 40,
+ "exec_transfer_cum_solved": 11,
+ "heldout_greedy_by_round": [
+  0.9302,
+  0.9256,
+  0.927,
+  0.9276,
+  0.9292,
+  0.9266,
+  0.9294,
+  0.9302
+ ],
+ "transfer_greedy_by_round": [
+  2,
+  6,
+  3,
+  7,
+  7,
+  7,
+  5,
+  5
+ ],
+ "targets": {
+  "rounds_present": [
+   1,
+   8,
+   8
+  ],
+  "rounds_ok": true,
+  "raw_records_last": 2048,
+  "distinct_norm_proofs": 58,
+  "earlier_files_subset_of_last": true,
+  "round_field_agrees_with_first_file": "58/58",
+  "n": 300,
+  "solved": 40,
+  "acquired": 40,
+  "acq_rate": 0.1333,
+  "acquired_unpruned_predicate": 40,
+  "solved_without_pattern": [],
+  "first_acq_round": 1,
+  "cum_acquired_by_round": [
+   8,
+   17,
+   22,
+   25,
+   31,
+   35,
+   37,
+   40
+  ],
+  "cum_solved_by_round": [
+   8,
+   17,
+   22,
+   25,
+   31,
+   35,
+   37,
+   40
+  ],
+  "verified": 58,
+  "verify_failures": 0,
+  "unparsable": 0,
+  "unknown_names": 0,
+  "written_hist": {
+   "9": 42,
+   "10": 16
+  },
+  "pruned_hist": {
+   "9": 42,
+   "10": 16
+  },
+  "pattern_written_hist": {
+   "9": 42,
+   "10": 16
+  },
+  "max_depth_hist": {
+   "1": 8,
+   "2": 46,
+   "3": 4
+  },
+  "frontier_written_ge5": 10,
+  "by_stratum": {
+   "9": {
+    "n": 126,
+    "solved": 28,
+    "acquired": 28,
+    "cum_acquired_by_round": [
+     8,
+     13,
+     14,
+     17,
+     21,
+     25,
+     27,
+     28
+    ],
+    "first_proof_round": 1,
+    "ignition_round": 2
+   },
+   "10": {
+    "n": 174,
+    "solved": 12,
+    "acquired": 12,
+    "cum_acquired_by_round": [
+     0,
+     4,
+     8,
+     8,
+     10,
+     10,
+     10,
+     12
+    ],
+    "first_proof_round": 2,
+    "ignition_round": 5
+   }
+  },
+  "by_schema_stratum(n,acquired)": {
+   "None|10": [
+    174,
+    12
+   ],
+   "None|9": [
+    126,
+    28
+   ]
+  },
+  "acquired_names": [
+   "targets_derived_ore_strict_c8req_106",
+   "targets_derived_ore_strict_c8req_109",
+   "targets_derived_ore_strict_c8req_121",
+   "targets_derived_ore_strict_c8req_122",
+   "targets_derived_ore_strict_c8req_142",
+   "targets_derived_ore_strict_c8req_148",
+   "targets_derived_ore_strict_c8req_155",
+   "targets_derived_ore_strict_c8req_159",
+   "targets_derived_ore_strict_c8req_169",
+   "targets_derived_ore_strict_c8req_174",
+   "targets_derived_ore_strict_c8req_175",
+   "targets_derived_ore_strict_c8req_177",
+   "targets_derived_ore_strict_c8req_189",
+   "targets_derived_ore_strict_c8req_190",
+   "targets_derived_ore_strict_c8req_191",
+   "targets_derived_ore_strict_c8req_192",
+   "targets_derived_ore_strict_c8req_195",
+   "targets_derived_ore_strict_c8req_200",
+   "targets_derived_ore_strict_c8req_202",
+   "targets_derived_ore_strict_c8req_204",
+   "targets_derived_ore_strict_c8req_209",
+   "targets_derived_ore_strict_c8req_222",
+   "targets_derived_ore_strict_c8req_228",
+   "targets_derived_ore_strict_c8req_234",
+   "targets_derived_ore_strict_c8req_236",
+   "targets_derived_ore_strict_c8req_259",
+   "targets_derived_ore_strict_c8req_27",
+   "targets_derived_ore_strict_c8req_281",
+   "targets_derived_ore_strict_c8req_286",
+   "targets_derived_ore_strict_c8req_288",
+   "targets_derived_ore_strict_c8req_37",
+   "targets_derived_ore_strict_c8req_38",
+   "targets_derived_ore_strict_c8req_50",
+   "targets_derived_ore_strict_c8req_64",
+   "targets_derived_ore_strict_c8req_67",
+   "targets_derived_ore_strict_c8req_77",
+   "targets_derived_ore_strict_c8req_88",
+   "targets_derived_ore_strict_c8req_90",
+   "targets_derived_ore_strict_c8req_93",
+   "targets_derived_ore_strict_c8req_97"
+  ]
+ },
+ "transfer": {
+  "rounds_present": [
+   1,
+   8,
+   8
+  ],
+  "rounds_ok": true,
+  "raw_records_last": 522,
+  "distinct_norm_proofs": 19,
+  "earlier_files_subset_of_last": true,
+  "round_field_agrees_with_first_file": "19/19",
+  "n": 65,
+  "solved": 11,
+  "acquired": 11,
+  "acq_rate": 0.1692,
+  "acquired_unpruned_predicate": 11,
+  "solved_without_pattern": [],
+  "first_acq_round": 1,
+  "cum_acquired_by_round": [
+   5,
+   7,
+   8,
+   8,
+   9,
+   9,
+   11,
+   11
+  ],
+  "cum_solved_by_round": [
+   5,
+   7,
+   8,
+   8,
+   9,
+   9,
+   11,
+   11
+  ],
+  "verified": 19,
+  "verify_failures": 0,
+  "unparsable": 0,
+  "unknown_names": 0,
+  "written_hist": {
+   "9": 15,
+   "10": 4
+  },
+  "pruned_hist": {
+   "9": 15,
+   "10": 4
+  },
+  "pattern_written_hist": {
+   "9": 15,
+   "10": 4
+  },
+  "max_depth_hist": {
+   "1": 1,
+   "2": 18
+  },
+  "frontier_written_ge5": 9,
+  "by_stratum": {
+   "9": {
+    "n": 28,
+    "solved": 8,
+    "acquired": 8,
+    "cum_acquired_by_round": [
+     5,
+     6,
+     7,
+     7,
+     7,
+     7,
+     8,
+     8
+    ],
+    "first_proof_round": 1,
+    "ignition_round": null
+   },
+   "10": {
+    "n": 37,
+    "solved": 3,
+    "acquired": 3,
+    "cum_acquired_by_round": [
+     0,
+     1,
+     1,
+     1,
+     2,
+     2,
+     3,
+     3
+    ],
+    "first_proof_round": 2,
+    "ignition_round": null
+   }
+  },
+  "by_schema_stratum(n,acquired)": {
+   "None|10": [
+    37,
+    3
+   ],
+   "None|9": [
+    28,
+    8
+   ]
+  },
+  "acquired_names": [
+   "transfer_derived_ore_strict_c8req_1",
+   "transfer_derived_ore_strict_c8req_13",
+   "transfer_derived_ore_strict_c8req_16",
+   "transfer_derived_ore_strict_c8req_18",
+   "transfer_derived_ore_strict_c8req_19",
+   "transfer_derived_ore_strict_c8req_25",
+   "transfer_derived_ore_strict_c8req_31",
+   "transfer_derived_ore_strict_c8req_32",
+   "transfer_derived_ore_strict_c8req_36",
+   "transfer_derived_ore_strict_c8req_4",
+   "transfer_derived_ore_strict_c8req_45"
+  ]
+ },
+ "solved_matches_exec": [
+  true,
+  true
+ ]
+}

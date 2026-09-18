@@ -1,0 +1,619 @@
+{
+ "arm": "frozen16_reductio_f0_s2_ss2",
+ "args": {
+  "init": "ckpts/p2/stage1_reductio_f0_s2.pt",
+  "targets": "data/r3_2/targets_reductio_req6.jsonl",
+  "transfer": "data/p2/transfer_reductio_req.jsonl",
+  "heldout": "data/p2/heldout.jsonl",
+  "train": "data/p2/train_reductio_f0.jsonl",
+  "rounds": 16,
+  "k": 32,
+  "temperature": 0.8,
+  "seed": 2,
+  "no_train": true,
+  "start_round": 1,
+  "resume_found": null,
+  "max_per_thm": 4,
+  "retain": 20000,
+  "batch": 768
+ },
+ "rounds": 16,
+ "attempts_per_target": 512,
+ "round_seeds": [
+  2001,
+  2002,
+  2003,
+  2004,
+  2005,
+  2006,
+  2007,
+  2008,
+  2009,
+  2010,
+  2011,
+  2012,
+  2013,
+  2014,
+  2015,
+  2016
+ ],
+ "round_ckpts_first_last": [
+  "ckpts/p2/stage1_reductio_f0_s2.pt",
+  "ckpts/p2/stage1_reductio_f0_s2.pt"
+ ],
+ "ckpt_chain_ok": true,
+ "exec_targets_cum_solved": 9,
+ "exec_transfer_cum_solved": 0,
+ "heldout_greedy_by_round": [
+  0.894,
+  0.894,
+  0.894,
+  0.894,
+  0.894,
+  0.894,
+  0.894,
+  0.894,
+  0.894,
+  0.894,
+  0.894,
+  0.894,
+  0.894,
+  0.894,
+  0.894,
+  0.894
+ ],
+ "transfer_greedy_by_round": [
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0
+ ],
+ "targets": {
+  "rounds_present": [
+   1,
+   16,
+   16
+  ],
+  "rounds_ok": true,
+  "raw_records_last": 76,
+  "distinct_norm_proofs": 10,
+  "earlier_files_subset_of_last": true,
+  "round_field_agrees_with_first_file": "10/10",
+  "n": 345,
+  "solved": 9,
+  "acquired": 9,
+  "acq_rate": 0.0261,
+  "acquired_unpruned_predicate": 9,
+  "solved_without_pattern": [],
+  "first_acq_round": 1,
+  "cum_acquired_by_round": [
+   4,
+   5,
+   6,
+   6,
+   6,
+   7,
+   7,
+   7,
+   7,
+   7,
+   8,
+   9,
+   9,
+   9,
+   9,
+   9
+  ],
+  "cum_solved_by_round": [
+   4,
+   5,
+   6,
+   6,
+   6,
+   7,
+   7,
+   7,
+   7,
+   7,
+   8,
+   9,
+   9,
+   9,
+   9,
+   9
+  ],
+  "verified": 10,
+  "verify_failures": 0,
+  "unparsable": 0,
+  "unknown_names": 0,
+  "written_hist": {
+   "6": 9,
+   "7": 1
+  },
+  "pruned_hist": {
+   "6": 9,
+   "7": 1
+  },
+  "pattern_written_hist": {
+   "6": 9,
+   "7": 1
+  },
+  "max_depth_hist": {
+   "1": 10
+  },
+  "frontier_written_ge5": 6,
+  "by_stratum": {
+   "6": {
+    "n": 45,
+    "solved": 8,
+    "acquired": 8,
+    "cum_acquired_by_round": [
+     4,
+     5,
+     6,
+     6,
+     6,
+     7,
+     7,
+     7,
+     7,
+     7,
+     7,
+     8,
+     8,
+     8,
+     8,
+     8
+    ],
+    "first_proof_round": 1,
+    "ignition_round": null
+   },
+   "7": {
+    "n": 52,
+    "solved": 1,
+    "acquired": 1,
+    "cum_acquired_by_round": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "first_proof_round": 11,
+    "ignition_round": null
+   },
+   "8": {
+    "n": 133,
+    "solved": 0,
+    "acquired": 0,
+    "cum_acquired_by_round": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "first_proof_round": null,
+    "ignition_round": null
+   },
+   "9": {
+    "n": 82,
+    "solved": 0,
+    "acquired": 0,
+    "cum_acquired_by_round": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "first_proof_round": null,
+    "ignition_round": null
+   },
+   "10": {
+    "n": 33,
+    "solved": 0,
+    "acquired": 0,
+    "cum_acquired_by_round": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "first_proof_round": null,
+    "ignition_round": null
+   }
+  },
+  "by_schema_stratum(n,acquired)": {
+   "cases_neg|10": [
+    2,
+    0
+   ],
+   "cases_neg|9": [
+    3,
+    0
+   ],
+   "chain_neg|8": [
+    1,
+    0
+   ],
+   "chain_neg|9": [
+    25,
+    0
+   ],
+   "consequentia_cond|8": [
+    26,
+    0
+   ],
+   "contraposition_conv|8": [
+    27,
+    0
+   ],
+   "demorgan_nor_neg|10": [
+    1,
+    0
+   ],
+   "excluded_middle|9": [
+    26,
+    0
+   ],
+   "imp_cases_or|10": [
+    1,
+    0
+   ],
+   "impimp_to_or|10": [
+    1,
+    0
+   ],
+   "nand_neg|7": [
+    26,
+    0
+   ],
+   "nand_to_imp|8": [
+    26,
+    0
+   ],
+   "neg_both|8": [
+    26,
+    0
+   ],
+   "neg_to_contra|8": [
+    26,
+    0
+   ],
+   "negcond_ante|9": [
+    26,
+    0
+   ],
+   "negimp_to_or|10": [
+    2,
+    0
+   ],
+   "negimp_to_or|8": [
+    1,
+    0
+   ],
+   "negimp_to_or|9": [
+    2,
+    0
+   ],
+   "negimp_to_pos|7": [
+    26,
+    1
+   ],
+   "nor_neg_ante|6": [
+    45,
+    8
+   ],
+   "peirce_seq|10": [
+    26,
+    0
+   ]
+  },
+  "acquired_names": [
+   "targets_reductio_req6_302",
+   "targets_reductio_req6_311",
+   "targets_reductio_req6_316",
+   "targets_reductio_req6_319",
+   "targets_reductio_req6_322",
+   "targets_reductio_req6_328",
+   "targets_reductio_req6_336",
+   "targets_reductio_req6_343",
+   "targets_reductio_req_165"
+  ]
+ },
+ "transfer": {
+  "rounds_present": [
+   1,
+   16,
+   16
+  ],
+  "rounds_ok": true,
+  "raw_records_last": 0,
+  "distinct_norm_proofs": 0,
+  "earlier_files_subset_of_last": true,
+  "round_field_agrees_with_first_file": "0/0",
+  "n": 150,
+  "solved": 0,
+  "acquired": 0,
+  "acq_rate": 0.0,
+  "acquired_unpruned_predicate": 0,
+  "solved_without_pattern": [],
+  "first_acq_round": null,
+  "cum_acquired_by_round": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "cum_solved_by_round": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "verified": 0,
+  "verify_failures": 0,
+  "unparsable": 0,
+  "unknown_names": 0,
+  "written_hist": {},
+  "pruned_hist": {},
+  "pattern_written_hist": {},
+  "max_depth_hist": {},
+  "frontier_written_ge5": 0,
+  "by_stratum": {
+   "7": {
+    "n": 27,
+    "solved": 0,
+    "acquired": 0,
+    "cum_acquired_by_round": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "first_proof_round": null,
+    "ignition_round": null
+   },
+   "8": {
+    "n": 67,
+    "solved": 0,
+    "acquired": 0,
+    "cum_acquired_by_round": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "first_proof_round": null,
+    "ignition_round": null
+   },
+   "9": {
+    "n": 41,
+    "solved": 0,
+    "acquired": 0,
+    "cum_acquired_by_round": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "first_proof_round": null,
+    "ignition_round": null
+   },
+   "10": {
+    "n": 15,
+    "solved": 0,
+    "acquired": 0,
+    "cum_acquired_by_round": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "first_proof_round": null,
+    "ignition_round": null
+   }
+  },
+  "by_schema_stratum(n,acquired)": {
+   "cases_neg|10": [
+    1,
+    0
+   ],
+   "cases_neg|9": [
+    1,
+    0
+   ],
+   "chain_neg|9": [
+    13,
+    0
+   ],
+   "consequentia_cond|8": [
+    14,
+    0
+   ],
+   "contraposition_conv|8": [
+    13,
+    0
+   ],
+   "excluded_middle|9": [
+    13,
+    0
+   ],
+   "nand_neg|7": [
+    13,
+    0
+   ],
+   "nand_to_imp|8": [
+    13,
+    0
+   ],
+   "neg_both|8": [
+    13,
+    0
+   ],
+   "neg_to_contra|8": [
+    13,
+    0
+   ],
+   "negcond_ante|8": [
+    1,
+    0
+   ],
+   "negcond_ante|9": [
+    13,
+    0
+   ],
+   "negimp_to_or|10": [
+    1,
+    0
+   ],
+   "negimp_to_or|9": [
+    1,
+    0
+   ],
+   "negimp_to_pos|7": [
+    14,
+    0
+   ],
+   "peirce_seq|10": [
+    13,
+    0
+   ]
+  },
+  "acquired_names": []
+ },
+ "solved_matches_exec": [
+  true,
+  true
+ ]
+}
