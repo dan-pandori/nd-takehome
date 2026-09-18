@@ -1,6 +1,6 @@
 # Pre-registration: round3-run4a — does "or nothing" survive model size? (reductio half)
 
-Written 2026-09-18 ≈ 18:35 UTC (commit time is the reference), before any pod of this run exists. Executor branch
+Written 2026-09-18 ≈ 17:55 UTC (commit time is the reference), before any pod of this run exists. Executor branch
 `dan_round3-run4a`. Brief: `BRIEF_scale.md`; policy: `AGENT_POLICY.md`. Builds on `run5.md`, `review_round2-run5.md`,
 `ignition.md`, `review_ignition.md`. (§4 of the round-3 proposals file named in the brief is not on this host; not read.)
 
@@ -97,7 +97,7 @@ rising with size ⇒ against the elicitation reading. All differences are quoted
 ## Budget and stop rule
 
 Ceiling **$50**, stop launching at **$45** of accrued pod cost (pod-hours × price from `~/pods.log` creation times;
-`rpbalance` checked before each pod — the balance is shared with run4b; $185 at 18:20 UTC). Two A100-SXM4-80GB pods at
+`rpbalance` checked before each pod — the balance is shared with run4b; $185 at 17:52 UTC). Two A100-SXM4-80GB pods at
 $1.59/h (a third only if the 85M cell would otherwise miss the 2026-09-19 06:00 UTC kill switch, which stays armed).
 Planned ≈ 18 A100-hours ≈ $29: set build + Stage-1 (9 models) ≈ 2 h; pre-RL 9 × 600k ≈ 4 h; EI 9 arms ≈ 5 h; frozen
 ≈ 3 h; pass@10⁴ on acquired targets ≈ 4 h. **Priority if short:** 85M cell complete (Stage-1, pre-RL, EI, frozen) >
