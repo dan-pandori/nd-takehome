@@ -13,7 +13,7 @@ Run 2026-09-17/18; numbers in `numbers.md` §Round 2 — Run 3; plan and expecta
 | sib16 | 236 / 303 / 336 / 344 | 143 / 250 / 294 / 312 | 51 / 62 / 75 / 80 | 50 / 66 / 72 / 95 |
 | gen4 | 1 / 27 / 98 / 167 | 2 / 54 / 170 / 235 | 0 | 5 / 29 / 53 / 61 |
 | other4 | 0 | 0 | 0 | 0 |
-| inv4 | 4 / 56 / 173 / 252 | 0 (r5–7) | 0 | 0 / 1 / 4 / 14 |
+| inv4 | 4 / 56 / 173 / 252 | 0 / 0 / 0 / 0 | 0 | 0 / 1 / 4 / 14 |
 
 **One proof is enough.** A single verifier-valid sibling proof ignites 4 / 4 arms (0.26 depth-3, 0.07–0.11 reductio by round 8); 16 proofs reach the plateau a round earlier. It must be the right pattern: the other pattern ignites 0 / 4. Four short generator instances of the shape ignite 3 / 4. And four *invalid* strings that merely carry three box bars ignite depth-3 s4 (0.252, not s5), while for reductio they barely move s2 and not s1: for the structural pattern the seed can be a token statistic, not a proof. Expectations R3-E1–E3 held; R3-E4 (invalid strings never ignite) was wrong for depth-3.
 
