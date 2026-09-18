@@ -167,3 +167,72 @@ kill-switch timing, the executor's "hand check of ten targets per pattern" (I sp
 pattern by eye; all six patterns present as claimed), and the bucket contents beyond the existence of
 `round2/run2/{artifacts,ckpts,data}` (uploaded 01:27 UTC). At 02:10 UTC no `p1`–`p4` pods exist on the account
 (the ten running pods are `r4-*`, `r1-a100`, `la-*` — other runs' executors).
+
+## Compare (phase 2: `run2.md`, `numbers.md` §Round 2 — Run 2, `log.md` 19:45–01:30, `STATUS.md` §Run 2, `artifacts/r2/summary.json`, `analysis_final.log`, `figures/run2_acq.png`, `run2_curves.png`)
+
+Gate 0: classes and expectations committed 19:45:07, first target-generation job 19:57, first set 21:19 (met); the
+cap-8 addendum committed 22:51:24 before its set (00:02) (met); the four `c8ctl` / `natctl` controls disclosed as
+outside the pre-registration two minutes after queueing. The results-vs-expectations entry (log 01:30) reports depth4
+and impe_chain4 as **wrong** and the rest as held — honest. One correction to my phase 1: the round-1…3 checkpoints of
+`negi_ande_hyp` s1 were never written (EI skips the fine-tune when a round has no accepted proof; `mix_rl_records` is
+0 in rounds 1–3), so the three missing drift files could not have been produced; the executor's reading — "nothing is
+trained before the first proof, so nothing can drift" — is right for this arm.
+
+| claim (executor) | my independent value | verdict |
+|---|---|---|
+| `numbers.md` per-arm lines (solved, pattern theorems, per-round lists, required stratum, violations, ignition round, transfer, held-out) for all 39 arms with files; pre-RL lines for 20 coverage files; the drift line | identical element for element (own predicates, own normaliser, first-appearance round) | reproduces |
+| `run2.md` table: 0 / 0 (depth4, chain, nested, impi_ore, ori_ore), 0 / 0.147 (negi); base rates 0 and 5·10⁻⁶; cap-8 0.97 / 0.96 and 0.96 / 0.96, base 0.11–0.20; natctl 0.19 / 0.22 and 0 / 0.03 | identical (0.028 for the last cell) | reproduces |
+| cap-8 sets "zero depth-4 proofs" (run2.md, log 00:36) | 0 in both cap-8 sets by my predicate, pruned and written; and 0 in every cap-6 set | reproduces |
+| "all 485 with a depth-≥ 4 proof … 0 violations" (log 22:52; numbers.md `viol` 0 everywhere) | EI cap-8: every solved target has a depth-4 proof (485 / 481 / 481 / 482), required stratum 162 / 162 / 161 / 161 all with the pattern; the only pattern-free solutions anywhere are 2 + 1 uses-only targets in two frozen controls | reproduces |
+| `run2.md` table column "f > 0 control" and both figures' legend "f > 0 controls (orange)" for `c8ctl` | the `c8ctl` Stage-1 sets hold 0 depth-4 proofs, as the executor found at 00:36 and states in the same table cell ("cap-8 models with 0 depth-4 proofs") | **relabel**: four f = 0 cap-8 arms, none is an f > 0 control; only `natctl` is |
+| "pre-RL pass@2,000 on the 300 shortest targets" (numbers.md, log 22:25, 00:40) | `coverage.py --limit 300` takes the first 300 records of the shuffled pool: all lengths in proportion (depth-4: 8 / 9 / 10 lines 156 / 33 / 111) | reword: "300 random targets" |
+| "the cap-6 base never writes [a fourth box]"; "the structural negatives are length, not structure" (run2.md) | 0 depth-4 proofs in 1.2 M pre-RL samples and 256 k EI attempts per draw — but the same cap-6 draws do write 8-line proofs (negi s1: 7 targets at 8 lines; ori_ore arms: 32 distinct 8-line proofs each), and 269 of the 500 depth-4 targets have 8-line pattern proofs that were never produced | the zero reproduces; "length, not structure" is an interpretation the run does not separate — the cap-6 models reach 8 lines, they do not reach 8 lines *with four boxes*. The supported form is the one in the restated rule: the pattern's minimal instance (8 lines) lies outside the cap |
+| "at cap 8 the base models … already write a fourth box in 11–20 % of samples" | 0.132 / 0.115 / 0.195 / 0.106 per sample; 110–134 of 300 targets | reproduces; add the pool's shape: 473 / 500 targets have no premise and 377 / 500 are right-nested implication chains ending in `( X > X )`, so the proof is dictated by the conclusion's syntax (open a box per antecedent, close them in order). The 11–20 % says the cap-8 models extend "one box per antecedent" from three to four on such theorems; it is not comparable in difficulty to the campaign's depth-3 pool (premised generator theorems, base ≈ 10⁻⁶ at cap 6) |
+| "nothing at f = 0 crossed zero except negi_ande_hyp seed 1, whose base already emitted the shape at 5·10⁻⁶ — elicitation" | s1 base 2 theorems / 3 hits in 600 k; frozen 2 at 256 attempts; EI 59 (0.147), first proof round 4, all uses-only targets, transfer 12 / 94 | reproduces; "elicitation" is the right word, and the 30× gain over the frozen control at equal attempts is the run's one RL effect on a cap-6 f = 0 draw |
+| "The decoration control solves 217 / 219 targets and never writes the pointless ORI-then-ORE" | 217 / 219, 0 pattern proofs in EI, frozen, base and transfer | reproduces |
+| pre-registration: pools of "500 targets + 200 transfer" per pattern; "ten targets per pattern hand-checked in this log" | 500 + 200 for three pools, 400 + 94 / 300 + 41 / 400 + 160 for the others (sizes given in numbers.md); no run-2 hand check appears in the log (the two logged hand checks are run 5's) | disclose the missing hand check; my spot check of two oracle proofs per pattern found all six patterns as labelled |
+| numbers.md: sets assembled with "3,151 run-2 pool classes … excluded" | `sets.log`: 49,337 classes excluded (every candidate file + held-out); the pools' 3,495 classes are among them | reword; disjointness holds either way (0 overlap, above) |
+| `frozen_depth4_c8f0_s0` | directory holds `args.json` only (no round or found files); the other three cap-8 frozen controls exist. Not mentioned in run2.md / numbers.md / log | disclose (one frozen control of four lost; conclusions unaffected: the three others are 0.30–0.40) |
+| impe_chain4 s0 coverage "96 targets, the run was cut"; nested_ore s1 "100 at k = 500" (numbers.md) | 96 / 300 and 100 at k = 500, 0 hits in both | disclosed; fine |
+| held-out intact | greedy 0.944–0.973 (cap 6), 0.918–0.934 (cap 8) in all arms | reproduces (not claimed; worth one clause) |
+| `run2.md` ≤ 400 words | 545 words including the figure lines | over the brief's length |
+| bucket `round2/run2/{artifacts,ckpts,data}`; pods p1–p3 ≈ $6 | the three directories exist (01:27 UTC); spend not derivable | reproduces / not derivable |
+
+## Verdict
+
+**What stands.** Every number in `run2.md`, `numbers.md` §Run 2 and `artifacts/r2/summary.json` reproduces from
+the raw per-round and coverage files with independent code and predicates; every counted proof re-verifies (5,601
+arm proofs, 1,072 coverage proofs, 80,618 oracle proofs, 0 failures); the five Stage-1 sets are exactly f = 0 for
+their patterns and class-disjoint from every pool; the checkpoints were trained from the stated sets on the stated
+mixes; the classes and expectations were committed before any set existed and the executor scored two of them as
+wrong. The clean results are: (i) at cap 6, none of the six pre-registered patterns was acquired from a draw with a
+zero pre-RL rate — two structural and three rule-sequence patterns stayed at 0 / 500 through 256 attempts per target
+with frozen controls at 0, and the one arm that moved (negi s1, 0.005 → 0.147) is the one draw that emitted the
+pattern before RL; (ii) the natural-rate controls show the same thing from the other side (impi_ore at 130 / 155k:
+base 12–26 theorems → 0.19–0.22; negi at 11 / 155k: 0 → 0 and 4 → 11); (iii) at cap 8, four Stage-1 draws trained
+on **no** depth-4 proof write depth-4 proofs at 11–20 % per sample before any RL, and EI takes them to 0.96–0.97 with
+every solved target solved with the pattern. Together with the ignition study, the run supports the executor's
+restated rule — the pre-registered syntactic classes predicted nothing that the base rate did not — and the one
+genuine zero-to-something event in the run happened in Stage-1 pretraining (cap 8, depth 4), not in RL.
+
+**What must be reworded.** (1) The `c8ctl` arms are f = 0 arms, not "f > 0 controls": the table column and both
+figure legends contradict the text and the 00:36 log entry. (2) "300 shortest targets" is "300 random targets".
+(3) The depth-4 pool's shape should be stated next to the 11–20 %: no-premise identity chains whose proof the
+conclusion dictates; the number measures a narrow generalisation and is not on the same scale as the campaign's
+depth-3 base rates. (4) "Length, not structure" is a hypothesis: the cap-6 draws write 8-line proofs of other
+shapes and never an 8-line four-box proof; what the run shows is that a pattern whose minimal instance exceeds the
+cap has base rate 0 and is not acquired. (5) Disclose the lost `frozen_depth4_c8f0_s0`, the absent per-pattern hand
+check, and the 49,337-class exclusion. (6) `run2.md` is 545 words against 400.
+
+**Flags, not quarantine.** The two cap-8 Stage-1 sets and their eight arms lie outside the take-home's cap-6 rule
+(labelled controls; not submission models). No hand-written or LLM-written proof entered any training set.
+
+**Next measurement.** (1) The length-margin clause directly: cap-7 f = 0 sets (two seeds) on the same depth-4 pool —
+the clause predicts base rate ≈ 0 at cap 7 (minimal instance 8 lines) and the observed 11–20 % at cap 8; a cap-7 rate
+between them would say the margin is soft. (2) A depth-4 pool that is not identity chains — premised generator
+theorems whose depth-4 proof is 9–10 lines and required — at cap 8, to see whether the 11–20 % survives when the
+conclusion no longer dictates the proof. (3) The run-3 protocol on a rule-sequence pattern with base rate 0: inject
+1 / 4 / 16 sibling or generator `impi_ore` proofs into the cap-6 f = 0 draws (7-line targets, within the frontier) and
+continue EI; if the pattern ignites like depth-3 did, the rule-sequence negatives are base-rate zeros, not a harder
+kind of novelty; if not, the class distinction has content after all. (4) Two more `negi_ande_hyp` draws to see how
+often a cap-6 f = 0 draw emits the pattern at all (1 of 4 so far, counting the `natctl` pair).
