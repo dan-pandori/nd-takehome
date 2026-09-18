@@ -166,7 +166,10 @@ def main():
     for ax in axes[-((n + 1) // 2):]:
         ax.set_xlabel('samples per target (thousands of samples / 1,000 targets)', fontsize=8)
     axes[0].set_ylabel('targets solved with a depth-3 proof (cumulative)', fontsize=8)
-    axes[0].legend(fontsize=7, loc='lower right')
+    from matplotlib.lines import Line2D
+    handles = [Line2D([], [], color=cols[('grpo', G, lr)], lw=1.2, label=f'GRPO G={G} lr {lr}') for G in (8, 32) for lr in ('1e-4', '3e-5')]
+    handles += [Line2D([], [], color=cols['ei'], marker='o', ms=3, lw=1.2, label='EI (k = 32)'), Line2D([], [], color=cols['frozen'], marker='o', ms=3, lw=1.2, ls='--', label='frozen (no training)')]
+    axes[-1].legend(handles=handles, fontsize=7, loc='center', title='thin lines: second seed', title_fontsize=7); axes[-1].axis('off')
     fig.suptitle('Run 4: depth-3 acquisition vs sample budget, GRPO (per update) and EI (per round), same Stage-1 draw', fontsize=10)
     fig.tight_layout(); fig.savefig(f'{a.figdir}/run4_acquisition.png', dpi=130); plt.close(fig)
     # Fig 2: fraction of groups with reward variance per update
@@ -181,7 +184,7 @@ def main():
         ax.set_title(f'draw s{s}', fontsize=9)
     for ax in axes[-((n + 1) // 2):]:
         ax.set_xlabel('update', fontsize=8)
-    axes[0].set_ylabel('fraction of groups with reward variance', fontsize=8); axes[0].legend(fontsize=7)
+    axes[0].set_ylabel('fraction of groups with reward variance', fontsize=8); axes[-1].legend(handles=handles[:4], fontsize=7, loc='center'); axes[-1].axis('off')
     fig.tight_layout(); fig.savefig(f'{a.figdir}/run4_variance.png', dpi=130); plt.close(fig)
     # Fig 3: held-out greedy by round
     fig, ax = plt.subplots(figsize=(6, 3.6))
