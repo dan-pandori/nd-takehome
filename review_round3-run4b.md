@@ -185,3 +185,105 @@ reproduces. Mix-acquired targets absent from the base's 600k sample: 241 / 241, 
    first-schedule draws) while 25Mr s2 (0.590) and 85Mr s1 (0.544) do not.
 3. Size is confounded with `ft_lr` (3e-4 / 1e-4 / 3e-5) and the 8-round window censors 85Mr.
 4. 85M is "untrained" by the pre-registered gate at both schedules; any 85M statement must carry that label.
+
+## Compare (phase 2)
+
+Written 2026-09-19 ≈ 01:45 UTC after committing §Recount (75e3232). Read now: `run4b.md`, `numbers.md` §Round 3 run 4b, `log.md`
+§round3-run4b, `STATUS.md`, `figures/r3_4b_fractions.png`, `~/pods.log`. Additional checks made in this phase: **all** counted proofs
+re-verified (`artifacts/r3_4b/review/review_run4b_verify_all.out`), final validation losses read from the twelve `q/s1_*.log`, the 3.2M
+held-out numbers read from run 1's `round_1.json`, pod-hours recomputed from `~/pods.log` + the log's deletion times, Fisher exact tests.
+
+| # | claim (where) | my independent value | verdict |
+|---|---|---|---|
+| 1 | Parameters 25,321,472 / 85,208,064 (numbers) | same, from 12 training logs | reproduces |
+| 2 | Held-out greedy 25M 0.887 / 0.885 / 0.891; 25Mr 0.916 / 0.898 / 0.911 (median 0.911, passes); 85M 0.888 / 0.891 / 0.886; 85Mr 0.897 / 0.904 / 0.892 (misses → "gate-missing") | 4435 / 4424 / 4456; 4579 / 4492 / 4554; 4442 / 4453 / 4431; 4485 / 4518 / 4462 of 5,000, all 60,000 outputs re-verified | reproduces |
+| 3 | Deficit is the 6-line bin; 25M s0 0.999 / 0.997 / 0.980 / 0.970 / 0.489; 25Mr s0 0.619; 85Mr s1 0.544 | same | reproduces |
+| 4 | 3.2M greedy 0.871–0.893, 6-line 0.47–0.58 | 0.8708–0.8934; 0.466–0.579 (run 1's `round_1.json`, not re-verified by me) | reproduces |
+| 5 | Final val loss 0.0819–0.0822 for all twelve | 0.0819–0.0822 | reproduces |
+| 6 | Non-zero draws, required pool: 0 / 3, 1 / 3, 0 / 3, 0 / 3; 9 hits in 7.2·10⁶ | same; the 9 hits are one distinct proof of `d3req_204` | reproduces |
+| 7 | Optional pool: first schedule 0 / 6; 25Mr 2 / 3 (75; 7,961 hits); 85Mr 1 / 3 (1 hit) | same | reproduces |
+| 8 | "(3.2M: 10 / 16)" on the optional pool | not recounted here (ignition study's files; reviewed there) | not derived in this review |
+| 9 | Third-box samples "3–337 of 3,840 at 3.2M, 0–2 at 85M" (run4b.md) | summaries give 3.2M 3–337 ✓; 85M first schedule 0 / 2 / 1 ✓, but 85Mr s2 = **6** (numbers.md has it) | reword: "0–2 (first schedule), 0–6 with the retry draws"; raw samples not pulled, so summary-level only |
+| 10 | `req`: 11 of 11 zero-rate draws 0 / 300, no training step; 0 of 12 `req` arms ignite | same; 25Mr s1 (the non-zero draw) gets 1 target in round 8 | reproduces |
+| 11 | Frozen arms: run for 25M ×3 and 25Mr s1; elsewhere "= req (skipped)", bit-identical where checked | 4 frozen arms exist; 25Mr s1 frozen `found_8.jsonl` byte-equal to req's; 85M frozen dirs hold `args.json` only | reproduces; the substitution is valid (a never-trained `req` arm *is* the frozen control). run4b.md's Design line lists "frozen" without saying 8 of 12 were not run |
+| 12 | `mix` curves, ignition rounds (≥ 20; ≥ 6), neighbours solved, for all 12 draws | identical in every cell (230 / 231 / 3; 0 ×6; 1 / 11 / 206; ignition r4, r3, r7) | reproduces |
+| 13 | 3.2M row: non-zero 2 / 8 (28 hits / 4.8·10⁶), `req` 0 / 8, `mix` 5 / 8, r8 values 0, 0, 1, 211, 233, 239, 241, 255 | same, from run 1's raw files with my predicate | reproduces |
+| 14 | pass@10⁴: 0 / 3·10⁶ (0 targets); 29 / 3·10⁶ (1 target); 0 / 3·10⁶ | same; base-reachable target is `d3req_204` in both of 25Mr s1's samples | reproduces |
+| 15 | EI-only 230 / 230, 230 / 231, 206 / 206 | same | reproduces |
+| 16 | "All 14,580 counted proofs re-verify"; 3.2M row 25,309, 0 failures | **14,580** and **25,309** counted by my predicate, each re-verified against the *pool's* prompt: 0 failures | reproduces exactly (so my depth-3 predicate and `patterns.depth3` agree on every counted proof) |
+| 17 | Required targets solved without the pattern: 0 everywhere (E4d) | 0 in all 28 arm directories that hold files (12 req, 4 frozen, 12 mix) | reproduces |
+| 18 | Class overlap required pool ↔ training set: 0 | 0 (ordered and premise-sorted key); also 0 for transfer, neighbours, optional pool | reproduces |
+| 19 | Spend: nine pods, 46.8 pod-hours, ≈ $23.5 | creation times in `~/pods.log` match; 24.38 h + 9.10 h A40 × $0.49 + 13.32 h A6000 × $0.53 = **$23.47**; under the $50 ceiling | reproduces |
+| 20 | Gate 0: pre-registration c1ad029 17:54:40Z before first pod `r34b-1` 17:56:28Z; `gate0` FAIL caused by `la-6` | `pods.log`: `la-6` 17:53:21Z (another run), `r34b-1` 17:56:28Z; commit time confirmed | reproduces; expectations were written before the run |
+| 21 | A1 / A2 committed 18:57:53Z before the optional-pool jobs; A3 20:59:57Z before any pass@10⁴ job | first optional-pool attempt (the failed `nofile` log) 19:53Z; first pass@10⁴ log after 21:20Z | reproduces. Both amendments say what had already been seen — they are informed guesses, correctly labelled |
+| 22 | Bucket paths recorded; token scan clean | bucket has all three dirs; my scan of `artifacts/r3_4b` (incl. the uploaded `q/*.log`): 0 token-like strings | reproduces |
+
+### Wording against n
+
+| statement (run4b.md / STATUS.md) | evidence | verdict |
+|---|---|---|
+| "**Larger bases are zero-rate more often, not less.**" / "these bigger bases had *less* to elicit" | Required pool: 2 / 8 vs 1 / 12 (Fisher two-sided 0.54; vs first schedule 0 / 6: 0.47) — **no difference**. Optional pool: 10 / 16 vs first-schedule 0 / 6 (p = 0.015) is a difference, but the same seeds at 25M on the retry schedule are 2 / 3 non-zero with a rate of 1.3·10⁻² — seven times the largest 3.2M rate the brief quotes (1.9·10⁻³). | **reword.** Supported: "larger bases were *not more often* non-zero (E1 / E2 failed at both sizes); on the optional pool the first-schedule draws and both 85M cells were less often non-zero than 3.2M, the 25M retry draws were not." "Less to elicit" is true of 9 of the 12 draws, not of "bigger bases". |
+| "**With neighbours, ignition follows the schedule, not the size.**" | 3 / 6 (retry) vs 0 / 6 (first): Fisher one-sided 0.09, two-sided 0.18; post hoc (the caveat line says so). 3 seeds per cell. | **reword** to the observation: "all three igniters are retry-schedule draws (3 / 6 vs 0 / 6, not significant at n = 6, post hoc)". The heading states a cause; the data are a suggestion. |
+| "…beyond base reach at 10⁴, **gated by Stage-1 quality**." | Held-out greedy does not order ignition: 85Mr s2 ignites at 0.892 (6-line bin 0.487 — the *lowest* retry value, equal to first-schedule draws), 25Mr s2 does not at 0.911 (0.590), 85Mr s1 does not by round 8 at 0.904 (0.544). Across cells: 3.2M draws at 0.871–0.893 ignite 5 / 8, first-schedule 25M / 85M draws at the *same* greedy (0.885–0.891) ignite 0 / 6 (Fisher two-sided **0.03** — the largest between-cell contrast in the run, and it runs against a quality gate). | **not supported.** The schedule may matter; "quality" as measured here does not explain which draws ignite. |
+| "EI-only fraction ≈ 1 at every size … **flat in size**" | 5 igniters at 3.2M (base sampled at 2,000 only), 2 at 25Mr, **1** at 85Mr (gate-missing). The pre-registration requires two igniters per size before calling a direction. The fraction is at its ceiling at the smallest size, so on this pool it could not have risen: the brief's falsifier (fraction growing with size) is untestable here; only a fall could have shown, and none did. | **reword**: "≈ 1 in all three igniting draws; no fall; one 85M igniter, so no trend is called, and a rise could not be seen on a required pool". |
+| "**Size bought nothing.**" | Greedy and val loss identical across 3.2M / 25M / 85M on the first schedule (n = 8 / 3 / 3, ranges overlap fully). | stands as a statement about held-out greedy on this 155k-record set; say so (the log's "data-limited, not capacity-limited" is the accurate version). |
+| "'Or nothing' holds at every size on the required pool" | 11 / 11; by construction an arm with no accepted proof cannot train, so the content is "zero-rate at 600k ⇒ nothing at 256 attempts × 300", which held. 85M carries the gate-missing label in run4b.md. | stands |
+| "Scale does not retire the clause" | true for these twelve draws; 85M is "untrained" by the pre-registered gate at both schedules, and size is confounded with `ft_lr` (3e-4 / 1e-4 / 3e-5) and with Stage-1 lr (1e-3 at 3.2M) | stands with the label; the `ft_lr` confound and the 8-round censoring of 85Mr (s1: 2 → 4 → 11, s2 130 → 206 at round 8) belong in the caveats — run4b.md mentions "rising", not the lr |
+| "Expectations. E1, E2, E5 (85M), E6 wrong; E3, E4d, A3 held." | numbers.md's table is complete and honest (E4a "half / wrong", E5 25M "right only after retry", A1 "wrong for the retry draws"). run4b.md's one-line list leaves out three misses: **E4a's counts** (1–2 of 3 85M and ≥ 1 of 3 25M `req` ignitions: 0), **E5 at 25M on the first schedule** (predicted 0.90–0.93, got 0.887), **A1 on the retry draws**. | **reword** the list in run4b.md; misses are reported as misses in numbers.md |
+
+No use of "bistable", "wall" or "never" beyond "never train / never trained", which is literal (0 training records in every round file).
+
+### Process notes (not defects of the numbers)
+
+- `data/p2/train_depth3_f0_a1.jsonl` is a symlink into another run's worktree and git-ignored; the bucket copy is the durable one. A future
+  clean-up of `~/work/run4-grpo` would break this checkout.
+- Held-out set: 21 of 5,000 theorems are premise-order permutations of a Stage-1 training class (inherited split). No gate verdict moves (§Recount).
+- Interrupted samplers were resumed with a re-seeded generator and forward / reverse halves overlap on 6–110 targets; merged files keep one
+  record per target. All affected cells are 0 hits or a single target, so no count depends on the merge rule. Disclosed in log and numbers.
+- Only 4 of 12 frozen arms exist and there is no frozen arm on the `mix` pool; the never-trained `req` arm is an exact equal-attempts control
+  for the required stratum, so nothing is lost.
+- `gate0` / `gate1` failures are harness artefacts as the executor says (`la-6` is not this run's pod; marker blob identical to `origin/main`).
+
+## Verdict
+
+**What stands (every number reproduces from raw files with independent code; 0 verification failures in 14,580 + 25,309 proofs; hard
+constraints pass; expectations pre-registered before the first pod; spend $23.5):**
+
+1. At 25M and 85M, on the cap-6 f = 0 depth-3 set, **no first-schedule draw and 1 of 6 retry draws emits a depth-3 proof on the required
+   pool in 600k samples** (9 hits, one target). The brief's E1 / E2 and the executor's fail at both sizes.
+2. **Zero-rate ⇒ nothing on the required pool: 11 of 11** draws, no training step; the one non-zero draw acquires 1 target. No `req` arm
+   ignites at any size (0 / 12; 3.2M 0 / 8).
+3. **With neighbours in the pool, 3 of 12 new draws ignite** (25Mr s0, s1; 85Mr s2 — 230, 231, 206 of 300 required targets; 76–82 of 100
+   transfer targets), all through the pattern (0 non-pattern solutions), and **what they acquire is not in the base's 10⁴ reach:
+   230 / 230, 230 / 231, 206 / 206.** A3 held.
+4. Held-out greedy does not improve with size on this data (0.885–0.891 vs 3.2M's 0.871–0.893; val loss 0.082 everywhere); 25M passes the gate
+   only on the retry schedule; **85M is gate-missing on both schedules** and every 85M statement carries that label.
+
+**What must be reworded:** "larger bases are zero-rate more often" (required pool shows no difference; the optional-pool contrast reverses
+at 25M on the retry schedule); "ignition follows the schedule, not the size" (3 / 6 vs 0 / 6, p = 0.18, post hoc → an observation, not a
+finding); "flat in size" (one 85M igniter; fraction at ceiling, so the brief's falsifier cannot be tested on a required pool); the
+expectations line in run4b.md (add E4a's counts, E5 at 25M first schedule, A1 on retry draws); "0–2 at 85M" (0–6 with the retry draws);
+add `ft_lr` and the 8-round window to the caveats.
+
+**What is not supported:** "gated by Stage-1 quality". Within the retry cells held-out greedy and the 6-line bin do not order the igniters
+(85Mr s2 ignites with the lowest values; 25Mr s2 does not with nearly the highest), and at matched greedy the 3.2M draws ignite 5 / 8
+against 0 / 6 for first-schedule 25M / 85M (p = 0.03). Something separates those cells, but this run cannot say whether it is size, the
+Stage-1 learning rate (1e-3 vs 3e-4 vs 1e-4), the fine-tune learning rate, or chance in which draws open a well-formed third box.
+
+**For the project's question:** the run adds nothing against the elicitation-or-nothing reading and one clean point for the other half —
+with rewarded neighbours, EI reaches required depth-3 targets that the base does not reach in 3·10⁶ samples, at 25M as at 3.2M. It does not
+show how that depends on size: the size axis is confounded with schedule and learning rates, the 85M cell is untrained by the run's own
+gate, and the cell counts are 3.
+
+**Next measurements that would settle what is open (cheapest first):**
+
+1. *Is 85Mr 1 / 3 or more?* Continue `ei_depth3_85Mr_s1_mix` and `_s0_mix` from their round-8 checkpoints (in the bucket) to round 16
+   (`--start_round 9 --resume_found`). ≈ 2 × 1.5 A40-hours ≈ $1.5. s1 at 2 → 4 → 11 is on the curve s2 followed one round earlier.
+2. *Schedule or chance?* 25M, seeds 3–8, both schedules, `mix` arm only (the only arm that discriminates), plus the writing
+   diagnostic with its raw samples kept. 12 draws ≈ 12 × (0.3–1.1 h Stage-1 + 1 h mix) ≈ $9. With 0 / 9 vs ≥ 5 / 9 the schedule effect is real
+   (p < 0.03); with a first-schedule igniter it is gone. The executor's proposed 3.2M two-schedule test (8 + 8 seeds, ≈ $3) answers the
+   complementary question — whether 3.2M's 5 / 8 survives the lr change — and should run alongside, with `ft_lr` held at the same ratio to
+   the Stage-1 peak in every cell.
+3. *Can the EI-only fraction move with size at all?* On the required pool it is pinned at 1. Run the brief's measurement where the base has
+   something: pass@10⁴ on the **optional** pool for 25Mr s1 (base rate 1.3·10⁻²), 25Mr s0, and two 3.2M igniters, with a `mix`-style arm on
+   that pool; only there can "falls with size" or "grows with size" be observed.
