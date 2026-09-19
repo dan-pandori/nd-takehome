@@ -1,0 +1,120 @@
+pool: required by n_lines Counter({8: 294, 7: 6}) | r10 alternative Counter({'9': 288, 'None': 11, '10': 1})
+mix neighbours by n_lines Counter({7: 250, 8: 50})
+
+== E5 held-out greedy (5,000), re-verified with nd_verify ==
+25M_s0 5000 4435 0.8870 {2: 0.999, 3: 0.997, 4: 0.98, 5: 0.97, 6: 0.489}
+25M_s1 5000 4424 0.8848 {2: 0.998, 3: 0.996, 4: 0.978, 5: 0.967, 6: 0.485}
+25M_s2 5000 4456 0.8912 {2: 1.0, 3: 0.996, 4: 0.987, 5: 0.978, 6: 0.495}
+25Mr_s0 5000 4579 0.9158 {2: 1.0, 3: 0.999, 4: 0.986, 5: 0.975, 6: 0.619}
+25Mr_s1 5000 4492 0.8984 {2: 1.0, 3: 0.997, 4: 0.983, 5: 0.971, 6: 0.541}
+25Mr_s2 5000 4554 0.9108 {2: 1.0, 3: 0.998, 4: 0.989, 5: 0.977, 6: 0.59}
+85M_s0 5000 4442 0.8884 {2: 0.999, 3: 0.996, 4: 0.984, 5: 0.968, 6: 0.495}
+85M_s1 5000 4453 0.8906 {2: 0.999, 3: 0.999, 4: 0.985, 5: 0.975, 6: 0.495}
+85M_s2 5000 4431 0.8862 {2: 0.998, 3: 0.997, 4: 0.975, 5: 0.976, 6: 0.485}
+85Mr_s0 5000 4485 0.8970 {2: 1.0, 3: 0.998, 4: 0.991, 5: 0.98, 6: 0.516}
+85Mr_s1 5000 4518 0.9036 {2: 0.999, 3: 1.0, 4: 0.993, 5: 0.982, 6: 0.544}
+85Mr_s2 5000 4462 0.8924 {2: 1.0, 3: 1.0, 4: 0.991, 5: 0.984, 6: 0.487}
+  median 25M: 0.8870 gate 0.9 -> MISS
+  median 25Mr: 0.9108 gate 0.9 -> PASS
+  median 85M: 0.8884 gate 0.93 -> MISS
+  median 85Mr: 0.8970 gate 0.93 -> MISS
+
+== pre-RL required-pool sample (k=2000, 600k) ==
+25M_s0 cov_depth3_25M_s0.s0.jsonl targets 300 tried 600000 {2000: 300} pattern hits 0 rate 0.00e+00 targets hit 0 distinct 0 frozen@256 0 valid non-pattern samples 0 on 0 targets
+25M_s1 cov_depth3_25M_s1.s0.jsonl targets 300 tried 600000 {2000: 300} pattern hits 0 rate 0.00e+00 targets hit 0 distinct 0 frozen@256 0 valid non-pattern samples 0 on 0 targets
+25M_s2 cov_depth3_25M_s2.s0.jsonl targets 300 tried 600000 {2000: 300} pattern hits 0 rate 0.00e+00 targets hit 0 distinct 0 frozen@256 0 valid non-pattern samples 0 on 0 targets
+25Mr_s0 cov_depth3_25Mr_s0.s0.jsonl targets 300 tried 600000 {2000: 300} pattern hits 0 rate 0.00e+00 targets hit 0 distinct 0 frozen@256 0 valid non-pattern samples 0 on 0 targets
+25Mr_s1 cov_depth3_25Mr_s1.s0.jsonl targets 300 tried 600000 {2000: 300} pattern hits 9 rate 1.50e-05 targets hit 1 distinct 1 frozen@256 1 valid non-pattern samples 0 on 0 targets
+25Mr_s2 cov_depth3_25Mr_s2.s0.jsonl targets 300 tried 600000 {2000: 300} pattern hits 0 rate 0.00e+00 targets hit 0 distinct 0 frozen@256 0 valid non-pattern samples 0 on 0 targets
+85M_s0 cov_depth3_85M_s0.s0.jsonl targets 300 tried 600000 {2000: 300} pattern hits 0 rate 0.00e+00 targets hit 0 distinct 0 frozen@256 0 valid non-pattern samples 0 on 0 targets
+85M_s1 cov_depth3_85M_s1.s0.jsonl targets 300 tried 600000 {2000: 300} pattern hits 0 rate 0.00e+00 targets hit 0 distinct 0 frozen@256 0 valid non-pattern samples 0 on 0 targets
+85M_s2 cov_depth3_85M_s2.s0.jsonl targets 300 tried 600000 {2000: 300} pattern hits 0 rate 0.00e+00 targets hit 0 distinct 0 frozen@256 0 valid non-pattern samples 0 on 0 targets
+85Mr_s0 cov_depth3_85Mr_s0.merged.jsonl targets 300 tried 600000 {2000: 300} pattern hits 0 rate 0.00e+00 targets hit 0 distinct 0 frozen@256 0 valid non-pattern samples 0 on 0 targets
+85Mr_s1 cov_depth3_85Mr_s1.merged.jsonl targets 300 tried 600000 {2000: 300} pattern hits 0 rate 0.00e+00 targets hit 0 distinct 0 frozen@256 0 valid non-pattern samples 0 on 0 targets
+85Mr_s2 cov_depth3_85Mr_s2.merged.jsonl targets 300 tried 600000 {2000: 300} pattern hits 0 rate 0.00e+00 targets hit 0 distinct 0 frozen@256 0 valid non-pattern samples 0 on 0 targets
+
+-- merged-file check (85Mr pre-RL halves)
+85Mr_s0 fwd 195 rev 118 overlap 13 merged 300 merged hits==max/sum? 0 0 0 overlap names ['d3req_182', 'd3req_183', 'd3req_184', 'd3req_185', 'd3req_186']
+85Mr_s1 fwd 233 rev 73 overlap 6 merged 300 merged hits==max/sum? 0 0 0 overlap names ['d3req_227', 'd3req_228', 'd3req_229', 'd3req_230', 'd3req_231']
+85Mr_s2 fwd 148 rev 162 overlap 10 merged 300 merged hits==max/sum? 0 0 0 overlap names ['d3req_138', 'd3req_139', 'd3req_140', 'd3req_141', 'd3req_142']
+
+== pre-RL optional-pool sample (A1) ==
+25M_s0 targets 300 tried 600000 pattern hits 0 rate 0.00e+00 targets hit 0 | valid non-pattern samples 2221 on 6 targets
+25M_s1 targets 300 tried 600000 pattern hits 0 rate 0.00e+00 targets hit 0 | valid non-pattern samples 79 on 8 targets
+25M_s2 targets 300 tried 600000 pattern hits 0 rate 0.00e+00 targets hit 0 | valid non-pattern samples 3513 on 10 targets
+25Mr_s0 targets 300 tried 600000 pattern hits 75 rate 1.25e-04 targets hit 6 | valid non-pattern samples 240 on 2 targets
+25Mr_s1 targets 300 tried 600000 pattern hits 7961 rate 1.33e-02 targets hit 24 | valid non-pattern samples 30 on 2 targets
+25Mr_s2 targets 300 tried 600000 pattern hits 0 rate 0.00e+00 targets hit 0 | valid non-pattern samples 134 on 2 targets
+85M_s0 targets 300 tried 600000 pattern hits 0 rate 0.00e+00 targets hit 0 | valid non-pattern samples 449 on 9 targets
+85M_s1 targets 300 tried 600000 pattern hits 0 rate 0.00e+00 targets hit 0 | valid non-pattern samples 4439 on 12 targets
+85M_s2 targets 300 tried 600000 pattern hits 0 rate 0.00e+00 targets hit 0 | valid non-pattern samples 1309 on 7 targets
+85Mr_s0 targets 300 tried 600000 pattern hits 0 rate 0.00e+00 targets hit 0 | valid non-pattern samples 619 on 7 targets
+85Mr_s1 targets 300 tried 600000 pattern hits 1 rate 1.67e-06 targets hit 1 | valid non-pattern samples 5128 on 8 targets
+85Mr_s2 targets 300 tried 600000 pattern hits 0 rate 0.00e+00 targets hit 0 | valid non-pattern samples 306 on 5 targets
+
+== EI arms (required stratum, pattern = my depth-3 predicate on the dependency cone, min-round) ==
+25M_s0 req rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum - | rounds trained 0 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+25M_s0 frozen rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum - | rounds trained 0 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+25M_s0 mix rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum [67, 89, 102, 106, 111, 119, 125, 129] | rounds trained 8 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+25M_s1 req rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum - | rounds trained 0 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+25M_s1 frozen rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum - | rounds trained 0 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+25M_s1 mix rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum [44, 85, 94, 96, 101, 106, 113, 121] | rounds trained 8 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+25M_s2 req rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum - | rounds trained 0 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+25M_s2 frozen rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum - | rounds trained 0 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+25M_s2 mix rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum [68, 98, 108, 119, 133, 136, 141, 145] | rounds trained 8 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+25Mr_s0 req rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum - | rounds trained 0 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+25Mr_s0 frozen ABSENT
+25Mr_s0 mix rounds 8 req cum [0, 2, 15, 106, 205, 224, 226, 230] ign>=20 4 ign>=6 3 | neighbours cum [59, 107, 149, 188, 203, 207, 212, 214] | rounds trained 8 | counted proofs 4795 distinct 259 | reverified 150 bad 0 | req solved w/o pattern 0 | transfer pattern targets 81
+25Mr_s1 req rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 1] ign>=20 None ign>=6 None | neighbours cum - | rounds trained 1 | counted proofs 1 distinct 1 | reverified 1 bad 0 | req solved w/o pattern 0 | transfer pattern targets 2
+25Mr_s1 frozen rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 1] ign>=20 None ign>=6 None | neighbours cum - | rounds trained 0 | counted proofs 1 distinct 1 | reverified 1 bad 0 | req solved w/o pattern 0 | transfer pattern targets 2
+25Mr_s1 mix rounds 8 req cum [0, 13, 113, 194, 219, 229, 230, 231] ign>=20 3 ign>=6 2 | neighbours cum [69, 136, 180, 195, 202, 207, 207, 207] | rounds trained 8 | counted proofs 6035 distinct 253 | reverified 150 bad 0 | req solved w/o pattern 0 | transfer pattern targets 82
+25Mr_s2 req rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum - | rounds trained 0 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+25Mr_s2 frozen ABSENT
+25Mr_s2 mix rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 3] ign>=20 None ign>=6 None | neighbours cum [56, 81, 93, 102, 107, 112, 119, 131] | rounds trained 8 | counted proofs 10 distinct 3 | reverified 10 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+85M_s0 req rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum - | rounds trained 0 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+85M_s0 frozen ABSENT
+85M_s0 mix rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum [61, 82, 91, 93, 95, 97, 100, 103] | rounds trained 8 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+85M_s1 req rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum - | rounds trained 0 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+85M_s1 frozen ABSENT
+85M_s1 mix rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum [67, 86, 100, 107, 108, 109, 110, 110] | rounds trained 8 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+85M_s2 req rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum - | rounds trained 0 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+85M_s2 frozen ABSENT
+85M_s2 mix rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum [70, 91, 101, 107, 108, 112, 113, 119] | rounds trained 8 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+85Mr_s0 req rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum - | rounds trained 0 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+85Mr_s0 frozen ABSENT
+85Mr_s0 mix rounds 8 req cum [0, 0, 1, 1, 1, 1, 1, 1] ign>=20 None ign>=6 None | neighbours cum [71, 100, 107, 108, 109, 109, 111, 112] | rounds trained 8 | counted proofs 27 distinct 1 | reverified 27 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+85Mr_s1 req rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum - | rounds trained 0 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+85Mr_s1 frozen ABSENT
+85Mr_s1 mix rounds 8 req cum [0, 0, 0, 0, 0, 2, 4, 11] ign>=20 None ign>=6 8 | neighbours cum [64, 94, 106, 107, 111, 114, 120, 146] | rounds trained 8 | counted proofs 138 distinct 11 | reverified 138 bad 0 | req solved w/o pattern 0 | transfer pattern targets 11
+85Mr_s2 req rounds 8 req cum [0, 0, 0, 0, 0, 0, 0, 0] ign>=20 None ign>=6 None | neighbours cum - | rounds trained 0 | counted proofs 0 distinct 0 | reverified 0 bad 0 | req solved w/o pattern 0 | transfer pattern targets 0
+85Mr_s2 frozen ABSENT
+85Mr_s2 mix rounds 8 req cum [0, 0, 1, 1, 3, 16, 130, 206] ign>=20 7 ign>=6 6 | neighbours cum [66, 87, 96, 100, 101, 117, 169, 195] | rounds trained 8 | counted proofs 3573 distinct 228 | reverified 150 bad 0 | req solved w/o pattern 0 | transfer pattern targets 76
+partial ei_depth3_85M_s0_mix.oom1 rows 0 req pattern targets 0
+partial ei_depth3_85M_s1_mix.oom1 rows 0 req pattern targets 0
+partial ei_depth3_85M_s2_mix.oom1 rows 0 req pattern targets 0
+partial ei_depth3_85M_s2_mix.oom2 rows 1097 req pattern targets 0
+
+== pass@1e4 from the Stage-1 checkpoint (required pool) ==
+  shard cov1e4_depth3_25Mr_s0.s0.jsonl targets 150 tried 1500000 [(10000, 150)]
+  shard cov1e4_depth3_25Mr_s0.s0r.jsonl targets 166 tried 1660000 [(10000, 166)]
+  shard union targets 300 targets in >1 shard 16
+25Mr_s0 merged targets 300 tried 3000000 {10000: 300} pattern hits 0 (shards sum 0 ) rate 0.00e+00 base-reachable targets 0 [] | acquired by mix 230 EI-only 230 1.0000 | also excluding 600k-sample reach: 230 | reachable but not acquired []
+  shard cov1e4_depth3_25Mr_s1.s0.jsonl targets 251 tried 2510000 [(10000, 251)]
+  shard cov1e4_depth3_25Mr_s1.s0r.jsonl targets 159 tried 1590000 [(10000, 159)]
+  shard union targets 300 targets in >1 shard 110
+25Mr_s1 merged targets 300 tried 3000000 {10000: 300} pattern hits 29 (shards sum 59 ) rate 9.67e-06 base-reachable targets 1 ['d3req_204'] | acquired by mix 231 EI-only 230 0.9957 | also excluding 600k-sample reach: 230 | reachable but not acquired []
+  shard cov1e4_depth3_85Mr_s2.s0.jsonl targets 100 tried 1000000 [(10000, 100)]
+  shard cov1e4_depth3_85Mr_s2.s1.jsonl targets 100 tried 1000000 [(10000, 100)]
+  shard cov1e4_depth3_85Mr_s2.s2.jsonl targets 100 tried 1000000 [(10000, 100)]
+  shard union targets 300 targets in >1 shard 0
+85Mr_s2 merged targets 300 tried 3000000 {10000: 300} pattern hits 0 (shards sum 0 ) rate 0.00e+00 base-reachable targets 0 [] | acquired by mix 206 EI-only 206 1.0000 | also excluding 600k-sample reach: 206 | reachable but not acquired []
+
+== 3.2M reference row from artifacts/r3_1 ==
+s20 tried 600000 hits 0 rate 0.00e+00 targets hit 0 | req cum [0, 0, 0, 0, 0, 0, 0, 0] trained rounds 0 | mix req cum [0, 0, 0, 0, 0, 0, 0, 1] ign20 None | mix acquired not in 600k sample 1 of 1
+s21 tried 600000 hits 0 rate 0.00e+00 targets hit 0 | req cum [0, 0, 0, 0, 0, 0, 0, 0] trained rounds 0 | mix req cum [0, 0, 2, 75, 202, 229, 238, 241] ign20 4 | mix acquired not in 600k sample 241 of 241
+s22 tried 600000 hits 2 rate 3.33e-06 targets hit 1 | req cum [0, 0, 0, 0, 0, 0, 0, 0] trained rounds 0 | mix req cum [0, 1, 1, 2, 8, 84, 178, 211] ign20 6 | mix acquired not in 600k sample 210 of 211
+s23 tried 600000 hits 0 rate 0.00e+00 targets hit 0 | req cum [0, 0, 0, 0, 0, 0, 0, 0] trained rounds 0 | mix req cum [0, 0, 5, 55, 183, 239, 250, 255] ign20 4 | mix acquired not in 600k sample 255 of 255
+s24 tried 600000 hits 26 rate 4.33e-05 targets hit 3 | req cum [0, 1, 1, 2, 4, 5, 5, 5] trained rounds 7 | mix req cum [0, 15, 136, 193, 215, 224, 231, 233] ign20 3 | mix acquired not in 600k sample 230 of 233
+s25 tried 600000 hits 0 rate 0.00e+00 targets hit 0 | req cum [0, 0, 0, 0, 0, 0, 0, 0] trained rounds 0 | mix req cum [0, 0, 0, 0, 0, 0, 0, 0] ign20 None | mix acquired not in 600k sample 0 of 0
+s26 tried 600000 hits 0 rate 0.00e+00 targets hit 0 | req cum [0, 0, 0, 0, 0, 0, 0, 0] trained rounds 0 | mix req cum [0, 21, 169, 209, 227, 237, 238, 239] ign20 2 | mix acquired not in 600k sample 239 of 239
+s27 tried 600000 hits 0 rate 0.00e+00 targets hit 0 | req cum [0, 0, 0, 0, 0, 0, 0, 0] trained rounds 0 | mix req cum [0, 0, 0, 0, 0, 0, 0, 0] ign20 None | mix acquired not in 600k sample 0 of 0

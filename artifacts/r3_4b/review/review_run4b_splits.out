@@ -1,0 +1,19 @@
+train records 155000 n_lines [(2, 31000), (3, 31000), (4, 31000), (5, 31000), (6, 31000)]
+train written max depth hist [(0, 82393), (1, 54883), (2, 17724)] -> depth>=3 proofs in the Stage-1 set: 0
+train classes ordered / sorted 155000 154494
+req (RL+eval, 300): rows 300 classes 300/300 | overlap with Stage-1 train: ordered 0 sorted 0
+req_transfer (100): rows 100 classes 100/100 | overlap with Stage-1 train: ordered 0 sorted 0
+neighbours (300): rows 300 classes 300/300 | overlap with Stage-1 train: ordered 0 sorted 0
+optional pool (first 300 of targets_depth3): rows 300 classes 300/300 | overlap with Stage-1 train: ordered 0 sorted 0
+heldout (5000): rows 5000 classes 5000/4999 | overlap with Stage-1 train: ordered 0 sorted 21
+targets/test_short_prompts.jsonl: rows 267 classes 256/256 | overlap with Stage-1 train: ordered 57 sorted 66
+targets/test_long_prompts.jsonl: rows 532 classes 531/531 | overlap with Stage-1 train: ordered 1 sorted 2
+mix pool rows 600 classes 600 600 = req U nb? True
+EI training pool (mix) vs req_transfer (100): ordered 0 sorted 0
+EI training pool (mix) vs optional pool (first 300 of targets_depth3): ordered 130 sorted 130
+EI training pool (mix) vs heldout (5000): ordered 0 sorted 0
+EI training pool (mix) vs targets/test_short_prompts.jsonl: ordered 0 sorted 0
+EI training pool (mix) vs targets/test_long_prompts.jsonl: ordered 0 sorted 0
+req vs neighbours: ordered 0 sorted 0
+req vs req_transfer: sorted 0
+within-pool duplicate classes: req 0 transfer 0 nb 0
