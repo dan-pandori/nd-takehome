@@ -480,3 +480,59 @@
 - EI reference ei_depth3_f0_a3_s1: solved 583, acquisition 0.352, per round [7, 92, 227, 319, 338, 345, 346, 352], held-out greedy 0.919
 - Summary: G = 8 acquisition mean 0.474 (range 0.447–0.505, n = 6), G = 32 mean 0.426 (0.395–0.467); EI mean 0.351 (0.335–0.364). Held-out greedy at the end: G = 8 [0.34, 0.53, 0.56, 0.62, 0.64, 0.67], G = 32 [0.38, 0.52, 0.56, 0.61, 0.64, 0.66].
 - The 85M / relative-codec arm of the proposal was not run (no access to that code). Pods: p4 / p5 (RTX 3090) from 23:09 to 01:36 UTC ≈ 2 × 2.4 h ≈ $2.4 (shared with run 3). Bucket: `hf://buckets/dan-pandori/nd-rl/round2/run4/{artifacts/r4,ckpts/r4}`.
+
+## Round 3 — Run 4a: reductio on the required pool vs model size (2026-09-18/19; `r3_4a_pool.py`, `make_coverage_sets.py assemble`, `r3_4a_indep.py`, `run4a_analysis.py` → `artifacts/r3_4a/summary.json`, `r3_4a_heldout_split.py` → `artifacts/r3_4a/heldout_split.json`, tables below printed by `run4a_tables.py`; job scripts `pod/r3_4a/`)
+
+Sources. Stage-1: `artifacts/r3_4a/train_<draw>.log`, `heldout_greedy_<draw>.json` (+ `.jsonl`, bucket only). Pre-RL sample: `artifacts/r3_4a/cov_<draw>_pre.s0.jsonl` (300 targets × 2,000, T = 0.8, seed 0). EI / frozen: `artifacts/r3_4a/{ei,frozen}_<draw>/round_<r>.json`, `found_<r>.jsonl`, `found_transfer_<r>.jsonl`, `args.json`. Base pass@10⁴ on the EI-acquired targets: `data/r3_4a/acq_<draw>.jsonl` → `artifacts/r3_4a/cov_<draw>_b10k.s0.jsonl` (seed 1, fresh samples). 3.2M original-set row: `artifacts/r5/` (run 5, reviewed). Draw names: `m3` = 3.2M (4 × 256), `m25` = 25M (8 × 512), `m85` = 85M (12 × 768); suffix `B` = retry configuration (lr 1e-4, 12,000 steps), none = configuration A (lr 3e-4, 6,000 steps; `m3`: campaign command, lr 1e-3); `_s<seed>`.
+
+- **Set (deviation).** `data/r3_4a/train_reductio_f0_b1.jsonl` (md5 333d1323…, bucket `round3-run4a/data/r3_4a/`): 155,000 = 31,000 × lengths 2–6, reductio **0** (pruned and written form; independent string-level recount `artifacts/r3_4a/indep_check_b1.log`: strict 0, DN-after-NEGI 0), derived-ORE 88, depth-3 5,687 (`data/r3_4a/assemble_report_b1.json`); source pool 466,088 classes from 775,000 records of five generator sets (`data/r3_4a/pool_cap6_r4a_report.json`); class overlap with targets / transfer / held-out / `targets_reductio_req6` / val-36: 0 / 0 / 0 / 0 / 0. The original `train_reductio_f0.jsonl` was unreachable (log.md 17:50).
+- **Parameters** (printed by `train.py`): 3,210,240 / 25,321,472 / 85,208,064.
+- **Quality gate.** Held-out greedy (5,000): 3.2M 0.867–0.877; 25M A 0.8926 / 0.8972 / 0.9078, B 0.9104 / 0.8972 / 0.9104; 85M A 0.8988 / 0.9134 / 0.8940 (+ extras), B 0.9160 / 0.9152 / 0.9148. The brief's 0.93 at 85M is not reachable by an f = 0 reductio model: 679 of the 5,000 held-out theorems are reductio-labelled and f = 0 models solve 178–308 of them; on the 4,321 others every 25M / 85M draw is at 0.982–0.988 (3.2M 0.957–0.971). Retry rule (fixed 19:02 UTC before the retries existed): B replaces A if seed-0 held-out greedy improves by > 0.01 → fired at both sizes (+0.0178, +0.0172), entirely on reductio-labelled theorems and inside the A seeds' own spread. Both configurations were run in full (3 draws each) and are reported as separate cells; B is the headline configuration by the rule, 85M is "gate missed (structural)".
+
+### Per draw
+
+| draw | params | Stage-1 steps / val | held-out greedy (all / non-reductio) | pre-RL strict hits / 600k (rate) | targets hit (7/8/9/10) | pass@256 targets | EI acquired (7/8/9/10) | per round | ignition round | trained rounds | frozen | transfer acq. (of 150) | solved w/o pattern (EI/frozen/cov) | base-reachable@1e4 of acquired | EI-only fraction |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| m3_s0 | 3210240 | 6000 / 0.0825 | 0.8668 / 0.9572 | 0 / 600,000 (0.0e+00) | 0 (0/0/0/0) | 0 | 0 (0/0/0/0) | 0 0 0 0 0 0 0 0 | – | 0 | 0 | 0 (0/0/0/0) | 0/0/0 | – | – |
+| m3_s1 | 3210240 | 6000 / 0.0827 | 0.8770 / 0.9713 | 14 / 600,000 (2.3e-05) | 3 (3/0/0/0) | 1 | 32 (32/0/0/0) | 0 1 3 7 8 11 21 32 | 4 | 7 | 2 | 18 (18/0/0/0) | 0/0/0 | 5 / 32 | 27 / 32 = 0.84 |
+| m3_s2 | 3210240 | 6000 / 0.0825 | 0.8712 / 0.9669 | 0 / 600,000 (0.0e+00) | 0 (0/0/0/0) | 0 | 0 (0/0/0/0) | 0 0 0 0 0 0 0 0 | – | 0 | 0 | 0 (0/0/0/0) | 0/0/0 | – | – |
+| m25_s0 | 25321472 | 6000 / 0.0820 | 0.8926 / 0.9824 | 1872 / 600,000 (3.1e-03) | 11 (11/0/0/0) | 8 | 45 (44/1/0/0) | 4 13 32 38 40 45 45 45 | 2 | 8 | 7 | 21 (21/0/0/0) | 0/0/0 | 15 / 45 | 30 / 45 = 0.67 |
+| m25_s1 | 25321472 | 6000 / 0.0829 | 0.8972 / 0.9861 | 830 / 600,000 (1.4e-03) | 10 (10/0/0/0) | 5 | 52 (52/0/0/0) | 4 20 37 49 52 52 52 52 | 2 | 8 | 7 | 25 (25/0/0/0) | 0/0/0 | 11 / 52 | 41 / 52 = 0.79 |
+| m25_s2 | 25321472 | 6000 / 0.0822 | 0.9078 / 0.9877 | 14 / 600,000 (2.3e-05) | 3 (3/0/0/0) | 2 | 40 (39/1/0/0) | 0 1 15 29 36 38 39 40 | 3 | 7 | 1 | 23 (23/0/0/0) | 0/0/0 | 6 / 40 | 34 / 40 = 0.85 |
+| m25B_s0 | 25321472 | 12000 / 0.0820 | 0.9104 / 0.9847 | 3 / 600,000 (5.0e-06) | 2 (2/0/0/0) | 0 | 0 (0/0/0/0) | 0 0 0 0 0 0 0 0 | – | 0 | 0 | 1 (1/0/0/0) | 0/0/0 | – | – |
+| m25B_s1 | 25321472 | 12000 / 0.0820 | 0.8972 / 0.9801 | 0 / 600,000 (0.0e+00) | 0 (0/0/0/0) | 0 | 0 (0/0/0/0) | 0 0 0 0 0 0 0 0 | – | 0 | 0 | 0 (0/0/0/0) | 0/0/0 | – | – |
+| m25B_s2 | 25321472 | 12000 / 0.0820 | 0.9104 / 0.9882 | 131 / 600,000 (2.2e-04) | 5 (5/0/0/0) | 3 | 48 (48/0/0/0) | 0 1 9 31 39 43 44 48 | 3 | 7 | 2 | 20 (20/0/0/0) | 0/0/0 | 10 / 48 | 38 / 48 = 0.79 |
+| m85_s0 | 85208064 | 6000 / 0.0820 | 0.8988 / 0.9875 | 37 / 600,000 (6.2e-05) | 3 (3/0/0/0) | 2 | 53 (52/1/0/0) | 1 6 30 39 42 53 53 53 | 2 | 8 | 2 | 27 (27/0/0/0) | 0/0/0 | 4 / 53 | 49 / 53 = 0.92 |
+| m85_s1 | 85208064 | 6000 / 0.0824 | 0.9134 / 0.9857 | 49 / 600,000 (8.2e-05) | 2 (2/0/0/0) | 2 | 52 (52/0/0/0) | 1 11 28 33 42 46 51 52 | 2 | 8 | 2 | 27 (27/0/0/0) | 0/0/0 | 5 / 52 | 47 / 52 = 0.90 |
+| m85_s2 | 85208064 | 6000 / 0.0823 | 0.8940 / 0.9850 | 6 / 600,000 (1.0e-05) | 3 (3/0/0/0) | 0 | 0 (0/0/0/0) | 0 0 0 0 0 0 0 0 | – | 0 | 0 | 0 (0/0/0/0) | 0/0/0 | – | – |
+| m85_s3 | 85208064 | 6000 / 0.0820 | 0.8962 / 0.9829 | 13 / 600,000 (2.2e-05) | 2 (2/0/0/0) | 1 | – | – | – | – | – | – | –/–/0 | – | – |
+| m85_s4 | 85208064 | 6000 / 0.0822 | 0.9008 / 0.9826 | 2 / 600,000 (3.3e-06) | 1 (1/0/0/0) | 0 | – | – | – | – | – | – | –/–/0 | – | – |
+| m85_s5 | 85208064 | 6000 / 0.0822 | 0.8956 / 0.9852 | 60 / 600,000 (1.0e-04) | 7 (7/0/0/0) | 5 | – | – | – | – | – | – | –/–/0 | – | – |
+| m85_s6 | 85208064 | 6000 / 0.0824 | 0.9022 / 0.9831 | 8 / 600,000 (1.3e-05) | 5 (5/0/0/0) | 3 | – | – | – | – | – | – | –/–/0 | – | – |
+| m85B_s0 | 85208064 | 12000 / 0.0820 | 0.9160 / 0.9919 | 0 / 600,000 (0.0e+00) | 0 (0/0/0/0) | 0 | 0 (0/0/0/0) | 0 0 0 0 0 0 0 0 | – | 0 | 0 | 0 (0/0/0/0) | 0/0/0 | – | – |
+| m85B_s1 | 85208064 | 12000 / 0.0821 | 0.9152 / 0.9903 | 4 / 600,000 (6.7e-06) | 3 (3/0/0/0) | 0 | 0 (0/0/0/0) | 0 0 0 0 0 0 0 0 | – | 0 | 0 | 1 (1/0/0/0) | 0/0/0 | – | – |
+| m85B_s2 | 85208064 | 12000 / 0.0821 | 0.9148 / 0.9877 | 1548 / 600,000 (2.6e-03) | 12 (12/0/0/0) | 6 | 52 (52/0/0/0) | 4 16 30 50 52 52 52 52 | 2 | 8 | 7 | 26 (26/0/0/0) | 0/0/0 | 13 / 52 | 39 / 52 = 0.75 |
+| r5_s0 | – | run 5 | – | 113 / 3,000,000 (3.8e-05) | 6 (6/0/0/0) | 1 | 51 (51/0/0/0) | 2 11 25 47 51 51 51 51 | 2 | 8 | 4 | 25 (25/0/0/0) | 0/0/0 | 6 / 51 | 45 / 51 = 0.88 |
+| r5_s1 | – | run 5 | – | 0 / 3,000,000 (0.0e+00) | 0 (0/0/0/0) | 0 | 0 (0/0/0/0) | 0 0 0 0 0 0 0 0 | – | 0 | 0 | 0 (0/0/0/0) | 0/0/0 | – | – |
+| r5_s2 | – | run 5 | – | 1 / 3,000,000 (3.3e-07) | 1 (1/0/0/0) | 0 | 0 (0/0/0/0) | 0 0 0 0 0 0 0 0 | – | 0 | 0 | 0 (0/0/0/0) | 0/0/0 | – | – |
+
+### Per cell (non-zero = ≥ 1 target with a strict-reductio sample among its first 2,000; the run-5 row is read from its 10⁴-per-target files with the same first-2,000 rule)
+
+| cell | draws sampled | non-zero draws (≥ 1 strict hit in 600k) | rates of non-zero draws | igniting (EI ≥ 6 targets by round 8) | EI-only fractions |
+|---|---|---|---|---|---|
+| 3.2M same-set | 3 | 1 | 2.3e-05 | 1 | 0.84 |
+| 25M config A | 3 | 3 | 3.1e-03, 1.4e-03, 2.3e-05 | 3 | 0.67, 0.79, 0.85 |
+| 25M config B | 3 | 2 | 5.0e-06, 2.2e-04 | 1 | 0.79 |
+| 85M config A | 3 | 3 | 6.2e-05, 8.2e-05, 1.0e-05 | 2 | 0.92, 0.90 |
+| 85M config A EXTRA draws (exploratory, coverage only) | 4 | 4 | 2.2e-05, 3.3e-06, 1.0e-04, 1.3e-05 | – (no EI run) | – |
+| 85M config B | 3 | 2 | 6.7e-06, 2.6e-03 | 1 | 0.75 |
+| 3.2M original set (run 5) | 3 | 1 | 3.8e-05 | 1 | 0.88 |
+
+- **Non-zero draws** (source: `cov_<draw>_pre.s0.jsonl`, `hits_by_pattern.reductio`): 3.2M same-set **1 / 3**; 25M **5 / 6** (A 3 / 3, B 2 / 3); 85M **9 / 10** (A 3 / 3 + 4 / 4 exploratory extra draws, B 2 / 3). Zero-rate draws (0 strict hits in 600,000): `m3_s0`, `m3_s2`, `m25B_s1`, `m85B_s0`. Every pre-RL hit at every size is on a 7-line target (`nand_neg` / `negimp_to_pos`); 0 hits on the 248 targets at 8–10 lines in 11.4M pre-RL samples (19 draws).
+- **Zero-rate and low-rate draws under EI:** all four zero-rate draws: EI 0 / 300, frozen 0 / 300, 0 trained rounds. Three non-zero draws with rates ≤ 1.0·10⁻⁵ (`m25B_s0` 3 hits, `m85_s2` 6, `m85B_s1` 4) also end at 0 / 300 with 0 trained rounds (expected hits in 76,800 attempts: 0.4–0.8). Exploratory: `m85_s2` continued to round 16 (`x_ei_m85_s2_r9-16`): 0 through round 12, then 1 / 13 / 29 / 49 (49 seven-line, 0 longer).
+- **Igniting draws (all 8 draws with rate ≥ 2.3·10⁻⁵):** ignition round 2–4; acquired 32–53; strata 7 / 8 / 9 / 10: at most **1 eight-line target** (`chain_neg`; `m25_s0`, `m25_s2`, `m85_s0`) and 0 at 9–10 lines in every arm; transfer 18–27 of the 27 seven-line theorems, 0 of 123 longer. Frozen twins 1–7 targets, all 7-line. Solved-without-pattern: 0 in all 30 pre-registered arms, the 2 exploratory arms and all 27 coverage files.
+- **EI-only fraction** (acquired targets with no verified proof in 10⁴ fresh base samples ÷ acquired; `cov_<draw>_b10k.s0.jsonl`): 3.2M same-set 27 / 32 = **0.84** (run 5, original set: 45 / 51 = 0.88); 25M A 30 / 45 = 0.67, 41 / 52 = 0.79, 34 / 40 = 0.85; 25M B 38 / 48 = 0.79; 85M A 49 / 53 = **0.92**, 47 / 52 = **0.90**; 85M B 39 / 52 = 0.75. By base rate rather than size: the three draws with rate > 10⁻³ give 0.67 / 0.79 / 0.75, the five with rate ≤ 2.2·10⁻⁴ give 0.79–0.92.
+- **Exploratory ft-lr check** (`x_ei_m85_s0_lr3e-5`, brief's suggested 3e-5 on `m85_s0`): 1 / 9 / 28 / 33 / 40 / 46 / 49 / 51 (50 seven-line + 1 eight-line) vs 1 / 6 / 30 / 39 / 42 / 53 / 53 / 53 at the 1e-4 used everywhere else at 25M / 85M.
+- **EI settings actually used:** k = 32, 8 rounds, T = 0.8, retain 20,000, max 4 proofs per theorem × weight 4, `--ft_steps 600`, sampling batch 1024, `--ft_lr` 3e-4 (3.2M) / 1e-4 (25M, 85M); seed = Stage-1 seed (`args.json` per arm).
+- **Pods and cost** (`~/pods.log`, deletion times in log.md): six A100-SXM4-80GB at $1.59/h — r4a-1 17:57–21:51, r4a-2 18:07–22:31, r4a-3 19:11–00:18, r4a-4 20:09–22:30, r4a-5 20:56–22:31, r4a-6 20:57–00:53 UTC = 21.3 pod-hours ≈ **$33.8** (pre-registered plan incl. the rule-mandated B cells ≈ $27; exploratory extras ≈ $6.7). Not re-derivable from repo files: pod spend.
+- **Bucket:** `hf://buckets/dan-pandori/nd-rl/round3-run4a/{artifacts/r3_4a,ckpts/r3_4a,data/r3_4a}` — `ckpts/r3_4a/`: 19 Stage-1 checkpoints (`stage1_reductio_f0_b1_<draw>.pt`) and the round-8 checkpoint of every arm that trained; `data/r3_4a/`: the rebuilt set, its reports, `acq_<draw>.jsonl`; `artifacts/r3_4a/`: everything above plus the per-theorem held-out greedy files (gitignored). The per-round training mixes (`mix_<r>.jsonl`) were not pulled; their RL part is `found_<r>.jsonl` capped at 4 proofs per theorem × weight 4, the rest a seeded 20,000-record sample of the set.

@@ -189,7 +189,7 @@ def figures(res, outdir):
             x.spines[s].set_visible(False)
     fig.tight_layout(rect=(0, 0.1, 1, 1)); os.makedirs(outdir, exist_ok=True); fig.savefig(f'{outdir}/run4a_size.png', dpi=150); plt.close(fig)
     # per-round curves
-    fig, ax = plt.subplots(1, 1, figsize=(5.5, 3.8))
+    fig, ax = plt.subplots(1, 1, figsize=(7.6, 3.8))
     for sz, cell in res['sizes'].items():
         for tag, d in cell['draws'].items():
             if d['ei']:
@@ -197,8 +197,8 @@ def figures(res, outdir):
     h, l = ax.get_legend_handles_labels(); seen = {}
     for hh, ll in zip(h, l):
         seen.setdefault(ll, hh)
-    ax.legend(seen.values(), seen.keys(), fontsize=7, frameon=False); ax.set_xlabel('EI round (32 attempts per target each)'); ax.set_ylabel('targets acquired / 300 (cumulative)')
-    ax.axhline(52, color='k', lw=0.5, ls=':'); ax.text(1, 54, '7-line stratum = 52', fontsize=7)
+    ax.legend(seen.values(), seen.keys(), fontsize=7.5, frameon=False, loc='center left', bbox_to_anchor=(1.01, 0.5)); ax.set_xlabel('EI round (32 attempts per target each)'); ax.set_ylabel('targets acquired / 300 (cumulative)')
+    ax.axhline(52, color='k', lw=0.5, ls=':'); ax.text(6.2, 54.5, '7-line stratum = 52', fontsize=7); ax.set_ylim(-2, 58)
     for s in ('top', 'right'):
         ax.spines[s].set_visible(False)
     fig.tight_layout(); fig.savefig(f'{outdir}/run4a_curves.png', dpi=150); plt.close(fig)

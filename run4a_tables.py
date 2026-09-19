@@ -30,5 +30,5 @@ print('|---|---|---|---|---|---|')
 for sz, cell in S['sizes'].items():
     ds = [d for d in cell['draws'].values() if d['pre_rl'] and d['pre_rl']['complete']]
     nz = [d for d in ds if d['pre_rl']['targets_hit_within_2000'] > 0]
-    print(f"| {cell['label']} | {len(ds)} | {len(nz)} | {', '.join(f'{d['pre_rl']['rate']:.1e}' for d in nz) or '–'} | {sum(1 for d in ds if d['ei'] and d['ei']['ignition_round'])} | "
+    print(f"| {cell['label']} | {len(ds)} | {len(nz)} | {', '.join(f'{d['pre_rl']['rate']:.1e}' for d in nz) or '–'} | {sum(1 for d in ds if d['ei'] and d['ei']['ignition_round']) if any(d['ei'] for d in ds) else '– (no EI run)'} | "
           f"{', '.join(f'{d['base10k']['ei_only_fraction']:.2f}' for d in ds if d.get('base10k')) or '–'} |")
