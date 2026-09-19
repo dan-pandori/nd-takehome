@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 S = json.load(open('artifacts/r3_4b/summary.json'))
 BLUE, ORANGE, AQUA, INK, INK2, GRID, SURF = '#2a78d6', '#eb6834', '#1baf7a', '#0b0b0b', '#52514e', '#e4e3df', '#fcfcfb'
 GROUPS = [('3.2M', '3.2M\n(run 1)', 3.2e6), ('25M', '25M\nfirst schedule\n(gate missed)', 25.3e6), ('25Mr', '25M\nretry\n(gate passed)', 25.3e6),
-          ('85M', '85M\nfirst schedule\n(gate missed)', 85.2e6), ('85Mr', '85M\nretry', 85.2e6)]
+          ('85M', '85M\nfirst schedule\n(gate missed)', 85.2e6), ('85Mr', '85M\nretry\n(gate missed)', 85.2e6)]
 plt.rcParams.update({'font.size': 9, 'axes.edgecolor': GRID, 'axes.labelcolor': INK2, 'xtick.color': INK2, 'ytick.color': INK2,
                      'axes.facecolor': SURF, 'figure.facecolor': SURF, 'savefig.facecolor': SURF, 'axes.spines.top': False, 'axes.spines.right': False})
 

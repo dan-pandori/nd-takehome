@@ -480,3 +480,89 @@
 - EI reference ei_depth3_f0_a3_s1: solved 583, acquisition 0.352, per round [7, 92, 227, 319, 338, 345, 346, 352], held-out greedy 0.919
 - Summary: G = 8 acquisition mean 0.474 (range 0.447–0.505, n = 6), G = 32 mean 0.426 (0.395–0.467); EI mean 0.351 (0.335–0.364). Held-out greedy at the end: G = 8 [0.34, 0.53, 0.56, 0.62, 0.64, 0.67], G = 32 [0.38, 0.52, 0.56, 0.61, 0.64, 0.66].
 - The 85M / relative-codec arm of the proposal was not run (no access to that code). Pods: p4 / p5 (RTX 3090) from 23:09 to 01:36 UTC ≈ 2 × 2.4 h ≈ $2.4 (shared with run 3). Bucket: `hf://buckets/dan-pandori/nd-rl/round2/run4/{artifacts/r4,ckpts/r4}`.
+
+## Round 3 run 4b — does "or nothing" survive model size? depth-3 half (2026-09-18/19; `r3_4b_analysis.py --verify_all` → `artifacts/r3_4b/summary.json`, `summary_table.md`; tables below printed by `r3_4b_numbers.py`; figures `r3_4b_figures.py`; pre-registration `preregistration/round3-run4b.md` committed c1ad029 17:54:40Z, first pod of this run `r34b-1` 17:56:28Z (`~/pods.log`); amendments A1/A2 18:58, A3 20:59:57Z, each before the job it concerns; pod scripts `pod/r3_4b/`; per-stage pod logs `artifacts/r3_4b/q/`)
+
+- **Gate 0 note.** `gate0` prints FAIL for this run because the host-wide `~/pods.log` contains `la-6` (another agent's pod, 17:53:21Z) between my start and my pre-registration commit. No pod of this run (`r34b-*`) precedes the commit. See `QUESTIONS.md` 2026-09-18 17:57.
+- **Models.** `train.py --mode abs --cap 6 --bs 128 --warmup 500` on `data/p2/train_depth3_f0_a1.jsonl` (155,000 records, 0 depth-3 proofs: `data/p2/assemble_report_a1.json`), seeds 0–2. 25M = `--n_layer 8 --d 512 --n_head 8` (25,321,472 parameters); 85M = `--n_layer 12 --d 768 --n_head 12` (85,208,064). First schedule `--steps 6000 --lr 3e-4 --min_lr 3e-5` (tags `25M`, `85M`); pre-registered retry `--steps 12000 --lr 1e-4 --min_lr 1e-5` (tags `25Mr`, `85Mr`). Logs `artifacts/r3_4b/q/s1_<tag>_s<seed>.log`; checkpoints `ckpts/r3_4b/stage1_depth3_f0_a1_<tag>_s<seed>.pt`.
+- **E5 gate** (`eval_set.py --temperature 0` on all 5,000 of `data/p2/heldout.jsonl` → `artifacts/r3_4b/heldout_greedy_<tag>_s<seed>.json`): 25M 0.887 / 0.885 / 0.891 (missed, ≥ 0.90); 25Mr 0.916 / 0.898 / 0.911, median 0.911 (**passed**); 85M 0.888 / 0.891 / 0.886 (missed, ≥ 0.93); 85Mr 0.897 / 0.904 / 0.892 (**missed after retry → 85M is reported as gate-missing, "untrained" in the brief's wording**). By length the deficit is the 6-line bin in every model (25M s0 0.999 / 0.997 / 0.980 / 0.970 / 0.489 for 2–6 lines; 25Mr s0 6-line 0.619; 85Mr s1 0.544; 3.2M draws 0.47–0.58, `artifacts/r3_1/ei_depth3_s2?_req/round_1.json`). Final validation loss is 0.0819–0.0822 for all twelve models: the retry improves greedy decoding, not likelihood.
+- **Pools.** Required: `data/r3_1/depth3_req.jsonl` (run 1's required@8 pool, 300 targets, unchanged; class overlap with the training set 0, checked again by key); transfer `depth3_req_transfer.jsonl` (100); `mix` = `data/r3_1/depth3_mix.jsonl` (the 300 required + 300 depth-≤ 2 neighbours). Optional pool (amendment A1) = first 300 of `data/p2/targets_depth3.jsonl` (the ignition study's pre-RL pool; 44 of its classes are also in the required pool).
+- **Arms.** `expert_iter.py --rounds 8 --k 32 --temperature 0.8 --retain 20000 --ft_steps 600`, seed = model seed, `--ft_lr 1e-4` (25M) / `3e-5` (85M); sampling batch 1024 (25M), 768 (85M), except `85M_s0_mix` 384 (restarted after OOM; rounds 5–8 resumed from the round-4 checkpoint with `--start_round 5 --resume_found`; each arm's `args.json`, and `args_rounds1-4.json` for that arm). Frozen control = same command `--no_train`; where the `req` arm never took a training step the frozen arm is a bit-identical copy (checked on the three first-schedule 25M draws: all 24 `round_*.json` pairs equal except `secs`) and was skipped with a marker `q/frozen_<tag>.skipped` (all 85M / 85Mr draws, 25Mr s0 / s2).
+- **Samples.** Pre-RL: `coverage.py --k 2000 --temperature 0.8 --seed 0` on the 300 required targets (600,000 samples per draw; 85Mr draws split into a forward file `.s0.jsonl` and a reverse file `.s0r.jsonl` run on another pod and stopped where they met; merged one record per target, forward first, by `r3_4b_analysis.merge_shards`; 85M s0 / s2 and 85Mr samples were interrupted by OOM and resumed from their files — completed targets kept, generator re-seeded at the resume point). pass@10⁴ (amendment A3, igniting `mix` draws only): `--k 10000 --seed 1`, 3,000,000 samples per draw (25Mr s0, s1: forward + reverse files; 85Mr s2: shards 0/3, 1/3, 2/3).
+- **Re-verification.** Every counted pattern proof on a required target in every new arm re-run through the unmodified `nd_verify`: **14,580 proofs, 0 failures**; the 3.2M row's `req` + `mix` arms: 25,309, 0 failures (run 1's number reproduced). Required targets solved without the pattern: **0 in every arm at every size** (the 9–10-line depth-≤ 2 alternative was never used; E4d held).
+- **Spend.** Nine pods (7 A40 at $0.49/h, 2 RTX A6000 at $0.53/h; A40 stock ran out after four), 46.8 pod-hours, **≈ $23.5**; all deleted by 00:48 UTC 2026-09-19 (times in `log.md`).
+- **Bucket.** `hf://buckets/dan-pandori/nd-rl/round3-run4b/ckpts/r3_4b/` (12 Stage-1 checkpoints + the round-8 checkpoint of every arm that trained), `.../artifacts/r3_4b/`, `.../data/r3_1/` and `.../data/p2/` (training set, held-out set, optional pool, assemble report).
+
+**Per draw** (`artifacts/r3_4b/summary.json`; pre-RL = `cov_depth3_<tag>.s0[r].jsonl`, optional pool = `optcov_depth3_<tag>.s0.jsonl`, arms = `ei_depth3_<tag>_{req,frozen,mix}/`, base@10⁴ = `cov1e4_depth3_<tag>.s0[r].jsonl`):
+
+| size / schedule | draw | parameters | held-out greedy | final val loss | required pool: pattern hits / samples (targets) | optional pool: hits / samples (targets) | `req` required targets w/ pattern, rounds 1–8 | frozen r8 | `mix` required targets w/ pattern, rounds 1–8 | `mix` ignition round (≥ 20; ≥ 6) | `mix` neighbours solved r8 | required solved w/o pattern (req / mix) | base@10⁴: hits / samples (targets) | EI-only / acquired (mix) | verify fails / checked (req; mix) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 3.2M (run 1, seeds 20–27) | s20 | — | — | — | 0 / 600,000 (0) | — | [0, 0, 0, 0, 0, 0, 0, 0] | — | [0, 0, 0, 0, 0, 0, 0, 1] | —; — | 126 / 300 | 0 / 0 | — | 1 / 1 (base at 2,000 only) | 0 / 0; 0 / 2 |
+| 3.2M (run 1, seeds 20–27) | s21 | — | — | — | 0 / 600,000 (0) | — | [0, 0, 0, 0, 0, 0, 0, 0] | — | [0, 0, 2, 75, 202, 229, 238, 241] | 4; 4 | 207 / 300 | 0 / 0 | — | 241 / 241 (base at 2,000 only) | 0 / 0; 0 / 5454 |
+| 3.2M (run 1, seeds 20–27) | s22 | — | — | — | 2 / 600,000 (1) | — | [0, 0, 0, 0, 0, 0, 0, 0] | — | [0, 1, 1, 2, 8, 84, 178, 211] | 6; 5 | 216 / 300 | 0 / 0 | — | 210 / 211 (base at 2,000 only) | 0 / 0; 0 / 3472 |
+| 3.2M (run 1, seeds 20–27) | s23 | — | — | — | 0 / 600,000 (0) | — | [0, 0, 0, 0, 0, 0, 0, 0] | — | [0, 0, 5, 55, 183, 239, 250, 255] | 4; 4 | 239 / 300 | 0 / 0 | — | 255 / 255 (base at 2,000 only) | 0 / 0; 0 / 4787 |
+| 3.2M (run 1, seeds 20–27) | s24 | — | — | — | 26 / 600,000 (3) | — | [0, 1, 1, 2, 4, 5, 5, 5] | — | [0, 15, 136, 193, 215, 224, 231, 233] | 3; 2 | 208 / 300 | 0 / 0 | — | 230 / 233 (base at 2,000 only) | 0 / 243; 0 / 5900 |
+| 3.2M (run 1, seeds 20–27) | s25 | — | — | — | 0 / 600,000 (0) | — | [0, 0, 0, 0, 0, 0, 0, 0] | — | [0, 0, 0, 0, 0, 0, 0, 0] | —; — | 106 / 300 | 0 / 0 | — | — | 0 / 0; 0 / 0 |
+| 3.2M (run 1, seeds 20–27) | s26 | — | — | — | 0 / 600,000 (0) | — | [0, 0, 0, 0, 0, 0, 0, 0] | — | [0, 21, 169, 209, 227, 237, 238, 239] | 2; 2 | 220 / 300 | 0 / 0 | — | 239 / 239 (base at 2,000 only) | 0 / 0; 0 / 5451 |
+| 3.2M (run 1, seeds 20–27) | s27 | — | — | — | 0 / 600,000 (0) | — | [0, 0, 0, 0, 0, 0, 0, 0] | — | [0, 0, 0, 0, 0, 0, 0, 0] | —; — | 141 / 300 | 0 / 0 | — | — | 0 / 0; 0 / 0 |
+| 25M first schedule | s0 | 25321472 | 0.887 | 0.0822 | 0 / 600,000 (0) | 0 / 600,000 (0) | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | [0, 0, 0, 0, 0, 0, 0, 0] | —; — | 129 / 300 | 0 / 0 | — | — | 0 / 0; 0 / 0 |
+| 25M first schedule | s1 | 25321472 | 0.885 | 0.0821 | 0 / 600,000 (0) | 0 / 600,000 (0) | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | [0, 0, 0, 0, 0, 0, 0, 0] | —; — | 121 / 300 | 0 / 0 | — | — | 0 / 0; 0 / 0 |
+| 25M first schedule | s2 | 25321472 | 0.891 | 0.0821 | 0 / 600,000 (0) | 0 / 600,000 (0) | [0, 0, 0, 0, 0, 0, 0, 0] | 0 | [0, 0, 0, 0, 0, 0, 0, 0] | —; — | 145 / 300 | 0 / 0 | — | — | 0 / 0; 0 / 0 |
+| 25M retry | s0 | 25321472 | 0.916 | 0.0819 | 0 / 600,000 (0) | 75 / 600,000 (6) | [0, 0, 0, 0, 0, 0, 0, 0] | = req (skipped) | [0, 2, 15, 106, 205, 224, 226, 230] | 4; 3 | 214 / 300 | 0 / 0 | 0 / 3,000,000 (0) | 230 / 230 | 0 / 0; 0 / 4795 |
+| 25M retry | s1 | 25321472 | 0.898 | 0.0821 | 9 / 600,000 (1) | 7961 / 600,000 (24) | [0, 0, 0, 0, 0, 0, 0, 1] | 1 | [0, 13, 113, 194, 219, 229, 230, 231] | 3; 2 | 207 / 300 | 0 / 0 | 29 / 3,000,000 (1) | 230 / 231 | 0 / 1; 0 / 6035 |
+| 25M retry | s2 | 25321472 | 0.911 | 0.0821 | 0 / 600,000 (0) | 0 / 600,000 (0) | [0, 0, 0, 0, 0, 0, 0, 0] | = req (skipped) | [0, 0, 0, 0, 0, 0, 0, 3] | —; — | 131 / 300 | 0 / 0 | — | 3 / 3 (base at 2,000 only) | 0 / 0; 0 / 10 |
+| 85M first schedule | s0 | 85208064 | 0.888 | 0.0821 | 0 / 600,000 (0) | 0 / 600,000 (0) | [0, 0, 0, 0, 0, 0, 0, 0] | = req (skipped) | [0, 0, 0, 0, 0, 0, 0, 0] | —; — | 103 / 300 | 0 / 0 | — | — | 0 / 0; 0 / 0 |
+| 85M first schedule | s1 | 85208064 | 0.891 | 0.0821 | 0 / 600,000 (0) | 0 / 600,000 (0) | [0, 0, 0, 0, 0, 0, 0, 0] | = req (skipped) | [0, 0, 0, 0, 0, 0, 0, 0] | —; — | 110 / 300 | 0 / 0 | — | — | 0 / 0; 0 / 0 |
+| 85M first schedule | s2 | 85208064 | 0.886 | 0.0821 | 0 / 600,000 (0) | 0 / 600,000 (0) | [0, 0, 0, 0, 0, 0, 0, 0] | = req (skipped) | [0, 0, 0, 0, 0, 0, 0, 0] | —; — | 119 / 300 | 0 / 0 | — | — | 0 / 0; 0 / 0 |
+| 85M retry | s0 | 85208064 | 0.897 | 0.0820 | 0 / 600,000 (0) | 0 / 600,000 (0) | [0, 0, 0, 0, 0, 0, 0, 0] | = req (skipped) | [0, 0, 1, 1, 1, 1, 1, 1] | —; — | 112 / 300 | 0 / 0 | — | 1 / 1 (base at 2,000 only) | 0 / 0; 0 / 27 |
+| 85M retry | s1 | 85208064 | 0.904 | 0.0820 | 0 / 600,000 (0) | 1 / 600,000 (1) | [0, 0, 0, 0, 0, 0, 0, 0] | = req (skipped) | [0, 0, 0, 0, 0, 2, 4, 11] | —; 8 | 146 / 300 | 0 / 0 | — | 11 / 11 (base at 2,000 only) | 0 / 0; 0 / 138 |
+| 85M retry | s2 | 85208064 | 0.892 | 0.0821 | 0 / 600,000 (0) | 0 / 600,000 (0) | [0, 0, 0, 0, 0, 0, 0, 0] | = req (skipped) | [0, 0, 1, 1, 3, 16, 130, 206] | 7; 6 | 195 / 300 | 0 / 0 | 0 / 3,000,000 (0) | 206 / 206 | 0 / 0; 0 / 3573 |
+
+**By size / schedule:**
+
+| size / schedule | draws | held-out greedy (min–max; median) | non-zero draws, required pool | total pattern hits / samples, required pool | non-zero draws, optional pool | `req` arms igniting | `mix` arms igniting | `mix` required targets at r8 |
+|---|---|---|---|---|---|---|---|---|
+| 3.2M (run 1, seeds 20–27) | 8 | — | 2 / 8 | 28 / 4,800,000 | — | 0 / 8 | 5 / 8 | [0, 0, 1, 211, 233, 239, 241, 255] |
+| 25M first schedule | 3 | 0.885–0.891; 0.887 | 0 / 3 | 0 / 1,800,000 | 0 / 3 | 0 / 3 | 0 / 3 | [0, 0, 0] |
+| 25M retry | 3 | 0.898–0.916; 0.911 | 1 / 3 | 9 / 1,800,000 | 2 / 3 | 0 / 3 | 2 / 3 | [3, 230, 231] |
+| 85M first schedule | 3 | 0.886–0.891; 0.888 | 0 / 3 | 0 / 1,800,000 | 0 / 3 | 0 / 3 | 0 / 3 | [0, 0, 0] |
+| 85M retry | 3 | 0.892–0.904; 0.897 | 0 / 3 | 0 / 1,800,000 | 1 / 3 | 0 / 3 | 1 / 3 | [1, 11, 206] |
+
+**Writing diagnostic** (`artifacts/r3_4b/diag_<tag>.json`, `r3_4b_depthdiag.py`: 64 samples × first 60 required targets = 3,840 per model, T = 0.8; none verifies):
+
+| size / schedule | draw | samples opening a third box | of which malformed ("depth jump") | samples with ≥ 7 lines | with ≥ 8 lines | `mix` ignition round |
+|---|---|---|---|---|---|---|
+| 3.2M (run 1, seeds 20–27) | s20 | 65 | 14 | 179 | 9 | — |
+| 3.2M (run 1, seeds 20–27) | s21 | 3 | 2 | 118 | 0 | 4 |
+| 3.2M (run 1, seeds 20–27) | s22 | 32 | 3 | 392 | 0 | 6 |
+| 3.2M (run 1, seeds 20–27) | s23 | 337 | 321 | 20 | 0 | 4 |
+| 3.2M (run 1, seeds 20–27) | s24 | 269 | 190 | 631 | 34 | 3 |
+| 3.2M (run 1, seeds 20–27) | s25 | 108 | 0 | 760 | 3 | — |
+| 3.2M (run 1, seeds 20–27) | s26 | 212 | 147 | 629 | 4 | 2 |
+| 3.2M (run 1, seeds 20–27) | s27 | 22 | 20 | 555 | 5 | — |
+| 25M first schedule | s0 | 81 | 78 | 64 | 0 | — |
+| 25M first schedule | s1 | 27 | 20 | 295 | 1 | — |
+| 25M first schedule | s2 | 2 | 1 | 217 | 0 | — |
+| 25M retry | s0 | 288 | 6 | 318 | 0 | 4 |
+| 25M retry | s1 | 307 | 0 | 406 | 5 | 3 |
+| 25M retry | s2 | 20 | 8 | 109 | 0 | — |
+| 85M first schedule | s0 | 0 | 0 | 78 | 0 | — |
+| 85M first schedule | s1 | 2 | 2 | 188 | 40 | — |
+| 85M first schedule | s2 | 1 | 0 | 52 | 0 | — |
+| 85M retry | s1 | 0 | 0 | 26 | 0 | — |
+| 85M retry | s2 | 6 | 3 | 124 | 0 | 7 |
+
+**Expectations vs outcomes** (pre-registration `preregistration/round3-run4b.md`; brief's numbers in brackets):
+
+| | expected | observed | verdict |
+|---|---|---|---|
+| E1 non-zero draws, required pool | ≥ 2 of 3 at each size [brief: 3 of 3] | 25M 0 / 3, 25Mr 1 / 3, 85M 0 / 3, 85Mr 0 / 3 (3.2M 2 / 8) | **wrong** (both) |
+| E2 median rate | ≥ 10⁻⁵ at 25M, ≥ 10⁻⁴ at 85M [brief: ≥ 10× per size step] | median 0 in all four groups; 9 hits in 7.2·10⁶ samples in total | **wrong** (both) |
+| E3 zero-rate draws stay 0 on `req`, never train | — | 11 of 11 zero-rate draws: 0 / 300 in 8 rounds, no training step | held |
+| E4a `req` ignition iff rate ≥ 10⁻⁴; 1–2 of 3 85M draws ignite by round 3 [brief: 3 of 3] | — | no draw reaches 10⁻⁴; 0 of 12 `req` arms ignite (the "iff" held vacuously; the 1–2 of 3 was wrong) | half / **wrong** |
+| E4b plateau ≥ 0.60 on `req` [brief: ≥ 0.5 at 85M] | — | vacuous on `req`; on `mix` the igniting arms reach 0.77 / 0.77 (25Mr) and 0.69 (85Mr, still rising at round 8) | vacuous |
+| E4c / A3 EI-only fraction ≥ 0.95, no fall with size | base-reachable ≤ 10 targets at 10⁴ | 25Mr s0 230 / 230 (base 0 hits / 3·10⁶), 25Mr s1 230 / 231 (base 29 hits, 1 target), 85Mr s2 206 / 206 (base 0 / 3·10⁶) | held |
+| E4d alternative route | 0 at 25M, ≤ 5 % at 85M | 0 everywhere | held |
+| E5 gate | 25M 0.90–0.93 passes; 85M 0.91–0.95, 50 % to clear 0.93 | 25M 0.887 then 0.911 after retry; 85M 0.888 then 0.897 | 25M right only after retry; 85M **wrong** |
+| E6 ≥ half of non-igniting draws ignite on `mix` | — | 25M 0 / 3, 25Mr 2 / 3, 85M 0 / 3, 85Mr 1 / 3 → 3 of 12 | **wrong** overall (A2's later guess — ≤ 1 of 3 at 85M — held) |
+| A1 optional pool: ≤ 1 of 3 non-zero at 25M, 0 of 3 at 85M | — | 25M 0 / 3, 85M 0 / 3, 25Mr **2 / 3** (75 and 7,961 hits / 600k), 85Mr 1 / 3 (1 hit) | held for the first schedule, **wrong** for the retry draws |

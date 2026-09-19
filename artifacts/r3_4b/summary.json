@@ -1961,7 +1961,7 @@
      "final_pattern_neighbour": 102,
      "final_solved_neighbour": 214,
      "required_solved_without_pattern": [],
-     "verify_sample": 100,
+     "verify_sample": 4795,
      "verify_failures": 0,
      "heldout_greedy_final": 0.9596,
      "examples": [
@@ -2253,20 +2253,22 @@
     },
     "optional_pool_pre_rl": {
      "file": "artifacts/r3_4b/optcov_depth3_25Mr_s0.s0.jsonl",
-     "n_targets": 100,
-     "n_tried": 200000,
-     "hits": 36,
-     "rate": 0.00018,
-     "targets_with_pattern": 4,
+     "n_targets": 300,
+     "n_tried": 600000,
+     "hits": 75,
+     "rate": 0.000125,
+     "targets_with_pattern": 6,
      "pattern_targets": [
+      "targets_depth3_103",
+      "targets_depth3_135",
       "targets_depth3_17",
       "targets_depth3_48",
       "targets_depth3_67",
       "targets_depth3_76"
      ],
-     "distinct_pattern_proofs": 5,
-     "frozen256_pattern_theorems": 1,
-     "solved_any": 4,
+     "distinct_pattern_proofs": 7,
+     "frozen256_pattern_theorems": 3,
+     "solved_any": 8,
      "zero_rate": false,
      "top_targets": [
       {
@@ -2276,6 +2278,22 @@
        "n_tried": 2000,
        "first": 4,
        "rate": 0.0155
+      },
+      {
+       "name": "targets_depth3_135",
+       "thm": " |- ( ( ( ~ P ) v S ) > ( ( ~ ( ~ ( R v P ) ) ) > ( ( ~ P ) > ( R v P ) ) ) )",
+       "hits": 24,
+       "n_tried": 2000,
+       "first": 122,
+       "rate": 0.012
+      },
+      {
+       "name": "targets_depth3_103",
+       "thm": " |- ( ( ~ ( Q v Q ) ) > ( ( ~ ( ~ P ) ) > ( ( R & ( R & Q ) ) > P ) ) )",
+       "hits": 15,
+       "n_tried": 2000,
+       "first": 195,
+       "rate": 0.0075
       },
       {
        "name": "targets_depth3_17",
@@ -2292,14 +2310,6 @@
        "n_tried": 2000,
        "first": 590,
        "rate": 0.001
-      },
-      {
-       "name": "targets_depth3_76",
-       "thm": " |- ( S > ( S > ( ( P v ( Q v S ) ) > ( ( P v ( Q v S ) ) v P ) ) ) )",
-       "hits": 1,
-       "n_tried": 2000,
-       "first": 404,
-       "rate": 0.0005
       }
      ]
     },
@@ -2855,7 +2865,7 @@
      "final_pattern_neighbour": 100,
      "final_solved_neighbour": 207,
      "required_solved_without_pattern": [],
-     "verify_sample": 100,
+     "verify_sample": 6035,
      "verify_failures": 0,
      "heldout_greedy_final": 0.9542,
      "examples": [
@@ -3159,11 +3169,11 @@
     },
     "optional_pool_pre_rl": {
      "file": "artifacts/r3_4b/optcov_depth3_25Mr_s1.s0.jsonl",
-     "n_targets": 124,
-     "n_tried": 248000,
-     "hits": 5168,
-     "rate": 0.020838709677419354,
-     "targets_with_pattern": 17,
+     "n_targets": 300,
+     "n_tried": 600000,
+     "hits": 7961,
+     "rate": 0.013268333333333333,
+     "targets_with_pattern": 24,
      "pattern_targets": [
       "targets_depth3_1",
       "targets_depth3_10",
@@ -3171,6 +3181,13 @@
       "targets_depth3_113",
       "targets_depth3_116",
       "targets_depth3_12",
+      "targets_depth3_125",
+      "targets_depth3_126",
+      "targets_depth3_128",
+      "targets_depth3_139",
+      "targets_depth3_140",
+      "targets_depth3_142",
+      "targets_depth3_165",
       "targets_depth3_17",
       "targets_depth3_2",
       "targets_depth3_41",
@@ -3183,9 +3200,9 @@
       "targets_depth3_96",
       "targets_depth3_98"
      ],
-     "distinct_pattern_proofs": 17,
-     "frozen256_pattern_theorems": 12,
-     "solved_any": 18,
+     "distinct_pattern_proofs": 25,
+     "frozen256_pattern_theorems": 18,
+     "solved_any": 26,
      "zero_rate": false,
      "top_targets": [
       {
@@ -3195,6 +3212,14 @@
        "n_tried": 2000,
        "first": 1,
        "rate": 0.942
+      },
+      {
+       "name": "targets_depth3_165",
+       "thm": " |- ( R > ( ( ~ ( ~ Q ) ) > ( ( S v ( S v P ) ) > Q ) ) )",
+       "hits": 1866,
+       "n_tried": 2000,
+       "first": 1,
+       "rate": 0.933
       },
       {
        "name": "targets_depth3_1",
@@ -3213,20 +3238,12 @@
        "rate": 0.397
       },
       {
-       "name": "targets_depth3_98",
-       "thm": " |- ( ( ~ ( ~ P ) ) > ( R > ( ( ( ~ S ) & R ) > P ) ) )",
-       "hits": 270,
+       "name": "targets_depth3_140",
+       "thm": " |- ( ( ~ ( ~ S ) ) > ( Q > ( ( R > ( ~ P ) ) > ( Q & ( R > ( ~ P ) ) ) ) ) )",
+       "hits": 437,
        "n_tried": 2000,
-       "first": 8,
-       "rate": 0.135
-      },
-      {
-       "name": "targets_depth3_113",
-       "thm": " |- ( ( ~ ( ~ Q ) ) > ( ( P > ( R & Q ) ) > ( P > ( S v ( P > ( R & Q ) ) ) ) ) )",
-       "hits": 243,
-       "n_tried": 2000,
-       "first": 19,
-       "rate": 0.1215
+       "first": 3,
+       "rate": 0.2185
       }
      ]
     },
@@ -3639,8 +3656,8 @@
     "base_1e4": null,
     "optional_pool_pre_rl": {
      "file": "artifacts/r3_4b/optcov_depth3_25Mr_s2.s0.jsonl",
-     "n_targets": 213,
-     "n_tried": 426000,
+     "n_targets": 300,
+     "n_tried": 600000,
      "hits": 0,
      "rate": 0.0,
      "targets_with_pattern": 0,
@@ -4021,15 +4038,15 @@
     "base_1e4": null,
     "optional_pool_pre_rl": {
      "file": "artifacts/r3_4b/optcov_depth3_85M_s0.s0.jsonl",
-     "n_targets": 201,
-     "n_tried": 402000,
+     "n_targets": 300,
+     "n_tried": 600000,
      "hits": 0,
      "rate": 0.0,
      "targets_with_pattern": 0,
      "pattern_targets": [],
      "distinct_pattern_proofs": 0,
      "frozen256_pattern_theorems": 0,
-     "solved_any": 2,
+     "solved_any": 9,
      "zero_rate": true,
      "top_targets": []
     },
@@ -5211,8 +5228,8 @@
     "heldout_greedy_file": "artifacts/r3_4b/heldout_greedy_85Mr_s1.json",
     "pre_rl": {
      "file": "artifacts/r3_4b/cov_depth3_85Mr_s1.merged.jsonl",
-     "n_targets": 233,
-     "n_tried": 466000,
+     "n_targets": 300,
+     "n_tried": 600000,
      "hits": 0,
      "rate": 0.0,
      "targets_with_pattern": 0,
@@ -5531,7 +5548,7 @@
      "final_pattern_neighbour": 25,
      "final_solved_neighbour": 146,
      "required_solved_without_pattern": [],
-     "verify_sample": 100,
+     "verify_sample": 138,
      "verify_failures": 0,
      "heldout_greedy_final": 0.943,
      "examples": [
@@ -5591,17 +5608,17 @@
     "base_1e4": null,
     "optional_pool_pre_rl": {
      "file": "artifacts/r3_4b/optcov_depth3_85Mr_s1.s0.jsonl",
-     "n_targets": 12,
-     "n_tried": 24000,
+     "n_targets": 300,
+     "n_tried": 600000,
      "hits": 1,
-     "rate": 4.1666666666666665e-05,
+     "rate": 1.6666666666666667e-06,
      "targets_with_pattern": 1,
      "pattern_targets": [
       "targets_depth3_0"
      ],
      "distinct_pattern_proofs": 1,
      "frozen256_pattern_theorems": 0,
-     "solved_any": 1,
+     "solved_any": 8,
      "zero_rate": false,
      "top_targets": [
       {
@@ -5959,7 +5976,7 @@
      "final_pattern_neighbour": 89,
      "final_solved_neighbour": 195,
      "required_solved_without_pattern": [],
-     "verify_sample": 100,
+     "verify_sample": 3573,
      "verify_failures": 0,
      "heldout_greedy_final": 0.9682,
      "examples": [
@@ -6211,7 +6228,20 @@
       "batch": 768
      }
     },
-    "base_1e4": null,
+    "base_1e4": {
+     "file": "artifacts/r3_4b/cov1e4_depth3_85Mr_s2.merged.jsonl",
+     "n_targets": 300,
+     "n_tried": 3000000,
+     "hits": 0,
+     "rate": 0.0,
+     "targets_with_pattern": 0,
+     "pattern_targets": [],
+     "distinct_pattern_proofs": 0,
+     "frozen256_pattern_theorems": 0,
+     "solved_any": 0,
+     "zero_rate": true,
+     "top_targets": []
+    },
     "optional_pool_pre_rl": {
      "file": "artifacts/r3_4b/optcov_depth3_85Mr_s2.s0.jsonl",
      "n_targets": 300,
@@ -6226,17 +6256,29 @@
      "zero_rate": true,
      "top_targets": []
     },
+    "ei_only": {
+     "acquired": 0,
+     "base_reachable_1e4": 0,
+     "acquired_and_base": 0,
+     "ei_only": 0,
+     "fraction": null,
+     "base_only": 0,
+     "ei_only_vs_union_with_600k": 0
+    },
+    "ei_only_mix": {
+     "acquired": 206,
+     "base_targets_sampled": 300,
+     "base_reachable_1e4": 0,
+     "acquired_and_base": 0,
+     "ei_only": 206,
+     "fraction": 1.0,
+     "base_only": 0
+    },
     "ei_only_mix_at_2000": {
      "acquired": 206,
      "base_reachable_2000": 0,
      "ei_only": 206,
      "fraction": 1.0
-    },
-    "ei_only_at_2000": {
-     "acquired": 0,
-     "base_reachable_2000": 0,
-     "ei_only": 0,
-     "fraction": null
     }
    }
   },
@@ -6934,7 +6976,7 @@
      "final_pattern_neighbour": 98,
      "final_solved_neighbour": 207,
      "required_solved_without_pattern": [],
-     "verify_sample": 100,
+     "verify_sample": 5454,
      "verify_failures": 0,
      "heldout_greedy_final": 0.9092,
      "examples": [
@@ -7570,7 +7612,7 @@
      "final_pattern_neighbour": 82,
      "final_solved_neighbour": 216,
      "required_solved_without_pattern": [],
-     "verify_sample": 100,
+     "verify_sample": 3472,
      "verify_failures": 0,
      "heldout_greedy_final": 0.9234,
      "examples": [
@@ -8165,7 +8207,7 @@
      "final_pattern_neighbour": 92,
      "final_solved_neighbour": 239,
      "required_solved_without_pattern": [],
-     "verify_sample": 100,
+     "verify_sample": 4787,
      "verify_failures": 0,
      "heldout_greedy_final": 0.9404,
      "examples": [
@@ -8669,7 +8711,7 @@
      "final_pattern_neighbour": 0,
      "final_solved_neighbour": 0,
      "required_solved_without_pattern": [],
-     "verify_sample": 100,
+     "verify_sample": 243,
      "verify_failures": 0,
      "heldout_greedy_final": 0.8976,
      "examples": [
@@ -8864,7 +8906,7 @@
      "final_pattern_neighbour": 100,
      "final_solved_neighbour": 208,
      "required_solved_without_pattern": [],
-     "verify_sample": 100,
+     "verify_sample": 5900,
      "verify_failures": 0,
      "heldout_greedy_final": 0.9208,
      "examples": [
@@ -9839,7 +9881,7 @@
      "final_pattern_neighbour": 102,
      "final_solved_neighbour": 220,
      "required_solved_without_pattern": [],
-     "verify_sample": 100,
+     "verify_sample": 5451,
      "verify_failures": 0,
      "heldout_greedy_final": 0.9262,
      "examples": [
