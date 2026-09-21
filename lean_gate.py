@@ -3,7 +3,7 @@
 gate(tok, prompts, nd_proofs, texts) is called by sample.generate() for a LeanTokenizer.  For every distinct
 (prompt, literal Lean text) whose text parsed in the strict grammar it (i) asks Lean (core) whether the literal text proves
 the theorem, (ii) asks nd_verify whether the denoted ND proof does, logs the 2 x 2 table and the timings, writes every
-disagreement to <log>.disagree.jsonl, and returns the ND proofs with Lean-rejected ones prefixed 'LEANREJ ' (so that
+disagreement to <log>.disagree.jsonl, and returns the ND proofs, prefixing 'LEANREJ ' where Lean rejects what nd_verify would accept (so that
 nd_verify-based judging downstream accepts exactly the samples that BOTH checkers accept).
 
 One theorem per line in a chunk file, `lean -DmaxErrors=...` so every error is reported; error line -> theorem.  A chunk
@@ -75,9 +75,10 @@ def gate(tok, prompts, nd_proofs, texts):
     tab = collections.Counter((bool(a), bool(b)) for a, b in zip(nd_ok, lean_ok))
     dis = [{'prompt': p, 'lean_text': tx, 'nd': nd, 'nd_ok': bool(a), 'lean_ok': bool(b)} for ((p, tx), nd), a, b in zip(items, nd_ok, lean_ok) if bool(a) != bool(b)]
     n_parse = sum(1 for nd in nd_proofs if nd.startswith('LEANPARSE'))
+    parse_reasons = collections.Counter(nd[10:] for nd in nd_proofs if nd.startswith('LEANPARSE'))
     rec = {'utc': time.strftime('%FT%TZ', time.gmtime()), 'samples': len(prompts), 'parse_fail': n_parse, 'distinct_checked': len(items),
            'both_ok': tab[(True, True)], 'nd_ok_lean_rej': tab[(True, False)], 'nd_rej_lean_ok': tab[(False, True)], 'both_rej': tab[(False, False)],
-           'lean_wall_s': wall, 'lean_proc_s': cpu, 'nd_verify_s': t_nd, 'workers': WORKERS, 'chunk': CHUNK}
+           'parse_reasons': dict(parse_reasons.most_common()), 'lean_wall_s': wall, 'lean_proc_s': cpu, 'nd_verify_s': t_nd, 'workers': WORKERS, 'chunk': CHUNK}
     os.makedirs(os.path.dirname(logfn) or '.', exist_ok=True)
     with open(logfn, 'a') as f:
         f.write(json.dumps(rec) + '\n')
@@ -87,10 +88,11 @@ def gate(tok, prompts, nd_proofs, texts):
                 f.write(json.dumps(d, ensure_ascii=False) + '\n')
     print(f'[lean_gate] {len(prompts)} samples, parse-fail {n_parse}, distinct checked {len(items)}: both ok {tab[(True, True)]}, nd-only {tab[(True, False)]}, '
           f'lean-only {tab[(False, True)]}, both rej {tab[(False, False)]}; lean {wall:.1f}s wall ({cpu:.1f}s proc, {WORKERS} workers), nd_verify {t_nd:.1f}s', flush=True)
+    ndv = {k: a for (k, _), a in zip(items, nd_ok)}
     out = []
     for p, nd, tx in zip(prompts, nd_proofs, texts):
-        if tx is None or nd.startswith('LEANPARSE') or verdict[(p, tx)]:
-            out.append(nd)
+        if tx is None or nd.startswith('LEANPARSE') or verdict[(p, tx)] or not ndv[(p, tx)]:
+            out.append(nd)               # accepted by Lean, or rejected by nd_verify too (judge() then records nd_verify's reason)
         else:
-            out.append('LEANREJ ' + nd)
+            out.append('LEANREJ ' + nd)  # nd_verify would accept but Lean rejected the literal text: never counted
     return out

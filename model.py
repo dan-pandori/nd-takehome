@@ -1,5 +1,9 @@
 """Small from-scratch decoder-only transformer with RoPE and a KV cache for sampling."""
-import math, torch, torch.nn as nn, torch.nn.functional as F
+import math, os, torch, torch.nn as nn, torch.nn.functional as F
+
+if os.environ.get('CUDA_MEM_FRACTION') and torch.cuda.is_available():
+    # co-tenant jobs on one GPU: cap this process so the caching allocator frees its own cached blocks instead of starving a neighbour
+    torch.cuda.set_per_process_memory_fraction(float(os.environ['CUDA_MEM_FRACTION']))
 
 
 def rope_cache(T, hd, device, base=10000.0):
