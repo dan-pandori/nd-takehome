@@ -1,0 +1,421 @@
+START 2026-09-21T03:27:15Z until [ -f ckpts/lf/stage1_a1_seq_s0.pt ]; do sleep 30; done; until [ -f ckpts/lf/stage1_a1_seq_s1.pt ]; do sleep 30; done; python3 expert_iter.py --init ckpts/lf/stage1_a1_seq_s0.pt --name lf/frozen_d3_seq_s0 --targets data/p2/targets_depth3.jsonl --transfer data/p2/transfer_depth3.jsonl --heldout data/p2/heldout.jsonl --train data/p2/train_depth3_f0_a1.jsonl --rounds 8 --k 32 --temperature 0.8 --batch 768 --seed 0 --no_train
+[lean_gate] 32000 samples, parse-fail 15193, distinct checked 14710: both ok 2500, nd-only 0, lean-only 0, both rej 12210; lean 10.5s wall (115.9s proc, 12 workers), nd_verify 0.7s
+[lf/frozen_d3_seq_s0 r1] targets (this round, pass@32) SOLVED 285/1000 = 0.285 [0.258,0.314]
+  len 7: 59/166 = 0.355 [0.287,0.431]
+  len 8: 35/166 = 0.211 [0.156,0.279]
+  len 9: 8/166 = 0.048 [0.025,0.092]
+  len 10: 40/166 = 0.241 [0.182,0.311]
+  len 11: 62/166 = 0.373 [0.304,0.449]
+  len 12: 81/170 = 0.476 [0.403,0.551]
+  written hist {7: 264, 8: 66, 9: 6, 10: 1}
+  pruned hist {5: 10, 6: 188, 7: 93, 8: 42, 9: 4}
+  frontier written 9 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 15193), ('rule check failed: IMPE', 4015), ('rule check failed: ANDI', 2136), ('rule check failed: ANDE2', 1634), ('final formula is not the conclusion', 1120), ('rule check failed: DN', 1082)]
+[lf/frozen_d3_seq_s0 r1] targets (cumulative 32 attempts) SOLVED 285/1000 = 0.285 [0.258,0.314]
+  len 7: 59/166 = 0.355 [0.287,0.431]
+  len 8: 35/166 = 0.211 [0.156,0.279]
+  len 9: 8/166 = 0.048 [0.025,0.092]
+  len 10: 40/166 = 0.241 [0.182,0.311]
+  len 11: 62/166 = 0.373 [0.304,0.449]
+  len 12: 81/170 = 0.476 [0.403,0.551]
+  written hist {7: 264, 8: 66, 9: 6, 10: 1}
+  pruned hist {5: 10, 6: 188, 7: 93, 8: 42, 9: 4}
+  frontier written 9 pruned 8
+  reasons []
+[lean_gate] 16000 samples, parse-fail 7700, distinct checked 7256: both ok 1314, nd-only 0, lean-only 1, both rej 5941; lean 5.7s wall (55.4s proc, 12 workers), nd_verify 0.4s
+[lf/frozen_d3_seq_s0 r1] transfer (this round, pass@32) SOLVED 130/500 = 0.260 [0.223,0.300]
+  len 7: 10/83 = 0.120 [0.067,0.208]
+  len 8: 21/83 = 0.253 [0.172,0.356]
+  len 9: 2/83 = 0.024 [0.007,0.084]
+  len 10: 26/83 = 0.313 [0.224,0.419]
+  len 11: 28/83 = 0.337 [0.245,0.444]
+  len 12: 43/85 = 0.506 [0.402,0.610]
+  written hist {7: 111, 8: 35, 9: 1, 10: 2}
+  pruned hist {5: 6, 6: 87, 7: 31, 8: 23, 9: 1, 10: 1}
+  frontier written 8 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 7700), ('rule check failed: IMPE', 1835), ('rule check failed: ANDI', 1083), ('rule check failed: ANDE2', 733), ('final formula is not the conclusion', 593), ('rule check failed: IMPI', 543)]
+[lf/frozen_d3_seq_s0 r1] transfer (cumulative 32 attempts) SOLVED 130/500 = 0.260 [0.223,0.300]
+  len 7: 10/83 = 0.120 [0.067,0.208]
+  len 8: 21/83 = 0.253 [0.172,0.356]
+  len 9: 2/83 = 0.024 [0.007,0.084]
+  len 10: 26/83 = 0.313 [0.224,0.419]
+  len 11: 28/83 = 0.337 [0.245,0.444]
+  len 12: 43/85 = 0.506 [0.402,0.610]
+  written hist {7: 111, 8: 35, 9: 1, 10: 2}
+  pruned hist {5: 6, 6: 87, 7: 31, 8: 23, 9: 1, 10: 1}
+  frontier written 8 pruned 8
+  reasons []
+[lean_gate] 500 samples, parse-fail 238, distinct checked 262: both ok 62, nd-only 0, lean-only 0, both rej 200; lean 2.3s wall (2.3s proc, 12 workers), nd_verify 0.0s
+[lf/frozen_d3_seq_s0 r1] transfer greedy SOLVED 62/500 = 0.124 [0.098,0.156]
+  len 7: 4/83 = 0.048 [0.019,0.117]
+  len 8: 0/83 = 0.000 [0.000,0.044]
+  len 9: 0/83 = 0.000 [0.000,0.044]
+  len 10: 9/83 = 0.108 [0.058,0.193]
+  len 11: 19/83 = 0.229 [0.152,0.330]
+  len 12: 30/85 = 0.353 [0.260,0.459]
+  written hist {7: 57, 8: 5}
+  pruned hist {6: 50, 7: 10, 8: 2}
+  frontier written 8 pruned 7
+  reasons [("parse: expected line index, got 'LEANPARSE'", 238), ('rule check failed: IMPE', 57), ('rule check failed: ANDI', 38), ('rule check failed: ANDE2', 23), ('final formula is not the conclusion', 17), ('rule check failed: ORI2', 15)]
+[lean_gate] 5000 samples, parse-fail 182, distinct checked 4818: both ok 4543, nd-only 0, lean-only 1, both rej 274; lean 2.7s wall (29.4s proc, 12 workers), nd_verify 0.2s
+[lf/frozen_d3_seq_s0 r1] heldout greedy SOLVED 4543/5000 = 0.909 [0.900,0.916]
+  len 2: 994/1000 = 0.994 [0.987,0.997]
+  len 3: 989/1000 = 0.989 [0.980,0.994]
+  len 4: 951/1000 = 0.951 [0.936,0.963]
+  len 5: 924/1000 = 0.924 [0.906,0.939]
+  len 6: 685/1000 = 0.685 [0.656,0.713]
+  written hist {2: 1020, 3: 981, 4: 931, 5: 970, 6: 641}
+  pruned hist {2: 1020, 3: 982, 4: 934, 5: 970, 6: 637}
+  frontier written 6 pruned 6
+  reasons [("parse: expected line index, got 'LEANPARSE'", 182), ('rule check failed: ANDI', 53), ('rule check failed: DN', 40), ('rule check failed: ORI2', 33), ('rule check failed: IMPI', 31), ('rule check failed: ANDE2', 30)]
+=== round 1 done in 333s; new proofs 337; cum targets solved 285
+[lean_gate] 32000 samples, parse-fail 15148, distinct checked 14638: both ok 2509, nd-only 0, lean-only 0, both rej 12129; lean 8.5s wall (92.9s proc, 12 workers), nd_verify 0.7s
+[lf/frozen_d3_seq_s0 r2] targets (this round, pass@32) SOLVED 270/1000 = 0.270 [0.243,0.298]
+  len 7: 50/166 = 0.301 [0.237,0.375]
+  len 8: 31/166 = 0.187 [0.135,0.253]
+  len 9: 5/166 = 0.030 [0.013,0.069]
+  len 10: 46/166 = 0.277 [0.215,0.350]
+  len 11: 61/166 = 0.367 [0.298,0.443]
+  len 12: 77/170 = 0.453 [0.380,0.528]
+  written hist {7: 260, 8: 70, 9: 4, 10: 1}
+  pruned hist {5: 12, 6: 191, 7: 95, 8: 35, 9: 2}
+  frontier written 8 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 15148), ('rule check failed: IMPE', 3974), ('rule check failed: ANDI', 2156), ('rule check failed: ANDE2', 1643), ('final formula is not the conclusion', 1134), ('rule check failed: DN', 1113)]
+[lf/frozen_d3_seq_s0 r2] targets (cumulative 64 attempts) SOLVED 319/1000 = 0.319 [0.291,0.349]
+  len 7: 66/166 = 0.398 [0.326,0.474]
+  len 8: 46/166 = 0.277 [0.215,0.350]
+  len 9: 8/166 = 0.048 [0.025,0.092]
+  len 10: 49/166 = 0.295 [0.231,0.369]
+  len 11: 67/166 = 0.404 [0.332,0.480]
+  len 12: 83/170 = 0.488 [0.414,0.563]
+  written hist {7: 298, 8: 102, 9: 7, 10: 1}
+  pruned hist {5: 16, 6: 211, 7: 122, 8: 55, 9: 4}
+  frontier written 9 pruned 8
+  reasons []
+[lean_gate] 16000 samples, parse-fail 7717, distinct checked 7262: both ok 1366, nd-only 0, lean-only 2, both rej 5894; lean 5.5s wall (53.8s proc, 12 workers), nd_verify 0.4s
+[lf/frozen_d3_seq_s0 r2] transfer (this round, pass@32) SOLVED 142/500 = 0.284 [0.246,0.325]
+  len 7: 16/83 = 0.193 [0.122,0.290]
+  len 8: 19/83 = 0.229 [0.152,0.330]
+  len 9: 3/83 = 0.036 [0.012,0.101]
+  len 10: 28/83 = 0.337 [0.245,0.444]
+  len 11: 30/83 = 0.361 [0.266,0.469]
+  len 12: 46/85 = 0.541 [0.436,0.643]
+  written hist {7: 118, 8: 35, 9: 1, 10: 1}
+  pruned hist {5: 3, 6: 92, 7: 35, 8: 23, 9: 1, 10: 1}
+  frontier written 8 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 7717), ('rule check failed: IMPE', 1813), ('rule check failed: ANDI', 1063), ('rule check failed: ANDE2', 774), ('final formula is not the conclusion', 635), ('rule check failed: ORI2', 482)]
+[lf/frozen_d3_seq_s0 r2] transfer (cumulative 64 attempts) SOLVED 154/500 = 0.308 [0.269,0.350]
+  len 7: 18/83 = 0.217 [0.142,0.317]
+  len 8: 25/83 = 0.301 [0.213,0.407]
+  len 9: 3/83 = 0.036 [0.012,0.101]
+  len 10: 30/83 = 0.361 [0.266,0.469]
+  len 11: 32/83 = 0.386 [0.288,0.493]
+  len 12: 46/85 = 0.541 [0.436,0.643]
+  written hist {7: 129, 8: 44, 9: 1, 10: 3}
+  pruned hist {5: 7, 6: 98, 7: 41, 8: 28, 9: 1, 10: 2}
+  frontier written 8 pruned 8
+  reasons []
+[lean_gate] 500 samples, parse-fail 238, distinct checked 262: both ok 62, nd-only 0, lean-only 0, both rej 200; lean 1.4s wall (1.4s proc, 12 workers), nd_verify 0.0s
+[lf/frozen_d3_seq_s0 r2] transfer greedy SOLVED 62/500 = 0.124 [0.098,0.156]
+  len 7: 4/83 = 0.048 [0.019,0.117]
+  len 8: 0/83 = 0.000 [0.000,0.044]
+  len 9: 0/83 = 0.000 [0.000,0.044]
+  len 10: 9/83 = 0.108 [0.058,0.193]
+  len 11: 19/83 = 0.229 [0.152,0.330]
+  len 12: 30/85 = 0.353 [0.260,0.459]
+  written hist {7: 57, 8: 5}
+  pruned hist {6: 50, 7: 10, 8: 2}
+  frontier written 8 pruned 7
+  reasons [("parse: expected line index, got 'LEANPARSE'", 238), ('rule check failed: IMPE', 57), ('rule check failed: ANDI', 38), ('rule check failed: ANDE2', 23), ('final formula is not the conclusion', 17), ('rule check failed: ORI2', 15)]
+[lean_gate] 5000 samples, parse-fail 182, distinct checked 4818: both ok 4543, nd-only 0, lean-only 1, both rej 274; lean 2.5s wall (27.1s proc, 12 workers), nd_verify 0.2s
+[lf/frozen_d3_seq_s0 r2] heldout greedy SOLVED 4543/5000 = 0.909 [0.900,0.916]
+  len 2: 994/1000 = 0.994 [0.987,0.997]
+  len 3: 989/1000 = 0.989 [0.980,0.994]
+  len 4: 951/1000 = 0.951 [0.936,0.963]
+  len 5: 924/1000 = 0.924 [0.906,0.939]
+  len 6: 685/1000 = 0.685 [0.656,0.713]
+  written hist {2: 1020, 3: 981, 4: 931, 5: 970, 6: 641}
+  pruned hist {2: 1020, 3: 982, 4: 934, 5: 970, 6: 637}
+  frontier written 6 pruned 6
+  reasons [("parse: expected line index, got 'LEANPARSE'", 182), ('rule check failed: ANDI', 53), ('rule check failed: DN', 40), ('rule check failed: ORI2', 33), ('rule check failed: IMPI', 31), ('rule check failed: ANDE2', 30)]
+=== round 2 done in 360s; new proofs 71; cum targets solved 319
+[lean_gate] 32000 samples, parse-fail 15268, distinct checked 14636: both ok 2457, nd-only 0, lean-only 1, both rej 12178; lean 9.5s wall (108.8s proc, 12 workers), nd_verify 0.7s
+[lf/frozen_d3_seq_s0 r3] targets (this round, pass@32) SOLVED 272/1000 = 0.272 [0.245,0.300]
+  len 7: 55/166 = 0.331 [0.264,0.406]
+  len 8: 35/166 = 0.211 [0.156,0.279]
+  len 9: 8/166 = 0.048 [0.025,0.092]
+  len 10: 45/166 = 0.271 [0.209,0.343]
+  len 11: 56/166 = 0.337 [0.270,0.412]
+  len 12: 73/170 = 0.429 [0.357,0.505]
+  written hist {7: 255, 8: 65, 9: 4, 10: 3}
+  pruned hist {5: 9, 6: 181, 7: 94, 8: 41, 9: 2}
+  frontier written 8 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 15268), ('rule check failed: IMPE', 3942), ('rule check failed: ANDI', 2078), ('rule check failed: ANDE2', 1648), ('final formula is not the conclusion', 1146), ('rule check failed: DN', 1073)]
+[lf/frozen_d3_seq_s0 r3] targets (cumulative 96 attempts) SOLVED 341/1000 = 0.341 [0.312,0.371]
+  len 7: 73/166 = 0.440 [0.366,0.516]
+  len 8: 53/166 = 0.319 [0.253,0.394]
+  len 9: 10/166 = 0.060 [0.033,0.107]
+  len 10: 53/166 = 0.319 [0.253,0.394]
+  len 11: 68/166 = 0.410 [0.338,0.486]
+  len 12: 84/170 = 0.494 [0.420,0.569]
+  written hist {7: 318, 8: 119, 9: 9, 10: 3}
+  pruned hist {5: 18, 6: 224, 7: 136, 8: 67, 9: 4}
+  frontier written 9 pruned 8
+  reasons []
+[lean_gate] 16000 samples, parse-fail 7670, distinct checked 7284: both ok 1311, nd-only 0, lean-only 3, both rej 5970; lean 5.6s wall (54.4s proc, 12 workers), nd_verify 0.4s
+[lf/frozen_d3_seq_s0 r3] transfer (this round, pass@32) SOLVED 148/500 = 0.296 [0.258,0.337]
+  len 7: 21/83 = 0.253 [0.172,0.356]
+  len 8: 24/83 = 0.289 [0.203,0.394]
+  len 9: 1/83 = 0.012 [0.002,0.065]
+  len 10: 27/83 = 0.325 [0.234,0.432]
+  len 11: 29/83 = 0.349 [0.256,0.457]
+  len 12: 46/85 = 0.541 [0.436,0.643]
+  written hist {7: 122, 8: 42}
+  pruned hist {5: 5, 6: 90, 7: 43, 8: 26}
+  frontier written 8 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 7670), ('rule check failed: IMPE', 1853), ('rule check failed: ANDI', 1069), ('rule check failed: ANDE2', 767), ('final formula is not the conclusion', 609), ('rule check failed: DN', 512)]
+[lf/frozen_d3_seq_s0 r3] transfer (cumulative 96 attempts) SOLVED 172/500 = 0.344 [0.304,0.387]
+  len 7: 25/83 = 0.301 [0.213,0.407]
+  len 8: 30/83 = 0.361 [0.266,0.469]
+  len 9: 3/83 = 0.036 [0.012,0.101]
+  len 10: 32/83 = 0.386 [0.288,0.493]
+  len 11: 34/83 = 0.410 [0.310,0.517]
+  len 12: 48/85 = 0.565 [0.459,0.665]
+  written hist {7: 141, 8: 55, 9: 1, 10: 3}
+  pruned hist {5: 7, 6: 104, 7: 53, 8: 33, 9: 1, 10: 2}
+  frontier written 8 pruned 8
+  reasons []
+[lean_gate] 500 samples, parse-fail 238, distinct checked 262: both ok 62, nd-only 0, lean-only 0, both rej 200; lean 1.3s wall (1.3s proc, 12 workers), nd_verify 0.0s
+[lf/frozen_d3_seq_s0 r3] transfer greedy SOLVED 62/500 = 0.124 [0.098,0.156]
+  len 7: 4/83 = 0.048 [0.019,0.117]
+  len 8: 0/83 = 0.000 [0.000,0.044]
+  len 9: 0/83 = 0.000 [0.000,0.044]
+  len 10: 9/83 = 0.108 [0.058,0.193]
+  len 11: 19/83 = 0.229 [0.152,0.330]
+  len 12: 30/85 = 0.353 [0.260,0.459]
+  written hist {7: 57, 8: 5}
+  pruned hist {6: 50, 7: 10, 8: 2}
+  frontier written 8 pruned 7
+  reasons [("parse: expected line index, got 'LEANPARSE'", 238), ('rule check failed: IMPE', 57), ('rule check failed: ANDI', 38), ('rule check failed: ANDE2', 23), ('final formula is not the conclusion', 17), ('rule check failed: ORI2', 15)]
+[lean_gate] 5000 samples, parse-fail 182, distinct checked 4818: both ok 4543, nd-only 0, lean-only 1, both rej 274; lean 2.3s wall (24.8s proc, 12 workers), nd_verify 0.2s
+[lf/frozen_d3_seq_s0 r3] heldout greedy SOLVED 4543/5000 = 0.909 [0.900,0.916]
+  len 2: 994/1000 = 0.994 [0.987,0.997]
+  len 3: 989/1000 = 0.989 [0.980,0.994]
+  len 4: 951/1000 = 0.951 [0.936,0.963]
+  len 5: 924/1000 = 0.924 [0.906,0.939]
+  len 6: 685/1000 = 0.685 [0.656,0.713]
+  written hist {2: 1020, 3: 981, 4: 931, 5: 970, 6: 641}
+  pruned hist {2: 1020, 3: 982, 4: 934, 5: 970, 6: 637}
+  frontier written 6 pruned 6
+  reasons [("parse: expected line index, got 'LEANPARSE'", 182), ('rule check failed: ANDI', 53), ('rule check failed: DN', 40), ('rule check failed: ORI2', 33), ('rule check failed: IMPI', 31), ('rule check failed: ANDE2', 30)]
+=== round 3 done in 375s; new proofs 41; cum targets solved 341
+[lean_gate] 32000 samples, parse-fail 15233, distinct checked 14562: both ok 2504, nd-only 0, lean-only 2, both rej 12056; lean 10.9s wall (121.9s proc, 12 workers), nd_verify 0.7s
+[lf/frozen_d3_seq_s0 r4] targets (this round, pass@32) SOLVED 276/1000 = 0.276 [0.249,0.305]
+  len 7: 48/166 = 0.289 [0.226,0.362]
+  len 8: 35/166 = 0.211 [0.156,0.279]
+  len 9: 9/166 = 0.054 [0.029,0.100]
+  len 10: 47/166 = 0.283 [0.220,0.356]
+  len 11: 61/166 = 0.367 [0.298,0.443]
+  len 12: 76/170 = 0.447 [0.374,0.522]
+  written hist {7: 262, 8: 64, 9: 8, 10: 3}
+  pruned hist {5: 13, 6: 192, 7: 91, 8: 37, 9: 4}
+  frontier written 9 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 15233), ('rule check failed: IMPE', 4023), ('rule check failed: ANDI', 2123), ('rule check failed: ANDE2', 1607), ('final formula is not the conclusion', 1104), ('rule check failed: DN', 1049)]
+[lf/frozen_d3_seq_s0 r4] targets (cumulative 128 attempts) SOLVED 358/1000 = 0.358 [0.329,0.388]
+  len 7: 79/166 = 0.476 [0.401,0.552]
+  len 8: 62/166 = 0.373 [0.304,0.449]
+  len 9: 11/166 = 0.066 [0.037,0.115]
+  len 10: 54/166 = 0.325 [0.259,0.400]
+  len 11: 68/166 = 0.410 [0.338,0.486]
+  len 12: 84/170 = 0.494 [0.420,0.569]
+  written hist {7: 329, 8: 135, 9: 12, 10: 4}
+  pruned hist {5: 21, 6: 231, 7: 147, 8: 76, 9: 5}
+  frontier written 9 pruned 9
+  reasons []
+[lean_gate] 16000 samples, parse-fail 7707, distinct checked 7258: both ok 1299, nd-only 0, lean-only 2, both rej 5957; lean 5.8s wall (56.1s proc, 12 workers), nd_verify 0.4s
+[lf/frozen_d3_seq_s0 r4] transfer (this round, pass@32) SOLVED 141/500 = 0.282 [0.244,0.323]
+  len 7: 16/83 = 0.193 [0.122,0.290]
+  len 8: 22/83 = 0.265 [0.182,0.369]
+  len 9: 2/83 = 0.024 [0.007,0.084]
+  len 10: 28/83 = 0.337 [0.245,0.444]
+  len 11: 29/83 = 0.349 [0.256,0.457]
+  len 12: 44/85 = 0.518 [0.413,0.621]
+  written hist {7: 114, 8: 41, 9: 1}
+  pruned hist {5: 5, 6: 87, 7: 39, 8: 25}
+  frontier written 8 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 7707), ('rule check failed: IMPE', 1847), ('rule check failed: ANDI', 1066), ('rule check failed: ANDE2', 783), ('final formula is not the conclusion', 612), ('rule check failed: IMPI', 518)]
+[lf/frozen_d3_seq_s0 r4] transfer (cumulative 128 attempts) SOLVED 182/500 = 0.364 [0.323,0.407]
+  len 7: 29/83 = 0.349 [0.256,0.457]
+  len 8: 33/83 = 0.398 [0.299,0.505]
+  len 9: 4/83 = 0.048 [0.019,0.117]
+  len 10: 32/83 = 0.386 [0.288,0.493]
+  len 11: 36/83 = 0.434 [0.332,0.541]
+  len 12: 48/85 = 0.565 [0.459,0.665]
+  written hist {7: 146, 8: 63, 9: 2, 10: 3}
+  pruned hist {5: 7, 6: 107, 7: 61, 8: 36, 9: 1, 10: 2}
+  frontier written 8 pruned 8
+  reasons []
+[lean_gate] 500 samples, parse-fail 238, distinct checked 262: both ok 62, nd-only 0, lean-only 0, both rej 200; lean 1.3s wall (1.3s proc, 12 workers), nd_verify 0.0s
+[lf/frozen_d3_seq_s0 r4] transfer greedy SOLVED 62/500 = 0.124 [0.098,0.156]
+  len 7: 4/83 = 0.048 [0.019,0.117]
+  len 8: 0/83 = 0.000 [0.000,0.044]
+  len 9: 0/83 = 0.000 [0.000,0.044]
+  len 10: 9/83 = 0.108 [0.058,0.193]
+  len 11: 19/83 = 0.229 [0.152,0.330]
+  len 12: 30/85 = 0.353 [0.260,0.459]
+  written hist {7: 57, 8: 5}
+  pruned hist {6: 50, 7: 10, 8: 2}
+  frontier written 8 pruned 7
+  reasons [("parse: expected line index, got 'LEANPARSE'", 238), ('rule check failed: IMPE', 57), ('rule check failed: ANDI', 38), ('rule check failed: ANDE2', 23), ('final formula is not the conclusion', 17), ('rule check failed: ORI2', 15)]
+[lean_gate] 5000 samples, parse-fail 182, distinct checked 4818: both ok 4543, nd-only 0, lean-only 1, both rej 274; lean 2.5s wall (27.8s proc, 12 workers), nd_verify 0.2s
+[lf/frozen_d3_seq_s0 r4] heldout greedy SOLVED 4543/5000 = 0.909 [0.900,0.916]
+  len 2: 994/1000 = 0.994 [0.987,0.997]
+  len 3: 989/1000 = 0.989 [0.980,0.994]
+  len 4: 951/1000 = 0.951 [0.936,0.963]
+  len 5: 924/1000 = 0.924 [0.906,0.939]
+  len 6: 685/1000 = 0.685 [0.656,0.713]
+  written hist {2: 1020, 3: 981, 4: 931, 5: 970, 6: 641}
+  pruned hist {2: 1020, 3: 982, 4: 934, 5: 970, 6: 637}
+  frontier written 6 pruned 6
+  reasons [("parse: expected line index, got 'LEANPARSE'", 182), ('rule check failed: ANDI', 53), ('rule check failed: DN', 40), ('rule check failed: ORI2', 33), ('rule check failed: IMPI', 31), ('rule check failed: ANDE2', 30)]
+=== round 4 done in 364s; new proofs 31; cum targets solved 358
+[lean_gate] 32000 samples, parse-fail 15204, distinct checked 14696: both ok 2553, nd-only 0, lean-only 1, both rej 12142; lean 10.7s wall (112.7s proc, 12 workers), nd_verify 0.8s
+[lf/frozen_d3_seq_s0 r5] targets (this round, pass@32) SOLVED 275/1000 = 0.275 [0.248,0.303]
+  len 7: 58/166 = 0.349 [0.281,0.425]
+  len 8: 27/166 = 0.163 [0.114,0.226]
+  len 9: 10/166 = 0.060 [0.033,0.107]
+  len 10: 46/166 = 0.277 [0.215,0.350]
+  len 11: 58/166 = 0.349 [0.281,0.425]
+  len 12: 76/170 = 0.447 [0.374,0.522]
+  written hist {7: 259, 8: 60, 9: 7, 10: 2}
+  pruned hist {5: 11, 6: 184, 7: 95, 8: 35, 9: 3}
+  frontier written 9 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 15204), ('rule check failed: IMPE', 3960), ('rule check failed: ANDI', 2106), ('rule check failed: ANDE2', 1669), ('final formula is not the conclusion', 1105), ('rule check failed: DN', 1061)]
+[lf/frozen_d3_seq_s0 r5] targets (cumulative 160 attempts) SOLVED 375/1000 = 0.375 [0.346,0.405]
+  len 7: 87/166 = 0.524 [0.448,0.599]
+  len 8: 64/166 = 0.386 [0.315,0.461]
+  len 9: 12/166 = 0.072 [0.042,0.122]
+  len 10: 57/166 = 0.343 [0.275,0.418]
+  len 11: 70/166 = 0.422 [0.349,0.498]
+  len 12: 85/170 = 0.500 [0.426,0.574]
+  written hist {7: 344, 8: 145, 9: 12, 10: 4}
+  pruned hist {5: 22, 6: 238, 7: 159, 8: 81, 9: 5}
+  frontier written 9 pruned 9
+  reasons []
+[lean_gate] 16000 samples, parse-fail 7695, distinct checked 7250: both ok 1323, nd-only 0, lean-only 3, both rej 5924; lean 4.6s wall (44.3s proc, 12 workers), nd_verify 0.4s
+[lf/frozen_d3_seq_s0 r5] transfer (this round, pass@32) SOLVED 136/500 = 0.272 [0.235,0.313]
+  len 7: 16/83 = 0.193 [0.122,0.290]
+  len 8: 22/83 = 0.265 [0.182,0.369]
+  len 9: 1/83 = 0.012 [0.002,0.065]
+  len 10: 25/83 = 0.301 [0.213,0.407]
+  len 11: 28/83 = 0.337 [0.245,0.444]
+  len 12: 44/85 = 0.518 [0.413,0.621]
+  written hist {7: 113, 8: 42}
+  pruned hist {5: 7, 6: 86, 7: 37, 8: 25}
+  frontier written 8 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 7695), ('rule check failed: IMPE', 1801), ('rule check failed: ANDI', 1066), ('rule check failed: ANDE2', 782), ('final formula is not the conclusion', 599), ('rule check failed: DN', 497)]
+[lf/frozen_d3_seq_s0 r5] transfer (cumulative 160 attempts) SOLVED 186/500 = 0.372 [0.331,0.415]
+  len 7: 31/83 = 0.373 [0.277,0.481]
+  len 8: 35/83 = 0.422 [0.321,0.529]
+  len 9: 4/83 = 0.048 [0.019,0.117]
+  len 10: 32/83 = 0.386 [0.288,0.493]
+  len 11: 36/83 = 0.434 [0.332,0.541]
+  len 12: 48/85 = 0.565 [0.459,0.665]
+  written hist {7: 150, 8: 69, 9: 2, 10: 3}
+  pruned hist {5: 9, 6: 109, 7: 65, 8: 38, 9: 1, 10: 2}
+  frontier written 8 pruned 8
+  reasons []
+[lean_gate] 500 samples, parse-fail 238, distinct checked 262: both ok 62, nd-only 0, lean-only 0, both rej 200; lean 1.4s wall (1.4s proc, 12 workers), nd_verify 0.0s
+[lf/frozen_d3_seq_s0 r5] transfer greedy SOLVED 62/500 = 0.124 [0.098,0.156]
+  len 7: 4/83 = 0.048 [0.019,0.117]
+  len 8: 0/83 = 0.000 [0.000,0.044]
+  len 9: 0/83 = 0.000 [0.000,0.044]
+  len 10: 9/83 = 0.108 [0.058,0.193]
+  len 11: 19/83 = 0.229 [0.152,0.330]
+  len 12: 30/85 = 0.353 [0.260,0.459]
+  written hist {7: 57, 8: 5}
+  pruned hist {6: 50, 7: 10, 8: 2}
+  frontier written 8 pruned 7
+  reasons [("parse: expected line index, got 'LEANPARSE'", 238), ('rule check failed: IMPE', 57), ('rule check failed: ANDI', 38), ('rule check failed: ANDE2', 23), ('final formula is not the conclusion', 17), ('rule check failed: ORI2', 15)]
+[lean_gate] 5000 samples, parse-fail 182, distinct checked 4818: both ok 4543, nd-only 0, lean-only 1, both rej 274; lean 3.4s wall (30.1s proc, 12 workers), nd_verify 0.2s
+[lf/frozen_d3_seq_s0 r5] heldout greedy SOLVED 4543/5000 = 0.909 [0.900,0.916]
+  len 2: 994/1000 = 0.994 [0.987,0.997]
+  len 3: 989/1000 = 0.989 [0.980,0.994]
+  len 4: 951/1000 = 0.951 [0.936,0.963]
+  len 5: 924/1000 = 0.924 [0.906,0.939]
+  len 6: 685/1000 = 0.685 [0.656,0.713]
+  written hist {2: 1020, 3: 981, 4: 931, 5: 970, 6: 641}
+  pruned hist {2: 1020, 3: 982, 4: 934, 5: 970, 6: 637}
+  frontier written 6 pruned 6
+  reasons [("parse: expected line index, got 'LEANPARSE'", 182), ('rule check failed: ANDI', 53), ('rule check failed: DN', 40), ('rule check failed: ORI2', 33), ('rule check failed: IMPI', 31), ('rule check failed: ANDE2', 30)]
+=== round 5 done in 365s; new proofs 25; cum targets solved 375
+[lean_gate] 32000 samples, parse-fail 15223, distinct checked 14637: both ok 2465, nd-only 0, lean-only 2, both rej 12170; lean 12.2s wall (123.4s proc, 12 workers), nd_verify 0.7s
+[lf/frozen_d3_seq_s0 r6] targets (this round, pass@32) SOLVED 270/1000 = 0.270 [0.243,0.298]
+  len 7: 55/166 = 0.331 [0.264,0.406]
+  len 8: 29/166 = 0.175 [0.124,0.240]
+  len 9: 10/166 = 0.060 [0.033,0.107]
+  len 10: 45/166 = 0.271 [0.209,0.343]
+  len 11: 56/166 = 0.337 [0.270,0.412]
+  len 12: 75/170 = 0.441 [0.369,0.516]
+  written hist {7: 255, 8: 62, 9: 4, 10: 2}
+  pruned hist {5: 11, 6: 184, 7: 91, 8: 34, 9: 3}
+  frontier written 8 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 15223), ('rule check failed: IMPE', 3977), ('rule check failed: ANDI', 2158), ('rule check failed: ANDE2', 1676), ('final formula is not the conclusion', 1107), ('rule check failed: DN', 1076)]
+[lf/frozen_d3_seq_s0 r6] targets (cumulative 192 attempts) SOLVED 386/1000 = 0.386 [0.356,0.417]
+  len 7: 91/166 = 0.548 [0.472,0.622]
+  len 8: 68/166 = 0.410 [0.338,0.486]
+  len 9: 14/166 = 0.084 [0.051,0.137]
+  len 10: 57/166 = 0.343 [0.275,0.418]
+  len 11: 71/166 = 0.428 [0.355,0.504]
+  len 12: 85/170 = 0.500 [0.426,0.574]
+  written hist {7: 350, 8: 156, 9: 13, 10: 4}
+  pruned hist {5: 23, 6: 244, 7: 164, 8: 86, 9: 6}
+  frontier written 9 pruned 9
+  reasons []
+[lean_gate] 16000 samples, parse-fail 7710, distinct checked 7237: both ok 1299, nd-only 0, lean-only 4, both rej 5934; lean 5.5s wall (54.3s proc, 12 workers), nd_verify 0.4s
+[lf/frozen_d3_seq_s0 r6] transfer (this round, pass@32) SOLVED 138/500 = 0.276 [0.239,0.317]
+  len 7: 17/83 = 0.205 [0.132,0.304]
+  len 8: 17/83 = 0.205 [0.132,0.304]
+  len 9: 1/83 = 0.012 [0.002,0.065]
+  len 10: 30/83 = 0.361 [0.266,0.469]
+  len 11: 29/83 = 0.349 [0.256,0.457]
+  len 12: 44/85 = 0.518 [0.413,0.621]
+  written hist {7: 121, 8: 32, 9: 1}
+  pruned hist {5: 5, 6: 92, 7: 38, 8: 19}
+  frontier written 8 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 7710), ('rule check failed: IMPE', 1813), ('rule check failed: ANDI', 1068), ('rule check failed: ANDE2', 768), ('final formula is not the conclusion', 589), ('rule check failed: DN', 514)]
+[lf/frozen_d3_seq_s0 r6] transfer (cumulative 192 attempts) SOLVED 193/500 = 0.386 [0.344,0.429]
+  len 7: 36/83 = 0.434 [0.332,0.541]
+  len 8: 35/83 = 0.422 [0.321,0.529]
+  len 9: 4/83 = 0.048 [0.019,0.117]
+  len 10: 33/83 = 0.398 [0.299,0.505]
+  len 11: 37/83 = 0.446 [0.344,0.553]
+  len 12: 48/85 = 0.565 [0.459,0.665]
+  written hist {7: 158, 8: 69, 9: 3, 10: 3}
+  pruned hist {5: 10, 6: 110, 7: 72, 8: 38, 9: 1, 10: 2}
+  frontier written 8 pruned 8
+  reasons []
+[lean_gate] 500 samples, parse-fail 238, distinct checked 262: both ok 62, nd-only 0, lean-only 0, both rej 200; lean 1.3s wall (1.3s proc, 12 workers), nd_verify 0.0s
+[lf/frozen_d3_seq_s0 r6] transfer greedy SOLVED 62/500 = 0.124 [0.098,0.156]
+  len 7: 4/83 = 0.048 [0.019,0.117]
+  len 8: 0/83 = 0.000 [0.000,0.044]
+  len 9: 0/83 = 0.000 [0.000,0.044]
+  len 10: 9/83 = 0.108 [0.058,0.193]
+  len 11: 19/83 = 0.229 [0.152,0.330]
+  len 12: 30/85 = 0.353 [0.260,0.459]
+  written hist {7: 57, 8: 5}
+  pruned hist {6: 50, 7: 10, 8: 2}
+  frontier written 8 pruned 7
+  reasons [("parse: expected line index, got 'LEANPARSE'", 238), ('rule check failed: IMPE', 57), ('rule check failed: ANDI', 38), ('rule check failed: ANDE2', 23), ('final formula is not the conclusion', 17), ('rule check failed: ORI2', 15)]
+[lean_gate] 5000 samples, parse-fail 182, distinct checked 4818: both ok 4543, nd-only 0, lean-only 1, both rej 274; lean 2.4s wall (24.7s proc, 12 workers), nd_verify 0.2s
+[lf/frozen_d3_seq_s0 r6] heldout greedy SOLVED 4543/5000 = 0.909 [0.900,0.916]
+  len 2: 994/1000 = 0.994 [0.987,0.997]
+  len 3: 989/1000 = 0.989 [0.980,0.994]
+  len 4: 951/1000 = 0.951 [0.936,0.963]
+  len 5: 924/1000 = 0.924 [0.906,0.939]
+  len 6: 685/1000 = 0.685 [0.656,0.713]
+  written hist {2: 1020, 3: 981, 4: 931, 5: 970, 6: 641}
+  pruned hist {2: 1020, 3: 982, 4: 934, 5: 970, 6: 637}
+  frontier written 6 pruned 6
+  reasons [("parse: expected line index, got 'LEANPARSE'", 182), ('rule check failed: ANDI', 53), ('rule check failed: DN', 40), ('rule check failed: ORI2', 33), ('rule check failed: IMPI', 31), ('rule check failed: ANDE2', 30)]
+=== round 6 done in 371s; new proofs 18; cum targets solved 386

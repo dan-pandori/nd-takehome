@@ -11,6 +11,8 @@ RS="rsync -rlptz --no-o --no-g -e \"ssh $SSHO -p $POD_PORT\""
 case "${1:-code}" in
   pull) mkdir -p "$W/$(dirname "$2")"; exec rsync -rlptz --no-o --no-g -e "ssh $SSHO -p $POD_PORT" "$R/$2" "$W/$(dirname "$2")/" ;;
   push) ssh $SSHO -p "$POD_PORT" "root@$POD_IP" "mkdir -p /workspace/nd-takehome/$(dirname "$2")"; exec rsync -rlptz --no-o --no-g -e "ssh $SSHO -p $POD_PORT" "$W/$2" "$R/$2" ;;
+  pullall) exec rsync -rlptz --no-o --no-g --exclude 'mix_*.jsonl' -e "ssh $SSHO -p $POD_PORT" "$R/artifacts/lf/" "$W/artifacts/lf/" ;;
+  pullckpt) exec rsync -rlptz --no-o --no-g -e "ssh $SSHO -p $POD_PORT" "$R/ckpts/lf" "$R/ckpts/ladder" "$W/ckpts/" ;;
   code)
     rsync -rlptz --no-o --no-g --exclude .git --exclude data/ --exclude artifacts/ --exclude ckpts/ --exclude __pycache__ --exclude .venv -e "ssh $SSHO -p $POD_PORT" "$W/" "$R/"
     ssh $SSHO -p "$POD_PORT" "root@$POD_IP" "mkdir -p /workspace/nd-takehome/{data/ladder,data/p2,ckpts/ladder,ckpts/lf,artifacts/lf/logs,targets}"
