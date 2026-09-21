@@ -24,12 +24,15 @@ for fmt in ('token', 'seq', 'rand'):
                 continue
             y = v['acq_by_round']
             a.plot(range(1, len(y) + 1), y, color=COL[fmt], ls=ls, lw=lw, marker='o' if kind == 'ei' else None, ms=3.5, label=(NAME[fmt] if (kind == 'ei' and s == 0) else None))
-            if kind == 'ei':
-                a.annotate(f'{y[-1]:.3f}', (len(y), y[-1]), xytext=(5, -3 if s == 0 else 3), textcoords='offset points', fontsize=7.5, color=INK)
+ends = {fmt: [P2[f'{fmt}_ei_s{s}']['acq'] for s in (0, 1) if f'{fmt}_ei_s{s}' in P2] for fmt in ('token', 'seq', 'rand')}
+ypos = {'seq': 0.492, 'rand': 0.447, 'token': 0.35}
+for fmt, v in ends.items():
+    if v:
+        a.text(8.15, ypos[fmt], ' / '.join(f'{x:.3f}' for x in v), fontsize=7.5, color=INK, va='center')
 a.plot([], [], color=MUTED, ls=(0, (4, 2)), lw=1.3, label='frozen control (same attempts)')
-a.axhspan(0.271, 0.364, color='#2a78d6', alpha=0.08, lw=0); a.text(1.1, 0.368, 'range of all 8 token f = 0 arms (0.271–0.364)', fontsize=7, color=MUTED)
+a.axhspan(0.271, 0.364, color='#2a78d6', alpha=0.08, lw=0); a.text(4.3, 0.277, 'band: all 8 token f = 0 arms, 0.271–0.364', fontsize=7, color=MUTED)
 a.set_xlabel('EI round (32 attempts per target each)'); a.set_ylabel('depth-3 acquisition (fraction of 1,000 targets)')
-a.set_title('(a) Depth-3 f = 0 dial: targets solved with a depth-3 proof', fontsize=9, loc='left'); a.grid(axis='y', color='#e6e5e0', lw=0.6); a.set_xlim(0.8, 9.2); a.legend(frameon=False, fontsize=7.5, loc='center right')
+a.set_title('(a) Depth-3 f = 0 dial: targets solved with a depth-3 proof', fontsize=9, loc='left'); a.grid(axis='y', color='#e6e5e0', lw=0.6); a.set_xlim(0.8, 9.6); a.set_ylim(-0.01, 0.56); a.legend(frameon=False, fontsize=7.5, loc='upper left')
 
 # (b) ladder: transfer theorems solved by L_true bin
 b = ax[1]; P3 = S['P3_ladder']
@@ -64,6 +67,6 @@ for i, (k, lab, col, hatch) in enumerate(series):
     for x, l in zip(xs, L):
         c.text(x, wh.get(l, 0) + 4, str(wh.get(l, 0)), ha='center', fontsize=6.5, color=INK)
 c.set_xticks(range(len(L))); c.set_xticklabels([f'{l} lines' for l in L]); c.set_ylabel('distinct verified proofs (1,638 theorems × 16 samples)')
-c.set_title('(c) Stage-1 base model: written proof length (trained on ≤ 6 lines)', fontsize=9, loc='left'); c.grid(axis='y', color='#e6e5e0', lw=0.6); c.legend(frameon=False, fontsize=7.5)
+c.set_title('(c) Stage-1 base model (trained on ≤ 6 lines): proof lengths', fontsize=9, loc='left'); c.grid(axis='y', color='#e6e5e0', lw=0.6); c.legend(frameon=False, fontsize=7.5)
 fig.tight_layout(); fig.savefig('figures/lean_format.png', dpi=170)
 print('figures/lean_format.png')
