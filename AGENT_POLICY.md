@@ -18,6 +18,8 @@ Dmitry or anyone else. Draft PRs with no reviewers are fine. Dan reads and share
   down (and committed) before a run; splits disjoint by renaming class; every count
   reproducible from files that are pulled back.
 
+- **Lean is the checker of record (Dan, 2026-09-20).** Every counted proof must translate with `nd2lean.py` and check in Lean; report agreement with `nd_verify`; a disagreement is a bug. Proofs in write-ups are shown in Lean. Pretrained-model experiments use Lean as the surface form. From-scratch training keeps the token format until proposal 8 (`~/nd-rl/docs/proposals/2026-09-20-lean-training-format.md`) reports. *Why:* the translator agrees with `nd_verify` on 181k/181k proofs and pretrained code models prove 2.7× more theorems in Lean.
+
 ## Everything else is a suggestion
 
 Experiment designs, pod counts, GPU classes, deadlines, deliverable formats. Use judgment. If
