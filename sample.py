@@ -54,13 +54,20 @@ def generate(model, tok, prompts, greedy=True, temperature=1.0, max_new=400, bat
     ids = [tok.encode_prompt(p) for p in prompts]
     order = sorted(range(len(prompts)), key=lambda i: len(ids[i]))
     res = [None] * len(prompts)
+    is_lean = hasattr(tok, 'statement')      # LeanTokenizer: decode() returns the denoted ND proof, last_text the literal Lean text
+    texts = [None] * len(prompts)
     for s in range(0, len(order), batch):
         chunk = order[s:s + batch]
         with torch.autocast('cuda', dtype=torch.bfloat16, enabled=(dev.type == 'cuda')):
             outs = generate_ids(model, tok, [ids[i] for i in chunk], greedy, temperature, max_new, gen)
         for i, o in zip(chunk, outs):
             res[i] = tok.decode(o)
+            if is_lean:
+                texts[i] = tok.last_text
         del outs
     if dev.type == 'cuda':
         torch.cuda.empty_cache()   # hand reserved memory back to co-tenant jobs
+    if is_lean:
+        from lean_gate import gate
+        res = gate(tok, prompts, res, texts)   # Lean checks the literal text; Lean-rejected samples come back prefixed 'LEANREJ '
     return res

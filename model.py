@@ -98,9 +98,9 @@ def save_ckpt(path, model, tok_mode, extra=None):
 
 
 def load_ckpt(path, device='cpu'):
-    from tokenizer import Tokenizer
+    from tokenizer import make_tokenizer
     ck = torch.load(path, map_location=device)
-    tk = Tokenizer(ck['tok_mode'])
+    tk = make_tokenizer(ck['tok_mode'])
     m = GPT(**ck['cfg']).to(device)
     m.load_state_dict(ck['state'])
     m.eval()

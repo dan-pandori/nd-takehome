@@ -10,7 +10,7 @@ Loss is next-token cross-entropy on proof tokens only (prompt tokens masked out)
 import argparse, json, math, os, random, sys, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import torch, torch.nn.functional as F
-from tokenizer import Tokenizer
+from tokenizer import make_tokenizer
 from model import GPT, save_ckpt, load_ckpt
 from nd_verify import verify_text
 
@@ -26,7 +26,10 @@ def load(fn, tok, cap, check_verify=False):
             if check_verify:
                 ok, reason, nl = verify_text(r['prompt'] + ' ' + r['proof'])
                 assert ok and nl == r['n_lines'] and nl <= cap, (reason, nl, r)
-        out.append((tok.encode_prompt(r['prompt']), tok.encode_proof(r['proof'])))
+        ids = tok.encode_proof(r['proof'])
+        if cap and hasattr(tok, 'statement'):      # Lean surface form: the rendered record must denote exactly the cap-checked ND proof
+            assert tok.decode(ids) == r['proof'], r
+        out.append((tok.encode_prompt(r['prompt']), ids))
     return out
 
 
@@ -82,7 +85,7 @@ def main():
         model, tok, _ = load_ckpt(a.init, dev)
         a.mode = tok.mode
     else:
-        tok = Tokenizer(a.mode)
+        tok = make_tokenizer(a.mode)
         model = GPT(tok.vocab_size, a.n_layer, a.d, a.n_head).to(dev)
     tok.shift = not a.no_shift
     print('params', model.n_params(), 'mode', tok.mode, 'shift', tok.shift, flush=True)

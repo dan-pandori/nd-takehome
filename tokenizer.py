@@ -108,6 +108,13 @@ class Tokenizer:
         return [x + s if x >= self.ref0 else x for x in ids]
 
 
+def make_tokenizer(mode):
+    if mode.startswith('lean'):
+        from lean_tok import LeanTokenizer
+        return LeanTokenizer(mode)
+    return Tokenizer(mode)
+
+
 def selftest():
     import json, sys
     from nd_verify import verify_text
