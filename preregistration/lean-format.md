@@ -1,6 +1,6 @@
 # Pre-registration — run `lean-format` (proposal 8: Lean as the training format for the from-scratch model)
 
-Written 2026-09-21 ≈ 03:40 UTC, before any pod exists for this run. Executor: agent:claude. Branch `dan_lean_format`.
+Written 2026-09-21 ≈ 03:00 UTC, before any pod exists for this run. Executor: agent:claude. Branch `dan_lean_format`.
 Brief `BRIEF_LEAN_FORMAT.md`; proposal `~/nd-rl/docs/proposals/2026-09-20-lean-training-format.md`; policy `AGENT_POLICY.md`.
 
 ## Question
