@@ -30,9 +30,9 @@ for fmt, v in ends.items():
     if v:
         a.text(8.15, ypos[fmt], ' / '.join(f'{x:.3f}' for x in v), fontsize=7.5, color=INK, va='center')
 a.plot([], [], color=MUTED, ls=(0, (4, 2)), lw=1.3, label='frozen control (same attempts)')
-a.axhspan(0.271, 0.364, color='#2a78d6', alpha=0.08, lw=0); a.text(4.3, 0.277, 'band: all 8 token f = 0 arms, 0.271–0.364', fontsize=7, color=MUTED)
+a.axhspan(0.271, 0.364, color='#2a78d6', alpha=0.08, lw=0, label='range of all 8 token f = 0 arms (0.271–0.364)')
 a.set_xlabel('EI round (32 attempts per target each)'); a.set_ylabel('depth-3 acquisition (fraction of 1,000 targets)')
-a.set_title('(a) Depth-3 f = 0 dial: targets solved with a depth-3 proof', fontsize=9, loc='left'); a.grid(axis='y', color='#e6e5e0', lw=0.6); a.set_xlim(0.8, 9.6); a.set_ylim(-0.01, 0.56); a.legend(frameon=False, fontsize=7.5, loc='upper left')
+a.set_title('(a) Depth-3 f = 0 dial: targets solved with a depth-3 proof', fontsize=9, loc='left'); a.grid(axis='y', color='#e6e5e0', lw=0.6); a.set_xlim(0.8, 9.6); a.set_ylim(-0.01, 0.62); a.legend(frameon=False, fontsize=7.5, loc='upper left')
 
 # (b) ladder: transfer theorems solved by L_true bin
 b = ax[1]; P3 = S['P3_ladder']
@@ -52,7 +52,7 @@ for fmt in ('seq', 'rand'):
             bb = {int(k): c for k, c in v['transfer_by_bin'].items()}
             b.plot(bins, [bb.get(L, 0) / NB[L] for L in bins], color=COL[fmt], lw=1.3, ls=(0, (4, 2)))
 b.set_xlabel('minimal proof length L_true of the transfer theorem'); b.set_ylabel('fraction solved in 256 attempts')
-b.set_title('(b) Ladder rung T1, transfer pool (2,285; never trained on)', fontsize=9, loc='left'); b.grid(axis='y', color='#e6e5e0', lw=0.6); b.legend(frameon=False, fontsize=7.5)
+b.set_title('(b) Ladder rung T1, transfer pool (2,285; never trained on)', fontsize=9, loc='left'); b.grid(axis='y', color='#e6e5e0', lw=0.6); b.set_ylim(-0.02, 0.72); b.plot([], [], color=MUTED, ls=(0, (4, 2)), lw=1.3, label='frozen Lean controls (token frozen: L* 7)'); b.legend(frameon=False, fontsize=7.5, loc='upper right')
 
 # (c) mechanism: distinct verified proofs by written length, Stage-1 base model, pass@16 on the take-home transfer set
 c = ax[2]; P4 = S['P4_mechanism']
@@ -67,6 +67,6 @@ for i, (k, lab, col, hatch) in enumerate(series):
     for x, l in zip(xs, L):
         c.text(x, wh.get(l, 0) + 4, str(wh.get(l, 0)), ha='center', fontsize=6.5, color=INK)
 c.set_xticks(range(len(L))); c.set_xticklabels([f'{l} lines' for l in L]); c.set_ylabel('distinct verified proofs (1,638 theorems × 16 samples)')
-c.set_title('(c) Stage-1 base model (trained on ≤ 6 lines): proof lengths', fontsize=9, loc='left'); c.grid(axis='y', color='#e6e5e0', lw=0.6); c.legend(frameon=False, fontsize=7.5)
+c.set_title('(c) Base model (trained on ≤ 6 lines): lengths written', fontsize=9, loc='left'); c.grid(axis='y', color='#e6e5e0', lw=0.6); c.legend(frameon=False, fontsize=7.5)
 fig.tight_layout(); fig.savefig('figures/lean_format.png', dpi=170)
 print('figures/lean_format.png')

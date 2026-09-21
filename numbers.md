@@ -480,3 +480,68 @@
 - EI reference ei_depth3_f0_a3_s1: solved 583, acquisition 0.352, per round [7, 92, 227, 319, 338, 345, 346, 352], held-out greedy 0.919
 - Summary: G = 8 acquisition mean 0.474 (range 0.447–0.505, n = 6), G = 32 mean 0.426 (0.395–0.467); EI mean 0.351 (0.335–0.364). Held-out greedy at the end: G = 8 [0.34, 0.53, 0.56, 0.62, 0.64, 0.67], G = 32 [0.38, 0.52, 0.56, 0.61, 0.64, 0.66].
 - The 85M / relative-codec arm of the proposal was not run (no access to that code). Pods: p4 / p5 (RTX 3090) from 23:09 to 01:36 UTC ≈ 2 × 2.4 h ≈ $2.4 (shared with run 3). Bucket: `hf://buckets/dan-pandori/nd-rl/round2/run4/{artifacts/r4,ckpts/r4}`.
+
+# lean-format (proposal 8) — Lean as the training format for the from-scratch model
+
+Every number below is re-derived by `python3 lean_format_analysis.py` → `artifacts/lf/summary.json` (stdout copy `artifacts/lf/analysis_stdout.txt`) from pulled files under `artifacts/lf/`; token comparators from `artifacts/p2/{ei,frozen}_depth3_f0_a1_s{0,1}/`, `artifacts/stage1_*_transfer2_k16_norm.json` and `ladder.md` (branch `dan_ladder_a`). A Lean-format sample counts iff Lean accepts the literal sampled text **and** `nd_verify` accepts the ND proof it denotes; counts are distinct denoted proofs (numbered from N1). Formats: `lean_rand` (random labels, pre-registered primary), `lean_seq` (first-appearance order + random offset). Model 4 layers, d 256 in all arms; parameters differ only by vocabulary rows (107 vs 99).
+
+## Sequence lengths (`artifacts/lf/seqlen.json`; one symbol per token)
+| file | n | token `abs` prompt / proof / total mean (p95, max) | Lean prompt / proof / total mean (p95, max) | ratio total |
+|---|---:|---|---|---:|
+| `data/train.jsonl` | 154,990 | 36.9 / 72.1 / 109.1 (187, 516) | 51.8 / 82.8 / 134.5 (214, 537) | 1.233 |
+| `data/p2/train_depth3_f0_a1.jsonl` | 155,000 | 39.1 / 73.6 / 112.6 (185, 444) | 54.2 / 84.3 / 138.4 (214, 464) | 1.229 |
+| `data/heldout.jsonl` | 5,000 | 37.0 / 72.6 / 109.6 (191, 440) | 51.8 / 83.2 / 135.1 (215, 461) | 1.232 |
+| `data/p2/heldout.jsonl` | 5,000 | 39.7 / 81.3 / 121.0 (212, 465) | 54.1 / 92.2 / 146.3 (238, 486) | 1.210 |
+
+## P1 — Stage-1 held-out greedy (band: within 2 pp of token)
+| Stage-1 set | token | `lean_seq` | `lean_rand` | source |
+|---|---|---|---|---|
+| a1 (depth-3 removed), seeds 0 / 1, `data/p2/heldout.jsonl` | 0.883 / 0.883 | **0.909 / 0.896** (in band) | **0.882 / 0.790** (s1 out of band, −9.3 pp) | `artifacts/lf/frozen_d3_<sch>_s<k>/round_1.json`; `artifacts/p2/ei_depth3_f0_a1_s<k>/round_1.json` |
+| full cap-6 set, `data/heldout.jsonl` | 0.948 | **0.936** (−1.2 pp, in band) | **0.830** (−11.8 pp) | `artifacts/lf/stage1_full_<sch>_heldout_greedy.json` |
+| full set, by proof length 2 / 3 / 4 / 5 / 6 | – | 1.000 / 0.988 / 0.950 / 0.888 / 0.852 | 0.999 / 0.979 / 0.864 / 0.645 / 0.662 | same |
+- `lean_rand` failures are mostly wrong-name citations: of 851 failures on the full set, 813 parse and are rejected by both checkers (`nd_verify` reasons on the denoted proof: rule check ANDI 209, NEGE 174, IMPE 170, ORI 108, R 54, ANDE1 35, …), 38 are outside the grammar (36 `unbound`); `artifacts/lf/stage1_full_rand_heldout_greedy.jsonl`, log.md 03:17. `lean_seq --no_shift` full set: 0.939.
+
+## P2 — depth-3 f = 0 dial, set a1, 8 rounds × 32 attempts (`phase2_metrics.arm_metrics`, pattern `depth3`, on `artifacts/lf/{ei,frozen}_d3_<sch>_s<k>/`)
+| arm | targets solved / 1,000 | **acquisition** (theorems / depth-3 proofs / first round) | transfer solved / 500, acq | held-out greedy final |
+|---|---|---|---|---|
+| token EI s0 / s1 | 645 / 698 | **0.335 / 0.364** (335 / 409 / r1; 364 / 426 / r1) | 331, 0.372 / 337, 0.366 | 0.907 / 0.930 |
+| token frozen s0 / s1 | 175 / 175 | 0.005 / 0.005 | 84, 0.004 / 93, 0.004 | 0.883 / 0.883 |
+| `lean_seq` EI s0 / s1 | 715 / 736 | **0.476 / 0.479** (476 / 661 / r1; 479 / 710 / r1) | 369, 0.494 / 388, 0.512 | 0.965 / 0.969 |
+| `lean_seq` frozen s0 / s1 | 409 / 326 | **0.206 / 0.134** (206 / 232; 134 / 168) | 206, 0.184 / 184, 0.156 | 0.909 / 0.896 |
+| `lean_rand` EI s0 / s1 | 663 / 673 | **0.433 / 0.462** (433 / 619 / r1; 462 / 657 / r1) | 347, 0.472 / 344, 0.476 | 0.925 / 0.913 |
+| `lean_rand` frozen s0 / s1 | 351 / 423 | **0.202 / 0.280** (202 / 241; 280 / 336) | 173, 0.198 / 233, 0.302 | 0.882 / 0.790 |
+- Acquisition by round, `lean_seq` s0: 0.104 / 0.362 / 0.401 / 0.418 / 0.439 / 0.456 / 0.465 / 0.476; token s0: 0.002 / 0.008 / 0.117 / 0.259 / 0.299 / 0.317 / 0.327 / 0.335.
+- **Base reachability**: the frozen Lean Stage-1 models (zero depth-3 proofs in pretraining) already solve 8.5–17.2 % of the targets with a depth-3 proof in the first 32 attempts and 13.4–28.0 % in 256; the token frozen controls: 0.5 % in 256. EI adds +0.27 / +0.35 (`lean_seq`) and +0.23 / +0.18 (`lean_rand`) over the frozen control at equal attempts (token: +0.33 / +0.36).
+
+## P3 — ladder rung T1, 8 rounds × 32 attempts (`artifacts/lf/la_{T1,frozen}_<sch>_s<k>/found_transfer_8.jsonl`, `found_8.jsonl`; pools `data/ladder/`; `L*` = max L with ≥ 5 theorems solved at `L_true` ≥ L)
+| arm | **`L*` transfer** | `L*` targets | transfer solved / 2,285 | by `L_true` 7 / 8 / 9 / 10 / 11 / 12 / 13 | targets solved / 4,495 | held-out greedy r1 → r8 | arm minutes (4 arms per GPU) |
+|---|---:|---:|---:|---|---:|---|---:|
+| token T1 s0 / s1 (on file) | 10 / 10 | 10 / 10 | 612 / 623 | 140, 137, 300, 34, 1, 0, 0 / 139, 138, 312, 34, 0, 0, 0 | 2,400 / 2,455 | 0.948 → 0.953 / 0.957 | 65 / 86 (2–3 per GPU) |
+| token frozen s0 / s1 (on file) | 7 / 7 | 8 / 8 | 22 / 24 | 20, 2, 0 … / 21, 3, 0 … | 426 / 408 | 0.948 | – |
+| `lean_seq` T1 s0 / s1 | **11 / 11** | 11 / 11 | **794 / 839** | 75, 161, 463, 83, 9, 3, 0 / 118, 162, 465, 81, 9, 3, 1 | 2,604 / 2,674 | 0.936 → 0.944 / 0.943 | 248 / 252 |
+| `lean_seq` frozen s0 / s1 | **10 / 10** | 10 / 10 | 304 / 309 | 43, 113, 134, 14, 0 / 50, 111, 134, 14, 0 | 1,768 / 1,759 | 0.936 | 247 / 251 |
+| `lean_rand` T1 s0 / s1 | **10 / 10** | 10 / 10 | 583 / 657 | 55, 131, 351, 44, 2 / 114, 139, 360, 40, 4 | 2,339 / 2,396 | 0.830 → 0.923 / 0.924 | 226 / 229 |
+| `lean_rand` frozen s0 / s1 | **9 / 9** | 9 / 9 | 229 / 222 | 42, 89, 96, 2 / 41, 87, 93, 1 | 1,511 / 1,501 | 0.830 | 222 / 226 |
+- `lean_seq` reaches transfer `L*` = 11 at round 5 in both seeds (`round_<r>.json` `transfer_cum.lstar`). Theorems solved at `L_true` ≥ 11: 12 / 13 (token 1 / 0); ≥ 12: 3 / 4. No pool label is contradicted by a shorter accepted proof (shortest written proof of the `L_true` ≥ 11 theorems: 11–13 lines), so `L*` is unchanged after relabelling.
+- Unexplained and against the trend: the `L_true` = 7 bin is solved *less* often by Lean T1 arms (55–118 of 300) than by the token arms (139–140).
+
+## P4 — mechanism test: Stage-1 base model on the full cap-6 set, pass@16 on `data/transfer.jsonl` (1,638; `artifacts/lf/stage1_full_<tag>_transfer2_k16.jsonl`)
+| model | pass@16 | distinct verified proofs of written length 6 / 7 / 8 / ≥ 9 |
+|---|---|---|
+| token `abs` / `rel` / `abs-fixed` (on file) | 0.447 / 0.405 / 0.385 | 363 / 108 / 1 / 0 ; 332 / 79 / 0 / 0 ; 359 / 0 / 0 / 0 |
+| `lean_seq` | **0.571** (935) | 333 / **266 / 130 / 18** |
+| `lean_rand` | **0.524** (859) | 263 / **228 / 86 / 7** |
+| `lean_seq --no_shift` (names n1… only) | 0.284 (466) | 229 / 37 / 0 / 0 |
+
+## P5 — Lean vs `nd_verify` (`artifacts/lf/gate_*.jsonl`, `gate_*.disagree.jsonl`, `artifacts/lf/disagreement_kinds.json`, `artifacts/lf/record_*.json`)
+- In the loop, every distinct grammar-valid sample of every job: 18,424,794 samples, 3,515,138 outside the strict grammar (19.1 %; `lean_rand` 20.7 %, `lean_seq` 17.4 %; mostly `unbound` = a name not in scope), **13,887,708 distinct checked by both: both accept 4,046,345, both reject 9,840,903, `nd_verify` accepts ∧ Lean rejects 0, Lean accepts ∧ `nd_verify` rejects 460** (33 per million; pre-registered expectation ≤ 10 per million: wrong).
+- The 460, by cause: 206 `na.elim` on a non-`False` hypothesis (Lean resolves it to `Not.elim`; `nd2lean.py`'s BOTE rendering is looser than BOTE); 137 `¬A` ≡ `A → False` unfolding (NEGE 67, ORI 37, IMPI 30, ANDE / ANDI 3); 117 proofs that restate only some premises (legal Lean; ND requires every PR line — a gap in `lean_tok.inverse`'s strictness, not in Lean). None is counted anywhere.
+- Checker of record (unmodified `nd2lean.py --check` + `nd_verify` on every counted proof, `found_8` and `found_transfer_8` of all 16 Lean arms): **41,840 / 41,840 both accept, 0 disagreements**.
+
+## P6 — throughput and round time
+- Lean 85.5 proofs per process-second in the loop (162,341 process-s for 13.89 M; 12 processes wide, 14,216 s wall over all jobs) vs `nd_verify` 14,497 per second on the same proofs: **≈ 170× slower per core**. Pod self-test on valid short proofs: 120–285 / s / core vs ≈ 20,000 / s.
+- Solo like-for-like frozen round on the same pod, nothing else on the GPU (`artifacts/lf/timing_*/round_1.json`): depth-3 dial token 59 s / 64 s, `lean_rand` 105 s (**1.8×**), `lean_seq` 141 s (**2.2×**); ladder token 406 s / 402 s, `lean_rand` 594 s (**1.46×**), `lean_seq` 657 s (**1.64×**). Below the 3× stop rule. With four arms per 3090 a ladder round took 27–36 min.
+- Cost: RunPod balance 127.78 → 121.56 (`rpbalance` at 03:03 and 08:04 UTC): **≈ $6.2** for ≈ 12.3 pod-hours on four RTX 3090 pods (`~/pods.log` lf-1 … lf-4, 03:04–08:03 UTC). Budget $30.
+
+## Bucket
+`hf://buckets/dan-pandori/nd-rl/lean-format/{ckpts,artifacts,data}` — `ckpts/lf` (Stage-1 models, depth-3 EI rounds), `ckpts/ladder` (ladder EI rounds), `artifacts/lf` (everything above incl. per-round found files), `data` (the a1 training set and the ladder pools used).
