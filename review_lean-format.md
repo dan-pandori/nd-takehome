@@ -153,3 +153,113 @@ band, as the pre-registration says. What I will look for in phase 2: that the wr
 (ii) reports the frozen controls (0.13–0.28 acquisition, `L*` 9–10) beside every EI number rather than comparing Lean EI with
 token EI alone, (iii) reports the P4 `--no_shift`, P5 and frozen-control misses as misses, and (iv) does not call `lean_seq`'s
 `L*` 11 an RL gain over the token format without the `L*` − `L*`_frozen = 1 vs 3 comparison.
+
+## Compare (phase 2 — after reading `run_lean_format.md`, `numbers.md` § lean-format, `log.md` § lean-format, `STATUS.md`, `QUESTIONS.md`)
+
+Extra checks made for this phase are in `artifacts/review_lf/phase2_checks_stdout.txt`.
+
+| # | executor's claim | my independent value | verdict |
+|---|---|---|---|
+| 1 | P1 a1 held-out: token 0.883 / 0.883, `lean_seq` 0.909 / 0.896, `lean_rand` 0.882 / 0.790; full set 0.948 / 0.936 / 0.830; `--no_shift` 0.939 | 4,413 / 4,415; 4,543 / 4,480; 4,408 / 3,949; 4,739 / 4,678 / 4,149; 4,696 of 5,000 | reproduces (a1 values from round-file aggregates only — no per-sample file, not re-runnable on the VPS) |
+| 2 | `lean_rand` full set by length 0.999 / 0.979 / 0.864 / 0.645 / 0.662; 851 failures = 813 rejected by both + 38 outside grammar | identical | reproduces |
+| 3 | "`lean_rand` failures are mostly wrong-name citations" | tested directly: the first failing line becomes valid when a different earlier line is cited in **451 of 851** failures (53 %); 347 are not fixable by re-citing (wrong rule or formula). `lean_seq`: 69 of 322 | partly — about half of the failures, ≈ 72 % of the *excess* over `lean_seq` (382 of 529). "Mostly" holds for the excess, not for the total |
+| 4 | P2 acquisition EI 0.476 / 0.479, 0.433 / 0.462; frozen 0.206 / 0.134, 0.202 / 0.280; token 0.335 / 0.364, frozen 0.005; solved, depth-3 proof counts, transfer columns, first round r1, by-round curves (Lean s0 and token s0) | identical in every cell (own pruner and depth counter; token by-round from the `round` field of `found_8`) | reproduces |
+| 5 | "frozen Lean models solve 8.5–17.2 % of targets with a depth-3 proof in 32 attempts, 13.4–28.0 % in 256"; EI adds +0.27 / +0.35, +0.23 / +0.18 (token +0.33 / +0.36) | 85–172 / 1,000; 134–280; 0.270 / 0.345, 0.231 / 0.182; 0.330 / 0.359 | reproduces |
+| 6 | P3 transfer `L*` 11 / 11 (`lean_seq`), 10 / 10 (`lean_rand`), frozen 10 / 10 and 9 / 9; token 10 / 10, frozen 7 / 7; solved 794 / 839, 583 / 657, 304 / 309, 229 / 222, 612 / 623, 22 / 24; by-`L_true` rows; targets `L*` and solved; `L*` = 11 from round 5 | identical (token arms recounted from `origin/dan_ladder_a`; pool files byte-identical) | reproduces |
+| 7 | 12 / 13 theorems at `L_true` ≥ 11 (token 1 / 0); ≥ 12: 3 / 4; no label contradicted by a shorter accepted proof | 12 / 13, 3 / 4; 0 theorems in any Lean arm (either pool) have an accepted proof shorter than `L_true`; shortest written proofs at `L_true` ≥ 11 are 11–13 lines | reproduces |
+| 8 | `L_true` = 7 bin solved less often by Lean T1 arms (55–118 of 300 vs 139–140) | 55, 114, 75, 118 vs 140, 139 | reproduces; reported as unexplained, which is accurate |
+| 9 | ladder held-out r1 → r8: 0.936 → 0.944 / 0.943; 0.830 → 0.923 / 0.924 | 4,678 → 4,718 / 4,713; 4,149 → 4,617 / 4,619 | reproduces |
+| 10 | P4: pass@16 935 / 859 / 466; 7- / 8- / ≥ 9-line 266 / 130 / 18, 228 / 86 / 7, 37 / 0 / 0; token 108 / 1, 79 / 0, 0 / 0 | identical; token values only from the aggregate json on file | reproduces |
+| 11 | log 05:50: `--no_shift` reaches 37 because "the model re-uses a name whose binding is out of scope — shadowing" | literal texts of accepted proofs were not saved | **not derivable** |
+| 12 | P5: 18,424,794 samples, 13,887,708 checked, both accept 4,046,345, both reject 9,840,903, 0 / 460; 33 per million; kinds 206 / 137 / 117; parse-fail 19.1 % (`rand` 20.7 %, `seq` 17.4 %) | mine are larger by exactly the pod self-test log (2,000 samples, 1,600 + 400), which the executor excludes; excluding it, identical. Kinds 206 / 137 (67 + 37 + 30 + 3) / 117 from my own classifier; 0.207 / 0.174 | reproduces |
+| 13 | checker of record 41,840 / 41,840 | 41,840 of my 58,201 are the 16 arms' found files (the other 16,361 are mechanism-test proofs); all accepted by `nd_verify` and by Lean through my own harness | reproduces, and extends to the mechanism-test proofs |
+| 14 | Lean 85.5 / process-s vs `nd_verify` 14,497 / s ≈ 170× | 85.5; 14,497; 169× | reproduces |
+| 15 | solo round ratios 1.8× / 2.2× / 1.46× / 1.64× | 1.78 / 2.20 / 1.46 / 1.63 | reproduces (one round per cell) |
+| 16 | sequence-length table, ratio 1.21–1.23 | identical means and ratios | reproduces |
+| 17 | cost ≈ $6.2; pods deleted; bucket uploaded | balance $121.52 at 08:35; `podls` empty; bucket has `artifacts`, `ckpts`, `data`, including the per-round `found_1…7` files that git ignores | reproduces |
+| 18 | gate change at 03:33 was diagnostic only | diff 63f94b2 → c544d90: only the `LEANREJ` prefix on both-reject samples and a parse-reason field changed; acceptance (Lean ∧ `nd_verify`) is the same. The two mechanism evaluations that ran under the old gate (03:17–03:19) are unaffected — I re-verified all their proofs | reproduces |
+
+Every number in `run_lean_format.md` and `numbers.md` § lean-format reproduces. No hard-constraint violation; no quarantine.
+
+### Expectations and misses
+
+Pre-registration committed 03:00:36, first pod 03:04:23 — before the run. Misses the executor reports as misses: `L*` "stays
+10" (wrong, 11 for `lean_seq`); `lean_rand` in-distribution loss (expected ≤ 5 pp); disagreement rate (33 vs ≤ 10 per
+million) and its two unanticipated kinds; frozen depth-3 acquisition (expected ≤ 0.01, found 0.13–0.28 — made the headline);
+`--no_shift` ≤ 2 (found 37; called wrong in `log.md` 05:50). Deviations logged: four pods instead of two; timing rounds run
+solo instead of co-tenant; the grammar does not mirror "every premise restated". Not flagged, all minor: the `--no_shift`
+miss is in the log but not in the write-up, which presents 37 / 0 only as confirmation; the pre-registration's token
+"frozen 0" is 0.005; P6 `lean_seq` depth-3 ratio 2.2× is above the expected 1.2–1.8×; P7's pre-registered absolute proof
+lengths (65 / 57) were measured on the first 3,000 held-out records (lengths 2–4; log 03:00) and differ from the full-file
+83 / 73 without a note; frozen ladder `L*` was expected 7 and is 9–10 (reported, not labelled a miss); the write-up is 588
+words against the brief's 400.
+
+### Wording against n
+
+- **"On depth-3 and length generalisation Lean is *better* than tokens."** Holds for `lean_seq`. For `lean_rand` it holds on
+  the depth-3 dial only: ladder `L*` is equal (10 / 10) and transfer solved is 583 / 657 against 612 / 623.
+- **"`lean_seq` reaches `L*` = 11 in both seeds."** The two seeds are EI seeds from **one** Stage-1 model (the caveat is in
+  the write-up's last line, not beside the claim). `lean_rand`'s two a1 Stage-1 seeds differ by 9 pp in distribution and by
+  0.08 in frozen acquisition, so Stage-1 seed variance in this format is large; a format-level "`L*` = 11" needs a second
+  Stage-1 seed. The same applies to the token comparator.
+- **`L*` − `L*`_frozen** is the ladder's registered headline and is not stated: it is **1 / 1** for both Lean schemes against
+  **3 / 3** for the token format. The write-up gives the frozen `L*` values, so the information is there, but the sentence
+  "the proposal's result that would matter" should carry it: the `L*` = 11 is a base-model gain plus the same-or-smaller EI
+  step, not a larger RL effect.
+- **"`lean_rand` loses 9–12 pp in distribution."** a1 s0 loses 0.1 pp, a1 s1 9.3 pp, the full set (one seed) 11.8 pp. It is
+  "0 to 12 pp, strongly seed-dependent".
+- **"The name-offset barrier is format-independent: `lean_seq` without offsets drops to 37 / 0."** One Stage-1 seed; the
+  token `abs-fixed` value is 0 and the pre-registered expectation was ≤ 2, so the measured statement is "present but weaker
+  in Lean (37 vs 0 seven-line proofs, 0 vs 0 eight-line)". The shadowing explanation in the log cannot be checked from the
+  pulled files.
+- **"So part of the token format's 'new capability from RL' was a surface-form barrier."** Supported as worded ("part of"):
+  two Stage-1 seeds per scheme on the depth-3 dial, all four frozen controls at 0.13–0.28 against 0.005, training file
+  verified to hold no depth-3 proof in either rendering. The unary-prefix explanation is labelled untested, correctly.
+- **Verdict line.** Matches the registered rule applied to my numbers (`lean_seq` not worse; `lean_rand`, the primary,
+  worse on P1). The pre-registration promised to say plainly that "not worse overall" rests on two tries at a fixed band;
+  the write-up names both schemes and which was primary but does not use those words.
+- No "never", "wall" or "bistable" claims.
+
+## Verdict
+
+**What stands.** All counts, rates, frontiers, timings and costs. The per-scheme decision-rule verdict. 58,201 / 58,201
+counted proofs accepted by `nd_verify` and by Lean; 0 "`nd_verify` yes, Lean no" among 13.9 M gate checks. The run's most
+important result for the project question stands and is robust at n = 4 Stage-1 models: **a Lean-format base model trained on
+zero depth-3 proofs writes depth-3 proofs for 13–28 % of targets at 256 attempts, where the token-format base writes them
+for 0.5 %**, and solves ≈ 10× more ladder transfer theorems frozen (222–309 vs 22–24). The EI increment over the frozen
+control is no larger in Lean than in tokens (acquisition +0.18 to +0.35 vs +0.33 / +0.36; `L*` +1 vs +3).
+
+**What must be reworded.** (1) "Lean is better on length generalisation" → `lean_seq` only. (2) Put `L*` − `L*`_frozen
+(1 vs 3) and "one Stage-1 model" beside the `L*` = 11 claim. (3) "loses 9–12 pp" → 0 / 9 / 12 pp by model. (4) The
+`--no_shift` result as a weakened barrier and a missed prediction, one seed. (5) "mostly wrong-name citations" → about half
+of all failures, about 70 % of the excess over `lean_seq`. (6) Add the "two tries at a fixed band" sentence.
+
+**What is not supported.** Nothing numerical. Two explanations are untested and should stay labelled as such: unary depth
+prefix vs nested `fun` (write-up, labelled) and name shadowing behind the 37 (log, not labelled).
+
+**Consequences the write-up does not draw, for whoever acts on the decision rule.**
+- If `lean_seq` becomes the training format, the campaign's depth-3 f = 0 dial no longer measures "RL crossing f = 0": the
+  pattern is base-reachable (0.085–0.172 of targets in the first 32 attempts). Depth-3 results in Lean must be read as
+  EI − frozen, and the creation-vs-elicitation question needs a pattern the Lean base does not reach.
+- Acceptance condition (ii), Lean on the literal sampled text, is not auditable after the fact because accepted literal
+  texts are not stored. Future Lean-format runs should write the literal text beside the denoted proof in `found_*.jsonl`.
+- `nd2lean.py`'s BOTE rendering is loose (`.elim` resolves to `Not.elim` on a negation; 206 of the 460). This run is
+  protected by requiring `nd_verify` too, but any pipeline that uses Lean through `nd2lean` alone is not. The executor's
+  question in `QUESTIONS.md` (render BOTE as `False.elim na`) is the right one and is still open.
+- Held-out sets overlap their Stage-1 files in 21 / 5,000 and 95 / 5,000 classes once premise order is ignored. Same for
+  both formats, so P1 comparisons are fair, but 1.9 % is the size of the P1b margin that `lean_seq` passed by (0.8 pp inside
+  the band).
+
+**Next measurements that would settle what is open.**
+1. Two more Stage-1 seeds per scheme on the full set, each with a frozen ladder control and one T1 arm (≈ 6 Stage-1 + 12
+   ladder arms, ≈ $8 at this run's rates): decides whether `L*` 11 / frozen 10 is the format or the seed, and whether
+   `lean_rand`'s in-distribution loss is typical. The same for the token model if the 10-vs-11 comparison is to carry weight.
+2. A 2 × 2 of Stage-1 + frozen controls only (no EI; ≈ $3): {Fitch order, goal-first order} × {unary `|` depth prefix, no
+   depth prefix}, two seeds each, on the a1 set, scored by frozen depth-3 acquisition. This separates the two candidate
+   mechanisms for the base-model jump — the conclusion stated before the box vs the unseen `| | |` prefix — which the
+   current data cannot.
+3. For the project question in the Lean format: find a pattern with frozen acquisition ≈ 0 at 256 attempts in `lean_seq`
+   (candidates: depth-4 from a depth ≤ 2 set, the reductio pattern) before running any further f = 0 dial in it.
+4. `--no_shift` with a second seed and stored literal texts, to check the shadowing explanation.
+
+Reviewer finished 2026-09-21 UTC. No `QUARANTINE`.

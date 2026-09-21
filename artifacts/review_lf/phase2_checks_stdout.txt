@@ -1,0 +1,24 @@
+excl selftest {'samples': 18424794, 'parse_fail': 3515138, 'distinct_checked': 13887708, 'lean_proc_s': 162341, 'lean_wall_s': 14216, 'nd_verify_s': 958, 'both_ok': 4046345, 'both_rej': 9840903} lean/proc-s 85.5 nd/s 14497 ratio 169
+all {'samples': 18426794, 'parse_fail': 3515138, 'distinct_checked': 13889708, 'lean_proc_s': 162350, 'lean_wall_s': 14218, 'nd_verify_s': 958, 'both_ok': 4047945, 'both_rej': 9841303} lean/proc-s 85.6 nd/s 14498 ratio 169
+parse-fail share rand 0.207
+parse-fail share seq 0.1744
+la_T1_rand_s0 rl_targets: proofs shorter than L_true on 0 theorems []; L_true>=11 min written [11, 11, 11, 12] | transfer: proofs shorter than L_true on 0 theorems []; L_true>=11 min written [11, 11]
+la_T1_rand_s1 rl_targets: proofs shorter than L_true on 0 theorems []; L_true>=11 min written [11, 11, 12] | transfer: proofs shorter than L_true on 0 theorems []; L_true>=11 min written [11, 11, 11, 11]
+la_frozen_rand_s0 rl_targets: proofs shorter than L_true on 0 theorems []; L_true>=11 min written [] | transfer: proofs shorter than L_true on 0 theorems []; L_true>=11 min written []
+la_frozen_rand_s1 rl_targets: proofs shorter than L_true on 0 theorems []; L_true>=11 min written [] | transfer: proofs shorter than L_true on 0 theorems []; L_true>=11 min written []
+la_T1_seq_s0 rl_targets: proofs shorter than L_true on 0 theorems []; L_true>=11 min written [11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12] | transfer: proofs shorter than L_true on 0 theorems []; L_true>=11 min written [11, 11, 11, 11, 11, 11, 11, 11, 11, 12, 12, 13]
+la_T1_seq_s1 rl_targets: proofs shorter than L_true on 0 theorems []; L_true>=11 min written [11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12] | transfer: proofs shorter than L_true on 0 theorems []; L_true>=11 min written [11, 11, 11, 11, 11, 11, 11, 11, 11, 12, 12, 12, 13]
+la_frozen_seq_s0 rl_targets: proofs shorter than L_true on 0 theorems []; L_true>=11 min written [] | transfer: proofs shorter than L_true on 0 theorems []; L_true>=11 min written []
+la_frozen_seq_s1 rl_targets: proofs shorter than L_true on 0 theorems []; L_true>=11 min written [] | transfer: proofs shorter than L_true on 0 theorems []; L_true>=11 min written []
+token ei s 0 cum acq by round [0.002, 0.008, 0.117, 0.259, 0.299, 0.317, 0.327, 0.335]
+token ei s 1 cum acq by round [0.004, 0.041, 0.175, 0.279, 0.311, 0.34, 0.354, 0.364]
+la_T1_rand_s0 heldout r1 4149/5000 r8 4617/5000; transfer_cum.lstar r1..8 [9, 9, 10, 10, 10, 10, 10, 10]
+la_T1_rand_s1 heldout r1 4149/5000 r8 4619/5000; transfer_cum.lstar r1..8 [9, 9, 10, 10, 10, 10, 10, 10]
+la_T1_seq_s0 heldout r1 4678/5000 r8 4718/5000; transfer_cum.lstar r1..8 [10, 10, 10, 10, 11, 11, 11, 11]
+la_T1_seq_s1 heldout r1 4678/5000 r8 4713/5000; transfer_cum.lstar r1..8 [10, 10, 10, 10, 11, 11, 11, 11]
+heldout jsonl keys ['name', 'thm', 'prompt', 'n_lines', 'solved', 'n_ok', 'n_tried', 'proofs', 'written_lens', 'pruned_lens', 'reasons', 'fail_example']
+failures 851 outside grammar 38 [("parse: expected line index, got 'LEANREJ'", 813), ("parse: expected line index, got 'LEANPARSE'", 38)]
+rand full by length {2: 0.999, 3: 0.979, 4: 0.864, 5: 0.645, 6: 0.662}
+fail_example sample: 'LEANREJ N1 ( ( S & R ) & ( S & S ) ) : PR ; N2 ( S & R ) : ANDE2 N1 ; QED'
+rand 851 {'first failing line NOT fixable by re-citing (wrong formula/rule)': 347, 'first failing line fixable by re-citing (wrong name)': 451, 'outside grammar': 38, 'other: final formula is not the conclusion': 11, 'box rule (not tested)': 4}
+seq 322 {'first failing line NOT fixable by re-citing (wrong formula/rule)': 232, 'outside grammar': 16, 'first failing line fixable by re-citing (wrong name)': 69, 'other: final formula is not the conclusion': 4, 'box rule (not tested)': 1}
