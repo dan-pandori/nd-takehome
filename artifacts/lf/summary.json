@@ -131,16 +131,16 @@
   "token_full": 0.948,
   "rand": {
    "a1": {
-    "0": null,
-    "1": null
+    "0": 0.8816,
+    "1": 0.7898
    },
    "full": null,
    "full_by_len": null
   },
   "seq": {
    "a1": {
-    "0": null,
-    "1": null
+    "0": 0.9086,
+    "1": 0.896
    },
    "full": null,
    "full_by_len": null
@@ -368,6 +368,465 @@
     "pruned": 7,
     "round": 1
    }
+  },
+  "rand_ei_s0": {
+   "dir": "artifacts/lf/ei_d3_rand_s0",
+   "rounds": 8,
+   "attempts": 256,
+   "targets_solved": 663,
+   "acq": 0.433,
+   "acq_theorems": 433,
+   "n_depth3_proofs": 619,
+   "first_round": 1,
+   "transfer_solved": 347,
+   "acq_transfer": 0.472,
+   "heldout_greedy_final": 0.925,
+   "acq_by_round": [
+    0.124,
+    0.341,
+    0.374,
+    0.394,
+    0.41,
+    0.418,
+    0.427,
+    0.433
+   ],
+   "solved_by_round": [
+    243,
+    505,
+    576,
+    612,
+    635,
+    645,
+    656,
+    663
+   ],
+   "written_hist_targets": {
+    "7": 530,
+    "8": 297,
+    "9": 133,
+    "10": 18,
+    "11": 2
+   },
+   "secs_by_round": [
+    370.5046899318695,
+    442.3995976448059,
+    452.282408952713,
+    454.7818241119385,
+    444.7621228694916,
+    452.933305978775,
+    431.56520652770996,
+    250.01077556610107
+   ],
+   "example": {
+    "name": "targets_depth3_1",
+    "thm": " |- ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) )",
+    "proof": "N1 | ( ~ ( ~ Q ) ) : AS ; N2 | | ( ( R v R ) & S ) : AS ; N3 | | | ( R & ( Q v S ) ) : AS ; N4 | | | ( ( ( R v R ) & S ) v ( P > S ) ) : ORI1 N2 ; N5 | | ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) : IMPI N3 N4 ; N6 | ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) ) : IMPI N1 N6 ; QED",
+    "written": 7,
+    "pruned": 7,
+    "round": 2
+   }
+  },
+  "rand_ei_s1": {
+   "dir": "artifacts/lf/ei_d3_rand_s1",
+   "rounds": 8,
+   "attempts": 256,
+   "targets_solved": 673,
+   "acq": 0.462,
+   "acq_theorems": 462,
+   "n_depth3_proofs": 657,
+   "first_round": 1,
+   "transfer_solved": 344,
+   "acq_transfer": 0.476,
+   "heldout_greedy_final": 0.9132,
+   "acq_by_round": [
+    0.172,
+    0.342,
+    0.387,
+    0.413,
+    0.427,
+    0.441,
+    0.45,
+    0.462
+   ],
+   "solved_by_round": [
+    278,
+    510,
+    587,
+    618,
+    632,
+    651,
+    661,
+    673
+   ],
+   "written_hist_targets": {
+    "7": 540,
+    "8": 287,
+    "9": 146,
+    "10": 38,
+    "11": 2
+   },
+   "secs_by_round": [
+    429.1568109989166,
+    444.7186703681946,
+    460.4530620574951,
+    452.3396246433258,
+    443.0441436767578,
+    435.43795800209045,
+    423.2820534706116,
+    221.85446953773499
+   ],
+   "example": {
+    "name": "targets_depth3_1",
+    "thm": " |- ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) )",
+    "proof": "N1 | ( ~ ( ~ Q ) ) : AS ; N2 | | ( ( R v R ) & S ) : AS ; N3 | | | ( R & ( Q v S ) ) : AS ; N4 | | | ( ( ( R v R ) & S ) v ( P > S ) ) : ORI1 N2 ; N5 | | ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) : IMPI N3 N4 ; N6 | ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) ) : IMPI N1 N6 ; QED",
+    "written": 7,
+    "pruned": 7,
+    "round": 2
+   }
+  },
+  "rand_frozen_s0": {
+   "dir": "artifacts/lf/frozen_d3_rand_s0",
+   "rounds": 8,
+   "attempts": 256,
+   "targets_solved": 351,
+   "acq": 0.202,
+   "acq_theorems": 202,
+   "n_depth3_proofs": 241,
+   "first_round": 1,
+   "transfer_solved": 173,
+   "acq_transfer": 0.198,
+   "heldout_greedy_final": 0.8816,
+   "acq_by_round": [
+    0.124,
+    0.152,
+    0.167,
+    0.176,
+    0.183,
+    0.189,
+    0.197,
+    0.202
+   ],
+   "solved_by_round": [
+    243,
+    281,
+    301,
+    312,
+    323,
+    334,
+    344,
+    351
+   ],
+   "written_hist_targets": {
+    "7": 346,
+    "8": 114,
+    "9": 17
+   },
+   "secs_by_round": [
+    346.9763550758362,
+    364.9446475505829,
+    395.1129434108734,
+    387.1872572898865,
+    400.24712896347046,
+    385.4610242843628,
+    396.2016410827637,
+    367.9933850765228
+   ],
+   "example": {
+    "name": "targets_depth3_0",
+    "thm": " |- ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) )",
+    "proof": "N1 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ( Q v Q ) > R ) : AS ; N4 | | ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) : IMPI N3 N3 ; N5 | | ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) : ORI2 N4 ; N6 | ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) : IMPI N1 N6 ; QED",
+    "written": 7,
+    "pruned": 7,
+    "round": 2
+   }
+  },
+  "rand_frozen_s1": {
+   "dir": "artifacts/lf/frozen_d3_rand_s1",
+   "rounds": 8,
+   "attempts": 256,
+   "targets_solved": 423,
+   "acq": 0.28,
+   "acq_theorems": 280,
+   "n_depth3_proofs": 336,
+   "first_round": 1,
+   "transfer_solved": 233,
+   "acq_transfer": 0.302,
+   "heldout_greedy_final": 0.7898,
+   "acq_by_round": [
+    0.172,
+    0.215,
+    0.229,
+    0.25,
+    0.261,
+    0.274,
+    0.279,
+    0.28
+   ],
+   "solved_by_round": [
+    278,
+    333,
+    357,
+    382,
+    397,
+    413,
+    422,
+    423
+   ],
+   "written_hist_targets": {
+    "7": 351,
+    "8": 149,
+    "9": 44,
+    "10": 1
+   },
+   "secs_by_round": [
+    357.02670884132385,
+    358.17713022232056,
+    380.19992780685425,
+    381.9264302253723,
+    394.9790599346161,
+    373.00157165527344,
+    354.59141063690186,
+    352.4034957885742
+   ],
+   "example": {
+    "name": "targets_depth3_0",
+    "thm": " |- ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) )",
+    "proof": "N1 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ( Q v Q ) > R ) : AS ; N4 | | ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) : IMPI N3 N3 ; N5 | | ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) : ORI2 N4 ; N6 | ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) : IMPI N1 N6 ; QED",
+    "written": 7,
+    "pruned": 7,
+    "round": 4
+   }
+  },
+  "seq_ei_s0": {
+   "dir": "artifacts/lf/ei_d3_seq_s0",
+   "rounds": 8,
+   "attempts": 256,
+   "targets_solved": 715,
+   "acq": 0.476,
+   "acq_theorems": 476,
+   "n_depth3_proofs": 661,
+   "first_round": 1,
+   "transfer_solved": 369,
+   "acq_transfer": 0.494,
+   "heldout_greedy_final": 0.9652,
+   "acq_by_round": [
+    0.104,
+    0.362,
+    0.401,
+    0.418,
+    0.439,
+    0.456,
+    0.465,
+    0.476
+   ],
+   "solved_by_round": [
+    285,
+    583,
+    628,
+    650,
+    677,
+    693,
+    703,
+    715
+   ],
+   "written_hist_targets": {
+    "7": 530,
+    "8": 321,
+    "9": 148,
+    "10": 43,
+    "11": 8
+   },
+   "secs_by_round": [
+    363.719788312912,
+    435.1358470916748,
+    432.1069428920746,
+    446.8786268234253,
+    442.92636013031006,
+    449.08228850364685,
+    432.8494231700897,
+    285.1936650276184
+   ],
+   "example": {
+    "name": "targets_depth3_0",
+    "thm": " |- ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) )",
+    "proof": "N1 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ( Q v Q ) > R ) : AS ; N4 | | ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) : IMPI N3 N3 ; N5 | | ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) : ORI2 N4 ; N6 | ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) : IMPI N1 N6 ; QED",
+    "written": 7,
+    "pruned": 7,
+    "round": 1
+   }
+  },
+  "seq_ei_s1": {
+   "dir": "artifacts/lf/ei_d3_seq_s1",
+   "rounds": 8,
+   "attempts": 256,
+   "targets_solved": 736,
+   "acq": 0.479,
+   "acq_theorems": 479,
+   "n_depth3_proofs": 710,
+   "first_round": 1,
+   "transfer_solved": 388,
+   "acq_transfer": 0.512,
+   "heldout_greedy_final": 0.9694,
+   "acq_by_round": [
+    0.085,
+    0.35,
+    0.392,
+    0.408,
+    0.431,
+    0.453,
+    0.46,
+    0.479
+   ],
+   "solved_by_round": [
+    247,
+    567,
+    622,
+    646,
+    674,
+    705,
+    717,
+    736
+   ],
+   "written_hist_targets": {
+    "7": 562,
+    "8": 276,
+    "9": 164,
+    "10": 69,
+    "11": 17,
+    "12": 1
+   },
+   "secs_by_round": [
+    405.6023144721985,
+    453.78619027137756,
+    443.05706882476807,
+    438.8041455745697,
+    439.0338978767395,
+    442.38101387023926,
+    421.8405284881592,
+    270.4549443721771
+   ],
+   "example": {
+    "name": "targets_depth3_0",
+    "thm": " |- ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) )",
+    "proof": "N1 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ( Q v Q ) > R ) : AS ; N4 | | ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) : IMPI N3 N3 ; N5 | | ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) : ORI2 N4 ; N6 | ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) : IMPI N1 N6 ; QED",
+    "written": 7,
+    "pruned": 7,
+    "round": 1
+   }
+  },
+  "seq_frozen_s0": {
+   "dir": "artifacts/lf/frozen_d3_seq_s0",
+   "rounds": 8,
+   "attempts": 256,
+   "targets_solved": 409,
+   "acq": 0.206,
+   "acq_theorems": 206,
+   "n_depth3_proofs": 232,
+   "first_round": 1,
+   "transfer_solved": 206,
+   "acq_transfer": 0.184,
+   "heldout_greedy_final": 0.9086,
+   "acq_by_round": [
+    0.104,
+    0.129,
+    0.148,
+    0.163,
+    0.178,
+    0.188,
+    0.198,
+    0.206
+   ],
+   "solved_by_round": [
+    285,
+    319,
+    341,
+    358,
+    375,
+    386,
+    400,
+    409
+   ],
+   "written_hist_targets": {
+    "7": 369,
+    "8": 171,
+    "9": 13,
+    "10": 4
+   },
+   "secs_by_round": [
+    333.4863214492798,
+    359.5358500480652,
+    374.57835054397583,
+    363.5893168449402,
+    365.33948945999146,
+    370.8883578777313,
+    360.78969979286194,
+    385.6492648124695
+   ],
+   "example": {
+    "name": "targets_depth3_0",
+    "thm": " |- ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) )",
+    "proof": "N1 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ( Q v Q ) > R ) : AS ; N4 | | ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) : IMPI N3 N3 ; N5 | | ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) : ORI2 N4 ; N6 | ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) : IMPI N1 N6 ; QED",
+    "written": 7,
+    "pruned": 7,
+    "round": 1
+   }
+  },
+  "seq_frozen_s1": {
+   "dir": "artifacts/lf/frozen_d3_seq_s1",
+   "rounds": 8,
+   "attempts": 256,
+   "targets_solved": 326,
+   "acq": 0.134,
+   "acq_theorems": 134,
+   "n_depth3_proofs": 168,
+   "first_round": 1,
+   "transfer_solved": 184,
+   "acq_transfer": 0.156,
+   "heldout_greedy_final": 0.896,
+   "acq_by_round": [
+    0.085,
+    0.097,
+    0.11,
+    0.116,
+    0.122,
+    0.126,
+    0.13,
+    0.134
+   ],
+   "solved_by_round": [
+    247,
+    266,
+    286,
+    295,
+    309,
+    315,
+    321,
+    326
+   ],
+   "written_hist_targets": {
+    "7": 363,
+    "8": 85,
+    "9": 4
+   },
+   "secs_by_round": [
+    363.28409361839294,
+    362.9810287952423,
+    372.3759665489197,
+    376.68328857421875,
+    369.1041610240936,
+    369.01405024528503,
+    379.09556341171265,
+    365.9587972164154
+   ],
+   "example": {
+    "name": "targets_depth3_0",
+    "thm": " |- ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) )",
+    "proof": "N1 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ( Q v Q ) > R ) : AS ; N4 | | ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) : IMPI N3 N3 ; N5 | | ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) : ORI2 N4 ; N6 | ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) : IMPI N1 N6 ; QED",
+    "written": 7,
+    "pruned": 7,
+    "round": 1
+   }
   }
  },
  "P3_ladder": {
@@ -453,13 +912,190 @@
   }
  },
  "P5_gate": {
-  "total": {},
-  "disagreements": 0,
-  "disagreement_kinds_rough": {},
-  "per_job": {},
-  "lean_proofs_per_proc_second": null,
-  "nd_verify_proofs_per_second": null
+  "total": {
+   "samples": 3424000,
+   "parse_fail": 924222,
+   "distinct_checked": 2330007,
+   "both_ok": 1083147,
+   "nd_ok_lean_rej": 0,
+   "nd_rej_lean_ok": 153,
+   "both_rej": 1246707,
+   "lean_wall_s": 1729.856843471527,
+   "lean_proc_s": 17569.0108397007,
+   "nd_verify_s": 118.42360186576843
+  },
+  "disagreements": 153,
+  "disagreement_kinds_rough": {
+   "other": 105,
+   "elim-on-negation": 48
+  },
+  "per_job": {
+   "ei_d3_rand_s0": {
+    "samples": 428000,
+    "parse_fail": 50625,
+    "distinct_checked": 377375,
+    "both_ok": 206138,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 16,
+    "both_rej": 171221,
+    "lean_wall_s": 200.0026695728302,
+    "lean_proc_s": 2056.6648437976837,
+    "nd_verify_s": 16.80513334274292,
+    "parse_reasons": {
+     "unbound": 35736,
+     "expected )": 8613,
+     "formula": 2799,
+     "expected :=": 1505,
+     "exact not last": 598,
+     "no-eos": 532
+    }
+   },
+   "ei_d3_rand_s1": {
+    "samples": 428000,
+    "parse_fail": 48601,
+    "distinct_checked": 379399,
+    "both_ok": 208623,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 10,
+    "both_rej": 170766,
+    "lean_wall_s": 210.80963468551636,
+    "lean_proc_s": 2156.407145023346,
+    "nd_verify_s": 17.193371534347534,
+    "parse_reasons": {
+     "unbound": 42316,
+     "formula": 2389,
+     "no-eos": 871,
+     "exact not last": 853,
+     "name": 776,
+     "expected :=": 533
+    }
+   },
+   "ei_d3_seq_s0": {
+    "samples": 428000,
+    "parse_fail": 44079,
+    "distinct_checked": 323670,
+    "both_ok": 200622,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 33,
+    "both_rej": 123015,
+    "lean_wall_s": 284.1914737224579,
+    "lean_proc_s": 2926.5213458538055,
+    "nd_verify_s": 20.458277940750122,
+    "parse_reasons": {
+     "unbound": 35695,
+     "formula": 3387,
+     "expected )": 1533,
+     "expected :=": 1524,
+     "name": 703,
+     "no-eos": 433
+    }
+   },
+   "ei_d3_seq_s1": {
+    "samples": 428000,
+    "parse_fail": 41871,
+    "distinct_checked": 326462,
+    "both_ok": 205327,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 11,
+    "both_rej": 121124,
+    "lean_wall_s": 370.5805084705353,
+    "lean_proc_s": 3859.6618390083313,
+    "nd_verify_s": 20.630908489227295,
+    "parse_reasons": {
+     "unbound": 23168,
+     "expected )": 11616,
+     "formula": 2983,
+     "no-eos": 1106,
+     "expected :=": 816,
+     "expected (": 760
+    }
+   },
+   "frozen_d3_rand_s0": {
+    "samples": 428000,
+    "parse_fail": 173967,
+    "distinct_checked": 254033,
+    "both_ok": 65425,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 10,
+    "both_rej": 188598,
+    "lean_wall_s": 150.99882173538208,
+    "lean_proc_s": 1533.0376369953156,
+    "nd_verify_s": 11.633037328720093,
+    "parse_reasons": {
+     "unbound": 95849,
+     "expected )": 67390,
+     "formula": 4065,
+     "exact not last": 2671,
+     "expected :=": 2343,
+     "no-eos": 638
+    }
+   },
+   "frozen_d3_rand_s1": {
+    "samples": 428000,
+    "parse_fail": 189655,
+    "distinct_checked": 238345,
+    "both_ok": 60465,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 16,
+    "both_rej": 177864,
+    "lean_wall_s": 142.58962559700012,
+    "lean_proc_s": 1411.9509963989258,
+    "nd_verify_s": 9.275443315505981,
+    "parse_reasons": {
+     "unbound": 174556,
+     "exact not last": 5577,
+     "formula": 4166,
+     "name": 1592,
+     "expected :=": 1232,
+     "no-eos": 1105
+    }
+   },
+   "frozen_d3_seq_s0": {
+    "samples": 428000,
+    "parse_fail": 186797,
+    "distinct_checked": 215774,
+    "both_ok": 67291,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 39,
+    "both_rej": 148444,
+    "lean_wall_s": 184.10402870178223,
+    "lean_proc_s": 1780.252540588379,
+    "nd_verify_s": 10.770074844360352,
+    "parse_reasons": {
+     "unbound": 168223,
+     "expected )": 8928,
+     "formula": 4310,
+     "expected :=": 2400,
+     "name": 809,
+     "exact not last": 796
+    }
+   },
+   "frozen_d3_seq_s1": {
+    "samples": 428000,
+    "parse_fail": 188627,
+    "distinct_checked": 214949,
+    "both_ok": 69256,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 18,
+    "both_rej": 145675,
+    "lean_wall_s": 186.58008098602295,
+    "lean_proc_s": 1844.514492034912,
+    "nd_verify_s": 11.657355070114136,
+    "parse_reasons": {
+     "unbound": 97480,
+     "expected )": 76147,
+     "formula": 5331,
+     "expected :=": 2845,
+     "expected (": 2272,
+     "name": 1781
+    }
+   }
+  },
+  "lean_proofs_per_proc_second": 132.62027220877357,
+  "nd_verify_proofs_per_second": 19675.19112145425
  },
  "checker_of_record": {},
- "P6_timing_solo_round_secs": {}
+ "P6_timing_solo_round_secs": {
+  "timing_d3_token_on_randpod": 58.7436683177948
+ }
 }
