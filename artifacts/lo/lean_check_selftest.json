@@ -1,6 +1,6 @@
 {
- "pass": 30,
- "n": 30,
+ "pass": 33,
+ "n": 33,
  "rows": [
   {
    "name": "and_intro_term",
@@ -229,7 +229,7 @@
    "expect_size": null,
    "ok": false,
    "size": null,
-   "reason": "axiom:[sorryAx] | Application type mismatch: The argument",
+   "reason": "axiom:[sorryAx] | error: Application type mismatch: The argument",
    "pass": true
   },
   {
@@ -293,6 +293,36 @@
    "pass": true
   },
   {
+   "name": "truncated_paren",
+   "source": "theorem t (P Q R S : Prop) : (Q \u2192 (Q \u2192 (Q \u2192 (Q \u2228 (Q \u2192 (R \u2192 S)))))) := ( fun n19 => ( fun n55 => Or.inl",
+   "expect_ok": false,
+   "expect_size": null,
+   "ok": false,
+   "size": null,
+   "reason": "error: unexpected token 'nd_check'; expected ')', ',' or ':'",
+   "pass": true
+  },
+  {
+   "name": "truncated_anon_ctor",
+   "source": "theorem t (P Q : Prop) (h : P \u2227 Q) : Q \u2227 P := \u27e8h.2, h.1",
+   "expect_ok": false,
+   "expect_size": null,
+   "ok": false,
+   "size": null,
+   "reason": "error: unexpected token 'nd_check'; expected '\u27e9'",
+   "pass": true
+  },
+  {
+   "name": "unapplied_or_inl",
+   "source": "theorem t (P Q R S : Prop) : (Q \u2192 (Q \u2192 (Q \u2192 (Q \u2228 (Q \u2192 (R \u2192 S)))))) := ( fun n19 => ( fun n55 => Or.inl ) )",
+   "expect_ok": true,
+   "expect_size": 3,
+   "ok": true,
+   "size": 3,
+   "reason": "",
+   "pass": true
+  },
+  {
    "name": "contradiction_tactic",
    "source": "theorem t (P Q : Prop) (h : \u00acP) (a : P) : Q := by contradiction",
    "expect_ok": true,
@@ -303,7 +333,7 @@
    "pass": true
   }
  ],
- "wall_s": 1.6720566749572754,
- "proc_s": 1.6694087982177734,
+ "wall_s": 1.7641446590423584,
+ "proc_s": 1.7612104415893555,
  "lean": "Lean (version 4.34.0, x86_64-unknown-linux-gnu, commit 293d5d0c0c3f3dded4688b3ccd6a33939ac5102b, Release)"
 }

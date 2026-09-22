@@ -1,0 +1,51 @@
+START 2026-09-22T06:44:19Z
+PASS and_intro_term {'ok': True, 'size': 3, 'reason': ''}
+PASS and_intro_explicit {'ok': True, 'size': 3, 'reason': ''}
+PASS fragment_have {'ok': True, 'size': 3, 'reason': ''}
+PASS em_lemma {'ok': False, 'size': None, 'reason': 'const:[Classical.em]'}
+PASS simp_proof {'ok': False, 'size': None, 'reason': 'const:[of_eq_true, Eq.trans, True, congr, congrArg, eq_true, and_self]'}
+PASS sorry {'ok': False, 'size': None, 'reason': 'axiom:[sorryAx]'}
+PASS decide {'ok': False, 'size': None, 'reason': 'const:[of_decide_eq_true, True, instDecidableOr, instDecidableTrue, instDecidableFalse, id, Eq, Bool, Decidable.decide, Bool.true, Eq.refl]'}
+PASS cases_or {'ok': False, 'size': None, 'reason': 'const:[Eq, Eq.refl]'}
+PASS or_elim_dot {'ok': True, 'size': 5, 'reason': ''}
+PASS match_or {'ok': False, 'size': None, 'reason': 'const:[t9.match_1]'}
+PASS or_elim_term {'ok': True, 'size': 5, 'reason': ''}
+PASS by_contradiction {'ok': True, 'size': 3, 'reason': ''}
+PASS false_elim {'ok': True, 'size': 1, 'reason': ''}
+PASS old_bote_on_false {'ok': True, 'size': 1, 'reason': ''}
+PASS old_bote_on_neg {'ok': False, 'size': None, 'reason': 'const:[Not.elim]'}
+PASS not_elim_explicit {'ok': False, 'size': None, 'reason': 'const:[Not.elim]'}
+PASS absurd_ok {'ok': True, 'size': 1, 'reason': ''}
+PASS or_resolve {'ok': False, 'size': None, 'reason': 'const:[Or.resolve_left]'}
+PASS mt_lemma {'ok': False, 'size': None, 'reason': 'const:[mt]'}
+PASS tauto_like_decidable {'ok': False, 'size': None, 'reason': 'const:[Decidable, Decidable.em]'}
+PASS imp_intro_lambda {'ok': True, 'size': 2, 'reason': ''}
+PASS neg_intro {'ok': True, 'size': 2, 'reason': ''}
+PASS wrong_proof {'ok': False, 'size': None, 'reason': 'axiom:[sorryAx] | error: Application type mismatch: The argument'}
+PASS unbound_name {'ok': False, 'size': None, 'reason': 'axiom:[sorryAx]'}
+PASS iff_intro {'ok': True, 'size': 3, 'reason': ''}
+PASS propext_term {'ok': False, 'size': None, 'reason': 'const:[propext]'}
+PASS have_unused_extra_premises {'ok': True, 'size': 0, 'reason': ''}
+PASS nested_depth3 {'ok': True, 'size': 4, 'reason': ''}
+PASS exfalso_tactic {'ok': True, 'size': 1, 'reason': ''}
+PASS truncated_paren {'ok': False, 'size': None, 'reason': "error: unexpected token 'nd_check'; expected ')', ',' or ':'"}
+PASS truncated_anon_ctor {'ok': False, 'size': None, 'reason': "error: unexpected token 'nd_check'; expected '⟩'"}
+PASS unapplied_or_inl {'ok': True, 'size': 3, 'reason': ''}
+PASS contradiction_tactic {'ok': True, 'size': 2, 'reason': ''}
+33/33 pass; 1.8s wall 1.8s proc
+253397 records: translate 29s, lean 198s wall / 3103s proc (1279 per wall-s, 82 per proc-s, 16 workers): nd_ok&lean_ok 253397, nd_ok&lean_rej 0, nd_rej&lean_ok 0, both reject 0, nd_unknown 0
+term_size min/median/max 1 3 18
+4012 records: translate 0s, lean 4s wall / 14s proc (293 per wall-s, 78 per proc-s, 16 workers): nd_ok&lean_ok 0, nd_ok&lean_rej 0, nd_rej&lean_ok 0, both reject 4012, nd_unknown 0
+460 records: translate 0s, lean 4s wall / 7s proc (121 per wall-s, 63 per proc-s, 16 workers): nd_ok&lean_ok 0, nd_ok&lean_rej 0, nd_rej&lean_ok 254, both reject 206, nd_unknown 0
+term_size min/median/max 1 3 7
+DISAGREE nd False lean True None |  | have n14 : ( ¬ ( P ∨ ( P ∨ S ) ) ) := h1 ; have n51 : ( ¬ ( ( P ∨ ( P ∨ S ) ) → False ) ) := h2 ; have n15 : False := n51 n14 ; exact n15
+DISAGREE nd False lean True None |  | have n62 : ( ¬ ( P ∨ ( P ∨ S ) ) ) := h1 ; have n59 : ( ¬ ( ( P ∨ ( P ∨ S ) ) → False ) ) := h2 ; have n12 : False := n59 n62 ; exact n12
+DISAGREE nd False lean True None |  | have n31 : ( ( ¬ S ) → ( S ∧ S ) ) := h1 ; have n60 : ( ( ( ( ¬ S ) → ( S ∧ S ) ) ∨ ( ¬ ( R ∨ P ) ) ) → ( ( ¬ ( ( ( ¬ S ) → ( S ∧ S ) ) ∨ ( ¬ ( R ∨ P 
+DISAGREE nd False lean True None |  | have n39 : ( ( ¬ S ) → ( S ∧ S ) ) := h1 ; have n3 : ( ( ( ( ¬ S ) → ( S ∧ S ) ) ∨ ( ¬ ( R ∨ P ) ) ) → ( ( ¬ ( ( ( ¬ S ) → ( S ∧ S ) ) ∨ ( ¬ ( R ∨ P )
+DISAGREE nd False lean True None |  | have n59 : ( ( ¬ S ) → ( S ∧ S ) ) := h1 ; have n12 : ( ( ( ( ¬ S ) → ( S ∧ S ) ) ∨ ( ¬ ( R ∨ P ) ) ) → ( ( ¬ ( ( ( ¬ S ) → ( S ∧ S ) ) ∨ ( ¬ ( R ∨ P 
+DISAGREE nd False lean True None |  | have n62 : ( ¬ ( P ∨ ( P ∨ S ) ) ) := h1 ; have n34 : ( ¬ ( ( P ∨ ( P ∨ S ) ) → False ) ) := h2 ; have n34 : False := n34 n62 ; exact n34
+DISAGREE nd False lean True None |  | have n35 : ( ¬ ( P ∨ ( P ∨ S ) ) ) := h1 ; have n53 : ( ¬ ( ( P ∨ ( P ∨ S ) ) → False ) ) := h2 ; have n34 : False := n53 n35 ; exact n34
+DISAGREE nd False lean True None |  | have n24 : ( ( ¬ S ) → ( S ∧ S ) ) := h1 ; have n16 : ( ( ( ( ¬ S ) → ( S ∧ S ) ) ∨ ( ¬ ( R ∨ P ) ) ) → ( ( ¬ ( ( ( ¬ S ) → ( S ∧ S ) ) ∨ ( ¬ ( R ∨ P 
+DISAGREE nd False lean True None |  | have n40 : ( ( ¬ S ) → ( S ∧ S ) ) := h1 ; have n4 : ( ( ( ( ¬ S ) → ( S ∧ S ) ) ∨ ( ¬ ( R ∨ P ) ) ) → ( ( ¬ ( ( ( ¬ S ) → ( S ∧ S ) ) ∨ ( ¬ ( R ∨ P )
+DISAGREE nd False lean True None |  | have n18 : ( ( ¬ S ) → ( S ∧ S ) ) := h1 ; have n13 : ( ( ( ( ¬ S ) → ( S ∧ S ) ) ∨ ( ¬ ( R ∨ P ) ) ) → ( ( ¬ ( ( ( ¬ S ) → ( S ∧ S ) ) ∨ ( ¬ ( R ∨ P 
+CHECKS_DONE 2026-09-22T06:48:20Z

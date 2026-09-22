@@ -1,7 +1,7 @@
 {
  "selftest": {
-  "pass": 30,
-  "n": 30,
+  "pass": 33,
+  "n": 33,
   "lean": "Lean (version 4.34.0, x86_64-unknown-linux-gnu, commit 293d5d0c0c3f3dded4688b3ccd6a33939ac5102b, Release)",
   "cases": {
    "and_intro_term": {
@@ -147,6 +147,21 @@
    "exfalso_tactic": {
     "ok": true,
     "size": 1,
+    "pass": true
+   },
+   "truncated_paren": {
+    "ok": false,
+    "size": null,
+    "pass": true
+   },
+   "truncated_anon_ctor": {
+    "ok": false,
+    "size": null,
+    "pass": true
+   },
+   "unapplied_or_inl": {
+    "ok": true,
+    "size": 3,
     "pass": true
    },
    "contradiction_tactic": {
@@ -333,11 +348,11 @@
  },
  "throughput": {
   "records": 253397,
-  "lean_wall_s": 127,
-  "lean_proc_s": 2973,
-  "per_wall_s": 1996,
-  "per_proc_s": 85,
-  "workers": 24,
+  "lean_wall_s": 198,
+  "lean_proc_s": 3103,
+  "per_wall_s": 1279,
+  "per_proc_s": 82,
+  "workers": 16,
   "lean_format_gate_per_proc_s_on_file": 85.5,
   "nd_verify_per_s_on_file": 14497
  },

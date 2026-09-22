@@ -33,7 +33,7 @@ def judge(recs, proofs_per, lenfield):
     import lean_gate
     rows = []
     for r, ps in zip(recs, proofs_per):
-        good, wl, pl, ts, ld, reasons = [], [], [], [], [], []
+        good, wl, pl, ts, ld, lt, reasons = [], [], [], [], [], [], []
         fail_example = None
         for p in ps:
             v = lean_gate.VERDICT.get((r['prompt'], p))
@@ -52,11 +52,12 @@ def judge(recs, proofs_per, lenfield):
                     pl.append(pruned_length(r['prompt'], p) if (v is None or v['nd']) else 0)
                     ts.append(v['size'] if v else None)
                     ld.append(v['lam_depth'] if v else None)
+                    lt.append(v['text'] if v else None)
             else:
                 reasons.append(reason.split(' (line')[0])
         rows.append({'name': r.get('name', r.get('thm')), 'thm': r.get('thm'), 'prompt': r['prompt'],
                      lenfield: r.get(lenfield), 'solved': bool(good), 'n_ok': sum(1 for p in ps if p in good),
-                     'n_tried': len(ps), 'proofs': good, 'written_lens': wl, 'pruned_lens': pl, 'term_sizes': ts, 'lam_depths': ld,
+                     'n_tried': len(ps), 'proofs': good, 'written_lens': wl, 'pruned_lens': pl, 'term_sizes': ts, 'lam_depths': ld, 'lean_texts': lt,
                      'reasons': reasons, 'fail_example': fail_example})
     return rows
 

@@ -126,9 +126,9 @@ def main():
         new_this = 0
         for t, row in zip(targets, rows):
             have = {x['proof'] for x in found[t['name']]}
-            for p, wl, pl, ts, ld in zip(row['proofs'], row['written_lens'], row['pruned_lens'], row['term_sizes'], row['lam_depths']):
+            for p, wl, pl, ts, ld, lt in zip(row['proofs'], row['written_lens'], row['pruned_lens'], row['term_sizes'], row['lam_depths'], row['lean_texts']):
                 if p not in have:
-                    found[t['name']].append({'proof': p, 'written': wl, 'pruned': pl, 'ts': ts, 'ld': ld, 'round': r}); new_this += 1
+                    found[t['name']].append({'proof': p, 'written': wl, 'pruned': pl, 'ts': ts, 'ld': ld, 'text': lt, 'round': r}); new_this += 1
         stats['targets_round'] = summarize(rows, 'n_lines', f'[{a.name} r{r}] targets (this round, pass@{a.k})')
         # cumulative view over all attempts so far
         cum_rows = []
@@ -165,9 +165,9 @@ def main():
         # cumulative transfer (union of attempts so far)
         for t, row in zip(transfer, rows_t):
             have = {x['proof'] for x in found_t[t['name']]}
-            for p, wl, pl, ts, ld in zip(row['proofs'], row['written_lens'], row['pruned_lens'], row['term_sizes'], row['lam_depths']):
+            for p, wl, pl, ts, ld, lt in zip(row['proofs'], row['written_lens'], row['pruned_lens'], row['term_sizes'], row['lam_depths'], row['lean_texts']):
                 if p not in have:
-                    found_t[t['name']].append({'proof': p, 'written': wl, 'pruned': pl, 'ts': ts, 'ld': ld, 'round': r})
+                    found_t[t['name']].append({'proof': p, 'written': wl, 'pruned': pl, 'ts': ts, 'ld': ld, 'text': lt, 'round': r})
         cum_t = [{'n_lines': t['n_lines'], 'solved': bool(found_t[t['name']]), 'written_lens': [x['written'] for x in found_t[t['name']]],
                   'pruned_lens': [x['pruned'] for x in found_t[t['name']]], 'reasons': []} for t in transfer]
         stats['transfer_cum'] = summarize(cum_t, 'n_lines', f'[{a.name} r{r}] transfer (cumulative {r*a.k} attempts)')

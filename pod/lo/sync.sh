@@ -10,7 +10,7 @@ R="root@$POD_IP:/workspace/nd-takehome"
 RS="rsync -rlptz --no-o --no-g -e \"ssh $SSHO -p $POD_PORT\""
 case "${1:-code}" in
   pull) mkdir -p "$W/$(dirname "$2")"; exec rsync -rlptz --no-o --no-g -e "ssh $SSHO -p $POD_PORT" "$R/$2" "$W/$(dirname "$2")/" ;;
-  push) ssh $SSHO -p "$POD_PORT" "root@$POD_IP" "mkdir -p /workspace/nd-takehome/$(dirname "$2")"; exec rsync -rlptz --no-o --no-g -e "ssh $SSHO -p $POD_PORT" "$W/$2" "$R/$2" ;;
+  push) ssh $SSHO -p "$POD_PORT" "root@$POD_IP" "mkdir -p /workspace/nd-takehome/$(dirname "$2")"; [ -d "$W/$2" ] && set -- push "${2%/}/"; exec rsync -rlptz --no-o --no-g -e "ssh $SSHO -p $POD_PORT" "$W/$2" "$R/$2" ;;
   pullall) exec rsync -rlptz --no-o --no-g --exclude 'mix_*.jsonl' -e "ssh $SSHO -p $POD_PORT" "$R/artifacts/lo/" "$W/artifacts/lo/" ;;
   pullckpt) exec rsync -rlptz --no-o --no-g -e "ssh $SSHO -p $POD_PORT" "$R/ckpts/lo" "$R/ckpts/ladder" "$W/ckpts/" ;;
   code)
