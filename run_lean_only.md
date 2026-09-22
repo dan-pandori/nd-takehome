@@ -19,7 +19,7 @@
 | E8 `L*` term size (free ≥ frag) | 8 / 9 | 8 / 8 | **wrong** in seed 1 |
 | E9 frozen `L*` lines (10 / 10) | 10 / 10 | 10 / 9 | free-form 9 once |
 | E10 new pattern from f = 0 | – | none (depth4 0.02–0.03 both) | held |
-| E11–E13 record; converter; solo round | 45,396 / 45,396 re-accepted | 2 of 1,232 text proofs unreadable; 42 vs 160 s | held |
+| E11–E13 record; converter; solo round | 45,396 / 45,396 re-accepted; its text proofs are ND-formality texts | 2 of the 151 text proofs in the analysed pools still undenoted after a binder-name fix; 42 vs 160 s | held |
 
 **Reading.** Without `have` lines the model has no per-step formula to condition on: the fragment is a chain of thought, the term is the answer. The free-form base is weaker everywhere (ladder frozen 157 / 108 solved vs 286 / 386), yet EI takes it to `L*` 11 / 11 and 953 / 936 transfer theorems (fragment 895 / 1,069): RL amplifies a weaker base by more, and nothing new appears. Term size orders the arms as lines do, more coarsely.
 
