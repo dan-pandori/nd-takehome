@@ -252,10 +252,12 @@ def lam_depth_ast(t):
 
 
 def lam_depth(text):
-    try:
-        return lam_depth_ast(parse_text(text))
-    except (ParseFail, ValueError, IndexError):
-        return None
+    for t in (text, 'by ' + text):          # a fragment sample is a bare tactic block (`have … ; exact n`)
+        try:
+            return lam_depth_ast(parse_text(t))
+        except (ParseFail, ValueError, IndexError):
+            continue
+    return None
 
 
 # ------------------------------------------------------------------ elaboration (AST -> ND lines)

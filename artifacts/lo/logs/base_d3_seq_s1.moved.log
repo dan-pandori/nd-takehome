@@ -1,0 +1,1 @@
+START 2026-09-22T06:46:06Z until [ -f artifacts/lo/timing_d3_seq.done ]; do sleep 30; done; python3 eval_set.py --ckpt ckpts/lo/stage1_a1_seq_s1.pt --in data/lo/targets_depth3.jsonl --out artifacts/lo/base_d3_seq_s1_k2000.jsonl --k 2000 --temperature 0.8 --seed 101 --batch 1024 --summary artifacts/lo/base_d3_seq_s1_k2000.json

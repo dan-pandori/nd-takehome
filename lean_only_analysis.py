@@ -149,6 +149,7 @@ def phase2():
             st[tag] = row
     out['stage1'] = st
     # 2. base rates at pass@2000 on the depth-3 targets (a1 models)
+    from lean_free import lam_depth
     br = {}
     for fmt in FMTS:
         for s in SEEDS:
@@ -165,6 +166,7 @@ def phase2():
                     if cl is None: nd_none += 1
                     else:
                         has_d3 |= cl['depth3']; has_red |= cl['reductio']
+                    if ld is None and lt: ld = lam_depth(lt)
                     if ld is not None and ld >= 3: has_lam = True
                 d3_nd += has_d3; red_nd += has_red; d3_lam += has_lam
             summ = json.load(open(fn.replace('.jsonl', '.json')))
@@ -183,7 +185,8 @@ def phase2():
                 last = m[-1]
                 rounds = {str(r['round']): round(r['acq_targets'], 3) for r in m}
                 fd = found_map(f'{d}/found_{last["round"]}.jsonl')
-                lam3 = sum(1 for name, xs in fd.items() if any((x.get('ld') or 0) >= 3 for x in xs))
+                from lean_free import lam_depth
+                lam3 = sum(1 for name, xs in fd.items() if any(((x.get('ld') if x.get('ld') is not None else (lam_depth(x['text']) if x.get('text') else None)) or 0) >= 3 for x in xs))
                 thm_d3 = set(); n_re = 0
                 for name, xs in fd.items():
                     for x in xs:

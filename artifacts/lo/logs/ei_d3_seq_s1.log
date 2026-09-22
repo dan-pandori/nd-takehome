@@ -1,0 +1,618 @@
+START 2026-09-22T06:45:56Z until [ -f artifacts/lo/timing_d3_seq.done ]; do sleep 30; done; python3 expert_iter.py --init ckpts/lo/stage1_a1_seq_s1.pt --name lo/ei_d3_seq_s1 --targets data/lo/targets_depth3.jsonl --transfer data/lo/transfer_depth3.jsonl --heldout data/p2/heldout.jsonl --train data/p2/train_depth3_f0_a1.jsonl --rounds 8 --k 32 --temperature 0.8 --batch 768 --seed 1
+[lean_gate] 32000 samples, no-eos 112, distinct checked 9139: both ok 598, lean-only 1, nd-only 0, both rej 8540; lean 14.2s wall (141.8s proc, 12 workers), denote+nd_verify 2.6s
+[lo/ei_d3_seq_s1 r1] targets (this round, pass@32) SOLVED 411/1000 = 0.411 [0.381,0.442]
+  len 7: 139/166 = 0.837 [0.774,0.886]
+  len 8: 85/166 = 0.512 [0.437,0.587]
+  len 9: 17/166 = 0.102 [0.065,0.158]
+  len 10: 45/166 = 0.271 [0.209,0.343]
+  len 11: 59/166 = 0.355 [0.287,0.431]
+  len 12: 66/170 = 0.388 [0.318,0.463]
+  written hist {0: 1, 7: 362, 8: 137, 9: 17, 10: 2}
+  pruned hist {0: 1, 5: 17, 6: 168, 7: 221, 8: 100, 9: 10, 10: 2}
+  frontier written 9 pruned 9
+  reasons [('LEANREJ axiom:[sorryAx]', 26394), ('LEANPARSE no-eos', 112), ("LEANREJ error: unexpected token ')'; expected command", 1)]
+[lo/ei_d3_seq_s1 r1] targets (cumulative 32 attempts) SOLVED 411/1000 = 0.411 [0.381,0.442]
+  len 7: 139/166 = 0.837 [0.774,0.886]
+  len 8: 85/166 = 0.512 [0.437,0.587]
+  len 9: 17/166 = 0.102 [0.065,0.158]
+  len 10: 45/166 = 0.271 [0.209,0.343]
+  len 11: 59/166 = 0.355 [0.287,0.431]
+  len 12: 66/170 = 0.388 [0.318,0.463]
+  written hist {0: 1, 7: 362, 8: 137, 9: 17, 10: 2}
+  pruned hist {0: 1, 5: 17, 6: 168, 7: 221, 8: 100, 9: 10, 10: 2}
+  frontier written 9 pruned 9
+  reasons []
+[lean_gate] 16000 samples, no-eos 61, distinct checked 4625: both ok 288, lean-only 0, nd-only 0, both rej 4337; lean 10.0s wall (76.4s proc, 12 workers), denote+nd_verify 1.3s
+[lo/ei_d3_seq_s1 r1] transfer (this round, pass@32) SOLVED 217/500 = 0.434 [0.391,0.478]
+  len 7: 63/83 = 0.759 [0.657,0.838]
+  len 8: 54/83 = 0.651 [0.543,0.744]
+  len 9: 10/83 = 0.120 [0.067,0.208]
+  len 10: 24/83 = 0.289 [0.203,0.394]
+  len 11: 31/83 = 0.373 [0.277,0.481]
+  len 12: 35/85 = 0.412 [0.313,0.518]
+  written hist {7: 160, 8: 78, 9: 10, 10: 1}
+  pruned hist {5: 5, 6: 74, 7: 96, 8: 67, 9: 6, 10: 1}
+  frontier written 9 pruned 9
+  reasons [('LEANREJ axiom:[sorryAx]', 13158), ('LEANPARSE no-eos', 61)]
+[lo/ei_d3_seq_s1 r1] transfer (cumulative 32 attempts) SOLVED 217/500 = 0.434 [0.391,0.478]
+  len 7: 63/83 = 0.759 [0.657,0.838]
+  len 8: 54/83 = 0.651 [0.543,0.744]
+  len 9: 10/83 = 0.120 [0.067,0.208]
+  len 10: 24/83 = 0.289 [0.203,0.394]
+  len 11: 31/83 = 0.373 [0.277,0.481]
+  len 12: 35/85 = 0.412 [0.313,0.518]
+  written hist {7: 160, 8: 78, 9: 10, 10: 1}
+  pruned hist {5: 5, 6: 74, 7: 96, 8: 67, 9: 6, 10: 1}
+  frontier written 9 pruned 9
+  reasons []
+[lean_gate] 500 samples, no-eos 3, distinct checked 497: both ok 99, lean-only 0, nd-only 0, both rej 398; lean 4.2s wall (7.4s proc, 12 workers), denote+nd_verify 0.1s
+[lo/ei_d3_seq_s1 r1] transfer greedy SOLVED 99/500 = 0.198 [0.165,0.235]
+  len 7: 32/83 = 0.386 [0.288,0.493]
+  len 8: 19/83 = 0.229 [0.152,0.330]
+  len 9: 3/83 = 0.036 [0.012,0.101]
+  len 10: 8/83 = 0.096 [0.050,0.179]
+  len 11: 14/83 = 0.169 [0.103,0.263]
+  len 12: 23/85 = 0.271 [0.188,0.373]
+  written hist {7: 78, 8: 19, 9: 2}
+  pruned hist {6: 37, 7: 43, 8: 18, 9: 1}
+  frontier written 8 pruned 8
+  reasons [('LEANREJ axiom:[sorryAx]', 398), ('LEANPARSE no-eos', 3)]
+[lean_gate] 5000 samples, no-eos 1, distinct checked 4999: both ok 4625, lean-only 2, nd-only 0, both rej 372; lean 7.3s wall (59.4s proc, 12 workers), denote+nd_verify 1.1s
+[lo/ei_d3_seq_s1 r1] heldout greedy SOLVED 4627/5000 = 0.925 [0.918,0.932]
+  len 2: 993/1000 = 0.993 [0.986,0.997]
+  len 3: 984/1000 = 0.984 [0.974,0.990]
+  len 4: 948/1000 = 0.948 [0.932,0.960]
+  len 5: 911/1000 = 0.911 [0.892,0.927]
+  len 6: 791/1000 = 0.791 [0.765,0.815]
+  written hist {0: 2, 2: 1017, 3: 982, 4: 930, 5: 955, 6: 741}
+  pruned hist {0: 2, 2: 1017, 3: 982, 4: 933, 5: 953, 6: 740}
+  frontier written 6 pruned 6
+  reasons [('LEANREJ axiom:[sorryAx]', 372), ('LEANPARSE no-eos', 1)]
+python3 train.py --data artifacts/lo/ei_d3_seq_s1/mix_1.jsonl --init ckpts/lo/stage1_a1_seq_s1.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/lo/ei_d3_seq_s1_r1.pt --seed 1001 --log_every 200
+params 3214336 mode lean_seq shift True
+train records 22048 max len 380
+step 200 loss 0.0498 lr 2.53e-04 23s
+step 400 loss 0.0508 lr 1.09e-04 47s
+step 600 loss 0.0462 lr 3.00e-05 71s
+saved ckpts/lo/ei_d3_seq_s1_r1.pt
+=== round 1 done in 532s; new proofs 519; cum targets solved 411
+[lean_gate] 32000 samples, no-eos 41, distinct checked 5402: both ok 962, lean-only 1, nd-only 0, both rej 4439; lean 10.2s wall (86.7s proc, 12 workers), denote+nd_verify 1.6s
+[lo/ei_d3_seq_s1 r2] targets (this round, pass@32) SOLVED 567/1000 = 0.567 [0.536,0.597]
+  len 7: 158/166 = 0.952 [0.908,0.975]
+  len 8: 124/166 = 0.747 [0.676,0.807]
+  len 9: 46/166 = 0.277 [0.215,0.350]
+  len 10: 77/166 = 0.464 [0.390,0.540]
+  len 11: 75/166 = 0.452 [0.378,0.528]
+  len 12: 87/170 = 0.512 [0.437,0.586]
+  written hist {0: 1, 7: 457, 8: 220, 9: 74, 10: 9, 11: 2}
+  pruned hist {0: 1, 5: 22, 6: 226, 7: 291, 8: 168, 9: 47, 10: 7, 11: 1}
+  frontier written 10 pruned 10
+  reasons [('LEANREJ axiom:[sorryAx]', 17072), ('LEANPARSE no-eos', 41)]
+[lo/ei_d3_seq_s1 r2] targets (cumulative 64 attempts) SOLVED 567/1000 = 0.567 [0.536,0.597]
+  len 7: 158/166 = 0.952 [0.908,0.975]
+  len 8: 124/166 = 0.747 [0.676,0.807]
+  len 9: 46/166 = 0.277 [0.215,0.350]
+  len 10: 77/166 = 0.464 [0.390,0.540]
+  len 11: 75/166 = 0.452 [0.378,0.528]
+  len 12: 87/170 = 0.512 [0.437,0.586]
+  written hist {0: 1, 7: 458, 8: 220, 9: 74, 10: 9, 11: 2}
+  pruned hist {0: 1, 5: 22, 6: 227, 7: 291, 8: 168, 9: 47, 10: 7, 11: 1}
+  frontier written 10 pruned 10
+  reasons []
+[lean_gate] 16000 samples, no-eos 82, distinct checked 2795: both ok 421, lean-only 0, nd-only 0, both rej 2374; lean 5.4s wall (46.9s proc, 12 workers), denote+nd_verify 0.9s
+[lo/ei_d3_seq_s1 r2] transfer (this round, pass@32) SOLVED 284/500 = 0.568 [0.524,0.611]
+  len 7: 76/83 = 0.916 [0.836,0.959]
+  len 8: 65/83 = 0.783 [0.683,0.858]
+  len 9: 26/83 = 0.313 [0.224,0.419]
+  len 10: 39/83 = 0.470 [0.366,0.576]
+  len 11: 35/83 = 0.422 [0.321,0.529]
+  len 12: 43/85 = 0.506 [0.402,0.610]
+  written hist {7: 197, 8: 104, 9: 33, 10: 8}
+  pruned hist {5: 7, 6: 95, 7: 118, 8: 95, 9: 22, 10: 5}
+  frontier written 10 pruned 10
+  reasons [('LEANREJ axiom:[sorryAx]', 9425), ('LEANPARSE no-eos', 82)]
+[lo/ei_d3_seq_s1 r2] transfer (cumulative 64 attempts) SOLVED 291/500 = 0.582 [0.538,0.624]
+  len 7: 77/83 = 0.928 [0.851,0.966]
+  len 8: 65/83 = 0.783 [0.683,0.858]
+  len 9: 26/83 = 0.313 [0.224,0.419]
+  len 10: 41/83 = 0.494 [0.389,0.599]
+  len 11: 37/83 = 0.446 [0.344,0.553]
+  len 12: 45/85 = 0.529 [0.424,0.632]
+  written hist {7: 208, 8: 113, 9: 36, 10: 8}
+  pruned hist {5: 8, 6: 103, 7: 128, 8: 97, 9: 24, 10: 5}
+  frontier written 10 pruned 10
+  reasons []
+[lean_gate] 500 samples, no-eos 5, distinct checked 495: both ok 216, lean-only 0, nd-only 0, both rej 279; lean 4.3s wall (7.5s proc, 12 workers), denote+nd_verify 0.1s
+[lo/ei_d3_seq_s1 r2] transfer greedy SOLVED 216/500 = 0.432 [0.389,0.476]
+  len 7: 61/83 = 0.735 [0.631,0.818]
+  len 8: 50/83 = 0.602 [0.495,0.701]
+  len 9: 19/83 = 0.229 [0.152,0.330]
+  len 10: 27/83 = 0.325 [0.234,0.432]
+  len 11: 23/83 = 0.277 [0.192,0.382]
+  len 12: 36/85 = 0.424 [0.324,0.530]
+  written hist {7: 136, 8: 62, 9: 17, 10: 1}
+  pruned hist {5: 2, 6: 63, 7: 76, 8: 61, 9: 13, 10: 1}
+  frontier written 9 pruned 9
+  reasons [('LEANREJ axiom:[sorryAx]', 279), ('LEANPARSE no-eos', 5)]
+[lean_gate] 5000 samples, no-eos 2, distinct checked 4998: both ok 4697, lean-only 1, nd-only 0, both rej 300; lean 7.4s wall (60.7s proc, 12 workers), denote+nd_verify 1.1s
+[lo/ei_d3_seq_s1 r2] heldout greedy SOLVED 4698/5000 = 0.940 [0.933,0.946]
+  len 2: 989/1000 = 0.989 [0.980,0.994]
+  len 3: 987/1000 = 0.987 [0.978,0.992]
+  len 4: 953/1000 = 0.953 [0.938,0.964]
+  len 5: 910/1000 = 0.910 [0.891,0.926]
+  len 6: 859/1000 = 0.859 [0.836,0.879]
+  written hist {0: 1, 2: 1012, 3: 983, 4: 935, 5: 943, 6: 823, 7: 1}
+  pruned hist {0: 1, 2: 1012, 3: 983, 4: 941, 5: 941, 6: 820}
+  frontier written 6 pruned 6
+  reasons [('LEANREJ axiom:[sorryAx]', 300), ('LEANPARSE no-eos', 2)]
+python3 train.py --data artifacts/lo/ei_d3_seq_s1/mix_2.jsonl --init ckpts/lo/ei_d3_seq_s1_r1.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/lo/ei_d3_seq_s1_r2.pt --seed 1002 --log_every 200
+params 3214336 mode lean_seq shift True
+train records 22980 max len 399
+step 200 loss 0.0467 lr 2.53e-04 21s
+step 400 loss 0.0464 lr 1.09e-04 43s
+step 600 loss 0.0448 lr 3.00e-05 64s
+saved ckpts/lo/ei_d3_seq_s1_r2.pt
+=== round 2 done in 518s; new proofs 245; cum targets solved 567
+[lean_gate] 32000 samples, no-eos 42, distinct checked 4416: both ok 1092, lean-only 3, nd-only 0, both rej 3321; lean 8.6s wall (69.6s proc, 12 workers), denote+nd_verify 1.3s
+[lo/ei_d3_seq_s1 r3] targets (this round, pass@32) SOLVED 618/1000 = 0.618 [0.587,0.648]
+  len 7: 162/166 = 0.976 [0.940,0.991]
+  len 8: 131/166 = 0.789 [0.721,0.844]
+  len 9: 60/166 = 0.361 [0.292,0.437]
+  len 10: 88/166 = 0.530 [0.454,0.605]
+  len 11: 80/166 = 0.482 [0.407,0.557]
+  len 12: 97/170 = 0.571 [0.495,0.643]
+  written hist {0: 3, 7: 477, 8: 249, 9: 104, 10: 22, 11: 2, 12: 1}
+  pruned hist {0: 3, 5: 29, 6: 236, 7: 320, 8: 186, 9: 64, 10: 19, 11: 1}
+  frontier written 10 pruned 10
+  reasons [('LEANREJ axiom:[sorryAx]', 14166), ('LEANPARSE no-eos', 42)]
+[lo/ei_d3_seq_s1 r3] targets (cumulative 96 attempts) SOLVED 618/1000 = 0.618 [0.587,0.648]
+  len 7: 162/166 = 0.976 [0.940,0.991]
+  len 8: 131/166 = 0.789 [0.721,0.844]
+  len 9: 60/166 = 0.361 [0.292,0.437]
+  len 10: 88/166 = 0.530 [0.454,0.605]
+  len 11: 80/166 = 0.482 [0.407,0.557]
+  len 12: 97/170 = 0.571 [0.495,0.643]
+  written hist {0: 3, 7: 485, 8: 250, 9: 105, 10: 22, 11: 2, 12: 1}
+  pruned hist {0: 3, 5: 31, 6: 242, 7: 321, 8: 187, 9: 64, 10: 19, 11: 1}
+  frontier written 10 pruned 10
+  reasons []
+[lean_gate] 16000 samples, no-eos 44, distinct checked 2507: both ok 478, lean-only 0, nd-only 0, both rej 2029; lean 5.2s wall (40.7s proc, 12 workers), denote+nd_verify 0.8s
+[lo/ei_d3_seq_s1 r3] transfer (this round, pass@32) SOLVED 305/500 = 0.610 [0.567,0.652]
+  len 7: 77/83 = 0.928 [0.851,0.966]
+  len 8: 67/83 = 0.807 [0.710,0.878]
+  len 9: 29/83 = 0.349 [0.256,0.457]
+  len 10: 43/83 = 0.518 [0.412,0.622]
+  len 11: 41/83 = 0.494 [0.389,0.599]
+  len 12: 48/85 = 0.565 [0.459,0.665]
+  written hist {7: 207, 8: 114, 9: 37, 10: 16}
+  pruned hist {5: 6, 6: 100, 7: 128, 8: 102, 9: 28, 10: 10}
+  frontier written 10 pruned 10
+  reasons [('LEANREJ axiom:[sorryAx]', 8689), ('LEANPARSE no-eos', 44)]
+[lo/ei_d3_seq_s1 r3] transfer (cumulative 96 attempts) SOLVED 311/500 = 0.622 [0.579,0.663]
+  len 7: 79/83 = 0.952 [0.883,0.981]
+  len 8: 68/83 = 0.819 [0.723,0.887]
+  len 9: 30/83 = 0.361 [0.266,0.469]
+  len 10: 44/83 = 0.530 [0.424,0.634]
+  len 11: 41/83 = 0.494 [0.389,0.599]
+  len 12: 49/85 = 0.576 [0.470,0.676]
+  written hist {7: 220, 8: 128, 9: 45, 10: 17}
+  pruned hist {5: 10, 6: 112, 7: 138, 8: 107, 9: 33, 10: 10}
+  frontier written 10 pruned 10
+  reasons []
+[lean_gate] 500 samples, no-eos 2, distinct checked 498: both ok 239, lean-only 0, nd-only 0, both rej 259; lean 4.4s wall (7.6s proc, 12 workers), denote+nd_verify 0.2s
+[lo/ei_d3_seq_s1 r3] transfer greedy SOLVED 239/500 = 0.478 [0.435,0.522]
+  len 7: 62/83 = 0.747 [0.644,0.828]
+  len 8: 54/83 = 0.651 [0.543,0.744]
+  len 9: 18/83 = 0.217 [0.142,0.317]
+  len 10: 34/83 = 0.410 [0.310,0.517]
+  len 11: 32/83 = 0.386 [0.288,0.493]
+  len 12: 39/85 = 0.459 [0.357,0.564]
+  written hist {7: 156, 8: 66, 9: 15, 10: 2}
+  pruned hist {5: 2, 6: 81, 7: 81, 8: 61, 9: 13, 10: 1}
+  frontier written 9 pruned 9
+  reasons [('LEANREJ axiom:[sorryAx]', 259), ('LEANPARSE no-eos', 2)]
+[lean_gate] 5000 samples, no-eos 1, distinct checked 4999: both ok 4719, lean-only 1, nd-only 0, both rej 279; lean 7.1s wall (58.5s proc, 12 workers), denote+nd_verify 1.1s
+[lo/ei_d3_seq_s1 r3] heldout greedy SOLVED 4720/5000 = 0.944 [0.937,0.950]
+  len 2: 989/1000 = 0.989 [0.980,0.994]
+  len 3: 981/1000 = 0.981 [0.971,0.988]
+  len 4: 945/1000 = 0.945 [0.929,0.958]
+  len 5: 910/1000 = 0.910 [0.891,0.926]
+  len 6: 895/1000 = 0.895 [0.874,0.913]
+  written hist {0: 1, 2: 1012, 3: 970, 4: 932, 5: 940, 6: 865}
+  pruned hist {0: 1, 2: 1012, 3: 972, 4: 936, 5: 937, 6: 862}
+  frontier written 6 pruned 6
+  reasons [('LEANREJ axiom:[sorryAx]', 279), ('LEANPARSE no-eos', 1)]
+python3 train.py --data artifacts/lo/ei_d3_seq_s1/mix_3.jsonl --init ckpts/lo/ei_d3_seq_s1_r2.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/lo/ei_d3_seq_s1_r3.pt --seed 1003 --log_every 200
+params 3214336 mode lean_seq shift True
+train records 23364 max len 442
+step 200 loss 0.0459 lr 2.53e-04 22s
+step 400 loss 0.0470 lr 1.09e-04 44s
+step 600 loss 0.0456 lr 3.00e-05 67s
+saved ckpts/lo/ei_d3_seq_s1_r3.pt
+=== round 3 done in 395s; new proofs 104; cum targets solved 618
+[lean_gate] 32000 samples, no-eos 82, distinct checked 4261: both ok 1151, lean-only 2, nd-only 0, both rej 3108; lean 8.7s wall (68.7s proc, 12 workers), denote+nd_verify 1.3s
+[lo/ei_d3_seq_s1 r4] targets (this round, pass@32) SOLVED 650/1000 = 0.650 [0.620,0.679]
+  len 7: 163/166 = 0.982 [0.948,0.994]
+  len 8: 136/166 = 0.819 [0.754,0.870]
+  len 9: 73/166 = 0.440 [0.366,0.516]
+  len 10: 92/166 = 0.554 [0.478,0.628]
+  len 11: 86/166 = 0.518 [0.443,0.593]
+  len 12: 100/170 = 0.588 [0.513,0.659]
+  written hist {0: 2, 7: 493, 8: 269, 9: 128, 10: 38, 11: 2, 12: 1}
+  pruned hist {0: 2, 5: 38, 6: 249, 7: 326, 8: 204, 9: 85, 10: 28, 11: 1}
+  frontier written 10 pruned 10
+  reasons [('LEANREJ axiom:[sorryAx]', 12803), ('LEANPARSE no-eos', 82)]
+[lo/ei_d3_seq_s1 r4] targets (cumulative 128 attempts) SOLVED 650/1000 = 0.650 [0.620,0.679]
+  len 7: 163/166 = 0.982 [0.948,0.994]
+  len 8: 136/166 = 0.819 [0.754,0.870]
+  len 9: 73/166 = 0.440 [0.366,0.516]
+  len 10: 92/166 = 0.554 [0.478,0.628]
+  len 11: 86/166 = 0.518 [0.443,0.593]
+  len 12: 100/170 = 0.588 [0.513,0.659]
+  written hist {0: 3, 7: 503, 8: 269, 9: 128, 10: 38, 11: 2, 12: 1}
+  pruned hist {0: 3, 5: 41, 6: 252, 7: 330, 8: 204, 9: 85, 10: 28, 11: 1}
+  frontier written 10 pruned 10
+  reasons []
+[lean_gate] 16000 samples, no-eos 121, distinct checked 2289: both ok 484, lean-only 0, nd-only 0, both rej 1805; lean 7.3s wall (42.4s proc, 12 workers), denote+nd_verify 0.7s
+[lo/ei_d3_seq_s1 r4] transfer (this round, pass@32) SOLVED 316/500 = 0.632 [0.589,0.673]
+  len 7: 78/83 = 0.940 [0.867,0.974]
+  len 8: 68/83 = 0.819 [0.723,0.887]
+  len 9: 35/83 = 0.422 [0.321,0.529]
+  len 10: 46/83 = 0.554 [0.447,0.656]
+  len 11: 40/83 = 0.482 [0.378,0.588]
+  len 12: 49/85 = 0.576 [0.470,0.676]
+  written hist {7: 212, 8: 116, 9: 52, 10: 18}
+  pruned hist {5: 5, 6: 102, 7: 137, 8: 104, 9: 38, 10: 12}
+  frontier written 10 pruned 10
+  reasons [('LEANREJ axiom:[sorryAx]', 8170), ('LEANPARSE no-eos', 121)]
+[lo/ei_d3_seq_s1 r4] transfer (cumulative 128 attempts) SOLVED 329/500 = 0.658 [0.615,0.698]
+  len 7: 79/83 = 0.952 [0.883,0.981]
+  len 8: 70/83 = 0.843 [0.750,0.906]
+  len 9: 37/83 = 0.446 [0.344,0.553]
+  len 10: 50/83 = 0.602 [0.495,0.701]
+  len 11: 42/83 = 0.506 [0.401,0.611]
+  len 12: 51/85 = 0.600 [0.494,0.698]
+  written hist {7: 224, 8: 141, 9: 60, 10: 24}
+  pruned hist {5: 11, 6: 116, 7: 145, 8: 117, 9: 44, 10: 16}
+  frontier written 10 pruned 10
+  reasons []
+[lean_gate] 500 samples, no-eos 3, distinct checked 497: both ok 255, lean-only 0, nd-only 0, both rej 242; lean 4.2s wall (7.5s proc, 12 workers), denote+nd_verify 0.2s
+[lo/ei_d3_seq_s1 r4] transfer greedy SOLVED 255/500 = 0.510 [0.466,0.554]
+  len 7: 65/83 = 0.783 [0.683,0.858]
+  len 8: 58/83 = 0.699 [0.593,0.787]
+  len 9: 22/83 = 0.265 [0.182,0.369]
+  len 10: 35/83 = 0.422 [0.321,0.529]
+  len 11: 33/83 = 0.398 [0.299,0.505]
+  len 12: 42/85 = 0.494 [0.390,0.598]
+  written hist {7: 161, 8: 73, 9: 20, 10: 1}
+  pruned hist {5: 2, 6: 82, 7: 87, 8: 67, 9: 16, 10: 1}
+  frontier written 9 pruned 9
+  reasons [('LEANREJ axiom:[sorryAx]', 242), ('LEANPARSE no-eos', 3)]
+[lean_gate] 5000 samples, no-eos 2, distinct checked 4998: both ok 4712, lean-only 1, nd-only 0, both rej 285; lean 7.1s wall (63.1s proc, 12 workers), denote+nd_verify 1.1s
+[lo/ei_d3_seq_s1 r4] heldout greedy SOLVED 4713/5000 = 0.943 [0.936,0.949]
+  len 2: 992/1000 = 0.992 [0.984,0.996]
+  len 3: 983/1000 = 0.983 [0.973,0.989]
+  len 4: 942/1000 = 0.942 [0.926,0.955]
+  len 5: 917/1000 = 0.917 [0.898,0.933]
+  len 6: 879/1000 = 0.879 [0.857,0.898]
+  written hist {0: 1, 2: 1012, 3: 981, 4: 928, 5: 954, 6: 836, 7: 1}
+  pruned hist {0: 1, 2: 1012, 3: 982, 4: 932, 5: 949, 6: 836, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('LEANREJ axiom:[sorryAx]', 285), ('LEANPARSE no-eos', 2)]
+python3 train.py --data artifacts/lo/ei_d3_seq_s1/mix_4.jsonl --init ckpts/lo/ei_d3_seq_s1_r3.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/lo/ei_d3_seq_s1_r4.pt --seed 1004 --log_every 200
+params 3214336 mode lean_seq shift True
+train records 23636 max len 405
+step 200 loss 0.0466 lr 2.53e-04 21s
+step 400 loss 0.0463 lr 1.09e-04 43s
+step 600 loss 0.0421 lr 3.00e-05 60s
+saved ckpts/lo/ei_d3_seq_s1_r4.pt
+=== round 4 done in 396s; new proofs 76; cum targets solved 650
+[lean_gate] 32000 samples, no-eos 90, distinct checked 3978: both ok 1188, lean-only 6, nd-only 0, both rej 2784; lean 8.9s wall (65.7s proc, 12 workers), denote+nd_verify 1.2s
+[lo/ei_d3_seq_s1 r5] targets (this round, pass@32) SOLVED 664/1000 = 0.664 [0.634,0.693]
+  len 7: 163/166 = 0.982 [0.948,0.994]
+  len 8: 138/166 = 0.831 [0.767,0.881]
+  len 9: 76/166 = 0.458 [0.384,0.534]
+  len 10: 95/166 = 0.572 [0.496,0.645]
+  len 11: 90/166 = 0.542 [0.466,0.616]
+  len 12: 102/170 = 0.600 [0.525,0.671]
+  written hist {0: 6, 7: 504, 8: 267, 9: 142, 10: 43, 11: 3, 12: 2}
+  pruned hist {0: 6, 5: 44, 6: 247, 7: 330, 8: 212, 9: 96, 10: 31, 11: 1}
+  frontier written 10 pruned 10
+  reasons [('LEANREJ axiom:[sorryAx]', 11749), ('LEANPARSE no-eos', 90)]
+[lo/ei_d3_seq_s1 r5] targets (cumulative 160 attempts) SOLVED 664/1000 = 0.664 [0.634,0.693]
+  len 7: 163/166 = 0.982 [0.948,0.994]
+  len 8: 138/166 = 0.831 [0.767,0.881]
+  len 9: 76/166 = 0.458 [0.384,0.534]
+  len 10: 95/166 = 0.572 [0.496,0.645]
+  len 11: 90/166 = 0.542 [0.466,0.616]
+  len 12: 102/170 = 0.600 [0.525,0.671]
+  written hist {0: 6, 7: 512, 8: 276, 9: 142, 10: 43, 11: 3, 12: 2}
+  pruned hist {0: 6, 5: 47, 6: 255, 7: 334, 8: 214, 9: 96, 10: 31, 11: 1}
+  frontier written 10 pruned 10
+  reasons []
+[lean_gate] 16000 samples, no-eos 71, distinct checked 2283: both ok 457, lean-only 0, nd-only 0, both rej 1826; lean 8.0s wall (39.7s proc, 12 workers), denote+nd_verify 0.7s
+[lo/ei_d3_seq_s1 r5] transfer (this round, pass@32) SOLVED 321/500 = 0.642 [0.599,0.683]
+  len 7: 78/83 = 0.940 [0.867,0.974]
+  len 8: 70/83 = 0.843 [0.750,0.906]
+  len 9: 35/83 = 0.422 [0.321,0.529]
+  len 10: 45/83 = 0.542 [0.435,0.645]
+  len 11: 42/83 = 0.506 [0.401,0.611]
+  len 12: 51/85 = 0.600 [0.494,0.698]
+  written hist {7: 212, 8: 109, 9: 53, 10: 19}
+  pruned hist {5: 5, 6: 103, 7: 129, 8: 104, 9: 38, 10: 14}
+  frontier written 10 pruned 10
+  reasons [('LEANREJ axiom:[sorryAx]', 8199), ('LEANPARSE no-eos', 71)]
+[lo/ei_d3_seq_s1 r5] transfer (cumulative 160 attempts) SOLVED 341/500 = 0.682 [0.640,0.721]
+  len 7: 80/83 = 0.964 [0.899,0.988]
+  len 8: 72/83 = 0.867 [0.778,0.924]
+  len 9: 40/83 = 0.482 [0.378,0.588]
+  len 10: 51/83 = 0.614 [0.507,0.712]
+  len 11: 44/83 = 0.530 [0.424,0.634]
+  len 12: 54/85 = 0.635 [0.529,0.730]
+  written hist {7: 231, 8: 147, 9: 67, 10: 28}
+  pruned hist {5: 12, 6: 123, 7: 148, 8: 121, 9: 50, 10: 19}
+  frontier written 10 pruned 10
+  reasons []
+[lean_gate] 500 samples, no-eos 2, distinct checked 498: both ok 259, lean-only 0, nd-only 0, both rej 239; lean 4.1s wall (7.5s proc, 12 workers), denote+nd_verify 0.2s
+[lo/ei_d3_seq_s1 r5] transfer greedy SOLVED 259/500 = 0.518 [0.474,0.561]
+  len 7: 64/83 = 0.771 [0.670,0.848]
+  len 8: 59/83 = 0.711 [0.606,0.797]
+  len 9: 25/83 = 0.301 [0.213,0.407]
+  len 10: 36/83 = 0.434 [0.332,0.541]
+  len 11: 34/83 = 0.410 [0.310,0.517]
+  len 12: 41/85 = 0.482 [0.379,0.587]
+  written hist {7: 162, 8: 72, 9: 22, 10: 3}
+  pruned hist {5: 1, 6: 83, 7: 84, 8: 72, 9: 18, 10: 1}
+  frontier written 9 pruned 9
+  reasons [('LEANREJ axiom:[sorryAx]', 239), ('LEANPARSE no-eos', 2)]
+[lean_gate] 5000 samples, no-eos 2, distinct checked 4998: both ok 4742, lean-only 1, nd-only 0, both rej 255; lean 7.0s wall (60.3s proc, 12 workers), denote+nd_verify 1.1s
+[lo/ei_d3_seq_s1 r5] heldout greedy SOLVED 4743/5000 = 0.949 [0.942,0.954]
+  len 2: 992/1000 = 0.992 [0.984,0.996]
+  len 3: 982/1000 = 0.982 [0.972,0.989]
+  len 4: 947/1000 = 0.947 [0.931,0.959]
+  len 5: 913/1000 = 0.913 [0.894,0.929]
+  len 6: 909/1000 = 0.909 [0.890,0.925]
+  written hist {0: 1, 2: 1012, 3: 975, 4: 923, 5: 952, 6: 876, 7: 4}
+  pruned hist {0: 1, 2: 1015, 3: 976, 4: 931, 5: 945, 6: 874, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('LEANREJ axiom:[sorryAx]', 255), ('LEANPARSE no-eos', 2)]
+python3 train.py --data artifacts/lo/ei_d3_seq_s1/mix_5.jsonl --init ckpts/lo/ei_d3_seq_s1_r4.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/lo/ei_d3_seq_s1_r5.pt --seed 1005 --log_every 200
+params 3214336 mode lean_seq shift True
+train records 23776 max len 464
+step 200 loss 0.0459 lr 2.53e-04 19s
+step 400 loss 0.0437 lr 1.09e-04 40s
+step 600 loss 0.0481 lr 3.00e-05 62s
+saved ckpts/lo/ei_d3_seq_s1_r5.pt
+=== round 5 done in 406s; new proofs 40; cum targets solved 664
+[lean_gate] 32000 samples, no-eos 75, distinct checked 3654: both ok 1181, lean-only 3, nd-only 0, both rej 2470; lean 6.3s wall (59.9s proc, 12 workers), denote+nd_verify 1.1s
+[lo/ei_d3_seq_s1 r6] targets (this round, pass@32) SOLVED 680/1000 = 0.680 [0.650,0.708]
+  len 7: 164/166 = 0.988 [0.957,0.997]
+  len 8: 143/166 = 0.861 [0.801,0.906]
+  len 9: 80/166 = 0.482 [0.407,0.557]
+  len 10: 97/166 = 0.584 [0.508,0.657]
+  len 11: 92/166 = 0.554 [0.478,0.628]
+  len 12: 104/170 = 0.612 [0.537,0.682]
+  written hist {0: 3, 7: 512, 8: 285, 9: 151, 10: 46, 11: 4, 12: 2}
+  pruned hist {0: 3, 5: 47, 6: 255, 7: 339, 8: 219, 9: 106, 10: 32, 11: 2}
+  frontier written 10 pruned 10
+  reasons [('LEANREJ axiom:[sorryAx]', 11316), ('LEANPARSE no-eos', 75)]
+[lo/ei_d3_seq_s1 r6] targets (cumulative 192 attempts) SOLVED 680/1000 = 0.680 [0.650,0.708]
+  len 7: 164/166 = 0.988 [0.957,0.997]
+  len 8: 143/166 = 0.861 [0.801,0.906]
+  len 9: 80/166 = 0.482 [0.407,0.557]
+  len 10: 97/166 = 0.584 [0.508,0.657]
+  len 11: 92/166 = 0.554 [0.478,0.628]
+  len 12: 104/170 = 0.612 [0.537,0.682]
+  written hist {0: 7, 7: 522, 8: 290, 9: 151, 10: 46, 11: 4, 12: 2}
+  pruned hist {0: 7, 5: 51, 6: 261, 7: 343, 8: 220, 9: 106, 10: 32, 11: 2}
+  frontier written 10 pruned 10
+  reasons []
+[lean_gate] 16000 samples, no-eos 113, distinct checked 2117: both ok 461, lean-only 1, nd-only 0, both rej 1655; lean 5.9s wall (35.2s proc, 12 workers), denote+nd_verify 0.7s
+[lo/ei_d3_seq_s1 r6] transfer (this round, pass@32) SOLVED 317/500 = 0.634 [0.591,0.675]
+  len 7: 78/83 = 0.940 [0.867,0.974]
+  len 8: 72/83 = 0.867 [0.778,0.924]
+  len 9: 34/83 = 0.410 [0.310,0.517]
+  len 10: 47/83 = 0.566 [0.459,0.668]
+  len 11: 39/83 = 0.470 [0.366,0.576]
+  len 12: 47/85 = 0.553 [0.447,0.654]
+  written hist {0: 1, 7: 213, 8: 109, 9: 56, 10: 17}
+  pruned hist {0: 1, 5: 9, 6: 101, 7: 130, 8: 107, 9: 38, 10: 10}
+  frontier written 10 pruned 10
+  reasons [('LEANREJ axiom:[sorryAx]', 8012), ('LEANPARSE no-eos', 113)]
+[lo/ei_d3_seq_s1 r6] transfer (cumulative 192 attempts) SOLVED 346/500 = 0.692 [0.650,0.731]
+  len 7: 80/83 = 0.964 [0.899,0.988]
+  len 8: 73/83 = 0.880 [0.792,0.933]
+  len 9: 41/83 = 0.494 [0.389,0.599]
+  len 10: 54/83 = 0.651 [0.543,0.744]
+  len 11: 44/83 = 0.530 [0.424,0.634]
+  len 12: 54/85 = 0.635 [0.529,0.730]
+  written hist {0: 1, 7: 232, 8: 153, 9: 72, 10: 30}
+  pruned hist {0: 1, 5: 13, 6: 126, 7: 152, 8: 124, 9: 52, 10: 20}
+  frontier written 10 pruned 10
+  reasons []
+[lean_gate] 500 samples, no-eos 4, distinct checked 496: both ok 259, lean-only 1, nd-only 0, both rej 236; lean 4.1s wall (7.4s proc, 12 workers), denote+nd_verify 0.2s
+[lo/ei_d3_seq_s1 r6] transfer greedy SOLVED 260/500 = 0.520 [0.476,0.563]
+  len 7: 69/83 = 0.831 [0.737,0.897]
+  len 8: 59/83 = 0.711 [0.606,0.797]
+  len 9: 24/83 = 0.289 [0.203,0.394]
+  len 10: 33/83 = 0.398 [0.299,0.505]
+  len 11: 31/83 = 0.373 [0.277,0.481]
+  len 12: 44/85 = 0.518 [0.413,0.621]
+  written hist {0: 1, 7: 167, 8: 67, 9: 23, 10: 2}
+  pruned hist {0: 1, 5: 3, 6: 81, 7: 89, 8: 67, 9: 18, 10: 1}
+  frontier written 9 pruned 9
+  reasons [('LEANREJ axiom:[sorryAx]', 236), ('LEANPARSE no-eos', 4)]
+[lean_gate] 5000 samples, no-eos 3, distinct checked 4997: both ok 4734, lean-only 1, nd-only 0, both rej 262; lean 8.7s wall (63.5s proc, 12 workers), denote+nd_verify 1.1s
+[lo/ei_d3_seq_s1 r6] heldout greedy SOLVED 4735/5000 = 0.947 [0.940,0.953]
+  len 2: 992/1000 = 0.992 [0.984,0.996]
+  len 3: 985/1000 = 0.985 [0.975,0.991]
+  len 4: 951/1000 = 0.951 [0.936,0.963]
+  len 5: 920/1000 = 0.920 [0.902,0.935]
+  len 6: 887/1000 = 0.887 [0.866,0.905]
+  written hist {0: 1, 2: 1014, 3: 981, 4: 931, 5: 949, 6: 857, 7: 2}
+  pruned hist {0: 1, 2: 1014, 3: 983, 4: 934, 5: 948, 6: 854, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('LEANREJ axiom:[sorryAx]', 262), ('LEANPARSE no-eos', 3)]
+python3 train.py --data artifacts/lo/ei_d3_seq_s1/mix_6.jsonl --init ckpts/lo/ei_d3_seq_s1_r5.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/lo/ei_d3_seq_s1_r6.pt --seed 1006 --log_every 200
+params 3214336 mode lean_seq shift True
+train records 23892 max len 413
+step 200 loss 0.0486 lr 2.53e-04 23s
+step 400 loss 0.0442 lr 1.09e-04 45s
+step 600 loss 0.0432 lr 3.00e-05 68s
+saved ckpts/lo/ei_d3_seq_s1_r6.pt
+=== round 6 done in 408s; new proofs 38; cum targets solved 680
+[lean_gate] 32000 samples, no-eos 78, distinct checked 3779: both ok 1273, lean-only 7, nd-only 0, both rej 2499; lean 7.3s wall (62.1s proc, 12 workers), denote+nd_verify 1.2s
+[lo/ei_d3_seq_s1 r7] targets (this round, pass@32) SOLVED 695/1000 = 0.695 [0.666,0.723]
+  len 7: 165/166 = 0.994 [0.967,0.999]
+  len 8: 146/166 = 0.880 [0.821,0.921]
+  len 9: 86/166 = 0.518 [0.443,0.593]
+  len 10: 100/166 = 0.602 [0.526,0.674]
+  len 11: 92/166 = 0.554 [0.478,0.628]
+  len 12: 106/170 = 0.624 [0.549,0.693]
+  written hist {0: 7, 7: 515, 8: 295, 9: 162, 10: 51, 11: 4, 12: 2}
+  pruned hist {0: 7, 5: 51, 6: 254, 7: 347, 8: 223, 9: 115, 10: 37, 11: 2}
+  frontier written 10 pruned 10
+  reasons [('LEANREJ axiom:[sorryAx]', 10749), ('LEANPARSE no-eos', 78)]
+[lo/ei_d3_seq_s1 r7] targets (cumulative 224 attempts) SOLVED 696/1000 = 0.696 [0.667,0.724]
+  len 7: 165/166 = 0.994 [0.967,0.999]
+  len 8: 146/166 = 0.880 [0.821,0.921]
+  len 9: 86/166 = 0.518 [0.443,0.593]
+  len 10: 100/166 = 0.602 [0.526,0.674]
+  len 11: 93/166 = 0.560 [0.484,0.634]
+  len 12: 106/170 = 0.624 [0.549,0.693]
+  written hist {0: 8, 7: 525, 8: 308, 9: 164, 10: 51, 11: 5, 12: 2}
+  pruned hist {0: 8, 5: 56, 6: 265, 7: 352, 8: 226, 9: 116, 10: 38, 11: 2}
+  frontier written 11 pruned 10
+  reasons []
+[lean_gate] 16000 samples, no-eos 96, distinct checked 2298: both ok 518, lean-only 1, nd-only 0, both rej 1779; lean 5.0s wall (35.9s proc, 12 workers), denote+nd_verify 0.7s
+[lo/ei_d3_seq_s1 r7] transfer (this round, pass@32) SOLVED 333/500 = 0.666 [0.624,0.706]
+  len 7: 77/83 = 0.928 [0.851,0.966]
+  len 8: 71/83 = 0.855 [0.764,0.915]
+  len 9: 37/83 = 0.446 [0.344,0.553]
+  len 10: 51/83 = 0.614 [0.507,0.712]
+  len 11: 46/83 = 0.554 [0.447,0.656]
+  len 12: 51/85 = 0.600 [0.494,0.698]
+  written hist {0: 1, 7: 216, 8: 127, 9: 55, 10: 31, 11: 1}
+  pruned hist {0: 1, 5: 8, 6: 107, 7: 138, 8: 112, 9: 44, 10: 20, 11: 1}
+  frontier written 10 pruned 10
+  reasons [('LEANREJ axiom:[sorryAx]', 7882), ('LEANPARSE no-eos', 96)]
+[lo/ei_d3_seq_s1 r7] transfer (cumulative 224 attempts) SOLVED 352/500 = 0.704 [0.663,0.742]
+  len 7: 80/83 = 0.964 [0.899,0.988]
+  len 8: 73/83 = 0.880 [0.792,0.933]
+  len 9: 43/83 = 0.518 [0.412,0.622]
+  len 10: 56/83 = 0.675 [0.568,0.766]
+  len 11: 46/83 = 0.554 [0.447,0.656]
+  len 12: 54/85 = 0.635 [0.529,0.730]
+  written hist {0: 1, 7: 234, 8: 167, 9: 75, 10: 42, 11: 1}
+  pruned hist {0: 1, 5: 14, 6: 130, 7: 158, 8: 129, 9: 60, 10: 27, 11: 1}
+  frontier written 10 pruned 10
+  reasons []
+[lean_gate] 500 samples, no-eos 4, distinct checked 496: both ok 263, lean-only 0, nd-only 0, both rej 233; lean 4.2s wall (7.4s proc, 12 workers), denote+nd_verify 0.2s
+[lo/ei_d3_seq_s1 r7] transfer greedy SOLVED 263/500 = 0.526 [0.482,0.569]
+  len 7: 68/83 = 0.819 [0.723,0.887]
+  len 8: 57/83 = 0.687 [0.581,0.776]
+  len 9: 27/83 = 0.325 [0.234,0.432]
+  len 10: 36/83 = 0.434 [0.332,0.541]
+  len 11: 32/83 = 0.386 [0.288,0.493]
+  len 12: 43/85 = 0.506 [0.402,0.610]
+  written hist {7: 165, 8: 69, 9: 23, 10: 6}
+  pruned hist {5: 2, 6: 79, 7: 93, 8: 67, 9: 19, 10: 3}
+  frontier written 10 pruned 9
+  reasons [('LEANREJ axiom:[sorryAx]', 233), ('LEANPARSE no-eos', 4)]
+[lean_gate] 5000 samples, no-eos 1, distinct checked 4999: both ok 4736, lean-only 1, nd-only 0, both rej 262; lean 7.1s wall (65.1s proc, 12 workers), denote+nd_verify 1.1s
+[lo/ei_d3_seq_s1 r7] heldout greedy SOLVED 4737/5000 = 0.947 [0.941,0.953]
+  len 2: 993/1000 = 0.993 [0.986,0.997]
+  len 3: 987/1000 = 0.987 [0.978,0.992]
+  len 4: 952/1000 = 0.952 [0.937,0.964]
+  len 5: 925/1000 = 0.925 [0.907,0.940]
+  len 6: 880/1000 = 0.880 [0.858,0.899]
+  written hist {0: 1, 2: 1010, 3: 981, 4: 936, 5: 972, 6: 835, 7: 2}
+  pruned hist {0: 1, 2: 1011, 3: 982, 4: 941, 5: 968, 6: 832, 7: 2}
+  frontier written 6 pruned 6
+  reasons [('LEANREJ axiom:[sorryAx]', 262), ('LEANPARSE no-eos', 1)]
+python3 train.py --data artifacts/lo/ei_d3_seq_s1/mix_7.jsonl --init ckpts/lo/ei_d3_seq_s1_r6.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/lo/ei_d3_seq_s1_r7.pt --seed 1007 --log_every 200
+params 3214336 mode lean_seq shift True
+train records 24032 max len 442
+step 200 loss 0.0507 lr 2.53e-04 22s
+step 400 loss 0.0452 lr 1.09e-04 45s
+step 600 loss 0.0429 lr 3.00e-05 67s
+saved ckpts/lo/ei_d3_seq_s1_r7.pt
+=== round 7 done in 424s; new proofs 41; cum targets solved 696
+[lean_gate] 32000 samples, no-eos 93, distinct checked 3665: both ok 1312, lean-only 9, nd-only 0, both rej 2344; lean 6.3s wall (60.0s proc, 12 workers), denote+nd_verify 1.1s
+[lo/ei_d3_seq_s1 r8] targets (this round, pass@32) SOLVED 704/1000 = 0.704 [0.675,0.731]
+  len 7: 165/166 = 0.994 [0.967,0.999]
+  len 8: 147/166 = 0.886 [0.828,0.925]
+  len 9: 88/166 = 0.530 [0.454,0.605]
+  len 10: 102/166 = 0.614 [0.539,0.685]
+  len 11: 95/166 = 0.572 [0.496,0.645]
+  len 12: 107/170 = 0.629 [0.555,0.698]
+  written hist {0: 9, 7: 518, 8: 319, 9: 169, 10: 57, 11: 6, 12: 2}
+  pruned hist {0: 9, 5: 55, 6: 261, 7: 357, 8: 234, 9: 121, 10: 40, 11: 3}
+  frontier written 11 pruned 10
+  reasons [('LEANREJ axiom:[sorryAx]', 10221), ('LEANPARSE no-eos', 93)]
+[lo/ei_d3_seq_s1 r8] targets (cumulative 256 attempts) SOLVED 704/1000 = 0.704 [0.675,0.731]
+  len 7: 165/166 = 0.994 [0.967,0.999]
+  len 8: 147/166 = 0.886 [0.828,0.925]
+  len 9: 88/166 = 0.530 [0.454,0.605]
+  len 10: 102/166 = 0.614 [0.539,0.685]
+  len 11: 95/166 = 0.572 [0.496,0.645]
+  len 12: 107/170 = 0.629 [0.555,0.698]
+  written hist {0: 11, 7: 532, 8: 326, 9: 170, 10: 57, 11: 6, 12: 2}
+  pruned hist {0: 11, 5: 61, 6: 271, 7: 360, 8: 237, 9: 121, 10: 40, 11: 3}
+  frontier written 11 pruned 10
+  reasons []
+[lean_gate] 16000 samples, no-eos 98, distinct checked 2260: both ok 511, lean-only 2, nd-only 0, both rej 1747; lean 5.0s wall (37.0s proc, 12 workers), denote+nd_verify 0.7s
+[lo/ei_d3_seq_s1 r8] transfer (this round, pass@32) SOLVED 334/500 = 0.668 [0.626,0.708]
+  len 7: 79/83 = 0.952 [0.883,0.981]
+  len 8: 69/83 = 0.831 [0.737,0.897]
+  len 9: 43/83 = 0.518 [0.412,0.622]
+  len 10: 49/83 = 0.590 [0.483,0.690]
+  len 11: 44/83 = 0.530 [0.424,0.634]
+  len 12: 50/85 = 0.588 [0.482,0.687]
+  written hist {0: 2, 7: 215, 8: 120, 9: 77, 10: 30, 11: 1}
+  pruned hist {0: 2, 5: 10, 6: 107, 7: 132, 8: 118, 9: 55, 10: 20, 11: 1}
+  frontier written 10 pruned 10
+  reasons [('LEANREJ axiom:[sorryAx]', 7644), ('LEANPARSE no-eos', 98)]
+[lo/ei_d3_seq_s1 r8] transfer (cumulative 256 attempts) SOLVED 360/500 = 0.720 [0.679,0.758]
+  len 7: 80/83 = 0.964 [0.899,0.988]
+  len 8: 73/83 = 0.880 [0.792,0.933]
+  len 9: 49/83 = 0.590 [0.483,0.690]
+  len 10: 56/83 = 0.675 [0.568,0.766]
+  len 11: 47/83 = 0.566 [0.459,0.668]
+  len 12: 55/85 = 0.647 [0.541,0.740]
+  written hist {0: 2, 7: 236, 8: 175, 9: 94, 10: 46, 11: 2}
+  pruned hist {0: 2, 5: 16, 6: 136, 7: 162, 8: 136, 9: 72, 10: 29, 11: 2}
+  frontier written 10 pruned 10
+  reasons []
+[lean_gate] 500 samples, no-eos 3, distinct checked 497: both ok 269, lean-only 0, nd-only 0, both rej 228; lean 4.2s wall (7.6s proc, 12 workers), denote+nd_verify 0.2s
+[lo/ei_d3_seq_s1 r8] transfer greedy SOLVED 269/500 = 0.538 [0.494,0.581]
+  len 7: 70/83 = 0.843 [0.750,0.906]
+  len 8: 54/83 = 0.651 [0.543,0.744]
+  len 9: 29/83 = 0.349 [0.256,0.457]
+  len 10: 39/83 = 0.470 [0.366,0.576]
+  len 11: 36/83 = 0.434 [0.332,0.541]
+  len 12: 41/85 = 0.482 [0.379,0.587]
+  written hist {7: 168, 8: 69, 9: 25, 10: 7}
+  pruned hist {5: 2, 6: 86, 7: 87, 8: 71, 9: 18, 10: 5}
+  frontier written 10 pruned 10
+  reasons [('LEANREJ axiom:[sorryAx]', 228), ('LEANPARSE no-eos', 3)]
+[lean_gate] 5000 samples, no-eos 1, distinct checked 4999: both ok 4750, lean-only 1, nd-only 0, both rej 248; lean 7.6s wall (63.2s proc, 12 workers), denote+nd_verify 1.1s
+[lo/ei_d3_seq_s1 r8] heldout greedy SOLVED 4751/5000 = 0.950 [0.944,0.956]
+  len 2: 996/1000 = 0.996 [0.990,0.998]
+  len 3: 991/1000 = 0.991 [0.983,0.995]
+  len 4: 950/1000 = 0.950 [0.935,0.962]
+  len 5: 922/1000 = 0.922 [0.904,0.937]
+  len 6: 892/1000 = 0.892 [0.871,0.910]
+  written hist {0: 1, 2: 1020, 3: 991, 4: 927, 5: 954, 6: 855, 7: 3}
+  pruned hist {0: 1, 2: 1020, 3: 991, 4: 932, 5: 949, 6: 857, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('LEANREJ axiom:[sorryAx]', 248), ('LEANPARSE no-eos', 1)]
+python3 train.py --data artifacts/lo/ei_d3_seq_s1/mix_8.jsonl --init ckpts/lo/ei_d3_seq_s1_r7.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/lo/ei_d3_seq_s1_r8.pt --seed 1008 --log_every 200
+params 3214336 mode lean_seq shift True
+train records 24160 max len 413
+step 200 loss 0.0456 lr 2.53e-04 10s
+step 400 loss 0.0486 lr 1.09e-04 20s
+step 600 loss 0.0430 lr 3.00e-05 30s
+saved ckpts/lo/ei_d3_seq_s1_r8.pt
+=== round 8 done in 293s; new proofs 41; cum targets solved 704
+END 2026-09-22T07:55:14Z

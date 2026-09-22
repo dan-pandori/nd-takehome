@@ -1,0 +1,10 @@
+START 2026-09-22T06:46:09Z until [ -f artifacts/lo/ei_d3_seq_s0.done ]; do sleep 30; done; until [ -f artifacts/lo/ei_d3_seq_s1.done ]; do sleep 30; done; until [ -f artifacts/lo/frozen_d3_seq_s0.done ]; do sleep 30; done; until [ -f artifacts/lo/frozen_d3_seq_s1.done ]; do sleep 30; done; python3 pod/lo/record.py artifacts/lo/ei_d3_seq_s0 artifacts/lo/ei_d3_seq_s1 artifacts/lo/frozen_d3_seq_s0 artifacts/lo/frozen_d3_seq_s1
+ei_d3_seq_s0 found 1087 lean ok 1087 rej 0 nd disagreements 0 size matches 1087
+ei_d3_seq_s0 found_transfer 577 lean ok 577 rej 0 nd disagreements 0 size matches 577
+ei_d3_seq_s1 found 1104 lean ok 1104 rej 0 nd disagreements 0 size matches 1104
+ei_d3_seq_s1 found_transfer 555 lean ok 555 rej 0 nd disagreements 0 size matches 555
+frozen_d3_seq_s0 found 552 lean ok 552 rej 0 nd disagreements 0 size matches 552
+frozen_d3_seq_s0 found_transfer 283 lean ok 283 rej 0 nd disagreements 0 size matches 283
+frozen_d3_seq_s1 found 753 lean ok 753 rej 0 nd disagreements 0 size matches 753
+frozen_d3_seq_s1 found_transfer 343 lean ok 343 rej 0 nd disagreements 0 size matches 343
+END 2026-09-22T07:56:14Z
