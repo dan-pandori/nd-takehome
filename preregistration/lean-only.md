@@ -100,3 +100,44 @@ labelled "old renderer, Lean ∧ `nd_verify`" vs "fixed renderer, `lean_check`".
 E7 (`L*` ≥ fragment's) hold in both seeds. "Free-form RL creates something the fragment did not" iff E7 gives 12 in
 either seed with ≥ 5 theorems at `L_true` ≥ 12 or E10 finds a pattern (defined as in `patterns.py`, on the denoted
 ND proofs) with acquisition ≥ 0.10 that both the token and fragment arms have at < 0.02.
+
+## Addendum 2026-09-22 06:45 UTC — phase-1 outcomes, before the first phase-2 job
+
+Phase 1 ran on pod `lo-1` (created 06:04 UTC, after the commit above). Pods `lo-2` … `lo-6` were created at 06:30–06:33
+UTC for setup only; no phase-2 job runs before the commit carrying this addendum. Outcomes against P1-1 … P1-6
+(`artifacts/lo/phase1_summary.json`, `python3 lean_only_analysis.py phase1`):
+
+- P1-1 **held**: 30 / 30 hand-written cases (`em` rejected, `simp` rejected, `sorry` rejected, `And.intro` accepted,
+  `na.elim` on `¬A` rejected as `Not.elim`, `Or.resolve_left` / `mt` / `Decidable.em` / `propext` rejected; term sizes
+  as defined). Two definitional facts learned: `cases h with …` elaborates through `Eq`/`Eq.refl` and is therefore
+  **rejected** (use `Or.elim` / `h.elim`), `match` compiles to an auxiliary definition and is rejected; the
+  `contradiction` tactic elaborates to allowed constants and is accepted. Both are consistent with "the term, not the
+  text" and are kept.
+- P1-2 **held**: 253,397 / 253,397 distinct pool proofs accepted by `lean_check` after `nd2lean.py`, 0 disagreements
+  with `nd_verify`; term size 1–18 (median 3, mean 3.17; by ND length: 6 lines → median 3, 9 → 6, 12 → 8, 16 → 12).
+- P1-3 **held exactly**: 206 `.elim` texts rejected, 137 `¬A ≡ A → False` and 117 unrestated-premise texts accepted.
+- P1-4 **held**: 0 / 4,012 corrupted proofs accepted (2,906 fail `nd2lean`'s structural rules, 1,106 elaborate to
+  `sorryAx`).
+- P1-5 **held**: 85 proofs / process-second (the plain-`lean` gate's 85.5), 1,996 / s wall at 24 workers.
+- P1-6 **partly wrong**: ladder pools fully relabelled (0 timeouts; the rerun `minlen` line counts equal `L_true` for all
+  6,780 records), but Spearman(`L_true`, `ts_minlen`) is **0.60 / 0.62**, not ≥ 0.8, and the transfer median is **5**,
+  not 8–14 (I forgot that `R`, `PR` and the box-closing lines count 0 in term size; `ts_minlen` by `L_true` 7 … 14 =
+  5, 5, 5, 7, 8, 11, 12, 12). The depth-3 pools carry generator lengths, not `L_true`; `minlen` at bound 12 finds
+  shorter proofs for 563 / 1,000 and 287 / 500 of them (median 7 lines; `ts_minlen` median 4).
+
+Consequences for phase 2 (numbers changed or added; predictions E1 … E13 otherwise stand):
+
+- **E3 is measured, not predicted**: the free-form rendering of the training set averages **8.0 tokens per proof**
+  (fragment 82.8; ratio 0.10), 386 / 154,990 training terms need a type ascription `( t : F )` (a term whose type Lean
+  must infer — projection target, application head, `Or.elim` major premise, DN idiom function — when it is an
+  `⟨⟩`/`Or.in*`/`False.elim`/`fun`/`Or.elim`/`byContradiction` term). Binder types are omitted. E3 is replaced by:
+  the free-form model's *sampled* accepted proofs average ≤ 20 tokens on the ladder transfer pool (fragment ≥ 80).
+- **E8 restated with the real scale**: `L*_ts` = max S with ≥ 5 transfer theorems solved at `ts_minlen` ≥ S. The
+  fragment's proposal-8 arms would sit at `L*_ts` ≈ 10–11 (theorems at `L_true` ≥ 11 have `ts_minlen` 4–13). Prediction:
+  fragment 10–11, free-form ≥ fragment in both seeds (P ≈ 0.6), 12 in either P ≈ 0.2.
+- A free-form base rate that the fragment cannot show: the depth-3 measure for free-form proofs is `fun` nesting on
+  the *term* (`lean_free.lam_depth`, DN idiom excluded) **and** box depth of the denoted ND proof (`patterns.depth3` on
+  the pruned proof); both are reported; the ND one is primary for E4/E6 (comparable with every earlier number).
+- Checker of record for phase 2 = `pod/lo/record.py`: every counted proof re-checked from scratch by `lean_check` (ND
+  proofs through the unmodified `nd2lean.py`, text proofs literally), `nd_verify` beside it; expectation: 0 rejections,
+  every ND proof both-accepted, term sizes equal to the in-loop ones.

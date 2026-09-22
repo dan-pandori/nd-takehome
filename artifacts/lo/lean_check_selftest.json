@@ -1,0 +1,309 @@
+{
+ "pass": 30,
+ "n": 30,
+ "rows": [
+  {
+   "name": "and_intro_term",
+   "source": "theorem t (P Q : Prop) (h : P \u2227 Q) : Q \u2227 P := \u27e8h.2, h.1\u27e9",
+   "expect_ok": true,
+   "expect_size": 3,
+   "ok": true,
+   "size": 3,
+   "reason": "",
+   "pass": true
+  },
+  {
+   "name": "and_intro_explicit",
+   "source": "theorem t (P Q : Prop) (h : P \u2227 Q) : Q \u2227 P := And.intro (And.right h) (And.left h)",
+   "expect_ok": true,
+   "expect_size": 3,
+   "ok": true,
+   "size": 3,
+   "reason": "",
+   "pass": true
+  },
+  {
+   "name": "fragment_have",
+   "source": "theorem t (P Q : Prop) (h1 : (P \u2227 Q)) : (Q \u2227 P) := by have n1 : (P \u2227 Q) := h1 ; have n2 : Q := n1.2 ; have n3 : P := n1.1 ; have n4 : (Q \u2227 P) := \u27e8n2, n3\u27e9 ; exact n4",
+   "expect_ok": true,
+   "expect_size": 3,
+   "ok": true,
+   "size": 3,
+   "reason": "",
+   "pass": true
+  },
+  {
+   "name": "em_lemma",
+   "source": "theorem t (P : Prop) : P \u2228 \u00acP := Classical.em P",
+   "expect_ok": false,
+   "expect_size": null,
+   "ok": false,
+   "size": null,
+   "reason": "const:[Classical.em]",
+   "pass": true
+  },
+  {
+   "name": "simp_proof",
+   "source": "theorem t (P Q : Prop) (h : P \u2227 Q) : Q \u2227 P := by simp [h]",
+   "expect_ok": false,
+   "expect_size": null,
+   "ok": false,
+   "size": null,
+   "reason": "const:[of_eq_true, Eq.trans, True, congr, congrArg, eq_true, and_self]",
+   "pass": true
+  },
+  {
+   "name": "sorry",
+   "source": "theorem t (P Q : Prop) (h : P \u2227 Q) : Q \u2227 P := sorry",
+   "expect_ok": false,
+   "expect_size": null,
+   "ok": false,
+   "size": null,
+   "reason": "axiom:[sorryAx]",
+   "pass": true
+  },
+  {
+   "name": "decide",
+   "source": "theorem t : True \u2228 False := by decide",
+   "expect_ok": false,
+   "expect_size": null,
+   "ok": false,
+   "size": null,
+   "reason": "const:[of_decide_eq_true, True, instDecidableOr, instDecidableTrue, instDecidableFalse, id, Eq, Bool, Decidable.decide, Bool.true, Eq.refl]",
+   "pass": true
+  },
+  {
+   "name": "cases_or",
+   "source": "theorem t (P Q : Prop) (h : P \u2228 Q) : Q \u2228 P := by cases h with | inl a => exact Or.inr a | inr b => exact Or.inl b",
+   "expect_ok": false,
+   "expect_size": null,
+   "ok": false,
+   "size": null,
+   "reason": "const:[Eq, Eq.refl]",
+   "pass": true
+  },
+  {
+   "name": "or_elim_dot",
+   "source": "theorem t (P Q : Prop) (h : P \u2228 Q) : Q \u2228 P := h.elim (fun a => Or.inr a) (fun b => Or.inl b)",
+   "expect_ok": true,
+   "expect_size": 5,
+   "ok": true,
+   "size": 5,
+   "reason": "",
+   "pass": true
+  },
+  {
+   "name": "match_or",
+   "source": "theorem t (P Q : Prop) (h : P \u2228 Q) : Q \u2228 P := match h with | Or.inl a => Or.inr a | Or.inr b => Or.inl b",
+   "expect_ok": false,
+   "expect_size": null,
+   "ok": false,
+   "size": null,
+   "reason": "const:[t9.match_1]",
+   "pass": true
+  },
+  {
+   "name": "or_elim_term",
+   "source": "theorem t (P Q : Prop) (h : P \u2228 Q) : Q \u2228 P := Or.elim h (fun a => Or.inr a) (fun b => Or.inl b)",
+   "expect_ok": true,
+   "expect_size": 5,
+   "ok": true,
+   "size": 5,
+   "reason": "",
+   "pass": true
+  },
+  {
+   "name": "by_contradiction",
+   "source": "theorem t (P : Prop) (h : \u00ac\u00acP) : P := Classical.byContradiction (fun hh => h hh)",
+   "expect_ok": true,
+   "expect_size": 3,
+   "ok": true,
+   "size": 3,
+   "reason": "",
+   "pass": true
+  },
+  {
+   "name": "false_elim",
+   "source": "theorem t (P : Prop) (h : False) : P := False.elim h",
+   "expect_ok": true,
+   "expect_size": 1,
+   "ok": true,
+   "size": 1,
+   "reason": "",
+   "pass": true
+  },
+  {
+   "name": "old_bote_on_false",
+   "source": "theorem t (P : Prop) (h : False) : P := h.elim",
+   "expect_ok": true,
+   "expect_size": 1,
+   "ok": true,
+   "size": 1,
+   "reason": "",
+   "pass": true
+  },
+  {
+   "name": "old_bote_on_neg",
+   "source": "theorem t (P Q : Prop) (h : \u00acP) (a : P) : Q := h.elim a",
+   "expect_ok": false,
+   "expect_size": null,
+   "ok": false,
+   "size": null,
+   "reason": "const:[Not.elim]",
+   "pass": true
+  },
+  {
+   "name": "not_elim_explicit",
+   "source": "theorem t (P Q : Prop) (h : \u00acP) (a : P) : Q := Not.elim h a",
+   "expect_ok": false,
+   "expect_size": null,
+   "ok": false,
+   "size": null,
+   "reason": "const:[Not.elim]",
+   "pass": true
+  },
+  {
+   "name": "absurd_ok",
+   "source": "theorem t (P Q : Prop) (h : \u00acP) (a : P) : Q := absurd a h",
+   "expect_ok": true,
+   "expect_size": 1,
+   "ok": true,
+   "size": 1,
+   "reason": "",
+   "pass": true
+  },
+  {
+   "name": "or_resolve",
+   "source": "theorem t (P Q : Prop) (h : P \u2228 Q) (n : \u00acP) : Q := Or.resolve_left h n",
+   "expect_ok": false,
+   "expect_size": null,
+   "ok": false,
+   "size": null,
+   "reason": "const:[Or.resolve_left]",
+   "pass": true
+  },
+  {
+   "name": "mt_lemma",
+   "source": "theorem t (P Q : Prop) (h : P \u2192 Q) (n : \u00acQ) : \u00acP := mt h n",
+   "expect_ok": false,
+   "expect_size": null,
+   "ok": false,
+   "size": null,
+   "reason": "const:[mt]",
+   "pass": true
+  },
+  {
+   "name": "tauto_like_decidable",
+   "source": "theorem t (P : Prop) [Decidable P] : P \u2228 \u00acP := Decidable.em P",
+   "expect_ok": false,
+   "expect_size": null,
+   "ok": false,
+   "size": null,
+   "reason": "const:[Decidable, Decidable.em]",
+   "pass": true
+  },
+  {
+   "name": "imp_intro_lambda",
+   "source": "theorem t (P Q : Prop) (h : P \u2192 Q) : P \u2192 Q := fun a => h a",
+   "expect_ok": true,
+   "expect_size": 2,
+   "ok": true,
+   "size": 2,
+   "reason": "",
+   "pass": true
+  },
+  {
+   "name": "neg_intro",
+   "source": "theorem t (P : Prop) (h : \u00acP) : \u00acP := fun a => h a",
+   "expect_ok": true,
+   "expect_size": 2,
+   "ok": true,
+   "size": 2,
+   "reason": "",
+   "pass": true
+  },
+  {
+   "name": "wrong_proof",
+   "source": "theorem t (P Q : Prop) (h : P \u2227 Q) : Q \u2227 P := \u27e8h.1, h.2\u27e9",
+   "expect_ok": false,
+   "expect_size": null,
+   "ok": false,
+   "size": null,
+   "reason": "axiom:[sorryAx] | Application type mismatch: The argument",
+   "pass": true
+  },
+  {
+   "name": "unbound_name",
+   "source": "theorem t (P Q : Prop) (h : P \u2227 Q) : Q \u2227 P := \u27e8n3.2, n3.1\u27e9",
+   "expect_ok": false,
+   "expect_size": null,
+   "ok": false,
+   "size": null,
+   "reason": "axiom:[sorryAx]",
+   "pass": true
+  },
+  {
+   "name": "iff_intro",
+   "source": "theorem t (P : Prop) : P \u2194 P := Iff.intro (fun a => a) (fun a => a)",
+   "expect_ok": true,
+   "expect_size": 3,
+   "ok": true,
+   "size": 3,
+   "reason": "",
+   "pass": true
+  },
+  {
+   "name": "propext_term",
+   "source": "theorem t (P Q : Prop) (h : P \u2194 Q) : P = Q := propext h",
+   "expect_ok": false,
+   "expect_size": null,
+   "ok": false,
+   "size": null,
+   "reason": "const:[propext]",
+   "pass": true
+  },
+  {
+   "name": "have_unused_extra_premises",
+   "source": "theorem t (P Q R S : Prop) (h1 : P) (h2 : Q) : Q := by have n1 : Q := h2 ; exact n1",
+   "expect_ok": true,
+   "expect_size": 0,
+   "ok": true,
+   "size": 0,
+   "reason": "",
+   "pass": true
+  },
+  {
+   "name": "nested_depth3",
+   "source": "theorem t (P Q R : Prop) : P \u2192 (Q \u2192 (R \u2192 (P \u2227 Q))) := fun a => fun b => fun c => \u27e8a, b\u27e9",
+   "expect_ok": true,
+   "expect_size": 4,
+   "ok": true,
+   "size": 4,
+   "reason": "",
+   "pass": true
+  },
+  {
+   "name": "exfalso_tactic",
+   "source": "theorem t (P : Prop) (h : False) : P := by exfalso ; exact h",
+   "expect_ok": true,
+   "expect_size": 1,
+   "ok": true,
+   "size": 1,
+   "reason": "",
+   "pass": true
+  },
+  {
+   "name": "contradiction_tactic",
+   "source": "theorem t (P Q : Prop) (h : \u00acP) (a : P) : Q := by contradiction",
+   "expect_ok": true,
+   "expect_size": null,
+   "ok": true,
+   "size": 2,
+   "reason": "",
+   "pass": true
+  }
+ ],
+ "wall_s": 1.6720566749572754,
+ "proc_s": 1.6694087982177734,
+ "lean": "Lean (version 4.34.0, x86_64-unknown-linux-gnu, commit 293d5d0c0c3f3dded4688b3ccd6a33939ac5102b, Release)"
+}

@@ -27,8 +27,10 @@ def load(fn, tok, cap, check_verify=False):
                 ok, reason, nl = verify_text(r['prompt'] + ' ' + r['proof'])
                 assert ok and nl == r['n_lines'] and nl <= cap, (reason, nl, r)
         ids = tok.encode_proof(r['proof'])
-        if cap and hasattr(tok, 'statement'):      # Lean surface form: the rendered record must denote exactly the cap-checked ND proof
-            assert tok.decode(ids) == r['proof'], r
+        if cap and hasattr(tok, 'statement'):      # Lean surface form: the rendered record must denote a verifier-valid ND proof (the fragment: exactly the cap-checked one)
+            nd = tok.denote(r['prompt'], tok.decode(ids))
+            assert nd is not None and verify_text(r['prompt'] + ' ' + nd)[0], r
+            assert tok.mode == 'lean_free' or nd == r['proof'], r
         out.append((tok.encode_prompt(r['prompt']), ids))
     return out
 

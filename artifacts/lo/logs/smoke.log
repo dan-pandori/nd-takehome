@@ -1,0 +1,75 @@
+=== lean_free 06:28:02
+  File "/workspace/nd-takehome/train.py", line 32, in load
+    assert nd is not None and verify_text(r['prompt'] + ' ' + nd)[0], r
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'name': 'train_47104', 'thm': '( ~ ( ~ ( R & Q ) ) ) |- Q', 'key': '( ~ ( ~ ( P & Q ) ) ) |- Q', 'prompt': 'THM ( ~ ( ~ ( R & Q ) ) ) SEQ Q PRF', 'n_lines': 3, 'rules': ['ANDE2', 'DN'], 'n_prem': 1, 'proof': 'N1 ( ~ ( ~ ( R & Q ) ) ) : PR ; N2 ( R & Q ) : DN N1 ; N3 Q : ANDE2 N2 ; QED', 'text': 'THM ( ~ ( ~ ( R & Q ) ) ) SEQ Q PRF N1 ( ~ ( ~ ( R & Q ) ) ) : PR ; N2 ( R & Q ) : DN N1 ; N3 Q : ANDE2 N2 ; QED'}
+    ck = torch.load(path, map_location=device)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 1484, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 759, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 740, in __init__
+    super().__init__(open(name, mode))
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'ckpts/lo/smoke_lean_free.pt'
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/expert_iter.py", line 227, in <module>
+    main()
+  File "/workspace/nd-takehome/expert_iter.py", line 118, in main
+    model, tok, _ = load_ckpt(ckpt, dev)
+                    ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 106, in load_ckpt
+    ck = torch.load(path, map_location=device)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 1484, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 759, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 740, in __init__
+    super().__init__(open(name, mode))
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'ckpts/lo/smoke_lean_free.pt'
+=== lean_free done 06:28:18
+=== lean_seq 06:28:18
+  File "/workspace/nd-takehome/train.py", line 32, in load
+    assert nd is not None and verify_text(r['prompt'] + ' ' + nd)[0], r
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'name': 'train_62463', 'thm': '( ( ~ ( P v Q ) ) v ( ~ ( P v Q ) ) ) |- ( ~ ( P v Q ) )', 'key': '( ( ~ ( P v Q ) ) v ( ~ ( P v Q ) ) ) |- ( ~ ( P v Q ) )', 'prompt': 'THM ( ( ~ ( P v Q ) ) v ( ~ ( P v Q ) ) ) SEQ ( ~ ( P v Q ) ) PRF', 'n_lines': 4, 'rules': ['AS', 'ORE'], 'n_prem': 1, 'proof': 'N1 ( ( ~ ( P v Q ) ) v ( ~ ( P v Q ) ) ) : PR ; N2 | ( ~ ( P v Q ) ) : AS ; N3 | ( ~ ( P v Q ) ) : AS ; N4 ( ~ ( P v Q ) ) : ORE N1 N2 N2 N3 N3 ; QED', 'text': 'THM ( ( ~ ( P v Q ) ) v ( ~ ( P v Q ) ) ) SEQ ( ~ ( P v Q ) ) PRF N1 ( ( ~ ( P v Q ) ) v ( ~ ( P v Q ) ) ) : PR ; N2 | ( ~ ( P v Q ) ) : AS ; N3 | ( ~ ( P v Q ) ) : AS ; N4 ( ~ ( P v Q ) ) : ORE N1 N2 N2 N3 N3 ; QED'}
+    ck = torch.load(path, map_location=device)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 1484, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 759, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 740, in __init__
+    super().__init__(open(name, mode))
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'ckpts/lo/smoke_lean_seq.pt'
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/expert_iter.py", line 227, in <module>
+    main()
+  File "/workspace/nd-takehome/expert_iter.py", line 118, in main
+    model, tok, _ = load_ckpt(ckpt, dev)
+                    ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 106, in load_ckpt
+    ck = torch.load(path, map_location=device)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 1484, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 759, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 740, in __init__
+    super().__init__(open(name, mode))
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'ckpts/lo/smoke_lean_seq.pt'
+=== lean_seq done 06:28:41
+SMOKE_DONE

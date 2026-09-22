@@ -217,11 +217,11 @@ def main():
         for (t, ki), row in zip(sub, rows):
             tried[t['name']] += ki; okc[t['name']] += row['n_ok']
             have = {x['norm'] for x in found[t['name']]}
-            for p, wl, pl in zip(row['proofs'], row['written_lens'], row['pruned_lens']):
+            for p, wl, pl, ts, ld in zip(row['proofs'], row['written_lens'], row['pruned_lens'], row['term_sizes'], row['lam_depths']):
                 pn = norm(p)
                 if pn not in have:
                     have.add(pn)
-                    found[t['name']].append({'proof': p, 'norm': pn, 'written': wl, 'pruned': pl, 'round': r}); new_this += 1
+                    found[t['name']].append({'proof': p, 'norm': pn, 'written': wl, 'pruned': pl, 'ts': ts, 'ld': ld, 'round': r}); new_this += 1
         stats['targets_round'] = summarize(rows, 'n_lines', f'[{a.name} r{r}] targets (this round)')
         stats['new_proofs_this_round'] = new_this
         stats['target_samples'] = sum(ks); stats['target_sample_acc'] = sum(x['n_ok'] for x in rows) / max(1, sum(ks))
@@ -252,11 +252,11 @@ def main():
         stats['transfer_sample_acc'] = sum(x['n_ok'] for x in rows_t) / sum(x['n_tried'] for x in rows_t)
         for t, row in zip(transfer, rows_t):
             have = {x['norm'] for x in found_t[t['name']]}
-            for p, wl, pl in zip(row['proofs'], row['written_lens'], row['pruned_lens']):
+            for p, wl, pl, ts, ld in zip(row['proofs'], row['written_lens'], row['pruned_lens'], row['term_sizes'], row['lam_depths']):
                 pn = norm(p)
                 if pn not in have:
                     have.add(pn)
-                    found_t[t['name']].append({'proof': p, 'norm': pn, 'written': wl, 'pruned': pl, 'round': r})
+                    found_t[t['name']].append({'proof': p, 'norm': pn, 'written': wl, 'pruned': pl, 'ts': ts, 'ld': ld, 'round': r})
         # 3. greedy
         g = generate(model, tok, [t['prompt'] for t in transfer], greedy=True, batch=a.batch, max_new=a.max_new)
         stats['transfer_greedy'] = summarize(judge(transfer, [[p] for p in g], 'n_lines'), 'n_lines', f'[{a.name} r{r}] transfer greedy')

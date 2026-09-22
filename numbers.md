@@ -545,3 +545,29 @@ Every number below is re-derived by `python3 lean_format_analysis.py` → `artif
 
 ## Bucket
 `hf://buckets/dan-pandori/nd-rl/lean-format/{ckpts,artifacts,data}` — `ckpts/lf` (Stage-1 models, depth-3 EI rounds), `ckpts/ladder` (ladder EI rounds), `artifacts/lf` (everything above incl. per-round found files), `data` (the a1 training set and the ladder pools used).
+
+# lean-only (proposal 9) — Lean is the only checker; term size beside lines; free-form vs fragment
+
+Every number is re-derived by `python3 lean_only_analysis.py phase1` → `artifacts/lo/phase1_summary.json` (phase 1) and `… phase2` → `artifacts/lo/summary.json` (phase 2) from pulled files under `artifacts/lo/` and `data/lo/`. Checker: `lean_check.py` (elaborated-term allowlist + axiom check; `term_size`); reward in phase 2 = `lean_check` only (`lean_gate.py`); `nd_verify` runs beside it as an audit. Lengths: lines first, term size second, everywhere.
+
+## Phase 1 — `lean_check` validation (pod `lo-1`, RTX 3090, 24 Lean workers; log `artifacts/lo/logs/phase1_checks.log`)
+| check | source | result |
+|---|---|---|
+| hand-written cases | `artifacts/lo/lean_check_selftest.json` (`python3 lean_check.py --selftest`) | **30 / 30**: `Classical.em`, `simp`, `sorry`, `decide`, `Or.resolve_left`, `mt`, `Decidable.em`, `propext`, `Not.elim` (old BOTE `na.elim` on `¬A`), `cases … with` (uses `Eq`), `match` (auxiliary def) rejected; `And.intro`, `⟨h.2, h.1⟩` (size 3), fragment `have` proof (3), `Or.elim` term (5), `byContradiction` (3), `False.elim` (1), `absurd` (1), `fun a => fun b => fun c => ⟨a, b⟩` (4), `exfalso`, `contradiction` accepted |
+| pool proofs, `nd_verify` vs `lean_check` (via the fixed `nd2lean.py`) | `artifacts/lo/pool_check.jsonl` (all `nd_verify`-accepted records of `artifacts/r1/lean_*.jsonl`, 253,397 distinct (prompt, proof); the proposal's "181,464" is a subset of these files) | **253,397 both accept, 0 `nd_verify`-yes/Lean-no, 0 Lean-yes/`nd_verify`-no** |
+| term size of pool proofs | same | min 1, median 3, mean 3.17, max 18; median by ND lines 2: 1 / 3: 1 / 4: 2 / 5: 3 / 6: 3 / 7: 4 / 8: 4 / 9: 6 / 10: 5 / 11: 7 / 12: 8 / 13: 9 / 14: 10 / 15: 11 / 16: 12 |
+| corrupted proofs | `artifacts/lo/negatives_check.jsonl` (`artifacts/r1/lean_negatives.jsonl`) | **0 / 4,012 accepted** (2,906 structural in `nd2lean`, 1,106 `sorryAx`) |
+| the 460 in-loop "Lean yes, `nd_verify` no" texts of lean-format, literal text | `artifacts/lo/disagree460_check.jsonl` | **206 rejected** (`.elim` kind → `Not.elim`), **254 accepted**: 137 `¬A ≡ A → False`, 117 unrestated premise — ND-formality cases; `nd_verify` accepts 0 |
+| throughput | `phase1_checks.log` | **85 proofs / process-s** (lean-format gate 85.5; `nd_verify` 14,497 / s → 170× per core), **1,996 / s wall** at 24 workers; `import Lean` per 300-proof chunk ≈ 1 s |
+
+## Phase 1 — pools relabelled in both units (`data/lo/*.jsonl`; `artifacts/lo/relabel_summary.json`; `relabel_size.py` on `artifacts/lo/minlen_*.jsonl`)
+`ts_minlen` = term size of `minlen.py`'s shortest proof (an upper bound on the minimum term size; every such proof verified by `nd_verify`, translated by `nd2lean.py`, accepted by `lean_check`).
+| pool | n | `L_true` reproduced by the `minlen` rerun | `ts_minlen` median (by `L_true`) | Spearman(`L_true`, `ts_minlen`) |
+|---|---:|---|---|---:|
+| `la_transfer` (bound 14, 120 s) | 2,285 | 2,285 / 2,285, 0 timeouts | 5 (7: 5, 8: 5, 9: 5, 10: 7, 11: 8, 12: 11, 13: 12, 14: 12) | 0.60 |
+| `la_rl_targets` (bound 14, 120 s) | 4,495 | 4,495 / 4,495, 0 timeouts | 5 (7: 4, 8: 4, 9: 5, 10: 7, 11: 7, 12: 11, 13: 12, 14: 12) | 0.62 |
+| `targets_depth3` (bound 12, 120 s; label = generator length) | 1,000 | 437 / 1,000 (563 have a shorter `minlen` proof; `minlen` lines 7: 575, 8: 240, 9: 130, 10: 38, 11: 15, 12: 2) | 4 (7: 4, 8: 4, 9: 5, 10: 4, 11: 4, 12: 4) | -0.27 |
+| `transfer_depth3` (bound 12, 120 s) | 500 | 213 / 500 (287 shorter; 7: 296, 8: 110, 9: 68, 10: 20, 11: 6) | 4 (7: 4, 8: 4, 9: 5, 10: 4, 11: 4, 12: 4) | -0.26 |
+
+## Phase 1 — free-form rendering (`lean_free.py`; `python3 lean_free.py data/train.jsonl`)
+- 154,990 / 154,990 training proofs and 5,000 / 5,000 held-out proofs: render → text → `denote` → `nd_verify` accepts (0 failures); **8.0 tokens per proof** (fragment 82.8, `numbers.md` § lean-format); 386 / 154,990 (0.25 %) carry a type ascription.

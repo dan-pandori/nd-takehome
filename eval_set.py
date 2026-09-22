@@ -25,25 +25,39 @@ def wilson(k, n, z=1.96):
 
 
 def judge(recs, proofs_per, lenfield):
-    """recs: list of theorem records; proofs_per: list of list of proof strings. Returns rows + summary."""
+    """recs: list of theorem records; proofs_per: list of list of proof strings. Returns rows + summary.
+    Token-format proofs are verified with nd_verify.  Lean-format samples (run lean-only) arrive from lean_gate already judged
+    by lean_check: accepted strings are in lean_gate.VERDICT (the denoted ND proof, or the canonical Lean text when the term
+    denotes no verifier-valid ND proof), rejected ones start with 'LEANREJ' / 'LEANPARSE'.  Lengths: written/pruned lines from
+    the ND proof (0 when there is none), term size and lambda depth from the verdict (None for token-format proofs)."""
+    import lean_gate
     rows = []
     for r, ps in zip(recs, proofs_per):
-        good, wl, pl, reasons = [], [], [], []
+        good, wl, pl, ts, ld, reasons = [], [], [], [], [], []
         fail_example = None
         for p in ps:
-            ok, reason, nl = verify_text(r['prompt'] + ' ' + p)
+            v = lean_gate.VERDICT.get((r['prompt'], p))
+            if p.startswith('LEANREJ') or p.startswith('LEANPARSE'):
+                ok, reason, nl = False, p[:60], 0
+            elif v is not None:
+                ok, reason, nl = True, 'ok', (verify_text(r['prompt'] + ' ' + p)[2] if v['nd'] else 0)
+            else:
+                ok, reason, nl = verify_text(r['prompt'] + ' ' + p)
             if not ok and fail_example is None:
                 fail_example = p
             if ok:
                 if p not in good:
                     good.append(p)
                     wl.append(nl)
-                    pl.append(pruned_length(r['prompt'], p))
+                    pl.append(pruned_length(r['prompt'], p) if (v is None or v['nd']) else 0)
+                    ts.append(v['size'] if v else None)
+                    ld.append(v['lam_depth'] if v else None)
             else:
                 reasons.append(reason.split(' (line')[0])
         rows.append({'name': r.get('name', r.get('thm')), 'thm': r.get('thm'), 'prompt': r['prompt'],
                      lenfield: r.get(lenfield), 'solved': bool(good), 'n_ok': sum(1 for p in ps if p in good),
-                     'n_tried': len(ps), 'proofs': good, 'written_lens': wl, 'pruned_lens': pl, 'reasons': reasons, 'fail_example': fail_example})
+                     'n_tried': len(ps), 'proofs': good, 'written_lens': wl, 'pruned_lens': pl, 'term_sizes': ts, 'lam_depths': ld,
+                     'reasons': reasons, 'fail_example': fail_example})
     return rows
 
 
@@ -67,6 +81,10 @@ def summarize(rows, lenfield, title=''):
     # robust frontier: longest written length with >=5 distinct verified proofs (also pruned version)
     out['frontier_written'] = max([L for L, c in wh.items() if c >= 5], default=0)
     out['frontier_pruned'] = max([L for L, c in ph.items() if c >= 5], default=0)
+    th = collections.Counter(x for r in rows for x in r.get('term_sizes', []) if x is not None)
+    if th:
+        out['ts_hist'] = dict(sorted(th.items())); out['frontier_ts'] = max([L for L, c in th.items() if c >= 5], default=0)
+        out['no_nd_denotation'] = sum(1 for r in rows for x in r.get('written_lens', []) if x == 0)
     reasons = collections.Counter(x for r in rows for x in r['reasons'])
     out['reasons'] = dict(reasons.most_common(10))
     print('  written hist', out['written_hist']); print('  pruned hist', out['pruned_hist'])

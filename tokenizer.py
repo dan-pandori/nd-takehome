@@ -109,6 +109,9 @@ class Tokenizer:
 
 
 def make_tokenizer(mode):
+    if mode == 'lean_free':
+        from lean_free import FreeTokenizer
+        return FreeTokenizer(mode)
     if mode.startswith('lean'):
         from lean_tok import LeanTokenizer
         return LeanTokenizer(mode)

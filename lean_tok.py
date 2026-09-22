@@ -134,12 +134,19 @@ class LeanTokenizer:
         return [self.stoi[t] for t in prompt_tokens(prompt)]
 
     def encode_proof(self, body):
-        """ND body -> ids with names numbered by first appearance (n1, n2, ...); <eos> included."""
+        """ND body -> ids with names numbered by first appearance (n1, n2, ...); <eos> included.  A Lean text (a counted proof that
+        denotes no verifier-valid ND proof, run lean-only) is tokenised as is, names renumbered the same way."""
+        if body.startswith('N') and body.rstrip().endswith('QED'):
+            toks = proof_tokens(body)
+        else:
+            from lean_free import split_tokens
+            toks = split_tokens(body)
         order = {}
         out = []
-        for t in proof_tokens(body):
-            if isinstance(t, tuple):
-                k = order.setdefault(t[1], len(order) + 1)
+        for t in toks:
+            if isinstance(t, tuple) or (t[0] == 'n' and t[1:].isdigit()):
+                key = t[1] if isinstance(t, tuple) else ('t', t)
+                k = order.setdefault(key, len(order) + 1)
                 if k > MAXN: raise ValueError('too many names')
                 out.append(self.ref0 + k - 1)
             else:
@@ -175,6 +182,8 @@ class LeanTokenizer:
 
     # ---- inverse ----
     def decode(self, ids):
+        """-> the literal Lean text ('LEANPARSE no-eos' if the sample never ended).  Run lean-only: the checker is lean_check on the
+        text (lean_gate.gate); the ND denotation is denote()."""
         toks = []
         ended = False
         for x in ids:
@@ -182,12 +191,15 @@ class LeanTokenizer:
             if x == self.eos: ended = True; break
             toks.append(self.itos[x])
         self.last_text = self.text(toks) if ended else None
-        if not ended:
-            return 'LEANPARSE no-eos'
+        return self.last_text if ended else 'LEANPARSE no-eos'
+
+    def denote(self, prompt, text):
+        """Lean text -> the ND proof it denotes (strict fragment grammar first, then lean_free's general converter), or None."""
+        from lean_free import split_tokens, denote as free_denote
         try:
-            return inverse(toks)
-        except ParseFail as e:
-            return f'LEANPARSE {e}'
+            return inverse(split_tokens(text))
+        except (ParseFail, IndexError, KeyError):
+            return free_denote(prompt, text)
 
 
 def inverse(toks):
