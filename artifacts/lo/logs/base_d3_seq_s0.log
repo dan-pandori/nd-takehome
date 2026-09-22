@@ -1,0 +1,15 @@
+START 2026-09-22T07:13:56Z python3 eval_set.py --ckpt ckpts/lo/stage1_a1_seq_s0.pt --in data/lo/targets_depth3.jsonl --out artifacts/lo/base_d3_seq_s0_k2000.jsonl --k 2000 --temperature 0.8 --seed 100 --batch 1024 --summary artifacts/lo/base_d3_seq_s0_k2000.json
+[lean_gate] 2000000 samples, no-eos 2191, distinct checked 76456: both ok 1226, lean-only 8, nd-only 0, both rej 75222; lean 109.1s wall (1266.4s proc, 12 workers), denote+nd_verify 21.6s
+generated 2000000 proofs in 2787s
+stage1_a1_seq_s0.pt on targets_depth3.jsonl k=2000 SOLVED 501/1000 = 0.501 [0.470,0.532]
+  len 7: 153/166 = 0.922 [0.871,0.954]
+  len 8: 91/166 = 0.548 [0.472,0.622]
+  len 9: 17/166 = 0.102 [0.065,0.158]
+  len 10: 67/166 = 0.404 [0.332,0.480]
+  len 11: 79/166 = 0.476 [0.401,0.552]
+  len 12: 94/170 = 0.553 [0.478,0.626]
+  written hist {0: 8, 7: 485, 8: 260, 9: 30, 10: 2}
+  pruned hist {0: 8, 5: 38, 6: 271, 7: 325, 8: 133, 9: 10}
+  frontier written 9 pruned 9
+  reasons [('LEANREJ axiom:[sorryAx]', 1772296), ('LEANPARSE no-eos', 2191), ("LEANREJ error: unexpected token 'theorem'; expected term; un", 1), ('LEANREJ const:[Not.elim]', 1)]
+END 2026-09-22T08:00:40Z
