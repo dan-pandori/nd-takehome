@@ -9,3 +9,10 @@ Brief: BRIEF_LEAN_FORMAT.md. Policy: AGENT_POLICY.md. Run id: lean-format. Only 
 - Deliverables: `run_lean_format.md`, `numbers.md` § lean-format, `log.md` § lean-format, `figures/lean_format.png`, bucket `hf://buckets/dan-pandori/nd-rl/lean-format/`. Two questions for Dan in `QUESTIONS.md` (2026-09-21).
 
 LEAN-FORMAT DONE 2026-09-21T08:10:42Z
+
+# STATUS — ds-composition (proposal 9, run 1)
+
+Brief: BRIEF_ds-composition.md. Policy: AGENT_POLICY.md. Run id: ds-composition (pause lifted for this theme by Dan's brief). Sibling `ds-generator` on the same host (pods `dsg-*` are not mine; mine are `dsc-*`).
+
+## ds-composition
+- 2026-09-22 05:54 UTC  run started (executor). Pre-registration `preregistration/ds-composition.md` committed ≈ 06:12 before any `dsc-*` pod. Sets built on the VPS (`dsc_assemble.py`, streaming); A2 needs an ORE top-up from the unchanged generator (output filter only; disclosed).

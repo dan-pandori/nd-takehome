@@ -64,6 +64,9 @@ def worker(args):
                 if intuit_provable(r['prompt']):
                     stats['only_intuit'] += 1
                     continue
+            if only and only.startswith('rule:') and not any(ru in r['rules'] for ru in only[5:].split('+')):   # ds-composition: output filter on rule use (generator untouched)
+                stats['only_out'] += 1
+                continue
             if only == 'derived_ore_strict' and not cl['derived_ore_strict']:
                 stats['only_out'] += 1
                 continue
@@ -431,7 +434,7 @@ def main():
     g.add_argument('--seed', type=int, default=1000)
     g.add_argument('--gen_max_prem', type=int, default=3, help='generator knob (Gen.max_prem); default = the take-home generator. Raised only for run-2 TARGET pools (IMPE chains need >= 5 premises)')
     g.add_argument('--gen_max_depth', type=int, default=3, help='generator knob (Gen.max_depth); default = the take-home generator. Raised only for run-2 TARGET pools (box depth 4)')
-    g.add_argument('--only', default=None, help="reductio_nodn | reductio_nodn_co | derived_ore_strict | p2:<pattern>[+<pattern>..] (patterns2.py); " + 'output filter: keep only proofs with this property (reductio_nodn = reductio pattern and no ( ~ ( ~ subformula in the sequent)')
+    g.add_argument('--only', default=None, help="reductio_nodn | reductio_nodn_co | derived_ore_strict | p2:<pattern>[+<pattern>..] (patterns2.py) | rule:<RULE>[+<RULE>..] (proof uses one of the rules; ds-composition A2); " + 'output filter: keep only proofs with this property (reductio_nodn = reductio pattern and no ( ~ ( ~ subformula in the sequent)')
     m = sub.add_parser('merge'); m.add_argument('--glob', required=True); m.add_argument('--out', required=True); m.add_argument('--prefix', default='pool')
     s = sub.add_parser('assemble'); s.add_argument('--pool', required=True); s.add_argument('--outdir', required=True)
     s.add_argument('--size', type=int, default=155000); s.add_argument('--heldout', type=int, default=5000); s.add_argument('--seed', type=int, default=0)

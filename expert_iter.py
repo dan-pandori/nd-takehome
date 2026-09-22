@@ -28,6 +28,14 @@ from gen import canon_key
 from eval_set import judge, summarize
 
 
+def text_of(samples, texts, p):
+    """literal Lean text of the first sample whose (gated) decode is the accepted proof p (ds-composition: stored beside counted proofs)."""
+    for s, tx in zip(samples, texts):
+        if s == p:
+            return tx
+    return None
+
+
 def read(fn):
     return [json.loads(l) for l in open(fn) if l.strip()]
 
@@ -122,13 +130,18 @@ def main():
         prompts = [t['prompt'] for t in targets for _ in range(a.k)]
         flat = generate(model, tok, prompts, greedy=False, temperature=a.temperature, batch=a.batch, seed=seed)
         outs = [flat[i * a.k:(i + 1) * a.k] for i in range(len(targets))]
+        texts = getattr(generate, 'last_texts', None)
+        texts_per = [texts[i * a.k:(i + 1) * a.k] for i in range(len(targets))] if texts else None
         rows = judge(targets, outs, 'n_lines')
         new_this = 0
-        for t, row in zip(targets, rows):
+        for ti, (t, row) in enumerate(zip(targets, rows)):
             have = {x['proof'] for x in found[t['name']]}
             for p, wl, pl in zip(row['proofs'], row['written_lens'], row['pruned_lens']):
                 if p not in have:
-                    found[t['name']].append({'proof': p, 'written': wl, 'pruned': pl, 'round': r}); new_this += 1
+                    x = {'proof': p, 'written': wl, 'pruned': pl, 'round': r}
+                    if texts_per:
+                        x['text'] = text_of(outs[ti], texts_per[ti], p)
+                    found[t['name']].append(x); new_this += 1
         stats['targets_round'] = summarize(rows, 'n_lines', f'[{a.name} r{r}] targets (this round, pass@{a.k})')
         # cumulative view over all attempts so far
         cum_rows = []
@@ -159,15 +172,20 @@ def main():
         prompts = [t['prompt'] for t in transfer for _ in range(a.k)]
         flat = generate(model, tok, prompts, greedy=False, temperature=a.temperature, batch=a.batch, seed=seed + 500)
         outs_t = [flat[i * a.k:(i + 1) * a.k] for i in range(len(transfer))]
+        texts = getattr(generate, 'last_texts', None)
+        texts_per_t = [texts[i * a.k:(i + 1) * a.k] for i in range(len(transfer))] if texts else None
         rows_t = judge(transfer, outs_t, 'n_lines')
         stats['transfer_round'] = summarize(rows_t, 'n_lines', f'[{a.name} r{r}] transfer (this round, pass@{a.k})')
         stats['transfer_sample_acc'] = sum(x['n_ok'] for x in rows_t) / sum(x['n_tried'] for x in rows_t)
         # cumulative transfer (union of attempts so far)
-        for t, row in zip(transfer, rows_t):
+        for ti, (t, row) in enumerate(zip(transfer, rows_t)):
             have = {x['proof'] for x in found_t[t['name']]}
             for p, wl, pl in zip(row['proofs'], row['written_lens'], row['pruned_lens']):
                 if p not in have:
-                    found_t[t['name']].append({'proof': p, 'written': wl, 'pruned': pl, 'round': r})
+                    x = {'proof': p, 'written': wl, 'pruned': pl, 'round': r}
+                    if texts_per_t:
+                        x['text'] = text_of(outs_t[ti], texts_per_t[ti], p)
+                    found_t[t['name']].append(x)
         cum_t = [{'n_lines': t['n_lines'], 'solved': bool(found_t[t['name']]), 'written_lens': [x['written'] for x in found_t[t['name']]],
                   'pruned_lens': [x['pruned'] for x in found_t[t['name']]], 'reasons': []} for t in transfer]
         stats['transfer_cum'] = summarize(cum_t, 'n_lines', f'[{a.name} r{r}] transfer (cumulative {r*a.k} attempts)')

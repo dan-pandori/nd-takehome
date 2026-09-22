@@ -70,4 +70,5 @@ def generate(model, tok, prompts, greedy=True, temperature=1.0, max_new=400, bat
     if is_lean:
         from lean_gate import gate
         res = gate(tok, prompts, res, texts)   # Lean checks the literal text; Lean-rejected samples come back prefixed 'LEANREJ '
+    generate.last_texts = texts if is_lean else None   # ds-composition: literal texts of the samples of this call (stored beside counted proofs)
     return res

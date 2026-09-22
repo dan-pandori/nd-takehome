@@ -128,10 +128,23 @@ def sample_targets(model, tok, targets, ks, temperature, batch, seed, max_new):
     for t, ki in zip(targets, ks):
         prompts += [t['prompt']] * ki
     flat = generate(model, tok, prompts, greedy=False, temperature=temperature, batch=batch, seed=seed, max_new=max_new)
+    texts = getattr(generate, 'last_texts', None)
     outs, pos = [], 0
+    sample_targets.last_texts = [] if texts else None
     for ki in ks:
-        outs.append(flat[pos:pos + ki]); pos += ki
+        outs.append(flat[pos:pos + ki])
+        if texts:
+            sample_targets.last_texts.append(texts[pos:pos + ki])
+        pos += ki
     return outs
+
+
+def text_of(samples, texts, p):
+    """literal Lean text of the first sample whose (gated) decode is the accepted proof p (ds-composition: stored beside counted proofs)."""
+    for s, tx in zip(samples, texts):
+        if s == p:
+            return tx
+    return None
 
 
 def main():
@@ -213,15 +226,19 @@ def main():
         sub = [(t, ki) for t, ki in zip(targets, ks) if ki > 0]
         outs = sample_targets(model, tok, [t for t, _ in sub], [ki for _, ki in sub], a.temperature, a.batch, seed, a.max_new)
         rows = judge([t for t, _ in sub], outs, 'n_lines')
+        texts_per = getattr(sample_targets, 'last_texts', None)
         new_this = 0
-        for (t, ki), row in zip(sub, rows):
+        for ti, ((t, ki), row) in enumerate(zip(sub, rows)):
             tried[t['name']] += ki; okc[t['name']] += row['n_ok']
             have = {x['norm'] for x in found[t['name']]}
             for p, wl, pl in zip(row['proofs'], row['written_lens'], row['pruned_lens']):
                 pn = norm(p)
                 if pn not in have:
                     have.add(pn)
-                    found[t['name']].append({'proof': p, 'norm': pn, 'written': wl, 'pruned': pl, 'round': r}); new_this += 1
+                    x = {'proof': p, 'norm': pn, 'written': wl, 'pruned': pl, 'round': r}
+                    if texts_per:
+                        x['text'] = text_of(outs[ti], texts_per[ti], p)
+                    found[t['name']].append(x); new_this += 1
         stats['targets_round'] = summarize(rows, 'n_lines', f'[{a.name} r{r}] targets (this round)')
         stats['new_proofs_this_round'] = new_this
         stats['target_samples'] = sum(ks); stats['target_sample_acc'] = sum(x['n_ok'] for x in rows) / max(1, sum(ks))
@@ -247,16 +264,21 @@ def main():
         prompts = [t['prompt'] for t in transfer for _ in range(a.k)]
         flat = generate(model, tok, prompts, greedy=False, temperature=a.temperature, batch=a.batch, seed=seed + 500, max_new=a.max_new)
         outs_t = [flat[i * a.k:(i + 1) * a.k] for i in range(len(transfer))]
+        texts = getattr(generate, 'last_texts', None)
+        texts_per_t = [texts[i * a.k:(i + 1) * a.k] for i in range(len(transfer))] if texts else None
         rows_t = judge(transfer, outs_t, 'n_lines')
         stats['transfer_round'] = summarize(rows_t, 'n_lines', f'[{a.name} r{r}] transfer (this round, pass@{a.k})')
         stats['transfer_sample_acc'] = sum(x['n_ok'] for x in rows_t) / sum(x['n_tried'] for x in rows_t)
-        for t, row in zip(transfer, rows_t):
+        for ti, (t, row) in enumerate(zip(transfer, rows_t)):
             have = {x['norm'] for x in found_t[t['name']]}
             for p, wl, pl in zip(row['proofs'], row['written_lens'], row['pruned_lens']):
                 pn = norm(p)
                 if pn not in have:
                     have.add(pn)
-                    found_t[t['name']].append({'proof': p, 'norm': pn, 'written': wl, 'pruned': pl, 'round': r})
+                    x = {'proof': p, 'norm': pn, 'written': wl, 'pruned': pl, 'round': r}
+                    if texts_per_t:
+                        x['text'] = text_of(outs_t[ti], texts_per_t[ti], p)
+                    found_t[t['name']].append(x)
         # 3. greedy
         g = generate(model, tok, [t['prompt'] for t in transfer], greedy=True, batch=a.batch, max_new=a.max_new)
         stats['transfer_greedy'] = summarize(judge(transfer, [[p] for p in g], 'n_lines'), 'n_lines', f'[{a.name} r{r}] transfer greedy')
