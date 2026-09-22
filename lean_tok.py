@@ -7,7 +7,7 @@ tactics (no indentation tokens):
   proof  : have n1 : F1 := h1 ; have n7 : ( P → R ) := ( fun ( n3 : P ) => by have n4 : Q := n1 n3 ; exact n4 ) ; exact n7 <eos>
 
 Terms (exactly nd2lean's): PR `hK`; R `nA`; ANDI `⟨ nA , nB ⟩`; ANDE `nA .1|.2`; IMPE / NEGE `nF nA`; ORI `Or.inl|Or.inr nA`;
-BOTE `nA .elim`; DN `Classical.byContradiction ( fun hh => nA hh )`; IMPI `( fun ( nS : A ) => by ... ; exact nE )`;
+BOTE `False.elim nA` (tokens `False` `.elim` `nA`; was `nA .elim` before the 2026-09-22 fix, see nd2lean.py); DN `Classical.byContradiction ( fun hh => nA hh )`; IMPI `( fun ( nS : A ) => by ... ; exact nE )`;
 NEGI the same ending `exact ( nE : False )`; ORE `Or.elim nJ <box> <box>`.  `.1 .2 .elim` are glued to the name in the text.
 
 Hypothesis names are LABELS, not line indices.  64 name tokens n1..n64; two naming schemes (stored in the ckpt as the mode):
@@ -102,7 +102,7 @@ def proof_tokens(proof):
         elif rule == 'NEGE': term = [n(refs[1]), n(refs[0])]
         elif rule == 'ORI1': term = ['Or.inl', n(refs[0])]
         elif rule == 'ORI2': term = ['Or.inr', n(refs[0])]
-        elif rule == 'BOTE': term = [n(refs[0]), '.elim']
+        elif rule == 'BOTE': term = ['False', '.elim', n(refs[0])]
         elif rule == 'DN': term = ['Classical.byContradiction', '(', 'fun', 'hh', '=>', n(refs[0]), 'hh', ')']
         elif rule == 'IMPI': term = box(refs[0], refs[1])
         elif rule == 'NEGI': term = box(refs[0], refs[1], neg=True)
@@ -280,11 +280,12 @@ def inverse(toks):
                     eat(); j = ref(scope); s1, e1, g1 = box(scope, depth); s2, e2, g2 = box(scope, depth)
                     if g1 or g2: raise ParseFail('ORE box')
                     rule, refs = 'ORE', [j, s1, e1, s2, e2]
+                elif t == 'False':
+                    eat(); eat('.elim'); a = ref(scope); rule, refs = 'BOTE', [a]
                 else:
                     a = ref(scope); t2 = peek()
                     if t2 == '.1': eat(); rule, refs = 'ANDE1', [a]
                     elif t2 == '.2': eat(); rule, refs = 'ANDE2', [a]
-                    elif t2 == '.elim': eat(); rule, refs = 'BOTE', [a]
                     elif t2 == ';': rule, refs = 'R', [a]
                     else:
                         b = ref(scope)
