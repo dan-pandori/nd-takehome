@@ -15,7 +15,7 @@ D = 'data/p2'
 train = {'c0': f'{D}/train_depth3_f0_a1.jsonl'}.get(arm, f'data/dsc/train_{arm}.jsonl')
 cap = 8 if arm == 'a3' else 6
 J = []
-POOLS = {'depth3': f'{D}/targets_depth3.jsonl', 'd3req': 'data/r3_1/depth3_req.jsonl', 'redreq': f'{D}/targets_reductio_req.jsonl'}
+POOLS = {'d3sub': 'data/dsc/targets_depth3_sub250.jsonl', 'd3req': 'data/r3_1/depth3_req.jsonl', 'redreq': f'{D}/targets_reductio_req.jsonl'}   # d3sub: 250-target random subset (seed 0) of targets_depth3.jsonl (budget deviation 07:50)
 for s in (0, 1):
     ck = f'ckpts/lf/stage1_a1_seq_s{s}.pt' if arm == 'c0' else f'ckpts/dsc/stage1_{arm}_s{s}.pt'
     if arm != 'c0':

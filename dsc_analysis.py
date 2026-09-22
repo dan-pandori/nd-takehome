@@ -52,7 +52,7 @@ def coverage(arm, s, pool):
     if not os.path.exists(fn):
         return None
     rows = rd(fn)
-    key = 'depth3' if pool in ('depth3', 'd3req') else 'derived_dn'
+    key = 'depth3' if pool in ('d3sub', 'depth3', 'd3req') else 'derived_dn'
     key2 = 'reductio' if pool == 'redreq' else None
     solved = sum(1 for r in rows if r['n_ok'] > 0)
     patt = sum(1 for r in rows if any(p['pat'][key] for p in r['proofs']))
@@ -132,7 +132,7 @@ def main():
         for s in SEEDS:
             row = {'arm': arm, 'seed': s, 'cap': 8 if arm == 'a3' else 6, 'label': 'cap 8' if arm == 'a3' else 'cap 6'}
             row['heldout'] = heldout(arm, s)
-            row['coverage'] = {pool: coverage(arm, s, pool) for pool in ('depth3', 'd3req', 'redreq')}
+            row['coverage'] = {pool: coverage(arm, s, pool) for pool in ('d3sub', 'd3req', 'redreq')}
             if arm == 'c0':
                 row['dial_ei'] = dial(f'artifacts/lf/ei_d3_seq_s{s}'); row['dial_frozen'] = dial(f'artifacts/lf/frozen_d3_seq_s{s}')
                 row['dial_ei_rerun'] = dial(f'{D}/ei_c0_s{s}'); row['dial_frozen_rerun'] = dial(f'{D}/frozen_c0_s{s}')

@@ -113,3 +113,12 @@ at 07:12–07:17 with the control's rule (reductio and derived-`ORE` at the natu
 A2's quota picks are random among `ORE` / `ANDE` / `BOTE` proofs and the fill compensates), the arm pods' jobs were killed and
 restarted on the new sets (≈ 1.1 pod-hours per arm pod lost, ≈ $2.2). Stage-1 held-out values of the first draw are kept in
 `artifacts/dsc/v1_uniform/` and reported as a side observation only. Expectations unchanged.
+
+## Amendment 2 — 2026-09-22 07:50 UTC (budget; before any coverage result)
+
+Coverage at k = 2,000 costs ≈ 3× the brief's arithmetic (97 % of samples on 7–12-line targets run to `max_new`; see `log.md` 07:05). To stay
+inside the $22 ceiling with the ladder intact, the **1,000-target depth-3 pool** is sampled on a fixed random **250-target subset**
+(`data/dsc/targets_depth3_sub250.jsonl`, `random.Random(0)`, 40 / 40 / 33 / 44 / 39 / 54 targets of generator length 7–12, 209 with
+`min_lines_ub` ≥ 7) at the same k = 2,000 and reported as a rate on 250 (± 3 pp); the two required pools (300 each) keep the full
+protocol. The dial still covers all 1,000 targets at 128 attempts (frozen) for every arm. Expectations on that pool are read as
+rates. The partial full-pool file of the control (`cov_c0_s0_depth3_partial_full1000`, first ≈ 100 targets) is kept, not counted.
