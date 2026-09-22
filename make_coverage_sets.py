@@ -17,14 +17,14 @@ Every emitted proof is verifier-checked at generation time and again at assembly
 import argparse, json, os, sys, random, collections, glob, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from nd_verify import verify_text
-from gen import Gen, sample_one, canon_key, Fail
+from gen import Gen, sample_one, canon_key, Fail, knobs_from_args
 from patterns import classify, PATTERNS
 
 LENS = (2, 3, 4, 5, 6)
 
 
 def worker(args):
-    seed, tries, mn, mx, long, cap_np, cap_pat, out, only, gmp, gmd = args
+    seed, tries, mn, mx, long, cap_np, cap_pat, out, only, gmp, gmd, knobs = args
     rng = random.Random(seed)
     g = Gen(rng, max_prem=gmp, max_depth=gmd)     # generator knobs (defaults 3 / 3 = the take-home generator); target pools only
     seen = set()
@@ -37,7 +37,7 @@ def worker(args):
         for _ in range(tries):
             stats['tries'] += 1
             try:
-                r = sample_one(g, rng, long)
+                r = sample_one(g, rng, long, knobs)
             except (Fail, RecursionError):
                 stats['fail'] += 1
                 continue
@@ -45,7 +45,7 @@ def worker(args):
             if L < mn or L > mx:
                 stats['len_out'] += 1
                 continue
-            if long and r['contra_prem']:
+            if (long or (knobs and knobs.get('drop_contra'))) and r['contra_prem']:
                 stats['contra'] += 1
                 continue
             key = canon_key(r['thm'])
@@ -106,7 +106,9 @@ def worker(args):
 def cmd_gen(a):
     import multiprocessing as mp
     os.makedirs(os.path.dirname(a.out) or '.', exist_ok=True)
-    jobs = [(a.seed + i, a.tries, a.min, a.max, a.long, a.cap_np, a.cap_pat, f'{a.out}.w{i}.jsonl', a.only, a.gen_max_prem, a.gen_max_depth) for i in range(a.workers)]
+    knobs = knobs_from_args(a)
+    print('generator knobs:', knobs, file=sys.stderr)
+    jobs = [(a.seed + i, a.tries, a.min, a.max, a.long, a.cap_np, a.cap_pat, f'{a.out}.w{i}.jsonl', a.only, a.gen_max_prem, a.gen_max_depth, knobs) for i in range(a.workers)]
     t0 = time.time()
     with mp.Pool(a.workers) as pool:
         res = pool.map(worker, jobs)
@@ -431,6 +433,10 @@ def main():
     g.add_argument('--seed', type=int, default=1000)
     g.add_argument('--gen_max_prem', type=int, default=3, help='generator knob (Gen.max_prem); default = the take-home generator. Raised only for run-2 TARGET pools (IMPE chains need >= 5 premises)')
     g.add_argument('--gen_max_depth', type=int, default=3, help='generator knob (Gen.max_depth); default = the take-home generator. Raised only for run-2 TARGET pools (box depth 4)')
+    g.add_argument('--ore_steps', type=int, default=None, help='ds-generator knob (gen.py); unset = take-home generator')
+    g.add_argument('--ore_boxes', action='store_true', help='ds-generator knob G1'); g.add_argument('--goal_only', action='store_true', help='ds-generator knob G2')
+    g.add_argument('--strict', action='store_true', help='ds-generator knob G2'); g.add_argument('--budgets', default=None); g.add_argument('--gdepth', default=None)
+    g.add_argument('--ladder', action='store_true', help='ds-generator knob: the ladder pools\' strict long generator at this length range'); g.add_argument('--drop_contra', action='store_true', help='drop contradictory-premise theorems (as the ladder pool generation did)')
     g.add_argument('--only', default=None, help="reductio_nodn | reductio_nodn_co | derived_ore_strict | p2:<pattern>[+<pattern>..] (patterns2.py); " + 'output filter: keep only proofs with this property (reductio_nodn = reductio pattern and no ( ~ ( ~ subformula in the sequent)')
     m = sub.add_parser('merge'); m.add_argument('--glob', required=True); m.add_argument('--out', required=True); m.add_argument('--prefix', default='pool')
     s = sub.add_parser('assemble'); s.add_argument('--pool', required=True); s.add_argument('--outdir', required=True)

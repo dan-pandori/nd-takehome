@@ -50,12 +50,13 @@ def fsize(f):
 
 
 class Line:
-    __slots__ = ('depth', 'f', 'rule', 'refs', 'idx', 'keep')
+    __slots__ = ('depth', 'f', 'rule', 'refs', 'idx', 'keep', 'lazy')
 
     def __init__(self, depth, f, rule, refs=()):
         self.depth, self.f, self.rule, self.refs = depth, f, rule, list(refs)
         self.idx = None
         self.keep = False
+        self.lazy = False   # premise added after reset() (a lazy premise), for the shape table only
 
 
 class Fail(Exception):
@@ -72,6 +73,9 @@ class Gen:
         self.bot_p = bot_p
         self.ore_steps = 3
         self.strict = False   # long pools: no lazy (Z>G)/G fallback, no F, fewer garbage intros
+        # ds-generator knobs (2026-09-22). Defaults reproduce the take-home generator byte for byte.
+        self.ore_boxes = False  # G1: ORE branch 1 takes full step()s (boxes / nested ORE allowed under max_depth) instead of step_local()
+        self.floor = 0          # box depth below which step() may not 'close' (the open ORE branch); 0 = take-home behaviour
 
     # ---------- formulas ----------
     def rf(self, depth=None):
@@ -97,19 +101,20 @@ class Gen:
         self.boxes = []         # open boxes: (AS line)
         self.closed = [[]]      # per level: closed boxes (s, e) citable at that level
         for _ in range(n_prem):
-            self.add_premise(self.rf())
+            self.add_premise(self.rf(), lazy=False)
 
     @property
     def depth(self):
         return len(self.boxes)
 
-    def add_premise(self, f):
+    def add_premise(self, f, lazy=True):
         for p in self.prem:
             if p.f == f:
                 return p
         if len(self.prem) >= self.max_prem:
             raise Fail('premise cap')
         ln = Line(0, f, 'PR')
+        ln.lazy = lazy
         self.prem.append(ln)
         return ln
 
@@ -260,7 +265,7 @@ class Gen:
         acts = []
         if self.depth < self.max_depth:
             acts += ['as'] * 3
-        if self.depth > 0 and len(self.levels[-1]) >= 1:
+        if self.depth > self.floor and len(self.levels[-1]) >= 1:
             acts += ['close'] * 3
         if av:
             if self.strict:
@@ -376,8 +381,18 @@ class Gen:
             d = rng.choice(ors)
             A, B = d.f[1], d.f[2]
             s1 = self.open_box(A)
-            for _ in range(rng.randint(0, self.ore_steps)):
-                self.step_local()
+            if self.ore_boxes:
+                # G1: full forward steps inside the branch (AS/close/ORE allowed under the global depth cap); the branch box
+                # itself cannot be closed by step() (floor), and boxes still open at the end are closed here.
+                fl = self.floor; self.floor = self.depth
+                for _ in range(rng.randint(0, self.ore_steps)):
+                    self.step()
+                while self.depth > self.floor:
+                    self.close_box()
+                self.floor = fl
+            else:
+                for _ in range(rng.randint(0, self.ore_steps)):
+                    self.step_local()
             e1 = self.levels[-1][-1]
             G = e1.f
             self.boxes.pop(); self.levels.pop(); self.closed.pop()
@@ -535,7 +550,7 @@ class Gen:
         rules = sorted(set(l.rule for l in body))
         contra = any(('not', p.f) in [q.f for q in prem] for p in prem)
         return {'contra_prem': contra, 'thm': thm, 'prompt': prompt, 'proof': body_s, 'n_lines': len(lines), 'rules': rules,
-                'n_prem': len(prem), 'gen_last_rule': last.rule}
+                'n_prem': len(prem), 'gen_last_rule': last.rule, 'n_lazy_prem': sum(1 for p in prem if p.lazy)}
 
 
 def canon_key(thm):
@@ -552,7 +567,32 @@ def canon_key(thm):
     return ' '.join(out)
 
 
-def sample_one(g, rng, long=False):
+KNOBS_G1 = {'ore_steps': 3, 'ore_boxes': True}
+KNOBS_G2 = {'ore_steps': 3, 'ore_boxes': True, 'goal_only': True, 'strict': True, 'budgets': [2, 3, 4], 'gdepth': [2, 2, 3]}
+
+
+def sample_one(g, rng, long=False, knobs=None):
+    """knobs (ds-generator, 2026-09-22): None = the take-home generator (control path, byte-identical). Keys:
+    ore_steps (int, default 1 at cap 6), ore_boxes (bool), goal_only (bool: 100 % goal mode), strict (bool: Gen.strict, no lazy
+    ( Z > G ) / G fallback, no F in the theorem, no intro-rule conclusion; bot_p 0 as in the strict long generator),
+    budgets (reach budgets for goal mode), gdepth (goal formula depths)."""
+    if knobs:
+        g.ore_steps = knobs.get('ore_steps', 1)
+        g.ore_boxes = bool(knobs.get('ore_boxes', False))
+        g.strict = bool(knobs.get('strict', False))
+        g.bot_p = 0.0 if g.strict else 0.02
+        if knobs.get('ladder'):
+            # the strict long generator that built the ladder pools (sample_one(long=True)), with the knobs above applied
+            mode = 'goal' if rng.random() < 0.5 else 'forward'
+            if mode == 'forward':
+                return g.forward(rng.randint(6, 22), rng.choice([0, 1, 1, 2, 2, 3]))
+            return g.goal(rng.choice([0, 0, 1, 1, 2]), rng.choice([2, 3, 3]), rng.choice([3, 4, 5]))
+        budgets = knobs.get('budgets', [1, 2, 3]); gdepth = knobs.get('gdepth', [1, 2, 2, 3])
+        mode = 'goal' if (knobs.get('goal_only') or rng.random() < 0.45) else 'forward'
+        if mode == 'forward':
+            return g.forward(rng.randint(1, 10), rng.choice([0, 1, 1, 2, 2, 3]))
+        return g.goal(rng.choice([0, 0, 1, 1, 2]), rng.choice(gdepth), rng.choice(budgets))
+    g.ore_boxes = False
     g.ore_steps = 3 if long else 1
     g.strict = long
     g.bot_p = 0.0 if long else 0.02
@@ -567,6 +607,21 @@ def sample_one(g, rng, long=False):
     return g.goal(rng.choice([0, 0, 1, 1, 2]), rng.choice([1, 2, 2, 3]), rng.choice([1, 2, 3]))
 
 
+def knobs_from_args(a):
+    """None unless a ds-generator flag is set (so the control path is untouched)."""
+    k = {}
+    if a.ore_steps is not None: k['ore_steps'] = a.ore_steps
+    if a.ore_boxes: k['ore_boxes'] = True
+    if a.goal_only: k['goal_only'] = True
+    if a.strict: k['strict'] = True
+    if a.budgets: k['budgets'] = [int(x) for x in a.budgets.split(',')]
+    if a.gdepth: k['gdepth'] = [int(x) for x in a.gdepth.split(',')]
+    if getattr(a, 'ladder', False): k['ladder'] = True; k['strict'] = True; k.setdefault('ore_steps', 3)
+    if getattr(a, 'drop_contra', False): k['drop_contra'] = True
+    if k and 'ore_steps' not in k: k['ore_steps'] = 1
+    return k or None
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--n', type=int, default=1000, help='number of accepted, deduplicated proofs to emit')
@@ -577,7 +632,15 @@ def main():
     ap.add_argument('--long', action='store_true', help='settings for 7-16 line pools')
     ap.add_argument('--per_len', type=int, default=None, help='cap per pruned length (flattens the histogram)')
     ap.add_argument('--max_prem', type=int, default=3)
+    ap.add_argument('--ore_steps', type=int, default=None, help='ds-generator knob: steps in ORE branch 1 (take-home: 1 at cap 6, 3 with --long)')
+    ap.add_argument('--ore_boxes', action='store_true', help='ds-generator knob G1: boxes / nested ORE allowed inside ORE branch 1')
+    ap.add_argument('--goal_only', action='store_true', help='ds-generator knob G2: 100 %% goal mode')
+    ap.add_argument('--strict', action='store_true', help='ds-generator knob G2: Gen.strict (no lazy ( Z > G ) / G fallback, no F, no intro conclusion)')
+    ap.add_argument('--budgets', default=None, help='ds-generator knob: reach budgets, e.g. 2,3,4')
+    ap.add_argument('--gdepth', default=None, help='ds-generator knob: goal formula depths, e.g. 2,2,3')
+    ap.add_argument('--ladder', action='store_true', help='ds-generator knob: the strict long generator that built the ladder pools (50 %% goal / 50 %% forward, strict, ore_steps 3, budgets 3-5, gdepth 2-3, forward 6-22 steps) at whatever --min/--max')
     a = ap.parse_args()
+    knobs = knobs_from_args(a)
     rng = random.Random(a.seed)
     g = Gen(rng, max_prem=a.max_prem)
     seen = set()
@@ -590,7 +653,7 @@ def main():
         while n_out < a.n:
             stats['tries'] += 1
             try:
-                r = sample_one(g, rng, a.long)
+                r = sample_one(g, rng, a.long, knobs)
             except (Fail, RecursionError) as e:
                 stats['fail:' + str(e).split(':')[0]] += 1
                 continue

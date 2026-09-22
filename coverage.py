@@ -61,6 +61,9 @@ def main():
     si, sn = map(int, a.shard.split('/'))
     dev = 'cuda'
     model, tok, _ = load_ckpt(a.ckpt, dev)
+    is_lean = hasattr(tok, 'statement')   # Lean-format model (ds-generator, 2026-09-22): a distinct proof counts iff nd_verify AND Lean accept
+    if is_lean:
+        from lean_gate import lean_check
     recs = [json.loads(l) for l in open(a.inp) if l.strip()]
     recs = [r for i, r in enumerate(recs) if i % sn == si]
     if a.limit:
@@ -88,22 +91,38 @@ def main():
             pid = tok.encode_prompt(r['prompt'])
             counts = collections.Counter()      # normalised proof string -> count
             first_idx = {}                      # normalised proof string -> first 1-based sample index
+            first_text = {}                     # Lean models: normalised proof string -> literal Lean text of its first sample
             n = 0
             while n < a.k:
                 b = min(a.batch, a.k - n)
                 with torch.autocast('cuda', dtype=torch.bfloat16):
                     outs = generate_ids(model, tok, [pid] * b, greedy=False, temperature=a.temperature, max_new=a.max_new, gen=gen)
                 for j, o in enumerate(outs):
-                    s = norm(tok.decode(o))
+                    nd = tok.decode(o)
+                    s = nd if (is_lean and nd.startswith('LEANPARSE')) else norm(nd)
                     counts[s] += 1
                     if s not in first_idx:
                         first_idx[s] = n + j + 1
+                        if is_lean:
+                            first_text[s] = tok.last_text
                 n += b
             # verify distinct strings once
             strs = list(counts.keys())
             jobs = [(r['prompt'], s) for s in strs]
             res = pool.map(_verify_one, jobs, chunksize=32) if pool else [_verify_one(j) for j in jobs]
-            ok_proofs = [{'proof': s, 'count': counts[s], 'written': x['written'], 'pruned': x['pruned'], 'first': first_idx[s], 'pat': x['pat']}
+            lean_rejected = []; n_lean_checked = 0
+            if is_lean:
+                # Lean on the literal text of every distinct nd_verify-accepted proof; a proof counts only if both accept
+                idx = [i for i, x in enumerate(res) if x]
+                items = [(tok.statement(r['prompt']), first_text[strs[i]]) for i in idx]
+                lok, _, _ = lean_check(items); n_lean_checked = len(items)
+                for i, ok in zip(idx, lok):
+                    res[i]['lean_text'] = first_text[strs[i]]
+                    if not ok:
+                        lean_rejected.append({'proof': strs[i], 'lean_text': first_text[strs[i]], 'count': counts[strs[i]], 'first': first_idx[strs[i]]})
+                        res[i] = None
+            ok_proofs = [{'proof': s, 'count': counts[s], 'written': x['written'], 'pruned': x['pruned'], 'first': first_idx[s], 'pat': x['pat'],
+                          **({'lean_text': x['lean_text']} if is_lean else {})}
                          for s, x in zip(strs, res) if x]
             n_ok = sum(p['count'] for p in ok_proofs)
             # pass@B from sample order: we know the first index of each distinct success and its total count, but not
@@ -124,7 +143,8 @@ def main():
                    'n_tried': n, 'n_ok': n_ok, 'n_distinct_ok': len(ok_proofs), 'n_distinct_all': len(counts),
                    'first_hit': first_hit, 'solved_within': {str(B): bool(first_hit is not None and first_hit <= B) for B in BUDGETS},
                    'written_hist': dict(sorted(wh.items())), 'pruned_hist': dict(sorted(ph.items())),
-                   'hits_by_pattern': hits_by_pattern, 'distinct_by_pattern': distinct_by_pattern, 'proofs': ok_proofs}
+                   'hits_by_pattern': hits_by_pattern, 'distinct_by_pattern': distinct_by_pattern, 'proofs': ok_proofs,
+                   **({'lean': True, 'n_lean_checked': n_lean_checked, 'n_lean_rejected': len(lean_rejected), 'lean_rejected': lean_rejected} if is_lean else {})}
             fo.write(json.dumps(rec) + '\n'); fo.flush()
             torch.cuda.empty_cache()
             n_done += 1
