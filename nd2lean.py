@@ -5,7 +5,9 @@ Translation (deterministic): atoms P Q R S are Prop variables; premises are hypo
 with its own formula, so a PR line that does not match the declared premise fails to type-check); every other line is a
 `have nI : F := term`; a box (AS ... last line) becomes a lambda `fun nS => by <lines>; exact nE` emitted at the rule that
 discharges it: IMPI (A → B), NEGI (¬A = A → False), ORE (Or.elim nJ (fun ..) (fun ..)); R = the cited name; ANDI ⟨a, b⟩;
-ANDE1/2 .1/.2; IMPE application; ORI1/2 Or.inl/inr; NEGE `nb na` (¬A applied to A : False); BOTE `na.elim`;
+ANDE1/2 .1/.2; IMPE application; ORI1/2 Or.inl/inr; NEGE `nb na` (¬A applied to A : False); BOTE `False.elim na`
+(2026-09-22, run lean-seed2: was `na.elim`, which Lean resolves by the head type of `na` — `Not.elim` on a negation — so
+Lean accepted non-BOTE uses that nd_verify rejects; `False.elim` only accepts `na : False`);
 DN `Classical.byContradiction (fun h => na h)`.  The verifier's structural rules are mirrored where Lean would not enforce
 them: consecutive indices, depth transitions, boxes closed by a shallower line, a box cited only after it is closed and
 with its exact last line, the final line at depth 0.  Violations raise TranslationError (reported as "structural").
@@ -132,7 +134,7 @@ def translate(prompt, proof):
         elif rule == 'ORI1': term = f'Or.inl {cite(refs[0])}' if len(refs) == 1 else None
         elif rule == 'ORI2': term = f'Or.inr {cite(refs[0])}' if len(refs) == 1 else None
         elif rule == 'NEGE': term = f'{cite(refs[1])} {cite(refs[0])}' if len(refs) == 2 else None
-        elif rule == 'BOTE': term = f'{cite(refs[0])}.elim' if len(refs) == 1 else None
+        elif rule == 'BOTE': term = f'False.elim {cite(refs[0])}' if len(refs) == 1 else None   # not `nA.elim`: Lean resolves that by head type (Not.elim on ¬A)
         elif rule == 'DN': term = f'Classical.byContradiction (fun hh => {cite(refs[0])} hh)' if len(refs) == 1 else None
         elif rule == 'IMPI':
             if len(refs) != 2: term = None
