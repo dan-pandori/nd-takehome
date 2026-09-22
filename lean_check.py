@@ -177,9 +177,11 @@ def _run(srcs, workdir, tag, depth=0):
         ks = [j for j, s in enumerate(starts) if s <= ln]
         if ks:
             errs[ks[-1]].append(m.group(2)[:120])
-    for k, r in res.items():
-        if not r['ok'] and errs.get(k):
-            r['reason'] = (r['reason'] + ' | ' + '; '.join(errs[k]))[:300]
+    for k in list(res) + [k for k in errs if k not in res]:
+        if errs.get(k):          # ANY error attributed to the theorem's lines rejects it — Lean's parse-error recovery can still
+            r = res.get(k)       # elaborate a truncated text (`( fun a => ( fun b => Or.inl` is closed and accepted as a term)
+            reason = ('' if r is None or r['ok'] else r['reason'] + ' | ') + 'error: ' + '; '.join(errs[k])
+            res[k] = {'ok': False, 'size': None, 'reason': reason[:300]}
     crashed = len(res) != len(srcs) or rc not in (0, 1)
     if crashed:
         if len(srcs) == 1:
@@ -241,6 +243,9 @@ SELFTEST = [
     ('have_unused_extra_premises', 'theorem t (P Q R S : Prop) (h1 : P) (h2 : Q) : Q := by have n1 : Q := h2 ; exact n1', True, 0),
     ('nested_depth3', 'theorem t (P Q R : Prop) : P → (Q → (R → (P ∧ Q))) := fun a => fun b => fun c => ⟨a, b⟩', True, 4),
     ('exfalso_tactic', 'theorem t (P : Prop) (h : False) : P := by exfalso ; exact h', True, 1),
+    ('truncated_paren', 'theorem t (P Q R S : Prop) : (Q → (Q → (Q → (Q ∨ (Q → (R → S)))))) := ( fun n19 => ( fun n55 => Or.inl', False, None),   # parse error: Lean's recovery would close the parens
+    ('truncated_anon_ctor', 'theorem t (P Q : Prop) (h : P ∧ Q) : Q ∧ P := ⟨h.2, h.1', False, None),
+    ('unapplied_or_inl', 'theorem t (P Q R S : Prop) : (Q → (Q → (Q → (Q ∨ (Q → (R → S)))))) := ( fun n19 => ( fun n55 => Or.inl ) )', True, 3),   # well-formed: an unapplied constructor is a function
     ('contradiction_tactic', 'theorem t (P Q : Prop) (h : ¬P) (a : P) : Q := by contradiction', True, None),   # elaborates to allowed constants only (size 2)
 ]
 

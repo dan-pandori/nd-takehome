@@ -101,7 +101,7 @@ E7 (`L*` ≥ fragment's) hold in both seeds. "Free-form RL creates something the
 either seed with ≥ 5 theorems at `L_true` ≥ 12 or E10 finds a pattern (defined as in `patterns.py`, on the denoted
 ND proofs) with acquisition ≥ 0.10 that both the token and fragment arms have at < 0.02.
 
-## Addendum 2026-09-22 06:45 UTC — phase-1 outcomes, before the first phase-2 job
+## Addendum 2026-09-22 06:40 UTC — phase-1 outcomes, before the first phase-2 job
 
 Phase 1 ran on pod `lo-1` (created 06:04 UTC, after the commit above). Pods `lo-2` … `lo-6` were created at 06:30–06:33
 UTC for setup only; no phase-2 job runs before the commit carrying this addendum. Outcomes against P1-1 … P1-6
