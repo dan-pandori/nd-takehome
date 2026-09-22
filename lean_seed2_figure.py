@@ -34,7 +34,7 @@ for m in ('seed0', 'seed2'):
             bb = {int(k): c for k, c in v['transfer_by_bin'].items()}
             a.plot(bins, [bb.get(L, 0) / NB[L] for L in bins], color=COL[m], lw=1.3, ls=(0, (4, 2)))
 a.plot([], [], color=MUTED, ls=(0, (4, 2)), lw=1.3, label='frozen Lean controls, same attempts (token frozen: L* 7)')
-a.axvline(10.5, color='#c9c8c2', lw=0.8); a.text(10.55, 0.66, 'L_true ≥ 11: the\nL* = 11 threshold', fontsize=7, color=MUTED, va='top')
+a.axvline(10.5, color='#c9c8c2', lw=0.8); a.text(10.55, 0.36, 'L_true ≥ 11:\nthe L* = 11\nthreshold', fontsize=7, color=MUTED, va='top')
 a.set_xlabel('minimal proof length L_true of the transfer theorem (bin sizes 300 / 300 / 1,010 / 451 / 99 / 102)'); a.set_ylabel('fraction solved in 256 attempts')
 a.set_title('(a) Ladder rung T1, transfer pool (2,285 theorems; never trained on), round 8', fontsize=9, loc='left'); a.grid(axis='y', color='#e6e5e0', lw=0.6); a.set_ylim(-0.02, 0.72)
 a.legend(frameon=False, fontsize=7.2, loc='upper right')

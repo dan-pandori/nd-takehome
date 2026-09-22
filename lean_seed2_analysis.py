@@ -98,7 +98,7 @@ for fn in sorted(glob.glob(f'{D}/gate_*seq2*.disagree.jsonl') + [f'{D}/gate_mech
         else: kd = 'other'
         reason = verify_text(r['prompt'] + ' ' + r['nd'])[1]
         if 'premise block' in reason: kd2 = 'missing-PR'
-        elif 'rule check failed' in reason: kd2 = 'neg-unfold/' + reason.split(': ')[-1]
+        elif 'rule check failed' in reason: kd2 = 'neg-unfold/' + re.sub(r' \(line \d+\)', '', reason.split(': ')[-1])
         else: kd2 = reason[:40]
         kinds[f"{'lean-only' if r['lean_ok'] else 'nd-only'}/{kd}/{kd2}"] += 1
 S['E7_gate'] = {'per_file': gate, 'total': dict(tot), 'disagreements_by_kind': dict(kinds.most_common()),

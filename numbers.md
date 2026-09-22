@@ -545,3 +545,59 @@ Every number below is re-derived by `python3 lean_format_analysis.py` → `artif
 
 ## Bucket
 `hf://buckets/dan-pandori/nd-rl/lean-format/{ckpts,artifacts,data}` — `ckpts/lf` (Stage-1 models, depth-3 EI rounds), `ckpts/ladder` (ladder EI rounds), `artifacts/lf` (everything above incl. per-round found files), `data` (the a1 training set and the ladder pools used).
+
+# lean-seed2 — second Stage-1 seed for `lean_seq` on the ladder rung, after the BOTE fix
+
+Every number below is re-derived by `python3 lean_seed2_analysis.py` → `artifacts/ls2/summary.json` from pulled files; seed-0 (lean-format) comparators from the same files under `artifacts/lf/` and `numbers.md` § lean-format; token comparators from `ladder.md` (branch `dan_ladder_a`). A proof counts iff Lean accepts the literal sampled text **and** `nd_verify` accepts the denoted ND proof; counts are distinct denoted proofs (numbered from N1).
+
+## Step 1 — BOTE fix (commit 39bdc5b, before any pod)
+- `nd2lean.py` (checker of record) and `lean_tok.py` (training format) render BOTE as `False.elim nA` (was `nA.elim`); vocabulary unchanged (107: tokens `False` `.elim` `nA`, glued in the text). BOTE occurs in 2,951 / 154,990 training proofs (1.9 %).
+- 460 known "Lean yes, `nd_verify` no" texts (`artifacts/lf/gate_*.disagree.jsonl`) re-rendered from their denoted ND proof and re-checked (`pod/ls2_recheck460.py` → `artifacts/ls2/recheck460.json`): `nd_verify` rejects 460 / 460 (unchanged). By kind — **`.elim` on a non-`False` hypothesis: 206, Lean now rejects 206 / 206** (0 accepted, in both the training-format path and `nd2lean.translate`); `¬A ≡ A → False` unfolding: 137, Lean still accepts 137 (not closable in the translator); unrestated premises: 117, `nd2lean.translate` rejects 117 / 117 as structural ("missing PR"), the training-format grammar still accepts 117 (`lean_tok.inverse` does not know the premise count; harmless: a sample counts only if both accept). Total Lean-accepted under the fix: 254 / 460 (was 460).
+- Held-out check (`pod/ls2_bote_test.py` → `artifacts/ls2/bote_test.json`): 104 held-out BOTE proofs + 1,000 others round-trip render → inverse to the identical ND proof (1,104 / 1,104, both schemes), Lean accepts 1,104 / 1,104 literal texts and 104 / 104 `nd2lean.translate` renderings; 128 in-scope BOTE-citing-a-negation mutants rejected 128 / 128 (these do not exercise the `Not.elim` unification, which needs an implication conclusion; the 206 texts above do).
+- 20k-proof pool sample (`artifacts/ls2/pool_sample_20k.jsonl`, seed 20260922: 4,000 `data/train.jsonl`, 4,000 `data/p2/train_depth3_f0_a1.jsonl`, 500 + 500 held-out sets, 1,000 target/transfer `gen_proof`s, 10,000 counted proofs from the 16 lean-format arms; 684 with BOTE) through the fixed `nd2lean.py --check` + `nd_verify`: **20,000 / 20,000 both accept, 0 disagreements** (`artifacts/ls2/pool_sample_20k.report.jsonl`).
+
+## E1 — Stage-1 held-out greedy, `data/heldout.jsonl` (5,000)
+| Stage-1 `lean_seq` model | held-out greedy | by length 2 / 3 / 4 / 5 / 6 | source |
+|---|---|---|---|
+| seed 2 (this run) | **0.9436** (4,718) | 0.996 / 0.983 / 0.960 / 0.901 / 0.878 | `artifacts/lf/stage1_full_seq_s2_heldout_greedy.json` |
+| seed 0 (lean-format) | 0.9356 (4,678) | 1.000 / 0.988 / 0.950 / 0.888 / 0.852 | `artifacts/lf/stage1_full_seq_heldout_greedy.json` |
+| token `abs` (on file) | 0.948 | – | `numbers.md` § lean-format |
+- Training: 6,000 steps, 253 s on a 3090, final val loss 0.0767 (`artifacts/lf/logs/stage1_full_seq_s2.log`); `ckpts/lf/stage1_full_seq_s2.pt` (md5 1a5d3c4d4e98a0724a9fd0558360783c).
+
+## E2–E5 — ladder rung T1, 8 rounds × 32 attempts (`artifacts/lf/la_{T1,frozen}_seq2_s<k>/`; pools `data/ladder/`; `L*` = max L with ≥ 5 theorems solved at `L_true` ≥ L)
+| arm (Stage-1 model → EI seed) | **`L*` transfer** | `L*` targets | transfer solved / 2,285 | by `L_true` 7 / 8 / 9 / 10 / 11 / 12 / 13 | ≥ 11 / ≥ 12 | targets solved / 4,495 | held-out r1 → r8 | `L*` by round | min / round |
+|---|---:|---:|---:|---|---|---:|---|---|---|
+| **seed 2 → T1 s0** | **12** | 11 | **906** | 99, 166, 533, 88, 15, 5, 0 | **20 / 5** | 2,820 | 0.944 → 0.951 | 9 10 10 11 11 11 11 12 | 17 16 15 15 15 15 15 13 |
+| **seed 2 → T1 s1** | **11** | 11 | **844** | 66, 161, 513, 88, 13, 3, 0 | **16 / 3** | 2,726 | 0.944 → 0.948 | 10 10 10 10 11 11 11 11 | 15 15 14 15 15 15 15 13 |
+| seed 2 → frozen s0 | 10 | 10 | 314 | 49, 105, 148, 12, 0, 0, 0 | 0 / 0 | 1,827 | 0.944 | 9 9 10 10 10 10 10 10 | 16 15 14 14 14 14 14 15 |
+| seed 2 → frozen s1 | 10 | 10 | 324 | 49, 106, 152, 17, 0, 0, 0 | 0 / 0 | 1,823 | 0.944 | 10 … 10 | 13 14 14 14 14 14 15 15 |
+| seed 0 → T1 s0 (lean-format) | 11 | 11 | 794 | 75, 161, 463, 83, 9, 3, 0 | 12 / 3 | 2,604 | 0.936 → 0.944 | 10 10 10 10 11 11 11 11 | 32 31 30 30 35 30 30 29 (4 arms / GPU) |
+| seed 0 → T1 s1 (lean-format) | 11 | 11 | 839 | 118, 162, 465, 81, 9, 3, 1 | 13 / 4 | 2,674 | 0.936 → 0.943 | 10 10 10 10 11 11 11 11 | 34 31 31 31 36 31 30 28 |
+| seed 0 → frozen s0 / s1 | 10 / 10 | 10 / 10 | 304 / 309 | 43, 113, 134, 14 / 50, 111, 134, 14 | 0 / 0 | 1,768 / 1,759 | 0.936 | 10 … 10 | ≈ 31 |
+| token T1 s0 / s1 (on file, `ladder.md`) | 10 / 10 | 10 / 10 | 612 / 623 | 140, 137, 300, 34, 1, 0, 0 / 139, 138, 312, 34, 0, 0, 0 | 1 / 0 | 2,400 / 2,455 | 0.948 → 0.953 / 0.957 | – | – |
+| token frozen s0 / s1 (on file) | 7 / 7 | 8 / 8 | 22 / 24 | 20, 2, 0 … / 21, 3, 0 … | 0 / 0 | 426 / 408 | 0.948 | – | – |
+- **`L*` = 11 on transfer now rests on two Stage-1 models (four EI arms: 11 / 11 from seed 0, 12 / 11 from seed 2).** Seed 2's EI s0 has exactly 5 theorems solved at `L_true` ≥ 12 at round 8 (the `L*` rule's threshold; `la_transfer_165, 454, 464, 499, 1585`), so its `L*` = 12 is at the edge of the rule; the `L_true` ≥ 11 counts (20 / 16 vs 12 / 13) are the robust comparison. `L*` reached 11 at round 4 (s0) / 5 (s1); seed 0: round 5 / 5.
+- No pool label is contradicted: the shortest written proof of every solved `L_true` ≥ 11 theorem is ≥ its `L_true` (`summary.json` `ge11_shortest_written`, `label_contradicted` 0 in every arm).
+- BOTE (the changed rendering) appears in 47 of seed 2's 2,135 distinct transfer proofs (T1 s0) and in 0 of the `L_true` ≥ 11 ones (seed 0: 31 / 82 and 0), so the rendering change does not touch the `L*` result.
+- The `L_true` = 7 bin is again solved less often by the Lean arms (66–99 of 300) than by the token arms (139–140) — the lean-format run's unexplained observation, reproduced.
+
+## E6 — mechanism test: Stage-1 base model, pass@16 on `data/transfer.jsonl` (1,638; `artifacts/lf/stage1_full_seq_s2_transfer2_k16.jsonl`, distinct normalised proofs)
+| model | pass@16 | distinct verified proofs of written length 6 / 7 / 8 / ≥ 9 |
+|---|---|---|
+| `lean_seq` seed 2 | **0.595** (974) | 353 / **275 / 109 / 9** |
+| `lean_seq` seed 0 (on file) | 0.571 (935) | 333 / 266 / 130 / 18 |
+| token `abs` (on file) | 0.447 | 363 / 108 / 1 / 0 |
+
+## E7 — Lean vs `nd_verify` in the loop (`artifacts/lf/gate_la_*_seq2_s<k>.jsonl`, `gate_mech_full_seq_s2.jsonl`, `*.disagree.jsonl`)
+- 7,207,048 samples; 1,177,998 outside the strict grammar (16.3 %); **5,276,013 distinct checked by both: both accept 1,554,603, both reject 3,721,349, `nd_verify` accepts ∧ Lean rejects 0, Lean accepts ∧ `nd_verify` rejects 61** (11.6 per million; lean-format run: 33 per million). By kind: **`.elim` on a non-`False` hypothesis 0** (was 206 of 460); unrestated premises 54; `¬A ≡ A → False` unfolding 7 (all at an IMPI line). Per arm: T1 s0 27, T1 s1 29, frozen s0 3, frozen s1 2, mechanism 0.
+- Lean 149 proofs per process-second (35,357 process-s for 5.28 M, 12 workers per arm).
+
+## E8 — checker of record (fixed `nd2lean.py --check` + `nd_verify` on every counted proof; `artifacts/lf/record_la_*_seq2_s<k>_{found,found_transfer}.json`, `pod/lf/record.py`)
+- `found_8` + `found_transfer_8` of the four seed-2 arms: **20,735 / 20,735 both accept, 0 disagreements** (T1 s0 5,335 + 2,135; T1 s1 5,054 + 1,948; frozen s0 2,686 + 439; frozen s1 2,689 + 449).
+
+## E9 — round time and cost
+- Two arms per RTX 3090: 13–17 min per ladder round (lean-format: 27–36 min at four arms). Whole run per pod ≈ 2.3 h.
+- Pods `ls2-1` (05:46:06–08:03 UTC) and `ls2-2` (05:47:40–08:03), `~/pods.log`: 4.5 pod-hours at $0.50 / h ≈ **$2.3** (budget $10). The account balance moved 121.52 → 108.00 over the run, but twelve other agents' pods were running on the account (`podls` at 08:03); the $2.3 is from pod-hours.
+
+## Bucket
+`hf://buckets/dan-pandori/nd-rl/lean-seed2/{ckpts,artifacts,data}` — `ckpts/lf/stage1_full_seq_s2.pt`, `ckpts/ladder/la_T1_seq2_s{0,1}_r{1..8}.pt`; `artifacts/ls2` (BOTE-fix checks, 20k sample, summary.json), `artifacts/lf` (all seed-2 arm files, gate logs, record files; also the lean-format run's files as pulled, unchanged); `data` (the ladder pools, `train.jsonl.gz`, `heldout.jsonl`, `transfer.jsonl` used).
