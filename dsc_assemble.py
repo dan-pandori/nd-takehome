@@ -33,6 +33,12 @@ SIZE = 155000
 SHARES = {'a1': None, 'a2': {L: 0.2 for L in range(2, 7)}, 'a3': {L: 1 / 7 for L in range(2, 9)},
           'a4': {2: 0.0, 3: 0.05, 4: 0.15, 5: 0.30, 6: 0.50}}
 QUOTA_A2 = {'ORE': 0.10, 'ANDE': 0.08, 'BOTE': 0.05}     # ANDE = ANDE1 or ANDE2
+# Natural per-length rates of the other two patterns, drawn exactly as the control's assembler draws them (make_coverage_sets.assemble_set
+# NATURAL table: the take-home's class-deduplicated raw cap-6 pool, 32,000 per length); 7-8 (A3 only): pool_cap8.jsonl's own per-length rates
+# (class-deduplicated, uncapped = the follow-up's "natural cap-8 rates"; measured 2026-09-22 07:12 on all 2,435,041 records).
+NATURAL = {2: {'reductio': 0, 'derived_ore': 0}, 3: {'reductio': 0, 'derived_ore': 0}, 4: {'reductio': 0, 'derived_ore': 0},
+           5: {'reductio': 5549 / 32000, 'derived_ore': 28 / 32000}, 6: {'reductio': 5338 / 32000, 'derived_ore': 63 / 32000},
+           7: {'reductio': 12752 / 220502, 'derived_ore': 7570 / 220502}, 8: {'reductio': 13135 / 253870, 'derived_ore': 34511 / 253870}}
 
 
 def opn(fn, mode='rt'):
@@ -80,7 +86,7 @@ def counts_from_shares(shares, size):
 
 
 def scan(fn, excl, seen, lens, src_id, full_hist=None):
-    """Stream one pool file. Returns list of (src_id, offset, n_lines, ORE, ANDE, BOTE) of eligible records and a stats Counter."""
+    """Stream one pool file. Returns list of (src_id, offset, n_lines, ORE, ANDE, BOTE, reductio, derived_ore) of eligible records and a stats Counter."""
     idx = []; st = collections.Counter()
     with open(fn, 'rb') as f:
         off = 0
@@ -100,7 +106,7 @@ def scan(fn, excl, seen, lens, src_id, full_hist=None):
                 else:
                     seen.add(r['key'])
                     ru = set(r['rules'])
-                    idx.append((src_id, off, r['n_lines'], 'ORE' in ru, bool(ru & {'ANDE1', 'ANDE2'}), 'BOTE' in ru))
+                    idx.append((src_id, off, r['n_lines'], 'ORE' in ru, bool(ru & {'ANDE1', 'ANDE2'}), 'BOTE' in ru, bool(r['pat'].get('reductio')), bool(r['pat'].get('derived_ore'))))
                     st['eligible'] += 1; st[f'eligible_len{r["n_lines"]}'] += 1
             off += L0
     return idx, st
@@ -139,13 +145,34 @@ def select(idx, counts, rng, quota=None):
                 take = avail[L][:alloc[L]]
                 picked[L] += take; pset.update(take)
             report[rule] = {'quota': quota[rule], 'already': have, 'added': need, 'by_len': alloc, 'avail_by_len': {L: len(v) for L, v in avail.items()}}
+    report['pattern_fill'] = {}
     for L in counts:
         rest = counts[L] - len(picked[L])
-        cand = [x for x in by[L] if x not in pset]
-        if rest > len(cand):
-            raise SystemExit(f'length {L}: need {rest} more records, only {len(cand)} eligible')
-        take = cand[:rest]
-        picked[L] += take; pset.update(take)
+        target = {p: int(round(counts[L] * NATURAL[L][p])) for p in ('reductio', 'derived_ore')}
+        have = {'reductio': sum(1 for x in picked[L] if x[6]), 'derived_ore': sum(1 for x in picked[L] if x[7])}
+        need = {p: max(0, target[p] - have[p]) for p in target}
+        cands = collections.defaultdict(list)
+        for x in by[L]:
+            if x not in pset:
+                cands[(x[6], x[7])].append(x)
+        def take(k, n):
+            got = cands[k][:n]; del cands[k][:n]; return got
+        fill = []
+        n_both = min(need['reductio'], need['derived_ore'], len(cands[(True, True)]))
+        fill += take((True, True), n_both); need['reductio'] -= n_both; need['derived_ore'] -= n_both
+        fill += take((True, False), min(need['reductio'], len(cands[(True, False)])))
+        fill += take((False, True), min(need['derived_ore'], len(cands[(False, True)])))
+        fill = fill[:rest]
+        fill += take((False, False), rest - len(fill))
+        short = rest - len(fill)
+        if short > 0:      # not enough pattern-free proofs: top up from whatever is left (reported)
+            for k in ((True, False), (False, True), (True, True)):
+                fill += take(k, rest - len(fill))
+        if len(fill) < rest:
+            raise SystemExit(f'length {L}: need {rest} more records, only {len(fill)} eligible')
+        picked[L] += fill; pset.update(fill)
+        report['pattern_fill'][L] = {'n': counts[L], 'target': target, 'from_quota_picks': have, 'achieved': {'reductio': sum(1 for x in picked[L] if x[6]), 'derived_ore': sum(1 for x in picked[L] if x[7])},
+                                     'pattern_free_shortfall': max(0, short)}
     out = [x for L in counts for x in picked[L]]
     rng.shuffle(out)
     return out, report
@@ -318,17 +345,18 @@ def cmd_assemble(a):
                    'pat': {p: bool(r['pat'].get(p)) for p in ('derived_ore', 'reductio', 'depth3')}, 'src': os.path.basename(sources[src])}
             fo.write(json.dumps(rec) + '\n')
     rep = {'arm': a.arm, 'seed': a.seed, 'size': a.size, 'cap': cap, 'sources': sources, 'scan_stats': stats, 'full_pool_len_hist': dict(sorted(full_hist.items())),
-           'shares_used': shares, 'counts': counts, 'quota': quota, 'quota_report': qrep, 'n_excluded_classes': len(excl), 'secs': time.time() - t0}
+           'shares_used': shares, 'counts': counts, 'quota': quota, 'quota_report': {k: v for k, v in qrep.items() if k != 'pattern_fill'}, 'pattern_fill': qrep.get('pattern_fill'), 'natural_rates': NATURAL, 'n_excluded_classes': len(excl), 'secs': time.time() - t0}
     json.dump(rep, open(f'{a.outdir}/assemble_report_{a.arm}.json', 'w'), indent=1)
-    print('written', fn, f'{time.time() - t0:.0f}s', flush=True)
-    shape_and_overlap(fn, a.arm, a.outdir, cap)
+    print('written', fn, f'{time.time() - t0:.0f}s', json.dumps(qrep.get('pattern_fill')), flush=True)
+    if not a.no_shape:
+        shape_and_overlap(fn, a.arm, a.outdir, cap)
 
 
 def main():
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest='cmd', required=True)
     s = sub.add_parser('assemble'); s.add_argument('--arm', required=True, choices=['a1', 'a2', 'a3', 'a4']); s.add_argument('--seed', type=int, default=0)
-    s.add_argument('--size', type=int, default=SIZE); s.add_argument('--outdir', default='data/dsc')
+    s.add_argument('--size', type=int, default=SIZE); s.add_argument('--outdir', default='data/dsc'); s.add_argument('--no_shape', action='store_true')
     h = sub.add_parser('shape'); h.add_argument('--set', required=True); h.add_argument('--tag', required=True); h.add_argument('--outdir', default='data/dsc'); h.add_argument('--cap', type=int, default=6)
     a = ap.parse_args()
     if a.cmd == 'assemble':

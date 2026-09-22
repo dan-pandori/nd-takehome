@@ -100,3 +100,16 @@ A4's ladder, then A4, then A2's ladder. Balance at the start: $121.38 (`rpbalanc
 (2026-09-23 11:54 UTC). Pods deleted as soon as pulled; `ckpts/`, `artifacts/`, `data/` of this run uploaded to
 `hf://buckets/dan-pandori/nd-rl/ds-composition/` at the end. No test-file run; `nd_verify`, `nd2lean.py`, `lean_gate.py` unmodified;
 every training proof is generator output rendered deterministically by `lean_tok.py`.
+
+## Amendment 2026-09-22 07:20 UTC (before any arm result beyond Stage-1 held-out; written when the confound was found)
+
+The first draw of A1–A4 (06:06–06:39, `data/dsc/v1_uniform/`) filled each length bin **uniformly** from the pool. The pool
+`pool_cap6_recon.jsonl` is pattern-enriched by its generation caps (`cap_np` on pattern-free proofs), and the control's assembler
+compensates by drawing reductio and derived-`ORE` proofs at the generator's *natural* per-length rates (`make_coverage_sets.assemble_set`,
+`NATURAL` table from the take-home's class-deduplicated raw pool) and the rest pattern-free. The uniform draw therefore changed a
+second thing: A1 held 38,994 reductio / 1,458 derived-`ORE` proofs against the control's 10,547 / 88. All four sets were re-drawn
+at 07:12–07:17 with the control's rule (reductio and derived-`ORE` at the natural rate per length — 2–6 from the control's table,
+7–8 (A3 only) from `pool_cap8.jsonl`'s own class-deduplicated rates 5.78 / 5.17 % reductio and 3.43 / 13.59 % derived-`ORE`;
+A2's quota picks are random among `ORE` / `ANDE` / `BOTE` proofs and the fill compensates), the arm pods' jobs were killed and
+restarted on the new sets (≈ 1.1 pod-hours per arm pod lost, ≈ $2.2). Stage-1 held-out values of the first draw are kept in
+`artifacts/dsc/v1_uniform/` and reported as a side observation only. Expectations unchanged.
