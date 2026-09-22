@@ -125,9 +125,16 @@ class Parser:
         self.i += 1
         return v
 
+    KEYWORDS = ('fun', 'by', 'have', 'exact', 'False', 'Prop', 'theorem') + CONSTS
+
+    @classmethod
+    def is_name(cls, v):
+        # any identifier can be a binder — models bind `P`, `Q`, `R`, `S` too (legal Lean: the hypothesis shadows the Prop variable)
+        return v is not None and v not in cls.KEYWORDS and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_']*", v) is not None
+
     def name(self):
         v = self.eat()
-        if not (re.fullmatch(r'n\d+|h\d+|hh', v)):
+        if not self.is_name(v):
             raise ParseFail(f'name {v}')
         return v
 
@@ -147,7 +154,7 @@ class Parser:
 
     def starts_atom(self):
         v = self.peek()
-        return v is not None and (v in self.STARTS or re.fullmatch(r'n\d+|h\d+|hh', v) is not None)
+        return v is not None and (v in self.STARTS or self.is_name(v))
 
     def term(self):
         items = [self.postfix()]

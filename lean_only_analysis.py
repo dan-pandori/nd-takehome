@@ -94,6 +94,17 @@ def classify_nd(proof):
         return None
 
 
+def nd_of(x):
+    """the ND proof of a counted record: as stored when it is ND, else re-denoted from the Lean text with the current converter
+    (the in-loop converter did not accept `P`/`Q`/`R`/`S` as binder names; verdicts were lean_check's and are unchanged)"""
+    p = x['proof']
+    if p.startswith('N') and p.rstrip().endswith('QED'):
+        return p
+    from lean_free import denote
+    nd = denote(x['prompt'], x.get('text') or p)
+    return nd if nd and verify_text(x['prompt'] + ' ' + nd)[0] else None
+
+
 def text_tokens(rec):
     t = rec.get('text')
     return len(t.split()) if t else None
@@ -147,9 +158,10 @@ def phase2():
             solved = sum(r['solved'] for r in rows); d3_nd = 0; d3_lam = 0; red_nd = 0; red_any = 0; nd_none = 0; n_proofs = 0
             for r in rows:
                 has_d3 = has_red = has_lam = False
-                for p, ld in zip(r['proofs'], r.get('lam_depths', [None] * len(r['proofs']))):
+                for p, ld, lt in zip(r['proofs'], r.get('lam_depths', [None] * len(r['proofs'])), r.get('lean_texts', [None] * len(r['proofs']))):
                     n_proofs += 1
-                    cl = classify_nd(p) if p.startswith('N') else None
+                    nd = nd_of({'proof': p, 'prompt': r['prompt'], 'text': lt})
+                    cl = classify_nd(nd) if nd else None
                     if cl is None: nd_none += 1
                     else:
                         has_d3 |= cl['depth3']; has_red |= cl['reductio']
@@ -172,11 +184,17 @@ def phase2():
                 rounds = {str(r['round']): round(r['acq_targets'], 3) for r in m}
                 fd = found_map(f'{d}/found_{last["round"]}.jsonl')
                 lam3 = sum(1 for name, xs in fd.items() if any((x.get('ld') or 0) >= 3 for x in xs))
+                thm_d3 = set(); n_re = 0
+                for name, xs in fd.items():
+                    for x in xs:
+                        nd = nd_of(x); n_re += (nd is not None and not x['proof'].startswith('N'))
+                        cl = classify_nd(nd) if nd else None
+                        if cl and cl['depth3']: thm_d3.add(name)
                 secs = [json.load(open(f'{d}/round_{r["round"]}.json')).get('secs') for r in m]
                 d3[arm] = {'rounds': last['round'], 'targets_solved': last['targets_solved'], 'acq_targets': last['acq_targets'], 'acq_targets_theorems': last['acq_targets_theorems'],
                            'n_pattern_proofs': last['n_pattern_proofs_targets'], 'first_round_pattern': last['first_round_pattern_targets'], 'acq_by_round': rounds,
                            'transfer_solved': last['transfer_solved'], 'acq_transfer': last['acq_transfer'], 'heldout_greedy_final': last['heldout_greedy'],
-                           'lambda_depth3_theorems': lam3, 'proofs_without_nd_denotation': sum(1 for xs in fd.values() for x in xs if not x['proof'].startswith('N')),
+                           'acq_targets_redenoted': len(thm_d3) / last['targets_n'], 'text_proofs_redenoted': n_re, 'lambda_depth3_theorems': lam3, 'proofs_without_nd_denotation': sum(1 for xs in fd.values() for x in xs if not x['proof'].startswith('N')),
                            'ts_hist': dict(sorted(collections.Counter(x['ts'] for xs in fd.values() for x in xs if x.get('ts') is not None).items())),
                            'round_secs': secs, 'tokens_per_proof': (lambda v: sum(v) / len(v) if v else None)([text_tokens(x) for xs in fd.values() for x in xs if text_tokens(x)])}
     out['depth3_dial'] = d3
@@ -194,11 +212,14 @@ def phase2():
                 by_round = {}
                 for r in range(1, R + 1):
                     j = json.load(open(f'{d}/round_{r}.json')); by_round[str(r)] = {'secs': int(j.get('secs', 0)), 'transfer_solved': j['transfer_cum']['solved'], 'lstar': j['transfer_cum']['lstar'], 'heldout': round(j['heldout_greedy']['rate'], 4)}
-                wl = [x['written'] for xs in ft.values() for x in xs]; tsz = [x['ts'] for xs in ft.values() for x in xs if x.get('ts') is not None]
+                def wlen(x):
+                    if x['written']: return x['written']
+                    nd = nd_of(x); return verify_text(x['prompt'] + ' ' + nd)[2] if nd else 0
+                wl = [wlen(x) for xs in ft.values() for x in xs]; tsz = [x['ts'] for xs in ft.values() for x in xs if x.get('ts') is not None]
                 shortest = {}
                 for name, xs in ft.items():
                     L = next(t['L_true'] for t in la_pool if t['name'] == name)
-                    w = min((x['written'] for x in xs if x['written']), default=None)
+                    w = min((wlen(x) for x in xs if wlen(x)), default=None)
                     if w is not None and w < L: shortest[name] = (L, w)
                 la[arm] = {'rounds': R, 'transfer_solved': len(ft), 'transfer_n': len(la_pool), 'lstar_lines': lsL, 'ge_lines': geL, 'lstar_ts': lsT, 'ge_ts': geT,
                            'targets_solved': len(fg), 'lstar_lines_targets': lsLt, 'lstar_ts_targets': lsTt,
@@ -206,7 +227,7 @@ def phase2():
                            'by_L_true': {str(L): sum(1 for t in la_pool if t['L_true'] == L and t['name'] in ft) for L in range(7, 15)},
                            'written_hist_transfer': dict(sorted(collections.Counter(wl).items())), 'ts_hist_transfer': dict(sorted(collections.Counter(tsz).items())),
                            'max_written': max(wl, default=0), 'max_ts': max(tsz, default=0), 'frontier_ts': max([t for t, c in collections.Counter(tsz).items() if c >= 5], default=0),
-                           'proofs_without_nd_denotation': sum(1 for xs in ft.values() for x in xs if not x['proof'].startswith('N')),
+                           'proofs_without_nd_denotation': sum(1 for xs in ft.values() for x in xs if not x['proof'].startswith('N')), 'still_without_after_redenote': sum(1 for xs in ft.values() for x in xs if not x['proof'].startswith('N') and nd_of(x) is None),
                            'labels_contradicted': shortest, 'by_round': by_round, 'heldout_final': by_round[str(R)]['heldout'],
                            'tokens_per_proof': (lambda v: sum(v) / len(v) if v else None)([text_tokens(x) for xs in ft.values() for x in xs if text_tokens(x)])}
     out['ladder'] = la
