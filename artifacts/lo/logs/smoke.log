@@ -1,75 +1,79 @@
-=== lean_free 06:28:02
-  File "/workspace/nd-takehome/train.py", line 32, in load
-    assert nd is not None and verify_text(r['prompt'] + ' ' + nd)[0], r
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AssertionError: {'name': 'train_47104', 'thm': '( ~ ( ~ ( R & Q ) ) ) |- Q', 'key': '( ~ ( ~ ( P & Q ) ) ) |- Q', 'prompt': 'THM ( ~ ( ~ ( R & Q ) ) ) SEQ Q PRF', 'n_lines': 3, 'rules': ['ANDE2', 'DN'], 'n_prem': 1, 'proof': 'N1 ( ~ ( ~ ( R & Q ) ) ) : PR ; N2 ( R & Q ) : DN N1 ; N3 Q : ANDE2 N2 ; QED', 'text': 'THM ( ~ ( ~ ( R & Q ) ) ) SEQ Q PRF N1 ( ~ ( ~ ( R & Q ) ) ) : PR ; N2 ( R & Q ) : DN N1 ; N3 Q : ANDE2 N2 ; QED'}
-    ck = torch.load(path, map_location=device)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 1484, in load
-    with _open_file_like(f, "rb") as opened_file:
-         ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 759, in _open_file_like
-    return _open_file(name_or_buffer, mode)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 740, in __init__
-    super().__init__(open(name, mode))
-                     ^^^^^^^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: 'ckpts/lo/smoke_lean_free.pt'
-Traceback (most recent call last):
-  File "/workspace/nd-takehome/expert_iter.py", line 227, in <module>
-    main()
-  File "/workspace/nd-takehome/expert_iter.py", line 118, in main
-    model, tok, _ = load_ckpt(ckpt, dev)
-                    ^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/nd-takehome/model.py", line 106, in load_ckpt
-    ck = torch.load(path, map_location=device)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 1484, in load
-    with _open_file_like(f, "rb") as opened_file:
-         ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 759, in _open_file_like
-    return _open_file(name_or_buffer, mode)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 740, in __init__
-    super().__init__(open(name, mode))
-                     ^^^^^^^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: 'ckpts/lo/smoke_lean_free.pt'
-=== lean_free done 06:28:18
-=== lean_seq 06:28:18
-  File "/workspace/nd-takehome/train.py", line 32, in load
-    assert nd is not None and verify_text(r['prompt'] + ' ' + nd)[0], r
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AssertionError: {'name': 'train_62463', 'thm': '( ( ~ ( P v Q ) ) v ( ~ ( P v Q ) ) ) |- ( ~ ( P v Q ) )', 'key': '( ( ~ ( P v Q ) ) v ( ~ ( P v Q ) ) ) |- ( ~ ( P v Q ) )', 'prompt': 'THM ( ( ~ ( P v Q ) ) v ( ~ ( P v Q ) ) ) SEQ ( ~ ( P v Q ) ) PRF', 'n_lines': 4, 'rules': ['AS', 'ORE'], 'n_prem': 1, 'proof': 'N1 ( ( ~ ( P v Q ) ) v ( ~ ( P v Q ) ) ) : PR ; N2 | ( ~ ( P v Q ) ) : AS ; N3 | ( ~ ( P v Q ) ) : AS ; N4 ( ~ ( P v Q ) ) : ORE N1 N2 N2 N3 N3 ; QED', 'text': 'THM ( ( ~ ( P v Q ) ) v ( ~ ( P v Q ) ) ) SEQ ( ~ ( P v Q ) ) PRF N1 ( ( ~ ( P v Q ) ) v ( ~ ( P v Q ) ) ) : PR ; N2 | ( ~ ( P v Q ) ) : AS ; N3 | ( ~ ( P v Q ) ) : AS ; N4 ( ~ ( P v Q ) ) : ORE N1 N2 N2 N3 N3 ; QED'}
-    ck = torch.load(path, map_location=device)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 1484, in load
-    with _open_file_like(f, "rb") as opened_file:
-         ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 759, in _open_file_like
-    return _open_file(name_or_buffer, mode)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 740, in __init__
-    super().__init__(open(name, mode))
-                     ^^^^^^^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: 'ckpts/lo/smoke_lean_seq.pt'
-Traceback (most recent call last):
-  File "/workspace/nd-takehome/expert_iter.py", line 227, in <module>
-    main()
-  File "/workspace/nd-takehome/expert_iter.py", line 118, in main
-    model, tok, _ = load_ckpt(ckpt, dev)
-                    ^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/nd-takehome/model.py", line 106, in load_ckpt
-    ck = torch.load(path, map_location=device)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 1484, in load
-    with _open_file_like(f, "rb") as opened_file:
-         ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 759, in _open_file_like
-    return _open_file(name_or_buffer, mode)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 740, in __init__
-    super().__init__(open(name, mode))
-                     ^^^^^^^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: 'ckpts/lo/smoke_lean_seq.pt'
-=== lean_seq done 06:28:41
+=== lean_free 06:35:24
+train records 154990 max len 169
+step 200 loss 1.0931 lr 1.00e-03 7s val 0.6285
+step 300 loss 0.7707 lr 1.00e-04 11s val 0.4463
+saved ckpts/lo/smoke_lean_free.pt
+[lean_gate] 1200 samples, no-eos 0, distinct checked 580: both ok 231, lean-only 0, nd-only 0, both rej 349; lean 3.6s wall (6.8s proc, 12 workers), denote+nd_verify 0.0s
+generated 1200 proofs in 5s
+smoke_lean_free.pt on heldout.jsonl k=4 SOLVED 230/300 = 0.767 [0.716,0.811]
+  len 2: 230/300 = 0.767 [0.716,0.811]
+  written hist {2: 231}
+  pruned hist {2: 231}
+  frontier written 2 pruned 2
+  reasons [('LEANREJ axiom:[sorryAx]', 691)]
+  len 7: 0/50 = 0.000 [0.000,0.071]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('LEANREJ axiom:[sorryAx]', 400)]
+[lo/smoke_ei_lean_free r2] transfer (cumulative 16 attempts) SOLVED 0/50 = 0.000 [0.000,0.071]
+  len 7: 0/50 = 0.000 [0.000,0.071]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons []
+[lo/smoke_ei_lean_free r2] transfer greedy SOLVED 0/50 = 0.000 [0.000,0.071]
+  len 7: 0/50 = 0.000 [0.000,0.071]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('LEANREJ axiom:[sorryAx]', 50)]
+[lo/smoke_ei_lean_free r2] heldout greedy SOLVED 104/200 = 0.520 [0.451,0.588]
+  len 2: 104/200 = 0.520 [0.451,0.588]
+  written hist {2: 104}
+  pruned hist {2: 104}
+  frontier written 2 pruned 2
+  reasons [('LEANREJ axiom:[sorryAx]', 96)]
+no accepted proofs: skipping training this round
+=== round 2 done in 13s; new proofs 0; cum targets solved 0
+=== lean_free done 06:36:48
+=== lean_seq 06:36:48
+train records 154990 max len 537
+step 200 loss 0.9381 lr 1.00e-03 9s val 0.9558
+step 300 loss 0.4377 lr 1.00e-04 13s val 0.3746
+saved ckpts/lo/smoke_lean_seq.pt
+[lean_gate] 1200 samples, no-eos 0, distinct checked 1193: both ok 0, lean-only 0, nd-only 0, both rej 1193; lean 5.4s wall (20.9s proc, 12 workers), denote+nd_verify 0.2s
+generated 1200 proofs in 9s
+smoke_lean_seq.pt on heldout.jsonl k=4 SOLVED 0/300 = 0.000 [0.000,0.013]
+  len 2: 0/300 = 0.000 [0.000,0.013]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('LEANREJ axiom:[sorryAx]', 1200)]
+  len 7: 0/50 = 0.000 [0.000,0.071]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('LEANREJ axiom:[sorryAx]', 396), ('LEANPARSE no-eos', 4)]
+[lo/smoke_ei_lean_seq r2] transfer (cumulative 16 attempts) SOLVED 0/50 = 0.000 [0.000,0.071]
+  len 7: 0/50 = 0.000 [0.000,0.071]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons []
+[lo/smoke_ei_lean_seq r2] transfer greedy SOLVED 0/50 = 0.000 [0.000,0.071]
+  len 7: 0/50 = 0.000 [0.000,0.071]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('LEANREJ axiom:[sorryAx]', 50)]
+[lo/smoke_ei_lean_seq r2] heldout greedy SOLVED 0/200 = 0.000 [0.000,0.019]
+  len 2: 0/200 = 0.000 [0.000,0.019]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('LEANREJ axiom:[sorryAx]', 198), ('LEANPARSE no-eos', 2)]
+no accepted proofs: skipping training this round
+=== round 2 done in 28s; new proofs 0; cum targets solved 0
+=== lean_seq done 06:39:02
 SMOKE_DONE

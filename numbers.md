@@ -571,3 +571,86 @@ Every number is re-derived by `python3 lean_only_analysis.py phase1` → `artifa
 
 ## Phase 1 — free-form rendering (`lean_free.py`; `python3 lean_free.py data/train.jsonl`)
 - 154,990 / 154,990 training proofs and 5,000 / 5,000 held-out proofs: render → text → `denote` → `nd_verify` accepts (0 failures); **8.0 tokens per proof** (fragment 82.8, `numbers.md` § lean-format); 386 / 154,990 (0.25 %) carry a type ascription.
+
+## Phase 2 — free-form terms vs the `have` fragment under `lean_check` (pods `lo-1` … `lo-6`, RTX 3090; `python3 lean_only_analysis.py phase2` → `artifacts/lo/summary.json`; tables printed by `python3 lean_only_tables.py`)
+Two Stage-1 seeds per format (seed = Stage-1 seed = EI seed); model, schedule and data as proposal 8; reward = `lean_check` on the sampled text (`lean_gate.py`), `nd_verify` beside it as an audit; a sample counts iff `lean_check` accepts it and it is the first with its canonical text (fragment: the first with its denoted ND proof). Lengths: lines first, term size second. Free-form = `lean_free.py` rendering (binders unannotated, ascriptions only where Lean must infer a type), same 107-symbol vocabulary; fragment = fixed `nd2lean.py` rendering.
+
+## P2-1 — Stage-1 (full cap-6 set), seeds 0 / 1 (`artifacts/lo/stage1_full_<fmt>_s<s>_{heldout_greedy,transfer2_k16}.json`)
+| format | held-out greedy (5,000) | transfer pass@16 (1,638) | tokens per accepted proof, held-out / transfer | distinct transfer proofs | frontier written lines / term size (transfer) | no ND denotation |
+|---|---|---|---|---|---|---|
+| fragment (`have`) | 0.938 / 0.953 | 0.600 / 0.647 | 81.300 / 81.300 (held-out), 111.900 / 110.800 (transfer) | 1367 / 1466 | lines 9 / 9, term size 7 / 7 | 0 / 1 (held-out), 2 / 1 (transfer) |
+| free-form | 0.918 / 0.906 | 0.446 / 0.427 | 6.600 / 6.500 (held-out), 10.900 / 11.100 (transfer) | 852 / 816 | lines 9 / 9, term size 6 / 6 | 0 / 1 (held-out), 0 / 2 (transfer) |
+- Proposal 8 `lean_seq` seed 0 on file: 0.936 / 0.571 (old BOTE rendering, Lean ∧ `nd_verify`).
+
+## P2-2 — pre-RL base rates, a1 models, 1,000 depth-3 targets × 2,000 samples at T 0.8 (`artifacts/lo/base_d3_<fmt>_s<s>_k2000.json`)
+| format | targets solved | depth-3 (ND box depth ≥ 3 on the pruned denoted proof) | depth-3 (`fun` nesting ≥ 3 on the term) | reductio | distinct proofs | proofs without ND denotation |
+|---|---|---|---|---|---|---|
+| fragment | 501 / 585 | **0.283 / 0.373** | 0.283 / 0.373 | 0.000 / 0.000 | 785 / 1016 | 8 / 20 |
+| free-form | 582 / 498 | **0.331 / 0.226** | 0.318 / 0.212 | 0.000 / 0.002 | 761 / 643 | 2 / 0 |
+- Proposal 8 frozen `lean_seq` controls at 256 attempts: 0.206 / 0.134; token 0.005.
+
+## P2-3 — depth-3 f = 0 dial, 8 rounds × 32 (`artifacts/lo/{ei,frozen}_d3_<fmt>_s<s>/`; `phase2_metrics.arm_metrics`, pattern `depth3`)
+| arm | targets solved / 1,000 | **acquisition** (theorems / depth-3 proofs / first round) | acq. re-denoted | λ-depth ≥ 3 theorems | transfer solved / 500, acq | held-out greedy final | term-size hist of counted proofs | round s (r1 … r8) |
+|---|---|---|---|---|---|---|---|---|
+| fragment ei s0 | 704 | **0.466** (466 / 684 / r1) | 0.466 | 466 | 363, 0.488 | 0.964 | {'2': 56, '3': 200, '4': 551, '5': 158, '6': 88, '7': 16, '8': 4, '9': 14} | 466, 507, 386, 399, 394, 409, 388, 345 |
+| fragment ei s1 | 704 | **0.478** (478 / 696 / r1) | 0.478 | 478 | 360, 0.480 | 0.950 | {'2': 59, '3': 243, '4': 529, '5': 182, '6': 70, '7': 18, '8': 3} | 532, 518, 395, 395, 406, 407, 424, 293 |
+| fragment frozen s0 | 409 | **0.214** (214 / 268 / r1) | 0.214 | 214 | 230, 0.246 | 0.916 | {'2': 35, '3': 168, '4': 275, '5': 21, '6': 43, '7': 7, '9': 3} | 421, 474, 362, 378, 371, 369, 382, 369 |
+| fragment frozen s1 | 517 | **0.338** (338 / 453 / r1) | 0.338 | 338 | 268, 0.332 | 0.925 | {'2': 33, '3': 181, '4': 412, '5': 56, '6': 58, '7': 13} | 474, 502, 380, 401, 409, 406, 397, 346 |
+| free-form ei s0 | 767 | **0.473** (473 / 611 / r1) | 0.473 | 454 | 401, 0.514 | 0.926 | {'2': 56, '3': 185, '4': 510, '5': 187, '6': 84, '7': 13, '8': 1, '9': 3} | 148, 94, 149, 109, 119, 160, 100, 99 |
+| free-form ei s1 | 817 | **0.508** (508 / 656 / r1) | 0.508 | 492 | 414, 0.528 | 0.909 | {'2': 54, '3': 191, '4': 507, '5': 222, '6': 101, '7': 19, '8': 3, '9': 3} | 176, 207, 109, 119, 160, 102, 100, 72 |
+| free-form frozen s0 | 499 | **0.276** (276 / 318 / r1) | 0.276 | 263 | 252, 0.284 | 0.912 | {'2': 42, '3': 148, '4': 302, '5': 39, '6': 44, '7': 6, '9': 3} | 169, 187, 95, 101, 131, 119, 95, 86 |
+| free-form frozen s1 | 373 | **0.146** (146 / 161 / r1) | 0.146 | 138 | 171, 0.126 | 0.894 | {'2': 40, '3': 163, '4': 168, '5': 36, '6': 43, '7': 1, '9': 2} | 164, 162, 87, 84, 82, 158, 94, 93 |
+- Proposal 8 `lean_seq`: EI 0.476 / 0.479, frozen 0.206 / 0.134; token EI 0.335 / 0.364, frozen 0.005 / 0.005.
+- Solo timing round (a1 seed 0, 1,000 × 32, nothing else on the GPU): seq 159 s, free 42 s (proposal 8: `lean_seq` 141 s, token 59–64 s).
+
+## P2-4 — ladder rung T1, 8 rounds × 32 (`artifacts/lo/la_{T1,frozen}_<fmt>_s<s>/found_transfer_8.jsonl`; pools `data/lo/la_*.jsonl`; `L*` = max L with ≥ 5 transfer theorems solved at label ≥ L)
+| arm | **`L*` lines** | **`L*` term size** | transfer solved / 2,285 | by `L_true` 7 / 8 / 9 / 10 / 11 / 12 / 13 / 14 | ≥ 5 at `ts_minlen` ≥ 7 / 8 / 9 / 10 | targets solved / 4,495 (`L*` lines / ts) | max written lines / max term size | tokens per proof | held-out greedy r8 | round s (r1, r8) |
+|---|---:|---:|---:|---|---|---|---|---:|---|---|
+| fragment T1 s0 | **11** | **8** | 895 | 99 / 166 / 526 / 88 / 12 / 4 / 0 / 0 | 73 / 24 / 4 / 0 | 2807 (11 / 8) | 13 / 11 | 197.6 | 0.949 | 1081, 909 |
+| fragment T1 s1 | **12** | **9** | 1069 | 131 / 179 / 621 / 116 / 16 / 6 / 0 / 0 | 109 / 29 / 5 / 0 | 3060 (11 / 9) | 13 / 12 | 197.5 | 0.961 | 947, 873 |
+| fragment frozen s0 | **10** | **7** | 286 | 51 / 112 / 113 / 10 / 0 / 0 / 0 / 0 | 14 / 4 / 0 / 0 | 1748 (10 / 7) | 10 / 9 | 179.9 | 0.938 | 1008, 912 |
+| fragment frozen s1 | **10** | **8** | 386 | 56 / 121 / 192 / 16 / 1 / 0 / 0 / 0 | 28 / 10 / 1 / 0 | 2003 (10 / 7) | 11 / 10 | 191.8 | 0.953 | 940, 789 |
+| free-form T1 s0 | **11** | **8** | 953 | 160 / 165 / 500 / 112 / 12 / 4 / 0 / 0 | 87 / 16 / 3 / 0 | 2738 (11 / 8) | 14 / 10 | 20.3 | 0.919 | 298, 303 |
+| free-form T1 s1 | **11** | **8** | 936 | 142 / 169 / 527 / 82 / 15 / 1 / 0 / 0 | 59 / 16 / 3 / 0 | 2797 (11 / 8) | 14 / 10 | 20.3 | 0.929 | 267, 295 |
+| free-form frozen s0 | **10** | **7** | 157 | 52 / 52 / 46 / 7 / 0 / 0 / 0 / 0 | 8 / 0 / 0 / 0 | 952 (9 / 7) | 11 / 9 | 18.4 | 0.918 | 272, 305 |
+| free-form frozen s1 | **9** | **7** | 108 | 54 / 27 / 23 / 4 / 0 / 0 / 0 / 0 | 7 / 2 / 1 / 0 | 698 (9 / 7) | 10 / 9 | 17.0 | 0.906 | 251, 235 |
+- Proposal 8 `lean_seq` (Stage-1 seed 0, EI seeds 0 / 1): T1 794 / 839 solved, `L*` 11 / 11 (12 / 13 theorems at `L_true` ≥ 11); frozen 304 / 309, `L*` 10 / 10; token T1 612 / 623, `L*` 10 / 10.
+
+## P2-5 — checker of record (`artifacts/lo/record_<arm>_<pool>.json`; `pod/lo/record.py`: every counted proof re-checked from scratch)
+- 32 found files, **45396 / 45396** counted proofs re-accepted by `lean_check`; 44164 ND-denoting proofs, 44164 of them `nd_verify`-accepted, **0 disagreements**; 1232 proofs stored as Lean text (no in-loop ND denotation); term size reproduced for 45360 / 45396 (the rest: a duplicated subterm in the sampled text vs the canonical rendering).
+
+## P2-6 — in-loop gate totals (`artifacts/lo/gate_*.jsonl`)
+| jobs | samples | no EOS | distinct checked | `lean_check` accepts | ND-denoting and `nd_verify` accepts | Lean yes / ND no (by kind) | ND yes / Lean no | Lean process-s |
+|---|---:|---:|---:|---:|---:|---|---:|---:|
+| la_T1_seq | 3,587,920 | 2,106 | 812,964 | 174,989 | 173,677 | 1,312 {'no-denotation': 1218, 'rule check failed: IMPI': 50, 'premise block does not match declared premises': 31, 'rule check failed: ORI2': 12, 'rule check failed: ORI1': 1} | 0 | 14,552 |
+| la_T1_free | 3,587,920 | 1 | 695,503 | 141,626 | 141,029 | 597 {'no-denotation': 597} | 0 | 12,064 |
+| la_frozen_seq | 3,587,920 | 6,167 | 1,101,212 | 121,017 | 120,910 | 107 {'no-denotation': 97, 'rule check failed: ORI2': 8, 'rule check failed: IMPI': 2} | 0 | 17,026 |
+| la_frozen_free | 3,587,920 | 0 | 822,641 | 85,629 | 85,603 | 26 {'no-denotation': 26} | 0 | 13,887 |
+| ei_d3_seq | 856,000 | 1,602 | 200,337 | 103,764 | 103,592 | 172 {'no-denotation': 155, 'rule check failed: NEGE': 16, 'rule check failed: ORI1': 1} | 0 | 2,926 |
+| ei_d3_free | 856,000 | 0 | 190,264 | 99,471 | 99,398 | 73 {'no-denotation': 73} | 0 | 6,706 |
+| frozen_d3_seq | 856,000 | 1,876 | 288,706 | 87,271 | 87,224 | 47 {'no-denotation': 22, 'rule check failed: NEGE': 16, 'rule check failed: ORI1': 8, 'final formula is not the conclusion': 1} | 0 | 5,354 |
+| frozen_d3_free | 856,000 | 0 | 254,735 | 83,361 | 83,354 | 7 {'no-denotation': 7} | 0 | 8,153 |
+| base_d3_seq | 4,000,000 | 8,206 | 183,403 | 3,112 | 3,084 | 28 {'no-denotation': 24, 'premise block does not match declared premises': 4} | 0 | 3,785 |
+| base_d3_free | 4,000,000 | 1 | 99,954 | 2,366 | 2,335 | 31 {'no-denotation': 31} | 0 | 979 |
+| mech_full_seq | 62,416 | 39 | 26,272 | 12,420 | 12,416 | 4 {'no-denotation': 3, 'rule check failed: ORI2': 1} | 0 | 430 |
+| mech_full_free | 62,416 | 0 | 23,540 | 10,846 | 10,843 | 3 {'no-denotation': 3} | 0 | 389 |
+
+## P2-7 — E10: pattern acquisition of the EI arms (fraction of 1,000 targets with ≥ 1 counted proof containing the pattern; `artifacts/lo/e10_patterns.json`)
+| arm | derived_ore | reductio | depth3 | depth4 | impe_chain4 | nested_ore | nested_ore3 | impi_ore | negi_ande_hyp | ori_ore |
+|---|---|---|---|---|---|---|---|---|---|---|
+| free_s0 | 0.000 | 0.000 | 0.473 | 0.022 | 0.000 | 0.000 | 0.000 | 0.007 | 0.000 | 0.000 |
+| free_s1 | 0.000 | 0.002 | 0.508 | 0.032 | 0.000 | 0.000 | 0.000 | 0.010 | 0.000 | 0.000 |
+| seq_s0 | 0.000 | 0.000 | 0.466 | 0.029 | 0.000 | 0.000 | 0.000 | 0.012 | 0.000 | 0.000 |
+| seq_s1 | 0.000 | 0.000 | 0.478 | 0.017 | 0.000 | 0.000 | 0.000 | 0.009 | 0.000 | 0.000 |
+| lf_seq_s0 (on file) | 0.000 | 0.000 | 0.476 | 0.023 | 0.000 | 0.000 | 0.000 | 0.014 | 0.000 | 0.000 |
+| lf_seq_s1 (on file) | 0.000 | 0.000 | 0.479 | 0.029 | 0.000 | 0.000 | 0.000 | 0.013 | 0.000 | 0.000 |
+| token_s0 (on file) | 0.000 | 0.000 | 0.335 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| token_s1 (on file) | 0.000 | 0.000 | 0.364 | 0.001 | 0.000 | 0.000 | 0.000 | 0.005 | 0.000 | 0.000 |
+| free_frozen_s0 | 0.000 | 0.000 | 0.276 | 0.005 | 0.000 | 0.000 | 0.000 | 0.005 | 0.000 | 0.000 |
+| free_frozen_s1 | 0.000 | 0.000 | 0.146 | 0.004 | 0.000 | 0.000 | 0.000 | 0.007 | 0.000 | 0.000 |
+| seq_frozen_s0 | 0.000 | 0.000 | 0.214 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 |
+| seq_frozen_s1 | 0.000 | 0.000 | 0.338 | 0.001 | 0.000 | 0.000 | 0.000 | 0.001 | 0.000 | 0.000 |
+
+## Cost and bucket
+- RunPod balance 121.38 → 103.26 (`rpbalance` 05:55 → 08:58 UTC; the sibling run `lean-seed2`'s two pods bill the same balance over the same hours). This run's pods (`~/pods.log`, deletion times in `log.md`): `lo-1` 06:04–≈09:45, `lo-2` 06:30–08:06, `lo-3` 06:31–08:49, `lo-4` 06:32–08:06, `lo-5` 06:32–08:01, `lo-6` 06:33–07:27 ≈ 12.3 pod-hours.
+- `hf://buckets/dan-pandori/nd-rl/lean-only/{artifacts/lo,data/lo,ckpts}` — `artifacts/lo` (every file above, incl. the 253,397-record `pool_check.jsonl`, all found / record / gate files), `data/lo` (relabelled pools), `ckpts/lo` (Stage-1 `full_seq_s0`, `a1_seq_s0/s1` — the originals; `ckpts/lo_retrained`: the five Stage-1 models whose pods were deleted before their checkpoints were pulled, retrained with the same seeds; EI round checkpoints were not kept).

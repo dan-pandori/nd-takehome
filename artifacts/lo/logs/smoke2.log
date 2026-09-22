@@ -1,0 +1,31 @@
+[lo/smoke2_ei_free r2] transfer (this round, pass@4) SOLVED 1/50 = 0.020 [0.004,0.105]
+  len 7: 1/50 = 0.020 [0.004,0.105]
+  written hist {0: 1}
+  pruned hist {0: 1}
+  frontier written 0 pruned 0
+  reasons [('LEANREJ axiom:[sorryAx]', 199)]
+[lo/smoke2_ei_free r2] transfer (cumulative 8 attempts) SOLVED 1/50 = 0.020 [0.004,0.105]
+  len 7: 1/50 = 0.020 [0.004,0.105]
+  written hist {0: 1}
+  pruned hist {0: 1}
+  frontier written 0 pruned 0
+  reasons []
+[lo/smoke2_ei_free r2] transfer greedy SOLVED 0/50 = 0.000 [0.000,0.071]
+  len 7: 0/50 = 0.000 [0.000,0.071]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('LEANREJ axiom:[sorryAx]', 50)]
+[lo/smoke2_ei_free r2] heldout greedy SOLVED 124/200 = 0.620 [0.551,0.684]
+  len 2: 124/200 = 0.620 [0.551,0.684]
+  written hist {2: 124}
+  pruned hist {2: 124}
+  frontier written 2 pruned 2
+  reasons [('LEANREJ axiom:[sorryAx]', 76)]
+python3 train.py --data artifacts/lo/smoke2_ei_free/mix_2.jsonl --init ckpts/lo/smoke2_ei_free_r1.pt --steps 60 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/lo/smoke2_ei_free_r2.pt --seed 2 --log_every 200
+params 3214336 mode lean_free shift True
+train records 2684 max len 114
+step 60 loss 0.7547 lr 3.00e-05 2s
+saved ckpts/lo/smoke2_ei_free_r2.pt
+=== round 2 done in 19s; new proofs 21; cum targets solved 171
+SMOKE2_DONE
