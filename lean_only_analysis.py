@@ -246,5 +246,34 @@ def phase2():
             print(' ', a, json.dumps({kk: vv for kk, vv in v.items() if kk not in ('by_round', 'ge_lines', 'ge_ts', 'written_hist_transfer', 'ts_hist_transfer', 'ts_hist', 'written_hist', 'labels_contradicted', 'acq_by_round', 'round_secs')} if isinstance(v, dict) else v)[:400])
 
 
+def e10_patterns():
+    """E10: per EI arm, fraction of depth-3 targets with >= 1 counted proof containing each pattern (patterns.py + patterns2.py, on the
+    dependency-pruned ND proof) — free-form and fragment arms of this run, proposal 8's lean_seq arms and the token arms on file."""
+    from patterns import classify, PATTERNS
+    from patterns2 import classify2, PATTERNS2
+    arms = {'free_s0': 'artifacts/lo/ei_d3_free_s0', 'free_s1': 'artifacts/lo/ei_d3_free_s1', 'seq_s0': 'artifacts/lo/ei_d3_seq_s0', 'seq_s1': 'artifacts/lo/ei_d3_seq_s1',
+            'lf_seq_s0 (on file)': 'artifacts/lf/ei_d3_seq_s0', 'lf_seq_s1 (on file)': 'artifacts/lf/ei_d3_seq_s1', 'token_s0 (on file)': 'artifacts/p2/ei_depth3_f0_a1_s0', 'token_s1 (on file)': 'artifacts/p2/ei_depth3_f0_a1_s1',
+            'free_frozen_s0': 'artifacts/lo/frozen_d3_free_s0', 'free_frozen_s1': 'artifacts/lo/frozen_d3_free_s1', 'seq_frozen_s0': 'artifacts/lo/frozen_d3_seq_s0', 'seq_frozen_s1': 'artifacts/lo/frozen_d3_seq_s1'}
+    out = {}
+    for arm, d in arms.items():
+        fn = f'{d}/found_8.jsonl'
+        if not os.path.exists(fn): continue
+        thm = collections.defaultdict(set); n_thm = set(); n_none = 0
+        for x in jl(fn):
+            n_thm.add(x['name'])
+            nd = nd_of(x) if 'prompt' in x else x['proof']
+            if not nd: n_none += 1; continue
+            c1 = classify(nd); c2 = classify2(nd)
+            if c1 is None: n_none += 1; continue
+            for p in PATTERNS:
+                if c1.get(p): thm[p].add(x['name'])
+            for p in PATTERNS2:
+                if c2 and c2.get(p): thm[p].add(x['name'])
+        out[arm] = {'solved': len(n_thm), 'proofs_unclassified': n_none, **{p: round(len(thm[p]) / 1000, 3) for p in PATTERNS + PATTERNS2}}
+    json.dump(out, open('artifacts/lo/e10_patterns.json', 'w'), indent=1)
+    for a, v in out.items(): print(a, v)
+    return out
+
+
 if __name__ == '__main__':
     globals()[sys.argv[1]]()

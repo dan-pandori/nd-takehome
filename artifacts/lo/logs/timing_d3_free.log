@@ -1,0 +1,72 @@
+START 2026-09-22T06:46:48Z until [ -f ckpts/lo/stage1_a1_free_s0.pt ]; do sleep 30; done; until [ -f ckpts/lo/stage1_a1_free_s1.pt ]; do sleep 30; done; python3 expert_iter.py --init ckpts/lo/stage1_a1_free_s0.pt --name lo/timing_d3_free --targets data/lo/targets_depth3.jsonl --transfer data/lo/transfer_depth3.jsonl --heldout data/p2/heldout.jsonl --train data/p2/train_depth3_f0_a1.jsonl --rounds 1 --k 32 --temperature 0.8 --batch 768 --seed 0 --no_train
+[lean_gate] 32000 samples, no-eos 0, distinct checked 7348: both ok 525, lean-only 0, nd-only 0, both rej 6823; lean 13.0s wall (135.7s proc, 12 workers), denote+nd_verify 0.4s
+[lo/timing_d3_free r1] targets (this round, pass@32) SOLVED 379/1000 = 0.379 [0.349,0.409]
+  len 7: 83/166 = 0.500 [0.425,0.575]
+  len 8: 98/166 = 0.590 [0.514,0.662]
+  len 9: 22/166 = 0.133 [0.089,0.193]
+  len 10: 52/166 = 0.313 [0.248,0.387]
+  len 11: 55/166 = 0.331 [0.264,0.406]
+  len 12: 69/170 = 0.406 [0.335,0.481]
+  written hist {7: 274, 8: 123, 9: 16}
+  pruned hist {5: 1, 6: 139, 7: 150, 8: 107, 9: 16}
+  frontier written 9 pruned 9
+  reasons [('LEANREJ axiom:[sorryAx]', 28027), ("LEANREJ error: unexpected token '⟩'; expected ')', ',' or ':", 20), ("LEANREJ error: unexpected token ')'; expected '⟩'", 8), ("LEANREJ error: unexpected token 'nd_check'; expected ')', ',", 1)]
+[lo/timing_d3_free r1] targets (cumulative 32 attempts) SOLVED 379/1000 = 0.379 [0.349,0.409]
+  len 7: 83/166 = 0.500 [0.425,0.575]
+  len 8: 98/166 = 0.590 [0.514,0.662]
+  len 9: 22/166 = 0.133 [0.089,0.193]
+  len 10: 52/166 = 0.313 [0.248,0.387]
+  len 11: 55/166 = 0.331 [0.264,0.406]
+  len 12: 69/170 = 0.406 [0.335,0.481]
+  written hist {7: 274, 8: 123, 9: 16}
+  pruned hist {5: 1, 6: 139, 7: 150, 8: 107, 9: 16}
+  frontier written 9 pruned 9
+  reasons []
+[lean_gate] 16000 samples, no-eos 0, distinct checked 3489: both ok 259, lean-only 0, nd-only 0, both rej 3230; lean 3.4s wall (33.4s proc, 12 workers), denote+nd_verify 0.2s
+[lo/timing_d3_free r1] transfer (this round, pass@32) SOLVED 193/500 = 0.386 [0.344,0.429]
+  len 7: 40/83 = 0.482 [0.378,0.588]
+  len 8: 47/83 = 0.566 [0.459,0.668]
+  len 9: 12/83 = 0.145 [0.085,0.236]
+  len 10: 23/83 = 0.277 [0.192,0.382]
+  len 11: 29/83 = 0.349 [0.256,0.457]
+  len 12: 42/85 = 0.494 [0.390,0.598]
+  written hist {7: 142, 8: 61, 9: 6}
+  pruned hist {5: 1, 6: 72, 7: 72, 8: 58, 9: 6}
+  frontier written 9 pruned 9
+  reasons [('LEANREJ axiom:[sorryAx]', 13717), ("LEANREJ error: unexpected token '⟩'; expected ')', ',' or ':", 17), ("LEANREJ error: unexpected token ')'; expected '⟩'", 1)]
+[lo/timing_d3_free r1] transfer (cumulative 32 attempts) SOLVED 193/500 = 0.386 [0.344,0.429]
+  len 7: 40/83 = 0.482 [0.378,0.588]
+  len 8: 47/83 = 0.566 [0.459,0.668]
+  len 9: 12/83 = 0.145 [0.085,0.236]
+  len 10: 23/83 = 0.277 [0.192,0.382]
+  len 11: 29/83 = 0.349 [0.256,0.457]
+  len 12: 42/85 = 0.494 [0.390,0.598]
+  written hist {7: 142, 8: 61, 9: 6}
+  pruned hist {5: 1, 6: 72, 7: 72, 8: 58, 9: 6}
+  frontier written 9 pruned 9
+  reasons []
+[lean_gate] 500 samples, no-eos 0, distinct checked 500: both ok 74, lean-only 0, nd-only 0, both rej 426; lean 2.7s wall (4.8s proc, 12 workers), denote+nd_verify 0.0s
+[lo/timing_d3_free r1] transfer greedy SOLVED 74/500 = 0.148 [0.120,0.182]
+  len 7: 10/83 = 0.120 [0.067,0.208]
+  len 8: 16/83 = 0.193 [0.122,0.290]
+  len 9: 2/83 = 0.024 [0.007,0.084]
+  len 10: 14/83 = 0.169 [0.103,0.263]
+  len 11: 8/83 = 0.096 [0.050,0.179]
+  len 12: 24/85 = 0.282 [0.198,0.386]
+  written hist {7: 54, 8: 20}
+  pruned hist {6: 34, 7: 20, 8: 20}
+  frontier written 8 pruned 8
+  reasons [('LEANREJ axiom:[sorryAx]', 426)]
+[lean_gate] 5000 samples, no-eos 0, distinct checked 5000: both ok 4560, lean-only 0, nd-only 0, both rej 440; lean 4.5s wall (38.2s proc, 12 workers), denote+nd_verify 0.5s
+[lo/timing_d3_free r1] heldout greedy SOLVED 4560/5000 = 0.912 [0.904,0.920]
+  len 2: 989/1000 = 0.989 [0.980,0.994]
+  len 3: 984/1000 = 0.984 [0.974,0.990]
+  len 4: 926/1000 = 0.926 [0.908,0.941]
+  len 5: 908/1000 = 0.908 [0.888,0.924]
+  len 6: 753/1000 = 0.753 [0.725,0.779]
+  written hist {2: 1192, 3: 988, 4: 917, 5: 743, 6: 679, 7: 40, 8: 1}
+  pruned hist {2: 1192, 3: 988, 4: 917, 5: 743, 6: 679, 7: 40, 8: 1}
+  frontier written 7 pruned 7
+  reasons [('LEANREJ axiom:[sorryAx]', 440)]
+=== round 1 done in 42s; new proofs 413; cum targets solved 379
+END 2026-09-22T06:52:35Z

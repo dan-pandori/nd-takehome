@@ -1,0 +1,15 @@
+START 2026-09-22T06:47:04Z until [ -f artifacts/lo/timing_d3_free.done ]; do sleep 30; done; python3 eval_set.py --ckpt ckpts/lo/stage1_a1_free_s0.pt --in data/lo/targets_depth3.jsonl --out artifacts/lo/base_d3_free_s0_k2000.jsonl --k 2000 --temperature 0.8 --seed 100 --batch 1024 --summary artifacts/lo/base_d3_free_s0_k2000.json
+[lean_gate] 2000000 samples, no-eos 0, distinct checked 51563: both ok 1363, lean-only 31, nd-only 0, both rej 50169; lean 44.0s wall (504.3s proc, 12 workers), denote+nd_verify 2.3s
+generated 2000000 proofs in 1421s
+stage1_a1_free_s0.pt on targets_depth3.jsonl k=2000 SOLVED 582/1000 = 0.582 [0.551,0.612]
+  len 7: 131/166 = 0.789 [0.721,0.844]
+  len 8: 124/166 = 0.747 [0.676,0.807]
+  len 9: 64/166 = 0.386 [0.315,0.461]
+  len 10: 77/166 = 0.464 [0.390,0.540]
+  len 11: 89/166 = 0.536 [0.460,0.610]
+  len 12: 97/170 = 0.571 [0.495,0.643]
+  written hist {0: 31, 7: 464, 8: 190, 9: 68, 10: 8}
+  pruned hist {0: 31, 5: 6, 6: 226, 7: 266, 8: 163, 9: 61, 10: 8}
+  frontier written 10 pruned 10
+  reasons [('LEANREJ axiom:[sorryAx]', 1751047), ("LEANREJ error: unexpected token '⟩'; expected ')', ',' or ':", 1092), ("LEANREJ error: unexpected token ')'; expected '⟩'", 202), ("LEANREJ error: unexpected token 'nd_check'; expected ')', ',", 164), ("LEANREJ error: unexpected token ')'; expected command", 22), ("LEANREJ error: unexpected token ':'; expected command", 2)]
+END 2026-09-22T07:17:02Z
