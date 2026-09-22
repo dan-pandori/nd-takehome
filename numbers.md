@@ -652,5 +652,5 @@ Two Stage-1 seeds per format (seed = Stage-1 seed = EI seed); model, schedule an
 | seq_frozen_s1 | 0.000 | 0.000 | 0.338 | 0.001 | 0.000 | 0.000 | 0.000 | 0.001 | 0.000 | 0.000 |
 
 ## Cost and bucket
-- RunPod balance 121.38 → 103.26 (`rpbalance` 05:55 → 08:58 UTC; the sibling run `lean-seed2`'s two pods bill the same balance over the same hours). This run's pods (`~/pods.log`, deletion times in `log.md`): `lo-1` 06:04–≈09:45, `lo-2` 06:30–08:06, `lo-3` 06:31–08:49, `lo-4` 06:32–08:06, `lo-5` 06:32–08:01, `lo-6` 06:33–07:27 ≈ 12.3 pod-hours.
+- RunPod balance 121.38 → 101.3791239743 (`rpbalance` 05:55 → 09:19 UTC; the sibling run `lean-seed2`'s two pods bill the same balance over the same hours). This run's pods (`~/pods.log`, deletion times in `log.md`): `lo-1` 06:04–≈09:45, `lo-2` 06:30–08:06, `lo-3` 06:31–08:49, `lo-4` 06:32–08:06, `lo-5` 06:32–08:01, `lo-6` 06:33–07:27 ≈ 12.3 pod-hours.
 - `hf://buckets/dan-pandori/nd-rl/lean-only/{artifacts/lo,data/lo,ckpts}` — `artifacts/lo` (every file above, incl. the 253,397-record `pool_check.jsonl`, all found / record / gate files), `data/lo` (relabelled pools), `ckpts/lo` (Stage-1 `full_seq_s0`, `a1_seq_s0/s1` — the originals; `ckpts/lo_retrained`: the five Stage-1 models whose pods were deleted before their checkpoints were pulled, retrained with the same seeds; EI round checkpoints were not kept).
