@@ -75,3 +75,58 @@ Seed-2 arms, two arms per 3090: 13.5–17.2 min per round (T1 s0 1,031 → 809 s
 
 ### Everything reproduced
 Every quantity promised in the pre-registration (E1–E9) is re-derived above from the pulled files with my own code and agrees with the round files. Misses against the pre-registered bands: E3 s0 at the band's top (20), E4 s0 slightly above (906 vs ≤ 900), E2 one arm at 12 rather than 11 — all on the "better than expected" side; none is a miss against a stop rule.
+
+## Compare (phase 2, after reading `run_lean_seed2.md`, `numbers.md` § lean-seed2, `log.md` § lean-seed2, `STATUS.md`)
+
+| claim (executor) | my independent value | verdict |
+|---|---|---|
+| Stage-1 held-out greedy 0.944 (4,718 / 5,000); seed 0 0.936 | 0.9436 (4,718); 0.9356 (4,678); by length identical | reproduces |
+| transfer `L*` 12 / 11 (seed 2), 11 / 11 (seed 0), frozen 10 / 10 / 10 / 10 | 12 / 11; 11 / 11; 10 / 10 / 10 / 10 | reproduces |
+| theorems at `L_true` ≥ 11: 20 / 16 (seed 2), 12 / 13 (seed 0); ≥ 12: 5 / 3, 3 / 4 | 20 / 16; 12 / 13; 5 / 3; 3 / 4 | reproduces |
+| transfer solved 906 / 844 (seed 2), 794 / 839 (seed 0); frozen 314 / 324, 304 / 309 | same | reproduces |
+| targets solved 2,820 / 2,726; 2,604 / 2,674; frozen 1,827 / 1,823; 1,768 / 1,759; targets `L*` 11 / 11 / 10 / 10 | same | reproduces |
+| by-`L_true` bins (99, 166, 533, 88, 15, 5, 0 etc.), `L*` by round (9 10 10 11 11 11 11 12; 10 10 10 10 11 11 11 11), seed 0 reached 11 at round 5 / 5 | same (seed-0 rounds from their `round_r.json`; per-round found files were not pulled for seed 0) | reproduces |
+| held-out r1 → r8 0.944 → 0.951 / 0.948; seed 0 0.936 → 0.944 / 0.943 | 0.9436 → 0.9506 / 0.9482; 0.9356 → 0.9436 / 0.9426 | reproduces |
+| `L*` = 12 rests on exactly 5 theorems at `L_true` ≥ 12 (`la_transfer_165, 454, 464, 499, 1585`) | same five names | reproduces |
+| no pool label contradicted (shortest written proof ≥ `L_true`) | 0 contradictions in all 8 arms, also with pruned length + unused premises | reproduces |
+| BOTE in 47 of 2,135 distinct transfer proofs (T1 s0), 0 of the ≥ 11 ones; seed 0: 31 / 82 and 0 | 47 / 2,135 (s1: 40 / 1,948); seed 0: 31 / 1,767, 82 / 1,801; 0 in ≥ 11 proofs everywhere | reproduces |
+| pass@16 0.595 (974); 7 / 8 / ≥ 9-line distinct proofs 275 / 109 / 9; seed 0 0.571, 266 / 130 / 18 | same | reproduces |
+| gate: 7,207,048 samples; 1,177,998 parse fails; 5,276,013 distinct; 1,554,603 both-ok; 3,721,349 both-rej; 0 nd-only; 61 Lean-only (11.6 / M); 0 `.elim`; 54 unrestated premise; 7 `¬A ≡ A → False` at IMPI; per arm 27 / 29 / 3 / 2 / 0 | same, by my own predicates | reproduces |
+| Lean 149 proofs per process-second (35,357 s) | 5,276,013 / 35,357 = 149 | reproduces |
+| checker of record 20,735 / 20,735 both accept | record rows re-tabulated 20,735 / 20,735; my own `nd_verify` 20,735 / 20,735; my own Lean run 2,101 / 2,101 (+ 40 negatives rejected) | reproduces and independently confirmed |
+| BOTE fix: 206 / 206 `.elim` texts now rejected, 137 + 117 remain Lean-accepted, 20,000 / 20,000 pool sample | `recheck460.json` / `pool_sample_20k.report.jsonl` re-tabulated: 20,000 both-accept, 684 BOTE; the 460-text re-check is the executor's script output (not re-run: it needs the old rendering path). Independent evidence for the fix: 0 `.elim`-kind disagreements in this run's 5.28 M in-loop checks vs 206 / 13.9 M before | reproduces (460 part: consistent, not re-derived) |
+| BOTE in 2,951 / 154,990 training proofs (1.9 %) | 1.904 % × 154,990 = 2,951 | reproduces |
+| round time 13–17 min, two arms per 3090 | 13.2–17.2 min | reproduces |
+| cost ≈ $2.3, 4.5 pod-hours; pods 05:46–08:03; 2 h 32 min wall-clock | job logs 05:48–07:57 / 05:50–07:54; pod create / delete times only in `~/pods.log` (not in the repo) — consistent | consistent, not derivable from repo files |
+| example proof: `L_true` 12 theorem solved by EI s0 at round 7; "frozen control and token arms: never" | `la_transfer_499`, `L_true` 12, s0 round 7 ✓; also solved by seed-2 s1 (round 5) and by both seed-0 arms (rounds 4 and 4 / 8); frozen: never ✓; token arms' found files are not in this repository (on file 1 / 0 theorems at ≥ 11, so "never" is plausible, not derivable here) | reproduces; wording could add that three other EI arms also solve it |
+| "The `L_true` = 7 bin is again solved less often by the Lean arms (66–99 of 300) than by the token arms (139–140)" | seed 2: 99 / 66; seed 0: 75 / **118** | reword: the range is 66–118 across the four Lean arms; seed 0 s1 at 118 is within noise of the token arms' 139–140 minus… no — still below, but the gap is 21–74, not 40–74 |
+| `STATUS.md` / `log.md`: "05:48 Pre-registration committed" | commit `123df56` is 05:44:42 UTC; the log's next line gives 05:44:42 correctly | cosmetic; the pre-registration precedes the first pod either way |
+| bucket paths `hf://buckets/dan-pandori/nd-rl/lean-seed2/{ckpts,artifacts,data}` | `upload_*.log` show "Sync completed" for 584 + 8 + 19 + 4 + 5 files; the stray top-level `data/rl_targets.jsonl` (3,840,203 B = the ladder pool) was removed per the log; not re-listed by me | consistent, not verified against the bucket |
+| Incident (08:12): upload staging overwrote `data/ladder/transfer.jsonl` on the VPS after the analysis; restored from git; `summary.json` byte-identical | working-tree file is record-for-record identical to HEAD (2,285 records); the pods' arms used the pool pushed at 05:46 (every `found` record's `L_true` equals the HEAD pool's) | reproduces; no number affected |
+
+Gate-0 record: expectations E1–E9 committed at 05:44:42, before the first pod job (05:48:37). Misses are reported as such: the executor states that the P ≈ 0.1 case (`L*` ≥ 12 in one arm) occurred and calls it "at the edge of the rule"; E3 s0 = 20 (top of 6–20) and E4 s0 = 906 (above ≤ 900) are in the write-up's table with their bands but not flagged as out-of-band — they are on the favourable side and harmless, but E4 s0 is strictly outside the pre-registered band and should be named as such.
+
+Wording vs n: "`L*` = 11 rests on two Stage-1 models" — n = 2 Stage-1 models × 2 EI seeds, four arms at ≥ 11; the pre-registered rule for this sentence is met. "`L*` 12" is one arm of four, at the rule's threshold (5 theorems) — the write-up says so. Nothing is called "never" or a "wall" beyond the frozen controls' 0 / 0 at `L_true` ≥ 11 in 256 attempts, which the files support.
+
+## Verdict
+
+**What stands.**
+1. Every number in `run_lean_seed2.md` and `numbers.md` § lean-seed2 reproduces from the pulled files with independent code, and the counted proofs are independently verified: 20,735 / 20,735 by `nd_verify`, 2,101 / 2,101 by Lean with an axiom check (no `sorryAx`, only `propext` / `Classical.choice` / `Quot.sound`), 40 / 40 corrupted controls rejected. All hard constraints hold (unmodified `nd_verify`, no test-file run, cap 6, no evaluation data in training, class-disjoint splits, pre-registration before the run).
+2. **The pre-registered headline holds as stated:** transfer `L*` ≥ 11 on the ladder rung is reached by both EI arms of a second, independently trained `lean_seq` Stage-1 model (12 / 11), so "`L*` = 11 rests on two Stage-1 models (four of four EI arms)". Frozen controls of the same model at equal attempts stay at 10 with 0 theorems at `L_true` ≥ 11; the `L_true` ≥ 11 counts (20 / 16 vs seed 0's 12 / 13, token 1 / 0) are the robust comparison, as the executor says.
+3. The BOTE fix is validated in the way that matters: 0 `.elim`-kind Lean-only disagreements in 5.28 M in-loop checks (206 / 13.9 M before), no `nd_verify`-only case, and the remaining 61 (11.6 per million) are the two formal kinds that cannot affect counts under the both-accept rule.
+
+**What must be reworded.**
+- `L*` = 12: keep it labelled as one arm at the rule's threshold (the write-up already does); do not carry "12" into any headline without the "/ 11" and the 5-theorem caveat. With two seed-2 arms at 12 / 11 and two seed-0 arms at 11 / 11, the two-seed evidence supports "≥ 11", not "12".
+- E4 s0 = 906 is outside the pre-registered 700–900 band; say so in the expectations paragraph ("every number landed in its band" is not literally true; two arm values sit at or above the top).
+- The `L_true` = 7 remark: the Lean arms' range is 66–118 (seed 0 s1 = 118), not 66–99.
+- The example proof's caption: it is also found by the other three EI arms (seed-2 s1 round 5; seed-0 s0 rounds 4 / 8, s1 round 4); "token arms: never" is not derivable from files in this repository.
+- Cosmetic: `STATUS.md`'s "05:48 Pre-registration committed" → 05:44:42 UTC.
+
+**What is not supported / what to keep in mind.**
+- **Lines vs inferences.** The `L_true` ≥ 11 theorems the arms solve need, by my count, only 4–8 inference nodes each (`la_transfer_130`: 11); e.g. the write-up's `L_true` = 12 example is 7 nodes — two premise restatements, five assumption lines and a trivial `Or.elim S ∨ S`. `L*` in lines is the pre-registered unit and stands, but "`L*` 11–12" should not be read as depth of reasoning: in term size the T1 arms' frontier (≥ 5 theorems at min term size ≥ T) is 9 / 8 vs 7 / 8 frozen — a one-to-two-node gain. Proposal 9's `lean_check` / term-size relabelling is the right next measurement; my counter is an approximation until it exists.
+- **The seed-2 vs seed-0 difference** (20 / 16 vs 12 / 13 at ≥ 11; 906 / 844 vs 794 / 839 solved; held-out 0.944 vs 0.936) is n = 1 vs n = 1 Stage-1 model — describe it as "seed 2 is somewhat better on every measure", not as an effect. The union of ≥ 11 theorems across all four arms is 26 of 224; 11 are common to both models' unions.
+- The frozen controls' 0 / 0 at `L_true` ≥ 11 and 12–17 at `L_true` 10 in 256 attempts is the base-reachability number for this rung; it supports "RL moves the frontier by one bin (10 → 11) on this pool" — the same size of gain as for seed 0, and smaller than the token format's 7 → 10 (which starts lower).
+
+**Next measurement that would settle what is open.** (1) `lean_check` + term-size labels for the ladder pools (proposal 9 phase 1), then re-report `L*` in both units for the four existing EI arms — no new training needed. (2) If the question is whether the one-bin gain is capacity- or budget-limited, the cheapest test is 8 more rounds of the seed-2 s0 arm (`--resume`) at ≈ $1: `L*` staying at 12 with ≥ 12 counts not growing would say plateau; growth would say budget.
+
+No quarantine. Reviewer done 2026-09-22 ≈ 09:00 UTC.
