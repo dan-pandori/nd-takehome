@@ -51,7 +51,15 @@ def coverage(arm, s, pool):
     fn = f'{D}/cov_{arm}_s{s}_{pool}.s0.jsonl'
     if not os.path.exists(fn):
         return None
-    rows = rd(fn)
+    rows0 = rd(fn)
+    # 2026-09-22: orphaned duplicate coverage processes (log.md 09:25) appended a second record for some targets; keep the FIRST record per
+    # target (both copies ran the same checkpoint and sampling seed) and report how many duplicates differed.
+    seen = {}; rows = []; n_dup = 0; n_dup_diff = 0
+    for r in rows0:
+        if r['name'] in seen:
+            n_dup += 1; n_dup_diff += [p['proof'] for p in r['proofs']] != [p['proof'] for p in seen[r['name']]['proofs']]
+            continue
+        seen[r['name']] = r; rows.append(r)
     key = 'depth3' if pool in ('d3sub', 'depth3', 'd3req') else 'derived_dn'
     key2 = 'reductio' if pool == 'redreq' else None
     solved = sum(1 for r in rows if r['n_ok'] > 0)
@@ -68,7 +76,7 @@ def coverage(arm, s, pool):
     for r in rows:
         for k, v in r['gate'].items():
             g[k] += v
-    return {'n': len(rows), 'solved': solved, 'solved_with_pattern': patt, 'pattern_key': key, 'solved_with_reductio_strict': strict, 'rate': patt / len(rows),
+    return {'n': len(rows), 'duplicate_records_dropped': n_dup, 'duplicates_differing': n_dup_diff, 'solved': solved, 'solved_with_pattern': patt, 'pattern_key': key, 'solved_with_reductio_strict': strict, 'rate': patt / len(rows),
             'samples': tried, 'accepted_samples': ok, 'nd_only_samples': ok_nd - ok, 'parse_fail_samples': pf, 'per_sample_rate': ok / tried,
             'by_stratum': {k: {'n': v[2], 'solved': v[0], 'pattern': v[1]} for k, v in sorted(strata.items())},
             'distinct_pattern_proofs_ge8': long_pat, 'written_hist': dict(sorted(wh.items())), 'distinct_proofs': sum(len(r['proofs']) for r in rows),
