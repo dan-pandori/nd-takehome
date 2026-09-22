@@ -19,7 +19,7 @@ case "${1:-code}" in
     ssh $SSHO -p "$POD_PORT" "root@$POD_IP" "mkdir -p /workspace/nd-takehome/{data/ladder,data/p2,data/r3_1,data/dsg,ckpts/dsg,ckpts/lf,artifacts/dsg/logs,targets}"
     RS "$W/targets/" "$R/targets/"
     RS "$W/ckpts/lf/stage1_a1_seq_s0.pt" "$W/ckpts/lf/stage1_a1_seq_s1.pt" "$R/ckpts/lf/"
-    RS "$W/data/heldout.jsonl" "$W/data/transfer.jsonl" "$W/data/rl_targets.jsonl" "$R/data/"
+    RS "$W/data/heldout.jsonl" "$W/data/transfer.jsonl" "$W/data/rl_targets.jsonl" "$W/data/train.jsonl" "$R/data/"
     RS "$W/data/ladder/rl_targets.jsonl" "$W/data/ladder/transfer.jsonl" "$R/data/ladder/"
     RS "$W/data/r3_1/depth3_req.jsonl" "$W/data/r3_1/depth3_req_transfer.jsonl" "$R/data/r3_1/"
     RS "$W/data/p2/heldout.jsonl" "$W/data/p2/targets_depth3.jsonl" "$W/data/p2/transfer_depth3.jsonl" "$W/data/p2/targets_reductio_req.jsonl" "$W/data/p2/transfer_reductio_req.jsonl" "$W/data/p2/train_depth3_f0_a1.jsonl" "$R/data/p2/"
