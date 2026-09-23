@@ -104,6 +104,35 @@ def held_breakdown(arm, s):
     return {'src': p, 'cells': {k: {'solved': v[0], 'n': v[1], 'rate': v[0] / v[1]} for k, v in sorted(d.items())}}
 
 
+def held_parse_fail(arm, s):
+    """WHY the held-out samples that fell outside the strict grammar fell outside it, split by the reference proof's
+    box depth.  `fail_example` holds the rejected sample, and for a grammar violation that string is
+    'LEANPARSE <reason>', so the reason is recoverable per theorem.  Added 2026-09-23 21:55 UTC (log.md): at depth 3
+    the lambda renderings fail overwhelmingly on bookkeeping -- unbound names and unbalanced parentheses."""
+    p = find(arm, f'held_{arm}_s{s}.jsonl')
+    rows = jlines(p)
+    if rows is None:
+        return None
+    depth = {}
+    for l in open('data/p2/heldout.jsonl'):
+        x = json.loads(l)
+        depth[x['name']] = max((y.count('| ') for y in x['proof'].split(' ; ')), default=0)
+    out = {}
+    for tag, want in (('depth3', lambda d: d == 3), ('depth_le2', lambda d: d <= 2)):
+        c = collections.Counter(); nfail = 0; nparse = 0
+        for r in rows:
+            if not want(depth[r['name']]) or r['solved']:
+                continue
+            nfail += 1
+            fe = r.get('fail_example') or ''
+            if fe.startswith('LEANPARSE'):
+                nparse += 1
+                c[fe[10:].strip()[:40]] += 1
+        out[tag] = {'failures': nfail, 'grammar_violations': nparse, 'reasons': dict(c.most_common(8))}
+    out['src'] = p
+    return out
+
+
 def cov(arm, s, tag):
     """coverage.py pass@2,000 on one pool."""
     p = find(arm, f'cov_{tag}_{arm}_s{s}.s0.jsonl')
@@ -254,6 +283,7 @@ def main():
                     'by_len': {k: v['rate'] for k, v in h['by_len'].items()},
                     'written_hist': h.get('written_hist')},
                 'heldout_by_prem_len': held_breakdown(arm, s),
+                'heldout_parse_fail': held_parse_fail(arm, s),
                 'mech_pass16': mech(arm, s),
                 'cov': {tag: cov(arm, s, tag) for tag in ('d3', 'd3req', 'red')},
                 'dial_ei': dial(arm, s, 'ei'), 'dial_frozen': dial(arm, s, 'frz'),

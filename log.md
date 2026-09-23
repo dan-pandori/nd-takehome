@@ -357,3 +357,13 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   | R2 `lean_seq_intro` | 891 / 861 | 247 / 206 | 79 / 47 | 2 / 3 |
 
   **E3 is falsified for R1 with the opposite sign.** The brief and the pre-registration predicted ×2–3 on the 7-line count; the measurement is **×0.70 / ×0.78**. The falsifier as worded ("dead if R1 is within ±25 % of C0 on both seeds") is met on seed 1 (−22 %) and missed on seed 0 (−30 %) — but the miss is *downwards*, which refutes "the horizon is text length" more strongly than a null would. The premise-count split (registered 21:40, before any R-arm result) shows no crossover either: R1 is below C0 at every premise count, including `n_prem` 2 (92 / 109 vs 126 / 124) and 3 (27 / 30 vs 38 / 34), where the text saving is largest. **The cap + 1 horizon is not a property of the text's length.**
+- 2026-09-23 21:55 UTC  **Why the lambda renderings fail at depth 3** (`dsr_analysis.held_parse_fail`, from `fail_example` in the same `held_*.jsonl`; the in-loop totals agree — `gate_held_*.jsonl` `parse_reasons`). Over the whole 5,000-theorem held-out pass, samples that fall **outside the strict grammar** (`LEANPARSE`), essentially all of them on the 500 depth-3 theorems:
+
+  | arm | grammar violations / 5,000 s0 | top reasons s0 | s1 | top reasons s1 |
+  |---|---|---|---|---|
+  | C0 `lean_seq` | 182 | `unbound` 162 | 308 | **`expected )` 216**, `unbound` 79 |
+  | R1 `lean_seq_noprem` | 339 | `exact not last` 285 | 305 | `unbound` 261 |
+  | R3 `lean_seq_nofml` | 135 | `unbound` 87 | 446 | `unbound` 403 |
+  | R2 `lean_seq_intro` | **24** | `formula` 12 | **51** | `unbound` 39 |
+
+  At depth 3 the failure of every lambda rendering is **bookkeeping, not logic**: a citation of a name that is not in scope, or a parenthesis that does not close. R2 has an order of magnitude fewer. Of C0's 257 / 363 depth-3 failures, 164 / 296 are grammar violations; of R2's 89 / 127, only 12 / 42 — R2's remaining failures are genuine rule errors (`DN`, `IMPI`, `ANDE2`), which the other arms make at about the same absolute rate. **R1 rules out "shorter text is easier"**: it has the shortest text of any arm (0.706×) and the *worst* depth-3 rate (0.232 / 0.218). The nesting load is what matters: `( fun ( nS : A ) => by … )` opens two bracket levels plus the hypothesis formula's own parentheses per box and repeats that formula, `( by intro nS ; … )` opens one and repeats nothing. **R4 `( fun nS => by … )` — one bracket level, no repeated formula, `fun` kept — is the arm that separates the bracket/formula load from the `fun` keyword.**
