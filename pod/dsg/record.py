@@ -2,12 +2,14 @@
 """Checker of record for every counted proof of an arm: the UNMODIFIED nd2lean.py --check (official translation + Lean) and
 nd_verify on (i) the dial's found_4.jsonl (EI and frozen), (ii) the ladder's found_8.jsonl / found_transfer_8.jsonl (T1 and frozen),
 (iii) every distinct counted proof of the three coverage runs. Agreement counts -> artifacts/dsg/record_<arm>.json.
-  python3 pod/dsg/record.py <c0|g1|g2>"""
+  python3 pod/dsg/record.py <c0|g1|g2> [seed]        (a seed restricts the pass to that seed; resume phase runs one seed per pod)"""
 import sys, os, glob, json, subprocess, collections
 arm = sys.argv[1]
+seeds = (int(sys.argv[2]),) if len(sys.argv) > 2 else (0, 1)
+sfx = f'_s{sys.argv[2]}' if len(sys.argv) > 2 else ''
 out = {}
 srcs = []
-for s in (0, 1):
+for s in seeds:
     for a in ('ei', 'frozen'):
         d = f'artifacts/dsg/{a}_d3_{arm}_s{s}'
         if os.path.isdir(d):
@@ -36,4 +38,4 @@ for tag, src in srcs:
     out[tag] = {'source': src, 'n': len(rows), 'both_accept': c[(True, True)], 'nd_ok_lean_rej': c[(True, False)], 'nd_rej_lean_ok': c[(False, True)],
                 'both_reject': c[(False, False)], 'stderr_tail': p.stderr[-300:]}
     print(tag, len(rows), 'both accept', out[tag]['both_accept'], 'disagree', out[tag]['nd_ok_lean_rej'] + out[tag]['nd_rej_lean_ok'], flush=True)
-json.dump(out, open(f'artifacts/dsg/record_{arm}.json', 'w'), indent=1)
+json.dump(out, open(f'artifacts/dsg/record_{arm}{sfx}.json', 'w'), indent=1)
