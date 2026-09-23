@@ -507,3 +507,21 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   Two lessons, both about my own scaffolding rather than the science: a step that `echo`s its failure and then marks the whole job done is worse than one that fails loudly, and I should have read the log path the script actually writes rather than the one I assumed.
 
   Also fixed: `record.py` died with `KeyError: 'sw'` on the sweep pod, which carries Stage-1 seeds of four different arms (and so four different renderings) rather than one. It now expands `sw` to the arms that actually have artefacts there and records each against its own mode.
+- 2026-09-23 23:50 UTC  **E8 — the first EI − frozen number, and the run's test of whether RL amplifies or compensates for what the rendering already does. It does neither.** Source `artifacts/dsr/dsr-{c0,r1}/{ei,frz}_d3_{c0,r1}_s{0,1}/round_4.json`, `targets_cum.rate`, 1,000 depth-3 targets, EI and frozen at **equal attempts** (k = 32 × 4 rounds), 3.2M from-scratch models, batch 2048.
+
+  | arm | seed | EI | frozen | **EI − frozen** | EI held-out | frozen held-out |
+  |---|---|---|---|---|---|---|
+  | C0 `lean_seq` | 0 | 0.6490 | 0.3560 | **+0.2930** | 0.9574 | 0.9084 |
+  | C0 | 1 | 0.6660 | 0.2910 | **+0.3750** | 0.9688 | 0.8966 |
+  | C0 | **mean** | 0.6575 | 0.3235 | **+0.3340** | 0.9631 | 0.9025 |
+  | R1 `lean_seq_noprem` | 0 | 0.5510 | 0.2850 | **+0.2660** | 0.9464 | 0.8766 |
+  | R1 | 1 | 0.6650 | 0.3090 | **+0.3560** | 0.9530 | 0.8716 |
+  | R1 | **mean** | 0.6080 | 0.2970 | **+0.3110** | 0.9497 | 0.8741 |
+
+  **Scored against the pre-registration.** E8 predicted C0 in **+0.20 to +0.35** and R1 **within ±0.05 of C0**. C0's mean is **+0.334, inside the band** (seed 1 at 0.375 is marginally above it; seed 0 at 0.293 is comfortably inside). R1 − C0 is **−0.023, well within ±0.05**. **E8 holds on both clauses.**
+
+  **This falsifies the text-length hypothesis for the third time, and by the route the pre-registration named.** Line 153 of the pre-registration sets the compound falsifier: the "cap + 1 horizon is text length" reading survives only if R1 shows *a lower base rate than C0* **and** *a larger EI − frozen*, on both seeds. R1 does have the lower base rate — but its EI − frozen is **smaller on both seeds** (0.266 < 0.293, 0.356 < 0.375), not larger. The second clause fails in the wrong direction, cleanly, twice. Removing the premise re-statement shortens the text and makes the model worse; **RL does not recover it.**
+
+  **The substantive result, which is more interesting than the falsification.** EI adds **+0.334 (C0) and +0.311 (R1)** — nearly the same constant — while the two arms' *levels* differ throughout: R1 is below C0 at EI (0.608 vs 0.658), below at frozen (0.297 vs 0.324), below on held-out at EI (0.9497 vs 0.9631) and below at frozen (0.8741 vs 0.9025). **Expert iteration adds a roughly fixed amount on top of whatever the rendering gives it; it neither amplifies the rendering's advantage nor compensates for its deficit.** On these two arms the base model's rendering deficit passes through RL essentially unchanged — which is the least convenient answer for the idea that a better rendering buys RL readiness specifically, and the most useful one for predicting from a Stage-1 number.
+
+  Caveat to carry into the write-up: n = 2 seeds per arm here, and the seed sweep has already shown once that n = 2 can manufacture a clean-looking story. The EI − frozen gap is large (≈ 0.33) relative to its seed scatter (0.293 vs 0.375), so the *existence* of the EI effect is safe; the **−0.023 arm difference is not resolvable at n = 2** and should be reported as "no detectable difference", not as "R1's gap is smaller".
