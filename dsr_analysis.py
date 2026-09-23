@@ -52,7 +52,15 @@ def mech(arm, s):
     rows = jlines(p)
     if rows is None:
         return None
+    nprem = {}
+    for l in open('data/transfer.jsonl'):
+        x = json.loads(l)
+        pre = x['thm'].split('|-')[0].strip()
+        nprem[x['name']] = int(x.get('n_prem') if x.get('n_prem') is not None else (0 if not pre else pre.count(',') + 1))
     wh = collections.Counter(); solved = 0; n = 0; ntext = 0; ndist = 0
+    # by premise count: R1 removes exactly n_prem `have` lines from the text, so if the horizon is text length the
+    # gain must grow with n_prem.  Added 2026-09-23 21:40 UTC, before any arm's mech result existed (log.md).
+    byp = collections.defaultdict(lambda: collections.Counter())
     for r in rows:
         n += 1
         seen = {}
@@ -62,9 +70,13 @@ def mech(arm, s):
             solved += 1
         ndist += len(seen)
         ntext += sum(1 for t in (r.get('lean_texts') or []) if t)
+        k = nprem.get(r['name'], -1)
         for wl in seen.values():
             wh[wl] += 1
+            byp[k][wl] += 1
     return {'src': p, 'n': n, 'solved': solved, 'rate': solved / max(n, 1),
+            'by_nprem': {str(k): {'d7': v[7], 'd8': v[8], 'd9plus': sum(c for L, c in v.items() if L >= 9),
+                                  'total': sum(v.values())} for k, v in sorted(byp.items())},
             'distinct_norm_by_written_len': dict(sorted(wh.items())),
             'd7': wh[7], 'd8': wh[8], 'd9plus': sum(v for k, v in wh.items() if k >= 9),
             'distinct_total': ndist, 'with_lean_text': ntext,
@@ -157,9 +169,22 @@ def ladder(arm, s, kind):
            'ge': tc.get('ge'), 'by_bin': tc.get('by_bin'),
            'heldout_greedy': r8.get('heldout_greedy', {}).get('rate'),
            'targets_solved': r8.get('targets_cum', {}).get('solved')}
-    for k in ('schema_solved', 'textbook_by_schema', 'by_schema'):
-        if k in tc:
-            out['by_schema'] = tc[k]; break
+    # textbook solves per schema: the round file has no per-schema view, so derive it from found_transfer_<R>.jsonl
+    ft = f'{d}/found_transfer_{last[0]}.jsonl'
+    if os.path.exists(ft):
+        solved = collections.defaultdict(set)
+        for l in open(ft):
+            x = json.loads(l)
+            if x.get('source') == 'textbook' and x.get('schema'):
+                solved[x['schema']].add(x['name'])
+        tot = collections.Counter()
+        for l in open('data/ladder/transfer.jsonl'):
+            x = json.loads(l)
+            if x.get('source') == 'textbook' and x.get('schema'):
+                tot[x['schema']] += 1
+        out['textbook_by_schema'] = {k: {'solved': len(solved.get(k, ())), 'n': v} for k, v in sorted(tot.items())}
+        out['textbook_schemata_ge5'] = sum(1 for k, v in out['textbook_by_schema'].items() if v['solved'] >= 5)
+        out['textbook_src'] = ft
     return out
 
 
