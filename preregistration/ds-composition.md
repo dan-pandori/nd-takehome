@@ -122,3 +122,44 @@ inside the $22 ceiling with the ladder intact, the **1,000-target depth-3 pool**
 `min_lines_ub` ≥ 7) at the same k = 2,000 and reported as a rate on 250 (± 3 pp); the two required pools (300 each) keep the full
 protocol. The dial still covers all 1,000 targets at 128 attempts (frozen) for every arm. Expectations on that pool are read as
 rates. The partial full-pool file of the control (`cov_c0_s0_depth3_partial_full1000`, first ≈ 100 targets) is kept, not counted.
+
+## Amendment 3 — 2026-09-23 21:15 UTC (resume after the credit stop and the host cleanup; before any new pod)
+
+The session ended 2026-09-22 ≈ 10:33 UTC when the account ran out of credits, the balance floor then deleted every pod, and a
+host cleanup deleted this worktree's local `artifacts/` and `ckpts/`, which had not been uploaded. What that cost and what
+this amendment changes:
+
+1. **What survived and what did not.** `data/dsc/` (the 07:12 re-drawn sets, their assemble reports and shape tables) survived
+   on disk. Round-level files that had been *committed* are recoverable from git and have been restored to
+   `artifacts/dsc_pre_cleanup/`: the dial `round_1..4.json` and `args.json` of every arm × seed, the Stage-1 held-out summaries
+   `heldout_<arm>_s<k>.json`, and two control coverage gate summaries. **Not** recoverable: every Stage-1 checkpoint, every
+   `found_*.jsonl` (the proof-level files), every coverage record file, the ladder rounds (none had finished). Because the
+   checkpoints are gone, no surviving number can be re-derived from a model anyone can load. Every number of this run is
+   therefore **re-measured from the sets in `data/dsc/`**: Stage-1 is retrained (2 seeds per arm), and held-out, dial, ladder
+   and coverage are run again on the new checkpoints. The pre-cleanup values are reported, where they exist, as a **second,
+   independently seeded replicate of Stage-1 training, clearly labelled, measured with the pre-`efficiency` sampler and with
+   its checkpoints lost** — a side observation on seed spread, never a substitute for a re-measured number.
+2. **The sampler changes, and it changes for every arm at once.** `sample.py` is replaced by `origin/dan_efficiency`'s (run
+   `efficiency`, 2026-09-23: fast decode path, `path='fast'`, `early='eos'`, `compact=True`, `rowrng=True`), with only the tail
+   of `generate()` restored to this run's gate contract (`lean_gate.gate(tok, prompts, nd_proofs, texts)` = Lean ∧ `nd_verify`,
+   plus `generate.last_texts`); `coverage_lean.py`'s direct `generate_ids` call is switched to `generate_ids_fast` with a
+   per-batch seed; `model.py` takes that run's memoised RoPE table (`ND_ROPE_MEMO`, same values). Sampling noise is keyed by
+   (chunk seed, step, slot) rather than drawn batch-wide, so the accepted set is reshuffled relative to the pre-cleanup
+   replicate about as much as an RNG re-draw. **Every arm, including the control, is measured on this sampler**, and
+   **batch sizes are held fixed across arms**: held-out 512, dial 768, ladder 512, coverage 1024, `max_new` unchanged (400
+   for coverage and the dial, 512 for the ladder). No number is compared across sampler or batch.
+3. **`nd2lean.py` takes `lean-seed2`'s BOTE fix** (`False.elim nA`, commit 39bdc5b on `origin/dan_lean_seed2`) — the owner's
+   fix, not mine. `lean_tok.py` is deliberately **not** changed: the control's Stage-1 checkpoints were trained on the old
+   BOTE tokenisation and may not be retrained, so changing the training surface would make the control incomparable. The
+   consequence is a known, harmless looseness in the *reward* (Lean accepts some non-BOTE `.elim` texts) that costs nothing,
+   because a proof is counted only if Lean **and** `nd_verify` accept it; the *record* check now uses the fixed translation.
+4. **Scheduling.** One pod per arm, ≤ 3 concurrent jobs per GPU (`pod/dsc/runner.sh`, a single process tree per pod, replacing
+   the `AFTER`-marker wrappers whose orphans duplicated coverage jobs on 2026-09-22), `CUDA_MEM_FRACTION=0.30`. Queue order per
+   pod: Stage-1 → held-out → dial (EI + frozen, 2 seeds) → ladder (T1 + frozen, 2 seeds) → coverage (redreq, d3req, d3sub;
+   2 seeds) → checker of record. The ladder and the dial come before coverage because falsifiers 1 and 2 are read off them.
+5. **Budget.** $18, ceiling 36 pod-hours (`podbudget ds-composition`), balance $220.36 at 21:02 UTC. Stop rule, in this order:
+   drop the coverage tail (d3sub, then d3req), then A4's ladder, then A4, then A2's ladder. Hard stop 30 h from 21:00 UTC
+   (2026-09-25 03:00 UTC).
+
+Expectations, arms, pools, falsifiers and the decision rule are **unchanged**; the control's own values are re-measured here
+and every arm is compared to that re-measured control.

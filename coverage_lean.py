@@ -20,7 +20,7 @@ import argparse, json, os, sys, time, collections, multiprocessing
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import torch
 from model import load_ckpt
-from sample import generate_ids
+from sample import generate_ids, generate_ids_fast
 from nd_verify import verify_text
 from prune import pruned_length
 from normalize import norm
@@ -74,6 +74,10 @@ def main():
     print(f'shard {si}/{sn}: {len(recs)} theorems, {len(done)} already done; k={a.k} T={a.temperature} batch={a.batch}', flush=True)
     gen = torch.Generator(device=dev)
     gen.manual_seed(a.seed * 100003 + si * 7919)
+    # ds-composition 2026-09-23: the fast decode path (run efficiency) is used unless ND_SAMPLE_PATH=base.  Its noise is
+    # keyed by (chunk seed, step, slot), so each batch gets its own seed from the same base as the base path's generator.
+    fast = os.environ.get('ND_SAMPLE_PATH', 'fast') == 'fast'
+    chunk_seed = a.seed * 100003 + si * 7919
     t_start = time.time(); n_done = 0
     G = collections.Counter()
     with open(out_fn, 'a') as fo:
@@ -91,7 +95,12 @@ def main():
             while n < a.k:
                 b = min(a.batch, a.k - n)
                 with torch.autocast('cuda', dtype=torch.bfloat16):
-                    outs = generate_ids(model, tok, [pid] * b, greedy=False, temperature=a.temperature, max_new=a.max_new, gen=gen)
+                    if fast:
+                        outs = generate_ids_fast(model, tok, [pid] * b, greedy=False, temperature=a.temperature,
+                                                 max_new=a.max_new, seed=chunk_seed, early='eos', compact=True)
+                        chunk_seed += 1
+                    else:
+                        outs = generate_ids(model, tok, [pid] * b, greedy=False, temperature=a.temperature, max_new=a.max_new, gen=gen)
                 for j, o in enumerate(outs):
                     nd = tok.decode(o); tx = tok.last_text
                     if nd.startswith('LEANPARSE'):
