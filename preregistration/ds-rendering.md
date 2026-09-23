@@ -254,3 +254,61 @@ fourth cell, `by intro nS` *with* a type, has no Lean syntax, so the missing cel
 **Budget.** One more A40 ($0.49/h), the same job plan as the other arms, ≈ 5 pod-hours ≈ $2.50.
 Projected total 25 of 36 pod-hours, ≈ $12.50 of $18. The drop order becomes: R2's ladder, then
 **R4's ladder**, then R2, then R3's ladder.
+
+---
+
+# Addendum 2, 2026-09-23 22:0x UTC — a Stage-1 **seed sweep**, because R4 split the seeds
+
+Written **before the `dsr-s` pod exists** (`~/pods.log`), immediately after R4's held-out result and
+before any coverage, dial or ladder result for any arm. It adds seeds; it changes no number
+already pre-registered.
+
+## What happened
+
+R4's depth-3 held-out slice (500 theorems, f = 0, greedy) is **0.788 / 0.440**. Addendum 1
+pre-registered two disjoint bands — 0.65–0.90 if the cost is the binder-type repetition,
+0.20–0.55 if it is the `fun … =>` syntax — and said in as many words: *"if R4 splits the seeds …
+the run reports the mechanism as unresolved."* Seed 0 lands in the first band, seed 1 in the
+second. **The mechanism is unresolved at n = 2, and I am reporting that.**
+
+The full picture at n = 2 (held-out greedy, `data/p2/heldout.jsonl`):
+
+| arm | in distribution (box depth ≤ 2, 4,500) | **depth-3 slice (500, f = 0)** | seed gap | grammar violations at depth 3 |
+|---|---|---|---|---|
+| C0 `lean_seq` | 0.955 / 0.966 | 0.486 / 0.274 | 0.21 | 164 / 296 |
+| R1 `lean_seq_noprem` | 0.948 / 0.944 | 0.232 / 0.218 | 0.01 | 324 / 283 |
+| R3 `lean_seq_nofml` | 0.942 / 0.926 | 0.674 / **0.024** | **0.65** | 107 / 420 |
+| R2 `lean_seq_intro` | 0.955 / 0.964 | **0.822 / 0.746** | **0.08** | **12 / 42** |
+| R4 `lean_seq_funbare` | 0.959 / 0.967 | 0.788 / 0.440 | 0.35 | 30 / 173 |
+
+The obstacle is **Stage-1 seed variance in the depth-3 cell**, which is large for every rendering
+that writes a box as a lambda (C0 0.21, R3 0.65, R4 0.35) and small for the one that does not
+(R2 0.08). Two seeds cannot separate "R2 beats R4" from that variance. Four more seeds can, for
+about $0.80 — 1.5 % of this run's budget — so it is worth doing rather than reporting a shrug.
+
+## The sweep
+
+`train.py --mode <arm's mode> --steps 6000 --bs 128 --cap 6 --seed {2,3,4,5}` on the **same**
+155,000 ND records, then `eval_set.py` greedy on `data/p2/heldout.jsonl` — Stage-1 and held-out
+only, nothing else. Arms **C0, R3, R2, R4** (R1 is excluded: its two seeds agree to 0.01 and it is
+worse than the control everywhere, so more seeds would not change a conclusion). 16 Stage-1 runs
+on one new A40, two at a time, ≈ 1.6 pod-hours ≈ **$0.80**. Everything else about the models,
+data and sampler is unchanged. With the two seeds already in hand this gives **n = 6 per arm**.
+
+## Pre-registered expectations (over the 6 seeds of each arm)
+
+- **E17** Mean depth-3 slice rate: **R2 > R4 > C0 ≈ R3**, with `mean(R2) − mean(C0) ≥ 0.25`.
+- **E18** R2's across-seed standard deviation on the depth-3 slice is the **smallest of the four**
+  and is **< 0.10**; C0's, R3's and R4's are each **> 0.12**.
+- **E19** Mean in-distribution (depth ≤ 2) accuracy is within **2 pp** across all four arms — i.e.
+  the rendering still buys nothing in distribution, whatever it does out of it.
+- **E20** Across all 24 models, the depth-3 slice rate and the count of grammar violations at
+  depth 3 are strongly negatively related (Spearman ρ ≤ −0.8): the depth-3 gap *is* the
+  bookkeeping gap, not a difference in logical competence.
+
+**Decision rule for the mechanism.** Let `s` be the pooled across-seed standard deviation of the
+depth-3 slice rate. If `mean(R2) − mean(R4) > s`, the `by intro` syntax contributes **beyond**
+dropping the binder type. If `|mean(R2) − mean(R4)| ≤ s`, dropping the binder type accounts for
+the effect and the `fun`-vs-`intro` choice does not. Either way the comparison of both against C0
+is the reportable result. **If E18 holds but E17 does not, the finding is about variance, not
+level**, and the write-up will say that instead.
