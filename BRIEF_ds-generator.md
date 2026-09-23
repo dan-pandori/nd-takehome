@@ -110,3 +110,41 @@ shape tables as a bar chart per arm; the readiness panel per arm with C0); `numb
 `DS-GENERATOR DONE <UTC>`; bucket `hf://buckets/dan-pandori/nd-rl/ds-generator/{ckpts,artifacts,data}`;
 pods deleted; `touch ~/runs/ds-generator/executor.done`. Questions for Dan in `QUESTIONS.md`
 with the default you follow.
+
+---
+
+## Resume 2026-09-23 (Dan lifted the pause; $50 across the three dataset-style runs)
+
+Your earlier session ended when the account ran out of Fable credits (2026-09-22 ≈ 10:33 UTC),
+and the balance floor then deleted every pod. Nothing was wrong with the work. Resume it.
+
+**What changed while you were stopped — use all of it.**
+
+1. **The sampler is ~2× faster.** Use `sample.generate(..., path="fast", early="eos",
+   compact=True, rowrng=True, batch=4096, max_new=288)`; peak memory ≈ 11 GB, so **at most two
+   sampling jobs per 24 GB GPU**, and ≤ 3 concurrent jobs per GPU in total (four was measured
+   counterproductive). Read
+   `~/nd-rl/experiment-summaries/2026-09-23-efficiency-sampler-and-checker-throughput/README.md`
+   before you set batch sizes. Note the caveat recorded there: a batch-size change reshuffles
+   which proofs are accepted about as much as an RNG re-draw does, so hold the batch **fixed
+   across every arm you compare**, and say which batch it was.
+2. **Every number must name the model it was measured on** — checkpoint, parameter count,
+   format (`lean_seq` / token), from-scratch or pretrained, and its training set — in the
+   write-up and in each `numbers.md` table. An inherited number carries its label. This is now
+   in `AGENT_POLICY.md`, and the reviewer treats an unlabelled number as a finding.
+3. **Pod-hour ceiling.** `podbudget <run-id>` shows it. At 80 % a file
+   `~/runs/<run-id>/BUDGET_WARNING` appears — check for it between stages. You may extend
+   yourself within the declared dollar budget: `podbudget <run-id> --extend <hours> "reason"`;
+   it is refused if the projection exceeds the budget, and then you ask Dan in `QUESTIONS.md`
+   and proceed on a stated default.
+4. **Upload to the bucket as you go, not only at the end**
+   (`hf buckets sync artifacts hf://buckets/dan-pandori/nd-rl/<run-id>/artifacts` after each
+   stage). A host cleanup deleted local `artifacts/` and `ckpts/` for the runs that had not
+   uploaded; `data/` survived. Treat local disk as scratch.
+
+**Specific to this run.** Your `artifacts/` were uploaded to
+`hf://buckets/dan-pandori/nd-rl/ds-generator/` before the cleanup — pull what you need back
+rather than re-measuring. `ckpts/` and the local `artifacts/` are gone from disk; `data/`
+survived. G2's held-out collapse (0.626 / 0.606 against the control's 0.909 / 0.896) is already
+a clear negative: do not spend the budget re-confirming it. Spend it on G1 and on the ladder and
+textbook numbers that are missing. Budget $14, ceiling 28 pod-hours.
