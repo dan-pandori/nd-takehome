@@ -34,10 +34,14 @@ def lstar(solved_names, pool, need=5):
 
 
 def heldout(arm, s):
-    fn = f'{D}/heldout_{arm}_s{s}.jsonl'
+    # resume phase: the 2026-09-22 per-record .jsonl files were lost with the host cleanup (only the .json
+    # summaries were committed), so every arm's held-out greedy was re-measured on 2026-09-23 -> heldout2_*.
+    fn = f'{D}/heldout2_{arm}_s{s}.jsonl'
+    if not os.path.exists(fn):
+        fn = f'{D}/heldout_{arm}_s{s}.jsonl'
     if not os.path.exists(fn):
         return None
-    rows = rd(fn); summ = jl(f'{D}/heldout_{arm}_s{s}.json')
+    rows = rd(fn); summ = jl(fn.replace('.jsonl', '.json'))
     lab = {r['name']: r['pat'] for r in rd('data/p2/heldout.jsonl')}
     by = collections.defaultdict(lambda: [0, 0])
     for r in rows:
@@ -95,6 +99,19 @@ def dial(arm, s):
     return out
 
 
+def retrain_check(arm, s):
+    """Resume phase: G1 / G2's Stage-1 checkpoints were deleted by the host cleanup and retrained on 2026-09-23
+    from the same set, seed and command line, on a different GPU class (A6000 / 4090, not the 3090 the originals
+    were trained on).  Held-out greedy is re-measured with the identical eval_set call and compared.  C0's row is
+    the control for the comparison itself: its checkpoint is byte-identical (md5 verified against the
+    pre-registration), so its delta is the harness's, not a retrain's."""
+    old, new = jl(f'{D}/heldout_{arm}_s{s}.json'), jl(f'{D}/heldout2_{arm}_s{s}.json')
+    if not old or not new:
+        return None
+    return {'heldout_2026_09_22': old['rate'], 'heldout_2026_09_23_retrain': new['rate'],
+            'delta_pp': 100 * (new['rate'] - old['rate']), 'n': old.get('n')}
+
+
 def ladder(arm, s, transfer, targets):
     out = {}
     for k in ('T1', 'frozen'):
@@ -135,7 +152,11 @@ def main():
         tag = 'c0_a1' if arm == 'c0' else arm
         sh = jl(f'{D}/shape_{tag}.json')
         S['sets'][arm] = {'shape': list(sh.values())[0] if sh else None, 'overlap': jl(f'{D}/overlap_{arm}.json'), 'assemble': jl(f'{D}/assemble_{arm}.json'), 'render': jl(f'{D}/render_{arm}.json')}
-        S['record'][arm] = jl(f'{D}/record_{arm}.json')
+        rec = jl(f'{D}/record_{arm}.json') or {}
+        for k in (0, 1):                      # resume phase: one seed per pod -> record_<arm>_s<seed>.json
+            rec.update(jl(f'{D}/record_{arm}_s{k}.json') or {})
+        S['record'][arm] = rec or None
+        S['sets'][arm]['retrain_check'] = {f's{k}': retrain_check(arm, k) for k in (0, 1)}
         for s in (0, 1):
             row = {'arm': arm, 'seed': s, 'heldout': heldout(arm, s), 'coverage': {p: coverage(arm, s, p) for p in POOLS}, 'dial': dial(arm, s), 'ladder': ladder(arm, s, transfer, targets)}
             S['rows'].append(row)
@@ -170,6 +191,12 @@ def main():
         for k in ('frozen', 'T1'):
             x = L.get(k)
             if x: print(f"| {r['arm']} s{r['seed']} | {k} | {x['lstar_transfer']} | {x['transfer_solved']} | " + ' / '.join(str(x['transfer_by_bin'][str(b)]) for b in range(7, 15)) + f" | {x['textbook_solved']} | {', '.join(sc + ' ' + str(x['by_schema'][sc][0]) for sc in x['schemata_ge5'])} | {f(x['heldout_greedy_r1'])} → {f(x['heldout_greedy_final'])} |")
+    print('\n## Stage-1 retrain reproduction check (G1 / G2 retrained 2026-09-23; C0 = same checkpoint, so its row is the harness control)')
+    print('| arm s | held-out greedy 2026-09-22 (RTX 3090) | held-out greedy 2026-09-23 (A6000 / 4090) | delta pp |\n|---|---|---|---|')
+    for arm in ARMS:
+        rc = S['sets'][arm].get('retrain_check') or {}
+        for k, v in sorted(rc.items()):
+            if v: print(f"| {arm} {k} | {f(v['heldout_2026_09_22'])} | {f(v['heldout_2026_09_23_retrain'])} | {v['delta_pp']:+.2f} |")
     print('\n## Checker of record')
     for arm, rec in S['record'].items():
         if rec:
