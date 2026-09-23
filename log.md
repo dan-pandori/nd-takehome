@@ -397,3 +397,13 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 
   **Addendum 1's E16 is satisfied by both of its disjoint bands, so it decides nothing.** R4 / R2 = 0.95 and R4 / C0 = 1.08 are both inside ×0.8–1.25. The band was written when the greedy gap between C0 and R2 looked like 2×; at k = 2,000 the gap is 13 %, far too small for a ±25 % rule to separate. That is a flaw in my own discriminator, not a property of the arms, and it is recorded as one.
   **What the panel does show, and it is the same story the greedy numbers told:** order the five arms by **seed gap** and the two renderings that do **not** write the box's binder type come first — R4 0.003 and R2 0.042 against R1 0.050, C0 0.101 and R3 0.158. Both untyped-binder arms are more stable than all three typed-binder arms. At n = 2 per arm that is suggestive, not established; the 24-model sweep is what decides it, under addendum 2's stated rule.
+- 2026-09-23 22:53 UTC  **`depth3_req` pool (300 targets, depth-3 REQUIRED at bound 8), pass@2,000 — C0, R1, R2 complete** (`cov_d3req_<arm>_s{0,1}.s0.jsonl`):
+
+  | arm | s0 | s1 | mean | vs C0 |
+  |---|---|---|---|---|
+  | C0 `lean_seq` | 175 / 300 = **0.583** | 111 / 300 = **0.370** | 0.477 | — |
+  | R1 `lean_seq_noprem` | 129 / 300 = 0.430 | 113 / 300 = 0.377 | 0.403 | ×0.85 |
+  | R2 `lean_seq_intro` | **218 / 300 = 0.727** | **175 / 300 = 0.583** | **0.655** | **×1.37** |
+
+  **E6's C0 band (0.05–0.25) is badly missed: the control is 0.370–0.583, 1.5–2.3× the top of the band.** The band came from the brief, which expected this pool to be near-impossible for a cap-6 base model; it is not — a `lean_seq` a1 model solves more than a third of the required-depth-3-at-8 targets in 2,000 attempts. Recorded as a miss, and it matters beyond this run: `depth3_req` was built (round3-run1) as a pool where "restricted search fails at bound 8", and it is being used elsewhere as a hard f ≈ 0 pool.
+  **R2's margin is larger on this harder pool than on the general one** — ×1.37 here against ×1.13 on `targets_depth3` — and E6's "within ×0.7–1.5" holds on s0 (×1.25) and fails on s1 (×1.58). That direction is what the bookkeeping account predicts: `depth3_req` targets need longer, more deeply bracketed proofs, so a rendering with fewer bracket levels per box gains more. R3 and R4 are still running on this pool.

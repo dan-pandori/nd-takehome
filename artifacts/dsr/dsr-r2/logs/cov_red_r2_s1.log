@@ -1,0 +1,4 @@
+START 2026-09-23T22:53:07Z python3 coverage.py --ckpt ckpts/dsr/stage1_r2_s1.pt --in data/p2/targets_reductio_req.jsonl --k 2000 --temperature 0.8 --seed 0 --batch 2048 --max_new 400 --procs 12 --lenfield min_lines_ub --path fast --out artifacts/dsr/cov_red_r2_s1
+shard 0/1: 300 theorems, 0 already done; k=2000 T=0.8 batch=2048
+targets_reductio_req_0: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (2s; 1 done, 2s/thm, ETA 11 min)
+targets_reductio_req_1: n_ok 0/2000 distinct_ok 0 first_hit None written_hist {} (2s; 2 done, 2s/thm, ETA 10 min)
