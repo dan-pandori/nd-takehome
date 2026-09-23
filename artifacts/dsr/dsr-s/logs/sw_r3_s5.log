@@ -1,0 +1,47 @@
+START 2026-09-23T23:08:51Z python3 train.py --data data/p2/train_depth3_f0_a1.jsonl --heldout data/p2/heldout.jsonl --mode lean_seq_nofml --steps 6000 --bs 128 --cap 6 --seed 5 --out ckpts/dsr/stage1_r3_s5.pt && python3 eval_set.py --ckpt ckpts/dsr/stage1_r3_s5.pt --in data/p2/heldout.jsonl --k 1 --temperature 0 --batch 2048 --out artifacts/dsr/held_r3_s5.jsonl --summary artifacts/dsr/held_r3_s5.json
+params 3214336 mode lean_seq_nofml shift True
+train records 155000 max len 464
+step 200 loss 0.9507 lr 1.00e-03 19s val 0.9566
+step 400 loss 0.2386 lr 9.97e-04 40s val 0.1790
+step 600 loss 0.1424 lr 9.89e-04 61s val 0.1110
+step 800 loss 0.1050 lr 9.76e-04 83s val 0.1006
+step 1000 loss 0.1013 lr 9.58e-04 104s val 0.0957
+step 1200 loss 0.0962 lr 9.36e-04 125s val 0.0889
+step 1400 loss 0.0903 lr 9.08e-04 147s val 0.0888
+step 1600 loss 0.0819 lr 8.77e-04 168s val 0.0851
+step 1800 loss 0.0860 lr 8.41e-04 189s val 0.0857
+step 2000 loss 0.0785 lr 8.03e-04 210s val 0.0858
+step 2200 loss 0.0729 lr 7.61e-04 232s val 0.0834
+step 2400 loss 0.0710 lr 7.17e-04 253s val 0.0826
+step 2600 loss 0.0715 lr 6.70e-04 274s val 0.0816
+step 2800 loss 0.0725 lr 6.23e-04 296s val 0.0820
+step 3000 loss 0.0682 lr 5.74e-04 317s val 0.0818
+step 3200 loss 0.0680 lr 5.26e-04 338s val 0.0807
+step 3400 loss 0.0643 lr 4.77e-04 360s val 0.0800
+step 3600 loss 0.0610 lr 4.30e-04 381s val 0.0800
+step 3800 loss 0.0644 lr 3.83e-04 402s val 0.0797
+step 4000 loss 0.0625 lr 3.39e-04 424s val 0.0794
+step 4200 loss 0.0572 lr 2.97e-04 445s val 0.0794
+step 4400 loss 0.0643 lr 2.59e-04 466s val 0.0793
+step 4600 loss 0.0577 lr 2.23e-04 487s val 0.0791
+step 4800 loss 0.0616 lr 1.92e-04 509s val 0.0788
+step 5000 loss 0.0607 lr 1.64e-04 530s val 0.0788
+step 5200 loss 0.0573 lr 1.42e-04 551s val 0.0786
+step 5400 loss 0.0602 lr 1.24e-04 573s val 0.0786
+step 5600 loss 0.0580 lr 1.11e-04 595s val 0.0786
+step 5800 loss 0.0592 lr 1.03e-04 615s val 0.0786
+step 6000 loss 0.0581 lr 1.00e-04 637s val 0.0784
+saved ckpts/dsr/stage1_r3_s5.pt
+[lean_gate] 5000 samples, parse-fail 88, distinct checked 4912: both ok 4483, nd-only 0, lean-only 2, both rej 427; lean 11.9s wall (134.8s proc, 12 workers), nd_verify 0.2s
+generated 5000 proofs in 18s
+stage1_r3_s5.pt on heldout.jsonl k=1 SOLVED 4483/5000 = 0.897 [0.888,0.905]
+  len 2: 991/1000 = 0.991 [0.983,0.995]
+  len 3: 975/1000 = 0.975 [0.963,0.983]
+  len 4: 901/1000 = 0.901 [0.881,0.918]
+  len 5: 885/1000 = 0.885 [0.864,0.903]
+  len 6: 731/1000 = 0.731 [0.703,0.758]
+  written hist {2: 1017, 3: 968, 4: 885, 5: 916, 6: 695, 7: 2}
+  pruned hist {2: 1017, 3: 968, 4: 886, 5: 915, 6: 696, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: IMPI', 102), ("parse: expected line index, got 'LEANPARSE'", 88), ('rule check failed: ANDI', 80), ('rule check failed: ORI2', 74), ('rule check failed: DN', 55), ('rule check failed: ORI1', 47)]
+END 2026-09-23T23:20:19Z

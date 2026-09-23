@@ -438,3 +438,22 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   | held-out greedy at r4, s0 / s1 | **0.9574 / 0.9688** | 0.9564 / 0.9664 |
 
   Seed 0 reproduces to the third decimal (0.649 vs 0.650); seed 1 is +2.0 pp, inside the seed-to-seed scatter this run has measured everywhere. **This is the run's main validity check on the whole re-measurement pipeline** — same checkpoints, everything else changed — and it passes. It also means the inherited control values in the pre-registration can be quoted beside the re-measured ones without a caveat about the hardware or sampler change.
+- 2026-09-23 23:31 UTC  **SEED SWEEP COMPLETE — 24 Stage-1 models, and addendum 2's expectations are mostly falsified. The n = 2 reading was an artefact of which two seeds I happened to have.** Held-out greedy, all seeds (`artifacts/dsr/{dsr-<arm>,dsr-s}/held_<arm>_s*.jsonl`):
+
+  | arm | n | overall | in distribution (depth ≤ 2) | **depth-3 slice mean (sd) [min, max]** |
+  |---|---|---|---|---|
+  | C0 `lean_seq` | 6 | 0.9186 | 0.9615 | 0.533 (**0.256**) [0.262, 0.848] |
+  | R1 `lean_seq_noprem` | 2 | 0.8741 | 0.9462 | 0.225 (0.010) [0.218, 0.232] |
+  | R3 `lean_seq_nofml` | 6 | 0.8942 | 0.9387 | 0.494 (**0.365**) [0.024, 0.808] |
+  | R2 `lean_seq_intro` | 6 | 0.9268 | 0.9563 | **0.661** (**0.310**) [0.034, 0.846] |
+  | R4 `lean_seq_funbare` | 6 | 0.9136 | 0.9526 | 0.562 (**0.276**) [0.104, 0.808] |
+
+  Per-seed depth-3 slice — **every lambda-or-not arm has a near-zero seed**: C0 `0.486 0.274 0.824 0.502 0.848 0.262`; R3 `0.674 0.024 0.788 0.038 0.808 0.632`; R2 `0.822 0.746 0.742 0.846 **0.034** 0.778`; R4 `0.788 0.440 0.808 0.754 0.480 0.104`.
+
+  **Scored against addendum 2:**
+  - **E17 (level) — half right.** The predicted order **R2 > R4 > C0 ≈ R3 holds exactly** (0.661 / 0.562 / 0.533 / 0.494), but the predicted gap `mean(R2) − mean(C0) ≥ 0.25` is **0.129**, about 1.1 standard errors at n = 6. The ordering is not established.
+  - **E18 (variance) — falsified, and it was my leading hypothesis.** I predicted R2's across-seed sd would be the smallest of the four and below 0.10, with the others above 0.12. R2's sd is **0.310, the second largest**; C0's is the smallest at 0.256. **R2 has a 0.034 seed, as bad as R3's worst.** The n = 2 picture — R2 stable at 0.822 / 0.746 while C0 swung 0.486 / 0.274 — was simply which two draws each arm got. There is no "R2 removes the lottery"; **the lottery is in every rendering**, including the one that changes the box syntax.
+  - **E19 (in distribution) — essentially holds, narrowly missed.** Spread across the four arms is **2.28 pp** against the predicted ≤ 2 pp (C0 0.9615 high, R3 0.9387 low). The substantive claim stands: rendering does almost nothing in distribution.
+  - **Decision rule for the mechanism, as pre-registered.** Pooled across-seed sd `s` = 0.305. `mean(R2) − mean(R4)` = **0.099 ≤ s**, so by the stated rule **dropping the binder's type accounts for whatever effect there is, and the `fun`-vs-`intro` choice does not.** That is consistent with the `reductio_req` split only in the sense that the rule is about the depth-3 cell; the reductio reversal (R2 ×0.56, R4 ×1.46) is a separate, much cleaner effect and is not covered by this rule.
+
+  **What the run should say about the greedy depth-3 numbers.** At n = 2 they looked like a large, stable rendering effect; at n = 6 they are a high-variance quantity whose arm means differ by about one standard error. The pass@2,000 measurements — 1,000 and 300 targets, far more samples per model — are the ones that carry weight, and those show a small, consistent R4 advantage and a clear R2 reductio deficit. **The $0.80 sweep changed the run's conclusion, which is the argument for having spent it.**
