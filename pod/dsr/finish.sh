@@ -12,8 +12,7 @@ export PATH=$HOME/.elan/bin:$PATH LEAN_GATE_WORKERS=${LEAN_GATE_WORKERS:-12}
   echo "FINISH_PLAN_DONE $(date -u +%FT%TZ)"
   python3 pod/dsr/record.py "$ARM" || echo "record.py failed"
   echo "FINISH_RECORDED $(date -u +%FT%TZ)"
-  hf buckets sync artifacts/dsr "hf://buckets/dan-pandori/nd-rl/ds-rendering/artifacts/$POD" || echo "artifacts sync failed"
-  hf buckets sync ckpts/dsr "hf://buckets/dan-pandori/nd-rl/ds-rendering/ckpts/$POD" || echo "ckpts sync failed"
+  command -v hf >/dev/null && hf buckets sync artifacts/dsr "hf://buckets/dan-pandori/nd-rl/ds-rendering/artifacts/$POD" || echo "NO POD-SIDE UPLOAD (hf absent on the pod image) -- the host does it via dsr_upload.sh"
   echo "FINISH_UPLOADED $(date -u +%FT%TZ)"
   touch artifacts/dsr/FINISH_DONE
 } > artifacts/dsr/logs/finish.log 2>&1

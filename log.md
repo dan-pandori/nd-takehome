@@ -492,3 +492,18 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   | R3 `lean_seq_nofml` | 83,323 | 96 | **115.2** |
 
   **R3 is 18× the control.** That is mechanistically what R3 *is*: it drops the formula on exactly `IMPE ANDE1 ANDE2 NEGE R` haves (`NOFML_RULES`), so when the model misapplies one of those rules there is **no stated formula for the decoder to contradict** — `infer()` simply recomputes whatever the rule and refs yield, and the text Lean sees is whatever typechecks. NEGE is in that list, which is exactly the second family above. **A rendering that hides formulas measurably weakens Lean as an independent check**, even though the conjunction still catches every case. That is a cost of R3 that none of the accuracy numbers show, and it is the kind of thing this run existed to find.
+- 2026-09-23 23:45 UTC  **Bug found and fixed in my own harness: no pod has ever uploaded to the bucket.** `pod/dsr/finish.sh` ends with `hf buckets sync`, armed detached on all six pods so the results land even while my session is paused. On the sweep pod's finish log (`artifacts/dsr/logs/finish.log`, the path I had been mis-checking as `artifacts/dsr/finish.log`):
+
+  ```
+  pod/dsr/finish.sh: line 15: hf: command not found
+  artifacts sync failed
+  FINISH_UPLOADED 2026-09-23T23:32:09Z          <- and it still touched FINISH_DONE
+  ```
+
+  **`hf` is not installed on the RunPod image and `huggingface_hub` is not importable there**, so this was never going to work on any of the six pods; the step failed, `echo`'d, and the script carried on to `touch artifacts/dsr/FINISH_DONE`, so the marker I was using to mean "this arm is safely in the bucket" meant nothing. The bucket held **150 objects, all `dsr-c0`, from an early host-side push at 21:46** — nothing since.
+
+  **Fix.** Upload from the host, where `hf` is on `PATH`: new `dsr_upload.sh` syncs every `artifacts/dsr/<pod>/` and `ckpts/dsr` and reports per-pod failures. `finish.sh` keeps the half that does work — waiting for `ARM_DONE` and running the checker of record without my host on the critical path — and now says plainly that the upload is the host's job instead of claiming success. Ran it: **all six pod directories + ckpts uploaded.**
+
+  Two lessons, both about my own scaffolding rather than the science: a step that `echo`s its failure and then marks the whole job done is worse than one that fails loudly, and I should have read the log path the script actually writes rather than the one I assumed.
+
+  Also fixed: `record.py` died with `KeyError: 'sw'` on the sweep pod, which carries Stage-1 seeds of four different arms (and so four different renderings) rather than one. It now expands `sw` to the arms that actually have artefacts there and records each against its own mode.

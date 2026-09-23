@@ -50,6 +50,15 @@ def collect(arm):
 
 def main():
     arm = sys.argv[1]
+    # the sweep pod carries Stage-1 seeds of SEVERAL arms, so it is launched as 'sw'; expand it to the arms that
+    # actually have artefacts here and record each one separately (its mode differs per arm).
+    if arm == 'sw':
+        found = sorted({os.path.basename(f).split('_')[1] for f in glob.glob(f'{A}/held_*_s*.jsonl')})
+        print(f'sw -> {found}', flush=True)
+        for a in found:
+            sys.argv[1] = a
+            main()
+        return
     items = collect(arm)
     # de-duplicate on (prompt, proof): the same counted proof appears in several files
     seen = {}
