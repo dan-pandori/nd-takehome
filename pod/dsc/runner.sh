@@ -12,7 +12,11 @@ while IFS=$'\t' read -r name cmd; do
   [ -z "$name" ] && continue
   case "$name" in \#*) continue;; esac
   if [ -f artifacts/dsc/$name.done ]; then echo "skip $name (done)"; continue; fi
-  while [ "$(jobs -rp | wc -l)" -ge "$N" ]; do sleep 20; done
+  # also skip a job that another runner already started (job.sh writes the log at START): lets this script be
+  # restarted with a different N without ever duplicating a running job (the 2026-09-22 orphan incident)
+  if [ -f artifacts/dsc/logs/$name.log ]; then echo "skip $name (log exists)"; continue; fi
+  # count every job.sh on the pod, not only this shell's children, so a restarted runner respects the same cap
+  while [ "$(pgrep -fc 'pod/dsc/job[.]sh')" -ge "$N" ]; do sleep 20; done
   echo "launch $(date -u +%FT%TZ) $name"
   bash pod/dsc/job.sh "$name" "$cmd" &
   sleep 5

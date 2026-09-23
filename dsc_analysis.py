@@ -141,11 +141,11 @@ def main():
             row = {'arm': arm, 'seed': s, 'cap': 8 if arm == 'a3' else 6, 'label': 'cap 8' if arm == 'a3' else 'cap 6'}
             row['heldout'] = heldout(arm, s)
             row['coverage'] = {pool: coverage(arm, s, pool) for pool in ('d3sub', 'd3req', 'redreq')}
+            # session 2: the control's PRIMARY dial is the one measured here, on the same sampler and batch as the arms;
+            # the lean-format files on the bucket are kept beside it as the on-file reference (base sampler, labelled).
+            row['dial_ei'] = dial(f'{D}/ei_{arm}_s{s}'); row['dial_frozen'] = dial(f'{D}/frozen_{arm}_s{s}')
             if arm == 'c0':
-                row['dial_ei'] = dial(f'artifacts/lf/ei_d3_seq_s{s}'); row['dial_frozen'] = dial(f'artifacts/lf/frozen_d3_seq_s{s}')
-                row['dial_ei_rerun'] = dial(f'{D}/ei_c0_s{s}'); row['dial_frozen_rerun'] = dial(f'{D}/frozen_c0_s{s}')
-            else:
-                row['dial_ei'] = dial(f'{D}/ei_{arm}_s{s}'); row['dial_frozen'] = dial(f'{D}/frozen_{arm}_s{s}')
+                row['dial_ei_onfile'] = dial(f'artifacts/lf/ei_d3_seq_s{s}'); row['dial_frozen_onfile'] = dial(f'artifacts/lf/frozen_d3_seq_s{s}')
             if row['dial_ei'] and row['dial_frozen']:
                 row['dial_ei_minus_frozen'] = row['dial_ei']['acq_targets'] - row['dial_frozen']['acq_targets']
             row['ladder_T1'] = ladder(f'{D}/la_T1_{arm}_s{s}'); row['ladder_frozen'] = ladder(f'{D}/la_frozen_{arm}_s{s}')
