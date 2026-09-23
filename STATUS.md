@@ -22,3 +22,5 @@ Brief: `BRIEF_ds-rendering.md`. Run id: `ds-rendering`. Budget $18, ceiling 36 p
   (3,000 / 3,000 round-trip, 1,000 / 1,000 accepted by Lean, 0 / 300 theorem-swapped negatives).
   Measured token ratios vs `lean_seq`: R1 0.707, R3 **0.956** (the brief predicted 0.70–0.80 —
   already falsified), R2 0.915.
+
+LIMIT_HIT 2026-09-23T21:40:38Z  (pods and their job sequencers kept running; no work lost)

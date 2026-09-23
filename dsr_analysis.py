@@ -83,6 +83,26 @@ def mech(arm, s):
             'frontier_written': max([L for L, c in wh.items() if c >= 5], default=0)}
 
 
+def held_breakdown(arm, s):
+    """held-out greedy split by (premise count, ND length).  The 6-line deficit every Lean rendering shows turns out
+    to live almost entirely in the 0-premise 6-line cell (511 of the 1,000 6-line held-out theorems), so the split is
+    what separates the renderings; added 2026-09-23 21:45 UTC, log.md."""
+    p = find(arm, f'held_{arm}_s{s}.jsonl')
+    rows = jlines(p)
+    if rows is None:
+        return None
+    prem = {}
+    for l in open('data/p2/heldout.jsonl'):
+        x = json.loads(l)
+        pre = x['thm'].split('|-')[0].strip()
+        prem[x.get('name') or x['thm']] = int(x.get('n_prem') if x.get('n_prem') is not None else (0 if not pre else pre.count(',') + 1))
+    d = collections.defaultdict(lambda: [0, 0])
+    for r in rows:
+        k = f"p{prem.get(r['name'], -1)}_L{r['n_lines']}"
+        d[k][0] += bool(r['solved']); d[k][1] += 1
+    return {'src': p, 'cells': {k: {'solved': v[0], 'n': v[1], 'rate': v[0] / v[1]} for k, v in sorted(d.items())}}
+
+
 def cov(arm, s, tag):
     """coverage.py pass@2,000 on one pool."""
     p = find(arm, f'cov_{tag}_{arm}_s{s}.s0.jsonl')
@@ -232,6 +252,7 @@ def main():
                     'src': find(arm, f'held_{arm}_s{s}.json'), 'n': h['n'], 'solved': h['solved'], 'rate': h['rate'],
                     'by_len': {k: v['rate'] for k, v in h['by_len'].items()},
                     'written_hist': h.get('written_hist')},
+                'heldout_by_prem_len': held_breakdown(arm, s),
                 'mech_pass16': mech(arm, s),
                 'cov': {tag: cov(arm, s, tag) for tag in ('d3', 'd3req', 'red')},
                 'dial_ei': dial(arm, s, 'ei'), 'dial_frozen': dial(arm, s, 'frz'),
