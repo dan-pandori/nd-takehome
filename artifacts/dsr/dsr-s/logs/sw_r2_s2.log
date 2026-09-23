@@ -1,0 +1,32 @@
+START 2026-09-23T22:12:39Z python3 train.py --data data/p2/train_depth3_f0_a1.jsonl --heldout data/p2/heldout.jsonl --mode lean_seq_intro --steps 6000 --bs 128 --cap 6 --seed 2 --out ckpts/dsr/stage1_r2_s2.pt && python3 eval_set.py --ckpt ckpts/dsr/stage1_r2_s2.pt --in data/p2/heldout.jsonl --k 1 --temperature 0 --batch 2048 --out artifacts/dsr/held_r2_s2.jsonl --summary artifacts/dsr/held_r2_s2.json
+params 3214848 mode lean_seq_intro shift True
+train records 155000 max len 391
+step 200 loss 1.0056 lr 1.00e-03 20s val 0.9666
+step 400 loss 0.2251 lr 9.97e-04 39s val 0.1599
+step 600 loss 0.1436 lr 9.89e-04 58s val 0.1115
+step 800 loss 0.1377 lr 9.76e-04 78s val 0.1005
+step 1000 loss 0.1100 lr 9.58e-04 98s val 0.0898
+step 1200 loss 0.0968 lr 9.36e-04 117s val 0.0872
+step 1400 loss 0.0974 lr 9.08e-04 137s val 0.0864
+step 1600 loss 0.0989 lr 8.77e-04 156s val 0.0832
+step 1800 loss 0.0802 lr 8.41e-04 176s val 0.0834
+step 2000 loss 0.0783 lr 8.03e-04 195s val 0.0825
+step 2200 loss 0.0735 lr 7.61e-04 215s val 0.0813
+step 2400 loss 0.0829 lr 7.17e-04 235s val 0.0822
+step 2600 loss 0.0801 lr 6.70e-04 254s val 0.0799
+step 2800 loss 0.0679 lr 6.23e-04 274s val 0.0800
+step 3000 loss 0.0710 lr 5.74e-04 293s val 0.0794
+step 3200 loss 0.0667 lr 5.26e-04 313s val 0.0782
+step 3400 loss 0.0634 lr 4.77e-04 332s val 0.0777
+step 3600 loss 0.0649 lr 4.30e-04 352s val 0.0773
+step 3800 loss 0.0589 lr 3.83e-04 371s val 0.0780
+step 4000 loss 0.0622 lr 3.39e-04 391s val 0.0776
+step 4200 loss 0.0596 lr 2.97e-04 411s val 0.0773
+step 4400 loss 0.0649 lr 2.59e-04 430s val 0.0771
+step 4600 loss 0.0584 lr 2.23e-04 450s val 0.0767
+step 4800 loss 0.0604 lr 1.92e-04 469s val 0.0767
+step 5000 loss 0.0627 lr 1.64e-04 489s val 0.0765
+step 5200 loss 0.0623 lr 1.42e-04 508s val 0.0767
+step 5400 loss 0.0562 lr 1.24e-04 528s val 0.0764
+step 5600 loss 0.0551 lr 1.11e-04 548s val 0.0763
+step 5800 loss 0.0629 lr 1.03e-04 568s val 0.0765
