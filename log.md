@@ -457,3 +457,38 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   - **Decision rule for the mechanism, as pre-registered.** Pooled across-seed sd `s` = 0.305. `mean(R2) − mean(R4)` = **0.099 ≤ s**, so by the stated rule **dropping the binder's type accounts for whatever effect there is, and the `fun`-vs-`intro` choice does not.** That is consistent with the `reductio_req` split only in the sense that the rule is about the depth-3 cell; the reductio reversal (R2 ×0.56, R4 ×1.46) is a separate, much cleaner effect and is not covered by this rule.
 
   **What the run should say about the greedy depth-3 numbers.** At n = 2 they looked like a large, stable rendering effect; at n = 6 they are a high-variance quantity whose arm means differ by about one standard error. The pass@2,000 measurements — 1,000 and 300 targets, far more samples per model — are the ones that carry weight, and those show a small, consistent R4 advantage and a clear R2 reductio deficit. **The $0.80 sweep changed the run's conclusion, which is the argument for having spent it.**
+- 2026-09-23 23:40 UTC  **AGREEMENT WITH `nd_verify` — the brief's mandated report, and it is not a formality: Lean alone is an unsound checker for this ND rule set, and the rendering changes how often it is fooled by 18×.** Source: every `artifacts/dsr/*/gate_*.jsonl` (totals) and `gate_*.disagree.jsonl` (the cases), six pods, all arms and seeds.
+
+  Across the run so far: **1,376,080 samples drawn; 315,660 outside the strict grammar; 949,568 distinct (theorem, Lean text) pairs put through BOTH checkers; 472,811 accepted by both** (counted). Disagreement is **241 pairs, 0.025% — agreement 99.9746%** — and it is **entirely one-directional**:
+
+  | | count |
+  |---|---|
+  | `nd_verify` accepts, Lean rejects | **0** |
+  | Lean accepts, `nd_verify` rejects | **241** |
+
+  **`nd_verify` is the strictly stronger checker here: in 949,568 pairs Lean never once caught something `nd_verify` missed.** Because acceptance is the conjunction, all 241 were rejected, so **no counted proof anywhere in this run is affected**. The conjunction is load-bearing, not belt-and-braces.
+
+  **The 241, classified** (`dsr_disagree.py`):
+
+  | n | share | family |
+  |---|---|---|
+  | 186 | 77.2% | **BOTE rendered `nA.elim`.** Sound only when `nA : False` (`False.elim : False → b`). When `nA : ¬a`, Lean resolves the same surface text to **`Not.elim : ¬a → a → b`**, which typechecks whenever the goal happens to be `a → …`. ND's BOTE requires the cited line to be `F`. |
+  | 38 | 15.8% | **NEGE rendered `nB nA`.** `¬A` is *definitionally* `A → False`, so `nB : ¬(A → False)` applied to `nA : ¬A` also typechecks. ND's NEGE requires the pair `A` / `~A`. |
+  | 14 | 5.8% | **Fewer `PR` lines than the theorem has premises**, deriving the missing premise validly by some other rule. Logically fine; `nd_verify` enforces "every declared premise appears as a `PR` line". **Convention, not soundness — here Lean is right about the mathematics.** |
+  | 3 | 1.2% | unclassified |
+
+  The first two families — 93% of the disagreement — share one root cause: **Lean's `¬a` is definitionally `a → False`, so `.elim` and bare application are polymorphic in ways the ND rules are not.** Worked BOTE case (`dsr-c0`, `THM ( ~ Q ) SEQ ( S > ( Q > ( Q > ( R > P ) ) ) )`): the model wrote `N4 | | ( Q > ( R > P ) ) : BOTE N1` with `N1 = ( ~ Q )`, rendered `have n36 : ( Q → ( R → P ) ) := n31.elim`. `n31 : ¬Q`, goal `Q → (R → P)`, so `Not.elim` unifies `b := R → P` and Lean accepts a step that is not ex falso at all.
+
+  **This is `nd2lean.py`'s own convention, not an artefact of my arms.** `nd2lean.py:135` emits `f'{cite(refs[0])}.elim'` for BOTE and `:134` `f'{cite(refs[1])} {cite(refs[0])}'` for NEGE; `lean_tok.py:157,159` mirror both exactly, which is what I wanted — the arms differ in the *box* and *have* syntax, not in how a rule's term is formed. **So the gap belongs to the repo's checker of record and applies to anything in this repo that treats a Lean pass as sufficient.** Raised in `QUESTIONS.md`.
+
+  **The rendering changes the rate, and this is a real cost of R3** (per 100k pairs checked, so comparable across pods of different sizes):
+
+  | arm | pairs checked | Lean-only accepts | per 100k |
+  |---|---|---|---|
+  | R1 `lean_seq_noprem` | 183,733 | 11 | **6.0** |
+  | C0 `lean_seq` | 383,704 | 24 | **6.3** |
+  | R4 `lean_seq_funbare` | 51,047 | 16 | 31.3 |
+  | R2 `lean_seq_intro` | 170,211 | 79 | 46.4 |
+  | R3 `lean_seq_nofml` | 83,323 | 96 | **115.2** |
+
+  **R3 is 18× the control.** That is mechanistically what R3 *is*: it drops the formula on exactly `IMPE ANDE1 ANDE2 NEGE R` haves (`NOFML_RULES`), so when the model misapplies one of those rules there is **no stated formula for the decoder to contradict** — `infer()` simply recomputes whatever the rule and refs yield, and the text Lean sees is whatever typechecks. NEGE is in that list, which is exactly the second family above. **A rendering that hides formulas measurably weakens Lean as an independent check**, even though the conjunction still catches every case. That is a cost of R3 that none of the accuracy numbers show, and it is the kind of thing this run existed to find.
