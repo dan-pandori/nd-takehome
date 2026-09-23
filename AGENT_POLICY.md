@@ -18,6 +18,7 @@ Dmitry or anyone else. Draft PRs with no reviewers are fine. Dan reads and share
   down (and committed) before a run; splits disjoint by renaming class; every count
   reproducible from files that are pulled back.
 
+- **Every number names the model it was measured on** (checkpoint, parameter count, format, from-scratch or pretrained, training data). A number from one model is never stated as a property of the setting; an inherited number carries its label. *Why:* an efficiency run inherited a premise measured on a pretrained model and applied it to a from-scratch one, where it was false.
 - **Lean is the checker of record (Dan, 2026-09-20).** Every counted proof must translate with `nd2lean.py` and check in Lean; report agreement with `nd_verify`; a disagreement is a bug. Proofs in write-ups are shown in Lean. Pretrained-model experiments use Lean as the surface form. From-scratch training keeps the token format until proposal 8 (`~/nd-rl/docs/proposals/2026-09-20-lean-training-format.md`) reports. *Why:* the translator agrees with `nd_verify` on 181k/181k proofs and pretrained code models prove 2.7× more theorems in Lean.
 
 ## Everything else is a suggestion
