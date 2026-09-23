@@ -1,0 +1,26 @@
+held_c0_s0	python3 eval_set.py --ckpt ckpts/dsr/stage1_a1_seq_s0.pt --in data/p2/heldout.jsonl --k 1 --temperature 0 --batch 2048 --out artifacts/dsr/held_c0_s0.jsonl --summary artifacts/dsr/held_c0_s0.json
+held_c0_s1	python3 eval_set.py --ckpt ckpts/dsr/stage1_a1_seq_s1.pt --in data/p2/heldout.jsonl --k 1 --temperature 0 --batch 2048 --out artifacts/dsr/held_c0_s1.jsonl --summary artifacts/dsr/held_c0_s1.json
+--
+mech_c0_s0	python3 eval_set.py --ckpt ckpts/dsr/stage1_a1_seq_s0.pt --in data/transfer.jsonl --k 16 --temperature 0.8 --seed 0 --batch 2048 --out artifacts/dsr/mech_c0_s0.jsonl --summary artifacts/dsr/mech_c0_s0.json
+mech_c0_s1	python3 eval_set.py --ckpt ckpts/dsr/stage1_a1_seq_s1.pt --in data/transfer.jsonl --k 16 --temperature 0.8 --seed 0 --batch 2048 --out artifacts/dsr/mech_c0_s1.jsonl --summary artifacts/dsr/mech_c0_s1.json
+--
+cov_d3_c0_s0	python3 coverage.py --ckpt ckpts/dsr/stage1_a1_seq_s0.pt --in data/p2/targets_depth3.jsonl --k 2000 --temperature 0.8 --seed 0 --batch 2048 --max_new 400 --procs 12 --lenfield min_lines_ub --path fast --out artifacts/dsr/cov_d3_c0_s0
+cov_d3_c0_s1	python3 coverage.py --ckpt ckpts/dsr/stage1_a1_seq_s1.pt --in data/p2/targets_depth3.jsonl --k 2000 --temperature 0.8 --seed 0 --batch 2048 --max_new 400 --procs 12 --lenfield min_lines_ub --path fast --out artifacts/dsr/cov_d3_c0_s1
+--
+cov_d3req_c0_s0	python3 coverage.py --ckpt ckpts/dsr/stage1_a1_seq_s0.pt --in data/r3_1/depth3_req.jsonl --k 2000 --temperature 0.8 --seed 0 --batch 2048 --max_new 400 --procs 12 --lenfield min_lines_ub --path fast --out artifacts/dsr/cov_d3req_c0_s0
+cov_d3req_c0_s1	python3 coverage.py --ckpt ckpts/dsr/stage1_a1_seq_s1.pt --in data/r3_1/depth3_req.jsonl --k 2000 --temperature 0.8 --seed 0 --batch 2048 --max_new 400 --procs 12 --lenfield min_lines_ub --path fast --out artifacts/dsr/cov_d3req_c0_s1
+--
+cov_red_c0_s0	python3 coverage.py --ckpt ckpts/dsr/stage1_a1_seq_s0.pt --in data/p2/targets_reductio_req.jsonl --k 2000 --temperature 0.8 --seed 0 --batch 2048 --max_new 400 --procs 12 --lenfield min_lines_ub --path fast --out artifacts/dsr/cov_red_c0_s0
+cov_red_c0_s1	python3 coverage.py --ckpt ckpts/dsr/stage1_a1_seq_s1.pt --in data/p2/targets_reductio_req.jsonl --k 2000 --temperature 0.8 --seed 0 --batch 2048 --max_new 400 --procs 12 --lenfield min_lines_ub --path fast --out artifacts/dsr/cov_red_c0_s1
+--
+ei_d3_c0_s0	python3 expert_iter.py --init ckpts/dsr/stage1_a1_seq_s0.pt --name dsr/ei_d3_c0_s0 --targets data/p2/targets_depth3.jsonl --transfer data/p2/transfer_depth3.jsonl --heldout data/p2/heldout.jsonl --train data/p2/train_depth3_f0_a1.jsonl --rounds 4 --k 32 --temperature 0.8 --batch 2048 --seed 0 
+ei_d3_c0_s1	python3 expert_iter.py --init ckpts/dsr/stage1_a1_seq_s1.pt --name dsr/ei_d3_c0_s1 --targets data/p2/targets_depth3.jsonl --transfer data/p2/transfer_depth3.jsonl --heldout data/p2/heldout.jsonl --train data/p2/train_depth3_f0_a1.jsonl --rounds 4 --k 32 --temperature 0.8 --batch 2048 --seed 1 
+--
+frz_d3_c0_s0	python3 expert_iter.py --init ckpts/dsr/stage1_a1_seq_s0.pt --name dsr/frz_d3_c0_s0 --targets data/p2/targets_depth3.jsonl --transfer data/p2/transfer_depth3.jsonl --heldout data/p2/heldout.jsonl --train data/p2/train_depth3_f0_a1.jsonl --rounds 4 --k 32 --temperature 0.8 --batch 2048 --seed 0 --no_train
+frz_d3_c0_s1	python3 expert_iter.py --init ckpts/dsr/stage1_a1_seq_s1.pt --name dsr/frz_d3_c0_s1 --targets data/p2/targets_depth3.jsonl --transfer data/p2/transfer_depth3.jsonl --heldout data/p2/heldout.jsonl --train data/p2/train_depth3_f0_a1.jsonl --rounds 4 --k 32 --temperature 0.8 --batch 2048 --seed 1 --no_train
+--
+la_T1_c0_s0	python3 ladder_ei.py --init ckpts/dsr/stage1_a1_seq_s0.pt --name la_T1_c0_s0 --outdir artifacts/dsr --heldout data/p2/heldout.jsonl --train data/p2/train_depth3_f0_a1.jsonl --rounds 8 --k 32 --temperature 0.8 --batch 2048 --max_new 400 --seed 0 
+la_T1_c0_s1	python3 ladder_ei.py --init ckpts/dsr/stage1_a1_seq_s1.pt --name la_T1_c0_s1 --outdir artifacts/dsr --heldout data/p2/heldout.jsonl --train data/p2/train_depth3_f0_a1.jsonl --rounds 8 --k 32 --temperature 0.8 --batch 2048 --max_new 400 --seed 1 
+--
+la_frz_c0_s0	python3 ladder_ei.py --init ckpts/dsr/stage1_a1_seq_s0.pt --name la_frz_c0_s0 --outdir artifacts/dsr --heldout data/p2/heldout.jsonl --train data/p2/train_depth3_f0_a1.jsonl --rounds 8 --k 32 --temperature 0.8 --batch 2048 --max_new 400 --seed 0 --no_train
+la_frz_c0_s1	python3 ladder_ei.py --init ckpts/dsr/stage1_a1_seq_s1.pt --name la_frz_c0_s1 --outdir artifacts/dsr --heldout data/p2/heldout.jsonl --train data/p2/train_depth3_f0_a1.jsonl --rounds 8 --k 32 --temperature 0.8 --batch 2048 --max_new 400 --seed 1 --no_train

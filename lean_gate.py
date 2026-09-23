@@ -15,6 +15,12 @@ from concurrent.futures import ThreadPoolExecutor
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from nd_verify import verify_text
 
+# (prompt, denoted ND proof) -> the literal Lean text that Lean accepted, for the accepted samples of the LAST gate()
+# call.  Run ds-rendering: the lean-format review asked that the literal sampled text be stored beside the denoted proof
+# in every found_*.jsonl, because acceptance condition (ii) -- Lean on the literal text -- was not auditable after the
+# fact.  eval_set.judge() reads it; it is cleared at each call.
+TEXTS = {}
+
 LEAN = os.path.expanduser('~/.elan/bin/lean')
 CHUNK = int(os.environ.get('LEAN_GATE_CHUNK', '400'))
 WORKERS = int(os.environ.get('LEAN_GATE_WORKERS', str(max(1, (os.cpu_count() or 2) // 2))))
@@ -89,10 +95,13 @@ def gate(tok, prompts, nd_proofs, texts):
     print(f'[lean_gate] {len(prompts)} samples, parse-fail {n_parse}, distinct checked {len(items)}: both ok {tab[(True, True)]}, nd-only {tab[(True, False)]}, '
           f'lean-only {tab[(False, True)]}, both rej {tab[(False, False)]}; lean {wall:.1f}s wall ({cpu:.1f}s proc, {WORKERS} workers), nd_verify {t_nd:.1f}s', flush=True)
     ndv = {k: a for (k, _), a in zip(items, nd_ok)}
+    TEXTS.clear()
     out = []
     for p, nd, tx in zip(prompts, nd_proofs, texts):
         if tx is None or nd.startswith('LEANPARSE') or verdict[(p, tx)] or not ndv[(p, tx)]:
             out.append(nd)               # accepted by Lean, or rejected by nd_verify too (judge() then records nd_verify's reason)
+            if tx is not None and not nd.startswith('LEANPARSE') and verdict[(p, tx)] and ndv[(p, tx)]:
+                TEXTS.setdefault((p, nd), tx)      # both checkers accepted this literal text
         else:
             out.append('LEANREJ ' + nd)  # nd_verify would accept but Lean rejected the literal text: never counted
     return out

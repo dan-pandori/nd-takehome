@@ -25,10 +25,13 @@ def wilson(k, n, z=1.96):
 
 
 def judge(recs, proofs_per, lenfield):
-    """recs: list of theorem records; proofs_per: list of list of proof strings. Returns rows + summary."""
+    """recs: list of theorem records; proofs_per: list of list of proof strings. Returns rows + summary.
+    Run ds-rendering: `lean_texts[j]` is the literal Lean text that Lean accepted for `proofs[j]` (from lean_gate.TEXTS,
+    filled by the last generate() call), or None for token-format proofs / a proof not in the last gate call."""
+    import lean_gate
     rows = []
     for r, ps in zip(recs, proofs_per):
-        good, wl, pl, reasons = [], [], [], []
+        good, wl, pl, lt, reasons = [], [], [], [], []
         fail_example = None
         for p in ps:
             ok, reason, nl = verify_text(r['prompt'] + ' ' + p)
@@ -39,11 +42,13 @@ def judge(recs, proofs_per, lenfield):
                     good.append(p)
                     wl.append(nl)
                     pl.append(pruned_length(r['prompt'], p))
+                    lt.append(lean_gate.TEXTS.get((r['prompt'], p)))
             else:
                 reasons.append(reason.split(' (line')[0])
         rows.append({'name': r.get('name', r.get('thm')), 'thm': r.get('thm'), 'prompt': r['prompt'],
                      lenfield: r.get(lenfield), 'solved': bool(good), 'n_ok': sum(1 for p in ps if p in good),
-                     'n_tried': len(ps), 'proofs': good, 'written_lens': wl, 'pruned_lens': pl, 'reasons': reasons, 'fail_example': fail_example})
+                     'n_tried': len(ps), 'proofs': good, 'written_lens': wl, 'pruned_lens': pl, 'lean_texts': lt,
+                     'reasons': reasons, 'fail_example': fail_example})
     return rows
 
 

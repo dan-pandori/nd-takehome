@@ -1,0 +1,19 @@
+params 3214336 mode lean_seq_noprem shift True
+train records 155000 max len 464
+step 60 loss 1.7321 lr 3.00e-04 2s
+saved ckpts/dsr/smoke.pt
+[lean_gate] 256 samples, parse-fail 256, distinct checked 0: both ok 0, nd-only 0, lean-only 0, both rej 0; lean 0.0s wall (0.0s proc, 12 workers), nd_verify 0.0s
+generated 256 proofs in 2s
+smoke.pt on heldout.jsonl k=4 SOLVED 0/64 = 0.000 [0.000,0.057]
+  len 2: 0/64 = 0.000 [0.000,0.057]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [("parse: expected line index, got 'LEANPARSE'", 256)]
+shard 0/1: 4 theorems, 0 already done; k=64 T=0.8 batch=64
+targets_depth3_0: n_ok 0/64 distinct_ok 0 first_hit None written_hist {} (1s; 1 done, 1s/thm, ETA 0 min)
+targets_depth3_1: n_ok 0/64 distinct_ok 0 first_hit None written_hist {} (1s; 2 done, 1s/thm, ETA 0 min)
+targets_depth3_2: n_ok 0/64 distinct_ok 0 first_hit None written_hist {} (1s; 3 done, 1s/thm, ETA 0 min)
+targets_depth3_3: n_ok 0/64 distinct_ok 0 first_hit None written_hist {} (1s; 4 done, 1s/thm, ETA 0 min)
+DONE
+SMOKE_OK
