@@ -25,11 +25,24 @@ VERDICT = {}
 
 def gate(tok, prompts, texts):
     logfn = os.environ.get('LEAN_GATE_LOG', 'artifacts/lean_gate.jsonl')
+    t_can = time.time()
+    # run efficiency (2026-09-23): canonicalise each DISTINCT text once instead of once per sample and again on the
+    # way out.  Samples repeat ~7x on a coverage pass, so this is the same values at ~1/14 of the calls.
+    canon = {}
+    ckeys = []
+    for tx in texts:
+        if tx is None:
+            ckeys.append(None); continue
+        c = canon.get(tx)
+        if c is None:
+            c = canon[tx] = lean_free.canonical(tx)
+        ckeys.append(c)
     keys = {}
-    for p, tx in zip(prompts, texts):
+    for p, tx, c in zip(prompts, texts, ckeys):
         if tx is not None:
-            keys.setdefault((p, lean_free.canonical(tx)), tx)
+            keys.setdefault((p, c), tx)
     items = list(keys.items())
+    t_can = time.time() - t_can
     srcs = [tok.statement(p) + ' ' + tx for (p, _), tx in items]
     res, wall, cpu = check(srcs)
     t0 = time.time()
@@ -56,7 +69,8 @@ def gate(tok, prompts, texts):
     rec = {'utc': time.strftime('%FT%TZ', time.gmtime()), 'samples': len(prompts), 'no_eos': n_noeos, 'distinct_checked': len(items),
            'both_ok': tab[(True, True)], 'nd_ok_lean_rej': tab[(True, False)], 'nd_rej_lean_ok': tab[(False, True)], 'both_rej': tab[(False, False)],
            'disagreement_kinds': dict(kinds.most_common()), 'lean_reject_kinds': dict(rej.most_common(8)),
-           'lean_wall_s': wall, 'lean_proc_s': cpu, 'denote_nd_verify_s': t_nd, 'workers': WORKERS, 'chunk': CHUNK, 'mode': tok.mode}
+           'lean_wall_s': wall, 'lean_proc_s': cpu, 'denote_nd_verify_s': t_nd, 'canonical_s': round(t_can, 2),
+           'workers': WORKERS, 'chunk': CHUNK, 'mode': tok.mode}
     os.makedirs(os.path.dirname(logfn) or '.', exist_ok=True)
     with open(logfn, 'a') as f:
         f.write(json.dumps(rec) + '\n')
@@ -68,4 +82,4 @@ def gate(tok, prompts, texts):
           f'nd-only {tab[(True, False)]}, both rej {tab[(False, False)]}; lean {wall:.1f}s wall ({cpu:.1f}s proc, {WORKERS} workers), denote+nd_verify {t_nd:.1f}s', flush=True)
     if tab[(True, False)]:
         print(f'[lean_gate] BUG: nd_verify accepts {tab[(True, False)]} proofs that lean_check rejects (see disagree log)', flush=True)
-    return [out_map[(p, lean_free.canonical(tx))] if tx is not None else 'LEANPARSE no-eos' for p, tx in zip(prompts, texts)]
+    return [out_map[(p, c)] if c is not None else 'LEANPARSE no-eos' for p, c in zip(prompts, ckeys)]

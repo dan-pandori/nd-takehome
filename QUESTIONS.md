@@ -17,3 +17,27 @@
 
 - **2026-09-22 06:05 UTC (lean-only, gate 0 / pod naming)** — My pods are `lo-*`; the sibling run's `ls2-*` pods (05:46, 05:47 UTC) precede my pre-registration commit in the host-wide `~/pods.log`. Phase 1 needs a pod (the VPS takes 14 s and 1.5 GB per `import Lean`), so I committed the full pre-registration — phase-1 expectations and phase-2 predictions — *before* the phase-1 pod; any phase-2 number that phase 1 changes is appended as a dated addendum before the first phase-2 pod. Default: proceed on that reading of "before the first phase-2 pod".
 - **2026-09-22 06:05 UTC (lean-only, the "181,464 pool proofs")** — The number in the proposal is round-2 run-1's summary figure; the pulled `artifacts/r1/lean_*.jsonl` files hold 253,397 distinct `nd_verify`-accepted (prompt, proof) pairs. Default: I validate `lean_check` on all 253,397 (a superset) and say so.
+
+## 2026-09-23 — run `efficiency`: the brief's `<eos>` premise does not reproduce on the from-scratch model
+
+`BRIEF_EFFICIENCY.md` is built on a `ds-composition` measurement: "97 % of base-model samples on 7–12-line Lean
+targets never emit `<eos>`", a coverage pass at ≈ 21 s per target at k = 2,000, and a 16–23 GB KV cache. On the
+checkpoint the brief names (`stage1_full_seq_s0.pt`, the `lean_seq` Stage-1 model of run `lean-only`), on 200
+ladder-transfer targets of `L_true` 7–12 at k = 256, T 0.8, `max_new` 512, batch 512, I measure the opposite:
+**99.988 % of rows emit `<eos>`** (6 of 51,200 do not), mean 143 decoded tokens, peak 2.1 GB, 1.7 ms per sample
+(≈ 6× faster per sample than the brief's arithmetic implies). Source: `artifacts/ef/base_orig.json`.
+
+The arithmetic suggests `ds-composition`'s figure came from a much larger model (≈ 6× the per-sample cost), i.e.
+a **pretrained** model sampled in the Lean surface form, not this 3.2 M-parameter from-scratch one. If so, the
+`<eos>` problem is real but belongs to the pretrained-model path, and the from-scratch sampler's waste is a
+different thing entirely (it is: the decode batch runs to its *longest* row, and each step is kernel-launch-bound,
+so the batch size — not the terminator — is the lever).
+
+**Question:** is the 97 % figure from a pretrained model (Qwen-family) rather than the `lean_seq` Stage-1 model?
+If it is, would you rather I spend the remaining budget (a) finishing the from-scratch sampler work, which every
+`lean_seq` run inherits, or (b) reproducing and fixing the `<eos>` failure on the pretrained path?
+
+**Default I am following:** (a). I am completing the from-scratch measurement and fixes, reporting the falsified
+premise plainly, and keeping the terminator fixes in the patched `sample.py` behind flags so that whoever hits the
+pretrained-path problem inherits them. I will not start a pretrained-model run under this brief's budget.
+
