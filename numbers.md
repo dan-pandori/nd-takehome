@@ -821,6 +821,27 @@ A round is 200 targets × k = 128 = 25,600 samples plus its Lean gate, fast path
 **One line for the next brief: run at most 3 jobs per GPU, and prefer one job at batch 4,096 — a single fast-path
 job at batch 4,096 does 1,395 samples/s, more than four co-tenant jobs at batch 1,024 do between them (964).**
 
+## 8b. Reproducing the baseline after the patches — `artifacts/ef/base_orig_repro.json`
+
+`sample.py` keeps the pre-run decode path behind `path='base'` (and the pre-run file verbatim as
+`sample_base_orig.py`); `model.py` keeps the pre-run RoPE behind `ND_ROPE_MEMO=0`. Re-running the baseline with
+both (`ND_ROPE_MEMO=0 python3 bench_sampler.py --tag base_orig_repro --path base --rowrng 0`) after every patch
+reproduces it:
+
+| | `base_orig` (before any patch) | `base_orig_repro` (after, old path re-selected) |
+|---|---|---|
+| decoded tokens mean / p95 | 143.39 / 236 | **143.39 / 236** |
+| `<eos>` fraction | 0.99988 | **0.99988** |
+| peak allocated | 2.123 GB | **2.123 GB** |
+| texts / accepted samples / targets | 51,194 / 1,961 / 25 | **51,194 / 1,961 / 25** |
+| samples/s | 592.47 | 609.30 |
+| gate wall | 19.03 s | 12.95 s (the canonicalisation fix is in) |
+
+Everything that is a *result* is bit-identical; samples/s differs by 2.8 %, which is the run-to-run noise of this
+pod. **Read every ratio in §3–§5 with a ±3 % band**; the ones that carry the write-up (2.13× for the batch, 2.35×
+cumulative, 1.01× for compaction alone, 0.72× for the goal stop) are far outside it, and the small ones (1.01×,
+1.05×, 1.07×) are individually at its edge, which is why the ladder is reported as a whole.
+
 ## 9. Re-packing (continuous batching) — analysed, not implemented
 
 The brief allows "drop finished rows … **or re-pack**". Compaction drops them; re-packing would refill the freed

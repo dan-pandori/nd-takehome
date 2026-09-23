@@ -1,0 +1,7 @@
+START 2026-09-23T17:00:14Z python3 bench_sampler.py --tag base_orig_repro --path base --rowrng 0 --save_tokens 0
+[bench] base_orig_repro: 200 targets x k=256 = 51200 samples, mode lean_seq, path base early goal compact 1 rowrng 0 batch 512 max_new 512
+[bench] sampling: {"sample_wall_s": 84.03, "samples_per_s": 609.3, "decoded_tokens_mean": 143.39, "decoded_tokens_p95": 236, "frac_rows_with_eos": 0.99988, "peak_alloc_gb": 2.123, "n_texts": 51194}
+[lean_gate] 51200 samples, no-eos 6, distinct checked 7568: both ok 51, lean-only 0, nd-only 0, both rej 7517; lean 8.2s wall (177.8s proc, 64 workers), denote+nd_verify 2.0s
+[bench] gate: {"gate_wall_s": 12.95, "accepted_samples": 1961, "accepted_distinct": 36, "targets_solved": 25, "lean_proc_s": 177.75070476531982, "accepted_per_lean_proc_s": 11.03, "end_to_end_s": 96.98}
+[bench] wrote artifacts/ef/base_orig_repro.json
+END 2026-09-23T17:01:54Z
