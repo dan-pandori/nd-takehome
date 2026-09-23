@@ -118,3 +118,47 @@ seed; shape and overlap tables in `data/dsc/README.md`; `STATUS.md` line `DS-COM
 <UTC>`; bucket `hf://buckets/dan-pandori/nd-rl/ds-composition/{ckpts,artifacts,data}`; pods
 deleted; `touch ~/runs/ds-composition/executor.done`. Questions for Dan go to `QUESTIONS.md`
 with the default you follow.
+
+---
+
+## Resume 2026-09-23 (Dan lifted the pause; $50 across the three dataset-style runs)
+
+Your earlier session ended when the account ran out of Fable credits (2026-09-22 ≈ 10:33 UTC),
+and the balance floor then deleted every pod. Nothing was wrong with the work. Resume it.
+
+**What changed while you were stopped — use all of it.**
+
+1. **The sampler is ~2× faster.** Use `sample.generate(..., path="fast", early="eos",
+   compact=True, rowrng=True, batch=4096, max_new=288)`; peak memory ≈ 11 GB, so **at most two
+   sampling jobs per 24 GB GPU**, and ≤ 3 concurrent jobs per GPU in total (four was measured
+   counterproductive). Read
+   `~/nd-rl/experiment-summaries/2026-09-23-efficiency-sampler-and-checker-throughput/README.md`
+   before you set batch sizes. Note the caveat recorded there: a batch-size change reshuffles
+   which proofs are accepted about as much as an RNG re-draw does, so hold the batch **fixed
+   across every arm you compare**, and say which batch it was.
+2. **Every number must name the model it was measured on** — checkpoint, parameter count,
+   format (`lean_seq` / token), from-scratch or pretrained, and its training set — in the
+   write-up and in each `numbers.md` table. An inherited number carries its label. This is now
+   in `AGENT_POLICY.md`, and the reviewer treats an unlabelled number as a finding.
+3. **Pod-hour ceiling.** `podbudget <run-id>` shows it. At 80 % a file
+   `~/runs/<run-id>/BUDGET_WARNING` appears — check for it between stages. You may extend
+   yourself within the declared dollar budget: `podbudget <run-id> --extend <hours> "reason"`;
+   it is refused if the projection exceeds the budget, and then you ask Dan in `QUESTIONS.md`
+   and proceed on a stated default.
+4. **Upload to the bucket as you go, not only at the end**
+   (`hf buckets sync artifacts hf://buckets/dan-pandori/nd-rl/<run-id>/artifacts` after each
+   stage). A host cleanup deleted local `artifacts/` and `ckpts/` for the runs that had not
+   uploaded; `data/` survived. Treat local disk as scratch.
+
+**Specific to this run.** Your `artifacts/` and `ckpts/` were deleted in that cleanup and had
+**not** been uploaded, so the dial, coverage and Stage-1 results you recorded in `log.md` on
+2026-09-22 cannot be re-derived by anyone. Treat them as lost, not as results: re-train the
+Stage-1 models from the sets in `data/dsc/` (they survived, and the 07:12 re-draw that fixed the
+pattern-enrichment confound is what is on disk) and re-measure. Keep the earlier log entries as
+a record of what was seen, clearly marked as not re-derivable. Your pre-registration is
+committed and unchanged, so gate 0 still holds. Budget $18, ceiling 36 pod-hours.
+
+Your A1 arm is the one with a real signal so far (held-out 0.939 / 0.934 against the control's
+0.909 / 0.896, but a frozen depth-3 base rate of 0.339 against 0.163) — that tension between
+"better in distribution" and "less left for RL to add" is the interesting thing this run can
+settle. Prioritise finishing A1 and the control over the other arms if the budget binds.
