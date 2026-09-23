@@ -16,9 +16,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from normalize import norm
 from patterns import classify
 
-ARMS = ['c0', 'r1', 'r3', 'r2']
-POD = {'c0': 'dsr-c0', 'r1': 'dsr-r1', 'r3': 'dsr-r3', 'r2': 'dsr-r2'}
-MODE = {'c0': 'lean_seq', 'r1': 'lean_seq_noprem', 'r3': 'lean_seq_nofml', 'r2': 'lean_seq_intro'}
+ARMS = ['c0', 'r1', 'r3', 'r2', 'r4']
+POD = {'c0': 'dsr-c0', 'r1': 'dsr-r1', 'r3': 'dsr-r3', 'r2': 'dsr-r2', 'r4': 'dsr-r4'}
+MODE = {'c0': 'lean_seq', 'r1': 'lean_seq_noprem', 'r3': 'lean_seq_nofml', 'r2': 'lean_seq_intro',
+        'r4': 'lean_seq_funbare'}
 SEEDS = [0, 1]
 A = 'artifacts/dsr'
 

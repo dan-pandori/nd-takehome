@@ -73,7 +73,8 @@ def main():
     # (B) Lean on the literal sampled text, in the arm's own rendering
     from lean_tok import LeanTokenizer
     from lean_gate import lean_check
-    MODE = {'c0': 'lean_seq', 'r1': 'lean_seq_noprem', 'r3': 'lean_seq_nofml', 'r2': 'lean_seq_intro'}
+    MODE = {'c0': 'lean_seq', 'r1': 'lean_seq_noprem', 'r3': 'lean_seq_nofml', 'r2': 'lean_seq_intro',
+            'r4': 'lean_seq_funbare'}
     tok = LeanTokenizer(MODE[arm])
     lit = [it for it in uniq if it['text']]
     okB, wall, cpu = lean_check([(tok.statement(it['prompt']), it['text']) for it in lit])

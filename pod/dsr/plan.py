@@ -11,7 +11,8 @@ budget cut loses a ladder and never a base rate.
 """
 import os, sys
 
-MODE = {'c0': 'lean_seq', 'r1': 'lean_seq_noprem', 'r3': 'lean_seq_nofml', 'r2': 'lean_seq_intro'}
+MODE = {'c0': 'lean_seq', 'r1': 'lean_seq_noprem', 'r3': 'lean_seq_nofml', 'r2': 'lean_seq_intro',
+        'r4': 'lean_seq_funbare'}   # R4 added 2026-09-23 21:45 UTC, pre-registration addendum
 TRAIN = 'data/p2/train_depth3_f0_a1.jsonl'
 HELD = 'data/p2/heldout.jsonl'
 B = 2048          # THE batch, identical in every arm and every stage (efficiency run's caveat)

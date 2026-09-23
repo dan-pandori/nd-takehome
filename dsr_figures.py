@@ -15,8 +15,9 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 S = json.load(open('artifacts/dsr/summary.json'))
-ARMS = ['c0', 'r1', 'r3', 'r2']
-LABEL = {'c0': 'C0\nlean_seq', 'r1': 'R1\nno premise\nre-statement', 'r3': 'R3\nformula-free\nhaves', 'r2': 'R2\nintro boxes'}
+ARMS = ['c0', 'r1', 'r3', 'r2', 'r4']
+LABEL = {'c0': 'C0\nlean_seq', 'r1': 'R1\nno premise\nre-statement', 'r3': 'R3\nformula-free\nhaves',
+         'r2': 'R2\nintro boxes', 'r4': 'R4\nbare-fun\nboxes'}
 # single-hue sequential ramp off the reference palette's slot-1 blue (light -> dark = short -> long)
 SEQ = ['#a8c9ee', '#5e9ae0', '#1c55a0']
 INK, MUTED, SURF, GRID = '#0b0b0b', '#52514e', '#fcfcfb', '#e3e2dc'
