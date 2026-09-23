@@ -133,6 +133,46 @@ def held_parse_fail(arm, s):
     return out
 
 
+_HELD_DEPTH = None
+
+
+def _held_depth():
+    """name -> box depth of the held-out theorem's REFERENCE proof."""
+    global _HELD_DEPTH
+    if _HELD_DEPTH is None:
+        _HELD_DEPTH = {}
+        for l in open('data/p2/heldout.jsonl'):
+            x = json.loads(l)
+            _HELD_DEPTH[x['name']] = max((y.count('| ') for y in x['proof'].split(' ; ')), default=0)
+    return _HELD_DEPTH
+
+
+def held_by_depth(arm, s):
+    """held-out greedy split by the reference proof's box depth.  The a1 training set contains NO depth-3 proof
+    (0 of 155,000), so the depth-3 slice of data/p2/heldout.jsonl -- 500 of its 5,000 theorems -- is an f = 0
+    out-of-distribution measurement, and the depth <= 2 slice is the in-distribution one.  This split is what
+    separates the renderings; everything else about them is within a few points."""
+    p = find(arm, f'held_{arm}_s{s}.jsonl')
+    rows = jlines(p)
+    if rows is None:
+        return None
+    dep = _held_depth()
+    d = collections.defaultdict(lambda: [0, 0])
+    md = collections.Counter()
+    for r in rows:
+        k = dep[r['name']]
+        d[k][0] += bool(r['solved']); d[k][1] += 1
+        if k == 3 and r['solved'] and r['proofs']:
+            md[max((y.count('| ') for y in r['proofs'][0].split(' ; ')), default=0)] += 1
+    lo = [sum(d[k][i] for k in d if k <= 2) for i in (0, 1)]
+    hi = d[3]
+    return {'src': p,
+            'by_depth': {str(k): {'solved': v[0], 'n': v[1], 'rate': v[0] / v[1]} for k, v in sorted(d.items())},
+            'in_distribution': {'solved': lo[0], 'n': lo[1], 'rate': lo[0] / lo[1]},
+            'depth3_slice': {'solved': hi[0], 'n': hi[1], 'rate': hi[0] / hi[1]},
+            'depth3_solves_by_model_proof_depth': dict(sorted(md.items()))}
+
+
 def cov(arm, s, tag):
     """coverage.py pass@2,000 on one pool."""
     p = find(arm, f'cov_{tag}_{arm}_s{s}.s0.jsonl')
@@ -284,6 +324,7 @@ def main():
                     'written_hist': h.get('written_hist')},
                 'heldout_by_prem_len': held_breakdown(arm, s),
                 'heldout_parse_fail': held_parse_fail(arm, s),
+                'heldout_by_depth': held_by_depth(arm, s),
                 'mech_pass16': mech(arm, s),
                 'cov': {tag: cov(arm, s, tag) for tag in ('d3', 'd3req', 'red')},
                 'dial_ei': dial(arm, s, 'ei'), 'dial_frozen': dial(arm, s, 'frz'),

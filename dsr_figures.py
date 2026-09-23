@@ -46,8 +46,8 @@ def bars(ax, vals, title, ylab, fmt='{:.0f}', ref=None):
                 continue
             ax.bar(x, v, width=0.30, color=SEQ[1], edgecolor=SURF, linewidth=1.2,
                    hatch='//' if arm == 'c0' else None)
-            ax.annotate(fmt.format(v), (x, v), textcoords='offset points', xytext=(0, 2), ha='center',
-                        fontsize=7.2, color=INK)
+            ax.annotate(fmt.format(v), (x, v), textcoords='offset points', xytext=(0, 2 + 9 * j), ha='center',
+                        fontsize=7.2, color=INK)   # stagger seed 1 so near-equal seeds do not collide
     if ref is not None:
         ax.axhline(ref, color=MUTED, lw=1, ls=(0, (4, 2)))
     ax.set_xticks(range(len(ARMS)))
@@ -69,7 +69,7 @@ def fig_lengths():
                     continue
                 ax.bar(x, v, width=0.30, color=col, edgecolor=SURF, linewidth=1.2,
                        hatch='//' if arm == 'c0' else None)
-                ax.annotate(f'{v}', (x, v), textcoords='offset points', xytext=(0, 2), ha='center', fontsize=7.2)
+                ax.annotate(f'{v}', (x, v), textcoords='offset points', xytext=(0, 2 + 9 * j), ha='center', fontsize=7.2)
         ax.set_xticks(range(len(ARMS))); ax.set_xticklabels([LABEL[a] for a in ARMS], fontsize=7.4)
         ax.set_title(name, fontsize=9, loc='left', color=INK)
         ax.grid(axis='y', color=GRID, lw=0.8); ax.set_axisbelow(True)
@@ -86,16 +86,18 @@ def fig_lengths():
 def fig_readiness():
     panels = [
         ('held', 'Held-out greedy (5,000)', lambda a, s: get(a, s, 'heldout_greedy', 'rate'), '{:.3f}', 'rate'),
-        ('held6', 'Held-out greedy, 6-line bin (1,000)', lambda a, s: (lambda d: None if d is None else d.get('6'))(get(a, s, 'heldout_greedy', 'by_len')), '{:.3f}', 'rate'),
+        ('indist', 'Held-out, IN DISTRIBUTION (box depth ≤ 2, 4,500)', lambda a, s: get(a, s, 'heldout_by_depth', 'in_distribution', 'rate'), '{:.3f}', 'rate'),
+        ('d3held', 'Held-out, DEPTH-3 slice (500; f = 0, greedy)', lambda a, s: get(a, s, 'heldout_by_depth', 'depth3_slice', 'rate'), '{:.3f}', 'rate'),
+        ('parse', 'Samples outside the strict grammar / 5,000', lambda a, s: get(a, s, 'heldout_parse_fail', 'depth3', 'grammar_violations'), '{:.0f}', 'LEANPARSE'),
         ('d3', 'depth-3 base rate, pass@2,000 (1,000)', lambda a, s: get(a, s, 'cov', 'd3', 'rate'), '{:.3f}', 'targets hit / n'),
         ('d3req', 'depth-3 required@8, pass@2,000 (300)', lambda a, s: get(a, s, 'cov', 'd3req', 'rate'), '{:.3f}', 'targets hit / n'),
         ('red', 'required reductio, pass@2,000 (300)', lambda a, s: get(a, s, 'cov', 'red', 'targets_hit'), '{:.0f}', 'targets hit'),
         ('dial', 'dial EI − frozen, round 4 (1,000)', lambda a, s: (lambda e, f: None if e is None or f is None else e - f)(get(a, s, 'dial_ei', 'targets_cum_rate'), get(a, s, 'dial_frozen', 'targets_cum_rate')), '{:.3f}', 'Δ solved rate'),
         ('lafrz', 'ladder frozen, transfer solved (2,285)', lambda a, s: get(a, s, 'ladder_frozen', 'transfer_solved'), '{:.0f}', 'solved'),
         ('laT1', 'ladder T1, transfer solved (2,285)', lambda a, s: get(a, s, 'ladder_T1', 'transfer_solved'), '{:.0f}', 'solved'),
-        ('lstar', 'ladder T1 L* (frozen L* labelled)', lambda a, s: get(a, s, 'ladder_T1', 'lstar'), '{:.0f}', 'L*'),
+        ('lstar', 'ladder T1 L*', lambda a, s: get(a, s, 'ladder_T1', 'lstar'), '{:.0f}', 'L*'),
     ]
-    fig, axes = plt.subplots(3, 3, figsize=(11.5, 9.0))
+    fig, axes = plt.subplots(4, 3, figsize=(11.5, 11.8))
     for ax, (key, title, f, fmt, ylab) in zip(axes.ravel(), panels):
         vals = {a: [f(a, s) for s in (0, 1)] for a in ARMS}
         ref = None
@@ -103,9 +105,10 @@ def fig_readiness():
         if c0:
             ref = sum(c0) / len(c0)
         bars(ax, vals, title, ylab, fmt=fmt, ref=ref)
-    fig.suptitle('RL readiness per rendering, two Stage-1 seeds each — dashed line = the control C0 (mean of its two seeds)\n'
-                 '3.2M from-scratch models on the identical 155,000-record cap-6 a1 set; sampler batch 2048; Lean ∧ nd_verify',
-                 fontsize=9, ha='left', x=0.007, y=0.995)
+    fig.suptitle('Rendering vs RL readiness, two Stage-1 seeds each — dashed line = the control C0 (mean of its two seeds)\n'
+                 '3.2M from-scratch models, IDENTICAL 155,000 ND records (cap 6, zero depth-3 proofs); only the Lean rendering differs.\n'
+                 'Sampler batch 2048 everywhere; a sample counts iff Lean 4.34 accepts the literal text AND nd_verify accepts the ND proof.',
+                 fontsize=9, ha='left', x=0.007, y=0.997)
     fig.tight_layout(rect=[0, 0, 1, 0.955])
     os.makedirs('figures', exist_ok=True)
     fig.savefig('figures/ds_rendering_readiness.png', dpi=175)
