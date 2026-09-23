@@ -28,7 +28,7 @@ def load(fn, tok, cap, check_verify=False):
                 assert ok and nl == r['n_lines'] and nl <= cap, (reason, nl, r)
         ids = tok.encode_proof(r['proof'])
         if cap and hasattr(tok, 'statement'):      # Lean surface form: the rendered record must denote exactly the cap-checked ND proof
-            assert tok.decode(ids) == r['proof'], r
+            assert tok.decode(ids, r['prompt']) == r['proof'], r
         out.append((tok.encode_prompt(r['prompt']), ids))
     return out
 

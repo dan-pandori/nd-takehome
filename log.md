@@ -295,3 +295,30 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 - 08:03  Ladder `lean_seq` finished (lf-4): transfer `L*` **11 / 11** (794 / 839 solved; 12 / 13 theorems at `L_true` ≥ 11; no label contradicted by a shorter proof), frozen 10 / 10 (304 / 309). Solo ladder round: token 402 s, `lean_seq` 657 s (1.64×). Checker of record over all 16 arms: 41,840 / 41,840 both accept. lf-4 pulled, checked, deleted at 08:03; no pod left (`podls`). RunPod balance 127.78 → 121.56.
 - 08:10  Gate totals: 13,887,708 distinct samples checked by Lean and `nd_verify`; 460 disagreements, all "Lean accepts, nd_verify rejects": 206 `.elim` on a non-False hypothesis, 137 `¬A ≡ A → False`, 117 proofs that do not restate every premise (my inverse grammar does not know the premise count; ND requires every PR line, Lean does not). DEVIATION from the pre-registration text: I wrote that the grammar mirrors nd2lean's structural rules; the "every premise restated" rule was not mirrored. No count is affected (both checkers must accept).
 - 2026-09-21T08:10:42Z  `numbers.md` section, `run_lean_format.md`, figure `figures/lean_format.png` (`lean_format_figures.py`; palette = dataviz reference slots 1–3, not machine-validated: no node on the VPS). Bucket upload done: `hf://buckets/dan-pandori/nd-rl/lean-format/{artifacts/lf,ckpts/lf,ckpts/ladder,data}` (789 files).
+
+## ds-rendering (proposal 10) — executor log
+
+- 2026-09-23 21:02 UTC  Session start. Read proposal 10, the `lean-format`, `lean-only` and
+  `efficiency` summaries. No pod exists; `podbudget ds-rendering` 0.00 h of 36 h / $18; RunPod
+  balance $220.36; `podls` empty (no other run is on pods).
+- 2026-09-23 21:06 UTC  Data pulled: `data/p2/train_depth3_f0_a1.jsonl` (155,000), `transfer_depth3.jsonl`
+  and the two control Stage-1 checkpoints `ckpts/dsr/stage1_a1_seq_s{0,1}.pt` from
+  `hf://buckets/dan-pandori/nd-rl/lean-format/`; `data/r3_1/depth3_req{,_transfer}.jsonl` from
+  `origin/dan_round3-run1`. Ladder pools already in the worktree, sha256 `47dd1886…` / `a5c4c277…`
+  (byte-identical to ladder-A's).
+- 2026-09-23 21:10–21:30 UTC  `lean_tok.py`: three rendering modes behind `Style`, each with a strict
+  grammar and an exact inverse. `decode()` gains an optional `prompt` (only `lean_seq_noprem` needs
+  it, to re-insert the premise lines); call sites in `train.py`, `sample.py`, `coverage.py`,
+  `tokenizer.py` updated. `lean_rand` and `lean_seq` are unchanged, so the control checkpoints load.
+- 2026-09-23 21:30 UTC  Render check (`dsr_render_check.py`, `artifacts/dsr/render_check.json`), 3,000
+  a1 records per mode on the VPS: round-trip 3000/3000, Lean 1000/1000, negatives 0/300 in all four
+  modes. Mean tokens per proof 83.5 / 59.0 / 79.8 / 76.4 (C0 / R1 / R3 / R2). R3's saving is 4.4 %,
+  not the brief's 20–30 %: the rules whose annotation it drops occur on only 0.625 lines per proof.
+  R2 is 0.915×, not 1.0–1.05×, because `by intro nS` does not write the binder's type — a confound,
+  declared in the pre-registration.
+- 2026-09-23 21:35 UTC  Fast sampler ported from `origin/dan_efficiency` (`sample.py`, `model.py`)
+  with exactly two changes: `decode()` is given the prompt, and the gate call is lean-format's
+  four-argument `gate(tok, prompts, nd_proofs, texts)` — this run's reward stays **Lean ∧
+  `nd_verify`** (brief protocol point 4), not `lean_check`. Pre-port file kept as `sample_prefast.py`.
+  `coverage.py` gains `--path fast` (default) and now stores the literal Lean text of the first
+  sample of every counted proof.

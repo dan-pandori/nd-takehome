@@ -69,8 +69,9 @@ class Tokenizer:
             raise ValueError(f'ref {k} out of range')
         return self.ref0 + k - 1
 
-    def decode(self, ids):
-        """ids (proof part, may include QED and trailing pads) -> body string in spec format."""
+    def decode(self, ids, prompt=None):
+        """ids (proof part, may include QED and trailing pads) -> body string in spec format.  `prompt` is ignored (the
+        Lean tokenizer's lean_seq_noprem mode needs it; the call sites pass it unconditionally)."""
         toks = []
         cur = 0
         at_line_start = True

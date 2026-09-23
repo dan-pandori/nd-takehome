@@ -1,4 +1,4 @@
-# STATUS — lean-format (proposal 8)
+# STATUS — ds-rendering (proposal 10) / lean-format (proposal 8)
 
 Brief: BRIEF_LEAN_FORMAT.md. Policy: AGENT_POLICY.md. Run id: lean-format. Only exception to the pause.
 
@@ -9,3 +9,16 @@ Brief: BRIEF_LEAN_FORMAT.md. Policy: AGENT_POLICY.md. Run id: lean-format. Only 
 - Deliverables: `run_lean_format.md`, `numbers.md` § lean-format, `log.md` § lean-format, `figures/lean_format.png`, bucket `hf://buckets/dan-pandori/nd-rl/lean-format/`. Two questions for Dan in `QUESTIONS.md` (2026-09-21).
 
 LEAN-FORMAT DONE 2026-09-21T08:10:42Z
+
+## ds-rendering (proposal 10, arms R1 / R3 / R2 + control C0)
+
+Brief: `BRIEF_ds-rendering.md`. Run id: `ds-rendering`. Budget $18, ceiling 36 pod-hours, hard stop
+2026-09-25 03:01 UTC.
+
+- 2026-09-23 21:01 UTC  run started (executor session, resumed after the Fable-credit stop of 2026-09-22).
+- 2026-09-23 21:15 UTC  pre-registration `preregistration/ds-rendering.md` committed **before any pod**.
+  Three rendering variants implemented in `lean_tok.py` (`lean_seq_noprem`, `lean_seq_nofml`,
+  `lean_seq_intro`) with their strict inverses; render check passes for all four modes
+  (3,000 / 3,000 round-trip, 1,000 / 1,000 accepted by Lean, 0 / 300 theorem-swapped negatives).
+  Measured token ratios vs `lean_seq`: R1 0.707, R3 **0.956** (the brief predicted 0.70–0.80 —
+  already falsified), R2 0.915.

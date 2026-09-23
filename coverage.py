@@ -10,7 +10,8 @@ invariant under renumbering), and writes ONE record per theorem to <out>.s<shard
   {name, thm, prompt, gen_lines, n_tried, n_ok, n_distinct_ok, hits_by_pattern, distinct_by_pattern, first_hit (1-based sample index of the
    first verified sample, or null), solved_within: {32:.., 128:.., 512:.., 1000:.., 10000:.., 100000:..}
    (first_hit <= B, an exact pass@B draw), written_hist, pruned_hist,
-   proofs: [{proof (normalised), count, written, pruned, first, pat}]  -- EVERY distinct verified success with its
+   proofs: [{proof (normalised), count, written, pruned, first, text (the LITERAL Lean text of the first sample that
+   decoded to it -- run ds-rendering, so the counted proof can be re-checked by Lean in the arm's own rendering), pat}]  -- EVERY distinct verified success with its
    hit count and pattern labels (sum of count == n_ok; asserted), so any per-pattern sample count is re-derivable}
 Failures are not stored. Resumable: theorems already present in the output file are skipped.
 Samples are i.i.d. per theorem, so first_hit <= B is one Bernoulli draw of pass@B and n_ok/n_tried estimates the per-sample rate.
@@ -19,7 +20,7 @@ import argparse, json, os, sys, time, collections, multiprocessing
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import torch
 from model import load_ckpt
-from sample import generate_ids
+from sample import generate_ids, generate_ids_fast
 from nd_verify import verify_text
 from prune import pruned_length
 from normalize import norm
@@ -56,6 +57,7 @@ def main():
     ap.add_argument('--reverse', action='store_true', help='process the shard in reverse order, writing <out>.s<shard>r.jsonl (to split a shard across two pods)')
     ap.add_argument('--lenfield', default='n_lines')
     ap.add_argument('--procs', type=int, default=1, help='verification workers (fork pool, created before CUDA init)')
+    ap.add_argument('--path', default='fast', choices=('fast', 'base'), help="sampler decode path (run efficiency); 'base' is the pre-2026-09-23 loop")
     a = ap.parse_args()
     pool = multiprocessing.get_context('fork').Pool(a.procs) if a.procs > 1 else None
     si, sn = map(int, a.shard.split('/'))
@@ -76,7 +78,8 @@ def main():
                 done.add(json.loads(l)['name'])
     print(f'shard {si}/{sn}: {len(recs)} theorems, {len(done)} already done; k={a.k} T={a.temperature} batch={a.batch}', flush=True)
     gen = torch.Generator(device=dev)
-    gen.manual_seed(a.seed * 100003 + si * 7919)
+    seed_base = a.seed * 100003 + si * 7919
+    gen.manual_seed(seed_base)
     t_start = time.time()
     n_done = 0
     with open(out_fn, 'a') as fo:
@@ -88,22 +91,33 @@ def main():
             pid = tok.encode_prompt(r['prompt'])
             counts = collections.Counter()      # normalised proof string -> count
             first_idx = {}                      # normalised proof string -> first 1-based sample index
+            first_text = {}                     # normalised proof string -> the LITERAL Lean text of its first sample
             n = 0
             while n < a.k:
                 b = min(a.batch, a.k - n)
                 with torch.autocast('cuda', dtype=torch.bfloat16):
-                    outs = generate_ids(model, tok, [pid] * b, greedy=False, temperature=a.temperature, max_new=a.max_new, gen=gen)
+                    if a.path == 'fast':
+                        # run efficiency (2026-09-23): row-keyed Gumbel noise, batch compaction, no per-step host sync.
+                        # The seed is (shard seed, theorem ordinal, sample offset) so every chunk of every theorem draws
+                        # a distinct, reproducible noise stream.
+                        outs = generate_ids_fast(model, tok, [pid] * b, greedy=False, temperature=a.temperature,
+                                                 max_new=a.max_new, seed=(seed_base + n_done * 1000003 + n) % (2 ** 31),
+                                                 early='eos', compact=True)
+                    else:
+                        outs = generate_ids(model, tok, [pid] * b, greedy=False, temperature=a.temperature, max_new=a.max_new, gen=gen)
                 for j, o in enumerate(outs):
-                    s = norm(tok.decode(o))
+                    s = norm(tok.decode(o, r['prompt']))
                     counts[s] += 1
                     if s not in first_idx:
                         first_idx[s] = n + j + 1
+                        first_text[s] = getattr(tok, 'last_text', None)
                 n += b
             # verify distinct strings once
             strs = list(counts.keys())
             jobs = [(r['prompt'], s) for s in strs]
             res = pool.map(_verify_one, jobs, chunksize=32) if pool else [_verify_one(j) for j in jobs]
-            ok_proofs = [{'proof': s, 'count': counts[s], 'written': x['written'], 'pruned': x['pruned'], 'first': first_idx[s], 'pat': x['pat']}
+            ok_proofs = [{'proof': s, 'count': counts[s], 'written': x['written'], 'pruned': x['pruned'], 'first': first_idx[s],
+                          'text': first_text.get(s), 'pat': x['pat']}
                          for s, x in zip(strs, res) if x]
             n_ok = sum(p['count'] for p in ok_proofs)
             # pass@B from sample order: we know the first index of each distinct success and its total count, but not
