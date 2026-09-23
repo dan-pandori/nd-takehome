@@ -26,6 +26,10 @@ are identical in all of them, only the text changes:
   lean_seq_intro  : boxes are `( by intro nS ; ... ; exact nE )` instead of `( fun ( nS : A ) => by ... ; exact nE )`; the
                     binder's type is read back from the discharging line's annotation (IMPI/NEGI) or from the disjunction
                     (ORE).  One extra vocabulary token, `intro`.
+  lean_seq_funbare: boxes are `( fun nS => by ... ; exact nE )` -- the `fun` form with the binder's TYPE dropped, Lean
+                    inferring it from the expected type.  Added 2026-09-23 22:00 UTC to separate the two things
+                    lean_seq_intro changes at once: the `fun` vs `by intro` syntax, and writing the hypothesis formula
+                    once instead of twice.  Same vocabulary as lean_seq (107).
 Each variant's grammar is as strict as the base one: anything outside it decodes to 'LEANPARSE <reason>'.
 
 decode() parses the sampled tokens with the strict grammar and returns the ND proof (spec.md format, N1..) it
@@ -44,7 +48,7 @@ FSYMS = ['(', ')', '¬', '∧', '∨', '→', 'P', 'Q', 'R', 'S', 'False']
 PSYMS = ['theorem', 't', ':', 'Prop', ':=', 'by']
 TSYMS = ['have', 'exact', ';', 'fun', '=>', '⟨', '⟩', ',', '.1', '.2', '.elim', 'Or.inl', 'Or.inr', 'Or.elim', 'Classical.byContradiction', 'hh']
 
-MODES = ('lean_rand', 'lean_seq', 'lean_seq_noprem', 'lean_seq_nofml', 'lean_seq_intro')
+MODES = ('lean_rand', 'lean_seq', 'lean_seq_noprem', 'lean_seq_nofml', 'lean_seq_intro', 'lean_seq_funbare')
 # the rules whose `have` type lean_seq_nofml drops: Lean infers it and inverse() recomputes it by one rule application
 NOFML_RULES = ('IMPE', 'ANDE1', 'ANDE2', 'NEGE', 'R')
 
@@ -62,6 +66,11 @@ class Style:
         self.noprem = mode == 'lean_seq_noprem'
         self.nofml = mode == 'lean_seq_nofml'
         self.intro = mode == 'lean_seq_intro'
+        self.funbare = mode == 'lean_seq_funbare'
+        # whether a box writes its binder's type.  lean_seq writes the hypothesis formula TWICE -- in the discharging
+        # line's annotation and again as the binder type -- and the two must agree across the whole box; intro and
+        # funbare write it once, and `inverse` reads the binder type back from the annotation.
+        self.typed_binder = not (self.intro or self.funbare)
 
 
 def ftoks(f):
@@ -119,6 +128,8 @@ def proof_tokens(proof, style=None):
         ex = ['exact', '(', ('n', e), ':', 'False', ')'] if neg else ['exact', ('n', e)]
         if st.intro:
             return ['(', 'by', 'intro', ('n', s), ';'] + stt + ex + [')']
+        if st.funbare:
+            return ['(', 'fun', ('n', s), '=>', 'by'] + stt + ex + [')']
         return ['(', 'fun', '(', ('n', s), ':'] + ftoks(hf) + [')', '=>', 'by'] + stt + ex + [')']
 
     for ln in lines:
@@ -319,11 +330,15 @@ def inverse(toks, style=None, prem=None):
         raise ParseFail('no inference')
 
     def box(scope, depth, hf=None):
-        """fun form '( fun ( n : A ) => by stmts exact .. )' / intro form '( by intro n ; stmts exact .. )'
-        -> (start idx, end idx, neg).  The intro form gets its binder type from the caller."""
+        """fun form '( fun ( n : A ) => by stmts exact .. )', bare-fun form '( fun n => by ... )', intro form
+        '( by intro n ; stmts exact .. )' -> (start idx, end idx, neg).  The two untyped forms get their binder type
+        from the caller (the discharging line's annotation, or the disjunction for ORE)."""
         eat('(')
         if st.intro:
             eat('by'); eat('intro'); nm = name_tok(); eat(';')
+            if hf is None: raise ParseFail('no binder type')
+        elif st.funbare:
+            eat('fun'); nm = name_tok(); eat('=>'); eat('by')
             if hf is None: raise ParseFail('no binder type')
         else:
             eat('fun'); eat('('); nm = name_tok(); eat(':'); hf = formula(); eat(')'); eat('=>'); eat('by')
@@ -368,17 +383,17 @@ def inverse(toks, style=None, prem=None):
                     eat(); eat('('); eat('fun'); eat('hh'); eat('=>'); a = ref(scope); eat('hh'); eat(')'); rule, refs = 'DN', [a]
                 elif t == '(':
                     hf = None
-                    if st.intro:                    # the binder type is the antecedent of the line's own annotation
-                        if f is None: raise ParseFail('intro type')
-                        if f[0] not in ('imp', 'not'): raise ParseFail('intro type')
+                    if not st.typed_binder:         # the binder type is the antecedent of the line's own annotation
+                        if f is None: raise ParseFail('binder type')
+                        if f[0] not in ('imp', 'not'): raise ParseFail('binder type')
                         hf = f[1]
                     s, e, neg = box(scope, depth, hf)
-                    if st.intro and neg != (f[0] == 'not'): raise ParseFail('box kind')
+                    if not st.typed_binder and neg != (f[0] == 'not'): raise ParseFail('box kind')
                     rule, refs = ('NEGI' if neg else 'IMPI'), [s, e]
                 elif t == 'Or.elim':
                     eat(); j = ref(scope)
                     h1 = h2 = None
-                    if st.intro:
+                    if not st.typed_binder:
                         g = forms[j]
                         if g[0] != 'or': raise ParseFail('ORE arg')
                         h1, h2 = g[1], g[2]

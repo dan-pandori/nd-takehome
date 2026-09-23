@@ -186,3 +186,71 @@ pass@2,000, reductio pass@2,000, ladder T1 `L*` or solved} improve with none wor
   mode.
 - Comparing arms at different sampler batches. Guarded by: batch 2048 everywhere, stated in every
   table.
+
+---
+
+# Addendum, 2026-09-23 22:0x UTC — a fifth arm, **R4 `lean_seq_funbare`**
+
+Written **before the `dsr-r4` pod exists** (`~/pods.log`), after the four Stage-1 arms' held-out
+greedy was in and before any of their coverage, dial or ladder results existed. It adds an arm;
+it changes no number already pre-registered above.
+
+## Why
+
+The held-out result splits cleanly by the **box depth of the reference proof**
+(`artifacts/dsr/summary.json` → `heldout_by_prem_len`, and `log.md` 2026-09-23 21:45):
+
+| held-out greedy | depth ≤ 2 (4,500; in distribution) | depth 3 (500; **f = 0** — the a1 set has 0 depth-3 proofs of 155,000) |
+|---|---|---|
+| C0 `lean_seq` s0 / s1 | 0.955 / 0.966 | **0.486 / 0.274** |
+| R1 `lean_seq_noprem` | 0.948 / 0.944 | 0.232 / 0.218 |
+| R3 `lean_seq_nofml` | 0.942 / 0.926 | 0.674 / 0.024 |
+| R2 `lean_seq_intro` | 0.955 / 0.964 | **0.822 / 0.746** |
+
+In distribution the four renderings are the same to within 4 pp. **Every difference between them
+is zero-shot depth-3 composition**, and R2 — pre-registered as a null and marked "drop first" —
+roughly doubles it. That is the **opposite** of falsifier 2 above, which said the nested-lambda
+mechanism would be supported by R2's depth-3 rate *halving*.
+
+R2 changes two things at once, as the pre-registration declared: the box syntax (`fun … =>` →
+`by intro`) **and** whether the box's hypothesis formula is written twice (once in the discharging
+line's annotation, once as the binder's type) or once. R4 separates them.
+
+## The arm
+
+**R4 `lean_seq_funbare`**: boxes are `( fun nS => by … ; exact nE )` — the **`fun` syntax kept**,
+the **binder's type dropped** (Lean infers it from the expected type; `inverse` reads it back from
+the discharging line's annotation, exactly as in R2). Everything else is C0. Vocabulary **107**
+(C0's; R2 needs 108 for `intro`), and the render check gives **mean 76.4 tokens per proof —
+identical to R2's 76.4**, so R4 is a length- and vocabulary-matched control for R2.
+
+Render check, run before this commit (`artifacts/dsr/render_check_funbare.json`): round-trip
+**3000 / 3000**, Lean accepts **1000 / 1000** literal texts, theorem-swapped negatives **0 / 300**.
+
+Same protocol as every other arm: two Stage-1 seeds, identical 155,000 ND records, 6,000 steps,
+bs 128, cap 6, sampler batch 2048 / `max_new` 400 / T 0.8, acceptance Lean ∧ `nd_verify`.
+
+## Pre-registered expectations for R4 (both seeds)
+
+The two hypotheses make disjoint predictions on the depth-3 held-out slice:
+
+| | if the cost is the **binder-type repetition** (R4 ≈ R2) | if the cost is the **`fun … =>` syntax** (R4 ≈ C0) |
+|---|---|---|
+| **E13** held-out greedy, depth-3 slice (500) | **0.65–0.90** | **0.20–0.55** |
+| **E14** held-out greedy overall | 0.930–0.955 | 0.890–0.920 |
+| **E15** held-out greedy, depth ≤ 2 (4,500) | 0.94–0.97 either way (no prediction distinguishes them) | |
+| **E16** depth-3 pass@2,000 on `targets_depth3` | within ×0.8–1.25 of R2 | within ×0.8–1.25 of C0 |
+
+**My prediction: the binder-type column** — R4 lands in 0.65–0.90 on E13 on both seeds. The reason:
+`lean_seq` must re-emit the hypothesis formula at the binder after having written it in the
+annotation, and at depth 3 those spans nest, so three formulas must each be reproduced twice
+across an interleaved span; `intro` and bare `fun` each write it once.
+
+**If R4 splits the seeds, or lands between the bands (0.55–0.65), the run reports the mechanism as
+unresolved** and names the 2 × 2 that would settle it ({`fun`, `intro`} × {typed, untyped} — the
+fourth cell, `by intro nS` *with* a type, has no Lean syntax, so the missing cell would have to be
+`fun ( nS : A ) => by` against `fun nS => by` at a *matched token count*, which R4 vs C0 is not).
+
+**Budget.** One more A40 ($0.49/h), the same job plan as the other arms, ≈ 5 pod-hours ≈ $2.50.
+Projected total 25 of 36 pod-hours, ≈ $12.50 of $18. The drop order becomes: R2's ladder, then
+**R4's ladder**, then R2, then R3's ladder.

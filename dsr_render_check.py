@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from lean_tok import LeanTokenizer, MODES
 from nd_verify import verify_text
 
-ALL = ['lean_seq', 'lean_seq_noprem', 'lean_seq_nofml', 'lean_seq_intro']
+ALL = ['lean_seq', 'lean_seq_noprem', 'lean_seq_nofml', 'lean_seq_intro', 'lean_seq_funbare']
 
 
 def main():
