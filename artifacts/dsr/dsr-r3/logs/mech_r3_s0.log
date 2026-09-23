@@ -1,1 +1,19 @@
 START 2026-09-23T21:41:24Z python3 eval_set.py --ckpt ckpts/dsr/stage1_r3_s0.pt --in data/transfer.jsonl --k 16 --temperature 0.8 --seed 0 --batch 2048 --out artifacts/dsr/mech_r3_s0.jsonl --summary artifacts/dsr/mech_r3_s0.json
+[lean_gate] 26208 samples, parse-fail 7442, distinct checked 17583: both ok 6605, nd-only 0, lean-only 15, both rej 10963; lean 92.6s wall (1062.6s proc, 12 workers), nd_verify 0.8s
+generated 26208 proofs in 144s
+stage1_r3_s0.pt on transfer.jsonl k=16 SOLVED 808/1638 = 0.493 [0.469,0.517]
+  len 7: 100/200 = 0.500 [0.431,0.569]
+  len 8: 100/200 = 0.500 [0.431,0.569]
+  len 9: 95/200 = 0.475 [0.407,0.544]
+  len 10: 103/171 = 0.602 [0.528,0.673]
+  len 11: 97/166 = 0.584 [0.508,0.657]
+  len 12: 74/142 = 0.521 [0.439,0.602]
+  len 13: 63/141 = 0.447 [0.367,0.529]
+  len 14: 61/125 = 0.488 [0.402,0.575]
+  len 15: 62/160 = 0.388 [0.315,0.465]
+  len 16: 53/133 = 0.398 [0.319,0.483]
+  written hist {2: 13, 3: 62, 4: 164, 5: 215, 6: 327, 7: 187, 8: 78, 9: 5}
+  pruned hist {2: 74, 3: 97, 4: 227, 5: 246, 6: 240, 7: 120, 8: 46, 9: 1}
+  frontier written 9 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 7442), ('rule check failed: NEGE', 2360), ('rule check failed: ANDI', 2024), ('rule check failed: IMPI', 2001), ('rule check failed: ORI2', 888), ('rule check failed: ORI1', 855)]
+END 2026-09-23T21:43:52Z
