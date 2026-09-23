@@ -858,7 +858,7 @@ later run is sampler-bound after this one; the number above is here so that call
 
 ## 10. Cost, provenance, bucket
 
-- Pod `ef-1`, RTX 3090 ($0.50/h), 15:31 → 17:0x UTC, ≈ 1.5 h ≈ **$0.75** of the $15 budget and the 10 pod-hour
+- Pod `ef-1`, RTX 3090 ($0.50/h), 15:31 → 17:04 UTC, **1.5314 h = $0.77** of the $15 budget and the 10 pod-hour
   ceiling. RunPod balance $221 at the start. No other pod was used.
 - Checkpoint `stage1_full_seq_s0.pt` from `hf://buckets/dan-pandori/nd-rl/lean-only/ckpts/lo/`, unchanged; nothing
   was trained in this run.

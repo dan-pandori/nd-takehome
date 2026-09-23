@@ -15,3 +15,16 @@ Brief: BRIEF_EFFICIENCY.md. Run id: efficiency. Pod-hour ceiling 10 h, budget $1
   The waste is elsewhere and is being measured: the decode batch runs to the *longest* row (~450 steps) while
   the mean row needs 143, and each step is kernel-launch-bound, so dropping finished rows buys nothing on its
   own (measured: 89.1 s vs 88.3 s).
+- 2026-09-23 17:05 UTC  **EFFICIENCY DONE.** Sampler **2.35×** (592.5 → 1,394.8 samples/s), end to end **2.16×**
+  (105.45 → 48.89 s) on the fixed 51,200-sample workload, with the accepted set **identical** before and after
+  (2,022 samples / 56 distinct proofs / 31 targets, symmetric difference 0, `nd_verify` 56/56 with Lean) in three
+  separate comparisons. What paid: batch 512 → 4,096 (2.13×), memoised RoPE (1.07×), `max_new` 512 → 288 (1.05×),
+  and batch compaction — which buys 1.01× on its own but is what makes the large batch affordable (on the
+  unchanged path batch 4,096 is *slower* than 512). Gate: canonicalise once per distinct text, 19.03 → 12.18 s.
+  Dropped with numbers: both per-sequence early stops, worker-sized Lean chunks, a persistent Lean server,
+  re-packing. Co-tenancy knee at **3** jobs per GPU; prefer one job at batch 4,096.
+  The brief's `<eos>` premise does not hold for this checkpoint (99.988 % of rows terminate) — see `QUESTIONS.md`.
+  `run_efficiency.md`, `numbers.md` §1–10, `log.md`, `figures/efficiency_before_after.png`. Pod deleted; 1.5314 h,
+  $0.77. Bucket `hf://buckets/dan-pandori/nd-rl/efficiency/{artifacts,ckpts,data}`.
+
+EFFICIENCY DONE 2026-09-23T17:05:00Z
