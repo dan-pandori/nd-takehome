@@ -6,11 +6,29 @@ if os.environ.get('CUDA_MEM_FRACTION') and torch.cuda.is_available():
     torch.cuda.set_per_process_memory_fraction(float(os.environ['CUDA_MEM_FRACTION']))
 
 
+_ROPE = {}
+ROPE_MEMO = os.environ.get('ND_ROPE_MEMO', '1') == '1'
+
+
 def rope_cache(T, hd, device, base=10000.0):
-    pos = torch.arange(T, device=device, dtype=torch.float32)
-    inv = 1.0 / (base ** (torch.arange(0, hd, 2, device=device, dtype=torch.float32) / hd))
-    ang = pos[:, None] * inv[None, :]
-    return torch.cos(ang), torch.sin(ang)  # (T, hd/2)
+    """Memoised (run efficiency, 2026-09-23): this used to rebuild the table on every decode step, and
+    GPT.forward called it with `int(pos.max().item())`, a host<->device sync per step.  The table is a pure
+    function of (T, hd, base), so it is built once per (hd, device, base) and sliced; the values are unchanged.
+    `ND_ROPE_MEMO=0` restores the pre-run behaviour exactly (it is 1.07x slower on the sampler)."""
+    if not ROPE_MEMO:
+        pos = torch.arange(T, device=device, dtype=torch.float32)
+        inv = 1.0 / (base ** (torch.arange(0, hd, 2, device=device, dtype=torch.float32) / hd))
+        ang = pos[:, None] * inv[None, :]
+        return torch.cos(ang), torch.sin(ang)
+    key = (hd, str(device), base)
+    c = _ROPE.get(key)
+    if c is None or c[0].shape[0] < T:
+        n = max(T, 8192)
+        pos = torch.arange(n, device=device, dtype=torch.float32)
+        inv = 1.0 / (base ** (torch.arange(0, hd, 2, device=device, dtype=torch.float32) / hd))
+        ang = pos[:, None] * inv[None, :]
+        c = _ROPE[key] = (torch.cos(ang), torch.sin(ang))
+    return c[0][:T], c[1][:T]  # (T, hd/2)
 
 
 def apply_rope(x, cos, sin):
@@ -89,7 +107,8 @@ class GPT(nn.Module):
         if pos is None:
             cos, sin = rope_cache(T, self.hd, idx.device)
         else:
-            cos_all, sin_all = rope_cache(int(pos.max().item()) + 1, self.hd, idx.device)
+            n = max(self.cfg['max_len'], 8192) if ROPE_MEMO else int(pos.max().item()) + 1   # memoised: no .item() sync per step
+            cos_all, sin_all = rope_cache(n, self.hd, idx.device)
             cos, sin = cos_all[pos], sin_all[pos]
         x = self.emb(idx)
         for i, b in enumerate(self.blocks):

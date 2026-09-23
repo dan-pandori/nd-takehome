@@ -125,3 +125,65 @@ arm to qualify (G1 null; G2 fails the held-out clause).
 - G2 generation stops at 2 pod-hours; short bins filled from G1's pool (disclosed per bin).
 - No test-file run; `nd_verify` unmodified; `nd2lean.py` unmodified (BOTE fix is `lean-seed2`'s); every training record is
   generator output rendered deterministically; no hand- or LLM-written proofs; `lean_gate.py` unchanged.
+
+---
+
+## Addendum — resume phase, written 2026-09-23 ≈ 21:20 UTC, before any pod of this phase exists
+
+The 2026-09-22 session ended at ≈ 10:33 UTC when the account ran out of Fable credits; the balance floor then deleted
+`dsg-1` / `dsg-2` / `dsg-3` while their ladder jobs were running (started 08:02 / 08:45), so **no ladder or textbook
+number of this run exists**. A host cleanup afterwards deleted local `artifacts/` and `ckpts/`. Recovered before this
+phase: `artifacts/dsg/` in full from git (it was committed as it was pulled — 95 files, the coverage, dial, shape,
+overlap and render-check material), `data/dsg/train_g{1,2}.jsonl` and the three raw pools from the bucket, and the two
+control checkpoints from `hf://buckets/dan-pandori/nd-rl/lean-format/ckpts/lf/` (md5 `9bde44c0…` / `fc27e52d…`, the
+values recorded above — verified). `ckpts/dsg/stage1_g{1,2}_s{0,1}.pt` were never uploaded and are gone.
+
+**What this phase runs.** Ladder T1 + frozen, 8 rounds × k 32, two seeds, for all three arms (12 jobs), then the checker
+of record over every counted proof, then the textbook-schema table from `found_transfer_8.jsonl`. G2's ladder is run
+even though its held-out collapsed (0.626 / 0.606 against C0's 0.909 / 0.896), because G2's **frozen** ladder solves are
+this run's pre-registered falsifier ("the shape-distribution account of the transfer wall is dead if G2's frozen ladder
+solves are within ±15 % of C0 on both seeds"); that is a new measurement, not a re-confirmation of the held-out number.
+
+**Deviations from the design above, each with its reason.**
+
+1. **Fast decode path.** `sample.py` and `model.py` are taken from `origin/dan_efficiency` (run `efficiency`, reviewed
+   2026-09-23: "every number re-derives", base-vs-fast accepted sets identical at fixed batch), with one line changed
+   back — this branch's gate is `gate(tok, prompts, res, texts)`, i.e. Lean **and** `nd_verify`, not that branch's
+   `lean_check`-only reward. `lean_gate.py`, `nd2lean.py`, `nd_verify`, `train.py`, `expert_iter.py`, `ladder_ei.py`,
+   `coverage.py` are untouched. Checked on the pod before any measurement by `dsg_regress.py` (16 ladder-transfer
+   prompts × 8 samples, T 0.8): `path='base'` with row-keyed rng, the new default, and the fast path without
+   compaction must produce **identical token streams and identical decoded proofs**. Expected: PASS; if it fails I set
+   `ND_SAMPLE_PATH=base ND_SAMPLE_ROWRNG=0` and run the ladder on the unchanged path at the original batch, costing
+   ≈ 6 extra pod-hours (still inside the ceiling).
+2. **Ladder sampling batch 512 → 4,096 and `--max_new` 512 → 384**, one sampling job per GPU at a time instead of four
+   co-tenants. Reason: `efficiency` measured 1,395 samples/s for a solo job at batch 4,096 against 964 for four
+   co-tenants at batch 1,024, and its longest *accepted* sample on exactly this workload (ladder transfer, `lean_seq`
+   Stage-1) was 255 tokens, so 384 keeps 50 % headroom. That run also recorded that a batch change reshuffles which
+   proofs are accepted about as much as an RNG re-draw: **batch 4,096 and `max_new` 384 are therefore held fixed across
+   all three arms and both seeds**, and the C0 ladder is re-measured here under them. Consequence, stated in advance:
+   this run's ladder numbers are not sample-for-sample comparable with `lean-format`'s on-file C0 ladder numbers
+   (frozen 304 / 309, T1 794 / 839, `L*` 10 / 11); the C0 measured *here* is the comparison every G1 / G2 claim uses,
+   and the lean-format figures are quoted only as the prior.
+3. **G1 and G2 Stage-1 checkpoints are retrained**, same sets (re-fetched from the bucket), same seeds, same command
+   line as on 2026-09-22. Reproduction check, pre-registered here: held-out greedy is re-measured with the identical
+   `eval_set.py --k 1 --temperature 0 --batch 512` call and compared with the committed
+   `artifacts/dsg/heldout_<arm>_s<seed>.json`. Expected **within ±0.5 pp** (bitwise-identical checkpoints if training is
+   deterministic on the same GPU class). A larger difference is disclosed and the *new* held-out number is the one the
+   ladder rows are labelled with.
+4. Everything measured in this phase is labelled with its model: 3.3 M-parameter from-scratch GPT, `lean_seq` Lean
+   surface format, Stage-1 6,000 steps × batch 128 on the named 155,000-record set, cap 6, seed as given.
+
+**Additional expected results for this phase** (the ladder and textbook rows of the table above stand unchanged):
+
+| quantity | expectation |
+|---|---|
+| `dsg_regress.py` on `stage1_a1_seq_s0.pt` | token streams and decoded proofs identical, verdict PASS |
+| held-out greedy of the retrained G1 / G2 checkpoints vs the committed values | within ±0.5 pp on all four |
+| ladder wall clock per arm (4 jobs, 8 rounds, sequential) | ≤ 3 h; whole phase ≤ 9 pod-hours |
+| Lean vs `nd_verify` on every counted ladder proof | 0 disagreements |
+
+**Budget and stop rule for this phase.** $14 and 28 pod-hours (`podbudget ds-generator`), balance $220.36 at start.
+Three RTX 3090 at $0.50/h, ≈ 2–3 h each ≈ $4. Order of dropping if spend reaches $11: G1's second-seed ladder, then
+G2's second-seed ladder, then G1 entirely (C0 and G2 carry the falsifier). No new hard stop beyond the ceiling; pods
+deleted as soon as their files are pulled, and `artifacts/` is uploaded to the bucket after each stage rather than only
+at the end.
