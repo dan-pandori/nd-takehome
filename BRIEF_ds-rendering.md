@@ -114,3 +114,43 @@ example of the same proof in all four modes; `numbers.md` § ds-rendering; `log.
 `hf://buckets/dan-pandori/nd-rl/ds-rendering/{ckpts,artifacts,data}`; pods deleted;
 `touch ~/runs/ds-rendering/executor.done`. Questions for Dan in `QUESTIONS.md` with the
 default you follow.
+
+---
+
+## Resume 2026-09-23 (Dan lifted the pause; $50 across the three dataset-style runs)
+
+Your earlier session ended when the account ran out of Fable credits (2026-09-22 ≈ 10:33 UTC),
+and the balance floor then deleted every pod. Nothing was wrong with the work. Resume it.
+
+**What changed while you were stopped — use all of it.**
+
+1. **The sampler is ~2× faster.** Use `sample.generate(..., path="fast", early="eos",
+   compact=True, rowrng=True, batch=4096, max_new=288)`; peak memory ≈ 11 GB, so **at most two
+   sampling jobs per 24 GB GPU**, and ≤ 3 concurrent jobs per GPU in total (four was measured
+   counterproductive). Read
+   `~/nd-rl/experiment-summaries/2026-09-23-efficiency-sampler-and-checker-throughput/README.md`
+   before you set batch sizes. Note the caveat recorded there: a batch-size change reshuffles
+   which proofs are accepted about as much as an RNG re-draw does, so hold the batch **fixed
+   across every arm you compare**, and say which batch it was.
+2. **Every number must name the model it was measured on** — checkpoint, parameter count,
+   format (`lean_seq` / token), from-scratch or pretrained, and its training set — in the
+   write-up and in each `numbers.md` table. An inherited number carries its label. This is now
+   in `AGENT_POLICY.md`, and the reviewer treats an unlabelled number as a finding.
+3. **Pod-hour ceiling.** `podbudget <run-id>` shows it. At 80 % a file
+   `~/runs/<run-id>/BUDGET_WARNING` appears — check for it between stages. You may extend
+   yourself within the declared dollar budget: `podbudget <run-id> --extend <hours> "reason"`;
+   it is refused if the projection exceeds the budget, and then you ask Dan in `QUESTIONS.md`
+   and proceed on a stated default.
+4. **Upload to the bucket as you go, not only at the end**
+   (`hf buckets sync artifacts hf://buckets/dan-pandori/nd-rl/<run-id>/artifacts` after each
+   stage). A host cleanup deleted local `artifacts/` and `ckpts/` for the runs that had not
+   uploaded; `data/` survived. Treat local disk as scratch.
+
+**Specific to this run.** You never started: no pods, no pre-registration. Begin at the
+beginning — pre-register first (gate 0 checks its commit time against `~/pods.log`), then run.
+Your brief's rendering variants matter more now than when they were written: `lean_seq` is the
+project's training format as of 2026-09-22, and the naming scheme alone was worth 9–12 points of
+held-out accuracy (`lean_seq` vs `lean_rand`), so rendering choices are known to be first-order
+rather than cosmetic. Read the `lean-format` and `lean-only` summaries in
+`~/nd-rl/experiment-summaries/` before fixing your arms, and state for each variant what you
+expect it to change and why. Budget $18, ceiling 36 pod-hours.
