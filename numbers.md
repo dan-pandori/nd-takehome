@@ -654,3 +654,198 @@ Two Stage-1 seeds per format (seed = Stage-1 seed = EI seed); model, schedule an
 ## Cost and bucket
 - RunPod balance 121.38 → 101.3791239743 (`rpbalance` 05:55 → 09:19 UTC; the sibling run `lean-seed2`'s two pods bill the same balance over the same hours). This run's pods (`~/pods.log`, deletion times in `log.md`): `lo-1` 06:04–≈09:45, `lo-2` 06:30–08:06, `lo-3` 06:31–08:49, `lo-4` 06:32–08:06, `lo-5` 06:32–08:01, `lo-6` 06:33–07:27 ≈ 12.3 pod-hours.
 - `hf://buckets/dan-pandori/nd-rl/lean-only/{artifacts/lo,data/lo,ckpts}` — `artifacts/lo` (every file above, incl. the 253,397-record `pool_check.jsonl`, all found / record / gate files), `data/lo` (relabelled pools), `ckpts/lo` (Stage-1 `full_seq_s0`, `a1_seq_s0/s1` — the originals; `ckpts/lo_retrained`: the five Stage-1 models whose pods were deleted before their checkpoints were pulled, retrained with the same seeds; EI round checkpoints were not kept).
+
+---
+
+# Run `efficiency` (2026-09-23) — sampler and checker throughput
+
+Pre-registration `preregistration/efficiency.md` (committed 15:30 UTC, before pod `ef-1` at 15:31; `gate0` PASS).
+Every number below is re-derivable from files under `artifacts/ef/` pulled from pod `ef-1` (RTX 3090, 256 vCPU).
+`python3 ef_ladder.py` prints the three tables; `python3 ef_summary.py` prints one line per configuration.
+
+**Fixed workload, identical in every measurement.** Checkpoint `ckpts/ef/stage1_full_seq_s0.pt` — the `lean_seq`
+Stage-1 model of run `lean-only` (cap 6, 4 layers, d 256, 3,214,336 parameters), taken from
+`hf://buckets/dan-pandori/nd-rl/lean-only/ckpts/lo/` and not retrained here. Targets: `artifacts/ef/targets200.jsonl`
+= 200 records of `data/ladder/transfer.jsonl` with `L_true` 7–12, stratified in pool proportion
+(27 / 27 / 88 / 40 / 9 / 9 at `L_true` 7 / 8 / 9 / 10 / 11 / 12), `random.Random(0)`; rebuilt by `ef_targets.py`.
+k = 256 → **51,200 samples**, temperature 0.8. Lean gate: `lean_check` at 64 workers, chunk 300, Lean 4.34.0.
+
+## 1. Baseline, committed before anything changed — `artifacts/ef/base_orig.json`
+
+| quantity | value |
+|---|---|
+| samples per second | **592.47** (86.42 s for 51,200 samples) |
+| decoded tokens per sample, mean / median / p95 | **143.39** / 121 / **236** (`max_new` 512) |
+| fraction of rows that ever emit `<eos>` | **0.99988** (6 rows of 51,200 do not) |
+| peak GPU memory (allocated / reserved) | **2.123 GB** / 2.127 GB |
+| Lean gate | 19.03 s wall: 51,194 texts → 7,568 distinct (prompt, canonical text); Lean 7.58 s wall / 168.58 s process; `denote` + `nd_verify` 1.98 s |
+| accepted | 1,961 samples, 25 of 200 targets; `nd_verify` agrees with Lean on 51 / 51 accepts, 0 disagreements |
+| end to end (sample + gate) | **105.45 s** |
+
+**The brief's premise does not reproduce on this checkpoint.** `BRIEF_EFFICIENCY.md` reports, from `ds-composition`,
+that 97 % of base-model samples on 7–12-line Lean targets never emit `<eos>`, that a coverage pass costs ≈ 21 s per
+target at k = 2,000 (10.5 ms per sample) and that the KV cache reaches 16–23 GB. Measured here: 0.012 % of rows fail
+to terminate, a sample costs 1.69 ms, and the KV cache is 2.1 GB. `QUESTIONS.md` (2026-09-23) asks Dan whether that
+figure came from a pretrained model; the default followed was to finish the from-scratch work.
+
+## 2. Why the terminator fires — `artifacts/ef/diag.json` (`ef_diag.py`)
+
+The brief's four candidate causes are all excluded from data:
+
+| candidate | measurement | verdict |
+|---|---|---|
+| (a) the model never learned a terminator | P(`<eos>`) at the true end, teacher-forced: **1.0000** (mean, median and 5th percentile) on 400 held-out ≤ 6-line proofs, and **1.0000** on the 42 ladder proofs this model actually got accepted | excluded |
+| (b) the rendering does not end with one | **5,000 / 5,000** sampled training renderings end in `<eos>` | excluded |
+| (c) the prompt is longer than anything in training | training prompts mean 51.9, p95 74, max 130 tokens; the 200 targets mean 60.9, p95 85, **max 100** — **0.0 %** exceed the training maximum | excluded |
+| (d) the sampler ignores it | 51,196 / 51,200 rows stop on `<eos>`; in a 1-in-7 sample of terminating rows, **6,803 / 7,314 (93 %)** emit `<eos>` immediately after a top-level `exact n<k>`, and the other 7 % after an `exact` at non-zero paren depth (ungrammatical, and Lean rejects them) | excluded |
+
+So on the `lean_seq` Stage-1 model the terminator is not the problem. The cost is elsewhere: **the decode batch runs
+for as many steps as its longest row** (20,611 decode steps for 51,200 rows whose mean length is 143), and each step
+is dominated by fixed per-step overhead rather than by how many rows are live.
+
+## 3. What was changed, and what each change bought — `artifacts/ef/ladder.json` (`ef_ladder.py`)
+
+| change | batch | samples/s | x this step | x cumulative | sampler s | tokens mean | p95 | decode steps | peak GB | accepted | targets |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| the sampler as it was (`path=base`, batch-wide multinomial, batch 512, `max_new` 512) | 512 | 592.47 | 1.0 | 1.0 | 86.42 | 143.39 | 236 | 20611 | 2.123 | 1961 | 25 |
+| + per-row deterministic RNG (same sampler; makes the two paths row-for-row comparable) | 512 | 580.01 | 0.98 | 0.98 | 88.27 | 143.62 | 236 | 21259 | 2.123 | 2022 | 31 |
+| + RoPE table memoised in `model.py` (drops a `pos.max().item()` sync per decode step) | 512 | 621.16 | 1.07 | 1.05 | 82.43 | 143.62 | 236 | 21259 | 2.124 | 2022 | 31 |
+| + the fast decode loop (no per-step `.any()`/`.sum()` sync, preallocated attention mask) | 512 | 613.08 | 0.99 | 1.03 | 83.51 | 143.62 | 236 | 21952 | 2.124 | 2022 | 31 |
+| + batch compaction (finished rows dropped from the batch and from the KV cache) | 512 | 619.62 | 1.01 | 1.05 | 82.63 | 143.62 | 236 | 22080 | 2.124 | 2022 | 31 |
+| + `max_new` 512 -> 288 (no accepted sample is longer than 255 decoded tokens) | 512 | 651.35 | 1.05 | 1.1 | 78.61 | 143.56 | 236 | 20688 | 1.468 | 2022 | 31 |
+| + batch 512 -> 4096 (affordable only because of compaction and the cap) | 4096 | 1386.85 | 2.13 | 2.34 | 36.92 | 143.49 | 236 | 3360 | 10.979 |  |  |
+| = the recommended configuration, re-run with the Lean gate for the end-to-end number | 4096 | 1394.79 | 1.01 | 2.35 | 36.71 | 143.49 | 236 | 3360 | 10.979 | 1988 | 27 |
+
+Each row adds one change to the row above it, on the same 51,200 samples. The recommended configuration is the last row: `sample.generate(..., path="fast", early="eos", compact=True, rowrng=True, batch=4096, max_new=288)`, which is the default of the patched `sample.py` except for `batch`/`max_new`, which callers pass.
+
+## 4. Fixes that were measured and dropped
+
+| fix | samples/s | vs the row it was added to | decoded tokens mean | accepted samples | targets |
+|---|---|---|---|---|---|
+| per-sequence early stop at a top-level `exact n<k>` | 571.89 | 0.92x | 142.64 (vs 143.62) | 2022 (vs 2022) | 31 (vs 31) |
+| goal-reached stop: the sampler appends `exact n<k>` when a depth-0 `have` states the goal | 448.29 | 0.72x | 140.22 (vs 143.62) | 2022 (vs 2022) | 31 (vs 31) |
+
+## 5. The batch-size sweep — why compaction matters even though it buys nothing on its own
+
+| config | batch | max_new | samples/s | sampler s | decode steps | row-steps (M) | peak GB |
+|---|---|---|---|---|---|---|---|
+| base path | 512 | 512 | 580.01 | 88.27 | 21259 | 10.88 | 2.123 |
+| base path | 1024 | 512 | 674.75 | 75.88 | 12959 | 13.27 | 4.222 |
+| base path | 2048 | 512 | 748.99 | 68.36 | 6578 | 13.47 | 8.417 |
+| base path | 4096 | 512 | 511.26 | 100.14 | 4533 | 17.79 | 16.229 |
+| fast path (compaction) | 512 | 512 | 619.62 | 82.63 | 22080 | 7.91 | 2.124 |
+| fast path (compaction) | 2048 | 512 | 1211.03 | 42.28 | 6752 | 8.06 | 8.417 |
+| fast path (compaction) | 4096 | 512 | 1223.78 | 41.84 | 4576 | 8.10 | 16.229 |
+| fast path (compaction) | 4096 | 288 | 1386.85 | 36.92 | 3360 | 8.09 | 10.979 |
+| fast path (compaction) | 8192 | 288 | 1388.08 | 36.89 | 2016 | 8.11 | 21.933 |
+
+Reading the sweep: raising the batch on the **unchanged** path is a trap — at 4,096 it is *slower* than at 512
+(511 vs 580 samples/s) and takes 16.2 GB, because every finished row keeps decoding padding to the end of the
+longest row (17.79 M row-steps against 10.88 M). Compaction holds the work flat (7.9–8.1 M row-steps at every
+batch size, against a floor of 143.6 × 51,200 = 7.35 M) and is what makes the batch a usable lever. The cap turns
+the remaining memory into batch: 8,192 buys nothing over 4,096 and costs twice the memory, so **4,096 is the
+recommendation**.
+
+## 6. Correctness gate — `artifacts/ef/gate_compare_*.json` (`ef_gate_compare.py`)
+
+Each comparison decodes the raw token dumps of two configurations over the same 51,200 samples, sends every
+distinct (prompt, canonical text) of the union to Lean once, and compares the accepted sets. Because sampling is
+per-row deterministic (`rowrng`), the two runs draw the same tokens, so this is an exact comparison, not a
+statistical one.
+
+| comparison | distinct texts checked | accepted samples | accepted distinct | targets | identical? | A∖B | B∖A |
+|---|---|---|---|---|---|---|---|
+| `base_rr` vs `r_eos` (fast loop + compaction) | 7,631 | 2,022 = 2,022 | 56 = 56 | 31 = 31 | **yes** | 0 | 0 |
+| `base_rr` vs `r_eos_mn288` (+ `max_new` cap 288) | 7,628 | 2,022 = 2,022 | 56 = 56 | 31 = 31 | **yes** | 0 | 0 |
+| `base_rr` vs `r_goal` (goal-reached terminator) | 7,910 | 2,022 = 2,022 | 56 = 56 | 31 = 31 | **yes** | 0 | 0 |
+
+`nd_verify` beside Lean on the union of every comparison: 56 both accept, **0** `nd_verify`-accepts-Lean-rejects,
+**0** Lean-accepts-`nd_verify`-rejects. The longest accepted sample used **255** decoded tokens (p99 245, mean
+172.5), which is what licenses the cap at 288; the cap truncated 36 of 51,200 rows and none of them was ever
+accepted. The `goal` path's accepted proofs are 3 tokens shorter on average (max 252) because the sampler, not the
+model, writes the final `exact n<k>` — the same proofs, written one step earlier.
+
+## 7. The Lean gate — `artifacts/ef/{lean_cost,gate_chunk}.json`, `gate_*.jsonl`
+
+**One fix kept.** `lean_gate.gate` canonicalised every sample's text twice — once per sample when building the key
+set, and once per sample when mapping verdicts back. It now canonicalises each *distinct* text once and reuses it.
+Samples repeat ≈ 6.7× on a coverage pass (51,196 texts → 7,620 distinct), so this is the same values at ≈ 1/14 of
+the calls; it cannot change a verdict.
+
+| gate on 51,200 samples | before (`base_orig`) | after (`r_rec`) |
+|---|---|---|
+| wall | **19.03 s** | **12.18 s** |
+| of which Lean | 7.58 s wall / 168.58 s process (64 workers, chunk 300) | 7.32 s / 167.75 s |
+| of which `denote` + `nd_verify` | 1.98 s | 1.98 s |
+| of which canonicalisation | ≈ 9.4 s (residual) | **2.72 s** (`canonical_s`, now logged) |
+
+**Is a persistent Lean process worth building? Measured, and no.** `ef_lean_cost.py` times the same texts at several
+chunk sizes with the processes run one at a time: the fit is **2.02 s fixed per `lean` process + 0.0120 s per
+theorem**, so at chunk 300 **35.9 %** of process time is startup. Pre-registered E10 said "< 10 %, so drop the fix" —
+**E10 is falsified on the process-time measure.** But the wall clock, which is what a run pays, does not follow, because
+concurrent `lean` processes contend (`ef_gate_chunk.py`, the real 7,620-text gate workload, RTX 3090 pod, 256 vCPU):
+
+| workers | chunk | concurrent `lean` processes | wall (s) | process (s) | accepted |
+|---|---|---|---|---|---|
+| 64 | 120 | 64 | 14.59 | 851.8 | 56 |
+| 64 | **300** | **26** | **8.09** | 178.8 | 56 |
+| 26 | 300 | 26 | 8.01 | 179.3 | 56 |
+| 128 | 300 | 26 | 8.01 | 180.3 | 56 |
+| 16 | 480 | 16 | 9.22 | 126.2 | 56 |
+| 64 | 600 | 13 | 10.65 | 121.2 | 56 |
+| 12 | 640 | 12 | 11.02 | 116.5 | 56 |
+| 8 | 960 | 8 | 14.61 | 105.9 | 56 |
+| 64 | 1200 | 7 | 17.77 | 101.7 | 56 |
+
+The accepted count is **56 in all nine settings**, so chunking cannot change a verdict. The existing chunk 300 is the
+optimum: smaller chunks trade startups for contention (64 concurrent processes cost 4.8× the process time), larger
+chunks trade startups for lost parallelism, and a worker pool larger than the number of chunks does nothing at all
+(64 and 128 workers give the same 8.0 s as 26). I did implement worker-sized chunking, measured it as a regression
+(gate 12.18 s → 19.66 s on the same workload, `r_rec_c`, same 1,988 accepted samples and 27 targets), and **reverted
+it**. A true persistent server would remove the 2.02 s startup from the critical path: the floor is ≈ 2–3 s against
+the 8.0 s measured, i.e. ≈ 5 s off a 49 s round (≈ 10 %). **Not built** — a Lean REPL is a real implementation and a
+fresh trust argument for the checker of record; the number is here so a later brief can decide.
+
+## 8. Co-tenancy — `artifacts/ef/cotenancy_co_n{1,2,3,4}.json` (`pod/ef/cotenancy_all.sh`)
+
+A round is 200 targets × k = 128 = 25,600 samples plus its Lean gate, fast path, batch 1,024, `max_new` 288,
+`CUDA_MEM_FRACTION` 0.90/N, `LEAN_CHECK_WORKERS` 192/N.
+
+| concurrent jobs | round wall (s) | aggregate samples/s | per job samples/s | marginal gain |
+|---|---|---|---|---|
+| 1 | 37.1 | 689.8 | 689.8 | — |
+| 2 | 57.2 | 894.8 | 447.4 | +29.7 % |
+| 3 | 79.9 | 961.4 | 320.5 | +7.4 % |
+| 4 | 106.2 | 964.2 | 241.1 | **+0.3 %** |
+
+**One line for the next brief: run at most 3 jobs per GPU, and prefer one job at batch 4,096 — a single fast-path
+job at batch 4,096 does 1,395 samples/s, more than four co-tenant jobs at batch 1,024 do between them (964).**
+
+## 9. Re-packing (continuous batching) — analysed, not implemented
+
+The brief allows "drop finished rows … **or re-pack**". Compaction drops them; re-packing would refill the freed
+slots from the next chunk. The headroom is exactly the per-chunk waste: at the recommended setting the sampler runs
+**3,360** decode steps where a perfectly packed batch would run 143.49 × 51,200 / 4,096 = **1,794**, so a perfect
+re-pack is worth at most **1.87×** on the sampler (36.7 s → 19.6 s) and **1.54×** end to end (48.9 s → 31.8 s).
+
+It was not built. `model.py`'s KV cache has one write cursor shared by every row, so a newly admitted row can only be
+prefilled at the current cursor, and the cache must then span the admission window *plus* a full `max_new`; keeping
+the batch ≈ 75 % full needs a cache ≈ 4× `max_new` wide — 4× the memory, which is the exact resource that caps the
+batch at 4,096 (10.98 GB of 23.6 GB) and from which the 2.13× of the last ladder step came. The alternative,
+per-row block tables (paged attention), is a rewrite of `Block.attn`. Both are worth more than they cost only if a
+later run is sampler-bound after this one; the number above is here so that call can be made on evidence.
+
+## 10. Cost, provenance, bucket
+
+- Pod `ef-1`, RTX 3090 ($0.50/h), 15:31 → 17:0x UTC, ≈ 1.5 h ≈ **$0.75** of the $15 budget and the 10 pod-hour
+  ceiling. RunPod balance $221 at the start. No other pod was used.
+- Checkpoint `stage1_full_seq_s0.pt` from `hf://buckets/dan-pandori/nd-rl/lean-only/ckpts/lo/`, unchanged; nothing
+  was trained in this run.
+- Scripts: `ef_targets.py` (the 200 targets), `bench_sampler.py` (one configuration → one json + token dump +
+  accepted file), `ef_smoke.py` (fast-path fidelity), `ef_diag.py` (step 2), `ef_gate_compare.py` (step 5),
+  `ef_lean_cost.py` and `ef_gate_chunk.py` (step 3d), `ef_ladder.py` / `ef_summary.py` / `ef_figure.py` (tables and
+  the figure); pod side `pod/ef/{sync,setup,job,bench_all,cotenancy,cotenancy_all,stop}.sh`.
+- Changed in the repository: `sample.py` (fast path; the pre-run file is kept verbatim as `sample_base_orig.py`),
+  `model.py` (memoised `rope_cache`), `lean_gate.py` (canonicalise once per distinct text), `lean_check.py`
+  (docstring recording the measured chunk optimum; defaults unchanged).
+- Bucket: `hf://buckets/dan-pandori/nd-rl/efficiency/{artifacts,ckpts,data}`.

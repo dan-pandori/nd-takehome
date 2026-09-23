@@ -1,0 +1,40 @@
+START 2026-09-23T16:08:22Z python3 bench_sampler.py --tag r_goal_b8192 --path fast --early goal --compact 1 --rowrng 1 --batch 8192 --gate 0 --save_tokens 0
+[bench] r_goal_b8192: 200 targets x k=256 = 51200 samples, mode lean_seq, path fast early goal compact 1 rowrng 1 batch 8192 max_new 512
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/bench_sampler.py", line 121, in <module>
+    main()
+  File "/workspace/nd-takehome/bench_sampler.py", line 50, in main
+    texts = S.generate(model, tok, prompts, greedy=False, temperature=a.temperature, max_new=a.max_new,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/sample.py", line 277, in generate
+    outs = generate_ids_fast(model, tok, [ids[i] for i in chunk],
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/sample.py", line 142, in generate_ids_fast
+    logits = model(idx, pos=pos, mask=mask, caches=caches)[:, -1]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 107, in forward
+    x = b(x, cos, sin, mask, None if caches is None else caches[i])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 71, in forward
+    x = x + self.attn(self.ln1(x), cos, sin, mask, cache)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 57, in attn
+    cache['k'] = k.new_empty(B, self.h, cache['max'], D // self.h)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 4.37 GiB. GPU 0 has a total capacity of 23.56 GiB of which 1.42 GiB is free. Process 447020 has 22.12 GiB memory in use. Of the allocated memory 21.77 GiB is allocated by PyTorch, and 53.22 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+FAILED 2026-09-23T16:08:27Z

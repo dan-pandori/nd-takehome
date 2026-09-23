@@ -1,0 +1,5 @@
+START 2026-09-23T16:03:41Z python3 bench_sampler.py --tag r_base_b4096 --path base --rowrng 1 --batch 4096 --gate 0 --save_tokens 0
+[bench] r_base_b4096: 200 targets x k=256 = 51200 samples, mode lean_seq, path base early goal compact 1 rowrng 1 batch 4096 max_new 512
+[bench] sampling: {"sample_wall_s": 100.14, "samples_per_s": 511.26, "decoded_tokens_mean": 143.56, "decoded_tokens_p95": 236, "frac_rows_with_eos": 0.99982, "peak_alloc_gb": 16.229, "n_texts": 51191}
+[bench] wrote artifacts/ef/r_base_b4096.json
+END 2026-09-23T16:05:24Z

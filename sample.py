@@ -6,12 +6,16 @@
 Run `efficiency` (2026-09-23) added a fast decode path.  `path='base'` is the code as it stood before that run,
 byte for byte; `path='fast'` is the default and adds, each separable and reversible:
 
-  early='eos'   only <eos> ends a row (what 'base' does)
+  early='eos'   (default) only <eos> ends a row (what 'base' does)
   early='exact' + a row ends as soon as it has emitted a top-level `exact n<k>` (paren depth 0): the Lean term is
                 syntactically complete, so nothing the model writes afterwards can be part of an accepted proof
-  early='goal'  (default) + a row ends as soon as a depth-0 `have n<k> : <the theorem's conclusion> := … ;` closes:
+  early='goal'  + a row ends as soon as a depth-0 `have n<k> : <the theorem's conclusion> := … ;` closes:
                 the sampler appends `exact n<k>` itself and stops.  A guess costs a rejected sample, never a wrong
                 accept, because lean_check still checks the text.
+Measured on run efficiency's workload, the `lean_seq` Stage-1 model emits <eos> on 99.99 % of rows and emits it
+immediately after its top-level `exact`, so 'exact' and 'goal' save 1 and 3 decoded tokens per sample and cost 8 %
+and 28 % of sampler wall time in extra per-step kernels.  **The default is therefore 'eos'.**  They are kept
+because a model that does *not* terminate (the pretrained-model path) pays nothing for <eos> that never comes.
   compact=True  finished rows are dropped from the decode batch (KV cache included), so they stop costing compute
                 and memory.  Compaction runs when the live fraction falls below `compact_frac`.
   rowrng=True   sampling noise is keyed by (chunk seed, step, slot) instead of drawn batch-wide, so a row's token
@@ -26,7 +30,7 @@ import os, time, torch, torch.nn.functional as F
 from model import rope_cache
 
 PATH = os.environ.get('ND_SAMPLE_PATH', 'fast')
-EARLY = os.environ.get('ND_SAMPLE_EARLY', 'goal')
+EARLY = os.environ.get('ND_SAMPLE_EARLY', 'eos')
 COMPACT = os.environ.get('ND_SAMPLE_COMPACT', '1') == '1'
 ROWRNG = os.environ.get('ND_SAMPLE_ROWRNG', '1') == '1'
 

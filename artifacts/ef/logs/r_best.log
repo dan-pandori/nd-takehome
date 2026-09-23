@@ -1,0 +1,7 @@
+START 2026-09-23T16:17:34Z python3 bench_sampler.py --tag r_best --path fast --early eos --compact 1 --rowrng 1 --batch 8192 --max_new 288 --gate 1 --save_tokens 0
+[bench] r_best: 200 targets x k=256 = 51200 samples, mode lean_seq, path fast early eos compact 1 rowrng 1 batch 8192 max_new 288
+[bench] sampling: {"sample_wall_s": 36.89, "samples_per_s": 1388.08, "decoded_tokens_mean": 143.48, "decoded_tokens_p95": 236, "frac_rows_with_eos": 0.99912, "peak_alloc_gb": 21.933, "n_texts": 51155}
+[lean_gate] 51200 samples, no-eos 45, distinct checked 7638: both ok 54, lean-only 0, nd-only 0, both rej 7584; lean 7.5s wall (168.3s proc, 64 workers), denote+nd_verify 2.0s
+[bench] gate: {"gate_wall_s": 12.28, "accepted_samples": 1925, "accepted_distinct": 38, "targets_solved": 27, "lean_proc_s": 168.26835083961487, "accepted_per_lean_proc_s": 11.44, "end_to_end_s": 49.17}
+[bench] wrote artifacts/ef/r_best.json
+END 2026-09-23T16:18:26Z

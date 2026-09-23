@@ -1,0 +1,5 @@
+[bench] co_n2_2: 200 targets x k=128 = 25600 samples, mode lean_seq, path fast early eos compact 1 rowrng 1 batch 1024 max_new 288
+[bench] sampling: {"sample_wall_s": 41.42, "samples_per_s": 618.11, "decoded_tokens_mean": 143.53, "decoded_tokens_p95": 236, "frac_rows_with_eos": 0.99914, "peak_alloc_gb": 2.909, "n_texts": 25578}
+[lean_gate] 25600 samples, no-eos 22, distinct checked 4947: both ok 43, lean-only 0, nd-only 0, both rej 4904; lean 8.4s wall (127.5s proc, 96 workers), denote+nd_verify 1.3s
+[bench] gate: {"gate_wall_s": 11.5, "accepted_samples": 984, "accepted_distinct": 31, "targets_solved": 22, "lean_proc_s": 127.52474427223206, "accepted_per_lean_proc_s": 7.72, "end_to_end_s": 52.92}
+[bench] wrote artifacts/ef/co_n2_2.json

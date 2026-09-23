@@ -1,0 +1,7 @@
+START 2026-09-23T16:01:17Z python3 bench_sampler.py --tag r_goal --path fast --early goal --compact 1 --rowrng 1 --save_tokens 1
+[bench] r_goal: 200 targets x k=256 = 51200 samples, mode lean_seq, path fast early goal compact 1 rowrng 1 batch 512 max_new 512
+[bench] sampling: {"sample_wall_s": 114.21, "samples_per_s": 448.29, "decoded_tokens_mean": 140.22, "decoded_tokens_p95": 234, "frac_rows_with_eos": 0.99992, "peak_alloc_gb": 2.124, "n_texts": 51196}
+[lean_gate] 51200 samples, no-eos 4, distinct checked 7384: both ok 56, lean-only 0, nd-only 0, both rej 7328; lean 21.8s wall (351.4s proc, 64 workers), denote+nd_verify 1.9s
+[bench] gate: {"gate_wall_s": 26.45, "accepted_samples": 2022, "accepted_distinct": 42, "targets_solved": 31, "lean_proc_s": 351.37984228134155, "accepted_per_lean_proc_s": 5.75, "end_to_end_s": 140.66}
+[bench] wrote artifacts/ef/r_goal.json
+END 2026-09-23T16:03:41Z

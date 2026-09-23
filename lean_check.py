@@ -196,7 +196,13 @@ def _run(srcs, workdir, tag, depth=0):
 
 
 def check(sources, workers=None, chunk=None):
-    """sources: list of Lean theorem sources (`theorem t ...`) -> (list of {'ok','size','reason'}, wall s, summed process s)"""
+    """sources: list of Lean theorem sources (`theorem t ...`) -> (list of {'ok','size','reason'}, wall s, summed process s)
+
+    Run efficiency (2026-09-23): `lean`'s fixed per-process cost is 2.02 s against 0.012 s per theorem when processes
+    run one at a time, so chunk 300 looks like 36 % startup overhead — but Lean processes contend badly, and sizing the
+    chunk so that every worker gets one (chunk 120, 64 concurrent processes) made the same 7,652 texts take 866 s of
+    process time instead of 168 s and 14.9 s of wall instead of 7.3 s.  chunk 300 / ~26 concurrent processes measured
+    best; see numbers.md section 7.  The defaults are left alone."""
     if not sources:
         return [], 0.0, 0.0
     workers = workers or WORKERS; chunk = chunk or CHUNK

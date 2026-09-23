@@ -1,0 +1,7 @@
+START 2026-09-23T16:13:52Z python3 bench_sampler.py --tag r_eos_mn288 --path fast --early eos --compact 1 --rowrng 1 --max_new 288 --save_tokens 1
+[bench] r_eos_mn288: 200 targets x k=256 = 51200 samples, mode lean_seq, path fast early eos compact 1 rowrng 1 batch 512 max_new 288
+[bench] sampling: {"sample_wall_s": 78.61, "samples_per_s": 651.35, "decoded_tokens_mean": 143.56, "decoded_tokens_p95": 236, "frac_rows_with_eos": 0.99922, "peak_alloc_gb": 1.468, "n_texts": 51160}
+[lean_gate] 51200 samples, no-eos 40, distinct checked 7586: both ok 56, lean-only 0, nd-only 0, both rej 7530; lean 7.6s wall (167.9s proc, 64 workers), denote+nd_verify 1.9s
+[bench] gate: {"gate_wall_s": 12.42, "accepted_samples": 2022, "accepted_distinct": 42, "targets_solved": 31, "lean_proc_s": 167.9432282447815, "accepted_per_lean_proc_s": 12.04, "end_to_end_s": 91.03}
+[bench] wrote artifacts/ef/r_eos_mn288.json
+END 2026-09-23T16:15:26Z

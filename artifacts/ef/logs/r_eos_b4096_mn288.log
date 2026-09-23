@@ -1,0 +1,5 @@
+START 2026-09-23T16:16:55Z python3 bench_sampler.py --tag r_eos_b4096_mn288 --path fast --early eos --compact 1 --rowrng 1 --batch 4096 --max_new 288 --gate 0 --save_tokens 0
+[bench] r_eos_b4096_mn288: 200 targets x k=256 = 51200 samples, mode lean_seq, path fast early eos compact 1 rowrng 1 batch 4096 max_new 288
+[bench] sampling: {"sample_wall_s": 36.92, "samples_per_s": 1386.85, "decoded_tokens_mean": 143.49, "decoded_tokens_p95": 236, "frac_rows_with_eos": 0.99914, "peak_alloc_gb": 10.979, "n_texts": 51156}
+[bench] wrote artifacts/ef/r_eos_b4096_mn288.json
+END 2026-09-23T16:17:34Z

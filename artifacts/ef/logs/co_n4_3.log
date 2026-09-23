@@ -1,0 +1,5 @@
+[bench] co_n4_3: 200 targets x k=128 = 25600 samples, mode lean_seq, path fast early eos compact 1 rowrng 1 batch 1024 max_new 288
+[bench] sampling: {"sample_wall_s": 83.16, "samples_per_s": 307.82, "decoded_tokens_mean": 143.52, "decoded_tokens_p95": 236, "frac_rows_with_eos": 0.99898, "peak_alloc_gb": 2.909, "n_texts": 25574}
+[lean_gate] 25600 samples, no-eos 26, distinct checked 4942: both ok 46, lean-only 0, nd-only 0, both rej 4896; lean 15.7s wall (246.5s proc, 48 workers), denote+nd_verify 1.3s
+[bench] gate: {"gate_wall_s": 18.93, "accepted_samples": 990, "accepted_distinct": 34, "targets_solved": 23, "lean_proc_s": 246.4565658569336, "accepted_per_lean_proc_s": 4.02, "end_to_end_s": 102.09}
+[bench] wrote artifacts/ef/co_n4_3.json

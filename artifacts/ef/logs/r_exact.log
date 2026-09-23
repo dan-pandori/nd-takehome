@@ -1,0 +1,7 @@
+START 2026-09-23T15:59:27Z python3 bench_sampler.py --tag r_exact --path fast --early exact --compact 1 --rowrng 1 --save_tokens 0
+[bench] r_exact: 200 targets x k=256 = 51200 samples, mode lean_seq, path fast early exact compact 1 rowrng 1 batch 512 max_new 512
+[bench] sampling: {"sample_wall_s": 89.53, "samples_per_s": 571.89, "decoded_tokens_mean": 142.64, "decoded_tokens_p95": 236, "frac_rows_with_eos": 0.99992, "peak_alloc_gb": 2.124, "n_texts": 51196}
+[lean_gate] 51200 samples, no-eos 4, distinct checked 7612: both ok 56, lean-only 0, nd-only 0, both rej 7556; lean 13.6s wall (304.9s proc, 64 workers), denote+nd_verify 1.9s
+[bench] gate: {"gate_wall_s": 18.47, "accepted_samples": 2022, "accepted_distinct": 42, "targets_solved": 31, "lean_proc_s": 304.8883001804352, "accepted_per_lean_proc_s": 6.63, "end_to_end_s": 108.0}
+[bench] wrote artifacts/ef/r_exact.json
+END 2026-09-23T16:01:17Z
