@@ -525,3 +525,15 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   **The substantive result, which is more interesting than the falsification.** EI adds **+0.334 (C0) and +0.311 (R1)** — nearly the same constant — while the two arms' *levels* differ throughout: R1 is below C0 at EI (0.608 vs 0.658), below at frozen (0.297 vs 0.324), below on held-out at EI (0.9497 vs 0.9631) and below at frozen (0.8741 vs 0.9025). **Expert iteration adds a roughly fixed amount on top of whatever the rendering gives it; it neither amplifies the rendering's advantage nor compensates for its deficit.** On these two arms the base model's rendering deficit passes through RL essentially unchanged — which is the least convenient answer for the idea that a better rendering buys RL readiness specifically, and the most useful one for predicting from a Stage-1 number.
 
   Caveat to carry into the write-up: n = 2 seeds per arm here, and the seed sweep has already shown once that n = 2 can manufacture a clean-looking story. The EI − frozen gap is large (≈ 0.33) relative to its seed scatter (0.293 vs 0.375), so the *existence* of the EI effect is safe; the **−0.023 arm difference is not resolvable at n = 2** and should be reported as "no detectable difference", not as "R1's gap is smaller".
+- 2026-09-23 23:52 UTC  **Checker of record, sweep pod: clean.** `pod/dsr/record.py` re-checks every counted proof twice — (A) the denoted ND proof through the **unmodified** `nd2lean.py --check`, which renders it *its own* way so its verdict cannot depend on the arm, and (B) the **literal sampled text**, in the arm's own rendering, through Lean 4.34. Across the sweep's four renderings (`artifacts/dsr/dsr-s/record_{c0,r2,r3,r4}.json`):
+
+  | arm | mode | distinct counted proofs | (A) nd2lean both-accept | (B) literal text accepted |
+  |---|---|---|---|---|
+  | C0 | `lean_seq` | 5,189 | **5,189 / 5,189** | **5,189 / 5,189** |
+  | R2 | `lean_seq_intro` | 5,132 | **5,132 / 5,132** | **5,132 / 5,132** |
+  | R3 | `lean_seq_nofml` | 5,056 | **5,056 / 5,056** | **5,056 / 5,056** |
+  | R4 | `lean_seq_funbare` | 5,113 | **5,113 / 5,113** | **5,113 / 5,113** |
+
+  **20,490 distinct counted proofs, zero rejections and zero disagreements on either check**, with `no_text_stored` 0 everywhere — every counted proof kept its literal text and every one of them still checks. This is the reassuring complement to the 23:40 agreement entry: the 241 Lean-only accepts all happened **at gate time and were all rejected by the conjunction**, and none of them leaked into anything counted. The in-loop gate and the independent re-check agree completely.
+
+  Sweep pod `dsr-s` deleted after pulling and uploading: artifacts (102 files), the four `record_*.json`, and **all 16 sweep Stage-1 checkpoints** (`ckpts/sweep/`, 222 MB — verified 18 objects in the bucket, the 16 plus the two shared controls) before `podrm`. 1.80 h, **$0.88**. Run total **$6.68 / $18, 13.64 / 36 pod-hours**; five arm pods still up on the ladders.
