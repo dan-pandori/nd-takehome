@@ -20,7 +20,7 @@ ARMS = ['c0', 'r1', 'r3', 'r2', 'r4']
 POD = {'c0': 'dsr-c0', 'r1': 'dsr-r1', 'r3': 'dsr-r3', 'r2': 'dsr-r2', 'r4': 'dsr-r4'}
 MODE = {'c0': 'lean_seq', 'r1': 'lean_seq_noprem', 'r3': 'lean_seq_nofml', 'r2': 'lean_seq_intro',
         'r4': 'lean_seq_funbare'}
-SEEDS = [0, 1]
+SEEDS = [0, 1, 2, 3, 4, 5]   # 0-1 get the full plan; 2-5 are the Stage-1 seed sweep (held-out only)
 A = 'artifacts/dsr'
 
 
@@ -332,13 +332,44 @@ def main():
             }
         rec['gate'] = gate_totals(arm)
         out['arms'][arm] = rec
+    # seed sweep: mean / sd of the held-out split over every Stage-1 seed an arm has (pre-registration addendum 2)
+    import statistics
+    sw = {}
+    for arm in ARMS:
+        rows = []
+        for s in SEEDS:
+            v = out['arms'][arm]['seeds'][s].get('heldout_by_depth')
+            pf = out['arms'][arm]['seeds'][s].get('heldout_parse_fail')
+            if not v:
+                continue
+            rows.append({'seed': s, 'overall': out['arms'][arm]['seeds'][s]['heldout_greedy']['rate'],
+                         'in_distribution': v['in_distribution']['rate'], 'depth3': v['depth3_slice']['rate'],
+                         'grammar_violations_depth3': (pf or {}).get('depth3', {}).get('grammar_violations')})
+        if not rows:
+            continue
+        f = lambda k: [r[k] for r in rows if r[k] is not None]
+        sw[arm] = {'n_seeds': len(rows), 'seeds': rows}
+        for k in ('overall', 'in_distribution', 'depth3'):
+            v = f(k)
+            sw[arm][k] = {'mean': statistics.fmean(v), 'sd': (statistics.stdev(v) if len(v) > 1 else 0.0),
+                          'min': min(v), 'max': max(v)}
+    out['seed_sweep'] = sw
+    if sw:
+        print()
+        print(f'{"arm":4s} {"n":2s} {"overall mean":13s} {"in-dist mean":13s} {"depth-3 mean (sd) [min,max]"}')
+        for arm in ARMS:
+            if arm not in sw:
+                continue
+            w = sw[arm]
+            print(f"{arm:4s} {w['n_seeds']:<2d} {w['overall']['mean']:.4f}        {w['in_distribution']['mean']:.4f}        "
+                  f"{w['depth3']['mean']:.4f} ({w['depth3']['sd']:.4f}) [{w['depth3']['min']:.3f},{w['depth3']['max']:.3f}]")
     os.makedirs(os.path.dirname(a.out) or '.', exist_ok=True)
     json.dump(out, open(a.out, 'w'), indent=1)
     # compact console table
     print(f'{"arm":4s} {"seed":4s} {"held":7s} {"6bin":6s} {"m7":5s} {"m8":5s} {"m9+":5s} {"d3":6s} {"d3req":6s} {"red":5s} '
           f'{"EI4":6s} {"FRZ4":6s} {"laT1":10s} {"laFRZ":10s}')
     for arm in ARMS:
-        for s in SEEDS:
+        for s in (0, 1):
             r = out['arms'][arm]['seeds'][s]
             g = lambda x, *k: ('-' if x is None else x) if not k else (x.get(k[0], '-') if isinstance(x, dict) else '-')
             h = r['heldout_greedy']; m = r['mech_pass16']
