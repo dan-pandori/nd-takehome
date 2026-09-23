@@ -430,3 +430,11 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 
   **R2 and R4 drop the same thing (the binder's type) and differ only in `by intro` vs bare `fun`, yet they are opposite on `reductio_req`: ×0.56 and ×1.46 relative to the control.** Whatever costs R2 on the `¬`-heavy path is the `intro` tactic itself, not the missing type — R4 is the control that shows it, and it exists only because addendum 1 was written to separate those two changes.
   **R4 is the only arm above the control on all three pools by mean** (×1.08, ×1.15, ×1.46) and above it on **both seeds** on `depth3_req` and `reductio_req`; on `targets_depth3` it is above on seed 1 (0.499 vs 0.411) and marginally below on seed 0 (0.496 vs 0.512). Under proposal 10's rule — held-out within 1 pp or better (R4 is **+3.4 / +1.7 pp**), at least two of the three readiness measures improved, none worse — **R4 qualifies on the pool means and is one seed-0 hair (0.496 vs 0.512) from qualifying seed-by-seed.** The ladder is the remaining input; I am not calling the verdict until it lands and the 24-model sweep fixes the seed variance.
+- 2026-09-23 23:25 UTC  **C0's EI dial reproduces lean-format's inherited values on different hardware, a different sampler and a different batch.** Round 4, cumulative targets solved / 1,000 and held-out greedy (`artifacts/dsr/dsr-c0/ei_d3_c0_s{0,1}/round_4.json`):
+
+  | | this run (A40, fast sampler, batch 2048) | lean-format (RTX 3090, pre-efficiency sampler, batch 768) |
+  |---|---|---|
+  | EI solved, s0 / s1 | **0.649 / 0.666** | 0.650 / 0.646 |
+  | held-out greedy at r4, s0 / s1 | **0.9574 / 0.9688** | 0.9564 / 0.9664 |
+
+  Seed 0 reproduces to the third decimal (0.649 vs 0.650); seed 1 is +2.0 pp, inside the seed-to-seed scatter this run has measured everywhere. **This is the run's main validity check on the whole re-measurement pipeline** — same checkpoints, everything else changed — and it passes. It also means the inherited control values in the pre-registration can be quoted beside the re-measured ones without a caveat about the hardware or sampler change.
