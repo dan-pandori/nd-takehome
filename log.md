@@ -385,3 +385,15 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   | R2 `lean_seq_intro` | **0.544** | **0.502** | **0.523** | **0.171** / 0.071 | **417** / 242 | **500** / 361 |
 
   **The rendering effect is much smaller at pass@2,000 than at greedy, and this is the third result in a row moderating the headline.** Greedy on the depth-3 held-out slice separates C0 and R2 by 0.38 vs 0.78; at 2,000 attempts they are 0.462 vs 0.523 — **+6 pp on the mean**, with R2 the only arm above C0 on both seeds (+3.2 and +9.1 pp; E5's pre-registered "within ±5 pp" null holds on s0 and fails on s1). The reading that fits all three measurements: **the lambda renderings' problem is a per-sample bookkeeping failure rate, and sampling 2,000 times buys most of the way around it.** A single greedy sample is where an unbalanced parenthesis or an out-of-scope name is fatal; at k = 2,000 the model gets 2,000 chances to get the brackets right. What survives at k = 2,000 is a per-sample efficiency difference — R2's per-sample acceptance is 0.171 vs C0's 0.093 on seed 0 — not a difference in what is reachable. **Every counted proof in all eight runs carries its literal Lean text** (791/791, 628/628, 553/553, 751/751, 736/736, 490/490, 885/885, 679/679).
+- 2026-09-23 22:48 UTC  **R4 completes the depth-3 pass@2,000 panel; E16 does not discriminate.** All five arms, 1,000 targets, batch 2048:
+
+  | arm | binder type written? | s0 | s1 | mean | **seed gap** | per-sample rate | ≥ 8-line proofs |
+  |---|---|---|---|---|---|---|---|
+  | C0 `lean_seq` | yes | 0.512 | 0.411 | 0.462 | 0.101 | 0.093 / 0.100 | 325 / 185 |
+  | R1 `lean_seq_noprem` | yes | 0.393 | 0.443 | 0.418 | 0.050 | 0.060 / 0.089 | 234 / 329 |
+  | R3 `lean_seq_nofml` | yes | 0.513 | 0.355 | 0.434 | **0.158** | 0.090 / 0.044 | 286 / 206 |
+  | R2 `lean_seq_intro` | **no** | 0.544 | 0.502 | **0.523** | 0.042 | 0.171 / 0.071 | 417 / 242 |
+  | R4 `lean_seq_funbare` | **no** | 0.496 | 0.499 | 0.497 | **0.003** | 0.091 / 0.090 | 316 / 281 |
+
+  **Addendum 1's E16 is satisfied by both of its disjoint bands, so it decides nothing.** R4 / R2 = 0.95 and R4 / C0 = 1.08 are both inside ×0.8–1.25. The band was written when the greedy gap between C0 and R2 looked like 2×; at k = 2,000 the gap is 13 %, far too small for a ±25 % rule to separate. That is a flaw in my own discriminator, not a property of the arms, and it is recorded as one.
+  **What the panel does show, and it is the same story the greedy numbers told:** order the five arms by **seed gap** and the two renderings that do **not** write the box's binder type come first — R4 0.003 and R2 0.042 against R1 0.050, C0 0.101 and R3 0.158. Both untyped-binder arms are more stable than all three typed-binder arms. At n = 2 per arm that is suggestive, not established; the 24-model sweep is what decides it, under addendum 2's stated rule.
