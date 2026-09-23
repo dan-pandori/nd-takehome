@@ -25,5 +25,6 @@ Brief: `BRIEF_ds-rendering.md`. Run id: `ds-rendering`. Budget $18, ceiling 36 p
 
 LIMIT_HIT 2026-09-23T21:40:38Z
 LIMIT_HIT 2026-09-23T21:51:31Z
-(Executor sessions paused twice by usage limits. Cost to the run: none so far — the five pods and their
+LIMIT_HIT 2026-09-23T21:55:21Z
+(Executor sessions paused by usage limits. Cost to the run: none so far — the five pods and their
 `setsid nohup` job sequencers keep running across a pause, and every result is committed as it lands.)
