@@ -3,7 +3,7 @@ import re, json
 
 VARS = re.compile(r'\b[A-Z][A-Za-z0-9_]*\b')
 # tokens that are not propositional variables in the ND surface syntax
-NONVAR = {'F'}          # falsum
+NONVAR = {'F'}          # falsum (a sequent string contains no rule names, so nothing else is excluded)
 RULES = {'PR','AS','QED','IMPI','IMPE','ANDI','ANDE1','ANDE2','ORI1','ORI2','ORE',
          'NEGI','NEGE','DN','BOTE','R','SEQ','THM','PRF'}
 
@@ -18,7 +18,7 @@ def renaming_key(thm: str) -> str:
     pos = 0
     for m in VARS.finditer(thm):
         tok = m.group(0)
-        if tok in NONVAR or tok in RULES:
+        if tok in NONVAR:          # falsum only; a theorem string contains no rule names
             continue
         out.append(thm[pos:m.start()])
         if tok not in seen:
