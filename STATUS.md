@@ -35,3 +35,27 @@ Brief: BRIEF_ds-generator.md. Policy: AGENT_POLICY.md. Run id: ds-generator. Sib
 
 DS-GENERATOR DONE 2026-09-24T08:50:00Z
 
+
+# STATUS — noise-floor (proposal 11, run 2: what difference can this project resolve?)
+
+Brief: run brief `noise-floor`. Policy: `AGENT_POLICY.md`. Run id: noise-floor. Pods `nf-*`.
+Sibling on this host: `cap-horizon` (own pods, own budget). My output is its yardstick, so interim
+numbers go into `numbers.md` § noise-floor as each stage lands rather than at the end.
+
+## noise-floor
+- 2026-09-24 15:59 UTC  run started (executor). Read proposal 11, the `ds-generator` summary
+  (§"the measurement noise is this run's real headline constraint"), the `ds-rendering` summary's
+  Finding R-2 and its bimodality note, `ds-composition`'s ladder tables, and the `pod/dsg` harness.
+- 16:05:12 UTC  pre-registration `e8f4c3b` committed and pushed **before any pod** (first pod
+  `nf-1` created 16:05:45 UTC — gate 0 holds, 33 s). Design: four null pools P1–P4 from the
+  unmodified generator (`knobs_from_args` returns `None` with no flags — verified) at generator
+  seeds 21000/22000/23000/24000, assembled flat 31,000 × lengths 2–6 = 155,000, depth-3 excluded,
+  × Stage-1 seeds 0 and 1 = eight models. Held-out greedy (overall / per length / depth-3 slice),
+  coverage pass@2,000 on three pools, frozen ladder 8 × 32. Plus two n = 1 gap-closers from bucket
+  checkpoints: `la_frozen_g1_s0` (`ds-generator`) and `ds-composition`'s C0 + A1 ladder, T1 and
+  frozen, on **both** Stage-1 seeds. Fifteen standing findings named in advance as expected-to-fall
+  or expected-to-stand.
+- 16:05–16:14  Pods `nf-1` / `nf-2`, **NVIDIA A40 48 GB**, catalogue $0.49/h (real billed rate to be
+  read from RunPod's billing API and recorded in `log.md`; `podbudget`'s column is a $0.49 estimate).
+  Both have a **7.65-CPU cgroup quota** despite `nproc` 96, so `LEAN_GATE_WORKERS=3` × 4 concurrent
+  chains, `coverage.py --procs 2`. `podbudget noise-floor --set 36 18` registered before the first pod.
