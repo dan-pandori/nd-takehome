@@ -52,6 +52,23 @@ for pool, fn in POOLS:
                       f'--temperature 0.8 --seed 0 --batch 1024 --procs 2 --out artifacts/kh/cov_{arm}_s{s}_{pool}'))
 queue.append((f'record_{arm}', f'python3 pod/kh/record.py {arm}'))
 
-J = {'all': stage1 + queue, 'stage1': stage1, 'queue': queue}[which]
+# --- diagnostic queue (pre-registered remedy): is the frontier truncation-bound? --------------
+# The headline coverage numbers are at max_new 400, the value ds-composition used, so the inherited
+# K6/K8flat numbers stay comparable.  The high-cap arms show a large LEANPARSE rate (a truncated
+# decode does not parse), so the same checkpoint and the same sampling seed are re-run at max_new
+# 768 and reported as a labelled pair (400, 768).  cov8f_* additionally re-runs ds-composition's
+# OWN K8flat checkpoint at both budgets on this run's pod: the 400 cell is a reproduction check of
+# an inherited number, the 768 cell says whether that number was itself clipped.
+diag = [(f'covd_{arm}_s0_redreq',
+         W(CK(0)) + f'python3 coverage_lean.py --ckpt {CK(0)} --in {D}/targets_reductio_req.jsonl --k 2000 '
+         f'--temperature 0.8 --seed 0 --batch 1024 --procs 2 --max_new 768 '
+         f'--out artifacts/kh/covd_{arm}_s0_redreq')]
+if arm == 'k8add':                      # this pod also carries the inherited cap-8 reference
+    for mx, tag in ((400, 'cov8f_K8flat_s0_redreq'), (768, 'covd8f_K8flat_s0_redreq')):
+        diag.append((tag, f'python3 coverage_lean.py --ckpt ckpts/dsc/stage1_a3_s0.pt '
+                     f'--in {D}/targets_reductio_req.jsonl --k 2000 --temperature 0.8 --seed 0 '
+                     f'--batch 1024 --procs 2 --max_new {mx} --out artifacts/kh/{tag}'))
+
+J = {'all': stage1 + queue, 'stage1': stage1, 'queue': queue, 'diag': diag}[which]
 for n, c in J:
     print(f'{n}\t{c}')
