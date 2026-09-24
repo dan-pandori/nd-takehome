@@ -1,0 +1,78 @@
+{
+ "arm": "k8add",
+ "cap": 8,
+ "size": 217000,
+ "seed": 0,
+ "out": "data/kh/train_k8add.jsonl.gz",
+ "per_length_wanted": {
+  "2": 31000,
+  "3": 31000,
+  "4": 31000,
+  "5": 31000,
+  "6": 31000,
+  "7": 31000,
+  "8": 31000
+ },
+ "per_length_achieved": {
+  "2": 31000,
+  "3": 31000,
+  "4": 31000,
+  "5": 31000,
+  "6": 31000,
+  "7": 31000,
+  "8": 31000
+ },
+ "short_bins_source": {
+  "file": "data/p2/train_depth3_f0_a1.jsonl",
+  "available": {
+   "2": 31000,
+   "3": 31000,
+   "4": 31000,
+   "5": 31000,
+   "6": 31000
+  },
+  "how": {
+   "2": "all (byte-identical)",
+   "3": "all (byte-identical)",
+   "4": "all (byte-identical)",
+   "5": "all (byte-identical)",
+   "6": "all (byte-identical)"
+  }
+ },
+ "long_bins_source": {
+  "file": "data/kh/pool_long_kh.jsonl",
+  "eligible": {
+   "7": 69926,
+   "8": 71492
+  },
+  "scan": {
+   "read": 518843,
+   "in_range": 169050,
+   "eligible": 141418,
+   "depth3": 23656,
+   "excluded_class_controlset": 3723,
+   "excluded_class_evalpool": 253
+  }
+ },
+ "fill_disclosure": "none: every long bin filled from its own length",
+ "distinct_renaming_classes": 217000,
+ "distinct_rendered_texts": 217000,
+ "exclusion_classes": 14026,
+ "exclusion_per_file": {
+  "heldout.jsonl": 5000,
+  "targets_depth3.jsonl": 1000,
+  "transfer_depth3.jsonl": 500,
+  "targets_reductio_req.jsonl": 300,
+  "transfer_reductio_req.jsonl": 150,
+  "depth3_req.jsonl": 233,
+  "depth3_req_transfer.jsonl": 80,
+  "rl_targets.jsonl": 4465,
+  "transfer.jsonl": 2262,
+  "validation_36.jsonl": 36,
+  "targets_depth3_sub250.jsonl": 0
+ },
+ "overlap_with_eval_pools": 0,
+ "records_over_cap": 0,
+ "depth3_records": 0,
+ "secs": 162.9
+}
