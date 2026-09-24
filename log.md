@@ -426,3 +426,35 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   With `cap-horizon` running beside me its overrun would have deleted **my** pods. Dead loop removed
   (backup `~/bin/pod_budget_watch.bak.2026-09-24`), stale warning file deleted so a real warning is
   not suppressed. No other guard touched.
+- 17:45  **Measured cost, and the scope cut it forces.** First frozen-ladder round on `nf-1`:
+  **3,485 s with four concurrent jobs** (`la_frozen_p1_s0`, round 1 of 8), i.e. **≈ 1.94 pod-hours per
+  frozen ladder** against the brief's ≈ 1.25. The pods alternate between two saturated resources —
+  during sampling the A40 sits at 93 % utilisation, and during gating three `lean` processes take
+  240 % CPU each, filling the 7.65-CPU quota (round 1's gate: 143,840 target samples, 75,966 distinct
+  checked, 1,130.6 s Lean wall / 3,375.5 s proc; plus 73,120 transfer samples, 449.9 s / 1,327.7 s).
+  Concurrency therefore buys throughput but not speed-up: the pod is the unit of work. The brief's
+  sizing (8 frozen ladders ≈ 10 pod-hours, held-out + coverage ≈ 5) is low by ≈ 2× on the ladder and
+  ≈ 7× on `pass@2,000` coverage — the design as written needs ≈ 60 pod-hours, not 36. **Cuts made,
+  in the brief's own drop order plus my stated reasons:**
+  1. **`targets_depth3` coverage dropped for every cell** (the stop rule's first drop; 2 M samples per
+     cell, the least variable of the three pools). `numbers.md`'s coverage floor is therefore on
+     `targets_reductio_req` and `depth3_req` only.
+  2. **Seed 2 keeps Stage-1 + held-out greedy only** — its frozen ladder and coverage are dropped. The
+     held-out floor stays at 12 cells (and held-out is where the bimodality is); the frozen-ladder and
+     coverage floors return to the pre-registered **8 cells**, so addendum 1's stated reporting rule
+     applies in reverse: held-out n = 12, everything else n = 8.
+  3. **`ds-composition` gap-closer cut to A1 seed 1** (T1 + frozen). C0's seed-1 ladder is **not**
+     re-run because `ds-generator` already measured **the same checkpoint** `stage1_a1_seq_s1.pt` with
+     the same `ladder_ei` command, the same pools and the same `--batch 512`: T1 **965** / `L*` 11,
+     frozen **114** / `L*` 9. A1's and C0's seed-0 ladders stay inherited from `ds-composition`
+     (T1 965 / 856, frozen 205 / 158). This is the brief's ask with one redundant job removed, not a
+     reduction of it.
+  4. `la_frozen_dsg_g1_s0` kept (on `nf-2`) — it is the cheapest gap-closer and a fifth independent
+     draw of the control's distribution.
+  Projection after the cut: `nf-1` ≈ 18 h wall, `nf-2` ≈ 15 h, **≈ 33 pod-hours ≈ $16.2**.
+- 17:42  **Pod budget raised from 36 h / $18 to 42 h / $21** (`podbudget noise-floor --set 42 21`),
+  for the headroom the measured cost needs. Within policy (per-run cap $50) and within proposal 11's
+  hard floor of a $130 RunPod balance: balance $177.5, `cap-horizon` is sized at $22, so $21 + $22 =
+  $43 of the $47.5 available above the floor. Real billed rate confirmed **$0.49/h** for both A40
+  pods from `runpodctl pod list` (`costPerHr`), which is also what `podbudget` assumes — so for this
+  run its dollar column is right. Question to Dan in `QUESTIONS.md`.

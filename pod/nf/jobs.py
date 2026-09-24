@@ -39,44 +39,44 @@ LA = ('python3 ladder_ei.py --outdir artifacts/nf --rounds 8 --k 32 --temperatur
 COV = ('python3 coverage.py --k 2000 --temperature 0.8 --seed 0 --batch 1000 --procs 2')
 
 # ---- gap-closer jobs, one appended to the tail of each chain (most valuable first) ----
+# Gap-closers, cut to what is not already on file with an identical command (2026-09-24 17:45, log.md):
+#   - la_frozen_dsg_g1_s0: ds-generator's missing cell, and a fifth independent draw of the control's
+#     distribution (different generator flags: --ore_steps 3 --ore_boxes).
+#   - ds-composition's A1 ladder at Stage-1 seed 1 (T1 and frozen). C0's seed-1 ladder is NOT re-run:
+#     ds-generator already measured the same checkpoint (ckpts/lf/stage1_a1_seq_s1.pt) with the same
+#     ladder_ei command, the same pools and the same --batch 512 -> T1 965 / L* 11, frozen 114 / L* 9.
+#   - A1's and C0's seed-0 ladders stay inherited from ds-composition (T1 965 / 856, frozen 205 / 158).
 if pod == 1:
-    CK = lambda s: f'ckpts/lf/stage1_a1_seq_s{s}.pt'
-    SET = f'{D}/train_depth3_f0_a1.jsonl'
-    GAP = [(f'la_T1_dsc_c0_s1', f'{LA} --init {CK(1)} --train {SET} --seed 1 --name la_T1_dsc_c0_s1'),
-           (f'la_frozen_dsc_c0_s1', f'{LA} --init {CK(1)} --train {SET} --seed 1 --name la_frozen_dsc_c0_s1 --no_train'),
-           (f'la_T1_dsc_c0_s0', f'{LA} --init {CK(0)} --train {SET} --seed 0 --name la_T1_dsc_c0_s0'),
-           (f'la_frozen_dsc_c0_s0', f'{LA} --init {CK(0)} --train {SET} --seed 0 --name la_frozen_dsc_c0_s0')]
-else:
     CKA = lambda s: f'ckpts/dsc/stage1_a1_s{s}.pt'
     SETA = 'data/dsc/train_a1.jsonl'
-    GAP = [('la_frozen_dsg_g1_s0', f'{LA} --init ckpts/dsg/stage1_g1_s0.pt --train data/dsg/train_g1.jsonl --seed 0 --name la_frozen_dsg_g1_s0 --no_train'),
-           ('la_T1_dsc_a1_s1', f'{LA} --init {CKA(1)} --train {SETA} --seed 1 --name la_T1_dsc_a1_s1'),
-           ('la_frozen_dsc_a1_s1', f'{LA} --init {CKA(1)} --train {SETA} --seed 1 --name la_frozen_dsc_a1_s1 --no_train'),
-           ('la_T1_dsc_a1_s0', f'{LA} --init {CKA(0)} --train {SETA} --seed 0 --name la_T1_dsc_a1_s0'),
-           ('la_frozen_dsc_a1_s0', f'{LA} --init {CKA(0)} --train {SETA} --seed 0 --name la_frozen_dsc_a1_s0')]
+    GAP = [('la_T1_dsc_a1_s1', f'{LA} --init {CKA(1)} --train {SETA} --seed 1 --name la_T1_dsc_a1_s1'),
+           ('la_frozen_dsc_a1_s1', f'{LA} --init {CKA(1)} --train {SETA} --seed 1 --name la_frozen_dsc_a1_s1 --no_train')]
+else:
+    GAP = [('la_frozen_dsg_g1_s0', f'{LA} --init ckpts/dsg/stage1_g1_s0.pt --train data/dsg/train_g1.jsonl --seed 0 --name la_frozen_dsg_g1_s0 --no_train')]
 
+# Scope cut 2026-09-24 17:45 (log.md, QUESTIONS.md): the measured cost of a frozen ladder on these
+# pods is ~2.1 pod-hours, not the brief's ~1.25, and of a pass@2,000 coverage run ~0.7-2.4 h, not
+# ~0.6.  Within the ceiling: seed 2 keeps Stage-1 + held-out greedy only (the quantity whose floor is
+# bimodal and whose 12th cell is nearly free), its frozen ladder and coverage are dropped, and
+# `targets_depth3` coverage - the stop rule's first drop - is dropped for every cell.
 chains, tails = [], []
 for p, _ in POOLS:
     for s in (0, 1, 2):
         SET = f'data/nf/train_{p}.jsonl'
         ck = f'ckpts/nf/stage1_{p}_s{s}.pt'
         c = [(f'stage1_{p}_s{s}', f'python3 train.py --data {SET} --heldout {D}/heldout.jsonl --mode lean_seq --steps 6000 --bs 128 --out {ck} --cap 6 --seed {s}'),
-             (f'heldout_{p}_s{s}', f'python3 eval_set.py --ckpt {ck} --in {D}/heldout.jsonl --out artifacts/nf/heldout_{p}_s{s}.jsonl --k 1 --temperature 0 --batch 512 --summary artifacts/nf/heldout_{p}_s{s}.json'),
-             (f'la_frozen_{p}_s{s}', f'{LA} --init {ck} --train {SET} --seed {s} --name la_frozen_{p}_s{s} --no_train'),
-             (f'cov_red_{p}_s{s}', f'{COV} --ckpt {ck} --in {D}/targets_reductio_req.jsonl --out artifacts/nf/cov_red_{p}_s{s}'),
-             (f'cov_req8_{p}_s{s}', f'{COV} --ckpt {ck} --in data/r3_1/depth3_req.jsonl --out artifacts/nf/cov_req8_{p}_s{s}'),
-             (f'cov_d3_{p}_s{s}', f'{COV} --ckpt {ck} --in {D}/targets_depth3.jsonl --out artifacts/nf/cov_d3_{p}_s{s}')]
+             (f'heldout_{p}_s{s}', f'python3 eval_set.py --ckpt {ck} --in {D}/heldout.jsonl --out artifacts/nf/heldout_{p}_s{s}.jsonl --k 1 --temperature 0 --batch 512 --summary artifacts/nf/heldout_{p}_s{s}.json')]
         if s == 2:
-            # addendum 1: seed 2 skips targets_depth3 (the stop rule's first coverage drop) and is
-            # appended to the four seed-0/1 chains rather than run as its own, so the pod still runs
-            # exactly four concurrent GPU jobs on its 7.65-CPU quota.
-            tails.append([x for x in c if not x[0].startswith('cov_d3_')])
-        else:
-            chains.append(c)
+            tails.append(c)
+            continue
+        c += [(f'la_frozen_{p}_s{s}', f'{LA} --init {ck} --train {SET} --seed {s} --name la_frozen_{p}_s{s} --no_train'),
+              (f'cov_red_{p}_s{s}', f'{COV} --ckpt {ck} --in {D}/targets_reductio_req.jsonl --out artifacts/nf/cov_red_{p}_s{s}'),
+              (f'cov_req8_{p}_s{s}', f'{COV} --ckpt {ck} --in data/r3_1/depth3_req.jsonl --out artifacts/nf/cov_req8_{p}_s{s}')]
+        chains.append(c)
 
-for i, t in enumerate(tails):          # seed 2 first: it is part of the deliverable
+for i, t in enumerate(tails):          # seed 2's Stage-1 + held-out, appended to the four chains
     chains[i % len(chains)] += t
-for i, g in enumerate(GAP):            # then the gap-closers, the brief's "while the pods are up" extras
+for i, g in enumerate(GAP):            # then the gap-closers
     chains[i % len(chains)].append(g)
 
 for i, c in enumerate(chains):

@@ -46,3 +46,17 @@
   ladder is **158** in both `ds-composition` and `ds-generator`, so the sampler contributes ~0 and
   the spread I measure is pool + Stage-1 noise). Default: run all four; drop the seed-0 pair first
   if the budget binds.
+- **2026-09-24 17:45 UTC (noise-floor, the brief's budget cannot buy the brief's design)** — Measured
+  on the A40 pods: a frozen ladder (8 × 32 on `data/ladder/`) costs **1.94 pod-hours**, not the
+  brief's ≈ 1.25, and a `pass@2,000` coverage run costs 0.7 h (300 targets) to 2.4 h (1,000 targets),
+  against a brief that sizes held-out **plus** all three coverage pools for all eight cells at 5 h
+  total. The brief's design as written is ≈ 60 pod-hours; its ceiling is 36. Cause is not waste: the
+  A40 is at 93 % during sampling and the 7.65-CPU quota is full of `lean` during gating, so four
+  concurrent jobs buy throughput but no speed-up. **Default I am following:** raised the ceiling to
+  **42 h / $21** (policy cap is $50/run; proposal 11's $130 balance floor leaves $47.5 for this run
+  and `cap-horizon`'s $22, so $21 fits), and cut scope in the brief's own drop order — no
+  `targets_depth3` coverage anywhere, seed 2 reduced to Stage-1 + held-out, and the `ds-composition`
+  gap-closer reduced to **A1 seed 1** because C0 seed 1's ladder is already on file from
+  `ds-generator` on the identical checkpoint and command (T1 965 / frozen 114). Projection ≈ 33
+  pod-hours ≈ $16.2. Say if you would rather I had held to 36 h and dropped the A1 gap-closer, or
+  conversely spent the remaining headroom on `targets_depth3` coverage.
