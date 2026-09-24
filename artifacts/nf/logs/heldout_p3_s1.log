@@ -1,0 +1,1 @@
+START 2026-09-24T16:16:42Z until [ -f artifacts/nf/stage1_p3_s1.done ]; do sleep 30; done; python3 eval_set.py --ckpt ckpts/nf/stage1_p3_s1.pt --in data/p2/heldout.jsonl --out artifacts/nf/heldout_p3_s1.jsonl --k 1 --temperature 0 --batch 512 --summary artifacts/nf/heldout_p3_s1.json

@@ -1,0 +1,1 @@
+START 2026-09-24T16:15:04Z until [ -f artifacts/nf/la_frozen_p2_s0.done ]; do sleep 30; done; python3 coverage.py --k 2000 --temperature 0.8 --seed 0 --batch 1000 --procs 2 --ckpt ckpts/nf/stage1_p2_s0.pt --in data/p2/targets_reductio_req.jsonl --out artifacts/nf/cov_red_p2_s0

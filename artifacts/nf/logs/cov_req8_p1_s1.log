@@ -1,0 +1,1 @@
+START 2026-09-24T16:14:43Z until [ -f artifacts/nf/cov_red_p1_s1.done ]; do sleep 30; done; python3 coverage.py --k 2000 --temperature 0.8 --seed 0 --batch 1000 --procs 2 --ckpt ckpts/nf/stage1_p1_s1.pt --in data/r3_1/depth3_req.jsonl --out artifacts/nf/cov_req8_p1_s1

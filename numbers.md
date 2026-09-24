@@ -697,3 +697,66 @@ differs, first at decode step 162 — which is why this run sets `ND_SAMPLE_COMP
 (the two 155,000-record sets and the three raw pools), `ckpts/dsg` (four Stage-1 checkpoints), `ckpts/ladder`
 (per-round ladder checkpoints), `artifacts/dsg` (everything above, incl. every per-round `found_*.jsonl`).
 The per-round training mixes `la_*/mix_<r>.jsonl` (263 MB) were not kept: no counted number reads them.
+
+# noise-floor (proposal 11, run 2) — what difference can this project resolve?
+
+Run id `noise-floor`, branch `dan_noise-floor`. **Interim numbers are published here as each stage
+lands**, because the sibling run `cap-horizon` is running now and reads this section as its yardstick.
+
+**Model behind every row below unless stated otherwise:** 3,214,336-parameter from-scratch GPT,
+`lean_seq` Lean surface format, **cap 6**, `train.py --mode lean_seq --steps 6000 --bs 128 --cap 6
+--seed {0,1}` — the same model, format and schedule as `ds-generator`'s C0/G1/G2 and
+`ds-composition`'s C0/A1, which is what makes this floor quotable by those runs. Checkpoints
+`ckpts/nf/stage1_p<i>_s<k>.pt`, training sets `data/nf/train_p<i>.jsonl`.
+
+## N1. The four null pools are the same distribution (premise check)
+
+Source: `artifacts/nf/premise.json` (built by `nf_premise.py` from `artifacts/nf/{shape,overlap,
+assemble,render}_p<i>.json`; those were produced on the pods by `dsg_shape.py`, `dsg_overlap.py`,
+`dsg_assemble.py`, `dsg_render_check.py`, all unmodified). Generation command in `log.md`
+(2026-09-24 16:03) — `make_coverage_sets.py gen` with **no knob flags**, generator seeds
+21000 / 22000 / 23000 / 24000, 6,000,000 tries each; the pods log `generator knobs: None`.
+
+| quantity | P1 | P2 | P3 | P4 | max − min | C0 published (`data/dsg/README.md`) |
+|---|---|---|---|---|---|---|
+| records / length 2–6 | 155,000 / 31,000 each | same | same | same | 0 | 155,000 / 31,000 each |
+| box depth 0 / 1 / 2 (%) | 53.11 / 35.52 / 11.37 | 53.26 / 35.33 / 11.41 | 53.28 / 35.46 / 11.26 | 53.30 / 35.44 / 11.26 | 0.19 / 0.19 / 0.15 | 53.2 / 35.4 / 11.4 |
+| box depth 3 (%) | 0.00 | 0.00 | 0.00 | 0.00 | 0 | 0 (excluded by design) |
+| proofs with `ORE` (%) | 1.42 | 1.48 | 1.45 | 1.46 | 0.07 | 1.46 |
+| proofs with `AS` (%) | 46.89 | 46.74 | 46.72 | 46.70 | 0.19 | 46.8 |
+| proofs with `IMPI` / `IMPE` (%) | 36.57 / 39.76 | 36.31 / 39.83 | 36.50 / 39.85 | 36.36 / 39.95 | 0.26 / 0.19 | 36.4 / 40.2 |
+| proofs with `NEGI` / `NEGE` / `DN` (%) | 9.77 / 11.99 / 7.97 | 9.81 / 12.06 / 7.93 | 9.65 / 12.06 / 7.91 | 9.73 / 11.96 / 8.05 | 0.17 / 0.10 / 0.14 | 9.9 / 12.0 / 8.3 |
+| proofs with `ANDI` / `R` / `BOTE` (%) | 22.83 / 2.75 / 2.15 | 22.76 / 2.71 / 2.18 | 22.80 / 2.82 / 2.13 | 22.82 / 2.70 / 2.12 | 0.07 / 0.12 / 0.06 | 22.9 / 2.8 / — |
+| mean premises | 1.41 | 1.41 | 1.42 | 1.42 | 0.00 | 1.41 |
+| contradictory-premise theorems (%) | 6.41 | 6.35 | 6.37 | 6.28 | 0.13 | 6.06 |
+| reductio proofs | 9,980 | 9,973 | 9,853 | 10,072 | 219 | — |
+| derived-`ORE` proofs | 69 | 71 | 74 | 76 | 7 | — |
+| mean ND / Lean (`lean_seq`) tokens | 112.98 / 138.77 | 112.81 / 138.60 | 112.75 / 138.55 | 112.71 / 138.52 | 0.26 / 0.25 | — |
+| fill fraction (%) | 0 | 0 | 0 | 0 | 0 | 0 |
+
+**Verdict: all four are replicates, not arms.** Every share agrees across the four pools to
+≤ 0.26 pp and with the control's published table to ≤ 0.4 pp. Pre-registered expectation **E11 is
+met** (`ORE` share predicted 1.2–1.8 %, measured 1.42–1.48 %; box depth predicted within ±2 pp of
+53.2 / 35.4 / 11.4, measured within ±0.2 pp). The only quantity slightly off the control is the
+contradictory-premise share, 6.28–6.41 % against 6.06 % — **consistent across all four pools**, so it
+is the pre-registered uncapped-pool deviation (the control's pool used `--cap_np 1500 --cap_pat 3000`
+per worker), not a between-pool difference; it cannot produce a difference between P1–P4.
+
+**Disjointness.** Against **all nine** evaluation / ladder pools used in this run
+(`data/p2/heldout.jsonl`, `targets_depth3`, `transfer_depth3`, `targets_reductio_req`,
+`transfer_reductio_req`, `data/r3_1/depth3_req{,_transfer}`, `data/ladder/{rl_targets,transfer}`):
+**0 exact-`thm` and 0 renaming-class collisions for all four sets.** Residual, disclosed: 15–26
+theorems per set match a `data/p2/heldout.jsonl` theorem only after *reordering the premises*
+(0.3–0.5 % of the 5,000), identically across the four pools. Against the take-home's *other*
+held-out set `data/heldout.jsonl` (**not used anywhere in this run**) there are 477–510 class
+collisions per set, which is expected: that set was never excluded at assembly and this run never
+evaluates on it.
+
+**Pairwise renaming-class overlap between the four null sets: 5.8–6.0 %** (|A ∩ B| / 155,000).
+Pre-registered expectation **E14 (30–70 %) is a miss, in the harmless direction** — the ≤ 6-line
+class universe is far larger than I assumed, so the four pools are nearly disjoint draws and the
+between-pool component below is not diluted by shared records.
+
+**Render check** (`dsg_render_check.py`, per set): 3,000 / 3,000 ND → Lean → ND round-trips
+identical, 3,000 / 3,000 denoted proofs re-verified by `nd_verify` at cap 6, 1,000 / 1,000 Lean
+positives accepted, 300 / 300 theorem-swapped Lean negatives rejected — on every one of the four sets.

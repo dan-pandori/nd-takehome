@@ -1,0 +1,6 @@
+START 2026-09-24T16:14:53Z until [ -f artifacts/nf/gen_p2.done ]; do sleep 30; done; until [ -f artifacts/nf/fetch.done ]; do sleep 30; done; python3 train.py --data data/nf/train_p2.jsonl --heldout data/p2/heldout.jsonl --mode lean_seq --steps 6000 --bs 128 --out ckpts/nf/stage1_p2_s0.pt --cap 6 --seed 0
+params 3214336 mode lean_seq shift True
+train records 155000 max len 542
+step 200 loss 0.9405 lr 1.00e-03 38s val 0.9270
+step 400 loss 0.1984 lr 9.97e-04 81s val 0.1525
+step 600 loss 0.1353 lr 9.89e-04 124s val 0.1241
