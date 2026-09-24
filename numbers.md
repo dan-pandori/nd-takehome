@@ -713,3 +713,116 @@ Ladder round times, A40 / A6000, 2–5 concurrent jobs per pod: 1,000–1,600 s 
 ## Bucket
 
 `hf://buckets/dan-pandori/nd-rl/ds-composition/{artifacts,ckpts,data}`.
+
+# cap-horizon (proposal 11, run 1) — is the proof-length horizon a property of the training cap?
+
+Run id `cap-horizon`, branch `dan_cap-horizon`. Pre-registration
+`preregistration/cap-horizon.md` (`2091f78`, 2026-09-24T16:07:35Z, **before the first pod** at
+16:25:11Z). Every entry names its source file.
+
+**Model label, carried on every table below.** Every arm is the **same architecture and recipe**: a
+**3,214,336-parameter from-scratch decoder** (4 layers, d 256, 8 heads), **`lean_seq` Lean surface
+form**, **Stage-1 6,000 steps at batch 128**, depth-3 excluded in the pruned **and** the written
+form, `train.py --cap` set to the arm's cap. **Every arm except K6 is above the take-home's cap-6
+rule, is labelled "cap N" in every row, and none is proposed for adoption as a take-home
+submission.**
+
+| arm | cap | records | training set | Stage-1 checkpoints | provenance |
+|---|---|---|---|---|---|
+| **K6** | 6 | 155,000 | `data/p2/train_depth3_f0_a1.jsonl` (flat 31,000 × lengths 2–6) | `ckpts/lf/stage1_a1_seq_s{0,1}.pt` | **inherited, not retrained** — `ds-composition` C0 = `lean-format` a1 |
+| **K8flat** | 8 | 155,000 | `data/dsc/train_a3.jsonl.gz` (flat 22,142/22,143 × lengths 2–8) | `ckpts/dsc/stage1_a3_s{0,1}.pt` | **inherited, not retrained** — `ds-composition` A3 |
+| **K8add** | 8 | **217,000** | `data/kh/train_k8add.jsonl.gz` (K6's **exact** bins 2–6 **plus** 31,000 each at 7 and 8) | `ckpts/kh/stage1_k8add_s{0,1}.pt` | this run |
+| **K10** | 10 | 155,000 | `data/kh/train_k10.jsonl.gz` (flat over 2–10) | `ckpts/kh/stage1_k10_s{0,1}.pt` | this run |
+| **K12** | 12 | 155,000 | `data/kh/train_k12.jsonl.gz` (flat over 2–12) | `ckpts/kh/stage1_k12_s{0,1}.pt` | this run |
+| **K14** | 14 | 155,000 | `data/kh/train_k14.jsonl.gz` (flat over 2–14) | `ckpts/kh/stage1_k14_s{0,1}.pt` | this run |
+
+**K8add is the only arm whose set size differs** (217,000 against 155,000). The K8add-vs-K8flat
+comparison is the **confound break** A3 needed (A3 added 7–8-line proofs *and* removed 8,857 proofs
+per ≤ 6-line bin to hold the total at 155,000; K8add adds without removing), not a set-size result.
+
+Sampler: `sample.py`'s **fast decode path**, identical across every arm; **batch and `max_new` held
+fixed across arms and equal to `ds-composition`'s** — held-out 512, ladder 512 (`max_new` 512),
+coverage 1024 (`max_new` 400). Checker: a proof counts only if **Lean 4.34 and `nd_verify` both
+accept** it (`nd2lean.py` unmodified). Hardware: four **A40 pods, SECURE, $0.49/h billed**, one per
+new arm; the inherited arms cost nothing.
+
+**Two measurement ceilings, pre-registered before the run, that apply to every table below.**
+
+1. **`L*` is hard-censored at 14.** `data/ladder/transfer.jsonl` (`git hash-object`
+   `e0524d0a84d7163feb4815910e47e09648f622b2`, byte-identical to ladder-A's `e0524d0`;
+   `rl_targets.jsonl` `69233bcaa2ea80038297bba6e8864cb8b1f00b13` = `69233bc`) has `L_true` counts
+   7: 300 · 8: 300 · 9: 1,010 · 10: 451 · 11: 99 · 12: 102 · 13: **13** · 14: **10**, so ≥ 13 is 23
+   theorems and ≥ 14 is 10. `L*` = max L with ≥ 5 solved at `L_true ≥ L`, so **`L* > 14` cannot be
+   measured** and `L* = 14` needs 5 of 10. The run brief's bands (T1 `L*` 13–15 for K10, 14–16 for
+   K12) are partly unattainable; the pre-registration truncated them to 13–14 and 14.
+2. **`max_new` = 400 clips coverage.** Measured `lean_seq` token cost, median / max over 60 sampled
+   proofs per length: L 10 → 152 / 292, L 12 → 194 / 374, L 14 → 218 / 355. The budget is kept at
+   400 for comparability with the inherited arms; the parse-fail rate is reported per cell as the
+   clipping proxy.
+
+## K0 — the sets (source: `data/kh/README.md`, `data/kh/assemble_report_<arm>.json`, `data/kh/shape_<arm>.json`)
+
+Long pool `data/kh/pool_long_kh.jsonl`: **518,843 distinct renaming classes** of pruned length
+7–14, generated **on the VPS with no pod** by `kh_gen.py` from the **control's own generator
+settings** (`gen.sample_one` short mode, `max_prem 3`, `max_depth 3`, probabilities untouched,
+output filter only, **no per-pattern cap**), 2 workers × ≈ 7.65 M tries, 686–692 s, seeds 31000/31001.
+Per length 7: 84,048 · 8: 85,002 · 9: 57,414 · 10: 57,697 · 11: 58,317 · 12: 58,552 · 13: 58,803 ·
+14: 59,010.
+
+Bins of length ≤ 6 for **every** new arm are taken from **K6's own training set** — byte-identical
+for K8add, a uniform per-bin subsample (seed 0) for K10/K12/K14 — so every arm's short bins are a
+*subset of the control's exact records* and "short proofs removed" is pure subsetting.
+
+**Disclosed:** K8add's 7–8 bins are a **fresh draw** from the same generator settings, not A3's
+records (`data/p2/pool_cap8.jsonl` is in no bucket and no longer on this host).
+
+| arm | records | distinct renaming classes | distinct rendered texts | over cap | depth-3 | **overlap with the 11 evaluation pools** | fill deficit |
+|---|---:|---:|---:|---:|---:|---:|---|
+| K8add | 217,000 | 217,000 | 217,000 | 0 | 0 | **0** | none |
+| K10 | 155,000 | 155,000 | 155,000 | 0 | 0 | **0** | none |
+| K12 | 155,000 | 155,000 | 155,000 | 0 | 0 | **0** | none |
+| K14 | 155,000 | 155,000 | 155,000 | 0 | 0 | **0** | none |
+
+**Every long bin filled from its own length on every arm — no proportional fill was needed.**
+Between 3,723 (K8add) and 7,077 (K14) long-pool classes were dropped because they collide with the
+*control set's* renaming classes, and 253–401 because they collide with an evaluation pool: the
+collision the brief warned not to assume away is real and was filtered.
+
+## K1 — training-set term size (source: `artifacts/kh/trainset_term_size.json`, `kh_trainsize.py`)
+
+Term size = formula nodes over the **pruned** proof (`kh_size.py`), summed over kept lines.
+Proposal 10 asked for this and no run had reported it; `ds-composition`'s reviewer found the
+training-set mean term size tracked A4's held-out damage better than the length histogram did.
+
+| arm | cap | records | mean term size | median | max | mean pruned length |
+|---|---:|---:|---:|---:|---:|---:|
+| K6 | 6 | 155,000 | 26.04 | 23 | 127 | 4.00 |
+| K8flat | 8 | 155,000 | 29.39 | 26 | 153 | 5.00 |
+| K8add | 8 | 217,000 | 29.04 | 26 | 127 | 5.00 |
+| K10 | 10 | 155,000 | 32.33 | 29 | 132 | 6.00 |
+| K12 | 12 | 155,000 | 35.91 | 32 | 178 | 7.00 |
+| K14 | 14 | 155,000 | 39.50 | 35 | 226 | 8.00 |
+
+Mean term size rises monotonically with the cap, and **K8flat and K8add are level on it**
+(29.39 vs 29.04) — which is what the confound break needs: the two cap-8 arms differ in what was
+*removed below* the cap, not in the size of the terms they were trained on.
+
+## K2 — this run's tooling reproduces both inherited arms (source: `artifacts/kh/summary.json`, `kh_analysis.py`)
+
+`kh_analysis.py` re-derives every inherited quantity from `ds-composition`'s bucket files with its
+own parser, pruner, term-size counter and `L*`; it imports none of that run's analysis scripts.
+Against the `ds-composition` **review's** published values:
+
+| quantity | K6 measured here | K6 published | K8flat measured here | K8flat published |
+|---|---|---|---|---|
+| held-out greedy s0 / s1 | 0.9088 / 0.8962 | 0.9088 / 0.8962 | 0.9508 / 0.9536 | 0.9508 / 0.9536 |
+| `redreq` solved / 300 | 28 / 26 | 28 / 26 | 54 / 72 | 54 / 72 |
+| accepted `redreq` proofs ≥ 8 **pruned** lines | 0 / 0 | 0 / 0 | 28 / 32 | 28 / 32 |
+| max accepted `redreq` pruned length | 7 / 7 | 7 | 10 / 8 | 10 |
+| `d3req` solved / 300 | 170 / 108 | 170 / 108 | 276 / 289 | 276 / 289 |
+| ladder T1 `L*` / frozen `L*` (seed 0) | 12 / 9 | 12 / 9 | 12 / 11 | 12 / 11 |
+| ladder T1 / frozen transfer solved (seed 0) | 856 / 158 | 856 / 158 | 1,438 / 976 | 1,438 / 976 |
+
+**Every cell agrees.** Note the published "max accepted reductio length 10" for K8flat is its
+**seed 0**; seed 1 reaches 8. The ≥ 8-line counts are by **pruned** length (the review's 29 / 33 is
+by *written* length; 28 / 32 by pruned, which is what this run counts).
