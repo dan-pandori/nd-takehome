@@ -1,0 +1,1 @@
+START 2026-09-24T16:30:41Z until [ -f artifacts/nf/cov_d3_p1_s1.done ]; do sleep 30; done; python3 train.py --data data/nf/train_p2.jsonl --heldout data/p2/heldout.jsonl --mode lean_seq --steps 6000 --bs 128 --out ckpts/nf/stage1_p2_s2.pt --cap 6 --seed 2

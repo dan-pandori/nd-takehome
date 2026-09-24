@@ -1,0 +1,1 @@
+START 2026-09-24T16:30:14Z until [ -f artifacts/nf/heldout_p1_s2.done ]; do sleep 30; done; python3 ladder_ei.py --outdir artifacts/nf --rounds 8 --k 32 --temperature 0.8 --batch 512 --max_new 512 --heldout data/p2/heldout.jsonl --init ckpts/nf/stage1_p1_s2.pt --train data/nf/train_p1.jsonl --seed 2 --name la_frozen_p1_s2 --no_train

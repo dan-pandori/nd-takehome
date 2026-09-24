@@ -760,3 +760,51 @@ between-pool component below is not diluted by shared records.
 **Render check** (`dsg_render_check.py`, per set): 3,000 / 3,000 ND → Lean → ND round-trips
 identical, 3,000 / 3,000 denoted proofs re-verified by `nd_verify` at cap 6, 1,000 / 1,000 Lean
 positives accepted, 300 / 300 theorem-swapped Lean negatives rejected — on every one of the four sets.
+
+## N2. Held-out greedy — the eight null cells (source: `artifacts/nf/heldout_p<i>_s<k>.{json,jsonl}`, `artifacts/nf/summary.json` § `floors`)
+
+Measured on `ckpts/nf/stage1_p<i>_s<k>.pt` — 3,214,336-parameter from-scratch GPT, `lean_seq`, cap 6,
+trained on `data/nf/train_p<i>.jsonl`. Command: `eval_set.py --in data/p2/heldout.jsonl --k 1
+--temperature 0 --batch 512` (5,000 theorems), identical in every cell.
+
+| quantity | P1 s0 | P1 s1 | P2 s0 | P2 s1 | P3 s0 | P3 s1 | P4 s0 | P4 s1 | mean | **sd** | max/min | **MDD at n = 2** |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| overall | 0.8726 | 0.9362 | 0.9458 | 0.8770 | 0.8680 | 0.8858 | 0.8716 | 0.9630 | 0.9025 | **0.0390** | 1.11× | **±20.9 pp** |
+| 2-line bin | 0.9970 | 0.9930 | 0.9990 | 1.0000 | 0.9970 | 0.9940 | 0.9980 | 0.9980 | 0.9970 | 0.0024 | 1.01× | ±1.3 pp |
+| 3-line bin | 0.9900 | 0.9810 | 0.9920 | 0.9930 | 0.9910 | 0.9910 | 0.9800 | 0.9910 | 0.9886 | 0.0051 | 1.01× | ±2.7 pp |
+| 4-line bin | 0.9560 | 0.9450 | 0.9700 | 0.9650 | 0.9530 | 0.9660 | 0.9600 | 0.9680 | 0.9604 | 0.0086 | 1.03× | ±4.6 pp |
+| 5-line bin | 0.9330 | 0.9120 | 0.9560 | 0.9190 | 0.9260 | 0.9220 | 0.9260 | 0.9380 | 0.9290 | 0.0135 | 1.05× | ±7.3 pp |
+| **6-line bin** | 0.4870 | 0.8500 | 0.8120 | 0.5080 | 0.4730 | 0.5560 | 0.4940 | 0.9200 | 0.6375 | **0.1887** | **1.95×** | **±101 pp (unresolvable)** |
+| **depth-3 slice (n = 500)** | 0.0860 | 0.8180 | 0.7060 | 0.1060 | 0.0400 | 0.2040 | 0.0900 | 0.9180 | 0.3710 | **0.3740** | **22.9×** | **±2.01 absolute (unresolvable)** |
+| 6-line, no pattern (n = 247) | 0.8300 | 0.7814 | 0.8623 | 0.8421 | 0.8340 | 0.8502 | 0.8300 | 0.8664 | 0.8370 | 0.0265 | 1.11× | ±14.2 pp |
+
+**Pre-registered expectations scored.** **E1 missed** — predicted sd ≤ 0.02 and max − min ≤ 5 pp;
+measured **sd 0.039, range 9.5 pp**, roughly twice the predicted floor. **E2 missed in the same
+direction** — 6-line bin predicted sd 0.04–0.10, measured **0.189**. **E3 met** — 2-line bin sd
+0.0024 ≤ 0.005. **E4 partly met** — the depth-3 slice is bimodal and its sd is 0.374 ≥ 0.20 as
+predicted, but only **3 of 8** cells are in the high mode against a predicted 5–8; high-mode
+proportion **0.375, Wilson 95 % [0.137, 0.694]**.
+
+**The bimodality is one phenomenon, not two.** All 500 depth-3 held-out theorems are 6-line
+theorems (`data/p2/heldout.jsonl`: depth-3 by length = {6: 500} of the 1,000 6-line theorems), and
+across the eight null cells the depth-3 slice and the 6-line bin correlate at **r = 0.9994**.
+`ds-rendering`'s "bimodal depth-3 cell" and `ds-generator`'s "retrain spread is almost all in the
+6-line bin" are the same thing seen twice: **a 6-line-bin mode that a single Stage-1 training run
+lands in or does not.** Cells split 3 high / 4 low / 1 between on `ds-rendering`'s own boundaries.
+
+**It is neither the pool nor the seed — it is the individual training run.** Two-way decomposition
+(4 pools × 2 seeds, one observation per cell; the interaction is confounded with error):
+
+| quantity | MS_pool | MS_seed | MS_resid | var_pool | var_seed | var_resid |
+|---|---|---|---|---|---|---|
+| overall | 0.000638 | 0.001352 | **0.002458** | −0.00091 | −0.00028 | **0.00246** |
+| 6-line bin | 0.01428 | 0.04033 | **0.05532** | −0.0205 | −0.0037 | **0.0553** |
+| depth-3 slice | 0.05832 | 0.1579 | **0.2154** | −0.0786 | −0.0144 | **0.2154** |
+
+Both between-pool and between-seed components come out **negative** (i.e. indistinguishable from
+zero) on every held-out quantity: within a pool, seed 0 and seed 1 land in *different* modes
+(P1 0.487 / 0.850, P2 0.812 / 0.508, P4 0.494 / 0.920), and P3 is low on both. **E12's premise is
+wrong for held-out accuracy in a way that matters: re-drawing the data set buys you no more
+independence than re-seeding Stage-1, and neither factor explains the spread — the residual does.**
+The practical consequence is that an arm's two seeds are two coin flips on the 6-line mode, so a
+two-seed held-out comparison is a comparison of two coin flips.
