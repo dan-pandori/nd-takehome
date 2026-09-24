@@ -1,0 +1,80 @@
+k12: cap 12, size 155000, exclusion classes 14026
+control set per-length available: {'2': 31000, '3': 31000, '4': 31000, '5': 31000, '6': 31000}
+long bins eligible: {'7': 69926, '8': 71492, '9': 49631, '10': 44110, '11': 41370, '12': 39875}
+{
+ "arm": "k12",
+ "cap": 12,
+ "size": 155000,
+ "seed": 0,
+ "out": "data/kh/train_k12.jsonl.gz",
+ "per_length_wanted": {
+  "2": 14091,
+  "3": 14091,
+  "4": 14091,
+  "5": 14091,
+  "6": 14091,
+  "7": 14091,
+  "8": 14091,
+  "9": 14091,
+  "10": 14091,
+  "11": 14091,
+  "12": 14090
+ },
+ "per_length_achieved": {
+  "2": 14091,
+  "3": 14091,
+  "4": 14091,
+  "5": 14091,
+  "6": 14091,
+  "7": 14091,
+  "8": 14091,
+  "9": 14091,
+  "10": 14091,
+  "11": 14091,
+  "12": 14090
+ },
+ "short_bins_source": {
+  "file": "data/p2/train_depth3_f0_a1.jsonl",
+  "available": {
+   "2": 31000,
+   "3": 31000,
+   "4": 31000,
+   "5": 31000,
+   "6": 31000
+  },
+  "how": {
+   "2": "uniform subsample 14091/31000 (seed 0)",
+   "3": "uniform subsample 14091/31000 (seed 0)",
+   "4": "uniform subsample 14091/31000 (seed 0)",
+   "5": "uniform subsample 14091/31000 (seed 0)",
+   "6": "uniform subsample 14091/31000 (seed 0)"
+  }
+ },
+ "long_bins_source": {
+  "file": "data/kh/pool_long_kh.jsonl",
+  "eligible": {
+   "7": 69926,
+   "8": 71492,
+   "9": 49631,
+   "10": 44110,
+   "11": 41370,
+   "12": 39875
+  },
+  "scan": {
+   "read": 518843,
+   "in_range": 401030,
+   "eligible": 316404,
+   "depth3": 77721,
+   "excluded_class_controlset": 6536,
+   "excluded_class_evalpool": 369
+  }
+ },
+ "fill_disclosure": "none: every long bin filled from its own length",
+ "distinct_renaming_classes": 155000,
+ "distinct_rendered_texts": 155000,
+ "exclusion_classes": 14026,
+ "overlap_with_eval_pools": 0,
+ "records_over_cap": 0,
+ "depth3_records": 0,
+ "secs": 159.3
+}
