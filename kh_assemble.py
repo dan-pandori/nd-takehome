@@ -85,7 +85,6 @@ def shape(records):
     per_len = collections.Counter()
     pats = collections.Counter()
     ts_all, ts_by_len = [], collections.defaultdict(list)
-    nprem = collections.Counter()
     wdepth = collections.Counter()
     pat_by_len = collections.defaultdict(collections.Counter)
     for L, prompt, proof, key in records:
@@ -95,9 +94,6 @@ def shape(records):
             if cl.get(p):
                 pats[p] += 1
                 pat_by_len[L][p] += 1
-        for ru in RULES:
-            if f' {ru} ' in f' {proof} ' or f' {ru};' in proof or proof.rstrip().endswith(' ' + ru):
-                pass
         toks = set(proof.split())
         for ru in RULES:
             if ru in toks:
@@ -106,7 +102,6 @@ def shape(records):
         if t:
             ts_all.append(t[1])
             ts_by_len[L].append(t[1])
-        nprem[len([x for x in prompt.split(' , ') if x.strip()]) if prompt.strip() and '|-' not in prompt.split()[0] else 0] += 0
         wdepth[written_depth(proof)] += 1
     n = len(records)
     return {'records': n,
