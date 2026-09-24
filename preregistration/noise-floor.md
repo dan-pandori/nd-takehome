@@ -188,3 +188,32 @@ Checked by name in the write-up, with the original number beside the measured fl
 `log.md` dated, `artifacts/nf/summary.json` (one row per pool × seed), `STATUS.md`
 `NOISE-FLOOR DONE <UTC>`, bucket `hf://buckets/dan-pandori/nd-rl/noise-floor/{ckpts,artifacts,data}`,
 pods deleted, `~/runs/noise-floor/executor.done`. Questions for Dan in `QUESTIONS.md` with defaults.
+
+---
+
+## Addendum 1 — a third Stage-1 seed (2026-09-24 16:31 UTC)
+
+Written **before any outcome of this run exists**: at the time of this commit the eight Stage-1 runs
+are at step ~1,800 of 6,000 and no held-out, coverage or ladder number has been produced. Nothing
+below is chosen in the light of a result.
+
+**What changes.** Stage-1 **seed 2** is added on all four pools, giving a **4 × 3 = 12-cell**
+design. The seed-2 cells get held-out greedy, the frozen ladder, and coverage on
+`targets_reductio_req` and `depth3_req` — **not** `targets_depth3` (the brief's own least-informative
+pool, and the first coverage drop in my stop rule). Commands, batch sizes, pools and checkers are
+unchanged.
+
+**Why.** The deliverable is an error bar, and the pre-registered design estimates the *seed*
+variance component with **1 degree of freedom**, which is too few to answer E12 ("is the Stage-1
+draw or the data draw the larger term?") at all. A third seed takes the decomposition to
+df = 3 (pool) / 2 (seed) / 6 (residual) and the pooled sd to 11 df from 7. Three seeds on four pools
+beats six pools on two seeds for the same cell count, because the seed axis is the one with 1 df.
+
+**Cost.** 4 × (Stage-1 0.15 h + held-out 0.1 h + frozen ladder 1.4 h + two coverage runs 1.0 h)
+≈ 11 job-hours ≈ 2.7 h wall on four slots ≈ **5.4 pod-hours ≈ $2.7**, against a projection of
+≈ 13 pod-hours of the 36 h / $18 ceiling.
+
+**Reporting.** Every floor states the number of cells behind it: held-out, frozen ladder,
+`redreq` and `required@8` are **n = 12**; `targets_depth3` coverage stays **n = 8**. The
+pre-registered expectations E1–E14 are scored against the 8-cell design they were written for
+**and** against all 12, and both are shown where they differ.
