@@ -75,3 +75,17 @@ numbers go into `numbers.md` § noise-floor as each stage lands rather than at t
   quantity (all 500 depth-3 held-out theorems are 6-line; r = 0.9994 across the eight cells).
   Both between-pool and between-seed variance components are **negative**: the spread is neither the
   data draw nor the seed, it is the individual training run. `numbers.md` § N2.
+- 17:45  **Scope cut, and the ceiling raised 36 h / $18 → 42 h / $21** (`log.md`, `QUESTIONS.md`): a
+  frozen ladder measures at **1.94 pod-hours** on these A40s, not the brief's 1.25, and `pass@2,000`
+  coverage at 0.7–2.4 h, so the brief's design needs ≈ 60 pod-hours against its 36. Dropped, in the
+  brief's own order: `targets_depth3` coverage everywhere; seed 2 reduced to Stage-1 + held-out; the
+  `ds-composition` gap-closer reduced to **A1 seed 1** (C0 seed 1 is already on file from
+  `ds-generator` on the identical checkpoint and command). Projection ≈ 33 pod-hours ≈ $16.
+- 23:28  **Headline result — the frozen-ladder floor, eight null cells.** Transfer theorems solved:
+  **62 / 96 / 117 / 174 / 177 / 200 / 262 / 265 of 2,285 — a 4.27× range**, sd 74.1 (43.8 % of the
+  mean). The smallest difference two seeds can resolve is **±235 %**. The control's published 158 /
+  114 sits in the middle of that range, and so does every frozen-ladder value proposal 10 reported
+  (G2 44 / 125, G1 170, A1 205, A2 111). Pre-registered E8 (1.4–2.5×) and E10 (±40–60 %) both
+  **missed, the floor being far larger than predicted**; the falsifier (max/min < 1.2×, which would
+  have revived the shape account) is **decisively not triggered**. `L*` is the robust readout:
+  9 in seven cells, 10 in one, resolvable difference **±1.9 points**. `numbers.md` § N3.
