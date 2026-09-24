@@ -32,16 +32,19 @@ for name, src in srcs:
                  'nd_rej_lean_ok': c[(False, True)], 'both_reject': c[(False, False)], 'stderr_tail': p.stderr[-300:]}
     print(name, len(rows), 'both accept', out[name]['both_accept'],
           'disagree', out[name]['nd_ok_lean_rej'] + out[name]['nd_rej_lean_ok'], flush=True)
-# in-loop gate rate: every lean_gate log written on this pod
+# in-loop gate rate: every lean_gate log written on this pod (one json line per generate() call)
 g = collections.Counter()
 for fn in glob.glob('artifacts/nf/gate_*.jsonl'):
+    if fn.endswith('.disagree.jsonl'):
+        continue
     for l in open(fn):
         try:
             r = json.loads(l)
         except Exception:
             continue
-        g['n'] += 1
-        g[f"{r.get('nd_ok')}_{r.get('lean_ok')}"] += 1
+        g['calls'] += 1
+        for k in ('samples', 'parse_fail', 'distinct_checked', 'both_ok', 'nd_ok_lean_rej', 'nd_rej_lean_ok', 'both_rej'):
+            g[k] += r.get(k, 0)
 out['_gate'] = dict(g)
 json.dump(out, open(f'artifacts/nf/record_{tag}.json', 'w'), indent=1)
 print('gate', dict(g))

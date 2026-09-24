@@ -202,6 +202,25 @@ def main():
                 'assemble': jl(f'{D}/assemble_{p}.json'), 'overlap': jl(f'{D}/overlap_{p}.json'),
                 'render': jl(f'{D}/render_{p}.json')} for p in POOLS}
     record = {os.path.basename(f)[:-5]: jl(f) for f in sorted(glob.glob(f'{D}/record_*.json'))}
+    # the in-loop Lean gate's own agreement rate, over every gate log pulled back from both pods
+    # (ds-generator's review asked for this rate; it is one json line per generate() call)
+    g = collections.Counter()
+    for fn in glob.glob(f'{D}/gate_*.jsonl'):
+        if fn.endswith('.disagree.jsonl'):
+            continue
+        for l in open(fn):
+            try:
+                r = json.loads(l)
+            except Exception:
+                continue
+            g['calls'] += 1
+            for k in ('samples', 'parse_fail', 'distinct_checked', 'both_ok', 'nd_ok_lean_rej', 'nd_rej_lean_ok', 'both_rej'):
+                g[k] += r.get(k, 0)
+    dis = sum(1 for fn in glob.glob(f'{D}/gate_*.disagree.jsonl') for _ in open(fn))
+    gate = dict(g)
+    gate['disagree_lines'] = dis
+    gate['lean_only_per_million_distinct'] = (1e6 * g['nd_rej_lean_ok'] / g['distinct_checked']) if g['distinct_checked'] else None
+    gate['nd_only_per_million_distinct'] = (1e6 * g['nd_ok_lean_rej'] / g['distinct_checked']) if g['distinct_checked'] else None
 
     floors = {}
     for name, fn in QUANTS:
@@ -228,7 +247,7 @@ def main():
         d3['high_mode'] = {'threshold_high': 0.44, 'threshold_low': 0.11, 'n_high': hi, 'n_low': lo,
                            'n_between': len(v) - hi - lo, 'p_high': hi / len(v), 'wilson95': list(w),
                            'note': "mode boundaries are ds-rendering's (>0.44 high, <0.11 low)"}
-    out = {'rows': rows, 'gap_closers': gap, 'sets': sets, 'record': record, 'floors': floors}
+    out = {'rows': rows, 'gap_closers': gap, 'sets': sets, 'record': record, 'gate': gate, 'floors': floors}
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
     json.dump(out, open(a.out, 'w'), indent=1)
 
@@ -262,6 +281,8 @@ def main():
     for n, g in gap.items():
         if g:
             print(f'| `{n}` | `{g["ckpt"]}` | {g["transfer_solved"]} | {g["transfer_lstar"]} | {g["targets_solved"]} |')
+    print('\n## in-loop Lean gate (both pods)\n')
+    print(json.dumps(gate, indent=1))
     print(f'\nwritten {a.out}')
 
 
