@@ -545,3 +545,171 @@ Every number below is re-derived by `python3 lean_format_analysis.py` → `artif
 
 ## Bucket
 `hf://buckets/dan-pandori/nd-rl/lean-format/{ckpts,artifacts,data}` — `ckpts/lf` (Stage-1 models, depth-3 EI rounds), `ckpts/ladder` (ladder EI rounds), `artifacts/lf` (everything above incl. per-round found files), `data` (the a1 training set and the ladder pools used).
+
+---
+
+# ds-composition (proposal 10, run 1) — the training set's composition
+
+**Every model in this section is the same architecture and recipe** unless the row says otherwise: a **3.3M-parameter
+from-scratch decoder, `lean_seq` Lean surface form, trained 6,000 steps at batch 128 on a 155,000-proof set**, depth-3
+excluded (pruned and written), cap 6 on the ND record — except **A3, which is cap 8 and is labelled "cap 8" in every row;
+A3 is a yardstick outside the take-home's cap rule, not a candidate for adoption.** Training sets: C0
+`data/p2/train_depth3_f0_a1.jsonl` (flat 31,000 per length 2–6; the two Stage-1 checkpoints are lean-format's
+`ckpts/lf/stage1_a1_seq_s{0,1}.pt`, **not retrained**); A1/A2/A3/A4 `data/dsc/train_<arm>.jsonl` with
+`ckpts/dsc/stage1_<arm>_s{0,1}.pt`. Sampler: `sample.py`'s **fast decode path** (`path=fast`, `early=eos`, `compact`,
+`rowrng`; run `efficiency`), identical across every arm; **batch held fixed across arms** — held-out 512, dial 768,
+ladder 512, coverage 1024. Checker: a proof counts only if **Lean and `nd_verify` both accept** it.
+Hardware: A40 (C0, A1, A3) and RTX A6000 (A2, A4), one pod per arm.
+
+## D1 — Stage-1 held-out greedy, 5,000 theorems (`artifacts/dsc/heldout_<arm>_s{0,1}.json{,l}`, 2 seeds)
+
+The 6-line bin splits into a **no-pattern** part (stable to ≈ ±2 pp) and a **pattern** part (6-line depth-3 theorems,
+which no f = 0 training set contains; it swings 0.40–0.92 by seed in every arm and carries the bin's noise).
+
+| arm | overall s0 / s1 | 2-line | 6-line | **6-line no-pattern** | Δ vs C0 (6-line no-pattern) |
+|---|---|---|---|---|---|
+| C0 control | 0.9088 / 0.8962 | 0.994 / 0.997 | 0.686 / 0.583 | **0.818 / 0.834** | — |
+| A1 natural histogram | 0.9172 / 0.9424 | 0.996 / 0.993 | 0.695 / 0.840 | **0.891 / 0.899** | **+7.3 / +6.5 pp** |
+| A2 rule quotas | 0.9186 / 0.9402 | 0.999 / 0.997 | 0.713 / 0.825 | **0.777 / 0.773** | **−4.1 / −6.1 pp** |
+| A3 **cap 8** | 0.9508 / 0.9536 | 0.998 / 0.997 | 0.877 / 0.869 | **0.858 / 0.895** | **+4.0 / +6.1 pp** |
+| A4 cap-heavy | 0.8166 / 0.8238 | **0.746 / 0.696** | 0.512 / 0.611 | **0.846 / 0.826** | +2.8 / −0.8 pp |
+
+## D2 — base rates, pass@2,000 at T = 0.8, seed 0 (`artifacts/dsc/cov_<arm>_s{0,1}_<pool>.s0.jsonl`)
+
+Pools: `redreq` = `data/p2/targets_reductio_req.jsonl` (300; every target needs a derived `DN`; strata by `min_lines_ub`),
+`d3req` = `data/r3_1/depth3_req.jsonl` (300; required@8), `d3sub` = `data/dsc/targets_depth3_sub250.jsonl` (250-target
+fixed random subset of the dial's 1,000-target pool, amendment 2). "solved" = at least one proof Lean ∧ `nd_verify`
+accepted; "pattern" = at least one such proof carries the pool's pattern; "≥ 8" = distinct accepted pattern proofs of
+≥ 8 written lines.
+
+| arm | redreq solved (of 300) | redreq ≥ 8-line proofs | d3req pattern (of 300) | d3sub pattern (of 250) |
+|---|---|---|---|---|
+| C0 | 28 / 26 | **0 / 0** | 170 / 108 | 71 / 40 |
+| A1 | 16 / 18 | 0 / 0 | 174 / 197 | 70 / 76 |
+| A2 | 23 / 4 | 0 / 0 | 132 / 214 | 48 / 84 |
+| A3 **cap 8** | **54 / 72** | **29 / 33** | **276 / 289** | **149 / 163** |
+| A4 | 17 / 0 | 0 / 0 | 167 / 106 | 58 / 49 |
+
+Every counted `redreq` proof is a derived-`DN` reductio, and in every cap-6 arm every one of them is in the **7-line
+stratum** (52 targets); strata 8, 9 and 10 (133 + 82 + 33 targets) yield **zero** solved targets in C0, A1, A2 and A4.
+**Only the cap-8 arm writes an accepted reductio proof of ≥ 8 lines at all** (29 / 30 of them).
+
+## D3 — depth-3 dial, 1,000 targets, 4 rounds × 32 attempts (`artifacts/dsc/{ei,frozen}_<arm>_s{0,1}/round_4.json`, `found_4.jsonl`)
+
+Acquisition = fraction of the 1,000 targets with a depth-3 proof found by round 4 (min round per normalised proof).
+
+| arm | EI s0 / s1 | frozen s0 / s1 | **EI − frozen s0 / s1** |
+|---|---|---|---|
+| C0 (re-measured here) | 0.432 / 0.419 | 0.170 / 0.117 | **+0.262 / +0.302** |
+| C0 on file (lean-format, base sampler) | 0.418 / 0.408 | 0.163 / 0.116 | +0.255 / +0.292 |
+| A1 | 0.437 / 0.408 | **0.212 / 0.270** | **+0.225 / +0.138** |
+| A2 | 0.408 / 0.406 | 0.135 / 0.262 | +0.273 / +0.144 |
+| A3 **cap 8** | 0.656 / 0.698 | **0.553 / 0.604** | **+0.103 / +0.094** |
+| A4 | 0.403 / 0.383 | 0.155 / 0.118 | +0.248 / +0.265 |
+
+EI lands at **0.38–0.44 in every arm** whatever the frozen base rate is (0.117–0.270).
+
+## D4 — ladder, rung T1 and frozen, 8 rounds × 32 attempts, **Stage-1 seed 0 only** (`artifacts/dsc/la_{T1,frozen}_<arm>_s0/`)
+
+Pools `data/ladder/{rl_targets,transfer}.jsonl`; `L*` = max L with ≥ 5 transfer theorems solved at `L_true` ≥ L.
+Seed 1 was stopped at rounds 1–3 by the budget (deviation, `log.md` 00:10) and is not reported as a result.
+
+| arm | T1 transfer solved (of 2,285) | T1 `L*` | T1 `L_true` = 7 bin (of 300) | T1 textbook | **frozen transfer solved** | frozen `L*` | frozen targets solved (of 4,495) |
+|---|---|---|---|---|---|---|---|
+| C0 | 856 | 12 | 90 | 38 | **158** | 9 | 1,210 |
+| A1 | 965 | 11 | 144 | 95 | **205** | 10 | 1,427 |
+| A2 | 977 | 11 | 157 | 103 | **111** | 9 | 1,033 |
+| A3 **cap 8** | **1,438** | **12** | **193** | **174** | **976** | **11** | **2,921** |
+| A4 | 966 | 12 | 133 | 79 | **156** | 10 | 1,195 |
+
+### D4b — textbook schemata at rung T1 (transfer pool, 40 targets per schema, 19 schemata)
+
+| schema | C0 | A1 | A2 | A4 |
+|---|---|---|---|---|
+| contraposition | 19 | 40 | 39 | 37 |
+| disjunctive_syllogism | 3 | **36** | **29** | **25** |
+| export | 6 | 5 | **26** | 1 |
+| demorgan_nand_to_or | 4 | **11** | 0 | 4 |
+| dist_or_over_and_conv | 1 | 0 | 4 | **6** |
+| the other 14 (constructive dilemma, the other three De Morgan forms, all four distribution forms, excluded middle, both Peirce forms, both negated-conditional forms, import, contraposition_conv) | ≤ 2 | ≤ 1 | ≤ 2 | ≤ 2 |
+
+Schemata that go from **< 5 in C0 to ≥ 5** in the arm: **A1 two** (disjunctive_syllogism, demorgan_nand_to_or),
+**A2 one** (disjunctive_syllogism), **A4 two** (disjunctive_syllogism, dist_or_over_and_conv).
+**A3 (cap 8)**, same pool: disjunctive_syllogism 40, contraposition 39, export 39, contraposition_conv 31,
+demorgan_nand_to_or 6, dist_or_over_and_conv 6, constructive_dilemma 5, every other schema ≤ 2 — **five** schemata go from
+< 5 in C0 to ≥ 5, and the four distribution forms other than `dist_or_over_and_conv`, the three other De Morgan forms,
+excluded middle and both Peirce forms stay at ≤ 2 **in every arm including cap 8**.
+Frozen schemata at ≥ 5: C0 none; A1 disjunctive_syllogism (5); A2 contraposition (21); A4 contraposition (7);
+A3 contraposition (37), export (37), disjunctive_syllogism (9), contraposition_conv (6).
+
+## D6 — Lean as the checker of record (`artifacts/dsc/record_<arm>.json`, `gate_*.jsonl`, `cov_*.gate.json`)
+
+`nd2lean.py --check` (the official translation + Lean, unmodified apart from `lean-seed2`'s BOTE fix) and `nd_verify` on
+**every counted proof** of the dial, the ladder and coverage: **124,952 proofs, 124,952 accepted by both, 0
+disagreements** — C0 18,086, A1 19,090, A2 19,173, A3 51,156, A4 17,447 (`record_<arm>.json`, `n` = `both_accept` in
+every entry). Over the whole run the sampling gate saw **26.7 M samples / 17.7 M distinct checked texts** with
+**`nd_ok_lean_rej` = 0** and `nd_rej_lean_ok` = 1,611 (the known `¬A ≡ A → False` looseness, `QUESTIONS.md`
+2026-09-21); no counted proof depends on it, because counting requires both checkers.
+
+## D5 — pre-registered expectations against outcomes (`preregistration/ds-composition.md`)
+
+| claim | pre-registered | measured | verdict |
+|---|---|---|---|
+| A1 6-line bin | +2 to +5 pp | **+7.3 / +6.5 pp** (no-pattern) | exceeded |
+| A1 held-out overall | −1 to +1 pp | +0.8 / +4.6 pp | above band |
+| A1 depth-3 pass@2,000 (req8) | +5 to +15 pp | +1.3 / **+29.7** pp | s0 below, s1 above |
+| A1 reductio pass@2,000 | ×1–2 of C0, ≥ C0 | **×0.57 / ×0.69, below C0 on both seeds** | **falsified** |
+| A1 dial EI − frozen | within ±0.05 of C0 | −0.037 / **−0.164** | s1 outside |
+| A1 frozen ladder solves | **+15 to +40 %** | **+29.7 %** (205 vs 158) | met |
+| A1 frozen `L*` | +0 to +1 | +1 (10 vs 9) | met |
+| A1 T1 `L*` | 11–12 | 11 | met |
+| A2 6-line bin | ±1 pp | **−4.1 / −6.1 pp** | falsified (worse) |
+| A2 textbook: new schemata at ≥ 5 | **≥ 2** | **1** (disjunctive_syllogism) | not met — finding 2 stands |
+| A2 `L_true` = 7 bin | +20 to +60 | **+67** (157 vs 90) | just above |
+| A3 (cap 8) held-out 6-bin | +3 to +8 pp | +4.0 / +6.1 pp | met |
+| A3 depth-3 pass@2,000 | ≥ 0.6 | **0.92 / 0.96** | met |
+| A3 reductio pass@2,000 | ×2–5 of C0, ≥ 5 | **×1.9 / ×2.8** (54 / 72), ≥ 8-line 29 / 33 | met |
+| A3 frozen ladder solves | **≥ 1,000** | **976** | just short |
+| A3 frozen `L*` / T1 `L*` | 11–12 / 12–13 | **11 / 12** | met |
+| A4 2-line bin | ≥ 0.95 | **0.746 / 0.696** | **falsified** |
+| A4 frozen ladder ≥ A1 | ≥ A1 | 156 < 205 | not met |
+| C0 frozen ladder solved / `L*` | 220–320 / 9–10 | **158 / 9** | solves below band |
+| C0 reductio pass@2,000 | 5–25 targets | **28 / 26** | just above |
+| C0 depth-3 pass@2,000 (req8) | 0.05–0.25 | **0.567 / 0.360** | far above |
+
+### Falsifiers
+
+- **Finding 1 ("the cap sets the horizon") survives.** Frozen ladder transfer solves: C0 158, A1 **205**, A4 156,
+  A3 (cap 8) **976**. A1 reaches **5.7 %** of A3's gain over C0 and A4 **0 %**, against the ≥ 70 % the falsifier needed;
+  neither matches A3's frozen `L*` (11 vs 10, 10). The cap's other signature is untouched by composition: **only cap 8
+  produces an accepted reductio proof of ≥ 8 lines** (29 / 33 vs **0** in C0, A1, A2 and A4) and only cap 8 solves any
+  `redreq` target outside the 7-line stratum.
+- **"The histogram is not a lever" is rejected.** A1's 6-line no-pattern bin is +7.3 / +6.5 pp (not within ±1 pp) and its
+  frozen ladder solves are +29.7 % (not within ±10 %).
+- **Finding 2's rule-mix version stands.** A2 moved **one** schema from < 5 to ≥ 5, not two. 14 of 19 schemata
+  (constructive dilemma outside cap 8, three of four De Morgan forms, three of four distribution forms, excluded middle,
+  both Peirce forms, both negated-conditional forms, import) stay at **≤ 2 in every cap-6 arm**.
+- **Finding 3 (RL amplifies what the base does) gets no counter-example.** No arm has both a lower frozen base rate than
+  C0 and a larger EI − frozen on both seeds. The sharper observation: **EI round-4 acquisition lands at 0.38–0.44 in every
+  cap-6 arm** while the frozen base rate it starts from ranges 0.117–0.270, so a higher base rate buys a *smaller*
+  EI − frozen (A1 +0.225 / +0.138 against C0's +0.262 / +0.302), and the cap-8 arm, starting at 0.553 / 0.604, gains least
+  of all (+0.103 / +0.094) while ending highest (0.656 / 0.698).
+
+### Decision rule (proposal 10)
+
+"An arm replaces the control iff, on both seeds, held-out greedy is within 1 pp of C0 or better **and** at least two of
+{depth-3 pass@2,000, reductio pass@2,000, ladder T1 `L*` or solved} improve with **none worse**." **No cap-6 arm passes.**
+A1 passes the held-out clause (+0.8 / +4.6 pp) and improves depth-3 pass@2,000 and ladder T1 solved (965 vs 856), but its
+**reductio pass@2,000 is worse on both seeds** (16 / 18 vs 28 / 26), so the "none worse" clause fails. A2 and A4 fail the
+held-out clause. A3 is excluded from the decision (cap 8).
+
+## D7 — cost (`podbudget ds-composition`, `~/pods.log`)
+
+Five pods, one per arm: `dsc-c0` 5.02 h, `dsc-a1` 5.99 h, `dsc-a2` 3.97 h, `dsc-a4` 3.74 h (all deleted 2026-09-24
+01:05–02:59 UTC), `dsc-a3` 6.98 h (deleted 04:10). **25.70 pod-hours, $12.84** against the $18 budget and the 36-hour ceiling.
+Ladder round times, A40 / A6000, 2–5 concurrent jobs per pod: 1,000–1,600 s per round for the cap-6 arms,
+2,400–3,800 s for cap 8.
+
+## Bucket
+
+`hf://buckets/dan-pandori/nd-rl/ds-composition/{artifacts,ckpts,data}`.

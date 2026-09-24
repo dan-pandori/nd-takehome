@@ -9,9 +9,6 @@ Lean (version 4.34.0, x86_64-unknown-linux-gnu, commit 293d5d0c0c3f3dded4688b3cc
 96
 NVIDIA A40, 46068 MiB
 2.8.0+cu128 True
-Traceback (most recent call last):
-  File "/workspace/nd-takehome/pod/lf/gate_selftest.py", line 8, in <module>
-    recs = [json.loads(l) for l in open('data/heldout.jsonl')][:2000]
-                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: 'data/heldout.jsonl'
+[lean_gate] 2000 samples, parse-fail 0, distinct checked 2000: both ok 1600, nd-only 0, lean-only 0, both rej 400; lean 4.1s wall (19.2s proc, 48 workers), nd_verify 0.1s
+rejected 0 of 2000
 SETUP_DONE
