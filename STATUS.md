@@ -59,3 +59,19 @@ numbers go into `numbers.md` § noise-floor as each stage lands rather than at t
   read from RunPod's billing API and recorded in `log.md`; `podbudget`'s column is a $0.49 estimate).
   Both have a **7.65-CPU cgroup quota** despite `nproc` 96, so `LEAN_GATE_WORKERS=3` × 4 concurrent
   chains, `coverage.py --procs 2`. `podbudget noise-floor --set 36 18` registered before the first pod.
+- 16:16–16:21  Four null pools generated and assembled (4 min each). **Premise check passes**: every
+  shape quantity agrees across P1–P4 to ≤ 0.26 pp and with the control's published table to ≤ 0.4 pp
+  (`ORE` 1.42–1.48 % vs 1.46; box depth 53.1–53.3 / 35.3–35.5 / 11.3–11.4 % vs 53.2 / 35.4 / 11.4;
+  mean premises 1.41–1.42 vs 1.41). 0 exact-`thm` and 0 renaming-class collisions with all nine
+  evaluation / ladder pools, on all four sets. Pairwise class overlap between the four sets 5.8–6.0 %.
+  **All four are replicates, not arms.** `numbers.md` § N1.
+- 16:27  Pre-registration **addendum 1** (committed before any outcome existed): Stage-1 **seed 2** on
+  all four pools, 4 × 3 = 12 cells, because the pre-registered design estimates the seed variance
+  component with 1 degree of freedom and cannot answer E12. ≈ $2.7.
+- 16:46  **First result — the held-out floor, eight null cells.** Overall greedy **0.868–0.963,
+  sd 0.039**, i.e. the smallest difference two seeds can resolve is **± 20.9 pp**; pre-registered
+  E1 (sd ≤ 0.02, range ≤ 5 pp) **missed by about 2×**. The 6-line bin is **0.473–0.920, sd 0.189,
+  max/min 1.95×**, and the depth-3 slice **0.040–0.918, 22.9×** — and the two are the *same*
+  quantity (all 500 depth-3 held-out theorems are 6-line; r = 0.9994 across the eight cells).
+  Both between-pool and between-seed variance components are **negative**: the spread is neither the
+  data draw nor the seed, it is the individual training run. `numbers.md` § N2.
