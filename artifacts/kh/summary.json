@@ -1,0 +1,1605 @@
+{
+ "transfer_L_true_hist": {
+  "9": 1010,
+  "8": 300,
+  "11": 99,
+  "10": 451,
+  "7": 300,
+  "12": 102,
+  "13": 13,
+  "14": 10
+ },
+ "note": "L* is hard-censored at 14 by this pool (23 theorems at L_true >= 13, 10 at >= 14)",
+ "rows": [
+  {
+   "arm": "K6",
+   "cap": 6,
+   "set_size": 155000,
+   "stage1_seed": 0,
+   "model": {
+    "ckpt": "ckpts/lf/stage1_a1_seq_s0.pt",
+    "params": 3214336,
+    "arch": "4 layers, d 256, 8 heads",
+    "format": "lean_seq",
+    "from_scratch": true,
+    "train_set": "data/p2/train_depth3_f0_a1.jsonl (ds-composition C0 = lean-format a1; flat 31,000 x lengths 2-6)",
+    "stage1": "6,000 steps, bs 128, --cap 6"
+   },
+   "inherited": true,
+   "heldout": {
+    "n": 5000,
+    "solved": 4544,
+    "rate": 0.9088,
+    "ci": [
+     0.9005030485251296,
+     0.9164692553143846
+    ],
+    "by_len": {
+     "2": {
+      "solved": 994,
+      "n": 1000,
+      "rate": 0.994,
+      "ci": [
+       0.9869716557675544,
+       0.9972473684290918
+      ]
+     },
+     "3": {
+      "solved": 989,
+      "n": 1000,
+      "rate": 0.989,
+      "ci": [
+       0.9804104032716243,
+       0.9938468899108859
+      ]
+     },
+     "4": {
+      "solved": 951,
+      "n": 1000,
+      "rate": 0.951,
+      "ci": [
+       0.9358089847812472,
+       0.9627391526938285
+      ]
+     },
+     "5": {
+      "solved": 924,
+      "n": 1000,
+      "rate": 0.924,
+      "ci": [
+       0.9059039930034635,
+       0.9388507969952776
+      ]
+     },
+     "6": {
+      "solved": 686,
+      "n": 1000,
+      "rate": 0.686,
+      "ci": [
+       0.6565682399199134,
+       0.7140081538059494
+      ]
+     }
+    },
+    "written_hist": {
+     "2": 1020,
+     "3": 981,
+     "4": 931,
+     "5": 970,
+     "6": 642
+    },
+    "pruned_hist": {
+     "2": 1020,
+     "3": 982,
+     "4": 934,
+     "5": 970,
+     "6": 638
+    },
+    "frontier_written": 6,
+    "frontier_pruned": 6,
+    "reasons": {
+     "parse: expected line index, got 'LEANPARSE'": 181,
+     "rule check failed: ANDI": 53,
+     "rule check failed: DN": 40,
+     "rule check failed: ORI2": 33,
+     "rule check failed: IMPI": 31,
+     "rule check failed: ANDE2": 30,
+     "rule check failed: IMPE": 28,
+     "final formula is not the conclusion": 16,
+     "rule check failed: ORI1": 14,
+     "rule check failed: NEGE": 11
+    },
+    "ckpt": "ckpts/lf/stage1_a1_seq_s0.pt",
+    "in": "data/p2/heldout.jsonl",
+    "k": 1,
+    "temperature": 0,
+    "seed": 0
+   },
+   "redreq": {
+    "file": "artifacts/dsc_inherited/cov_c0_s0_redreq.s0.jsonl",
+    "theorems": 300,
+    "solved": 28,
+    "max_pruned_len": 7,
+    "accepted_proofs_ge8": 0,
+    "ge10": 0,
+    "ge12": 0,
+    "ge14": 0,
+    "distinct_accepted_proofs": 28,
+    "pruned_hist": {
+     "7": 28
+    },
+    "term_size_of_longest": 27,
+    "mean_term_size": 28.21,
+    "max_term_size": 40,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 28.2,
+      "max": 40,
+      "n": 28
+     }
+    },
+    "strata_solved": {
+     "10": [
+      0,
+      33
+     ],
+     "7": [
+      28,
+      52
+     ],
+     "8": [
+      0,
+      133
+     ],
+     "9": [
+      0,
+      82
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 158231,
+    "parse_fail_rate": 0.263718,
+    "longest_proof": {
+     "name": "targets_reductio_req_27",
+     "thm": "( ~ ( ( ~ ( Q v R ) ) & S ) ) , S |- ( Q v R )",
+     "pruned": 7,
+     "written": 7,
+     "term_size": 27,
+     "proof": "N1 ( ~ ( ( ~ ( Q v R ) ) & S ) ) : PR ; N2 S : PR ; N3 | ( ~ ( Q v R ) ) : AS ; N4 | ( ( ~ ( Q v R ) ) & S ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( Q v R ) ) ) : NEGI N3 N5 ; N7 ( Q v R ) : DN N6 ; QED"
+    }
+   },
+   "d3req": {
+    "file": "artifacts/dsc_inherited/cov_c0_s0_d3req.s0.jsonl",
+    "theorems": 300,
+    "solved": 170,
+    "max_pruned_len": 9,
+    "accepted_proofs_ge8": 174,
+    "ge10": 0,
+    "ge12": 0,
+    "ge14": 0,
+    "distinct_accepted_proofs": 195,
+    "pruned_hist": {
+     "7": 21,
+     "8": 173,
+     "9": 1
+    },
+    "term_size_of_longest": 37,
+    "mean_term_size": 55.6,
+    "max_term_size": 114,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 49.9,
+      "max": 79,
+      "n": 21
+     },
+     "8": {
+      "mean": 56.4,
+      "max": 114,
+      "n": 173
+     },
+     "9": {
+      "mean": 37,
+      "max": 37,
+      "n": 1
+     }
+    },
+    "strata_solved": {
+     "7": [
+      5,
+      6
+     ],
+     "8": [
+      165,
+      294
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 394240,
+    "parse_fail_rate": 0.657067,
+    "longest_proof": {
+     "name": "d3req_157",
+     "thm": "( S v S ) |- ( ( ~ ( ~ ( Q v P ) ) ) > ( ( R & ( Q v P ) ) > S ) )",
+     "pruned": 9,
+     "written": 9,
+     "term_size": 37,
+     "proof": "N1 ( S v S ) : PR ; N2 | S : AS ; N3 | S : AS ; N4 S : ORE N1 N2 N2 N3 N3 ; N5 | ( ~ ( ~ ( Q v P ) ) ) : AS ; N6 | | ( R & ( Q v P ) ) : AS ; N7 | | S : R N4 ; N8 | ( ( R & ( Q v P ) ) > S ) : IMPI N6 N7 ; N9 ( ( ~ ( ~ ( Q v P ) ) ) > ( ( R & ( Q v P ) ) > S ) ) : IMPI N5 N8 ; QED"
+    }
+   },
+   "ladder_T1": {
+    "dir": "artifacts/dsc_inherited/la_T1_c0_s0",
+    "transfer_solved": 856,
+    "transfer_n": 2285,
+    "lstar": 12,
+    "ge_L_true": {
+     "7": 856,
+     "8": 766,
+     "9": 601,
+     "10": 94,
+     "11": 15,
+     "12": 5,
+     "13": 0,
+     "14": 0
+    },
+    "solved_by_L_true": {
+     "7": 90,
+     "8": 165,
+     "9": 507,
+     "10": 79,
+     "11": 10,
+     "12": 5
+    },
+    "max_pruned_len": 12,
+    "longest": {
+     "name": "la_transfer_445",
+     "L_true": 9,
+     "pruned": 12,
+     "term_size": 40
+    },
+    "mean_term_size": 62.6,
+    "max_term_size": 131,
+    "lstar_censored_at": 14
+   },
+   "ladder_frozen": {
+    "dir": "artifacts/dsc_inherited/la_frozen_c0_s0",
+    "transfer_solved": 158,
+    "transfer_n": 2285,
+    "lstar": 9,
+    "ge_L_true": {
+     "7": 158,
+     "8": 116,
+     "9": 47,
+     "10": 3,
+     "11": 0,
+     "12": 0,
+     "13": 0,
+     "14": 0
+    },
+    "solved_by_L_true": {
+     "7": 42,
+     "8": 69,
+     "9": 44,
+     "10": 3
+    },
+    "max_pruned_len": 10,
+    "longest": {
+     "name": "la_transfer_444",
+     "L_true": 10,
+     "pruned": 10,
+     "term_size": 90
+    },
+    "mean_term_size": 53.82,
+    "max_term_size": 98,
+    "lstar_censored_at": 14
+   }
+  },
+  {
+   "arm": "K6",
+   "cap": 6,
+   "set_size": 155000,
+   "stage1_seed": 1,
+   "model": {
+    "ckpt": "ckpts/lf/stage1_a1_seq_s1.pt",
+    "params": 3214336,
+    "arch": "4 layers, d 256, 8 heads",
+    "format": "lean_seq",
+    "from_scratch": true,
+    "train_set": "data/p2/train_depth3_f0_a1.jsonl (ds-composition C0 = lean-format a1; flat 31,000 x lengths 2-6)",
+    "stage1": "6,000 steps, bs 128, --cap 6"
+   },
+   "inherited": true,
+   "heldout": {
+    "n": 5000,
+    "solved": 4481,
+    "rate": 0.8962,
+    "ci": [
+     0.8874394047875169,
+     0.9043522458514641
+    ],
+    "by_len": {
+     "2": {
+      "solved": 997,
+      "n": 1000,
+      "rate": 0.997,
+      "ci": [
+       0.9912168282105721,
+       0.9989792345945557
+      ]
+     },
+     "3": {
+      "solved": 992,
+      "n": 1000,
+      "rate": 0.992,
+      "ci": [
+       0.9842934787948114,
+       0.9959408529961804
+      ]
+     },
+     "4": {
+      "solved": 966,
+      "n": 1000,
+      "rate": 0.966,
+      "ci": [
+       0.952864531539886,
+       0.9755687989775981
+      ]
+     },
+     "5": {
+      "solved": 943,
+      "n": 1000,
+      "rate": 0.943,
+      "ci": [
+       0.9268626022720123,
+       0.9557467655804457
+      ]
+     },
+     "6": {
+      "solved": 583,
+      "n": 1000,
+      "rate": 0.583,
+      "ci": [
+       0.5521788916695798,
+       0.6131858431650794
+      ]
+     }
+    },
+    "written_hist": {
+     "2": 1023,
+     "3": 991,
+     "4": 951,
+     "5": 985,
+     "6": 531
+    },
+    "pruned_hist": {
+     "2": 1023,
+     "3": 995,
+     "4": 953,
+     "5": 980,
+     "6": 530
+    },
+    "frontier_written": 6,
+    "frontier_pruned": 6,
+    "reasons": {
+     "parse: expected line index, got 'LEANPARSE'": 310,
+     "rule check failed: DN": 44,
+     "rule check failed: ANDI": 40,
+     "rule check failed: IMPE": 33,
+     "rule check failed: ANDE2": 32,
+     "rule check failed: ORI2": 17,
+     "rule check failed: ANDE1": 11,
+     "rule check failed: NEGE": 9,
+     "rule check failed: ORI1": 7,
+     "rule check failed: R": 6
+    },
+    "ckpt": "ckpts/lf/stage1_a1_seq_s1.pt",
+    "in": "data/p2/heldout.jsonl",
+    "k": 1,
+    "temperature": 0,
+    "seed": 0
+   },
+   "redreq": {
+    "file": "artifacts/dsc_inherited/cov_c0_s1_redreq.s0.jsonl",
+    "theorems": 300,
+    "solved": 26,
+    "max_pruned_len": 7,
+    "accepted_proofs_ge8": 0,
+    "ge10": 0,
+    "ge12": 0,
+    "ge14": 0,
+    "distinct_accepted_proofs": 26,
+    "pruned_hist": {
+     "7": 26
+    },
+    "term_size_of_longest": 26,
+    "mean_term_size": 26.5,
+    "max_term_size": 32,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 26.5,
+      "max": 32,
+      "n": 26
+     }
+    },
+    "strata_solved": {
+     "10": [
+      0,
+      33
+     ],
+     "7": [
+      26,
+      52
+     ],
+     "8": [
+      0,
+      133
+     ],
+     "9": [
+      0,
+      82
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 127658,
+    "parse_fail_rate": 0.212763,
+    "longest_proof": {
+     "name": "targets_reductio_req_31",
+     "thm": "( ( ~ ( ( ~ S ) v P ) ) > R ) , ( ~ R ) |- ( ( ~ S ) v P )",
+     "pruned": 7,
+     "written": 7,
+     "term_size": 26,
+     "proof": "N1 ( ( ~ ( ( ~ S ) v P ) ) > R ) : PR ; N2 ( ~ R ) : PR ; N3 | ( ~ ( ( ~ S ) v P ) ) : AS ; N4 | R : IMPE N1 N3 ; N5 | F : NEGE N4 N2 ; N6 ( ~ ( ~ ( ( ~ S ) v P ) ) ) : NEGI N3 N5 ; N7 ( ( ~ S ) v P ) : DN N6 ; QED"
+    }
+   },
+   "d3req": {
+    "file": "artifacts/dsc_inherited/cov_c0_s1_d3req.s0.jsonl",
+    "theorems": 300,
+    "solved": 108,
+    "max_pruned_len": 8,
+    "accepted_proofs_ge8": 107,
+    "ge10": 0,
+    "ge12": 0,
+    "ge14": 0,
+    "distinct_accepted_proofs": 129,
+    "pruned_hist": {
+     "7": 22,
+     "8": 107
+    },
+    "term_size_of_longest": 59,
+    "mean_term_size": 47.29,
+    "max_term_size": 88,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 44.7,
+      "max": 71,
+      "n": 22
+     },
+     "8": {
+      "mean": 47.8,
+      "max": 88,
+      "n": 107
+     }
+    },
+    "strata_solved": {
+     "7": [
+      3,
+      6
+     ],
+     "8": [
+      105,
+      294
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 382669,
+    "parse_fail_rate": 0.637782,
+    "longest_proof": {
+     "name": "d3req_8",
+     "thm": "( ~ P ) |- ( R > ( ( ~ ( ~ S ) ) > ( ( ( ~ P ) & ( R & P ) ) > ( ( ~ P ) & R ) ) ) )",
+     "pruned": 8,
+     "written": 8,
+     "term_size": 59,
+     "proof": "N1 ( ~ P ) : PR ; N2 | R : AS ; N3 | | ( ~ ( ~ S ) ) : AS ; N4 | | | ( ( ~ P ) & ( R & P ) ) : AS ; N5 | | | ( ( ~ P ) & R ) : ANDI N1 N2 ; N6 | | ( ( ( ~ P ) & ( R & P ) ) > ( ( ~ P ) & R ) ) : IMPI N4 N5 ; N7 | ( ( ~ ( ~ S ) ) > ( ( ( ~ P ) & ( R & P ) ) > ( ( ~ P ) & R ) ) ) : IMPI N3 N6 ; N8 ( R > ( ( ~ ( ~ S ) ) > ( ( ( ~ P ) & ( R & P ) ) > ( ( ~ P ) & R ) ) ) ) : IMPI N2 N7 ; QED"
+    }
+   }
+  },
+  {
+   "arm": "K8flat",
+   "cap": 8,
+   "set_size": 155000,
+   "stage1_seed": 0,
+   "model": {
+    "ckpt": "ckpts/dsc/stage1_a3_s0.pt",
+    "params": 3214336,
+    "arch": "4 layers, d 256, 8 heads",
+    "format": "lean_seq",
+    "from_scratch": true,
+    "train_set": "data/dsc/train_a3.jsonl.gz (ds-composition A3; flat 22,142/22,143 x lengths 2-8)",
+    "stage1": "6,000 steps, bs 128, --cap 8"
+   },
+   "inherited": true,
+   "heldout": {
+    "n": 5000,
+    "solved": 4754,
+    "rate": 0.9508,
+    "ci": [
+     0.9444510991879493,
+     0.9564567153200079
+    ],
+    "by_len": {
+     "2": {
+      "solved": 998,
+      "n": 1000,
+      "rate": 0.998,
+      "ci": [
+       0.9927370411104123,
+       0.9994513678975429
+      ]
+     },
+     "3": {
+      "solved": 988,
+      "n": 1000,
+      "rate": 0.988,
+      "ci": [
+       0.9791425260718425,
+       0.9931224209078404
+      ]
+     },
+     "4": {
+      "solved": 957,
+      "n": 1000,
+      "rate": 0.957,
+      "ci": [
+       0.9425806957803401,
+       0.9679215189116991
+      ]
+     },
+     "5": {
+      "solved": 934,
+      "n": 1000,
+      "rate": 0.934,
+      "ci": [
+       0.9168903772338006,
+       0.9477878747932127
+      ]
+     },
+     "6": {
+      "solved": 877,
+      "n": 1000,
+      "rate": 0.877,
+      "ci": [
+       0.8551883398130525,
+       0.8959261786528091
+      ]
+     }
+    },
+    "written_hist": {
+     "2": 1009,
+     "3": 963,
+     "4": 916,
+     "5": 939,
+     "6": 844,
+     "7": 51,
+     "8": 26,
+     "9": 6
+    },
+    "pruned_hist": {
+     "2": 1013,
+     "3": 963,
+     "4": 920,
+     "5": 937,
+     "6": 842,
+     "7": 49,
+     "8": 25,
+     "9": 5
+    },
+    "frontier_written": 9,
+    "frontier_pruned": 9,
+    "reasons": {
+     "rule check failed: ANDI": 45,
+     "parse: expected line index, got 'LEANPARSE'": 37,
+     "rule check failed: DN": 37,
+     "rule check failed: IMPE": 24,
+     "final formula is not the conclusion": 20,
+     "rule check failed: ORI2": 16,
+     "rule check failed: ORI1": 16,
+     "rule check failed: ANDE2": 15,
+     "rule check failed: NEGE": 9,
+     "rule check failed: R": 8
+    },
+    "ckpt": "ckpts/dsc/stage1_a3_s0.pt",
+    "in": "data/p2/heldout.jsonl",
+    "k": 1,
+    "temperature": 0,
+    "seed": 0
+   },
+   "redreq": {
+    "file": "artifacts/dsc_inherited/cov_a3_s0_redreq.s0.jsonl",
+    "theorems": 300,
+    "solved": 54,
+    "max_pruned_len": 10,
+    "accepted_proofs_ge8": 28,
+    "ge10": 2,
+    "ge12": 0,
+    "ge14": 0,
+    "distinct_accepted_proofs": 58,
+    "pruned_hist": {
+     "7": 30,
+     "8": 26,
+     "10": 2
+    },
+    "term_size_of_longest": 38,
+    "mean_term_size": 32.9,
+    "max_term_size": 49,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 29.7,
+      "max": 49,
+      "n": 30
+     },
+     "8": {
+      "mean": 36,
+      "max": 44,
+      "n": 26
+     },
+     "10": {
+      "mean": 40.5,
+      "max": 43,
+      "n": 2
+     }
+    },
+    "strata_solved": {
+     "10": [
+      0,
+      33
+     ],
+     "7": [
+      30,
+      52
+     ],
+     "8": [
+      24,
+      133
+     ],
+     "9": [
+      0,
+      82
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 188254,
+    "parse_fail_rate": 0.313757,
+    "longest_proof": {
+     "name": "targets_reductio_req_51",
+     "thm": "( ~ ( ( ~ ( Q & R ) ) & ( R > P ) ) ) , ( R > P ) |- ( Q & R )",
+     "pruned": 10,
+     "written": 10,
+     "term_size": 38,
+     "proof": "N1 ( ~ ( ( ~ ( Q & R ) ) & ( R > P ) ) ) : PR ; N2 ( R > P ) : PR ; N3 | ( ~ ( Q & R ) ) : AS ; N4 | | R : AS ; N5 | | P : IMPE N2 N4 ; N6 | ( R > P ) : IMPI N4 N5 ; N7 | ( ( ~ ( Q & R ) ) & ( R > P ) ) : ANDI N3 N6 ; N8 | F : NEGE N7 N1 ; N9 ( ~ ( ~ ( Q & R ) ) ) : NEGI N3 N8 ; N10 ( Q & R ) : DN N9 ; QED"
+    }
+   },
+   "d3req": {
+    "file": "artifacts/dsc_inherited/cov_a3_s0_d3req.s0.jsonl",
+    "theorems": 300,
+    "solved": 276,
+    "max_pruned_len": 11,
+    "accepted_proofs_ge8": 800,
+    "ge10": 6,
+    "ge12": 0,
+    "ge14": 0,
+    "distinct_accepted_proofs": 928,
+    "pruned_hist": {
+     "7": 128,
+     "8": 622,
+     "9": 172,
+     "11": 6
+    },
+    "term_size_of_longest": 97,
+    "mean_term_size": 51.86,
+    "max_term_size": 114,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 49.6,
+      "max": 79,
+      "n": 128
+     },
+     "8": {
+      "mean": 53.7,
+      "max": 114,
+      "n": 622
+     },
+     "9": {
+      "mean": 47.1,
+      "max": 105,
+      "n": 172
+     },
+     "11": {
+      "mean": 49.7,
+      "max": 97,
+      "n": 6
+     }
+    },
+    "strata_solved": {
+     "7": [
+      6,
+      6
+     ],
+     "8": [
+      270,
+      294
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 93364,
+    "parse_fail_rate": 0.155607,
+    "longest_proof": {
+     "name": "d3req_26",
+     "thm": "( ( P & Q ) > ( S v P ) ) |- ( ( P & Q ) > ( ( P & Q ) > ( ( P & Q ) > ( ( P & Q ) & ( ( P & Q ) > ( S v P ) ) ) ) ) )",
+     "pruned": 11,
+     "written": 11,
+     "term_size": 97,
+     "proof": "N1 ( ( P & Q ) > ( S v P ) ) : PR ; N2 | ( P & Q ) : AS ; N3 | ( S v P ) : IMPE N1 N2 ; N4 ( ( P & Q ) > ( S v P ) ) : IMPI N2 N3 ; N5 | ( P & Q ) : AS ; N6 | | ( P & Q ) : AS ; N7 | | | ( P & Q ) : AS ; N8 | | | ( ( P & Q ) & ( ( P & Q ) > ( S v P ) ) ) : ANDI N5 N4 ; N9 | | ( ( P & Q ) > ( ( P & Q ) & ( ( P & Q ) > ( S v P ) ) ) ) : IMPI N7 N8 ; N10 | ( ( P & Q ) > ( ( P & Q ) > ( ( P & Q ) & ( ( P & Q ) > ( S v P ) ) ) ) ) : IMPI N6 N9 ; N11 ( ( P & Q ) > ( ( P & Q ) > ( ( P & Q ) > ( ( P & Q ) & ( ( P & Q ) > ( S v P ) ) ) ) ) ) : IMPI N5 N10 ; QED"
+    }
+   },
+   "ladder_T1": {
+    "dir": "artifacts/dsc_inherited/la_T1_a3_s0",
+    "transfer_solved": 1438,
+    "transfer_n": 2285,
+    "lstar": 12,
+    "ge_L_true": {
+     "7": 1438,
+     "8": 1245,
+     "9": 1000,
+     "10": 217,
+     "11": 47,
+     "12": 11,
+     "13": 1,
+     "14": 0
+    },
+    "solved_by_L_true": {
+     "7": 193,
+     "8": 245,
+     "9": 783,
+     "10": 170,
+     "11": 36,
+     "12": 10,
+     "13": 1
+    },
+    "max_pruned_len": 15,
+    "longest": {
+     "name": "la_transfer_162",
+     "L_true": 9,
+     "pruned": 15,
+     "term_size": 41
+    },
+    "mean_term_size": 59.48,
+    "max_term_size": 136,
+    "lstar_censored_at": 14
+   },
+   "ladder_frozen": {
+    "dir": "artifacts/dsc_inherited/la_frozen_a3_s0",
+    "transfer_solved": 976,
+    "transfer_n": 2285,
+    "lstar": 11,
+    "ge_L_true": {
+     "7": 976,
+     "8": 829,
+     "9": 650,
+     "10": 99,
+     "11": 8,
+     "12": 0,
+     "13": 0,
+     "14": 0
+    },
+    "solved_by_L_true": {
+     "7": 147,
+     "8": 179,
+     "9": 551,
+     "10": 91,
+     "11": 8
+    },
+    "max_pruned_len": 13,
+    "longest": {
+     "name": "la_transfer_267",
+     "L_true": 9,
+     "pruned": 13,
+     "term_size": 65
+    },
+    "mean_term_size": 55.61,
+    "max_term_size": 113,
+    "lstar_censored_at": 14
+   }
+  },
+  {
+   "arm": "K8flat",
+   "cap": 8,
+   "set_size": 155000,
+   "stage1_seed": 1,
+   "model": {
+    "ckpt": "ckpts/dsc/stage1_a3_s1.pt",
+    "params": 3214336,
+    "arch": "4 layers, d 256, 8 heads",
+    "format": "lean_seq",
+    "from_scratch": true,
+    "train_set": "data/dsc/train_a3.jsonl.gz (ds-composition A3; flat 22,142/22,143 x lengths 2-8)",
+    "stage1": "6,000 steps, bs 128, --cap 8"
+   },
+   "inherited": true,
+   "heldout": {
+    "n": 5000,
+    "solved": 4768,
+    "rate": 0.9536,
+    "ci": [
+     0.9474130027021483,
+     0.9590905125170386
+    ],
+    "by_len": {
+     "2": {
+      "solved": 997,
+      "n": 1000,
+      "rate": 0.997,
+      "ci": [
+       0.9912168282105721,
+       0.9989792345945557
+      ]
+     },
+     "3": {
+      "solved": 994,
+      "n": 1000,
+      "rate": 0.994,
+      "ci": [
+       0.9869716557675544,
+       0.9972473684290918
+      ]
+     },
+     "4": {
+      "solved": 960,
+      "n": 1000,
+      "rate": 0.96,
+      "ci": [
+       0.9459900625744302,
+       0.9704891907260906
+      ]
+     },
+     "5": {
+      "solved": 948,
+      "n": 1000,
+      "rate": 0.948,
+      "ci": [
+       0.9324439406590116,
+       0.9601271582075824
+      ]
+     },
+     "6": {
+      "solved": 869,
+      "n": 1000,
+      "rate": 0.869,
+      "ci": [
+       0.8466679220596967,
+       0.8885078267835471
+      ]
+     }
+    },
+    "written_hist": {
+     "2": 1015,
+     "3": 988,
+     "4": 922,
+     "5": 982,
+     "6": 795,
+     "7": 52,
+     "8": 11,
+     "9": 2,
+     "10": 1
+    },
+    "pruned_hist": {
+     "2": 1015,
+     "3": 992,
+     "4": 931,
+     "5": 976,
+     "6": 804,
+     "7": 37,
+     "8": 10,
+     "9": 2,
+     "10": 1
+    },
+    "frontier_written": 8,
+    "frontier_pruned": 8,
+    "reasons": {
+     "rule check failed: DN": 42,
+     "rule check failed: ANDI": 36,
+     "rule check failed: IMPE": 28,
+     "rule check failed: NEGE": 26,
+     "parse: expected line index, got 'LEANPARSE'": 25,
+     "rule check failed: ORI2": 18,
+     "rule check failed: ANDE2": 15,
+     "rule check failed: IMPI": 12,
+     "final formula is not the conclusion": 10,
+     "rule check failed: R": 9
+    },
+    "ckpt": "ckpts/dsc/stage1_a3_s1.pt",
+    "in": "data/p2/heldout.jsonl",
+    "k": 1,
+    "temperature": 0,
+    "seed": 0
+   },
+   "redreq": {
+    "file": "artifacts/dsc_inherited/cov_a3_s1_redreq.s0.jsonl",
+    "theorems": 300,
+    "solved": 72,
+    "max_pruned_len": 8,
+    "accepted_proofs_ge8": 32,
+    "ge10": 0,
+    "ge12": 0,
+    "ge14": 0,
+    "distinct_accepted_proofs": 75,
+    "pruned_hist": {
+     "7": 43,
+     "8": 32
+    },
+    "term_size_of_longest": 36,
+    "mean_term_size": 32.03,
+    "max_term_size": 56,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 28.0,
+      "max": 40,
+      "n": 43
+     },
+     "8": {
+      "mean": 37.4,
+      "max": 56,
+      "n": 32
+     }
+    },
+    "strata_solved": {
+     "10": [
+      0,
+      33
+     ],
+     "7": [
+      42,
+      52
+     ],
+     "8": [
+      30,
+      133
+     ],
+     "9": [
+      0,
+      82
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 169429,
+    "parse_fail_rate": 0.282382,
+    "longest_proof": {
+     "name": "targets_reductio_req_0",
+     "thm": "( ( ~ ( Q v P ) ) > ( ~ ( S > P ) ) ) |- ( ( S > P ) > ( Q v P ) )",
+     "pruned": 8,
+     "written": 8,
+     "term_size": 36,
+     "proof": "N1 ( ( ~ ( Q v P ) ) > ( ~ ( S > P ) ) ) : PR ; N2 | ( S > P ) : AS ; N3 | | ( ~ ( Q v P ) ) : AS ; N4 | | ( ~ ( S > P ) ) : IMPE N1 N3 ; N5 | | F : NEGE N2 N4 ; N6 | ( ~ ( ~ ( Q v P ) ) ) : NEGI N3 N5 ; N7 | ( Q v P ) : DN N6 ; N8 ( ( S > P ) > ( Q v P ) ) : IMPI N2 N7 ; QED"
+    }
+   },
+   "d3req": {
+    "file": "artifacts/dsc_inherited/cov_a3_s1_d3req.s0.jsonl",
+    "theorems": 300,
+    "solved": 289,
+    "max_pruned_len": 13,
+    "accepted_proofs_ge8": 1233,
+    "ge10": 33,
+    "ge12": 2,
+    "ge14": 0,
+    "distinct_accepted_proofs": 1393,
+    "pruned_hist": {
+     "7": 160,
+     "8": 1048,
+     "9": 152,
+     "10": 12,
+     "11": 19,
+     "12": 1,
+     "13": 1
+    },
+    "term_size_of_longest": 75,
+    "mean_term_size": 53.91,
+    "max_term_size": 114,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 46.4,
+      "max": 79,
+      "n": 160
+     },
+     "8": {
+      "mean": 55.6,
+      "max": 114,
+      "n": 1048
+     },
+     "9": {
+      "mean": 49.1,
+      "max": 105,
+      "n": 152
+     },
+     "10": {
+      "mean": 53.5,
+      "max": 66,
+      "n": 12
+     },
+     "11": {
+      "mean": 61.2,
+      "max": 83,
+      "n": 19
+     },
+     "12": {
+      "mean": 50,
+      "max": 50,
+      "n": 1
+     },
+     "13": {
+      "mean": 75,
+      "max": 75,
+      "n": 1
+     }
+    },
+    "strata_solved": {
+     "7": [
+      6,
+      6
+     ],
+     "8": [
+      283,
+      294
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 122084,
+    "parse_fail_rate": 0.203473,
+    "longest_proof": {
+     "name": "d3req_293",
+     "thm": "( R v P ) |- ( ( ~ ( ~ ( ~ R ) ) ) > ( P > ( ( ~ ( ~ R ) ) > ( ( ~ ( ~ ( ~ R ) ) ) & ( R v P ) ) ) ) )",
+     "pruned": 13,
+     "written": 13,
+     "term_size": 75,
+     "proof": "N1 ( R v P ) : PR ; N2 | R : AS ; N3 | ( R v P ) : ORI1 N2 ; N4 | P : AS ; N5 | ( R v P ) : ORI2 N4 ; N6 ( R v P ) : ORE N1 N2 N3 N4 N5 ; N7 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N8 | | P : AS ; N9 | | | ( ~ ( ~ R ) ) : AS ; N10 | | | ( ( ~ ( ~ ( ~ R ) ) ) & ( R v P ) ) : ANDI N7 N6 ; N11 | | ( ( ~ ( ~ R ) ) > ( ( ~ ( ~ ( ~ R ) ) ) & ( R v P ) ) ) : IMPI N9 N10 ; N12 | ( P > ( ( ~ ( ~ R ) ) > ( ( ~ ( ~ ( ~ R ) ) ) & ( R v P ) ) ) ) : IMPI N8 N11 ; N13 ( ( ~ ( ~ ( ~ R ) ) ) > ( P > ( ( ~ ( ~ R ) ) > ( ( ~ ( ~ ( ~ R ) ) ) & ( R v P ) ) ) ) ) : IMPI N7 N12 ; QED"
+    }
+   }
+  },
+  {
+   "arm": "K8add",
+   "cap": 8,
+   "set_size": 217000,
+   "stage1_seed": 0,
+   "model": {
+    "ckpt": "ckpts/kh/stage1_k8add_s0.pt",
+    "params": 3214336,
+    "arch": "4 layers, d 256, 8 heads",
+    "format": "lean_seq",
+    "from_scratch": true,
+    "train_set": "data/kh/train_k8add.jsonl.gz (C0s exact bins 2-6 PLUS 31,000 each at 7 and 8)",
+    "stage1": "6,000 steps, bs 128, --cap 8"
+   },
+   "inherited": false,
+   "heldout": {
+    "n": 5000,
+    "solved": 4692,
+    "rate": 0.9384,
+    "ci": [
+     0.9313931752596691,
+     0.9447336789557002
+    ],
+    "by_len": {
+     "2": {
+      "solved": 998,
+      "n": 1000,
+      "rate": 0.998,
+      "ci": [
+       0.9927370411104123,
+       0.9994513678975429
+      ]
+     },
+     "3": {
+      "solved": 988,
+      "n": 1000,
+      "rate": 0.988,
+      "ci": [
+       0.9791425260718425,
+       0.9931224209078404
+      ]
+     },
+     "4": {
+      "solved": 959,
+      "n": 1000,
+      "rate": 0.959,
+      "ci": [
+       0.9448517110985959,
+       0.9696351959990976
+      ]
+     },
+     "5": {
+      "solved": 939,
+      "n": 1000,
+      "rate": 0.939,
+      "ci": [
+       0.922419543452788,
+       0.9522204395883611
+      ]
+     },
+     "6": {
+      "solved": 808,
+      "n": 1000,
+      "rate": 0.808,
+      "ci": [
+       0.7824270733559523,
+       0.8312155571148313
+      ]
+     }
+    },
+    "written_hist": {
+     "2": 1009,
+     "3": 968,
+     "4": 923,
+     "5": 961,
+     "6": 753,
+     "7": 56,
+     "8": 20,
+     "9": 2
+    },
+    "pruned_hist": {
+     "2": 1010,
+     "3": 972,
+     "4": 921,
+     "5": 965,
+     "6": 754,
+     "7": 51,
+     "8": 17,
+     "9": 2
+    },
+    "frontier_written": 8,
+    "frontier_pruned": 8,
+    "reasons": {
+     "rule check failed: DN": 56,
+     "parse: expected line index, got 'LEANPARSE'": 47,
+     "rule check failed: ANDI": 43,
+     "rule check failed: IMPE": 37,
+     "rule check failed: IMPI": 28,
+     "final formula is not the conclusion": 26,
+     "rule check failed: NEGE": 15,
+     "rule check failed: ORI2": 13,
+     "rule check failed: ANDE2": 11,
+     "rule check failed: ORI1": 10
+    },
+    "ckpt": "ckpts/kh/stage1_k8add_s0.pt",
+    "in": "data/p2/heldout.jsonl",
+    "k": 1,
+    "temperature": 0,
+    "seed": 0
+   },
+   "redreq": null,
+   "d3req": null,
+   "ladder_T1": null,
+   "ladder_frozen": null
+  },
+  {
+   "arm": "K8add",
+   "cap": 8,
+   "set_size": 217000,
+   "stage1_seed": 1,
+   "model": {
+    "ckpt": "ckpts/kh/stage1_k8add_s1.pt",
+    "params": 3214336,
+    "arch": "4 layers, d 256, 8 heads",
+    "format": "lean_seq",
+    "from_scratch": true,
+    "train_set": "data/kh/train_k8add.jsonl.gz (C0s exact bins 2-6 PLUS 31,000 each at 7 and 8)",
+    "stage1": "6,000 steps, bs 128, --cap 8"
+   },
+   "inherited": false,
+   "heldout": {
+    "n": 5000,
+    "solved": 4743,
+    "rate": 0.9486,
+    "ci": [
+     0.9421276577249094,
+     0.9543835347956533
+    ],
+    "by_len": {
+     "2": {
+      "solved": 994,
+      "n": 1000,
+      "rate": 0.994,
+      "ci": [
+       0.9869716557675544,
+       0.9972473684290918
+      ]
+     },
+     "3": {
+      "solved": 987,
+      "n": 1000,
+      "rate": 0.987,
+      "ci": [
+       0.9778853478989854,
+       0.9923872528778702
+      ]
+     },
+     "4": {
+      "solved": 943,
+      "n": 1000,
+      "rate": 0.943,
+      "ci": [
+       0.9268626022720123,
+       0.9557467655804457
+      ]
+     },
+     "5": {
+      "solved": 933,
+      "n": 1000,
+      "rate": 0.933,
+      "ci": [
+       0.9157875981239373,
+       0.9468983077002487
+      ]
+     },
+     "6": {
+      "solved": 886,
+      "n": 1000,
+      "rate": 0.886,
+      "ci": [
+       0.8648069825448822,
+       0.9042386517464244
+      ]
+     }
+    },
+    "written_hist": {
+     "2": 1014,
+     "3": 967,
+     "4": 908,
+     "5": 951,
+     "6": 829,
+     "7": 42,
+     "8": 29,
+     "9": 3
+    },
+    "pruned_hist": {
+     "2": 1016,
+     "3": 970,
+     "4": 909,
+     "5": 952,
+     "6": 826,
+     "7": 38,
+     "8": 30,
+     "9": 2
+    },
+    "frontier_written": 8,
+    "frontier_pruned": 8,
+    "reasons": {
+     "rule check failed: ANDI": 52,
+     "rule check failed: IMPE": 44,
+     "rule check failed: DN": 28,
+     "parse: expected line index, got 'LEANPARSE'": 25,
+     "rule check failed: ANDE2": 24,
+     "rule check failed: ORI2": 20,
+     "rule check failed: IMPI": 18,
+     "final formula is not the conclusion": 10,
+     "rule check failed: R": 9,
+     "rule check failed: NEGE": 9
+    },
+    "ckpt": "ckpts/kh/stage1_k8add_s1.pt",
+    "in": "data/p2/heldout.jsonl",
+    "k": 1,
+    "temperature": 0,
+    "seed": 0
+   },
+   "redreq": null,
+   "d3req": null
+  },
+  {
+   "arm": "K10",
+   "cap": 10,
+   "set_size": 155000,
+   "stage1_seed": 0,
+   "model": {
+    "ckpt": "ckpts/kh/stage1_k10_s0.pt",
+    "params": 3214336,
+    "arch": "4 layers, d 256, 8 heads",
+    "format": "lean_seq",
+    "from_scratch": true,
+    "train_set": "data/kh/train_k10.jsonl.gz (flat over lengths 2-10)",
+    "stage1": "6,000 steps, bs 128, --cap 10"
+   },
+   "inherited": false,
+   "heldout": {
+    "n": 5000,
+    "solved": 4732,
+    "rate": 0.9464,
+    "ci": [
+     0.9398073148037129,
+     0.9523072557294552
+    ],
+    "by_len": {
+     "2": {
+      "solved": 996,
+      "n": 1000,
+      "rate": 0.996,
+      "ci": [
+       0.9897602795701941,
+       0.9984434370321067
+      ]
+     },
+     "3": {
+      "solved": 987,
+      "n": 1000,
+      "rate": 0.987,
+      "ci": [
+       0.9778853478989854,
+       0.9923872528778702
+      ]
+     },
+     "4": {
+      "solved": 955,
+      "n": 1000,
+      "rate": 0.955,
+      "ci": [
+       0.940316857129231,
+       0.9662006651571536
+      ]
+     },
+     "5": {
+      "solved": 939,
+      "n": 1000,
+      "rate": 0.939,
+      "ci": [
+       0.922419543452788,
+       0.9522204395883611
+      ]
+     },
+     "6": {
+      "solved": 855,
+      "n": 1000,
+      "rate": 0.855,
+      "ci": [
+       0.831817486934133,
+       0.8754654150695298
+      ]
+     }
+    },
+    "written_hist": {
+     "2": 1022,
+     "3": 950,
+     "4": 901,
+     "5": 942,
+     "6": 755,
+     "7": 52,
+     "8": 43,
+     "9": 38,
+     "10": 27,
+     "11": 2
+    },
+    "pruned_hist": {
+     "2": 1025,
+     "3": 951,
+     "4": 901,
+     "5": 941,
+     "6": 755,
+     "7": 52,
+     "8": 42,
+     "9": 36,
+     "10": 27,
+     "11": 2
+    },
+    "frontier_written": 10,
+    "frontier_pruned": 10,
+    "reasons": {
+     "parse: expected line index, got 'LEANPARSE'": 71,
+     "rule check failed: ANDI": 48,
+     "rule check failed: IMPE": 44,
+     "rule check failed: DN": 19,
+     "rule check failed: ANDE2": 16,
+     "rule check failed: ORI1": 13,
+     "rule check failed: ANDE1": 10,
+     "rule check failed: IMPI": 10,
+     "rule check failed: ORI2": 9,
+     "final formula is not the conclusion": 8
+    },
+    "ckpt": "ckpts/kh/stage1_k10_s0.pt",
+    "in": "data/p2/heldout.jsonl",
+    "k": 1,
+    "temperature": 0,
+    "seed": 0
+   },
+   "redreq": null,
+   "d3req": null,
+   "ladder_T1": null,
+   "ladder_frozen": null
+  },
+  {
+   "arm": "K10",
+   "cap": 10,
+   "set_size": 155000,
+   "stage1_seed": 1,
+   "model": {
+    "ckpt": "ckpts/kh/stage1_k10_s1.pt",
+    "params": 3214336,
+    "arch": "4 layers, d 256, 8 heads",
+    "format": "lean_seq",
+    "from_scratch": true,
+    "train_set": "data/kh/train_k10.jsonl.gz (flat over lengths 2-10)",
+    "stage1": "6,000 steps, bs 128, --cap 10"
+   },
+   "inherited": false,
+   "heldout": {
+    "n": 5000,
+    "solved": 4697,
+    "rate": 0.9394,
+    "ci": [
+     0.9324430775489947,
+     0.9456822412060994
+    ],
+    "by_len": {
+     "2": {
+      "solved": 996,
+      "n": 1000,
+      "rate": 0.996,
+      "ci": [
+       0.9897602795701941,
+       0.9984434370321067
+      ]
+     },
+     "3": {
+      "solved": 992,
+      "n": 1000,
+      "rate": 0.992,
+      "ci": [
+       0.9842934787948114,
+       0.9959408529961804
+      ]
+     },
+     "4": {
+      "solved": 953,
+      "n": 1000,
+      "rate": 0.953,
+      "ci": [
+       0.9380597525405758,
+       0.9644730773401544
+      ]
+     },
+     "5": {
+      "solved": 913,
+      "n": 1000,
+      "rate": 0.913,
+      "ci": [
+       0.8939131380174493,
+       0.9289258437501923
+      ]
+     },
+     "6": {
+      "solved": 843,
+      "n": 1000,
+      "rate": 0.843,
+      "ci": [
+       0.8191437085463132,
+       0.8642310390234228
+      ]
+     }
+    },
+    "written_hist": {
+     "2": 1018,
+     "3": 959,
+     "4": 897,
+     "5": 918,
+     "6": 742,
+     "7": 39,
+     "8": 32,
+     "9": 59,
+     "10": 32,
+     "11": 1
+    },
+    "pruned_hist": {
+     "2": 1019,
+     "3": 962,
+     "4": 905,
+     "5": 915,
+     "6": 740,
+     "7": 37,
+     "8": 28,
+     "9": 58,
+     "10": 32,
+     "11": 1
+    },
+    "frontier_written": 10,
+    "frontier_pruned": 10,
+    "reasons": {
+     "parse: expected line index, got 'LEANPARSE'": 60,
+     "rule check failed: ANDI": 43,
+     "rule check failed: IMPE": 32,
+     "rule check failed: ORI2": 32,
+     "rule check failed: DN": 30,
+     "rule check failed: ANDE2": 24,
+     "rule check failed: IMPI": 22,
+     "rule check failed: NEGE": 16,
+     "final formula is not the conclusion": 13,
+     "rule check failed: ORI1": 11
+    },
+    "ckpt": "ckpts/kh/stage1_k10_s1.pt",
+    "in": "data/p2/heldout.jsonl",
+    "k": 1,
+    "temperature": 0,
+    "seed": 0
+   },
+   "redreq": null,
+   "d3req": null
+  },
+  {
+   "arm": "K12",
+   "cap": 12,
+   "set_size": 155000,
+   "stage1_seed": 0,
+   "model": {
+    "ckpt": "ckpts/kh/stage1_k12_s0.pt",
+    "params": 3214336,
+    "arch": "4 layers, d 256, 8 heads",
+    "format": "lean_seq",
+    "from_scratch": true,
+    "train_set": "data/kh/train_k12.jsonl.gz (flat over lengths 2-12)",
+    "stage1": "6,000 steps, bs 128, --cap 12"
+   },
+   "inherited": false,
+   "redreq": null,
+   "d3req": null,
+   "ladder_T1": null,
+   "ladder_frozen": null
+  },
+  {
+   "arm": "K12",
+   "cap": 12,
+   "set_size": 155000,
+   "stage1_seed": 1,
+   "model": {
+    "ckpt": "ckpts/kh/stage1_k12_s1.pt",
+    "params": 3214336,
+    "arch": "4 layers, d 256, 8 heads",
+    "format": "lean_seq",
+    "from_scratch": true,
+    "train_set": "data/kh/train_k12.jsonl.gz (flat over lengths 2-12)",
+    "stage1": "6,000 steps, bs 128, --cap 12"
+   },
+   "inherited": false,
+   "redreq": null,
+   "d3req": null
+  },
+  {
+   "arm": "K14",
+   "cap": 14,
+   "set_size": 155000,
+   "stage1_seed": 0,
+   "model": {
+    "ckpt": "ckpts/kh/stage1_k14_s0.pt",
+    "params": 3214336,
+    "arch": "4 layers, d 256, 8 heads",
+    "format": "lean_seq",
+    "from_scratch": true,
+    "train_set": "data/kh/train_k14.jsonl.gz (flat over lengths 2-14)",
+    "stage1": "6,000 steps, bs 128, --cap 14"
+   },
+   "inherited": false,
+   "redreq": null,
+   "d3req": null,
+   "ladder_T1": null,
+   "ladder_frozen": null
+  },
+  {
+   "arm": "K14",
+   "cap": 14,
+   "set_size": 155000,
+   "stage1_seed": 1,
+   "model": {
+    "ckpt": "ckpts/kh/stage1_k14_s1.pt",
+    "params": 3214336,
+    "arch": "4 layers, d 256, 8 heads",
+    "format": "lean_seq",
+    "from_scratch": true,
+    "train_set": "data/kh/train_k14.jsonl.gz (flat over lengths 2-14)",
+    "stage1": "6,000 steps, bs 128, --cap 14"
+   },
+   "inherited": false,
+   "redreq": null,
+   "d3req": null
+  }
+ ]
+}
