@@ -35,8 +35,9 @@ pass@2,000 numbers carry the weight.
 
 ## Lean alone is not a sufficient checker
 
-Over **949,568** pairs the two disagree **241 times, always Lean being too permissive** (`BOTE` as `.elim`
-resolving to `Not.elim`). The conjunction is load-bearing — and **R3 is fooled 18× more often than the control**, a
+Over **3.1M** pairs the two disagree **1,094 times, always Lean being too permissive** (`BOTE` as `.elim`
+resolving to `Not.elim`); Lean has **never once** caught what `nd_verify` missed. The conjunction is load-bearing — and
+**R3 is fooled an order of magnitude more often than the control**, a
 cost no accuracy number shows.
 
 ![lengths](figures/ds_rendering_lengths.png)
