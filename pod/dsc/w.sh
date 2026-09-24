@@ -20,6 +20,7 @@ case "${1:-sync}" in
     RS "$W/data/ladder/rl_targets.jsonl" "$W/data/ladder/transfer.jsonl" "$R/data/ladder/"
     RS "$W/data/p2/heldout.jsonl" "$W/data/p2/targets_depth3.jsonl" "$W/data/p2/transfer_depth3.jsonl" "$W/data/p2/targets_reductio_req.jsonl" "$W/data/p2/transfer_reductio_req.jsonl" "$R/data/p2/"
     RS "$W/data/r3_1/depth3_req.jsonl" "$W/data/r3_1/depth3_req_transfer.jsonl" "$R/data/r3_1/"
+    RS "$W/data/dsc/targets_depth3_sub250.jsonl" "$R/data/dsc/"
     RS "$W/ckpts/lf/stage1_a1_seq_s0.pt" "$W/ckpts/lf/stage1_a1_seq_s1.pt" "$R/ckpts/lf/"
     ;;
 esac
