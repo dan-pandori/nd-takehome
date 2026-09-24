@@ -808,3 +808,43 @@ wrong for held-out accuracy in a way that matters: re-drawing the data set buys 
 independence than re-seeding Stage-1, and neither factor explains the spread — the residual does.**
 The practical consequence is that an arm's two seeds are two coin flips on the 6-line mode, so a
 two-seed held-out comparison is a comparison of two coin flips.
+
+## N3. Frozen ladder — the eight null cells (source: `artifacts/nf/la_frozen_p<i>_s<k>/round_8.json`)
+
+Measured on `ckpts/nf/stage1_p<i>_s<k>.pt` (3,214,336-parameter `lean_seq` GPT, cap 6, trained on
+`data/nf/train_p<i>.jsonl`). Command, identical in every cell and identical to `ds-generator`'s and
+`ds-composition`'s: `ladder_ei.py --no_train --rounds 8 --k 32 --temperature 0.8 --batch 512
+--max_new 512` on `data/ladder/` (4,495 RL targets, 2,285 transfer theorems), `ND_SAMPLE_COMPACT=0`.
+A proof counts only if `nd_verify` **and** Lean accept.
+
+| cell | P1 s0 | P1 s1 | P2 s0 | P2 s1 | P3 s0 | P3 s1 | P4 s0 | P4 s1 | mean | sd | max/min | **MDD at n = 2** |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| **transfer solved / 2,285** | 117 | 262 | 200 | 96 | 62 | 174 | 177 | 265 | 169.1 | **74.1** | **4.27×** | **±397 (±235 %)** |
+| transfer `L*` | 9 | 9 | 9 | 9 | 9 | 9 | 9 | **10** | 9.125 | **0.354** | 1.11× | **±1.9 points** |
+| RL targets solved / 4,495 | 1,036 | 1,715 | 1,512 | 823 | 714 | 1,298 | 1,187 | 1,765 | 1,256 | 391 | 2.47× | ±2,098 (±167 %) |
+
+**This is the run's headline.** Eight models that differ only in a generator RNG seed and a Stage-1
+seed span **62 to 265 solved transfer theorems, a 4.27× range**, sd = 43.8 % of the mean. The
+control's own published frozen ladder — **158 (s0) and 114 (s1)**, `ckpts/lf/stage1_a1_seq_s{0,1}.pt`
+— sits in the middle of that range, and so does **every** frozen-ladder value proposal 10 reported:
+`ds-generator` G2 44 / 125 and G1 170, `ds-composition` A1 205 and A2 111. Pre-registered
+**E8 missed** (max/min predicted 1.4–2.5×, measured **4.27×**; sd ≥ 25 % of the mean **met** at
+43.8 %) and **E10 missed by ≈ 4×** (n = 2 resolvable difference predicted ±40–60 %, measured
+**±235 %**).
+
+**`L*` is the robust readout; the solve count is not.** Seven of the eight cells give `L*` = 9 and
+one gives 10, sd 0.354, while the underlying solve count moves 4.27×. **E9 missed in the favourable
+direction** (predicted 9–11, i.e. 2 points of pure noise; measured 9–10, **1 point**). The
+resolvable `L*` difference at n = 2 is **±1.9 points**, so a 1-point `L*` difference is noise and a
+2-point one is at the edge of resolution.
+
+**Again the spread is the individual training run, not the pool or the seed** (4 × 2 unreplicated
+decomposition): MS_pool 4,111, MS_seed 7,260, MS_resid **6,268** → var_pool **−1,079**, var_seed
+**+248**, var_resid **6,268**. E12's ordering (σ²_seed ≥ σ²_pool) holds in sign but both components
+are negligible beside the residual: **re-drawing the data set buys no more independence than
+re-seeding Stage-1.** Bimodality coefficient 0.546 (< 5/9), so unlike the held-out 6-line bin the
+frozen ladder is not bimodal — it is unimodal and very wide.
+
+**What an n = 2 comparison of frozen-ladder solves can say.** Nothing below a **2.4× ratio**
+(± 235 % of the mean). And non-parametrically, nothing at all: a two-sided exact permutation test at
+2 vs 2 has minimum attainable p = **1/3**.

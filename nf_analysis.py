@@ -165,6 +165,10 @@ def wilson(k, n, z=1.96):
     return max(0.0, c - h), min(1.0, c + h)
 
 
+def done(c):
+    return c if (c and c.get('complete')) else None
+
+
 QUANTS = [
     ('heldout_overall', lambda r: r['heldout'] and r['heldout']['rate']),
     ('heldout_len2', lambda r: r['heldout'] and r['heldout']['by_len'].get('2')),
@@ -174,10 +178,11 @@ QUANTS = [
     ('heldout_len6', lambda r: r['heldout'] and r['heldout']['by_len'].get('6')),
     ('heldout_depth3_slice', lambda r: r['heldout'] and r['heldout']['by_pattern']['depth3']['rate']),
     ('heldout_len6_nopattern', lambda r: r['heldout'] and r['heldout']['by_pattern']['len6_none']['rate']),
-    ('cov_red_solved', lambda r: r['coverage']['red'] and r['coverage']['red']['targets_hit']),
-    ('cov_req8_solved', lambda r: r['coverage']['req8'] and r['coverage']['req8']['targets_hit']),
-    ('cov_d3_solved', lambda r: r['coverage']['d3'] and r['coverage']['d3']['targets_hit']),
-    ('cov_d3_with_depth3_proof', lambda r: r['coverage']['d3'] and r['coverage']['d3']['targets_hit_with_pattern']),
+    # only complete coverage runs count: a run still in flight has processed part of its pool
+    ('cov_red_solved', lambda r: done(r['coverage']['red']) and r['coverage']['red']['targets_hit']),
+    ('cov_req8_solved', lambda r: done(r['coverage']['req8']) and r['coverage']['req8']['targets_hit']),
+    ('cov_d3_solved', lambda r: done(r['coverage']['d3']) and r['coverage']['d3']['targets_hit']),
+    ('cov_d3_with_depth3_proof', lambda r: done(r['coverage']['d3']) and r['coverage']['d3']['targets_hit_with_pattern']),
     ('ladder_frozen_transfer_solved', lambda r: r['ladder_frozen'] and r['ladder_frozen']['transfer_solved']),
     ('ladder_frozen_transfer_lstar', lambda r: r['ladder_frozen'] and r['ladder_frozen']['transfer_lstar']),
     ('ladder_frozen_targets_solved', lambda r: r['ladder_frozen'] and r['ladder_frozen']['targets_solved']),
