@@ -355,3 +355,54 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   § ds-generator (G1–G8, every table naming its source file and its model), `run_ds_generator.md`,
   `figures/dsg_shape.png` and `figures/dsg_readiness.png` (`dsg_figures.py`), `data/dsg/README.md` resume note.
 
+
+# noise-floor (proposal 11, run 2) — log
+
+- 2026-09-24 15:59 UTC  Run started. Read proposal 11, the `ds-generator` experiment summary (its
+  §"the measurement noise is this run's real headline constraint"), `ds-rendering`'s Finding R-2 and
+  bimodality note, `ds-composition`'s headline tables, and the `pod/dsg` harness (reused wholesale).
+- 16:03  **Generator command verified against the control's.** `gen.py:610 knobs_from_args` returns
+  `None` unless a ds-generator flag is set, so `make_coverage_sets.py gen` with **no knob flags** is
+  the unmodified control path (`ore_steps` 1, no `ore_boxes`, 45 % goal / 55 % forward, `strict` off,
+  `bot_p` 0.02, contradictory premises kept). The command I run, per pool, is
+
+      python3 make_coverage_sets.py gen --out data/nf/raw_<p> --workers 32 --tries 187500 \
+          --seed <21000|22000|23000|24000> --cap_np 1000000000 --cap_pat 1000000000
+      python3 make_coverage_sets.py merge --glob 'data/nf/raw_<p>.w*.jsonl' --out data/nf/pool_<p>.jsonl --prefix <p>
+      python3 dsg_assemble.py --pool data/nf/pool_<p>.jsonl --out data/nf/train_<p>.jsonl \
+          --report data/nf/assemble_<p>.json --exclude <the nine evaluation / ladder pools> --prefix train_<p>
+
+  (32 workers x 187,500 tries = 6,000,000 tries per pool, the same total as `ds-generator`'s G1.)
+  The pod log line `generator knobs: None` is the on-pod confirmation, one per pool.
+  Two deviations from the *control's own historical* command, both pre-registered, both applied
+  identically to all four pools: **no per-worker output cap** (the control used `--cap_np 1500
+  --cap_pat 3000` at 90 workers, unreproducible at 32; G1 used the uncapped path and matched the
+  control's shape table), and the control's raw pool is a local *reconstruction* so P1–P4 are fresh
+  generator output rather than subsamples of it.
+- 16:03  `git diff origin/dan_ds-generator` empty for `nd_verify`, `nd2lean.py`, `train.py`,
+  `eval_set.py`, `coverage.py`, `ladder_ei.py`, `expert_iter.py`, `lean_gate.py`, `sample.py`,
+  `model.py`, `prune.py`, `patterns.py`, `gen.py`, `make_coverage_sets.py`, `dsg_assemble.py`.
+- 16:05:12  Pre-registration `e8f4c3b` committed and pushed. First pod `nf-1` created **16:05:45**
+  (`~/pods.log`) — 33 s later. **Gate 0 holds.** `podbudget noise-floor --set 36 18` was already
+  registered when I checked at 16:05.
+- 16:05–16:14  Pods `nf-1` (`kmol2dhu6iz9sw`) and `nf-2` (`a2vq56qgrp9e2z`), **NVIDIA A40 48 GB**,
+  catalogue rate $0.49/h (RunPod's billed rate to be read from the billing API at the end and
+  recorded here — `podbudget`'s dollar column is a catalogue estimate). Lean 4.34.0 installed,
+  gate self-test passes on both (2,000 samples, 0 parse failures, 0 Lean-only, 0 `nd_verify`-only).
+  **`nproc` reports 96 but the cgroup-v1 quota is 765000/100000 = 7.65 CPUs**, the same as the
+  `ds-generator` resume pods — so four concurrent chains run with `LEAN_GATE_WORKERS=3` each
+  (≈ 12 Lean workers on 7.65 cores) and `coverage.py --procs 2`, rather than `ds-generator`'s
+  session-1 `LEAN_GATE_WORKERS=12`.
+  Also fixed: `podnew` writes `GPU=NVIDIA A40` unquoted into `~/.config/nd-rl/pods/<name>`, which
+  makes `. "$F"` fail with "A40: command not found" and breaks `podbudget`'s rate lookup; I quoted
+  it in both pod files (the helper itself is outside this worktree and unchanged).
+- 16:13  **Deviation, disclosed:** the `hf` CLI is not installed on these pods and `HF_TOKEN` is not
+  exported into the `podrun` ssh command, so the `fetch` job (bucket checkpoints and training sets
+  for the two gap-closers) failed. The assets were instead downloaded on the VPS, which is logged
+  in, and pushed with `pod/nf/sync.sh push`; the `fetch` job now only asserts they arrived. Nothing
+  about what is measured changes — the same bucket objects, byte-for-byte.
+- 16:16–16:21  Generation: **P1 (seed 21000) and P2 (22000) on `nf-1`, P3 (23000) and P4 (24000) on
+  `nf-2`**, ≈ 4 min each. All four assembled to 155,000 = 31,000 x lengths 2–6 with **0 fill** and
+  **0 depth-3**. First premise-check reading (P1): box depth 0/1/2 = 53.1 / 35.5 / 11.4 %, against
+  the control's 53.2 / 35.4 / 11.4 — E11 met on this pool. Stage-1 training started 16:20 on `nf-1`
+  (3,214,336 parameters, `lean_seq`).

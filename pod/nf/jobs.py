@@ -18,21 +18,15 @@ D = 'data/p2'
 B = 'hf://buckets/dan-pandori/nd-rl'
 J = []
 
-# ---- fetch: bucket checkpoints and training sets for the gap-closers (no retraining) ----
-if pod == 1:
-    fetch = ' && '.join([
-        f'hf buckets cp {B}/lean-format/ckpts/lf/stage1_a1_seq_s{s}.pt ckpts/lf/stage1_a1_seq_s{s}.pt' for s in (0, 1)]
-        + [f'hf buckets cp {B}/lean-format/data/p2/train_depth3_f0_a1.jsonl {D}/train_depth3_f0_a1.jsonl',
-           f'wc -l {D}/train_depth3_f0_a1.jsonl'])
-else:
-    fetch = ' && '.join([
-        f'hf buckets cp {B}/ds-composition/ckpts/dsc/stage1_a1_s{s}.pt ckpts/dsc/stage1_a1_s{s}.pt' for s in (0, 1)]
-        + [f'hf buckets cp {B}/ds-composition/data/dsc/train_a1.jsonl.gz data/dsc/train_a1.jsonl.gz',
-           'gunzip -f data/dsc/train_a1.jsonl.gz',
-           f'hf buckets cp {B}/ds-generator/ckpts/dsg/stage1_g1_s0.pt ckpts/dsg/stage1_g1_s0.pt',
-           f'hf buckets cp {B}/ds-generator/data/dsg/train_g1.jsonl data/dsg/train_g1.jsonl',
-           'wc -l data/dsc/train_a1.jsonl data/dsg/train_g1.jsonl'])
-J.append(('fetch', '-', fetch))
+# ---- fetch: bucket checkpoints and training sets for the gap-closers (no retraining).
+# The `hf` CLI is NOT installed on these pods and HF_TOKEN is not exported into the ssh command, so the
+# bucket assets are downloaded on the VPS (which is logged in) and pushed with pod/nf/sync.sh push; this
+# job only asserts they arrived.  (2026-09-24, disclosed in log.md.) ----
+need = ({0: ['ckpts/lf/stage1_a1_seq_s0.pt', 'ckpts/lf/stage1_a1_seq_s1.pt', f'{D}/train_depth3_f0_a1.jsonl']}
+        if pod == 1 else
+        {0: ['ckpts/dsc/stage1_a1_s0.pt', 'ckpts/dsc/stage1_a1_s1.pt', 'ckpts/dsg/stage1_g1_s0.pt',
+             'data/dsc/train_a1.jsonl', 'data/dsg/train_g1.jsonl']})[0]
+J.append(('fetch', '-', 'ls -la ' + ' '.join(need)))
 
 # ---- generation (CPU, all cores; the two pools of this pod run one after the other) ----
 prev_gen = '-'
