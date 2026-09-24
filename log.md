@@ -537,3 +537,23 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   **20,490 distinct counted proofs, zero rejections and zero disagreements on either check**, with `no_text_stored` 0 everywhere — every counted proof kept its literal text and every one of them still checks. This is the reassuring complement to the 23:40 agreement entry: the 241 Lean-only accepts all happened **at gate time and were all rejected by the conjunction**, and none of them leaked into anything counted. The in-loop gate and the independent re-check agree completely.
 
   Sweep pod `dsr-s` deleted after pulling and uploading: artifacts (102 files), the four `record_*.json`, and **all 16 sweep Stage-1 checkpoints** (`ckpts/sweep/`, 222 MB — verified 18 objects in the bucket, the 16 plus the two shared controls) before `podrm`. 1.80 h, **$0.88**. Run total **$6.68 / $18, 13.64 / 36 pod-hours**; five arm pods still up on the ladders.
+- 2026-09-24 00:10 UTC  **All five frozen dials complete — and with five arms instead of two, E8's picture inverts. Expert iteration does not add a constant; it COMPENSATES, and it very nearly erases the rendering's pre-RL advantage.** Source `artifacts/dsr/dsr-<arm>/{ei,frz}_d3_<arm>_s{0,1}/round_4.json`, `targets_cum.rate`, 1,000 depth-3 targets, **equal attempts** (k = 32 × 4 rounds).
+
+  | arm | frozen (mean) | EI (mean) | **EI − frozen** | vs C0 | E8 (±0.05 of C0) |
+  |---|---|---|---|---|---|
+  | C0 `lean_seq` | 0.324 | 0.657 | **+0.334** | — | band **+0.20…+0.35: holds** |
+  | R1 `lean_seq_noprem` | 0.297 | 0.608 | +0.311 | −0.023 | **holds** |
+  | R3 `lean_seq_nofml` | 0.305 | 0.597 | +0.292 | −0.042 | **holds** |
+  | R4 `lean_seq_funbare` | 0.362 | 0.635 | +0.272 | −0.062 | **fails, narrowly** |
+  | R2 `lean_seq_intro` | **0.406** | 0.615 | **+0.209** | **−0.125** | **fails, clearly** |
+
+  **Correction to my 23:50 entry.** On C0 and R1 alone I wrote that "EI adds a roughly fixed amount … it neither amplifies the rendering's advantage nor compensates for its deficit." That was right about those two arms and **wrong as a general claim**, and I should not have generalised from the two arms that happened to have near-identical frozen rates. Across all five the gap ranges +0.209 to +0.334, and the pattern is systematic:
+
+  - **corr(frozen, EI − frozen) = −0.871** across the five arms, **−0.782** across all ten models. **The better an arm's frozen baseline, the less EI adds to it.**
+  - R2's small gap is **not** EI working badly on R2 — it is R2 having **much the best frozen baseline** (0.406 vs C0's 0.324). R2 starts ahead and has less room.
+  - **The arms converge under EI.** Frozen spans 0.297–0.406 (spread 0.109, sd 0.0454); EI spans 0.597–0.657 (spread **0.060**, sd **0.0238**). Per-model sd falls 0.0597 → 0.0396.
+  - Sharpest form: **corr(frozen, EI endpoint) = +0.158.** *Where a rendering starts predicts almost nothing about where it ends after expert iteration.*
+
+  **What this means for the run's question.** The two untyped-binder arms (R2 0.406, R4 0.362) really are better than the typed control (0.324) at frozen sampling — that is a genuine rendering effect, and the largest one on this metric. **But it is mostly gone after four rounds of EI**, where C0 is actually highest (0.657). So the honest answer to "does the rendering buy RL readiness?" is: **it buys a better starting point, and expert iteration spends most of that advantage getting everyone to roughly the same place.** A rendering chosen on a Stage-1 or frozen-sampling number would be chosen on a quantity that RL largely washes out — which is the practical warning this run can offer, and it points the same way as the in-distribution near-null and the seed sweep.
+
+  **Caveat, same as before and now doubly earned:** n = 2 seeds per arm for the dial. The correlation is strong and holds per-model (−0.782 over ten), but the individual arm gaps are n = 2 means. I have now been wrong once this run by generalising from n = 2 (E18) and once by generalising from two *arms* (this entry's correction); the write-up will state the convergence as the finding and the per-arm ordering as indicative.
