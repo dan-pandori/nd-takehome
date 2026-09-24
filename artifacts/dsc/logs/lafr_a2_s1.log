@@ -1,0 +1,114 @@
+START 2026-09-23T22:14:55Z until [ -f ckpts/dsc/stage1_a2_s1.pt ]; do sleep 30; done; python3 ladder_ei.py --init ckpts/dsc/stage1_a2_s1.pt --name la_frozen_a2_s1 --outdir artifacts/dsc --train data/dsc/train_a2.jsonl --heldout data/p2/heldout.jsonl --batch 512 --seed 1 --no_train
+[lean_gate] 143840 samples, parse-fail 47241, distinct checked 85553: both ok 9162, nd-only 0, lean-only 11, both rej 76380; lean 94.9s wall (1126.8s proc, 12 workers), nd_verify 3.3s
+[la_frozen_a2_s1 r1] targets (this round) SOLVED 1130/4495 = 0.251 [0.239,0.264]
+  len 7: 793/1800 = 0.441 [0.418,0.464]
+  len 8: 292/1000 = 0.292 [0.265,0.321]
+  len 9: 43/1004 = 0.043 [0.032,0.057]
+  len 10: 2/456 = 0.004 [0.001,0.016]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 837, 8: 468, 9: 56, 10: 5, 11: 1}
+  pruned hist {5: 19, 6: 208, 7: 742, 8: 362, 9: 33, 10: 3}
+  frontier written 10 pruned 9
+  reasons [("parse: expected line index, got 'LEANPARSE'", 47241), ('rule check failed: IMPE', 21117), ('rule check failed: ANDI', 12946), ('rule check failed: NEGE', 10653), ('rule check failed: ANDE2', 8926), ('final formula is not the conclusion', 7636)]
+[lean_gate] 73120 samples, parse-fail 22449, distinct checked 45232: both ok 789, nd-only 0, lean-only 1, both rej 44442; lean 57.7s wall (641.4s proc, 12 workers), nd_verify 5.9s
+[la_frozen_a2_s1 r1] transfer (this round, pass@32) SOLVED 130/2285 = 0.057 [0.048,0.067]
+  len 7: 32/300 = 0.107 [0.077,0.147]
+  len 8: 59/300 = 0.197 [0.156,0.245]
+  len 9: 38/1010 = 0.038 [0.028,0.051]
+  len 10: 1/451 = 0.002 [0.000,0.012]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 34, 8: 76, 9: 41, 10: 3}
+  pruned hist {5: 7, 6: 7, 7: 41, 8: 71, 9: 28}
+  frontier written 9 pruned 9
+  reasons [("parse: expected line index, got 'LEANPARSE'", 22449), ('rule check failed: IMPE', 13277), ('rule check failed: ANDI', 7301), ('rule check failed: NEGE', 6613), ('final formula is not the conclusion', 4811), ('rule check failed: ANDE2', 4427)]
+[lean_gate] 2285 samples, parse-fail 703, distinct checked 1582: both ok 25, nd-only 0, lean-only 0, both rej 1557; lean 7.5s wall (29.5s proc, 12 workers), nd_verify 0.2s
+[la_frozen_a2_s1 r1] transfer greedy SOLVED 25/2285 = 0.011 [0.007,0.016]
+  len 7: 8/300 = 0.027 [0.014,0.052]
+  len 8: 7/300 = 0.023 [0.011,0.047]
+  len 9: 10/1010 = 0.010 [0.005,0.018]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 7, 8: 8, 9: 10}
+  pruned hist {5: 1, 6: 2, 7: 6, 8: 12, 9: 4}
+  frontier written 9 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 703), ('rule check failed: IMPE', 431), ('rule check failed: ANDI', 242), ('rule check failed: NEGE', 234), ('final formula is not the conclusion', 135), ('rule check failed: ANDE2', 120)]
+[lean_gate] 5000 samples, parse-fail 48, distinct checked 4952: both ok 4701, nd-only 0, lean-only 1, both rej 250; lean 9.0s wall (88.7s proc, 12 workers), nd_verify 0.5s
+[la_frozen_a2_s1 r1] heldout greedy SOLVED 4701/5000 = 0.940 [0.933,0.946]
+  len 2: 997/1000 = 0.997 [0.991,0.999]
+  len 3: 986/1000 = 0.986 [0.977,0.992]
+  len 4: 962/1000 = 0.962 [0.948,0.972]
+  len 5: 931/1000 = 0.931 [0.914,0.945]
+  len 6: 825/1000 = 0.825 [0.800,0.847]
+  written hist {2: 1024, 3: 980, 4: 965, 5: 962, 6: 768, 7: 2}
+  pruned hist {2: 1024, 3: 980, 4: 968, 5: 964, 6: 763, 7: 2}
+  frontier written 6 pruned 6
+  reasons [("parse: expected line index, got 'LEANPARSE'", 48), ('rule check failed: ANDI', 38), ('rule check failed: DN', 37), ('rule check failed: IMPE', 34), ('rule check failed: NEGE', 25), ('rule check failed: IMPI', 22)]
+[la_frozen_a2_s1 r1] targets cumulative: solved 1130/4495 L*=9 ge={7: 1130, 8: 337, 9: 45, 10: 2, 11: 0, 12: 0}
+[la_frozen_a2_s1 r1] transfer cumulative: solved 130/2285 L*=9 ge={7: 130, 8: 98, 9: 39, 10: 1, 11: 0, 12: 0}
+=== round 1 done in 1599s; new proofs 1367; cum targets solved 1130 L*=9; transfer L*=9
+[lean_gate] 143840 samples, parse-fail 47120, distinct checked 85623: both ok 9096, nd-only 0, lean-only 10, both rej 76517; lean 94.6s wall (1119.6s proc, 12 workers), nd_verify 3.3s
+[la_frozen_a2_s1 r2] targets (this round) SOLVED 1124/4495 = 0.250 [0.238,0.263]
+  len 7: 789/1800 = 0.438 [0.416,0.461]
+  len 8: 294/1000 = 0.294 [0.267,0.323]
+  len 9: 39/1004 = 0.039 [0.029,0.053]
+  len 10: 2/456 = 0.004 [0.001,0.016]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 831, 8: 467, 9: 55, 10: 5}
+  pruned hist {5: 18, 6: 214, 7: 729, 8: 363, 9: 32, 10: 2}
+  frontier written 10 pruned 9
+  reasons [("parse: expected line index, got 'LEANPARSE'", 47120), ('rule check failed: IMPE', 20979), ('rule check failed: ANDI', 13035), ('rule check failed: NEGE', 10753), ('rule check failed: ANDE2', 8892), ('final formula is not the conclusion', 7664)]
+[lean_gate] 73120 samples, parse-fail 22561, distinct checked 45205: both ok 731, nd-only 0, lean-only 1, both rej 44473; lean 52.7s wall (614.6s proc, 12 workers), nd_verify 1.6s
+[la_frozen_a2_s1 r2] transfer (this round, pass@32) SOLVED 130/2285 = 0.057 [0.048,0.067]
+  len 7: 33/300 = 0.110 [0.079,0.150]
+  len 8: 61/300 = 0.203 [0.162,0.252]
+  len 9: 34/1010 = 0.034 [0.024,0.047]
+  len 10: 2/451 = 0.004 [0.001,0.016]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 36, 8: 83, 9: 38, 10: 2}
+  pruned hist {5: 4, 6: 5, 7: 46, 8: 77, 9: 26, 10: 1}
+  frontier written 9 pruned 9
+  reasons [("parse: expected line index, got 'LEANPARSE'", 22561), ('rule check failed: IMPE', 13215), ('rule check failed: ANDI', 7208), ('rule check failed: NEGE', 6613), ('final formula is not the conclusion', 4851), ('rule check failed: ANDE2', 4512)]
+[lean_gate] 2285 samples, parse-fail 703, distinct checked 1582: both ok 25, nd-only 0, lean-only 0, both rej 1557; lean 2.2s wall (8.3s proc, 12 workers), nd_verify 0.1s
+[la_frozen_a2_s1 r2] transfer greedy SOLVED 25/2285 = 0.011 [0.007,0.016]
+  len 7: 8/300 = 0.027 [0.014,0.052]
+  len 8: 7/300 = 0.023 [0.011,0.047]
+  len 9: 10/1010 = 0.010 [0.005,0.018]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 7, 8: 8, 9: 10}
+  pruned hist {5: 1, 6: 2, 7: 6, 8: 12, 9: 4}
+  frontier written 9 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 703), ('rule check failed: IMPE', 431), ('rule check failed: ANDI', 242), ('rule check failed: NEGE', 234), ('final formula is not the conclusion', 135), ('rule check failed: ANDE2', 120)]
+[lean_gate] 5000 samples, parse-fail 48, distinct checked 4952: both ok 4701, nd-only 0, lean-only 1, both rej 250; lean 10.4s wall (111.3s proc, 12 workers), nd_verify 0.5s
+[la_frozen_a2_s1 r2] heldout greedy SOLVED 4701/5000 = 0.940 [0.933,0.946]
+  len 2: 997/1000 = 0.997 [0.991,0.999]
+  len 3: 986/1000 = 0.986 [0.977,0.992]
+  len 4: 962/1000 = 0.962 [0.948,0.972]
+  len 5: 931/1000 = 0.931 [0.914,0.945]
+  len 6: 825/1000 = 0.825 [0.800,0.847]
+  written hist {2: 1024, 3: 980, 4: 965, 5: 962, 6: 768, 7: 2}
+  pruned hist {2: 1024, 3: 980, 4: 968, 5: 964, 6: 763, 7: 2}
+  frontier written 6 pruned 6
+  reasons [("parse: expected line index, got 'LEANPARSE'", 48), ('rule check failed: ANDI', 38), ('rule check failed: DN', 37), ('rule check failed: IMPE', 34), ('rule check failed: NEGE', 25), ('rule check failed: IMPI', 22)]
+[la_frozen_a2_s1 r2] targets cumulative: solved 1278/4495 L*=9 ge={7: 1278, 8: 399, 9: 55, 10: 2, 11: 0, 12: 0}
+[la_frozen_a2_s1 r2] transfer cumulative: solved 160/2285 L*=9 ge={7: 160, 8: 123, 9: 52, 10: 2, 11: 0, 12: 0}
+=== round 2 done in 1531s; new proofs 242; cum targets solved 1278 L*=9; transfer L*=9
+[lean_gate] 143840 samples, parse-fail 47332, distinct checked 85528: both ok 9185, nd-only 0, lean-only 7, both rej 76336; lean 92.0s wall (1085.4s proc, 12 workers), nd_verify 3.1s
