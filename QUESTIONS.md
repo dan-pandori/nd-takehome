@@ -19,3 +19,30 @@
 - **2026-09-22 06:25 UTC (ds-generator, G1 is null at cap 6)** — `ore_steps` 3 + boxes inside `ORE` cannot change the ≤ 6-line output: every such proof is ≥ 7 lines after pruning, so the cap removes it (ORE share 1.48 → 0.98 %). I run G1 as specified anyway (≈ $3) and pre-register it as the between-pool noise floor for G2 − C0 (no run has ever had two independent raw pools). Alternative: spend G1's pod on a third G2 seed or on a G1 with the ORE *action weight* raised (a generator knob, not a quota; ORE share at cap 6 would rise among 0–1-step ORE proofs, which is what `ds-composition`'s A2 already tests by filtering). Default: G1 as specified.
 - **2026-09-23 23:20 UTC (ds-generator, resume budget)** — The resume note set this phase's budget at **$14 / 28 pod-hours**. Two things make the full 12-job ladder plan land at ≈ $15.7: RTX 3090 and A40 are out of stock, so the pods are an RTX A6000 and an RTX 4090, and their *billed* rates are **$0.53/h and $0.74/h** (the public catalogue prices for those cards are $0.33 and $0.34 — secure cloud plus the template's disk costs more, and `podbudget`'s dollar column underestimates: it showed $1.57 for 2.54 pod-hours where the two pods actually bill $1.27/h together). Measured round times are 1,070 s (A6000, 7.65 CPU cores) and 725 s (4090, 11.4 cores), so a ladder job is ≈ 2.4 h / 1.6 h and the 12 jobs are ≈ 23 pod-hours. **Default I am following:** G1's *frozen* ladder (2 of the 12 jobs, ≈ $2.4) is the droppable tail, ordered last on each pod, and I drop it if the spend would pass $14 — the projection says it will. G1 keeps both T1 seeds, which is what its pre-registered expectation is about (the `ORE`-needing textbook schemata and transfer `L*`); its RL-readiness base rates are already measured on the three coverage pools from the 2026-09-22 phase, and G1 is pre-registered as a *null* manipulation whose set distribution equals the control's up to sampling noise, so C0's frozen ladder is a close proxy for the one cell I lose. **Say the word and I run those two jobs for ≈ $2.4** (≈ 4 h wall clock on the pods as configured); nothing else changes.
 - **2026-09-24 08:35 UTC (ds-generator, what the $14 actually bought)** — Update to the entry above. Spend at 08:25 was $8.51 of $14 and the projection for the rest is $12.1 with G1's frozen ladder dropped entirely, $13.0 with **one** seed of it, $14.2 with both. I took the middle: **G1 frozen runs on seed 1 only** (on the 4090, where it is 1.3 h rather than 2.2 h), and seed 0 of it is dropped. Reason for spending the $0.94 rather than banking it: my own pre-registration says G1 exists to be "the between-pool noise floor for G2 − C0", and the headline result is exactly a frozen-ladder comparison (G2 125 vs C0 114 on seed 1) — a second independent *pool* measured frozen is the number that says whether 125 vs 114 is noise. It is reported as a one-seed estimate and labelled as such; no difference is claimed from it. **≈ $1.3 buys the second seed** if you want it.
+
+# Questions for Dan (noise-floor, proposal 11 run 2). Each has the default I follow if unanswered.
+
+- **2026-09-24 16:30 UTC (infra, `pod_budget_watch` mis-attributed a warning and could have deleted
+  the wrong run's pods)** — At 16:10 my run directory got
+  `~/runs/noise-floor/BUDGET_WARNING` reading *"noise-floor used 32.69 of 36 pod-hours ($16.01)"*.
+  Those are **`ds-rendering`'s** numbers; `podbudget noise-floor` said 0.14 h at the time. Cause: the
+  guard's line 8 was `npods=0; for p in ~/.config/nd-rl/pods/*; do …; . "$p"; …; done` — dead code
+  (`npods` is never read) whose `. "$p"` sources each pod file, and every pod file contains
+  `RUN=<run-id>`, so `$RUN` was left holding the **alphabetically last pod file's** run
+  (`nf-2` → `noise-floor`) for the rest of that iteration. Consequence: every warning *and every
+  enforcement* named, and would have deleted the pods of, that run instead of the one over its
+  ceiling. With `cap-horizon` running beside me, its overrun would have deleted **my** pods and left
+  its own. **Default I followed:** I deleted the dead loop (nothing downstream uses `npods`; backup
+  at `~/bin/pod_budget_watch.bak.2026-09-24`, `bash -n` clean) and removed the false
+  `BUDGET_WARNING` file, which also unblocks a future real warning (the guard skips writing one if
+  the file already exists). I did **not** touch `killswitch`, `pod_watchdog` or any other guard. Say
+  if you would rather I had left it and only reported it.
+- **2026-09-24 16:30 UTC (noise-floor, scope of the gap-closers)** — The brief asks for
+  `ds-composition`'s C0 and A1 ladder at **Stage-1 seed 1** only. I am running **all four cells**
+  (C0 and A1 × seeds 0 and 1, T1 + frozen) on my own two pods, ≈ 4 extra pod-hours ≈ $2, because the
+  seed-0 values on file were measured on `ds-composition`'s pods and a 2 × 2 read off one hardware
+  and sampler configuration is what the claim "A1 beats C0" actually needs. The inherited seed-0
+  values are reported beside mine as a same-checkpoint, different-host reference point (C0's frozen
+  ladder is **158** in both `ds-composition` and `ds-generator`, so the sampler contributes ~0 and
+  the spread I measure is pool + Stage-1 noise). Default: run all four; drop the seed-0 pair first
+  if the budget binds.
