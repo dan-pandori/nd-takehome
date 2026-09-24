@@ -545,3 +545,174 @@ Every number below is re-derived by `python3 lean_format_analysis.py` → `artif
 
 ## Bucket
 `hf://buckets/dan-pandori/nd-rl/lean-format/{ckpts,artifacts,data}` — `ckpts/lf` (Stage-1 models, depth-3 EI rounds), `ckpts/ladder` (ladder EI rounds), `artifacts/lf` (everything above incl. per-round found files), `data` (the a1 training set and the ladder pools used).
+
+# ds-rendering (proposal 10) — how the same proofs are written in Lean
+
+Run id `ds-rendering`, branch `dan_ds-rendering`. Every number is re-derived by `python3 dsr_analysis.py` →
+`artifacts/dsr/summary.json` from files pulled into `artifacts/dsr/<pod>/`; each table names its source.
+
+**Model label, identical in every arm** (an inherited number carries its own label where one is quoted): 3.2M
+parameters (4 layers, d 256, 8 heads), trained **from scratch**, 6,000 steps, bs 128, lr 1e-3 → 1e-4, cap 6, on the
+**same 155,000 ND records** `data/p2/train_depth3_f0_a1.jsonl` (cap 6, **zero depth-3 proofs**: box-depth histogram
+0 / 1 / 2 = 82,393 / 54,883 / 17,724). Surface form is Lean `lean_seq` with a random first-appearance name offset;
+the arms differ **only** in how `lean_tok.py` renders that record into Lean text. Sampler in every arm and every
+stage: `path=fast, early=eos, compact, rowrng`, **batch 2048**, `max_new` 400, T 0.8 (the efficiency run's caveat —
+a batch change reshuffles the accepted set, so it is held fixed). A sample counts iff **Lean 4.34 accepts the literal
+sampled text and `nd_verify` accepts the ND proof it denotes**. GPU: NVIDIA A40 in every arm.
+
+## 1 — The renderings and the render check (`dsr_render_check.py` → `artifacts/dsr/render_check{,_funbare}.json`)
+
+| arm | mode | box form / change | vocab | mean tokens / proof | ratio to C0 | round-trip | Lean accepts | swapped negatives accepted |
+|---|---|---|---:|---:|---:|---|---|---|
+| C0 `lean_seq` (control) | `lean_seq` | `( fun ( nS : A ) => by … )`; premises re-stated; every `have` annotated | 107 | 83.5 | 1.000 | 3000 / 3000 | 1000 / 1000 | 0 / 300 |
+| R1 `lean_seq_noprem` | `lean_seq_noprem` | premise lines not rendered; later lines cite `hK` | 107 | 59.0 | 0.706 | 3000 / 3000 | 1000 / 1000 | 0 / 300 |
+| R3 `lean_seq_nofml` | `lean_seq_nofml` | `have n3 := n1 n2` for IMPE / ANDE / NEGE / R | 107 | 79.8 | 0.955 | 3000 / 3000 | 1000 / 1000 | 0 / 300 |
+| R2 `lean_seq_intro` | `lean_seq_intro` | `( by intro nS ; … )` | 108 | 76.4 | 0.914 | 3000 / 3000 | 1000 / 1000 | 0 / 300 |
+| R4 `lean_seq_funbare` | `lean_seq_funbare` | `( fun nS => by … )` — `fun` kept, binder type dropped | 107 | 76.4 | 0.914 | 3000 / 3000 | 1000 / 1000 | 0 / 300 |
+
+- Text length in `have` lines (3,000 a1 records; ND lengths 2–6 are flat at 600 each): C0 / R3 / R2 / R4
+  `1:80 2:680 3:875 4:844 5:386 6:135`; **R1 `1:1106 2:931 3:888 4:75`** — R1 shortens the text by the premise count,
+  so a 6-line ND proof is at most a 4-`have` text.
+- The rules whose annotation R3 drops occur on **0.625 lines per proof** (by ND length 2/3/4/5/6:
+  0.012 / 0.752 / 0.479 / 0.828 / 1.053), which is why R3 saves 4.4 % of tokens and not the brief's 20–30 %.
+- `train.py --cap 6` re-checks `decode(encode(proof)) == proof` on all **155,000** records at training time in every
+  arm; every arm loaded without an assertion failure.
+
+## 2 — Splits: the shared training set against every evaluation pool (`dsr_splits.py` → `artifacts/dsr/splits.json`)
+
+All arms train on the identical records, so this table is a property of the run, not of an arm.
+Training classes: **155,000** order-sensitive, **154,683** premise-order-insensitive.
+
+| pool | classes | shared, order-sensitive | shared, premise-order-insensitive |
+|---|---:|---:|---:|
+| `data/p2/heldout.jsonl` | 5,000 | **0** | 16 |
+| `data/p2/targets_depth3.jsonl` | 1,000 | **0** | 0 |
+| `data/p2/transfer_depth3.jsonl` | 500 | **0** | 0 |
+| `data/p2/targets_reductio_req.jsonl` | 300 | **0** | 0 |
+| `data/r3_1/depth3_req.jsonl` | 300 | **0** | 0 |
+| `data/r3_1/depth3_req_transfer.jsonl` | 100 | **0** | 0 |
+| `data/ladder/rl_targets.jsonl` | 4,495 | **0** | 0 |
+| `data/ladder/transfer.jsonl` | 2,285 | **0** | 0 |
+| `data/transfer.jsonl` | 1,638 | **7** | 8 |
+| `targets/validation_36.jsonl` | 36 | **0** | 0 |
+
+- The only non-zero order-sensitive overlap is **7 of 1,638** in `data/transfer.jsonl`, the mechanism-test pool
+  (8 premise-order-insensitive). It is the same 7 theorems for every arm, so it cannot bias the comparison, but
+  lean-format's review never checked that file and it is 0.43 % of the pool.
+
+## 3 — Held-out greedy, and where the difference lives (`artifacts/dsr/<pod>/held_<arm>_s<k>.json`;
+`data/p2/heldout.jsonl`, 5,000 = 1,000 per ND length 2–6, greedy, one sample per theorem)
+
+| arm | overall s0 / s1 | by ND length 2 / 3 / 4 / 5 / **6** (s0) | same (s1) |
+|---|---|---|---|
+| C0 `lean_seq` (control) | **0.908 / 0.897** | 0.994 / 0.988 / 0.953 / 0.923 / 0.684 | 0.997 / 0.992 / 0.966 / 0.943 / 0.585 |
+| R1 `lean_seq_noprem` | **0.877 / 0.872** | 0.996 / 0.987 / 0.937 / 0.913 / 0.550 | 0.994 / 0.988 / 0.936 / 0.904 / 0.536 |
+| R3 `lean_seq_nofml` | **0.915 / 0.836** | 0.995 / 0.980 / 0.918 / 0.914 / 0.769 | 0.990 / 0.975 / 0.907 / 0.886 / 0.421 |
+| R2 `lean_seq_intro` | **0.941 / 0.942** | 0.998 / 0.987 / 0.958 / 0.916 / 0.848 | 1.000 / 0.990 / 0.968 / 0.932 / 0.819 |
+| R4 `lean_seq_funbare` | **0.942 / 0.914** | 0.999 / 0.987 / 0.954 / 0.927 / 0.842 | 0.996 / 0.992 / 0.971 / 0.928 / 0.683 |
+
+**The 500 held-out theorems whose reference proof has box depth 3 are out of distribution — the training set has
+none.** Splitting on that (source: the same `held_*.jsonl`; `dsr_analysis.held_breakdown` and the depth recomputed
+from each reference proof) separates in-distribution accuracy from zero-shot depth-3 composition:
+
+| arm | depth ≤ 2 (4,500, in distribution) s0 / s1 | **depth 3 (500, f = 0)** s0 / s1 |
+|---|---|---|
+| C0 `lean_seq` (control) | 0.955 / 0.966 | **0.486 / 0.274** |
+| R1 `lean_seq_noprem` | 0.948 / 0.944 | **0.232 / 0.218** |
+| R3 `lean_seq_nofml` | 0.942 / 0.926 | **0.674 / 0.024** |
+| R2 `lean_seq_intro` | 0.955 / 0.964 | **0.822 / 0.746** |
+| R4 `lean_seq_funbare` | 0.959 / 0.967 | **0.788 / 0.440** |
+
+## 4 — Mechanism test: pass@16 on `data/transfer.jsonl` (1,638 theorems; `artifacts/dsr/<pod>/mech_<arm>_s<k>.jsonl`;
+distinct **start-index-normalised** proofs by written ND length; every counted proof carries its literal Lean text)
+
+| arm | solved / 1,638 | distinct 7-line | 8-line | ≥ 9-line | 7-line by `n_prem` 0 / 1 / 2 / 3 (s0; s1) |
+|---|---|---|---|---|---|
+| C0 `lean_seq` (control) | 906 / 922 | **234 / 265** | 77 / 67 | 7 / 1 | 23 / 47 / 126 / 38; 38 / 69 / 124 / 34 |
+| R1 `lean_seq_noprem` | 681 / 855 | **164 / 206** | 48 / 59 | 1 / 4 | 13 / 32 / 92 / 27; 18 / 49 / 109 / 30 |
+| R3 `lean_seq_nofml` | 808 / 656 | **187 / 118** | 78 / 30 | 5 / 2 | 46 / 27 / 86 / 28; 7 / 25 / 73 / 13 |
+| R2 `lean_seq_intro` | 891 / 861 | **247 / 206** | 79 / 47 | 2 / 3 | 85 / 27 / 107 / 28; 29 / 53 / 101 / 23 |
+| R4 `lean_seq_funbare` | 831 / 903 | **193 / 246** | 46 / 84 | 0 / 7 | 56 / 22 / 96 / 19; 42 / 61 / 114 / 29 |
+
+## 5 — Base rates at pass@2,000 (`coverage.py --k 2000 --temperature 0.8 --seed 0 --batch 2048`;
+`artifacts/dsr/<pod>/cov_<pool>_<arm>_s<k>.s0.jsonl`)
+
+| arm | depth-3 (1,000) targets hit s0 / s1 | per-sample rate | `depth3_req` (300) | `reductio_req` (300) | distinct ≥ 8-line proofs, depth-3 pool |
+|---|---|---|---|---|---|
+| C0 `lean_seq` (control) | **512 / 411** | 0.0928 / 0.0999 | 175 / 111 | 31 / 26 | 325 / 185 |
+| R1 `lean_seq_noprem` | **393 / 443** | 0.0602 / 0.0891 | 129 / 113 | 17 / 36 | 234 / 329 |
+| R3 `lean_seq_nofml` | **513 / 355** | 0.0895 / 0.0441 | 208 / 146 | 24 / 17 | 286 / 206 |
+| R2 `lean_seq_intro` | **544 / 502** | 0.1705 / 0.0714 | 218 / 175 | 13 / 19 | 417 / 242 |
+| R4 `lean_seq_funbare` | **496 / 499** | 0.0913 / 0.0900 | 178 / 162 | 37 / 46 | 316 / 281 |
+
+## 6 — Dial: depth-3 EI vs frozen, 4 rounds × 32 (`artifacts/dsr/<pod>/{ei,frz}_d3_<arm>_s<k>/round_4.json`)
+
+| arm | EI solved / 1,000 s0 / s1 | frozen, equal attempts | **EI − frozen** | EI depth-3 acquisition | frozen acquisition | held-out greedy at r4 |
+|---|---|---|---|---|---|---|
+| C0 `lean_seq` (control) | 649 / 666 | 356 / 291 | **+0.293 / +0.375** | 0.425 / 0.416 | 0.160 / 0.111 | 0.957 / 0.969 |
+| R1 `lean_seq_noprem` | 551 / 665 | 285 / 309 | **+0.266 / +0.356** | 0.338 / 0.436 | 0.129 / 0.106 | 0.946 / 0.953 |
+| R3 `lean_seq_nofml` | 631 / 564 | 376 / 235 | **+0.255 / +0.329** | 0.424 / 0.400 | 0.230 / 0.127 | 0.947 / 0.916 |
+| R2 `lean_seq_intro` | 621 / 609 | 444 / 369 | **+0.177 / +0.240** | 0.408 / 0.380 | 0.289 / 0.193 | 0.947 / 0.952 |
+| R4 `lean_seq_funbare` | 617 / 652 | 377 / 348 | **+0.240 / +0.304** | 0.394 / 0.408 | 0.214 / 0.187 | 0.951 / 0.969 |
+
+## 7 — Ladder rung T1 and frozen, 8 rounds × 32 (`artifacts/dsr/<pod>/la_{T1,frz}_<arm>_s<k>/round_8.json`;
+pools byte-identical to ladder-A's, `transfer.jsonl` sha256 `47dd1886…`, `rl_targets.jsonl` `a5c4c277…`)
+
+| arm | frozen solved / 2,285 | frozen `L*` | T1 solved / 2,285 | **T1 `L*`** | `L*` − `L*`_frozen | textbook schemata with ≥ 5 solves (T1) | held-out greedy at r8 |
+|---|---|---|---|---|---|---|---|
+| C0 `lean_seq` (control) | – / – | – / – | 923 / 1003 | **12 / 11** | – / – | 2 / 3 | 0.963 / 0.972 |
+| R1 `lean_seq_noprem` | – / – | – / – | 837 / 945 | **11 / 11** | – / – | 3 / 3 | 0.956 / 0.956 |
+| R3 `lean_seq_nofml` | – / – | – / – | 898 / 698 | **11 / 11** | – / – | 3 / 1 | 0.956 / 0.926 |
+| R2 `lean_seq_intro` | – / – | – / – | 658 / 800 | **10 / 11** | – / – | 1 / 3 | 0.951 / 0.953 |
+| R4 `lean_seq_funbare` | – / – | – / – | 771 / 896 | **11 / 11** | – / – | 0 / 3 | 0.962 / 0.971 |
+
+## 8 — Checker of record (`pod/dsr/record.py` → `artifacts/dsr/<pod>/record_<arm>.json`; in-loop gate totals from
+`artifacts/dsr/<pod>/gate_*.jsonl`)
+
+| arm | distinct counted proofs | (A) unmodified `nd2lean.py --check`: both accept / disagree | (B) Lean on the literal text: accepted / rejected | in-loop samples | parse-fail | `nd_verify`-only | Lean-only |
+|---|---:|---|---|---:|---:|---:|---:|
+| C0 `lean_seq` (control) | 19004 | 19004 / 0 | 19004 / 0 | 4,506,336 | 764,877 | 0 | 145 |
+| R1 `lean_seq_noprem` | 15783 | 15783 / 0 | 15783 / 0 | 4,506,336 | 747,631 | 0 | 62 |
+| R3 `lean_seq_nofml` | 16743 | 16743 / 0 | 16743 / 0 | 4,794,016 | 1,248,696 | 0 | 1220 |
+| R2 `lean_seq_intro` | 15025 | 15025 / 0 | 15025 / 0 | 4,506,336 | 594,638 | 0 | 507 |
+| R4 `lean_seq_funbare` | 16958 | 16958 / 0 | 16958 / 0 | 4,506,336 | 668,986 | 0 | 259 |
+
+### 8b — Agreement between the two checkers, over every sample the run gated (`dsr_disagree.py`)
+
+Across **all six pods**: 22,899,360 samples drawn, 4,027,278 outside the strict grammar, **16,300,481 distinct (theorem, Lean text) pairs put through both checkers**, 6,234,557 accepted by both (counted) and 10,063,716 rejected by both.
+
+| | count |
+|---|---:|
+| `nd_verify` accepts, Lean rejects | **0** |
+| Lean accepts, `nd_verify` rejects | **2,208** |
+| **agreement** | **99.9865 %** |
+
+Disagreement is **entirely one-directional**: in 16,300,481 pairs Lean never once caught something `nd_verify` missed. Acceptance is the **conjunction**, so every one of these was rejected and **no counted proof in this run is affected** — the conjunction is load-bearing, not belt-and-braces.
+
+| n | share | cause |
+|---:|---:|---|
+| 1,645 | 74.5 % | BOTE cited a non-F line (Not.elim : ~a -> a -> b) |
+| 315 | 14.3 % | fewer PR lines than the theorem has premises (convention, not soundness) |
+| 179 | 8.1 % | NEGE refs not A/~A (~ unfolds to A -> False) |
+| 69 | 3.1 % | unclassified |
+
+The first two share one root cause: Lean's `¬a` is **definitionally** `a → False`, so the rendering's `.elim` and bare application are polymorphic in ways the ND rules are not. `BOTE` is rendered `nA.elim` (`nd2lean.py:135`), which is `False.elim : False → b` when the cited line is `F` but **`Not.elim : ¬a → a → b`** when it is `¬a`, so it typechecks whenever the goal happens to be `a → …`. This is the **unmodified checker of record's own convention** — `lean_tok.py:157` mirrors it exactly in every arm — so it applies anywhere in this repo that a Lean pass is treated as sufficient. Raised in `QUESTIONS.md`.
+
+**The rendering changes how often Lean is fooled** (per 100k pairs checked, so comparable across pods of different sizes):
+
+| arm | pairs checked | Lean-only accepts | per 100k |
+|---|---:|---:|---:|
+| R1 lean_seq_noprem | 3,241,268 | 62 | **1.9** |
+| C0 lean_seq | 3,223,191 | 145 | **4.5** |
+| R4 lean_seq_funbare | 3,305,274 | 259 | **7.8** |
+| R2 lean_seq_intro | 3,375,634 | 507 | **15.0** |
+| seed sweep (mixed) | 77,550 | 15 | **19.3** |
+| R3 lean_seq_nofml | 3,077,564 | 1220 | **39.6** |
+
+R3 is the outlier by an order of magnitude, and that is mechanically what R3 **is**: it drops the stated formula on exactly `IMPE ANDE1 ANDE2 NEGE R`, so when the model misapplies one of those rules there is **no stated formula for the decoder to contradict**. A rendering that hides formulas measurably weakens Lean as an independent check — a cost of R3 that none of the accuracy numbers show.
+
+## 9 — Cost
+
+RTX 3090 was unavailable (the two sibling runs had taken the capacity), so every arm ran on an **NVIDIA A40**
+($0.49/h): five pods `dsr-{c0,r1,r3,r2,r4}`, one arm each. See `log.md` for the per-stage timeline and
+`podbudget ds-rendering` for the ledger.
