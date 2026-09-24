@@ -40,6 +40,9 @@ def lstar(solved_names, labels):
     return max([L for L, c in ge.items() if c >= 5], default=0), ge
 
 
+EXPECTED_N = {'redreq': 300, 'd3req': 300}
+
+
 def cov_row(fn):
     """Coverage file -> solved, max pruned length, accepted-proof counts at >= 8/10/12 lines, term sizes, strata."""
     if not os.path.exists(fn):
@@ -81,6 +84,11 @@ def cov_row(fn):
                 longest_proof = {'name': r['name'], 'thm': r.get('thm'), 'pruned': pl, 'written': p['written'],
                                  'term_size': ts_of_longest, 'proof': p['proof']}
     allts = [v for vs in ts_by_len.values() for v in vs]
+    exp = next((v for k, v in EXPECTED_N.items() if k in fn), None)
+    if exp is not None and n_thm < exp:
+        # a coverage file is written one theorem at a time and is resumable, so a file pulled while
+        # the job is still running is a PARTIAL file.  Never report it as a result.
+        return {'file': fn, 'theorems': n_thm, 'expected': exp, 'status': 'INCOMPLETE'}
     return {'file': fn, 'theorems': n_thm, 'solved': solved, 'max_pruned_len': maxp,
             'accepted_proofs_ge8': ge[8], 'ge10': ge[10], 'ge12': ge[12], 'ge14': ge[14],
             'distinct_accepted_proofs': n_distinct_accepted,
@@ -152,6 +160,24 @@ def main():
                 for k, key in (('T1', 'ladder_T1'), ('frozen', 'ladder_frozen')):
                     row[key] = ladder_row(f'{D}/la_{k}_{tag}_s0', labels)
             rows.append(row)
+    # max accepted pruned length ANYWHERE for this arm x seed, and per pool -- the uncensored
+    # readout.  ds-composition's reviewer (B5) found cap-6 models write accepted 8-11-line proofs on
+    # the depth-3 pools while stopping dead at 7 lines on the required-reductio pool, so a
+    # single "max accepted length" for an arm would be meaningless: it is reported PER POOL.
+    for row in rows:
+        per_pool = {}
+        for pool in ('redreq', 'd3req'):
+            v = (row.get(pool) or {}).get('max_pruned_len')
+            if v:
+                per_pool[pool] = v
+        for key, nm in (('ladder_T1', 'ladder_T1_transfer'), ('ladder_frozen', 'ladder_frozen_transfer')):
+            v = (row.get(key) or {}).get('max_pruned_len')
+            if v:
+                per_pool[nm] = v
+        row['max_pruned_len_by_pool'] = per_pool
+        row['max_pruned_len_anywhere'] = max(per_pool.values()) if per_pool else None
+        row['max_minus_cap_by_pool'] = {k: v - row['cap'] for k, v in per_pool.items()}
+
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
     json.dump({'transfer_L_true_hist': dict(collections.Counter(labels.values())),
                'note': 'L* is hard-censored at 14 by this pool (23 theorems at L_true >= 13, 10 at >= 14)',

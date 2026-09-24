@@ -290,6 +290,19 @@
     "mean_term_size": 53.82,
     "max_term_size": 98,
     "lstar_censored_at": 14
+   },
+   "max_pruned_len_by_pool": {
+    "redreq": 7,
+    "d3req": 9,
+    "ladder_T1_transfer": 12,
+    "ladder_frozen_transfer": 10
+   },
+   "max_pruned_len_anywhere": 12,
+   "max_minus_cap_by_pool": {
+    "redreq": 1,
+    "d3req": 3,
+    "ladder_T1_transfer": 6,
+    "ladder_frozen_transfer": 4
    }
   },
   {
@@ -499,6 +512,15 @@
      "term_size": 59,
      "proof": "N1 ( ~ P ) : PR ; N2 | R : AS ; N3 | | ( ~ ( ~ S ) ) : AS ; N4 | | | ( ( ~ P ) & ( R & P ) ) : AS ; N5 | | | ( ( ~ P ) & R ) : ANDI N1 N2 ; N6 | | ( ( ( ~ P ) & ( R & P ) ) > ( ( ~ P ) & R ) ) : IMPI N4 N5 ; N7 | ( ( ~ ( ~ S ) ) > ( ( ( ~ P ) & ( R & P ) ) > ( ( ~ P ) & R ) ) ) : IMPI N3 N6 ; N8 ( R > ( ( ~ ( ~ S ) ) > ( ( ( ~ P ) & ( R & P ) ) > ( ( ~ P ) & R ) ) ) ) : IMPI N2 N7 ; QED"
     }
+   },
+   "max_pruned_len_by_pool": {
+    "redreq": 7,
+    "d3req": 8
+   },
+   "max_pruned_len_anywhere": 8,
+   "max_minus_cap_by_pool": {
+    "redreq": 1,
+    "d3req": 2
    }
   },
   {
@@ -806,6 +828,19 @@
     "mean_term_size": 55.61,
     "max_term_size": 113,
     "lstar_censored_at": 14
+   },
+   "max_pruned_len_by_pool": {
+    "redreq": 10,
+    "d3req": 11,
+    "ladder_T1_transfer": 15,
+    "ladder_frozen_transfer": 13
+   },
+   "max_pruned_len_anywhere": 15,
+   "max_minus_cap_by_pool": {
+    "redreq": 2,
+    "d3req": 3,
+    "ladder_T1_transfer": 7,
+    "ladder_frozen_transfer": 5
    }
   },
   {
@@ -1059,6 +1094,15 @@
      "term_size": 75,
      "proof": "N1 ( R v P ) : PR ; N2 | R : AS ; N3 | ( R v P ) : ORI1 N2 ; N4 | P : AS ; N5 | ( R v P ) : ORI2 N4 ; N6 ( R v P ) : ORE N1 N2 N3 N4 N5 ; N7 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N8 | | P : AS ; N9 | | | ( ~ ( ~ R ) ) : AS ; N10 | | | ( ( ~ ( ~ ( ~ R ) ) ) & ( R v P ) ) : ANDI N7 N6 ; N11 | | ( ( ~ ( ~ R ) ) > ( ( ~ ( ~ ( ~ R ) ) ) & ( R v P ) ) ) : IMPI N9 N10 ; N12 | ( P > ( ( ~ ( ~ R ) ) > ( ( ~ ( ~ ( ~ R ) ) ) & ( R v P ) ) ) ) : IMPI N8 N11 ; N13 ( ( ~ ( ~ ( ~ R ) ) ) > ( P > ( ( ~ ( ~ R ) ) > ( ( ~ ( ~ ( ~ R ) ) ) & ( R v P ) ) ) ) ) : IMPI N7 N12 ; QED"
     }
+   },
+   "max_pruned_len_by_pool": {
+    "redreq": 8,
+    "d3req": 13
+   },
+   "max_pruned_len_anywhere": 13,
+   "max_minus_cap_by_pool": {
+    "redreq": 0,
+    "d3req": 5
    }
   },
   {
@@ -1171,10 +1215,221 @@
     "temperature": 0,
     "seed": 0
    },
-   "redreq": null,
-   "d3req": null,
-   "ladder_T1": null,
-   "ladder_frozen": null
+   "redreq": {
+    "file": "artifacts/kh/cov_k8add_s0_redreq.s0.jsonl",
+    "theorems": 300,
+    "solved": 63,
+    "max_pruned_len": 8,
+    "accepted_proofs_ge8": 21,
+    "ge10": 0,
+    "ge12": 0,
+    "ge14": 0,
+    "distinct_accepted_proofs": 68,
+    "pruned_hist": {
+     "7": 47,
+     "8": 21
+    },
+    "term_size_of_longest": 28,
+    "mean_term_size": 31.93,
+    "max_term_size": 59,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 30.0,
+      "max": 59,
+      "n": 47
+     },
+     "8": {
+      "mean": 36.3,
+      "max": 44,
+      "n": 21
+     }
+    },
+    "strata_solved": {
+     "10": [
+      0,
+      33
+     ],
+     "7": [
+      43,
+      52
+     ],
+     "8": [
+      20,
+      133
+     ],
+     "9": [
+      0,
+      82
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 161533,
+    "parse_fail_rate": 0.269222,
+    "longest_proof": {
+     "name": "targets_reductio_req_3",
+     "thm": "( ( ~ ( R > Q ) ) > ( ~ R ) ) |- ( R > ( R > Q ) )",
+     "pruned": 8,
+     "written": 8,
+     "term_size": 28,
+     "proof": "N1 ( ( ~ ( R > Q ) ) > ( ~ R ) ) : PR ; N2 | R : AS ; N3 | | ( ~ ( R > Q ) ) : AS ; N4 | | ( ~ R ) : IMPE N1 N3 ; N5 | | F : NEGE N2 N4 ; N6 | ( ~ ( ~ ( R > Q ) ) ) : NEGI N3 N5 ; N7 | ( R > Q ) : DN N6 ; N8 ( R > ( R > Q ) ) : IMPI N2 N7 ; QED"
+    }
+   },
+   "d3req": {
+    "file": "artifacts/kh/cov_k8add_s0_d3req.s0.jsonl",
+    "theorems": 300,
+    "solved": 258,
+    "max_pruned_len": 12,
+    "accepted_proofs_ge8": 655,
+    "ge10": 23,
+    "ge12": 1,
+    "ge14": 0,
+    "distinct_accepted_proofs": 762,
+    "pruned_hist": {
+     "7": 107,
+     "8": 504,
+     "9": 128,
+     "10": 1,
+     "11": 21,
+     "12": 1
+    },
+    "term_size_of_longest": 57,
+    "mean_term_size": 49.57,
+    "max_term_size": 117,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 45.9,
+      "max": 71,
+      "n": 107
+     },
+     "8": {
+      "mean": 50.9,
+      "max": 114,
+      "n": 504
+     },
+     "9": {
+      "mean": 46.3,
+      "max": 117,
+      "n": 128
+     },
+     "10": {
+      "mean": 52,
+      "max": 52,
+      "n": 1
+     },
+     "11": {
+      "mean": 56.4,
+      "max": 95,
+      "n": 21
+     },
+     "12": {
+      "mean": 57,
+      "max": 57,
+      "n": 1
+     }
+    },
+    "strata_solved": {
+     "7": [
+      4,
+      6
+     ],
+     "8": [
+      254,
+      294
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 342855,
+    "parse_fail_rate": 0.571425,
+    "longest_proof": {
+     "name": "d3req_81",
+     "thm": "( ~ ( ~ Q ) ) |- ( ( Q > ( Q & S ) ) > ( Q > ( ( ~ S ) > ( Q v ( ~ ( ~ Q ) ) ) ) ) )",
+     "pruned": 12,
+     "written": 12,
+     "term_size": 57,
+     "proof": "N1 ( ~ ( ~ Q ) ) : PR ; N2 | ( Q > ( Q & S ) ) : AS ; N3 | | ( ~ Q ) : AS ; N4 | | F : NEGE N3 N1 ; N5 | ( ~ ( ~ Q ) ) : NEGI N3 N4 ; N6 | Q : DN N5 ; N7 | | Q : AS ; N8 | | | ( ~ S ) : AS ; N9 | | | ( Q v ( ~ ( ~ Q ) ) ) : ORI1 N6 ; N10 | | ( ( ~ S ) > ( Q v ( ~ ( ~ Q ) ) ) ) : IMPI N8 N9 ; N11 | ( Q > ( ( ~ S ) > ( Q v ( ~ ( ~ Q ) ) ) ) ) : IMPI N7 N10 ; N12 ( ( Q > ( Q & S ) ) > ( Q > ( ( ~ S ) > ( Q v ( ~ ( ~ Q ) ) ) ) ) ) : IMPI N2 N11 ; QED"
+    }
+   },
+   "ladder_T1": {
+    "dir": "artifacts/kh/la_T1_k8add_s0",
+    "transfer_solved": 1428,
+    "transfer_n": 2285,
+    "lstar": 12,
+    "ge_L_true": {
+     "7": 1428,
+     "8": 1229,
+     "9": 1003,
+     "10": 220,
+     "11": 48,
+     "12": 9,
+     "13": 1,
+     "14": 0
+    },
+    "solved_by_L_true": {
+     "7": 199,
+     "8": 226,
+     "9": 783,
+     "10": 172,
+     "11": 39,
+     "12": 8,
+     "13": 1
+    },
+    "max_pruned_len": 16,
+    "longest": {
+     "name": "la_transfer_197",
+     "L_true": 10,
+     "pruned": 16,
+     "term_size": 96
+    },
+    "mean_term_size": 61.06,
+    "max_term_size": 142,
+    "lstar_censored_at": 14
+   },
+   "ladder_frozen": {
+    "dir": "artifacts/kh/la_frozen_k8add_s0",
+    "transfer_solved": 857,
+    "transfer_n": 2285,
+    "lstar": 10,
+    "ge_L_true": {
+     "7": 857,
+     "8": 693,
+     "9": 536,
+     "10": 77,
+     "11": 3,
+     "12": 0,
+     "13": 0,
+     "14": 0
+    },
+    "solved_by_L_true": {
+     "7": 164,
+     "8": 157,
+     "9": 459,
+     "10": 74,
+     "11": 3
+    },
+    "max_pruned_len": 14,
+    "longest": {
+     "name": "la_transfer_1518",
+     "L_true": 10,
+     "pruned": 14,
+     "term_size": 64
+    },
+    "mean_term_size": 52.62,
+    "max_term_size": 113,
+    "lstar_censored_at": 14
+   },
+   "max_pruned_len_by_pool": {
+    "redreq": 8,
+    "d3req": 12,
+    "ladder_T1_transfer": 16,
+    "ladder_frozen_transfer": 14
+   },
+   "max_pruned_len_anywhere": 16,
+   "max_minus_cap_by_pool": {
+    "redreq": 0,
+    "d3req": 4,
+    "ladder_T1_transfer": 8,
+    "ladder_frozen_transfer": 6
+   }
   },
   {
    "arm": "K8add",
@@ -1286,8 +1541,143 @@
     "temperature": 0,
     "seed": 0
    },
-   "redreq": null,
-   "d3req": null
+   "redreq": {
+    "file": "artifacts/kh/cov_k8add_s1_redreq.s0.jsonl",
+    "theorems": 300,
+    "solved": 24,
+    "max_pruned_len": 8,
+    "accepted_proofs_ge8": 1,
+    "ge10": 0,
+    "ge12": 0,
+    "ge14": 0,
+    "distinct_accepted_proofs": 24,
+    "pruned_hist": {
+     "7": 23,
+     "8": 1
+    },
+    "term_size_of_longest": 20,
+    "mean_term_size": 27.17,
+    "max_term_size": 34,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 27.5,
+      "max": 34,
+      "n": 23
+     },
+     "8": {
+      "mean": 20,
+      "max": 20,
+      "n": 1
+     }
+    },
+    "strata_solved": {
+     "10": [
+      0,
+      33
+     ],
+     "7": [
+      22,
+      52
+     ],
+     "8": [
+      2,
+      133
+     ],
+     "9": [
+      0,
+      82
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 152245,
+    "parse_fail_rate": 0.253742,
+    "longest_proof": {
+     "name": "targets_reductio_req_133",
+     "thm": "( ~ ( Q & ( ~ P ) ) ) |- ( Q > P )",
+     "pruned": 8,
+     "written": 8,
+     "term_size": 20,
+     "proof": "N1 ( ~ ( Q & ( ~ P ) ) ) : PR ; N2 | Q : AS ; N3 | | ( ~ P ) : AS ; N4 | | ( Q & ( ~ P ) ) : ANDI N2 N3 ; N5 | | F : NEGE N4 N1 ; N6 | ( ~ ( ~ P ) ) : NEGI N3 N5 ; N7 | P : DN N6 ; N8 ( Q > P ) : IMPI N2 N7 ; QED"
+    }
+   },
+   "d3req": {
+    "file": "artifacts/kh/cov_k8add_s1_d3req.s0.jsonl",
+    "theorems": 300,
+    "solved": 270,
+    "max_pruned_len": 12,
+    "accepted_proofs_ge8": 569,
+    "ge10": 6,
+    "ge12": 1,
+    "ge14": 0,
+    "distinct_accepted_proofs": 664,
+    "pruned_hist": {
+     "7": 95,
+     "8": 484,
+     "9": 79,
+     "11": 5,
+     "12": 1
+    },
+    "term_size_of_longest": 50,
+    "mean_term_size": 51.28,
+    "max_term_size": 114,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 45.7,
+      "max": 79,
+      "n": 95
+     },
+     "8": {
+      "mean": 52.8,
+      "max": 114,
+      "n": 484
+     },
+     "9": {
+      "mean": 47.9,
+      "max": 78,
+      "n": 79
+     },
+     "11": {
+      "mean": 64,
+      "max": 87,
+      "n": 5
+     },
+     "12": {
+      "mean": 50,
+      "max": 50,
+      "n": 1
+     }
+    },
+    "strata_solved": {
+     "7": [
+      6,
+      6
+     ],
+     "8": [
+      264,
+      294
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 318175,
+    "parse_fail_rate": 0.530292,
+    "longest_proof": {
+     "name": "d3req_64",
+     "thm": "( S v ( P v ( P v S ) ) ) |- ( S > ( S > ( ( ~ ( ~ S ) ) > ( S & S ) ) ) )",
+     "pruned": 12,
+     "written": 12,
+     "term_size": 50,
+     "proof": "N1 ( S v ( P v ( P v S ) ) ) : PR ; N2 | S : AS ; N3 | | S : AS ; N4 | | ( P v ( P v S ) ) : AS ; N5 | | S : R N2 ; N6 | S : ORE N1 N3 N3 N4 N5 ; N7 | | S : AS ; N8 | | | ( ~ ( ~ S ) ) : AS ; N9 | | | ( S & S ) : ANDI N7 N6 ; N10 | | ( ( ~ ( ~ S ) ) > ( S & S ) ) : IMPI N8 N9 ; N11 | ( S > ( ( ~ ( ~ S ) ) > ( S & S ) ) ) : IMPI N7 N10 ; N12 ( S > ( S > ( ( ~ ( ~ S ) ) > ( S & S ) ) ) ) : IMPI N2 N11 ; QED"
+    }
+   },
+   "max_pruned_len_by_pool": {
+    "redreq": 8,
+    "d3req": 12
+   },
+   "max_pruned_len_anywhere": 12,
+   "max_minus_cap_by_pool": {
+    "redreq": 0,
+    "d3req": 4
+   }
   },
   {
    "arm": "K10",
@@ -1403,10 +1793,227 @@
     "temperature": 0,
     "seed": 0
    },
-   "redreq": null,
-   "d3req": null,
-   "ladder_T1": null,
-   "ladder_frozen": null
+   "redreq": {
+    "file": "artifacts/kh/cov_k10_s0_redreq.s0.jsonl",
+    "theorems": 300,
+    "solved": 70,
+    "max_pruned_len": 10,
+    "accepted_proofs_ge8": 33,
+    "ge10": 2,
+    "ge12": 0,
+    "ge14": 0,
+    "distinct_accepted_proofs": 76,
+    "pruned_hist": {
+     "7": 43,
+     "8": 31,
+     "10": 2
+    },
+    "term_size_of_longest": 26,
+    "mean_term_size": 31.11,
+    "max_term_size": 44,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 28.1,
+      "max": 35,
+      "n": 43
+     },
+     "8": {
+      "mean": 35.2,
+      "max": 44,
+      "n": 31
+     },
+     "10": {
+      "mean": 33.5,
+      "max": 41,
+      "n": 2
+     }
+    },
+    "strata_solved": {
+     "10": [
+      0,
+      33
+     ],
+     "7": [
+      40,
+      52
+     ],
+     "8": [
+      30,
+      133
+     ],
+     "9": [
+      0,
+      82
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 191815,
+    "parse_fail_rate": 0.319692,
+    "longest_proof": {
+     "name": "targets_reductio_req_13",
+     "thm": "( ~ ( ( ~ Q ) & ( S v Q ) ) ) , ( S v Q ) |- Q",
+     "pruned": 10,
+     "written": 10,
+     "term_size": 26,
+     "proof": "N1 ( ~ ( ( ~ Q ) & ( S v Q ) ) ) : PR ; N2 ( S v Q ) : PR ; N3 | ( ~ Q ) : AS ; N4 | ( ( ~ Q ) & ( S v Q ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ Q ) ) : NEGI N3 N5 ; N7 | S : AS ; N8 | Q : DN N6 ; N9 | Q : AS ; N10 Q : ORE N2 N7 N8 N9 N9 ; QED"
+    }
+   },
+   "d3req": {
+    "file": "artifacts/kh/cov_k10_s0_d3req.s0.jsonl",
+    "theorems": 300,
+    "solved": 207,
+    "max_pruned_len": 13,
+    "accepted_proofs_ge8": 498,
+    "ge10": 11,
+    "ge12": 2,
+    "ge14": 0,
+    "distinct_accepted_proofs": 564,
+    "pruned_hist": {
+     "7": 66,
+     "8": 375,
+     "9": 112,
+     "10": 1,
+     "11": 8,
+     "13": 2
+    },
+    "term_size_of_longest": 53,
+    "mean_term_size": 48.33,
+    "max_term_size": 102,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 45.6,
+      "max": 65,
+      "n": 66
+     },
+     "8": {
+      "mean": 49.2,
+      "max": 102,
+      "n": 375
+     },
+     "9": {
+      "mean": 46.2,
+      "max": 86,
+      "n": 112
+     },
+     "10": {
+      "mean": 64,
+      "max": 64,
+      "n": 1
+     },
+     "11": {
+      "mean": 59,
+      "max": 71,
+      "n": 8
+     },
+     "13": {
+      "mean": 49.5,
+      "max": 53,
+      "n": 2
+     }
+    },
+    "strata_solved": {
+     "7": [
+      4,
+      6
+     ],
+     "8": [
+      203,
+      294
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 427345,
+    "parse_fail_rate": 0.712242,
+    "longest_proof": {
+     "name": "d3req_1",
+     "thm": "( R v R ) |- ( S > ( R > ( ( ~ ( ~ Q ) ) > ( S v R ) ) ) )",
+     "pruned": 13,
+     "written": 13,
+     "term_size": 53,
+     "proof": "N1 ( R v R ) : PR ; N2 | ( ~ ( ~ Q ) ) : AS ; N3 | | R : AS ; N4 | | ( S v R ) : ORI2 N3 ; N5 | | R : AS ; N6 | | ( S v R ) : ORI2 N5 ; N7 | ( S v R ) : ORE N1 N3 N4 N5 N6 ; N8 ( ( ~ ( ~ Q ) ) > ( S v R ) ) : IMPI N2 N7 ; N9 | S : AS ; N10 | | R : AS ; N11 | | ( ( ~ ( ~ Q ) ) > ( S v R ) ) : R N8 ; N12 | ( R > ( ( ~ ( ~ Q ) ) > ( S v R ) ) ) : IMPI N10 N11 ; N13 ( S > ( R > ( ( ~ ( ~ Q ) ) > ( S v R ) ) ) ) : IMPI N9 N12 ; QED"
+    }
+   },
+   "ladder_T1": {
+    "dir": "artifacts/kh/la_T1_k10_s0",
+    "transfer_solved": 1554,
+    "transfer_n": 2285,
+    "lstar": 12,
+    "ge_L_true": {
+     "7": 1554,
+     "8": 1350,
+     "9": 1127,
+     "10": 285,
+     "11": 59,
+     "12": 10,
+     "13": 0,
+     "14": 0
+    },
+    "solved_by_L_true": {
+     "7": 204,
+     "8": 223,
+     "9": 842,
+     "10": 226,
+     "11": 49,
+     "12": 10
+    },
+    "max_pruned_len": 16,
+    "longest": {
+     "name": "la_transfer_547",
+     "L_true": 9,
+     "pruned": 16,
+     "term_size": 82
+    },
+    "mean_term_size": 57.16,
+    "max_term_size": 149,
+    "lstar_censored_at": 14
+   },
+   "ladder_frozen": {
+    "dir": "artifacts/kh/la_frozen_k10_s0",
+    "transfer_solved": 743,
+    "transfer_n": 2285,
+    "lstar": 11,
+    "ge_L_true": {
+     "7": 743,
+     "8": 582,
+     "9": 443,
+     "10": 74,
+     "11": 9,
+     "12": 1,
+     "13": 0,
+     "14": 0
+    },
+    "solved_by_L_true": {
+     "7": 161,
+     "8": 139,
+     "9": 369,
+     "10": 65,
+     "11": 8,
+     "12": 1
+    },
+    "max_pruned_len": 15,
+    "longest": {
+     "name": "la_transfer_1301",
+     "L_true": 9,
+     "pruned": 15,
+     "term_size": 67
+    },
+    "mean_term_size": 48.83,
+    "max_term_size": 114,
+    "lstar_censored_at": 14
+   },
+   "max_pruned_len_by_pool": {
+    "redreq": 10,
+    "d3req": 13,
+    "ladder_T1_transfer": 16,
+    "ladder_frozen_transfer": 15
+   },
+   "max_pruned_len_anywhere": 16,
+   "max_minus_cap_by_pool": {
+    "redreq": 0,
+    "d3req": 3,
+    "ladder_T1_transfer": 6,
+    "ladder_frozen_transfer": 5
+   }
   },
   {
    "arm": "K10",
@@ -1522,8 +2129,173 @@
     "temperature": 0,
     "seed": 0
    },
-   "redreq": null,
-   "d3req": null
+   "redreq": {
+    "file": "artifacts/kh/cov_k10_s1_redreq.s0.jsonl",
+    "theorems": 300,
+    "solved": 87,
+    "max_pruned_len": 11,
+    "accepted_proofs_ge8": 43,
+    "ge10": 4,
+    "ge12": 0,
+    "ge14": 0,
+    "distinct_accepted_proofs": 98,
+    "pruned_hist": {
+     "7": 55,
+     "8": 39,
+     "10": 2,
+     "11": 2
+    },
+    "term_size_of_longest": 34,
+    "mean_term_size": 32.34,
+    "max_term_size": 59,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 29.5,
+      "max": 59,
+      "n": 55
+     },
+     "8": {
+      "mean": 36.2,
+      "max": 54,
+      "n": 39
+     },
+     "10": {
+      "mean": 35.5,
+      "max": 38,
+      "n": 2
+     },
+     "11": {
+      "mean": 33,
+      "max": 34,
+      "n": 2
+     }
+    },
+    "strata_solved": {
+     "10": [
+      0,
+      33
+     ],
+     "7": [
+      50,
+      52
+     ],
+     "8": [
+      37,
+      133
+     ],
+     "9": [
+      0,
+      82
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 182362,
+    "parse_fail_rate": 0.303937,
+    "longest_proof": {
+     "name": "targets_reductio_req_67",
+     "thm": "( ( ~ ( R > P ) ) > Q ) , ( ~ Q ) |- ( R > P )",
+     "pruned": 11,
+     "written": 11,
+     "term_size": 34,
+     "proof": "N1 ( ( ~ ( R > P ) ) > Q ) : PR ; N2 ( ~ Q ) : PR ; N3 | ( ~ ( R > P ) ) : AS ; N4 | ( Q v ( ~ ( R > P ) ) ) : ORI2 N3 ; N5 | | Q : AS ; N6 | | ( ~ ( R > P ) ) : AS ; N7 | | Q : IMPE N1 N6 ; N8 | Q : ORE N4 N5 N5 N6 N7 ; N9 | F : NEGE N8 N2 ; N10 ( ~ ( ~ ( R > P ) ) ) : NEGI N3 N9 ; N11 ( R > P ) : DN N10 ; QED"
+    }
+   },
+   "d3req": {
+    "file": "artifacts/kh/cov_k10_s1_d3req.s0.jsonl",
+    "theorems": 300,
+    "solved": 282,
+    "max_pruned_len": 14,
+    "accepted_proofs_ge8": 1319,
+    "ge10": 112,
+    "ge12": 24,
+    "ge14": 1,
+    "distinct_accepted_proofs": 1489,
+    "pruned_hist": {
+     "7": 170,
+     "8": 937,
+     "9": 270,
+     "10": 13,
+     "11": 75,
+     "12": 15,
+     "13": 8,
+     "14": 1
+    },
+    "term_size_of_longest": 81,
+    "mean_term_size": 53.53,
+    "max_term_size": 114,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 45.3,
+      "max": 79,
+      "n": 170
+     },
+     "8": {
+      "mean": 54.5,
+      "max": 114,
+      "n": 937
+     },
+     "9": {
+      "mean": 52.1,
+      "max": 111,
+      "n": 270
+     },
+     "10": {
+      "mean": 65.8,
+      "max": 114,
+      "n": 13
+     },
+     "11": {
+      "mean": 62,
+      "max": 93,
+      "n": 75
+     },
+     "12": {
+      "mean": 50.7,
+      "max": 72,
+      "n": 15
+     },
+     "13": {
+      "mean": 62,
+      "max": 72,
+      "n": 8
+     },
+     "14": {
+      "mean": 81,
+      "max": 81,
+      "n": 1
+     }
+    },
+    "strata_solved": {
+     "7": [
+      6,
+      6
+     ],
+     "8": [
+      276,
+      294
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 261093,
+    "parse_fail_rate": 0.435155,
+    "longest_proof": {
+     "name": "d3req_173",
+     "thm": "P |- ( ( P v ( P & R ) ) > ( ( ~ ( ~ ( ~ R ) ) ) > ( ( ~ ( ~ Q ) ) > ( P v ( Q v P ) ) ) ) )",
+     "pruned": 14,
+     "written": 14,
+     "term_size": 81,
+     "proof": "N1 P : PR ; N2 | ( P v ( P & R ) ) : AS ; N3 | | P : AS ; N4 | | ( P v ( Q v P ) ) : ORI1 N1 ; N5 | | ( P & R ) : AS ; N6 | | P : R N1 ; N7 | | ( P v ( Q v P ) ) : ORI1 N6 ; N8 | ( P v ( Q v P ) ) : ORE N2 N3 N4 N5 N7 ; N9 | | ( ~ ( ~ ( ~ R ) ) ) : AS ; N10 | | | ( ~ ( ~ Q ) ) : AS ; N11 | | | ( P v ( Q v P ) ) : R N8 ; N12 | | ( ( ~ ( ~ Q ) ) > ( P v ( Q v P ) ) ) : IMPI N10 N11 ; N13 | ( ( ~ ( ~ ( ~ R ) ) ) > ( ( ~ ( ~ Q ) ) > ( P v ( Q v P ) ) ) ) : IMPI N9 N12 ; N14 ( ( P v ( P & R ) ) > ( ( ~ ( ~ ( ~ R ) ) ) > ( ( ~ ( ~ Q ) ) > ( P v ( Q v P ) ) ) ) ) : IMPI N2 N13 ; QED"
+    }
+   },
+   "max_pruned_len_by_pool": {
+    "redreq": 11,
+    "d3req": 14
+   },
+   "max_pruned_len_anywhere": 14,
+   "max_minus_cap_by_pool": {
+    "redreq": 1,
+    "d3req": 4
+   }
   },
   {
    "arm": "K12",
@@ -1540,10 +2312,369 @@
     "stage1": "6,000 steps, bs 128, --cap 12"
    },
    "inherited": false,
-   "redreq": null,
-   "d3req": null,
-   "ladder_T1": null,
-   "ladder_frozen": null
+   "heldout": {
+    "n": 5000,
+    "solved": 4714,
+    "rate": 0.9428,
+    "ci": [
+     0.9360166152035871,
+     0.9489034829865715
+    ],
+    "by_len": {
+     "2": {
+      "solved": 998,
+      "n": 1000,
+      "rate": 0.998,
+      "ci": [
+       0.9927370411104123,
+       0.9994513678975429
+      ]
+     },
+     "3": {
+      "solved": 983,
+      "n": 1000,
+      "rate": 0.983,
+      "ci": [
+       0.9729438156287651,
+       0.9893594003367818
+      ]
+     },
+     "4": {
+      "solved": 949,
+      "n": 1000,
+      "rate": 0.949,
+      "ci": [
+       0.9335641957120492,
+       0.9609992493573721
+      ]
+     },
+     "5": {
+      "solved": 938,
+      "n": 1000,
+      "rate": 0.938,
+      "ci": [
+       0.9213116000993365,
+       0.9513360367389853
+      ]
+     },
+     "6": {
+      "solved": 846,
+      "n": 1000,
+      "rate": 0.846,
+      "ci": [
+       0.8223076809446219,
+       0.8670441052335958
+      ]
+     }
+    },
+    "written_hist": {
+     "2": 1010,
+     "3": 938,
+     "4": 861,
+     "5": 911,
+     "6": 717,
+     "7": 85,
+     "8": 50,
+     "9": 39,
+     "10": 40,
+     "11": 55,
+     "12": 7,
+     "13": 1
+    },
+    "pruned_hist": {
+     "2": 1011,
+     "3": 943,
+     "4": 863,
+     "5": 911,
+     "6": 716,
+     "7": 85,
+     "8": 45,
+     "9": 40,
+     "10": 39,
+     "11": 53,
+     "12": 7,
+     "13": 1
+    },
+    "frontier_written": 12,
+    "frontier_pruned": 12,
+    "reasons": {
+     "parse: expected line index, got 'LEANPARSE'": 77,
+     "rule check failed: IMPE": 50,
+     "rule check failed: ANDI": 28,
+     "rule check failed: NEGE": 27,
+     "rule check failed: ANDE2": 20,
+     "rule check failed: IMPI": 19,
+     "final formula is not the conclusion": 16,
+     "rule check failed: DN": 13,
+     "rule check failed: ORI2": 12,
+     "rule check failed: R": 7
+    },
+    "ckpt": "ckpts/kh/stage1_k12_s0.pt",
+    "in": "data/p2/heldout.jsonl",
+    "k": 1,
+    "temperature": 0,
+    "seed": 0
+   },
+   "redreq": {
+    "file": "artifacts/kh/cov_k12_s0_redreq.s0.jsonl",
+    "theorems": 300,
+    "solved": 73,
+    "max_pruned_len": 13,
+    "accepted_proofs_ge8": 50,
+    "ge10": 16,
+    "ge12": 7,
+    "ge14": 0,
+    "distinct_accepted_proofs": 94,
+    "pruned_hist": {
+     "7": 44,
+     "8": 33,
+     "9": 1,
+     "11": 9,
+     "12": 6,
+     "13": 1
+    },
+    "term_size_of_longest": 42,
+    "mean_term_size": 33.39,
+    "max_term_size": 59,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 30.1,
+      "max": 59,
+      "n": 44
+     },
+     "8": {
+      "mean": 34.7,
+      "max": 44,
+      "n": 33
+     },
+     "9": {
+      "mean": 27,
+      "max": 27,
+      "n": 1
+     },
+     "11": {
+      "mean": 37.7,
+      "max": 47,
+      "n": 9
+     },
+     "12": {
+      "mean": 43.8,
+      "max": 57,
+      "n": 6
+     },
+     "13": {
+      "mean": 42,
+      "max": 42,
+      "n": 1
+     }
+    },
+    "strata_solved": {
+     "10": [
+      0,
+      33
+     ],
+     "7": [
+      41,
+      52
+     ],
+     "8": [
+      30,
+      133
+     ],
+     "9": [
+      2,
+      82
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 249162,
+    "parse_fail_rate": 0.41527,
+    "longest_proof": {
+     "name": "targets_reductio_req_120",
+     "thm": "( ~ ( ( ~ S ) & ( R v P ) ) ) , ( R v P ) |- S",
+     "pruned": 13,
+     "written": 13,
+     "term_size": 42,
+     "proof": "N1 ( ~ ( ( ~ S ) & ( R v P ) ) ) : PR ; N2 ( R v P ) : PR ; N3 | ( ~ S ) : AS ; N4 | | R : AS ; N5 | | ( ( ~ S ) & ( R v P ) ) : ANDI N3 N2 ; N6 | | P : AS ; N7 | | ( ~ S ) : R N3 ; N8 | | ( R v P ) : R N2 ; N9 | | ( ( ~ S ) & ( R v P ) ) : ANDI N7 N8 ; N10 | ( ( ~ S ) & ( R v P ) ) : ORE N2 N4 N5 N6 N9 ; N11 | F : NEGE N10 N1 ; N12 ( ~ ( ~ S ) ) : NEGI N3 N11 ; N13 S : DN N12 ; QED"
+    }
+   },
+   "d3req": {
+    "file": "artifacts/kh/cov_k12_s0_d3req.s0.jsonl",
+    "theorems": 300,
+    "solved": 252,
+    "max_pruned_len": 15,
+    "accepted_proofs_ge8": 1344,
+    "ge10": 99,
+    "ge12": 56,
+    "ge14": 2,
+    "distinct_accepted_proofs": 1561,
+    "pruned_hist": {
+     "7": 217,
+     "8": 1052,
+     "9": 193,
+     "10": 5,
+     "11": 38,
+     "12": 19,
+     "13": 35,
+     "14": 1,
+     "15": 1
+    },
+    "term_size_of_longest": 72,
+    "mean_term_size": 49.37,
+    "max_term_size": 111,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 43.5,
+      "max": 79,
+      "n": 217
+     },
+     "8": {
+      "mean": 50.5,
+      "max": 111,
+      "n": 1052
+     },
+     "9": {
+      "mean": 44.3,
+      "max": 83,
+      "n": 193
+     },
+     "10": {
+      "mean": 48,
+      "max": 61,
+      "n": 5
+     },
+     "11": {
+      "mean": 64.8,
+      "max": 106,
+      "n": 38
+     },
+     "12": {
+      "mean": 49.8,
+      "max": 62,
+      "n": 19
+     },
+     "13": {
+      "mean": 60.8,
+      "max": 104,
+      "n": 35
+     },
+     "14": {
+      "mean": 77,
+      "max": 77,
+      "n": 1
+     },
+     "15": {
+      "mean": 72,
+      "max": 72,
+      "n": 1
+     }
+    },
+    "strata_solved": {
+     "7": [
+      3,
+      6
+     ],
+     "8": [
+      249,
+      294
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 414161,
+    "parse_fail_rate": 0.690268,
+    "longest_proof": {
+     "name": "d3req_62",
+     "thm": "P |- ( ( P & P ) > ( ( ( ~ R ) & Q ) > ( ( P & P ) > ( P v Q ) ) ) )",
+     "pruned": 15,
+     "written": 15,
+     "term_size": 72,
+     "proof": "N1 P : PR ; N2 | ( P & P ) : AS ; N3 | ( P v ( P & P ) ) : ORI2 N2 ; N4 | | P : AS ; N5 | | ( P v Q ) : ORI1 N4 ; N6 | | ( P & P ) : AS ; N7 | | P : R N1 ; N8 | | ( P v Q ) : ORI1 N7 ; N9 | ( P v Q ) : ORE N3 N4 N5 N6 N8 ; N10 ( ( P & P ) > ( P v Q ) ) : IMPI N2 N9 ; N11 | ( P & P ) : AS ; N12 | | ( ( ~ R ) & Q ) : AS ; N13 | | ( ( P & P ) > ( P v Q ) ) : R N10 ; N14 | ( ( ( ~ R ) & Q ) > ( ( P & P ) > ( P v Q ) ) ) : IMPI N12 N13 ; N15 ( ( P & P ) > ( ( ( ~ R ) & Q ) > ( ( P & P ) > ( P v Q ) ) ) ) : IMPI N11 N14 ; QED"
+    }
+   },
+   "ladder_T1": {
+    "dir": "artifacts/kh/la_T1_k12_s0",
+    "transfer_solved": 1685,
+    "transfer_n": 2285,
+    "lstar": 12,
+    "ge_L_true": {
+     "7": 1685,
+     "8": 1462,
+     "9": 1198,
+     "10": 333,
+     "11": 69,
+     "12": 15,
+     "13": 3,
+     "14": 1
+    },
+    "solved_by_L_true": {
+     "7": 223,
+     "8": 264,
+     "9": 865,
+     "10": 264,
+     "11": 54,
+     "12": 12,
+     "13": 2,
+     "14": 1
+    },
+    "max_pruned_len": 18,
+    "longest": {
+     "name": "la_transfer_325",
+     "L_true": 9,
+     "pruned": 18,
+     "term_size": 95
+    },
+    "mean_term_size": 56.43,
+    "max_term_size": 159,
+    "lstar_censored_at": 14
+   },
+   "ladder_frozen": {
+    "dir": "artifacts/kh/la_frozen_k12_s0",
+    "transfer_solved": 1088,
+    "transfer_n": 2285,
+    "lstar": 12,
+    "ge_L_true": {
+     "7": 1088,
+     "8": 904,
+     "9": 712,
+     "10": 166,
+     "11": 30,
+     "12": 5,
+     "13": 1,
+     "14": 0
+    },
+    "solved_by_L_true": {
+     "7": 184,
+     "8": 192,
+     "9": 546,
+     "10": 136,
+     "11": 25,
+     "12": 4,
+     "13": 1
+    },
+    "max_pruned_len": 17,
+    "longest": {
+     "name": "la_transfer_261",
+     "L_true": 9,
+     "pruned": 17,
+     "term_size": 81
+    },
+    "mean_term_size": 51.65,
+    "max_term_size": 141,
+    "lstar_censored_at": 14
+   },
+   "max_pruned_len_by_pool": {
+    "redreq": 13,
+    "d3req": 15,
+    "ladder_T1_transfer": 18,
+    "ladder_frozen_transfer": 17
+   },
+   "max_pruned_len_anywhere": 18,
+   "max_minus_cap_by_pool": {
+    "redreq": 1,
+    "d3req": 3,
+    "ladder_T1_transfer": 6,
+    "ladder_frozen_transfer": 5
+   }
   },
   {
    "arm": "K12",
@@ -1560,8 +2691,282 @@
     "stage1": "6,000 steps, bs 128, --cap 12"
    },
    "inherited": false,
-   "redreq": null,
-   "d3req": null
+   "heldout": {
+    "n": 5000,
+    "solved": 4561,
+    "rate": 0.9122,
+    "ci": [
+     0.9040357047900347,
+     0.9197313784845438
+    ],
+    "by_len": {
+     "2": {
+      "solved": 994,
+      "n": 1000,
+      "rate": 0.994,
+      "ci": [
+       0.9869716557675544,
+       0.9972473684290918
+      ]
+     },
+     "3": {
+      "solved": 986,
+      "n": 1000,
+      "rate": 0.986,
+      "ci": [
+       0.9766377520234698,
+       0.9916425025505587
+      ]
+     },
+     "4": {
+      "solved": 939,
+      "n": 1000,
+      "rate": 0.939,
+      "ci": [
+       0.922419543452788,
+       0.9522204395883611
+      ]
+     },
+     "5": {
+      "solved": 936,
+      "n": 1000,
+      "rate": 0.936,
+      "ci": [
+       0.9190989242389269,
+       0.9495640201937408
+      ]
+     },
+     "6": {
+      "solved": 706,
+      "n": 1000,
+      "rate": 0.706,
+      "ci": [
+       0.6770168391561994,
+       0.7334064786262077
+      ]
+     }
+    },
+    "written_hist": {
+     "2": 1018,
+     "3": 963,
+     "4": 867,
+     "5": 919,
+     "6": 599,
+     "7": 31,
+     "8": 31,
+     "9": 45,
+     "10": 46,
+     "11": 33,
+     "12": 8,
+     "13": 1
+    },
+    "pruned_hist": {
+     "2": 1020,
+     "3": 963,
+     "4": 872,
+     "5": 920,
+     "6": 596,
+     "7": 29,
+     "8": 33,
+     "9": 41,
+     "10": 47,
+     "11": 31,
+     "12": 8,
+     "13": 1
+    },
+    "frontier_written": 12,
+    "frontier_pruned": 12,
+    "reasons": {
+     "parse: expected line index, got 'LEANPARSE'": 103,
+     "rule check failed: DN": 64,
+     "rule check failed: ANDI": 54,
+     "rule check failed: ANDE2": 36,
+     "rule check failed: IMPI": 35,
+     "rule check failed: IMPE": 30,
+     "final formula is not the conclusion": 28,
+     "rule check failed: ORI2": 28,
+     "rule check failed: ORI1": 28,
+     "rule check failed: R": 13
+    },
+    "ckpt": "ckpts/kh/stage1_k12_s1.pt",
+    "in": "data/p2/heldout.jsonl",
+    "k": 1,
+    "temperature": 0,
+    "seed": 0
+   },
+   "redreq": {
+    "file": "artifacts/kh/cov_k12_s1_redreq.s0.jsonl",
+    "theorems": 300,
+    "solved": 86,
+    "max_pruned_len": 12,
+    "accepted_proofs_ge8": 77,
+    "ge10": 39,
+    "ge12": 23,
+    "ge14": 0,
+    "distinct_accepted_proofs": 137,
+    "pruned_hist": {
+     "7": 60,
+     "8": 37,
+     "9": 1,
+     "10": 3,
+     "11": 13,
+     "12": 23
+    },
+    "term_size_of_longest": 58,
+    "mean_term_size": 36.45,
+    "max_term_size": 62,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 30.0,
+      "max": 59,
+      "n": 60
+     },
+     "8": {
+      "mean": 35.8,
+      "max": 49,
+      "n": 37
+     },
+     "9": {
+      "mean": 43,
+      "max": 43,
+      "n": 1
+     },
+     "10": {
+      "mean": 36,
+      "max": 36,
+      "n": 3
+     },
+     "11": {
+      "mean": 44.2,
+      "max": 56,
+      "n": 13
+     },
+     "12": {
+      "mean": 49.6,
+      "max": 62,
+      "n": 23
+     }
+    },
+    "strata_solved": {
+     "10": [
+      0,
+      33
+     ],
+     "7": [
+      51,
+      52
+     ],
+     "8": [
+      34,
+      133
+     ],
+     "9": [
+      1,
+      82
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 192770,
+    "parse_fail_rate": 0.321283,
+    "longest_proof": {
+     "name": "targets_reductio_req_51",
+     "thm": "( ~ ( ( ~ ( Q & R ) ) & ( R > P ) ) ) , ( R > P ) |- ( Q & R )",
+     "pruned": 12,
+     "written": 12,
+     "term_size": 58,
+     "proof": "N1 ( ~ ( ( ~ ( Q & R ) ) & ( R > P ) ) ) : PR ; N2 ( R > P ) : PR ; N3 | ( ~ ( Q & R ) ) : AS ; N4 | ( ( ~ ( Q & R ) ) & ( R > P ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( Q & R ) ) ) : NEGI N3 N5 ; N7 ( ( ~ ( ~ ( Q & R ) ) ) v ( ~ ( P v S ) ) ) : ORI1 N6 ; N8 | ( ~ ( ~ ( Q & R ) ) ) : AS ; N9 | ( Q & R ) : DN N6 ; N10 | ( ~ ( P v S ) ) : AS ; N11 | ( Q & R ) : DN N6 ; N12 ( Q & R ) : ORE N7 N8 N9 N10 N11 ; QED"
+    }
+   },
+   "d3req": {
+    "file": "artifacts/kh/cov_k12_s1_d3req.s0.jsonl",
+    "theorems": 300,
+    "solved": 231,
+    "max_pruned_len": 13,
+    "accepted_proofs_ge8": 865,
+    "ge10": 107,
+    "ge12": 42,
+    "ge14": 0,
+    "distinct_accepted_proofs": 923,
+    "pruned_hist": {
+     "7": 58,
+     "8": 625,
+     "9": 133,
+     "10": 3,
+     "11": 62,
+     "12": 8,
+     "13": 34
+    },
+    "term_size_of_longest": 61,
+    "mean_term_size": 53.45,
+    "max_term_size": 136,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 48.4,
+      "max": 79,
+      "n": 58
+     },
+     "8": {
+      "mean": 53.4,
+      "max": 114,
+      "n": 625
+     },
+     "9": {
+      "mean": 46.2,
+      "max": 88,
+      "n": 133
+     },
+     "10": {
+      "mean": 52.3,
+      "max": 75,
+      "n": 3
+     },
+     "11": {
+      "mean": 67.1,
+      "max": 117,
+      "n": 62
+     },
+     "12": {
+      "mean": 40.5,
+      "max": 56,
+      "n": 8
+     },
+     "13": {
+      "mean": 70.5,
+      "max": 136,
+      "n": 34
+     }
+    },
+    "strata_solved": {
+     "7": [
+      3,
+      6
+     ],
+     "8": [
+      228,
+      294
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 395376,
+    "parse_fail_rate": 0.65896,
+    "longest_proof": {
+     "name": "d3req_0",
+     "thm": "S |- ( ( ~ ( ~ S ) ) > ( ( S > Q ) > ( P > Q ) ) )",
+     "pruned": 13,
+     "written": 13,
+     "term_size": 61,
+     "proof": "N1 S : PR ; N2 | ( S > Q ) : AS ; N3 | | P : AS ; N4 | | Q : IMPE N2 N1 ; N5 | ( P > Q ) : IMPI N3 N4 ; N6 ( ( S > Q ) > ( P > Q ) ) : IMPI N2 N5 ; N7 ( ( ( S > Q ) > ( P > Q ) ) v S ) : ORI1 N6 ; N8 | ( ~ ( ~ S ) ) : AS ; N9 | | ( ( S > Q ) > ( P > Q ) ) : AS ; N10 | | S : AS ; N11 | | ( ( S > Q ) > ( P > Q ) ) : R N6 ; N12 | ( ( S > Q ) > ( P > Q ) ) : ORE N7 N9 N9 N10 N11 ; N13 ( ( ~ ( ~ S ) ) > ( ( S > Q ) > ( P > Q ) ) ) : IMPI N8 N12 ; QED"
+    }
+   },
+   "max_pruned_len_by_pool": {
+    "redreq": 12,
+    "d3req": 13
+   },
+   "max_pruned_len_anywhere": 13,
+   "max_minus_cap_by_pool": {
+    "redreq": 0,
+    "d3req": 1
+   }
   },
   {
    "arm": "K14",
@@ -1578,10 +2983,378 @@
     "stage1": "6,000 steps, bs 128, --cap 14"
    },
    "inherited": false,
-   "redreq": null,
-   "d3req": null,
-   "ladder_T1": null,
-   "ladder_frozen": null
+   "heldout": {
+    "n": 5000,
+    "solved": 4435,
+    "rate": 0.887,
+    "ci": [
+     0.8779257229090438,
+     0.8954800539644687
+    ],
+    "by_len": {
+     "2": {
+      "solved": 992,
+      "n": 1000,
+      "rate": 0.992,
+      "ci": [
+       0.9842934787948114,
+       0.9959408529961804
+      ]
+     },
+     "3": {
+      "solved": 988,
+      "n": 1000,
+      "rate": 0.988,
+      "ci": [
+       0.9791425260718425,
+       0.9931224209078404
+      ]
+     },
+     "4": {
+      "solved": 944,
+      "n": 1000,
+      "rate": 0.944,
+      "ci": [
+       0.9279763237468875,
+       0.9566253903083978
+      ]
+     },
+     "5": {
+      "solved": 914,
+      "n": 1000,
+      "rate": 0.914,
+      "ci": [
+       0.8949995893100292,
+       0.9298317386604397
+      ]
+     },
+     "6": {
+      "solved": 597,
+      "n": 1000,
+      "rate": 0.597,
+      "ci": [
+       0.5662831955382815,
+       0.6269743861359586
+      ]
+     }
+    },
+    "written_hist": {
+     "2": 1018,
+     "3": 962,
+     "4": 900,
+     "5": 898,
+     "6": 473,
+     "7": 39,
+     "8": 40,
+     "9": 30,
+     "10": 32,
+     "11": 31,
+     "12": 9,
+     "13": 2,
+     "14": 1
+    },
+    "pruned_hist": {
+     "2": 1018,
+     "3": 963,
+     "4": 904,
+     "5": 903,
+     "6": 465,
+     "7": 40,
+     "8": 40,
+     "9": 29,
+     "10": 31,
+     "11": 31,
+     "12": 8,
+     "13": 2,
+     "14": 1
+    },
+    "frontier_written": 12,
+    "frontier_pruned": 12,
+    "reasons": {
+     "parse: expected line index, got 'LEANPARSE'": 311,
+     "rule check failed: IMPE": 60,
+     "rule check failed: ANDI": 55,
+     "rule check failed: ORI2": 21,
+     "rule check failed: NEGE": 21,
+     "rule check failed: ANDE2": 18,
+     "final formula is not the conclusion": 17,
+     "rule check failed: ORI1": 15,
+     "rule check failed: ANDE1": 12,
+     "rule check failed: DN": 10
+    },
+    "ckpt": "ckpts/kh/stage1_k14_s0.pt",
+    "in": "data/p2/heldout.jsonl",
+    "k": 1,
+    "temperature": 0,
+    "seed": 0
+   },
+   "redreq": {
+    "file": "artifacts/kh/cov_k14_s0_redreq.s0.jsonl",
+    "theorems": 300,
+    "solved": 84,
+    "max_pruned_len": 14,
+    "accepted_proofs_ge8": 78,
+    "ge10": 33,
+    "ge12": 19,
+    "ge14": 5,
+    "distinct_accepted_proofs": 153,
+    "pruned_hist": {
+     "7": 75,
+     "8": 45,
+     "10": 6,
+     "11": 8,
+     "12": 10,
+     "13": 4,
+     "14": 5
+    },
+    "term_size_of_longest": 61,
+    "mean_term_size": 34.88,
+    "max_term_size": 61,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 30.2,
+      "max": 59,
+      "n": 75
+     },
+     "8": {
+      "mean": 34.6,
+      "max": 44,
+      "n": 45
+     },
+     "10": {
+      "mean": 39.3,
+      "max": 58,
+      "n": 6
+     },
+     "11": {
+      "mean": 39.2,
+      "max": 46,
+      "n": 8
+     },
+     "12": {
+      "mean": 48.2,
+      "max": 60,
+      "n": 10
+     },
+     "13": {
+      "mean": 55,
+      "max": 58,
+      "n": 4
+     },
+     "14": {
+      "mean": 53.2,
+      "max": 61,
+      "n": 5
+     }
+    },
+    "strata_solved": {
+     "10": [
+      0,
+      33
+     ],
+     "7": [
+      46,
+      52
+     ],
+     "8": [
+      38,
+      133
+     ],
+     "9": [
+      0,
+      82
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 219017,
+    "parse_fail_rate": 0.365028,
+    "longest_proof": {
+     "name": "targets_reductio_req_72",
+     "thm": "( ~ ( ( ~ ( Q v S ) ) & ( ~ Q ) ) ) , ( ~ Q ) |- ( Q v S )",
+     "pruned": 14,
+     "written": 14,
+     "term_size": 61,
+     "proof": "N1 ( ~ ( ( ~ ( Q v S ) ) & ( ~ Q ) ) ) : PR ; N2 ( ~ Q ) : PR ; N3 | ( ~ ( Q v S ) ) : AS ; N4 | ( ( ~ ( Q v S ) ) v P ) : ORI1 N3 ; N5 | | ( ~ ( Q v S ) ) : AS ; N6 | | ( ( ~ ( Q v S ) ) & ( ~ Q ) ) : ANDI N5 N2 ; N7 | | P : AS ; N8 | | ( ~ ( Q v S ) ) : R N3 ; N9 | | ( ~ Q ) : R N2 ; N10 | | ( ( ~ ( Q v S ) ) & ( ~ Q ) ) : ANDI N8 N9 ; N11 | ( ( ~ ( Q v S ) ) & ( ~ Q ) ) : ORE N4 N5 N6 N7 N10 ; N12 | F : NEGE N11 N1 ; N13 ( ~ ( ~ ( Q v S ) ) ) : NEGI N3 N12 ; N14 ( Q v S ) : DN N13 ; QED"
+    }
+   },
+   "d3req": {
+    "file": "artifacts/kh/cov_k14_s0_d3req.s0.jsonl",
+    "theorems": 300,
+    "solved": 238,
+    "max_pruned_len": 16,
+    "accepted_proofs_ge8": 1772,
+    "ge10": 235,
+    "ge12": 186,
+    "ge14": 16,
+    "distinct_accepted_proofs": 1992,
+    "pruned_hist": {
+     "7": 220,
+     "8": 1349,
+     "9": 188,
+     "10": 4,
+     "11": 45,
+     "12": 42,
+     "13": 128,
+     "14": 14,
+     "16": 2
+    },
+    "term_size_of_longest": 58,
+    "mean_term_size": 45.64,
+    "max_term_size": 122,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 46.7,
+      "max": 71,
+      "n": 220
+     },
+     "8": {
+      "mean": 43.8,
+      "max": 104,
+      "n": 1349
+     },
+     "9": {
+      "mean": 41.6,
+      "max": 79,
+      "n": 188
+     },
+     "10": {
+      "mean": 58,
+      "max": 66,
+      "n": 4
+     },
+     "11": {
+      "mean": 57.9,
+      "max": 99,
+      "n": 45
+     },
+     "12": {
+      "mean": 51.5,
+      "max": 81,
+      "n": 42
+     },
+     "13": {
+      "mean": 60.3,
+      "max": 122,
+      "n": 128
+     },
+     "14": {
+      "mean": 65.4,
+      "max": 84,
+      "n": 14
+     },
+     "16": {
+      "mean": 58,
+      "max": 58,
+      "n": 2
+     }
+    },
+    "strata_solved": {
+     "7": [
+      5,
+      6
+     ],
+     "8": [
+      233,
+      294
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 398679,
+    "parse_fail_rate": 0.664465,
+    "longest_proof": {
+     "name": "d3req_64",
+     "thm": "( S v ( P v ( P v S ) ) ) |- ( S > ( S > ( ( ~ ( ~ S ) ) > ( S & S ) ) ) )",
+     "pruned": 16,
+     "written": 16,
+     "term_size": 58,
+     "proof": "N1 ( S v ( P v ( P v S ) ) ) : PR ; N2 | S : AS ; N3 | | S : AS ; N4 | | ( P v ( P v S ) ) : AS ; N5 | | S : R N2 ; N6 | S : ORE N1 N3 N3 N4 N5 ; N7 | | S : AS ; N8 | | ( P v ( P v S ) ) : AS ; N9 | | S : R N6 ; N10 | S : ORE N1 N7 N7 N8 N9 ; N11 | | S : AS ; N12 | | | ( ~ ( ~ S ) ) : AS ; N13 | | | ( S & S ) : ANDI N6 N10 ; N14 | | ( ( ~ ( ~ S ) ) > ( S & S ) ) : IMPI N12 N13 ; N15 | ( S > ( ( ~ ( ~ S ) ) > ( S & S ) ) ) : IMPI N11 N14 ; N16 ( S > ( S > ( ( ~ ( ~ S ) ) > ( S & S ) ) ) ) : IMPI N2 N15 ; QED"
+    }
+   },
+   "ladder_T1": {
+    "dir": "artifacts/kh/la_T1_k14_s0",
+    "transfer_solved": 1655,
+    "transfer_n": 2285,
+    "lstar": 12,
+    "ge_L_true": {
+     "7": 1655,
+     "8": 1452,
+     "9": 1185,
+     "10": 323,
+     "11": 72,
+     "12": 17,
+     "13": 4,
+     "14": 1
+    },
+    "solved_by_L_true": {
+     "7": 203,
+     "8": 267,
+     "9": 862,
+     "10": 251,
+     "11": 55,
+     "12": 13,
+     "13": 3,
+     "14": 1
+    },
+    "max_pruned_len": 20,
+    "longest": {
+     "name": "la_transfer_66",
+     "L_true": 10,
+     "pruned": 20,
+     "term_size": 70
+    },
+    "mean_term_size": 58.75,
+    "max_term_size": 154,
+    "lstar_censored_at": 14
+   },
+   "ladder_frozen": {
+    "dir": "artifacts/kh/la_frozen_k14_s0",
+    "transfer_solved": 1140,
+    "transfer_n": 2285,
+    "lstar": 12,
+    "ge_L_true": {
+     "7": 1140,
+     "8": 969,
+     "9": 786,
+     "10": 198,
+     "11": 40,
+     "12": 9,
+     "13": 2,
+     "14": 1
+    },
+    "solved_by_L_true": {
+     "7": 171,
+     "8": 183,
+     "9": 588,
+     "10": 158,
+     "11": 31,
+     "12": 7,
+     "13": 1,
+     "14": 1
+    },
+    "max_pruned_len": 19,
+    "longest": {
+     "name": "la_transfer_1227",
+     "L_true": 9,
+     "pruned": 19,
+     "term_size": 105
+    },
+    "mean_term_size": 55.17,
+    "max_term_size": 154,
+    "lstar_censored_at": 14
+   },
+   "max_pruned_len_by_pool": {
+    "redreq": 14,
+    "d3req": 16,
+    "ladder_T1_transfer": 20,
+    "ladder_frozen_transfer": 19
+   },
+   "max_pruned_len_anywhere": 20,
+   "max_minus_cap_by_pool": {
+    "redreq": 0,
+    "d3req": 2,
+    "ladder_T1_transfer": 6,
+    "ladder_frozen_transfer": 5
+   }
   },
   {
    "arm": "K14",
@@ -1598,8 +3371,308 @@
     "stage1": "6,000 steps, bs 128, --cap 14"
    },
    "inherited": false,
-   "redreq": null,
-   "d3req": null
+   "heldout": {
+    "n": 5000,
+    "solved": 4527,
+    "rate": 0.9054,
+    "ci": [
+     0.896973739088033,
+     0.9132037853164165
+    ],
+    "by_len": {
+     "2": {
+      "solved": 993,
+      "n": 1000,
+      "rate": 0.993,
+      "ci": [
+       0.9856215030730511,
+       0.996605174920768
+      ]
+     },
+     "3": {
+      "solved": 969,
+      "n": 1000,
+      "rate": 0.969,
+      "ci": [
+       0.956334233864468,
+       0.9780761352614977
+      ]
+     },
+     "4": {
+      "solved": 911,
+      "n": 1000,
+      "rate": 0.911,
+      "ci": [
+       0.891742264575647,
+       0.9271120247863402
+      ]
+     },
+     "5": {
+      "solved": 888,
+      "n": 1000,
+      "rate": 0.888,
+      "ci": [
+       0.8669495617556403,
+       0.9060807649413208
+      ]
+     },
+     "6": {
+      "solved": 766,
+      "n": 1000,
+      "rate": 0.766,
+      "ci": [
+       0.7387716492779421,
+       0.7911924406740982
+      ]
+     }
+    },
+    "written_hist": {
+     "2": 1019,
+     "3": 940,
+     "4": 815,
+     "5": 854,
+     "6": 653,
+     "7": 39,
+     "8": 41,
+     "9": 55,
+     "10": 47,
+     "11": 39,
+     "12": 19,
+     "13": 4,
+     "14": 2
+    },
+    "pruned_hist": {
+     "2": 1020,
+     "3": 940,
+     "4": 817,
+     "5": 858,
+     "6": 652,
+     "7": 39,
+     "8": 39,
+     "9": 51,
+     "10": 48,
+     "11": 39,
+     "12": 18,
+     "13": 4,
+     "14": 2
+    },
+    "frontier_written": 12,
+    "frontier_pruned": 12,
+    "reasons": {
+     "rule check failed: IMPE": 86,
+     "rule check failed: ANDI": 82,
+     "rule check failed: DN": 63,
+     "parse: expected line index, got 'LEANPARSE'": 39,
+     "rule check failed: ANDE2": 37,
+     "rule check failed: ORI2": 36,
+     "rule check failed: ORI1": 33,
+     "rule check failed: NEGE": 29,
+     "final formula is not the conclusion": 18,
+     "rule check failed: IMPI": 15
+    },
+    "ckpt": "ckpts/kh/stage1_k14_s1.pt",
+    "in": "data/p2/heldout.jsonl",
+    "k": 1,
+    "temperature": 0,
+    "seed": 0
+   },
+   "redreq": {
+    "file": "artifacts/kh/cov_k14_s1_redreq.s0.jsonl",
+    "theorems": 300,
+    "solved": 54,
+    "max_pruned_len": 14,
+    "accepted_proofs_ge8": 36,
+    "ge10": 18,
+    "ge12": 7,
+    "ge14": 1,
+    "distinct_accepted_proofs": 76,
+    "pruned_hist": {
+     "7": 40,
+     "8": 18,
+     "10": 2,
+     "11": 9,
+     "12": 5,
+     "13": 1,
+     "14": 1
+    },
+    "term_size_of_longest": 45,
+    "mean_term_size": 34.54,
+    "max_term_size": 62,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 30.3,
+      "max": 59,
+      "n": 40
+     },
+     "8": {
+      "mean": 34.6,
+      "max": 48,
+      "n": 18
+     },
+     "10": {
+      "mean": 34.5,
+      "max": 40,
+      "n": 2
+     },
+     "11": {
+      "mean": 45.3,
+      "max": 62,
+      "n": 9
+     },
+     "12": {
+      "mean": 45.4,
+      "max": 52,
+      "n": 5
+     },
+     "13": {
+      "mean": 43,
+      "max": 43,
+      "n": 1
+     },
+     "14": {
+      "mean": 45,
+      "max": 45,
+      "n": 1
+     }
+    },
+    "strata_solved": {
+     "10": [
+      0,
+      33
+     ],
+     "7": [
+      37,
+      52
+     ],
+     "8": [
+      17,
+      133
+     ],
+     "9": [
+      0,
+      82
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 134326,
+    "parse_fail_rate": 0.223877,
+    "longest_proof": {
+     "name": "targets_reductio_req_74",
+     "thm": "( ~ ( ( ~ S ) & ( ( S > R ) v ( ~ P ) ) ) ) , ( ( S > R ) v ( ~ P ) ) |- S",
+     "pruned": 14,
+     "written": 14,
+     "term_size": 45,
+     "proof": "N1 ( ~ ( ( ~ S ) & ( ( S > R ) v ( ~ P ) ) ) ) : PR ; N2 ( ( S > R ) v ( ~ P ) ) : PR ; N3 | ( ~ S ) : AS ; N4 | ( ( ~ S ) & ( ( S > R ) v ( ~ P ) ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ S ) ) : NEGI N3 N5 ; N7 | ( S > R ) : AS ; N8 | S : DN N6 ; N9 | ( ~ P ) : AS ; N10 | | ( ~ S ) : AS ; N11 | | F : NEGE N10 N6 ; N12 | ( ~ ( ~ S ) ) : NEGI N10 N11 ; N13 | S : DN N12 ; N14 S : ORE N2 N7 N8 N9 N13 ; QED"
+    }
+   },
+   "d3req": {
+    "file": "artifacts/kh/cov_k14_s1_d3req.s0.jsonl",
+    "theorems": 300,
+    "solved": 266,
+    "max_pruned_len": 16,
+    "accepted_proofs_ge8": 2158,
+    "ge10": 278,
+    "ge12": 151,
+    "ge14": 20,
+    "distinct_accepted_proofs": 2341,
+    "pruned_hist": {
+     "7": 183,
+     "8": 1679,
+     "9": 201,
+     "10": 11,
+     "11": 116,
+     "12": 35,
+     "13": 96,
+     "14": 10,
+     "15": 2,
+     "16": 8
+    },
+    "term_size_of_longest": 76,
+    "mean_term_size": 52.98,
+    "max_term_size": 137,
+    "term_size_by_pruned_len": {
+     "7": {
+      "mean": 47.3,
+      "max": 79,
+      "n": 183
+     },
+     "8": {
+      "mean": 52.3,
+      "max": 111,
+      "n": 1679
+     },
+     "9": {
+      "mean": 47.2,
+      "max": 105,
+      "n": 201
+     },
+     "10": {
+      "mean": 62.8,
+      "max": 114,
+      "n": 11
+     },
+     "11": {
+      "mean": 68.4,
+      "max": 131,
+      "n": 116
+     },
+     "12": {
+      "mean": 51.4,
+      "max": 112,
+      "n": 35
+     },
+     "13": {
+      "mean": 66.7,
+      "max": 137,
+      "n": 96
+     },
+     "14": {
+      "mean": 69.4,
+      "max": 121,
+      "n": 10
+     },
+     "15": {
+      "mean": 65,
+      "max": 72,
+      "n": 2
+     },
+     "16": {
+      "mean": 60.9,
+      "max": 76,
+      "n": 8
+     }
+    },
+    "strata_solved": {
+     "7": [
+      4,
+      6
+     ],
+     "8": [
+      262,
+      294
+     ]
+    },
+    "samples": 600000,
+    "parse_fail": 295884,
+    "parse_fail_rate": 0.49314,
+    "longest_proof": {
+     "name": "d3req_4",
+     "thm": "Q |- ( Q > ( Q > ( ( ~ ( ~ Q ) ) > ( Q & ( ~ ( ~ Q ) ) ) ) ) )",
+     "pruned": 16,
+     "written": 16,
+     "term_size": 76,
+     "proof": "N1 Q : PR ; N2 | ( ~ ( ~ Q ) ) : AS ; N3 | ( Q v ( ~ ( ~ Q ) ) ) : ORI2 N2 ; N4 | | Q : AS ; N5 | | ( Q & ( ~ ( ~ Q ) ) ) : ANDI N1 N2 ; N6 | | ( ~ ( ~ Q ) ) : AS ; N7 | | Q : R N1 ; N8 | | ( ~ ( ~ Q ) ) : R N2 ; N9 | | ( Q & ( ~ ( ~ Q ) ) ) : ANDI N7 N8 ; N10 | ( Q & ( ~ ( ~ Q ) ) ) : ORE N3 N4 N5 N6 N9 ; N11 ( ( ~ ( ~ Q ) ) > ( Q & ( ~ ( ~ Q ) ) ) ) : IMPI N2 N10 ; N12 | Q : AS ; N13 | | Q : AS ; N14 | | ( ( ~ ( ~ Q ) ) > ( Q & ( ~ ( ~ Q ) ) ) ) : R N11 ; N15 | ( Q > ( ( ~ ( ~ Q ) ) > ( Q & ( ~ ( ~ Q ) ) ) ) ) : IMPI N13 N14 ; N16 ( Q > ( Q > ( ( ~ ( ~ Q ) ) > ( Q & ( ~ ( ~ Q ) ) ) ) ) ) : IMPI N12 N15 ; QED"
+    }
+   },
+   "max_pruned_len_by_pool": {
+    "redreq": 14,
+    "d3req": 16
+   },
+   "max_pruned_len_anywhere": 16,
+   "max_minus_cap_by_pool": {
+    "redreq": 0,
+    "d3req": 2
+   }
   }
  ]
 }
