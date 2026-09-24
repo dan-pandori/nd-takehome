@@ -595,3 +595,27 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   **Consequence, stated plainly:** **E9 (ladder frozen solved / 2,285 and frozen `L*`) is not measured for any arm** and will be reported as not run, budget. E10 is measured for all five arms as pre-registered. The run's claims about frozen-vs-EI rest on the dial, at 4 rounds × 32 and 1,000 targets, not on the ladder.
 
   Because no arm will now reach the end of its plan, **`ARM_DONE` never fires anywhere**, so `finish.sh` is dead on all five pods; `finish_la.sh` (which triggers on `la_T1` round 8 for both seeds) is now armed on **all five**, C0 included.
+- 2026-09-24 04:15 UTC  **LADDER COMPLETE — all five arms, 8 rounds × k = 32, and the control wins outright. Every rendering variant is worse than plain `lean_seq` at the longest horizon the run measures.** Source `artifacts/dsr/dsr-<arm>/la_T1_<arm>_s{0,1}/round_8.json`, `transfer_cum`, 2,285 transfer theorems, identical attempts in every arm.
+
+  | arm | transfer solved (s0, s1) | mean | **vs C0** | `L*` | targets mean / 4,495 | held-out greedy |
+  |---|---|---:|---:|---|---:|---:|
+  | **C0 `lean_seq` (control)** | 923, 1003 | **963.0** | **1.000** | **12, 11** | 2913.5 | 0.9671 |
+  | R1 `lean_seq_noprem` | 837, 945 | 891.0 | 0.925 | 11, 11 | 2651.0 | 0.9556 |
+  | R4 `lean_seq_funbare` | 771, 896 | 833.5 | 0.866 | 11, 11 | 2692.5 | 0.9664 |
+  | R3 `lean_seq_nofml` | 898, 698 | 798.0 | 0.829 | 11, 11 | 2573.5 | 0.9410 |
+  | **R2 `lean_seq_intro`** | 658, 800 | **729.0** | **0.757** | **10, 11** | 2538.0 | 0.9520 |
+
+  **The control is above every arm on both seeds.** C0 owns the only `L*` = 12; R2 owns the only `L*` = 10.
+
+  **This inverts the mid-run picture, and the inversion is the result.** R2 was the *best* arm on Stage-1 greedy depth-3 (0.661 at n = 6, the largest of the five) and had *much* the best frozen dial (0.406 vs C0's 0.324). It is the **worst arm on the ladder, at ×0.757 of the control.** R4, which led all three pass@2,000 pools (×1.08, ×1.15, ×1.46) and was the only arm passing proposal 10's decision rule on pool means, is **below the control on both seeds** (771 < 923, 896 < 1003). At 23:05 I wrote that "the ladder is the remaining input; I am not calling the verdict until it lands." It has landed, and it says **no.**
+
+  **Scored against E10** (pre-registered `L*`: C0 10–11, R1 **11–12**, R3 11, R2 11): R1 **holds** (11, 11), R3 **holds** (11, 11), C0 **misses high** on seed 0 (12), R2 **misses low** on seed 0 (10). The bands were roughly right about the *level* and wrong about the *ordering* — I had predicted R1 above C0.
+
+  **The run's three horizons now line up into one story, and it is a negative one.**
+  1. **Base / frozen:** renderings genuinely differ, and the untyped-binder arms (R2 0.406, R4 0.362) beat the typed control (0.324).
+  2. **Short RL (4-round dial):** expert iteration *compensates* — corr(frozen, EI − frozen) = **−0.871**; the arms converge (frozen sd 0.045 → EI sd 0.024) and C0 finishes highest.
+  3. **Long RL (8-round ladder):** the control wins outright on both seeds, and the arm that led at Stage 1 finishes last.
+
+  **So the honest answer to the brief's question is that none of these renderings buys RL readiness — and choosing one on a Stage-1 or frozen number would have chosen exactly wrong.** R2 is the worked example: best Stage-1 depth-3 of the five, worst ladder of the five. That is the most useful thing this run can tell anyone picking a training surface form.
+
+  All five pods recorded clean before deletion — **83,513 distinct counted proofs** (C0 19,004; R4 16,958; R3 16,743; R1 15,783; R2 15,025), each **100 % accepted by both** the unmodified `nd2lean.py --check` and Lean on the literal text, **zero rejections, zero disagreements**. All pods deleted; **32.69 / 36 pod-hours, $16.01 / $18**.
