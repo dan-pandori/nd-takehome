@@ -826,3 +826,152 @@ Against the `ds-composition` **review's** published values:
 **Every cell agrees.** Note the published "max accepted reductio length 10" for K8flat is its
 **seed 0**; seed 1 reaches 8. The ≥ 8-line counts are by **pruned** length (the review's 29 / 33 is
 by *written* length; 28 / 32 by pruned, which is what this run counts).
+
+## K3 — Stage-1 held-out greedy, 5,000 theorems (`artifacts/kh/heldout_<arm>_s{0,1}.json`, 2 seeds)
+
+**`data/p2/heldout.jsonl` is the cap-6 distribution, so every arm above cap 6 is measured OUT OF
+DISTRIBUTION on it.** This is a comparability check, not a headline.
+
+| arm | cap | s0 | s1 | Δ vs K8flat (pp) | longest correct held-out proof (pruned) |
+|---|---:|---:|---:|---:|---:|
+| K6 | 6 | 0.9088 | 0.8962 | −4.2 / −5.7 | 6 |
+| K8flat | 8 | 0.9508 | 0.9536 | — | 8 |
+| K8add | 8 | 0.9384 | 0.9486 | −1.2 / −0.5 | 8 |
+| K10 | 10 | 0.9464 | 0.9394 | −0.4 / −1.4 | 10 |
+| K12 | 12 | 0.9428 | 0.9122 | −0.8 / −4.1 | 12 |
+| K14 | 14 | 0.8870 | 0.9054 | −6.4 / −4.8 | 12 |
+
+**None of these differences is resolvable.** The sibling `noise-floor` run's published floor for this
+exact quantity (its `numbers.md` § N2, eight null cells that differ only by an RNG re-draw) is
+**sd 0.039, minimum detectable difference at n = 2 of ±20.9 pp**. Every gap in the table above is
+smaller than that, K14's −6.4 pp included. The only statement the table supports is that **no arm
+collapses in distribution**.
+
+## K4 — `targets_reductio_req` pass@2,000, T 0.8, sampling seed 0 (`artifacts/kh/cov_<arm>_s{0,1}_redreq.s0.jsonl`)
+
+300 targets, each of which needs a derived `DN`; 2,000 samples per target = 600,000 samples per
+cell. Line counts are **pruned**. Accepted = Lean ∧ `nd_verify`.
+
+| arm | cap | solved / 300 (s0 / s1) | **max accepted pruned length** | accepted proofs ≥ 8 | ≥ 10 | ≥ 12 | mean term size | LEANPARSE rate |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| K6 | 6 | 28 / 26 | **7 / 7** | 0 / 0 | 0 / 0 | 0 / 0 | 28.2 / 26.5 | 0.264 / 0.213 |
+| K8flat | 8 | 54 / 72 | **10 / 8** | 28 / 32 | 2 / 0 | 0 / 0 | 32.9 / 32.0 | 0.314 / 0.282 |
+| K8add | 8 | 63 / 24 | **8 / 8** | 21 / 1 | 0 / 0 | 0 / 0 | 31.9 / 27.2 | 0.269 / 0.254 |
+| K10 | 10 | 70 / 87 | **10 / 11** | 33 / 43 | 2 / 4 | 0 / 0 | 31.1 / 32.3 | 0.320 / 0.304 |
+| K12 | 12 | 73 / 86 | **13 / 12** | 50 / 77 | 16 / 39 | 7 / 23 | 33.4 / 36.5 | 0.415 / 0.321 |
+| K14 | 14 | 84 / 54 | **14 / 14** | 78 / 36 | 33 / 18 | 19 / 7 | 34.9 / 34.5 | 0.365 / 0.224 |
+
+### K4a — solved by **required** length (`min_lines_ub` stratum): the plateau
+
+The pool's strata are 52 targets needing ≥ 7 lines, 133 needing ≥ 8, 82 needing ≥ 9, 33 needing ≥ 10.
+
+| arm | cap | ≥ 7 (of 52) | ≥ 8 (of 133) | **≥ 9 (of 82)** | **≥ 10 (of 33)** |
+|---|---:|---:|---:|---:|---:|
+| K6 | 6 | 28 / 26 | **0 / 0** | 0 / 0 | 0 / 0 |
+| K8flat | 8 | 30 / 42 | 24 / 30 | **0 / 0** | 0 / 0 |
+| K8add | 8 | 43 / 22 | 20 / 2 | **0 / 0** | 0 / 0 |
+| K10 | 10 | 40 / 50 | 30 / 37 | **0 / 0** | 0 / 0 |
+| K12 | 12 | 41 / 51 | 30 / 34 | **2 / 1** | 0 / 0 |
+| K14 | 14 | 46 / 37 | 38 / 17 | **0 / 0** | 0 / 0 |
+
+**Going from cap 6 to cap 8 unlocks one stratum (0 → 20–30 of 133). Going from cap 8 to cap 10, 12
+or 14 unlocks nothing: stratum 9 gets at most 2 of 82 on one arm × seed, and stratum 10 gets zero
+everywhere.** 12,000 attempts per stratum-10 target across the six arms produced no accepted proof.
+
+### K4b — the long proofs are **redundant**
+
+Every accepted proof of ≥ 10 pruned lines, by the stratum of the target it proves (seed 0):
+
+| arm | cap | ≥ 10-line proofs for targets needing ≥ 7 | needing ≥ 8 | needing ≥ 9 | needing ≥ 10 |
+|---|---:|---:|---:|---:|---:|
+| K8flat | 8 | 2 | 0 | 0 | 0 |
+| K8add | 8 | 0 | 0 | 0 | 0 |
+| K10 | 10 | 2 | 0 | 0 | 0 |
+| K12 | 12 | 9 | 7 | 0 | 0 |
+| K14 | 14 | 32 | 1 | 0 | 0 |
+
+**Not one of the 53 accepted proofs of ≥ 10 lines in this run proves a target that needs more than
+8 lines.** The extra length the high-cap models produce is padding on targets they could already
+solve, not a harder target cracked.
+
+## K5 — `max_new` diagnostic: the frontier is **not** truncation-bound (`artifacts/kh/covd_<arm>_s0_redreq.s0.jsonl`, `cov8f_*`, `covd8f_*`)
+
+Pre-registered remedy, run on the same checkpoints with the same sampling seed at `max_new` 768
+against the headline 400.
+
+| cell | solved | max pruned length | ≥ 8 | ≥ 10 | ≥ 12 | distinct accepted proofs | LEANPARSE / 600,000 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| K8add s0 @400 / @768 | 63 / 63 | 8 / 8 | 21 / 21 | 0 / 0 | 0 / 0 | 68 / 68 | 161,533 / 161,533 |
+| K10 s0 @400 / @768 | 70 / 70 | 10 / 10 | 33 / 33 | 2 / 2 | 0 / 0 | 76 / 76 | 191,815 / 191,812 |
+| K12 s0 @400 / @768 | 73 / 73 | 13 / 13 | 50 / 50 | 16 / 16 | 7 / 7 | 94 / 94 | 249,162 / 249,148 |
+| K14 s0 @400 / @768 | 84 / 84 | 14 / 14 | 78 / 78 | 33 / 33 | 19 / 19 | 153 / 153 | 219,017 / 218,996 |
+
+**The accepted-proof sets are byte-identical at both budgets on all four arms** (compared proof
+text by proof text, with hit counts). Nearly doubling the decode budget recovered 3–21 extra
+*parseable* decodes per 600,000 samples and **zero** extra accepted proofs. The pre-registered
+clipping risk did not materialise, and the LEANPARSE failures are malformed decodes, not truncated
+long ones.
+
+**Reproduction of an inherited number.** `ds-composition`'s own K8flat (A3) seed-0 checkpoint, run
+on *this* run's pod, GPU and day at `max_new` 400: **54 solved, max pruned length 10, 28 accepted
+proofs ≥ 8 lines, 2 at ≥ 10** — equal to the inherited values in every cell. At 768: identical again.
+
+## K6 — `r3_1/depth3_req` pass@2,000 (`artifacts/kh/cov_<arm>_s{0,1}_d3req.s0.jsonl`)
+
+| arm | cap | solved / 300 (s0 / s1) | max accepted pruned length | accepted proofs ≥ 8 (s0) |
+|---|---:|---:|---:|---:|
+| K6 | 6 | 170 / 108 | 9 / 8 | — |
+| K8flat | 8 | 276 / 289 | 11 / 13 | — |
+| K8add | 8 | 258 / 270 | 12 / 12 | 655 |
+| K10 | 10 | 207 / 282 | 13 / — | — |
+| K12 | 12 | 252 / 231 | 15 / — | — |
+| K14 | 14 | 238 / 266 | 14 / — | — |
+
+Above cap 8 this is **flat and non-monotone** (K10 207/282, K12 252/231, K14 238/266 against
+K8flat's 276/289). The sibling run has not yet published a floor for coverage counts, so **no
+difference in this table is called real**.
+
+**The horizon is pool-specific.** On this pool a **cap-8** model writes accepted 12–13-line proofs
+and a **cap-6** model 8–9-line proofs — 3 to 5 lines *above* their caps — while on
+`targets_reductio_req` the same models stop at 7–8. `ds-composition`'s reviewer (B5) required this
+distinction and this run reproduces it across six arms.
+
+## K7 — ladder rung T1 and frozen at equal attempts, **Stage-1 seed 0 only** (`artifacts/kh/la_{T1,frozen}_<arm>_s0/round_8.json`, `found_transfer_8.jsonl`)
+
+8 rounds × k 32 on `data/ladder/rl_targets.jsonl`, read out on `data/ladder/transfer.jsonl` (2,285)
+labelled by `L_true`. **`L*` is censored at 14 by this pool (see the header).** The frozen number is
+given beside every T1 number.
+
+| arm | cap | frozen solved | frozen `L*` | T1 solved | T1 `L*` | T1 − frozen | T1 solved at `L_true` ≥ 11 / ≥ 12 / ≥ 13 | T1 max pruned length | T1 max − cap |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| K6 | 6 | 158 | 9 | 856 | **12** | +698 | 15 / 5 / 0 | 12 | **+6** |
+| K8flat | 8 | 976 | 11 | 1,438 | **12** | +462 | 47 / 11 / 1 | 15 | **+7** |
+| K8add | 8 | 857 | 10 | 1,428 | **12** | +571 | 48 / 9 / 1 | 16 | **+8** |
+| K10 | 10 | 743 | 11 | 1,554 | **12** | +811 | 59 / 10 / 0 | 16 | **+6** |
+| K12 | 12 | 1,088 | 12 | 1,685 | **12** | +597 | 69 / 15 / 3 | 18 | **+6** |
+| K14 | 14 | 1,140 | 12 | 1,655 | **12** | +515 | 72 / 17 / 4 | 20 | **+6** |
+
+**T1 `L*` is 12 on every one of the six arms, cap 6 to cap 14.** Frozen `L*` does walk (9 → 10/11 →
+11 → 12 → 12) and T1 solves at `L_true` ≥ 12 walk (5 → 11 → 10 → 15 → 17), but `L*` after RL does
+not move at all. T1 solved saturates at 1,554–1,685 for caps 10–14. **Every arm, including cap 6,
+writes accepted proofs 6–8 lines longer than its own cap on this pool.**
+
+## K8 — checker of record (`artifacts/kh/record_<arm>.json`, `pod/kh/record.py`; `artifacts/kh/*.gate.json`; ladder `[lean_gate]` log lines)
+
+Unmodified `nd2lean.py --check` on **every counted proof** of every new arm, run on the round-8
+ladder files and the completed coverage files.
+
+| arm | proofs checked | accepted by both | `nd_verify` ok / Lean rejects | Lean ok / `nd_verify` rejects |
+|---|---:|---:|---:|---:|
+| K8add | 37,421 | 37,421 | 0 | 0 |
+| K10 | 59,954 | 59,954 | 0 | 0 |
+| K12 | 119,504 | 119,504 | 0 | 0 |
+| K14 | 169,588 | 169,588 | 0 | 0 |
+| **total** | **386,467** | **386,467** | **0** | **0** |
+
+Sample-level gate totals: coverage **9,600,000 samples**, 714,479 `nd_verify`-accepted, **714,479
+also Lean-accepted, 0 Lean rejections of an `nd_verify`-accepted text**. Ladder **14,351,680
+samples** (256 gate calls), 4,440,346 both-accepted, **0 nd-only**, **453 Lean-only** — Lean
+accepting a text `nd_verify` rejects, at 32 per million, one-directional, exactly the standing
+caveat in proposal 11. **Lean never once caught what `nd_verify` missed, and because acceptance is
+the conjunction no counted proof in this run is affected.**
