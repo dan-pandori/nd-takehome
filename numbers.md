@@ -975,3 +975,69 @@ samples** (256 gate calls), 4,440,346 both-accepted, **0 nd-only**, **453 Lean-o
 accepting a text `nd_verify` rejects, at 32 per million, one-directional, exactly the standing
 caveat in proposal 11. **Lean never once caught what `nd_verify` missed, and because acceptance is
 the conjunction no counted proof in this run is affected.**
+
+## K9 — pre-registered expectations, scored (including the misses)
+
+`preregistration/cap-horizon.md` (`2091f78`). K6 and K8flat columns were the known inherited
+values, not predictions.
+
+| quantity | arm | pre-registered | measured (s0 / s1) | verdict |
+|---|---|---|---|---|
+| max accepted `redreq` pruned length | K8add | 9–10 | **8 / 8** | **MISSED, below band** |
+| | K10 | 11–13 | **10 / 11** | **MISSED on s0, s1 at the band edge** |
+| | K12 | 13–15 | **13 / 12** | met on s0, **missed on s1** |
+| | K14 | 14–17 | **14 / 14** | met (bottom of band) |
+| accepted `redreq` proofs ≥ 8 lines | K8add | 20–45 | **21 / 1** | met on s0, **missed badly on s1** |
+| | K10 | 30–70 | **33 / 43** | met |
+| | K12 | 30–70 | **50 / 77** | met on s0, **just above band on s1** |
+| | K14 | 25–70 | **78 / 36** | **above band on s0**, met on s1 |
+| `redreq` solved / 300 | K8add | 45–80 | **63 / 24** | met on s0, **missed badly on s1** |
+| | K10 | 60–110 | **70 / 87** | met |
+| | K12 | 60–110 | **73 / 86** | met |
+| | K14 | 55–110 | **84 / 54** | met on s0, **1 below band on s1** |
+| frozen ladder `L*` (s0) | K8add | 10–11 | **10** | met |
+| | K10 | 12–13 | **11** | **MISSED, below band** |
+| | K12 | 13–14 | **12** | **MISSED, below band** |
+| | K14 | 13–14 (censored) | **12** | **MISSED, below band** |
+| T1 transfer `L*` (s0) | K8add | 12–13 | **12** | met |
+| | K10 | 13–14 | **12** | **MISSED, below band** |
+| | K12 | 14 (censored) | **12** | **MISSED, below band** |
+| | K14 | 14 (censored) | **12** | **MISSED, below band** |
+| held-out greedy | K8add | ≥ K8flat | **−1.2 / −0.5 pp** | **MISSED** (but far below the ±20.9 pp floor) |
+| | K10 | −3 to +3 pp | **−0.4 / −1.4** | met |
+| | K12 | −5 to +3 pp | **−0.8 / −4.1** | met |
+| | K14 | −8 to +3 pp | **−6.4 / −4.8** | met |
+
+**The pre-registered relationship, scored.**
+
+- **`c_maxlen = +2` — MISSED.** Least squares over all 12 arm × seed points:
+  max accepted `redreq` pruned length = **0.908 × cap + 1.39, R² = 0.944**; the **mean of
+  (max length − cap) is +0.50**, not +2. Per-arm means 7.0 / 9.0 / 8.0 / 10.5 / 12.5 / 14.0 for
+  caps 6 / 8 / 8 / 10 / 12 / 14. The relationship is real, tight and monotone in the cap — the
+  **offset was wrong** and the horizon on this pool sits essentially **at** the cap.
+- **`c_frozen = +3` — MISSED above cap 8.** Frozen `L*` is 9 / 11 / 10 / 11 / 12 / 12 against a
+  predicted 9 / 11 / 11 / 13 / 14 / 14. The offset falls from +3 (caps 6 and 8) to +1 (cap 10) to
+  **−2 (caps 12 and 14)**: frozen `L*` grows **sub-linearly** in the cap and is flat from cap 12.
+- **Monotone walk vs plateau — BOTH, on different quantities.** Max accepted length and the counts
+  at ≥ 8 / ≥ 10 / ≥ 12 lines walk monotonically with the cap with no plateau through cap 14
+  (≥ 12-line accepted reductio proofs: 0 at caps 6, 8 and 10; 7–23 at cap 12; 7–19 at cap 14).
+  The **solved frontier plateaus at cap 8**: required-length stratum 9 gets at most 2 of 82 and
+  stratum 10 zero on every arm, and T1 `L*` is 12 on all six arms.
+
+**Falsifier 1 (the cap-sets-the-horizon account is dead) — NOT triggered, by the letter.** It
+required K10 **and** K12 to leave T1 `L*` ≤ 12 **and** frozen `L*` ≤ 11 **and** max accepted
+`redreq` length ≤ 10. K10 satisfies all three (12, 11, 10/11); **K12 does not** — its frozen `L*` is
+12 and its max accepted length is 13. The account survives *for the length the model writes*.
+The pre-registration's third clause is what makes this decidable, and it is what separates the two
+halves of the result: had only `L*` been read, the falsifier would have fired on a censored metric.
+
+**Falsifier 2 (the "A3 removed short proofs" account is dead) — TRIGGERED, with a caveat.** K8add
+(adds long proofs, removes nothing, 217,000 records) and K8flat (adds long proofs, removes 8,857
+per short bin, 155,000 records) agree on every quantity within their own two-seed spread: `redreq`
+solved 63/24 vs 54/72, proofs ≥ 8 lines 21/1 vs 28/32, max length 8/8 vs 10/8, frozen ladder
+857 / `L*` 10 vs 976 / `L*` 11, T1 1,428 vs 1,438, `d3req` 258/270 vs 276/289. K8add is **not
+better** on anything despite 40 % more data, and both cap-8 arms stop at the same stratum.
+**Adding the long proofs is the effect; what was removed below the cap is not.**
+*Caveat:* the sibling `noise-floor` run has **not yet published** a floor for coverage or ladder
+counts (only held-out, § N2). The within-arm seed spread here is itself large (K8add 63 vs 24
+solved), so this is stated as "agree within their own spread", not as a resolved equality.
