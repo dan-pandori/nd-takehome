@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Job list of one noise-floor pod as lines '<jobname>\t<dep1,dep2|->\t<command>'.  python3 pod/nf/jobs.py <1|2>
+"""Job list of one noise-floor pod (Stage-1 seeds 0, 1 and 2 — seed 2 per pre-registration addendum 1) as lines '<jobname>\t<dep1,dep2|->\t<command>'.  python3 pod/nf/jobs.py <1|2>
 
 Pod 1: null pools P1 (generator seed 21000) and P2 (22000); gap-closer = ds-composition's C0 ladder, T1 + frozen,
        both Stage-1 seeds.
@@ -55,9 +55,9 @@ else:
            ('la_T1_dsc_a1_s0', f'{LA} --init {CKA(0)} --train {SETA} --seed 0 --name la_T1_dsc_a1_s0'),
            ('la_frozen_dsc_a1_s0', f'{LA} --init {CKA(0)} --train {SETA} --seed 0 --name la_frozen_dsc_a1_s0')]
 
-chains = []
+chains, tails = [], []
 for p, _ in POOLS:
-    for s in (0, 1):
+    for s in (0, 1, 2):
         SET = f'data/nf/train_{p}.jsonl'
         ck = f'ckpts/nf/stage1_{p}_s{s}.pt'
         c = [(f'stage1_{p}_s{s}', f'python3 train.py --data {SET} --heldout {D}/heldout.jsonl --mode lean_seq --steps 6000 --bs 128 --out {ck} --cap 6 --seed {s}'),
@@ -66,9 +66,17 @@ for p, _ in POOLS:
              (f'cov_red_{p}_s{s}', f'{COV} --ckpt {ck} --in {D}/targets_reductio_req.jsonl --out artifacts/nf/cov_red_{p}_s{s}'),
              (f'cov_req8_{p}_s{s}', f'{COV} --ckpt {ck} --in data/r3_1/depth3_req.jsonl --out artifacts/nf/cov_req8_{p}_s{s}'),
              (f'cov_d3_{p}_s{s}', f'{COV} --ckpt {ck} --in {D}/targets_depth3.jsonl --out artifacts/nf/cov_d3_{p}_s{s}')]
-        chains.append(c)
+        if s == 2:
+            # addendum 1: seed 2 skips targets_depth3 (the stop rule's first coverage drop) and is
+            # appended to the four seed-0/1 chains rather than run as its own, so the pod still runs
+            # exactly four concurrent GPU jobs on its 7.65-CPU quota.
+            tails.append([x for x in c if not x[0].startswith('cov_d3_')])
+        else:
+            chains.append(c)
 
-for i, g in enumerate(GAP):
+for i, t in enumerate(tails):          # seed 2 first: it is part of the deliverable
+    chains[i % len(chains)] += t
+for i, g in enumerate(GAP):            # then the gap-closers, the brief's "while the pods are up" extras
     chains[i % len(chains)].append(g)
 
 for i, c in enumerate(chains):

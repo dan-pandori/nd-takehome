@@ -406,3 +406,23 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   **0 depth-3**. First premise-check reading (P1): box depth 0/1/2 = 53.1 / 35.5 / 11.4 %, against
   the control's 53.2 / 35.4 / 11.4 — E11 met on this pool. Stage-1 training started 16:20 on `nf-1`
   (3,214,336 parameters, `lean_seq`).
+- 16:27  **Pre-registration addendum 1** (`preregistration/noise-floor.md`, committed 16:27 UTC, before
+  any held-out / coverage / ladder number of this run existed — the eight Stage-1 runs were at step
+  ~1,800 of 6,000): **Stage-1 seed 2 added on all four pools**, a 4 × 3 = 12-cell design. Seed 2 gets
+  held-out greedy, the frozen ladder and coverage on `targets_reductio_req` and `depth3_req`, not
+  `targets_depth3`. Reason: the pre-registered design estimates the *seed* variance component with
+  **1 degree of freedom**, which cannot answer E12 at all; a third seed takes the decomposition to
+  df 3 / 2 / 6 and the pooled sd to 11 df from 7, for ≈ 5.4 pod-hours ≈ $2.7. The four seed-2 chains
+  are **appended to the four existing chains** rather than run as new ones, so each pod still runs
+  exactly four concurrent GPU jobs (`CUDA_MEM_FRACTION` 0.21 each) on its 7.65-CPU quota. The nine
+  gap-closer jobs, which were already launched and still only sleeping on their dependency markers,
+  were stopped and relaunched behind the seed-2 work (`/tmp/nf_reset_gap.sh`; no job had started).
+- 16:10  **`pod_budget_watch` wrote a false ceiling warning into this run's directory** —
+  "noise-floor used 32.69 of 36 pod-hours ($16.01)", which are `ds-rendering`'s numbers
+  (`podbudget noise-floor` read 0.14 h at the time). Cause and one-line fix in `QUESTIONS.md`
+  (2026-09-24 16:30): a dead `for p in ~/.config/nd-rl/pods/*; do … . "$p"; … done` loop sourced every
+  pod file, and each pod file's `RUN=` line overwrote the guard's own `$RUN` with the alphabetically
+  last pod's run, so both the warning **and the pod-deleting enforcement branch** named the wrong run.
+  With `cap-horizon` running beside me its overrun would have deleted **my** pods. Dead loop removed
+  (backup `~/bin/pod_budget_watch.bak.2026-09-24`), stale warning file deleted so a real warning is
+  not suppressed. No other guard touched.

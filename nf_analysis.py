@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 D = 'artifacts/nf'
 POOLS = ('p1', 'p2', 'p3', 'p4')
-SEEDS = (0, 1)
+SEEDS = (0, 1, 2)   # seed 2 added by pre-registration addendum 1 (held-out, frozen ladder, red + req8 coverage only)
 COV = {'d3': ('data/p2/targets_depth3.jsonl', 'depth3'),
        'req8': ('data/r3_1/depth3_req.jsonl', 'depth3'),
        'red': ('data/p2/targets_reductio_req.jsonl', 'derived_dn')}
@@ -215,6 +215,10 @@ def main():
                 cells[(r['pool'], r['seed'])] = v
         if len(cells) >= 4:
             floors[name] = floor_stats(cells)
+            # the 8-cell design the expectations E1-E14 were written for, scored separately
+            c8 = {k: v for k, v in cells.items() if k[1] in (0, 1)}
+            if len(c8) == 8:
+                floors[name]['seeds01_only'] = floor_stats(c8)
     # the depth-3 held-out slice: bimodal, so report the high-mode proportion with a Wilson interval
     d3 = floors.get('heldout_depth3_slice')
     if d3:
@@ -230,15 +234,15 @@ def main():
 
     print(f'# noise-floor — eight null cells (pool x Stage-1 seed)\n')
     print('| quantity | ' + ' | '.join(f'{p} s{s}' for p in POOLS for s in SEEDS) +
-          ' | mean | sd | max/min | MDD n=2 |\n|---|' + '---|' * (len(POOLS) * len(SEEDS) + 4))
+          ' | n | mean | sd | max/min | MDD n=2 |\n|---|' + '---|' * (len(POOLS) * len(SEEDS) + 5))
     for name, _ in QUANTS:
         f = floors.get(name)
         if not f:
             continue
         vals = f['values']
         fmt = (lambda x: f'{x:.4f}') if abs(f['mean']) < 3 else (lambda x: f'{x:g}')
-        print(f'| `{name}` | ' + ' | '.join(fmt(vals.get(f'{p}_s{s}', float("nan"))) for p in POOLS for s in SEEDS)
-              + f' | {fmt(f["mean"])} | {f["sd"]:.4g} | '
+        print(f'| `{name}` | ' + ' | '.join(fmt(vals[f'{p}_s{s}']) if f'{p}_s{s}' in vals else '—' for p in POOLS for s in SEEDS)
+              + f' | {f["n_cells"]} | {fmt(f["mean"])} | {f["sd"]:.4g} | '
               + (f'{f["max_over_min"]:.2f}x' if f['max_over_min'] else '-')
               + f' | {f["mdd_n2_abs"]:.4g}'
               + (f' ({100 * f["mdd_n2_frac_of_mean"]:.0f} %)' if f['mdd_n2_frac_of_mean'] else '') + ' |')
