@@ -1,0 +1,4206 @@
+{
+ "rows": [
+  {
+   "arm": "c0",
+   "seed": 0,
+   "heldout": {
+    "rate": 0.9088,
+    "n": 5000,
+    "by_len": {
+     "2": 0.994,
+     "3": 0.989,
+     "4": 0.951,
+     "5": 0.924,
+     "6": 0.686
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9522435056415639,
+      "solved": 3629,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.7695542472666106,
+      "solved": 915,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.488,
+      "solved": 244,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.6427622841965471,
+      "solved": 484,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8178137651821862,
+      "solved": 202,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": {
+     "n_targets": 1000,
+     "targets_hit": 506,
+     "targets_hit_with_pattern": 280,
+     "pattern": "depth3",
+     "per_sample_rate": 0.092631,
+     "samples": 2000000,
+     "n_ok_samples": 185262,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 575,
+       "hit": 397,
+       "hit_with_pattern": 178
+      },
+      "8": {
+       "n": 240,
+       "hit": 100,
+       "hit_with_pattern": 95
+      },
+      "None": {
+       "n": 185,
+       "hit": 9,
+       "hit_with_pattern": 7
+      }
+     },
+     "distinct_proofs": 782,
+     "distinct_ge8": 317,
+     "distinct_ge8_pattern": 179,
+     "distinct_7_pattern": 179,
+     "written_hist": {
+      "7": 465,
+      "8": 280,
+      "9": 24,
+      "10": 13
+     },
+     "lean_checked": 782,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "req8": {
+     "n_targets": 300,
+     "targets_hit": 165,
+     "targets_hit_with_pattern": 164,
+     "pattern": "depth3",
+     "per_sample_rate": 0.015538333333333333,
+     "samples": 600000,
+     "n_ok_samples": 9323,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 6,
+       "hit": 5,
+       "hit_with_pattern": 5
+      },
+      "8": {
+       "n": 294,
+       "hit": 160,
+       "hit_with_pattern": 159
+      }
+     },
+     "distinct_proofs": 183,
+     "distinct_ge8": 178,
+     "distinct_ge8_pattern": 177,
+     "distinct_7_pattern": 5,
+     "written_hist": {
+      "7": 5,
+      "8": 177,
+      "9": 1
+     },
+     "lean_checked": 183,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "red": {
+     "n_targets": 300,
+     "targets_hit": 31,
+     "targets_hit_with_pattern": 31,
+     "pattern": "derived_dn",
+     "per_sample_rate": 0.001565,
+     "samples": 600000,
+     "n_ok_samples": 939,
+     "by_min_lines_ub": {
+      "10": {
+       "n": 33,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "7": {
+       "n": 52,
+       "hit": 31,
+       "hit_with_pattern": 31
+      },
+      "8": {
+       "n": 133,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "9": {
+       "n": 82,
+       "hit": 0,
+       "hit_with_pattern": 0
+      }
+     },
+     "distinct_proofs": 31,
+     "distinct_ge8": 0,
+     "distinct_ge8_pattern": 0,
+     "distinct_7_pattern": 31,
+     "written_hist": {
+      "7": 31
+     },
+     "lean_checked": 31,
+     "lean_rejected": 0,
+     "complete": true
+    }
+   },
+   "dial": {
+    "ei": {
+     "acq_round4": 0.418,
+     "acq_theorems": 418,
+     "n_depth3_proofs": 548,
+     "targets_solved": 650,
+     "transfer_acq": 0.434,
+     "heldout_greedy_r4": 0.9564,
+     "acq_by_round": [
+      0.104,
+      0.362,
+      0.401,
+      0.418
+     ],
+     "first_round": 1
+    },
+    "frozen": {
+     "acq_round4": 0.163,
+     "acq_theorems": 163,
+     "n_depth3_proofs": 186,
+     "targets_solved": 358,
+     "transfer_acq": 0.142,
+     "heldout_greedy_r4": 0.9086,
+     "acq_by_round": [
+      0.104,
+      0.129,
+      0.148,
+      0.163
+     ],
+     "first_round": 1
+    },
+    "ei_minus_frozen": 0.255
+   },
+   "ladder": {
+    "T1": {
+     "rounds": 8,
+     "lstar_transfer": 12,
+     "lstar_targets": 11,
+     "transfer_solved": 890,
+     "targets_solved": 2830,
+     "transfer_n": 2285,
+     "targets_n": 4495,
+     "transfer_ge": {
+      "7": 890,
+      "8": 798,
+      "9": 632,
+      "10": 107,
+      "11": 16,
+      "12": 5,
+      "13": 0,
+      "14": 0
+     },
+     "transfer_by_bin": {
+      "7": 92,
+      "8": 166,
+      "9": 525,
+      "10": 91,
+      "11": 11,
+      "12": 5,
+      "13": 0,
+      "14": 0
+     },
+     "textbook_solved": 37,
+     "textbook_n": 760,
+     "by_schema": {
+      "constructive_dilemma": [
+       0,
+       40
+      ],
+      "contraposition": [
+       19,
+       40
+      ],
+      "contraposition_conv": [
+       1,
+       40
+      ],
+      "demorgan_and_to_nor": [
+       0,
+       40
+      ],
+      "demorgan_nand_to_or": [
+       4,
+       40
+      ],
+      "demorgan_nor_to_and": [
+       0,
+       40
+      ],
+      "demorgan_or_to_nand": [
+       0,
+       40
+      ],
+      "disjunctive_syllogism": [
+       4,
+       40
+      ],
+      "dist_and_over_or": [
+       0,
+       40
+      ],
+      "dist_and_over_or_conv": [
+       0,
+       40
+      ],
+      "dist_or_over_and": [
+       0,
+       40
+      ],
+      "dist_or_over_and_conv": [
+       1,
+       40
+      ],
+      "excluded_middle": [
+       0,
+       40
+      ],
+      "export": [
+       5,
+       40
+      ],
+      "import": [
+       1,
+       40
+      ],
+      "negated_conditional": [
+       0,
+       40
+      ],
+      "negated_conditional_conv": [
+       0,
+       40
+      ],
+      "peirce": [
+       1,
+       40
+      ],
+      "peirce_sequent": [
+       1,
+       40
+      ]
+     },
+     "schemata_ge5": [
+      "contraposition",
+      "export"
+     ],
+     "new_schemata_ge5": [],
+     "by_source": {
+      "gen": 853,
+      "textbook": 37
+     },
+     "distinct_transfer_proofs": 2108,
+     "heldout_greedy_r1": 0.9088,
+     "heldout_greedy_final": 0.959,
+     "lstar_by_round": [
+      [
+       1,
+       9
+      ],
+      [
+       2,
+       10
+      ],
+      [
+       3,
+       10
+      ],
+      [
+       4,
+       11
+      ],
+      [
+       5,
+       11
+      ],
+      [
+       6,
+       11
+      ],
+      [
+       7,
+       11
+      ],
+      [
+       8,
+       12
+      ]
+     ],
+     "secs_by_round": [
+      882.7019157409668,
+      1041.7015616893768,
+      1067.8893647193909,
+      1072.2555303573608,
+      1077.9016497135162,
+      1086.8645465373993,
+      1067.0409078598022,
+      1068.8692138195038
+     ]
+    },
+    "frozen": {
+     "rounds": 8,
+     "lstar_transfer": 9,
+     "lstar_targets": 9,
+     "transfer_solved": 158,
+     "targets_solved": 1214,
+     "transfer_n": 2285,
+     "targets_n": 4495,
+     "transfer_ge": {
+      "7": 158,
+      "8": 116,
+      "9": 47,
+      "10": 3,
+      "11": 0,
+      "12": 0,
+      "13": 0,
+      "14": 0
+     },
+     "transfer_by_bin": {
+      "7": 42,
+      "8": 69,
+      "9": 44,
+      "10": 3,
+      "11": 0,
+      "12": 0,
+      "13": 0,
+      "14": 0
+     },
+     "textbook_solved": 6,
+     "textbook_n": 760,
+     "by_schema": {
+      "constructive_dilemma": [
+       0,
+       40
+      ],
+      "contraposition": [
+       1,
+       40
+      ],
+      "contraposition_conv": [
+       0,
+       40
+      ],
+      "demorgan_and_to_nor": [
+       0,
+       40
+      ],
+      "demorgan_nand_to_or": [
+       3,
+       40
+      ],
+      "demorgan_nor_to_and": [
+       0,
+       40
+      ],
+      "demorgan_or_to_nand": [
+       0,
+       40
+      ],
+      "disjunctive_syllogism": [
+       1,
+       40
+      ],
+      "dist_and_over_or": [
+       0,
+       40
+      ],
+      "dist_and_over_or_conv": [
+       0,
+       40
+      ],
+      "dist_or_over_and": [
+       0,
+       40
+      ],
+      "dist_or_over_and_conv": [
+       1,
+       40
+      ],
+      "excluded_middle": [
+       0,
+       40
+      ],
+      "export": [
+       0,
+       40
+      ],
+      "import": [
+       0,
+       40
+      ],
+      "negated_conditional": [
+       0,
+       40
+      ],
+      "negated_conditional_conv": [
+       0,
+       40
+      ],
+      "peirce": [
+       0,
+       40
+      ],
+      "peirce_sequent": [
+       0,
+       40
+      ]
+     },
+     "schemata_ge5": [],
+     "new_schemata_ge5": [],
+     "by_source": {
+      "gen": 152,
+      "textbook": 6
+     },
+     "distinct_transfer_proofs": 203,
+     "heldout_greedy_r1": 0.9088,
+     "heldout_greedy_final": 0.9088,
+     "lstar_by_round": [
+      [
+       1,
+       9
+      ],
+      [
+       2,
+       9
+      ],
+      [
+       3,
+       9
+      ],
+      [
+       4,
+       9
+      ],
+      [
+       5,
+       9
+      ],
+      [
+       6,
+       9
+      ],
+      [
+       7,
+       9
+      ],
+      [
+       8,
+       9
+      ]
+     ],
+     "secs_by_round": [
+      864.8210842609406,
+      886.518768787384,
+      950.078848361969,
+      921.6718859672546,
+      931.4683237075806,
+      883.6403253078461,
+      870.269987821579,
+      915.3731007575989
+     ]
+    }
+   }
+  },
+  {
+   "arm": "c0",
+   "seed": 1,
+   "heldout": {
+    "rate": 0.8968,
+    "n": 5000,
+    "by_len": {
+     "2": 0.997,
+     "3": 0.992,
+     "4": 0.967,
+     "5": 0.944,
+     "6": 0.584
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9643138283914983,
+      "solved": 3675,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.68040370058873,
+      "solved": 809,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.272,
+      "solved": 136,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.50199203187251,
+      "solved": 378,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8340080971659919,
+      "solved": 206,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": {
+     "n_targets": 1000,
+     "targets_hit": 423,
+     "targets_hit_with_pattern": 197,
+     "pattern": "depth3",
+     "per_sample_rate": 0.1002855,
+     "samples": 2000000,
+     "n_ok_samples": 200571,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 575,
+       "hit": 353,
+       "hit_with_pattern": 136
+      },
+      "8": {
+       "n": 240,
+       "hit": 70,
+       "hit_with_pattern": 61
+      },
+      "None": {
+       "n": 185,
+       "hit": 0,
+       "hit_with_pattern": 0
+      }
+     },
+     "distinct_proofs": 639,
+     "distinct_ge8": 186,
+     "distinct_ge8_pattern": 96,
+     "distinct_7_pattern": 156,
+     "written_hist": {
+      "7": 453,
+      "8": 178,
+      "9": 5,
+      "10": 3
+     },
+     "lean_checked": 639,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "req8": {
+     "n_targets": 300,
+     "targets_hit": 113,
+     "targets_hit_with_pattern": 113,
+     "pattern": "depth3",
+     "per_sample_rate": 0.013403333333333333,
+     "samples": 600000,
+     "n_ok_samples": 8042,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 6,
+       "hit": 3,
+       "hit_with_pattern": 3
+      },
+      "8": {
+       "n": 294,
+       "hit": 110,
+       "hit_with_pattern": 110
+      }
+     },
+     "distinct_proofs": 132,
+     "distinct_ge8": 129,
+     "distinct_ge8_pattern": 129,
+     "distinct_7_pattern": 3,
+     "written_hist": {
+      "7": 3,
+      "8": 129
+     },
+     "lean_checked": 132,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "red": {
+     "n_targets": 300,
+     "targets_hit": 27,
+     "targets_hit_with_pattern": 27,
+     "pattern": "derived_dn",
+     "per_sample_rate": 0.00913,
+     "samples": 600000,
+     "n_ok_samples": 5478,
+     "by_min_lines_ub": {
+      "10": {
+       "n": 33,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "7": {
+       "n": 52,
+       "hit": 27,
+       "hit_with_pattern": 27
+      },
+      "8": {
+       "n": 133,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "9": {
+       "n": 82,
+       "hit": 0,
+       "hit_with_pattern": 0
+      }
+     },
+     "distinct_proofs": 27,
+     "distinct_ge8": 0,
+     "distinct_ge8_pattern": 0,
+     "distinct_7_pattern": 27,
+     "written_hist": {
+      "7": 27
+     },
+     "lean_checked": 27,
+     "lean_rejected": 0,
+     "complete": true
+    }
+   },
+   "dial": {
+    "ei": {
+     "acq_round4": 0.408,
+     "acq_theorems": 408,
+     "n_depth3_proofs": 560,
+     "targets_solved": 646,
+     "transfer_acq": 0.44,
+     "heldout_greedy_r4": 0.9664,
+     "acq_by_round": [
+      0.085,
+      0.35,
+      0.392,
+      0.408
+     ],
+     "first_round": 1
+    },
+    "frozen": {
+     "acq_round4": 0.116,
+     "acq_theorems": 116,
+     "n_depth3_proofs": 146,
+     "targets_solved": 295,
+     "transfer_acq": 0.134,
+     "heldout_greedy_r4": 0.896,
+     "acq_by_round": [
+      0.085,
+      0.097,
+      0.11,
+      0.116
+     ],
+     "first_round": 1
+    },
+    "ei_minus_frozen": 0.292
+   },
+   "ladder": {
+    "T1": {
+     "rounds": 8,
+     "lstar_transfer": 11,
+     "lstar_targets": 11,
+     "transfer_solved": 965,
+     "targets_solved": 2924,
+     "transfer_n": 2285,
+     "targets_n": 4495,
+     "transfer_ge": {
+      "7": 965,
+      "8": 820,
+      "9": 655,
+      "10": 124,
+      "11": 18,
+      "12": 3,
+      "13": 0,
+      "14": 0
+     },
+     "transfer_by_bin": {
+      "7": 145,
+      "8": 165,
+      "9": 531,
+      "10": 106,
+      "11": 15,
+      "12": 3,
+      "13": 0,
+      "14": 0
+     },
+     "textbook_solved": 89,
+     "textbook_n": 760,
+     "by_schema": {
+      "constructive_dilemma": [
+       0,
+       40
+      ],
+      "contraposition": [
+       30,
+       40
+      ],
+      "contraposition_conv": [
+       1,
+       40
+      ],
+      "demorgan_and_to_nor": [
+       0,
+       40
+      ],
+      "demorgan_nand_to_or": [
+       2,
+       40
+      ],
+      "demorgan_nor_to_and": [
+       0,
+       40
+      ],
+      "demorgan_or_to_nand": [
+       0,
+       40
+      ],
+      "disjunctive_syllogism": [
+       21,
+       40
+      ],
+      "dist_and_over_or": [
+       0,
+       40
+      ],
+      "dist_and_over_or_conv": [
+       0,
+       40
+      ],
+      "dist_or_over_and": [
+       0,
+       40
+      ],
+      "dist_or_over_and_conv": [
+       0,
+       40
+      ],
+      "excluded_middle": [
+       0,
+       40
+      ],
+      "export": [
+       33,
+       40
+      ],
+      "import": [
+       0,
+       40
+      ],
+      "negated_conditional": [
+       0,
+       40
+      ],
+      "negated_conditional_conv": [
+       0,
+       40
+      ],
+      "peirce": [
+       1,
+       40
+      ],
+      "peirce_sequent": [
+       1,
+       40
+      ]
+     },
+     "schemata_ge5": [
+      "contraposition",
+      "disjunctive_syllogism",
+      "export"
+     ],
+     "new_schemata_ge5": [
+      "disjunctive_syllogism"
+     ],
+     "by_source": {
+      "gen": 876,
+      "textbook": 89
+     },
+     "distinct_transfer_proofs": 2175,
+     "heldout_greedy_r1": 0.897,
+     "heldout_greedy_final": 0.969,
+     "lstar_by_round": [
+      [
+       1,
+       9
+      ],
+      [
+       2,
+       10
+      ],
+      [
+       3,
+       10
+      ],
+      [
+       4,
+       11
+      ],
+      [
+       5,
+       11
+      ],
+      [
+       6,
+       11
+      ],
+      [
+       7,
+       11
+      ],
+      [
+       8,
+       11
+      ]
+     ],
+     "secs_by_round": [
+      641.1342771053314,
+      718.0628561973572,
+      715.0930466651917,
+      722.9665100574493,
+      726.1455750465393,
+      733.095458984375,
+      750.5747570991516,
+      770.8318011760712
+     ]
+    },
+    "frozen": {
+     "rounds": 8,
+     "lstar_transfer": 9,
+     "lstar_targets": 9,
+     "transfer_solved": 114,
+     "targets_solved": 1061,
+     "transfer_n": 2285,
+     "targets_n": 4495,
+     "transfer_ge": {
+      "7": 114,
+      "8": 70,
+      "9": 23,
+      "10": 1,
+      "11": 0,
+      "12": 0,
+      "13": 0,
+      "14": 0
+     },
+     "transfer_by_bin": {
+      "7": 44,
+      "8": 47,
+      "9": 22,
+      "10": 1,
+      "11": 0,
+      "12": 0,
+      "13": 0,
+      "14": 0
+     },
+     "textbook_solved": 13,
+     "textbook_n": 760,
+     "by_schema": {
+      "constructive_dilemma": [
+       0,
+       40
+      ],
+      "contraposition": [
+       2,
+       40
+      ],
+      "contraposition_conv": [
+       0,
+       40
+      ],
+      "demorgan_and_to_nor": [
+       0,
+       40
+      ],
+      "demorgan_nand_to_or": [
+       1,
+       40
+      ],
+      "demorgan_nor_to_and": [
+       0,
+       40
+      ],
+      "demorgan_or_to_nand": [
+       0,
+       40
+      ],
+      "disjunctive_syllogism": [
+       3,
+       40
+      ],
+      "dist_and_over_or": [
+       0,
+       40
+      ],
+      "dist_and_over_or_conv": [
+       0,
+       40
+      ],
+      "dist_or_over_and": [
+       0,
+       40
+      ],
+      "dist_or_over_and_conv": [
+       0,
+       40
+      ],
+      "excluded_middle": [
+       0,
+       40
+      ],
+      "export": [
+       7,
+       40
+      ],
+      "import": [
+       0,
+       40
+      ],
+      "negated_conditional": [
+       0,
+       40
+      ],
+      "negated_conditional_conv": [
+       0,
+       40
+      ],
+      "peirce": [
+       0,
+       40
+      ],
+      "peirce_sequent": [
+       0,
+       40
+      ]
+     },
+     "schemata_ge5": [
+      "export"
+     ],
+     "new_schemata_ge5": [],
+     "by_source": {
+      "gen": 101,
+      "textbook": 13
+     },
+     "distinct_transfer_proofs": 136,
+     "heldout_greedy_r1": 0.897,
+     "heldout_greedy_final": 0.897,
+     "lstar_by_round": [
+      [
+       1,
+       9
+      ],
+      [
+       2,
+       9
+      ],
+      [
+       3,
+       9
+      ],
+      [
+       4,
+       9
+      ],
+      [
+       5,
+       9
+      ],
+      [
+       6,
+       9
+      ],
+      [
+       7,
+       9
+      ],
+      [
+       8,
+       9
+      ]
+     ],
+     "secs_by_round": [
+      638.4092531204224,
+      642.6216804981232,
+      643.5908055305481,
+      643.6815431118011,
+      638.2663481235504,
+      642.1607010364532,
+      637.8095655441284,
+      600.7051546573639
+     ]
+    }
+   }
+  },
+  {
+   "arm": "g1",
+   "seed": 0,
+   "heldout": {
+    "rate": 0.8606,
+    "n": 5000,
+    "by_len": {
+     "2": 0.998,
+     "3": 0.984,
+     "4": 0.947,
+     "5": 0.923,
+     "6": 0.451
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9514563106796117,
+      "solved": 3626,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.5693860386879731,
+      "solved": 677,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.014,
+      "solved": 7,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.32669322709163345,
+      "solved": 246,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8299595141700404,
+      "solved": 205,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": {
+     "n_targets": 1000,
+     "targets_hit": 456,
+     "targets_hit_with_pattern": 247,
+     "pattern": "depth3",
+     "per_sample_rate": 0.102495,
+     "samples": 2000000,
+     "n_ok_samples": 204990,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 575,
+       "hit": 370,
+       "hit_with_pattern": 165
+      },
+      "8": {
+       "n": 240,
+       "hit": 79,
+       "hit_with_pattern": 75
+      },
+      "None": {
+       "n": 185,
+       "hit": 7,
+       "hit_with_pattern": 7
+      }
+     },
+     "distinct_proofs": 730,
+     "distinct_ge8": 271,
+     "distinct_ge8_pattern": 153,
+     "distinct_7_pattern": 197,
+     "written_hist": {
+      "7": 459,
+      "8": 257,
+      "9": 13,
+      "10": 1
+     },
+     "lean_checked": 730,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "req8": {
+     "n_targets": 300,
+     "targets_hit": 138,
+     "targets_hit_with_pattern": 138,
+     "pattern": "depth3",
+     "per_sample_rate": 0.017245,
+     "samples": 600000,
+     "n_ok_samples": 10347,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 6,
+       "hit": 4,
+       "hit_with_pattern": 4
+      },
+      "8": {
+       "n": 294,
+       "hit": 134,
+       "hit_with_pattern": 134
+      }
+     },
+     "distinct_proofs": 179,
+     "distinct_ge8": 175,
+     "distinct_ge8_pattern": 175,
+     "distinct_7_pattern": 4,
+     "written_hist": {
+      "7": 4,
+      "8": 172,
+      "9": 3
+     },
+     "lean_checked": 179,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "red": {
+     "n_targets": 300,
+     "targets_hit": 38,
+     "targets_hit_with_pattern": 38,
+     "pattern": "derived_dn",
+     "per_sample_rate": 0.010998333333333334,
+     "samples": 600000,
+     "n_ok_samples": 6599,
+     "by_min_lines_ub": {
+      "10": {
+       "n": 33,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "7": {
+       "n": 52,
+       "hit": 38,
+       "hit_with_pattern": 38
+      },
+      "8": {
+       "n": 133,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "9": {
+       "n": 82,
+       "hit": 0,
+       "hit_with_pattern": 0
+      }
+     },
+     "distinct_proofs": 38,
+     "distinct_ge8": 0,
+     "distinct_ge8_pattern": 0,
+     "distinct_7_pattern": 38,
+     "written_hist": {
+      "7": 38
+     },
+     "lean_checked": 38,
+     "lean_rejected": 0,
+     "complete": true
+    }
+   },
+   "dial": {
+    "ei": {
+     "acq_round4": 0.403,
+     "acq_theorems": 403,
+     "n_depth3_proofs": 530,
+     "targets_solved": 620,
+     "transfer_acq": 0.422,
+     "heldout_greedy_r4": 0.9468,
+     "acq_by_round": [
+      0.12,
+      0.341,
+      0.379,
+      0.403
+     ],
+     "first_round": 1
+    },
+    "frozen": {
+     "acq_round4": 0.165,
+     "acq_theorems": 165,
+     "n_depth3_proofs": 214,
+     "targets_solved": 346,
+     "transfer_acq": 0.17,
+     "heldout_greedy_r4": 0.8758,
+     "acq_by_round": [
+      0.12,
+      0.144,
+      0.157,
+      0.165
+     ],
+     "first_round": 1
+    },
+    "ei_minus_frozen": 0.23800000000000002
+   },
+   "ladder": {
+    "T1": {
+     "rounds": 8,
+     "lstar_transfer": 12,
+     "lstar_targets": 11,
+     "transfer_solved": 916,
+     "targets_solved": 2832,
+     "transfer_n": 2285,
+     "targets_n": 4495,
+     "transfer_ge": {
+      "7": 916,
+      "8": 783,
+      "9": 625,
+      "10": 103,
+      "11": 16,
+      "12": 5,
+      "13": 0,
+      "14": 0
+     },
+     "transfer_by_bin": {
+      "7": 133,
+      "8": 158,
+      "9": 522,
+      "10": 87,
+      "11": 11,
+      "12": 5,
+      "13": 0,
+      "14": 0
+     },
+     "textbook_solved": 80,
+     "textbook_n": 760,
+     "by_schema": {
+      "constructive_dilemma": [
+       0,
+       40
+      ],
+      "contraposition": [
+       39,
+       40
+      ],
+      "contraposition_conv": [
+       0,
+       40
+      ],
+      "demorgan_and_to_nor": [
+       0,
+       40
+      ],
+      "demorgan_nand_to_or": [
+       2,
+       40
+      ],
+      "demorgan_nor_to_and": [
+       0,
+       40
+      ],
+      "demorgan_or_to_nand": [
+       0,
+       40
+      ],
+      "disjunctive_syllogism": [
+       38,
+       40
+      ],
+      "dist_and_over_or": [
+       0,
+       40
+      ],
+      "dist_and_over_or_conv": [
+       0,
+       40
+      ],
+      "dist_or_over_and": [
+       0,
+       40
+      ],
+      "dist_or_over_and_conv": [
+       0,
+       40
+      ],
+      "excluded_middle": [
+       0,
+       40
+      ],
+      "export": [
+       0,
+       40
+      ],
+      "import": [
+       1,
+       40
+      ],
+      "negated_conditional": [
+       0,
+       40
+      ],
+      "negated_conditional_conv": [
+       0,
+       40
+      ],
+      "peirce": [
+       0,
+       40
+      ],
+      "peirce_sequent": [
+       0,
+       40
+      ]
+     },
+     "schemata_ge5": [
+      "contraposition",
+      "disjunctive_syllogism"
+     ],
+     "new_schemata_ge5": [
+      "disjunctive_syllogism"
+     ],
+     "by_source": {
+      "gen": 836,
+      "textbook": 80
+     },
+     "distinct_transfer_proofs": 2263,
+     "heldout_greedy_r1": 0.8606,
+     "heldout_greedy_final": 0.9544,
+     "lstar_by_round": [
+      [
+       1,
+       9
+      ],
+      [
+       2,
+       10
+      ],
+      [
+       3,
+       10
+      ],
+      [
+       4,
+       10
+      ],
+      [
+       5,
+       11
+      ],
+      [
+       6,
+       11
+      ],
+      [
+       7,
+       11
+      ],
+      [
+       8,
+       12
+      ]
+     ],
+     "secs_by_round": [
+      732.2421364784241,
+      898.249303817749,
+      1034.0135807991028,
+      890.752867937088,
+      1008.1491017341614,
+      999.8487157821655,
+      979.6173675060272,
+      989.9637906551361
+     ]
+    },
+    "frozen": null
+   }
+  },
+  {
+   "arm": "g1",
+   "seed": 1,
+   "heldout": {
+    "rate": 0.8956,
+    "n": 5000,
+    "by_len": {
+     "2": 0.992,
+     "3": 0.975,
+     "4": 0.915,
+     "5": 0.878,
+     "6": 0.718
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9212805038047757,
+      "solved": 3511,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.8132884777123633,
+      "solved": 967,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.616,
+      "solved": 308,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.7144754316069057,
+      "solved": 538,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.728744939271255,
+      "solved": 180,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": {
+     "n_targets": 1000,
+     "targets_hit": 603,
+     "targets_hit_with_pattern": 391,
+     "pattern": "depth3",
+     "per_sample_rate": 0.2578835,
+     "samples": 2000000,
+     "n_ok_samples": 515767,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 575,
+       "hit": 421,
+       "hit_with_pattern": 215
+      },
+      "8": {
+       "n": 240,
+       "hit": 145,
+       "hit_with_pattern": 140
+      },
+      "None": {
+       "n": 185,
+       "hit": 37,
+       "hit_with_pattern": 36
+      }
+     },
+     "distinct_proofs": 1094,
+     "distinct_ge8": 595,
+     "distinct_ge8_pattern": 384,
+     "distinct_7_pattern": 240,
+     "written_hist": {
+      "7": 499,
+      "8": 486,
+      "9": 91,
+      "10": 17,
+      "11": 1
+     },
+     "lean_checked": 1094,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "req8": {
+     "n_targets": 300,
+     "targets_hit": 259,
+     "targets_hit_with_pattern": 259,
+     "pattern": "depth3",
+     "per_sample_rate": 0.31851833333333335,
+     "samples": 600000,
+     "n_ok_samples": 191111,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 6,
+       "hit": 6,
+       "hit_with_pattern": 6
+      },
+      "8": {
+       "n": 294,
+       "hit": 253,
+       "hit_with_pattern": 253
+      }
+     },
+     "distinct_proofs": 362,
+     "distinct_ge8": 356,
+     "distinct_ge8_pattern": 356,
+     "distinct_7_pattern": 6,
+     "written_hist": {
+      "7": 6,
+      "8": 337,
+      "9": 19
+     },
+     "lean_checked": 362,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "red": {
+     "n_targets": 300,
+     "targets_hit": 31,
+     "targets_hit_with_pattern": 31,
+     "pattern": "derived_dn",
+     "per_sample_rate": 0.00279,
+     "samples": 600000,
+     "n_ok_samples": 1674,
+     "by_min_lines_ub": {
+      "10": {
+       "n": 33,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "7": {
+       "n": 52,
+       "hit": 31,
+       "hit_with_pattern": 31
+      },
+      "8": {
+       "n": 133,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "9": {
+       "n": 82,
+       "hit": 0,
+       "hit_with_pattern": 0
+      }
+     },
+     "distinct_proofs": 31,
+     "distinct_ge8": 0,
+     "distinct_ge8_pattern": 0,
+     "distinct_7_pattern": 31,
+     "written_hist": {
+      "7": 31
+     },
+     "lean_checked": 31,
+     "lean_rejected": 0,
+     "complete": true
+    }
+   },
+   "dial": {
+    "ei": {
+     "acq_round4": 0.436,
+     "acq_theorems": 436,
+     "n_depth3_proofs": 618,
+     "targets_solved": 662,
+     "transfer_acq": 0.462,
+     "heldout_greedy_r4": 0.9566,
+     "acq_by_round": [
+      0.297,
+      0.383,
+      0.421,
+      0.436
+     ],
+     "first_round": 1
+    },
+    "frozen": {
+     "acq_round4": 0.322,
+     "acq_theorems": 322,
+     "n_depth3_proofs": 444,
+     "targets_solved": 497,
+     "transfer_acq": 0.366,
+     "heldout_greedy_r4": 0.9398,
+     "acq_by_round": [
+      0.297,
+      0.304,
+      0.315,
+      0.322
+     ],
+     "first_round": 1
+    },
+    "ei_minus_frozen": 0.11399999999999999
+   },
+   "ladder": {
+    "T1": {
+     "rounds": 8,
+     "lstar_transfer": 10,
+     "lstar_targets": 11,
+     "transfer_solved": 635,
+     "targets_solved": 2346,
+     "transfer_n": 2285,
+     "targets_n": 4495,
+     "transfer_ge": {
+      "7": 635,
+      "8": 562,
+      "9": 421,
+      "10": 52,
+      "11": 3,
+      "12": 1,
+      "13": 0,
+      "14": 0
+     },
+     "transfer_by_bin": {
+      "7": 73,
+      "8": 141,
+      "9": 369,
+      "10": 49,
+      "11": 2,
+      "12": 1,
+      "13": 0,
+      "14": 0
+     },
+     "textbook_solved": 23,
+     "textbook_n": 760,
+     "by_schema": {
+      "constructive_dilemma": [
+       0,
+       40
+      ],
+      "contraposition": [
+       0,
+       40
+      ],
+      "contraposition_conv": [
+       0,
+       40
+      ],
+      "demorgan_and_to_nor": [
+       0,
+       40
+      ],
+      "demorgan_nand_to_or": [
+       0,
+       40
+      ],
+      "demorgan_nor_to_and": [
+       0,
+       40
+      ],
+      "demorgan_or_to_nand": [
+       0,
+       40
+      ],
+      "disjunctive_syllogism": [
+       23,
+       40
+      ],
+      "dist_and_over_or": [
+       0,
+       40
+      ],
+      "dist_and_over_or_conv": [
+       0,
+       40
+      ],
+      "dist_or_over_and": [
+       0,
+       40
+      ],
+      "dist_or_over_and_conv": [
+       0,
+       40
+      ],
+      "excluded_middle": [
+       0,
+       40
+      ],
+      "export": [
+       0,
+       40
+      ],
+      "import": [
+       0,
+       40
+      ],
+      "negated_conditional": [
+       0,
+       40
+      ],
+      "negated_conditional_conv": [
+       0,
+       40
+      ],
+      "peirce": [
+       0,
+       40
+      ],
+      "peirce_sequent": [
+       0,
+       40
+      ]
+     },
+     "schemata_ge5": [
+      "disjunctive_syllogism"
+     ],
+     "new_schemata_ge5": [
+      "disjunctive_syllogism"
+     ],
+     "by_source": {
+      "gen": 612,
+      "textbook": 23
+     },
+     "distinct_transfer_proofs": 1089,
+     "heldout_greedy_r1": 0.8956,
+     "heldout_greedy_final": 0.9314,
+     "lstar_by_round": [
+      [
+       1,
+       9
+      ],
+      [
+       2,
+       10
+      ],
+      [
+       3,
+       10
+      ],
+      [
+       4,
+       10
+      ],
+      [
+       5,
+       10
+      ],
+      [
+       6,
+       10
+      ],
+      [
+       7,
+       10
+      ],
+      [
+       8,
+       10
+      ]
+     ],
+     "secs_by_round": [
+      615.3096306324005,
+      677.6078021526337,
+      684.7483434677124,
+      673.2271373271942,
+      681.727254152298,
+      678.3172690868378,
+      671.2941157817841,
+      671.9447581768036
+     ]
+    },
+    "frozen": {
+     "rounds": 8,
+     "lstar_transfer": 9,
+     "lstar_targets": 9,
+     "transfer_solved": 170,
+     "targets_solved": 1278,
+     "transfer_n": 2285,
+     "targets_n": 4495,
+     "transfer_ge": {
+      "7": 170,
+      "8": 135,
+      "9": 63,
+      "10": 2,
+      "11": 0,
+      "12": 0,
+      "13": 0,
+      "14": 0
+     },
+     "transfer_by_bin": {
+      "7": 35,
+      "8": 72,
+      "9": 61,
+      "10": 2,
+      "11": 0,
+      "12": 0,
+      "13": 0,
+      "14": 0
+     },
+     "textbook_solved": 2,
+     "textbook_n": 760,
+     "by_schema": {
+      "constructive_dilemma": [
+       0,
+       40
+      ],
+      "contraposition": [
+       0,
+       40
+      ],
+      "contraposition_conv": [
+       0,
+       40
+      ],
+      "demorgan_and_to_nor": [
+       0,
+       40
+      ],
+      "demorgan_nand_to_or": [
+       0,
+       40
+      ],
+      "demorgan_nor_to_and": [
+       0,
+       40
+      ],
+      "demorgan_or_to_nand": [
+       0,
+       40
+      ],
+      "disjunctive_syllogism": [
+       2,
+       40
+      ],
+      "dist_and_over_or": [
+       0,
+       40
+      ],
+      "dist_and_over_or_conv": [
+       0,
+       40
+      ],
+      "dist_or_over_and": [
+       0,
+       40
+      ],
+      "dist_or_over_and_conv": [
+       0,
+       40
+      ],
+      "excluded_middle": [
+       0,
+       40
+      ],
+      "export": [
+       0,
+       40
+      ],
+      "import": [
+       0,
+       40
+      ],
+      "negated_conditional": [
+       0,
+       40
+      ],
+      "negated_conditional_conv": [
+       0,
+       40
+      ],
+      "peirce": [
+       0,
+       40
+      ],
+      "peirce_sequent": [
+       0,
+       40
+      ]
+     },
+     "schemata_ge5": [],
+     "new_schemata_ge5": [],
+     "by_source": {
+      "gen": 168,
+      "textbook": 2
+     },
+     "distinct_transfer_proofs": 215,
+     "heldout_greedy_r1": 0.8956,
+     "heldout_greedy_final": 0.8956,
+     "lstar_by_round": [
+      [
+       1,
+       9
+      ],
+      [
+       2,
+       9
+      ],
+      [
+       3,
+       9
+      ],
+      [
+       4,
+       9
+      ],
+      [
+       5,
+       9
+      ],
+      [
+       6,
+       9
+      ],
+      [
+       7,
+       9
+      ],
+      [
+       8,
+       9
+      ]
+     ],
+     "secs_by_round": [
+      615.7101607322693,
+      605.8399314880371,
+      607.7563245296478,
+      594.5817589759827,
+      601.991325378418,
+      599.2037184238434,
+      598.1713387966156,
+      596.0032911300659
+     ]
+    }
+   }
+  },
+  {
+   "arm": "g2",
+   "seed": 0,
+   "heldout": {
+    "rate": 0.6078,
+    "n": 5000,
+    "by_len": {
+     "2": 0.996,
+     "3": 0.963,
+     "4": 0.525,
+     "5": 0.417,
+     "6": 0.138
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.7370768827079507,
+      "solved": 2809,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.1934398654331371,
+      "solved": 230,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.076,
+      "solved": 38,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.07436918990703852,
+      "solved": 56,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.3319838056680162,
+      "solved": 82,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": {
+     "n_targets": 1000,
+     "targets_hit": 288,
+     "targets_hit_with_pattern": 65,
+     "pattern": "depth3",
+     "per_sample_rate": 0.1021885,
+     "samples": 2000000,
+     "n_ok_samples": 204377,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 575,
+       "hit": 259,
+       "hit_with_pattern": 43
+      },
+      "8": {
+       "n": 240,
+       "hit": 29,
+       "hit_with_pattern": 22
+      },
+      "None": {
+       "n": 185,
+       "hit": 0,
+       "hit_with_pattern": 0
+      }
+     },
+     "distinct_proofs": 401,
+     "distinct_ge8": 79,
+     "distinct_ge8_pattern": 42,
+     "distinct_7_pattern": 38,
+     "written_hist": {
+      "7": 322,
+      "8": 73,
+      "9": 5,
+      "10": 1
+     },
+     "lean_checked": 401,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "req8": {
+     "n_targets": 300,
+     "targets_hit": 38,
+     "targets_hit_with_pattern": 38,
+     "pattern": "depth3",
+     "per_sample_rate": 0.0058516666666666665,
+     "samples": 600000,
+     "n_ok_samples": 3511,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 6,
+       "hit": 1,
+       "hit_with_pattern": 1
+      },
+      "8": {
+       "n": 294,
+       "hit": 37,
+       "hit_with_pattern": 37
+      }
+     },
+     "distinct_proofs": 46,
+     "distinct_ge8": 45,
+     "distinct_ge8_pattern": 45,
+     "distinct_7_pattern": 1,
+     "written_hist": {
+      "7": 1,
+      "8": 44,
+      "9": 1
+     },
+     "lean_checked": 46,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "red": {
+     "n_targets": 300,
+     "targets_hit": 0,
+     "targets_hit_with_pattern": 0,
+     "pattern": "derived_dn",
+     "per_sample_rate": 0.0,
+     "samples": 600000,
+     "n_ok_samples": 0,
+     "by_min_lines_ub": {
+      "10": {
+       "n": 33,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "7": {
+       "n": 52,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "8": {
+       "n": 133,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "9": {
+       "n": 82,
+       "hit": 0,
+       "hit_with_pattern": 0
+      }
+     },
+     "distinct_proofs": 0,
+     "distinct_ge8": 0,
+     "distinct_ge8_pattern": 0,
+     "distinct_7_pattern": 0,
+     "written_hist": {},
+     "lean_checked": 0,
+     "lean_rejected": 0,
+     "complete": true
+    }
+   },
+   "dial": {
+    "ei": {
+     "acq_round4": 0.415,
+     "acq_theorems": 415,
+     "n_depth3_proofs": 570,
+     "targets_solved": 640,
+     "transfer_acq": 0.422,
+     "heldout_greedy_r4": 0.7016,
+     "acq_by_round": [
+      0.02,
+      0.261,
+      0.378,
+      0.415
+     ],
+     "first_round": 1
+    },
+    "frozen": {
+     "acq_round4": 0.032,
+     "acq_theorems": 32,
+     "n_depth3_proofs": 35,
+     "targets_solved": 228,
+     "transfer_acq": 0.038,
+     "heldout_greedy_r4": 0.6254,
+     "acq_by_round": [
+      0.02,
+      0.024,
+      0.029,
+      0.032
+     ],
+     "first_round": 1
+    },
+    "ei_minus_frozen": 0.383
+   },
+   "ladder": {
+    "T1": {
+     "rounds": 8,
+     "lstar_transfer": 11,
+     "lstar_targets": 10,
+     "transfer_solved": 632,
+     "targets_solved": 2282,
+     "transfer_n": 2285,
+     "targets_n": 4495,
+     "transfer_ge": {
+      "7": 632,
+      "8": 547,
+      "9": 406,
+      "10": 55,
+      "11": 5,
+      "12": 0,
+      "13": 0,
+      "14": 0
+     },
+     "transfer_by_bin": {
+      "7": 85,
+      "8": 141,
+      "9": 351,
+      "10": 50,
+      "11": 5,
+      "12": 0,
+      "13": 0,
+      "14": 0
+     },
+     "textbook_solved": 39,
+     "textbook_n": 760,
+     "by_schema": {
+      "constructive_dilemma": [
+       0,
+       40
+      ],
+      "contraposition": [
+       0,
+       40
+      ],
+      "contraposition_conv": [
+       0,
+       40
+      ],
+      "demorgan_and_to_nor": [
+       0,
+       40
+      ],
+      "demorgan_nand_to_or": [
+       0,
+       40
+      ],
+      "demorgan_nor_to_and": [
+       0,
+       40
+      ],
+      "demorgan_or_to_nand": [
+       0,
+       40
+      ],
+      "disjunctive_syllogism": [
+       38,
+       40
+      ],
+      "dist_and_over_or": [
+       0,
+       40
+      ],
+      "dist_and_over_or_conv": [
+       0,
+       40
+      ],
+      "dist_or_over_and": [
+       0,
+       40
+      ],
+      "dist_or_over_and_conv": [
+       0,
+       40
+      ],
+      "excluded_middle": [
+       0,
+       40
+      ],
+      "export": [
+       1,
+       40
+      ],
+      "import": [
+       0,
+       40
+      ],
+      "negated_conditional": [
+       0,
+       40
+      ],
+      "negated_conditional_conv": [
+       0,
+       40
+      ],
+      "peirce": [
+       0,
+       40
+      ],
+      "peirce_sequent": [
+       0,
+       40
+      ]
+     },
+     "schemata_ge5": [
+      "disjunctive_syllogism"
+     ],
+     "new_schemata_ge5": [
+      "disjunctive_syllogism"
+     ],
+     "by_source": {
+      "gen": 593,
+      "textbook": 39
+     },
+     "distinct_transfer_proofs": 1042,
+     "heldout_greedy_r1": 0.6078,
+     "heldout_greedy_final": 0.6938,
+     "lstar_by_round": [
+      [
+       1,
+       9
+      ],
+      [
+       2,
+       9
+      ],
+      [
+       3,
+       10
+      ],
+      [
+       4,
+       10
+      ],
+      [
+       5,
+       10
+      ],
+      [
+       6,
+       10
+      ],
+      [
+       7,
+       10
+      ],
+      [
+       8,
+       11
+      ]
+     ],
+     "secs_by_round": [
+      909.6159949302673,
+      952.9518299102783,
+      1021.0482759475708,
+      1047.901624917984,
+      1045.3771069049835,
+      1033.3250970840454,
+      1151.486869096756,
+      1135.3704328536987
+     ]
+    },
+    "frozen": {
+     "rounds": 8,
+     "lstar_transfer": 9,
+     "lstar_targets": 9,
+     "transfer_solved": 44,
+     "targets_solved": 561,
+     "transfer_n": 2285,
+     "targets_n": 4495,
+     "transfer_ge": {
+      "7": 44,
+      "8": 26,
+      "9": 8,
+      "10": 0,
+      "11": 0,
+      "12": 0,
+      "13": 0,
+      "14": 0
+     },
+     "transfer_by_bin": {
+      "7": 18,
+      "8": 18,
+      "9": 8,
+      "10": 0,
+      "11": 0,
+      "12": 0,
+      "13": 0,
+      "14": 0
+     },
+     "textbook_solved": 1,
+     "textbook_n": 760,
+     "by_schema": {
+      "constructive_dilemma": [
+       0,
+       40
+      ],
+      "contraposition": [
+       0,
+       40
+      ],
+      "contraposition_conv": [
+       0,
+       40
+      ],
+      "demorgan_and_to_nor": [
+       0,
+       40
+      ],
+      "demorgan_nand_to_or": [
+       0,
+       40
+      ],
+      "demorgan_nor_to_and": [
+       0,
+       40
+      ],
+      "demorgan_or_to_nand": [
+       0,
+       40
+      ],
+      "disjunctive_syllogism": [
+       1,
+       40
+      ],
+      "dist_and_over_or": [
+       0,
+       40
+      ],
+      "dist_and_over_or_conv": [
+       0,
+       40
+      ],
+      "dist_or_over_and": [
+       0,
+       40
+      ],
+      "dist_or_over_and_conv": [
+       0,
+       40
+      ],
+      "excluded_middle": [
+       0,
+       40
+      ],
+      "export": [
+       0,
+       40
+      ],
+      "import": [
+       0,
+       40
+      ],
+      "negated_conditional": [
+       0,
+       40
+      ],
+      "negated_conditional_conv": [
+       0,
+       40
+      ],
+      "peirce": [
+       0,
+       40
+      ],
+      "peirce_sequent": [
+       0,
+       40
+      ]
+     },
+     "schemata_ge5": [],
+     "new_schemata_ge5": [],
+     "by_source": {
+      "gen": 43,
+      "textbook": 1
+     },
+     "distinct_transfer_proofs": 59,
+     "heldout_greedy_r1": 0.6078,
+     "heldout_greedy_final": 0.6078,
+     "lstar_by_round": [
+      [
+       1,
+       9
+      ],
+      [
+       2,
+       9
+      ],
+      [
+       3,
+       9
+      ],
+      [
+       4,
+       9
+      ],
+      [
+       5,
+       9
+      ],
+      [
+       6,
+       9
+      ],
+      [
+       7,
+       9
+      ],
+      [
+       8,
+       9
+      ]
+     ],
+     "secs_by_round": [
+      906.4433710575104,
+      832.4935302734375,
+      763.4335498809814,
+      749.6164839267731,
+      708.3099510669708,
+      745.1809344291687,
+      746.6670062541962,
+      769.4286422729492
+     ]
+    }
+   }
+  },
+  {
+   "arm": "g2",
+   "seed": 1,
+   "heldout": {
+    "rate": 0.6652,
+    "n": 5000,
+    "by_len": {
+     "2": 0.997,
+     "3": 0.97,
+     "4": 0.533,
+     "5": 0.401,
+     "6": 0.425
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.7349776961427447,
+      "solved": 2801,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.4415475189234651,
+      "solved": 525,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.68,
+      "solved": 340,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.4674634794156706,
+      "solved": 352,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.29554655870445345,
+      "solved": 73,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": {
+     "n_targets": 1000,
+     "targets_hit": 266,
+     "targets_hit_with_pattern": 69,
+     "pattern": "depth3",
+     "per_sample_rate": 0.0812185,
+     "samples": 2000000,
+     "n_ok_samples": 162437,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 575,
+       "hit": 250,
+       "hit_with_pattern": 57
+      },
+      "8": {
+       "n": 240,
+       "hit": 14,
+       "hit_with_pattern": 10
+      },
+      "None": {
+       "n": 185,
+       "hit": 2,
+       "hit_with_pattern": 2
+      }
+     },
+     "distinct_proofs": 389,
+     "distinct_ge8": 76,
+     "distinct_ge8_pattern": 24,
+     "distinct_7_pattern": 61,
+     "written_hist": {
+      "7": 313,
+      "8": 72,
+      "9": 4
+     },
+     "lean_checked": 389,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "req8": {
+     "n_targets": 300,
+     "targets_hit": 23,
+     "targets_hit_with_pattern": 23,
+     "pattern": "depth3",
+     "per_sample_rate": 0.0016583333333333333,
+     "samples": 600000,
+     "n_ok_samples": 995,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 6,
+       "hit": 2,
+       "hit_with_pattern": 2
+      },
+      "8": {
+       "n": 294,
+       "hit": 21,
+       "hit_with_pattern": 21
+      }
+     },
+     "distinct_proofs": 27,
+     "distinct_ge8": 25,
+     "distinct_ge8_pattern": 25,
+     "distinct_7_pattern": 2,
+     "written_hist": {
+      "7": 2,
+      "8": 25
+     },
+     "lean_checked": 27,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "red": {
+     "n_targets": 300,
+     "targets_hit": 0,
+     "targets_hit_with_pattern": 0,
+     "pattern": "derived_dn",
+     "per_sample_rate": 0.0,
+     "samples": 600000,
+     "n_ok_samples": 0,
+     "by_min_lines_ub": {
+      "10": {
+       "n": 33,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "7": {
+       "n": 52,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "8": {
+       "n": 133,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "9": {
+       "n": 82,
+       "hit": 0,
+       "hit_with_pattern": 0
+      }
+     },
+     "distinct_proofs": 0,
+     "distinct_ge8": 0,
+     "distinct_ge8_pattern": 0,
+     "distinct_7_pattern": 0,
+     "written_hist": {},
+     "lean_checked": 0,
+     "lean_rejected": 0,
+     "complete": true
+    }
+   },
+   "dial": {
+    "ei": {
+     "acq_round4": 0.396,
+     "acq_theorems": 396,
+     "n_depth3_proofs": 537,
+     "targets_solved": 600,
+     "transfer_acq": 0.412,
+     "heldout_greedy_r4": 0.6986,
+     "acq_by_round": [
+      0.022,
+      0.32,
+      0.382,
+      0.396
+     ],
+     "first_round": 1
+    },
+    "frozen": {
+     "acq_round4": 0.034,
+     "acq_theorems": 34,
+     "n_depth3_proofs": 37,
+     "targets_solved": 202,
+     "transfer_acq": 0.032,
+     "heldout_greedy_r4": 0.6056,
+     "acq_by_round": [
+      0.022,
+      0.029,
+      0.033,
+      0.034
+     ],
+     "first_round": 1
+    },
+    "ei_minus_frozen": 0.362
+   },
+   "ladder": {
+    "T1": {
+     "rounds": 8,
+     "lstar_transfer": 11,
+     "lstar_targets": 10,
+     "transfer_solved": 607,
+     "targets_solved": 2259,
+     "transfer_n": 2285,
+     "targets_n": 4495,
+     "transfer_ge": {
+      "7": 607,
+      "8": 564,
+      "9": 422,
+      "10": 58,
+      "11": 5,
+      "12": 2,
+      "13": 0,
+      "14": 0
+     },
+     "transfer_by_bin": {
+      "7": 43,
+      "8": 142,
+      "9": 364,
+      "10": 53,
+      "11": 3,
+      "12": 2,
+      "13": 0,
+      "14": 0
+     },
+     "textbook_solved": 0,
+     "textbook_n": 760,
+     "by_schema": {
+      "constructive_dilemma": [
+       0,
+       40
+      ],
+      "contraposition": [
+       0,
+       40
+      ],
+      "contraposition_conv": [
+       0,
+       40
+      ],
+      "demorgan_and_to_nor": [
+       0,
+       40
+      ],
+      "demorgan_nand_to_or": [
+       0,
+       40
+      ],
+      "demorgan_nor_to_and": [
+       0,
+       40
+      ],
+      "demorgan_or_to_nand": [
+       0,
+       40
+      ],
+      "disjunctive_syllogism": [
+       0,
+       40
+      ],
+      "dist_and_over_or": [
+       0,
+       40
+      ],
+      "dist_and_over_or_conv": [
+       0,
+       40
+      ],
+      "dist_or_over_and": [
+       0,
+       40
+      ],
+      "dist_or_over_and_conv": [
+       0,
+       40
+      ],
+      "excluded_middle": [
+       0,
+       40
+      ],
+      "export": [
+       0,
+       40
+      ],
+      "import": [
+       0,
+       40
+      ],
+      "negated_conditional": [
+       0,
+       40
+      ],
+      "negated_conditional_conv": [
+       0,
+       40
+      ],
+      "peirce": [
+       0,
+       40
+      ],
+      "peirce_sequent": [
+       0,
+       40
+      ]
+     },
+     "schemata_ge5": [],
+     "new_schemata_ge5": [],
+     "by_source": {
+      "gen": 607
+     },
+     "distinct_transfer_proofs": 1020,
+     "heldout_greedy_r1": 0.6652,
+     "heldout_greedy_final": 0.6814,
+     "lstar_by_round": [
+      [
+       1,
+       9
+      ],
+      [
+       2,
+       10
+      ],
+      [
+       3,
+       10
+      ],
+      [
+       4,
+       10
+      ],
+      [
+       5,
+       10
+      ],
+      [
+       6,
+       10
+      ],
+      [
+       7,
+       10
+      ],
+      [
+       8,
+       11
+      ]
+     ],
+     "secs_by_round": [
+      582.6671433448792,
+      632.1948049068451,
+      646.9982304573059,
+      722.2453231811523,
+      735.9256420135498,
+      690.2094314098358,
+      670.0711126327515,
+      670.6394717693329
+     ]
+    },
+    "frozen": {
+     "rounds": 8,
+     "lstar_transfer": 9,
+     "lstar_targets": 9,
+     "transfer_solved": 125,
+     "targets_solved": 1158,
+     "transfer_n": 2285,
+     "targets_n": 4495,
+     "transfer_ge": {
+      "7": 125,
+      "8": 95,
+      "9": 31,
+      "10": 0,
+      "11": 0,
+      "12": 0,
+      "13": 0,
+      "14": 0
+     },
+     "transfer_by_bin": {
+      "7": 30,
+      "8": 64,
+      "9": 31,
+      "10": 0,
+      "11": 0,
+      "12": 0,
+      "13": 0,
+      "14": 0
+     },
+     "textbook_solved": 0,
+     "textbook_n": 760,
+     "by_schema": {
+      "constructive_dilemma": [
+       0,
+       40
+      ],
+      "contraposition": [
+       0,
+       40
+      ],
+      "contraposition_conv": [
+       0,
+       40
+      ],
+      "demorgan_and_to_nor": [
+       0,
+       40
+      ],
+      "demorgan_nand_to_or": [
+       0,
+       40
+      ],
+      "demorgan_nor_to_and": [
+       0,
+       40
+      ],
+      "demorgan_or_to_nand": [
+       0,
+       40
+      ],
+      "disjunctive_syllogism": [
+       0,
+       40
+      ],
+      "dist_and_over_or": [
+       0,
+       40
+      ],
+      "dist_and_over_or_conv": [
+       0,
+       40
+      ],
+      "dist_or_over_and": [
+       0,
+       40
+      ],
+      "dist_or_over_and_conv": [
+       0,
+       40
+      ],
+      "excluded_middle": [
+       0,
+       40
+      ],
+      "export": [
+       0,
+       40
+      ],
+      "import": [
+       0,
+       40
+      ],
+      "negated_conditional": [
+       0,
+       40
+      ],
+      "negated_conditional_conv": [
+       0,
+       40
+      ],
+      "peirce": [
+       0,
+       40
+      ],
+      "peirce_sequent": [
+       0,
+       40
+      ]
+     },
+     "schemata_ge5": [],
+     "new_schemata_ge5": [],
+     "by_source": {
+      "gen": 125
+     },
+     "distinct_transfer_proofs": 157,
+     "heldout_greedy_r1": 0.6652,
+     "heldout_greedy_final": 0.6652,
+     "lstar_by_round": [
+      [
+       1,
+       9
+      ],
+      [
+       2,
+       9
+      ],
+      [
+       3,
+       9
+      ],
+      [
+       4,
+       9
+      ],
+      [
+       5,
+       9
+      ],
+      [
+       6,
+       9
+      ],
+      [
+       7,
+       9
+      ],
+      [
+       8,
+       9
+      ]
+     ],
+     "secs_by_round": [
+      566.6986794471741,
+      571.9092645645142,
+      573.7697834968567,
+      576.2052073478699,
+      585.9120671749115,
+      579.2396426200867,
+      565.6886658668518,
+      571.0670137405396
+     ]
+    }
+   }
+  }
+ ],
+ "sets": {
+  "c0": {
+   "shape": {
+    "n": 155000,
+    "len_hist": {
+     "2": 31000,
+     "3": 31000,
+     "4": 31000,
+     "5": 31000,
+     "6": 31000
+    },
+    "box_depth_hist": {
+     "0": 82393,
+     "1": 54883,
+     "2": 17724
+    },
+    "rule_share": {
+     "PR": 0.8766967741935484,
+     "AS": 0.4684322580645161,
+     "R": 0.027825806451612905,
+     "ANDI": 0.22925806451612904,
+     "ANDE1": 0.021625806451612904,
+     "ANDE2": 0.021341935483870967,
+     "ORI1": 0.20556774193548388,
+     "ORI2": 0.20278709677419354,
+     "ORE": 0.01455483870967742,
+     "IMPI": 0.3635290322580645,
+     "IMPE": 0.40236774193548386,
+     "NEGI": 0.09930967741935484,
+     "NEGE": 0.12032258064516128,
+     "DN": 0.08325806451612904,
+     "BOTE": 0.019464516129032258
+    },
+    "proofs_with_ore": 2256,
+    "ore_share": 0.01455483870967742,
+    "proofs_with_box_in_ore": 49,
+    "box_in_ore_share": 0.0003161290322580645,
+    "ore_by_len": {
+     "2": 0,
+     "3": 0,
+     "4": 3,
+     "5": 147,
+     "6": 2106
+    },
+    "box_in_ore_by_len": {
+     "2": 0,
+     "3": 0,
+     "4": 0,
+     "5": 0,
+     "6": 49
+    },
+    "n_prem_hist": {
+     "0": 19112,
+     "1": 61422,
+     "2": 66018,
+     "3": 8448
+    },
+    "mean_n_prem": 1.411625806451613,
+    "lazy_prem_hist": null,
+    "mean_lazy_prem": null,
+    "lazy_labelled": 0,
+    "contra_prem_share": 0.0606,
+    "last_rule_share": {
+     "IMPI": 0.33968387096774194,
+     "IMPE": 0.16232258064516128,
+     "ORI2": 0.12466451612903226,
+     "ORI1": 0.12410322580645161,
+     "ANDI": 0.12285161290322581,
+     "DN": 0.06405161290322581,
+     "NEGI": 0.02129032258064516,
+     "NEGE": 0.01615483870967742,
+     "ORE": 0.012154838709677419,
+     "BOTE": 0.0070451612903225805,
+     "ANDE1": 0.002909677419354839,
+     "ANDE2": 0.002767741935483871
+    },
+    "mean_nd_tokens": 112.60585161290322,
+    "mean_lean_tokens": 138.4178064516129,
+    "pattern_counts": {
+     "derived_ore": 88,
+     "reductio": 10547,
+     "depth3": 0
+    },
+    "pattern_share": {
+     "derived_ore": 0.000567741935483871,
+     "reductio": 0.06804516129032258,
+     "depth3": 0.0
+    }
+   },
+   "overlap": {
+    "data/p2/train_depth3_f0_a1.jsonl": {
+     "set_n_classes": 155000,
+     "vs": {
+      "data/p2/heldout.jsonl": {
+       "pool_n": 5000,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 18
+      },
+      "data/p2/targets_depth3.jsonl": {
+       "pool_n": 1000,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/transfer_depth3.jsonl": {
+       "pool_n": 500,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/targets_reductio_req.jsonl": {
+       "pool_n": 300,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/transfer_reductio_req.jsonl": {
+       "pool_n": 150,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/r3_1/depth3_req.jsonl": {
+       "pool_n": 300,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/r3_1/depth3_req_transfer.jsonl": {
+       "pool_n": 100,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/ladder/rl_targets.jsonl": {
+       "pool_n": 4495,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/ladder/transfer.jsonl": {
+       "pool_n": 2285,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/train.jsonl": {
+       "pool_n": 154990,
+       "thm": 1214,
+       "class": 16047,
+       "premise_order_insensitive": 16509
+      },
+      "data/transfer.jsonl": {
+       "pool_n": 1638,
+       "thm": 1,
+       "class": 7,
+       "premise_order_insensitive": 9
+      },
+      "data/rl_targets.jsonl": {
+       "pool_n": 3000,
+       "thm": 2,
+       "class": 19,
+       "premise_order_insensitive": 19
+      }
+     }
+    }
+   },
+   "assemble": null,
+   "render": null,
+   "retrain_check": {
+    "s0": {
+     "heldout_2026_09_22": 0.9088,
+     "heldout_2026_09_23_retrain": 0.9088,
+     "delta_pp": 0.0,
+     "n": 5000
+    },
+    "s1": {
+     "heldout_2026_09_22": 0.896,
+     "heldout_2026_09_23_retrain": 0.8968,
+     "delta_pp": 0.08000000000000229,
+     "n": 5000
+    }
+   }
+  },
+  "g1": {
+   "shape": {
+    "n": 155000,
+    "len_hist": {
+     "2": 31000,
+     "3": 31000,
+     "4": 31000,
+     "5": 31000,
+     "6": 31000
+    },
+    "box_depth_hist": {
+     "0": 80898,
+     "1": 53720,
+     "2": 20382
+    },
+    "rule_share": {
+     "PR": 0.8740774193548387,
+     "AS": 0.4780774193548387,
+     "R": 0.02649032258064516,
+     "ANDI": 0.22436129032258065,
+     "ANDE1": 0.022258064516129033,
+     "ANDE2": 0.02154193548387097,
+     "ORI1": 0.2091290322580645,
+     "ORI2": 0.2112,
+     "ORE": 0.008864516129032258,
+     "IMPI": 0.3846709677419355,
+     "IMPE": 0.38823870967741936,
+     "NEGI": 0.09304516129032259,
+     "NEGE": 0.11393548387096775,
+     "DN": 0.07676129032258064,
+     "BOTE": 0.021535483870967743
+    },
+    "proofs_with_ore": 1374,
+    "ore_share": 0.008864516129032258,
+    "proofs_with_box_in_ore": 52,
+    "box_in_ore_share": 0.0003354838709677419,
+    "ore_by_len": {
+     "2": 0,
+     "3": 0,
+     "4": 1,
+     "5": 109,
+     "6": 1264
+    },
+    "box_in_ore_by_len": {
+     "2": 0,
+     "3": 0,
+     "4": 0,
+     "5": 0,
+     "6": 52
+    },
+    "n_prem_hist": {
+     "0": 19518,
+     "1": 62517,
+     "2": 65319,
+     "3": 7646
+    },
+    "mean_n_prem": 1.3941483870967741,
+    "lazy_prem_hist": {
+     "0": 61819,
+     "1": 81502,
+     "2": 11679
+    },
+    "mean_lazy_prem": 0.6765161290322581,
+    "lazy_labelled": 155000,
+    "contra_prem_share": 0.061219354838709675,
+    "last_rule_share": {
+     "IMPI": 0.3813354838709677,
+     "IMPE": 0.15800645161290322,
+     "ORI2": 0.12175483870967742,
+     "ORI1": 0.12054838709677419,
+     "ANDI": 0.10767096774193548,
+     "DN": 0.05563870967741936,
+     "NEGI": 0.023580645161290322,
+     "NEGE": 0.011490322580645161,
+     "ORE": 0.007135483870967742,
+     "BOTE": 0.006870967741935484,
+     "ANDE1": 0.0030838709677419355,
+     "ANDE2": 0.0028838709677419354
+    },
+    "mean_nd_tokens": 113.42301290322581,
+    "mean_lean_tokens": 139.04604516129032,
+    "pattern_counts": {
+     "derived_ore": 57,
+     "reductio": 9374,
+     "depth3": 0
+    },
+    "pattern_share": {
+     "derived_ore": 0.00036774193548387097,
+     "reductio": 0.06047741935483871,
+     "depth3": 0.0
+    }
+   },
+   "overlap": {
+    "data/dsg/train_g1.jsonl": {
+     "set_n_classes": 155000,
+     "vs": {
+      "data/p2/heldout.jsonl": {
+       "pool_n": 5000,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 21
+      },
+      "data/p2/targets_depth3.jsonl": {
+       "pool_n": 1000,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/transfer_depth3.jsonl": {
+       "pool_n": 500,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/targets_reductio_req.jsonl": {
+       "pool_n": 300,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/transfer_reductio_req.jsonl": {
+       "pool_n": 150,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/r3_1/depth3_req.jsonl": {
+       "pool_n": 300,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/r3_1/depth3_req_transfer.jsonl": {
+       "pool_n": 100,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/ladder/rl_targets.jsonl": {
+       "pool_n": 4495,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/ladder/transfer.jsonl": {
+       "pool_n": 2285,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/train.jsonl": {
+       "pool_n": 154990,
+       "thm": 1111,
+       "class": 14380,
+       "premise_order_insensitive": 14858
+      },
+      "data/transfer.jsonl": {
+       "pool_n": 1638,
+       "thm": 0,
+       "class": 13,
+       "premise_order_insensitive": 14
+      },
+      "data/rl_targets.jsonl": {
+       "pool_n": 3000,
+       "thm": 0,
+       "class": 21,
+       "premise_order_insensitive": 21
+      },
+      "data/p2/train_depth3_f0_a1.jsonl": {
+       "pool_n": 155000,
+       "thm": 756,
+       "class": 9381,
+       "premise_order_insensitive": 9909
+      }
+     }
+    }
+   },
+   "assemble": {
+    "n": 155000,
+    "per_len": {
+     "2": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "3": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "4": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "5": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "6": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     }
+    },
+    "fill_total": 0,
+    "fill_frac": 0.0,
+    "pattern_counts": {
+     "derived_ore": 57,
+     "reductio": 9374,
+     "depth3": 0,
+     "derived_ore_strict": 2
+    },
+    "pattern_freq": {
+     "derived_ore": 0.00036774193548387097,
+     "reductio": 0.06047741935483871,
+     "depth3": 0.0,
+     "derived_ore_strict": 1.2903225806451613e-05
+    },
+    "pool": "data/dsg/pool_g1.jsonl",
+    "fill_pool": null,
+    "exclude": [
+     "data/p2/heldout.jsonl",
+     "data/p2/targets_depth3.jsonl",
+     "data/p2/transfer_depth3.jsonl",
+     "data/p2/targets_reductio_req.jsonl",
+     "data/p2/transfer_reductio_req.jsonl",
+     "data/r3_1/depth3_req.jsonl",
+     "data/r3_1/depth3_req_transfer.jsonl",
+     "data/ladder/rl_targets.jsonl",
+     "data/ladder/transfer.jsonl"
+    ],
+    "seed": 0,
+    "stats": {
+     "main:read": 745885,
+     "main:depth3": 35116,
+     "main:excluded": 1185
+    },
+    "n_excluded_classes": 14026
+   },
+   "render": {
+    "set": "data/dsg/train_g1.jsonl",
+    "n_records": 155000,
+    "n_sampled": 3000,
+    "roundtrip_identical": 3000,
+    "denoted_verified_cap6": 3000,
+    "lean_positive_checked": 1000,
+    "lean_positive_accepted": 1000,
+    "lean_negative_checked": 300,
+    "lean_negative_rejected": 300,
+    "lean_wall_s": 2.249562978744507,
+    "lean_proc_s": 4.4906110763549805,
+    "roundtrip_failures": []
+   },
+   "retrain_check": {
+    "s0": {
+     "heldout_2026_09_22": 0.875,
+     "heldout_2026_09_23_retrain": 0.8606,
+     "delta_pp": -1.4399999999999968,
+     "n": 5000
+    },
+    "s1": {
+     "heldout_2026_09_22": 0.94,
+     "heldout_2026_09_23_retrain": 0.8956,
+     "delta_pp": -4.4399999999999995,
+     "n": 5000
+    }
+   }
+  },
+  "g2": {
+   "shape": {
+    "n": 155000,
+    "len_hist": {
+     "2": 31000,
+     "3": 31000,
+     "4": 31000,
+     "5": 31000,
+     "6": 31000
+    },
+    "box_depth_hist": {
+     "0": 35636,
+     "1": 70426,
+     "2": 48938
+    },
+    "rule_share": {
+     "PR": 0.6445354838709677,
+     "AS": 0.7700903225806451,
+     "R": 0.007406451612903226,
+     "ANDI": 0.15011612903225807,
+     "ANDE1": 0.053503225806451615,
+     "ANDE2": 0.052225806451612906,
+     "ORI1": 0.2230967741935484,
+     "ORI2": 0.22136129032258064,
+     "ORE": 0.0033806451612903225,
+     "IMPI": 0.7012451612903225,
+     "IMPE": 0.09829677419354839,
+     "NEGI": 0.08650967741935484,
+     "NEGE": 0.10604516129032258,
+     "DN": 0.08961290322580645,
+     "BOTE": 0.018303225806451613
+    },
+    "proofs_with_ore": 524,
+    "ore_share": 0.0033806451612903225,
+    "proofs_with_box_in_ore": 23,
+    "box_in_ore_share": 0.00014838709677419355,
+    "ore_by_len": {
+     "2": 0,
+     "3": 0,
+     "4": 4,
+     "5": 35,
+     "6": 485
+    },
+    "box_in_ore_by_len": {
+     "2": 0,
+     "3": 0,
+     "4": 0,
+     "5": 0,
+     "6": 23
+    },
+    "n_prem_hist": {
+     "0": 55097,
+     "1": 78615,
+     "2": 21266,
+     "3": 22
+    },
+    "mean_n_prem": 0.7820193548387097,
+    "lazy_prem_hist": {
+     "0": 110220,
+     "1": 44020,
+     "2": 760
+    },
+    "mean_lazy_prem": 0.29380645161290325,
+    "lazy_labelled": 155000,
+    "contra_prem_share": 0.001503225806451613,
+    "last_rule_share": {
+     "IMPI": 0.7003290322580645,
+     "IMPE": 0.07174193548387096,
+     "ORI2": 0.0672516129032258,
+     "ORI1": 0.06617419354838709,
+     "DN": 0.05796129032258065,
+     "ANDI": 0.018361290322580645,
+     "NEGI": 0.010361290322580645,
+     "ANDE1": 0.002496774193548387,
+     "ANDE2": 0.0024451612903225806,
+     "ORE": 0.0015225806451612902,
+     "NEGE": 0.0013354838709677419,
+     "BOTE": 1.935483870967742e-05
+    },
+    "mean_nd_tokens": 125.08490967741936,
+    "mean_lean_tokens": 148.59649677419355,
+    "pattern_counts": {
+     "derived_ore": 34,
+     "reductio": 8956,
+     "depth3": 0
+    },
+    "pattern_share": {
+     "derived_ore": 0.00021935483870967742,
+     "reductio": 0.05778064516129032,
+     "depth3": 0.0
+    }
+   },
+   "overlap": {
+    "data/dsg/train_g2.jsonl": {
+     "set_n_classes": 155000,
+     "vs": {
+      "data/p2/heldout.jsonl": {
+       "pool_n": 5000,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 13
+      },
+      "data/p2/targets_depth3.jsonl": {
+       "pool_n": 1000,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/transfer_depth3.jsonl": {
+       "pool_n": 500,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/targets_reductio_req.jsonl": {
+       "pool_n": 300,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/transfer_reductio_req.jsonl": {
+       "pool_n": 150,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/r3_1/depth3_req.jsonl": {
+       "pool_n": 300,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/r3_1/depth3_req_transfer.jsonl": {
+       "pool_n": 100,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/ladder/rl_targets.jsonl": {
+       "pool_n": 4495,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/ladder/transfer.jsonl": {
+       "pool_n": 2285,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/train.jsonl": {
+       "pool_n": 154990,
+       "thm": 854,
+       "class": 11054,
+       "premise_order_insensitive": 11223
+      },
+      "data/transfer.jsonl": {
+       "pool_n": 1638,
+       "thm": 1,
+       "class": 14,
+       "premise_order_insensitive": 14
+      },
+      "data/rl_targets.jsonl": {
+       "pool_n": 3000,
+       "thm": 1,
+       "class": 28,
+       "premise_order_insensitive": 30
+      },
+      "data/p2/train_depth3_f0_a1.jsonl": {
+       "pool_n": 155000,
+       "thm": 583,
+       "class": 7657,
+       "premise_order_insensitive": 7845
+      }
+     }
+    }
+   },
+   "assemble": {
+    "n": 155000,
+    "per_len": {
+     "2": {
+      "n": 31000,
+      "main": 8421,
+      "fill": 22579,
+      "fill_frac": 0.7283548387096774
+     },
+     "3": {
+      "n": 31000,
+      "main": 15863,
+      "fill": 15137,
+      "fill_frac": 0.48829032258064514
+     },
+     "4": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "5": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "6": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     }
+    },
+    "fill_total": 37716,
+    "fill_frac": 0.24332903225806451,
+    "pattern_counts": {
+     "derived_ore": 34,
+     "reductio": 8956,
+     "depth3": 0,
+     "derived_ore_strict": 4
+    },
+    "pattern_freq": {
+     "derived_ore": 0.00021935483870967742,
+     "reductio": 0.05778064516129032,
+     "depth3": 0.0,
+     "derived_ore_strict": 2.5806451612903226e-05
+    },
+    "pool": "data/dsg/pool_g2.jsonl",
+    "fill_pool": "data/dsg/pool_g1fill.jsonl",
+    "exclude": [
+     "data/p2/heldout.jsonl",
+     "data/p2/targets_depth3.jsonl",
+     "data/p2/transfer_depth3.jsonl",
+     "data/p2/targets_reductio_req.jsonl",
+     "data/p2/transfer_reductio_req.jsonl",
+     "data/r3_1/depth3_req.jsonl",
+     "data/r3_1/depth3_req_transfer.jsonl",
+     "data/ladder/rl_targets.jsonl",
+     "data/ladder/transfer.jsonl"
+    ],
+    "seed": 0,
+    "stats": {
+     "main:read": 824568,
+     "main:depth3": 265067,
+     "main:excluded": 520,
+     "fill:read": 749121,
+     "fill:depth3": 35088,
+     "fill:excluded": 1164
+    },
+    "n_excluded_classes": 14026
+   },
+   "render": {
+    "set": "data/dsg/train_g2.jsonl",
+    "n_records": 155000,
+    "n_sampled": 3000,
+    "roundtrip_identical": 3000,
+    "denoted_verified_cap6": 3000,
+    "lean_positive_checked": 1000,
+    "lean_positive_accepted": 1000,
+    "lean_negative_checked": 300,
+    "lean_negative_rejected": 300,
+    "lean_wall_s": 1.2900390625,
+    "lean_proc_s": 3.2987897396087646,
+    "roundtrip_failures": []
+   },
+   "retrain_check": {
+    "s0": {
+     "heldout_2026_09_22": 0.6256,
+     "heldout_2026_09_23_retrain": 0.6078,
+     "delta_pp": -1.7800000000000038,
+     "n": 5000
+    },
+    "s1": {
+     "heldout_2026_09_22": 0.6056,
+     "heldout_2026_09_23_retrain": 0.6652,
+     "delta_pp": 5.959999999999999,
+     "n": 5000
+    }
+   }
+  }
+ },
+ "record": {
+  "c0": {
+   "la_T1_s0_found": {
+    "source": "artifacts/dsg/la_T1_c0_s0/found_8.jsonl",
+    "n": 5266,
+    "both_accept": 5266,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_T1_s0_found_transfer": {
+    "source": "artifacts/dsg/la_T1_c0_s0/found_transfer_8.jsonl",
+    "n": 2108,
+    "both_accept": 2108,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_s0_found": {
+    "source": "artifacts/dsg/la_frozen_c0_s0/found_8.jsonl",
+    "n": 1735,
+    "both_accept": 1735,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_s0_found_transfer": {
+    "source": "artifacts/dsg/la_frozen_c0_s0/found_transfer_8.jsonl",
+    "n": 203,
+    "both_accept": 203,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_d3_s0": {
+    "source": "artifacts/dsg/cov_d3_c0_s0.counted.jsonl",
+    "n": 782,
+    "both_accept": 782,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_req8_s0": {
+    "source": "artifacts/dsg/cov_req8_c0_s0.counted.jsonl",
+    "n": 183,
+    "both_accept": 183,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_red_s0": {
+    "source": "artifacts/dsg/cov_red_c0_s0.counted.jsonl",
+    "n": 31,
+    "both_accept": 31,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_T1_s1_found": {
+    "source": "artifacts/dsg/la_T1_c0_s1/found_8.jsonl",
+    "n": 5360,
+    "both_accept": 5360,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_T1_s1_found_transfer": {
+    "source": "artifacts/dsg/la_T1_c0_s1/found_transfer_8.jsonl",
+    "n": 2175,
+    "both_accept": 2175,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_s1_found": {
+    "source": "artifacts/dsg/la_frozen_c0_s1/found_8.jsonl",
+    "n": 1649,
+    "both_accept": 1649,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_s1_found_transfer": {
+    "source": "artifacts/dsg/la_frozen_c0_s1/found_transfer_8.jsonl",
+    "n": 136,
+    "both_accept": 136,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_d3_s1": {
+    "source": "artifacts/dsg/cov_d3_c0_s1.counted.jsonl",
+    "n": 639,
+    "both_accept": 639,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_req8_s1": {
+    "source": "artifacts/dsg/cov_req8_c0_s1.counted.jsonl",
+    "n": 132,
+    "both_accept": 132,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_red_s1": {
+    "source": "artifacts/dsg/cov_red_c0_s1.counted.jsonl",
+    "n": 27,
+    "both_accept": 27,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   }
+  },
+  "g1": {
+   "ei_d3_s0_found": {
+    "source": "artifacts/dsg/ei_d3_g1_s0/found_4.jsonl",
+    "n": 803,
+    "both_accept": 803,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "ei_d3_s0_found_transfer": {
+    "source": "artifacts/dsg/ei_d3_g1_s0/found_transfer_4.jsonl",
+    "n": 422,
+    "both_accept": 422,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "frozen_d3_s0_found": {
+    "source": "artifacts/dsg/frozen_d3_g1_s0/found_4.jsonl",
+    "n": 455,
+    "both_accept": 455,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "frozen_d3_s0_found_transfer": {
+    "source": "artifacts/dsg/frozen_d3_g1_s0/found_transfer_4.jsonl",
+    "n": 209,
+    "both_accept": 209,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_T1_s0_found": {
+    "source": "artifacts/dsg/la_T1_g1_s0/found_8.jsonl",
+    "n": 5457,
+    "both_accept": 5457,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_T1_s0_found_transfer": {
+    "source": "artifacts/dsg/la_T1_g1_s0/found_transfer_8.jsonl",
+    "n": 2263,
+    "both_accept": 2263,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_d3_s0": {
+    "source": "artifacts/dsg/cov_d3_g1_s0.counted.jsonl",
+    "n": 730,
+    "both_accept": 730,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_req8_s0": {
+    "source": "artifacts/dsg/cov_req8_g1_s0.counted.jsonl",
+    "n": 179,
+    "both_accept": 179,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_red_s0": {
+    "source": "artifacts/dsg/cov_red_g1_s0.counted.jsonl",
+    "n": 38,
+    "both_accept": 38,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "ei_d3_s1_found": {
+    "source": "artifacts/dsg/ei_d3_g1_s1/found_4.jsonl",
+    "n": 1007,
+    "both_accept": 1007,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "ei_d3_s1_found_transfer": {
+    "source": "artifacts/dsg/ei_d3_g1_s1/found_transfer_4.jsonl",
+    "n": 542,
+    "both_accept": 542,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "frozen_d3_s1_found": {
+    "source": "artifacts/dsg/frozen_d3_g1_s1/found_4.jsonl",
+    "n": 715,
+    "both_accept": 715,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "frozen_d3_s1_found_transfer": {
+    "source": "artifacts/dsg/frozen_d3_g1_s1/found_transfer_4.jsonl",
+    "n": 376,
+    "both_accept": 376,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_T1_s1_found": {
+    "source": "artifacts/dsg/la_T1_g1_s1/found_8.jsonl",
+    "n": 3506,
+    "both_accept": 3506,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_T1_s1_found_transfer": {
+    "source": "artifacts/dsg/la_T1_g1_s1/found_transfer_8.jsonl",
+    "n": 1089,
+    "both_accept": 1089,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_s1_found": {
+    "source": "artifacts/dsg/la_frozen_g1_s1/found_8.jsonl",
+    "n": 1669,
+    "both_accept": 1669,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_s1_found_transfer": {
+    "source": "artifacts/dsg/la_frozen_g1_s1/found_transfer_8.jsonl",
+    "n": 215,
+    "both_accept": 215,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_d3_s1": {
+    "source": "artifacts/dsg/cov_d3_g1_s1.counted.jsonl",
+    "n": 1094,
+    "both_accept": 1094,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_req8_s1": {
+    "source": "artifacts/dsg/cov_req8_g1_s1.counted.jsonl",
+    "n": 362,
+    "both_accept": 362,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_red_s1": {
+    "source": "artifacts/dsg/cov_red_g1_s1.counted.jsonl",
+    "n": 31,
+    "both_accept": 31,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   }
+  },
+  "g2": {
+   "ei_d3_s0_found": {
+    "source": "artifacts/dsg/ei_d3_g2_s0/found_4.jsonl",
+    "n": 859,
+    "both_accept": 859,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "ei_d3_s0_found_transfer": {
+    "source": "artifacts/dsg/ei_d3_g2_s0/found_transfer_4.jsonl",
+    "n": 433,
+    "both_accept": 433,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "frozen_d3_s0_found": {
+    "source": "artifacts/dsg/frozen_d3_g2_s0/found_4.jsonl",
+    "n": 285,
+    "both_accept": 285,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "frozen_d3_s0_found_transfer": {
+    "source": "artifacts/dsg/frozen_d3_g2_s0/found_transfer_4.jsonl",
+    "n": 145,
+    "both_accept": 145,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_T1_s0_found": {
+    "source": "artifacts/dsg/la_T1_g2_s0/found_8.jsonl",
+    "n": 3448,
+    "both_accept": 3448,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_T1_s0_found_transfer": {
+    "source": "artifacts/dsg/la_T1_g2_s0/found_transfer_8.jsonl",
+    "n": 1042,
+    "both_accept": 1042,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_s0_found": {
+    "source": "artifacts/dsg/la_frozen_g2_s0/found_8.jsonl",
+    "n": 767,
+    "both_accept": 767,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_s0_found_transfer": {
+    "source": "artifacts/dsg/la_frozen_g2_s0/found_transfer_8.jsonl",
+    "n": 59,
+    "both_accept": 59,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_d3_s0": {
+    "source": "artifacts/dsg/cov_d3_g2_s0.counted.jsonl",
+    "n": 401,
+    "both_accept": 401,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_req8_s0": {
+    "source": "artifacts/dsg/cov_req8_g2_s0.counted.jsonl",
+    "n": 46,
+    "both_accept": 46,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_red_s0": {
+    "source": "artifacts/dsg/cov_red_g2_s0.counted.jsonl",
+    "n": 0,
+    "both_accept": 0,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "ei_d3_s1_found": {
+    "source": "artifacts/dsg/ei_d3_g2_s1/found_4.jsonl",
+    "n": 803,
+    "both_accept": 803,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "ei_d3_s1_found_transfer": {
+    "source": "artifacts/dsg/ei_d3_g2_s1/found_transfer_4.jsonl",
+    "n": 389,
+    "both_accept": 389,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "frozen_d3_s1_found": {
+    "source": "artifacts/dsg/frozen_d3_g2_s1/found_4.jsonl",
+    "n": 261,
+    "both_accept": 261,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "frozen_d3_s1_found_transfer": {
+    "source": "artifacts/dsg/frozen_d3_g2_s1/found_transfer_4.jsonl",
+    "n": 117,
+    "both_accept": 117,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_T1_s1_found": {
+    "source": "artifacts/dsg/la_T1_g2_s1/found_8.jsonl",
+    "n": 3287,
+    "both_accept": 3287,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_T1_s1_found_transfer": {
+    "source": "artifacts/dsg/la_T1_g2_s1/found_transfer_8.jsonl",
+    "n": 1020,
+    "both_accept": 1020,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_s1_found": {
+    "source": "artifacts/dsg/la_frozen_g2_s1/found_8.jsonl",
+    "n": 1490,
+    "both_accept": 1490,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_s1_found_transfer": {
+    "source": "artifacts/dsg/la_frozen_g2_s1/found_transfer_8.jsonl",
+    "n": 157,
+    "both_accept": 157,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_d3_s1": {
+    "source": "artifacts/dsg/cov_d3_g2_s1.counted.jsonl",
+    "n": 389,
+    "both_accept": 389,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_req8_s1": {
+    "source": "artifacts/dsg/cov_req8_g2_s1.counted.jsonl",
+    "n": 27,
+    "both_accept": 27,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_red_s1": {
+    "source": "artifacts/dsg/cov_red_g2_s1.counted.jsonl",
+    "n": 0,
+    "both_accept": 0,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   }
+  }
+ }
+}

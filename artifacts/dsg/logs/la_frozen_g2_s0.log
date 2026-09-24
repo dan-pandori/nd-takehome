@@ -1,0 +1,450 @@
+START 2026-09-23T21:46:54Z until [ -f artifacts/dsg/la_T1_g2_s0.done ]; do sleep 30; done; python3 ladder_ei.py --init ckpts/dsg/stage1_g2_s0.pt --outdir artifacts/dsg --seed 0 --batch 512 --train data/dsg/train_g2.jsonl --heldout data/p2/heldout.jsonl --name la_frozen_g2_s0 --no_train
+[lean_gate] 143840 samples, parse-fail 66394, distinct checked 67383: both ok 4484, nd-only 0, lean-only 115, both rej 62784; lean 284.7s wall (1978.2s proc, 7 workers), nd_verify 2.4s
+[la_frozen_g2_s0 r1] targets (this round) SOLVED 394/4495 = 0.088 [0.080,0.096]
+  len 7: 330/1800 = 0.183 [0.166,0.202]
+  len 8: 59/1000 = 0.059 [0.046,0.075]
+  len 9: 5/1004 = 0.005 [0.002,0.012]
+  len 10: 0/456 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 371, 8: 110, 9: 5}
+  pruned hist {5: 2, 6: 168, 7: 230, 8: 81, 9: 5}
+  frontier written 9 pruned 9
+  reasons [("parse: expected line index, got 'LEANPARSE'", 66394), ('rule check failed: IMPE', 18538), ('rule check failed: ANDI', 14569), ('premise block does not match declared premises', 7522), ('rule check failed: ORI2', 5754), ('rule check failed: NEGE', 4804)]
+[lean_gate] 73120 samples, parse-fail 32914, distinct checked 35090: both ok 161, nd-only 0, lean-only 60, both rej 34869; lean 132.1s wall (910.8s proc, 7 workers), nd_verify 1.2s
+[la_frozen_g2_s0 r1] transfer (this round, pass@32) SOLVED 26/2285 = 0.011 [0.008,0.017]
+  len 7: 11/300 = 0.037 [0.021,0.064]
+  len 8: 10/300 = 0.033 [0.018,0.060]
+  len 9: 5/1010 = 0.005 [0.002,0.012]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 12, 8: 11, 9: 7}
+  pruned hist {6: 3, 7: 9, 8: 13, 9: 5}
+  frontier written 9 pruned 9
+  reasons [("parse: expected line index, got 'LEANPARSE'", 32914), ('rule check failed: IMPE', 11049), ('rule check failed: ANDI', 7998), ('premise block does not match declared premises', 4646), ('rule check failed: ORI2', 3001), ('rule check failed: NEGE', 2719)]
+[lean_gate] 2285 samples, parse-fail 986, distinct checked 1299: both ok 5, nd-only 0, lean-only 3, both rej 1291; lean 4.4s wall (14.4s proc, 7 workers), nd_verify 0.1s
+[la_frozen_g2_s0 r1] transfer greedy SOLVED 5/2285 = 0.002 [0.001,0.005]
+  len 7: 3/300 = 0.010 [0.003,0.029]
+  len 8: 2/300 = 0.007 [0.002,0.024]
+  len 9: 0/1010 = 0.000 [0.000,0.004]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 3, 8: 2}
+  pruned hist {6: 3, 8: 2}
+  frontier written 0 pruned 0
+  reasons [("parse: expected line index, got 'LEANPARSE'", 986), ('rule check failed: IMPE', 377), ('rule check failed: ANDI', 266), ('premise block does not match declared premises', 157), ('rule check failed: NEGE', 91), ('rule check failed: ORI2', 83)]
+[lean_gate] 5000 samples, parse-fail 489, distinct checked 4511: both ok 3039, nd-only 0, lean-only 8, both rej 1464; lean 9.9s wall (57.1s proc, 7 workers), nd_verify 0.2s
+[la_frozen_g2_s0 r1] heldout greedy SOLVED 3039/5000 = 0.608 [0.594,0.621]
+  len 2: 996/1000 = 0.996 [0.990,0.998]
+  len 3: 963/1000 = 0.963 [0.949,0.973]
+  len 4: 525/1000 = 0.525 [0.494,0.556]
+  len 5: 417/1000 = 0.417 [0.387,0.448]
+  len 6: 138/1000 = 0.138 [0.118,0.161]
+  written hist {2: 1023, 3: 973, 4: 508, 5: 409, 6: 125, 7: 1}
+  pruned hist {2: 1025, 3: 974, 4: 508, 5: 410, 6: 121, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: IMPE', 498), ("parse: expected line index, got 'LEANPARSE'", 489), ('rule check failed: ANDI', 208), ('premise block does not match declared premises', 202), ('rule check failed: ORI1', 133), ('rule check failed: ORI2', 126)]
+[la_frozen_g2_s0 r1] targets cumulative: solved 394/4495 L*=9 ge={7: 394, 8: 64, 9: 5, 10: 0, 11: 0, 12: 0}
+[la_frozen_g2_s0 r1] transfer cumulative: solved 26/2285 L*=9 ge={7: 26, 8: 15, 9: 5, 10: 0, 11: 0, 12: 0}
+=== round 1 done in 906s; new proofs 486; cum targets solved 394 L*=9; transfer L*=9
+[lean_gate] 143840 samples, parse-fail 66395, distinct checked 67188: both ok 4492, nd-only 0, lean-only 128, both rej 62568; lean 245.9s wall (1707.5s proc, 7 workers), nd_verify 2.5s
+[la_frozen_g2_s0 r2] targets (this round) SOLVED 394/4495 = 0.088 [0.080,0.096]
+  len 7: 329/1800 = 0.183 [0.166,0.201]
+  len 8: 62/1000 = 0.062 [0.049,0.079]
+  len 9: 3/1004 = 0.003 [0.001,0.009]
+  len 10: 0/456 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 371, 8: 115, 9: 4}
+  pruned hist {5: 8, 6: 169, 7: 225, 8: 85, 9: 3}
+  frontier written 8 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 66395), ('rule check failed: IMPE', 18590), ('rule check failed: ANDI', 14596), ('premise block does not match declared premises', 7419), ('rule check failed: ORI2', 5891), ('rule check failed: NEGE', 4819)]
+[lean_gate] 73120 samples, parse-fail 32752, distinct checked 35157: both ok 168, nd-only 0, lean-only 64, both rej 34925; lean 102.4s wall (703.1s proc, 7 workers), nd_verify 1.2s
+[la_frozen_g2_s0 r2] transfer (this round, pass@32) SOLVED 28/2285 = 0.012 [0.008,0.018]
+  len 7: 12/300 = 0.040 [0.023,0.069]
+  len 8: 10/300 = 0.033 [0.018,0.060]
+  len 9: 6/1010 = 0.006 [0.003,0.013]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 13, 8: 12, 9: 8}
+  pruned hist {6: 3, 7: 11, 8: 13, 9: 6}
+  frontier written 9 pruned 9
+  reasons [("parse: expected line index, got 'LEANPARSE'", 32752), ('rule check failed: IMPE', 11099), ('rule check failed: ANDI', 8106), ('premise block does not match declared premises', 4684), ('rule check failed: ORI2', 3009), ('rule check failed: NEGE', 2737)]
+[lean_gate] 2285 samples, parse-fail 986, distinct checked 1299: both ok 5, nd-only 0, lean-only 3, both rej 1291; lean 3.7s wall (12.2s proc, 7 workers), nd_verify 0.1s
+[la_frozen_g2_s0 r2] transfer greedy SOLVED 5/2285 = 0.002 [0.001,0.005]
+  len 7: 3/300 = 0.010 [0.003,0.029]
+  len 8: 2/300 = 0.007 [0.002,0.024]
+  len 9: 0/1010 = 0.000 [0.000,0.004]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 3, 8: 2}
+  pruned hist {6: 3, 8: 2}
+  frontier written 0 pruned 0
+  reasons [("parse: expected line index, got 'LEANPARSE'", 986), ('rule check failed: IMPE', 377), ('rule check failed: ANDI', 266), ('premise block does not match declared premises', 157), ('rule check failed: NEGE', 91), ('rule check failed: ORI2', 83)]
+[lean_gate] 5000 samples, parse-fail 489, distinct checked 4511: both ok 3039, nd-only 0, lean-only 8, both rej 1464; lean 7.7s wall (44.4s proc, 7 workers), nd_verify 0.2s
+[la_frozen_g2_s0 r2] heldout greedy SOLVED 3039/5000 = 0.608 [0.594,0.621]
+  len 2: 996/1000 = 0.996 [0.990,0.998]
+  len 3: 963/1000 = 0.963 [0.949,0.973]
+  len 4: 525/1000 = 0.525 [0.494,0.556]
+  len 5: 417/1000 = 0.417 [0.387,0.448]
+  len 6: 138/1000 = 0.138 [0.118,0.161]
+  written hist {2: 1023, 3: 973, 4: 508, 5: 409, 6: 125, 7: 1}
+  pruned hist {2: 1025, 3: 974, 4: 508, 5: 410, 6: 121, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: IMPE', 498), ("parse: expected line index, got 'LEANPARSE'", 489), ('rule check failed: ANDI', 208), ('premise block does not match declared premises', 202), ('rule check failed: ORI1', 133), ('rule check failed: ORI2', 126)]
+[la_frozen_g2_s0 r2] targets cumulative: solved 452/4495 L*=9 ge={7: 452, 8: 81, 9: 6, 10: 0, 11: 0, 12: 0}
+[la_frozen_g2_s0 r2] transfer cumulative: solved 32/2285 L*=9 ge={7: 32, 8: 19, 9: 7, 10: 0, 11: 0, 12: 0}
+=== round 2 done in 832s; new proofs 97; cum targets solved 452 L*=9; transfer L*=9
+[lean_gate] 143840 samples, parse-fail 66248, distinct checked 67513: both ok 4449, nd-only 0, lean-only 116, both rej 62948; lean 178.5s wall (1234.0s proc, 7 workers), nd_verify 2.5s
+[la_frozen_g2_s0 r3] targets (this round) SOLVED 387/4495 = 0.086 [0.078,0.095]
+  len 7: 333/1800 = 0.185 [0.168,0.204]
+  len 8: 51/1000 = 0.051 [0.039,0.066]
+  len 9: 3/1004 = 0.003 [0.001,0.009]
+  len 10: 0/456 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 372, 8: 103, 9: 3}
+  pruned hist {5: 6, 6: 166, 7: 229, 8: 75, 9: 2}
+  frontier written 8 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 66248), ('rule check failed: IMPE', 18534), ('rule check failed: ANDI', 14612), ('premise block does not match declared premises', 7445), ('rule check failed: ORI2', 5838), ('rule check failed: NEGE', 4881)]
+[lean_gate] 73120 samples, parse-fail 32934, distinct checked 35003: both ok 162, nd-only 0, lean-only 64, both rej 34777; lean 100.3s wall (692.3s proc, 7 workers), nd_verify 1.2s
+[la_frozen_g2_s0 r3] transfer (this round, pass@32) SOLVED 29/2285 = 0.013 [0.009,0.018]
+  len 7: 13/300 = 0.043 [0.025,0.073]
+  len 8: 11/300 = 0.037 [0.021,0.064]
+  len 9: 5/1010 = 0.005 [0.002,0.012]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 15, 8: 15, 9: 7}
+  pruned hist {6: 3, 7: 14, 8: 16, 9: 4}
+  frontier written 9 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 32934), ('rule check failed: IMPE', 10981), ('rule check failed: ANDI', 8039), ('premise block does not match declared premises', 4693), ('rule check failed: ORI2', 2984), ('rule check failed: NEGE', 2749)]
+[lean_gate] 2285 samples, parse-fail 986, distinct checked 1299: both ok 5, nd-only 0, lean-only 3, both rej 1291; lean 3.2s wall (10.7s proc, 7 workers), nd_verify 0.1s
+[la_frozen_g2_s0 r3] transfer greedy SOLVED 5/2285 = 0.002 [0.001,0.005]
+  len 7: 3/300 = 0.010 [0.003,0.029]
+  len 8: 2/300 = 0.007 [0.002,0.024]
+  len 9: 0/1010 = 0.000 [0.000,0.004]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 3, 8: 2}
+  pruned hist {6: 3, 8: 2}
+  frontier written 0 pruned 0
+  reasons [("parse: expected line index, got 'LEANPARSE'", 986), ('rule check failed: IMPE', 377), ('rule check failed: ANDI', 266), ('premise block does not match declared premises', 157), ('rule check failed: NEGE', 91), ('rule check failed: ORI2', 83)]
+[lean_gate] 5000 samples, parse-fail 489, distinct checked 4511: both ok 3039, nd-only 0, lean-only 8, both rej 1464; lean 8.3s wall (47.5s proc, 7 workers), nd_verify 0.2s
+[la_frozen_g2_s0 r3] heldout greedy SOLVED 3039/5000 = 0.608 [0.594,0.621]
+  len 2: 996/1000 = 0.996 [0.990,0.998]
+  len 3: 963/1000 = 0.963 [0.949,0.973]
+  len 4: 525/1000 = 0.525 [0.494,0.556]
+  len 5: 417/1000 = 0.417 [0.387,0.448]
+  len 6: 138/1000 = 0.138 [0.118,0.161]
+  written hist {2: 1023, 3: 973, 4: 508, 5: 409, 6: 125, 7: 1}
+  pruned hist {2: 1025, 3: 974, 4: 508, 5: 410, 6: 121, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: IMPE', 498), ("parse: expected line index, got 'LEANPARSE'", 489), ('rule check failed: ANDI', 208), ('premise block does not match declared premises', 202), ('rule check failed: ORI1', 133), ('rule check failed: ORI2', 126)]
+[la_frozen_g2_s0 r3] targets cumulative: solved 472/4495 L*=9 ge={7: 472, 8: 84, 9: 7, 10: 0, 11: 0, 12: 0}
+[la_frozen_g2_s0 r3] transfer cumulative: solved 37/2285 L*=9 ge={7: 37, 8: 23, 9: 8, 10: 0, 11: 0, 12: 0}
+=== round 3 done in 763s; new proofs 45; cum targets solved 472 L*=9; transfer L*=9
+[lean_gate] 143840 samples, parse-fail 66388, distinct checked 67341: both ok 4508, nd-only 0, lean-only 148, both rej 62685; lean 186.4s wall (1294.7s proc, 7 workers), nd_verify 2.5s
+[la_frozen_g2_s0 r4] targets (this round) SOLVED 410/4495 = 0.091 [0.083,0.100]
+  len 7: 344/1800 = 0.191 [0.174,0.210]
+  len 8: 63/1000 = 0.063 [0.050,0.080]
+  len 9: 3/1004 = 0.003 [0.001,0.009]
+  len 10: 0/456 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 385, 8: 107, 9: 4}
+  pruned hist {5: 5, 6: 169, 7: 240, 8: 79, 9: 3}
+  frontier written 8 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 66388), ('rule check failed: IMPE', 18483), ('rule check failed: ANDI', 14616), ('premise block does not match declared premises', 7415), ('rule check failed: ORI2', 5874), ('rule check failed: NEGE', 4902)]
+[lean_gate] 73120 samples, parse-fail 32883, distinct checked 35172: both ok 163, nd-only 0, lean-only 63, both rej 34946; lean 88.0s wall (605.7s proc, 7 workers), nd_verify 1.2s
+[la_frozen_g2_s0 r4] transfer (this round, pass@32) SOLVED 25/2285 = 0.011 [0.007,0.016]
+  len 7: 12/300 = 0.040 [0.023,0.069]
+  len 8: 10/300 = 0.033 [0.018,0.060]
+  len 9: 3/1010 = 0.003 [0.001,0.009]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 13, 8: 10, 9: 4}
+  pruned hist {6: 3, 7: 11, 8: 12, 9: 1}
+  frontier written 8 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 32883), ('rule check failed: IMPE', 11166), ('rule check failed: ANDI', 8086), ('premise block does not match declared premises', 4721), ('rule check failed: ORI2', 3051), ('rule check failed: NEGE', 2707)]
+[lean_gate] 2285 samples, parse-fail 986, distinct checked 1299: both ok 5, nd-only 0, lean-only 3, both rej 1291; lean 3.7s wall (12.0s proc, 7 workers), nd_verify 0.0s
+[la_frozen_g2_s0 r4] transfer greedy SOLVED 5/2285 = 0.002 [0.001,0.005]
+  len 7: 3/300 = 0.010 [0.003,0.029]
+  len 8: 2/300 = 0.007 [0.002,0.024]
+  len 9: 0/1010 = 0.000 [0.000,0.004]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 3, 8: 2}
+  pruned hist {6: 3, 8: 2}
+  frontier written 0 pruned 0
+  reasons [("parse: expected line index, got 'LEANPARSE'", 986), ('rule check failed: IMPE', 377), ('rule check failed: ANDI', 266), ('premise block does not match declared premises', 157), ('rule check failed: NEGE', 91), ('rule check failed: ORI2', 83)]
+[lean_gate] 5000 samples, parse-fail 489, distinct checked 4511: both ok 3039, nd-only 0, lean-only 8, both rej 1464; lean 6.8s wall (40.1s proc, 7 workers), nd_verify 0.2s
+[la_frozen_g2_s0 r4] heldout greedy SOLVED 3039/5000 = 0.608 [0.594,0.621]
+  len 2: 996/1000 = 0.996 [0.990,0.998]
+  len 3: 963/1000 = 0.963 [0.949,0.973]
+  len 4: 525/1000 = 0.525 [0.494,0.556]
+  len 5: 417/1000 = 0.417 [0.387,0.448]
+  len 6: 138/1000 = 0.138 [0.118,0.161]
+  written hist {2: 1023, 3: 973, 4: 508, 5: 409, 6: 125, 7: 1}
+  pruned hist {2: 1025, 3: 974, 4: 508, 5: 410, 6: 121, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: IMPE', 498), ("parse: expected line index, got 'LEANPARSE'", 489), ('rule check failed: ANDI', 208), ('premise block does not match declared premises', 202), ('rule check failed: ORI1', 133), ('rule check failed: ORI2', 126)]
+[la_frozen_g2_s0 r4] targets cumulative: solved 504/4495 L*=9 ge={7: 504, 8: 91, 9: 7, 10: 0, 11: 0, 12: 0}
+[la_frozen_g2_s0 r4] transfer cumulative: solved 39/2285 L*=9 ge={7: 39, 8: 24, 9: 8, 10: 0, 11: 0, 12: 0}
+=== round 4 done in 750s; new proofs 45; cum targets solved 504 L*=9; transfer L*=9
+[lean_gate] 143840 samples, parse-fail 66313, distinct checked 67381: both ok 4501, nd-only 0, lean-only 133, both rej 62747; lean 137.2s wall (952.5s proc, 7 workers), nd_verify 2.5s
+[la_frozen_g2_s0 r5] targets (this round) SOLVED 397/4495 = 0.088 [0.080,0.097]
+  len 7: 337/1800 = 0.187 [0.170,0.206]
+  len 8: 58/1000 = 0.058 [0.045,0.074]
+  len 9: 2/1004 = 0.002 [0.001,0.007]
+  len 10: 0/456 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 373, 8: 114, 9: 3}
+  pruned hist {5: 4, 6: 167, 7: 234, 8: 83, 9: 2}
+  frontier written 8 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 66313), ('rule check failed: IMPE', 18495), ('rule check failed: ANDI', 14630), ('premise block does not match declared premises', 7481), ('rule check failed: ORI2', 5939), ('rule check failed: NEGE', 4826)]
+[lean_gate] 73120 samples, parse-fail 32799, distinct checked 35163: both ok 180, nd-only 0, lean-only 58, both rej 34925; lean 91.9s wall (630.0s proc, 7 workers), nd_verify 1.1s
+[la_frozen_g2_s0 r5] transfer (this round, pass@32) SOLVED 29/2285 = 0.013 [0.009,0.018]
+  len 7: 14/300 = 0.047 [0.028,0.077]
+  len 8: 11/300 = 0.037 [0.021,0.064]
+  len 9: 4/1010 = 0.004 [0.002,0.010]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 16, 8: 13, 9: 7}
+  pruned hist {6: 3, 7: 15, 8: 13, 9: 5}
+  frontier written 9 pruned 9
+  reasons [("parse: expected line index, got 'LEANPARSE'", 32799), ('rule check failed: IMPE', 11166), ('rule check failed: ANDI', 8049), ('premise block does not match declared premises', 4687), ('rule check failed: ORI2', 3038), ('rule check failed: NEGE', 2753)]
+[lean_gate] 2285 samples, parse-fail 986, distinct checked 1299: both ok 5, nd-only 0, lean-only 3, both rej 1291; lean 3.8s wall (12.3s proc, 7 workers), nd_verify 0.0s
+[la_frozen_g2_s0 r5] transfer greedy SOLVED 5/2285 = 0.002 [0.001,0.005]
+  len 7: 3/300 = 0.010 [0.003,0.029]
+  len 8: 2/300 = 0.007 [0.002,0.024]
+  len 9: 0/1010 = 0.000 [0.000,0.004]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 3, 8: 2}
+  pruned hist {6: 3, 8: 2}
+  frontier written 0 pruned 0
+  reasons [("parse: expected line index, got 'LEANPARSE'", 986), ('rule check failed: IMPE', 377), ('rule check failed: ANDI', 266), ('premise block does not match declared premises', 157), ('rule check failed: NEGE', 91), ('rule check failed: ORI2', 83)]
+[lean_gate] 5000 samples, parse-fail 489, distinct checked 4511: both ok 3039, nd-only 0, lean-only 8, both rej 1464; lean 5.6s wall (33.4s proc, 7 workers), nd_verify 0.2s
+[la_frozen_g2_s0 r5] heldout greedy SOLVED 3039/5000 = 0.608 [0.594,0.621]
+  len 2: 996/1000 = 0.996 [0.990,0.998]
+  len 3: 963/1000 = 0.963 [0.949,0.973]
+  len 4: 525/1000 = 0.525 [0.494,0.556]
+  len 5: 417/1000 = 0.417 [0.387,0.448]
+  len 6: 138/1000 = 0.138 [0.118,0.161]
+  written hist {2: 1023, 3: 973, 4: 508, 5: 409, 6: 125, 7: 1}
+  pruned hist {2: 1025, 3: 974, 4: 508, 5: 410, 6: 121, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: IMPE', 498), ("parse: expected line index, got 'LEANPARSE'", 489), ('rule check failed: ANDI', 208), ('premise block does not match declared premises', 202), ('rule check failed: ORI1', 133), ('rule check failed: ORI2', 126)]
+[la_frozen_g2_s0 r5] targets cumulative: solved 523/4495 L*=9 ge={7: 523, 8: 95, 9: 7, 10: 0, 11: 0, 12: 0}
+[la_frozen_g2_s0 r5] transfer cumulative: solved 43/2285 L*=9 ge={7: 43, 8: 25, 9: 8, 10: 0, 11: 0, 12: 0}
+=== round 5 done in 708s; new proofs 31; cum targets solved 523 L*=9; transfer L*=9
+[lean_gate] 143840 samples, parse-fail 66444, distinct checked 67212: both ok 4404, nd-only 0, lean-only 129, both rej 62679; lean 173.4s wall (1202.4s proc, 7 workers), nd_verify 2.5s
+[la_frozen_g2_s0 r6] targets (this round) SOLVED 396/4495 = 0.088 [0.080,0.097]
+  len 7: 337/1800 = 0.187 [0.170,0.206]
+  len 8: 58/1000 = 0.058 [0.045,0.074]
+  len 9: 1/1004 = 0.001 [0.000,0.006]
+  len 10: 0/456 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 362, 8: 113, 9: 2}
+  pruned hist {5: 6, 6: 166, 7: 218, 8: 85, 9: 2}
+  frontier written 8 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 66444), ('rule check failed: IMPE', 18497), ('rule check failed: ANDI', 14609), ('premise block does not match declared premises', 7485), ('rule check failed: ORI2', 5795), ('rule check failed: NEGE', 4893)]
+[lean_gate] 73120 samples, parse-fail 32896, distinct checked 35085: both ok 170, nd-only 0, lean-only 52, both rej 34863; lean 94.8s wall (656.1s proc, 7 workers), nd_verify 1.3s
+[la_frozen_g2_s0 r6] transfer (this round, pass@32) SOLVED 27/2285 = 0.012 [0.008,0.017]
+  len 7: 11/300 = 0.037 [0.021,0.064]
+  len 8: 11/300 = 0.037 [0.021,0.064]
+  len 9: 5/1010 = 0.005 [0.002,0.012]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 13, 8: 15, 9: 7}
+  pruned hist {6: 3, 7: 11, 8: 16, 9: 5}
+  frontier written 9 pruned 9
+  reasons [("parse: expected line index, got 'LEANPARSE'", 32896), ('rule check failed: IMPE', 11053), ('rule check failed: ANDI', 8001), ('premise block does not match declared premises', 4671), ('rule check failed: ORI2', 3069), ('rule check failed: NEGE', 2754)]
+[lean_gate] 2285 samples, parse-fail 986, distinct checked 1299: both ok 5, nd-only 0, lean-only 3, both rej 1291; lean 3.5s wall (11.6s proc, 7 workers), nd_verify 0.1s
+[la_frozen_g2_s0 r6] transfer greedy SOLVED 5/2285 = 0.002 [0.001,0.005]
+  len 7: 3/300 = 0.010 [0.003,0.029]
+  len 8: 2/300 = 0.007 [0.002,0.024]
+  len 9: 0/1010 = 0.000 [0.000,0.004]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 3, 8: 2}
+  pruned hist {6: 3, 8: 2}
+  frontier written 0 pruned 0
+  reasons [("parse: expected line index, got 'LEANPARSE'", 986), ('rule check failed: IMPE', 377), ('rule check failed: ANDI', 266), ('premise block does not match declared premises', 157), ('rule check failed: NEGE', 91), ('rule check failed: ORI2', 83)]
+[lean_gate] 5000 samples, parse-fail 489, distinct checked 4511: both ok 3039, nd-only 0, lean-only 8, both rej 1464; lean 9.1s wall (51.8s proc, 7 workers), nd_verify 0.2s
+[la_frozen_g2_s0 r6] heldout greedy SOLVED 3039/5000 = 0.608 [0.594,0.621]
+  len 2: 996/1000 = 0.996 [0.990,0.998]
+  len 3: 963/1000 = 0.963 [0.949,0.973]
+  len 4: 525/1000 = 0.525 [0.494,0.556]
+  len 5: 417/1000 = 0.417 [0.387,0.448]
+  len 6: 138/1000 = 0.138 [0.118,0.161]
+  written hist {2: 1023, 3: 973, 4: 508, 5: 409, 6: 125, 7: 1}
+  pruned hist {2: 1025, 3: 974, 4: 508, 5: 410, 6: 121, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: IMPE', 498), ("parse: expected line index, got 'LEANPARSE'", 489), ('rule check failed: ANDI', 208), ('premise block does not match declared premises', 202), ('rule check failed: ORI1', 133), ('rule check failed: ORI2', 126)]
+[la_frozen_g2_s0 r6] targets cumulative: solved 538/4495 L*=9 ge={7: 538, 8: 97, 9: 7, 10: 0, 11: 0, 12: 0}
+[la_frozen_g2_s0 r6] transfer cumulative: solved 43/2285 L*=9 ge={7: 43, 8: 25, 9: 8, 10: 0, 11: 0, 12: 0}
+=== round 6 done in 745s; new proofs 21; cum targets solved 538 L*=9; transfer L*=9
+[lean_gate] 143840 samples, parse-fail 66383, distinct checked 67244: both ok 4480, nd-only 0, lean-only 115, both rej 62649; lean 176.1s wall (1224.4s proc, 7 workers), nd_verify 2.5s
+[la_frozen_g2_s0 r7] targets (this round) SOLVED 391/4495 = 0.087 [0.079,0.096]
+  len 7: 330/1800 = 0.183 [0.166,0.202]
+  len 8: 58/1000 = 0.058 [0.045,0.074]
+  len 9: 3/1004 = 0.003 [0.001,0.009]
+  len 10: 0/456 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 365, 8: 115, 9: 7}
+  pruned hist {5: 3, 6: 161, 7: 234, 8: 83, 9: 6}
+  frontier written 9 pruned 9
+  reasons [("parse: expected line index, got 'LEANPARSE'", 66383), ('rule check failed: IMPE', 18275), ('rule check failed: ANDI', 14728), ('premise block does not match declared premises', 7476), ('rule check failed: ORI2', 5861), ('rule check failed: NEGE', 4837)]
+[lean_gate] 73120 samples, parse-fail 32928, distinct checked 35109: both ok 163, nd-only 0, lean-only 72, both rej 34874; lean 89.5s wall (614.4s proc, 7 workers), nd_verify 1.2s
+[la_frozen_g2_s0 r7] transfer (this round, pass@32) SOLVED 25/2285 = 0.011 [0.007,0.016]
+  len 7: 10/300 = 0.033 [0.018,0.060]
+  len 8: 9/300 = 0.030 [0.016,0.056]
+  len 9: 6/1010 = 0.006 [0.003,0.013]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 10, 8: 11, 9: 7}
+  pruned hist {6: 3, 7: 8, 8: 12, 9: 5}
+  frontier written 9 pruned 9
+  reasons [("parse: expected line index, got 'LEANPARSE'", 32928), ('rule check failed: IMPE', 10983), ('rule check failed: ANDI', 7952), ('premise block does not match declared premises', 4702), ('rule check failed: ORI2', 3070), ('rule check failed: NEGE', 2789)]
+[lean_gate] 2285 samples, parse-fail 986, distinct checked 1299: both ok 5, nd-only 0, lean-only 3, both rej 1291; lean 3.5s wall (11.6s proc, 7 workers), nd_verify 0.0s
+[la_frozen_g2_s0 r7] transfer greedy SOLVED 5/2285 = 0.002 [0.001,0.005]
+  len 7: 3/300 = 0.010 [0.003,0.029]
+  len 8: 2/300 = 0.007 [0.002,0.024]
+  len 9: 0/1010 = 0.000 [0.000,0.004]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 3, 8: 2}
+  pruned hist {6: 3, 8: 2}
+  frontier written 0 pruned 0
+  reasons [("parse: expected line index, got 'LEANPARSE'", 986), ('rule check failed: IMPE', 377), ('rule check failed: ANDI', 266), ('premise block does not match declared premises', 157), ('rule check failed: NEGE', 91), ('rule check failed: ORI2', 83)]
+[lean_gate] 5000 samples, parse-fail 489, distinct checked 4511: both ok 3039, nd-only 0, lean-only 8, both rej 1464; lean 8.5s wall (49.0s proc, 7 workers), nd_verify 0.2s
+[la_frozen_g2_s0 r7] heldout greedy SOLVED 3039/5000 = 0.608 [0.594,0.621]
+  len 2: 996/1000 = 0.996 [0.990,0.998]
+  len 3: 963/1000 = 0.963 [0.949,0.973]
+  len 4: 525/1000 = 0.525 [0.494,0.556]
+  len 5: 417/1000 = 0.417 [0.387,0.448]
+  len 6: 138/1000 = 0.138 [0.118,0.161]
+  written hist {2: 1023, 3: 973, 4: 508, 5: 409, 6: 125, 7: 1}
+  pruned hist {2: 1025, 3: 974, 4: 508, 5: 410, 6: 121, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: IMPE', 498), ("parse: expected line index, got 'LEANPARSE'", 489), ('rule check failed: ANDI', 208), ('premise block does not match declared premises', 202), ('rule check failed: ORI1', 133), ('rule check failed: ORI2', 126)]
+[la_frozen_g2_s0 r7] targets cumulative: solved 550/4495 L*=9 ge={7: 550, 8: 99, 9: 7, 10: 0, 11: 0, 12: 0}
+[la_frozen_g2_s0 r7] transfer cumulative: solved 44/2285 L*=9 ge={7: 44, 8: 26, 9: 8, 10: 0, 11: 0, 12: 0}
+=== round 7 done in 747s; new proofs 23; cum targets solved 550 L*=9; transfer L*=9
+[lean_gate] 143840 samples, parse-fail 66332, distinct checked 67382: both ok 4479, nd-only 0, lean-only 128, both rej 62775; lean 189.7s wall (1315.0s proc, 7 workers), nd_verify 2.4s
+[la_frozen_g2_s0 r8] targets (this round) SOLVED 386/4495 = 0.086 [0.078,0.094]
+  len 7: 326/1800 = 0.181 [0.164,0.200]
+  len 8: 58/1000 = 0.058 [0.045,0.074]
+  len 9: 2/1004 = 0.002 [0.001,0.007]
+  len 10: 0/456 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 376, 8: 110, 9: 2}
+  pruned hist {5: 4, 6: 166, 7: 238, 8: 78, 9: 2}
+  frontier written 8 pruned 8
+  reasons [("parse: expected line index, got 'LEANPARSE'", 66332), ('rule check failed: IMPE', 18415), ('rule check failed: ANDI', 14637), ('premise block does not match declared premises', 7480), ('rule check failed: ORI2', 5796), ('rule check failed: NEGE', 4828)]
+[lean_gate] 73120 samples, parse-fail 32917, distinct checked 35049: both ok 171, nd-only 0, lean-only 66, both rej 34812; lean 91.0s wall (622.2s proc, 7 workers), nd_verify 1.2s
+[la_frozen_g2_s0 r8] transfer (this round, pass@32) SOLVED 30/2285 = 0.013 [0.009,0.019]
+  len 7: 12/300 = 0.040 [0.023,0.069]
+  len 8: 12/300 = 0.040 [0.023,0.069]
+  len 9: 6/1010 = 0.006 [0.003,0.013]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 13, 8: 13, 9: 7}
+  pruned hist {6: 3, 7: 11, 8: 14, 9: 5}
+  frontier written 9 pruned 9
+  reasons [("parse: expected line index, got 'LEANPARSE'", 32917), ('rule check failed: IMPE', 11151), ('rule check failed: ANDI', 8006), ('premise block does not match declared premises', 4670), ('rule check failed: ORI2', 3006), ('rule check failed: NEGE', 2724)]
+[lean_gate] 2285 samples, parse-fail 986, distinct checked 1299: both ok 5, nd-only 0, lean-only 3, both rej 1291; lean 3.1s wall (10.6s proc, 7 workers), nd_verify 0.1s
+[la_frozen_g2_s0 r8] transfer greedy SOLVED 5/2285 = 0.002 [0.001,0.005]
+  len 7: 3/300 = 0.010 [0.003,0.029]
+  len 8: 2/300 = 0.007 [0.002,0.024]
+  len 9: 0/1010 = 0.000 [0.000,0.004]
+  len 10: 0/451 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 3, 8: 2}
+  pruned hist {6: 3, 8: 2}
+  frontier written 0 pruned 0
+  reasons [("parse: expected line index, got 'LEANPARSE'", 986), ('rule check failed: IMPE', 377), ('rule check failed: ANDI', 266), ('premise block does not match declared premises', 157), ('rule check failed: NEGE', 91), ('rule check failed: ORI2', 83)]
+[lean_gate] 5000 samples, parse-fail 489, distinct checked 4511: both ok 3039, nd-only 0, lean-only 8, both rej 1464; lean 7.4s wall (42.7s proc, 7 workers), nd_verify 0.2s
+[la_frozen_g2_s0 r8] heldout greedy SOLVED 3039/5000 = 0.608 [0.594,0.621]
+  len 2: 996/1000 = 0.996 [0.990,0.998]
+  len 3: 963/1000 = 0.963 [0.949,0.973]
+  len 4: 525/1000 = 0.525 [0.494,0.556]
+  len 5: 417/1000 = 0.417 [0.387,0.448]
+  len 6: 138/1000 = 0.138 [0.118,0.161]
+  written hist {2: 1023, 3: 973, 4: 508, 5: 409, 6: 125, 7: 1}
+  pruned hist {2: 1025, 3: 974, 4: 508, 5: 410, 6: 121, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: IMPE', 498), ("parse: expected line index, got 'LEANPARSE'", 489), ('rule check failed: ANDI', 208), ('premise block does not match declared premises', 202), ('rule check failed: ORI1', 133), ('rule check failed: ORI2', 126)]
+[la_frozen_g2_s0 r8] targets cumulative: solved 561/4495 L*=9 ge={7: 561, 8: 102, 9: 7, 10: 0, 11: 0, 12: 0}
+[la_frozen_g2_s0 r8] transfer cumulative: solved 44/2285 L*=9 ge={7: 44, 8: 26, 9: 8, 10: 0, 11: 0, 12: 0}
+=== round 8 done in 769s; new proofs 19; cum targets solved 561 L*=9; transfer L*=9
+END 2026-09-24T06:20:18Z

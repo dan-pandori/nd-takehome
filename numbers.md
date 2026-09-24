@@ -545,3 +545,155 @@ Every number below is re-derived by `python3 lean_format_analysis.py` → `artif
 
 ## Bucket
 `hf://buckets/dan-pandori/nd-rl/lean-format/{ckpts,artifacts,data}` — `ckpts/lf` (Stage-1 models, depth-3 EI rounds), `ckpts/ladder` (ladder EI rounds), `artifacts/lf` (everything above incl. per-round found files), `data` (the a1 training set and the ladder pools used).
+
+
+# ds-generator (proposal 9, run 2) — the generator's proof-shape distribution
+
+**Every model here is a 3.3 M-parameter from-scratch GPT in the `lean_seq` Lean surface format**, Stage-1 =
+`train.py --mode lean_seq --steps 6000 --bs 128 --cap 6 --seed <s>` on a 155,000-record set of **cap-6 generator
+proofs, flat 31,000 per pruned length 2–6, depth-3 excluded**. The three sets differ only in the generator knobs
+(`data/dsg/README.md`):
+
+| arm | training set | Stage-1 checkpoints | generator |
+|---|---|---|---|
+| C0 | `data/p2/train_depth3_f0_a1.jsonl` | `ckpts/lf/stage1_a1_seq_s{0,1}.pt` (md5 `9bde44c0…`, `fc27e52d…`; trained 2026-09-21 on an RTX 3090, **not** retrained) | control knobs |
+| G1 | `data/dsg/train_g1.jsonl` | `ckpts/dsg/stage1_g1_s{0,1}.pt` (retrained 2026-09-23/24 on A6000 / 4090) | `--ore_steps 3 --ore_boxes` |
+| G2 | `data/dsg/train_g2.jsonl` | `ckpts/dsg/stage1_g2_s{0,1}.pt` (retrained 2026-09-23/24 on A6000 / 4090) | `--ladder --drop_contra --ore_boxes` (the ladder pools' strict long generator at cap 6) |
+
+Sampler for every ladder number: this branch's decode path with the memoised RoPE table from run `efficiency`,
+`ND_SAMPLE_COMPACT=0`, **batch 512, `--max_new` 512, T 0.8**, held fixed across all three arms and both seeds.
+A proof counts only if `nd_verify` **and** Lean accept it. Source files are named per table; all are under
+`artifacts/dsg/` unless said, and `dsg_analysis.py` regenerates every table below into `artifacts/dsg/summary.json`.
+
+## G1 — held-out greedy (`heldout2_<arm>_s<k>.json`, `eval_set.py --k 1 --temperature 0 --batch 512`, `data/p2/heldout.jsonl`, 5,000)
+
+| arm s | overall | 2 | 3 | 4 | 5 | 6 | none | pattern | depth-3 thms | 6-line none |
+|---|---|---|---|---|---|---|---|---|---|---|
+| c0 s0 | 0.909 | 0.994 | 0.989 | 0.951 | 0.924 | 0.686 | 0.952 | 0.770 | 0.488 | 0.818 |
+| c0 s1 | 0.897 | 0.997 | 0.992 | 0.967 | 0.944 | 0.584 | 0.964 | 0.680 | 0.272 | 0.834 |
+| g1 s0 | 0.861 | 0.998 | 0.984 | 0.947 | 0.923 | 0.451 | 0.951 | 0.569 | 0.014 | 0.830 |
+| g1 s1 | 0.896 | 0.992 | 0.975 | 0.915 | 0.878 | 0.718 | 0.921 | 0.813 | 0.616 | 0.729 |
+| g2 s0 | 0.608 | 0.996 | 0.963 | 0.525 | 0.417 | 0.138 | 0.737 | 0.193 | 0.076 | 0.332 |
+| g2 s1 | 0.665 | 0.997 | 0.970 | 0.533 | 0.401 | 0.425 | 0.735 | 0.442 | 0.680 | 0.296 |
+
+## G2 — coverage pass@2,000 (`cov_<pool>_<arm>_s<k>.s0.jsonl`, `coverage.py --k 2000 --temperature 0.8 --seed 0 --batch 1000`)
+
+Measured 2026-09-22 **on the original G1 / G2 Stage-1 checkpoints**, which the host cleanup deleted; the ladder
+rows below are on retrained replicas of the same (set, seed). See § G5 for how far a retrain moves a number.
+
+| arm s | depth-3 1,000 | req8 300 | reductio-req 300 (7-line stratum; ≥ 8) | per-sample d3 / req8 / red | ≥ 8-line pattern proofs d3 / req8 / red | Lean rej |
+|---|---|---|---|---|---|---|
+| c0 s0 | 506 (280) / 1000 | 165 (164) / 300 | 31 (31) / 300 (31; 0) | 0.0926 / 0.0155 / 0.0016 | 179 / 177 / 0 | 0 |
+| c0 s1 | 423 (197) / 1000 | 113 (113) / 300 | 27 (27) / 300 (27; 0) | 0.1003 / 0.0134 / 0.0091 | 96 / 129 / 0 | 0 |
+| g1 s0 | 456 (247) / 1000 | 138 (138) / 300 | 38 (38) / 300 (38; 0) | 0.1025 / 0.0172 / 0.0110 | 153 / 175 / 0 | 0 |
+| g1 s1 | 603 (391) / 1000 | 259 (259) / 300 | 31 (31) / 300 (31; 0) | 0.2579 / 0.3185 / 0.0028 | 384 / 356 / 0 | 0 |
+| g2 s0 | 288 (65) / 1000 | 38 (38) / 300 | 0 (0) / 300 (0; 0) | 0.1022 / 0.0059 / 0.0000 | 42 / 45 / 0 | 0 |
+| g2 s1 | 266 (69) / 1000 | 23 (23) / 300 | 0 (0) / 300 (0; 0) | 0.0812 / 0.0017 / 0.0000 | 24 / 25 / 0 | 0 |
+
+## G3 — depth-3 dial (`{ei,frozen}_d3_<arm>_s<k>/`, `expert_iter.py --rounds 4 --k 32 --temperature 0.8 --batch 768`, targets `data/p2/targets_depth3.jsonl`)
+
+C0's rows are `artifacts/lf_control/{ei,frozen}_d3_seq_s{0,1}/`, pulled from
+`hf://buckets/dan-pandori/nd-rl/lean-format/artifacts/lf/`; their `args.json` confirms `--init
+ckpts/lf/stage1_a1_seq_s<k>.pt --train data/p2/train_depth3_f0_a1.jsonl`, i.e. the same model and set as this
+run's C0. G1 / G2 measured 2026-09-22 on the original checkpoints.
+
+| arm s | EI | frozen | EI − frozen | EI acq by round | held-out r4 |
+|---|---|---|---|---|---|
+| c0 s0 | 0.418 | 0.163 | +0.255 | 0.104, 0.362, 0.401, 0.418 | 0.956 |
+| c0 s1 | 0.408 | 0.116 | +0.292 | 0.085, 0.350, 0.392, 0.408 | 0.966 |
+| g1 s0 | 0.403 | 0.165 | +0.238 | 0.120, 0.341, 0.379, 0.403 | 0.947 |
+| g1 s1 | 0.436 | 0.322 | +0.114 | 0.297, 0.383, 0.421, 0.436 | 0.957 |
+| g2 s0 | 0.415 | 0.032 | +0.383 | 0.020, 0.261, 0.378, 0.415 | 0.702 |
+| g2 s1 | 0.396 | 0.034 | +0.362 | 0.022, 0.320, 0.382, 0.396 | 0.699 |
+
+## G4 — ladder rung T1 and frozen, 8 rounds × 32 attempts (`la_{T1,frozen}_<arm>_s<k>/`, `ladder_ei.py`, pools `data/ladder/`, byte-identical to ladder-A's; `L*` = max L with ≥ 5 transfer theorems solved at `L_true` ≥ L)
+
+Measured 2026-09-23/24, all arms on the same two pods, same sampler settings, same 2,285-theorem transfer pool.
+`la_frozen_g1_s0` was **not run** — it was the pre-registered droppable tail and the $14 budget stopped at 11 of
+12 jobs (`QUESTIONS.md`, 2026-09-24 08:35 UTC).
+
+| arm s | rung | L* | solved | 7 / 8 / 9 / 10 / 11 / 12 / 13 / 14 | textbook | schemata ≥ 5 | held-out |
+|---|---|---|---|---|---|---|---|
+| c0 s0 | frozen | 9 | 158 | 42 / 69 / 44 / 3 / 0 / 0 / 0 / 0 | 6 |  | 0.909 → 0.909 |
+| c0 s0 | T1 | 12 | 890 | 92 / 166 / 525 / 91 / 11 / 5 / 0 / 0 | 37 | contraposition 19, export 5 | 0.909 → 0.959 |
+| c0 s1 | frozen | 9 | 114 | 44 / 47 / 22 / 1 / 0 / 0 / 0 / 0 | 13 | export 7 | 0.897 → 0.897 |
+| c0 s1 | T1 | 11 | 965 | 145 / 165 / 531 / 106 / 15 / 3 / 0 / 0 | 89 | contraposition 30, disjunctive_syllogism 21, export 33 | 0.897 → 0.969 |
+| g1 s0 | T1 | 12 | 916 | 133 / 158 / 522 / 87 / 11 / 5 / 0 / 0 | 80 | contraposition 39, disjunctive_syllogism 38 | 0.861 → 0.954 |
+| g1 s1 | frozen | 9 | 170 | 35 / 72 / 61 / 2 / 0 / 0 / 0 / 0 | 2 |  | 0.896 → 0.896 |
+| g1 s1 | T1 | 10 | 635 | 73 / 141 / 369 / 49 / 2 / 1 / 0 / 0 | 23 | disjunctive_syllogism 23 | 0.896 → 0.931 |
+| g2 s0 | frozen | 9 | 44 | 18 / 18 / 8 / 0 / 0 / 0 / 0 / 0 | 1 |  | 0.608 → 0.608 |
+| g2 s0 | T1 | 11 | 632 | 85 / 141 / 351 / 50 / 5 / 0 / 0 / 0 | 39 | disjunctive_syllogism 38 | 0.608 → 0.694 |
+| g2 s1 | frozen | 9 | 125 | 30 / 64 / 31 / 0 / 0 / 0 / 0 / 0 | 0 |  | 0.665 → 0.665 |
+| g2 s1 | T1 | 11 | 607 | 43 / 142 / 364 / 53 / 3 / 2 / 0 / 0 | 0 |  | 0.665 → 0.681 |
+
+**Textbook schemata (`found_transfer_8.jsonl` joined to the transfer pool's `schema` field, 19 schemata × 40 = 760):**
+
+| schema | n | C0 s0 | C0 s1 | G1 s0 | G1 s1 | G2 s0 | G2 s1 |
+|---|---|---|---|---|---|---|---|
+| constructive_dilemma | 40 | 0 | 0 | 0 | 0 | 0 | 0 |
+| contraposition | 40 | **19** | **30** | **39** | 0 | 0 | 0 |
+| contraposition_conv | 40 | 1 | 1 | 0 | 0 | 0 | 0 |
+| demorgan_and_to_nor | 40 | 0 | 0 | 0 | 0 | 0 | 0 |
+| demorgan_nand_to_or | 40 | 4 | 2 | 2 | 0 | 0 | 0 |
+| demorgan_nor_to_and | 40 | 0 | 0 | 0 | 0 | 0 | 0 |
+| demorgan_or_to_nand | 40 | 0 | 0 | 0 | 0 | 0 | 0 |
+| disjunctive_syllogism | 40 | 4 | **21** | **38** | **23** | **38** | 0 |
+| dist_and_over_or | 40 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dist_and_over_or_conv | 40 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dist_or_over_and | 40 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dist_or_over_and_conv | 40 | 1 | 0 | 0 | 0 | 0 | 0 |
+| excluded_middle | 40 | 0 | 0 | 0 | 0 | 0 | 0 |
+| export | 40 | **5** | **33** | 0 | 0 | 1 | 0 |
+| import | 40 | 1 | 0 | 1 | 0 | 0 | 0 |
+| negated_conditional | 40 | 0 | 0 | 0 | 0 | 0 | 0 |
+| negated_conditional_conv | 40 | 0 | 0 | 0 | 0 | 0 | 0 |
+| peirce | 40 | 1 | 1 | 0 | 0 | 0 | 0 |
+| peirce_sequent | 40 | 1 | 1 | 0 | 0 | 0 | 0 |
+| **total / 760** | 760 | 37 | 89 | 80 | 23 | 39 | 0 |
+| **schemata at ≥ 5** | 19 | 2 | 3 | 2 | 1 | 1 | 0 |
+
+## G5 — what a retrain and a hardware change are worth (`heldout_<arm>_s<k>.json` 2026-09-22 vs `heldout2_<arm>_s<k>.json` 2026-09-23/24)
+
+C0's two rows are the **harness control**: byte-identical checkpoint (md5 verified), different GPU class, the new
+decode path. G1 / G2's rows are a genuine retrain: same set, same seed, same command line.
+
+| arm s | held-out greedy 2026-09-22 (RTX 3090) | held-out greedy 2026-09-23 (A6000 / 4090) | delta pp |
+|---|---|---|---|
+| c0 s0 | 0.909 | 0.909 | +0.00 |
+| c0 s1 | 0.896 | 0.897 | +0.08 |
+| g1 s0 | 0.875 | 0.861 | -1.44 |
+| g1 s1 | 0.940 | 0.896 | -4.44 |
+| g2 s0 | 0.626 | 0.608 | -1.78 |
+| g2 s1 | 0.606 | 0.665 | +5.96 |
+
+Every delta is concentrated in the 6-line bin: C0 s0 0.686 → 0.686, G1 s0 0.521 → 0.451, G1 s1 0.849 → 0.718,
+G2 s0 0.205 → 0.138, G2 s1 0.101 → 0.425.
+
+## G6 — checker of record (`record_<arm>_s<k>.json`, the unmodified `nd2lean.py --check` + `nd_verify` over every counted proof of the dial, the ladder and the three coverage runs)
+
+- c0: 20426 counted proofs, both accept 20426, disagreements 0
+- g1: 21162 counted proofs, both accept 21162, disagreements 0
+- g2: 15425 counted proofs, both accept 15425, disagreements 0
+
+**57,013 counted proofs, 57,013 accepted by both, 0 disagreements.** `coverage.py`'s in-line Lean check also
+rejected 0 of the `nd_verify`-accepted distinct proofs in all six coverage runs. `nd_verify`, `nd2lean.py` and
+`lean_gate.py` are unmodified in this run (`git diff origin/main HEAD -- nd_verify/ nd2lean.py` empty).
+
+## G7 — sampler equivalence (`regress.json`, `dsg_regress.py`, 128 samples from `data/ladder/transfer.jsonl`, T 0.8)
+
+`path='base'` with row-keyed rng, sample.py's default as configured here, and the fast path with compaction
+explicitly off: **token streams and decoded proofs identical**, verdict PASS. With **compaction on**, 1 row of 128
+differs, first at decode step 162 — which is why this run sets `ND_SAMPLE_COMPACT=0` and keeps batch 512.
+
+## G8 — cost
+
+`podbudget ds-generator`: **21.34 pod-hours, $13.02**, of a $14 / 28 pod-hour budget. `dsg-1` RTX A6000 48 GB,
+11.56 h, $5.78 (billed $0.50/h); `dsg-2` RTX 4090 24 GB, 9.78 h, $7.24 ($0.74/h). Both deleted (`podls` empty of
+`dsg-*`). RTX 3090 and A40 were out of stock throughout. The 2026-09-22 phase spent ≈ $2.5 of its own $20 ceiling.
+
+## Bucket
+
+`hf://buckets/dan-pandori/nd-rl/ds-generator/{artifacts/dsg,ckpts/dsg,ckpts/ladder,data/dsg}` — `data/dsg`
+(the two 155,000-record sets and the three raw pools), `ckpts/dsg` (four Stage-1 checkpoints), `ckpts/ladder`
+(per-round ladder checkpoints), `artifacts/dsg` (everything above, incl. every per-round `found_*.jsonl`).
+The per-round training mixes `la_*/mix_<r>.jsonl` (263 MB) were not kept: no counted number reads them.

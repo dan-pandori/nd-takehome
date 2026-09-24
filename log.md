@@ -326,3 +326,32 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 
 - 01:05  **The pre-registered C0 ladder band was anchored to the wrong model, and I can show it.** C0 measured here: T1 **890 / 2,285 solved, transfer `L*` 12** (s0) and **965, `L*` 11** (s1); frozen **114, `L*` 9** (s1). My pre-registration put C0 at 700–900 T1 and 220–320 frozen "[794 / 839; 304 / 309]", quoting `lean-format`'s figures. Reading `pod/lf/jobs.py` line 30: lean-format's ladder ran on `ckpts/lf/stage1_full_seq_s0.pt` — **3.3 M-parameter `lean_seq` GPT trained on `data/train.jsonl`, the full take-home cap-6 set** — with both rows differing only in EI seed. This run's C0 is `ckpts/lf/stage1_a1_seq_s{0,1}.pt`, **the same architecture and format but trained on `data/p2/train_depth3_f0_a1.jsonl`** (155,000, depth-3 excluded at f = 0), which is what the ds-generator design specifies and what G1 / G2 are matched against. The two are different models on different training sets, so the on-file band never applied; the frozen figure moves most (114 vs 309) because the a1 set has no depth-3 proofs at all. **Every arm-vs-arm claim in this run uses the C0 measured here**, on the same hardware, sampler and settings as G1 and G2; the lean-format numbers are relabelled in the write-up as what they are.
 - 01:05  **G2's Stage-1 retrain does not reproduce, and the failure is in one bin.** G2 s1, same set, same seed, same command line, A6000/4090 instead of a 3090: held-out greedy **0.6056 → 0.6652 (+5.96 pp)**, against a pre-registered ±0.5 pp. By length the retrain matches everywhere except the 6-line bin: 2 / 3 / 4 / 5 = 1.000 → 0.997, 0.967 → 0.970, 0.544 → 0.533, 0.416 → 0.401, and **6-line 0.101 → 0.425**. So the 2026-09-22 G2 s1 draw was an unusually bad 6-line draw rather than a stable property of the set; the harness control (C0, byte-identical checkpoint) reproduced to four decimals in every bin at 01:04, so this is training-run variance, not the recovery. Per the pre-registration the **new** number is the one the ladder rows are labelled with, and G2's held-out claim is re-stated from both draws. G2 s0's retrain check follows on dsg-1.
+- 06:55–08:20  Ladder finished. **C0** T1 890 / 965 solved of 2,285 (`L*` 12 / 11), frozen 158 / 114 (`L*` 9 / 9).
+  **G1** T1 916 / 635 (12 / 10), frozen 170 (s1 only). **G2** T1 632 / 607 (11 / 11), frozen 44 / 125 (9 / 9).
+  Held-out greedy at round 8 (T1): C0 0.959 / 0.969, G1 0.954 / 0.931, G2 0.694 / 0.681. `L_true` ≥ 13 is 0 solves
+  in all eleven runs. The pre-registered falsifier reads **both ways at once** and I report it as such: G2's frozen
+  solves are within ±15 % of C0 on seed 1 (125 vs 114, +9.6 %) but −72 % on seed 0 (44 vs 158) — so the strict
+  "within ±15 % on both seeds" wording is met on one seed only, while the *prediction* the shape account made
+  (+50 to +150 %, i.e. 450–760) fails by an order of magnitude on both. The account is dead on the prediction, not
+  on the equivalence. G1 settles the reading: an independent pool whose shape table matches the control's gives
+  frozen **170**, above both C0 seeds, and T1 seeds of **916 and 635** that bracket the entire C0–G2 gap.
+- 08:20  Checker of record, both seeds, unmodified `nd2lean.py --check` + `nd_verify` over every counted proof of
+  the dial, the ladder and the three coverage runs: **57,013 proofs, 57,013 accepted by both, 0 disagreements**
+  (c0 20,426; g1 21,162; g2 15,425). `coverage.py`'s in-line Lean check rejected 0 `nd_verify`-accepted distinct
+  proofs in all six runs. `git diff origin/dan_lean_format HEAD` is empty for `nd_verify/`, `nd2lean.py`,
+  `lean_gate.py`, `train.py`, `expert_iter.py`, `ladder_ei.py`; `artifacts/TEST_RUN_DONE` untouched (last commit
+  `ca93f83`, 2026-09-15); no test-file run.
+- 08:25–08:40  `ckpts/dsg` and `ckpts/ladder` uploaded to the bucket **from each pod** before deleting it. Pull
+  checklist run on both: remote-vs-local file listing differs only by the 24 per-round `mix_<r>.jsonl` training
+  mixes (263 MB), which `sync.sh pullall` excludes by design and which no counted number reads. `podrm dsg-2`
+  (9.78 h, $7.24), `podrm dsg-1` (11.56 h, $5.78). **No `dsg-*` pod left.** Final: `podbudget ds-generator`
+  **21.34 h, $13.02** of $14 / 28 h.
+- 08:45  C0's depth-3 dial files restored from `hf://buckets/dan-pandori/nd-rl/lean-format/artifacts/lf/` into
+  `artifacts/lf_control/` so the dial table regenerates from pulled files; their `args.json` confirms `--init
+  ckpts/lf/stage1_a1_seq_s<k>.pt --train data/p2/train_depth3_f0_a1.jsonl`, i.e. **the same model and set as this
+  run's C0** — so the dial comparison was always like-for-like and it was only the pre-registration's *ladder*
+  band that was anchored to `stage1_full_seq_s0`.
+- 08:50  Deliverables: `artifacts/dsg/summary.json` (one row per arm × seed, `dsg_analysis.py`), `numbers.md`
+  § ds-generator (G1–G8, every table naming its source file and its model), `run_ds_generator.md`,
+  `figures/dsg_shape.png` and `figures/dsg_readiness.png` (`dsg_figures.py`), `data/dsg/README.md` resume note.
+

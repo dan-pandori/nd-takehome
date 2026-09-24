@@ -1,0 +1,35 @@
+START 2026-09-23T21:46:57Z until [ -f artifacts/dsg/fetch.done ]; do sleep 30; done; until [ -f artifacts/dsg/la_frozen_g2_s0.done ]; do sleep 30; done; python3 train.py --data data/dsg/train_g1.jsonl --heldout data/p2/heldout.jsonl --mode lean_seq --steps 6000 --bs 128 --out ckpts/dsg/stage1_g1_s0.pt --cap 6 --seed 0
+params 3214336 mode lean_seq shift True
+train records 155000 max len 504
+step 200 loss 0.9292 lr 1.00e-03 17s val 0.9338
+step 400 loss 0.1927 lr 9.97e-04 35s val 0.1463
+step 600 loss 0.1202 lr 9.89e-04 52s val 0.1251
+step 800 loss 0.1073 lr 9.76e-04 70s val 0.0962
+step 1000 loss 0.0908 lr 9.58e-04 87s val 0.1067
+step 1200 loss 0.0829 lr 9.36e-04 104s val 0.0834
+step 1400 loss 0.0786 lr 9.08e-04 122s val 0.0821
+step 1600 loss 0.0747 lr 8.77e-04 139s val 0.0807
+step 1800 loss 0.0681 lr 8.41e-04 157s val 0.0793
+step 2000 loss 0.0615 lr 8.03e-04 174s val 0.0792
+step 2200 loss 0.0711 lr 7.61e-04 192s val 0.0802
+step 2400 loss 0.0659 lr 7.17e-04 209s val 0.0780
+step 2600 loss 0.0663 lr 6.70e-04 226s val 0.0772
+step 2800 loss 0.0654 lr 6.23e-04 244s val 0.0762
+step 3000 loss 0.0613 lr 5.74e-04 261s val 0.0759
+step 3200 loss 0.0578 lr 5.26e-04 279s val 0.0751
+step 3400 loss 0.0600 lr 4.77e-04 296s val 0.0758
+step 3600 loss 0.0585 lr 4.30e-04 314s val 0.0741
+step 3800 loss 0.0557 lr 3.83e-04 331s val 0.0744
+step 4000 loss 0.0579 lr 3.39e-04 349s val 0.0747
+step 4200 loss 0.0587 lr 2.97e-04 367s val 0.0737
+step 4400 loss 0.0554 lr 2.59e-04 384s val 0.0736
+step 4600 loss 0.0564 lr 2.23e-04 401s val 0.0737
+step 4800 loss 0.0515 lr 1.92e-04 419s val 0.0735
+step 5000 loss 0.0563 lr 1.64e-04 436s val 0.0732
+step 5200 loss 0.0537 lr 1.42e-04 454s val 0.0733
+step 5400 loss 0.0575 lr 1.24e-04 471s val 0.0731
+step 5600 loss 0.0527 lr 1.11e-04 489s val 0.0732
+step 5800 loss 0.0521 lr 1.03e-04 506s val 0.0730
+step 6000 loss 0.0511 lr 1.00e-04 524s val 0.0731
+saved ckpts/dsg/stage1_g1_s0.pt
+END 2026-09-24T06:29:51Z

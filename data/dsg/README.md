@@ -85,3 +85,22 @@ Not in the brief's G2: the brief's literal G2 (100 % goal mode + strict) was pro
 | `data/train.jsonl` (154,990) | 1214 / 16047 / 16509 | 1111 / 14380 / 14858 | 854 / 11054 / 11223 |
 | `data/transfer.jsonl` (1,638) | 1 / 7 / 9 | 0 / 13 / 14 | 1 / 14 / 14 |
 | `data/rl_targets.jsonl` (3,000) | 2 / 19 / 19 | 0 / 21 / 21 | 1 / 28 / 30 |
+
+## Resume phase, 2026-09-23/24 — what was rebuilt and what that costs you
+
+The 2026-09-22 session was cut off mid-ladder and a host cleanup then deleted local `artifacts/` and `ckpts/`.
+`data/dsg/` itself survived and is unchanged: `train_g1.jsonl` and `train_g2.jsonl` were re-fetched from the
+bucket and are byte-identical to what the shape, overlap, assembly and render-check tables above describe
+(155,000 lines each, verified on the pods).
+
+**`ckpts/dsg/stage1_g{1,2}_s{0,1}.pt` in the bucket are retrained replicas**, not the 2026-09-22 originals (those
+were never uploaded). Same set, same seed, same command line; different GPU class (RTX A6000 / RTX 4090 rather
+than a 3090). They do **not** reproduce the originals: held-out greedy moves by −1.44, −4.44, −1.78 and +5.96 pp
+respectively, and essentially all of the movement is in the 6-line bin (`numbers.md` § ds-generator G5). The same
+comparison on a **byte-identical** checkpoint (C0, md5 verified) moves +0.00 / +0.08 pp, so this is training-run
+variance rather than anything about the recovery or the sampler.
+
+Consequence for anyone reading the tables: the **held-out and ladder** numbers for G1 / G2 are measured on the
+retrained checkpoints; the **coverage (pass@2,000) and depth-3 dial** numbers are the 2026-09-22 measurements on
+the originals. They are different draws of the same (set, seed) and the spread above is the scale on which to
+read any difference between them.
