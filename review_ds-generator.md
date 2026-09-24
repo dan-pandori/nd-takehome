@@ -310,3 +310,180 @@ as inherited.
    reaching a count.
 
 *Phase 2 follows in this file, written after reading the executor's `run_ds_generator.md`, `numbers.md` and `log.md`.*
+
+---
+
+# §Phase 2 — claims vs the recount
+
+Read after §Recount was committed (`65bef8e`): `run_ds_generator.md`, `numbers.md` § ds-generator (G1–G8),
+`log.md` 2026-09-22 → 2026-09-24, `STATUS.md`, `data/dsg/README.md`, `QUESTIONS.md`.
+
+## Claim-by-claim
+
+| # | claim (source) | my independent value | verdict |
+|---|---|---|---|
+| 1 | Held-out greedy C0 0.909 / 0.897, G1 0.861 / 0.896, G2 0.608 / 0.665 (`run`, G1 table) | identical, all six, and every length bin and pattern cell | **reproduces** |
+| 2 | Coverage pass@2,000, G2 table, 6 rows × 6 columns incl. per-sample rates and ≥ 8-line pattern proofs | identical in every field, plus every stratum and the written-length histograms | **reproduces** |
+| 3 | Depth-3 dial G3: EI, frozen, EI − frozen, acq-by-round, held-out r4 (36 numbers) | identical, including the four-element acq-by-round vectors, which I re-derived from min-round bookkeeping in `found_4.jsonl` | **reproduces** |
+| 4 | Ladder G4: 11 rows × (`L*`, solved, 8 `L_true` bins, textbook, schemata ≥ 5, held-out) | identical in every cell, including `c0 s1` frozen "export 7" and all 88 bin counts | **reproduces** |
+| 5 | Textbook table, 19 schemata × 6 arm-seeds | identical; the 10 all-zero schemata are the 10 I list | **reproduces** |
+| 6 | Retrain deltas G5: −1.44 / −4.44 / −1.78 / +5.96 pp; control +0.00 / +0.08 | identical, and I confirmed the C0 checkpoint md5s myself | **reproduces** |
+| 7 | Checker of record G6: 57,013 counted proofs, 57,013 both-accept, 0 disagreements; 0 Lean rejections in all six coverage runs | identical by my own aggregation; plus my own independent 450-proof re-check (150/arm) through the unmodified `nd2lean.py --check`: 450/450, 0 disagreements; 60/60 theorem-swapped negatives rejected; 0 `sorry`/`decide`/`simp`-class tokens in 150 translated sources and 5,091 stored Lean texts | **reproduces, and independently confirmed** |
+| 8 | Sampler equivalence G7: base vs adopted path token-identical, PASS; compaction flips 1 row of 128 | `regress.json` says exactly this; I confirmed all 20 `args.json` use batch 512 / `max_new` 512 (ladder) and 768 (dial), the same for every arm and seed | **reproduces**; comparability holds |
+| 9 | "`L_true` ≥ 13 is 0 solves in all eleven ladder runs" (`run`) | 0 in bins 13 and 14 in all eleven | **reproduces** |
+| 10 | "10 of 19 schemata are at 0 solves in every arm and seed" (`run`) | exactly 10 | **reproduces** |
+| 11 | "G1 and G2 leave 17–19 of 19 at ≤ 2 on every seed — the pre-registered falsifier" (`run`) | 17, 18, 18, 19 | **reproduces**; the falsifier fires |
+| 12 | "The brief predicted G1 would open an `ORE`-needing schema from the dilemma / De Morgan / distribution families: those are 0 in all six arm-seeds" (`run`) | constructive dilemma 0, De Morgan ≤ 4, distribution ≤ 1, excluded middle 0, everywhere | **reproduces**; miss correctly reported as a miss |
+| 13 | "Disjunctive syllogism (which does need `ORE`) reaches ≥ 5 in C0 s1, G1 s0/s1 and G2 s0 alike — a draw effect, not a knob effect" (`run`) | correct, and I checked further: **every** DS solution uses `ORE` (21/21 C0 s1, 58/58 G1 s0, 38/38 G2 s0) — so the control already has the `ORE`-needing capability | **reproduces**, and the strongest form of the point is available |
+| 14 | "Finding 3 keeps its counter-example: G2's base rate far below C0's yet EI − frozen larger on both seeds" (`run`) | frozen acq 0.032 / 0.034 vs 0.163 / 0.116; EI − frozen +0.383 / +0.362 vs +0.255 / +0.292. The pre-registered counter-example condition is met on both seeds | **reproduces** |
+| 15 | "My own C0 ladder band was wrong: it quoted `lean-format` figures measured on `stage1_full_seq_s0`, a model trained on a different set" (`run`, `log` 01:05) | **confirmed independently.** I pulled `origin/dan_lean_format:artifacts/lf/la_*_seq_s*/args.json` and re-counted the found files: `init ckpts/lf/stage1_full_seq_s{0,1}.pt`, `train data/train.jsonl`, giving exactly 794 / 839 (T1) and 304 / 309 (frozen) | **reproduces**; a self-caught label error, correctly disclosed |
+| 16 | "G1's own two seeds, 916 and 635, bracket the entire C0–G2 gap" (`run`) | G1 T1 range 635–916 (spread 281); C0 mean − G2 mean = 927.5 − 619.5 = 308 | **reproduces** as an order-of-magnitude statement; "bracket" is loose (G1's range lies inside the C0–G2 span rather than straddling it) but the substantive point — the null arm's seed spread ≈ the arm difference — is right |
+| 17 | "G2 is at or below C0 on both seeds" (frozen ladder, `run`) | s0 44 vs 158 (−72 %); **s1 125 vs 114 (+9.6 %, above)** | **differs — rewording needed.** `log.md` 06:55–08:20 states it correctly; the compressed write-up does not |
+| 18 | "Both accounts … are dead, for the same reason: the manipulation is smaller than the noise" (`run`, headline) | G2's *manipulation* is not small: box depth 23/45/32 vs C0's 53/35/11 %, `IMPI`-final 70 % vs 34 %, mean premises 0.78 vs 1.41, and its held-out effect (−24 to −30 pp) is 5× any noise measured here. What is inside the noise is the **frozen-ladder difference** | **differs — rewording needed** (see §Rewording 1) |
+| 19 | "11 of 12 ladder jobs (`la_frozen_g1_s0` dropped, `QUESTIONS.md`)" (`run`, G4) | confirmed: `la_frozen_g1_s0/` holds `args.json` only; the drop is dated and reasoned in `QUESTIONS.md` 2026-09-24 08:35 | **reproduces**; disclosed |
+| 20 | "`git diff origin/main HEAD -- nd_verify/ nd2lean.py` empty" (`numbers.md` G6) | **not empty**: `nd2lean.py` is 249 added lines against `origin/main` (it was born on `dan_lean_format`). The correct comparison, which `log.md` 08:20 uses, is `git diff origin/dan_lean_format HEAD`, and that **is** empty for all six files | **differs** — the *substance* (unchanged in this run) holds; the command quoted does not |
+| 21 | Cost G8: "21.34 pod-hours, $13.02"; "dsg-1 RTX A6000, 11.56 h, $5.78 (billed $0.50/h); dsg-2 RTX 4090, 9.78 h, $7.24 ($0.74/h)"; both deleted | `podbudget` agrees, but `podbudget`'s rate table has **no A6000 entry** and falls through to a `$0.50` default — so "$0.50/h billed" is the tool's fallback, and `log.md` 23:05 and `QUESTIONS.md` both say the A6000 bills **$0.53/h**. RunPod `list-pod-billing`: dsg-1 `9pb5x3wfjj4ue6` **$5.93**, dsg-2 `uixjxcwkx01rb3` **$7.27**, total **$13.20** | **differs by $0.18** (still inside $14); the "$0.50/h billed" label is wrong and contradicts the run's own log |
+| 22 | "The 2026-09-22 phase spent ≈ $2.5 of its own $20 ceiling" (`numbers.md` G8) | **Not supported, by a factor of ≈ 14.** RunPod billing for the three first-phase pods (`cjwj3tobkfxcua`, `lfjig3g5f1efpb`, `i8ijzvzj0gplcj`, all in `~/pods.log` as `dsg-1/2/3`): $8.96 + $8.93 + $8.92 on 2026-09-22 and $2.66 each on 2026-09-23 = **$34.79**. Hourly records show each ran continuously at $0.50/h from ≈ 06:10 on 09-22 to ≈ 05:20 on 09-23 — ≈ 23 h each, of which ≈ 19 h after the session died at ≈ 10:33 | **not supported — see §Finding A** |
+| 23 | Pods deleted; bucket carries `{artifacts/dsg, ckpts/dsg, ckpts/ladder, data/dsg}` | `runpodctl pod list` empty; bucket has all four trees (185 artifact entries, 4 Stage-1 checkpoints, both 155k sets) | **reproduces** |
+| 24 | Set shape, overlap, assembly, render-check tables (`data/dsg/README.md`) | every cell reproduces with my own code over all 465,000 records; my independent render check at a fresh seed is 1,000/1,000 round-trips, 500/500 Lean accepts, 200/200 negatives rejected on both sets | **reproduces** |
+
+## Wording against n
+
+- **"Both accounts … are dead."** The *textbook/rule-shape* account is dead by a pre-registered falsifier that
+  fires on every seed of both arms — that wording is earned. The *shape-distribution/transfer* account is dead
+  **on its prediction, not on its equivalence test**, and `log.md` 06:55–08:20 says exactly that
+  ("within ±15 % of C0 on seed 1 (125 vs 114) but −72 % on seed 0 … dead on the prediction, not on the
+  equivalence"). That distinction does not survive into `run_ds_generator.md`. It should.
+- **Two seeds.** Every arm difference the write-up asserts is quoted with both seeds, and the one-seed cell
+  (`G1 frozen 170`) is explicitly labelled "(s1)". **Correct throughout.** One consequence the write-up leans on
+  should be stated as the limit it is: G1's frozen ladder is a *one-seed* noise-floor estimate, so
+  "G1 … is *above* both C0 seeds" is a single draw, not a replicated finding.
+- **"never" / "wall" / "bistable".** Not used loosely. "`L_true` ≥ 13 is 0 solves in all eleven ladder runs" is
+  a count, not a claim about reachability, and is correct. "10 are at 0 solves in every arm and seed" is a count.
+- **Pre-registered retention row missed and not scored.** The prereg predicts held-out retention across T1 at
+  ±1 pp (C0, G1) and ±3 pp (G2). Measured (round 1 → round 8 greedy): **+5.02, +7.20, +9.38, +3.58, +8.60,
+  +1.62 pp** — outside the band on all six, in the favourable direction. The *numbers* are in `numbers.md` G4's
+  "held-out" column; the **miss is never called a miss**. Everything else in the expectations table is scored.
+
+## Model labelling
+
+**Exemplary, and better than the pre-registration it came from.** `numbers.md` opens § ds-generator with the model
+for every arm (3.3 M from-scratch GPT, `lean_seq`, Stage-1 command line, training set, checkpoint path and md5 or
+retrain provenance); every table names its source files and its measurement date; the coverage and dial tables
+carry an explicit "measured on the **original** checkpoints, the ladder rows are on retrained replicas" note; and
+the one inherited number that was mislabelled (the C0 ladder band) was found by the executor during the run,
+traced to `pod/lf/jobs.py`, corrected, and the correction put in the write-up. I found no unlabelled number in
+this run's deliverables.
+
+## Gate 0
+
+Pre-registration `5a6acd8` at 2026-09-22 06:09:12 UTC, first `dsg-*` pod 06:10:32 UTC. Addendum `2733373` at
+2026-09-23 21:06:00 UTC, first resume pod 21:07:18 UTC. **Both phases pass**, and both deviations from the brief's
+design (G1 as a null manipulation, G2 as the strict long generator rather than the brief's literal G2) were
+pre-registered with their reasons and put to Dan in `QUESTIONS.md` with a stated default. The one deviation *from
+the addendum* — batch 512 / `max_new` 512 instead of 4,096 / 384 — is documented in `pod/dsg/jobs2.py` and
+`log.md` 21:42 with the equivalence test that forced it, and it was applied identically to all six models, which
+is what the addendum's requirement was actually for.
+
+## §Findings
+
+**A. The first phase's pod spend is understated by ≈ 14×, and its $20 ceiling was exceeded (≈ $34.8).**
+`numbers.md` G8 says "The 2026-09-22 phase spent ≈ $2.5 of its own $20 ceiling." RunPod's billing API says the
+three `dsg-*` pods of that phase billed **$34.79** — they ran ≈ 23 h each, from 06:10 on 2026-09-22 to ≈ 05:20 on
+2026-09-23, at $0.50/h. The session died at ≈ 10:33 on 09-22 when the account ran out of Fable credits, so
+≈ 19 h per pod (≈ $29) is unattended idle time after the executor could no longer act. The sibling run
+`ds-composition`'s five pods show the same pattern on the same day (≈ $8.8 each). Run total, both phases:
+**≈ $48**, against $20 + $14 declared.
+*This is not an accusation of overspending in session* — the in-session part is ≈ $6.6 — **but the number in the
+deliverable is wrong and must be corrected**, and the mechanism (a dead session leaves pods running until a
+balance floor or cron catches them) is worth Dan's attention because it hit two runs simultaneously and is not
+something the executor can fix from inside a dead session. `podhours.log` only begins 2026-09-23, which is why
+`podbudget` cannot see the first phase at all.
+
+**B. The in-loop gate's Lean-vs-`nd_verify` disagreements are not reported, and they moved 22× since the last
+run.** `artifacts/dsg/gate_*.jsonl`: 19,775,560 samples, 12,877,375 distinct checked by both, **9,249 "Lean
+accepts, `nd_verify` rejects", 0 the other way** — 718 per million, against `lean-format`'s 460 in 13,887,708
+(33 per million), which **that** run did report in `numbers.md` § lean-format. I re-verified all 9,249 with
+`nd_verify` and classified them: **8,594 (92.9 %) "premise block does not match declared premises"** (the model
+does not restate every `PR` line; the Lean rendering binds premises as hypotheses and does not care) and **655
+(7.1 %) `¬A ≡ A → False` definitional unfolding** (`DN` 131, `NEGE` 90, `BOTE`/`Not.elim` 241, `NEGI` 59, `ORI1`
+61, `R` 27) — exactly the two classes `QUESTIONS.md` flagged on 2026-09-21. **No counted proof is affected**
+(both checkers are required, confirmed by the executor's 57,013 and my 450). But the run's own standard is
+"report agreement with `nd_verify`", and § ds-generator reports only the counted-proof agreement. The rate should
+be in G6.
+
+**C. `numbers.md` G8's "$0.50/h billed" for the A6000 is `podbudget`'s fallback, not a billed rate.** `podbudget`
+has no A6000 case and defaults to $0.50; `log.md` 23:05 and `QUESTIONS.md` both say $0.53/h; the API says the pod
+billed $5.93, not $5.78. Resume-phase total $13.20, not $13.02 — still inside $14. The rate table should grow an
+A6000 entry so the next run's ceiling is not computed from a default.
+
+**D. `numbers.md` G6 quotes a diff command that does not return empty.** `git diff origin/main HEAD --
+nd_verify/ nd2lean.py` shows `nd2lean.py` as 249 added lines, because it does not exist on `origin/main`.
+`log.md` 08:20 uses the right base (`origin/dan_lean_format`) and is correct. Substance unaffected.
+
+**E. Minor.** `run_ds_generator.md` is **528 words** against the brief's "≤ 400 words + two figures" (the two
+figures exist). There is **no render check on file for C0** — its set is the unmodified lean-format a1 set, so
+this is inherited rather than missing, but `data/dsg/README.md`'s render-check table should say "inherited"
+rather than leave the row absent.
+
+## §Verdict
+
+**What stands.** Everything measured. I re-derived, with code I wrote myself, every quantity the pre-registration
+promised — per-arm counts, rates, frontiers, acquisition, base reachability, `L*`, per-schema textbook solves,
+set shape, overlap, disjointness, term sizes — across 18 coverage runs, 12 dial cells, 11 ladder runs, 6 held-out
+evaluations and 465,000 training records, and found **zero differences** from `artifacts/dsg/summary.json`,
+`numbers.md` and `data/dsg/README.md`. Every hard constraint passes. The checker of record agrees with `nd_verify`
+on 57,013 counted proofs (executor) and on my independent 450, with adversarial negatives rejected. Gate 0 passes
+in both phases. Every number names its model. The two headline conclusions are supported:
+
+1. **The generator's proof-shape distribution is not the transfer wall.** G2 is the ladder transfer pool's own
+   generator at cap 6 and its frozen ladder reads that pool *worse or no better* than the control (44 vs 158,
+   125 vs 114) against a pre-registered 450–760 — while its held-out collapses to 0.61 / 0.67 and its
+   required-reductio base rate is 0/300 on both seeds.
+2. **The generator's rule shape is not the textbook wall.** The pre-registered falsifier fires on every seed of
+   both arms (17, 18, 18, 19 of 19 schemata left at ≤ 2), and no `ORE`-needing schema in the brief's named
+   families is reached anywhere — while disjunctive syllogism, which *is* `ORE`-needing, is reached by the
+   control too, with `ORE`, in 100 % of its solutions.
+
+And a third that the run earned by accident and reports honestly: **Finding 3 has a clean two-seed
+counter-example.** G2 has a far lower depth-3 base rate than C0 *and* a larger EI − frozen, on both seeds.
+
+**What must be reworded.**
+1. `run_ds_generator.md`'s headline "the manipulation is smaller than the noise" is right for the *readiness
+   differences* and wrong for G2's manipulation, which is large and whose held-out effect is large. Suggest:
+   *"Both accounts are dead: the rule-shape account by its falsifier, the shape-distribution account by its
+   prediction — G2 changes the training distribution profoundly and the transfer readiness not at all, and what
+   differences remain are inside a between-pool noise floor the null arm measures at ±50 %."*
+2. "G2 is at or below C0 on both seeds" → "44 vs 158 on seed 0 and 125 vs 114 on seed 1 — one far below, one
+   marginally above, against a pre-registered +50 to +150 %." `log.md` already has the right form.
+3. Carry `log.md`'s "dead on the prediction, not on the equivalence" reading of the ±15 % falsifier into the
+   write-up; a reader of `run_ds_generator.md` alone cannot tell which way the falsifier was scored.
+4. Label G1's frozen ladder (170) as the one-seed estimate it is wherever it carries weight, including in
+   "G1 … is *above* both C0 seeds".
+5. Correct `numbers.md` G8's first-phase cost (§Finding A), its "$0.50/h billed" (§Finding C), and G6's diff
+   command (§Finding D).
+6. Score the pre-registered held-out-retention row as the miss it is (+1.6 to +9.4 pp against ±1 / ±3 pp).
+
+**What is not supported.** Only the first-phase cost sentence (§Finding A). Nothing scientific in this run rests
+on it.
+
+**Next measurements that would settle what is left open.**
+1. **Make the noise floor a measured quantity rather than a by-product.** This run's most valuable number is
+   accidental: two independent raw pools from the *same* generator (C0 and G1) differ by +49 % on the frozen
+   ladder and 1.9× on required@8 coverage. Four independent pools × two Stage-1 seeds at cap 6, measured frozen
+   on the ladder only (no EI), is ≈ 8 cheap jobs and would give the first real error bar for every "arm X beats
+   the control" claim in this campaign. Until it exists, no dataset-style run with n = 2 can resolve anything
+   smaller than ±50 %.
+2. **Finish G1's frozen ladder on seed 0** (≈ $1.3, ≈ 2 h). It is the one dropped cell, and it is the cell that
+   turns the noise-floor claim from one draw into two.
+3. **The length horizon, not the shape.** Both walls survived a shape manipulation that moved the training
+   distribution as far as the cap allows. `ds-composition`'s length axis is now the only remaining lever named in
+   the brief, and the `L_true` ≥ 13 result (0 solves in all eleven runs, T1 and frozen alike) says where the
+   ceiling sits.
+4. **Fix the translator's two looseness classes** (`False.elim na` for `BOTE`; mirror the "every premise
+   restated" rule in the inverse grammar). 718 disagreements per million is a 22× rise over `lean-format`'s rate
+   on a workload with more premises, and "Lean is the checker of record" cannot be taken literally until both are
+   closed. No count in either run is affected, because both runs required `nd_verify` as well.
+
+**No hard-constraint violation. No quarantine. The run's numbers stand as written, subject to the six rewordings
+above and the correction of the first-phase cost.**
