@@ -34,8 +34,10 @@ Agent-role: executor
 Run-id: ds-rendering
 Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>" 2>/dev/null && git push -q origin dan_ds-rendering && echo pushed || echo "nothing to commit"
 
-echo "== 5. upload (the pods also upload themselves; this covers the host-side analysis)"
-hf buckets sync artifacts/dsr hf://buckets/dan-pandori/nd-rl/ds-rendering/artifacts/host 2>&1 | tail -1
+# The pods CANNOT upload: hf is absent from the RunPod image (log.md 2026-09-23 23:45). The host does it, and
+# dsr_upload.sh keeps the per-pod layout instead of flattening every pod's artefacts into one directory.
+echo "== 5. upload from the host"
+bash dsr_upload.sh 2>&1 | grep -E '^==|FAILED'
 hf buckets sync data/r3_1 hf://buckets/dan-pandori/nd-rl/ds-rendering/data/r3_1 2>&1 | tail -1
 
 echo "== done"; date -u +%FT%TZ; podbudget ds-rendering

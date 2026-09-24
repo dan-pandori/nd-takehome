@@ -225,6 +225,66 @@ for a in ARMS:
       f"{B.get('accepted', '–')} / {B.get('rejected', '–')} | {gt.get('samples', '–'):,} | {gt.get('parse_fail', '–'):,} | "
       f"{gt.get('nd_ok_lean_rej', '–')} | {gt.get('nd_rej_lean_ok', '–')} |")
 P()
+# The brief makes Lean the checker of record and requires the agreement with nd_verify to be reported. Reported here
+# with its DIRECTION and CAUSE rather than as a single percentage, because every disagreement this run saw points the
+# same way and 93 % of them have one root cause. dsr_disagree.py reproduces all of it.
+import dsr_disagree as _dis
+_tot, _checked, _disn, _reasons = __import__('collections').Counter(), {}, {}, __import__('collections').Counter()
+for _fn in sorted(__import__('glob').glob('artifacts/dsr/*/gate_*.jsonl')):
+    _pod = _fn.split('/')[2]
+    if _fn.endswith('.disagree.jsonl'):
+        for _l in open(_fn):
+            _disn[_pod] = _disn.get(_pod, 0) + 1
+            _reasons[_dis.classify(json.loads(_l))] += 1
+        continue
+    for _l in open(_fn):
+        _r = json.loads(_l)
+        for _k in ('samples', 'parse_fail', 'distinct_checked', 'both_ok', 'nd_ok_lean_rej', 'nd_rej_lean_ok', 'both_rej'):
+            _tot[_k] += _r.get(_k, 0)
+        _checked[_pod] = _checked.get(_pod, 0) + _r['distinct_checked']
+_n = _tot['distinct_checked']; _d = _tot['nd_ok_lean_rej'] + _tot['nd_rej_lean_ok']
+P('### 8b — Agreement between the two checkers, over every sample the run gated (`dsr_disagree.py`)')
+P()
+P(f"Across **all six pods**: {_tot['samples']:,} samples drawn, {_tot['parse_fail']:,} outside the strict grammar, "
+  f"**{_n:,} distinct (theorem, Lean text) pairs put through both checkers**, {_tot['both_ok']:,} accepted by both "
+  f"(counted) and {_tot['both_rej']:,} rejected by both.")
+P()
+P('| | count |')
+P('|---|---:|')
+P(f"| `nd_verify` accepts, Lean rejects | **{_tot['nd_ok_lean_rej']}** |")
+P(f"| Lean accepts, `nd_verify` rejects | **{_tot['nd_rej_lean_ok']:,}** |")
+P(f"| **agreement** | **{100 * (_n - _d) / max(_n, 1):.4f} %** |")
+P()
+P(f"Disagreement is **entirely one-directional**: in {_n:,} pairs Lean never once caught something `nd_verify` "
+  'missed. Acceptance is the **conjunction**, so every one of these was rejected and **no counted proof in this run '
+  'is affected** — the conjunction is load-bearing, not belt-and-braces.')
+P()
+P('| n | share | cause |')
+P('|---:|---:|---|')
+for _k, _v in _reasons.most_common():
+    P(f'| {_v:,} | {100 * _v / max(sum(_reasons.values()), 1):.1f} % | {_k} |')
+P()
+P('The first two share one root cause: Lean\'s `¬a` is **definitionally** `a → False`, so the rendering\'s `.elim` '
+  'and bare application are polymorphic in ways the ND rules are not. `BOTE` is rendered `nA.elim` '
+  '(`nd2lean.py:135`), which is `False.elim : False → b` when the cited line is `F` but **`Not.elim : ¬a → a → b`** '
+  'when it is `¬a`, so it typechecks whenever the goal happens to be `a → …`. This is the **unmodified checker of '
+  'record\'s own convention** — `lean_tok.py:157` mirrors it exactly in every arm — so it applies anywhere in this '
+  'repo that a Lean pass is treated as sufficient. Raised in `QUESTIONS.md`.')
+P()
+P('**The rendering changes how often Lean is fooled** (per 100k pairs checked, so comparable across pods of '
+  'different sizes):')
+P()
+P('| arm | pairs checked | Lean-only accepts | per 100k |')
+P('|---|---:|---:|---:|')
+for _p in sorted(_checked, key=lambda x: 1e5 * _disn.get(x, 0) / max(_checked[x], 1)):
+    P(f"| {_dis.ARM.get(_p, _p)} | {_checked[_p]:,} | {_disn.get(_p, 0)} | **{1e5 * _disn.get(_p, 0) / max(_checked[_p], 1):.1f}** |")
+P()
+P('R3 is the outlier by an order of magnitude, and that is mechanically what R3 **is**: it drops the stated formula '
+  'on exactly `IMPE ANDE1 ANDE2 NEGE R`, so when the model misapplies one of those rules there is **no stated '
+  'formula for the decoder to contradict**. A rendering that hides formulas measurably weakens Lean as an '
+  'independent check — a cost of R3 that none of the accuracy numbers show.')
+
+P()
 P('## 9 — Cost')
 P()
 P('RTX 3090 was unavailable (the two sibling runs had taken the capacity), so every arm ran on an **NVIDIA A40**')

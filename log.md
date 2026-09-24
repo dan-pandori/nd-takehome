@@ -570,3 +570,19 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   **Projection after the cut:** ≈ 12.9 pod-hours to finish `la_T1` everywhere (c0/r1/r3 ≈ 2.3 h each, r2/r4 ≈ 3.0 h each — r2 and r4 started their ladders later) → ≈ 28.8 h / $14.1; then C0's `la_frz` ≈ 2 h → **≈ 30.8 h / $15.1**, inside both limits with ≈ 5 pod-hours and $2.9 of margin. If it runs ahead I will add **R4's** `la_frz` next (≈ 2 h, ≈ $1), R4 being the arm that passes proposal 10's decision rule and so the one whose frozen ladder is worth most.
 
   The hard stop (2026-09-25 03:01 UTC) is not binding — it is over 26 h away.
+- 2026-09-24 00:35 UTC  **Agreement re-measured on 3.25× more data (the ladders and frozen dials have since run): the finding holds and gets stronger.** `dsr_disagree.py`, now wired into `numbers.md` as **§ 8b** so it re-derives itself at finalize time rather than being a number I typed once.
+
+  | | 23:40 | **now** |
+  |---|---:|---:|
+  | samples drawn | 1,376,080 | **4,959,760** |
+  | pairs through both checkers | 949,568 | **3,090,794** |
+  | accepted by both (counted) | 472,811 | **1,309,379** |
+  | `nd_verify` accepts, Lean rejects | 0 | **0** |
+  | Lean accepts, `nd_verify` rejects | 241 | **1,094** |
+  | agreement | 99.9746 % | **99.9646 %** |
+
+  **The zero is the number that matters.** Over **3,090,794** pairs Lean has still never once caught something `nd_verify` missed. One-directional at n = 3.1M is a much stronger claim than at n = 0.95M, and it says plainly that on this rule set **`nd_verify` is the strictly stronger checker and Lean alone is not sufficient**. All 1,094 were rejected by the conjunction; no counted proof is affected.
+
+  Cause split is stable and the BOTE share grows: **920 (84.1 %)** BOTE `.elim` resolving to `Not.elim`, **102 (9.3 %)** NEGE under `¬`-unfolding, **51 (4.7 %)** the benign missing-`PR`-line convention, 21 unclassified.
+
+  **Correction to the per-arm multiplier.** At 23:40 I wrote that R3 is fooled "18×" as often as the control. On the full data it is **105.8 vs 9.0 per 100k = 11.8×**. The ordering is unchanged and robust — **R1 5.0 < C0 9.0 < R4 16.8 < R2 37.6 < R3 105.8** — but the write-up should say "an order of magnitude", not "18×", and § 8b now prints whatever the final data says rather than a figure that can go stale.
