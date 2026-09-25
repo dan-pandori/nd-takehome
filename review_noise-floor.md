@@ -327,3 +327,230 @@ Expectations were written down before the run and before each extension. Pass.
 One arithmetic slip inside addendum 2: "At 12 cells my high-mode proportion is 3/8 with a Wilson
 95 % interval of [0.137, 0.694]". 3/8 and [0.137, 0.694] are the **8-cell** values; at 12 cells it is
 **5/12 = 0.417, [0.193, 0.680]**. The argument for spending on more seeds is unaffected.
+
+---
+
+## §Compare
+
+Read after §Recount was committed (`eab2f11`): `run_noise_floor.md` (386 words of body, 394 with the
+title — inside the ≤ 400 cap, two figures), `numbers.md` §§ N1–N11, `log.md`, `STATUS.md`,
+`QUESTIONS.md`, `artifacts/nf/summary.json`. One row per claim.
+
+### The floor table — the deliverable
+
+| claim | my independent value | verdict |
+|---|---|---|
+| frozen ladder transfer 62–265, 4.27×, sd 74.1, MDD ±397 (±235 %), ratio 3.35× | 62–265, 4.274×, sd 74.06, MDD 397.2, 2.349 of mean, 3.35× | **reproduces** |
+| frozen ladder `L*` 9–10, sd 0.354, MDD ±1.9 | 9 in seven cells, 10 in P4 s1; sd 0.3536; MDD 1.896 | **reproduces** |
+| frozen ladder RL targets 714–1,765, 2.47×, sd 391, MDD ±2,098 | 714–1,765, 2.472×, sd 391.2, MDD 2,098 | **reproduces** |
+| `targets_reductio_req` 6–46, 7.67×, sd 13.2, MDD ±71 | 6–46, 7.667×, sd 13.23, MDD 70.98 | **reproduces** |
+| `r3_1/depth3_req` 61–242, 3.97×, sd 73.3, MDD ±393 | 61–242, 3.967×, sd 73.27, MDD 392.9 | **reproduces** |
+| held-out overall 0.8420–0.9630, sd 0.0304, MDD ±16.3 pp (52 cells) | identical to 4 d.p. | **reproduces** |
+| 6-line bin 0.4210–0.9200, sd 0.1523, MDD ±81.7 pp | identical | **reproduces** |
+| depth-3 slice 0.0080–0.9180, 114.8×, sd 0.3053, not resolvable | identical; MDD 1.638 > 1 | **reproduces** |
+| 6-line no-pattern 0.6964–0.8785, sd 0.0367, MDD ±19.7 pp | identical | **reproduces** |
+| 2/3/4/5-line bins, MDD ±1.7 / ±2.6 / ±8.1 / ±8.1 pp | identical to 3 s.f. | **reproduces** |
+| all eight n = 8 and three n = 12 held-out figures in § N2 | identical | **reproduces** |
+| MDD formula `5.364·s`, n = 6 → `1.794·s` | 5.3633, 1.7939 (SciPy agrees) | **reproduces** |
+| **"at n = 13 to `1.183`"** (`NOISE_FLOOR.md`) | **1.1456** (n = 12 → 1.1970; nothing gives 1.183) | **differs — wrong constant in a standing reference** |
+| exact 2-vs-2 permutation test minimum p = 1/3 | 6 assignments, 3 distinct statistics, min p = 2/6 | **reproduces** |
+| every bimodality coefficient in `NOISE_FLOOR.md`'s second table (13 values) | all 13 reproduce to 3 d.p. with the sample-corrected `b = (g₁²+1)/(g₂+3)` | **reproduces** (but see §Verdict on what three of the flags mean) |
+
+### Premise, splits, checker
+
+| claim | my independent value | verdict |
+|---|---|---|
+| four pools agree to ≤ 0.26 pp on every share; `ORE` 1.42–1.48 %; box depth within 0.2 pp; depth-3 0 % | box depth 53.11–53.30 / 35.33–35.52 / 11.26–11.41, spread ≤ 0.19 pp; `ORE` 1.419–1.485; depth 3 = 0.00 in all four | **reproduces** |
+| 0 exact and 0 renaming-class collisions against all nine evaluation pools, all four sets | 0 / 0 in all 36 pairs, my own normaliser | **reproduces** |
+| premise-order-only residue "15–26 theorems per set (0.3–0.5 %)" | 9 / 15 / 11 / 13 with my normaliser (0.18–0.30 %) | **reproduces in kind**; the exact count depends on the normaliser, both are ≤ 0.5 % and identical across pools |
+| pairwise inter-pool class overlap 5.8–6.0 % | 5.82 / 5.84 / 5.82 / 5.85 / 5.95 / 5.95 % | **reproduces** |
+| 0 Lean-vs-`nd_verify` disagreements on 39,137 counted proofs | 0 on my own 2,105-proof per-arm sample under **both** the run's translator and the fixed one, **and** under `lean_check`'s allowlist + axiom checks; plus 0 `nd_verify` rejections on every counted proof in all 52 held-out cells and all 11 ladder cells | **reproduces, and strengthened** |
+| in-loop gate **808** Lean-only / 12,033,100 distinct = **67.1 per million**, 0 the other way (§ N8, `summary.json`) | **801 / 12,016,388 = 66.7 per million** after removing the self-test and the three duplicated `gate_heldout` re-runs (`p1_s2` ×3, `p3_s2` ×2); 0 the other way | **differs slightly — 808 double-counts re-gated cells**; conclusion unaffected |
+| § N9 E13 row says **789** Lean-only / **66.1** per million | — | **internally inconsistent with § N8's 808 / 67.1** in the same document (a stale snapshot) |
+| gate rate is "an order of magnitude below `ds-generator`'s 718 per million; `lean-format` 33" | all three are pre-BOTE-fix figures, so the comparison is self-consistent — but unlabelled | **reproduces, needs a version label** (see §Verdict) |
+| `git diff origin/dan_ds-generator` empty for `nd_verify`, `nd2lean.py`, `train.py`, `eval_set.py`, `coverage.py`, `ladder_ei.py`, `expert_iter.py`, `lean_gate.py`, … | confirmed; and `nd_verify` blobs equal `origin/main`'s | **reproduces** |
+
+### The variance story
+
+| claim | my independent value | verdict |
+|---|---|---|
+| § N2 4 × 2 components (overall, 6-line, depth-3): var_pool −0.00091 / −0.0205 / −0.0786, var_resid 0.00246 / 0.0553 / 0.2154 | identical | **reproduces** |
+| § N3 frozen ladder: MS_pool 4,111, MS_seed 7,260, MS_resid 6,268; var_pool −1,079, var_seed +248 | identical | **reproduces** |
+| § N4 `redreq` −84 / −49 / 276; `required@8` −3,401 / −899 / 8,796 | identical | **reproduces** |
+| § N7 4 × 13 components for overall, 6-line, depth-3 | identical | **reproduces** |
+| **"the pool variance component is negative on every quantity"** (`run_noise_floor.md`, `STATUS.md`) / "on every held-out quantity and on both coverage pools" (`NOISE_FLOOR.md`) | negative on **seven** of the eight held-out quantities at 4 × 13; the **3-line bin is +3.67e−7** (1.5 % of variance, F = 1.26, p = 0.30). § N7 tabulates only three of the eight and generalises to all | **differs — "every" is not supported**; the direction of the conclusion is safe |
+| **"the seed component a few per cent of the residual"** | true for the three tabulated quantities (4.4 / 6.1 / 7.9 % of residual); **31–51 % of the residual** on the 4-line bin, 5-line bin, 6-line no-pattern slice and 3-line bin, with **F_seed p = 0.005 / 0.008 / 0.012 / 0.030** — a detectable seed main effect, because `--seed j` shares an initialisation across pools | **differs — not supported on half the quantities** |
+| **"≈ 99 % of the variance is the individual training run"** | **95.8 %** (overall), 94.3 % (6-line), 92.7 % (depth-3), **66–75 %** (2-, 3-, 4-, 5-line bins and 6-line no-pattern) | **differs — 99 % is not reproduced on any held-out quantity** |
+| E12 met in sign (σ²_seed +248 ≥ σ²_pool −1,079) | confirmed | **reproduces**; but see §Verdict — this is the seed df = 1 that addendum 1 was written to fix |
+
+### Gap-closers and the retrospective
+
+| claim | my independent value | verdict |
+|---|---|---|
+| `la_frozen_dsg_g1_s0` = 62, `L*` 9, targets 612 | 62 / 9 / 612 | **reproduces** |
+| pooled ten draws 62, 62, 96, 117, 170, 174, 177, 200, 262, 265; mean 158.5, sd 73.6, 4.27× | identical | **reproduces** |
+| **"G1's own two seeds bracket C0's 158 / 114 and G2's 44 / 125 entirely"** (§ N5, `run_noise_floor.md`, `STATUS.md`) | G1's bracket is [62, 170]; it contains 158, 114 and 125 but **not G2 s0's 44**, which is below G1's minimum | **differs — false for one of the four values**; "brackets C0 entirely and G2's seed 1" is the true claim |
+| A1 s1: T1 847, T1 `L*` 11, frozen 194, frozen `L*` 9, frozen targets 1,456 | 847 / 11 / 194 / 9 / 1,456 | **reproduces** |
+| "A1's T1 beats C0 (965 vs 856) reverses on seed 1: 847 vs 965" | the comparator 965 is `ds-generator`'s measurement of `ckpts/lf/stage1_a1_seq_s1.pt`; A1 s1 = 847 measured here. Sign does reverse | **reproduces**, and the cross-host provenance is disclosed in § N6 and `log.md` 17:45 |
+| "A1's frozen `L*` 10 vs C0's 9 — dead; on seed 1 both are 9" | A1 s1 `L*` = 9; C0 s1 `L*` = 9 (`ds-generator`) | **reproduces** |
+| § N10: 20 rows, **two survive**, both cap-8; six outside the null range but below the MDD; twelve inside | 20 rows, tally 2 / 6 / 12 = 20; every ratio and null-range call I checked is right | **reproduces** (see §Verdict on what "survives" means at n = 1) |
+| "one value outside the range of eight null draws is only about p = 0.22 one-sided" | P(a fresh draw falls outside the range of 8) = 2/9 = **0.222 two-sided**; one-sided is 1/9 = 0.111 | **mislabelled** — the number is right, "one-sided" is wrong |
+| all 500 depth-3 held-out theorems are 6-line; depth-3 and 6-line bin correlate r = 0.9994 | depth-3 by length = {6: 500}; r = **0.9994** at 8 cells, 0.9979 at 52 | **reproduces** |
+| high-mode proportion 0.462, Wilson [0.333, 0.595]; 24 high / 13 low / 15 in the gap; per pool 0.385 / 0.615 / 0.462 / 0.385 | identical | **reproduces** |
+
+### Expectations, deliverables, cost
+
+| claim | my independent value | verdict |
+|---|---|---|
+| "Seven met, two partly, nine missed, one not run" (19 expectations) | my independent scoring in §Recount gives the **same** partition: met E3, E11, E12, E13, E15, E17, E18; partly E4, E8; missed E1, E2, E5, E6, E9, E10, E14, E16, E19; not run E7 | **reproduces** |
+| every miss reported as a miss, including the two narrow ones (E16 28.8 %, E19 spread 0.23) | all nine misses are in § N9 and named as misses; E16 and E19 are called "narrow miss"; E7 is "not run" with the reason | **reproduces — misses are reported as misses** |
+| falsifier did not fire, "by 3.6×" (threshold 1.2×, measured 4.27×) | 4.274 / 1.2 = 3.56× | **reproduces** |
+| the model label: 3,214,336-parameter from-scratch GPT, `lean_seq`, cap 6, 6,000 steps, bs 128, 155,000-record flat set, depth-3 excluded | read out of all 52 checkpoints; every field matches, no duplicate cells | **reproduces** |
+| every § N1–N11 row names the model it was measured on | § N1–N4 and N7 restate the checkpoint and configuration; § N5 and N6 name the inherited checkpoint, its generator flags / composition and that it was **not retrained**; § N10 names the source run for every standing finding | **reproduces** — I found no unlabelled number |
+| cost 28.32 pod-hours, $13.88, two A40s at $0.49/h, ceiling 42 h / $21, balance $151.21 | 28.32 × 0.49 = $13.88; both pods absent from `runpodctl pod list`; Stage-1 GPU time in the checkpoints sums to 17.36 h, consistent | **reproduces**; pods deleted |
+| deliverables: `NOISE_FLOOR.md`, `run_noise_floor.md`, § N1–N11, `log.md`, two figures, `summary.json` (52 rows), `premise.json`, bucket, `QUESTIONS.md` | all present; `summary.json` has 52 `rows` and a 13-entry `floors` block whose values match my recount; bucket `noise-floor/{artifacts,ckpts,data}` present | **reproduces** |
+| § N4: `targets_depth3` coverage "dropped before it ran" | confirmed — waiter-only logs, no result files | **reproduces** |
+| the seed-2 frozen ladder and coverage drop (addendum 1's 12-cell ladder/coverage → 8) | confirmed; disclosed in **`log.md` 17:45** with the measured cost as the reason — but **not** in `numbers.md` § N2–N4/N9 or `run_noise_floor.md`, which report 8 cells without noting that addendum 1 had promised 12 | **reproduces, under-reported in the quotable file** |
+| addendum 2: "at 12 cells my high-mode proportion is 3/8, Wilson [0.137, 0.694]" | 3/8 and [0.137, 0.694] are the **8**-cell values; at 12 cells it is 5/12 = 0.417, [0.193, 0.680] | **differs — mislabelled**, argument unaffected |
+
+---
+
+## §Verdict
+
+### What stands
+
+**The deliverable reproduces.** All thirteen rows of `NOISE_FLOOR.md`'s floor table — every min, max,
+ratio, pooled sd, MDD and `1 + MDD/mean` — come out identical from my own code on the raw artefacts,
+as do all thirteen bimodality coefficients, all eight n = 8 held-out cells in § N2, the three
+variance-component tables, the pooled ten-draw figures in § N5, and every value in
+`summary.json`'s `floors` block. The 52 checkpoints are one configuration with no duplicate cells, so
+the model label is exact. Attempt budgets are equal in every cell (600,000 coverage samples per cell,
+identical `ladder_ei` arguments in all eleven ladder runs, `k = 1, T = 0` held-out throughout).
+Splits are disjoint by renaming class against all nine evaluation pools, and the premise check holds:
+P1–P4 really are replicates, so the run measures what it says it measures.
+
+**The checker holds, and holds harder than reported.** I re-ran `nd_verify` on every counted proof
+in all 52 held-out cells and all 11 ladder cells (≈ 270,000 proofs) — zero rejections, zero
+disagreements with the recorded flags — and re-checked 2,105 counted proofs (≥ 200 per arm) in Lean
+through the run's own `nd2lean.py`, through the *fixed* `nd2lean.py`, and through proposal 9's
+`lean_check.py` with its allowlist and axiom checks: **2,105 / 2,105 accepted, 0 disagreements either
+way**. Term sizes re-derived from the elaborated Lean terms track line counts (ratio 0.52–0.57) and
+are the *same in every ladder cell* while the solve count moves 4.3× — an independent confirmation
+that the spread is a count, not a change in what the proofs look like.
+
+**Both headlines stand.** The floor is far larger than the project assumed; the falsifier did not
+fire (4.27× against a 1.2× threshold); the misses are one-directional and are reported as misses —
+my independent scoring of E1–E19 gives exactly the same 7 met / 2 partly / 9 missed / 1 not-run
+partition. Gate 0 is clean: the pre-registration precedes the first pod by 36 seconds and each
+addendum precedes every outcome it extends. The three scope cuts are disclosed in `log.md` with
+measured costs as the reason, and no claim in the run rests on an unlabelled number.
+
+### What must be reworded
+
+1. **"≈ 99 % of the variance is the individual training run" and "the pool variance component is
+   negative on every quantity" (`run_noise_floor.md`, `NOISE_FLOOR.md` "Three facts" bullet 1,
+   `STATUS.md`).** Both generalise a three-quantity table to all eight. At 4 × 13: σ²_pool is
+   negative on **seven** of eight (the 3-line bin is +3.67e−7, p = 0.30 — still zero for practical
+   purposes, but "every" is wrong), and the residual share is **95.8 %** on held-out overall, 94.3 %
+   on the 6-line bin, 92.7 % on the depth-3 slice, and **66–75 %** on the 2-, 3-, 4-, 5-line bins and
+   the 6-line no-pattern slice. Say "≈ 95 % on the wide quantities".
+2. **"the seed component a few per cent of the residual".** On the 4-line bin (F = 3.03, **p = 0.005**),
+   5-line bin (p = 0.008), 6-line no-pattern slice (p = 0.012) and 3-line bin (p = 0.030) the seed
+   main effect is **31–51 % of the residual** — a detectable effect, because `--seed j` shares an
+   initialisation across all four pools. The correct sentence has the opposite operational sign to the
+   current one: **on the precise bins seeds behave as a block, so an arm-vs-control comparison that
+   reuses the same seeds in both arms removes that component and cuts the MDD by 13–17 %** (4-line
+   −17.3 %, 5-line −14.6 %, 6-line no-pattern −13.6 %, 3-line −12.6 %; ≈ 0 on overall, the 6-line bin
+   and the depth-3 slice). That is a free precision gain the write-up currently argues against.
+3. **"G1's own two seeds bracket C0's 158 / 114 and G2's 44 / 125 entirely"** (§ N5,
+   `run_noise_floor.md`, `STATUS.md`). G1's bracket is [62, 170]; **G2 seed 0's 44 is below it**. The
+   true claim — "brackets C0 entirely and G2's seed 1" — still makes the point.
+4. **`NOISE_FLOOR.md`: "at n = 13 to `1.183 · sd`"** → **1.146**. (n = 12 gives 1.197; no n gives
+   1.183.) This is a constant written to be quoted verbatim by future runs.
+5. **The gate total.** § N8 and `summary.json` say 808 Lean-only / 12,033,100 distinct / 67.1 per
+   million; § N9's E13 row says 789 / 66.1. Neither is quite right: the 408 records include the
+   2,000-sample self-test and three duplicated `gate_heldout` re-runs of the *same* evaluation
+   (`p1_s2` gated three times, `p3_s2` twice). De-duplicated: **801 / 12,016,388 = 66.7 per million**.
+   Pick one figure and state the de-duplication.
+6. **"about p = 0.22 one-sided"** (§ N10). 2/(n+1) = 0.222 is the **two-sided** probability; one-sided
+   is 0.111.
+7. **Three of the eight "bimodal" flags in `NOISE_FLOOR.md`'s second table are artefacts** and should
+   be dropped or annotated. Transfer **`L*`** (b = 0.818) takes two values in a 7:1 split — a
+   bimodality coefficient is meaningless there, and the flag contradicts both the document's own
+   advice ("`L*` is the readout to prefer") and § N3 ("unlike the held-out 6-line bin the frozen
+   ladder is not bimodal"). The **2-line bin** (b = 0.648) is saturated at 0.987–1.000 with six
+   distinct values; the flag is discreteness. **Held-out overall** (b = 0.5566) clears 5/9 = 0.5556 by
+   0.001 at n = 52. The **6-line no-pattern** flag (b = 0.603) is also doubtful: its 52 values are a
+   smooth left-skewed run from 0.696 to 0.879 with no gap, and its correlation with the depth-3 slice
+   is **−0.11** — the mode phenomenon lives entirely in the depth-3 half of the 6-line bin (r = 0.998
+   with the 6-line bin, 0.962 with overall). Only the 6-line bin and the depth-3 slice are bimodal in
+   any useful sense, and they are the same cell seen twice, which § N2 already says well.
+8. **"Of twenty standing findings, two survive" — both survivors are n = 1 vs n = 1, scored against an
+   n = 2 MDD.** `ds-composition`'s ladder was Stage-1 seed 0 only (§ N6 says so), so A3-vs-C0 is one
+   model against one model, while `MDD = 5.364·s` is the two-seeds-per-arm constant. The
+   distribution-free statement is the honest one and is strong enough: **976 is 3.7× the null maximum
+   of 265, and `L*` 11 is one point above the null maximum of 10**. Also, A3 is the **cap-8** arm, and
+   `NOISE_FLOOR.md`'s own scope note says the floor is "not claimed for … a different cap" — the one
+   surviving finding is judged against a floor the same document excludes it from. Both caveats
+   strengthen rather than weaken the conclusion (the effect is enormous), but they belong beside it.
+9. **"The sampler and the checker contribute ≈ 0" is inferred, not measured here.** The evidence is
+   two inherited n = 1 comparisons from other runs' write-ups, and the companion T1 pair moves
+   **+4.0 %** (856 vs 890). Worse, in this run the ladder's *sampling* seed is tied to the Stage-1
+   seed (`la_frozen_p*_s0` draws round seeds 1–8, `s1` draws 1001–1008), so the frozen ladder's
+   σ²_seed **and** its residual both contain sampler variance: nothing in `noise-floor` separates
+   them. Label the claim as inherited, n = 1, or measure it (below).
+10. **Name the Lean surface format precisely.** The floor is measured on models whose training data
+    was rendered by `lean_tok.py` **before** the BOTE fix, i.e. `BOTE` → `nA.elim`, which Lean
+    resolves as `Not.elim` and therefore accepts in non-`BOTE` positions. I re-checked all **139
+    distinct** proofs behind the gate's 808 Lean-only acceptances with the fixed renderer/checker:
+    **116 (83 %) are then rejected by Lean too** — 103 are exactly the `.elim` class and 13 are
+    unrestated-premise cases — leaving **23** genuine Lean-is-looser cases (mostly `IMPI` discharging
+    its own assumption, plus `¬A ≡ A → False` defeq). Weighted over the raw records, the published
+    **67 per million becomes ≈ 16 per million** post-fix. No counted proof is affected (acceptance is
+    a conjunction and my 2,105-proof recheck is clean), and the comparison with `lean-format`'s 33 and
+    `ds-generator`'s 718 per million is self-consistent because those are pre-fix too — but say so,
+    because `ds-composition` and `cap-horizon` carry the **fixed `nd2lean`** with the **pre-fix
+    `lean_tok`**, a combination `noise-floor` does not have.
+11. **`numbers.md` should carry the seed-2 drop.** § N2–N4 and § N9 report 8 ladder/coverage cells
+    without noting that addendum 1 pre-registered **12** and that its reporting rule was applied in
+    reverse. It is fully disclosed in `log.md` 17:45 — but `numbers.md` is the file the sibling run
+    quotes. Note too that addendum 1's stated purpose was to lift the seed component off **1 df**
+    "which is too few to answer E12 at all"; after the cut, E12 — which is about the **frozen
+    ladder** — is scored "met" at exactly that 1 df. The 52-cell held-out decomposition answers the
+    general question at 12 df, so the conclusion holds; the E12 row should say which design it rests on.
+
+### What is not supported
+
+Only four things, all narrow: "negative on **every** quantity"; "the seed component a few per cent of
+the residual"; "≈ 99 %"; and "bracket C0 and G2 **entirely**". Plus the three-to-four spurious
+bimodality flags and the `1.183` constant. **Nothing in the floor table itself is unsupported**, and
+no standing-finding verdict in § N10 changes under my recount.
+
+### The next measurements that would settle what is left open
+
+1. **One frozen ladder on an existing `ckpts/nf/stage1_p<i>_s<k>.pt` at a different `ladder_ei
+   --seed`** — ≈ 1.94 pod-hours, ≈ **$0.95**. This is the only claim in the run that rests entirely
+   on inherited n = 1 numbers, and it is the claim that licenses reading the 4.27× as "all training".
+   Two such re-runs would give it an error bar. It should have been the cheapest job on the pod.
+2. **Four more frozen ladders (seed 2 on P1–P4)** — ≈ 7.8 pod-hours, ≈ **$3.80** — to take the
+   frozen-ladder seed component off 1 df, which is what addendum 1 was written to do. Until then E12
+   is answered for held-out accuracy and asserted for the ladder.
+3. **Re-measure the gate rate with the fixed `lean_tok`/`nd2lean`** (no new training: re-gate the
+   existing `found_*.jsonl`) and publish both numbers, so the 67-per-million figure future runs will
+   quote is labelled by translator version. My estimate is ≈ 16 per million.
+4. **Ask whether the 6-line mode is predictable before the expensive evaluation.** `train.py` already
+   logs a held-out validation loss every 200 steps for all 52 cells. If the mode is visible in the
+   loss curve, a future run can either condition on it or report it as a covariate, and the 6-line /
+   depth-3 floor — currently "not resolvable at n = 2 at all" — becomes resolvable at modest n. This
+   is a **zero-GPU** analysis of logs that already exist and is by far the highest-value follow-up
+   available; it is the one thing that would make the project's most interesting quantity measurable.
+5. **Adopt paired seeds as the standard for the precise bins.** The 13–17 % MDD reduction on the
+   3-, 4-, 5-line bins and the 6-line no-pattern slice is free, and `NOISE_FLOOR.md`'s "How to use it"
+   section should carry it as a sixth item.
+
+**Recommendation: accept.** `NOISE_FLOOR.md` should be quoted, with the corrections in items 1–11
+applied — in particular the `1.146` constant, the variance-share wording, the `L*` / 2-line
+bimodality flags, and the n = 1 caveat on the two surviving findings. This is the most carefully
+executed run I have reviewed in this repository: the recount found no error in the floor table it
+exists to produce, and every deviation from the pre-registration is disclosed somewhere in the run's
+own files.
