@@ -870,12 +870,12 @@ The published contrasts, against this floor:
 
 | standing comparison | original | inside the null range? |
 |---|---|---|
-| `ds-generator` G1 s1 vs C0 s1, required@8 | 259 vs 113 (2.3×) | **yes** — the null range is 61–242 and its ratio 3.97× |
+| `ds-generator` G1 s1 vs C0 s1, required@8 | 259 vs 113 (2.3×) | 259 is just outside the null range 61–242, but the ratio 2.29× is below the MDD's 3.57× — and G1 **is** a null arm, so this is the floor measuring itself |
 | `ds-generator` G1 s0 vs C0 s0, required@8 | 138 vs 165 | **yes** |
 | `ds-composition` A1 vs C0, `redreq` | 16 / 18 vs 28 / 26 | **yes** — the null range is 6–46 |
 | `ds-composition` A2 s1 vs C0 s1, `redreq` | 4 vs 26 | **yes** |
-| `ds-generator` G2 vs C0, `redreq` | **0 / 0** vs 31 / 27 | **no** — zero on both seeds is below the null minimum of 6 |
-| `ds-composition` A3 (cap 8) vs C0, `redreq` | 54 / 72 vs 28 / 26 | **72 is above the null maximum of 46; 54 is above it too** — the only coverage contrast in proposal 10 that clears its floor |
+| `ds-generator` G2 vs C0, `redreq` | **0 / 0** vs 31 / 27 | **zero on both seeds is below the null minimum of 6** — outside the null range; the ratio is infinite but the *difference* (30.6) is below the MDD of 71 |
+| `ds-composition` A3 (cap 8) vs C0, `redreq` | 54 / 72 vs 28 / 26 | **both seeds are above the null maximum of 46**, but the ratio 2.33× is below the MDD's 3.32× — "outside the null range, but below the MDD" (see § N6 for the two criteria) |
 
 **And again it is the individual training run.** `redreq`: var_pool **−84**, var_seed **−49**,
 var_resid **276**. `required@8`: var_pool **−3,401**, var_seed **−899**, var_resid **8,796**. Both
