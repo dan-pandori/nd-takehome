@@ -903,6 +903,6 @@ frozen-ladder solve count cannot separate arms at two seeds. 62 is also exactly 
 own eight null cells.
 
 Pooling G1's two seeds with the eight null cells gives **ten independent draws of the control's
-distribution**: 62, 62, 96, 117, 170, 174, 177, 200, 262, 265 — mean 158.5, sd 72.6, **max/min
+distribution**: 62, 62, 96, 117, 170, 174, 177, 200, 262, 265 — mean 158.5, sd 73.6, **max/min
 4.27×**. (Reported separately as well as pooled, because G1 is a different generator flag set and
 its two cells were trained on different hardware; the pooled figures move the sd by under 2 %.)
