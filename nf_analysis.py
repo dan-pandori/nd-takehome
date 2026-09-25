@@ -72,13 +72,16 @@ def coverage(p, s, pool):
             'lean_rejected': sum(r.get('n_lean_rejected', 0) for r in rows), 'complete': n == len(meta)}
 
 
-def ladder(name):
-    """<D>/<name>/round_<R>.json -> the last round's cumulative transfer solves and L*."""
+def ladder(name, need=8):
+    """<D>/<name>/round_8.json -> the cumulative transfer solves and L* after all 8 rounds.
+    A directory without round_8.json is a run that did not finish and is NOT read: the 2026-09-24
+    orphaned-waiter fault left several partial ladder directories behind, and reading the last round
+    present would silently report a 3-round ladder as an 8-round one."""
     d = f'{D}/{name}'
     rounds = sorted(int(os.path.basename(f).split('_')[-1][:-5]) for f in glob.glob(f'{d}/round_*.json'))
-    if not rounds:
+    if not rounds or rounds[-1] != need or len(rounds) != need:
         return None
-    R = rounds[-1]
+    R = need
     j = jl(f'{d}/round_{R}.json')
     tc, gc = j['transfer_cum'], j['targets_cum']
     return {'rounds': R, 'transfer_solved': tc['solved'], 'transfer_n': tc['n'], 'transfer_lstar': tc['lstar'],

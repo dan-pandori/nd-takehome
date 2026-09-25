@@ -458,3 +458,24 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   $43 of the $47.5 available above the floor. Real billed rate confirmed **$0.49/h** for both A40
   pods from `runpodctl pod list` (`costPerHr`), which is also what `podbudget` assumes — so for this
   run its dollar column is right. Question to Dan in `QUESTIONS.md`.
+- 2026-09-25 01:00  **Harness fault, found and cleaned: orphaned job waiters.** `pod/nf/job.sh` runs
+  its command as `bash -c "<dependency wait>; <command>"`, a *child* of the wrapper. My two job
+  resets (17:09 and 17:45) killed the `bash pod/nf/job.sh <name>` wrapper but not that child, so the
+  waiters for jobs I had dropped survived, fired when their old dependency markers appeared, and
+  started real work with no `.done` marker: on `nf-1` six dropped runs (three `cov_d3_*`,
+  `la_frozen_p1_s2`, `la_T1_dsc_c0_s0`, `la_frozen_dsc_c0_s0`) and on `nf-2` five (three `cov_d3_*`,
+  `la_frozen_p3_s2`, and a **duplicate `la_frozen_dsc_a1_s1`** now owned by `nf-1`). They were
+  stealing GPU from the wanted jobs — which is part of why the frozen-ladder round time drifted from
+  3,485 s to ≈ 4,000 s — and the duplicate would have collided on pull.
+  Fixed: every legitimately-running job is a child of a live `bash pod/nf/job.sh` (PPID ≠ 1) and every
+  orphan has PPID 1, so `/tmp/nf_kill_orphans.sh` kills exactly the PPID-1 `bash -c` waiters and bare
+  `python3 {coverage,ladder_ei,train,eval_set}.py` processes and leaves the wrappers alone (39 killed
+  on `nf-1`, 27 on `nf-2`). `/tmp/nf_clean_dropped.sh` then removed the dropped jobs' artifacts from
+  both pods so no pull can pick them up.
+  **Nothing counted is affected.** The eight frozen ladders, the eight held-out cells and the
+  coverage runs already reported all have `.done` markers, complete outputs and `round_8.json`, and
+  were pulled before the orphans wrote anything. As a belt-and-braces measure `nf_analysis.ladder()`
+  now **refuses any ladder directory without all eight `round_*.json` files** rather than reading the
+  last round present, and `nf_analysis` counts only coverage runs whose `complete` flag is true.
+  **Discarded unread:** six partial `targets_depth3` coverage runs (30–50 % of their pools) produced
+  by the fault — `targets_depth3` is the pre-registered first drop and is not reported.
