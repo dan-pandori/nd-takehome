@@ -880,3 +880,29 @@ The published contrasts, against this floor:
 **And again it is the individual training run.** `redreq`: var_pool **−84**, var_seed **−49**,
 var_resid **276**. `required@8`: var_pool **−3,401**, var_seed **−899**, var_resid **8,796**. Both
 between-factor components are indistinguishable from zero on both pools.
+
+## N5. Gap-closer 1 — `ds-generator`'s missing `la_frozen_g1_s0` (source: `artifacts/nf/la_frozen_dsg_g1_s0/round_8.json`)
+
+Model: `ckpts/dsg/stage1_g1_s0.pt` from `hf://buckets/dan-pandori/nd-rl/ds-generator/ckpts/dsg/` —
+3,214,336-parameter `lean_seq` GPT, cap 6, trained on `ds-generator`'s **G1** set
+(`gen.py --ore_steps 3 --ore_boxes`, a different generator flag set from P1–P4, shown by that run to
+match the control's shape table to sampling noise). **Not retrained.** Same `ladder_ei` command,
+same pools, same `--batch 512` as every cell above; run here on an A40.
+
+| cell | transfer solved / 2,285 | transfer `L*` | RL targets solved / 4,495 |
+|---|---|---|---|
+| G1 seed 0 (**this run**) | **62** | 9 | 612 |
+| G1 seed 1 (`ds-generator`) | 170 | 9 | — |
+
+`ds-generator` reported the seed-1 value, 170, as *"larger than either C0 seed"* and flagged the
+missing seed-0 cell as *"the run's most informative noise-floor cell is a one-seed estimate."* It is
+now two seeds: **62 and 170, a 2.74× difference inside a single arm** whose data set is the
+control's distribution by construction. G1's own two seeds **bracket C0's 158 / 114 and G2's
+44 / 125 entirely**, which is the cleanest single demonstration in this project that the
+frozen-ladder solve count cannot separate arms at two seeds. 62 is also exactly the minimum of my
+own eight null cells.
+
+Pooling G1's two seeds with the eight null cells gives **ten independent draws of the control's
+distribution**: 62, 62, 96, 117, 170, 174, 177, 200, 262, 265 — mean 158.5, sd 72.6, **max/min
+4.27×**. (Reported separately as well as pooled, because G1 is a different generator flag set and
+its two cells were trained on different hardware; the pooled figures move the sd by under 2 %.)
