@@ -939,3 +939,50 @@ in hand:
 the byte-identical checkpoint and the identical command — and its T1 ladder at **856** and **890**
 (+4.0 %). So the *sampler and checker* contribute ≈ 0 to the frozen ladder and ≈ 4 % to a ladder
 that trains; the 4.27× spread in § N3 is all data-draw + Stage-1-draw, i.e. all training.
+
+## N7. Held-out greedy at 52 cells (4 pools × 13 Stage-1 seeds; pre-registration addendum 2)
+
+Source: `artifacts/nf/heldout_p<i>_s<k>.{json,jsonl}` for `k` = 0…12, `artifacts/nf/summary.json`
+§ `floors`. Models `ckpts/nf/stage1_p<i>_s<k>.pt`, all 52 the same 3,214,336-parameter `lean_seq`
+GPT at cap 6, `train.py --steps 6000 --bs 128`, differing only in pool and Stage-1 seed. Held-out
+command identical in every cell.
+
+| quantity | cells | mean | sd | min | max | max/min | **MDD at n = 2** |
+|---|---|---|---|---|---|---|---|
+| overall | 52 | 0.9072 | **0.0304** | 0.8420 | 0.9630 | 1.14× | **±16.3 pp** |
+| 2-line bin | 52 | 0.9963 | 0.0031 | 0.9870 | 1.0000 | 1.01× | ±1.7 pp |
+| 3-line bin | 52 | 0.9883 | 0.0049 | 0.9760 | 0.9970 | 1.02× | ±2.6 pp |
+| 4-line bin | 52 | 0.9567 | 0.0151 | 0.8920 | 0.9790 | 1.10× | ±8.1 pp |
+| 5-line bin | 52 | 0.9272 | 0.0150 | 0.8770 | 0.9560 | 1.09× | ±8.1 pp |
+| **6-line bin** | 52 | 0.6674 | **0.1523** | 0.4210 | 0.9200 | **2.19×** | **±81.7 pp (unresolvable)** |
+| **depth-3 slice (500)** | 52 | 0.4402 | **0.3053** | **0.0080** | **0.9180** | **114.8×** | **±1.64 (unresolvable)** |
+| 6-line, no pattern (247) | 52 | 0.8240 | 0.0367 | 0.6964 | 0.8785 | 1.26× | ±19.7 pp |
+
+The eight pre-registered cells give sd 0.0390 on the overall rate; 52 cells give **0.0304**, so the
+n = 8 figure already published in § N2 was ≈ 28 % high but the same size. **Nothing quoted from § N2
+moves materially**; the ± 20.9 pp resolvable difference there becomes **± 16.3 pp** here.
+
+**The depth-3 cell is bimodal, but less cleanly than `ds-rendering` at n = 26 suggested.** On that
+run's own boundaries: **24 of 52 high (> 0.44), 13 low (< 0.11), 15 (28.8 %) in the gap**, bimodality
+coefficient 0.697 (> 5/9). The right summary is the **probability a training run lands in the high
+mode: 0.462, Wilson 95 % [0.333, 0.595]** — a coin flip, and now pinned to ±0.13 instead of ±0.28.
+
+| pool | cells | high (> 0.44) | low (< 0.11) | in the gap | p(high) |
+|---|---|---|---|---|---|
+| P1 | 13 | 5 | 4 | 4 | 0.385 |
+| P2 | 13 | 8 | 3 | 2 | 0.615 |
+| P3 | 13 | 6 | 4 | 3 | 0.462 |
+| P4 | 13 | 5 | 2 | 6 | 0.385 |
+
+**Variance components at 52 cells** (balanced 4 × 13, one observation per cell):
+
+| quantity | MS_pool | MS_seed | MS_resid | var_pool | var_seed | var_resid |
+|---|---|---|---|---|---|---|
+| overall | 2.74e−4 | 1.08e−3 | **9.23e−4** | **−5.0e−5** | +4.0e−5 | **9.23e−4** |
+| 6-line bin | 6.65e−3 | 2.84e−2 | **2.28e−2** | **−1.2e−3** | +1.4e−3 | **2.28e−2** |
+| depth-3 slice | 2.73e−2 | 1.19e−1 | **9.03e−2** | **−4.8e−3** | +7.1e−3 | **9.03e−2** |
+
+With 3 and 12 degrees of freedom instead of 3 and 1, the answer does not change and is now firm:
+**the pool contributes nothing measurable and the seed almost nothing; ≈ 99 % of the variance is the
+individual training run.** Re-drawing the data set is not a stronger replicate than re-seeding
+Stage-1 — a cheaper standard for future runs than the one proposal 11 feared.
