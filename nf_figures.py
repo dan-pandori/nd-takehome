@@ -28,9 +28,9 @@ ROWS = [
     ('ladder_frozen_transfer_lstar', 'frozen ladder, transfer $L^*$', [9, 9]),
     ('cov_red_solved', '`targets_reductio_req` solved / 300', [31, 27]),
     ('cov_req8_solved', '`depth3_req` required@8 solved / 300', [165, 113]),
-    ('cov_d3_solved', '`targets_depth3` solved / 1,000', [506, 423]),
     ('heldout_depth3_slice', 'held-out depth-3 slice (n = 500)', [0.488, 0.446]),
     ('heldout_len6', 'held-out greedy, 6-line bin', [0.686, 0.584]),
+    ('heldout_len6_nopattern', 'held-out greedy, 6-line no-pattern', [0.818, 0.834]),
     ('heldout_overall', 'held-out greedy, overall', [0.9088, 0.8968]),
 ]
 
@@ -46,70 +46,59 @@ for i, (q, lab, ctrl) in enumerate(ROWS):
     vals = f['values']
     ax.hlines(y, f['min'] / m, f['max'] / m, color='#d7d6d0', lw=6, zorder=1)
     for k, v in vals.items():
-        ax.plot(v / m, y, marker='o' if k.endswith('s0') else '^', ms=6, color=BLUE, mec=SURF, mew=0.6, zorder=3)
+        pre = k.endswith('_s0') or k.endswith('_s1')          # the pre-registered 4 x 2 design
+        ax.plot(v / m, y, marker='o' if pre else 'o', ms=6 if pre else 4,
+                mfc=BLUE if pre else 'none', mec=BLUE if pre else BLUE, mew=0.6 if pre else 1.0,
+                color=BLUE, ls='', zorder=3 if pre else 2)
     for c in ctrl:
         ax.plot(c / m, y, marker='|', ms=15, color=ORANGE, mew=2.0, zorder=4)
     g = S['gap_closers'].get('la_frozen_dsg_g1_s0')
     if q == 'ladder_frozen_transfer_solved' and g:
         ax.plot(g['transfer_solved'] / m, y, marker='D', ms=6, mfc='none', mec=AQUA, mew=1.4, zorder=4)
         ax.plot(170 / m, y, marker='D', ms=6, mfc='none', mec=AQUA, mew=1.4, zorder=4)
-    ylab.append((y, f'{lab}\nmean {m:.4g}, sd {f["sd"]:.3g}, max/min {f["max_over_min"]:.2f}×'))
+    ylab.append((y, f'{lab}\n{f["n_cells"]} cells: mean {m:.4g}, sd {f["sd"]:.3g}, max/min {f["max_over_min"]:.2f}×'))
 ax.axvline(1.0, color='#c9c8c2', lw=0.8, zorder=0)
 ax.set_yticks([y for y, _ in ylab]); ax.set_yticklabels([t for _, t in ylab], fontsize=7.5)
-ax.set_xlabel('value ÷ mean of the eight null cells  (everything on this chart is noise by construction)')
+ax.set_xlabel('value ÷ the mean of that quantity\'s null cells  (everything on this chart is noise by construction)')
 ax.grid(axis='x', color='#e6e5e0', lw=0.6)
-h = [plt.Line2D([], [], marker='o', ls='', color=BLUE, label='null cell, Stage-1 seed 0'),
-     plt.Line2D([], [], marker='^', ls='', color=BLUE, label='null cell, Stage-1 seed 1'),
+h = [plt.Line2D([], [], marker='o', ls='', color=BLUE, label='null cell, Stage-1 seed 0 or 1 (pre-registered 4 × 2)'),
+     plt.Line2D([], [], marker='o', ls='', ms=4, mfc='none', mec=BLUE, label='null cell, Stage-1 seed 2–12 (addenda 1–2, held-out only)'),
      plt.Line2D([], [], marker='|', ls='', color=ORANGE, mew=2, label="C0 control's published value (both seeds)"),
      plt.Line2D([], [], marker='D', ls='', mfc='none', mec=AQUA, label='ds-generator G1 (fifth independent draw)')]
 ax.legend(handles=h, frameon=False, fontsize=7.5, loc='lower right')
-fig.suptitle('noise-floor: four independent null pools × two Stage-1 seeds, same generator settings, same composition, same schedule',
+fig.suptitle('noise-floor: four independent null pools × up to thirteen Stage-1 seeds — same generator settings, same composition, same schedule',
              fontsize=10, x=0.01, ha='left')
 fig.tight_layout(); fig.savefig('figures/nf_cells.png', dpi=160); plt.close(fig)
 
-# ---------- figure 2: resolvable difference vs the standing findings ----------
-# (quantity, finding label, observed effect as a fraction of the control value; pp quantities as a fraction too)
-FINDINGS = [
-    ('ladder_frozen_transfer_solved', 'ds-composition A3 cap-8 vs C0 (976 vs 158)', 976 / 158 - 1),
-    ('ladder_frozen_transfer_solved', 'ds-generator G1 vs C0 s1 (170 vs 114)', 170 / 114 - 1),
-    ('ladder_frozen_transfer_solved', 'ds-composition A1 vs C0, n = 1 (205 vs 158)', 205 / 158 - 1),
-    ('ladder_frozen_transfer_solved', 'ds-composition A2 vs C0, n = 1 (111 vs 158)', 1 - 111 / 158),
-    ('ladder_frozen_transfer_solved', 'ds-generator G2 vs C0 s1 (125 vs 114)', 125 / 114 - 1),
-    ('cov_req8_solved', 'ds-generator G1 vs C0 s1 (259 vs 113)', 259 / 113 - 1),
-    ('cov_red_solved', 'ds-composition A3 cap-8 vs C0 (54 vs 28)', 54 / 28 - 1),
-    ('cov_red_solved', 'ds-composition A1 vs C0 (16 vs 28)', 1 - 16 / 28),
-    ('heldout_overall', 'lean-format lean_seq vs token (0.909 vs 0.883)', 0.909 / 0.883 - 1),
-    ('heldout_overall', 'ds-composition A1 vs C0 s0 (0.9172 vs 0.9088)', 0.9172 / 0.9088 - 1),
-    ('heldout_len6', 'ds-composition A1 vs C0 s1 (0.840 vs 0.583)', 0.840 / 0.583 - 1),
-    ('heldout_depth3_slice', 'ds-rendering R2 − C0 (0.661 vs 0.533)', 0.661 / 0.533 - 1),
-    ('ladder_frozen_transfer_lstar', 'ds-composition A1 vs C0 $L^*$ (10 vs 9)', 10 / 9 - 1),
-    ('ladder_frozen_transfer_lstar', 'ds-composition A3 cap-8 $L^*$ (11 vs 9)', 11 / 9 - 1),
-]
-qs = [q for q, _, _ in ROWS if q in F]
-fig, ax = plt.subplots(figsize=(10.5, 4.8))
-ypos = {q: len(qs) - i for i, q in enumerate(qs)}
-for q in qs:
-    f = F[q]
-    frac = f['mdd_n2_frac_of_mean']
-    ax.barh(ypos[q], 100 * frac, height=0.42, color='#e2e1db', edgecolor='#c9c8c2', lw=0.6, zorder=1)
-    ax.text(100 * frac + 2, ypos[q], f'{100 * frac:.0f} %', va='center', fontsize=7.5, color=MUTED)
-for q, lab, eff in FINDINGS:
-    if q not in ypos:
-        continue
-    below = 100 * eff < 100 * F[q]['mdd_n2_frac_of_mean']
-    ax.plot(100 * eff, ypos[q], marker='o', ms=7, mfc='none' if below else (AQUA if not below else 'none'),
-            mec=ORANGE if below else AQUA, mew=1.6, zorder=3)
-    ax.annotate(lab, (100 * eff, ypos[q]), textcoords='offset points', xytext=(7, 7 if eff > 0 else -12),
-                fontsize=6.6, color=MUTED)
-ax.set_yticks(list(ypos.values()))
-ax.set_yticklabels([dict((q, l) for q, l, _ in ROWS)[q] for q in qs], fontsize=7.5)
-ax.set_xlabel('difference as % of the control value — bars: smallest difference an n = 2 comparison resolves at 80 % power; '
-              'points: differences this project has reported as findings')
-ax.set_xscale('symlog', linthresh=10); ax.grid(axis='x', color='#e6e5e0', lw=0.6)
-h = [plt.Line2D([], [], marker='o', ls='', mfc='none', mec=ORANGE, mew=1.6, label='reported difference **below** its floor — not resolvable at n = 2'),
-     plt.Line2D([], [], marker='o', ls='', color=AQUA, label='reported difference above its floor — survives')]
+# ---------- figure 2: one row per standing finding, against the floor of its own quantity ----------
+import nf_retro
+
+RET = nf_retro.rows()
+LABEL = dict((q, l) for q, l, _ in ROWS)
+fig, ax = plt.subplots(figsize=(13.2, 6.4))
+ticks = []
+order = sorted(range(len(RET)), key=lambda i: (LABEL.get(RET[i]['q'], RET[i]['q']), -RET[i]['effect_pct']))
+for row, i in enumerate(order):
+    r = RET[i]
+    y = len(order) - row
+    fl, eff = r['mdd_pct'], r['effect_pct']
+    ax.barh(y, fl, height=0.62, color='#e2e1db', edgecolor='#c9c8c2', lw=0.6, zorder=1)
+    surv = r['verdict'] == 'survives'
+    ax.plot(eff, y, marker='o', ms=8, mfc=AQUA if surv else 'none', mec=AQUA if surv else ORANGE,
+            mew=1.8, zorder=3)
+    ticks.append((y, f"{r['run']} — {r['claim']}  ({r['orig']})"))
+    ax.text(max(fl, eff) * 1.12, y, LABEL.get(r['q'], r['q']), va='center', fontsize=6.2, color=MUTED)
+ax.set_yticks([t for t, _ in ticks]); ax.set_yticklabels([t for _, t in ticks], fontsize=6.9)
+ax.set_ylim(0.3, len(order) + 0.7)
+ax.set_xscale('log'); ax.set_xlim(0.8, 1500)
+ax.set_xlabel('difference as % of the control value (log scale)\n'
+              'grey bar: the smallest difference resolvable at 80 % power   •   point: the difference reported', fontsize=8)
+ax.grid(axis='x', color='#e6e5e0', lw=0.6)
+h = [plt.Line2D([], [], marker='o', ls='', ms=8, mfc='none', mec=ORANGE, mew=1.8,
+                label='reported difference is inside the floor — not resolvable by that run'),
+     plt.Line2D([], [], marker='o', ls='', ms=8, color=AQUA, label='reported difference clears the floor — survives')]
 ax.legend(handles=h, frameon=False, fontsize=7.5, loc='lower right')
-fig.suptitle('noise-floor: what this project can resolve at two seeds, and which standing findings clear it',
+fig.suptitle('noise-floor: every standing finding this run can score, against the floor of the quantity it was read off',
              fontsize=10, x=0.01, ha='left')
 fig.tight_layout(); fig.savefig('figures/nf_resolvable.png', dpi=160); plt.close(fig)
 print('figures/nf_cells.png figures/nf_resolvable.png')

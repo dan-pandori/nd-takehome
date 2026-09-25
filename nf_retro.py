@@ -51,30 +51,43 @@ R = [
  ('heldout_len6', 'ds-generator', 'G2 6-line held-out is far below C0', [0.138, 0.425], [0.686, 0.584], 'pp'),
 ]
 
-print('| quantity | run | standing finding | original | null cells | MDD | verdict |')
-print('|---|---|---|---|---|---|---|')
-for q, run, claim, arm, ctrl, kind in R:
-    f = F[q]
-    n = 6 if kind == 'pp6' else 2
-    a, c = sum(arm) / len(arm), sum(ctrl) / len(ctrl)
-    m = mdd(f, n)
-    outside = all(x < f['min'] or x > f['max'] for x in arm)
-    if kind in ('pp', 'pp6'):
+def rows():
+    """One dict per standing finding: the original numbers, the floor it is scored against and the
+    verdict.  Shared by the markdown table below and by nf_figures.py so the two cannot disagree."""
+    out = []
+    for q, run, claim, arm, ctrl, kind in R:
+        f = F[q]
+        n = 6 if kind == 'pp6' else 2
+        a, c = sum(arm) / len(arm), sum(ctrl) / len(ctrl)
+        m = mdd(f, n)
+        outside = all(x < f['min'] or x > f['max'] for x in arm)
         eff = abs(a - c)
-        orig = f'{100 * a:.1f} vs {100 * c:.1f} ({100 * (a - c):+.1f} pp)'
-        rng = f'{100 * f["min"]:.1f}–{100 * f["max"]:.1f}'
-        fl = f'±{100 * m:.1f} pp' + (' (n = 6)' if n == 6 else '')
-    elif kind == 'abs':
-        eff = abs(a - c)
-        orig = f'{a:g} vs {c:g} ({a - c:+g})'
-        rng = f'{f["min"]:g}–{f["max"]:g}'
-        fl = f'±{m:.1f}'
-    else:
-        eff = abs(a - c)
-        ratio = max(a, c) / min(a, c) if min(a, c) else float('inf')
-        orig = ('/'.join(f'{x:g}' for x in arm) + ' vs ' + '/'.join(f'{x:g}' for x in ctrl)
-                + (f' ({ratio:.2f}×)' if ratio != float('inf') else ' (∞)'))
-        rng = f'{f["min"]:g}–{f["max"]:g}'
-        fl = f'±{m:.0f} ({1 + m / f["mean"]:.2f}×)'
-    v = '**survives**' if eff > m else ('outside the null range, but below the MDD' if outside else '**inside the floor**')
-    print(f'| `{q}` | {run} | {claim} | {orig} | {rng} | {fl} | {v} |')
+        if kind in ('pp', 'pp6'):
+            orig = f'{100 * a:.1f} vs {100 * c:.1f} ({100 * (a - c):+.1f} pp)'
+            rng = f'{100 * f["min"]:.1f}–{100 * f["max"]:.1f}'
+            fl = f'±{100 * m:.1f} pp' + (' (n = 6)' if n == 6 else '')
+        elif kind == 'abs':
+            orig = f'{a:g} vs {c:g} ({a - c:+g})'
+            rng = f'{f["min"]:g}–{f["max"]:g}'
+            fl = f'±{m:.1f}'
+        else:
+            ratio = max(a, c) / min(a, c) if min(a, c) else float('inf')
+            orig = ('/'.join(f'{x:g}' for x in arm) + ' vs ' + '/'.join(f'{x:g}' for x in ctrl)
+                    + (f' ({ratio:.2f}×)' if ratio != float('inf') else ' (∞)'))
+            rng = f'{f["min"]:g}–{f["max"]:g}'
+            fl = f'±{m:.0f} ({1 + m / f["mean"]:.2f}×)'
+        v = ('survives' if eff > m else
+             ('outside the null range, but below the MDD' if outside else 'inside the floor'))
+        out.append({'q': q, 'run': run, 'claim': claim, 'orig': orig, 'range': rng, 'floor_str': fl,
+                    'effect': eff, 'mdd': m, 'n_per_arm': n, 'verdict': v,
+                    'effect_pct': 100 * eff / c if c else None, 'mdd_pct': 100 * m / c if c else None})
+    return out
+
+
+if __name__ == '__main__':
+    print('| quantity | run | standing finding | original | null cells | MDD | verdict |')
+    print('|---|---|---|---|---|---|---|')
+    for r in rows():
+        mark = '**survives**' if r['verdict'] == 'survives' else (
+            '**inside the floor**' if r['verdict'] == 'inside the floor' else r['verdict'])
+        print(f'| `{r["q"]}` | {r["run"]} | {r["claim"]} | {r["orig"]} | {r["range"]} | {r["floor_str"]} | {mark} |')
