@@ -986,3 +986,34 @@ With 3 and 12 degrees of freedom instead of 3 and 1, the answer does not change 
 **the pool contributes nothing measurable and the seed almost nothing; ≈ 99 % of the variance is the
 individual training run.** Re-drawing the data set is not a stronger replicate than re-seeding
 Stage-1 — a cheaper standard for future runs than the one proposal 11 feared.
+
+## N8. Checker of record
+
+Lean is the checker of record: a proof counts here only if the **unmodified** `nd2lean.py --check`
+(official translation + Lean) **and** `nd_verify` accept it. `git diff origin/dan_ds-generator` is
+empty for `nd_verify`, `nd2lean.py`, `lean_gate.py`, `train.py`, `eval_set.py`, `coverage.py`,
+`ladder_ei.py`, `expert_iter.py`, `sample.py`, `model.py`, `prune.py`, `patterns.py`, `gen.py`,
+`make_coverage_sets.py`, `dsg_assemble.py`.
+
+| pass | proofs | both accept | `nd_verify`-only | **Lean-only** | source |
+|---|---|---|---|---|---|
+| ladder + coverage, every counted proof | 28,737 | **28,737** | 0 | 0 | `artifacts/nf/record_nf1.json`, `record_nf2.json` |
+| held-out greedy, 200 sampled per cell × 52 | 10,400 | **10,400** | 0 | 0 | `artifacts/nf/record_heldout.json` (26 cells, Lean 4.34.0 on `nf-1`), `record_heldout_vps.json` (26 cells, Lean **4.34.1** on the VPS) |
+| **total** | **39,137** | **39,137** | **0** | **0** | |
+
+**0 disagreements on 39,137 counted proofs**, including 5,200 re-checked on a *different Lean patch
+version* (4.34.1) from the one the pods ran (4.34.0) — disclosed, and it agrees.
+
+**The in-loop gate's own rate, which `ds-generator`'s review asked every run to report** (source:
+the `_gate` block of `record_nf1.json` / `record_nf2.json`, aggregated from `artifacts/nf/gate_*.jsonl`,
+389 `generate()` calls over both pods):
+
+| samples gated | parse failures | distinct checked by both | both accept | `nd_verify`-only | **Lean-only** |
+|---|---|---|---|---|---|
+| 19,912,560 | 6,496,303 | 11,939,579 | 1,888,010 | **0** | **789** |
+
+**66.1 Lean-only acceptances per million distinct samples, 0 the other way** — one-directional, as in
+every run that has measured it, and an order of magnitude below `ds-generator`'s 718 per million on
+its heavier-premise workload (`lean-format` measured 33 per million). No counted proof is affected,
+because acceptance is the conjunction. The individual disagreements are in
+`artifacts/nf/gate_*.disagree.jsonl`.
