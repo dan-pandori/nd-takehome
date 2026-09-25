@@ -89,3 +89,28 @@ numbers go into `numbers.md` § noise-floor as each stage lands rather than at t
   **missed, the floor being far larger than predicted**; the falsifier (max/min < 1.2×, which would
   have revived the shape account) is **decisively not triggered**. `L*` is the robust readout:
   9 in seven cells, 10 in one, resolvable difference **±1.9 points**. `numbers.md` § N3.
+- 2026-09-25 03:35  Pre-registration **addendum 2** (before any seed-3+ model existed): 40 more
+  Stage-1 seeds on P1–P4, **held-out greedy only**, to pin the bimodal cell's high-mode probability.
+  52 held-out cells in total, ≈ 6.5 pod-minutes per model.
+- 05:00  **Both n = 1 gaps closed.** `ds-generator`'s missing `la_frozen_g1_s0` = **62** against its
+  arm-mate's **170** — G1's own two seeds bracket C0 (158/114) and G2 (44/125) entirely.
+  `ds-composition`'s A1 at Stage-1 seed 1: T1 **847** (C0's is 965, so "A1's T1 beats C0" **reverses**),
+  frozen **194**, frozen `L*` **9** (so "A1 `L*` 10 vs C0 9" **dies**).
+- 07:05  **Result.** The floor, per quantity: frozen ladder **62–265 of 2,285 (4.27×, ±235 %)**,
+  `L*` **9–10 (±1.9)**, `targets_reductio_req` **6–46 (7.67×)**, `required@8` **61–242 (3.97×)**,
+  held-out greedy overall **±16.3 pp** at 52 cells, 6-line bin and depth-3 slice **not resolvable at
+  n = 2 at all**. The depth-3 slice is bimodal; the estimand is p(high mode) = **0.462, Wilson
+  [0.333, 0.595]**. ≈ **99 % of the variance is the individual training run** — the pool variance
+  component is negative on every quantity, so re-drawing the data set is no stronger a replicate than
+  re-seeding Stage-1. **Of twenty standing findings scored, two survive, both the cap-8 arm.** The
+  pre-registered falsifier (max/min < 1.2×) did not fire, by 3.6×. Seven of nineteen expectations met,
+  nine missed, and the misses that matter all say the floor is bigger than predicted.
+  Checker: **0 disagreements on 39,137 counted proofs**; in-loop gate 67.1 Lean-only per million
+  distinct, 0 the other way. Cost **28.32 pod-hours, $13.88** of a 42 h / $21 ceiling; both pods deleted.
+- Deliverables: **`NOISE_FLOOR.md`** (standing reference), `run_noise_floor.md`, `numbers.md`
+  §§ N1–N11, `log.md`, `figures/nf_{cells,resolvable}.png`, `artifacts/nf/summary.json` (52 rows) and
+  `artifacts/nf/premise.json`, bucket
+  `hf://buckets/dan-pandori/nd-rl/noise-floor/{artifacts/nf,ckpts/nf,data/nf}`. Two questions for Dan
+  in `QUESTIONS.md` (the `pod_budget_watch` bug I fixed; the budget raise the measured cost forced).
+
+NOISE-FLOOR DONE 2026-09-25T07:25:00Z
