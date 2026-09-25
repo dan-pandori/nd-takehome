@@ -1005,14 +1005,15 @@ empty for `nd_verify`, `nd2lean.py`, `lean_gate.py`, `train.py`, `eval_set.py`, 
 version* (4.34.1) from the one the pods ran (4.34.0) — disclosed, and it agrees.
 
 **The in-loop gate's own rate, which `ds-generator`'s review asked every run to report** (source:
-the `_gate` block of `record_nf1.json` / `record_nf2.json`, aggregated from `artifacts/nf/gate_*.jsonl`,
-389 `generate()` calls over both pods):
+`artifacts/nf/summary.json` § `gate`, aggregated from all 408 `generate()`-call records in
+`artifacts/nf/gate_*.jsonl` pulled back from both pods; the `_gate` blocks inside
+`record_nf1.json` / `record_nf2.json` are the same count taken before the last few jobs finished):
 
 | samples gated | parse failures | distinct checked by both | both accept | `nd_verify`-only | **Lean-only** |
 |---|---|---|---|---|---|
-| 19,912,560 | 6,496,303 | 11,939,579 | 1,888,010 | **0** | **789** |
+| 20,010,560 | 6,500,782 | 12,033,100 | 1,977,301 | **0** | **808** |
 
-**66.1 Lean-only acceptances per million distinct samples, 0 the other way** — one-directional, as in
+**67.1 Lean-only acceptances per million distinct samples, 0 the other way** — one-directional, as in
 every run that has measured it, and an order of magnitude below `ds-generator`'s 718 per million on
 its heavier-premise workload (`lean-format` measured 33 per million). No counted proof is affected,
 because acceptance is the conjunction. The individual disagreements are in
@@ -1088,3 +1089,32 @@ A finding is scored **survives** only if it clears the MDD.
 | `heldout_len6_nopattern` | ds-composition | A2's 6-line no-pattern deficit vs C0 | 77.5 vs 82.6 (-5.1 pp) | 69.6–87.9 | ±19.7 pp | **inside the floor** |
 | `heldout_depth3_slice` | ds-rendering | R2 depth-3 held-out beats C0 (n = 6 each) | 66.1 vs 53.3 (+12.8 pp) | 0.8–91.8 | ±54.8 pp (n = 6) | **inside the floor** |
 | `heldout_len6` | ds-generator | G2 6-line held-out is far below C0 | 28.1 vs 63.5 (-35.4 pp) | 42.1–92.0 | ±81.7 pp | **inside the floor** |
+
+## N11. Cost, pods and artifacts
+
+| pod | GPU | created | deleted | pod-hours | billed |
+|---|---|---|---|---|---|
+| `nf-1` (`kmol2dhu6iz9sw`) | NVIDIA A40 48 GB | 2026-09-24 16:05:45 UTC | 2026-09-25 07:05 UTC | 14.98 | $7.34 |
+| `nf-2` (`a2vq56qgrp9e2z`) | NVIDIA A40 48 GB | 2026-09-24 16:06:22 UTC | 2026-09-25 05:26 UTC | 13.34 | $6.54 |
+| **total** | | | | **28.32** | **$13.88** |
+
+Real billed rate **$0.49/h**, read from `runpodctl pod list`'s `costPerHr` for both pods — which is
+also what `podbudget` assumes for an A40, so for this run its dollar column is right (it is **not**
+for A6000 or 4090). Ceiling as run: **42 h / $21** (raised from the brief's 36 h / $18 at 17:40 on
+2026-09-24; `QUESTIONS.md`). RunPod balance after: **$151.21**, above proposal 11's $130 floor.
+
+**Measured unit costs on an A40 at four concurrent jobs** (for future sizing — the brief's estimates
+were low by 2–7×):
+
+| job | cost |
+|---|---|
+| Stage-1, 6,000 steps, bs 128 | ≈ 5.3 pod-minutes |
+| held-out greedy, 5,000 theorems, k = 1 | ≈ 1.2 pod-minutes |
+| frozen ladder, 8 rounds × k 32 on `data/ladder/` | **≈ 1.94 pod-hours** |
+| `pass@2,000` coverage, 300 targets | ≈ 0.7 pod-hours |
+| `pass@2,000` coverage, 1,000 targets | ≈ 2.4 pod-hours |
+
+Bucket: `hf://buckets/dan-pandori/nd-rl/noise-floor/{ckpts,artifacts,data}` —
+`ckpts/nf/stage1_p<i>_s<k>.pt` (52), `artifacts/nf/` (per-cell held-out, coverage and ladder outputs,
+`summary.json`, `premise.json`, the `record_*.json` checker passes, the `gate_*.jsonl` logs and their
+`.disagree.jsonl`), `data/nf/train_p<i>.jsonl` (4 × 155,000) and `assemble_p<i>.json`.
