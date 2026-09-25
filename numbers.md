@@ -1017,3 +1017,74 @@ every run that has measured it, and an order of magnitude below `ds-generator`'s
 its heavier-premise workload (`lean-format` measured 33 per million). No counted proof is affected,
 because acceptance is the conjunction. The individual disagreements are in
 `artifacts/nf/gate_*.disagree.jsonl`.
+
+## N9. Pre-registered expectations, scored
+
+Every expectation from `preregistration/noise-floor.md` and its two addenda, scored against the
+files above. The pattern is one-directional and is the run's second headline: **almost every miss is
+the floor being larger than I predicted.**
+
+| # | expectation | measured | verdict |
+|---|---|---|---|
+| E1 | held-out overall sd ≤ 0.02, max − min ≤ 5 pp | sd **0.0304** (0.039 at n = 8), range **12.1 pp** | **miss — floor ≈ 2× larger** |
+| E2 | held-out 6-line bin sd 0.04–0.10 | **0.152** (0.189 at n = 8) | **miss — larger** |
+| E3 | held-out 2-line bin sd ≤ 0.005 | 0.0031 | met |
+| E4 | depth-3 slice bimodal; 5–8 of 8 high; sd ≥ 0.20 | bimodal (b = 0.697); **3 of 8** high; sd 0.305 | partly met — bimodal and wide, but fewer in the high mode |
+| E5 | `redreq` max/min 1.5–3× | **7.67×** | **miss — larger** |
+| E6 | `required@8` max/min 1.5–3× | **3.97×** | **miss — larger** |
+| E7 | `targets_depth3` max/min 1.2–2× | **not run** (pre-registered first drop; see `log.md` 17:45) | not scored |
+| E8 | frozen ladder max/min 1.4–2.5×; sd ≥ 25 % of mean | **4.27×**; sd 43.8 % | **ratio miss — larger**; sd met |
+| E9 | frozen ladder `L*` spread 9–11 (2 points of noise) | **9–10 (1 point)** | **miss — smaller, the favourable direction** |
+| E10 | n = 2 resolvable frozen-ladder difference ± 40–60 % | **± 235 %** | **miss — ≈ 4× larger** |
+| E11 | pool shape tables agree; `ORE` 1.2–1.8 %; box depth within ±2 pp | all shares within 0.26 pp of each other; `ORE` 1.42–1.48 %; box depth within 0.2 pp | met |
+| E12 | σ²_seed ≥ σ²_pool on the frozen ladder | var_seed **+248**, var_pool **−1,079** | met in sign, but both ≈ 0 against var_resid 6,268 |
+| E13 | 0 Lean-vs-`nd_verify` disagreements on counted proofs; gate 0–1,000 per million, one-directional | **0 / 39,137**; gate **66.1 per million**, 789 Lean-only, 0 the other way | met |
+| E14 | inter-pool renaming-class overlap 30–70 % | **5.8–6.0 %** | **miss — the pools are far more independent than assumed** |
+| E15 | depth-3 high-mode proportion 0.30–0.55; Wilson half-width ≤ 0.15 | **0.462**, half-width **0.131** | met |
+| E16 | ≤ 25 % of the 52 cells in the gap 0.11–0.44 | **28.8 %** (15 of 52) | narrow miss |
+| E17 | held-out overall sd at 52 cells 0.030–0.050 | **0.0304** | met |
+| E18 | var_pool ≤ 20 % of var_resid for held-out overall | var_pool **negative** (−5.0e−5 vs 9.23e−4) | met |
+| E19 | the four pools' high-mode proportions within ±0.20 | 0.385 / 0.615 / 0.462 / 0.385 — spread **0.23** | narrow miss |
+
+**The falsifier did not fire, decisively.** It required the frozen ladder's max/min to be **under
+1.2×** across eight null cells, which would have meant `ds-generator`'s G1-vs-C0 gap was a real
+effect of `--ore_steps 3 --ore_boxes` and would have reopened the shape account. Measured:
+**4.27×** — more than three times the *upper* end of the pre-registered band, and 3.6× the
+falsifier's threshold. The shape account stays dead.
+
+## N10. The retrospective table (source: `nf_retro.py`, which reads `artifacts/nf/summary.json`)
+
+Two criteria, both shown, because they disagree on four rows:
+
+- **MDD** — the smallest difference a two-sample t-test at *n* seeds per arm has 80 % power to
+  detect, `(t_{.975,2n-2} + t_{.80,2n-2}) · s · √(2/n)`, with `s` the pooled sd over the null cells.
+  This is the **parametric best case**: at 2 vs 2 the exact two-sided permutation test cannot reach
+  p < 0.05 at all (minimum attainable p = **1/3**).
+- **null range** — does the arm's value fall outside the interval the null cells span? Weaker (one
+  value outside the range of eight null draws is only about p = 0.22 one-sided) but distribution-free
+  and it is the question a reader actually asks.
+
+A finding is scored **survives** only if it clears the MDD.
+
+| quantity | run | standing finding | original | null cells | MDD | verdict |
+|---|---|---|---|---|---|---|
+| `ladder_frozen_transfer_solved` | ds-composition | A3 (cap 8) frozen ladder beats C0 | 976 vs 158 (6.18×) | 62–265 | ±397 (3.35×) | **survives** |
+| `ladder_frozen_transfer_solved` | ds-generator | G1 frozen ladder is above both C0 seeds | 170 vs 158/114 (1.25×) | 62–265 | ±397 (3.35×) | **inside the floor** |
+| `ladder_frozen_transfer_solved` | ds-composition | A1 frozen ladder beats C0 (n = 1) | 205 vs 158 (1.30×) | 62–265 | ±397 (3.35×) | **inside the floor** |
+| `ladder_frozen_transfer_solved` | ds-composition | A2 frozen ladder is below C0 (n = 1) | 111 vs 158 (1.42×) | 62–265 | ±397 (3.35×) | **inside the floor** |
+| `ladder_frozen_transfer_solved` | ds-generator | G2 frozen ladder is above C0 on seed 1 | 125 vs 114 (1.10×) | 62–265 | ±397 (3.35×) | **inside the floor** |
+| `ladder_frozen_transfer_solved` | ds-generator | G2 frozen ladder is far below C0 on seed 0 | 44 vs 158 (3.59×) | 62–265 | ±397 (3.35×) | outside the null range, but below the MDD |
+| `ladder_frozen_transfer_lstar` | ds-composition | A3 (cap 8) frozen L* 11 vs C0 9 | 11 vs 9 (+2) | 9–10 | ±1.9 | **survives** |
+| `ladder_frozen_transfer_lstar` | ds-composition | A1 frozen L* 10 vs C0 9 (n = 1) | 10 vs 9 (+1) | 9–10 | ±1.9 | **inside the floor** |
+| `ladder_frozen_transfer_lstar` | lean-format | lean_seq ladder L* 11 vs token 10 | 11 vs 10 (+1) | 9–10 | ±1.9 | outside the null range, but below the MDD |
+| `cov_red_solved` | ds-composition | A3 (cap 8) solves more `redreq` than C0 | 54/72 vs 28/26 (2.33×) | 6–46 | ±71 (3.32×) | outside the null range, but below the MDD |
+| `cov_red_solved` | ds-composition | A1's reductio deficit vs C0 | 16/18 vs 28/26 (1.59×) | 6–46 | ±71 (3.32×) | **inside the floor** |
+| `cov_red_solved` | ds-generator | G2 writes no `redreq` proof at all | 0/0 vs 31/27 (∞) | 6–46 | ±71 (3.32×) | outside the null range, but below the MDD |
+| `cov_req8_solved` | ds-generator | G1 s1 required@8 is 2.3x C0 s1 | 259 vs 113 (2.29×) | 61–242 | ±393 (3.57×) | outside the null range, but below the MDD |
+| `heldout_overall` | lean-format | lean_seq held-out beats the token format | 90.3 vs 88.3 (+2.0 pp) | 84.2–96.3 | ±16.3 pp | **inside the floor** |
+| `heldout_overall` | ds-composition | A1 held-out beats C0 | 93.0 vs 90.3 (+2.7 pp) | 84.2–96.3 | ±16.3 pp | **inside the floor** |
+| `heldout_overall` | ds-composition | A3 (cap 8) held-out beats C0 | 95.2 vs 90.3 (+5.0 pp) | 84.2–96.3 | ±16.3 pp | **inside the floor** |
+| `heldout_len6_nopattern` | ds-composition | A1's 6-line no-pattern gain over C0 | 89.5 vs 82.6 (+6.9 pp) | 69.6–87.9 | ±19.7 pp | outside the null range, but below the MDD |
+| `heldout_len6_nopattern` | ds-composition | A2's 6-line no-pattern deficit vs C0 | 77.5 vs 82.6 (-5.1 pp) | 69.6–87.9 | ±19.7 pp | **inside the floor** |
+| `heldout_depth3_slice` | ds-rendering | R2 depth-3 held-out beats C0 (n = 6 each) | 66.1 vs 53.3 (+12.8 pp) | 0.8–91.8 | ±54.8 pp (n = 6) | **inside the floor** |
+| `heldout_len6` | ds-generator | G2 6-line held-out is far below C0 | 28.1 vs 63.5 (-35.4 pp) | 42.1–92.0 | ±81.7 pp | **inside the floor** |
