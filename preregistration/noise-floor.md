@@ -217,3 +217,45 @@ beats six pools on two seeds for the same cell count, because the seed axis is t
 `redreq` and `required@8` are **n = 12**; `targets_depth3` coverage stays **n = 8**. The
 pre-registered expectations E1–E14 are scored against the 8-cell design they were written for
 **and** against all 12, and both are shown where they differ.
+
+---
+
+## Addendum 2 — 40 more Stage-1 seeds, held-out only (2026-09-25 03:35 UTC)
+
+`nf-2` finished its assigned work at 03:32 and would otherwise be deleted with ≈ 19 pod-hours of the
+run's 42-hour ceiling unused. This addendum spends ≈ 4.3 of them on the cheapest and most-asked-for
+measurement available.
+
+**What changes.** Stage-1 seeds **3–12** on each of P1–P4 — **40 more models**, `train.py` exactly as
+before, **held-out greedy only** (`eval_set.py --k 1 --temperature 0 --batch 512` on
+`data/p2/heldout.jsonl`). No ladder, no coverage. Held-out therefore goes to **4 pools × 13 seeds =
+52 cells**; the frozen-ladder and coverage floors stay at the 8 cells already reported and are
+**not** changed by this.
+
+**Why.** The held-out depth-3 slice / 6-line bin is the one quantity this run found to be *bimodal*
+rather than merely wide, and for a bimodal quantity the right estimand is **the probability that a
+training run lands in the high mode**, not a mean ± sd — `ds-rendering`'s reviewer said so and
+costed it at ≈ 87 seeds per arm. At 12 cells my high-mode proportion is 3/8 with a Wilson 95 %
+interval of **[0.137, 0.694]**, which is almost no information. At 52 cells the interval is roughly
+±0.13 instead of ±0.28. It is also the only way to give the **pool** variance component more than
+3 degrees of freedom, which is what E12 needs: with 13 seeds per pool the pool means are estimated
+well enough to say whether re-drawing the data set does anything at all.
+
+**Cost.** Measured on these pods: Stage-1 6,000 steps ≈ 21 min and held-out greedy ≈ 5 min, both at
+four concurrent jobs, so ≈ 6.5 pod-minutes per model → **≈ 4.3 pod-hours ≈ $2.1**. Run as four
+chains of ten models on `nf-2`.
+
+**Pre-registered expectations for the 52-cell held-out set** (written now, before any seed-3+ model
+exists):
+
+| # | quantity | expectation |
+|---|---|---|
+| E15 | high-mode proportion of the depth-3 slice (> 0.44) | **0.30–0.55**, Wilson half-width ≤ 0.15 |
+| E16 | cells landing in the gap 0.11–0.44 | **≤ 25 %** of 52 — the cell is genuinely bimodal, not merely wide |
+| E17 | pooled sd, held-out overall, at 52 cells | **0.030–0.050** (it is 0.040 at 11) |
+| E18 | var_pool for held-out overall, now with 12 df | **≤ 20 %** of var_resid — re-drawing the pool still does nothing |
+| E19 | the four pools' high-mode proportions | all four within **±0.20** of each other |
+
+**Reporting.** Every held-out floor states 52 cells; every ladder and coverage floor states 8. The
+n = 8 held-out figures already published in `numbers.md` § N2 are kept and shown beside the n = 52
+ones, so nothing already quoted by the sibling run `cap-horizon` moves silently.
