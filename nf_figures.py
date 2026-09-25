@@ -28,7 +28,7 @@ ROWS = [
     ('ladder_frozen_transfer_lstar', 'frozen ladder, transfer $L^*$', [9, 9]),
     ('cov_red_solved', '`targets_reductio_req` solved / 300', [31, 27]),
     ('cov_req8_solved', '`depth3_req` required@8 solved / 300', [165, 113]),
-    ('heldout_depth3_slice', 'held-out depth-3 slice (n = 500)', [0.488, 0.446]),
+    ('heldout_depth3_slice', 'held-out depth-3 slice (n = 500)', [0.488, 0.272]),
     ('heldout_len6', 'held-out greedy, 6-line bin', [0.686, 0.584]),
     ('heldout_len6_nopattern', 'held-out greedy, 6-line no-pattern', [0.818, 0.834]),
     ('heldout_overall', 'held-out greedy, overall', [0.9088, 0.8968]),

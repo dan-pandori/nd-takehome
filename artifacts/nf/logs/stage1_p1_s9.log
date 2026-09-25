@@ -1,0 +1,35 @@
+START 2026-09-25T05:01:30Z until [ -f artifacts/nf/heldout_p1_s5.done ]; do sleep 20; done; python3 train.py --data data/nf/train_p1.jsonl --heldout data/p2/heldout.jsonl --mode lean_seq --steps 6000 --bs 128 --out ckpts/nf/stage1_p1_s9.pt --cap 6 --seed 9
+params 3214336 mode lean_seq shift True
+train records 155000 max len 504
+step 200 loss 0.9882 lr 1.00e-03 34s val 0.9578
+step 400 loss 0.2405 lr 9.97e-04 78s val 0.1544
+step 600 loss 0.1473 lr 9.89e-04 121s val 0.1493
+step 800 loss 0.1035 lr 9.76e-04 164s val 0.0963
+step 1000 loss 0.0968 lr 9.58e-04 207s val 0.0871
+step 1200 loss 0.0850 lr 9.36e-04 250s val 0.0840
+step 1400 loss 0.0811 lr 9.08e-04 294s val 0.0821
+step 1600 loss 0.0849 lr 8.77e-04 336s val 0.0804
+step 1800 loss 0.0817 lr 8.41e-04 380s val 0.0812
+step 2000 loss 0.0759 lr 8.03e-04 424s val 0.0801
+step 2200 loss 0.0718 lr 7.61e-04 467s val 0.0775
+step 2400 loss 0.0771 lr 7.17e-04 510s val 0.0766
+step 2600 loss 0.0643 lr 6.70e-04 553s val 0.0764
+step 2800 loss 0.0675 lr 6.23e-04 596s val 0.0759
+step 3000 loss 0.0687 lr 5.74e-04 640s val 0.0757
+step 3200 loss 0.0602 lr 5.26e-04 683s val 0.0752
+step 3400 loss 0.0627 lr 4.77e-04 726s val 0.0748
+step 3600 loss 0.0595 lr 4.30e-04 769s val 0.0742
+step 3800 loss 0.0581 lr 3.83e-04 813s val 0.0738
+step 4000 loss 0.0560 lr 3.39e-04 857s val 0.0736
+step 4200 loss 0.0530 lr 2.97e-04 900s val 0.0737
+step 4400 loss 0.0540 lr 2.59e-04 943s val 0.0738
+step 4600 loss 0.0531 lr 2.23e-04 986s val 0.0739
+step 4800 loss 0.0593 lr 1.92e-04 1024s val 0.0734
+step 5000 loss 0.0544 lr 1.64e-04 1059s val 0.0731
+step 5200 loss 0.0519 lr 1.42e-04 1096s val 0.0731
+step 5400 loss 0.0538 lr 1.24e-04 1128s val 0.0730
+step 5600 loss 0.0519 lr 1.11e-04 1170s val 0.0731
+step 5800 loss 0.0544 lr 1.03e-04 1211s val 0.0731
+step 6000 loss 0.0530 lr 1.00e-04 1246s val 0.0729
+saved ckpts/nf/stage1_p1_s9.pt
+END 2026-09-25T05:45:14Z

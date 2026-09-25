@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 D = 'artifacts/nf'
 POOLS = ('p1', 'p2', 'p3', 'p4')
-SEEDS = (0, 1, 2)   # seed 2 added by pre-registration addendum 1 (held-out, frozen ladder, red + req8 coverage only)
+SEEDS = tuple(range(0, 13))   # 0-1 pre-registered; 2 by addendum 1; 3-12 by addendum 2 (held-out only)
 COV = {'d3': ('data/p2/targets_depth3.jsonl', 'depth3'),
        'req8': ('data/r3_1/depth3_req.jsonl', 'depth3'),
        'red': ('data/p2/targets_reductio_req.jsonl', 'derived_dn')}
@@ -259,20 +259,28 @@ def main():
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
     json.dump(out, open(a.out, 'w'), indent=1)
 
-    print(f'# noise-floor — eight null cells (pool x Stage-1 seed)\n')
-    print('| quantity | ' + ' | '.join(f'{p} s{s}' for p in POOLS for s in SEEDS) +
-          ' | n | mean | sd | max/min | MDD n=2 |\n|---|' + '---|' * (len(POOLS) * len(SEEDS) + 5))
+    print('# noise-floor — the null cells (pool x Stage-1 seed)\n')
+    print('| quantity | cells | mean | sd | min | max | max/min | MDD at n = 2 |\n|---|---|---|---|---|---|---|---|')
+    for name, _ in QUANTS:
+        f = floors.get(name)
+        if not f:
+            continue
+        fmt = (lambda x: f'{x:.4f}') if abs(f['mean']) < 3 else (lambda x: f'{x:g}')
+        print(f'| `{name}` | {f["n_cells"]} | {fmt(f["mean"])} | {f["sd"]:.4g} | {fmt(f["min"])} | {fmt(f["max"])} | '
+              + (f'{f["max_over_min"]:.2f}x' if f['max_over_min'] else '-')
+              + f' | {f["mdd_n2_abs"]:.4g}'
+              + (f' ({100 * f["mdd_n2_frac_of_mean"]:.0f} %)' if f['mdd_n2_frac_of_mean'] else '') + ' |')
+    print('\n### the eight pre-registered cells (Stage-1 seeds 0 and 1), per cell\n')
+    print('| quantity | ' + ' | '.join(f'{p} s{s}' for p in POOLS for s in (0, 1)) +
+          ' |\n|---|' + '---|' * (len(POOLS) * 2))
     for name, _ in QUANTS:
         f = floors.get(name)
         if not f:
             continue
         vals = f['values']
         fmt = (lambda x: f'{x:.4f}') if abs(f['mean']) < 3 else (lambda x: f'{x:g}')
-        print(f'| `{name}` | ' + ' | '.join(fmt(vals[f'{p}_s{s}']) if f'{p}_s{s}' in vals else '—' for p in POOLS for s in SEEDS)
-              + f' | {f["n_cells"]} | {fmt(f["mean"])} | {f["sd"]:.4g} | '
-              + (f'{f["max_over_min"]:.2f}x' if f['max_over_min'] else '-')
-              + f' | {f["mdd_n2_abs"]:.4g}'
-              + (f' ({100 * f["mdd_n2_frac_of_mean"]:.0f} %)' if f['mdd_n2_frac_of_mean'] else '') + ' |')
+        print(f'| `{name}` | ' + ' | '.join(fmt(vals[f'{p}_s{s}']) if f'{p}_s{s}' in vals else '—'
+                                            for p in POOLS for s in (0, 1)) + ' |')
     print('\n## variance components (unreplicated pools x seeds)\n')
     print('| quantity | MS_pool | MS_seed | MS_resid | var_pool | var_seed | var_resid | bimodality b |\n|---|' + '---|' * 7)
     for name, _ in QUANTS:
