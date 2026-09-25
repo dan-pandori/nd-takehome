@@ -479,3 +479,28 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   last round present, and `nf_analysis` counts only coverage runs whose `complete` flag is true.
   **Discarded unread:** six partial `targets_depth3` coverage runs (30–50 % of their pools) produced
   by the fault — `targets_depth3` is the pre-registered first drop and is not reported.
+- 2026-09-25 03:35  **Pre-registration addendum 2**, committed before any seed-3+ model existed:
+  `nf-2` had finished its assigned work at 03:32 with ≈ 19 of the run's 42 pod-hours unused, so it
+  and later `nf-1` ran **40 more Stage-1 seeds (3–12) on P1–P4, held-out greedy only** — 52 held-out
+  cells in total. Reason: the depth-3 / 6-line cell is the one quantity found to be *bimodal*, and for
+  a bimodal quantity the estimand is the probability of landing in the high mode, which at 12 cells
+  had a Wilson interval of [0.137, 0.694]. Cost ≈ 6.5 pod-minutes per model.
+- 05:00  **Gap-closer results.** `la_frozen_dsg_g1_s0` = **62** transfer solved (`L*` 9) against its
+  arm-mate's 170 — `ds-generator`'s G1 arm's own two seeds span 2.74× and bracket C0 (158/114) and G2
+  (44/125) entirely. `la_T1_dsc_a1_s1` = **847** (`L*` 11) and `la_frozen_dsc_a1_s1` = **194**
+  (`L*` 9) — `ds-composition`'s "A1's T1 ladder beats C0" reverses on seed 1 (847 vs C0's 965) and
+  its "A1 frozen `L*` 10 vs C0 9" dies (both 9).
+- 07:01  **Checker of record.** Every counted ladder and coverage proof re-checked through the
+  unmodified `nd2lean.py --check`: **28,737 / 28,737 both-accept, 0 disagreements**. Held-out greedy
+  re-checked on a 200-proof sample per cell × 52 cells: **10,400 / 10,400 both-accept**, of which
+  5,200 ran on `nf-1` (Lean 4.34.0) and 5,200 on the VPS (**Lean 4.34.1** — a different patch version,
+  disclosed; it agrees). In-loop gate over both pods: 20,010,560 samples, 12,033,100 distinct checked,
+  **808 Lean-accepts-`nd_verify`-rejects, 0 the other way** = 67.1 per million.
+- 07:05  Both pods deleted (`nf-1` 14.98 h / $7.34, `nf-2` 13.34 h / $6.54; **28.32 pod-hours,
+  $13.88** of the 42 h / $21 ceiling). RunPod balance $151.21, above proposal 11's $130 floor.
+- 07:30  **A note on what went into git.** `artifacts/nf/` is committed in full, including the 52
+  per-theorem `heldout_p<i>_s<k>.jsonl` files (≈ 345 MB of text). That is deliberate: the depth-3
+  slice, the 6-line no-pattern slice and the high-mode proportion are all derived from those
+  per-theorem records, and a reviewer re-deriving them from git alone would otherwise be stuck with
+  the `.json` summaries. The same tree is in the bucket. `data/nf/train_p<i>.jsonl` and
+  `ckpts/nf/*.pt` are **not** in git (`.gitignore`), only in the bucket.
