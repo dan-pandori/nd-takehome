@@ -906,3 +906,36 @@ Pooling G1's two seeds with the eight null cells gives **ten independent draws o
 distribution**: 62, 62, 96, 117, 170, 174, 177, 200, 262, 265 — mean 158.5, sd 73.6, **max/min
 4.27×**. (Reported separately as well as pooled, because G1 is a different generator flag set and
 its two cells were trained on different hardware; the pooled figures move the sd by under 2 %.)
+
+## N6. Gap-closer 2 — `ds-composition`'s A1 ladder at Stage-1 seed 1 (source: `artifacts/nf/la_{T1,frozen}_dsc_a1_s1/round_8.json`)
+
+Model: `ckpts/dsc/stage1_a1_s1.pt` from `hf://buckets/dan-pandori/nd-rl/ds-composition/ckpts/dsc/`,
+training set `data/dsc/train_a1.jsonl` from the same bucket — 3,214,336-parameter `lean_seq` GPT,
+cap 6, A1 = the pool's own length histogram. **Not retrained.** Same `ladder_ei` command, same pools,
+same `--batch 512`. C0 seed 1 was **not** re-run: `ds-generator` measured the identical checkpoint
+`ckpts/lf/stage1_a1_seq_s1.pt` with the identical command (T1 **965** / `L*` 11, frozen **114** /
+`L*` 9).
+
+| | C0 s0 | C0 s1 | A1 s0 | **A1 s1 (this run)** |
+|---|---|---|---|---|
+| T1 transfer solved / 2,285 | 856 *(`ds-composition`)* / 890 *(`ds-generator`)* | 965 | 965 | **847** |
+| T1 transfer `L*` | 12 | 11 | 11 | **11** |
+| frozen transfer solved | 158 | 114 | 205 | **194** |
+| frozen transfer `L*` | 9 | 9 | 10 | **9** |
+| frozen RL targets solved / 4,495 | — | — | — | **1,456** |
+
+`ds-composition`'s **entire ladder was Stage-1 seed 0** and carried three headline claims. With seed 1
+in hand:
+
+1. **"A1's T1 ladder beats C0" (965 vs 856) — dead.** It reverses on seed 1: **A1 847 vs C0 965**.
+   The sign is not stable across seeds, which is the strongest form of failure available.
+2. **"A1's frozen ladder beats C0" (205 vs 158) — same sign on both seeds** (+30 % on s0, +70 % on
+   s1) **but inside this run's floor**: the null cells span 62–265 and the MDD is 3.35×, against
+   A1/C0 ratios of 1.30× and 1.70×. Reportable only as "consistent in sign at n = 2, not resolvable".
+3. **"A1's frozen `L*` is 10 vs C0's 9" — dead.** On seed 1 both are 9. The `L*` floor is ±1.9 points.
+
+**A free third measurement of harness noise.** C0 seed 0's frozen ladder was measured at **158** by
+`ds-composition` and at **158** by `ds-generator`, on different pods and different GPU classes, from
+the byte-identical checkpoint and the identical command — and its T1 ladder at **856** and **890**
+(+4.0 %). So the *sampler and checker* contribute ≈ 0 to the frozen ladder and ≈ 4 % to a ladder
+that trains; the 4.27× spread in § N3 is all data-draw + Stage-1-draw, i.e. all training.
