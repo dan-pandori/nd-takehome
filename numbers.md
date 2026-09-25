@@ -848,3 +848,35 @@ frozen ladder is not bimodal — it is unimodal and very wide.
 **What an n = 2 comparison of frozen-ladder solves can say.** Nothing below a **2.4× ratio**
 (± 235 % of the mean). And non-parametrically, nothing at all: a two-sided exact permutation test at
 2 vs 2 has minimum attainable p = **1/3**.
+
+## N4. Coverage pass@2,000 — the eight null cells (source: `artifacts/nf/cov_{red,req8}_p<i>_s<k>.s0.jsonl`)
+
+Measured on `ckpts/nf/stage1_p<i>_s<k>.pt` (3,214,336-parameter `lean_seq` GPT, cap 6). Command,
+identical in every cell: `coverage.py --k 2000 --temperature 0.8 --seed 0 --batch 1000 --procs 2`.
+A sample counts only if `nd_verify` **and** Lean accept. `targets_depth3` coverage was **dropped**
+before it ran (the pre-registered first drop; see `log.md` 2026-09-24 17:45).
+
+| pool (n targets) | P1 s0 | P1 s1 | P2 s0 | P2 s1 | P3 s0 | P3 s1 | P4 s0 | P4 s1 | mean | sd | max/min | **MDD at n = 2** |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `targets_reductio_req` (300) | 31 | 19 | 39 | 43 | **6** | **46** | 34 | 27 | 30.6 | 13.2 | **7.67×** | **±71 (±232 %)** |
+| `r3_1/depth3_req`, required@8 (300) | 89 | 242 | 205 | **61** | 71 | 172 | 144 | 238 | 152.8 | 73.3 | **3.97×** | **±393 (±257 %)** |
+
+**E5 and E6 both missed, again with the floor far larger than predicted** (both predicted a max/min
+ratio of 1.5–3×; measured **7.67×** and **3.97×**). The `redreq` pool is the worse of the two because
+its counts are small: one null cell solves **6** of 300 and another **46**, and the control's own
+published values (**31 / 27**) sit in the middle.
+
+The published contrasts, against this floor:
+
+| standing comparison | original | inside the null range? |
+|---|---|---|
+| `ds-generator` G1 s1 vs C0 s1, required@8 | 259 vs 113 (2.3×) | **yes** — the null range is 61–242 and its ratio 3.97× |
+| `ds-generator` G1 s0 vs C0 s0, required@8 | 138 vs 165 | **yes** |
+| `ds-composition` A1 vs C0, `redreq` | 16 / 18 vs 28 / 26 | **yes** — the null range is 6–46 |
+| `ds-composition` A2 s1 vs C0 s1, `redreq` | 4 vs 26 | **yes** |
+| `ds-generator` G2 vs C0, `redreq` | **0 / 0** vs 31 / 27 | **no** — zero on both seeds is below the null minimum of 6 |
+| `ds-composition` A3 (cap 8) vs C0, `redreq` | 54 / 72 vs 28 / 26 | **72 is above the null maximum of 46; 54 is above it too** — the only coverage contrast in proposal 10 that clears its floor |
+
+**And again it is the individual training run.** `redreq`: var_pool **−84**, var_seed **−49**,
+var_resid **276**. `required@8`: var_pool **−3,401**, var_seed **−899**, var_resid **8,796**. Both
+between-factor components are indistinguishable from zero on both pools.

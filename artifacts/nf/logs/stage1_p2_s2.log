@@ -1,1 +1,8 @@
 START 2026-09-24T17:42:58Z until [ -f artifacts/nf/cov_req8_p1_s1.done ]; do sleep 30; done; python3 train.py --data data/nf/train_p2.jsonl --heldout data/p2/heldout.jsonl --mode lean_seq --steps 6000 --bs 128 --out ckpts/nf/stage1_p2_s2.pt --cap 6 --seed 2
+params 3214336 mode lean_seq shift True
+train records 155000 max len 542
+step 200 loss 0.9492 lr 1.00e-03 23s val 0.9465
+step 400 loss 0.2390 lr 9.97e-04 43s val 0.1723
+step 600 loss 0.1487 lr 9.89e-04 65s val 0.1293
+step 800 loss 0.1099 lr 9.76e-04 86s val 0.0932
+step 1000 loss 0.0894 lr 9.58e-04 107s val 0.0894

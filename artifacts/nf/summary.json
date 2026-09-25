@@ -198,35 +198,35 @@
    "coverage": {
     "d3": null,
     "req8": {
-     "n_targets": 238,
-     "targets_hit": 191,
-     "targets_hit_with_pattern": 191,
+     "n_targets": 300,
+     "targets_hit": 242,
+     "targets_hit_with_pattern": 242,
      "pattern": "depth3",
-     "per_sample_rate": 0.24631092436974789,
-     "samples": 476000,
-     "n_ok_samples": 117244,
+     "per_sample_rate": 0.23933,
+     "samples": 600000,
+     "n_ok_samples": 143598,
      "by_min_lines_ub": {
       "7": {
-       "n": 4,
-       "hit": 4,
-       "hit_with_pattern": 4
+       "n": 6,
+       "hit": 6,
+       "hit_with_pattern": 6
       },
       "8": {
-       "n": 234,
-       "hit": 187,
-       "hit_with_pattern": 187
+       "n": 294,
+       "hit": 236,
+       "hit_with_pattern": 236
       }
      },
-     "distinct_proofs": 285,
-     "distinct_ge8": 281,
+     "distinct_proofs": 356,
+     "distinct_ge8": 350,
      "written_hist": {
-      "7": 4,
-      "8": 272,
-      "9": 9
+      "7": 6,
+      "8": 339,
+      "9": 11
      },
-     "lean_checked": 285,
+     "lean_checked": 356,
      "lean_rejected": 0,
-     "complete": false
+     "complete": true
     },
     "red": {
      "n_targets": 300,
@@ -1224,35 +1224,35 @@
    "coverage": {
     "d3": null,
     "req8": {
-     "n_targets": 243,
-     "targets_hit": 191,
-     "targets_hit_with_pattern": 191,
+     "n_targets": 300,
+     "targets_hit": 238,
+     "targets_hit_with_pattern": 238,
      "pattern": "depth3",
-     "per_sample_rate": 0.3488991769547325,
-     "samples": 486000,
-     "n_ok_samples": 169565,
+     "per_sample_rate": 0.3390166666666667,
+     "samples": 600000,
+     "n_ok_samples": 203410,
      "by_min_lines_ub": {
       "7": {
-       "n": 4,
-       "hit": 4,
-       "hit_with_pattern": 4
+       "n": 6,
+       "hit": 6,
+       "hit_with_pattern": 6
       },
       "8": {
-       "n": 239,
-       "hit": 187,
-       "hit_with_pattern": 187
+       "n": 294,
+       "hit": 232,
+       "hit_with_pattern": 232
       }
      },
-     "distinct_proofs": 269,
-     "distinct_ge8": 265,
+     "distinct_proofs": 331,
+     "distinct_ge8": 325,
      "written_hist": {
-      "7": 4,
-      "8": 252,
-      "9": 13
+      "7": 6,
+      "8": 307,
+      "9": 18
      },
-     "lean_checked": 269,
+     "lean_checked": 331,
      "lean_rejected": 0,
-     "complete": false
+     "complete": true
     },
     "red": {
      "n_targets": 300,
@@ -2420,16 +2420,16 @@
  },
  "record": {},
  "gate": {
-  "calls": 271,
-  "samples": 14423680,
-  "parse_fail": 4944225,
-  "distinct_checked": 8470108,
-  "both_ok": 1027532,
+  "calls": 275,
+  "samples": 14647925,
+  "parse_fail": 5044556,
+  "distinct_checked": 8580717,
+  "both_ok": 1037151,
   "nd_ok_lean_rej": 0,
-  "nd_rej_lean_ok": 597,
-  "both_rej": 7441979,
-  "disagree_lines": 597,
-  "lean_only_per_million_distinct": 70.48316267041696,
+  "nd_rej_lean_ok": 602,
+  "both_rej": 7542964,
+  "disagree_lines": 602,
+  "lean_only_per_million_distinct": 70.15730736720487,
   "nd_only_per_million_distinct": 0.0
  },
  "floors": {
@@ -3339,33 +3339,128 @@
    }
   },
   "cov_req8_solved": {
-   "n_cells": 6,
+   "n_cells": 8,
    "values": {
     "p1_s0": 89,
+    "p1_s1": 242,
     "p2_s0": 205,
     "p2_s1": 61,
     "p3_s0": 71,
     "p3_s1": 172,
-    "p4_s0": 144
+    "p4_s0": 144,
+    "p4_s1": 238
    },
-   "mean": 123.66666666666667,
-   "sd": 58.766203439278485,
-   "cv": 0.47519841056020334,
+   "mean": 152.75,
+   "sd": 73.26614887810449,
+   "cv": 0.4796474558304713,
    "min": 61,
-   "max": 205,
-   "range": 144,
-   "max_over_min": 3.360655737704918,
+   "max": 242,
+   "range": 181,
+   "max_over_min": 3.9672131147540983,
    "largest_gap": 55,
    "largest_gap_between": [
     89,
     144
    ],
-   "bimodality_coefficient": 1.0191262957783733,
+   "bimodality_coefficient": 0.8753592216053484,
    "bimodal_consistent": true,
-   "mdd_n2_abs": 315.18154286652697,
-   "mdd_n2_frac_of_mean": 2.548637812936876,
-   "two_way": null,
-   "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power)."
+   "mdd_n2_abs": 392.9492887378732,
+   "mdd_n2_frac_of_mean": 2.5724994352724924,
+   "two_way": {
+    "levels_pool": [
+     "p1",
+     "p2",
+     "p3",
+     "p4"
+    ],
+    "levels_seed": [
+     0,
+     1
+    ],
+    "grand_mean": 152.75,
+    "pool_means": {
+     "p1": 165.5,
+     "p2": 133.0,
+     "p3": 121.5,
+     "p4": 191.0
+    },
+    "seed_means": {
+     "0": 127.25,
+     "1": 178.25
+    },
+    "MS_pool": 1994.8333333333333,
+    "MS_seed": 5202.0,
+    "MS_resid": 8796.333333333334,
+    "F_pool": 0.22678009776800936,
+    "F_seed": 0.5913827731251657,
+    "var_pool": -3400.7500000000005,
+    "var_seed": -898.5833333333335,
+    "var_resid": 8796.333333333334,
+    "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+   },
+   "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power).",
+   "seeds01_only": {
+    "n_cells": 8,
+    "values": {
+     "p1_s0": 89,
+     "p1_s1": 242,
+     "p2_s0": 205,
+     "p2_s1": 61,
+     "p3_s0": 71,
+     "p3_s1": 172,
+     "p4_s0": 144,
+     "p4_s1": 238
+    },
+    "mean": 152.75,
+    "sd": 73.26614887810449,
+    "cv": 0.4796474558304713,
+    "min": 61,
+    "max": 242,
+    "range": 181,
+    "max_over_min": 3.9672131147540983,
+    "largest_gap": 55,
+    "largest_gap_between": [
+     89,
+     144
+    ],
+    "bimodality_coefficient": 0.8753592216053484,
+    "bimodal_consistent": true,
+    "mdd_n2_abs": 392.9492887378732,
+    "mdd_n2_frac_of_mean": 2.5724994352724924,
+    "two_way": {
+     "levels_pool": [
+      "p1",
+      "p2",
+      "p3",
+      "p4"
+     ],
+     "levels_seed": [
+      0,
+      1
+     ],
+     "grand_mean": 152.75,
+     "pool_means": {
+      "p1": 165.5,
+      "p2": 133.0,
+      "p3": 121.5,
+      "p4": 191.0
+     },
+     "seed_means": {
+      "0": 127.25,
+      "1": 178.25
+     },
+     "MS_pool": 1994.8333333333333,
+     "MS_seed": 5202.0,
+     "MS_resid": 8796.333333333334,
+     "F_pool": 0.22678009776800936,
+     "F_seed": 0.5913827731251657,
+     "var_pool": -3400.7500000000005,
+     "var_seed": -898.5833333333335,
+     "var_resid": 8796.333333333334,
+     "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+    },
+    "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power)."
+   }
   },
   "ladder_frozen_transfer_solved": {
    "n_cells": 8,
