@@ -60,3 +60,31 @@
   `ds-generator` on the identical checkpoint and command (T1 965 / frozen 114). Projection ≈ 33
   pod-hours ≈ $16.2. Say if you would rather I had held to 36 h and dropped the A1 gap-closer, or
   conversely spent the remaining headroom on `targets_depth3` coverage.
+
+# Questions for Dan (stage1-dynamics). Each has the default I follow if unanswered.
+
+- **2026-09-27 18:35 UTC (budget ledger changed by something outside this session)** — My run brief
+  declares **$15 / 30 pod-hours**. `~/podbudget.log` shows `stage1-dynamics set HOURS=30 USD=15` at
+  **17:49:00** (the run's start minute, i.e. the driver registering the brief) and then
+  `set HOURS=60 USD=30` at **17:54:06** — five minutes later, before my session had created a pod or
+  touched `podbudget`. I did not do it and cannot tell what did; the only other actor I know of is the
+  orchestration harness or the sibling `lean-judge` session. This is the same *class* of thing as the
+  `pod_budget_watch` mis-attribution `noise-floor` reported (a guard that sourced every run's config
+  and acted on the wrong run's numbers), so it seems worth telling you rather than quietly enjoying
+  the extra $15. **Default I am following:** I set it back to the brief's **30 h / $15** and I am
+  running to that. It does not bind — the measured projection for the whole design, including the
+  addendum, is ≈ 10–12 pod-hours and ≈ $5.
+- **2026-09-27 18:35 UTC (training is not reproducible from its seed, and what that implies)** — Two
+  runs of the **identical** `train.py` command line on one A40 diverge by step 100 (loss 1.3698 vs
+  1.3632). bf16 autocast plus non-deterministic reduction kernels; the project has never set
+  `torch.use_deterministic_algorithms(True)`. This very likely *is* `NOISE_FLOOR.md`'s "≈ 95 % of the
+  variance is the individual training run". Two things follow and only the first is mine to decide.
+  **(a) Default I am following:** I did **not** force determinism — it would change the code path
+  every past number, including the 52-cell floor this run is read against, was measured on — and
+  instead added pre-registered **arm R** (addendum 1) to measure the same-command floor directly, so
+  that every cross-run difference in this run is stated beside the right floor rather than beside the
+  cross-seed one. **(b) For you:** if you want *future* runs reproducible, the change is
+  `torch.use_deterministic_algorithms(True)` + `CUBLAS_WORKSPACE_CONFIG=:4096:8` in `train.py`, which
+  would make `--seed` mean what the project has been assuming it means, at some throughput cost and
+  at the price of a discontinuity with every number measured before it. I have not made that change;
+  say if you want it and I will measure the cost and propose it as a one-line patch.

@@ -50,6 +50,25 @@ def chain(cid):
         out.append((f'ev_ff_s{k}', f'{EV} --texts --skip_done --ckpts {f}'))
         out.append((f'ev_f_s{k}', f'{EV} --skip_done --ckpts ckpts/sd/f_s{k}.step*.pt '
                                   f'&& gzip -f artifacts/sd/ev/f_s{k}.step*.jsonl'))
+    elif cid == 'r':
+        # addendum 1: the same-command replicate floor at 6,000 steps -- four extra runs of the exact
+        # c_s0 command and four of the exact c_s1 command (c_s0/c_s1 themselves are the fifth of each).
+        cks = []
+        for k in (0, 1):
+            for r in 'abcd':
+                ck = f'ckpts/sd/r6{r}_s{k}.pt'
+                out.append((f'r6{r}_s{k}', train(CTL, k, 6000, ck, f'r6{r}_s{k}', 'cosine')))
+                cks.append(ck)
+        out.append(('ev_r6', f'{EV} --skip_done --ckpts ' + ' '.join(cks)))
+    elif cid == 'r24':
+        # addendum 1: the same-command replicate floor at 24,000 steps -- two extra runs of the exact
+        # w_s0 command, final checkpoint only (no trajectory).
+        cks = []
+        for r in 'ab':
+            ck = f'ckpts/sd/r24{r}_s0.pt'
+            out.append((f'r24{r}_s0', train(CTL, 0, 24000, ck, f'r24{r}_s0', 'wsd', ' --decay_frac 0.2')))
+            cks.append(ck)
+        out.append(('ev_r24', f'{EV} --skip_done --ckpts ' + ' '.join(cks)))
     elif cid == 'smoke':
         # does --resume continue the run it branched from?  A 400-step wsd run with a state at 200,
         # and the same schedule resumed from that state: steps 300 and 400 must print the same loss.
@@ -63,7 +82,7 @@ def chain(cid):
     return out
 
 
-CHAINS = [f'w{k}' for k in WSEEDS] + [f'f{k}' for k in FSEEDS]
+CHAINS = [f'w{k}' for k in WSEEDS] + [f'f{k}' for k in FSEEDS] + ['r', 'r24']
 
 if __name__ == '__main__':
     what = sys.argv[1] if len(sys.argv) > 1 else 'chains'
@@ -78,7 +97,7 @@ if __name__ == '__main__':
             js = chain(cid)
             st = sum(int(c.split('--steps ')[1].split()[0]) for _, c in js if '--steps' in c)
             # a resumed run only runs the tail
-            if cid.startswith('w'):
+            if cid.startswith('w') and cid != 'w':
                 st = 24000 + 1200 + 2400 + 6000
             tot += st
             print(f'{cid}\t{len(js)} jobs\t{st} steps')

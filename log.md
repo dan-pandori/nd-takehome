@@ -504,3 +504,58 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   per-theorem records, and a reviewer re-deriving them from git alone would otherwise be stuck with
   the `.json` summaries. The same tree is in the bucket. `data/nf/train_p<i>.jsonl` and
   `ckpts/nf/*.pt` are **not** in git (`.gitignore`), only in the bucket.
+
+## stage1-dynamics (2026-09-27)
+
+- 17:49  Run start. Read `NOISE_FLOOR.md`, the noise-floor experiment summary, `train.py` (validation
+  loss at lines 93 and 114–121, schedule at 96), `lean_gate.py`, `lean_tok.py`, `sample.py`.
+  Confirmed on file: `train.py` takes `load(a.heldout, tok, 0)[:2000]`, and `data/p2/heldout.jsonl`
+  is sorted by `n_lines` with 1,000 per length 2–6, so the on-file validation loss has only ever
+  measured **lengths 2 and 3**. The depth-3 slice is `pat.depth3`: **500 records, every one inside
+  the 6-line bin**.
+- 17:58  `sd_pool.py` → `data/sd/train_fresh.jsonl`: the four noise-floor pools (620,000 records)
+  de-duplicated by atom-renaming class. **572,759 survive**; 47,241 dropped as duplicate classes
+  (p2 loses 9,092 to p1, p3 16,160, p4 21,989); **0** collide with a held-out class. Composition
+  18.4/20.4/20.4/20.4/20.5 % at lengths 2–6 against the control's flat 20 % — the length-2 class
+  universe is smaller so more of its draws collide. Report: `data/sd/pool_fresh.json`.
+- 18:05  `train.py` instrumented; `sd_eval.py` written (Lean-alone judge: strict `lean_seq` grammar
+  parse of the sampled ids **and** `lean_gate.lean_check` on the literal Lean text; `nd_verify` is
+  never called). Pre-registration committed `5fddcc7` **18:05:40 UTC**, pushed. No pod of this run
+  existed at that moment (`~/pods.log`: the previous entry is sibling run `lean-judge`'s `lj1` at
+  17:38:36, created before this run started at 17:49).
+- 18:11  Pod `sd-1` created (`5rzptucjoxwn7t`), **NVIDIA A40, SECURE, catalogue $0.49/h** — the real
+  billed rate is recorded again at the end from `podbudget`. Machine: **96 vCPU, 503 GB RAM, A40
+  46,068 MiB, torch 2.8.0+cu128, no cgroup v2 CPU quota, 17 GB free on the container overlay**.
+  Lean 4.34.0 installed via elan. The `hf` CLI cannot be pip-installed on this image (PEP 668
+  externally-managed environment), so checkpoints are pulled to the VPS and uploaded from there.
+  `pod/lf/gate_selftest.py` wants `data/heldout.jsonl`, which this run does not push; the Lean path
+  is self-tested by the `smoke_ev` job instead, which is the judge this run actually uses.
+- 18:19  **Smoke test (chain `smoke`).** Two bugs found and fixed: `torch.set_rng_state` rejected the
+  resumed state because `load_ckpt(map_location=dev)` had moved it to the GPU (now `.cpu().to(uint8)`),
+  and `sample.generate` assigns python lists into its `raw` argument so it must be a numpy array,
+  not a tensor. After the fix: 400 steps in 22 s solo (**0.0475 s/step**, 3 s of it in the per-bin
+  validation = 7.9 % overhead at the real cadence of one validation per 200 steps), ~30 s to load and
+  `nd_verify`-assert the 155,000-record training set, and `sd_eval.py` on 5,000 theorems in **14 s
+  wall (8 s sampling + 4 s Lean, 3 Lean workers)**. The brief's estimates (21.5 min per 6k run,
+  1–2 min per evaluation) are the **4-concurrent-job** figures, not solo.
+- 18:24  **The `--resume` check the pre-registration promised, and what it found.** `smoke_b`
+  (resumed from `smoke_a`'s step-200 state) does **not** reproduce `smoke_a`'s step-300 loss exactly:
+  0.5892 vs 0.5809. So I re-ran the *identical* `smoke_a` command as `smoke_a2`: it gives 0.5902 —
+  i.e. **two runs of the same command line diverge by more (|Δ| 0.0093) than the resumed branch
+  differs from the run it branched from (|Δ| 0.0083)**, and they already differ at step 100 (loss
+  1.3698 vs 1.3632, `val2k` 1.2536 vs 1.3211). Training on this A40 is not reproducible from its
+  seed (bf16 autocast, non-deterministic reduction kernels; the project has never set
+  `torch.use_deterministic_algorithms`). **Verdict: `--resume` is as faithful as the platform is to
+  itself, so the pre-registered failure mode does not fire** — but "paired seeds" controls only the
+  initialisation and the batch order. I did **not** force determinism: that would change the code path
+  every past number was measured on, including the 52-cell floor this run is read against. Instead,
+  addendum 1 adds **arm R** to measure the same-command floor (commit `2ea21a8`, 18:30:46 UTC, before
+  any R run existed). Evidence: `artifacts/sd/logs/smoke_{a,a2,b}.log`, `artifacts/sd/m_smoke_*.jsonl`.
+- 18:26  Chains `w0 w1 w2` launched on `sd-1`. At **3 concurrent jobs one A40 does 19.2 steps/s
+  aggregate against 21.0 solo** — the card is saturated by a single job at bs 128, so extra
+  concurrency buys wall-clock smoothing, not throughput, and the run's cost is set by its step count.
+- 18:30  `sd-2` (`n6p8yt8s5y38wb`), `sd-3` (`p24mlbpjfrxek3`), `sd-4` (`bwvx4zpmg6z07p`) created, all
+  A40. `w3 w4 w5` on `sd-2`, `w6 w7` on `sd-3`.
+- 18:31  `r` on `sd-3`; `f0 f1 f2 f3` and `r24` on `sd-4`. All 14 chains running. `pod/sd/jobs.py`
+  emits arm R's commands from the same `train()` helper as arm C, so `r6a_s0`'s command line is
+  byte-identical to `c_s0`'s except for `--out`/`--metrics` (checked by diff, logged here).
