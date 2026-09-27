@@ -114,3 +114,22 @@ numbers go into `numbers.md` § noise-floor as each stage lands rather than at t
   in `QUESTIONS.md` (the `pod_budget_watch` bug I fixed; the budget raise the measured cost forced).
 
 NOISE-FLOOR DONE 2026-09-25T07:25:00Z
+
+# stage1-dynamics (does Stage-1 saturate on long proofs, and is the schedule right?)
+
+Run id `stage1-dynamics`, executor agent:claude, worktree `~/work/stage1-dynamics`, branch
+`dan_stage1-dynamics` from the fork's `origin/dan`. Budget $15 / 30 pod-hours.
+
+- 2026-09-27 17:49  Run start. Read `NOISE_FLOOR.md`, the noise-floor experiment summary and
+  `train.py`; confirmed the on-file validation loss takes the first 2,000 records of a
+  length-sorted held-out file, i.e. lengths 2 and 3 only, and that the depth-3 slice is 500
+  records all inside the 6-line bin.
+- 18:00  `sd_pool.py`: arm F's fresh set is the four noise-floor pools de-duplicated by
+  atom-renaming class — **572,759 of 620,000 records** survive, **0** collide with a held-out
+  class (`data/sd/pool_fresh.json`).
+- 18:05  `train.py` instrumented (all opt-in, default path unchanged): `--val_bins` per-length and
+  depth-3 validation loss on the whole held-out file with `val2k` kept under its own name,
+  `--metrics`, `--sched wsd --decay_frac`, `--ckpt_every`, `--state_at`, `--resume`.
+  `sd_eval.py` written: held-out greedy per length bin and depth-3 slice, judged by **Lean alone**.
+- 18:06  Pre-registration `preregistration/stage1-dynamics.md` committed (16 numbered expectations
+  with falsifiers, budget and stop rule). No pod of this run exists yet.
