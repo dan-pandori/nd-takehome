@@ -228,3 +228,39 @@ C at E10; F vs W at E12) actually needs. It is cheap: ≈ 1.5 GPU-hours, ≈ $0.
 **Drop order unchanged except that R sits just above F's seeds**: R-6k is the cheapest arm in the run
 and the one that tells every other comparison what it is allowed to claim, so it is dropped last
 after C and W; R-24k is dropped before F entirely.
+
+---
+
+## Addendum 2 — what exactly oscillates (2026-09-27 20:25 UTC)
+
+Committed before the runs it covers exist, and before any pass@k number of this run exists. Arm F's
+trajectories, the first to finish, showed something neither the brief nor my pre-registration
+anticipated: **held-out accuracy on the depth-3 slice does not rise monotonically, it flickers**, by
+almost the full range of the 52-cell noise floor, inside a single run. `f_s1`: 0.806 at step 8,000 →
+0.134 at 10,000 → 0.018 at 14,000 → 0.366 at 16,000 → 0.152 at 24,000. `f_s0`: 0.016 at 12,000 →
+0.666 at 14,000 → 0.934 at 24,000. The **per-bin validation loss moves with it** (f_s1's depth-3 loss
+0.0330 → 0.0594 → 0.0719 → 0.0379 → 0.0560 at those same steps) while **`val2k` is flat and monotone
+throughout** (0.0811 → 0.0722) and the 6-line non-depth-3 loss is nearly monotone (0.0718 → 0.0408).
+
+Two readings remain, and they recommend opposite things:
+
+- **(i) the pattern is genuinely lost and regained** — the model's depth-3 competence oscillates, and a
+  checkpoint at a loss trough is a better model;
+- **(ii) the greedy path is on a knife-edge** — the competence is there throughout and only the T = 0
+  argmax route in and out of it flips, in which case every bimodality this project has reported on
+  greedy readouts is a measurement artefact and pass@k would show nothing.
+
+**The measurement.** `sd_passk.py` (a new file; nothing the running jobs use is touched) evaluates
+**pass@8 at T = 0.8 on the 500-record depth-3 slice** at two within-run pairs of trajectory
+checkpoints chosen for their *loss*, not their accuracy — one trough and one peak in each run:
+`f_s1.step08000` (loss 0.0330) vs `f_s1.step14000` (0.0719), and `f_s0.step12000` (0.1343) vs
+`f_s0.step14000` (0.0324). Judged by Lean alone, as everything else here. ≈ 4 evaluations of 4,000
+samples: minutes, cents.
+
+- **E21.** Reading (i): pass@8 moves in the same direction as greedy within each pair, by **≥ 20 pp**
+  on at least three of the four ordered comparisons, and the low-greedy checkpoint stays below
+  **0.60** at pass@8. *Falsifier of (i): pass@8 differs by < 10 pp within both pairs while greedy
+  differs by > 40 pp — then the oscillation is a greedy-decode artefact (reading (ii)) and I will say
+  so in the write-up as the more important result of the two.*
+- **E22.** Either way, pass@8 > greedy at every one of the four checkpoints (a sanity check on the
+  sampler; a violation means the pass@k path is wrong, not that the model is strange).
