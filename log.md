@@ -728,3 +728,24 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   trajectory checkpoints. Both are reported; the pre-registered one is scored as missed (E11, E12).
 - 21:07  Deliverables written: `run_stage1_dynamics.md` (400 words of body + three figures),
   `numbers.md` §§ S1–S11 (S11 scores all 22 expectations one by one), `STATUS.md`.
+- 21:13  **Independent re-check of the counted proofs, no GPU** (`sd_recheck.py`, on the VPS, using
+  run `lean-judge`'s `lean_judge.py` now that it is on `origin/dan` — the brief's "re-judge the
+  stored outputs once it lands"). 600 accepted proofs drawn at random from the 166,149 stored with
+  their text, decoded back to the ND proof they denote and re-translated by `nd2lean` into a
+  *different* Lean source: **600/600 accepted, 0 disagreements**, 4.5 s of Lean
+  (`artifacts/sd/recheck.json`). A first pass at n = 400 reported 5 "re-parse failures"; they were a
+  bug in the re-check script's text→token step (it split the single vocabulary token `Or.elim` on
+  its `.elim` suffix, so it hit exactly the ≈ 1.4 % of proofs using `ORE`). `sd_eval.py` decodes from
+  the sampled token **ids**, never from text, so no counted number was affected. Fixed and re-run.
+- 21:15  Merged `origin/dan` (run `lean-judge`'s Lean-only judge) into this branch. The only
+  conflicts were the five end-of-file appends both runs made to `.gitignore`, `QUESTIONS.md`,
+  `STATUS.md`, `log.md` and `numbers.md`; both sides kept. **`train.py` merged cleanly** — `lean-judge`
+  did not touch it and this run's additions to it are all opt-in flags. Verified after the merge
+  that every `lean-judge` file is byte-identical to `origin/dan` and that no deliverable of this run
+  changed. The branch now merges into `dan` with no conflicts.
+- 21:16  **Reproducibility check.** `1,100` slice counts (overall / 2-line / 6-line / depth-3, over
+  all 274 evaluations) re-derived from the committed per-theorem records alone: **0 mismatches**
+  against `artifacts/sd/summary.json`. `nd_verify` is blob-identical to `origin/main`; the only
+  pre-existing code file this run modified is `train.py`; `lean_gate.py`, `lean_judge.py`,
+  `eval_set.py`, `expert_iter.py`, `ladder_ei.py`, `coverage.py`, `eval_targets.py`, `grpo.py`,
+  `sample.py`, `nd2lean.py`, `model.py` and `lean_tok.py` are untouched by it.

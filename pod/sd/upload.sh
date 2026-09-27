@@ -12,6 +12,6 @@ case "${1:-all}" in
   artifacts|all) hf buckets sync artifacts/sd "$B/artifacts/sd" ;;
 esac
 case "${1:-all}" in
-  data) hf buckets sync data/sd "$B/data/sd" ;;
+  data|all) hf buckets sync data/sd "$B/data/sd" ;;
 esac
 echo "uploaded ${1:-all} to $B"

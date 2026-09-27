@@ -178,7 +178,8 @@ Run id `stage1-dynamics`, executor agent:claude, worktree `~/work/stage1-dynamic
   Cost **8.74 pod-hours, $4.29** of a 30 h / $15 budget.
 - Deliverables: `run_stage1_dynamics.md`, `numbers.md` §§ S1–S11, `log.md`,
   `preregistration/stage1-dynamics.md` (+ 2 addenda), `figures/sd_{valloss,traj,proxy}.png`,
-  `artifacts/sd/summary.json`, the `train.py` instrumentation (default path unchanged) and
+  `artifacts/sd/summary.json`, `artifacts/sd/recheck.json`, the `train.py` instrumentation (default
+  path unchanged) and
   `sd_{pool,eval,passk,analysis,tables,figures}.py`, `pod/sd/`, bucket
   `hf://buckets/dan-pandori/nd-rl/stage1-dynamics/{ckpts,artifacts,data}`. Two questions for Dan in
   `QUESTIONS.md` (the budget ledger changed outside this session; whether to make training

@@ -1307,6 +1307,23 @@ Sources: 274 per-checkpoint summaries `artifacts/sd/ev/<stem>.json` (+ the per-t
 **0.0880 / 0.8180** against **0.0860 / 0.8180**. Five extra theorems in 20,000 theorem-cells, every
 difference in the direction policy predicts (Lean alone ≥ Lean ∧ `nd_verify`), none the other way.
 
+### S1b  The counted proofs, re-checked by an independent Lean route (no GPU)
+
+`sd_recheck.py`, run on the VPS after run `lean-judge` landed on `origin/dan`, as the brief asks.
+This run counts a sample iff its **literal sampled Lean text** parses in the strict `lean_seq`
+grammar and Lean accepts that literal text. The re-check takes a random **600** of the **166,149**
+accepted proofs stored across the 47 evaluations that keep their text, decodes each back to the ND
+proof it denotes (`lean_tok.inverse`), and asks **`lean_judge.verify_text`**, which re-translates
+that ND proof through `nd2lean.translate` and checks the **translation** in Lean — a different Lean
+source for the same proof. **600 of 600 accepted, 0 grammar re-parse failures, 0 disagreements**
+(4.5 s of Lean; `artifacts/sd/recheck.json`). Nothing counted in this run depends on which of the
+two renderings was checked.
+
+*(A first pass at n = 400 reported 5 re-parse failures. They were a bug in `sd_recheck.py`'s
+text→token step, which split the single vocabulary token `Or.elim` on its `.elim` suffix, and so hit
+exactly the ≈ 1.4 % of proofs that use `ORE`. `sd_eval.py` decodes from the sampled token **ids** and
+never from text, so no counted number was affected; the fix is recorded in `sd_recheck.py`.)*
+
 ### S2  Q1 — long proofs are nowhere near saturated at 6,000 steps
 
 Within seed, decayed W-6k → decayed W-24k, 8 paired seeds (`summary.json` → `questions.Q1_saturation`):
