@@ -307,7 +307,7 @@ def generate(model, tok, prompts, greedy=True, temperature=1.0, max_new=400, bat
         torch.cuda.empty_cache()   # hand reserved memory back to co-tenant jobs
     if is_lean and gate:
         from lean_gate import gate as _gate
-        res = _gate(tok, prompts, res, texts)   # run ds-generator: Lean AND nd_verify (this branch's gate signature)
+        res = _gate(tok, prompts, res, texts)   # Lean alone decides (2026-09-27): accepted samples come back as CLEAN ND strings, rejects marked 'LEANREJ '
     elif is_lean:
-        res = texts
+        res = texts            # gate=False: literal Lean texts, for render/decode diagnostics only -- NOT judgeable
     return res

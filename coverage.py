@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import torch
 from model import load_ckpt
 from sample import generate_ids
-from nd_verify import verify_text
+from lean_judge import judge_many    # Lean alone decides (Dan, 2026-09-27)
 from prune import pruned_length
 from normalize import norm
 from patterns import classify, PATTERNS
@@ -29,14 +29,12 @@ BUDGETS = (32, 128, 512, 1000, 10000, 100000)
 PATS = list(PATTERNS) + ['derived_ore_strict', 'derived_dn']
 
 
-def _verify_one(args):
-    """verify + classify one distinct normalised string (CPU); run in a fork pool (--procs) since the verifier dominates
-    the wall clock on hard targets where ~every sample is distinct. Pure function of (prompt, s): output identical to the
-    sequential version."""
-    prompt, s = args
-    ok, reason, nl = verify_text(prompt + ' ' + s)
-    if not ok:
-        return None
+def _class_one(args):
+    """dependency-pruned length + pattern labels of one ACCEPTED distinct normalised string (CPU); run in a fork pool
+    (--procs). Pure function of (prompt, s, n_lines): output identical to the sequential version.
+    Judging is no longer done here: Lean alone decides (Dan, 2026-09-27) and its checks must be batched over all of a
+    theorem's distinct strings, so `judge_many` runs once in the main process before this pool is used (pitfall 4)."""
+    prompt, s, nl = args
     cl = classify(s) or {}
     return {'written': nl, 'pruned': pruned_length(prompt, s), 'pat': {p: bool(cl.get(p)) for p in PATS}}
 
@@ -61,9 +59,7 @@ def main():
     si, sn = map(int, a.shard.split('/'))
     dev = 'cuda'
     model, tok, _ = load_ckpt(a.ckpt, dev)
-    is_lean = hasattr(tok, 'statement')   # Lean-format model (ds-generator, 2026-09-22): a distinct proof counts iff nd_verify AND Lean accept
-    if is_lean:
-        from lean_gate import lean_check
+    is_lean = hasattr(tok, 'statement')   # Lean-format model: tok.last_text is the literal sampled Lean text
     recs = [json.loads(l) for l in open(a.inp) if l.strip()]
     recs = [r for i, r in enumerate(recs) if i % sn == si]
     if a.limit:
@@ -106,21 +102,21 @@ def main():
                         if is_lean:
                             first_text[s] = tok.last_text
                 n += b
-            # verify distinct strings once
+            # judge every distinct NORMALISED string once, in ONE batched Lean run (pitfall 3: this file normalises
+            # before judging, so the verdict is keyed on the normalised string -- nd2lean's rendering of norm(nd) differs
+            # from the literal sampled text only by hypothesis renaming, which Lean's verdict is invariant to; measured
+            # identical on 18,553 stored samples, see numbers.md S lean-judge).
             strs = list(counts.keys())
-            jobs = [(r['prompt'], s) for s in strs]
-            res = pool.map(_verify_one, jobs, chunksize=32) if pool else [_verify_one(j) for j in jobs]
-            lean_rejected = []; n_lean_checked = 0
-            if is_lean:
-                # Lean on the literal text of every distinct nd_verify-accepted proof; a proof counts only if both accept
-                idx = [i for i, x in enumerate(res) if x]
-                items = [(tok.statement(r['prompt']), first_text[strs[i]]) for i in idx]
-                lok, _, _ = lean_check(items); n_lean_checked = len(items)
-                for i, ok in zip(idx, lok):
+            verdicts = judge_many([(r['prompt'], s) for s in strs])
+            acc = [i for i, (ok, _, _) in enumerate(verdicts) if ok]
+            n_lean_checked = len(strs); n_lean_rejected = len(strs) - len(acc)
+            jobs = [(r['prompt'], strs[i], verdicts[i][2]) for i in acc]
+            cls = pool.map(_class_one, jobs, chunksize=32) if pool else [_class_one(j) for j in jobs]
+            res = [None] * len(strs)
+            for i, x in zip(acc, cls):
+                res[i] = x
+                if is_lean:
                     res[i]['lean_text'] = first_text[strs[i]]
-                    if not ok:
-                        lean_rejected.append({'proof': strs[i], 'lean_text': first_text[strs[i]], 'count': counts[strs[i]], 'first': first_idx[strs[i]]})
-                        res[i] = None
             ok_proofs = [{'proof': s, 'count': counts[s], 'written': x['written'], 'pruned': x['pruned'], 'first': first_idx[s], 'pat': x['pat'],
                           **({'lean_text': x['lean_text']} if is_lean else {})}
                          for s, x in zip(strs, res) if x]
@@ -144,7 +140,8 @@ def main():
                    'first_hit': first_hit, 'solved_within': {str(B): bool(first_hit is not None and first_hit <= B) for B in BUDGETS},
                    'written_hist': dict(sorted(wh.items())), 'pruned_hist': dict(sorted(ph.items())),
                    'hits_by_pattern': hits_by_pattern, 'distinct_by_pattern': distinct_by_pattern, 'proofs': ok_proofs,
-                   **({'lean': True, 'n_lean_checked': n_lean_checked, 'n_lean_rejected': len(lean_rejected), 'lean_rejected': lean_rejected} if is_lean else {})}
+                   'judge': 'lean-only', 'n_lean_checked': n_lean_checked, 'n_lean_rejected': n_lean_rejected,
+                   **({'lean': True} if is_lean else {})}
             fo.write(json.dumps(rec) + '\n'); fo.flush()
             torch.cuda.empty_cache()
             n_done += 1

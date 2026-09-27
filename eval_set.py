@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import torch
 from model import load_ckpt
 from sample import generate
-from nd_verify import verify_text
+from lean_judge import verify_text, judge_many    # Lean alone decides (Dan, 2026-09-27)
 from prune import pruned_length
 
 
@@ -27,11 +27,15 @@ def wilson(k, n, z=1.96):
 def judge(recs, proofs_per, lenfield):
     """recs: list of theorem records; proofs_per: list of list of proof strings. Returns rows + summary."""
     rows = []
+    # one batched judging call for every sample of every theorem: after sample.generate() these are all registry hits,
+    # and where they are not (a caller that never saw the gate) the Lean runs are batched (pitfall 4).
+    flat = judge_many([(r['prompt'], p) for r, ps in zip(recs, proofs_per) for p in ps])
+    at = 0
     for r, ps in zip(recs, proofs_per):
         good, wl, pl, reasons = [], [], [], []
         fail_example = None
         for p in ps:
-            ok, reason, nl = verify_text(r['prompt'] + ' ' + p)
+            ok, reason, nl = flat[at]; at += 1
             if not ok and fail_example is None:
                 fail_example = p
             if ok:

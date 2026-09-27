@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import torch
 from model import load_ckpt
 from sample import generate
-from nd_verify import verify_text
+from lean_judge import verify_text    # Lean alone decides (Dan, 2026-09-27); judging goes through eval_set.judge
 from prune import pruned_length
 from gen import canon_key
 from normalize import norm

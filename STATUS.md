@@ -114,3 +114,11 @@ numbers go into `numbers.md` § noise-floor as each stage lands rather than at t
   in `QUESTIONS.md` (the `pod_budget_watch` bug I fixed; the budget raise the measured cost forced).
 
 NOISE-FLOOR DONE 2026-09-25T07:25:00Z
+
+## Run `lean-judge` (executor, 2026-09-27)
+
+START 2026-09-27T17:20Z. Making **Lean the only judge** on the fork's `dan` branch (Dan, 2026-09-27):
+`lean_judge.py`, the gate change, the six loop-file import swaps, `lean_check.py` with `Not.elim`,
+tests, `LEAN_JUDGE.md`, and a seven-part acceptance test. Pre-registered in
+`preregistration/lean-judge.md` (commit `579ee16`, before any pod). Pod budget 8 h / $4; one A40
+(`lj1`, $0.49/h) for acceptance test 5 only.

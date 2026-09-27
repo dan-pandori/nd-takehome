@@ -11,7 +11,7 @@ transfer and held-out, mean reward, fraction of groups with reward variance per 
       --transfer data/p2/transfer_depth3.jsonl --heldout data/p2/heldout.jsonl --group 8 --prompts 64 --lr 1e-4 --seed 0
 
 Update: for each step sample P prompts (targets, cycling through a shuffled order) x G completions at temperature T;
-reward = nd_verify accepts the completion as a proof of the prompted sequent; advantage A = r - mean(r over the group);
+reward = Lean accepts the completion as a proof of the prompted sequent; advantage A = r - mean(r over the group);
 loss = - sum_i sum_t A_i * log pi(y_t | prompt, y_<t) / (P * G * --divisor)  (divisor fixed = --max_new, not the length),
 one Adam step (grad-norm clip 1.0).  Sampling uses the current parameters (no replay), so the update is on-policy.
 """
@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import torch, torch.nn.functional as F
 from model import load_ckpt
 from sample import generate_ids, generate
-from nd_verify import verify_text
+from lean_judge import judge_many    # Lean alone decides (Dan, 2026-09-27)
 from prune import pruned_length
 from normalize import norm
 from eval_set import judge, summarize
@@ -101,8 +101,10 @@ def main():
         texts = [tok.decode(c) for c in comps]
         rewards = torch.zeros(len(pid), device=dev)
         rnum = boundaries.get(min(b for b in boundaries if b >= step), a.rounds) if any(b >= step for b in boundaries) else a.rounds
-        for j, (t, txt) in enumerate(zip([t for t in prompts for _ in range(a.group)], texts)):
-            ok, reason, nl = verify_text(t['prompt'] + ' ' + txt)
+        flat_t = [t for t in prompts for _ in range(a.group)]
+        verdicts = judge_many([(t['prompt'], txt) for t, txt in zip(flat_t, texts)])   # batched (grpo uses generate_ids: no gate)
+        for j, (t, txt) in enumerate(zip(flat_t, texts)):
+            ok, reason, nl = verdicts[j]
             if ok:
                 rewards[j] = 1.0
                 pn = norm(txt)
@@ -143,9 +145,11 @@ def main():
             # transfer pass@eval_k (never trained on) and greedy evals, as expert_iter does
             outs_t = generate(model, tok, [t['prompt'] for t in transfer for _ in range(a.eval_k)], greedy=False, temperature=a.temperature, batch=a.batch, seed=a.seed * 100 + r)
             found_t = collections.defaultdict(dict)
+            vt = judge_many([(t['prompt'], p) for i, t in enumerate(transfer) for p in outs_t[i * a.eval_k:(i + 1) * a.eval_k]])
+            at = 0
             for i, t in enumerate(transfer):
                 for p in outs_t[i * a.eval_k:(i + 1) * a.eval_k]:
-                    ok, reason, nl = verify_text(t['prompt'] + ' ' + p)
+                    ok, reason, nl = vt[at]; at += 1
                     if ok:
                         pn = norm(p)
                         if pn not in found_t[t['name']]:
