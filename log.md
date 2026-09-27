@@ -550,3 +550,17 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
     predicts ≈ 3.4 solved; 2 observed is ordinary Poisson noise. My error was reading `ds-generator`'s
     *cumulative over 256 attempts* row (42/300) as a per-theorem rate at k = 32.
   - Kept: a `--compact` flag on `support.py`, and `sc_selftest.py` as a standing check.
+- **21:18** Stage 0 finished. **E1 confirmed:** EI seed 0 solves **869 / 2,285** transfer theorems at 8 × 32,
+  `L*` = 12 — inside the pre-registered 856–965, and matching the on-file `c0 s0` `L*` of 12 for this base.
+  Measured under **Lean alone**; the 856–965 range it is compared against was measured under Lean ∧ `nd_verify`.
+- **21:20** EI stage-1 sampling launched (auto-started by `pod/sc/after_ei.sh` the moment training exited).
+- **21:25** Pods `sc3`, `sc4` added (A40, $0.49/h) and put on the base **T = 1.0** arm over the **338 theorems
+  the base failed at T = 0.8** — a superset of the forward crux, so this needs no knowledge of the crux and
+  nothing is wasted.
+- **21:28 — seed-labelling slip, caught after ~1 minute of sampling and fixed.** `support.py --seed` was
+  feeding *both* the sampling RNG and the record's `seed` label, which the analysis uses as the **Stage-1 model
+  seed**. Two consequences: the T = 1.0 arm would have been labelled model-seed 10, and — the real hazard — the
+  stage-2 T = 0.8 continuation, pooled with stage 1, would have **replayed stage 1's exact 10,000 samples**
+  instead of drawing fresh ones. Split into `--seed` (sampling) and `--model_seed` (label, defaults to `--seed`);
+  the four partial output files were deleted and the arm relaunched with `--seed 10 --model_seed 0`. The
+  already-running stage-1 jobs are unaffected: their sampling seed and model seed coincide.

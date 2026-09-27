@@ -82,7 +82,10 @@ def main():
     ap.add_argument('--k', type=int, default=4000)
     ap.add_argument('--stop_at', type=int, default=50, help='stop a theorem at the first batch boundary with >= this many successes (0 = never)')
     ap.add_argument('--temperature', type=float, default=0.8)
-    ap.add_argument('--seed', type=int, default=0)
+    ap.add_argument('--seed', type=int, default=0, help='SAMPLING seed. Must differ between two runs of the same '
+                    '(model, temperature) that will be pooled, or the second replays the first exactly.')
+    ap.add_argument('--model_seed', type=int, default=None, help="the Stage-1 seed of --ckpt; this is the 'seed' "
+                    'label on the record and the analysis cell key. Defaults to --seed.')
     ap.add_argument('--batch', type=int, default=2048)
     ap.add_argument('--max_new', type=int, default=400)
     ap.add_argument('--shard', default='0/1')
@@ -92,6 +95,8 @@ def main():
     ap.add_argument('--early', default='eos', choices=['eos', 'exact', 'goal'], help="fast-path stop rule; 'eos' is sample.generate's default and matches the base path")
     ap.add_argument('--procs', type=int, default=1, help='unused; kept so job lines match coverage.py')
     a = ap.parse_args()
+    if a.model_seed is None:
+        a.model_seed = a.seed
     si, sn = map(int, a.shard.split('/'))
     dev = 'cuda'
     ck_md5 = md5(a.ckpt)
@@ -115,7 +120,7 @@ def main():
     todo = [r for r in recs if r['name'] not in done]
     print(f'[{a.out} s{si}/{sn}] {len(recs)} theorems, {len(done)} done, {len(todo)} to do; '
           f'model={a.model} ckpt={os.path.basename(a.ckpt)} md5={ck_md5[:8]} k={a.k} stop_at={a.stop_at} '
-          f'T={a.temperature} batch={a.batch} max_new={a.max_new} seed={a.seed}', flush=True)
+          f'T={a.temperature} batch={a.batch} max_new={a.max_new} seed={a.seed} model_seed={a.model_seed}', flush=True)
     gen = torch.Generator(device=dev)
     gen.manual_seed(a.seed * 100003 + si * 7919 + 13)
     rng = random.Random(a.seed * 7717 + si)
@@ -166,7 +171,7 @@ def main():
             rej = sorted((s for s in counts if not verdict[s][0]), key=lambda s: -counts[s])
             rec = {'name': r['name'], 'L_true': r['L_true'], 'schema': r.get('schema'), 'source': r.get('source'),
                    'model': a.model, 'ckpt': a.ckpt, 'ckpt_md5': ck_md5, 'temperature': a.temperature,
-                   'seed': a.seed, 'stage': a.stage, 'k_requested': a.k, 'stop_at': a.stop_at,
+                   'seed': a.model_seed, 'sampling_seed': a.seed, 'stage': a.stage, 'k_requested': a.k, 'stop_at': a.stop_at,
                    'n_tried': n, 'n_ok': n_ok, 'n_distinct_ok': len(acc), 'n_distinct_strings': len(counts),
                    'n_parse_fail': n_parse, 'early': a.early, 'compact': a.compact, 'first_hit': (first_idx[acc[0]] if acc else None),
                    'stopped_early': bool(a.stop_at and n_ok >= a.stop_at and n < a.k),
