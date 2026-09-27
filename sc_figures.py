@@ -65,7 +65,7 @@ def scatter(cells, out, seed=0, T=0.8):
             n_bb += 1
     lo = min(ax.get_xlim()[0], ax.get_ylim()[0]); hi = max(ax.get_xlim()[1], ax.get_ylim()[1])
     ax.plot([lo, hi], [lo, hi], '-', color=INK2, lw=1.0, alpha=0.55, zorder=1)
-    ax.text(hi - 0.1, hi - 0.1, 'equal', color=INK2, fontsize=8, ha='right', va='bottom', rotation=45)
+    ax.text(hi - 0.35, hi - 0.55, 'equal', color=INK2, fontsize=8, ha='right', va='bottom', rotation=45)
     ax.axvline(math.log10(1.0 / EI_ATTEMPTS), color=INK2, lw=1.0, ls=(0, (4, 3)), alpha=0.8, zorder=1)
     ax.text(math.log10(1.0 / EI_ATTEMPTS) + 0.08, lo + 0.25, f'p_base = 1/{EI_ATTEMPTS}\n(what EI spent)',
             color=INK2, fontsize=7.5, va='bottom')
@@ -76,7 +76,7 @@ def scatter(cells, out, seed=0, T=0.8):
                  f'at least one model)', color=INK, fontsize=10.5, pad=10)
     h = [Line2D([], [], marker='o', ls='', ms=5.5, mec='white', mew=0.7, color=cmap[L], label=f'{L}') for L in Ls]
     h.append(Line2D([], [], marker='>', ls='', ms=5, color=INK2, label='0 successes:\n95 % upper bound'))
-    lg = ax.legend(handles=h, title='$L_{true}$ (ND upper bound)', loc='upper left', fontsize=7.5,
+    lg = ax.legend(handles=h, title='$L_{true}$ (ND upper bound)', loc='lower right', fontsize=7.5,
                    title_fontsize=8, frameon=True, framealpha=0.95, edgecolor=GRID, ncol=2)
     lg.get_title().set_color(INK)
     for t in lg.get_texts():
@@ -99,9 +99,17 @@ def passk(report, out, seed=0, T=0.8):
     for i, v in enumerate(st):
         ax = axes[i // ncol][i % ncol]
         style(ax)
-        ks = sorted(v['curve'])
-        ax.plot(ks, [v['curve'][k]['base'] for k in ks], '-o', color=BASE_C, lw=2.0, ms=4, label='base')
-        ax.plot(ks, [v['curve'][k]['ei'] for k in ks], '-o', color=EI_C, lw=2.0, ms=4, label='EI')
+        # json.load turns the integer k keys into STRINGS; sorting those lexicographically gives
+        # 1, 10, 100, 1000, 10000, 2000, 256, ... and draws a zig-zag instead of a monotone pass@k curve.
+        cv = {int(k): val for k, val in v['curve'].items()}
+        ks = sorted(cv)
+        kx = [k for k in ks if cv[k]['exact']]
+        for col, key in ((BASE_C, 'base'), (EI_C, 'ei')):
+            ax.plot(ks, [cv[k][key] for k in ks], '--', color=col, lw=1.6, alpha=0.85)   # plug-in tail
+            if kx:
+                ax.plot(kx, [cv[k][key] for k in kx], '-o', color=col, lw=2.2, ms=4)     # exact estimator
+        if kx and max(kx) < max(ks):
+            ax.axvline(max(kx), color=GRID, lw=1.0)
         ax.set_xscale('log'); ax.set_ylim(-0.03, 1.03)
         ax.set_title(f'$L_{{true}}$ = {v["L_true"]}  ({v["n_theorems"]} thms)', color=INK, fontsize=9)
         if v['crossover_k']:
@@ -114,12 +122,13 @@ def passk(report, out, seed=0, T=0.8):
     for j in range(len(st), nrow * ncol):
         axes[j // ncol][j % ncol].axis('off')
     h = [Line2D([], [], color=BASE_C, lw=2.2, label='base (Stage 1 only)'),
-         Line2D([], [], color=EI_C, lw=2.2, label='EI (8 rounds x k 32)')]
-    lg = fig.legend(handles=h, loc='lower center', ncol=2, fontsize=9, frameon=False)
+         Line2D([], [], color=EI_C, lw=2.2, label='EI (8 rounds x k 32)'),
+         Line2D([], [], color=INK2, lw=1.6, ls='--', label='dashed: binomial plug-in past the attempts drawn')]
+    lg = fig.legend(handles=h, loc='lower center', ncol=3, fontsize=8.5, frameon=False)
     for t in lg.get_texts():
         t.set_color(INK)
-    fig.suptitle(f'pass@k by true minimal length, seed {seed}, T = {T}  (k never extrapolated beyond '
-                 f'the attempts drawn)', color=INK, fontsize=10.5)
+    fig.suptitle(f'pass@k by true minimal length, seed {seed}, T = {T}  (solid = unbiased estimator; '
+                 f'dashed = plug-in past the attempts drawn)', color=INK, fontsize=10.5)
     fig.tight_layout(rect=(0, 0.055, 1, 0.955))
     fig.savefig(out + '_passk.png', facecolor='white')
     print(f'-> {out}_passk.png  ({len(st)} strata)')

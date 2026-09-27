@@ -153,6 +153,20 @@ def pass_at_k(n, c, k):
     return 1.0 - math.exp(lp)
 
 
+def pass_at_k_ext(n, c, k):
+    """pass@k for k <= n; beyond n, the binomial plug-in 1 - (1 - c/n)^k.
+
+    k > n happens only for a theorem that STOPPED EARLY, i.e. one with c >= stop_at (50) successes, where
+    p-hat is estimated from >= 50 events and the plug-in is accurate; a theorem that ran to full k has
+    n = k_requested and needs no extension.  Cells that use the plug-in are flagged `exact: false` on the
+    curve and drawn dashed, because a plug-in is a model, not a measurement."""
+    v = pass_at_k(n, c, k)
+    if v is not None:
+        return v, True
+    p = c / n if n else 0.0
+    return (1.0 - (1.0 - p) ** k), False
+
+
 def cmd_report(a):
     cells = aggregate(load_rows())
     rep = {'generated': __import__('time').strftime('%FT%TZ', __import__('time').gmtime()), 'strata': {}}
@@ -169,17 +183,24 @@ def cmd_report(a):
             for L, ns in sorted(by_L.items()):
                 key = f'seed{seed}_T{T}_L{L}'
                 curve = {}
-                for k in (1, 10, 32, 100, 256, 1000, 2000, 4000, 10000, 20000, 50000, 100000):
-                    b = [pass_at_k(base[x]['n'], base[x]['c'], k) for x in ns]
-                    e = [pass_at_k(ei[x]['n'], ei[x]['c'], k) for x in ns]
-                    b = [v for v in b if v is not None]; e = [v for v in e if v is not None]
-                    if len(b) < len(ns) or len(e) < len(ns):     # k exceeds some theorem's n: not comparable
-                        continue
-                    curve[k] = {'base': sum(b) / len(b), 'ei': sum(e) / len(e), 'n_theorems': len(ns)}
-                cross = next((k for k in sorted(curve) if curve[k]['base'] >= curve[k]['ei']), None)
+                for k in (1, 10, 32, 100, 256, 1000, 2000, 4000, 10000, 20000, 50000, 100000, 200000):
+                    bv = [pass_at_k_ext(base[x]['n'], base[x]['c'], k) for x in ns]
+                    ev = [pass_at_k_ext(ei[x]['n'], ei[x]['c'], k) for x in ns]
+                    if k > max(max(base[x]['n'] for x in ns), max(ei[x]['n'] for x in ns)):
+                        continue                                  # past every theorem's attempts: pure extrapolation
+                    exact = all(f for _, f in bv) and all(f for _, f in ev)
+                    curve[k] = {'base': sum(v for v, _ in bv) / len(bv), 'ei': sum(v for v, _ in ev) / len(ev),
+                                'n_theorems': len(ns), 'exact': exact}
+                # crossover = the smallest measured k at which base catches EI. A tie at zero (neither model
+                # has ever solved anything in the stratum) is not a crossover, so require EI to be above zero.
+                cross = next((k for k in sorted(curve)
+                              if curve[k]['ei'] > 0 and curve[k]['base'] >= curve[k]['ei']), None)
                 rep['strata'][key] = {'L_true': L, 'seed': seed, 'temperature': T, 'n_theorems': len(ns),
                                       'curve': curve, 'crossover_k': cross,
-                                      'max_k_measured': max(curve) if curve else None}
+                                      'max_k_exact': max([k for k, v in curve.items() if v['exact']], default=None),
+                                      'max_k_measured': max(curve) if curve else None,
+                                      'min_n_base': min(base[x]['n'] for x in ns),
+                                      'min_n_ei': min(ei[x]['n'] for x in ns)}
                 print(f'{key}: {len(ns):3d} thms  crossover_k={cross}  '
                       + ' '.join(f'{k}:{v["base"]:.3f}/{v["ei"]:.3f}' for k, v in sorted(curve.items()) if k in (256, 4000, 10000)))
     os.makedirs(ART, exist_ok=True)
