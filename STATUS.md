@@ -122,3 +122,23 @@ START 2026-09-27T17:20Z. Making **Lean the only judge** on the fork's `dan` bran
 tests, `LEAN_JUDGE.md`, and a seven-part acceptance test. Pre-registered in
 `preregistration/lean-judge.md` (commit `579ee16`, before any pod). Pod budget 8 h / $4; one A40
 (`lj1`, $0.49/h) for acceptance test 5 only.
+
+# STATUS — support-curves (proposal 12, experiment 1: does EI expand the base model's support?)
+
+Brief: run brief `support-curves` (elicitation/BRIEF_support-curves.md). Policy: AGENT_POLICY.md. Run id:
+support-curves. Repo: `~/work/support-curves` (worktree, branch `dan_support-curves`, based on `origin/dan`).
+Siblings on agent2: `lean-judge` (owns `lean_gate.py`, `lean_judge.py`, `coverage.py`, `eval_set.py`,
+`expert_iter.py`, `ladder_ei.py`, `eval_targets.py`, `grpo.py`) and `stage1-dynamics` (owns `train.py`) —
+this run edits none of them and writes its own `support.py`. The RunPod account is shared; pod `lj1` is
+`lean-judge`'s and is not touched.
+
+## support-curves
+- 2026-09-27 18:07 UTC  run started (executor). Worktree fast-forwarded onto `origin/dan` `9a1db24`, so
+  **`lean_judge.py` is available and this run judges with Lean alone** (`nd_verify` judges nothing).
+- 2026-09-27 ~18:20 UTC  pre-registration `preregistration/support-curves.md` committed **before any pod**
+  (gate 0), with the theorem set `data/sc/theorems.jsonl` (383 theorems, md5 `3cb6e7bf…`) fixed and committed
+  alongside it. Budget $15 / 30 pod-hours.
+- Deviation checked and rejected: the bucket does hold Lean-format EI checkpoints
+  (`lean-format/ckpts/ladder/la_T1_seq_s{0,1}_r*.pt`), but both were initialised from
+  `ckpts/lf/stage1_full_seq_s0.pt` — a different Stage-1 model, and both from the same seed — so they are not
+  this base's EI models. The EI models are re-trained here, as the brief says.
