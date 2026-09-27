@@ -504,3 +504,73 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   per-theorem records, and a reviewer re-deriving them from git alone would otherwise be stuck with
   the `.json` summaries. The same tree is in the bucket. `data/nf/train_p<i>.jsonl` and
   `ckpts/nf/*.pt` are **not** in git (`.gitignore`), only in the bucket.
+
+## 2026-09-27 — run `lean-judge` (executor): Lean alone decides
+
+- 17:15  Read the 2026-09-27 update of `nd-rl/docs/project_strategy/2026-09-20-lean-default.md`,
+  `AGENT_POLICY.md`, `lean_gate.py`, `sample.generate`'s gate call, `lean_tok.py` and
+  `lean_check.py` on `origin/dan_lean_only`. Traced where the decision is actually made today:
+  `lean_gate.gate` runs Lean on the literal text *and* `nd_verify` on the ND denotation and marks
+  `LEANREJ`, and the six loop files then judge with `nd_verify.verify_text` — so a proof counted iff
+  both accepted.
+- 17:26  `preregistration/lean-judge.md` committed and pushed (`579ee16`), before any pod; pod budget
+  registered `podbudget lean-judge --set 8 4`. RunPod balance $151.21 (floor $130).
+- 17:30–17:50  Implementation. `lean_judge.py` (marker ⇒ reject; gate registry ⇒ that verdict;
+  otherwise batched `nd2lean` + Lean). `lean_gate.py`: `nd_verify` removed, verdicts registered,
+  **accepted samples leave the gate as clean ND strings**, `check_sources()` generalised to
+  multi-line sources (`bisect` on theorem start lines) because `nd2lean.translate` emits indented
+  boxes, prelude gained `maxRecDepth 4000`, `$LEAN_GATE_DUMP` audit trail added. Six import swaps;
+  `eval_set.judge`, `eval_targets`, `grpo` (×2), `coverage` and `expert_iter`'s relabelling rewritten
+  to batch through `judge_many`. `coverage.py`'s fork-pool worker `_verify_one` became `_class_one`
+  (classify + prune only) with judging hoisted into one `judge_many` call per theorem.
+- 17:40  **Deviation from the brief, with reason.** The brief's design did not anticipate this: the
+  largest class of proofs Lean accepts and `nd_verify` rejects (41.7 % of the stored Lean-only class)
+  omits premise re-statement lines, and `nd2lean.translate` *refused to translate* them
+  (`TranslationError('missing PR')`), so the fallback would have rejected exactly the class the
+  decision is about. Added `translate(..., require_all_pr=False)` and used it only from the judge.
+  Sound because `lean_tok.inverse` accepts `h`-citations only as a prefix `h1…hk` in order, so the
+  k-th `PR` line is still the k-th declared premise; the remaining premises stay declared and unused.
+- 17:45  `lean_check.py` ported from `origin/dan_lean_only` with `Not.elim`, `Not.intro`, `And.elim`,
+  `Iff.elim` on the allowlist and `nd_verify` moved behind an opt-in `--compare_nd`. Self-test
+  **39/39** on the VPS (Lean 4.34.1) and on the pod (Lean 4.34.0): the two `Not.elim` cases now
+  accepted (term size 1 each), the decision note's canonical example accepted, `sorry` / `simp` /
+  `decide` / `Classical.em` / `Decidable.em` / `Or.resolve_left` / `mt` / `propext` / a truncated term
+  still rejected. `nd2lean.py`'s `BOTE` stays `.elim` (the `False.elim` "fix" is **not** ported).
+- 17:50  `tests/test_lean_only_judge.py`: 26 checks, all pass on the VPS and on the pod (acceptance
+  test 1 plus one unit test per pitfall). `nd_verify` use is detected by parsing the file with `ast`,
+  not by grep, so prose in a docstring is not a hit.
+- 17:52  `lj_regress.py collect`: **283,012** distinct `(prompt, ND proof)` pairs the old gate counted
+  (from 1,533,741 records in the 1,000 `found*.jsonl` of every Lean-gated arm plus the `proofs[]` of
+  34 Lean-gated coverage files), and **8,514** distinct Lean-only records from 398 `*.disagree.jsonl`
+  (29,070 records).
+- 17:53  Acceptance test 3: **6,419 / 6,419 = 100 %** of the Lean-only class with an ND denotation is
+  accepted by the new judge; 0 rejected. The other 2,095 are run `efficiency`'s
+  `kind: no-denotation` class (Lean accepted a literal text whose strict-grammar decode failed) and
+  are **excluded, not expected to pass**: the grammar is the allowlist, so such a text is not counted
+  by the `lean_seq` judge either.
+- 17:33–18:05  Pod `lj1` (**NVIDIA A40, $0.49/h**, `yst4i2630thfpi`, created 17:33Z). Lean 4.34.0 via
+  elan; `nproc` 96 but the real CPU quota is ~7.65 cores (as in `cap-horizon`), so
+  `LEAN_GATE_WORKERS=6`. Acceptance test 5 (one expert-iteration round, `ckpts/dsc/stage1_a3_s0.pt`,
+  `lean_seq`, from-scratch, ~19 M params, 200 depth-3 targets × k = 16, `--relabel`): the first run
+  died in `train.py` (`ckpts/lj` did not exist — `expert_iter.py` only `mkdir`s `ckpts`), rerun after
+  `mkdir -p ckpts/lj`.
+- 18:00  **Deviation:** test 5's retain slice is 3,000 records of `data/p2/heldout.jsonl` (records
+  200–3,200, disjoint from the 200 used as the round's held-out set), because the arm's real Stage-1
+  pool `data/dsc/train_a3.jsonl` was generated on a pod and is in neither git nor the bucket. It
+  feeds only the fine-tune mix; test 5 is about markers and acceptance, not learning.
+- 18:05  Test 2 moved from the VPS to the pod: at the measured fallback cost the 283,012-proof batch
+  needs ~99 min on the VPS's 1 Lean worker (over the 90-min guard) and ~17 min on the pod's 6.
+- 18:20  Acceptance test 2 finished on the pod: **281,817 / 281,817 ND proofs accepted (100.000 %),
+  0 losses**, line counts identical to `nd_verify`'s on all of them. 870 s of Lean (3.075 s / 1,000),
+  19.9 s of `nd_verify` for the comparison. **A corpus-construction error of mine, found by the test:**
+  1,195 of the 283,012 collected records are not ND proofs — run `efficiency` (`artifacts/lo`) stores
+  the literal Lean text in the `proof` field of its `found*.jsonl`, in both its free-form and its
+  `lean_seq` arms. `nd_verify` rejects all 1,195, so the old `lean_seq` gate never counted them as ND
+  proofs either and the `nd=True, lean=False` cell is 0. `lj_regress.py collect` now skips any `proof`
+  that does not start with `N`. Judging them properly is `lean_check`'s job and needs that run's
+  statement convention; a spot check with a reconstructed statement accepts 567 / 1,195 and fails 628
+  on elaboration (`artifacts/lj/t2_freeform.json`), i.e. the statement form differs. Out of scope here.
+- 18:25  `LEAN_JUDGE.md`, `numbers.md` § lean-judge (L0–L8), `run_lean_judge.md` (493 words of body,
+  of which ~215 are the expectations-vs-outcomes table — over the 400-word guide, and I kept the table
+  because it *is* the deliverable), `figures/lj_{leanonly_classes,throughput}.png`, three questions in
+  `QUESTIONS.md`. Pod `lj1` deleted; bucket sync.

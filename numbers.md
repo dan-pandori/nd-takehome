@@ -1118,3 +1118,165 @@ Bucket: `hf://buckets/dan-pandori/nd-rl/noise-floor/{ckpts,artifacts,data}` —
 `ckpts/nf/stage1_p<i>_s<k>.pt` (52), `artifacts/nf/` (per-cell held-out, coverage and ladder outputs,
 `summary.json`, `premise.json`, the `record_*.json` checker passes, the `gate_*.jsonl` logs and their
 `.disagree.jsonl`), `data/nf/train_p<i>.jsonl` (4 × 155,000) and `assemble_p<i>.json`.
+
+---
+
+# § lean-judge (2026-09-27) — Lean alone decides
+
+Every count below is reproducible from files pulled back into `artifacts/lj/` (and the bucket) with the
+commands named. The corpora are built by `python3 lj_regress.py collect` from the other runs' artifacts.
+
+**Checker labels.** Stored verdicts in the source runs were produced under **Lean ∧ `nd_verify`**
+(pre-2026-09-27). Every verdict computed in this run is under **Lean alone**. Lean versions: **4.34.1**
+on the VPS, **4.34.0** on pod `lj1` (the version the stored data was produced under); both give the same
+verdicts on every case measured here (`lean_check --selftest` 39/39 on both).
+
+**Model labels.** No model was trained in this run. The numbers in L1–L4, L6, L8 are properties of
+**stored samples** from runs `cap-horizon`, `noise-floor`, `ds-rendering`, `efficiency`, `lean-format` —
+all **`lean_seq`**, **from-scratch**, ~19 M parameters, trained on this project's Stage-1 Lean-format
+pools. L5, L7 are measured on **`ckpts/dsc/stage1_a3_s0.pt`** (run `ds-composition`, arm a3, seed 0:
+`lean_seq`, from-scratch, ~19 M parameters, Stage-1 pool `train_a3`), pod `lj1` (NVIDIA A40, $0.49/h).
+
+## L0 — the corpora
+
+| quantity | value | source |
+|---|---|---|
+| `found*.jsonl` records read, Lean-gated arms (1,000 files) | 1,533,741 | `artifacts/lj/collect.json` |
+| collected distinct `(prompt, proof)` pairs | 283,012 (282,393 from `found*`, 619 from 34 Lean-gated coverage files) | `artifacts/lj/collect.json`, `artifacts/lj/corpus_accepted.jsonl` (bucket only, 165 MB) |
+| of those, **not ND proofs**: run `efficiency` (`artifacts/lo`) stores the **literal Lean text** in the `proof` field of its `found*.jsonl`, in both its free-form and its `lean_seq` arms | 1,195 (of 3,167 records from that directory; the other 1,972 are ND) | `artifacts/lj/t2_judge.rejected.jsonl` — all 1,195 rejected with `nd2lean: QED`, i.e. the string is not an ND proof |
+| **distinct ND proofs the old gate counted** (the test-2 corpus) | **281,817** | `artifacts/lj/t2_judge.json` |
+| `*.disagree.jsonl` records read (398 files) | 29,070, all `nd_rej & lean_ok` (0 `nd_ok & lean_rej`) | `artifacts/lj/collect.json` |
+| distinct Lean-only records | **8,514** — 6,419 with an ND denotation, 2,095 without | `artifacts/lj/corpus_leanonly.jsonl` |
+
+## L1 — acceptance test 1: no judging path calls `nd_verify`
+
+26/26 checks pass, on the VPS and on pod `lj1`. Detection is by `ast`, not grep, over
+`expert_iter.py`, `ladder_ei.py`, `coverage.py`, `eval_set.py`, `eval_targets.py`, `grpo.py`,
+`lean_gate.py`, `lean_judge.py`: **0** imports of or attribute accesses on `nd_verify`.
+Source: `python3 tests/test_lean_only_judge.py`; pod copy `artifacts/lj/setup.log`.
+
+## L2 — acceptance test 2: zero regressions
+
+| quantity | value | source |
+|---|---|---|
+| records judged | 283,012 | `artifacts/lj/t2_judge.json` |
+| accepted by the new judge | **281,817** | same |
+| rejected, all with reason `nd2lean: QED` (not ND proofs — see L0) | 1,195 | same, `artifacts/lj/t2_judge.rejected.jsonl` |
+| Lean × `nd_verify` table | `nd=True,lean=True` **281,817**; `nd=False,lean=False` **1,195**; `nd=True,lean=False` **0**; `nd=False,lean=True` **0** | same, key `table_nd_lean` |
+| **losses** (old gate counted, new judge did not) | **0** | the `nd=True, lean=False` cell |
+| acceptance rate on the ND corpus | **281,817 / 281,817 = 100.000 %** | same |
+| `n_lines` identical to `nd_verify`'s on proofs both accept (acceptance test 4) | **281,817 / 281,817 = 100 %**, 0 disagreements | same, keys `both_accept`, `n_lines_agree` |
+| cost | 870 s Lean wall (3.075 s / 1,000), 19.9 s `nd_verify`, pod `lj1`, 6 workers | same |
+
+The 1,195 are a **corpus-construction error of mine, not a regression**: `lj_regress.py collect` took every
+`found*.jsonl` under a directory with a gate log, and run `efficiency`'s files store literal Lean text
+(`( fun P => ( fun n1 => ( fun n2 => Or.inr h1 ) ) )`) where every other run stores an ND proof. `nd_verify`
+rejects all 1,195, so the old `lean_seq` gate never counted them as ND proofs either. `collect` now skips any
+`proof` that does not start with `N` and counts it under `not_nd_excluded`. Judging them properly is
+`lean_check`'s job and needs run `efficiency`'s statement convention, which this run does not reimplement: a
+spot check against a reconstructed `theorem t (P Q R S : Prop) (h1 : …)` statement accepts 567 and fails 628 on
+elaboration (`artifacts/lj/t2_freeform.json`), which shows the statement form differs, not that the proofs are
+bad. Not pursued further — out of this run's scope.
+
+## L3 — acceptance test 3: the Lean-only class is now counted
+
+| quantity | value | source |
+|---|---|---|
+| Lean-only records with an ND denotation | 6,419 | `artifacts/lj/t3_judge.json` |
+| accepted by the new judge | **6,419 / 6,419 = 100 %** | same |
+| excluded, no ND denotation (run `efficiency`'s `kind: no-denotation`) | 2,095 | same, key `skipped_no_nd` |
+
+Classification of all 8,514 (`artifacts/lj/t3_classify.json`, `lj_regress.py classify`):
+
+| class | n | fraction |
+|---|---|---|
+| omitted premise re-statement (`PR` lines fewer than declared premises) | 3,550 | 41.7 % |
+| `BOTE` on a non-`F` line — i.e. `Not.elim` | 2,205 | 25.9 % |
+| no ND denotation (excluded) | 2,095 | 24.6 % |
+| other | 531 | 6.2 % |
+| `NEGE` on `A` and `A > F` (Lean's `¬A` *is* `A → False`) | 133 | 1.6 % |
+
+## L4 — pitfall 3 (coverage normalises before judging)
+
+Lean's verdict on (i) the literal sampled text, (ii) `nd2lean(nd)`, (iii) `nd2lean(norm(nd))`, on all
+6,419 Lean-only records that carry a literal text: **6,419 / 6,419 agree** (all three accept),
+**0 disagreements**. So keying the verdict on the normalised string gives identical counts.
+Source: `artifacts/lj/t3b_normform.json` (`lj_regress.py normform`, pod `lj1`).
+
+## L5 — acceptance test 5: one expert-iteration round end to end
+
+`expert_iter.py --init ckpts/stage1_a3_s0.pt --rounds 1 --k 16 --temperature 0.8 --relabel`, 200 depth-3
+targets, 50 transfer, 200 held-out, retain 3,000, `ft_steps 50` (pod `lj1`).
+
+| quantity | value | source |
+|---|---|---|
+| samples generated / grammar parse-failures / distinct texts Lean-checked | 4,250 / 476 / 3,506 | `artifacts/lj/t5_gate.jsonl` (4 gate calls) |
+| Lean accepted (distinct) | 2,348 | same |
+| registry conflicts (two texts, same ND proof, different verdicts) | **0** | same, key `registry_conflicts` |
+| Lean cost for the round's gating | 11.5 s wall, 45.6 s process, 6 workers | same |
+| **`LEAN*` markers in `found_1.jsonl`, `found_transfer_1.jsonl`, `mix_1.jsonl`** | **0, 0, 0** (228 / 56 / 3,912 records) | `artifacts/lj/t5_marker_grep.txt` |
+| target / transfer sample acceptance | 0.5759 / 0.5975 | `artifacts/lj/t5_ei/round_1.json` |
+| old gate's count on the same 3,506 samples (Lean ∧ `nd_verify`) | 2,348 | `artifacts/lj/t5_compare.json` |
+| new judge's count (Lean alone) | 2,348 — **excess 0, losses 0** | same |
+
+The excess is 0 on this round, which is consistent with the stored Lean-only rate: at 0.01–0.07 % of
+distinct checked texts, 3,506 samples predict 0.4–2.5 such proofs, so 0 is the expected order. The
+Lean-only class is evidenced at scale by L3, not by this round.
+
+Hindsight relabelling on the round's real samples (`pod/lj/t5_relabel.py`, pitfall 2): of 3,506 dumped
+samples, **246** yield a rewritten theorem that *differs* from the prompted one, reducing to 78 distinct
+`(new theorem, proof)` pairs, none of which had a registered verdict (the gate never saw them) —
+**166 accepted, 80 rejected** (1 untranslatable), 0.50 s of Lean.
+Source: `artifacts/lj/t5_relabel.json`. One accepted relabel, checked by hand, in Lean:
+
+```lean
+theorem t (P Q R S : Prop) : ((¬(¬R)) → (((R ∨ Q) ∧ (S ∨ R)) → ((¬(¬R)) ∨ (¬(Q ∧ Q))))) := by
+  have n5 : ((¬(¬R)) → (((R ∨ Q) ∧ (S ∨ R)) → ((¬(¬R)) ∨ (¬(Q ∧ Q))))) := (fun (n1 : (¬(¬R))) => by
+    have n4 : (((R ∨ Q) ∧ (S ∨ R)) → ((¬(¬R)) ∨ (¬(Q ∧ Q)))) := (fun (n2 : ((R ∨ Q) ∧ (S ∨ R))) => by
+      have n3 : ((¬(¬R)) ∨ (¬(Q ∧ Q))) := Or.inl n1
+      exact n3)
+    exact n4)
+  exact n5
+```
+
+## L6 — acceptance test 6: throughput
+
+20,000 stored accepted proofs, pod `lj1`, `LEAN_GATE_WORKERS=6` (`artifacts/lj/t6_throughput.json`):
+
+| path | s / 1,000 strings |
+|---|---|
+| **old** `nd_verify` pass (dropped) | 0.0790 |
+| **new** registry hit (what a loop sees after `generate()`) | **0.0123** |
+| **new** marker (`LEANPARSE` / `LEANREJ`) | 0.0021 |
+| **new** fallback: `nd2lean` + batched Lean (gate never saw the string) | **3.556** |
+
+The Lean run on the literal texts is unchanged and is still done by the gate, so in the loop the new
+judge is faster than the old one by exactly the dropped `nd_verify` pass: **6.4× faster on the judging
+step**, 0.0667 s saved per 1,000 samples.
+
+## L7 — acceptance test 7: `lean_check --selftest`
+
+**39 / 39 pass**, VPS (Lean 4.34.1) and pod `lj1` (Lean 4.34.0).
+Source: `artifacts/lj/lean_check_selftest.json`, `artifacts/lj/setup.log`.
+Newly accepted: `h.elim a` on `h : ¬P` (term size 1), `Not.elim h a` (1), `Not.intro h` (1),
+`And.elim` (5), `Iff.elim` (4), and the decision note's canonical example
+`~P ⊢ P > Q` via `N1 (~P) : PR ; N2 (P>Q) : BOTE N1` → `have n2 : (P → Q) := n1.elim` (term size 1).
+Still rejected: `sorry`, `sorry` inside a `have`, `simp`, `decide`, `Classical.em`, `Decidable.em`,
+`Or.resolve_left`, `mt`, `not_not.mp`, `propext` as a term, `cases`, `match`, a truncated term.
+The same canonical example is accepted by the `lean_seq` path: `lean_judge.verify_text` returns
+`(True, '', 2)` where `nd_verify` returns
+`(False, 'rule check failed: BOTE (line 2)', 2)` — asserted in `tests/test_lean_only_judge.py`.
+
+## L8 — the grammar-as-allowlist claim
+
+`lean_tok.LeanTokenizer('lean_seq').vocab_size` = **107** = 2 specials + 11 formula symbols + 6 prompt
+symbols + 16 term/tactic symbols + `h1…h8` + `n1…n64`. The only tokens naming a Lean constant or
+projection: `.1 .2 .elim Or.inl Or.inr Or.elim Classical.byContradiction` (plus the type formers
+`P Q R S False Prop`). `sorry`, `simp`, `Classical.em` are not in the vocabulary.
+Reproduce: the `print` in `LEAN_JUDGE.md` § "The grammar is the allowlist", or
+`python3 -c "from lean_tok import LeanTokenizer; t=LeanTokenizer('lean_seq'); print(t.vocab_size, t.itos)"`.
+
+## Bucket
+
+`hf://buckets/dan-pandori/nd-rl/lean-judge/artifacts` — `artifacts/lj/` in full, including
+`corpus_accepted.jsonl` (165 MB, gitignored) and `corpus_leanonly.jsonl`.

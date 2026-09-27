@@ -49,6 +49,13 @@ def cmd_collect(a):
             continue
         for r in read_jsonl(f):
             n_read += 1
+            if not r['proof'].lstrip().startswith('N'):
+                # run `efficiency` (artifacts/lo) stores the LITERAL LEAN TEXT in `proof`, not an ND proof, in both its
+                # free-form and its lean_seq arms.  Those records are not lean_seq/ND samples: the ND judge cannot
+                # translate them and `nd_verify` rejects all of them, so the old lean_seq gate never counted them
+                # either.  They belong to `lean_check`'s domain.  1,195 of them; excluded here and counted separately.
+                src['not_nd_excluded'] += 1
+                continue
             k = (r['prompt'], r['proof'])
             if k in seen:
                 continue
