@@ -18,6 +18,7 @@ complement, and overall.  Every count in the .json is recomputable from the .jso
 """
 import argparse, glob, json, math, os, sys, time, collections
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import numpy as np
 import torch
 from model import load_ckpt
 from sample import generate
@@ -75,14 +76,15 @@ def main():
         t0 = time.time()
         model, tok, extra = load_ckpt(ck, dev)
         assert hasattr(tok, 'statement'), f'{ck} is not a Lean-format checkpoint (mode {tok.mode})'
-        raw = torch.full((len(prompts), a.max_new), tok.pad, dtype=torch.long)
+        # sample.generate() assigns python lists into `raw`, so it must be a numpy array, not a tensor
+        raw = np.full((len(prompts), a.max_new), tok.pad, dtype=np.int64)
         stats = {}
         # gate=False returns the literal Lean text of each sample (None if it never emitted <eos>);
         # `raw` receives the sampled token ids, so the strict-grammar verdict is read off the same ids.
         texts = generate(model, tok, prompts, greedy=True, temperature=0.0, max_new=a.max_new,
                          batch=a.batch, seed=0, stats=stats, gate=False, raw=raw)
         t_samp = time.time() - t0
-        nd = [tok.decode(row) for row in raw.tolist()]
+        nd = [tok.decode(row.tolist()) for row in raw]
         parsed = [bool(tx) and not d.startswith('LEANPARSE') for tx, d in zip(texts, nd)]
         parse_reasons = collections.Counter(d[10:].strip() for d, tx in zip(nd, texts) if d.startswith('LEANPARSE'))
         del raw

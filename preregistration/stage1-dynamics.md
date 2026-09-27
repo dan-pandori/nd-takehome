@@ -168,3 +168,63 @@ within-seed comparison that is not within seed: if `--resume` does not reproduce
 data order, W-6k and W-12k stop being branches of W and inherit the ±81.7 pp cross-run floor. I test
 `--resume` for exact continuation (a resumed 200 steps must match the unresumed run's loss trace to
 the last decimal) before launching the arms, and record the test in `log.md`.
+
+---
+
+## Addendum 1 — arm R, the same-command replicate floor (2026-09-27 18:32 UTC)
+
+Committed before any run of arm R exists, and before any outcome it covers. Written after the
+`--resume` check the main pre-registration promised, which found something the main design assumed
+away.
+
+**What the check found.** `smoke_a` and `smoke_a2` are the **same command line** — same seed, same
+data, same schedule, same 400 steps, run twice on the same A40. They diverge immediately:
+
+| | step 100 loss | step 100 `val2k` | step 300 loss | step 400 loss |
+|---|---|---|---|---|
+| `smoke_a` | 1.3698 | 1.2536 | 0.5809 | 0.2137 |
+| `smoke_a2` (identical command) | 1.3632 | 1.3211 | 0.5902 | 0.2266 |
+| `smoke_b` (resumed from `smoke_a`'s step-200 state) | — | — | 0.5892 | 0.2191 |
+
+So **a seed does not determine a run on this hardware** (bf16 autocast, non-deterministic reduction
+kernels; the project has never forced `torch.use_deterministic_algorithms`). The resumed run sits
+*closer* to the run it branched from (|Δ| = 0.0083 at step 300) than an identical re-run does
+(|Δ| = 0.0093), so **`--resume` is as faithful as the platform is to itself — the pre-registered
+failure mode does not fire**, and `log.md` records the test. But it means "paired seeds" controls the
+initialisation and the batch order and **not** the run-to-run noise, and it is very likely the
+mechanism behind `NOISE_FLOOR.md`'s central finding that ≈ 95 % of the variance is "the individual
+training run" rather than the data draw or the seed.
+
+**Arm R measures that floor directly**, which is what every cross-run comparison in this run (W-6k vs
+C at E10; F vs W at E12) actually needs. It is cheap: ≈ 1.5 GPU-hours, ≈ $0.8.
+
+- **R-6k**: four extra runs of the **exact `c_s0` command** (cosine, 6,000 steps, control set, seed 0)
+  and four of the exact `c_s1` command. With `c_s0` and `c_s1` themselves that is **n = 5 replicates
+  at each of two seeds**, differing in nothing a human specified.
+- **R-24k**: two extra runs of the exact `w_s0` command truncated to its final checkpoint (WSD,
+  24,000 steps, control set, seed 0; no trajectory checkpoints). With `w_s0` that is **n = 3 at
+  24,000 steps**.
+- All eight plus two are judged by the same Lean-alone evaluator on the same 5,000 theorems.
+
+**Expected results.**
+
+- **E17.** Same-command replicates at 6,000 steps have a **smaller** spread than the 52 noise-floor
+  cells but not a negligible one: per-seed sd of the 6-line bin **0.03–0.10** (against 0.152 across
+  the 52 cells) and of the overall rate **0.005–0.020** (against 0.030). *Falsifier of "the run-to-run
+  floor is nondeterminism": per-seed sd of the 6-line bin < 0.01 in both seeds — then a seed nearly
+  does determine the run, the 0.152 is seed and data variance after all, and E10's pairing is as
+  strong as the main pre-registration assumed.*
+- **E18.** The depth-3 slice **changes mode between same-command replicates** in at least one of the
+  two seeds (at least one replicate above 0.44 and at least one below in the same seed's five). This
+  is the sharp version: if it holds, a run's depth-3 mode is not a property of its seed or its data at
+  all. *Falsifier: all five replicates of both seeds land on the same side of 0.44.*
+- **E19.** At 24,000 steps the three same-command replicates of `w_s0` have a 6-line spread **no
+  larger than** at 6,000 steps — longer training damps the divergence rather than amplifying it
+  (the counterpart of E2).
+- **E20.** Every cross-run difference reported in this run is stated beside R's measured sd for the
+  matching step count, and `NOISE_FLOOR.md`'s 52-cell figure is quoted beside it as the wider
+  cross-seed floor.
+
+**Drop order unchanged except that R sits just above F's seeds**: R-6k is the cheapest arm in the run
+and the one that tells every other comparison what it is allowed to claim, so it is dropped last
+after C and W; R-24k is dropped before F entirely.

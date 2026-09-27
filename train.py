@@ -232,9 +232,10 @@ def main():
     if st is not None:
         opt.load_state_dict(st['opt'])
         rng.setstate(tuple(tuple(x) if isinstance(x, list) else x for x in st['rng']))
-        torch.set_rng_state(st['torch_rng'])
+        # load_ckpt maps every tensor in the state onto `dev`; the rng states must go back as cpu uint8
+        torch.set_rng_state(st['torch_rng'].detach().cpu().to(torch.uint8))
         if dev == 'cuda' and st.get('cuda_rng') is not None:
-            torch.cuda.set_rng_state(st['cuda_rng'])
+            torch.cuda.set_rng_state(st['cuda_rng'].detach().cpu().to(torch.uint8))
         perm = list(st['perm'])
         step0 = st['step']
         print(f'resumed {a.resume} at step {step0} (sched {a.sched} to {a.steps}); lr now {sched(step0 + 1):.3e}', flush=True)
