@@ -307,3 +307,225 @@ which is a clean internal consistency check on the sampler.
 - **F7 — `mean_written_lines` is not an ND line count.** It counts `have` tactics plus one, so box
   assumption lines are invisible and every depth-3 slice reports ≈ 4.0 written lines for 6-line
   theorems.
+
+---
+
+## §Compare
+
+Read after §Recount was committed (`8f47cb90`). Sources compared: `run_stage1_dynamics.md`
+(400 words of body, 416 with the title — inside the brief's ≤ 400), `numbers.md` § stage1-dynamics
+(S1–S11), `log.md`, `artifacts/sd/summary.json`, `sd_tables.py`'s output.
+
+### The write-up's claims
+
+| claim (`run_stage1_dynamics.md`) | my independent value | verdict |
+|---|---|---|
+| "All five bins cost **4.7 %** of training time" | 4.70 % median over the 46 full-length runs from the checkpoint-recorded wall times, 4.50 % from the metrics files' last logged step | **reproduces** (see R5 for the population the range is quoted over) |
+| Q1: 6k → 24k moves the 6-line bin by a median **+16.1 pp** (7/8 seeds) | **+16.1 pp**, 7/8 seeds > +2 pp | **reproduces** |
+| …and depth-3 by **+25.6 pp** | **+25.6 pp** | **reproduces** |
+| …2- and 3-line move **+0.2 and +1.1 pp** | +0.2 and +1.1 pp | **reproduces** |
+| "The falsifier needed 6 of 8 seeds flat. **None** were." | 0/8 | **reproduces** |
+| Q2: "All twelve 24,000-step runs visit both modes" | 12/12: every run's trajectory min < 0.44 and max > 0.44 (mins 0.004–0.038, maxima 0.488–0.934) | **reproduces** |
+| …"spans ≈ 0.01 to 0.49–0.92 and crosses the 0.44 cut **1–10 times**" | crossings 1–10 over the 18 checkpoints at steps ≥ 6,000 (1–11 if the final checkpoint is included) | **reproduces** |
+| …"Checkpoints sit in the high mode **37 %** of the time against `NOISE_FLOOR.md`'s 0.462 across 52 *runs*" | 0.37 (mean of the twelve per-run fractions over 18 checkpoints each); 24/52 = 0.4615 | **reproduces**; needs the checker label (R8) |
+| …"pass@8 moves with it (0.892 → 0.392 and 0.026 → 0.884)" | identical | **reproduces** |
+| "Arm R … the 6-line bin spans **0.490–0.802**, depth-3 **0.064–0.736**" | identical | **reproduces** |
+| "Three same-command runs at 24,000 steps **reproduce nearly the whole** 52-cell floor (6-line sd 0.155 vs 0.152; depth-3 0.311 vs 0.305)" | the four sds are exact. But n = 3 gives a 95 % CI on the sd of **[0.081, 0.973]**; the n = 5 groups give [0.067, 0.323] and [0.059, 0.284]; the 52-cell 0.1523 has [0.128, 0.191]. All three contain it | numbers reproduce, **wording overstated (R4)** |
+| Q3: "C and W-6k see identical batches" | verified by reading `train.py`: `lr_at` does not touch the rng; `--ckpt_every`/`--state_at` only trigger saves; the `val2k` block consumes the rng identically in both arms at every logged step; `--val_bins` uses its own `Random(12345)`; `--resume` restores `perm` and all three rng states after step 4,800's logging | **reproduces** |
+| …"median Δ −0.3 pp overall, −2.3 pp at 6 lines, 4/8 each way, inside that floor" | −0.3 pp, −2.3 pp, 4/8 | **reproduces**; the resolution should be stated (R2) |
+| Q4: "steps, not data … match on every trajectory-robust estimator (best depth-3 loss **0.0286 vs 0.0283**, best rate **0.823 vs 0.820**)" | 0.0286 vs 0.0283 and 0.823 vs 0.820, both under "best over the trajectory checkpoints, excluding the final decayed one" | numbers **reproduce**; the claim is **not supported as stated (R1)** |
+| "572,759 fresh proofs (5.4 epochs) … 155,000 seen 19.8 times" | 5.364 and 19.82 epochs | **reproduces** |
+| Q5: Spearman **−0.905** (6-line) and **−0.934** (depth-3) against **−0.310** for `val2k` across 8 seeds at 24,000 | −0.905, −0.934, −0.310 | **reproduces** |
+| …"`val2k` moved 0.002 all run while the 6-line bin moved up to 45 pp" | \|Δval2k\| 0.0015–0.0027; max len6 move +45.0 pp (s5) | **reproduces** |
+| "**10 met, 6 partly, 6 missed**" | my own scoring of the same 22, §Recount §7: 9 clear hits, 1 hit whose sibling clause fails, 6 partial, 6 misses — the same verdicts modulo where E7 and E13 are placed | **reproduces** |
+| "**8.74 pod-hours, $4.29** of 30 h / $15; four A40s, real rate $0.49/h, deleted" | `podbudget` 8.74 h / $4.29; `runpodctl pod list` has no `sd-*` pod; `sd-4` billed $0.93 for 1.8964 h = $0.490/h | **reproduces** |
+
+### `numbers.md` claims that do not reproduce
+
+| § | claim | my value | verdict |
+|---|---|---|---|
+| S9 | proof length: C 85.4 / 4.16 / **122.5** / 5.23; W-6k 84.0 / 116.2 / 5.41; W-12k 83.6 / 113.9 / 5.52; W-24k 87.1 / 127.3 / 5.10 | C **86.4 / 4.15 / 126.7 / 5.13**; W-6k **84.5 / 4.17 / 118.4 / 5.36**; W-12k **83.9 / 4.19 / 115.3 / 5.49**; W-24k **86.8 / 4.19 / 125.8 / 5.16**. These are also exactly what the run's own `summary.json` holds and what `python3 sd_tables.py` prints today. The F-24k row is correct | **differs — a transcription error in the write-up, not in the analysis** (R6) |
+| S8 | table headed "Spearman ρ, **arm W**", with an "at 6,000" column: −0.952 / −0.857 / −0.333 / −0.571 | those four are arm **C** (`sd_analysis.py` line 338: `(6000, ('C',))`), which I reproduce exactly. Arm W's own step-6,000 trajectory point gives −0.833 / −0.826 / −0.048 / −0.238; the decayed W-6k arm gives −0.881 / −0.881 / −0.524 / −0.548 | **mislabelled arm** (R7) |
+| S8, S11 | "The 6-line loss falls from 6,000 to 24,000 in **7 of 8** seeds" | **8 of 8** (s0 is 0.0750 → 0.0740). `summary.json`'s own `E5_long_loss` has `falls_6k_to_end: true` for all 8 on `len6`; 7/8 is the **depth-3** count (s0 rises there) | **differs — understates its own result** (R9) |
+| S7 | "Runs differing in **nothing a human specified** (checked: `sort -u` … returns exactly **1** string per group)" | true for both 6,000-step groups. **False for the 24,000-step group**: `w_s0` ran with `--ckpt_every 1000 --state_at 4800,9600`, `r24a_s0` and `r24b_s0` with neither. I read the code — both flags only trigger saves and cannot alter the trajectory — so the group is computationally equivalent, but not command-identical. Separately, the replicates did **not** hold GPU co-tenancy fixed (throughput 4.48–8.23 steps/s across the ten 6,000-step runs; disclosed in `log.md` at 19:05 but not in S7). I checked whether that drives the spread: pooled Spearman(throughput, 6-line rate) = **+0.115**, depth-3 **−0.018**, and the two seed groups disagree in sign — no evidence it does | **differs — overstated identity** (R3) |
+| S10 | "a median **4.7 %** … (range **4.3–6.2 %**) over the **46 full-length runs**" | the 4.71 % median in `summary.json` is over **49** runs including the three 200–400-step smokes, whose overhead is 10.2–13.0 %. Over the 46 full-length runs it is median **4.70 %**, range **4.27–6.24 %** — so the number happens to be right and the range is right, but the sentence attributes one population's median to the other's range | **reproduces under the right population; the sentence mixes two** (R5) |
+| S11 | E7 scored "**2/8**, 6/8, and 4 change" | 2/8 is W's **undecayed** step-6,000 checkpoint; "4 of 8 change mode" is computed from the **decayed** W-6k → W-24k pair, where the 6,000-step high count is **4/8** — inside E7's pre-registered 3–5 band. Two clauses of one expectation are scored on two different readings of "at 6,000 steps" | **inconsistent readings** (R10) |
+| S11 | E13 scored "**3/4**" | 3/4 on the **6-line bin**; **0/4** if "per-bin" means all five bins. Which bin is not stated | **reproduces on one reading, needs the bin named** (R11) |
+| prereg | baseline "6-line non-depth-3 **0.824 ± 0.037**" | that is `noise-floor`'s `len6_none`, **n = 247** (6-line, *no* pattern), not the n = 500 non-depth-3 complement this run reports. The n = 500 baseline is not derivable from the pulled artefacts | **mislabelled premise** (F4) |
+| prereg | gate boundary "≈ 67 per million **on held-out greedy**" | 67.15 per million is over `noise-floor`'s 12,033,100 in-loop gate samples. On held-out greedy the run's own S1 measures **+400 and +200 per million** (2 and 1 extra theorems in 5,000). S1's cells are correct; only the pre-registration's sentence is | **mislabelled population** (F5) |
+| S1 | "**Five** extra theorems in 20,000 theorem-cells" | the eight quoted cells differ in five of them, but the overall cell already contains its own bins: `stage1_p1_s0` gains **2** theorems (4,365 vs 4,363; both 6-line, one of them depth-3) and `stage1_p1_s1` gains **1** (4,682 vs 4,681; 6-line). **Three** distinct theorems in 10,000, appearing in 5 of the 8 cells | **differs — five is the cell count, not the theorem count** (R12) |
+| pool | "**0** records collide with a held-out class" (`pool_fresh.json`, `make_splits.py`) | under a premise-order-insensitive renaming class: **21** held-out theorems in the control set's class, **66** in the fresh set's, **0** in the depth-3 slice. Effect on any reported rate ≤ **+0.14 pp** | **differs; bounded and immaterial** (F2) |
+
+### Wording against n, and what the measured floor allows
+
+Every cross-run comparison in this run is stated beside arm R's sd (E20 satisfied). What the
+write-up does not state is the **resolution** those sds imply. Paired two-sided 95 % intervals,
+computed by me from the per-seed values:
+
+| comparison | n | mean difference | 95 % interval | what may be claimed |
+|---|---|---|---|---|
+| W-24k − W-6k, overall | 8 paired | **+5.3 pp** | **[+2.6, +7.9]** | a real gain |
+| W-24k − W-6k, 5-line | 8 paired | **+5.4 pp** | **[+4.4, +6.3]** | a real gain |
+| W-24k − W-6k, 6-line non-depth-3 | 8 paired | **+6.9 pp** | **[+5.5, +8.4]** | a real gain |
+| W-24k − W-6k, 4-line | 8 paired | +2.8 pp | [+1.9, +3.7] | a real gain |
+| W-24k − W-6k, 6-line | 8 paired | +16.8 pp | [+3.5, +30.1] | a real gain, poorly located |
+| W-24k − W-6k, depth-3 | 8 paired | +26.6 pp | [+0.3, +52.9] | barely clears zero |
+| W-6k − C, overall | 8 paired | −1.0 pp | [−3.3, +1.2] | no difference, to ±2 pp |
+| W-6k − C, 6-line | 8 paired | −8.8 pp | [−20.7, +3.2] | **no difference detected, to ±12 pp** |
+| F-24k − W-24k, 6-line (endpoint) | 4 vs 8 | −14.8 pp (median) | MDD **±21.1 pp** from R's 24k sd | **nothing may be claimed** |
+
+Two consequences the write-up should carry. First, **Q1's strongest evidence is the slices that do
+not oscillate** — overall, 5-line, 4-line and 6-line-non-depth-3 all clear zero with intervals of
+±1–1.5 pp — not the 6-line bin and depth-3 slice it leads with, whose intervals are ±13 and ±26 pp.
+The headline survives either way, and is stronger told the first way. Second, **E12's pre-registered
+band (+2…+8 pp) was 4× below the design's resolution before the run started**; the right lesson is
+not "steps, not data" but "this contrast needs a different readout".
+
+---
+
+## §Verdict
+
+**Accept, with twelve rewordings and one gap to close.** No hard constraint is violated; nothing is
+quarantined. This is the most carefully instrumented run in the series: every one of the 275 result
+files recomputes exactly from its own raw records under code I wrote independently, the pre-registration
+and both addenda were committed before the outcomes they cover, the misses are reported as misses
+(6 of 22, all but one in the unfavourable direction, and the executor scored two of its own
+expectations more harshly than the pre-registration required), and the deviations that mattered —
+the arm-R chain split, the `sd_recheck.py` bug, the externally changed budget ledger — are disclosed
+in `log.md` and `QUESTIONS.md` rather than smoothed over.
+
+### What stands
+
+1. **The blind spot is real.** `data/p2/heldout.jsonl` is length-sorted and its first 2,000 records
+   are exactly 1,000 two-line and 1,000 three-line proofs, so every validation curve in this project
+   before this run measured only proofs every model already solves at 0.99+. Verified directly.
+2. **Stage 1 is not near saturation at 6,000 steps.** This is the run's headline and it holds with
+   room to spare. Within seed, the 6k → 24k gain clears zero at 95 % on **every** slice, and the
+   intervals are tightest exactly where the measurement is quietest: overall **+5.3 pp [+2.6, +7.9]**,
+   5-line **+5.4 pp [+4.4, +6.3]**, 6-line non-depth-3 **+6.9 pp [+5.5, +8.4]**. E1's falsifier
+   needed 6 of 8 seeds flat and got 0.
+3. **The depth-3 "mode" is not a property of a seed, a data pool, or even a run — it is where a
+   checkpoint happens to land.** Two distribution-free demonstrations, neither needing an sd:
+   all **12** of the 24,000-step runs cross the 0.44 cut along their own trajectory (1–10 times), and
+   **five runs of one fixed command line at one seed** span depth-3 0.064–0.736. This retires
+   `NOISE_FLOOR.md`'s cross-seed bimodality as a separate phenomenon, and it retires "seed variance"
+   as an explanation of it. It is the most consequential result in the run.
+4. **The oscillation is capability, not decoding.** pass@8 at T = 0.8 on 500 depth-3 theorems moves
+   **−50.0 pp** and **+85.8 pp** with greedy across the two within-run pairs, and the low-greedy
+   checkpoints stay at 0.392 and 0.026 — so reading (ii) is dead and every bimodality this project
+   has reported on greedy readouts is a real capability difference, not a measurement artefact. Well
+   powered (n = 500, k = 8) and re-verified: I re-checked 133 of these accepted samples in Lean.
+5. **Per-length validation loss ranks runs; `val2k` does not.** ρ = −0.905 (6-line) and −0.934
+   (depth-3) against −0.310 for `val2k` across 8 seeds at a fixed step, and the pooled trajectory
+   ρ is −0.885/−0.893 over 192 checkpoints. The instrumentation is worth its **4.7 %**.
+6. **The judge.** Lean alone, `nd_verify` called nowhere, the 275 files self-consistent, 733 counted
+   proofs re-verified in Lean (4.34.1 on my side, 4.34.0 on the pods) from their stored literal text
+   with an added `#print axioms` check, after 197 negative controls confirmed my harness rejects what
+   it should. The run also cross-checked its judge against two `noise-floor` checkpoints published
+   under Lean ∧ `nd_verify` and against a second Lean rendering of 600 counted proofs — both
+   reproduce under my counting.
+
+### What must be reworded
+
+- **R1 — "Q4 — steps, not data" is not supported as a positive claim.** The pre-registered estimator
+  failed (E11 ratio ≈ 0, E12 median −14.8 pp), and with arm R's own 24,000-step sd the endpoint
+  design's resolution is **±21 pp** on the 6-line bin against a pre-registered band of +2…+8 pp — it
+  was 4× underpowered before the first pod. `numbers.md` S6 says this plainly ("the pre-registered
+  endpoint estimator is not usable") and labels the substitutes "post-hoc"; the 400-word write-up
+  does not, and its confident "steps, not data" reads as a demonstration. Reword to: *fresh data
+  bought nothing detectable; the endpoint contrast cannot resolve anything below ≈ 20 pp, and the
+  post-hoc trajectory estimators (best losses 0.0286 vs 0.0283, best rates 0.823 vs 0.820) are flat.*
+- **R2 — Q3 needs its resolution.** "Schedules are indistinguishable" is right overall
+  (−1.0 pp [−3.3, +1.2]); on the 6-line bin it is a non-detection at **±12 pp** (−8.8 pp
+  [−20.7, +3.2]) and E10's own 5 pp falsifier fired. Say "no difference above ≈ 12 pp on the 6-line
+  bin and ≈ 2 pp overall", not "indistinguishable".
+- **R3 — S7's "differing in nothing a human specified" is not true of the 24,000-step group.**
+  `w_s0` carries `--ckpt_every 1000 --state_at 4800,9600` and its two replicates carry neither. Both
+  flags only trigger saves, so the group is computationally equivalent — say that, and drop the
+  `sort -u` sentence, which returns 2 strings there. Add that co-tenancy was not held fixed
+  (throughput 4.48–8.23 steps/s) and that it does not appear to drive the spread (pooled
+  ρ = +0.115 on the 6-line bin, −0.018 on depth-3).
+- **R4 — "reproduce nearly the whole 52-cell floor" claims more than n = 3 can.** The 95 % CI on
+  that sd is [0.081, 0.973]. Say the same-command sd is **statistically indistinguishable** from the
+  52-cell sd (all three replicate groups' CIs contain 0.1523) — which is the finding, and is enough.
+- **R5 — S10 mixes two populations in one sentence.** The 4.7 % median in `summary.json` is over 49
+  runs including three 200–400-step smokes at 10–13 %; the 4.3–6.2 % range is over the 46 full-length
+  ones. Over those 46 alone: median 4.70 %, range 4.27–6.24 %. Quote one population.
+- **R6 — S9's proof-length table is wrong in four of five rows.** Correct values, which are what the
+  run's own `summary.json` holds and what `sd_tables.py` prints: C **86.4 / 4.15 / 126.7 / 5.13**,
+  W-6k **84.5 / 4.17 / 118.4 / 5.36**, W-12k **83.9 / 4.19 / 115.3 / 5.49**, W-24k
+  **86.8 / 4.19 / 125.8 / 5.16**; F-24k is already right. The analysis is fine; only the transcription
+  is not. Add that "written lines" = `have`s + 1 **excludes box assumption lines**, which is why every
+  depth-3 slice reads ≈ 4.0 written lines for 6-line theorems (F7).
+- **R7 — S8's table is headed "arm W" but its 6,000-step column is arm C.** The four values
+  (−0.952, −0.857, −0.333, −0.571) are arm C and reproduce exactly; arm W's own step-6,000 point gives
+  −0.833/−0.826/−0.048/−0.238 and the decayed W-6k arm −0.881/−0.881/−0.524/−0.548. Relabel.
+- **R8 — the write-up needs checker labels on its cross-date comparisons.** It quotes
+  `NOISE_FLOOR.md`'s 0.462, 0.152 and 0.305 with no note that those were measured under
+  **Lean ∧ `nd_verify`** while all its own numbers are under **Lean alone** (Dan, 2026-09-27).
+  `numbers.md` labels them correctly; the 400-word document must too.
+- **R9 — S8 and S11 understate the run's own result.** "The 6-line loss falls from 6,000 to 24,000 in
+  7 of 8 seeds" is **8 of 8**; 7/8 is the depth-3 count. `summary.json` already has it right.
+- **R10 — E7's two clauses are scored on two different readings of "at 6,000 steps."** 2/8 is W's
+  undecayed step-6,000 checkpoint; the "4 of 8 change mode" count is from the decayed W-6k arm, where
+  the 6,000-step count is 4/8 and inside the pre-registered 3–5 band. Use the decayed arm for both
+  (it is what the arm table defines) and E7's first clause is met.
+- **R11 — E13's "3/4" needs its bin named.** 3/4 on the 6-line bin; 0/4 on all five bins. The
+  accompanying deflation ("the reason is the oscillation, not less memorisation") is correct and
+  should stay.
+- **R12 — S1's "five extra theorems" is a cell count.** Three distinct theorems in 10,000 (2 in
+  `stage1_p1_s0`, 1 in `stage1_p1_s1`), appearing in five of the eight quoted cells.
+
+Also carry F2, F4 and F5 from §Recount: the "0 held-out class collisions" claim holds only under the
+project's premise-order-sensitive `canon_key` (21 and 66 collisions under a true canonical form,
+worth ≤ +0.14 pp and exactly 0 on the depth-3 slice); the "6-line non-depth-3 0.824 ± 0.037" premise
+is `noise-floor`'s n = 247 pattern-free slice, not this run's n = 500 complement; and the "≈ 67 per
+million" gate boundary is a gate-population number, against +200–400 per million that this run's own
+S1 measures on held-out greedy.
+
+### What is not supported
+
+- **The gap to close: arm R is not auditable.** `pod/sd/jobs.py` evaluates every arm-R checkpoint
+  without `--texts`, so none of its counted proofs retains the literal Lean text a reviewer must
+  re-check (the same is true of all 228 trajectory evaluations). Arm R's rates recompute exactly from
+  its stored per-record verdicts, and I have no reason to doubt them — the same evaluator produced the
+  733 proofs I did verify, and all 275 files are internally consistent — but arm R is the arm that
+  licenses the run's central claim about the floor, and on the brief's standard ("re-check ≥ 100
+  counted proofs per arm in Lean, from their stored literal text") it is unverified. **Remedy: re-run
+  `sd_eval.py --texts --ckpts 'ckpts/sd/r6*.pt' 'ckpts/sd/r24*.pt'`. No training, ten checkpoints,
+  ≈ 10 GPU-minutes, ≈ $0.10.** Do it before anything else here is built on.
+- Q4's positive form (R1) and the n = 3 precision claim (R4).
+
+### The next measurement
+
+Two, in order of value per dollar.
+
+1. **Make arm R checkable** — the `--texts` re-run above, ≈ $0.10. Then add `--texts` to the
+   trajectory evaluations in any future run; storing the text costs **1.6 MB** per 5,000-theorem
+   evaluation uncompressed (2.15 MB with text against 0.58 MB without, and far less gzipped) and is
+   what makes the whole thing reviewable.
+2. **The measurement that would settle what the oscillation is: average the weights, not the
+   readouts.** Every ingredient is already in the bucket — 23 trajectory checkpoints per W seed. If
+   the depth-3 rate of an average of the last k stable-phase checkpoints sits near the **high** end of
+   its run's oscillation rather than near its mean, the oscillation is a wobble in the loss basin that
+   weight averaging removes for free, "seed variance" stops being a property of Stage 1, and every
+   future Stage 1 gets the high mode for nothing. If instead the average lands near the mean, the
+   oscillation is a genuine alternation between distinct solutions and the right response is
+   checkpoint selection on per-length loss (which this run has just shown works, ρ = −0.905). The
+   run's own data already says this is the question worth asking: **averaging the readout** over
+   steps 6,000–23,000 cuts the between-seed sd from 0.158 to **0.073** on the 6-line bin and from
+   0.315 to **0.147** on depth-3, and on that readout F − W is **+1.4 pp** and **+0.2 pp** — so a
+   trajectory readout is both 2× quieter and the only version of Q4 that could be answered. Cost:
+   a CPU/GPU-minutes averaging job plus one evaluation per averaged checkpoint, ≈ 1 GPU-hour, ≈ $0.50.
+
+If Q4 is to be answered properly rather than abandoned, the powered design follows from arm R: on the
+trajectory-mean readout (sd 0.073) a 4-seed × 3-replicate cell per arm gives an MDD of ≈ ±6 pp, which
+would actually test the pre-registered +2…+8 pp band. That is 24 runs of 24,000 steps, ≈ 35 GPU-hours,
+≈ $17 — worth pre-registering as its own run rather than bolting onto this one.
+
+---
+
+Reviewer: agent:claude, 2026-09-27. Recount committed at `8f47cb90` before this section was written.
+Scripts: `review_sd_slices.py`, `review_sd_pick.py`, `review_sd_lean.py`, `review_sd_controls.py`,
+`review_sd_splits.py`, `review_sd_expect.py`. Raw outputs: `review_sd_expect.txt`,
+`review_sd_splits.txt`, `review_sd_leanspec.verdicts.json`, `review_sd_controls.verdicts.json`.
