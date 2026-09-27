@@ -43,7 +43,7 @@ def load_rows(pattern=f'{ART}/*.jsonl'):
             if not l.strip():
                 continue
             r = json.loads(l)
-            if 'n_tried' not in r or r.get('stage') == 'probe':
+            if 'n_tried' not in r or r.get('stage') in ('probe', 'diag'):
                 continue
             r['_src'] = fn
             rows.append(r)
