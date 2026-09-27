@@ -15,7 +15,7 @@ length of the proof written vs the reference length; and a failure-reason tally.
 """
 import argparse, json, math, os, sys, collections
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from nd_verify import verify_text
+from lean_judge import judge_many    # Lean alone decides (Dan, 2026-09-27)
 
 
 def wilson(k, n, z=1.96):
@@ -71,7 +71,7 @@ def main():
         if 'proof' not in r or not isinstance(r['proof'], str):
             sys.exit(f'record {name}: expected a single "proof" string per theorem (see submission_template/prove.py)')
         samples = [r['proof']]
-        res = [verify_text(t['prompt'] + ' ' + s.strip()) for s in samples]
+        res = judge_many([(t['prompt'], s.strip()) for s in samples])   # batched: one Lean run for the whole set
         oks = [x[0] for x in res]
         lens = [x[2] for x in res if x[0]]
         for ok, reason, _ in res:

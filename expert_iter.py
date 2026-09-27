@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import torch
 from model import load_ckpt
 from sample import generate
-from nd_verify import verify_text
+from lean_judge import judge_many    # Lean alone decides (Dan, 2026-09-27)
 from prune import pruned_length
 from gen import canon_key
 from eval_set import judge, summarize
@@ -32,8 +32,10 @@ def read(fn):
     return [json.loads(l) for l in open(fn) if l.strip()]
 
 
-def relabel(prompt, proof):
-    """If proof is a valid proof of some other conclusion from the same premises, return (new_prompt, thm)."""
+def relabel_candidate(prompt, proof):
+    """The rewritten theorem this proof would prove if its last formula were the conclusion: (new_prompt, thm) or None.
+    Structural only -- no judging: hindsight relabelling re-checks the proof against a theorem the gate never saw, so no
+    cached verdict applies (pitfall 2) and the Lean checks must be batched over all candidates (pitfall 4)."""
     toks = proof.split()
     if 'QED' not in toks:
         return None
@@ -56,11 +58,20 @@ def relabel(prompt, proof):
         return None
     pre = prompt.split(' SEQ ')[0]
     newp = f'{pre} SEQ {form} PRF'
-    ok, reason, nl = verify_text(newp + ' ' + proof)
-    if not ok:
-        return None
     prem = pre[len('THM '):].strip()
-    return newp, f'{prem} |- {form}', nl
+    return newp, f'{prem} |- {form}'
+
+
+def relabel_batch(pairs):
+    """pairs: list of (prompt, proof) -> list of (new_prompt, thm, n_lines) or None, judged in ONE batched Lean run."""
+    cands = [relabel_candidate(p, pf) for p, pf in pairs]
+    idx = [i for i, c in enumerate(cands) if c is not None]
+    res = judge_many([(cands[i][0], pairs[i][1]) for i in idx])
+    out = [None] * len(pairs)
+    for i, (ok, reason, nl) in zip(idx, res):
+        if ok:
+            out[i] = (cands[i][0], cands[i][1], nl)
+    return out
 
 
 def main():
@@ -143,9 +154,12 @@ def main():
         # relabelling by-products
         if a.relabel:
             nrl = 0
+            flat_pairs = [(t['prompt'], p) for t, ps in zip(targets, outs) for p in ps]
+            rls = relabel_batch(flat_pairs)                      # one batched Lean run for every candidate (pitfalls 2 + 4)
+            at = 0
             for t, ps in zip(targets, outs):
                 for p in ps:
-                    rl = relabel(t['prompt'], p)
+                    rl = rls[at]; at += 1
                     if rl is None:
                         continue
                     newp, thm, nl = rl

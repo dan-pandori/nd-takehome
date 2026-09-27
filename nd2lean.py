@@ -63,8 +63,14 @@ class Box:
         self.last_formula = hyp
 
 
-def translate(prompt, proof):
-    """-> Lean source for one theorem named `t`, or raise TranslationError for structural violations."""
+def translate(prompt, proof, require_all_pr=True):
+    """-> Lean source for one theorem named `t`, or raise TranslationError for structural violations.
+
+    require_all_pr=False allows a proof that re-states only the first k of the declared premises (`lean_judge`, run
+    lean-judge, 2026-09-27).  Lean does not require a premise to be re-stated; `lean_tok.inverse` accepts a literal text
+    whose `h`-citations are a PREFIX h1..hk in order (`raise ParseFail('PR position')` otherwise), so the k-th PR line is
+    still the k-th declared premise and the rendering is unchanged -- only this check is dropped.  The remaining premises
+    stay declared in the statement and are simply unused, which cannot make a false theorem provable."""
     prem, concl = parse_prompt(prompt)
     toks = proof.split()
     if toks.count('QED') != 1 or toks[-1] != 'QED':
@@ -160,7 +166,7 @@ def translate(prompt, proof):
         box.last = i; box.last_formula = f; formulas[i] = f
     if len(stack) != 1:
         raise TranslationError('final line inside a box')
-    if n_pr != len(prem):
+    if n_pr != len(prem) and require_all_pr:
         raise TranslationError('missing PR')
     last = lines[-1]
     if last['rule'] == 'AS' or (last['rule'] == 'PR' and last['formula'] != concl):

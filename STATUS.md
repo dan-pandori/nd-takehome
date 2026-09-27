@@ -115,6 +115,28 @@ numbers go into `numbers.md` § noise-floor as each stage lands rather than at t
 
 NOISE-FLOOR DONE 2026-09-25T07:25:00Z
 
+## Run `lean-judge` (executor, 2026-09-27)
+
+START 2026-09-27T17:20Z. Making **Lean the only judge** on the fork's `dan` branch (Dan, 2026-09-27):
+`lean_judge.py`, the gate change, the six loop-file import swaps, `lean_check.py` with `Not.elim`,
+tests, `LEAN_JUDGE.md`, and a seven-part acceptance test. Pre-registered in
+`preregistration/lean-judge.md` (commit `579ee16`, before any pod). Pod budget 8 h / $4; one A40
+(`lj1`, $0.49/h) for acceptance test 5 only.
+
+LEAN-JUDGE DONE 2026-09-27T18:35:00Z — Lean alone decides on the fork's `dan` branch.
+`lean_judge.py` (marker ⇒ reject, gate registry ⇒ that verdict, else batched `nd2lean` + Lean);
+`lean_gate.py` no longer calls `nd_verify` and returns **clean ND strings** for accepted samples;
+the six loop files import the Lean judge and batch; `lean_check.py` admits `Not.elim`, `Not.intro`,
+`And.elim`, `Iff.elim`; `nd2lean.translate(require_all_pr=False)` for the judge only.
+**All seven acceptance tests pass**: 281,817 / 281,817 stored ND proofs the old gate counted are
+counted now (**0 losses**), line counts identical on all of them; 6,419 / 6,419 of the Lean-only
+class now counted (41.7 % omitted premise re-statement, 25.9 % `Not.elim`); Lean agrees on the
+literal text, `nd2lean(nd)` and `nd2lean(norm(nd))` on all 6,419; one expert-iteration round with
+**0 `LEAN*` markers** in the training files and 166 hindsight relabels accepted; the judging step is
+6.4× faster; `lean_check --selftest` 39/39. Read `LEAN_JUDGE.md`; counts in `numbers.md` § lean-judge
+(L0–L8), write-up `run_lean_judge.md`, figures `figures/lj_*.png`, raw files `artifacts/lj/` and
+`hf://buckets/dan-pandori/nd-rl/lean-judge/`. One A40 pod, 0.66 h, $0.32 of $4. Three questions for
+Dan in `QUESTIONS.md` (the `no-denotation` class, `require_all_pr`, relabelling the pools).
 # stage1-dynamics (does Stage-1 saturate on long proofs, and is the schedule right?)
 
 Run id `stage1-dynamics`, executor agent:claude, worktree `~/work/stage1-dynamics`, branch
