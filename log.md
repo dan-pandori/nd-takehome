@@ -574,3 +574,8 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   of which ~215 are the expectations-vs-outcomes table — over the 400-word guide, and I kept the table
   because it *is* the deliverable), `figures/lj_{leanonly_classes,throughput}.png`, three questions in
   `QUESTIONS.md`. Pod `lj1` deleted; bucket sync.
+- 18:35  Pod `lj1` deleted: **0.66 pod-hours, $0.32** of the $4 / 8 h budget (NVIDIA A40, real billed
+  rate $0.49/h). RunPod balance $150.91 (floor $130). Bucket:
+  `hf://buckets/dan-pandori/nd-rl/lean-judge/{artifacts/lj,data/lj}` (179 MB, including the 165 MB
+  `corpus_accepted.jsonl`, which is gitignored). No checkpoint was produced worth keeping (test 5's
+  one-round fine-tune is a smoke test), so `ckpts/` is not uploaded.
