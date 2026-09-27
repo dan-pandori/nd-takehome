@@ -1,0 +1,7 @@
+START 2026-09-27T20:30:42Z python3 sd_eval.py --in data/p2/heldout.jsonl --outdir artifacts/sd/ev --batch 512 --texts --skip_done --ckpts ckpts/sd/c_s2.pt ckpts/sd/w6_s2.pt ckpts/sd/w12_s2.pt ckpts/sd/w_s2.pt
+4 checkpoints, 5000 theorems, slices {'all': 5000, 'len2': 1000, 'len3': 1000, 'len4': 1000, 'len5': 1000, 'len6': 1000, 'depth3': 500, 'nodepth3_len6': 500}
+c_s2: all 0.9264 len6 0.7840 depth3 0.6820 | parse-fail 74 lean-rej 294 | 30s sample 27s lean
+w6_s2: all 0.9412 len6 0.8270 depth3 0.7320 | parse-fail 86 lean-rej 208 | 27s sample 23s lean
+w12_s2: all 0.8870 len6 0.4850 depth3 0.0200 | parse-fail 470 lean-rej 95 | 30s sample 13s lean
+w_s2: all 0.9536 len6 0.8040 depth3 0.6400 | parse-fail 174 lean-rej 58 | 27s sample 11s lean
+END 2026-09-27T20:33:54Z

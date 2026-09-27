@@ -1,0 +1,13 @@
+START 2026-09-27T19:37:24Z python3 train.py --heldout data/p2/heldout.jsonl --mode lean_seq --bs 128 --cap 6 --val_bins --data data/p2/train_depth3_f0_a1.jsonl --seed 3 --steps 6000 --sched wsd --metrics artifacts/sd/m_w6_s3.jsonl --out ckpts/sd/w6_s3.pt --decay_frac 0.2 --resume ckpts/sd/w_s3.state04800.pt
+params 3214336 mode lean_seq shift True
+val slices {'all': 5000, 'len2': 1000, 'len3': 1000, 'len4': 1000, 'len5': 1000, 'len6': 1000, 'depth3': 500, 'nodepth3_len6': 500}
+train records 155000 max len 464
+resumed ckpts/sd/w_s3.state04800.pt at step 4800 (sched wsd to 6000); lr now 9.992e-04
+step 5000 loss 0.0638 lr 8.50e-04 21s val 0.0750 | all=0.0621 len2=0.0801 len3=0.0703 len4=0.0555 len5=0.0437 len6=0.0709 depth3=0.0832 nodepth3_len6=0.0526
+step 5200 loss 0.0610 lr 7.00e-04 55s val 0.0747 | all=0.0533 len2=0.0793 len3=0.0700 len4=0.0560 len5=0.0435 len6=0.0423 depth3=0.0362 nodepth3_len6=0.0514
+step 5400 loss 0.0597 lr 5.50e-04 88s val 0.0749 | all=0.0570 len2=0.0794 len3=0.0700 len4=0.0544 len5=0.0425 len6=0.0562 depth3=0.0612 nodepth3_len6=0.0487
+step 5600 loss 0.0550 lr 4.00e-04 122s val 0.0739 | all=0.0609 len2=0.0788 len3=0.0687 len4=0.0528 len5=0.0413 len6=0.0717 depth3=0.0874 nodepth3_len6=0.0482
+step 5800 loss 0.0547 lr 2.50e-04 155s val 0.0731 | all=0.0524 len2=0.0783 len3=0.0681 len4=0.0522 len5=0.0405 len6=0.0456 depth3=0.0445 nodepth3_len6=0.0472
+step 6000 loss 0.0559 lr 1.00e-04 189s val 0.0730 | all=0.0506 len2=0.0781 len3=0.0679 len4=0.0515 len5=0.0398 len6=0.0407 depth3=0.0375 nodepth3_len6=0.0455
+saved ckpts/sd/w6_s3.pt (191s total, 9s in the per-bin validation = 5.0% overhead on 1200 steps)
+END 2026-09-27T19:41:07Z

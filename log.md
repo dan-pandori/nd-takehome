@@ -643,3 +643,14 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 - 20:23  `sd-4` deleted after its checkpoints and artifacts were pulled: **1.8964 pod-hours, $0.93** —
   i.e. the **real billed A40 rate is $0.49/h**, the same as `podbudget`'s assumption. First bucket
   upload started (arm F's 48 checkpoints and all artifacts so far).
+- 20:57  Last chain finished. All four pods deleted after their checkpoints **and** artifacts were
+  pulled (`sd-1` 2.7092 h $1.33, `sd-2` 2.0775 h $1.02, `sd-3` 2.0544 h $1.01, `sd-4` 1.8964 h $0.93):
+  **8.74 pod-hours, $4.29** of a 30 h / $15 budget; RunPod balance $144.04, well above the $130 floor.
+- 21:00  `sd_analysis.py` over **274 per-checkpoint evaluations and 49 metric files** →
+  `artifacts/sd/summary.json`; `sd_figures.py` → the three figures. One bug fixed on the way
+  (`a` was shadowed inside `main`). Two post-hoc estimators added and labelled post-hoc: the
+  pre-registered endpoint estimator for Q4 turned out to be a draw from the oscillation this run
+  discovered, so Q4 is also answered with each run's whole 120-point loss curve and all of its
+  trajectory checkpoints. Both are reported; the pre-registered one is scored as missed (E11, E12).
+- 21:07  Deliverables written: `run_stage1_dynamics.md` (400 words of body + three figures),
+  `numbers.md` §§ S1–S11 (S11 scores all 22 expectations one by one), `STATUS.md`.

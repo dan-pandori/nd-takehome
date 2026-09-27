@@ -133,3 +133,33 @@ Run id `stage1-dynamics`, executor agent:claude, worktree `~/work/stage1-dynamic
   `sd_eval.py` written: held-out greedy per length bin and depth-3 slice, judged by **Lean alone**.
 - 18:06  Pre-registration `preregistration/stage1-dynamics.md` committed (16 numbered expectations
   with falsifiers, budget and stop rule). No pod of this run exists yet.
+- 18:26–20:57  Four **A40** pods (`sd-1`…`sd-4`, real billed rate **$0.49/h**), 14 chains, all
+  deleted as their work was pulled. 461,000 training steps, 49 runs, **274 Lean-alone held-out
+  evaluations** of 5,000 theorems each, 4 pass@8 evaluations.
+- 20:20  **Addendum 2** (pre-registered 20:17, before the runs it covers): pass@8 at loss troughs and
+  peaks of the same run shows the depth-3 oscillation is **real capability, not a decoding artefact**.
+- 21:07  **Result.** (1) **Stage 1 is nowhere near saturated at 6,000 steps**: within seed,
+  6k → 24k is **+16.1 pp** on the 6-line bin and **+25.6 pp** on depth-3 (+0.2 / +1.1 pp at 2 and 3
+  lines); the falsifier needed 6 of 8 seeds flat and **none** were. (2) **The depth-3 "mode" is never
+  decided** — every one of the twelve 24,000-step runs crosses the 0.44 cut **1–10 times** after step
+  6,000, sitting in the high mode 37 % of the time against `NOISE_FLOOR.md`'s **0.462 estimated
+  across 52 runs**: the cross-run bimodality *is* the within-run oscillation sampled once, and pass@8
+  moves with it. (3) **Arm R** (pre-registered addendum 1): runs of the **identical command line**
+  span 0.490–0.802 on the 6-line bin and 0.064–0.736 on depth-3, and three of them at 24,000 steps
+  reproduce nearly the whole 52-cell floor (sd 0.155 vs 0.152; 0.311 vs 0.305) — **that floor is
+  mostly nondeterminism inside one fixed command**, not seed or data variance. (4) **WSD and cosine
+  are indistinguishable** at equal steps (median Δ −0.3 pp overall, 4/8 seeds each way). (5) The gain
+  is **steps, not data**: 572,759 fresh proofs match 155,000 seen 19.8× on every trajectory-robust
+  estimator. (6) **Per-length validation loss ranks runs** (Spearman −0.905 and −0.934 across 8 seeds
+  at a fixed step) where **`val2k` does not** (−0.310), for **4.7 %** of training time.
+  22 expectations: **10 met, 6 partly, 6 missed**, five misses all saying the floor is bigger.
+  Cost **8.74 pod-hours, $4.29** of a 30 h / $15 budget.
+- Deliverables: `run_stage1_dynamics.md`, `numbers.md` §§ S1–S11, `log.md`,
+  `preregistration/stage1-dynamics.md` (+ 2 addenda), `figures/sd_{valloss,traj,proxy}.png`,
+  `artifacts/sd/summary.json`, the `train.py` instrumentation (default path unchanged) and
+  `sd_{pool,eval,passk,analysis,tables,figures}.py`, `pod/sd/`, bucket
+  `hf://buckets/dan-pandori/nd-rl/stage1-dynamics/{ckpts,artifacts,data}`. Two questions for Dan in
+  `QUESTIONS.md` (the budget ledger changed outside this session; whether to make training
+  deterministic).
+
+STAGE1-DYNAMICS DONE 2026-09-27T21:07:32Z

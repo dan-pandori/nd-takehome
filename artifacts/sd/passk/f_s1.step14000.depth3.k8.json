@@ -1,0 +1,182 @@
+{
+ "ckpt": "ckpts/sd/f_s1.step14000.pt",
+ "slice": "depth3",
+ "n": 500,
+ "k": 8,
+ "temperature": 0.8,
+ "judge": "lean_alone",
+ "batch": 512,
+ "model": {
+  "n_params": 3214336,
+  "mode": "lean_seq",
+  "step": 14000,
+  "train_args": {
+   "data": "data/sd/train_fresh.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "mode": "lean_seq",
+   "init": null,
+   "steps": 24000,
+   "bs": 128,
+   "lr": 0.001,
+   "min_lr": 0.0001,
+   "warmup": 200,
+   "wd": 0.1,
+   "n_layer": 4,
+   "d": 256,
+   "n_head": 8,
+   "cap": 6,
+   "seed": 1,
+   "out": "ckpts/sd/f_s1.pt",
+   "log_every": 200,
+   "no_shift": false,
+   "val_bins": true,
+   "val_bs": 256,
+   "metrics": "artifacts/sd/m_f_s1.jsonl",
+   "sched": "wsd",
+   "decay_frac": 0.2,
+   "ckpt_every": 2000,
+   "state_at": "",
+   "resume": null
+  }
+ },
+ "greedy": {
+  "solved": 8,
+  "rate": 0.016,
+  "ci": [
+   0.008129155320203278,
+   0.03125147541771118
+  ]
+ },
+ "per_pass": [
+  {
+   "pass": 0,
+   "solved": 8,
+   "rate": 0.016,
+   "parse_fail": 471
+  },
+  {
+   "pass": 1,
+   "solved": 44,
+   "rate": 0.088,
+   "parse_fail": 414
+  },
+  {
+   "pass": 2,
+   "solved": 37,
+   "rate": 0.074,
+   "parse_fail": 418
+  },
+  {
+   "pass": 3,
+   "solved": 38,
+   "rate": 0.076,
+   "parse_fail": 420
+  },
+  {
+   "pass": 4,
+   "solved": 37,
+   "rate": 0.074,
+   "parse_fail": 425
+  },
+  {
+   "pass": 5,
+   "solved": 41,
+   "rate": 0.082,
+   "parse_fail": 423
+  },
+  {
+   "pass": 6,
+   "solved": 56,
+   "rate": 0.112,
+   "parse_fail": 402
+  },
+  {
+   "pass": 7,
+   "solved": 43,
+   "rate": 0.086,
+   "parse_fail": 415
+  },
+  {
+   "pass": 8,
+   "solved": 44,
+   "rate": 0.088,
+   "parse_fail": 415
+  }
+ ],
+ "pass_at_k": [
+  {
+   "k": 1,
+   "solved": 44,
+   "rate": 0.088,
+   "ci": [
+    0.06620563711739778,
+    0.11607704855206659
+   ]
+  },
+  {
+   "k": 2,
+   "solved": 72,
+   "rate": 0.144,
+   "ci": [
+    0.11593760751948218,
+    0.177491120874521
+   ]
+  },
+  {
+   "k": 3,
+   "solved": 94,
+   "rate": 0.188,
+   "ci": [
+    0.1561794242435824,
+    0.22457833771970132
+   ]
+  },
+  {
+   "k": 4,
+   "solved": 115,
+   "rate": 0.23,
+   "ci": [
+    0.19525432702175258,
+    0.2688629669849352
+   ]
+  },
+  {
+   "k": 5,
+   "solved": 136,
+   "rate": 0.272,
+   "ci": [
+    0.2348434449332605,
+    0.3126333811168315
+   ]
+  },
+  {
+   "k": 6,
+   "solved": 170,
+   "rate": 0.34,
+   "ci": [
+    0.29983814768649814,
+    0.382601730243391
+   ]
+  },
+  {
+   "k": 7,
+   "solved": 182,
+   "rate": 0.364,
+   "ci": [
+    0.323010706915662,
+    0.4070631893247437
+   ]
+  },
+  {
+   "k": 8,
+   "solved": 196,
+   "rate": 0.392,
+   "ci": [
+    0.35018663004287004,
+    0.4354602875598051
+   ]
+  }
+ ],
+ "lean_wall_s": 5.292388916015625,
+ "total_s": 16.929515600204468
+}

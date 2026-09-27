@@ -1,0 +1,36 @@
+START 2026-09-27T19:30:38Z python3 train.py --heldout data/p2/heldout.jsonl --mode lean_seq --bs 128 --cap 6 --val_bins --data data/p2/train_depth3_f0_a1.jsonl --seed 0 --steps 6000 --sched cosine --metrics artifacts/sd/m_r6d_s0.jsonl --out ckpts/sd/r6d_s0.pt
+params 3214336 mode lean_seq shift True
+val slices {'all': 5000, 'len2': 1000, 'len3': 1000, 'len4': 1000, 'len5': 1000, 'len6': 1000, 'depth3': 500, 'nodepth3_len6': 500}
+train records 155000 max len 464
+step 200 loss 1.0110 lr 1.00e-03 43s val 0.9925 | all=0.9658 len2=0.9809 len3=1.0065 len4=0.9823 len5=0.9667 len6=0.9314 depth3=0.8851 nodepth3_len6=1.0006
+step 400 loss 0.2042 lr 9.97e-04 87s val 0.1527 | all=0.1794 len2=0.1555 len3=0.1507 len4=0.1844 len5=0.1741 len6=0.2024 depth3=0.1757 nodepth3_len6=0.2424
+step 600 loss 0.1384 lr 9.89e-04 132s val 0.1143 | all=0.1199 len2=0.1109 len3=0.1173 len4=0.1284 len5=0.1116 len6=0.1261 depth3=0.1021 nodepth3_len6=0.1618
+step 800 loss 0.1034 lr 9.76e-04 177s val 0.0953 | all=0.0957 len2=0.0945 len3=0.0963 len4=0.0993 len5=0.0852 len6=0.1023 depth3=0.0920 nodepth3_len6=0.1177
+step 1000 loss 0.0945 lr 9.58e-04 221s val 0.0861 | all=0.0863 len2=0.0880 len3=0.0845 len4=0.0930 len5=0.0714 len6=0.0945 depth3=0.0905 nodepth3_len6=0.1006
+step 1200 loss 0.0950 lr 9.36e-04 265s val 0.0838 | all=0.0795 len2=0.0842 len3=0.0843 len4=0.0820 len5=0.0665 len6=0.0849 depth3=0.0839 nodepth3_len6=0.0863
+step 1400 loss 0.0814 lr 9.08e-04 310s val 0.0816 | all=0.0720 len2=0.0859 len3=0.0772 len4=0.0735 len5=0.0624 len6=0.0714 depth3=0.0637 nodepth3_len6=0.0831
+step 1600 loss 0.0783 lr 8.77e-04 354s val 0.0818 | all=0.0778 len2=0.0861 len3=0.0772 len4=0.0713 len5=0.0587 len6=0.0944 depth3=0.1084 nodepth3_len6=0.0736
+step 1800 loss 0.0717 lr 8.41e-04 399s val 0.0787 | all=0.0649 len2=0.0826 len3=0.0748 len4=0.0674 len5=0.0554 len6=0.0600 depth3=0.0534 nodepth3_len6=0.0699
+step 2000 loss 0.0779 lr 8.03e-04 444s val 0.0796 | all=0.0638 len2=0.0838 len3=0.0755 len4=0.0655 len5=0.0520 len6=0.0598 depth3=0.0563 nodepth3_len6=0.0649
+step 2200 loss 0.0719 lr 7.61e-04 488s val 0.0770 | all=0.0598 len2=0.0815 len3=0.0722 len4=0.0617 len5=0.0500 len6=0.0528 depth3=0.0460 nodepth3_len6=0.0629
+step 2400 loss 0.0634 lr 7.17e-04 533s val 0.0762 | all=0.0599 len2=0.0809 len3=0.0715 len4=0.0604 len5=0.0480 len6=0.0564 depth3=0.0529 nodepth3_len6=0.0615
+step 2600 loss 0.0628 lr 6.70e-04 578s val 0.0763 | all=0.0618 len2=0.0810 len3=0.0716 len4=0.0593 len5=0.0464 len6=0.0644 depth3=0.0686 nodepth3_len6=0.0580
+step 2800 loss 0.0650 lr 6.23e-04 622s val 0.0759 | all=0.0583 len2=0.0805 len3=0.0715 len4=0.0583 len5=0.0474 len6=0.0528 depth3=0.0491 nodepth3_len6=0.0583
+step 3000 loss 0.0621 lr 5.74e-04 667s val 0.0747 | all=0.0563 len2=0.0794 len3=0.0703 len4=0.0574 len5=0.0440 len6=0.0507 depth3=0.0476 nodepth3_len6=0.0554
+step 3200 loss 0.0602 lr 5.26e-04 711s val 0.0746 | all=0.0608 len2=0.0791 len3=0.0701 len4=0.0557 len5=0.0443 len6=0.0663 depth3=0.0755 nodepth3_len6=0.0526
+step 3400 loss 0.0587 lr 4.77e-04 755s val 0.0747 | all=0.0609 len2=0.0794 len3=0.0699 len4=0.0548 len5=0.0438 len6=0.0675 depth3=0.0783 nodepth3_len6=0.0514
+step 3600 loss 0.0542 lr 4.30e-04 798s val 0.0744 | all=0.0554 len2=0.0792 len3=0.0695 len4=0.0541 len5=0.0428 len6=0.0512 depth3=0.0506 nodepth3_len6=0.0521
+step 3800 loss 0.0552 lr 3.83e-04 822s val 0.0738 | all=0.0546 len2=0.0788 len3=0.0689 len4=0.0533 len5=0.0422 len6=0.0501 depth3=0.0501 nodepth3_len6=0.0501
+step 4000 loss 0.0603 lr 3.39e-04 858s val 0.0737 | all=0.0514 len2=0.0781 len3=0.0693 len4=0.0534 len5=0.0419 len6=0.0397 depth3=0.0325 nodepth3_len6=0.0504
+step 4200 loss 0.0568 lr 2.97e-04 902s val 0.0739 | all=0.0519 len2=0.0789 len3=0.0689 len4=0.0527 len5=0.0409 len6=0.0425 depth3=0.0385 nodepth3_len6=0.0486
+step 4400 loss 0.0549 lr 2.59e-04 946s val 0.0737 | all=0.0541 len2=0.0785 len3=0.0689 len4=0.0528 len5=0.0410 len6=0.0497 depth3=0.0505 nodepth3_len6=0.0486
+step 4600 loss 0.0549 lr 2.23e-04 989s val 0.0737 | all=0.0524 len2=0.0785 len3=0.0688 len4=0.0522 len5=0.0405 len6=0.0451 depth3=0.0439 nodepth3_len6=0.0468
+step 4800 loss 0.0553 lr 1.92e-04 1033s val 0.0735 | all=0.0543 len2=0.0789 len3=0.0685 len4=0.0521 len5=0.0403 len6=0.0516 depth3=0.0553 nodepth3_len6=0.0461
+step 5000 loss 0.0515 lr 1.64e-04 1077s val 0.0730 | all=0.0552 len2=0.0783 len3=0.0681 len4=0.0515 len5=0.0400 len6=0.0553 depth3=0.0618 nodepth3_len6=0.0456
+step 5200 loss 0.0526 lr 1.42e-04 1112s val 0.0733 | all=0.0514 len2=0.0787 len3=0.0680 len4=0.0510 len5=0.0398 len6=0.0434 depth3=0.0416 nodepth3_len6=0.0460
+step 5400 loss 0.0549 lr 1.24e-04 1136s val 0.0731 | all=0.0512 len2=0.0784 len3=0.0678 len4=0.0513 len5=0.0395 len6=0.0430 depth3=0.0417 nodepth3_len6=0.0449
+step 5600 loss 0.0542 lr 1.11e-04 1178s val 0.0731 | all=0.0513 len2=0.0783 len3=0.0678 len4=0.0507 len5=0.0396 len6=0.0436 depth3=0.0427 nodepth3_len6=0.0450
+step 5800 loss 0.0561 lr 1.03e-04 1221s val 0.0731 | all=0.0504 len2=0.0787 len3=0.0678 len4=0.0510 len5=0.0393 len6=0.0407 depth3=0.0378 nodepth3_len6=0.0450
+step 6000 loss 0.0497 lr 1.00e-04 1266s val 0.0729 | all=0.0507 len2=0.0780 len3=0.0678 len4=0.0509 len5=0.0392 len6=0.0419 depth3=0.0401 nodepth3_len6=0.0446
+saved ckpts/sd/r6d_s0.pt (1269s total, 55s in the per-bin validation = 4.6% overhead on 6000 steps)
+END 2026-09-27T19:52:19Z

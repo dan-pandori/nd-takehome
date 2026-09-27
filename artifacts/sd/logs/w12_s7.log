@@ -1,0 +1,19 @@
+START 2026-09-27T19:49:38Z python3 train.py --heldout data/p2/heldout.jsonl --mode lean_seq --bs 128 --cap 6 --val_bins --data data/p2/train_depth3_f0_a1.jsonl --seed 7 --steps 12000 --sched wsd --metrics artifacts/sd/m_w12_s7.jsonl --out ckpts/sd/w12_s7.pt --decay_frac 0.2 --resume ckpts/sd/w_s7.state09600.pt
+params 3214336 mode lean_seq shift True
+val slices {'all': 5000, 'len2': 1000, 'len3': 1000, 'len4': 1000, 'len5': 1000, 'len6': 1000, 'depth3': 500, 'nodepth3_len6': 500}
+train records 155000 max len 464
+resumed ckpts/sd/w_s7.state09600.pt at step 9600 (sched wsd to 12000); lr now 9.996e-04
+step 9800 loss 0.0552 lr 9.25e-04 43s val 0.0734 | all=0.0546 len2=0.0783 len3=0.0685 len4=0.0525 len5=0.0408 len6=0.0520 depth3=0.0560 nodepth3_len6=0.0459
+step 10000 loss 0.0578 lr 8.50e-04 87s val 0.0733 | all=0.0498 len2=0.0784 len3=0.0681 len4=0.0517 len5=0.0403 len6=0.0375 depth3=0.0315 nodepth3_len6=0.0466
+step 10200 loss 0.0519 lr 7.75e-04 131s val 0.0732 | all=0.0518 len2=0.0782 len3=0.0681 len4=0.0514 len5=0.0400 len6=0.0446 depth3=0.0433 nodepth3_len6=0.0465
+step 10400 loss 0.0547 lr 7.00e-04 158s val 0.0731 | all=0.0601 len2=0.0784 len3=0.0679 len4=0.0509 len5=0.0393 len6=0.0722 depth3=0.0898 nodepth3_len6=0.0460
+step 10600 loss 0.0545 lr 6.25e-04 191s val 0.0732 | all=0.0650 len2=0.0779 len3=0.0684 len4=0.0514 len5=0.0395 len6=0.0877 depth3=0.1158 nodepth3_len6=0.0456
+step 10800 loss 0.0537 lr 5.50e-04 230s val 0.0729 | all=0.0511 len2=0.0783 len3=0.0675 len4=0.0506 len5=0.0393 len6=0.0435 depth3=0.0436 nodepth3_len6=0.0433
+step 11000 loss 0.0546 lr 4.75e-04 267s val 0.0728 | all=0.0541 len2=0.0783 len3=0.0674 len4=0.0510 len5=0.0392 len6=0.0531 depth3=0.0592 nodepth3_len6=0.0439
+step 11200 loss 0.0561 lr 4.00e-04 305s val 0.0732 | all=0.0522 len2=0.0786 len3=0.0676 len4=0.0505 len5=0.0384 len6=0.0478 depth3=0.0505 nodepth3_len6=0.0438
+step 11400 loss 0.0503 lr 3.25e-04 342s val 0.0726 | all=0.0541 len2=0.0781 len3=0.0674 len4=0.0502 len5=0.0384 len6=0.0544 depth3=0.0606 nodepth3_len6=0.0451
+step 11600 loss 0.0491 lr 2.50e-04 376s val 0.0726 | all=0.0493 len2=0.0778 len3=0.0673 len4=0.0500 len5=0.0381 len6=0.0393 depth3=0.0365 nodepth3_len6=0.0435
+step 11800 loss 0.0524 lr 1.75e-04 410s val 0.0725 | all=0.0535 len2=0.0778 len3=0.0671 len4=0.0500 len5=0.0381 len6=0.0530 depth3=0.0599 nodepth3_len6=0.0427
+step 12000 loss 0.0504 lr 1.00e-04 442s val 0.0725 | all=0.0536 len2=0.0781 len3=0.0670 len4=0.0498 len5=0.0380 len6=0.0536 depth3=0.0610 nodepth3_len6=0.0424
+saved ckpts/sd/w12_s7.pt (443s total, 20s in the per-bin validation = 4.8% overhead on 2400 steps)
+END 2026-09-27T19:57:34Z

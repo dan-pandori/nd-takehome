@@ -1118,3 +1118,216 @@ Bucket: `hf://buckets/dan-pandori/nd-rl/noise-floor/{ckpts,artifacts,data}` —
 `ckpts/nf/stage1_p<i>_s<k>.pt` (52), `artifacts/nf/` (per-cell held-out, coverage and ladder outputs,
 `summary.json`, `premise.json`, the `record_*.json` checker passes, the `gate_*.jsonl` logs and their
 `.disagree.jsonl`), `data/nf/train_p<i>.jsonl` (4 × 155,000) and `assemble_p<i>.json`.
+
+# stage1-dynamics (run `stage1-dynamics`, 2026-09-27)
+
+**The model every number in this section is about, without exception.** A **3,214,336-parameter
+from-scratch GPT** (4 layers, d 256, 8 heads), Lean surface format **`lean_seq`**, **cap 6**,
+`--bs 128 --lr 1e-3 --min_lr 1e-4 --warmup 200` — the `noise-floor` control configuration. Arms
+**C, W, W-6k, W-12k, R** train on `data/p2/train_depth3_f0_a1.jsonl` (**155,000** records, flat
+31,000 per length 2–6, **zero depth-3**, recounted in `artifacts/sd/premise.txt`); arm **F** trains
+on `data/sd/train_fresh.jsonl` (**572,759** records, **zero depth-3**, `data/sd/pool_fresh.json`).
+**Judge: Lean alone** (policy 2026-09-27) — the literal sampled text parses in the strict `lean_seq`
+grammar *and* Lean 4.34.0 core accepts it; `nd_verify` is never called. Every held-out number is
+greedy `k = 1, T = 0` on the same 5,000 theorems of `data/p2/heldout.jsonl`, sampler batch 512,
+`max_new` 400. Numbers quoted from `noise-floor` were measured under **Lean ∧ `nd_verify`** and are
+labelled where they appear.
+
+Sources: 274 per-checkpoint summaries `artifacts/sd/ev/<stem>.json` (+ the per-theorem
+`<stem>.jsonl`), 49 per-step metric files `artifacts/sd/m_<tag>.jsonl`, four pass@8 files
+`artifacts/sd/passk/*.k8.json`, all rolled up by `sd_analysis.py` into
+**`artifacts/sd/summary.json`**; tables reprinted by `sd_tables.py`.
+
+### S1  The judge, cross-checked against the checker of record
+
+`sd_eval.py` on two `noise-floor` checkpoints whose numbers are published under Lean ∧ `nd_verify`
+(`artifacts/sd/xcheck/stage1_p1_s{0,1}.json`): overall **0.8730 / 0.9364** against published
+**0.8726 / 0.9362**; 6-line **0.4890 / 0.8510** against **0.4870 / 0.8500**; depth-3
+**0.0880 / 0.8180** against **0.0860 / 0.8180**. Five extra theorems in 20,000 theorem-cells, every
+difference in the direction policy predicts (Lean alone ≥ Lean ∧ `nd_verify`), none the other way.
+
+### S2  Q1 — long proofs are nowhere near saturated at 6,000 steps
+
+Within seed, decayed W-6k → decayed W-24k, 8 paired seeds (`summary.json` → `questions.Q1_saturation`):
+
+| slice | median W-12k − W-6k | median W-24k − W-6k | seeds up > 2 pp at 24k | seeds within ±2 pp at 24k |
+|---|---|---|---|---|
+| 2-line | +0.2 pp | **+0.2 pp** | 0 | 8 |
+| 3-line | +1.0 pp | **+1.1 pp** | 0 | 8 |
+| 4-line | +2.3 pp | **+2.8 pp** | 6 | 2 |
+| 5-line | +4.1 pp | **+5.4 pp** | 8 | 0 |
+| **6-line** | +4.1 pp | **+16.1 pp** | 7 | 0 |
+| 6-line, no depth-3 | +4.4 pp | **+6.4 pp** | 8 | 0 |
+| **depth-3 slice** | +2.1 pp | **+25.6 pp** | 6 | 0 |
+| overall (5,000) | +2.3 pp | **+5.0 pp** | 7 | 1 |
+
+E1's falsifier needed ≥ 6 of 8 seeds flat within ±2 pp on the 6-line bin at both 12k and 24k:
+**0 seeds are.** Arm means: 6-line **0.622 (W-6k) → 0.607 (W-12k) → 0.790 (W-24k)**, overall
+**0.900 → 0.912 → 0.953**.
+
+### S3  Q2 — the depth-3 "mode" is not decided early; it is not decided at all
+
+Arm W's own trajectory, 8 seeds × 24 checkpoints, per seed (`questions.Q2_depth3`,
+`questions.oscillation`). Over the 18 checkpoints at steps ≥ 6,000 **every one of the twelve
+24,000-step runs visits both modes**:
+
+| run | depth-3 min | max | median | fraction of checkpoints in the high mode | crossings of the 0.44 cut | final (decayed) |
+|---|---|---|---|---|---|---|
+| W_s0 | 0.006 | 0.748 | 0.096 | 0.28 | 8 | 0.060 |
+| W_s1 | 0.022 | 0.922 | 0.615 | 0.61 | 6 | 0.942 |
+| W_s2 | 0.006 | 0.818 | 0.034 | 0.17 | 3 | 0.640 |
+| W_s3 | 0.004 | 0.858 | 0.174 | 0.33 | 6 | 0.404 |
+| W_s4 | 0.038 | 0.890 | 0.618 | 0.67 | 7 | 0.920 |
+| W_s5 | 0.010 | 0.734 | 0.430 | 0.50 | 10 | 0.942 |
+| W_s6 | 0.010 | 0.488 | 0.033 | 0.06 | 2 | 0.492 |
+| W_s7 | 0.006 | 0.822 | 0.057 | 0.39 | 10 | 0.470 |
+| F_s0 | 0.008 | 0.880 | 0.666 | 0.67 | 3 | 0.934 |
+| F_s1 | 0.008 | 0.806 | 0.100 | 0.22 | 1 | 0.152 |
+| F_s2 | 0.004 | 0.616 | 0.044 | 0.11 | 2 | 0.020 |
+| F_s3 | 0.010 | 0.840 | 0.292 | 0.44 | 4 | 0.402 |
+
+The 6-line bin does the same, less extremely: within a single W run it spans **0.368–0.939**.
+Seeds in the high mode by step (8 seeds): 0, 0, 2, 4, 1, 2, 3, 2, 1, 3, 3, 2, 2, 4, 5, 2, 2, 4, 3,
+4, 3, 5, 4, **6** at steps 1,000…24,000. **Mean fraction of checkpoints in the high mode across the
+twelve runs: 0.37** — against `NOISE_FLOOR.md`'s **p(high) = 0.462** estimated across 52 *runs* at
+6,000 steps (Lean ∧ `nd_verify`). The cross-run bimodality and the within-run oscillation are the
+same phenomenon measured twice. **4 of 8 seeds change mode between decayed W-6k and decayed W-24k**
+(seeds 3, 5, 6, 7), so "the mode is set early" is dead at its pre-registered threshold of 2.
+Depth-3 at step 2,000 does not predict step 24,000: Spearman **ρ = −0.40** over 8 seeds (E9's
+threshold was |ρ| < 0.6).
+
+### S4  Addendum 2 — the oscillation is real capability, not a greedy-decode artefact
+
+pass@8 at T = 0.8 on the 500-record depth-3 slice, at within-run pairs of checkpoints chosen by
+their **loss** (`artifacts/sd/passk/*.k8.json`, Lean-alone):
+
+| checkpoint | depth-3 val loss | greedy | **pass@8** |
+|---|---|---|---|
+| `f_s1.step08000` | 0.0330 | 0.8060 | **0.8920** |
+| `f_s1.step14000` | 0.0719 | 0.0160 | **0.3920** |
+| `f_s0.step12000` | 0.1343 | 0.0160 | **0.0260** |
+| `f_s0.step14000` | 0.0324 | 0.6680 | **0.8840** |
+
+pass@8 moves with greedy by **50.0 pp** and **85.8 pp** within the two pairs; pass@8 > greedy at all
+four. The four checkpoints' depth-3 **validation loss ranks their pass@8 perfectly**.
+
+### S5  Q3 — WSD and cosine are indistinguishable at an equal 6,000 steps
+
+C and W-6k on the same seed see the **identical 6,000 batches in the same order from the identical
+initialisation** (the learning rate does not affect which batch a step sees), so this is the
+tightest schedule comparison available. Median W-6k − C over 8 paired seeds: **−0.3 pp overall,
+−2.3 pp on the 6-line bin, +1.7 pp at 5 lines, −7.5 pp on depth-3**; median |Δ| 1.7 / 5.1 / 1.7 /
+9.1 pp; **4 of 8 seeds favour WSD** on overall and on the 6-line bin. Every one of those medians is
+inside arm R's same-command floor (S7).
+
+### S6  Q4 — the gain is steps, not fresh data
+
+F (572,759 fresh records, 5.36 epochs at 24,000 steps) against W (155,000 records, 19.8 epochs),
+both WSD 24,000. The **pre-registered endpoint estimator is not usable** — a single checkpoint's
+rate is a draw from S3's oscillation — and it gives median F − W of −2.5 pp overall, −14.8 pp on
+the 6-line bin, −31.1 pp on depth-3 (n = 4), all **inside one same-command sd** (S7). The
+**post-hoc trajectory estimators**, which use each run's whole 120-point loss curve and all of its
+trajectory checkpoints, are flat (`questions.Q4_robust_posthoc`):
+
+| estimator | W (n = 8) median [range] | F (n = 4) median [range] |
+|---|---|---|
+| min depth-3 validation loss | 0.0283 [0.0271, 0.0303] | 0.0286 [0.0265, 0.0340] |
+| min 6-line validation loss | 0.0338 [0.0329, 0.0355] | 0.0353 [0.0324, 0.0388] |
+| best depth-3 accuracy over the trajectory | 0.820 [0.488, 0.922] | 0.823 [0.616, 0.880] |
+| best 6-line accuracy over the trajectory | 0.864 [0.677, 0.939] | 0.856 [0.769, 0.900] |
+| fraction of checkpoints in the depth-3 high mode | 0.361 [0.056, 0.667] | 0.333 [0.111, 0.667] |
+
+### S7  Arm R (addendum 1) — the floor is nondeterminism inside one fixed command line
+
+Runs differing in **nothing a human specified** (checked: `sort -u` over the logged command lines
+with `--out`/`--metrics` stripped returns exactly **1** string per group):
+
+| group | n | overall sd [range] | 6-line sd [range] | 5-line sd | depth-3 sd [range] |
+|---|---|---|---|---|---|
+| 6,000 steps, seed 0 | 5 | 0.0169 [0.878, 0.923] | **0.1123** [0.490, 0.802] | 0.0132 | **0.2425** [0.064, 0.736] |
+| 6,000 steps, seed 1 | 5 | 0.0191 [0.889, 0.936] | **0.0989** [0.589, 0.843] | 0.0059 | **0.2033** [0.280, 0.800] |
+| 24,000 steps, seed 0 | 3 | 0.0299 [0.900, 0.955] | **0.1549** [0.519, 0.803] | 0.0029 | **0.3114** [0.060, 0.638] |
+| `NOISE_FLOOR.md`, 52 cells (4 data pools × 13 seeds, 6,000 steps, Lean ∧ `nd_verify`) | 52 | 0.0304 [0.842, 0.963] | 0.1523 [0.421, 0.920] | 0.0150 | 0.3053 [0.008, 0.918] |
+
+**All three groups straddle the 0.44 depth-3 cut.** At 24,000 steps three runs of one command line
+reproduce essentially the whole 52-cell floor (6-line sd 0.155 vs 0.152; depth-3 0.311 vs 0.305).
+
+### S8  Q5 — per-length validation loss ranks runs; `val2k` does not
+
+Spearman ρ, arm W (`questions.Q5_proxy`):
+
+| pair | along the trajectory (8 seeds × 24 ckpts, 192 pts) | **across the 8 seeds at a fixed step** |
+|---|---|---|
+| 6-line loss vs 6-line accuracy | −0.885 | **−0.905** at 24,000; **−0.952** at 6,000 |
+| depth-3 loss vs depth-3 accuracy | −0.893 | **−0.934** at 24,000; **−0.857** at 6,000 |
+| `val2k` vs 6-line accuracy | −0.630 | **−0.310** at 24,000; **−0.333** at 6,000 |
+| `val2k` vs overall accuracy | — | **−0.310** at 24,000; −0.571 at 6,000 |
+
+`val2k` itself moves by **−0.0015 to −0.0027** between 6,000 and 24,000 steps on all 8 seeds while
+those same seeds' 6-line bin moves **−2.3 to +45.0 pp**. The 6-line loss falls from 6,000 to 24,000
+in 7 of 8 seeds, and **every seed's minimum is at step 19,800–24,000** — there is no memorisation
+turn-up at 19.8 epochs — but 5 of 8 seeds *end* more than 2 % above their own minimum (up to 2.09×),
+which is the oscillation, not overfitting.
+
+### S9  Proof length, in lines and in term size
+
+Mean over each arm's final checkpoints, accepted proofs only (`questions.proof_length`):
+
+| arm | mean term size, all | mean written lines, all | term size, 6-line bin | written lines, 6-line bin |
+|---|---|---|---|---|
+| C | 85.4 | 4.16 | 122.5 | 5.23 |
+| W-6k | 84.0 | 4.17 | 116.2 | 5.41 |
+| W-12k | 83.6 | 4.19 | 113.9 | 5.52 |
+| W-24k | 87.1 | 4.19 | 127.3 | 5.10 |
+| F-24k | 84.6 | 4.20 | 116.9 | 5.39 |
+
+Term size is the token count of the literal Lean term; written lines is `have`s + 1. The ladder's
+`L_true` labels elsewhere in this repository are ND-derived upper bounds and are not used here.
+
+### S10  Cost of the instrumentation, and of the run
+
+Per-length validation on all 5,000 held-out records every 200 steps costs a median **4.7 %** of
+training wall time (range **4.3–6.2 %** over the 46 full-length runs; `questions.E16_...`) — 1.15 h
+of the run's 25.0 h of training. The 274 Lean-alone evaluations cost **1.88 h of sampling and
+65.7 min of Lean** in total. Run cost: **8.74 pod-hours, $4.29** of a 30 h / $15 budget, on four
+**NVIDIA A40** pods whose real billed rate is **$0.49/h** (`sd-4` billed $0.93 for 1.8964 h).
+
+Bucket: `hf://buckets/dan-pandori/nd-rl/stage1-dynamics/{ckpts/sd,artifacts/sd,data/sd}` —
+**290 checkpoints** (`ckpts/sd/`: the 8 × 23 W and 4 × 11 F trajectory checkpoints, the 16 W decay
+states, and every arm's finals), `artifacts/sd/` (the 274 per-checkpoint evaluations and their
+per-theorem records, the 49 metric files, the pass@8 files, the judge cross-check, `summary.json`),
+and `data/sd/` (`train_fresh.jsonl` and `pool_fresh.json`).
+
+### S11  Every pre-registered expectation, scored
+
+22 expectations (E1–E16 in the pre-registration, E17–E20 in addendum 1, E21–E22 in addendum 2).
+**10 met, 6 partly met, 6 missed.**
+
+| # | what it claimed | outcome | verdict |
+|---|---|---|---|
+| E1 | 6-line, median W-24k − W-6k = +12 pp (band +5…+25), ≥ 7/8 seeds up > 2 pp | **+16.1 pp, 7/8** | **met** |
+| E2 | 6-line cross-seed sd falls from 0.152 to < 0.10 at 24k | **0.158** | missed |
+| E3 | overall, median +3…+5 pp | **+5.0 pp** | met (top edge) |
+| E4 | 2- and 3-line move < 1 pp | **+0.2 / +1.1 pp** | partly |
+| E5 | 6-line loss lower at 24k than 6k in ≥ 7/8, no seed > 2 % above its own min | **7/8 lower; 5/8 end > 2 % above their min** | partly — but every minimum is at step 19,800–24,000, so there is **no memorisation turn-up**; the clause measured the oscillation |
+| E6 | \|Δ`val2k`\| < 0.01 in ≥ 6/8 while the 6-line bin moves ≥ 5 pp | **8/8 within 0.003; 6 seeds ≥ 5 pp** | **met** |
+| E7 | 3–5/8 high at 6k, 7–8/8 at 24k, ≥ 2 change mode | **2/8, 6/8, and 4 change** | partly — both counts one outside the band, the falsifier verdict as predicted |
+| E8 | no seed's depth-3 falls by > 5 pp from 6k to 24k | **seed 2 falls 9.2 pp** | missed |
+| E9 | \|Spearman(depth-3@2,000, @24,000)\| < 0.6 | **ρ = −0.398** | **met** |
+| E10 | W-6k vs C: median \|Δ\| ≤ 3 pp (6-line), ≤ 1.5 pp (overall), ≤ 6/8 one way | **5.1 pp, 1.7 pp, 4/8** | partly — the sign test is dead even and both medians are far inside S7's floor, but my ±3 pp / ±5 pp thresholds were set before the floor was known and the 5 pp falsifier fires by 0.1 pp |
+| E11 | F's own 6k → 24k gain ≥ 0.6 × W's | **ratio −0.003** | missed — the endpoint estimator is swamped by the oscillation |
+| E12 | F − W on the 6-line bin = +2…+8 pp, not > +15 | **−14.8 pp** | missed — inside one same-command sd (0.155) |
+| E13 | F's per-bin loss above W's at 24,000 in ≥ 3/4 seeds | **3/4** | met by the letter; the reason is the oscillation, not less memorisation (min losses are equal, S6) |
+| E14 | trajectory Spearman ≤ −0.85 pooled and ≤ −0.80 in every seed | **−0.885 / −0.893 pooled; 7/8 seeds ≤ −0.79, seed 6 is −0.657** | partly |
+| E15 | at a fixed step, \|ρ(`val2k`, 6-line)\| < 0.5 and \|ρ(6-line loss, 6-line)\| > 0.8 | **0.310 and 0.905** | **met** |
+| E16 | per-bin validation costs 5–9 % of training time | **4.7 % (4.3–6.2 %)** | missed — cheaper than predicted |
+| E17 | same-command per-seed sd: 6-line 0.03–0.10, overall 0.005–0.020 | **6-line 0.112 / 0.099; overall 0.0169 / 0.0191** | partly — overall in band, 6-line above it; the falsifier (sd < 0.01) is dead |
+| E18 | the depth-3 replicates straddle the 0.44 cut in ≥ 1 of the 2 seeds | **all three groups straddle it** | **met** |
+| E19 | the 24k same-command spread is no larger than the 6k spread | **6-line 0.155 vs 0.099–0.112** | missed — larger |
+| E20 | every cross-run difference reported beside R's sd | done in S5, S6 and `run_stage1_dynamics.md` | **met** |
+| E21 | pass@8 moves with greedy by ≥ 20 pp in ≥ 3 of 4, low-greedy stays < 0.60 at pass@8 | **50.0 and 85.8 pp; 0.392 and 0.026** | **met** |
+| E22 | pass@8 > greedy at all four checkpoints | **4/4** | **met** |
+
+Five of the six misses (E2, E8, E11, E12, E19) are in one direction: **the oscillation and the floor
+are larger than I predicted.** The sixth (E16) is favourable. No expectation missed in the direction
+"the effect is smaller than claimed."

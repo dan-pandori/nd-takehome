@@ -1,0 +1,9 @@
+START 2026-09-27T18:21:02Z python3 train.py --heldout data/p2/heldout.jsonl --mode lean_seq --bs 128 --cap 6 --val_bins --data data/p2/train_depth3_f0_a1.jsonl --seed 99 --steps 400 --sched wsd --metrics artifacts/sd/m_smoke_b.jsonl --out ckpts/sd/smoke_b.pt --decay_frac 0.2 --log_every 100 --resume ckpts/sd/smoke_a.state00200.pt
+params 3214336 mode lean_seq shift True
+val slices {'all': 5000, 'len2': 1000, 'len3': 1000, 'len4': 1000, 'len5': 1000, 'len6': 1000, 'depth3': 500, 'nodepth3_len6': 500}
+train records 155000 max len 464
+resumed ckpts/sd/smoke_a.state00200.pt at step 200 (sched wsd to 400); lr now 1.000e-03
+step 300 loss 0.5892 lr 1.00e-03 6s val 0.5509 | all=0.5979 len2=0.5457 len3=0.5587 len4=0.5941 len5=0.6091 len6=0.6284 depth3=0.6355 nodepth3_len6=0.6178
+step 400 loss 0.2191 lr 1.00e-04 12s val 0.1661 | all=0.2035 len2=0.1705 len3=0.1606 len4=0.2080 len5=0.1974 len6=0.2373 depth3=0.2164 nodepth3_len6=0.2687
+saved ckpts/sd/smoke_b.pt (13s total, 1s in the per-bin validation = 10.2% overhead on 200 steps)
+END 2026-09-27T18:21:45Z

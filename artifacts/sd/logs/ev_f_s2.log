@@ -1,0 +1,14 @@
+START 2026-09-27T20:04:16Z python3 sd_eval.py --in data/p2/heldout.jsonl --outdir artifacts/sd/ev --batch 512 --skip_done --ckpts ckpts/sd/f_s2.step*.pt && gzip -f artifacts/sd/ev/f_s2.step*.jsonl
+11 checkpoints, 5000 theorems, slices {'all': 5000, 'len2': 1000, 'len3': 1000, 'len4': 1000, 'len5': 1000, 'len6': 1000, 'depth3': 500, 'nodepth3_len6': 500}
+f_s2.step02000: all 0.7020 len6 0.2830 depth3 0.0040 | parse-fail 492 lean-rej 998 | 16s sample 23s lean
+f_s2.step04000: all 0.7948 len6 0.3730 depth3 0.0020 | parse-fail 465 lean-rej 561 | 34s sample 15s lean
+f_s2.step06000: all 0.8422 len6 0.4170 depth3 0.0040 | parse-fail 480 lean-rej 309 | 32s sample 16s lean
+f_s2.step08000: all 0.8534 len6 0.4430 depth3 0.0180 | parse-fail 416 lean-rej 317 | 27s sample 21s lean
+f_s2.step10000: all 0.8562 len6 0.4460 depth3 0.0300 | parse-fail 464 lean-rej 255 | 28s sample 20s lean
+f_s2.step12000: all 0.9232 len6 0.7690 depth3 0.6160 | parse-fail 205 lean-rej 179 | 27s sample 23s lean
+f_s2.step14000: all 0.8798 len6 0.4790 depth3 0.0520 | parse-fail 404 lean-rej 197 | 21s sample 15s lean
+f_s2.step16000: all 0.8864 len6 0.5290 depth3 0.1420 | parse-fail 408 lean-rej 160 | 30s sample 15s lean
+f_s2.step18000: all 0.8706 len6 0.4810 depth3 0.0440 | parse-fail 474 lean-rej 173 | 27s sample 22s lean
+f_s2.step20000: all 0.8884 len6 0.5110 depth3 0.0960 | parse-fail 448 lean-rej 110 | 37s sample 20s lean
+f_s2.step22000: all 0.8894 len6 0.4890 depth3 0.0180 | parse-fail 486 lean-rej 67 | 18s sample 18s lean
+END 2026-09-27T20:13:04Z

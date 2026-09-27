@@ -40,9 +40,9 @@ def curve(tag, key):
     return xs, ys
 
 
-def band(ax, tags, key, color, label, dash=None):
+def band(ax, tags, key, color, label, dash=None, xmin=0):
     """median with a min-max band over the seeds present"""
-    cs = [curve(t, key) for t in tags]
+    cs = [([x for x in c[0] if x >= xmin], [y for x, y in zip(*c) if x >= xmin]) for c in (curve(t, key) for t in tags)]
     cs = [c for c in cs if c[0]]
     if not cs:
         return
@@ -58,11 +58,12 @@ def band(ax, tags, key, color, label, dash=None):
 WT = [f'w_s{k}' for k in range(8)]
 FT = [f'f_s{k}' for k in range(4)]
 CT = [f'c_s{k}' for k in range(8)]
+X0 = 1000        # after the warmup drop, so the log axis shows the range the run is actually about
 fig, axes = plt.subplots(2, 4, figsize=(13.4, 6.2), sharex=True)
 for ax, (key, lab) in zip(axes.ravel(), BINS):
-    band(ax, WT, key, BLUE, 'W  WSD 24k, control set')
-    band(ax, FT, key, AQUA, 'F  WSD 24k, fresh set')
-    band(ax, CT, key, ORANGE, 'C  cosine 6k, control set', dash=(0, (4, 2)))
+    band(ax, WT, key, BLUE, 'W  WSD 24k, control set', xmin=X0)
+    band(ax, FT, key, AQUA, 'F  WSD 24k, fresh set', xmin=X0)
+    band(ax, CT, key, ORANGE, 'C  cosine 6k, control set', dash=(0, (4, 2)), xmin=X0)
     ax.axvline(6000, color='#c9c8c2', lw=0.7, zorder=0)
     ax.axvline(19200, color='#c9c8c2', lw=0.7, ls=':', zorder=0)
     ax.set_title(lab, fontsize=8.5, color=INK, loc='left')
@@ -70,14 +71,15 @@ for ax, (key, lab) in zip(axes.ravel(), BINS):
 for ax in axes[1]:
     ax.set_xlabel('step')
 for ax in axes[:, 0]:
-    ax.set_ylabel('validation cross-entropy per proof token')
+    ax.set_ylabel('validation CE per proof token')
 axes[0, 0].legend(frameon=False, fontsize=7.2, loc='upper right')
-fig.suptitle('(a) Validation loss per length bin, whole 5,000-record held-out file — 3,214,336-parameter from-scratch '
-             '`lean_seq` GPT, cap 6.  Solid line = median over seeds, band = min–max.\n'
-             'Thin line at 6,000 steps = the recipe the project has been using; dotted at 19,200 = where W and F begin '
-             'their linear decay.  `val2k` is the number every past curve in this project plotted.',
+fig.suptitle('(a) Validation loss per length bin, whole 5,000-record held-out file, from step 1,000 (after the warmup drop) — '
+             '3,214,336-parameter from-scratch `lean_seq` GPT, cap 6.  Line = median over seeds, band = min–max.\n'
+             'Thin line at 6,000 steps = the recipe the project has been using; dotted at 19,200 = where W and F start to decay.\n'
+             '`val2k`, bottom right, is the number every past curve in this project plotted. It is smooth, and it is blind to the '
+             'only two slices that move.',
              fontsize=8.2, color=MUTED, x=0.008, ha='left', y=0.995)
-fig.tight_layout(rect=(0, 0, 1, 0.92))
+fig.tight_layout(rect=(0, 0, 1, 0.90))
 fig.savefig('figures/sd_valloss.png', dpi=170)
 plt.close(fig)
 
@@ -108,7 +110,9 @@ for row, (armt, armf, tag, col) in enumerate([('Wtraj', 'W', 'W  control set', B
                                 mec=cmap(0.08 + 0.84 * i / max(len(seeds) - 1, 1)), mew=1.2)
         if key == 'depth3':
             ax.axhline(0.44, color=ORANGE, lw=0.9, ls=(0, (4, 2)))
-            ax.text(400, 0.455, "NOISE_FLOOR.md's high-mode cut 0.44", fontsize=6.8, color=ORANGE)
+            ax.text(0.99, 0.44 / 1.06, "NOISE_FLOOR.md's high-mode cut 0.44", fontsize=6.6, color=ORANGE,
+                    transform=ax.get_yaxis_transform(), ha='right', va='top',
+                    bbox=dict(fc=SURF, ec='none', pad=1.0))
         ax.axvline(6000, color='#c9c8c2', lw=0.7, zorder=0)
         ax.set_title(f'{tag} — {lab}', fontsize=8.2, color=INK, loc='left')
         ax.grid(color=GRID, lw=0.6); ax.set_ylim(-0.03, 1.03)
@@ -151,14 +155,14 @@ for ax, (vkey, akey, title) in zip(axes, PAIRS):
             ax.plot([p[0] for p in pts], [p[1] for p in pts], color=cc, lw=0.8, marker='o', ms=2.4,
                     alpha=0.9, label=f'seed {k}' if ax is axes[0] else None)
             ax.plot(pts[-1][0], pts[-1][1], marker='*', ms=10, ls='', color=cc)
-    key = f'trajectory' if False else None
     rho = (Q.get('Q5_proxy', {}).get('trajectory', {}).get(f'val_{vkey}_vs_acc_{akey}', {}) or {}).get('spearman_pooled')
     fx = (Q.get('Q5_proxy', {}).get('fixed_step_ranking', {}).get(f'step24000_val_{vkey}_vs_acc_{akey}', {}) or {})
     sub = f'pooled trajectory Spearman ρ = {rho:.3f}' if rho is not None else ''
     if fx.get('spearman') is not None:
         sub += f'\nacross the {fx["n_seeds"]} seeds at step 24,000 only: ρ = {fx["spearman"]:.3f}'
     ax.set_title(title, fontsize=8.5, color=INK, loc='left')
-    ax.text(0.98, 0.04, sub, transform=ax.transAxes, ha='right', va='bottom', fontsize=7.4, color=MUTED)
+    ax.text(0.98, 0.97, sub, transform=ax.transAxes, ha='right', va='top', fontsize=7.6, color=INK,
+            bbox=dict(fc=SURF, ec='#d7d6d0', lw=0.6, pad=3.0))
     ax.set_xscale('log'); ax.grid(color=GRID, lw=0.6)
     ax.set_xlabel('validation cross-entropy per proof token')
 axes[0].set_ylabel('Lean-alone greedy solve rate')

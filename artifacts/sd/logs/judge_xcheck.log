@@ -1,0 +1,5 @@
+START 2026-09-27T18:39:55Z python3 sd_eval.py --in data/p2/heldout.jsonl --outdir artifacts/sd/xcheck --batch 512 --texts --ckpts ckpts/nf/stage1_p1_s0.pt ckpts/nf/stage1_p1_s1.pt
+2 checkpoints, 5000 theorems, slices {'all': 5000, 'len2': 1000, 'len3': 1000, 'len4': 1000, 'len5': 1000, 'len6': 1000, 'depth3': 500, 'nodepth3_len6': 500}
+stage1_p1_s0: all 0.8730 len6 0.4890 depth3 0.0880 | parse-fail 408 lean-rej 227 | 47s sample 10s lean
+stage1_p1_s1: all 0.9364 len6 0.8510 depth3 0.8180 | parse-fail 22 lean-rej 296 | 46s sample 12s lean
+END 2026-09-27T18:41:53Z

@@ -1,0 +1,157 @@
+{
+ "ckpt": "ckpts/sd/w_s6.step04000.pt",
+ "heldout": "data/p2/heldout.jsonl",
+ "n": 5000,
+ "judge": "lean_alone",
+ "judge_detail": "strict lean_seq grammar parse AND lean 4 core accepts the literal text",
+ "sampler": {
+  "greedy": true,
+  "temperature": 0.0,
+  "batch": 512,
+  "max_new": 400,
+  "path": "fast",
+  "early": "eos",
+  "compact": "1"
+ },
+ "model": {
+  "n_params": 3214336,
+  "mode": "lean_seq",
+  "step": 4000,
+  "train_args": {
+   "data": "data/p2/train_depth3_f0_a1.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "mode": "lean_seq",
+   "init": null,
+   "steps": 24000,
+   "bs": 128,
+   "lr": 0.001,
+   "min_lr": 0.0001,
+   "warmup": 200,
+   "wd": 0.1,
+   "n_layer": 4,
+   "d": 256,
+   "n_head": 8,
+   "cap": 6,
+   "seed": 6,
+   "out": "ckpts/sd/w_s6.pt",
+   "log_every": 200,
+   "no_shift": false,
+   "val_bins": true,
+   "val_bs": 256,
+   "metrics": "artifacts/sd/m_w_s6.jsonl",
+   "sched": "wsd",
+   "decay_frac": 0.2,
+   "ckpt_every": 1000,
+   "state_at": "4800,9600",
+   "resume": null
+  }
+ },
+ "timing": {
+  "sample_s": 25.51930522918701,
+  "lean_wall_s": 9.784480571746826,
+  "lean_proc_s": 38.15797686576843,
+  "total_s": 35.82200360298157
+ },
+ "parse_fail": 491,
+ "parse_reasons": {
+  "unbound": 180,
+  "expected =>": 151,
+  "expected :=": 64,
+  "expected )": 48,
+  "formula": 37,
+  "no-eos": 9,
+  "exact not last": 1,
+  "expected ;": 1
+ },
+ "lean_rej_of_parsed": 556,
+ "slices": {
+  "all": {
+   "solved": 3953,
+   "n": 5000,
+   "rate": 0.7906,
+   "ci": [
+    0.7791008718139175,
+    0.8016529234301205
+   ],
+   "mean_term_size": 82.15734884897546,
+   "mean_written_lines": 4.060713382241335
+  },
+  "len2": {
+   "solved": 987,
+   "n": 1000,
+   "rate": 0.987,
+   "ci": [
+    0.9778853478989854,
+    0.9923872528778702
+   ],
+   "mean_term_size": 52.77001013171226,
+   "mean_written_lines": 2.835866261398176
+  },
+  "len3": {
+   "solved": 955,
+   "n": 1000,
+   "rate": 0.955,
+   "ci": [
+    0.940316857129231,
+    0.9662006651571536
+   ],
+   "mean_term_size": 62.08586387434555,
+   "mean_written_lines": 3.898429319371728
+  },
+  "len4": {
+   "solved": 831,
+   "n": 1000,
+   "rate": 0.831,
+   "ci": [
+    0.8065158387363724,
+    0.852950754399437
+   ],
+   "mean_term_size": 85.88688327316486,
+   "mean_written_lines": 4.253910950661853
+  },
+  "len5": {
+   "solved": 722,
+   "n": 1000,
+   "rate": 0.722,
+   "ci": [
+    0.6934224363691295,
+    0.7488784206585131
+   ],
+   "mean_term_size": 118.75484764542936,
+   "mean_written_lines": 4.986149584487535
+  },
+  "len6": {
+   "solved": 458,
+   "n": 1000,
+   "rate": 0.458,
+   "ci": [
+    0.42733866245855345,
+    0.48898279702270353
+   ],
+   "mean_term_size": 122.87991266375546,
+   "mean_written_lines": 5.229257641921397
+  },
+  "depth3": {
+   "solved": 127,
+   "n": 500,
+   "rate": 0.254,
+   "ci": [
+    0.2178196276777558,
+    0.2939316846394487
+   ],
+   "mean_term_size": 171.38582677165354,
+   "mean_written_lines": 4.0
+  },
+  "nodepth3_len6": {
+   "solved": 331,
+   "n": 500,
+   "rate": 0.662,
+   "ci": [
+    0.6194419387868491,
+    0.7020876848091384
+   ],
+   "mean_term_size": 104.26888217522658,
+   "mean_written_lines": 5.7009063444108765
+  }
+ }
+}

@@ -258,6 +258,59 @@ def main():
                                    'ratio': (gf / gw) if (gw and gf is not None) else None,
                                    'steps_not_repetition_if_ge_0.6': (gf / gw >= 0.6) if (gw and gf is not None) else None}
 
+    # ---- POST-HOC (not pre-registered): trajectory-robust estimators.
+    # The pre-registered Q4 estimator is each arm's endpoint accuracy, and arm F showed that a single
+    # checkpoint's depth-3 rate is a draw from a large within-run oscillation, so the endpoint carries
+    # that oscillation rather than the arm's quality.  These estimators use the whole trajectory (and
+    # the 200-step loss curve, which has 120 points per run) instead of one checkpoint.  They are
+    # labelled post-hoc everywhere they are reported.
+    Q['oscillation'] = {}
+    for arm_t, arm_f, tagf in (('Wtraj', 'W', 'w_s{}'), ('Ftraj', 'F', 'f_s{}')):
+        for k in sorted({c['seed'] for c in cells if c['arm'] == arm_t}):
+            pts = sorted([(c['step'], c) for c in cells if c['arm'] == arm_t and c['seed'] == k])
+            late = [(s, c) for s, c in pts if s >= 6000]
+            fin = get(arm_f, k)
+            cur = curves.get(tagf.format(k))
+            vd = [(s['step'], (s['val'] or {}).get('depth3')) for s in (cur['steps'] if cur else [])
+                  if (s['val'] or {}).get('depth3') is not None]
+            v6 = [(s['step'], (s['val'] or {}).get('len6')) for s in (cur['steps'] if cur else [])
+                  if (s['val'] or {}).get('len6') is not None]
+            d3 = [c['depth3'] for _, c in late]
+            l6 = [c['len6'] for _, c in late]
+            flips = sum(1 for i in range(1, len(d3)) if (d3[i] > D3_CUT) != (d3[i - 1] > D3_CUT))
+            Q['oscillation'][f'{arm_f}_s{k}'] = {
+                'n_traj_ckpts': len(pts), 'n_at_or_after_6000': len(late),
+                'depth3': {'min': min(d3) if d3 else None, 'max': max(d3) if d3 else None,
+                           'median': st.median(d3) if d3 else None,
+                           'frac_high_mode': (sum(1 for x in d3 if x > D3_CUT) / len(d3)) if d3 else None,
+                           'mode_flips': flips, 'final': fin['depth3'] if fin else None},
+                'len6': {'min': min(l6) if l6 else None, 'max': max(l6) if l6 else None,
+                         'median': st.median(l6) if l6 else None,
+                         'final': fin['len6'] if fin else None},
+                'val_depth3_last5k_mean': (st.mean([v for s, v in vd if s > 19000]) if vd else None),
+                'val_depth3_min': (min(v for _, v in vd) if vd else None),
+                'val_len6_last5k_mean': (st.mean([v for s, v in v6 if s > 19000]) if v6 else None),
+                'val_len6_min': (min(v for _, v in v6) if v6 else None)}
+    Q['Q4_robust_posthoc'] = {}
+    for key in ('val_depth3_last5k_mean', 'val_len6_last5k_mean', 'val_depth3_min', 'val_len6_min'):
+        w = [v[key] for g, v in Q['oscillation'].items() if g.startswith('W_') and v[key] is not None]
+        f = [v[key] for g, v in Q['oscillation'].items() if g.startswith('F_') and v[key] is not None]
+        Q['Q4_robust_posthoc'][key] = {'W_n': len(w), 'W_median': st.median(w) if w else None,
+                                       'W_range': [min(w), max(w)] if w else None,
+                                       'F_n': len(f), 'F_median': st.median(f) if f else None,
+                                       'F_range': [min(f), max(f)] if f else None}
+    for key in ('median', 'max', 'frac_high_mode'):
+        for sl in ('depth3', 'len6'):
+            if sl == 'len6' and key == 'frac_high_mode':
+                continue
+            w = [v[sl][key] for g, v in Q['oscillation'].items() if g.startswith('W_') and v[sl][key] is not None]
+            f = [v[sl][key] for g, v in Q['oscillation'].items() if g.startswith('F_') and v[sl][key] is not None]
+            Q['Q4_robust_posthoc'][f'traj_{sl}_{key}'] = {
+                'W_n': len(w), 'W_median': st.median(w) if w else None,
+                'W_range': [min(w), max(w)] if w else None,
+                'F_n': len(f), 'F_median': st.median(f) if f else None,
+                'F_range': [min(f), max(f)] if f else None}
+
     # Q5 is per-length loss a proxy?  trajectory correlation and fixed-step ranking
     def val_at(tag, step, key):
         c = curves.get(tag)
@@ -271,14 +324,14 @@ def main():
     for key, sl in (('len6', 'len6'), ('depth3', 'depth3'), ('all', 'all'), ('val2k', 'len6')):
         xs, ys, per_seed = [], [], {}
         for k, d in sorted(traj.items()):
-            a, b = [], []
+            vv, aa = [], []
             for s in sorted(d):
                 v = val_at(f'w_s{k}', s, key)
                 if v is not None and sl in d[s]:
-                    a.append(v); b.append(d[s][sl])
-            if len(a) > 2:
-                per_seed[str(k)] = {'n': len(a), 'spearman': spearman(a, b)}
-                xs += a; ys += b
+                    vv.append(v); aa.append(d[s][sl])
+            if len(vv) > 2:
+                per_seed[str(k)] = {'n': len(vv), 'spearman': spearman(vv, aa)}
+                xs += vv; ys += aa
         Q['Q5_proxy']['trajectory'][f'val_{key}_vs_acc_{sl}'] = {
             'n_points': len(xs), 'spearman_pooled': spearman(xs, ys) if len(xs) > 2 else None,
             'per_seed': per_seed}
