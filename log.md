@@ -559,3 +559,31 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 - 18:31  `r` on `sd-3`; `f0 f1 f2 f3` and `r24` on `sd-4`. All 14 chains running. `pod/sd/jobs.py`
   emits arm R's commands from the same `train()` helper as arm C, so `r6a_s0`'s command line is
   byte-identical to `c_s0`'s except for `--out`/`--metrics` (checked by diff, logged here).
+- 18:41  **The judge, cross-checked against the checker of record.** Before trusting `sd_eval.py` I ran
+  it on two `noise-floor` checkpoints whose held-out numbers are published (`ckpts/nf/stage1_p1_s0.pt`,
+  `stage1_p1_s1.pt`, 3,214,336-parameter `lean_seq`, cap 6, 6,000 steps, measured there under
+  **Lean ∧ `nd_verify`**). Lean alone against the published pair:
+
+  | checkpoint | overall | 6-line | depth-3 |
+  |---|---|---|---|
+  | `stage1_p1_s0` — published (Lean ∧ `nd_verify`) | 0.8726 | 0.4870 | 0.0860 |
+  | `stage1_p1_s0` — this run (**Lean alone**) | **0.8730** | **0.4890** | **0.0880** |
+  | `stage1_p1_s1` — published (Lean ∧ `nd_verify`) | 0.9362 | 0.8500 | 0.8180 |
+  | `stage1_p1_s1` — this run (**Lean alone**) | **0.9364** | **0.8510** | **0.8180** |
+
+  Five extra theorems in 20,000 theorem-cells, **every difference in the one direction policy predicts**
+  (Lean alone ≥ Lean ∧ `nd_verify`, never the reverse). So the judge reproduces the checker of record to
+  0.04 pp and the Lean-alone/Lean-∧-`nd_verify` boundary costs this run nothing it has to reason about.
+  Sources `artifacts/sd/xcheck/stage1_p1_s{0,1}.json`, log `artifacts/sd/logs/judge_xcheck.log`.
+  A held-out evaluation of a *trained* model costs **46–47 s of sampling + 10–12 s of Lean** per 5,000
+  theorems (against 8 s + 4 s for the barely-trained smoke model, which writes shorter proofs), so the
+  274 evaluations of this design are ≈ 4.6 GPU-hours — about as much as its 461,000 training steps.
+- 18:50  **Premise check on both training sets** (`artifacts/sd/premise.txt`, my own recount over all
+  727,759 records). Control `data/p2/train_depth3_f0_a1.jsonl`: **155,000 records, flat 31,000 per
+  length 2–6, max `n_lines` 6, zero depth-3 records**, reductio share 6.80 %, `derived_ore` 0.06 %.
+  Fresh `data/sd/train_fresh.jsonl`: **572,759 records, max `n_lines` 6, zero depth-3 records**
+  (the `pat.depth3` key is present and false on all 572,759), reductio 6.32 %, `derived_ore` 0.04 %;
+  per-length 105,111 / 116,762 / 116,981 / 116,568 / 117,337. So **both** sets exclude depth-3
+  entirely and the held-out depth-3 slice is strictly out-of-distribution for every arm in this run —
+  which is the right frame for questions 1 and 2: depth-3 is a generalisation slice, not an
+  in-distribution one, and that is presumably why it is the bimodal one.
