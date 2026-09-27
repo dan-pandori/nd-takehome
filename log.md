@@ -504,3 +504,49 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   per-theorem records, and a reviewer re-deriving them from git alone would otherwise be stuck with
   the `.json` summaries. The same tree is in the bucket. `data/nf/train_p<i>.jsonl` and
   `ckpts/nf/*.pt` are **not** in git (`.gitignore`), only in the bucket.
+
+## support-curves (proposal 12, experiment 1) — executor
+
+- **2026-09-27 18:07 UTC** Run started. Worktree fast-forwarded onto `origin/dan` `9a1db24`, which carries
+  `lean_judge.py`, so this run judges with **Lean alone** for both models. `wt.sh` written because `~/bin/pod*`
+  address `~/nd-takehome`, a different checkout on this shared host.
+- **18:10** Checked the brief's premise that no Lean-format EI checkpoint exists. The bucket *does* hold
+  `lean-format/ckpts/ladder/la_T1_seq_s{0,1}_r{1..8}.pt`, but their `args.json` records
+  `"init": "ckpts/lf/stage1_full_seq_s0.pt"` — a different Stage-1 model (md5 `f3d68227…` vs the A1 control's
+  `9bde44c0…`) — and **both seeds start from the same seed-0 base**. Not this base's EI models, and not two
+  replicates. Re-training confirmed necessary; the brief was right in effect.
+- **18:14** Base checkpoints downloaded; md5 `9bde44c0…` / `fc27e52d…` match `ds-generator`'s review.
+- **18:16** `preregistration/support-curves.md` + `data/sc/theorems.jsonl` (383 theorems, md5 `3cb6e7bf…`)
+  committed and pushed **before the first pod** (gate 0). Budget registered: `podbudget support-curves --set 30 15`.
+- **18:18–18:21** Pods `sc1`, `sc2` created (A40 46 GB, **$0.49/h billed**, secure cloud). Lean 4.34.0 installed;
+  the gate self-test returned exactly 1600 ok / 400 rejected on both, as expected.
+- **18:22** **Defect found in `ladder_ei.py`, which this run may not edit.** It does not import on `origin/dan`
+  `9a1db24`: that commit (sibling `lean-judge`) renamed `expert_iter.relabel` → `relabel_candidate` /
+  `relabel_batch` and left `ladder_ei.py:34` `from expert_iter import relabel`. Breaks every caller. Worked
+  around with `sc_ladder_ei.py`, which supplies the name from outside and raises if called; the only call site
+  is line 233 inside `if a.relabel:` (T3), which this run never passes, so `ladder_ei.py` runs unmodified.
+- **18:26** Throughput measured (`artifacts/sc/probe/`): **988–1,001 samples/s on an idle A40 = 3.6 M
+  samples/pod-hour**, 7× the budgeted rate; Lean only 23 % of wall because the model emits just 6–142 distinct
+  normalised strings per 2,000 samples. `--max_new` 400 and 512 give byte-identical records.
+- **18:33** **Addendum 1** to the pre-registration committed *before any stage-1 sample*: the design scales up
+  — stage-1 k 4,000 → 10,000, forward-crux base attempts 40,000 → 100,000, new stage 2b to 4 × 10⁵. The
+  pre-registered k = 4,000 crux and the ≥ 40,000-attempt falsifier are still reported exactly, because
+  `first_hit` makes the prefix count recoverable.
+- **18:34** Stage 0 (EI training, both seeds) and stage-1 base sampling launched, two jobs per pod.
+- **19:05 — a scare that was my arithmetic, not a bug.** Stage 1 had solved only 2 of its first 47 `L_true` 7
+  theorems at k = 10,000, while round 1 of my own EI job reported the same base solving **80/2,285 transfer
+  theorems at k = 32** (L7 exactly: 22/300 = 7.3 %). At 312× the attempts, fewer solves is impossible, so I
+  stopped and checked rather than let the run produce a wrong number.
+  - *Judging path:* `sc_selftest.py` fed the 11 proofs of the 9 overlapping theorems from my own
+    `la_T1_sc_s0/found_transfer_1.jsonl` (written and Lean-gated by `ladder_ei`, an independent path) through
+    support.py's judging path — `normalize.norm` then `lean_judge.judge_many`. **11/11 accepted**, normalised
+    and un-normalised. Judging is not the problem.
+  - *Sampler path:* support.py re-run on those 9 theorems at k = 2,000 (`artifacts/sc/diag/`). It solves them
+    at **116, 140, 179 per 2,000** — p̂ ≈ 0.06–0.09. Compaction on vs off: 116/116, 140/140, 179/**178** — one
+    sample in 6,000, the flip `ds-generator` documented, distributionally irrelevant. Sampler is not the problem.
+  - *The actual explanation, and it is the run's question in miniature:* the base's per-theorem success
+    probability is **strongly bimodal** — a transfer theorem is either ≈ 10⁻¹ or ≈ 0, with very little mass
+    between — so raising k from 32 to 10,000 adds almost no theorems. 47 L7 theorems at a 7.3 % solvable rate
+    predicts ≈ 3.4 solved; 2 observed is ordinary Poisson noise. My error was reading `ds-generator`'s
+    *cumulative over 256 attempts* row (42/300) as a per-theorem rate at k = 32.
+  - Kept: a `--compact` flag on `support.py`, and `sc_selftest.py` as a standing check.

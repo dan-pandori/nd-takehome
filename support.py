@@ -88,6 +88,7 @@ def main():
     ap.add_argument('--shard', default='0/1')
     ap.add_argument('--limit', type=int, default=None)
     ap.add_argument('--fail_keep', type=int, default=3, help='failing literal texts kept per theorem (storage: this run draws ~10M samples)')
+    ap.add_argument('--compact', default='1', choices=['0','1'], help="fast-path KV compaction; ds-generator saw it flip ~1 row in 128 vs the base path")
     ap.add_argument('--early', default='eos', choices=['eos', 'exact', 'goal'], help="fast-path stop rule; 'eos' is sample.generate's default and matches the base path")
     ap.add_argument('--procs', type=int, default=1, help='unused; kept so job lines match coverage.py')
     a = ap.parse_args()
@@ -134,7 +135,8 @@ def main():
                 tg = time.time()
                 with torch.autocast('cuda', dtype=torch.bfloat16):
                     outs = generate_ids_fast(model, tok, [pid] * b, greedy=False, temperature=a.temperature,
-                                             max_new=a.max_new, seed=a.seed * 1000003 + n, early=a.early)
+                                             max_new=a.max_new, seed=a.seed * 1000003 + n, early=a.early,
+                                             compact=(a.compact == '1'))
                 fresh = []
                 for j, o in enumerate(outs):
                     nd = tok.decode(o)
@@ -166,7 +168,7 @@ def main():
                    'model': a.model, 'ckpt': a.ckpt, 'ckpt_md5': ck_md5, 'temperature': a.temperature,
                    'seed': a.seed, 'stage': a.stage, 'k_requested': a.k, 'stop_at': a.stop_at,
                    'n_tried': n, 'n_ok': n_ok, 'n_distinct_ok': len(acc), 'n_distinct_strings': len(counts),
-                   'n_parse_fail': n_parse, 'early': a.early, 'first_hit': (first_idx[acc[0]] if acc else None),
+                   'n_parse_fail': n_parse, 'early': a.early, 'compact': a.compact, 'first_hit': (first_idx[acc[0]] if acc else None),
                    'stopped_early': bool(a.stop_at and n_ok >= a.stop_at and n < a.k),
                    'gen_s': round(gen_s, 2), 'lean_s': round(lean_s, 2), 'wall_s': round(time.time() - t0, 2),
                    'proofs': [{'proof': s, 'count': counts[s], 'first': first_idx[s], 'n_lines': verdict[s][1],
