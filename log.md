@@ -749,3 +749,7 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   pre-existing code file this run modified is `train.py`; `lean_gate.py`, `lean_judge.py`,
   `eval_set.py`, `expert_iter.py`, `ladder_ei.py`, `coverage.py`, `eval_targets.py`, `grpo.py`,
   `sample.py`, `nd2lean.py`, `model.py` and `lean_tok.py` are untouched by it.
+- 21:20  **Gate 0.** Pre-registration commit `5fddcc7` at **2026-09-27T18:05:40Z**; this run's first
+  pod `sd-1` at **18:15:50Z** — **10 min 10 s later**. The only other entry in `~/pods.log` between
+  this run's start (17:49) and that commit is sibling run `lean-judge`'s `lj1` at **17:38:36Z**,
+  which precedes the run's start, so nothing was created inside the window the gate examines.
