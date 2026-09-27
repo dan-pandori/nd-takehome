@@ -36,7 +36,31 @@ from model import load_ckpt
 from sample import generate_ids_fast
 from lean_judge import judge_many
 from normalize import norm
-from review_nf_ladder_cov import proof_term_size    # syntactic term size: formula nodes summed over lines
+import re
+
+
+def _formula_size(f):
+    """nodes of one formula's syntax tree: connectives + atoms."""
+    return sum(1 for t in f.split() if t in ('~', '&', 'v', '>', 'F') or re.fullmatch(r'[A-Z]', t))
+
+
+_LINE = re.compile(r'N\d+\s+((?:\|\s*)*)(.*?):')
+
+
+def proof_term_size(proof):
+    """Proof term size = formula nodes summed over the proof's lines.  Byte-identical to
+    `review_nf_ladder_cov.proof_term_size`, which the `noise-floor` reviewer used; inlined because that module reads
+    files at import time.  Reported alongside line count because under Lean a proof may be shorter than the shortest
+    ND proof and may omit premise re-statements, so lines alone are not the whole story (AGENT_POLICY)."""
+    tot = 0
+    for seg in proof.split(';'):
+        seg = seg.strip()
+        if not seg or seg == 'QED':
+            continue
+        m = _LINE.match(seg)
+        if m:
+            tot += _formula_size(m.group(2))
+    return tot
 
 
 def md5(p):

@@ -138,3 +138,76 @@ If E5 comes out ≥ 20, the amplifier reading of this project's EI results is wr
 proposal 12's experiment 2 should be re-ordered around capacity rather than search. If E5 comes out
 0 and E7 shows crossover in every stratum, the project's headline EI numbers are a statement about
 sample efficiency and should be relabelled as such everywhere.
+
+---
+
+# Addendum 1 — re-sizing on the measured throughput (2026-09-27 18:30 UTC)
+
+Written **before any stage-1 sample was drawn**. Stage 0 (EI training) is running; no measurement
+data exists yet. The brief requires the throughput to be measured in the first batch and the run
+projected from it; this is that step, and it came out **7× better than budgeted**, so the design
+scales **up**. The falsifier and every prediction above stand; the numbers below are additions.
+
+## Measured (source: `artifacts/sc/probe/mn{400,512}.s0.jsonl`, pod `sc1`, A40 46 GB, $0.49/h)
+
+Base s0 (`stage1_a1_seq_s0.pt`, md5 `9bde44c0…`), 6 theorems at `L_true` 7, k = 2,000, T = 0.8:
+
+- **988–1,001 samples/s single-job on an idle A40 = 3.6 M samples per pod-hour**, against the
+  500,000/pod-hour I budgeted from `noise-floor`'s 7-line reductio targets.
+- Wall split **gen 76 % / Lean 23 %**. Lean is cheap because the model is extremely concentrated:
+  **6 to 142 distinct normalised strings per 2,000 samples**, and only distinct strings are checked.
+  Distinct-string count grows far slower than k, so the Lean share *falls* as k rises.
+- `--max_new` 400 and 512 give **byte-identical** per-theorem records: the model always terminates
+  inside 400 tokens. **Using 400.**
+- Sampling uses `generate_ids_fast` with compaction on. `ds-generator` recorded that compaction can
+  flip ~1 row in 128 versus the base path (a bf16 batch-repacking difference). That matters for a run
+  reproducing an exact count; it does not matter here, because every sample is an i.i.d. draw and the
+  estimand is a probability. Stage 0 keeps `ND_SAMPLE_COMPACT=0` to mirror `noise-floor` exactly.
+- Early signal, not a result: the base solved **0 of those 6** `L_true` 7 theorems in 2,000 attempts
+  each. If that holds up, **E2 lands at or below its lower bound**.
+
+Projection of the design as briefed: stage 1 ≈ 0.9 pod-h, stage 2 ≈ 3 pod-h, stage 3 ≈ 0.4 pod-h,
+stage 0 ≈ 6 pod-h — **≈ 10 of the 30 pod-hour ceiling**. Spending the other 20 on more base attempts
+is the single best use of them, because the falsifier is a statement about how many attempts the base
+model survives.
+
+## Re-sized design
+
+| stage | briefed | **running** |
+|---|---|---|
+| 1 (seed 0, T 0.8, both models) | k 4,000, stop at 50 | **k 10,000**, stop at 50 |
+| 2a forward crux, base | +20,000 @ T 0.8, +20,000 @ T 1.0 | **+50,000 @ T 0.8, +50,000 @ T 1.0** |
+| 2a forward crux, EI | +4,000 @ T 1.0 | **+10,000 @ T 1.0** |
+| **2b (new)** — survivors of 2a still at 0 base successes | — | **+150,000 more at each temperature**, budget permitting: up to **4 × 10⁵ base attempts** on the strongest survivors |
+| 2r reverse crux, EI | +20,000 @ T 0.8 | **+50,000 @ T 0.8** |
+| 3 (seed 1, T 0.8, both models) | k 2,000 | **k 10,000** |
+
+**The pre-registered crux is not lost.** `support.py` records `first_hit`, so "c_base ≥ 1 within
+4,000 attempts" is exactly `first_hit ≤ 4000`. The forward crux is reported at **both** the
+pre-registered k = 4,000 and the stricter k = 10,000, and the primary falsifier is evaluated at its
+pre-registered ≥ 40,000 attempts. The 100,000- and 400,000-attempt versions are reported as
+strictly stronger secondaries.
+
+## Added predictions at the new k (the k = 4,000 predictions E1–E10 stand unchanged)
+
+| # | quantity | prediction |
+|---|---|---|
+| E2′ | base s0 solved of 383 at **k = 10,000**, T = 0.8 | **100–220** |
+| E3′ | EI s0 solved of 383 at **k = 10,000**, T = 0.8 | **230–340** |
+| E4′ | forward-crux size at **k = 10,000** | **50–130** |
+| E11 | forward-crux theorems at 0 base successes after **100,000** attempts at both temperatures, p̂_EI ≥ 0.01 | **0–12** (the falsifier's own threshold is 20 at 40,000) |
+| E12 | Lean share of sampler wall time at k = 10,000 | **below** the 23 % measured at k = 2,000 |
+
+Revised projection: stage 0 ≈ 6 h, stage 1 ≈ 2.2 h, stage 2 ≈ 6 h, stage 3 ≈ 2.2 h, slack ≈ 2 h —
+**≈ 18 of 30 pod-hours ≈ $9 of $15** on two A40s at $0.49/h. Drop order unchanged; stage 2b is the
+first thing cut, before stage 3.
+
+## Defect found in a file this run may not edit
+
+`ladder_ei.py` **does not import** on `origin/dan` `9a1db24`: that commit (sibling run `lean-judge`)
+renamed `expert_iter.relabel` to `relabel_candidate` / `relabel_batch` and left `ladder_ei.py`'s
+line 34 `from expert_iter import relabel` untouched. It breaks every caller, not just this run.
+`ladder_ei.py` and `expert_iter.py` belong to the sibling, so this run does not edit them: stage 0
+runs through **`sc_ladder_ei.py`**, which supplies the missing name from outside and raises if it is
+ever called. The only call site is line 233, inside `if a.relabel:` (technique T3), which this run
+never passes — so stage 0 executes `ladder_ei.py` unmodified.
