@@ -600,3 +600,46 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 - 19:06  First measured instrumentation overhead on a full-length run: `r6b_s0`, 6,000 steps in
   1,007 s of which **47 s (4.9 %)** is the per-bin validation on all 5,000 held-out records at every
   200 steps — just under the pre-registered 5–9 % band (E16), and the brief's ≈ 6 % estimate.
+- 19:55  **Arm R, seed 0, first result — and it is the run's biggest surprise.** Four runs whose
+  command lines are *exactly* one distinct string (checked: `sort -u` over the four logged `START`
+  lines with `--out`/`--metrics` stripped gives **1**), cosine 6,000 steps, seed 0, control set,
+  judged by Lean alone on the same 5,000 theorems:
+
+  | run | overall | 6-line bin | depth-3 slice |
+  |---|---|---|---|
+  | `r6a_s0` | 0.8778 | 0.4900 | 0.0640 |
+  | `r6b_s0` | 0.8950 | 0.6090 | 0.3100 |
+  | `r6c_s0` | 0.9058 | 0.6560 | 0.4360 |
+  | `r6d_s0` | 0.9094 | 0.6640 | 0.4160 |
+
+  Nothing a human specified differs between those rows. The 6-line bin spans **17.4 pp** and the
+  depth-3 slice spans **0.064 → 0.436, a 6.8× ratio**, which is most of the range `NOISE_FLOOR.md`
+  measured across 52 cells that differed in seed *and* data draw. Sources
+  `artifacts/sd/ev/r6{a,b,c,d}_s0.json`, log `artifacts/sd/logs/ev_r6_s0.log`.
+- 20:15  **Arm F finished first (all four chains), and its trajectories are the run's central result.**
+  Held-out accuracy on the depth-3 slice does **not** rise monotonically — it flickers by most of the
+  52-cell noise-floor range *inside one run*. `f_s1`: 0.806 (step 8,000) → 0.134 (10,000) → 0.018
+  (14,000) → 0.366 (16,000) → 0.152 (24,000). `f_s0`: 0.016 (12,000) → 0.666 (14,000) → 0.934
+  (24,000, the decayed final — above the maximum of all 52 noise-floor cells). The **per-bin
+  validation loss moves with it** (f_s1's depth-3 loss 0.0330 → 0.0594 → 0.0719 → 0.0379 → 0.0560 at
+  those same steps), while **`val2k` is flat and monotone across the whole run** (0.0811 → 0.0722) and
+  the 6-line non-depth-3 loss is nearly monotone (0.0718 → 0.0408). Sources
+  `artifacts/sd/ev/f_s*.json`, `artifacts/sd/m_f_s*.jsonl`.
+- 20:20  **Addendum 2 answered (E21, E22).** pass@8 at T = 0.8 on the 500-record depth-3 slice, at two
+  within-run pairs of checkpoints chosen by their *loss*:
+
+  | checkpoint | depth-3 val loss | greedy | pass@8 |
+  |---|---|---|---|
+  | `f_s1.step08000` | 0.0330 (trough) | 0.8060 | **0.8920** |
+  | `f_s1.step14000` | 0.0719 (peak) | 0.0160 | **0.3920** |
+  | `f_s0.step12000` | 0.1343 (peak) | 0.0160 | **0.0260** |
+  | `f_s0.step14000` | 0.0324 (trough) | 0.6680 | **0.8840** |
+
+  pass@8 moves the same way as greedy in both pairs, by **50.0 pp** and **85.8 pp** — so **reading (i)
+  holds: the competence is genuinely lost and regained, it is not a greedy-decode artefact** (E21 met;
+  its falsifier needed < 10 pp). pass@8 > greedy at all four (E22 met). And the depth-3 validation loss
+  **ranks pass@8 perfectly** over the four: 0.0324 → 0.884, 0.0330 → 0.892, 0.0719 → 0.392,
+  0.1343 → 0.026. Sources `artifacts/sd/passk/*.k8.json`.
+- 20:23  `sd-4` deleted after its checkpoints and artifacts were pulled: **1.8964 pod-hours, $0.93** —
+  i.e. the **real billed A40 rate is $0.49/h**, the same as `podbudget`'s assumption. First bucket
+  upload started (arm F's 48 checkpoints and all artifacts so far).

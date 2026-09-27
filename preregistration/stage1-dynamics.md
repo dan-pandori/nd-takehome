@@ -231,7 +231,7 @@ after C and W; R-24k is dropped before F entirely.
 
 ---
 
-## Addendum 2 — what exactly oscillates (2026-09-27 20:25 UTC)
+## Addendum 2 — what exactly oscillates (2026-09-27 20:17 UTC)
 
 Committed before the runs it covers exist, and before any pass@k number of this run exists. Arm F's
 trajectories, the first to finish, showed something neither the brief nor my pre-registration
