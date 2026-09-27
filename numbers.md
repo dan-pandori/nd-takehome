@@ -1118,3 +1118,117 @@ Bucket: `hf://buckets/dan-pandori/nd-rl/noise-floor/{ckpts,artifacts,data}` —
 `ckpts/nf/stage1_p<i>_s<k>.pt` (52), `artifacts/nf/` (per-cell held-out, coverage and ladder outputs,
 `summary.json`, `premise.json`, the `record_*.json` checker passes, the `gate_*.jsonl` logs and their
 `.disagree.jsonl`), `data/nf/train_p<i>.jsonl` (4 × 155,000) and `assemble_p<i>.json`.
+
+# support-curves (proposal 12, experiment 1) — per-theorem support of a base model and its EI model
+
+Run `support-curves`, 2026-09-27, branch `dan_support-curves`. **Every number here is judged by Lean alone**
+(`lean_judge.py`, `origin/dan` `9a1db24`; Dan, 2026-09-27): the literal sampled text must parse the strict
+`lean_seq` grammar and Lean 4.34.0 core must accept the proof. `nd_verify` judged nothing in this run. Numbers
+compared below against pre-2026-09-27 results are labelled, because those were measured under Lean ∧ `nd_verify`.
+
+## SC0 — the models every number below is about
+
+| label | checkpoint | md5 | what it is |
+|---|---|---|---|
+| **base s0** | `ckpts/lf/stage1_a1_seq_s0.pt` | `9bde44c0b6c7580951656bf57aec3e43` | 3,214,336-parameter from-scratch GPT, `lean_seq` Lean format, **cap 6**, **Stage 1 only**, trained on `data/p2/train_depth3_f0_a1.jsonl` (depth-3 frequency 0, A1 composition). From `hf://buckets/dan-pandori/nd-rl/lean-format/ckpts/lf/`. |
+| **base s1** | `ckpts/lf/stage1_a1_seq_s1.pt` | `fc27e52d017e5a361b3232fcd13f4ddc` | the same, Stage-1 seed 1. |
+| **EI s0** | `ckpts/ladder/la_T1_sc_s0_r8.pt` | (trained in this run) | base s0 + **8 rounds × k 32 expert iteration at T 0.8** on `data/ladder/rl_targets.jsonl` (4,495 targets), `ladder_ei.py` with `noise-floor`'s `la_T1_dsc_*` settings. |
+| **EI s1** | `ckpts/ladder/la_T1_sc_s1_r8.pt` | (trained in this run) | the same from base s1. |
+
+EI differs from its base **only** by expert iteration on the RL-target pool, which is **disjoint from the
+transfer pool measured here**. Both models share architecture and tokenizer and are judged identically.
+
+**Why the EI models were re-trained.** `hf://…/lean-format/ckpts/ladder/la_T1_seq_s{0,1}_r{1..8}.pt` exist, but
+their `args.json` both record `"init": "ckpts/lf/stage1_full_seq_s0.pt"` — a different Stage-1 checkpoint (md5
+`f3d68227…`) and **the same seed-0 base for both** "seeds". They are not this base's EI models and not two
+replicates.
+
+## SC1 — the theorem set (source: `data/sc/theorems.jsonl`, md5 `3cb6e7bf3b094ce24ebc0706777a9a70`)
+
+383 theorems drawn by `sc_theorems.py` (seed 20260927) from `data/ladder/transfer.jsonl` (2,285 theorems,
+**never trained on**): 60 each at `L_true` 7–12 and **every** theorem at `L_true` 13 (13) and 14 (10).
+20 schemata, 183 textbook. The transfer pool holds nothing below `L_true` 7, so the run brief's `L_true` 4–6
+anchors do not exist; 7 and 8 are the anchors. Committed before any sampling.
+
+**`L_true` is an ND-derived UPPER BOUND on the minimal Lean proof length** (`minlen.py` searches ND proofs;
+Lean accepts proofs that skip steps ND's rule format demands).
+
+## SC2 — stage 0: the EI models reproduce the on-file behaviour of this base
+
+Source: `artifacts/sc/la_T1_sc_s{0,1}/round_8.json` and `artifacts/sc/la_T1_sc_s{0,1}.log`. Command, both seeds:
+`ladder_ei.py --rounds 8 --k 32 --temperature 0.8 --batch 512 --max_new 512 --heldout data/p2/heldout.jsonl
+--train data/p2/train_depth3_f0_a1.jsonl --init ckpts/lf/stage1_a1_seq_s<k>.pt --seed <k>`, `ND_SAMPLE_COMPACT=0`,
+run through `sc_ladder_ei.py` (see SC9).
+
+| | transfer solved / 2,285 at 8 × 32 | transfer `L*` |
+|---|---|---|
+| **EI s0, this run (Lean alone)** | **869** | **12** |
+| EI s1, this run (Lean alone) | (round 8; see `la_T1_sc_s1.log`) | |
+| on file for this base, `ds-generator` `c0 s0` (Lean ∧ `nd_verify`) | 890 | 12 |
+| on file for this base, `ds-generator` `c0 s1` (Lean ∧ `nd_verify`) | 965 | 11 |
+| `cap-horizon` K6 seed 0 (Lean ∧ `nd_verify`) | 856 | — |
+
+869 is inside the pre-registered 856–965 and the `L*` matches, so the re-trained EI model behaves like the
+ones the project's headline EI numbers came from. Round-1 transfer at k = 32 for **base s0** was
+**80 / 2,285**, `L*` = 9.
+
+## SC3 — stage 1: per-theorem support at k = 10,000, T = 0.8, seed 0
+
+Sources: `artifacts/sc/s1_base_T08_s0.s{0,1}.jsonl`, `artifacts/sc/s1_ei_T08_s0.s{0,1}.jsonl`. `support.py`,
+k = 10,000 per theorem, stopping a theorem at the first batch boundary with 50 successes.
+
+| `L_true` | n | **base** solved @10k (@4k) | **EI** solved @10k (@4k) |
+|---|---|---|---|
+| 7 | 60 | 19 (17) | — |
+| 8 | 60 | 24 (20) | — |
+| 9 | 60 | 0 (0) | — |
+| 10 | 60 | 2 (2) | — |
+| 11 | 60 | 0 (0) | — |
+| 12 | 60 | 0 (0) | — |
+| 13 | 13 | 0 (0) | — |
+| 14 | 10 | 0 (0) | — |
+| **all** | **383** | **45 (39)** | **121 (116)** |
+
+Base: 3,726,864 samples, 3,982 accepted. EI: 3,094,800 samples, 126,826 accepted.
+
+## SC4 — seed replication (stage 3): seed 0 vs seed 1 at k = 10,000, T = 0.8
+
+Sources: `artifacts/sc/s3_base_T08_s1.s{0,1}.jsonl`, `artifacts/sc/s3_ei_T08_s1.s{0,1}.jsonl`.
+
+| model | seed 0 solved / 383 | seed 1 solved / 383 | per-theorem solved/not agreement |
+|---|---|---|---|
+| base | 45 | 37 | **355 / 383 = 92.7 %** |
+| EI | 125 (pooled with the reverse-crux arm; 121 from stage 1 alone) | 144 | **348 / 383 = 90.9 %** |
+
+The **count** difference (45 vs 37; 125 vs 144) is far inside `NOISE_FLOOR.md`'s frozen-ladder floor
+(±235 % at n = 2), so it is not a finding. The **per-theorem** agreement is the informative quantity and it is
+high: which theorems a model can reach is far more stable across Stage-1 seeds than how many it reaches.
+
+## SC5 — the reverse crux (Yue et al.'s "RL loses coverage at large k")
+
+Source: `artifacts/sc/s2_ei_rev_s0.s0.jsonl`. Reverse crux = base solved it in stage 1 and EI did not:
+**6 theorems of 383**. Each given **50,000 more EI attempts at T = 0.8**:
+
+| theorem | `L_true` | EI n | EI successes | p̂_EI |
+|---|---|---|---|---|
+| la_transfer_474 | 7 | 50,000 | 4 | 8.0 × 10⁻⁵ |
+| la_transfer_79 | 7 | 50,000 | 1 | 2.0 × 10⁻⁵ |
+| la_transfer_1934 | 7 | 50,000 | 1 | 2.0 × 10⁻⁵ |
+| la_transfer_1859 | 10 | 50,000 | 1 | 2.0 × 10⁻⁵ |
+| la_transfer_481 | 8 | 50,000 | **0** | < 6.0 × 10⁻⁵ (95 % UB) |
+| la_transfer_848 | 8 | 50,000 | **0** | < 6.0 × 10⁻⁵ (95 % UB) |
+
+**2 of 6 survive.** Coverage loss exists here but is small (2 of 383 theorems, 0.5 %) and one to two orders of
+magnitude smaller than the forward crux.
+
+## SC6 — temperature: T = 0.8 support is not the model's support
+
+Source: `artifacts/sc/s2a_base_T10_s0.s{0..3}.jsonl`. The **338 theorems the base failed at T = 0.8 in 10,000
+attempts**, given 10,000 attempts each at **T = 1.0**:
+
+- **19 of 338 solved**, all at p̂ between 1.0 × 10⁻⁴ and 7.3 × 10⁻⁴.
+- By `L_true`: 7 → 6, 8 → 6, **9 → 7**. The `L_true` 9 bin scored **0 / 60 at T = 0.8** and **7 at T = 1.0**.
+- **17 of the 19 lie inside the forward crux**, and 14 of those are in the p̂_EI ≥ 0.01 subset.
+
+This is why the falsifier is stated at both temperatures: measuring base support only at the RL sampling
+temperature would have over-stated support expansion by ≈ 20 crux theorems.
