@@ -373,3 +373,141 @@ re-run of the executor's for the delta), `rv_t3b.py`, `rv_t5.py`, `rv_relabel.py
 | 6 | hit < 0.05 s/1,000; fallback 10–120 | 0.0123 / 3.556 | **0.022 / 11.6** on 2 vCPU | reproduces (both bands) |
 | 7 | all pass | 39/39 | **39/39**, plus 17/17 adversarial cases of my own | reproduces |
 | splits | disjoint | — | **0 shared renaming classes in all six pairs** | clean |
+
+---
+
+# §Compare
+
+Read after §Recount was committed (`0b14a38`): `run_lean_judge.md`, `numbers.md` § lean-judge
+(L0–L8), `log.md` § lean-judge, `STATUS.md`, `QUESTIONS.md`, `figures/lj_*.png`.
+
+## Process
+
+| item | check | verdict |
+|---|---|---|
+| expectations written before the run | `preregistration/lean-judge.md` = `579ee16`, committed **17:20:43Z**; first pod `lj1` in `~/pods.log` at **17:38:36Z**; `podbudget lean-judge --set 8 4` at 17:15:07Z | **gate 0 holds** (18 min) |
+| budget | 0.6631 pod-h / **$0.32** of 8 h / $4 (`~/podhours.log`), A40 with its real billed rate ($0.49/h) recorded | within budget, rate recorded |
+| misses reported as misses | the `> 80 %` expectation of test 3 is labelled **wrong** in `LEAN_JUDGE.md`, `run_lean_judge.md` and `numbers.md` | yes |
+| deviations recorded | `require_all_pr=False`; test 5's retain slice (`data/p2/heldout.jsonl` 200–3,200, because `data/dsc/train_a3.jsonl` is in neither git nor the bucket); the `ckpts/lj` mkdir failure — all three in `log.md` | yes |
+| checker named on both sides of 2026-09-27 | `numbers.md` § lean-judge opens with an explicit **Checker labels** paragraph; `LEAN_JUDGE.md`, `run_lean_judge.md` and `STATUS.md` each say stored = Lean ∧ `nd_verify`, new = Lean alone | yes, on every write-up |
+| model labels | every table names `lean_seq` / from-scratch / ~19 M / Stage-1 pool, and test 5 names `ckpts/dsc/stage1_a3_s0.pt` | yes |
+| `nd_verify` used as a judge anywhere in the run | `lj_regress.py judge --compare_nd`, `lj_t5_compare.py` and `throughput` import it, each to reconstruct the **old** count or to time the dropped pass | no — correct use |
+| questions for Dan | three in `QUESTIONS.md`, dated, each with the default followed | yes |
+| one test-file run | none in this run | fine |
+
+## Claims
+
+| claim (executor) | my independent value | verdict |
+|---|---|---|
+| test 1: **0 of 8** judging files import or call `nd_verify`; 26/26 checks | 0 of 8 by my own AST walk; 26/26 re-run here | **reproduces** |
+| test 2: **281,817 / 281,817 = 100.000 %**, **0 losses** | 281,817 / 281,817, 0 rejected, and additionally 0 allowlist / 0 axiom rejections | **reproduces**, under a stronger check |
+| test 4: `n_lines` identical on **281,817 / 281,817** | 281,817 / 281,817 | **reproduces** |
+| L0: 283,012 collected, of which 1,195 not ND ⇒ 281,817 | 281,817 distinct ND; the 1,195 are exactly the non-ND records | **reproduces** |
+| L0: "1,533,741 records in **1,000** `found*.jsonl` … **34** coverage files … **398** `*.disagree.jsonl` (29,070 records)" | 1,863,151 records in **1,284** found + **102** coverage files; **492** disagree files, 39,587 records | **differs** — file and record counts depend on how many run worktrees are checked out; the *distinct* counts (281,817 / 8,514) are identical, which is what the tests use |
+| L2: "a spot check … accepts 567 and fails 628 on elaboration … **the statement form differs**, not that the proofs are bad. Out of scope" | the failures are entirely `*_seq_*` arms and entirely a **wrapper** problem: `:= <tactic block>` does not parse. With `:= by <block>` for `_seq_` and `:= <term>` for `_free_`, **1,195 / 1,195 accepted** | **direction right, number wrong**: the reading ("not that the proofs are bad") is correct, but 567/628 is an artefact and the real answer is 1,195/1,195. `LEAN_JUDGE.md`'s test-2 row states 567/628 without that caveat |
+| test 3: **6,419 / 6,419 = 100 %** | 6,419 / 6,419 records — and **909 / 909 distinct (prompt, ND proof)**, 6,419 / 6,419 distinct literal texts, allowlist and axioms clean | **reproduces**; the class is 909 distinct proofs, not 6,419, and no write-up says so |
+| test 3 classes: 41.7 / 25.9 / 24.6 / 6.2 / 1.6 % | 41.4 / 25.9 / 24.6 / 6.5 / 1.6 % of records; **24 / 49 / – / 27 / 0.4 %** of the 909 distinct proofs | **differs by 0.3 pp** (a premise-parsing bug in `classify_leanonly` on premise-free theorems: 26 of 874 records); **the record-level ordering inverts at the distinct-proof level** |
+| "other 6.2 %" (unexplained) | 204 of its 232 distinct proofs are `IMPI` 116 / `DN` 78 / `NEGI` 10 rule-check failures, all one cause: **`¬A` and `A > F` are the same proposition in Lean** — with the `NEGE` row that is 7.8 % of the class, a fourth nameable class | **not supported as a residual**; should be named |
+| "the 0.01–0.07 % rate" | **0.021 %** = 14,995 `nd_rej & lean_ok` of 70,882,951 distinct checked texts, over 225 gate logs | **reproduces** (inside the band) |
+| "all 29,070 stored disagreements are `nd_rej & lean_ok`; the old gate's `LEANREJ` path never fired in five runs" | **0** `nd_ok & lean_rej` in 39,587 disagreement records **and** in the 70.9 M distinct texts the gate logs summarise | **reproduces, and is stronger than stated** — the 70.9 M denominator is the right one |
+| test 3b: **0** disagreements on 6,419 | 0 / 6,419 (literal / `nd2lean(nd)` / `nd2lean(norm(nd))`) | **reproduces** |
+| test 5: **0 / 0 / 0** markers in `found_1` (228), `found_transfer_1` (56), `mix_1` (3,912) | 0, and 0 in `round_1.json` too | **reproduces** |
+| test 5: 4,250 samples / 476 parse failures / 3,506 distinct checked; 2,348 Lean-accepted; 0 registry conflicts | 4,250 / 476 / 3,506; my own Lean run on the 3,506 stored texts agrees with the dump **3,506 / 3,506**, 2,348 accepted; 0 conflicts | **reproduces** |
+| test 5: old 2,348 = new 2,348, **excess 0, losses 0** | 2,348 = 2,348, excess 0, losses 0 (records); 484 = 484 (distinct) | **reproduces** |
+| test 5: "**166** hindsight relabels accepted, 80 rejected, one shown in Lean" | 246 candidate pairs → 78 distinct; **166 pairs / 38 distinct accepted**, 80 / 39 rejected — exactly the executor's numbers | **the number reproduces; the claim it supports does not.** The round's own `round_1.json` says `relabelled_new: 0, relabelled_total: 0`. 166 is measured by `pod/lj/t5_relabel.py` on the **gate dump**, which stores clean ND strings; the loop is handed `'LEANREJ ' + nd` for every Lean-rejected sample and `judge_many` rejects on the marker first. Measured: 125 accepted on the clean strings, **0** on the strings the loop sees; all 125 come from Lean-rejected samples. Three clear every other loop filter and were still not recorded. **Pitfall 2 is not closed end to end** |
+| test 6: hit **0.0123**, marker 0.0021, fallback **3.556** s/1,000; "**6.4× faster**" | 0.022 / 0.002 / 11.6 s/1,000 on 2 vCPU; 4.7× faster | **reproduces** (pod vs VPS); both pre-registered bands hold |
+| "the new judge is faster" (STATUS, run write-up) | true on a **gated** path. `coverage.py` and `grpo.py` use `generate_ids` and never see the gate, so every string takes the fallback: **45× slower per string than `nd_verify` on the pod, 112× here** | **needs rewording** — the fallback row is in `numbers.md`, but no write-up says which files pay it |
+| test 7: **39/39**, Lean 4.34.1 and 4.34.0 | 39/39 on 4.34.1, plus 17/17 adversarial cases of my own (`admit`, `native_decide`, `exact?`, `Classical.choice`, `by_cases`, `id`, `trivial`, a `theorem t : False`, a mis-typed `Not.elim`, `h.elim` as DN without `Classical`) | **reproduces**, and the allowlist holds against cases the self-test does not cover |
+| L8: vocabulary **107** tokens, no `sorry`/`simp`/`Classical.em` | 107; full non-index token list re-derived and matches | **reproduces**. One over-statement: there is **no `↔` token**, so the `Iff.intro` / `Iff.mp` / `Iff.mpr` cases `LEAN_JUDGE.md` lists as reachable from `lean_seq` cannot arise |
+| "model labels: stored samples from `cap-horizon`, `noise-floor`, `ds-rendering`, `efficiency`, `lean-format`" | all contribute: `kh` 262,653, `dsc` 35,441, `lo` 15,456, `dsg` 14,897, `lf` 11,338, `nf` 8,631 distinct (overlapping) | **reproduces**; `ds-composition` (`dsc`) and `ds-generator` (`dsg`) also contribute and are not named |
+| splits disjoint | 0 shared renaming classes in all six pairs of `data/lj/*` | **reproduces** |
+| gitignore: "the 165 MB corpus is reproducible with `python3 lj_regress.py collect`" | re-running `collect` today gives **281,817** records, not the committed file's 283,012 (the non-ND exclusion was added after the file was written) | **differs** — the file is in the bucket, so nothing is lost, but the committed script does not regenerate the committed artefact |
+
+## Wording against n
+
+Every number here is a property of stored files or of code, not of a model comparison, so the n = 2
+rule does not bite. Nothing in the write-ups says "bistable", "wall" or "never" about a measurement.
+"The old gate's `LEANREJ` path never fired in five runs" is the one absolute, and it is supported
+(0 of 70.9 M). "0 losses" is exact, not an estimate, and I reproduce it exactly.
+
+The one place the wording outruns the evidence is **"all seven acceptance tests pass"**
+(`STATUS.md`, `run_lean_judge.md`): test 5 has three clauses and its third — the hindsight-relabel
+clause — is met by a side script and not by the round.
+
+# §Verdict
+
+## What stands
+
+- **The judge is sound and the change is safe.** Every one of the 281,817 proofs the old
+  Lean ∧ `nd_verify` gate counted is still counted, with no constant off the allowlist and no axiom
+  outside {`propext`, `Classical.choice`, `Quot.sound`} — I re-derived this over the whole population,
+  not a sample, with a positive-per-theorem checker rather than the gate's absence-of-error test.
+  Line counts are identical on all of them. Tests 1, 2, 3, 3b, 4, 6 and 7 reproduce.
+- **Nothing is lost anywhere.** Beyond the 281,817, the 1,195 records the corpus could not translate
+  are also all accepted (by the free-form judge, correctly wrapped): **1,195 / 1,195**. The run's
+  "0 losses" is if anything understated.
+- **Pitfall 1 is closed.** 0 markers in the round's training files, checked over whole lines, and the
+  gate's contract is unit-tested.
+- **Pitfall 3 is closed.** 6,419 / 6,419 agreement across the literal text and both translations.
+- **Pitfall 4 is closed on the gated path.** The registry hit is 0.022 s / 1,000 here.
+- **The grammar really is the allowlist.** 107 tokens, no automation, no library identifier; and my
+  own adversarial cases (17) all fall the right way.
+- Gate 0, the budget, the deviations, the checker labels and the model labels are all in order, and
+  the one missed expectation is reported as missed.
+
+## What must be reworded
+
+1. **"All seven acceptance tests pass" → tests 1–4, 6, 7 pass; test 5 passes on markers and counts
+   and fails on hindsight relabelling.** The round recorded `relabelled_new: 0`.
+2. **The 628 `sorryAx` rejects** (`LEAN_JUDGE.md` test-2 row, `numbers.md` L2, `t2_freeform.json`)
+   are a wrapper artefact. Replace 567 / 628 with **1,195 / 1,195 accepted**, `_free_` arms as terms
+   and `_seq_` arms as `by` blocks.
+3. **"6,419 / 6,419"** is a count of stored samples; say **909 distinct proofs** beside it, and give
+   the class fractions at the distinct level too (`Not.elim` 49 %, other 27 %, omitted premise 24 %) —
+   the record-level ordering is a property of re-sampling, not of the class.
+4. **"other 6.2 %"** should be named: `¬A` versus `A > F`, the same definitional identity as the
+   `NEGE` row; together 7.8 %.
+5. **"the judging step is 6.4× faster"** should say *on a gated path*; on `coverage.py` and `grpo.py`,
+   which never see the gate, judging costs 45× more per string than `nd_verify` did.
+6. **The classification's 41.7 %** is 41.4 %; fix the premise parse in `classify_leanonly`
+   (premise-free prompts) — `lj_t5_compare.py` shares the expression.
+7. Minor: `LEAN_JUDGE.md`'s `Iff.*` sentence (no `↔` in the vocabulary); L0's file counts
+   (1,000 / 34 / 398) are environment-dependent; the gitignore note that `collect` reproduces
+   `corpus_accepted.jsonl` (it now produces 281,817 rows, not 283,012); the model-label list should
+   add `ds-composition` and `ds-generator`; `ladder_ei.py` and `eval_set.py` import `verify_text`
+   from `lean_judge` and never call it.
+
+## What is not supported
+
+**Pitfall 2 — "hindsight relabelling is judged, not silently accepted" — is closed in the unit test
+and in a side script, and open in the loop.** `lean_gate.gate` now marks *every* Lean-rejected
+sample with `LEANREJ `, where the old gate marked only the `nd_ok & lean_rej` cell (which is empty in
+five runs of data). `expert_iter.relabel_batch` passes that marked string to `judge_many`, whose
+first rule is "marker ⇒ reject". Hindsight relabelling operates by definition on samples that failed
+their prompted theorem, so it now rescues nothing: **125 → 0** on this round's own candidates. This
+is a regression introduced by the run, not a pre-existing one.
+
+The fix is small and local: strip a leading `LEANREJ ` in `relabel_candidate`/`relabel_batch` before
+judging — the marker records Lean's verdict *for the prompted theorem*, which says nothing about the
+rewritten one. `LEANPARSE` must keep rejecting (there is no ND proof at all). Then re-run test 5's
+round; on this round's data I expect ~3 relabels to be recorded (n_lines ≥ 7 and not in `eval_keys`).
+
+## The next measurement
+
+1. **Re-run test 5's round after the `LEANREJ` fix**, and report `relabelled_new` from
+   `round_1.json` rather than from a script over the dump. That is the only acceptance test whose
+   evidence does not come from the artefact the loop writes; it is also how the gap was hidden.
+2. **One `lean_check` pass over the ladder and coverage pools** to attach `term_size` and a
+   Lean-minimal length, so `minlen.py`'s ND-derived `L_true` stops being an unlabelled upper bound.
+   The executor proposes this in `QUESTIONS.md`; my re-derivation gives the scale of the gap on the
+   counted population — term size **median 6** against `n_lines` **median 10** (mean 6.22 vs 10.06),
+   so line counts overstate proof size by about 40 % under Lean.
+3. **Decide the `no-denotation` class** (`QUESTIONS.md` question 1). 2,095 stored samples, of which
+   **1,423 are `lean_seq`** samples whose literal text Lean accepts and the grammar rejects (the one
+   I read re-uses a `have` name, which Lean allows) and **671 are free-form arms** where the
+   `lean_seq` grammar does not apply. Whatever is decided, those 671 should leave the denominator of
+   the "24.6 %".
+
+**Recommendation: accept, with the six rewordings above, and treat the `LEANREJ`-blocks-relabelling
+regression as a fix to land before the next expert-iteration run on this branch.** No hard constraint
+is violated; nothing is quarantined.
