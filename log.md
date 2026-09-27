@@ -587,3 +587,16 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   entirely and the held-out depth-3 slice is strictly out-of-distribution for every arm in this run —
   which is the right frame for questions 1 and 2: depth-3 is a generalisation slice, not an
   in-distribution one, and that is presumably why it is the bimodal one.
+- 19:05  **Deviation, disclosed: arm R's chain split in two.** The `r` chain ran its eight 6,000-step
+  replicates in sequence and would have finished ≈ 1.5 h after every other chain on the pod. After
+  `r6a_s0` and `r6b_s0` had both completed (19:06:09), I killed the chain driver and relaunched the
+  remainder as two chains **on the same pod `sd-3`**: `r0b` (`r6c_s0`, `r6d_s0`) and `r1` (`r6a_s1`…
+  `r6d_s1`). The command lines are unchanged — `pod/sd/jobs.py` still builds them from the same
+  `train()` helper as arm C, and `r6a_s1`'s command is byte-identical to `c_s1`'s except for
+  `--out`/`--metrics` (checked by diff). What *did* change is that `sd-3` now runs four concurrent
+  jobs rather than three, so the eight replicates did not all share the card with the same number of
+  neighbours. For a measurement of "how much do runs of the same command differ" that is if anything
+  the more honest condition, but it is a difference between replicates and it is recorded here.
+- 19:06  First measured instrumentation overhead on a full-length run: `r6b_s0`, 6,000 steps in
+  1,007 s of which **47 s (4.9 %)** is the per-bin validation on all 5,000 held-out records at every
+  200 steps — just under the pre-registered 5–9 % band (E16), and the brief's ≈ 6 % estimate.

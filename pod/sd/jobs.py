@@ -60,6 +60,15 @@ def chain(cid):
                 out.append((f'r6{r}_s{k}', train(CTL, k, 6000, ck, f'r6{r}_s{k}', 'cosine')))
                 cks.append(ck)
         out.append(('ev_r6', f'{EV} --skip_done --ckpts ' + ' '.join(cks)))
+    elif cid in ('r0b', 'r1'):
+        # 19:05: the single `r` chain would have run its eight 6,000-step replicates in sequence and
+        # finished ~1.5 h after every other chain, so it was split into two chains on the SAME pod
+        # (sd-3), after r6a_s0 had finished and while r6b_s0 was running.  The commands are unchanged;
+        # only the number of concurrent jobs sharing the card differs, which is disclosed in log.md.
+        ks, rs = ((0, 'cd'), (1, 'abcd'))[cid == 'r1']
+        for r in rs:
+            out.append((f'r6{r}_s{ks}', train(CTL, ks, 6000, f'ckpts/sd/r6{r}_s{ks}.pt', f'r6{r}_s{ks}', 'cosine')))
+        out.append((f'ev_r6_s{ks}', f'{EV} --skip_done --ckpts ckpts/sd/r6*_s{ks}.pt'))
     elif cid == 'r24':
         # addendum 1: the same-command replicate floor at 24,000 steps -- two extra runs of the exact
         # w_s0 command, final checkpoint only (no trajectory).
@@ -82,7 +91,7 @@ def chain(cid):
     return out
 
 
-CHAINS = [f'w{k}' for k in WSEEDS] + [f'f{k}' for k in FSEEDS] + ['r', 'r24']
+CHAINS = [f'w{k}' for k in WSEEDS] + [f'f{k}' for k in FSEEDS] + ['r0b', 'r1', 'r24']
 
 if __name__ == '__main__':
     what = sys.argv[1] if len(sys.argv) > 1 else 'chains'
