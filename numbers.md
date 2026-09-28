@@ -1366,3 +1366,37 @@ the 297 still sits at 7.7 × 10⁻⁵.
   job with 2–4 jobs per pod. Lean is 3–26 % of wall and its share *falls* as k rises.
 - **Lean**: 4.34.0 core via elan, no Mathlib. Gate self-test on every pod returned exactly 1600 accepted /
   400 rejected of 2,000, as designed.
+
+## SC12 — where everything is
+
+Bucket root: **`hf://buckets/dan-pandori/nd-rl/support-curves/`** (public).
+
+| path | contents |
+|---|---|
+| `ckpts/lf/stage1_a1_seq_s{0,1}.pt` | the two base models (md5 `9bde44c0…`, `fc27e52d…`) |
+| `ckpts/ladder/la_T1_sc_s0_r{1..8}.pt` | **seed 0's complete EI ladder**, every round — the seed every crux and falsifier number is measured on |
+| `ckpts/ladder/la_T1_sc_s1rerun_r{1..8}.pt` | seed 1's EI ladder, **re-trained**: the original was lost when pod `sc2` was deleted (`log.md`, 2026-09-28 00:35). It is *not* the checkpoint SC4's seed-1 numbers were measured on — round 1 reproduces the lost run exactly but round 2 already diverges (transfer 374 vs 373), so the fine-tuning step is not bit-reproducible on this hardware. Hence the distinct name. |
+| `artifacts/sc/s*.jsonl` | every per-theorem record: (n, c, first-success index, every distinct accepted proof with its literal Lean text, term size, and a failure sample) per model × temperature × seed × stage |
+| `artifacts/sc/summary.json` | **one row per theorem × model × temperature × seed**, pooled over stages — the deliverable the analysis and any re-derivation runs off |
+| `artifacts/sc/report.json` | per-stratum pass@k curves with `exact` flags and crossover k |
+| `artifacts/sc/secondary_logp.jsonl` | base teacher-forced log p of each distinct EI-found crux proof |
+| `artifacts/sc/la_T1_sc_s0/` | seed 0's full EI training record (per-round `found_*`, `alloc_*`, `mix_*`, `round_*.json`) |
+| `artifacts/sc/gate/` | Lean gate self-tests and a 5,000-line uniform reservoir sample of the 787,691 Lean-rejected EI-training proofs (the 593 MB full dump was **not** kept: the brief forbids storing failures in bulk) |
+| `artifacts/sc/diag/`, `artifacts/sc/probe/` | the sampler validation and the throughput probe |
+| `data/sc/theorems.jsonl` | the 383-theorem set (md5 `3cb6e7bf3b094ce24ebc0706777a9a70`) |
+| `data/sc/crux_{forward,reverse,forward_phi}.txt`, `falsifier_survivors.txt` | the crux sets and the 29 survivors |
+
+**Reproducing the counts without re-running the model**: `python3 sc_analysis.py summary` rebuilds
+`summary.json` from the per-theorem records (and refuses to run if any (file, theorem) record is duplicated);
+`sc_analysis.py crux` and `sc_falsifier.py` print every count in SC7 and SC8 from it; `sc_analysis.py report`
+and `sc_figures.py` produce SC9 and both figures.
+
+## SC13 — cost
+
+| | |
+|---|---|
+| pods | 5 × NVIDIA A40 46 GB, secure cloud, **$0.49/h billed** (`runpodctl pod get`), named `sc1`–`sc5` |
+| total | **≈ 21 pod-hours, ≈ $10.3** against a declared budget of **30 pod-hours / $15** |
+| of which stage 0 (EI training, 2 seeds) | ≈ 6 pod-hours; the seed-1 re-train added ≈ 2.5 more |
+| samples drawn | **≈ 47 M**, at 360–1,001 samples/s per job depending on co-tenancy |
+| RunPod balance | above the $100 floor throughout (`rpbalance` $150.99 at start) |
