@@ -634,3 +634,21 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   6,872 → B (10 min, 48 timeouts) 3,884×11, 1,735×12, 1,205 ≥ 13. ≥ 13 yield by generated length: 0.33 % (20–23) →
   1.0–2.0 % (≥ 32). g3 queued: generated length 28–80, 5M tries/worker, seed 33000.
 - 19:03  Textbook: `textbook_pool.py --n 3900 --seed 41`, kept the 6 schemata that reach ≥ 11 (906), same staged labelling.
+- 19:25  lp-l1 → VPS rsync crawled (≈ 30 MB in 20 min) and elan's lazy toolchain download hung there; pods now pull
+  checkpoints from the bucket themselves (`pod/lp/fetch_ckpts.sh`, sha256 prefixes match the VPS copies) and outputs go
+  pod → bucket → VPS. lp-l1's files pulled via the bucket, listings diffed equal, lp-l1 deleted at 19:58 (1.54 h, $1.14).
+- 20:26–21:33  g3 (48 × 5M tries, generated length 28–80) and g4 (48 × 6M, 32–90) labelled; per-stage table
+  `artifacts/lp/stages.md`. Stage timeouts: A 0.2 %, B 0.7 %, C 3.0 %, D 7.6 %.
+- 21:33  Assembled `transfer_long.jsonl` (`lp_assemble.py`, seed 0): 373 / 428 / 341 / 340 / 300 / 131 at `L_true` 11–16,
+  1,913 total, 70 at ≥ 17 in a separate lower-bound file. 161 classes excluded (156 textbook, 5 generator) against 117
+  files / 5.74 M records. Lean accepts all 1,913 label proofs (term size 4–16, median 9).
+- 21:35  **Deviation (budget):** the re-read uses a seed-0 subset of 100 theorems per bin (`transfer_long_rr600.jsonl`,
+  600 theorems) instead of the whole pool. At k = 256 the full pool would take ≈ 5 GPU-min per 100 theorems per model on one 4090,
+  i.e. about 7 h for 14 models. One lane, sequential: a second lane next to a state model's 23 GB reserved memory risked OOM.
+- 21:47  First re-read: SN-v2 T1 s0 (`state-env/ckpts/se/ladder/la_T1_SN_s0_r8.pt`) solves 42 / 35 / 31 / 30 / 22 / **19** of
+  100 at `L_true` 11–16 (11.5 min, peak 10.7 GB). No accepted proof has fewer derivation steps (non-PR lines) than
+  `L_true − n_prem`: 116 of 179 solved theorems have a proof of exactly the label length, the rest are longer. So the labels hold.
+  Textbook instances are nearly unsolved (6 / 73 at 11–14, against generator 132 / 327). On the old pool's 23 theorems at ≥ 13
+  (smoke run, k = 32), the same model solves 5 / 6 generator and 0 / 17 textbook theorems. The old "wall at 13" was
+  largely a textbook-schema wall at tiny n. This misses the pre-registered `L*` 13 badly. `L*` is censored at 16 again, so every
+  model is also re-read on the 70 `L_true ≥ 17` theorems (queue C).
