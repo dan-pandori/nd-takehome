@@ -157,3 +157,10 @@ Brief: nd-rl `docs/proposals/improvements/BRIEF_lean-prefilter.md`. Policy: nd-r
 - Deliverables: `LEAN_GATE.md`, `run_lean_prefilter.md`, `numbers.md` § lean-prefilter, `log.md`, bucket `hf://buckets/dan-pandori/nd-rl/lean-prefilter/artifacts/lp/`. Merged into the fork's `dan`.
 
 LEAN-PREFILTER DONE 2026-09-28T18:20:39Z — sound reject-only pre-filter (0 false rejects / 1.31 M texts), pipelined quota-sized gate; T1 round 1,111 s → 259 s. Pods deleted, bucket synced.
+
+# STATUS — podjob (proposal 15, item 7)
+
+Brief: nd-rl `docs/proposals/improvements/BRIEF_podjob.md`. Policy: nd-rl `AGENT_POLICY.md`. Run id: podjob. Budget $1 / 2 pod-hours. Code: nd-rl branch `dan_podjob`, `code/tools/orchestration/podjob`.
+
+## podjob
+- 2026-09-28 19:10 UTC  run started (executor). Pre-registration `preregistration/podjob.md` committed before any pod.
