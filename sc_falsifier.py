@@ -45,5 +45,15 @@ for KCRUX in (4000, 10000):
         print(f'  survivors: min attempts T0.8 {mn8:,}  T1.0 {mn10:,};  p_EI range '
               f'{min(x[3] for x in surv):.3f}-{max(x[3] for x in surv):.3f}')
         print('  by L_true:', dict(sorted(collections.Counter(L[x[0]] for x in surv).items())))
+    # The count is a function of how many attempts the base was given, so report the whole curve rather than
+    # one number: a survivor is only ever "0 successes in THIS many attempts".  Deeper arms can only remove
+    # survivors, never add them, so the curve is monotone down and the last point is the strongest claim.
+    print('  survivors as a function of the attempts the base was given (min over the two temperatures):')
+    for thr in (10000, 40000, 50000, 100000, 150000, 200000):
+        k = [n for n in phi
+             if base08[n]['c'] == 0 and base10.get(n) and base10[n]['c'] == 0
+             and base08[n]['n'] >= thr and base10[n]['n'] >= thr]
+        print(f'    >= {thr:>7,} attempts at EACH temperature: {len(k):3d} survivors'
+              + ('   <- the pre-registered threshold is 40,000 attempts / 20 theorems' if thr == 40000 else ''))
     if KCRUX == 10000:
         open('data/sc/falsifier_survivors.txt', 'w').write('\n'.join(x[0] for x in surv) + '\n')

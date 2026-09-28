@@ -590,3 +590,21 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
     silently again. The arm was relaunched with exactly two shards, resuming from the 10 kept per shard.
   - The falsifier count of 35 was computed **before** these files existed, so it is unaffected; it will be
     recomputed at the end with the deeper T = 0.8 data.
+- **2026-09-28 00:35 — I deleted `sc2` without pulling `ckpts/`, and lost the seed-1 EI ladder.** Before
+  deleting I diffed the pod's `artifacts/sc/*.jsonl` against local and confirmed every one was already pulled —
+  but I scoped that check to the jsonl artifacts and **not to `ckpts/`**, and seed 1's expert iteration had run
+  on `sc2`. Lost: `ckpts/ladder/la_T1_sc_s1_r{1..8}.pt`, the run directory `artifacts/sc/la_T1_sc_s1/`, and
+  `la_T1_sc_s1.log`. **Not** lost: every seed-1 *measurement* (`s3_{base,ei}_T08_s1.s{0,1}.jsonl`), so SC4 and
+  the whole analysis are intact and reproducible; and seed 0's ladder, whose 8 checkpoints (99 MB) and full run
+  directory (141 MB) were pulled immediately on discovering this. Seed 0 is the seed every crux and falsifier
+  number comes from.
+  - This is exactly the failure that proposal 12's "keep every RL checkpoint" standard exists to prevent — the
+    absence of uploaded Lean-format EI checkpoints is what cost *this* run 6 pod-hours of re-training — so
+    leaving it would pass the same cost to the next run. Seed 1 is therefore **re-trained on `sc5`** under the
+    byte-identical command from the identical base.
+  - It is uploaded as **`la_T1_sc_s1rerun_r{1..8}.pt`**, deliberately *not* as `la_T1_sc_s1_*`: GPU
+    non-determinism means it need not be bit-identical to the checkpoint SC4's seed-1 numbers were measured on,
+    and naming it the same would mislabel those numbers. Its round-8 transfer count is reported beside seed 0's
+    as a reproduction check.
+  - `pod/sc/pullcheck.sh` added: diff **every** directory a pod writes (`artifacts/`, `ckpts/`, `data/`), not
+    just one glob, before `podrm`.
