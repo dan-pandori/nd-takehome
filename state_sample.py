@@ -52,6 +52,7 @@ def env_generate(model, tok, prompts, greedy=True, temperature=1.0, max_action=2
         while len(live) < batch and nxt < len(prompts):
             live.append((nxt, Env(prompts[nxt]))); nxt += 1
         pids = [prompt_ids(tok, e) for _, e in live]
+        st['prompt_tokens'] = st.get('prompt_tokens', 0) + sum(len(p) for p in pids)   # prefill cost of the env loop
         with torch.autocast('cuda', dtype=torch.bfloat16, enabled=(dev.type == 'cuda')):
             outs = generate_ids_fast(model, tok, pids, goals=None, greedy=greedy, temperature=temperature,
                                      max_new=max_action, seed=seed * 100003 + wave, early='eos', compact=True,
