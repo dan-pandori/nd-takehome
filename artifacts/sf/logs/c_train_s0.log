@@ -1,0 +1,42 @@
+params 25329664 mode lean_seq shift True
+train records 155000 max len 464
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/train.py", line 129, in <module>
+    main()
+  File "/workspace/nd-takehome/train.py", line 109, in main
+    loss = loss_on(model, x, m)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/train.py", line 53, in loss_on
+    logits = model(x[:, :-1])
+             ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 115, in forward
+    x = b(x, cos, sin, mask, None if caches is None else caches[i])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 78, in forward
+    x = x + self.attn(self.ln1(x), cos, sin, mask, cache)
+                      ^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/normalization.py", line 217, in forward
+    return F.layer_norm(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/functional.py", line 2905, in layer_norm
+    return torch.layer_norm(
+           ^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 68.00 MiB. GPU 0 has a total capacity of 31.36 GiB of which 16.38 MiB is free. Process 1175 has 27.02 GiB memory in use. Including non-PyTorch memory, this process has 4.31 GiB memory in use. Of the allocated memory 3.66 GiB is allocated by PyTorch, and 79.17 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
