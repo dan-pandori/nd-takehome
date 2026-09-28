@@ -60,3 +60,33 @@
   `ds-generator` on the identical checkpoint and command (T1 965 / frozen 114). Projection ≈ 33
   pod-hours ≈ $16.2. Say if you would rather I had held to 36 h and dropped the A1 gap-closer, or
   conversely spent the remaining headroom on `targets_depth3` coverage.
+
+- **2026-09-28 01:15 UTC (support-curves) — the pre-registered falsifier fired, and I want a second pair of
+  eyes on what it licenses.** On 383 never-trained-on transfer theorems, **29 theorems have 0 base successes in
+  ≥ 50,000 attempts at T = 0.8 and ≥ 200,000 at T = 1.0 while the EI model solves each at p̂ 0.022–1.000**
+  (35 at the 50,000/50,000 depth the falsifier asks for; threshold 20; I pre-registered 8). No stratum shows a
+  pass@k crossover at any measured k. I checked the five things that could make it an artefact — leakage
+  (0 overlap with the EI training pool by name, string and renaming-class key), proof validity (all 372
+  accepted EI proofs re-verified one-per-Lean-process, 0 vacuity tokens), the judging path against `ladder_ei`'s
+  independent path (11/11), the sampler against theorems the base demonstrably solves, and both temperatures —
+  and none of them dents it. **Default I am following:** reporting it as support expansion on this pool, and
+  recommending proposal 12's experiment 2 be re-ordered around capacity/coverage rather than search. The honest
+  limit is that this is one 3.2 M model at one scale on one pool with n = 2 Stage-1 seeds, so the *counts* are
+  inside `NOISE_FLOOR.md`'s floor and only the **per-theorem** structure (which replicates at 92.7 % / 90.9 %
+  across seeds) is the finding. Say if you would rather I had spent the remaining budget on a third seed than
+  on taking base attempts to 2 × 10⁵.
+- **2026-09-28 01:15 UTC (support-curves) — `ladder_ei.py` is broken on `origin/dan` and I did not fix it.**
+  Commit `9a1db24` (run `lean-judge`) renamed `expert_iter.relabel` to `relabel_candidate`/`relabel_batch` and
+  left `ladder_ei.py:34` `from expert_iter import relabel`, so `ladder_ei.py` fails at import for every caller.
+  My brief forbids this run from editing `ladder_ei.py` or `expert_iter.py`, so I worked around it with
+  `sc_ladder_ei.py`. **Default:** leaving the one-line fix to `lean-judge`, flagged here rather than in a
+  message to anyone. It is a two-character change (`relabel` → `relabel_candidate`) if you want it done.
+- **2026-09-28 01:15 UTC (support-curves) — I lost the seed-1 EI ladder checkpoints and re-trained them.**
+  I deleted pod `sc2` after diffing only its `artifacts/sc/*.jsonl` against local, not its `ckpts/`, so
+  `ckpts/ladder/la_T1_sc_s1_r{1..8}.pt` and the seed-1 ladder run directory went with it. Every seed-1
+  *measurement* survives, as does seed 0's complete ladder. **Default:** re-trained seed 1 under the identical
+  command (~$1.5) and uploaded as **`la_T1_sc_s1rerun_*`** rather than `la_T1_sc_s1_*`, because it need not be
+  bit-identical to the checkpoint the seed-1 numbers were measured on — though in fact round 1 reproduced the
+  lost run *exactly* (same parse-fail 54,051, same distinct 79,599, same 7,089 Lean-accepted, same transfer
+  57/2,285), so the run appears bit-reproducible at fixed seed with `ND_SAMPLE_COMPACT=0`. Added
+  `pod/sc/pullcheck.sh`, which diffs `artifacts/`, `ckpts/` **and** `data/` before `podrm`.
