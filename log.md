@@ -638,7 +638,7 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   i.e. ≈ 43 % of them are of the kind the environment prevents by construction. Removing all of those would put C0 at
   ≈ 0.948 overall and ≈ 0.821 on the 6-line bin, so the environment's grammar guard explains most of the overall gap
   and **less than half** of the 6-line gap.
-- 05:05  **Arm S seed 1's held-out greedy is 0.8012** against seed 0's 0.9580, on Stage-1 models with the same
+- 05:05  **Arm S seed 1's held-out greedy is 0.8012** against seed 0's 0.9578, on Stage-1 models with the same
   validation loss (0.0702 / 0.0701). The failure profile says why: **581 of 5,000 attempts (11.6 %) end on
   `unbound`** — the policy cited a name that is not in scope — against 0 for seed 0 (seed 0's 211 failures are 191
   Lean rejections and 20 syntactic). This is the imperfection the pre-registration names: a `have`'s name is
@@ -665,3 +665,6 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   fine-tune mix's shuffle RNG (`random.Random(seed*7919)` is re-created), so rounds ≥ 3 (s0) and ≥ 2 (s1) are a
   re-draw of what an uninterrupted run would have sampled — the same kind of difference as a batch-size change. The
   original `args.json` is kept as `args_r1.json`.
+- 05:25  Correction: arm S seed 0's held-out greedy is **4,789 / 5,000 = 0.9578**, not 0.9580 as first written here
+  and in the pre-registration addendum (a rounding slip of mine; the addendum is left as committed, this line is the
+  correction). The re-run of the held-out evaluation inside `seed.sh` at 04:45 reproduced 4,789 exactly.
