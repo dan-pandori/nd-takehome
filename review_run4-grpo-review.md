@@ -164,3 +164,108 @@ discharge a depth-3 assumption that nothing cites** (e.g. `S > (S > (Q > P))`: t
 EI's depth-3 proofs on s23 are the same (69 %). The base's depth-2 proofs of these targets re-order the boxes instead.
 So what is crossed from zero is a **nesting habit** (open a box for every antecedent, in order), not a new inference
 rule — the same object EI acquires.
+
+## §Compare (phase 2: `run4.md`, `log.md` Run 4, `STATUS.md`, `QUESTIONS.md` on `origin/dan_run4_grpo` @ 25295bc)
+
+`numbers.md` has **no Run 4 section** (the brief's deliverable was never written), so claims come from `run4.md` and
+`log.md`. The salvage commit 25295bc also removed three `log.md` entries (02:19 s20/s21 base rates and the s27/s29
+round-1 numbers; 02:25 ablations and lr grid; 02:46 pulls) and the 02:40 `STATUS.md` line; they are read from the diff.
+"Reviewer" values are from §Recount; model for all rows = the 3.2 M token-format from-scratch Stage-1 draws above (none
+of the executor's rows name the model — see V5).
+
+| # | claim (source) | reviewer's value | verdict |
+|---|---|---|---|
+| 1 | GRPO ignited on "every draw, seed and primary setting: **30 of 30 arms**" (run4.md) | 40 of 40 arms with surviving data (32 on s22–s25 incl. both seeds; 4 primary-seed arms each on s20, s21) | **direction reproduces; the count "30" is not derivable** (no combination of the planned arms gives 30; s20/s21 second seeds and s27/s29 arms do not survive) |
+| 2 | s21, s23: 0 depth-3 samples in 600,000 from the base (run4.md) | 0 and 0 (own predicate, first 300 targets, T 0.8, own Stage-1 ckpt); plus 0 in the frozen 256 × 1,000 on each | **reproduces** (under `nd_verify`; see V1) |
+| 3 | s27, s29: 0 in 600,000; GRPO ignites there (run4.md "XXX"; log 02:07, 02:19) | no file exists | **not reproducible** — nothing of s26–s29 survives |
+| 4 | ignition at update 5–110 (4,000–88,000 samples) (run4.md) | 5–160 (4,000–128,000): `grpo_g32_s23_lr3e-5_e2` ignites at update 160; lr 1e-4 only: 5–102 | **differs**: upper end 160 / 128,000, not 110 / 88,000 |
+| 5 | round-8 GRPO acquisition 0.36–0.48 (run4.md) | complete arms 0.361–0.476 on s22–s25; 0.413–0.505 on s20/s21 (novelty files); 0.355/0.363 in the two cut-short arms | **reproduces for s22–s25; 0.36–0.51 over all surviving arms** |
+| 6 | paired EI ignited in **6 of 10** arms (run4.md) | 6 of 8 on s22–s25; 7 of 10 adding the s20/s21 primary seeds (s20 ignites r8) | **differs / not derivable**: surviving arms give 7 of 10 or 6 of 8; the executor's 10 cannot be identified |
+| 7 | EI acquisition 0.25–0.38 where it ignited (run4.md) | 0.255–0.379 on s22–s25; s20 EI ignites at r8 with 0.083 | **reproduces with correction**: 0.08–0.38 (s20 is "late", as the text says, but its value falls outside the range) |
+| 8 | "every depth-3 proof GRPO found is unreachable by sampling … log p < 1/256 for 100 % of 4,300+ proofs on the five low-rate draws, medians −39 to −66" (run4.md) | from the executor's stored scores: 100 % on s20–s23; s25 1 theorem above 1/256 (log 01:19 itself says 745/746); medians −39.0 to −65.6; 12,570 GRPO depth-3 proofs on the five draws over the 4 primary settings | **reproduces with correction** (99.9 % on s25, not 100 %). Not independently re-scorable: checkpoints lost |
+| 9 | s24: 10 theorems above 1/256 (run4.md) | 10 | reproduces |
+| 10 | held-out greedy at r8: lr 1e-4 0.54–0.72, EI 0.88–0.93 (run4.md) | lr 1e-4 0.580–0.715 (s22–s25); EI 0.881–0.935 | **reproduces for the surviving arms**; the 0.54 low end (s20/s21) is not derivable |
+| 11 | lr 3e-5 keeps 0.75–0.86 and still ignites every arm (run4.md) | 0.745–0.865 (14 complete arms), 20 of 20 surviving lr 3e-5 arms ignite | reproduces |
+| 12 | lr 1e-5 ignites (s20 322 by r2); lr 3e-4 collapses (G32 held-out 0.17) (run4.md, log 02:07/02:25) | no file | **not reproducible** |
+| 13 | G = 32 ignites later than G = 8 (update 11–110 vs 5–57) (run4.md) | later in 14 of 16 matched pairs (1 tie, 1 earlier); G = 32 range 6–160, G = 8 5–57 | **direction reproduces; G = 32 range differs** (6–160) |
+| 14 | at update 1, 7–32 % of groups carry variance (run4.md) | 4–32 % (e2 seeds 4–5 %) | **differs** at the low end |
+| 15 | variance rises to 0.3–0.5 within 20 updates on every draw (run4.md) | max over the first 20 updates 0.22–0.60; below 0.30 in three s23 G = 8 arms | **differs**: not on every arm of the zero-rate draw s23 |
+| 16 | first depth-3 successes at update 1–24 (run4.md) | 1–24 | reproduces |
+| 17 | sprint-sized budget: 24–60 depth-3 targets on 4 of 6 draws at lr 1e-4; 0–10 at lr 1e-5 (run4.md, log 23:46) | s22 27, s23 1, s24 24, s25 35 at 1e-4; 9, 0, 10, 1 at 1e-5; s20/s21 not on disk | **reproduces for the four surviving draws**; s20 (60) / s21 (6) not derivable |
+| 18 | "the sprint's null result reproduces on budget and lr alone" (run4.md) | lr 1e-5 finds 9–10 depth-3 theorems on two draws | **reword**: fewer than 20 (no ignition), not a null |
+| 19 | E1 held (2 of 6 zero-rate) | s21, s23 zero; s20/s22/s25 at 1–3·10⁻⁵ | reproduces |
+| 20 | E5 held ("variance rises past 0.3 in igniting arms") | pre-registered E5: > 0.30 **by the ignition round** fails in 13 of 32 arms (all G = 8; max before ignition 0.21–0.30); "G = 32 higher than G = 8 at every update" fails at 406 of 4,963 paired updates | **mis-scored: E5 failed** |
+| 21 | E7 held at 3e-5 "for 5 of 8 arms" | within 0.05 of Stage-1: 5 of 16 lr 3e-5 arms (4 of 14 complete); 0 of 16 at lr 1e-4 | **differs** (5 of 16, not 5 of 8) |
+| 22 | E6 wrong: GRPO solves more targets than EI | GRPO 616–815 vs EI 362–682 at r8, GRPO above both EI seeds in every arm on s22, s23 and in 7 of 8 on s24, s25 (the exceptions are the two cut-short g32 lr 3e-5 e2 arms) | reproduces |
+| 23 | E2 wrong on seed agreement: seeds disagree on 3 draws | disagree on s22 and s23; agree on s24, s25 (both ignite); s20/s21 second seeds lost | **2 reproduce; the third not derivable** |
+| 24 | E3, E4 wrong in the opposite direction | GRPO ignites on 12 of 12 zero-rate arms, earlier than EI | reproduces; the misses are reported as misses |
+| 25 | ablations: `ei_noretain` collapses (held-out 0.025 / 0.006), `grpo_g8_posonly` acq 0.505 / 0.481 (log 02:25, deleted by the salvage) | paired G8 lr 1e-4 arms 0.505 / 0.481 reproduce; the ablation arms themselves do not survive | **not reproducible** |
+| 26 | pre-registration 23:00:11 before the first pod 23:01:07; amendments before their arms (run4.md, log) | commit times agree (49ecc8a 23:00:11; 2e69d57, d0d5ed0, d9002fd at 23:10–23:26); the pod time cannot be checked from this host's `pods.log` (no `r4-*` entries; the run used another VPS) | **reproduces from git; pod time not verifiable here**. Amendment 2 was written after round-1 results and says so |
+| 27 | comparison with the round-2 executor's run 4, claim by claim (Dan's note in the brief) | absent from `run4.md` | **missing** |
+
+## §Verdict
+
+**V1 — the zero-base-rate claim.** On draws s21 and s23 the base model produced **0 depth-3 proofs in 600,000 samples**
+(first 300 targets, T = 0.8, own Stage-1 checkpoint), and 0 more in the frozen control's 256,000 samples over all 1,000
+targets; my own predicate gives 0 on both, and the executor's GRPO depth-3 proofs have theorem-level base probability
+≤ e^−13.75 (s21) and ≤ e^−14.86 (s23) under those checkpoints (executor's scores). The claim reproduces **as a
+statement about `nd_verify`-accepted samples of the run's own checkpoints**. It cannot be re-measured under the Lean-only
+judge (rejected samples were not stored), and it cannot be re-measured at all on these draws, with or without a GPU,
+because **no checkpoint of this run survives** (the `round3-run1` files with the same names are different trainings).
+It is therefore a closed, not an extensible, result. The extension draws s27/s29 — half of the "four zero-rate draws" in
+the deleted STATUS line — have **no surviving evidence**.
+
+**V2 — ignition from zero.** GRPO ignites in **12 of 12** arms with data on the two zero-rate draws (s21: 4 primary-seed
+arms; s23: 8 arms, both seeds), at update 23–160 on s23 (18,400–128,000 samples, i.e. within the 256,000 samples in
+which the frozen base found none), while paired EI ignites in 1 of 3 arms there. Every counted proof Lean-checked on
+these draws (7,127, plus the rest of 13,317 checked) is accepted by Lean 4. This stands, with n = 2 zero-rate draws.
+
+**V3 — must be reworded.** "30 of 30 arms" → "40 of 40 arms whose files survive (12 of 12 on the zero-rate draws s21,
+s23)"; drop s27/s29 or mark them "reported in the log, files lost". "6 of 10" EI → "6 of 8 on s22–s25 (7 of 10 with the
+surviving s20/s21 primary seeds)". Ignition "update 5–110" → "5–160 (4,000–128,000 samples)"; G = 32 "11–110" →
+"6–160". "100 % … on the five low-rate draws" → "100 % on s20–s23, 99.9 % on s25". Variance "7–32 %" → "4–32 %", and
+"rises to 0.3–0.5 within 20 updates on every draw" → "on every draw except three s23 G = 8 arms (max 0.22–0.28)".
+E5 → **failed** (both halves), E7 at 3e-5 → "5 of 16". "RL against a verifier in general" (E9) → "on-policy GRPO too,
+with one model size, one pretraining set, one pattern". "The sprint's null reproduces" → "the sprint-sized budget stays
+below the ignition line at lr 1e-5 (0–10 theorems)".
+
+**V4 — not supported by surviving files.** Everything about s26–s29; the lr 1e-5 / 3e-4 grid; the `noretain` and
+`posonly` ablations (and hence the E9 sentence about EI's retained slice); s20/s21 second seeds, per-update traces and
+held-out values (the 0.54 low end); the "4,300+" proof count. These rest on log entries only, and three of those entries
+were deleted by the salvage commit.
+
+**V5 — labels.** No executor claim names its model (checkpoint, 3.2 M parameters, ND token format `abs`, from scratch on
+`train_depth3_f0_a1`) or its checker (`nd_verify`, pre-2026-09-27). Both are findings; every row above applies to the
+3.2 M token-format from-scratch draws s20–s25 of this run, and every count is `nd_verify`-counted and Lean-confirmed on
+re-check (13,317 of 13,317). `numbers.md` §Run 4 does not exist; checkpoints were never uploaded and md5s never recorded.
+
+**V6 — what "depth-3" is here (new, R11).** About 70 % of GRPO's (and EI's) depth-3 proofs on the zero-rate draws open a
+third box whose assumption nothing cites; the base proves the same targets at depth 2 by re-ordering boxes. What is
+crossed from zero is a proof-layout habit, reached by training, not a new inference rule. The run's result should be
+quoted with that scope.
+
+### What stands (quotable)
+
+> In an independent replication (run4-grpo, 2026-09-17/18; 3.2 M-parameter ND-token transformers trained from scratch on
+> `train_depth3_f0_a1`, a set with no depth-3 proof), two of six Stage-1 draws (s21, s23) produced no depth-3 proof in
+> 600,000 base samples on the 300 hardest targets and none in 256,000 samples over all 1,000 targets (`nd_verify` at run
+> time; the checkpoints are lost, so this cannot be re-measured under Lean). On-policy GRPO (groups of 8 or 32, binary
+> reward, group-mean baseline, no KL, lr 1e-4 or 3e-5, 256,000 samples) ignited the depth-3 pattern (≥ 20 of 1,000 target
+> theorems) in all 12 arms with surviving files on those two draws, after 18,400–128,000 samples on s23, reaching
+> 0.37–0.48 acquisition; paired expert iteration ignited in 1 of 3 arms there. Across all six draws, 40 of 40 surviving
+> GRPO arms and 6 of 8 paired EI arms on s22–s25 ignited. lr 1e-4 cost held-out greedy (0.58–0.72 vs 0.87–0.89 at
+> Stage-1); lr 3e-5 ignited every arm at 0.75–0.87. Every depth-3 proof checked (7,127 on the zero-rate draws) is accepted
+> by Lean 4. About 70 % of these depth-3 proofs nest a third, unused assumption: the acquired pattern is a box-nesting
+> habit.
+
+### Next measurement
+
+What would settle V1/V4: fresh `a1` draws screened for zero rate **with Lean as the judge and every sample stored**
+(not only verified ones), checkpoints uploaded with md5s, then GRPO (G = 8, lr 3e-5, 2 seeds) and EI (2 seeds) on ≥ 3
+zero-rate draws, plus the `posonly` / `noretain` ablations on one of them. Nothing here was checkable with a GPU either:
+the lost checkpoints cannot be recreated. Estimated cost on RTX 3090s (≈ 35 min per 600,000-sample Lean screen,
+≈ 40 min per 8-round arm): ≈ 8 screens + 15 arms ≈ 15 GPU-hours ≈ $8–12 at the billed 3090 rate (check `costPerHr`).
+
+Reviewer outputs: `artifacts/run4-grpo-review/` — `base_rate.json`, `arms.json`, `novelty_recount.json`,
+`updates_check.json`, `lean_tally.json` (+ `lean_rejects.json`, empty), `splits.json`, `ckpt_identity.json`,
+`shape.json`, `phase2_extra.txt`.
