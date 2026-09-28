@@ -693,3 +693,12 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   — neither pre-registered falsifier fires ("moved but not decisive").** `lean_check` re-checked the shortest
   accepted proof of every solved theorem in all six runs (6,552 proofs): 0 rejected; median term size by `L_true`
   7…12 is 4 / 4 / 5 / 6 / 6 / 8 for S s0 against 4 / 4 / 5 / 5 / 6 / 6 for C0 s0.
+- 10:10  Frozen S s1 finished (787 / `L*` 10). Arm SH's rounds are ≈ 1,640 s (the history makes the prompt longer),
+  so run serially it would end ≈ 18:30. To halve that, SH s0's frozen control runs on a new pod `se-5` (RTX PRO 4500
+  Blackwell 32 GB, $0.72/h) with the same Stage-1 checkpoint (md5 `b8d6e987…` on both pods), in parallel with its T1
+  on `se-1`; `se-1`'s job chain was detached from the running T1 process so it will not also run the frozen control.
+  `se-3` (4.62 h) and `se-4` (5.04 h) deleted after their artifacts and checkpoints were verified in the bucket.
+- 11:05  SH s1: Stage-1 done on `se-2`, held-out greedy **0.9554** (4,777 / 5,000); SH s0's is **0.9516**. Its
+  frozen control runs on a new pod `se-6` (RTX 3090, $0.50/h; checkpoint md5 `9ad2b75f…` identical on both pods) in
+  parallel with its T1 on `se-2`, whose job chain was detached like `se-1`'s. The detached T1 processes do not upload
+  on their own; they are pulled and synced by hand when they finish.
