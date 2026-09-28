@@ -186,3 +186,10 @@ Run id `stage1-dynamics`, executor agent:claude, worktree `~/work/stage1-dynamic
   deterministic).
 
 STAGE1-DYNAMICS DONE 2026-09-27T21:07:32Z
+
+## Run `ckpt-avg` (executor, 2026-09-28)
+
+- Started 2026-09-28T04:21:40Z. Checkpoint averaging / loss-based selection on stage1-dynamics'
+  W (8 seeds) and F (4 seeds) trajectories; no training. Budget $2 / 4 pod-hours.
+  Pre-registration `preregistration/ckpt-avg.md`; held-out split `data/ca/` (half A selects,
+  half B reports) committed with it.

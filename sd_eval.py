@@ -87,6 +87,7 @@ def main():
         nd = [tok.decode(row.tolist()) for row in raw]
         parsed = [bool(tx) and not d.startswith('LEANPARSE') for tx, d in zip(texts, nd)]
         parse_reasons = collections.Counter(d[10:].strip() for d, tx in zip(nd, texts) if d.startswith('LEANPARSE'))
+        n_full = int((raw[:, -1] != tok.pad).sum())
         del raw
         items, where = [], []
         for i, (p, tx) in enumerate(zip(prompts, texts)):
@@ -119,6 +120,8 @@ def main():
                          'step': extra.get('step'), 'train_args': extra.get('args')},
                'timing': {'sample_s': t_samp, 'lean_wall_s': wall, 'lean_proc_s': proc,
                           'total_s': time.time() - t0},
+               'sampler_stats': {k: v for k, v in stats.items() if isinstance(v, (int, float, str))},
+               'hit_max_new': n_full,   # rows whose last of max_new positions is not pad (run ckpt-avg)
                'parse_fail': sum(1 for x in parsed if not x),
                'parse_reasons': dict(parse_reasons.most_common(10)),
                'lean_rej_of_parsed': sum(1 for i in where if not lean_ok[i]),

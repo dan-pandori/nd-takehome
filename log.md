@@ -753,3 +753,10 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   pod `sd-1` at **18:15:50Z** — **10 min 10 s later**. The only other entry in `~/pods.log` between
   this run's start (17:49) and that commit is sibling run `lean-judge`'s `lj1` at **17:38:36Z**,
   which precedes the run's start, so nothing was created inside the window the gate examines.
+
+## ckpt-avg
+
+- 2026-09-28T04:21:40Z Start. Split `data/p2/heldout.jsonl` into halves A/B (`ca_split.py`, 2,500 each,
+  250 depth-3 each, 0 renaming classes shared). Variants fixed in `ca_plan.py` (96 averages + 1
+  self-average control). `sd_eval.py` gains two output fields (`hit_max_new`, `sampler_stats` incl.
+  peak memory); its verdicts are unchanged.
