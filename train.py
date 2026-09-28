@@ -27,6 +27,10 @@ the same order, so a seed reproduces its old trajectory):
   --state_at a,b,...    at these steps save a full resumable state (weights + optimiser + rng + step)
                         to <out>.state<step>.pt -- the decay branch points.
   --resume CKPT         resume from such a state file: the continuation is the run the state came from.
+
+Run `fast-stage1` (2026-09-28) added `--impl fast` (fast_train.py): the same recipe on GPU-resident,
+packed, compiled batches -- see FAST_STAGE1.md for its speed and its equivalence test.  `--impl legacy`
+(the code below) is unchanged.
 """
 import argparse, json, math, os, random, sys, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -190,6 +194,12 @@ def main():
     ap.add_argument('--ckpt_every', type=int, default=0, help='save weights every N steps to <out>.step<N>.pt')
     ap.add_argument('--state_at', default='', help='comma-separated steps at which to save a resumable state to <out>.state<N>.pt')
     ap.add_argument('--resume', default=None, help='resume from a <out>.state<N>.pt written by an earlier run')
+    # ---- run fast-stage1 (2026-09-28): the GPU-resident path; see fast_train.py and FAST_STAGE1.md
+    ap.add_argument('--impl', default='legacy', choices=('legacy', 'fast'),
+                    help='legacy: the per-row Python batching above (reproduces old trajectories); fast: fast_train.py')
+    ap.add_argument('--no_pack', action='store_true', help='--impl fast: right-pad instead of packing (no flex_attention)')
+    ap.add_argument('--no_compile', action='store_true', help='--impl fast: do not torch.compile')
+    ap.add_argument('--no_graph', action='store_true', help='--impl fast: do not capture the step as a CUDA graph')
     a = ap.parse_args()
     torch.manual_seed(a.seed)
     rng = random.Random(a.seed)
@@ -208,6 +218,9 @@ def main():
         tok = make_tokenizer(a.mode)
         model = GPT(tok.vocab_size, a.n_layer, a.d, a.n_head).to(dev)
     tok.shift = not a.no_shift
+    if a.impl == 'fast':
+        import fast_train
+        return fast_train.run(a, model, tok, dev, load, lr_at, load_val, save_ckpt, VAL_SHIFT_SEED, st=st)
     print('params', model.n_params(), 'mode', tok.mode, 'shift', tok.shift, flush=True)
     data = load(a.data, tok, a.cap, check_verify=(a.cap > 0))
     held = load(a.heldout, tok, 0)[:2000] if a.heldout else None
