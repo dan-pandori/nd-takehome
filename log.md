@@ -702,3 +702,10 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   frozen control runs on a new pod `se-6` (RTX 3090, $0.50/h; checkpoint md5 `9ad2b75f…` identical on both pods) in
   parallel with its T1 on `se-2`, whose job chain was detached like `se-1`'s. The detached T1 processes do not upload
   on their own; they are pulled and synced by hand when they finish.
+- 12:39  **`la_T1_SH_s0` died at the round-6 fine-tune: CUDA out of memory** (`state_train.py`). The history makes
+  arm SH's pairs up to 544 tokens, and 128 proofs are ≈ 920 pairs, on a 24 GB card that the parent ladder process
+  also occupies. Fixed with micro-batching in `state_train.py` (`--max_tokens` 200,000 padded tokens per micro-batch,
+  each weighted by its share of the batch's action tokens, so the gradient is the same token-mean as one batch).
+  Batches under the limit — every S and SN batch so far — take the single-micro-batch path and are unchanged. Pushed
+  to every pod before `la_T1_SH_s1` reached its next fine-tune. `la_T1_SH_s0` resumed from round 6 at 12:41
+  (round 6's sampling is re-drawn).

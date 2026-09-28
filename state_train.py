@@ -85,6 +85,7 @@ def main():
     ap.add_argument('--seed', type=int, default=0)
     ap.add_argument('--out', required=True)
     ap.add_argument('--log_every', type=int, default=200)
+    ap.add_argument('--max_tokens', type=int, default=200000, help='padded tokens per micro-batch (same gradient, less memory)')
     a = ap.parse_args()
     torch.manual_seed(a.seed)
     rng = random.Random(a.seed)
@@ -120,10 +121,22 @@ def main():
         npb.append(x.shape[0])
         for g in opt.param_groups:
             g['lr'] = sched(step)
-        with torch.autocast('cuda', dtype=torch.bfloat16, enabled=(dev == 'cuda')):
-            loss = loss_on(model, x, m)
         opt.zero_grad(set_to_none=True)
-        loss.backward()
+        # micro-batches of <= --max_tokens padded tokens, each weighted by its share of the action tokens, so the
+        # gradient is the same token-mean as one full batch (arm SH's history makes pairs long enough to OOM a 24 GB card)
+        per = max(1, a.max_tokens // x.shape[1])
+        ntok = m[:, 1:].sum()
+        loss_sum = 0.0
+        for s0 in range(0, x.shape[0], per):
+            xb, mb = x[s0:s0 + per], m[s0:s0 + per]
+            kb = mb[:, 1:].sum()
+            if int(kb) == 0:
+                continue
+            with torch.autocast('cuda', dtype=torch.bfloat16, enabled=(dev == 'cuda')):
+                lb = loss_on(model, xb, mb) * (kb / ntok)
+            lb.backward()
+            loss_sum += float(lb)
+        loss = torch.tensor(loss_sum)
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
         opt.step()
         if step % a.log_every == 0 or step == a.steps:
