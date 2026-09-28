@@ -1,0 +1,10 @@
+rs_T1_C0_s1_mn1024 bash pod/sf/resample.sh T1_C0_s1_mn1024 ds-generator/ckpts/ladder/la_T1_c0_s1_r8.pt whole 1024
+rs_base_S_s0_ma512 bash pod/sf/resample.sh base_S_s0_ma512 state-env/ckpts/se/stage1_S_s0.pt state 512
+rs_T1_S_s2 bash pod/sf/resample.sh T1_S_s2 ckpts/sf2/ladder/la_T1_S_s2_r8.pt state
+rs_base_S_s2 bash pod/sf/resample.sh base_S_s2 ckpts/sf2/stage1_S_s2.pt state
+rs_base_S_s3 bash pod/sf/resample.sh base_S_s3 state-frontier/ckpts/sf2/stage1_S_s3.pt state
+rs_base_SN_s2 bash pod/sf/resample.sh base_SN_s2 state-frontier/ckpts/sf2/stage1_SN_s2.pt state
+rs_base_SN_s3 bash pod/sf/resample.sh base_SN_s3 state-frontier/ckpts/sf2/stage1_SN_s3.pt state
+rs_base_SN_s4 bash pod/sf/resample.sh base_SN_s4 state-frontier/ckpts/sf2/stage1_SN_s4.pt state
+rs_base_SN_s5 bash pod/sf/resample.sh base_SN_s5 state-frontier/ckpts/sf2/stage1_SN_s5.pt state
+rs_T1_S_s3 until hf buckets cp hf://buckets/dan-pandori/nd-rl/state-frontier/ckpts/sf2/ladder/la_T1_S_s3_r8.pt /tmp/probe.pt >/dev/null 2>&1; do sleep 120; done; bash pod/sf/resample.sh T1_S_s3 state-frontier/ckpts/sf2/ladder/la_T1_S_s3_r8.pt state

@@ -61,12 +61,21 @@ def resample():
         s = json.load(open(fn[:-6] + '.json'))
         m = {'ckpt': s.get('src_ckpt'), 'k': s['k'], 'temperature': s['temperature'], 'wall_s': s.get('wall_s')}
         if 'gen_stats' in s:        # whole-proof: samples that hit max_new
-            g = s['gen_stats']; m.update(max_new=s['max_new'], batch=s['batch'], hit_max_new=g['hit_max_new'], rows=g['rows'])
+            g = s['gen_stats']; m.update(max_new=s['max_new'], batch=s['batch'], hit_max_new=g['hit_max_new'], rows=g['rows'],
+                                         peak_alloc_gb=s.get('peak_alloc_gb'))
         if 'env' in s:
             e = s['env']; m.update(batch=s['batch'], max_action=s['max_action'], max_steps=s['max_steps'],
-                                   env={k: e[k] for k in e if k in ('attempts', 'actions', 'hit_max_action', 'hit_max_steps',
-                                                                    'end_syntax', 'finished')})
+                                   env_end=e['env_end'], peak_alloc_gb=e.get('peak_alloc_gb'),
+                                   hit_max_action=e['action_declen_hist'].get(str(s['max_action']), 0))
         meta[lab] = m
+    # pre-registered: a whole-proof model with > 0.1 % of samples at max_new is re-run at 1,024 and that run is the one
+    # reported; the 512 run is kept as '<label>_mn512'.  '_ma512' (state, max_action 512) is a diagnostic only.
+    for lab in [l for l in rows if l.endswith('_mn1024')]:
+        base = lab[:-len('_mn1024')]
+        if base in rows:
+            rows[base + '_mn512'], meta[base + '_mn512'] = rows.pop(base), meta.pop(base)
+        rows[base], meta[base] = rows.pop(lab), meta.pop(lab)
+        meta[base]['rerun_of_max_new_512'] = True
     out = {}
     for lab, R in rows.items():
         by = collections.defaultdict(lambda: [0, 0, 0])     # L_true -> [solved, n, successes]
@@ -84,8 +93,9 @@ def resample():
 
 
 def q1_readings(rows, rs):
-    st = [l for l in rs if l.startswith('T1_') and rs[l]['family'] in ('S', 'SN')]
-    c0 = [l for l in rs if l.startswith('T1_C0')]
+    main = [l for l in rs if l.count('_') == 2]          # T1_S_s0 etc.; diagnostics carry a 4th field
+    st = [l for l in main if l.startswith('T1_') and rs[l]['family'] in ('S', 'SN')]
+    c0 = [l for l in main if l.startswith('T1_C0')]
     names13 = sorted({n for l in rows for n, r in rows[l].items() if r['L_true'] >= 13})
     by_thm = {n: {l: rows[l][n]['n_ok'] for l in rows} for n in names13}
     succ = {n: sum(by_thm[n][l] for l in st) for n in names13}
@@ -207,7 +217,7 @@ def main():
     json.dump(S, open('artifacts/sf2/summary.json', 'w'), indent=1)
     print(f"{'model':16s} {'N13':>4s} {'succ13':>6s} {'rate13':>8s} {'sol11-12':>8s}  trunc")
     for l, m in sorted(rs.items()):
-        tr = f"{m['hit_max_new']}/{m['rows']}" if 'hit_max_new' in m else f"act {m.get('env', {}).get('hit_max_action')}"
+        tr = f"{m['hit_max_new']}/{m['rows']}" if 'hit_max_new' in m else f"att {m['env_end'].get('truncated', 0)}/{sum(m['env_end'].values())} act {m['hit_max_action']}"
         print(f"{l:16s} {m['N13']:4d} {m['succ13']:6d} {m['rate13']:8.5f} {m['solved_11_12']:8d}  {tr}")
     if S['q1']:
         q = S['q1']; print('Q1 reading:', q['reading'], '| share 1126', q['share_la_transfer_1126'],

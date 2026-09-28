@@ -628,3 +628,12 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   checkpoints (`pod/sf/resample.sh`), then frozen SN s3, s5. Every job sets `LEAN_GATE_DUMP=artifacts/sf2/dumps/<job>.jsonl`.
   `eval_set.py` gained `--max_new` (default unchanged, 400) and a `gen_stats.hit_max_new` counter; C0 / G1 are
   re-sampled at `max_new` 512 (their ladders' value).
+- 19:34  All 14 on-file re-samples done (sf-4, `artifacts/sf2/rs/`, k 256, T 0.8, 224 theorems). N13 (of 23 `L_true` ≥ 13):
+  S T1 s0 / s1 1 / 3, SN T1 s0 / s1 **5** / 1, C0 T1 s0 / s1 1 / 0, G1 T1 0 / 0, every Stage-1 base 0. Three ≥ 13
+  theorems are solved by ≥ 2 of the 4 state T1 finals so far (`la_transfer_1126`, `1198`, `735`); `1126` carries 52 % of
+  the state successes. **C0 T1 s1 hit `max_new` 512 on 144 / 57,344 samples (0.25 %)**, above the policy line, so per
+  the pre-registration it is re-run at 1,024 (queued on sf-1, `pod/sf/q1b.txt`); base S s0 had 116 / 57,344 attempts
+  end at `max_action` 256 (0.20 %) and is re-run at 512 as a diagnostic. Peak allocated, state sampler at batch
+  2,048: 9.42 GB (T1 S s0, A5000).
+- 19:34  Lottery, first reading: new Stage-1 seeds S s2 / s3 and SN s2 / s3 have depth-3 slices 0.936 / 0.960 / 0.944 / 0.934,
+  all high mode (4 / 4).
