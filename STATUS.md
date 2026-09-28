@@ -137,3 +137,11 @@ literal text, `nd2lean(nd)` and `nd2lean(norm(nd))` on all 6,419; one expert-ite
 (L0–L8), write-up `run_lean_judge.md`, figures `figures/lj_*.png`, raw files `artifacts/lj/` and
 `hf://buckets/dan-pandori/nd-rl/lean-judge/`. One A40 pod, 0.66 h, $0.32 of $4. Three questions for
 Dan in `QUESTIONS.md` (the `no-denotation` class, `require_all_pr`, relabelling the pools).
+
+# STATUS — state-env (proposal 13: an AlphaProof-style state for the policy)
+
+Brief: the `state-env` run brief. Policy: AGENT_POLICY.md (nd-rl canonical). Run id: state-env. Budget 60 h / $30, registered. Nothing else of mine is running.
+
+## state-env
+- 2026-09-28 03:55 UTC  run started (executor). Branch `dan_state-env` from the fork's `origin/dan`.
+- 2026-09-28 04:2x UTC  environment built on the VPS and the three CPU gates run **before any pod**: gate 1 round trip **0 failures / 155,000** control proofs (+ 0 Lean rejections on a random 5,000 reassembled texts), gate 2 "your state is Lean's state" **0 mismatches / 2,800** cut points (2,000 random + 500 `Or.elim`-branch + 300 negation-box), gate 3 environment replay **0 failures / 155,000**. Pre-registration `preregistration/state-env.md` committed before the first pod.

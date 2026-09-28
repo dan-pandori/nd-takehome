@@ -579,3 +579,26 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   `hf://buckets/dan-pandori/nd-rl/lean-judge/{artifacts/lj,data/lj}` (179 MB, including the 165 MB
   `corpus_accepted.jsonl`, which is gitignored). No checkpoint was produced worth keeping (test 5's
   one-round fine-tune is a smoke test), so `ckpts/` is not uploaded.
+
+# log — state-env (proposal 13, run `state-env`)
+
+## 2026-09-28
+- 03:55  Run started. Read proposal 13, `lean_tok.py`, `nd2lean.py`, `lean_judge.py`, `lean_gate.py`, `sample.py`,
+  `train.py`, `ladder_ei.py`. Control set and held-out pulled from
+  `hf://buckets/dan-pandori/nd-rl/lean-format/data/p2/` (`train_depth3_f0_a1.jsonl`, 155,000 records; `heldout.jsonl`,
+  5,000) — both gitignored, both in this run's bucket at the end.
+- 04:05  `state_env.py`: the state renderer, the step decomposition and the environment loop; `lean_tok.py` gains the
+  `lean_state` / `lean_stateh` tokenizer modes (four new tokens `<st> <nl> ⊢ <act>`; `lean_seq`'s vocabulary is
+  **unchanged at 107**, so every on-file `lean_seq` checkpoint still loads). `state_train.py`, `state_sample.py`,
+  `state_eval.py`, `state_ladder_ei.py` mirror `train.py` / `sample.py` / `eval_set.py` / `ladder_ei.py` with the
+  policy's input and the step loop changed and nothing else.
+- 04:13  **Gate 1 + gate 3** (`state_gates.py`, whole control set, 71 s of CPU): 0 failures / 155,000 — every proof
+  decomposes into actions, replays through a fresh environment, and the rendered actions reassemble the `lean_seq`
+  text byte for byte. A random 5,000 of the reassembled texts: **0 rejected by Lean**. Mean 5.000 actions per proof
+  (3/4/5/6/7 for lengths 2/3/4/5/6). Longest single action 220 tokens, longest state 303.
+- 04:20  **Gate 2** (`state_gate2.py`): for 2,800 random proof prefixes, Lean's own `trace_state` at the cut against
+  the renderer's state, compared as parsed formulas (Lean prints minimal parentheses and groups equal-typed
+  hypotheses). **0 mismatches**, over all five focused-frame kinds.
+- 04:2x  Deviation from the brief, pre-registered with its reason: the environment, not the model, supplies the
+  tokens that *close* a box (`) ;`, the `( n : False )` ascription, the `Or.elim` second-branch opener); the model's
+  closing action is uniformly `exact n`. Byte-for-byte reassembly is on the rendered chunks and passes.
