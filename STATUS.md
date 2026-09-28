@@ -140,7 +140,9 @@ Dan in `QUESTIONS.md` (the `no-denotation` class, `require_all_pr`, relabelling 
 
 # STATUS — state-env (proposal 13: an AlphaProof-style state for the policy)
 
-Brief: the `state-env` run brief. Policy: AGENT_POLICY.md (nd-rl canonical). Run id: state-env. Budget 60 h / $30, registered. Nothing else of mine is running.
+Brief: the `state-env` run brief. Policy: AGENT_POLICY.md (nd-rl canonical). Run id: state-env. Budget 60 h / $30, registered. My pods are `se-*`.
+
+**Gate-0 confound:** at 04:22:02 UTC, one minute before my first pod, a pod `ca1` for a run `ckpt-avg` appeared in the shared `~/pods.log` — a sibling run on this host, not mine. My pre-registration commit (`5bb93132`, 04:21:15 UTC) predates my first pod `se-1` (04:22:57 UTC).
 
 ## state-env
 - 2026-09-28 03:55 UTC  run started (executor). Branch `dan_state-env` from the fork's `origin/dan`.
