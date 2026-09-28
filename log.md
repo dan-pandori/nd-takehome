@@ -642,3 +642,8 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   written on `ss1`. The partial ss1 files were moved aside on ss1 (`artifacts/ss/moved/`) and the partial ss1 Lean
   dumps kept locally as `dump/S1_*_T08_s0.part_ss1.jsonl` (the audit trail for those rows). The S1 batch change
   (1,024 → 4,096) mid-job is a sampling re-draw, not a correctness change (`NOISE_FLOOR.md`).
+- 19:40  **H s0 complete**: SN base s0 reaches **28 / 29** survivors (26 at T 0.8 within the first 10,000 attempts);
+  la_transfer_454 falls at T 1.0 (3 / 200,000, first at 48,718), la_transfer_1893 is 0 / 200,000 at both
+  temperatures. `ss_analysis.py` → `artifacts/ss/summary.json`.
+- 19:45  S2 started early on `ss1` (free slot) on the 15 SN forward-crux theorems known so far (S1 rows complete for
+  both models), batch 2,048 (fits beside H s1), `stop_at 1` (only reach matters); topped up when S1 ends.
