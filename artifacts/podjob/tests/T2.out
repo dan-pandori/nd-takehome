@@ -1,0 +1,13 @@
+2026-09-28T19:16:16Z pj-podjob-T2-191616 podjob START gpu=NVIDIA RTX A4000,NVIDIA RTX 2000 Ada Generation,NVIDIA A40 pack=1 jobs=1
+podnew pj-podjob-T2-191616: create failed (exit 1): {"error":"failed to create pod: graphql error: There are no longer any instances available with the requested specifications. Please refresh and try again.","code":"graphql_error"}
+2026-09-28T19:16:20Z pj-podjob-T2-191616 podjob podnew on NVIDIA RTX A4000 failed (1)
+pod pj-podjob-T2-191616 ready: 82q4i3bttq5co3 157.157.221.29:57564 (gpu NVIDIA RTX 2000 Ada Generation, $0.24/h)
+2026-09-28T19:27:31Z pj-podjob-T2-191616 podjob READY 82q4i3bttq5co3
+2026-09-28T19:27:36Z pj-podjob-T2-191616 podjob job 0 started: mkdir -p artifacts/pjtest/T2 && echo host=$(hostname) pod=${RUNPOD_POD_ID:-?} start=$(date +%s) > artifacts/pjtest/T2/out.txt && exit 3
+2026-09-28T19:27:53Z pj-podjob-T2-191616 podjob job0 ended rc=3 at 2026-09-28T19:27:36Z
+2026-09-28T19:27:53Z pj-podjob-T2-191616 podjob all 1 job(s) ended, status 3
+2026-09-28T19:28:01Z pj-podjob-T2-191616 podjob pod-side sync of artifacts/podjob/pj-podjob-T2-191616 failed: bash: line 1: hf: command not found
+2026-09-28T19:28:03Z pj-podjob-T2-191616 podjob bucket hf://buckets/dan-pandori/nd-rl/podjob/artifacts/podjob/pj-podjob-T2-191616 (from host)
+2026-09-28T19:28:18Z pj-podjob-T2-191616 podjob bucket hf://buckets/dan-pandori/nd-rl/podjob/artifacts/pjtest/T2 (from pod)
+removed pj-podjob-T2-191616 (82q4i3bttq5co3) (0.0153h, $0.00)
+2026-09-28T19:28:21Z pj-podjob-T2-191616 podjob DELETED exit=3

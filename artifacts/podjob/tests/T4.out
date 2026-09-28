@@ -1,0 +1,16 @@
+2026-09-28T19:17:46Z pj-podjob-T4-191746 podjob START gpu=NVIDIA RTX A4000,NVIDIA RTX 2000 Ada Generation,NVIDIA A40 pack=3 jobs=3
+podnew pj-podjob-T4-191746: create failed (exit 1): {"error":"failed to create pod: graphql error: There are no longer any instances available with the requested specifications. Please refresh and try again.","code":"graphql_error"}
+2026-09-28T19:17:52Z pj-podjob-T4-191746 podjob podnew on NVIDIA RTX A4000 failed (1)
+pod pj-podjob-T4-191746 ready: cqhohpbc58xh1m 213.173.110.200:34508 (gpu NVIDIA RTX 2000 Ada Generation, $0.24/h)
+2026-09-28T19:18:35Z pj-podjob-T4-191746 podjob READY cqhohpbc58xh1m
+2026-09-28T19:18:40Z pj-podjob-T4-191746 podjob job 0 started: mkdir -p artifacts/pjtest/T4 && echo host=$(hostname) pod=${RUNPOD_POD_ID:-?} start=$(date +%s) > artifacts/pjtest/T4/a.txt && sleep 60 && echo end=$(date +%s) >> artifacts/pjtest/T4/a.txt
+2026-09-28T19:18:42Z pj-podjob-T4-191746 podjob job 1 started: mkdir -p artifacts/pjtest/T4 && echo host=$(hostname) pod=${RUNPOD_POD_ID:-?} start=$(date +%s) > artifacts/pjtest/T4/b.txt && sleep 60 && echo end=$(date +%s) >> artifacts/pjtest/T4/b.txt
+2026-09-28T19:18:45Z pj-podjob-T4-191746 podjob job 2 started: mkdir -p artifacts/pjtest/T4 && echo host=$(hostname) pod=${RUNPOD_POD_ID:-?} start=$(date +%s) > artifacts/pjtest/T4/c.txt && sleep 60 && echo end=$(date +%s) >> artifacts/pjtest/T4/c.txt
+2026-09-28T19:19:54Z pj-podjob-T4-191746 podjob job0 ended rc=0 at 2026-09-28T19:19:40Z
+2026-09-28T19:19:54Z pj-podjob-T4-191746 podjob job1 ended rc=0 at 2026-09-28T19:19:42Z
+2026-09-28T19:19:54Z pj-podjob-T4-191746 podjob job2 ended rc=0 at 2026-09-28T19:19:45Z
+2026-09-28T19:19:54Z pj-podjob-T4-191746 podjob all 3 job(s) ended, status 0
+2026-09-28T19:20:04Z pj-podjob-T4-191746 podjob bucket hf://buckets/dan-pandori/nd-rl/podjob/artifacts/podjob/pj-podjob-T4-191746 (from pod)
+2026-09-28T19:20:15Z pj-podjob-T4-191746 podjob bucket hf://buckets/dan-pandori/nd-rl/podjob/artifacts/pjtest/T4 (from pod)
+removed pj-podjob-T4-191746 (cqhohpbc58xh1m) (0.0297h, $0.01)
+2026-09-28T19:20:17Z pj-podjob-T4-191746 podjob DELETED exit=0

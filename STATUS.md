@@ -164,3 +164,6 @@ Brief: nd-rl `docs/proposals/improvements/BRIEF_podjob.md`. Policy: nd-rl `AGENT
 
 ## podjob
 - 2026-09-28 19:10 UTC  run started (executor). Pre-registration `preregistration/podjob.md` committed before any pod.
+- 2026-09-28 19:09–19:31 UTC  acceptance T1–T5 passed (pod gone 15–74 s after job end / signal; limit 120 s; `--pack 3` on one pod). Secure RTX A4000 / 2000 Ada / A5000 pods, all deleted; ≈ 0.36 pod-h, ≈ $0.09 of $1. Code on nd-rl `dan_podjob` (4334bfb): `podjob`, README section, `podbg` ssh-hold fix, `podnew` CREATED at the create call. Not installed (long-pool pods live on this host). Policy text in `QUESTIONS.md`. Bucket `hf://buckets/dan-pandori/nd-rl/podjob/artifacts/`.
+
+PODJOB DONE 2026-09-28T19:32:31Z — podjob ties a pod's lifetime to its jobs; all acceptance tests pass; pods deleted; not yet installed or merged (reviewer/librarian).

@@ -1348,3 +1348,21 @@ Source: `artifacts/lp/workers{,_j,_j2}.jsonl`. 30,000 arm-A texts, A40 pod (7.65
 ## Spend
 Pods `lp-t` (1.44 h, $0.71) and `lp-k` (1.22 h, $0.60), NVIDIA A40 secure at $0.49/h billed: **2.67 pod-hours,
 $1.31** of $3 / 6 h. Bucket: `hf://buckets/dan-pandori/nd-rl/lean-prefilter/artifacts/lp/`.
+
+## podjob (2026-09-28) — acceptance of `podjob` (nd-rl `dan_podjob`, `code/tools/orchestration/podjob`)
+
+No model is involved: these are infrastructure timings. Pods: secure RTX A4000 ($0.25/h billed), RTX 2000 Ada ($0.24/h), RTX A5000 ($0.27/h), template `uhf9wr47j6`, min CUDA 12.4.
+Source: `artifacts/podjob/tests/summary.txt` (made by `artifacts/podjob/tests/summarize.sh` from `T*.txt`, the pulled `local/artifacts/podjob/*/job*.rc`, `T*.bucket.txt`); host events `artifacts/podjob/tests/podjob.log.excerpt`.
+
+| test | podjob exit | pod absent from the account listing, s after | reference | files in bucket |
+|---|---|---|---|---|
+| T1 normal (final code) | 0 | 15 | job end | 1 |
+| T2 failing (`exit 3`) | 3 | 48 | job end | 1 |
+| T3 SIGTERM mid-job | 143 | 26 | signal | 1 |
+| T4 `--pack 3` | 0 | 33 | last job end | 3 |
+| T5 SIGTERM during creation | 143 | 74 (podjob removed the half-made pod 2 s after the signal) | signal | 0 (no job ran) |
+
+T4: all three jobs on host `456e10895074`, starts within 5 s, job wall 65 s for three 60-s jobs; one `pods.log` line (`pods.log.excerpt`).
+`podbg` (T3.txt): old version held the ssh call 42 s for a 40-s job, fixed version 4 s.
+Spend: `podbudget podjob` 0.13 h / $0.04 (four pods registered before the `CREATED` fix undercount their creation wait); from `podjob.log.excerpt` START→DELETED ≈ 0.36 pod-h ≈ $0.09.
+Bucket: `hf://buckets/dan-pandori/nd-rl/podjob/artifacts/podjob/` (tests, summary, logs); test outputs under `hf://buckets/dan-pandori/nd-rl/podjob/artifacts/pjtest/` and `.../artifacts/podjob/pj-podjob-*/`.

@@ -1,0 +1,16 @@
+2026-09-28T19:29:35Z pj-podjob-T1-192935 podjob START gpu=NVIDIA RTX A4000,NVIDIA RTX 2000 Ada Generation,NVIDIA RTX 4000 Ada Generation,NVIDIA RTX A5000,NVIDIA RTX A6000,NVIDIA A40,NVIDIA L4 pack=1 jobs=1
+podnew pj-podjob-T1-192935: create failed (exit 1): {"error":"failed to create pod: graphql error: There are no longer any instances available with the requested specifications. Please refresh and try again.","code":"graphql_error"}
+2026-09-28T19:29:38Z pj-podjob-T1-192935 podjob podnew on NVIDIA RTX A4000 failed (1)
+podnew pj-podjob-T1-192935: create failed (exit 1): {"error":"failed to create pod: graphql error: There are no longer any instances available with the requested specifications. Please refresh and try again.","code":"graphql_error"}
+2026-09-28T19:29:42Z pj-podjob-T1-192935 podjob podnew on NVIDIA RTX 2000 Ada Generation failed (1)
+podnew pj-podjob-T1-192935: create failed (exit 1): {"error":"failed to create pod: graphql error: There are no longer any instances available with the requested specifications. Please refresh and try again.","code":"graphql_error"}
+2026-09-28T19:29:45Z pj-podjob-T1-192935 podjob podnew on NVIDIA RTX 4000 Ada Generation failed (1)
+pod pj-podjob-T1-192935 ready: a3fomuwm4amr2x 69.30.85.242:22095 (gpu NVIDIA RTX A5000, $0.27/h)
+2026-09-28T19:30:29Z pj-podjob-T1-192935 podjob READY a3fomuwm4amr2x
+2026-09-28T19:30:31Z pj-podjob-T1-192935 podjob job 0 started: mkdir -p artifacts/pjtest/T1 && echo host=$(hostname) pod=${RUNPOD_POD_ID:-?} start=$(date +%s) > artifacts/pjtest/T1/out.txt && sleep 30 && echo end=$(date +%s) >> artifacts/pjtest/T1/out.txt
+2026-09-28T19:31:03Z pj-podjob-T1-192935 podjob job0 ended rc=0 at 2026-09-28T19:31:01Z
+2026-09-28T19:31:03Z pj-podjob-T1-192935 podjob all 1 job(s) ended, status 0
+2026-09-28T19:31:08Z pj-podjob-T1-192935 podjob bucket hf://buckets/dan-pandori/nd-rl/podjob/artifacts/podjob/pj-podjob-T1-192935 (from pod)
+2026-09-28T19:31:13Z pj-podjob-T1-192935 podjob bucket hf://buckets/dan-pandori/nd-rl/podjob/artifacts/pjtest/T1 (from pod)
+removed pj-podjob-T1-192935 (a3fomuwm4amr2x) (0.0239h, $0.01)
+2026-09-28T19:31:15Z pj-podjob-T1-192935 podjob DELETED exit=0

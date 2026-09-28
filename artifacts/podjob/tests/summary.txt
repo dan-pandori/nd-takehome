@@ -1,0 +1,19 @@
+test name                   exit  gone_s reference                  bucket_files
+T1   pj-podjob-T1-192935    0     15     last job end (pod clock)   1
+T2   pj-podjob-T2-191616    3     48     last job end (pod clock)   1
+T3   pj-podjob-T3-191701    143   26     signal                     1
+T4   pj-podjob-T4-191746    0     33     last job end (pod clock)   3
+T5   pj-podjob-T5-191831    143   74     signal                     0
+--- T4 (pack 3): host, start, end per job; one pod?
+host=456e10895074 pod=? start=1790623120 end=1790623180 
+host=456e10895074 pod=? start=1790623122 end=1790623182 
+host=456e10895074 pod=? start=1790623125 end=1790623185 
+2026-09-28T19:18:35Z pj-podjob-T4-191746 podjob READY cqhohpbc58xh1m
+--- T4 job wall (first start -> last end, pod clock): 65 s
+--- podhours.log
+2026-09-28T19:10:42Z podjob pj-podjob-T1-190911 0.0200 0.01 NVIDIA RTX A4000
+2026-09-28T19:15:39Z podjob pj-podjob-T5-191404 0.0114 0.00 NVIDIA RTX A4000
+2026-09-28T19:19:14Z podjob pj-podjob-T3-191701 0.0283 0.01 NVIDIA RTX A4000
+2026-09-28T19:20:15Z podjob pj-podjob-T4-191746 0.0297 0.01 NVIDIA RTX 2000 Ada Generation
+2026-09-28T19:28:18Z podjob pj-podjob-T2-191616 0.0153 0.00 NVIDIA RTX 2000 Ada Generation
+2026-09-28T19:31:13Z podjob pj-podjob-T1-192935 0.0239 0.01 NVIDIA RTX A5000

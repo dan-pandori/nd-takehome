@@ -644,3 +644,8 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   pods deleted: 2.67 pod-hours, $1.31. Balance $253.
 - 18:15  Soundness table: 0 false rejects in 1,310,119 texts; the filter rejects 100 % of Lean's rejects in
   every corpus. Uploaded `artifacts/lp` to the bucket.
+
+## podjob — 2026-09-28
+- 19:10 UTC pre-registration committed; `podjob` written; stub dry run (fake `pod*` tools under a fake HOME) passed sequential, failing, pack, SIGTERM.
+- 19:09–19:31 UTC real tests. Findings on the way: (1) `a && setsid … & disown` backgrounds the whole list and holds the ssh channel until the job ends — same bug in `podbg` (42 s vs 4 s); fixed in both. (2) the template has no `hf`: podjob installs `huggingface_hub` in the background at pod start; host-side sync is the fallback (used in T1-first, T2). (3) bash ignores SIGINT in `&`-started commands of non-interactive scripts and cannot trap it; T5 as first run with SIGINT was ignored (job ran normally, pod deleted at the end) — `T5_sigint_ignored.*`; re-run with SIGTERM, documented. (4) A4000 stock flaky → `--gpu` takes a fallback list. (5) `podnew` stamped `CREATED` after `--wait` (T2's 2000 Ada took 11 min to accept ssh; unlogged billing) → now stamped at the create call. First T1 (A4000) passed on the pre-fix code (37 s); final T1 re-run on the final code (A5000) 15 s.
+- Not installed: this host had live registered pods (`lp-l1`, `lp-l2`, run long-pool) at the end.
