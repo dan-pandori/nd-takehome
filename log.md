@@ -654,3 +654,8 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 - 21:50  S1 SN base complete (152 / 383 at k 10,000; whole-proof base 45). SN EI at 355 / 383. SN forward crux 81 so
   far. S2 deepening to 200,000 / temperature started on `ss2` (two processes, batch 2,048, `stop_at 1`) for the 12
   E8 zeros known so far (`data/ss/sn_deep_e8.txt`; la_transfer_1893 is already at 210,000 / 200,000 from H).
+- 23:15  S1 EI complete (237 / 383). Final SN forward crux **87**, reverse crux 2 (SN EI still 0 on both after
+  +20,000). S2 top-ups to 40,000 / temperature done for 85–87 of 87. E8 (0 at 40,000 at both T, SN EI p̂ ≥ 0.01)
+  stands at 27. Budget: $6.90 at 23:14; stop line $8.50. The 200,000 deepening cannot cover all zeros: the first
+  12 (`sn_deep_e8.txt`) continue to 200,000 / T on `ss2`; the 16 new ones (`sn_deep_e8b.txt`) go to **100,000 / T**
+  on `ss1` (+60,000 each). Deviation from the pre-registration (200,000 "if budget remains"), for budget.
