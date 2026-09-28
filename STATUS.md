@@ -162,3 +162,10 @@ this run edits none of them and writes its own `support.py`. The RunPod account 
   is measured on; `pod/sc/pullcheck.sh` added).
 
 SUPPORT-CURVES DONE 2026-09-28T03:10:00Z
+
+# STATUS — support-followups (pressure-testing the support-expansion result)
+
+Brief: run brief `support-followups` (Dan, 2026-09-28). Policy: AGENT_POLICY.md (nd-rl canonical). Run id: support-followups. Budget 30 h / $15 (registered). Sibling `state-env` runs on agent2; pods here are `sf*`.
+
+## support-followups
+- 2026-09-28 04:05 UTC  run started (executor). Pre-registration `preregistration/support-followups.md` committed before any pod and before any D computation.
