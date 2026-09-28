@@ -2,7 +2,7 @@
 
 **Built.** `podjob <run> [--gpu A,B,…] [--pack N] [--sync] [--push P] [--out P] -- cmd ';' cmd` (nd-rl
 `dan_podjob`, `code/tools/orchestration/podjob`). It creates a pod registered to the run, runs the jobs
-detached on it (at most N at once), syncs outputs to `hf://buckets/dan-pandori/nd-rl/<run>/`, pulls them,
+detached (≤ N at once), syncs outputs to `hf://buckets/dan-pandori/nd-rl/<run>/`, pulls them,
 and deletes the pod. A host-side trap on EXIT/INT/TERM/HUP does the same salvage-and-delete. No RunPod
 key goes to the pod. README section added; policy text proposed
 in `QUESTIONS.md`.
