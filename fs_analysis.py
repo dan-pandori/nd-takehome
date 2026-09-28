@@ -17,6 +17,7 @@ NF_SD = {'all': 0.03038, 'len2': 0.003128, 'len3': 0.00486, 'len4': 0.01512, 'le
          'nodepth3_len6': 0.03667}           # NOISE_FLOOR.md table; nodepth3_len6 uses its '6-line no-pattern (247)' row (pre-registered proxy)
 SLICES = ['all', 'len2', 'len3', 'len4', 'len5', 'len6', 'nodepth3_len6']
 A40_PEAK = 149.7e12
+LEGACY_WASTE = []
 SEEDS = range(8)
 
 
@@ -24,10 +25,10 @@ def seed_of(f):
     return int(re.search(r'_s(\d+)\.json', f).group(1))
 
 
-def greedy(pattern):
+def greedy(pattern, by_name=False):
     out = {}
     for f in sorted(glob.glob(pattern)):
-        out[seed_of(f)] = {k: v['rate'] for k, v in json.load(open(f))['slices'].items()}
+        out[os.path.basename(f) if by_name else seed_of(f)] = {k: v['rate'] for k, v in json.load(open(f))['slices'].items()}
     return out
 
 
@@ -73,7 +74,7 @@ def compare(new, old, sd_of, label):
 
 def main():
     res = {}
-    gC = greedy(f'{A}/old/ev_c_s*.json'); gR = greedy(f'{A}/old/ev_r6*_s*.json')
+    gC = greedy(f'{A}/old/ev_c_s*.json'); gR = greedy(f'{A}/old/ev_r6*_s*.json', by_name=True)   # 8 replicates of seeds 0/1: keyed by file
     gN = {k: v for k, v in greedy(f'{A}/ev/fast*_s*.json').items() if k in SEEDS}
     vC = final_val(f'{A}/old/m_c_s*.jsonl'); vN = {k: v for k, v in final_val(f'{A}/m_fast*_s*.jsonl').items() if k in SEEDS}
     res['labels'] = {'model': '3,214,336-param from-scratch GPT, lean_seq, cap 6, trained on data/p2/train_depth3_f0_a1.jsonl (155,000 records, 0 depth-3), '
@@ -94,7 +95,8 @@ def main():
     res['C_vs_R_diff'] = {s: st.mean(v[s] for v in gR.values()) - st.mean(v[s] for v in gC.values()) for s in SLICES} if gR else None
 
     # ---- speed
-    waves = [json.loads(l) for l in open(f'{A}/waves.jsonl')] if os.path.exists(f'{A}/waves.jsonl') else []
+    waves = [json.loads(l) for fn in sorted(glob.glob(f'{A}/waves*.jsonl')) for l in open(fn)]
+    waves = [w for w in waves if not w['wave'].endswith('_warm')]
     sp = []
     tps_fast = []                              # useful tokens per step, from the fast waves' plans (same data, same bs: the legacy expectation)
     for w in waves:
@@ -122,6 +124,8 @@ def main():
                    'agg_useful_tok_s': agg_tok_s, 'agg_frac_peak': (6 * n_params * agg_tok_s / A40_PEAK) if agg_tok_s else None,
                    'pad_waste': (per[0]['computed'] / per[0]['useful']) if per[0]['computed'] else None,
                    'legacy_pad_waste': (per[0]['legacy_computed'] / per[0]['useful']) if per[0]['legacy_computed'] else None})
+    LEGACY_WASTE[:] = [st.mean(w['legacy_pad_waste'] for w in sp if w['legacy_pad_waste'])] if any(w['legacy_pad_waste'] for w in sp) else []
+    res['legacy_pad_waste'] = LEGACY_WASTE[0] if LEGACY_WASTE else None
     res['speed'] = sp
     json.dump(res, open(f'{A}/summary.json', 'w'), indent=1)
 
@@ -135,13 +139,14 @@ def main():
             print(f"| {r['quantity']} | {r['slice']} | {g(r['mean_old'])} | {g(r['mean_new'])} | {f(r['diff'])} | {f(r['mdd'])} | {'yes' if r['pass'] else '**no**'} |")
         print('PASS' if res['PASS'] else 'FAIL', '| depth-3 high mode (>0.44):', res['depth3_high_mode']['new'], 'new vs', res['depth3_high_mode']['C'], 'C')
     if sp:
-        print('\n| wave | impl | N | steps | wall s | s/model | ms/step/model | agg steps/s | agg useful tok/s | agg % bf16 peak | pad waste |')
-        print('|---|---|---|---|---|---|---|---|---|---|---|')
+        print('\n| wave | gpu | impl | N | steps | wall s | s/model | ms/step/model | agg steps/s | agg useful tok/s | agg % bf16 peak (A40) | pad waste |')
+        print('|---|---|---|---|---|---|---|---|---|---|---|---|')
         for w in sp:
-            print(f"| {w['wave']} | {w['impl']} | {w['n']} | {w['steps']} | {w['wall_s']:.0f} | {w['mean_model_secs']:.0f} | {w['ms_per_step_per_model']:.1f} | "
-                  f"{w['agg_steps_per_s']:.1f} | {w['agg_useful_tok_s'] / 1e3:.0f}k | {100 * w['agg_frac_peak']:.1f} | "
-                  (f"{w['pad_waste']:.3f} |" if w['pad_waste'] else f"{w['legacy_pad_waste'] or 1.972:.3f} (legacy) |") if w['agg_useful_tok_s'] else f"| {w['wave']} | {w['impl']} | {w['n']} | {w['steps']} | {w['wall_s']:.0f} | {w['mean_model_secs']:.0f} | | {w['agg_steps_per_s']:.1f} | | | |")
-
+            f = lambda x, fmt: (fmt % x) if x is not None else '—'
+            pw = f"{w['pad_waste']:.3f}" if w['pad_waste'] else f"{LEGACY_WASTE[0]:.3f} (legacy)" if LEGACY_WASTE else '—'
+            print(f"| {w['wave']} | {w.get('gpu', 'NVIDIA A40')} | {w['impl']} | {w['n']} | {w['steps']} | {w['wall_s']:.0f} | {w['mean_model_secs']:.0f} | "
+                  f"{w['ms_per_step_per_model']:.1f} | {w['agg_steps_per_s']:.1f} | {f(w['agg_useful_tok_s'] and w['agg_useful_tok_s'] / 1e3, '%.0fk')} | "
+                  f"{f(w['agg_frac_peak'] and 100 * w['agg_frac_peak'], '%.1f') if 'A40' in w.get('gpu', 'NVIDIA A40') else '—'} | {pw} |")
 
 if __name__ == '__main__':
     main()

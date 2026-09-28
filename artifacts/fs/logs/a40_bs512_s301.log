@@ -1,0 +1,9 @@
+params 3214336 mode lean_seq shift True aug offset impl fast pack True cache hit
+train records 155000  stream T 73472  useful tokens 35436034  computed 36736000 (waste 1.037x; legacy pad-to-max 2.210x)
+val slices {'all': 5000, 'len2': 1000, 'len3': 1000, 'len4': 1000, 'len5': 1000, 'len6': 1000, 'depth3': 500, 'nodepth3_len6': 500}
+captured the training step as one CUDA graph (16.3s incl. compile)
+first step (incl. compile) 16.3s
+step 200 loss 0.9764 lr 1.00e-03 29s val 0.9331 | all=0.9449 len2=0.9028 len3=0.9589 len4=0.9500 len5=0.9820 len6=0.9210 depth3=0.8583 nodepth3_len6=1.0147
+step 400 loss 0.1657 lr 3.25e-04 47s val 0.1251 | all=0.1463 len2=0.1309 len3=0.1202 len4=0.1557 len5=0.1378 len6=0.1650 depth3=0.1430 nodepth3_len6=0.1979
+step 500 loss 0.1293 lr 1.00e-04 54s val 0.1034 | all=0.1119 len2=0.1084 len3=0.0991 len4=0.1195 len5=0.1016 len6=0.1229 depth3=0.1079 nodepth3_len6=0.1454
+saved ckpts/fs/a40_bs512_s301.pt (54.0s total, 5.7s validation, first step 16.3s, setup 3.5s, peak 0.76 GiB, 733474 useful tok/s in training)

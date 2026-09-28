@@ -1,0 +1,16 @@
+params 3214336 mode lean_seq shift True aug offset impl fast pack True cache hit
+train records 155000  stream T 19456  useful tokens 35436330  computed 38912000 (waste 1.098x; legacy pad-to-max 1.971x)
+val slices {'all': 5000, 'len2': 1000, 'len3': 1000, 'len4': 1000, 'len5': 1000, 'len6': 1000, 'depth3': 500, 'nodepth3_len6': 500}
+captured the training step as one CUDA graph (13.9s incl. compile)
+first step (incl. compile) 14.0s
+step 200 loss 0.9562 lr 1.00e-03 43s val 0.8982 | all=0.8950 len2=0.8733 len3=0.9193 len4=0.9115 len5=0.9108 len6=0.8694 depth3=0.8142 nodepth3_len6=0.9519
+step 400 loss 0.2433 lr 9.73e-04 73s val 0.1894 | all=0.2145 len2=0.1849 len3=0.1932 len4=0.2200 len5=0.2075 len6=0.2378 depth3=0.2079 nodepth3_len6=0.2824
+step 600 loss 0.1432 lr 8.95e-04 105s val 0.1087 | all=0.1188 len2=0.1098 len3=0.1078 len4=0.1234 len5=0.1086 len6=0.1328 depth3=0.1206 nodepth3_len6=0.1510
+step 800 loss 0.1014 lr 7.75e-04 136s val 0.0915 | all=0.0920 len2=0.0937 len3=0.0897 len4=0.0974 len5=0.0822 len6=0.0973 depth3=0.0833 nodepth3_len6=0.1181
+step 1000 loss 0.0927 lr 6.28e-04 167s val 0.0844 | all=0.0810 len2=0.0869 len3=0.0823 len4=0.0798 len5=0.0694 len6=0.0884 depth3=0.0850 nodepth3_len6=0.0936
+step 1200 loss 0.0844 lr 4.72e-04 198s val 0.0823 | all=0.0702 len2=0.0842 len3=0.0806 len4=0.0728 len5=0.0613 len6=0.0660 depth3=0.0557 nodepth3_len6=0.0814
+step 1400 loss 0.0735 lr 3.25e-04 229s val 0.0788 | all=0.0649 len2=0.0818 len3=0.0762 len4=0.0688 len5=0.0560 len6=0.0585 depth3=0.0508 nodepth3_len6=0.0700
+step 1600 loss 0.0735 lr 2.05e-04 260s val 0.0770 | all=0.0605 len2=0.0809 len3=0.0737 len4=0.0648 len5=0.0521 len6=0.0511 depth3=0.0408 nodepth3_len6=0.0666
+step 1800 loss 0.0684 lr 1.27e-04 292s val 0.0768 | all=0.0585 len2=0.0806 len3=0.0737 len4=0.0631 len5=0.0503 len6=0.0474 depth3=0.0383 nodepth3_len6=0.0609
+step 2000 loss 0.0624 lr 1.00e-04 322s val 0.0759 | all=0.0575 len2=0.0799 len3=0.0725 len4=0.0612 len5=0.0490 len6=0.0472 depth3=0.0386 nodepth3_len6=0.0601
+saved ckpts/fs/thr8_s103.pt (323.6s total, 13.3s validation, first step 14.0s, setup 4.4s, peak 0.41 GiB, 114184 useful tok/s in training)

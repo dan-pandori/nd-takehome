@@ -579,3 +579,38 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   `hf://buckets/dan-pandori/nd-rl/lean-judge/{artifacts/lj,data/lj}` (179 MB, including the 165 MB
   `corpus_accepted.jsonl`, which is gitignored). No checkpoint was produced worth keeping (test 5's
   one-round fine-tune is a smoke test), so `ckpts/` is not uploaded.
+
+## fast-stage1 (executor), 2026-09-28
+
+- 16:23  Pre-registration `preregistration/fast-stage1.md` committed (f5a6cdd) and pushed; budget
+  `podbudget fast-stage1 --set 10 5`. Old arm = stage1-dynamics arm C, copied to `artifacts/fs/old/`.
+- 16:28  Pod `fs1` (NVIDIA A40, billed $0.49/h; A40 SECURE with min-CUDA 13.0 was out of stock, created
+  with `POD_MINCUDA=12.8`). torch 2.8.0+cu128.
+- 16:31  `fast_train_selftest.py` PASS (`artifacts/fs/selftest.json`): 0 transform mismatches over 2,000
+  records × 200 draws; offsets vs `shift_abs` draws min p 0.33 over all mx; `lean_rand` map injective, p 0.62;
+  packed and padded fp32 loss equal legacy `loss_on` to 4.8e-7, gradient rel. diff 5.6e-7; block mask
+  identical to `create_block_mask`'s flex output.
+- 16:33  **Finding that changes the premise.** Legacy `train.py` alone on this A40 runs 1,000 steps in 53 s
+  (≈ 45 ms/step training + 3 s validation), not the brief's 215 ms/step. The brief's 1,288 s per model
+  (and arm C's 1,115–1,338 s) were measured with several jobs sharing a GPU. Speed-ups below are quoted
+  against the uncontended legacy run on the same pod, and against the brief's number separately.
+- 16:37  First fast version (packed + flex_attention + torch.compile + fused AdamW) was CPU-launch-bound:
+  24 ms/step wall vs 16 ms of GPU kernels (`pod/fs/prof.py`). `--no_pack` (right-pad) slower still.
+  `max-autotune` cut GPU time to 13.9 ms but not wall time and costs +20 s compile: not used.
+- 16:45  Whole training step captured as one CUDA graph (weights/optimiser snapshotted around the
+  warm-up and restored): 1,000 steps in 32.8 s incl. 14.6 s compile+capture and 1.6 s validation,
+  ≈ 16.6 ms/step — GPU-bound now.
+- 16:47  `pod/fs/main.sh` launched: the 8 equivalence seeds as the N = 1/2/4 concurrency test, N = 8
+  throughput, legacy N = 1/2/4 timing, then `sd_eval.py` on the 8 new checkpoints.
+- 16:54  First waves: N = 2 fast on the A40 took 251 s for two models vs 135 s for one — no aggregate gain; the fast
+  path is GPU-bound.
+- 17:11  H100 SXM pod `fs2` created (4090 out of stock) for a short speed benchmark only.
+- 17:25  H100: aggregate rises to 188 steps/s at N = 16 (≈ 3.8× an A40, ≈ 1.9× its cost per model). `fs2` deleted ($0.86).
+- 17:27  Equivalence: **14 / 14 within the pre-registered MDD** (`fs_analysis.py`). No re-test needed; seeds 8–15 not run.
+- 17:32  Legacy alone, full 6,000 steps on the A40: 345 s process wall. bs 512 no faster per token on either GPU, so the
+  batch-size sweep's equivalence arm was not run (deviation from the brief's suggestion: it cannot buy speed here).
+- 17:40  Smoke tests (`artifacts/fs/logs/smoke.log`): fast `--state_at`/`--resume` continues (val 0.3315 vs 0.3342
+  uninterrupted, not bit-identical), `--no_graph`, `--no_pack`, `lean_rand` run, `--init` falls back to legacy under
+  `--impl auto`. A graph-vs-no-graph run with the same seed matched to 4 decimals for 10 steps and then drifted as bf16
+  runs do (`logs/graph_vs_nograph_*.log`); the same-seed val gap at step 400 of the smoke test is that drift.
+- 17:42  `fs1` deleted. Total 1.49 pod-hours, $1.47. `--impl auto` made the default (fast only for from-scratch GPU training).

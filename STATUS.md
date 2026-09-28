@@ -140,3 +140,8 @@ Dan in `QUESTIONS.md` (the `no-denotation` class, `require_all_pr`, relabelling 
 
 ## fast-stage1 (executor, started 2026-09-28T16:23:22Z)
 Make Stage-1 training use the GPU (proposal 15 §1). Pre-registration `preregistration/fast-stage1.md`. Budget $5 / 10 pod-h.
+FAST-STAGE1 DONE 2026-09-28T17:44:50Z — `train.py --impl fast` (default for from-scratch GPU training): packed, compiled,
+one CUDA graph per step. **Equivalence 14/14 within the n = 8 MDD** vs stage1-dynamics arm C. Speed on an A40: 345 s → 128–135 s
+per model (2.6–2.7×; ≈ 10× vs the brief's 1,288 s, which was legacy sharing a GPU); per-GPU throughput ≈ 3.2× legacy's best;
+N seeds per A40 adds only ~10 % (GPU-bound), an H100 takes N = 16 (188 steps/s) but costs ≈ 1.9× per model. 5× per GPU **not met**.
+Read `FAST_STAGE1.md`, `run_fast_stage1.md`. 1.49 pod-h, $1.47 of $5; pods deleted; bucket `hf://buckets/dan-pandori/nd-rl/fast-stage1/`.
