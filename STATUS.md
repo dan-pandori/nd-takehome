@@ -145,3 +145,7 @@ one CUDA graph per step. **Equivalence 14/14 within the n = 8 MDD** vs stage1-dy
 per model (2.6–2.7×; ≈ 10× vs the brief's 1,288 s, which was legacy sharing a GPU); per-GPU throughput ≈ 3.2× legacy's best;
 N seeds per A40 adds only ~10 % (GPU-bound), an H100 takes N = 16 (188 steps/s) but costs ≈ 1.9× per model. 5× per GPU **not met**.
 Read `FAST_STAGE1.md`, `run_fast_stage1.md`. 1.49 pod-h, $1.47 of $5; pods deleted; bucket `hf://buckets/dan-pandori/nd-rl/fast-stage1/`.
+
+## support-state (executor, started 2026-09-28 18:20 UTC)
+- Run start 2026-09-28 18:20 UTC. Branch `dan_support-state` (from fork `origin/dan` + support-curves harness). Budget $10 / 20 pod-h.
+- Pre-registration `preregistration/support-state.md` committed before the first pod.

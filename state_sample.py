@@ -32,7 +32,7 @@ def prompt_ids(tok, env):
 
 @torch.no_grad()
 def env_generate(model, tok, prompts, greedy=True, temperature=1.0, max_action=256, max_steps=48,
-                 batch=2048, seed=0, stats=None, gate=True):
+                 batch=2048, seed=0, stats=None, gate=True, texts_out=None):
     dev = next(model.parameters()).device
     st = stats if stats is not None else {}
     cnt = st.setdefault('env_end', collections.Counter())
@@ -92,6 +92,8 @@ def env_generate(model, tok, prompts, greedy=True, temperature=1.0, max_action=2
     if gate:
         from lean_gate import gate as _gate
         res_nd = _gate(tok, prompts, res_nd, res_tx)
+    if texts_out is not None:          # the literal `lean_seq` text Lean judged, per prompt (None = never finished)
+        texts_out.extend(res_tx)
     return res_nd
 
 
