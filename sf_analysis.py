@@ -173,7 +173,7 @@ def ladders():
                                     'ge13': d['solved_ge13'], 'ge13_names': [t[0] for t in d['solved_ge13_names']],
                                     'solved_11_12': d['by_bin']['11']['solved'] + d['by_bin']['12']['solved']}
     if os.path.exists('artifacts/sf2/ladders.json'):
-        for n, x in json.load(open('artifacts/sf2/ladders.json'))['ladders']['runs'].items():
+        for n, x in json.load(open('artifacts/sf2/ladders.json'))['runs'].items():
             d = x['derived']; out[n] = {'source': 'artifacts/sf2/ladders.json', 'solved': d['solved'], 'lstar': d['lstar'],
                                         'ge13': d['solved_ge13'], 'ge13_names': [t[0] for t in d['solved_ge13_names']],
                                         'solved_11_12': d['by_bin']['11']['solved'] + d['by_bin']['12']['solved'],
@@ -185,6 +185,8 @@ def ladders():
             xs = [x['solved'] for x in v.values()]
             agg[key] = {'n': len(xs), 'per_seed': {n: x['solved'] for n, x in sorted(v.items())},
                         'lstar': {n: x['lstar'] for n, x in sorted(v.items())},
+                        'ge13': {n: x['ge13'] for n, x in sorted(v.items())},
+                        'ge13_names': sorted({t for x in v.values() for t in x['ge13_names']}),
                         'iqm': round(iqm(xs), 1), 'iqm_ci95': boot_iqm(xs) if len(xs) > 2 else None,
                         'sd': round((sum((x - sum(xs) / len(xs)) ** 2 for x in xs) / (len(xs) - 1)) ** .5, 1) if len(xs) > 1 else None}
     return {'runs': out, 'aggregate': agg}

@@ -640,9 +640,24 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 - 19:40  sf-2 is an A40 (46 GB) and T1 S s3 used ≈ 10 GB, so `frozen_S_s3` was started beside it as job `frozen_S_s3c`
   (same command, `pod/sf/ladder.sh S 3 frozen`); `artifacts/sf2/frozen_S_s3.done` on sf-2 is a skip marker so the queue
   does not start it twice (its text says so). Two jobs share the GPU: a re-draw, not a change of settings.
-- 21:00  T1 S s2 finished (sf-1, 4090, ≈ 1,000 s / round): transfer 1,546 / 2,285, `L*` 12, 0 at `L_true` ≥ 13
-  (`artifacts/sf2/logs/T1_S_s2.log`; re-derived later by `se_analysis.py`).
+- 21:00  T1 S s2 finished (sf-1, 4090, ≈ 1,000 s / round): transfer 1,546 / 2,285, `L*` 12
+  (`artifacts/sf2/logs/T1_S_s2.log`). **Correction (23:25):** the log's `ge={…}` line prints L 7–12 only; `se_analysis.py`
+  re-derives **3** transfer theorems at `L_true` ≥ 13 from the found files (`artifacts/sf2/ladders.json`).
 - 21:55  Frozen SN s2 finished (sf-3): transfer 841, `L*` 11. **Lottery complete: all 6 new state-conditioned Stage-1
   seeds are in the high mode** (depth-3 S s2 / s3 0.936 / 0.960, SN s2–s5 0.944 / 0.934 / 0.908 / 0.924); with
   state-env's 6, 12 / 12, Wilson [0.757, 1.00]. P(6 / 6 | control rate 0.462) = 0.0097. The falsifier (≥ 2 low) did
   not fire. Source: `sf_analysis.py` → `artifacts/sf2/summary.json` `q2_lottery`.
+- 23:10  C0 T1 s1 re-run at `max_new` 1,024 (sf-1): 42 / 57,344 hit the cap (0.07 %, under the line); N13 0 → 0,
+  solved at 11–12 21 → 22. Per the pre-registration the 1,024 run is the reported one (`rs/T1_C0_s1_mn1024.*`; the 512
+  run is kept as `T1_C0_s1_mn512` in `summary.json`). Peak allocated 16.07 GB at batch 2,048 / `max_new` 1,024.
+  Base S s0 at `max_action` 512 (diagnostic): 40 / 57,344 attempts still hit it (116 at 256) and N13 stays 0, so most
+  cut-offs are non-terminating actions, not long proofs. State arms stay at `max_action` 256, as in `state-env`.
+- 23:19  sf-1 pulled (re-samples, ladders without `mix_*` / target `found_*`, logs), synced to the bucket, deleted
+  (4.92 h, $3.64). T1 S s2's final checkpoint solves **4** of the 23 ≥ 13 theorems at k 256; base SN s3 solves one
+  (1 / 256). Frozen SN s3's ladder solved one ≥ 13 theorem (`la_transfer_978`) with no RL.
+- 23:58  **Stop rule.** `podbudget` read 21.44 h / $10.57 — past the pre-registered 20 h / $10 line, which I had not
+  been tracking closely (my estimate of 19 h was low: four pods × ≈ 5.5 h). Letting every job finish would reach
+  ≈ 24 h, where `pod_budget_watch` deletes pods. Following the rule, **frozen SN s5 was dropped** at round 5 of 8
+  (its rounds 1–5 are kept and reported as a partial, labelled). **Deviation:** frozen SN s4 (round 7 of 8, ≈ 0.3 h
+  left) is kept, because stopping it would discard ≈ 2 h already spent for a saving of 0.3 h; S s3 T1 / frozen (last
+  round each) are kept, as the rule allows. sf-4 synced, pulled and deleted (5.51 h, $1.49).
