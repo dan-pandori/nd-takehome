@@ -631,7 +631,7 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   on the transfer pool **0.0747 vs 0.0041**; cumulative transfer solved after one round **577 vs 76**, `L*`
   **10 vs 9**. Of 224,245 attempts, 82.7 % produced a finished proof, 17.3 % ended on a syntactic error and
   0.06 % on a truncated action.
-- 05:00  **Held-out greedy, arm S seed 0: 0.9580** (4,789 / 5,000), per length 0.999 / 0.992 / 0.961 / 0.933 /
+- 05:00  **Held-out greedy, arm S seed 0: 0.9578** (4,789 / 5,000), per length 0.999 / 0.992 / 0.961 / 0.933 /
   **0.904**; C0 s0 is 0.9088 with **0.686** on the 6-line bin. Above my pre-registered band [0.85, 0.95] — a miss on
   the upside, recorded as such. Decomposition: 181 of C0 s0's 456 held-out failures were out-of-grammar text and 16
   were "final formula is not the conclusion" (`artifacts/dsg/heldout2_c0_s0.json`; measured under Lean ∧ `nd_verify`),
@@ -650,3 +650,18 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   canonical variant: **0 / 155,000** round-trip failures, **0 / 5,000** Lean rejections, **0 / 1,300** state
   mismatches, and **0 / 526,784** `have` actions whose name is not `max in scope + 1` (was 15,821). Two more pods:
   `se-3` (RTX 3090, $0.50/h) and `se-4` (RTX 4090, $0.74/h).
+- 05:17–05:18  Session interrupted (cause not recorded); no pod work was lost. On resuming, **two duplicate launches
+  of arm SN seed 1 were found running side by side on `se-4`** (two watcher commands had both fired); both were
+  killed and one restarted cleanly at 05:19, costing ≈ 4 minutes of Stage-1 training.
+- 05:19  **Environment crash, fixed.** `la_T1_S_s0` died at the start of round 3 with an `IndexError`: the policy
+  wrote an empty term (`have n : F := ;`), and `_check_atomic` indexed an empty list instead of ending the attempt.
+  Fixed in `state_env.py` (an empty term is `ParseFail('empty term')`, and any other exception inside `apply` ends
+  the attempt as `malformed` rather than the run); 800,000 random fuzz actions, 0 crashes; unit tests pass. The fix
+  can only change which failure *label* an already-failing attempt gets — no accepted proof passes through the
+  changed lines. `seed.sh` does not stop on a failed step, so `la_frozen_S_s0` had started with the buggy code; it
+  was killed, and so was `la_T1_S_s1` (mid round 2, same code in memory).
+- 05:22  **Resumed** with `pod/se/plan_S.sh`: `la_T1_S_s0` from round 3 (`--resume --start_round 3`, found proofs
+  and checkpoint of round 2), `la_T1_S_s1` from round 2; then frozen afresh, then arm SH. A resume re-seeds the
+  fine-tune mix's shuffle RNG (`random.Random(seed*7919)` is re-created), so rounds ≥ 3 (s0) and ≥ 2 (s1) are a
+  re-draw of what an uninterrupted run would have sampled — the same kind of difference as a batch-size change. The
+  original `args.json` is kept as `args_r1.json`.

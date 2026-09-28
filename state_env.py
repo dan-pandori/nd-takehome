@@ -231,6 +231,9 @@ class Env:
         except ParseFail as e:
             self.failed = str(e)
             return False, str(e)
+        except (IndexError, KeyError, ValueError) as e:     # any other malformed action ends the attempt, never the run
+            self.failed = 'malformed'
+            return False, 'malformed'
         self.hist += list(act)
         return True, ''
 
@@ -361,6 +364,8 @@ class Env:
         def ref(n):
             if not is_name(n) or self.lookup(n) is None:
                 raise ParseFail('unbound')
+        if not tm:
+            raise ParseFail('empty term')
         if len(tm) == 1:
             ref(tm[0]); return
         if tm[0] == '⟨':
