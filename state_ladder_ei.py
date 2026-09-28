@@ -43,7 +43,6 @@ from prune import pruned_length
 from gen import canon_key
 from normalize import norm
 from eval_set import judge, summarize, wilson
-from expert_iter import relabel
 
 
 ENV = {'max_action': 256, 'max_steps': 48, 'stats': None}
@@ -254,10 +253,11 @@ def main():
         stats['target_samples'] = sum(ks); stats['target_sample_acc'] = sum(x['n_ok'] for x in rows) / max(1, sum(ks))
         # relabelling by-products (T3)
         if a.relabel:
+            from expert_iter import relabel_batch      # run lean-judge renamed this; import it only for T3
             nrl = 0
             for (t, ki), ps in zip(sub, outs):
                 for p in ps:
-                    rl = relabel(t['prompt'], p)
+                    rl = relabel_batch([(t['prompt'], p)])[0]
                     if rl is None:
                         continue
                     newp, thm, nl = rl

@@ -602,3 +602,26 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 - 04:2x  Deviation from the brief, pre-registered with its reason: the environment, not the model, supplies the
   tokens that *close* a box (`) ;`, the `( n : False )` ascription, the `Or.elim` second-branch opener); the model's
   closing action is uniformly `exact n`. Byte-for-byte reassembly is on the rendered chunks and passes.
+- 04:22  Pods. **A40, A6000 and 3090 were all out of stock at the secure tier at various moments**: `se-1` is an
+  **RTX 3090 24 GB at $0.50/h** (secure), `se-2` an **RTX PRO 4000 Blackwell 24 GB at $0.57/h** — one seed per pod, so
+  the seed axis is confounded with the GPU, as `ds-generator` also had to accept. Gate-0 confound: a pod `ca1` of a
+  sibling run `ckpt-avg` appears in the shared `~/pods.log` one minute before `se-1`; my pre-registration commit
+  `5bb93132` (04:21:15Z) predates `se-1` (04:22:57Z).
+- 04:38  **Stage 1, arm S, seed 0**: 6,000 steps, 128 proofs (= 641 pairs) per step, 784 s, val loss 0.0701. The
+  control's `lean_seq` Stage 1 on the same set and schedule was 427 s and val 0.0729 — not the same quantity (this
+  loss is over action tokens given a state, the control's over proof tokens given a theorem), so the two are not
+  comparable; only the downstream measurements are.
+- 04:41  **Batch probe** (`pod/se/probe.sh`, `artifacts/se/probe_b*.json`), one attempt per RL target (4,495, T 0.8),
+  Stage-1 S s0 on the 3090: batch 1,024 / 2,048 / 4,096 / 8,192 → peak allocated 4.53 / 8.58 / 16.37 / 16.31 GB,
+  wall 25.1 / 21.5 / 18.7 / 18.6 s, solved 986 / 943 / 974 / 971. 8,192 does not differ from 4,096 because the
+  worklist never has more than 4,495 attempts pending. **Batch 2,048 kept** (the pre-registered value): 4,096 fits at
+  Stage-1 state lengths but the ladder's states grow with proof length on a 24 GB card, and the wall-clock difference
+  is 13 %. The 943–986 spread across batch sizes is the re-draw the policy describes: ±2 % of solves at one attempt
+  per target, with Lean checking every sample.
+- 04:42  **`ladder_ei.py` was broken at import on this branch** — `from expert_iter import relabel`, but run
+  `lean-judge` renamed that function to `relabel_batch`. Nothing had run the ladder driver since. Fixed in both
+  `ladder_ei.py` and this run's `state_ladder_ei.py` by importing `relabel_batch` lazily, inside the `--relabel`
+  (rung T3) branch that is the only user.
+- 04:45  Ladder runs launched: `la_T1_S_s{0,1}` then `la_frozen_S_s{0,1}`, 8 rounds × k 32, batch 2,048,
+  `--max_action 256 --max_steps 48`, on `data/ladder/{rl_targets,transfer}.jsonl` (md5-identical to ladder-A's).
+  Arm **SH** is queued behind arm S on each pod.
