@@ -638,3 +638,15 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   i.e. ≈ 43 % of them are of the kind the environment prevents by construction. Removing all of those would put C0 at
   ≈ 0.948 overall and ≈ 0.821 on the 6-line bin, so the environment's grammar guard explains most of the overall gap
   and **less than half** of the 6-line gap.
+- 05:05  **Arm S seed 1's held-out greedy is 0.8012** against seed 0's 0.9580, on Stage-1 models with the same
+  validation loss (0.0702 / 0.0701). The failure profile says why: **581 of 5,000 attempts (11.6 %) end on
+  `unbound`** — the policy cited a name that is not in scope — against 0 for seed 0 (seed 0's 211 failures are 191
+  Lean rejections and 20 syntactic). This is the imperfection the pre-registration names: a `have`'s name is
+  `lean_seq`'s **global first-appearance index**, which the state stops determining once a box closes and takes its
+  names out of scope, so the policy has to guess it and one seed guesses worse.
+- 05:07  **Arm SN added** (pre-registration addendum, written before any SN measurement): the same proofs rewritten
+  by `state_env.canonicalise` so that every name a step introduces is `max index in scope + 1` — an alpha-variant
+  (same ND proof under `lean_tok.inverse`, same Lean verdict), tokenizer mode `lean_staten`. Gates re-run on the
+  canonical variant: **0 / 155,000** round-trip failures, **0 / 5,000** Lean rejections, **0 / 1,300** state
+  mismatches, and **0 / 526,784** `have` actions whose name is not `max in scope + 1` (was 15,821). Two more pods:
+  `se-3` (RTX 3090, $0.50/h) and `se-4` (RTX 4090, $0.74/h).
