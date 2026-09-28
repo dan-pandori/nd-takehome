@@ -1,0 +1,10 @@
+C counted 36419 parsed-rejected 2257
+untouched counted (must pass): n=60 accepted=60
+recorded parsed-but-rejected (must fail): n=60 accepted=0
+one Or.inl/inr or .1/.2 flip (nearly all fail): n=60 accepted=3
+proof paired with other theorem, same #premises (must fail): n=60 accepted=0
+last 3 tokens dropped (must fail): n=30 accepted=0
+bare sorry (must fail): n=5 accepted=0
+ACCEPTED FLIP: THM ( ( ~ R ) v ( R & R ) ) , ( ( ( ~ R ) v ( R & R ) ) > R ) SEQ ( R v R ) PRF || have n34 : ( ( ¬ R ) ∨ ( R ∧ R ) ) := h1 ; have n35 : ( ( ( ¬ R ) ∨ ( R ∧ R ) ) → R ) := h2 ; have n36 : R := n35 n34 ; have n37 : ( R ∨ R ) := Or.inr n36 ; exact n37
+ACCEPTED FLIP: THM ( ( F v R ) v S ) , ( ( ( F v R ) v S ) > R ) SEQ ( R v R ) PRF || have n34 : ( ( False ∨ R ) ∨ S ) := h1 ; have n35 : ( ( ( False ∨ R ) ∨ S ) → R ) := h2 ; have n36 : R := n35 n34 ; have n37 : ( R ∨ R ) := Or.inr n36 ; exact n37
+ACCEPTED FLIP: THM SEQ ( ( R > ( ( R v R ) v ( S > S ) ) ) v P ) PRF || have n10 : ( R → ( ( R ∨ R ) ∨ ( S → S ) ) ) := ( fun ( n11 : R ) => by have n12 : ( R ∨ R ) := Or.inr n11 ; have n13 : ( ( R ∨ R ) ∨ ( S → S ) ) := Or.inl n12 ; exact n13 ) ; have n14 : ( ( R → ( ( R ∨ R ) ∨ ( S → S ) ) ) ∨ P ) := Or.inl n10 ; exact n14

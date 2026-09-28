@@ -1,0 +1,12 @@
+samples 1200 ended 1200
+(executor lean_ok, reviewer Lean accepts): {(False, False): 155, (True, True): 1038, (False, True): 4, (True, False): 3}
+both accept and identical term size: 1035
+executor-counted in subset, per checkpoint: {'ckpts/fs/fast1_s0.pt': 132, 'ckpts/fs/fast2_s1.pt': 137, 'ckpts/fs/fast2_s2.pt': 124, 'ckpts/fs/fast4_s3.pt': 130, 'ckpts/fs/fast4_s4.pt': 139, 'ckpts/fs/fast4_s5.pt': 122, 'ckpts/fs/fast4_s6.pt': 133, 'ckpts/fs/fast1b_s7.pt': 124}
+disagreements (ckpt, i, lines, depth3, theirs, mine, min greedy margin):
+   ('ckpts/fs/fast2_s1.pt', 4217, 6, True, False, True, 0.0033)
+   ('ckpts/fs/fast2_s1.pt', 4817, 6, True, True, False, 0.0052)
+   ('ckpts/fs/fast2_s1.pt', 4656, 6, False, True, False, 0.0028)
+   ('ckpts/fs/fast4_s3.pt', 4301, 6, True, False, True, 0.0007)
+   ('ckpts/fs/fast4_s5.pt', 4498, 6, True, False, True, 0.0007)
+   ('ckpts/fs/fast4_s6.pt', 1343, 3, False, True, False, 0.029)
+   ('ckpts/fs/fast4_s6.pt', 4656, 6, False, False, True, 0.0018)
