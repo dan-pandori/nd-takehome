@@ -28,18 +28,24 @@ CHUNK = int(os.environ.get('LEAN_GATE_CHUNK', '400'))
 
 
 def cpu_quota():
-    """CPUs this process may actually use: the cgroup quota (`cpu.max`; RunPod pods show 96 cores but grant ~7.6)
+    """CPUs this process may actually use: the cgroup quota (`cpu.max`, or cgroup v1's cfs quota; RunPod pods show 96 cores but grant ~7.6)
     intersected with the affinity mask."""
     try:
         n = len(os.sched_getaffinity(0))
     except AttributeError:
         n = os.cpu_count() or 2
-    try:
-        q, per = open('/sys/fs/cgroup/cpu.max').read().split()[:2]
-        if q != 'max':
-            n = min(n, max(1, int(int(q) / int(per))))
-    except (OSError, ValueError):
-        pass
+    for fq, fp in (('/sys/fs/cgroup/cpu.max', None),                                            # cgroup v2
+                   ('/sys/fs/cgroup/cpu/cpu.cfs_quota_us', '/sys/fs/cgroup/cpu/cpu.cfs_period_us')):  # v1 (RunPod A40s)
+        try:
+            if fp is None:
+                q, per = open(fq).read().split()[:2]
+            else:
+                q, per = open(fq).read().strip(), open(fp).read().strip()
+            if q not in ('max', '-1'):
+                n = min(n, max(1, int(int(q) / int(per))))
+            break
+        except (OSError, ValueError):
+            continue
     return n
 
 
