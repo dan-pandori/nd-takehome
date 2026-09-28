@@ -54,22 +54,25 @@ def c_fig(path='artifacts/sf/abc_summary.json', out='figures/sf_c_reach.png'):
     Ls = sorted({e['L_true'] for e in reach.values()})
     tot = [sum(1 for e in reach.values() if e['L_true'] == L) for L in Ls]
     big = [sum(e['reached'] for e in reach.values() if e['L_true'] == L) for L in Ls]
-    fig, ax = plt.subplots(figsize=(6.4, 3.6))
-    x = np.arange(len(Ls)); w = 0.26
+    r1 = S.get('C_s1', {}).get('survivors', {})
+    big1 = [sum(e['reached'] for e in r1.values() if e['L_true'] == L) for L in Ls]
+    fig, ax = plt.subplots(figsize=(7.2, 3.8))
+    x = np.arange(len(Ls)); w = 0.2
     bars = [('EI s0 (3.2 M + 8×32 EI): solves', tot, '#2a78d6'),
             ('big s0 (25.3 M, same data & steps): reaches', big, '#eb6834'),
+            ('big s1: reaches', big1, '#e87ba4'),
             ('base s0 (3.2 M): reaches', [0] * len(Ls), '#1baf7a')]
     for i, (lab, v, c) in enumerate(bars):
-        b = ax.bar(x + (i - 1) * w, v, w - 0.03, color=c, label=lab)
-        for xi, vi in zip(x + (i - 1) * w, v):
+        b = ax.bar(x + (i - 1.5) * w, v, w - 0.03, color=c, label=lab)
+        for xi, vi in zip(x + (i - 1.5) * w, v):
             ax.text(xi, vi + 0.15, str(vi), ha='center', va='bottom', fontsize=8, color=INK)
     ax.set_xticks(x, [f'L_true {L}' for L in Ls]); ax.set_ylabel('falsifier survivors')
-    ax.set_title(f"The 29 survivors: big s0 reaches {S['C']['survivors_reached']} "
-                 '(≤ 200,000 attempts per temperature, T 0.8 and 1.0)', color=INK, fontsize=9.5, loc='left')
+    ax.set_title(f"The 29 survivors: big s0 reaches {S['C']['survivors_reached']}, big s1 {S.get('C_s1', {}).get('survivors_reached', '–')} "
+                 '(200,000 attempts at T 0.8 and at T 1.0 each)', color=INK, fontsize=9.5, loc='left')
     ax.grid(axis='y', color=GRID, lw=0.6); ax.set_axisbelow(True); ax.legend(frameon=False, fontsize=8)
-    fig.text(0.01, 0.005, "Base s0: 0 in 400,000 (support-curves). big s0 md5 4efb5a1e; EI s0 md5 5cebd7ec. Lean alone judges.",
+    fig.text(0.01, 0.005, "Base s0: 0 in 400,000 (support-curves). big s0 md5 4efb5a1e, big s1 05ed8839; EI s0 5cebd7ec. Lean alone judges.\nSource: artifacts/sf/abc_summary.json",
              fontsize=7, color=INK2)
-    fig.tight_layout(rect=(0, 0.03, 1, 1)); fig.savefig(out, dpi=150); print('->', out)
+    fig.tight_layout(rect=(0, 0.06, 1, 1)); fig.savefig(out, dpi=150); print('->', out)
 
 
 if __name__ == '__main__':

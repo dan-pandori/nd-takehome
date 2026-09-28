@@ -1408,3 +1408,169 @@ and `sc_figures.py` produce SC9 and both figures.
 | of which stage 0 (EI training, 2 seeds) | ≈ 6 pod-hours; the seed-1 re-train added ≈ 2.5 more |
 | samples drawn | **≈ 47 M**, at 360–1,001 samples/s per job depending on co-tenancy |
 | RunPod balance | above the $100 floor throughout (`rpbalance` $150.99 at start) |
+
+# support-followups — pressure-testing the support-expansion result
+
+Run `support-followups`, 2026-09-28, branch `dan_support-followups` (from `dan_support-curves`). **Every count is judged
+by Lean alone** (`lean_judge` inside `support.py`; the literal sampled texts were then re-checked one proof per Lean
+process, SF8). Pre-registration: `preregistration/support-followups.md` (`352676c`, 04:09 UTC, 13 min before the first
+pod; addendum `fe0a939` for C seed 1 before its first pod). Analysis: `sf_d_analysis.py`, `sf_alt.py`, `sf_analysis.py`
+(stdout in `artifacts/sf/d_report_T1.txt`, `d_report_T08.txt`, `abc_report.txt`); roll-up `artifacts/sf/summary.json`.
+
+## SF0 — models
+
+| label | checkpoint | md5 | what it is |
+|---|---|---|---|
+| base s0 | `ckpts/lf/stage1_a1_seq_s0.pt` | `9bde44c0b6c7580951656bf57aec3e43` | 3,214,336 params, from scratch, `lean_seq`, cap 6, Stage 1 only, `data/p2/train_depth3_f0_a1.jsonl` (md5 `29276f24…`), 6,000 × 128 |
+| base s1 | `ckpts/lf/stage1_a1_seq_s1.pt` | `fc27e52d017e5a361b3232fcd13f4ddc` | the same, Stage-1 seed 1 |
+| EI s0 | `ckpts/ladder/la_T1_sc_s0_r8.pt` | `5cebd7eca859f4a4bb1dcc4ed47b8bbc` | base s0 + 8 × k 32 EI, T 0.8, disjoint ladder pool (support-curves) |
+| EI s1 (lost) | `la_T1_sc_s1_r8.pt` — no file exists | `105be4f3…` | support-curves' seed-1 EI model; numbers only |
+| EI s1rerun | `ckpts/ladder/la_T1_sc_s1rerun_r8.pt` | `12c13e6115571022d66a23ad2bb59e6d` | base s1 + the same recipe, re-trained (support-curves) |
+| big s0 | `ckpts/sf/stage1_big_seq_s0.pt` | `4efb5a1ebe5c2fd1625a8885523ce8a5` | **25,329,664 params** (8 layers, d 512, 8 heads), from scratch, `lean_seq`, cap 6, same data / steps / lr schedule as base, seed 0; val loss 0.0725 |
+| big s1 | `ckpts/sf/stage1_big_seq_s1.pt` | `05ed88390b8af7d41f94c1656027f36c` | the same, seed 1; val loss 0.0724 |
+
+Sampler: fast path, batch 4,096 (3.2 M models; peak 17.4 GiB) / 1,024 (25 M models; peak 15.6 GiB), `max_new` 512,
+fresh sampling seeds. `L_true` is an ND-derived **upper bound** on proof length.
+
+## SF1 — D: where the base's improbability sits (base s0, T 1.0, name offset marginalised exactly)
+
+Sources: `artifacts/sf/d_steps.jsonl` (per-token and per-step log p under base s0 and EI s0), `d_summary.json`,
+`d_alternatives.jsonl`. Sets: **S** = 133 distinct EI s0 proofs of the 29 survivors; **C1** = 164 EI s0 proofs of the
+other 53 forward-crux theorems; **C2** = the base s0's own 62 stage-1 proofs (45 theorems); **C3** = the base s0's own 53
+proofs of 33 forward-crux theorems (stage 2; not pre-registered). Totals reproduce `sc_secondary.py`'s `logp_T1` within
+0.03 nats.
+
+Each theorem's most probable proof (medians):
+
+| set | theorems | total log p | worst step w1 | 2nd | 3rd | all other steps | share in worst 2 (s2) | steps with p < 0.1 |
+|---|---|---|---|---|---|---|---|---|
+| S (survivors) | 29 | −21.8 | **−11.0** | −6.2 | −3.1 | −4.1 | 0.77 | **3** |
+| C1 (other crux, EI) | 53 | −12.3 | −8.1 | −4.3 | −1.2 | −1.7 | 0.88 | 2 |
+| C3 (crux, base's own) | 33 | −10.2 | −6.8 | −2.5 | −0.3 | −0.4 | 0.97 | 2 |
+| C2 (base's own) | 45 | −6.2 | −4.7 | −0.6 | −0.1 | −0.2 | 0.97 | 1 |
+
+- **Pre-registered classification** (s2 ≥ 0.50 and w1 ≤ −6 = concentrated): survivors **28 concentrated, 1 mixed, 0
+  spread → reading "a new move"** (threshold 20). At T 0.8 the same (28 / 1 / 0). Survivors with w1 below C2's 5th
+  percentile (−7.14): **26 / 29**.
+- **The rule does not discriminate the controls:** best-proof labels C1 42 concentrated / 11 mixed, C2 10 / 35, C3
+  (all proofs) 38 / 15. What separates S from the controls is the *depth* of the two or three worst steps and a
+  heavier remainder, not the shape.
+- **Token classes** (pre-registered class | position-based class, the latter counting a stated formula's brackets as
+  formula — added after the pre-registration): share of S's surprisal logic 0.51 | 0.57, syntax 0.33 | 0.28, name 0.16;
+  of S's worst-3 tokens logic 0.53 | 0.59, syntax 0.35 | 0.30, name 0.12. C2: logic 0.57 | 0.68, syntax 0.15 | 0.04, name 0.29.
+- **What the base wanted instead** (`sf_alt.py`, at each survivor's single worst token, at the base's best offset):
+  base top-1 mass there median **1.000**; EI s0's log p of the proof's token there median **−0.000** (min −8.9). The
+  base's preferred token: a different **intermediate formula** 10, a different **rule at `:=`** 8 (mostly `⟨` where
+  EI opens an implication box), **`<eos>` where EI closes a nested box** 7, **`exact` where EI states another `have`** 3,
+  another citation 1.
+
+## SF2 — A: seed-1 column on an uploaded EI checkpoint (T 0.8, k 10,000, stop 50)
+
+Sources: `artifacts/sf/a_base_T08_s1.s0.jsonl` (base s1 `fc27e52d`), `a_ei_T08_s1rerun.s0.jsonl` (EI s1rerun `12c13e61`);
+compared with support-curves' `artifacts/sc/s3_*_T08_s1.s{0,1}.jsonl` (lost EI s1 `105be4f3`) and `s1_*_T08_s0`.
+6,860,304 samples. Deviation: the brief said k 2,000; support-curves' stage 3 was k 10,000 / stop 50, so A matches it.
+
+| | this run | support-curves |
+|---|---|---|
+| EI s1 solved / 383 | **147** (s1rerun) | 144 (lost) |
+| base s1 solved / 383 | 37 (re-draw) | 37 |
+| forward crux (base s1 0, EI s1 > 0) | **110** | 107 |
+| survivors solved by EI s1 | **29 / 29** | 28 / 29 |
+| survivors solved by base s1 | 2 / 29 | 1 / 29 |
+| per-theorem agreement, EI s1rerun vs lost EI s1 | **366 / 383 = 95.6 %** | — |
+| per-theorem agreement, EI s1rerun vs EI s0 | 345 / 383 = 90.1 % | 348 / 383 (lost vs s0) |
+| base s1 re-draw vs its support-curves draw | 377 / 383 = 98.4 % | — |
+| crux overlap s1rerun ∩ s0 / s1rerun ∩ lost | 67 / 97 | lost ∩ s0 66 |
+
+By `L_true` (solved, EI s1rerun / lost / base s1): 7: 36 / 35 / 17; 8: 40 / 38 / 17; 9: 37 / 36 / 2; 10: 18 / 20 / 1;
+11: 13 / 12 / 0; 12: 2 / 2 / 0; 13: 1 / 1 / 0; 14: 0 / 0 / 0. Truncation at 512 (base s1): `L_true` 10 **1.39 %**
+(8,119 of its 8,354 from two survivors: la_transfer_191 54 % of its samples, la_transfer_1004 28 %), 13 0.39 %, 11
+0.094 %, others ≤ 0.04 %; EI ≤ 0.1 % everywhere. The longest accepted proof in all 1,254 counted proofs of
+support-curves + A is 352 tokens.
+
+## SF3 — B: depth on the six longest survivors (base s0, T 1.0, stop 5)
+
+Source: `artifacts/sf/b_base_T10_s0.s0.jsonl` (base s0 `9bde44c0`), 10,000,002 samples; prior counts from
+`artifacts/sc/s*_base_*_s0` (400,000 each, 0 successes). EI s0 p̂ from `artifacts/sc/summary.json` (k 2,048).
+
+| theorem | `L_true` | new attempts | successes | base p̂ (95 % UB if 0) | EI s0 p̂ T 0.8 / T 1.0 |
+|---|---|---|---|---|---|
+| la_transfer_87 | 11 | 1,666,667 | 0 | < 1.8 × 10⁻⁶ | 0.186 / 0.163 |
+| la_transfer_1858 | 11 | 1,666,667 | 0 | < 1.8 × 10⁻⁶ | 0.035 / 0.048 |
+| la_transfer_1893 | 11 | 1,666,667 | 0 | < 1.8 × 10⁻⁶ | 0.225 / 0.249 |
+| **la_transfer_1932** | 11 | 1,666,667 | **1** (at attempt 985,640) | **6.0 × 10⁻⁷** (4.8 × 10⁻⁷ pooled with the prior 400,000) | 0.043 / 0.059 |
+| la_transfer_2038 | 11 | 1,666,667 | 0 | < 1.8 × 10⁻⁶ | 0.464 / 0.425 |
+| la_transfer_454 | 12 | 1,666,667 | 0 | < 1.8 × 10⁻⁶ | 0.909 / 0.815 |
+
+The one base proof is **not** EI's proof: 8 lines / term size 59 against EI's 11–12 / 75–78, and it closes
+`¬P → …` with `n63.elim` on `n63 : ¬¬P` (`Not.elim`); EI's proofs of it have base log p −40.6 to −54.3.
+Truncation ≤ 0.012 % per theorem.
+
+## SF4 — C: a bigger base (seed 0)
+
+Sources: `artifacts/sf/c_heldout_greedy_s0.json`, `base_s0_heldout_greedy.json`, `c1_big_T08_s0.s{0,1}.jsonl`,
+`c2_big_T{08,10}_s0_sh*.s0.jsonl`; model big s0 `4efb5a1e`; 12,302,048 samples.
+
+- Held-out greedy (`data/p2/heldout.jsonl`, 5,000, Lean): **big s0 0.879** vs **base s0 0.909** (same judge, same run);
+  by length 2–6 big s0 0.999 / 0.993 / 0.975 / 0.958 / **0.471**.
+- Forward crux (82) at k 10,000, T 0.8: big s0 solves **6** (la_transfer_1406, 297, 119, 1427 at `L_true` 7;
+  1318, 2081 at 9) — base s0 solves 0 of these 82 at k 10,000 by construction.
+- **Survivors: 0 / 29 reached**, with 200,000 attempts at T 0.8 (la_transfer_588: 390,000) and 200,000 at T 1.0 on
+  each. By `L_true`: 7 0/1, 9 0/13, 10 0/9, 11 0/5, 12 0/1. Capacity falsifier (≥ 15): **does not fire**.
+- Truncation: crux pass `L_true` 11 1.25 % (flagged), otherwise ≤ 0.05 %; deep passes ≤ 0.005 %.
+
+## SF5 — C seed 1 (addendum `fe0a939`)
+
+Sources: `artifacts/sf/c_heldout_greedy_s1.json`, `c1_big_T08_s1.s{0,1,2}.jsonl`, `c2_big_T{08,10}_s1_*.s0.jsonl`
+(shard files `sh0`/`sh2` hold the two records finished before the deep pass was redistributed; `r1*` the rest); model
+big s1 `05ed8839`; 11,848,960 samples.
+
+- Held-out greedy: **0.8842** (big s0 0.8792, base s0 0.909).
+- Forward crux at k 10,000: **8 / 82** (the six big s0 solves plus la_transfer_1905 and la_transfer_2182).
+- **Survivors: 2 / 29 reached** — la_transfer_1932 (`L_true` 11): 5 in 155,408 at T 0.8 (p̂ 3.2 × 10⁻⁵; 2 distinct
+  proofs, 11 lines / term size 65); la_transfer_2169 (`L_true` 9): 0 in 200,000 at T 0.8, 1 in 200,000 at T 1.0
+  (p̂ 5 × 10⁻⁶; 10 lines / term size 44). Every other survivor: 0 in 200,000 at each temperature.
+- **Union over both big seeds: 2 / 29.** Capacity falsifier (≥ 15): **does not fire** for either seed or the union.
+- **None of the three non-EI proofs of a survivor in this run** (base s0's in SF3, big s1's two here) equals any of EI's
+  distinct proofs of that theorem (5 for la_transfer_1932, 4 for la_transfer_2169; all EI records of support-curves and A).
+- Truncation: crux pass ≤ 0.22 % (`L_true` 12); deep passes `L_true` 9 0.08 % / 0.18 %, 11 0.11 % / 0.15 % (T 0.8 / T 1.0;
+  above the 0.1 % line — same caveat as SF2), others ≤ 0.08 %.
+
+## SF6 — pre-registered expectations against outcomes
+
+| part | expected | outcome | |
+|---|---|---|---|
+| D reading | mixed, concentrated 17 (10–24), spread ≤ 8; compounding will not occur | concentrated 28, spread 0 → "a new move" | range missed high; the falsifiable part (no compounding) held |
+| D below C2's 5th pct of w1 | ≥ 15 of 29 | 26 | hit |
+| D worst-3 tokens | logic ≥ 50 %, syntax ≤ 20 % | logic 53 %, syntax 35 % (position-based 59 % / 30 %) | logic hit, syntax missed |
+| A EI s1rerun solved | 145 (125–165) | 147 | hit |
+| A base s1 re-draw | 37 (32–43) | 37 | hit |
+| A forward crux | 105 (85–125) | 110 | hit |
+| A survivors EI / base | ≥ 24 / ≤ 2 | 29 / 2 | hit |
+| A agreement vs lost / vs s0 / base re-draw | ≥ 88 / ≥ 85 / ≥ 95 % | 95.6 / 90.1 / 98.4 % | hit |
+| B | 0 on ≥ 5 of 6; total ≤ 3 | 5 of 6 at 0; total 1 | hit |
+| C held-out s0 / s1 | 0.90–0.96 / 0.85–0.93 | 0.879 / 0.884 | s0 missed, s1 hit |
+| C forward crux s0 / s1 | 20 (8–40) / 2–15 | 6 / 8 | s0 missed low, s1 hit |
+| C survivors s0 / s1 | 6 (2–14) / 0–2 | 0 / 2 | s0 missed low, s1 hit |
+| **C falsifier (≥ 15)** | does not fire | **does not fire** (0, 2, union 2) | hit |
+
+## SF7 — literal-text Lean re-check
+
+`sf_recheck.py` (`LEAN_GATE_CHUNK=1`: one proof per Lean process, VPS Lean 4.34.1; the pods ran 4.34.0), every accepted
+literal sampled text of this run against its theorem statement, plus a scan for `sorry` / `admit` / `simp` / `decide` /
+`exact?` / `native_decide` / `omega` / `tauto` / `aesop` / `axiom`: A + B **431 / 431** (`artifacts/sf/recheck_ab.json`),
+C both seeds **20 / 20** (`recheck_c.json`), 0 vacuity tokens. Control: B's proof against another theorem's statement is
+rejected.
+
+## SF8 — cost, pods, artefacts
+
+| | |
+|---|---|
+| pods | 13 created: `sf1` RTX 5090 32 GB **$0.69/h** (4.13 h); `sf4`, `sf5`, `sf7`, `sfa`, `sfe` RTX 3090 24 GB **$0.22/h** (4.05 / 3.98 / 1.56 / 4.12 / 3.36 h); `sfd` L40S 48 GB **$0.79/h** (3.89 h); six community 5090s with a broken CUDA stack (`sf2`, `sf3`, `sf6`, `sfb`, `sfc`, first `sfd`), deleted within 4 min each. All community cloud (A40s out of stock). All deleted. |
+| total | **25.17 pod-hours** (`podbudget`); **≈ $8.81 billed** (`list-pod-billing`, 2026-09-28, summed over the 13 pod ids; `podbudget`'s $12.57 assumes $0.50/h) against 30 h / $15 |
+| samples | A 6,860,304; B 10,000,002; C s0 12,302,048; C s1 11,848,960 → **41,011,314** |
+| RunPod balance | $136.49 at start, $258.43 at end (Dan topped up); never near the $100 floor |
+
+Bucket (public): `hf://buckets/dan-pandori/nd-rl/support-followups/ckpts/sf/stage1_big_seq_s{0,1}.pt` and
+`hf://buckets/dan-pandori/nd-rl/support-followups/artifacts/sf/` (every per-theorem record, D's per-token file, logs).
+Base / EI checkpoints are support-curves' (`hf://buckets/dan-pandori/nd-rl/support-curves/ckpts/`).

@@ -1,0 +1,224 @@
+{
+ "run": "support-followups",
+ "judge": "Lean alone (lean_judge in support.py) + literal-text re-check (sf_recheck.py)",
+ "models": {
+  "base_s0": "stage1_a1_seq_s0.pt 9bde44c0 3,214,336",
+  "base_s1": "stage1_a1_seq_s1.pt fc27e52d",
+  "ei_s0": "la_T1_sc_s0_r8.pt 5cebd7ec",
+  "ei_s1rerun": "la_T1_sc_s1rerun_r8.pt 12c13e61",
+  "big_s0": "stage1_big_seq_s0.pt 4efb5a1e 25,329,664",
+  "big_s1": "stage1_big_seq_s1.pt 05ed8839 25,329,664"
+ },
+ "D": {
+  "model": "base_s0",
+  "T": 1.0,
+  "primary_labels": {
+   "concentrated": 28,
+   "mixed": 1
+  },
+  "reading": "a new move",
+  "below_C2_w1_p05": 26,
+  "sets": {
+   "S": {
+    "n_proofs": 133,
+    "n_theorems": 29,
+    "total_med": -29.72413925409424,
+    "w1_med": -12.327429470048454,
+    "s2_med": 0.6859088087010631,
+    "labels_best_per_theorem": {
+     "concentrated": 28,
+     "mixed": 1
+    }
+   },
+   "C1": {
+    "n_proofs": 164,
+    "n_theorems": 53,
+    "total_med": -21.91716630390453,
+    "w1_med": -10.48364501392518,
+    "s2_med": 0.8187431407854762,
+    "labels_best_per_theorem": {
+     "mixed": 11,
+     "concentrated": 42
+    }
+   },
+   "C2": {
+    "n_proofs": 62,
+    "n_theorems": 45,
+    "total_med": -6.2014799967258645,
+    "w1_med": -4.643041727747596,
+    "s2_med": 0.9669271024056588,
+    "labels_best_per_theorem": {
+     "mixed": 35,
+     "concentrated": 10
+    }
+   },
+   "C3": {
+    "n_proofs": 53,
+    "n_theorems": 33,
+    "total_med": -11.003542246868223,
+    "w1_med": -7.175531263162938,
+    "s2_med": 0.9520340440714005,
+    "labels_best_per_theorem": {
+     "concentrated": 21,
+     "mixed": 12
+    }
+   }
+  },
+  "worst_token_alternatives": {
+   "categories": {
+    "formula": 10,
+    "rule": 8,
+    "ends-proof": 7,
+    "closes-box-early": 3,
+    "citation": 1
+   },
+   "ei_lp_at_worst_token_median": -0.0,
+   "base_top1_mass_median": 1.0
+  }
+ },
+ "A": {
+  "k": 10000,
+  "stop_at": 50,
+  "T": 0.8,
+  "batch": 4096,
+  "max_new": 512,
+  "base_s1_redraw_solved": 37,
+  "base_s1_sc_solved": 37,
+  "ei_s1rerun_solved": 147,
+  "ei_s1_lost_solved": 144,
+  "ei_s0_solved": 121,
+  "base_s0_solved": 45,
+  "crux_s1rerun": 110,
+  "crux_s1_lost": 107,
+  "crux_s0": 82,
+  "crux_s1rerun_and_s0": 67,
+  "crux_s1rerun_and_lost": 97,
+  "survivors_ei_s1rerun_solves": 29,
+  "survivors_base_s1_redraw_solves": 2,
+  "survivors_in_crux_s1rerun": 27,
+  "agree_ei_s1rerun_vs_lost": [
+   366,
+   383
+  ],
+  "agree_ei_s1rerun_vs_s0": [
+   345,
+   383
+  ],
+  "agree_base_s1_redraw_vs_sc": [
+   377,
+   383
+  ],
+  "agree_base_s1_vs_s0_redraw": [
+   355,
+   383
+  ],
+  "md5": {
+   "base": [
+    "fc27e52d"
+   ],
+   "ei": [
+    "12c13e61"
+   ]
+  },
+  "peak_mem_gb": 17.43,
+  "samples": 6860304
+ },
+ "B": {
+  "rows": [
+   {
+    "name": "la_transfer_1858",
+    "L_true": 11,
+    "n_new": 1666667,
+    "c_new": 0,
+    "n_prior": 400000,
+    "c_prior": 0,
+    "p_hat": null,
+    "ub95": 1.799999640000072e-06
+   },
+   {
+    "name": "la_transfer_1893",
+    "L_true": 11,
+    "n_new": 1666667,
+    "c_new": 0,
+    "n_prior": 400000,
+    "c_prior": 0,
+    "p_hat": null,
+    "ub95": 1.799999640000072e-06
+   },
+   {
+    "name": "la_transfer_1932",
+    "L_true": 11,
+    "n_new": 1666667,
+    "c_new": 1,
+    "n_prior": 400000,
+    "c_prior": 0,
+    "p_hat": 5.99999880000024e-07,
+    "ub95": null
+   },
+   {
+    "name": "la_transfer_2038",
+    "L_true": 11,
+    "n_new": 1666667,
+    "c_new": 0,
+    "n_prior": 400000,
+    "c_prior": 0,
+    "p_hat": null,
+    "ub95": 1.799999640000072e-06
+   },
+   {
+    "name": "la_transfer_87",
+    "L_true": 11,
+    "n_new": 1666667,
+    "c_new": 0,
+    "n_prior": 400000,
+    "c_prior": 0,
+    "p_hat": null,
+    "ub95": 1.799999640000072e-06
+   },
+   {
+    "name": "la_transfer_454",
+    "L_true": 12,
+    "n_new": 1666667,
+    "c_new": 0,
+    "n_prior": 400000,
+    "c_prior": 0,
+    "p_hat": null,
+    "ub95": 1.799999640000072e-06
+   }
+  ],
+  "successes": 1
+ },
+ "C_s0": {
+  "c1_crux_solved": 6,
+  "survivors_reached": 0,
+  "falsifier_fires": false,
+  "samples": 12302048,
+  "heldout": 0.8792
+ },
+ "C_s1": {
+  "c1_crux_solved": 8,
+  "survivors_reached": 2,
+  "falsifier_fires": false,
+  "samples": 11848960,
+  "heldout": 0.8842
+ },
+ "C_union": {
+  "survivors_reached_either_seed": 2,
+  "names": [
+   "la_transfer_1932",
+   "la_transfer_2169"
+  ],
+  "falsifier_fires": false
+ },
+ "base_s0_heldout": 0.909,
+ "recheck": {
+  "ab": 431,
+  "c": 20
+ },
+ "cost": {
+  "pod_hours": 25.17,
+  "usd_billed": 8.81,
+  "budget": "30 h / $15"
+ },
+ "sources": "numbers.md § support-followups"
+}

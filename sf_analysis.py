@@ -107,41 +107,58 @@ def main():
             print(f"  {r['name']:17s} L{r['L_true']} new n {r['n_new']:,} ok {r['c_new']} (prior {r['n_prior']:,} / {r['c_prior']}) "
                   f"p̂ {r['p_hat']} ub95 {r['ub95']} no-eos {r['no_eos_frac']:.4%}")
 
-    # ---------------- C
-    c1 = load(f'{SF}/c1_big_T08_s0.s*.jsonl')
-    if c1:
-        C1 = pooled(c1)
-        c = {'c1_done': len(C1), 'c1_crux_solved': sum(C1[n][1] > 0 for n in crux if n in C1),
-             'c1_survivors_solved': sum(C1[n][1] > 0 for n in surv if n in C1), 'md5': sorted({m for v in C1.values() for m in v[2]}),
-             'truncation_c1': trunc(c1, Lt)}
-        c2 = {T: pooled(load(f'{SF}/c2_big_{T}_s0_sh*.s0.jsonl')) for T in ('T08', 'T10')}
-        reach = {}
-        for n in surv:
-            n1, k1 = C1.get(n, (0, 0, None))[:2]
-            e = {'L_true': Lt[n], 'c1': (n1, k1)}
-            for T in ('T08', 'T10'):
-                e[T] = c2[T].get(n, (0, 0, None))[:2]
-            e['n08'] = n1 + e['T08'][0]; e['c08'] = k1 + e['T08'][1]
-            e['n10'], e['c10'] = e['T10']
-            e['reached'] = e['c08'] > 0 or e['c10'] > 0
-            reach[n] = e
-        c['survivors'] = reach
-        c['survivors_reached'] = sum(e['reached'] for e in reach.values())
-        c['reach_by_L'] = {L: [sum(e['reached'] for e in reach.values() if e['L_true'] == L), sum(1 for e in reach.values() if e['L_true'] == L)]
-                           for L in sorted({e['L_true'] for e in reach.values()})}
-        c['falsifier_fires'] = c['survivors_reached'] >= 15
-        for T in ('T08', 'T10'):
-            c[f'truncation_c2_{T}'] = trunc(load(f'{SF}/c2_big_{T}_s0_sh*.s0.jsonl'), Lt)
-        c['samples'] = sum(v[0] for v in C1.values()) + sum(v[0] for T in c2 for v in c2[T].values())
-        c['peak_mem_gb'] = max(r.get('peak_mem_gb', 0) for p in ('c1', 'c2') for f in glob.glob(f'{SF}/{p}_big_*.jsonl') for l in open(f) for r in [json.loads(l)])
-        S['C'] = c
-        print(f"\nC — big s0 {c['md5']}: c1 {c['c1_done']} / 82 done; crux solved at k 10,000: {c['c1_crux_solved']}; "
-              f"survivors solved in c1: {c['c1_survivors_solved']}; survivors reached overall: {c['survivors_reached']} / 29 "
-              f"(falsifier >= 15: {c['falsifier_fires']}); by L_true {c['reach_by_L']}")
-        for k in ('truncation_c1', 'truncation_c2_T08', 'truncation_c2_T10'):
-            print(f'  {k}:', {L: f"{v['frac']:.4%}" for L, v in c[k].items()})
-        print(f"  samples {c['samples']:,}; peak mem {c['peak_mem_gb']} GiB at batch 1,024 / max_new 512")
+    # ---------------- C (per model seed; seed 1's deep pass is spread over shard files sh* and redistributed r1*)
+    for sd in (0, 1):
+        c = c_seed(sd, Lt, surv, crux)
+        if c:
+            S['C' if sd == 0 else 'C_s1'] = c
+    if 'C' in S and 'C_s1' in S:
+        u = [n for n in surv if S['C']['survivors'][n]['reached'] or S['C_s1']['survivors'][n]['reached']]
+        S['C_union'] = {'survivors_reached_either_seed': len(u), 'names': u, 'falsifier_fires': len(u) >= 15}
+        print(f"\nC union over seeds: {len(u)} / 29 survivors reached")
     json.dump(S, open(f'{SF}/abc_summary.json', 'w'), indent=1, ensure_ascii=False)
+
+
+def c_seed(sd, Lt, surv, crux):
+    c1 = load(f'{SF}/c1_big_T08_s{sd}.s*.jsonl')
+    if not c1:
+        return None
+    pat = (lambda T: f'{SF}/c2_big_{T}_s{sd}_*.s0.jsonl')
+    C1 = pooled(c1)
+    c = {'c1_done': len(C1), 'c1_crux_solved': sum(C1[n][1] > 0 for n in crux if n in C1),
+         'c1_crux_solved_names': [n for n in crux if n in C1 and C1[n][1] > 0],
+         'c1_survivors_solved': sum(C1[n][1] > 0 for n in surv if n in C1), 'md5': sorted({m for v in C1.values() for m in v[2]}),
+         'truncation_c1': trunc(c1, Lt)}
+    c2 = {T: pooled(load(pat(T))) for T in ('T08', 'T10')}
+    reach = {}
+    for n in surv:
+        n1, k1 = C1.get(n, (0, 0, None))[:2]
+        e = {'L_true': Lt[n], 'c1': (n1, k1)}
+        for T in ('T08', 'T10'):
+            e[T] = c2[T].get(n, (0, 0, None))[:2]
+        e['n08'] = n1 + e['T08'][0]; e['c08'] = k1 + e['T08'][1]
+        e['n10'], e['c10'] = e['T10']
+        e['reached'] = e['c08'] > 0 or e['c10'] > 0
+        e['complete'] = e['reached'] or (e['n08'] >= 200000 and e['n10'] >= 200000)
+        reach[n] = e
+    c['survivors'] = reach
+    c['survivors_reached'] = sum(e['reached'] for e in reach.values())
+    c['survivors_complete'] = sum(e['complete'] for e in reach.values())
+    c['reach_by_L'] = {L: [sum(e['reached'] for e in reach.values() if e['L_true'] == L), sum(1 for e in reach.values() if e['L_true'] == L)]
+                       for L in sorted({e['L_true'] for e in reach.values()})}
+    c['falsifier_fires'] = c['survivors_reached'] >= 15
+    for T in ('T08', 'T10'):
+        c[f'truncation_c2_{T}'] = trunc(load(pat(T)), Lt)
+    c['samples'] = sum(v[0] for v in C1.values()) + sum(v[0] for T in c2 for v in c2[T].values())
+    c['peak_mem_gb'] = max(r.get('peak_mem_gb', 0) for f in glob.glob(f'{SF}/c1_big_T08_s{sd}.s*.jsonl') + glob.glob(pat('T*'))
+                           for l in open(f) for r in [json.loads(l)])
+    print(f"\nC — big s{sd} {c['md5']}: c1 {c['c1_done']} / 82 done; crux solved at k 10,000: {c['c1_crux_solved']}; "
+          f"survivors solved in c1: {c['c1_survivors_solved']}; survivors reached overall: {c['survivors_reached']} / 29 "
+          f"(complete {c['survivors_complete']} / 29; falsifier >= 15: {c['falsifier_fires']}); by L_true {c['reach_by_L']}")
+    for k in ('truncation_c1', 'truncation_c2_T08', 'truncation_c2_T10'):
+        print(f'  {k}:', {L: f"{v['frac']:.4%}" for L, v in c[k].items()})
+    print(f"  samples {c['samples']:,}; peak mem {c['peak_mem_gb']} GiB at batch 1,024 / max_new 512")
+    return c
 
 
 if __name__ == '__main__':
