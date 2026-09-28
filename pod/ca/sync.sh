@@ -16,5 +16,6 @@ case "${1:-code}" in
     ssh $SSHO -p "$POD_PORT" "root@$POD_IP" "mkdir -p /workspace/nd-takehome/{data/p2,data/ca,ckpts/sd,ckpts/ca,artifacts/ca/logs,artifacts/ca/ev,targets}"
     RS "$W/data/p2/heldout.jsonl" "$R/data/p2/"
     RS "$W/data/ca/" "$R/data/ca/"
+    RS "$W/data/heldout.jsonl" "$R/data/"   # pod/lf/gate_selftest.py reads it
     ;;
 esac

@@ -760,3 +760,23 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   250 depth-3 each, 0 renaming classes shared). Variants fixed in `ca_plan.py` (96 averages + 1
   self-average control). `sd_eval.py` gains two output fields (`hit_max_new`, `sampler_stats` incl.
   peak memory); its verdicts are unchanged.
+- 2026-09-28T04:21:40Z Pre-registration committed and pushed (`1694e10`); `podbudget ckpt-avg --set 4 2`.
+  (The pre-registration's own "~04:45 UTC" was a mis-estimate of the clock; the commit time is the record.)
+- 04:22:02Z Pod `ca1` (NVIDIA A40, $0.49/h) created. First pipeline launch failed in setup (the `hf`
+  CLI needs `pip --break-system-packages` on this image; the Lean self-test reads `data/heldout.jsonl`,
+  not pushed). Fixed both in `pod/ca/`, relaunched 04:23:55Z. Lean self-test 1,600 ok / 400 rej as
+  designed. 290 checkpoints downloaded on the pod from the public bucket; 97 averages built.
+- 04:24–05:12Z Half-A losses for 353 checkpoints; 353 half-B evaluations (3 concurrent `sd_eval.py`,
+  batch 2,500 = the whole half, peak 9.02 GB each); then the arm-R `--texts` re-evaluation.
+- ~04:30Z **Deviation (max_new).** Up to 32/2,500 rows per evaluation hit `max_new` 400, mostly in the
+  depth-3 stratum: over the policy's 0.1 % line. Instead of raising the cap blind, I re-ran the three
+  worst checkpoints' depth-3 half-B rows at 400/800/1,600 (`artifacts/ca/maxnew_diag/`): 0 verdicts
+  change, and most capped rows still hit 1,600. They're non-terminating loops, so the cap can't bias
+  counts. Kept 400 (= stage1-dynamics, so the re-draw check is at equal `max_new`).
+- 05:13Z All files pulled (`artifacts/ca/`, `ckpts/ca/`); pod deleted: 0.86 h, $0.42.
+- Per-theorem files gzipped for the repository (364 → 30 MB); `ca_analysis.py` output byte-identical
+  before and after.
+- Result: no variant meets the adoption rule. Uniform stable-phase averages drop W depth-3 by 31–39 pp
+  and don't shrink its sd. LSd3/LS6 cut W's sd 1.28×/1.30×. On F (n = 4), LSd3 cuts it 4.3×.
+  Details `numbers.md` CA1–CA5.
+- Arm-R texts (the stage1-dynamics review's open gap): 0/50,000 verdicts differ, slices identical.

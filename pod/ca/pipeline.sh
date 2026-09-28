@@ -11,7 +11,7 @@ echo "setup $(ts)"
   ~/.elan/bin/lean --version; nproc; cat /sys/fs/cgroup/cpu.max 2>/dev/null
   nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
   python3 -c "import torch; print('torch', torch.__version__, torch.cuda.get_device_name(0))"
-  command -v hf || pip install -q -U 'huggingface_hub[cli]' 2>&1 | tail -2
+  command -v hf || pip install -q --break-system-packages -U 'huggingface_hub[cli]' 2>&1 | tail -2
   LEAN_GATE_WORKERS=6 LEAN_GATE_LOG=artifacts/ca/gate_selftest.jsonl python3 pod/lf/gate_selftest.py
 } > $L/setup.log 2>&1
 echo "download $(ts)"

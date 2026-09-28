@@ -193,3 +193,13 @@ STAGE1-DYNAMICS DONE 2026-09-27T21:07:32Z
   W (8 seeds) and F (4 seeds) trajectories; no training. Budget $2 / 4 pod-hours.
   Pre-registration `preregistration/ckpt-avg.md`; held-out split `data/ca/` (half A selects,
   half B reports) committed with it.
+- Result: **no variant meets the adoption rule.** On arm W (8 seeds, half B), averaging the last 2/4/8
+  stable-phase checkpoints *lowers* depth-3 from 0.62 (decayed endpoint) to 0.31/0.26/0.23 without
+  shrinking its sd (0.34–0.37 vs 0.31). Loss-selected checkpoints (half-A depth-3 / 6-line loss) raise the
+  mean by +7/+8 pp but cut the sd only 1.28×/1.30×. On arm F (n = 4), LSd3 cuts the sd 4.3×, but
+  costs 5 pp on len5. Also closed stage1-dynamics' arm-R texts gap (0/50,000 verdicts changed).
+  Cost 0.86 A40-hours, $0.42. Deliverables: `run_ckpt_avg.md`, `numbers.md` § ckpt-avg,
+  `artifacts/ca/summary.json`, `figures/ca_depth3.png`, `ca_*.py`, `pod/ca/`, bucket
+  `hf://buckets/dan-pandori/nd-rl/ckpt-avg/{artifacts,ckpts,data}/ca`.
+
+CKPT-AVG DONE 2026-09-28T05:19:08Z

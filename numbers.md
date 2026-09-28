@@ -1509,3 +1509,94 @@ and `data/sd/` (`train_fresh.jsonl` and `pool_fresh.json`).
 Five of the six misses (E2, E8, E11, E12, E19) are in one direction: **the oscillation and the floor
 are larger than I predicted.** The sixth (E16) is favourable. No expectation missed in the direction
 "the effect is smaller than claimed."
+
+# ckpt-avg (run `ckpt-avg`, 2026-09-28)
+
+**Model for every number in this section:** run `stage1-dynamics`' checkpoints — 3,214,336-param GPT
+(4 layers, d 256, 8 heads), **from scratch**, `lean_seq`, **cap 6**, WSD (lr 1e-3, linear decay to 1e-4
+over the last 20 % of steps). **Arm W** = `ckpts/sd/w_s{0..7}*` (+ `w6_s*`, `w12_s*`), trained on
+`data/p2/train_depth3_f0_a1.jsonl` (155,000, 0 depth-3); **arm F** = `ckpts/sd/f_s{0..3}*`, trained on
+`data/sd/train_fresh.jsonl` (572,759, 0 depth-3); plus the 97 uniform weight averages of them in
+`ckpts/ca/` (`ca_average.py`; members in each file's `extra.avg_of`). **Judge: Lean alone**
+(`sd_eval.py`; `nd_verify` never called). **Eval set: half B** of `data/p2/heldout.jsonl`
+(`data/ca/heldout_B.jsonl`, 2,500; 250 depth-3, 250 len6 non-depth-3, 500 each len2–5), greedy, batch
+2,500, `max_new` 400, fast path. **Selection set: half A** (`data/ca/heldout_A.jsonl`), per-slice loss
+(`artifacts/ca/valloss_A.jsonl`, `train.py`'s `val_bins`). Source of every number below:
+`artifacts/ca/summary.json` (← `ca_analysis.py` ← `artifacts/ca/ev/*.jsonl.gz`), table dump
+`artifacts/ca/tables.txt`. Pre-registration: `preregistration/ckpt-avg.md` (commit `1694e10`,
+04:21:40Z; first pod 04:22:02Z).
+
+## CA1 — arm W, 8 seeds, half B: mean (across-seed sd)
+
+| variant | len4 | len5 | len6 | depth-3 | all | high-mode seeds (d3 ≥ 0.44) | d3 sd ratio E24/variant [F 95 %] |
+|---|---|---|---|---|---|---|---|
+| E24 (decayed 24k endpoint) | 0.992 (0.005) | 0.984 (0.008) | 0.797 (0.151) | **0.616 (0.306)** | 0.954 | 7/8 | — |
+| A24_K2 (avg 18k,19k) | 0.989 | 0.970 | 0.637 (0.171) | 0.308 (0.342) | 0.918 | 3/8 | 0.89 [0.40, 2.00] |
+| A24_K4 (16–19k) | 0.992 | 0.975 | 0.619 (0.174) | 0.264 (0.350) | 0.917 | 2/8 | 0.87 [0.39, 1.95] |
+| A24_K8 (12–19k) | 0.993 | 0.973 | 0.600 (0.187) | 0.227 (0.374) | 0.913 | 2/8 | 0.82 [0.37, 1.83] |
+| T24_3 (22k, 23k, E24) | 0.993 | 0.982 | 0.780 (0.181) | 0.576 (0.361) | 0.951 | 5/8 | 0.85 [0.38, 1.90] |
+| T24_5 (20k–23k, E24) | 0.994 | 0.982 | 0.759 (0.185) | 0.535 (0.368) | 0.947 | 5/8 | 0.83 [0.37, 1.86] |
+| LS6 (min half-A 6-line loss) | 0.986 | 0.972 | 0.827 (0.128) | 0.693 (0.236) | 0.956 | 7/8 | 1.30 [0.58, 2.90] |
+| LSd3 (min half-A depth-3 loss) | 0.966 | 0.956 | 0.811 (0.137) | 0.683 (0.239) | 0.944 | 7/8 | 1.28 [0.57, 2.86] |
+| E12 | 0.988 | 0.970 | 0.611 (0.177) | 0.258 (0.353) | 0.913 | 2/8 | 0.87 |
+| A12_K2 / K4 / K8 | 0.968 / 0.972 / 0.927 | 0.940 / 0.943 / 0.910 | 0.558 / 0.556 / 0.480 | 0.183 / 0.177 / 0.067 (sd 0.325 / 0.303 / 0.144) | 0.891 / 0.892 / 0.858 | 2 / 2 / 0 | 0.94 / 1.01 / 2.13 |
+| E6 | 0.962 | 0.934 | 0.626 (0.154) | 0.326 (0.310) | 0.901 | 4/8 | 0.99 |
+| A6_K2 / K4 | 0.863 / 0.780 | 0.838 / 0.762 | 0.543 / 0.408 | 0.274 / 0.115 (sd 0.282 / 0.127) | 0.838 / 0.770 | 3 / 0 | 1.09 / 2.41 |
+
+len2 ≥ 0.982 and len3 ≥ 0.977 in every row except the 6k averages (A6_K2 len3 0.958, A6_K4 0.918). The two sd ratios > 2 (A12_K8, A6_K4) come
+from collapsing every seed to the floor (depth-3 mean −55 and −50 pp vs E24), not from removing the
+oscillation. Paired depth-3 differences vs E24 (t 95 %): A24_K8 **−38.9 pp [−63.9, −13.9]**, T24_3
+−4.0 [−23.7, +15.7], LS6 +7.7 [−8.9, +24.2], LSd3 +6.7 [−10.4, +23.8]. LSd3 costs len4 −2.6 pp and len5
+−2.8 pp; LS6 costs ≤ 1.2 pp on every bin. Depth-3 per seed (W 0–7): E24 0.07 0.94 0.64 0.45 0.92 0.94
+0.50 0.48; LSd3 0.53 0.94 0.57 0.30 0.92 0.94 0.50 0.77; A24_K8 0.04 0.87 0.01 0.02 0.79 0.05 0.02 0.02.
+LS picks (W): LS6 = step 14k, E24, E24, step 20k, E24, E24, E24, step 22k; LSd3 same except seed 2 → step 4k.
+**Adoption rule: met by no candidate** (`summary.json` → `rule`).
+
+## CA2 — arm F, 4 seeds, half B (secondary; n = 4)
+
+| variant | len5 | len6 | depth-3 | high | d3 sd ratio [F 95 %] |
+|---|---|---|---|---|---|
+| E24 | 0.989 | 0.684 (0.197) | 0.379 (0.397) | 1/4 | — |
+| A24_K2 / K4 / K8 | 0.976 / 0.975 / 0.970 | 0.694 / 0.672 / 0.644 | 0.411 / 0.367 / 0.326 (sd 0.46 / 0.39 / 0.35) | 2 / 2 / 2 | 0.86 / 1.02 / 1.13 |
+| T24_3 | 0.988 | 0.699 (0.231) | 0.412 (0.467) | 2/4 | 0.85 |
+| LS6 | 0.944 | 0.849 (0.075) | 0.755 (0.123) | 4/4 | 3.23 [0.82, 12.7] |
+| LSd3 | 0.938 | 0.835 (0.048) | **0.737 (0.092)** | 4/4 | **4.31 [1.10, 17.0]** |
+
+LS costs len5 −4.5 / −5.1 pp and len4 −2.6 / −2.9 pp on F (would fail the 2 pp clause).
+
+## CA3 — averages vs their constituents (depth-3, half B)
+
+Easy bins are not broken: on len2–len5 every average is within 0.2 pp of or above its constituents'
+mean (minimum difference −0.2 pp, T24_3) and never below its worst constituent. On depth-3 the average lands **between** its
+constituents' min and max in most seeds (A24_K8: 6/8 between, 2/8 above the max) and **above the
+constituents' mean in only 2/8** (A24_K2 4/8, A24_K4 4/8, T24_3 5/8; F A24_K8 2/4). The
+trajectory-mean *readout* (the mean of a run's own trajectory evaluations, not a model) has depth-3 mean
+0.273, sd **0.110** on W (0.267, 0.127 on F) — 2.8× quieter than E24, at a different mean.
+
+## CA4 — checks
+
+- Self-average control `w_s0.CTRL_self19000` (step 19000 averaged with itself): per-theorem verdicts
+  identical to step 19000 (`summary.json` → `control_self_average_identical: true`).
+- Re-draw vs `stage1-dynamics`' own evaluations (batch 512, full file) of the same 256 checkpoints,
+  restricted to half B: **1,176 / 640,000** per-theorem verdicts differ (0.18 %; depth-3 268 / 64,000,
+  0.42 %) — inside `NOISE_FLOOR.md`'s ≈ 1 row in 128 re-draw rate (`artifacts/ca/redraw.json`).
+- Half-A depth-3 loss vs half-B depth-3 accuracy over all 208 W checkpoints: Spearman **−0.896**.
+- `max_new` 400: 549 row-hits over 353 evaluations, max 32 / 2,500 in one evaluation, concentrated in the
+  depth-3 stratum (> 0.1 % of it). Diagnostic (`artifacts/ca/maxnew_diag/`, the three worst checkpoints,
+  depth-3 half B at 400 / 800 / 1,600): hits 29/26/25, 12/4/4, 11/8/8; **0 verdicts change** between 400
+  and 1,600 — the capped rows are non-terminating loops, not long proofs.
+- Peak GPU memory 9.02 GB (`torch.cuda.max_memory_allocated`, batch 2,500, three processes on one A40).
+- Mean term size of solved depth-3 proofs: E24 154.9, LSd3 165.6, A24_K8 137.7 Lean tokens (W); 6-line
+  E24 126.8, LSd3 131.2. Lines are not re-reported (`L_true` labels are ND-derived upper bounds).
+
+## CA5 — arm R texts (closes the stage1-dynamics review's open gap)
+
+`sd_eval.py --texts` on the ten arm-R checkpoints (`ckpts/sd/r6{a..d}_s{0,1}.pt`, `r24{a,b}_s0.pt`), full
+held-out file, stage1-dynamics' settings (batch 512, max_new 400, A40): **0 / 50,000 verdicts differ**
+from `artifacts/sd/ev/r*.jsonl`, every slice count identical; 49,983 rows carry text (17 empty: no
+`<eos>`). Files: `artifacts/ca/ev_r/`.
+
+## Cost
+
+One NVIDIA A40, billed $0.49/h: **0.86 pod-hours, $0.42** of 4 h / $2. RunPod balance $284.47 after.
+Bucket: `hf://buckets/dan-pandori/nd-rl/ckpt-avg/{artifacts/ca,ckpts/ca,data/ca}`.
