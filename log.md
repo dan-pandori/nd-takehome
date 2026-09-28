@@ -652,3 +652,12 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   (smoke run, k = 32), the same model solves 5 / 6 generator and 0 / 17 textbook theorems. The old "wall at 13" was
   largely a textbook-schema wall at tiny n. This misses the pre-registered `L*` 13 badly. `L*` is censored at 16 again, so every
   model is also re-read on the 70 `L_true ≥ 17` theorems (queue C).
+- 22:00  Whole-proof checkpoints OOM at batch 4096 with `max_new` 768 on 24 GB (the policy's 11 GB was at `max_new` 288). They were
+  re-queued at batch 2048 (lane D).
+- 23:36  Pass 1 complete: 14 models × (600-subset + ≥ 17 file), `artifacts/lp/rr/`, tables `artifacts/lp/rr_tables.md`. Lean
+  accepts all 643 shortest accepted proofs (term size 4–30, median 8). **Truncation above the policy's 0.1 %:**
+  - whole-proof: 0.04–0.70 % of samples hit `max_new` 768 (K14 frozen 0.70 %);
+  - state: 0.04–0.27 % overall, and up to 1.06 % in a bin, almost all `max_action` 256.
+  Some unsolved theorems had a truncated sample: up to 42 per state model. **Pass 2** re-reads all 14 models with the caps raised:
+  state `max_action` 512 at batch 2048; whole-proof `max_new` 1536 at batch 1024 (the largest that fits with that
+  `max_new`). Pass 2 is the reported pass. Pass 1 is kept as an independent re-draw at lower caps.

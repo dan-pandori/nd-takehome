@@ -1,0 +1,13 @@
+[lean_gate] 153600 samples, parse-fail 29885, distinct checked 74639: lean ok 247, lean rej 74392; lean 58.2s wall (4091.8s proc, 128 workers)
+ds-generator__la_T1_c0_s1_r8.pt on transfer_long_rr600.jsonl k=256 SOLVED 12/600 = 0.020 [0.011,0.035]
+  len 11: 7/100 = 0.070 [0.034,0.137]
+  len 12: 3/100 = 0.030 [0.010,0.085]
+  len 13: 1/100 = 0.010 [0.002,0.054]
+  len 14: 1/100 = 0.010 [0.002,0.054]
+  len 15: 0/100 = 0.000 [0.000,0.037]
+  len 16: 0/100 = 0.000 [0.000,0.037]
+  written hist {11: 9, 12: 12, 13: 1, 14: 2}
+  pruned hist {8: 1, 9: 2, 10: 14, 11: 4, 12: 1, 13: 2}
+  frontier written 12 pruned 10
+  reasons [('lean rejected', 123343), ('lean_seq parse: unbound', 20376), ('lean_seq parse: formula', 6558), ('lean_seq parse: expected (', 601), ('lean_seq parse: expected :=', 528), ('lean_seq parse: expected )', 489)]
+{"n": 600, "solved": 12, "rate": 0.02, "ci": [0.011477064060296744, 0.03463039193478542], "written_hist": {"11": 9, "12": 12, "13": 1, "14": 2}, "pruned_hist": {"8": 1, "9": 2, "10": 14, "11": 4, "12": 1, "13": 2}, "frontier_written": 12, "frontier_pruned": 10, "reasons": {"lean rejected": 123343, "lean_seq parse: unbound": 20376, "lean_seq parse: formula": 6558, "lean_seq parse: expected (": 601, "lean_seq parse: expected :=": 528, "lean_seq parse: expected )": 489, "lean_seq parse: name": 440, "lean_seq parse: exact not last": 317, "lean_seq parse: PR position": 220, "lean_seq parse: expected fun": 114}, "ckpt": "ckpts/lp/ds-generator__la_T1_c0_s1_r8.pt", "in": "data/ladder/transfer_long_rr600.jsonl", "k": 256, "temperature": 0.8, "seed": 0, "batch": 2048, "state_mode": false, "tok_mode": "lean_seq", "gen_s": 219.8833134174347, "wall_s": 220.06475377082825, "peak_mem_gb": 12.238223552703857, "n_samples": 153600, "max_new": 768, "trunc_frac": 0.00042317708333333335, "declen_max": 768, "sample_stats": {"steps": 28816, "rows": 153600, "rowsteps": 28727408, "prompt_len_max": 134, "chunks": 75, "stop_eos": 153535, "stop_exact": 0, "stop_goal": 0, "sample_wall_s": 154.65919995307922, "peak_alloc_gb": 12.238223552703857, "peak_reserved_gb": 23.021484375}}

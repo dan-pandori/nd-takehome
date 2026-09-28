@@ -1,0 +1,18 @@
+[lean_gate] 736 samples, parse-fail 105, distinct checked 559: lean ok 0, lean rej 559; lean 2.3s wall (3.5s proc, 128 workers)
+ds-generator__la_T1_c0_s0_r8.pt on smoke13.jsonl k=32 SOLVED 0/23 = 0.000 [0.000,0.143]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 631), ('lean_seq parse: unbound', 98), ('lean_seq parse: expected (', 2), ('lean_seq parse: name', 2), ('lean_seq parse: exact not last', 1), ('lean_seq parse: expected None', 1)]
+{"n": 23, "solved": 0, "rate": 0.0, "ci": [0.0, 0.14312112541726274], "written_hist": {}, "pruned_hist": {}, "frontier_written": 0, "frontier_pruned": 0, "reasons": {"lean rejected": 631, "lean_seq parse: unbound": 98, "lean_seq parse: expected (": 2, "lean_seq parse: name": 2, "lean_seq parse: exact not last": 1, "lean_seq parse: expected None": 1, "lean_seq parse: eof": 1}, "ckpt": "ckpts/lp/ds-generator__la_T1_c0_s0_r8.pt", "in": "data/lp/smoke13.jsonl", "k": 32, "temperature": 0.8, "seed": 0, "batch": 1024, "state_mode": false, "tok_mode": "lean_seq", "gen_s": 4.529461860656738, "wall_s": 4.530796051025391, "peak_mem_gb": 2.9032349586486816, "n_samples": 736, "max_new": 512, "trunc_frac": 0.0, "declen_max": 298, "sample_stats": {"steps": 304, "rows": 736, "rowsteps": 96208, "prompt_len_max": 84, "chunks": 1, "stop_eos": 736, "stop_exact": 0, "stop_goal": 0, "sample_wall_s": 2.107417106628418, "peak_alloc_gb": 2.9032349586486816, "peak_reserved_gb": 3.91015625}}
+[lean_gate] 736 samples, parse-fail 235, distinct checked 431: lean ok 29, lean rej 402; lean 2.1s wall (2.6s proc, 128 workers)
+state-env__la_T1_SN_s0_r8.pt on smoke13.jsonl k=32 SOLVED 5/23 = 0.217 [0.097,0.419]
+  len 13: 3/13 = 0.231 [0.082,0.503]
+  len 14: 2/10 = 0.200 [0.057,0.510]
+  written hist {13: 2, 14: 3, 15: 2, 17: 1, 20: 2, 23: 4, 26: 2, 29: 1}
+  pruned hist {13: 3, 14: 3, 15: 1, 17: 1, 20: 2, 23: 4, 26: 2, 29: 1}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 472), ('lean_seq parse: env: Or.elim on non-or', 140), ('lean_seq parse: env: unbound', 32), ('lean_seq parse: env: binder mismatch', 32), ('lean_seq parse: env: exact goal mismatch', 22), ('lean_seq parse: env: formula', 4)]
+{"n": 23, "solved": 5, "rate": 0.21739130434782608, "ci": [0.09663835601719065, 0.4190388018273492], "written_hist": {"13": 2, "14": 3, "15": 2, "17": 1, "20": 2, "23": 4, "26": 2, "29": 1}, "pruned_hist": {"13": 3, "14": 3, "15": 1, "17": 1, "20": 2, "23": 4, "26": 2, "29": 1}, "frontier_written": 0, "frontier_pruned": 0, "reasons": {"lean rejected": 472, "lean_seq parse: env: Or.elim on non-or": 140, "lean_seq parse: env: unbound": 32, "lean_seq parse: env: binder mismatch": 32, "lean_seq parse: env: exact goal mismatch": 22, "lean_seq parse: env: formula": 4, "lean_seq parse: env: assign": 3, "lean_seq parse: env: PR position": 1, "lean_seq parse: env: have name": 1}, "ckpt": "ckpts/lp/state-env__la_T1_SN_s0_r8.pt", "in": "data/lp/smoke13.jsonl", "k": 32, "temperature": 0.8, "seed": 0, "batch": 1024, "state_mode": true, "tok_mode": "lean_staten", "gen_s": 10.105065822601318, "wall_s": 10.11023211479187, "peak_mem_gb": 2.277554512023926, "n_samples": 736, "max_action": 256, "max_steps": 48}
