@@ -615,3 +615,15 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   the original's 373 (ge8 306 vs 307). The fine-tuning step is not bit-reproducible on this hardware, so the
   re-trained ladder is a genuinely different model and the `la_T1_sc_s1rerun_*` name is load-bearing, not a
   formality. `QUESTIONS.md` corrected accordingly.
+- **2026-09-28 01:48** All sampling complete. Final falsifier count **29** after the base was given 200,000
+  attempts at each of T = 0.8 and T = 1.0 per crux theorem; survivors decay 44 → 35 → 29 as depth goes
+  10,000 → 50,000 → 200,000 and then plateau, far above the threshold of 20.
+- **02:05** `gate_la_s0.leanrej.jsonl` was 593 MB of Lean-rejected EI-training proofs — bulk failure storage,
+  which the brief forbids. Replaced by a 5,000-line uniform reservoir sample of its 787,691 records (and the
+  same for the seed-1 re-train's 778,792). The per-theorem records were designed not to store failures in bulk
+  and the whole sampling record for ≈ 47 M samples is ≈ 12 MB; the gate dumps were the one leak.
+- **03:02** Seed-1 EI re-train finished: 8 rounds, transfer **972 / 2,285**, `L*` 11. Uploaded as
+  `la_T1_sc_s1rerun_*`. **No number in this run is measured on it.**
+- **03:06** All five pods deleted, each after `pod/sc/pullcheck.sh` reported everything pulled (it caught 16
+  un-pulled job logs on `sc1` that the old jsonl-only check would have missed). Final cost **20.37 pod-hours,
+  $9.99** of the $15 budget; RunPod balance **$136.49**, above the $100 floor throughout.

@@ -1,0 +1,507 @@
+START 2026-09-28T00:40:23Z
+[sc_ladder_ei] shimmed expert_iter.relabel (broken import on origin/dan 9a1db24)
+[lean_gate] 143840 samples, parse-fail 54051, distinct checked 79599: lean ok 7089, lean rej 72510; lean 301.1s wall (1761.3s proc, 6 workers)
+[la_T1_sc_s1rerun r1] targets (this round) SOLVED 747/4495 = 0.166 [0.156,0.177]
+  len 7: 593/1800 = 0.329 [0.308,0.352]
+  len 8: 135/1000 = 0.135 [0.115,0.158]
+  len 9: 19/1004 = 0.019 [0.012,0.029]
+  len 10: 0/456 = 0.000 [0.000,0.008]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 714, 8: 245, 9: 38}
+  pruned hist {5: 30, 6: 200, 7: 557, 8: 197, 9: 13}
+  frontier written 9 pruned 9
+  reasons [('lean rejected', 81459), ('lean_seq parse: unbound', 30154), ('lean_seq parse: expected )', 18410), ('lean_seq parse: formula', 2195), ('lean_seq parse: expected (', 677), ('lean_seq parse: expected :=', 659)]
+[lean_gate] 73120 samples, parse-fail 25931, distinct checked 42120: lean ok 361, lean rej 41759; lean 168.7s wall (985.9s proc, 6 workers)
+[la_T1_sc_s1rerun r1] transfer (this round, pass@32) SOLVED 57/2285 = 0.025 [0.019,0.032]
+  len 7: 27/300 = 0.090 [0.063,0.128]
+  len 8: 19/300 = 0.063 [0.041,0.097]
+  len 9: 10/1010 = 0.010 [0.005,0.018]
+  len 10: 1/451 = 0.002 [0.000,0.012]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {6: 1, 7: 31, 8: 21, 9: 11, 10: 1}
+  pruned hist {5: 3, 6: 3, 7: 34, 8: 22, 9: 2, 10: 1}
+  frontier written 9 pruned 8
+  reasons [('lean rejected', 46778), ('lean_seq parse: unbound', 16009), ('lean_seq parse: expected )', 6265), ('lean_seq parse: formula', 1578), ('lean_seq parse: expected (', 516), ('lean_seq parse: expected :=', 371)]
+[lean_gate] 2285 samples, parse-fail 789, distinct checked 1496: lean ok 17, lean rej 1479; lean 5.2s wall (20.3s proc, 6 workers)
+[la_T1_sc_s1rerun r1] transfer greedy SOLVED 17/2285 = 0.007 [0.005,0.012]
+  len 7: 10/300 = 0.033 [0.018,0.060]
+  len 8: 5/300 = 0.017 [0.007,0.038]
+  len 9: 1/1010 = 0.001 [0.000,0.006]
+  len 10: 1/451 = 0.002 [0.000,0.012]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 10, 8: 5, 9: 1, 10: 1}
+  pruned hist {5: 1, 6: 1, 7: 8, 8: 6, 10: 1}
+  frontier written 8 pruned 8
+  reasons [('lean rejected', 1479), ('lean_seq parse: unbound', 468), ('lean_seq parse: expected )', 229), ('lean_seq parse: formula', 39), ('lean_seq parse: expected (', 18), ('lean_seq parse: PR position', 11)]
+[lean_gate] 5000 samples, parse-fail 311, distinct checked 4689: lean ok 4481, lean rej 208; lean 9.4s wall (52.9s proc, 6 workers)
+[la_T1_sc_s1rerun r1] heldout greedy SOLVED 4481/5000 = 0.896 [0.887,0.904]
+  len 2: 997/1000 = 0.997 [0.991,0.999]
+  len 3: 992/1000 = 0.992 [0.984,0.996]
+  len 4: 966/1000 = 0.966 [0.953,0.976]
+  len 5: 943/1000 = 0.943 [0.927,0.956]
+  len 6: 583/1000 = 0.583 [0.552,0.613]
+  written hist {2: 1023, 3: 992, 4: 951, 5: 985, 6: 530}
+  pruned hist {2: 1023, 3: 996, 4: 953, 5: 980, 6: 529}
+  frontier written 6 pruned 6
+  reasons [('lean_seq parse: expected )', 217), ('lean rejected', 208), ('lean_seq parse: unbound', 81), ('lean_seq parse: formula', 6), ('lean_seq parse: expected :=', 4), ('lean_seq parse: no-eos', 1)]
+[la_T1_sc_s1rerun r1] targets cumulative: solved 747/4495 L*=9 ge={7: 747, 8: 154, 9: 19, 10: 0, 11: 0, 12: 0}
+[la_T1_sc_s1rerun r1] transfer cumulative: solved 57/2285 L*=9 ge={7: 57, 8: 30, 9: 11, 10: 1, 11: 0, 12: 0}
+python3 train.py --data artifacts/sc/la_T1_sc_s1rerun/mix_1.jsonl --init ckpts/lf/stage1_a1_seq_s1.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/ladder/la_T1_sc_s1rerun_r1.pt --seed 1001 --log_every 200
+params 3214336 mode lean_seq shift True
+train records 23928 max len 387
+step 200 loss 0.0436 lr 2.53e-04 21s
+step 400 loss 0.0463 lr 1.09e-04 39s
+step 600 loss 0.0467 lr 3.00e-05 58s
+saved ckpts/ladder/la_T1_sc_s1rerun_r1.pt
+=== round 1 done in 980s; new proofs 997; cum targets solved 747 L*=9; transfer L*=9
+[lean_gate] 143840 samples, parse-fail 17360, distinct checked 106875: lean ok 38026, lean rej 68849; lean 400.1s wall (2341.3s proc, 6 workers)
+[la_T1_sc_s1rerun r2] targets (this round) SOLVED 1911/4495 = 0.425 [0.411,0.440]
+  len 7: 1168/1800 = 0.649 [0.627,0.671]
+  len 8: 534/1000 = 0.534 [0.503,0.565]
+  len 9: 191/1004 = 0.190 [0.167,0.216]
+  len 10: 17/456 = 0.037 [0.023,0.059]
+  len 11: 1/99 = 0.010 [0.002,0.055]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 1287, 8: 875, 9: 311, 10: 54, 11: 4}
+  pruned hist {5: 45, 6: 282, 7: 1169, 8: 811, 9: 195, 10: 26, 11: 3}
+  frontier written 10 pruned 10
+  reasons [('lean rejected', 79286), ('lean_seq parse: unbound', 11666), ('lean_seq parse: expected )', 1934), ('lean_seq parse: formula', 1904), ('lean_seq parse: exact not last', 418), ('lean_seq parse: expected (', 399)]
+[lean_gate] 73120 samples, parse-fail 13756, distinct checked 51323: lean ok 5544, lean rej 45779; lean 201.8s wall (1172.9s proc, 6 workers)
+[la_T1_sc_s1rerun r2] transfer (this round, pass@32) SOLVED 364/2285 = 0.159 [0.145,0.175]
+  len 7: 63/300 = 0.210 [0.168,0.260]
+  len 8: 109/300 = 0.363 [0.311,0.419]
+  len 9: 173/1010 = 0.171 [0.149,0.196]
+  len 10: 19/451 = 0.042 [0.027,0.065]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {6: 1, 7: 67, 8: 137, 9: 227, 10: 54}
+  pruned hist {5: 3, 6: 7, 7: 100, 8: 186, 9: 165, 10: 25}
+  frontier written 10 pruned 10
+  reasons [('lean rejected', 52567), ('lean_seq parse: unbound', 9456), ('lean_seq parse: formula', 1440), ('lean_seq parse: expected )', 1421), ('lean_seq parse: name', 303), ('lean_seq parse: expected (', 302)]
+[lean_gate] 2285 samples, parse-fail 372, distinct checked 1913: lean ok 232, lean rej 1681; lean 6.8s wall (32.2s proc, 6 workers)
+[la_T1_sc_s1rerun r2] transfer greedy SOLVED 232/2285 = 0.102 [0.090,0.115]
+  len 7: 43/300 = 0.143 [0.108,0.188]
+  len 8: 88/300 = 0.293 [0.245,0.347]
+  len 9: 95/1010 = 0.094 [0.078,0.114]
+  len 10: 6/451 = 0.013 [0.006,0.029]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 37, 8: 91, 9: 94, 10: 10}
+  pruned hist {5: 1, 6: 6, 7: 47, 8: 111, 9: 63, 10: 4}
+  frontier written 10 pruned 9
+  reasons [('lean rejected', 1681), ('lean_seq parse: unbound', 250), ('lean_seq parse: expected )', 50), ('lean_seq parse: formula', 36), ('lean_seq parse: expected (', 8), ('lean_seq parse: expected :=', 7)]
+[lean_gate] 5000 samples, parse-fail 25, distinct checked 4975: lean ok 4818, lean rej 157; lean 9.9s wall (55.5s proc, 6 workers)
+[la_T1_sc_s1rerun r2] heldout greedy SOLVED 4818/5000 = 0.964 [0.958,0.968]
+  len 2: 997/1000 = 0.997 [0.991,0.999]
+  len 3: 992/1000 = 0.992 [0.984,0.996]
+  len 4: 971/1000 = 0.971 [0.959,0.980]
+  len 5: 941/1000 = 0.941 [0.925,0.954]
+  len 6: 917/1000 = 0.917 [0.898,0.933]
+  written hist {2: 1018, 3: 987, 4: 954, 5: 978, 6: 879, 7: 2}
+  pruned hist {2: 1020, 3: 986, 4: 956, 5: 977, 6: 877, 7: 2}
+  frontier written 6 pruned 6
+  reasons [('lean rejected', 157), ('lean_seq parse: unbound', 13), ('lean_seq parse: formula', 9), ('lean_seq parse: no-eos', 1), ('lean_seq parse: expected )', 1), ('lean_seq parse: expected :=', 1)]
+[la_T1_sc_s1rerun r2] targets cumulative: solved 1911/4495 L*=10 ge={7: 1911, 8: 743, 9: 209, 10: 18, 11: 1, 12: 0}
+[la_T1_sc_s1rerun r2] transfer cumulative: solved 374/2285 L*=10 ge={7: 374, 8: 306, 9: 193, 10: 19, 11: 0, 12: 0}
+python3 train.py --data artifacts/sc/la_T1_sc_s1rerun/mix_2.jsonl --init ckpts/ladder/la_T1_sc_s1rerun_r1.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/ladder/la_T1_sc_s1rerun_r2.pt --seed 1002 --log_every 200
+params 3214336 mode lean_seq shift True
+train records 29964 max len 417
+step 200 loss 0.0415 lr 2.53e-04 22s
+step 400 loss 0.0387 lr 1.09e-04 43s
+step 600 loss 0.0395 lr 3.00e-05 65s
+saved ckpts/ladder/la_T1_sc_s1rerun_r2.pt
+=== round 2 done in 1107s; new proofs 1551; cum targets solved 1911 L*=10; transfer L*=10
+[lean_gate] 143840 samples, parse-fail 12465, distinct checked 109776: lean ok 50542, lean rej 59234; lean 366.2s wall (2138.6s proc, 6 workers)
+[la_T1_sc_s1rerun r3] targets (this round) SOLVED 2258/4495 = 0.502 [0.488,0.517]
+  len 7: 1278/1800 = 0.710 [0.689,0.730]
+  len 8: 627/1000 = 0.627 [0.597,0.656]
+  len 9: 310/1004 = 0.309 [0.281,0.338]
+  len 10: 42/456 = 0.092 [0.069,0.122]
+  len 11: 1/99 = 0.010 [0.002,0.055]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 1438, 8: 1069, 9: 535, 10: 123, 11: 14}
+  pruned hist {5: 54, 6: 327, 7: 1360, 8: 996, 9: 364, 10: 73, 11: 5}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 68115), ('lean_seq parse: unbound', 9533), ('lean_seq parse: formula', 1356), ('lean_seq parse: exact not last', 347), ('lean_seq parse: expected (', 339), ('lean_seq parse: name', 233)]
+[lean_gate] 73120 samples, parse-fail 10937, distinct checked 53840: lean ok 8797, lean rej 45043; lean 200.2s wall (1165.5s proc, 6 workers)
+[la_T1_sc_s1rerun r3] transfer (this round, pass@32) SOLVED 535/2285 = 0.234 [0.217,0.252]
+  len 7: 84/300 = 0.280 [0.232,0.333]
+  len 8: 126/300 = 0.420 [0.366,0.477]
+  len 9: 290/1010 = 0.287 [0.260,0.316]
+  len 10: 35/451 = 0.078 [0.056,0.106]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 89, 8: 168, 9: 415, 10: 116, 11: 4}
+  pruned hist {5: 1, 6: 10, 7: 134, 8: 276, 9: 311, 10: 59, 11: 1}
+  frontier written 10 pruned 10
+  reasons [('lean rejected', 51449), ('lean_seq parse: unbound', 8359), ('lean_seq parse: formula', 1204), ('lean_seq parse: expected (', 333), ('lean_seq parse: name', 216), ('lean_seq parse: exact not last', 198)]
+[lean_gate] 2285 samples, parse-fail 303, distinct checked 1982: lean ok 362, lean rej 1620; lean 7.1s wall (34.1s proc, 6 workers)
+[la_T1_sc_s1rerun r3] transfer greedy SOLVED 362/2285 = 0.158 [0.144,0.174]
+  len 7: 56/300 = 0.187 [0.147,0.235]
+  len 8: 105/300 = 0.350 [0.298,0.406]
+  len 9: 188/1010 = 0.186 [0.163,0.211]
+  len 10: 13/451 = 0.029 [0.017,0.049]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 49, 8: 106, 9: 180, 10: 24, 11: 3}
+  pruned hist {6: 8, 7: 61, 8: 145, 9: 130, 10: 17, 11: 1}
+  frontier written 10 pruned 10
+  reasons [('lean rejected', 1620), ('lean_seq parse: unbound', 242), ('lean_seq parse: formula', 34), ('lean_seq parse: expected )', 6), ('lean_seq parse: expected (', 5), ('lean_seq parse: ORE box', 4)]
+[lean_gate] 5000 samples, parse-fail 22, distinct checked 4978: lean ok 4839, lean rej 139; lean 9.9s wall (54.9s proc, 6 workers)
+[la_T1_sc_s1rerun r3] heldout greedy SOLVED 4839/5000 = 0.968 [0.963,0.972]
+  len 2: 998/1000 = 0.998 [0.993,0.999]
+  len 3: 995/1000 = 0.995 [0.988,0.998]
+  len 4: 966/1000 = 0.966 [0.953,0.976]
+  len 5: 940/1000 = 0.940 [0.924,0.953]
+  len 6: 940/1000 = 0.940 [0.924,0.953]
+  written hist {2: 1018, 3: 987, 4: 955, 5: 969, 6: 906, 7: 2, 8: 2}
+  pruned hist {2: 1019, 3: 987, 4: 958, 5: 965, 6: 906, 7: 2, 8: 2}
+  frontier written 6 pruned 6
+  reasons [('lean rejected', 139), ('lean_seq parse: unbound', 10), ('lean_seq parse: formula', 6), ('lean_seq parse: expected :=', 3), ('lean_seq parse: ORE box', 1), ('lean_seq parse: expected ;', 1)]
+[la_T1_sc_s1rerun r3] targets cumulative: solved 2258/4495 L*=10 ge={7: 2258, 8: 980, 9: 353, 10: 43, 11: 1, 12: 0}
+[la_T1_sc_s1rerun r3] transfer cumulative: solved 557/2285 L*=10 ge={7: 557, 8: 467, 9: 339, 10: 39, 11: 0, 12: 0}
+python3 train.py --data artifacts/sc/la_T1_sc_s1rerun/mix_3.jsonl --init ckpts/ladder/la_T1_sc_s1rerun_r2.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/ladder/la_T1_sc_s1rerun_r3.pt --seed 1003 --log_every 200
+params 3214336 mode lean_seq shift True
+train records 32412 max len 420
+step 200 loss 0.0423 lr 2.53e-04 21s
+step 400 loss 0.0380 lr 1.09e-04 42s
+step 600 loss 0.0360 lr 3.00e-05 62s
+saved ckpts/ladder/la_T1_sc_s1rerun_r3.pt
+=== round 3 done in 1058s; new proofs 666; cum targets solved 2258 L*=10; transfer L*=10
+[lean_gate] 143840 samples, parse-fail 11636, distinct checked 110136: lean ok 57753, lean rej 52383; lean 360.3s wall (2099.2s proc, 6 workers)
+[la_T1_sc_s1rerun r4] targets (this round) SOLVED 2467/4495 = 0.549 [0.534,0.563]
+  len 7: 1343/1800 = 0.746 [0.725,0.766]
+  len 8: 672/1000 = 0.672 [0.642,0.700]
+  len 9: 387/1004 = 0.385 [0.356,0.416]
+  len 10: 61/456 = 0.134 [0.106,0.168]
+  len 11: 3/99 = 0.030 [0.010,0.085]
+  len 12: 1/106 = 0.009 [0.002,0.052]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 1519, 8: 1181, 9: 693, 10: 196, 11: 22, 12: 2}
+  pruned hist {5: 64, 6: 357, 7: 1461, 8: 1105, 9: 499, 10: 113, 11: 12, 12: 2}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 60321), ('lean_seq parse: unbound', 8927), ('lean_seq parse: formula', 1321), ('lean_seq parse: name', 411), ('lean_seq parse: exact not last', 309), ('lean_seq parse: expected (', 206)]
+[lean_gate] 73120 samples, parse-fail 10734, distinct checked 53743: lean ok 11214, lean rej 42529; lean 197.5s wall (1148.8s proc, 6 workers)
+[la_T1_sc_s1rerun r4] transfer (this round, pass@32) SOLVED 643/2285 = 0.281 [0.263,0.300]
+  len 7: 86/300 = 0.287 [0.238,0.340]
+  len 8: 134/300 = 0.447 [0.391,0.503]
+  len 9: 371/1010 = 0.367 [0.338,0.398]
+  len 10: 48/451 = 0.106 [0.081,0.138]
+  len 11: 4/99 = 0.040 [0.016,0.099]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 90, 8: 179, 9: 548, 10: 160, 11: 14}
+  pruned hist {5: 3, 6: 11, 7: 138, 8: 308, 9: 443, 10: 82, 11: 6}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 48735), ('lean_seq parse: unbound', 8141), ('lean_seq parse: formula', 1261), ('lean_seq parse: name', 244), ('lean_seq parse: exact not last', 239), ('lean_seq parse: expected (', 230)]
+[lean_gate] 2285 samples, parse-fail 318, distinct checked 1967: lean ok 446, lean rej 1521; lean 7.4s wall (35.3s proc, 6 workers)
+[la_T1_sc_s1rerun r4] transfer greedy SOLVED 446/2285 = 0.195 [0.179,0.212]
+  len 7: 67/300 = 0.223 [0.180,0.274]
+  len 8: 110/300 = 0.367 [0.314,0.423]
+  len 9: 243/1010 = 0.241 [0.215,0.268]
+  len 10: 25/451 = 0.055 [0.038,0.081]
+  len 11: 1/99 = 0.010 [0.002,0.055]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 61, 8: 108, 9: 231, 10: 41, 11: 5}
+  pruned hist {5: 1, 6: 5, 7: 73, 8: 149, 9: 190, 10: 25, 11: 3}
+  frontier written 11 pruned 10
+  reasons [('lean rejected', 1521), ('lean_seq parse: unbound', 252), ('lean_seq parse: formula', 33), ('lean_seq parse: expected (', 7), ('lean_seq parse: exact not last', 6), ('lean_seq parse: ORE box', 6)]
+[lean_gate] 5000 samples, parse-fail 21, distinct checked 4979: lean ok 4855, lean rej 124; lean 10.1s wall (56.6s proc, 6 workers)
+[la_T1_sc_s1rerun r4] heldout greedy SOLVED 4855/5000 = 0.971 [0.966,0.975]
+  len 2: 998/1000 = 0.998 [0.993,0.999]
+  len 3: 994/1000 = 0.994 [0.987,0.997]
+  len 4: 972/1000 = 0.972 [0.960,0.981]
+  len 5: 941/1000 = 0.941 [0.925,0.954]
+  len 6: 950/1000 = 0.950 [0.935,0.962]
+  written hist {2: 1023, 3: 986, 4: 956, 5: 979, 6: 903, 7: 4, 8: 3, 9: 1}
+  pruned hist {2: 1024, 3: 985, 4: 962, 5: 975, 6: 903, 7: 2, 8: 3, 9: 1}
+  frontier written 6 pruned 6
+  reasons [('lean rejected', 124), ('lean_seq parse: unbound', 13), ('lean_seq parse: formula', 5), ('lean_seq parse: no-eos', 1), ('lean_seq parse: expected )', 1), ('lean_seq parse: expected :=', 1)]
+[la_T1_sc_s1rerun r4] targets cumulative: solved 2467/4495 L*=10 ge={7: 2467, 8: 1124, 9: 452, 10: 65, 11: 4, 12: 1}
+[la_T1_sc_s1rerun r4] transfer cumulative: solved 681/2285 L*=10 ge={7: 681, 8: 587, 9: 447, 10: 59, 11: 4, 12: 0}
+python3 train.py --data artifacts/sc/la_T1_sc_s1rerun/mix_4.jsonl --init ckpts/ladder/la_T1_sc_s1rerun_r3.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/ladder/la_T1_sc_s1rerun_r4.pt --seed 1004 --log_every 200
+params 3214336 mode lean_seq shift True
+train records 34116 max len 444
+step 200 loss 0.0405 lr 2.53e-04 22s
+step 400 loss 0.0394 lr 1.09e-04 43s
+step 600 loss 0.0385 lr 3.00e-05 64s
+saved ckpts/ladder/la_T1_sc_s1rerun_r4.pt
+=== round 4 done in 1079s; new proofs 467; cum targets solved 2467 L*=10; transfer L*=10
+[lean_gate] 143840 samples, parse-fail 9333, distinct checked 112347: lean ok 62347, lean rej 50000; lean 369.4s wall (2147.8s proc, 6 workers)
+[la_T1_sc_s1rerun r5] targets (this round) SOLVED 2639/4495 = 0.587 [0.573,0.601]
+  len 7: 1395/1800 = 0.775 [0.755,0.794]
+  len 8: 704/1000 = 0.704 [0.675,0.731]
+  len 9: 450/1004 = 0.448 [0.418,0.479]
+  len 10: 82/456 = 0.180 [0.147,0.218]
+  len 11: 6/99 = 0.061 [0.028,0.126]
+  len 12: 2/106 = 0.019 [0.005,0.066]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 1593, 8: 1260, 9: 844, 10: 266, 11: 40, 12: 6}
+  pruned hist {5: 66, 6: 373, 7: 1561, 8: 1211, 9: 617, 10: 152, 11: 25, 12: 4}
+  frontier written 12 pruned 11
+  reasons [('lean rejected', 57220), ('lean_seq parse: unbound', 7340), ('lean_seq parse: formula', 976), ('lean_seq parse: exact not last', 296), ('lean_seq parse: name', 249), ('lean_seq parse: expected (', 149)]
+[lean_gate] 73120 samples, parse-fail 8577, distinct checked 55754: lean ok 13294, lean rej 42460; lean 197.6s wall (1147.4s proc, 6 workers)
+[la_T1_sc_s1rerun r5] transfer (this round, pass@32) SOLVED 719/2285 = 0.315 [0.296,0.334]
+  len 7: 98/300 = 0.327 [0.276,0.382]
+  len 8: 141/300 = 0.470 [0.414,0.527]
+  len 9: 411/1010 = 0.407 [0.377,0.438]
+  len 10: 61/451 = 0.135 [0.107,0.170]
+  len 11: 7/99 = 0.071 [0.035,0.139]
+  len 12: 1/102 = 0.010 [0.002,0.053]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 102, 8: 196, 9: 650, 10: 199, 11: 29, 12: 2}
+  pruned hist {5: 3, 6: 13, 7: 161, 8: 336, 9: 550, 10: 103, 11: 12}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 48328), ('lean_seq parse: unbound', 6604), ('lean_seq parse: formula', 1021), ('lean_seq parse: name', 308), ('lean_seq parse: expected (', 175), ('lean_seq parse: exact not last', 170)]
+[lean_gate] 2285 samples, parse-fail 209, distinct checked 2076: lean ok 536, lean rej 1540; lean 7.7s wall (39.8s proc, 6 workers)
+[la_T1_sc_s1rerun r5] transfer greedy SOLVED 536/2285 = 0.235 [0.218,0.252]
+  len 7: 73/300 = 0.243 [0.198,0.295]
+  len 8: 121/300 = 0.403 [0.349,0.460]
+  len 9: 306/1010 = 0.303 [0.275,0.332]
+  len 10: 34/451 = 0.075 [0.054,0.104]
+  len 11: 2/99 = 0.020 [0.006,0.071]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 63, 8: 116, 9: 291, 10: 58, 11: 8}
+  pruned hist {6: 6, 7: 76, 8: 177, 9: 236, 10: 38, 11: 3}
+  frontier written 11 pruned 10
+  reasons [('lean rejected', 1540), ('lean_seq parse: unbound', 171), ('lean_seq parse: formula', 22), ('lean_seq parse: name', 5), ('lean_seq parse: expected (', 4), ('lean_seq parse: exact not last', 3)]
+[lean_gate] 5000 samples, parse-fail 27, distinct checked 4973: lean ok 4836, lean rej 137; lean 10.0s wall (56.2s proc, 6 workers)
+[la_T1_sc_s1rerun r5] heldout greedy SOLVED 4836/5000 = 0.967 [0.962,0.972]
+  len 2: 998/1000 = 0.998 [0.993,0.999]
+  len 3: 991/1000 = 0.991 [0.983,0.995]
+  len 4: 970/1000 = 0.970 [0.957,0.979]
+  len 5: 939/1000 = 0.939 [0.922,0.952]
+  len 6: 938/1000 = 0.938 [0.921,0.951]
+  written hist {2: 1023, 3: 981, 4: 960, 5: 970, 6: 896, 7: 4, 8: 2}
+  pruned hist {2: 1023, 3: 981, 4: 965, 5: 968, 6: 894, 7: 3, 8: 2}
+  frontier written 6 pruned 6
+  reasons [('lean rejected', 137), ('lean_seq parse: unbound', 19), ('lean_seq parse: formula', 4), ('lean_seq parse: name', 3), ('lean_seq parse: expected :=', 1)]
+[la_T1_sc_s1rerun r5] targets cumulative: solved 2639/4495 L*=11 ge={7: 2639, 8: 1244, 9: 540, 10: 90, 11: 8, 12: 2}
+[la_T1_sc_s1rerun r5] transfer cumulative: solved 773/2285 L*=11 ge={7: 773, 8: 667, 9: 518, 10: 80, 11: 11, 12: 1}
+python3 train.py --data artifacts/sc/la_T1_sc_s1rerun/mix_5.jsonl --init ckpts/ladder/la_T1_sc_s1rerun_r4.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/ladder/la_T1_sc_s1rerun_r5.pt --seed 1005 --log_every 200
+params 3214336 mode lean_seq shift True
+train records 35620 max len 464
+step 200 loss 0.0358 lr 2.53e-04 21s
+step 400 loss 0.0371 lr 1.09e-04 43s
+step 600 loss 0.0358 lr 3.00e-05 64s
+saved ckpts/ladder/la_T1_sc_s1rerun_r5.pt
+=== round 5 done in 1085s; new proofs 412; cum targets solved 2639 L*=11; transfer L*=11
+[lean_gate] 143840 samples, parse-fail 10640, distinct checked 111087: lean ok 66520, lean rej 44567; lean 361.2s wall (2106.3s proc, 6 workers)
+[la_T1_sc_s1rerun r6] targets (this round) SOLVED 2760/4495 = 0.614 [0.600,0.628]
+  len 7: 1430/1800 = 0.794 [0.775,0.812]
+  len 8: 726/1000 = 0.726 [0.698,0.753]
+  len 9: 500/1004 = 0.498 [0.467,0.529]
+  len 10: 95/456 = 0.208 [0.174,0.248]
+  len 11: 7/99 = 0.071 [0.035,0.139]
+  len 12: 2/106 = 0.019 [0.005,0.066]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 1644, 8: 1335, 9: 981, 10: 320, 11: 56, 12: 11, 13: 1}
+  pruned hist {5: 75, 6: 388, 7: 1643, 8: 1290, 9: 720, 10: 189, 11: 34, 12: 9}
+  frontier written 12 pruned 12
+  reasons [('lean rejected', 50922), ('lean_seq parse: unbound', 8521), ('lean_seq parse: formula', 831), ('lean_seq parse: expected (', 377), ('lean_seq parse: expected )', 239), ('lean_seq parse: exact not last', 203)]
+[lean_gate] 73120 samples, parse-fail 9885, distinct checked 54513: lean ok 14238, lean rej 40275; lean 195.3s wall (1138.0s proc, 6 workers)
+[la_T1_sc_s1rerun r6] transfer (this round, pass@32) SOLVED 800/2285 = 0.350 [0.331,0.370]
+  len 7: 117/300 = 0.390 [0.337,0.446]
+  len 8: 154/300 = 0.513 [0.457,0.569]
+  len 9: 442/1010 = 0.438 [0.407,0.468]
+  len 10: 76/451 = 0.169 [0.137,0.206]
+  len 11: 9/99 = 0.091 [0.049,0.164]
+  len 12: 2/102 = 0.020 [0.005,0.069]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 121, 8: 200, 9: 708, 10: 219, 11: 43, 12: 3}
+  pruned hist {5: 5, 6: 12, 7: 175, 8: 359, 9: 596, 10: 126, 11: 21}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 45798), ('lean_seq parse: unbound', 7671), ('lean_seq parse: formula', 1061), ('lean_seq parse: expected (', 306), ('lean_seq parse: expected )', 257), ('lean_seq parse: name', 189)]
+[lean_gate] 2285 samples, parse-fail 273, distinct checked 2012: lean ok 582, lean rej 1430; lean 7.5s wall (37.0s proc, 6 workers)
+[la_T1_sc_s1rerun r6] transfer greedy SOLVED 582/2285 = 0.255 [0.237,0.273]
+  len 7: 91/300 = 0.303 [0.254,0.358]
+  len 8: 124/300 = 0.413 [0.359,0.470]
+  len 9: 322/1010 = 0.319 [0.291,0.348]
+  len 10: 39/451 = 0.086 [0.064,0.116]
+  len 11: 5/99 = 0.051 [0.022,0.113]
+  len 12: 1/102 = 0.010 [0.002,0.053]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 79, 8: 120, 9: 300, 10: 68, 11: 14, 12: 1}
+  pruned hist {5: 1, 6: 8, 7: 91, 8: 174, 9: 252, 10: 49, 11: 7}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 1430), ('lean_seq parse: unbound', 213), ('lean_seq parse: formula', 29), ('lean_seq parse: expected (', 11), ('lean_seq parse: expected )', 9), ('lean_seq parse: expected :=', 4)]
+[lean_gate] 5000 samples, parse-fail 30, distinct checked 4970: lean ok 4846, lean rej 124; lean 9.8s wall (54.4s proc, 6 workers)
+[la_T1_sc_s1rerun r6] heldout greedy SOLVED 4846/5000 = 0.969 [0.964,0.974]
+  len 2: 997/1000 = 0.997 [0.991,0.999]
+  len 3: 995/1000 = 0.995 [0.988,0.998]
+  len 4: 966/1000 = 0.966 [0.953,0.976]
+  len 5: 942/1000 = 0.942 [0.926,0.955]
+  len 6: 946/1000 = 0.946 [0.930,0.958]
+  written hist {2: 1023, 3: 992, 4: 953, 5: 985, 6: 885, 7: 6, 8: 2}
+  pruned hist {2: 1024, 3: 991, 4: 956, 5: 986, 6: 885, 7: 2, 8: 2}
+  frontier written 7 pruned 6
+  reasons [('lean rejected', 124), ('lean_seq parse: unbound', 22), ('lean_seq parse: formula', 4), ('lean_seq parse: name', 1), ('lean_seq parse: no-eos', 1), ('lean_seq parse: expected :=', 1)]
+[la_T1_sc_s1rerun r6] targets cumulative: solved 2760/4495 L*=11 ge={7: 2760, 8: 1330, 9: 604, 10: 104, 11: 9, 12: 2}
+[la_T1_sc_s1rerun r6] transfer cumulative: solved 859/2285 L*=11 ge={7: 859, 8: 737, 9: 575, 10: 98, 11: 14, 12: 2}
+python3 train.py --data artifacts/sc/la_T1_sc_s1rerun/mix_6.jsonl --init ckpts/ladder/la_T1_sc_s1rerun_r5.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/ladder/la_T1_sc_s1rerun_r6.pt --seed 1006 --log_every 200
+params 3214336 mode lean_seq shift True
+train records 36904 max len 453
+step 200 loss 0.0379 lr 2.53e-04 22s
+step 400 loss 0.0365 lr 1.09e-04 42s
+step 600 loss 0.0373 lr 3.00e-05 64s
+saved ckpts/ladder/la_T1_sc_s1rerun_r6.pt
+=== round 6 done in 1086s; new proofs 370; cum targets solved 2760 L*=11; transfer L*=11
+[lean_gate] 143840 samples, parse-fail 10196, distinct checked 111616: lean ok 69731, lean rej 41885; lean 356.7s wall (2083.6s proc, 6 workers)
+[la_T1_sc_s1rerun r7] targets (this round) SOLVED 2836/4495 = 0.631 [0.617,0.645]
+  len 7: 1459/1800 = 0.811 [0.792,0.828]
+  len 8: 743/1000 = 0.743 [0.715,0.769]
+  len 9: 522/1004 = 0.520 [0.489,0.551]
+  len 10: 100/456 = 0.219 [0.184,0.260]
+  len 11: 10/99 = 0.101 [0.056,0.176]
+  len 12: 2/106 = 0.019 [0.005,0.066]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 1692, 8: 1421, 9: 1091, 10: 368, 11: 81, 12: 16, 13: 2}
+  pruned hist {5: 77, 6: 407, 7: 1717, 8: 1383, 9: 807, 10: 223, 11: 45, 12: 12}
+  frontier written 12 pruned 12
+  reasons [('lean rejected', 47728), ('lean_seq parse: unbound', 7610), ('lean_seq parse: formula', 993), ('lean_seq parse: expected (', 559), ('lean_seq parse: name', 380), ('lean_seq parse: exact not last', 277)]
+[lean_gate] 73120 samples, parse-fail 9424, distinct checked 55110: lean ok 16094, lean rej 39016; lean 194.6s wall (1134.1s proc, 6 workers)
+[la_T1_sc_s1rerun r7] transfer (this round, pass@32) SOLVED 858/2285 = 0.375 [0.356,0.396]
+  len 7: 139/300 = 0.463 [0.408,0.520]
+  len 8: 155/300 = 0.517 [0.460,0.573]
+  len 9: 465/1010 = 0.460 [0.430,0.491]
+  len 10: 85/451 = 0.188 [0.155,0.227]
+  len 11: 11/99 = 0.111 [0.063,0.188]
+  len 12: 3/102 = 0.029 [0.010,0.083]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 151, 8: 215, 9: 796, 10: 280, 11: 57, 12: 11}
+  pruned hist {5: 4, 6: 16, 7: 218, 8: 397, 9: 679, 10: 167, 11: 28, 12: 1}
+  frontier written 12 pruned 11
+  reasons [('lean rejected', 44262), ('lean_seq parse: unbound', 7221), ('lean_seq parse: formula', 957), ('lean_seq parse: expected (', 388), ('lean_seq parse: name', 334), ('lean_seq parse: exact not last', 140)]
+[lean_gate] 2285 samples, parse-fail 273, distinct checked 2012: lean ok 647, lean rej 1365; lean 7.1s wall (34.7s proc, 6 workers)
+[la_T1_sc_s1rerun r7] transfer greedy SOLVED 647/2285 = 0.283 [0.265,0.302]
+  len 7: 103/300 = 0.343 [0.292,0.399]
+  len 8: 133/300 = 0.443 [0.388,0.500]
+  len 9: 351/1010 = 0.348 [0.319,0.377]
+  len 10: 55/451 = 0.122 [0.095,0.155]
+  len 11: 5/99 = 0.051 [0.022,0.113]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 92, 8: 126, 9: 332, 10: 83, 11: 13, 12: 1}
+  pruned hist {6: 6, 7: 117, 8: 189, 9: 277, 10: 52, 11: 6}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 1365), ('lean_seq parse: unbound', 217), ('lean_seq parse: formula', 22), ('lean_seq parse: expected (', 10), ('lean_seq parse: name', 8), ('lean_seq parse: expected )', 6)]
+[lean_gate] 5000 samples, parse-fail 20, distinct checked 4980: lean ok 4852, lean rej 128; lean 9.5s wall (52.4s proc, 6 workers)
+[la_T1_sc_s1rerun r7] heldout greedy SOLVED 4852/5000 = 0.970 [0.965,0.975]
+  len 2: 999/1000 = 0.999 [0.994,1.000]
+  len 3: 994/1000 = 0.994 [0.987,0.997]
+  len 4: 964/1000 = 0.964 [0.951,0.974]
+  len 5: 946/1000 = 0.946 [0.930,0.958]
+  len 6: 949/1000 = 0.949 [0.934,0.961]
+  written hist {2: 1024, 3: 991, 4: 959, 5: 982, 6: 883, 7: 10, 8: 2, 9: 1}
+  pruned hist {2: 1026, 3: 991, 4: 964, 5: 982, 6: 881, 7: 5, 8: 2, 9: 1}
+  frontier written 7 pruned 7
+  reasons [('lean rejected', 128), ('lean_seq parse: unbound', 12), ('lean_seq parse: formula', 3), ('lean_seq parse: expected )', 2), ('lean_seq parse: expected :=', 2), ('lean_seq parse: no-eos', 1)]
+[la_T1_sc_s1rerun r7] targets cumulative: solved 2836/4495 L*=11 ge={7: 2836, 8: 1377, 9: 634, 10: 112, 11: 12, 12: 2}
+[la_T1_sc_s1rerun r7] transfer cumulative: solved 920/2285 L*=11 ge={7: 920, 8: 774, 9: 607, 10: 111, 11: 17, 12: 3}
+python3 train.py --data artifacts/sc/la_T1_sc_s1rerun/mix_7.jsonl --init ckpts/ladder/la_T1_sc_s1rerun_r6.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/ladder/la_T1_sc_s1rerun_r7.pt --seed 1007 --log_every 200
+params 3214336 mode lean_seq shift True
+train records 38008 max len 453
+step 200 loss 0.0401 lr 2.53e-04 22s
+step 400 loss 0.0385 lr 1.09e-04 44s
+step 600 loss 0.0375 lr 3.00e-05 64s
+saved ckpts/ladder/la_T1_sc_s1rerun_r7.pt
+=== round 7 done in 1065s; new proofs 319; cum targets solved 2836 L*=11; transfer L*=11
+[lean_gate] 143840 samples, parse-fail 9498, distinct checked 112462: lean ok 72105, lean rej 40357; lean 359.0s wall (2093.3s proc, 6 workers)
+[la_T1_sc_s1rerun r8] targets (this round) SOLVED 2923/4495 = 0.650 [0.636,0.664]
+  len 7: 1492/1800 = 0.829 [0.811,0.846]
+  len 8: 758/1000 = 0.758 [0.730,0.784]
+  len 9: 550/1004 = 0.548 [0.517,0.578]
+  len 10: 107/456 = 0.235 [0.198,0.276]
+  len 11: 13/99 = 0.131 [0.078,0.212]
+  len 12: 2/106 = 0.019 [0.005,0.066]
+  len 13: 1/16 = 0.062 [0.011,0.283]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 1748, 8: 1514, 9: 1201, 10: 433, 11: 105, 12: 22, 13: 6}
+  pruned hist {5: 83, 6: 444, 7: 1797, 8: 1457, 9: 916, 10: 253, 11: 61, 12: 17, 13: 1}
+  frontier written 13 pruned 12
+  reasons [('lean rejected', 46059), ('lean_seq parse: unbound', 7549), ('lean_seq parse: formula', 885), ('lean_seq parse: name', 300), ('lean_seq parse: exact not last', 246), ('lean_seq parse: expected (', 244)]
+[lean_gate] 73120 samples, parse-fail 9171, distinct checked 55383: lean ok 16427, lean rej 38956; lean 187.6s wall (1098.7s proc, 6 workers)
+[la_T1_sc_s1rerun r8] transfer (this round, pass@32) SOLVED 893/2285 = 0.391 [0.371,0.411]
+  len 7: 140/300 = 0.467 [0.411,0.523]
+  len 8: 158/300 = 0.527 [0.470,0.582]
+  len 9: 484/1010 = 0.479 [0.449,0.510]
+  len 10: 96/451 = 0.213 [0.178,0.253]
+  len 11: 13/99 = 0.131 [0.078,0.212]
+  len 12: 2/102 = 0.020 [0.005,0.069]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 149, 8: 222, 9: 851, 10: 347, 11: 60, 12: 12}
+  pruned hist {5: 4, 6: 16, 7: 230, 8: 422, 9: 749, 10: 188, 11: 31, 12: 1}
+  frontier written 12 pruned 11
+  reasons [('lean rejected', 44159), ('lean_seq parse: unbound', 7277), ('lean_seq parse: formula', 937), ('lean_seq parse: expected (', 289), ('lean_seq parse: name', 250), ('lean_seq parse: exact not last', 127)]
+[lean_gate] 2285 samples, parse-fail 232, distinct checked 2053: lean ok 648, lean rej 1405; lean 6.1s wall (30.3s proc, 6 workers)
+[la_T1_sc_s1rerun r8] transfer greedy SOLVED 648/2285 = 0.284 [0.265,0.302]
+  len 7: 105/300 = 0.350 [0.298,0.406]
+  len 8: 133/300 = 0.443 [0.388,0.500]
+  len 9: 345/1010 = 0.342 [0.313,0.371]
+  len 10: 59/451 = 0.131 [0.103,0.165]
+  len 11: 6/99 = 0.061 [0.028,0.126]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 95, 8: 122, 9: 335, 10: 79, 11: 16, 12: 1}
+  pruned hist {5: 1, 6: 6, 7: 113, 8: 180, 9: 288, 10: 54, 11: 6}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 1405), ('lean_seq parse: unbound', 191), ('lean_seq parse: formula', 25), ('lean_seq parse: expected (', 7), ('lean_seq parse: exact not last', 6), ('lean_seq parse: expected )', 2)]
+[lean_gate] 5000 samples, parse-fail 17, distinct checked 4983: lean ok 4851, lean rej 132; lean 8.5s wall (47.1s proc, 6 workers)
+[la_T1_sc_s1rerun r8] heldout greedy SOLVED 4851/5000 = 0.970 [0.965,0.975]
+  len 2: 999/1000 = 0.999 [0.994,1.000]
+  len 3: 996/1000 = 0.996 [0.990,0.998]
+  len 4: 959/1000 = 0.959 [0.945,0.970]
+  len 5: 949/1000 = 0.949 [0.934,0.961]
+  len 6: 948/1000 = 0.948 [0.932,0.960]
+  written hist {2: 1023, 3: 987, 4: 948, 5: 985, 6: 901, 7: 5, 8: 2}
+  pruned hist {2: 1024, 3: 986, 4: 954, 5: 983, 6: 899, 7: 3, 8: 2}
+  frontier written 7 pruned 6
+  reasons [('lean rejected', 132), ('lean_seq parse: unbound', 11), ('lean_seq parse: expected :=', 2), ('lean_seq parse: formula', 1), ('lean_seq parse: expected )', 1), ('lean_seq parse: no-eos', 1)]
+[la_T1_sc_s1rerun r8] targets cumulative: solved 2923/4495 L*=11 ge={7: 2923, 8: 1431, 9: 673, 10: 123, 11: 16, 12: 3}
+[la_T1_sc_s1rerun r8] transfer cumulative: solved 972/2285 L*=11 ge={7: 972, 8: 818, 9: 648, 10: 123, 11: 18, 12: 3}
+python3 train.py --data artifacts/sc/la_T1_sc_s1rerun/mix_8.jsonl --init ckpts/ladder/la_T1_sc_s1rerun_r7.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/ladder/la_T1_sc_s1rerun_r8.pt --seed 1008 --log_every 200
+params 3214336 mode lean_seq shift True
+train records 39240 max len 453
+step 200 loss 0.0409 lr 2.53e-04 21s
+step 400 loss 0.0370 lr 1.09e-04 42s
+step 600 loss 0.0339 lr 3.00e-05 64s
+saved ckpts/ladder/la_T1_sc_s1rerun_r8.pt
+=== round 8 done in 1067s; new proofs 378; cum targets solved 2923 L*=11; transfer L*=11
+EXIT 0 2026-09-28T03:02:35Z

@@ -142,3 +142,23 @@ this run edits none of them and writes its own `support.py`. The RunPod account 
   (`lean-format/ckpts/ladder/la_T1_seq_s{0,1}_r*.pt`), but both were initialised from
   `ckpts/lf/stage1_full_seq_s0.pt` — a different Stage-1 model, and both from the same seed — so they are not
   this base's EI models. The EI models are re-trained here, as the brief says.
+- 2026-09-27 18:16 UTC  pre-registration + the 383-theorem set committed before the first pod (gate 0); 18:33
+  addendum 1 re-sized the run *up* on a measured throughput 7× the budgeted rate, before any stage-1 sample.
+- 2026-09-27 18:18 – 2026-09-28 03:06  five A40 pods (`sc1`–`sc5`, $0.49/h), ≈ 47 M samples, all deleted.
+- **Result: the pre-registered falsifier FIRED.** 29 transfer theorems get **0 base successes in 200,000
+  attempts at T = 0.8 and 200,000 at T = 1.0** while the EI model solves each at p̂ 0.022–1.000 (threshold 20;
+  I predicted 8). No pass@k crossover in any `L_true` stratum at any measured k. Survivors decay 44 → 35 → 29
+  with depth and plateau. Checked against leakage (0 overlap with the EI training pool), proof validity (372
+  proofs re-verified one-per-Lean-process), the judging path, the sampler, and both temperatures.
+- Reads as **support expansion**, not a sampling amplifier — against the project's standing pattern. Caveat:
+  one 3.2 M model, one pool, n = 2 seeds, so counts sit inside `NOISE_FLOOR.md`'s floor; the per-theorem
+  structure is the finding and it replicates at 92.7 % / 90.9 %.
+- Deliverables: `run_support_curves.md`, `numbers.md` § support-curves (SC0–SC13), `log.md`, `QUESTIONS.md`
+  (3 entries), `artifacts/sc/summary.json`, `figures/support_curves_{scatter,passk}.png`, bucket
+  `hf://buckets/dan-pandori/nd-rl/support-curves/{ckpts,artifacts,data}`. Cost 20.37 pod-hours / $9.99 of $15.
+- Two things went wrong and are written up in `log.md`: duplicated shards briefly replayed records into two
+  stage-2 files (de-duplicated; `sc_analysis` now refuses to run on duplicates), and deleting `sc2` after
+  checking only its `*.jsonl` lost the seed-1 EI ladder (re-trained as `la_T1_sc_s1rerun_*`, which no number
+  is measured on; `pod/sc/pullcheck.sh` added).
+
+SUPPORT-CURVES DONE 2026-09-28T03:10:00Z

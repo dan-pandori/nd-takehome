@@ -1155,15 +1155,16 @@ Lean accepts proofs that skip steps ND's rule format demands).
 
 ## SC2 — stage 0: the EI models reproduce the on-file behaviour of this base
 
-Source: `artifacts/sc/la_T1_sc_s{0,1}/round_8.json` and `artifacts/sc/la_T1_sc_s{0,1}.log`. Command, both seeds:
+Source: `artifacts/sc/la_T1_sc_s0/round_8.json`, `la_T1_sc_s0.log`, and `la_T1_sc_s1rerun/` (seed 1 as measured has no surviving ladder record — see the table). Command, both seeds:
 `ladder_ei.py --rounds 8 --k 32 --temperature 0.8 --batch 512 --max_new 512 --heldout data/p2/heldout.jsonl
 --train data/p2/train_depth3_f0_a1.jsonl --init ckpts/lf/stage1_a1_seq_s<k>.pt --seed <k>`, `ND_SAMPLE_COMPACT=0`,
-run through `sc_ladder_ei.py` (see SC9).
+run through `sc_ladder_ei.py` (SC11).
 
 | | transfer solved / 2,285 at 8 × 32 | transfer `L*` |
 |---|---|---|
 | **EI s0, this run (Lean alone)** | **869** | **12** |
-| EI s1, this run (Lean alone) | (round 8; see `la_T1_sc_s1.log`) | |
+| EI s1 **as measured** (the model behind SC4's seed-1 column) | **not reproducible** — its ladder log went with pod `sc2` (`log.md`, 00:35). What survives and *is* reproducible is its performance on this run's 383-theorem set: **144 / 383** at k = 10,000 (`s3_ei_T08_s1.s{0,1}.jsonl`). | — |
+| EI s1 **re-trained** (`la_T1_sc_s1rerun`, a different model) | **972** | 11 |
 | on file for this base, `ds-generator` `c0 s0` (Lean ∧ `nd_verify`) | 890 | 12 |
 | on file for this base, `ds-generator` `c0 s1` (Lean ∧ `nd_verify`) | 965 | 11 |
 | `cap-horizon` K6 seed 0 (Lean ∧ `nd_verify`) | 856 | — |
@@ -1171,6 +1172,13 @@ run through `sc_ladder_ei.py` (see SC9).
 869 is inside the pre-registered 856–965 and the `L*` matches, so the re-trained EI model behaves like the
 ones the project's headline EI numbers came from. Round-1 transfer at k = 32 for **base s0** was
 **80 / 2,285**, `L*` = 9.
+
+The seed-1 **re-train** is a separate model, not a reproduction of the lost one: its round 1 matched the lost
+run exactly (parse-fail 54,051, distinct 79,599, 7,089 Lean-accepted, transfer 57/2,285 — round 1 samples from
+the shared init checkpoint, so this shows only that the *sampler* is deterministic), but **round 2 already
+diverged** (374 vs 373) and it ends at 972 rather than in the original's neighbourhood. The fine-tuning step is
+not bit-reproducible on this hardware. **No number in this run is measured on `la_T1_sc_s1rerun`**; it is
+uploaded only so the next run need not re-train an EI model from base s1.
 
 ## SC3 — stage 1: per-theorem support at k = 10,000, T = 0.8, seed 0
 
