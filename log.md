@@ -655,7 +655,7 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 - 23:19  sf-1 pulled (re-samples, ladders without `mix_*` / target `found_*`, logs), synced to the bucket, deleted
   (4.92 h, $3.64). T1 S s2's final checkpoint solves **4** of the 23 ≥ 13 theorems at k 256; base SN s3 solves one
   (1 / 256). Frozen SN s3's ladder solved one ≥ 13 theorem (`la_transfer_978`) with no RL.
-- 23:58  **Stop rule.** `podbudget` read 21.44 h / $10.57 — past the pre-registered 20 h / $10 line, which I had not
+- 23:50  **Stop rule.** `podbudget` read 21.44 h / $10.57 — past the pre-registered 20 h / $10 line, which I had not
   been tracking closely (my estimate of 19 h was low: four pods × ≈ 5.5 h). Letting every job finish would reach
   ≈ 24 h, where `pod_budget_watch` deletes pods. Following the rule, **frozen SN s5 was dropped** at round 5 of 8
   (its rounds 1–5 are kept and reported as a partial, labelled). **Deviation:** frozen SN s4 (round 7 of 8, ≈ 0.3 h
