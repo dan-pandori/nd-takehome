@@ -668,3 +668,14 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 - 05:25  Correction: arm S seed 0's held-out greedy is **4,789 / 5,000 = 0.9578**, not 0.9580 as first written here
   and in the pre-registration addendum (a rounding slip of mine; the addendum is left as committed, this line is the
   correction). The re-run of the held-out evaluation inside `seed.sh` at 04:45 reproduced 4,789 exactly.
+- 05:30  **SN-v1 seed 1 held-out 0.623** (SN-v1 s0 0.9716). A GPU swap rules out hardware: each of `stage1_S_s0`,
+  `stage1_S_s1`, `stage1_SN_s1` scores the same on the 3090 (`se-1`) and the 4090 (`se-4`): 0.958 / 0.801 / 0.617 vs
+  0.958 / 0.804 / 0.623. A trace of greedy rollouts (`se_trace.py`) shows the seed-1 models name their first `have`
+  `n64` and then cite `n62`. `lean_seq`'s random name offset makes the first name an attempt introduces
+  unpredictable from any state (nothing is in scope yet). Greedy takes the mode of a near-uniform distribution, and
+  seed 1's mode is at the top of the range. **The same mechanism explains arm S's 0.958 / 0.801 spread.**
+- 05:45  **SN-v2**: same checkpoints, the environment names what each step introduces (canonical, per-attempt base
+  `U[0, 32]`; `Env(assign=True)`). Held-out greedy **0.9700 (s0) / 0.9584 (s1)**, 6-line bin 0.941 / 0.904;
+  `unbound` 2 / 0; the environment overrode 6,054 / 6,026 of 19,817 / 19,818 defining names (≈ one per attempt —
+  the first name — plus a few). Pre-registration addendum 2 says what this is and is not. SN-v2 ladders (T1, then
+  frozen) launched on `se-3` / `se-4`.

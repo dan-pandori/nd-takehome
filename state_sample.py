@@ -15,11 +15,14 @@ with `early='eos'` (an action ends at <eos>) and compaction on; the noise of row
 `stats` (a dict) collects the per-step diagnostics the run reports: how attempts end, steps per attempt, and the
 action truncation rate.
 """
-import collections, os, sys, time
+import collections, os, random, sys, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import torch
 from sample import generate_ids_fast
 from state_env import Env
+
+
+NAME_BASE_MAX = 32     # arm SN: canonical names start at n<base+1>, base ~ U[0, 32] per attempt (the Stage-1 offset is U[0, 64 - max name])
 
 
 def prompt_ids(tok, env):
@@ -43,6 +46,8 @@ def env_generate(model, tok, prompts, greedy=True, temperature=1.0, max_action=2
     t0 = time.time()
 
     def finish(i, e):
+        st['names_defined'] = st.get('names_defined', 0) + e.defined
+        st['names_renamed'] = st.get('names_renamed', 0) + e.renamed
         nd = e.nd()
         res_nd[i] = nd
         res_tx[i] = tok.text(e.text) if e.done and not nd.startswith('LEANPARSE') else None
@@ -50,7 +55,12 @@ def env_generate(model, tok, prompts, greedy=True, temperature=1.0, max_action=2
 
     while nxt < len(prompts) or live:
         while len(live) < batch and nxt < len(prompts):
-            live.append((nxt, Env(prompts[nxt], canon=getattr(tok, 'canon', False)))); nxt += 1
+            if getattr(tok, 'canon', False):      # arm SN: the environment names what a step introduces, from a random base
+                base = random.Random(seed * 1000003 + nxt).randint(0, NAME_BASE_MAX)
+                e = Env(prompts[nxt], canon=True, base=base, assign=True)
+            else:
+                e = Env(prompts[nxt])
+            live.append((nxt, e)); nxt += 1
         pids = [prompt_ids(tok, e) for _, e in live]
         st['prompt_tokens'] = st.get('prompt_tokens', 0) + sum(len(p) for p in pids)   # prefill cost of the env loop
         with torch.autocast('cuda', dtype=torch.bfloat16, enabled=(dev.type == 'cuda')):

@@ -111,6 +111,21 @@ def t3():
     ck((not ok) and 'binder mismatch' in reason, f'box binder that is not the antecedent: {reason!r}')
 
 
+def t7():
+    print('7. arm SN: the environment names what a step introduces (canonical, from a per-attempt base)')
+    e = Env('THM P SEQ ( P v Q ) PRF', canon=True, base=5, assign=True)
+    ck(e.apply(['have', 'n64', ':', 'P', ':=', 'h1', ';'])[0], 'a have with any name is accepted')
+    ck(e.frames[0].htoks[-1][0] == 'n6', f'... and named n<base+1> = n6: {e.frames[0].htoks[-1][0]}')
+    ck(e.apply(['have', 'n2', ':', '(', 'P', '∨', 'Q', ')', ':=', 'Or.inl', 'n6', ';'])[0], 'citations are the state\'s names')
+    ck(e.apply(['exact', 'n7'])[0] and e.done and e.renamed == 2, f'renamed {e.renamed} of {e.defined}')
+    prompt, nd = CASES[-1]
+    steps, toks, env = decompose(prompt, nd, canon=True)
+    e = Env(prompt, canon=True, base=0, assign=True)
+    for s, a, h in steps:
+        e.apply(a)
+    ck(e.done and e.renamed == 0 and inverse(e.text) == nd, 'a canonical proof replays with 0 renames')
+
+
 def t5():
     print('5. vocabularies')
     ck(LeanTokenizer('lean_seq').vocab_size == 107, 'lean_seq vocabulary unchanged at 107')
@@ -136,7 +151,7 @@ def t6():
 
 
 if __name__ == '__main__':
-    t1_t4(); t2(); t3(); t5(); t6()
+    t1_t4(); t2(); t3(); t5(); t7(); t6()
     print()
     if FAIL:
         print(f'{len(FAIL)} FAILURES'); [print(' -', f) for f in FAIL]; sys.exit(1)

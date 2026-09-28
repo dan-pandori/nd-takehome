@@ -172,9 +172,13 @@ def prompt_parts(prompt):
 class Env:
     """One proof attempt.  `apply(action_tokens)` -> (ok, reason)."""
 
-    def __init__(self, prompt, canon=False):
+    def __init__(self, prompt, canon=False, base=0, assign=False):
         prem, concl, lines = prompt_parts(prompt)
         self.canon = canon
+        self.base = base            # canonical names start at n<base+1> (the train-time name offset, drawn per attempt)
+        self.assign = assign        # arm SN: the environment, not the model, names what a step introduces
+        self.renamed = 0            # defining names the environment overrode (assign=True)
+        self.defined = 0
         self.prompt = prompt
         self.prem = prem
         self.concl = concl
@@ -200,7 +204,7 @@ class Env:
     def next_name(self, reserve=(), frames=None):
         """the canonical next name: `max index in scope (+ the pending `have`s) + 1`.  Under canonical naming the
         action's name token is a function of the state, which the global first-appearance numbering is not."""
-        mx = 0
+        mx = self.base
         for f in (self.frames if frames is None else frames):
             for n in f.names:
                 mx = max(mx, int(n[1:]))
@@ -234,13 +238,14 @@ class Env:
         except (IndexError, KeyError, ValueError) as e:     # any other malformed action ends the attempt, never the run
             self.failed = 'malformed'
             return False, 'malformed'
-        self.hist += list(act)
+        self.hist += list(self._eff)
         return True, ''
 
     def _bump(self, n):
         self.maxname = max(self.maxname, int(n[1:]))
 
     def _apply(self, act):
+        self._eff = act
         if not act:
             raise ParseFail('empty action')
         if act[0] == 'exact':
@@ -271,6 +276,10 @@ class Env:
             raise ParseFail('assign')
         i += 1
         t = act[i] if i < len(act) else None
+        if self.assign:
+            act = self._assign_names(act, i)
+            nm = act[1]
+            self._eff = act
         if t is None:
             raise ParseFail('empty term')
         fr = self.frames[-1]
@@ -344,6 +353,26 @@ class Env:
         self.add_hyp(fr, nm, f)
         self.text += act
         return
+
+    def _assign_names(self, act, i):
+        """arm SN: replace the name(s) this `have` action introduces by the canonical ones (`max in scope + 1`, from
+        `self.base`).  Citations are untouched -- they name hypotheses the state shows."""
+        a = list(act)
+        nh = f'n{self.next_name()}'
+        self.defined += 1; self.renamed += a[1] != nh
+        a[1] = nh
+        j = None
+        if i < len(a) and a[i] == '(' and i + 3 < len(a):
+            j = i + 3
+        elif i < len(a) and a[i] == 'Or.elim' and i + 5 < len(a):
+            j = i + 5
+        if j is not None and is_name(a[j]):
+            nb = f'n{self.next_name(reserve=[nh[1:]])}'
+            self.defined += 1; self.renamed += a[j] != nb
+            a[j] = nb
+        if int(nh[1:]) > MAXN or (j is not None and int(a[j][1:]) > MAXN):
+            raise ParseFail('names exhausted')
+        return a
 
     def _box_head(self, act, i):
         """act[i:] == '( fun ( X : A ) => by' -> (X, A, end index) or None."""

@@ -166,3 +166,28 @@ Predictions for SN, written now, before any SN measurement exists:
 | T1 transfer solved at `L_true` ≥ 13 | **0 – 5** |
 
 Budget: two more pods (`se-3`, `se-4`), projected ≈ 10 more pod-hours, inside the declared 60 h / $30.
+
+## Addendum 2 — arm SN, second version (environment-assigned names), 2026-09-28 ≈ 05:45 UTC
+
+**Also added after seeing a result.** SN as first built (call it **SN-v1**) scored 0.9716 on seed 0 and **0.623 on
+seed 1** on held-out, with 1,424 `unbound` failures, including on 2-line proofs. A step-by-step trace
+(`se_trace.py`) showed the cause, which also explains arm S's seed spread: `lean_seq`'s **random name offset** (the
+Stage-1 augmentation that makes every name token a trained token) makes the **first** name an attempt introduces
+unpredictable from any state, because nothing is in scope yet. Greedy decoding then picks the mode of a near-uniform
+distribution. Seed 1's models put it at `n64` and then counted *down*, citing `n62` when `n64` was the only name in
+scope. Seed 0's models happened to land low. Canonicalising the later names (SN-v1) could not fix the first one.
+
+**SN-v2 = the same two SN-v1 checkpoints (no retraining), sampled with the environment naming every hypothesis a
+step introduces** — `max index in scope + 1`, counted from a per-attempt random base drawn like the training offset,
+`U[0, 32]`. The model still writes a name, and the environment overrides it, as Lean's own `intro`/`have` naming
+would. Citations are the model's and name hypotheses the state shows. On shifted canonical control proofs the
+override is a no-op (0 of 6,370 defining names changed). In SN-v2 the policy's input fully determines everything the
+environment accepts from it.
+
+What SN-v2 is and is not: it is a sampling-side change to a diagnostic arm, decided after seeing SN-v1. Its held-out
+numbers (**0.9700 / 0.9584**) were measured after this decision, so they do **not** count as confirming addendum 1's
+held-out prediction; they are reported as what they are. The addendum-1 ladder predictions (T1 ≥ arm S on the same
+seed; 0–5 solved at `L_true` ≥ 13) are carried over unchanged to SN-v2, and no SN-v2 ladder result exists at this
+commit. The SN-v1 ladders were stopped before their first round finished. SN-v1 held-out files are kept as
+`artifacts/se/heldout_SNv1_s*.json`. **Arm S is left exactly as pre-registered**, flaw included, and remains the arm
+the falsifiers are about.
