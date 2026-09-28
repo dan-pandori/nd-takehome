@@ -647,3 +647,7 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   temperatures. `ss_analysis.py` → `artifacts/ss/summary.json`.
 - 19:45  S2 started early on `ss1` (free slot) on the 15 SN forward-crux theorems known so far (S1 rows complete for
   both models), batch 2,048 (fits beside H s1), `stop_at 1` (only reach matters); topped up when S1 ends.
+- 20:50  **H s1 complete**: SN base s1 reaches **28 / 29** as well (la_transfer_1110 0 / 200,000 at both T; s0's
+  miss la_transfer_1893 is reached by s1). S1 at ≈ 272 / 376 rows. SN forward crux so far **58** (several with SN EI
+  p̂ ≥ 0.4): EI expands the state base's support too. S2 top-up launched on `ss1` for the 43 new crux theorems
+  (fwd08 and fwd10 as two parallel processes, batch 2,048 as before).
