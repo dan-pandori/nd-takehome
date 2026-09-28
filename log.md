@@ -625,3 +625,16 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 - 04:45  Ladder runs launched: `la_T1_S_s{0,1}` then `la_frozen_S_s{0,1}`, 8 rounds × k 32, batch 2,048,
   `--max_action 256 --max_steps 48`, on `data/ladder/{rl_targets,transfer}.jsonl` (md5-identical to ladder-A's).
   Arm **SH** is queued behind arm S on each pod.
+- 05:01  **Round 1 of `la_T1_S_s0`** (`artifacts/se/la_T1_S_s0/round_1.json`), against the control's own round 1
+  (`artifacts/dsg/la_T1_c0_s0/round_1.json`): round wall **927 s vs 883 s** — the environment's extra prefills are
+  paid back by keeping a 2,048-attempt batch full; per-attempt accept rate on the RL targets **0.2187 vs 0.0536**;
+  on the transfer pool **0.0747 vs 0.0041**; cumulative transfer solved after one round **577 vs 76**, `L*`
+  **10 vs 9**. Of 224,245 attempts, 82.7 % produced a finished proof, 17.3 % ended on a syntactic error and
+  0.06 % on a truncated action.
+- 05:00  **Held-out greedy, arm S seed 0: 0.9580** (4,789 / 5,000), per length 0.999 / 0.992 / 0.961 / 0.933 /
+  **0.904**; C0 s0 is 0.9088 with **0.686** on the 6-line bin. Above my pre-registered band [0.85, 0.95] — a miss on
+  the upside, recorded as such. Decomposition: 181 of C0 s0's 456 held-out failures were out-of-grammar text and 16
+  were "final formula is not the conclusion" (`artifacts/dsg/heldout2_c0_s0.json`; measured under Lean ∧ `nd_verify`),
+  i.e. ≈ 43 % of them are of the kind the environment prevents by construction. Removing all of those would put C0 at
+  ≈ 0.948 overall and ≈ 0.821 on the 6-line bin, so the environment's grammar guard explains most of the overall gap
+  and **less than half** of the 6-line gap.
