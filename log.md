@@ -614,3 +614,23 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   `--impl auto`. A graph-vs-no-graph run with the same seed matched to 4 decimals for 10 steps and then drifted as bf16
   runs do (`logs/graph_vs_nograph_*.log`); the same-seed val gap at step 400 of the smoke test is that drift.
 - 17:42  `fs1` deleted. Total 1.49 pod-hours, $1.47. `--impl auto` made the default (fast only for from-scratch GPU training).
+
+## long-pool (executor), 2026-09-28
+- 18:20  Read POOLS.md, gen.py, minlen.py, the cap-horizon and state-env summaries. Ladder raw labels
+  (`hf://…/ladder-A/data/ladder/raw_textbook_minlen.jsonl`): every textbook schema has one base length; only
+  `dist_or_over_and_conv` (13) and `demorgan_nand_to_or` (14) reach ≥ 13, nothing reaches 15. The textbook source cannot
+  fill 15–16.
+- 18:25  VPS probe: strict long generator at generated length 14–40, 900 theorems, three knob settings: ≈ 2 % survive a
+  bound-10 search; 11 survivors at bound 16 → 9×11, 1×12, 1×13 (1–136 s each). Knob settings indistinguishable → take-home knobs.
+- 18:32  Pre-registration `dfce363` committed and pushed; `podbudget long-pool --set 16 8`.
+- 18:33  CPU pods (cpu5c / cpu3c, 16–32 vCPU, secure, EUR-IS-1 too): "no instances available" on every try; A40 and
+  3090 out of stock. **Deviation:** labelling runs on RTX 4090 GPU pods' CPUs (`lp-l1` $0.74/h, cpu.max 10.2 CPUs;
+  `lp-l2` $0.74/h, cpu.max 54.4 CPUs).
+- 18:48  Pilot g1 on lp-l1 (`pod/lp/label.sh g1 10 100000 31000 12 40`): 24,400 generated → stage A 318 ≥ 11
+  → B: 180×11, 81×12, 54 ≥ 13 → C: 30×13, 14×14, 6 ≥ 15 → D: 6×15, 0×16. Survival rises with generated length
+  (≥ 13: 2 / 12,601 at 12–15 lines, 38 / 5,331 at ≥ 20). Main chunks keep generated length ≥ 20 (output filter, allowed by
+  the pre-registration: ≥ 2× yield per CPU-second).
+- 18:59  g2 on lp-l2 (48 workers, 1M tries each, generated length 20–60, seed 32000): 255,368 → A (8 min, 279 timeouts)
+  6,872 → B (10 min, 48 timeouts) 3,884×11, 1,735×12, 1,205 ≥ 13. ≥ 13 yield by generated length: 0.33 % (20–23) →
+  1.0–2.0 % (≥ 32). g3 queued: generated length 28–80, 5M tries/worker, seed 33000.
+- 19:03  Textbook: `textbook_pool.py --n 3900 --seed 41`, kept the 6 schemata that reach ≥ 11 (906), same staged labelling.
