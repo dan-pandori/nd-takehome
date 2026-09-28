@@ -213,7 +213,7 @@ across-seed sd in either direction.
 
 | # | expectation | my value | verdict |
 |---|---|---|---|
-| 1 | every A/T within 3 pp of its constituents' mean on len2–5, overall ≥ 0.80; falsified if > 5 pp below its worst constituent | 60/96 within 3 pp; all 36 others are **above** (averages beat their members by +0.2 to +11.6 pp); 0 more than 5 pp below the worst member; overall min 0.752 (`w_s1.A6_K4`; 5 A6_K4 runs < 0.80) | not falsified; the "within 3 pp" and "≥ 0.80" parts miss, in the benign direction and for A6_K4 respectively |
+| 1 | every A/T within 3 pp of its constituents' mean on len2–5, overall ≥ 0.80; falsified if > 5 pp below its worst constituent | 60/96 within 3 pp; all 36 others are **above** (averages beat their members by +0.2 to +11.6 pp); 0 more than 5 pp below the worst member; overall min 0.752 (`w_s1.A6_K4`); **all 8 A6_K4 runs < 0.80** (0.752–0.780) | not falsified; the "within 3 pp" and "≥ 0.80" parts miss, in the benign direction and for A6_K4 respectively |
 | 2a | A24_K8 d3 sd in [0.18, 0.35] | 0.374 | miss (just above) |
 | 2b | sd ratio < 2 for A24_K2/4/8, T24_3/5 | 1.12–1.22 | holds |
 | 2c | average above its constituents' mean on d3 in ≥ 6/8 W seeds | A24_K2 4/8, A24_K4 4/8, **A24_K8 2/8**, T24_3 5/8, T24_5 5/8 | **miss** — averaging does not act like lr decay here |
@@ -287,3 +287,156 @@ On 6-line non-depth-3, every W variant is at 6.2 inlined / 108 `n_tok` / 5.8 lin
   recorded the real A40 rate.
 
 **No hard-constraint violation. No quarantine.**
+
+## §Compare (executor's `run_ckpt_avg.md`, `numbers.md` § ckpt-avg CA1–CA5, `log.md`, `STATUS.md`)
+
+Phase-2 checks were run with `review_ca/phase2.py`. The executor states its sd ratios as E24 / variant, the inverse
+of my R7 ratios; I converted before comparing.
+
+### Numbers
+
+| claim (where) | my value | verdict |
+|---|---|---|
+| **CA1, arm W** | | |
+| E24 len4/len5/len6/d3/all 0.992/0.984/0.797 (0.151)/0.616 (0.306)/0.954 | .9925/.9838/.7970 (.1515)/.6160 (.3062)/.9544 | reproduces |
+| A24_K2/K4/K8 d3 0.308/0.264/0.227, sd 0.342/0.350/0.374; len6 0.637/0.619/0.600 | same | reproduces |
+| T24_3/T24_5 d3 0.576/0.535 (sd .361/.368) | same | reproduces |
+| LS6/LSd3 d3 0.693/0.683 (sd .236/.239), len6 .827/.811 | same | reproduces |
+| sd ratios E24/variant 0.89/0.87/0.82/0.85/0.83/1.30/1.28 with F-test CIs | reciprocals of mine: 1/1.118 … 1/0.782, CIs likewise | reproduces |
+| high-mode seeds (d3 ≥ 0.44): 7, 3, 2, 2, 5, 5, 7, 7 of 8 | same from my per-seed values | reproduces |
+| E12/A12/E6/A6 rows, incl. A12_K8 d3 .067 (sd .144) and A6_K4 .115 (sd .127) | same (.0675/.1436, .1150/.1273) | reproduces |
+| len2 ≥ 0.982, len3 ≥ 0.977 except A6_K2 len3 .958 and A6_K4 .918 | same | reproduces |
+| paired d3 vs E24 (t 95 %): A24_K8 −38.9 [−63.9, −13.9], T24_3 −4.0 [−23.7, +15.7], LS6 +7.7 [−8.9, +24.2], LSd3 +6.7 [−10.4, +23.8] | identical | reproduces |
+| "LSd3 costs len4 −2.6, len5 −2.8 pp" | −2.62 / −2.80 | reproduces |
+| "LS6 costs ≤ 1.2 pp on every bin" | ≤ 1.15 pp on the rule's bins (len2–6, d3); **−1.70 pp on 6-line non-depth-3** (LSd3 −3.8 there) | reword: "on every bin of the rule" |
+| LS picks (W and F) | identical to my argmin (R5) | reproduces |
+| "Adoption rule: met by no candidate" | same (R7) | reproduces |
+| **CA2, arm F (n = 4)** | | |
+| E24 d3 .379 (.397); LS6 .755 (.123); LSd3 .737 (.092); ratios 3.23, 4.31 [1.10, 17.0]; LS len5 −4.5/−5.1, len4 −2.6/−2.9 | same | reproduces; see verdict on the 4.3× |
+| **CA3, averages vs constituents** | | |
+| "len2–len5: every average within 0.2 pp of or above its constituents' mean (min −0.2 pp, T24_3), never below its worst constituent" | min −0.20 pp (`w_s6.T24_3`, len3); 0 averages below their worst constituent on any of len2–5 | reproduces |
+| A24_K8 between min and max in 6/8, above the mean in 2/8; A24_K2 4/8, K4 4/8, T24_3 5/8; F A24_K8 2/4 | 6/8; 2/8, 4/8, 4/8, 5/8; F 2/4 | reproduces |
+| trajectory-mean readout: W d3 mean 0.273 sd 0.110; F 0.267, 0.127 | 0.273 / 0.110; 0.267 / 0.127 (trajectory checkpoints only, endpoints excluded) | reproduces; post hoc (see verdict) |
+| **CA4, checks** | | |
+| self-average control identical | identical verdicts **and** texts | reproduces |
+| re-draw vs stage1-dynamics: 1,176 / 640,000 (0.18 %), depth-3 268 / 64,000 | 1,176 / 640,000, 268 / 64,000 (256 checkpoints) | reproduces. R11 first read only the 28 uncompressed files; this row supersedes it. |
+| Spearman(half-A d3 loss, half-B d3 accuracy), 208 W checkpoints: −0.896 | −0.896 | reproduces |
+| `max_new`: 549 hits, max 32 / 2,500 in one evaluation; diagnostic 29/26/25, 12/4/4, 11/8/8; 0 verdicts change | 549; max 32; same diagnostic counts; 0 changes | reproduces |
+| peak memory 9.02 GB | 9.02 in all 353 | reproduces |
+| term size of solved d3: E24 154.9, LSd3 165.6, A24_K8 137.7 "Lean tokens"; 6-line 126.8 / 131.2 | same as the mean over seeds of `sd_eval`'s per-checkpoint `n_tok` means | reproduces arithmetically; see finding F3 |
+| **CA5, arm R** | | |
+| 0 / 50,000 verdicts differ; slices identical; 49,983 rows with text (17 no `<eos>`) | same; 17 empty, and every one of the 45,678 counted rows has text | reproduces |
+| **Cost** | | |
+| A40 at $0.49/h, 0.86 h, $0.42 | `podbudget`: 0.86 h / $0.42; the real rate is recorded | reproduces |
+| **Gate 0** | | |
+| pre-registration committed and pushed 04:21:40Z, first pod 04:22:02Z; "~04:45" was a mis-estimate | commit 04:21:40Z; remote ref updated 04:21:42Z (reflog); `pipeline.out` setup 04:23:55Z | reproduces. Expectations were on the remote before the pod existed. |
+
+### Wording and scope against n and evidence
+
+- **"Uniform weight averaging makes depth-3 worse"** (run md): n = 8, paired CIs exclude 0 for A24_K2/K4/K8.
+  **Stands.**
+- **"and no quieter"**: the sd point estimates are 1.12–1.22× E24's, and every CI contains 1. "No quieter" is fair
+  as "not shown quieter"; the data do not show it is *louder* either. **Stands.**
+- **"the oscillation alternates between distinct solutions, and averaging doesn't smooth it out"**: this is a
+  mechanism. Nothing in the run measures whether the checkpoints lie in distinct basins (no interpolation curve, no
+  loss barrier between members). What was measured is that the average is not above its members' mean on depth-3.
+  **Reword** as a hypothesis ("consistent with …"); the loss-barrier measurement below would test it.
+- **"Loss-based selection helps, but not enough on W"**: the +7/+8 pp is a point estimate whose CIs span 0 (the
+  run md says so in parentheses), and the sd ratio CIs contain 1. At n = 8, "helps" is not supported. **Reword**:
+  "loss-based selection moves W's depth-3 mean +7/+8 pp and its sd 1.3× in the right direction; neither is
+  distinguishable from 0 / 1 at n = 8."
+- **"On F (n = 4), LSd3 cuts the sd 4.3× (0.40 → 0.09)"**: the F-test CI [1.10, 17.0] excludes 1, but n = 4 and
+  the run labels it as secondary. One of the four LSd3 picks (f_s1: step08000 over step06000, loss margin 0.08 %)
+  is inside the bf16 noise of the loss (R5). With the runner-up, that seed's depth-3 is 0.604 instead of 0.760 and
+  the ratio is 3.6×. **Stands with n = 4 and "secondary" attached**; add the pick-fragility caveat.
+- **"The quietest readout is the mean over a run's trajectory evaluations (depth-3 sd 0.11)"**: reproduces, but it
+  was not pre-registered. A mean over 23 checkpoints is expected to have a smaller across-seed sd than any single
+  checkpoint. The run already says it is "a different quantity". It should also say "post hoc", and that it costs 23
+  evaluations per run.
+- **Expectations summary (run md)**. Misses must be reported as misses; four sub-misses are not:
+  - Exp. 1 is reported "met". Its falsifier did not fire, but the pre-registered "overall ≥ 0.80" clause misses: all
+    8 A6_K4 runs are at 0.752–0.780. The "within 3 pp" clause misses in 36/96 averages, in the benign direction (the
+    averages are *above* their members, up to +11.6 pp).
+  - Exp. 2a (A24_K8 sd in [0.18, 0.35]) **missed**: 0.374. Not mentioned.
+  - Exp. 2d ("below the constituents' max in ≥ 6/8") **missed for A24_K2** (5/8). Not mentioned.
+  - Exp. 3's "LS6 depth-3 sd ≤ 0.20" **missed** (0.236). Only LSd3's miss is reported.
+  - Exp. 6 (F: LSd3 has the smallest sd) **holds**. Not scored in the run md.
+- **Model labels**: the run md, `numbers.md` and `STATUS.md` all carry the model label (checkpoint family, 3.2 M,
+  `lean_seq`, from scratch, cap 6, training set per arm). Arm R's numbers in CA5 name their checkpoints. The
+  comparison with stage1-dynamics is Lean-alone on both sides (both after 2026-09-27), so no checker-mixing label is
+  needed. **No unlabelled number found.**
+
+### Findings not in the executor's files
+- **F1. LS picks inside the loss noise.** Two LSd3 picks (w_s2 0.24 %, f_s1 0.08 %) and one LS6 pick (f_s0 0.41 %)
+  are separated from the runner-up by about the bf16 error of `val_bins` (≈ 1e-3 relative; R5). The W verdict does
+  not depend on them. The F 4.3× does, modestly (3.6× with the runner-up).
+- **F2. Train/eval overlap by premise permutation**, inherited from stage1-dynamics' data: 5 half-B theorems in train
+  W's renaming classes, 30 in train F's, 0 depth-3 (R3). `split.json` documents A/B disjointness only. Impact on any
+  headline is nil (≤ 1.3 % of non-depth-3 rows, all in bins at 0.97–1.00).
+- **F3. Proof length.** The policy asks for lines *and* term size.
+  - `numbers.md` CA4 reports only `n_tok`, calls it "Lean tokens", and says "Lines are not re-reported (`L_true`
+    labels are ND-derived upper bounds)". But the model's own written lines are measured in every `.json`
+    (`mean_written_lines`); they are not the `L_true` labels.
+  - `n_tok` counts whitespace tokens of the literal text, nearly all of them type ascriptions. It is therefore not
+    invariant to premise re-statement.
+  - The 137.7 vs 165.6 gap between A24_K8 and LSd3 is a composition effect: an unweighted mean over seeds, some of
+    which solve 3–4 depth-3 theorems.
+  - My inlined term size is 4.02–4.07 on depth-3 and 6.2 on 6-line non-depth-3 in every variant, and lines are
+    4.01–4.03 (R12). **No variant changes proof length.** That is worth one sentence in the write-up in place of
+    the `n_tok` line.
+- **F4. IQM not reported.** The policy asks for per-seed values plus an IQM with a bootstrap CI. Per-seed values
+  and paired t-CIs are there; the IQM is not. Mine (R6): E24 .635 [.38, .92], LS6 .715 [.50, .92], A24_K8 .031
+  [.02, .60]. They change no conclusion.
+- **F5. `max_new` deviation** — reported, with a sound diagnostic (log.md ~04:30Z; CA4). It is not in the run md's
+  summary. One line there would make the deviation visible where the headline is read.
+
+## §Verdict
+
+**Hard constraints: none violated.**
+- `nd_verify` is unmodified and unused.
+- `TEST_RUN_DONE` is unchanged.
+- Nothing reads half B for selection.
+- Lean alone judges, and 480/480 re-checked counted proofs are accepted, with 160/160 negative controls rejected.
+- The pre-registration was pushed before the first pod.
+
+**What stands:**
+1. **No averaging or selection variant meets the pre-registered adoption rule on arm W (n = 8, half B).**
+   Reproduced from the rows, the losses and my own argmin.
+2. Uniform stable-phase averages (A24_K2/K4/K8) **lower** W's depth-3 by 31–39 pp (paired CIs exclude 0), and do not
+   shrink its across-seed sd.
+3. Averaging across the decay phase (T24_3/T24_5) is indistinguishable from E24.
+4. The averages are not broken on easy bins: on len2–5 they sit at or above their constituents' mean.
+5. Half-A depth-3 loss tracks half-B depth-3 accuracy across checkpoints (ρ = −0.896), yet selecting on it does not
+   meet the rule. Within a run the loss minimum can be a low-accuracy checkpoint (`w_s3` step20000: 0.30, beside
+   0.82–0.83).
+6. The self-average control is byte-identical.
+7. The re-draw rate against stage1-dynamics is 0.18 % of verdicts.
+8. **The arm-R literal-text gap from the stage1-dynamics review is closed** (0 / 50,000, texts on all counted rows,
+   160 of them Lean-re-checked).
+9. No variant changes proof length (my inlined term size and lines).
+
+**Must be reworded:**
+- (a) "Loss-based selection helps" → "moves the mean +7/+8 pp and the sd 1.3×, neither distinguishable from no
+  change at n = 8".
+- (b) "the oscillation alternates between distinct solutions" → a hypothesis, not a finding.
+- (c) "LS6 costs ≤ 1.2 pp on every bin" → "on every bin of the rule" (the 6-line non-depth-3 complement is −1.7 pp).
+- (d) The expectations summary should list the four unreported sub-misses: Exp. 1's ≥ 0.80 clause (A6_K4), Exp. 2a
+  (A24_K8 sd 0.374), Exp. 2d for A24_K2 (5/8), and Exp. 3's LS6 sd clause (0.236). It should also record Exp. 6 as
+  held.
+- (e) Label the trajectory-mean readout "post hoc".
+- (f) Attach to F's "4.3×": n = 4, secondary, and one pick inside the loss's bf16 noise (3.6× with the runner-up).
+- (g) Replace the `n_tok`-only length line with lines and an ascription-free term size (F3).
+- (h) Mention the `max_new` deviation in the run md.
+
+**Not supported:** nothing the run claims as a finding is contradicted. The mechanism sentence in (b) is the only
+claim with no measurement behind it.
+
+**Next measurements that would settle what is left open:**
+1. **Loss barrier between members.** Evaluate half-A loss and half-B depth-3 along the linear path between two W
+   checkpoints of opposite mode, for 2–3 seeds; for example `w_s3` step20000 (0.30) ↔ step21000 (0.82). This costs
+   ~10 half-B evaluations per pair. A barrier supports "distinct solutions"; a flat path means averaging fails for
+   another reason (e.g. the depth-3 behaviour is fragile under any weight change).
+2. **The F 4.3× at a seed count that can see it.** The adoption question for loss selection on the fresh-data arm
+   rests on n = 4. Once fast Stage-1 training is merged, 8–10 F seeds with trajectory checkpoints, and half-A losses
+   recomputed in fp32 so that near-ties like f_s1's are resolved, would decide whether LSd3 meets the rule off arm W.
+   Its len5 cost (−5 pp at n = 4) already fails clause (iii) as it stands.
