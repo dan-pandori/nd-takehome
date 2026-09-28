@@ -651,3 +651,6 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   miss la_transfer_1893 is reached by s1). S1 at ≈ 272 / 376 rows. SN forward crux so far **58** (several with SN EI
   p̂ ≥ 0.4): EI expands the state base's support too. S2 top-up launched on `ss1` for the 43 new crux theorems
   (fwd08 and fwd10 as two parallel processes, batch 2,048 as before).
+- 21:50  S1 SN base complete (152 / 383 at k 10,000; whole-proof base 45). SN EI at 355 / 383. SN forward crux 81 so
+  far. S2 deepening to 200,000 / temperature started on `ss2` (two processes, batch 2,048, `stop_at 1`) for the 12
+  E8 zeros known so far (`data/ss/sn_deep_e8.txt`; la_transfer_1893 is already at 210,000 / 200,000 from H).
