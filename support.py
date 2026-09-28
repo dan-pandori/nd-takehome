@@ -132,7 +132,7 @@ def main():
             pid = tok.encode_prompt(r['prompt'])
             counts = collections.Counter()     # normalised accepted-or-not string -> count
             first_idx, first_text, verdict = {}, {}, {}
-            n = n_parse = n_ok = 0
+            n = n_parse = n_ok = n_no_eos = 0
             gen_s = lean_s = 0.0
             fail_parse, n_parse_seen = [], 0     # uniform reservoir over grammar-reject literal texts
             while n < a.k and not (a.stop_at and n_ok >= a.stop_at):
@@ -147,6 +147,7 @@ def main():
                     nd = tok.decode(o)
                     if nd.startswith('LEANPARSE'):
                         n_parse += 1; n_parse_seen += 1
+                        n_no_eos += nd == 'LEANPARSE no-eos'     # hit max_new: truncated (support-followups)
                         if len(fail_parse) < a.fail_keep:
                             fail_parse.append(tok.last_text)
                         elif rng.random() < a.fail_keep / n_parse_seen:
@@ -173,7 +174,8 @@ def main():
                    'model': a.model, 'ckpt': a.ckpt, 'ckpt_md5': ck_md5, 'temperature': a.temperature,
                    'seed': a.model_seed, 'sampling_seed': a.seed, 'stage': a.stage, 'k_requested': a.k, 'stop_at': a.stop_at,
                    'n_tried': n, 'n_ok': n_ok, 'n_distinct_ok': len(acc), 'n_distinct_strings': len(counts),
-                   'n_parse_fail': n_parse, 'early': a.early, 'compact': a.compact, 'first_hit': (first_idx[acc[0]] if acc else None),
+                   'n_parse_fail': n_parse, 'n_no_eos': n_no_eos, 'max_new': a.max_new, 'batch': a.batch,
+                   'peak_mem_gb': round(torch.cuda.max_memory_allocated() / 2**30, 2), 'early': a.early, 'compact': a.compact, 'first_hit': (first_idx[acc[0]] if acc else None),
                    'stopped_early': bool(a.stop_at and n_ok >= a.stop_at and n < a.k),
                    'gen_s': round(gen_s, 2), 'lean_s': round(lean_s, 2), 'wall_s': round(time.time() - t0, 2),
                    'proofs': [{'proof': s, 'count': counts[s], 'first': first_idx[s], 'n_lines': verdict[s][1],
@@ -192,7 +194,7 @@ def main():
     el = time.time() - t_start
     print(f'DONE {out_fn}: {len(todo)} theorems, {tot_tried:.0f} samples in {el/60:.1f} min = '
           f'{tot_tried/max(el,1e-9):.0f} samples/s = {tot_tried/max(el/3600,1e-9):.0f} samples/pod-hour-equiv '
-          f'(gen {tot_gen/el:.0%}, lean {tot_lean/el:.0%})', flush=True)
+          f'(gen {tot_gen/el:.0%}, lean {tot_lean/el:.0%}); peak mem {torch.cuda.max_memory_allocated()/2**30:.2f} GiB', flush=True)
 
 
 if __name__ == '__main__':

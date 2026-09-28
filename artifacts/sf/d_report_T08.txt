@@ -1,0 +1,59 @@
+D at T08 under base s0 = ckpts/lf/stage1_a1_seq_s0.pt md5 9bde44c0 (3,214,336 params, from scratch, lean_seq, cap 6, Stage 1 on data/p2/train_depth3_f0_a1.jsonl)
+
+set  proofs theorems | total logp med [min,max] | steps med | w1 med | s1 med | s2 med | labels (all proofs)
+S       133       29 |  -35.20 [-124.8,-16.1] |  11.0 | -14.79 | 0.42 | 0.70 | {'concentrated': 122, 'mixed': 11}
+C1      164       53 |  -26.09 [-105.9,-9.5] |  10.0 | -12.73 | 0.52 | 0.83 | {'concentrated': 154, 'mixed': 10}
+C2       62       45 |   -7.02 [-13.0,-0.8] |   9.0 |  -5.42 | 0.80 | 0.98 | {'concentrated': 25, 'mixed': 37}
+C3       53       33 |  -12.54 [-19.2,-9.5] |  10.0 |  -8.85 | 0.65 | 0.97 | {'concentrated': 48, 'mixed': 5}
+
+surprisal share by class (pre-registered | position-based):
+  S   {'syntax': 0.342, 'name': 0.138, 'logic': 0.52} | {'syntax': 0.287, 'name': 0.138, 'logic': 0.575}
+  C1  {'syntax': 0.275, 'name': 0.14, 'logic': 0.585} | {'syntax': 0.217, 'name': 0.14, 'logic': 0.643}
+  C2  {'syntax': 0.141, 'name': 0.269, 'logic': 0.59} | {'syntax': 0.032, 'name': 0.269, 'logic': 0.7}
+  C3  {'syntax': 0.169, 'name': 0.182, 'logic': 0.649} | {'syntax': 0.108, 'name': 0.182, 'logic': 0.71}
+worst-3 tokens by class (pre-registered | position-based):
+  S   {'logic': 0.536, 'syntax': 0.353, 'name': 0.11} | {'logic': 0.586, 'syntax': 0.303, 'name': 0.11}
+  C1  {'logic': 0.549, 'name': 0.185, 'syntax': 0.266} | {'logic': 0.6, 'name': 0.185, 'syntax': 0.215}
+  C2  {'syntax': 0.199, 'logic': 0.419, 'name': 0.382} | {'logic': 0.522, 'name': 0.382, 'syntax': 0.097}
+  C3  {'syntax': 0.233, 'logic': 0.465, 'name': 0.302} | {'logic': 0.553, 'name': 0.302, 'syntax': 0.145}
+worst step kind:
+  S   {'have:box': 50, 'exact': 46, 'have:name': 16, 'have:⟨': 10, 'have:Classical.byContradiction': 5, 'have:Or.inl': 5, 'have:Or.inr': 1}
+  C1  {'have:box': 66, 'have:name': 35, 'exact': 31, 'have:Or.inr': 10, 'have:⟨': 9, 'have:Or.inl': 6, 'have:orelim': 5, 'have:Classical.byContradiction': 2}
+  C2  {'exact': 16, 'have:name': 14, 'have:box': 13, 'have:Classical.byContradiction': 7, 'have:⟨': 5, 'have:orelim': 4, 'have:Or.inr': 2, 'have:Or.inl': 1}
+  C3  {'have:box': 12, 'exact': 10, 'have:name': 10, 'have:Or.inr': 9, 'have:orelim': 5, 'have:⟨': 4, 'have:Or.inl': 3}
+
+PRIMARY (29 survivors, best EI proof each, T08): {'concentrated': 28, 'mixed': 1}  -> reading: a new move
+  survivors with w1 below C2 5th percentile (-8.83): 26 / 29
+  median mean-per-step log p excluding the worst step: S -1.944, C1 -1.165, C2 -0.116
+
+ name              L  lines term total steps   w1    w2   s1   s2  label         worst step  worst tokens
+ la_transfer_588    7   7   24  -19.8    9  -13.7  -5.9 0.69 0.99  concentrated have:name   False[log/log]-11.37 R[log/log]-4.34 have[syn/syn]-2.2
+ la_transfer_149    9   9  122  -34.7   10  -16.3  -7.8 0.47 0.69  concentrated exact       )[syn/syn]-16.19 ¬[log/log]-7.02 ∨[log/log]-6.06
+ la_transfer_1110   9  10   37  -30.8   12  -12.2 -10.7 0.40 0.74  concentrated have:name   ;[syn/syn]-6.63 ([log/log]-6.44 n7[nam/nam]-5.36
+ la_transfer_1013   9   9   43  -26.4   11  -14.2 -10.8 0.54 0.95  concentrated have:box    ([syn/log]-12.05 n4[nam/nam]-8.34 )[syn/syn]-2.48
+ la_transfer_235    9   9  109  -25.6   10  -10.9  -7.1 0.43 0.71  concentrated exact       )[syn/syn]-10.91 n1[nam/nam]-7.1 ([syn/log]-3.75
+ la_transfer_381    9   9   32  -25.5   11  -15.6  -7.0 0.61 0.89  concentrated have:name   have[syn/syn]-8.63 ([log/log]-6.92 n8[nam/nam]-5.3
+ la_transfer_543    9   9   67  -21.9   10  -14.7  -4.0 0.67 0.85  concentrated have:box    ([log/log]-14.65 n5[nam/nam]-2.64 Q[log/log]-2.11
+ la_transfer_1759   9   9   64  -20.7   10  -10.3  -9.7 0.50 0.97  concentrated exact       ([log/log]-9.68 )[syn/syn]-5.37 n5[nam/nam]-4.91
+ la_transfer_202    9   9   98  -20.6   10  -11.5  -4.6 0.56 0.78  concentrated have:box    ¬[log/log]-10.86 )[syn/syn]-4.07 S[log/log]-3.79
+ la_transfer_31     9  10   40  -20.4   11  -11.4  -4.5 0.56 0.78  concentrated have:box    ([log/log]-11.37 R[log/log]-3.81 )[syn/syn]-2.33
+ la_transfer_1314   9   9   83  -18.4   10  -10.5  -7.7 0.57 0.99  concentrated exact       P[log/log]-7.72 )[syn/syn]-7.66 n4[nam/nam]-2.85
+ la_transfer_1423   9   9   77  -16.8   10  -13.6  -3.1 0.81 0.99  concentrated have:box    ([log/log]-13.57 n5[nam/nam]-3.06 n1[nam/nam]-0.06
+ la_transfer_2169   9   9   39  -16.6   10  -12.4  -4.1 0.75 1.00  concentrated have:box    ([log/log]-12.43 n5[nam/nam]-4.11 n1[nam/nam]-0.05
+ la_transfer_880    9   9   67  -16.6   10  -12.9  -2.7 0.78 0.94  concentrated have:Classical.byContradiction ¬[log/log]-8.88 R[log/log]-2.28 n4[nam/nam]-2.03
+ la_transfer_1004  10  10   97  -53.8   11  -11.6 -11.1 0.22 0.42  mixed        have:box    S[log/log]-11.1 ¬[log/log]-10.24 )[syn/syn]-9.11
+ la_transfer_191   10  10   70  -44.7   11  -15.4 -10.6 0.34 0.58  concentrated have:box    ([log/log]-15.41 Q[log/log]-8.34 )[syn/syn]-6.66
+ la_transfer_100   10  10   88  -28.5   11  -18.1  -9.8 0.63 0.97  concentrated have:Or.inl S[log/log]-14.97 )[syn/syn]-9.73 R[log/log]-1.87
+ la_transfer_1277  10  10   79  -26.9   11  -10.1  -8.7 0.38 0.70  concentrated exact       P[log/log]-8.69 )[syn/syn]-8.31 ([log/log]-7.03
+ la_transfer_1437  10  10   86  -26.3   11  -14.3  -8.7 0.54 0.87  concentrated have:box    P[log/log]-9.25 have[syn/syn]-5.84 ([log/log]-5.03
+ la_transfer_330   10  10   98  -25.6   11   -8.2  -8.1 0.32 0.64  concentrated exact       )[syn/syn]-8.11 n1[nam/nam]-8.09 ¬[log/log]-6.55
+ la_transfer_1645  10  10   80  -19.8   11   -8.6  -4.8 0.43 0.67  concentrated have:name   S[log/log]-8.25 ([syn/log]-4.74 ([log/log]-2.49
+ la_transfer_1729  10  10   85  -19.2   11  -13.4  -2.9 0.70 0.85  concentrated have:Or.inl S[log/log]-10.3 Or.inl[log/log]-3.06 ([log/log]-2.69
+ la_transfer_616   10  10   96  -16.1   11   -7.5  -4.6 0.46 0.75  concentrated exact       )[syn/syn]-7.29 S[log/log]-4.44 S[log/log]-2.43
+ la_transfer_1932  11  11   75  -47.9   12  -17.0  -9.9 0.35 0.56  concentrated have:box    ([log/log]-16.84 )[syn/syn]-9.6 ¬[log/log]-9.39
+ la_transfer_2038  11  11   65  -41.4   12  -18.4 -14.0 0.45 0.79  concentrated have:box    have[syn/syn]-13.8 S[log/log]-10.69 ([log/log]-7.71
+ la_transfer_1858  11  11  112  -35.9   12  -18.7  -4.9 0.52 0.66  concentrated exact       )[syn/syn]-15.45 n2[nam/nam]-3.56 n6[nam/nam]-3.54
+ la_transfer_1893  11  11   46  -33.5   13  -16.3  -8.5 0.49 0.74  concentrated have:name   have[syn/syn]-10.95 S[log/log]-8.5 ([log/log]-8.1
+ la_transfer_87    11  11   89  -30.9   12  -12.3  -5.6 0.40 0.58  concentrated exact       )[syn/syn]-11.95 P[log/log]-5.53 ([log/log]-4.95
+ la_transfer_454   12  12   59  -85.1   13  -36.9 -19.8 0.43 0.67  concentrated have:box    P[log/log]-15.44 ([log/log]-12.48 )[syn/syn]-12.36
+-> artifacts/sf/d_summary_T08.json
