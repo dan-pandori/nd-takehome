@@ -124,3 +124,66 @@ thread inside `submit`/`finish`.
 Term size, line counts, frontiers, acquisition and base reachability: the run makes no proof-length or capability claims.
 The T1 round's solve counts are by-products (A/B 1,189 targets solved and 1,533 new proofs; C/D 1,202 and 1,544). A vs C
 is a sampling re-draw, not a finding.
+
+## §Compare (phase 2: `run_lean_prefilter.md`, `numbers.md` § lean-prefilter, `LEAN_GATE.md`, `log.md`, `STATUS.md`)
+
+| claim (executor) | my independent value | verdict |
+|---|---|---|
+| (a) 0 false rejects in 1,310,119 texts (C1 + C2 + C3, each distinct within its corpus) | 0 false rejects. Within-corpus sum 1,214,162 + 51,274 + 25,007 + 19,676 = 1,310,119; **1,307,551 distinct across corpora** | reproduces (the wording "each distinct within its corpus" is accurate) |
+| C1 1,214,162 distinct, 499,565 accepted, 714,597 rejected, all filtered | identical | reproduces |
+| C2 76,281 / 32,909 accepted; C3 19,676 / 7,763 | C2 + C2r 76,281 / 32,909; C3 19,676 / 7,763 | reproduces |
+| filter removes 100.00 % of Lean's rejects in every corpus (pre-reg ≥ 95 %) | 100.000 % in all four, and 100 % on my own 32,256-text adversarial set | reproduces |
+| per-checkpoint C1 rows (e.g. a1_s1 286,406) | not re-derived per checkpoint. My global first-seen split differs, as expected, because checkpoints share texts. Every checkpoint's 0 is covered by the global 0 | consistent |
+| Lean-beyond-ND features exercised (C1 `Not.elim` 70, C2 1,799, C3 1,403, …) | not re-derived with their method. My own adversarial set adds 136 Lean-accepted `.elim`-on-`¬` cases, 23 on `∧` and 13 on `∨` | consistent; note that C1 (the model corpus) barely exercises `Not.elim` (70) and never `And.elim` / `Or.elim` field notation. The edge corpora carry that side |
+| (b) 120,000 texts, 14,816 accepted off and on, 0 differ; 421.4 s → 43.4 s | 14,816 / 14,816 from stored verdicts. The wall times are from `test_b.json` | reproduces |
+| (c) A 1,111 s, B 485 s (0.436), C 272 s (0.245), D 259 s (0.233) | 1,110.8 / 484.7 / 271.8 / 258.6 | reproduces |
+| gate share A 57.1 %, B 3.3 %, C 6.0 % (missed), D 5.0 % | 57.1 / 3.32 / 6.03 / **5.03** % | reproduces. D is marginally *above* 5 %, so "5.0 % after tuning" must not be read as meeting ≤ 5 % |
+| A = B accepted (19,915; 1,533 found); C = D (20,035; 1,544) | identical, and the found files are byte-identical | reproduces |
+| arm A reproduces noise-floor's round-1 gate (92,074 distinct, 13,923 accepted) | A's first gate call: 92,074 distinct, 13,923 ok, 78,151 rej = the brief's numbers | reproduces |
+| Lean 57 % of the old round, not 30 %: "that figure came from a co-tenant pod" | Lean seconds are similar (brief 353 + 206 = 559 s; A 634 s). The difference is sampling (≈ 1,160 s there vs ≈ 400 s here) | the number reproduces; the **cause is not derivable** from this run (co-tenancy vs GPU class). Say "sampling was ≈ 3× faster on this A40 pod" |
+| "0.233 / 5.0 % after tuning (`-j 1`, 2× faster filter)" | filter 11.7 s → 5.8 s ✓ (2×). But round C → D is 272 → 259 s (−5 %), under the pre-registration's own 10 % threshold | the filter speed-up reproduces; **the round-level effect of tuning is not a finding** by the run's own rule |
+| STATUS headline "T1 round 1,111 s → 259 s" | 259 s is arm D, which was added after the sweep. The pre-registered arm C is 272 s | reword to cite C (0.245), with D as post-hoc |
+| quota workers vs 3 ≥ 2×: "falsified: 0.5× with default threads; 1.2–3.0× with `-j 1`" | 298, 293 vs 618, 290 (default); 745–871 vs 290–618 | reproduces, and the miss is reported as a miss ✓ |
+| `-j 1` made default: 7 workers `-j 1` 745 / 871 vs default 298 / 293 | 2.5–3.0×, above the stated 2× repeat noise, and with a stated mechanism (96 threads on a 7.65-CPU quota) | supported |
+| truncation 0.027–0.045 % per call (T1 arms) | per call 0.026–0.045 %; pooled 0.032 / 0.033 % | reproduces. **Omitted:** C1 strata reach 0.60 % (cap-horizon k14), 0.23 % (g2, full_seq). Harmless for soundness, but the policy asks for it to be reported |
+| peak memory 16.76 GB, batch 4,096, `max_new` 512 | 16.76 GB, but from the C1 corpus jobs, not arm C as pre-registered. The source is named ✓ | reproduces; minor pre-registration deviation. The `ladder_ei` comment quoting ≈ 11 GB is for `max_new` 288 |
+| round C / A 0.245 vs pre-registered 0.30–0.45 | 0.245 | the table shows it, but the text never says the prediction **missed** (on the fast side). Say so |
+| spend 2.67 pod-hours, $1.31 | `podbudget`: 2.67 h, $1.31. `lp-t` and `lp-k` are gone | reproduces |
+| bucket `…/lean-prefilter/artifacts/lp/` | present (c2, c3, corpus, logs, t1, soundness, test_b, workers) | reproduces |
+| model labels | every table names the checkpoint, 3,214,336 params, format and from-scratch status. The C1 checkpoints are listed with `lean_rand` flagged | ✓ no unlabelled number |
+| checker labels | "Lean 4.34 core alone" throughout. No comparison with a pre-2026-09-27 number except noise-floor's round-1 gate, which is itself Lean-only in the gate | ✓ |
+
+## §Verdict
+
+**What stands.**
+- The pre-filter is sound on everything checked. It showed 0 false rejects on 1.31 M within-corpus distinct texts
+  (1,307,551 distinct across corpora), in 8 model checkpoints, the executor's edge mutants and stored records, and on my
+  independently written 32,256-text adversarial set.
+- On all of these, it is also complete: filter verdict = Lean verdict, 100 % of Lean's rejects.
+- My local Lean re-check of 4,440 stored verdicts (≥ 150 counted proofs per arm) agrees 100 %. Code reading found no
+  false-reject path within the strict grammar.
+- Test (b) and the A = B accepted-set identity hold exactly.
+- One T1 round on `stage1_a1_s1` (3.2 M, `lean_seq`, from scratch, A40, n = 1 per arm) went from 1,111 s to 272 s with the
+  pre-registered new path (0.245, target ≤ 1/3 met). Lean's exposed share fell from 57 % to 3–6 %.
+- The worker-count prediction was falsified and is reported as such. The fix (`lean -j 1`) is well supported.
+- No hard-constraint violation.
+
+**Reword.**
+1. Headline "1,111 s → 259 s": cite the pre-registered arm C (272 s, 0.245), with D (259 s) as a post-hoc variant. C vs D
+   (−5 %) is inside the run's own 10 % threshold, so "after tuning" improvements to the round are not a finding.
+2. D's gate share is 5.03 %, not under 5 %.
+3. State that the round-ratio prediction (0.30–0.45) missed on the fast side.
+4. Replace "that figure came from a co-tenant pod" with what is measured: Lean seconds were similar, and sampling was about
+   3× faster on this pod. The cause is not measured.
+5. Report the C1 corpus truncation (up to 0.60 % in the cap-horizon k14 strata).
+6. Note that peak memory was measured in the corpus jobs, not in arm C.
+
+**Not supported.** Nothing central. The quota-workers ≥ 2× claim is already reported as falsified.
+
+**Open / next measurement.**
+- Soundness is empirical. It depends on the strict grammar staying the filter's domain and on Lean 4.34 semantics. Keep
+  one `LEAN_PREFILTER=shadow` job in each future run that changes `lean_tok`, the Lean version or the prompt format.
+- The model corpus barely exercises `And.elim` / `Or.elim` field notation (0 accepted in C1). If a later model learns
+  them, the first shadow run will be their real test.
+- Round timing is n = 1 per arm on one pod. If the ≈ 4× speed-up is to be quoted as a planning number, repeat A and C
+  once on a second pod (and on a 3090, the other common class).
