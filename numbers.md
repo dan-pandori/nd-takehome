@@ -1572,5 +1572,5 @@ rejected.
 | RunPod balance | $136.49 at start, $258.43 at end (Dan topped up); never near the $100 floor |
 
 Bucket (public): `hf://buckets/dan-pandori/nd-rl/support-followups/ckpts/sf/stage1_big_seq_s{0,1}.pt` and
-`hf://buckets/dan-pandori/nd-rl/support-followups/artifacts/sf/` (every per-theorem record, D's per-token file, logs).
+`hf://buckets/dan-pandori/nd-rl/support-followups/artifacts/sf/` (every per-theorem record, D's per-token file, logs). Survivor / theorem lists: `hf://buckets/dan-pandori/nd-rl/support-followups/data/sf/`.
 Base / EI checkpoints are support-curves' (`hf://buckets/dan-pandori/nd-rl/support-curves/ckpts/`).
