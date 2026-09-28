@@ -169,3 +169,4 @@ Brief: run brief `support-followups` (Dan, 2026-09-28). Policy: AGENT_POLICY.md 
 
 ## support-followups
 - 2026-09-28 04:05 UTC  run started (executor). Pre-registration `preregistration/support-followups.md` committed before any pod and before any D computation.
+- 2026-09-28 06:45 UTC  D done (pre-registered rule: 28 / 29 concentrated → "a new move"; controls are concentrated too, the survivors differ by the depth of their 2–3 worst steps). A done: every prediction hit (EI s1rerun 147 / 383, 29 / 29 survivors, 95.6 % agreement with the lost checkpoint). B 2 / 6 theorems at 0 / 1,666,667. C: big s0 (25.3 M) trained, held-out 0.879 (base 0.909); 6 / 82 forward crux at k 10,000, 0 / 29 survivors so far; deep passes running. Pods: sf1 (5090, $0.69/h), sf4 + sf5 (3090, $0.22/h). A40s out of stock → deviation logged.
