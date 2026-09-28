@@ -637,3 +637,12 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   2,048: 9.42 GB (T1 S s0, A5000).
 - 19:30  Lottery, first reading: new Stage-1 seeds S s2 / s3 and SN s2 / s3 have depth-3 slices 0.936 / 0.960 / 0.944 / 0.934,
   all high mode (4 / 4).
+- 19:40  sf-2 is an A40 (46 GB) and T1 S s3 used ≈ 10 GB, so `frozen_S_s3` was started beside it as job `frozen_S_s3c`
+  (same command, `pod/sf/ladder.sh S 3 frozen`); `artifacts/sf2/frozen_S_s3.done` on sf-2 is a skip marker so the queue
+  does not start it twice (its text says so). Two jobs share the GPU: a re-draw, not a change of settings.
+- 21:00  T1 S s2 finished (sf-1, 4090, ≈ 1,000 s / round): transfer 1,546 / 2,285, `L*` 12, 0 at `L_true` ≥ 13
+  (`artifacts/sf2/logs/T1_S_s2.log`; re-derived later by `se_analysis.py`).
+- 21:55  Frozen SN s2 finished (sf-3): transfer 841, `L*` 11. **Lottery complete: all 6 new state-conditioned Stage-1
+  seeds are in the high mode** (depth-3 S s2 / s3 0.936 / 0.960, SN s2–s5 0.944 / 0.934 / 0.908 / 0.924); with
+  state-env's 6, 12 / 12, Wilson [0.757, 1.00]. P(6 / 6 | control rate 0.462) = 0.0097. The falsifier (≥ 2 low) did
+  not fire. Source: `sf_analysis.py` → `artifacts/sf2/summary.json` `q2_lottery`.
