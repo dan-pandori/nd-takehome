@@ -1,42 +1,34 @@
 params 25329664 mode lean_seq shift True
 train records 155000 max len 464
-Traceback (most recent call last):
-  File "/workspace/nd-takehome/train.py", line 129, in <module>
-    main()
-  File "/workspace/nd-takehome/train.py", line 109, in main
-    loss = loss_on(model, x, m)
-           ^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/nd-takehome/train.py", line 53, in loss_on
-    logits = model(x[:, :-1])
-             ^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/nd-takehome/model.py", line 115, in forward
-    x = b(x, cos, sin, mask, None if caches is None else caches[i])
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/nd-takehome/model.py", line 78, in forward
-    x = x + self.attn(self.ln1(x), cos, sin, mask, cache)
-                      ^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/normalization.py", line 217, in forward
-    return F.layer_norm(
-           ^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/nn/functional.py", line 2905, in layer_norm
-    return torch.layer_norm(
-           ^^^^^^^^^^^^^^^^^
-torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 68.00 MiB. GPU 0 has a total capacity of 31.36 GiB of which 16.38 MiB is free. Process 1175 has 27.02 GiB memory in use. Including non-PyTorch memory, this process has 4.31 GiB memory in use. Of the allocated memory 3.66 GiB is allocated by PyTorch, and 79.17 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+step 200 loss 0.6687 lr 1.00e-03 37s val 0.6757
+step 400 loss 0.1617 lr 9.97e-04 74s val 0.1241
+step 600 loss 0.1030 lr 9.89e-04 112s val 0.0943
+step 800 loss 0.1003 lr 9.76e-04 149s val 0.0894
+step 1000 loss 0.0889 lr 9.58e-04 186s val 0.0849
+step 1200 loss 0.0924 lr 9.36e-04 223s val 0.0816
+step 1400 loss 0.0744 lr 9.08e-04 260s val 0.0791
+step 1600 loss 0.0762 lr 8.77e-04 298s val 0.0777
+step 1800 loss 0.0653 lr 8.41e-04 335s val 0.0794
+step 2000 loss 0.0701 lr 8.03e-04 373s val 0.0774
+step 2200 loss 0.0694 lr 7.61e-04 410s val 0.0759
+step 2400 loss 0.0600 lr 7.17e-04 448s val 0.0753
+step 2600 loss 0.0625 lr 6.70e-04 485s val 0.0747
+step 2800 loss 0.0616 lr 6.23e-04 522s val 0.0751
+step 3000 loss 0.0576 lr 5.74e-04 560s val 0.0743
+step 3200 loss 0.0566 lr 5.26e-04 597s val 0.0742
+step 3400 loss 0.0575 lr 4.77e-04 634s val 0.0738
+step 3600 loss 0.0510 lr 4.30e-04 671s val 0.0737
+step 3800 loss 0.0534 lr 3.83e-04 709s val 0.0737
+step 4000 loss 0.0563 lr 3.39e-04 746s val 0.0733
+step 4200 loss 0.0535 lr 2.97e-04 784s val 0.0734
+step 4400 loss 0.0537 lr 2.59e-04 821s val 0.0732
+step 4600 loss 0.0526 lr 2.23e-04 858s val 0.0730
+step 4800 loss 0.0561 lr 1.92e-04 895s val 0.0731
+step 5000 loss 0.0496 lr 1.64e-04 933s val 0.0727
+step 5200 loss 0.0510 lr 1.42e-04 970s val 0.0728
+step 5400 loss 0.0539 lr 1.24e-04 1007s val 0.0727
+step 5600 loss 0.0525 lr 1.11e-04 1044s val 0.0729
+step 5800 loss 0.0536 lr 1.03e-04 1081s val 0.0727
+step 6000 loss 0.0493 lr 1.00e-04 1119s val 0.0725
+saved ckpts/sf/stage1_big_seq_s0.pt
+4efb5a1ebe5c2fd1625a8885523ce8a5  ckpts/sf/stage1_big_seq_s0.pt

@@ -130,11 +130,17 @@ def main():
         c['reach_by_L'] = {L: [sum(e['reached'] for e in reach.values() if e['L_true'] == L), sum(1 for e in reach.values() if e['L_true'] == L)]
                            for L in sorted({e['L_true'] for e in reach.values()})}
         c['falsifier_fires'] = c['survivors_reached'] >= 15
+        for T in ('T08', 'T10'):
+            c[f'truncation_c2_{T}'] = trunc(load(f'{SF}/c2_big_{T}_s0_sh*.s0.jsonl'), Lt)
+        c['samples'] = sum(v[0] for v in C1.values()) + sum(v[0] for T in c2 for v in c2[T].values())
+        c['peak_mem_gb'] = max(r.get('peak_mem_gb', 0) for p in ('c1', 'c2') for f in glob.glob(f'{SF}/{p}_big_*.jsonl') for l in open(f) for r in [json.loads(l)])
         S['C'] = c
         print(f"\nC — big s0 {c['md5']}: c1 {c['c1_done']} / 82 done; crux solved at k 10,000: {c['c1_crux_solved']}; "
               f"survivors solved in c1: {c['c1_survivors_solved']}; survivors reached overall: {c['survivors_reached']} / 29 "
               f"(falsifier >= 15: {c['falsifier_fires']}); by L_true {c['reach_by_L']}")
-        print('  truncation c1:', {L: f"{v['frac']:.4%}" for L, v in c['truncation_c1'].items()})
+        for k in ('truncation_c1', 'truncation_c2_T08', 'truncation_c2_T10'):
+            print(f'  {k}:', {L: f"{v['frac']:.4%}" for L, v in c[k].items()})
+        print(f"  samples {c['samples']:,}; peak mem {c['peak_mem_gb']} GiB at batch 1,024 / max_new 512")
     json.dump(S, open(f'{SF}/abc_summary.json', 'w'), indent=1, ensure_ascii=False)
 
 

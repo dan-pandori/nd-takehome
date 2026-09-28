@@ -1,19 +1,12 @@
-Traceback (most recent call last):
-  File "/workspace/nd-takehome/eval_set.py", line 119, in <module>
-    main()
-  File "/workspace/nd-takehome/eval_set.py", line 96, in main
-    model, tok, _ = load_ckpt(a.ckpt, dev)
-                    ^^^^^^^^^^^^^^^^^^^^^^
-  File "/workspace/nd-takehome/model.py", line 125, in load_ckpt
-    ck = torch.load(path, map_location=device)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 1484, in load
-    with _open_file_like(f, "rb") as opened_file:
-         ^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 759, in _open_file_like
-    return _open_file(name_or_buffer, mode)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 740, in __init__
-    super().__init__(open(name, mode))
-                     ^^^^^^^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: 'ckpts/sf/stage1_big_seq_s0.pt'
+[lean_gate] 5000 samples, parse-fail 471, distinct checked 4529: lean ok 4396, lean rej 133; lean 2.9s wall (16.4s proc, 8 workers)
+generated 5000 proofs in 19s
+stage1_big_seq_s0.pt on heldout.jsonl k=1 SOLVED 4396/5000 = 0.879 [0.870,0.888]
+  len 2: 999/1000 = 0.999 [0.994,1.000]
+  len 3: 993/1000 = 0.993 [0.986,0.997]
+  len 4: 975/1000 = 0.975 [0.963,0.983]
+  len 5: 958/1000 = 0.958 [0.944,0.969]
+  len 6: 471/1000 = 0.471 [0.440,0.502]
+  written hist {2: 1023, 3: 987, 4: 953, 5: 1005, 6: 427, 7: 1}
+  pruned hist {2: 1023, 3: 988, 4: 954, 5: 1003, 6: 427, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('lean_seq parse: unbound', 463), ('lean rejected', 133), ('lean_seq parse: expected :=', 3), ('lean_seq parse: name', 2), ('lean_seq parse: no-eos', 2), ('lean_seq parse: formula', 1)]
