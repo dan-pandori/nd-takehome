@@ -48,3 +48,51 @@ consistent with the 15 s poll.
   runs in the background and races the first sync. It failed on T2 and T5 and the host fallback covered both.
 - **Hard constraints.** `nd_verify/` and `artifacts/TEST_RUN_DONE` do not differ from `origin/main` ✓. There
   is no training or evaluation code in this run, so no evaluation-file reads ✓. `nd_verify` was not used ✓.
+
+## Compare (phase 2: `run_podjob.md`, `numbers.md` § podjob, `log.md`, `STATUS.md`, `QUESTIONS.md`)
+
+| claim | reviewer value | verdict |
+|---|---|---|
+| Pre-registration committed before any pod | commit 19:01:18; first START 19:06:48; first pod 19:09:30 | reproduces. The pre-reg text says "Written 19:10", which is later than its own commit time. Cosmetic |
+| T1 normal: exit 0, gone 15 s, 1 bucket file | 0 / 15 / 1 | reproduces |
+| T2 failing: exit 3, 48 s, 1 file | 3 / 48 / 1 | reproduces |
+| T3 SIGTERM mid-job: 143, 26 s, 1 file | 143 / 26 / 1 | reproduces |
+| T4 `--pack 3`: 0, 33 s, 3 files; one host; starts within 5 s; wall 65 s; one pods.log line | 0 / 33 / 3; host `456e10895074` ×3; starts 1790623120/122/125; wall 65 s; one id `cqhohpbc58xh1m` | reproduces. **But** the registered condition "all three report the same `RUNPOD_POD_ID`" is not met: every job printed `pod=?`, because the variable is not set in the job's environment. The substitute evidence (hostname plus a single pod id) is adequate, but the write-up should call it a substitution |
+| T5 SIGTERM during creation: 143, 74 s; half-made pod removed 2 s after the signal | 143 / 74 / removed 19:18:53 (+2 s) | reproduces. The 74 s is bounded by podjob's exit, which includes its 60 s create-grace loop. The pod was already absent from the listing saved at +27 s |
+| "All pass" (`run_podjob.md`); "all acceptance tests pass" (`STATUS.md`) | T5 was **registered with SIGINT**. Run that way, the signal was ignored and podjob exited 0 (`T5_sigint_ignored.*`) | **reword.** `log.md` and the Limits paragraph report the SIGINT result honestly, but the headline should say "T1–T4 pass; T5 fails as registered (SIGINT is ignored when podjob is started with `&` from a script), and passes with SIGTERM substituted" |
+| First T1 on the pre-fix code "passed (37 s)" | 37 s ✓ | reproduces as a timing. That run also showed the v1 detach defect (host logged the start 30 s late). `log.md` finding (1) covers it |
+| `podbg` old 42 s vs new 4 s | `T3.txt`: 42 / 4 | reproduces |
+| "Existing `pod*` tools unchanged" (pre-reg Design) | `podbg` and `podnew` changed | deviation. It is reported as "found and fixed" but not flagged as a departure from the pre-registration. The fixes themselves look correct: the diff is minimal, and `podrm` reads `CREATED` from the registry |
+| Spend: podbudget 0.13 h / $0.04; START→DELETED ≈ 0.36 pod-h ≈ $0.09 | podhours 0.1286 h / $0.04 ✓. START→DELETED over the 7 runs that made a pod: 1,393 s = 0.39 h | reproduces within rounding (0.36 vs 0.39, both upper bounds). The T5 `UNDONE` pod has no podhours entry. RunPod billing records for 19:00–20:00 were empty when queried, so billed $ is not derivable yet |
+| Billed rates $0.25 / $0.24 / $0.27 per hour; min CUDA 12.4 | – | not derivable. The registries were deleted and no billing records exist yet |
+| "T2's 2000 Ada took 11 min to accept ssh; unlogged billing" | create 19:16:20 → registered 19:27:23 ✓. Whether that time was billed is not derivable | the "11 min" reproduces. "Unlogged billing" is plausible but unverified |
+| Bucket paths | `hf buckets ls …/podjob/artifacts/podjob/` lists 6 job dirs plus `tests/` | reproduces |
+| Not installed (other runs' pods live) | no `~/bin/podjob` | reproduces |
+| No RunPod key on the pod | only `podrun` ssh commands are sent; no key on the command line | reproduces (by code reading) |
+| Model labels | the run has no model; `numbers.md` says so | n/a, no finding |
+
+## Verdict
+
+- **No hard-constraint violation.** `nd_verify` and `TEST_RUN_DONE` are unchanged from `origin/main`, and
+  no judge was used. No quarantine.
+- **What stands.** podjob ties a pod's lifetime to its jobs, and it cleans up on a normal exit, on a job
+  failure, on SIGTERM mid-job, and on SIGTERM during creation. The pod was gone within 15–74 s, and every value
+  is an upper bound under the 120 s limit. It runs packed jobs concurrently on one pod. No `pj-` pod was left on
+  the account. Spend was a few cents, inside $1. The `podbg` ssh-hold fix is real and measured (42 → 4 s).
+- **Must be reworded.**
+  1. "All pass" should become "T1–T4 pass; T5 as registered (SIGINT) failed and passed with SIGTERM".
+  2. T4's `RUNPOD_POD_ID` condition was replaced by hostname plus a single pod id; say so. Either fix the
+     variable (e.g. export `RUNPOD_POD_ID` from the registry into the job's environment) or drop it from the
+     acceptance wording.
+  3. The pre-registered "Existing `pod*` tools unchanged" did not hold, so `podbg` and `podnew` should be
+     listed as deviations.
+- **Not supported or not derivable yet.** The billed rates, and whether T2's 11-minute creation wait was
+  billed.
+- **Suggested next checks.** Both are cheap and can be done without a pod or on one test pod:
+  1. A SIGINT test from an interactive terminal (foreground Ctrl-C), the case the header says is trapped.
+  2. The RunPod billing for pods `82q4i3bttq5co3` and `x1qujwzx9ckgq0` once it posts, to settle the
+     creation-wait accounting.
+- **Code notes for the librarian** (not blocking):
+  1. With ≥ 10 jobs the exit code comes from lexical job order.
+  2. The unregistered-pod loop never ends if `runpodctl pod remove` keeps failing.
+  3. The pod-side `hf` install is background-raced; the host fallback covers it.
