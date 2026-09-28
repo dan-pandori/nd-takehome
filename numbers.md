@@ -1281,6 +1281,31 @@ Reproduce: the `print` in `LEAN_JUDGE.md` § "The grammar is the allowlist", or
 `hf://buckets/dan-pandori/nd-rl/lean-judge/artifacts` — `artifacts/lj/` in full, including
 `corpus_accepted.jsonl` (165 MB, gitignored) and `corpus_leanonly.jsonl`.
 
+## fast-stage1 (2026-09-28)
+
+**Model (every row):** 3,214,336-param from-scratch GPT (4L, d 256, 8H), `lean_seq`, cap 6, trained on
+`data/p2/train_depth3_f0_a1.jsonl` (155,000 records, 0 depth-3), cosine 6,000 steps, bs 128, lr 1e-3 → 1e-4, warmup 200.
+Old arm = `stage1-dynamics` arm C (legacy `train.py`, seeds 0–7; its files copied to `artifacts/fs/old/`). New arm =
+`train.py --impl fast`, seeds 0–7 (`ckpts/fs/fast*_s{0..7}.pt`). Judge: Lean alone (`sd_eval.py`, batch 512, max_new 400).
+All values recomputed by `python3 fs_analysis.py` → `artifacts/fs/summary.json`, `artifacts/fs/tables.md`.
+
+- FS1 equivalence: 14 / 14 pre-registered comparisons within the n = 8 MDD (table in `FAST_STAGE1.md`). Held-out greedy
+  overall 0.9001 fast vs 0.9105 legacy (Δ −1.04 pp, MDD 4.58 pp); 6-line 0.6459 vs 0.7096 (Δ −6.37 pp, MDD 22.94 pp);
+  val loss all 0.05124 vs 0.05101 (MDD 0.00219). Sources: `artifacts/fs/ev/fast*_s*.json`, `artifacts/fs/m_fast*_s*.jsonl`,
+  `artifacts/fs/old/{ev_c_s*.json,m_c_s*.jsonl}`.
+- FS2 depth-3 high mode (> 0.44): fast 4/8, arm C 6/8, arm R 3/8 (`artifacts/fs/ev/`, `artifacts/fs/old/ev_r6*`).
+- FS3 one model, A40 alone (billed $0.49/h): legacy 345 s process wall (`waves.jsonl` `legfull`; 48.9 ms/step), fast 135 s and
+  128 s (`fast1`, `fast1b`; 16.8 / 17.3 ms/step; compile + capture 14.7 / 9.7 s). `m_legfull_s0.jsonl`, `m_fast1*_s*.jsonl`.
+- FS4 tokens: 106,296,500 useful (non-pad) tokens per 6,000-step run of seed 0; fast computes 116,736,000 (1.098×, stream
+  length 19,456); legacy pad-to-batch-max would compute 208,984,960 (1.966×) (`m_fast1_s0.jsonl` args record).
+- FS5 in-loop useful tokens/s: fast 921k (11.9 % of A40 bf16 dense peak at 6·P per token), legacy 362k (4.7 %).
+- FS6 seeds per A40, aggregate steps/s: fast 44.5 / 47.8 / 49.6 / 47.7 at N = 1 / 2 / 4 / 8; legacy 11.9 / 14.0 / 15.6 at N = 1 / 2 / 4
+  (`waves.jsonl`; legacy waves are 1,000 steps incl. ≈ 30 s start-up). Peak GPU memory per fast process 0.44 GB.
+- FS7 H100 SXM ($3.49/h, 2,000-step waves, `waves_h100.jsonl`): fast 4.1 ms/step alone; aggregate 64.9 / 125.0 / 133.0 / 179.2 /
+  188.0 steps/s at N = 1 / 2 / 4 / 8 / 16; legacy alone 30.0 ms/step. bs 512: A40 64.0 ms/step, H100 12.2 ms/step (no gain per token).
+- FS8 cost: 1.49 pod-hours, $1.47 (A40 `fs1` 1.24 h $0.61; H100 `fs2` 0.25 h $0.86).
+- FS9 bucket: `hf://buckets/dan-pandori/nd-rl/fast-stage1/{artifacts,ckpts}` (the 8 fast checkpoints and `legfull_s0.pt`).
+
 # § lean-prefilter (2026-09-28) — a sound reject-only pre-filter, quota-sized Lean, pipelined gate
 
 Checker for every number: Lean 4.34 core alone (`nd_verify` not called). Pre-registration

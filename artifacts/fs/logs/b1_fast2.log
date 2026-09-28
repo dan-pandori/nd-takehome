@@ -1,0 +1,29 @@
+params 3214336 mode lean_seq shift True aug offset impl fast pack True cache hit
+train records 155000  stream T 19200  useful tokens 17727376  computed 19200000 (waste 1.083x; legacy pad-to-max 1.972x)
+val slices {'all': 5000, 'len2': 1000, 'len3': 1000, 'len4': 1000, 'len5': 1000, 'len6': 1000, 'depth3': 500, 'nodepth3_len6': 500}
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/train.py", line 323, in <module>
+    main()
+  File "/workspace/nd-takehome/train.py", line 222, in main
+    return fast_train.run(a, model, tok, dev, load, lr_at, load_val, save_ckpt, VAL_SHIFT_SEED, st=st)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/fast_train.py", line 373, in run
+    l = lossf(x, pos, bmf(doc, T))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/_dynamo/eval_frame.py", line 736, in compile_wrapper
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/fast_train.py", line 337, in <lambda>
+    lossf = torch.compile(lambda x, pos, bm: tok_losses_packed(model, x, pos, bm), disable=a.no_compile)
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/fast_train.py", line 234, in tok_losses_packed
+    logits = packed_logits(model, x, pos, bm)[0]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/fast_train.py", line 226, in packed_logits
+    y = flex_attention(q, k, v, block_mask=bm)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/attention/flex_attention.py", line 1298, in flex_attention
+    _validate_sdpa_input(query, key, value)
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/attention/_utils.py", line 45, in _validate_sdpa_input
+    raise ValueError(
+ValueError: Expected query, key, and value to have the same dtype, but got query.dtype: torch.float32, key.dtype: torch.float32, and value.dtype: torch.bfloat16 instead.
