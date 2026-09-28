@@ -128,3 +128,13 @@ Order D, A, B, C (D on the VPS in parallel with pods). Pods: A40 at the billed r
 `costPerHr`). Stop at 30 pod-hours / $15 or if the balance would fall below $100 counting `state-env`'s
 remaining ceiling. Drop order: C seed 1, then C's T 1.0 depth, then B's depth halved. If C would not
 fit, finish D, A, B, write up, and put C's projection in `QUESTIONS.md`.
+
+## Addendum (2026-09-28 10:30 UTC, before any seed-1 pod): C seed 1
+
+Seed 0 of C is in (big s0 reaches 0 / 29 survivors; 6 / 82 forward crux at k 10,000; held-out 0.879). The
+budget allows C seed 1 (13.8 of 30 pod-hours used), and the policy asks for two seeds before a difference is called.
+**Protocol identical to seed 0** except `train.py --seed 1` and fresh sampling seeds (4xx): the same 82 forward-crux
+theorems at k 10,000 / T 0.8 / stop 50, then every survivor not solved there to 200,000 at T 0.8 and then 200,000 at
+T 1.0 (T 1.0 only if still unsolved), stop 5, batch 1,024, `max_new` 512. The survivor count is the union over seeds
+per model seed; the falsifier (≥ 15 of 29) is evaluated per seed and for the union.
+**Expected:** big s1 held-out greedy 0.85–0.93; forward crux at k 10,000 **2–15** of 82; survivors reached **0–2** of 29.
