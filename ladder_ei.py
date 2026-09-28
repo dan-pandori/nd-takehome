@@ -31,7 +31,7 @@ from prune import pruned_length
 from gen import canon_key
 from normalize import norm
 from eval_set import judge, summarize, wilson
-from expert_iter import relabel
+from expert_iter import relabel_batch, strip_rej   # `relabel` was replaced by the batched form (lean-judge)
 
 
 def read(fn):
@@ -228,17 +228,16 @@ def main():
         # relabelling by-products (T3)
         if a.relabel:
             nrl = 0
-            for (t, ki), ps in zip(sub, outs):
-                for p in ps:
-                    rl = relabel(t['prompt'], p)
-                    if rl is None:
-                        continue
-                    newp, thm, nl = rl
-                    key = canon_key(thm)
-                    if nl < 7 or key in eval_keys or thm in relabelled:
-                        continue
-                    relabelled[thm] = {'prompt': newp, 'proof': p, 'n_lines': nl, 'thm': thm, 'round': r}
-                    nrl += 1
+            pairs = [(t['prompt'], p) for (t, ki), ps in zip(sub, outs) for p in ps]
+            for (_, p), rl in zip(pairs, relabel_batch(pairs)):   # one batched Lean run for every candidate
+                if rl is None:
+                    continue
+                newp, thm, nl = rl
+                key = canon_key(thm)
+                if nl < 7 or key in eval_keys or thm in relabelled:
+                    continue
+                relabelled[thm] = {'prompt': newp, 'proof': strip_rej(p), 'n_lines': nl, 'thm': thm, 'round': r}
+                nrl += 1
             stats['relabelled_new'] = nrl; stats['relabelled_total'] = len(relabelled)
             with open(f'{out}/relabelled_{r}.jsonl', 'w') as f:
                 for x in relabelled.values():

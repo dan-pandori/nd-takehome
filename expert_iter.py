@@ -36,7 +36,9 @@ def relabel_candidate(prompt, proof):
     """The rewritten theorem this proof would prove if its last formula were the conclusion: (new_prompt, thm) or None.
     Structural only -- no judging: hindsight relabelling re-checks the proof against a theorem the gate never saw, so no
     cached verdict applies (pitfall 2) and the Lean checks must be batched over all candidates (pitfall 4)."""
-    toks = proof.split()
+    if proof.startswith('LEANPARSE'):
+        return None
+    toks = strip_rej(proof).split()
     if 'QED' not in toks:
         return None
     # last line formula: between the last 'N<i>' line start and ':'... find last ';' before QED, then the line
@@ -62,11 +64,22 @@ def relabel_candidate(prompt, proof):
     return newp, f'{prem} |- {form}'
 
 
+MARK_REJ = 'LEANREJ '
+
+
+def strip_rej(proof):
+    """Drop a leading `LEANREJ ` marker. The marker is Lean's verdict for the PROMPTED theorem; it says nothing about the
+    rewritten theorem hindsight relabelling checks, so it must not veto a relabel (lean-judge review, 2026-09-28: with the
+    marker kept, relabelling rescued 125 -> 0). `LEANPARSE` strings carry no ND proof and stay rejected. Callers store the
+    stripped proof, so no marker ever reaches training data."""
+    return proof[len(MARK_REJ):] if proof.startswith(MARK_REJ) else proof
+
+
 def relabel_batch(pairs):
     """pairs: list of (prompt, proof) -> list of (new_prompt, thm, n_lines) or None, judged in ONE batched Lean run."""
     cands = [relabel_candidate(p, pf) for p, pf in pairs]
     idx = [i for i, c in enumerate(cands) if c is not None]
-    res = judge_many([(cands[i][0], pairs[i][1]) for i in idx])
+    res = judge_many([(cands[i][0], strip_rej(pairs[i][1])) for i in idx])
     out = [None] * len(pairs)
     for i, (ok, reason, nl) in zip(idx, res):
         if ok:
@@ -166,7 +179,7 @@ def main():
                     key = canon_key(thm)
                     if nl < 7 or key in eval_keys or thm in relabelled:
                         continue
-                    relabelled[thm] = {'prompt': newp, 'proof': p, 'n_lines': nl, 'thm': thm, 'round': r}
+                    relabelled[thm] = {'prompt': newp, 'proof': strip_rej(p), 'n_lines': nl, 'thm': thm, 'round': r}
                     nrl += 1
             stats['relabelled_new'] = nrl; stats['relabelled_total'] = len(relabelled)
         # 2. transfer, sampled
