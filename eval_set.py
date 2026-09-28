@@ -114,7 +114,8 @@ def main():
     if a.k > 1 or a.temperature:     # rows that stopped for none of eos / exact / goal hit max_new (fast path's counters)
         st = {k: gstats.get(k, 0) for k in ('rows', 'stop_eos', 'stop_exact', 'stop_goal')}
         st['hit_max_new'] = st['rows'] - st['stop_eos'] - st['stop_exact'] - st['stop_goal']
-        summ.update({'max_new': a.max_new, 'batch': a.batch, 'gen_stats': st, 'wall_s': time.time() - t0})
+        summ.update({'max_new': a.max_new, 'batch': a.batch, 'gen_stats': st, 'wall_s': time.time() - t0,
+                     'peak_alloc_gb': round(torch.cuda.max_memory_allocated() / 1e9, 2) if torch.cuda.is_available() else None})
         print('gen_stats', json.dumps(st), flush=True)
     with open(a.out, 'w') as f:
         for r in rows:
