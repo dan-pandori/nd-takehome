@@ -78,9 +78,10 @@ def seq_tokens(nd_body):
 
 
 # --------------------------------------------------------------------------- decomposition
-def split_actions(toks):
+def split_actions(toks, sink=None):
     """`lean_seq` token list -> the list of model-visible actions (see the module docstring).  Raises ParseFail
-    outside the strict grammar.  The Or.elim second-branch opener is NOT an action: the environment supplies it."""
+    outside the strict grammar.  The Or.elim second-branch opener is NOT an action: the environment supplies it;
+    `sink`, if given, collects its binder name, in the order the branch-1 `exact` actions occur."""
     pos = [0]
     acts = []
 
@@ -128,7 +129,9 @@ def split_actions(toks):
             elif t == 'Or.elim':
                 a += [eat('Or.elim'), name()]
                 acts.append(a + box_head()); stmts(); acts.append(close_box())
-                box_head()                      # environment-supplied second branch opener
+                h2 = box_head()                 # environment-supplied second branch opener
+                if sink is not None:
+                    sink.append(h2[3])
                 stmts(); acts.append(close_box()); eat(';')
             else:
                 while peek() is not None and peek() != ';':
@@ -169,8 +172,9 @@ def prompt_parts(prompt):
 class Env:
     """One proof attempt.  `apply(action_tokens)` -> (ok, reason)."""
 
-    def __init__(self, prompt):
+    def __init__(self, prompt, canon=False):
         prem, concl, lines = prompt_parts(prompt)
+        self.canon = canon
         self.prompt = prompt
         self.prem = prem
         self.concl = concl
@@ -192,6 +196,19 @@ class Env:
             if n in f.names:
                 return f.names[n]
         return None
+
+    def next_name(self, reserve=(), frames=None):
+        """the canonical next name: `max index in scope (+ the pending `have`s) + 1`.  Under canonical naming the
+        action's name token is a function of the state, which the global first-appearance numbering is not."""
+        mx = 0
+        for f in (self.frames if frames is None else frames):
+            for n in f.names:
+                mx = max(mx, int(n[1:]))
+            if f.pending:
+                mx = max(mx, int(f.pending[0][1:]))
+        for r in reserve:
+            mx = max(mx, int(r))
+        return mx + 1
 
     def add_hyp(self, fr, n, f):
         fr.htoks.append([n, ':'] + ftoks(f) + ['<nl>'])
@@ -372,10 +389,14 @@ class Env:
             self.done = True
             return
         if fr.kind == 'or1':
-            self.maxname += 1
-            if self.maxname > MAXN:
+            if self.canon:
+                k = self.next_name(frames=self.frames[:-1] + [Frame('x', None, pending=fr.pending)])
+            else:
+                k = self.maxname + 1
+            if k > MAXN:
                 raise ParseFail('names exhausted')
-            b = f'n{self.maxname}'
+            self.maxname = max(self.maxname, k)
+            b = f'n{k}'
             rt = ftoks(fr.ore_right)
             self.text += ['exact', n, ')', '(', 'fun', '(', b, ':'] + rt + [')', '=>', 'by']
             nf = Frame('or2', fr.goal, pending=fr.pending)
@@ -403,12 +424,64 @@ class Env:
             return f'LEANPARSE {e}'
 
 
-def decompose(prompt, nd_body):
-    """-> (steps, tokens, env) where steps is a list of (state tokens, action tokens, history tokens).
-    Raises ParseFail if the actions do not replay or do not reassemble the original text byte for byte."""
+def canonicalise(prompt, nd_body):
+    """`lean_seq` tokens rewritten so that every name a step *introduces* is `max index in scope + 1` -- a function of
+    the state, unlike the global first-appearance index, which the state stops determining once a box has closed and
+    taken its names out of scope (3.00 % of the control set's `have` actions).  The result is an alpha-variant: the ND
+    proof `lean_tok.inverse` returns is unchanged, and Lean's verdict is invariant to hypothesis renaming."""
     toks = seq_tokens(nd_body)
+    sink = []
+    acts = split_actions(toks, sink)
+    env = Env(prompt, canon=True)
+    m = {}
+    si = 0
+    out = []
+    for a in acts:
+        if a[0] == 'exact':
+            b2 = None
+            if env.frames[-1].kind == 'or1':
+                b2 = sink[si]; si += 1
+            na = ['exact', m[a[1]]]
+            ok, why = env.apply(na)
+            if not ok:
+                raise ParseFail(f'canon: {why}')
+            if b2 is not None:
+                m[b2] = env.frames[-1].last
+        else:
+            j = a.index(':=')
+            na = list(a)
+            nh = f'n{env.next_name()}'
+            na[1] = nh
+            if a[j + 1] == '(':
+                nb = f'n{env.next_name(reserve=[nh[1:]])}'
+                na[j + 4] = nb
+                m[a[j + 4]] = nb
+            elif a[j + 1] == 'Or.elim':
+                na[j + 2] = m[a[j + 2]]
+                nb = f'n{env.next_name(reserve=[nh[1:]])}'
+                na[j + 6] = nb
+                m[a[j + 6]] = nb
+            else:
+                for i in range(j + 1, len(a)):
+                    if is_name(a[i]):
+                        na[i] = m[a[i]]
+            m[a[1]] = nh
+            ok, why = env.apply(na)
+            if not ok:
+                raise ParseFail(f'canon: {why}')
+        out.append(na)
+    if not env.done:
+        raise ParseFail('canon: did not finish')
+    return env.text
+
+
+def decompose(prompt, nd_body, canon=False):
+    """-> (steps, tokens, env) where steps is a list of (state tokens, action tokens, history tokens).
+    Raises ParseFail if the actions do not replay or do not reassemble the text byte for byte.  With `canon=True` the
+    text is first rewritten by `canonicalise` (an alpha-variant denoting the same ND proof)."""
+    toks = canonicalise(prompt, nd_body) if canon else seq_tokens(nd_body)
     acts = split_actions(toks)
-    env = Env(prompt)
+    env = Env(prompt, canon=canon)
     steps = []
     for a in acts:
         st = env.state_tokens()

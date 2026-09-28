@@ -24,8 +24,9 @@ def main():
     ap.add_argument('--lean', type=int, default=5000)
     ap.add_argument('--limit', type=int, default=0)
     ap.add_argument('--seed', type=int, default=0)
+    ap.add_argument('--canon', action='store_true', help='arm SN: canonical (scope-determined) names')
     a = ap.parse_args()
-    tk = LeanTokenizer('lean_state')
+    tk = LeanTokenizer('lean_staten' if a.canon else 'lean_state')
     rng = random.Random(a.seed)
     recs = [json.loads(l) for l in open(a.data) if l.strip()]
     if a.limit:
@@ -38,7 +39,7 @@ def main():
     t0 = time.time()
     for r in recs:
         try:
-            steps, toks, env = decompose(r['prompt'], r['proof'])
+            steps, toks, env = decompose(r['prompt'], r['proof'], canon=a.canon)
         except (ParseFail, ValueError, AssertionError, KeyError, IndexError) as e:
             fails.append({'name': r.get('name'), 'reason': str(e)})
             continue
@@ -59,14 +60,10 @@ def main():
                 name_steps += 1
         # name predictability: recompute per step with a fresh replay of the scope
         from state_env import Env
-        e2 = Env(r['prompt'])
+        e2 = Env(r['prompt'], canon=a.canon)
         for st, act, hs in steps:
             if act[0] == 'have':
-                mx = 0
-                for f in e2.frames:
-                    for n in f.names:
-                        mx = max(mx, int(n[1:]))
-                if int(act[1][1:]) != mx + 1:
+                if int(act[1][1:]) != e2.next_name():
                     name_offbyN += 1
             e2.apply(act)
     res = {'utc': time.strftime('%FT%TZ', time.gmtime()), 'data': a.data, 'n_records': len(recs),

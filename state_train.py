@@ -30,7 +30,7 @@ def load(fn, tok, cap, limit=0):
         if cap:
             assert r['n_lines'] <= cap, f'record exceeds cap {cap}: {r.get("name")}'
         try:
-            steps, toks, env = decompose(r['prompt'], r['proof'])
+            steps, toks, env = decompose(r['prompt'], r['proof'], canon=getattr(tok, 'canon', False))
         except (ParseFail, ValueError, AssertionError, IndexError) as e:
             skipped += 1
             continue

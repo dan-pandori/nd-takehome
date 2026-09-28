@@ -134,3 +134,35 @@ are recorded in `numbers.md`; pods are deleted when their work is pulled; `ckpts
 
 Stop rule: stop at 60 pod-hours or $30, whichever comes first (`pod_budget_watch` deletes this run's pods at 100 %);
 extend only within the declared budget with `podbudget state-env --extend`, and ask in `QUESTIONS.md` beyond it.
+
+---
+
+## Addendum — arm SN (canonical names), added 2026-09-28 ≈ 05:05 UTC
+
+**Added after seeing a result, and labelled as such.** Arm S seed 0's held-out greedy is 0.9580; seed 1's is
+**0.8012**, with **581 of 5,000 attempts (11.6 %) ending on `unbound`** — the policy cited a name that is not in
+scope. The two Stage-1 models have the same validation loss (0.0701 / 0.0702), so this is not a training failure: it
+is the imperfection the pre-registration names. A `have`'s name in `lean_seq` is the **global first-appearance
+index**, which the state stops determining as soon as a box closes and takes its names out of scope (3.00 % of the
+control set's `have` actions), so the policy must guess it, and one seed guesses worse than the other.
+
+**Arm SN** removes that one non-Markov token and changes nothing else: `state_env.canonicalise` rewrites each proof
+so that every name a step introduces is `max index in scope + 1`, which the state does determine. The rewritten text
+is an **alpha-variant** — `lean_tok.inverse` returns the same ND proof and Lean's verdict is invariant to hypothesis
+renaming — so it is the same proofs, the same set, the same schedule, the same environment, with the policy's naming
+decision made a function of the observation. Tokenizer mode `lean_staten`. Gates re-run on the canonical variant
+before its first pod's measurements: gate 1 **0 failures / 155,000**, gate 1b **0 Lean rejections / 5,000**,
+gate 2 **0 mismatches / 1,300**, and **0 of 526,784 `have` actions** now have a name that is not `max in scope + 1`
+(`artifacts/se/gate13_canon.json`, `artifacts/se/gate2_canon*.json`).
+
+SN is a **diagnostic arm, not a falsifier arm**: the pre-registered falsifiers are about arm S and stay about arm S.
+Predictions for SN, written now, before any SN measurement exists:
+
+| quantity | prediction for SN (both seeds) |
+|---|---|
+| held-out greedy, overall | **≥ 0.94**, and the seed-to-seed spread **< 3 pp** (arm S's is 15.7 pp) |
+| attempts ending on `unbound` | **< 1 %** (arm S seed 1: 11.6 %) |
+| T1 transfer solved / 2,285 | **≥ arm S on the same seed**, and I expect the gain to be large on seed 1 and small on seed 0 |
+| T1 transfer solved at `L_true` ≥ 13 | **0 – 5** |
+
+Budget: two more pods (`se-3`, `se-4`), projected ≈ 10 more pod-hours, inside the declared 60 h / $30.

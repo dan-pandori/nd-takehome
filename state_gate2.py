@@ -16,7 +16,7 @@ import argparse, bisect, collections, json, os, random, re, shutil, subprocess, 
 from concurrent.futures import ThreadPoolExecutor
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from lean_tok import LeanTokenizer, ParseFail
-from state_env import Env, seq_tokens, split_actions, parse_ftoks, NDMAP
+from state_env import Env, seq_tokens, split_actions, parse_ftoks, canonicalise, NDMAP
 
 LEAN = os.path.expanduser('~/.elan/bin/lean')
 PRELUDE = 'set_option linter.unusedVariables false\nset_option maxRecDepth 4000\nset_option format.width 100000\n'
@@ -184,8 +184,9 @@ def main():
     ap.add_argument('--out', default='artifacts/se/gate2.json')
     ap.add_argument('--dump', default='artifacts/se/gate2_cases.jsonl')
     ap.add_argument('--kinds', default='', help='comma-separated focused-frame kinds to keep (default: any)')
+    ap.add_argument('--canon', action='store_true', help='arm SN: canonical (scope-determined) names')
     a = ap.parse_args()
-    tk = LeanTokenizer('lean_state')
+    tk = LeanTokenizer('lean_staten' if a.canon else 'lean_state')
     rng = random.Random(a.seed)
     recs = [json.loads(l) for l in open(a.data) if l.strip()]
     want = set(x for x in a.kinds.split(',') if x)
@@ -195,14 +196,14 @@ def main():
     while len(cases) < a.n and tries < 4000 * a.n:
         tries += 1
         r = recs[rng.randrange(len(recs))]
-        toks = seq_tokens(r['proof'])
+        toks = canonicalise(r['prompt'], r['proof']) if a.canon else seq_tokens(r['proof'])
         acts = split_actions(toks)
         i = rng.randrange(len(acts))
         key = (r['name'], i)
         if key in seen:
             continue
         seen.add(key)
-        env = Env(r['prompt'])
+        env = Env(r['prompt'], canon=a.canon)
         for a2 in acts[:i]:
             ok, why = env.apply(a2)
             assert ok, why
