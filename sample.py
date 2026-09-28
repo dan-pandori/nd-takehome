@@ -274,6 +274,10 @@ def generate(model, tok, prompts, greedy=True, temperature=1.0, max_new=400, bat
     texts = [None] * len(prompts)
     goals = [goal_token_ids(tok, p) for p in prompts] if (is_lean and path == 'fast' and early == 'goal') else None
     t0 = time.time()
+    g = None
+    if is_lean and gate:
+        from lean_gate import Gate
+        g = Gate(tok)          # Lean checks each finished decode chunk while the GPU samples the next (LEAN_GATE_PIPELINE)
     for ci, s in enumerate(range(0, len(order), batch)):
         chunk = order[s:s + batch]
         with torch.autocast('cuda', dtype=torch.bfloat16, enabled=(dev.type == 'cuda')):
@@ -298,6 +302,8 @@ def generate(model, tok, prompts, greedy=True, temperature=1.0, max_new=400, bat
             if raw is not None:
                 raw[i, :len(o)] = o
         del outs
+        if g is not None:
+            g.submit([prompts[i] for i in chunk], [res[i] for i in chunk], [texts[i] for i in chunk])
     if stats is not None:
         stats['sample_wall_s'] = stats.get('sample_wall_s', 0.0) + time.time() - t0
         if dev.type == 'cuda':
@@ -305,9 +311,8 @@ def generate(model, tok, prompts, greedy=True, temperature=1.0, max_new=400, bat
             stats['peak_reserved_gb'] = torch.cuda.max_memory_reserved() / 2 ** 30
     if dev.type == 'cuda':
         torch.cuda.empty_cache()   # hand reserved memory back to co-tenant jobs
-    if is_lean and gate:
-        from lean_gate import gate as _gate
-        res = _gate(tok, prompts, res, texts)   # Lean alone decides (2026-09-27): accepted samples come back as CLEAN ND strings, rejects marked 'LEANREJ '
+    if g is not None:
+        res = g.finish(prompts, res, texts)     # Lean alone decides (2026-09-27): accepted samples come back as CLEAN ND strings, rejects marked 'LEANREJ '
     elif is_lean:
         res = texts            # gate=False: literal Lean texts, for render/decode diagnostics only -- NOT judgeable
     return res

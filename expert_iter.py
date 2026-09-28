@@ -107,7 +107,7 @@ def main():
     ap.add_argument('--rl_weight', type=int, default=4, help='repeat RL proofs this many times in the mix')
     ap.add_argument('--relabel', action='store_true')
     ap.add_argument('--select', default='random', choices=['random', 'longest'], help='which <=max_per_thm proofs of a theorem to train on: random, or longest dependency-pruned length')
-    ap.add_argument('--batch', type=int, default=1024)
+    ap.add_argument('--batch', type=int, default=4096)   # policy 2026-09-28: the largest that fits
     ap.add_argument('--start_round', type=int, default=1)
     ap.add_argument('--extra_train', default=None, help='Phase 3 precursor injection: jsonl of verified <=6-line generator proofs added to the retained slice every round')
     ap.add_argument('--extra_weight', type=int, default=1, help='repeat each extra_train record this many times per round')

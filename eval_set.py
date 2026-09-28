@@ -89,7 +89,7 @@ def main():
     ap.add_argument('--seed', type=int, default=0)
     ap.add_argument('--limit', type=int, default=None)
     ap.add_argument('--lenfield', default='n_lines')
-    ap.add_argument('--batch', type=int, default=1024)
+    ap.add_argument('--batch', type=int, default=4096)   # policy 2026-09-28: the largest that fits
     ap.add_argument('--summary', default=None)
     a = ap.parse_args()
     dev = 'cuda' if torch.cuda.is_available() else 'cpu'

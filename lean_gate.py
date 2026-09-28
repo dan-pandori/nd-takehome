@@ -25,7 +25,29 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 LEAN = os.path.expanduser('~/.elan/bin/lean')
 CHUNK = int(os.environ.get('LEAN_GATE_CHUNK', '400'))
-WORKERS = int(os.environ.get('LEAN_GATE_WORKERS', str(max(1, (os.cpu_count() or 2) // 2))))
+
+
+def cpu_quota():
+    """CPUs this process may actually use: the cgroup quota (`cpu.max`; RunPod pods show 96 cores but grant ~7.6)
+    intersected with the affinity mask."""
+    try:
+        n = len(os.sched_getaffinity(0))
+    except AttributeError:
+        n = os.cpu_count() or 2
+    try:
+        q, per = open('/sys/fs/cgroup/cpu.max').read().split()[:2]
+        if q != 'max':
+            n = min(n, max(1, int(int(q) / int(per))))
+    except (OSError, ValueError):
+        pass
+    return n
+
+
+# default: one Lean process per CPU of the quota (lean-prefilter, 2026-09-28; was cpu_count // 2, and job scripts set 3)
+WORKERS = int(os.environ.get('LEAN_GATE_WORKERS', '0')) or cpu_quota()
+PREFILTER = os.environ.get('LEAN_PREFILTER', 'on')          # on | off | shadow  (see lean_prefilter.py, LEAN_GATE.md)
+PIPELINE = os.environ.get('LEAN_GATE_PIPELINE', '1') == '1'  # sample.generate submits each decode chunk as it finishes
+assert PREFILTER in ('on', 'off', 'shadow'), PREFILTER
 ERR = re.compile(r'^[^\n]*?:(\d+):\d+: error', re.M)
 PRELUDE = 'set_option linter.unusedVariables false\nset_option maxRecDepth 4000\n'
 
@@ -89,48 +111,152 @@ def lean_check(items):
     return check_sources([f'{s} {b}' for s, b in items])
 
 
-def gate(tok, prompts, nd_proofs, texts):
-    """Lean on the literal text of every distinct (prompt, text); returns the ND proofs, clean where Lean accepted and
-    prefixed `LEANREJ ` where Lean rejected.  Registers every verdict with lean_judge."""
-    import lean_judge
-    logfn = os.environ.get('LEAN_GATE_LOG', 'artifacts/lean_gate.jsonl')
-    keys = {}
-    for p, nd, tx in zip(prompts, nd_proofs, texts):
-        if tx is not None and not nd.startswith('LEANPARSE'):
-            keys.setdefault((p, tx), nd)
-    items = list(keys.items())
-    lean_ok, wall, cpu = lean_check([(tok.statement(p), tx) for (p, tx), _ in items])
-    verdict = {k: bool(lo) for (k, _), lo in zip(items, lean_ok)}
-    n_conflict0 = lean_judge.stats()['conflict']
-    for ((p, tx), nd), lo in zip(items, lean_ok):
-        lean_judge.register(p, nd, bool(lo))
-    n_ok = sum(1 for v in verdict.values() if v)
-    n_parse = sum(1 for nd in nd_proofs if nd.startswith('LEANPARSE'))
-    parse_reasons = collections.Counter(nd[10:] for nd in nd_proofs if nd.startswith('LEANPARSE'))
-    rec = {'utc': time.strftime('%FT%TZ', time.gmtime()), 'samples': len(prompts), 'parse_fail': n_parse,
-           'distinct_checked': len(items), 'lean_ok': n_ok, 'lean_rej': len(items) - n_ok,
-           'registry_conflicts': lean_judge.stats()['conflict'] - n_conflict0,
-           'parse_reasons': dict(parse_reasons.most_common()), 'lean_wall_s': wall, 'lean_proc_s': cpu,
-           'workers': WORKERS, 'chunk': CHUNK, 'judge': 'lean-only'}
-    os.makedirs(os.path.dirname(logfn) or '.', exist_ok=True)
-    with open(logfn, 'a') as f:
-        f.write(json.dumps(rec) + '\n')
-    dump = os.environ.get('LEAN_GATE_DUMP')
-    if dump:      # every distinct checked sample with its Lean verdict: the audit trail an acceptance test or a reviewer
-        with open(dump, 'a') as f:      # re-derives counts from, without re-running the model (run lean-judge, test 5)
-            for (p, tx), nd in items:
-                f.write(json.dumps({'prompt': p, 'lean_text': tx, 'nd': nd, 'lean_ok': verdict[(p, tx)]}, ensure_ascii=False) + '\n')
-    rejs = [{'prompt': p, 'lean_text': tx, 'nd': nd} for ((p, tx), nd) in items if not verdict[(p, tx)]]
-    if rejs:
-        with open(logfn.replace('.jsonl', '') + '.leanrej.jsonl', 'a') as f:
-            for d in rejs:
-                f.write(json.dumps(d, ensure_ascii=False) + '\n')
-    print(f'[lean_gate] {len(prompts)} samples, parse-fail {n_parse}, distinct checked {len(items)}: lean ok {n_ok}, '
-          f'lean rej {len(items) - n_ok}; lean {wall:.1f}s wall ({cpu:.1f}s proc, {WORKERS} workers)', flush=True)
-    out = []
-    for p, nd, tx in zip(prompts, nd_proofs, texts):
-        if tx is None or nd.startswith('LEANPARSE') or verdict[(p, tx)]:
-            out.append(nd)               # accepted: a CLEAN ND string (this is what gets trained on), or already marked
+
+
+class Gate:
+    """The gate over one generate() call.  submit() takes decode chunks as they finish: new distinct (prompt, text)
+    pairs are pre-filtered (`lean_prefilter`, reject-only) and the survivors are handed to Lean worker threads in
+    pieces of CHUNK while the GPU samples the next chunk; finish() waits for Lean and returns the ND proofs exactly
+    as gate() always has.  LEAN_PREFILTER=off sends every text to Lean; =shadow sends every text to Lean, lets Lean
+    decide, and logs each text the filter would have rejected but Lean accepted (a filter bug) to
+    <log>.filterbug.jsonl."""
+
+    def __init__(self, tok, pipeline=None):
+        self.tok = tok
+        self.pipeline = PIPELINE if pipeline is None else pipeline
+        self.keys = {}            # (prompt, text) -> ND string, first-seen order
+        self.filt = {}            # (prompt, text) -> filter reason or None
+        self.lean_ok = {}         # (prompt, text) -> Lean verdict, for the texts sent to Lean
+        self.pending = []
+        self.futs = []
+        self.stmt = {}
+        self.n_piece = 0
+        self.exposed_s = 0.0      # main-thread seconds spent inside submit()/finish()
+        self.filter_s = 0.0
+        self.t0 = time.time()
+        self.wd = tempfile.mkdtemp(prefix='leangate_')
+        self.ex = ThreadPoolExecutor(WORKERS)
+
+    def _dispatch(self, keys):
+        srcs = [f'{self.stmt[p]} {tx}' for p, tx in keys]
+        tag = str(self.n_piece); self.n_piece += 1
+        self.futs.append((keys, self.ex.submit(_run, srcs, self.wd, tag)))
+
+    def submit(self, prompts, nd_proofs, texts):
+        t0 = time.time()
+        new = []
+        for p, nd, tx in zip(prompts, nd_proofs, texts):
+            if tx is not None and not nd.startswith('LEANPARSE') and (p, tx) not in self.keys:
+                self.keys[(p, tx)] = nd; new.append((p, tx))
+        tf = time.time()
+        if PREFILTER != 'off':
+            from lean_prefilter import reject_reason
+        for p, tx in new:
+            if p not in self.stmt:
+                self.stmt[p] = self.tok.statement(p)
+            r = reject_reason(self.stmt[p], tx) if PREFILTER != 'off' else None
+            self.filt[(p, tx)] = r
+            if r is None or PREFILTER == 'shadow':
+                self.pending.append((p, tx))
+        self.filter_s += time.time() - tf
+        if self.pipeline:
+            while len(self.pending) >= CHUNK:
+                self._dispatch(self.pending[:CHUNK]); self.pending = self.pending[CHUNK:]
+        self.exposed_s += time.time() - t0
+
+    def finish(self, prompts, nd_proofs, texts):
+        t0 = time.time()
+        rest = self.pending; self.pending = []
+        if self.pipeline:     # the tail: spread over the workers (>= 50 texts a process: a process costs ~2 s to start)
+            n = max(1, min(WORKERS, len(rest) // 50))
+            size = -(-len(rest) // n) if rest else 0
         else:
-            out.append('LEANREJ ' + nd)  # the literal text parsed the grammar but Lean rejected it: never counted
-    return out
+            size = CHUNK      # the pre-2026-09-28 gate: CHUNK pieces, all dispatched after sampling
+        for i in range(0, len(rest), max(1, size)):
+            self._dispatch(rest[i:i + size])
+        cpu = 0.0
+        for keys, fu in self.futs:
+            ok, c = fu.result()
+            cpu += c
+            for k, v in zip(keys, ok):
+                self.lean_ok[k] = bool(v)
+        self.ex.shutdown()
+        shutil.rmtree(self.wd, ignore_errors=True)
+        self.exposed_s += time.time() - t0
+        return self._record(prompts, nd_proofs, texts, cpu, time.time() - t0)
+
+    def _record(self, prompts, nd_proofs, texts, cpu, tail):
+        import lean_judge
+        logfn = os.environ.get('LEAN_GATE_LOG', 'artifacts/lean_gate.jsonl')
+        items = list(self.keys.items())
+        if PREFILTER == 'on':
+            verdict = {k: self.filt[k] is None and self.lean_ok[k] for k, _ in items}
+        else:
+            verdict = {k: self.lean_ok[k] for k, _ in items}
+        bugs = [k for k, _ in items if self.filt[k] is not None and self.lean_ok.get(k)] if PREFILTER == 'shadow' else []
+        n_conflict0 = lean_judge.stats()['conflict']
+        for (p, tx), nd in items:
+            lean_judge.register(p, nd, verdict[(p, tx)])
+        n_ok = sum(1 for v in verdict.values() if v)
+        n_parse = sum(1 for nd in nd_proofs if nd.startswith('LEANPARSE'))
+        parse_reasons = collections.Counter(nd[10:] for nd in nd_proofs if nd.startswith('LEANPARSE'))
+        freasons = collections.Counter(r for r in self.filt.values() if r is not None)
+        n_frej = sum(freasons.values())
+        n_lean = len(self.lean_ok)
+        n_trunc = parse_reasons.get('no-eos', 0)
+        rec = {'utc': time.strftime('%FT%TZ', time.gmtime()), 'samples': len(prompts), 'parse_fail': n_parse,
+               'distinct_checked': len(items), 'lean_ok': n_ok, 'lean_rej': len(items) - n_ok,
+               'registry_conflicts': lean_judge.stats()['conflict'] - n_conflict0,
+               'parse_reasons': dict(parse_reasons.most_common()),
+               'lean_wall_s': self.exposed_s, 'lean_tail_s': tail, 'gate_span_s': time.time() - self.t0,
+               'lean_proc_s': cpu, 'lean_texts': n_lean, 'lean_procs': self.n_piece,
+               'lean_proc_rej': sum(1 for v in self.lean_ok.values() if not v),
+               'prefilter': PREFILTER, 'filter_rej': n_frej, 'filter_reasons': dict(freasons.most_common()),
+               'filter_s': self.filter_s, 'filter_false_rej': len(bugs) if PREFILTER == 'shadow' else None,
+               'trunc': n_trunc, 'trunc_rate': n_trunc / max(1, len(prompts)),
+               'pipeline': self.pipeline, 'workers': WORKERS, 'chunk': CHUNK, 'judge': 'lean-only'}
+        os.makedirs(os.path.dirname(logfn) or '.', exist_ok=True)
+        with open(logfn, 'a') as f:
+            f.write(json.dumps(rec) + '\n')
+        dump = os.environ.get('LEAN_GATE_DUMP')
+        if dump:      # every distinct checked sample with its verdict: the audit trail an acceptance test or a reviewer
+            with open(dump, 'a') as f:      # re-derives counts from, without re-running the model (run lean-judge, test 5)
+                for (p, tx), nd in items:   # `lean`: Lean's own verdict, null if the filter kept the text from Lean
+                    f.write(json.dumps({'prompt': p, 'lean_text': tx, 'nd': nd, 'lean_ok': verdict[(p, tx)],
+                                        'filter': self.filt[(p, tx)], 'lean': self.lean_ok.get((p, tx))},
+                                       ensure_ascii=False) + '\n')
+        base = logfn.replace('.jsonl', '')
+        rejs = [{'prompt': p, 'lean_text': tx, 'nd': nd, 'filter': self.filt[(p, tx)]} for (p, tx), nd in items
+                if not verdict[(p, tx)]]
+        if rejs:
+            with open(base + '.leanrej.jsonl', 'a') as f:
+                for d in rejs:
+                    f.write(json.dumps(d, ensure_ascii=False) + '\n')
+        if bugs:
+            with open(base + '.filterbug.jsonl', 'a') as f:
+                for p, tx in bugs:
+                    f.write(json.dumps({'prompt': p, 'lean_text': tx, 'filter': self.filt[(p, tx)]}, ensure_ascii=False) + '\n')
+            print(f'[lean_gate] PREFILTER BUG: {len(bugs)} texts the filter rejects are accepted by Lean '
+                  f'(see {base}.filterbug.jsonl)', flush=True)
+        print(f'[lean_gate] {len(prompts)} samples, parse-fail {n_parse} (no-eos {n_trunc}, {100 * rec["trunc_rate"]:.3f} %), '
+              f'distinct {len(items)}: ok {n_ok}, rej {len(items) - n_ok} (filter {n_frej}, prefilter={PREFILTER}); '
+              f'lean on {n_lean} texts in {self.n_piece} procs, {cpu:.1f}s proc, exposed {self.exposed_s:.1f}s, '
+              f'tail {tail:.1f}s, {WORKERS} workers', flush=True)
+        if rec['trunc_rate'] > 0.001:
+            print(f'[lean_gate] WARNING: {100 * rec["trunc_rate"]:.2f} % of samples hit max_new (policy: raise max_new '
+                  f'above 0.1 %)', flush=True)
+        out = []
+        for p, nd, tx in zip(prompts, nd_proofs, texts):
+            if tx is None or nd.startswith('LEANPARSE') or verdict[(p, tx)]:
+                out.append(nd)               # accepted: a CLEAN ND string (this is what gets trained on), or already marked
+            else:
+                out.append('LEANREJ ' + nd)  # parsed the grammar, rejected by the pre-filter or by Lean: never counted
+        return out
+
+
+def gate(tok, prompts, nd_proofs, texts):
+    """Lean on the literal text of every distinct (prompt, text); returns the ND proofs, clean where accepted and
+    prefixed `LEANREJ ` where rejected.  Registers every verdict with lean_judge.  One-shot form of Gate."""
+    g = Gate(tok, pipeline=False)
+    g.submit(prompts, nd_proofs, texts)
+    return g.finish(prompts, nd_proofs, texts)

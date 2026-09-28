@@ -154,7 +154,7 @@ def main():
     ap.add_argument('--retain', type=int, default=20000)
     ap.add_argument('--max_per_thm', type=int, default=4)
     ap.add_argument('--rl_weight', type=int, default=4)
-    ap.add_argument('--batch', type=int, default=1024)
+    ap.add_argument('--batch', type=int, default=4096)   # policy 2026-09-28: the largest that fits (3.2 M lean_seq: ~11 GB at max_new 288)
     ap.add_argument('--alloc', default='uniform', choices=['uniform', 'difficulty', 'window'])
     ap.add_argument('--alloc_cap', type=int, default=128)
     ap.add_argument('--relabel', action='store_true')
@@ -209,6 +209,7 @@ def main():
         ks = allocate(a.alloc, targets, a.k, tried, okc, found, a.alloc_cap, rng, r, alog)
         stats['alloc_log'] = alog
         stats['k_hist'] = dict(sorted(collections.Counter(ks).items()))
+        ph = {'load': time.time() - t0}; tp = time.time()   # per-phase wall seconds (lean-prefilter)
         # 1. RL targets
         sub = [(t, ki) for t, ki in zip(targets, ks) if ki > 0]
         outs = sample_targets(model, tok, [t for t, _ in sub], [ki for _, ki in sub], a.temperature, a.batch, seed, a.max_new)
@@ -225,6 +226,7 @@ def main():
         stats['targets_round'] = summarize(rows, 'n_lines', f'[{a.name} r{r}] targets (this round)')
         stats['new_proofs_this_round'] = new_this
         stats['target_samples'] = sum(ks); stats['target_sample_acc'] = sum(x['n_ok'] for x in rows) / max(1, sum(ks))
+        ph['targets'] = time.time() - tp; tp = time.time()
         # relabelling by-products (T3)
         if a.relabel:
             nrl = 0
@@ -242,6 +244,7 @@ def main():
             with open(f'{out}/relabelled_{r}.jsonl', 'w') as f:
                 for x in relabelled.values():
                     f.write(json.dumps(x) + '\n')
+        ph['relabel'] = time.time() - tp; tp = time.time()
         # 2. transfer, sampled (uniform k; T6 siblings each sample k)
         prompts = [t['prompt'] for t in transfer for _ in range(a.k)]
         flat = generate(model, tok, prompts, greedy=False, temperature=a.temperature, batch=a.batch, seed=seed + 500, max_new=a.max_new)
@@ -256,11 +259,13 @@ def main():
                 if pn not in have:
                     have.add(pn)
                     found_t[t['name']].append({'proof': p, 'norm': pn, 'written': wl, 'pruned': pl, 'round': r})
+        ph['transfer'] = time.time() - tp; tp = time.time()
         # 3. greedy
         g = generate(model, tok, [t['prompt'] for t in transfer], greedy=True, batch=a.batch, max_new=a.max_new)
         stats['transfer_greedy'] = summarize(judge(transfer, [[p] for p in g], 'n_lines'), 'n_lines', f'[{a.name} r{r}] transfer greedy')
         g = generate(model, tok, [t['prompt'] for t in heldout], greedy=True, batch=a.batch, max_new=a.max_new)
         stats['heldout_greedy'] = summarize(judge(heldout, [[p] for p in g], 'n_lines'), 'n_lines', f'[{a.name} r{r}] heldout greedy')
+        ph['greedy'] = time.time() - tp; tp = time.time()
         del model; torch.cuda.empty_cache()
         # cumulative bookkeeping (L_true bins, L*)
         for pool, fd, recs in (('targets', found, targets), ('transfer', found_t, transfer)):
@@ -313,6 +318,7 @@ def main():
                 for x in inject_recs:
                     f.write(json.dumps(x) + '\n')
             print(f"[{a.name} r{r}] injection set: {len(inject_recs)} records; {ilog.get('shapes')}", flush=True)
+        ph['bookkeeping'] = time.time() - tp; tp = time.time()
         # 4. train
         if not a.no_train:
             mix = f'{out}/mix_{r}.jsonl'
@@ -345,6 +351,8 @@ def main():
                 print(' '.join(cmd), flush=True)
                 subprocess.run(cmd, check=True)
                 ckpt = new_ckpt
+        ph['train'] = time.time() - tp
+        stats['phase_s'] = ph
         stats['secs'] = time.time() - t0
         json.dump(stats, open(f'{out}/round_{r}.json', 'w'), indent=1)
         print(f'=== round {r} done in {stats["secs"]:.0f}s; new proofs {new_this}; cum targets solved {stats["targets_cum"]["solved"]} L*={stats["targets_cum"]["lstar"]}; transfer L*={stats["transfer_cum"]["lstar"]}', flush=True)
