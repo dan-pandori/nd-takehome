@@ -608,3 +608,10 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
     as a reproduction check.
   - `pod/sc/pullcheck.sh` added: diff **every** directory a pod writes (`artifacts/`, `ckpts/`, `data/`), not
     just one glob, before `podrm`.
+- **01:50** Re-run reproduction check, and a correction to what I first wrote. Round 1 of `la_T1_sc_s1rerun`
+  matched the lost seed-1 run **exactly** (parse-fail 54,051, distinct 79,599, Lean-accepted 7,089, transfer
+  57/2,285) — but round 1 samples from the shared init checkpoint, so that only establishes that the *sampler*
+  is deterministic at a fixed seed with `ND_SAMPLE_COMPACT=0`. **Round 2 diverges**: transfer 374/2,285 against
+  the original's 373 (ge8 306 vs 307). The fine-tuning step is not bit-reproducible on this hardware, so the
+  re-trained ladder is a genuinely different model and the `la_T1_sc_s1rerun_*` name is load-bearing, not a
+  formality. `QUESTIONS.md` corrected accordingly.

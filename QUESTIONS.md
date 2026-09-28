@@ -86,7 +86,10 @@
   `ckpts/ladder/la_T1_sc_s1_r{1..8}.pt` and the seed-1 ladder run directory went with it. Every seed-1
   *measurement* survives, as does seed 0's complete ladder. **Default:** re-trained seed 1 under the identical
   command (~$1.5) and uploaded as **`la_T1_sc_s1rerun_*`** rather than `la_T1_sc_s1_*`, because it need not be
-  bit-identical to the checkpoint the seed-1 numbers were measured on — though in fact round 1 reproduced the
-  lost run *exactly* (same parse-fail 54,051, same distinct 79,599, same 7,089 Lean-accepted, same transfer
-  57/2,285), so the run appears bit-reproducible at fixed seed with `ND_SAMPLE_COMPACT=0`. Added
+  bit-identical to the checkpoint the seed-1 numbers were measured on — and it is not. Round 1 reproduced the lost run *exactly*
+  (same parse-fail 54,051, same distinct 79,599, same 7,089 Lean-accepted, same transfer 57/2,285) — but round
+  1 samples from the shared init checkpoint, so that only shows the *sampler* is deterministic. **Round 2
+  already diverges** (transfer 374/2,285 against the original's 373), i.e. the fine-tuning step is not
+  bit-reproducible on this hardware and the re-trained checkpoints are genuinely a different model. The
+  `rerun` name is therefore the right one, not a formality. Added
   `pod/sc/pullcheck.sh`, which diffs `artifacts/`, `ckpts/` **and** `data/` before `podrm`.
