@@ -219,3 +219,103 @@ Process notes:
 - T1 S s0 resumed at round 3 and S s1 at round 2 after the empty-term crash fix (`42742a82`). The fix changes only
   attempts that crashed.
 - T1 SH s0 resumed at round 6 with the micro-batched fine-tune (`dd610df3`).
+
+---
+
+## §Compare (phase 2: `run_state_env.md`, `numbers.md` § state-env, `log.md`, `STATUS.md`)
+
+**Erratum to my §Recount R2.** The C0 s1 held-out figures in the pre-registration and `numbers.md` (0.8968; 6-line
+0.584) come from `artifacts/dsg/heldout2_c0_s1.jsonl`, the re-evaluation that `review_ds-generator.md` §3 uses.
+Recomputed from that file, 0.8968 reproduces exactly (`review_se/depth3.py`). The 0.8960 / 0.582 I quoted in R2 is the
+older `heldout_c0_s1.json`. That discrepancy is mine, not the run's.
+
+**Depth-3 slice, added in phase 2** (`review_se/depth3.py`). My depth counter is the max box nesting of the reference
+proof. It selects exactly the 500 records that `pat.depth3` flags (5,000 / 5,000 agree). Depth-3 rates are S 0.922 /
+0.882, SH 0.860 / 0.880, SN-v2 0.956 / 0.902, C0 0.488 / 0.272. Adding C0's Lean-only accepts back changes C0 by 0.000.
+
+| # | claim (where) | my value | verdict |
+|---|---|---|---|
+| 1 | T1 transfer solved S 1,348 / 1,389, SN-v2 1,557 / 1,403, SH 1,257 / 1,390, C0 890 / 965 (run doc, numbers) | identical | **reproduces** |
+| 2 | Frozen: S 779 / 787, C0 158 / 114 (run doc); SH 516 / 479, SN 975 / 801 (numbers) | identical | **reproduces** |
+| 3 | `L*` is 12 in every T1 run | 12 in all 6 | **reproduces** |
+| 4 | At `L_true` ≥ 13: S 1 / 2, SN-v2 3 / 1; only 3 distinct theorems, all nested `fun` introductions, 13+ ND lines, term size 8–13 | same 3 theorems (1126, 1198, 978). All three conclusions are implication chains; written ≥ 13 lines; no Lean-only shortcut. My own term size is 11–14; `lean_check`'s definition gives 8–13 | **reproduces** (term size by the run's definition; mine differs by construction) |
+| 5 | "whole-proof runs: 0 in 11" at ≥ 13 (run doc) | C0's 4 runs: 0 / 0 / 0 / 0, also 0 with Lean-only accepts added. The other 7 are `ds-generator` runs I did not recount | reproduces for C0. **Unlabelled**: the 11 are `ds-generator` ladders on several training sets, under Lean ∧ `nd_verify` |
+| 6 | Depth-3 held-out "moves most": S 0.922 / 0.882 vs C0 0.488 / 0.272 | identical | numbers **reproduce**. The framing breaks `NOISE_FLOOR.md` rule 5: the depth-3 slice is bimodal and must not be read as a difference of means. See Verdict |
+| 7 | Held-out greedy S 0.958 / 0.801, 6-line 0.904 / 0.678; SN-v2 0.970 / 0.958 | identical | **reproduces** |
+| 8 | S s1 loses 11.6 % of held-out attempts to out-of-scope names | 581 / 5,000 `unbound` | **reproduces**. The mechanism for S (first-name offset) is an inference; `log.md` 15:55 says so and the run doc words it correctly |
+| 9 | Prediction table for S (run doc) | matches my R9 row by row | **reproduces**. Truncation is quoted only for s0 (0.002 %); s1 is 0.008 %, also under the band |
+| 10 | "SH vs S: predicted equal → T1 equal; frozen 516 / 479, ~280 lower" | −91 / +1 T1; frozen −263 / −308 | numbers reproduce. **Two issues:** (a) the pre-registration also predicted "SH ≥ S on held-out by ≤ 2 pp". That missed (−0.6 pp on s0, +15.4 pp on s1) and the write-up does not report it. (b) The frozen gap of ≈ 285 is inside the frozen floor (MDD 397 at n = 2), so "~280 lower" must carry "inside the floor" |
+| 11 | "Falsifiers: neither fires" | neither fires | **reproduces** |
+| 12 | "**The state is not what limits length here.**" (run doc) | the pre-registered reading of "neither fires" is "moved but not decisive". The falsifier that would license this sentence ("the state is not the wall": 0 at ≥ 13 on both seeds) did **not** fire | **not supported as worded.** `log.md` 08:10 and `STATUS.md` use the correct reading |
+| 13 | "The state lifts everything below the wall" | frozen S − C0 = +647 (MDD 397, 5.8× vs a 3.35× floor), SN +752: clear. T1 +441 / +553: no T1 floor measured. SH frozen +362: inside the MDD. Per-bin T1 gains at `L_true` 11–12 are 24 / 28 vs 11 / 15 and 7 / 9 vs 5 / 3, small counts | supported for S and SN on the frozen (base-reachability) readout. "Everything" overstates the 11–12 bins and SH |
+| 14 | Gates 1 / 1b / 2 / 3 / 2b, all 0 failures | gate 2 (all 5,600 cases incl. 2b): 0 mismatches, harness validated on 594 mutations. Gates 1 / 1b / 3 not re-derived | **reproduces** (gate 2); **not re-derived** (1 / 1b / 3) |
+| 15 | `lean_check`: 0 rejected of 14,808 shortest proofs (`log.md` 15:50) | my Lean pass: 0 of 2,792, two renderings, controls pass | **consistent** |
+| 16 | Env diagnostics (numbers table): syntax 11.1 %, 8.51 steps, peak 10.16 GB … | identical ratios from the same counters | **reproduces** (from the run's counters; not independently derivable) |
+| 17 | Batch probe: peak 4.53 / 8.58 / 16.37 / 16.31 GB at 1,024–8,192; batch 2,048 kept | solves 986 / 943 / 974 / 971 reproduce from `probe_b*.json`. The peaks are not in those files (log only) | **partly derivable** |
+| 18 | "Lean-only versus Lean ∧ `nd_verify` is a smaller effect still" (numbers) | on C0's own ladders: +2 / +1 T1, +7 / +2 frozen, 0 at ≥ 13, depth-3 +0.000 | **reproduces** directly for this comparison |
+| 19 | Textbook: S 182 / 216 of 760; C0 37 / 89 | identical (pre-registration's "38" for C0 s0 is 37 on file) | **reproduces** (pre-registration quoted C0 off by 1) |
+| 20 | 35.44 pod-hours, $20.20 | not derivable from the artefacts. Consistent with `~/pods.log` (`se-1` at 04:22:57) and the per-pod table | not derivable |
+| 21 | Models: 3.2 M, from scratch, `data/p2/train_depth3_f0_a1.jsonl`; checkpoints named in `numbers.md` | 3,216,384 params in every state-mode training log | **labelled correctly**. C0 carries its checkpoint, size and checker label everywhere I looked except claim 5 |
+
+**Pre-registration hygiene.** Checks passed:
+- The pre-registration was committed before the first pod: `5bb93132` at 04:21:13, `se-1` at 04:22:57.
+- The executor disclosed a sibling run's pod one minute earlier in the shared `~/pods.log`.
+- Both SN addenda are labelled post-hoc.
+- Misses are reported as misses in the run doc's table, with one exception: the SH held-out half (row 10a).
+- The SN addendum predictions are not scored anywhere I can find. Among them is "gain large on s1, small on s0", and
+  the result was the opposite (+209 on s0, +14 on s1). That is a miss and should be reported.
+
+No quarantine.
+
+## §Verdict
+
+**Stands** (reproduced from the raw artefacts with my own code, and Lean-rechecked):
+- The transfer counts for all 12 ladders and C0's 4, `L*`, the `L_true` bins, the textbook slice and the held-out rates.
+- The three `L_true` ≥ 13 theorems. They are real ND-length proofs, not Lean-only shortcuts, and no frozen run reaches
+  them at equal attempts.
+- Neither pre-registered falsifier fires.
+- **The base-reachability jump.** With no RL, the state-conditioned S model solves 779 / 787 transfer theorems against
+  C0's 158 / 114. That is 5.8× against a 3.35× floor and clears `NOISE_FLOOR.md`'s MDD, with the caveat that the floor
+  was measured on C0's configuration, not on these models. SN (975 / 801) clears it too.
+- The seed-1 `unbound` failure and the SN-v2 repair (0.970 / 0.958), stated as a post-hoc diagnostic arm, which the
+  write-ups do.
+- No hard-constraint violation: `nd_verify` is unmodified and judges nothing, `TEST_RUN_DONE` is unchanged, and no
+  evaluation file is read in training. Splits are disjoint under a real canonical form, apart from the inherited 21
+  held-out and 2 target/transfer premise-order collisions, which touch no conclusion.
+
+**Must be reworded:**
+1. Run doc, "The state is not what limits length here." Replace it with the pre-registered reading: "moved but not
+   decisive — `L*` 12 on both seeds, 1 and 2 theorems at `L_true` ≥ 13 (one theorem shared by all four S/SN runs).
+   The pre-registered test cannot tell 'barely moved' from 'not the wall' at n = 2." `STATUS.md` and `log.md` already
+   say this.
+2. Depth-3. State it as `NOISE_FLOOR.md` rule 5 requires: all 6 state-conditioned Stage-1 checkpoints (S, SH, SN × 2)
+   are in the high mode (≥ 0.86). The control configuration lands there with probability 0.462 [0.333, 0.595]. Six of
+   six has probability ≈ 0.462⁶ ≈ 0.01 under the control's rate, so it is suggestive of a real shift. Two of the six
+   (0.922, 0.956) are above the control's whole 52-cell null range (max 0.918). A mean-vs-mean contrast such as
+   "0.922 / 0.882 vs 0.488 / 0.272" should not be the headline form.
+3. "SH … ~280 lower" on frozen. Add "inside the frozen floor (MDD 397 at n = 2); not a finding". Also report the
+   missed SH held-out prediction (+15.4 pp on s1 against "≤ 2 pp").
+4. "whole-proof runs: 0 in 11". Label it: `ds-generator`'s 11 ladders, several training sets, Lean ∧ `nd_verify`.
+5. Score the SN addendum predictions. "Gain large on s1, small on s0" missed in the opposite direction.
+6. Quote the noise floor beside the headline comparisons (`AGENT_POLICY.md`: compare, "say so, and quote
+   `NOISE_FLOOR.md`"). No T1 floor exists, so "T1 +441 over C0" has no resolution statement. The pre-registration
+   also gave no MDD for its headline quantity; that rule is dated the same day and may post-date it.
+
+**Not supported / not auditable:**
+- **The literal sampled text is not stored.** No `LEAN_GATE_DUMP`; the found and held-out files hold ND strings. My
+  Lean re-check is of alpha-equivalent re-renderings (0 / 2,792 rejected under two independent renderings). "Lean on
+  the literal text" is attested only by the gate's code path and logs. Future state-env runs should set
+  `LEAN_GATE_DUMP` (≈ 2 MB per 5,000 attempts).
+- **Gates 1 / 1b / 3** were not independently re-derived. Gate 2 was, against stored renderer states.
+- **Attempt-level truncation** reaches 0.21 % in two frozen runs (`numbers.md`'s own table), above the policy's
+  ≈ 0.1 % line for a reported stratum. The pre-registered action-level rate is ≤ 0.008 %, and no transfer or target
+  formula exceeds 113 tokens, so this cannot plausibly cut a real proof step. It should still be stated.
+
+**Next measurement that would settle what is left open.**
+- **The headline question** — does the state move the length wall? — is inside n = 2 on its decisive quantity. A
+  third and fourth Stage-1 seed of S (≈ 13 min each) would help. So would k = 128–256 re-sampling of the final T1
+  checkpoints on the 23 `L_true` ≥ 13 transfer theorems, paired against C0's final checkpoints at the same k. That
+  tells "the state reaches 13+ at a low rate" apart from "one lucky theorem". Today one theorem (1126) carries 4 of the
+  7 S/SN hits.
+- **The robust result (base reachability)** would be firmed up by a state-model noise floor: 4–6 more cheap frozen
+  S cells. The present MDD is borrowed from C0's configuration.
