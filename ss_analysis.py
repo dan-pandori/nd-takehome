@@ -246,8 +246,17 @@ def main():
             tr.append({'file': base, 'L_true': L, 'n': n, 'capped': t, 'rate': t / n if n else 0})
     S['truncation'] = {'max_rate': max((x['rate'] for x in tr), default=0), 'over_0.1pct': [x for x in tr if x['rate'] > 0.001],
                        'total_capped': sum(x['capped'] for x in tr), 'total_attempts': sum(x['n'] for x in tr)}
+    zero = collections.defaultdict(lambda: [0, 0, 0])     # (model, seed, name) -> [n, c, capped], pooled over T
+    for (stage, model, seed, T, base), recs in by_file.items():
+        for r in recs.values():
+            z = zero[(model, seed, r['name'])]
+            z[0] += r['n_tried']; z[1] += r['n_ok']; z[2] += r['n_trunc_action'] + r['n_step_cap']
+    zc = {f'{m} s{sd} {n}': round(z[2] / z[0], 5) for (m, sd, n), z in zero.items() if z[1] == 0 and z[0] >= 40000}
+    S['truncation']['zero_claims_max_capped_share'] = max(zc.values(), default=0)
+    S['truncation']['zero_claims_capped_share'] = zc
     print(f'\nlength caps: {S["truncation"]["total_capped"]} of {S["truncation"]["total_attempts"]:,} attempts; max stratum rate '
-          f'{S["truncation"]["max_rate"]:.5f}; strata over 0.1 %: {len(S["truncation"]["over_0.1pct"])}')
+          f'{S["truncation"]["max_rate"]:.5f}; strata over 0.1 %: {len(S["truncation"]["over_0.1pct"])}; '
+          f'max capped share on a zero-success row (>= 40,000 attempts): {S["truncation"]["zero_claims_max_capped_share"]}')
 
     # ---------------- proof length: lines and term size (distinct accepted proofs, by model) ----------------
     pl = {}

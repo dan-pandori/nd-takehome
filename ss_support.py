@@ -12,7 +12,7 @@ text (`lean_gate.gate`; Lean alone decides, `nd_verify` judges nothing).  Set $L
 checked (prompt, literal text, ND, verdict).  Distinct proofs are counted after start-index normalisation of the
 ND string (`normalize.norm`), as in support.py.
 
-Stopping rule, record format and resumability are support.py's, so `sc_analysis.py`-style code reads both.  Extra
+Stopping rule (checked after each env_generate call; a call is batch x 1, 2, 4, ... up to --max_chunk), record format and resumability are support.py's, so `sc_analysis.py`-style code reads both.  Extra
 fields: n_leanrej (the environment finished, Lean rejected), n_trunc_action / n_step_cap (length-cap hits: the
 policy's truncation line), env_end (how attempts ended).
 """
@@ -40,6 +40,8 @@ def main():
     ap.add_argument('--seed', type=int, default=0, help='SAMPLING seed; must differ between two runs that are pooled')
     ap.add_argument('--model_seed', type=int, default=None, help='Stage-1 seed of --ckpt (record label); defaults to --seed')
     ap.add_argument('--batch', type=int, default=4096)
+    ap.add_argument('--max_chunk', type=int, default=8, help='attempts per env_generate call grow 1x, 2x, 4x ... up '
+                    'to this many x batch: the worklist keeps the decode batch full, and easy theorems still stop early')
     ap.add_argument('--max_action', type=int, default=256)
     ap.add_argument('--max_steps', type=int, default=48)
     ap.add_argument('--shard', default='0/1')
@@ -82,8 +84,10 @@ def main():
             n = n_parse = n_rej = n_ok = 0
             fail_parse, n_parse_seen, fail_rej = [], 0, []
             st = {}
+            calls = 0
             while n < a.k and not (a.stop_at and n_ok >= a.stop_at):
-                b = min(a.batch, a.k - n)
+                b = min(a.batch * min(a.max_chunk, 2 ** calls), a.k - n)
+                calls += 1
                 tx = []
                 outs = env_generate(model, tok, [r['prompt']] * b, greedy=False, temperature=a.temperature,
                                     max_action=a.max_action, max_steps=a.max_steps, batch=a.batch,
@@ -113,7 +117,7 @@ def main():
             rec = {'name': r['name'], 'L_true': r['L_true'], 'schema': r.get('schema'), 'source': r.get('source'),
                    'model': a.model, 'ckpt': a.ckpt, 'ckpt_md5': ck_md5, 'tok_mode': tok.mode,
                    'temperature': a.temperature, 'seed': a.model_seed, 'sampling_seed': a.seed, 'stage': a.stage,
-                   'k_requested': a.k, 'stop_at': a.stop_at, 'batch': a.batch, 'max_action': a.max_action,
+                   'k_requested': a.k, 'stop_at': a.stop_at, 'batch': a.batch, 'max_chunk': a.max_chunk, 'max_action': a.max_action,
                    'max_steps': a.max_steps, 'n_tried': n, 'n_ok': n_ok, 'n_distinct_ok': len(acc),
                    'n_parse_fail': n_parse, 'n_leanrej': n_rej,
                    'n_trunc_action': int(ee.get('truncated', 0)), 'n_step_cap': int(ee.get('step_cap', 0)),
