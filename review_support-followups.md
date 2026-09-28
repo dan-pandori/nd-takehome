@@ -170,3 +170,86 @@ EI proof's improbable step as the gate: the base reached la_transfer_1932 by a d
 
 Every number above names its model; the A "lost EI s1" column (`105be4f3…`) is support-curves' record, read from
 `artifacts/sc/s3_*`; the checkpoint itself is not available and I did not verify it.
+
+## §Compare (phase 2)
+
+Read after committing §Recount (`0e138f8`): `run_support_followups.md`, `numbers.md` §SF0–SF8, `log.md`
+§support-followups, `STATUS.md`. Phase-2 script: `review/support-followups-recount/review_sf_phase2.py`
+(per-theorem-best control medians, secondary-logp agreement, worst-token alternatives, non-EI survivor proofs).
+
+**Erratum to my §Recount §6.** I wrote that C1 is "indistinguishable" from the survivors (w1 −10.48 vs −10.96,
+total −21.92 vs −21.84). That compared the survivors' *most probable* proof per theorem with *all* C1 proofs —
+not like for like. On the pre-registered unit (most probable proof per theorem) C1's medians are total −12.3,
+w1 −8.1, and the survivors are deeper, as the executor reports. The part that stands: the classification rule
+labels most controls concentrated too (42 / 53 of C1's best proofs), so it does not separate them.
+
+| claim (where) | my value | verdict |
+|---|---|---|
+| 451 / 451 literal texts pass Lean (run, SF7) | 451 / 451, my own driver; negative controls rejected | reproduces |
+| D: 28 concentrated / 1 mixed / 0 spread → "a new move", same at T 0.8 (run, SF1) | 28 / 1 / 0 at both | reproduces |
+| D medians, most probable proof per theorem: S −21.8 / w1 −11.0 / −6.2 / −3.1 / rest −4.1; C1 −12.3 / −8.1 / −4.3 / −1.2 / −1.7; C3 −10.2 / −6.8 / −2.5 / −0.3 / −0.4; C2 −6.2 / −4.7 / −0.6 / −0.1 / −0.2; s2 0.77 / 0.88 / 0.97 / 0.97; steps < 0.1: 3 / 2 / 2 / 1 (SF1) | identical to 0.1 | reproduces |
+| "the rule does not discriminate the controls": C1 42 / 11, C2 10 / 35, C3 (all) 38 / 15 (SF1) | same | reproduces |
+| 26 / 29 survivors below C2's 5th percentile of w1 (−7.14) (SF1) | 26 / 29 | reproduces |
+| surprisal share logic 0.51, syntax 0.33, name 0.16; worst-3 over S 0.53 / 0.35 (SF1) | 0.51 / 0.33 / 0.16; 0.534 / 0.351 | reproduces |
+| at the worst token the base puts top-1 mass 1.000 on another choice; EI's log p there −0.000 (min −8.9); alternatives formula 10, rule 8, `<eos>` 7, `exact` 3, citation 1 (run, SF1) | medians 1.000 / −0.000, min −8.94; my token pairs give the same 10 / 8 / 7 / 3 / 1 | reproduces — but it is a **median**: the minimum top-1 mass is 0.27. The run file says "puts mass 1.000" without "median" |
+| totals reproduce `sc_secondary.py`'s `logp_T1` "within 0.03 nats" (SF1) | median 0.016, **98 of 339 above 0.03, max 0.17**; pre-registration promised a 1e-3 check. My CPU fp32 re-score differs from both by up to 0.36 (T 1.0) | **differs**: numerical noise, no classification affected (nearest threshold margin 0.47 nats); the stated bound is wrong |
+| A: 147 / 383, base 37, crux 110, survivors 29 / 29 and 2 / 29, agreement 95.6 / 90.1 / 98.4 %, 6,860,304 samples (run, SF2) | all identical | reproduces |
+| A: truncation L 10 1.39 %, two survivors 54 % / 28 % (SF2) | 1.39 %; la_transfer_191 53.5 %, _1004 27.7 % | reproduces |
+| B: 1 success in 10,000,002 on la_transfer_1932 at attempt 985,640; five < 1.8 × 10⁻⁶ (run, SF3) | same | reproduces |
+| B: p̂ "≈ 5 × 10⁻⁷" (run); 6.0 × 10⁻⁷, 4.8 × 10⁻⁷ pooled with prior 400,000 (SF3) | 6.0 × 10⁻⁷ at T 1.0 in this run; the pooled figure mixes 200,000 T 0.8 attempts into a T 1.0 rate (T 1.0 only: 1 / 1,866,667 = 5.4 × 10⁻⁷) | reproduces; label the pooled number as mixed-temperature |
+| B's proof is shorter than any EI proof, via `Not.elim` on `¬¬P`; EI's proofs have base log p −40.6 to −54.3 (run, SF3) | 8 lines / term 59 vs 11–12 / 75–78; −40.6 … −54.3 | reproduces. Not mentioned: the text shadows `n63` / `n64` and uses an out-of-order name `n23`; it parses and Lean accepts it, so it counts, but it is exactly the kind of proof a strict-grammar reader would want flagged |
+| C: big 25,329,664 params, same recipe; held-out 0.879 / 0.884 (base 0.909); crux 6 / 8; survivors 0 / 2, union 2; falsifier does not fire (run, SF4–5) | same (checkpoint `args` read) | reproduces |
+| "At 3.2 M the expansion … **is not a capacity artefact**" (run, So) | the 25 M model has the base's val loss (0.0724 / 0.0725 vs 0.0729) and is **worse at cap-length proofs** (held-out L 6 greedy 0.471 / 0.485 vs 0.687; the run file reports only the overall 0.879 / 0.884 and SF4 gives big s0's L 6 without base's) | **not supported as worded.** What was shown: 8× parameters at the same data and steps do not reach the survivors; but that model is not a stronger prover, so "capacity" in the sense of a better base is untested. The caveat "not a tuned larger model" is there but the headline sentence outruns it |
+| "consists of a few structural decisions the base makes confidently the other way — not per-step sharpening compounding" (run, So) | D measures where *EI's* proofs are improbable under the base; B shows the base can reach a survivor by a *different, shorter* route; D is n = 1 (base s0 / EI s0) | **reword**: "EI's proofs of the survivors are improbable under the base at 2–3 steps where it confidently prefers another move, not through many slightly unlikely steps" — a statement about EI's proofs, one seed pair, not about what makes the theorem unreachable |
+| "**Every non-EI survivor proof differs from all of EI's**" (run, So); SF5: "none of the three non-EI proofs" (base s0 B, big s1) | true for base s0's (1) and big s1's (3 distinct) proofs; **false for base s1's** A proofs of la_transfer_543 and _1645 — both are EI proofs (normalised equal to a proof in the EI records) | **does not reproduce as worded**: 2 of the run's 6 distinct non-EI survivor proofs are EI proofs. SF5's restricted statement is true; the run file drops the restriction |
+| expectations (SF6), misses reported as misses | my table in §Recount matches SF6 row for row (D range missed high, syntax share missed, C s0 missed three times) | reproduces; gate 0 kept (pre-registration 04:09, addendum before seed 1) |
+| deviation: `max_new` 512 despite ≤ 1.4 % truncation (run) | 7 strata above 0.1 %, the largest 1.39 % | reproduces; the pre-registered "raise to 640" rule was not followed, and this is disclosed. No zero-success claim is at risk (≤ 2.3 % of any survivor's attempts) |
+| peak memory 17.4 GiB (batch 4,096) / 15.6 GiB (batch 1,024) (SF0) | 17.43 / 15.6 from the records | reproduces |
+| cost 25.17 pod-hours, ≈ $8.81 billed (SF8) | not derived (I did not query billing) | not derivable here |
+| bucket: `support-followups/ckpts/sf/stage1_big_seq_s{0,1}.pt`, `artifacts/sf/` (SF8) | both checkpoints (101,353,755 B each) and 66 artefact entries listed | reproduces |
+
+**Model labels.** `numbers.md` labels every number (SF0 table; D names base s0 / EI s0). The run file names its
+three model families in one line but **does not say that D is measured on seed 0 only** (base s0, EI s0), nor that
+A's "survivors" are the set defined on base s0 (base s1 solving 2 of them is not a contradiction). The A comparison
+with support-curves' seed-1 column changes batch (4,096 vs 2,048) and `max_new` (512 vs 400); the
+pre-registration says it is a sampling re-draw, the write-up does not quote `NOISE_FLOOR.md` — minor.
+
+**Smaller points.** The pre-registration's "review: 231 proofs" for S does not match the 133 the run used (and I
+count 133 from the raw records): the run used the right set but does not say why the number changed. C3 is marked
+not pre-registered. `train.py` reads the held-out file for its logged val loss only.
+
+## §Verdict
+
+**Stands.** All counts: A (the seed-1 column replicates on the uploaded EI s1rerun: 147 / 383, 29 / 29 survivors,
+95.6 % per-theorem agreement with the lost checkpoint), B (1 of 6 longest survivors reached in 10⁷ base s0 draws, by
+a different, shorter proof; five stay below 1.8 × 10⁻⁶), C (the 25.3 M base reaches 0 and 2 of the 29; the
+falsifier does not fire for either seed or the union), D's pre-registered classification (28 / 1 / 0 → "a new
+move") and its control medians, and every Lean check (451 / 451). No hard-constraint violation: `nd_verify`
+unmodified and unused as a judge, `TEST_RUN_DONE` unchanged, no transfer-pool file in training, splits disjoint.
+
+**Must be reworded** (run file):
+1. "is not a capacity artefact" → "is not removed by 8× parameters at the same data and steps; that model has the
+   base's val loss and is worse at 6-line held-out proofs (0.47–0.49 vs 0.69), so a *stronger* larger base is
+   untested".
+2. "consists of a few structural decisions the base makes confidently the other way" → a statement about EI's
+   proofs under base s0 (n = 1 seed pair), not about why the theorems are unreachable — B's la_transfer_1932 was
+   reached by another route.
+3. "Every non-EI survivor proof differs from all of EI's" → "the base s0 and big s1 proofs of survivors differ from
+   all of EI's; base s1's proofs of la_transfer_543 and _1645 are EI proofs".
+4. SF1 "within 0.03 nats" → "median 0.016, max 0.17 nats (98 of 339 above 0.03)"; the pre-registered 1e-3 check
+   failed and should be said.
+5. "puts mass 1.000 on another choice" → "median 1.000 (min 0.27)".
+6. Say D is seed 0 only, and give base s0's held-out by length beside big's in SF4.
+
+**Not supported.** That the survivors' unreachability is *explained* by the one or two improbable steps in EI's
+proofs: the rule labels most controls the same way, the survivor/control difference is one of degree on the
+most-probable proof, and the base can reach at least one survivor by a route EI never used.
+
+**Next measurements.**
+- D on seed 1 (base s1 × EI s1rerun, 29 survivors + controls): forward passes only, VPS-cheap; makes D n = 2.
+- A real capacity test: train the 25 M model until it beats base s0 on held-out L 6 greedy (more steps or a tuned
+  lr; 2 seeds), then re-run the 29 survivors at 200,000 per temperature.
+- For the "why unreachable" question: enumerate short Lean proofs of each survivor (the `Not.elim`-style routes that
+  B found), score them under base s0, and compare the best alternative's log p with EI's proof's. If survivors
+  have alternatives at ≈ −15 nats and are still unreached, the limit is search; if every route is ≤ −30, it is
+  the model.
