@@ -614,3 +614,24 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   `--impl auto`. A graph-vs-no-graph run with the same seed matched to 4 decimals for 10 steps and then drifted as bf16
   runs do (`logs/graph_vs_nograph_*.log`); the same-seed val gap at step 400 of the smoke test is that drift.
 - 17:42  `fs1` deleted. Total 1.49 pod-hours, $1.47. `--impl auto` made the default (fast only for from-scratch GPU training).
+
+## support-state (executor), 2026-09-28
+
+- 18:20  Run start. Harness from `origin/dan_support-curves` (`support.py sc_*.py data/sc/`). Wrote `ss_support.py`
+  (support.py's protocol through `state_sample.env_generate`; Lean on the literal text via `lean_gate.gate`,
+  `LEAN_GATE_DUMP` per job) and a backwards-compatible `texts_out=` hook in `env_generate`.
+- 18:21  Before pre-registering, read `state-env`'s frozen SN found files: 21 / 29 (s0) and 18 / 29 (s1) survivors
+  solved at 256 attempts. Written into the pre-registration as prior knowledge.
+- 18:23  Pre-registration `242c065a` pushed. `podbudget support-state --set 20 10`.
+- 18:25  No RTX 3090 / A40 / 4090 / L40S / A6000 in stock (secure or community). `ss1` = RTX PRO 4500 Blackwell,
+  32 GB, **$0.72/h billed**, 128 vCPU. Checkpoint md5s (bucket `state-env/ckpts/se/`): SN base s0 `ec3888d9…`,
+  s1 `d8b21e4c…`; SN EI s0 `la_T1_SN_s0_r8` `fb448247…`, s1 `455c08b2…`.
+- 18:30  H s0 launched (batch 4,096; peak `max_memory_allocated` 14.39 GB; ≈ 515 attempts/s alone). GPU at 5 %
+  utilisation with one job: the environment's Python step loop is the bottleneck, so H s1 (batch 4,096) and S1
+  base s0 run as further processes on the same card. S1 at **batch 1,024**, not the largest that fits alone —
+  deviation, reason: the card is shared by three processes and throughput is CPU-bound, not batch-bound.
+- 18:35  `ss_support.py` grows attempts per `env_generate` call 1×, 2×, 4×, 8× batch (`--max_chunk`), so the worklist
+  keeps the decode batch full on long draws; the stopping rule is checked after each call (recorded per row).
+- 18:36  Many attempts the environment finishes are Lean-rejected (la_transfer_100: 11,669 / 12,288): the
+  environment checks structure and names, not term types (sample: `Or.inl n3` with `n3 : S` for goal `Q ∨ …`).
+  Lean decides; these count as failures.
