@@ -1280,3 +1280,46 @@ Reproduce: the `print` in `LEAN_JUDGE.md` § "The grammar is the allowlist", or
 
 `hf://buckets/dan-pandori/nd-rl/lean-judge/artifacts` — `artifacts/lj/` in full, including
 `corpus_accepted.jsonl` (165 MB, gitignored) and `corpus_leanonly.jsonl`.
+
+# § lean-prefilter (2026-09-28) — a sound reject-only pre-filter, quota-sized Lean, pipelined gate
+
+Checker for every number: Lean 4.34 core alone (`nd_verify` not called). Pre-registration
+`preregistration/lean-prefilter.md` (commit 9238edc). Details and tables: `LEAN_GATE.md`.
+
+## P1 — soundness (test a)
+Source: `artifacts/lp/soundness.{md,json}` from `lp_analysis.py` over the bucket files
+`artifacts/lp/corpus/*.dump.jsonl.gz` (C1), `artifacts/lp/c2/c2*_checked.jsonl.gz` (C2),
+`artifacts/lp/c3/c3_checked.jsonl.gz` (C3). C1 models: eight 3,214,336-parameter from-scratch checkpoints
+(ds-composition a1 s1 / a3 s0, cap-horizon k14 s0, ds-generator g2 s0, lean-format a1_rand s0 [`lean_rand`],
+full_seq s0, EI d3_seq s0 r8, noise-floor p2 s3), each trained on its own run's set.
+- C1: 1,214,162 distinct texts, 499,565 Lean-accepted, 714,597 Lean-rejected; filter rejects 714,597;
+  **false rejects 0**; coverage of Lean's rejects **100.00 %**.
+- C2 (edge mutants): 76,281 texts, 32,909 accepted; false rejects 0; coverage 100.00 %.
+- C3 (stored bucket records re-checked): 19,676 texts, 7,763 accepted (5,424 of them Lean-only accepts from
+  `*.disagree.jsonl`); false rejects 0; coverage 100.00 %.
+- Accepted texts exercising Lean-beyond-ND: `→ False` written 40,890 / 28,419 / 347 (C1 / C2 / C3);
+  `Not.elim` 70 / 1,799 / 1,403; `And.elim` 0 / 1,214 / 0; `Or.elim` 0 / 1,792 / 0.
+
+## P2 — identical accepted sets (test b)
+Source: `artifacts/lp/test_b.json`. 120,000 texts of `artifacts/lp/t1/dump_A.jsonl.gz`: 14,816 accepted with
+the filter off and on; 0 differ. Wall 421.4 s → 43.4 s (7 workers, A40).
+
+## P3 — one T1 ladder round (test c)
+Source: `artifacts/lp/t1/compare.json` (`lp_t1_compare.py`), `artifacts/lp/t1/{gate_*.jsonl,t1_*/round_1.json}`.
+Model `ckpts/dsc/stage1_a1_s1.pt` (3,214,336 params, `lean_seq`, from scratch, `data/dsc/train_a1.jsonl`),
+k 32, T 0.8, `max_new` 512, seed 1, one round, one RunPod A40 per arm, alone.
+- Round wall-clock: A (old: batch 512, 3 workers, no filter, not pipelined) **1,111 s**; B (new, batch 512)
+  **485 s** (0.436); C (new, batch 4,096) **272 s** (0.245); D (C + `lean -j 1` + faster filter) **259 s** (0.233).
+- Gate share of the round: A 57.1 %, B 3.3 %, C 6.0 %, D 5.0 %.
+- Accepted: A = B (19,915 texts, 1,533 found proofs); C = D (20,035, 1,544).
+- Truncation at `max_new` 512: 0.027–0.045 % of samples per call.
+- Peak memory batch 4,096 / `max_new` 512: 16.76 GB (`artifacts/lp/corpus/*.meta.json`).
+
+## P4 — Lean workers (item 2)
+Source: `artifacts/lp/workers{,_j,_j2}.jsonl`. 30,000 arm-A texts, A40 pod (7.65-CPU quota, 96 visible cores):
+3 workers default threads 618 / 290 texts/s (two measurements); 7 workers default 298 / 293; 7 workers
+`-j 1` 745 / 871; 8 workers `-j 1` 823 / 865; 7 workers `-j 2` 872 / 776; 14 workers `-j 1` 466.
+
+## Spend
+Pods `lp-t` (1.44 h, $0.71) and `lp-k` (1.22 h, $0.60), NVIDIA A40 secure at $0.49/h billed: **2.67 pod-hours,
+$1.31** of $3 / 6 h. Bucket: `hf://buckets/dan-pandori/nd-rl/lean-prefilter/artifacts/lp/`.

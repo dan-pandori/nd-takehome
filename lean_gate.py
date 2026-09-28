@@ -51,6 +51,7 @@ def cpu_quota():
 
 # default: one Lean process per CPU of the quota (lean-prefilter, 2026-09-28; was cpu_count // 2, and job scripts set 3)
 WORKERS = int(os.environ.get('LEAN_GATE_WORKERS', '0')) or cpu_quota()
+THREADS = os.environ.get('LEAN_GATE_THREADS', '1')  # `lean -j N`; '' = Lean's default (a thread per hardware thread: 96 on a 7.6-CPU pod; measured 2-3x slower)
 PREFILTER = os.environ.get('LEAN_PREFILTER', 'on')          # on | off | shadow  (see lean_prefilter.py, LEAN_GATE.md)
 PIPELINE = os.environ.get('LEAN_GATE_PIPELINE', '1') == '1'  # sample.generate submits each decode chunk as it finishes
 assert PREFILTER in ('on', 'off', 'shadow'), PREFILTER
@@ -71,7 +72,7 @@ def _run(srcs, workdir, tag, depth=0):
         f.write(text)
     t0 = time.time()
     try:
-        p = subprocess.run([LEAN, '-DmaxErrors=100000000', fn], capture_output=True, text=True,
+        p = subprocess.run([LEAN] + (['-j', THREADS] if THREADS else []) + ['-DmaxErrors=100000000', fn], capture_output=True, text=True,
                            timeout=60 + 2 * text.count('\n'))
         o = p.stdout + p.stderr; rc = p.returncode
     except subprocess.TimeoutExpired:

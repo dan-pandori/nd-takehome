@@ -53,11 +53,11 @@ def norm(f):
 def _split(text):
     out = []
     for w in text.split():
-        for suf in ('.elim', '.1', '.2'):
-            if w.endswith(suf) and len(w) > len(suf) and w[0] in 'nh' and w[1:-len(suf)].isdigit():
-                out.append(w[:-len(suf)]); out.append(suf); break
-        else:
-            out.append(w)
+        if w[0] in 'nh' and '.' in w:
+            j = w.index('.')
+            if j > 1 and w[1:j].isdigit() and w[j:] in ('.elim', '.1', '.2'):
+                out.append(w[:j]); out.append(w[j:]); continue
+        out.append(w)
     return out
 
 
@@ -102,6 +102,7 @@ class _P:
         return (OPS[op], a, b)
 
 
+@functools.lru_cache(maxsize=1 << 16)
 def parse_statement(statement):
     """-> (list of premise formulas, conclusion)"""
     p = _P(statement.split())

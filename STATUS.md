@@ -144,3 +144,6 @@ Brief: nd-rl `docs/proposals/improvements/BRIEF_lean-prefilter.md`. Policy: nd-r
 
 ## lean-prefilter
 - 2026-09-28 16:20 UTC  run started (executor). Prototype `lean_prefilter.py` (type checker for the `lean_seq` fragment, reject-only) removes all 1,158 Lean rejects of `lean-judge`'s test-5 dump with 0 false rejects on its 2,348 accepts. Pre-registration `preregistration/lean-prefilter.md` committed before any pod.
+- 2026-09-28 16:34–17:59 UTC  Two A40 pods (`lp-t`, `lp-k`, $0.49/h billed), both deleted: 2.67 pod-hours, $1.31 of $3.
+- Result: (a) **0 false rejects in 1,310,119 Lean-checked texts** (1.21 M distinct model samples from 8 checkpoints + 76 k edge mutants + 20 k stored bucket records); the filter removes 100 % of Lean's rejects. (b) filter off/on identical on 120 k texts. (c) T1 round on `ckpts/dsc/stage1_a1_s1.pt` (3.2 M, `lean_seq`): 1,111 s → 272 s (0.245; 259 s after `lean -j 1`), accepted set identical at fixed batch; gate share 57 % → 3–6 %. Worker finding: Lean's default thread count (one per visible core, 96) made quota-sized pools slower; `LEAN_GATE_THREADS=1` is now the default.
+- Deliverables: `LEAN_GATE.md`, `run_lean_prefilter.md`, `numbers.md` § lean-prefilter, `log.md`, bucket `hf://buckets/dan-pandori/nd-rl/lean-prefilter/artifacts/lp/`. Merged into the fork's `dan`.

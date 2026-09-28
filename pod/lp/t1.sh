@@ -10,7 +10,8 @@ for arm in ${@:-A B C}; do
   case $arm in
     A) E="LEAN_GATE_WORKERS=3 LEAN_PREFILTER=off LEAN_GATE_PIPELINE=0 ND_SAMPLE_COMPACT=0"; BATCH=512 ;;
     B) E="LEAN_PREFILTER=on LEAN_GATE_PIPELINE=1 ND_SAMPLE_COMPACT=0"; BATCH=512 ;;
-    C) E="LEAN_PREFILTER=on LEAN_GATE_PIPELINE=1"; BATCH=4096 ;;
+    C) E="LEAN_PREFILTER=on LEAN_GATE_PIPELINE=1 LEAN_GATE_THREADS="; BATCH=4096 ;;
+    D) E="LEAN_PREFILTER=on LEAN_GATE_PIPELINE=1"; BATCH=4096 ;;   # C after the worker sweep: lean -j 1 default, faster filter
   esac
   echo "$(date -u +%FT%TZ) start $arm $E batch $BATCH"
   env $E LEAN_GATE_LOG=artifacts/lp/t1/gate_$arm.jsonl LEAN_GATE_DUMP=artifacts/lp/t1/dump_$arm.jsonl \

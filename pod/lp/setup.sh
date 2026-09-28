@@ -6,9 +6,10 @@ cd /workspace/nd-takehome; mkdir -p artifacts/lp ckpts/lp data/dsc
   ~/.elan/bin/lean --version; nproc; cat /sys/fs/cgroup/cpu.max 2>/dev/null || echo "no cpu.max"
   nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
   python3 -c "import torch; print('cuda', torch.cuda.is_available())"
+  command -v hf > /dev/null || pip install -q -U huggingface_hub --break-system-packages > /dev/null 2>&1
   B=hf://buckets/dan-pandori/nd-rl
   for f in ds-composition/ckpts/dsc/stage1_a1_s1.pt ds-composition/ckpts/dsc/stage1_a3_s0.pt ds-generator/ckpts/dsg/stage1_g2_s0.pt \
-           lean-format/ckpts/lf/stage1_a1_rand_s0.pt lean-format/ckpts/lf/stage1_full_seq.pt lean-format/ckpts/lf/ei_d3_seq_s0_r8.pt \
+           lean-format/ckpts/lf/stage1_a1_rand_s0.pt lean-format/ckpts/lf/stage1_full_seq_s0.pt lean-format/ckpts/lf/ei_d3_seq_s0_r8.pt \
            cap-horizon/ckpts/kh/stage1_k14_s0.pt noise-floor/ckpts/nf/stage1_p2_s3.pt; do
     o=ckpts/lp/$(echo $f | cut -d/ -f1)__$(basename $f); [ -s $o ] || hf buckets cp $B/$f $o > /dev/null
   done

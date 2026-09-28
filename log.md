@@ -579,3 +579,33 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   `hf://buckets/dan-pandori/nd-rl/lean-judge/{artifacts/lj,data/lj}` (179 MB, including the 165 MB
   `corpus_accepted.jsonl`, which is gitignored). No checkpoint was produced worth keeping (test 5's
   one-round fine-tune is a smoke test), so `ckpts/` is not uploaded.
+
+## 2026-09-28 — run `lean-prefilter` (executor): take Lean off the RL critical path
+
+- 16:20  Started. Read proposal 15 §§3–4, `lean_gate`, `lean_judge`, `lean_tok`, `sample.generate`.
+  Probed Lean 4.34 by hand on the edge cases (`h.elim` on `¬`/`∧`/`∨`/`→`/atom, `.1` on non-`∧`, `⟨,⟩`
+  against `¬`/`∨`, application of a non-function): Lean errors on every non-`∧` projection, on `Function.elim`,
+  and accepts `Not.elim`/`And.elim`/`Or.elim` in their curried shapes. Wrote `lean_prefilter.py` as an exact
+  type checker for the fragment with a pass-through for anything unmodelled.
+- 16:27  Pre-registration committed (9238edc) before any pod. Prototype: 0 false rejects, 100 % coverage on
+  lean-judge's 3,506-text test-5 dump.
+- 16:30  `Gate` class: prefilter + Lean on a thread pool per decode chunk (pipelined), `LEAN_PREFILTER=on|off|shadow`.
+  Batch defaults 4,096 in `ladder_ei`, `expert_iter`, `eval_set` (not `grpo.py`: base `generate_ids` path).
+- 16:34  Pod `lp-t` (A40). Worker default by `cpu.max` fell back to 96: RunPod A40s use cgroup v1 — added
+  `cpu.cfs_quota_us` (quota 7). 16:35 test (c) arms A, B, C in sequence, alone.
+- 16:40  Pod `lp-k` (A40, second try; first create: no instances). C1 shadow corpus, 2 jobs at a time.
+  Deviation: after two checkpoints at k = 12 (≈ 35 min each) the other six ran at k = 6, three of them on
+  `lp-t` after its timing arms, to stay near 1 M distinct texts without doubling the pod time.
+- 17:07  Arms done: A 1,111 s (Lean 57 % of the round), B 485 s, C 272 s; A and B accepted sets identical.
+  C's gate share 6.0 % missed the pre-registered ≤ 5 %; profiling showed half the filter time in token
+  splitting — rewrote `_split` and cached the statement parse (2× faster, identical verdicts).
+- 17:15  Worker sweep: more workers were *slower* (7 → 0.5× of 3). Cause: `lean` starts one thread per
+  visible core (96) on a 7.65-CPU quota. `lean -j 1` / `-j 2` with 7–8 workers: 745–872 texts/s. Made
+  `LEAN_GATE_THREADS=1` the default. Repeat measurements of one setting differ up to 2× (shared host).
+- 17:38  Arm D (C + `-j 1` + faster filter): 259 s, gate 5.0 %, accepted set identical to C.
+- 17:40  Test (b): 120,000 texts, filter off vs on, 0 differ. C2 edge corpus (lean_seq bases) checked on the VPS.
+- 17:59  Corpus done: 2,332,440 samples, 1,214,162 distinct parsed texts. C2 `lean_rand` bases on `lp-t`.
+  Pull listings diffed (only uncompressed twins, training mixes and test-(b) leanrej files left behind), both
+  pods deleted: 2.67 pod-hours, $1.31. Balance $253.
+- 18:15  Soundness table: 0 false rejects in 1,310,119 texts; the filter rejects 100 % of Lean's rejects in
+  every corpus. Uploaded `artifacts/lp` to the bucket.

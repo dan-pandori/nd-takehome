@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # lean-prefilter helpers (worktree ~/work/lean-prefilter; the ~/bin helpers address ~/nd-takehome, so never use podsync/podpush here).
-#   bash pod/nf/sync.sh <pod>                  push code + the evaluation pools
-#   bash pod/nf/sync.sh <pod> pull <relpath>   pull a path from the pod into the worktree
-#   bash pod/nf/sync.sh <pod> push <relpath>   push one path
-#   bash pod/nf/sync.sh <pod> pullall          pull artifacts/lp/ and ckpts/lp/ and the assembled sets
+#   bash pod/lp/sync.sh <pod>                  push code + the evaluation pools
+#   bash pod/lp/sync.sh <pod> pull <relpath>   pull a path from the pod into the worktree (a directory: NO trailing slash)
+#   bash pod/lp/sync.sh <pod> push <relpath>   push one path
+#   bash pod/lp/sync.sh <pod> pullall          pull artifacts/lp/ and ckpts/lp/ and the assembled sets
 . ~/.config/nd-rl/env; N=$1; shift; F=~/.config/nd-rl/pods/$N; [ -f "$F" ] || { echo "no pod $N"; exit 1; }; . "$F"
 W=/home/dan/work/lean-prefilter
 SSHO="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o BatchMode=yes -o LogLevel=ERROR -o ServerAliveInterval=30"
