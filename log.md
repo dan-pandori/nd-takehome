@@ -679,3 +679,17 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   `unbound` 2 / 0; the environment overrode 6,054 / 6,026 of 19,817 / 19,818 defining names (≈ one per attempt —
   the first name — plus a few). Pre-registration addendum 2 says what this is and is not. SN-v2 ladders (T1, then
   frozen) launched on `se-3` / `se-4`.
+- 07:20  **`la_T1_S_s0` finished** (round 8; rounds 3–8 after the resume). Re-derived from its
+  `found_transfer_8.jsonl` by `se_analysis.py` (matches the round json): transfer **1,348 / 2,285** (C0 s0 890),
+  `L*` **12** (C0 12), solved at `L_true` ≥ 13: **1** (`la_transfer_1126`, `L_true` 13, generator; C0 0), textbook
+  **182 / 760**, 12 / 19 schemata (C0 37, 9). By `L_true` 7…14: 183 / 207 / 739 / 187 / 24 / 7 / 1 / 0 against C0's
+  92 / 166 / 525 / 91 / 11 / 5 / 0 / 0 — large gains up to 10 lines, small ones from 11 on. Round 8 environment:
+  88.8 % of attempts finished, 11.1 % ended on a syntactic error, 33.1 % ended with Lean rejecting a finished proof,
+  0.016 % on a truncated action (0.0019 % of actions hit `--max_action` 256), 8.51 actions per attempt, peak 10.2 GB.
+- 08:10  **All four T1 runs finished.** `se_analysis.py` over `found_transfer_8.jsonl` (all re-derivations match the
+  round jsons; `artifacts/se/summary_T1.json`): transfer solved / `L*` / solved at `L_true` ≥ 13 / textbook —
+  S s0 1,348 / 12 / 1 / 182; S s1 1,389 / 12 / 2 / 216; SN-v2 s0 1,557 / 12 / 3 / 236; SN-v2 s1 1,403 / 12 / 1 / 197;
+  C0 s0 890 / 12 / 0 / 37; C0 s1 965 / 11 / 0 / 89. **Arm S: `L*` 12 on both seeds, 1 and 2 solved at `L_true` ≥ 13
+  — neither pre-registered falsifier fires ("moved but not decisive").** `lean_check` re-checked the shortest
+  accepted proof of every solved theorem in all six runs (6,552 proofs): 0 rejected; median term size by `L_true`
+  7…12 is 4 / 4 / 5 / 6 / 6 / 8 for S s0 against 4 / 4 / 5 / 5 / 6 / 6 for C0 s0.
