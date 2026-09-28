@@ -635,3 +635,10 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 - 18:36  Many attempts the environment finishes are Lean-rejected (la_transfer_100: 11,669 / 12,288): the
   environment checks structure and names, not term types (sample: `Or.inl n3` with `n3 : S` for goal `Q ∨ …`).
   Lean decides; these count as failures.
+- 19:03  S1 base / EI (batch 1,024, third and fourth process on `ss1`) both died of CUDA OOM: the two H jobs grew to
+  12–17 GB each. H s0 finished T 0.8 on all 29 (la_transfer_454: 0 / 200,000); T 1.0 running on the rest.
+- 19:10  `ss2` = RTX 6000 Ada 48 GB, **$0.84/h billed** (only class in stock). S1 moved there at batch 4,096 (the
+  largest the policy asks for; two jobs fit in 48 GB) under `pod/ss/retry.sh`, resuming from the 7 / 19 records
+  written on `ss1`. The partial ss1 files were moved aside on ss1 (`artifacts/ss/moved/`) and the partial ss1 Lean
+  dumps kept locally as `dump/S1_*_T08_s0.part_ss1.jsonl` (the audit trail for those rows). The S1 batch change
+  (1,024 → 4,096) mid-job is a sampling re-draw, not a correctness change (`NOISE_FLOOR.md`).
