@@ -129,7 +129,7 @@ Order D, A, B, C (D on the VPS in parallel with pods). Pods: A40 at the billed r
 remaining ceiling. Drop order: C seed 1, then C's T 1.0 depth, then B's depth halved. If C would not
 fit, finish D, A, B, write up, and put C's projection in `QUESTIONS.md`.
 
-## Addendum (2026-09-28 10:30 UTC, before any seed-1 pod): C seed 1
+## Addendum (2026-09-28 08:46 UTC, before any seed-1 pod): C seed 1
 
 Seed 0 of C is in (big s0 reaches 0 / 29 survivors; 6 / 82 forward crux at k 10,000; held-out 0.879). The
 budget allows C seed 1 (13.8 of 30 pod-hours used), and the policy asks for two seeds before a difference is called.
