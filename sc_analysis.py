@@ -47,6 +47,15 @@ def load_rows(pattern=f'{ART}/*.jsonl'):
                 continue
             r['_src'] = fn
             rows.append(r)
+    # Guard: one theorem must appear at most once per output file.  Two jobs writing the same shard to the
+    # same file (it happened once in this run: a launcher fired and was then launched again by hand) append
+    # duplicate records with the SAME sampling seed, i.e. the same draws; pooling them would double n and c
+    # on correlated data and make the c = 0 upper bound 3/n look twice as tight as it is.
+    seen = collections.Counter((r['_src'], r['name']) for r in rows)
+    dup = [k for k, v in seen.items() if v > 1]
+    if dup:
+        raise SystemExit(f'{len(dup)} duplicated (file, theorem) records, e.g. {dup[:3]}. De-duplicate before '
+                         f'analysing: identical duplicates are replays and one copy must be dropped.')
     return rows
 
 

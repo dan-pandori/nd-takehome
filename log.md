@@ -564,3 +564,29 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   instead of drawing fresh ones. Split into `--seed` (sampling) and `--model_seed` (label, defaults to `--seed`);
   the four partial output files were deleted and the arm relaunched with `--seed 10 --model_seed 0`. The
   already-running stage-1 jobs are unaffected: their sampling seed and model seed coincide.
+- **2026-09-27 21:29 – 23:25** Stage 2 ran across up to four A40s: base T = 1.0 on the 338 theorems the base
+  failed at T = 0.8 (a crux superset, so it needed no knowledge of the crux); base T = 0.8 continued to 50,000;
+  the forward crux's T = 1.0 arm to 50,000; the reverse crux's EI arm to 50,000; the EI T = 1.0 arm.
+  Pods `sc3`, `sc4` deleted once their files were pulled and diffed against the remote listing.
+- **23:25** Secondary scored on `sc3` before deleting it: 297 distinct EI-found crux proofs, base teacher-forced
+  log p (marginalised over the `lean_seq` name offset) median **−30.69**, max **−9.47**.
+- **23:40** **The falsifier fires: 35** (threshold 20; my pre-registered E5 was 8, range 0–19). Before believing
+  it I ran the checks that could have killed it — leakage (0 overlap with the EI training pool by name, string
+  or renaming-class key, 0 of 2,285 pool-wide), proof validity (`sc_recheck.py`: all 372 accepted EI proofs on
+  the survivors re-verified **one proof per Lean process**, 0 failures, 0 `sorry`/`simp`-class tokens), plus the
+  judging and sampler checks already on file from 19:05.
+- **2026-09-28 00:03 — duplicated shards on `sc1`, found through a CUDA OOM, and repaired.** Shard 1 of the
+  T = 0.8 deep arm died with `torch.OutOfMemoryError`; the traceback showed **four** processes on a 44 GiB A40
+  where I expected two. Cause: `pod/sc/after_s2b.sh` **did** fire and launch both shards, then died before
+  writing its log, so when I saw an empty log I launched both shards again by hand. Two copies of shard 0 and
+  two of shard 1 were appending to the same two files **with the same `--seed 21`**, i.e. replaying identical
+  draws. Pooling those would have doubled n and c on perfectly correlated data and made the c = 0 bound 3/n
+  look twice as tight as it is — directly inflating the falsifier's attempt counts.
+  - Audited **all 22** artifact files: only the two `s2c_base_T08_s0.s{0,1}.jsonl` were affected (20 → 10 and
+    19 → 10 records), and **every duplicate pair was identical** in (n_tried, n_ok, first_hit), confirming
+    replay rather than independent sampling, so dropping one copy is exact. The de-duplication asserts that
+    identity and refuses to drop a differing pair.
+  - `sc_analysis.load_rows` now **raises** on any duplicated (file, theorem) record, so this cannot pass
+    silently again. The arm was relaunched with exactly two shards, resuming from the 10 kept per shard.
+  - The falsifier count of 35 was computed **before** these files existed, so it is unaffected; it will be
+    recomputed at the end with the deeper T = 0.8 data.
