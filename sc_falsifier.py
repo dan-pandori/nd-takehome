@@ -45,15 +45,24 @@ for KCRUX in (4000, 10000):
         print(f'  survivors: min attempts T0.8 {mn8:,}  T1.0 {mn10:,};  p_EI range '
               f'{min(x[3] for x in surv):.3f}-{max(x[3] for x in surv):.3f}')
         print('  by L_true:', dict(sorted(collections.Counter(L[x[0]] for x in surv).items())))
-    # The count is a function of how many attempts the base was given, so report the whole curve rather than
-    # one number: a survivor is only ever "0 successes in THIS many attempts".  Deeper arms can only remove
-    # survivors, never add them, so the curve is monotone down and the last point is the strongest claim.
-    print('  survivors as a function of the attempts the base was given (min over the two temperatures):')
-    for thr in (10000, 40000, 50000, 100000, 150000, 200000):
-        k = [n for n in phi
-             if base08[n]['c'] == 0 and base10.get(n) and base10[n]['c'] == 0
-             and base08[n]['n'] >= thr and base10[n]['n'] >= thr]
-        print(f'    >= {thr:>7,} attempts at EACH temperature: {len(k):3d} survivors'
-              + ('   <- the pre-registered threshold is 40,000 attempts / 20 theorems' if thr == 40000 else ''))
+    # The count is a function of how far the base was pushed, so report the curve by the DEPTH ACTUALLY RUN,
+    # accumulating the stages in the order they were run.  (Filtering the final pooled n by a threshold is
+    # degenerate once every theorem has full depth -- every row would read the same.)  Deeper arms can only
+    # remove survivors, never add them, so this is monotone down and the last row is the strongest claim.
+    DEPTHS = [('10,000 / 10,000', {'s1'}, {'s2a_T10'}),
+              ('50,000 / 50,000', {'s1', 's2a_T08'}, {'s2a_T10', 's2b_T10'}),
+              ('200,000 / 200,000', {'s1', 's2a_T08', 's2c_T08'}, {'s2a_T10', 's2b_T10', 's2c_T10'})]
+    print('  survivors by the base attempts actually drawn (T 0.8 / T 1.0), accumulating stages in run order:')
+    for label, st8, st10 in DEPTHS:
+        k = []
+        for n in phi:
+            a8 = [v for st, v in base08[n]['stages'].items() if st in st8]
+            a10 = [v for st, v in (base10[n]['stages'].items() if base10.get(n) else [])if st in st10]
+            n8, c8 = sum(v['n'] for v in a8), sum(v['c'] for v in a8)
+            n10, c10 = sum(v['n'] for v in a10), sum(v['c'] for v in a10)
+            if c8 == 0 and c10 == 0 and n8 and n10:
+                k.append(n)
+        print(f'    {label:>19} attempts: {len(k):3d} survivors'
+              + ('    <- pre-registered: >= 40,000 attempts, fires at >= 20' if '50,000' in label else ''))
     if KCRUX == 10000:
         open('data/sc/falsifier_survivors.txt', 'w').write('\n'.join(x[0] for x in surv) + '\n')

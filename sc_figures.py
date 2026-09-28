@@ -67,8 +67,8 @@ def scatter(cells, out, seed=0, T=0.8):
     ax.plot([lo, hi], [lo, hi], '-', color=INK2, lw=1.0, alpha=0.55, zorder=1)
     ax.text(hi - 0.35, hi - 0.55, 'equal', color=INK2, fontsize=8, ha='right', va='bottom', rotation=45)
     ax.axvline(math.log10(1.0 / EI_ATTEMPTS), color=INK2, lw=1.0, ls=(0, (4, 3)), alpha=0.8, zorder=1)
-    ax.text(math.log10(1.0 / EI_ATTEMPTS) + 0.08, lo + 0.25, f'p_base = 1/{EI_ATTEMPTS}\n(what EI spent)',
-            color=INK2, fontsize=7.5, va='bottom')
+    ax.text(math.log10(1.0 / EI_ATTEMPTS) - 0.10, lo + 0.25, f'p_base = 1/{EI_ATTEMPTS}\n(the attempts EI spent)',
+            color=INK2, fontsize=7.5, va='bottom', ha='right')
     ax.set_xlim(lo, hi); ax.set_ylim(lo, hi)
     ax.set_xlabel('log$_{10}$  base per-sample success probability', color=INK, fontsize=9.5)
     ax.set_ylabel('log$_{10}$  EI per-sample success probability', color=INK, fontsize=9.5)

@@ -1179,17 +1179,21 @@ k = 10,000 per theorem, stopping a theorem at the first batch boundary with 50 s
 
 | `L_true` | n | **base** solved @10k (@4k) | **EI** solved @10k (@4k) |
 |---|---|---|---|
-| 7 | 60 | 19 (17) | — |
-| 8 | 60 | 24 (20) | — |
-| 9 | 60 | 0 (0) | — |
-| 10 | 60 | 2 (2) | — |
-| 11 | 60 | 0 (0) | — |
-| 12 | 60 | 0 (0) | — |
-| 13 | 13 | 0 (0) | — |
-| 14 | 10 | 0 (0) | — |
+| 7 | 60 | 19 (17) | 25 (24) |
+| 8 | 60 | 24 (20) | 34 (33) |
+| 9 | 60 | 0 (0) | 32 (31) |
+| 10 | 60 | 2 (2) | 17 (17) |
+| 11 | 60 | 0 (0) | 8 (7) |
+| 12 | 60 | 0 (0) | 4 (3) |
+| 13 | 13 | 0 (0) | 1 (1) |
+| 14 | 10 | 0 (0) | 0 (0) |
 | **all** | **383** | **45 (39)** | **121 (116)** |
 
-Base: 3,726,864 samples, 3,982 accepted. EI: 3,094,800 samples, 126,826 accepted.
+Base: 3,726,864 samples, 3,982 accepted. EI: 3,094,800 samples, 126,826 accepted. Pooling stage 1 with every
+stage-2 arm, the base ends at **64 / 383** solved from **25,587,536** samples at T = 0.8 and **35 / 338** at
+T = 1.0 from **13,722,176**; EI at **125 / 383** at T = 0.8 (stage 1 plus the reverse-crux arm).
+
+
 
 ## SC4 — seed replication (stage 3): seed 0 vs seed 1 at k = 10,000, T = 0.8
 
@@ -1259,34 +1263,48 @@ the 35 falsifier survivors and the RL pool: **0 by theorem name, 0 by theorem st
 
 **Pre-registered falsifier (support expansion):** ≥ 20 forward-crux theorems with **0 base successes in
 ≥ 40,000 attempts at both temperatures** while the EI model solves each at **p̂_EI ≥ 0.01**.
-**Pre-registered prediction E5: 8 (range 0–19), i.e. it does not fire.**
+**Pre-registered prediction E5: 8 (range 0–19) — i.e. it does not fire.**
 
-**Measured: 35.** Source: `sc_falsifier.py` over `artifacts/sc/summary.json`.
+**Measured: 29,** after the base was given **200,000 attempts at T = 0.8 and 200,000 at T = 1.0** on each
+(4 × 10⁵ per theorem, 5× the depth the falsifier asks for). Source: `sc_falsifier.py` over
+`artifacts/sc/summary.json`.
+
+**Survivors as a function of how far the base was pushed** (deeper arms can only remove survivors, so this is
+monotone down; the last row is the claim):
+
+| base attempts, T 0.8 / T 1.0 | survivors |
+|---|---|
+| 10,000 / 10,000 | 44 |
+| 50,000 / 50,000 | **35** ← the pre-registered depth (≥ 40,000) and threshold (≥ 20) |
+| **200,000 / 200,000** | **29** |
+
+The amplifier effect is visible in that column — extra base attempts *do* rescue theorems, 44 → 35 → 29 — and
+then it saturates far above the threshold.
 
 | | value |
 |---|---|
-| survivors (0 base successes at both T, ≥ 40,000 attempts each, p̂_EI ≥ 0.01) | **35** |
-| minimum base attempts behind each survivor | **50,000 at T = 0.8 and 50,000 at T = 1.0** (100,000 total) |
+| survivors | **29** |
 | p̂_EI range over the survivors | **0.022 – 1.000** |
-| survivors by `L_true` | 7 → 1, 8 → 3, **9 → 16**, 10 → 9, 11 → 5, 12 → 1 |
-| identical count at the pre-registered k = 4,000 crux | **35** |
-
-So the falsifier fires by 15 theorems, and at a stricter attempt count than it asks for. The gap on a survivor
-is at least **p̂_EI 0.022 against p_base < 3/100,000 = 3.0 × 10⁻⁵**, i.e. ≥ 700×, and for the theorems at
-p̂_EI ≈ 1 it is ≥ 3 × 10⁴×.
+| implied gap | p̂_EI ≥ 0.022 vs p_base < 3/400,000 = 7.5 × 10⁻⁶, i.e. **≥ 2,900×**; for the survivors at p̂_EI ≈ 1, **≥ 1.3 × 10⁵×** |
+| survivors by `L_true` | 7 → 1, **9 → 13**, 10 → 9, 11 → 5, 12 → 1 |
+| same count at the pre-registered k = 4,000 crux definition | **29** |
 
 **Checks that had to pass before this was believed** (each could have killed it):
 
-1. **Leakage** — 0 overlap with the EI training pool by name, string, or renaming class (SC7).
-2. **Proof validity** — all **372** distinct accepted EI proofs on the 35 survivors re-verified **one proof
-   per Lean process** (`sc_recheck.py`), not in a shared batch file; **0 failures**. Their literal sampled
-   texts contain **0** occurrences of `sorry|admit|exact?|apply?|decide|native_decide|simp|omega|aesop|tauto|trivial|norm_num` — the tokens that could make a Lean check vacuous. Lengths 7–13 lines, term size 24–122.
+1. **Leakage** — 0 overlap between the 35/29 survivors and the EI training pool by theorem name, theorem
+   string and renaming-class `key`; 0 of 2,285 across the whole transfer pool (SC7).
+2. **Proof validity** — all **372** distinct accepted EI proofs on the survivors re-verified **one proof per
+   Lean process** (`sc_recheck.py`), not in a shared batch file; **0 failures**. Their literal sampled texts
+   contain **0** occurrences of `sorry|admit|exact?|apply?|decide|native_decide|simp|omega|aesop|tauto|trivial|norm_num`. Lengths 7–13 lines, term size 24–122.
 3. **Judging path** — `sc_selftest.py` put 11 proofs written and Lean-gated by `ladder_ei` (an independent
    code path) through `support.py`'s judging path: **11/11 accepted**, normalised and un-normalised.
 4. **Sampler** — `support.py` re-run on 9 theorems the base demonstrably solves at k = 32 returns
    116, 140, 179 successes per 2,000 (`artifacts/sc/diag/`); compaction on vs off agrees to 1 sample in 6,000.
-5. **Temperature** — the falsifier is evaluated at T = 1.0 as well as T = 0.8 precisely because T = 0.8
-   understates base support; T = 1.0 removed 17 theorems from the crux that T = 0.8 would have left in (SC6).
+5. **Temperature** — evaluated at T = 1.0 as well as T = 0.8, because T = 0.8 understates base support:
+   T = 1.0 removed 17 theorems from the crux that T = 0.8 alone would have left in (SC6).
+6. **Duplicate records** — two stage-2 files briefly carried replayed records from a duplicated job; they were
+   de-duplicated after verifying every duplicate pair identical, and `sc_analysis.load_rows` now refuses to
+   run if any (file, theorem) repeats (`log.md`, 2026-09-28 00:03).
 
 ## SC9 — pass@k by stratum, and the crossover that is not there
 
@@ -1297,18 +1315,18 @@ theorems that stopped early at ≥ 50 successes and is drawn **dashed** in the f
 
 | `L_true` | n | base @256 | EI @256 | base @4,000 | EI @4,000 | base @10,000 | EI @10,000 | **crossover k** |
 |---|---|---|---|---|---|---|---|---|
-| 7 | 60 | 0.123 | 0.326 | 0.287 | 0.407 | 0.333 | 0.431 | **none** |
-| 8 | 60 | 0.181 | 0.525 | 0.341 | 0.547 | 0.418 | 0.567 | **none** |
-| 9 | 60 | 0.001 | 0.497 | 0.008 | 0.526 | 0.018 | 0.533 | **none** |
+| 7 | 60 | 0.123 | 0.326 | 0.288 | 0.407 | 0.335 | 0.431 | **none** |
+| 8 | 60 | 0.181 | 0.525 | 0.345 | 0.547 | 0.427 | 0.567 | **none** |
+| 9 | 60 | 0.001 | 0.497 | 0.010 | 0.526 | 0.024 | 0.533 | **none** |
 | 10 | 60 | 0.008 | 0.191 | 0.033 | 0.264 | 0.033 | 0.286 | **none** |
 | 11 | 60 | 0.000 | 0.091 | 0.000 | 0.123 | 0.000 | 0.133 | **none** |
 | 12 | 60 | 0.000 | 0.026 | 0.000 | 0.056 | 0.000 | 0.067 | **none** |
 | 13 | 13 | 0.000 | 0.002 | 0.000 | 0.031 | 0.000 | 0.077 | **none** |
 | 14 | 10 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | **none** |
 
-**No stratum crosses over at any measured k.** Base pass@k does climb — `L_true` 7 goes 0.123 → 0.333 and
-8 goes 0.181 → 0.418 between k = 256 and k = 10,000, which is the amplifier effect and it is real — but the
-EI model climbs too and stays ahead everywhere. At `L_true` 9 the ratio is ≈ 30× at k = 10,000 and closing
+**No stratum crosses over at any measured k.** Base pass@k does climb — `L_true` 7 goes 0.123 → 0.335 and
+8 goes 0.181 → 0.427 between k = 256 and k = 10,000, which is the amplifier effect and it is real — but the
+EI model climbs too and stays ahead everywhere. At `L_true` 9 the ratio is ≈ 22× at k = 10,000 and closing
 slowly. E7 predicted crossover for `L_true` 7–9 at k between 10³ and 10⁴: **wrong**.
 
 `L_true` 14 (10 theorems) is solved 0 times by either model at any k; `L_true` 13 is solved by EI only
