@@ -1280,3 +1280,278 @@ Reproduce: the `print` in `LEAN_JUDGE.md` § "The grammar is the allowlist", or
 
 `hf://buckets/dan-pandori/nd-rl/lean-judge/artifacts` — `artifacts/lj/` in full, including
 `corpus_accepted.jsonl` (165 MB, gitignored) and `corpus_leanonly.jsonl`.
+
+
+# state-env (proposal 13: an AlphaProof-style proof state for the policy)
+
+Run `state-env`, 2026-09-28. Branch `dan_state-env`. Every number here is **under Lean alone** (`lean_gate` on the
+literal `lean_seq` text, `lean_judge` elsewhere; Dan, 2026-09-27) unless the row says otherwise. `L_true` on the
+ladder pools is `minlen.py`'s ND-derived label and is an **upper bound under Lean**.
+
+**Models.** All arms are the same architecture as the control: 4 layers, d 256, 8 heads, **3,216,384 parameters**
+(the control's 3,214,336 plus the 4 × 256 × 2 embedding and output rows of the four state tokens), trained **from
+scratch** for 6,000 steps on **`data/p2/train_depth3_f0_a1.jsonl`** (155,000 proofs, cap 6, depth-3 f = 0), 128 whole
+proofs per step. They differ only in what the policy reads and writes:
+
+| arm | checkpoint | tokenizer mode | the policy's input | the policy's output |
+|---|---|---|---|---|
+| **S** | `ckpts/se/stage1_S_s{0,1}.pt` | `lean_state` | the focused goal's tactic state | one `lean_seq` step |
+| **SH** | `ckpts/se/stage1_SH_s{0,1}.pt` | `lean_stateh` | the actions so far **and** the state | one `lean_seq` step |
+| **SN-v2** (post-hoc diagnostic) | `ckpts/se/stage1_SN_s{0,1}.pt` | `lean_staten` | the state; the **environment** names what a step introduces (`max in scope + 1` from a per-attempt base `U[0,32]`) | one `lean_seq` step |
+| **C0** | `ckpts/lf/stage1_a1_seq_s{0,1}.pt` (on file, **not re-run**) | `lean_seq` | the theorem | the whole proof |
+
+C0's ladder and held-out numbers were measured by run `ds-generator` on 2026-09-23/24 **under Lean ∧ `nd_verify`**
+and at whole-proof sampler batch 512 with `ND_SAMPLE_COMPACT=0`; per `AGENT_POLICY.md` a settings change is a
+sampling re-draw, and the `ds-generator` spread on the same two checkpoints (T1 856 / 890 / 923 at s0) is what that
+re-draw looks like. Lean-only versus Lean ∧ `nd_verify` is a smaller effect still: run `lean-format` found 460
+Lean-only acceptances among 13.9 M samples.
+
+**Sampler settings, identical for every arm and seed:** `ND_SAMPLE_PATH=fast`, `early='eos'`, compaction on, per-row
+seeding; environment batch **2,048 attempts**, `--max_action 256`, `--max_steps 48`, temperature 0.8 on the ladder
+and greedy (T 0) on held-out. Batch probe on Stage-1 S s0, one attempt per RL target
+(`artifacts/se/probe_b*.json`): batch 1,024 / 2,048 / 4,096 / 8,192 → peak allocated **4.53 / 8.58 / 16.37 / 16.31 GB**,
+wall 25.1 / 21.5 / 18.7 / 18.6 s, solved 986 / 943 / 974 / 971 (the spread is the re-draw). 2,048 was kept: 4,096
+fits at Stage-1 state lengths but the environment's states grow with proof length and every card here is 24 GB.
+
+**Gates** (all before the first measurement of the arm they cover):
+
+| gate | arm S / SH (`lean_state`) | arm SN (`lean_staten`) |
+|---|---|---|
+| 1 round trip, byte for byte, on all 155,000 control proofs | 0 failures | 0 failures |
+| 1b random reassembled texts accepted by Lean | 0 rejected / 5,000 | 0 rejected / 5,000 |
+| 2 renderer's state == Lean's `trace_state` at a random cut | 0 mismatches / 2,800 | 0 mismatches / 1,300 |
+| 3 environment replay of every control proof | 0 failures / 155,000 | 0 failures / 155,000 |
+| `have` actions whose name is not `max index in scope + 1` | 15,821 / 526,784 (3.00 %) | **0** / 526,784 |
+| 2b gate 2 on 7–15-line proofs the model found (T1 S s0, round 3) | 0 mismatches / 1,500 | — |
+
+Sources: `artifacts/se/gate13.json`, `gate2.json`, `gate2_ore.json`, `gate2_neg.json`, `gate13_canon.json`,
+`gate2_canon.json`, `gate2_canon_ore.json`; per-case Lean sources in `artifacts/se/gate2*_cases.jsonl`.
+
+
+**The falsifiers (arm S, pre-registered):** neither fires. T1 `L*` = **12 / 12**; solved at `L_true` ≥ 13 = **1 / 2**
+("is the wall" needed `L*` ≥ 13 and ≥ 5; "is not the wall" needed 0 on both seeds). Only **3 distinct** `L_true` ≥ 13
+theorems were solved by any run: `la_transfer_1126` (S s0, S s1, SN s0, SN s1), `la_transfer_1198` (S s1, SN s0),
+`la_transfer_978` (SN s0); source `artifacts/se/summary.json` → `ladders.runs.*.derived.solved_ge13_names`.
+
+### Held-out greedy, depth-3 slice (`pat.depth3` of `data/p2/heldout.jsonl`, 500 records) — `artifacts/se/heldout_depth3.json` (`se_depth3.py`)
+
+| model | depth-3 | rest (4,500) |
+|---|---|---|
+| SH_s0 | 430/500 = 0.860 | 0.962 |
+| SH_s1 | 440/500 = 0.880 | 0.964 |
+| SN_s0 | 478/500 = 0.956 | 0.972 |
+| SN_s1 | 451/500 = 0.902 | 0.965 |
+| SNv1_s0 | 479/500 = 0.958 | 0.973 |
+| SNv1_s1 | 449/500 = 0.898 | 0.592 |
+| S_s0 | 461/500 = 0.922 | 0.962 |
+| S_s1 | 441/500 = 0.882 | 0.792 |
+| C0_s0 (Lean AND nd_verify, on file) | 244/500 = 0.488 | 0.956 |
+| C0_s1 (Lean AND nd_verify, on file) | 136/500 = 0.272 | 0.966 |
+
+### Cost and bucket
+
+| pod | GPU | $/h (billed) | hours | $ |
+|---|---|---|---|---|
+| se-1 | NVIDIA GeForce RTX 3090 | 0.50 | 9.83 | 4.91 |
+| se-2 | NVIDIA RTX PRO 4000 Blackwell | 0.57 | 11.20 | 6.38 |
+| se-3 | NVIDIA GeForce RTX 3090 | 0.50 | 4.62 | 2.31 |
+| se-4 | NVIDIA GeForce RTX 4090 | 0.74 | 5.04 | 3.73 |
+| se-5 | NVIDIA RTX PRO 4500 Blackwell Server Edition | 0.72 | 2.24 | 1.61 |
+| se-6 | NVIDIA GeForce RTX 3090 | 0.50 | 2.51 | 1.26 |
+| **total** | | | **35.44** | **20.20** |
+
+`podbudget` reports 35.44 h / $19.42 (it bills `se-2` at its $0.50/h fallback). Budget 60 h / $30.
+Bucket: `hf://buckets/dan-pandori/nd-rl/state-env/ckpts/se/` (six Stage-1 checkpoints S / SH / SN × 2 seeds, and
+every EI round `ladder/la_T1_{S,SH,SN}_s{0,1}_r{1..8}.pt`), `…/artifacts/se/` (every ladder run's round jsons,
+found files, mixes and logs; held-out per-record files; gates), `…/data/` (the control set and pools used).
+
+### Held-out greedy (`data/p2/heldout.jsonl`, 5,000, k 1, T 0; per length)
+
+| model | overall | 2 | 3 | 4 | 5 | 6 | source |
+|---|---|---|---|---|---|---|---|
+| SH_s0 `stage1_SH_s0.pt` | 0.9516 | 0.998 | 0.991 | 0.971 | 0.928 | 0.870 | `artifacts/se/heldout_SH_s0.json` |
+| SH_s1 `stage1_SH_s1.pt` | 0.9554 | 1.000 | 0.985 | 0.961 | 0.936 | 0.895 | `artifacts/se/heldout_SH_s1.json` |
+| SN_s0 `stage1_SN_s0.pt` | 0.9700 | 0.998 | 0.992 | 0.972 | 0.947 | 0.941 | `artifacts/se/heldout_SN_s0.json` |
+| SN_s1 `stage1_SN_s1.pt` | 0.9584 | 0.999 | 0.993 | 0.970 | 0.926 | 0.904 | `artifacts/se/heldout_SN_s1.json` |
+| SNv1_s0 `stage1_SN_s0.pt` | 0.9716 | 0.998 | 0.992 | 0.972 | 0.952 | 0.944 | `artifacts/se/heldout_SNv1_s0.json` |
+| SNv1_s1 `stage1_SN_s1.pt` | 0.6230 | 0.608 | 0.527 | 0.674 | 0.643 | 0.663 | `artifacts/se/heldout_SNv1_s1.json` |
+| S_s0 `stage1_S_s0.pt` | 0.9578 | 0.999 | 0.992 | 0.961 | 0.933 | 0.904 | `artifacts/se/heldout_S_s0.json` |
+| S_s1 `stage1_S_s1.pt` | 0.8012 | 0.991 | 0.878 | 0.757 | 0.702 | 0.678 | `artifacts/se/heldout_S_s1.json` |
+| C0 s0 `stage1_a1_seq_s0.pt` (on file, Lean ∧ nd_verify) | 0.9088 | 0.994 | 0.989 | 0.951 | 0.924 | 0.686 | `review_ds-generator.md` §3 |
+| C0 s1 `stage1_a1_seq_s1.pt` (on file, Lean ∧ nd_verify) | 0.8968 | 0.997 | 0.992 | 0.967 | 0.944 | 0.584 | same |
+
+### Ladder: transfer pool (2,285 theorems), cumulative at the last round
+
+| run | last round | solved | `L*` | ≥13 | greedy | textbook | distinct proofs | source |
+|---|---|---|---|---|---|---|---|---|
+| `la_T1_SH_s0` | 8 | 1257 | 12 | 0 | 637 | 148/760 (11/19 schemata) | 2981 | `artifacts/se/la_T1_SH_s0/found_transfer_8.jsonl` |
+| `la_T1_SH_s1` | 8 | 1390 | 12 | 0 | 912 | 201/760 (12/19 schemata) | 3623 | `artifacts/se/la_T1_SH_s1/found_transfer_8.jsonl` |
+| `la_T1_SN_s0` | 8 | 1557 | 12 | 3 | 1100 | 236/760 (16/19 schemata) | 8377 | `artifacts/se/la_T1_SN_s0/found_transfer_8.jsonl` |
+| `la_T1_SN_s1` | 8 | 1403 | 12 | 1 | 887 | 197/760 (14/19 schemata) | 4620 | `artifacts/se/la_T1_SN_s1/found_transfer_8.jsonl` |
+| `la_T1_S_s0` | 8 | 1348 | 12 | 1 | 735 | 182/760 (12/19 schemata) | 3667 | `artifacts/se/la_T1_S_s0/found_transfer_8.jsonl` |
+| `la_T1_S_s1` | 8 | 1389 | 12 | 2 | 840 | 216/760 (12/19 schemata) | 4187 | `artifacts/se/la_T1_S_s1/found_transfer_8.jsonl` |
+| `la_frozen_SH_s0` | 8 | 516 | 10 | 0 | 158 | 79/760 (6/19 schemata) | 730 | `artifacts/se/la_frozen_SH_s0/found_transfer_8.jsonl` |
+| `la_frozen_SH_s1` | 8 | 479 | 10 | 0 | 149 | 66/760 (7/19 schemata) | 698 | `artifacts/se/la_frozen_SH_s1/found_transfer_8.jsonl` |
+| `la_frozen_SN_s0` | 8 | 975 | 11 | 0 | 429 | 111/760 (11/19 schemata) | 2075 | `artifacts/se/la_frozen_SN_s0/found_transfer_8.jsonl` |
+| `la_frozen_SN_s1` | 8 | 801 | 11 | 0 | 261 | 110/760 (10/19 schemata) | 1552 | `artifacts/se/la_frozen_SN_s1/found_transfer_8.jsonl` |
+| `la_frozen_S_s0` | 8 | 779 | 11 | 0 | 212 | 93/760 (7/19 schemata) | 1387 | `artifacts/se/la_frozen_S_s0/found_transfer_8.jsonl` |
+| `la_frozen_S_s1` | 8 | 787 | 10 | 0 | 144 | 100/760 (7/19 schemata) | 1351 | `artifacts/se/la_frozen_S_s1/found_transfer_8.jsonl` |
+| `la_T1_c0_s0` (C0, on file) | 8 | 890 | 12 | 0 | 553 | 37/760 (9/19 schemata) | 2108 | `artifacts/dsg/la_T1_c0_s0/found_transfer_8.jsonl` |
+| `la_T1_c0_s1` (C0, on file) | 8 | 965 | 11 | 0 | 646 | 89/760 (7/19 schemata) | 2175 | `artifacts/dsg/la_T1_c0_s1/found_transfer_8.jsonl` |
+| `la_frozen_c0_s0` (C0, on file) | 8 | 158 | 9 | 0 | 10 | 6/760 (4/19 schemata) | 203 | `artifacts/dsg/la_frozen_c0_s0/found_transfer_8.jsonl` |
+| `la_frozen_c0_s1` (C0, on file) | 8 | 114 | 9 | 0 | 16 | 13/760 (4/19 schemata) | 136 | `artifacts/dsg/la_frozen_c0_s1/found_transfer_8.jsonl` |
+
+### Transfer solved by `L_true` (ND-derived upper bound under Lean)
+
+| run | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 |
+|---|---|---|---|---|---|---|---|---|
+| `la_T1_SH_s0` | 183/300 | 196/300 | 703/1010 | 142/451 | 27/99 | 6/102 | 0/13 | 0/10 |
+| `la_T1_SH_s1` | 195/300 | 233/300 | 743/1010 | 174/451 | 37/99 | 8/102 | 0/13 | 0/10 |
+| `la_T1_SN_s0` | 196/300 | 235/300 | 834/1010 | 232/451 | 42/99 | 15/102 | 2/13 | 1/10 |
+| `la_T1_SN_s1` | 191/300 | 210/300 | 752/1010 | 205/451 | 33/99 | 11/102 | 1/13 | 0/10 |
+| `la_T1_S_s0` | 183/300 | 207/300 | 739/1010 | 187/451 | 24/99 | 7/102 | 1/13 | 0/10 |
+| `la_T1_S_s1` | 187/300 | 234/300 | 745/1010 | 184/451 | 28/99 | 9/102 | 2/13 | 0/10 |
+| `la_frozen_SH_s0` | 125/300 | 128/300 | 226/1010 | 36/451 | 1/99 | 0/102 | 0/13 | 0/10 |
+| `la_frozen_SH_s1` | 111/300 | 119/300 | 225/1010 | 24/451 | 0/99 | 0/102 | 0/13 | 0/10 |
+| `la_frozen_SN_s0` | 151/300 | 182/300 | 546/1010 | 87/451 | 9/99 | 0/102 | 0/13 | 0/10 |
+| `la_frozen_SN_s1` | 145/300 | 152/300 | 432/1010 | 67/451 | 5/99 | 0/102 | 0/13 | 0/10 |
+| `la_frozen_S_s0` | 137/300 | 159/300 | 419/1010 | 59/451 | 5/99 | 0/102 | 0/13 | 0/10 |
+| `la_frozen_S_s1` | 142/300 | 154/300 | 427/1010 | 61/451 | 3/99 | 0/102 | 0/13 | 0/10 |
+| `la_T1_c0_s0` | 92/300 | 166/300 | 525/1010 | 91/451 | 11/99 | 5/102 | 0/13 | 0/10 |
+| `la_T1_c0_s1` | 145/300 | 165/300 | 531/1010 | 106/451 | 15/99 | 3/102 | 0/13 | 0/10 |
+| `la_frozen_c0_s0` | 42/300 | 69/300 | 44/1010 | 3/451 | 0/99 | 0/102 | 0/13 | 0/10 |
+| `la_frozen_c0_s1` | 44/300 | 47/300 | 22/1010 | 1/451 | 0/99 | 0/102 | 0/13 | 0/10 |
+
+### Environment per-step diagnostics (last round of each run)
+
+| run | attempts | finished | syntactic error | Lean rejected | truncated | step cap | mean steps/attempt | action tokens (mean) | peak alloc GB |
+|---|---|---|---|---|---|---|---|---|---|
+| `la_T1_SH_s0` | 224245 | 87.0 % | 13.0 % | 34.7 % | 0.027 % | 0.000 % | 8.30 | 19.2 | 18.98 |
+| `la_T1_SH_s1` | 224245 | 89.6 % | 10.4 % | 32.3 % | 0.042 % | 0.000 % | 8.48 | 19.2 | 20.35 |
+| `la_T1_SN_s0` | 224245 | 92.8 % | 7.2 % | 25.8 % | 0.003 % | 0.003 % | 9.41 | 18.5 | 12.51 |
+| `la_T1_SN_s1` | 224245 | 93.9 % | 6.0 % | 34.2 % | 0.046 % | 0.001 % | 8.96 | 18.9 | 12.11 |
+| `la_T1_S_s0` | 224245 | 88.8 % | 11.1 % | 33.1 % | 0.016 % | 0.000 % | 8.51 | 19.3 | 10.16 |
+| `la_T1_S_s1` | 224245 | 88.9 % | 11.1 % | 32.9 % | 0.074 % | 0.000 % | 8.75 | 19.1 | 12.74 |
+| `la_frozen_SH_s0` | 224245 | 78.5 % | 21.3 % | 63.0 % | 0.202 % | 0.000 % | 7.05 | 20.5 | 19.27 |
+| `la_frozen_SH_s1` | 224245 | 81.6 % | 18.3 % | 65.1 % | 0.073 % | 0.000 % | 7.04 | 20.4 | 18.54 |
+| `la_frozen_SN_s0` | 224245 | 89.1 % | 10.8 % | 57.0 % | 0.026 % | 0.000 % | 7.73 | 19.7 | 10.61 |
+| `la_frozen_SN_s1` | 224245 | 86.6 % | 13.3 % | 64.1 % | 0.096 % | 0.000 % | 7.56 | 20.0 | 11.28 |
+| `la_frozen_S_s0` | 224245 | 82.6 % | 17.4 % | 63.9 % | 0.054 % | 0.000 % | 7.41 | 20.3 | 11.41 |
+| `la_frozen_S_s1` | 224245 | 82.6 % | 17.2 % | 62.2 % | 0.206 % | 0.000 % | 7.50 | 20.2 | 10.84 |
+
+### Proof length: lines **and** elaborated Lean term size (`lean_check`), shortest accepted proof per theorem
+
+| run | `L_true` | n | lines min/median/max | term size min/median/max |
+|---|---|---|---|---|
+| `la_T1_SH_s0` | 7 | 183 | 7/7/11 | 3/4/7 |
+| `la_T1_SH_s0` | 8 | 196 | 6/8/11 | 3/4/8 |
+| `la_T1_SH_s0` | 9 | 703 | 6/9/14 | 3/5/10 |
+| `la_T1_SH_s0` | 10 | 142 | 10/10/12 | 4/5/9 |
+| `la_T1_SH_s0` | 11 | 27 | 11/11/13 | 5/6/11 |
+| `la_T1_SH_s0` | 12 | 6 | 12/12/12 | 5/7/8 |
+| `la_T1_SH_s1` | 7 | 195 | 7/7/11 | 3/4/7 |
+| `la_T1_SH_s1` | 8 | 233 | 6/8/12 | 3/4/9 |
+| `la_T1_SH_s1` | 9 | 743 | 6/9/13 | 3/5/15 |
+| `la_T1_SH_s1` | 10 | 174 | 7/10/13 | 4/5/11 |
+| `la_T1_SH_s1` | 11 | 37 | 11/11/13 | 4/6/11 |
+| `la_T1_SH_s1` | 12 | 8 | 12/12/13 | 5/8/9 |
+| `la_T1_SN_s0` | 7 | 196 | 7/7/13 | 3/4/10 |
+| `la_T1_SN_s0` | 8 | 235 | 8/8/14 | 3/4/9 |
+| `la_T1_SN_s0` | 9 | 834 | 9/9/18 | 3/5/15 |
+| `la_T1_SN_s0` | 10 | 232 | 10/10/27 | 4/6/25 |
+| `la_T1_SN_s0` | 11 | 42 | 11/11/14 | 5/7/11 |
+| `la_T1_SN_s0` | 12 | 15 | 12/12/22 | 5/8/14 |
+| `la_T1_SN_s0` | 13 | 2 | 13/17/17 | 8/13/13 |
+| `la_T1_SN_s0` | 14 | 1 | 14/14/14 | 11/11/11 |
+| `la_T1_SN_s1` | 7 | 191 | 7/7/11 | 3/4/7 |
+| `la_T1_SN_s1` | 8 | 210 | 6/8/13 | 3/4/9 |
+| `la_T1_SN_s1` | 9 | 752 | 8/9/15 | 3/5/11 |
+| `la_T1_SN_s1` | 10 | 205 | 9/10/14 | 4/6/14 |
+| `la_T1_SN_s1` | 11 | 33 | 11/11/15 | 5/6/12 |
+| `la_T1_SN_s1` | 12 | 11 | 12/12/15 | 5/8/14 |
+| `la_T1_SN_s1` | 13 | 1 | 13/13/13 | 8/8/8 |
+| `la_T1_S_s0` | 7 | 183 | 7/7/11 | 3/4/6 |
+| `la_T1_S_s0` | 8 | 207 | 8/8/19 | 3/4/18 |
+| `la_T1_S_s0` | 9 | 739 | 8/9/13 | 3/5/11 |
+| `la_T1_S_s0` | 10 | 187 | 10/10/16 | 4/6/14 |
+| `la_T1_S_s0` | 11 | 24 | 11/11/14 | 5/6/11 |
+| `la_T1_S_s0` | 12 | 7 | 12/12/12 | 5/8/8 |
+| `la_T1_S_s0` | 13 | 1 | 13/13/13 | 8/8/8 |
+| `la_T1_S_s1` | 7 | 187 | 7/7/13 | 3/4/8 |
+| `la_T1_S_s1` | 8 | 234 | 8/8/13 | 3/4/11 |
+| `la_T1_S_s1` | 9 | 745 | 7/9/18 | 3/5/15 |
+| `la_T1_S_s1` | 10 | 184 | 10/10/13 | 4/6/13 |
+| `la_T1_S_s1` | 11 | 28 | 11/11/17 | 5/6/14 |
+| `la_T1_S_s1` | 12 | 9 | 12/12/13 | 5/8/9 |
+| `la_T1_S_s1` | 13 | 2 | 13/13/13 | 8/9/9 |
+| `la_frozen_SH_s0` | 7 | 125 | 6/7/8 | 2/4/6 |
+| `la_frozen_SH_s0` | 8 | 128 | 6/8/9 | 3/4/7 |
+| `la_frozen_SH_s0` | 9 | 226 | 6/9/11 | 2/4/10 |
+| `la_frozen_SH_s0` | 10 | 36 | 7/10/11 | 3/5/7 |
+| `la_frozen_SH_s0` | 11 | 1 | 11/11/11 | 6/6/6 |
+| `la_frozen_SH_s1` | 7 | 111 | 7/7/8 | 3/4/6 |
+| `la_frozen_SH_s1` | 8 | 119 | 5/8/9 | 2/4/7 |
+| `la_frozen_SH_s1` | 9 | 225 | 6/9/11 | 3/4/9 |
+| `la_frozen_SH_s1` | 10 | 24 | 10/10/10 | 4/5/7 |
+| `la_frozen_SN_s0` | 7 | 151 | 7/7/11 | 3/4/10 |
+| `la_frozen_SN_s0` | 8 | 182 | 8/8/11 | 3/4/8 |
+| `la_frozen_SN_s0` | 9 | 546 | 9/9/12 | 3/5/10 |
+| `la_frozen_SN_s0` | 10 | 87 | 10/10/15 | 4/5/11 |
+| `la_frozen_SN_s0` | 11 | 9 | 11/11/14 | 6/6/9 |
+| `la_frozen_SN_s1` | 7 | 145 | 7/7/11 | 3/4/8 |
+| `la_frozen_SN_s1` | 8 | 152 | 6/8/12 | 3/4/9 |
+| `la_frozen_SN_s1` | 9 | 432 | 6/9/12 | 3/5/10 |
+| `la_frozen_SN_s1` | 10 | 67 | 10/10/11 | 4/5/9 |
+| `la_frozen_SN_s1` | 11 | 5 | 11/11/11 | 6/6/8 |
+| `la_frozen_S_s0` | 7 | 137 | 7/7/8 | 3/4/6 |
+| `la_frozen_S_s0` | 8 | 159 | 6/8/10 | 3/4/8 |
+| `la_frozen_S_s0` | 9 | 419 | 7/9/11 | 3/5/9 |
+| `la_frozen_S_s0` | 10 | 59 | 10/10/11 | 4/5/9 |
+| `la_frozen_S_s0` | 11 | 5 | 11/11/11 | 5/6/6 |
+| `la_frozen_S_s1` | 7 | 142 | 7/7/8 | 3/4/6 |
+| `la_frozen_S_s1` | 8 | 154 | 5/8/9 | 3/4/8 |
+| `la_frozen_S_s1` | 9 | 427 | 6/9/12 | 3/5/10 |
+| `la_frozen_S_s1` | 10 | 61 | 9/10/11 | 4/5/9 |
+| `la_frozen_S_s1` | 11 | 3 | 11/11/11 | 5/6/8 |
+| `la_T1_c0_s0` | 7 | 92 | 7/7/11 | 3/4/6 |
+| `la_T1_c0_s0` | 8 | 166 | 8/8/10 | 3/4/9 |
+| `la_T1_c0_s0` | 9 | 525 | 9/9/11 | 3/5/10 |
+| `la_T1_c0_s0` | 10 | 91 | 10/10/11 | 4/5/10 |
+| `la_T1_c0_s0` | 11 | 11 | 11/11/11 | 5/6/8 |
+| `la_T1_c0_s0` | 12 | 5 | 12/12/12 | 5/6/8 |
+| `la_T1_c0_s1` | 7 | 145 | 7/7/11 | 3/4/6 |
+| `la_T1_c0_s1` | 8 | 165 | 8/8/10 | 3/4/9 |
+| `la_T1_c0_s1` | 9 | 531 | 9/9/11 | 3/5/10 |
+| `la_T1_c0_s1` | 10 | 106 | 10/10/12 | 4/5/10 |
+| `la_T1_c0_s1` | 11 | 15 | 11/11/11 | 4/6/8 |
+| `la_T1_c0_s1` | 12 | 3 | 12/12/12 | 5/5/8 |
+| `la_frozen_c0_s0` | 7 | 42 | 7/7/8 | 3/4/6 |
+| `la_frozen_c0_s0` | 8 | 69 | 8/8/11 | 3/4/7 |
+| `la_frozen_c0_s0` | 9 | 44 | 9/9/9 | 4/4/7 |
+| `la_frozen_c0_s0` | 10 | 3 | 10/10/10 | 5/5/5 |
+| `la_frozen_c0_s1` | 7 | 44 | 7/7/9 | 3/4/6 |
+| `la_frozen_c0_s1` | 8 | 47 | 8/8/8 | 3/4/7 |
+| `la_frozen_c0_s1` | 9 | 22 | 9/9/10 | 4/4/6 |
+| `la_frozen_c0_s1` | 10 | 1 | 10/10/10 | 5/5/5 |
+
+### Transfer solved by round (cumulative)
+
+| run | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|---|---|---|---|---|---|---|---|
+| `la_T1_SH_s0` | 378 | 665 | 837 | 970 | 1067 | 1146 | 1205 | 1257 |
+| `la_T1_SH_s1` | 332 | 661 | 883 | 1023 | 1140 | 1237 | 1324 | 1390 |
+| `la_T1_SN_s0` | 794 | 1090 | 1243 | 1341 | 1422 | 1474 | 1515 | 1557 |
+| `la_T1_SN_s1` | 604 | 918 | 1092 | 1201 | 1278 | 1332 | 1372 | 1403 |
+| `la_T1_S_s0` | 577 | 859 | 1019 | 1112 | 1208 | 1261 | 1311 | 1348 |
+| `la_T1_S_s1` | 588 | 886 | 1069 | 1190 | 1251 | 1310 | 1346 | 1389 |
+| `la_frozen_SH_s0` | 373 | 424 | 440 | 462 | 482 | 492 | 502 | 516 |
+| `la_frozen_SH_s1` | 348 | 388 | 411 | 424 | 440 | 457 | 468 | 479 |
+| `la_frozen_SN_s0` | 794 | 850 | 889 | 914 | 935 | 953 | 963 | 975 |
+| `la_frozen_SN_s1` | 604 | 665 | 708 | 736 | 762 | 781 | 795 | 801 |
+| `la_frozen_S_s0` | 577 | 645 | 671 | 697 | 716 | 742 | 767 | 779 |
+| `la_frozen_S_s1` | 588 | 653 | 681 | 716 | 732 | 744 | 765 | 787 |
+| `la_T1_c0_s0` | 76 | 395 | 546 | 665 | 736 | 790 | 847 | 890 |
+| `la_T1_c0_s1` | 57 | 376 | 568 | 718 | 799 | 872 | 924 | 965 |
+| `la_frozen_c0_s0` | 76 | 105 | 120 | 128 | 137 | 149 | 156 | 158 |
+| `la_frozen_c0_s1` | 57 | 74 | 88 | 96 | 99 | 104 | 108 | 114 |
+

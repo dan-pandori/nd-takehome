@@ -17,6 +17,7 @@ def main():
     ap.add_argument('--out', default='artifacts/se/tables.md')
     a = ap.parse_args()
     d = json.load(open(a.summary))
+    d = d.get('ladders', d)          # artifacts/se/summary.json nests the ladder summary
     L = []
     # --- held-out greedy
     L.append('### Held-out greedy (`data/p2/heldout.jsonl`, 5,000, k 1, T 0; per length)\n')
@@ -24,8 +25,11 @@ def main():
     L.append('|---|---|---|---|---|---|---|---|')
     for fn in sorted(glob.glob(a.heldout_glob)):
         h = json.load(open(fn))
+        if 'by_len' not in h:          # heldout_depth3.json is a different table
+            continue
         b = h['by_len']
-        L.append(f"| {os.path.basename(h['ckpt'])} | {h['rate']:.4f} | " +
+        lab = os.path.basename(fn)[8:-5] + ' `' + os.path.basename(h['ckpt']) + '`'
+        L.append(f"| {lab} | {h['rate']:.4f} | " +
                  ' | '.join(f"{b[str(k)]['rate']:.3f}" if str(k) in b else '—' for k in range(2, 7)) +
                  f" | `{fn}` |")
     L.append('| C0 s0 `stage1_a1_seq_s0.pt` (on file, Lean ∧ nd_verify) | 0.9088 | 0.994 | 0.989 | 0.951 | 0.924 | 0.686 | `review_ds-generator.md` §3 |')

@@ -1,0 +1,167 @@
+=== heldout S s0 2026-09-28T04:45:41Z
+[lean_gate] 5000 samples, parse-fail 20, distinct checked 4980: lean ok 4789, lean rej 191; lean 2.6s wall (27.0s proc, 32 workers)
+[stage1_S_s0.pt on heldout.jsonl k=1 T=0.0] SOLVED 4789/5000 = 0.958 [0.952,0.963]
+  len 2: 999/1000 = 0.999 [0.994,1.000]
+  len 3: 992/1000 = 0.992 [0.984,0.996]
+  len 4: 961/1000 = 0.961 [0.947,0.971]
+  len 5: 933/1000 = 0.933 [0.916,0.947]
+  len 6: 904/1000 = 0.904 [0.884,0.921]
+  written hist {2: 1022, 3: 996, 4: 947, 5: 968, 6: 854, 7: 2}
+  pruned hist {2: 1028, 3: 994, 4: 948, 5: 967, 6: 850, 7: 2}
+  frontier written 6 pruned 6
+  reasons [('lean rejected', 191), ('lean_seq parse: env: exact goal mismatch', 7), ('lean_seq parse: env: formula', 5), ('lean_seq parse: env: exact not last', 3), ('lean_seq parse: env: box on non-arrow', 2), ('lean_seq parse: env: binder mismatch', 1)]
+env {"env_end": {"syntax": 20, "done": 4980}, "env_fail_reason": {"binder mismatch": 1, "box on non-arrow": 2, "exact not last": 3, "formula": 5, "exact goal mismatch": 7, "assign": 1, "box head": 1}, "env_steps": {"1": 9, "3": 1029, "4": 1014, "5": 991, "6": 1029, "7": 920, "8": 5, "2": 1, "9": 2}, "steps": 1472, "rows": 24781, "rowsteps": 694976, "prompt_len_max": 210, "chunks": 16, "stop_eos": 24781, "stop_exact": 0, "stop_goal": 0, "env_waves": 16, "env_wall_s": 10.775132894515991, "peak_alloc_gb": 7.551971912384033, "peak_reserved_gb": 8.544921875, "action_declen_mean": 18.737944392881644}
+=== ladder T1 S s0 2026-09-28T04:46:00Z
+[lean_gate] 143840 samples, parse-fail 23185, distinct checked 109039: lean ok 26805, lean rej 82234; lean 74.5s wall (2284.2s proc, 32 workers)
+[la_T1_S_s0 r1] targets (this round) SOLVED 2193/4495 = 0.488 [0.473,0.502]
+  len 7: 1247/1800 = 0.693 [0.671,0.714]
+  len 8: 625/1000 = 0.625 [0.595,0.654]
+  len 9: 282/1004 = 0.281 [0.254,0.309]
+  len 10: 37/456 = 0.081 [0.059,0.110]
+  len 11: 2/99 = 0.020 [0.006,0.071]
+  len 12: 0/106 = 0.000 [0.000,0.035]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 1396, 8: 1071, 9: 508, 10: 84, 11: 9, 12: 1, 13: 1}
+  pruned hist {3: 1, 5: 49, 6: 278, 7: 1323, 8: 981, 9: 394, 10: 38, 11: 6}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 89200), ('lean_seq parse: env: unbound', 8315), ('lean_seq parse: env: exact goal mismatch', 4797), ('lean_seq parse: env: exact not last', 3273), ('lean_seq parse: env: binder mismatch', 2143), ('lean_seq parse: env: formula', 2008)]
+[lean_gate] 73120 samples, parse-fail 15316, distinct checked 53278: lean ok 4790, lean rej 48488; lean 40.7s wall (1202.8s proc, 32 workers)
+[la_T1_S_s0 r1] transfer (this round, pass@32) SOLVED 577/2285 = 0.253 [0.235,0.271]
+  len 7: 99/300 = 0.330 [0.279,0.385]
+  len 8: 133/300 = 0.443 [0.388,0.500]
+  len 9: 318/1010 = 0.315 [0.287,0.344]
+  len 10: 26/451 = 0.058 [0.040,0.083]
+  len 11: 1/99 = 0.010 [0.002,0.055]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 110, 8: 176, 9: 469, 10: 54, 11: 7, 12: 2}
+  pruned hist {5: 5, 6: 15, 7: 137, 8: 252, 9: 368, 10: 35, 11: 6}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 52340), ('lean_seq parse: env: unbound', 5486), ('lean_seq parse: env: exact goal mismatch', 3101), ('lean_seq parse: env: binder mismatch', 1685), ('lean_seq parse: env: formula', 1580), ('lean_seq parse: env: exact not last', 1543)]
+[lean_gate] 2285 samples, parse-fail 304, distinct checked 1981: lean ok 212, lean rej 1769; lean 2.6s wall (11.8s proc, 32 workers)
+[la_T1_S_s0 r1] transfer greedy SOLVED 212/2285 = 0.093 [0.082,0.105]
+  len 7: 27/300 = 0.090 [0.063,0.128]
+  len 8: 70/300 = 0.233 [0.189,0.284]
+  len 9: 113/1010 = 0.112 [0.094,0.133]
+  len 10: 2/451 = 0.004 [0.001,0.016]
+  len 11: 0/99 = 0.000 [0.000,0.037]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 23, 8: 67, 9: 116, 10: 6}
+  pruned hist {5: 1, 7: 32, 8: 84, 9: 91, 10: 4}
+  frontier written 10 pruned 9
+  reasons [('lean rejected', 1769), ('lean_seq parse: env: unbound', 88), ('lean_seq parse: env: exact goal mismatch', 84), ('lean_seq parse: env: binder mismatch', 47), ('lean_seq parse: env: formula', 39), ('lean_seq parse: env: box on non-arrow', 15)]
+[lean_gate] 5000 samples, parse-fail 20, distinct checked 4980: lean ok 4789, lean rej 191; lean 2.7s wall (27.0s proc, 32 workers)
+[la_T1_S_s0 r1] heldout greedy SOLVED 4789/5000 = 0.958 [0.952,0.963]
+  len 2: 999/1000 = 0.999 [0.994,1.000]
+  len 3: 992/1000 = 0.992 [0.984,0.996]
+  len 4: 961/1000 = 0.961 [0.947,0.971]
+  len 5: 933/1000 = 0.933 [0.916,0.947]
+  len 6: 904/1000 = 0.904 [0.884,0.921]
+  written hist {2: 1022, 3: 996, 4: 947, 5: 968, 6: 854, 7: 2}
+  pruned hist {2: 1028, 3: 994, 4: 948, 5: 967, 6: 850, 7: 2}
+  frontier written 6 pruned 6
+  reasons [('lean rejected', 191), ('lean_seq parse: env: exact goal mismatch', 7), ('lean_seq parse: env: formula', 5), ('lean_seq parse: env: exact not last', 3), ('lean_seq parse: env: box on non-arrow', 2), ('lean_seq parse: env: binder mismatch', 1)]
+[la_T1_S_s0 r1] targets cumulative: solved 2193/4495 L*=10 ge={7: 2193, 8: 946, 9: 321, 10: 39, 11: 2, 12: 0}
+[la_T1_S_s0 r1] transfer cumulative: solved 577/2285 L*=10 ge={7: 577, 8: 478, 9: 345, 10: 27, 11: 1, 12: 0}
+python3 state_train.py --data artifacts/se/la_T1_S_s0/mix_1.jsonl --init ckpts/se/stage1_S_s0.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/se/ladder/la_T1_S_s0_r1.pt --seed 1 --log_every 200 --recs 128
+params 3216384 mode lean_state
+train records 32012 (skipped 0); pairs 205244; mean 6.411 per proof; max pair len 276; load 8s
+step 200 loss 0.0444 lr 2.53e-04 pairs/batch 821 34s
+step 400 loss 0.0446 lr 1.09e-04 pairs/batch 819 68s
+step 600 loss 0.0385 lr 3.00e-05 pairs/batch 822 101s
+saved ckpts/se/ladder/la_T1_S_s0_r1.pt
+=== round 1 done in 927s; new proofs 3070; cum targets solved 2193 L*=10; transfer L*=10
+[lean_gate] 143840 samples, parse-fail 16664, distinct checked 110916: lean ok 52477, lean rej 58439; lean 111.4s wall (3420.8s proc, 32 workers)
+[la_T1_S_s0 r2] targets (this round) SOLVED 2734/4495 = 0.608 [0.594,0.622]
+  len 7: 1441/1800 = 0.801 [0.781,0.818]
+  len 8: 736/1000 = 0.736 [0.708,0.762]
+  len 9: 462/1004 = 0.460 [0.430,0.491]
+  len 10: 89/456 = 0.195 [0.161,0.234]
+  len 11: 5/99 = 0.051 [0.022,0.113]
+  len 12: 1/106 = 0.009 [0.002,0.052]
+  len 13: 0/16 = 0.000 [0.000,0.194]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 1651, 8: 1318, 9: 843, 10: 235, 11: 38, 12: 7, 13: 2}
+  pruned hist {5: 81, 6: 371, 7: 1596, 8: 1206, 9: 671, 10: 135, 11: 29, 12: 5}
+  frontier written 12 pruned 12
+  reasons [('lean rejected', 64215), ('lean_seq parse: env: unbound', 5371), ('lean_seq parse: env: exact not last', 3645), ('lean_seq parse: env: binder mismatch', 2139), ('lean_seq parse: env: exact goal mismatch', 1621), ('lean_seq parse: env: Or.elim on non-or', 1385)]
+[lean_gate] 73120 samples, parse-fail 12344, distinct checked 54689: lean ok 11381, lean rej 43308; lean 59.7s wall (1776.6s proc, 32 workers)
+[la_T1_S_s0 r2] transfer (this round, pass@32) SOLVED 829/2285 = 0.363 [0.343,0.383]
+  len 7: 137/300 = 0.457 [0.401,0.513]
+  len 8: 150/300 = 0.500 [0.444,0.556]
+  len 9: 466/1010 = 0.461 [0.431,0.492]
+  len 10: 68/451 = 0.151 [0.121,0.187]
+  len 11: 8/99 = 0.081 [0.042,0.151]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 151, 8: 190, 9: 723, 10: 159, 11: 31, 12: 5}
+  pruned hist {5: 8, 6: 13, 7: 193, 8: 338, 9: 580, 10: 104, 11: 21, 12: 2}
+  frontier written 12 pruned 11
+  reasons [('lean rejected', 47461), ('lean_seq parse: env: unbound', 3856), ('lean_seq parse: env: binder mismatch', 1875), ('lean_seq parse: env: exact not last', 1666), ('lean_seq parse: env: exact goal mismatch', 1470), ('lean_seq parse: env: formula', 1096)]
+[lean_gate] 2285 samples, parse-fail 333, distinct checked 1952: lean ok 443, lean rej 1509; lean 5.3s wall (22.9s proc, 32 workers)
+[la_T1_S_s0 r2] transfer greedy SOLVED 443/2285 = 0.194 [0.178,0.211]
+  len 7: 83/300 = 0.277 [0.229,0.330]
+  len 8: 112/300 = 0.373 [0.321,0.429]
+  len 9: 226/1010 = 0.224 [0.199,0.250]
+  len 10: 18/451 = 0.040 [0.025,0.062]
+  len 11: 4/99 = 0.040 [0.016,0.099]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {7: 76, 8: 109, 9: 226, 10: 27, 11: 5}
+  pruned hist {5: 2, 6: 5, 7: 81, 8: 145, 9: 188, 10: 19, 11: 3}
+  frontier written 11 pruned 10
+  reasons [('lean rejected', 1509), ('lean_seq parse: env: unbound', 73), ('lean_seq parse: env: binder mismatch', 66), ('lean_seq parse: env: exact not last', 42), ('lean_seq parse: env: exact goal mismatch', 40), ('lean_seq parse: env: formula', 31)]
+[lean_gate] 5000 samples, parse-fail 264, distinct checked 4736: lean ok 4409, lean rej 327; lean 5.7s wall (47.3s proc, 32 workers)
+[la_T1_S_s0 r2] heldout greedy SOLVED 4409/5000 = 0.882 [0.873,0.890]
+  len 2: 995/1000 = 0.995 [0.988,0.998]
+  len 3: 978/1000 = 0.978 [0.967,0.985]
+  len 4: 796/1000 = 0.796 [0.770,0.820]
+  len 5: 821/1000 = 0.821 [0.796,0.844]
+  len 6: 819/1000 = 0.819 [0.794,0.842]
+  written hist {2: 1019, 3: 986, 4: 779, 5: 832, 6: 788, 7: 4, 8: 1}
+  pruned hist {2: 1024, 3: 987, 4: 780, 5: 827, 6: 787, 7: 3, 8: 1}
+  frontier written 6 pruned 6
+  reasons [('lean rejected', 327), ('lean_seq parse: env: exact not last', 134), ('lean_seq parse: env: unbound', 105), ('lean_seq parse: env: names exhausted', 10), ('lean_seq parse: env: exact goal mismatch', 5), ('lean_seq parse: env: box on non-arrow', 3)]
+[la_T1_S_s0 r2] targets cumulative: solved 2735/4495 L*=11 ge={7: 2735, 8: 1294, 9: 557, 10: 95, 11: 6, 12: 1}
+[la_T1_S_s0 r2] transfer cumulative: solved 859/2285 L*=11 ge={7: 859, 8: 720, 9: 563, 10: 81, 11: 8, 12: 0}
+python3 state_train.py --data artifacts/se/la_T1_S_s0/mix_2.jsonl --init ckpts/se/ladder/la_T1_S_s0_r1.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/se/ladder/la_T1_S_s0_r2.pt --seed 2 --log_every 200 --recs 128
+params 3216384 mode lean_state
+train records 36068 (skipped 0); pairs 243681; mean 6.756 per proof; max pair len 276; load 10s
+step 200 loss 0.0448 lr 2.53e-04 pairs/batch 865 36s
+step 400 loss 0.0382 lr 1.09e-04 pairs/batch 865 72s
+step 600 loss 0.0366 lr 3.00e-05 pairs/batch 865 108s
+saved ckpts/se/ladder/la_T1_S_s0_r2.pt
+=== round 2 done in 1002s; new proofs 1108; cum targets solved 2735 L*=11; transfer L*=11
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/state_ladder_ei.py", line 384, in <module>
+    main()
+  File "/workspace/nd-takehome/state_ladder_ei.py", line 240, in main
+    outs = sample_targets(model, tok, [t for t, _ in sub], [ki for _, ki in sub], a.temperature, a.batch, seed, a.max_new)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/state_ladder_ei.py", line 150, in sample_targets
+    flat = generate(model, tok, prompts, greedy=False, temperature=temperature, batch=batch, seed=seed, max_new=max_new)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/state_ladder_ei.py", line 53, in generate
+    return env_generate(model, tok, prompts, greedy=greedy, temperature=temperature, max_action=ENV['max_action'],
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/state_sample.py", line 65, in env_generate
+    e.failed = 'action truncated'; cnt['truncated'] += 1; finish(i, e); continue
+          ^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/state_env.py", line 213, in apply
+    self._apply(list(act))
+  File "/workspace/nd-takehome/state_env.py", line 321, in _apply
+    self._check_atomic(act[i:-1])
+  File "/workspace/nd-takehome/state_env.py", line 349, in _check_atomic
+    if tm[0] == '⟨':
+       ~~^^^
+IndexError: list index out of range
+=== ladder frozen S s0 2026-09-28T05:19:49Z

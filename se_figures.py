@@ -27,6 +27,7 @@ def main():
     ap.add_argument('--out', default='figures/state_env.png')
     a = ap.parse_args()
     d = json.load(open(a.summary))
+    d = d.get('ladders', d)          # artifacts/se/summary.json nests the ladder summary
     R, C0 = d['runs'], d['c0']
     Ls = list(range(7, 15))
     fig, ax = plt.subplots(1, 3, figsize=(15, 4.3))

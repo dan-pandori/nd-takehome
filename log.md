@@ -709,3 +709,14 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   Batches under the limit — every S and SN batch so far — take the single-micro-batch path and are unchanged. Pushed
   to every pod before `la_T1_SH_s1` reached its next fine-tune. `la_T1_SH_s0` resumed from round 6 at 12:41
   (round 6's sampling is re-drawn).
+- 15:40  **Last run finished; all pods deleted** (`se-2` last). Totals: 35.44 pod-hours; $20.20 at the real billed
+  rates (`podbudget` says $19.42 because it bills `se-2`'s RTX PRO 4000 at its $0.50/h fallback instead of $0.57).
+  SH: T1 1,257 / 1,390, frozen 516 / 479, `L*` 12 / 12, 0 solved at `L_true` ≥ 13; held-out 0.9516 / 0.9554.
+- 15:50  `se_analysis.py` over all 12 runs and C0's 4 (`artifacts/se/summary.json`): every re-derived count matches
+  its round json. `lean_check` re-checked the shortest accepted proof of every solved transfer theorem in all 16
+  runs (14,808 proofs): **0 rejected**. Held-out depth-3 slice (`se_depth3.py`, `pat.depth3`, 500 records):
+  S 0.922 / 0.882, SN-v2 0.956 / 0.902, SH 0.860 / 0.880, against C0 0.488 / 0.272 (Lean ∧ `nd_verify`).
+- 15:55  Correction to the 05:30 entry: only the **SN-v1** seed-1 checkpoint was traced (`se_trace.py`). That arm S
+  seed 1 fails by the same first-name mechanism is an inference from its failure profile (581 `unbound`), not a
+  trace; the write-ups now say so.
+- 16:00  Bucket synced: `hf://buckets/dan-pandori/nd-rl/state-env/{ckpts/se, artifacts/se, data/p2, data/ladder}`.

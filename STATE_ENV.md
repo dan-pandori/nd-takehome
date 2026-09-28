@@ -45,6 +45,22 @@ a proof step, and a real Lean tactic state does not tell you whether closing thi
 `n<next>` is `max name index used in this attempt so far + 1`, which is exactly `lean_seq`'s "numbered in order of
 first appearance", so replaying a stored proof's actions reproduces its text **byte for byte**.
 
+### Names, and arm SN
+
+In arms S and SH the model writes every name it introduces, exactly as in `lean_seq`. That turned out to matter.
+`lean_seq`'s Stage-1 augmentation shifts all names by a random offset (so every name token is trained). As a result
+**the first name an attempt introduces is not a function of any state**, since nothing is in scope yet. A greedy policy
+takes the mode of a near-uniform distribution. The traced seed-1 model (SN-v1) puts it at `n64` and then cites names that do not exist
+(`se_trace.py` shows it). Separately, once a box closes, `lean_seq`'s global first-appearance index is not
+determined by the scope either (3.00 % of `have` actions).
+
+Arm **SN** (`lean_staten`) removes both. Training proofs are rewritten by `state_env.canonicalise` so every
+introduced name is `max index in scope + 1` (an alpha-variant: same ND proof, same Lean verdict). At sampling time,
+`Env(canon=True, base=b, assign=True)` makes the **environment** name what each step introduces, counting from a
+per-attempt random base `b ~ U[0, 32]`, as Lean's own `intro`/`have` naming would. The model's name token is
+overridden, and its citations name hypotheses the state shows. ("SN-v1" was the same checkpoints sampled without
+`assign`; see the pre-registration addenda.)
+
 There is **no symbolic type check**: scope, hypotheses and the goal follow from the actions because every `have`
 declares its formula, and a wrong *term* is caught by Lean on the finished proof, exactly as in the whole-proof loop.
 The checks the environment does make are the ones `lean_tok.inverse`'s strict grammar makes, so an attempt that
@@ -81,8 +97,12 @@ branch 2, and at step 6 the finished `have n2` is a hypothesis of the parent —
 | 1b | a random 5,000 of the reassembled texts, judged by `lean_judge` (nd2lean + Lean 4 core) | **0 rejected / 5,000** |
 | 2 | **your state is Lean's state**: cut a proof at a random step, put `trace_state` there and `sorry` in every goal still open, and compare Lean's hypotheses (names and types) and goal with the renderer's, as parsed formulas | **0 mismatches / 2,800** (2,000 random + 500 `Or.elim`-branch + 300 negation-box cuts) |
 | 3 | every control proof's actions fed through the environment loop: all syntactic checks pass and every attempt finishes | **0 failures / 155,000** |
+| 2b | gate 2 on **7–15-line proofs the model itself found** (T1 S s0, round 3) | **0 mismatches / 1,500** |
+| SN | gates 1 / 1b / 2 / 3 on the canonical variant | 0 / 155,000; 0 / 5,000; 0 / 1,300; 0 / 155,000 |
+| fuzz | 800,000 random token sequences as actions: the environment never raises | **0 crashes** |
 
 Files: `artifacts/se/gate13.json`, `artifacts/se/gate2.json`, `artifacts/se/gate2_ore.json`, `artifacts/se/gate2_neg.json`,
+`artifacts/se/gate2b.json`, `artifacts/se/gate13_canon.json`, `artifacts/se/gate2_canon*.json`,
 with the per-case Lean sources in `artifacts/se/gate2*_cases.jsonl`.
 
 Shape statistics from gate 1, which is where the settings come from: **5.000 actions per proof** on the control set
@@ -120,4 +140,8 @@ python3 se_figures.py --summary artifacts/se/summary.json --out figures/state_en
 
 Code: `state_env.py` (renderer, decomposition, environment), `lean_tok.py` (`lean_state` / `lean_stateh` modes),
 `state_train.py`, `state_sample.py` (the batched environment loop), `state_eval.py`, `state_ladder_ei.py`,
-`state_gates.py`, `state_gate2.py`, `se_analysis.py`, `se_figures.py`. Tests: `tests/test_state_env.py`.
+`state_gates.py`, `state_gate2.py`, `se_analysis.py`, `se_tables.py`, `se_figures.py`, `se_trace.py` (step-by-step
+rollouts); pod scripts in `pod/se/`. Tests: `tests/test_state_env.py`. Arm SN: add `--mode lean_staten` to
+`state_train.py`; sampling picks up canonical, environment-assigned names from the checkpoint's mode. `state_train.py`
+micro-batches at `--max_tokens` padded tokens with token-weighted accumulation (same gradient; arm SH's long prompts
+need it on a 24 GB card).
