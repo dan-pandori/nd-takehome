@@ -108,13 +108,17 @@ record. Of the 8 new metric files, each has one `args` record with `impl fast`, 
 
 | slice | new | C | Δ | sd_C (mine) | MDD = 1.5064·sd_C | \|Δ\|/MDD |
 |---|---|---|---|---|---|---|
-| all | 0.05122 | 0.05099 | +0.00023 | 0.00150 | 0.00226 | 0.10 |
-| len2 | 0.07823 | 0.07816 | +0.00007 | 0.00024 | 0.00036 | 0.20 |
-| len3 | 0.06780 | 0.06780 | −0.00000 | 0.00029 | 0.00044 | 0.00 |
-| len4 | 0.05113 | 0.05141 | −0.00028 | 0.00032 | 0.00049 | 0.57 |
-| len5 | 0.03963 | 0.03957 | +0.00006 | 0.00050 | 0.00076 | 0.08 |
-| len6 | 0.04320 | 0.04236 | +0.00084 | 0.00513 | 0.00773 | 0.11 |
-| 6-line non-d3 | 0.04529 | 0.04546 | −0.00017 | 0.00055 | 0.00083 | 0.21 |
+| all | 0.05124 | 0.05101 | +0.00023 | 0.00146 | 0.00219 | 0.10 |
+| len2 | 0.07824 | 0.07817 | +0.00007 | 0.00024 | 0.00036 | 0.20 |
+| len3 | 0.06780 | 0.06780 | −0.00000 | 0.00030 | 0.00045 | 0.00 |
+| len4 | 0.05111 | 0.05139 | −0.00028 | 0.00033 | 0.00049 | 0.57 |
+| len5 | 0.03964 | 0.03958 | +0.00006 | 0.00051 | 0.00077 | 0.08 |
+| len6 | 0.04322 | 0.04238 | +0.00084 | 0.00515 | 0.00775 | 0.11 |
+| 6-line non-d3 | 0.04533 | 0.04551 | −0.00017 | 0.00056 | 0.00084 | 0.21 |
+
+*Erratum (phase 2):* as first committed, this table's means and sds carried a fifth decimal I had
+filled in by hand from a four-decimal printout. The rows above are re-printed at five decimals by
+`review_fs/recount_val.py`. The Δ and |Δ|/MDD columns and the verdicts are unchanged.
 
 **All 14 comparisons pass, recomputed independently.** One discrepancy to take to phase 2: the
 pre-registration lists "sd_C" as all 0.0023, len2 0.0003, len3 0.0005, len4 0.0005, len5 0.0008, len6 0.0077,
@@ -243,3 +247,105 @@ Spend: `podbudget fast-stage1` shows 1.49 pod-h, $1.47 of the $5 budget.
   from-scratch Stage-1 run on `dan` now uses the fast path. The executor's own stop rule reads: "If the
   equivalence test fails … the fast path is not merged into `dan`". It passed, so that rule does not
   forbid the merge. The policy has librarians merge into `dan` after review.
+
+## §Compare (phase 2: the executor's `run_fast_stage1.md`, `FAST_STAGE1.md`, `numbers.md` § fast-stage1, `log.md`, `STATUS.md`)
+
+All claims are about the model labelled at the top, and the executor labels it in every file (FAST_STAGE1
+header, numbers.md "Model (every row)", run_fast_stage1 first line). The H100 rows are the same model on a
+different GPU class and are labelled as such. **No unlabelled number found.**
+
+| claim (where) | my independent value | verdict |
+|---|---|---|
+| Equivalence: 14/14 within the n = 8 MDD (all docs; FS1) | 14/14. Every mean, Δ, sd_used and MDD in `summary.json` equals mine to the printed digits | **reproduces** |
+| 13 of 14 under ½ MDD; val-loss len4 at 0.57 (run_fast_stage1) | 0.57 (len4). All others ≤ 0.45 | **reproduces**. The miss of the "every Δ < ½ MDD" expectation is reported as a miss ✔ |
+| Held-out overall 0.9001 vs 0.9105, Δ −1.04 pp, MDD 4.58; 6-line 0.6459 vs 0.7096 (FS1) | same | reproduces |
+| Val loss all 0.05124 vs 0.05101, MDD 0.00219 (FS1) | same | reproduces. The pre-registration's "sd_C" list is really the MDDs (1.506 × sd). The analysis used the right sd (`sd_used` = 0.00146 for "all"), so this is a pre-registration wording slip only |
+| "len 6 non-depth-3" MDD uses the 247-theorem no-pattern sd as a proxy (FAST_STAGE1 caveat) | the tested slice's own sd is ≈ 0.0165, which gives MDD 2.49 pp; |Δ| 1.10 pp is still within | reproduces. The caveat is disclosed, and the proxy is ≈ 2× lenient but does not change the verdict |
+| Depth-3 high mode: fast 4/8, C 6/8, R 3/8 (FS2) | 4/8, 6/8, 3/8 (R from `old/ev_r6*.json`) | reproduces. With R at 3/8, 4/8 lies inside legacy's own spread |
+| Self-test: "offsets vs `shift_abs` draws min p 0.33 **over all mx**" (log.md 16:31); "tested against `shift_abs`" (FAST_STAGE1) | `selftest.json` `per_mx` has only mx = 2. All 2,000 test records are 2-line (the file is length-sorted) | **not supported as worded.** The test covered one mx. Reword: "mx = 2 only (the first 2,000 records)". No bug is expected (the code has no mx-specific branch) |
+| Legacy alone on an A40 48.9 ms/step; the brief's 215 ms was contention (all docs) | 48.5–50.2 ms/step alone; 213.6–215.5 ms/step with 4 legacy co-tenants | **reproduces**. The 4-co-tenant number is exactly the brief's 215 ms, which confirms the explanation |
+| Fast 16.8 ms/step, 2.9× per step (run_fast_stage1) | 16.6–17.3; 2.92× vs legacy on the same A40 | reproduces |
+| One model: legacy 345 s, fast 128–135 s process wall, 2.6–2.7× (FS3) | `waves.jsonl` walls 344.9 / 134.9 / 128.1 s. In-loop time (excl. process start-up, data load/cache) 313.2 vs 125.8 / 119.0 s = 2.5–2.6× | reproduces. The legacy wall includes its ≈ 30 s `nd_verify` data check, which the fast path skips on a cache hit. On a new data file the fast path pays it too (disclosed in FAST_STAGE1) |
+| Padding waste 1.10× (legacy 1.97×) (FS4) | 1.098× on seed 0, 1.083–1.113× across runs; legacy pad-to-max 1.96–1.97× | reproduces (seed 0). Two main-arm seeds are at 1.113×, marginally over the ≤ 1.1 expectation |
+| 11.9 % of bf16 peak, legacy 4.7 % (FS5) | 921k useful tok/s → 11.9 % (incl. compile); 13.5 % in steady state; legacy 4.66 % | reproduces. The pre-registered "≤ 10 %" is **missed** (higher), but run_fast_stage1's table lists 11.9 % without calling it a miss. Minor |
+| A40 N seeds: fast 44.5 / 47.8 / 49.6 / 47.7 steps/s at N = 1/2/4/8, "N > 1 gains only ~10 %" (FS6, FAST_STAGE1) | wave arithmetic reproduces exactly. Steady-state training throughput per GPU **falls** with N: 59.2 / 55.2 / 53.7 / 53.7 (0.91× at N = 4) | reproduces as whole-job throughput. **Reword the mechanism:** the +11 % is concurrent processes overlapping each other's fixed costs (start-up, compile/capture ≈ 9–15 s, validation), not extra training throughput. The N = 8 wave is 2,000 steps against 6,000 for N ≤ 4, so it is not strictly comparable |
+| Legacy N = 1/2/4: 11.9 / 14.0 / 15.6 steps/s; fast per-GPU "≈ 3.2× legacy's best" (FS6, STATUS, run_fast_stage1 headline "2.6–3.2×") | the legacy waves are **1,000 steps** and carry ≈ 30 s of data load each. The fast waves are 6,000 steps. Legacy's own 6,000-step wave (`legfull`) is 17.4 steps/s, so the per-GPU ratio with matched wave length is 49.6 / 17.4 = **2.85×**; steady state 59.2 / 20.3 = **2.9×** | **differs by ≈ 10 %**. "3.2×" compares waves of different lengths. Say ≈ 2.9× per GPU |
+| H100: aggregate 65 / 125 / 133 / 179 / 188 steps/s at N = 1/2/4/8/16, "use N = 8–16", "≈ 3.8× an A40" (FS7, FAST_STAGE1) | the waves are 2,000 steps; at 4.1 ms/step that is 8 s of training inside a 31 s wave. Steady-state training throughput is **flat**: 244 / 229 / 234 / 240 / 226 steps/s | **reproduces as arithmetic but mis-describes the H100.** The N = 16 "2.9×" is overlap of ≈ 20 s per-process fixed cost in very short waves. For 6,000-step models I estimate ≈ 1.7× at N = 16 from the same logs (fixed ≈ 23 s + 6,000 × 4.1 ms alone, vs 16 × 6,000 / 226 + 28 s). The H100/A40 ratio of 3.8× compares a 2,000-step H100 wave with a 6,000-step A40 wave; in steady state it is 4.1× (N = 1), so the conclusion survives by coincidence. "≈ 1.9× cost per model" becomes ≈ 1.7× (7.1× price / 4.1× speed). **Reword** |
+| bs 512 no faster per token (FS7, log 17:32) | A40 64.2 ms/step at bs 512 = 4 × 16.05 ms: 1.05× per token; H100 12.2 = 4 × 3.05: 1.34× per token | A40: reproduces. **H100: differs.** bs 512 is ≈ 1.3× more tokens/s than bs 128 alone on the H100, so "no gain per token on either GPU" is wrong for the H100 (single 500-step timing run each, and never equivalence-tested) |
+| "Headline ≈ 10× against the brief's 1,288 s per model" (run_fast_stage1, STATUS) | 1,288 / 128–135 ≈ 9.5–10× is arithmetic, but 1,288 s is a contended-GPU number | not wrong, but **should not be the headline**. The like-for-like figure is 2.6× per model and ≈ 2.9× per GPU. Both docs give it, the headline order just inverts importance |
+| 5× per GPU not met (STATUS, run_fast_stage1) | ≈ 2.9× | reproduces. The miss is reported as a miss ✔ |
+| Resume "continues within run-to-run noise but is not bit-identical" (FAST_STAGE1, log 17:40) | smoke.log 0.3315 vs 0.3342 | reproduces, disclosed ✔ |
+| `--impl legacy` reproduces an old trajectory exactly (FAST_STAGE1) | the legacy loop is byte-unchanged. The new argparse flags consume no RNG | plausible by inspection; not re-run |
+| Cost 1.49 pod-h, $1.47 (A40 $0.49/h, H100 SXM $3.49/h) (FS8) | `podbudget`: 1.49 h, $1.47 | reproduces. Budget was registered at 16:23, before the first pod (16:28) ✔ |
+| Bucket `hf://buckets/dan-pandori/nd-rl/fast-stage1/` (FS9) | `hf buckets ls` shows `artifacts/` and `ckpts/fs/` with the 8 fast checkpoints + `legfull_s0.pt` | reproduces |
+
+**Gate 0 / expectations.** The pre-registration was committed at 16:23 (`f5a6cdd6`) before the first pod
+(16:28) and before any result. Misses are reported as misses in `run_fast_stage1.md`'s expected-vs-observed
+table: legacy ms/step, ≥ 8× per step, ≥ 2× by N = 4 on the A40, and ½-MDD on one comparison. The
+per-model ≥ 5× miss is stated in the headline. The one unflagged miss is ≤ 10 % of peak (11.9 %).
+The batch-size sweep was pre-registered as exploratory and was dropped with a stated reason (log 17:32). That
+reason is right for the A40 and wrong for the H100 (row above).
+
+**n and wording.** The equivalence claim rests on 8 vs 8 seeds, with the same seeds and the same held-out
+settings in both arms ✔. It is correctly phrased as "within the MDD" rather than "identical". One nuance the
+docs do not state: "within the MDD" means no difference ≥ the 80 %-power MDD was detected. It does not mean
+differences below it are excluded. The IQM bootstrap intervals still admit sizeable gaps: overall
+[−4.8, +2.3] pp; 6-line [−26.9, +11.3] pp. For any later experiment whose effect is that small on the
+6-line bin, fast and legacy models must not be mixed across arms. That is already the policy's
+same-settings rule.
+
+**Process.** (1) The run's commits, including the `--impl auto` default, were pushed to `origin/dan` at
+17:44 UTC, before review. The review found no correctness problem, so nothing needs reverting. But every
+from-scratch Stage-1 run on `dan` since then uses a code path whose review was pending. (2) `sd_eval.py` was run
+without `--texts`, so no counted proof of the new arm can be re-checked from its stored literal text (the
+reviewer brief's requirement). I substituted an independent fp32 regeneration (§Recount); rerunning
+`sd_eval.py --texts` on the 8 bucketed checkpoints would close the gap for about 3 GPU-minutes.
+
+## §Verdict
+
+**Stands.**
+- `train.py --impl fast` trains the same kind of model as legacy for the tested configuration: `lean_seq`,
+  bs 128, cosine, 6,000 steps, from scratch, 3.2 M parameters. All 14 pre-registered comparisons (7 held-out
+  greedy slices under Lean alone, 7 val-loss slices) are within the n = 8 MDD, recomputed independently from
+  per-record files. Depth-3 high-mode 4/8 lies between legacy's two 8-run samples (C 6/8, R 3/8). No
+  counted proof Lean rejects: arm C 38,676/38,676 stored texts agree with my harness, and 1,038 of the new
+  arm's 1,041 counted proofs in a 1,200-sample regeneration are Lean-accepted. The 3 others are bf16/fp32 decode
+  flips at margins < 0.03 logits. The fast path's `--val_bins` numbers match my own fp32 forward pass to
+  ≤ 0.16 %.
+- Speed on an A40: 16.8 vs 48.9 ms/step (2.9×); 2.6× per model in process wall-clock (2.5× in-loop); padding
+  waste 1.97× → 1.10×. The brief's 215 ms/step was legacy with ≈ 4 co-tenants, which the logs confirm directly.
+- The 5×-per-GPU goal is not met on an A40, as the executor reports.
+- No hard-constraint violation: `nd_verify` unchanged and unused as a judge, `TEST_RUN_DONE` unchanged,
+  no test file in training code.
+
+**Must be reworded.**
+1. "per-GPU ≈ 3.2× legacy's best" / headline "2.6–3.2×": the ratio compares 6,000-step fast waves with
+   1,000-step legacy waves. With matched lengths it is **≈ 2.9×**.
+2. The H100 paragraph, "aggregate 65 → 188 steps/s at N = 16 … use N = 8–16 … ≈ 1.9× cost per model":
+   steady-state H100 training throughput is flat in N (244 → 226 steps/s). The N-scaling is 2,000-step waves
+   amortising ≈ 20 s of per-process start-up and compile. Say: "on an H100 one process runs at 4.1 ms/step
+   (≈ 4.1× an A40); concurrency only overlaps start-up, which matters for short runs". Cost per model
+   ≈ 1.7× an A40's.
+3. "N > 1 gains only ~10 %" on the A40: true for whole jobs, but the mechanism is overlap of fixed costs.
+   Steady-state throughput drops 9 %.
+4. "bs 512 no faster per token on either GPU": true on the A40 (1.05×), not on the H100 (≈ 1.3×).
+5. Self-test "min p 0.33 over all mx" / "tested against `shift_abs`": only mx = 2 was tested.
+6. Put the uncontended 2.6× first. The ≈ 10× against the contended 1,288 s belongs in the premise
+   correction, not the headline.
+7. Pre-registration: the listed "sd_C" values are the MDDs (1.506 × sd). A wording slip only; the analysis
+   used the right sds.
+8. Expected-vs-observed: mark "≤ 10 % of bf16 peak" (11.9 %) as a miss.
+
+**Not supported.** No claim is unsupported outright. The closest are the H100 concurrency
+recommendation (item 2) and the "over all mx" self-test wording (item 5).
+
+**Next measurements that would settle what is left open.**
+- Rerun `sd_eval.py --texts` on the 8 bucketed fast checkpoints (≈ 3 GPU-min), so their counted proofs
+  are re-checkable from literal text like every other arm's.
+- Rerun `fast_train_selftest.py` with records sampled across all lengths (e.g. `--n 2000` drawn uniformly
+  from the file) so the augmentation test covers every mx that occurs.
+- If H100s are to be used: one 6,000-step wave at N = 1 and N = 16 on an H100, to replace the 2,000-step
+  extrapolation with a measured per-model cost.
+- Before `--impl auto` is relied on for `lean_rand`, token-format (`abs`/`rel`), bs ≠ 128 or `--sched wsd`
+  runs: a small equivalence check (≥ 5 seeds against the MDD) in whichever of those a run first needs.
+  Only `lean_seq` / bs 128 / cosine was tested, and `auto` already routes all of them to the fast path.

@@ -21,4 +21,4 @@ for k in ['all', 'len2', 'len3', 'len4', 'len5', 'len6', 'nodepth3_len6', 'depth
     a = np.array([new[s][k] for s in range(8)]); b = np.array([old[s][k] for s in range(8)])
     sdC = b.std(ddof=1); mdd = K * sdC; d = a.mean() - b.mean()
     pooled = math.sqrt((a.var(ddof=1) + b.var(ddof=1)) / 2)
-    print(f"{k:14s} {a.mean():8.4f} {b.mean():8.4f} {d:+9.5f} {sdC:7.4f} {mdd:7.4f} {abs(d)/mdd:7.2f} {a.std(ddof=1):7.4f}  welch p={stats.ttest_ind(a,b,equal_var=False).pvalue:.3f}  d/pooled={d/pooled:+.2f}")
+    print(f"{k:14s} {a.mean():.5f} {b.mean():.5f} {d:+9.5f} {sdC:.5f} {mdd:.5f} {abs(d)/mdd:7.2f} {a.std(ddof=1):7.4f}  welch p={stats.ttest_ind(a,b,equal_var=False).pvalue:.3f}  d/pooled={d/pooled:+.2f}")
