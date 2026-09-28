@@ -614,3 +614,17 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   `--impl auto`. A graph-vs-no-graph run with the same seed matched to 4 decimals for 10 steps and then drifted as bf16
   runs do (`logs/graph_vs_nograph_*.log`); the same-seed val gap at step 400 of the smoke test is that drift.
 - 17:42  `fs1` deleted. Total 1.49 pod-hours, $1.47. `--impl auto` made the default (fast only for from-scratch GPU training).
+
+## state-frontier (executor), 2026-09-28
+
+- 18:23  Pre-registration `preregistration/state-frontier.md` committed and pushed (20dfa0f1, 18:23:14Z); budget
+  `podbudget state-frontier --set 24 12`. RunPod balance $253.03.
+- 18:24–18:35  Pods. No RTX 3090 was available at first (secure and community), so the four pods are mixed:
+  `sf-1` RTX 4090 $0.74/h, `sf-2` A40 $0.49/h, `sf-3` RTX 3090 $0.50/h, `sf-4` RTX A5000 $0.27/h (billed rates from
+  `podnew`). The GPU class changes wall-clock only; a different card is a sampling re-draw (`NOISE_FLOOR.md`), and
+  arms that are compared are sampled with the same flags.
+- 18:35  Queues (`pod/sf/q{1..4}.txt`, `pod/sf/queue.sh`): sf-1 S s2 Stage-1 → held-out → T1 → frozen; sf-2 the same
+  for S s3; sf-3 SN s2–s5 Stage-1 + held-out, then frozen SN s2, s4; sf-4 the k = 256 re-sample of the 14 on-file
+  checkpoints (`pod/sf/resample.sh`), then frozen SN s3, s5. Every job sets `LEAN_GATE_DUMP=artifacts/sf2/dumps/<job>.jsonl`.
+  `eval_set.py` gained `--max_new` (default unchanged, 400) and a `gen_stats.hit_max_new` counter; C0 / G1 are
+  re-sampled at `max_new` 512 (their ladders' value).

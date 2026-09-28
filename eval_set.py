@@ -91,6 +91,7 @@ def main():
     ap.add_argument('--lenfield', default='n_lines')
     ap.add_argument('--batch', type=int, default=1024)
     ap.add_argument('--summary', default=None)
+    ap.add_argument('--max_new', type=int, default=400, help='token cap per sample (sample.generate default 400)')
     a = ap.parse_args()
     dev = 'cuda' if torch.cuda.is_available() else 'cpu'
     model, tok, _ = load_ckpt(a.ckpt, dev)
@@ -102,12 +103,19 @@ def main():
         outs = [[p] for p in generate(model, tok, [r['prompt'] for r in recs], greedy=True, batch=a.batch)]
     else:
         prompts = [r['prompt'] for r in recs for _ in range(a.k)]
-        flat = generate(model, tok, prompts, greedy=False, temperature=a.temperature, batch=a.batch, seed=a.seed)
+        gstats = {}
+        flat = generate(model, tok, prompts, greedy=False, temperature=a.temperature, batch=a.batch, seed=a.seed,
+                        max_new=a.max_new, stats=gstats)
         outs = [flat[i * a.k:(i + 1) * a.k] for i in range(len(recs))]
     print(f'generated {sum(len(o) for o in outs)} proofs in {time.time()-t0:.0f}s', flush=True)
     rows = judge(recs, outs, a.lenfield)
     summ = summarize(rows, a.lenfield, title=f'{os.path.basename(a.ckpt)} on {os.path.basename(a.inp)} k={a.k}')
     summ.update({'ckpt': a.ckpt, 'in': a.inp, 'k': a.k, 'temperature': a.temperature if a.k > 1 or a.temperature else 0, 'seed': a.seed})
+    if a.k > 1 or a.temperature:     # rows that stopped for none of eos / exact / goal hit max_new (fast path's counters)
+        st = {k: gstats.get(k, 0) for k in ('rows', 'stop_eos', 'stop_exact', 'stop_goal')}
+        st['hit_max_new'] = st['rows'] - st['stop_eos'] - st['stop_exact'] - st['stop_goal']
+        summ.update({'max_new': a.max_new, 'batch': a.batch, 'gen_stats': st, 'wall_s': time.time() - t0})
+        print('gen_stats', json.dumps(st), flush=True)
     with open(a.out, 'w') as f:
         for r in rows:
             f.write(json.dumps(r) + '\n')
