@@ -137,3 +137,6 @@ literal text, `nd2lean(nd)` and `nd2lean(norm(nd))` on all 6,419; one expert-ite
 (L0–L8), write-up `run_lean_judge.md`, figures `figures/lj_*.png`, raw files `artifacts/lj/` and
 `hf://buckets/dan-pandori/nd-rl/lean-judge/`. One A40 pod, 0.66 h, $0.32 of $4. Three questions for
 Dan in `QUESTIONS.md` (the `no-denotation` class, `require_all_pr`, relabelling the pools).
+
+## fast-stage1 (executor, started 2026-09-28T16:23:22Z)
+Make Stage-1 training use the GPU (proposal 15 §1). Pre-registration `preregistration/fast-stage1.md`. Budget $5 / 10 pod-h.
