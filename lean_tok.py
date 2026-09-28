@@ -29,6 +29,9 @@ MAXH = 8
 FSYMS = ['(', ')', '¬', '∧', '∨', '→', 'P', 'Q', 'R', 'S', 'False']
 PSYMS = ['theorem', 't', ':', 'Prop', ':=', 'by']
 TSYMS = ['have', 'exact', ';', 'fun', '=>', '⟨', '⟩', ',', '.1', '.2', '.elim', 'Or.inl', 'Or.inr', 'Or.elim', 'Classical.byContradiction', 'hh']
+# run state-env (proposal 13): the only tokens the state-conditioned modes add on top of lean_seq's vocabulary.
+STATE_SYMS = ['<st>', '<nl>', '⊢', '<act>']
+STATE_MODES = ('lean_state', 'lean_stateh', 'lean_staten')
 
 
 class ParseFail(Exception):
@@ -116,9 +119,13 @@ def proof_tokens(proof):
 
 class LeanTokenizer:
     def __init__(self, mode='lean_rand'):
-        assert mode in ('lean_rand', 'lean_seq')
+        assert mode in ('lean_rand', 'lean_seq') + STATE_MODES
         self.mode = mode
-        self.itos = ['<pad>', '<eos>'] + FSYMS + PSYMS + TSYMS + [f'h{k}' for k in range(1, MAXH + 1)]
+        self.state_mode = mode in STATE_MODES       # names are still lean_seq's; the extra tokens render the tactic state
+        self.with_history = mode == 'lean_stateh'
+        self.canon = mode == 'lean_staten'      # names a step introduces are `max index in scope + 1` (run state-env, arm SN)
+        self.itos = ['<pad>', '<eos>'] + FSYMS + PSYMS + TSYMS + (STATE_SYMS if self.state_mode else []) \
+            + [f'h{k}' for k in range(1, MAXH + 1)]
         self.ref0 = len(self.itos)
         self.itos += [f'n{k}' for k in range(1, MAXN + 1)]
         self.stoi = {s: i for i, s in enumerate(self.itos)}
@@ -153,11 +160,37 @@ class LeanTokenizer:
         mx = max((x - self.ref0 + 1 for x in ids if x >= self.ref0), default=0)
         if mx == 0:
             return ids
-        if self.mode == 'lean_seq':
+        if self.mode != 'lean_rand':
             s = rng.randint(0, MAXN - mx)
             return [x + s if x >= self.ref0 else x for x in ids]
         perm = rng.sample(range(MAXN), mx)
         return [self.ref0 + perm[x - self.ref0] if x >= self.ref0 else x for x in ids]
+
+    # ---- the state-conditioned modes (run state-env) ----
+    def encode_toks(self, toks):
+        return [self.stoi[t] for t in toks]
+
+    def shift_pair(self, ids_a, ids_b, rng):
+        """one random name offset applied to BOTH halves of a (state, action) pair (lean_seq's augmentation)."""
+        if not self.shift:
+            return ids_a, ids_b
+        mx = max((x - self.ref0 + 1 for x in list(ids_a) + list(ids_b) if x >= self.ref0), default=0)
+        if mx == 0:
+            return ids_a, ids_b
+        s = rng.randint(0, MAXN - mx)
+        f = lambda ids: [x + s if x >= self.ref0 else x for x in ids]
+        return f(ids_a), f(ids_b)
+
+    def decode_action(self, ids):
+        """sampled ids of ONE action -> (token strings, ended).  `ended` is False if <eos> never came (truncation)."""
+        toks = []
+        for x in ids:
+            if x == self.pad:
+                continue
+            if x == self.eos:
+                return toks, True
+            toks.append(self.itos[x])
+        return toks, False
 
     # ---- text ----
     def text(self, toks):
