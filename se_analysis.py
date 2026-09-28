@@ -118,6 +118,15 @@ def one(run, recs, rounds, from_git, term, workers):
                'transfer_cum_reported': {'solved': d['transfer_cum']['solved'], 'lstar': d['transfer_cum']['lstar'],
                                          'ge13': d['transfer_cum']['ge'].get('13', d['transfer_cum']['ge'].get(13))},
                'targets_cum_reported': {'solved': d['targets_cum']['solved'], 'lstar': d['targets_cum']['lstar']}}
+        k = d.get('k', 32)
+        n_tr = d['transfer_round']['n'] if 'transfer_round' in d else 2285
+        n_ho = d['heldout_greedy']['n']
+        att = d.get('target_samples', 0) + k * n_tr + n_tr + n_ho
+        acc = (round(d.get('target_sample_acc', 0) * d.get('target_samples', 0))
+               + round(d.get('transfer_sample_acc', 0) * k * n_tr)
+               + d['transfer_greedy']['solved'] + d['heldout_greedy']['solved'])
+        row['attempts'] = att
+        row['accepted_by_lean'] = acc
         if 'env' in d:
             e = d['env']
             row['env'] = {k: e.get(k) for k in ('env_end', 'env_fail_reason', 'env_waves', 'env_wall_s',
@@ -127,7 +136,12 @@ def one(run, recs, rounds, from_git, term, workers):
             row['env']['mean_steps_per_attempt'] = sum(int(k) * v for k, v in st.items()) / tot
             dl = e.get('action_declen_hist') or {}
             n = sum(dl.values()) or 1
-            row['env']['action_trunc_frac'] = sum(v for k, v in dl.items() if int(k) >= 256) / n
+            row['env']['action_trunc_frac'] = sum(v for kk, v in dl.items() if int(kk) >= 256) / n
+            ee = e.get('env_end') or {}
+            tot = sum(ee.values()) or 1
+            row['env']['end_frac'] = {kk: v / tot for kk, v in ee.items()}
+            row['env']['ended_by_lean_reject'] = ee.get('done', 0) - acc
+            row['env']['ended_by_lean_reject_frac'] = (ee.get('done', 0) - acc) / tot
         out['rounds'][str(r)] = row
     if last is None:
         return None

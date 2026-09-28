@@ -66,3 +66,23 @@
 - **2026-09-27 18:30 UTC (lean-judge, the `no-denotation` class)** — 2,095 of the 8,514 stored Lean-only samples (all from run `efficiency`) are `kind: no-denotation`: **Lean accepted the literal sampled text but the strict `lean_seq` grammar could not decode it**, so it has no ND denotation. Your 2026-09-27 note says the grammar *is* the allowlist, which makes these not-counted; but they are cases where a sound checker said "this is a proof" and we throw it away, and they were 24.6 % of the stored Lean-only class. **Default: the grammar stays the allowlist** — `lean_judge` rejects them (`LEANPARSE`) and I excluded them from acceptance test 3 rather than expecting them to pass. The alternative is to count any Lean-accepted text and record `nd: null` (which costs the ND denotation that `prune`, `normalize`, `patterns` and every analysis script need, and would need a Lean-side line/term-size source). Say if you want that instead; it is a day of work on the analysis scripts, not on the judge.
 - **2026-09-27 18:30 UTC (lean-judge, `require_all_pr`)** — `nd2lean.translate` refused to translate a proof that re-states fewer premises than the theorem declares. That is 41.7 % of the class Lean accepts and `nd_verify` rejects, so the judge needed `translate(..., require_all_pr=False)`. I left the **default strict** and pass the flag only from `lean_judge`, so generated training data still re-states every premise. **Default: keep it that way.** Say if you would rather the generators also drop premise re-statements (it would shorten training proofs and move the training distribution toward what Lean accepts, but it is a training-data change, not a judging one, and belongs in its own pre-registered run).
 - **2026-09-27 18:30 UTC (lean-judge, relabelling the pools)** — The brief said not to relabel the pools in this run, so `minlen.py`'s `L_true` labels are still ND-derived and are **upper bounds under Lean**; term size is not on any pool record. **Default: not done here.** The follow-up that would close it is one CPU job: `lean_check.py` over the ladder and coverage pools to attach `term_size` and a Lean-minimal length, then relabel. Say if you want it and I will propose it.
+
+# Questions for Dan (state-env, 2026-09-28). Each has the default I follow if unanswered.
+
+- **2026-09-28 05:00 UTC (state-env, what "equal" means when the policy's input changes)** — Arm S and the
+  whole-proof control C0 are matched on **attempts** (k = 32 per theorem per round, 8 rounds) and on **training
+  proofs seen** (128 whole proofs per step, 6,000 steps), which is what the ladder's numbers have always meant.
+  They are *not* matched on forward passes: one S attempt re-encodes the state once per step, so it costs roughly
+  5–10× the prefill tokens of one whole-proof attempt (it decodes about the same number of tokens). On wall clock
+  the two are close at the batch sizes each one wants, because the environment keeps a much bigger batch full
+  (2,048 vs 512) — measured, not assumed. **Default: attempts, and I report the forward-pass and wall-clock cost
+  beside every table** so a compute-matched reading is available. Say if you would rather the headline comparison be
+  compute-matched (that would mean giving C0 more attempts, which is a different experiment and a new pre-registration).
+- **2026-09-28 05:00 UTC (state-env, the environment supplies the box-closing tokens)** — Pre-registered deviation,
+  with its reason, in `preregistration/state-env.md`: the model's closing action is uniformly `exact n` and the
+  environment writes `) ;`, the `( n : False )` ascription, and the `Or.elim` second-branch opener. This is the one
+  place where arm S writes less text than C0 does. It is forced: those tokens encode box structure, and a real Lean
+  tactic state does not say whether closing this goal also closes a lambda, so the alternative is a frame-kind marker
+  in the observation, which makes the state *less* Lean-faithful than AlphaProof's. **Default: as pre-registered**,
+  with the per-action byte-for-byte round trip (gate 1) as the guarantee that nothing else changed. Say if you would
+  rather see the literal-chunk variant measured as a third arm.
