@@ -137,3 +137,10 @@ literal text, `nd2lean(nd)` and `nd2lean(norm(nd))` on all 6,419; one expert-ite
 (L0–L8), write-up `run_lean_judge.md`, figures `figures/lj_*.png`, raw files `artifacts/lj/` and
 `hf://buckets/dan-pandori/nd-rl/lean-judge/`. One A40 pod, 0.66 h, $0.32 of $4. Three questions for
 Dan in `QUESTIONS.md` (the `no-denotation` class, `require_all_pr`, relabelling the pools).
+
+# STATUS — lean-prefilter (proposal 15, items 3 and 4)
+
+Brief: nd-rl `docs/proposals/improvements/BRIEF_lean-prefilter.md`. Policy: nd-rl `AGENT_POLICY.md`. Run id: lean-prefilter. Budget $3 / 6 pod-hours.
+
+## lean-prefilter
+- 2026-09-28 16:20 UTC  run started (executor). Prototype `lean_prefilter.py` (type checker for the `lean_seq` fragment, reject-only) removes all 1,158 Lean rejects of `lean-judge`'s test-5 dump with 0 false rejects on its 2,348 accepts. Pre-registration `preregistration/lean-prefilter.md` committed before any pod.
