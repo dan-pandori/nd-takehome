@@ -186,4 +186,5 @@ RESULTS-REGISTRY DONE 2026-09-29T01:45:00Z
   token lacks `workflow` scope (ships as `ci/ci.yml` + `ci/install_workflow.sh`). `record.save_config` in all 59
   scripts with `--out`/`--outdir`. Write-up `run_repo_hygiene.md`.
 - Merged into `dan` (`77344dfd`); local CI on `dan` green (58 s). GitHub run pending the `workflow` scope.
-REPO-HYGIENE DONE 2026-09-29T01:57:33Z
+- long-pool merged into `dan` meanwhile and re-added 5 artifacts/lpool files (all in the bucket): untracked; CI's config check caught its new script, fixed. CI green on the merged tip (50 s, local).
+REPO-HYGIENE DONE 2026-09-29T02:00:32Z

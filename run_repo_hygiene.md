@@ -10,7 +10,7 @@ CI smoke models (114 k parameters, `lean_seq`, from scratch on a 150-proof fixtu
 | fresh non-sparse worktree 200–280 MB | **227 MB** (< 300 MB) |
 | CI green on `dan`, red on a broken commit | green in a clean HOME + venv (fresh Lean 4.34.1, torch 2.8 CPU), 59 s; red on `ci-broken` (`78770822`, decode drops `.2`): 5 failures |
 | CI on GitHub, < 10 min | **not shown — deviation.** The VPS token lacks the `workflow` scope; GitHub refuses the file. It ships as `ci/ci.yml`; `ci/install_workflow.sh` installs it (QUESTIONS.md) |
-| configs universal | 4 scripts wrote `args.json` before; now all 59 with `--out`/`--outdir` call `record.save_config`; rows name the file; CI enforces it |
+| configs universal | 4 scripts wrote `args.json` before; now all 60 with `--out`/`--outdir` call `record.save_config`; rows name the file; CI enforces it |
 
 Sources: `artifacts/repo-hygiene/` (inventories, listings, CI logs),
 `hf://buckets/dan-pandori/nd-rl/repo-hygiene/artifacts/repo-hygiene/`; `ARTIFACTS_INDEX.tsv`. No pods; $0.
