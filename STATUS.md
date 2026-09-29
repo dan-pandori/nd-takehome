@@ -195,3 +195,11 @@ REPO-HYGIENE DONE 2026-09-29T02:00:32Z
 - 16:00 merged into `dan` (0c34c534), Actions green on `dan`; acceptance met (0 lost, guard red on 6 MB, 148.1 MB worktree, 0 credential hits). Fetch demo switched from lean-prefilter to noise-floor (deviation, log.md).
 
 REPO-HYGIENE-2 DONE 2026-09-29T15:58:53Z
+
+
+# STATUS — long-pool-2
+
+## long-pool-2 (executor, started 2026-09-29T16:00Z)
+- 16:45 pre-registration `preregistration/long-pool-2.md` committed before any pod. Pre-pod pilot: construction upper
+  bounds are ≥ 23 for the ≥ 17 theorems (brief's 17–24 bins unfillable) and are not a difficulty axis for SN-cap12 T1;
+  added stage E (bound 17) to split exact 17 / ≥ 18. Budget $10 / 20 h.
