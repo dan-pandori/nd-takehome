@@ -109,10 +109,11 @@ def main():
     print(json.dumps(st), file=sys.stderr)
 
     def label(c, r, x16, x17):
-        nub, ubp = prune(r['gen_proof'])
+        gp = r.get('gen_proof') or r['proof']; gl = r.get('gen_lines') or r['n_lines']
+        nub, ubp = prune(gp)
         rec = {'name': f'lp2_{r["name"]}' if c != 'calib' else r['name'], 'thm': r['thm'], 'key': pkey(r['prompt']),
-               'prompt': r['prompt'], 'source': 'gen', 'schema': None, 'chunk': c, 'gen_lines': r['gen_lines'],
-               'n_prem': r.get('n_prem'), 'rules': r.get('rules'), 'gen_proof': r['gen_proof'],
+               'prompt': r['prompt'], 'source': 'gen', 'schema': None, 'chunk': c, 'gen_lines': gl,
+               'n_prem': r.get('n_prem'), 'rules': r.get('rules'), 'gen_proof': gp,
                'construction_pruned': nub, 'ub_proof': ubp, 'minlen16_secs': x16.get('secs') if x16 else None}
         if x17 is None:
             e, lb, ub, p = 'missing', 17, nub, None
