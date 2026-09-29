@@ -101,7 +101,7 @@
   (`python3 fetch_artifacts.py ckpts/`; sha256 checked against the bucket copy). If the take-home's graders expect
   them in a plain clone, they would have to be tracked again, and the 5 MB guard would need an allowlist entry.
   Default if unanswered: they stay out of git, and `CONTRIBUTING.md` says how to fetch them.
-- **2026-09-29 17:05 UTC (long-pool-2)** — CPU pods (cpu3c / cpu5c, 16–32 vCPU) and 4090 / 5090 pods (secure and community)
+- **2026-09-29 16:37 UTC (long-pool-2)** — CPU pods (cpu3c / cpu5c, 16–32 vCPU) and 4090 / 5090 pods (secure and community)
   all return "no instances". Only RTX A5000 ($0.27/h) is obtainable, and it has a 7.65-CPU quota. At that quota the brief's
   20 pod-hour ceiling allows ≈ 150 core-hours, about a quarter of what the pool needs (≈ 1.5–2 core-h per new ≥ 17 theorem),
   while $10 would buy ≈ 37 A5000-hours. May I raise the ceiling to 37 pod-hours inside the same $10? Default if unanswered:

@@ -773,10 +773,10 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   generator proofs; the ≥ 17 file's construction lengths are 23–49; SN-cap12 T1's ≥ 17 solve rate rises with
   construction length; bound 17 costs ≥ 3× bound 16; PyPy 0.84×. The brief's construction-upper-bound bins 17–24
   cannot be filled → design adds stage E (bound 17 / 1,800 s). Pre-registration `ea3cfdff` 16:32:46 UTC.
-- 16:33–16:50 pods. Budget registered 20 h / $10 before the first pod. Secure RTX 4090, community 4090, secure 5090, and
+- 16:33–16:38 pods. Budget registered 20 h / $10 before the first pod. Secure RTX 4090, community 4090, secure 5090, and
   CPU pods (cpu3c / cpu5c, 16 and 32 vCPU, MCP `create-pod`) all: "no instances available". Got **`lp2-a` RTX A5000
   $0.27/h, CPU quota 7.65 (cgroup v1)** and **`lp2-b` RTX 4000 Ada $0.28/h, cpu.max 10.2**. Deviation: labelling on GPU
   pods' CPUs (as long-pool), at ≈ 8–10 CPUs per pod-hour, so the 20 pod-hour ceiling binds before the $10
-  (`QUESTIONS.md` 17:05).
+  (`QUESTIONS.md` 16:37).
 - ≈ 16:35 `lp2-a`: stage E on the 70 calibration theorems (`label.sh calib 7`). ≈ 16:38 `lp2-b`: two chunk loops
   (`loop.sh b|c 6 4000000 35000|36000`, generated length 32–90), stages A–E per chunk.
