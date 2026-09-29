@@ -322,6 +322,7 @@ def round_stats(stats, source, init=None, frozen=False, **labels):
     r, k, ck = stats.get('round'), stats.get('k'), stats.get('ckpt')
     role = 'frozen' if frozen else ('init' if ck and init and os.path.abspath(ck) == os.path.abspath(init) else 'rl')
     labels = {'role': role, **labels}
+    cfg = _ctx['config'] or {}
     for key, (split, dec) in ROUND_KEYS.items():
         s = stats.get(key)
         if not isinstance(s, dict) or 'solved' not in s:
@@ -329,9 +330,11 @@ def round_stats(stats, source, init=None, frozen=False, **labels):
         n = s.get('n')
         v = s.get('rate', s['solved'] / n if n else None)
         metric = {'greedy': f'{split}_greedy_acc', 'pass@k': f'{split}_pass@{k}'}.get(dec, f'{split}_solved_{dec}')
-        record(metric, v, n=n, solved=s['solved'], split=split, decode=dec, round=r, k=k, ckpt=ck, source=source, **labels)
+        data = labels.get('data') or cfg.get(split)    # the arm's --heldout / --transfer / --targets file
+        lab = {**labels, 'data': data}
+        record(metric, v, n=n, solved=s['solved'], split=split, decode=dec, round=r, k=k, ckpt=ck, source=source, **lab)
         if s.get('lstar') is not None:
-            record(f'{split}_lstar_{dec}', s['lstar'], n=n, split=split, decode=dec, round=r, k=k, ckpt=ck, source=source, **labels)
+            record(f'{split}_lstar_{dec}', s['lstar'], n=n, split=split, decode=dec, round=r, k=k, ckpt=ck, source=source, **lab)
     for key in ('target_sample_acc', 'transfer_sample_acc'):
         if stats.get(key) is not None:
             split = 'targets' if key.startswith('target_') else 'transfer'
