@@ -1,0 +1,17 @@
+[32m✓ Downloaded[0m
+  src: hf://buckets/dan-pandori/nd-rl/state-env/ckpts/se/stage1_SN_s1.pt
+  dst: ckpts/sf2/rs/base_SN_s1.pt
+d8b21e4cbacaf8a45fa952ad9eaf25ff  ckpts/sf2/rs/base_SN_s1.pt
+=== resample base_SN_s1 state state-env/ckpts/se/stage1_SN_s1.pt 2026-09-28T19:13:19Z
+[lean_gate] 57344 samples, parse-fail 12304, distinct checked 21919: lean ok 26, lean rej 21893; lean 83.0s wall (2144.7s proc, 32 workers)
+[base_SN_s1.pt on long.jsonl k=256 T=0.8] SOLVED 6/224 = 0.027 [0.012,0.057]
+  len 11: 6/99 = 0.061 [0.028,0.126]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {11: 14, 12: 1}
+  pruned hist {10: 3, 11: 11, 12: 1}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 45012), ('lean_seq parse: env: unbound', 3473), ('lean_seq parse: env: binder mismatch', 3004), ('lean_seq parse: env: exact goal mismatch', 2613), ('lean_seq parse: env: Or.elim on non-or', 1038), ('lean_seq parse: env: box on non-arrow', 722)]
+env {"env_end": {"syntax": 12296, "done": 45040, "truncated": 8}, "env_fail_reason": {"have name": 11, "Or.elim on non-or": 1038, "unbound": 3473, "term": 62, "binder mismatch": 3004, "box on non-arrow": 722, "box head": 52, "formula": 485, "no semicolon": 137, "exact goal mismatch": 2613, "assign": 663, "malformed": 1, "PR position": 10, "exact not last": 24, "exact form": 1}, "env_steps": {"1": 256, "2": 5483, "3": 8822, "4": 6709, "5": 2679, "6": 2773, "7": 5496, "8": 7588, "9": 5782, "10": 6053, "11": 2852, "12": 1144, "13": 889, "14": 355, "16": 179, "15": 185, "18": 10, "17": 77, "19": 7, "20": 4, "22": 1}, "prompt_tokens": 31032137, "steps": 16656, "rows": 375299, "rowsteps": 11507648, "prompt_len_max": 304, "chunks": 190, "stop_eos": 375291, "stop_exact": 0, "stop_goal": 0, "names_defined": 333933, "names_renamed": 61398, "env_waves": 190, "env_wall_s": 143.06001543998718, "peak_alloc_gb": 10.411712646484375, "peak_reserved_gb": 13.681640625, "action_declen_mean": 21.24910537997703}
+=== done 2026-09-28T19:17:10Z

@@ -150,3 +150,8 @@ Read `FAST_STAGE1.md`, `run_fast_stage1.md`. 1.49 pod-h, $1.47 of $5; pods delet
 Settle state-env's length question (k = 256 re-sample of final T1 / Stage-1 checkpoints on the 224 `L_true` ≥ 11
 transfer theorems; S s2/s3 through T1) and test the depth-3 "lottery" (6 new state Stage-1 seeds). Pre-registration
 `preregistration/state-frontier.md`. Budget $12 / 24 pod-h.
+STATE-FRONTIER DONE 2026-09-29T00:39:48Z — Q1: the state reaches `L_true` ≥ 13 at a real, low rate (k = 256 re-sample: 5 distinct of 23
+theorems across 6 state T1 finals, 4 by ≥ 2 of them, pooled 2.1 % vs C0 T1 0.017 %), but `L*` stays 12 in all four S
+ladders. Q2: 6 / 6 new state Stage-1 seeds in the high depth-3 mode (12 / 12 overall, Wilson [0.757, 1.00] vs control
+[0.333, 0.595]); falsifier not fired. Stop rule fired at 21.4 h (frozen SN s5 dropped). Read `run_state_frontier.md`,
+`numbers.md` § state-frontier. 22.17 pod-h, $10.94 of $12; pods deleted; bucket `hf://buckets/dan-pandori/nd-rl/state-frontier/`.

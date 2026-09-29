@@ -1,0 +1,17 @@
+[32m✓ Downloaded[0m
+  src: hf://buckets/dan-pandori/nd-rl/state-env/ckpts/se/ladder/la_T1_S_s0_r8.pt
+  dst: ckpts/sf2/rs/T1_S_s0.pt
+5ea746bc0e0c354ca03dfbdad1c204fc  ckpts/sf2/rs/T1_S_s0.pt
+=== resample T1_S_s0 state state-env/ckpts/se/ladder/la_T1_S_s0_r8.pt 2026-09-28T18:35:37Z
+[lean_gate] 57344 samples, parse-fail 15910, distinct checked 27817: lean ok 2142, lean rej 25675; lean 124.3s wall (3512.5s proc, 32 workers)
+[T1_S_s0.pt on long.jsonl k=256 T=0.8] SOLVED 41/224 = 0.183 [0.138,0.239]
+  len 11: 33/99 = 0.333 [0.248,0.431]
+  len 12: 7/102 = 0.069 [0.034,0.135]
+  len 13: 1/13 = 0.077 [0.014,0.333]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {11: 109, 12: 30, 13: 4, 14: 5, 15: 11, 17: 2}
+  pruned hist {9: 3, 10: 33, 11: 90, 12: 16, 13: 4, 14: 5, 15: 8, 17: 2}
+  frontier written 15 pruned 15
+  reasons [('lean rejected', 37826), ('lean_seq parse: env: binder mismatch', 4255), ('lean_seq parse: env: unbound', 3392), ('lean_seq parse: env: exact goal mismatch', 2764), ('lean_seq parse: env: Or.elim on non-or', 2562), ('lean_seq parse: env: names exhausted', 873)]
+env {"env_end": {"syntax": 15909, "done": 41434, "truncated": 1}, "env_fail_reason": {"have name": 23, "Or.elim on non-or": 2562, "no semicolon": 225, "unbound": 3392, "PR position": 2, "box on non-arrow": 518, "binder mismatch": 4255, "names exhausted": 873, "exact not last": 699, "exact goal mismatch": 2764, "formula": 262, "term": 45, "box head": 278, "Or.elim name": 4, "assign": 7}, "env_steps": {"1": 262, "2": 3903, "3": 3949, "4": 5195, "5": 2125, "6": 2469, "7": 5934, "8": 2746, "9": 6025, "10": 5891, "11": 4206, "12": 6254, "13": 2909, "14": 1888, "15": 1081, "16": 863, "17": 501, "18": 376, "19": 185, "20": 166, "21": 96, "22": 68, "23": 66, "24": 36, "25": 24, "26": 42, "27": 51, "28": 17, "29": 5, "30": 8, "31": 2, "33": 1}, "prompt_tokens": 39823221, "steps": 18448, "rows": 490401, "rowsteps": 14281664, "prompt_len_max": 264, "chunks": 247, "stop_eos": 490400, "stop_exact": 0, "stop_goal": 0, "names_defined": 0, "names_renamed": 0, "env_waves": 247, "env_wall_s": 166.39836168289185, "peak_alloc_gb": 9.419794082641602, "peak_reserved_gb": 11.982421875, "action_declen_mean": 19.698106243665897}
+=== done 2026-09-28T18:40:34Z

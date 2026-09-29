@@ -661,3 +661,12 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   (its rounds 1–5 are kept and reported as a partial, labelled). **Deviation:** frozen SN s4 (round 7 of 8, ≈ 0.3 h
   left) is kept, because stopping it would discard ≈ 2 h already spent for a saving of 0.3 h; S s3 T1 / frozen (last
   round each) are kept, as the rule allows. sf-4 synced, pulled and deleted (5.51 h, $1.49).
+- 00:05–00:45  sf-3 (frozen SN s4 done) and sf-2 (T1 / frozen S s3, re-sample T1 S s3, two `max_action` 512
+  diagnostics) synced, pulled and deleted (5.56 h $2.78; 6.18 h $3.03). **No pods left. 22.17 pod-hours, $10.94.**
+  T1 S s3: transfer 1,630, `L*` 12, 4 at ≥ 13 (`artifacts/sf2/ladders.json`).
+- 00:39  Final numbers (`sf_analysis.py --term_size` → `artifacts/sf2/summary.json`, `tables.txt`): Q1 reading
+  "a real, low rate" — 5 distinct ≥ 13 theorems across the 6 state T1 finals, 4 by ≥ 2 finals, pooled rate 2.1 %
+  vs C0 T1 0.017 %; Q2 6 / 6 new seeds high. Checked a write-up claim before keeping it: S s3's held-out failures are
+  mostly Lean rejections (358 / 588), not unbound names (84), so the draft's "same failure as S s1" was removed.
+  Uncompressed duplicates of the ladder dumps (≈ 8 GB, uploaded by `ladder.sh` before gzip) were removed from the
+  bucket after checking each has a `.gz` copy. Ladder `found_*` / `mix_*` / `alloc_*` files are in the bucket only.

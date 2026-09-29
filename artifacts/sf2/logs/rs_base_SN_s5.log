@@ -1,0 +1,17 @@
+[32m✓ Downloaded[0m
+  src: hf://buckets/dan-pandori/nd-rl/state-frontier/ckpts/sf2/stage1_SN_s5.pt
+  dst: ckpts/sf2/rs/base_SN_s5.pt
+d6afb36b8563dd50ccfcfaaaec54c30d  ckpts/sf2/rs/base_SN_s5.pt
+=== resample base_SN_s5 state state-frontier/ckpts/sf2/stage1_SN_s5.pt 2026-09-28T23:14:48Z
+[lean_gate] 57344 samples, parse-fail 16181, distinct checked 18385: lean ok 47, lean rej 18338; lean 28.4s wall (731.3s proc, 32 workers)
+[base_SN_s5.pt on long.jsonl k=256 T=0.8] SOLVED 6/224 = 0.027 [0.012,0.057]
+  len 11: 5/99 = 0.051 [0.022,0.113]
+  len 12: 1/102 = 0.010 [0.002,0.053]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {11: 7, 15: 1}
+  pruned hist {10: 2, 11: 5, 14: 1}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 41043), ('lean_seq parse: env: unbound', 3906), ('lean_seq parse: env: binder mismatch', 3480), ('lean_seq parse: env: exact goal mismatch', 3446), ('lean_seq parse: env: box on non-arrow', 2528), ('lean_seq parse: env: Or.elim on non-or', 769)]
+env {"env_end": {"syntax": 16171, "done": 41163, "truncated": 10}, "env_fail_reason": {"have name": 18, "Or.elim on non-or": 769, "box on non-arrow": 2528, "unbound": 3906, "no semicolon": 301, "term": 92, "binder mismatch": 3480, "formula": 603, "PR position": 3, "exact goal mismatch": 3446, "box head": 213, "exact not last": 63, "assign": 745, "empty term": 4}, "env_steps": {"1": 363, "2": 7822, "3": 10956, "4": 5276, "5": 3064, "6": 3668, "7": 5799, "8": 5304, "9": 4441, "10": 6061, "11": 2469, "16": 218, "13": 702, "12": 765, "15": 71, "14": 290, "17": 34, "18": 18, "19": 14, "20": 4, "21": 2, "23": 1, "0": 2}, "prompt_tokens": 28401645, "steps": 15872, "rows": 346312, "rowsteps": 10898272, "prompt_len_max": 256, "chunks": 178, "stop_eos": 346302, "stop_exact": 0, "stop_goal": 0, "names_defined": 315174, "names_renamed": 61373, "env_waves": 178, "env_wall_s": 119.6506416797638, "peak_alloc_gb": 9.222142696380615, "peak_reserved_gb": 11.708984375, "action_declen_mean": 21.877393795190464}
+=== done 2026-09-28T23:17:23Z

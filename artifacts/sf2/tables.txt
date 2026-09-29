@@ -1,0 +1,36 @@
+model             N13 succ13   rate13 sol11-12  trunc
+T1_C0_s0            1      2  0.00034       21  4/57344
+T1_C0_s1            0      0  0.00000       22  42/57344
+T1_C0_s1_mn512      0      0  0.00000       21  144/57344
+T1_G1_s0            0      0  0.00000       19  11/57344
+T1_G1_s1            0      0  0.00000        6  51/57344
+T1_SN_s0            5    269  0.04569       67  att 1/57344 act 1
+T1_SN_s1            1    129  0.02191       48  att 14/57344 act 14
+T1_S_s0             1      7  0.00119       40  att 1/57344 act 1
+T1_S_s1             3    188  0.03193       40  att 11/57344 act 11
+T1_S_s2             4     13  0.00221       57  att 2/57344 act 2
+T1_S_s3             3    143  0.02429       70  att 0/57344 act 0
+base_C0_s0          0      0  0.00000        0  0/57344
+base_C0_s1          0      0  0.00000        0  45/57344
+base_SN_s0          0      0  0.00000       10  att 1/57344 act 1
+base_SN_s1          0      0  0.00000        6  att 8/57344 act 8
+base_SN_s2          0      0  0.00000        6  att 2/57344 act 2
+base_SN_s3          1      1  0.00017       10  att 183/57344 act 183
+base_SN_s3_ma512    1      1  0.00017       13  att 1/57344 act 1
+base_SN_s4          0      0  0.00000        2  att 35/57344 act 35
+base_SN_s5          0      0  0.00000        6  att 10/57344 act 10
+base_S_s0           0      0  0.00000        5  att 116/57344 act 117
+base_S_s0_ma512     0      0  0.00000        3  att 40/57344 act 40
+base_S_s1           0      0  0.00000        3  att 30/57344 act 30
+base_S_s2           0      0  0.00000        6  att 6/57344 act 6
+base_S_s3           0      0  0.00000       14  att 96/57344 act 96
+base_S_s3_ma512     0      0  0.00000       17  att 21/57344 act 21
+Q1 reading: a real, low rate | share 1126 0.4232309746328438 | solved by >=2 state T1: ['la_transfer_1126', 'la_transfer_1198', 'la_transfer_735', 'la_transfer_978']
+sign >=13 {'state_better': 5, 'c0_better': 0, 'ties_excluded': True, 'two_sided_p': 0.0625} 
+sign 11-12 {'state_better': 86, 'c0_better': 7, 'ties_excluded': True, 'two_sided_p': 2.078229307846884e-18}
+Q2: {'S_s0': (0.922, True), 'S_s1': (0.882, True), 'SH_s0': (0.86, True), 'SH_s1': (0.88, True), 'SN_s0': (0.956, True), 'SN_s1': (0.902, True), 'SN_s2': (0.944, True), 'SN_s3': (0.934, True), 'SN_s4': (0.908, True), 'SN_s5': (0.924, True), 'S_s2': (0.936, True), 'S_s3': (0.96, True)}
+   new high 6/6 falsifier_fired=False P(>=obs|ctrl)=0.009666013301955809; all 12/12 (0.7575, 1.0)
+ladder la_T1_S {'n': 4, 'per_seed': {'la_T1_S_s0': 1348, 'la_T1_S_s1': 1389, 'la_T1_S_s2': 1546, 'la_T1_S_s3': 1630}, 'lstar': {'la_T1_S_s0': 12, 'la_T1_S_s1': 12, 'la_T1_S_s2': 12, 'la_T1_S_s3': 12}, 'ge13': {'la_T1_S_s0': 1, 'la_T1_S_s1': 2, 'la_T1_S_s2': 3, 'la_T1_S_s3': 4}, 'ge13_names': ['la_transfer_1126', 'la_transfer_1198', 'la_transfer_735', 'la_transfer_978'], 'iqm': 1467.5, 'iqm_ci95': (1348.0, 1630.0), 'sd': 132.3}
+ladder la_frozen_S {'n': 4, 'per_seed': {'la_frozen_S_s0': 779, 'la_frozen_S_s1': 787, 'la_frozen_S_s2': 858, 'la_frozen_S_s3': 996}, 'lstar': {'la_frozen_S_s0': 11, 'la_frozen_S_s1': 10, 'la_frozen_S_s2': 11, 'la_frozen_S_s3': 11}, 'ge13': {'la_frozen_S_s0': 0, 'la_frozen_S_s1': 0, 'la_frozen_S_s2': 0, 'la_frozen_S_s3': 0}, 'ge13_names': [], 'iqm': 822.5, 'iqm_ci95': (779.0, 996.0), 'sd': 100.5}
+ladder la_T1_SN {'n': 2, 'per_seed': {'la_T1_SN_s0': 1557, 'la_T1_SN_s1': 1403}, 'lstar': {'la_T1_SN_s0': 12, 'la_T1_SN_s1': 12}, 'ge13': {'la_T1_SN_s0': 3, 'la_T1_SN_s1': 1}, 'ge13_names': ['la_transfer_1126', 'la_transfer_1198', 'la_transfer_978'], 'iqm': 1480.0, 'iqm_ci95': None, 'sd': 108.9}
+ladder la_frozen_SN {'n': 5, 'per_seed': {'la_frozen_SN_s0': 975, 'la_frozen_SN_s1': 801, 'la_frozen_SN_s2': 841, 'la_frozen_SN_s3': 1009, 'la_frozen_SN_s4': 723}, 'lstar': {'la_frozen_SN_s0': 11, 'la_frozen_SN_s1': 11, 'la_frozen_SN_s2': 11, 'la_frozen_SN_s3': 11, 'la_frozen_SN_s4': 10}, 'ge13': {'la_frozen_SN_s0': 0, 'la_frozen_SN_s1': 0, 'la_frozen_SN_s2': 0, 'la_frozen_SN_s3': 1, 'la_frozen_SN_s4': 0}, 'ge13_names': ['la_transfer_978'], 'iqm': 869.2, 'iqm_ci95': (746.4, 998.8), 'sd': 120.0}

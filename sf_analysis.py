@@ -180,7 +180,7 @@ def ladders():
                                         'last_round': x.get('last_round')}
     agg = {}
     for key in ('la_T1_S', 'la_frozen_S', 'la_T1_SN', 'la_frozen_SN'):
-        v = {n: out[n] for n in out if n.rsplit('_', 1)[0] == key}
+        v = {n: out[n] for n in out if n.rsplit('_', 1)[0] == key and out[n].get('last_round', 8) == 8}   # partial ladders excluded
         if v:
             xs = [x['solved'] for x in v.values()]
             agg[key] = {'n': len(xs), 'per_seed': {n: x['solved'] for n, x in sorted(v.items())},

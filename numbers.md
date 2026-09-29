@@ -1305,3 +1305,86 @@ All values recomputed by `python3 fs_analysis.py` → `artifacts/fs/summary.json
   188.0 steps/s at N = 1 / 2 / 4 / 8 / 16; legacy alone 30.0 ms/step. bs 512: A40 64.0 ms/step, H100 12.2 ms/step (no gain per token).
 - FS8 cost: 1.49 pod-hours, $1.47 (A40 `fs1` 1.24 h $0.61; H100 `fs2` 0.25 h $0.86).
 - FS9 bucket: `hf://buckets/dan-pandori/nd-rl/fast-stage1/{artifacts,ckpts}` (the 8 fast checkpoints and `legfull_s0.pt`).
+
+## state-frontier (2026-09-28/29)
+
+Lean alone decides (`lean_judge`); `nd_verify` judges nothing. `L_true` = ND-derived label, an upper bound under Lean.
+Every number below comes from `python3 sf_analysis.py --term_size` → `artifacts/sf2/summary.json` (printed table:
+`artifacts/sf2/tables.txt`), which reads the files named in each section. The literal sampled text of every job is in
+`LEAN_GATE_DUMP` files (`hf://…/state-frontier/artifacts/sf2/dumps/<job>.jsonl.gz`).
+
+**Models.** All are 4-layer, d 256, from-scratch GPTs, Stage-1 on `data/p2/train_depth3_f0_a1.jsonl` (155,000 records,
+cap 6, depth-3 f = 0), except G1.
+- S / SN (state-conditioned, 3,216,384 params; `lean_state` / `lean_staten`, SN sampled with `Env(assign=True)`):
+  s0/s1 from `state-env` (`hf://…/state-env/ckpts/se/`); s2/s3 (S) and s2–s5 (SN) trained here (`hf://…/state-frontier/ckpts/sf2/`).
+- C0 (whole-proof `lean_seq`, 3,214,336): bases `lean-format/ckpts/lf/stage1_a1_seq_s{0,1}.pt`, T1 finals
+  `ds-generator/ckpts/ladder/la_T1_c0_s{0,1}_r8.pt`.
+- G1 T1 (`lean_seq`, 3,214,336, **trained on `train_g1`**, a different set): `ds-generator/ckpts/ladder/la_T1_g1_s{0,1}_r8.pt`.
+- "T1" = the final (round-8) checkpoint of an 8-round expert-iteration ladder; "base" = the Stage-1 checkpoint.
+
+### Q1 — re-sample at k = 256, T 0.8, on the 224 transfer theorems with `L_true` ≥ 11 (`artifacts/sf2/rs/<label>.jsonl`)
+
+Pool `data/sf2/long.jsonl` (99 / 102 / 13 / 10 at `L_true` 11 / 12 / 13 / 14; md5 7730420059f15cdd93c5361ca5c5c9aa).
+State models: `state_eval.py`, batch 2,048, `max_action` 256, `max_steps` 48. Whole-proof: `eval_set.py`, batch
+2,048, `max_new` 512 (C0 T1 s1 re-run at 1,024, see below). N13 = theorems (of 23) at `L_true` ≥ 13 with ≥ 1 accepted proof.
+
+| model | N13 | successes at ≥ 13 (of 5,888) | solved at 11 / 12 | cut off |
+|---|---|---|---|---|
+| T1 S s0 / s1 / s2 / s3 | 1 / 3 / 4 / 3 | 7 / 188 / 13 / 143 | 33/7, 33/7, 46/11, 53/17 | ≤ 0.03 % |
+| T1 SN s0 / s1 | **5** / 1 | 269 / 129 | 44/23, 37/11 | ≤ 0.03 % |
+| T1 C0 s0 / s1 | 1 / 0 | 2 / 0 | 15/6, 16/6 | 0.007 % / 0.07 % (1,024) |
+| T1 G1 s0 / s1 (other training set) | 0 / 0 | 0 / 0 | 14/5, 4/2 | 0.02 / 0.09 % |
+| base S s0–s3 | 0 / 0 / 0 / 0 | 0 | 5, 3, 6, 14 (both bins) | 0.20 / 0.05 / 0.01 / 0.17 % |
+| base SN s0–s5 | 0 / 0 / 0 / **1** / 0 / 0 | 0 / 0 / 0 / 1 / 0 / 0 | 10, 6, 6, 10, 2, 6 | ≤ 0.32 % (SN s3) |
+| base C0 s0 / s1 | 0 / 0 | 0 | 0, 0 | 0 / 0.08 % |
+
+- Distinct ≥ 13 theorems solved by the 6 state T1 finals: **5** (`la_transfer_1126` by 6 of 6, `1198` 4, `735` 3,
+  `978` 3, `1696` 1). `1126` carries **42 %** (317) of the 749 state successes at ≥ 13 (`q1.share_la_transfer_1126`).
+  Pooled state-T1 success rate at ≥ 13: **2.12 %** of attempts; C0 T1 **0.017 %** (2 hits, both on `1126`).
+- Pre-registered reading: **"a real, low rate"** (≥ 3 theorems each solved by ≥ 2 state T1 finals: 4).
+- Paired by theorem, state T1 mean vs C0 T1 mean: ≥ 13 state better on 5, C0 on 0 (sign test p = 0.0625);
+  11–12 state better on **86**, C0 on 7 (p = 2 × 10⁻¹⁸).
+- Term size (`lean_check`, one shortest proof per model × theorem at ≥ 13, 20 proofs, 0 rejected): 13-line proofs
+  size 8–9 (`1198` also a 17-line proof, size 13); 14-line proofs size 11–12 (`term_size_ge13`).
+- Cut-off checks: C0 T1 s1 at `max_new` 512 hit it on 144 / 57,344 (0.25 %); re-run at 1,024 per the
+  pre-registration: 42 (0.07 %), N13 0 → 0, 11–12 21 → 22 (the 1,024 run is the one in the table). State bases at
+  `max_action` 512 (diagnostic re-draws): S s0 116 → 40 cut-offs, S s3 96 → 21, SN s3 183 → 1; N13 unchanged in all
+  three (0, 0, 1). The cut-offs are mostly non-terminating actions. State rows stay at 256, as in `state-env`.
+- Peak `max_memory_allocated`: state sampler at batch 2,048 8.9–11.0 GB; whole-proof at batch 2,048 9.4 GB (`max_new`
+  512) and 16.1 GB (1,024).
+
+### Q2 — the depth-3 lottery (held-out greedy, `pat.depth3` slice, 500; `artifacts/sf2/heldout_*.jsonl`, state-env's at b0926966)
+
+| seed | S | SH | SN |
+|---|---|---|---|
+| s0 / s1 (state-env) | 0.922 / 0.882 | 0.860 / 0.880 | 0.956 / 0.902 |
+| s2 / s3 (new) | 0.936 / 0.960 | — | 0.944 / 0.934 |
+| s4 / s5 (new) | — | — | 0.908 / 0.924 |
+
+- **New seeds in the high mode (> 0.44): 6 / 6.** P(6 / 6 | control P(high) = 0.462) = 0.0097. Falsifier (≥ 2 low)
+  did not fire. All state seeds 12 / 12, Wilson **[0.757, 1.00]**; control 24 / 52, [0.333, 0.595] (`NOISE_FLOOR.md`,
+  `artifacts/nf/summary.json`). SD of the depth-3 rate across the 12 state seeds 0.032.
+- Held-out overall, new seeds: S s2 / s3 0.960 / **0.882**; SN s2–s5 0.969 / 0.971 / 0.955 / 0.968.
+
+### Ladders, transfer pool of 2,285 (`artifacts/sf2/ladders.json` from `se_analysis.py`; s0/s1 from state-env's summary)
+
+| arm | per seed (s0, s1, s2, s3[, s4]) | IQM [95 % bootstrap] | `L*` | ≥ 13 theorems per seed |
+|---|---|---|---|---|
+| T1 S (n = 4) | 1,348 / 1,389 / 1,546 / 1,630 | 1,467.5 [1,348, 1,630] | 12 / 12 / 12 / 12 | 1 / 2 / 3 / 4 |
+| frozen S (n = 4) | 779 / 787 / 858 / 996 | 822.5 [779, 996] | 11 / 10 / 11 / 11 | 0 / 0 / 0 / 0 |
+| T1 SN (n = 2) | 1,557 / 1,403 | — | 12 / 12 | 3 / 1 |
+| frozen SN (n = 5) | 975 / 801 / 841 / 1,009 / 723 | 869.2 [746.4, 998.8] | 11 / 11 / 11 / 11 / 10 | 0 / 0 / 0 / 1 / 0 |
+
+- Frozen SN s5 was stopped at round 5 of 8 (stop rule; `log.md`): 759 solved, `L*` 11 — partial, excluded above.
+- Frozen SN s3 solves `la_transfer_978` (`L_true` 14) with no RL.
+- Bootstrap intervals at n = 4–5 are wide and near the range; per-seed values are the result.
+
+### Cost
+
+Four pods, all deleted: sf-1 RTX 4090 $0.74/h 4.92 h $3.64; sf-2 A40 $0.49/h 6.18 h $3.03; sf-3 RTX 3090
+$0.50/h 5.56 h $2.78; sf-4 RTX A5000 $0.27/h 5.51 h $1.49. **22.17 pod-hours, $10.94** of $12 / 24 h.
+
+### Bucket
+
+`hf://buckets/dan-pandori/nd-rl/state-frontier/` — `ckpts/sf2/` (6 new Stage-1, 16 T1 rounds), `artifacts/sf2/`
+(re-samples, held-out, ladders, logs, `dumps/*.jsonl.gz`), `data/sf2/long.jsonl`.

@@ -1,0 +1,17 @@
+[32m✓ Downloaded[0m
+  src: hf://buckets/dan-pandori/nd-rl/state-env/ckpts/se/ladder/la_T1_S_s1_r8.pt
+  dst: ckpts/sf2/rs/T1_S_s1.pt
+0b4d5dd6fd288f68d28bea52975619ac  ckpts/sf2/rs/T1_S_s1.pt
+=== resample T1_S_s1 state state-env/ckpts/se/ladder/la_T1_S_s1_r8.pt 2026-09-28T18:42:58Z
+[lean_gate] 57344 samples, parse-fail 14237, distinct checked 29199: lean ok 2135, lean rej 27064; lean 134.0s wall (3748.6s proc, 32 workers)
+[T1_S_s1.pt on long.jsonl k=256 T=0.8] SOLVED 43/224 = 0.192 [0.146,0.249]
+  len 11: 33/99 = 0.333 [0.248,0.431]
+  len 12: 7/102 = 0.069 [0.034,0.135]
+  len 13: 3/13 = 0.231 [0.082,0.503]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {11: 103, 12: 33, 13: 14, 14: 10, 15: 2, 16: 6, 17: 6, 18: 1, 19: 3, 20: 1, 21: 1, 23: 1}
+  pruned hist {9: 3, 10: 31, 11: 87, 12: 20, 13: 11, 14: 11, 16: 5, 17: 6, 18: 1, 19: 3, 20: 1, 21: 1, 23: 1}
+  frontier written 17 pruned 17
+  reasons [('lean rejected', 39886), ('lean_seq parse: env: unbound', 3350), ('lean_seq parse: env: binder mismatch', 2775), ('lean_seq parse: env: Or.elim on non-or', 2406), ('lean_seq parse: env: exact goal mismatch', 2231), ('lean_seq parse: env: names exhausted', 1261)]
+env {"env_end": {"syntax": 14226, "done": 43107, "truncated": 11}, "env_fail_reason": {"have name": 29, "unbound": 3350, "Or.elim on non-or": 2406, "PR position": 98, "formula": 600, "no semicolon": 94, "exact goal mismatch": 2231, "box on non-arrow": 554, "binder mismatch": 2775, "names exhausted": 1261, "exact not last": 643, "box head": 78, "term": 101, "exact form": 1, "Or.elim name": 5}, "env_steps": {"1": 74, "2": 2363, "3": 4924, "4": 6121, "5": 2528, "6": 3028, "7": 6235, "8": 3884, "9": 4706, "10": 5530, "11": 3984, "12": 5094, "13": 2519, "14": 1347, "15": 707, "16": 886, "17": 924, "19": 409, "20": 334, "21": 197, "23": 188, "25": 102, "24": 121, "0": 1, "18": 369, "22": 269, "27": 109, "26": 132, "28": 83, "29": 61, "31": 17, "30": 51, "34": 4, "32": 24, "33": 6, "39": 1, "35": 9, "36": 1, "37": 1, "38": 1}, "prompt_tokens": 40387557, "steps": 21184, "rows": 499310, "rowsteps": 14317888, "prompt_len_max": 264, "chunks": 267, "stop_eos": 499299, "stop_exact": 0, "stop_goal": 0, "names_defined": 0, "names_renamed": 0, "env_waves": 267, "env_wall_s": 176.40686988830566, "peak_alloc_gb": 9.419794082641602, "peak_reserved_gb": 11.982421875, "action_declen_mean": 19.320796699445236}
+=== done 2026-09-28T18:48:15Z

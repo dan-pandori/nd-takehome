@@ -1,0 +1,17 @@
+[32m✓ Downloaded[0m
+  src: hf://buckets/dan-pandori/nd-rl/state-frontier/ckpts/sf2/stage1_SN_s3.pt
+  dst: ckpts/sf2/rs/base_SN_s3_ma512.pt
+f3ee348b673985b8184eeefb1537f851  ckpts/sf2/rs/base_SN_s3_ma512.pt
+=== resample base_SN_s3_ma512 state state-frontier/ckpts/sf2/stage1_SN_s3.pt 2026-09-29T00:26:58Z
+[lean_gate] 57344 samples, parse-fail 17619, distinct checked 21678: lean ok 123, lean rej 21555; lean 81.3s wall (2060.9s proc, 32 workers)
+[base_SN_s3_ma512.pt on long.jsonl k=256 T=0.8] SOLVED 14/224 = 0.062 [0.038,0.102]
+  len 11: 13/99 = 0.131 [0.078,0.212]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 1/10 = 0.100 [0.018,0.404]
+  written hist {11: 17, 12: 1, 14: 3}
+  pruned hist {9: 1, 10: 3, 11: 13, 12: 1, 14: 3}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 39406), ('lean_seq parse: env: binder mismatch', 4181), ('lean_seq parse: env: unbound', 3437), ('lean_seq parse: env: Or.elim on non-or', 3052), ('lean_seq parse: env: exact goal mismatch', 2760), ('lean_seq parse: env: box on non-arrow', 1709)]
+env {"env_end": {"syntax": 17618, "done": 39725, "truncated": 1}, "env_fail_reason": {"have name": 17, "assign": 745, "Or.elim on non-or": 3052, "unbound": 3437, "binder mismatch": 4181, "PR position": 229, "no semicolon": 69, "term": 70, "box on non-arrow": 1709, "exact goal mismatch": 2760, "formula": 1016, "malformed": 13, "exact not last": 137, "box head": 176, "Or.elim name": 2, "empty term": 4, "action head": 1}, "env_steps": {"1": 345, "2": 9459, "3": 4673, "4": 7174, "5": 1837, "6": 3658, "7": 4501, "8": 4732, "9": 5967, "10": 6512, "11": 3429, "12": 1949, "13": 1237, "14": 695, "15": 578, "16": 288, "17": 186, "18": 67, "19": 44, "20": 6, "22": 2, "21": 4, "23": 1}, "prompt_tokens": 31732139, "steps": 19376, "rows": 386969, "rowsteps": 11765088, "prompt_len_max": 265, "chunks": 202, "stop_eos": 386968, "stop_exact": 0, "stop_goal": 0, "names_defined": 354268, "names_renamed": 61604, "env_waves": 202, "env_wall_s": 157.78438448905945, "peak_alloc_gb": 12.444517612457275, "peak_reserved_gb": 15.53515625, "action_declen_mean": 21.20457194245534}
+=== done 2026-09-29T00:31:03Z

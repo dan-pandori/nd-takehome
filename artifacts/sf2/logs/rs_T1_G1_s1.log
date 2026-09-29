@@ -1,0 +1,18 @@
+[32m✓ Downloaded[0m
+  src: hf://buckets/dan-pandori/nd-rl/ds-generator/ckpts/ladder/la_T1_g1_s1_r8.pt
+  dst: ckpts/sf2/rs/T1_G1_s1.pt
+d5ef6d9fb07d02395b20ae59bc3a674e  ckpts/sf2/rs/T1_G1_s1.pt
+=== resample T1_G1_s1 whole ds-generator/ckpts/ladder/la_T1_g1_s1_r8.pt 2026-09-28T19:23:56Z
+[lean_gate] 57344 samples, parse-fail 10792, distinct checked 20780: lean ok 68, lean rej 20712; lean 78.7s wall (1927.3s proc, 32 workers)
+generated 57344 proofs in 133s
+T1_G1_s1.pt on long.jsonl k=256 SOLVED 6/224 = 0.027 [0.012,0.057]
+  len 11: 4/99 = 0.040 [0.016,0.099]
+  len 12: 2/102 = 0.020 [0.005,0.069]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {11: 6, 12: 2}
+  pruned hist {10: 2, 11: 6}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 46431), ('lean_seq parse: unbound', 7235), ('lean_seq parse: formula', 1016), ('lean_seq parse: name', 924), ('lean_seq parse: expected (', 716), ('lean_seq parse: expected fun', 388)]
+gen_stats {"rows": 57344, "stop_eos": 57293, "stop_exact": 0, "stop_goal": 0, "hit_max_new": 51}
+=== done 2026-09-28T19:26:12Z

@@ -1,0 +1,17 @@
+[32m✓ Downloaded[0m
+  src: hf://buckets/dan-pandori/nd-rl/state-env/ckpts/se/stage1_S_s1.pt
+  dst: ckpts/sf2/rs/base_S_s1.pt
+c89baf11fbfb5b9ea4f8b3f2865c6e50  ckpts/sf2/rs/base_S_s1.pt
+=== resample base_S_s1 state state-env/ckpts/se/stage1_S_s1.pt 2026-09-28T19:05:36Z
+[lean_gate] 57344 samples, parse-fail 14112, distinct checked 27536: lean ok 17, lean rej 27519; lean 94.8s wall (2684.0s proc, 32 workers)
+[base_S_s1.pt on long.jsonl k=256 T=0.8] SOLVED 3/224 = 0.013 [0.005,0.039]
+  len 11: 2/99 = 0.020 [0.006,0.071]
+  len 12: 1/102 = 0.010 [0.002,0.053]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {11: 2, 12: 1}
+  pruned hist {10: 1, 11: 2}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 43210), ('lean_seq parse: env: exact goal mismatch', 3808), ('lean_seq parse: env: unbound', 3551), ('lean_seq parse: env: binder mismatch', 2762), ('lean_seq parse: env: formula', 1218), ('lean_seq parse: env: Or.elim on non-or', 891)]
+env {"env_end": {"syntax": 14082, "done": 43232, "truncated": 30}, "env_fail_reason": {"have name": 31, "Or.elim on non-or": 891, "unbound": 3551, "box on non-arrow": 365, "binder mismatch": 2762, "no semicolon": 98, "formula": 1218, "exact goal mismatch": 3808, "names exhausted": 252, "exact not last": 611, "term": 73, "box head": 122, "assign": 161, "PR position": 136, "action head": 3}, "env_steps": {"1": 173, "2": 4307, "3": 7935, "4": 8381, "5": 3627, "6": 4522, "7": 6744, "8": 6196, "9": 5780, "10": 6692, "11": 1719, "13": 408, "14": 190, "15": 112, "12": 503, "16": 29, "17": 17, "20": 1, "18": 7, "19": 1}, "prompt_tokens": 29519617, "steps": 16352, "rows": 362636, "rowsteps": 11200992, "prompt_len_max": 254, "chunks": 184, "stop_eos": 362606, "stop_exact": 0, "stop_goal": 0, "names_defined": 0, "names_renamed": 0, "env_waves": 184, "env_wall_s": 135.89650225639343, "peak_alloc_gb": 9.172768592834473, "peak_reserved_gb": 11.630859375, "action_declen_mean": 21.53075811557595}
+=== done 2026-09-28T19:09:33Z

@@ -1,0 +1,17 @@
+[32m✓ Downloaded[0m
+  src: hf://buckets/dan-pandori/nd-rl/state-env/ckpts/se/stage1_S_s0.pt
+  dst: ckpts/sf2/rs/base_S_s0.pt
+226b3ded365c89544482080f9ded06c8  ckpts/sf2/rs/base_S_s0.pt
+=== resample base_S_s0 state state-env/ckpts/se/stage1_S_s0.pt 2026-09-28T19:01:26Z
+[lean_gate] 57344 samples, parse-fail 16629, distinct checked 26009: lean ok 8, lean rej 26001; lean 109.2s wall (3085.1s proc, 32 workers)
+[base_S_s0.pt on long.jsonl k=256 T=0.8] SOLVED 5/224 = 0.022 [0.010,0.051]
+  len 11: 5/99 = 0.051 [0.022,0.113]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {11: 5, 14: 1}
+  pruned hist {10: 1, 11: 4, 14: 1}
+  frontier written 11 pruned 0
+  reasons [('lean rejected', 40707), ('lean_seq parse: env: binder mismatch', 5020), ('lean_seq parse: env: unbound', 3600), ('lean_seq parse: env: exact goal mismatch', 3055), ('lean_seq parse: env: formula', 1601), ('lean_seq parse: env: exact not last', 796)]
+env {"env_end": {"syntax": 16513, "done": 40715, "truncated": 116}, "env_fail_reason": {"have name": 16, "Or.elim on non-or": 610, "unbound": 3600, "box on non-arrow": 637, "binder mismatch": 5020, "formula": 1601, "term": 134, "no semicolon": 82, "exact goal mismatch": 3055, "names exhausted": 173, "exact not last": 796, "box head": 730, "PR position": 2, "assign": 50, "action head": 6, "Or.elim name": 1}, "env_steps": {"1": 823, "2": 6997, "3": 9128, "4": 6225, "5": 2296, "6": 3979, "7": 6032, "8": 6749, "9": 5355, "10": 6296, "11": 2053, "12": 703, "16": 54, "13": 319, "15": 77, "14": 230, "17": 19, "18": 6, "19": 2, "20": 1}, "prompt_tokens": 28437119, "steps": 15632, "rows": 350836, "rowsteps": 10960384, "prompt_len_max": 319, "chunks": 181, "stop_eos": 350720, "stop_exact": 0, "stop_goal": 0, "names_defined": 0, "names_renamed": 0, "env_waves": 181, "env_wall_s": 133.8133943080902, "peak_alloc_gb": 10.785256385803223, "peak_reserved_gb": 14.228515625, "action_declen_mean": 21.90721020647824}
+=== done 2026-09-28T19:05:35Z

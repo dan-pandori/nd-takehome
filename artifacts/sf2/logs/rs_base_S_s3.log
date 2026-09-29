@@ -1,0 +1,17 @@
+[32m✓ Downloaded[0m
+  src: hf://buckets/dan-pandori/nd-rl/state-frontier/ckpts/sf2/stage1_S_s3.pt
+  dst: ckpts/sf2/rs/base_S_s3.pt
+159f310d59441f52c636be4ab6d76bfb  ckpts/sf2/rs/base_S_s3.pt
+=== resample base_S_s3 state state-frontier/ckpts/sf2/stage1_S_s3.pt 2026-09-28T23:03:16Z
+[lean_gate] 57344 samples, parse-fail 15533, distinct checked 27107: lean ok 228, lean rej 26879; lean 39.3s wall (1129.2s proc, 32 workers)
+[base_S_s3.pt on long.jsonl k=256 T=0.8] SOLVED 14/224 = 0.062 [0.038,0.102]
+  len 11: 11/99 = 0.111 [0.063,0.188]
+  len 12: 3/102 = 0.029 [0.010,0.083]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {11: 25, 12: 4, 14: 1}
+  pruned hist {10: 10, 11: 15, 12: 4, 14: 1}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 41441), ('lean_seq parse: env: unbound', 3401), ('lean_seq parse: env: exact goal mismatch', 3394), ('lean_seq parse: env: binder mismatch', 2868), ('lean_seq parse: env: Or.elim on non-or', 1773), ('lean_seq parse: env: formula', 1015)]
+env {"env_end": {"syntax": 15437, "done": 41811, "truncated": 96}, "env_fail_reason": {"have name": 28, "Or.elim on non-or": 1773, "unbound": 3401, "box on non-arrow": 711, "no semicolon": 121, "binder mismatch": 2868, "formula": 1015, "exact goal mismatch": 3394, "names exhausted": 284, "exact not last": 980, "term": 117, "PR position": 12, "assign": 605, "colon": 3, "box head": 112, "empty term": 13}, "env_steps": {"1": 577, "2": 5707, "3": 5144, "4": 8043, "5": 3741, "6": 4682, "7": 6760, "8": 5958, "9": 5474, "10": 5713, "11": 3042, "12": 1517, "14": 215, "13": 595, "15": 78, "16": 63, "17": 25, "18": 7, "19": 2, "20": 1}, "prompt_tokens": 30323162, "steps": 16944, "rows": 373066, "rowsteps": 11365776, "prompt_len_max": 292, "chunks": 195, "stop_eos": 372970, "stop_exact": 0, "stop_goal": 0, "names_defined": 0, "names_renamed": 0, "env_waves": 195, "env_wall_s": 126.5318672657013, "peak_alloc_gb": 10.113495826721191, "peak_reserved_gb": 12.958984375, "action_declen_mean": 21.245790289117743}
+=== done 2026-09-28T23:06:09Z

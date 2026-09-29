@@ -1,0 +1,17 @@
+[32m✓ Downloaded[0m
+  src: hf://buckets/dan-pandori/nd-rl/state-frontier/ckpts/sf2/stage1_SN_s2.pt
+  dst: ckpts/sf2/rs/base_SN_s2.pt
+009614b0d0a714c14ded063d7ae78f2d  ckpts/sf2/rs/base_SN_s2.pt
+=== resample base_SN_s2 state state-frontier/ckpts/sf2/stage1_SN_s2.pt 2026-09-28T23:06:12Z
+[lean_gate] 57344 samples, parse-fail 16885, distinct checked 21150: lean ok 19, lean rej 21131; lean 34.0s wall (901.4s proc, 32 workers)
+[base_SN_s2.pt on long.jsonl k=256 T=0.8] SOLVED 6/224 = 0.027 [0.012,0.057]
+  len 11: 6/99 = 0.061 [0.028,0.126]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {11: 7}
+  pruned hist {10: 1, 11: 6}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 40429), ('lean_seq parse: env: binder mismatch', 4980), ('lean_seq parse: env: unbound', 4433), ('lean_seq parse: env: exact goal mismatch', 3592), ('lean_seq parse: env: formula', 1278), ('lean_seq parse: env: Or.elim on non-or', 769)]
+env {"env_end": {"syntax": 16883, "done": 40459, "truncated": 2}, "env_fail_reason": {"have name": 17, "Or.elim on non-or": 769, "unbound": 4433, "box on non-arrow": 453, "term": 118, "binder mismatch": 4980, "no semicolon": 38, "box head": 619, "formula": 1278, "exact goal mismatch": 3592, "exact not last": 24, "assign": 550, "malformed": 4, "PR position": 5, "Or.elim name": 2, "action head": 1}, "env_steps": {"1": 243, "2": 7022, "3": 6833, "4": 7226, "5": 2821, "6": 3446, "7": 6070, "8": 7167, "9": 5830, "10": 5673, "11": 2230, "12": 1246, "13": 778, "14": 391, "15": 185, "16": 101, "17": 39, "18": 22, "19": 11, "20": 7, "23": 1, "22": 1, "24": 1}, "prompt_tokens": 29714996, "steps": 16480, "rows": 368437, "rowsteps": 11228368, "prompt_len_max": 244, "chunks": 189, "stop_eos": 368435, "stop_exact": 0, "stop_goal": 0, "names_defined": 337362, "names_renamed": 62593, "env_waves": 189, "env_wall_s": 125.90968346595764, "peak_alloc_gb": 8.926124572753906, "peak_reserved_gb": 11.298828125, "action_declen_mean": 21.22669275887058}
+=== done 2026-09-28T23:08:59Z

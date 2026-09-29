@@ -1,0 +1,17 @@
+[32m✓ Downloaded[0m
+  src: hf://buckets/dan-pandori/nd-rl/state-env/ckpts/se/stage1_SN_s0.pt
+  dst: ckpts/sf2/rs/base_SN_s0.pt
+ec3888d91a1f72cc0b438d3902fd26e7  ckpts/sf2/rs/base_SN_s0.pt
+=== resample base_SN_s0 state state-env/ckpts/se/stage1_SN_s0.pt 2026-09-28T19:09:34Z
+[lean_gate] 57344 samples, parse-fail 10602, distinct checked 21000: lean ok 76, lean rej 20924; lean 81.6s wall (2046.7s proc, 32 workers)
+[base_SN_s0.pt on long.jsonl k=256 T=0.8] SOLVED 10/224 = 0.045 [0.024,0.080]
+  len 11: 10/99 = 0.101 [0.056,0.176]
+  len 12: 0/102 = 0.000 [0.000,0.036]
+  len 13: 0/13 = 0.000 [0.000,0.228]
+  len 14: 0/10 = 0.000 [0.000,0.278]
+  written hist {11: 13, 14: 1}
+  pruned hist {10: 1, 11: 12, 14: 1}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 46634), ('lean_seq parse: env: exact goal mismatch', 4208), ('lean_seq parse: env: binder mismatch', 2626), ('lean_seq parse: env: unbound', 1881), ('lean_seq parse: env: formula', 796), ('lean_seq parse: env: Or.elim on non-or', 342)]
+env {"env_end": {"syntax": 10601, "done": 46742, "truncated": 1}, "env_fail_reason": {"have name": 19, "Or.elim on non-or": 342, "no semicolon": 12, "unbound": 1881, "PR position": 200, "exact goal mismatch": 4208, "term": 49, "formula": 796, "binder mismatch": 2626, "box on non-arrow": 98, "empty term": 15, "assign": 134, "malformed": 1, "exact not last": 35, "PR form": 1, "box head": 183, "Or.elim name": 1}, "env_steps": {"1": 558, "2": 3704, "3": 9018, "4": 10009, "5": 2669, "6": 3239, "7": 4435, "8": 6463, "9": 5181, "10": 6286, "11": 2857, "12": 1659, "13": 825, "15": 96, "16": 47, "14": 230, "20": 12, "17": 26, "18": 15, "19": 11, "22": 1, "23": 1, "21": 2}, "prompt_tokens": 30727347, "steps": 15440, "rows": 368794, "rowsteps": 11232976, "prompt_len_max": 259, "chunks": 187, "stop_eos": 368793, "stop_exact": 0, "stop_goal": 0, "names_defined": 323939, "names_renamed": 61497, "env_waves": 187, "env_wall_s": 136.47713971138, "peak_alloc_gb": 9.296233654022217, "peak_reserved_gb": 11.806640625, "action_declen_mean": 21.163229336702877}
+=== done 2026-09-28T19:13:18Z
