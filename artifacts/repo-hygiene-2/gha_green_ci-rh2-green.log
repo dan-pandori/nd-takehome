@@ -1,0 +1,232 @@
+##[group]size guard: no tracked file > 5 MB, no bulk kind under artifacts/ (ci/check_sizes.sh)
+size guard ok: no tracked file over 5 MB, no bulk kind under artifacts/
+ok  size guard: no tracked file > 5 MB, no bulk kind under artifacts/ (ci/check_sizes.sh) (0s)
+PASS test_manifest
+ok  artifacts/MANIFEST.jsonl well-formed; no manifest path tracked (1s)
+PASS fixture has 150 rows
+PASS token format rel: decode(encode(p)) == p
+PASS token format abs: decode(encode(p)) == p
+PASS lean_seq: decode(encode(p)) == p
+PASS lean_seq: encode(decode(ids)) == ids
+PASS lean_seq: literal text re-tokenises to the same tokens
+PASS lean_seq: name offsets decode to the same proof
+PASS canonical Not.elim example decodes
+PASS gate: 150/150 gold texts accepted
+PASS gate: canonical Not.elim text accepted
+PASS gate: 0/150 prompt-swapped texts accepted
+PASS judge: 0/150 truncated proofs accepted
+PASS judge_many: 150/150 gold ND proofs accepted
+PASS judge_many: canonical Not.elim ND proof accepted
+PASS judge_many: 0/150 prompt-swapped ND proofs accepted
+ALL PASS
+ok  tokenizer + lean_seq round-trips, Lean judge on a fixed sample (2s)
+PASS and_intro_term {'ok': True, 'size': 3, 'reason': ''}
+PASS and_intro_explicit {'ok': True, 'size': 3, 'reason': ''}
+PASS fragment_have {'ok': True, 'size': 3, 'reason': ''}
+PASS em_lemma {'ok': False, 'size': None, 'reason': 'const:[Classical.em]'}
+PASS simp_proof {'ok': False, 'size': None, 'reason': 'const:[of_eq_true, Eq.trans, True, congr, congrArg, eq_true, and_self]'}
+PASS sorry {'ok': False, 'size': None, 'reason': 'axiom:[sorryAx]'}
+PASS decide {'ok': False, 'size': None, 'reason': 'const:[of_decide_eq_true, True, instDecidableOr, instDecidableTrue, instDecidableFalse, id, Eq, Bool, Decidable.decide, Bool.true, Eq.refl]'}
+PASS cases_or {'ok': False, 'size': None, 'reason': 'const:[Eq, Eq.refl]'}
+PASS or_elim_dot {'ok': True, 'size': 5, 'reason': ''}
+PASS match_or {'ok': False, 'size': None, 'reason': 'const:[t9.match_1]'}
+PASS or_elim_term {'ok': True, 'size': 5, 'reason': ''}
+PASS by_contradiction {'ok': True, 'size': 3, 'reason': ''}
+PASS false_elim {'ok': True, 'size': 1, 'reason': ''}
+PASS old_bote_on_false {'ok': True, 'size': 1, 'reason': ''}
+PASS old_bote_on_neg {'ok': True, 'size': 1, 'reason': ''}
+PASS not_elim_explicit {'ok': True, 'size': 1, 'reason': ''}
+PASS not_intro {'ok': True, 'size': 1, 'reason': ''}
+PASS and_elim {'ok': True, 'size': 5, 'reason': ''}
+PASS iff_elim {'ok': True, 'size': 4, 'reason': ''}
+PASS decision_note_bote {'ok': True, 'size': 1, 'reason': ''}
+PASS sorry_in_have {'ok': False, 'size': None, 'reason': 'axiom:[sorryAx]'}
+PASS tauto_lemma_not_not {'ok': False, 'size': None, 'reason': 'axiom:[sorryAx]'}
+PASS absurd_ok {'ok': True, 'size': 1, 'reason': ''}
+PASS or_resolve {'ok': False, 'size': None, 'reason': 'const:[Or.resolve_left]'}
+PASS mt_lemma {'ok': False, 'size': None, 'reason': 'const:[mt]'}
+PASS tauto_like_decidable {'ok': False, 'size': None, 'reason': 'const:[Decidable, Decidable.em]'}
+PASS imp_intro_lambda {'ok': True, 'size': 2, 'reason': ''}
+PASS neg_intro {'ok': True, 'size': 2, 'reason': ''}
+PASS wrong_proof {'ok': False, 'size': None, 'reason': 'axiom:[sorryAx] | error: Application type mismatch: The argument'}
+PASS unbound_name {'ok': False, 'size': None, 'reason': 'axiom:[sorryAx]'}
+PASS iff_intro {'ok': True, 'size': 3, 'reason': ''}
+PASS propext_term {'ok': False, 'size': None, 'reason': 'const:[propext]'}
+PASS have_unused_extra_premises {'ok': True, 'size': 0, 'reason': ''}
+PASS nested_depth3 {'ok': True, 'size': 4, 'reason': ''}
+PASS exfalso_tactic {'ok': True, 'size': 1, 'reason': ''}
+PASS truncated_paren {'ok': False, 'size': None, 'reason': "error: unexpected token 'nd_check'; expected ')', ',' or ':'"}
+PASS truncated_anon_ctor {'ok': False, 'size': None, 'reason': "error: unexpected token 'nd_check'; expected '⟩'"}
+PASS unapplied_or_inl {'ok': True, 'size': 3, 'reason': ''}
+PASS contradiction_tactic {'ok': True, 'size': 2, 'reason': ''}
+ok  lean_check selftest (free-form Lean allowlist: Not.elim and negatives) (1s)
+PASS no nd_verify import or call in expert_iter.py
+PASS no nd_verify import or call in ladder_ei.py
+PASS no nd_verify import or call in coverage.py
+PASS no nd_verify import or call in eval_set.py
+PASS no nd_verify import or call in eval_targets.py
+PASS no nd_verify import or call in grpo.py
+PASS no nd_verify import or call in lean_gate.py
+PASS no nd_verify import or call in lean_judge.py
+PASS expert_iter.py imports lean_judge
+PASS ladder_ei.py imports lean_judge
+PASS coverage.py imports lean_judge
+PASS eval_set.py imports lean_judge
+PASS eval_targets.py imports lean_judge
+PASS grpo.py imports lean_judge
+PASS expert_iter.py makes no deeply-indented one-string verify_text call
+PASS ladder_ei.py makes no deeply-indented one-string verify_text call
+PASS coverage.py makes no deeply-indented one-string verify_text call
+PASS eval_set.py makes no deeply-indented one-string verify_text call
+PASS eval_targets.py makes no deeply-indented one-string verify_text call
+PASS grpo.py makes no deeply-indented one-string verify_text call
+PASS canonical decision-note proof accepted by the lean_seq judge
+PASS nd_verify rejects it (this is the class Lean alone now counts)
+PASS shape and n_lines match nd_verify on a proof both accept
+PASS an invalid proof is rejected
+PASS accepted sample leaves the gate as a CLEAN ND string (no LEAN* prefix)
+PASS Lean-rejected sample is marked
+PASS grammar-rejected sample keeps its LEANPARSE marker
+PASS no LEAN marker anywhere in the accepted sample
+PASS the gate registered the accepted verdict (registry hit, no second Lean run)
+PASS the marked samples are rejected by the judge
+PASS relabel_candidate rewrites the theorem without judging
+PASS a true hindsight relabel is accepted
+PASS a false hindsight relabel is rejected (the gate never saw this theorem)
+PASS same verdict and n_lines before and after norm()
+LEAN-ONLY JUDGE TESTS PASS
+ok  Lean-only judge (no nd_verify on any judging path) (2s)
+PASS lean=True expected=True filter=None want=None :: have n1 : ( P ∧ Q ) := h1 ; have n2 : ( ( P → ( Q → R ) ) → R ) := n1.elim ; exact n2
+PASS lean=True expected=True filter=None want=None :: have n1 : ( P ∨ Q ) := h1 ; have n2 : ( ( P → R ) → ( ( Q → R ) → R ) ) := n1.elim ; exact
+PASS lean=True expected=True filter=None want=None :: have n1 : ( ¬ P ) := h1 ; have n2 : ( P → R ) := n1.elim ; exact n2
+PASS lean=True expected=True filter=None want=None :: have n1 : ( P → False ) := h1 ; have n2 : ( P → R ) := ( fun ( n3 : P ) => by have n4 : Fa
+PASS lean=True expected=True filter=None want=None :: have n1 : ( ¬ P ) := h1 ; have n2 : P := h2 ; have n3 : False := n1 n2 ; exact n3
+PASS lean=True expected=True filter=None want=None :: have n1 : False := h1 ; have n2 : P := n1.elim ; exact n2
+PASS lean=True expected=True filter=None want=None :: have n1 : ( ( P → False ) → False ) := h1 ; have n2 : P := Classical.byContradiction ( fun
+PASS lean=True expected=True filter=None want=None :: have n1 : P := h1 ; have n2 : ( ¬ ( ¬ P ) ) := ( fun ( n3 : ( P → False ) ) => by have n4 
+PASS lean=True expected=True filter=None want=None :: have n1 : P := h1 ; have n2 : ( ( ¬ P ) → False ) := ( fun ( n3 : ( ¬ P ) ) => by have n4 
+PASS lean=True expected=True filter=None want=None :: have n1 : ( ¬ P ) := h1 ; have n2 : ( ¬ P ) := n1.elim ; have n3 : ( P → R ) := ( fun ( n4
+PASS lean=False expected=False filter=elim want=elim :: have n1 : ( P → False ) := h1 ; have n2 : ( P → R ) := n1.elim ; exact n2
+PASS lean=False expected=False filter=elim want=elim :: have n1 : P := h1 ; have n2 : ( P → Q ) := h2 ; have n3 : ( Q → Q ) := n1.elim ; exact n2
+PASS lean=False expected=False filter=projection want=projection :: have n1 : ( ¬ P ) := h1 ; have n2 : P := n1.1 ; exact n1
+PASS lean=False expected=False filter=projection want=projection :: have n1 : ( P ∨ Q ) := h1 ; have n2 : P := n1.1 ; exact n2
+PASS lean=False expected=False filter=projection want=projection :: have n1 : False := h1 ; have n2 : P := n1.1 ; exact n2
+PASS lean=False expected=False filter=function-expected want=function-expected :: have n1 : ( P ∧ Q ) := h1 ; have n2 : P := n1 n1 ; exact n2
+PASS lean=False expected=False filter=function-expected want=function-expected :: have n1 : P := h1 ; have n2 : Q := n1 n1 ; exact n2
+PASS lean=False expected=False filter=anon-ctor want=anon-ctor :: have n1 : P := h1 ; have n2 : ( ¬ ( ¬ P ) ) := ⟨ n1 , n1 ⟩ ; exact n2
+PASS lean=False expected=False filter=anon-ctor want=anon-ctor :: have n1 : ( P ∨ Q ) := h1 ; have n2 : ( P ∨ Q ) := ⟨ n1 , n1 ⟩ ; exact n2
+PASS lean=False expected=False filter=elim want=elim :: have n1 : ( P ∧ Q ) := h1 ; have n2 : ( P ∧ Q ) := n1.elim ; exact n2
+PASS lean=False expected=False filter=elim want=elim :: have n1 : ( P ∨ Q ) := h1 ; have n2 : P := n1.elim ; exact n2
+PASS lean=False expected=False filter=or-intro-target want=or-intro-target :: have n1 : P := h1 ; have n2 : ( ¬ ( ¬ P ) ) := Or.inl n1 ; exact n2
+PASS lean=False expected=False filter=app-arg want=app-arg :: have n1 : P := h1 ; have n2 : ( P → Q ) := h2 ; have n3 : Q := n2 n2 ; exact n3
+PASS lean=False expected=False filter=app-result want=app-result :: have n1 : P := h1 ; have n2 : ( P → Q ) := h2 ; have n3 : P := n2 n1 ; exact n3
+PASS lean=False expected=False filter=unknown-premise want=unknown-premise :: have n1 : P := h1 ; have n2 : ( P → Q ) := h3 ; exact n2
+PASS lean=False expected=False filter=premise-type want=premise-type :: have n1 : Q := h1 ; exact n1
+PASS lean=False expected=False filter=goal want=goal :: have n1 : P := h1 ; exact n1
+PASS lean=False expected=False filter=by-contradiction want=by-contradiction :: have n1 : ( ¬ ( ¬ P ) ) := h1 ; have n2 : Q := Classical.byContradiction ( fun hh => n1 hh
+PASS lean=False expected=False filter=fun-binder want=fun-binder :: have n1 : P := h1 ; have n2 : ( ¬ ( ¬ P ) ) := ( fun ( n3 : P ) => by exact n1 ) ; exact n
+PASS lean=False expected=False filter=fun-not-pi want=fun-not-pi :: have n1 : P := h1 ; have n2 : Q := ( fun ( n3 : P ) => by exact n3 ) ; exact n2
+PASS lean=False expected=False filter=ascription want=ascription :: have n1 : P := h1 ; have n2 : ( ¬ ( ¬ P ) ) := ( fun ( n3 : ( ¬ P ) ) => by exact ( n1 : F
+LEAN PREFILTER TESTS PASS
+ok  lean-prefilter soundness (0s)
+  ok   byte-for-byte: have n1 : ( P ∧ Q ) := h1 ; have n2 : P := n1.1 ; exact n2
+  ok   inverse(text) == the ND proof: N1 ( P & Q ) : PR ; N2 P : ANDE1 N1 ; QE
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : ( P ∧ Q ) := h1 ; have n2 : Q := n1.2 ; exact n2
+  ok   inverse(text) == the ND proof: N1 ( P & Q ) : PR ; N2 Q : ANDE2 N1 ; QE
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : P := h1 ; have n2 : Q := h2 ; have n3 : ( P ∧ Q 
+  ok   inverse(text) == the ND proof: N1 P : PR ; N2 Q : PR ; N3 ( P & Q ) : A
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : P := h1 ; have n2 : ( P ∨ Q ) := Or.inl n1 ; exa
+  ok   inverse(text) == the ND proof: N1 P : PR ; N2 ( P v Q ) : ORI1 N1 ; QED
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : Q := h1 ; have n2 : ( P ∨ Q ) := Or.inr n1 ; exa
+  ok   inverse(text) == the ND proof: N1 Q : PR ; N2 ( P v Q ) : ORI2 N1 ; QED
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : ( P → Q ) := h1 ; have n2 : P := h2 ; have n3 : 
+  ok   inverse(text) == the ND proof: N1 ( P > Q ) : PR ; N2 P : PR ; N3 Q : I
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : ( ¬ P ) := h1 ; have n2 : P := h2 ; have n3 : Fa
+  ok   inverse(text) == the ND proof: N1 ( ~ P ) : PR ; N2 P : PR ; N3 F : NEG
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : False := h1 ; have n2 : P := n1.elim ; exact n2
+  ok   inverse(text) == the ND proof: N1 F : PR ; N2 P : BOTE N1 ; QED
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : ( ¬ ( ¬ P ) ) := h1 ; have n2 : P := Classical.b
+  ok   inverse(text) == the ND proof: N1 ( ~ ( ~ P ) ) : PR ; N2 P : DN N1 ; Q
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : Q := h1 ; have n2 : ( P → Q ) := ( fun ( n3 : P 
+  ok   inverse(text) == the ND proof: N1 Q : PR ; N2 | P : AS ; N3 | Q : R N1 
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : ( ¬ P ) := h1 ; have n2 : ( ¬ P ) := ( fun ( n3 
+  ok   inverse(text) == the ND proof: N1 ( ~ P ) : PR ; N2 | P : AS ; N3 | F :
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : ( P ∨ Q ) := h1 ; have n2 : ( Q ∨ P ) := Or.elim
+  ok   inverse(text) == the ND proof: N1 ( P v Q ) : PR ; N2 | P : AS ; N3 | (
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   step 1 scope ['h1']
+  ok   step 2 scope ['h1', 'n1']
+  ok   branch 1 sees its binder n3 and not the have it is proving: ['h1', 'n1', 'n3']
+  ok   branch 2 sees only its own binder n5 (branch 1 is gone): ['h1', 'n1', 'n5']
+  ok   after both branches close, only the finished have n2: ['h1', 'n1', 'n2']
+  ok   the environment named branch 2's binder n5, so the next have is n6, as in the original text
+  ok   every goal in this proof is the conclusion
+  ok   premise out of order: rejected as 'PR position'
+  ok   out-of-scope name: rejected as 'unbound'
+  ok   missing semicolon: rejected as 'PR form'
+  ok   exact before anything is proved: rejected as 'unbound'
+  ok   malformed pair: rejected as 'term'
+  ok   not an action: rejected as 'action head'
+  ok   premise 1 accepted
+  ok   premise 2 accepted
+  ok   exact on a non-last hypothesis: 'exact not last'
+  ok   exact whose formula is not the goal: 'exact goal mismatch'
+  ok   ∧-intro accepted
+  ok   exact on the goal finishes the attempt
+  ok   box binder that is not the antecedent: 'binder mismatch'
+  ok   lean_seq vocabulary unchanged at 107
+  ok   lean_state adds exactly four tokens
+  ok   ref0 still points at n1
+  ok   only lean_stateh prepends the history
+  ok   a have with any name is accepted
+  ok   ... and named n<base+1> = n6: n6
+  ok   citations are the state's names
+  ok   renamed 2 of 2
+  ok   a canonical proof replays with 0 renames
+  ok   gate2 on 30 cases: agree 30, mismatches 0
+ALL TESTS PASS
+ok  state-env round-trip and replay (1s)
+ok  relabel marker (2s)
+PASS offline publish writes sidecar + row
+PASS publish without ND_RUN_ID raises
+PASS record fills config / labels / defaults
+PASS ND_REGISTRY=0 writes nothing
+PASS round_stats roles
+PASS merge dedupe + query
+PASS save_ckpt without ND_RUN_ID raises before writing
+PASS save_ckpt offline writes ckpt + sidecar
+ALL PASS
+ok  results registry (5s)
+PASS save_config /tmp/tmpzqoriywq/x.jsonl -> /tmp/tmpzqoriywq/x.jsonl.args.json
+PASS save_config /tmp/tmpzqoriywq/sub/ -> /tmp/tmpzqoriywq/sub/args.json
+PASS save_config /tmp/tmpzqoriywq -> /tmp/tmpzqoriywq/args.json
+PASS save_config None -> None
+ALL PASS
+ok  every script with --out/--outdir records its config (record.save_config) (0s)
+PASS train.py: 50 CPU steps exit 0
+PASS train.py: checkpoint written
+PASS train.py: <out>.args.json holds the resolved config
+PASS train.py: loss finite and falling (step 25 -> 50)
+PASS registry: rows name the config file
+PASS train.py: 100-step memorisation run exit 0
+PASS sampler: one result per prompt
+PASS sampler: every result is a clean ND proof or a reject marker
+PASS sampler: greedy reproduces the 4 memorised proofs, Lean-accepted (32/32)
+PASS sampler: sampled T=1, >= 8/32 Lean-accepted (14 on torch 2.8 CPU, 2026-09-29)
+PASS sampler: same seed, same samples
+PASS sampler: raw token ids filled
+PASS sampler: judge_many agrees with the gate
+ALL PASS
+ok  50-step CPU training + sampler smoke (13s)
+CI PASS (27s)

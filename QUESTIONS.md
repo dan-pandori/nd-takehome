@@ -96,3 +96,8 @@
   workflow` on the VPS (or give the token that scope)? Default if unanswered: the workflow ships as `ci/ci.yml` plus
   `ci/install_workflow.sh` (moves it into `.github/workflows/`, commits, pushes — needs the scope), and green/red is
   shown by running the identical steps (`ci/run_ci.sh`) in a clean venv on the VPS. I re-try the push before closing.
+- **2026-09-29 16:00 UTC (repo-hygiene-2)** — Following the brief's rule for `ckpts/*.pt`, the take-home's submission
+  checkpoints `ckpts/stage1_abs.pt` and `ckpts/final.pt` (12.9 MB each) are no longer in git. They are manifest rows
+  (`python3 fetch_artifacts.py ckpts/`; sha256 checked against the bucket copy). If the take-home's graders expect
+  them in a plain clone, they would have to be tracked again, and the 5 MB guard would need an allowlist entry.
+  Default if unanswered: they stay out of git, and `CONTRIBUTING.md` says how to fetch them.

@@ -723,3 +723,39 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   `long-pool/artifacts/lpool/<same>` in the bucket (size + xet hash; `index_longpool.tsv`) and were also mirrored.
   Merged `origin/dan`, `git rm --cached` the 5, appended them to `ARTIFACTS_INDEX.tsv`. Their content is unchanged.
 - 01:59  CI on the merged tip failed one step, correctly: long-pool's new `lpool_assemble.py` takes `--out` without `record.save_config` (60 scripts now). Added the one line.
+
+# log — repo-hygiene-2 (small files back, manifest and fetch helper, size guard)
+
+## 2026-09-29 — run `repo-hygiene-2` (executor)
+
+No pods, no model: nothing below is a model number. CI's smoke models (114 k params, `lean_seq`, from scratch on the
+150-proof fixture) only show that code runs.
+
+- 15:36 Pre-registration `c07a4822`. **Recorded for `repo-hygiene`:** its brief was amended by Dan (via the
+  orchestrator, 2026-09-29 ~01:55 UTC, `~/runs/repo-hygiene/BRIEF_AMENDMENT.md`: small files stay in git, manifest +
+  fetch helper, 5 MB guard, credential scan, links). The amendment never reached that executor; this run implements it.
+  Reason for the deviation from `repo-hygiene`'s own pre-registration: brief amended by Dan.
+- 15:37 Found: `cf5924e2`'s message says CI's `no_tracked_artifacts` step was narrowed to bulk / > 5 MB, but the commit
+  changed only the two artifact files, so `ci/run_ci.sh` still failed on any tracked file under `artifacts/`.
+  Replaced by `ci/check_sizes.sh`.
+- 15:38 Untracked set U: 5,992 files at `6123570e` (= `3bfdec15`'s `artifacts/`) + 5 at `470d39e0` (`artifacts/lpool`).
+  `manifest_build.py`: 3,953 small (71.7 MB) restored with `git checkout <commit> -- …` (3,951 new; `TEST_RUN_DONE`
+  and `test_scores.txt` already back, same blobs, sha256 `aa174582…` unchanged); 2,044 bulk → manifest.
+  `ckpts/final.pt`, `ckpts/stage1_abs.pt` and 7 `data/` files > 5 MB (no test/CI reads them) uploaded to
+  `repo-hygiene-2/git_tip/` and untracked → 2,053 rows, 4,250,380,609 bytes. Producing run: 865 from a pre-existing
+  bucket copy, 2 by directory, 1,186 by the take-home / round-2 directory convention (`run_src`).
+- 15:48 `fetch_artifacts.py --verify-remote all`: every row's bucket object downloaded in full and hashed: **2,053 / 2,053
+  bytes + sha256 match** (`artifacts/repo-hygiene-2/verify_bucket.tsv`).
+- 15:52 Fetch demo, **deviation**: the pre-registered `lean-prefilter` demo cannot test this. `lp_analysis.py`'s main
+  input (`artifacts/lp/corpus/*.dump.jsonl`) was never in git, so its table is empty with or without the fetch (25 / 25
+  lp files fetched fine, `fetch_lp.log`). Switched to `noise-floor`: in a fresh non-sparse worktree of `8fe52a5c`
+  (147.4 MB), `nf_analysis.py` before fetching ≠ tracked `artifacts/nf/summary.json`; `fetch_artifacts.py artifacts/nf/`
+  fetched 365 files (327 MB) in 24 s; re-run output **byte-identical** to the tracked summary. Second fetch: 365 have;
+  one corrupted file → fetched 1, have 364.
+- 15:47 Size guard on a 6 MB scratch file: pre-commit hook refuses the commit; `ci/check_sizes.sh` and `ci/run_ci.sh`
+  exit 1 (`guard_red_6mb.log`). GitHub Actions: `ci-rh2-green` (workflow installed on a copy of this branch)
+  **green**, run 36592782467; `ci-rh2-red6mb` **red** at the size guard, run 36592832438.
+- 15:58 `publish_artifacts.py repo-hygiene-2 artifacts/repo-hygiene-2`: 1 file (the bucket listing) scanned,
+  uploaded, re-downloaded and matched, manifest row added; second call publishes 0.
+- Links: 43 relative links in tracked `.md` files, all to `figures/`, none to a moved file: 0 re-pointed. Four were
+  already broken (`artifacts/fu/*followup_draft.md` → `figures/…`, wrong relative base); not changed.

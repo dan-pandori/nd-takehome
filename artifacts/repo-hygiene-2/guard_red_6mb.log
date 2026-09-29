@@ -1,0 +1,14 @@
+## pre-commit hook on a commit adding a 6 MB file (2026-09-29T15:46:59Z)
+FAIL size guard: 1 file(s) must not be tracked (CONTRIBUTING.md: publish_artifacts.py):
+over 5 MB (6291456 bytes): scratch_6mb.bin
+commit exit=1
+HEAD still 7492f11f scratch (repo-hygiene-2): workflow installed on a ci-* branch to show Actions green before merging into dan
+## ci/check_sizes.sh on that commit (cd208d52)
+FAIL size guard: 1 file(s) must not be tracked (CONTRIBUTING.md: publish_artifacts.py):
+over 5 MB (6291456 bytes): scratch_6mb.bin
+exit=1
+## sh ci/run_ci.sh on cd208d52
+::group::size guard: no tracked file > 5 MB, no bulk kind under artifacts/ (ci/check_sizes.sh)
+FAIL size guard: 1 file(s) must not be tracked (CONTRIBUTING.md: publish_artifacts.py):
+over 5 MB (6291456 bytes): scratch_6mb.bin
+exit=1
