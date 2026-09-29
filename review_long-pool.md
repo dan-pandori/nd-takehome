@@ -84,7 +84,7 @@ NEGE refs, wrong formula, wrong conclusion, swapped ORE boxes, citation into a c
 of a valid proof accepted). My term size (inference nodes of the pruned proof) equals the executor's
 `label_term_size` on **1,913 / 1,913** once DN is weighted 3 (a first pass with DN = 1 disagreed on exactly the
 DN-containing proofs, so this is one calibration, disclosed). Label-proof term size by bin (median [min–max]):
-11: 7 [4–10] · 12: 8 [4–11] · 13: 9 [5–12] · 14: 10 [5–12] · 15: 10 [6–13] · 16: 11 [8–14].
+~~11: 7 [4–10] · 12: 8 [4–11] · 13: 9 [5–12] · 14: 10 [5–12] · 15: 10 [6–13] · 16: 11 [8–14]~~ **[erratum, phase 2:** that line came from the DN = 1 pass; with DN = 3 (the weighting that equals `label_term_size` on 1,913 / 1,913) it is 11: 7 [4–13] · 12: 9 [4–12] · 13: 9 [5–12] · 14: 10 [5–13] · 15: 10 [6–15] · 16: 11 [8–16], overall 4–16, median 9**]**.
 
 **Validity / premises.** All 1,983 theorems (pool + ≥ 17) are classically valid by my truth tables. 0 have a
 syntactic `A`, `¬A` premise pair (the generator's `contra_prem` filter), but **67 pool theorems have jointly
@@ -203,3 +203,100 @@ for 49–116 theorems per state T1 model, longer by 1–19 lines for the rest; m
    n = 2 seeds (1 for K12 / K14) only the gross ordering is supported.
 5. Whole-proof truncation after the second pass is still 0.2–0.9 % of samples for 5 of 6 whole-proof models, above
    the policy threshold; its per-bin distribution is not recorded.
+
+# §Phase 2 — claims vs the recount
+
+Read after the phase-1 commit (`372c6ad2`): `run_long_pool.md`, `numbers.md` § long-pool, `log.md` § long-pool, the
+`POOLS.md` section, `STATUS.md`, `figures/lpool_rate_by_bin_rr2.png`. Gate 0: the pre-registration commit `dfce3630`
+is 18:32:38 UTC; the first pod (`lp-l1`) was created 18:34:14 (`~/pods.log`), so expectations predate all pod work.
+
+**Erratum to my §Recount (term size).** My per-bin label term-size line was produced by the first `r1_pool.py` run,
+before I re-weighted DN; the corrected line is given in place (struck through + corrected). The executor's "4–16,
+median 9" is right.
+
+## Claim-by-claim
+
+| claim (source) | my value | verdict |
+|---|---|---|
+| Pool 1,913 = 373 / 428 / 341 / 340 / 300 / 131; textbook 73 / 128 / 41 / 40 / 0 / 0; 70 at ≥ 17 (run, LP4) | same | reproduces |
+| Generated g1–g4 24,400 / 255,368 / 224,596 / 103,852; textbook 906 (LP1) | same | reproduces |
+| Stage timeouts 1,003 / 143 / 136 / 53 (0.2 / 0.7 / 3.0 / 7.6 %) (LP1, run) | same | reproduces |
+| Labelled candidates 11: 11,443 + 127 · 12: 5,406 + 347 · 13–16, ≥ 17 (LP2) | 11,450 / 5,407 counted per record; 21,652 distinct classes in total, equal to the executor's sum | reproduces (the 7 + 1 difference is the 8 cross-chunk duplicate classes POOLS.md mentions) |
+| "only the length filter was raised" (run, POOLS.md) | g1–g4 logs: no extra generator flags; generated-length windows 12–40 → 32–90 | reproduces |
+| Lean accepts all 1,913 label proofs; term size 4–16, median 9 (LP4) | 1,913 / 1,913 with my translator; my size equals theirs on 1,913 | reproduces |
+| 161 classes excluded; raw collisions 0.74 % (LP3, LP14) | 161 / 21,652 = 0.74 % (my key); 156 / 5 split not re-derived | reproduces |
+| 0 classes shared with 117 files / 5,736,567 records (run, LP3) | 0 under two keys (one also premise-order invariant) over 118 files / 5,746,204 records (a superset) | reproduces |
+| rr600: 100 per bin, gen / textbook 81/19, 66/34, 90/10, 90/10, 100/0, 100/0 (LP5) | same | reproduces |
+| LP6 per-bin table, all 14 models, and `L*` row of `run_long_pool.md` | identical cell for cell (pass 2), `L*` identical, incl. SN-v2 T1 s0 "≥ 17" (19 at 16 + 5 at ≥ 17) | reproduces |
+| Textbook: 10 solves in 73 × 14 reads, SN s0 6, SN s1 2, S 1 / 1; frozen and C0 T1 0 (run, LP7) | same | reproduces |
+| "T1 state models solve 1–34 % of generator theorems per bin at 13–16" (run) | generator-only: S s0 16 → 1 %, SN s0 13 → 34 % (31 / 90) | reproduces |
+| Old pool: 17 of 23 theorems at ≥ 13 are textbook (run) | 17 / 23 (10 demorgan_nand_to_or, 7 dist_or_over_and_conv) | reproduces |
+| Smoke on old pool: SN-v2 T1 s0 5 / 6 generator, 0 / 17 textbook; C0 T1 s0 0 / 23 (LP11) | same | reproduces (one model, one seed, k = 32) |
+| "No accepted proof is shorter than its label" (run) | one accepted proof is: K14 pass 2 `lp_transfer_843`, 10 lines vs `L_true` 11, by omitting the premise line (Lean-valid) | **reword** — true only in LP8's form (derivation steps vs `L_true − n_prem`), which is the form to use |
+| "Lean re-accepts all of them" (run) / 640 fewest-step proofs (LP8) | all 3,047 distinct stored accepted proofs of both passes re-accepted by my own translator | reproduces (and my check covers all, not only the fewest-step ones) |
+| SN-v2 T1 s0: 116 exact, 63 longer (LP8) | 116 / 63 | reproduces |
+| Fewest-step proof term size 4–30, median 8 (LP8) | not re-derived (depends on their choice of fewest-step proof) | not derived |
+| Pass 1 vs pass 2: state identical, whole-proof ±3, no `L*` change (LP10, log 00:00 correction) | same (all 8 state models identical per bin) | reproduces |
+| Whole-proof truncation pass 2: 0.02–0.44 % (LP9) | 0.02–0.44 % on rr600; **0–0.93 % on the ≥ 17 file** (C0 frozen s1 0.93 %, K14 0.16 %, K12 0.13 %) | reproduces for rr600; the ≥ 17 range is missing from LP9 |
+| State truncation 0.002–0.105 %; S frozen s1 161 samples at `max_action` (LP9) | `env_end.truncated`: 0–161 of 153,600 (0–0.105 %); S frozen s1 161 | reproduces; per-bin 0.238 % / 0.164 % not derivable (stored in aggregate only); SN s0 has 50 samples at step 48 in `env_steps` vs "48 step-cap hits" — close, not identical, possibly samples that finished on step 48 |
+| Cost 8.44 pod-h, $6.25; 2 × RTX 4090 at $0.74/h (LP12) | `~/podhours.log`: 1.5381 h $1.14 + 6.9067 h $5.11 | reproduces |
+| LP14 scoring of the pre-registration | matches my §5 row for row | reproduces |
+| "Expected vs outcome: … C0 and SN frozen s0 matched; the other T1 and cap-12/14 models came out higher, S frozen lower" (run) | SN frozen s1 (< 11) also came out lower; S T1 s0 (14) was inside its pre-registered range 12–14 | **reword** (incomplete; LP14 has it right) |
+| "The wall at 13 was mostly the old pool" (run, STATUS) | supported by composition (17 / 23 textbook), textbook near-unsolvable for every model (10 / 1,022 reads), generator ≥ 13 solved at 1–34 % | stands as an explanation, with two limits: the old-pool check is one model / one seed at k = 32, and the state-env "wall" was a cumulative 8-round number while this re-read is the final checkpoint (the pre-registration says so; the write-up's "not comparable with transfer.jsonl" caveat covers it) |
+| Figure `lpool_rate_by_bin_rr2.png` | curves match the table; bins 11–14 include 10–34 % near-unsolvable textbook theorems, 15–16 none, and the figure does not say so | **reword / add**: note it on the figure or add generator-only curves (my generator-only S T1 s0 rates: 28 · 30 · 12 · 17 · 2 · 1 %) |
+| POOLS.md "contradictory premises dropped" | syntactic `A`, `¬A` pairs are dropped (0 remain), but 67 pool theorems have jointly unsatisfiable premises (ladder `transfer.jsonl`: 125) | **reword** to "syntactically contradictory premise pairs dropped" and give the 67 |
+| POOLS.md / log "every textbook schema has one base length" | instances of a schema land at several lengths (e.g. demorgan_nand_to_or: 11 at 11, 4 at 12, 1 at 13, 40 at 14) | minor reword: one *maximum* length per schema; the conclusion (none reaches 15–16) holds |
+
+## Wording against n
+
+- Two trained seeds for S / SN / C0 (T1 and frozen), one for K12 / K14 — every write-up sentence that compares
+  models says so in the caveats line; the table gives per-seed values. "SN-v2 T1 `L*` ≥ 17" is **s0 only**; s1 is 15
+  and the seed totals are 179 vs 68. The run labels it "s0 / s1" in the table; STATUS writes "SN-v2 T1 ≥17/15" — fine.
+- No noise floor exists for this pool (the run says so). The whole-proof pass-1/pass-2 re-draw is the only sampling-noise
+  evidence here: up to ±3 solved theorems in a bin of 100, no `L*` change. A reader should treat any per-bin difference
+  of ≲ 3–5 between models as noise.
+- "the wall at 13" / "mostly": acceptable given the composition evidence; "wall" is the prior runs' word, quoted.
+- Misses are reported as misses (LP14, run "Expected vs outcome"), including the wrong "expect to miss ≥ 100 at 16".
+
+## Model labelling
+
+`numbers.md` § long-pool names every model (checkpoint path via `lpool_analyze.py` MODELS, parameter count, format,
+from scratch, training set, seeds) — it agrees with what I read from each checkpoint's `extra` (§0). `run_long_pool.md`
+points to it (LP6). No inherited number is used unlabelled. The one comparison with an older number (the old pool's
+23-theorem tail) is re-measured in this run (LP11) rather than quoted, and both sides are Lean-only.
+
+## Checker of record
+
+Every re-read number is Lean-only (`lean_judge`), measured 2026-09-28/29; no comparison crosses the 2026-09-27
+checker change. `nd_verify` appears only inside `minlen.py` as a pre-registered labelling-proof check and rejected
+nothing (0 `error` rows). The stored proofs are the ND-form decode of each sample, not the literal model text; the
+write-up says the judge ran "on the literal text", which is how `lean_judge` works, but the literal text is not kept
+in the artefacts, so a later re-check can only re-check the decoded form (as I did).
+
+# §Verdict
+
+**Stands.** The pool: 1,913 theorems with ≥ 131 in every `L_true` bin 11–16, labels re-derived exactly from the raw
+stage files, every label proof Lean-accepted, 0 renaming-class overlaps with 118 files under two keys, timeouts excluded
+and counted. The re-read table (LP6) and every `L*` reproduce cell for cell, every counted proof re-checks in Lean,
+cost and gate 0 check out, and misses against the pre-registration are reported as misses. No hard-constraint
+violation; no quarantine.
+
+**Reword.**
+1. `run_long_pool.md`: "No accepted proof is shorter than its label" → "no accepted proof has fewer derivation steps than
+   its label" (one Lean proof omits a premise line and is 10 lines against `L_true` 11).
+2. `run_long_pool.md` "Expected vs outcome": add that SN frozen s1 came out lower and S T1 s0 (14) fell inside its range.
+3. Figure / LP6: say that bins 11–14 contain 19 / 34 / 10 / 10 % textbook theorems that almost no model solves, or add
+   generator-only curves; otherwise the drop from 12 to 13 and the flattening at 15–16 partly reflect composition.
+4. LP9: add the ≥ 17 file's whole-proof truncation (up to 0.93 %) and state explicitly that 0.02–0.44 % remains above the
+   policy's 0.1 % after one raise — with the executor's argument (cut rows are ≥ 4× the longest accepted proof, i.e. loops)
+   as the reason for not raising again.
+5. POOLS.md: "contradictory premises dropped" → syntactic pairs only; 67 theorems have jointly unsatisfiable premises.
+
+**Not supported.** Nothing in the write-up is contradicted. What the data do not yet support is any fine ordering
+among S T1, SN-v2 T1, K12 and K14 frozen: the SN seed spread (179 vs 68) is larger than their differences, and K12 /
+K14 have one seed.
+
+**Next measurement.** (a) A sampling-noise floor on this pool: re-read S T1 and SN-v2 T1 (both seeds) at a second
+sampling seed on the same rr600, which prices a per-bin difference; (b) read bins 15–16 in full (431 theorems) for the
+T1 state models and K14, so `L*` at 15–16 rests on more than 100 theorems per bin; (c) a second K14 seed and a third
+SN-v2 T1 seed, to decide whether SN s0's 19 / 100 at 16 is the model or the seed.
