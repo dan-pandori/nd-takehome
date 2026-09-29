@@ -1,0 +1,22 @@
+H_s0 counted distinct proofs 89 checking 89
+H_s1 counted distinct proofs 75 checking 75
+S1_base counted distinct proofs 438 checking 120
+S1_ei counted distinct proofs 4185 checking 120
+S2_fwd_base counted distinct proofs 46 checking 46
+S2_rev_ei counted distinct proofs 0 checking 0
+H_s0: accepted 89, rejected 0
+H_s1: accepted 75, rejected 0
+S1_base: accepted 120, rejected 0
+S1_ei: accepted 120, rejected 0
+S2_fwd_base: accepted 46, rejected 0
+neg_dump: accepted 0, rejected 120
+neg_mut_cite: accepted 5, rejected 41
+neg_mut_truncate: accepted 0, rejected 36
+neg_mut_atom: accepted 1, rejected 37
+UNEXPECTED: 6
+  ('neg_mut_cite', 'la_transfer_235', 'have n23 : ( ( P → P ) → ( ( P → P ) → ( ( P → P ) → ( ( ( ¬ ( ¬ ( P → P ) ) ) → ( ¬ ( ¬ ( P → P ) ) ) ) ∧ ( P → P ) ) ) ) ) := ( fun ( n28 : ( P → P ) ) => by have n25 : ( ( ¬ ( ¬ ( P → P ) ) ) → ( ¬ ( ¬ ( P → P ) ) ) ) := ( fun ( n26 : ( ¬ ( ¬ ( P → P ) ) ) ) => by exact n26 ) ; have n26 : ( ( P →', '/tmp/ssrev/tmp1iekw6bq.lean:1:13: warning: Variable name `Q` is not explicitly r')
+  ('neg_mut_cite', 'la_transfer_888', 'have n18 : P := h1 ; have n19 : ( P ∨ ( ( Q → Q ) ∨ S ) ) := h2 ; have n20 : ( P ∨ R ) := Or.inl n18 ; have n21 : ( ( ¬ Q ) → ( ( ¬ ( R → R ) ) → ( R → ( P ∨ R ) ) ) ) := ( fun ( n22 : ( ¬ Q ) ) => by have n23 : ( ( ¬ ( R → R ) ) → ( R → ( P ∨ R ) ) ) := ( fun ( n24 : ( ¬ ( R → R ) ) ) => by have n2', "'t' does not depend on any axioms")
+  ('neg_mut_cite', 'la_transfer_435', 'have n20 : S := h1 ; have n21 : ( ( Q ∨ ( Q ∧ P ) ) ∨ ( ¬ S ) ) := h2 ; have n22 : ( Q ∨ ( Q ∧ P ) ) := Or.elim n21 ( fun ( n23 : ( Q ∨ ( Q ∧ P ) ) ) => by exact n23 ) ( fun ( n23 : ( ¬ S ) ) => by have n24 : ( Q ∨ ( Q ∧ P ) ) := Or.elim n21 ( fun ( n25 : ( Q ∨ ( Q ∧ P ) ) ) => by exact n25 ) ( fun ', "'t' does not depend on any axioms")
+  ('neg_mut_cite', 'la_transfer_1204', 'have n7 : ( Q ∧ ( P → Q ) ) := h1 ; have n8 : ( P → ( ( ¬ ( ¬ P ) ) → ( ( ¬ P ) → ( ( Q ∧ ( P → Q ) ) ∧ P ) ) ) ) := ( fun ( n9 : P ) => by have n10 : ( ( ¬ ( ¬ P ) ) → ( ( ¬ P ) → ( ( Q ∧ ( P → Q ) ) ∧ P ) ) ) := ( fun ( n11 : ( ¬ ( ¬ P ) ) ) => by have n12 : ( ( ¬ P ) → ( ( Q ∧ ( P → Q ) ) ∧ P ) )', '/tmp/ssrev/tmpcdiqi8i7.lean:1:15: warning: Variable name `R` is not explicitly r')
+  ('neg_mut_cite', 'la_transfer_1110', 'have n33 : ( ( ( ¬ Q ) → S ) ∨ S ) := h1 ; have n34 : ( ¬ S ) := h2 ; have n35 : ( ( ¬ ( ¬ ( ¬ Q ) ) ) → ( ( ¬ Q ) → S ) ) := ( fun ( n36 : ( ¬ ( ¬ ( ¬ Q ) ) ) ) => by have n37 : ( ( ¬ Q ) → S ) := Or.elim n33 ( fun ( n38 : ( ( ¬ Q ) → S ) ) => by exact n38 ) ( fun ( n38 : S ) => by have n39 : ( ( ¬', '/tmp/ssrev/tmpsbhfcggx.lean:1:11: warning: Variable name `P` is not explicitly r')
+  ('neg_mut_atom', 'la_transfer_1645', 'have n5 : ( ( P → R ) → ( S ∧ S ) ) := h1 ; have n6 : ( P → R ) := h2 ; have n7 : ( S ∧ S ) := n5 n6 ; have n8 : ( ( P → S ) ∨ ( S ∧ S ) ) := Or.inr n7 ; have n9 : ( ( P → R ) → ( ( ¬ ( ¬ ( S ∧ P ) ) ) → ( P → ( ( ( Q → P ) ∨ R ) ∨ ( S ∧ S ) ) ) ) ) := ( fun ( n10 : ( P → R ) ) => by have n11 : ( ( ', "'t' does not depend on any axioms")
