@@ -188,3 +188,8 @@ RESULTS-REGISTRY DONE 2026-09-29T01:45:00Z
 - Merged into `dan` (`77344dfd`); local CI on `dan` green (58 s). GitHub run pending the `workflow` scope.
 - long-pool merged into `dan` meanwhile and re-added 5 artifacts/lpool files (all in the bucket): untracked; CI's config check caught its new script, fixed. CI green on the merged tip (50 s, local).
 REPO-HYGIENE DONE 2026-09-29T02:00:32Z
+
+# STATUS — state-cap12 (proof state + cap-12 training proofs)
+
+## state-cap12 (executor, started 2026-09-29T02:30Z)
+- 02:36 pre-registration `preregistration/state-cap12.md` committed before any pod. Gates on K12 running on the VPS.
