@@ -782,3 +782,8 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   (`loop.sh b|c 6 4000000 35000|36000`, generated length 32–90), stages A–E per chunk.
 - 17:15 `lp2-b`: third chunk loop `loop.sh d 4 6000000 37000` (the two 6-worker loops leave cores idle in the stage D/E tails).
 - 16:42–17:39 step-cap re-read, SN-cap12 T1 (`la_T1_SN12_s{2,3}_r8.pt`, 3,216,384 params, `lean_staten`) at `max_steps` 96, `lp2-a` (A5000): s2: rr600 471 (max_steps 48: 476), ≥ 17 file 42 (42); max env steps used 89 / 84 of 96; action-cap (512) hits 29/153600 / 1/17920; peak 16.6 GB; s3: rr600 468 (max_steps 48: 472), ≥ 17 file 41 (46); max env steps used 86 / 83 of 96; action-cap (512) hits 47/153600 / 1/17920; peak 15.1 GB. Files `artifacts/lpool2/rr/T1_SN12_s*_ms96__*`.
+- 18:15 Yield check: chunks b1, c1, c2, d1 (35,022 generated) → 6 lower-bound-17 theorems, all exact 17 at stage E
+  (≈ 2.5 core-h each on `lp2-b`). **Deviation (added, not pre-registered):** long-pool's 53 stage-D timeouts
+  (`g*_cand14` ∩ timeout in `g*_ml16`, same generator family, their bound-16 search was cut at 600 s) are re-searched
+  with `minlen` bound 17 / 3,600 s as chunk `lpto` (`data/lp2/lpto.jsonl`): a proof ≤ 16 → excluded; 17 → exact 17;
+  finished without proof → lower bound 18; timeout → still unknown, excluded. Queued on `lp2-a` after calibration.
