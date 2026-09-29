@@ -1,5 +1,3 @@
-**AMENDMENT (Dan, via orchestrator, 2026-09-29 ~01:55 UTC): the run brief changed. Read `~/runs/repo-hygiene/BRIEF_AMENDMENT.md` before doing anything else. Your session was stopped on purpose to deliver it.**
-
 # STATUS — lean-format (proposal 8)
 
 Brief: BRIEF_LEAN_FORMAT.md. Policy: AGENT_POLICY.md. Run id: lean-format. Only exception to the pause.
@@ -188,3 +186,9 @@ RESULTS-REGISTRY DONE 2026-09-29T01:45:00Z
 - Merged into `dan` (`77344dfd`); local CI on `dan` green (58 s). GitHub run pending the `workflow` scope.
 - long-pool merged into `dan` meanwhile and re-added 5 artifacts/lpool files (all in the bucket): untracked; CI's config check caught its new script, fixed. CI green on the merged tip (50 s, local).
 REPO-HYGIENE DONE 2026-09-29T02:00:32Z
+
+
+# STATUS — repo-hygiene-2
+
+## repo-hygiene-2 (executor, started 2026-09-29T15:34Z)
+- 15:50 pre-registration `preregistration/repo-hygiene-2.md` committed; no pods planned. Orchestrator's AMENDMENT line removed from the top of this file.
