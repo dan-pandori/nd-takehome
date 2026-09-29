@@ -644,3 +644,21 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   pods deleted: 2.67 pod-hours, $1.31. Balance $253.
 - 18:15  Soundness table: 0 false rejects in 1,310,119 texts; the filter rejects 100 % of Lean's rejects in
   every corpus. Uploaded `artifacts/lp` to the bucket.
+
+# log — results-registry
+
+- 2026-09-29 00:20 UTC  Started. Pre-registration 454528d (before any pod).
+- 00:24–00:40  `record.py`, `save_ckpt` upload on save, instrumented train / fast_train / state_train / eval_set /
+  state_eval / coverage / expert_iter / ladder_ei / state_ladder_ei / grpo, then sd_eval (not in the brief's list;
+  stage1-dynamics, fast-stage1, ckpt-avg and noise-floor measured held-out accuracy with it). `support.py` is not on
+  the fork's `dan`: skipped. Tests (`tests/test_registry.py --online`) pass on the VPS, incl. the three negative
+  controls (no run id raises; missing bucket raises; a flipped byte fails md5).
+- Deviation from the brief: rows go to one file per process (`artifacts/<run>/registry/<utc>_<host>_<pid>.jsonl`,
+  bucket `registry/<run>/<file>`), not one `registry.jsonl` per run — a single per-run file is overwritten by each
+  pull from a second pod.
+- 00:40–01:05  Backfill: 32 reviewed runs (29 from the bucket, 3 git-only), 298,943 rows. Backfilled rows keep the
+  arm's `args.json` by reference (`labels.config_file`) and are gzipped: 233 MB -> 3.6 MB.
+- 01:05  **E4 substitution, named before the check** (pre-registration allows it): lean-prefilter's "0 false rejects
+  in 1,310,119" is a sum over selected corpus rows of `lp/soundness.json`, not a stored value. Substitute: state-env
+  "Transfer solved after T1: S 1,348" (seed 0; `run_state_env.md` line 10).
+- 01:00  Pod rr-1 (RTX 3090 secure, $0.50/h) created 00:47 after a community-cloud create failed (no stock).

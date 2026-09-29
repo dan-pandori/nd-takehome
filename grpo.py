@@ -68,6 +68,7 @@ def main():
     json.dump(vars(a), open(f'{out}/args.json', 'w'), indent=1)
     import record    # results registry (REGISTRY.md): each round's headline stats
     record.set_config(vars(a), arm=a.name)
+    record.preflight()    # the round checkpoints upload on save: fail now if they cannot
     dev = 'cuda'
     torch.manual_seed(a.seed); rng = random.Random(a.seed)
     model, tok, _ = load_ckpt(a.init, dev)

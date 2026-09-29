@@ -143,6 +143,14 @@ def ckpt_info(path):
     return md5_file(path), None
 
 
+def preflight():
+    """Call at the start of any script that will save checkpoints: fail now, not after hours of training, if the
+    upload save_ckpt performs cannot happen (no ND_RUN_ID, no `hf` CLI).  No-op with ND_OFFLINE=1."""
+    if not offline():
+        run_id(required=True)
+        hf_bin()
+
+
 def publish_ckpt(path, step=None):
     """Upload a just-written checkpoint and record it. Raises on failure unless ND_OFFLINE=1."""
     md5, nbytes = md5_file(path), os.path.getsize(path)
@@ -329,16 +337,19 @@ def round_stats(stats, source, init=None, frozen=False, **labels):
             continue
         n = s.get('n')
         v = s.get('rate', s['solved'] / n if n else None)
-        metric = {'greedy': f'{split}_greedy_acc', 'pass@k': f'{split}_pass@{k}'}.get(dec, f'{split}_solved_{dec}')
         data = labels.get('data') or cfg.get(split)    # the arm's --heldout / --transfer / --targets file
         lab = {**labels, 'data': data}
+        if split == 'heldout' and data:
+            split = split_of(data)    # a held-out subset (e.g. heldout_B_d3) is never pooled with the full set
+        metric = {'greedy': f'{split}_greedy_acc', 'pass@k': f'{split}_pass@{k}'}.get(dec, f'{split}_solved_{dec}')
         record(metric, v, n=n, solved=s['solved'], split=split, decode=dec, round=r, k=k, ckpt=ck, source=source, **lab)
         if s.get('lstar') is not None:
             record(f'{split}_lstar_{dec}', s['lstar'], n=n, split=split, decode=dec, round=r, k=k, ckpt=ck, source=source, **lab)
     for key in ('target_sample_acc', 'transfer_sample_acc'):
         if stats.get(key) is not None:
             split = 'targets' if key.startswith('target_') else 'transfer'
-            record(f'{split}_sample_acc', stats[key], split=split, round=r, k=k, ckpt=ck, source=source, **labels)
+            record(f'{split}_sample_acc', stats[key], split=split, round=r, k=k, ckpt=ck, source=source,
+                   **{**labels, 'data': labels.get('data') or cfg.get(split)})
 
 
 def train_rows(a, last, extra):
@@ -349,3 +360,12 @@ def train_rows(a, last, extra):
         record('train_loss', last['loss'], **lab)
     if last.get('val2k') is not None:
         record('val2k_loss', last['val2k'], n=2000, **lab)
+
+
+if __name__ == '__main__':
+    # python3 record.py publish <ckpt> ...   re-upload checkpoints whose upload failed (save_ckpt raised after writing)
+    if len(sys.argv) > 2 and sys.argv[1] == 'publish':
+        for p in sys.argv[2:]:
+            print(publish_ckpt(p))
+    else:
+        print(__doc__)

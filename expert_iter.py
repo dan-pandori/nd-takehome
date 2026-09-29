@@ -119,6 +119,8 @@ def main():
     json.dump(vars(a), open(f'{out}/args.json', 'w'), indent=1)
     import record    # results registry (REGISTRY.md): each round's headline stats
     record.set_config(vars(a), arm=a.name)
+    if not a.no_train:
+        record.preflight()    # the round checkpoints upload on save: fail now if they cannot
     dev = 'cuda'
     targets, transfer, heldout = read(a.targets), read(a.transfer), read(a.heldout)
     eval_keys = {r['key'] for r in transfer} | {r['key'] for r in heldout} | {r['key'] for r in targets}
