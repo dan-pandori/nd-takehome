@@ -791,6 +791,8 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   8–18 against a 7.65 quota), so its wall-clock limits (1,800 s) meant ≈ 270 CPU-s. `lp2-b` workers get a full core
   (14:46 CPU in 14:47 wall). Fix: `pod/lpool2/minlen_cpu.py` runs `minlen.main()` with `time.time` replaced by
   `time.process_time`, so every limit is **CPU seconds per theorem**; the search is unchanged. `label.sh` uses it for
-  chunks started from 21:55 (b6, c9, d6, …); earlier chunks ran on `lp2-b` with wall limits, which on its full cores are
+  chunks whose START is after the 21:50 push (b6 is still wall-clock); earlier chunks ran on `lp2-b` with wall limits, which on its full cores are
   ≈ CPU limits (oversubscribed phases make them stricter, never looser — a timeout is excluded, never a label).
-  The calibration stage E will be re-run with CPU-time limits on a new pod; `lp2-a`'s wall-clock result is kept as a record.
+  The calibration stage E is re-run with CPU-time limits on `lp2-c`; `lp2-a` was deleted at 21:58 before its wall-clock run finished (pod-hours).
+- 21:53 `lp2-c` RTX 4090 $0.74/h, cpu.max 17.85, idle host: calibration stage E (`label.sh calib 17`, CPU-s), then `lpto` (bound 17 / 3,600 CPU-s, 17 procs); setup (Lean 4.34.0, the 12 checkpoints) for the re-read.
+- 22:05 `lpto` limit set to 2,400 CPU-s (not 3,600) so it fits the 20 pod-hour ceiling; `lp2-b` loops to be stopped ≈ 00:30.
