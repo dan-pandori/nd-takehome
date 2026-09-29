@@ -804,3 +804,5 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   workers (`calib_retry*.jsonl`, merged into `calib_ml17.jsonl`, first pass kept as `calib_ml17_first.jsonl`). `lp2-b`
   (limit 125 GB, peak 32 GB) had no deaths. **`lpto` dropped** (53 × 2,400 CPU-s at ≤ 4 concurrent does not fit the
   pod-hour ceiling). `lp2-c`: chunk loop `e` (12 workers, 3M tries, `EW=1`). `lp2-b` loops stop at 00:20 (STOP file).
+- 23:30 STOP on `lp2-b` (in-flight chunks finish) to leave pod-hours for stage F and the re-read. **Stage F added** (not pre-registered; `pod/lpool2/stageF.sh`): `minlen` bound 18 / 3,600 CPU-s on every lower-bound-18 theorem, on `lp2-b` (125 GB). First calibration pass had shown ≥ 18 certified in 101–345 CPU-s, so one more bound is affordable; it splits ≥ 18 into exact 18 / ≥ 19.
+- (correction) `lp2-b`'s stopper had an hour-check bug and wrote STOP at ≈ 22:57, so b7 / c9 / d6 were the last chunks (done 23:30). `lp2-b` total: 192,300 generated → 41 lower-bound-17 (31 exact 17, 10 ≥ 18, 0 stage-E timeouts).
