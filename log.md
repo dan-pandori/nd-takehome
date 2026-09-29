@@ -796,3 +796,4 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   The calibration stage E is re-run with CPU-time limits on `lp2-c`; `lp2-a` was deleted at 21:58 before its wall-clock run finished (pod-hours).
 - 21:53 `lp2-c` RTX 4090 $0.74/h, cpu.max 17.85, idle host: calibration stage E (`label.sh calib 17`, CPU-s), then `lpto` (bound 17 / 3,600 CPU-s, 17 procs); setup (Lean 4.34.0, the 12 checkpoints) for the re-read.
 - 22:05 `lpto` limit set to 2,400 CPU-s (not 3,600) so it fits the 20 pod-hour ceiling; `lp2-b` loops to be stopped ≈ 00:30.
+- 22:10 `minlen.py` hands its pool 4 theorems per task (`imap` chunksize 4), so the calibration run on `lp2-c` used ~9 of 17 CPUs with a multi-hour single-worker tail ahead. `minlen_cpu.py` now forces chunksize 1 (search unchanged); calibration stage E restarted 22:09 (`artifacts/lpool2/calib_aborted_chunksize4.log`); `lp2-b` synced (new stages pick it up).
