@@ -757,5 +757,6 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   **green**, run 36592782467; `ci-rh2-red6mb` **red** at the size guard, run 36592832438.
 - 15:58 `publish_artifacts.py repo-hygiene-2 artifacts/repo-hygiene-2`: 1 file (the bucket listing) scanned,
   uploaded, re-downloaded and matched, manifest row added; second call publishes 0.
+- 16:13 Credential scan of the bucket: 6,023 objects (4,329,220,777 bytes), **0 hits**, 0 read errors (`secret_scan_bucket.tsv`). Controls: 5 planted fakes (hf, sk-ant, RunPod in .gz, PEM in .tgz) and one real-token copy in /tmp (known-value detector; deleted) all found.
 - Links: 43 relative links in tracked `.md` files, all to `figures/`, none to a moved file: 0 re-pointed. Four were
   already broken (`artifacts/fu/*followup_draft.md` → `figures/…`, wrong relative base); not changed.

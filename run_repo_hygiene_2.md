@@ -9,7 +9,7 @@ No pods and no model. CI's smoke models (114 k params, `lean_seq`, from scratch 
 | fresh worktree 120–170 MB | **147.4 MB** |
 | guard red on 6 MB | hook, `check_sizes.sh`, `run_ci.sh` and GitHub Actions all **red** |
 | CI green on `dan` | Actions **green**: `ci-rh2-green`, then `dan` (SEE_DAN_RUN) |
-| credential scan 0 hits | SCAN_RESULT |
+| credential scan 0 hits | **0 hits**: 6,023 objects under `repo-hygiene/` and `repo-hygiene-2/` (4.33 GB) plus the 1 file `publish_artifacts.py` uploaded; 5 planted fakes and 1 real-value copy found |
 
 Found on the way: `cf5924e2` did not narrow CI's guard, although its message says it did. `check_sizes.sh` replaces that guard.
 
