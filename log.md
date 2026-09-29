@@ -749,3 +749,20 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   0.022–0.044 % of samples. Peak 11.0 GB at batch 1,024. Files `artifacts/sc12/rr/T1_K12_s*`, `artifacts/sc12/la_T1_K12_s*`.
 - 03:55 `sc-k0`, `sc-k1` deleted after uploading `artifacts/sc12` (dumps gzipped, 96 MB each) and `ckpts/ladder` to the
   bucket (1.31 h $0.64, 1.30 h $0.63).
+- 06:47–09:28 SN-cap12 T1 ladders done (8 rounds each; 3090 rounds 1,392–1,801 s, A40 1,564–2,276 s, growing with the
+  replay mix). Re-reads at long-pool pass-2 settings started per pod after its ladder.
+- 07:10 first long-pool readout, T1 s0: 375 / 600. Because this is far above every comparator, checked before
+  believing it: (1) **contamination**: 0 of 155,000 K12 training theorems and 0 of 4,495 RL targets share a renaming
+  class with `transfer_long*.jsonl` (the file's `key` and my own premise-order-invariant key); (2) **literal-text Lean
+  re-check** (`sc12_recheck.py` + `lean_check.py --texts`, free-form path, on the LEAN_GATE_DUMP literal texts):
+  T1 s0 400 / 400 accepted, Stage-1 s0 258 / 258; negative control 300 / 300 rejected texts rejected by `lean_check`
+  in each (all 300 had been rejected by the gate's pre-Lean filter, none reached Lean).
+- 08:10 step-cap check: accepted proofs reach 45–47 written lines against `--max_steps` 48; 0.13 % (rr600) and 0.98 %
+  (≥ 17 file) of T1 s0 samples hit the step cap — above the policy's 0.1 %. Diagnostic (pre-planned in the same hour,
+  not pre-registered): re-read T1 and Stage-1 at `max_steps` 96 (`*_ms96` files). T1 s0: rr600 368 vs 375, ≥ 17 file
+  25 vs 25, step-cap hits 194 → 1; Stage-1 s0 241 vs 248, s1 345 vs 338. The cap does not hide proofs; the ± 7 is
+  re-draw noise (a different step budget changes the sampled stream).
+- 09:03 / 09:17 `sc-s0` (6.49 h, $3.24) and `sc-s1` (6.74 h, $3.37) deleted after uploading `artifacts/sc12` (dumps
+  gzipped) and `ckpts/sc12` to the bucket and a selective pull.
+- Original-pool frozen re-read was run with `--lenfield L_true_lb`, which `transfer.jsonl` lacks, so its summary's
+  `by_len` is empty; `sc12_analysis.py` recomputes the bins from the per-theorem rows with `transfer.jsonl`'s `n_lines`.

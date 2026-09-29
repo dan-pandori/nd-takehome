@@ -142,14 +142,18 @@ def main():
     md.append('')
     res['_orig_frozen'] = {}
     for s in range(4):
-        p = f'{RR}/stage1_SN12_s{s}__orig.json'
+        p = f'{RR}/stage1_SN12_s{s}__orig.jsonl'
         if os.path.exists(p):
-            d = json.load(open(p))
-            res['_orig_frozen'][s] = {'solved': d['solved'], 'lstar_by_len': d.get('by_len')}
-            ge = {int(L): v['solved'] for L, v in d['by_len'].items()}
+            rs = [json.loads(l) for l in open(p)]
+            ge = {}
+            for r in rs:
+                if r['n_ok'] > 0:
+                    L = int(ORIG[r['name']]['n_lines']); ge[L] = ge.get(L, 0) + 1
+            solved = sum(ge.values())
             lst = max([L for L in ge if sum(v for k, v in ge.items() if k >= L) >= 5] or [0])
-            res['_orig_frozen'][s]['lstar'] = lst; res['_orig_frozen'][s]['ge13'] = sum(v for k, v in ge.items() if k >= 13)
-            md.append(f"- SN-cap12 frozen s{s}: solved {d['solved']} / {d['n']}, `L*` {lst}, at >= 13: {res['_orig_frozen'][s]['ge13']}")
+            g13 = sum(v for k, v in ge.items() if k >= 13)
+            res['_orig_frozen'][s] = {'solved': solved, 'n': len(rs), 'lstar': lst, 'ge13': g13, 'by_L': ge}
+            md.append(f"- SN-cap12 frozen s{s}: solved {solved} / {len(rs)}, `L*` {lst}, at `L_true` >= 13: {g13}")
     md.append('')
     md.append('Held-out greedy (`data/p2/heldout.jsonl`, 5,000), Stage-1 SN-cap12:')
     for s in range(4):
