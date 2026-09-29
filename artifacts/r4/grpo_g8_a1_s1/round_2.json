@@ -1,0 +1,860 @@
+{
+ "round": 2,
+ "k": 32,
+ "step": 125,
+ "samples": 64000,
+ "group": 8,
+ "prompts_per_step": 64,
+ "targets_cum": {
+  "n": 1000,
+  "solved": 733,
+  "rate": 0.733,
+  "ci": [
+   0.7047265646086438,
+   0.7594901006500983
+  ],
+  "by_len": {
+   "7": {
+    "solved": 161,
+    "n": 166,
+    "rate": 0.9698795180722891,
+    "ci": [
+     0.9314355831785572,
+     0.987067304217699
+    ]
+   },
+   "8": {
+    "solved": 150,
+    "n": 166,
+    "rate": 0.9036144578313253,
+    "ci": [
+     0.8491715402885577,
+     0.9397988886287393
+    ]
+   },
+   "9": {
+    "solved": 74,
+    "n": 166,
+    "rate": 0.4457831325301205,
+    "ci": [
+     0.3722451697584374,
+     0.5217737278496867
+    ]
+   },
+   "10": {
+    "solved": 98,
+    "n": 166,
+    "rate": 0.5903614457831325,
+    "ci": [
+     0.5143299392210132,
+     0.662305231432113
+    ]
+   },
+   "11": {
+    "solved": 122,
+    "n": 166,
+    "rate": 0.7349397590361446,
+    "ci": [
+     0.6630341234939215,
+     0.7962173202042065
+    ]
+   },
+   "12": {
+    "solved": 128,
+    "n": 170,
+    "rate": 0.7529411764705882,
+    "ci": [
+     0.682993382411676,
+     0.8117098416727778
+    ]
+   }
+  },
+  "written_hist": {
+   "7": 598,
+   "8": 322,
+   "9": 116,
+   "10": 1
+  },
+  "pruned_hist": {
+   "5": 21,
+   "6": 348,
+   "7": 365,
+   "8": 234,
+   "9": 68,
+   "10": 1
+  },
+  "frontier_written": 9,
+  "frontier_pruned": 9,
+  "reasons": {}
+ },
+ "transfer_cum": {
+  "n": 500,
+  "solved": 365,
+  "rate": 0.73,
+  "ci": [
+   0.6894405695613621,
+   0.7670521059144222
+  ],
+  "by_len": {
+   "7": {
+    "solved": 77,
+    "n": 83,
+    "rate": 0.927710843373494,
+    "ci": [
+     0.8511303528251295,
+     0.9664501615827119
+    ]
+   },
+   "8": {
+    "solved": 77,
+    "n": 83,
+    "rate": 0.927710843373494,
+    "ci": [
+     0.8511303528251295,
+     0.9664501615827119
+    ]
+   },
+   "9": {
+    "solved": 39,
+    "n": 83,
+    "rate": 0.46987951807228917,
+    "ci": [
+     0.36623168109196985,
+     0.5761922263440977
+    ]
+   },
+   "10": {
+    "solved": 54,
+    "n": 83,
+    "rate": 0.6506024096385542,
+    "ci": [
+     0.5434401797494255,
+     0.744440283070237
+    ]
+   },
+   "11": {
+    "solved": 57,
+    "n": 83,
+    "rate": 0.6867469879518072,
+    "ci": [
+     0.5805842734789477,
+     0.7763875004174339
+    ]
+   },
+   "12": {
+    "solved": 61,
+    "n": 85,
+    "rate": 0.7176470588235294,
+    "ci": [
+     0.6141587579262482,
+     0.8023128049451995
+    ]
+   }
+  },
+  "written_hist": {
+   "7": 238,
+   "8": 136,
+   "9": 66,
+   "10": 5
+  },
+  "pruned_hist": {
+   "5": 4,
+   "6": 138,
+   "7": 139,
+   "8": 123,
+   "9": 37,
+   "10": 4
+  },
+  "frontier_written": 10,
+  "frontier_pruned": 9,
+  "reasons": {}
+ },
+ "transfer_greedy": {
+  "n": 500,
+  "solved": 312,
+  "rate": 0.624,
+  "ci": [
+   0.5807483730601202,
+   0.6653607215442159
+  ],
+  "by_len": {
+   "7": {
+    "solved": 64,
+    "n": 83,
+    "rate": 0.7710843373493976,
+    "ci": [
+     0.6699173072434109,
+     0.8482675258319817
+    ]
+   },
+   "8": {
+    "solved": 70,
+    "n": 83,
+    "rate": 0.8433734939759037,
+    "ci": [
+     0.7502466907604597,
+     0.9061207644683709
+    ]
+   },
+   "9": {
+    "solved": 31,
+    "n": 83,
+    "rate": 0.37349397590361444,
+    "ci": [
+     0.27719527504576813,
+     0.4809851361857155
+    ]
+   },
+   "10": {
+    "solved": 46,
+    "n": 83,
+    "rate": 0.5542168674698795,
+    "ci": [
+     0.4472482426556269,
+     0.6563887239594516
+    ]
+   },
+   "11": {
+    "solved": 50,
+    "n": 83,
+    "rate": 0.6024096385542169,
+    "ci": [
+     0.4948463779413774,
+     0.7009123367759931
+    ]
+   },
+   "12": {
+    "solved": 51,
+    "n": 85,
+    "rate": 0.6,
+    "ci": [
+     0.49371248037407567,
+     0.697639318783076
+    ]
+   }
+  },
+  "written_hist": {
+   "7": 186,
+   "8": 91,
+   "9": 32,
+   "10": 3
+  },
+  "pruned_hist": {
+   "5": 2,
+   "6": 110,
+   "7": 99,
+   "8": 74,
+   "9": 25,
+   "10": 2
+  },
+  "frontier_written": 9,
+  "frontier_pruned": 9,
+  "reasons": {
+   "rule check failed: ANDI": 28,
+   "rule check failed: DN": 25,
+   "rule check failed: ORI2": 19,
+   "rule check failed: IMPE": 18,
+   "rule check failed: NEGE": 16,
+   "rule check failed: ANDE2": 12,
+   "rule check failed: ORI1": 10,
+   "final formula is not the conclusion": 9,
+   "parse: missing )": 8,
+   "rule check failed: IMPI": 6
+  }
+ },
+ "heldout_greedy": {
+  "n": 5000,
+  "solved": 4024,
+  "rate": 0.8048,
+  "ci": [
+   0.7935813325158186,
+   0.8155506591923122
+  ],
+  "by_len": {
+   "2": {
+    "solved": 945,
+    "n": 1000,
+    "rate": 0.945,
+    "ci": [
+     0.9290912862059457,
+     0.9575027740521667
+    ]
+   },
+   "3": {
+    "solved": 805,
+    "n": 1000,
+    "rate": 0.805,
+    "ci": [
+     0.779295278311453,
+     0.828370313550849
+    ]
+   },
+   "4": {
+    "solved": 773,
+    "n": 1000,
+    "rate": 0.773,
+    "ci": [
+     0.746020700386552,
+     0.797889812985279
+    ]
+   },
+   "5": {
+    "solved": 752,
+    "n": 1000,
+    "rate": 0.752,
+    "ci": [
+     0.7243030327449996,
+     0.7777682103674596
+    ]
+   },
+   "6": {
+    "solved": 749,
+    "n": 1000,
+    "rate": 0.749,
+    "ci": [
+     0.7212075582644133,
+     0.7748866462395643
+    ]
+   }
+  },
+  "written_hist": {
+   "2": 957,
+   "3": 772,
+   "4": 739,
+   "5": 785,
+   "6": 695,
+   "7": 57,
+   "8": 19
+  },
+  "pruned_hist": {
+   "2": 960,
+   "3": 782,
+   "4": 736,
+   "5": 795,
+   "6": 695,
+   "7": 38,
+   "8": 18
+  },
+  "frontier_written": 8,
+  "frontier_pruned": 8,
+  "reasons": {
+   "rule check failed: IMPE": 132,
+   "rule check failed: NEGE": 122,
+   "rule check failed: IMPI": 100,
+   "bad line cite": 89,
+   "rule check failed: ANDI": 79,
+   "bad box cite": 75,
+   "final formula is not the conclusion": 59,
+   "rule check failed: DN": 58,
+   "rule check failed: ORI2": 55,
+   "proof ends inside a subproof": 36
+  }
+ },
+ "targets_round": {
+  "rate": 0.6116746471774194,
+  "reasons": {}
+ },
+ "transfer_round": {
+  "rate": null
+ },
+ "frac_groups_with_variance_mean": 0.25151209677419356,
+ "steps": [
+  {
+   "step": 64,
+   "mean_reward": 0.60546875,
+   "frac_groups_with_variance": 0.390625,
+   "loss": -0.0003163286601193249,
+   "grad_norm": 0.013709483668208122,
+   "samples": 32768
+  },
+  {
+   "step": 65,
+   "mean_reward": 0.66796875,
+   "frac_groups_with_variance": 0.375,
+   "loss": -0.00036911299685016274,
+   "grad_norm": 0.009619338437914848,
+   "samples": 33280
+  },
+  {
+   "step": 66,
+   "mean_reward": 0.529296875,
+   "frac_groups_with_variance": 0.265625,
+   "loss": -0.00018562590412329882,
+   "grad_norm": 0.00549048837274313,
+   "samples": 33792
+  },
+  {
+   "step": 67,
+   "mean_reward": 0.57421875,
+   "frac_groups_with_variance": 0.359375,
+   "loss": -0.00037331460043787956,
+   "grad_norm": 0.012610143050551414,
+   "samples": 34304
+  },
+  {
+   "step": 68,
+   "mean_reward": 0.57421875,
+   "frac_groups_with_variance": 0.28125,
+   "loss": -0.0002048307505901903,
+   "grad_norm": 0.017054030671715736,
+   "samples": 34816
+  },
+  {
+   "step": 69,
+   "mean_reward": 0.51953125,
+   "frac_groups_with_variance": 0.28125,
+   "loss": -0.00019922558567486703,
+   "grad_norm": 0.008608689531683922,
+   "samples": 35328
+  },
+  {
+   "step": 70,
+   "mean_reward": 0.55859375,
+   "frac_groups_with_variance": 0.34375,
+   "loss": -0.00022236432414501905,
+   "grad_norm": 0.00579156493768096,
+   "samples": 35840
+  },
+  {
+   "step": 71,
+   "mean_reward": 0.671875,
+   "frac_groups_with_variance": 0.34375,
+   "loss": -0.0003326433361507952,
+   "grad_norm": 0.013345260173082352,
+   "samples": 36352
+  },
+  {
+   "step": 72,
+   "mean_reward": 0.546875,
+   "frac_groups_with_variance": 0.265625,
+   "loss": -0.0002659332240000367,
+   "grad_norm": 0.008324913680553436,
+   "samples": 36864
+  },
+  {
+   "step": 73,
+   "mean_reward": 0.451171875,
+   "frac_groups_with_variance": 0.21875,
+   "loss": -0.00010557343193795532,
+   "grad_norm": 0.008021555840969086,
+   "samples": 37376
+  },
+  {
+   "step": 74,
+   "mean_reward": 0.564453125,
+   "frac_groups_with_variance": 0.296875,
+   "loss": -0.0002720046613831073,
+   "grad_norm": 0.012825234793126583,
+   "samples": 37888
+  },
+  {
+   "step": 75,
+   "mean_reward": 0.513671875,
+   "frac_groups_with_variance": 0.375,
+   "loss": -0.0002893663477152586,
+   "grad_norm": 0.01571301929652691,
+   "samples": 38400
+  },
+  {
+   "step": 76,
+   "mean_reward": 0.48828125,
+   "frac_groups_with_variance": 0.140625,
+   "loss": -8.160292782122269e-05,
+   "grad_norm": 0.004941953346133232,
+   "samples": 38912
+  },
+  {
+   "step": 77,
+   "mean_reward": 0.53125,
+   "frac_groups_with_variance": 0.3125,
+   "loss": -0.00022860305034555495,
+   "grad_norm": 0.01277872547507286,
+   "samples": 39424
+  },
+  {
+   "step": 78,
+   "mean_reward": 0.48828125,
+   "frac_groups_with_variance": 0.28125,
+   "loss": -0.00021615723380818963,
+   "grad_norm": 0.009768549352884293,
+   "samples": 39936
+  },
+  {
+   "step": 79,
+   "mean_reward": 0.65234375,
+   "frac_groups_with_variance": 0.234375,
+   "loss": -0.00023775530280545354,
+   "grad_norm": 0.00909403245896101,
+   "samples": 40448
+  },
+  {
+   "step": 80,
+   "mean_reward": 0.677734375,
+   "frac_groups_with_variance": 0.1875,
+   "loss": -0.00013442515046335757,
+   "grad_norm": 0.006076430901885033,
+   "samples": 40960
+  },
+  {
+   "step": 81,
+   "mean_reward": 0.67578125,
+   "frac_groups_with_variance": 0.25,
+   "loss": -0.00024145774659700692,
+   "grad_norm": 0.010797088034451008,
+   "samples": 41472
+  },
+  {
+   "step": 82,
+   "mean_reward": 0.63671875,
+   "frac_groups_with_variance": 0.1875,
+   "loss": -0.00010598009248496965,
+   "grad_norm": 0.004351467825472355,
+   "samples": 41984
+  },
+  {
+   "step": 83,
+   "mean_reward": 0.546875,
+   "frac_groups_with_variance": 0.296875,
+   "loss": -0.0002710447006393224,
+   "grad_norm": 0.007069452665746212,
+   "samples": 42496
+  },
+  {
+   "step": 84,
+   "mean_reward": 0.5546875,
+   "frac_groups_with_variance": 0.203125,
+   "loss": -0.00023484995472244918,
+   "grad_norm": 0.00658295676112175,
+   "samples": 43008
+  },
+  {
+   "step": 85,
+   "mean_reward": 0.58203125,
+   "frac_groups_with_variance": 0.28125,
+   "loss": -0.00023957810481078923,
+   "grad_norm": 0.008166669867932796,
+   "samples": 43520
+  },
+  {
+   "step": 86,
+   "mean_reward": 0.615234375,
+   "frac_groups_with_variance": 0.25,
+   "loss": -0.00024378915259148926,
+   "grad_norm": 0.007872254587709904,
+   "samples": 44032
+  },
+  {
+   "step": 87,
+   "mean_reward": 0.625,
+   "frac_groups_with_variance": 0.25,
+   "loss": -0.00020221408340148628,
+   "grad_norm": 0.008466006256639957,
+   "samples": 44544
+  },
+  {
+   "step": 88,
+   "mean_reward": 0.62109375,
+   "frac_groups_with_variance": 0.265625,
+   "loss": -0.0002580889849923551,
+   "grad_norm": 0.008754424750804901,
+   "samples": 45056
+  },
+  {
+   "step": 89,
+   "mean_reward": 0.625,
+   "frac_groups_with_variance": 0.203125,
+   "loss": -0.0002993177331518382,
+   "grad_norm": 0.008396632969379425,
+   "samples": 45568
+  },
+  {
+   "step": 90,
+   "mean_reward": 0.57421875,
+   "frac_groups_with_variance": 0.234375,
+   "loss": -0.00040813873056322336,
+   "grad_norm": 0.009441748261451721,
+   "samples": 46080
+  },
+  {
+   "step": 91,
+   "mean_reward": 0.46484375,
+   "frac_groups_with_variance": 0.265625,
+   "loss": -0.00017233812832273543,
+   "grad_norm": 0.01235760934650898,
+   "samples": 46592
+  },
+  {
+   "step": 92,
+   "mean_reward": 0.66015625,
+   "frac_groups_with_variance": 0.359375,
+   "loss": -0.00042483131983317435,
+   "grad_norm": 0.014533360488712788,
+   "samples": 47104
+  },
+  {
+   "step": 93,
+   "mean_reward": 0.591796875,
+   "frac_groups_with_variance": 0.171875,
+   "loss": -0.00013713659427594393,
+   "grad_norm": 0.008375553414225578,
+   "samples": 47616
+  },
+  {
+   "step": 94,
+   "mean_reward": 0.5859375,
+   "frac_groups_with_variance": 0.234375,
+   "loss": -0.00020899406808894128,
+   "grad_norm": 0.007914625108242035,
+   "samples": 48128
+  },
+  {
+   "step": 95,
+   "mean_reward": 0.55859375,
+   "frac_groups_with_variance": 0.328125,
+   "loss": -0.00030098241404630244,
+   "grad_norm": 0.0178154855966568,
+   "samples": 48640
+  },
+  {
+   "step": 96,
+   "mean_reward": 0.556640625,
+   "frac_groups_with_variance": 0.203125,
+   "loss": -0.00022302493744064122,
+   "grad_norm": 0.024663792923092842,
+   "samples": 49152
+  },
+  {
+   "step": 97,
+   "mean_reward": 0.6328125,
+   "frac_groups_with_variance": 0.234375,
+   "loss": -0.00020526803564280272,
+   "grad_norm": 0.008058939129114151,
+   "samples": 49664
+  },
+  {
+   "step": 98,
+   "mean_reward": 0.537109375,
+   "frac_groups_with_variance": 0.296875,
+   "loss": -0.0003812935610767454,
+   "grad_norm": 0.00788858812302351,
+   "samples": 50176
+  },
+  {
+   "step": 99,
+   "mean_reward": 0.66015625,
+   "frac_groups_with_variance": 0.34375,
+   "loss": -0.00035925768315792084,
+   "grad_norm": 0.007931913249194622,
+   "samples": 50688
+  },
+  {
+   "step": 100,
+   "mean_reward": 0.7421875,
+   "frac_groups_with_variance": 0.265625,
+   "loss": -0.0003336672089062631,
+   "grad_norm": 0.008257747627794743,
+   "samples": 51200
+  },
+  {
+   "step": 101,
+   "mean_reward": 0.607421875,
+   "frac_groups_with_variance": 0.375,
+   "loss": -0.00042917014798149467,
+   "grad_norm": 0.022570310160517693,
+   "samples": 51712
+  },
+  {
+   "step": 102,
+   "mean_reward": 0.642578125,
+   "frac_groups_with_variance": 0.25,
+   "loss": -0.0002337037440156564,
+   "grad_norm": 0.011324314400553703,
+   "samples": 52224
+  },
+  {
+   "step": 103,
+   "mean_reward": 0.712890625,
+   "frac_groups_with_variance": 0.203125,
+   "loss": -0.00028292337083257735,
+   "grad_norm": 0.005699401721358299,
+   "samples": 52736
+  },
+  {
+   "step": 104,
+   "mean_reward": 0.68359375,
+   "frac_groups_with_variance": 0.265625,
+   "loss": -0.00020753037824761122,
+   "grad_norm": 0.007932142354547977,
+   "samples": 53248
+  },
+  {
+   "step": 105,
+   "mean_reward": 0.62890625,
+   "frac_groups_with_variance": 0.28125,
+   "loss": -0.00021789874881505966,
+   "grad_norm": 0.009169567376375198,
+   "samples": 53760
+  },
+  {
+   "step": 106,
+   "mean_reward": 0.650390625,
+   "frac_groups_with_variance": 0.28125,
+   "loss": -0.0002952717477455735,
+   "grad_norm": 0.012065364047884941,
+   "samples": 54272
+  },
+  {
+   "step": 107,
+   "mean_reward": 0.6328125,
+   "frac_groups_with_variance": 0.234375,
+   "loss": -0.00018752634059637785,
+   "grad_norm": 0.009073599241673946,
+   "samples": 54784
+  },
+  {
+   "step": 108,
+   "mean_reward": 0.662109375,
+   "frac_groups_with_variance": 0.3125,
+   "loss": -0.00027558652800507843,
+   "grad_norm": 0.01424819603562355,
+   "samples": 55296
+  },
+  {
+   "step": 109,
+   "mean_reward": 0.615234375,
+   "frac_groups_with_variance": 0.25,
+   "loss": -0.00027816416695713997,
+   "grad_norm": 0.01341745350509882,
+   "samples": 55808
+  },
+  {
+   "step": 110,
+   "mean_reward": 0.599609375,
+   "frac_groups_with_variance": 0.234375,
+   "loss": -0.00022096971224527806,
+   "grad_norm": 0.009998773224651814,
+   "samples": 56320
+  },
+  {
+   "step": 111,
+   "mean_reward": 0.638671875,
+   "frac_groups_with_variance": 0.109375,
+   "loss": -0.00010649665637174621,
+   "grad_norm": 0.005386438686400652,
+   "samples": 56832
+  },
+  {
+   "step": 112,
+   "mean_reward": 0.63671875,
+   "frac_groups_with_variance": 0.21875,
+   "loss": -0.00023549400793854147,
+   "grad_norm": 0.01003002468496561,
+   "samples": 57344
+  },
+  {
+   "step": 113,
+   "mean_reward": 0.65625,
+   "frac_groups_with_variance": 0.1875,
+   "loss": -0.000106565494206734,
+   "grad_norm": 0.005439924541860819,
+   "samples": 57856
+  },
+  {
+   "step": 114,
+   "mean_reward": 0.626953125,
+   "frac_groups_with_variance": 0.1875,
+   "loss": -0.00022608431754633784,
+   "grad_norm": 0.01239005196839571,
+   "samples": 58368
+  },
+  {
+   "step": 115,
+   "mean_reward": 0.697265625,
+   "frac_groups_with_variance": 0.25,
+   "loss": -0.0002502728020772338,
+   "grad_norm": 0.009716457687318325,
+   "samples": 58880
+  },
+  {
+   "step": 116,
+   "mean_reward": 0.681640625,
+   "frac_groups_with_variance": 0.203125,
+   "loss": -0.00019580256775952876,
+   "grad_norm": 0.01667400449514389,
+   "samples": 59392
+  },
+  {
+   "step": 117,
+   "mean_reward": 0.705078125,
+   "frac_groups_with_variance": 0.140625,
+   "loss": -0.0001485435786889866,
+   "grad_norm": 0.013707319274544716,
+   "samples": 59904
+  },
+  {
+   "step": 118,
+   "mean_reward": 0.623046875,
+   "frac_groups_with_variance": 0.21875,
+   "loss": -0.0001927399862324819,
+   "grad_norm": 0.008069083094596863,
+   "samples": 60416
+  },
+  {
+   "step": 119,
+   "mean_reward": 0.611328125,
+   "frac_groups_with_variance": 0.265625,
+   "loss": -9.555961878504604e-05,
+   "grad_norm": 0.01018983218818903,
+   "samples": 60928
+  },
+  {
+   "step": 120,
+   "mean_reward": 0.65625,
+   "frac_groups_with_variance": 0.15625,
+   "loss": -0.00021744301193393767,
+   "grad_norm": 0.006925645750015974,
+   "samples": 61440
+  },
+  {
+   "step": 121,
+   "mean_reward": 0.68359375,
+   "frac_groups_with_variance": 0.265625,
+   "loss": -0.0002625615452416241,
+   "grad_norm": 0.021933065727353096,
+   "samples": 61952
+  },
+  {
+   "step": 122,
+   "mean_reward": 0.66796875,
+   "frac_groups_with_variance": 0.125,
+   "loss": -0.00011321812780806795,
+   "grad_norm": 0.005179163534194231,
+   "samples": 62464
+  },
+  {
+   "step": 123,
+   "mean_reward": 0.626953125,
+   "frac_groups_with_variance": 0.140625,
+   "loss": -0.00012194982991786674,
+   "grad_norm": 0.01519317552447319,
+   "samples": 62976
+  },
+  {
+   "step": 124,
+   "mean_reward": 0.6171875,
+   "frac_groups_with_variance": 0.171875,
+   "loss": -0.00014937174273654819,
+   "grad_norm": 0.009874013252556324,
+   "samples": 63488
+  },
+  {
+   "step": 125,
+   "mean_reward": 0.697265625,
+   "frac_groups_with_variance": 0.1875,
+   "loss": -0.00023439177311956882,
+   "grad_norm": 0.00778579618781805,
+   "samples": 64000
+  }
+ ],
+ "secs": 606.8237950801849
+}

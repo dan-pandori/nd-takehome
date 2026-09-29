@@ -1,0 +1,1627 @@
+{
+ "grpo": {
+  "grpo_g32_a1_s0": {
+   "group": 32,
+   "draw": "a1_s0",
+   "final_round": 8,
+   "solved": 728,
+   "acq": 0.44,
+   "acq_theorems": 440,
+   "pattern_proofs": 722,
+   "first_round": 1,
+   "per_round_acq": [
+    176,
+    321,
+    368,
+    389,
+    402,
+    415,
+    432,
+    440
+   ],
+   "per_round_solved": [
+    418,
+    600,
+    646,
+    670,
+    680,
+    695,
+    718,
+    728
+   ],
+   "transfer_solved": 315,
+   "transfer_acq": 183,
+   "heldout_greedy": 0.5638,
+   "per_round": [
+    {
+     "round": 1,
+     "samples": 31744,
+     "mean_reward": 0.24776335685483872,
+     "frac_var": 0.3951612903225806,
+     "heldout": 0.7328
+    },
+    {
+     "round": 2,
+     "samples": 64000,
+     "mean_reward": 0.4377835181451613,
+     "frac_var": 0.4737903225806452,
+     "heldout": 0.624
+    },
+    {
+     "round": 3,
+     "samples": 96256,
+     "mean_reward": 0.5154674899193549,
+     "frac_var": 0.4022177419354839,
+     "heldout": 0.7134
+    },
+    {
+     "round": 4,
+     "samples": 128000,
+     "mean_reward": 0.5452998991935484,
+     "frac_var": 0.3689516129032258,
+     "heldout": 0.6024
+    },
+    {
+     "round": 5,
+     "samples": 159744,
+     "mean_reward": 0.5667527721774194,
+     "frac_var": 0.27923387096774194,
+     "heldout": 0.647
+    },
+    {
+     "round": 6,
+     "samples": 192000,
+     "mean_reward": 0.5946320564516129,
+     "frac_var": 0.25100806451612906,
+     "heldout": 0.6622
+    },
+    {
+     "round": 7,
+     "samples": 224256,
+     "mean_reward": 0.6081464213709677,
+     "frac_var": 0.23286290322580644,
+     "heldout": 0.6292
+    },
+    {
+     "round": 8,
+     "samples": 256000,
+     "mean_reward": 0.6256615423387096,
+     "frac_var": 0.21774193548387097,
+     "heldout": 0.5638
+    }
+   ],
+   "written_hist": {
+    "7": 615,
+    "8": 432,
+    "9": 161,
+    "10": 8
+   },
+   "examples": [
+    {
+     "name": "targets_depth3_0",
+     "thm": " |- ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ( Q v Q ) > R ) : AS ; N4 | | ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) : IMPI N3 N3 ; N5 | | ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) : ORI2 N4 ; N6 | ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 3
+    },
+    {
+     "name": "targets_depth3_1",
+     "thm": " |- ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ Q ) ) : AS ; N2 | | ( ( R v R ) & S ) : AS ; N3 | | | ( R & ( Q v S ) ) : AS ; N4 | | | ( ( ( R v R ) & S ) v ( P > S ) ) : ORI1 N2 ; N5 | | ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) : IMPI N3 N4 ; N6 | ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 2
+    },
+    {
+     "name": "targets_depth3_2",
+     "thm": " |- ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( S > R ) ) ) : AS ; N2 | | Q : AS ; N3 | | | ( ~ ( ~ R ) ) : AS ; N4 | | | R : DN N3 ; N5 | | ( ( ~ ( ~ R ) ) > R ) : IMPI N3 N4 ; N6 | ( Q > ( ( ~ ( ~ R ) ) > R ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    }
+   ]
+  },
+  "grpo_g32_a1_s1": {
+   "group": 32,
+   "draw": "a1_s1",
+   "final_round": 8,
+   "solved": 798,
+   "acq": 0.467,
+   "acq_theorems": 467,
+   "pattern_proofs": 746,
+   "first_round": 1,
+   "per_round_acq": [
+    251,
+    350,
+    387,
+    423,
+    440,
+    451,
+    458,
+    467
+   ],
+   "per_round_solved": [
+    521,
+    650,
+    706,
+    749,
+    770,
+    783,
+    790,
+    798
+   ],
+   "transfer_solved": 353,
+   "transfer_acq": 202,
+   "heldout_greedy": 0.6432,
+   "per_round": [
+    {
+     "round": 1,
+     "samples": 31744,
+     "mean_reward": 0.3383946572580645,
+     "frac_var": 0.4949596774193548,
+     "heldout": 0.8458
+    },
+    {
+     "round": 2,
+     "samples": 64000,
+     "mean_reward": 0.4998424899193548,
+     "frac_var": 0.4808467741935484,
+     "heldout": 0.8352
+    },
+    {
+     "round": 3,
+     "samples": 96256,
+     "mean_reward": 0.5545614919354839,
+     "frac_var": 0.43649193548387094,
+     "heldout": 0.789
+    },
+    {
+     "round": 4,
+     "samples": 128000,
+     "mean_reward": 0.6001134072580645,
+     "frac_var": 0.3689516129032258,
+     "heldout": 0.8128
+    },
+    {
+     "round": 5,
+     "samples": 159744,
+     "mean_reward": 0.6290952620967742,
+     "frac_var": 0.3487903225806452,
+     "heldout": 0.6944
+    },
+    {
+     "round": 6,
+     "samples": 192000,
+     "mean_reward": 0.666047127016129,
+     "frac_var": 0.33064516129032256,
+     "heldout": 0.767
+    },
+    {
+     "round": 7,
+     "samples": 224256,
+     "mean_reward": 0.6745526713709677,
+     "frac_var": 0.28326612903225806,
+     "heldout": 0.731
+    },
+    {
+     "round": 8,
+     "samples": 256000,
+     "mean_reward": 0.7006678427419355,
+     "frac_var": 0.2752016129032258,
+     "heldout": 0.6432
+    }
+   ],
+   "written_hist": {
+    "7": 644,
+    "8": 453,
+    "9": 218,
+    "10": 16,
+    "11": 2
+   },
+   "examples": [
+    {
+     "name": "targets_depth3_1",
+     "thm": " |- ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ Q ) ) : AS ; N2 | | ( ( R v R ) & S ) : AS ; N3 | | | ( R & ( Q v S ) ) : AS ; N4 | | | ( ( ( R v R ) & S ) v ( P > S ) ) : ORI1 N2 ; N5 | | ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) : IMPI N3 N4 ; N6 | ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 4
+    },
+    {
+     "name": "targets_depth3_2",
+     "thm": " |- ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( S > R ) ) ) : AS ; N2 | | Q : AS ; N3 | | | ( ~ ( ~ R ) ) : AS ; N4 | | | R : DN N3 ; N5 | | ( ( ~ ( ~ R ) ) > R ) : IMPI N3 N4 ; N6 | ( Q > ( ( ~ ( ~ R ) ) > R ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    },
+    {
+     "name": "targets_depth3_3",
+     "thm": " |- ( ( ~ ( ~ P ) ) > ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ P ) > P ) ) )",
+     "proof": "N1 | ( ~ ( ~ P ) ) : AS ; N2 | | ( ~ ( ~ ( P v S ) ) ) : AS ; N3 | | | ( ~ P ) : AS ; N4 | | | P : DN N1 ; N5 | | ( ( ~ P ) > P ) : IMPI N3 N4 ; N6 | ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ P ) > P ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ P ) ) > ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ P ) > P ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    }
+   ]
+  },
+  "grpo_g32_a2_s0": {
+   "group": 32,
+   "draw": "a2_s0",
+   "final_round": 8,
+   "solved": 737,
+   "acq": 0.437,
+   "acq_theorems": 437,
+   "pattern_proofs": 668,
+   "first_round": 1,
+   "per_round_acq": [
+    283,
+    342,
+    364,
+    372,
+    395,
+    415,
+    424,
+    437
+   ],
+   "per_round_solved": [
+    506,
+    605,
+    651,
+    665,
+    687,
+    711,
+    724,
+    737
+   ],
+   "transfer_solved": 323,
+   "transfer_acq": 190,
+   "heldout_greedy": 0.6572,
+   "per_round": [
+    {
+     "round": 1,
+     "samples": 31744,
+     "mean_reward": 0.30786920362903225,
+     "frac_var": 0.4949596774193548,
+     "heldout": 0.9064
+    },
+    {
+     "round": 2,
+     "samples": 64000,
+     "mean_reward": 0.45482610887096775,
+     "frac_var": 0.4727822580645161,
+     "heldout": 0.792
+    },
+    {
+     "round": 3,
+     "samples": 96256,
+     "mean_reward": 0.5066784274193549,
+     "frac_var": 0.4122983870967742,
+     "heldout": 0.7598
+    },
+    {
+     "round": 4,
+     "samples": 128000,
+     "mean_reward": 0.5510332661290323,
+     "frac_var": 0.32661290322580644,
+     "heldout": 0.7358
+    },
+    {
+     "round": 5,
+     "samples": 159744,
+     "mean_reward": 0.5818107358870968,
+     "frac_var": 0.3185483870967742,
+     "heldout": 0.7866
+    },
+    {
+     "round": 6,
+     "samples": 192000,
+     "mean_reward": 0.5968686995967742,
+     "frac_var": 0.2872983870967742,
+     "heldout": 0.7402
+    },
+    {
+     "round": 7,
+     "samples": 224256,
+     "mean_reward": 0.6030430947580645,
+     "frac_var": 0.30544354838709675,
+     "heldout": 0.7282
+    },
+    {
+     "round": 8,
+     "samples": 256000,
+     "mean_reward": 0.6336000504032258,
+     "frac_var": 0.2620967741935484,
+     "heldout": 0.6572
+    }
+   ],
+   "written_hist": {
+    "7": 617,
+    "8": 378,
+    "9": 162,
+    "10": 7,
+    "11": 2
+   },
+   "examples": [
+    {
+     "name": "targets_depth3_0",
+     "thm": " |- ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ( Q v Q ) > R ) : AS ; N4 | | ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) : IMPI N3 N3 ; N5 | | ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) : ORI2 N4 ; N6 | ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    },
+    {
+     "name": "targets_depth3_1",
+     "thm": " |- ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ Q ) ) : AS ; N2 | | ( ( R v R ) & S ) : AS ; N3 | | | ( R & ( Q v S ) ) : AS ; N4 | | | ( ( ( R v R ) & S ) v ( P > S ) ) : ORI1 N2 ; N5 | | ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) : IMPI N3 N4 ; N6 | ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    },
+    {
+     "name": "targets_depth3_2",
+     "thm": " |- ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( S > R ) ) ) : AS ; N2 | | Q : AS ; N3 | | | ( ~ ( ~ R ) ) : AS ; N4 | | | R : DN N3 ; N5 | | ( ( ~ ( ~ R ) ) > R ) : IMPI N3 N4 ; N6 | ( Q > ( ( ~ ( ~ R ) ) > R ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    }
+   ]
+  },
+  "grpo_g32_a2_s1": {
+   "group": 32,
+   "draw": "a2_s1",
+   "final_round": 8,
+   "solved": 725,
+   "acq": 0.404,
+   "acq_theorems": 404,
+   "pattern_proofs": 584,
+   "first_round": 1,
+   "per_round_acq": [
+    124,
+    309,
+    351,
+    366,
+    376,
+    389,
+    399,
+    404
+   ],
+   "per_round_solved": [
+    390,
+    611,
+    667,
+    689,
+    697,
+    709,
+    719,
+    725
+   ],
+   "transfer_solved": 338,
+   "transfer_acq": 188,
+   "heldout_greedy": 0.6098,
+   "per_round": [
+    {
+     "round": 1,
+     "samples": 31744,
+     "mean_reward": 0.23998235887096775,
+     "frac_var": 0.38205645161290325,
+     "heldout": 0.8294
+    },
+    {
+     "round": 2,
+     "samples": 64000,
+     "mean_reward": 0.46040196572580644,
+     "frac_var": 0.4465725806451613,
+     "heldout": 0.7482
+    },
+    {
+     "round": 3,
+     "samples": 96256,
+     "mean_reward": 0.5026776713709677,
+     "frac_var": 0.36189516129032256,
+     "heldout": 0.7188
+    },
+    {
+     "round": 4,
+     "samples": 128000,
+     "mean_reward": 0.5544354838709677,
+     "frac_var": 0.2782258064516129,
+     "heldout": 0.732
+    },
+    {
+     "round": 5,
+     "samples": 159744,
+     "mean_reward": 0.5684853830645161,
+     "frac_var": 0.2590725806451613,
+     "heldout": 0.7254
+    },
+    {
+     "round": 6,
+     "samples": 192000,
+     "mean_reward": 0.6081464213709677,
+     "frac_var": 0.2127016129032258,
+     "heldout": 0.7102
+    },
+    {
+     "round": 7,
+     "samples": 224256,
+     "mean_reward": 0.5959866431451613,
+     "frac_var": 0.21975806451612903,
+     "heldout": 0.6824
+    },
+    {
+     "round": 8,
+     "samples": 256000,
+     "mean_reward": 0.6313949092741935,
+     "frac_var": 0.20967741935483872,
+     "heldout": 0.6098
+    }
+   ],
+   "written_hist": {
+    "7": 666,
+    "8": 378,
+    "9": 89,
+    "10": 1
+   },
+   "examples": [
+    {
+     "name": "targets_depth3_0",
+     "thm": " |- ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ( Q v Q ) > R ) : AS ; N4 | | ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) : IMPI N3 N3 ; N5 | | ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) : ORI2 N4 ; N6 | ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 2
+    },
+    {
+     "name": "targets_depth3_0",
+     "thm": " |- ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N2 | | R : AS ; N3 | | | Q : AS ; N4 | | | ( ( Q v Q ) > R ) : AS ; N5 | | ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) : IMPI N4 N4 ; N6 | | ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) : ORI2 N5 ; N7 | ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) : IMPI N2 N6 ; N8 ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) : IMPI N1 N7 ; QED",
+     "written": 8,
+     "pruned": 7,
+     "round": 6
+    },
+    {
+     "name": "targets_depth3_1",
+     "thm": " |- ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ Q ) ) : AS ; N2 | | ( ( R v R ) & S ) : AS ; N3 | | | ( R & ( Q v S ) ) : AS ; N4 | | | ( ( ( R v R ) & S ) v ( P > S ) ) : ORI1 N2 ; N5 | | ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) : IMPI N3 N4 ; N6 | ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    }
+   ]
+  },
+  "grpo_g32_a3_s0": {
+   "group": 32,
+   "draw": "a3_s0",
+   "final_round": 8,
+   "solved": 710,
+   "acq": 0.411,
+   "acq_theorems": 411,
+   "pattern_proofs": 601,
+   "first_round": 1,
+   "per_round_acq": [
+    252,
+    337,
+    377,
+    384,
+    394,
+    402,
+    409,
+    411
+   ],
+   "per_round_solved": [
+    442,
+    581,
+    633,
+    651,
+    674,
+    694,
+    705,
+    710
+   ],
+   "transfer_solved": 302,
+   "transfer_acq": 174,
+   "heldout_greedy": 0.3764,
+   "per_round": [
+    {
+     "round": 1,
+     "samples": 31744,
+     "mean_reward": 0.24807837701612903,
+     "frac_var": 0.4415322580645161,
+     "heldout": 0.7726
+    },
+    {
+     "round": 2,
+     "samples": 64000,
+     "mean_reward": 0.42014238911290325,
+     "frac_var": 0.4949596774193548,
+     "heldout": 0.6386
+    },
+    {
+     "round": 3,
+     "samples": 96256,
+     "mean_reward": 0.49779485887096775,
+     "frac_var": 0.37298387096774194,
+     "heldout": 0.7016
+    },
+    {
+     "round": 4,
+     "samples": 128000,
+     "mean_reward": 0.5325730846774194,
+     "frac_var": 0.27318548387096775,
+     "heldout": 0.5812
+    },
+    {
+     "round": 5,
+     "samples": 159744,
+     "mean_reward": 0.5473475302419355,
+     "frac_var": 0.26310483870967744,
+     "heldout": 0.4662
+    },
+    {
+     "round": 6,
+     "samples": 192000,
+     "mean_reward": 0.5859375,
+     "frac_var": 0.23387096774193547,
+     "heldout": 0.5782
+    },
+    {
+     "round": 7,
+     "samples": 224256,
+     "mean_reward": 0.5978767641129032,
+     "frac_var": 0.2247983870967742,
+     "heldout": 0.3104
+    },
+    {
+     "round": 8,
+     "samples": 256000,
+     "mean_reward": 0.609343497983871,
+     "frac_var": 0.22278225806451613,
+     "heldout": 0.3764
+    }
+   ],
+   "written_hist": {
+    "7": 629,
+    "8": 373,
+    "9": 104
+   },
+   "examples": [
+    {
+     "name": "targets_depth3_1",
+     "thm": " |- ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ Q ) ) : AS ; N2 | | ( ( R v R ) & S ) : AS ; N3 | | | ( R & ( Q v S ) ) : AS ; N4 | | | ( ( ( R v R ) & S ) v ( P > S ) ) : ORI1 N2 ; N5 | | ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) : IMPI N3 N4 ; N6 | ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    },
+    {
+     "name": "targets_depth3_2",
+     "thm": " |- ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( S > R ) ) ) : AS ; N2 | | Q : AS ; N3 | | | ( ~ ( ~ R ) ) : AS ; N4 | | | R : DN N3 ; N5 | | ( ( ~ ( ~ R ) ) > R ) : IMPI N3 N4 ; N6 | ( Q > ( ( ~ ( ~ R ) ) > R ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    },
+    {
+     "name": "targets_depth3_3",
+     "thm": " |- ( ( ~ ( ~ P ) ) > ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ P ) > P ) ) )",
+     "proof": "N1 | ( ~ ( ~ P ) ) : AS ; N2 | | ( ~ ( ~ ( P v S ) ) ) : AS ; N3 | | | ( ~ P ) : AS ; N4 | | | P : DN N1 ; N5 | | ( ( ~ P ) > P ) : IMPI N3 N4 ; N6 | ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ P ) > P ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ P ) ) > ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ P ) > P ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    }
+   ]
+  },
+  "grpo_g32_a3_s1": {
+   "group": 32,
+   "draw": "a3_s1",
+   "final_round": 8,
+   "solved": 691,
+   "acq": 0.395,
+   "acq_theorems": 395,
+   "pattern_proofs": 554,
+   "first_round": 1,
+   "per_round_acq": [
+    201,
+    317,
+    357,
+    371,
+    377,
+    383,
+    389,
+    395
+   ],
+   "per_round_solved": [
+    449,
+    598,
+    644,
+    660,
+    668,
+    676,
+    685,
+    691
+   ],
+   "transfer_solved": 313,
+   "transfer_acq": 183,
+   "heldout_greedy": 0.5212,
+   "per_round": [
+    {
+     "round": 1,
+     "samples": 31744,
+     "mean_reward": 0.26682207661290325,
+     "frac_var": 0.4475806451612903,
+     "heldout": 0.7312
+    },
+    {
+     "round": 2,
+     "samples": 64000,
+     "mean_reward": 0.4401146673387097,
+     "frac_var": 0.5141129032258065,
+     "heldout": 0.6858
+    },
+    {
+     "round": 3,
+     "samples": 96256,
+     "mean_reward": 0.5141759072580645,
+     "frac_var": 0.4566532258064516,
+     "heldout": 0.664
+    },
+    {
+     "round": 4,
+     "samples": 128000,
+     "mean_reward": 0.5553175403225806,
+     "frac_var": 0.3497983870967742,
+     "heldout": 0.6178
+    },
+    {
+     "round": 5,
+     "samples": 159744,
+     "mean_reward": 0.5752898185483871,
+     "frac_var": 0.26411290322580644,
+     "heldout": 0.5166
+    },
+    {
+     "round": 6,
+     "samples": 192000,
+     "mean_reward": 0.5909148185483871,
+     "frac_var": 0.2560483870967742,
+     "heldout": 0.6482
+    },
+    {
+     "round": 7,
+     "samples": 224256,
+     "mean_reward": 0.5972152217741935,
+     "frac_var": 0.2318548387096774,
+     "heldout": 0.5114
+    },
+    {
+     "round": 8,
+     "samples": 256000,
+     "mean_reward": 0.6149193548387096,
+     "frac_var": 0.20262096774193547,
+     "heldout": 0.5212
+    }
+   ],
+   "written_hist": {
+    "7": 614,
+    "8": 340,
+    "9": 85,
+    "10": 1
+   },
+   "examples": [
+    {
+     "name": "targets_depth3_0",
+     "thm": " |- ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ( Q v Q ) > R ) : AS ; N4 | | ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) : IMPI N3 N3 ; N5 | | ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) : ORI2 N4 ; N6 | ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 3
+    },
+    {
+     "name": "targets_depth3_1",
+     "thm": " |- ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ Q ) ) : AS ; N2 | | ( ( R v R ) & S ) : AS ; N3 | | | ( R & ( Q v S ) ) : AS ; N4 | | | ( ( ( R v R ) & S ) v ( P > S ) ) : ORI1 N2 ; N5 | | ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) : IMPI N3 N4 ; N6 | ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    },
+    {
+     "name": "targets_depth3_2",
+     "thm": " |- ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( S > R ) ) ) : AS ; N2 | | Q : AS ; N3 | | | ( ~ ( ~ R ) ) : AS ; N4 | | | R : DN N3 ; N5 | | ( ( ~ ( ~ R ) ) > R ) : IMPI N3 N4 ; N6 | ( Q > ( ( ~ ( ~ R ) ) > R ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    }
+   ]
+  },
+  "grpo_g8_a1_s0": {
+   "group": 8,
+   "draw": "a1_s0",
+   "final_round": 7,
+   "solved": 778,
+   "acq": 0.478,
+   "acq_theorems": 478,
+   "pattern_proofs": 779,
+   "first_round": 1,
+   "per_round_acq": [
+    344,
+    375,
+    405,
+    436,
+    458,
+    471,
+    478
+   ],
+   "per_round_solved": [
+    593,
+    660,
+    697,
+    733,
+    755,
+    770,
+    778
+   ],
+   "transfer_solved": 338,
+   "transfer_acq": 200,
+   "heldout_greedy": 0.5624,
+   "per_round": [
+    {
+     "round": 1,
+     "samples": 31744,
+     "mean_reward": 0.3706212197580645,
+     "frac_var": 0.3142641129032258,
+     "heldout": 0.7564
+    },
+    {
+     "round": 2,
+     "samples": 64000,
+     "mean_reward": 0.5589717741935484,
+     "frac_var": 0.22782258064516128,
+     "heldout": 0.7158
+    },
+    {
+     "round": 3,
+     "samples": 96256,
+     "mean_reward": 0.628937752016129,
+     "frac_var": 0.11668346774193548,
+     "heldout": 0.6186
+    },
+    {
+     "round": 4,
+     "samples": 128000,
+     "mean_reward": 0.6756867439516129,
+     "frac_var": 0.10735887096774194,
+     "heldout": 0.6298
+    },
+    {
+     "round": 5,
+     "samples": 159744,
+     "mean_reward": 0.7009828629032258,
+     "frac_var": 0.0950100806451613,
+     "heldout": 0.6604
+    },
+    {
+     "round": 6,
+     "samples": 192000,
+     "mean_reward": 0.7169858870967742,
+     "frac_var": 0.08770161290322581,
+     "heldout": 0.5732
+    },
+    {
+     "round": 7,
+     "samples": 224256,
+     "mean_reward": 0.7358870967741935,
+     "frac_var": 0.07711693548387097,
+     "heldout": 0.5624
+    }
+   ],
+   "written_hist": {
+    "7": 604,
+    "8": 403,
+    "9": 217,
+    "10": 36,
+    "11": 2
+   },
+   "examples": [
+    {
+     "name": "targets_depth3_0",
+     "thm": " |- ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ( Q v Q ) > R ) : AS ; N4 | | ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) : IMPI N3 N3 ; N5 | | ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) : ORI2 N4 ; N6 | ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 3
+    },
+    {
+     "name": "targets_depth3_1",
+     "thm": " |- ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ Q ) ) : AS ; N2 | | ( ( R v R ) & S ) : AS ; N3 | | | ( R & ( Q v S ) ) : AS ; N4 | | | ( ( ( R v R ) & S ) v ( P > S ) ) : ORI1 N2 ; N5 | | ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) : IMPI N3 N4 ; N6 | ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    },
+    {
+     "name": "targets_depth3_2",
+     "thm": " |- ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( S > R ) ) ) : AS ; N2 | | Q : AS ; N3 | | | ( ~ ( ~ R ) ) : AS ; N4 | | | R : DN N3 ; N5 | | ( ( ~ ( ~ R ) ) > R ) : IMPI N3 N4 ; N6 | ( Q > ( ( ~ ( ~ R ) ) > R ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    }
+   ]
+  },
+  "grpo_g8_a1_s1": {
+   "group": 8,
+   "draw": "a1_s1",
+   "final_round": 8,
+   "solved": 819,
+   "acq": 0.505,
+   "acq_theorems": 505,
+   "pattern_proofs": 816,
+   "first_round": 1,
+   "per_round_acq": [
+    357,
+    414,
+    453,
+    469,
+    483,
+    490,
+    501,
+    505
+   ],
+   "per_round_solved": [
+    648,
+    733,
+    767,
+    784,
+    798,
+    805,
+    814,
+    819
+   ],
+   "transfer_solved": 381,
+   "transfer_acq": 229,
+   "heldout_greedy": 0.6442,
+   "per_round": [
+    {
+     "round": 1,
+     "samples": 31744,
+     "mean_reward": 0.4158896169354839,
+     "frac_var": 0.32560483870967744,
+     "heldout": 0.8026
+    },
+    {
+     "round": 2,
+     "samples": 64000,
+     "mean_reward": 0.6116746471774194,
+     "frac_var": 0.25151209677419356,
+     "heldout": 0.8048
+    },
+    {
+     "round": 3,
+     "samples": 96256,
+     "mean_reward": 0.6951864919354839,
+     "frac_var": 0.14440524193548387,
+     "heldout": 0.8134
+    },
+    {
+     "round": 4,
+     "samples": 128000,
+     "mean_reward": 0.7181514616935484,
+     "frac_var": 0.11567540322580645,
+     "heldout": 0.639
+    },
+    {
+     "round": 5,
+     "samples": 159744,
+     "mean_reward": 0.7419354838709677,
+     "frac_var": 0.08694556451612903,
+     "heldout": 0.7264
+    },
+    {
+     "round": 6,
+     "samples": 192000,
+     "mean_reward": 0.7618447580645161,
+     "frac_var": 0.07736895161290322,
+     "heldout": 0.5992
+    },
+    {
+     "round": 7,
+     "samples": 224256,
+     "mean_reward": 0.7719884072580645,
+     "frac_var": 0.07283266129032258,
+     "heldout": 0.6526
+    },
+    {
+     "round": 8,
+     "samples": 256000,
+     "mean_reward": 0.7894720262096774,
+     "frac_var": 0.05241935483870968,
+     "heldout": 0.6442
+    }
+   ],
+   "written_hist": {
+    "7": 633,
+    "8": 452,
+    "9": 263,
+    "10": 38,
+    "11": 4
+   },
+   "examples": [
+    {
+     "name": "targets_depth3_0",
+     "thm": " |- ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ( Q v Q ) > R ) : AS ; N4 | | ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) : IMPI N3 N3 ; N5 | | ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) : ORI2 N4 ; N6 | ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 6
+    },
+    {
+     "name": "targets_depth3_1",
+     "thm": " |- ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ Q ) ) : AS ; N2 | | ( ( R v R ) & S ) : AS ; N3 | | | ( R & ( Q v S ) ) : AS ; N4 | | | ( ( ( R v R ) & S ) v ( P > S ) ) : ORI1 N2 ; N5 | | ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) : IMPI N3 N4 ; N6 | ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    },
+    {
+     "name": "targets_depth3_2",
+     "thm": " |- ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( S > R ) ) ) : AS ; N2 | | Q : AS ; N3 | | | ( ~ ( ~ R ) ) : AS ; N4 | | | R : DN N3 ; N5 | | ( ( ~ ( ~ R ) ) > R ) : IMPI N3 N4 ; N6 | ( Q > ( ( ~ ( ~ R ) ) > R ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    }
+   ]
+  },
+  "grpo_g8_a2_s0": {
+   "group": 8,
+   "draw": "a2_s0",
+   "final_round": 8,
+   "solved": 777,
+   "acq": 0.473,
+   "acq_theorems": 473,
+   "pattern_proofs": 730,
+   "first_round": 1,
+   "per_round_acq": [
+    373,
+    400,
+    419,
+    433,
+    445,
+    454,
+    463,
+    473
+   ],
+   "per_round_solved": [
+    598,
+    640,
+    698,
+    724,
+    741,
+    755,
+    764,
+    777
+   ],
+   "transfer_solved": 347,
+   "transfer_acq": 210,
+   "heldout_greedy": 0.6718,
+   "per_round": [
+    {
+     "round": 1,
+     "samples": 31744,
+     "mean_reward": 0.4039818548387097,
+     "frac_var": 0.3485383064516129,
+     "heldout": 0.8332
+    },
+    {
+     "round": 2,
+     "samples": 64000,
+     "mean_reward": 0.5499306955645161,
+     "frac_var": 0.23563508064516128,
+     "heldout": 0.8118
+    },
+    {
+     "round": 3,
+     "samples": 96256,
+     "mean_reward": 0.6217237903225806,
+     "frac_var": 0.13709677419354838,
+     "heldout": 0.8404
+    },
+    {
+     "round": 4,
+     "samples": 128000,
+     "mean_reward": 0.6573525705645161,
+     "frac_var": 0.11920362903225806,
+     "heldout": 0.7468
+    },
+    {
+     "round": 5,
+     "samples": 159744,
+     "mean_reward": 0.688508064516129,
+     "frac_var": 0.0829133064516129,
+     "heldout": 0.7758
+    },
+    {
+     "round": 6,
+     "samples": 192000,
+     "mean_reward": 0.7131426411290323,
+     "frac_var": 0.08190524193548387,
+     "heldout": 0.7094
+    },
+    {
+     "round": 7,
+     "samples": 224256,
+     "mean_reward": 0.7224042338709677,
+     "frac_var": 0.06703629032258064,
+     "heldout": 0.705
+    },
+    {
+     "round": 8,
+     "samples": 256000,
+     "mean_reward": 0.7339339717741935,
+     "frac_var": 0.05670362903225806,
+     "heldout": 0.6718
+    }
+   ],
+   "written_hist": {
+    "7": 604,
+    "8": 406,
+    "9": 203,
+    "10": 18,
+    "11": 3
+   },
+   "examples": [
+    {
+     "name": "targets_depth3_0",
+     "thm": " |- ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ( Q v Q ) > R ) : AS ; N4 | | ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) : IMPI N3 N3 ; N5 | | ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) : ORI2 N4 ; N6 | ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 2
+    },
+    {
+     "name": "targets_depth3_1",
+     "thm": " |- ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ Q ) ) : AS ; N2 | | ( ( R v R ) & S ) : AS ; N3 | | | ( R & ( Q v S ) ) : AS ; N4 | | | ( ( ( R v R ) & S ) v ( P > S ) ) : ORI1 N2 ; N5 | | ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) : IMPI N3 N4 ; N6 | ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    },
+    {
+     "name": "targets_depth3_2",
+     "thm": " |- ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( S > R ) ) ) : AS ; N2 | | Q : AS ; N3 | | | ( ~ ( ~ R ) ) : AS ; N4 | | | R : DN N3 ; N5 | | ( ( ~ ( ~ R ) ) > R ) : IMPI N3 N4 ; N6 | ( Q > ( ( ~ ( ~ R ) ) > R ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    }
+   ]
+  },
+  "grpo_g8_a2_s1": {
+   "group": 8,
+   "draw": "a2_s1",
+   "final_round": 8,
+   "solved": 799,
+   "acq": 0.472,
+   "acq_theorems": 472,
+   "pattern_proofs": 790,
+   "first_round": 1,
+   "per_round_acq": [
+    329,
+    388,
+    402,
+    408,
+    433,
+    444,
+    467,
+    472
+   ],
+   "per_round_solved": [
+    605,
+    677,
+    710,
+    722,
+    751,
+    771,
+    793,
+    799
+   ],
+   "transfer_solved": 351,
+   "transfer_acq": 207,
+   "heldout_greedy": 0.621,
+   "per_round": [
+    {
+     "round": 1,
+     "samples": 31744,
+     "mean_reward": 0.38032384072580644,
+     "frac_var": 0.31401209677419356,
+     "heldout": 0.7672
+    },
+    {
+     "round": 2,
+     "samples": 64000,
+     "mean_reward": 0.5822832661290323,
+     "frac_var": 0.1423891129032258,
+     "heldout": 0.7634
+    },
+    {
+     "round": 3,
+     "samples": 96256,
+     "mean_reward": 0.6429876512096774,
+     "frac_var": 0.11693548387096774,
+     "heldout": 0.759
+    },
+    {
+     "round": 4,
+     "samples": 128000,
+     "mean_reward": 0.6743951612903226,
+     "frac_var": 0.0829133064516129,
+     "heldout": 0.709
+    },
+    {
+     "round": 5,
+     "samples": 159744,
+     "mean_reward": 0.6923828125,
+     "frac_var": 0.09576612903225806,
+     "heldout": 0.7724
+    },
+    {
+     "round": 6,
+     "samples": 192000,
+     "mean_reward": 0.7174584173387096,
+     "frac_var": 0.07837701612903226,
+     "heldout": 0.7184
+    },
+    {
+     "round": 7,
+     "samples": 224256,
+     "mean_reward": 0.742219002016129,
+     "frac_var": 0.09223790322580645,
+     "heldout": 0.7258
+    },
+    {
+     "round": 8,
+     "samples": 256000,
+     "mean_reward": 0.7621282762096774,
+     "frac_var": 0.06880040322580645,
+     "heldout": 0.621
+    }
+   ],
+   "written_hist": {
+    "7": 658,
+    "8": 464,
+    "9": 225,
+    "10": 34
+   },
+   "examples": [
+    {
+     "name": "targets_depth3_0",
+     "thm": " |- ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ( Q v Q ) > R ) : AS ; N4 | | ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) : IMPI N3 N3 ; N5 | | ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) : ORI2 N4 ; N6 | ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 2
+    },
+    {
+     "name": "targets_depth3_1",
+     "thm": " |- ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ Q ) ) : AS ; N2 | | ( ( R v R ) & S ) : AS ; N3 | | | ( R & ( Q v S ) ) : AS ; N4 | | | ( ( ( R v R ) & S ) v ( P > S ) ) : ORI1 N2 ; N5 | | ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) : IMPI N3 N4 ; N6 | ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    },
+    {
+     "name": "targets_depth3_2",
+     "thm": " |- ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( S > R ) ) ) : AS ; N2 | | Q : AS ; N3 | | | ( ~ ( ~ R ) ) : AS ; N4 | | | R : DN N3 ; N5 | | ( ( ~ ( ~ R ) ) > R ) : IMPI N3 N4 ; N6 | ( Q > ( ( ~ ( ~ R ) ) > R ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    }
+   ]
+  },
+  "grpo_g8_a3_s0": {
+   "group": 8,
+   "draw": "a3_s0",
+   "final_round": 8,
+   "solved": 747,
+   "acq": 0.447,
+   "acq_theorems": 447,
+   "pattern_proofs": 667,
+   "first_round": 1,
+   "per_round_acq": [
+    350,
+    381,
+    407,
+    421,
+    428,
+    435,
+    442,
+    447
+   ],
+   "per_round_solved": [
+    580,
+    647,
+    684,
+    705,
+    713,
+    726,
+    738,
+    747
+   ],
+   "transfer_solved": 332,
+   "transfer_acq": 197,
+   "heldout_greedy": 0.3404,
+   "per_round": [
+    {
+     "round": 1,
+     "samples": 31744,
+     "mean_reward": 0.3235257056451613,
+     "frac_var": 0.3492943548387097,
+     "heldout": 0.74
+    },
+    {
+     "round": 2,
+     "samples": 64000,
+     "mean_reward": 0.529328377016129,
+     "frac_var": 0.22731854838709678,
+     "heldout": 0.7576
+    },
+    {
+     "round": 3,
+     "samples": 96256,
+     "mean_reward": 0.6049017137096774,
+     "frac_var": 0.11542338709677419,
+     "heldout": 0.7106
+    },
+    {
+     "round": 4,
+     "samples": 128000,
+     "mean_reward": 0.6488785282258065,
+     "frac_var": 0.08140120967741936,
+     "heldout": 0.5512
+    },
+    {
+     "round": 5,
+     "samples": 159744,
+     "mean_reward": 0.6672757056451613,
+     "frac_var": 0.07888104838709678,
+     "heldout": 0.5386
+    },
+    {
+     "round": 6,
+     "samples": 192000,
+     "mean_reward": 0.6826171875,
+     "frac_var": 0.07560483870967742,
+     "heldout": 0.4768
+    },
+    {
+     "round": 7,
+     "samples": 224256,
+     "mean_reward": 0.6931073588709677,
+     "frac_var": 0.07535282258064516,
+     "heldout": 0.4584
+    },
+    {
+     "round": 8,
+     "samples": 256000,
+     "mean_reward": 0.7063697076612904,
+     "frac_var": 0.0690524193548387,
+     "heldout": 0.3404
+    }
+   ],
+   "written_hist": {
+    "7": 628,
+    "8": 365,
+    "9": 151,
+    "10": 10
+   },
+   "examples": [
+    {
+     "name": "targets_depth3_0",
+     "thm": " |- ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( ~ R ) ) ) : AS ; N2 | | R : AS ; N3 | | | ( ( Q v Q ) > R ) : AS ; N4 | | ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) : IMPI N3 N3 ; N5 | | ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) : ORI2 N4 ; N6 | ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( ~ R ) ) ) > ( R > ( Q v ( ( ( Q v Q ) > R ) > ( ( Q v Q ) > R ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 5
+    },
+    {
+     "name": "targets_depth3_1",
+     "thm": " |- ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ Q ) ) : AS ; N2 | | ( ( R v R ) & S ) : AS ; N3 | | | ( R & ( Q v S ) ) : AS ; N4 | | | ( ( ( R v R ) & S ) v ( P > S ) ) : ORI1 N2 ; N5 | | ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) : IMPI N3 N4 ; N6 | ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    },
+    {
+     "name": "targets_depth3_2",
+     "thm": " |- ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( S > R ) ) ) : AS ; N2 | | Q : AS ; N3 | | | ( ~ ( ~ R ) ) : AS ; N4 | | | R : DN N3 ; N5 | | ( ( ~ ( ~ R ) ) > R ) : IMPI N3 N4 ; N6 | ( Q > ( ( ~ ( ~ R ) ) > R ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    }
+   ]
+  },
+  "grpo_g8_a3_s1": {
+   "group": 8,
+   "draw": "a3_s1",
+   "final_round": 8,
+   "solved": 780,
+   "acq": 0.472,
+   "acq_theorems": 472,
+   "pattern_proofs": 749,
+   "first_round": 1,
+   "per_round_acq": [
+    325,
+    369,
+    395,
+    418,
+    433,
+    448,
+    465,
+    472
+   ],
+   "per_round_solved": [
+    572,
+    651,
+    678,
+    710,
+    731,
+    748,
+    768,
+    780
+   ],
+   "transfer_solved": 330,
+   "transfer_acq": 192,
+   "heldout_greedy": 0.531,
+   "per_round": [
+    {
+     "round": 1,
+     "samples": 31744,
+     "mean_reward": 0.3548702116935484,
+     "frac_var": 0.3303931451612903,
+     "heldout": 0.7962
+    },
+    {
+     "round": 2,
+     "samples": 64000,
+     "mean_reward": 0.5481980846774194,
+     "frac_var": 0.22202620967741934,
+     "heldout": 0.7012
+    },
+    {
+     "round": 3,
+     "samples": 96256,
+     "mean_reward": 0.6123991935483871,
+     "frac_var": 0.12222782258064516,
+     "heldout": 0.6692
+    },
+    {
+     "round": 4,
+     "samples": 128000,
+     "mean_reward": 0.641570060483871,
+     "frac_var": 0.11668346774193548,
+     "heldout": 0.627
+    },
+    {
+     "round": 5,
+     "samples": 159744,
+     "mean_reward": 0.669921875,
+     "frac_var": 0.09979838709677419,
+     "heldout": 0.6158
+    },
+    {
+     "round": 6,
+     "samples": 192000,
+     "mean_reward": 0.6838772681451613,
+     "frac_var": 0.10105846774193548,
+     "heldout": 0.5516
+    },
+    {
+     "round": 7,
+     "samples": 224256,
+     "mean_reward": 0.7108744959677419,
+     "frac_var": 0.09400201612903226,
+     "heldout": 0.593
+    },
+    {
+     "round": 8,
+     "samples": 256000,
+     "mean_reward": 0.724640877016129,
+     "frac_var": 0.09097782258064516,
+     "heldout": 0.531
+    }
+   ],
+   "written_hist": {
+    "7": 621,
+    "8": 431,
+    "9": 238,
+    "10": 24
+   },
+   "examples": [
+    {
+     "name": "targets_depth3_1",
+     "thm": " |- ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) )",
+     "proof": "N1 | ( ~ ( ~ Q ) ) : AS ; N2 | | ( ( R v R ) & S ) : AS ; N3 | | | ( R & ( Q v S ) ) : AS ; N4 | | | ( ( ( R v R ) & S ) v ( P > S ) ) : ORI1 N2 ; N5 | | ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) : IMPI N3 N4 ; N6 | ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ Q ) ) > ( ( ( R v R ) & S ) > ( ( R & ( Q v S ) ) > ( ( ( R v R ) & S ) v ( P > S ) ) ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    },
+    {
+     "name": "targets_depth3_2",
+     "thm": " |- ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) )",
+     "proof": "N1 | ( ~ ( ~ ( S > R ) ) ) : AS ; N2 | | Q : AS ; N3 | | | ( ~ ( ~ R ) ) : AS ; N4 | | | R : DN N3 ; N5 | | ( ( ~ ( ~ R ) ) > R ) : IMPI N3 N4 ; N6 | ( Q > ( ( ~ ( ~ R ) ) > R ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ ( S > R ) ) ) > ( Q > ( ( ~ ( ~ R ) ) > R ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    },
+    {
+     "name": "targets_depth3_3",
+     "thm": " |- ( ( ~ ( ~ P ) ) > ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ P ) > P ) ) )",
+     "proof": "N1 | ( ~ ( ~ P ) ) : AS ; N2 | | ( ~ ( ~ ( P v S ) ) ) : AS ; N3 | | | ( ~ P ) : AS ; N4 | | | P : DN N1 ; N5 | | ( ( ~ P ) > P ) : IMPI N3 N4 ; N6 | ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ P ) > P ) ) : IMPI N2 N5 ; N7 ( ( ~ ( ~ P ) ) > ( ( ~ ( ~ ( P v S ) ) ) > ( ( ~ P ) > P ) ) ) : IMPI N1 N6 ; QED",
+     "written": 7,
+     "pruned": 7,
+     "round": 1
+    }
+   ]
+  }
+ },
+ "ei": {
+  "ei_depth3_f0_a1_s0": {
+   "solved": 645,
+   "acq": 0.335,
+   "per_round_acq": [
+    2,
+    8,
+    117,
+    259,
+    299,
+    317,
+    327,
+    335
+   ],
+   "per_round_solved": [
+    154,
+    230,
+    360,
+    514,
+    566,
+    595,
+    623,
+    645
+   ],
+   "heldout_greedy": 0.9074
+  },
+  "ei_depth3_f0_a1_s1": {
+   "solved": 698,
+   "acq": 0.364,
+   "per_round_acq": [
+    4,
+    41,
+    175,
+    279,
+    311,
+    340,
+    354,
+    364
+   ],
+   "per_round_solved": [
+    148,
+    259,
+    430,
+    569,
+    627,
+    666,
+    686,
+    698
+   ],
+   "heldout_greedy": 0.9298
+  },
+  "ei_depth3_f0_a2_s0": {
+   "solved": 589,
+   "acq": 0.35,
+   "per_round_acq": [
+    3,
+    75,
+    199,
+    291,
+    308,
+    327,
+    341,
+    350
+   ],
+   "per_round_solved": [
+    140,
+    268,
+    413,
+    515,
+    540,
+    564,
+    579,
+    589
+   ],
+   "heldout_greedy": 0.9452
+  },
+  "ei_depth3_f0_a2_s1": {
+   "solved": 652,
+   "acq": 0.341,
+   "per_round_acq": [
+    0,
+    0,
+    8,
+    78,
+    242,
+    298,
+    317,
+    341
+   ],
+   "per_round_solved": [
+    120,
+    202,
+    234,
+    323,
+    517,
+    593,
+    624,
+    652
+   ],
+   "heldout_greedy": 0.903
+  },
+  "ei_depth3_f0_a3_s0": {
+   "solved": 605,
+   "acq": 0.361,
+   "per_round_acq": [
+    1,
+    31,
+    185,
+    280,
+    319,
+    335,
+    348,
+    361
+   ],
+   "per_round_solved": [
+    76,
+    208,
+    402,
+    512,
+    556,
+    574,
+    590,
+    605
+   ],
+   "heldout_greedy": 0.945
+  },
+  "ei_depth3_f0_a3_s1": {
+   "solved": 583,
+   "acq": 0.352,
+   "per_round_acq": [
+    7,
+    92,
+    227,
+    319,
+    338,
+    345,
+    346,
+    352
+   ],
+   "per_round_solved": [
+    106,
+    283,
+    431,
+    532,
+    555,
+    569,
+    572,
+    583
+   ],
+   "heldout_greedy": 0.9192
+  }
+ }
+}

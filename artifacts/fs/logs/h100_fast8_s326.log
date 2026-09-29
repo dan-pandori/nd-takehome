@@ -1,0 +1,16 @@
+params 3214336 mode lean_seq shift True aug offset impl fast pack True cache hit
+train records 155000  stream T 19200  useful tokens 35434825  computed 38400000 (waste 1.084x; legacy pad-to-max 1.967x)
+val slices {'all': 5000, 'len2': 1000, 'len3': 1000, 'len4': 1000, 'len5': 1000, 'len6': 1000, 'depth3': 500, 'nodepth3_len6': 500}
+captured the training step as one CUDA graph (6.9s incl. compile)
+first step (incl. compile) 6.9s
+step 200 loss 0.9470 lr 1.00e-03 12s val 0.9301 | all=0.9281 len2=0.8930 len3=0.9616 len4=0.9471 len5=0.9339 len6=0.9102 depth3=0.8602 nodepth3_len6=0.9849
+step 400 loss 0.2326 lr 9.73e-04 18s val 0.1804 | all=0.2191 len2=0.1830 len3=0.1782 len4=0.2272 len5=0.2074 len6=0.2556 depth3=0.2359 nodepth3_len6=0.2849
+step 600 loss 0.1448 lr 8.95e-04 25s val 0.1093 | all=0.1226 len2=0.1112 len3=0.1077 len4=0.1356 len5=0.1175 len6=0.1299 depth3=0.1081 nodepth3_len6=0.1624
+step 800 loss 0.1018 lr 7.75e-04 32s val 0.0958 | all=0.0920 len2=0.0986 len3=0.0934 len4=0.1011 len5=0.0820 len6=0.0915 depth3=0.0716 nodepth3_len6=0.1213
+step 1000 loss 0.0858 lr 6.28e-04 40s val 0.0871 | all=0.0770 len2=0.0901 len3=0.0845 len4=0.0836 len5=0.0675 len6=0.0724 depth3=0.0569 nodepth3_len6=0.0955
+step 1200 loss 0.0820 lr 4.72e-04 47s val 0.0821 | all=0.0690 len2=0.0833 len3=0.0811 len4=0.0748 len5=0.0618 len6=0.0606 depth3=0.0472 nodepth3_len6=0.0806
+step 1400 loss 0.0768 lr 3.25e-04 54s val 0.0793 | all=0.0632 len2=0.0816 len3=0.0775 len4=0.0690 len5=0.0549 len6=0.0532 depth3=0.0426 nodepth3_len6=0.0692
+step 1600 loss 0.0667 lr 2.05e-04 62s val 0.0774 | all=0.0602 len2=0.0811 len3=0.0742 len4=0.0644 len5=0.0517 len6=0.0505 depth3=0.0403 nodepth3_len6=0.0656
+step 1800 loss 0.0654 lr 1.27e-04 69s val 0.0753 | all=0.0579 len2=0.0794 len3=0.0718 len4=0.0615 len5=0.0488 len6=0.0489 depth3=0.0409 nodepth3_len6=0.0610
+step 2000 loss 0.0636 lr 1.00e-04 76s val 0.0755 | all=0.0565 len2=0.0800 len3=0.0716 len4=0.0597 len5=0.0472 len6=0.0466 depth3=0.0392 nodepth3_len6=0.0576
+saved ckpts/fs/h100_fast8_s326.pt (76.7s total, 5.0s validation, first step 6.9s, setup 2.8s, peak 0.52 GiB, 494421 useful tok/s in training)

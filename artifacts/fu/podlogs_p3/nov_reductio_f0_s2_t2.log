@@ -1,0 +1,22 @@
+ei_targets: 0 normalised-distinct proofs, 0 theorems
+ei_transfer: 0 normalised-distinct proofs, 0 theorems
+scoring under base (ckpts/p2/stage1_reductio_f0_s2.pt)
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/novelty.py", line 227, in <module>
+    main()
+  File "/workspace/nd-takehome/novelty.py", line 191, in main
+    model, tok, _ = load_ckpt(path, dev)
+                    ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 102, in load_ckpt
+    ck = torch.load(path, map_location=device)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 1484, in load
+    with _open_file_like(f, "rb") as opened_file:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 759, in _open_file_like
+    return _open_file(name_or_buffer, mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 740, in __init__
+    super().__init__(open(name, mode))
+                     ^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'ckpts/p2/ei_reductio_f0_s2_t2_r7.pt'

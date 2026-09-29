@@ -1,0 +1,14 @@
+START 2026-09-25T05:01:53Z until [ -f artifacts/nf/stage1_p2_s11.done ]; do sleep 20; done; python3 eval_set.py --ckpt ckpts/nf/stage1_p2_s11.pt --in data/p2/heldout.jsonl --out artifacts/nf/heldout_p2_s11.jsonl --k 1 --temperature 0 --batch 512 --summary artifacts/nf/heldout_p2_s11.json
+[lean_gate] 5000 samples, parse-fail 24, distinct checked 4976: both ok 4670, nd-only 0, lean-only 0, both rej 306; lean 18.8s wall (54.5s proc, 3 workers), nd_verify 0.2s
+generated 5000 proofs in 32s
+stage1_p2_s11.pt on heldout.jsonl k=1 SOLVED 4670/5000 = 0.934 [0.927,0.941]
+  len 2: 995/1000 = 0.995 [0.988,0.998]
+  len 3: 985/1000 = 0.985 [0.975,0.991]
+  len 4: 939/1000 = 0.939 [0.922,0.952]
+  len 5: 899/1000 = 0.899 [0.879,0.916]
+  len 6: 852/1000 = 0.852 [0.829,0.873]
+  written hist {2: 1021, 3: 980, 4: 915, 5: 944, 6: 807, 7: 3}
+  pruned hist {2: 1022, 3: 979, 4: 917, 5: 943, 6: 806, 7: 3}
+  frontier written 6 pruned 6
+  reasons [('rule check failed: ANDI', 75), ('rule check failed: ORI2', 46), ('rule check failed: DN', 33), ('rule check failed: ORI1', 28), ('rule check failed: IMPE', 27), ('rule check failed: IMPI', 27)]
+END 2026-09-25T06:52:11Z

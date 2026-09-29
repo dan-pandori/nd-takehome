@@ -1,0 +1,37 @@
+train_a1     data/p2/train_depth3_f0_a1.jsonl         n  155000 classes  154494
+train_full   data/train.jsonl                         n  154990 classes  153475
+d3_targets   data/p2/targets_depth3.jsonl             n    1000 classes    1000
+d3_transfer  data/p2/transfer_depth3.jsonl            n     500 classes     500
+p2_heldout   data/p2/heldout.jsonl                    n    5000 classes    4999
+la_targets   data/ladder/rl_targets.jsonl             n    4495 classes    4495
+la_transfer  data/ladder/transfer.jsonl               n    2285 classes    2284
+heldout      data/heldout.jsonl                       n    5000 classes    4996
+th_transfer  data/transfer.jsonl                      n    1638 classes    1637
+
+pairwise class overlaps (training files and RL-target pools vs every evaluation pool; 0 expected):
+  train_a1     x d3_targets  : 0
+  train_a1     x d3_transfer : 0
+  train_a1     x p2_heldout  : 21
+  d3_targets   x d3_transfer : 0
+  d3_targets   x p2_heldout  : 0
+  d3_transfer  x p2_heldout  : 0
+  train_full   x la_targets  : 0
+  train_full   x la_transfer : 0
+  train_full   x heldout     : 95
+  train_full   x th_transfer : 2
+  la_targets   x la_transfer : 2
+  la_targets   x heldout     : 0
+  la_transfer  x heldout     : 0
+  la_targets   x th_transfer : 0
+  la_transfer  x th_transfer : 0
+
+train_a1: n 155000 ND max-depth hist {0: 82393, 1: 54883, 2: 17724} | Lean nested-box depth hist {0: 82393, 1: 54883, 2: 17724} | ND lines hist {2: 31000, 3: 31000, 4: 31000, 5: 31000, 6: 31000} | render->inverse != original: 0
+
+train_full: n 154990 ND max-depth hist {0: 80077, 1: 52821, 2: 16428, 3: 5664} | Lean nested-box depth hist {0: 80077, 1: 52821, 2: 16428, 3: 5664} | ND lines hist {2: 30999, 3: 30999, 4: 30998, 5: 30996, 6: 30998} | render->inverse != original: 0
+
+sequence lengths, mean / median / p95 / max  (prompt, proof incl. eos)
+train_a1     lean prompt   54.2   53   76  152 | lean proof   84.3   77  146  328 || token prompt   39.1   38   60  142 | token proof   73.6   67  131  318 || total ratio 1.229
+train_full   lean prompt   51.8   50   74  157 | lean proof   82.8   75  149  412 || token prompt   36.9   35   58  143 | token proof   72.1   64  135  401 || total ratio 1.233
+p2_heldout   lean prompt   54.1   53   74  120 | lean proof   92.2   80  174  366 || token prompt   39.7   39   59  110 | token proof   81.3   69  162  355 || total ratio 1.210
+heldout      lean prompt   51.8   50   74  130 | lean proof   83.2   75  151  350 || token prompt   37.0   35   57  113 | token proof   72.6   64  139  339 || total ratio 1.232
+vocab: lean 107 token abs 99

@@ -1,0 +1,7558 @@
+{
+ "rows": [
+  {
+   "pool": "p1",
+   "seed": 0,
+   "set": "data/nf/train_p1.jsonl",
+   "ckpt": "ckpts/nf/stage1_p1_s0.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.8726,
+    "n": 5000,
+    "by_len": {
+     "2": 0.997,
+     "3": 0.99,
+     "4": 0.956,
+     "5": 0.933,
+     "6": 0.487
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9577538703752296,
+      "solved": 3650,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.599663582842725,
+      "solved": 713,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.086,
+      "solved": 43,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.3745019920318725,
+      "solved": 282,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8299595141700404,
+      "solved": 205,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": {
+     "n_targets": 300,
+     "targets_hit": 89,
+     "targets_hit_with_pattern": 89,
+     "pattern": "depth3",
+     "per_sample_rate": 0.009715,
+     "samples": 600000,
+     "n_ok_samples": 5829,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 6,
+       "hit": 4,
+       "hit_with_pattern": 4
+      },
+      "8": {
+       "n": 294,
+       "hit": 85,
+       "hit_with_pattern": 85
+      }
+     },
+     "distinct_proofs": 109,
+     "distinct_ge8": 105,
+     "written_hist": {
+      "7": 4,
+      "8": 105
+     },
+     "lean_checked": 109,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "red": {
+     "n_targets": 300,
+     "targets_hit": 31,
+     "targets_hit_with_pattern": 31,
+     "pattern": "derived_dn",
+     "per_sample_rate": 0.0009566666666666666,
+     "samples": 600000,
+     "n_ok_samples": 574,
+     "by_min_lines_ub": {
+      "10": {
+       "n": 33,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "7": {
+       "n": 52,
+       "hit": 31,
+       "hit_with_pattern": 31
+      },
+      "8": {
+       "n": 133,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "9": {
+       "n": 82,
+       "hit": 0,
+       "hit_with_pattern": 0
+      }
+     },
+     "distinct_proofs": 31,
+     "distinct_ge8": 0,
+     "written_hist": {
+      "7": 31
+     },
+     "lean_checked": 31,
+     "lean_rejected": 0,
+     "complete": true
+    }
+   },
+   "ladder_frozen": {
+    "rounds": 8,
+    "transfer_solved": 117,
+    "transfer_n": 2285,
+    "transfer_lstar": 9,
+    "transfer_ge": {
+     "2": 117,
+     "3": 117,
+     "4": 117,
+     "5": 117,
+     "6": 117,
+     "7": 117,
+     "8": 70,
+     "9": 32,
+     "10": 3,
+     "11": 0,
+     "12": 0,
+     "13": 0,
+     "14": 0,
+     "15": 0,
+     "16": 0,
+     "17": 0,
+     "18": 0,
+     "19": 0,
+     "20": 0
+    },
+    "targets_solved": 1036,
+    "targets_n": 4495,
+    "targets_lstar": 9,
+    "ckpt": "ckpts/nf/stage1_p1_s0.pt",
+    "k": 32,
+    "max_new": 512,
+    "secs_total": 23053.140856027603
+   }
+  },
+  {
+   "pool": "p1",
+   "seed": 1,
+   "set": "data/nf/train_p1.jsonl",
+   "ckpt": "ckpts/nf/stage1_p1_s1.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9362,
+    "n": 5000,
+    "by_len": {
+     "2": 0.993,
+     "3": 0.981,
+     "4": 0.945,
+     "5": 0.912,
+     "6": 0.85
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.942797166098137,
+      "solved": 3593,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.9150546677880572,
+      "solved": 1088,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.818,
+      "solved": 409,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.8725099601593626,
+      "solved": 657,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.7813765182186235,
+      "solved": 193,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": {
+     "n_targets": 300,
+     "targets_hit": 242,
+     "targets_hit_with_pattern": 242,
+     "pattern": "depth3",
+     "per_sample_rate": 0.23933,
+     "samples": 600000,
+     "n_ok_samples": 143598,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 6,
+       "hit": 6,
+       "hit_with_pattern": 6
+      },
+      "8": {
+       "n": 294,
+       "hit": 236,
+       "hit_with_pattern": 236
+      }
+     },
+     "distinct_proofs": 356,
+     "distinct_ge8": 350,
+     "written_hist": {
+      "7": 6,
+      "8": 339,
+      "9": 11
+     },
+     "lean_checked": 356,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "red": {
+     "n_targets": 300,
+     "targets_hit": 19,
+     "targets_hit_with_pattern": 19,
+     "pattern": "derived_dn",
+     "per_sample_rate": 0.010976666666666666,
+     "samples": 600000,
+     "n_ok_samples": 6586,
+     "by_min_lines_ub": {
+      "10": {
+       "n": 33,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "7": {
+       "n": 52,
+       "hit": 19,
+       "hit_with_pattern": 19
+      },
+      "8": {
+       "n": 133,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "9": {
+       "n": 82,
+       "hit": 0,
+       "hit_with_pattern": 0
+      }
+     },
+     "distinct_proofs": 19,
+     "distinct_ge8": 0,
+     "written_hist": {
+      "7": 19
+     },
+     "lean_checked": 19,
+     "lean_rejected": 0,
+     "complete": true
+    }
+   },
+   "ladder_frozen": {
+    "rounds": 8,
+    "transfer_solved": 262,
+    "transfer_n": 2285,
+    "transfer_lstar": 9,
+    "transfer_ge": {
+     "2": 262,
+     "3": 262,
+     "4": 262,
+     "5": 262,
+     "6": 262,
+     "7": 262,
+     "8": 212,
+     "9": 114,
+     "10": 4,
+     "11": 0,
+     "12": 0,
+     "13": 0,
+     "14": 0,
+     "15": 0,
+     "16": 0,
+     "17": 0,
+     "18": 0,
+     "19": 0,
+     "20": 0
+    },
+    "targets_solved": 1715,
+    "targets_n": 4495,
+    "targets_lstar": 10,
+    "ckpt": "ckpts/nf/stage1_p1_s1.pt",
+    "k": 32,
+    "max_new": 512,
+    "secs_total": 24266.35342979431
+   }
+  },
+  {
+   "pool": "p1",
+   "seed": 2,
+   "set": "data/nf/train_p1.jsonl",
+   "ckpt": "ckpts/nf/stage1_p1_s2.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.945,
+    "n": 5000,
+    "by_len": {
+     "2": 0.994,
+     "3": 0.989,
+     "4": 0.952,
+     "5": 0.921,
+     "6": 0.869
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9504067173970087,
+      "solved": 3622,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.9276703111858705,
+      "solved": 1103,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.856,
+      "solved": 428,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.8937583001328021,
+      "solved": 673,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.7935222672064778,
+      "solved": 196,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p1",
+   "seed": 3,
+   "set": "data/nf/train_p1.jsonl",
+   "ckpt": "ckpts/nf/stage1_p1_s3.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9118,
+    "n": 5000,
+    "by_len": {
+     "2": 0.998,
+     "3": 0.992,
+     "4": 0.96,
+     "5": 0.939,
+     "6": 0.67
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9619522435056416,
+      "solved": 3666,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.7510513036164844,
+      "solved": 893,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.432,
+      "solved": 216,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.6122177954847278,
+      "solved": 461,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8461538461538461,
+      "solved": 209,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p1",
+   "seed": 4,
+   "set": "data/nf/train_p1.jsonl",
+   "ckpt": "ckpts/nf/stage1_p1_s4.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.937,
+    "n": 5000,
+    "by_len": {
+     "2": 0.997,
+     "3": 0.984,
+     "4": 0.952,
+     "5": 0.914,
+     "6": 0.838
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9488323274731042,
+      "solved": 3616,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.8990748528174937,
+      "solved": 1069,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.792,
+      "solved": 396,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.8459495351925631,
+      "solved": 637,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8137651821862348,
+      "solved": 201,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p1",
+   "seed": 5,
+   "set": "data/nf/train_p1.jsonl",
+   "ckpt": "ckpts/nf/stage1_p1_s5.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9418,
+    "n": 5000,
+    "by_len": {
+     "2": 0.999,
+     "3": 0.988,
+     "4": 0.95,
+     "5": 0.929,
+     "6": 0.843
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9556546838100236,
+      "solved": 3642,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.8973927670311186,
+      "solved": 1067,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.79,
+      "solved": 395,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.8459495351925631,
+      "solved": 637,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8340080971659919,
+      "solved": 206,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p1",
+   "seed": 6,
+   "set": "data/nf/train_p1.jsonl",
+   "ckpt": "ckpts/nf/stage1_p1_s6.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.8968,
+    "n": 5000,
+    "by_len": {
+     "2": 0.997,
+     "3": 0.983,
+     "4": 0.953,
+     "5": 0.922,
+     "6": 0.629
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9540802938861191,
+      "solved": 3636,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.7132043734230445,
+      "solved": 848,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.364,
+      "solved": 182,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.5590969455511288,
+      "solved": 421,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8421052631578947,
+      "solved": 208,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p1",
+   "seed": 7,
+   "set": "data/nf/train_p1.jsonl",
+   "ckpt": "ckpts/nf/stage1_p1_s7.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9038,
+    "n": 5000,
+    "by_len": {
+     "2": 0.994,
+     "3": 0.992,
+     "4": 0.947,
+     "5": 0.933,
+     "6": 0.653
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9561794804513251,
+      "solved": 3644,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.7359125315391085,
+      "solved": 875,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.402,
+      "solved": 201,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.5883134130146083,
+      "solved": 443,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8502024291497976,
+      "solved": 210,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p1",
+   "seed": 8,
+   "set": "data/nf/train_p1.jsonl",
+   "ckpt": "ckpts/nf/stage1_p1_s8.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.8712,
+    "n": 5000,
+    "by_len": {
+     "2": 0.998,
+     "3": 0.992,
+     "4": 0.974,
+     "5": 0.937,
+     "6": 0.455
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.964576226712149,
+      "solved": 3676,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.5719091673675357,
+      "solved": 680,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.032,
+      "solved": 16,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.33067729083665337,
+      "solved": 249,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8340080971659919,
+      "solved": 206,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p1",
+   "seed": 9,
+   "set": "data/nf/train_p1.jsonl",
+   "ckpt": "ckpts/nf/stage1_p1_s9.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.873,
+    "n": 5000,
+    "by_len": {
+     "2": 0.997,
+     "3": 0.985,
+     "4": 0.968,
+     "5": 0.936,
+     "6": 0.479
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9601154552610863,
+      "solved": 3659,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.5937762825904122,
+      "solved": 706,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.06,
+      "solved": 30,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.3652058432934927,
+      "solved": 275,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8259109311740891,
+      "solved": 204,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p1",
+   "seed": 10,
+   "set": "data/nf/train_p1.jsonl",
+   "ckpt": "ckpts/nf/stage1_p1_s10.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.887,
+    "n": 5000,
+    "by_len": {
+     "2": 0.998,
+     "3": 0.994,
+     "4": 0.973,
+     "5": 0.956,
+     "6": 0.514
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9721857780110207,
+      "solved": 3705,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.6139613120269134,
+      "solved": 730,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.106,
+      "solved": 53,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.3944223107569721,
+      "solved": 297,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8785425101214575,
+      "solved": 217,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p1",
+   "seed": 11,
+   "set": "data/nf/train_p1.jsonl",
+   "ckpt": "ckpts/nf/stage1_p1_s11.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.8632,
+    "n": 5000,
+    "by_len": {
+     "2": 0.993,
+     "3": 0.976,
+     "4": 0.892,
+     "5": 0.877,
+     "6": 0.578
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9144581474678563,
+      "solved": 3485,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.6989066442388562,
+      "solved": 831,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.316,
+      "solved": 158,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.5338645418326693,
+      "solved": 402,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.7125506072874493,
+      "solved": 176,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p1",
+   "seed": 12,
+   "set": "data/nf/train_p1.jsonl",
+   "ckpt": "ckpts/nf/stage1_p1_s12.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.93,
+    "n": 5000,
+    "by_len": {
+     "2": 1.0,
+     "3": 0.986,
+     "4": 0.959,
+     "5": 0.93,
+     "6": 0.775
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9569666754132774,
+      "solved": 3647,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.8435660218671153,
+      "solved": 1003,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.66,
+      "solved": 330,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.7583001328021248,
+      "solved": 571,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8259109311740891,
+      "solved": 204,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p2",
+   "seed": 0,
+   "set": "data/nf/train_p2.jsonl",
+   "ckpt": "ckpts/nf/stage1_p2_s0.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9458,
+    "n": 5000,
+    "by_len": {
+     "2": 0.999,
+     "3": 0.992,
+     "4": 0.97,
+     "5": 0.956,
+     "6": 0.812
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9703489897664654,
+      "solved": 3698,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.8671152228763667,
+      "solved": 1031,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.706,
+      "solved": 353,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.795484727755644,
+      "solved": 599,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8623481781376519,
+      "solved": 213,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": {
+     "n_targets": 300,
+     "targets_hit": 205,
+     "targets_hit_with_pattern": 205,
+     "pattern": "depth3",
+     "per_sample_rate": 0.09742833333333334,
+     "samples": 600000,
+     "n_ok_samples": 58457,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 6,
+       "hit": 5,
+       "hit_with_pattern": 5
+      },
+      "8": {
+       "n": 294,
+       "hit": 200,
+       "hit_with_pattern": 200
+      }
+     },
+     "distinct_proofs": 277,
+     "distinct_ge8": 272,
+     "written_hist": {
+      "7": 5,
+      "8": 268,
+      "9": 4
+     },
+     "lean_checked": 277,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "red": {
+     "n_targets": 300,
+     "targets_hit": 39,
+     "targets_hit_with_pattern": 39,
+     "pattern": "derived_dn",
+     "per_sample_rate": 0.004121666666666667,
+     "samples": 600000,
+     "n_ok_samples": 2473,
+     "by_min_lines_ub": {
+      "10": {
+       "n": 33,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "7": {
+       "n": 52,
+       "hit": 39,
+       "hit_with_pattern": 39
+      },
+      "8": {
+       "n": 133,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "9": {
+       "n": 82,
+       "hit": 0,
+       "hit_with_pattern": 0
+      }
+     },
+     "distinct_proofs": 39,
+     "distinct_ge8": 0,
+     "written_hist": {
+      "7": 39
+     },
+     "lean_checked": 39,
+     "lean_rejected": 0,
+     "complete": true
+    }
+   },
+   "ladder_frozen": {
+    "rounds": 8,
+    "transfer_solved": 200,
+    "transfer_n": 2285,
+    "transfer_lstar": 9,
+    "transfer_ge": {
+     "2": 200,
+     "3": 200,
+     "4": 200,
+     "5": 200,
+     "6": 200,
+     "7": 200,
+     "8": 151,
+     "9": 69,
+     "10": 3,
+     "11": 0,
+     "12": 0,
+     "13": 0,
+     "14": 0,
+     "15": 0,
+     "16": 0,
+     "17": 0,
+     "18": 0,
+     "19": 0,
+     "20": 0
+    },
+    "targets_solved": 1512,
+    "targets_n": 4495,
+    "targets_lstar": 10,
+    "ckpt": "ckpts/nf/stage1_p2_s0.pt",
+    "k": 32,
+    "max_new": 512,
+    "secs_total": 22430.007994890213
+   }
+  },
+  {
+   "pool": "p2",
+   "seed": 1,
+   "set": "data/nf/train_p2.jsonl",
+   "ckpt": "ckpts/nf/stage1_p2_s1.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.877,
+    "n": 5000,
+    "by_len": {
+     "2": 1.0,
+     "3": 0.993,
+     "4": 0.965,
+     "5": 0.919,
+     "6": 0.508
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9585410653371819,
+      "solved": 3653,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.6156433978132885,
+      "solved": 732,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.106,
+      "solved": 53,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.398406374501992,
+      "solved": 300,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8421052631578947,
+      "solved": 208,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": {
+     "n_targets": 300,
+     "targets_hit": 61,
+     "targets_hit_with_pattern": 61,
+     "pattern": "depth3",
+     "per_sample_rate": 0.004556666666666666,
+     "samples": 600000,
+     "n_ok_samples": 2734,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 6,
+       "hit": 1,
+       "hit_with_pattern": 1
+      },
+      "8": {
+       "n": 294,
+       "hit": 60,
+       "hit_with_pattern": 60
+      }
+     },
+     "distinct_proofs": 72,
+     "distinct_ge8": 71,
+     "written_hist": {
+      "7": 1,
+      "8": 71
+     },
+     "lean_checked": 72,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "red": {
+     "n_targets": 300,
+     "targets_hit": 43,
+     "targets_hit_with_pattern": 43,
+     "pattern": "derived_dn",
+     "per_sample_rate": 0.005835,
+     "samples": 600000,
+     "n_ok_samples": 3501,
+     "by_min_lines_ub": {
+      "10": {
+       "n": 33,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "7": {
+       "n": 52,
+       "hit": 43,
+       "hit_with_pattern": 43
+      },
+      "8": {
+       "n": 133,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "9": {
+       "n": 82,
+       "hit": 0,
+       "hit_with_pattern": 0
+      }
+     },
+     "distinct_proofs": 43,
+     "distinct_ge8": 0,
+     "written_hist": {
+      "7": 43
+     },
+     "lean_checked": 43,
+     "lean_rejected": 0,
+     "complete": true
+    }
+   },
+   "ladder_frozen": {
+    "rounds": 8,
+    "transfer_solved": 96,
+    "transfer_n": 2285,
+    "transfer_lstar": 9,
+    "transfer_ge": {
+     "2": 96,
+     "3": 96,
+     "4": 96,
+     "5": 96,
+     "6": 96,
+     "7": 96,
+     "8": 66,
+     "9": 37,
+     "10": 0,
+     "11": 0,
+     "12": 0,
+     "13": 0,
+     "14": 0,
+     "15": 0,
+     "16": 0,
+     "17": 0,
+     "18": 0,
+     "19": 0,
+     "20": 0
+    },
+    "targets_solved": 823,
+    "targets_n": 4495,
+    "targets_lstar": 9,
+    "ckpt": "ckpts/nf/stage1_p2_s1.pt",
+    "k": 32,
+    "max_new": 512,
+    "secs_total": 23098.818380832672
+   }
+  },
+  {
+   "pool": "p2",
+   "seed": 2,
+   "set": "data/nf/train_p2.jsonl",
+   "ckpt": "ckpts/nf/stage1_p2_s2.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.8752,
+    "n": 5000,
+    "by_len": {
+     "2": 0.987,
+     "3": 0.984,
+     "4": 0.935,
+     "5": 0.912,
+     "6": 0.558
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.941747572815534,
+      "solved": 3589,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.6619007569386038,
+      "solved": 787,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.216,
+      "solved": 108,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.4754316069057105,
+      "solved": 358,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8097165991902834,
+      "solved": 200,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p2",
+   "seed": 3,
+   "set": "data/nf/train_p2.jsonl",
+   "ckpt": "ckpts/nf/stage1_p2_s3.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.8868,
+    "n": 5000,
+    "by_len": {
+     "2": 0.996,
+     "3": 0.991,
+     "4": 0.965,
+     "5": 0.932,
+     "6": 0.55
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9606402519023878,
+      "solved": 3661,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.6501261564339781,
+      "solved": 773,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.194,
+      "solved": 97,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.4541832669322709,
+      "solved": 342,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8421052631578947,
+      "solved": 208,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p2",
+   "seed": 4,
+   "set": "data/nf/train_p2.jsonl",
+   "ckpt": "ckpts/nf/stage1_p2_s4.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9546,
+    "n": 5000,
+    "by_len": {
+     "2": 0.998,
+     "3": 0.99,
+     "4": 0.969,
+     "5": 0.939,
+     "6": 0.877
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9627394384675938,
+      "solved": 3669,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.928511354079058,
+      "solved": 1104,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.854,
+      "solved": 427,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.8950863213811421,
+      "solved": 674,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8218623481781376,
+      "solved": 203,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p2",
+   "seed": 5,
+   "set": "data/nf/train_p2.jsonl",
+   "ckpt": "ckpts/nf/stage1_p2_s5.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9388,
+    "n": 5000,
+    "by_len": {
+     "2": 0.999,
+     "3": 0.986,
+     "4": 0.959,
+     "5": 0.93,
+     "6": 0.82
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9564418787719758,
+      "solved": 3645,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.8822539949537427,
+      "solved": 1049,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.742,
+      "solved": 371,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.8207171314741036,
+      "solved": 618,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8178137651821862,
+      "solved": 202,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p2",
+   "seed": 6,
+   "set": "data/nf/train_p2.jsonl",
+   "ckpt": "ckpts/nf/stage1_p2_s6.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9094,
+    "n": 5000,
+    "by_len": {
+     "2": 0.998,
+     "3": 0.993,
+     "4": 0.962,
+     "5": 0.928,
+     "6": 0.666
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9582786670165311,
+      "solved": 3652,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.7527333894028595,
+      "solved": 895,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.478,
+      "solved": 239,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.6162018592297477,
+      "solved": 464,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8178137651821862,
+      "solved": 202,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p2",
+   "seed": 7,
+   "set": "data/nf/train_p2.jsonl",
+   "ckpt": "ckpts/nf/stage1_p2_s7.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.8766,
+    "n": 5000,
+    "by_len": {
+     "2": 0.999,
+     "3": 0.989,
+     "4": 0.961,
+     "5": 0.946,
+     "6": 0.488
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9630018367882446,
+      "solved": 3670,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.599663582842725,
+      "solved": 713,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.064,
+      "solved": 32,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.37317397078353254,
+      "solved": 281,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8380566801619433,
+      "solved": 207,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p2",
+   "seed": 8,
+   "set": "data/nf/train_p2.jsonl",
+   "ckpt": "ckpts/nf/stage1_p2_s8.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.8774,
+    "n": 5000,
+    "by_len": {
+     "2": 0.998,
+     "3": 0.993,
+     "4": 0.962,
+     "5": 0.943,
+     "6": 0.491
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.964576226712149,
+      "solved": 3676,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.5979814970563498,
+      "solved": 711,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.068,
+      "solved": 34,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.37184594953519257,
+      "solved": 280,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.854251012145749,
+      "solved": 211,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p2",
+   "seed": 9,
+   "set": "data/nf/train_p2.jsonl",
+   "ckpt": "ckpts/nf/stage1_p2_s9.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9276,
+    "n": 5000,
+    "by_len": {
+     "2": 0.991,
+     "3": 0.983,
+     "4": 0.927,
+     "5": 0.904,
+     "6": 0.833
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9388611912883758,
+      "solved": 3578,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.8915054667788057,
+      "solved": 1060,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.768,
+      "solved": 384,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.8353253652058433,
+      "solved": 629,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8259109311740891,
+      "solved": 204,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p2",
+   "seed": 10,
+   "set": "data/nf/train_p2.jsonl",
+   "ckpt": "ckpts/nf/stage1_p2_s10.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9418,
+    "n": 5000,
+    "by_len": {
+     "2": 0.995,
+     "3": 0.988,
+     "4": 0.968,
+     "5": 0.917,
+     "6": 0.841
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9556546838100236,
+      "solved": 3642,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.8973927670311186,
+      "solved": 1067,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.786,
+      "solved": 393,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.8446215139442231,
+      "solved": 636,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8299595141700404,
+      "solved": 205,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p2",
+   "seed": 11,
+   "set": "data/nf/train_p2.jsonl",
+   "ckpt": "ckpts/nf/stage1_p2_s11.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.934,
+    "n": 5000,
+    "by_len": {
+     "2": 0.995,
+     "3": 0.985,
+     "4": 0.939,
+     "5": 0.899,
+     "6": 0.852
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9391235896090265,
+      "solved": 3579,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.9175777964676198,
+      "solved": 1091,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.85,
+      "solved": 425,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.8804780876494024,
+      "solved": 663,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.7651821862348178,
+      "solved": 189,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p2",
+   "seed": 12,
+   "set": "data/nf/train_p2.jsonl",
+   "ckpt": "ckpts/nf/stage1_p2_s12.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.937,
+    "n": 5000,
+    "by_len": {
+     "2": 0.999,
+     "3": 0.989,
+     "4": 0.96,
+     "5": 0.936,
+     "6": 0.801
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9574914720545789,
+      "solved": 3649,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.8713204373423045,
+      "solved": 1036,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.714,
+      "solved": 357,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.8034528552456839,
+      "solved": 605,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.7935222672064778,
+      "solved": 196,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p3",
+   "seed": 0,
+   "set": "data/nf/train_p3.jsonl",
+   "ckpt": "ckpts/nf/stage1_p3_s0.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.868,
+    "n": 5000,
+    "by_len": {
+     "2": 0.997,
+     "3": 0.991,
+     "4": 0.953,
+     "5": 0.926,
+     "6": 0.473
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9559170821306744,
+      "solved": 3643,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.5862068965517241,
+      "solved": 697,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.04,
+      "solved": 20,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.3545816733067729,
+      "solved": 267,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8340080971659919,
+      "solved": 206,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": {
+     "n_targets": 300,
+     "targets_hit": 71,
+     "targets_hit_with_pattern": 71,
+     "pattern": "depth3",
+     "per_sample_rate": 0.00205,
+     "samples": 600000,
+     "n_ok_samples": 1230,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 6,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "8": {
+       "n": 294,
+       "hit": 71,
+       "hit_with_pattern": 71
+      }
+     },
+     "distinct_proofs": 84,
+     "distinct_ge8": 84,
+     "written_hist": {
+      "8": 82,
+      "9": 2
+     },
+     "lean_checked": 84,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "red": {
+     "n_targets": 300,
+     "targets_hit": 6,
+     "targets_hit_with_pattern": 6,
+     "pattern": "derived_dn",
+     "per_sample_rate": 2.8333333333333332e-05,
+     "samples": 600000,
+     "n_ok_samples": 17,
+     "by_min_lines_ub": {
+      "10": {
+       "n": 33,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "7": {
+       "n": 52,
+       "hit": 6,
+       "hit_with_pattern": 6
+      },
+      "8": {
+       "n": 133,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "9": {
+       "n": 82,
+       "hit": 0,
+       "hit_with_pattern": 0
+      }
+     },
+     "distinct_proofs": 6,
+     "distinct_ge8": 0,
+     "written_hist": {
+      "7": 6
+     },
+     "lean_checked": 6,
+     "lean_rejected": 0,
+     "complete": true
+    }
+   },
+   "ladder_frozen": {
+    "rounds": 8,
+    "transfer_solved": 62,
+    "transfer_n": 2285,
+    "transfer_lstar": 9,
+    "transfer_ge": {
+     "2": 62,
+     "3": 62,
+     "4": 62,
+     "5": 62,
+     "6": 62,
+     "7": 62,
+     "8": 39,
+     "9": 22,
+     "10": 1,
+     "11": 0,
+     "12": 0,
+     "13": 0,
+     "14": 0,
+     "15": 0,
+     "16": 0,
+     "17": 0,
+     "18": 0,
+     "19": 0,
+     "20": 0
+    },
+    "targets_solved": 714,
+    "targets_n": 4495,
+    "targets_lstar": 9,
+    "ckpt": "ckpts/nf/stage1_p3_s0.pt",
+    "k": 32,
+    "max_new": 512,
+    "secs_total": 21086.45312309265
+   }
+  },
+  {
+   "pool": "p3",
+   "seed": 1,
+   "set": "data/nf/train_p3.jsonl",
+   "ckpt": "ckpts/nf/stage1_p3_s1.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.8858,
+    "n": 5000,
+    "by_len": {
+     "2": 0.994,
+     "3": 0.991,
+     "4": 0.966,
+     "5": 0.922,
+     "6": 0.556
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9588034636578326,
+      "solved": 3654,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.6518082422203533,
+      "solved": 775,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.204,
+      "solved": 102,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.4594953519256308,
+      "solved": 346,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8502024291497976,
+      "solved": 210,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": {
+     "n_targets": 300,
+     "targets_hit": 172,
+     "targets_hit_with_pattern": 172,
+     "pattern": "depth3",
+     "per_sample_rate": 0.01762,
+     "samples": 600000,
+     "n_ok_samples": 10572,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 6,
+       "hit": 6,
+       "hit_with_pattern": 6
+      },
+      "8": {
+       "n": 294,
+       "hit": 166,
+       "hit_with_pattern": 166
+      }
+     },
+     "distinct_proofs": 200,
+     "distinct_ge8": 194,
+     "written_hist": {
+      "7": 6,
+      "8": 187,
+      "9": 7
+     },
+     "lean_checked": 200,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "red": {
+     "n_targets": 300,
+     "targets_hit": 46,
+     "targets_hit_with_pattern": 46,
+     "pattern": "derived_dn",
+     "per_sample_rate": 0.002085,
+     "samples": 600000,
+     "n_ok_samples": 1251,
+     "by_min_lines_ub": {
+      "10": {
+       "n": 33,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "7": {
+       "n": 52,
+       "hit": 46,
+       "hit_with_pattern": 46
+      },
+      "8": {
+       "n": 133,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "9": {
+       "n": 82,
+       "hit": 0,
+       "hit_with_pattern": 0
+      }
+     },
+     "distinct_proofs": 46,
+     "distinct_ge8": 0,
+     "written_hist": {
+      "7": 46
+     },
+     "lean_checked": 46,
+     "lean_rejected": 0,
+     "complete": true
+    }
+   },
+   "ladder_frozen": {
+    "rounds": 8,
+    "transfer_solved": 174,
+    "transfer_n": 2285,
+    "transfer_lstar": 9,
+    "transfer_ge": {
+     "2": 174,
+     "3": 174,
+     "4": 174,
+     "5": 174,
+     "6": 174,
+     "7": 174,
+     "8": 134,
+     "9": 73,
+     "10": 4,
+     "11": 0,
+     "12": 0,
+     "13": 0,
+     "14": 0,
+     "15": 0,
+     "16": 0,
+     "17": 0,
+     "18": 0,
+     "19": 0,
+     "20": 0
+    },
+    "targets_solved": 1298,
+    "targets_n": 4495,
+    "targets_lstar": 9,
+    "ckpt": "ckpts/nf/stage1_p3_s1.pt",
+    "k": 32,
+    "max_new": 512,
+    "secs_total": 22135.12429499626
+   }
+  },
+  {
+   "pool": "p3",
+   "seed": 2,
+   "set": "data/nf/train_p3.jsonl",
+   "ckpt": "ckpts/nf/stage1_p3_s2.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9138,
+    "n": 5000,
+    "by_len": {
+     "2": 0.999,
+     "3": 0.99,
+     "4": 0.955,
+     "5": 0.937,
+     "6": 0.688
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9609026502230386,
+      "solved": 3662,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.7628259041211102,
+      "solved": 907,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.464,
+      "solved": 232,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.6321381142098274,
+      "solved": 476,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8582995951417004,
+      "solved": 212,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p3",
+   "seed": 3,
+   "set": "data/nf/train_p3.jsonl",
+   "ckpt": "ckpts/nf/stage1_p3_s3.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9052,
+    "n": 5000,
+    "by_len": {
+     "2": 0.999,
+     "3": 0.99,
+     "4": 0.955,
+     "5": 0.924,
+     "6": 0.658
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9574914720545789,
+      "solved": 3649,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.7375946173254836,
+      "solved": 877,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.4,
+      "solved": 200,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.5936254980079682,
+      "solved": 447,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.854251012145749,
+      "solved": 211,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p3",
+   "seed": 4,
+   "set": "data/nf/train_p3.jsonl",
+   "ckpt": "ckpts/nf/stage1_p3_s4.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9454,
+    "n": 5000,
+    "by_len": {
+     "2": 0.99,
+     "3": 0.987,
+     "4": 0.955,
+     "5": 0.928,
+     "6": 0.867
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9546050905274206,
+      "solved": 3638,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.9158957106812448,
+      "solved": 1089,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.84,
+      "solved": 420,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.8764940239043825,
+      "solved": 660,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8380566801619433,
+      "solved": 207,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p3",
+   "seed": 5,
+   "set": "data/nf/train_p3.jsonl",
+   "ckpt": "ckpts/nf/stage1_p3_s5.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9258,
+    "n": 5000,
+    "by_len": {
+     "2": 0.992,
+     "3": 0.984,
+     "4": 0.942,
+     "5": 0.917,
+     "6": 0.794
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9459459459459459,
+      "solved": 3605,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.8612279226240538,
+      "solved": 1024,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.692,
+      "solved": 346,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.7901726427622842,
+      "solved": 595,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.805668016194332,
+      "solved": 199,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p3",
+   "seed": 6,
+   "set": "data/nf/train_p3.jsonl",
+   "ckpt": "ckpts/nf/stage1_p3_s6.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9346,
+    "n": 5000,
+    "by_len": {
+     "2": 0.994,
+     "3": 0.985,
+     "4": 0.94,
+     "5": 0.919,
+     "6": 0.835
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9462083442665967,
+      "solved": 3606,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.8973927670311186,
+      "solved": 1067,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.792,
+      "solved": 396,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.848605577689243,
+      "solved": 639,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.7935222672064778,
+      "solved": 196,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p3",
+   "seed": 7,
+   "set": "data/nf/train_p3.jsonl",
+   "ckpt": "ckpts/nf/stage1_p3_s7.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.8764,
+    "n": 5000,
+    "by_len": {
+     "2": 0.993,
+     "3": 0.992,
+     "4": 0.968,
+     "5": 0.936,
+     "6": 0.493
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9616898451849908,
+      "solved": 3665,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.6030277544154752,
+      "solved": 717,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.086,
+      "solved": 43,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.3784860557768924,
+      "solved": 285,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8421052631578947,
+      "solved": 208,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p3",
+   "seed": 8,
+   "set": "data/nf/train_p3.jsonl",
+   "ckpt": "ckpts/nf/stage1_p3_s8.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9454,
+    "n": 5000,
+    "by_len": {
+     "2": 0.997,
+     "3": 0.993,
+     "4": 0.973,
+     "5": 0.935,
+     "6": 0.829
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.964576226712149,
+      "solved": 3676,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.8839360807401178,
+      "solved": 1051,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.748,
+      "solved": 374,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.8233731739707836,
+      "solved": 620,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8461538461538461,
+      "solved": 209,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p3",
+   "seed": 9,
+   "set": "data/nf/train_p3.jsonl",
+   "ckpt": "ckpts/nf/stage1_p3_s9.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.874,
+    "n": 5000,
+    "by_len": {
+     "2": 0.995,
+     "3": 0.995,
+     "4": 0.979,
+     "5": 0.943,
+     "6": 0.458
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9685122015219103,
+      "solved": 3691,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.5710681244743482,
+      "solved": 679,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.01,
+      "solved": 5,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.33067729083665337,
+      "solved": 249,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8461538461538461,
+      "solved": 209,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p3",
+   "seed": 10,
+   "set": "data/nf/train_p3.jsonl",
+   "ckpt": "ckpts/nf/stage1_p3_s10.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.8694,
+    "n": 5000,
+    "by_len": {
+     "2": 1.0,
+     "3": 0.994,
+     "4": 0.962,
+     "5": 0.937,
+     "6": 0.454
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9619522435056416,
+      "solved": 3666,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.5727502102607233,
+      "solved": 681,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.012,
+      "solved": 6,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.3293492695883134,
+      "solved": 248,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8340080971659919,
+      "solved": 206,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p3",
+   "seed": 11,
+   "set": "data/nf/train_p3.jsonl",
+   "ckpt": "ckpts/nf/stage1_p3_s11.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9132,
+    "n": 5000,
+    "by_len": {
+     "2": 0.998,
+     "3": 0.981,
+     "4": 0.947,
+     "5": 0.898,
+     "6": 0.742
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9383363946470743,
+      "solved": 3576,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.832632464255677,
+      "solved": 990,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.62,
+      "solved": 310,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.7436918990703851,
+      "solved": 560,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.7368421052631579,
+      "solved": 182,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p3",
+   "seed": 12,
+   "set": "data/nf/train_p3.jsonl",
+   "ckpt": "ckpts/nf/stage1_p3_s12.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.895,
+    "n": 5000,
+    "by_len": {
+     "2": 0.998,
+     "3": 0.995,
+     "4": 0.968,
+     "5": 0.937,
+     "6": 0.577
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.964576226712149,
+      "solved": 3676,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.6719932716568545,
+      "solved": 799,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.244,
+      "solved": 122,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.48871181938911024,
+      "solved": 368,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8461538461538461,
+      "solved": 209,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p4",
+   "seed": 0,
+   "set": "data/nf/train_p4.jsonl",
+   "ckpt": "ckpts/nf/stage1_p4_s0.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.8716,
+    "n": 5000,
+    "by_len": {
+     "2": 0.998,
+     "3": 0.98,
+     "4": 0.96,
+     "5": 0.926,
+     "6": 0.494
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9553922854893728,
+      "solved": 3641,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.6030277544154752,
+      "solved": 717,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.09,
+      "solved": 45,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.3837981407702523,
+      "solved": 289,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8299595141700404,
+      "solved": 205,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": {
+     "n_targets": 300,
+     "targets_hit": 144,
+     "targets_hit_with_pattern": 144,
+     "pattern": "depth3",
+     "per_sample_rate": 0.011553333333333334,
+     "samples": 600000,
+     "n_ok_samples": 6932,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 6,
+       "hit": 4,
+       "hit_with_pattern": 4
+      },
+      "8": {
+       "n": 294,
+       "hit": 140,
+       "hit_with_pattern": 140
+      }
+     },
+     "distinct_proofs": 178,
+     "distinct_ge8": 174,
+     "written_hist": {
+      "7": 4,
+      "8": 166,
+      "9": 8
+     },
+     "lean_checked": 178,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "red": {
+     "n_targets": 300,
+     "targets_hit": 34,
+     "targets_hit_with_pattern": 34,
+     "pattern": "derived_dn",
+     "per_sample_rate": 0.0027166666666666667,
+     "samples": 600000,
+     "n_ok_samples": 1630,
+     "by_min_lines_ub": {
+      "10": {
+       "n": 33,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "7": {
+       "n": 52,
+       "hit": 34,
+       "hit_with_pattern": 34
+      },
+      "8": {
+       "n": 133,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "9": {
+       "n": 82,
+       "hit": 0,
+       "hit_with_pattern": 0
+      }
+     },
+     "distinct_proofs": 34,
+     "distinct_ge8": 0,
+     "written_hist": {
+      "7": 34
+     },
+     "lean_checked": 34,
+     "lean_rejected": 0,
+     "complete": true
+    }
+   },
+   "ladder_frozen": {
+    "rounds": 8,
+    "transfer_solved": 177,
+    "transfer_n": 2285,
+    "transfer_lstar": 9,
+    "transfer_ge": {
+     "2": 177,
+     "3": 177,
+     "4": 177,
+     "5": 177,
+     "6": 177,
+     "7": 177,
+     "8": 122,
+     "9": 74,
+     "10": 3,
+     "11": 0,
+     "12": 0,
+     "13": 0,
+     "14": 0,
+     "15": 0,
+     "16": 0,
+     "17": 0,
+     "18": 0,
+     "19": 0,
+     "20": 0
+    },
+    "targets_solved": 1187,
+    "targets_n": 4495,
+    "targets_lstar": 9,
+    "ckpt": "ckpts/nf/stage1_p4_s0.pt",
+    "k": 32,
+    "max_new": 512,
+    "secs_total": 21456.53769469261
+   }
+  },
+  {
+   "pool": "p4",
+   "seed": 1,
+   "set": "data/nf/train_p4.jsonl",
+   "ckpt": "ckpts/nf/stage1_p4_s1.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.963,
+    "n": 5000,
+    "by_len": {
+     "2": 0.998,
+     "3": 0.991,
+     "4": 0.968,
+     "5": 0.938,
+     "6": 0.92
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9653634216741013,
+      "solved": 3679,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.9554247266610597,
+      "solved": 1136,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.918,
+      "solved": 459,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.9375830013280213,
+      "solved": 706,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8663967611336032,
+      "solved": 214,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": {
+     "n_targets": 300,
+     "targets_hit": 238,
+     "targets_hit_with_pattern": 238,
+     "pattern": "depth3",
+     "per_sample_rate": 0.3390166666666667,
+     "samples": 600000,
+     "n_ok_samples": 203410,
+     "by_min_lines_ub": {
+      "7": {
+       "n": 6,
+       "hit": 6,
+       "hit_with_pattern": 6
+      },
+      "8": {
+       "n": 294,
+       "hit": 232,
+       "hit_with_pattern": 232
+      }
+     },
+     "distinct_proofs": 331,
+     "distinct_ge8": 325,
+     "written_hist": {
+      "7": 6,
+      "8": 307,
+      "9": 18
+     },
+     "lean_checked": 331,
+     "lean_rejected": 0,
+     "complete": true
+    },
+    "red": {
+     "n_targets": 300,
+     "targets_hit": 27,
+     "targets_hit_with_pattern": 27,
+     "pattern": "derived_dn",
+     "per_sample_rate": 0.0009416666666666667,
+     "samples": 600000,
+     "n_ok_samples": 565,
+     "by_min_lines_ub": {
+      "10": {
+       "n": 33,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "7": {
+       "n": 52,
+       "hit": 27,
+       "hit_with_pattern": 27
+      },
+      "8": {
+       "n": 133,
+       "hit": 0,
+       "hit_with_pattern": 0
+      },
+      "9": {
+       "n": 82,
+       "hit": 0,
+       "hit_with_pattern": 0
+      }
+     },
+     "distinct_proofs": 27,
+     "distinct_ge8": 0,
+     "written_hist": {
+      "7": 27
+     },
+     "lean_checked": 27,
+     "lean_rejected": 0,
+     "complete": true
+    }
+   },
+   "ladder_frozen": {
+    "rounds": 8,
+    "transfer_solved": 265,
+    "transfer_n": 2285,
+    "transfer_lstar": 10,
+    "transfer_ge": {
+     "2": 265,
+     "3": 265,
+     "4": 265,
+     "5": 265,
+     "6": 265,
+     "7": 265,
+     "8": 218,
+     "9": 118,
+     "10": 14,
+     "11": 0,
+     "12": 0,
+     "13": 0,
+     "14": 0,
+     "15": 0,
+     "16": 0,
+     "17": 0,
+     "18": 0,
+     "19": 0,
+     "20": 0
+    },
+    "targets_solved": 1765,
+    "targets_n": 4495,
+    "targets_lstar": 10,
+    "ckpt": "ckpts/nf/stage1_p4_s1.pt",
+    "k": 32,
+    "max_new": 512,
+    "secs_total": 23105.410245895386
+   }
+  },
+  {
+   "pool": "p4",
+   "seed": 2,
+   "set": "data/nf/train_p4.jsonl",
+   "ckpt": "ckpts/nf/stage1_p4_s2.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.842,
+    "n": 5000,
+    "by_len": {
+     "2": 0.991,
+     "3": 0.979,
+     "4": 0.927,
+     "5": 0.892,
+     "6": 0.421
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9265284702177906,
+      "solved": 3531,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.5710681244743482,
+      "solved": 679,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.008,
+      "solved": 4,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.33067729083665337,
+      "solved": 249,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.6963562753036437,
+      "solved": 172,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p4",
+   "seed": 3,
+   "set": "data/nf/train_p4.jsonl",
+   "ckpt": "ckpts/nf/stage1_p4_s3.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.8842,
+    "n": 5000,
+    "by_len": {
+     "2": 0.998,
+     "3": 0.989,
+     "4": 0.965,
+     "5": 0.934,
+     "6": 0.535
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9609026502230386,
+      "solved": 3662,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.6383515559293524,
+      "solved": 759,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.172,
+      "solved": 86,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.4395750332005312,
+      "solved": 331,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8259109311740891,
+      "solved": 204,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p4",
+   "seed": 4,
+   "set": "data/nf/train_p4.jsonl",
+   "ckpt": "ckpts/nf/stage1_p4_s4.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9456,
+    "n": 5000,
+    "by_len": {
+     "2": 0.999,
+     "3": 0.992,
+     "4": 0.963,
+     "5": 0.931,
+     "6": 0.843
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9580162686958803,
+      "solved": 3651,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.9058031959629941,
+      "solved": 1077,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.798,
+      "solved": 399,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.8579017264276229,
+      "solved": 646,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.7975708502024291,
+      "solved": 197,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p4",
+   "seed": 5,
+   "set": "data/nf/train_p4.jsonl",
+   "ckpt": "ckpts/nf/stage1_p4_s5.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.904,
+    "n": 5000,
+    "by_len": {
+     "2": 0.997,
+     "3": 0.988,
+     "4": 0.966,
+     "5": 0.938,
+     "6": 0.631
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9630018367882446,
+      "solved": 3670,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.7148864592094197,
+      "solved": 850,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.356,
+      "solved": 178,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.5564409030544488,
+      "solved": 419,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8582995951417004,
+      "solved": 212,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p4",
+   "seed": 6,
+   "set": "data/nf/train_p4.jsonl",
+   "ckpt": "ckpts/nf/stage1_p4_s6.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.8756,
+    "n": 5000,
+    "by_len": {
+     "2": 0.999,
+     "3": 0.992,
+     "4": 0.961,
+     "5": 0.924,
+     "6": 0.502
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9572290737339281,
+      "solved": 3648,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.6139613120269134,
+      "solved": 730,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.122,
+      "solved": 61,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.399734395750332,
+      "solved": 301,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8137651821862348,
+      "solved": 201,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p4",
+   "seed": 7,
+   "set": "data/nf/train_p4.jsonl",
+   "ckpt": "ckpts/nf/stage1_p4_s7.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.8956,
+    "n": 5000,
+    "by_len": {
+     "2": 0.998,
+     "3": 0.986,
+     "4": 0.944,
+     "5": 0.912,
+     "6": 0.638
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9451587509839937,
+      "solved": 3602,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.736753574432296,
+      "solved": 876,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.408,
+      "solved": 204,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.5949535192563081,
+      "solved": 448,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.7692307692307693,
+      "solved": 190,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p4",
+   "seed": 8,
+   "set": "data/nf/train_p4.jsonl",
+   "ckpt": "ckpts/nf/stage1_p4_s8.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.8936,
+    "n": 5000,
+    "by_len": {
+     "2": 0.999,
+     "3": 0.983,
+     "4": 0.974,
+     "5": 0.936,
+     "6": 0.576
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9630018367882446,
+      "solved": 3670,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.671152228763667,
+      "solved": 798,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.248,
+      "solved": 124,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.48871181938911024,
+      "solved": 368,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8421052631578947,
+      "solved": 208,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p4",
+   "seed": 9,
+   "set": "data/nf/train_p4.jsonl",
+   "ckpt": "ckpts/nf/stage1_p4_s9.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.927,
+    "n": 5000,
+    "by_len": {
+     "2": 0.991,
+     "3": 0.986,
+     "4": 0.957,
+     "5": 0.933,
+     "6": 0.768
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9561794804513251,
+      "solved": 3644,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.8334735071488646,
+      "solved": 991,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.632,
+      "solved": 316,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.7423638778220452,
+      "solved": 559,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8461538461538461,
+      "solved": 209,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p4",
+   "seed": 10,
+   "set": "data/nf/train_p4.jsonl",
+   "ckpt": "ckpts/nf/stage1_p4_s10.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9494,
+    "n": 5000,
+    "by_len": {
+     "2": 0.998,
+     "3": 0.994,
+     "4": 0.97,
+     "5": 0.938,
+     "6": 0.847
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9666754132773551,
+      "solved": 3684,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.8940285954583683,
+      "solved": 1063,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.778,
+      "solved": 389,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.8419654714475432,
+      "solved": 634,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8623481781376519,
+      "solved": 213,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p4",
+   "seed": 11,
+   "set": "data/nf/train_p4.jsonl",
+   "ckpt": "ckpts/nf/stage1_p4_s11.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.905,
+    "n": 5000,
+    "by_len": {
+     "2": 0.989,
+     "3": 0.978,
+     "4": 0.939,
+     "5": 0.919,
+     "6": 0.7
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9435843610600892,
+      "solved": 3596,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.7813288477712363,
+      "solved": 929,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.522,
+      "solved": 261,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.6640106241699867,
+      "solved": 500,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8097165991902834,
+      "solved": 200,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  },
+  {
+   "pool": "p4",
+   "seed": 12,
+   "set": "data/nf/train_p4.jsonl",
+   "ckpt": "ckpts/nf/stage1_p4_s12.pt",
+   "model": "3.3M from-scratch GPT, lean_seq, cap 6, train.py --steps 6000 --bs 128",
+   "heldout": {
+    "rate": 0.9138,
+    "n": 5000,
+    "by_len": {
+     "2": 0.998,
+     "3": 0.997,
+     "4": 0.969,
+     "5": 0.935,
+     "6": 0.67
+    },
+    "by_pattern": {
+     "none": {
+      "rate": 0.9653634216741013,
+      "solved": 3679,
+      "n": 3811
+     },
+     "pattern": {
+      "rate": 0.7485281749369218,
+      "solved": 890,
+      "n": 1189
+     },
+     "depth3": {
+      "rate": 0.426,
+      "solved": 213,
+      "n": 500
+     },
+     "len6_pattern": {
+      "rate": 0.6082337317397079,
+      "solved": 458,
+      "n": 753
+     },
+     "len6_none": {
+      "rate": 0.8582995951417004,
+      "solved": 212,
+      "n": 247
+     }
+    }
+   },
+   "coverage": {
+    "d3": null,
+    "req8": null,
+    "red": null
+   },
+   "ladder_frozen": null
+  }
+ ],
+ "gap_closers": {
+  "la_frozen_dsg_g1_s0": {
+   "rounds": 8,
+   "transfer_solved": 62,
+   "transfer_n": 2285,
+   "transfer_lstar": 9,
+   "transfer_ge": {
+    "2": 62,
+    "3": 62,
+    "4": 62,
+    "5": 62,
+    "6": 62,
+    "7": 62,
+    "8": 28,
+    "9": 14,
+    "10": 0,
+    "11": 0,
+    "12": 0,
+    "13": 0,
+    "14": 0,
+    "15": 0,
+    "16": 0,
+    "17": 0,
+    "18": 0,
+    "19": 0,
+    "20": 0
+   },
+   "targets_solved": 612,
+   "targets_n": 4495,
+   "targets_lstar": 9,
+   "ckpt": "ckpts/dsg/stage1_g1_s0.pt",
+   "k": 32,
+   "max_new": 512,
+   "secs_total": 9286.395411491394
+  },
+  "la_T1_dsc_c0_s0": null,
+  "la_T1_dsc_c0_s1": null,
+  "la_frozen_dsc_c0_s0": null,
+  "la_frozen_dsc_c0_s1": null,
+  "la_T1_dsc_a1_s0": null,
+  "la_T1_dsc_a1_s1": {
+   "rounds": 8,
+   "transfer_solved": 847,
+   "transfer_n": 2285,
+   "transfer_lstar": 11,
+   "transfer_ge": {
+    "2": 847,
+    "3": 847,
+    "4": 847,
+    "5": 847,
+    "6": 847,
+    "7": 847,
+    "8": 723,
+    "9": 563,
+    "10": 97,
+    "11": 13,
+    "12": 3,
+    "13": 0,
+    "14": 0,
+    "15": 0,
+    "16": 0,
+    "17": 0,
+    "18": 0,
+    "19": 0,
+    "20": 0
+   },
+   "targets_solved": 2693,
+   "targets_n": 4495,
+   "targets_lstar": 11,
+   "ckpt": "ckpts/ladder/la_T1_dsc_a1_s1_r7.pt",
+   "k": 32,
+   "max_new": 512,
+   "secs_total": 14822.35995721817
+  },
+  "la_frozen_dsc_a1_s0": null,
+  "la_frozen_dsc_a1_s1": {
+   "rounds": 8,
+   "transfer_solved": 194,
+   "transfer_n": 2285,
+   "transfer_lstar": 9,
+   "transfer_ge": {
+    "2": 194,
+    "3": 194,
+    "4": 194,
+    "5": 194,
+    "6": 194,
+    "7": 194,
+    "8": 138,
+    "9": 54,
+    "10": 2,
+    "11": 0,
+    "12": 0,
+    "13": 0,
+    "14": 0,
+    "15": 0,
+    "16": 0,
+    "17": 0,
+    "18": 0,
+    "19": 0,
+    "20": 0
+   },
+   "targets_solved": 1456,
+   "targets_n": 4495,
+   "targets_lstar": 9,
+   "ckpt": "ckpts/dsc/stage1_a1_s1.pt",
+   "k": 32,
+   "max_new": 512,
+   "secs_total": 12713.718809843063
+  }
+ },
+ "sets": {
+  "p1": {
+   "shape": {
+    "n": 155000,
+    "len_hist": {
+     "2": 31000,
+     "3": 31000,
+     "4": 31000,
+     "5": 31000,
+     "6": 31000
+    },
+    "box_depth_hist": {
+     "0": 82318,
+     "1": 55059,
+     "2": 17623
+    },
+    "rule_share": {
+     "PR": 0.8766903225806452,
+     "AS": 0.46891612903225804,
+     "R": 0.02750967741935484,
+     "ANDI": 0.22832903225806453,
+     "ANDE1": 0.021670967741935485,
+     "ANDE2": 0.02235483870967742,
+     "ORI1": 0.20838709677419354,
+     "ORI2": 0.2066193548387097,
+     "ORE": 0.014187096774193548,
+     "IMPI": 0.36569032258064516,
+     "IMPE": 0.3976193548387097,
+     "NEGI": 0.09773548387096774,
+     "NEGE": 0.11986451612903226,
+     "DN": 0.07970322580645162,
+     "BOTE": 0.02145806451612903
+    },
+    "proofs_with_ore": 2199,
+    "ore_share": 0.014187096774193548,
+    "proofs_with_box_in_ore": 43,
+    "box_in_ore_share": 0.0002774193548387097,
+    "ore_by_len": {
+     "2": 0,
+     "3": 0,
+     "4": 5,
+     "5": 103,
+     "6": 2091
+    },
+    "box_in_ore_by_len": {
+     "2": 0,
+     "3": 0,
+     "4": 0,
+     "5": 0,
+     "6": 43
+    },
+    "n_prem_hist": {
+     "0": 19113,
+     "1": 60835,
+     "2": 66868,
+     "3": 8184
+    },
+    "mean_n_prem": 1.4136967741935484,
+    "lazy_prem_hist": {
+     "0": 59432,
+     "1": 82519,
+     "2": 13022,
+     "3": 27
+    },
+    "mean_lazy_prem": 0.7009290322580645,
+    "lazy_labelled": 155000,
+    "contra_prem_share": 0.06414193548387097,
+    "last_rule_share": {
+     "IMPI": 0.34243870967741935,
+     "IMPE": 0.1618,
+     "ORI1": 0.12572258064516129,
+     "ORI2": 0.12428387096774193,
+     "ANDI": 0.12041290322580646,
+     "DN": 0.06,
+     "NEGI": 0.023470967741935484,
+     "NEGE": 0.015406451612903226,
+     "ORE": 0.011864516129032257,
+     "BOTE": 0.008341935483870968,
+     "ANDE1": 0.003167741935483871,
+     "ANDE2": 0.0030903225806451612
+    },
+    "mean_nd_tokens": 112.97596774193548,
+    "mean_lean_tokens": 138.76868387096775,
+    "pattern_counts": {
+     "derived_ore": 69,
+     "reductio": 9980,
+     "depth3": 0
+    },
+    "pattern_share": {
+     "derived_ore": 0.00044516129032258066,
+     "reductio": 0.06438709677419355,
+     "depth3": 0.0
+    }
+   },
+   "assemble": {
+    "n": 155000,
+    "per_len": {
+     "2": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "3": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "4": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "5": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "6": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     }
+    },
+    "fill_total": 0,
+    "fill_frac": 0.0,
+    "pattern_counts": {
+     "derived_ore": 69,
+     "reductio": 9980,
+     "depth3": 0,
+     "derived_ore_strict": 1
+    },
+    "pattern_freq": {
+     "derived_ore": 0.00044516129032258066,
+     "reductio": 0.06438709677419355,
+     "depth3": 0.0,
+     "derived_ore_strict": 6.451612903225806e-06
+    },
+    "pool": "data/nf/pool_p1.jsonl",
+    "fill_pool": null,
+    "exclude": [
+     "data/p2/heldout.jsonl",
+     "data/p2/targets_depth3.jsonl",
+     "data/p2/transfer_depth3.jsonl",
+     "data/p2/targets_reductio_req.jsonl",
+     "data/p2/transfer_reductio_req.jsonl",
+     "data/r3_1/depth3_req.jsonl",
+     "data/r3_1/depth3_req_transfer.jsonl",
+     "data/ladder/rl_targets.jsonl",
+     "data/ladder/transfer.jsonl"
+    ],
+    "seed": 0,
+    "stats": {
+     "main:read": 727796,
+     "main:excluded": 1158,
+     "main:depth3": 26459
+    },
+    "n_excluded_classes": 14026
+   },
+   "overlap": {
+    "data/nf/train_p1.jsonl": {
+     "set_n_classes": 155000,
+     "vs": {
+      "data/p2/heldout.jsonl": {
+       "pool_n": 5000,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 18
+      },
+      "data/p2/targets_depth3.jsonl": {
+       "pool_n": 1000,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/transfer_depth3.jsonl": {
+       "pool_n": 500,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/targets_reductio_req.jsonl": {
+       "pool_n": 300,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/transfer_reductio_req.jsonl": {
+       "pool_n": 150,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/r3_1/depth3_req.jsonl": {
+       "pool_n": 300,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/r3_1/depth3_req_transfer.jsonl": {
+       "pool_n": 100,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/ladder/rl_targets.jsonl": {
+       "pool_n": 4495,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/ladder/transfer.jsonl": {
+       "pool_n": 2285,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/transfer.jsonl": {
+       "pool_n": 1638,
+       "thm": 3,
+       "class": 21,
+       "premise_order_insensitive": 22
+      },
+      "data/rl_targets.jsonl": {
+       "pool_n": 3000,
+       "thm": 1,
+       "class": 19,
+       "premise_order_insensitive": 21
+      },
+      "data/heldout.jsonl": {
+       "pool_n": 5000,
+       "thm": 27,
+       "class": 477,
+       "premise_order_insensitive": 505
+      }
+     }
+    }
+   },
+   "render": {
+    "set": "data/nf/train_p1.jsonl",
+    "n_records": 155000,
+    "n_sampled": 3000,
+    "roundtrip_identical": 3000,
+    "denoted_verified_cap6": 3000,
+    "lean_positive_checked": 1000,
+    "lean_positive_accepted": 1000,
+    "lean_negative_checked": 300,
+    "lean_negative_rejected": 300,
+    "lean_wall_s": 1.932469129562378,
+    "lean_proc_s": 5.107574939727783,
+    "roundtrip_failures": []
+   }
+  },
+  "p2": {
+   "shape": {
+    "n": 155000,
+    "len_hist": {
+     "2": 31000,
+     "3": 31000,
+     "4": 31000,
+     "5": 31000,
+     "6": 31000
+    },
+    "box_depth_hist": {
+     "0": 82550,
+     "1": 54768,
+     "2": 17682
+    },
+    "rule_share": {
+     "PR": 0.8766903225806452,
+     "AS": 0.46741935483870967,
+     "R": 0.02712258064516129,
+     "ANDI": 0.22758709677419356,
+     "ANDE1": 0.022193548387096775,
+     "ANDE2": 0.021503225806451615,
+     "ORI1": 0.2070774193548387,
+     "ORI2": 0.20746451612903224,
+     "ORE": 0.014845161290322581,
+     "IMPI": 0.3630838709677419,
+     "IMPE": 0.39832903225806454,
+     "NEGI": 0.09812903225806452,
+     "NEGE": 0.1205741935483871,
+     "DN": 0.07928387096774193,
+     "BOTE": 0.021806451612903226
+    },
+    "proofs_with_ore": 2301,
+    "ore_share": 0.014845161290322581,
+    "proofs_with_box_in_ore": 54,
+    "box_in_ore_share": 0.00034838709677419355,
+    "ore_by_len": {
+     "2": 0,
+     "3": 0,
+     "4": 6,
+     "5": 117,
+     "6": 2178
+    },
+    "box_in_ore_by_len": {
+     "2": 0,
+     "3": 0,
+     "4": 0,
+     "5": 0,
+     "6": 54
+    },
+    "n_prem_hist": {
+     "0": 19113,
+     "1": 60839,
+     "2": 66724,
+     "3": 8324
+    },
+    "mean_n_prem": 1.414574193548387,
+    "lazy_prem_hist": {
+     "0": 59357,
+     "1": 82551,
+     "2": 13071,
+     "3": 21
+    },
+    "mean_lazy_prem": 0.7016516129032258,
+    "lazy_labelled": 155000,
+    "contra_prem_share": 0.06349032258064516,
+    "last_rule_share": {
+     "IMPI": 0.33945806451612903,
+     "IMPE": 0.16174193548387097,
+     "ORI2": 0.1258967741935484,
+     "ORI1": 0.12452903225806451,
+     "ANDI": 0.12218709677419355,
+     "DN": 0.0596258064516129,
+     "NEGI": 0.02425806451612903,
+     "NEGE": 0.01496774193548387,
+     "ORE": 0.012464516129032257,
+     "BOTE": 0.008935483870967742,
+     "ANDE1": 0.003,
+     "ANDE2": 0.002935483870967742
+    },
+    "mean_nd_tokens": 112.8099935483871,
+    "mean_lean_tokens": 138.60387096774193,
+    "pattern_counts": {
+     "derived_ore": 71,
+     "reductio": 9973,
+     "depth3": 0
+    },
+    "pattern_share": {
+     "derived_ore": 0.00045806451612903225,
+     "reductio": 0.06434193548387097,
+     "depth3": 0.0
+    }
+   },
+   "assemble": {
+    "n": 155000,
+    "per_len": {
+     "2": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "3": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "4": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "5": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "6": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     }
+    },
+    "fill_total": 0,
+    "fill_frac": 0.0,
+    "pattern_counts": {
+     "derived_ore": 71,
+     "reductio": 9973,
+     "depth3": 0,
+     "derived_ore_strict": 1
+    },
+    "pattern_freq": {
+     "derived_ore": 0.00045806451612903225,
+     "reductio": 0.06434193548387097,
+     "depth3": 0.0,
+     "derived_ore_strict": 6.451612903225806e-06
+    },
+    "pool": "data/nf/pool_p2.jsonl",
+    "fill_pool": null,
+    "exclude": [
+     "data/p2/heldout.jsonl",
+     "data/p2/targets_depth3.jsonl",
+     "data/p2/transfer_depth3.jsonl",
+     "data/p2/targets_reductio_req.jsonl",
+     "data/p2/transfer_reductio_req.jsonl",
+     "data/r3_1/depth3_req.jsonl",
+     "data/r3_1/depth3_req_transfer.jsonl",
+     "data/ladder/rl_targets.jsonl",
+     "data/ladder/transfer.jsonl"
+    ],
+    "seed": 0,
+    "stats": {
+     "main:read": 728483,
+     "main:depth3": 26681,
+     "main:excluded": 1184
+    },
+    "n_excluded_classes": 14026
+   },
+   "overlap": {
+    "data/nf/train_p2.jsonl": {
+     "set_n_classes": 155000,
+     "vs": {
+      "data/p2/heldout.jsonl": {
+       "pool_n": 5000,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 26
+      },
+      "data/p2/targets_depth3.jsonl": {
+       "pool_n": 1000,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/transfer_depth3.jsonl": {
+       "pool_n": 500,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/targets_reductio_req.jsonl": {
+       "pool_n": 300,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/transfer_reductio_req.jsonl": {
+       "pool_n": 150,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/r3_1/depth3_req.jsonl": {
+       "pool_n": 300,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/r3_1/depth3_req_transfer.jsonl": {
+       "pool_n": 100,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/ladder/rl_targets.jsonl": {
+       "pool_n": 4495,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/ladder/transfer.jsonl": {
+       "pool_n": 2285,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/transfer.jsonl": {
+       "pool_n": 1638,
+       "thm": 2,
+       "class": 11,
+       "premise_order_insensitive": 14
+      },
+      "data/rl_targets.jsonl": {
+       "pool_n": 3000,
+       "thm": 0,
+       "class": 18,
+       "premise_order_insensitive": 19
+      },
+      "data/heldout.jsonl": {
+       "pool_n": 5000,
+       "thm": 38,
+       "class": 462,
+       "premise_order_insensitive": 491
+      }
+     }
+    }
+   },
+   "render": {
+    "set": "data/nf/train_p2.jsonl",
+    "n_records": 155000,
+    "n_sampled": 3000,
+    "roundtrip_identical": 3000,
+    "denoted_verified_cap6": 3000,
+    "lean_positive_checked": 1000,
+    "lean_positive_accepted": 1000,
+    "lean_negative_checked": 300,
+    "lean_negative_rejected": 300,
+    "lean_wall_s": 1.9252607822418213,
+    "lean_proc_s": 5.048031806945801,
+    "roundtrip_failures": []
+   }
+  },
+  "p3": {
+   "shape": {
+    "n": 155000,
+    "len_hist": {
+     "2": 31000,
+     "3": 31000,
+     "4": 31000,
+     "5": 31000,
+     "6": 31000
+    },
+    "box_depth_hist": {
+     "0": 82579,
+     "1": 54970,
+     "2": 17451
+    },
+    "rule_share": {
+     "PR": 0.8777032258064517,
+     "AS": 0.4672322580645161,
+     "R": 0.02815483870967742,
+     "ANDI": 0.22801290322580645,
+     "ANDE1": 0.022122580645161292,
+     "ANDE2": 0.022038709677419353,
+     "ORI1": 0.20784516129032257,
+     "ORI2": 0.20775483870967743,
+     "ORE": 0.014548387096774194,
+     "IMPI": 0.36495483870967743,
+     "IMPE": 0.3985290322580645,
+     "NEGI": 0.09645806451612904,
+     "NEGE": 0.1206258064516129,
+     "DN": 0.07907096774193548,
+     "BOTE": 0.021296774193548387
+    },
+    "proofs_with_ore": 2255,
+    "ore_share": 0.014548387096774194,
+    "proofs_with_box_in_ore": 42,
+    "box_in_ore_share": 0.00027096774193548386,
+    "ore_by_len": {
+     "2": 0,
+     "3": 0,
+     "4": 2,
+     "5": 120,
+     "6": 2133
+    },
+    "box_in_ore_by_len": {
+     "2": 0,
+     "3": 0,
+     "4": 0,
+     "5": 0,
+     "6": 42
+    },
+    "n_prem_hist": {
+     "0": 18956,
+     "1": 60687,
+     "2": 67088,
+     "3": 8269
+    },
+    "mean_n_prem": 1.417225806451613,
+    "lazy_prem_hist": {
+     "0": 59134,
+     "1": 82670,
+     "2": 13174,
+     "3": 22
+    },
+    "mean_lazy_prem": 0.7037677419354839,
+    "lazy_labelled": 155000,
+    "contra_prem_share": 0.06367096774193548,
+    "last_rule_share": {
+     "IMPI": 0.3408322580645161,
+     "IMPE": 0.16151612903225807,
+     "ORI2": 0.12583225806451612,
+     "ORI1": 0.12413548387096775,
+     "ANDI": 0.1229741935483871,
+     "DN": 0.058941935483870965,
+     "NEGI": 0.02329677419354839,
+     "NEGE": 0.015587096774193548,
+     "ORE": 0.012180645161290322,
+     "BOTE": 0.008606451612903226,
+     "ANDE2": 0.0030774193548387097,
+     "ANDE1": 0.0030193548387096774
+    },
+    "mean_nd_tokens": 112.75205161290323,
+    "mean_lean_tokens": 138.54748387096774,
+    "pattern_counts": {
+     "derived_ore": 74,
+     "reductio": 9853,
+     "depth3": 0
+    },
+    "pattern_share": {
+     "derived_ore": 0.00047741935483870966,
+     "reductio": 0.06356774193548387,
+     "depth3": 0.0
+    }
+   },
+   "assemble": {
+    "n": 155000,
+    "per_len": {
+     "2": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "3": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "4": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "5": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "6": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     }
+    },
+    "fill_total": 0,
+    "fill_frac": 0.0,
+    "pattern_counts": {
+     "derived_ore": 74,
+     "reductio": 9853,
+     "depth3": 0,
+     "derived_ore_strict": 1
+    },
+    "pattern_freq": {
+     "derived_ore": 0.00047741935483870966,
+     "reductio": 0.06356774193548387,
+     "depth3": 0.0,
+     "derived_ore_strict": 6.451612903225806e-06
+    },
+    "pool": "data/nf/pool_p3.jsonl",
+    "fill_pool": null,
+    "exclude": [
+     "data/p2/heldout.jsonl",
+     "data/p2/targets_depth3.jsonl",
+     "data/p2/transfer_depth3.jsonl",
+     "data/p2/targets_reductio_req.jsonl",
+     "data/p2/transfer_reductio_req.jsonl",
+     "data/r3_1/depth3_req.jsonl",
+     "data/r3_1/depth3_req_transfer.jsonl",
+     "data/ladder/rl_targets.jsonl",
+     "data/ladder/transfer.jsonl"
+    ],
+    "seed": 0,
+    "stats": {
+     "main:read": 728218,
+     "main:excluded": 1205,
+     "main:depth3": 26827
+    },
+    "n_excluded_classes": 14026
+   },
+   "overlap": {
+    "data/nf/train_p3.jsonl": {
+     "set_n_classes": 155000,
+     "vs": {
+      "data/p2/heldout.jsonl": {
+       "pool_n": 5000,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 15
+      },
+      "data/p2/targets_depth3.jsonl": {
+       "pool_n": 1000,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/transfer_depth3.jsonl": {
+       "pool_n": 500,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/targets_reductio_req.jsonl": {
+       "pool_n": 300,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/transfer_reductio_req.jsonl": {
+       "pool_n": 150,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/r3_1/depth3_req.jsonl": {
+       "pool_n": 300,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/r3_1/depth3_req_transfer.jsonl": {
+       "pool_n": 100,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/ladder/rl_targets.jsonl": {
+       "pool_n": 4495,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/ladder/transfer.jsonl": {
+       "pool_n": 2285,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/transfer.jsonl": {
+       "pool_n": 1638,
+       "thm": 1,
+       "class": 11,
+       "premise_order_insensitive": 13
+      },
+      "data/rl_targets.jsonl": {
+       "pool_n": 3000,
+       "thm": 0,
+       "class": 13,
+       "premise_order_insensitive": 16
+      },
+      "data/heldout.jsonl": {
+       "pool_n": 5000,
+       "thm": 32,
+       "class": 462,
+       "premise_order_insensitive": 489
+      }
+     }
+    }
+   },
+   "render": {
+    "set": "data/nf/train_p3.jsonl",
+    "n_records": 155000,
+    "n_sampled": 3000,
+    "roundtrip_identical": 3000,
+    "denoted_verified_cap6": 3000,
+    "lean_positive_checked": 1000,
+    "lean_positive_accepted": 1000,
+    "lean_negative_checked": 300,
+    "lean_negative_rejected": 300,
+    "lean_wall_s": 2.1358001232147217,
+    "lean_proc_s": 5.501850605010986,
+    "roundtrip_failures": []
+   }
+  },
+  "p4": {
+   "shape": {
+    "n": 155000,
+    "len_hist": {
+     "2": 31000,
+     "3": 31000,
+     "4": 31000,
+     "5": 31000,
+     "6": 31000
+    },
+    "box_depth_hist": {
+     "0": 82608,
+     "1": 54938,
+     "2": 17454
+    },
+    "rule_share": {
+     "PR": 0.8780129032258065,
+     "AS": 0.4670451612903226,
+     "R": 0.026980645161290322,
+     "ANDI": 0.22818709677419355,
+     "ANDE1": 0.021741935483870968,
+     "ANDE2": 0.021974193548387096,
+     "ORI1": 0.20885806451612904,
+     "ORI2": 0.20654193548387098,
+     "ORE": 0.014606451612903226,
+     "IMPI": 0.36361290322580647,
+     "IMPE": 0.3995290322580645,
+     "NEGI": 0.09733548387096774,
+     "NEGE": 0.11963225806451613,
+     "DN": 0.08048387096774194,
+     "BOTE": 0.021225806451612903
+    },
+    "proofs_with_ore": 2264,
+    "ore_share": 0.014606451612903226,
+    "proofs_with_box_in_ore": 55,
+    "box_in_ore_share": 0.0003548387096774194,
+    "ore_by_len": {
+     "2": 0,
+     "3": 0,
+     "4": 4,
+     "5": 136,
+     "6": 2124
+    },
+    "box_in_ore_by_len": {
+     "2": 0,
+     "3": 0,
+     "4": 0,
+     "5": 0,
+     "6": 55
+    },
+    "n_prem_hist": {
+     "0": 18908,
+     "1": 60843,
+     "2": 66903,
+     "3": 8346
+    },
+    "mean_n_prem": 1.4173354838709677,
+    "lazy_prem_hist": {
+     "0": 59309,
+     "1": 82545,
+     "2": 13123,
+     "3": 23
+    },
+    "mean_lazy_prem": 0.7023225806451613,
+    "lazy_labelled": 155000,
+    "contra_prem_share": 0.06283870967741935,
+    "last_rule_share": {
+     "IMPI": 0.34021290322580644,
+     "IMPE": 0.16225806451612904,
+     "ORI1": 0.12535483870967742,
+     "ORI2": 0.12490967741935484,
+     "ANDI": 0.12189677419354839,
+     "DN": 0.06020645161290323,
+     "NEGI": 0.022858064516129033,
+     "NEGE": 0.015316129032258064,
+     "ORE": 0.012348387096774193,
+     "BOTE": 0.008483870967741936,
+     "ANDE1": 0.003096774193548387,
+     "ANDE2": 0.0030580645161290324
+    },
+    "mean_nd_tokens": 112.7138193548387,
+    "mean_lean_tokens": 138.5217612903226,
+    "pattern_counts": {
+     "derived_ore": 76,
+     "reductio": 10072,
+     "depth3": 0
+    },
+    "pattern_share": {
+     "derived_ore": 0.0004903225806451613,
+     "reductio": 0.06498064516129032,
+     "depth3": 0.0
+    }
+   },
+   "assemble": {
+    "n": 155000,
+    "per_len": {
+     "2": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "3": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "4": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "5": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     },
+     "6": {
+      "n": 31000,
+      "main": 31000,
+      "fill": 0,
+      "fill_frac": 0.0
+     }
+    },
+    "fill_total": 0,
+    "fill_frac": 0.0,
+    "pattern_counts": {
+     "derived_ore": 76,
+     "reductio": 10072,
+     "depth3": 0,
+     "derived_ore_strict": 4
+    },
+    "pattern_freq": {
+     "derived_ore": 0.0004903225806451613,
+     "reductio": 0.06498064516129032,
+     "depth3": 0.0,
+     "derived_ore_strict": 2.5806451612903226e-05
+    },
+    "pool": "data/nf/pool_p4.jsonl",
+    "fill_pool": null,
+    "exclude": [
+     "data/p2/heldout.jsonl",
+     "data/p2/targets_depth3.jsonl",
+     "data/p2/transfer_depth3.jsonl",
+     "data/p2/targets_reductio_req.jsonl",
+     "data/p2/transfer_reductio_req.jsonl",
+     "data/r3_1/depth3_req.jsonl",
+     "data/r3_1/depth3_req_transfer.jsonl",
+     "data/ladder/rl_targets.jsonl",
+     "data/ladder/transfer.jsonl"
+    ],
+    "seed": 0,
+    "stats": {
+     "main:read": 728301,
+     "main:depth3": 26620,
+     "main:excluded": 1184
+    },
+    "n_excluded_classes": 14026
+   },
+   "overlap": {
+    "data/nf/train_p4.jsonl": {
+     "set_n_classes": 155000,
+     "vs": {
+      "data/p2/heldout.jsonl": {
+       "pool_n": 5000,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 20
+      },
+      "data/p2/targets_depth3.jsonl": {
+       "pool_n": 1000,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/transfer_depth3.jsonl": {
+       "pool_n": 500,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/targets_reductio_req.jsonl": {
+       "pool_n": 300,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/p2/transfer_reductio_req.jsonl": {
+       "pool_n": 150,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/r3_1/depth3_req.jsonl": {
+       "pool_n": 300,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/r3_1/depth3_req_transfer.jsonl": {
+       "pool_n": 100,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/ladder/rl_targets.jsonl": {
+       "pool_n": 4495,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/ladder/transfer.jsonl": {
+       "pool_n": 2285,
+       "thm": 0,
+       "class": 0,
+       "premise_order_insensitive": 0
+      },
+      "data/transfer.jsonl": {
+       "pool_n": 1638,
+       "thm": 1,
+       "class": 13,
+       "premise_order_insensitive": 14
+      },
+      "data/rl_targets.jsonl": {
+       "pool_n": 3000,
+       "thm": 1,
+       "class": 23,
+       "premise_order_insensitive": 25
+      },
+      "data/heldout.jsonl": {
+       "pool_n": 5000,
+       "thm": 39,
+       "class": 474,
+       "premise_order_insensitive": 504
+      }
+     }
+    }
+   },
+   "render": {
+    "set": "data/nf/train_p4.jsonl",
+    "n_records": 155000,
+    "n_sampled": 3000,
+    "roundtrip_identical": 3000,
+    "denoted_verified_cap6": 3000,
+    "lean_positive_checked": 1000,
+    "lean_positive_accepted": 1000,
+    "lean_negative_checked": 300,
+    "lean_negative_rejected": 300,
+    "lean_wall_s": 2.421387195587158,
+    "lean_proc_s": 6.018969297409058,
+    "roundtrip_failures": []
+   }
+  }
+ },
+ "record": {
+  "record_heldout": {
+   "n_cells": 26,
+   "n_per_cell": 200,
+   "n_checked": 5200,
+   "both_accept": 5200,
+   "nd_ok_lean_rej": 0,
+   "nd_rej_lean_ok": 0,
+   "both_reject": 0,
+   "per_cell": {
+    "p1_s0": {
+     "solved_proofs": 4363,
+     "sampled": 200
+    },
+    "p1_s1": {
+     "solved_proofs": 4681,
+     "sampled": 200
+    },
+    "p1_s10": {
+     "solved_proofs": 4435,
+     "sampled": 200
+    },
+    "p1_s11": {
+     "solved_proofs": 4316,
+     "sampled": 200
+    },
+    "p1_s12": {
+     "solved_proofs": 4650,
+     "sampled": 200
+    },
+    "p1_s2": {
+     "solved_proofs": 4725,
+     "sampled": 200
+    },
+    "p1_s3": {
+     "solved_proofs": 4559,
+     "sampled": 200
+    },
+    "p1_s4": {
+     "solved_proofs": 4685,
+     "sampled": 200
+    },
+    "p1_s5": {
+     "solved_proofs": 4709,
+     "sampled": 200
+    },
+    "p1_s6": {
+     "solved_proofs": 4484,
+     "sampled": 200
+    },
+    "p1_s7": {
+     "solved_proofs": 4519,
+     "sampled": 200
+    },
+    "p1_s8": {
+     "solved_proofs": 4356,
+     "sampled": 200
+    },
+    "p1_s9": {
+     "solved_proofs": 4365,
+     "sampled": 200
+    },
+    "p2_s0": {
+     "solved_proofs": 4729,
+     "sampled": 200
+    },
+    "p2_s1": {
+     "solved_proofs": 4385,
+     "sampled": 200
+    },
+    "p2_s10": {
+     "solved_proofs": 4709,
+     "sampled": 200
+    },
+    "p2_s11": {
+     "solved_proofs": 4670,
+     "sampled": 200
+    },
+    "p2_s12": {
+     "solved_proofs": 4685,
+     "sampled": 200
+    },
+    "p2_s2": {
+     "solved_proofs": 4376,
+     "sampled": 200
+    },
+    "p2_s3": {
+     "solved_proofs": 4434,
+     "sampled": 200
+    },
+    "p2_s4": {
+     "solved_proofs": 4773,
+     "sampled": 200
+    },
+    "p2_s5": {
+     "solved_proofs": 4694,
+     "sampled": 200
+    },
+    "p2_s6": {
+     "solved_proofs": 4547,
+     "sampled": 200
+    },
+    "p2_s7": {
+     "solved_proofs": 4383,
+     "sampled": 200
+    },
+    "p2_s8": {
+     "solved_proofs": 4387,
+     "sampled": 200
+    },
+    "p2_s9": {
+     "solved_proofs": 4638,
+     "sampled": 200
+    }
+   },
+   "stderr_tail": ""
+  },
+  "record_heldout_vps": {
+   "n_cells": 26,
+   "n_per_cell": 200,
+   "n_checked": 5200,
+   "both_accept": 5200,
+   "nd_ok_lean_rej": 0,
+   "nd_rej_lean_ok": 0,
+   "both_reject": 0,
+   "per_cell": {
+    "p3_s0": {
+     "solved_proofs": 4340,
+     "sampled": 200
+    },
+    "p3_s1": {
+     "solved_proofs": 4429,
+     "sampled": 200
+    },
+    "p3_s10": {
+     "solved_proofs": 4347,
+     "sampled": 200
+    },
+    "p3_s11": {
+     "solved_proofs": 4566,
+     "sampled": 200
+    },
+    "p3_s12": {
+     "solved_proofs": 4475,
+     "sampled": 200
+    },
+    "p3_s2": {
+     "solved_proofs": 4569,
+     "sampled": 200
+    },
+    "p3_s3": {
+     "solved_proofs": 4526,
+     "sampled": 200
+    },
+    "p3_s4": {
+     "solved_proofs": 4727,
+     "sampled": 200
+    },
+    "p3_s5": {
+     "solved_proofs": 4629,
+     "sampled": 200
+    },
+    "p3_s6": {
+     "solved_proofs": 4673,
+     "sampled": 200
+    },
+    "p3_s7": {
+     "solved_proofs": 4382,
+     "sampled": 200
+    },
+    "p3_s8": {
+     "solved_proofs": 4727,
+     "sampled": 200
+    },
+    "p3_s9": {
+     "solved_proofs": 4370,
+     "sampled": 200
+    },
+    "p4_s0": {
+     "solved_proofs": 4358,
+     "sampled": 200
+    },
+    "p4_s1": {
+     "solved_proofs": 4815,
+     "sampled": 200
+    },
+    "p4_s10": {
+     "solved_proofs": 4747,
+     "sampled": 200
+    },
+    "p4_s11": {
+     "solved_proofs": 4525,
+     "sampled": 200
+    },
+    "p4_s12": {
+     "solved_proofs": 4569,
+     "sampled": 200
+    },
+    "p4_s2": {
+     "solved_proofs": 4210,
+     "sampled": 200
+    },
+    "p4_s3": {
+     "solved_proofs": 4421,
+     "sampled": 200
+    },
+    "p4_s4": {
+     "solved_proofs": 4728,
+     "sampled": 200
+    },
+    "p4_s5": {
+     "solved_proofs": 4520,
+     "sampled": 200
+    },
+    "p4_s6": {
+     "solved_proofs": 4378,
+     "sampled": 200
+    },
+    "p4_s7": {
+     "solved_proofs": 4478,
+     "sampled": 200
+    },
+    "p4_s8": {
+     "solved_proofs": 4468,
+     "sampled": 200
+    },
+    "p4_s9": {
+     "solved_proofs": 4635,
+     "sampled": 200
+    }
+   },
+   "where": "VPS",
+   "stderr_tail": ""
+  },
+  "record_nf1": {
+   "la_T1_dsc_a1_s1_found_8": {
+    "source": "artifacts/nf/la_T1_dsc_a1_s1/found_8.jsonl",
+    "n": 4958,
+    "both_accept": 4958,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_T1_dsc_a1_s1_found_transfer_8": {
+    "source": "artifacts/nf/la_T1_dsc_a1_s1/found_transfer_8.jsonl",
+    "n": 1851,
+    "both_accept": 1851,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_dsc_a1_s1_found_8": {
+    "source": "artifacts/nf/la_frozen_dsc_a1_s1/found_8.jsonl",
+    "n": 2172,
+    "both_accept": 2172,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_dsc_a1_s1_found_transfer_8": {
+    "source": "artifacts/nf/la_frozen_dsc_a1_s1/found_transfer_8.jsonl",
+    "n": 264,
+    "both_accept": 264,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p1_s0_found_8": {
+    "source": "artifacts/nf/la_frozen_p1_s0/found_8.jsonl",
+    "n": 1615,
+    "both_accept": 1615,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p1_s0_found_transfer_8": {
+    "source": "artifacts/nf/la_frozen_p1_s0/found_transfer_8.jsonl",
+    "n": 171,
+    "both_accept": 171,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p1_s1_found_8": {
+    "source": "artifacts/nf/la_frozen_p1_s1/found_8.jsonl",
+    "n": 2390,
+    "both_accept": 2390,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p1_s1_found_transfer_8": {
+    "source": "artifacts/nf/la_frozen_p1_s1/found_transfer_8.jsonl",
+    "n": 384,
+    "both_accept": 384,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p2_s0_found_8": {
+    "source": "artifacts/nf/la_frozen_p2_s0/found_8.jsonl",
+    "n": 2211,
+    "both_accept": 2211,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p2_s0_found_transfer_8": {
+    "source": "artifacts/nf/la_frozen_p2_s0/found_transfer_8.jsonl",
+    "n": 254,
+    "both_accept": 254,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p2_s1_found_8": {
+    "source": "artifacts/nf/la_frozen_p2_s1/found_8.jsonl",
+    "n": 1372,
+    "both_accept": 1372,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p2_s1_found_transfer_8": {
+    "source": "artifacts/nf/la_frozen_p2_s1/found_transfer_8.jsonl",
+    "n": 145,
+    "both_accept": 145,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_red_p1_s0": {
+    "source": "artifacts/nf/cov_red_p1_s0.counted.jsonl",
+    "n": 31,
+    "both_accept": 31,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_red_p1_s1": {
+    "source": "artifacts/nf/cov_red_p1_s1.counted.jsonl",
+    "n": 19,
+    "both_accept": 19,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_red_p2_s0": {
+    "source": "artifacts/nf/cov_red_p2_s0.counted.jsonl",
+    "n": 39,
+    "both_accept": 39,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_red_p2_s1": {
+    "source": "artifacts/nf/cov_red_p2_s1.counted.jsonl",
+    "n": 43,
+    "both_accept": 43,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_req8_p1_s0": {
+    "source": "artifacts/nf/cov_req8_p1_s0.counted.jsonl",
+    "n": 109,
+    "both_accept": 109,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_req8_p1_s1": {
+    "source": "artifacts/nf/cov_req8_p1_s1.counted.jsonl",
+    "n": 356,
+    "both_accept": 356,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_req8_p2_s0": {
+    "source": "artifacts/nf/cov_req8_p2_s0.counted.jsonl",
+    "n": 277,
+    "both_accept": 277,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_req8_p2_s1": {
+    "source": "artifacts/nf/cov_req8_p2_s1.counted.jsonl",
+    "n": 72,
+    "both_accept": 72,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "_gate": {
+    "calls": 221,
+    "samples": 10905760,
+    "parse_fail": 3102181,
+    "distinct_checked": 6931562,
+    "both_ok": 1307223,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 301,
+    "both_rej": 5624038
+   }
+  },
+  "record_nf2": {
+   "la_frozen_dsg_g1_s0_found_8": {
+    "source": "artifacts/nf/la_frozen_dsg_g1_s0/found_8.jsonl",
+    "n": 972,
+    "both_accept": 972,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_dsg_g1_s0_found_transfer_8": {
+    "source": "artifacts/nf/la_frozen_dsg_g1_s0/found_transfer_8.jsonl",
+    "n": 84,
+    "both_accept": 84,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p3_s0_found_8": {
+    "source": "artifacts/nf/la_frozen_p3_s0/found_8.jsonl",
+    "n": 1058,
+    "both_accept": 1058,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p3_s0_found_transfer_8": {
+    "source": "artifacts/nf/la_frozen_p3_s0/found_transfer_8.jsonl",
+    "n": 91,
+    "both_accept": 91,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p3_s1_found_8": {
+    "source": "artifacts/nf/la_frozen_p3_s1/found_8.jsonl",
+    "n": 1701,
+    "both_accept": 1701,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p3_s1_found_transfer_8": {
+    "source": "artifacts/nf/la_frozen_p3_s1/found_transfer_8.jsonl",
+    "n": 212,
+    "both_accept": 212,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p4_s0_found_8": {
+    "source": "artifacts/nf/la_frozen_p4_s0/found_8.jsonl",
+    "n": 1783,
+    "both_accept": 1783,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p4_s0_found_transfer_8": {
+    "source": "artifacts/nf/la_frozen_p4_s0/found_transfer_8.jsonl",
+    "n": 233,
+    "both_accept": 233,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p4_s1_found_8": {
+    "source": "artifacts/nf/la_frozen_p4_s1/found_8.jsonl",
+    "n": 2598,
+    "both_accept": 2598,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p4_s1_found_transfer_8": {
+    "source": "artifacts/nf/la_frozen_p4_s1/found_transfer_8.jsonl",
+    "n": 366,
+    "both_accept": 366,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_red_p3_s0": {
+    "source": "artifacts/nf/cov_red_p3_s0.counted.jsonl",
+    "n": 6,
+    "both_accept": 6,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_red_p3_s1": {
+    "source": "artifacts/nf/cov_red_p3_s1.counted.jsonl",
+    "n": 46,
+    "both_accept": 46,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_red_p4_s0": {
+    "source": "artifacts/nf/cov_red_p4_s0.counted.jsonl",
+    "n": 34,
+    "both_accept": 34,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_red_p4_s1": {
+    "source": "artifacts/nf/cov_red_p4_s1.counted.jsonl",
+    "n": 27,
+    "both_accept": 27,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_req8_p3_s0": {
+    "source": "artifacts/nf/cov_req8_p3_s0.counted.jsonl",
+    "n": 84,
+    "both_accept": 84,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_req8_p3_s1": {
+    "source": "artifacts/nf/cov_req8_p3_s1.counted.jsonl",
+    "n": 200,
+    "both_accept": 200,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_req8_p4_s0": {
+    "source": "artifacts/nf/cov_req8_p4_s0.counted.jsonl",
+    "n": 178,
+    "both_accept": 178,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_req8_p4_s1": {
+    "source": "artifacts/nf/cov_req8_p4_s1.counted.jsonl",
+    "n": 331,
+    "both_accept": 331,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "_gate": {
+    "calls": 168,
+    "samples": 9006800,
+    "parse_fail": 3394122,
+    "distinct_checked": 5008017,
+    "both_ok": 580787,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 488,
+    "both_rej": 4426742
+   }
+  },
+  "record_pod": {
+   "la_T1_dsc_a1_s1_found_8": {
+    "source": "artifacts/nf/la_T1_dsc_a1_s1/found_8.jsonl",
+    "n": 4958,
+    "both_accept": 4958,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_T1_dsc_a1_s1_found_transfer_8": {
+    "source": "artifacts/nf/la_T1_dsc_a1_s1/found_transfer_8.jsonl",
+    "n": 1851,
+    "both_accept": 1851,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_dsc_a1_s1_found_8": {
+    "source": "artifacts/nf/la_frozen_dsc_a1_s1/found_8.jsonl",
+    "n": 2172,
+    "both_accept": 2172,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_dsc_a1_s1_found_transfer_8": {
+    "source": "artifacts/nf/la_frozen_dsc_a1_s1/found_transfer_8.jsonl",
+    "n": 264,
+    "both_accept": 264,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p1_s0_found_8": {
+    "source": "artifacts/nf/la_frozen_p1_s0/found_8.jsonl",
+    "n": 1615,
+    "both_accept": 1615,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p1_s0_found_transfer_8": {
+    "source": "artifacts/nf/la_frozen_p1_s0/found_transfer_8.jsonl",
+    "n": 171,
+    "both_accept": 171,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p1_s1_found_8": {
+    "source": "artifacts/nf/la_frozen_p1_s1/found_8.jsonl",
+    "n": 2390,
+    "both_accept": 2390,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p1_s1_found_transfer_8": {
+    "source": "artifacts/nf/la_frozen_p1_s1/found_transfer_8.jsonl",
+    "n": 384,
+    "both_accept": 384,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p2_s0_found_8": {
+    "source": "artifacts/nf/la_frozen_p2_s0/found_8.jsonl",
+    "n": 2211,
+    "both_accept": 2211,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p2_s0_found_transfer_8": {
+    "source": "artifacts/nf/la_frozen_p2_s0/found_transfer_8.jsonl",
+    "n": 254,
+    "both_accept": 254,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p2_s1_found_8": {
+    "source": "artifacts/nf/la_frozen_p2_s1/found_8.jsonl",
+    "n": 1372,
+    "both_accept": 1372,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "la_frozen_p2_s1_found_transfer_8": {
+    "source": "artifacts/nf/la_frozen_p2_s1/found_transfer_8.jsonl",
+    "n": 145,
+    "both_accept": 145,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_red_p1_s0": {
+    "source": "artifacts/nf/cov_red_p1_s0.counted.jsonl",
+    "n": 31,
+    "both_accept": 31,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_red_p1_s1": {
+    "source": "artifacts/nf/cov_red_p1_s1.counted.jsonl",
+    "n": 19,
+    "both_accept": 19,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_red_p2_s0": {
+    "source": "artifacts/nf/cov_red_p2_s0.counted.jsonl",
+    "n": 39,
+    "both_accept": 39,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_red_p2_s1": {
+    "source": "artifacts/nf/cov_red_p2_s1.counted.jsonl",
+    "n": 43,
+    "both_accept": 43,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_req8_p1_s0": {
+    "source": "artifacts/nf/cov_req8_p1_s0.counted.jsonl",
+    "n": 109,
+    "both_accept": 109,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_req8_p1_s1": {
+    "source": "artifacts/nf/cov_req8_p1_s1.counted.jsonl",
+    "n": 356,
+    "both_accept": 356,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_req8_p2_s0": {
+    "source": "artifacts/nf/cov_req8_p2_s0.counted.jsonl",
+    "n": 277,
+    "both_accept": 277,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "cov_req8_p2_s1": {
+    "source": "artifacts/nf/cov_req8_p2_s1.counted.jsonl",
+    "n": 72,
+    "both_accept": 72,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 0,
+    "both_reject": 0,
+    "stderr_tail": ""
+   },
+   "_gate": {
+    "calls": 201,
+    "samples": 10805760,
+    "parse_fail": 3097906,
+    "distinct_checked": 6835837,
+    "both_ok": 1216225,
+    "nd_ok_lean_rej": 0,
+    "nd_rej_lean_ok": 280,
+    "both_rej": 5619332
+   }
+  }
+ },
+ "gate": {
+  "calls": 408,
+  "samples": 20010560,
+  "parse_fail": 6500782,
+  "distinct_checked": 12033100,
+  "both_ok": 1977301,
+  "nd_ok_lean_rej": 0,
+  "nd_rej_lean_ok": 808,
+  "both_rej": 10054991,
+  "disagree_lines": 808,
+  "lean_only_per_million_distinct": 67.14811644547125,
+  "nd_only_per_million_distinct": 0.0
+ },
+ "floors": {
+  "heldout_overall": {
+   "n_cells": 52,
+   "values": {
+    "p1_s0": 0.8726,
+    "p1_s1": 0.9362,
+    "p1_s2": 0.945,
+    "p1_s3": 0.9118,
+    "p1_s4": 0.937,
+    "p1_s5": 0.9418,
+    "p1_s6": 0.8968,
+    "p1_s7": 0.9038,
+    "p1_s8": 0.8712,
+    "p1_s9": 0.873,
+    "p1_s10": 0.887,
+    "p1_s11": 0.8632,
+    "p1_s12": 0.93,
+    "p2_s0": 0.9458,
+    "p2_s1": 0.877,
+    "p2_s2": 0.8752,
+    "p2_s3": 0.8868,
+    "p2_s4": 0.9546,
+    "p2_s5": 0.9388,
+    "p2_s6": 0.9094,
+    "p2_s7": 0.8766,
+    "p2_s8": 0.8774,
+    "p2_s9": 0.9276,
+    "p2_s10": 0.9418,
+    "p2_s11": 0.934,
+    "p2_s12": 0.937,
+    "p3_s0": 0.868,
+    "p3_s1": 0.8858,
+    "p3_s2": 0.9138,
+    "p3_s3": 0.9052,
+    "p3_s4": 0.9454,
+    "p3_s5": 0.9258,
+    "p3_s6": 0.9346,
+    "p3_s7": 0.8764,
+    "p3_s8": 0.9454,
+    "p3_s9": 0.874,
+    "p3_s10": 0.8694,
+    "p3_s11": 0.9132,
+    "p3_s12": 0.895,
+    "p4_s0": 0.8716,
+    "p4_s1": 0.963,
+    "p4_s2": 0.842,
+    "p4_s3": 0.8842,
+    "p4_s4": 0.9456,
+    "p4_s5": 0.904,
+    "p4_s6": 0.8756,
+    "p4_s7": 0.8956,
+    "p4_s8": 0.8936,
+    "p4_s9": 0.927,
+    "p4_s10": 0.9494,
+    "p4_s11": 0.905,
+    "p4_s12": 0.9138
+   },
+   "mean": 0.9071884615384616,
+   "sd": 0.030378666752593975,
+   "cv": 0.03348661060026724,
+   "min": 0.842,
+   "max": 0.963,
+   "range": 0.121,
+   "max_over_min": 1.1437054631828978,
+   "largest_gap": 0.021199999999999997,
+   "largest_gap_between": [
+    0.842,
+    0.8632
+   ],
+   "bimodality_coefficient": 0.5571768198398888,
+   "bimodal_consistent": true,
+   "mdd_n2_abs": 0.16293029831685504,
+   "mdd_n2_frac_of_mean": 0.17959917395835107,
+   "two_way": {
+    "levels_pool": [
+     "p1",
+     "p2",
+     "p3",
+     "p4"
+    ],
+    "levels_seed": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "grand_mean": 0.9071884615384616,
+    "pool_means": {
+     "p1": 0.9053384615384616,
+     "p2": 0.9139999999999999,
+     "p3": 0.904,
+     "p4": 0.9054153846153846
+    },
+    "seed_means": {
+     "0": 0.8895,
+     "1": 0.9155,
+     "2": 0.8939999999999999,
+     "3": 0.897,
+     "4": 0.94565,
+     "5": 0.9276,
+     "6": 0.9041,
+     "7": 0.8881,
+     "8": 0.8969,
+     "9": 0.9004,
+     "10": 0.9118999999999999,
+     "11": 0.90385,
+     "12": 0.91895
+    },
+    "MS_pool": 0.00027356179487178777,
+    "MS_seed": 0.0010843819230769234,
+    "MS_resid": 0.0009231323504273512,
+    "F_pool": 0.29634081694260433,
+    "F_seed": 1.1746765483572577,
+    "var_pool": -4.996696581196642e-05,
+    "var_seed": 4.031239316239305e-05,
+    "var_resid": 0.0009231323504273512,
+    "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+   },
+   "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power).",
+   "seeds01_only": {
+    "n_cells": 8,
+    "values": {
+     "p1_s0": 0.8726,
+     "p1_s1": 0.9362,
+     "p2_s0": 0.9458,
+     "p2_s1": 0.877,
+     "p3_s0": 0.868,
+     "p3_s1": 0.8858,
+     "p4_s0": 0.8716,
+     "p4_s1": 0.963
+    },
+    "mean": 0.9025,
+    "sd": 0.03898541851952927,
+    "cv": 0.043197139633827444,
+    "min": 0.868,
+    "max": 0.963,
+    "range": 0.09499999999999997,
+    "max_over_min": 1.109447004608295,
+    "largest_gap": 0.0504,
+    "largest_gap_between": [
+     0.8858,
+     0.9362
+    ],
+    "bimodality_coefficient": 1.1274262270660924,
+    "bimodal_consistent": true,
+    "mdd_n2_abs": 0.20909100195623206,
+    "mdd_n2_frac_of_mean": 0.23167978056092195,
+    "two_way": {
+     "levels_pool": [
+      "p1",
+      "p2",
+      "p3",
+      "p4"
+     ],
+     "levels_seed": [
+      0,
+      1
+     ],
+     "grand_mean": 0.9025,
+     "pool_means": {
+      "p1": 0.9044000000000001,
+      "p2": 0.9114,
+      "p3": 0.8769,
+      "p4": 0.9173
+     },
+     "seed_means": {
+      "0": 0.8895,
+      "1": 0.9155
+     },
+     "MS_pool": 0.0006381466666666664,
+     "MS_seed": 0.0013520000000000025,
+     "MS_resid": 0.0024575333333333293,
+     "F_pool": 0.25966958739115137,
+     "F_seed": 0.5501451319751531,
+     "var_pool": -0.0009096933333333315,
+     "var_seed": -0.0002763833333333317,
+     "var_resid": 0.0024575333333333293,
+     "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+    },
+    "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power)."
+   }
+  },
+  "heldout_len2": {
+   "n_cells": 52,
+   "values": {
+    "p1_s0": 0.997,
+    "p1_s1": 0.993,
+    "p1_s2": 0.994,
+    "p1_s3": 0.998,
+    "p1_s4": 0.997,
+    "p1_s5": 0.999,
+    "p1_s6": 0.997,
+    "p1_s7": 0.994,
+    "p1_s8": 0.998,
+    "p1_s9": 0.997,
+    "p1_s10": 0.998,
+    "p1_s11": 0.993,
+    "p1_s12": 1.0,
+    "p2_s0": 0.999,
+    "p2_s1": 1.0,
+    "p2_s2": 0.987,
+    "p2_s3": 0.996,
+    "p2_s4": 0.998,
+    "p2_s5": 0.999,
+    "p2_s6": 0.998,
+    "p2_s7": 0.999,
+    "p2_s8": 0.998,
+    "p2_s9": 0.991,
+    "p2_s10": 0.995,
+    "p2_s11": 0.995,
+    "p2_s12": 0.999,
+    "p3_s0": 0.997,
+    "p3_s1": 0.994,
+    "p3_s2": 0.999,
+    "p3_s3": 0.999,
+    "p3_s4": 0.99,
+    "p3_s5": 0.992,
+    "p3_s6": 0.994,
+    "p3_s7": 0.993,
+    "p3_s8": 0.997,
+    "p3_s9": 0.995,
+    "p3_s10": 1.0,
+    "p3_s11": 0.998,
+    "p3_s12": 0.998,
+    "p4_s0": 0.998,
+    "p4_s1": 0.998,
+    "p4_s2": 0.991,
+    "p4_s3": 0.998,
+    "p4_s4": 0.999,
+    "p4_s5": 0.997,
+    "p4_s6": 0.999,
+    "p4_s7": 0.998,
+    "p4_s8": 0.999,
+    "p4_s9": 0.991,
+    "p4_s10": 0.998,
+    "p4_s11": 0.989,
+    "p4_s12": 0.998
+   },
+   "mean": 0.9963076923076923,
+   "sd": 0.003128229854265213,
+   "cv": 0.0031398230470543365,
+   "min": 0.987,
+   "max": 1.0,
+   "range": 0.013000000000000012,
+   "max_over_min": 1.0131712259371835,
+   "largest_gap": 0.0020000000000000018,
+   "largest_gap_between": [
+    0.987,
+    0.989
+   ],
+   "bimodality_coefficient": 0.6478051876874171,
+   "bimodal_consistent": true,
+   "mdd_n2_abs": 0.016777675844368723,
+   "mdd_n2_frac_of_mean": 0.016839853765966136,
+   "two_way": {
+    "levels_pool": [
+     "p1",
+     "p2",
+     "p3",
+     "p4"
+    ],
+    "levels_seed": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "grand_mean": 0.9963076923076923,
+    "pool_means": {
+     "p1": 0.9965384615384616,
+     "p2": 0.9964615384615385,
+     "p3": 0.9958461538461538,
+     "p4": 0.9963846153846153
+    },
+    "seed_means": {
+     "0": 0.99775,
+     "1": 0.99625,
+     "2": 0.99275,
+     "3": 0.99775,
+     "4": 0.996,
+     "5": 0.99675,
+     "6": 0.997,
+     "7": 0.996,
+     "8": 0.998,
+     "9": 0.9935,
+     "10": 0.99775,
+     "11": 0.99375,
+     "12": 0.99875
+    },
+    "MS_pool": 1.2820512820514952e-06,
+    "MS_seed": 1.4339743589743532e-05,
+    "MS_resid": 8.976495726495752e-06,
+    "F_pool": 0.14282313734827376,
+    "F_seed": 1.59747679124017,
+    "var_pool": -5.918803418803274e-07,
+    "var_seed": 1.340811965811945e-06,
+    "var_resid": 8.976495726495752e-06,
+    "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+   },
+   "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power).",
+   "seeds01_only": {
+    "n_cells": 8,
+    "values": {
+     "p1_s0": 0.997,
+     "p1_s1": 0.993,
+     "p2_s0": 0.999,
+     "p2_s1": 1.0,
+     "p3_s0": 0.997,
+     "p3_s1": 0.994,
+     "p4_s0": 0.998,
+     "p4_s1": 0.998
+    },
+    "mean": 0.997,
+    "sd": 0.0023904572186687896,
+    "cv": 0.0023976501691763187,
+    "min": 0.993,
+    "max": 1.0,
+    "range": 0.007000000000000006,
+    "max_over_min": 1.0070493454179255,
+    "largest_gap": 0.0030000000000000027,
+    "largest_gap_between": [
+     0.994,
+     0.997
+    ],
+    "bimodality_coefficient": 0.5851381628080656,
+    "bimodal_consistent": true,
+    "mdd_n2_abs": 0.012820770276830162,
+    "mdd_n2_frac_of_mean": 0.012859348321795548,
+    "two_way": {
+     "levels_pool": [
+      "p1",
+      "p2",
+      "p3",
+      "p4"
+     ],
+     "levels_seed": [
+      0,
+      1
+     ],
+     "grand_mean": 0.997,
+     "pool_means": {
+      "p1": 0.995,
+      "p2": 0.9995,
+      "p3": 0.9955,
+      "p4": 0.998
+     },
+     "seed_means": {
+      "0": 0.99775,
+      "1": 0.99625
+     },
+     "MS_pool": 9.00000000000009e-06,
+     "MS_seed": 4.5000000000003415e-06,
+     "MS_resid": 2.833333333333153e-06,
+     "F_pool": 3.176470588235528,
+     "F_seed": 1.5882352941178686,
+     "var_pool": 3.0833333333334687e-06,
+     "var_seed": 4.166666666667971e-07,
+     "var_resid": 2.833333333333153e-06,
+     "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+    },
+    "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power)."
+   }
+  },
+  "heldout_len3": {
+   "n_cells": 52,
+   "values": {
+    "p1_s0": 0.99,
+    "p1_s1": 0.981,
+    "p1_s2": 0.989,
+    "p1_s3": 0.992,
+    "p1_s4": 0.984,
+    "p1_s5": 0.988,
+    "p1_s6": 0.983,
+    "p1_s7": 0.992,
+    "p1_s8": 0.992,
+    "p1_s9": 0.985,
+    "p1_s10": 0.994,
+    "p1_s11": 0.976,
+    "p1_s12": 0.986,
+    "p2_s0": 0.992,
+    "p2_s1": 0.993,
+    "p2_s2": 0.984,
+    "p2_s3": 0.991,
+    "p2_s4": 0.99,
+    "p2_s5": 0.986,
+    "p2_s6": 0.993,
+    "p2_s7": 0.989,
+    "p2_s8": 0.993,
+    "p2_s9": 0.983,
+    "p2_s10": 0.988,
+    "p2_s11": 0.985,
+    "p2_s12": 0.989,
+    "p3_s0": 0.991,
+    "p3_s1": 0.991,
+    "p3_s2": 0.99,
+    "p3_s3": 0.99,
+    "p3_s4": 0.987,
+    "p3_s5": 0.984,
+    "p3_s6": 0.985,
+    "p3_s7": 0.992,
+    "p3_s8": 0.993,
+    "p3_s9": 0.995,
+    "p3_s10": 0.994,
+    "p3_s11": 0.981,
+    "p3_s12": 0.995,
+    "p4_s0": 0.98,
+    "p4_s1": 0.991,
+    "p4_s2": 0.979,
+    "p4_s3": 0.989,
+    "p4_s4": 0.992,
+    "p4_s5": 0.988,
+    "p4_s6": 0.992,
+    "p4_s7": 0.986,
+    "p4_s8": 0.983,
+    "p4_s9": 0.986,
+    "p4_s10": 0.994,
+    "p4_s11": 0.978,
+    "p4_s12": 0.997
+   },
+   "mean": 0.9882884615384615,
+   "sd": 0.004860148220371673,
+   "cv": 0.004917742551406414,
+   "min": 0.976,
+   "max": 0.997,
+   "range": 0.02100000000000002,
+   "max_over_min": 1.021516393442623,
+   "largest_gap": 0.0020000000000000018,
+   "largest_gap_between": [
+    0.995,
+    0.997
+   ],
+   "bimodality_coefficient": 0.4975527075643531,
+   "bimodal_consistent": false,
+   "mdd_n2_abs": 0.026066496132246257,
+   "mdd_n2_frac_of_mean": 0.026375392556611185,
+   "two_way": {
+    "levels_pool": [
+     "p1",
+     "p2",
+     "p3",
+     "p4"
+    ],
+    "levels_seed": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "grand_mean": 0.9882884615384615,
+    "pool_means": {
+     "p1": 0.9870769230769232,
+     "p2": 0.9889230769230769,
+     "p3": 0.9898461538461538,
+     "p4": 0.9873076923076922
+    },
+    "seed_means": {
+     "0": 0.98825,
+     "1": 0.989,
+     "2": 0.9855,
+     "3": 0.9904999999999999,
+     "4": 0.98825,
+     "5": 0.9864999999999999,
+     "6": 0.98825,
+     "7": 0.98975,
+     "8": 0.99025,
+     "9": 0.98725,
+     "10": 0.9924999999999999,
+     "11": 0.98,
+     "12": 0.99175
+    },
+    "MS_pool": 2.2788461538460698e-05,
+    "MS_seed": 4.061858974358962e-05,
+    "MS_resid": 1.8024572649572823e-05,
+    "F_pool": 1.2642996858514022,
+    "F_seed": 2.2535119435717808,
+    "var_pool": 3.6645299145291344e-07,
+    "var_seed": 5.648504273504199e-06,
+    "var_resid": 1.8024572649572823e-05,
+    "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+   },
+   "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power).",
+   "seeds01_only": {
+    "n_cells": 8,
+    "values": {
+     "p1_s0": 0.99,
+     "p1_s1": 0.981,
+     "p2_s0": 0.992,
+     "p2_s1": 0.993,
+     "p3_s0": 0.991,
+     "p3_s1": 0.991,
+     "p4_s0": 0.98,
+     "p4_s1": 0.991
+    },
+    "mean": 0.988625,
+    "sd": 0.005097268175909809,
+    "cv": 0.0051559167286987576,
+    "min": 0.98,
+    "max": 0.993,
+    "range": 0.013000000000000012,
+    "max_over_min": 1.013265306122449,
+    "largest_gap": 0.009000000000000008,
+    "largest_gap_between": [
+     0.981,
+     0.99
+    ],
+    "bimodality_coefficient": 0.9388973777547178,
+    "bimodal_consistent": true,
+    "mdd_n2_abs": 0.027338244672343363,
+    "mdd_n2_frac_of_mean": 0.027652795217947515,
+    "two_way": {
+     "levels_pool": [
+      "p1",
+      "p2",
+      "p3",
+      "p4"
+     ],
+     "levels_seed": [
+      0,
+      1
+     ],
+     "grand_mean": 0.988625,
+     "pool_means": {
+      "p1": 0.9855,
+      "p2": 0.9924999999999999,
+      "p3": 0.991,
+      "p4": 0.9855
+     },
+     "seed_means": {
+      "0": 0.98825,
+      "1": 0.989
+     },
+     "MS_pool": 2.6791666666665968e-05,
+     "MS_seed": 1.1250000000000854e-06,
+     "MS_resid": 3.345833333333412e-05,
+     "F_pool": 0.8007471980074323,
+     "F_seed": 0.03362391033624087,
+     "var_pool": -3.3333333333340745e-06,
+     "var_seed": -8.083333333333507e-06,
+     "var_resid": 3.345833333333412e-05,
+     "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+    },
+    "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power)."
+   }
+  },
+  "heldout_len4": {
+   "n_cells": 52,
+   "values": {
+    "p1_s0": 0.956,
+    "p1_s1": 0.945,
+    "p1_s2": 0.952,
+    "p1_s3": 0.96,
+    "p1_s4": 0.952,
+    "p1_s5": 0.95,
+    "p1_s6": 0.953,
+    "p1_s7": 0.947,
+    "p1_s8": 0.974,
+    "p1_s9": 0.968,
+    "p1_s10": 0.973,
+    "p1_s11": 0.892,
+    "p1_s12": 0.959,
+    "p2_s0": 0.97,
+    "p2_s1": 0.965,
+    "p2_s2": 0.935,
+    "p2_s3": 0.965,
+    "p2_s4": 0.969,
+    "p2_s5": 0.959,
+    "p2_s6": 0.962,
+    "p2_s7": 0.961,
+    "p2_s8": 0.962,
+    "p2_s9": 0.927,
+    "p2_s10": 0.968,
+    "p2_s11": 0.939,
+    "p2_s12": 0.96,
+    "p3_s0": 0.953,
+    "p3_s1": 0.966,
+    "p3_s2": 0.955,
+    "p3_s3": 0.955,
+    "p3_s4": 0.955,
+    "p3_s5": 0.942,
+    "p3_s6": 0.94,
+    "p3_s7": 0.968,
+    "p3_s8": 0.973,
+    "p3_s9": 0.979,
+    "p3_s10": 0.962,
+    "p3_s11": 0.947,
+    "p3_s12": 0.968,
+    "p4_s0": 0.96,
+    "p4_s1": 0.968,
+    "p4_s2": 0.927,
+    "p4_s3": 0.965,
+    "p4_s4": 0.963,
+    "p4_s5": 0.966,
+    "p4_s6": 0.961,
+    "p4_s7": 0.944,
+    "p4_s8": 0.974,
+    "p4_s9": 0.957,
+    "p4_s10": 0.97,
+    "p4_s11": 0.939,
+    "p4_s12": 0.969
+   },
+   "mean": 0.9567115384615383,
+   "sd": 0.015120867983258068,
+   "cv": 0.0158050440235868,
+   "min": 0.892,
+   "max": 0.979,
+   "range": 0.08699999999999997,
+   "max_over_min": 1.0975336322869955,
+   "largest_gap": 0.03500000000000003,
+   "largest_gap_between": [
+    0.892,
+    0.927
+   ],
+   "bimodality_coefficient": 0.5102891131079322,
+   "bimodal_consistent": false,
+   "mdd_n2_abs": 0.08109794782589178,
+   "mdd_n2_frac_of_mean": 0.08476739807727537,
+   "two_way": {
+    "levels_pool": [
+     "p1",
+     "p2",
+     "p3",
+     "p4"
+    ],
+    "levels_seed": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "grand_mean": 0.9567115384615383,
+    "pool_means": {
+     "p1": 0.9523846153846154,
+     "p2": 0.957076923076923,
+     "p3": 0.9586923076923076,
+     "p4": 0.9586923076923076
+    },
+    "seed_means": {
+     "0": 0.95975,
+     "1": 0.961,
+     "2": 0.94225,
+     "3": 0.9612499999999999,
+     "4": 0.95975,
+     "5": 0.9542499999999999,
+     "6": 0.954,
+     "7": 0.955,
+     "8": 0.97075,
+     "9": 0.95775,
+     "10": 0.9682499999999999,
+     "11": 0.9292499999999999,
+     "12": 0.964
+    },
+    "MS_pool": 0.0001157115384615359,
+    "MS_seed": 0.0004738269230769238,
+    "MS_resid": 0.0001563226495726492,
+    "F_pool": 0.7402096802853911,
+    "F_seed": 3.0310829836383886,
+    "var_pool": -3.1239316239317916e-06,
+    "var_seed": 7.937606837606865e-05,
+    "var_resid": 0.0001563226495726492,
+    "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+   },
+   "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power).",
+   "seeds01_only": {
+    "n_cells": 8,
+    "values": {
+     "p1_s0": 0.956,
+     "p1_s1": 0.945,
+     "p2_s0": 0.97,
+     "p2_s1": 0.965,
+     "p3_s0": 0.953,
+     "p3_s1": 0.966,
+     "p4_s0": 0.96,
+     "p4_s1": 0.968
+    },
+    "mean": 0.960375,
+    "sd": 0.008568005268772563,
+    "cv": 0.008921520519351881,
+    "min": 0.945,
+    "max": 0.97,
+    "range": 0.025000000000000022,
+    "max_over_min": 1.0264550264550265,
+    "largest_gap": 0.008000000000000007,
+    "largest_gap_between": [
+     0.945,
+     0.953
+    ],
+    "bimodality_coefficient": 0.579534355648798,
+    "bimodal_consistent": true,
+    "mdd_n2_abs": 0.04595289404207638,
+    "mdd_n2_frac_of_mean": 0.047848906981206696,
+    "two_way": {
+     "levels_pool": [
+      "p1",
+      "p2",
+      "p3",
+      "p4"
+     ],
+     "levels_seed": [
+      0,
+      1
+     ],
+     "grand_mean": 0.960375,
+     "pool_means": {
+      "p1": 0.9504999999999999,
+      "p2": 0.9675,
+      "p3": 0.9595,
+      "p4": 0.964
+     },
+     "seed_means": {
+      "0": 0.95975,
+      "1": 0.961
+     },
+     "MS_pool": 0.0001081250000000014,
+     "MS_seed": 3.1249999999998667e-06,
+     "MS_resid": 6.212499999999894e-05,
+     "F_pool": 1.740442655935666,
+     "F_seed": 0.05030181086518987,
+     "var_pool": 2.300000000000123e-05,
+     "var_seed": -1.4749999999999767e-05,
+     "var_resid": 6.212499999999894e-05,
+     "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+    },
+    "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power)."
+   }
+  },
+  "heldout_len5": {
+   "n_cells": 52,
+   "values": {
+    "p1_s0": 0.933,
+    "p1_s1": 0.912,
+    "p1_s2": 0.921,
+    "p1_s3": 0.939,
+    "p1_s4": 0.914,
+    "p1_s5": 0.929,
+    "p1_s6": 0.922,
+    "p1_s7": 0.933,
+    "p1_s8": 0.937,
+    "p1_s9": 0.936,
+    "p1_s10": 0.956,
+    "p1_s11": 0.877,
+    "p1_s12": 0.93,
+    "p2_s0": 0.956,
+    "p2_s1": 0.919,
+    "p2_s2": 0.912,
+    "p2_s3": 0.932,
+    "p2_s4": 0.939,
+    "p2_s5": 0.93,
+    "p2_s6": 0.928,
+    "p2_s7": 0.946,
+    "p2_s8": 0.943,
+    "p2_s9": 0.904,
+    "p2_s10": 0.917,
+    "p2_s11": 0.899,
+    "p2_s12": 0.936,
+    "p3_s0": 0.926,
+    "p3_s1": 0.922,
+    "p3_s2": 0.937,
+    "p3_s3": 0.924,
+    "p3_s4": 0.928,
+    "p3_s5": 0.917,
+    "p3_s6": 0.919,
+    "p3_s7": 0.936,
+    "p3_s8": 0.935,
+    "p3_s9": 0.943,
+    "p3_s10": 0.937,
+    "p3_s11": 0.898,
+    "p3_s12": 0.937,
+    "p4_s0": 0.926,
+    "p4_s1": 0.938,
+    "p4_s2": 0.892,
+    "p4_s3": 0.934,
+    "p4_s4": 0.931,
+    "p4_s5": 0.938,
+    "p4_s6": 0.924,
+    "p4_s7": 0.912,
+    "p4_s8": 0.936,
+    "p4_s9": 0.933,
+    "p4_s10": 0.938,
+    "p4_s11": 0.919,
+    "p4_s12": 0.935
+   },
+   "mean": 0.9272115384615385,
+   "sd": 0.01501546462747269,
+   "cv": 0.016194216750566832,
+   "min": 0.877,
+   "max": 0.956,
+   "range": 0.07899999999999996,
+   "max_over_min": 1.0900798175598632,
+   "largest_gap": 0.015000000000000013,
+   "largest_gap_between": [
+    0.877,
+    0.892
+   ],
+   "bimodality_coefficient": 0.4233507274666275,
+   "bimodal_consistent": false,
+   "mdd_n2_abs": 0.08053263663756442,
+   "mdd_n2_frac_of_mean": 0.08685465322313284,
+   "two_way": {
+    "levels_pool": [
+     "p1",
+     "p2",
+     "p3",
+     "p4"
+    ],
+    "levels_seed": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "grand_mean": 0.9272115384615385,
+    "pool_means": {
+     "p1": 0.926076923076923,
+     "p2": 0.9277692307692308,
+     "p3": 0.9276153846153847,
+     "p4": 0.9273846153846155
+    },
+    "seed_means": {
+     "0": 0.93525,
+     "1": 0.92275,
+     "2": 0.9155,
+     "3": 0.93225,
+     "4": 0.928,
+     "5": 0.9285,
+     "6": 0.92325,
+     "7": 0.9317500000000001,
+     "8": 0.9377500000000001,
+     "9": 0.929,
+     "10": 0.937,
+     "11": 0.89825,
+     "12": 0.9345000000000001
+    },
+    "MS_pool": 7.762820512821715e-06,
+    "MS_seed": 0.0004625352564102588,
+    "MS_resid": 0.00016458226495726363,
+    "F_pool": 0.04716681056028396,
+    "F_seed": 2.8103590416036828,
+    "var_pool": -1.2063034188033993e-05,
+    "var_seed": 7.448824786324879e-05,
+    "var_resid": 0.00016458226495726363,
+    "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+   },
+   "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power).",
+   "seeds01_only": {
+    "n_cells": 8,
+    "values": {
+     "p1_s0": 0.933,
+     "p1_s1": 0.912,
+     "p2_s0": 0.956,
+     "p2_s1": 0.919,
+     "p3_s0": 0.926,
+     "p3_s1": 0.922,
+     "p4_s0": 0.926,
+     "p4_s1": 0.938
+    },
+    "mean": 0.929,
+    "sd": 0.013533028380331444,
+    "cv": 0.014567307190884223,
+    "min": 0.912,
+    "max": 0.956,
+    "range": 0.04399999999999993,
+    "max_over_min": 1.0482456140350875,
+    "largest_gap": 0.018000000000000016,
+    "largest_gap_between": [
+     0.938,
+     0.956
+    ],
+    "bimodality_coefficient": 0.47668880764322,
+    "bimodal_consistent": false,
+    "mdd_n2_abs": 0.07258186704160058,
+    "mdd_n2_frac_of_mean": 0.07812902803186283,
+    "two_way": {
+     "levels_pool": [
+      "p1",
+      "p2",
+      "p3",
+      "p4"
+     ],
+     "levels_seed": [
+      0,
+      1
+     ],
+     "grand_mean": 0.929,
+     "pool_means": {
+      "p1": 0.9225000000000001,
+      "p2": 0.9375,
+      "p3": 0.924,
+      "p4": 0.9319999999999999
+     },
+     "seed_means": {
+      "0": 0.93525,
+      "1": 0.92275
+     },
+     "MS_pool": 9.899999999999861e-05,
+     "MS_seed": 0.0003125000000000033,
+     "MS_resid": 0.00022416666666666505,
+     "F_pool": 0.441635687732339,
+     "F_seed": 1.3940520446096902,
+     "var_pool": -6.258333333333322e-05,
+     "var_seed": 2.2083333333334566e-05,
+     "var_resid": 0.00022416666666666505,
+     "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+    },
+    "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power)."
+   }
+  },
+  "heldout_len6": {
+   "n_cells": 52,
+   "values": {
+    "p1_s0": 0.487,
+    "p1_s1": 0.85,
+    "p1_s2": 0.869,
+    "p1_s3": 0.67,
+    "p1_s4": 0.838,
+    "p1_s5": 0.843,
+    "p1_s6": 0.629,
+    "p1_s7": 0.653,
+    "p1_s8": 0.455,
+    "p1_s9": 0.479,
+    "p1_s10": 0.514,
+    "p1_s11": 0.578,
+    "p1_s12": 0.775,
+    "p2_s0": 0.812,
+    "p2_s1": 0.508,
+    "p2_s2": 0.558,
+    "p2_s3": 0.55,
+    "p2_s4": 0.877,
+    "p2_s5": 0.82,
+    "p2_s6": 0.666,
+    "p2_s7": 0.488,
+    "p2_s8": 0.491,
+    "p2_s9": 0.833,
+    "p2_s10": 0.841,
+    "p2_s11": 0.852,
+    "p2_s12": 0.801,
+    "p3_s0": 0.473,
+    "p3_s1": 0.556,
+    "p3_s2": 0.688,
+    "p3_s3": 0.658,
+    "p3_s4": 0.867,
+    "p3_s5": 0.794,
+    "p3_s6": 0.835,
+    "p3_s7": 0.493,
+    "p3_s8": 0.829,
+    "p3_s9": 0.458,
+    "p3_s10": 0.454,
+    "p3_s11": 0.742,
+    "p3_s12": 0.577,
+    "p4_s0": 0.494,
+    "p4_s1": 0.92,
+    "p4_s2": 0.421,
+    "p4_s3": 0.535,
+    "p4_s4": 0.843,
+    "p4_s5": 0.631,
+    "p4_s6": 0.502,
+    "p4_s7": 0.638,
+    "p4_s8": 0.576,
+    "p4_s9": 0.768,
+    "p4_s10": 0.847,
+    "p4_s11": 0.7,
+    "p4_s12": 0.67
+   },
+   "mean": 0.667423076923077,
+   "sd": 0.15227495077485384,
+   "cv": 0.22815355962347716,
+   "min": 0.421,
+   "max": 0.92,
+   "range": 0.49900000000000005,
+   "max_over_min": 2.1852731591448933,
+   "largest_gap": 0.051000000000000045,
+   "largest_gap_between": [
+    0.578,
+    0.629
+   ],
+   "bimodality_coefficient": 0.6772507575377249,
+   "bimodal_consistent": true,
+   "mdd_n2_abs": 0.8166982230651336,
+   "mdd_n2_frac_of_mean": 1.2236589523248702,
+   "two_way": {
+    "levels_pool": [
+     "p1",
+     "p2",
+     "p3",
+     "p4"
+    ],
+    "levels_seed": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "grand_mean": 0.667423076923077,
+    "pool_means": {
+     "p1": 0.6646153846153846,
+     "p2": 0.6997692307692307,
+     "p3": 0.6479999999999999,
+     "p4": 0.6573076923076923
+    },
+    "seed_means": {
+     "0": 0.5665,
+     "1": 0.7085,
+     "2": 0.634,
+     "3": 0.6032500000000001,
+     "4": 0.85625,
+     "5": 0.772,
+     "6": 0.658,
+     "7": 0.5680000000000001,
+     "8": 0.58775,
+     "9": 0.6345,
+     "10": 0.664,
+     "11": 0.718,
+     "12": 0.70575
+    },
+    "MS_pool": 0.006646179487179486,
+    "MS_seed": 0.028381391025641012,
+    "MS_resid": 0.022834873931623933,
+    "F_pool": 0.2910539163509555,
+    "F_seed": 1.2428967688030774,
+    "var_pool": -0.0012452841880341882,
+    "var_seed": 0.00138662927350427,
+    "var_resid": 0.022834873931623933,
+    "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+   },
+   "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power).",
+   "seeds01_only": {
+    "n_cells": 8,
+    "values": {
+     "p1_s0": 0.487,
+     "p1_s1": 0.85,
+     "p2_s0": 0.812,
+     "p2_s1": 0.508,
+     "p3_s0": 0.473,
+     "p3_s1": 0.556,
+     "p4_s0": 0.494,
+     "p4_s1": 0.92
+    },
+    "mean": 0.6375,
+    "sd": 0.18865236358369405,
+    "cv": 0.2959252762097162,
+    "min": 0.473,
+    "max": 0.92,
+    "range": 0.44700000000000006,
+    "max_over_min": 1.9450317124735732,
+    "largest_gap": 0.256,
+    "largest_gap_between": [
+     0.556,
+     0.812
+    ],
+    "bimodality_coefficient": 1.2518431333512323,
+    "bimodal_consistent": true,
+    "mdd_n2_abs": 1.011801674089153,
+    "mdd_n2_frac_of_mean": 1.5871398809241615,
+    "two_way": {
+     "levels_pool": [
+      "p1",
+      "p2",
+      "p3",
+      "p4"
+     ],
+     "levels_seed": [
+      0,
+      1
+     ],
+     "grand_mean": 0.6375,
+     "pool_means": {
+      "p1": 0.6685,
+      "p2": 0.66,
+      "p3": 0.5145,
+      "p4": 0.7070000000000001
+     },
+     "seed_means": {
+      "0": 0.5665,
+      "1": 0.7085
+     },
+     "MS_pool": 0.014284333333333349,
+     "MS_seed": 0.04032800000000001,
+     "MS_resid": 0.05531566666666666,
+     "F_pool": 0.25823305031124427,
+     "F_seed": 0.7290520467378142,
+     "var_pool": -0.020515666666666654,
+     "var_seed": -0.0037469166666666623,
+     "var_resid": 0.05531566666666666,
+     "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+    },
+    "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power)."
+   }
+  },
+  "heldout_depth3_slice": {
+   "n_cells": 52,
+   "values": {
+    "p1_s0": 0.086,
+    "p1_s1": 0.818,
+    "p1_s2": 0.856,
+    "p1_s3": 0.432,
+    "p1_s4": 0.792,
+    "p1_s5": 0.79,
+    "p1_s6": 0.364,
+    "p1_s7": 0.402,
+    "p1_s8": 0.032,
+    "p1_s9": 0.06,
+    "p1_s10": 0.106,
+    "p1_s11": 0.316,
+    "p1_s12": 0.66,
+    "p2_s0": 0.706,
+    "p2_s1": 0.106,
+    "p2_s2": 0.216,
+    "p2_s3": 0.194,
+    "p2_s4": 0.854,
+    "p2_s5": 0.742,
+    "p2_s6": 0.478,
+    "p2_s7": 0.064,
+    "p2_s8": 0.068,
+    "p2_s9": 0.768,
+    "p2_s10": 0.786,
+    "p2_s11": 0.85,
+    "p2_s12": 0.714,
+    "p3_s0": 0.04,
+    "p3_s1": 0.204,
+    "p3_s2": 0.464,
+    "p3_s3": 0.4,
+    "p3_s4": 0.84,
+    "p3_s5": 0.692,
+    "p3_s6": 0.792,
+    "p3_s7": 0.086,
+    "p3_s8": 0.748,
+    "p3_s9": 0.01,
+    "p3_s10": 0.012,
+    "p3_s11": 0.62,
+    "p3_s12": 0.244,
+    "p4_s0": 0.09,
+    "p4_s1": 0.918,
+    "p4_s2": 0.008,
+    "p4_s3": 0.172,
+    "p4_s4": 0.798,
+    "p4_s5": 0.356,
+    "p4_s6": 0.122,
+    "p4_s7": 0.408,
+    "p4_s8": 0.248,
+    "p4_s9": 0.632,
+    "p4_s10": 0.778,
+    "p4_s11": 0.522,
+    "p4_s12": 0.426
+   },
+   "mean": 0.4401923076923077,
+   "sd": 0.3053276631758945,
+   "cv": 0.693623350159306,
+   "min": 0.008,
+   "max": 0.918,
+   "range": 0.91,
+   "max_over_min": 114.75,
+   "largest_gap": 0.09799999999999998,
+   "largest_gap_between": [
+    0.522,
+    0.62
+   ],
+   "bimodality_coefficient": 0.6965093262807944,
+   "bimodal_consistent": true,
+   "mdd_n2_abs": 1.637567825170896,
+   "mdd_n2_frac_of_mean": 3.7201191310129573,
+   "two_way": {
+    "levels_pool": [
+     "p1",
+     "p2",
+     "p3",
+     "p4"
+    ],
+    "levels_seed": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "grand_mean": 0.4401923076923077,
+    "pool_means": {
+     "p1": 0.43953846153846154,
+     "p2": 0.5035384615384616,
+     "p3": 0.3963076923076923,
+     "p4": 0.42138461538461536
+    },
+    "seed_means": {
+     "0": 0.23049999999999998,
+     "1": 0.5115,
+     "2": 0.386,
+     "3": 0.2995,
+     "4": 0.821,
+     "5": 0.645,
+     "6": 0.439,
+     "7": 0.24,
+     "8": 0.274,
+     "9": 0.3675,
+     "10": 0.42050000000000004,
+     "11": 0.577,
+     "12": 0.511
+    },
+    "MS_pool": 0.027268589743589783,
+    "MS_seed": 0.11861592307692305,
+    "MS_resid": 0.09025770085470088,
+    "F_pool": 0.3021192594689227,
+    "F_seed": 1.3141917194176478,
+    "var_pool": -0.0048453162393162375,
+    "var_seed": 0.007089555555555543,
+    "var_resid": 0.09025770085470088,
+    "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+   },
+   "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power).",
+   "seeds01_only": {
+    "n_cells": 8,
+    "values": {
+     "p1_s0": 0.086,
+     "p1_s1": 0.818,
+     "p2_s0": 0.706,
+     "p2_s1": 0.106,
+     "p3_s0": 0.04,
+     "p3_s1": 0.204,
+     "p4_s0": 0.09,
+     "p4_s1": 0.918
+    },
+    "mean": 0.371,
+    "sd": 0.37399465236818563,
+    "cv": 1.0080718392673467,
+    "min": 0.04,
+    "max": 0.918,
+    "range": 0.878,
+    "max_over_min": 22.95,
+    "largest_gap": 0.502,
+    "largest_gap_between": [
+     0.204,
+     0.706
+    ],
+    "bimodality_coefficient": 1.2958098510443208,
+    "bimodal_consistent": true,
+    "mdd_n2_abs": 2.0058503809767707,
+    "mdd_n2_frac_of_mean": 5.406604800476471,
+    "two_way": {
+     "levels_pool": [
+      "p1",
+      "p2",
+      "p3",
+      "p4"
+     ],
+     "levels_seed": [
+      0,
+      1
+     ],
+     "grand_mean": 0.371,
+     "pool_means": {
+      "p1": 0.45199999999999996,
+      "p2": 0.40599999999999997,
+      "p3": 0.122,
+      "p4": 0.504
+     },
+     "seed_means": {
+      "0": 0.23049999999999998,
+      "1": 0.5115
+     },
+     "MS_pool": 0.05831733333333333,
+     "MS_seed": 0.15792199999999995,
+     "MS_resid": 0.21541000000000002,
+     "F_pool": 0.2707271404917753,
+     "F_seed": 0.733122881946056,
+     "var_pool": -0.07854633333333334,
+     "var_seed": -0.014372000000000017,
+     "var_resid": 0.21541000000000002,
+     "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+    },
+    "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power)."
+   },
+   "high_mode": {
+    "threshold_high": 0.44,
+    "threshold_low": 0.11,
+    "n_high": 24,
+    "n_low": 13,
+    "n_between": 15,
+    "p_high": 0.46153846153846156,
+    "wilson95": [
+     0.3334025986239788,
+     0.5949662160231659
+    ],
+    "note": "mode boundaries are ds-rendering's (>0.44 high, <0.11 low)"
+   }
+  },
+  "heldout_len6_nopattern": {
+   "n_cells": 52,
+   "values": {
+    "p1_s0": 0.8299595141700404,
+    "p1_s1": 0.7813765182186235,
+    "p1_s2": 0.7935222672064778,
+    "p1_s3": 0.8461538461538461,
+    "p1_s4": 0.8137651821862348,
+    "p1_s5": 0.8340080971659919,
+    "p1_s6": 0.8421052631578947,
+    "p1_s7": 0.8502024291497976,
+    "p1_s8": 0.8340080971659919,
+    "p1_s9": 0.8259109311740891,
+    "p1_s10": 0.8785425101214575,
+    "p1_s11": 0.7125506072874493,
+    "p1_s12": 0.8259109311740891,
+    "p2_s0": 0.8623481781376519,
+    "p2_s1": 0.8421052631578947,
+    "p2_s2": 0.8097165991902834,
+    "p2_s3": 0.8421052631578947,
+    "p2_s4": 0.8218623481781376,
+    "p2_s5": 0.8178137651821862,
+    "p2_s6": 0.8178137651821862,
+    "p2_s7": 0.8380566801619433,
+    "p2_s8": 0.854251012145749,
+    "p2_s9": 0.8259109311740891,
+    "p2_s10": 0.8299595141700404,
+    "p2_s11": 0.7651821862348178,
+    "p2_s12": 0.7935222672064778,
+    "p3_s0": 0.8340080971659919,
+    "p3_s1": 0.8502024291497976,
+    "p3_s2": 0.8582995951417004,
+    "p3_s3": 0.854251012145749,
+    "p3_s4": 0.8380566801619433,
+    "p3_s5": 0.805668016194332,
+    "p3_s6": 0.7935222672064778,
+    "p3_s7": 0.8421052631578947,
+    "p3_s8": 0.8461538461538461,
+    "p3_s9": 0.8461538461538461,
+    "p3_s10": 0.8340080971659919,
+    "p3_s11": 0.7368421052631579,
+    "p3_s12": 0.8461538461538461,
+    "p4_s0": 0.8299595141700404,
+    "p4_s1": 0.8663967611336032,
+    "p4_s2": 0.6963562753036437,
+    "p4_s3": 0.8259109311740891,
+    "p4_s4": 0.7975708502024291,
+    "p4_s5": 0.8582995951417004,
+    "p4_s6": 0.8137651821862348,
+    "p4_s7": 0.7692307692307693,
+    "p4_s8": 0.8421052631578947,
+    "p4_s9": 0.8461538461538461,
+    "p4_s10": 0.8623481781376519,
+    "p4_s11": 0.8097165991902834,
+    "p4_s12": 0.8582995951417004
+   },
+   "mean": 0.8240423544067268,
+   "sd": 0.03666552414300655,
+   "cv": 0.044494708247616796,
+   "min": 0.6963562753036437,
+   "max": 0.8785425101214575,
+   "range": 0.1821862348178137,
+   "max_over_min": 1.2616279069767442,
+   "largest_gap": 0.028340080971659964,
+   "largest_gap_between": [
+    0.7368421052631579,
+    0.7651821862348178
+   ],
+   "bimodality_coefficient": 0.6028922059695869,
+   "bimodal_consistent": true,
+   "mdd_n2_abs": 0.19664868228800086,
+   "mdd_n2_frac_of_mean": 0.23863904717565035,
+   "two_way": {
+    "levels_pool": [
+     "p1",
+     "p2",
+     "p3",
+     "p4"
+    ],
+    "levels_seed": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "grand_mean": 0.8240423544067268,
+    "pool_means": {
+     "p1": 0.8206166303332295,
+     "p2": 0.8246652133291809,
+     "p3": 0.8296480847088135,
+     "p4": 0.8212394892556836
+    },
+    "seed_means": {
+     "0": 0.8390688259109311,
+     "1": 0.8350202429149798,
+     "2": 0.7894736842105263,
+     "3": 0.8421052631578947,
+     "4": 0.8178137651821862,
+     "5": 0.8289473684210527,
+     "6": 0.8168016194331984,
+     "7": 0.8248987854251012,
+     "8": 0.8441295546558705,
+     "9": 0.8360323886639676,
+     "10": 0.8512145748987854,
+     "11": 0.7560728744939271,
+     "12": 0.8309716599190283
+    },
+    "MS_pool": 0.00022274981707196676,
+    "MS_seed": 0.0026456794310717488,
+    "MS_resid": 0.0010040553075187312,
+    "F_pool": 0.22185014650481416,
+    "F_seed": 2.6349937212222665,
+    "var_pool": -6.01004223420588e-05,
+    "var_seed": 0.0004104060308882544,
+    "var_resid": 0.0010040553075187312,
+    "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+   },
+   "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power).",
+   "seeds01_only": {
+    "n_cells": 8,
+    "values": {
+     "p1_s0": 0.8299595141700404,
+     "p1_s1": 0.7813765182186235,
+     "p2_s0": 0.8623481781376519,
+     "p2_s1": 0.8421052631578947,
+     "p3_s0": 0.8340080971659919,
+     "p3_s1": 0.8502024291497976,
+     "p4_s0": 0.8299595141700404,
+     "p4_s1": 0.8663967611336032
+    },
+    "mean": 0.8370445344129555,
+    "sd": 0.026482101153136105,
+    "cv": 0.03163762507774906,
+    "min": 0.7813765182186235,
+    "max": 0.8663967611336032,
+    "range": 0.08502024291497967,
+    "max_over_min": 1.1088082901554404,
+    "largest_gap": 0.04858299595141691,
+    "largest_gap_between": [
+     0.7813765182186235,
+     0.8299595141700404
+    ],
+    "bimodality_coefficient": 0.4908653950039331,
+    "bimodal_consistent": false,
+    "mdd_n2_abs": 0.14203179738192986,
+    "mdd_n2_frac_of_mean": 0.16968248586861753,
+    "two_way": {
+     "levels_pool": [
+      "p1",
+      "p2",
+      "p3",
+      "p4"
+     ],
+     "levels_seed": [
+      0,
+      1
+     ],
+     "grand_mean": 0.8370445344129555,
+     "pool_means": {
+      "p1": 0.8056680161943319,
+      "p2": 0.8522267206477733,
+      "p3": 0.8421052631578947,
+      "p4": 0.8481781376518218
+     },
+     "seed_means": {
+      "0": 0.8390688259109311,
+      "1": 0.8350202429149798
+     },
+     "MS_pool": 0.0009097018472684371,
+     "MS_seed": 3.2782048550212725e-05,
+     "MS_resid": 0.0007157413933463348,
+     "F_pool": 1.2709923664122194,
+     "F_seed": 0.04580152671755574,
+     "var_pool": 9.698022696105117e-05,
+     "var_seed": -0.0001707398361990305,
+     "var_resid": 0.0007157413933463348,
+     "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+    },
+    "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power)."
+   }
+  },
+  "cov_red_solved": {
+   "n_cells": 8,
+   "values": {
+    "p1_s0": 31,
+    "p1_s1": 19,
+    "p2_s0": 39,
+    "p2_s1": 43,
+    "p3_s0": 6,
+    "p3_s1": 46,
+    "p4_s0": 34,
+    "p4_s1": 27
+   },
+   "mean": 30.625,
+   "sd": 13.233480267866046,
+   "cv": 0.43211364139970765,
+   "min": 6,
+   "max": 46,
+   "range": 40,
+   "max_over_min": 7.666666666666667,
+   "largest_gap": 13,
+   "largest_gap_between": [
+    6,
+    19
+   ],
+   "bimodality_coefficient": 0.514852392336471,
+   "bimodal_consistent": false,
+   "mdd_n2_abs": 70.97529675588945,
+   "mdd_n2_frac_of_mean": 2.31756071039639,
+   "two_way": {
+    "levels_pool": [
+     "p1",
+     "p2",
+     "p3",
+     "p4"
+    ],
+    "levels_seed": [
+     0,
+     1
+    ],
+    "grand_mean": 30.625,
+    "pool_means": {
+     "p1": 25.0,
+     "p2": 41.0,
+     "p3": 26.0,
+     "p4": 30.5
+    },
+    "seed_means": {
+     "0": 27.5,
+     "1": 33.75
+    },
+    "MS_pool": 107.125,
+    "MS_seed": 78.125,
+    "MS_resid": 275.4583333333333,
+    "F_pool": 0.3888972923914688,
+    "F_seed": 0.28361821207079113,
+    "var_pool": -84.16666666666666,
+    "var_seed": -49.33333333333333,
+    "var_resid": 275.4583333333333,
+    "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+   },
+   "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power).",
+   "seeds01_only": {
+    "n_cells": 8,
+    "values": {
+     "p1_s0": 31,
+     "p1_s1": 19,
+     "p2_s0": 39,
+     "p2_s1": 43,
+     "p3_s0": 6,
+     "p3_s1": 46,
+     "p4_s0": 34,
+     "p4_s1": 27
+    },
+    "mean": 30.625,
+    "sd": 13.233480267866046,
+    "cv": 0.43211364139970765,
+    "min": 6,
+    "max": 46,
+    "range": 40,
+    "max_over_min": 7.666666666666667,
+    "largest_gap": 13,
+    "largest_gap_between": [
+     6,
+     19
+    ],
+    "bimodality_coefficient": 0.514852392336471,
+    "bimodal_consistent": false,
+    "mdd_n2_abs": 70.97529675588945,
+    "mdd_n2_frac_of_mean": 2.31756071039639,
+    "two_way": {
+     "levels_pool": [
+      "p1",
+      "p2",
+      "p3",
+      "p4"
+     ],
+     "levels_seed": [
+      0,
+      1
+     ],
+     "grand_mean": 30.625,
+     "pool_means": {
+      "p1": 25.0,
+      "p2": 41.0,
+      "p3": 26.0,
+      "p4": 30.5
+     },
+     "seed_means": {
+      "0": 27.5,
+      "1": 33.75
+     },
+     "MS_pool": 107.125,
+     "MS_seed": 78.125,
+     "MS_resid": 275.4583333333333,
+     "F_pool": 0.3888972923914688,
+     "F_seed": 0.28361821207079113,
+     "var_pool": -84.16666666666666,
+     "var_seed": -49.33333333333333,
+     "var_resid": 275.4583333333333,
+     "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+    },
+    "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power)."
+   }
+  },
+  "cov_req8_solved": {
+   "n_cells": 8,
+   "values": {
+    "p1_s0": 89,
+    "p1_s1": 242,
+    "p2_s0": 205,
+    "p2_s1": 61,
+    "p3_s0": 71,
+    "p3_s1": 172,
+    "p4_s0": 144,
+    "p4_s1": 238
+   },
+   "mean": 152.75,
+   "sd": 73.26614887810449,
+   "cv": 0.4796474558304713,
+   "min": 61,
+   "max": 242,
+   "range": 181,
+   "max_over_min": 3.9672131147540983,
+   "largest_gap": 55,
+   "largest_gap_between": [
+    89,
+    144
+   ],
+   "bimodality_coefficient": 0.8753592216053484,
+   "bimodal_consistent": true,
+   "mdd_n2_abs": 392.9492887378732,
+   "mdd_n2_frac_of_mean": 2.5724994352724924,
+   "two_way": {
+    "levels_pool": [
+     "p1",
+     "p2",
+     "p3",
+     "p4"
+    ],
+    "levels_seed": [
+     0,
+     1
+    ],
+    "grand_mean": 152.75,
+    "pool_means": {
+     "p1": 165.5,
+     "p2": 133.0,
+     "p3": 121.5,
+     "p4": 191.0
+    },
+    "seed_means": {
+     "0": 127.25,
+     "1": 178.25
+    },
+    "MS_pool": 1994.8333333333333,
+    "MS_seed": 5202.0,
+    "MS_resid": 8796.333333333334,
+    "F_pool": 0.22678009776800936,
+    "F_seed": 0.5913827731251657,
+    "var_pool": -3400.7500000000005,
+    "var_seed": -898.5833333333335,
+    "var_resid": 8796.333333333334,
+    "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+   },
+   "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power).",
+   "seeds01_only": {
+    "n_cells": 8,
+    "values": {
+     "p1_s0": 89,
+     "p1_s1": 242,
+     "p2_s0": 205,
+     "p2_s1": 61,
+     "p3_s0": 71,
+     "p3_s1": 172,
+     "p4_s0": 144,
+     "p4_s1": 238
+    },
+    "mean": 152.75,
+    "sd": 73.26614887810449,
+    "cv": 0.4796474558304713,
+    "min": 61,
+    "max": 242,
+    "range": 181,
+    "max_over_min": 3.9672131147540983,
+    "largest_gap": 55,
+    "largest_gap_between": [
+     89,
+     144
+    ],
+    "bimodality_coefficient": 0.8753592216053484,
+    "bimodal_consistent": true,
+    "mdd_n2_abs": 392.9492887378732,
+    "mdd_n2_frac_of_mean": 2.5724994352724924,
+    "two_way": {
+     "levels_pool": [
+      "p1",
+      "p2",
+      "p3",
+      "p4"
+     ],
+     "levels_seed": [
+      0,
+      1
+     ],
+     "grand_mean": 152.75,
+     "pool_means": {
+      "p1": 165.5,
+      "p2": 133.0,
+      "p3": 121.5,
+      "p4": 191.0
+     },
+     "seed_means": {
+      "0": 127.25,
+      "1": 178.25
+     },
+     "MS_pool": 1994.8333333333333,
+     "MS_seed": 5202.0,
+     "MS_resid": 8796.333333333334,
+     "F_pool": 0.22678009776800936,
+     "F_seed": 0.5913827731251657,
+     "var_pool": -3400.7500000000005,
+     "var_seed": -898.5833333333335,
+     "var_resid": 8796.333333333334,
+     "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+    },
+    "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power)."
+   }
+  },
+  "ladder_frozen_transfer_solved": {
+   "n_cells": 8,
+   "values": {
+    "p1_s0": 117,
+    "p1_s1": 262,
+    "p2_s0": 200,
+    "p2_s1": 96,
+    "p3_s0": 62,
+    "p3_s1": 174,
+    "p4_s0": 177,
+    "p4_s1": 265
+   },
+   "mean": 169.125,
+   "sd": 74.06259418318304,
+   "cv": 0.4379162996788354,
+   "min": 62,
+   "max": 265,
+   "range": 203,
+   "max_over_min": 4.274193548387097,
+   "largest_gap": 62,
+   "largest_gap_between": [
+    200,
+    262
+   ],
+   "bimodality_coefficient": 0.5462511781380531,
+   "bimodal_consistent": false,
+   "mdd_n2_abs": 397.22087419638996,
+   "mdd_n2_frac_of_mean": 2.3486821829793936,
+   "two_way": {
+    "levels_pool": [
+     "p1",
+     "p2",
+     "p3",
+     "p4"
+    ],
+    "levels_seed": [
+     0,
+     1
+    ],
+    "grand_mean": 169.125,
+    "pool_means": {
+     "p1": 189.5,
+     "p2": 148.0,
+     "p3": 118.0,
+     "p4": 221.0
+    },
+    "seed_means": {
+     "0": 139.0,
+     "1": 199.25
+    },
+    "MS_pool": 4110.791666666667,
+    "MS_seed": 7260.125,
+    "MS_resid": 6268.125,
+    "F_pool": 0.6558247748196896,
+    "F_seed": 1.1582610429753715,
+    "var_pool": -1078.6666666666665,
+    "var_seed": 248.0,
+    "var_resid": 6268.125,
+    "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+   },
+   "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power).",
+   "seeds01_only": {
+    "n_cells": 8,
+    "values": {
+     "p1_s0": 117,
+     "p1_s1": 262,
+     "p2_s0": 200,
+     "p2_s1": 96,
+     "p3_s0": 62,
+     "p3_s1": 174,
+     "p4_s0": 177,
+     "p4_s1": 265
+    },
+    "mean": 169.125,
+    "sd": 74.06259418318304,
+    "cv": 0.4379162996788354,
+    "min": 62,
+    "max": 265,
+    "range": 203,
+    "max_over_min": 4.274193548387097,
+    "largest_gap": 62,
+    "largest_gap_between": [
+     200,
+     262
+    ],
+    "bimodality_coefficient": 0.5462511781380531,
+    "bimodal_consistent": false,
+    "mdd_n2_abs": 397.22087419638996,
+    "mdd_n2_frac_of_mean": 2.3486821829793936,
+    "two_way": {
+     "levels_pool": [
+      "p1",
+      "p2",
+      "p3",
+      "p4"
+     ],
+     "levels_seed": [
+      0,
+      1
+     ],
+     "grand_mean": 169.125,
+     "pool_means": {
+      "p1": 189.5,
+      "p2": 148.0,
+      "p3": 118.0,
+      "p4": 221.0
+     },
+     "seed_means": {
+      "0": 139.0,
+      "1": 199.25
+     },
+     "MS_pool": 4110.791666666667,
+     "MS_seed": 7260.125,
+     "MS_resid": 6268.125,
+     "F_pool": 0.6558247748196896,
+     "F_seed": 1.1582610429753715,
+     "var_pool": -1078.6666666666665,
+     "var_seed": 248.0,
+     "var_resid": 6268.125,
+     "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+    },
+    "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power)."
+   }
+  },
+  "ladder_frozen_transfer_lstar": {
+   "n_cells": 8,
+   "values": {
+    "p1_s0": 9,
+    "p1_s1": 9,
+    "p2_s0": 9,
+    "p2_s1": 9,
+    "p3_s0": 9,
+    "p3_s1": 9,
+    "p4_s0": 9,
+    "p4_s1": 10
+   },
+   "mean": 9.125,
+   "sd": 0.3535533905932738,
+   "cv": 0.038745577051317676,
+   "min": 9,
+   "max": 10,
+   "range": 1,
+   "max_over_min": 1.1111111111111112,
+   "largest_gap": 1,
+   "largest_gap_between": [
+    9,
+    10
+   ],
+   "bimodality_coefficient": 0.8181818181818179,
+   "bimodal_consistent": true,
+   "mdd_n2_abs": 1.896217495962983,
+   "mdd_n2_frac_of_mean": 0.20780465709183374,
+   "two_way": {
+    "levels_pool": [
+     "p1",
+     "p2",
+     "p3",
+     "p4"
+    ],
+    "levels_seed": [
+     0,
+     1
+    ],
+    "grand_mean": 9.125,
+    "pool_means": {
+     "p1": 9.0,
+     "p2": 9.0,
+     "p3": 9.0,
+     "p4": 9.5
+    },
+    "seed_means": {
+     "0": 9.0,
+     "1": 9.25
+    },
+    "MS_pool": 0.125,
+    "MS_seed": 0.125,
+    "MS_resid": 0.125,
+    "F_pool": 1.0,
+    "F_seed": 1.0,
+    "var_pool": 0.0,
+    "var_seed": 0.0,
+    "var_resid": 0.125,
+    "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+   },
+   "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power).",
+   "seeds01_only": {
+    "n_cells": 8,
+    "values": {
+     "p1_s0": 9,
+     "p1_s1": 9,
+     "p2_s0": 9,
+     "p2_s1": 9,
+     "p3_s0": 9,
+     "p3_s1": 9,
+     "p4_s0": 9,
+     "p4_s1": 10
+    },
+    "mean": 9.125,
+    "sd": 0.3535533905932738,
+    "cv": 0.038745577051317676,
+    "min": 9,
+    "max": 10,
+    "range": 1,
+    "max_over_min": 1.1111111111111112,
+    "largest_gap": 1,
+    "largest_gap_between": [
+     9,
+     10
+    ],
+    "bimodality_coefficient": 0.8181818181818179,
+    "bimodal_consistent": true,
+    "mdd_n2_abs": 1.896217495962983,
+    "mdd_n2_frac_of_mean": 0.20780465709183374,
+    "two_way": {
+     "levels_pool": [
+      "p1",
+      "p2",
+      "p3",
+      "p4"
+     ],
+     "levels_seed": [
+      0,
+      1
+     ],
+     "grand_mean": 9.125,
+     "pool_means": {
+      "p1": 9.0,
+      "p2": 9.0,
+      "p3": 9.0,
+      "p4": 9.5
+     },
+     "seed_means": {
+      "0": 9.0,
+      "1": 9.25
+     },
+     "MS_pool": 0.125,
+     "MS_seed": 0.125,
+     "MS_resid": 0.125,
+     "F_pool": 1.0,
+     "F_seed": 1.0,
+     "var_pool": 0.0,
+     "var_seed": 0.0,
+     "var_resid": 0.125,
+     "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+    },
+    "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power)."
+   }
+  },
+  "ladder_frozen_targets_solved": {
+   "n_cells": 8,
+   "values": {
+    "p1_s0": 1036,
+    "p1_s1": 1715,
+    "p2_s0": 1512,
+    "p2_s1": 823,
+    "p3_s0": 714,
+    "p3_s1": 1298,
+    "p4_s0": 1187,
+    "p4_s1": 1765
+   },
+   "mean": 1256.25,
+   "sd": 391.23896606987984,
+   "cv": 0.31143400284169537,
+   "min": 714,
+   "max": 1765,
+   "range": 1051,
+   "max_over_min": 2.4719887955182074,
+   "largest_gap": 214,
+   "largest_gap_between": [
+    1298,
+    1512
+   ],
+   "bimodality_coefficient": 0.622729106815708,
+   "bimodal_consistent": true,
+   "mdd_n2_abs": 2098.3370328291453,
+   "mdd_n2_frac_of_mean": 1.6703180360829017,
+   "two_way": {
+    "levels_pool": [
+     "p1",
+     "p2",
+     "p3",
+     "p4"
+    ],
+    "levels_seed": [
+     0,
+     1
+    ],
+    "grand_mean": 1256.25,
+    "pool_means": {
+     "p1": 1375.5,
+     "p2": 1167.5,
+     "p3": 1006.0,
+     "p4": 1476.0
+    },
+    "seed_means": {
+     "0": 1112.25,
+     "1": 1400.25
+    },
+    "MS_pool": 88674.83333333333,
+    "MS_seed": 165888.0,
+    "MS_resid": 213187.66666666666,
+    "F_pool": 0.4159472952625465,
+    "F_seed": 0.7781313177904288,
+    "var_pool": -62256.416666666664,
+    "var_seed": -11824.916666666664,
+    "var_resid": 213187.66666666666,
+    "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+   },
+   "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power).",
+   "seeds01_only": {
+    "n_cells": 8,
+    "values": {
+     "p1_s0": 1036,
+     "p1_s1": 1715,
+     "p2_s0": 1512,
+     "p2_s1": 823,
+     "p3_s0": 714,
+     "p3_s1": 1298,
+     "p4_s0": 1187,
+     "p4_s1": 1765
+    },
+    "mean": 1256.25,
+    "sd": 391.23896606987984,
+    "cv": 0.31143400284169537,
+    "min": 714,
+    "max": 1765,
+    "range": 1051,
+    "max_over_min": 2.4719887955182074,
+    "largest_gap": 214,
+    "largest_gap_between": [
+     1298,
+     1512
+    ],
+    "bimodality_coefficient": 0.622729106815708,
+    "bimodal_consistent": true,
+    "mdd_n2_abs": 2098.3370328291453,
+    "mdd_n2_frac_of_mean": 1.6703180360829017,
+    "two_way": {
+     "levels_pool": [
+      "p1",
+      "p2",
+      "p3",
+      "p4"
+     ],
+     "levels_seed": [
+      0,
+      1
+     ],
+     "grand_mean": 1256.25,
+     "pool_means": {
+      "p1": 1375.5,
+      "p2": 1167.5,
+      "p3": 1006.0,
+      "p4": 1476.0
+     },
+     "seed_means": {
+      "0": 1112.25,
+      "1": 1400.25
+     },
+     "MS_pool": 88674.83333333333,
+     "MS_seed": 165888.0,
+     "MS_resid": 213187.66666666666,
+     "F_pool": 0.4159472952625465,
+     "F_seed": 0.7781313177904288,
+     "var_pool": -62256.416666666664,
+     "var_seed": -11824.916666666664,
+     "var_resid": 213187.66666666666,
+     "note": "unreplicated two-way: pool x seed interaction is confounded with error; negative variance components are reported as measured, not truncated"
+    },
+    "note_permutation": "a two-sided exact permutation test at 2 vs 2 has minimum attainable p = 1/3, so no n = 2 comparison is significant non-parametrically; the MDD is the parametric best case (t-test, alpha .05 two-sided, 80 % power)."
+   }
+  }
+ }
+}

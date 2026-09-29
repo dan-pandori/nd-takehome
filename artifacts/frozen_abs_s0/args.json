@@ -1,0 +1,20 @@
+{
+ "init": "ckpts/stage1_abs.pt",
+ "name": "frozen_abs_s0",
+ "targets": "data/rl_targets.jsonl",
+ "transfer": "data/transfer.jsonl",
+ "heldout": "data/heldout.jsonl",
+ "train": "data/train.jsonl",
+ "rounds": 8,
+ "k": 32,
+ "temperature": 0.8,
+ "seed": 0,
+ "no_train": true,
+ "ft_steps": 600,
+ "ft_lr": 0.0003,
+ "retain": 20000,
+ "max_per_thm": 4,
+ "rl_weight": 4,
+ "relabel": false,
+ "batch": 1024
+}

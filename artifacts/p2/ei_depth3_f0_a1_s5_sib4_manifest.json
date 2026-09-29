@@ -1,0 +1,41 @@
+{
+ "own": "artifacts/p2/ei_depth3_f0_a1_s5",
+ "own_proofs": 968,
+ "own_theorems": 247,
+ "inject_file": "artifacts/p2/ei_depth3_f0_a1_s2/found_4.jsonl",
+ "tag": "sib4",
+ "n_injected": 4,
+ "injected_valid": [
+  true,
+  true,
+  true,
+  true
+ ],
+ "injected_has_pattern": [
+  true,
+  true,
+  true,
+  true
+ ],
+ "injected": [
+  {
+   "prompt": "THM S SEQ ( ( ~ P ) > ( P > ( ( ~ ( ~ R ) ) > ( S v ( ( P v Q ) > ( R & P ) ) ) ) ) ) PRF",
+   "proof": "N52 S : PR ; N53 | ( ~ P ) : AS ; N54 | | P : AS ; N55 | | | ( ~ ( ~ R ) ) : AS ; N56 | | | ( S v ( ( P v Q ) > ( R & P ) ) ) : ORI1 N52 ; N57 | | ( ( ~ ( ~ R ) ) > ( S v ( ( P v Q ) > ( R & P ) ) ) ) : IMPI N55 N56 ; N58 | ( P > ( ( ~ ( ~ R ) ) > ( S v ( ( P v Q ) > ( R & P ) ) ) ) ) : IMPI N54 N57 ; N59 ( ( ~ P ) > ( P > ( ( ~ ( ~ R ) ) > ( S v ( ( P v Q ) > ( R & P ) ) ) ) ) ) : IMPI N53 N58 ; QED"
+  },
+  {
+   "prompt": "THM SEQ ( ( R > R ) > ( R > ( Q > ( R v Q ) ) ) ) PRF",
+   "proof": "N33 | ( R > R ) : AS ; N34 | | R : AS ; N35 | | | Q : AS ; N36 | | | ( R v Q ) : ORI2 N35 ; N37 | | ( Q > ( R v Q ) ) : IMPI N35 N36 ; N38 | ( R > ( Q > ( R v Q ) ) ) : IMPI N34 N37 ; N39 ( ( R > R ) > ( R > ( Q > ( R v Q ) ) ) ) : IMPI N33 N38 ; QED"
+  },
+  {
+   "prompt": "THM S SEQ ( ( ~ ( P > Q ) ) > ( Q > ( ( R v S ) > ( S & ( ~ ( P > Q ) ) ) ) ) ) PRF",
+   "proof": "N36 S : PR ; N37 | ( ~ ( P > Q ) ) : AS ; N38 | | Q : AS ; N39 | | | ( R v S ) : AS ; N40 | | | ( S & ( ~ ( P > Q ) ) ) : ANDI N36 N37 ; N41 | | ( ( R v S ) > ( S & ( ~ ( P > Q ) ) ) ) : IMPI N39 N40 ; N42 | ( Q > ( ( R v S ) > ( S & ( ~ ( P > Q ) ) ) ) ) : IMPI N38 N41 ; N43 ( ( ~ ( P > Q ) ) > ( Q > ( ( R v S ) > ( S & ( ~ ( P > Q ) ) ) ) ) ) : IMPI N37 N42 ; QED"
+  },
+  {
+   "prompt": "THM SEQ ( ( P v ( P v S ) ) > ( Q > ( ( ~ ( ~ ( S v P ) ) ) > ( S v P ) ) ) ) PRF",
+   "proof": "N25 | ( P v ( P v S ) ) : AS ; N26 | | Q : AS ; N27 | | | ( ~ ( ~ ( S v P ) ) ) : AS ; N28 | | | ( S v P ) : DN N27 ; N29 | | ( ( ~ ( ~ ( S v P ) ) ) > ( S v P ) ) : IMPI N27 N28 ; N30 | ( Q > ( ( ~ ( ~ ( S v P ) ) ) > ( S v P ) ) ) : IMPI N26 N29 ; N31 ( ( P v ( P v S ) ) > ( Q > ( ( ~ ( ~ ( S v P ) ) ) > ( S v P ) ) ) ) : IMPI N25 N30 ; QED"
+  }
+ ],
+ "init": "ckpts/p2/ei_depth3_f0_a1_s5_r4.pt",
+ "out": "ckpts/r3/ei_depth3_f0_a1_s5_sib4_r4t.pt",
+ "retain": 20000
+}

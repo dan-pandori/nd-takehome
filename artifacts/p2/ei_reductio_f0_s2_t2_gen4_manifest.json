@@ -1,0 +1,41 @@
+{
+ "own": "artifacts/p2/ei_reductio_f0_s2_t2",
+ "own_proofs": 0,
+ "own_theorems": 0,
+ "inject_file": "data/r3/inject_reductio_gen4.jsonl",
+ "tag": "gen4",
+ "n_injected": 4,
+ "injected_valid": [
+  true,
+  true,
+  true,
+  true
+ ],
+ "injected_has_pattern": [
+  true,
+  true,
+  true,
+  true
+ ],
+ "injected": [
+  {
+   "prompt": "THM ( ( ~ Q ) > ( ~ S ) ) , ( ( ( ~ Q ) > ( ~ S ) ) > F ) SEQ ( ( ~ S ) & Q ) PRF",
+   "proof": "N1 ( ( ~ Q ) > ( ~ S ) ) : PR ; N2 ( ( ( ~ Q ) > ( ~ S ) ) > F ) : PR ; N3 | ( ~ ( ( ~ S ) & Q ) ) : AS ; N4 | F : IMPE N2 N1 ; N5 ( ~ ( ~ ( ( ~ S ) & Q ) ) ) : NEGI N3 N4 ; N6 ( ( ~ S ) & Q ) : DN N5 ; QED"
+  },
+  {
+   "prompt": "THM ( ~ ( S > Q ) ) , ( S > Q ) SEQ P PRF",
+   "proof": "N1 ( ~ ( S > Q ) ) : PR ; N2 ( S > Q ) : PR ; N3 | ( ~ P ) : AS ; N4 | F : NEGE N2 N1 ; N5 ( ~ ( ~ P ) ) : NEGI N3 N4 ; N6 P : DN N5 ; QED"
+  },
+  {
+   "prompt": "THM ( ~ ( P & S ) ) , ( ( ~ ( P & S ) ) > F ) SEQ ( ~ S ) PRF",
+   "proof": "N1 ( ~ ( P & S ) ) : PR ; N2 ( ( ~ ( P & S ) ) > F ) : PR ; N3 | ( ~ ( ~ S ) ) : AS ; N4 | F : IMPE N2 N1 ; N5 ( ~ ( ~ ( ~ S ) ) ) : NEGI N3 N4 ; N6 ( ~ S ) : DN N5 ; QED"
+  },
+  {
+   "prompt": "THM ( P > ( ~ Q ) ) , ( ~ ( P > ( ~ Q ) ) ) SEQ S PRF",
+   "proof": "N1 ( P > ( ~ Q ) ) : PR ; N2 ( ~ ( P > ( ~ Q ) ) ) : PR ; N3 | ( ~ S ) : AS ; N4 | F : NEGE N1 N2 ; N5 ( ~ ( ~ S ) ) : NEGI N3 N4 ; N6 S : DN N5 ; QED"
+  }
+ ],
+ "init": "ckpts/p2/stage1_reductio_f0_s2.pt",
+ "out": "ckpts/r3/ei_reductio_f0_s2_t2_gen4_r4t.pt",
+ "retain": 20000
+}

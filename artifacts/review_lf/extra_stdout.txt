@@ -1,0 +1,35 @@
+premise-order-sensitive class overlaps:
+  train_a1 x p2_heldout 0
+  train_full x heldout 0
+  train_full x th_transfer 0
+  la_targets x la_transfer 0
+ladder transfer theorems whose order-insensitive class is in rl_targets: [('la_transfer_307', 9, ['la_rl_targets_2228']), ('la_transfer_842', 9, ['la_rl_targets_363'])]
+
+depth-3 acquisition: EI vs frozen control at equal attempts (targets, n=1000)
+  rand s0: EI 433 frozen(same Stage-1) 202  EI-only 233  frozen-only 2  EI minus frozen = 0.231
+  rand s1: EI 462 frozen(same Stage-1) 280  EI-only 184  frozen-only 2  EI minus frozen = 0.182
+  rand s0 transfer(500): EI 236 frozen 99 diff 0.274
+  rand s1 transfer(500): EI 238 frozen 151 diff 0.174
+  seq s0: EI 476 frozen(same Stage-1) 206  EI-only 270  frozen-only 0  EI minus frozen = 0.270
+  seq s1: EI 479 frozen(same Stage-1) 134  EI-only 345  frozen-only 0  EI minus frozen = 0.345
+  seq s0 transfer(500): EI 247 frozen 92 diff 0.310
+  seq s1 transfer(500): EI 256 frozen 78 diff 0.356
+  frozen_d3_rand_s0 round 1 (k=32): distinct proofs 303, depth-3 142; depth hist of all found_8 proofs {1: 1, 2: 235, 3: 241}
+  frozen_d3_rand_s1 round 1 (k=32): distinct proofs 324, depth-3 193; depth hist of all found_8 proofs {1: 4, 2: 205, 3: 336}
+  frozen_d3_seq_s0 round 1 (k=32): distinct proofs 337, depth-3 113; depth hist of all found_8 proofs {1: 1, 2: 324, 3: 232}
+  frozen_d3_seq_s1 round 1 (k=32): distinct proofs 325, depth-3 108; depth hist of all found_8 proofs {1: 2, 2: 282, 3: 168}
+
+gate disagreement rows by nd_verify reason class (all 460 rows):
+   206 BOTE: .elim on a non-False term (Not.elim / And.elim ...)
+   117 premise line omitted or reordered (Lean does not require restating premises)
+    67 defeq ¬A ≡ A→False (NEGE)
+    36 defeq ¬A ≡ A→False (ORI2)
+    30 defeq ¬A ≡ A→False (IMPI)
+     2 defeq ¬A ≡ A→False (ANDE1)
+     1 defeq ¬A ≡ A→False (ORI1)
+     1 defeq ¬A ≡ A→False (ANDI)
+
+P4 mechanism test: pruned-length (own pruner; PR lines kept) of distinct pass@16 proofs on data/transfer.jsonl
+  rand      written {2: 13, 3: 76, 4: 167, 5: 227, 6: 263, 7: 228, 8: 86, 9: 7} pruned {2: 13, 3: 79, 4: 173, 5: 227, 6: 258, 7: 226, 8: 84, 9: 7}
+  seq       written {2: 13, 3: 63, 4: 155, 5: 247, 6: 333, 7: 266, 8: 130, 9: 18} pruned {2: 13, 3: 69, 4: 168, 5: 258, 6: 314, 7: 265, 8: 120, 9: 18}
+  seqfixed  written {2: 13, 3: 37, 4: 102, 5: 128, 6: 229, 7: 37} pruned {2: 13, 3: 37, 4: 109, 5: 128, 6: 224, 7: 35}

@@ -1,0 +1,41 @@
+{
+ "own": "artifacts/p2/ei_depth3_f0_a1_s3",
+ "own_proofs": 916,
+ "own_theorems": 233,
+ "inject_file": "data/r3/inject_depth3_gen4.jsonl",
+ "tag": "gen4",
+ "n_injected": 4,
+ "injected_valid": [
+  true,
+  true,
+  true,
+  true
+ ],
+ "injected_has_pattern": [
+  true,
+  true,
+  true,
+  true
+ ],
+ "injected": [
+  {
+   "prompt": "THM SEQ ( ( R > R ) > ( P > ( R > R ) ) ) PRF",
+   "proof": "N1 | ( R > R ) : AS ; N2 | | P : AS ; N3 | | | R : AS ; N4 | | ( R > R ) : IMPI N3 N3 ; N5 | ( P > ( R > R ) ) : IMPI N2 N4 ; N6 ( ( R > R ) > ( P > ( R > R ) ) ) : IMPI N1 N5 ; QED"
+  },
+  {
+   "prompt": "THM SEQ ( ( ~ ( ~ ( P > Q ) ) ) > ( ( ~ ( P > Q ) ) > ( S > S ) ) ) PRF",
+   "proof": "N1 | ( ~ ( ~ ( P > Q ) ) ) : AS ; N2 | | ( ~ ( P > Q ) ) : AS ; N3 | | | S : AS ; N4 | | ( S > S ) : IMPI N3 N3 ; N5 | ( ( ~ ( P > Q ) ) > ( S > S ) ) : IMPI N2 N4 ; N6 ( ( ~ ( ~ ( P > Q ) ) ) > ( ( ~ ( P > Q ) ) > ( S > S ) ) ) : IMPI N1 N5 ; QED"
+  },
+  {
+   "prompt": "THM SEQ ( ( ~ ( ~ S ) ) > ( R > ( ( ~ ( ~ ( R > Q ) ) ) > ( ~ ( ~ ( R > Q ) ) ) ) ) ) PRF",
+   "proof": "N1 | ( ~ ( ~ S ) ) : AS ; N2 | | R : AS ; N3 | | | ( ~ ( ~ ( R > Q ) ) ) : AS ; N4 | | ( ( ~ ( ~ ( R > Q ) ) ) > ( ~ ( ~ ( R > Q ) ) ) ) : IMPI N3 N3 ; N5 | ( R > ( ( ~ ( ~ ( R > Q ) ) ) > ( ~ ( ~ ( R > Q ) ) ) ) ) : IMPI N2 N4 ; N6 ( ( ~ ( ~ S ) ) > ( R > ( ( ~ ( ~ ( R > Q ) ) ) > ( ~ ( ~ ( R > Q ) ) ) ) ) ) : IMPI N1 N5 ; QED"
+  },
+  {
+   "prompt": "THM SEQ ( ( ~ ( ~ ( Q > R ) ) ) > ( ( ( ~ R ) > Q ) > ( ( ~ ( ~ R ) ) > ( ~ ( ~ R ) ) ) ) ) PRF",
+   "proof": "N1 | ( ~ ( ~ ( Q > R ) ) ) : AS ; N2 | | ( ( ~ R ) > Q ) : AS ; N3 | | | ( ~ ( ~ R ) ) : AS ; N4 | | ( ( ~ ( ~ R ) ) > ( ~ ( ~ R ) ) ) : IMPI N3 N3 ; N5 | ( ( ( ~ R ) > Q ) > ( ( ~ ( ~ R ) ) > ( ~ ( ~ R ) ) ) ) : IMPI N2 N4 ; N6 ( ( ~ ( ~ ( Q > R ) ) ) > ( ( ( ~ R ) > Q ) > ( ( ~ ( ~ R ) ) > ( ~ ( ~ R ) ) ) ) ) : IMPI N1 N5 ; QED"
+  }
+ ],
+ "init": "ckpts/p2/ei_depth3_f0_a1_s3_r4.pt",
+ "out": "ckpts/r3/ei_depth3_f0_a1_s3_gen4_r4t.pt",
+ "retain": 20000
+}

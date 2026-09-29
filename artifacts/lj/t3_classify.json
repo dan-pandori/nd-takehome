@@ -1,0 +1,45 @@
+{
+ "corpus": "artifacts/lj/corpus_leanonly.jsonl",
+ "n": 8514,
+ "classes": {
+  "omitted premise re-statement": 3550,
+  "BOTE on a non-F line (Not.elim)": 2205,
+  "no ND denotation (outside the lean_seq grammar; excluded)": 2095,
+  "other": 531,
+  "NEGE on A and A>F (Lean: ~A is A\u2192False)": 133
+ },
+ "fractions": {
+  "omitted premise re-statement": 0.4169603006812309,
+  "BOTE on a non-F line (Not.elim)": 0.25898520084566595,
+  "no ND denotation (outside the lean_seq grammar; excluded)": 0.24606530420483907,
+  "other": 0.06236786469344609,
+  "NEGE on A and A>F (Lean: ~A is A\u2192False)": 0.015621329574817946
+ },
+ "examples": {
+  "omitted premise re-statement": {
+   "prompt": "THM S , ( ( ( ~ R ) v ( ~ P ) ) v R ) SEQ ( ( ~ ( ~ P ) ) > ( ( ~ P ) > ( ( ( ~ R ) v ( ~ P ) ) v S ) ) ) PRF",
+   "nd": "N1 S : PR ; N2 ( ( ( ~ R ) v ( ~ P ) ) v S ) : ORI2 N1 ; N3 | ( ~ ( ~ P ) ) : AS ; N4 | | ( ~ P ) : AS ; N5 | | ( ( ( ~ R ) v ( ~ P ) ) v S ) : ORI2 N1 ; N6 | ( ( ~ P ) > ( ( ( ~ R ) v ( ~ P ) ) v S ) ) : IMPI N4 N5 ; N7 ( ( ~ ( ~ P ) ) > ( ( ~ P ) > ( ( ( ~ R ) v ( ~ P ) ) v S ) ) ) : IMPI N3 N6 ; QED",
+   "lean_text": "have n12 : S := h1 ; have n13 : ( ( ( \u00ac R ) \u2228 ( \u00ac P ) ) \u2228 S ) := Or.inr n12 ; have n14 : ( ( \u00ac ( \u00ac P ) ) \u2192 ( ( \u00ac P ) \u2192 ( ( ( \u00ac R ) \u2228 ( \u00ac P ) ) \u2228 S ) ) ) := ( fun ( n15 : ( \u00ac ( \u00ac P ) ) ) => by have n16 : ( ( \u00ac P ) \u2192 ( ( ( \u00ac R ) \u2228 ( \u00ac P ) ) \u2228 S ) ) := ( fun ( n17 : ( \u00ac P ) ) => by have n18 : ( ( ( \u00ac R ) \u2228 ( \u00ac P ) ) \u2228 S ) := Or.inr n12 ; exact n18 ) ; exact n16 ) ; exact n14"
+  },
+  "other": {
+   "prompt": "THM ( ~ R ) SEQ ( ( ~ Q ) > ( R > ( ~ ( ~ Q ) ) ) ) PRF",
+   "nd": "N1 ( ~ R ) : PR ; N2 | ( ~ Q ) : AS ; N3 | | R : AS ; N4 | | | ( ~ Q ) : AS ; N5 | | | F : NEGE N3 N1 ; N6 | | ( ~ ( ~ Q ) ) : IMPI N4 N5 ; N7 | ( R > ( ~ ( ~ Q ) ) ) : IMPI N3 N6 ; N8 ( ( ~ Q ) > ( R > ( ~ ( ~ Q ) ) ) ) : IMPI N2 N7 ; QED",
+   "lean_text": "have n43 : ( \u00ac R ) := h1 ; have n44 : ( ( \u00ac Q ) \u2192 ( R \u2192 ( \u00ac ( \u00ac Q ) ) ) ) := ( fun ( n45 : ( \u00ac Q ) ) => by have n46 : ( R \u2192 ( \u00ac ( \u00ac Q ) ) ) := ( fun ( n47 : R ) => by have n48 : ( \u00ac ( \u00ac Q ) ) := ( fun ( n49 : ( \u00ac Q ) ) => by have n50 : False := n43 n47 ; exact n50 ) ; exact n48 ) ; exact n46 ) ; exact n44"
+  },
+  "NEGE on A and A>F (Lean: ~A is A\u2192False)": {
+   "prompt": "THM ( ~ ( P v ( P v S ) ) ) , ( ~ ( ( P v ( P v S ) ) > F ) ) SEQ F PRF",
+   "nd": "N1 ( ~ ( P v ( P v S ) ) ) : PR ; N2 ( ~ ( ( P v ( P v S ) ) > F ) ) : PR ; N3 F : NEGE N1 N2 ; QED",
+   "lean_text": "have n23 : ( \u00ac ( P \u2228 ( P \u2228 S ) ) ) := h1 ; have n24 : ( \u00ac ( ( P \u2228 ( P \u2228 S ) ) \u2192 False ) ) := h2 ; have n25 : False := n24 n23 ; exact n25"
+  },
+  "BOTE on a non-F line (Not.elim)": {
+   "prompt": "THM ( ~ Q ) SEQ ( S > ( Q > ( Q > ( R > P ) ) ) ) PRF",
+   "nd": "N1 ( ~ Q ) : PR ; N2 | S : AS ; N3 | | Q : AS ; N4 | | ( Q > ( R > P ) ) : BOTE N1 ; N5 | ( Q > ( Q > ( R > P ) ) ) : IMPI N3 N4 ; N6 ( S > ( Q > ( Q > ( R > P ) ) ) ) : IMPI N2 N5 ; QED",
+   "lean_text": "have n3 : ( \u00ac Q ) := h1 ; have n4 : ( S \u2192 ( Q \u2192 ( Q \u2192 ( R \u2192 P ) ) ) ) := ( fun ( n5 : S ) => by have n6 : ( Q \u2192 ( Q \u2192 ( R \u2192 P ) ) ) := ( fun ( n7 : Q ) => by have n8 : ( Q \u2192 ( R \u2192 P ) ) := n3.elim ; exact n8 ) ; exact n6 ) ; exact n4"
+  },
+  "no ND denotation (outside the lean_seq grammar; excluded)": {
+   "prompt": "THM SEQ ( ( P > S ) > ( ( ~ ( ~ ( R & P ) ) ) > ( R > ( R & P ) ) ) ) PRF",
+   "nd": null,
+   "lean_text": "have n60 : ( ( P \u2192 S ) \u2192 ( ( \u00ac ( \u00ac ( R \u2227 P ) ) ) \u2192 ( R \u2192 ( R \u2227 P ) ) ) ) := ( fun ( n61 : ( P \u2192 S ) ) => by have n62 : ( ( \u00ac ( \u00ac ( R \u2227 P ) ) ) \u2192 ( R \u2192 ( R \u2227 P ) ) ) := ( fun ( n63 : ( \u00ac ( \u00ac ( R \u2227 P ) ) ) ) => by have n64 : ( R \u2227 P ) := Classical.byContradiction ( fun hh => n63 hh ) ; have n64 : ( R \u2192 ( R \u2227 P ) ) := ( fun ( n56 : R ) => by exact n64 ) ; exact n64 ) ; exact n62 ) ; exact n60"
+  }
+ }
+}

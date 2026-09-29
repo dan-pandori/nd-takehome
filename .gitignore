@@ -14,6 +14,20 @@ data/p3/*.jsonl
 .git_sha
 *.pt.upload.json
 
-# repo-hygiene (2026-09-29): experiment output is not tracked. It lives in the bucket
-# (hf://buckets/dan-pandori/nd-rl/<run>/artifacts/); the files tracked until 3bfdec15 are listed in ARTIFACTS_INDEX.tsv.
-/artifacts/
+# repo-hygiene-2 (2026-09-29): bulk files (.jsonl, .jsonl.gz, .pt, anything > 5 MB) are not tracked. They live in the
+# bucket and are listed, with sha256, in artifacts/MANIFEST.jsonl: python3 fetch_artifacts.py <path-or-prefix>.
+# New runs publish theirs with publish_artifacts.py. Small files under artifacts/ are tracked. ci/check_sizes.sh
+# (pre-commit hook + CI) fails on any tracked file > 5 MB, which .gitignore cannot express.
+/artifacts/**/*.jsonl
+/artifacts/**/*.jsonl.gz
+!/artifacts/MANIFEST.jsonl
+*.part
+/ckpts/final.pt
+/ckpts/stage1_abs.pt
+/data/p2/run5_c8d_cands.jsonl
+/data/p2/run5_c8d_nec.jsonl
+/data/r1/prompts.jsonl
+/data/r2/nec_depth4.jsonl
+/data/r2/nec_impi_ore.jsonl
+/data/r2/nec_ori_ore.jsonl
+/data/train.jsonl.gz

@@ -10,10 +10,8 @@ TMP=$(mktemp -d); export ND_REGISTRY_DIR=$TMP/registry
 T0=$(date +%s)
 step() { name=$1; shift; t=$(date +%s); echo "::group::$name"; "$@"; echo "::endgroup::"; echo "ok  $name ($(( $(date +%s) - t ))s)"; }
 
-no_tracked_artifacts() {   # experiment output lives in the bucket (CONTRIBUTING.md), never in git
-  n=$(git ls-files artifacts | wc -l); [ "$n" -eq 0 ] || { echo "FAIL: $n files tracked under artifacts/"; git ls-files artifacts | head; return 1; }
-}
-step "no tracked files under artifacts/" no_tracked_artifacts
+step "size guard: no tracked file > 5 MB, no bulk kind under artifacts/ (ci/check_sizes.sh)" sh ci/check_sizes.sh
+step "artifacts/MANIFEST.jsonl well-formed; no manifest path tracked" $PY tests/test_manifest.py
 step "tokenizer + lean_seq round-trips, Lean judge on a fixed sample" $PY tests/test_roundtrip_judge.py
 step "lean_check selftest (free-form Lean allowlist: Not.elim and negatives)" $PY lean_check.py --selftest
 step "Lean-only judge (no nd_verify on any judging path)" $PY tests/test_lean_only_judge.py

@@ -1,0 +1,99 @@
+{
+ "ckpt": "ckpts/lp/noise-floor__stage1_p2_s3.pt",
+ "params": 3214336,
+ "tok_mode": "lean_seq",
+ "args": {
+  "ckpt": "ckpts/lp/noise-floor__stage1_p2_s3.pt",
+  "name": "noise-floor__stage1_p2_s3",
+  "pools": "data/ladder/rl_targets.jsonl,data/ladder/transfer.jsonl,data/p2/heldout.jsonl",
+  "k": 6,
+  "temps": "0.8,1.0,1.2",
+  "batch": 4096,
+  "max_new": 512,
+  "seed": 7,
+  "outdir": "artifacts/lp/corpus"
+ },
+ "calls": [
+  {
+   "pool": "data/ladder/rl_targets.jsonl",
+   "prompts": 4495,
+   "T": 0.8,
+   "k": 6,
+   "secs": 78.3754358291626,
+   "sample_wall_s": 60.53751349449158,
+   "peak_alloc_gb": 15.941036701202393
+  },
+  {
+   "pool": "data/ladder/rl_targets.jsonl",
+   "prompts": 4495,
+   "T": 1.0,
+   "k": 6,
+   "secs": 43.487582206726074,
+   "sample_wall_s": 37.68159341812134,
+   "peak_alloc_gb": 15.941036701202393
+  },
+  {
+   "pool": "data/ladder/rl_targets.jsonl",
+   "prompts": 4495,
+   "T": 1.2,
+   "k": 6,
+   "secs": 38.771339893341064,
+   "sample_wall_s": 32.38134527206421,
+   "peak_alloc_gb": 15.941036701202393
+  },
+  {
+   "pool": "data/ladder/transfer.jsonl",
+   "prompts": 2285,
+   "T": 0.8,
+   "k": 6,
+   "secs": 24.791423559188843,
+   "sample_wall_s": 18.355496406555176,
+   "peak_alloc_gb": 15.989094257354736
+  },
+  {
+   "pool": "data/ladder/transfer.jsonl",
+   "prompts": 2285,
+   "T": 1.0,
+   "k": 6,
+   "secs": 24.792301177978516,
+   "sample_wall_s": 18.551286935806274,
+   "peak_alloc_gb": 15.989094257354736
+  },
+  {
+   "pool": "data/ladder/transfer.jsonl",
+   "prompts": 2285,
+   "T": 1.2,
+   "k": 6,
+   "secs": 23.280306339263916,
+   "sample_wall_s": 17.56952428817749,
+   "peak_alloc_gb": 15.989094257354736
+  },
+  {
+   "pool": "data/p2/heldout.jsonl",
+   "prompts": 5000,
+   "T": 0.8,
+   "k": 6,
+   "secs": 34.74309301376343,
+   "sample_wall_s": 22.00943112373352,
+   "peak_alloc_gb": 15.65285062789917
+  },
+  {
+   "pool": "data/p2/heldout.jsonl",
+   "prompts": 5000,
+   "T": 1.0,
+   "k": 6,
+   "secs": 34.807159423828125,
+   "sample_wall_s": 22.39204454421997,
+   "peak_alloc_gb": 15.65285062789917
+  },
+  {
+   "pool": "data/p2/heldout.jsonl",
+   "prompts": 5000,
+   "T": 1.2,
+   "k": 6,
+   "secs": 33.472904443740845,
+   "sample_wall_s": 23.744567155838013,
+   "peak_alloc_gb": 15.65285062789917
+  }
+ ]
+}

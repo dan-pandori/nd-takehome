@@ -1,0 +1,108 @@
+START 2026-09-24T16:16:01Z bash pod/nf/gen.sh p3 23000
+pool p3 seed 23000 workers 32  2026-09-24T16:16:01Z
+generator knobs: None
+excluding 14026 classes / 14078 theorems from 9 files + validation-36
+main pool usable per length {2: 64372, 3: 210613, 4: 168743, 5: 133913, 6: 122545} {'main:read': 728218, 'main:excluded': 1205, 'main:depth3': 26827}
+{
+ "n": 155000,
+ "per_len": {
+  "2": {
+   "n": 31000,
+   "main": 31000,
+   "fill": 0,
+   "fill_frac": 0.0
+  },
+  "3": {
+   "n": 31000,
+   "main": 31000,
+   "fill": 0,
+   "fill_frac": 0.0
+  },
+  "4": {
+   "n": 31000,
+   "main": 31000,
+   "fill": 0,
+   "fill_frac": 0.0
+  },
+  "5": {
+   "n": 31000,
+   "main": 31000,
+   "fill": 0,
+   "fill_frac": 0.0
+  },
+  "6": {
+   "n": 31000,
+   "main": 31000,
+   "fill": 0,
+   "fill_frac": 0.0
+  }
+ },
+ "fill_total": 0,
+ "fill_frac": 0.0,
+ "pattern_counts": {
+  "derived_ore": 74,
+  "reductio": 9853,
+  "depth3": 0,
+  "derived_ore_strict": 1
+ },
+ "pattern_freq": {
+  "derived_ore": 0.00047741935483870966,
+  "reductio": 0.06356774193548387,
+  "depth3": 0.0,
+  "derived_ore_strict": 6.451612903225806e-06
+ },
+ "pool": "data/nf/pool_p3.jsonl",
+ "fill_pool": null,
+ "exclude": [
+  "data/p2/heldout.jsonl",
+  "data/p2/targets_depth3.jsonl",
+  "data/p2/transfer_depth3.jsonl",
+  "data/p2/targets_reductio_req.jsonl",
+  "data/p2/transfer_reductio_req.jsonl",
+  "data/r3_1/depth3_req.jsonl",
+  "data/r3_1/depth3_req_transfer.jsonl",
+  "data/ladder/rl_targets.jsonl",
+  "data/ladder/transfer.jsonl"
+ ],
+ "seed": 0,
+ "stats": {
+  "main:read": 728218,
+  "main:excluded": 1205,
+  "main:depth3": 26827
+ },
+ "n_excluded_classes": 14026
+}
+assembled 2026-09-24T16:18:24Z
+== data/nf/train_p3.jsonl: n 155000 len {2: 31000, 3: 31000, 4: 31000, 5: 31000, 6: 31000} box_depth {0: 82579, 1: 54970, 2: 17451}
+   rule share PR 87.8 AS 46.7 R 2.8 ANDI 22.8 ANDE1 2.2 ANDE2 2.2 ORI1 20.8 ORI2 20.8 ORE 1.5 IMPI 36.5 IMPE 39.9 NEGI 9.6 NEGE 12.1 DN 7.9 BOTE 2.1
+   ORE 2255 (1.45%) box-in-ORE 42 (0.03%) prem {0: 18956, 1: 60687, 2: 67088, 3: 8269} mean 1.42 lazy mean 0.7037677419354839 contra 6.4% ND tok 112.8 Lean tok 138.54748387096774 patterns {'derived_ore': 74, 'reductio': 9853, 'depth3': 0}
+   last rule IMPI 34.1 IMPE 16.2 ORI2 12.6 ORI1 12.4 ANDI 12.3 DN 5.9 NEGI 2.3 NEGE 1.6 ORE 1.2 BOTE 0.9 ANDE2 0.3 ANDE1 0.3
+== data/nf/train_p3.jsonl (155000 classes)
+   data/p2/heldout.jsonl                                   pool   5000  thm     0  class     0  premise-order-insensitive    15
+   data/p2/targets_depth3.jsonl                            pool   1000  thm     0  class     0  premise-order-insensitive     0
+   data/p2/transfer_depth3.jsonl                           pool    500  thm     0  class     0  premise-order-insensitive     0
+   data/p2/targets_reductio_req.jsonl                      pool    300  thm     0  class     0  premise-order-insensitive     0
+   data/p2/transfer_reductio_req.jsonl                     pool    150  thm     0  class     0  premise-order-insensitive     0
+   data/r3_1/depth3_req.jsonl                              pool    300  thm     0  class     0  premise-order-insensitive     0
+   data/r3_1/depth3_req_transfer.jsonl                     pool    100  thm     0  class     0  premise-order-insensitive     0
+   data/ladder/rl_targets.jsonl                            pool   4495  thm     0  class     0  premise-order-insensitive     0
+   data/ladder/transfer.jsonl                              pool   2285  thm     0  class     0  premise-order-insensitive     0
+   data/transfer.jsonl                                     pool   1638  thm     1  class    11  premise-order-insensitive    13
+   data/rl_targets.jsonl                                   pool   3000  thm     0  class    13  premise-order-insensitive    16
+   data/heldout.jsonl                                      pool   5000  thm    32  class   462  premise-order-insensitive   489
+{
+ "set": "data/nf/train_p3.jsonl",
+ "n_records": 155000,
+ "n_sampled": 3000,
+ "roundtrip_identical": 3000,
+ "denoted_verified_cap6": 3000,
+ "lean_positive_checked": 1000,
+ "lean_positive_accepted": 1000,
+ "lean_negative_checked": 300,
+ "lean_negative_rejected": 300,
+ "lean_wall_s": 2.1358001232147217,
+ "lean_proc_s": 5.501850605010986,
+ "roundtrip_failures": []
+}
+GEN_DONE 2026-09-24T16:18:52Z
+END 2026-09-24T16:18:52Z

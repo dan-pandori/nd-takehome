@@ -1,0 +1,1651 @@
+{
+ "reductio": {
+  "targets_file": "data/p2/targets_reductio_req.jsonl",
+  "arms": {
+   "ei_f0_s0": {
+    "kind": "ei",
+    "f": 0,
+    "seed": 0,
+    "round": 8,
+    "solved": 51,
+    "n": 300,
+    "acq_theorems": 51,
+    "acq": 0.17,
+    "pattern_proofs": 52,
+    "first_round": 1,
+    "per_round_solved": [
+     2,
+     11,
+     25,
+     47,
+     51,
+     51,
+     51,
+     51
+    ],
+    "per_round_acq": [
+     2,
+     11,
+     25,
+     47,
+     51,
+     51,
+     51,
+     51
+    ],
+    "violations": 0,
+    "violation_examples": [],
+    "transfer_solved": 25,
+    "transfer_n": 150,
+    "transfer_acq_theorems": 25,
+    "transfer_violations": null,
+    "heldout_greedy": 0.8914,
+    "transfer_greedy": 0.14666666666666667,
+    "written_hist": {
+     "7": 51,
+     "8": 1
+    },
+    "other_patterns": {
+     "derived_ore": 0,
+     "reductio": 52,
+     "depth3": 0,
+     "derived_dn": 52,
+     "any_dn": 52
+    },
+    "examples": [
+     {
+      "name": "targets_reductio_req_2",
+      "thm": "( ~ ( ( ~ ( S > R ) ) & ( Q > S ) ) ) , ( Q > S ) |- ( S > R )",
+      "proof": "N1 ( ~ ( ( ~ ( S > R ) ) & ( Q > S ) ) ) : PR ; N2 ( Q > S ) : PR ; N3 | ( ~ ( S > R ) ) : AS ; N4 | ( ( ~ ( S > R ) ) & ( Q > S ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( S > R ) ) ) : NEGI N3 N5 ; N7 ( S > R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 4
+     },
+     {
+      "name": "targets_reductio_req_13",
+      "thm": "( ~ ( ( ~ Q ) & ( S v Q ) ) ) , ( S v Q ) |- Q",
+      "proof": "N1 ( ~ ( ( ~ Q ) & ( S v Q ) ) ) : PR ; N2 ( S v Q ) : PR ; N3 | ( ~ Q ) : AS ; N4 | ( ( ~ Q ) & ( S v Q ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ Q ) ) : NEGI N3 N5 ; N7 Q : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 2
+     },
+     {
+      "name": "targets_reductio_req_27",
+      "thm": "( ~ ( ( ~ ( Q v R ) ) & S ) ) , S |- ( Q v R )",
+      "proof": "N1 ( ~ ( ( ~ ( Q v R ) ) & S ) ) : PR ; N2 S : PR ; N3 | ( ~ ( Q v R ) ) : AS ; N4 | ( ( ~ ( Q v R ) ) & S ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( Q v R ) ) ) : NEGI N3 N5 ; N7 ( Q v R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 2
+     },
+     {
+      "name": "targets_reductio_req_40",
+      "thm": "( ~ ( ( ~ ( P v R ) ) & ( S & Q ) ) ) , ( S & Q ) |- ( P v R )",
+      "proof": "N1 ( ~ ( ( ~ ( P v R ) ) & ( S & Q ) ) ) : PR ; N2 ( S & Q ) : PR ; N3 | ( ~ ( P v R ) ) : AS ; N4 | ( ( ~ ( P v R ) ) & ( S & Q ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( P v R ) ) ) : NEGI N3 N5 ; N7 ( P v R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 2
+     },
+     {
+      "name": "targets_reductio_req_51",
+      "thm": "( ~ ( ( ~ ( Q & R ) ) & ( R > P ) ) ) , ( R > P ) |- ( Q & R )",
+      "proof": "N1 ( ~ ( ( ~ ( Q & R ) ) & ( R > P ) ) ) : PR ; N2 ( R > P ) : PR ; N3 | ( ~ ( Q & R ) ) : AS ; N4 | ( ( ~ ( Q & R ) ) & ( R > P ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( Q & R ) ) ) : NEGI N3 N5 ; N7 ( Q & R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 3
+     }
+    ],
+    "solved_by_schema": {
+     "nand_neg": 26,
+     "negimp_to_pos": 25
+    }
+   },
+   "ei_f0_s1": {
+    "kind": "ei",
+    "f": 0,
+    "seed": 1,
+    "round": 8,
+    "solved": 0,
+    "n": 300,
+    "acq_theorems": 0,
+    "acq": 0.0,
+    "pattern_proofs": 0,
+    "first_round": null,
+    "per_round_solved": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "per_round_acq": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "violations": 0,
+    "violation_examples": [],
+    "transfer_solved": 0,
+    "transfer_n": 150,
+    "transfer_acq_theorems": 0,
+    "transfer_violations": null,
+    "heldout_greedy": 0.8706,
+    "transfer_greedy": 0.0,
+    "written_hist": {},
+    "other_patterns": {},
+    "examples": [],
+    "solved_by_schema": {}
+   },
+   "ei_f0_s2": {
+    "kind": "ei",
+    "f": 0,
+    "seed": 2,
+    "round": 8,
+    "solved": 0,
+    "n": 300,
+    "acq_theorems": 0,
+    "acq": 0.0,
+    "pattern_proofs": 0,
+    "first_round": null,
+    "per_round_solved": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "per_round_acq": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "violations": 0,
+    "violation_examples": [],
+    "transfer_solved": 0,
+    "transfer_n": 150,
+    "transfer_acq_theorems": 0,
+    "transfer_violations": null,
+    "heldout_greedy": 0.894,
+    "transfer_greedy": 0.0,
+    "written_hist": {},
+    "other_patterns": {},
+    "examples": [],
+    "solved_by_schema": {}
+   },
+   "ei_f0.1_s0": {
+    "kind": "ei",
+    "f": 0.1,
+    "seed": 0,
+    "round": 8,
+    "solved": 53,
+    "n": 300,
+    "acq_theorems": 53,
+    "acq": 0.17666666666666667,
+    "pattern_proofs": 53,
+    "first_round": 1,
+    "per_round_solved": [
+     14,
+     39,
+     51,
+     53,
+     53,
+     53,
+     53,
+     53
+    ],
+    "per_round_acq": [
+     14,
+     39,
+     51,
+     53,
+     53,
+     53,
+     53,
+     53
+    ],
+    "violations": 0,
+    "violation_examples": [],
+    "transfer_solved": 27,
+    "transfer_n": 150,
+    "transfer_acq_theorems": 27,
+    "transfer_violations": null,
+    "heldout_greedy": 0.966,
+    "transfer_greedy": 0.16,
+    "written_hist": {
+     "7": 52,
+     "8": 1
+    },
+    "other_patterns": {
+     "derived_ore": 0,
+     "reductio": 53,
+     "depth3": 0,
+     "derived_dn": 53,
+     "any_dn": 53
+    },
+    "examples": [
+     {
+      "name": "targets_reductio_req_2",
+      "thm": "( ~ ( ( ~ ( S > R ) ) & ( Q > S ) ) ) , ( Q > S ) |- ( S > R )",
+      "proof": "N1 ( ~ ( ( ~ ( S > R ) ) & ( Q > S ) ) ) : PR ; N2 ( Q > S ) : PR ; N3 | ( ~ ( S > R ) ) : AS ; N4 | ( ( ~ ( S > R ) ) & ( Q > S ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( S > R ) ) ) : NEGI N3 N5 ; N7 ( S > R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 1
+     },
+     {
+      "name": "targets_reductio_req_13",
+      "thm": "( ~ ( ( ~ Q ) & ( S v Q ) ) ) , ( S v Q ) |- Q",
+      "proof": "N1 ( ~ ( ( ~ Q ) & ( S v Q ) ) ) : PR ; N2 ( S v Q ) : PR ; N3 | ( ~ Q ) : AS ; N4 | ( ( ~ Q ) & ( S v Q ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ Q ) ) : NEGI N3 N5 ; N7 Q : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 1
+     },
+     {
+      "name": "targets_reductio_req_27",
+      "thm": "( ~ ( ( ~ ( Q v R ) ) & S ) ) , S |- ( Q v R )",
+      "proof": "N1 ( ~ ( ( ~ ( Q v R ) ) & S ) ) : PR ; N2 S : PR ; N3 | ( ~ ( Q v R ) ) : AS ; N4 | ( ( ~ ( Q v R ) ) & S ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( Q v R ) ) ) : NEGI N3 N5 ; N7 ( Q v R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 1
+     },
+     {
+      "name": "targets_reductio_req_31",
+      "thm": "( ( ~ ( ( ~ S ) v P ) ) > R ) , ( ~ R ) |- ( ( ~ S ) v P )",
+      "proof": "N1 ( ( ~ ( ( ~ S ) v P ) ) > R ) : PR ; N2 ( ~ R ) : PR ; N3 | ( ~ ( ( ~ S ) v P ) ) : AS ; N4 | R : IMPE N1 N3 ; N5 | F : NEGE N4 N2 ; N6 ( ~ ( ~ ( ( ~ S ) v P ) ) ) : NEGI N3 N5 ; N7 ( ( ~ S ) v P ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 2
+     },
+     {
+      "name": "targets_reductio_req_40",
+      "thm": "( ~ ( ( ~ ( P v R ) ) & ( S & Q ) ) ) , ( S & Q ) |- ( P v R )",
+      "proof": "N1 ( ~ ( ( ~ ( P v R ) ) & ( S & Q ) ) ) : PR ; N2 ( S & Q ) : PR ; N3 | ( ~ ( P v R ) ) : AS ; N4 | ( ( ~ ( P v R ) ) & ( S & Q ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( P v R ) ) ) : NEGI N3 N5 ; N7 ( P v R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 1
+     }
+    ],
+    "solved_by_schema": {
+     "nand_neg": 26,
+     "negimp_to_pos": 26,
+     "chain_neg": 1
+    }
+   },
+   "ei_f0.1_s1": {
+    "kind": "ei",
+    "f": 0.1,
+    "seed": 1,
+    "round": 8,
+    "solved": 52,
+    "n": 300,
+    "acq_theorems": 52,
+    "acq": 0.17333333333333334,
+    "pattern_proofs": 52,
+    "first_round": 1,
+    "per_round_solved": [
+     17,
+     40,
+     51,
+     52,
+     52,
+     52,
+     52,
+     52
+    ],
+    "per_round_acq": [
+     17,
+     40,
+     51,
+     52,
+     52,
+     52,
+     52,
+     52
+    ],
+    "violations": 0,
+    "violation_examples": [],
+    "transfer_solved": 27,
+    "transfer_n": 150,
+    "transfer_acq_theorems": 27,
+    "transfer_violations": null,
+    "heldout_greedy": 0.973,
+    "transfer_greedy": 0.16,
+    "written_hist": {
+     "7": 52
+    },
+    "other_patterns": {
+     "derived_ore": 0,
+     "reductio": 52,
+     "depth3": 0,
+     "derived_dn": 52,
+     "any_dn": 52
+    },
+    "examples": [
+     {
+      "name": "targets_reductio_req_2",
+      "thm": "( ~ ( ( ~ ( S > R ) ) & ( Q > S ) ) ) , ( Q > S ) |- ( S > R )",
+      "proof": "N1 ( ~ ( ( ~ ( S > R ) ) & ( Q > S ) ) ) : PR ; N2 ( Q > S ) : PR ; N3 | ( ~ ( S > R ) ) : AS ; N4 | ( ( ~ ( S > R ) ) & ( Q > S ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( S > R ) ) ) : NEGI N3 N5 ; N7 ( S > R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 1
+     },
+     {
+      "name": "targets_reductio_req_13",
+      "thm": "( ~ ( ( ~ Q ) & ( S v Q ) ) ) , ( S v Q ) |- Q",
+      "proof": "N1 ( ~ ( ( ~ Q ) & ( S v Q ) ) ) : PR ; N2 ( S v Q ) : PR ; N3 | ( ~ Q ) : AS ; N4 | ( ( ~ Q ) & ( S v Q ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ Q ) ) : NEGI N3 N5 ; N7 Q : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 2
+     },
+     {
+      "name": "targets_reductio_req_27",
+      "thm": "( ~ ( ( ~ ( Q v R ) ) & S ) ) , S |- ( Q v R )",
+      "proof": "N1 ( ~ ( ( ~ ( Q v R ) ) & S ) ) : PR ; N2 S : PR ; N3 | ( ~ ( Q v R ) ) : AS ; N4 | ( ( ~ ( Q v R ) ) & S ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( Q v R ) ) ) : NEGI N3 N5 ; N7 ( Q v R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 1
+     },
+     {
+      "name": "targets_reductio_req_31",
+      "thm": "( ( ~ ( ( ~ S ) v P ) ) > R ) , ( ~ R ) |- ( ( ~ S ) v P )",
+      "proof": "N1 ( ( ~ ( ( ~ S ) v P ) ) > R ) : PR ; N2 ( ~ R ) : PR ; N3 | ( ~ ( ( ~ S ) v P ) ) : AS ; N4 | R : IMPE N1 N3 ; N5 | F : NEGE N4 N2 ; N6 ( ~ ( ~ ( ( ~ S ) v P ) ) ) : NEGI N3 N5 ; N7 ( ( ~ S ) v P ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 2
+     },
+     {
+      "name": "targets_reductio_req_40",
+      "thm": "( ~ ( ( ~ ( P v R ) ) & ( S & Q ) ) ) , ( S & Q ) |- ( P v R )",
+      "proof": "N1 ( ~ ( ( ~ ( P v R ) ) & ( S & Q ) ) ) : PR ; N2 ( S & Q ) : PR ; N3 | ( ~ ( P v R ) ) : AS ; N4 | ( ( ~ ( P v R ) ) & ( S & Q ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( P v R ) ) ) : NEGI N3 N5 ; N7 ( P v R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 1
+     }
+    ],
+    "solved_by_schema": {
+     "nand_neg": 26,
+     "negimp_to_pos": 26
+    }
+   },
+   "frozen_f0_s0": {
+    "kind": "frozen",
+    "f": 0,
+    "seed": 0,
+    "round": 8,
+    "solved": 4,
+    "n": 300,
+    "acq_theorems": 4,
+    "acq": 0.013333333333333334,
+    "pattern_proofs": 4,
+    "first_round": 1,
+    "per_round_solved": [
+     2,
+     2,
+     2,
+     3,
+     3,
+     3,
+     3,
+     4
+    ],
+    "per_round_acq": [
+     2,
+     2,
+     2,
+     3,
+     3,
+     3,
+     3,
+     4
+    ],
+    "violations": 0,
+    "violation_examples": [],
+    "transfer_solved": 3,
+    "transfer_n": 150,
+    "transfer_acq_theorems": 3,
+    "transfer_violations": null,
+    "heldout_greedy": 0.886,
+    "transfer_greedy": 0.0,
+    "written_hist": {
+     "7": 4
+    },
+    "other_patterns": {
+     "derived_ore": 0,
+     "reductio": 4,
+     "depth3": 0,
+     "derived_dn": 4,
+     "any_dn": 4
+    },
+    "examples": [
+     {
+      "name": "targets_reductio_req_51",
+      "thm": "( ~ ( ( ~ ( Q & R ) ) & ( R > P ) ) ) , ( R > P ) |- ( Q & R )",
+      "proof": "N1 ( ~ ( ( ~ ( Q & R ) ) & ( R > P ) ) ) : PR ; N2 ( R > P ) : PR ; N3 | ( ~ ( Q & R ) ) : AS ; N4 | ( ( ~ ( Q & R ) ) & ( R > P ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( Q & R ) ) ) : NEGI N3 N5 ; N7 ( Q & R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 4
+     },
+     {
+      "name": "targets_reductio_req_73",
+      "thm": "( ~ ( ( ~ ( S v R ) ) & ( ~ R ) ) ) , ( ~ R ) |- ( S v R )",
+      "proof": "N1 ( ~ ( ( ~ ( S v R ) ) & ( ~ R ) ) ) : PR ; N2 ( ~ R ) : PR ; N3 | ( ~ ( S v R ) ) : AS ; N4 | ( ( ~ ( S v R ) ) & ( ~ R ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( S v R ) ) ) : NEGI N3 N5 ; N7 ( S v R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 1
+     },
+     {
+      "name": "targets_reductio_req_74",
+      "thm": "( ~ ( ( ~ S ) & ( ( S > R ) v ( ~ P ) ) ) ) , ( ( S > R ) v ( ~ P ) ) |- S",
+      "proof": "N1 ( ~ ( ( ~ S ) & ( ( S > R ) v ( ~ P ) ) ) ) : PR ; N2 ( ( S > R ) v ( ~ P ) ) : PR ; N3 | ( ~ S ) : AS ; N4 | ( ( ~ S ) & ( ( S > R ) v ( ~ P ) ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ S ) ) : NEGI N3 N5 ; N7 S : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 1
+     },
+     {
+      "name": "targets_reductio_req_115",
+      "thm": "( ~ ( ( ~ ( Q & R ) ) & ( Q > P ) ) ) , ( Q > P ) |- ( Q & R )",
+      "proof": "N1 ( ~ ( ( ~ ( Q & R ) ) & ( Q > P ) ) ) : PR ; N2 ( Q > P ) : PR ; N3 | ( ~ ( Q & R ) ) : AS ; N4 | ( ( ~ ( Q & R ) ) & ( Q > P ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( Q & R ) ) ) : NEGI N3 N5 ; N7 ( Q & R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 8
+     }
+    ],
+    "solved_by_schema": {
+     "nand_neg": 4
+    }
+   },
+   "frozen_f0_s1": {
+    "kind": "frozen",
+    "f": 0,
+    "seed": 1,
+    "round": 8,
+    "solved": 0,
+    "n": 300,
+    "acq_theorems": 0,
+    "acq": 0.0,
+    "pattern_proofs": 0,
+    "first_round": null,
+    "per_round_solved": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "per_round_acq": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "violations": 0,
+    "violation_examples": [],
+    "transfer_solved": 0,
+    "transfer_n": 150,
+    "transfer_acq_theorems": 0,
+    "transfer_violations": null,
+    "heldout_greedy": 0.8706,
+    "transfer_greedy": 0.0,
+    "written_hist": {},
+    "other_patterns": {},
+    "examples": [],
+    "solved_by_schema": {}
+   },
+   "frozen_f0_s2": {
+    "kind": "frozen",
+    "f": 0,
+    "seed": 2,
+    "round": 8,
+    "solved": 0,
+    "n": 300,
+    "acq_theorems": 0,
+    "acq": 0.0,
+    "pattern_proofs": 0,
+    "first_round": null,
+    "per_round_solved": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "per_round_acq": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "violations": 0,
+    "violation_examples": [],
+    "transfer_solved": 0,
+    "transfer_n": 150,
+    "transfer_acq_theorems": 0,
+    "transfer_violations": null,
+    "heldout_greedy": 0.894,
+    "transfer_greedy": 0.0,
+    "written_hist": {},
+    "other_patterns": {},
+    "examples": [],
+    "solved_by_schema": {}
+   },
+   "frozen_f0.1_s0": {
+    "kind": "frozen",
+    "f": 0.1,
+    "seed": 0,
+    "round": 8,
+    "solved": 27,
+    "n": 300,
+    "acq_theorems": 27,
+    "acq": 0.09,
+    "pattern_proofs": 27,
+    "first_round": 1,
+    "per_round_solved": [
+     14,
+     20,
+     22,
+     22,
+     22,
+     22,
+     25,
+     27
+    ],
+    "per_round_acq": [
+     14,
+     20,
+     22,
+     22,
+     22,
+     22,
+     25,
+     27
+    ],
+    "violations": 0,
+    "violation_examples": [],
+    "transfer_solved": 9,
+    "transfer_n": 150,
+    "transfer_acq_theorems": 9,
+    "transfer_violations": null,
+    "heldout_greedy": 0.968,
+    "transfer_greedy": 0.006666666666666667,
+    "written_hist": {
+     "7": 27
+    },
+    "other_patterns": {
+     "derived_ore": 0,
+     "reductio": 27,
+     "depth3": 0,
+     "derived_dn": 27,
+     "any_dn": 27
+    },
+    "examples": [
+     {
+      "name": "targets_reductio_req_2",
+      "thm": "( ~ ( ( ~ ( S > R ) ) & ( Q > S ) ) ) , ( Q > S ) |- ( S > R )",
+      "proof": "N1 ( ~ ( ( ~ ( S > R ) ) & ( Q > S ) ) ) : PR ; N2 ( Q > S ) : PR ; N3 | ( ~ ( S > R ) ) : AS ; N4 | ( ( ~ ( S > R ) ) & ( Q > S ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( S > R ) ) ) : NEGI N3 N5 ; N7 ( S > R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 1
+     },
+     {
+      "name": "targets_reductio_req_13",
+      "thm": "( ~ ( ( ~ Q ) & ( S v Q ) ) ) , ( S v Q ) |- Q",
+      "proof": "N1 ( ~ ( ( ~ Q ) & ( S v Q ) ) ) : PR ; N2 ( S v Q ) : PR ; N3 | ( ~ Q ) : AS ; N4 | ( ( ~ Q ) & ( S v Q ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ Q ) ) : NEGI N3 N5 ; N7 Q : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 1
+     },
+     {
+      "name": "targets_reductio_req_27",
+      "thm": "( ~ ( ( ~ ( Q v R ) ) & S ) ) , S |- ( Q v R )",
+      "proof": "N1 ( ~ ( ( ~ ( Q v R ) ) & S ) ) : PR ; N2 S : PR ; N3 | ( ~ ( Q v R ) ) : AS ; N4 | ( ( ~ ( Q v R ) ) & S ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( Q v R ) ) ) : NEGI N3 N5 ; N7 ( Q v R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 1
+     },
+     {
+      "name": "targets_reductio_req_40",
+      "thm": "( ~ ( ( ~ ( P v R ) ) & ( S & Q ) ) ) , ( S & Q ) |- ( P v R )",
+      "proof": "N1 ( ~ ( ( ~ ( P v R ) ) & ( S & Q ) ) ) : PR ; N2 ( S & Q ) : PR ; N3 | ( ~ ( P v R ) ) : AS ; N4 | ( ( ~ ( P v R ) ) & ( S & Q ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( P v R ) ) ) : NEGI N3 N5 ; N7 ( P v R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 1
+     },
+     {
+      "name": "targets_reductio_req_51",
+      "thm": "( ~ ( ( ~ ( Q & R ) ) & ( R > P ) ) ) , ( R > P ) |- ( Q & R )",
+      "proof": "N1 ( ~ ( ( ~ ( Q & R ) ) & ( R > P ) ) ) : PR ; N2 ( R > P ) : PR ; N3 | ( ~ ( Q & R ) ) : AS ; N4 | ( ( ~ ( Q & R ) ) & ( R > P ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( Q & R ) ) ) : NEGI N3 N5 ; N7 ( Q & R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 2
+     }
+    ],
+    "solved_by_schema": {
+     "nand_neg": 21,
+     "negimp_to_pos": 6
+    }
+   },
+   "frozen_f0.1_s1": {
+    "kind": "frozen",
+    "f": 0.1,
+    "seed": 1,
+    "round": 8,
+    "solved": 21,
+    "n": 300,
+    "acq_theorems": 21,
+    "acq": 0.07,
+    "pattern_proofs": 21,
+    "first_round": 1,
+    "per_round_solved": [
+     17,
+     17,
+     19,
+     21,
+     21,
+     21,
+     21,
+     21
+    ],
+    "per_round_acq": [
+     17,
+     17,
+     19,
+     21,
+     21,
+     21,
+     21,
+     21
+    ],
+    "violations": 0,
+    "violation_examples": [],
+    "transfer_solved": 11,
+    "transfer_n": 150,
+    "transfer_acq_theorems": 11,
+    "transfer_violations": null,
+    "heldout_greedy": 0.967,
+    "transfer_greedy": 0.013333333333333334,
+    "written_hist": {
+     "7": 21
+    },
+    "other_patterns": {
+     "derived_ore": 0,
+     "reductio": 21,
+     "depth3": 0,
+     "derived_dn": 21,
+     "any_dn": 21
+    },
+    "examples": [
+     {
+      "name": "targets_reductio_req_2",
+      "thm": "( ~ ( ( ~ ( S > R ) ) & ( Q > S ) ) ) , ( Q > S ) |- ( S > R )",
+      "proof": "N1 ( ~ ( ( ~ ( S > R ) ) & ( Q > S ) ) ) : PR ; N2 ( Q > S ) : PR ; N3 | ( ~ ( S > R ) ) : AS ; N4 | ( ( ~ ( S > R ) ) & ( Q > S ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( S > R ) ) ) : NEGI N3 N5 ; N7 ( S > R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 1
+     },
+     {
+      "name": "targets_reductio_req_27",
+      "thm": "( ~ ( ( ~ ( Q v R ) ) & S ) ) , S |- ( Q v R )",
+      "proof": "N1 ( ~ ( ( ~ ( Q v R ) ) & S ) ) : PR ; N2 S : PR ; N3 | ( ~ ( Q v R ) ) : AS ; N4 | ( ( ~ ( Q v R ) ) & S ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( Q v R ) ) ) : NEGI N3 N5 ; N7 ( Q v R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 1
+     },
+     {
+      "name": "targets_reductio_req_40",
+      "thm": "( ~ ( ( ~ ( P v R ) ) & ( S & Q ) ) ) , ( S & Q ) |- ( P v R )",
+      "proof": "N1 ( ~ ( ( ~ ( P v R ) ) & ( S & Q ) ) ) : PR ; N2 ( S & Q ) : PR ; N3 | ( ~ ( P v R ) ) : AS ; N4 | ( ( ~ ( P v R ) ) & ( S & Q ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( P v R ) ) ) : NEGI N3 N5 ; N7 ( P v R ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 1
+     },
+     {
+      "name": "targets_reductio_req_60",
+      "thm": "( ( ~ P ) > ( S & ( P v R ) ) ) , ( ~ ( S & ( P v R ) ) ) |- P",
+      "proof": "N1 ( ( ~ P ) > ( S & ( P v R ) ) ) : PR ; N2 ( ~ ( S & ( P v R ) ) ) : PR ; N3 | ( ~ P ) : AS ; N4 | ( S & ( P v R ) ) : IMPE N1 N3 ; N5 | F : NEGE N4 N2 ; N6 ( ~ ( ~ P ) ) : NEGI N3 N5 ; N7 P : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 1
+     },
+     {
+      "name": "targets_reductio_req_71",
+      "thm": "( ~ ( ( ~ ( ( P & R ) & Q ) ) & ( ( Q & S ) > R ) ) ) , ( ( Q & S ) > R ) |- ( ( P & R ) & Q )",
+      "proof": "N1 ( ~ ( ( ~ ( ( P & R ) & Q ) ) & ( ( Q & S ) > R ) ) ) : PR ; N2 ( ( Q & S ) > R ) : PR ; N3 | ( ~ ( ( P & R ) & Q ) ) : AS ; N4 | ( ( ~ ( ( P & R ) & Q ) ) & ( ( Q & S ) > R ) ) : ANDI N3 N2 ; N5 | F : NEGE N4 N1 ; N6 ( ~ ( ~ ( ( P & R ) & Q ) ) ) : NEGI N3 N5 ; N7 ( ( P & R ) & Q ) : DN N6 ; QED",
+      "written": 7,
+      "pruned": 7,
+      "round": 1
+     }
+    ],
+    "solved_by_schema": {
+     "nand_neg": 14,
+     "negimp_to_pos": 7
+    }
+   }
+  },
+  "coverage": {
+   "f0_s0": {
+    "targets": 300,
+    "samples": 3000000,
+    "solved": 6,
+    "n_ok": 113,
+    "solved_within_256": 1,
+    "pattern_hits": 113,
+    "targets_with_pattern_proof": 6,
+    "solved_without_pattern": 0,
+    "rate_per_sample": 3.766666666666667e-05
+   },
+   "f0_s1": {
+    "targets": 300,
+    "samples": 3000000,
+    "solved": 0,
+    "n_ok": 0,
+    "solved_within_256": 0,
+    "pattern_hits": 0,
+    "targets_with_pattern_proof": 0,
+    "solved_without_pattern": 0,
+    "rate_per_sample": 0.0
+   },
+   "f0_s2": {
+    "targets": 300,
+    "samples": 3000000,
+    "solved": 1,
+    "n_ok": 1,
+    "solved_within_256": 0,
+    "pattern_hits": 1,
+    "targets_with_pattern_proof": 1,
+    "solved_without_pattern": 0,
+    "rate_per_sample": 3.3333333333333335e-07
+   }
+  },
+  "campaign": {
+   "pool": "targets_reductio2 (606, DN needed, \u226410-line proof not guaranteed)",
+   "ei": {
+    "(0, 0)": 0.09570957095709572,
+    "(0, 1)": 0.0,
+    "(0, 2)": 0.0,
+    "(0.1, 0)": 0.15676567656765678,
+    "(0.1, 1)": 0.10396039603960396
+   },
+   "frozen": {
+    "(0, 0)": 0.0049504950495049506,
+    "(0, 1)": 0.0,
+    "(0, 2)": 0.0,
+    "(0.1, 0)": 0.041254125412541254,
+    "(0.1, 1)": 0.04785478547854786
+   },
+   "solved": {
+    "(0, 0)": 0.09570957095709572,
+    "(0, 1)": 0.0,
+    "(0, 2)": 0.0,
+    "(0.1, 0)": 0.15676567656765678,
+    "(0.1, 1)": 0.10396039603960396
+   }
+  },
+  "n_targets": 300,
+  "targets_min_lines_hist": {
+   "7": 52,
+   "8": 133,
+   "9": 82,
+   "10": 33
+  },
+  "targets_by_schema": {
+   "cases_neg": 5,
+   "chain_neg": 26,
+   "consequentia_cond": 26,
+   "contraposition_conv": 27,
+   "demorgan_nor_neg": 1,
+   "excluded_middle": 26,
+   "imp_cases_or": 1,
+   "impimp_to_or": 1,
+   "nand_neg": 26,
+   "nand_to_imp": 26,
+   "neg_both": 26,
+   "neg_to_contra": 26,
+   "negcond_ante": 26,
+   "negimp_to_or": 5,
+   "negimp_to_pos": 26,
+   "peirce_seq": 26
+  }
+ },
+ "derived_ore_strict": {
+  "targets_file": "data/p2/targets_derived_ore_req.jsonl",
+  "arms": {
+   "ei_f0_s0": {
+    "kind": "ei",
+    "f": 0,
+    "seed": 0,
+    "round": 8,
+    "solved": 26,
+    "n": 300,
+    "acq_theorems": 26,
+    "acq": 0.08666666666666667,
+    "pattern_proofs": 35,
+    "first_round": 1,
+    "per_round_solved": [
+     8,
+     12,
+     16,
+     20,
+     22,
+     24,
+     25,
+     26
+    ],
+    "per_round_acq": [
+     8,
+     12,
+     16,
+     20,
+     22,
+     24,
+     25,
+     26
+    ],
+    "violations": 0,
+    "violation_examples": [],
+    "transfer_solved": 8,
+    "transfer_n": 65,
+    "transfer_acq_theorems": 8,
+    "transfer_violations": null,
+    "heldout_greedy": 0.9273709483793517,
+    "transfer_greedy": 0.06153846153846154,
+    "written_hist": {
+     "9": 25,
+     "10": 10
+    },
+    "other_patterns": {
+     "derived_ore": 35,
+     "reductio": 0,
+     "depth3": 6,
+     "derived_ore_strict": 35
+    },
+    "examples": [
+     {
+      "name": "targets_derived_ore_strict_c8req_27",
+      "thm": "( R v ( Q > P ) ) , ( ( R v ( Q > P ) ) > ( P v ( Q & P ) ) ) |- ( ( ~ ( ~ ( P v S ) ) ) > P )",
+      "proof": "N1 ( R v ( Q > P ) ) : PR ; N2 ( ( R v ( Q > P ) ) > ( P v ( Q & P ) ) ) : PR ; N3 ( P v ( Q & P ) ) : IMPE N2 N1 ; N4 | ( ~ ( ~ ( P v S ) ) ) : AS ; N5 | | P : AS ; N6 | | ( Q & P ) : AS ; N7 | | P : ANDE2 N6 ; N8 | P : ORE N3 N5 N5 N6 N7 ; N9 ( ( ~ ( ~ ( P v S ) ) ) > P ) : IMPI N4 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 1
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_27",
+      "thm": "( R v ( Q > P ) ) , ( ( R v ( Q > P ) ) > ( P v ( Q & P ) ) ) |- ( ( ~ ( ~ ( P v S ) ) ) > P )",
+      "proof": "N1 ( R v ( Q > P ) ) : PR ; N2 ( ( R v ( Q > P ) ) > ( P v ( Q & P ) ) ) : PR ; N3 | ( ~ ( ~ ( P v S ) ) ) : AS ; N4 | ( P v ( Q & P ) ) : IMPE N2 N1 ; N5 | | P : AS ; N6 | | ( Q & P ) : AS ; N7 | | P : ANDE2 N6 ; N8 | P : ORE N4 N5 N5 N6 N7 ; N9 ( ( ~ ( ~ ( P v S ) ) ) > P ) : IMPI N3 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 2
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_38",
+      "thm": "( ( ~ R ) > ( R v S ) ) , ( S > R ) , ( ~ R ) |- ( R & R )",
+      "proof": "N1 ( ( ~ R ) > ( R v S ) ) : PR ; N2 ( S > R ) : PR ; N3 ( ~ R ) : PR ; N4 ( R v S ) : IMPE N1 N3 ; N5 | R : AS ; N6 | S : AS ; N7 | R : IMPE N2 N6 ; N8 R : ORE N4 N5 N5 N6 N7 ; N9 ( R & R ) : ANDI N8 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 1
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_64",
+      "thm": "( ( P v R ) & ( R > P ) ) |- ( ( ~ ( ~ ( R > S ) ) ) > P )",
+      "proof": "N1 ( ( P v R ) & ( R > P ) ) : PR ; N2 ( R > P ) : ANDE2 N1 ; N3 | ( ~ ( ~ ( R > S ) ) ) : AS ; N4 | ( P v R ) : ANDE1 N1 ; N5 | | P : AS ; N6 | | R : AS ; N7 | | P : IMPE N2 N6 ; N8 | P : ORE N4 N5 N5 N6 N7 ; N9 ( ( ~ ( ~ ( R > S ) ) ) > P ) : IMPI N3 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 4
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_67",
+      "thm": "Q , ( Q > ( ( S & R ) v ( R & P ) ) ) |- ( ( ~ ( ~ ( S v P ) ) ) > R )",
+      "proof": "N1 Q : PR ; N2 ( Q > ( ( S & R ) v ( R & P ) ) ) : PR ; N3 ( ( S & R ) v ( R & P ) ) : IMPE N2 N1 ; N4 | ( ~ ( ~ ( S v P ) ) ) : AS ; N5 | | ( S & R ) : AS ; N6 | | R : ANDE2 N5 ; N7 | | ( R & P ) : AS ; N8 | | R : ANDE1 N7 ; N9 | R : ORE N3 N5 N6 N7 N8 ; N10 ( ( ~ ( ~ ( S v P ) ) ) > R ) : IMPI N4 N9 ; QED",
+      "written": 10,
+      "pruned": 10,
+      "round": 3
+     }
+    ],
+    "solved_by_schema": {
+     "null": 26
+    }
+   },
+   "ei_f0_s1": {
+    "kind": "ei",
+    "f": 0,
+    "seed": 1,
+    "round": 8,
+    "solved": 24,
+    "n": 300,
+    "acq_theorems": 24,
+    "acq": 0.08,
+    "pattern_proofs": 34,
+    "first_round": 1,
+    "per_round_solved": [
+     7,
+     11,
+     13,
+     14,
+     16,
+     18,
+     21,
+     24
+    ],
+    "per_round_acq": [
+     7,
+     11,
+     13,
+     14,
+     16,
+     18,
+     21,
+     24
+    ],
+    "violations": 0,
+    "violation_examples": [],
+    "transfer_solved": 8,
+    "transfer_n": 65,
+    "transfer_acq_theorems": 8,
+    "transfer_violations": null,
+    "heldout_greedy": 0.9289715886354541,
+    "transfer_greedy": 0.1076923076923077,
+    "written_hist": {
+     "9": 24,
+     "10": 10
+    },
+    "other_patterns": {
+     "derived_ore": 34,
+     "reductio": 0,
+     "depth3": 1,
+     "derived_ore_strict": 34
+    },
+    "examples": [
+     {
+      "name": "targets_derived_ore_strict_c8req_38",
+      "thm": "( ( ~ R ) > ( R v S ) ) , ( S > R ) , ( ~ R ) |- ( R & R )",
+      "proof": "N1 ( ( ~ R ) > ( R v S ) ) : PR ; N2 ( S > R ) : PR ; N3 ( ~ R ) : PR ; N4 ( R v S ) : IMPE N1 N3 ; N5 | R : AS ; N6 | S : AS ; N7 | R : IMPE N2 N6 ; N8 R : ORE N4 N5 N5 N6 N7 ; N9 ( R & R ) : ANDI N8 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 1
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_64",
+      "thm": "( ( P v R ) & ( R > P ) ) |- ( ( ~ ( ~ ( R > S ) ) ) > P )",
+      "proof": "N1 ( ( P v R ) & ( R > P ) ) : PR ; N2 ( R > P ) : ANDE2 N1 ; N3 | ( ~ ( ~ ( R > S ) ) ) : AS ; N4 | ( P v R ) : ANDE1 N1 ; N5 | | P : AS ; N6 | | R : AS ; N7 | | P : IMPE N2 N6 ; N8 | P : ORE N4 N5 N5 N6 N7 ; N9 ( ( ~ ( ~ ( R > S ) ) ) > P ) : IMPI N3 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 3
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_64",
+      "thm": "( ( P v R ) & ( R > P ) ) |- ( ( ~ ( ~ ( R > S ) ) ) > P )",
+      "proof": "N1 ( ( P v R ) & ( R > P ) ) : PR ; N2 | ( ~ ( ~ ( R > S ) ) ) : AS ; N3 | ( R > P ) : ANDE2 N1 ; N4 | ( P v R ) : ANDE1 N1 ; N5 | | P : AS ; N6 | | R : AS ; N7 | | P : IMPE N3 N6 ; N8 | P : ORE N4 N5 N5 N6 N7 ; N9 ( ( ~ ( ~ ( R > S ) ) ) > P ) : IMPI N2 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 4
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_67",
+      "thm": "Q , ( Q > ( ( S & R ) v ( R & P ) ) ) |- ( ( ~ ( ~ ( S v P ) ) ) > R )",
+      "proof": "N1 Q : PR ; N2 ( Q > ( ( S & R ) v ( R & P ) ) ) : PR ; N3 ( ( S & R ) v ( R & P ) ) : IMPE N2 N1 ; N4 | ( ~ ( ~ ( S v P ) ) ) : AS ; N5 | | ( S & R ) : AS ; N6 | | R : ANDE2 N5 ; N7 | | ( R & P ) : AS ; N8 | | R : ANDE1 N7 ; N9 | R : ORE N3 N5 N6 N7 N8 ; N10 ( ( ~ ( ~ ( S v P ) ) ) > R ) : IMPI N4 N9 ; QED",
+      "written": 10,
+      "pruned": 10,
+      "round": 5
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_88",
+      "thm": "( ( S & Q ) v R ) , ( ( ( S & Q ) v R ) > ( S v ( Q & S ) ) ) |- ( ( ~ ( ~ P ) ) > S )",
+      "proof": "N1 ( ( S & Q ) v R ) : PR ; N2 ( ( ( S & Q ) v R ) > ( S v ( Q & S ) ) ) : PR ; N3 ( S v ( Q & S ) ) : IMPE N2 N1 ; N4 | ( ~ ( ~ P ) ) : AS ; N5 | | S : AS ; N6 | | ( Q & S ) : AS ; N7 | | S : ANDE2 N6 ; N8 | S : ORE N3 N5 N5 N6 N7 ; N9 ( ( ~ ( ~ P ) ) > S ) : IMPI N4 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 7
+     }
+    ],
+    "solved_by_schema": {
+     "null": 24
+    }
+   },
+   "ei_f0.01_s0": {
+    "kind": "ei",
+    "f": 0.01,
+    "seed": 0,
+    "round": 8,
+    "solved": 48,
+    "n": 300,
+    "acq_theorems": 48,
+    "acq": 0.16,
+    "pattern_proofs": 57,
+    "first_round": 1,
+    "per_round_solved": [
+     14,
+     26,
+     33,
+     34,
+     37,
+     42,
+     44,
+     48
+    ],
+    "per_round_acq": [
+     14,
+     26,
+     33,
+     34,
+     37,
+     42,
+     44,
+     48
+    ],
+    "violations": 0,
+    "violation_examples": [],
+    "transfer_solved": 13,
+    "transfer_n": 65,
+    "transfer_acq_theorems": 13,
+    "transfer_violations": null,
+    "heldout_greedy": 0.9295718287314926,
+    "transfer_greedy": 0.09230769230769231,
+    "written_hist": {
+     "9": 43,
+     "10": 14
+    },
+    "other_patterns": {
+     "derived_ore": 57,
+     "reductio": 0,
+     "depth3": 8,
+     "derived_ore_strict": 57
+    },
+    "examples": [
+     {
+      "name": "targets_derived_ore_strict_c8req_10",
+      "thm": "( ( S v P ) & R ) |- ( ( ~ ( ~ ( ~ S ) ) ) > ( ( S > P ) > P ) )",
+      "proof": "N1 ( ( S v P ) & R ) : PR ; N2 ( S v P ) : ANDE1 N1 ; N3 | ( ~ ( ~ ( ~ S ) ) ) : AS ; N4 | | ( S > P ) : AS ; N5 | | | S : AS ; N6 | | | P : IMPE N4 N5 ; N7 | | | P : AS ; N8 | | P : ORE N2 N5 N6 N7 N7 ; N9 | ( ( S > P ) > P ) : IMPI N4 N8 ; N10 ( ( ~ ( ~ ( ~ S ) ) ) > ( ( S > P ) > P ) ) : IMPI N3 N9 ; QED",
+      "written": 10,
+      "pruned": 10,
+      "round": 6
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_27",
+      "thm": "( R v ( Q > P ) ) , ( ( R v ( Q > P ) ) > ( P v ( Q & P ) ) ) |- ( ( ~ ( ~ ( P v S ) ) ) > P )",
+      "proof": "N1 ( R v ( Q > P ) ) : PR ; N2 ( ( R v ( Q > P ) ) > ( P v ( Q & P ) ) ) : PR ; N3 ( P v ( Q & P ) ) : IMPE N2 N1 ; N4 | ( ~ ( ~ ( P v S ) ) ) : AS ; N5 | | P : AS ; N6 | | ( Q & P ) : AS ; N7 | | P : ANDE2 N6 ; N8 | P : ORE N3 N5 N5 N6 N7 ; N9 ( ( ~ ( ~ ( P v S ) ) ) > P ) : IMPI N4 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 1
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_33",
+      "thm": " |- ( ( ~ ( ~ ( Q v P ) ) ) > ( R > ( P v Q ) ) )",
+      "proof": "N1 | ( ~ ( ~ ( Q v P ) ) ) : AS ; N2 | | R : AS ; N3 | | ( Q v P ) : DN N1 ; N4 | | | Q : AS ; N5 | | | ( P v Q ) : ORI2 N4 ; N6 | | | P : AS ; N7 | | | ( P v Q ) : ORI1 N6 ; N8 | | ( P v Q ) : ORE N3 N4 N5 N6 N7 ; N9 | ( R > ( P v Q ) ) : IMPI N2 N8 ; N10 ( ( ~ ( ~ ( Q v P ) ) ) > ( R > ( P v Q ) ) ) : IMPI N1 N9 ; QED",
+      "written": 10,
+      "pruned": 10,
+      "round": 8
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_34",
+      "thm": "( S > Q ) |- ( ( ~ ( ~ ( S v Q ) ) ) > ( P v Q ) )",
+      "proof": "N1 ( S > Q ) : PR ; N2 | ( ~ ( ~ ( S v Q ) ) ) : AS ; N3 | ( S v Q ) : DN N2 ; N4 | | S : AS ; N5 | | Q : IMPE N1 N4 ; N6 | | Q : AS ; N7 | Q : ORE N3 N4 N5 N6 N6 ; N8 | ( P v Q ) : ORI2 N7 ; N9 ( ( ~ ( ~ ( S v Q ) ) ) > ( P v Q ) ) : IMPI N2 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 2
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_37",
+      "thm": "( ( R v Q ) & ( R v Q ) ) |- ( ( ( R v S ) v ( S > Q ) ) > ( Q v R ) )",
+      "proof": "N1 ( ( R v Q ) & ( R v Q ) ) : PR ; N2 ( R v Q ) : ANDE1 N1 ; N3 | ( ( R v S ) v ( S > Q ) ) : AS ; N4 | | R : AS ; N5 | | ( Q v R ) : ORI2 N4 ; N6 | | Q : AS ; N7 | | ( Q v R ) : ORI1 N6 ; N8 | ( Q v R ) : ORE N2 N4 N5 N6 N7 ; N9 ( ( ( R v S ) v ( S > Q ) ) > ( Q v R ) ) : IMPI N3 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 7
+     }
+    ],
+    "solved_by_schema": {
+     "null": 48
+    }
+   },
+   "ei_f0.01_s1": {
+    "kind": "ei",
+    "f": 0.01,
+    "seed": 1,
+    "round": 8,
+    "solved": 63,
+    "n": 300,
+    "acq_theorems": 63,
+    "acq": 0.21,
+    "pattern_proofs": 96,
+    "first_round": 1,
+    "per_round_solved": [
+     20,
+     30,
+     37,
+     42,
+     52,
+     57,
+     61,
+     63
+    ],
+    "per_round_acq": [
+     20,
+     30,
+     37,
+     42,
+     52,
+     57,
+     61,
+     63
+    ],
+    "violations": 0,
+    "violation_examples": [],
+    "transfer_solved": 14,
+    "transfer_n": 65,
+    "transfer_acq_theorems": 14,
+    "transfer_violations": null,
+    "heldout_greedy": 0.9429771908763506,
+    "transfer_greedy": 0.16923076923076924,
+    "written_hist": {
+     "9": 52,
+     "10": 41,
+     "11": 3
+    },
+    "other_patterns": {
+     "derived_ore": 96,
+     "reductio": 0,
+     "depth3": 18,
+     "derived_ore_strict": 96
+    },
+    "examples": [
+     {
+      "name": "targets_derived_ore_strict_c8req_4",
+      "thm": "Q , ( Q v ( R & ( ~ Q ) ) ) , ( Q > ( R v ( R & Q ) ) ) |- ( ( Q v ( R & ( ~ Q ) ) ) & R )",
+      "proof": "N1 Q : PR ; N2 ( Q v ( R & ( ~ Q ) ) ) : PR ; N3 ( Q > ( R v ( R & Q ) ) ) : PR ; N4 ( R v ( R & Q ) ) : IMPE N3 N1 ; N5 | R : AS ; N6 | ( R & Q ) : AS ; N7 | R : ANDE1 N6 ; N8 R : ORE N4 N5 N5 N6 N7 ; N9 ( ( Q v ( R & ( ~ Q ) ) ) & R ) : ANDI N2 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 1
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_10",
+      "thm": "( ( S v P ) & R ) |- ( ( ~ ( ~ ( ~ S ) ) ) > ( ( S > P ) > P ) )",
+      "proof": "N1 ( ( S v P ) & R ) : PR ; N2 ( S v P ) : ANDE1 N1 ; N3 | ( ~ ( ~ ( ~ S ) ) ) : AS ; N4 | | ( S > P ) : AS ; N5 | | | S : AS ; N6 | | | P : IMPE N4 N5 ; N7 | | | P : AS ; N8 | | P : ORE N2 N5 N6 N7 N7 ; N9 | ( ( S > P ) > P ) : IMPI N4 N8 ; N10 ( ( ~ ( ~ ( ~ S ) ) ) > ( ( S > P ) > P ) ) : IMPI N3 N9 ; QED",
+      "written": 10,
+      "pruned": 10,
+      "round": 5
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_10",
+      "thm": "( ( S v P ) & R ) |- ( ( ~ ( ~ ( ~ S ) ) ) > ( ( S > P ) > P ) )",
+      "proof": "N1 ( ( S v P ) & R ) : PR ; N2 | ( ~ ( ~ ( ~ S ) ) ) : AS ; N3 | | ( S > P ) : AS ; N4 | | ( S v P ) : ANDE1 N1 ; N5 | | | S : AS ; N6 | | | P : IMPE N3 N5 ; N7 | | | P : AS ; N8 | | P : ORE N4 N5 N6 N7 N7 ; N9 | ( ( S > P ) > P ) : IMPI N3 N8 ; N10 ( ( ~ ( ~ ( ~ S ) ) ) > ( ( S > P ) > P ) ) : IMPI N2 N9 ; QED",
+      "written": 10,
+      "pruned": 10,
+      "round": 6
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_10",
+      "thm": "( ( S v P ) & R ) |- ( ( ~ ( ~ ( ~ S ) ) ) > ( ( S > P ) > P ) )",
+      "proof": "N1 ( ( S v P ) & R ) : PR ; N2 | ( ~ ( ~ ( ~ S ) ) ) : AS ; N3 | ( S v P ) : ANDE1 N1 ; N4 | | ( S > P ) : AS ; N5 | | | S : AS ; N6 | | | P : IMPE N4 N5 ; N7 | | | P : AS ; N8 | | P : ORE N3 N5 N6 N7 N7 ; N9 | ( ( S > P ) > P ) : IMPI N4 N8 ; N10 ( ( ~ ( ~ ( ~ S ) ) ) > ( ( S > P ) > P ) ) : IMPI N2 N9 ; QED",
+      "written": 10,
+      "pruned": 10,
+      "round": 7
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_19",
+      "thm": "P , ( ( ( Q & S ) & ( ~ R ) ) v ( ( R v S ) > S ) ) , ( P > ( Q v ( S & Q ) ) ) |- ( ( ~ ( ~ ( Q > S ) ) ) > Q )",
+      "proof": "N1 P : PR ; N2 ( ( ( Q & S ) & ( ~ R ) ) v ( ( R v S ) > S ) ) : PR ; N3 ( P > ( Q v ( S & Q ) ) ) : PR ; N4 | ( ~ ( ~ ( Q > S ) ) ) : AS ; N5 | ( Q v ( S & Q ) ) : IMPE N3 N1 ; N6 | | Q : AS ; N7 | | ( S & Q ) : AS ; N8 | | Q : ANDE2 N7 ; N9 | Q : ORE N5 N6 N6 N7 N8 ; N10 ( ( ~ ( ~ ( Q > S ) ) ) > Q ) : IMPI N4 N9 ; QED",
+      "written": 10,
+      "pruned": 9,
+      "round": 6
+     }
+    ],
+    "solved_by_schema": {
+     "null": 63
+    }
+   },
+   "frozen_f0_s0": {
+    "kind": "frozen",
+    "f": 0,
+    "seed": 0,
+    "round": 8,
+    "solved": 13,
+    "n": 300,
+    "acq_theorems": 13,
+    "acq": 0.043333333333333335,
+    "pattern_proofs": 21,
+    "first_round": 1,
+    "per_round_solved": [
+     8,
+     9,
+     10,
+     12,
+     12,
+     13,
+     13,
+     13
+    ],
+    "per_round_acq": [
+     8,
+     9,
+     10,
+     12,
+     12,
+     13,
+     13,
+     13
+    ],
+    "violations": 0,
+    "violation_examples": [],
+    "transfer_solved": 5,
+    "transfer_n": 65,
+    "transfer_acq_theorems": 5,
+    "transfer_violations": null,
+    "heldout_greedy": 0.9175670268107243,
+    "transfer_greedy": 0.046153846153846156,
+    "written_hist": {
+     "9": 21
+    },
+    "other_patterns": {
+     "derived_ore": 21,
+     "reductio": 0,
+     "depth3": 0,
+     "derived_ore_strict": 21
+    },
+    "examples": [
+     {
+      "name": "targets_derived_ore_strict_c8req_27",
+      "thm": "( R v ( Q > P ) ) , ( ( R v ( Q > P ) ) > ( P v ( Q & P ) ) ) |- ( ( ~ ( ~ ( P v S ) ) ) > P )",
+      "proof": "N1 ( R v ( Q > P ) ) : PR ; N2 ( ( R v ( Q > P ) ) > ( P v ( Q & P ) ) ) : PR ; N3 ( P v ( Q & P ) ) : IMPE N2 N1 ; N4 | ( ~ ( ~ ( P v S ) ) ) : AS ; N5 | | P : AS ; N6 | | ( Q & P ) : AS ; N7 | | P : ANDE2 N6 ; N8 | P : ORE N3 N5 N5 N6 N7 ; N9 ( ( ~ ( ~ ( P v S ) ) ) > P ) : IMPI N4 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 1
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_27",
+      "thm": "( R v ( Q > P ) ) , ( ( R v ( Q > P ) ) > ( P v ( Q & P ) ) ) |- ( ( ~ ( ~ ( P v S ) ) ) > P )",
+      "proof": "N1 ( R v ( Q > P ) ) : PR ; N2 ( ( R v ( Q > P ) ) > ( P v ( Q & P ) ) ) : PR ; N3 | ( ~ ( ~ ( P v S ) ) ) : AS ; N4 | ( P v ( Q & P ) ) : IMPE N2 N1 ; N5 | | P : AS ; N6 | | ( Q & P ) : AS ; N7 | | P : ANDE2 N6 ; N8 | P : ORE N4 N5 N5 N6 N7 ; N9 ( ( ~ ( ~ ( P v S ) ) ) > P ) : IMPI N3 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 2
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_38",
+      "thm": "( ( ~ R ) > ( R v S ) ) , ( S > R ) , ( ~ R ) |- ( R & R )",
+      "proof": "N1 ( ( ~ R ) > ( R v S ) ) : PR ; N2 ( S > R ) : PR ; N3 ( ~ R ) : PR ; N4 ( R v S ) : IMPE N1 N3 ; N5 | R : AS ; N6 | S : AS ; N7 | R : IMPE N2 N6 ; N8 R : ORE N4 N5 N5 N6 N7 ; N9 ( R & R ) : ANDI N8 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 1
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_64",
+      "thm": "( ( P v R ) & ( R > P ) ) |- ( ( ~ ( ~ ( R > S ) ) ) > P )",
+      "proof": "N1 ( ( P v R ) & ( R > P ) ) : PR ; N2 ( R > P ) : ANDE2 N1 ; N3 | ( ~ ( ~ ( R > S ) ) ) : AS ; N4 | ( P v R ) : ANDE1 N1 ; N5 | | P : AS ; N6 | | R : AS ; N7 | | P : IMPE N2 N6 ; N8 | P : ORE N4 N5 N5 N6 N7 ; N9 ( ( ~ ( ~ ( R > S ) ) ) > P ) : IMPI N3 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 2
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_88",
+      "thm": "( ( S & Q ) v R ) , ( ( ( S & Q ) v R ) > ( S v ( Q & S ) ) ) |- ( ( ~ ( ~ P ) ) > S )",
+      "proof": "N1 ( ( S & Q ) v R ) : PR ; N2 ( ( ( S & Q ) v R ) > ( S v ( Q & S ) ) ) : PR ; N3 ( S v ( Q & S ) ) : IMPE N2 N1 ; N4 | ( ~ ( ~ P ) ) : AS ; N5 | | S : AS ; N6 | | ( Q & S ) : AS ; N7 | | S : ANDE2 N6 ; N8 | S : ORE N3 N5 N5 N6 N7 ; N9 ( ( ~ ( ~ P ) ) > S ) : IMPI N4 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 1
+     }
+    ],
+    "solved_by_schema": {
+     "null": 13
+    }
+   },
+   "frozen_f0_s1": {
+    "kind": "frozen",
+    "f": 0,
+    "seed": 1,
+    "round": 8,
+    "solved": 11,
+    "n": 300,
+    "acq_theorems": 11,
+    "acq": 0.03666666666666667,
+    "pattern_proofs": 14,
+    "first_round": 1,
+    "per_round_solved": [
+     7,
+     10,
+     10,
+     10,
+     10,
+     11,
+     11,
+     11
+    ],
+    "per_round_acq": [
+     7,
+     10,
+     10,
+     10,
+     10,
+     11,
+     11,
+     11
+    ],
+    "violations": 0,
+    "violation_examples": [],
+    "transfer_solved": 4,
+    "transfer_n": 65,
+    "transfer_acq_theorems": 4,
+    "transfer_violations": null,
+    "heldout_greedy": 0.9307723089235694,
+    "transfer_greedy": 0.015384615384615385,
+    "written_hist": {
+     "9": 14
+    },
+    "other_patterns": {
+     "derived_ore": 14,
+     "reductio": 0,
+     "depth3": 0,
+     "derived_ore_strict": 14
+    },
+    "examples": [
+     {
+      "name": "targets_derived_ore_strict_c8req_38",
+      "thm": "( ( ~ R ) > ( R v S ) ) , ( S > R ) , ( ~ R ) |- ( R & R )",
+      "proof": "N1 ( ( ~ R ) > ( R v S ) ) : PR ; N2 ( S > R ) : PR ; N3 ( ~ R ) : PR ; N4 ( R v S ) : IMPE N1 N3 ; N5 | R : AS ; N6 | S : AS ; N7 | R : IMPE N2 N6 ; N8 R : ORE N4 N5 N5 N6 N7 ; N9 ( R & R ) : ANDI N8 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 1
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_64",
+      "thm": "( ( P v R ) & ( R > P ) ) |- ( ( ~ ( ~ ( R > S ) ) ) > P )",
+      "proof": "N1 ( ( P v R ) & ( R > P ) ) : PR ; N2 ( R > P ) : ANDE2 N1 ; N3 | ( ~ ( ~ ( R > S ) ) ) : AS ; N4 | ( P v R ) : ANDE1 N1 ; N5 | | P : AS ; N6 | | R : AS ; N7 | | P : IMPE N2 N6 ; N8 | P : ORE N4 N5 N5 N6 N7 ; N9 ( ( ~ ( ~ ( R > S ) ) ) > P ) : IMPI N3 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 2
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_88",
+      "thm": "( ( S & Q ) v R ) , ( ( ( S & Q ) v R ) > ( S v ( Q & S ) ) ) |- ( ( ~ ( ~ P ) ) > S )",
+      "proof": "N1 ( ( S & Q ) v R ) : PR ; N2 ( ( ( S & Q ) v R ) > ( S v ( Q & S ) ) ) : PR ; N3 ( S v ( Q & S ) ) : IMPE N2 N1 ; N4 | ( ~ ( ~ P ) ) : AS ; N5 | | S : AS ; N6 | | ( Q & S ) : AS ; N7 | | S : ANDE2 N6 ; N8 | S : ORE N3 N5 N5 N6 N7 ; N9 ( ( ~ ( ~ P ) ) > S ) : IMPI N4 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 2
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_97",
+      "thm": "( ~ ( ( S & P ) v ( Q v Q ) ) ) , ( ( ~ ( ( S & P ) v ( Q v Q ) ) ) > ( ( R v S ) v S ) ) |- ( ( ~ ( ( S & P ) v ( Q v Q ) ) ) > ( R v S ) )",
+      "proof": "N1 ( ~ ( ( S & P ) v ( Q v Q ) ) ) : PR ; N2 ( ( ~ ( ( S & P ) v ( Q v Q ) ) ) > ( ( R v S ) v S ) ) : PR ; N3 | ( ~ ( ( S & P ) v ( Q v Q ) ) ) : AS ; N4 | ( ( R v S ) v S ) : IMPE N2 N1 ; N5 | | ( R v S ) : AS ; N6 | | S : AS ; N7 | | ( R v S ) : ORI2 N6 ; N8 | ( R v S ) : ORE N4 N5 N5 N6 N7 ; N9 ( ( ~ ( ( S & P ) v ( Q v Q ) ) ) > ( R v S ) ) : IMPI N3 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 1
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_122",
+      "thm": "( ~ R ) , ( ( ~ R ) > ( ( Q v R ) v Q ) ) |- ( ( ~ R ) > ( Q v R ) )",
+      "proof": "N1 ( ~ R ) : PR ; N2 ( ( ~ R ) > ( ( Q v R ) v Q ) ) : PR ; N3 ( ( Q v R ) v Q ) : IMPE N2 N1 ; N4 | ( ~ R ) : AS ; N5 | | ( Q v R ) : AS ; N6 | | Q : AS ; N7 | | ( Q v R ) : ORI1 N6 ; N8 | ( Q v R ) : ORE N3 N5 N5 N6 N7 ; N9 ( ( ~ R ) > ( Q v R ) ) : IMPI N4 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 1
+     }
+    ],
+    "solved_by_schema": {
+     "null": 11
+    }
+   },
+   "frozen_f0.01_s0": {
+    "kind": "frozen",
+    "f": 0.01,
+    "seed": 0,
+    "round": 8,
+    "solved": 21,
+    "n": 300,
+    "acq_theorems": 21,
+    "acq": 0.07,
+    "pattern_proofs": 30,
+    "first_round": 1,
+    "per_round_solved": [
+     14,
+     15,
+     16,
+     19,
+     20,
+     21,
+     21,
+     21
+    ],
+    "per_round_acq": [
+     14,
+     15,
+     16,
+     19,
+     20,
+     21,
+     21,
+     21
+    ],
+    "violations": 0,
+    "violation_examples": [],
+    "transfer_solved": 6,
+    "transfer_n": 65,
+    "transfer_acq_theorems": 6,
+    "transfer_violations": null,
+    "heldout_greedy": 0.933173269307723,
+    "transfer_greedy": 0.03076923076923077,
+    "written_hist": {
+     "9": 30
+    },
+    "other_patterns": {
+     "derived_ore": 30,
+     "reductio": 0,
+     "depth3": 1,
+     "derived_ore_strict": 30
+    },
+    "examples": [
+     {
+      "name": "targets_derived_ore_strict_c8req_27",
+      "thm": "( R v ( Q > P ) ) , ( ( R v ( Q > P ) ) > ( P v ( Q & P ) ) ) |- ( ( ~ ( ~ ( P v S ) ) ) > P )",
+      "proof": "N1 ( R v ( Q > P ) ) : PR ; N2 ( ( R v ( Q > P ) ) > ( P v ( Q & P ) ) ) : PR ; N3 ( P v ( Q & P ) ) : IMPE N2 N1 ; N4 | ( ~ ( ~ ( P v S ) ) ) : AS ; N5 | | P : AS ; N6 | | ( Q & P ) : AS ; N7 | | P : ANDE2 N6 ; N8 | P : ORE N3 N5 N5 N6 N7 ; N9 ( ( ~ ( ~ ( P v S ) ) ) > P ) : IMPI N4 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 1
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_38",
+      "thm": "( ( ~ R ) > ( R v S ) ) , ( S > R ) , ( ~ R ) |- ( R & R )",
+      "proof": "N1 ( ( ~ R ) > ( R v S ) ) : PR ; N2 ( S > R ) : PR ; N3 ( ~ R ) : PR ; N4 ( R v S ) : IMPE N1 N3 ; N5 | R : AS ; N6 | S : AS ; N7 | R : IMPE N2 N6 ; N8 R : ORE N4 N5 N5 N6 N7 ; N9 ( R & R ) : ANDI N8 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 4
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_50",
+      "thm": "( ( ( R > P ) v Q ) v ( Q & R ) ) , ( ( ( ( R > P ) v Q ) v ( Q & R ) ) > ( P v ( R & P ) ) ) |- ( ( ( ( R > P ) v Q ) v ( Q & R ) ) > P )",
+      "proof": "N1 ( ( ( R > P ) v Q ) v ( Q & R ) ) : PR ; N2 ( ( ( ( R > P ) v Q ) v ( Q & R ) ) > ( P v ( R & P ) ) ) : PR ; N3 ( P v ( R & P ) ) : IMPE N2 N1 ; N4 | ( ( ( R > P ) v Q ) v ( Q & R ) ) : AS ; N5 | | P : AS ; N6 | | ( R & P ) : AS ; N7 | | P : ANDE2 N6 ; N8 | P : ORE N3 N5 N5 N6 N7 ; N9 ( ( ( ( R > P ) v Q ) v ( Q & R ) ) > P ) : IMPI N4 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 2
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_64",
+      "thm": "( ( P v R ) & ( R > P ) ) |- ( ( ~ ( ~ ( R > S ) ) ) > P )",
+      "proof": "N1 ( ( P v R ) & ( R > P ) ) : PR ; N2 ( R > P ) : ANDE2 N1 ; N3 | ( ~ ( ~ ( R > S ) ) ) : AS ; N4 | ( P v R ) : ANDE1 N1 ; N5 | | P : AS ; N6 | | R : AS ; N7 | | P : IMPE N2 N6 ; N8 | P : ORE N4 N5 N5 N6 N7 ; N9 ( ( ~ ( ~ ( R > S ) ) ) > P ) : IMPI N3 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 5
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_88",
+      "thm": "( ( S & Q ) v R ) , ( ( ( S & Q ) v R ) > ( S v ( Q & S ) ) ) |- ( ( ~ ( ~ P ) ) > S )",
+      "proof": "N1 ( ( S & Q ) v R ) : PR ; N2 ( ( ( S & Q ) v R ) > ( S v ( Q & S ) ) ) : PR ; N3 ( S v ( Q & S ) ) : IMPE N2 N1 ; N4 | ( ~ ( ~ P ) ) : AS ; N5 | | S : AS ; N6 | | ( Q & S ) : AS ; N7 | | S : ANDE2 N6 ; N8 | S : ORE N3 N5 N5 N6 N7 ; N9 ( ( ~ ( ~ P ) ) > S ) : IMPI N4 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 1
+     }
+    ],
+    "solved_by_schema": {
+     "null": 21
+    }
+   },
+   "frozen_f0.01_s1": {
+    "kind": "frozen",
+    "f": 0.01,
+    "seed": 1,
+    "round": 8,
+    "solved": 28,
+    "n": 300,
+    "acq_theorems": 28,
+    "acq": 0.09333333333333334,
+    "pattern_proofs": 46,
+    "first_round": 1,
+    "per_round_solved": [
+     20,
+     21,
+     21,
+     22,
+     23,
+     24,
+     26,
+     28
+    ],
+    "per_round_acq": [
+     20,
+     21,
+     21,
+     22,
+     23,
+     24,
+     26,
+     28
+    ],
+    "violations": 0,
+    "violation_examples": [],
+    "transfer_solved": 8,
+    "transfer_n": 65,
+    "transfer_acq_theorems": 8,
+    "transfer_violations": null,
+    "heldout_greedy": 0.9431772709083633,
+    "transfer_greedy": 0.03076923076923077,
+    "written_hist": {
+     "9": 40,
+     "10": 6
+    },
+    "other_patterns": {
+     "derived_ore": 46,
+     "reductio": 0,
+     "depth3": 3,
+     "derived_ore_strict": 46
+    },
+    "examples": [
+     {
+      "name": "targets_derived_ore_strict_c8req_4",
+      "thm": "Q , ( Q v ( R & ( ~ Q ) ) ) , ( Q > ( R v ( R & Q ) ) ) |- ( ( Q v ( R & ( ~ Q ) ) ) & R )",
+      "proof": "N1 Q : PR ; N2 ( Q v ( R & ( ~ Q ) ) ) : PR ; N3 ( Q > ( R v ( R & Q ) ) ) : PR ; N4 ( R v ( R & Q ) ) : IMPE N3 N1 ; N5 | R : AS ; N6 | ( R & Q ) : AS ; N7 | R : ANDE1 N6 ; N8 R : ORE N4 N5 N5 N6 N7 ; N9 ( ( Q v ( R & ( ~ Q ) ) ) & R ) : ANDI N2 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 1
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_27",
+      "thm": "( R v ( Q > P ) ) , ( ( R v ( Q > P ) ) > ( P v ( Q & P ) ) ) |- ( ( ~ ( ~ ( P v S ) ) ) > P )",
+      "proof": "N1 ( R v ( Q > P ) ) : PR ; N2 ( ( R v ( Q > P ) ) > ( P v ( Q & P ) ) ) : PR ; N3 | ( ~ ( ~ ( P v S ) ) ) : AS ; N4 | ( P v ( Q & P ) ) : IMPE N2 N1 ; N5 | | P : AS ; N6 | | ( Q & P ) : AS ; N7 | | P : ANDE2 N6 ; N8 | P : ORE N4 N5 N5 N6 N7 ; N9 ( ( ~ ( ~ ( P v S ) ) ) > P ) : IMPI N3 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 1
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_27",
+      "thm": "( R v ( Q > P ) ) , ( ( R v ( Q > P ) ) > ( P v ( Q & P ) ) ) |- ( ( ~ ( ~ ( P v S ) ) ) > P )",
+      "proof": "N1 ( R v ( Q > P ) ) : PR ; N2 ( ( R v ( Q > P ) ) > ( P v ( Q & P ) ) ) : PR ; N3 ( P v ( Q & P ) ) : IMPE N2 N1 ; N4 | ( ~ ( ~ ( P v S ) ) ) : AS ; N5 | | P : AS ; N6 | | ( Q & P ) : AS ; N7 | | P : ANDE2 N6 ; N8 | P : ORE N3 N5 N5 N6 N7 ; N9 ( ( ~ ( ~ ( P v S ) ) ) > P ) : IMPI N4 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 1
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_38",
+      "thm": "( ( ~ R ) > ( R v S ) ) , ( S > R ) , ( ~ R ) |- ( R & R )",
+      "proof": "N1 ( ( ~ R ) > ( R v S ) ) : PR ; N2 ( S > R ) : PR ; N3 ( ~ R ) : PR ; N4 ( R v S ) : IMPE N1 N3 ; N5 | R : AS ; N6 | S : AS ; N7 | R : IMPE N2 N6 ; N8 R : ORE N4 N5 N5 N6 N7 ; N9 ( R & R ) : ANDI N8 N8 ; QED",
+      "written": 9,
+      "pruned": 9,
+      "round": 1
+     },
+     {
+      "name": "targets_derived_ore_strict_c8req_48",
+      "thm": "R , ( ( ~ S ) > ( Q v S ) ) , ( ~ S ) |- ( S v ( Q & R ) )",
+      "proof": "N1 R : PR ; N2 ( ( ~ S ) > ( Q v S ) ) : PR ; N3 ( ~ S ) : PR ; N4 ( Q v S ) : IMPE N2 N3 ; N5 | Q : AS ; N6 | ( Q & R ) : ANDI N5 N1 ; N7 | ( S v ( Q & R ) ) : ORI2 N6 ; N8 | S : AS ; N9 | ( S v ( Q & R ) ) : ORI1 N8 ; N10 ( S v ( Q & R ) ) : ORE N4 N5 N7 N8 N9 ; QED",
+      "written": 10,
+      "pruned": 10,
+      "round": 7
+     }
+    ],
+    "solved_by_schema": {
+     "null": 28
+    }
+   }
+  },
+  "coverage": {
+   "f0_s0": {
+    "targets": 300,
+    "samples": 3000000,
+    "solved": 27,
+    "n_ok": 17043,
+    "solved_within_256": 13,
+    "pattern_hits": 17043,
+    "targets_with_pattern_proof": 27,
+    "solved_without_pattern": 0,
+    "rate_per_sample": 0.005681
+   },
+   "f0_s1": {
+    "targets": 300,
+    "samples": 3000000,
+    "solved": 27,
+    "n_ok": 16044,
+    "solved_within_256": 11,
+    "pattern_hits": 16044,
+    "targets_with_pattern_proof": 27,
+    "solved_without_pattern": 0,
+    "rate_per_sample": 0.005348
+   }
+  },
+  "campaign": {
+   "pool": "targets_c8 (500, generating proof uses the strict ORE, no \u22648-line proof)",
+   "ei": {
+    "(0, 0)": 0.008,
+    "(0, 1)": 0.008,
+    "(0.001, 0)": 0.022,
+    "(0.01, 0)": 0.022
+   },
+   "frozen": {
+    "(0, 0)": 0.006,
+    "(0, 1)": 0.004
+   },
+   "solved": {
+    "(0, 0)": 0.394,
+    "(0, 1)": 0.4,
+    "(0.001, 0)": 0.404,
+    "(0.01, 0)": 0.436
+   }
+  },
+  "n_targets": 300,
+  "targets_min_lines_hist": {
+   "9": 126,
+   "10": 174
+  },
+  "targets_by_schema": {
+   "None": 300
+  }
+ }
+}

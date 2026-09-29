@@ -1,0 +1,3 @@
+#!/bin/sh
+# pre-commit (run repo-hygiene-2): the 5 MB / bulk-kind size guard on the staged index. Installed by ci/install_hooks.sh.
+exec sh "$(git rev-parse --show-toplevel)/ci/check_sizes.sh"

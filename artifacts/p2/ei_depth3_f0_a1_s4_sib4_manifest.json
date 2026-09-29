@@ -1,0 +1,41 @@
+{
+ "own": "artifacts/p2/ei_depth3_f0_a1_s4",
+ "own_proofs": 910,
+ "own_theorems": 232,
+ "inject_file": "artifacts/p2/ei_depth3_f0_a1_s2/found_4.jsonl",
+ "tag": "sib4",
+ "n_injected": 4,
+ "injected_valid": [
+  true,
+  true,
+  true,
+  true
+ ],
+ "injected_has_pattern": [
+  true,
+  true,
+  true,
+  true
+ ],
+ "injected": [
+  {
+   "prompt": "THM SEQ ( ( ( Q & R ) & ( ~ P ) ) > ( ( ~ P ) > ( ( ~ P ) > ( ( ~ P ) v ( ( S & R ) & ( S & P ) ) ) ) ) ) PRF",
+   "proof": "N27 | ( ( Q & R ) & ( ~ P ) ) : AS ; N28 | | ( ~ P ) : AS ; N29 | | | ( ~ P ) : AS ; N30 | | | ( ( ~ P ) v ( ( S & R ) & ( S & P ) ) ) : ORI1 N28 ; N31 | | ( ( ~ P ) > ( ( ~ P ) v ( ( S & R ) & ( S & P ) ) ) ) : IMPI N29 N30 ; N32 | ( ( ~ P ) > ( ( ~ P ) > ( ( ~ P ) v ( ( S & R ) & ( S & P ) ) ) ) ) : IMPI N28 N31 ; N33 ( ( ( Q & R ) & ( ~ P ) ) > ( ( ~ P ) > ( ( ~ P ) > ( ( ~ P ) v ( ( S & R ) & ( S & P ) ) ) ) ) ) : IMPI N27 N32 ; QED"
+  },
+  {
+   "prompt": "THM SEQ ( ( ~ ( ~ ( Q & R ) ) ) > ( ( ~ ( P v R ) ) > ( ( ~ ( ~ Q ) ) > Q ) ) ) PRF",
+   "proof": "N54 | ( ~ ( ~ ( Q & R ) ) ) : AS ; N55 | | ( ~ ( P v R ) ) : AS ; N56 | | | ( ~ ( ~ Q ) ) : AS ; N57 | | | Q : DN N56 ; N58 | | ( ( ~ ( ~ Q ) ) > Q ) : IMPI N56 N57 ; N59 | ( ( ~ ( P v R ) ) > ( ( ~ ( ~ Q ) ) > Q ) ) : IMPI N55 N58 ; N60 ( ( ~ ( ~ ( Q & R ) ) ) > ( ( ~ ( P v R ) ) > ( ( ~ ( ~ Q ) ) > Q ) ) ) : IMPI N54 N59 ; QED"
+  },
+  {
+   "prompt": "THM SEQ ( Q > ( P > ( ( ( P > Q ) & R ) > ( Q & P ) ) ) ) PRF",
+   "proof": "N38 | Q : AS ; N39 | | P : AS ; N40 | | | ( ( P > Q ) & R ) : AS ; N41 | | | ( Q & P ) : ANDI N38 N39 ; N42 | | ( ( ( P > Q ) & R ) > ( Q & P ) ) : IMPI N40 N41 ; N43 | ( P > ( ( ( P > Q ) & R ) > ( Q & P ) ) ) : IMPI N39 N42 ; N44 ( Q > ( P > ( ( ( P > Q ) & R ) > ( Q & P ) ) ) ) : IMPI N38 N43 ; QED"
+  },
+  {
+   "prompt": "THM ( Q > ( ~ P ) ) SEQ ( ( ~ ( ~ P ) ) > ( P > ( P > ( R v ( Q > ( ~ P ) ) ) ) ) ) PRF",
+   "proof": "N36 ( Q > ( ~ P ) ) : PR ; N37 | ( ~ ( ~ P ) ) : AS ; N38 | | P : AS ; N39 | | | P : AS ; N40 | | | ( R v ( Q > ( ~ P ) ) ) : ORI2 N36 ; N41 | | ( P > ( R v ( Q > ( ~ P ) ) ) ) : IMPI N39 N40 ; N42 | ( P > ( P > ( R v ( Q > ( ~ P ) ) ) ) ) : IMPI N38 N41 ; N43 ( ( ~ ( ~ P ) ) > ( P > ( P > ( R v ( Q > ( ~ P ) ) ) ) ) ) : IMPI N37 N42 ; QED"
+  }
+ ],
+ "init": "ckpts/p2/ei_depth3_f0_a1_s4_r4.pt",
+ "out": "ckpts/r3/ei_depth3_f0_a1_s4_sib4_r4t.pt",
+ "retain": 20000
+}

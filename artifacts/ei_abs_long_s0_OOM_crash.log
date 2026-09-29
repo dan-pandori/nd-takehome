@@ -1,0 +1,44 @@
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/expert_iter.py", line 210, in <module>
+    main()
+  File "/workspace/nd-takehome/expert_iter.py", line 103, in main
+    model, tok, _ = load_ckpt(ckpt, dev)
+                    ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 96, in load_ckpt
+    ck = torch.load(path, map_location=device)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 1521, in load
+    return _load(
+           ^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 2119, in _load
+    result = unpickler.load()
+             ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/_weights_only_unpickler.py", line 532, in load
+    self.append(self.persistent_load(pid))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 2083, in persistent_load
+    typed_storage = load_tensor(
+                    ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 2049, in load_tensor
+    wrap_storage = restore_location(storage, location)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 1859, in restore_location
+    return default_restore_location(storage, map_location)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 698, in default_restore_location
+    result = fn(storage, location)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 637, in _deserialize
+    return obj.to(device=device)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/storage.py", line 291, in to
+    return _to(self, device, non_blocking)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/_utils.py", line 101, in _to
+    untyped_storage = torch.UntypedStorage(self.size(), device=device)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.AcceleratorError: CUDA error: out of memory
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
