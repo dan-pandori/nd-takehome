@@ -722,3 +722,4 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   under `artifacts/lpool/` (1,522,220 bytes) — the case CONTRIBUTING.md describes. All 5 were already at
   `long-pool/artifacts/lpool/<same>` in the bucket (size + xet hash; `index_longpool.tsv`) and were also mirrored.
   Merged `origin/dan`, `git rm --cached` the 5, appended them to `ARTIFACTS_INDEX.tsv`. Their content is unchanged.
+- 01:59  CI on the merged tip failed one step, correctly: long-pool's new `lpool_assemble.py` takes `--out` without `record.save_config` (60 scripts now). Added the one line.

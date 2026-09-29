@@ -35,6 +35,7 @@ def main():
     ap.add_argument('--out', required=True); ap.add_argument('--cap_gen', type=int, default=300)
     ap.add_argument('--cap_tb', type=int, default=40); ap.add_argument('--seed', type=int, default=0)
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     recs, stats = {}, collections.Counter()
     tout = collections.Counter()          # (stage bound, chunk) -> timeouts
     for c in a.chunks:
