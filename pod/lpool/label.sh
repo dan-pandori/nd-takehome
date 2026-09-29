@@ -4,7 +4,7 @@
 # stage's None-without-timeout records only.  Restartable: a stage whose output is complete is skipped.
 cd /workspace/nd-takehome; export OMP_NUM_THREADS=1
 T=$1; W=$2; TR=$3; S=$4; MN=${5:-12}; MX=${6:-40}; shift 6 2>/dev/null; X="$*"
-mkdir -p data/lp artifacts/lp; L=artifacts/lp/$T.log
+mkdir -p data/lp artifacts/lpool; L=artifacts/lpool/$T.log
 echo "$(date -u +%FT%TZ) START $T W=$W tries=$TR seed=$S len=$MN-$MX extra=$X" >> $L
 if [ ! -s data/lp/$T.jsonl ]; then
   python3 make_coverage_sets.py gen --long --min $MN --max $MX --out data/lp/raw_$T --workers $W --tries $TR --cap_np 1000000000 --cap_pat 1000000000 --seed $S $X >> $L 2>&1

@@ -67,8 +67,8 @@ The transfer pool is unchanged. Class-disjointness re-asserted. The sample budge
 # long-pool: `transfer_long.jsonl` — a transfer pool for the length frontier (run `long-pool`, 2026-09-28)
 
 Built 18:48–21:35 UTC on pods `lp-l1` (RTX 4090, cpu.max 10.2 CPUs) and `lp-l2` (RTX 4090, cpu.max 54.4 CPUs); CPU pods
-had no stock. Scripts: `pod/lp/label.sh` (generate + staged `minlen.py`), `lp_assemble.py` (labels, disjointness,
-assembly), `lp_finalize.py` (Lean check of every label proof, re-read subset), `lp_shape.py`, `lp_stages.py`.
+had no stock. Scripts: `pod/lpool/label.sh` (generate + staged `minlen.py`), `lpool_assemble.py` (labels, disjointness,
+assembly), `lpool_finalize.py` (Lean check of every label proof, re-read subset), `lpool_shape.py`, `lpool_stages.py`.
 Files here: **`transfer_long.jsonl` (1,913)**, `transfer_long_rr600.jsonl` (the 100-per-bin seed-0 subset the run's
 re-read used), `transfer_long_ge17.jsonl` (70 theorems with no proof ≤ 16 lines found: `L_true ≥ 17`, lower bound only,
 not binned), `transfer_long_summary.json` (counts, timeouts, the disjointness table). Raw chunks and every label file:
@@ -107,14 +107,14 @@ searched completely without finding a proof:
 
 A label L is final: the search at every smaller length finished without a proof. **A timeout at any stage = label unknown.**
 Those theorems are excluded and never counted. A stage-D timeout could have been a 15, 16 or ≥ 17. Per-chunk detail is in
-`artifacts/lp/stages.md`. Every label proof is checked twice. `minlen.py` checks it internally as a labelling tool (as
+`artifacts/lpool/stages.md`. Every label proof is checked twice. `minlen.py` checks it internally as a labelling tool (as
 for the ladder). **Lean** checks it too (`lean_check.py --check --field minlen_proof`): **1,913 / 1,913 accepted**. The
 term size by `lean_check`'s definition (`label_term_size`) is 4–16, median 9. `L_true` is ND-derived and is an **upper
 bound under Lean**, like the ladder's labels: Lean may accept a shorter proof (e.g. `n.elim` on `n : ¬A`).
 
 ## Disjointness (renaming class = `gen.canon_key` over the prompt, premise order kept)
 Candidates (21,582 labelled `L_true` 11–16 plus 70 at ≥ 17 = 21,652 classes; 8 duplicate classes across chunks dropped) were checked against
-**117 files, 5,736,567 records** (`artifacts/lp/excl_manifest.txt`). The files are:
+**117 files, 5,736,567 records** (`artifacts/lpool/excl_manifest.txt`). The files are:
 - every `data/**/*.jsonl` in git: the ladder's transfer / rl_targets, held-out, all `data/p2` target and transfer pools,
   and the r1–r3 pools;
 - the take-home `data/train.jsonl.gz`;
@@ -131,7 +131,7 @@ ladder's `transfer.jsonl`, the run-5 cap-8 candidate / target pools, cap-horizon
 pool; one class may sit in several files). After exclusion the pool shares **0 classes** with every
 file (asserted).
 
-## Assembly (`lp_assemble.py`, seed 0)
+## Assembly (`lpool_assemble.py`, seed 0)
 For each bin 11–16: at most **300** generator theorems, drawn uniformly, plus textbook instances at ≤ **40 per schema per
 bin** (the ladder's cap).
 
@@ -141,7 +141,7 @@ bin** (the ladder's cap).
 | **pool** | **373** | **428** | **341** | **340** | **300** | **131** | **1,913** | 70 |
 | of which textbook | 73 | 128 | 41 | 40 | 0 | 0 | 282 | 0 |
 
-Shape (label proof = the `minlen` proof; `artifacts/lp/shape.md`):
+Shape (label proof = the `minlen` proof; `artifacts/lpool/shape.md`):
 
 | L_true | n | gen / textbook | premises (mean) | prompt tokens (median / max) | generated lines (median) | label term size (median, range) | max box depth (median / max) | label proofs using ORE / DN / NEGI / IMPI (%) |
 |---|---:|---|---:|---|---:|---|---|---|

@@ -1307,21 +1307,21 @@ All values recomputed by `python3 fs_analysis.py` → `artifacts/fs/summary.json
 - FS9 bucket: `hf://buckets/dan-pandori/nd-rl/fast-stage1/{artifacts,ckpts}` (the 8 fast checkpoints and `legfull_s0.pt`).
 
 ## long-pool (2026-09-28/29)
-Pool: `data/ladder/transfer_long.jsonl`, built by `pod/lp/label.sh` → `lp_assemble.py` → `lp_finalize.py`. Every pool count
-re-derives from `data/lp/<chunk>{,_ml10,_ml12,_ml14,_ml16}.jsonl` (bucket `long-pool/data/lp/`) and `artifacts/lp/excl_manifest.txt`.
+Pool: `data/ladder/transfer_long.jsonl`, built by `pod/lpool/label.sh` → `lpool_assemble.py` → `lpool_finalize.py`. Every pool count
+re-derives from `data/lp/<chunk>{,_ml10,_ml12,_ml14,_ml16}.jsonl` (bucket `long-pool/data/lp/`) and `artifacts/lpool/excl_manifest.txt`.
 `L_true` is `minlen.py`'s ND-derived label and an upper bound under Lean.
 - LP1 generated (distinct classes): g1 24,400 · g2 255,368 · g3 224,596 · g4 103,852 · textbook 906 (6 schemata). Stage table:
-  `artifacts/lp/stages.md` (`lp_stages.py`). Stage timeouts: bound 10: 1,003 / 609,122 (0.2 %) · 12: 143 / 21,992 (0.7 %) ·
+  `artifacts/lpool/stages.md` (`lpool_stages.py`). Stage timeouts: bound 10: 1,003 / 609,122 (0.2 %) · 12: 143 / 21,992 (0.7 %) ·
   14: 136 / 4,518 (3.0 %) · 16: 53 / 697 (7.6 %). Timeouts are unknown labels and are excluded.
 - LP2 labelled candidates (generator + textbook): 11: 11,443 + 127 · 12: 5,406 + 347 · 13: 2,535 + 78 · 14: 975 + 97 · 15: 443 · 16: 131 ·
   ≥ 17 (no proof ≤ 16): 70 (`data/ladder/transfer_long_summary.json` → `labelled_candidates_by_bin_source`).
 - LP3 disjointness: 117 files, 5,736,567 records; 161 candidate classes excluded (156 textbook, 5 generator); 0 shared after
   (asserted) (`transfer_long_summary.json` → `disjointness`).
 - LP4 pool: 373 / 428 / 341 / 340 / 300 / 131 at `L_true` 11–16 = **1,913** (textbook 73 / 128 / 41 / 40 / 0 / 0); ≥ 17 file 70.
-  Lean accepts all 1,913 label proofs, with term size 4–16, median 9 (`artifacts/lp/lean_labels.jsonl`). Shape: `artifacts/lp/shape.md`.
+  Lean accepts all 1,913 label proofs, with term size 4–16, median 9 (`artifacts/lpool/lean_labels.jsonl`). Shape: `artifacts/lpool/shape.md`.
 - LP5 re-read subset `transfer_long_rr600.jsonl`: seed 0, 100 per bin (generator / textbook: 81/19, 66/34, 90/10, 90/10, 100/0, 100/0).
 
-Re-read (no training), pass 2 = reported (`artifacts/lp/rr2/`, tables `artifacts/lp/rr2_tables.md` by `lp_analyze.py artifacts/lp/rr2`).
+Re-read (no training), pass 2 = reported (`artifacts/lpool/rr2/`, tables `artifacts/lpool/rr2_tables.md` by `lpool_analyze.py artifacts/lpool/rr2`).
 Settings: k = 256, T 0.8, seed 0, Lean alone decides (`lean_judge`, strict grammar + Lean on the literal text).
 State models run in the environment: batch 2048, `max_action` 512, `max_steps` 48. Whole-proof models: batch 1024, `max_new` 1536.
 Models (all from scratch, 4 layers, d 256):
@@ -1330,7 +1330,7 @@ Models (all from scratch, 4 layers, d 256):
   `data/ladder/rl_targets.jsonl`; S/SN T1 from state-env, C0 T1 from ds-generator. "Frozen" = the Stage-1 checkpoint.
 - K12 / K14 (3,214,336 params, `lean_seq`): cap-horizon Stage-1, 155,000 records flat to cap 12 / 14, seed 0. Their T1
   checkpoints are not in the bucket.
-Checkpoint paths are in `lp_analyze.py` MODELS (bucket-relative); sha256 prefixes are in `artifacts/lp/ckpt_sha.txt`.
+Checkpoint paths are in `lpool_analyze.py` MODELS (bucket-relative); sha256 prefixes are in `artifacts/lpool/ckpt_sha.txt`.
 
 - LP6 solved / 100 at `L_true` 11 · 12 · 13 · 14 · 15 · 16, then / 70 at ≥ 17, then `L*` (≥ 5 solved at ≥ L):
 
@@ -1348,18 +1348,18 @@ Checkpoint paths are in `lp_analyze.py` MODELS (bucket-relative); sha256 prefixe
   S s1 1). Every frozen model and both C0 T1 models solve 0 / 73. Generator solves at 11–14 are in `rr2_tables.md`.
 - LP8 no accepted proof has fewer derivation steps (non-PR lines) than `L_true − n_prem`. Every solved theorem has a proof at
   exactly the label length or longer (e.g. SN-v2 T1 s0: 116 exact, 63 longer). Lean re-checks the fewest-step accepted proof of all
-  640 (model, theorem) solves and accepts all 640; term size 4–30, median 8 (`artifacts/lp/rr2_shortest_lean.jsonl`).
+  640 (model, theorem) solves and accepts all 640; term size 4–30, median 8 (`artifacts/lpool/rr2_shortest_lean.jsonl`).
 - LP9 truncation (pass 2):
   - state: 0.002–0.105 % of samples. Two models exceed 0.1 % in a bin: S frozen s1 at 0.238 % (161 samples, all `max_action` hits at 512) and SN-v2 T1 s0
     at 0.164 % (48 samples, all step-cap hits).
     Unsolved theorems with any truncated sample are at most 22 per model, the most solves truncation could hide.
   - whole-proof: 0.02–0.44 % of samples reach `max_new` 1536 without `<eos>`. The longest accepted whole-proof output is 362 ND
     tokens, so these are non-terminating rows.
-- LP10 pass 1 (state `max_action` 256, whole-proof batch 2048 / `max_new` 768; `artifacts/lp/rr/`, `rr_tables.md`):
+- LP10 pass 1 (state `max_action` 256, whole-proof batch 2048 / `max_new` 768; `artifacts/lpool/rr/`, `rr_tables.md`):
   - state models: identical solved sets to pass 2, since same batch and keyed noise, so pass 2 is not a re-draw for them;
   - whole-proof models: totals within ±3 (C0 T1 18 / 12, K12 91, K14 117), a genuine batch re-draw;
   - no `L*` changes.
-- LP11 old pool, 23 theorems at `L_true` ≥ 13 (smoke run, k = 32, batch 1024, `artifacts/lp/smoke/`): SN-v2 T1 s0 solves 5 / 6
+- LP11 old pool, 23 theorems at `L_true` ≥ 13 (smoke run, k = 32, batch 1024, `artifacts/lpool/smoke/`): SN-v2 T1 s0 solves 5 / 6
   generator and 0 / 17 textbook; C0 T1 s0 solves 0 / 23.
 - LP12 cost: `lp-l1` RTX 4090 $0.74/h, 1.54 h, $1.14; `lp-l2` RTX 4090 $0.74/h, 6.91 h, $5.11. Total **8.44 pod-hours, $6.25** of $8.
   CPU pods had no stock.
@@ -1386,4 +1386,4 @@ Checkpoint paths are in `lp_analyze.py` MODELS (bucket-relative); sha256 prefixe
     - "no model ≥ 5 solved at ≥ 16": miss (SN-v2 T1 s0 24, K14 5).
   - overall the pre-registration was too pessimistic about length: it read the old pool's wall at 13 as a property of the
     models, and on generator theorems it is not one.
-- LP13 bucket: `hf://buckets/dan-pandori/nd-rl/long-pool/{data/ladder,data/lp,artifacts/lp}`.
+- LP13 bucket: `hf://buckets/dan-pandori/nd-rl/long-pool/{data/ladder,data/lp,artifacts/lpool}`.

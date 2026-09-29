@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""long-pool: tables and figure for the re-read (artifacts/lp/rr/<model>.jsonl on transfer_long_rr600, <model>__ge17.jsonl
-on the L_true >= 17 file).  stdout = markdown tables; writes artifacts/lp/rr_summary.json and figures/lp_rate_by_bin.png.
-  python3 lp_analyze.py [artifacts/lp/rr2] > artifacts/lp/rr2_tables.md
+"""long-pool: tables and figure for the re-read (artifacts/lpool/rr/<model>.jsonl on transfer_long_rr600, <model>__ge17.jsonl
+on the L_true >= 17 file).  stdout = markdown tables; writes artifacts/lpool/rr_summary.json and figures/lpool_rate_by_bin.png.
+  python3 lpool_analyze.py [artifacts/lpool/rr2] > artifacts/lpool/rr2_tables.md
 L* = max L in 11..16 with >= 5 solved at L_true >= L on the 600-theorem subset; '>= 17' if >= 5 of the 70 lower-bound
 theorems are solved too; '< 11' if fewer than 5 are solved at >= 11.  Steps check: for each solved theorem, the fewest
 derivation steps (non-PR lines) of any accepted proof against L_true - n_prem (the label's derivation steps).
 """
 import json, os, sys, collections, math
 
-RR = sys.argv[1] if len(sys.argv) > 1 else 'artifacts/lp/rr2'   # pass 2 (reported); artifacts/lp/rr = pass 1
+RR = sys.argv[1] if len(sys.argv) > 1 else 'artifacts/lpool/rr2'   # pass 2 (reported); artifacts/lpool/rr = pass 1
 TAG = os.path.basename(RR)
 MODELS = [   # file stem, label, checkpoint (bucket path), params, format, rung, Stage-1 training set
     ('state-env__la_T1_S_s0_r8', 'S T1 s0', 'state-env/ckpts/se/ladder/la_T1_S_s0_r8.pt', '3,216,384', 'lean_state', 'T1 r8'),
@@ -77,7 +77,7 @@ def main():
                      'env_end': summ.get('env', {}).get('env_end'), 'peak_mem_gb': summ.get('peak_mem_gb'),
                      'batch': summ['batch'], 'wall_s': summ['wall_s'], 'max_new': summ.get('max_new'), 'max_action': summ.get('max_action'), 'declen_max': summ.get('declen_max')}
         have.append(stem)
-    json.dump(out, open(f'artifacts/lp/{TAG}_summary.json', 'w'), indent=1)
+    json.dump(out, open(f'artifacts/lpool/{TAG}_summary.json', 'w'), indent=1)
     print('Solved / 100 per `L_true` bin (k = 256, T 0.8), `transfer_long_rr600.jsonl`; ≥ 17 = solved / 70 of the lower-bound file.\n')
     print('| model | rung | ' + ' | '.join(str(L) for L in BINS) + ' | ≥ 17 | total /600 | `L*` | fewer steps than label / equal / more |')
     print('|---|---|' + '---:|' * (len(BINS) + 2) + '---|---|')
@@ -100,8 +100,8 @@ def main():
               f"{100 * sum(b[L]['trunc'] for L in BINS) / sum(b[L]['n_tried'] for L in BINS):.3f} % (max bin {max(100 * b[L]['trunc'] / b[L]['n_tried'] for L in BINS):.3f} %)")
         print(f"| {o['label']} | " + ' | '.join(f"{100 * b[L]['n_ok'] / b[L]['n_tried']:.2f}" for L in BINS) +
               f" | {(100 * g['n_ok'] / g['n_tried']) if g else float('nan'):.2f} | {tr} | {sum(b[L].get('unsolved_with_trunc', 0) for L in BINS)} | {o['peak_mem_gb']:.1f} ({o['batch']}) |")
-    if TAG == 'rr2' and os.path.exists('artifacts/lp/rr_summary.json'):
-        p1 = json.load(open('artifacts/lp/rr_summary.json'))
+    if TAG == 'rr2' and os.path.exists('artifacts/lpool/rr_summary.json'):
+        p1 = json.load(open('artifacts/lpool/rr_summary.json'))
         print('\nPass 1 (caps 256 / 768) vs pass 2 (512 / 1536), same seed: solved at 11–16 / 600, at 15–16 / 200, and `L*`.\n')
         print('| model | pass 1 | pass 2 | pass 1 at 15–16 | pass 2 at 15–16 | `L*` pass 1 → 2 |'); print('|---|---:|---:|---:|---:|---|')
         for s_ in have:
@@ -136,7 +136,7 @@ def figure(out, have):
     ax.set_title('transfer_long re-read: 100 theorems per bin (70 at ≥ 17); thin = seeds, thick = mean')
     ax.legend(fontsize=8, ncol=2); ax.grid(alpha=0.3)
     os.makedirs('figures', exist_ok=True)
-    fig.tight_layout(); fig.savefig(f'figures/lp_rate_by_bin_{TAG}.png', dpi=130)
+    fig.tight_layout(); fig.savefig(f'figures/lpool_rate_by_bin_{TAG}.png', dpi=130)
 
 
 if __name__ == '__main__':

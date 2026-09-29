@@ -8,7 +8,7 @@ per stage). Lean accepts every label proof, and no renaming class is shared with
 
 **Re-read** (k = 256, 100 theorems per bin, Lean decides; models: `numbers.md` LP6):
 
-![solve rate by bin](figures/lp_rate_by_bin_rr2.png)
+![solve rate by bin](figures/lpool_rate_by_bin_rr2.png)
 
 | `L*` s0 / s1 | S T1 | SN-v2 T1 | C0 T1 | S frozen | SN frozen | C0 frozen | K12 / K14 frozen |
 |---|---|---|---|---|---|---|---|

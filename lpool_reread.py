@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """long-pool re-read: sample one checkpoint k times per theorem of a pool and judge with Lean (no training).
-  python3 lp_reread.py --ckpt ckpts/lp/la_T1_S_s0_r8.pt --in data/ladder/transfer_long.jsonl --k 256 --temperature 0.8 \
-      --out artifacts/lp/rr/T1_S_s0.jsonl --summary artifacts/lp/rr/T1_S_s0.json --batch 4096 --max_new 512
+  python3 lpool_reread.py --ckpt ckpts/lp/la_T1_S_s0_r8.pt --in data/ladder/transfer_long.jsonl --k 256 --temperature 0.8 \
+      --out artifacts/lpool/rr/T1_S_s0.jsonl --summary artifacts/lpool/rr/T1_S_s0.json --batch 4096 --max_new 512
 Whole-proof (`lean_seq`) checkpoints go through `sample.generate` (fast path defaults), state-conditioned ones
 (`lean_state*`) through `state_sample.env_generate` in the environment, exactly as `eval_set.py` / `state_eval.py` do;
 judging is `eval_set.judge` (lean_judge: strict `lean_seq` grammar + Lean).  Rows keep every distinct accepted proof,

@@ -2,7 +2,7 @@
 """long-pool: attach Lean's verdict and term size on each label proof, drop any theorem whose label proof Lean rejects,
 and draw the re-read subset.
 
-  python3 lp_finalize.py --pool data/ladder/transfer_long.jsonl --lean artifacts/lp/lean_labels.jsonl \
+  python3 lpool_finalize.py --pool data/ladder/transfer_long.jsonl --lean artifacts/lpool/lean_labels.jsonl \
       --rr_out data/ladder/transfer_long_rr600.jsonl --rr_per_bin 100
 --lean is `lean_check.py --check <pool> --field minlen_proof --out ...` (rows in pool order, keyed by name).
 The pool file is rewritten in place with `label_lean_ok` and `label_term_size`; the re-read subset is a seed-0 draw of

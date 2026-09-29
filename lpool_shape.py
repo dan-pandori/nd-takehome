@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """long-pool: shape table of data/ladder/transfer_long.jsonl per L_true bin (from the minlen label proof and the prompt).
-  python3 lp_shape.py data/ladder/transfer_long.jsonl > artifacts/lp/shape.md"""
+  python3 lpool_shape.py data/ladder/transfer_long.jsonl > artifacts/lpool/shape.md"""
 import json, sys, collections, statistics as st
 recs = [json.loads(l) for l in open(sys.argv[1])]
 by = collections.defaultdict(list)

@@ -626,7 +626,7 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 - 18:33  CPU pods (cpu5c / cpu3c, 16–32 vCPU, secure, EUR-IS-1 too): "no instances available" on every try; A40 and
   3090 out of stock. **Deviation:** labelling runs on RTX 4090 GPU pods' CPUs (`lp-l1` $0.74/h, cpu.max 10.2 CPUs;
   `lp-l2` $0.74/h, cpu.max 54.4 CPUs).
-- 18:48  Pilot g1 on lp-l1 (`pod/lp/label.sh g1 10 100000 31000 12 40`): 24,400 generated → stage A 318 ≥ 11
+- 18:48  Pilot g1 on lp-l1 (`pod/lpool/label.sh g1 10 100000 31000 12 40`): 24,400 generated → stage A 318 ≥ 11
   → B: 180×11, 81×12, 54 ≥ 13 → C: 30×13, 14×14, 6 ≥ 15 → D: 6×15, 0×16. Survival rises with generated length
   (≥ 13: 2 / 12,601 at 12–15 lines, 38 / 5,331 at ≥ 20). Main chunks keep generated length ≥ 20 (output filter, allowed by
   the pre-registration: ≥ 2× yield per CPU-second).
@@ -635,11 +635,11 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   1.0–2.0 % (≥ 32). g3 queued: generated length 28–80, 5M tries/worker, seed 33000.
 - 19:03  Textbook: `textbook_pool.py --n 3900 --seed 41`, kept the 6 schemata that reach ≥ 11 (906), same staged labelling.
 - 19:25  lp-l1 → VPS rsync crawled (≈ 30 MB in 20 min) and elan's lazy toolchain download hung there; pods now pull
-  checkpoints from the bucket themselves (`pod/lp/fetch_ckpts.sh`, sha256 prefixes match the VPS copies) and outputs go
+  checkpoints from the bucket themselves (`pod/lpool/fetch_ckpts.sh`, sha256 prefixes match the VPS copies) and outputs go
   pod → bucket → VPS. lp-l1's files pulled via the bucket, listings diffed equal, lp-l1 deleted at 19:58 (1.54 h, $1.14).
 - 20:26–21:33  g3 (48 × 5M tries, generated length 28–80) and g4 (48 × 6M, 32–90) labelled; per-stage table
-  `artifacts/lp/stages.md`. Stage timeouts: A 0.2 %, B 0.7 %, C 3.0 %, D 7.6 %.
-- 21:33  Assembled `transfer_long.jsonl` (`lp_assemble.py`, seed 0): 373 / 428 / 341 / 340 / 300 / 131 at `L_true` 11–16,
+  `artifacts/lpool/stages.md`. Stage timeouts: A 0.2 %, B 0.7 %, C 3.0 %, D 7.6 %.
+- 21:33  Assembled `transfer_long.jsonl` (`lpool_assemble.py`, seed 0): 373 / 428 / 341 / 340 / 300 / 131 at `L_true` 11–16,
   1,913 total, 70 at ≥ 17 in a separate lower-bound file. 161 classes excluded (156 textbook, 5 generator) against 117
   files / 5.74 M records. Lean accepts all 1,913 label proofs (term size 4–16, median 9).
 - 21:35  **Deviation (budget):** the re-read uses a seed-0 subset of 100 theorems per bin (`transfer_long_rr600.jsonl`,
@@ -654,7 +654,7 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   model is also re-read on the 70 `L_true ≥ 17` theorems (queue C).
 - 22:00  Whole-proof checkpoints OOM at batch 4096 with `max_new` 768 on 24 GB (the policy's 11 GB was at `max_new` 288). They were
   re-queued at batch 2048 (lane D).
-- 23:36  Pass 1 complete: 14 models × (600-subset + ≥ 17 file), `artifacts/lp/rr/`, tables `artifacts/lp/rr_tables.md`. Lean
+- 23:36  Pass 1 complete: 14 models × (600-subset + ≥ 17 file), `artifacts/lpool/rr/`, tables `artifacts/lpool/rr_tables.md`. Lean
   accepts all 643 shortest accepted proofs (term size 4–30, median 8). **Truncation above the policy's 0.1 %:**
   - whole-proof: 0.04–0.70 % of samples hit `max_new` 768 (K14 frozen 0.70 %);
   - state: 0.04–0.27 % overall, and up to 1.06 % in a bin, almost all `max_action` 256.
@@ -664,10 +664,14 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 - 2026-09-29 00:00  **Correction to the 23:36 entry:** pass 2 is *not* a re-draw for the state models. Same seed, same batch
   2048 and keyed noise give the same samples except the rows that hit a cap, and their solved sets are identical. For whole-proof
   models the batch changed (2048 → 1024), so it is a genuine re-draw: totals within ±3, no `L*` change.
-- 01:50  Pass 2 complete (`artifacts/lp/rr2/`). Remaining truncation above 0.1 % in a bin: S frozen s1 (0.238 %,
+- 01:50  Pass 2 complete (`artifacts/lpool/rr2/`). Remaining truncation above 0.1 % in a bin: S frozen s1 (0.238 %,
   `max_action` 512 hits) and SN-v2 T1 s0 (0.164 %, step-cap hits); at most 22 / 3 unsolved theorems could hide a solve.
   Whole-proof rows at `max_new` 1536 never emit `<eos>` (longest accepted proof 362 ND tokens), so they are loops. Lean accepts
   all 640 fewest-step accepted proofs (term size 4–30, median 8).
 - 02:00  Pod lp-l2 listings diffed against local (nothing remote-only; pool md5 equal); deleted (6.91 h, $5.11). Run
-  total 8.44 pod-hours, $6.25; balance $227.56. Bucket `long-pool/{data/ladder,data/lp,artifacts/lp}` uploaded, file
+  total 8.44 pod-hours, $6.25; balance $227.56. Bucket `long-pool/{data/ladder,data/lp,artifacts/lpool}` uploaded, file
   counts match local.
+- 02:20  Namespace: the lean-prefilter run, merged into `dan` after this branch was cut, already uses `pod/lp/`, `artifacts/lp/`
+  (81 files) and `lp_*.py`. To keep the two runs' files apart, this run's files are renamed `artifacts/lpool/`, `pod/lpool/`,
+  `lpool_*.py`, `figures/lpool_*`. The raw chunk directory `data/lp/` (bucket only, untracked) keeps its name. Tables, stages and
+  shape re-derive identically after the rename. Bucket artifacts moved to `long-pool/artifacts/lpool/`.

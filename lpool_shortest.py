@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""long-pool: collect the fewest-step accepted proof of every (model, solved theorem) in artifacts/lp/rr/*.jsonl for a Lean
-term-size pass:  python3 lp_shortest.py > artifacts/lp/rr_shortest.jsonl ; python3 lean_check.py --check artifacts/lp/rr_shortest.jsonl --out artifacts/lp/rr_shortest_lean.jsonl"""
+"""long-pool: collect the fewest-step accepted proof of every (model, solved theorem) in artifacts/lpool/rr/*.jsonl for a Lean
+term-size pass:  python3 lpool_shortest.py > artifacts/lpool/rr_shortest.jsonl ; python3 lean_check.py --check artifacts/lpool/rr_shortest.jsonl --out artifacts/lpool/rr_shortest_lean.jsonl"""
 import json, glob, os
 def steps(p):
     ls = [x.strip() for x in p.split(';') if x.strip() and x.strip() != 'QED']
     return sum(1 for l in ls if not l.endswith(': PR'))
-for fn in sorted(glob.glob(os.environ.get('LP_RR', 'artifacts/lp/rr2') + '/*.jsonl')):
+for fn in sorted(glob.glob(os.environ.get('LP_RR', 'artifacts/lpool/rr2') + '/*.jsonl')):
     m = os.path.basename(fn)[:-6]
     for l in open(fn):
         r = json.loads(l)

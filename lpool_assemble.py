@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""long-pool: assemble data/ladder/transfer_long.jsonl from the staged minlen labels (pod/lp/label.sh) and check
+"""long-pool: assemble data/ladder/transfer_long.jsonl from the staged minlen labels (pod/lpool/label.sh) and check
 renaming-class disjointness against every training / evaluation set on file.
 
-  python3 lp_assemble.py --chunks g1 g2 g3 g4 tb --excl_manifest artifacts/lp/excl_manifest.txt --out data/ladder/transfer_long.jsonl
+  python3 lpool_assemble.py --chunks g1 g2 g3 g4 tb --excl_manifest artifacts/lpool/excl_manifest.txt --out data/ladder/transfer_long.jsonl
 
 Label of a record = the first stage (bounds 10, 12, 14, 16) whose search returned a proof; a timeout at any stage it
 reached = label unknown (excluded, counted); no proof at bound 16 and no timeout = `L_true >= 17` (lower bound only,
