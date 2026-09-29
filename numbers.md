@@ -1374,3 +1374,14 @@ Backfill: 32 reviewed runs → **298,943 rows**; 63 live smoke rows; the bucket 
 then on. Per-run file and row counts are in `artifacts/results-registry/backfill_report.json`.
 
 Spend: pod rr-1, RTX 3090 secure cloud, $0.50/h billed, 0.21 h, **$0.10** (`podbudget`).
+
+## repo-hygiene (2026-09-29) — no model; repository and bucket counts
+Sources: `hf://buckets/dan-pandori/nd-rl/repo-hygiene/artifacts/repo-hygiene/` (`index_pre.tsv`, `index_post.tsv`,
+`inv_*.tsv`, `bucket_ls_*.json.gz`, `ci_green.log`, `ci_red.log`); `ARTIFACTS_INDEX.tsv`.
+- Tracked under `artifacts/` at `3bfdec15`: 5,992 files, 4,159,751,936 bytes (of 4,394,344,736 tracked).
+- Before upload (`index_pre.tsv`): 2,557 files at their run path, 1,454 same content elsewhere, 1,981 absent
+  (2,889,875,938 bytes). After the mirror upload (`index_post.tsv`): 5,992 / 5,992 verified by size + xet hash. Lost: 0.
+- New tip: 549 files, 235,990,671 bytes; fresh non-sparse worktree of `e844a8ea` 227 MB (`du -sh`).
+- CI: clean-environment run green, 59 s of tests; `ci-broken` red, 5 failures. The smoke models are throwaway
+  114 k-parameter `lean_seq` models (from scratch, on `tests/fixtures/proofs150.jsonl`); their numbers mean nothing
+  else.

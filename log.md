@@ -674,3 +674,45 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 - 01:25  `registry_acceptance.py`: E1 5 / 5, E2 3 / 3, E3 25 runs, E4 3 / 3 (+1), E5 0.058 ms/row, 3.4–7.4 s per
   checkpoint. Rows uploaded; the bucket alone re-merges to the same 299,006 rows. Merged table in
   `registry_merged/`.
+
+# log — repo-hygiene (proposal 15 §6, cheap half)
+
+## 2026-09-29 — run `repo-hygiene` (executor)
+- 01:30  Start. Branch `dan_repo-hygiene` at `3bfdec15` (after results-registry). Tip: 6,529 tracked files,
+  4,394,344,736 bytes, of which `artifacts/` 5,992 files / 4,159,751,936 bytes (`git ls-tree -r -l`).
+- 01:32  Probe: pushing a `.github/workflows/*` file is refused — the VPS's only GitHub token has scopes
+  `gist, read:org, repo`, no `workflow`. Question in `QUESTIONS.md`; default: workflow as `ci/ci.yml`, run locally.
+- 01:33  Pre-registration committed (`6123570e`) before any pod; no pods used in the run.
+- 01:35  `artifact_inventory.py hash`: every blob streamed from `git cat-file` at `3bfdec15` (a sparse worktree lacks
+  most files), xet-hashed with `hf_xet.hash_files` (the hash the bucket lists). Matched against a full bucket listing
+  (22 k entries): 2,557 files already at `<run>/artifacts/<rel>` (same size + hash), 1,454 same content elsewhere,
+  1,981 (2,889,875,938 bytes; `p2` 1,535, `p3` 145, `ign` 173, `fu` 120, …) absent — the take-home-era trees.
+- 01:37  Mirror upload of all 5,992 to `repo-hygiene/git_tip/artifacts/` (xet dedup; ≈ 2 min). The second hashing
+  pass is byte-identical to the first. Re-listing: 5,992 / 5,992 mirror copies match size and hash. Negative control:
+  one corrupted hash + one corrupted size in a copy of the inventory → 2 mismatches reported. 20 random files
+  downloaded from the mirror: 20 / 20 `git hash-object` equal the original blob SHA.
+- 01:38  `git rm --cached artifacts/`. Trap: in a sparse worktree it silently skips paths outside the cone
+  (removed 150 of 5,992); `git sparse-checkout disable` then materialised 3.9 GB (disk 85 → 90 %). Second
+  `git rm --cached` removed the rest; the local tree held exactly the 5,992 inventoried files (no untracked extras)
+  and was deleted. `.gitignore`: `/artifacts/` replaces 23 per-run patterns. Commit `e844a8ea`.
+- 01:39  Fresh non-sparse `git worktree add` of the new tip: 540 files, 235,913,806 bytes apparent, 227 MB `du -sh`.
+- 01:41  CPU venv (uv, torch 2.8.0+cpu; a first attempt pulled the 5.3 GB CUDA wheel from PyPI — pinned `+cpu`).
+  Existing tests all pass on CPU. New: `tests/test_roundtrip_judge.py` (4 s), `tests/test_smoke_train_sample.py`
+  (≈ 20 s; a 50-step model never emits `<eos>` in 64 tokens, so the sampler half trains a second 100-step model that
+  memorises 4 fixture proofs: greedy 32/32 reproduced and Lean-accepted, sampled T=1 14/32 accepted),
+  `tests/test_configs.py`. `test_state_env` t6 skipped without the untracked control set; it now falls back to the
+  fixture (30/30 agree).
+- 01:48  Configs: `record.save_config(vars(a), out)` (set_config + `<out>.args.json` / `<outdir>/args.json`, flat
+  `vars(args)` + `_meta`, label `config_file` on every row). Before: 4 of 38 output-writing entry points wrote
+  `args.json` (EI drivers, grpo); 7 more only put the config in registry rows / metrics / the checkpoint. After:
+  59 / 59 scripts that take `--out`/`--outdir` call it (analysis scripts included; exempt: `artifact_inventory.py`).
+  The four EI drivers' `args.json` keeps its flat format (review scripts index it) plus `_meta`.
+- 01:52  Clean-environment CI (`artifacts/repo-hygiene/ci_clean.sh`): fresh HOME, elan-init installs Lean 4.34.1
+  (≈ 1 s download here), fresh venv from `ci/requirements-ci.txt` (38–40 s), fresh worktree. At `399d881b`: CI PASS,
+  59 s of tests (`ci_green.log`). Scratch branch `ci-broken` (`78770822`, pushed; `lean_tok.decode` drops every `.2`
+  token): 5 failures in the first test step, exit 1 (`ci_red.log`).
+- 01:55  Token re-checked: still no `workflow` scope, so the workflow stays at `ci/ci.yml` (default in QUESTIONS.md).
+  CI on GitHub is not demonstrated — a deviation from the acceptance test.
+- 01:56  Correction: the clock times in this section, STATUS.md and QUESTIONS.md were first written as estimates that
+  ran ahead of the real clock. They are now set from commit and file times. The pre-registration says "written ≈ 01:45";
+  it was committed at 01:33 (`6123570e`), before any work, and was left unedited.

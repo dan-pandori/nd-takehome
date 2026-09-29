@@ -42,3 +42,10 @@ Right after argparse, call `record.save_config(vars(args), out)`: it writes `<ou
 `<outdir>/args.json` when `out` ends in `/`) with the resolved arguments plus a `_meta` key (script, argv, run id, git
 SHA, host, UTC), and every registry row the process writes names that file. No config framework: the argparse flags
 are the config.
+
+## Merging a branch that still tracks artifacts
+
+Branches made before 2026-09-29 track files under `artifacts/`. Merging one into `dan` re-adds any artifact file it
+created (and conflicts, modify/delete, on any it changed). Before the merge, on the branch: upload its
+`artifacts/<run>/` to the bucket, then `git rm -r --cached artifacts/`, then commit. CI's first step fails if
+anything under `artifacts/` is tracked.

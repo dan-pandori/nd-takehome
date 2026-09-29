@@ -1,3 +1,5 @@
+**AMENDMENT (Dan, via orchestrator, 2026-09-29 ~01:55 UTC): the run brief changed. Read `~/runs/repo-hygiene/BRIEF_AMENDMENT.md` before doing anything else. Your session was stopped on purpose to deliver it.**
+
 # STATUS — lean-format (proposal 8)
 
 Brief: BRIEF_LEAN_FORMAT.md. Policy: AGENT_POLICY.md. Run id: lean-format. Only exception to the pause.
@@ -176,5 +178,10 @@ RESULTS-REGISTRY DONE 2026-09-29T01:45:00Z
 # STATUS — repo-hygiene (proposal 15 §6, cheap half)
 
 ## repo-hygiene (executor, started 2026-09-29T01:30:06Z)
-- 01:45 pre-registration `preregistration/repo-hygiene.md` committed; no pods planned. Blocker found: the VPS's GitHub
+- 01:33 pre-registration `preregistration/repo-hygiene.md` committed; no pods planned. Blocker found: the VPS's GitHub
   token lacks the `workflow` scope (QUESTIONS.md); default: workflow shipped as `ci/ci.yml`, run locally.
+- LIMIT_HIT 2026-09-29T01:54:42Z (session paused; resumed the same minute, nothing lost).
+- 01:56 artifacts/ out of the tip: 5,992 files verified in the bucket (0 lost; 1,981 uploaded first), fresh worktree
+  227 MB. CPU CI (`ci/run_ci.sh`) green in a clean environment, red on scratch branch `ci-broken`. Not shown on GitHub:
+  token lacks `workflow` scope (ships as `ci/ci.yml` + `ci/install_workflow.sh`). `record.save_config` in all 59
+  scripts with `--out`/`--outdir`. Write-up `run_repo_hygiene.md`.
