@@ -723,3 +723,24 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   `long-pool/artifacts/lpool/<same>` in the bucket (size + xet hash; `index_longpool.tsv`) and were also mirrored.
   Merged `origin/dan`, `git rm --cached` the 5, appended them to `ARTIFACTS_INDEX.tsv`. Their content is unchanged.
 - 01:59  CI on the merged tip failed one step, correctly: long-pool's new `lpool_assemble.py` takes `--out` without `record.save_config` (60 scripts now). Added the one line.
+
+## lit-review (executor, 2026-09-29)
+- 03:20 UTC start. No pods (guard budget $0.50 / 1 h registered). Read nd-rl STATE/proposals 13–15/latest summaries,
+  STATE_ENV.md, NOISE_FLOOR.md with targeted reads.
+- 03:35 pre-registration `preregistration/lit-review.md` committed (`dae83e61`) before any screening.
+- Source handling: `lit_review/fetch.py` pulls arXiv HTML (or the PDF via pdfminer) into `~/lr_sources/<id>.txt`
+  (kept out of git: copyrighted text); every quote in REVIEW.md names id + version + section so it can be re-fetched.
+- 03:45 five research agents (clusters: search, curricula, RL objectives, length generalisation, error feedback +
+  create-vs-elicit) and one code-mapping agent launched in parallel; outputs to `~/lr_out/`, notes to `lit_review/notes/`.
+- Correction: the pre-registration text says "≈ 03:35"; its commit time, which is the one that counts, is
+  03:22:31 UTC (`dae83e61`). Agents were launched ≈ 03:23 UTC.
+- 03:30–03:35 all six agents returned (A search, B curricula, C objectives, D length, E feedback/measurement, code map).
+  The Explore agent was read-only, so its code map was saved by the executor; its line refs were spot-checked
+  (one wrong: GRPO advantage is `grpo.py:117`, not :133).
+- Novelty check against `ladder_ei.allocate`: T2 (difficulty) and T4 (window) already implement learnability-style
+  allocation, and T6 is cross-seed pooling. Ladder-A found no frontier gain from any of them, so the curriculum
+  candidates were re-ranked from allocation to *supply*.
+- The executor independently re-checked 33 claims with `lit_review/quote.py`: 32 were verified. AlphaProof's
+  Table 1 TTRL percentages are not in the fetched text and are not cited.
+- Fixed the Interplay note's `papers:` field (it listed Yue et al.'s citekey; the note is not about that paper).
+- REVIEW.md prose is 1,498 words (tables excluded). Notes: 23. Screened: 58 papers.

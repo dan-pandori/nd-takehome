@@ -191,3 +191,5 @@ REPO-HYGIENE DONE 2026-09-29T02:00:32Z
 
 ## lit-review (executor, started 2026-09-29T03:20Z)
 - No pods. Literature screen + ranked shortlist of untried techniques; pre-registration `preregistration/lit-review.md`.
+- Done: `lit_review/REVIEW.md` (6-item ranked shortlist; top: search as the EI expert in the state env), 23 notes, 58 screened papers, `to_add_to_zotero.md`; `run_lit_review.md`. No pods, $0.
+LIT-REVIEW DONE 2026-09-29T03:36:21Z
