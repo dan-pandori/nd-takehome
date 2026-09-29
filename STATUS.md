@@ -188,3 +188,4 @@ RESULTS-REGISTRY DONE 2026-09-29T01:45:00Z
 - Merged into `dan` (`77344dfd`); local CI on `dan` green (58 s). GitHub run pending the `workflow` scope.
 - long-pool merged into `dan` meanwhile and re-added 5 artifacts/lpool files (all in the bucket): untracked; CI's config check caught its new script, fixed. CI green on the merged tip (50 s, local).
 REPO-HYGIENE DONE 2026-09-29T02:00:32Z
+QUARANTINE 2026-09-29T02:01:31Z artifacts/TEST_RUN_DONE removed from the tip of dan (e844a8ea, merged as 3cb0a0f8): test_run_once.sh's refuse-to-run-twice guard now passes in every fresh checkout, and CI's no-tracked-artifacts step forbids restoring it. Reviewer: review_repo-hygiene.md.
