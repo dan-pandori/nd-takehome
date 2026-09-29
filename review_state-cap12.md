@@ -158,3 +158,67 @@ Every shared pair is a premise permutation plus renaming. None matches on the re
 is why the ladder's replay filter and earlier split checks miss them. They come from cap-horizon's K12 and from the ladder
 pools, not from this run. They affect at most 0.44 pp of held-out and 2 of 2,285 original-pool theorems, and none of the
 long pool that carries the headline.
+
+## §Comparison (phase 2: `run_state_cap12.md`, `numbers.md` § state-cap12, `log.md`, `STATUS.md`)
+
+| # | executor's claim | my independent value | verdict |
+|---|---|---|---|
+| 1 | Q, SN-cap12 T1 = 233 / 295 / 320 / 317 (mean 291.2, IQM 306 [233, 320]) | 233 / 295 / 320 / 317; mean 291.3; IQM 306.0 [233, 320] | reproduces |
+| 2 | Q, SN-cap12 frozen = 134 / 212 / 228 / 216 | same | reproduces |
+| 3 | Q, K12 whole-proof T1 = 79 / 72 | same | reproduces |
+| 4 | Q, SN-v2 cap-6 T1 (inherited) = 102 / 28; frozen 3 / 0; K12 frozen s0 38 | same (from `lp_rr2` rows) | reproduces |
+| 5 | ≥ 17 file: T1 25 / 42 / 42 / 46; frozen 10 / 15 / 19 / 18; K12 T1 3 / 2; SN-v2 cap-6 5 / 0 | same | reproduces |
+| 6 | `L*` on the long pool: SN-cap12 T1 and frozen ≥ 17 on 4 / 4; K12 T1 16 / 16; SN-v2 cap-6 ≥ 17 / 15 | same (≥ 5-solved rule) | reproduces |
+| 7 | SN-cap12 T1 − best comparator = +215.8 vs MDD ≈ 119 (4 vs 2, sd 37) | +215.8; bootstrap 95 % [168, 243]; MDD 119 recomputed | reproduces |
+| 8 | every SN-cap12 seed (min 233) above every comparator seed (max 102); exact permutation p ≥ 2/15 | yes; C(6,2) = 15 → 2/15 two-sided | reproduces |
+| 9 | frozen SN-cap12 already beats every comparator's T1; RL adds +83 … +101 per seed | min frozen 134 > 102; paired +99 / +83 / +92 / +101 | reproduces |
+| 10 | "over C0 T1's Q of 2, the state alone adds ≈ +63 and the cap alone ≈ +74; together +289, i.e. **super-additive**" | arithmetic reproduces (65 − 2, 75.5 − 2, 291.25 − 2). But: (a) C0 carries no model label in `run_state_cap12.md` or `numbers.md` (it is `ds-generator/ckpts/ladder/la_T1_c0_s{0,1}_r8.pt`, 3,214,336 params, `lean_seq` whole-proof, cap-6 training set, ladder run under Lean ∧ `nd_verify` on 2026-09-24, re-read by `long-pool` under Lean alone; my recount of its Q is 2 / 2). (b) The 2 × 2 decomposition was not pre-registered. (c) The cells are not matched: C0's ladder ran under the old checker, and the replay sets differ (cap 6 vs K12). (d) Q is a pass@256 count, whose scale is not additive, and three cells have n = 2 (SN-v2 cap-6 spans 28–102) | **reword**: arithmetic correct; "super-additive" is an unregistered interaction on unmatched cells and a non-additive scale |
+| 11 | textbook theorems: "27–30 of 82" (run), "/82" column (numbers) | 27–30 correct, but rr600 holds **73** textbook theorems (19 / 34 / 10 / 10 at 11–14); `sc12_analysis.py:188` hard-codes 82 | **differs** (denominator) |
+| 12 | gates on K12: 1 / 3 0 / 155,000; 1b 0 / 3,000; 2 0 / 1,500 | records agree (not re-run). Gate 1b checks the `nd2lean` translation of the ND string, not the literal `lean_seq` text | reproduces (from the records); wording note |
+| 13 | "Contamination: 0 shared renaming classes" (run); numbers.md scopes it to the long pool | long pool: 0 (reproduces). Unscoped as written in the run: K12 shares 22 classes with p2 held-out and 2 with the original pool (premise permutations; inherited) | reproduces for the long pool; **scope the run's sentence** |
+| 14 | literal-text `lean_check` 3,280 / 3,280 accepted; 2,400 / 2,400 negative controls rejected | my own Lean check: 3,315 / 3,315 accepted (re-reads **and** in-loop ladder proofs, SN-cap12 and K12); 300 / 300 negative controls rejected. The executor re-checked SN-cap12 re-reads only; K12 T1 and the ladders' counted proofs are covered by my check alone | consistent; coverage now complete |
+| 15 | held-out greedy 0.969–0.978 | 0.9688 / 0.9768 / 0.9778 / 0.9744 | reproduces |
+| 16 | original pool: T1 1,960 / 2,027 / 2,024 / 1,985, `L*` 13 ×4, ≥ 13 5 / 5 / 6 / 7; frozen 1,661 / 1,769 / 1,796 / 1,727, `L*` 12 / 12 / 13 / 12; K12 T1 1,703 / 1,634, `L*` 13 / 13 | same | reproduces |
+| 17 | step cap 0.13–0.31 % (rr600); `max_steps` 96 moves solves by ≤ 7 in both directions; log: "The cap does not hide proofs" | rates reproduce. ms96 exists for s0–s1 only; s2–s3 have ≈ 2× the cap rate (0.30 %, and 1.46 % on ≥ 17) and were not tested | reproduces; **restrict "does not hide proofs" to s0–s1** |
+| 18 | "Misses, all too low": T1 Q, frozen Q, gen rates 13–16, ≥ 17 file, original pool; also K12 original `L*` 13 and step cap | correct as far as it goes, but **incomplete**. Also missed (all above the range): SN-cap12 T1 rr600 total 150–350 → 375–476; frozen rr600 total 50–200 → 248–356; frozen per-bin 5–25 / 5–25 / 3–20 / 1–12 % → 46–67 / 46–68 / 31–63 / 18–45 %; frozen `L*` rr600 14–16 → ≥ 17; frozen ≥ 17 file 0–5 → 10–19; frozen original pool 900–1,500 → 1,661–1,796; K12 T1 bin-13 rate 10–25 % → 24–36 % (gen). "Original pool 1,500–1,900 → 1,960–2,027" covers T1 only | **complete the list** |
+| 19 | spend 30.17 pod-hours, $14.91; pods deleted | `podbudget`: 30.17 h, $14.91 | reproduces |
+| 20 | gate 0 | pre-registration committed 02:34:31, first pod 02:36:16; budget registered 02:30 | reproduces |
+
+Model labels: `numbers.md` labels every arm (checkpoint, parameters, format, from scratch, training set), including the
+inherited ones and the checker behind the inherited original-pool numbers (SN-v2 "Lean alone", cap-horizon K12 "Lean ∧
+`nd_verify`" in `log.md`). The one unlabelled number is C0's Q (row 10). Wording against n: "compound" rests on 4 vs 2 seeds
+and clears the pre-registered MDD; no single-seed claims; "wall"/"never" are not used.
+
+## §Verdict
+
+**Stands.** The pre-registered primary result: SN-cap12 T1 Q 233–320 (mean 291, 4 seeds) against K12 whole-proof T1 79 / 72 and
+SN-v2 cap-6 T1 102 / 28. The gap (+216) exceeds the pre-registered MDD (119), and by the pre-registered rule compounding is
+**supported**. Every count is reproducible from the pulled literal-text dumps. All 3,315 counted proofs I sampled across
+every arm are accepted by Lean, and my harness rejects all 300 negative controls. The long pool shares no renaming class with
+any training file. Also standing: the secondary result that the cap lever transfers to the state policy (frozen Q 134–228 vs
+3 / 0), RL's paired +83 … +101 on top of Stage-1, and the original-pool numbers. No hard-constraint violation.
+
+**Reword.**
+1. "Super-additive" (run, STATUS). State it as an unregistered observation. The four cells are not matched (C0's ladder ran
+   under Lean ∧ `nd_verify`, the replay sets differ), three cells have n = 2, and pass@256 counts are not an additive scale.
+   C0 needs its model label.
+2. Textbook denominator: 73, not 82 (`sc12_analysis.py:188`).
+3. "Contamination: 0 shared renaming classes": say "with the long pool". K12 shares 22 premise-permutation classes with the
+   p2 held-out set and 2 with the original pool, which is inherited and affects ≤ 0.44 pp of held-out.
+4. "The cap does not hide proofs": on seeds 0–1. Seeds 2–3 have twice the step-cap rate and were not re-read at 96.
+5. Expected-vs-outcome: add the frozen-arm misses (totals, per-bin rates, `L*`, ≥ 17, original pool), the T1 rr600 total,
+   and K12's bin-13 rate. Every miss ran above its range; the pre-registration gave 0.15 to a win beyond the MDD.
+
+**Not supported / not derivable.** Nothing in the headline. Held-out greedy has no literal-text dump, so it rests on the
+gate's Lean verdicts. I did not re-run gates 1–3 (records only), and gate 1b checks the `nd2lean` translation rather
+than the literal text.
+
+**Outside the run (for `dan`).** `artifacts/TEST_RUN_DONE` is no longer tracked after `e844a8ea` (repo-hygiene) and is absent
+from run worktrees, so `test_run_once.sh`'s guard would not fire in them. This run did not touch the test set.
+
+**Next measurements.**
+1. Seeds 2–3 at `max_steps` 96 on rr600 and ≥ 17, to close the step-cap question where the rate is highest.
+2. If the interaction is to be claimed: a matched 2 × 2 (whole-proof and state policy × cap 6 and cap 12), all four cells
+   run with the same ladder protocol under Lean alone, ≥ 4 seeds each, with the interaction pre-registered.
+3. The long pool is now near its own ceiling for SN-cap12 T1 (47–91 % at 13–16, 36–66 % on ≥ 17). A pool labelled by
+   length above 17 (the ≥ 17 file has no per-theorem `L_true`) is needed to locate where this policy's frontier falls off.
