@@ -179,3 +179,86 @@ say so.
   - F5: the 4 garbled table rows.
   - F6: He §3.4 is worded as empirical.
   - F7: the pre-registration timestamp.
+
+## Compare (phase 2: `run_lit_review.md`, `log.md`, `REVIEW.md` §Pre-registered outcomes)
+
+| claim (executor) | reviewer's independent value | verdict |
+|---|---|---|
+| 58 papers screened, 23 in depth | 58 table rows; 23 notes | reproduces |
+| `to_add_to_zotero.md` has 56 identifiers | 54 `arxiv:` lines + 1 `url:` + 1 `doi:` = 56; none already in `references.bib` | reproduces |
+| every arXiv id in the brief was right (pre-registered expectation 5 "falsified") | The ids reproduce: the one arXiv id the brief gives (2506.02355) is correct, and all 55 in the run resolve correctly. But the brief's statement that pass@k training, the entropy mechanism and Dr. GRPO are "in `references.bib`" is wrong. | reproduces as scored. Borderline: the brief did contain a factual error about sources, just not about an *identifier*. `REVIEW.md` mentions only the DAPO part of it. |
+| executor's re-check: 32 of 33 claims verified; AlphaProof Table 1 TTRL % not found and not cited | 43 of 43 checked claims verified. 20 overlap the executor's list; all agree. | reproduces |
+| ≥ 90 % of claims verify (expectation 6, held) | 100 % of the reviewer's 43, including all 27 behind the top five | reproduces |
+| all code mappings real; GRPO advantage at `grpo.py:117` (the code-map agent's :133 corrected) | every mapping real, and :117 is right | reproduces |
+| search ranks first (expectation 1, held); pass@k shortlisted below search (4, held); positional encodings low (3, held) | the ranking in §a is as stated | reproduces. The ranking judgement is below. |
+| learnability curriculum in the top 3 (expectation 2, **falsified**, because ladder-A T2 / T4 already did it) | ladder-A: T2 and T4 transfer `L*` 10 = T1 on both seeds | reproduces; the miss is reported as a miss |
+| "Our curriculum has tried *allocation* but not *supply*… we have none" | ladder-A T5 injected static cap-6 generator records: a non-adaptive supply arm | **reword** (F2) |
+| "No paper compares a search-trained apprentice with a sampling-trained one at matched compute, evaluated without search" | Of the screened papers, TS-LLM Table 4 is the only one close (47.9 vs 47.5 greedy, compute unmatched), and `REVIEW.md` names it. The reviewer did not search beyond the 58 papers. | supported *within the screened set*; say "among the 58 screened" |
+| #1 test: "the pairing removes the Stage-1 component, about 99 % of the variance" | `NOISE_FLOOR.md`'s 99 % is per-training-run variance; EI arms are themselves runs | **not supported** (F3) |
+| pre-registration written 03:35 (text) and committed "before any screening" | committed 03:22:31. `log.md` corrects the text. | reproduces, but `log.md` is internally inconsistent: "03:45 five research agents … launched" and "03:30–03:35 all six agents returned", while the executor exited at 03:36:43 (driver log). The "03:45" line is wrong. (F7) |
+| model labels for inherited numbers (SN / S 3,216,384; C0 3,214,336; ladder-A `stage1_abs.pt` under `nd_verify`) | match the nd-rl summaries | reproduces. Literature numbers in the §a table mostly omit the paper's model (e.g. BFS-Prover 70.83 %, a 7B; Enigmata numbers from Qwen2.5-7B-Instruct). §b / §c label theirs. Minor. |
+| "No checkpoints, artifacts or data, so nothing to upload" | The run produced no ckpts or data. The source texts are copyrighted and deliberately not uploaded; `fetch.py` re-fetches by version. | acceptable |
+
+## Ranking: does it follow from the stated reasons?
+
+- **Mostly yes.** "Do first: per-step base likelihood (§c1)" is the right first move: it costs about $0 and speaks
+  to the open question directly.
+- **Where I would rank differently: #2 (frontier target supply) level with or above #1.**
+  - *Evidence from our own runs.* The `long-pool` summary's headline is that the wall at 13 "was the pool".
+    Bins ≥ 13 are dominated by textbook instances that no model solves. That makes the lack of solvable targets
+    past `L*` the best-evidenced bottleneck in the project's own data.
+  - *Cost and uncertainty.* #2 is small code (≈ $10–15). #1 needs a search loop, an `Env` clone and per-action
+    log-probs, and it is already proposal 14's item 1.
+  - *Strength of the #1 case.* It rests on a gap in the literature (no clean ExIt-vs-sampling result). That is a
+    reason the experiment is *informative*, not evidence it will *move* `L*`. The one source result
+    specifically about length, InternLM's critic-guided 4.44 vs best-first 1.66, favours a critic over plain
+    best-first. So the α = 1 best-first design has no source support for its "mean `L_true` higher at α = 1"
+    expectation. BFS-Prover ran EI at α = 0 and reports no α ablation (the executor's own note says so).
+- **#5 (value token)** duplicates proposal 14 item 1's value head. Fold it into #1's write-up rather than
+  listing it separately.
+- **#3** is ranked sensibly. `grpo.py` is whole-proof, so the test runs on C0-style models, not in the state env
+  where the other items live. Say so as a limitation on combining results.
+- **Seed plans.** The #1, #2 and #3 expectations are sign counts over 6 pairs ("≥ 5 of 6"). Under a sign test,
+  5 of 6 is p ≈ 0.11 one-sided, and only 6 of 6 reaches 0.05. Outcomes of 4 of 6 are neither expectation nor
+  falsifier. `AGENT_POLICY.md` asks for per-seed values plus IQM with a stratified-bootstrap 95 % CI. The
+  proposal-16 pre-registrations should state the MDD for the paired design and fill the 4-of-6 gap. (F4)
+
+## Verdict
+
+**What stands:**
+- Every checked source claim: 43 of 43, all 27 behind the top five.
+- Every identifier: 55 of 55.
+- Every code mapping.
+- The hard constraints: `nd_verify` unmodified and unused, no training code touched, `references.bib`
+  untouched.
+- The pre-registration predates screening, and the two misses are reported as misses.
+- The literature gap as scoped to the screened set, the "do §c1 first" recommendation, and the rejection
+  table.
+
+**Must be reworded** (for the librarian or orchestrator before proposal 16; the reviewer has not edited the
+executor's files):
+1. **F1.** #1 and #5: cite nd-rl proposal 14 item 1 (and proposal 13), which already propose search with a
+   steps-to-go value head. Present #1 as a sharpened design of that proposal: the no-search apprentice
+   readout, best-first before value, and minimal-proof targets.
+2. **F2.** "tried allocation but not supply … we have none" → "no model-conditioned supply past `L*`
+   (ladder-A T5 injected a static cap-6 generator pool, with no gain)".
+3. **F3.** Drop "the pairing removes … about 99 % of the variance". The EI-arm variance from a shared
+   checkpoint is unmeasured, so pairing's gain is unknown until a same-checkpoint re-run is measured.
+4. **F6.** He et al. §3.4: "an analytic argument (uniform (1 + ε) uplift) shows the pass@N gain needs p₀ ≈
+   1/N", not "the gain comes from".
+5. **F8.** AlphaProof's T_steps is the longest open branch, not steps-to-go overall. It matters only with
+   `Or.elim` subgoals.
+6. **F5.** Repair screened-table rows 17, 20, 32 and 37: escape the `|` characters and restore the missing
+   relevance, depth and verified cells.
+
+**Not supported:**
+- The "≈ 99 %" pairing claim (F3).
+- `log.md`'s "03:45" timestamp (F7).
+
+Nothing is quarantined.
+
+**Next measurement:**
+- §c1 (per-step base log-prob of EI-found proofs of base-unreached theorems) from files already in the bucket.
+  It is cheap and decides whether #1 or #2 should lead.
+- Before any #1 / #2 run, one same-checkpoint EI re-run pair to measure the arm-level floor that the paired
+  designs assume.
