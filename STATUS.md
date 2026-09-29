@@ -194,3 +194,8 @@ REPO-HYGIENE DONE 2026-09-29T02:00:32Z
 ## state-cap12 (executor, started 2026-09-29T02:30Z)
 - 02:36 pre-registration `preregistration/state-cap12.md` committed before any pod. Gates on K12 running on the VPS.
 - 03:55 gates 0 failures; SN-cap12 held-out 0.969 / 0.977; K12 whole-proof T1 comparator done (long-pool Q 79 / 72), its pods deleted. 4 SN T1 ladders running (≈ 3.5 h).
+- 09:50 all done. Long pool (rr600, k 256), Q = generator theorems solved at `L_true` 13–16 /380: SN-cap12 T1 233 / 295 / 320 / 317
+  (4 seeds), frozen 134–228; K12 whole-proof T1 79 / 72; SN-v2 cap-6 T1 102 / 28. The levers compound (+216 vs MDD ≈ 119),
+  super-additively. SN-cap12 T1 `L*` ≥ 17 on all seeds. Literal-text lean_check 3,280 / 3,280; negative controls 2,400 / 2,400
+  rejected. 30.17 pod-hours, $14.91, all pods deleted. Write-up `run_state_cap12.md`.
+STATE-CAP12 DONE 2026-09-29T09:51:02Z

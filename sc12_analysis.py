@@ -161,6 +161,45 @@ def main():
         if os.path.exists(p):
             d = json.load(open(p)); res.setdefault('_heldout', {})[s] = d.get('rate', d.get('acc'))
             md.append(f"- s{s}: {d.get('rate', d.get('acc'))}  ({d.get('solved')} / {d.get('n')})")
+
+    md.append('')
+    md.append('Literal-text Lean re-check (`lean_check --texts` on LEAN_GATE_DUMP; rr600 + >= 17), term size of the shortest accepted text:')
+    md.append('')
+    md.append('| model | accepted re-checked | rejected by lean_check | neg. control rejected | term size median by `L_true` 11..16, >=17 (max) |')
+    md.append('|---|---:|---:|---|---|')
+    res['_recheck'] = {}
+    for fn in sorted(glob.glob('artifacts/sc12/recheck/*_lean.jsonl')):
+        rs = [json.loads(l) for l in open(fn)]
+        acc = [r for r in rs if r['kind'] == 'acc']; neg = [r for r in rs if r['kind'] == 'rej']
+        PL = {t['prompt']: int(t['L_true']) for t in POOL.values()}
+        byL = {}
+        for r in acc:
+            if r['lean_ok'] and r.get('size') is not None:
+                byL.setdefault(PL.get(r['prompt'], 17), []).append(r['size'])
+        med = {L: sorted(v)[len(v) // 2] for L, v in sorted(byL.items())}
+        mx = max((max(v) for v in byL.values()), default=None)
+        lab = os.path.basename(fn)[:-11]
+        res['_recheck'][lab] = {'acc': len(acc), 'acc_rejected': sum(1 for r in acc if not r['lean_ok']), 'neg': len(neg),
+                                'neg_rejected': sum(1 for r in neg if not r['lean_ok']), 'size_median_by_L': med, 'size_max': mx}
+        o = res['_recheck'][lab]
+        md.append(f"| {lab} | {o['acc']} | {o['acc_rejected']} | {o['neg_rejected']} / {o['neg']} | " +
+                  ' '.join(str(med.get(L, '-')) for L in range(11, 18)) + f' ({mx}) |')
+    md.append('')
+    md.append('Textbook theorems solved in rr600 (82 textbook; bins 11-14), and sampler caps per re-read:')
+    md.append('')
+    for arm, cells in ARMS.items():
+        for sd, p in cells:
+            o = res[arm].get(sd)
+            if not o:
+                continue
+            tb = o['total'] - sum(o['gen_by_bin'].values())
+            summ = json.load(open(p[:-6] + '.json')) if os.path.exists(p[:-6] + '.json') else {}
+            e = (summ.get('env') or {}).get('env_end') or {}
+            n = summ.get('n_samples') or 1
+            cap = (f"step_cap {100 * e.get('step_cap', 0) / n:.3f} %, action_cap {100 * e.get('truncated', 0) / n:.3f} %" if e
+                   else f"max_new hit {100 * (o['trunc_frac'] or 0):.3f} %")
+            o['textbook'] = tb
+            md.append(f'- {arm} s{sd}: textbook {tb}; rr600 {cap}')
     json.dump(res, open(a.out, 'w'), indent=1, default=str)
     open(a.md, 'w').write('\n'.join(md) + '\n')
     print('\n'.join(md))

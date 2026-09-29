@@ -766,3 +766,10 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   gzipped) and `ckpts/sc12` to the bucket and a selective pull.
 - Original-pool frozen re-read was run with `--lenfield L_true_lb`, which `transfer.jsonl` lacks, so its summary's
   `by_len` is empty; `sc12_analysis.py` recomputes the bins from the per-theorem rows with `transfer.jsonl`'s `n_lines`.
+- 09:45 `sc-s2` (7.17 h, $3.51) and `sc-s3` (7.18 h, $3.52) deleted after upload + selective pull. The `max_steps` 96
+  diagnostic was stopped on s2 / s3 (their literal-text re-checks had finished): s0 / s1 had already answered it, and it
+  saved ≈ 2 pod-hours. Partial `_ms96` files there were deleted before upload.
+- 09:50 all four seeds in. Long pool Q (gen 13–16): SN-cap12 T1 233 / 295 / 320 / 317, frozen 134 / 212 / 228 / 216; K12 T1
+  79 / 72; SN-v2 cap-6 T1 102 / 28. Compounding supported (+216 vs MDD ≈ 119). Totals: 30.17 pod-hours, $14.91; RunPod
+  balance $212.58. Local artifacts, figure and `data/kh/train_k12_ge7.jsonl.gz` uploaded to the bucket.
+- 2026-09-29T09:51:02Z write-up `run_state_cap12.md`, `numbers.md` § state-cap12, figure `figures/state_cap12.png`.

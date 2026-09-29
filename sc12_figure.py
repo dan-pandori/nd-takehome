@@ -3,7 +3,8 @@
 checkpoints, k 256.  Left: T1; right: frozen (Stage-1).  Thin lines = seeds, thick = arm mean.
   python3 sc12_figure.py --summary artifacts/sc12/summary.json --out figures/state_cap12.png
 """
-import argparse, json
+import argparse, json, os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -26,6 +27,7 @@ def rates(o):
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--summary', default='artifacts/sc12/summary.json')
     ap.add_argument('--out', default='figures/state_cap12.png'); a = ap.parse_args()
+    import record; record.save_config(vars(a), a.out)
     S = json.load(open(a.summary))
     fig, axs = plt.subplots(1, 2, figsize=(11, 4.2), sharey=True, facecolor=SURF)
     xs = list(range(len(BINS) + 1)); xl = [str(L) for L in BINS] + ['≥17']

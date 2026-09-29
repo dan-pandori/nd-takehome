@@ -1385,3 +1385,77 @@ Sources: `hf://buckets/dan-pandori/nd-rl/repo-hygiene/artifacts/repo-hygiene/` (
 - CI: clean-environment run green, 59 s of tests; `ci-broken` red, 5 failures. The smoke models are throwaway
   114 k-parameter `lean_seq` models (from scratch, on `tests/fixtures/proofs150.jsonl`); their numbers mean nothing
   else.
+
+# state-cap12 (2026-09-29) — proof state + cap-12 training proofs
+
+Checker: **Lean alone** (`lean_judge` in the loop; literal texts re-checked with `lean_check`). `L_true` labels are
+ND-derived upper bounds under Lean. Source of every table: `python3 sc12_analysis.py` → `artifacts/sc12/tables.md`,
+`artifacts/sc12/summary.json`, reading `artifacts/sc12/rr/*.jsonl` (ours) and `artifacts/sc12/lp_rr2/*.jsonl`
+(`long-pool`'s pass-2 files, = `hf://buckets/dan-pandori/nd-rl/long-pool/artifacts/lpool/rr2/`).
+
+**Models** (all from scratch, 4 layers, d 256, 8 heads):
+- **SN-cap12** Stage-1 `ckpts/sc12/stage1_SN12_s{0..3}.pt`, 3,216,384 params, `lean_staten` (state input,
+  environment-assigned names), 6,000 steps × 128 proofs on `cap-horizon`'s K12 set (`data/kh/train_k12.jsonl`, cap 12,
+  flat 2–12, 155,000). T1: `ckpts/sc12/ladder/la_T1_SN12_s{0..3}_r8.pt` (8 EI rounds × k 32 on `rl_targets.jsonl`,
+  replay K12, batch 2,048, `max_action` 256, `max_steps` 48).
+- **K12 T1 (whole-proof)**, re-run here: `ckpts/ladder/la_T1_K12_s{0,1}_r8.pt`, 3,214,336 params, `lean_seq`, from
+  `cap-horizon/ckpts/kh/stage1_k12_s{0,1}.pt`, `ladder_ei.py` 8 × 32, replay K12, batch 2,048, `max_new` 512.
+- Inherited (labels as in `long-pool`): SN-v2 cap-6 T1 / frozen = `state-env` `la_T1_SN_s{0,1}_r8.pt` /
+  `stage1_SN_s{0,1}.pt` (3,216,384, `lean_staten`, cap-6 `train_depth3_f0_a1`); K12 frozen = `cap-horizon`
+  `stage1_k12_s0.pt` (3,214,336, `lean_seq`, cap 12, one seed).
+
+**Long pool** (`transfer_long_rr600.jsonl` + `transfer_long_ge17.jsonl`; final checkpoint, k 256, T 0.8, seed 0; state
+batch 2,048 / `max_action` 512 / `max_steps` 48; whole-proof batch 1,024 / `max_new` 1,536 — `long-pool` pass 2).
+Q = generator theorems solved in bins 13–16 (of 380).
+
+| model | seed | 11 | 12 | 13 | 14 | 15 | 16 | ≥ 17 /70 | total /600 | `L*` | **Q** | textbook solved /82 |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|---:|---:|
+| SN-cap12 T1 | s0 | 69 | 70 | 61 | 65 | 63 | 47 | 25 | 375 | ≥ 17 | 233 | 29 |
+| SN-cap12 T1 | s1 | 75 | 84 | 73 | 76 | 75 | 71 | 42 | 454 | ≥ 17 | 295 | 30 |
+| SN-cap12 T1 | s2 | 79 | 77 | 77 | 79 | 86 | 78 | 42 | 476 | ≥ 17 | 320 | 27 |
+| SN-cap12 T1 | s3 | 74 | 78 | 77 | 81 | 91 | 71 | 46 | 472 | ≥ 17 | 317 | 28 |
+| SN-cap12 frozen | s0 | 63 | 51 | 44 | 41 | 31 | 18 | 10 | 248 | ≥ 17 | 134 | 10 |
+| SN-cap12 frozen | s1 | 59 | 67 | 55 | 60 | 52 | 45 | 15 | 338 | ≥ 17 | 212 | 17 |
+| SN-cap12 frozen | s2 | 68 | 60 | 60 | 61 | 63 | 44 | 19 | 356 | ≥ 17 | 228 | 14 |
+| SN-cap12 frozen | s3 | 69 | 59 | 56 | 58 | 57 | 45 | 18 | 344 | ≥ 17 | 216 | 14 |
+| K12 T1 whole-proof | s0 | 52 | 29 | 32 | 25 | 15 | 7 | 3 | 160 | 16 | 79 | 0 |
+| K12 T1 whole-proof | s1 | 46 | 33 | 22 | 22 | 21 | 7 | 2 | 151 | 16 | 72 | 0 |
+| SN-v2 cap-6 T1 (inh.) | s0 | 42 | 35 | 31 | 30 | 22 | 19 | 5 | 179 | ≥ 17 | 102 | 6 |
+| SN-v2 cap-6 T1 (inh.) | s1 | 25 | 15 | 14 | 9 | 3 | 2 | 0 | 68 | 15 | 28 | 2 |
+| SN-v2 cap-6 frozen (inh.) | s0 / s1 | 7 / 3 | 1 / 1 | 2 / 0 | 1 / 0 | 0 | 0 | 0 | 11 / 4 | 11 / < 11 | 3 / 0 | 0 |
+| K12 frozen (inh.) | s0 | 33 | 17 | 12 | 12 | 12 | 2 | 0 | 88 | 15 | 38 | 0 |
+
+Q per arm: SN-cap12 T1 **233 / 295 / 320 / 317** (mean 291.2, sd 40.4, IQM 306 [bootstrap 233, 320]); SN-cap12 frozen
+134 / 212 / 228 / 216 (mean 197.5); K12 T1 79 / 72 (75.5); SN-v2 cap-6 T1 102 / 28 (65.0). SN-cap12 T1 − the best
+comparator (K12 T1) = **+215.8**, against the pre-registered MDD ≈ 119 (4 vs 2 seeds, sd 37). Every SN-cap12 seed (min
+233) is above every comparator seed (max 102); the exact 4-vs-2 permutation test's smallest attainable two-sided p is
+2/15 = 0.13, so this is a parametric, not a permutation, result. T1 − frozen on the same seed: +99 / +83 / +92 / +101.
+
+**Original pool** (`transfer.jsonl`, 2,285): in-loop cumulative T1 (`artifacts/sc12/la_T1_*/round_8.json`), frozen =
+Stage-1 re-read at k 256 (`artifacts/sc12/rr/stage1_SN12_s*__orig.jsonl`).
+
+| model | T1 solved | T1 `L*` | T1 at `L_true` ≥ 13 | frozen solved | frozen `L*` | frozen ≥ 13 |
+|---|---|---|---|---|---|---|
+| SN-cap12 s0 / s1 / s2 / s3 | 1,960 / 2,027 / 2,024 / 1,985 | 13 ×4 | 5 / 5 / 6 / 7 | 1,661 / 1,769 / 1,796 / 1,727 | 12 / 12 / 13 / 12 | 4 / 4 / 5 / 3 |
+| K12 whole-proof s0 / s1 (re-run, Lean alone) | 1,703 / 1,634 | 13 / 13 | 5 / 5 | — | — | — |
+| SN-v2 cap 6 (`state-env`, Lean alone) | 1,557 / 1,403 | 12 / 12 | 3 / 1 | 975 / 801 (frozen ladder) | 11 / 11 | — |
+
+**Held-out greedy** (`data/p2/heldout.jsonl`, 5,000), SN-cap12 Stage-1: 0.9688 / 0.9768 / 0.9778 / 0.9744
+(`artifacts/sc12/heldout_SN12_s*.json`).
+
+**Checks.** Gates on K12 (canonical names): 1 / 3 **0 / 155,000**, 1b 0 / 3,000 Lean rejections, 2 **0 / 1,500** on ≥ 7-line
+proofs (`artifacts/sc12/gate13_canon_k12.json`, `gate2_canon_k12ge7.json`). Contamination: 0 of 155,000 K12 and 0 of
+4,495 RL targets share a renaming class with the long pool (file key and a premise-order-invariant key). Literal-text
+re-check (`artifacts/sc12/recheck/*_lean.jsonl`): **3,280 / 3,280** accepted texts (shortest per solved prompt, 8 SN-cap12
+models) accepted by `lean_check`; **2,400 / 2,400** negative controls rejected. Term size of the shortest accepted
+text, median by bin 11 … 16, ≥ 17: T1 s0 8 12 10 11 12 13 16 (max 28 over all bins; max over the 8 models 37).
+Sampler caps (rr600): T1 step cap **0.13–0.31 %** (> 0.1 %), action cap 0.02–0.03 %; frozen ≤ 0.04 %; K12 T1 `max_new`
+hit 0.03–0.04 %. `max_steps` 96 diagnostic (`artifacts/sc12/rr/*_ms96.json`): T1 s0 368 vs 375, s1 455 vs 454, ≥ 17 file
+25 vs 25 / 42 vs 42; Stage-1 s0 241 vs 248, s1 345 vs 338; step-cap hits → ≤ 0.001 %.
+
+**Spend.** `sc-s0`, `sc-s1` RTX 3090 $0.50/h (6.49 h, 6.74 h); `sc-s2`, `sc-s3` A40 $0.49/h (7.17 h, 7.18 h); `sc-k0`,
+`sc-k1` A40 $0.49/h (1.31 h, 1.30 h). Total **30.17 pod-hours, $14.91** of 40 h / $20. All deleted.
+
+**Bucket** `hf://buckets/dan-pandori/nd-rl/state-cap12/`: `ckpts/sc12/` (4 Stage-1 + 32 ladder checkpoints),
+`ckpts/ladder/` (K12 T1 rounds), `artifacts/sc12/` (rounds, found files, re-reads, re-checks, gzipped Lean dumps with the
+literal texts), `data/kh/train_k12_ge7.jsonl.gz`, `figures/state_cap12.png`. K12 itself: `cap-horizon/data/kh/`.
