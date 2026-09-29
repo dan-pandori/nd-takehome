@@ -149,7 +149,7 @@ Read `FAST_STAGE1.md`, `run_fast_stage1.md`. 1.49 pod-h, $1.47 of $5; pods delet
 ## long-pool (executor, started 2026-09-28T18:19:50Z)
 Build `data/ladder/transfer_long.jsonl` (≥ 100 per `L_true` bin 11–16) and re-read existing checkpoints on it. Pre-registration
 `preregistration/long-pool.md`. Budget $8 / 16 pod-h.
-LONG-POOL DONE 2026-09-29T01:54:33Z — `data/ladder/transfer_long.jsonl`: 1,913 theorems, 373 / 428 / 341 / 340 / 300 / 131 at `L_true` 11–16
+LONG-POOL DONE 2026-09-29T01:54:33Z — `data/ladder/transfer_long.jsonl`: 1,913 theorems, 373 / 428 / 341 / 340 / 300 / 131 at `L_true` 11–16 Pool merged into `dan` (`470d39e0`).
 (+ 70 at ≥ 17, lower bound), class-disjoint from 117 files, all label proofs Lean-checked; POOLS.md section. Re-read (k 256, 100/bin):
 `L*` S T1 14/15, SN-v2 T1 ≥17/15, C0 T1 12/12, K12/K14 frozen 15/16, S/SN/C0 frozen ≤ 11. The old wall at 13 was mostly the old
 pool's textbook-dominated tail (textbook 10 solves in 73×14 reads). Read `run_long_pool.md`, `numbers.md` § long-pool.

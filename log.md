@@ -675,3 +675,7 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   (81 files) and `lp_*.py`. To keep the two runs' files apart, this run's files are renamed `artifacts/lpool/`, `pod/lpool/`,
   `lpool_*.py`, `figures/lpool_*`. The raw chunk directory `data/lp/` (bucket only, untracked) keeps its name. Tables, stages and
   shape re-derive identically after the rename. Bucket artifacts moved to `long-pool/artifacts/lpool/`.
+- 02:30  Pool merged into the fork's `dan` as `470d39e0`, pool-only: the `transfer_long*` files, the POOLS.md section,
+  `lpool_{assemble,finalize,shape,stages}.py`, `pod/lpool/{label,sync}.sh`, and `artifacts/lpool/{excl_manifest.txt,stages.md,shape.md,
+  lean_labels.jsonl,assemble.log}`. POOLS.md on `dan` had not changed since this branch's base, so the section is a pure addition.
+  The re-read, numbers, log and write-up stay on `dan_long-pool` for review.
