@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # long-pool-2: generate + staged minlen labelling, long-pool's stages A-D plus stage E (bound 17 / 1,800 s).
 # Usage: label.sh <tag> <workers> <tries_per_worker> <seed> [gen_min] [gen_max]      Output data/lp2/<tag>*.
+# Time limits are CPU seconds per theorem (pod/lpool2/minlen_cpu.py; from 21:55 UTC, chunks started before used wall seconds).
 # Each stage runs on the previous stage's None-without-timeout records.  Restartable (a complete stage is skipped).
 # calib mode: label.sh calib <workers>  -> stage E only, on data/ladder/transfer_long_ge17.jsonl.
 cd /workspace/nd-takehome; export OMP_NUM_THREADS=1
@@ -21,7 +22,7 @@ fi
 IFS='|'; for st in $STAGES; do IFS=' '
   set -- $st; out=data/lp2/${T}_ml$2.jsonl
   if [ ! -s $out ] || [ $(wc -l < $out) -lt $(wc -l < $prev) ]; then
-    [ -s $prev ] && python3 minlen.py --in $prev --out $out --bound $2 --time $3 --procs $W >> $L 2>&1 || touch $out
+    [ -s $prev ] && python3 pod/lpool2/minlen_cpu.py --in $prev --out $out --bound $2 --time $3 --procs $W >> $L 2>&1 || touch $out
   fi
   [ $1 = E ] && break
   python3 - $prev $out data/lp2/${T}_cand$2.jsonl <<'PY' >> $L

@@ -787,3 +787,10 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   (`g*_cand14` ∩ timeout in `g*_ml16`, same generator family, their bound-16 search was cut at 600 s) are re-searched
   with `minlen` bound 17 / 3,600 s as chunk `lpto` (`data/lp2/lpto.jsonl`): a proof ≤ 16 → excluded; 17 → exact 17;
   finished without proof → lower bound 18; timeout → still unknown, excluded. Queued on `lp2-a` after calibration.
+- 21:50 **`lp2-a` is CPU-starved**: after 5 h its 7 stage-E workers had 13–60 CPU-minutes each (≈ 15 % of a core; load
+  8–18 against a 7.65 quota), so its wall-clock limits (1,800 s) meant ≈ 270 CPU-s. `lp2-b` workers get a full core
+  (14:46 CPU in 14:47 wall). Fix: `pod/lpool2/minlen_cpu.py` runs `minlen.main()` with `time.time` replaced by
+  `time.process_time`, so every limit is **CPU seconds per theorem**; the search is unchanged. `label.sh` uses it for
+  chunks started from 21:55 (b6, c9, d6, …); earlier chunks ran on `lp2-b` with wall limits, which on its full cores are
+  ≈ CPU limits (oversubscribed phases make them stricter, never looser — a timeout is excluded, never a label).
+  The calibration stage E will be re-run with CPU-time limits on a new pod; `lp2-a`'s wall-clock result is kept as a record.
