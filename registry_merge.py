@@ -12,7 +12,7 @@ key!=v drops; key~substr keeps rows containing substr. Keys are row columns or l
 Exact duplicate rows (same content apart from utc / host / row file, e.g. a coverage shard re-summarised by a resumed
 job that found every theorem done) are kept once.  See REGISTRY.md.
 """
-import argparse, csv, glob, json, os, subprocess, sys
+import argparse, csv, glob, gzip, json, os, subprocess, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import record
 
@@ -24,7 +24,7 @@ VOLATILE = ('utc', 'host', '_file')
 def load(paths):
     rows, seen = [], set()
     for p in paths:
-        for l in open(p):
+        for l in (gzip.open(p, 'rt') if p.endswith('.gz') else open(p)):
             if not l.strip():
                 continue
             r = json.loads(l)
@@ -74,10 +74,11 @@ def main():
     ap.add_argument('--cols', default='run_id,arm,seed,role,metric,value,n,ckpt,source')
     ap.add_argument('--sort', default='run_id,arm,seed')
     a = ap.parse_args()
-    local = [] if a.no_local else sorted(glob.glob(os.path.join(ROOT, 'artifacts', '*', 'registry', '*.jsonl')))
+    local = [] if a.no_local else sorted(glob.glob(os.path.join(ROOT, 'artifacts', '*', 'registry', '*.jsonl'))
+                                         + glob.glob(os.path.join(ROOT, 'artifacts', '*', 'registry', '*.jsonl.gz')))
     if a.upload:
         for p in local:
-            rid = json.loads(open(p).readline())['run_id']
+            rid = json.loads((gzip.open(p, 'rt') if p.endswith('.gz') else open(p)).readline())['run_id']
             record.bucket_cp(p, f'{record.BUCKET}/registry/{rid}/{os.path.basename(p)}', verify=False)
             print('uploaded', p)
     paths = list(local)
@@ -85,7 +86,7 @@ def main():
         os.makedirs(CACHE, exist_ok=True)
         subprocess.run([record.hf_bin(), 'buckets', 'sync', f'{record.BUCKET}/registry', CACHE], check=True,
                        capture_output=True)
-        paths += sorted(glob.glob(os.path.join(CACHE, '**', '*.jsonl'), recursive=True))
+        paths += sorted(glob.glob(os.path.join(CACHE, '**', '*.jsonl*'), recursive=True))
     rows = load(paths)
     print(f'{len(rows)} rows from {len(paths)} files', file=sys.stderr)
     if a.out:

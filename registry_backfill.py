@@ -122,8 +122,9 @@ def main():
         base = os.path.join(SRC, rid)
         files = sorted(glob.glob(os.path.join(base, '**', '*.json'), recursive=True))
         fn = os.path.join(OUT, f'backfill_{rid}.jsonl')
-        if os.path.exists(fn):
-            os.remove(fn)
+        for x in (fn, fn + '.gz'):
+            if os.path.exists(x):
+                os.remove(x)
         os.environ['ND_REGISTRY_DIR'] = OUT
         record._state['file'] = fn
         os.environ['ND_RUN_ID'] = rid
@@ -174,6 +175,21 @@ def main():
                                        **{k: v for k, v in common.items() if k != 'source'})
                     cnt['round_files'] += 1
                     cnt['round_files_no_rows'] += cnt['rows'] == before
+                elif m and isinstance(d, dict) and 'ckpt' in d:
+                    # no args.json: init = round 1's checkpoint, frozen = every round sampled the same checkpoint
+                    dr = os.path.dirname(f)
+                    cks = {}
+                    for g in glob.glob(os.path.join(dr, 'round_*.json')):
+                        try:
+                            cks[g] = json.load(open(g)).get('ckpt')
+                        except Exception:
+                            pass
+                    r1 = cks.get(os.path.join(dr, 'round_1.json'))
+                    frozen = len(cks) > 1 and len(set(cks.values())) == 1
+                    common.update(kind='round', arm=os.path.relpath(dr, base).split('artifacts/', 1)[-1],
+                                  role_from='no args.json: init = round-1 ckpt, frozen = one ckpt in every round')
+                    record.round_stats(d, f, init=r1, frozen=frozen, **{k: v for k, v in common.items() if k != 'source'})
+                    cnt['round_files_noargs'] += 1
                 elif isinstance(d, dict) and isinstance(d.get('slices'), dict) and 'ckpt' in d and 'model' in d:
                     common.update(kind='sdeval')
                     record.sdeval_rows(d, f, **{k: v for k, v in common.items() if k != 'source'})
@@ -206,7 +222,11 @@ def main():
                     r['backfilled'] = True
                     r['labels'].pop('backfill', None)
                     r['host'] = None
+                    if r.get('config') is not None:    # the arm's args.json, by reference (it is in backfill_src)
+                        r['labels']['config_file'] = os.path.relpath(os.path.join(os.path.dirname(os.path.join(ROOT, r['source'])), 'args.json'), ROOT)
+                        r['config'] = None
                     fo.write(json.dumps(r) + '\n')
+            subprocess.run(['gzip', '-f', fn], check=True)
         report[rid] = {'files': len(files), **cnt, 'skipped_other_names': dict(skipped[rid].most_common(8))}
         print(rid, dict(report[rid]), flush=True)
     json.dump(report, open(os.path.join(ROOT, 'artifacts', 'results-registry', 'backfill_report.json'), 'w'), indent=1)
