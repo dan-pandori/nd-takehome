@@ -157,3 +157,10 @@ Brief: nd-rl `docs/proposals/improvements/BRIEF_lean-prefilter.md`. Policy: nd-r
 - Deliverables: `LEAN_GATE.md`, `run_lean_prefilter.md`, `numbers.md` § lean-prefilter, `log.md`, bucket `hf://buckets/dan-pandori/nd-rl/lean-prefilter/artifacts/lp/`. Merged into the fork's `dan`.
 
 LEAN-PREFILTER DONE 2026-09-28T18:20:39Z — sound reject-only pre-filter (0 false rejects / 1.31 M texts), pipelined quota-sized gate; T1 round 1,111 s → 259 s. Pods deleted, bucket synced.
+
+# STATUS — results-registry (proposal 15 §5)
+
+Brief: `docs/proposals/improvements/BRIEF_results-registry.md` (nd-rl). Run id: results-registry. Budget $1 / 2 pod-hours.
+
+## results-registry
+- 2026-09-29 00:20 UTC  run started (executor). Pre-registration `preregistration/results-registry.md` committed before any pod.
