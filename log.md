@@ -718,3 +718,7 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   it was committed at 01:33 (`6123570e`), before any work, and was left unedited.
 - 01:57  Fast-forwarded `dan` to `77344dfd` (`3bfdec15..77344dfd`). `ci/run_ci.sh` on a fresh worktree of `origin/dan`:
   CI PASS, 58 s (`ci_dan.log`, uploaded). The VPS venv and staging dirs were deleted (disk 86 %).
+- 01:58  Push to `dan` rejected: `long-pool` fast-forwarded `dan` to `470d39e0` in between, re-adding 5 files
+  under `artifacts/lpool/` (1,522,220 bytes) — the case CONTRIBUTING.md describes. All 5 were already at
+  `long-pool/artifacts/lpool/<same>` in the bucket (size + xet hash; `index_longpool.tsv`) and were also mirrored.
+  Merged `origin/dan`, `git rm --cached` the 5, appended them to `ARTIFACTS_INDEX.tsv`. Their content is unchanged.
