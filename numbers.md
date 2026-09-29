@@ -1385,3 +1385,17 @@ Sources: `hf://buckets/dan-pandori/nd-rl/repo-hygiene/artifacts/repo-hygiene/` (
 - CI: clean-environment run green, 59 s of tests; `ci-broken` red, 5 failures. The smoke models are throwaway
   114 k-parameter `lean_seq` models (from scratch, on `tests/fixtures/proofs150.jsonl`); their numbers mean nothing
   else.
+
+## repo-hygiene-2 (2026-09-29; no model — repository bookkeeping)
+
+| quantity | value | source |
+|---|---:|---|
+| files untracked by repo-hygiene + repo-hygiene-2 | 6,006 | `rh2_acceptance.py` → `artifacts/repo-hygiene-2/acceptance_dan.md` |
+| tracked again, same blob | 3,953 | same |
+| manifest rows (bucket sha256 ok) | 2,054 (2,054) | `artifacts/MANIFEST.jsonl`, `artifacts/repo-hygiene-2/verify_bucket.tsv` |
+| lost | 0 | same |
+| fresh non-sparse `dan` worktree | 148.1 MB | `artifacts/repo-hygiene-2/fresh_worktree.txt` |
+| credential-scan hits (6,023 bucket objects, 4.33 GB) | 0 | `artifacts/repo-hygiene-2/secret_scan_bucket.tsv` |
+| noise-floor `nf_analysis.py` after fetch vs tracked summary | byte-identical | `artifacts/repo-hygiene-2/nf_summary_refetched.json`, `fetch_nf.log` |
+
+Bucket: `hf://buckets/dan-pandori/nd-rl/repo-hygiene-2/` (`git_tip/` = the 9 moved ckpts/data files; `artifacts/repo-hygiene-2/`).

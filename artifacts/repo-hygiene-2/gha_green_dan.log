@@ -1,0 +1,78 @@
+ok  size guard: no tracked file > 5 MB, no bulk kind under artifacts/ (ci/check_sizes.sh) (0s)
+ok  artifacts/MANIFEST.jsonl well-formed; no manifest path tracked (1s)
+ok  tokenizer + lean_seq round-trips, Lean judge on a fixed sample (2s)
+ok  lean_check selftest (free-form Lean allowlist: Not.elim and negatives) (1s)
+ok  Lean-only judge (no nd_verify on any judging path) (1s)
+ok  lean-prefilter soundness (1s)
+  ok   byte-for-byte: have n1 : ( P ∧ Q ) := h1 ; have n2 : P := n1.1 ; exact n2
+  ok   inverse(text) == the ND proof: N1 ( P & Q ) : PR ; N2 P : ANDE1 N1 ; QE
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : ( P ∧ Q ) := h1 ; have n2 : Q := n1.2 ; exact n2
+  ok   inverse(text) == the ND proof: N1 ( P & Q ) : PR ; N2 Q : ANDE2 N1 ; QE
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : P := h1 ; have n2 : Q := h2 ; have n3 : ( P ∧ Q 
+  ok   inverse(text) == the ND proof: N1 P : PR ; N2 Q : PR ; N3 ( P & Q ) : A
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : P := h1 ; have n2 : ( P ∨ Q ) := Or.inl n1 ; exa
+  ok   inverse(text) == the ND proof: N1 P : PR ; N2 ( P v Q ) : ORI1 N1 ; QED
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : Q := h1 ; have n2 : ( P ∨ Q ) := Or.inr n1 ; exa
+  ok   inverse(text) == the ND proof: N1 Q : PR ; N2 ( P v Q ) : ORI2 N1 ; QED
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : ( P → Q ) := h1 ; have n2 : P := h2 ; have n3 : 
+  ok   inverse(text) == the ND proof: N1 ( P > Q ) : PR ; N2 P : PR ; N3 Q : I
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : ( ¬ P ) := h1 ; have n2 : P := h2 ; have n3 : Fa
+  ok   inverse(text) == the ND proof: N1 ( ~ P ) : PR ; N2 P : PR ; N3 F : NEG
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : False := h1 ; have n2 : P := n1.elim ; exact n2
+  ok   inverse(text) == the ND proof: N1 F : PR ; N2 P : BOTE N1 ; QED
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : ( ¬ ( ¬ P ) ) := h1 ; have n2 : P := Classical.b
+  ok   inverse(text) == the ND proof: N1 ( ~ ( ~ P ) ) : PR ; N2 P : DN N1 ; Q
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : Q := h1 ; have n2 : ( P → Q ) := ( fun ( n3 : P 
+  ok   inverse(text) == the ND proof: N1 Q : PR ; N2 | P : AS ; N3 | Q : R N1 
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : ( ¬ P ) := h1 ; have n2 : ( ¬ P ) := ( fun ( n3 
+  ok   inverse(text) == the ND proof: N1 ( ~ P ) : PR ; N2 | P : AS ; N3 | F :
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   byte-for-byte: have n1 : ( P ∨ Q ) := h1 ; have n2 : ( Q ∨ P ) := Or.elim
+  ok   inverse(text) == the ND proof: N1 ( P v Q ) : PR ; N2 | P : AS ; N3 | (
+  ok   every state is <st> ... ⊢ goal <act>
+  ok   step 1 scope ['h1']
+  ok   step 2 scope ['h1', 'n1']
+  ok   branch 1 sees its binder n3 and not the have it is proving: ['h1', 'n1', 'n3']
+  ok   branch 2 sees only its own binder n5 (branch 1 is gone): ['h1', 'n1', 'n5']
+  ok   after both branches close, only the finished have n2: ['h1', 'n1', 'n2']
+  ok   the environment named branch 2's binder n5, so the next have is n6, as in the original text
+  ok   every goal in this proof is the conclusion
+  ok   premise out of order: rejected as 'PR position'
+  ok   out-of-scope name: rejected as 'unbound'
+  ok   missing semicolon: rejected as 'PR form'
+  ok   exact before anything is proved: rejected as 'unbound'
+  ok   malformed pair: rejected as 'term'
+  ok   not an action: rejected as 'action head'
+  ok   premise 1 accepted
+  ok   premise 2 accepted
+  ok   exact on a non-last hypothesis: 'exact not last'
+  ok   exact whose formula is not the goal: 'exact goal mismatch'
+  ok   ∧-intro accepted
+  ok   exact on the goal finishes the attempt
+  ok   box binder that is not the antecedent: 'binder mismatch'
+  ok   lean_seq vocabulary unchanged at 107
+  ok   lean_state adds exactly four tokens
+  ok   ref0 still points at n1
+  ok   only lean_stateh prepends the history
+  ok   a have with any name is accepted
+  ok   ... and named n<base+1> = n6: n6
+  ok   citations are the state's names
+  ok   renamed 2 of 2
+  ok   a canonical proof replays with 0 renames
+  ok   gate2 on 30 cases: agree 30, mismatches 0
+ok  state-env round-trip and replay (0s)
+ok  relabel marker (3s)
+ok  results registry (5s)
+ok  every script with --out/--outdir records its config (record.save_config) (0s)
+ok  50-step CPU training + sampler smoke (11s)
+CI PASS (25s)
