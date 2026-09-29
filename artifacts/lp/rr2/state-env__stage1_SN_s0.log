@@ -1,0 +1,13 @@
+[lean_gate] 153600 samples, parse-fail 32364, distinct checked 72307: lean ok 136, lean rej 72171; lean 60.6s wall (4419.1s proc, 128 workers)
+state-env__stage1_SN_s0.pt on transfer_long_rr600.jsonl k=256 SOLVED 11/600 = 0.018 [0.010,0.033]
+  len 11: 7/100 = 0.070 [0.034,0.137]
+  len 12: 1/100 = 0.010 [0.002,0.054]
+  len 13: 2/100 = 0.020 [0.006,0.070]
+  len 14: 1/100 = 0.010 [0.002,0.054]
+  len 15: 0/100 = 0.000 [0.000,0.037]
+  len 16: 0/100 = 0.000 [0.000,0.037]
+  written hist {11: 17, 12: 1, 13: 3, 14: 3}
+  pruned hist {9: 1, 10: 14, 11: 3, 12: 3, 13: 2, 14: 1}
+  frontier written 11 pruned 10
+  reasons [('lean rejected', 120996), ('lean_seq parse: env: exact goal mismatch', 12394), ('lean_seq parse: env: formula', 9097), ('lean_seq parse: env: unbound', 4879), ('lean_seq parse: env: binder mismatch', 1846), ('lean_seq parse: env: PR position', 1660)]
+{"n": 600, "solved": 11, "rate": 0.018333333333333333, "ci": [0.010267199437239104, 0.03252812966893709], "written_hist": {"11": 17, "12": 1, "13": 3, "14": 3}, "pruned_hist": {"9": 1, "10": 14, "11": 3, "12": 3, "13": 2, "14": 1}, "frontier_written": 11, "frontier_pruned": 10, "reasons": {"lean rejected": 120996, "lean_seq parse: env: exact goal mismatch": 12394, "lean_seq parse: env: formula": 9097, "lean_seq parse: env: unbound": 4879, "lean_seq parse: env: binder mismatch": 1846, "lean_seq parse: env: PR position": 1660, "lean_seq parse: env: assign": 769, "lean_seq parse: env: box head": 531, "lean_seq parse: env: exact not last": 389, "lean_seq parse: env: Or.elim on non-or": 337}, "ckpt": "ckpts/lp/state-env__stage1_SN_s0.pt", "in": "data/ladder/transfer_long_rr600.jsonl", "k": 256, "temperature": 0.8, "seed": 0, "batch": 2048, "state_mode": true, "tok_mode": "lean_staten", "gen_s": 555.0881404876709, "wall_s": 555.2724285125732, "peak_mem_gb": 14.011382102966309, "n_samples": 153600, "max_action": 512, "max_steps": 48}

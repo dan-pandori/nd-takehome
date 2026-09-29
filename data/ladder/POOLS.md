@@ -113,7 +113,7 @@ term size by `lean_check`'s definition (`label_term_size`) is 4–16, median 9. 
 bound under Lean**, like the ladder's labels: Lean may accept a shorter proof (e.g. `n.elim` on `n : ¬A`).
 
 ## Disjointness (renaming class = `gen.canon_key` over the prompt, premise order kept)
-Candidates (16,906 labelled `L_true` ≥ 11 plus 70 at ≥ 17, 8 duplicate classes across chunks dropped) were checked against
+Candidates (21,582 labelled `L_true` 11–16 plus 70 at ≥ 17 = 21,652 classes; 8 duplicate classes across chunks dropped) were checked against
 **117 files, 5,736,567 records** (`artifacts/lp/excl_manifest.txt`). The files are:
 - every `data/**/*.jsonl` in git: the ladder's transfer / rl_targets, held-out, all `data/p2` target and transfer pools,
   and the r1–r3 pools;
@@ -160,3 +160,6 @@ Record fields are as for `transfer.jsonl`: `n_lines = L_true`, `minlen_bound`, `
 **Numbers on this pool are not comparable with `transfer.jsonl` numbers.** It is a different theorem distribution, with
 100–400 theorems per bin where the old pool had 10–102 at 11–14. That changes what `L*` (≥ 5 solved at ≥ L) means, so
 report per-bin rates.
+Measured on this pool (run `long-pool`, `numbers.md` LP6–LP7): textbook instances are much harder than generator theorems
+at the same `L_true`. Fourteen checkpoints solved 10 of 73 × 14 textbook reads at 11–14, while T1 models solved 1–52 % of
+generator theorems per bin. Report source-split rates in bins 11–14, where the pool mixes the two.

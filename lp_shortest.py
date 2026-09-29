@@ -5,7 +5,7 @@ import json, glob, os
 def steps(p):
     ls = [x.strip() for x in p.split(';') if x.strip() and x.strip() != 'QED']
     return sum(1 for l in ls if not l.endswith(': PR'))
-for fn in sorted(glob.glob('artifacts/lp/rr/*.jsonl')):
+for fn in sorted(glob.glob(os.environ.get('LP_RR', 'artifacts/lp/rr2') + '/*.jsonl')):
     m = os.path.basename(fn)[:-6]
     for l in open(fn):
         r = json.loads(l)

@@ -661,3 +661,13 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   Some unsolved theorems had a truncated sample: up to 42 per state model. **Pass 2** re-reads all 14 models with the caps raised:
   state `max_action` 512 at batch 2048; whole-proof `max_new` 1536 at batch 1024 (the largest that fits with that
   `max_new`). Pass 2 is the reported pass. Pass 1 is kept as an independent re-draw at lower caps.
+- 2026-09-29 00:00  **Correction to the 23:36 entry:** pass 2 is *not* a re-draw for the state models. Same seed, same batch
+  2048 and keyed noise give the same samples except the rows that hit a cap, and their solved sets are identical. For whole-proof
+  models the batch changed (2048 → 1024), so it is a genuine re-draw: totals within ±3, no `L*` change.
+- 01:50  Pass 2 complete (`artifacts/lp/rr2/`). Remaining truncation above 0.1 % in a bin: S frozen s1 (0.238 %,
+  `max_action` 512 hits) and SN-v2 T1 s0 (0.164 %, step-cap hits); at most 22 / 3 unsolved theorems could hide a solve.
+  Whole-proof rows at `max_new` 1536 never emit `<eos>` (longest accepted proof 362 ND tokens), so they are loops. Lean accepts
+  all 640 fewest-step accepted proofs (term size 4–30, median 8).
+- 02:00  Pod lp-l2 listings diffed against local (nothing remote-only; pool md5 equal); deleted (6.91 h, $5.11). Run
+  total 8.44 pod-hours, $6.25; balance $227.56. Bucket `long-pool/{data/ladder,data/lp,artifacts/lp}` uploaded, file
+  counts match local.

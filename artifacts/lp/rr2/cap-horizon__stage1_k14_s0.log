@@ -1,0 +1,13 @@
+[lean_gate] 153600 samples, parse-fail 72394, distinct checked 70098: lean ok 1278, lean rej 68820; lean 64.7s wall (4090.7s proc, 128 workers)
+cap-horizon__stage1_k14_s0.pt on transfer_long_rr600.jsonl k=256 SOLVED 118/600 = 0.197 [0.167,0.230]
+  len 11: 42/100 = 0.420 [0.328,0.518]
+  len 12: 27/100 = 0.270 [0.193,0.364]
+  len 13: 16/100 = 0.160 [0.101,0.244]
+  len 14: 15/100 = 0.150 [0.093,0.233]
+  len 15: 13/100 = 0.130 [0.078,0.210]
+  len 16: 5/100 = 0.050 [0.022,0.112]
+  written hist {10: 1, 11: 39, 12: 52, 13: 43, 14: 61, 15: 39, 16: 46, 17: 33, 18: 9, 19: 11, 20: 1, 21: 1}
+  pruned hist {8: 2, 9: 6, 10: 54, 11: 26, 12: 39, 13: 40, 14: 48, 15: 38, 16: 43, 17: 25, 18: 9, 19: 5, 21: 1}
+  frontier written 19 pruned 19
+  reasons [('lean rejected', 79437), ('lean_seq parse: unbound', 62084), ('lean_seq parse: formula', 5110), ('lean_seq parse: exact not last', 1145), ('lean_seq parse: name', 1040), ('lean_seq parse: expected )', 994)]
+{"n": 600, "solved": 118, "rate": 0.19666666666666666, "ci": [0.1668342294244255, 0.23035867679468897], "written_hist": {"10": 1, "11": 39, "12": 52, "13": 43, "14": 61, "15": 39, "16": 46, "17": 33, "18": 9, "19": 11, "20": 1, "21": 1}, "pruned_hist": {"8": 2, "9": 6, "10": 54, "11": 26, "12": 39, "13": 40, "14": 48, "15": 38, "16": 43, "17": 25, "18": 9, "19": 5, "21": 1}, "frontier_written": 19, "frontier_pruned": 19, "reasons": {"lean rejected": 79437, "lean_seq parse: unbound": 62084, "lean_seq parse: formula": 5110, "lean_seq parse: exact not last": 1145, "lean_seq parse: name": 1040, "lean_seq parse: expected )": 994, "lean_seq parse: expected ;": 745, "lean_seq parse: no-eos": 680, "lean_seq parse: expected (": 265, "lean_seq parse: expected :=": 190}, "ckpt": "ckpts/lp/cap-horizon__stage1_k14_s0.pt", "in": "data/ladder/transfer_long_rr600.jsonl", "k": 256, "temperature": 0.8, "seed": 0, "batch": 1024, "state_mode": false, "tok_mode": "lean_seq", "gen_s": 476.8928391933441, "wall_s": 477.1297471523285, "peak_mem_gb": 10.938215255737305, "n_samples": 153600, "max_new": 1536, "trunc_frac": 0.00443359375, "declen_max": 1536, "sample_stats": {"steps": 103600, "rows": 153600, "rowsteps": 40968400, "prompt_len_max": 134, "chunks": 150, "stop_eos": 152920, "stop_exact": 0, "stop_goal": 0, "sample_wall_s": 404.92045378685, "peak_alloc_gb": 10.938215255737305, "peak_reserved_gb": 23.02734375}}
