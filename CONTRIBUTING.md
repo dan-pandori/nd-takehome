@@ -11,7 +11,8 @@ Needs Lean 4 at `~/.elan/bin/lean` (v4.34.1 in CI) and, for the smoke tests, `to
 
 | step | file |
 |---|---|
-| nothing tracked under `artifacts/` | `ci/run_ci.sh` |
+| size guard: no tracked file > 5 MB, no `.jsonl`/`.jsonl.gz`/`.pt` under `artifacts/` (also the pre-commit hook) | `ci/check_sizes.sh` |
+| `artifacts/MANIFEST.jsonl` well-formed and disjoint from git; fetch checks sha256, is idempotent, re-fetches a corrupted copy | `tests/test_manifest.py` |
 | token-format and `lean_seq` render ↔ parse round-trips; Lean judge on 150 gold proofs, the canonical `Not.elim` example, 450 negatives | `tests/test_roundtrip_judge.py`, fixture `tests/fixtures/proofs150.jsonl` |
 | free-form Lean allowlist (`lean_check`, 39 cases incl. `Not.elim`, `sorry`, `simp`, library lemmas) | `lean_check.py --selftest` |
 | no `nd_verify` on any judging path | `tests/test_lean_only_judge.py` |
@@ -27,14 +28,32 @@ Test fixtures live in `tests/fixtures/`, never in `artifacts/`.
 
 ## Where outputs go
 
-- `artifacts/<run>/` is **not tracked** (since run `repo-hygiene`, 2026-09-29). Write a run's outputs there and
-  upload them to `hf://buckets/dan-pandori/nd-rl/<run>/artifacts/` as you go (`hf buckets sync`). `numbers.md` names
-  the bucket path of every source file; reviewers pull from the bucket.
-- `ckpts/`: uploaded on save by `model.save_ckpt` (`ND_RUN_ID` must be set; `REGISTRY.md`).
-- `data/` stays tracked (≈ 230 MB). Large generated pools go to the bucket, not git.
-- The 5,992 files that were tracked under `artifacts/` until `3bfdec15` are listed in `ARTIFACTS_INDEX.tsv`; each is at
-  `hf://buckets/dan-pandori/nd-rl/repo-hygiene/git_tip/<path>` (verified by size and xet hash), and in git history:
-  `git show 3bfdec15:<path>`.
+Small files are tracked; bulk files are not (run `repo-hygiene-2`, 2026-09-29). **Bulk** = `.jsonl`, `.jsonl.gz`,
+`.pt`, or anything over 5 MB. Every bulk file that is not in git has a row in `artifacts/MANIFEST.jsonl`
+(`path`, bucket `uri`, `bytes`, `sha256`, producing `run`) and a copy in the public bucket
+`hf://buckets/dan-pandori/nd-rl/`, checked by sha256.
+
+- **Fetch** a moved file to its own repo path, so scripts keep their paths (stdlib only, no token, idempotent):
+
+      python3 fetch_artifacts.py artifacts/nf/                  # a run's prefix
+      python3 fetch_artifacts.py ckpts/final.pt data/r1/prompts.jsonl
+      python3 fetch_artifacts.py --list artifacts/r5/           # what is there, what is not
+
+- **Publish** a run's bulk files (credential scan, upload to `<run-id>/<path>`, sha256 re-check of the bucket copy,
+  manifest row, `git rm --cached`), then commit `artifacts/MANIFEST.jsonl` with the run's small files:
+
+      python3 publish_artifacts.py <run-id> artifacts/<dir> [ckpts/<dir> ...]
+
+  `.gitignore` already ignores the bulk kinds under `artifacts/` and `*.pt`; the 5 MB rule for other kinds is enforced
+  by `ci/check_sizes.sh`, as a pre-commit hook (`sh ci/install_hooks.sh`, once per clone) and in CI.
+- `ckpts/`: uploaded on save by `model.save_ckpt` (`ND_RUN_ID` must be set; `REGISTRY.md`). The take-home's
+  `ckpts/stage1_abs.pt` and `ckpts/final.pt` are manifest rows: `python3 fetch_artifacts.py ckpts/`.
+- `data/` is tracked except its 7 files over 5 MB (manifest rows; `python3 fetch_artifacts.py data/`).
+- Instead of fetching, old content can be read from git history: every manifest row names `git_commit` and
+  `git_blob` (`git show <git_commit>:<path>`). New run worktrees are sparse checkouts (`newrun`): other runs'
+  `artifacts/<dir>/` are left out; add one with `git sparse-checkout add /artifacts/<dir>/`, then fetch its bulk files.
+- `ARTIFACTS_INDEX.tsv` is run `repo-hygiene`'s index of the 5,997 files it untracked (xet hashes); the manifest
+  supersedes it for fetching.
 
 ## Configs
 
@@ -43,9 +62,8 @@ Right after argparse, call `record.save_config(vars(args), out)`: it writes `<ou
 SHA, host, UTC), and every registry row the process writes names that file. No config framework: the argparse flags
 are the config.
 
-## Merging a branch that still tracks artifacts
+## Merging a branch that still tracks bulk files
 
-Branches made before 2026-09-29 track files under `artifacts/`. Merging one into `dan` re-adds any artifact file it
-created (and conflicts, modify/delete, on any it changed). Before the merge, on the branch: upload its
-`artifacts/<run>/` to the bucket, then `git rm -r --cached artifacts/`, then commit. CI's first step fails if
-anything under `artifacts/` is tracked.
+A branch made before 2026-09-29 may still add bulk files under `artifacts/`. At merge time, on the branch:
+`python3 publish_artifacts.py <run-id> artifacts/<dir>` (uploads, adds manifest rows, untracks), commit, then merge.
+The manifest merges with git's union driver (`.gitattributes`). CI's size guard fails on any bulk file left tracked.
