@@ -188,3 +188,6 @@ RESULTS-REGISTRY DONE 2026-09-29T01:45:00Z
 - Merged into `dan` (`77344dfd`); local CI on `dan` green (58 s). GitHub run pending the `workflow` scope.
 - long-pool merged into `dan` meanwhile and re-added 5 artifacts/lpool files (all in the bucket): untracked; CI's config check caught its new script, fixed. CI green on the merged tip (50 s, local).
 REPO-HYGIENE DONE 2026-09-29T02:00:32Z
+
+## lit-review (executor, started 2026-09-29T03:20Z)
+- No pods. Literature screen + ranked shortlist of untried techniques; pre-registration `preregistration/lit-review.md`.
