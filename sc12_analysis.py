@@ -93,10 +93,7 @@ def ladder(d):
     if not fs:
         return None
     last = json.load(open(fs[-1])); tc = last.get('transfer_cum', {})
-    ge13 = None
-    fp = f'{d}/found_transfer_{len(fs)}.jsonl'
-    if os.path.exists(fp):
-        ge13 = sum(1 for l in open(fp) if json.loads(l).get('proofs') and int(ORIG[json.loads(l)['name']]['n_lines']) >= 13)
+    ge13 = tc.get('ge', {}).get('13')
     return {'rounds': len(fs), 'solved': tc.get('solved'), 'lstar': tc.get('lstar'), 'ge13': ge13}
 
 

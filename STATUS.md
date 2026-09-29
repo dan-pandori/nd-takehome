@@ -193,3 +193,4 @@ REPO-HYGIENE DONE 2026-09-29T02:00:32Z
 
 ## state-cap12 (executor, started 2026-09-29T02:30Z)
 - 02:36 pre-registration `preregistration/state-cap12.md` committed before any pod. Gates on K12 running on the VPS.
+- 03:55 gates 0 failures; SN-cap12 held-out 0.969 / 0.977; K12 whole-proof T1 comparator done (long-pool Q 79 / 72), its pods deleted. 4 SN T1 ladders running (≈ 3.5 h).

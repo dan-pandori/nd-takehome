@@ -740,3 +740,12 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 - 02:47 gate 2 (Lean's state vs the renderer's, canonical names) on 1,500 cuts of ≥ 7-line K12 proofs: **0 mismatches**
   (focused frame: 753 top, 206 imp, 197 or1, 301 or2, 43 neg). `artifacts/sc12/gate2_canon_k12ge7.json`. `GATES_OK`
   written on the four SN pods.
+- 03:16–03:25 SN-cap12 Stage-1 done (s0/s1 3090 ≈ 29 min, s2/s3 A40 ≈ 37 min). Held-out greedy (p2, 5,000): s0 0.9688, s1
+  0.9768 (6-line bin 0.938 / 0.942). T1 ladders started; round 1 took 1,400–1,709 s (sampling ≈ 18–25 min + fine-tune).
+- 03:49 K12 whole-proof T1 (cap-horizon's `stage1_k12_s{0,1}.pt`, 3,214,336 params, `lean_seq`, Lean alone; rounds ≈ 7 min
+  on A40 at batch 2,048) done. Original pool in-loop: 1,703 / 1,634, `L*` **13 / 13**, 5 / 5 solved at `L_true` ≥ 13
+  (cap-horizon's K12 T1 s0 was 1,685, `L*` 12 under Lean ∧ `nd_verify` at batch 512 — a re-draw plus the checker change).
+  Long pool (rr600, k 256): 160 / 151, `L*` 16 / 16, **Q 79 / 72**, ≥ 17 file 3 / 2. Truncation at `max_new` 1,536:
+  0.022–0.044 % of samples. Peak 11.0 GB at batch 1,024. Files `artifacts/sc12/rr/T1_K12_s*`, `artifacts/sc12/la_T1_K12_s*`.
+- 03:55 `sc-k0`, `sc-k1` deleted after uploading `artifacts/sc12` (dumps gzipped, 96 MB each) and `ckpts/ladder` to the
+  bucket (1.31 h $0.64, 1.30 h $0.63).
