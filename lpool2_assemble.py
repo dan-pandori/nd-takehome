@@ -74,6 +74,21 @@ def main():
         src = [json.loads(l) for l in open(f'{a.dir}/{c}.jsonl')]
         st[f'{c}:generated'] = len(src); st['generated'] += len(src)
         stages = {b: read_stage(f'{a.dir}/{c}_ml{b}.jsonl') for b in (10, 12, 14, 16, 17)}
+        if c == 'lpto':   # long-pool's stage-D timeouts, re-searched at bound 17 / 3,600 s in one pass
+            for r in src:
+                x = (stages[17] or {}).get(r['name'])
+                if x is None:
+                    fate = 'not_reached'
+                elif x.get('timeout') or x.get('error'):
+                    fate = 'timeout_17'
+                elif x['min_lines_ub'] is not None and x['min_lines_ub'] <= 16:
+                    fate = 'le16'
+                else:
+                    fate = 'lb17'
+                st[f'lpto:{fate}'] += 1
+                if fate == 'lb17':
+                    cands[r['name']] = (c, r, None, x)
+            continue
         if stages[17] is None:
             st[f'{c}:stage_E_missing'] += 1; print(f'{c}: stage E not run, skipped', file=sys.stderr); continue
         for r in src:
