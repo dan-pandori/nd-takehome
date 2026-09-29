@@ -798,3 +798,9 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 22:05 `lpto` limit set to 2,400 CPU-s (not 3,600) so it fits the 20 pod-hour ceiling; `lp2-b` loops to be stopped ≈ 00:30.
 - 22:10 `minlen.py` hands its pool 4 theorems per task (`imap` chunksize 4), so the calibration run on `lp2-c` used ~9 of 17 CPUs with a multi-hour single-worker tail ahead. `minlen_cpu.py` now forces chunksize 1 (search unchanged); calibration stage E restarted 22:09 (`artifacts/lpool2/calib_aborted_chunksize4.log`); `lp2-b` synced (new stages pick it up).
 - 22:40 The chunksize-1 calibration run on `lp2-c` hung: a pool worker died at 22:18:52 (replacement pid seen; cause not visible — no dmesg), and `Pool.imap` waits forever for a lost task (all workers idle, output empty, 22:36). `minlen_cpu.py` rewritten: one subprocess per theorem (thread pool of `--procs`), CPU-second limit, a dead process is written as `error: worker died` (= unknown, excluded). Calibration stage E restarted 22:39 (`calib_aborted_poolhang.log`); `lp2-b` synced. Losses: ≈ 45 min of `lp2-c`.
+- 23:05 **Stage-E memory:** 28 of the first 58 calibration results on `lp2-c` are `worker died rc=-9` (SIGKILL): the
+  container limit is 41 GB (`memory.max_usage` = limit) and one bound-17 search holds 5–8 GB. Earlier "pool worker died"
+  was the same. Fixes: stage E in `label.sh` now runs ≤ `EW` (default 3) searches at once; the 28 are retried with 3
+  workers (`calib_retry*.jsonl`, merged into `calib_ml17.jsonl`, first pass kept as `calib_ml17_first.jsonl`). `lp2-b`
+  (limit 125 GB, peak 32 GB) had no deaths. **`lpto` dropped** (53 × 2,400 CPU-s at ≤ 4 concurrent does not fit the
+  pod-hour ceiling). `lp2-c`: chunk loop `e` (12 workers, 3M tries, `EW=1`). `lp2-b` loops stop at 00:20 (STOP file).
