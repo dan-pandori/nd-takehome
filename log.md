@@ -737,3 +737,6 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   step (cap 6: ≈ 640).
 - Gate 2 first attempt crashed (`KeyError: 'name'`: K12 records carry no `name`); re-run on a copy with
   `name = k12_<line>` (`data/kh/train_k12_ge7.jsonl`, 84,545 proofs of ≥ 7 lines).
+- 02:47 gate 2 (Lean's state vs the renderer's, canonical names) on 1,500 cuts of ≥ 7-line K12 proofs: **0 mismatches**
+  (focused frame: 753 top, 206 imp, 197 or1, 301 or2, 43 neg). `artifacts/sc12/gate2_canon_k12ge7.json`. `GATES_OK`
+  written on the four SN pods.

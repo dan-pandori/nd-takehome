@@ -25,6 +25,7 @@ def main():
     ap.add_argument('--max_action', type=int, default=256); ap.add_argument('--max_steps', type=int, default=48)
     ap.add_argument('--lenfield', default='L_true')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     recs = [json.loads(l) for l in open(a.inp) if l.strip()]
     model, tok, _ = load_ckpt(a.ckpt, 'cuda')
     torch.cuda.reset_peak_memory_stats()
