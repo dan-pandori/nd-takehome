@@ -172,3 +172,9 @@ Brief: `docs/proposals/improvements/BRIEF_results-registry.md` (nd-rl). Run id: 
   policy text is in `QUESTIONS.md`. Spend: rr-1, RTX 3090, 0.21 h, $0.10; pod deleted.
 
 RESULTS-REGISTRY DONE 2026-09-29T01:45:00Z
+
+# STATUS — repo-hygiene (proposal 15 §6, cheap half)
+
+## repo-hygiene (executor, started 2026-09-29T01:30:06Z)
+- 01:45 pre-registration `preregistration/repo-hygiene.md` committed; no pods planned. Blocker found: the VPS's GitHub
+  token lacks the `workflow` scope (QUESTIONS.md); default: workflow shipped as `ci/ci.yml`, run locally.

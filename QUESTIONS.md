@@ -90,3 +90,9 @@
   (state-frontier, support-state, long-pool, …) keep the old `save_ckpt` until they merge `dan`. When they do, any
   pod job without `ND_RUN_ID` stops at start-up with a message saying what to set. Default: leave it to each
   executor, since the message is explicit.
+- **2026-09-29 01:45 UTC (repo-hygiene)** — The only GitHub token on the VPS (`gh`, account dan-pandori; scopes
+  `gist, read:org, repo`) has no `workflow` scope, and GitHub rejects any push that adds `.github/workflows/*`
+  without it (probe push to branch `ci-probe` rejected 01:40 UTC). Could you run `gh auth refresh -h github.com -s
+  workflow` on the VPS (or give the token that scope)? Default if unanswered: the workflow ships as `ci/ci.yml` plus
+  `ci/install_workflow.sh` (moves it into `.github/workflows/`, commits, pushes — needs the scope), and green/red is
+  shown by running the identical steps (`ci/run_ci.sh`) in a clean venv on the VPS. I re-try the push before closing.
