@@ -766,3 +766,13 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   2,054 / 2,054 manifest rows sha256-ok. Fresh non-sparse `dan` worktree 148.1 MB. `ci/install_hooks.sh` run: the
   clone's `core.hooksPath` is `ci/hooks`. Remote scratch branches `ci-rh2-green`, `ci-rh2-red6mb` deleted; their
   Actions runs remain.
+
+## 2026-09-29 — run `lit-measures` (executor)
+
+- **~16:05 Deviation (session killed; Dan's message of 2026-09-29 23:59 UTC).** The first executor session started
+  160 `hf buckets cp` processes at once (one `&` per file) to survey M3's per-round `args.json` files. That exhausted the
+  4 GB VPS's memory and killed both sessions on the host, which then sat dead for ~8 h. Nothing had been committed; no
+  pod had been created. Rule from now on (also in `AGENT_POLICY.md`): **never more than 4 processes at once on the
+  VPS (`xargs -P 4`); heavy or parallel work goes on a pod.** Resumed 23:59 UTC in a fresh session from the working
+  tree (uncommitted `--data_seed` change, `tests/test_data_seed.py`, staged `lpool_reread.py` + `pod/sc12/` from
+  `origin/dan_state-cap12`) and `/tmp/m3survey` (54 / 160 `args.json` fetched, `argslist.txt`).
