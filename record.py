@@ -262,9 +262,9 @@ ROUND_KEYS = {'heldout_greedy': ('heldout', 'greedy'), 'transfer_greedy': ('tran
 
 
 def split_of(path):
-    """heldout*.jsonl -> 'heldout'; otherwise the file's stem."""
-    b = os.path.basename(path or '').split('.')[0]
-    return 'heldout' if b.startswith('heldout') else b
+    """The evaluation file's stem: data/p2/heldout.jsonl -> 'heldout', data/ca/heldout_B_d3.jsonl -> 'heldout_B_d3'
+    (a subset is never pooled with the full set; `data` holds the exact file)."""
+    return os.path.basename(path or '').split('.')[0] or None
 
 
 def ckpt_role(extra):
@@ -291,6 +291,29 @@ def summary_rows(summ, split, decode, k=None, **labels):
            k=k, **labels)
     for L, b in summ.get('by_len', {}).items():
         record(metric, b['rate'], n=b['n'], solved=b['solved'], L=L, split=split, decode=decode, k=k, **labels)
+
+
+def sdeval_rows(d, source, **labels):
+    """sd_eval.py per-checkpoint summary -> per-slice <split>_greedy_acc and <split>_mean_term_size rows, labelled with
+    the model (n_params, format, training seed, init) the summary itself records."""
+    m = d.get('model') or {}
+    ta = m.get('train_args') or {}
+    lab = dict(ckpt=d.get('ckpt'), data=d.get('heldout'), source=source, n_params=m.get('n_params'),
+               format=m.get('mode'), step=m.get('step'), train_data=ta.get('data'),
+               hit_max_new=d.get('hit_max_new'), max_new=(d.get('sampler') or {}).get('max_new'))
+    lab['role'] = labels.pop('role', None) or ('stage1' if ta and not ta.get('init') else ('finetune' if ta.get('init') else None))
+    sd = labels.pop('seed', None)
+    lab['seed'] = sd if sd is not None else ta.get('seed')
+    lab.update(labels)
+    split = split_of(d.get('heldout'))
+    greedy = (d.get('sampler') or {}).get('greedy', True)
+    for name, s in (d.get('slices') or {}).items():
+        sl = {'L': name[3:]} if name.startswith('len') and name[3:].isdigit() else ({} if name == 'all' else {'slice': name})
+        metric = f'{split}_greedy_acc' if greedy else f'{split}_sample_acc'
+        record(metric, s['rate'], n=s['n'], solved=s['solved'], ci=s.get('ci'), split=split, decode='greedy' if greedy else 'sample', **sl, **lab)
+        if s.get('mean_term_size') is not None:
+            record(f'{split}_mean_term_size', s['mean_term_size'], n=s['solved'], split=split, **sl, **lab)
+            record(f'{split}_mean_written_lines', s['mean_written_lines'], n=s['solved'], split=split, **sl, **lab)
 
 
 def round_stats(stats, source, init=None, frozen=False, **labels):

@@ -117,6 +117,7 @@ def main():
     if os.path.exists(pf):
         pts = set(json.load(open(pf)))
     report = {}
+    skipped = collections.defaultdict(collections.Counter)
     for rid, (prefix, date) in RUNS.items():
         base = os.path.join(SRC, rid)
         files = sorted(glob.glob(os.path.join(base, '**', '*.json'), recursive=True))
@@ -150,7 +151,7 @@ def main():
                 name = os.path.basename(f)
                 src_uri = f'{BK}/{prefix}/{rel}' if prefix else f'git:HEAD:{rel}'
                 common = dict(source=f, source_uri=src_uri, backfill=True, kind=None, checker=checker)
-                if name == 'args.json' or (SKIP_NAME.search(name) and not name.startswith('summary')):
+                if name == 'args.json' or SKIP_NAME.search(name):
                     cnt['skipped_name'] += 1
                     continue
                 if any(rel.endswith(x) for x in NOT_OWN.get(rid, ())):
@@ -169,9 +170,14 @@ def main():
                     record._ctx['config'] = a
                     common.update(kind='round', arm=a.get('name'), seed=a.get('seed'))
                     before = cnt['rows']
-                    record.round_stats(d, f, init=a.get('init'), frozen=bool(a.get('no_train')), **common)
+                    record.round_stats(d, f, init=a.get('init'), frozen=bool(a.get('no_train')),
+                                       **{k: v for k, v in common.items() if k != 'source'})
                     cnt['round_files'] += 1
                     cnt['round_files_no_rows'] += cnt['rows'] == before
+                elif isinstance(d, dict) and isinstance(d.get('slices'), dict) and 'ckpt' in d and 'model' in d:
+                    common.update(kind='sdeval')
+                    record.sdeval_rows(d, f, **{k: v for k, v in common.items() if k != 'source'})
+                    cnt['sdeval_files'] += 1
                 elif is_eval_summary(d):
                     ck = d.get('ckpt')
                     k = d.get('k') or 1
@@ -189,6 +195,7 @@ def main():
                     cnt['summary_files'] += 1
                 else:
                     cnt['skipped_other'] += 1
+                    skipped[rid][re.sub(r'\d+', 'N', name)] += 1
         finally:
             record.record = orig_record
         # mark every row backfilled (record() writes backfilled=false for live rows)
@@ -200,7 +207,7 @@ def main():
                     r['labels'].pop('backfill', None)
                     r['host'] = None
                     fo.write(json.dumps(r) + '\n')
-        report[rid] = {'files': len(files), **cnt}
+        report[rid] = {'files': len(files), **cnt, 'skipped_other_names': dict(skipped[rid].most_common(8))}
         print(rid, dict(report[rid]), flush=True)
     json.dump(report, open(os.path.join(ROOT, 'artifacts', 'results-registry', 'backfill_report.json'), 'w'), indent=1)
 

@@ -59,6 +59,8 @@ def main():
     ap.add_argument('--texts', action='store_true', help='also store the literal Lean text of every sample')
     ap.add_argument('--skip_done', action='store_true')
     a = ap.parse_args()
+    import record    # results registry (REGISTRY.md): per-slice accuracy and term size of every checkpoint
+    record.set_config(vars(a))
     os.makedirs(a.outdir, exist_ok=True)
     recs = [json.loads(l) for l in open(a.inp) if l.strip()]
     idx = slices(recs)
@@ -133,6 +135,7 @@ def main():
                                    'mean_term_size': (sum(tk) / len(tk)) if tk else None,
                                    'mean_written_lines': ((sum(hv) / len(hv)) + 1) if hv else None}
         json.dump(out, open(fs, 'w'), indent=1)
+        record.sdeval_rows(out, fs)
         s = out['slices']
         print(f"{stem}: all {s['all']['rate']:.4f} len6 {s.get('len6',{}).get('rate',0):.4f} "
               f"depth3 {s.get('depth3',{}).get('rate',0):.4f} | parse-fail {out['parse_fail']} "
