@@ -1,0 +1,67 @@
+[artifacts/ss/S1_base_T08_s0 s0/1] 383 theorems, 0 done, 383 to do; model=base ckpt=stage1_SN_s0.pt md5=ec3888d9 mode=lean_staten k=10000 stop_at=50 T=0.8 batch=1024 max_action=256 max_steps=48 seed=5
+[lean_gate] 1024 samples, parse-fail 83, distinct checked 530: lean ok 0, lean rej 530; lean 1.5s wall (2.2s proc, 32 workers)
+[lean_gate] 2048 samples, parse-fail 167, distinct checked 867: lean ok 0, lean rej 867; lean 1.6s wall (3.5s proc, 32 workers)
+[lean_gate] 4096 samples, parse-fail 350, distinct checked 1359: lean ok 0, lean rej 1359; lean 1.6s wall (5.4s proc, 32 workers)
+[lean_gate] 2832 samples, parse-fail 256, distinct checked 1032: lean ok 0, lean rej 1032; lean 1.6s wall (4.0s proc, 32 workers)
+  [1/383] la_transfer_1035 L7 n=10000 ok=0 distinct_ok=0 rej=9144 parse=856 | 156 att/s | 1.1 min, 10000 att, peak 2.85 GB
+[lean_gate] 1024 samples, parse-fail 30, distinct checked 92: lean ok 32, lean rej 60; lean 0.5s wall (0.5s proc, 32 workers)
+  [2/383] la_transfer_1043 L7 n=1024 ok=561 distinct_ok=1 rej=433 parse=30 | 161 att/s | 1.1 min, 11024 att, peak 2.85 GB
+[lean_gate] 1024 samples, parse-fail 8, distinct checked 56: lean ok 33, lean rej 23; lean 0.5s wall (0.5s proc, 32 workers)
+  [3/383] la_transfer_1088 L7 n=1024 ok=970 distinct_ok=1 rej=46 parse=8 | 167 att/s | 1.2 min, 12048 att, peak 3.07 GB
+[lean_gate] 1024 samples, parse-fail 15, distinct checked 308: lean ok 0, lean rej 308; lean 1.3s wall (1.3s proc, 32 workers)
+[lean_gate] 2048 samples, parse-fail 20, distinct checked 439: lean ok 0, lean rej 439; lean 1.6s wall (2.0s proc, 32 workers)
+[lean_gate] 4096 samples, parse-fail 35, distinct checked 636: lean ok 0, lean rej 636; lean 1.6s wall (2.7s proc, 32 workers)
+[lean_gate] 2832 samples, parse-fail 25, distinct checked 495: lean ok 0, lean rej 495; lean 1.6s wall (2.2s proc, 32 workers)
+  [4/383] la_transfer_1093 L7 n=10000 ok=0 distinct_ok=0 rej=9905 parse=95 | 167 att/s | 2.2 min, 22048 att, peak 3.07 GB
+[lean_gate] 1024 samples, parse-fail 0, distinct checked 34: lean ok 0, lean rej 34; lean 0.4s wall (0.4s proc, 32 workers)
+[lean_gate] 2048 samples, parse-fail 0, distinct checked 36: lean ok 0, lean rej 36; lean 0.4s wall (0.4s proc, 32 workers)
+[lean_gate] 4096 samples, parse-fail 4, distinct checked 44: lean ok 0, lean rej 44; lean 0.4s wall (0.4s proc, 32 workers)
+[lean_gate] 2832 samples, parse-fail 2, distinct checked 39: lean ok 0, lean rej 39; lean 0.4s wall (0.4s proc, 32 workers)
+  [5/383] la_transfer_1103 L7 n=10000 ok=0 distinct_ok=0 rej=9994 parse=6 | 193 att/s | 2.8 min, 32048 att, peak 3.07 GB
+[lean_gate] 1024 samples, parse-fail 9, distinct checked 363: lean ok 0, lean rej 363; lean 1.4s wall (1.4s proc, 32 workers)
+[lean_gate] 2048 samples, parse-fail 20, distinct checked 529: lean ok 0, lean rej 529; lean 1.6s wall (2.4s proc, 32 workers)
+[lean_gate] 4096 samples, parse-fail 40, distinct checked 785: lean ok 0, lean rej 785; lean 1.5s wall (3.0s proc, 32 workers)
+[lean_gate] 2832 samples, parse-fail 31, distinct checked 635: lean ok 0, lean rej 635; lean 1.5s wall (2.6s proc, 32 workers)
+  [6/383] la_transfer_1108 L7 n=10000 ok=0 distinct_ok=0 rej=9900 parse=100 | 192 att/s | 3.7 min, 42048 att, peak 3.24 GB
+[lean_gate] 1024 samples, parse-fail 30, distinct checked 201: lean ok 33, lean rej 168; lean 0.8s wall (0.8s proc, 32 workers)
+  [7/383] la_transfer_111 L7 n=1024 ok=750 distinct_ok=1 rej=244 parse=30 | 192 att/s | 3.7 min, 43072 att, peak 3.24 GB
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/ss_support.py", line 147, in <module>
+    main()
+  File "/workspace/nd-takehome/ss_support.py", line 92, in main
+    outs = env_generate(model, tok, [r['prompt']] * b, greedy=False, temperature=a.temperature,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/state_sample.py", line 67, in env_generate
+    outs = generate_ids_fast(model, tok, pids, goals=None, greedy=greedy, temperature=temperature,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/sample.py", line 146, in generate_ids_fast
+    logits = model(idx, pos=pos, mask=mask, caches=caches)[:, -1]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 115, in forward
+    x = b(x, cos, sin, mask, None if caches is None else caches[i])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 78, in forward
+    x = x + self.attn(self.ln1(x), cos, sin, mask, cache)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/model.py", line 65, in attn
+    cache['v'] = v.new_empty(B, self.h, cache['max'], D // self.h)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 172.00 MiB. GPU 0 has a total capacity of 31.37 GiB of which 131.81 MiB is free. Process 467 has 12.73 GiB memory in use. Process 1481 has 12.47 GiB memory in use. Including non-PyTorch memory, this process has 2.70 GiB memory in use. Process 2583 has 3.31 GiB memory in use. Of the allocated memory 2.37 GiB is allocated by PyTorch, and 39.68 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

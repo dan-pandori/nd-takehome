@@ -149,3 +149,4 @@ Read `FAST_STAGE1.md`, `run_fast_stage1.md`. 1.49 pod-h, $1.47 of $5; pods delet
 ## support-state (executor, started 2026-09-28 18:20 UTC)
 - Run start 2026-09-28 18:20 UTC. Branch `dan_support-state` (from fork `origin/dan` + support-curves harness). Budget $10 / 20 pod-h.
 - Pre-registration `preregistration/support-state.md` committed before the first pod.
+- SUPPORT-STATE DONE 2026-09-29 00:35 UTC. SN base reaches 28 / 29 survivors on each seed (brief falsifier ≥ 15 fires: the WP expansion was about state); but SN EI has its own 87-theorem forward crux, 30 E8 (≥ 5 fires). $7.96, 10.3 pod-h, pods deleted. `run_support_state.md`, `numbers.md` § support-state.

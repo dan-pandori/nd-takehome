@@ -1305,3 +1305,84 @@ All values recomputed by `python3 fs_analysis.py` → `artifacts/fs/summary.json
   188.0 steps/s at N = 1 / 2 / 4 / 8 / 16; legacy alone 30.0 ms/step. bs 512: A40 64.0 ms/step, H100 12.2 ms/step (no gain per token).
 - FS8 cost: 1.49 pod-hours, $1.47 (A40 `fs1` 1.24 h $0.61; H100 `fs2` 0.25 h $0.86).
 - FS9 bucket: `hf://buckets/dan-pandori/nd-rl/fast-stage1/{artifacts,ckpts}` (the 8 fast checkpoints and `legfull_s0.pt`).
+
+## support-state (2026-09-28/29)
+
+Source for every row: `artifacts/ss/summary.json` (written by `ss_analysis.py`; stdout `artifacts/ss/analysis_stdout.txt`),
+from the per-theorem records `artifacts/ss/*.s0.jsonl` (`ss_support.py`). Judge: **Lean alone** (Lean 4.34.0 core, in
+loop, on the literal `lean_seq` text the environment assembles; every checked text is in `artifacts/ss/dump/*.jsonl.gz`).
+
+**Models.** All from scratch on `data/p2/train_depth3_f0_a1.jsonl` (6,000 × 128, cap 6); sampled in `Env(canon, assign)`,
+`max_action` 256, `max_steps` 48.
+- SN base s0 / s1 = `state-env` `ckpts/se/stage1_SN_s{0,1}.pt`, 3,216,384 params, `lean_staten`, md5 `ec3888d9…` / `d8b21e4c…`.
+- SN EI s0 = `ckpts/se/ladder/la_T1_SN_s0_r8.pt` (SN base s0 + 8 × k 32 EI at T 0.8 on `rl_targets`), md5 `fb448247…`.
+- Whole-proof (WP) numbers are `support-curves`' records (`origin/dan_support-curves:artifacts/sc/summary.json`), Lean
+  alone: WP base = `ckpts/lf/stage1_a1_seq_s0.pt` md5 `9bde44c0…` (3,214,336 params, `lean_seq`); WP EI =
+  `la_T1_sc_s0_r8.pt` md5 `5cebd7ec…`.
+
+**SS1 — H: the 29 survivors** (`data/sc/falsifier_survivors.txt`; WP base 0 / 400,000 on each, p < 7.5 × 10⁻⁶).
+Protocol: ≤ 200,000 at T 0.8, then ≤ 200,000 at T 1.0 for rows < 5 successes, stop at 5. Batch 4,096.
+
+| | SN base s0 | SN base s1 |
+|---|---|---|
+| reached (≥ 1 Lean-accepted attempt) | **28 / 29** (miss la_transfer_1893, 0 / 200,000 at each T) | **28 / 29** (miss la_transfer_1110, 0 / 200,000 at each T) |
+| reached at T 0.8 within the first 10,000 attempts | 26 | 23 |
+| median p̂ at T 0.8 (unreached = 0) | 0.188 | 0.0088 |
+| lowest nonzero p̂ at T 0.8 | 6.4 × 10⁻⁵ (la_transfer_588) | 5 × 10⁻⁶ (la_transfer_454) |
+| attempts | 1,041,664 | 2,190,528 |
+| reached pooling every draw of this run (H + S1 + S2) | **29 / 29** (la_transfer_1893: 1 in 30,720 at T 1.0 in S2; 1 / 470,720 pooled) | 28 (la_transfer_1110 0 / 400,000) |
+
+Union of the two seeds: 29 / 29 within H alone. p̂ of a row that hit 5 successes is c / n at a stopping time.
+
+**SS2 — S1: 383 theorems, k 10,000, stop 50, T 0.8, seed 0.** Solved: SN base **152**, SN EI **237**; WP base 45, WP EI
+121 (support-curves stage 1). SN − WP base = +107, above the scaled frozen-count MDD ≈ 67 (pre-registered comparison
+rule; n = 1 here, so this is a single-draw difference, not a two-sample test). Per `L_true` (pass@10,000):
+
+| `L_true` | n | SN base | SN EI | WP base | WP EI |
+|---|---|---|---|---|---|
+| 7 | 60 | 0.600 | 0.733 | 0.317 | 0.417 |
+| 8 | 60 | 0.750 | 0.867 | 0.400 | 0.567 |
+| 9 | 60 | 0.633 | 0.850 | 0.000 | 0.533 |
+| 10 | 60 | 0.333 | 0.583 | 0.033 | 0.283 |
+| 11 | 60 | 0.183 | 0.550 | 0.000 | 0.133 |
+| 12 | 60 | 0.033 | 0.283 | 0.000 | 0.067 |
+| 13 | 13 | 0.000 | 0.231 | 0.000 | 0.077 |
+| 14 | 10 | 0.000 | 0.200 | 0.000 | 0.000 |
+
+`L_true` is an ND-derived upper bound on proof length under Lean. The WP forward crux (82) has 64 solved by SN base at k 10,000.
+
+**SS3 — the SN crux.** SN forward crux (SN base 0 / 10,000, SN EI ≥ 1): **87** (`data/ss/sn_crux_forward.txt`); SN reverse
+crux: 2, both still 0 for SN EI after +20,000 (`S2revk20_ei_T08_s0`). SN base continued on the forward crux with
+`stop_at 1`, batch 2,048: to 40,000 at T 0.8 (S1 + `S2fwd08k30`) and 40,000 at T 1.0 (`S2fwd10k40`).
+- Reached within 40,000 / T: 27 of 87. Zero at 40,000 at both T: 60.
+- **E8 (pre-registered: 0 in the first 40,000 at both T and SN EI p̂ ≥ 0.01): 30** (`S2.E8_strict_40k`).
+- Deepened (pooled over all SN base s0 draws): 20 of the E8 theorems still 0 with ≥ 100,000 / T at both T; 7 still 0 with
+  ≥ 200,000 / T (12 of the 30 were taken to 200,000; 16 to 100,000 only, 2 — la_transfer_1696, _978, both
+  `L_true` 14 — stayed at 40,000: budget). The 7 at 200,000: la_transfer_1108 (SN EI p̂ 0.167), 1185 (0.018), 1352
+  (0.905), 198 (0.037), 2089 (0.013), 394 (0.980), 988 (0.181).
+
+**SS4 — part 3** (`summary.json` `part3`). Unit: support-followups D's most base-probable WP EI s0 proof per survivor
+(T 1.0), worst step = min per-step WP-base log p; match = some SN base s0 distinct accepted proof has a step with the same
+(formula, rule head), names abstracted. Worst step is a `have` on 19 reached survivors, an `exact` (box close; no content
+to match) on 9. SN base s0 takes the same step on **18 / 19** (not: la_transfer_100, `have … : ( S ∨ R ) := Or.inl …`).
+
+**SS5 — proof length** (distinct accepted proofs, median lines / term size): SN base s0 on the survivors 10 / 89;
+SN base s0 T 0.8 all 9 / 67; SN EI s0 T 0.8 all 13 / 65. (`term_size` = `support.proof_term_size`.)
+
+**SS6 — length caps.** 2,674 of 19,598,608 attempts hit `max_action` or `max_steps` (0.014 %). Five (file, `L_true`)
+strata exceed 0.1 % (max 0.22 %, `S2fwd10k60` `L_true` 13); on every zero-success row with ≥ 40,000 attempts the capped
+share is ≤ 0.36 %, so no zero claim rests on truncated attempts.
+
+**SS7 — spend.** `ss1` RTX PRO 4500 Blackwell 32 GB $0.72/h, 5.75 h, $4.14; `ss2` RTX 6000 Ada 48 GB $0.84/h, 4.54 h,
+$3.82. Total **10.30 pod-hours, $7.96** (`podbudget support-state`), of $10 / 20 h. Throughput ≈ 515 attempts/s for one
+job alone on `ss1`; ≈ 700 / s summed over 3–4 co-resident jobs. Peak `max_memory_allocated` 14.4 GB (batch 4,096,
+first H job), 16.8 GB (S1, batch 4,096).
+
+**Bucket:** `hf://buckets/dan-pandori/nd-rl/support-state/artifacts/ss` (records, summary, Lean dumps `dump/*.jsonl.gz`,
+gate logs), `…/data/ss`, `…/data/sc`. No new checkpoints: the models are in `hf://buckets/dan-pandori/nd-rl/state-env/ckpts/se/`.
+
+**SS8 — independent Lean re-check** (`ss_recheck.py` → `artifacts/ss/recheck.json`; Lean 4.34.1 on the VPS, the pods
+ran 4.34.0; statement built from the prompt string, not by `lean_tok` — identical to `lean_tok`'s on all 383; one Lean
+process per proof on the literal text): H **164 / 164** distinct counted proofs accepted, S2 **46 / 46**, S1 seeded
+sample **300 / 300**. Negative controls (one connective flipped in the first `have` type of each H proof that has
+one): **113 / 113 rejected**.

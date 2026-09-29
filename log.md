@@ -659,3 +659,13 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   stands at 27. Budget: $6.90 at 23:14; stop line $8.50. The 200,000 deepening cannot cover all zeros: the first
   12 (`sn_deep_e8.txt`) continue to 200,000 / T on `ss2`; the 16 new ones (`sn_deep_e8b.txt`) go to **100,000 / T**
   on `ss1` (+60,000 each). Deviation from the pre-registration (200,000 "if budget remains"), for budget.
+- 00:10 (09-29)  Deepening done: 12 E8 theorems at 200,000 / T (`ss2`), 16 at 100,000 / T (`ss1`); la_transfer_1696 and
+  _978 (added to E8 by the last top-up rows) not deepened. Both pods deleted after md5-matching every record file
+  pulled (`ss2` 4.54 h $3.82, `ss1` 5.75 h $4.14; total 10.30 h, **$7.96**; RunPod balance $229).
+- 00:15  E8 recomputed exactly as pre-registered (0 in the FIRST 40,000 per T, from the S1 + `S2fwd08k30` +
+  `S2fwd10k40` files only): **30**. The pooled-cell count (22) drops theorems first reached after 40,000; it is kept
+  as a depth ladder (20 at ≥ 100,000 / T, 7 at ≥ 200,000 / T). la_transfer_1893, H's one s0 miss, was reached in S2
+  (1 in 30,720 at T 1.0): pooled over the run, SN base s0 reaches 29 / 29; the pre-registered H count stays 28.
+- 00:20  Dumps and Lean-reject logs gzipped (disk was at 86 %); uploaded `artifacts/ss`, `data/ss`, `data/sc` to
+  `hf://buckets/dan-pandori/nd-rl/support-state/`. `ss_recheck.py` (independent statement builder, one Lean 4.34.1
+  process per proof, connective-flip negative controls) running on the VPS.

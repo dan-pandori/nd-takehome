@@ -169,6 +169,12 @@ def main():
                  'median_p_T08': med(ps), 'min_p_T08_reached': min([p for p in ps if p > 0], default=None),
                  'attempts': sum((r['T08'][0] if r['T08'] else 0) + (r['T10'][0] if r['T10'] else 0) for r in rows),
                  'wp_base_attempts_min': min(r['wp_base_n'] for r in rows), 'wp_base_successes': sum(r['wp_base_c'] for r in rows)}
+        pr = [n for n in SURV if any((pooled[('base', s, T)].get(n) or {}).get('c', 0) > 0 for T in (0.8, 1.0))]
+        Hs[s]['reached_pooled_all_draws'] = len(pr)
+        Hs[s]['pooled_attempts_unreached'] = {n: sum((pooled[('base', s, T)].get(n) or {}).get('n', 0) for T in (0.8, 1.0))
+                                              for n in SURV if n not in pr}
+        print(f'SN base s{s}: reached pooled over every draw of this run (H + S1 + S2): {len(pr)}; '
+              f'unreached {Hs[s]["pooled_attempts_unreached"]}')
         print(f'SN base s{s}: rows complete {complete}/29, reached {reached}, reached at T0.8 within first 10,000: '
               f'{Hs[s]["reached_T08_first10k"]}, median p(T0.8) {Hs[s]["median_p_T08"]}, attempts {Hs[s]["attempts"]:,}, '
               f'unreached {Hs[s]["unreached"]}')
@@ -218,7 +224,16 @@ def main():
                        'base_T10': (b10['n'], b10['c']) if b10 else None, 'ei_p_T08': ei_p})
         surv = [r for r in e8 if r['base_T08'] and r['base_T10'] and r['base_T08'][0] >= 40000 and r['base_T10'][0] >= 40000
                 and r['base_T08'][1] == 0 and r['base_T10'][1] == 0]
-        S['S2'] = {'rows': e8, 'at_40k_both_T_zero': [r['name'] for r in surv],
+        # E8 as pre-registered: 0 in the FIRST 40,000 at each T (S1 + the fwd08k30 continuation; fwd10k40), EI p >= 0.01
+        f08 = by_file.get(('S2fwd08k30', 'base', 0, 0.8, 'S2fwd08k30_base_T08_s0.s0.jsonl'), {})
+        f10 = by_file.get(('S2fwd10k40', 'base', 0, 1.0, 'S2fwd10k40_base_T10_s0.s0.jsonl'), {})
+        strict = [n for n in fwd if n in f08 and n in f10 and s1['base'][n]['n_tried'] + f08[n]['n_tried'] >= 40000
+                  and f10[n]['n_tried'] >= 40000 and f08[n]['n_ok'] == 0 and f10[n]['n_ok'] == 0]
+        strict_e8 = [n for n in strict if (phat(pooled[('ei', 0, 0.8)].get(n)) or 0) >= 0.01]
+        print(f'E8 (pre-registered, first 40,000 per T): {len(strict_e8)} of {len(strict)} zero-at-40k crux theorems have '
+              f'SN EI p >= 0.01; SN forward-crux theorems reached within 40,000/T: {len(fwd) - len(strict)}')
+        S['S2'] = {'rows': e8, 'E8_strict_40k': strict_e8, 'zero_first_40k_both_T': strict,
+                   'at_40k_both_T_zero': [r['name'] for r in surv],
                    'E8_count': sum(1 for r in surv if (r['ei_p_T08'] or 0) >= 0.01),
                    'deepest': {r['name']: (r['base_T08'], r['base_T10']) for r in surv}}
         for d in (40000, 100000, 200000):
