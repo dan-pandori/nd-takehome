@@ -140,3 +140,79 @@ No hard-constraint violation.
    correctness issue, but the policy says to hold the batch fixed across arms.
 3. The two seeds differ by ≈ 20× in median survivor p̂. Per-theorem p̂ claims need a seed label.
 4. The phrase "22 E8 theorems never reached" must state the depth: only 7 got 200k + 200k.
+
+## §Compare (phase 2: `run_support_state.md`, `numbers.md` § support-state, `log.md`)
+
+| claim (source) | my independent value | verdict |
+|---|---|---|
+| SN base s0 reaches 28 / 29 survivors, miss `1893` (run, SS1) | 28, miss `1893` | reproduces |
+| SN base s1 reaches 28 / 29, miss `1110` | 28, miss `1110` | reproduces |
+| 26 (s0) / 23 (s1) within first 10,000 at T 0.8 | 26 / 23 | reproduces |
+| median p̂ T 0.8: 0.188 (s0), 0.0088 (s1) | 0.188 / 0.0088 | reproduces |
+| lowest nonzero p̂: 6.4 × 10⁻⁵ (`588`, s0), 5 × 10⁻⁶ (`454`, s1) | same | reproduces |
+| attempts 1,041,664 (s0), 2,190,528 (s1) | same | reproduces |
+| union of seeds 29 / 29 in H | 29 (intersection 27) | reproduces |
+| pooling all s0 draws: 29 / 29 (`1893` 1 in 30,720 at T 1.0 in `S2fwd10k40`, 1 / 470,720 pooled) | same (first hit 16,168 of that file) | reproduces; the pre-registered H count (28) is kept as the headline — correct |
+| E1-F fires | fires on both seeds | reproduces |
+| S1: SN base 152, SN EI 237; WP 45 / 121 | 152 / 237; WP 45 / 121 from support-curves' records | reproduces |
+| per-`L_true` pass@10,000 table (SS2) | all 32 cells identical | reproduces |
+| WP forward crux (82): 64 solved by SN base at k 10,000 | 64 | reproduces |
+| SN forward crux 87, reverse 2, reverse still 0 after +20,000 | 87, 2, 0 / 20,000 each | reproduces |
+| 27 of 87 reached within 40,000 / T; 60 zero | 27 / 60 | reproduces |
+| E8 = 30 | 30 | reproduces |
+| 20 E8 theorems still 0 at ≥ 100,000 / T, 7 at ≥ 200,000 / T (names + SN EI p̂) | 20 / 7, same names; p̂ same (2089: 0.012 vs 0.013, rounding) | reproduces |
+| deepening coverage 12 @ 200k, 16 @ 100k, `1696`/`978` not deepened | same | reproduces; the deviation from the pre-registration is disclosed in `log.md` |
+| "The state moves the frontier to `L_true` 11–14; it does not remove it" (run) | the 22 E8 theorems still at 0 span `L_true` 7–14 (7:1, 8:1, 9:3, 10:1, 11:4, 12:8, 13:2, 14:2); **the 7 at 200k + 200k are `L_true` 7, 8, 9, 9, 9, 10, 11** | **not supported as worded.** Only the S1 pass@10k columns hit 0 at `L_true` 13–14. The EI-only set that the SN base does not reach at depth is not concentrated at long theorems |
+| Part 3: SN base takes WP-EI's worst `have` step on 18 / 19 (E10 "95 %") | my variant (T 0.8 log p, most frequent WP-EI proof, formula-bearing worst steps): 15 / 16 (s0), 15 / 15 (s1) | reproduces qualitatively; the value depends on the matching rule, and E10 was pre-registered over reached survivors (28), not the 19 `have` rows. Descriptive only, as pre-registered |
+| la_transfer_1004 example: WP base log p −45.1 for WP-EI's proof; SN base s0 writes it in 122 / 4,096 | d_steps T 1.0 log p −45.09 (the count-83 proof); H s0 record: one distinct proof, count 122 of 4,096 | reproduces |
+| SS5 lengths: survivors 10 / 89; S1 base 9 / 67; S1 EI 13 / 65 | 10 / 89; 9 / 66; 13 / 65 | reproduces (S1 base 66 vs 67: a median over a different set, or my computation includes the `part_ss1` rows; not material) |
+| SS6: 2,674 of 19,598,608 attempts capped; five (file, `L_true`) strata > 0.1 %, zero rows ≤ 0.36 % | total attempts 19,598,608 ✓; per-theorem rows: 16 of 1,063 > 0.1 % (max 6.3 % on a theorem solved 2,445×); the worst zero row, `1126`, is 0.36 % pooled (0.44 % in one file) | reproduces. E11 is correctly reported as a miss. Stratum definitions differ; the conclusion (no zero rests on truncation) holds, because `1126`'s base attempts fail 99 % on syntax |
+| SS7 spend 10.30 h, $7.96; GPU classes / billed rates | `podbudget`: 10.30 h, $7.96 | reproduces |
+| peak memory 14.4 GB (first H job), 16.8 GB (S1) | record peaks up to 15.2 (H s0) / 15.9 GB (H s1) | minor: the H peak grew after the first theorems (as `log.md` 19:03 says). Quote the max, not the first reading |
+| SS8: 164 / 164 H, 46 / 46 S2, 300 / 300 S1 accepted; 113 / 113 negatives rejected | my harness: 89 + 75 H, 46 S2, 240 S1 sampled, all accepted; 120 / 120 dump rejects and 114 / 120 mutants rejected (the 6 accepted are valid proofs) | reproduces |
+| expectations table: hits E1, E1-F, E2, E3, E4, E6, E9; misses E5, E7, E8 (range), E10, E11 | same classification (E2, E3 on s0 as pre-registered) | reproduces; misses are reported as misses |
+| pre-registration before first pod | commit 18:23:28Z, `ss1` created 18:25:08Z | holds |
+| model labels | every number in run / numbers names checkpoint, md5, params, format, from scratch, training file; WP numbers carry support-curves' labels and "Lean alone" | holds |
+| bucket upload | `hf://buckets/dan-pandori/nd-rl/support-state/artifacts/ss/` lists the record files | holds |
+
+Settings: the S1 batch changed mid-arm (1,024 → 4,096 on 7 / 19 rows), and S2 ran at 2,048. Both deviations are
+disclosed in `log.md` with reasons (co-tenancy OOM, CPU-bound env loop). They are sampling re-draws, not
+correctness changes, but the policy asks for fixed batch within one experiment's arms, and neither `numbers.md` nor
+the run note quotes `NOISE_FLOOR.md` for them. Minor.
+
+## §Verdict
+
+**Stands.**
+- Both SN base seeds reach 28 / 29 of the survivors that the WP base never reaches in 400,000 attempts, and the two
+  seeds miss different theorems. All 29 fall to the union of seeds, and all 29 fall to s0 when every draw is pooled.
+  The brief's falsifier fires with a large margin. Every count reproduces from the records, every counted proof I
+  re-checked passes Lean, and the harness is shown to reject bad proofs.
+- On the 383 theorems, the SN base solves 152 and the SN EI 237 (n = 1 seed each; the gap to WP, +107 / +116, is above
+  the pre-registered ≈ 67 threshold). The SN forward crux is 87, and E8 = 30 fires. The SN base does not reach 7
+  theorems at 200,000 attempts per temperature, while SN EI solves them at p̂ 0.012–0.98.
+- No hard-constraint violation. Lean alone judged every count, and no `nd_verify` call is on any counting path.
+
+**Must be reworded.**
+1. "The state moves the frontier to `L_true` 11–14" (run). The EI-only theorems still at 0 span `L_true` 7–14, and the
+   7 best-evidenced (200k + 200k) are `L_true` 7–11. Suggested wording: "the SN base's pass@10k falls to 0 at `L_true`
+   13–14, but the theorems SN EI reaches and the SN base does not at 200,000 / T are short (`L_true` 7–11): the
+   remaining EI-only support is not a length frontier."
+2. "The whole-proof support expansion is … about state." The SN arm changes more than state visibility: the
+   environment also assigns canonical names and checks structure per step (`Env(canon, assign)`). The comparison
+   cannot separate *seeing the state* from *not having to track names*. Say "about the state interface (state +
+   environment-assigned names)", or cite the `state-env` S vs SN ablation if it separates them.
+3. "EI expands the state base's support too" rests on one base seed and one EI seed. On the survivors the two base
+   seeds differ ≈ 20× in median p̂, and each misses a theorem the other reaches. The E8 zeros should be labelled
+   "SN base s0" everywhere (the run note says "SN base" without a seed in that paragraph).
+4. E10: state the denominator (19 `have` rows of 28 reached) and that the value depends on the matching rule. Peak
+   memory: quote the maximum (15.9 GB H, 16.8 GB S1 at batch 4,096).
+
+**Not supported.** Nothing beyond item 1 above. "Never" is not used for the SN zeros, and the text gives their depths
+correctly.
+
+**Next measurements.**
+- SN base **s1** (and SN EI s1) on the 22 E8 zeros at 200,000 / T, with the same seeds in both arms. A theorem that
+  s1 reaches is a seed effect, not EI-only support. This is the direct test of item 3 (≈ 4–5 pod-h at this run's
+  throughput).
+- Deepen `1696` and `978` (40k only) and the 13 E8 zeros at 100k to 200k / T, so that the 30-theorem E8 set has one depth.
+- To separate state from naming: the `state-env` S (no env naming) and SH arms on the 29 survivors at 200,000 / T.
