@@ -716,3 +716,5 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
 - 01:56  Correction: the clock times in this section, STATUS.md and QUESTIONS.md were first written as estimates that
   ran ahead of the real clock. They are now set from commit and file times. The pre-registration says "written ≈ 01:45";
   it was committed at 01:33 (`6123570e`), before any work, and was left unedited.
+- 01:57  Fast-forwarded `dan` to `77344dfd` (`3bfdec15..77344dfd`). `ci/run_ci.sh` on a fresh worktree of `origin/dan`:
+  CI PASS, 58 s (`ci_dan.log`, uploaded). The VPS venv and staging dirs were deleted (disk 86 %).

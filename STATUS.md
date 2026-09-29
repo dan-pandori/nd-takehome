@@ -185,3 +185,5 @@ RESULTS-REGISTRY DONE 2026-09-29T01:45:00Z
   227 MB. CPU CI (`ci/run_ci.sh`) green in a clean environment, red on scratch branch `ci-broken`. Not shown on GitHub:
   token lacks `workflow` scope (ships as `ci/ci.yml` + `ci/install_workflow.sh`). `record.save_config` in all 59
   scripts with `--out`/`--outdir`. Write-up `run_repo_hygiene.md`.
+- Merged into `dan` (`77344dfd`); local CI on `dan` green (58 s). GitHub run pending the `workflow` scope.
+REPO-HYGIENE DONE 2026-09-29T01:57:33Z
