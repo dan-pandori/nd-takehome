@@ -194,6 +194,7 @@ QUANTS = [
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--out', default=f'{D}/summary.json'); a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     rows = []
     for p in POOLS:
         for s in SEEDS:

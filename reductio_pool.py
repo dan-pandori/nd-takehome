@@ -187,6 +187,7 @@ def main():
     f.add_argument('--min_ub', type=int, default=7); f.add_argument('--per_schema_t', type=int, default=30); f.add_argument('--per_schema_x', type=int, default=15)
     f.add_argument('--seed', type=int, default=0)
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     {'gen': cmd_gen, 'finalize': cmd_finalize}[a.cmd](a)
 
 

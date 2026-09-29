@@ -59,6 +59,7 @@ def main():
     ap.add_argument('--minlen_val36', default='artifacts/minlen_val36.jsonl')
     ap.add_argument('--out', default='artifacts/phase1')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     os.makedirs('figures', exist_ok=True)
     P = rd(a.novelty + '_proofs.jsonl')
     T = rd(a.novelty + '_theorems.jsonl')

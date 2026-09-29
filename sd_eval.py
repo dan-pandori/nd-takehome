@@ -60,7 +60,7 @@ def main():
     ap.add_argument('--skip_done', action='store_true')
     a = ap.parse_args()
     import record    # results registry (REGISTRY.md): per-slice accuracy and term size of every checkpoint
-    record.set_config(vars(a))
+    record.save_config(vars(a), a.outdir + '/')
     os.makedirs(a.outdir, exist_ok=True)
     recs = [json.loads(l) for l in open(a.inp) if l.strip()]
     idx = slices(recs)

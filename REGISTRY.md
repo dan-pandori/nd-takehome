@@ -54,8 +54,11 @@ Metrics: `<split>_greedy_acc`, `<split>_pass@<k>`, `<split>_solved_cum` / `_unio
 `train.py` / `fast_train.py` / `state_train.py` (final losses and every checkpoint), `eval_set.py`, `state_eval.py`,
 `sd_eval.py` (overall and per length / slice), `coverage.py` (per shard, at the end), `expert_iter.py`,
 `ladder_ei.py`, `state_ladder_ei.py`, `grpo.py` (each round's headline stats; per-length detail stays in
-`round_<r>.json`). A new script calls `record.set_config(vars(args))` once, then `record.record(metric, value, n=…,
-**labels)`, or `record.summary_rows` / `record.round_stats` for the standard shapes.
+`round_<r>.json`). A new script calls `record.save_config(vars(args), out)` once (since run repo-hygiene: it is
+`set_config` plus a file — `<out>.args.json`, or `<outdir>/args.json` when `out` ends in `/` — holding `vars(args)` and
+a `_meta` key {script, argv, run_id, git_sha, git_dirty, host, utc}; every later row names it as label `config_file`),
+then `record.record(metric, value, n=…, **labels)`, or `record.summary_rows` / `record.round_stats` for the standard
+shapes. CI (`tests/test_configs.py`) fails if a script that takes `--out`/`--outdir` does not call `save_config`.
 
 ## Backfill
 

@@ -26,6 +26,7 @@ def main():
     ap.add_argument('--summary', default='artifacts/se/summary.json')
     ap.add_argument('--out', default='figures/state_env.png')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     d = json.load(open(a.summary))
     d = d.get('ladders', d)          # artifacts/se/summary.json nests the ladder summary
     R, C0 = d['runs'], d['c0']

@@ -13,6 +13,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument('set'); ap.add_argument('--out', required=True); ap.add_argument('--n', type=int, default=3000)
 ap.add_argument('--n_lean', type=int, default=1000); ap.add_argument('--n_neg', type=int, default=300); ap.add_argument('--seed', type=int, default=0)
 a = ap.parse_args()
+import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
 rng = random.Random(a.seed)
 recs = [json.loads(l) for l in open(a.set) if l.strip()]
 sample = rng.sample(recs, min(a.n, len(recs)))

@@ -74,6 +74,7 @@ def main():
     ap.add_argument('--cols', default='run_id,arm,seed,role,metric,value,n,ckpt,source')
     ap.add_argument('--sort', default='run_id,arm,seed')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     local = [] if a.no_local else sorted(glob.glob(os.path.join(ROOT, 'artifacts', '*', 'registry', '*.jsonl'))
                                          + glob.glob(os.path.join(ROOT, 'artifacts', '*', 'registry', '*.jsonl.gz')))
     if a.upload:

@@ -29,6 +29,7 @@ def main():
     ap.add_argument('--temperature', type=float, default=None)
     ap.add_argument('--seed', type=int, default=0)
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     dev = 'cuda' if torch.cuda.is_available() else 'cpu'
     model, tok, _ = load_ckpt(a.ckpt, dev)
     recs = [json.loads(l) for l in open(a.inp) if l.strip()]

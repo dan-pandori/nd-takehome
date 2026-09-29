@@ -29,6 +29,7 @@ def keys_of(fn):
 ap = argparse.ArgumentParser()
 ap.add_argument('--sets', nargs='+', required=True); ap.add_argument('--pools', nargs='+', required=True); ap.add_argument('--out', required=True)
 a = ap.parse_args()
+import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
 pools = {p: keys_of(p) for p in a.pools}
 out = {}
 for s in a.sets:

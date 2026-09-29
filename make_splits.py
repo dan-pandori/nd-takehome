@@ -23,6 +23,7 @@ def main():
     ap.add_argument('--seed', type=int, default=0)
     ap.add_argument('--outdir', default='data')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.outdir + '/')    # the resolved config next to the outputs
     rng = random.Random(a.seed)
     val = [json.loads(l) for l in open('targets/validation_36.jsonl')]
     val_keys = {canon_key(v['thm'].strip()) for v in val}

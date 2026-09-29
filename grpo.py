@@ -65,9 +65,8 @@ def main():
     ap.add_argument('--lp_batch', type=int, default=128, help='sequences per forward/backward chunk in the update (memory)')
     a = ap.parse_args()
     out = f'artifacts/{a.name}'; os.makedirs(out, exist_ok=True); os.makedirs('ckpts/' + os.path.dirname(a.name), exist_ok=True)
-    json.dump(vars(a), open(f'{out}/args.json', 'w'), indent=1)
     import record    # results registry (REGISTRY.md): each round's headline stats
-    record.set_config(vars(a), arm=a.name)
+    record.save_config(vars(a), out, arm=a.name)    # also writes <out>/args.json
     record.preflight()    # the round checkpoints upload on save: fail now if they cannot
     dev = 'cuda'
     torch.manual_seed(a.seed); rng = random.Random(a.seed)

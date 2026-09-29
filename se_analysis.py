@@ -165,6 +165,7 @@ def main():
     ap.add_argument('--workers', type=int, default=8)
     ap.add_argument('--out', default='artifacts/se/summary.json')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     recs = read(a.transfer)
     res = {'utc': time.strftime('%FT%TZ', time.gmtime()), 'transfer_pool': a.transfer, 'n_transfer': len(recs),
            'L_true_note': 'L_true = the pool n_lines, ND-derived; an UPPER BOUND under Lean',

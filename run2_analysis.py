@@ -83,6 +83,7 @@ def coverage(fn, pattern):
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--out', default='artifacts/r2/summary.json'); ap.add_argument('--figs', default='figures')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     res = {}
     for p in PATS:
         T = rd(f'data/r2/targets_{p}.jsonl')

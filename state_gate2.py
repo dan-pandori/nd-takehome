@@ -186,6 +186,7 @@ def main():
     ap.add_argument('--kinds', default='', help='comma-separated focused-frame kinds to keep (default: any)')
     ap.add_argument('--canon', action='store_true', help='arm SN: canonical (scope-determined) names')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     tk = LeanTokenizer('lean_staten' if a.canon else 'lean_state')
     rng = random.Random(a.seed)
     recs = [json.loads(l) for l in open(a.data) if l.strip()]

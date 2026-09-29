@@ -178,6 +178,26 @@ def set_config(cfg, **labels):
         os.environ['ND_ARM'] = str(labels['arm'])    # child processes (the EI drivers' train.py calls) inherit the arm
 
 
+def save_config(cfg, out, **labels):
+    """set_config, and write the resolved config next to the outputs (run repo-hygiene): `<out>/args.json` if `out` is an
+    existing directory or ends in '/', else `<out>.args.json` (an output file or prefix).  The file is `vars(args)` as before (readers index it
+    directly) plus one key `_meta` {script, argv, run_id, git_sha, git_dirty, host, utc}.  Every later row names the file (label `config_file`).
+    Returns the path written, or None when `out` is None (output to stdout)."""
+    set_config(cfg, **labels)
+    if not out:
+        return None
+    out = str(out)
+    path = os.path.join(out, 'args.json') if (os.path.isdir(out) or out.endswith('/')) else out + '.args.json'
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+    sha, dirty = git_sha()
+    with open(path, 'w') as f:
+        json.dump({**_ctx['config'], '_meta': {'script': _ctx['script'], 'argv': sys.argv, 'run_id': run_id(),
+                   'git_sha': sha, 'git_dirty': dirty, 'host': socket.gethostname(),
+                   'utc': time.strftime('%FT%TZ', time.gmtime())}}, f, indent=1, default=str)
+    _ctx['labels']['config_file'] = _rel(path)
+    return path
+
+
 def _default(name, cfg_keys):
     if name in _ctx['labels']:
         return _ctx['labels'][name]

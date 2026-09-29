@@ -131,6 +131,7 @@ def main():
     ap.add_argument('--selftest', action='store_true')
     ap.add_argument('--in', dest='inp'); ap.add_argument('--out')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     if a.selftest:
         selftest(); return
     n = c = 0

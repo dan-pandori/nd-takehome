@@ -15,6 +15,7 @@ ap.add_argument('--k', type=int, default=12); ap.add_argument('--temps', default
 ap.add_argument('--batch', type=int, default=4096); ap.add_argument('--max_new', type=int, default=512)
 ap.add_argument('--seed', type=int, default=0); ap.add_argument('--outdir', default='artifacts/lp/corpus')
 a = ap.parse_args()
+import record as ndrec; ndrec.save_config(vars(a), a.outdir + '/')    # the resolved config next to the outputs
 assert lean_gate.PREFILTER == 'shadow' and os.environ.get('LEAN_GATE_DUMP'), 'run with LEAN_PREFILTER=shadow and LEAN_GATE_DUMP'
 os.makedirs(a.outdir, exist_ok=True)
 model, tok, extra = load_ckpt(a.ckpt, 'cuda')

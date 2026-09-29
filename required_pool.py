@@ -21,6 +21,7 @@ ap.add_argument('--mode', default='requires', choices=['requires', 'uses', 'gen'
 ap.add_argument('--gen_pattern', default=None, help='pattern key in pat2 for --mode gen')
 ap.add_argument('--gen_from', default=None, help='candidate jsonl carrying pat2 / proof (looked up by name) for --mode gen')
 a = ap.parse_args()
+import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
 rng = random.Random(a.seed)
 excl = {canon_key(json.loads(l)['thm'].strip()) for l in open('targets/validation_36.jsonl')}
 for fn in a.exclude:

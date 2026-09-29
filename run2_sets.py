@@ -17,6 +17,7 @@ ap.add_argument('--pool', required=True); ap.add_argument('--outdir', required=T
 ap.add_argument('--exclude', nargs='*', default=[]); ap.add_argument('--sets', required=True); ap.add_argument('--size', type=int, default=155000)
 ap.add_argument('--lens', default='2-6'); ap.add_argument('--seed', type=int, default=0)
 a = ap.parse_args()
+import record as ndrec; ndrec.save_config(vars(a), a.outdir + '/')    # the resolved config next to the outputs
 lo, hi = map(int, a.lens.split('-')); LENS = list(range(lo, hi + 1)); quota = a.size // len(LENS)
 excl = set()
 for pat in a.exclude:

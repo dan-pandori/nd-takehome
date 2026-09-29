@@ -128,6 +128,7 @@ def main():
     ap.add_argument('--max_per_template', type=int, default=400)
     ap.add_argument('--seed', type=int, default=0)
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     if a.test:
         sys.exit(0 if test() else 1)
     import random

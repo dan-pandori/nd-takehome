@@ -23,6 +23,7 @@ def main():
     ap.add_argument('--seed', type=int, required=True); ap.add_argument('--round', type=int, default=4)
     ap.add_argument('--retain', type=int, default=20000); ap.add_argument('--max_per_thm', type=int, default=4); ap.add_argument('--rl_weight', type=int, default=4)
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     rng = random.Random(a.seed * 1000 + a.round + 77)
     own = load(f'{a.own}/found_{a.round}.jsonl'); sib = load(f'{a.sibling}/found_{a.round}.jsonl')
     train = [json.loads(l) for l in open(a.train) if l.strip()]

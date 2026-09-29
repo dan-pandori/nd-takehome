@@ -93,7 +93,7 @@ def main():
     ap.add_argument('--summary', default=None)
     a = ap.parse_args()
     import record    # results registry (REGISTRY.md)
-    record.set_config(vars(a))
+    record.save_config(vars(a), a.out)
     dev = 'cuda' if torch.cuda.is_available() else 'cpu'
     model, tok, extra = load_ckpt(a.ckpt, dev)
     recs = [json.loads(l) for l in open(a.inp) if l.strip()]

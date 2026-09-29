@@ -206,7 +206,7 @@ def main():
     ap.add_argument('--no_graph', action='store_true', help='--impl fast: do not capture the step as a CUDA graph')
     a = ap.parse_args()
     import record    # results registry (REGISTRY.md): config + final losses; save_ckpt uploads each checkpoint
-    record.set_config(vars(a), role='finetune' if a.init else 'stage1')
+    record.save_config(vars(a), a.out, role='finetune' if a.init else 'stage1')
     record.preflight()    # ND_RUN_ID + hf CLI present, or ND_OFFLINE=1: checked before training, not at the first save
     torch.manual_seed(a.seed)
     rng = random.Random(a.seed)

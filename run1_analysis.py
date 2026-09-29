@@ -94,6 +94,7 @@ def step3():
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--out', default='artifacts/r1/summary.json'); ap.add_argument('--figs', default='figures')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     res = {'agreement': agreement()}
     if os.path.exists('artifacts/r1/scored_qwen30b.jsonl'): res['step2'] = step2('artifacts/r1/scored_qwen30b.jsonl')
     res['step3'] = step3()

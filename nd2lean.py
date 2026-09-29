@@ -214,6 +214,7 @@ def main():
     ap.add_argument('--check'); ap.add_argument('--out'); ap.add_argument('--limit', type=int); ap.add_argument('--per_file', type=int, default=40)
     ap.add_argument('--one'); ap.add_argument('--field', default='proof')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     if a.one:
         prompt, proof = a.one.split(' PRF ', 1); prompt += ' PRF'
         src = translate(prompt, proof); print(src); print(lean_check([src]))

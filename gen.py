@@ -640,6 +640,7 @@ def main():
     ap.add_argument('--gdepth', default=None, help='ds-generator knob: goal formula depths, e.g. 2,2,3')
     ap.add_argument('--ladder', action='store_true', help='ds-generator knob: the strict long generator that built the ladder pools (50 %% goal / 50 %% forward, strict, ore_steps 3, budgets 3-5, gdepth 2-3, forward 6-22 steps) at whatever --min/--max')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     knobs = knobs_from_args(a)
     rng = random.Random(a.seed)
     g = Gen(rng, max_prem=a.max_prem)

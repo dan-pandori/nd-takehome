@@ -15,6 +15,7 @@ def main():
     ap.add_argument('--filter', default=None); ap.add_argument('--limit', type=int, default=None); ap.add_argument('--thinking_off', action='store_true')
     ap.add_argument('--batch', type=int, default=256)
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     from vllm import LLM, SamplingParams
     P = [json.loads(l) for l in open(a.prompts) if l.strip()]
     if a.filter:

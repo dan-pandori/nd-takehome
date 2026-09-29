@@ -271,4 +271,5 @@ if __name__ == '__main__':
             c.add_argument('--compare_nd', action='store_true')
         c.set_defaults(fn=fn)
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     a.fn(a)

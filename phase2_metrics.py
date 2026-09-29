@@ -102,6 +102,7 @@ def main():
     ap.add_argument('--pattern', required=True)
     ap.add_argument('--out', required=True)
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     res = {}
     for arm in a.arms:
         if not glob.glob(f'{arm}/round_*.json'):

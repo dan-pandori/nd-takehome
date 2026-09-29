@@ -113,6 +113,7 @@ def main():
     ap.add_argument('--arms', nargs='*', default=None); ap.add_argument('--out', default='ladder.md'); ap.add_argument('--json', default='artifacts/ladder/summary.json')
     ap.add_argument('--pools', default='data/ladder')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     transfer, targets = rd(f'{a.pools}/transfer.jsonl'), rd(f'{a.pools}/rl_targets.jsonl')
     arms = a.arms or sorted(os.path.basename(d) for d in glob.glob(f'{a.dir}/la_*') if os.path.isdir(d))
     summ = {}

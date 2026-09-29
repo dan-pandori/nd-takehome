@@ -457,6 +457,7 @@ def main():
     t.add_argument('--patterns', default=None, help='comma list of pattern keys to build pools for (default: all + none)')
     t.add_argument('--suffix', default='', help='suffix for output file names, e.g. 2 -> targets_reductio2.jsonl')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), getattr(a, 'out', None) or (a.outdir + '/' if getattr(a, 'outdir', None) else None))    # the resolved config next to the outputs
     {'gen': cmd_gen, 'merge': cmd_merge, 'assemble': cmd_assemble, 'targets': cmd_targets}[a.cmd](a)
 
 

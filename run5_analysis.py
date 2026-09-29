@@ -59,6 +59,7 @@ def coverage(fn):
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--out', default='artifacts/r5/summary.json'); ap.add_argument('--figs', default='figures')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     res = {}
     for pattern, arms in ARMS.items():
         P = {'targets_file': TARGETS[pattern], 'arms': {}, 'coverage': {}, 'campaign': {k: ({str(kk): vv for kk, vv in v.items()} if isinstance(v, dict) else v) for k, v in CAMPAIGN[pattern].items()}}

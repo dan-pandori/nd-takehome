@@ -41,6 +41,7 @@ def per_round(d, pattern):
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--out', default='artifacts/r3/summary.json'); ap.add_argument('--figs', default='figures')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     res = {}
     for pattern, arm, seed in ARMS:
         A = {'pattern': pattern, 'seed': seed, 'parent_per_round': PARENT[arm], 'conditions': {}}

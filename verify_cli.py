@@ -26,6 +26,7 @@ def main():
     ap.add_argument('--out', default=None)
     ap.add_argument('--reasons', action='store_true')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     n = valid = 0
     reasons = collections.Counter()
     fo = open(a.out, 'w') if a.out else None

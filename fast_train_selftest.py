@@ -38,6 +38,7 @@ def main():
     ap.add_argument('--out', required=True)
     ap.add_argument('--n', type=int, default=2000)
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     dev = 'cuda'
     res = {}
     tok = make_tokenizer('lean_seq')

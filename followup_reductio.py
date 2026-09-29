@@ -36,6 +36,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--out', default='artifacts/fu/blockB_summary.json'); ap.add_argument('--fig', default='figures/followup_reductio.png')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     T = {json.loads(l)['name']: json.loads(l) for l in open('data/p2/targets_reductio2.jsonl')}
     n = len(T)
     res = {'n_targets': n, 'n_transfer': sum(1 for _ in open('data/p2/transfer_reductio2.jsonl')), 'arms': {}}

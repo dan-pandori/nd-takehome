@@ -59,6 +59,7 @@ def main():
     ap.add_argument('--exclude', nargs='*', default=[]); ap.add_argument('--fill', default=None)
     ap.add_argument('--per_len', type=int, default=31000); ap.add_argument('--seed', type=int, default=0); ap.add_argument('--prefix', default='train')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     rng = random.Random(a.seed)
     stats = collections.Counter()
     keys, thms = load_excl(a.exclude)

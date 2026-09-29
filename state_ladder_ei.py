@@ -194,9 +194,8 @@ def main():
     a = ap.parse_args()
     out = f'{a.outdir}/{a.name}'
     os.makedirs(out, exist_ok=True); os.makedirs(os.path.dirname(a.ckptdir + '/x'), exist_ok=True)
-    json.dump(vars(a), open(f'{out}/args.json', 'w'), indent=1)
     import record    # results registry (REGISTRY.md): each round's headline stats
-    record.set_config(vars(a), arm=a.name)
+    record.save_config(vars(a), out, arm=a.name)    # also writes <out>/args.json
     if not a.no_train:
         record.preflight()    # the round checkpoints upload on save: fail now if they cannot
     dev = 'cuda'

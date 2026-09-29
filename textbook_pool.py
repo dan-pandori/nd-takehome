@@ -82,6 +82,7 @@ def main():
     ap.add_argument('--seed', type=int, default=0)
     ap.add_argument('--max_prompt_toks', type=int, default=90)
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     rng = random.Random(a.seed)
     excl = {canon_key(json.loads(l)['thm'].strip()) for l in open('targets/validation_36.jsonl')}
     n_val = len(excl)

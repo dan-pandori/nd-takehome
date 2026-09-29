@@ -291,6 +291,7 @@ def main():
     ap.add_argument('--compare_nd', action='store_true', help='also run nd_verify and print the agreement table; nd_verify judges '
                     'nothing (Dan, 2026-09-27) -- this flag exists only to reproduce pre-2026-09-27 numbers')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     if a.selftest:
         sys.exit(0 if selftest() else 1)
     verify_text = None

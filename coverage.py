@@ -56,7 +56,7 @@ def main():
     ap.add_argument('--procs', type=int, default=1, help='verification workers (fork pool, created before CUDA init)')
     a = ap.parse_args()
     import record    # results registry (REGISTRY.md): per-shard pass@B and per-sample rate at the end of the shard
-    record.set_config(vars(a))
+    record.save_config(vars(a), a.out)
     pool = multiprocessing.get_context('fork').Pool(a.procs) if a.procs > 1 else None
     si, sn = map(int, a.shard.split('/'))
     dev = 'cuda'

@@ -98,6 +98,7 @@ def main():
     ap.add_argument('sets', nargs='+'); ap.add_argument('--out', default=None); ap.add_argument('--lean', action='store_true')
     ap.add_argument('--limit', type=int, default=None)
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     res = {}
     for fn in a.sets:
         recs = [json.loads(l) for l in open(fn) if l.strip()]

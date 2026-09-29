@@ -25,6 +25,7 @@ def main():
     ap.add_argument('--round', type=int, default=8)
     ap.add_argument('--pool', default='targets', choices=['targets', 'transfer'])
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     rep = json.load(open(a.report)) if a.report else {}
     pts = collections.defaultdict(list)   # (pattern, kind) -> list of (f, acq, seed, n_proofs)
     for fn in a.metrics:

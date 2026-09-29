@@ -235,4 +235,5 @@ if __name__ == '__main__':
     b = sub.add_parser('build'); b.add_argument('--out', default='data/r1/prompts.jsonl'); b.add_argument('--n_transfer', type=int, default=200); b.add_argument('--draws', type=int, default=5)
     s = sub.add_parser('score'); s.add_argument('--prompts', required=True); s.add_argument('--gens', required=True); s.add_argument('--out', required=True)
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), getattr(a, 'out', None))    # the resolved config next to the outputs
     {'build': cmd_build, 'score': cmd_score}[a.cmd](a)

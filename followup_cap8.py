@@ -11,6 +11,7 @@ ARMS = [('ei', 0, 0), ('ei', 0, 1), ('ei', 0.001, 0), ('ei', 0.01, 0), ('frozen'
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--out', default='artifacts/fu/blockC_summary.json'); ap.add_argument('--fig', default='figures/followup_cap8_dial.png')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     res = {'cap': 8, 'n_targets': 500, 'n_transfer': 250, 'arms': {}}
     for kind, f, s in ARMS:
         d = f'artifacts/p2/{kind}_derived_ore_strict_f{f:g}_c8_s{s}'

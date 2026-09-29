@@ -111,6 +111,7 @@ def main():
     ap.add_argument('--covdir', default='artifacts/ign')
     ap.add_argument('--figs', default=None)
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     summary = {}
     for sname, S in SETS.items():
         P = S['pattern']; N = S['n']

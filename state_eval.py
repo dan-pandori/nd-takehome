@@ -32,7 +32,7 @@ def main():
     ap.add_argument('--limit', type=int, default=0)
     a = ap.parse_args()
     import record    # results registry (REGISTRY.md)
-    record.set_config(vars(a))
+    record.save_config(vars(a), a.out or a.summary)
     recs = [json.loads(l) for l in open(a.inp) if l.strip()]
     if a.limit:
         recs = recs[:a.limit]

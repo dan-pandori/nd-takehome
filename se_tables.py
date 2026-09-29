@@ -16,6 +16,7 @@ def main():
     ap.add_argument('--heldout_glob', default='artifacts/se/heldout_*.json')
     ap.add_argument('--out', default='artifacts/se/tables.md')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     d = json.load(open(a.summary))
     d = d.get('ladders', d)          # artifacts/se/summary.json nests the ladder summary
     L = []

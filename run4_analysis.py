@@ -17,6 +17,7 @@ EI_SOLVED = {'a1_s0': 645, 'a1_s1': 698, 'a2_s0': 589, 'a2_s1': 652, 'a3_s0': 60
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--out', default='artifacts/r4/summary.json'); ap.add_argument('--figs', default='figures')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     res = {'grpo': {}, 'ei': {}}
     for d in sorted(glob.glob('artifacts/r4/grpo_g*')):
         if not glob.glob(f'{d}/round_*.json'): continue

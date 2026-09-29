@@ -172,6 +172,7 @@ def main():
     ap.add_argument('--batch', type=int, default=768)
     ap.add_argument('--verify', action='store_true', help='re-verify every normalised proof (sanity)')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     dev = 'cuda' if torch.cuda.is_available() else 'cpu'
     recs = []
     for s in a.src:

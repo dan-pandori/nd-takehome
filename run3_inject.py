@@ -24,6 +24,7 @@ def main():
     ap.add_argument('--sibling_mode', action='store_true', help='--inject is a found_<r>.jsonl: draw --n pattern proofs of distinct theorems')
     ap.add_argument('--round', type=int, default=4); ap.add_argument('--retain', type=int, default=20000); ap.add_argument('--max_per_thm', type=int, default=4); ap.add_argument('--rl_weight', type=int, default=4)
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     rng = random.Random(a.seed * 1000 + a.round + hash(a.tag) % 997)
     own = collections.defaultdict(list)
     fn_own = f'{a.own}/found_{a.round}.jsonl'

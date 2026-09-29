@@ -448,6 +448,7 @@ def main():
     ap.add_argument('--no_derived_ore', action='store_true', help='restricted search: ORE only over premise disjunctions (= --forbid ORE_DERIVED_LOOSE)')
     ap.add_argument('--forbid', nargs='*', default=[], help=f'rule restrictions: {FORBID}. DN also disables the reductio template; ORE_DERIVED forbids ORE over a disjunction that is not a premise, not an open hypothesis and not ( X v X ) (the complement of patterns.derived_ore_strict); ORE_DERIVED_LOOSE forbids ORE over any non-premise line')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     if a.selftest:
         selftest(); return
     recs = [json.loads(l) for l in open(a.inp) if l.strip()]

@@ -16,6 +16,7 @@ from lean_prompts import build_messages
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--out', default='data/r1/scale_prompts.jsonl'); ap.add_argument('--per_class', type=int, default=40)
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     rng = random.Random(0)
     P = [json.loads(l) for l in open('data/r1/prompts.jsonl')]
     ex_prompts = next(p for p in P if p['draw'] == 0 and p['form'] == 'lean')['examples']

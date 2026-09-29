@@ -139,9 +139,10 @@ def t6():
     print('6. Lean agrees with the renderer on the state (30 cases)')
     if not os.path.exists(os.path.expanduser('~/.elan/bin/lean')):
         print('  skip (no lean)'); return
-    if not os.path.exists('data/p2/train_depth3_f0_a1.jsonl'):
-        print('  skip (no control set)'); return
-    p = subprocess.run([sys.executable, 'state_gate2.py', '--n', '30', '--chunk', '15', '--seed', '3',
+    data = 'data/p2/train_depth3_f0_a1.jsonl'     # the control set; untracked, so CI uses the fixed fixture instead
+    if not os.path.exists(data):
+        data = 'tests/fixtures/proofs150.jsonl'; print('  (no control set: using ' + data + ')')
+    p = subprocess.run([sys.executable, 'state_gate2.py', '--data', data, '--n', '30', '--chunk', '15', '--seed', '3',
                         '--out', '/tmp/t6.json', '--dump', '/tmp/t6.jsonl'], capture_output=True, text=True)
     try:
         d = json.load(open('/tmp/t6.json'))

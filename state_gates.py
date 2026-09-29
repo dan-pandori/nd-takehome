@@ -26,6 +26,7 @@ def main():
     ap.add_argument('--seed', type=int, default=0)
     ap.add_argument('--canon', action='store_true', help='arm SN: canonical (scope-determined) names')
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     tk = LeanTokenizer('lean_staten' if a.canon else 'lean_state')
     rng = random.Random(a.seed)
     recs = [json.loads(l) for l in open(a.data) if l.strip()]

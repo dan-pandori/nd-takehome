@@ -82,6 +82,7 @@ def main():
     ap.add_argument('--procs', type=int, default=6); ap.add_argument('--limit', type=int, default=None)
     ap.add_argument('--classical_only', default=None, help="jsonl with fields name + classical_only (intuit.py output), or 'all' (every candidate is classical-only by construction)")
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     recs = [json.loads(l) for l in open(a.inp) if l.strip()]
     if a.limit:
         recs = recs[:a.limit]

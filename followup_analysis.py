@@ -91,6 +91,7 @@ def main():
     ap.add_argument('--fig', default='figures/followup_depth3_strips.png')
     ap.add_argument('--round', type=int, default=8)
     a = ap.parse_args()
+    import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     arms = []
     for f, sufs in SETS.items():
         for suf in sufs:
