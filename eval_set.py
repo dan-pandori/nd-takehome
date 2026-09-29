@@ -92,8 +92,10 @@ def main():
     ap.add_argument('--batch', type=int, default=4096)   # policy 2026-09-28: the largest that fits
     ap.add_argument('--summary', default=None)
     a = ap.parse_args()
+    import record    # results registry (REGISTRY.md)
+    record.set_config(vars(a))
     dev = 'cuda' if torch.cuda.is_available() else 'cpu'
-    model, tok, _ = load_ckpt(a.ckpt, dev)
+    model, tok, extra = load_ckpt(a.ckpt, dev)
     recs = [json.loads(l) for l in open(a.inp) if l.strip()]
     if a.limit:
         recs = recs[:a.limit]
@@ -113,6 +115,11 @@ def main():
             f.write(json.dumps(r) + '\n')
     if a.summary:
         json.dump(summ, open(a.summary, 'w'), indent=1)
+    # seed column = the model's training seed; the sampling seed is a label
+    greedy = a.k == 1 and a.temperature == 0
+    record.summary_rows(summ, record.split_of(a.inp), 'greedy' if greedy else 'pass@k', k=a.k, ckpt=a.ckpt, data=a.inp,
+                        source=a.summary or a.out, role=record.ckpt_role(extra), seed=record.model_seed(extra),
+                        sample_seed=None if greedy else a.seed, temperature=summ['temperature'], lenfield=a.lenfield)
 
 
 if __name__ == '__main__':

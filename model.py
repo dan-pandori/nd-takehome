@@ -117,7 +117,12 @@ class GPT(nn.Module):
 
 
 def save_ckpt(path, model, tok_mode, extra=None):
+    """Write the checkpoint, then upload it to hf://…/<ND_RUN_ID>/ckpts/ before returning (record.publish_ckpt):
+    raises if ND_RUN_ID is unset or the upload fails; ND_OFFLINE=1 is the explicit opt-out. See REGISTRY.md."""
+    import record
+    record.run_id(required=not record.offline())    # fail before the write, not after hours of training
     torch.save({'cfg': model.cfg, 'state': model.state_dict(), 'tok_mode': tok_mode, 'extra': extra or {}}, path)
+    return record.publish_ckpt(path, step=(extra or {}).get('step'))
 
 
 def load_ckpt(path, device='cpu'):

@@ -496,6 +496,8 @@ def run(a, model, tok, dev, loader, lr_at, load_val, save_ckpt, VAL_SHIFT_SEED, 
              'setup_s': t0 - t_setup, 'peak_mem': peak, 'useful_tokens': useful, 'computed_tokens': computed,
              'useful_tok_per_s_train': frac / max(train_s, 1e-9)}
     save_ckpt(a.out, model, tok.mode, extra=extra)
+    import record    # results registry: final losses (config was registered by train.py)
+    record.train_rows(a, locals().get('rec', {}), extra)
     if mf:
         mf.write(json.dumps({'kind': 'done', 'utc': time.strftime('%FT%TZ', time.gmtime()), 'out': a.out, 'secs': secs,
                              'val_full_s': val_s, 'steps_run': n_run, 'val_full_overhead': val_s / max(train_s, 1e-9),

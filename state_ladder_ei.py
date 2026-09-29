@@ -195,6 +195,8 @@ def main():
     out = f'{a.outdir}/{a.name}'
     os.makedirs(out, exist_ok=True); os.makedirs(os.path.dirname(a.ckptdir + '/x'), exist_ok=True)
     json.dump(vars(a), open(f'{out}/args.json', 'w'), indent=1)
+    import record    # results registry (REGISTRY.md): each round's headline stats
+    record.set_config(vars(a), arm=a.name)
     dev = 'cuda'
     ENV['max_action'] = a.max_action; ENV['max_steps'] = a.max_steps
     targets, transfer, heldout = read(a.targets), read(a.transfer), read(a.heldout)
@@ -376,6 +378,7 @@ def main():
         stats['env'] = env_stats_json(ENV['stats'])
         stats['secs'] = time.time() - t0
         json.dump(stats, open(f'{out}/round_{r}.json', 'w'), indent=1)
+        record.round_stats(stats, f'{out}/round_{r}.json', init=a.init, frozen=a.no_train)
         print(f'=== round {r} done in {stats["secs"]:.0f}s; new proofs {new_this}; cum targets solved {stats["targets_cum"]["solved"]} L*={stats["targets_cum"]["lstar"]}; transfer L*={stats["transfer_cum"]["lstar"]}', flush=True)
 
 

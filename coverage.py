@@ -55,10 +55,12 @@ def main():
     ap.add_argument('--lenfield', default='n_lines')
     ap.add_argument('--procs', type=int, default=1, help='verification workers (fork pool, created before CUDA init)')
     a = ap.parse_args()
+    import record    # results registry (REGISTRY.md): per-shard pass@B and per-sample rate at the end of the shard
+    record.set_config(vars(a))
     pool = multiprocessing.get_context('fork').Pool(a.procs) if a.procs > 1 else None
     si, sn = map(int, a.shard.split('/'))
     dev = 'cuda'
-    model, tok, _ = load_ckpt(a.ckpt, dev)
+    model, tok, extra = load_ckpt(a.ckpt, dev)
     is_lean = hasattr(tok, 'statement')   # Lean-format model: tok.last_text is the literal sampled Lean text
     recs = [json.loads(l) for l in open(a.inp) if l.strip()]
     recs = [r for i, r in enumerate(recs) if i % sn == si]
@@ -148,6 +150,19 @@ def main():
             el = time.time() - t_start
             print(f'{name}: n_ok {n_ok}/{n} distinct_ok {len(ok_proofs)} first_hit {first_hit} written_hist {rec["written_hist"]} '
                   f'({time.time()-t0:.0f}s; {n_done} done, {el/n_done:.0f}s/thm, ETA {(len(recs)-len(done)-n_done)*el/n_done/60:.0f} min)', flush=True)
+    # registry rows over the whole shard file (resumed theorems included), so a shard is summarised exactly once per
+    # completed pass; registry_merge drops exact duplicates from a re-run that found everything done
+    allr = [json.loads(l) for l in open(out_fn) if l.strip()]
+    lab = dict(split=record.split_of(a.inp), k=a.k, shard=a.shard + ('r' if a.reverse else ''), ckpt=a.ckpt,
+               data=a.inp, source=out_fn, role=record.ckpt_role(extra), seed=record.model_seed(extra),
+               sample_seed=a.seed, temperature=a.temperature, max_new=a.max_new)
+    for B in BUDGETS:
+        if B <= a.k:
+            record.record(f'coverage_pass@{B}', sum(x['solved_within'][str(B)] for x in allr) / max(1, len(allr)),
+                          n=len(allr), **lab)
+    record.record('coverage_solved_frac', sum(x['n_ok'] > 0 for x in allr) / max(1, len(allr)), n=len(allr), **lab)
+    record.record('coverage_sample_rate', sum(x['n_ok'] for x in allr) / max(1, sum(x['n_tried'] for x in allr)),
+                  n=sum(x['n_tried'] for x in allr), **lab)
     print('DONE', flush=True)
 
 

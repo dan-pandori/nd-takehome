@@ -87,6 +87,8 @@ def main():
     ap.add_argument('--log_every', type=int, default=200)
     ap.add_argument('--max_tokens', type=int, default=200000, help='padded tokens per micro-batch (same gradient, less memory)')
     a = ap.parse_args()
+    import record    # results registry (REGISTRY.md)
+    record.set_config(vars(a), role='finetune' if a.init else 'stage1')
     torch.manual_seed(a.seed)
     rng = random.Random(a.seed)
     dev = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -155,6 +157,10 @@ def main():
             print(msg, flush=True)
     save_ckpt(a.out, model, tok.mode, extra={'args': vars(a), 'n_params': model.n_params(), 'secs': time.time() - t0,
                                              'pairs': npairs, 'records': len(data)})
+    lab = dict(ckpt=a.out, data=a.data, source=a.out, n_params=model.n_params(), pairs=npairs)
+    record.record('train_loss', loss.item(), **lab)
+    if held:
+        record.record('val_loss', tot / n, n=len(held), **lab)
     print('saved', a.out, flush=True)
 
 

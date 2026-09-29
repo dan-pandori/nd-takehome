@@ -205,6 +205,8 @@ def main():
     ap.add_argument('--no_compile', action='store_true', help='--impl fast: do not torch.compile')
     ap.add_argument('--no_graph', action='store_true', help='--impl fast: do not capture the step as a CUDA graph')
     a = ap.parse_args()
+    import record    # results registry (REGISTRY.md): config + final losses; save_ckpt uploads each checkpoint
+    record.set_config(vars(a), role='finetune' if a.init else 'stage1')
     torch.manual_seed(a.seed)
     rng = random.Random(a.seed)
     dev = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -315,8 +317,11 @@ def main():
             fn = (a.out[:-3] if a.out.endswith('.pt') else a.out) + f'.step{step:05d}.pt'
             save_ckpt(fn, model, tok.mode, extra={'args': vars(a), 'n_params': model.n_params(), 'secs': time.time() - t0, 'step': step})
     secs = time.time() - t0
-    save_ckpt(a.out, model, tok.mode, extra={'args': vars(a), 'n_params': model.n_params(), 'secs': secs,
-                                             'val_full_s': val_s[0], 'steps_run': a.steps - step0, 'step': a.steps})
+    extra = {'args': vars(a), 'n_params': model.n_params(), 'secs': secs, 'val_full_s': val_s[0],
+             'steps_run': a.steps - step0, 'step': a.steps}
+    save_ckpt(a.out, model, tok.mode, extra=extra)
+    import record
+    record.train_rows(a, locals().get('rec', {}), extra)
     if mf:
         mf.write(json.dumps({'kind': 'done', 'utc': time.strftime('%FT%TZ', time.gmtime()), 'out': a.out, 'secs': secs,
                              'val_full_s': val_s[0], 'steps_run': a.steps - step0,

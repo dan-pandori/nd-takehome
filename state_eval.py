@@ -31,10 +31,12 @@ def main():
     ap.add_argument('--lenfield', default='n_lines')
     ap.add_argument('--limit', type=int, default=0)
     a = ap.parse_args()
+    import record    # results registry (REGISTRY.md)
+    record.set_config(vars(a))
     recs = [json.loads(l) for l in open(a.inp) if l.strip()]
     if a.limit:
         recs = recs[:a.limit]
-    model, tok, _ = load_ckpt(a.ckpt, 'cuda')
+    model, tok, extra = load_ckpt(a.ckpt, 'cuda')
     stats = {}
     prompts = [r['prompt'] for r in recs for _ in range(a.k)]
     t0 = time.time()
@@ -56,6 +58,10 @@ def main():
     if a.summary:
         os.makedirs(os.path.dirname(a.summary) or '.', exist_ok=True)
         json.dump(summ, open(a.summary, 'w'), indent=1)
+    greedy = a.k == 1 and a.temperature == 0
+    record.summary_rows(summ, record.split_of(a.inp), 'greedy' if greedy else 'pass@k', k=a.k, ckpt=a.ckpt, data=a.inp,
+                        source=a.summary or a.out, role=record.ckpt_role(extra), seed=record.model_seed(extra),
+                        sample_seed=None if greedy else a.seed, temperature=a.temperature, env='state')
 
 
 if __name__ == '__main__':

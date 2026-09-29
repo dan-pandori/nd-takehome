@@ -117,6 +117,8 @@ def main():
     os.makedirs(out, exist_ok=True)
     os.makedirs('ckpts', exist_ok=True)
     json.dump(vars(a), open(f'{out}/args.json', 'w'), indent=1)
+    import record    # results registry (REGISTRY.md): each round's headline stats
+    record.set_config(vars(a), arm=a.name)
     dev = 'cuda'
     targets, transfer, heldout = read(a.targets), read(a.transfer), read(a.heldout)
     eval_keys = {r['key'] for r in transfer} | {r['key'] for r in heldout} | {r['key'] for r in targets}
@@ -247,6 +249,7 @@ def main():
                 ckpt = new_ckpt
         stats['secs'] = time.time() - t0
         json.dump(stats, open(f'{out}/round_{r}.json', 'w'), indent=1)
+        record.round_stats(stats, f'{out}/round_{r}.json', init=a.init, frozen=a.no_train)
         print(f'=== round {r} done in {stats["secs"]:.0f}s; new proofs {new_this}; cum targets solved {stats["targets_cum"]["solved"]}', flush=True)
 
 

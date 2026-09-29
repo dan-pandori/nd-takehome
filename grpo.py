@@ -18,7 +18,7 @@ one Adam step (grad-norm clip 1.0).  Sampling uses the current parameters (no re
 import argparse, json, os, sys, random, collections, time, math
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import torch, torch.nn.functional as F
-from model import load_ckpt
+from model import load_ckpt, save_ckpt
 from sample import generate_ids, generate
 from lean_judge import judge_many    # Lean alone decides (Dan, 2026-09-27)
 from prune import pruned_length
@@ -66,6 +66,8 @@ def main():
     a = ap.parse_args()
     out = f'artifacts/{a.name}'; os.makedirs(out, exist_ok=True); os.makedirs('ckpts/' + os.path.dirname(a.name), exist_ok=True)
     json.dump(vars(a), open(f'{out}/args.json', 'w'), indent=1)
+    import record    # results registry (REGISTRY.md): each round's headline stats
+    record.set_config(vars(a), arm=a.name)
     dev = 'cuda'
     torch.manual_seed(a.seed); rng = random.Random(a.seed)
     model, tok, _ = load_ckpt(a.init, dev)
@@ -137,7 +139,7 @@ def main():
             r = boundaries[step]
             model.eval()
             ck = f'ckpts/{a.name}_r{r}.pt'
-            torch.save({'cfg': model.cfg, 'state': model.state_dict(), 'tok_mode': tok.mode, 'extra': {'grpo_round': r, 'step': step}}, ck)
+            save_ckpt(ck, model, tok.mode, extra={'grpo_round': r, 'step': step})    # uploads before returning
             with open(f'{out}/found_{r}.jsonl', 'w') as f:
                 for t in targets:
                     for x in found[t['name']].values():
@@ -172,6 +174,7 @@ def main():
                      'frac_groups_with_variance_mean': float(sum(s['frac_groups_with_variance'] for s in stats_steps[-max(1, steps // a.rounds):]) / max(1, len(stats_steps[-max(1, steps // a.rounds):]))),
                      'steps': stats_steps[-max(1, steps // a.rounds):], 'secs': time.time() - t0}
             json.dump(stats, open(f'{out}/round_{r}.json', 'w'), indent=1)
+            record.round_stats({**stats, 'ckpt': ck}, f'{out}/round_{r}.json', init=a.init, frozen=False)
             print(f"[{a.name} r{r}] step {step} samples {samples_seen} targets solved {stats['targets_cum']['solved']}/{N} transfer {stats['transfer_cum']['solved']}/{len(transfer)} heldout greedy {stats['heldout_greedy']['rate']:.3f} var-groups {stats['frac_groups_with_variance_mean']:.2f}", flush=True)
             model.train()
     print('DONE', flush=True)
