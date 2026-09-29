@@ -723,3 +723,17 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   `long-pool/artifacts/lpool/<same>` in the bucket (size + xet hash; `index_longpool.tsv`) and were also mirrored.
   Merged `origin/dan`, `git rm --cached` the 5, appended them to `ARTIFACTS_INDEX.tsv`. Their content is unchanged.
 - 01:59  CI on the merged tip failed one step, correctly: long-pool's new `lpool_assemble.py` takes `--out` without `record.save_config` (60 scripts now). Added the one line.
+
+# log — state-cap12
+
+- 2026-09-29 02:34 UTC pre-registration committed (`c34abbfb`), before any pod.
+- 02:34–02:37 gates 1 / 1b / 3 on K12 (`data/kh/train_k12.jsonl`, canonical names), VPS: **0 failures / 155,000**
+  (round trip and replay), **0 / 3,000** Lean rejections; 8.00 actions per proof (3–13), longest action 220 tokens,
+  longest state 386 (cap 6: 303), `have` name ≠ scope max + 1: 0. File `artifacts/sc12/gate13_canon_k12.json`.
+- 02:37–02:42 pods: `sc-s0`, `sc-s1` RTX 3090 $0.50/h; `sc-s2`, `sc-s3`, `sc-k0`, `sc-k1` A40 $0.49/h (3090 stock ran
+  out after two). Budget registered 40 h / $20.
+- 02:43–02:46 launched `pod/sc12/sn_seed.sh 0..3` (Stage-1 SN-cap12 → held-out → [waits for GATES_OK] → T1 →
+  re-reads) and `pod/sc12/k12_t1.sh 0,1` (K12 whole-proof T1 → re-read). Stage-1: 3,216,384 params, ≈ 1,020 pairs per
+  step (cap 6: ≈ 640).
+- Gate 2 first attempt crashed (`KeyError: 'name'`: K12 records carry no `name`); re-run on a copy with
+  `name = k12_<line>` (`data/kh/train_k12_ge7.jsonl`, 84,545 proofs of ≥ 7 lines).
