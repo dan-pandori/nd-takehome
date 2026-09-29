@@ -1348,3 +1348,29 @@ Source: `artifacts/lp/workers{,_j,_j2}.jsonl`. 30,000 arm-A texts, A40 pod (7.65
 ## Spend
 Pods `lp-t` (1.44 h, $0.71) and `lp-k` (1.22 h, $0.60), NVIDIA A40 secure at $0.49/h billed: **2.67 pod-hours,
 $1.31** of $3 / 6 h. Bucket: `hf://buckets/dan-pandori/nd-rl/lean-prefilter/artifacts/lp/`.
+
+# results-registry (2026-09-29)
+
+Every number here is re-derived by `python3 registry_acceptance.py` → `artifacts/results-registry/acceptance.json`.
+Bucket: `hf://buckets/dan-pandori/nd-rl/registry/<run>/` (rows), `registry_merged/` (merged table, .jsonl.gz and
+.csv.gz), `results-registry/ckpts/rr/`, `results-registry/artifacts/{rr,results-registry}/`.
+
+**Models (smoke run only; no model-quality claim).** `ckpts/rr/smoke_s0.pt` is 3.2 M parameters, `lean_seq`, from
+scratch, 300 steps on `data/p2/train_depth3_f0_a1.jsonl`, seed 0: a throwaway, held-out greedy 4 / 500 on the first 500
+held-out theorems (`artifacts/rr/heldout_greedy.json`). `ckpts/rr/ei_fast1_s0_r{1,2}.pt` are two 30-step EI
+fine-tunes of fast-stage1's `ckpts/fs/fast1_s0.pt` (3.2 M, `lean_seq`, from scratch, 6,000 steps, same training
+set; md5 ae3dfb40…).
+
+| check (pre-registered) | expected | measured | source |
+|---|---|---|---|
+| E1 checkpoint URI → download md5 = row md5 | 100 %, ≥ 3 | **5 / 5** (final, step 150, state 150, EI r1, EI r2); local copies identical | acceptance.json `E1` |
+| E2 negative controls must fail | 3 / 3 fail | **3 / 3**: flipped byte detected; no `ND_RUN_ID` raises; missing bucket raises (VPS and pod) | acceptance.json `E2_flip_detected`; `tests/test_registry.py`; `artifacts/rr/setup.log` |
+| E3 held-out greedy of control checkpoints, one filter | ≥ 8 runs | **25 runs** (24 reviewed + this smoke run), 3,091 rows | acceptance.json `E3` |
+| E4 three headline numbers exactly | 3 / 3 | **3 / 3** (+1 cross-check): lean-format 0.948; ds-generator 158 / 114; state-env 1,348 (substitute, log.md 01:05), also from its round-8 file via `round_stats` | acceptance.json `E4` |
+| E5 cost | < 5 ms/row; < 30 s/ckpt | **0.058 ms/row** (VPS); **3.4–7.4 s** per 12.9 MB checkpoint, 6.0 s per 38.6 MB state (RTX 3090 pod) | acceptance.json `E5_*` |
+
+Backfill: 32 reviewed runs → **298,943 rows**; 63 live smoke rows; the bucket alone gives the same 299,006
+(`registry_merge.py --bucket --no_local`). Checker labels: `lean+nd_verify` for runs before 2026-09-27, `lean` from
+then on. Per-run file and row counts are in `artifacts/results-registry/backfill_report.json`.
+
+Spend: pod rr-1, RTX 3090 secure cloud, $0.50/h billed, 0.21 h, **$0.10** (`podbudget`).

@@ -662,3 +662,15 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   in 1,310,119" is a sum over selected corpus rows of `lp/soundness.json`, not a stored value. Substitute: state-env
   "Transfer solved after T1: S 1,348" (seed 0; `run_state_env.md` line 10).
 - 01:00  Pod rr-1 (RTX 3090 secure, $0.50/h) created 00:47 after a community-cloud create failed (no stock).
+- 00:47–00:56  Smoke run on rr-1 (`pod/rr/smoke.sh`): train 300 steps (84 s incl. setup), eval 500 held-out, coverage
+  2 × 256, EI 2 rounds. The 300-step model solves 4 / 500 held-out, so neither EI job trained ("no accepted proofs").
+  A third EI job from fast-stage1's `fast1_s0.pt` (downloaded from the bucket) exercised the fine-tune path: two
+  round checkpoints uploaded (3.7 s, 7.4 s). Everything pulled; pod deleted 00:59 (0.21 h, $0.10).
+- 01:00–01:20  Found in the live rows and fixed: (1) `*_sample_acc` rows took the targets file as `data` on transfer
+  rows; (2) EI held-out rows now use the held-out file's stem as the split (so a subset never pools with the full
+  set). The smoke EI rows predate both fixes (their `git_sha` is 88a9bc9), so their `data_md5` / split show the
+  old behaviour. Added `record.preflight()`: training scripts check for `ND_RUN_ID` and the `hf` CLI before the
+  first step (the first version checked only at save, i.e. after training).
+- 01:25  `registry_acceptance.py`: E1 5 / 5, E2 3 / 3, E3 25 runs, E4 3 / 3 (+1), E5 0.058 ms/row, 3.4–7.4 s per
+  checkpoint. Rows uploaded; the bucket alone re-merges to the same 299,006 rows. Merged table in
+  `registry_merged/`.

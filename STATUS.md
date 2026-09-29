@@ -164,3 +164,11 @@ Brief: `docs/proposals/improvements/BRIEF_results-registry.md` (nd-rl). Run id: 
 
 ## results-registry
 - 2026-09-29 00:20 UTC  run started (executor). Pre-registration `preregistration/results-registry.md` committed before any pod.
+- 2026-09-29 01:40 UTC  **Done.** Every pre-registered check passed: checkpoint URIs download to the recorded md5
+  (5 / 5), negative controls fail (3 / 3), one filter gives control-checkpoint held-out accuracy for 25 runs,
+  headline numbers reproduced exactly (3 / 3, one substitute named in advance), and cost is 0.06 ms per row and
+  3–7 s per checkpoint. Backfill: 298,943 rows from 32 reviewed runs. Merged into the fork's `dan`: `save_ckpt`
+  now uploads on save, and training scripts stop at start-up without `ND_RUN_ID` (see `REGISTRY.md`). Proposed
+  policy text is in `QUESTIONS.md`. Spend: rr-1, RTX 3090, 0.21 h, $0.10; pod deleted.
+
+RESULTS-REGISTRY DONE 2026-09-29T01:45:00Z

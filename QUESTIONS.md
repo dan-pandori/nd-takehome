@@ -66,3 +66,27 @@
 - **2026-09-27 18:30 UTC (lean-judge, the `no-denotation` class)** — 2,095 of the 8,514 stored Lean-only samples (all from run `efficiency`) are `kind: no-denotation`: **Lean accepted the literal sampled text but the strict `lean_seq` grammar could not decode it**, so it has no ND denotation. Your 2026-09-27 note says the grammar *is* the allowlist, which makes these not-counted; but they are cases where a sound checker said "this is a proof" and we throw it away, and they were 24.6 % of the stored Lean-only class. **Default: the grammar stays the allowlist** — `lean_judge` rejects them (`LEANPARSE`) and I excluded them from acceptance test 3 rather than expecting them to pass. The alternative is to count any Lean-accepted text and record `nd: null` (which costs the ND denotation that `prune`, `normalize`, `patterns` and every analysis script need, and would need a Lean-side line/term-size source). Say if you want that instead; it is a day of work on the analysis scripts, not on the judge.
 - **2026-09-27 18:30 UTC (lean-judge, `require_all_pr`)** — `nd2lean.translate` refused to translate a proof that re-states fewer premises than the theorem declares. That is 41.7 % of the class Lean accepts and `nd_verify` rejects, so the judge needed `translate(..., require_all_pr=False)`. I left the **default strict** and pass the flag only from `lean_judge`, so generated training data still re-states every premise. **Default: keep it that way.** Say if you would rather the generators also drop premise re-statements (it would shorten training proofs and move the training distribution toward what Lean accepts, but it is a training-data change, not a judging one, and belongs in its own pre-registered run).
 - **2026-09-27 18:30 UTC (lean-judge, relabelling the pools)** — The brief said not to relabel the pools in this run, so `minlen.py`'s `L_true` labels are still ND-derived and are **upper bounds under Lean**; term size is not on any pool record. **Default: not done here.** The follow-up that would close it is one CPU job: `lean_check.py` over the ladder and coverage pools to attach `term_size` and a Lean-minimal length, then relabel. Say if you want it and I will propose it.
+
+# Questions for Dan (results-registry, 2026-09-29). Each has the default I follow if unanswered.
+
+- **2026-09-29 01:40 UTC (results-registry, proposed `AGENT_POLICY.md` text — for Dan's session to adopt)** — The
+  registry is on the fork's `dan` (`REGISTRY.md`). Proposed text, for the "Standards with reasons" list:
+
+  > - **Every checkpoint is in the bucket before the script moves on; every headline number is a registry row**
+  >   (Dan, 2026-09-29). Pod jobs export `ND_RUN_ID=<run id>` and install `huggingface_hub`. `save_ckpt` uploads
+  >   to `hf://…/<run>/ckpts/` and raises if it cannot, and the training scripts check before the first step. Do
+  >   not set `ND_OFFLINE=1` in a pod job. A number that goes into `numbers.md` or a write-up is also a registry
+  >   row: the instrumented scripts write theirs, and anything else is recorded with `record.record(metric, value,
+  >   n=…, source=…)`. Pull `artifacts/<run>/registry/` with the other artifacts. `numbers.md` entries quote the
+  >   metric name and filter that reproduce them (`registry_merge.py --q …`). Reviewers re-derive a sample from
+  >   raw files and check that it matches the registry. Librarians query `registry_merge.py --bucket` instead of
+  >   reading `numbers.md` prose. *Why:* checkpoints were lost or never uploaded in three runs (the 2026-09-22
+  >   cleanup; no Lean-format EI checkpoint before `support-curves`; `support-curves`' seed-1 EI checkpoint), and
+  >   results lived in prose across 27 branches (proposal 15 §5).
+
+  Default if unanswered: nothing changes in `AGENT_POLICY.md` (only Dan's session edits it). The code already
+  enforces the upload for any run that branches from `dan` after this merge.
+- **2026-09-29 01:40 UTC (results-registry, runs in flight)** — Runs that branched before this merge
+  (state-frontier, support-state, long-pool, …) keep the old `save_ckpt` until they merge `dan`. When they do, any
+  pod job without `ND_RUN_ID` stops at start-up with a message saying what to set. Default: leave it to each
+  executor, since the message is explicit.
