@@ -661,7 +661,7 @@ Pods: 3 A40s (p1–p3). Stage-1 ≈ 16 × 5 min spread; coverage ≈ 27 models �
   (its rounds 1–5 are kept and reported as a partial, labelled). **Deviation:** frozen SN s4 (round 7 of 8, ≈ 0.3 h
   left) is kept, because stopping it would discard ≈ 2 h already spent for a saving of 0.3 h; S s3 T1 / frozen (last
   round each) are kept, as the rule allows. sf-4 synced, pulled and deleted (5.51 h, $1.49).
-- 00:05–00:45  sf-3 (frozen SN s4 done) and sf-2 (T1 / frozen S s3, re-sample T1 S s3, two `max_action` 512
+- 00:05–00:35  sf-3 (frozen SN s4 done) and sf-2 (T1 / frozen S s3, re-sample T1 S s3, two `max_action` 512
   diagnostics) synced, pulled and deleted (5.56 h $2.78; 6.18 h $3.03). **No pods left. 22.17 pod-hours, $10.94.**
   T1 S s3: transfer 1,630, `L*` 12, 4 at ≥ 13 (`artifacts/sf2/ladders.json`).
 - 00:39  Final numbers (`sf_analysis.py --term_size` → `artifacts/sf2/summary.json`, `tables.txt`): Q1 reading
