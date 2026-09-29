@@ -1,0 +1,579 @@
+{
+ "n": 1913,
+ "bins": {
+  "11": {
+   "gen_available": 11438,
+   "gen_taken": 300,
+   "textbook_taken": 73,
+   "textbook_by_schema": {
+    "demorgan_nand_to_or": 11,
+    "dist_and_over_or_conv": 9,
+    "dist_or_over_and": 4,
+    "dist_or_over_and_conv": 5,
+    "negated_conditional": 4,
+    "peirce": 40
+   }
+  },
+  "12": {
+   "gen_available": 5406,
+   "gen_taken": 300,
+   "textbook_taken": 128,
+   "textbook_by_schema": {
+    "demorgan_nand_to_or": 4,
+    "dist_and_over_or_conv": 40,
+    "dist_or_over_and": 40,
+    "dist_or_over_and_conv": 4,
+    "negated_conditional": 40
+   }
+  },
+  "13": {
+   "gen_available": 2535,
+   "gen_taken": 300,
+   "textbook_taken": 41,
+   "textbook_by_schema": {
+    "demorgan_nand_to_or": 1,
+    "dist_or_over_and_conv": 40
+   }
+  },
+  "14": {
+   "gen_available": 975,
+   "gen_taken": 300,
+   "textbook_taken": 40,
+   "textbook_by_schema": {
+    "demorgan_nand_to_or": 40
+   }
+  },
+  "15": {
+   "gen_available": 443,
+   "gen_taken": 300,
+   "textbook_taken": 0,
+   "textbook_by_schema": {}
+  },
+  "16": {
+   "gen_available": 131,
+   "gen_taken": 131,
+   "textbook_taken": 0,
+   "textbook_by_schema": {}
+  }
+ },
+ "ge17_lower_bound_only": 70,
+ "stats": {
+  "g1:generated": 24400,
+  "g1:unknown": 22,
+  "g2:generated": 255368,
+  "g2:unknown": 375,
+  "g3:generated": 224596,
+  "dup_class_across_chunks": 8,
+  "g3:unknown": 420,
+  "g4:generated": 103852,
+  "g4:unknown": 488,
+  "tb:generated": 906,
+  "tb:unknown": 30
+ },
+ "labelled_candidates_by_bin_source": {
+  ">=17|gen": 70,
+  "11|gen": 11443,
+  "11|textbook": 127,
+  "12|gen": 5406,
+  "12|textbook": 347,
+  "13|gen": 2535,
+  "13|textbook": 78,
+  "14|gen": 975,
+  "14|textbook": 97,
+  "15|gen": 443,
+  "16|gen": 131
+ },
+ "timeouts_by_stage_chunk": {
+  "bound10|g1": 15,
+  "bound10|g2": 279,
+  "bound10|g3": 260,
+  "bound10|g4": 440,
+  "bound10|tb": 9,
+  "bound12|g1": 3,
+  "bound12|g2": 48,
+  "bound12|g3": 47,
+  "bound12|g4": 24,
+  "bound12|tb": 21,
+  "bound14|g1": 4,
+  "bound14|g2": 38,
+  "bound14|g3": 74,
+  "bound14|g4": 20,
+  "bound16|g2": 10,
+  "bound16|g3": 39,
+  "bound16|g4": 4
+ },
+ "disjointness": {
+  "data/heldout.jsonl": {
+   "records": 5000,
+   "candidate_classes_hit": 0
+  },
+  "data/ladder/rl_targets.jsonl": {
+   "records": 4495,
+   "candidate_classes_hit": 22
+  },
+  "data/ladder/transfer.jsonl": {
+   "records": 2285,
+   "candidate_classes_hit": 23
+  },
+  "data/lj/heldout200.jsonl": {
+   "records": 200,
+   "candidate_classes_hit": 0
+  },
+  "data/lj/targets200.jsonl": {
+   "records": 200,
+   "candidate_classes_hit": 0
+  },
+  "data/lj/train_retain.jsonl": {
+   "records": 3000,
+   "candidate_classes_hit": 0
+  },
+  "data/lj/transfer50.jsonl": {
+   "records": 50,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/heldout.jsonl": {
+   "records": 5000,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/heldout_c8.jsonl": {
+   "records": 4998,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/reductio2_cands.jsonl": {
+   "records": 945,
+   "candidate_classes_hit": 38
+  },
+  "data/p2/reductio2_cands_minlen.jsonl": {
+   "records": 945,
+   "candidate_classes_hit": 38
+  },
+  "data/p2/run5_c8_cands.jsonl": {
+   "records": 1568,
+   "candidate_classes_hit": 2
+  },
+  "data/p2/run5_c8_nec.jsonl": {
+   "records": 1568,
+   "candidate_classes_hit": 2
+  },
+  "data/p2/run5_c8c_cands.jsonl": {
+   "records": 1381,
+   "candidate_classes_hit": 2
+  },
+  "data/p2/run5_c8c_nec.jsonl": {
+   "records": 1381,
+   "candidate_classes_hit": 2
+  },
+  "data/p2/run5_c8d_cands.jsonl": {
+   "records": 5040,
+   "candidate_classes_hit": 2
+  },
+  "data/p2/run5_c8d_nec.jsonl": {
+   "records": 5040,
+   "candidate_classes_hit": 2
+  },
+  "data/p2/run5_reductio_nec.jsonl": {
+   "records": 945,
+   "candidate_classes_hit": 38
+  },
+  "data/p2/targets_c8.jsonl": {
+   "records": 500,
+   "candidate_classes_hit": 1
+  },
+  "data/p2/targets_depth3.jsonl": {
+   "records": 1000,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/targets_depth3_intuit.jsonl": {
+   "records": 0,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/targets_depth3_maxdepth2.jsonl": {
+   "records": 1000,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/targets_derived_ore.jsonl": {
+   "records": 1000,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/targets_derived_ore_intuit.jsonl": {
+   "records": 0,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/targets_derived_ore_noderived.jsonl": {
+   "records": 1000,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/targets_derived_ore_strict_c8.jsonl": {
+   "records": 500,
+   "candidate_classes_hit": 1
+  },
+  "data/p2/targets_none.jsonl": {
+   "records": 1000,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/targets_none_intuit.jsonl": {
+   "records": 0,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/targets_reductio.jsonl": {
+   "records": 972,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/targets_reductio2.jsonl": {
+   "records": 606,
+   "candidate_classes_hit": 25
+  },
+  "data/p2/targets_reductio_intuit.jsonl": {
+   "records": 0,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/targets_reductio_req.jsonl": {
+   "records": 300,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/transfer_c8.jsonl": {
+   "records": 250,
+   "candidate_classes_hit": 1
+  },
+  "data/p2/transfer_depth3.jsonl": {
+   "records": 500,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/transfer_depth3_intuit.jsonl": {
+   "records": 0,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/transfer_derived_ore.jsonl": {
+   "records": 500,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/transfer_derived_ore_intuit.jsonl": {
+   "records": 0,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/transfer_derived_ore_strict_c8.jsonl": {
+   "records": 250,
+   "candidate_classes_hit": 1
+  },
+  "data/p2/transfer_none.jsonl": {
+   "records": 500,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/transfer_none_intuit.jsonl": {
+   "records": 0,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/transfer_reductio.jsonl": {
+   "records": 332,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/transfer_reductio2.jsonl": {
+   "records": 300,
+   "candidate_classes_hit": 13
+  },
+  "data/p2/transfer_reductio_intuit.jsonl": {
+   "records": 0,
+   "candidate_classes_hit": 0
+  },
+  "data/p2/transfer_reductio_req.jsonl": {
+   "records": 150,
+   "candidate_classes_hit": 0
+  },
+  "data/r1/prompts.jsonl": {
+   "records": 3540,
+   "candidate_classes_hit": 0
+  },
+  "data/r1/scale_prompts.jsonl": {
+   "records": 106,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/cands_impe_chain4.jsonl": {
+   "records": 1600,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/cands_nested_ore.jsonl": {
+   "records": 800,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/cands_ori_ore.jsonl": {
+   "records": 6000,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/nec_depth4.jsonl": {
+   "records": 6000,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/nec_impe_chain4.jsonl": {
+   "records": 1600,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/nec_impi_ore.jsonl": {
+   "records": 30000,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/nec_negi_ande_hyp.jsonl": {
+   "records": 807,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/nec_nested_ore.jsonl": {
+   "records": 800,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/nec_ori_ore.jsonl": {
+   "records": 6000,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/targets_depth4.jsonl": {
+   "records": 500,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/targets_impe_chain4.jsonl": {
+   "records": 500,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/targets_impi_ore.jsonl": {
+   "records": 500,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/targets_negi_ande_hyp.jsonl": {
+   "records": 400,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/targets_nested_ore.jsonl": {
+   "records": 300,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/targets_ori_ore.jsonl": {
+   "records": 400,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/transfer_depth4.jsonl": {
+   "records": 200,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/transfer_impe_chain4.jsonl": {
+   "records": 200,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/transfer_impi_ore.jsonl": {
+   "records": 200,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/transfer_negi_ande_hyp.jsonl": {
+   "records": 94,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/transfer_nested_ore.jsonl": {
+   "records": 41,
+   "candidate_classes_hit": 0
+  },
+  "data/r2/transfer_ori_ore.jsonl": {
+   "records": 160,
+   "candidate_classes_hit": 0
+  },
+  "data/r3/inject_depth3_gen4.jsonl": {
+   "records": 4,
+   "candidate_classes_hit": 0
+  },
+  "data/r3/inject_depth3_invalid4.jsonl": {
+   "records": 4,
+   "candidate_classes_hit": 0
+  },
+  "data/r3/inject_reductio_gen4.jsonl": {
+   "records": 4,
+   "candidate_classes_hit": 0
+  },
+  "data/r3/inject_reductio_invalid4.jsonl": {
+   "records": 4,
+   "candidate_classes_hit": 0
+  },
+  "data/r3_1/depth3_req.jsonl": {
+   "records": 300,
+   "candidate_classes_hit": 0
+  },
+  "data/r3_1/depth3_req_transfer.jsonl": {
+   "records": 100,
+   "candidate_classes_hit": 0
+  },
+  "data/rl_targets.jsonl": {
+   "records": 3000,
+   "candidate_classes_hit": 0
+  },
+  "data/rl_targets_v1.jsonl": {
+   "records": 3000,
+   "candidate_classes_hit": 0
+  },
+  "data/transfer.jsonl": {
+   "records": 1638,
+   "candidate_classes_hit": 0
+  },
+  "data/transfer_v1.jsonl": {
+   "records": 1600,
+   "candidate_classes_hit": 0
+  },
+  "data/train.jsonl.gz": {
+   "records": 154990,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_depth3_f0.0001.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_depth3_f0.001.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_depth3_f0.01.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_depth3_f0.1.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_depth3_f0.1_b1.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_depth3_f0.1_b2.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_depth3_f0.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_depth3_f0_a1.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_depth3_f0_a2.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_depth3_f0_a3.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_derived_ore_f0.0001.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_derived_ore_f0.001.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_derived_ore_f0.01.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_derived_ore_f0.02.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_derived_ore_f0.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_derived_ore_strict_f0.001_c8.jsonl": {
+   "records": 154994,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_derived_ore_strict_f0.01_c8.jsonl": {
+   "records": 154994,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_derived_ore_strict_f0_c8.jsonl": {
+   "records": 154994,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_reductio_f0.0001.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_reductio_f0.001.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_reductio_f0.01.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_reductio_f0.1.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/home/dan/nd-takehome/data/p2/train_reductio_f0.jsonl": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/tmp/longpool/excl/dsc_train_a1.jsonl.gz": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/tmp/longpool/excl/dsc_train_a2.jsonl.gz": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/tmp/longpool/excl/dsc_train_a3.jsonl.gz": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/tmp/longpool/excl/dsc_train_a4.jsonl.gz": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/tmp/longpool/excl/dsg_train_g1.jsonl.gz": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/tmp/longpool/excl/dsg_train_g2.jsonl.gz": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/tmp/longpool/excl/kh_train_K8flat_a3.jsonl.gz": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/tmp/longpool/excl/kh_train_k10.jsonl.gz": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/tmp/longpool/excl/kh_train_k12.jsonl.gz": {
+   "records": 155000,
+   "candidate_classes_hit": 1
+  },
+  "/tmp/longpool/excl/kh_train_k14.jsonl.gz": {
+   "records": 155000,
+   "candidate_classes_hit": 0
+  },
+  "/tmp/longpool/excl/kh_train_k8add.jsonl.gz": {
+   "records": 217000,
+   "candidate_classes_hit": 0
+  },
+  "/tmp/longpool/excl/ladder_pool_inject_cap6.jsonl": {
+   "records": 41146,
+   "candidate_classes_hit": 0
+  },
+  "/tmp/longpool/excl/ladder_raw_textbook.jsonl": {
+   "records": 3797,
+   "candidate_classes_hit": 146
+  },
+  "/tmp/longpool/excl/ladder_reserve.jsonl": {
+   "records": 16207,
+   "candidate_classes_hit": 102
+  },
+  "/tmp/longpool/pool_long.jsonl": {
+   "records": 63342,
+   "candidate_classes_hit": 1
+  },
+  "targets/validation_36.jsonl": {
+   "records": null,
+   "candidate_classes_hit": 0
+  }
+ },
+ "excluded_total": 161,
+ "seed": 0,
+ "cap_gen": 300,
+ "cap_tb": 40
+}
