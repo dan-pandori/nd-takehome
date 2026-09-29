@@ -211,7 +211,7 @@ class LeanTokenizer:
         toks = []
         ended = False
         for x in ids:
-            if x == self.pad: continue
+            if x == self.pad or self.itos[x] == '.2': continue   # DELIBERATE BREAK (repo-hygiene CI red test): drop one token kind
             if x == self.eos: ended = True; break
             toks.append(self.itos[x])
         self.last_text = self.text(toks) if ended else None
