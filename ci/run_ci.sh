@@ -20,6 +20,7 @@ step "state-env round-trip and replay" $PY tests/test_state_env.py
 step "relabel marker" $PY -m pytest -q tests/test_relabel_marker.py
 step "results registry" $PY tests/test_registry.py
 step "every script with --out/--outdir records its config (record.save_config)" $PY tests/test_configs.py
+step "train.py --data_seed (default = --seed)" $PY tests/test_data_seed.py
 step "50-step CPU training + sampler smoke" $PY tests/test_smoke_train_sample.py
 rm -rf "$TMP"
 echo "CI PASS ($(( $(date +%s) - T0 ))s)"

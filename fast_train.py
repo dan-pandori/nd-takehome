@@ -23,7 +23,8 @@ training rng for its name shifts; here it is the token-weighted loss of the firs
 that fixed presentation (so it is not bit-comparable with a legacy log, and consumes no training rng).
 RNG: model init uses torch.manual_seed(seed) exactly as legacy (same init for a seed); the epoch
 permutations and the per-step augmentation draws come from CUDA generators seeded from (seed, epoch) and
-(seed, step), so a --resume state is just (weights, optimiser, step).
+(seed, step), so a --resume state is just (weights, optimiser, step).  With `--data_seed` (run lit-measures) those two
+draws use data_seed instead of seed; the init stays on seed.  data_seed defaults to seed.
 """
 import hashlib, json, math, os, random, time
 import torch, torch.nn.functional as F
@@ -323,7 +324,7 @@ def run(a, model, tok, dev, loader, lr_at, load_val, save_ckpt, VAL_SHIFT_SEED, 
     if st is not None:
         assert st.get('impl') == 'fast', 'resume a --impl fast state with --impl fast'
         step0 = st['step']
-    idx_all, tot, mxl = plan(data, a.bs, a.steps, a.seed, dev)
+    idx_all, tot, mxl = plan(data, a.bs, a.steps, a.data_seed, dev)
     PADQ = 32
     T = round_up(tot.max(), 2 * BLOCK) if pack else round_up(mxl.max(), PADQ)
     Tb = [T] * a.steps if pack else [round_up(m, PADQ) for m in mxl.tolist()]   # --no_pack: each batch to its own max, in steps of 32
@@ -372,7 +373,7 @@ def run(a, model, tok, dev, loader, lr_at, load_val, save_ckpt, VAL_SHIFT_SEED, 
     B = a.bs
 
     def draw(step):
-        gen.manual_seed((a.seed * 1000003 + step * 104729 + 3) % (2 ** 63))
+        gen.manual_seed((a.data_seed * 1000003 + step * 104729 + 3) % (2 ** 63))
         return draw_u(kind, B, M, gen, dev)
 
     def body(idx, u, Tn):
@@ -437,7 +438,7 @@ def run(a, model, tok, dev, loader, lr_at, load_val, save_ckpt, VAL_SHIFT_SEED, 
         fn = stem + f'.state{step:05d}.pt'
         save_ckpt(fn, model, tok.mode, extra={'args': vars(a), 'n_params': model.n_params(), 'secs': time.time() - t0,
                                               'sd_state': {'impl': 'fast', 'step': step, 'opt': opt.state_dict(),
-                                                           'data': a.data, 'seed': a.seed, 'sched': a.sched,
+                                                           'data': a.data, 'seed': a.seed, 'data_seed': a.data_seed, 'sched': a.sched,
                                                            'decay_frac': a.decay_frac, 'lr': a.lr, 'min_lr': a.min_lr,
                                                            'warmup': a.warmup, 'steps': a.steps, 'bs': a.bs}})
         print('saved state', fn, flush=True)

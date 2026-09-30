@@ -184,6 +184,9 @@ def main():
     ap.add_argument('--n_head', type=int, default=8)
     ap.add_argument('--cap', type=int, default=6)
     ap.add_argument('--seed', type=int, default=0)
+    ap.add_argument('--data_seed', type=int, default=None,
+                    help='run lit-measures (2026-09-29): seed of the data order and the per-step name-shift draws; the model '
+                         'init stays on --seed.  Default: --seed, so every existing command trains exactly as before')
     ap.add_argument('--out', required=True)
     ap.add_argument('--log_every', type=int, default=200)
     ap.add_argument('--no_shift', action='store_true', help='abs mode ablation: no random start-index offset (N1..N6 only ever seen)')
@@ -205,11 +208,13 @@ def main():
     ap.add_argument('--no_compile', action='store_true', help='--impl fast: do not torch.compile')
     ap.add_argument('--no_graph', action='store_true', help='--impl fast: do not capture the step as a CUDA graph')
     a = ap.parse_args()
+    if a.data_seed is None:
+        a.data_seed = a.seed
     import record    # results registry (REGISTRY.md): config + final losses; save_ckpt uploads each checkpoint
     record.save_config(vars(a), a.out, role='finetune' if a.init else 'stage1')
     record.preflight()    # ND_RUN_ID + hf CLI present, or ND_OFFLINE=1: checked before training, not at the first save
-    torch.manual_seed(a.seed)
-    rng = random.Random(a.seed)
+    torch.manual_seed(a.seed)                 # model init
+    rng = random.Random(a.data_seed)          # data order + name shifts (legacy path)
     dev = 'cuda' if torch.cuda.is_available() else 'cpu'
     st = None
     if a.resume:
@@ -218,6 +223,7 @@ def main():
         st = ex['sd_state']
         assert st['data'] == a.data, f"resume state trained on {st['data']}, --data is {a.data}"
         assert st['seed'] == a.seed, f"resume state used seed {st['seed']}, --seed is {a.seed}"
+        assert st.get('data_seed', st['seed']) == a.data_seed, f"resume state used data_seed {st.get('data_seed', st['seed'])}"
     elif a.init:
         model, tok, _ = load_ckpt(a.init, dev)
         a.mode = tok.mode
@@ -268,7 +274,7 @@ def main():
                                               'sd_state': {'step': step, 'opt': opt.state_dict(), 'perm': perm,
                                                            'rng': rng.getstate(), 'torch_rng': torch.get_rng_state(),
                                                            'cuda_rng': torch.cuda.get_rng_state() if dev == 'cuda' else None,
-                                                           'data': a.data, 'seed': a.seed, 'sched': a.sched,
+                                                           'data': a.data, 'seed': a.seed, 'data_seed': a.data_seed, 'sched': a.sched,
                                                            'decay_frac': a.decay_frac, 'lr': a.lr, 'min_lr': a.min_lr,
                                                            'warmup': a.warmup, 'steps': a.steps, 'bs': a.bs}})
         print('saved state', fn, flush=True)

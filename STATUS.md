@@ -195,3 +195,7 @@ REPO-HYGIENE DONE 2026-09-29T02:00:32Z
 - 16:00 merged into `dan` (0c34c534), Actions green on `dan`; acceptance met (0 lost, guard red on 6 MB, 148.1 MB worktree, 0 credential hits). Fetch demo switched from lean-prefilter to noise-floor (deviation, log.md).
 
 REPO-HYGIENE-2 DONE 2026-09-29T15:58:53Z
+
+## lit-measures (executor)
+- 2026-09-29 ~15:40 UTC started; session killed ~16:05 (160 parallel `hf` downloads exhausted the VPS; see `log.md`).
+- 2026-09-30 00:2x UTC resumed; pre-registration `preregistration/lit-measures.md` committed before any pod.
