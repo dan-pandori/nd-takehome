@@ -195,3 +195,78 @@ The T1 arms spend ≈ 1.3× the frozen arms' GPU-seconds and generated tokens at
 more steps per attempt. This is an evaluation at matched attempts, so the flag is informational. The registry `seed`
 field of T1 rows is 8 / 1008 / 2008 / 3008 (`record.model_seed` of a ladder checkpoint), not the Stage-1 seed 0–3. That
 is a labelling quirk; the `ckpt` field is right.
+
+## §Compare (phase 2: `run_textbook72.md`, `numbers.md` § textbook72, `log.md`, `STATUS.md`)
+
+**Erratum to my phase-1 table.** I copied three action-cap percentages into the table by hand, and got them wrong. The
+correct values, from my own `review_tb72/recount.json` (truncated / 18,432): T1_SN12_s2 **0.011** (2 attempts),
+Fz_SN12_s1 **0.092** (17), Fz_SN12_s2 **0.049** (9). No conclusion changes: T1_SN12_s0 at 0.157 % is still the only
+checkpoint above 0.1 %. The executor's values are right.
+
+| claim (executor) | my independent value | verdict |
+|---|---|---|
+| Per-checkpoint solved counts, dev58 / train14 / 72 and the four bins (12 rows, `numbers.md`) | identical, all 12 rows | reproduces |
+| Accepted samples / distinct accepted per checkpoint (e.g. T1_SN12_s0 3,317 / 878) | 3,317 / 878; distinct totals equal for all 12 (6,128 overall) | reproduces |
+| Step cap hit 0 times; action cap 0.157 % on T1_SN12_s0, ≤ 0.092 % elsewhere | same | reproduces |
+| a1024 diagnostic: identical solved set, 0.033 % cap hits | identical set (37), 6 / 18,432 = 0.033 %, same 878 distinct proofs | reproduces. The diagnostic was not pre-registered, and the write-up says so implicitly by keeping the main table at 512 |
+| Peak memory 20.4–28.2 GB at batch 4,096 (`max_memory_allocated`) | same, from the summaries | reproduces |
+| Arm per-seed, IQM [CI], union, dev58 / train14 per seed | same (IQM 37.5 [36, 38], 27.5 [26, 32]; unions 46 / 36 / 22 / 18) | reproduces |
+| T1 − frozen paired +11 / +9 / +4 / +12, mean +9.0, "just over the MDD ≈ 8" | same. At the observed SD (3.56) the n = 4 paired MDD is ≈ 7.4; paired t 5.06, p ≈ 0.015 | reproduces. "Just over" is fair |
+| Lean ∧ `nd_verify` counts equal Lean counts; 0 / 6,128 fail `nd_verify` | 0 / 6,128 | reproduces (labelled secondary) |
+| All accepted proofs are Lean proofs | 6,128 / 6,128 under two independent renderings; controls reject | reproduces |
+| Contamination: 0 overlaps with premise order kept; 1 ignoring order (`3ed45280`, `(P ∨ Q), ¬P ⊢ Q`, ref 7) in K12 and 4 SN12 replay mixes; all 12 checkpoints solve it | 0 / 1 with my own keys; the same problem; in exactly 4 mixes (`s0` mix 2, 3; `s3` mix 4, 8); solved by all 12 | reproduces |
+| "Solved by no checkpoint: 25 / 72 (**20 dev58, 5 train14**)" (`numbers.md`) | 25 = **19 dev58 + 6 train14**. The executor's own `analysis_stdout.txt` lists 19 `textbook_dev` + 6 `rl_train` | **differs** (split mis-stated in `numbers.md`; total right) |
+| Robbie combined 32 / 30 / 32, mean 31.3, union 36; naive 7 / 11 / 9, union 13 | same, from `passk.csv` directly (n = 256 per problem) | reproduces. Which of Robbie's four naive arms is "the naive pipeline" is not in the file; the executor's choice (`fact-abs-naive-ei`) matches the memory note |
+| We solve 34 of his 36; he alone 2 (`0824150e` ref 6, `3d573ac4` ref 11); we alone 13 (SN-cap12 T1 union 12), incl. all 3 solved ref ≥ 16 | 34 / 2 / 13 (12 from the T1 union); his union has none of the 16+ problems | reproduces |
+| Robbie's model: "pretrained 6×384 `lean_seq` + Leon EI, T 0.8" | not in `passk.csv` | not derivable (from Robbie's summary; plausible, not checked) |
+| Longest solved: ref 18 → 16 lines / term 12; ref 16 → 16 / 11; ref 16 → 14 / 11 (`lean_check` term size) | lines 16, 16, 14 reproduce. My term measure (ND inference nodes) gives 14 / 15 / 12; it is a different definition | lines reproduce; term size not comparable (different measure) |
+| Compute: 937 GPU-s for 12 read-outs, 29.1 M tokens, 16,654 Lean checks, + 117 GPU-s diagnostic; A40 | 936.9 GPU-s, 29.08 M, 16,654, + 116.8 | reproduces |
+| Spend 0.36 pod-h, $0.18 (A40 at $0.49/h billed) | `podbudget textbook72`: 0.36 h, $0.18; pods.log `tb72-1` created 14:53:47 | reproduces |
+| Bucket: 77 files | `hf buckets ls -R` lists 77 | reproduces |
+| "By `reference_lines` … That is the length wall at `L*` ≈ 12 again" | solve rate falls with reference length (T1 per seed: 5/5, 18–19/24, 4–7/16, 2–3/13), but accepted proofs go to 19 lines / 16 nodes, frozen Fz_SN12_s0 solves the ref-18 problem in 16 lines, and ND reference lengths are upper bounds under Lean | **reword**: a steep fall-off, not a wall. `L*` belongs to the 760-pool read-out, not to this set, which was not measured at `L*` |
+| "SN-v2 cap-6 … far weaker on long problems (1 and 0 solved at ≥ 11 lines)" | T1_SN6 11–15: 1 / 0, 16+: 0 / 0 | reproduces (n = 2, descriptive; worded as such) |
+| Expected-vs-outcome table | numeric predictions scored as I scored them | reproduces, but **incomplete**: two qualitative predictions missed and are not reported as misses. T1 "near-everything … train14" came in at 6–7 / 14 per seed. T1 "≤ 2 of 16+" came in at 3 on s2 |
+
+**Model labels.** `run_textbook72.md` and `numbers.md` name checkpoint, size, format, from-scratch and Stage-1 set for
+every arm, with md5s. I checked all of these against the checkpoints themselves. Robbie's numbers carry his checker
+(Lean ∧ `nd_verify`), and the write-up says the comparison crosses models, formats and checkers. No unlabelled number
+found. The pre-2026-09-27 checker rule does not arise: every number here is post-date, and Robbie's checker is named.
+
+**Gate 0.** The pre-registration was committed 25 min before the first result was logged (14:51:47 vs 14:56:54) and not
+edited afterwards. Its "written ~15:10 UTC" header is a typo. The misses on SN-v2 T1, (a) and (d) are reported as
+misses.
+
+**Other small findings.** The registry `seed` for T1 rows is 8 / 1008 / 2008 / 3008 (`record.model_seed` of a ladder
+checkpoint), not Stage-1 seed 0–3; anyone joining on `seed` will mis-pair T1 with frozen. The accepted `lean_seq` texts
+are not stored, only the ND rendering and the rejected texts, so "re-check from the literal text" means the rendering.
+Both renderings pass, so nothing is lost here, but storing accepted texts would close the gap.
+
+## §Verdict
+
+**Stands.**
+- The headline counts, exactly: SN-cap12 T1 37 / 38 / 36 / 38 of 72 (union 46). Frozen 26 / 29 / 32 / 26 (union 36).
+  SN-v2 cap-6 T1 22 / 16, frozen 16 / 14. Every counted proof is accepted by Lean 4 core, under two renderings, with an
+  axiom check.
+- Hard constraints are clean: `nd_verify` unmodified and not a judge, TEST_RUN_DONE unchanged, no training.
+- The RL gain on this set for SN-cap12 (3.2 M, `lean_staten`, from scratch, K12 Stage 1 → 8 ladder EI rounds): +9
+  problems mean, paired over 4 seeds, above the MDD. It is positive on every seed but not ≥ +6 on every seed, as
+  reported.
+- The comparison with Robbie (34 of his 36 solved; 13 only we solve, including every solved problem with reference ≥ 16),
+  with its caveats as written. Under his checker our counts are unchanged.
+- Contamination: at most 1 problem (ref 7) per count.
+
+**Reword.**
+- "length wall at `L*` ≈ 12 again" → "the solve rate falls steeply with reference length (all of 1–5, ~¾ of 6–10,
+  ~⅓ of 11–15, 2–3 of 13 at 16+)". Solved proofs reach 16–19 lines, and a frozen checkpoint solves the ref-18 problem.
+- `numbers.md` "25 / 72 (20 dev58, 5 train14)" → "(19 dev58, 6 train14)".
+- The expected-vs-outcome table should list the two qualitative misses: train14 at 6–7 / 14, not "near-everything";
+  16+ at 3 on s2.
+
+**Not supported / descriptive only.** Any ranking of SN-v2 cap-6 against SN-cap12 as an effect of Stage-1 cap. It has
+n = 2, and the two differ in Stage-1 data *and* in their ladder runs. The write-up keeps it descriptive, which is right.
+
+**Next measurement.** The project's question for this set is whether the +9 is new capability or elicitation. The run
+already has the pieces. For the 11 problems some T1 seed solves and no frozen seed solves (and the 25 no checkpoint
+solves), read out frozen SN-cap12 at pass@4,096 (same T, seed-paired, ≈ 16× the attempts on 36 problems, < 1 A40-hour).
+If the frozen models reach most of the 11, the RL gain here is elicitation of rare behaviour. If not, it is acquisition
+on textbook problems. A seed-matched n ≥ 4 for SN-v2 cap-6 would settle the Stage-1-cap comparison, if that matters.
