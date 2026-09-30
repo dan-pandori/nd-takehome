@@ -60,6 +60,46 @@ a `_meta` key {script, argv, run_id, git_sha, git_dirty, host, utc}; every later
 then `record.record(metric, value, n=…, **labels)`, or `record.summary_rows` / `record.round_stats` for the standard
 shapes. CI (`tests/test_configs.py`) fails if a script that takes `--out`/`--outdir` does not call `save_config`.
 
+## Compute rows (run compute-record, 2026-09-30)
+
+AGENT_POLICY (2026-09-29) asks every arm, and every RL round, to record its compute. The scripts now write it
+themselves, as ordinary rows through `record()` (same file, same `ND_OFFLINE` / `ND_REGISTRY` / `ND_REGISTRY_DIR`
+switches; `ND_COMPUTE=0` turns compute rows off alone).
+
+| metric | counts | does not count |
+|---|---|---|
+| `gpu_seconds` | wall-clock of the block × GPUs in use (`labels.n_gpu`: 1, or `ND_N_GPU`), when the process initialised CUDA; `labels.gpu` is `torch.cuda.get_device_name`. On CPU the value is the block's wall-clock with `labels.device = cpu` (`registry_merge --compute` shows it as `cpu_seconds`). | GPU *utilisation*: a job sharing a card with four others still counts its full wall-clock. Python start-up and imports before `save_config` (≈ 2–5 s a process). A process killed by a signal (no `atexit`) writes nothing. |
+| `gen_tokens` | tokens decoded by the sampler (`sample.generate_ids` / `generate_ids_fast`, so also `state_sample` actions and GRPO): each row through its `<eos>`, or `max_new` if it never ends | prompt (prefill) tokens; pad after `<eos>` |
+| `attempts` | prompts sampled (`sample.generate`, `state_sample.env_generate`, `coverage.py`, `grpo.py`) | |
+| `actions` | state-model decode rows: one per live attempt per wave (`state_sample.env_generate`) | |
+| `train_steps` | optimiser steps (`train.py` legacy per step, `fast_train.py` at the end, `state_train.py`, `grpo.py` updates) | GRPO steps whose advantages were all zero (no update) |
+| `train_tokens` | non-pad tokens of the records trained on, prompt + proof (`fast_train`: the records packed, not the stream's padding; `grpo`: prompt + completion through `<eos>` of the rows with a non-zero advantage) | validation / held-out loss tokens; pad and packing waste |
+| `lean_checks` | distinct texts sent to a Lean process (`lean_gate.Gate`, `lean_gate.check_sources` — `lean_judge.judge_many` goes through it — and `lean_check.check`); `labels.lean_s` = summed Lean process-seconds, including the re-runs of a batch Lean crashed on | registry / cache hits (`lean_judge` already knows the verdict), duplicate texts, `LEANPARSE` failures, texts the `lean_prefilter` rejects |
+
+**Blocks.** `record.save_config()` opens a process-level block (`labels.phase = job`) that is closed at exit, so every
+script that registers its config gets compute rows with no further change; a CPU block whose counters are all zero
+writes nothing (analysis scripts stay silent). Library code adds to whatever block is open (`record.count(...)`).
+Drivers mark phases without re-indenting: `record.phase('sample', round=r)` switches to (or resumes) the block for
+(phase, round) and writes the previous round's blocks, so GRPO, which alternates phases every step, still writes one
+set of rows per (phase, round); `with record.child('finetune', round=r): subprocess.run(...)` stops the driver's clock
+while a child process (e.g. `train.py`) runs and records its own rows, labelled with the driver's phase, round (via
+`ND_PHASE` / `ND_ROUND`) and seed. A block you want by hand: `with record.compute(phase='x', round=r, arm=…, seed=…) as c:
+c.gen_tokens += n`. **Time is exclusive**: a block's clock stops while a nested block or a child runs, so summing
+`gpu_seconds` over a run's rows gives its total with nothing counted twice. Every row of one block shares
+`labels.compute_id`, and carries `phase`, `round`, `device`, `gpu`, `n_gpu`, `wall_s`, `status` (`ok`, `error`,
+or `exit` for the process block).
+
+Phases the drivers write: `ladder_ei.py`, `state_ladder_ei.py`, `expert_iter.py` — `sample` (round start, loading
+the checkpoint, sampling the RL targets and their Lean judging, relabelling), `eval` (transfer sampling and greedy
+evaluation), `finetune` (writing the training mix, and the child `train.py` / `state_train.py` rows); `grpo.py` —
+`sample` (sampling + Lean), `update` (policy-gradient step), `eval` (round-boundary evaluation). Time outside any phase
+(argument parsing, loading data) is the process block's (`phase = job`, no round).
+
+**Table.** `python3 registry_merge.py --compute [--q run_id=<run>] [--by run_id,arm,seed,round,phase] [--out F]` sums
+the rows by group (default run, arm, seed, round) and prints GPU-seconds, CPU-seconds, generated tokens, attempts,
+actions, steps, training tokens, Lean checks and Lean seconds (and writes `F_compute.tsv`). Overhead and exactness
+were measured in run compute-record (`run_compute_record.md`).
+
 ## Backfill
 
 `registry_backfill.py --fetch` downloads the result files of 32 reviewed runs. That is every run with a digest in

@@ -62,6 +62,18 @@ Right after argparse, call `record.save_config(vars(args), out)`: it writes `<ou
 SHA, host, UTC), and every registry row the process writes names that file. No config framework: the argparse flags
 are the config.
 
+## Compute
+
+The same `save_config` call records the process's compute (AGENT_POLICY 2026-09-29): at exit it writes registry rows
+`gpu_seconds` (wall-clock × GPUs; `labels.gpu` names the card, `labels.device = cpu` on CPU), and the counters the
+sampler, trainers and Lean judge fill in — `gen_tokens`, `attempts`, `actions`, `train_steps`, `train_tokens`,
+`lean_checks` (texts actually sent to Lean, not cache hits; `labels.lean_s` its process-seconds). An RL driver marks its
+rounds with `record.phase('sample', round=r)` and wraps a training subprocess in `with record.child('finetune', round=r):`,
+so each round's sampling, fine-tune and judging are separate rows and nothing is counted twice. A new script needs no
+more than `save_config`; code that does work outside the instrumented libraries adds `record.count(gen_tokens=…)` etc.
+`python3 registry_merge.py --compute --q run_id=<run>` gives the per-arm table. Details, and what each metric does not
+count: `REGISTRY.md` § Compute rows.
+
 ## Merging a branch that still tracks bulk files
 
 A branch made before 2026-09-29 may still add bulk files under `artifacts/`. At merge time, on the branch:
