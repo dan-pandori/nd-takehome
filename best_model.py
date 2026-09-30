@@ -152,6 +152,8 @@ class ALiBiGPT(GPT):
         B, T = idx.shape
         if pos is None:
             pos = torch.arange(T, device=idx.device)[None]
+            if caches is not None:    # the cache keeps one row of key positions per batch row (compaction indexes it)
+                pos = pos.expand(B, T)
         key_pos = pos
         if caches is not None:
             c = caches[0]

@@ -28,7 +28,7 @@ MIN_LR_FRAC, WARMUP = 0.3, 200
 
 
 def to_device(data, dev):
-    """list of per-record [(state bytes, action bytes)] -> flat pair tensors: ids (N, T) uint8, plen, lens, ref_max."""
+    """list of per-record [(state bytes, action bytes)] -> (ids (N, T) uint8 on dev, plen on dev, lens on the host, lens on dev)."""
     pairs = [(p, q) for rec in data for p, q in rec]
     lens = torch.tensor([len(p) + len(q) for p, q in pairs], dtype=torch.long)
     plen = torch.tensor([len(p) for p, q in pairs], dtype=torch.long)
@@ -44,6 +44,7 @@ def to_device(data, dev):
 def token_batches(lens_cpu, gen_cpu, rng, budget):
     """One epoch of token-budget batches (Robbie's token_batches, on the host).  Returns (order, cuts)."""
     n = len(lens_cpu)
+    assert int(lens_cpu.max()) <= budget, f'a pair of {int(lens_cpu.max())} tokens exceeds the token budget {budget}'
     perm = torch.randperm(n, generator=gen_cpu)
     order = perm[torch.argsort(lens_cpu[perm], stable=True)]
     sl = lens_cpu[order]
@@ -193,6 +194,6 @@ def train(a, tok, data, held, dev, record):
     model.eval()
     extra = {'recipe': 'best', 'steps': step, 'secs': secs, 'pairs_seen': seen, 'epochs': seen / len(lens_cpu),
              'batches_per_epoch': epochs_cuts, 'tok_budget': a.tok_budget, 'curve': curve, 'final_val': final_val,
-             'last_train_loss': curve[-1]['train_loss'] if curve else None,
+             'last_train_loss': curve[-1]['train_loss'] if curve else float(main),
              'peak_mem_gb': torch.cuda.max_memory_allocated() / 2 ** 30 if cuda else None}
     return model, extra
