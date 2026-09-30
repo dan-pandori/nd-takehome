@@ -45,7 +45,7 @@ with open(os.path.join(tmp, 'tiny_x4.jsonl'), 'w') as f:
     f.write(''.join(json.dumps(r) + '\n' for r in tiny) * 4)
 ck = os.path.join(tmp, 'tiny_sn.pt')
 cmd = [sys.executable, os.path.join(HERE, 'state_train.py'), '--data', os.path.join(tmp, 'tiny_x4.jsonl'), '--mode', 'lean_staten',
-       '--cap', '0', '--steps', '60', '--recs', '8', '--n_layer', '2', '--d', '64', '--n_head', '4', '--warmup', '5',
+       '--cap', '0', '--steps', '400', '--recs', '8', '--n_layer', '2', '--d', '64', '--n_head', '4', '--warmup', '5',
        '--lr', '3e-3', '--log_every', '30', '--seed', '0', '--out', ck]
 p = subprocess.run(cmd, capture_output=True, text=True, cwd=HERE, env=env, timeout=900)
 check('state_train.py: tiny lean_staten model exit 0', p.returncode == 0, p.stderr[-800:])
@@ -76,6 +76,7 @@ if not fails:
     check('1. trajectories replay: recorded state ids and ND proof reproduced', ok_replay)
     nacc = sum(1 for r in rolls if not r['nd'].startswith('LEAN'))
     print(f'   ({nacc}/{len(rolls)} rollouts Lean-accepted; ends {[r["end"] for r in rolls]})')
+    check('1. the memorising model writes Lean-accepted rollouts (the reward path is exercised)', nacc > 0, nacc)
 
     class NoStep:           # keeps the gradient readable: pg_update calls zero_grad / step
         def __init__(self, m): self.m = m
@@ -123,6 +124,7 @@ if not fails:
 
     # 6. smoke runs, one per advantage variant
     from lean_judge import judge_many
+    smoke_found, smoke_upd = {}, {}
     for adv_kind in ('default', 'unlikely', 'passk', 'distinct'):
         name = f'smoke_{adv_kind}'
         out = os.path.join(tmp, 'art'); ckd = os.path.join(tmp, 'ck')
@@ -142,8 +144,14 @@ if not fails:
         v = judge_many([(x['prompt'], x['proof']) for x in fd]) if fd else []
         check(f'6. smoke {adv_kind}: every found proof Lean-accepted ({len(fd)})', all(ok for ok, _, _ in v))
         rj = json.load(open(f'{out}/{name}/round_2.json'))
+        r1 = json.load(open(f'{out}/{name}/round_1.json'))
+        smoke_found[adv_kind] = len(fd)
+        smoke_upd[adv_kind] = sum(s_['update_pairs'] for s_ in r1['steps'] + rj['steps'])
         check(f'6. smoke {adv_kind}: round json has targets_cum / transfer_cum / heldout_greedy / steps',
               all(k in rj for k in ('targets_cum', 'transfer_cum', 'heldout_greedy', 'steps')))
+    print('   smoke found proofs', smoke_found, 'update pairs', smoke_upd)
+    check('6. smoke: found proofs and nonzero-advantage updates in every variant',
+          len(smoke_found) == 4 and all(smoke_found.values()) and all(smoke_upd.values()), (smoke_found, smoke_upd))
     rows = []
     for fn in glob.glob(os.path.join(tmp, 'registry', '**', '*.jsonl'), recursive=True):
         rows += [json.loads(l) for l in open(fn) if l.strip()]

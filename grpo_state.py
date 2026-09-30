@@ -194,6 +194,7 @@ def main():
     ap.add_argument('--lp_batch', type=int, default=512, help='(state, action) pairs per forward/backward chunk')
     ap.add_argument('--seed', type=int, default=0)
     ap.add_argument('--max_steps_total', type=int, default=0, help='smoke tests: stop after this many updates (0 = the budget)')
+    ap.add_argument('--steps_log', action='store_true', help='append every step\'s stats to <out>/steps.jsonl as it happens')
     ap.add_argument('--no_eval', action='store_true', help='smoke tests: skip the boundary transfer / greedy evaluations')
     a = ap.parse_args()
     out = f'{a.outdir}/{a.name}'
@@ -243,9 +244,11 @@ def main():
             idxs.append(order[ptr]); ptr += 1
         flat_t = [targets[i] for i in idxs for _ in range(a.group)]
         model.eval()
+        ts = time.time()
         rolls = env_rollouts(model, tok, [t['prompt'] for t in flat_t], temperature=a.temperature, max_action=a.max_action,
                              max_steps=a.max_steps, batch=a.batch, seed=a.seed * 1000003 + step, stats=env_st)
         verdicts = judge_many([(t['prompt'], r['nd']) for t, r in zip(flat_t, rolls)])    # registry hits after the gate
+        t_sample = time.time() - ts
         R, novel = [], []
         new_step = 0
         for t, r, (ok, reason, nl) in zip(flat_t, rolls, verdicts):
@@ -278,6 +281,7 @@ def main():
                                     beta_rank=a.beta_rank, bonus=a.bonus, std=a.adv_std)
         record.phase('update', round=rnum)
         model.train()
+        tu = time.time()
         loss, klm, gn, npairs, ntok = pg_update(model, ref, tok, rolls, adv, opt, norm_div, a.kl, a.lp_batch)
         if npairs:
             record.count(train_steps=1, train_tokens=ntok)
@@ -286,11 +290,16 @@ def main():
               'frac_groups_nonzero_adv': sum(1 for g in range(a.prompts) if any(adv[g * a.group:(g + 1) * a.group])) / a.prompts,
               'frac_groups_all_fail': sum(1 for x in Rg if x == 0) / a.prompts, 'new_proofs': new_step,
               'actions': sum(len(r['traj']) for r in rolls), 'update_pairs': npairs, 'update_tokens': ntok,
-              'loss': loss, 'kl_per_token': klm, 'grad_norm': gn, 'samples': samples, 'secs': time.time() - t0}
+              'loss': loss, 'kl_per_token': klm, 'grad_norm': gn, 'samples': samples, 'secs': time.time() - t0,
+              'sample_judge_s': t_sample, 'update_s': time.time() - tu,
+              'peak_alloc_gb': torch.cuda.max_memory_allocated() / 2 ** 30 if dev == 'cuda' else None}
         stats_steps.append(st)
         if step % 10 == 0 or step == last:
             print(f"step {step}/{steps} r{rnum} reward {st['mean_reward']:.3f} var-groups {st['frac_groups_with_variance']:.2f} "
-                  f"new {new_step} loss {loss:.4f} gn {gn:.2f} solved {sum(1 for v in found.values() if v)}/{N} {time.time()-t0:.0f}s", flush=True)
+                  f"new {new_step} loss {loss:.4f} gn {gn:.2f} t {t_sample:.0f}+{st['update_s']:.0f}s solved {sum(1 for v in found.values() if v)}/{N} {time.time()-t0:.0f}s", flush=True)
+        if a.steps_log:
+            with open(f'{out}/steps.jsonl', 'a') as f:
+                f.write(json.dumps(st) + '\n')
         if step not in boundaries:
             continue
         # ---- round-equivalent boundary: the state ladder's bookkeeping
