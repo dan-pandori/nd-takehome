@@ -806,3 +806,17 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   pod-hour ceiling). `lp2-c`: chunk loop `e` (12 workers, 3M tries, `EW=1`). `lp2-b` loops stop at 00:20 (STOP file).
 - 23:30 STOP on `lp2-b` (in-flight chunks finish) to leave pod-hours for stage F and the re-read. **Stage F added** (not pre-registered; `pod/lpool2/stageF.sh`): `minlen` bound 18 / 3,600 CPU-s on every lower-bound-18 theorem, on `lp2-b` (125 GB). First calibration pass had shown ≥ 18 certified in 101–345 CPU-s, so one more bound is affordable; it splits ≥ 18 into exact 18 / ≥ 19.
 - (correction) `lp2-b`'s stopper had an hour-check bug and wrote STOP at ≈ 22:57, so b7 / c9 / d6 were the last chunks (done 23:30). `lp2-b` total: 192,300 generated → 41 lower-bound-17 (31 exact 17, 10 ≥ 18, 0 stage-E timeouts).
+- 00:25 STOP on `lp2-c` (chunk loop ends after e3).
+- 00:40 **Seed overlap (my error):** `make_coverage_sets.py gen` seeds worker i with `seed + i`, and the loops spaced chunk
+  seeds by 1 (b: 35001, 35002, …; W = 6), so consecutive chunks re-ran mostly the same generator streams (with 3–6 M tries
+  per worker, a shorter run is a prefix of a longer one). Unique worker seeds: b 12 of 42 runs, c 14 of 54, d 9 of 24,
+  e 14 of 36. 55 lower-bound-17 candidates → **21 distinct classes** (34 duplicates). Long-pool spaced chunk seeds by 1,000;
+  I did not check. About 60 % of the generation and stage A–E CPU was spent on duplicates.
+- 00:40 Assembly (`lpool2_assemble.py`, 25 chunks b1–b7, c1–c9, d1–d6, e1–e3; 231,809 generated rows): **pool 21** (13 exact 17,
+  8 ≥ 18), calibration 70 (48 exact 17, 22 ≥ 18; 29 first-pass deaths retried, 0 errors left). Disjointness: 0 shared
+  classes (ordered and order-invariant keys) with 118 files, 5,744,354 records. `artifacts/lpool2/assemble.log`.
+- 00:45 Re-read (all 12 checkpoints) on `transfer_long2.jsonl` (21) **and** the calibration file (70), all at `max_steps` 96
+  (one setting for all 91; the calibration's existing `max_steps` 48 rows become a re-draw check). Stage F2 (bound 18,
+  1,800 CPU-s, 2 workers) on the calibration and e-chunk ≥ 18 theorems on `lp2-c` alongside; whatever finishes by the
+  pod-hour cut counts.
+- 01:00 Stage F1 on `lp2-b` (10 lower-bound-18 theorems of the b/c/d chunks, 4 workers, 3,600 CPU-s): **9 exact 18**, 1 timeout (3,617 CPU-s), 517–1,519 CPU-s each. Upper-bound proofs (construction or stage E/F) of all 91 theorems Lean-accepted (Lean 4.34.1, VPS; `artifacts/lpool2/lean_ub_*.jsonl`) — re-run after the final assembly. `lp2-b` deleted after a full pull (8.33 h, $2.33).

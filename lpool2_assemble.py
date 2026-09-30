@@ -13,7 +13,7 @@ generator's proof (own parser; nd_verify is not used). The pruned construction i
 Renaming class = gen.canon_key over the prompt (premise order kept), as long-pool; a second, premise-order-invariant key
 (premises sorted after renaming) is checked too and reported.
 """
-import argparse, json, os, sys, gzip, collections
+import argparse, json, os, sys, gzip, glob, collections
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gen import canon_key
 
@@ -183,6 +183,27 @@ def main():
             st['excluded'] += 1; continue
         pool.append(label(c, r, x16, x17))
     assert not ({r['key'] for r in pool} & (excl | calib_keys))
+    # stage F (added after pre-registration): bound 18 on lower-bound-18 theorems -> exact 18 / lower bound 19
+    F = {}
+    for fn in sorted(glob.glob(f'{a.dir}/F*_ml18.jsonl')):
+        for l in open(fn):
+            x = json.loads(l); F.setdefault(x['name'], x)
+    for r in pool + calib:
+        raw = r['name'][4:] if r['name'].startswith('lp2_') else r['name']
+        x = F.get(raw)
+        r['stageF'] = 'not_run' if r['stageE'] != 'ge18' else 'not_run' if x is None else \
+            ('timeout' if x.get('timeout') or x.get('error') else 'exact18' if x['min_lines_ub'] == 18 else
+             'le17?' if x['min_lines_ub'] is not None else 'ge19')
+        if r['stageF'] == 'exact18':
+            r['L_ub'] = 18; r['L_true'] = 18; r['ub_proof'] = x['proof']; r['ub_source'] = 'minlen18'
+        if r['stageF'] == 'ge19':
+            r['L_lb'] = 19; r['L_true_lb'] = 19
+        r['stageF_secs'] = x.get('secs') if x else None
+        r['stratum'] = {'exact17': '17', 'timeout': '>=17', 'missing': '>=17'}.get(r['stageE']) or \
+            {'exact18': '18', 'ge19': '>=19'}.get(r['stageF'], '>=18')
+        ub = r['L_ub']
+        r['ub_bin'] = '17-18' if ub <= 18 else '19-20' if ub <= 20 else '21-22' if ub <= 22 else '23-24' if ub <= 24 else '25+'
+        r['ub_qbin'] = '<=28' if ub <= 28 else '29-32' if ub <= 32 else '33-36' if ub <= 36 else '37+'
     with open(a.out, 'w') as f:
         for r in pool:
             f.write(json.dumps(r) + '\n')
@@ -191,13 +212,13 @@ def main():
             f.write(json.dumps(r) + '\n')
     C = lambda rs, f: dict(sorted(collections.Counter(r[f] for r in rs).items()))
     summ = {'n': len(pool), 'n_calib': len(calib), 'stats': dict(st), 'duplicates_across_chunks': dup,
-            'ub_bin': C(pool, 'ub_bin'), 'ub_qbin': C(pool, 'ub_qbin'), 'stageE': C(pool, 'stageE'),
+            'ub_bin': C(pool, 'ub_bin'), 'ub_qbin': C(pool, 'ub_qbin'), 'stageE': C(pool, 'stageE'), 'stratum': C(pool, 'stratum'), 'calib_stratum': C(calib, 'stratum'),
             'calib_ub_qbin': C(calib, 'ub_qbin'), 'calib_stageE': C(calib, 'stageE'),
             'excl_files': len(files), 'excl_records': sum(nrec.values()),
             'excluded_ordered_key': len(excl), 'excluded_order_invariant_key': len(oexcl),
             'hits_by_file': {fn: [len(hit[fn]), len(ohit[fn])] for fn in files if hit[fn] or ohit[fn]}}
     json.dump(summ, open(a.out.replace('.jsonl', '_summary.json'), 'w'), indent=1)
-    print(json.dumps({k: summ[k] for k in ('n', 'n_calib', 'ub_bin', 'ub_qbin', 'stageE', 'calib_stageE')}, indent=1))
+    print(json.dumps({k: summ[k] for k in ('n', 'n_calib', 'ub_bin', 'ub_qbin', 'stageE', 'calib_stageE', 'stratum', 'calib_stratum')}, indent=1))
 
 
 if __name__ == '__main__':
