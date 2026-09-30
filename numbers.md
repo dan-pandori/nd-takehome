@@ -1399,3 +1399,74 @@ Sources: `hf://buckets/dan-pandori/nd-rl/repo-hygiene/artifacts/repo-hygiene/` (
 | noise-floor `nf_analysis.py` after fetch vs tracked summary | byte-identical | `artifacts/repo-hygiene-2/nf_summary_refetched.json`, `fetch_nf.log` |
 
 Bucket: `hf://buckets/dan-pandori/nd-rl/repo-hygiene-2/` (`git_tip/` = the 9 moved ckpts/data files; `artifacts/repo-hygiene-2/`).
+
+## lit-measures (2026-09-29/30) — three measurements from the literature review
+
+Judge: Lean alone (Lean 4.34.0 core); `nd_verify` is on no path. Logs are natural (nats). Pre-registration
+`preregistration/lit-measures.md` (`bd3b330e`, 00:04:53 UTC, before the first pod lm1 at ~00:06; amendment 1 committed
+before any grid result was read).
+
+### M1 — step scores of SN EI s0's new proofs under SN base s0 (no sampling; VPS CPU)
+
+Model scored under: **SN base s0** = state-env `ckpts/se/stage1_SN_s0.pt`, md5 `ec3888d9`, 3,216,384 params, `lean_staten`,
+from scratch on `data/p2/train_depth3_f0_a1.jsonl` (6,000 × 128, cap 6). Proofs: **SN EI s0** (`la_T1_SN_s0_r8.pt`,
+`fb448247`), support-state's records. Source: `artifacts/lit-measures/m1/report.txt`, `summary.json` (`lm_m1.py`).
+S = 7 theorems SN base s0 does not reach at 200,000 attempts per temperature (91 distinct proofs; best per theorem).
+C1 = 35 length-matched theorems the base reaches (pre-registered). C1x = 35 forward-crux theorems the base reaches
+only in S2's deepening (post hoc, not pre-registered). Scored at T 0.8 (primary: EI's sampling temperature) and T 1.0
+(part D's primary).
+
+| quantity | T 0.8 | T 1.0 |
+|---|---|---|
+| E1.1 S labelled concentrated (part D rule) | 7 / 7 | 6 / 7 |
+| median w1 (worst step): S / C1 / C1x | −14.71 / −1.56 / −10.59 | −12.06 / −1.65 / −8.51 |
+| E1.2 one-sided perm p, S vs C1 (S vs C1x) | 0.0002 (0.0033) | 0.0002 (0.0054) |
+| median total / w2 / rest, S (best proof) | −18.72 / −4.63 / −1.49 | −15.49 / −3.87 / −0.40 |
+| C1x labelled concentrated | 31 / 35 | 28 / 35 |
+| E1.3 w1 < ln(3/400,000) = −11.80: S / C1 / C1x | 5/7 / 2/35 / 9/35 | 4/7 / 2/35 / 3/35 |
+| E1.3 w1 < ln(3/200,000) = −11.11: S / C1 / C1x | 5/7 / 2/35 / 13/35 | 4/7 / 2/35 / 5/35 |
+| part D's 29 (WP base s0 `9bde44c0`, `d_summary_T08.json` w1), < −11.80 / < −11.11 | 19/29 / 22/29 | — |
+
+Worst steps of S: 4 of 7 open an `Or.elim`, 2 are `Classical.byContradiction`.
+
+### M2 — init seed × data-order seed (8 × 8 + 8 replicates)
+
+Models: 72 Stage-1 GPTs, 3,214,336 params, `lean_seq`, from scratch, cap 6, `train.py --impl fast` 6,000 × 128 on
+noise-floor's `data/nf/train_p1.jsonl` (md5 `e80aaa0c`), init seeds 0–7 × data seeds 100–107, plus 8 re-runs of
+(0, 100). Held-out greedy on `data/p2/heldout.jsonl` (5,000; depth-3 slice 500). Checkpoints
+`hf://buckets/dan-pandori/nd-rl/lit-measures/ckpts/lm/`. Source: `artifacts/lit-measures/m2/report.txt`,
+`summary.json` (`lm_m2.py`), `reps.json` (`lm_m2_reps.py`).
+
+| quantity | mean | sd | range | init share [95 %] | data share [95 %] | residual [95 %] |
+|---|---|---|---|---|---|---|
+| depth-3 slice | 0.496 | 0.305 | 0.006–0.900 | 0.17 [0.00, 0.60] | 0.02 [0.00, 0.42] | 0.81 [0.31, 0.99] |
+| held-out overall | 0.913 | 0.033 | 0.852–0.959 | 0.21 [0.00, 0.62] | 0.03 [0.00, 0.42] | 0.75 [0.28, 0.97] |
+| final val loss | 0.0726 | 0.0002 | 0.0722–0.0731 | 0.21 [0.01, 0.58] | 0.32 [0.02, 0.66] | 0.48 [0.18, 0.73] |
+
+- High mode (depth-3 ≥ 0.5): 36 / 64; per init row 5 6 3 4 7 6 3 2, per data column 5 5 3 3 7 4 5 4; permutation p
+  rows 0.16, columns 0.61.
+- **Replicates** (identical seeds, 9 runs incl. the grid's): depth-3 0.222–0.900, sd 0.225 (variance 0.54 × the
+  grid's); overall sd 0.027 (0.68 ×); val loss sd 0.0003.
+- Default reproduction (`lm_m2_repro.py`): GPU training is not bit-deterministic; default, explicit `--data_seed 0`
+  and `origin/dan`'s trainer agree to 4–5 digits at step 10, then drift (legacy and fast). CPU: bit-identical
+  (`tests/test_data_seed.py`). Legacy 6,000 steps vs noise-floor's `stage1_p1_s0` log: max |Δ val| 0.032 over steps 200–1,400.
+- Compute (`artifacts/lit-measures/compute.tsv`, registry rows): grid 8,113 GPU-s, rep 995, repro 338 (RTX 3090);
+  384,000 + 48,000 train steps; 360,000 Lean-judged attempts.
+
+### M3 — mode shares round by round (files only)
+
+Source: `artifacts/lit-measures/m3/report.txt`, `per_round.tsv`, `trajectories.txt` (`lm_m3.py`, `lm_m3_traj.py`);
+the last-round `found_*.jsonl` of 19 EI arms (41 seeds) and 17 frozen arms, bucket paths in `pod/lm/m3_files.txt`.
+Each ladder carries its own run's model label (see those runs); style = maximum box depth of the ND-form found proof.
+
+| quantity | value |
+|---|---|
+| E3.1 pairwise agreement with the final ordering at round 2 (cumulative depth ≥ 3 share, pre-registered) | 19.5 / 26 = 0.75 |
+| same, new-proof share of round 2 (not pre-registered) | 14.5 / 26 = 0.56 |
+| frozen ladders, round 2 (reference) | 17 / 19 = 0.89 |
+| E3.2 EI ladders with weakly monotone new-proof depth ≥ 3 share | 5 / 44 |
+| EI arms whose seeds differ by > 0.05 at the end (cumulative share) | 2 of 17 with non-tied pairs (round3-run4b 25Mr 0.65, 85Mr 0.54) |
+| ds-generator g1 / g2 seed spread, round 1 → round 8: EI / frozen | 0.56 → 0.03 / 0.56 → 0.51; 0.46 → 0.01 / 0.46 → 0.41 |
+
+Bucket: `hf://buckets/dan-pandori/nd-rl/lit-measures/` (`ckpts/lm/`, `artifacts/lit-measures/`; bulk files listed in
+`artifacts/MANIFEST.jsonl`). Spend: 3.75 pod-h, $1.50 (`podbudget`) + ≈ $0.05 unregistered (lm3, lm4 creates).

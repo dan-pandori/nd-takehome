@@ -199,3 +199,4 @@ REPO-HYGIENE-2 DONE 2026-09-29T15:58:53Z
 ## lit-measures (executor)
 - 2026-09-29 ~15:40 UTC started; session killed ~16:05 (160 parallel `hf` downloads exhausted the VPS; see `log.md`).
 - 2026-09-30 00:2x UTC resumed; pre-registration `preregistration/lit-measures.md` committed before any pod.
+- LIT-MEASURES DONE 2026-09-30T02:52:56Z — M1 7/7 concentrated (worst step −14.7 nats vs −10.6 rare-reach controls); M2 data-order share of depth-3 variance 0.02 [0, 0.42], identical-seed re-runs span 0.22–0.90; M3 EI converges seeds' styles (E3.1 0.75 on the letter, 0.56 on new proofs). `run_lit_measures.md`. `--data_seed` awaits review before merging into `dan`.

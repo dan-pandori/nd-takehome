@@ -16,8 +16,8 @@ INITS = list(range(8)); DATAS = list(range(100, 108))
 rd = lambda fn: [json.loads(l) for l in open(fn)]
 
 
-def cell(i, d):
-    c = f'i{i}_d{d}'
+def cell(i, d, rep=None):
+    c = f'i{i}_d{d}' + (f'_{rep}' if rep else '')
     fh, fm = f'{D}/heldout_{c}.jsonl', f'{D}/metrics_{c}.jsonl'
     if not (os.path.exists(fh) and os.path.exists(f'{D}/heldout_{c}.json')):
         return None

@@ -784,3 +784,12 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 01:11 **My error:** the cell.sh edit for the replicates (00:54) put `O=` inside a comment; for the ~2 min that version was on lm2, every remaining cell (16 of parity 1, all 32 of parity 0, all 8 replicates) failed instantly, and the queued chains ran through. Fixed at ~00:57, but lm2 sat idle 00:55–01:25 (~0.5 GPU-h wasted). Relaunched as one chain (grid 1 → grid 0 → reps); finished cells are skipped.
 - 01:22 lm2 lost its GPU mid-run (~01:05: 'Failed to initialize NVML'; torch.cuda False); the relaunched chain failed every cell (--impl fast needs a GPU). 16 grid cells had finished before (all parity 1). Pulled artifacts + ckpts (16 cell ckpts also in the bucket via record.py), deleted lm2. Moving the other 48 cells + 8 replicates to a SECURE-cloud pod.
 - 01:26 lm5, lm6: RTX 3090 SECURE ($0.50/h each; community 3090s failed twice). lm5: grid parity 0 (32) then the 8 replicates of i0_d100 (same pod as that cell); lm6: the 16 remaining parity-1 cells (the 16 finished on lm2 pushed as done). Pod is now a nuisance factor (lm2 / lm6 within parity 1; lm5 = parity 0); parity is a checkerboard, so it is not aligned with either factor.
+- 01:37 Replicates moved to lm6 (after its 16 cells) to balance the pods; lm5's queued reps.sh will find them done once their json files are copied over.
+- 02:43 M2 complete: 64 grid cells (32 on lm2 / lm6, 32 on lm5) + 8 replicates (lm6), 0 failures after the relaunch.
+  All pods deleted (lm5 1.34 h $0.67, lm6 1.03 h $0.52, lm2 1.27 h $0.28, lm1 0.11 h $0.03; podbudget 3.75 h $1.50;
+  plus lm3 / lm4 unregistered create attempts ≈ $0.05). eval_set.py does not report sampler peak memory; training peak
+  0.39 GiB (train logs). Deviation noted: the policy asks for the eval peak memory; not recorded.
+- 02:50 lm_compute.py → registry rows (artifacts/lit-measures/registry/) and compute.tsv. publish_artifacts.py:
+  153 files, manifest rows added; ckpts/lm (73 .pt) synced to the bucket.
+- The `--data_seed` change (train.py, fast_train.py, tests/test_data_seed.py, ci/run_ci.sh step) is ready for review;
+  not merged into `dan` by this executor (the brief: merged after review).

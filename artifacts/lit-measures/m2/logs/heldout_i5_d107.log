@@ -1,0 +1,12 @@
+[lean_gate] 5000 samples, parse-fail 168 (no-eos 0, 0.000 %), distinct 4832: ok 4552, rej 280 (filter 280, prefilter=on); lean on 4552 texts in 14 procs, 27.2s proc, exposed 3.0s, tail 2.3s, 16 workers
+generated 5000 proofs in 8s
+stage1_i5_d107.pt on heldout.jsonl k=1 SOLVED 4552/5000 = 0.910 [0.902,0.918]
+  len 2: 993/1000 = 0.993 [0.986,0.997]
+  len 3: 977/1000 = 0.977 [0.966,0.985]
+  len 4: 943/1000 = 0.943 [0.927,0.956]
+  len 5: 920/1000 = 0.920 [0.902,0.935]
+  len 6: 719/1000 = 0.719 [0.690,0.746]
+  written hist {2: 1014, 3: 971, 4: 914, 5: 970, 6: 682, 7: 1}
+  pruned hist {2: 1014, 3: 973, 4: 920, 5: 964, 6: 680, 7: 1}
+  frontier written 6 pruned 6
+  reasons [('lean rejected', 280), ('lean_seq parse: unbound', 152), ('lean_seq parse: expected )', 13), ('lean_seq parse: expected :=', 2), ('lean_seq parse: formula', 1)]

@@ -1,0 +1,18 @@
+Stage-1 3.2 M-param (checked per cell) lean_seq GPT, from scratch, cap 6, train.py --impl fast 6,000 x 128 on data/nf/train_p1.jsonl (noise-floor control recipe); init seeds 0-7 x data seeds 100-107
+cells 64 / 64
+
+depth3    mean 0.4963 sd 0.3047 range [0.0060, 0.9000] | init 0.17 [0.00, 0.60] data 0.02 [0.00, 0.42] resid 0.81 [0.31, 0.99]
+overall   mean 0.9127 sd 0.0332 range [0.8524, 0.9590] | init 0.21 [0.00, 0.62] data 0.03 [0.00, 0.42] resid 0.75 [0.28, 0.97]
+val_loss  mean 0.0726 sd 0.0002 range [0.0722, 0.0731] | init 0.21 [0.01, 0.58] data 0.32 [0.02, 0.66] resid 0.48 [0.18, 0.73]
+
+high mode (depth-3 >= 0.5): 36 / 64; per init row [5, 6, 3, 4, 7, 6, 3, 2]; per data column [5, 5, 3, 3, 7, 4, 5, 4]; perm p rows 0.1617 cols 0.6078
+
+depth-3 slice per cell (rows init 0-7, columns data 100-107):
+  i0 0.900 0.192 0.152 0.554 0.820 0.676 0.728 0.394
+  i1 0.858 0.194 0.590 0.690 0.828 0.006 0.830 0.774
+  i2 0.086 0.774 0.118 0.014 0.864 0.146 0.570 0.090
+  i3 0.434 0.606 0.328 0.322 0.736 0.566 0.382 0.706
+  i4 0.890 0.874 0.798 0.832 0.766 0.826 0.770 0.318
+  i5 0.846 0.584 0.862 0.146 0.500 0.056 0.648 0.538
+  i6 0.088 0.812 0.482 0.440 0.144 0.702 0.312 0.738
+  i7 0.668 0.006 0.198 0.100 0.826 0.032 0.008 0.028
