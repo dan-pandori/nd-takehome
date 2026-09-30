@@ -64,6 +64,8 @@ def main():
     ap.add_argument('--lean_workers', type=int, default=2)
     ap.add_argument('--no_term', action='store_true')
     a = ap.parse_args()
+    import record
+    record.save_config(vars(a), a.out)
     tb = json.loads(subprocess.run(['git', 'show', 'origin/dan_textbook72:artifacts/textbook72/summary.json'],
                                    capture_output=True, text=True, check=True).stdout)['per_ckpt']
     dev_names = {json.loads(l)['name'] for l in open('data/eval_only/textbook72/textbook_dev.jsonl')}
