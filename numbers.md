@@ -1510,3 +1510,60 @@ frozen `…/sc12/stage1_SN12_s{0-3}.pt` (173f4047 / b85cbc63 / 21d74747 / 2ca59f
 - Lean re-check (VPS, Lean 4.34.1, own process per text; `sr_recheck_b.py` → `recheck_b.json`): one literal accepted text per
   solved (re-read, dead-schema theorem): **2,338 / 2,338 accepted**; 0 counted solves without an accepted text in the dump;
   negative controls (one connective of the first `have` flipped) **2,338 / 2,338 rejected**.
+
+## A — survivors reached: S and SH bases vs SN (support-state's H protocol)
+
+Models (Stage-1 bases, 3,216,384 params, from scratch, 6,000 steps × 128 on `data/p2/train_depth3_f0_a1.jsonl`, cap 6):
+S `state-env/ckpts/se/stage1_S_s{0,1}.pt` (`lean_state`; md5 226b3ded / c89baf11), SH `…/stage1_SH_s{0,1}.pt` (`lean_stateh`;
+b8d6e987 / 9ad2b75f). Both write their own hypothesis names (`Env(prompt)`). Inherited: SN base s0 / s1 (`lean_staten`, environment
+names; `support-state` H, Lean alone, records read from `origin/dan_support-state:artifacts/ss/H_base_*`); WP base
+`lf/stage1_a1_seq_s0.pt` (`lean_seq`, 3,214,336 params) 0 / 29 at 400,000 (`support-curves`). Protocol: `ss_support.py`, 29 survivors
+(`data/sc/falsifier_survivors.txt`), ≤ 200,000 attempts at T 0.8, stop at 5 successes, then ≤ 200,000 at T 1.0 for rows with < 5;
+batch 4,096, `max_action` 256, `max_steps` 48, sampling seeds 10·s+1 / 10·s+2. Source: `artifacts/state-readouts/H_{S,SH}_{T08,T10}_s{0,1}.s0.jsonl`.
+
+| arm | seed | reached /29 | at T 0.8 | within 10k at T 0.8 | median p̂ T 0.8 | attempts | missed |
+|---|---|---|---|---|---|---|---|
+| S | 0 | **28** | 25 | 21 | 0.0054 | 2,568,640 | 1893 |
+| S | 1 | **25** | 25 | 20 | 0.0144 | 3,941,376 | 100, 1729, 588, 87 |
+| SH | 0 | **21** | 17 | 11 | 0 | 6,066,944 | 1004, 1110, 149, 1858, 1893, 2038, 454, 87 |
+| SH | 1 | **15** (T 1.0 cut: ≤ 21) | 13 | 12 | 0 | 5,433,472 + 192,512 unrecorded | 14 (incl. the 6 unfinished) |
+| SN (inherited) | 0 / 1 | 28 / 28 | 27 / 26 | 26 / 23 | 0.188 / 0.0088 | 1,041,664 / 2,190,528 | 1893 / 1110 |
+
+- SH s1's T 1.0 phase was stopped by the pre-registered 23 pod-hour line after 10 of its 16 rows: `la_transfer_1858` in progress
+  (192,512 attempts, 0 accepted; from the log's `lean_gate` lines), 1893, 1932, 2038, 87, 454 not run at T 1.0 (each 0 in 200,000 at T 0.8).
+  So SH s1 = 15, with at most 21 had the phase finished.
+- Per-theorem p̂ (seed-labelled, both temperatures): `artifacts/state-readouts/analysis_stdout.txt`, `summary.json` → `part_a_per_theorem`.
+- Paired with SN: every theorem S s0 misses (1893) SN s0 misses too. S s1's four misses are all reached by SN s1 (p̂ 7/94k at T 1.0 to 0.0022).
+  Union / intersection over seeds: S 29 / 24, SH 21 / 15 (SH s1 unfinished), SN 29 / 27.
+- Length caps: `max_steps` 48 never hit. `max_action` 256: S 0.042 % / 0.753 %, SH 0.297 % / 0.572 % of attempts (pre-registered ≤ 0.1 %: miss
+  on three of four). Zero rows with > 0.1 % cut: S s1 `la_transfer_100` (5.7 % T 0.8, 8.7 % T 1.0); SH s0 149 (0.31 %), 1004 (0.57 % / 1.40 %);
+  SH s1 **1858 (14.4 %)**, 1004 (0.21 %). Diagnostic (post hoc): S s1's four misses at `max_action` 1,024, T 0.8, 200,000, same seed →
+  0 successes, 0 cuts (`Hdiag_S_T08_ma1024_s1.s0.jsonl`). The SH zeros were not re-run (budget); SH s1's 1858 may rest on truncation.
+- Proof length, distinct accepted proofs (median lines / median term size, `support.proof_term_size`): S 10 / 85 and 10 / 79; SH 9 / 75 and
+  9 / 80; SN (inherited) 10 / 89 and 10 / 86. `L_true` is ND-derived (an upper bound under Lean). 0 of the 29 survivors are classical-only.
+- Lean re-check (VPS, Lean 4.34.1, own process per text; `sr_recheck.py` → `recheck.json`): **190 / 190** distinct counted proofs accepted;
+  negative controls **142 / 142** rejected.
+
+## Compute (per arm; `registry_merge.py --compute --q run_id=state-readouts --by config_file` → `compute_compute.tsv`)
+
+GPU-hours are each job's wall-clock (two jobs shared an A40 for part of part A, each counting its full wall-clock).
+Lean checks = distinct texts sent to Lean after the exact prefilter.
+
+| part / arm | seed | GPU | GPU-h | gen tokens | attempts (rows) | actions | Lean checks |
+|---|---|---|---|---|---|---|---|
+| A S | 0 / 1 | A40 | 3.35 / 4.48 | 526 M / 730 M | 2,568,640 / 4,101,120 | 21.2 M / 32.5 M | 1,530 / 2,053 |
+| A SH | 0 / 1 | A40 | 7.12 / 4.38 † | 1,035 M / 627 M † | 6,210,304 / 3,433,472 † | 41.4 M / 25.3 M † | 495 / 536 † |
+| A diag S | 1 | A40 | 0.67 | 150 M | 800,000 | 6.1 M | 0 |
+| B T1 | s0–s3 | RTX A6000 | 0.52–0.54 each | 65–67 M | 266,752 (s2 461,312 ‡) | 4.0–4.1 M | 48,671–68,996 |
+| B frozen | s0–s3 | RTX A6000 | 0.33–0.36 each | 45–46 M | 266,752 | 2.6–2.7 M | 6,363–9,965 |
+
+Rows include attempts of runs that died of CUDA OOM and were resumed (S s1, SH s0), so they exceed the record totals above.
+† SH s1's killed T 1.0 process wrote no rows (signal kill); its record files hold 2,000,000 more attempts plus 192,512 in the unfinished row.
+‡ includes the first T1 s2 launch that OOM'd. Training steps / tokens: 0 (no training). Every S / SH arm used > 1.25× SN's attempts
+(1.04 M / 2.19 M): the arms are matched on the per-theorem cap and stop rule, not on total attempts, and an arm that reaches fewer
+theorems spends more. Pods: sr-1 A40 5.39 h $2.64, sr-2 A40 7.05 h $3.46, sr-3 RTX A6000 3.59 h $1.90, sr-4 A40 6.63 h $3.25;
+**22.67 pod-hours, $11.25** (`podbudget state-readouts`), budget 24 h / $12.
+
+Bucket: `hf://buckets/dan-pandori/nd-rl/state-readouts/artifacts/state-readouts/` (records, re-reads `rr/`, gzipped Lean dumps `dump/`
+with every literal text judged, gate logs `logs/`, registry rows, re-check files) and `…/state-readouts/data/{sr,sc}/`. No new checkpoints
+(models: `state-env/ckpts/se/`, `state-cap12/ckpts/sc12/`). Registry rows also under `hf://buckets/dan-pandori/nd-rl/registry/state-readouts/`.

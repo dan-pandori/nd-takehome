@@ -1,0 +1,31 @@
+{
+ "bucket": false,
+ "no_local": false,
+ "out": "artifacts/state-readouts/compute",
+ "upload": false,
+ "q": [
+  "run_id=state-readouts"
+ ],
+ "cols": "run_id,arm,seed,role,metric,value,n,ckpt,source",
+ "sort": "run_id,arm,seed",
+ "compute": true,
+ "by": "config_file",
+ "_meta": {
+  "script": "registry_merge.py",
+  "argv": [
+   "registry_merge.py",
+   "--compute",
+   "--q",
+   "run_id=state-readouts",
+   "--by",
+   "config_file",
+   "--out",
+   "artifacts/state-readouts/compute"
+  ],
+  "run_id": "state-readouts",
+  "git_sha": "db859e4ce5ef5dfb0dd46ead9f513feadc270a7d",
+  "git_dirty": false,
+  "host": "nd-rl-agent2",
+  "utc": "2026-09-30T09:38:12Z"
+ }
+}

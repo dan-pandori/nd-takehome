@@ -213,3 +213,8 @@ COMPUTE-RECORD DONE 2026-09-30T01:02:02Z
 
 ## state-readouts (executor, started 2026-09-30T02:10Z)
 - Part A: S / SH Stage-1 bases on support-curves' 29 survivors, support-state's H protocol. Part B: SN-cap12 T1 / frozen s0–s3, k 256 on the textbook theorems of transfer / transfer_long. Budget $12 / 24 pod-hours.
+- A: S reached 28 / 25 of the 29 survivors, SH 21 / 15 (SH s1's T 1.0 phase cut by the pre-registered 23 pod-hour line), SN (inherited) 28 / 28. Seeing the state is what matters; naming ≤ ≈ 3 theorems.
+- B: SN-cap12 T1 moves 11 / 12 dead schemata to ≥ 5 on every seed (frozen 6 / 10 / 10 / 9); on classical-only instances excluded middle and Peirce stay at 0.
+- 4 pods (3 × A40 $0.49, 1 × RTX A6000 $0.53), all deleted: 22.67 pod-hours, $11.25. Bucket: hf://buckets/dan-pandori/nd-rl/state-readouts/.
+
+STATE-READOUTS DONE 2026-09-30T09:42:06Z
