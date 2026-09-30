@@ -6,7 +6,7 @@ term size). `nd_verify` was not used by me to judge anything. Code and outputs: 
 `~/review/long-pool-2`, a copy of the run with the write-ups removed). The raw stage files (`data/lp2/*`, 178 MB, not
 in git) were pulled from `hf://buckets/dan-pandori/nd-rl/long-pool-2/data/lp2`.
 
-Models (all 3,216,384-parameter checkpoints read at k 256, T 0.8, seed 0; labels from `lpool_reread.py` args and
+Models (read at k 256, T 0.8, seed 0; 3,216,384 params except K12 T1 at 3,214,336 — corrected in phase 2 from `numbers.md`; labels from `lpool_reread.py` args and
 `artifacts/lpool2/setup.log`):
 - **SN-cap12 T1** = `ckpts/sc12/ladder/la_T1_SN12_s{0-3}_r8.pt` (`lean_staten` state model, from scratch, Stage-1 on
   `kh/train_k12` cap-12 + 8 ladder EI rounds; state-cap12 run).
@@ -157,3 +157,79 @@ There are no results-registry rows (`record.py`: `gpu_seconds`, `gen_tokens`, `l
 the re-read summaries: generation wall-seconds (on the pod GPU, class per `pods.log`/question commit) 38–187 s per
 pool read and 1,429 / 1,589 s for the two rr600 reads; samples 5,376 / 17,920 / 153,600 per file. Labelling ≈ 210 k
 minlen core-seconds from chunk rows (plus calibration, `lpto` and stage F). No training.
+
+## §Comparison (phase 2: `run_long_pool_2.md`, `numbers.md` §long-pool-2, `log.md` 2026-09-29/30)
+
+| claim (source) | my independent value | verdict |
+|---|---|---|
+| Pool: 21 new + 70 calibration; strata 61 / 5 / 25; all 91 disjoint; every upper-bound proof Lean-accepted (run, LP2-1) | 21 + 70; 61 / 5 / 25; 0 hits in 239 files / 11.2 M records (a superset of their 118 / 5.74 M); `ub_proof` 91 / 91 | reproduces |
+| 231,809 generated → 55 lower-bound-17 → 21 distinct (LP2-1) | 231,809 → 55 → 21 | reproduces |
+| Seed overlap: unique worker seeds b 12/42, c 14/54, d 9/24, e 14/36 (log 00:40) | consistent with my distinct-class fractions (b 0.285, c 0.261, d 0.374, e 0.388) | reproduces |
+| "About 60 % of the generation and stage A–E CPU was spent on duplicates" (log 00:40) | 68.6 % of generated rows are repeats of an earlier class (72,765 distinct / 231,809) | differs, by ≈ 9 pp; the honest figure is ≈ 69 % of rows (CPU share not separately derivable, but stage A–D time scales with rows) |
+| Yield missed for three reasons: small-CPU pods, 5–8 GB per search, overlapping seeds (run) | seeds alone cut the pool ≈ 3× (21 of an expected ≈ 55–65 at the same spend) | stands, but understated: the seed error is the dominant cause, not one of three equal ones |
+| LP2-2 brief bins 65 / 0 / 0 / 1 / 25 by best upper bound | 66 / 0 / 0 / 1 / 24 (their own `tables.md` also says 66 / … / 24) | **differs by 1** (transcription error in `numbers.md`) |
+| LP2-2 construction-length bins 0 / 0 / 0 / 2 / 89 | 0 / 0 / 0 / 2 / 89 | reproduces |
+| LP2-3 per-seed table (all / L 17 / L ≥ 18 (exact 18) / construction bins), 12 checkpoints | identical in every cell | reproduces |
+| LP2-3 SN-cap12 T1 IQM all 64.3 % [37.4, 67.0]; L 17 65.6 % [41.0, 70.5] | 64.3 [37.4, 67.0]; 65.6 [41.0, 70.5] | reproduces |
+| LP2-3 SN-cap12 T1 "L ≥ 18 56.0 % [28.0, 64.0]", frozen "L ≥ 18 10.0 % [4.0, 20.0]", printed beside an "L ≥ 18 /30" column | Over the n 30 stratum (exact 18 + F open): **58.3 % [30.0, 66.7]** and frozen **13.3 % [6.7, 16.7]**. Their numbers are the n 25 F-open sub-stratum (7/13/16/15 of 25) | **mislabelled** (a right number on the wrong n) |
+| Paired per-seed L17 − L≥18 +11, +17, −4, +6 pp, mean +7.5 (run, LP2-3) | +11.0, +17.2, −4.4, +5.5; mean **+7.3** (mean of the rounded values is 7.5) | reproduces to rounding; quote +7.3 |
+| MDD between strata of 61 and 30 ≈ 30 pp | 2.8 × √(0.24 (1/61 + 1/30)) = 30.6 pp per seed | reproduces. My theorem-bootstrap 95 % CI on the 4-seed-mean Δ is [−7.7, +22.6] pp |
+| "The brief's falsifier fired, as I predicted: ≥ 25 % in every filled bin on every seed" (run) | filled `L_ub` bins: min 40.9 % (17–18), 25.0 % (25+, s0), 100 % (23–24, **n 1**) | reproduces; the 23–24 bin is a single theorem |
+| "Its rate *rises* with construction length" (run) | SN-cap12 T1 per seed, ≤ 28 / 29–32 / 33–36 / 37+: s0 37.5 / 26.3 / 25.0 / 50.0; s1 50.0 / 68.4 / 50.0 / 75.0; s2 62.5 / 63.2 / 50.0 / 72.5; s3 62.5 / 73.7 / 58.3 / 70.0 % | **overstated**: not monotone on any seed, and the bottom bin has n 8. What holds: top bin ≥ bottom bin on 4 / 4 seeds, i.e. no fall |
+| "Model rates were met" (run) | Pre-registered on the **new pool**: SN-cap12 T1 30–70 % per seed with IQM 40–65 % → observed 71.4 and 81.0 % on s1/s2, IQM 69.0 %; frozen 10–35 % → s1 4.8 %; K12 T1 1–10 % → 0 / 0 | **not supported**: three model expectations missed (T1 high, K12 low, one frozen seed low). On all 91 the T1 and frozen ranges nearly hold, but that is not what was registered |
+| Misses listed: pool size, stage-E timeouts, s3's ≥ 17 count (run) | Also missed: brief's 17–22 bins "< 10 each" (17–18 holds 66), stage-D timeout rate 5–10 % (0.5 %), the three model rates above | **incomplete** miss list |
+| "The step-cap question is closed: rr600 471 / 468, no sample needs more than 89 steps" (run); LP2-5 "0 step-cap hits" | rr600 471 / 468; 0 hits in the four ms96 reads (max 89 / 86); **1 hit (96 steps) in `T1_SN12_s3__cal`**, which LP2-5 does report | stands for the ms96 reads; "no sample needs more than 89" is too broad because one pool sample hit 96. The s3 ≥ 17 "miss" (41 vs 46 ± 4) is inside the same-settings redraw: the identical s3 read on the same 70 theorems gave 47 (8 flips). Worth saying: the miss is sampling, not the cap |
+| LP2-5 action cap 0–0.03 %; peak 10.8–17.2 GB | action-cap truncation up to **0.056 %** (`T1_SN12_s2__new`, their own `caps.md`); peak 10.6–17.1 GB | minor differences; all under the 0.1 % policy line |
+| LP2-6 redraw (−1…+2 T1, −2…0 frozen; up to 13 theorems; K12 identical) | identical table | reproduces |
+| LP2-7 literal-text re-check 292 / 292, controls 72 / 72 | not re-derived as such; my stronger check: all 3,012 counted pool proofs + 320 rr600/≥ 17 samples accepted | consistent |
+| LP2-8 spend $6.29 / 17.08 h; per pod $1.44 / $2.33 / $2.52 | RunPod billing: $1.46 / $2.27 / $2.09 = **$5.82** | reproduces within the budget; `podbudget` over-states lp2-c by ≈ $0.43 |
+| Model labels (numbers.md header, run table) | every number names checkpoint, params, format, from-scratch, training set | **pass**; the run.md table also carries the labels |
+| Comparisons with earlier numbers name the checker | the inherited numbers (state-cap12 476 / 472 / 42 / 46, long-pool rows) are from 2026-09-29 runs, Lean alone on both sides | pass |
+| "Up to length 18, SN-cap12 T1 shows no measurable fall-off" (conclusion) | Δ +7.3 pp, CI [−7.7, +22.6] | stands **as a null at this power**: a fall of up to ≈ 20–30 pp is not excluded |
+
+### Omissions against `AGENT_POLICY.md`
+1. **No term sizes anywhere** in `run_long_pool_2.md` or §long-pool-2 of `numbers.md`. The policy requires them beside line counts, and they matter here: the result is stated in ND line strata (17 / 18), and in Lean term size those strata overlap. My values: minimal proofs have term size median 12 on exact-17 theorems; SN-cap12 T1's smallest proof per theorem has median 14 (exact 17) vs 16 (≥ 18), minimum 9 on a ≥ 18 theorem. On 24 of 78 solved theorems, the model's proof has a smaller term size than the pool's `ub_proof`.
+2. **No compute record** (`record.py` rows with `gpu_seconds`, `gen_tokens`, `lean_checks`, per arm). The re-read summaries contain `gen_s` and sample counts, so this can be derived (above). No arm-vs-arm compute matching question arises: every model read the same prompts at the same k.
+3. Pre-registration deviations are labelled in the log (CPU-second limits from 21:50, `lpto` added then dropped, stage F added, F2 cut). Pass.
+
+## §Verdict
+
+**Stands.**
+- The pool itself: 21 new theorems with lower bound 17 (13 exact 17, 4 exact 18, 4 ≥ 18), plus the 70-theorem
+  calibration file relabelled with stage E (48 / 1 / 21). Labels reproduce from the raw stage files, upper bounds are
+  Lean-accepted, and the pool is disjoint from every training and evaluation file I could find (239 files).
+- Every per-seed solved count in LP2-3 / LP2-4 / LP2-6, and every counted proof, is Lean-accepted (3,012 / 3,012).
+- The null result, worded as a null: at ND length 17 vs ≥ 18, SN-cap12 T1 shows no detectable fall (Δ +7.3 pp, CI
+  [−7.7, +22.6]); the minimum detectable difference is ≈ 30 pp. The brief's falsifier fires. No fall with construction
+  length either (top bin ≥ bottom on 4 / 4 seeds).
+- Step cap 48 → 96 makes no detectable difference (rr600 471 / 468 vs 476 / 472; every difference is inside the
+  same-settings redraw spread).
+
+**Must be reworded.**
+- "Model rates were met" → three pre-registered model-rate expectations on the new pool were missed (SN-cap12 T1 above
+  70 % on s1/s2 and IQM 69.0 % > 65 %; K12 T1 0 / 0 < 1 %; frozen s1 4.8 % < 10 %). Add the stage-D timeout rate and the
+  "< 10 per brief bin" misses to the miss list.
+- "Its rate rises with construction length" → "does not fall with construction length (top bin ≥ bottom bin on 4 / 4
+  seeds; not monotone; bottom bin n 8)".
+- LP2-3's "L ≥ 18 56.0 % [28.0, 64.0]" / frozen "10.0 % [4.0, 20.0]" are the n 25 F-open sub-stratum. For n 30: 58.3 %
+  [30.0, 66.7] and 13.3 % [6.7, 16.7]. Mean Δ is +7.3, not +7.5.
+- LP2-2 "65 / 0 / 0 / 1 / 25" → 66 / 0 / 0 / 1 / 24.
+- The 23–24 bin in the falsifier claim is one theorem.
+- The yield explanation should put the seed overlap first (≈ 69 % of generated rows were repeats, not "about 60 %"; it
+  cost ≈ 3× the pool).
+- The s3 ≥ 17 "miss" (41 vs 46 ± 4): note that the identical s3 read in this run gave 47. It is a sampling redraw, and
+  per-theorem results on 70 theorems at k 256 flip by 6–11 between identical reads.
+
+**Not supported / missing.** No term-size reporting (policy); no compute-record rows (policy). Neither changes a
+count; both should be added. "Up to length 18" is a statement in ND lines only. Under Lean term size the ≥ 18
+stratum is not harder (its easiest theorem has a smaller proof than any exact-17 theorem), so "no fall-off with
+length" should say which length.
+
+**Next measurement.** The question is still open: a fall of up to ≈ 20–30 pp at 17 → 18 is not excluded, and nothing
+above 18 is labelled. Two measurements would settle it:
+1. The same pipeline with **chunk seeds spaced ≥ 1,000**, about ×3 the distinct yield at this spend. Finish stage F on
+   the 25 F-open theorems (bound 18 needs > 20 GB per search, so use a ≥ 125 GB-limit pod like `lp2-b`). That gives
+   ≈ 60–80 new theorems and splits the ≥ 18 stratum into exact 18 / ≥ 19.
+2. For length beyond 19, theorems of **known length by construction** (the executor's own suggestion; e.g. chained
+   lemmas), stratified by Lean term size as well as ND lines, read by SN-cap12 T1 s0–s3 and frozen s0–s3 at k 256.
+   Pre-register a paired or larger design: with ≈ 60 theorems per stratum, the MDD is ≈ 20 pp.
