@@ -833,3 +833,9 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   train Stage-1); `sx-6`, `sx-7` run `pair.sh <0|1> resume 50` (A2 ∥ C). Launch trap: a `pgrep -f 'pair.s[h]'` guard
   inside the podrun string matched itself and skipped the launch (fixed by launching without a guard). `sx-6` creation
   failed once (no resources), retried.
+- 04:10 interim (rounds 1–4, s0/s1, pulled round/alloc files; `sx_analysis.py`): best-first spends 25–34 % of its
+  budget (it stops at the first proof; unspent budget is not reallocated) and solves fewer targets per round than
+  sampling: s0 round 1 B 3,401 vs A 3,582; targets solved in round r and never by the other arm so far: B 136 / 99 / 93 /
+  84 vs A 317 / 246 / 223 / 207 (s0), B 102–51 vs A 273–208 (s1). Pre-registered H1 (B ≥ 2× A) is failing at the expert
+  level. Truncate-and-resume with 23–29 % of its budget beats its sampling pair: C 156 / 119 / 109 vs A2 102 / 60 / 50
+  (s0), C 137 / 87 / 70 vs A2 70 / 64 / 48 (s1).
