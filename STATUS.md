@@ -228,3 +228,5 @@ Brief: run brief `best-state` (Dan, 2026-09-30). Policy: AGENT_POLICY.md. Budget
 
 ## best-state
 - 2026-09-30 15:59 UTC  run started (executor). Port of Robbie's recipe written (`best_model.py`, `state_train_best.py`, `state_train.py --recipe best`); both training sets checked (155,000 records each). Pre-registration `preregistration/best-state.md` committed before the first pod.
+- 16:02–16:32 UTC  CPU tests pass (on a pod, CUDA hidden). Pilot: 300 s → held-out greedy 0.9424, val 0.0709; 1,200 s → 0.9626, val 0.0715. Pre-registered rule → **1,200 s** for all six models (9.56M params). Six A40 pods (bs-p0..p5) run Stage-1 → T1 ladder; two A40 reader pods (bs-r0 inherited, bs-r1 new frozen).
+- 16:40 UTC  ladder batch 4,096 and then 2,048 OOM'd: ALiBi's prefill bias was built in fp32 (~29 GB). Now built in bf16 in place (bit-identical values, checked on GPU); ladder batch 2,048.

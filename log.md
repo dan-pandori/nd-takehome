@@ -843,3 +843,26 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   boundary path on subsets (64 targets / 64 transfer / 200 held-out, 2 round-equivalents of one update), default with
   KL 0.02 and unlikely: both DONE, KL 0 at step 1 and 1.8e-4 / token at step 2, env stats per round. Pulled (34
   files, md5 equal), uploaded, pod deleted (0.09 h, $0.05). Run total **0.32 pod-h, $0.16**.
+
+## best-state (executor, 2026-09-30)
+
+- 15:51 UTC start. Read the proposal, Robbie's `pretrain_best.py` / `harness_combo.py` / `passk.py` / `harness.py`
+  (`robbie-experiments`, factorial_20260929 and autoresearch), `state_train.py`, the state-cap12 / textbook72 scripts.
+- Both Stage-1 sets pulled from the bucket: 155,000 records each (md5 cap-6 29276f24…, K12 800b5486…), matching the
+  `state-env` / `state-cap12` counts. Pair statistics (3,000-record sample, `lean_staten`): cap 6 5.08 pairs/proof, mean
+  pair 85 tokens (action 17); K12 7.96 pairs/proof, mean pair 97 tokens.
+- Port: `best_model.py` (Robbie's network, Muon, MTP, init; credited), `state_train_best.py` (his loop on pairs),
+  `state_train.py --recipe best`; `model.load_ckpt` rebuilds `cfg.arch == 'best'`; `sample.py` compaction now moves
+  every tensor in a layer cache (ALiBi keeps key positions there; RoPE caches unchanged).
+- 15:59 pre-registration committed (fcf3dedb). First pod bs-p0 created ≈ 16:02 (A40 stock was empty in the default
+  data centre; EU-SE-1 had some).
+- `tests/test_best_state.py` passes on CPU (pod bs-p1, CUDA hidden): round trip, cached + compacted ALiBi sampling equals
+  a full forward, one Lean-judged episode, loss falls, control recipe unchanged. Added to `ci/run_ci.sh`.
+  `state_eval.py` hard-coded `cuda`; now falls back to CPU.
+- Pilot (seed 0, cap 6, A40, one job per pod): 300 s → 5,028 steps, 1.41 epochs of pairs, val 0.0709, held-out greedy
+  0.9424; 1,200 s → 24,178 steps, 6.79 epochs, val 0.0715, held-out greedy **0.9626**. Rule: +2.0 pp ≥ 1.0 pp →
+  **1,200 s** for every new model; the pilot's 1,200 s model is best-cap6 s0. 9,560,832 parameters (+1.88M MTP, not saved).
+  Held-out greedy at batch 2,048 peaked at 16.4 GB.
+- 16:32 Stage-1 (cap 6 s1–s2, cap 12 s0–s2) + T1 ladders launched on bs-p0..p5 (A40, $0.49/h). Deviation: each
+  ladder starts as soon as its Stage-1 finishes, not after the frozen read-outs are posted (they run on reader pods
+  bs-r0 / bs-r1 in parallel), to save wall-clock. Ladder sampling batch 4,096.

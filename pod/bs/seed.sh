@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # One best-recipe cell seed: Stage-1 (1,200 s, the pilot's choice) + held-out greedy, then the T1 ladder
 # (state-cap12's protocol: state_ladder_ei.py defaults, 8 rounds x k 32, T 0.8, replay from the cell's own data).
-# Usage: bash pod/bs/seed.sh <cap 6|12> <seed>          env LB = ladder sampling batch (default 4096)
+# Usage: bash pod/bs/seed.sh <cap 6|12> <seed>          env LB = ladder sampling batch (default 2048)
 source pod/bs/env.sh
-C=$1; S=$2; LB=${LB:-4096}; BU=1200
+C=$1; S=$2; LB=${LB:-2048}; BU=1200
 D=$([ "$C" = 6 ] && echo data/p2/train_depth3_f0_a1.jsonl || echo data/kh/train_k12.jsonl)
 N=best${C}_s${S}_b${BU}; CK=ckpts/bs/stage1_$N.pt
 [ -s $CK ] || hf buckets cp $BK/best-state/$CK $CK >/dev/null 2>&1

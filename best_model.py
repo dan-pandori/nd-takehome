@@ -128,9 +128,17 @@ class ALiBiGPT(GPT):
             c['pos'][:, n0:n1] = pos
             c['n_pos'] = n1
             key_pos = c['pos'][:, :n1]
-        rel = pos[:, None, :, None] - key_pos[:, None, None, :]
-        bias = -self.slopes * rel.to(self.slopes.dtype)
-        bias = bias.masked_fill(rel < 0 if mask is None else ~mask, float('-inf'))
+        # Built directly in the attention dtype (bf16 under autocast) with in-place ops: a (B, H, T, S) prefill bias at
+        # batch 2,048 x 400^2 is 5 GB this way against ~29 GB for fp32 + int64 + copies.  The values are identical to
+        # computing in fp32 and casting (Robbie's `mask.to(q.dtype)`): the slopes are powers of two, so slope x bf16(rel)
+        # is the bf16 rounding of the exact product.
+        dt = torch.get_autocast_dtype('cuda') if idx.is_cuda and torch.is_autocast_enabled('cuda') else self.slopes.dtype
+        rel = (pos[:, None, :, None].int() - key_pos[:, None, None, :].int())
+        neg = rel < 0 if mask is None else ~mask
+        bias = rel.to(dt)
+        del rel
+        bias = bias * (-self.slopes.to(dt))
+        bias.masked_fill_(neg, float('-inf'))
         x = self.emb(idx)
         for i, b in enumerate(self.blocks):
             x = b(x, None, None, bias, None if caches is None else caches[i])
