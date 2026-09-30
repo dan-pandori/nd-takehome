@@ -107,7 +107,9 @@ def main():
                 # long pools
                 r = rows(L, 'rr600')
                 if r:
-                    d['Q'] = sum(1 for x in r if x['solved'] and x.get('source') == 'gen' and 13 <= x['L_true'] <= 16)
+                    pool = {x['name']: x for x in map(json.loads, open('data/ladder/transfer_long_rr600.jsonl'))}
+                    d['Q'] = sum(1 for x in r if x['solved'] and pool[x['name']]['source'] == 'gen'
+                                 and 13 <= pool[x['name']]['L_true'] <= 16)
                     d['rr600'] = sum(x['solved'] for x in r); d['Q_src'] = f'{E}/{L}__rr600.jsonl'
                 elif fam in INH_Q:
                     d['Q'] = INH_Q[fam][s]; d['Q_src'] = 'state-cap12 / long-pool (max_steps 48)'
