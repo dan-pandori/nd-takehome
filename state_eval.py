@@ -36,7 +36,7 @@ def main():
     recs = [json.loads(l) for l in open(a.inp) if l.strip()]
     if a.limit:
         recs = recs[:a.limit]
-    model, tok, extra = load_ckpt(a.ckpt, 'cuda')
+    model, tok, extra = load_ckpt(a.ckpt, 'cuda' if torch.cuda.is_available() else 'cpu')
     stats = {}
     prompts = [r['prompt'] for r in recs for _ in range(a.k)]
     t0 = time.time()

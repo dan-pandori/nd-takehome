@@ -174,6 +174,8 @@ def train(a, tok, data, held, dev, record):
             recent.append(float(main)); recent_aux.append(float(aux))
         el = time.time() - t0
         if el >= next_point or (a.best_steps and step == a.best_steps):
+            if not recent:
+                recent.append(float(main)); recent_aux.append(float(aux))
             pt = {'secs': round(el, 1), 'step': step, 'train_loss': sum(recent) / max(1, len(recent)),
                   'mtp_loss': sum(recent_aux) / max(1, len(recent_aux)), 'epochs': seen / len(lens_cpu)}
             if vd:
