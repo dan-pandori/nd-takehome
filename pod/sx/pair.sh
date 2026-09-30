@@ -28,7 +28,7 @@ run() {  # name, extra args
 run $NA --expert sample --seed_offset $OFF &
 PA=$!
 sleep 60
-run $NX --expert $X --budget_from artifacts/sx/$NA --seed_offset $OFF &
+run $NX --expert $X --chains 4 --resume_max 4 --width 4 --alpha 1.0 --budget_from artifacts/sx/$NA --seed_offset $OFF &
 PX=$!
 wait $PA; RA=$?; wait $PX; RX=$?
 up artifacts/sx; up ckpts/sx

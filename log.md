@@ -823,3 +823,13 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   L ≥ 9, k 8): step filter 0 unsound stops (0 Lean-accepted attempts it would have stopped), 0 Lean rejects missed;
   it would stop 70 / 96 attempts early. Best-first at width 4 found 0 / 12 at the sampler's budgets (sampling 11
   proofs): 312 of 736 sampled actions were duplicates. Under investigation.
+- 02:31 pre-registration committed (`9d138b60`, 02:31:18Z) before the first pod (`sx-0`, created 02:31:47Z). Budget
+  registered 50 h / $25.
+- 02:33–02:37 smoke test on `sx-0` (300 random targets, 2 rounds, 20 fine-tune steps, s0 Stage-1; `ND_OFFLINE=1`; files
+  deleted): round 1 A 237 / 300 solved with 70,903 actions; B 219 with 26,112 of the same budget (stops at first proof);
+  C (4 chains) 240 with 20,246. Round 2 cumulative A 245, B 233, C 246. Peak memory 10.0 / 7.1 / 5.1 GB at batch 2,048.
+  Filter ended 4,420 of 9,600 A attempts in round 1. Multi-round budget coupling, shortest selection and resume all ran.
+- 02:35–02:45 pods (all A40, $0.49/h): `sx-0`..`sx-5` run `pod/sx/pair.sh <seed> search` (A ∥ B, seed 0–5; s4, s5 first
+  train Stage-1); `sx-6`, `sx-7` run `pair.sh <0|1> resume 50` (A2 ∥ C). Launch trap: a `pgrep -f 'pair.s[h]'` guard
+  inside the podrun string matched itself and skipped the launch (fixed by launching without a guard). `sx-6` creation
+  failed once (no resources), retried.
