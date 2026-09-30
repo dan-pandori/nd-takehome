@@ -1,0 +1,451 @@
+{
+ "train_fast": {
+  "wall": 376.85,
+  "sum_gpu_seconds": 372.54,
+  "ratio": 0.9886,
+  "blocks": [
+   {
+    "script": "train.py",
+    "phase": "job",
+    "round": null,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "exit",
+    "arm": null,
+    "seed": 0,
+    "gpu_seconds": 372.54,
+    "train_steps": 6000,
+    "train_tokens": 375609000
+   }
+  ]
+ },
+ "legacy_off_1": {
+  "wall": 128.1,
+  "sum_gpu_seconds": 0,
+  "ratio": 0.0,
+  "blocks": []
+ },
+ "legacy_on_1": {
+  "wall": 129.28,
+  "sum_gpu_seconds": 126.02,
+  "ratio": 0.9747,
+  "blocks": [
+   {
+    "script": "train.py",
+    "phase": "job",
+    "round": null,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "exit",
+    "arm": null,
+    "seed": 0,
+    "gpu_seconds": 126.015,
+    "train_steps": 600,
+    "train_tokens": 37560900
+   }
+  ]
+ },
+ "legacy_off_2": {
+  "wall": 128.05,
+  "sum_gpu_seconds": 0,
+  "ratio": 0.0,
+  "blocks": []
+ },
+ "legacy_on_2": {
+  "wall": 129.15,
+  "sum_gpu_seconds": 125.83,
+  "ratio": 0.9742,
+  "blocks": [
+   {
+    "script": "train.py",
+    "phase": "job",
+    "round": null,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "exit",
+    "arm": null,
+    "seed": 0,
+    "gpu_seconds": 125.826,
+    "train_steps": 600,
+    "train_tokens": 37560900
+   }
+  ]
+ },
+ "sample": {
+  "wall": 8.04,
+  "sum_gpu_seconds": 3.9,
+  "ratio": 0.4843,
+  "blocks": [
+   {
+    "script": "gpu_check.py",
+    "phase": "sample_check",
+    "round": null,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "ok",
+    "arm": "gpu_check",
+    "seed": 0,
+    "gpu_seconds": 3.896,
+    "gen_tokens": 513325,
+    "attempts": 4000
+   }
+  ]
+ },
+ "ladder": {
+  "wall": 16.87,
+  "sum_gpu_seconds": 14.02,
+  "ratio": 0.8312,
+  "blocks": [
+   {
+    "script": "ladder_ei.py",
+    "phase": "sample",
+    "round": 1,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "ok",
+    "arm": "cr_ladder",
+    "seed": 0,
+    "gpu_seconds": 5.778,
+    "gen_tokens": 819285,
+    "attempts": 6400
+   },
+   {
+    "script": "ladder_ei.py",
+    "phase": "eval",
+    "round": 1,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "ok",
+    "arm": "cr_ladder",
+    "seed": 0,
+    "gpu_seconds": 3.678,
+    "gen_tokens": 220005,
+    "attempts": 1850,
+    "lean_checks": 189,
+    "lean_s": 1.417
+   },
+   {
+    "script": "ladder_ei.py",
+    "phase": "finetune",
+    "round": 1,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "ok",
+    "arm": "cr_ladder",
+    "seed": 0,
+    "gpu_seconds": 3.659
+   },
+   {
+    "script": "ladder_ei.py",
+    "phase": "job",
+    "round": null,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "exit",
+    "arm": "cr_ladder",
+    "seed": 0,
+    "gpu_seconds": 0.908
+   }
+  ]
+ },
+ "expect": {
+  "wall": 4.31,
+  "sum_gpu_seconds": 0,
+  "ratio": 0.0,
+  "blocks": [
+   {
+    "script": "gpu_check.py",
+    "phase": "bench",
+    "round": null,
+    "device": "cpu",
+    "gpu": null,
+    "status": "ok",
+    "arm": null,
+    "seed": null,
+    "gpu_seconds": 0.01,
+    "train_steps": 200,
+    "train_tokens": 12496799
+   }
+  ]
+ },
+ "test_registry": {
+  "wall": 6.23,
+  "sum_gpu_seconds": 0,
+  "ratio": 0.0,
+  "blocks": []
+ },
+ "test_smoke": {
+  "wall": 39.21,
+  "sum_gpu_seconds": 0,
+  "ratio": 0.0,
+  "blocks": []
+ },
+ "train_fast_short": {
+  "wall": 59.26,
+  "sum_gpu_seconds": 56.94,
+  "ratio": 0.9609,
+  "blocks": [
+   {
+    "script": "train.py",
+    "phase": "job",
+    "round": null,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "exit",
+    "arm": null,
+    "seed": 1,
+    "gpu_seconds": 56.937,
+    "train_steps": 600,
+    "train_tokens": 37560900
+   }
+  ]
+ },
+ "ladder2": {
+  "wall": 79.88,
+  "sum_gpu_seconds": 75.04,
+  "ratio": 0.9394,
+  "blocks": [
+   {
+    "script": "train.py",
+    "phase": "finetune",
+    "round": 1,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "exit",
+    "arm": "cr_ladder2",
+    "seed": 0,
+    "gpu_seconds": 21.873,
+    "train_steps": 300,
+    "train_tokens": 4540890
+   },
+   {
+    "script": "ladder_ei.py",
+    "phase": "sample",
+    "round": 1,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "ok",
+    "arm": "cr_ladder2",
+    "seed": 0,
+    "gpu_seconds": 6.344,
+    "gen_tokens": 344899,
+    "attempts": 6400,
+    "lean_checks": 4766,
+    "lean_s": 25.061
+   },
+   {
+    "script": "ladder_ei.py",
+    "phase": "eval",
+    "round": 1,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "ok",
+    "arm": "cr_ladder2",
+    "seed": 0,
+    "gpu_seconds": 3.737,
+    "gen_tokens": 235077,
+    "attempts": 1850
+   },
+   {
+    "script": "ladder_ei.py",
+    "phase": "finetune",
+    "round": 1,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "ok",
+    "arm": "cr_ladder2",
+    "seed": 0,
+    "gpu_seconds": 2.877
+   },
+   {
+    "script": "ladder_ei.py",
+    "phase": "sample",
+    "round": 2,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "ok",
+    "arm": "cr_ladder2",
+    "seed": 0,
+    "gpu_seconds": 5.676,
+    "gen_tokens": 351583,
+    "attempts": 6400,
+    "lean_checks": 4871,
+    "lean_s": 21.098
+   },
+   {
+    "script": "ladder_ei.py",
+    "phase": "eval",
+    "round": 2,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "ok",
+    "arm": "cr_ladder2",
+    "seed": 0,
+    "gpu_seconds": 3.673,
+    "gen_tokens": 237584,
+    "attempts": 1850
+   },
+   {
+    "script": "ladder_ei.py",
+    "phase": "finetune",
+    "round": 2,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "ok",
+    "arm": "cr_ladder2",
+    "seed": 0,
+    "gpu_seconds": 2.86
+   },
+   {
+    "script": "ladder_ei.py",
+    "phase": "job",
+    "round": null,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "exit",
+    "arm": "cr_ladder2",
+    "seed": 0,
+    "gpu_seconds": 3.66
+   },
+   {
+    "script": "train.py",
+    "phase": "finetune",
+    "round": 2,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "exit",
+    "arm": "cr_ladder2",
+    "seed": 0,
+    "gpu_seconds": 24.342,
+    "train_steps": 300,
+    "train_tokens": 4563097
+   }
+  ]
+ },
+ "expect2": {
+  "wall": 2.26,
+  "sum_gpu_seconds": 0,
+  "ratio": 0.0,
+  "blocks": []
+ },
+ "train_fast_perstep": {
+  "wall": 64.32,
+  "sum_gpu_seconds": 61.45,
+  "ratio": 0.9554,
+  "blocks": [
+   {
+    "script": "train.py",
+    "phase": "job",
+    "round": null,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "exit",
+    "arm": null,
+    "seed": 2,
+    "gpu_seconds": 61.454,
+    "train_steps": 600,
+    "train_tokens": 37560900
+   }
+  ]
+ },
+ "grpo": {
+  "wall": 27.47,
+  "sum_gpu_seconds": 25.26,
+  "ratio": 0.9198,
+  "blocks": [
+   {
+    "script": "grpo.py",
+    "phase": "sample",
+    "round": 1,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "ok",
+    "arm": "cr_grpo",
+    "seed": 0,
+    "gpu_seconds": 4.084,
+    "gen_tokens": 82276,
+    "attempts": 1536,
+    "lean_checks": 199,
+    "lean_s": 1.871
+   },
+   {
+    "script": "grpo.py",
+    "phase": "update",
+    "round": 1,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "ok",
+    "arm": "cr_grpo",
+    "seed": 0,
+    "gpu_seconds": 0.271,
+    "train_steps": 3,
+    "train_tokens": 4778
+   },
+   {
+    "script": "grpo.py",
+    "phase": "eval",
+    "round": 1,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "ok",
+    "arm": "cr_grpo",
+    "seed": 0,
+    "gpu_seconds": 8.355,
+    "gen_tokens": 57799,
+    "attempts": 450
+   },
+   {
+    "script": "grpo.py",
+    "phase": "sample",
+    "round": 2,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "ok",
+    "arm": "cr_grpo",
+    "seed": 0,
+    "gpu_seconds": 2.275,
+    "gen_tokens": 81699,
+    "attempts": 1536,
+    "lean_checks": 12,
+    "lean_s": 0.779
+   },
+   {
+    "script": "grpo.py",
+    "phase": "update",
+    "round": 2,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "ok",
+    "arm": "cr_grpo",
+    "seed": 0,
+    "gpu_seconds": 0.029,
+    "train_steps": 1,
+    "train_tokens": 808
+   },
+   {
+    "script": "grpo.py",
+    "phase": "eval",
+    "round": 2,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "ok",
+    "arm": "cr_grpo",
+    "seed": 0,
+    "gpu_seconds": 7.594,
+    "gen_tokens": 57521,
+    "attempts": 450
+   },
+   {
+    "script": "grpo.py",
+    "phase": "job",
+    "round": null,
+    "device": "cuda",
+    "gpu": "NVIDIA A40",
+    "status": "exit",
+    "arm": "cr_grpo",
+    "seed": 0,
+    "gpu_seconds": 2.656
+   }
+  ]
+ }
+}
