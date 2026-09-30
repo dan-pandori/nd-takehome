@@ -114,9 +114,11 @@ def part_b():
         if t == 'tb':
             print(f"{'dead schemata >= 5 (/12)':30s}" + ''.join(
                 f"{sum(res[l][t]['by_schema'].get(s, 0) >= 5 for s in dead) if t in res[l] else '-':>11}" for l in labs))
-        print(f"{'step-cap hits %':30s}" + ''.join(
-            f"{(100 * res[l][t]['env']['end'].get('step_cap', 0) / max(1, sum(res[l][t]['env']['end'].values()))) if t in res[l] and res[l][t].get('env') and 'end' in res[l][t]['env'] else float('nan'):>11.3f}"
-            for l in labs))
+        for key, title in (('step_cap', 'step-cap (96) hits %'), ('truncated', 'action-cap (512) hits %')):
+            print(f"{title:30s}" + ''.join(
+                f"{100 * res[l][t]['env']['env_end'].get(key, 0) / max(1, sum(res[l][t]['env']['env_end'].values())) if t in res[l] else float('nan'):>11.3f}"
+                for l in labs))
+        print(f"{'peak GB':30s}" + ''.join(f"{res[l][t]['peak_mem_gb'] if t in res[l] else float('nan'):>11.1f}" for l in labs))
     return res
 
 
