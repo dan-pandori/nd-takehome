@@ -776,3 +776,7 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   VPS (`xargs -P 4`); heavy or parallel work goes on a pod.** Resumed 23:59 UTC in a fresh session from the working
   tree (uncommitted `--data_seed` change, `tests/test_data_seed.py`, staged `lpool_reread.py` + `pod/sc12/` from
   `origin/dan_state-cap12`) and `/tmp/m3survey` (54 / 160 `args.json` fetched, `argslist.txt`).
+- 00:13 lm1: torch.cuda.is_available() False (driver 580 / CUDA 13.0 visible to nvidia-smi, torch 2.8.0+cu128 errors); repro ran on CPU. Deleted lm1 (~0.2 h), replaced by lm3.
+- 00:17 M2: pods lm1, lm2 (RTX 3090 community, $0.22/h each) set up (train_p1 md5 e80aaa0c, heldout ae6daf49); lm1 runs repro.sh then grid parity 0, lm2 grid parity 1.
+- 00:25 podnew lm3 hung 10 min (SSH wait), was killed by my timeout and left an unregistered running pod lm3 (43h631bnbmilq1, $0.22/h, ~10 min); deleted by hand with runpodctl. Its cost is not in podbudget (≈ $0.04).
+- 00:39 podnew lm4 (RTX 3090 community) failed after 12 min (ssh port never allocated; podnew removed it). Deviation: all 64 M2 cells run sequentially on lm2 (parity 1 then parity 0) instead of on two pods; same GPU for every cell, so no pod/factor confound at all. Repro check also on lm2, concurrent with the grid.

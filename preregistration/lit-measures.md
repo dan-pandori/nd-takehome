@@ -76,3 +76,13 @@ the final ordering (pairwise, within arm).
 
 Stop M2 at 64 cells or at 5.5 pod-hours / $2.75, whichever first; M3 pod job at 1 pod-hour. Never more than 4
 processes at once on the VPS. Pods deleted when their files are pulled and md5-matched.
+
+## Amendment 1 (2026-09-30 ~00:55 UTC, before any M2 grid cell's result was read)
+
+The default-reproduction check (`lm_m2_repro.py`) found that GPU Stage-1 training is not bit-deterministic: at fixed
+seeds, this branch with the default, this branch with an explicit `--data_seed 0`, and `origin/dan`'s trainer agree to
+4–5 digits at step 10 and then drift apart (legacy and fast alike); on CPU the default is bit-identical
+(`tests/test_data_seed.py`). So the M2 residual includes non-determinism. **Added:** 8 re-runs of cell (init 0, data
+100) with identical seeds (`pod/lm/reps.sh`), on the same pod. Read-out: the replicate sd of depth-3 / overall / val
+loss, reported next to the ANOVA components. Expectation E2.4: replicate sd of depth-3 ≥ 0.10 (non-determinism alone
+reaches the bimodal spread). Falsified if < 0.05.
