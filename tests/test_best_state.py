@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """CPU tests for `state_train.py --recipe best` (run `best-state`: Robbie's network and pretraining recipe in the
-proof-state format).  The model is the real 6 x 384 network trained for a few dozen steps on 4 short fixture proofs.
+proof-state format).  The model is a 2 x 128 copy of the network (CI's 10-minute limit; the full size is checked by construction) trained for 300 steps on 4 short fixture proofs.
 
     ND_OFFLINE=1 python3 tests/test_best_state.py      # needs torch (CPU is enough) and Lean
 
@@ -43,7 +43,7 @@ with open(data, 'w') as f:
     f.write(''.join(json.dumps(r) + '\n' for r in tiny) * 4)
 ck = os.path.join(tmp, 'tiny_best.pt')
 cmd = [sys.executable, os.path.join(HERE, 'state_train.py'), '--recipe', 'best', '--data', data, '--heldout', pool,
-       '--mode', 'lean_staten', '--cap', '0', '--best_steps', '80', '--curve_every', '0', '--no_compile', '--seed', '0',
+       '--mode', 'lean_staten', '--cap', '0', '--best_steps', '300', '--best_dims', '2,128,4,256', '--curve_every', '0', '--no_compile', '--seed', '0',
        '--out', ck]
 p = subprocess.run(cmd, capture_output=True, text=True, cwd=HERE, env=env, timeout=1800)
 check('state_train.py --recipe best exit 0', p.returncode == 0, p.stderr[-1500:])
@@ -56,13 +56,14 @@ if not fails:
     from state_sample import prompt_ids
     model, tok, extra = load_ckpt(ck)
     check('checkpoint: arch best, ALiBiGPT', model.cfg.get('arch') == 'best' and isinstance(model, ALiBiGPT), model.cfg)
-    n = model.n_params()
-    check('checkpoint: ~10M params (6 x 384, MLP 1280, MTP not saved)', 9e6 < n < 11.5e6, n)
+    n = ALiBiGPT(tok.vocab_size).n_params()    # the recipe's size, by construction (CI trains a 2 x 128 copy)
+    check('recipe network: 9,560,832 params (6 x 384, MLP 1280; MTP not in the model)', n == 9560832, n)
+    check('checkpoint cfg records the trained dims', model.cfg['n_layer'] == 2 and model.cfg['d_ff'] == 256, model.cfg)
     cv = extra['curve']
     check('loss falls on a small slice', cv[-1]['train_loss'] < 0.5 * cv[0]['train_loss'],
           (cv[0]['train_loss'], cv[-1]['train_loss']))
     check('val loss falls', cv[-1]['val_loss'] < 0.5 * cv[0]['val_loss'], (cv[0]['val_loss'], cv[-1]['val_loss']))
-    check('extra records steps / secs / tok_budget', extra['steps'] == 80 and extra['tok_budget'] == 128 * 144, extra.get('steps'))
+    check('extra records steps / secs / tok_budget', extra['steps'] == 300 and extra['tok_budget'] == 128 * 144, extra.get('steps'))
 
     # 2. round trip
     x = torch.randint(2, tok.vocab_size, (3, 40))

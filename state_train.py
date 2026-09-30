@@ -94,11 +94,13 @@ def main():
     ap.add_argument('--mtp', type=float, default=0.3, help='best: MTP loss weight')
     ap.add_argument('--curve_every', type=float, default=30, help='best: seconds between curve / val points')
     ap.add_argument('--no_compile', action='store_true')
+    ap.add_argument('--best_dims', default=None, help='best: "layers,d,heads,d_ff" override (CPU tests only; the recipe is 6,384,8,1280)')
     a = ap.parse_args()
     if a.recipe == 'best':
         assert not a.init, '--recipe best is Stage-1 pretraining; fine-tunes of a best checkpoint use the default loop'
         import best_model as BM
-        a.n_layer, a.d, a.n_head, a.d_ff = BM.N_LAYER, BM.D, BM.N_HEAD, BM.D_FF
+        a.n_layer, a.d, a.n_head, a.d_ff = (BM.N_LAYER, BM.D, BM.N_HEAD, BM.D_FF) if not a.best_dims else \
+            tuple(int(x) for x in a.best_dims.split(','))
     import record    # results registry (REGISTRY.md)
     record.save_config(vars(a), a.out, role='finetune' if a.init else 'stage1')
     record.preflight()    # ND_RUN_ID + hf CLI present, or ND_OFFLINE=1: checked before training, not at the first save
