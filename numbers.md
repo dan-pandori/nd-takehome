@@ -1473,3 +1473,75 @@ prefilter.) Smoke 2 (after the review fixes; `artifacts/grpo_state/smoke2_*/roun
 targets, 64 transfer and 200 held-out theorems (the first lines of each pool) only to exercise the boundary path.
 Pods: `gs-smoke` RTX 3090 0.23 h $0.11, `gs-smoke2` A40 ($0.49/h) 0.09 h $0.05; total 0.32 h, $0.16. Bucket: `hf://buckets/dan-pandori/nd-rl/grpo-state/{artifacts/grpo_state,artifacts/grpo-state,ckpts/grpo_state}`
 (rows in `artifacts/MANIFEST.jsonl`).
+
+# § textbook72 (2026-09-30) — the proof-state models on the group's 72 textbook problems
+
+**Models** (all 3,216,384 params, `lean_staten`, from scratch, sampled in the proof-state environment with
+`Env(canon=True, assign=True)` = "SN-v2" naming): SN-cap12 T1 = `state-cap12/ckpts/sc12/ladder/la_T1_SN12_s{0..3}_r8.pt`
+(md5 82206356 / ea02cd0c / f2c6c062 / 46c3058c), SN-cap12 frozen = `…/sc12/stage1_SN12_s{0..3}.pt` (173f4047 / b85cbc63 /
+21d74747 / 2ca59f8d), Stage-1 on K12 `train_k12.jsonl` (cap 12, 155 k), T1 = + 8 ladder EI rounds. SN-v2 cap-6 T1 =
+`state-env/ckpts/se/ladder/la_T1_SN_s{0,1}_r8.pt` (fb448247 / 455c08b2), frozen = `…/se/stage1_SN_s{0,1}.pt` (ec3888d9 /
+d8b21e4c), Stage-1 on `p2/train_depth3_f0_a1.jsonl` (cap 6, 155 k). Checkpoint names below: T1/Fz × SN12/SN6 × seed.
+
+**Problems:** `data/eval_only/textbook72/` (dev58 + train14; sha256 = manifest). **Protocol:** `state_eval.py` k 256, T 0.8,
+seed 0, batch 4,096, `max_steps` 96, `max_action` 512, one A40. **Judge: Lean alone** (`lean_judge`). Solved = ≥ 1 of 256
+accepted. The "Lean∧nd_verify" column is a labelled secondary count (Robbie's reward), judges nothing. Bins by
+`reference_lines` (dev58 only; ND reference lengths, upper bounds under Lean); train14 has no `reference_lines`.
+Source: `artifacts/textbook72/eval/<ckpt>.{jsonl,json}` → `tb72_analysis.py` → `artifacts/textbook72/{summary.json,analysis_stdout.txt}`.
+
+| checkpoint | dev58 | train14 | all 72 | 1-5 /5 | 6-10 /24 | 11-15 /16 | 16+ /13 | Lean∧nd_verify (72) | accepted samples | distinct accepted | distinct failing nd_verify | step-cap % | action-cap % | peak GB | wall s |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| T1_SN12_s0 | 30 | 7 | **37** | 5 | 18 | 5 | 2 | 37 | 3317 | 878 | 0 | 0.000 | 0.157 | 24.5 | 103 |
+| Fz_SN12_s0 | 20 | 6 | **26** | 5 | 12 | 2 | 1 | 26 | 2210 | 371 | 0 | 0.000 | 0.087 | 24.8 | 82 |
+| T1_SN12_s1 | 32 | 6 | **38** | 5 | 18 | 7 | 2 | 38 | 3806 | 1033 | 0 | 0.000 | 0.000 | 24.1 | 96 |
+| Fz_SN12_s1 | 23 | 6 | **29** | 5 | 14 | 4 | 0 | 29 | 2477 | 487 | 0 | 0.000 | 0.092 | 23.4 | 74 |
+| T1_SN12_s2 | 30 | 6 | **36** | 5 | 18 | 4 | 3 | 36 | 4488 | 1387 | 0 | 0.000 | 0.011 | 26.6 | 96 |
+| Fz_SN12_s2 | 26 | 6 | **32** | 5 | 17 | 4 | 0 | 32 | 3178 | 367 | 0 | 0.000 | 0.049 | 25.0 | 72 |
+| T1_SN12_s3 | 32 | 6 | **38** | 5 | 19 | 6 | 2 | 38 | 4610 | 941 | 0 | 0.000 | 0.005 | 28.2 | 102 |
+| Fz_SN12_s3 | 21 | 5 | **26** | 5 | 13 | 3 | 0 | 26 | 2889 | 392 | 0 | 0.000 | 0.000 | 25.4 | 68 |
+| T1_SN6_s0 | 18 | 4 | **22** | 5 | 12 | 1 | 0 | 22 | 3430 | 152 | 0 | 0.000 | 0.005 | 20.9 | 53 |
+| Fz_SN6_s0 | 13 | 3 | **16** | 5 | 8 | 0 | 0 | 16 | 1621 | 37 | 0 | 0.000 | 0.005 | 21.7 | 38 |
+| T1_SN6_s1 | 12 | 4 | **16** | 5 | 7 | 0 | 0 | 16 | 2565 | 52 | 0 | 0.000 | 0.005 | 21.7 | 46 |
+| Fz_SN6_s1 | 12 | 2 | **14** | 5 | 7 | 0 | 0 | 14 | 1570 | 31 | 0 | 0.000 | 0.043 | 20.4 | 43 |
+
+"peak GB" = `torch.cuda.max_memory_allocated`. Step cap (96) hit 0 times anywhere. Action cap (512) above 0.1 % once
+(T1_SN12_s0, 0.157 %); diagnostic re-run at `max_action` 1,024 (same seed): 37 / 72, the **identical solved set**,
+cap hits 6 / 18,432 = 0.033 %, peak 36.5 GB (`artifacts/textbook72/diag/T1_SN12_s0_a1024.{jsonl,json}`).
+
+| arm | per seed (all 72) | IQM [95 % CI] | union | dev58 per seed | train14 per seed |
+|---|---|---|---|---|---|
+| SN-cap12 T1 | 37 / 38 / 36 / 38 | 37.5 [36.0, 38.0] | 46 | 30 / 32 / 30 / 32 | 7 / 6 / 6 / 6 |
+| SN-cap12 frozen | 26 / 29 / 32 / 26 | 27.5 [26.0, 32.0] | 36 | 20 / 23 / 26 / 21 | 6 / 6 / 6 / 5 |
+| SN-v2 cap-6 T1 | 22 / 16 | 19.0 [16.0, 22.0] | 22 | 18 / 12 | 4 / 4 |
+| SN-v2 cap-6 frozen | 16 / 14 | 15.0 [14.0, 16.0] | 18 | 13 / 12 | 3 / 2 |
+
+IQM with a bootstrap 95 % interval over seeds (4 or 2 seeds; crude at this n). SN-cap12 T1 − frozen, paired by seed:
++11 / +9 / +4 / +12 (mean +9.0; pre-registered MDD ≈ 8).
+
+**nd_verify (secondary):** 0 of the 6,128 distinct accepted proofs (summed over checkpoints) (all 12 checkpoints) fail `nd_verify`, so
+Lean∧nd_verify counts equal the Lean counts. Control: `nd_verify` accepts 47 / 47 shortest proofs and rejects 47 / 47
+with the last line's rule corrupted (run inline, 2026-09-30; see log).
+
+**Contamination** (`tb72_contam.py` → `artifacts/textbook72/contam.json`): renaming class with premise order kept: **0**
+overlaps with any of cap-6 control (155,000), K12 (155,000), ladder `rl_targets` (4,495), old `rl_targets` (3,000), and the
+48 EI replay sets `mix_1..8` of the six T1 runs. Premise order ignored: **1** problem, `textbook_3ed45280e6c686e76ac6`
+(`( P v Q ) , ( ~ P ) ⊢ Q`, disjunctive syllogism, reference 7) is in K12 and in 4 SN12 replay mixes (retained K12
+records). All 12 checkpoints and Robbie's model solve it; excluding it lowers every count above by 1.
+
+**Solved by no checkpoint: 25 / 72** (20 dev58, 5 train14); list in `analysis_stdout.txt`. Any checkpoint: 47 / 72.
+
+**Robbie's combined model** (`artifacts/textbook72/robbie_per_problem.json`, from nd-rl `origin/robbie-experiments:
+experiment-summaries/2026-09-28-combined-model/charts/passk.csv`; pretrained 6×384 `lean_seq` + Leon EI, Lean ∧ nd_verify,
+256 samples T 0.8): **32 / 30 / 32 per seed (mean 31.3), union 36**. His "naive 13" is 13 % = 9 problems (7 / 11 / 9;
+union 13). Per problem: of his union 36, our checkpoints solve 34; he alone solves 2 (`0824150e…` ref 6, `3d573ac4…`
+ref 11); we alone solve 13 (SN-cap12 T1's union alone: 12), including all three solved problems with reference ≥ 16.
+
+**Proof length** (shortest accepted proof per problem, lines and `lean_check` term size): per-problem table in
+`analysis_stdout.txt`; longest-reference solved proofs in Lean: `artifacts/textbook72/long_proofs.md` (reference 18 → 16
+lines / term size 12; 16 → 16 / 11; 16 → 14 / 11).
+
+**Compute** (`tb72_compute.py` → `artifacts/textbook72/compute.tsv`, from registry rows; A40; no training): per checkpoint
+18,432 attempts, 43–109 GPU-s, 1.5–3.3 M generated tokens, 108 k–245 k actions, 325–2,898 Lean checks; total 12 read-outs
+937 GPU-s, 29.1 M tokens, 16,654 Lean checks (+ diagnostic 117 GPU-s). Pod `tb72-1` A40 /bin/bash.49/h: 0.36 h, $0.18.
+
+**Bucket:** `hf://buckets/dan-pandori/nd-rl/textbook72/artifacts/textbook72/` (77 files).

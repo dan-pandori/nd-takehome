@@ -843,3 +843,27 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   boundary path on subsets (64 targets / 64 transfer / 200 held-out, 2 round-equivalents of one update), default with
   KL 0.02 and unlikely: both DONE, KL 0 at step 1 and 1.8e-4 / token at step 2, env stats per round. Pulled (34
   files, md5 equal), uploaded, pod deleted (0.09 h, $0.05). Run total **0.32 pod-h, $0.16**.
+
+# log — textbook72
+
+- 2026-09-30 14:48 UTC start. Problems fetched from nd-rl `origin/robbie-experiments` (`factorial_20260929/textbook72/`),
+  both sha256 match `MANIFEST.json`; copy in `data/eval_only/textbook72/` with a README stating the rule. The 14 train14
+  records carry no `reference_lines` (own bin). Five problems use `F`. Robbie's per-problem results found by a subagent
+  in `origin/robbie-experiments:experiment-summaries/2026-09-28-combined-model/charts/passk.csv` (per problem, per seed):
+  his "31 / 72" is the mean of 3 seeds (32 / 30 / 32; union 36), and the naive pipeline's "13" is 13 % = 9 problems
+  mean (7 / 11 / 9; union 13) → `artifacts/textbook72/robbie_per_problem.json`.
+- 14:51:47 pre-registration committed (51c97089); budget registered (6 h / $3). 14:53 pod `tb72-1` A40 secure,
+  $0.49/h billed. Setup: Lean v4.34.1, 12 checkpoints (md5s match state-readouts' list for SN-cap12), 7 Lean workers.
+- 14:55 launched `pod/tb72/eval.sh` (12 read-outs in sequence, batch 4,096) and `pod/tb72/contam.sh` in one `podrun`
+  call (deviation from "one job per podrun": both are single nohup queues; harmless). SN-cap12 T1 s0: 37 / 72 in 111 s.
+- 15:11 all 12 read-outs done (16 min, 55–110 s each). Contamination done: 0 overlaps with premise order kept; 1 with
+  premise order ignored (`textbook_3ed45280…`, disjunctive syllogism, in K12 and 4 SN12 replay mixes).
+- ~15:12 `tb72_analysis.py` on the pod (7 Lean workers for `lean_check` term sizes). 0 of 6,128 distinct accepted
+  proofs fail `nd_verify` (secondary count only). Control run inline on the VPS: `nd_verify` accepts 47 / 47 shortest
+  proofs and rejects 47 / 47 with the last line's rule replaced by `ANDE1 N1`.
+- ~15:13 T1_SN12_s0's action-cap rate 0.157 % > 0.1 % → diagnostic re-read at `max_action` 1,024 (same seed): identical
+  solved set (37), 0.033 % cap hits, peak 36.5 GB. Main table kept at 512 (settings fixed across arms).
+- ~15:15 artifacts pulled (listing diffed: nothing missing), pod `tb72-1` deleted (0.36 h, $0.18). Secret scan 0 hits
+  (77 files); uploaded to `hf://buckets/dan-pandori/nd-rl/textbook72/artifacts/textbook72/` (77 / 77 listed). The
+  eval-only problem copy (`data/eval_only/textbook72/`) is in git and not uploaded to the public bucket; no ckpts or
+  new data were produced.

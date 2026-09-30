@@ -225,3 +225,10 @@ GRPO-STATE DONE 2026-09-30T02:51:03Z
 
 - Proof-state models (SN-cap12 T1/frozen s0–s3, SN-v2 cap-6 T1/frozen s0/s1) on the group's 72 textbook problems at
   pass@256, T 0.8, Lean alone. Budget $3 / 6 pod-h. Pre-registration `preregistration/textbook72.md`.
+- Result (Lean alone, pass@256 T 0.8): SN-cap12 T1 37 / 38 / 36 / 38 of 72 (union 46); SN-cap12 frozen 26 / 29 / 32 / 26;
+  SN-v2 cap-6 T1 22 / 16, frozen 16 / 14. Robbie's combined model 32 / 30 / 32 (Lean ∧ nd_verify; our Lean ∧ nd_verify
+  counts are identical to our Lean counts). 25 / 72 solved by nothing. Contamination: 1 premise-order-only overlap.
+  0.36 pod-h, $0.18; pod deleted. `run_textbook72.md`, `numbers.md` § textbook72,
+  bucket `hf://buckets/dan-pandori/nd-rl/textbook72/artifacts/textbook72/`.
+
+TEXTBOOK72 DONE 2026-09-30T15:16:52Z

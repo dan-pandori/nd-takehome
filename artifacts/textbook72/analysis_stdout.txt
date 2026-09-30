@@ -1,0 +1,182 @@
+| checkpoint | dev58 | train14 | all 72 | 1-5 /5 | 6-10 /24 | 11-15 /16 | 16+ /13 | Lean∧nd_verify (72) | accepted samples | distinct accepted | distinct failing nd_verify | step-cap % | action-cap % | peak GB | wall s |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| T1_SN12_s0 | 30 | 7 | **37** | 5 | 18 | 5 | 2 | 37 | 3317 | 878 | 0 | 0.000 | 0.157 | 24.5 | 103 |
+| Fz_SN12_s0 | 20 | 6 | **26** | 5 | 12 | 2 | 1 | 26 | 2210 | 371 | 0 | 0.000 | 0.087 | 24.8 | 82 |
+| T1_SN12_s1 | 32 | 6 | **38** | 5 | 18 | 7 | 2 | 38 | 3806 | 1033 | 0 | 0.000 | 0.000 | 24.1 | 96 |
+| Fz_SN12_s1 | 23 | 6 | **29** | 5 | 14 | 4 | 0 | 29 | 2477 | 487 | 0 | 0.000 | 0.092 | 23.4 | 74 |
+| T1_SN12_s2 | 30 | 6 | **36** | 5 | 18 | 4 | 3 | 36 | 4488 | 1387 | 0 | 0.000 | 0.011 | 26.6 | 96 |
+| Fz_SN12_s2 | 26 | 6 | **32** | 5 | 17 | 4 | 0 | 32 | 3178 | 367 | 0 | 0.000 | 0.049 | 25.0 | 72 |
+| T1_SN12_s3 | 32 | 6 | **38** | 5 | 19 | 6 | 2 | 38 | 4610 | 941 | 0 | 0.000 | 0.005 | 28.2 | 102 |
+| Fz_SN12_s3 | 21 | 5 | **26** | 5 | 13 | 3 | 0 | 26 | 2889 | 392 | 0 | 0.000 | 0.000 | 25.4 | 68 |
+| T1_SN6_s0 | 18 | 4 | **22** | 5 | 12 | 1 | 0 | 22 | 3430 | 152 | 0 | 0.000 | 0.005 | 20.9 | 53 |
+| Fz_SN6_s0 | 13 | 3 | **16** | 5 | 8 | 0 | 0 | 16 | 1621 | 37 | 0 | 0.000 | 0.005 | 21.7 | 38 |
+| T1_SN6_s1 | 12 | 4 | **16** | 5 | 7 | 0 | 0 | 16 | 2565 | 52 | 0 | 0.000 | 0.005 | 21.7 | 46 |
+| Fz_SN6_s1 | 12 | 2 | **14** | 5 | 7 | 0 | 0 | 14 | 1570 | 31 | 0 | 0.000 | 0.043 | 20.4 | 43 |
+
+| arm | per seed (all 72) | IQM [95 % CI] | union | dev58 per seed | train14 per seed |
+|---|---|---|---|---|---|
+| SN-cap12 T1 | 37 / 38 / 36 / 38 | 37.5 [36.0, 38.0] | 46 | 30 / 32 / 30 / 32 | 7 / 6 / 6 / 6 |
+| SN-cap12 frozen | 26 / 29 / 32 / 26 | 27.5 [26.0, 32.0] | 36 | 20 / 23 / 26 / 21 | 6 / 6 / 6 / 5 |
+| SN-v2 cap-6 T1 | 22 / 16 | 19.0 [16.0, 22.0] | 22 | 18 / 12 | 4 / 4 |
+| SN-v2 cap-6 frozen | 16 / 14 | 15.0 [14.0, 16.0] | 18 | 13 / 12 | 3 / 2 |
+
+SN-cap12 T1 - frozen, paired by seed: [11, 9, 4, 12]
+
+solved by any checkpoint: 47 / 72; by none: 25
+  none: textbook_5758428c8c74f96345ad (textbook_dev, ref 10) Robbie-combined False: THM ( ( ( ( ~ P ) > P ) & ( P > ( ~ P ) ) ) v P ) SEQ P PRF
+  none: textbook_03549baa1134033548d6 (textbook_dev, ref 11) Robbie-combined False: THM SEQ ( ( ( P > R ) & ( Q > ( ~ R ) ) ) > ( ~ ( P & Q ) ) ) PRF
+  none: textbook_9f83d4425b7684ef58e7 (textbook_dev, ref 18) Robbie-combined False: THM ( ~ ( P & ( ~ ( S & Q ) ) ) ) , ( ( ~ R ) & ( ~ ( ~ P ) ) ) SEQ ( Q & ( ~ ( ~ ( ~ R ) ) ) ) PRF
+  none: textbook_35e75d37fcd6e6fc7dfe (textbook_dev, ref 33) Robbie-combined False: THM ( ~ ( ( P > Q ) & ( Q > P ) ) ) SEQ ( ( ( ~ P ) > Q ) & ( Q > ( ~ P ) ) ) PRF
+  none: textbook_c070bcc0c3bc8e3b8386 (textbook_dev, ref 22) Robbie-combined False: THM ( ~ ( ( P > Q ) & ( Q > P ) ) ) SEQ ( ( P & ( ~ Q ) ) v ( ( ~ P ) & Q ) ) PRF
+  none: textbook_3d573ac42c0db3988c20 (textbook_dev, ref 11) Robbie-combined True: THM ( ( P & Q ) > ( Q & R ) ) , ( R > ( ~ P ) ) SEQ ( P > ( ~ Q ) ) PRF
+  none: textbook_7ea17063b2c61d0c16d9 (textbook_dev, ref 20) Robbie-combined False: THM ( ( ~ P ) v R ) , ( ~ ( R v S ) ) , ( P v Q ) , ( ~ ( Q & ( ~ S ) ) ) SEQ F PRF
+  none: textbook_920bfc2896e73d80d8cd (textbook_dev, ref 15) Robbie-combined False: THM SEQ ( ( P > Q ) v ( Q > P ) ) PRF
+  none: textbook_078f26deb57f268c2fae (textbook_dev, ref 15) Robbie-combined False: THM SEQ ( ( ~ ( P & ( ( ~ P ) v Q ) ) ) v Q ) PRF
+  none: textbook_a104fab36312807439b0 (textbook_dev, ref 9) Robbie-combined False: THM SEQ ( ( ~ ( P v ( Q v R ) ) ) v ( P v ( Q v R ) ) ) PRF
+  none: textbook_970fbf60225a4d6e78b3 (textbook_dev, ref 20) Robbie-combined False: THM ( P > ( ( Q > R ) & ( R > Q ) ) ) SEQ ( ( ( P & Q ) > ( P & R ) ) & ( ( P & R ) > ( P & Q ) ) ) PRF
+  none: textbook_201dc6c52fcdedeac240 (textbook_dev, ref 12) Robbie-combined False: THM ( P > ( Q & R ) ) , ( ( ~ P ) > R ) SEQ R PRF
+  none: textbook_3d2b05bca4cbb83ed73b (textbook_dev, ref 29) Robbie-combined False: THM SEQ ( ( ( ~ ( P & Q ) ) > ( ( ~ P ) v ( ~ Q ) ) ) & ( ( ( ~ P ) v ( ~ Q ) ) > ( ~ ( P & Q ) ) ) ) PRF
+  none: textbook_1e1d3b9a628f0b73c258 (textbook_dev, ref 18) Robbie-combined False: THM ( ( ~ S ) > ( ~ R ) ) , ( ( P & Q ) v R ) , ( ( ~ S ) > ( ~ Q ) ) SEQ ( ( ~ P ) v S ) PRF
+  none: textbook_33e465a968d29efbb443 (textbook_dev, ref 15) Robbie-combined False: THM ( R > ( P & ( ~ Q ) ) ) , ( ( ~ R ) > ( Q & ( ~ P ) ) ) SEQ ( Q v P ) PRF
+  none: textbook_68c64ac26ce426bfc04e (textbook_dev, ref 25) Robbie-combined False: THM ( ( P > R ) & ( R > P ) ) , ( ( Q > S ) & ( S > Q ) ) SEQ ( ( ( P v Q ) > ( R v S ) ) & ( ( R v S ) > ( P v Q ) ) ) PRF
+  none: textbook_0824150e3d98b3ab201f (textbook_dev, ref 6) Robbie-combined True: THM ( P & ( Q & R ) ) , ( ( Q v R ) > S ) SEQ S PRF
+  none: textbook_f900b1d7c659ef00e06b (textbook_dev, ref 20) Robbie-combined False: THM P , ( ( ( ( P > Q ) & ( Q > P ) ) > R ) & ( R > ( ( P > Q ) & ( Q > P ) ) ) ) SEQ ( ( Q > R ) & ( R > Q ) ) PRF
+  none: textbook_55c0251debc570e4f3e3 (textbook_dev, ref 18) Robbie-combined False: THM SEQ ( ( ( P & Q ) > R ) > ( ( P > R ) v ( Q > R ) ) ) PRF
+  none: textbook_54e1d81ad54a80f1f835 (rl_train, ref None) Robbie-combined False: THM ( ( ( ( ( P v Q ) > Q ) & ( Q > ( P v Q ) ) ) > P ) & ( P > ( ( ( P v Q ) > Q ) & ( Q > ( P v Q ) ) ) ) ) SEQ ( ( P > Q ) & ( Q > P ) ) PRF
+  none: textbook_92b4192856ec54a3e1ee (rl_train, ref None) Robbie-combined False: THM ( ~ ( P & Q ) ) , ( ~ ( ( ~ P ) v ( ~ Q ) ) ) SEQ ( ~ P ) PRF
+  none: textbook_936ceade34df08c26377 (rl_train, ref None) Robbie-combined False: THM ( ~ ( P & Q ) ) , ( ~ ( ( ~ P ) v ( ~ Q ) ) ) SEQ ( ( ~ P ) v ( ~ Q ) ) PRF
+  none: textbook_9fa52f90369a7b6286f7 (rl_train, ref None) Robbie-combined False: THM ( ( P > ( ~ ( ~ Q ) ) ) & ( ( ~ ( ~ Q ) ) > P ) ) SEQ ( ( P > Q ) & ( Q > P ) ) PRF
+  none: textbook_bcb4f30a22574210fc12 (rl_train, ref None) Robbie-combined False: THM ( ( ~ P ) > Q ) SEQ ( P v Q ) PRF
+  none: textbook_f918caefa752f2beda53 (rl_train, ref None) Robbie-combined False: THM ( ~ ( P & Q ) ) , ( ~ ( ( ~ P ) v ( ~ Q ) ) ) SEQ F PRF
+
+Robbie combined (union of his 3 seeds) 36; ours (any ckpt) 47; both 34; Robbie only 2; ours only 13
+SN-cap12 T1 union 46: both 34, T1 only 12, Robbie only 2
+  robbie-only: textbook_0824150e3d98b3ab201f ref 6: THM ( P & ( Q & R ) ) , ( ( Q v R ) > S ) SEQ S PRF
+  robbie-only: textbook_3d573ac42c0db3988c20 ref 11: THM ( ( P & Q ) > ( Q & R ) ) , ( R > ( ~ P ) ) SEQ ( P > ( ~ Q ) ) PRF
+
+| problem | role | ref lines | shortest accepted: lines | term size | lean_check ok | found by |
+|---|---|---|---|---|---|---|
+| textbook_b98931f273313e2c32e7 | textbook_dev | 18 | 16 | 12 | True | T1_SN12_s0 |
+| textbook_418e4b67e7e59d93fa6b | textbook_dev | 16 | 16 | 11 | True | T1_SN12_s2 |
+| textbook_48e30865966e132d65ad | textbook_dev | 16 | 14 | 11 | True | T1_SN12_s0 |
+| textbook_79e3c381d248c69d315c | textbook_dev | 15 | 12 | 9 | True | T1_SN12_s1 |
+| textbook_3af838bf624ac899a441 | textbook_dev | 14 | 12 | 9 | True | T1_SN12_s1 |
+| textbook_3f4b5ba98e9f3445b303 | textbook_dev | 14 | 12 | 10 | True | Fz_SN12_s1 |
+| textbook_a2cda4772846af3ccedb | textbook_dev | 14 | 12 | 11 | True | Fz_SN12_s1 |
+| textbook_33a5b9f5c6c6ad7582e7 | textbook_dev | 13 | 13 | 12 | True | T1_SN12_s1 |
+| textbook_49c48adca28f05789420 | textbook_dev | 13 | 18 | 14 | True | T1_SN12_s1 |
+| textbook_fef8f88a0e6c1c196603 | textbook_dev | 13 | 19 | 17 | True | T1_SN12_s3 |
+| textbook_8244c4b1090af406e68f | textbook_dev | 12 | 15 | 14 | True | Fz_SN12_s3 |
+| textbook_0713eb0885a366161011 | textbook_dev | 11 | 10 | 9 | True | T1_SN12_s2 |
+| textbook_dd75f8b41bdf4097bd34 | textbook_dev | 11 | 11 | 8 | True | T1_SN12_s0 |
+| textbook_0b9b989cc2f245db9021 | textbook_dev | 10 | 10 | 7 | True | Fz_SN12_s0 |
+| textbook_757636e8f5ff1662c1c8 | textbook_dev | 10 | 19 | 14 | True | T1_SN12_s0 |
+| textbook_ea2a86a786bde0e260cc | textbook_dev | 10 | 10 | 8 | True | T1_SN12_s0 |
+| textbook_f15b4e7e289f788cc70d | textbook_dev | 10 | 10 | 8 | True | T1_SN12_s2 |
+| textbook_330042a43256968ac526 | textbook_dev | 9 | 9 | 5 | True | T1_SN12_s0 |
+| textbook_72338b1cd817d75fdda2 | textbook_dev | 9 | 9 | 6 | True | T1_SN12_s0 |
+| textbook_245a0349bb058006b821 | textbook_dev | 8 | 8 | 5 | True | T1_SN12_s1 |
+| textbook_94b2fb662310a6f7ac8d | textbook_dev | 8 | 8 | 5 | True | T1_SN12_s0 |
+| textbook_3ed45280e6c686e76ac6 | textbook_dev | 7 | 7 | 5 | True | T1_SN12_s0 |
+| textbook_8270cf21f3f79e6a1281 | textbook_dev | 7 | 7 | 4 | True | T1_SN12_s0 |
+| textbook_9ad08632649f4911b2cd | textbook_dev | 7 | 7 | 5 | True | T1_SN12_s3 |
+| textbook_c18068b3bc4dc6b6894a | textbook_dev | 7 | 7 | 6 | True | T1_SN12_s0 |
+| textbook_7020fd7d40d48f1e47f4 | textbook_dev | 6 | 6 | 4 | True | Fz_SN12_s0 |
+| textbook_902dbc2045265febcddf | textbook_dev | 6 | 6 | 4 | True | T1_SN12_s0 |
+| textbook_98cdc8d06ea0d36428a2 | textbook_dev | 6 | 6 | 4 | True | T1_SN12_s2 |
+| textbook_ab0622acfa2bdb298f46 | textbook_dev | 6 | 6 | 4 | True | T1_SN12_s0 |
+| textbook_b3af45532093373816b1 | textbook_dev | 6 | 6 | 3 | True | T1_SN12_s0 |
+| textbook_b5920d6d8c128e48b958 | textbook_dev | 6 | 6 | 3 | True | T1_SN12_s0 |
+| textbook_b6439372a23eedd8d70e | textbook_dev | 6 | 6 | 3 | True | T1_SN12_s0 |
+| textbook_dd8d30b16bfb0b99a5d7 | textbook_dev | 6 | 6 | 6 | True | Fz_SN12_s0 |
+| textbook_eec1f557a49c79cc7081 | textbook_dev | 6 | 6 | 4 | True | T1_SN12_s0 |
+| textbook_287ceb6c7a54a42f3829 | textbook_dev | 5 | 5 | 2 | True | T1_SN12_s0 |
+| textbook_44157a16ce8876875ce1 | textbook_dev | 3 | 3 | 1 | True | T1_SN12_s0 |
+| textbook_4f666c992cac7dcfd117 | textbook_dev | 2 | 2 | 3 | True | T1_SN12_s0 |
+| textbook_dd80d9db9d060cdb3f53 | textbook_dev | 2 | 2 | 3 | True | T1_SN12_s0 |
+| textbook_34f93da8bd82c5f421bc | textbook_dev | 1 | 1 | 0 | True | T1_SN12_s2 |
+| textbook_0c463f021f70dc4f6b35 | rl_train | None | 2 | 1 | True | T1_SN12_s0 |
+| textbook_0dd5ea3d0aa761fea3d9 | rl_train | None | 8 | 7 | True | T1_SN12_s0 |
+| textbook_0ed8057166e48df4ff93 | rl_train | None | 4 | 2 | True | T1_SN12_s0 |
+| textbook_58b532c9c8cc1819378b | rl_train | None | 11 | 10 | True | T1_SN12_s0 |
+| textbook_6997656e16fb567550a6 | rl_train | None | 12 | 7 | True | T1_SN12_s1 |
+| textbook_cea8801c51d3f9d213d6 | rl_train | None | 9 | 7 | True | T1_SN12_s0 |
+| textbook_da42d4814cf3a388b9fc | rl_train | None | 4 | 1 | True | T1_SN12_s0 |
+| textbook_f8e226f6c5b45234819d | rl_train | None | 7 | 4 | True | T1_SN12_s0 |
+
+### textbook_757636e8f5ff1662c1c8 (textbook_dev, reference_lines 10): shortest accepted proof 19 lines, term size 14, from T1_SN12_s0
+```lean
+theorem t (P Q R S : Prop)  : (¬((P → (¬P)) ∧ ((¬P) → P))) := by
+  have n19 : (¬((P → (¬P)) ∧ ((¬P) → P))) := (fun (n1 : ((P → (¬P)) ∧ ((¬P) → P))) => by
+    have n2 : ((¬P) → P) := n1.2
+    have n10 : (¬P) := (fun (n3 : P) => by
+      have n8 : (¬P) := (fun (n4 : P) => by
+        have n5 : (P → (¬P)) := n1.1
+        have n6 : (¬P) := n5 n3
+        have n7 : False := n6 n3
+        exact (n7 : False))
+      have n9 : False := n8 n3
+      exact (n9 : False))
+    have n13 : (¬P) := (fun (n11 : P) => by
+      have n12 : False := n10 n11
+      exact (n12 : False))
+    have n16 : (¬P) := (fun (n14 : P) => by
+      have n15 : False := n13 n14
+      exact (n15 : False))
+    have n17 : P := n2 n10
+    have n18 : False := n13 n17
+    exact (n18 : False))
+  exact n19
+
+```
+
+### textbook_fef8f88a0e6c1c196603 (textbook_dev, reference_lines 13): shortest accepted proof 19 lines, term size 17, from T1_SN12_s3
+```lean
+theorem t (P Q R S : Prop) (h1 : (¬(Q ∧ P))) (h2 : ((R ∧ Q) ∨ (P ∧ Q))) : R := by
+  have n1 : (¬(Q ∧ P)) := h1
+  have n2 : ((R ∧ Q) ∨ (P ∧ Q)) := h2
+  have n19 : R := Or.elim n2 (fun (n3 : (R ∧ Q)) => by
+    have n4 : R := n3.1
+    exact n4) (fun (n5 : (P ∧ Q)) => by
+    have n17 : (¬(¬R)) := (fun (n6 : (¬R)) => by
+      have n7 : Q := n5.2
+      have n15 : (Q ∧ P) := Or.elim n2 (fun (n8 : (R ∧ Q)) => by
+        have n9 : P := n5.1
+        have n10 : (Q ∧ P) := ⟨n7, n9⟩
+        exact n10) (fun (n11 : (P ∧ Q)) => by
+        have n12 : Q := n7
+        have n13 : P := n5.1
+        have n14 : (Q ∧ P) := ⟨n12, n13⟩
+        exact n14)
+      have n16 : False := n1 n15
+      exact (n16 : False))
+    have n18 : R := Classical.byContradiction (fun hh => n17 hh)
+    exact n18)
+  exact n19
+
+```
+
+### textbook_49c48adca28f05789420 (textbook_dev, reference_lines 13): shortest accepted proof 18 lines, term size 14, from T1_SN12_s1
+```lean
+theorem t (P Q R S : Prop) (h1 : ((¬P) → (Q ∧ R))) (h2 : (¬(R ∨ P))) : (¬Q) := by
+  have n1 : ((¬P) → (Q ∧ R)) := h1
+  have n2 : (¬(R ∨ P)) := h2
+  have n6 : (¬P) := (fun (n3 : P) => by
+    have n4 : (R ∨ P) := Or.inr n3
+    have n5 : False := n2 n4
+    exact (n5 : False))
+  have n7 : (Q ∧ R) := n1 n6
+  have n8 : ((¬Q) ∨ (Q ∧ R)) := Or.inr n7
+  have n18 : (¬Q) := (fun (n9 : Q) => by
+    have n16 : (R ∨ P) := Or.elim n8 (fun (n10 : (¬Q)) => by
+      have n11 : False := n10 n9
+      have n12 : (R ∨ P) := n11.elim
+      exact n12) (fun (n13 : (Q ∧ R)) => by
+      have n14 : R := n13.2
+      have n15 : (R ∨ P) := Or.inl n14
+      exact n15)
+    have n17 : False := n2 n16
+    exact (n17 : False))
+  exact n18
+
+```

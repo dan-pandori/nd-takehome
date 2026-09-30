@@ -1,0 +1,1133 @@
+{
+ "source": [
+  "https://robbiewmthompson.com/blog/combined-model/",
+  "~/nd-rl origin/robbie-experiments:experiment-summaries/2026-09-28-combined-model/charts/passk.csv (pool=textbook72; runs fact-lean-best-leon_s{0,1,2}, fact-abs-naive-ei_s{0,1,2})",
+  "~/nd-rl origin/robbie-experiments:experiment-summaries/2026-09-28-combined-model/README.md",
+  "~/nd-rl origin/robbie-experiments:code/experiments/current/factorial_20260929/{README.md,passk.py}",
+  "~/nd-rl origin/robbie-experiments:code/experiments/current/factorial_20260929/textbook72/textbook_{dev,train}.jsonl (byte-identical to data/eval_only/textbook72)"
+ ],
+ "headline": {
+  "blog": "naive 13% pass@256; combined 44% pass@256 (31 of 72)",
+  "summary_README": "31 of 72 textbook problems at 256 samples (naive: 9); best seed 32 of 72; table: naive 13%, best 44%",
+  "factorial_README": "textbook72 pass@256 12.5% -> 43.5% (3-seed means)",
+  "per_seed_solved_combined": [
+   32,
+   30,
+   32
+  ],
+  "per_seed_solved_naive": [
+   7,
+   11,
+   9
+  ],
+  "note": "31 = mean(32,30,32)=31.33 rounded; naive '13' is 13% = 9/72 (mean of 7,11,9), not 13 problems"
+ },
+ "protocol": "256 samples per problem at T=0.8 (harness eval temp/max_new) from the final model of each run, fast_sample.generate; judged by harness judge: Lean AND nd_verify for lean_seq (combined), nd_verify alone for abs (naive); problem solved if n_ok>0 (pass@256); unbiased pass@k from (n,n_ok); reported numbers are 3-seed means. 2,400 s pipeline budget, one A40/RTX A6000 per run.",
+ "combined_model_ckpt": "factorial cell lean-best-leon (Dan's lean_seq format + 186-claude incumbent pretraining (pretrain_best.py, 6x384 Peri-LN, Muon, MTP) + c005 Leon EI with verifier-guided sampling, 1,800 s), runs fact-lean-best-leon_s0/s1/s2; checkpoints/summaries in gitignored ~/repos/nd-rl-7/artifacts/autoresearch/ on Robbie's machine (not available). Naive = fact-abs-naive-ei (abs tokens, autoresearch 012 pretraining, frozen-harness EI).",
+ "per_problem_available": true,
+ "combined_solved": [
+  "textbook_0713eb0885a366161011",
+  "textbook_0824150e3d98b3ab201f",
+  "textbook_0b9b989cc2f245db9021",
+  "textbook_0c463f021f70dc4f6b35",
+  "textbook_0dd5ea3d0aa761fea3d9",
+  "textbook_0ed8057166e48df4ff93",
+  "textbook_245a0349bb058006b821",
+  "textbook_287ceb6c7a54a42f3829",
+  "textbook_34f93da8bd82c5f421bc",
+  "textbook_3af838bf624ac899a441",
+  "textbook_3d573ac42c0db3988c20",
+  "textbook_3ed45280e6c686e76ac6",
+  "textbook_44157a16ce8876875ce1",
+  "textbook_4f666c992cac7dcfd117",
+  "textbook_7020fd7d40d48f1e47f4",
+  "textbook_72338b1cd817d75fdda2",
+  "textbook_8270cf21f3f79e6a1281",
+  "textbook_902dbc2045265febcddf",
+  "textbook_94b2fb662310a6f7ac8d",
+  "textbook_9ad08632649f4911b2cd",
+  "textbook_a2cda4772846af3ccedb",
+  "textbook_ab0622acfa2bdb298f46",
+  "textbook_b3af45532093373816b1",
+  "textbook_b5920d6d8c128e48b958",
+  "textbook_b6439372a23eedd8d70e",
+  "textbook_c18068b3bc4dc6b6894a",
+  "textbook_cea8801c51d3f9d213d6",
+  "textbook_da42d4814cf3a388b9fc",
+  "textbook_dd75f8b41bdf4097bd34",
+  "textbook_dd80d9db9d060cdb3f53",
+  "textbook_dd8d30b16bfb0b99a5d7",
+  "textbook_ea2a86a786bde0e260cc",
+  "textbook_eec1f557a49c79cc7081",
+  "textbook_f15b4e7e289f788cc70d",
+  "textbook_f8e226f6c5b45234819d",
+  "textbook_fef8f88a0e6c1c196603"
+ ],
+ "naive_solved": [
+  "textbook_0ed8057166e48df4ff93",
+  "textbook_287ceb6c7a54a42f3829",
+  "textbook_34f93da8bd82c5f421bc",
+  "textbook_44157a16ce8876875ce1",
+  "textbook_4f666c992cac7dcfd117",
+  "textbook_902dbc2045265febcddf",
+  "textbook_ab0622acfa2bdb298f46",
+  "textbook_b3af45532093373816b1",
+  "textbook_b5920d6d8c128e48b958",
+  "textbook_da42d4814cf3a388b9fc",
+  "textbook_dd80d9db9d060cdb3f53",
+  "textbook_eec1f557a49c79cc7081",
+  "textbook_f8e226f6c5b45234819d"
+ ],
+ "combined_detail": {
+  "per_seed": {
+   "s0": [
+    "textbook_0713eb0885a366161011",
+    "textbook_0824150e3d98b3ab201f",
+    "textbook_0b9b989cc2f245db9021",
+    "textbook_0c463f021f70dc4f6b35",
+    "textbook_0ed8057166e48df4ff93",
+    "textbook_245a0349bb058006b821",
+    "textbook_287ceb6c7a54a42f3829",
+    "textbook_34f93da8bd82c5f421bc",
+    "textbook_3af838bf624ac899a441",
+    "textbook_3ed45280e6c686e76ac6",
+    "textbook_44157a16ce8876875ce1",
+    "textbook_4f666c992cac7dcfd117",
+    "textbook_7020fd7d40d48f1e47f4",
+    "textbook_72338b1cd817d75fdda2",
+    "textbook_8270cf21f3f79e6a1281",
+    "textbook_902dbc2045265febcddf",
+    "textbook_94b2fb662310a6f7ac8d",
+    "textbook_9ad08632649f4911b2cd",
+    "textbook_a2cda4772846af3ccedb",
+    "textbook_ab0622acfa2bdb298f46",
+    "textbook_b3af45532093373816b1",
+    "textbook_b5920d6d8c128e48b958",
+    "textbook_b6439372a23eedd8d70e",
+    "textbook_c18068b3bc4dc6b6894a",
+    "textbook_cea8801c51d3f9d213d6",
+    "textbook_da42d4814cf3a388b9fc",
+    "textbook_dd75f8b41bdf4097bd34",
+    "textbook_dd80d9db9d060cdb3f53",
+    "textbook_dd8d30b16bfb0b99a5d7",
+    "textbook_ea2a86a786bde0e260cc",
+    "textbook_eec1f557a49c79cc7081",
+    "textbook_f8e226f6c5b45234819d"
+   ],
+   "s1": [
+    "textbook_0713eb0885a366161011",
+    "textbook_0824150e3d98b3ab201f",
+    "textbook_0b9b989cc2f245db9021",
+    "textbook_0c463f021f70dc4f6b35",
+    "textbook_0dd5ea3d0aa761fea3d9",
+    "textbook_0ed8057166e48df4ff93",
+    "textbook_245a0349bb058006b821",
+    "textbook_287ceb6c7a54a42f3829",
+    "textbook_34f93da8bd82c5f421bc",
+    "textbook_3ed45280e6c686e76ac6",
+    "textbook_44157a16ce8876875ce1",
+    "textbook_4f666c992cac7dcfd117",
+    "textbook_7020fd7d40d48f1e47f4",
+    "textbook_72338b1cd817d75fdda2",
+    "textbook_8270cf21f3f79e6a1281",
+    "textbook_902dbc2045265febcddf",
+    "textbook_94b2fb662310a6f7ac8d",
+    "textbook_9ad08632649f4911b2cd",
+    "textbook_ab0622acfa2bdb298f46",
+    "textbook_b3af45532093373816b1",
+    "textbook_b5920d6d8c128e48b958",
+    "textbook_b6439372a23eedd8d70e",
+    "textbook_c18068b3bc4dc6b6894a",
+    "textbook_cea8801c51d3f9d213d6",
+    "textbook_da42d4814cf3a388b9fc",
+    "textbook_dd75f8b41bdf4097bd34",
+    "textbook_dd80d9db9d060cdb3f53",
+    "textbook_dd8d30b16bfb0b99a5d7",
+    "textbook_eec1f557a49c79cc7081",
+    "textbook_f8e226f6c5b45234819d"
+   ],
+   "s2": [
+    "textbook_0824150e3d98b3ab201f",
+    "textbook_0b9b989cc2f245db9021",
+    "textbook_0c463f021f70dc4f6b35",
+    "textbook_0ed8057166e48df4ff93",
+    "textbook_245a0349bb058006b821",
+    "textbook_287ceb6c7a54a42f3829",
+    "textbook_34f93da8bd82c5f421bc",
+    "textbook_3d573ac42c0db3988c20",
+    "textbook_3ed45280e6c686e76ac6",
+    "textbook_44157a16ce8876875ce1",
+    "textbook_4f666c992cac7dcfd117",
+    "textbook_7020fd7d40d48f1e47f4",
+    "textbook_72338b1cd817d75fdda2",
+    "textbook_8270cf21f3f79e6a1281",
+    "textbook_902dbc2045265febcddf",
+    "textbook_94b2fb662310a6f7ac8d",
+    "textbook_9ad08632649f4911b2cd",
+    "textbook_ab0622acfa2bdb298f46",
+    "textbook_b3af45532093373816b1",
+    "textbook_b5920d6d8c128e48b958",
+    "textbook_b6439372a23eedd8d70e",
+    "textbook_c18068b3bc4dc6b6894a",
+    "textbook_cea8801c51d3f9d213d6",
+    "textbook_da42d4814cf3a388b9fc",
+    "textbook_dd75f8b41bdf4097bd34",
+    "textbook_dd80d9db9d060cdb3f53",
+    "textbook_dd8d30b16bfb0b99a5d7",
+    "textbook_ea2a86a786bde0e260cc",
+    "textbook_eec1f557a49c79cc7081",
+    "textbook_f15b4e7e289f788cc70d",
+    "textbook_f8e226f6c5b45234819d",
+    "textbook_fef8f88a0e6c1c196603"
+   ]
+  },
+  "union": [
+   "textbook_0713eb0885a366161011",
+   "textbook_0824150e3d98b3ab201f",
+   "textbook_0b9b989cc2f245db9021",
+   "textbook_0c463f021f70dc4f6b35",
+   "textbook_0dd5ea3d0aa761fea3d9",
+   "textbook_0ed8057166e48df4ff93",
+   "textbook_245a0349bb058006b821",
+   "textbook_287ceb6c7a54a42f3829",
+   "textbook_34f93da8bd82c5f421bc",
+   "textbook_3af838bf624ac899a441",
+   "textbook_3d573ac42c0db3988c20",
+   "textbook_3ed45280e6c686e76ac6",
+   "textbook_44157a16ce8876875ce1",
+   "textbook_4f666c992cac7dcfd117",
+   "textbook_7020fd7d40d48f1e47f4",
+   "textbook_72338b1cd817d75fdda2",
+   "textbook_8270cf21f3f79e6a1281",
+   "textbook_902dbc2045265febcddf",
+   "textbook_94b2fb662310a6f7ac8d",
+   "textbook_9ad08632649f4911b2cd",
+   "textbook_a2cda4772846af3ccedb",
+   "textbook_ab0622acfa2bdb298f46",
+   "textbook_b3af45532093373816b1",
+   "textbook_b5920d6d8c128e48b958",
+   "textbook_b6439372a23eedd8d70e",
+   "textbook_c18068b3bc4dc6b6894a",
+   "textbook_cea8801c51d3f9d213d6",
+   "textbook_da42d4814cf3a388b9fc",
+   "textbook_dd75f8b41bdf4097bd34",
+   "textbook_dd80d9db9d060cdb3f53",
+   "textbook_dd8d30b16bfb0b99a5d7",
+   "textbook_ea2a86a786bde0e260cc",
+   "textbook_eec1f557a49c79cc7081",
+   "textbook_f15b4e7e289f788cc70d",
+   "textbook_f8e226f6c5b45234819d",
+   "textbook_fef8f88a0e6c1c196603"
+  ],
+  "intersection": [
+   "textbook_0824150e3d98b3ab201f",
+   "textbook_0b9b989cc2f245db9021",
+   "textbook_0c463f021f70dc4f6b35",
+   "textbook_0ed8057166e48df4ff93",
+   "textbook_245a0349bb058006b821",
+   "textbook_287ceb6c7a54a42f3829",
+   "textbook_34f93da8bd82c5f421bc",
+   "textbook_3ed45280e6c686e76ac6",
+   "textbook_44157a16ce8876875ce1",
+   "textbook_4f666c992cac7dcfd117",
+   "textbook_7020fd7d40d48f1e47f4",
+   "textbook_72338b1cd817d75fdda2",
+   "textbook_8270cf21f3f79e6a1281",
+   "textbook_902dbc2045265febcddf",
+   "textbook_94b2fb662310a6f7ac8d",
+   "textbook_9ad08632649f4911b2cd",
+   "textbook_ab0622acfa2bdb298f46",
+   "textbook_b3af45532093373816b1",
+   "textbook_b5920d6d8c128e48b958",
+   "textbook_b6439372a23eedd8d70e",
+   "textbook_c18068b3bc4dc6b6894a",
+   "textbook_cea8801c51d3f9d213d6",
+   "textbook_da42d4814cf3a388b9fc",
+   "textbook_dd75f8b41bdf4097bd34",
+   "textbook_dd80d9db9d060cdb3f53",
+   "textbook_dd8d30b16bfb0b99a5d7",
+   "textbook_eec1f557a49c79cc7081",
+   "textbook_f8e226f6c5b45234819d"
+  ],
+  "majority_2of3": [
+   "textbook_0713eb0885a366161011",
+   "textbook_0824150e3d98b3ab201f",
+   "textbook_0b9b989cc2f245db9021",
+   "textbook_0c463f021f70dc4f6b35",
+   "textbook_0ed8057166e48df4ff93",
+   "textbook_245a0349bb058006b821",
+   "textbook_287ceb6c7a54a42f3829",
+   "textbook_34f93da8bd82c5f421bc",
+   "textbook_3ed45280e6c686e76ac6",
+   "textbook_44157a16ce8876875ce1",
+   "textbook_4f666c992cac7dcfd117",
+   "textbook_7020fd7d40d48f1e47f4",
+   "textbook_72338b1cd817d75fdda2",
+   "textbook_8270cf21f3f79e6a1281",
+   "textbook_902dbc2045265febcddf",
+   "textbook_94b2fb662310a6f7ac8d",
+   "textbook_9ad08632649f4911b2cd",
+   "textbook_ab0622acfa2bdb298f46",
+   "textbook_b3af45532093373816b1",
+   "textbook_b5920d6d8c128e48b958",
+   "textbook_b6439372a23eedd8d70e",
+   "textbook_c18068b3bc4dc6b6894a",
+   "textbook_cea8801c51d3f9d213d6",
+   "textbook_da42d4814cf3a388b9fc",
+   "textbook_dd75f8b41bdf4097bd34",
+   "textbook_dd80d9db9d060cdb3f53",
+   "textbook_dd8d30b16bfb0b99a5d7",
+   "textbook_ea2a86a786bde0e260cc",
+   "textbook_eec1f557a49c79cc7081",
+   "textbook_f8e226f6c5b45234819d"
+  ],
+  "seeds_solving": {
+   "textbook_0713eb0885a366161011": 2,
+   "textbook_0824150e3d98b3ab201f": 3,
+   "textbook_0b9b989cc2f245db9021": 3,
+   "textbook_0c463f021f70dc4f6b35": 3,
+   "textbook_0dd5ea3d0aa761fea3d9": 1,
+   "textbook_0ed8057166e48df4ff93": 3,
+   "textbook_245a0349bb058006b821": 3,
+   "textbook_287ceb6c7a54a42f3829": 3,
+   "textbook_34f93da8bd82c5f421bc": 3,
+   "textbook_3af838bf624ac899a441": 1,
+   "textbook_3d573ac42c0db3988c20": 1,
+   "textbook_3ed45280e6c686e76ac6": 3,
+   "textbook_44157a16ce8876875ce1": 3,
+   "textbook_4f666c992cac7dcfd117": 3,
+   "textbook_7020fd7d40d48f1e47f4": 3,
+   "textbook_72338b1cd817d75fdda2": 3,
+   "textbook_8270cf21f3f79e6a1281": 3,
+   "textbook_902dbc2045265febcddf": 3,
+   "textbook_94b2fb662310a6f7ac8d": 3,
+   "textbook_9ad08632649f4911b2cd": 3,
+   "textbook_a2cda4772846af3ccedb": 1,
+   "textbook_ab0622acfa2bdb298f46": 3,
+   "textbook_b3af45532093373816b1": 3,
+   "textbook_b5920d6d8c128e48b958": 3,
+   "textbook_b6439372a23eedd8d70e": 3,
+   "textbook_c18068b3bc4dc6b6894a": 3,
+   "textbook_cea8801c51d3f9d213d6": 3,
+   "textbook_da42d4814cf3a388b9fc": 3,
+   "textbook_dd75f8b41bdf4097bd34": 3,
+   "textbook_dd80d9db9d060cdb3f53": 3,
+   "textbook_dd8d30b16bfb0b99a5d7": 3,
+   "textbook_ea2a86a786bde0e260cc": 2,
+   "textbook_eec1f557a49c79cc7081": 3,
+   "textbook_f15b4e7e289f788cc70d": 1,
+   "textbook_f8e226f6c5b45234819d": 3,
+   "textbook_fef8f88a0e6c1c196603": 1
+  },
+  "n_ok_per_seed": {
+   "textbook_03549baa1134033548d6": [
+    0,
+    0,
+    0
+   ],
+   "textbook_0713eb0885a366161011": [
+    3,
+    1,
+    0
+   ],
+   "textbook_078f26deb57f268c2fae": [
+    0,
+    0,
+    0
+   ],
+   "textbook_0824150e3d98b3ab201f": [
+    10,
+    171,
+    24
+   ],
+   "textbook_0b9b989cc2f245db9021": [
+    14,
+    33,
+    5
+   ],
+   "textbook_0c463f021f70dc4f6b35": [
+    140,
+    151,
+    19
+   ],
+   "textbook_0dd5ea3d0aa761fea3d9": [
+    0,
+    20,
+    0
+   ],
+   "textbook_0ed8057166e48df4ff93": [
+    249,
+    244,
+    244
+   ],
+   "textbook_1e1d3b9a628f0b73c258": [
+    0,
+    0,
+    0
+   ],
+   "textbook_201dc6c52fcdedeac240": [
+    0,
+    0,
+    0
+   ],
+   "textbook_245a0349bb058006b821": [
+    33,
+    37,
+    59
+   ],
+   "textbook_287ceb6c7a54a42f3829": [
+    247,
+    241,
+    253
+   ],
+   "textbook_330042a43256968ac526": [
+    0,
+    0,
+    0
+   ],
+   "textbook_33a5b9f5c6c6ad7582e7": [
+    0,
+    0,
+    0
+   ],
+   "textbook_33e465a968d29efbb443": [
+    0,
+    0,
+    0
+   ],
+   "textbook_34f93da8bd82c5f421bc": [
+    173,
+    228,
+    42
+   ],
+   "textbook_35e75d37fcd6e6fc7dfe": [
+    0,
+    0,
+    0
+   ],
+   "textbook_3af838bf624ac899a441": [
+    1,
+    0,
+    0
+   ],
+   "textbook_3d2b05bca4cbb83ed73b": [
+    0,
+    0,
+    0
+   ],
+   "textbook_3d573ac42c0db3988c20": [
+    0,
+    0,
+    7
+   ],
+   "textbook_3ed45280e6c686e76ac6": [
+    129,
+    150,
+    217
+   ],
+   "textbook_3f4b5ba98e9f3445b303": [
+    0,
+    0,
+    0
+   ],
+   "textbook_418e4b67e7e59d93fa6b": [
+    0,
+    0,
+    0
+   ],
+   "textbook_44157a16ce8876875ce1": [
+    249,
+    252,
+    255
+   ],
+   "textbook_48e30865966e132d65ad": [
+    0,
+    0,
+    0
+   ],
+   "textbook_49c48adca28f05789420": [
+    0,
+    0,
+    0
+   ],
+   "textbook_4f666c992cac7dcfd117": [
+    244,
+    208,
+    247
+   ],
+   "textbook_54e1d81ad54a80f1f835": [
+    0,
+    0,
+    0
+   ],
+   "textbook_55c0251debc570e4f3e3": [
+    0,
+    0,
+    0
+   ],
+   "textbook_5758428c8c74f96345ad": [
+    0,
+    0,
+    0
+   ],
+   "textbook_58b532c9c8cc1819378b": [
+    0,
+    0,
+    0
+   ],
+   "textbook_68c64ac26ce426bfc04e": [
+    0,
+    0,
+    0
+   ],
+   "textbook_6997656e16fb567550a6": [
+    0,
+    0,
+    0
+   ],
+   "textbook_7020fd7d40d48f1e47f4": [
+    56,
+    11,
+    2
+   ],
+   "textbook_72338b1cd817d75fdda2": [
+    41,
+    1,
+    14
+   ],
+   "textbook_757636e8f5ff1662c1c8": [
+    0,
+    0,
+    0
+   ],
+   "textbook_79e3c381d248c69d315c": [
+    0,
+    0,
+    0
+   ],
+   "textbook_7ea17063b2c61d0c16d9": [
+    0,
+    0,
+    0
+   ],
+   "textbook_8244c4b1090af406e68f": [
+    0,
+    0,
+    0
+   ],
+   "textbook_8270cf21f3f79e6a1281": [
+    48,
+    54,
+    29
+   ],
+   "textbook_902dbc2045265febcddf": [
+    163,
+    94,
+    173
+   ],
+   "textbook_920bfc2896e73d80d8cd": [
+    0,
+    0,
+    0
+   ],
+   "textbook_92b4192856ec54a3e1ee": [
+    0,
+    0,
+    0
+   ],
+   "textbook_936ceade34df08c26377": [
+    0,
+    0,
+    0
+   ],
+   "textbook_94b2fb662310a6f7ac8d": [
+    11,
+    152,
+    72
+   ],
+   "textbook_970fbf60225a4d6e78b3": [
+    0,
+    0,
+    0
+   ],
+   "textbook_98cdc8d06ea0d36428a2": [
+    0,
+    0,
+    0
+   ],
+   "textbook_9ad08632649f4911b2cd": [
+    89,
+    187,
+    83
+   ],
+   "textbook_9f83d4425b7684ef58e7": [
+    0,
+    0,
+    0
+   ],
+   "textbook_9fa52f90369a7b6286f7": [
+    0,
+    0,
+    0
+   ],
+   "textbook_a104fab36312807439b0": [
+    0,
+    0,
+    0
+   ],
+   "textbook_a2cda4772846af3ccedb": [
+    2,
+    0,
+    0
+   ],
+   "textbook_ab0622acfa2bdb298f46": [
+    46,
+    109,
+    68
+   ],
+   "textbook_b3af45532093373816b1": [
+    148,
+    154,
+    16
+   ],
+   "textbook_b5920d6d8c128e48b958": [
+    242,
+    247,
+    236
+   ],
+   "textbook_b6439372a23eedd8d70e": [
+    118,
+    15,
+    34
+   ],
+   "textbook_b98931f273313e2c32e7": [
+    0,
+    0,
+    0
+   ],
+   "textbook_bcb4f30a22574210fc12": [
+    0,
+    0,
+    0
+   ],
+   "textbook_c070bcc0c3bc8e3b8386": [
+    0,
+    0,
+    0
+   ],
+   "textbook_c18068b3bc4dc6b6894a": [
+    199,
+    63,
+    81
+   ],
+   "textbook_cea8801c51d3f9d213d6": [
+    79,
+    83,
+    111
+   ],
+   "textbook_da42d4814cf3a388b9fc": [
+    248,
+    253,
+    250
+   ],
+   "textbook_dd75f8b41bdf4097bd34": [
+    12,
+    31,
+    11
+   ],
+   "textbook_dd80d9db9d060cdb3f53": [
+    251,
+    247,
+    248
+   ],
+   "textbook_dd8d30b16bfb0b99a5d7": [
+    182,
+    68,
+    12
+   ],
+   "textbook_ea2a86a786bde0e260cc": [
+    48,
+    0,
+    8
+   ],
+   "textbook_eec1f557a49c79cc7081": [
+    43,
+    127,
+    34
+   ],
+   "textbook_f15b4e7e289f788cc70d": [
+    0,
+    0,
+    52
+   ],
+   "textbook_f8e226f6c5b45234819d": [
+    194,
+    204,
+    102
+   ],
+   "textbook_f900b1d7c659ef00e06b": [
+    0,
+    0,
+    0
+   ],
+   "textbook_f918caefa752f2beda53": [
+    0,
+    0,
+    0
+   ],
+   "textbook_fef8f88a0e6c1c196603": [
+    0,
+    0,
+    1
+   ]
+  }
+ },
+ "naive_detail": {
+  "per_seed": {
+   "s0": [
+    "textbook_0ed8057166e48df4ff93",
+    "textbook_287ceb6c7a54a42f3829",
+    "textbook_44157a16ce8876875ce1",
+    "textbook_4f666c992cac7dcfd117",
+    "textbook_b5920d6d8c128e48b958",
+    "textbook_da42d4814cf3a388b9fc",
+    "textbook_dd80d9db9d060cdb3f53"
+   ],
+   "s1": [
+    "textbook_0ed8057166e48df4ff93",
+    "textbook_287ceb6c7a54a42f3829",
+    "textbook_34f93da8bd82c5f421bc",
+    "textbook_44157a16ce8876875ce1",
+    "textbook_4f666c992cac7dcfd117",
+    "textbook_ab0622acfa2bdb298f46",
+    "textbook_b3af45532093373816b1",
+    "textbook_b5920d6d8c128e48b958",
+    "textbook_da42d4814cf3a388b9fc",
+    "textbook_dd80d9db9d060cdb3f53",
+    "textbook_f8e226f6c5b45234819d"
+   ],
+   "s2": [
+    "textbook_0ed8057166e48df4ff93",
+    "textbook_287ceb6c7a54a42f3829",
+    "textbook_44157a16ce8876875ce1",
+    "textbook_4f666c992cac7dcfd117",
+    "textbook_902dbc2045265febcddf",
+    "textbook_b5920d6d8c128e48b958",
+    "textbook_da42d4814cf3a388b9fc",
+    "textbook_dd80d9db9d060cdb3f53",
+    "textbook_eec1f557a49c79cc7081"
+   ]
+  },
+  "union": [
+   "textbook_0ed8057166e48df4ff93",
+   "textbook_287ceb6c7a54a42f3829",
+   "textbook_34f93da8bd82c5f421bc",
+   "textbook_44157a16ce8876875ce1",
+   "textbook_4f666c992cac7dcfd117",
+   "textbook_902dbc2045265febcddf",
+   "textbook_ab0622acfa2bdb298f46",
+   "textbook_b3af45532093373816b1",
+   "textbook_b5920d6d8c128e48b958",
+   "textbook_da42d4814cf3a388b9fc",
+   "textbook_dd80d9db9d060cdb3f53",
+   "textbook_eec1f557a49c79cc7081",
+   "textbook_f8e226f6c5b45234819d"
+  ],
+  "intersection": [
+   "textbook_0ed8057166e48df4ff93",
+   "textbook_287ceb6c7a54a42f3829",
+   "textbook_44157a16ce8876875ce1",
+   "textbook_4f666c992cac7dcfd117",
+   "textbook_b5920d6d8c128e48b958",
+   "textbook_da42d4814cf3a388b9fc",
+   "textbook_dd80d9db9d060cdb3f53"
+  ],
+  "majority_2of3": [
+   "textbook_0ed8057166e48df4ff93",
+   "textbook_287ceb6c7a54a42f3829",
+   "textbook_44157a16ce8876875ce1",
+   "textbook_4f666c992cac7dcfd117",
+   "textbook_b5920d6d8c128e48b958",
+   "textbook_da42d4814cf3a388b9fc",
+   "textbook_dd80d9db9d060cdb3f53"
+  ],
+  "seeds_solving": {
+   "textbook_0ed8057166e48df4ff93": 3,
+   "textbook_287ceb6c7a54a42f3829": 3,
+   "textbook_34f93da8bd82c5f421bc": 1,
+   "textbook_44157a16ce8876875ce1": 3,
+   "textbook_4f666c992cac7dcfd117": 3,
+   "textbook_902dbc2045265febcddf": 1,
+   "textbook_ab0622acfa2bdb298f46": 1,
+   "textbook_b3af45532093373816b1": 1,
+   "textbook_b5920d6d8c128e48b958": 3,
+   "textbook_da42d4814cf3a388b9fc": 3,
+   "textbook_dd80d9db9d060cdb3f53": 3,
+   "textbook_eec1f557a49c79cc7081": 1,
+   "textbook_f8e226f6c5b45234819d": 1
+  },
+  "n_ok_per_seed": {
+   "textbook_03549baa1134033548d6": [
+    0,
+    0,
+    0
+   ],
+   "textbook_0713eb0885a366161011": [
+    0,
+    0,
+    0
+   ],
+   "textbook_078f26deb57f268c2fae": [
+    0,
+    0,
+    0
+   ],
+   "textbook_0824150e3d98b3ab201f": [
+    0,
+    0,
+    0
+   ],
+   "textbook_0b9b989cc2f245db9021": [
+    0,
+    0,
+    0
+   ],
+   "textbook_0c463f021f70dc4f6b35": [
+    0,
+    0,
+    0
+   ],
+   "textbook_0dd5ea3d0aa761fea3d9": [
+    0,
+    0,
+    0
+   ],
+   "textbook_0ed8057166e48df4ff93": [
+    248,
+    250,
+    202
+   ],
+   "textbook_1e1d3b9a628f0b73c258": [
+    0,
+    0,
+    0
+   ],
+   "textbook_201dc6c52fcdedeac240": [
+    0,
+    0,
+    0
+   ],
+   "textbook_245a0349bb058006b821": [
+    0,
+    0,
+    0
+   ],
+   "textbook_287ceb6c7a54a42f3829": [
+    253,
+    255,
+    252
+   ],
+   "textbook_330042a43256968ac526": [
+    0,
+    0,
+    0
+   ],
+   "textbook_33a5b9f5c6c6ad7582e7": [
+    0,
+    0,
+    0
+   ],
+   "textbook_33e465a968d29efbb443": [
+    0,
+    0,
+    0
+   ],
+   "textbook_34f93da8bd82c5f421bc": [
+    0,
+    46,
+    0
+   ],
+   "textbook_35e75d37fcd6e6fc7dfe": [
+    0,
+    0,
+    0
+   ],
+   "textbook_3af838bf624ac899a441": [
+    0,
+    0,
+    0
+   ],
+   "textbook_3d2b05bca4cbb83ed73b": [
+    0,
+    0,
+    0
+   ],
+   "textbook_3d573ac42c0db3988c20": [
+    0,
+    0,
+    0
+   ],
+   "textbook_3ed45280e6c686e76ac6": [
+    0,
+    0,
+    0
+   ],
+   "textbook_3f4b5ba98e9f3445b303": [
+    0,
+    0,
+    0
+   ],
+   "textbook_418e4b67e7e59d93fa6b": [
+    0,
+    0,
+    0
+   ],
+   "textbook_44157a16ce8876875ce1": [
+    206,
+    255,
+    256
+   ],
+   "textbook_48e30865966e132d65ad": [
+    0,
+    0,
+    0
+   ],
+   "textbook_49c48adca28f05789420": [
+    0,
+    0,
+    0
+   ],
+   "textbook_4f666c992cac7dcfd117": [
+    220,
+    234,
+    210
+   ],
+   "textbook_54e1d81ad54a80f1f835": [
+    0,
+    0,
+    0
+   ],
+   "textbook_55c0251debc570e4f3e3": [
+    0,
+    0,
+    0
+   ],
+   "textbook_5758428c8c74f96345ad": [
+    0,
+    0,
+    0
+   ],
+   "textbook_58b532c9c8cc1819378b": [
+    0,
+    0,
+    0
+   ],
+   "textbook_68c64ac26ce426bfc04e": [
+    0,
+    0,
+    0
+   ],
+   "textbook_6997656e16fb567550a6": [
+    0,
+    0,
+    0
+   ],
+   "textbook_7020fd7d40d48f1e47f4": [
+    0,
+    0,
+    0
+   ],
+   "textbook_72338b1cd817d75fdda2": [
+    0,
+    0,
+    0
+   ],
+   "textbook_757636e8f5ff1662c1c8": [
+    0,
+    0,
+    0
+   ],
+   "textbook_79e3c381d248c69d315c": [
+    0,
+    0,
+    0
+   ],
+   "textbook_7ea17063b2c61d0c16d9": [
+    0,
+    0,
+    0
+   ],
+   "textbook_8244c4b1090af406e68f": [
+    0,
+    0,
+    0
+   ],
+   "textbook_8270cf21f3f79e6a1281": [
+    0,
+    0,
+    0
+   ],
+   "textbook_902dbc2045265febcddf": [
+    0,
+    0,
+    129
+   ],
+   "textbook_920bfc2896e73d80d8cd": [
+    0,
+    0,
+    0
+   ],
+   "textbook_92b4192856ec54a3e1ee": [
+    0,
+    0,
+    0
+   ],
+   "textbook_936ceade34df08c26377": [
+    0,
+    0,
+    0
+   ],
+   "textbook_94b2fb662310a6f7ac8d": [
+    0,
+    0,
+    0
+   ],
+   "textbook_970fbf60225a4d6e78b3": [
+    0,
+    0,
+    0
+   ],
+   "textbook_98cdc8d06ea0d36428a2": [
+    0,
+    0,
+    0
+   ],
+   "textbook_9ad08632649f4911b2cd": [
+    0,
+    0,
+    0
+   ],
+   "textbook_9f83d4425b7684ef58e7": [
+    0,
+    0,
+    0
+   ],
+   "textbook_9fa52f90369a7b6286f7": [
+    0,
+    0,
+    0
+   ],
+   "textbook_a104fab36312807439b0": [
+    0,
+    0,
+    0
+   ],
+   "textbook_a2cda4772846af3ccedb": [
+    0,
+    0,
+    0
+   ],
+   "textbook_ab0622acfa2bdb298f46": [
+    0,
+    19,
+    0
+   ],
+   "textbook_b3af45532093373816b1": [
+    0,
+    2,
+    0
+   ],
+   "textbook_b5920d6d8c128e48b958": [
+    120,
+    189,
+    114
+   ],
+   "textbook_b6439372a23eedd8d70e": [
+    0,
+    0,
+    0
+   ],
+   "textbook_b98931f273313e2c32e7": [
+    0,
+    0,
+    0
+   ],
+   "textbook_bcb4f30a22574210fc12": [
+    0,
+    0,
+    0
+   ],
+   "textbook_c070bcc0c3bc8e3b8386": [
+    0,
+    0,
+    0
+   ],
+   "textbook_c18068b3bc4dc6b6894a": [
+    0,
+    0,
+    0
+   ],
+   "textbook_cea8801c51d3f9d213d6": [
+    0,
+    0,
+    0
+   ],
+   "textbook_da42d4814cf3a388b9fc": [
+    3,
+    234,
+    53
+   ],
+   "textbook_dd75f8b41bdf4097bd34": [
+    0,
+    0,
+    0
+   ],
+   "textbook_dd80d9db9d060cdb3f53": [
+    248,
+    238,
+    220
+   ],
+   "textbook_dd8d30b16bfb0b99a5d7": [
+    0,
+    0,
+    0
+   ],
+   "textbook_ea2a86a786bde0e260cc": [
+    0,
+    0,
+    0
+   ],
+   "textbook_eec1f557a49c79cc7081": [
+    0,
+    0,
+    1
+   ],
+   "textbook_f15b4e7e289f788cc70d": [
+    0,
+    0,
+    0
+   ],
+   "textbook_f8e226f6c5b45234819d": [
+    0,
+    2,
+    0
+   ],
+   "textbook_f900b1d7c659ef00e06b": [
+    0,
+    0,
+    0
+   ],
+   "textbook_f918caefa752f2beda53": [
+    0,
+    0,
+    0
+   ],
+   "textbook_fef8f88a0e6c1c196603": [
+    0,
+    0,
+    0
+   ]
+  }
+ },
+ "notes": "Per-problem n_ok (of 256) per seed come from passk.csv. No single set of 31 exists: headline is a 3-seed mean. combined_solved/naive_solved above are UNIONS across 3 seeds (combined 36, naive 13); see *_detail for per-seed sets (combined 32/30/32, naive 7/11/9), intersection (combined 28, naive 7), majority >=2 of 3 (combined 30, naive 7). All 72 problem names match our records by name; textbook files are byte-identical (sha256) to ours."
+}
