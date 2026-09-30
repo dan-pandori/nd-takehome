@@ -192,6 +192,83 @@ duplicates and order ignored. Overlaps of each training source with each evaluat
   - Both are above the policy's ≈ 0.1 %, B s5 clearly so.
   - Neither touches a decision quantity much: B has no rr, and S s5's 0.14 % is spread over 400 theorems × 256 samples.
 
-## Comparison (phase 2) and Verdict
+## Comparison (phase 2)
 
-*Written after §Recount was committed; see the next commit.*
+I read `run_frontier_supply.md`, `numbers.md` § frontier-supply (FS-1…6) and the frontier-supply part of `log.md` only after
+committing §Recount (commit `49ec722f`). The model is the same as above (SN-cap12) for every row.
+
+| claim (executor) | my value | verdict |
+|---|---|---|
+| FS-1 per-seed primary: C 142/207/218/220/220/207; S 139/217/226/233/228/216; C′ 145/197 | identical (R1) | reproduces |
+| FS-1 on the 91: C 33/60/57/58/61/47, S 36/62/61/66/66/58, C′ 34/52; base 7/20/18/23/25/19 | identical | reproduces |
+| FS-2 primary S − C −3, +10, +8, +13, +8, +9; mean 7.5, IQM 8.8, CI [2.5, 11.0]; flips 158 / 113 | identical; flips 158 / 113 | reproduces |
+| FS-2 on the 91: mean 5.5, CI [2.8, 8.8], flips 69 / 36; exact-17 +4.0 (6/6); ≥18 +1.5; rr 15–16 +2.0 [−2.8, 6.0]; rr 13–14 +1.3 | +5.5 [2.75, 8.75]; +4.0 (6/6); +1.5; +2.0 [−2.75, 6.0]; +1.3 | reproduces (flips on the 91 not separately recounted) |
+| FS-3 C′ − C +3, −10, flips 48 / 55; sd_d 7.4 → MDD 10.5; S − C sd 5.5, t 3.4 | identical | reproduces |
+| "S − C is inside the MDD, so the falsifier is met. There is no demonstrated frontier gain" | +7.5 < 10.5 | reproduces; correct reading of the pre-registered rule |
+| "S beats C on the 91 in 6 of 6 seeds, on the primary in 5 of 6" | yes | reproduces |
+| FS-4 filter 6,894 / 53,904 = 12.8 %; (a) 15.8 %, (b) 9.8 %; zero 40,686, easy 6,324 | 12.8 %, 15.8 %, 9.8 %; zero 75.5 %, easy 11.7 % (= 40,686 / 6,324 of 53,904) | reproduces |
+| FS-4 per op: chain 10.5, conj 14.0, case 15.4, contrapose 22.7, hyp 32.3 % ("S s0–s3, s5") | over all six seeds: 10.5, 13.8, 15.3, 22.6, 32.0 % | differs by ≤ 0.3 pt because of the seed subset; fine as labelled |
+| FS-4 window 13–16 → 14–17 from round 2 (s2, s4), 3 (s1, s3, s5), 7 (s0); no shortfall; leak drops 75 (21/14/4/10/10/16); kept pool 1,075…1,120 | identical | reproduces |
+| FS-4 kept targets' shortest proof: median (a) 13–15 lines, (b) 9–10 | over **all** kept proofs: (a) 16, (b) 11 (different statistic) | consistent |
+| FS-5 read-out solves: median 20–22 lines, term size 14–17 on the 91; S and C do not differ | lines 21 in every arm; my tree / DAG sizes 29–32 / 19–20 (a different definition from `lean_check`'s elaborated term size) | "S and C do not differ" reproduces under my measure too; absolute term sizes are not comparable across the two definitions |
+| FS-5 "0 rejected" by `lean_check` | my Lean re-check: 870 / 870 accepted | reproduces |
+| FS-6 GPU-s: S 19,340–20,434; C s4 / s5 20,491 / 19,689; C′ 19,880 / 19,918; within 25 % | registry sums: S 19,339–20,589; C s4 **21,377**; others identical | reproduces for the claim. C s4's registry carries a second round-1 `sample` row (143,840 attempts, 887 GPU-s) left over from the ladder killed at 04:00. The executor's 20,491 = 21,377 − 887 excludes it correctly, but the registry row is still there. S s4 is 20,589, not 20,434 (the range is slightly off). |
+| "Compute matched: … GPU-seconds within ±5 %" | S mean 19,977 against C s4 / s5 20,491 / 19,689 | reproduces |
+| "Supplied targets are rare but **short** …: the filter selects rarity, not length" | the (a) window never exceeded ub 17 (base 12 → 13, pinned to the `rl_targets` L*), so length was capped **by the window rule, not by the filter**; (b) open goals are sub-goals, short by construction; 48 % of (a) proofs are ≥ 17 lines | **reword**: the design did not offer targets at the read-out's 17–18 length, so this run cannot say whether the filter selects against length |
+| "Stage-1 bases read on the 91 only (… budget)" | the B s0 / s1 rr read-outs OOM'd (04:24–04:26 logs), and s2–s5 were cut at 10:10 for budget | reproduces (the caveat is disclosed); the pre-registered "frozen reachability on every read-out pool" is a **miss** on rr 13–16 |
+| `reserve.jsonl` missing ("a generator reserve, not an evaluation pool") | missing; my R6 check finds 0 overlaps with every pool that exists | fine; the pre-registration's leak list named a file that does not exist |
+| C re-reads match long-pool-2 (33 / 60 / 57 vs 34 / 59 / 58) | 33 / 60 / 57 / 58 | reproduces (±1 is a sampling re-draw on another pod) |
+
+**Expectations and misses.** The pre-registration was committed at 02:06 and the deviation at 02:11, both before the first pod
+(02:22). The write-up reports every expectation against its outcome:
+- Filter ≥ 5 %: met.
+- S − C > MDD: missed, and reported as a miss.
+- The point forecast +8 came out as +7.5.
+- C vs C′ ≤ 12: met.
+
+The (a) 12 % and (b) 6 % per-source forecasts are not tabulated against their outcomes (15.8 % and 9.8 %). This is minor.
+
+**Wording against n.**
+- "no demonstrated frontier gain" is right under the pre-registered rule.
+- "The direction is consistent" is right: 5/6 on the primary and 6/6 on the 91.
+- The run avoids "never" and "wall".
+- The MDD rests on 2 C′ pairs (sd_d from 2 df). The write-up says so and names the fix.
+
+**Model labels.** `numbers.md` and `run_frontier_supply.md` name SN-cap12 (`lean_staten`, 3.2 M parameters, from scratch, K12)
+for every number. The reused C s0–s3 carry their state-cap12 origin, and the long-pool-2 comparison is on the same checkpoints. No
+unlabelled number was found. There is no comparison with a pre-2026-09-27 (Lean ∧ `nd_verify`) number.
+
+**Hard constraints.** None was violated (R7), so there is no quarantine.
+
+## Verdict
+
+**What stands.**
+- The filter produces targets: 12.8 % pass at p̂ ∈ (0, 1/4], above the 5 % floor, with (a) 15.8 % and (b) 9.8 %.
+- The pre-registered test is not met: primary S − C = +7.5 of 291 against a C′-based MDD of 10.5.
+- Every per-seed count, paired difference, interval, flip count and compute figure reproduces from the raw rows with my own code.
+- 870 / 870 stored proofs pass Lean on re-check.
+- The splits are disjoint from every read-out pool.
+
+**What must be reworded.**
+1. "the filter selects rarity, not length" should become something like "the supplied targets were short because the length
+   window was anchored to the `rl_targets` L* (12–13), giving upper bounds of at most 17; the run did not offer targets at the
+   read-out's length".
+2. FS-6's S range should be 19,339–20,589 GPU-s. Note that the C s4 registry carries a stale round-1 row from the killed ladder.
+3. List the per-source forecast misses (the forecasts were lower than the outcomes) in the expected/outcome table.
+
+**What is not supported.** Nothing claimed is unsupported. The write-up does not claim a gain.
+
+A reader should not infer "no effect" either:
+- The paired differences are positive on 5/6 seeds on the primary and 6/6 on the 91 and on exact-17.
+- The paired t is 3.4 (p ≈ 0.02), and the IQM bootstrap CI [2.5, 11.0] excludes 0.
+- The miss comes from a C′-based sd_d estimated from 2 pairs, one of them −10.
+
+"Small positive effect, not established against the pre-registered MDD" is the accurate summary. The gain is concentrated on
+exact-17 (+4.0 of 61) and absent on rr 15–16 (+2.0, inside its noise).
+
+**Next measurements.**
+1. C′ on s2–s5, four ladders. This is about 4 × 5.5 A40-hours, roughly $11. It turns sd_d into a 6-pair estimate, and it settles
+   whether +7.5 is outside the MDD. With 6 pairs, a sd_d near the S − C sd of 5.5 would give an MDD of about 8.
+2. Stage-1 base read-outs on rr 13–16 for all six seeds, about 16 min each. They complete the pre-registered frozen reachability.
+3. If (1) confirms the effect: a supply arm whose window is anchored to the model's read-out frontier (base 16–17) rather than the
+   `rl_targets` L*. This separates "more rare targets" from "longer targets".
