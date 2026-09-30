@@ -214,3 +214,5 @@ COMPUTE-RECORD DONE 2026-09-30T01:02:02Z
 ## search-expert (executor, started 2026-09-30T02:00Z)
 - 02:11 Dan's message (primary Q = solves on the 91 + rr600 15–16) adopted; log.md.
 - Code: `state_search.py` (best-first, truncate-and-resume, per-step filter), ladder flags; CPU self-test `se_selftest.py`.
+- 02:31 pre-registration `9d138b60` (before first pod 02:31:47). 02:35–02:45 8 A40 pods: sx-0..5 A ∥ B (seeds 0–5), sx-6/7 A2 ∥ C (seeds 0/1).
+- 03:10 round 1: A solves 3,582 / 3,740 / 3,727 / 3,685 targets (s0–s3), B 3,401 / 3,569 / 3,539 / 3,497. ≈ 17 min per round.
