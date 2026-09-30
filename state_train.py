@@ -86,7 +86,19 @@ def main():
     ap.add_argument('--out', required=True)
     ap.add_argument('--log_every', type=int, default=200)
     ap.add_argument('--max_tokens', type=int, default=200000, help='padded tokens per micro-batch (same gradient, less memory)')
+    ap.add_argument('--recipe', default='control', choices=['control', 'best'],
+                    help="best: Robbie's 6x384 Peri-LN/ALiBi network, Muon + AdamW, MTP 0.3, token-budget batches (state_train_best.py)")
+    ap.add_argument('--budget_secs', type=float, default=300, help='best: wall-clock budget of the cosine schedule')
+    ap.add_argument('--best_steps', type=int, default=0, help='best: schedule over this many steps instead of --budget_secs')
+    ap.add_argument('--tok_budget', type=int, default=128 * 144, help='best: padded tokens per step')
+    ap.add_argument('--mtp', type=float, default=0.3, help='best: MTP loss weight')
+    ap.add_argument('--curve_every', type=float, default=30, help='best: seconds between curve / val points')
+    ap.add_argument('--no_compile', action='store_true')
     a = ap.parse_args()
+    if a.recipe == 'best':
+        assert not a.init, '--recipe best is Stage-1 pretraining; fine-tunes of a best checkpoint use the default loop'
+        import best_model as BM
+        a.n_layer, a.d, a.n_head, a.d_ff = BM.N_LAYER, BM.D, BM.N_HEAD, BM.D_FF
     import record    # results registry (REGISTRY.md)
     record.save_config(vars(a), a.out, role='finetune' if a.init else 'stage1')
     record.preflight()    # ND_RUN_ID + hf CLI present, or ND_OFFLINE=1: checked before training, not at the first save
@@ -109,6 +121,18 @@ def main():
     held = None
     if a.heldout:
         held, _ = load(a.heldout, tok, 0, limit=2000)
+    if a.recipe == 'best':
+        import state_train_best
+        del model
+        model, extra = state_train_best.train(a, tok, data, held, dev, record)
+        save_ckpt(a.out, model, tok.mode, extra={'args': vars(a), 'n_params': model.n_params(), 'pairs': npairs,
+                                                 'records': len(data), **extra})
+        lab = dict(ckpt=a.out, data=a.data, source=a.out, n_params=model.n_params(), pairs=npairs, recipe='best')
+        record.record('train_loss', extra['last_train_loss'], **lab)
+        if held:
+            record.record('val_loss', extra['final_val'], n=len(held), **lab)
+        print('saved', a.out, flush=True)
+        return
     opt = torch.optim.AdamW(model.parameters(), lr=a.lr, weight_decay=a.wd, betas=(0.9, 0.95))
     sched = lambda s: a.lr * s / a.warmup if s < a.warmup else a.min_lr + 0.5 * (a.lr - a.min_lr) * (1 + math.cos(math.pi * (s - a.warmup) / max(1, a.steps - a.warmup)))
     model.train()

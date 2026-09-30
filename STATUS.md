@@ -220,3 +220,11 @@ Brief: nd-rl `docs/proposals/orchestration` run brief `grpo-state`. Policy: AGEN
 - Experiment not run (code phase): costed at ≈ $37–43 for the brief's 6 seeds (only s0–s3 exist); question in `QUESTIONS.md`, default Plan B (4 seeds, ≈ $24). Deliverables: `run_grpo_state.md`, `numbers.md` § grpo-state, `log.md`, bucket `hf://buckets/dan-pandori/nd-rl/grpo-state/`.
 
 GRPO-STATE DONE 2026-09-30T02:51:03Z
+
+
+# STATUS — best-state (Robbie's network and pretraining recipe in the proof-state format, cap 6 and cap 12)
+
+Brief: run brief `best-state` (Dan, 2026-09-30). Policy: AGENT_POLICY.md. Budget $55 / 110 pod-hours.
+
+## best-state
+- 2026-09-30 15:59 UTC  run started (executor). Port of Robbie's recipe written (`best_model.py`, `state_train_best.py`, `state_train.py --recipe best`); both training sets checked (155,000 records each). Pre-registration `preregistration/best-state.md` committed before the first pod.

@@ -244,9 +244,8 @@ def generate_ids_fast(model, tok, prompt_ids, goals=None, greedy=True, temperatu
                 act = act[sel]; nxt = nxt[sel]; cur_pos = cur_pos[sel]; keepb = keepb[sel]
                 done = torch.zeros(n_live, dtype=torch.bool, device=dev)
                 for c in caches:
-                    if 'k' in c:
-                        nk = c['k'][sel].contiguous(); del c['k']; c['k'] = nk
-                        nv = c['v'][sel].contiguous(); del c['v']; c['v'] = nv
+                    for key in [key for key, v in c.items() if torch.is_tensor(v)]:   # K, V (and ALiBiGPT's key positions)
+                        nk = c[key][sel].contiguous(); del c[key]; c[key] = nk
         cur_pos = cur_pos + 1
         logits = model(nxt[:, None], pos=cur_pos[:, None], mask=keepb[:, None, None, :L + t + 1], caches=caches)[:, -1]
     n_eos, n_exact, n_goal = int(n_eo), int(n_ex), int(n_go)

@@ -129,7 +129,12 @@ def load_ckpt(path, device='cpu'):
     from tokenizer import make_tokenizer
     ck = torch.load(path, map_location=device)
     tk = make_tokenizer(ck['tok_mode'])
-    m = GPT(**ck['cfg']).to(device)
+    cfg = dict(ck['cfg'])
+    if cfg.get('arch') == 'best':    # Robbie's Peri-LN / ALiBi network (best_model.py, run best-state)
+        from best_model import ALiBiGPT
+        m = ALiBiGPT(**cfg).to(device)
+    else:
+        m = GPT(**cfg).to(device)
     m.load_state_dict(ck['state'])
     m.eval()
     return m, tk, ck.get('extra', {})
