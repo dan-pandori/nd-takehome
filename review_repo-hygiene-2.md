@@ -50,4 +50,57 @@ Minor observations (not constraint issues):
 - `.gitattributes` sets `merge=union` on `artifacts/MANIFEST.jsonl`. Concurrent runs appending rows merge cleanly, but
   a re-published path can then leave two rows for the same path. `tests/test_manifest.py:13` asserts that paths are unique, so CI catches it.
 
+## Comparison (phase 2: `run_repo_hygiene_2.md`, `numbers.md`, `log.md` at `6b7b2f5e`)
+
+| Claim (executor) | Reviewer's independent value | Verdict |
+|---|---|---|
+| 6,006 files untracked by `repo-hygiene` + this run; 3,953 tracked again with the same blob; 2,053 in the manifest; 0 lost | U = 5,992 (`6123570e` `artifacts/`) + 5 (`470d39e0` `artifacts/lpool`) + 9 (`cf5924e2` ckpts/data) = 6,006; 3,953 tracked at `HEAD` with the same blob, 0 with a different blob, 2,053 untracked, all with a manifest row matching the git blob. The union over all 18 commits gives the same result | reproduces |
+| 2,053 rows + 1 from the publish demo = 2,054; all re-hashed from full bucket downloads, 2,054 ok | 2,054 rows; 2,054 / 2,054 sha256 + bytes match on the reviewer's own full downloads | reproduces |
+| Credential scan: 0 hits, 6,023 objects, 4,329,220,777 bytes; planted fakes and 1 real-value copy found | 0 hits in 6,045 objects (4,332,285,282 bytes). The executor's 6,023 are a strict subset. The 22 extra objects (3,064,505 bytes) are this run's own `artifacts/repo-hygiene-2/` files, uploaded at DONE **after** the executor's scan. The brief asks for a scan of "anything you upload", so those 22 went unscanned by the run. This review scanned them: 0 hits | reproduces; coverage gap closed by the review |
+| Pre-registered fetch demo (`lp`) could not test the claim: its input was never in git. Disclosed as a deviation | confirmed: `artifacts/lp/corpus/*.dump.jsonl*` is absent at `6123570e` and from the manifest; after the fetch, C1 is empty | reproduces; deviation correctly disclosed |
+| `nf_analysis.py` after fetching `artifacts/nf/` (365 files) byte-identical to the tracked `summary.json`; differs before the fetch | same result in the reviewer's own fresh worktree of `6b7b2f5e` | reproduces |
+| Idempotent; a corrupted copy is re-fetched | "have 25"; "fetched 1, have 24" on `lp` | reproduces |
+| Fresh non-sparse worktree "147.4 MB" (`8fe52a5c`) / "148.1 MB" (`0c34c534`) | 155,261,304 tracked bytes at `6b7b2f5e`; 160 MiB on disk. The executor's own file gives 155,254,480 **bytes**, so "148.1 MB" is MiB (= 155.3 MB) | reproduces within the pre-registered range and < 300 MB either way; unit mislabel (MB where MiB is meant) |
+| Guard red on 6 MB: hook, `check_sizes.sh`, `run_ci.sh`, Actions | hook and `check_sizes.sh` red (own scratch commit); Actions run 36592832438 red at the size guard | reproduces (`run_ci.sh` locally not re-run: no torch on the VPS) |
+| Actions green on `ci-rh2-green` and on `dan` (36594025125) | green, and also green at the tip `6b7b2f5e` (36594323823) | reproduces |
+| `cf5924e2` did not narrow CI's guard despite its message | confirmed | reproduces |
+| Links: 43 relative links, none to a moved file, 0 re-pointed; 4 already broken in `artifacts/fu/*followup_draft.md` | 0 links to moved files at `6123570e`; the same 4 broken links (walker counts 39 resolving + 4 broken = 43) | reproduces |
+| Quarantine items (1) to (3) answered; `TEST_RUN_DONE` sha256 `aa174582…` unchanged | `aa1745827596a2cc`, same blob at every ref; items verified in §Recount | reproduces |
+| Merge: `dan` fast-forwarded `cf5924e2..0c34c534`, no history rewrite; no other run active (`runqueue` empty) | fast-forward confirmed (`3cb0a0f8` and `6123570e` are ancestors). Which runs were active at 15:56 cannot be derived now | reproduces / not derivable |
+| Log entry "16:13 Credential scan …" | the scan's files and log line are in commit `f7585240`, committed 15:56:22; another log line at 16:13 is from an earlier day's entry | log timestamp wrong (should be ≤ 15:56); cosmetic |
+| Model labels | the only model mention (CI smoke models: 114 k params, `lean_seq`, from scratch, 150-proof fixture) is labelled and makes no result claim. No other number concerns a model | OK |
+| Write-up length (brief: ≤ 250 words) | 348 words including the policy draft | over length; minor |
+
+Gate 0: pre-registration `c07a4822` committed 15:36:27, before the first work commit `8fe52a5c` (15:43:59). Its seven
+expectations are all reported, with the one miss (the `lp` demo) disclosed as a deviation. Nothing in this run needs
+seeds or a noise floor. The run makes no "never" or "wall" claim.
+
+## Verdict
+
+**No hard-constraint violation.** `nd_verify` is unchanged, `TEST_RUN_DONE` is unchanged and tracked, no training or
+evaluation code changed, and `test_run_once.sh` was not run (its outputs are unchanged). No history was rewritten.
+
+**What stands.** Every quantitative claim reproduces from the reviewer's own code: 0 lost files; 2,054 / 2,054 manifest
+rows sha256-equal to the bucket copies; 0 credential hits (now over all 6,045 objects, including the run's own DONE
+upload); the size guard is red at > 5 MB and on bulk kinds under `artifacts/`; CI and Actions are green on `dan`; the
+fetch helper reproduces `noise-floor`'s summary byte for byte and is idempotent. **`repo-hygiene`'s quarantine is
+cleared.** Every item under "What would clear the quarantine" is met on `dan`, and this review is the re-review.
+
+**Reword.** (1) "147.4 MB / 148.1 MB" → "147.4 / 148.1 MiB (154.6 / 155.3 MB)". (2) The credential-scan claim should
+say it covered the bucket as of 15:56. The 22 files uploaded at DONE were scanned by this review (0 hits), not by the
+run. (3) Log timestamp "16:13" for the scan → before 15:56. None of these changes a conclusion.
+
+**Not supported / open.** Nothing claimed is unsupported. Open, and not the run's fault:
+- In a plain clone, the take-home's checkpoints and `data/train.jsonl.gz` are no longer present. `README.md`'s
+  reproduction commands (`stage1_eval.sh ckpts/stage1_abs.pt …`) fail there unless the user first runs
+  `python3 fetch_artifacts.py ckpts/ data/`, and `README.md` does not mention the manifest. The executor's
+  `QUESTIONS.md` entry (16:00) asks Dan about the checkpoints. Recommended: a one-line pointer in `README.md`,
+  whichever way Dan answers.
+- The pre-commit hook needs `core.hooksPath` (set in this clone; a fresh clone must run `ci/install_hooks.sh`). CI is
+  the backstop.
+
+**Next measurement.** None is needed for this run. The fetch-to-reproduce check is shown for one run (`noise-floor`).
+Repeating it on a run whose analysis reads `ckpts/` or `data/` manifest rows would exercise the non-`artifacts/` rows
+end to end.
+
 Edited-by: agent:claude · Agent-role: reviewer · Run-id: repo-hygiene-2
