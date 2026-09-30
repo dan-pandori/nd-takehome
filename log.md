@@ -826,3 +826,4 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 01:40 Final assembly with F results; `ub_proof` Lean re-check 91 / 91; literal-text re-check 292 / 292 accepted texts, 72 / 72
   negative controls rejected (`lpool2_recheck.py`). Tables `artifacts/lpool2/tables.md` (`lpool2_analysis.py`), figure
   `figures/lpool2_rate.png` (`lpool2_figure.py`), re-draw `artifacts/lpool2/redraw_calib.md`, caps `artifacts/lpool2/caps.md`.
+- 01:55 Pool merged into the fork's `dan` (`d3abe474`; local CI green in a clean venv, 81 s). Bucket `hf://buckets/dan-pandori/nd-rl/long-pool-2/` {data/lp2, data/ladder, artifacts/lpool2 (incl. literal-text dumps), figures}: 641 objects, 1.38 GB.

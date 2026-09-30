@@ -107,3 +107,4 @@
   while $10 would buy ≈ 37 A5000-hours. May I raise the ceiling to 37 pod-hours inside the same $10? Default if unanswered:
   I stay at 20 pod-hours, put stage E (bound 17) on the 70 calibration theorems first, generate as far as the rest allows,
   and report the counts reached.
+  *Outcome (2026-09-30 01:50, unanswered): default followed; the run used 17.08 pod-hours, $6.29.*

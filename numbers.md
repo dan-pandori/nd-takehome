@@ -1451,4 +1451,4 @@ sha256 prefixes `artifacts/lpool2/ckpt_sha.txt`):
   `artifacts/lpool2/recheck/`.
 - **LP2-8 Spend.** `lp2-a` RTX A5000 $0.27/h 5.34 h $1.44; `lp2-b` RTX 4000 Ada $0.28/h 8.33 h $2.33; `lp2-c` RTX 4090 $0.74/h
   3.41 h $2.52. **17.08 pod-hours, $6.29** of 20 h / $10 (`podbudget long-pool-2`).
-- Bucket: `hf://buckets/dan-pandori/nd-rl/long-pool-2/{data,artifacts,figures}`.
+- Pool merged into the fork's `dan` as `d3abe474`. Bucket: `hf://buckets/dan-pandori/nd-rl/long-pool-2/{data/lp2,data/ladder,artifacts/lpool2,figures}` (641 objects, 1.38 GB).
