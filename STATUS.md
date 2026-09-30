@@ -215,3 +215,8 @@ Brief: nd-rl `docs/proposals/orchestration` run brief `grpo-state`. Policy: AGEN
 
 ## grpo-state
 - 2026-09-30 02:10 UTC  run started (executor). Code phase: `grpo_state.py` + advantage variants + tests; the experiment is pre-registered for later, not run.
+- 2026-09-30 02:17 UTC  pre-registration `preregistration/grpo-state.md` committed (c21af4c) before the first pod (02:21).
+- Built `grpo_state.py` + `grpo_adv.py` (default / unlikely / pass@k / distinct), CPU tests in CI (green on `dan` at 4eb500d), two GPU smokes (RTX 3090 timings: 19.5 s / update, 8.6 GB, 1.47× with two jobs per card; A40 boundary path). Independent code review: no serious bug; fixes applied. 0.32 pod-h, $0.16; pods deleted. Merged into `dan`.
+- Experiment not run (code phase): costed at ≈ $37–43 for the brief's 6 seeds (only s0–s3 exist); question in `QUESTIONS.md`, default Plan B (4 seeds, ≈ $24). Deliverables: `run_grpo_state.md`, `numbers.md` § grpo-state, `log.md`, bucket `hf://buckets/dan-pandori/nd-rl/grpo-state/`.
+
+GRPO-STATE DONE 2026-09-30T02:51:03Z
