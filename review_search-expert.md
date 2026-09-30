@@ -152,3 +152,89 @@ proof on a label-17 theorem), as expected under Lean.
   separately.
 - A and B shared one GPU, so the GPU-seconds are wall time under co-tenancy.
 - Each read-out cost 1,261–2,205 GPU-s.
+
+## §Compare (phase 2: `run_search_expert.md`, `numbers.md` § search-expert, `log.md`, `artifacts/sx/analysis.md`, `compute_table.md`)
+
+| claim (executor) | my value | verdict |
+|---|---|---|
+| Q per seed, A 79/111/129/148/113/102, B 76/118/122/144/117/97, A2 80/129, C 72/121, T1 142/207/218/220 | identical | reproduces |
+| strata table in `analysis.md` (17, ≥ 18, rr15, rr16, rr13, rr14, textbook 13–14) | my 17 / ≥ 18 / rr13–14 / rr15–16 sums match every row | reproduces |
+| B − A −3, +7, −7, −4, +4, −5; mean −1.3; sd 5.5 | identical | reproduces |
+| IQM −2.5 [−5.7, +4.3] | −2.0 [−5.5, +3.75] | differs by definition only: `sx_analysis.iqm` gives the end elements fractional weight, mine trims one of six from each end. Both intervals contain 0 |
+| s = 9.0 → MDD 18.2; MDD from the B − A sd 7.9 | 9.01 → 18.17; 7.89 | reproduces |
+| discordant only-B / only-A 26/29 … 32/37; A vs A2 flips 47, 66 | identical | reproduces |
+| C − A2 −8, −8; A − T1 −63, −96, −89, −72 | identical | reproduces |
+| H1: past-the-other solves B 746/483/508/455/668/698 vs A 1,800/1,753/1,708/1,737/1,850/1,787, ratio 0.33 | identical; ratio 3,558 / 10,635 = 0.33 | reproduces |
+| C 762 / 542 vs A2 474 / 419 | identical | reproduces |
+| B spends 23 % of A's actions (0.226–0.246); C 0.185–0.204 ("19–20 %" in the run doc) | 0.226–0.246; 0.185–0.204 | reproduces (the run doc's "19–20 %" is rounded) |
+| cumulative targets A 4,075–4,206, B 3,950–4,039, A2 4,122 / 4,183, C 4,131 / 4,184 | identical | reproduces |
+| B's shortest training proof longer than A's on 21–23 % of shared targets, shorter "< 1 %" | longer 826–924 of 3,872–3,997 (21–23 %); shorter 19–45 (0.5–**1.16 %**) | reproduces except the rounding: seed 4 is 1.16 %, so write "≤ 1.2 %" |
+| read-out proofs: on shared theorems B / A median 18 / 17–18 lines, term size 11–13 / 11–12 (`lean_check`) | B − A median 0 lines and 0 term size (my metric), means +0.7 to +1.1 lines, B longer on 40 % and shorter on 14 % of shared theorems | reproduces in direction (B slightly longer). Absolute term sizes are not comparable (different metric) |
+| "Step-cap hits at `max_steps` 96: none recorded in any read" | 2 step-cap samples (T1 s0, T1 s2) and 566 `max_action`-truncated samples of 2.51 M; 6 arm × seed × stratum cells above the 0.1 % line, worst B_s3 rr15 0.82 % (one theorem) | **differs** (minor). The policy asks for the fraction hitting the cap per reported stratum. The action cap is not reported at all. No effect on any conclusion (≤ 1 theorem in any cell) |
+| compute: A 8,296–10,375 GPU-s, B 4,708–5,651, same fine-tune; B never exceeds A | registry sums agree; B's train tokens are 1.035× A's, nothing above 1.25× | reproduces |
+| pods 29.1 h, $14.26 | not independently derived (`podbudget`) | not derivable from the repo |
+| every counted proof Lean-checked | 46,956 / 46,956 read-out proofs and 400 / 400 sampled expert proofs pass my harness; 0 of 2,400 prefilter rejections are Lean-accepted | reproduces |
+
+**Wording against n and the pre-registration**
+
+- **Model labels:** present in the run doc, `numbers.md` and `compute_table.md` (A40). T1 is labelled as
+  `state-cap12`'s ladder, and the inherited 59 / 91 in `log.md` names its model and read settings. No pre-2026-09-27
+  number is compared.
+- **Expectations before the run:** committed at 02:31:18, before the first pod. Misses:
+  - The forecast of **H1 ratio 0.7–1.5 missed**: the ratio is 0.33, well below the range.
+  - The pilot's "B spends ≈ 60 % of the budget" also missed: B spent 23 %.
+  - The run doc says only "my forecast (H1 fails, |B − A| < MDD, C ≈ A) held". The direction held, but the numeric
+    forecast did not. It should be reported as a miss.
+  - The log's 02:10 CPU pilot (best-first 0 / 12 at k 8, "under investigation") is not the pilot the
+    pre-registration quotes (5–6 / 12 at k 32). The second pilot is not in `log.md`.
+- **"at matched compute" / title:**
+  - B was matched on **budget**, not on spend. It used 23 % of A's actions, ≈ 23 % of the generated tokens and
+    ≈ 35 % of the sampling GPU-seconds.
+  - The run doc states this in the expert paragraph, but the headline and the primary paragraph read as a
+    matched-compute tie.
+  - What the data show is: B, spending about a quarter of A's actions, ties A's apprentice. This run cannot separate
+    "search is no better" from "search stopped at the first proof".
+- **C (2 seeds):** "a better expert per action" rests on 2 seeds with the same sign and a large margin (1,304 vs 893
+  past-the-other solves at ≈ 19 % of the actions); say "2 seeds". "The apprentice is not better (−8, −8)" is fine. With 2
+  seeds it cannot say "worse" either.
+- **Secondary T1:**
+  - The heading says "the selection rule matters far more than the expert". The A − T1 gap (−80 mean, 4 of 4 seeds,
+    sd 15) is real.
+  - Attributing it to the selection rule is not supported. T1 comes from another run (`state-cap12`, default flags).
+    It differs from A in selection (random vs shortest), in records per target (up to 4 vs 1), in the step filter,
+    in the per-round evals and in code version.
+  - The run doc names the record-volume confound, but the heading still attributes the gap to selection.
+
+## §Verdict
+
+**Stands:**
+- **Primary null.** B − A on Q is −1.3 (6 paired seeds, t = −0.59), inside both MDDs (18.2 from the same-checkpoint
+  spread, 7.9 from the B − A spread). The 95 % CI of the mean, [−7.1, +4.5], rules out a gain of ≥ 5 of 291.
+- The pre-registered falsifier fires, and H2 is not supported.
+- **H1 falsified.** B's expert finds 0.33× A's past-the-other solves, and fewer cumulative targets in all 6 seeds.
+- B's selected proofs are slightly longer: median equal, longer on ≈ 22 % of targets.
+- **C vs A2.** C finds more past-the-other targets per action (2 seeds), yet its apprentice is 8 lower on both seeds.
+- Compute is recorded and no arm exceeds its comparator by 1.25×.
+- No hard-constraint violation. Splits are disjoint. Every counted read-out proof is Lean-accepted, and the prefilter
+  shows no false rejections in 2,400 samples.
+
+**Must be reworded:**
+1. Headline and primary paragraph: say B spent ≈ 23 % of A's actions, so this is a tie at matched budget and
+   about ¼ of the spend, not at matched compute.
+2. "Expected vs outcome": report the numeric misses (H1 ratio forecast 0.7–1.5, measured 0.33; spend forecast
+   ≈ 60 %, measured 23 %).
+3. Change "shorter in < 1 %" to "≤ 1.2 %".
+4. Replace "Step-cap hits: none" with the measured cap fractions: 2 step-cap samples; `max_action` truncation 0.02 %
+   overall, 6 cells above 0.1 %, worst 0.82 % on one theorem.
+5. Add the second CPU pilot behind the pre-registered forecast to `log.md`.
+
+**Not supported:** "the selection rule matters far more than the expert". Say instead: "state-cap12's T1 recipe
+(up to 4 random proofs per target, no filter, another run) beats A by 63–96; which ingredient is responsible is not
+identified."
+
+**Next measurements that would settle what is open:**
+- **(a)** A at B's actual spend (sampling with k ≈ 8, same selection, 6 seeds). If A's apprentice drops, B is the
+  cheaper expert for the same apprentice.
+- **(b)** B that keeps searching after the first proof until it has spent its budget.
+- **(c)** A within-run A′ arm on the same 6 seeds and code: up to 4 random successes per target, and separately
+  1 random vs 1 shortest. This splits T1's +80 into selection and volume.
