@@ -21,5 +21,7 @@ step "relabel marker" $PY -m pytest -q tests/test_relabel_marker.py
 step "results registry" $PY tests/test_registry.py
 step "every script with --out/--outdir records its config (record.save_config)" $PY tests/test_configs.py
 step "50-step CPU training + sampler smoke" $PY tests/test_smoke_train_sample.py
+step "GRPO advantage variants on hand-made groups (grpo-state)" $PY tests/test_grpo_adv.py
+step "grpo_state: gradient sanity + tiny CPU smoke per variant (grpo-state)" $PY tests/test_grpo_state.py
 rm -rf "$TMP"
 echo "CI PASS ($(( $(date +%s) - T0 ))s)"
