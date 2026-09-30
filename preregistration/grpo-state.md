@@ -180,5 +180,10 @@ This is above the brief's ≈ $10–20. Cheaper plans, in the order I would cut:
 - **Plan C (≈ $16):** Plan B with two GRPO arms (default, pass@4): Q1 plus the stronger half of Q2.
 - A 16 GB card (e.g. RTX A4000) holds one job (peak 8.9 GB); if it bills ≈ half a 3090 it cuts every plan by up to
   ≈ 2× at one job per card. Measure s / update on it first.
+**Log-probs at the sampling temperature** (after the code review, 02:55 UTC): the loss, the KL and the unlikeliness
+ranking use log softmax(logits / T), the distribution the rollouts were drawn from, so the update is on-policy.
+`grpo.py` (run 4) used T = 1 there; the smoke above ran the T = 1 version (timings unaffected). This fixes a GRPO
+setting § 3 left implicit; nothing in § 1–8 changes.
+
 The support deepening in § 5.3 is **5,000 + 5,000** attempts (was 10,000 + 10,000), to fit the budget: a theorem at
 0 / 10,256 has base p < 2.9 × 10⁻⁴ at 95 %. Question and default in `QUESTIONS.md` (2026-09-30).

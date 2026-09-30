@@ -1438,3 +1438,33 @@ counts once at the end (no per-step cost); the sampler adds one `declen.sum()` p
 
 Per-arm compute table of this run: `artifacts/compute-record/compute_table.tsv` (`registry_merge.py --compute --by
 arm,seed,round,phase`). Pods: cr1 0.36 h + cr2 0.05 h, A40 at $0.49/h billed: $0.21. Bucket: `hf://buckets/dan-pandori/nd-rl/compute-record/`.
+
+## grpo-state (code phase, 2026-09-30)
+
+Model for every number here: SN-cap12 Stage-1 s0, `ckpts/sc12/stage1_SN12_s0.pt` (bucket
+`state-cap12/ckpts/sc12/`), 3,216,384 params, `lean_staten`, from scratch on `data/kh/train_k12.jsonl` (155,000
+generator proofs, cap 12). One RTX 3090 (24 GB, $0.50/h billed). Lean alone decides. These are smoke measurements of
+the code (≤ 8 updates), **not results**: no claim about GRPO is made from them.
+
+| run (`grpo_state.py`, 256 × G 8, batch 2,048, lr 3e-5, no KL) | updates | s / update | peak alloc | mean reward | groups with variance | source |
+|---|---|---|---|---|---|---|
+| default | 8 | 18.6 | 8.60 GB | 0.465 | 0.565 | `artifacts/grpo_state/smoke_default/steps.jsonl` |
+| unlikely (β_rank 0.25) | 4 | 19.8 | 8.05 GB | 0.462 | 0.591 | `…/smoke_unlikely/steps.jsonl` |
+| pass@4 | 4 | 19.2 | 8.15 GB | 0.463 | 0.606 | `…/smoke_passk/steps.jsonl` |
+| distinct (bonus 0.5) | 4 | 20.7 | 8.09 GB | 0.463 | 0.601 | `…/smoke_distinct/steps.jsonl` |
+| default + pass@4 concurrently (seed 1) | 6 each | 26.5 / 26.4 | 8.92 / 8.61 GB | 0.456 / 0.441 | 0.573 / 0.608 | `…/conc_{default,passk}/steps.jsonl` |
+
+Compute rows (registry, `python3 gs_compute.py artifacts/grpo-state/registry`), per arm:
+
+| arm | gpu_seconds | gen_tokens | attempts | actions | train_steps | train_tokens | lean_checks |
+|---|---|---|---|---|---|---|---|
+| smoke_default | 159 | 3,015,571 | 16,384 | 162,298 | 8 | 8,802,833 | 7,201 |
+| smoke_unlikely | 94 | 1,556,538 | 8,192 | 83,476 | 4 | 4,728,533 | 3,567 |
+| smoke_passk | 87 | 1,553,995 | 8,192 | 83,332 | 4 | 2,734,076 | 3,587 |
+| smoke_distinct | 94 | 1,553,906 | 8,192 | 83,365 | 4 | 5,142,343 | 3,584 |
+| conc_default | 169 | 2,275,190 | 12,288 | 121,103 | 6 | 6,731,648 | 5,320 |
+| conc_passk | 168 | 2,307,410 | 12,288 | 123,320 | 6 | 3,989,653 | 5,165 |
+
+(`attempts` counts rollouts; `lean_checks` counts distinct texts sent to Lean after the prefilter.) Pod: `gs-smoke`
+0.23 h, $0.11. Bucket: `hf://buckets/dan-pandori/nd-rl/grpo-state/{artifacts/grpo_state,artifacts/grpo-state,ckpts/grpo_state}`
+(rows in `artifacts/MANIFEST.jsonl`).

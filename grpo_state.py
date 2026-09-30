@@ -22,7 +22,8 @@ round-equivalent r (the ladder's round r evaluates the checkpoint it samples fro
 Update (one per step, on-policy): P prompts (cycling a shuffled order) x G rollouts at temperature T;
   loss = - sum_rollouts A_i sum_actions sum_tokens log pi(a_t | state, a_<t) / (P G divisor)
        + kl * sum_rollouts sum_tokens k3(pi, pi_ref) / (P G divisor),     k3 = exp(ref - lp) - (ref - lp) - 1
-with the divisor fixed (--divisor; not the length), grad-norm clip 1.0, AdamW.  Log-probs are at temperature 1 on the
+with the divisor fixed (--divisor; not the length), grad-norm clip 1.0, AdamW.  Log-probs (loss, KL, and the unlikeliness
+ranking) are of the sampling distribution, logits / T, so the update is on-policy (grpo.py / run 4 used T = 1 there), on the
 exact ids the sampler fed and produced (the state prompt, then the action up to and including <eos>; a truncated action
 is all its tokens).  Every sampled action is in the loss, including the one that failed: it was the policy's choice.
 """
@@ -78,13 +79,9 @@ def env_rollouts(model, tok, prompts, temperature=0.8, max_action=256, max_steps
         wave += 1
         keep = []
         for (i, e), p, o in zip(live, pids, outs):
-            aid = []
-            for x in o:
-                if x == tok.pad:
-                    continue
-                aid.append(x)
-                if x == tok.eos:
-                    break
+            aid = list(o[:o.index(tok.eos) + 1]) if tok.eos in o else list(o)   # exactly what the model was fed
+            while aid and aid[-1] == tok.pad and tok.eos not in aid:            # (no <eos>: drop trailing fill only)
+                aid.pop()
             trajs[i].append((list(p), aid))
             atoks, ended = tok.decode_action(o)
             if not ended:
@@ -119,17 +116,18 @@ def pair_batch(tok, pairs, dev):
     return x.to(dev), m.to(dev)
 
 
-def token_logprobs(model, x, m):
-    """-> (B, T-1) log pi of each next token, zero off the action mask."""
+def token_logprobs(model, x, m, temperature=1.0):
+    """-> (B, T-1) log pi_T of each next token (logits / T: the distribution the sampler drew from), zero off the mask."""
     dev = x.device
     with torch.autocast('cuda', dtype=torch.bfloat16, enabled=(dev.type == 'cuda')):
         logits = model(x[:, :-1])
-    lp = -F.cross_entropy(logits.reshape(-1, logits.size(-1)).float(), x[:, 1:].reshape(-1), reduction='none').view(x.size(0), -1)
+    logits = logits.float() / temperature
+    lp = -F.cross_entropy(logits.reshape(-1, logits.size(-1)), x[:, 1:].reshape(-1), reduction='none').view(x.size(0), -1)
     return lp * m[:, 1:]
 
 
 @torch.no_grad()
-def rollout_logprobs(model, tok, rolls, lp_batch):
+def rollout_logprobs(model, tok, rolls, lp_batch, temperature=1.0):
     """sequence log-prob of each rollout (sum over its actions' tokens) under `model` -> list of floats."""
     dev = next(model.parameters()).device
     flat = [(j, pa) for j, r in enumerate(rolls) for pa in r['traj']]
@@ -137,13 +135,13 @@ def rollout_logprobs(model, tok, rolls, lp_batch):
     for s in range(0, len(flat), lp_batch):
         ch = flat[s:s + lp_batch]
         x, m = pair_batch(tok, [pa for _, pa in ch], dev)
-        v = token_logprobs(model, x, m).sum(1).tolist()
+        v = token_logprobs(model, x, m, temperature).sum(1).tolist()
         for (j, _), y in zip(ch, v):
             out[j] += y
     return out
 
 
-def pg_update(model, ref, tok, rolls, adv, opt, norm_div, kl, lp_batch):
+def pg_update(model, ref, tok, rolls, adv, opt, norm_div, kl, lp_batch, temperature=1.0):
     """one accumulated policy-gradient (+ KL) step over the rollouts' (state, action) pairs.
     -> (loss, kl_mean_per_token or None, grad norm, pairs, train tokens)"""
     dev = next(model.parameters()).device
@@ -156,12 +154,12 @@ def pg_update(model, ref, tok, rolls, adv, opt, norm_div, kl, lp_batch):
     for s in range(0, len(flat), lp_batch):
         ch = flat[s:s + lp_batch]
         x, m = pair_batch(tok, [pa for _, pa in ch], dev)
-        lp = token_logprobs(model, x, m)
+        lp = token_logprobs(model, x, m, temperature)
         w = torch.tensor([adv[j] for j, _ in ch], device=dev, dtype=torch.float32)
         l = -(w[:, None] * lp).sum() / norm_div
         if kl > 0:
             with torch.no_grad():
-                lr_ = token_logprobs(ref, x, m)
+                lr_ = token_logprobs(ref, x, m, temperature)
             d = (lr_ - lp) * m[:, 1:]
             k3 = (torch.exp(d) - d - 1) * m[:, 1:]
             l = l + kl * k3.sum() / norm_div
@@ -216,13 +214,14 @@ def main():
     targets, transfer, heldout = sl.read(a.targets), sl.read(a.transfer), sl.read(a.heldout)
     sl.ENV['max_action'] = a.max_action; sl.ENV['max_steps'] = a.max_steps
     N = len(targets); budget = a.rounds * a.k * N
-    per_step = a.prompts * a.group; steps = max(1, budget // per_step)
+    per_step = a.prompts * a.group; steps = max(a.rounds, budget // per_step)    # >= 1 step per round: distinct boundaries
     if a.adv == 'passk':
         assert a.passk_k <= a.group
     boundaries = {max(1, int(round(r * steps / a.rounds))): r for r in range(1, a.rounds + 1)}
     last = steps if not a.max_steps_total else min(steps, a.max_steps_total)
-    if a.max_steps_total:
-        boundaries = {s: r for s, r in boundaries.items() if s <= last} or {last: 1}
+    if a.max_steps_total and last not in boundaries:    # smoke runs: the last step closes its round-equivalent
+        boundaries = {s: r for s, r in boundaries.items() if s < last}
+        boundaries[last] = min(r for r in range(1, a.rounds + 1) if max(1, int(round(r * steps / a.rounds))) >= last)
     norm_div = a.prompts * a.group * a.divisor
     print(f'{N} targets, budget {budget} rollouts = {steps} steps of {per_step} ({a.prompts} x G {a.group}); adv {a.adv}; '
           f'boundaries {sorted(boundaries)}; params {model.n_params()} mode {tok.mode}', flush=True)
@@ -270,7 +269,7 @@ def main():
         mixed = [g for g in range(a.prompts) if 0 < sum(R[g * a.group:(g + 1) * a.group]) < a.group]
         if a.adv == 'unlikely' and mixed:
             sel = [j for g in mixed for j in range(g * a.group, (g + 1) * a.group)]
-            lps = rollout_logprobs(model, tok, [rolls[j] for j in sel], a.lp_batch)
+            lps = rollout_logprobs(model, tok, [rolls[j] for j in sel], a.lp_batch, a.temperature)
             logp = [0.0] * len(rolls)
             for j, v in zip(sel, lps):
                 logp[j] = v
@@ -282,7 +281,7 @@ def main():
         record.phase('update', round=rnum)
         model.train()
         tu = time.time()
-        loss, klm, gn, npairs, ntok = pg_update(model, ref, tok, rolls, adv, opt, norm_div, a.kl, a.lp_batch)
+        loss, klm, gn, npairs, ntok = pg_update(model, ref, tok, rolls, adv, opt, norm_div, a.kl, a.lp_batch, a.temperature)
         if npairs:
             record.count(train_steps=1, train_tokens=ntok)
         Rg = [sum(R[g * a.group:(g + 1) * a.group]) / a.group for g in range(a.prompts)]
@@ -350,7 +349,8 @@ def main():
                         f.write(json.dumps({'name': t['name'], 'thm': t['thm'], 'prompt': t['prompt'], 'L_true': t['n_lines'], 'gen_lines': t.get('gen_lines'),
                                             'source': t.get('source'), 'schema': t.get('schema'), **x}) + '\n')
         json.dump({'tried': dict(tried), 'accepted': dict(okc)}, open(f'{out}/alloc_{r}.json', 'w'))
-        stats['env'] = env_stats_json(env_st)
+        stats['env'] = env_stats_json(env_st)     # this round-equivalent's rollouts (reset below), as the ladder's per round
+        env_st = {}
         stats['steps'] = rs
         stats['secs'] = time.time() - t0
         json.dump(stats, open(f'{out}/round_{r}.json', 'w'), indent=1)

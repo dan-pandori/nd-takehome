@@ -8,7 +8,8 @@
 1. On-policy trajectories: replaying every rollout's recorded action ids in a fresh Env (same name base) reproduces the
    recorded state ids at every step and the rollout's ND proof.
 2. Gradient: pg_update's accumulated gradient equals autograd of -sum_i A_i log pi(rollout_i) / (P G divisor) computed
-   directly (one forward over all pairs), and is independent of the chunk size (lp_batch 1 vs 512).
+   directly (one forward over all pairs), and is independent of the chunk size (lp_batch 1 vs 512); at T = 0.8 it is
+   the gradient of log softmax(logits / T).
 3. Zero advantages with kl = 0: no pairs, parameters unchanged.
 4. Direction: a few steps with A = +1 on one rollout raise its sequence log-prob; A = -1 lowers it.
 5. KL: with the reference equal to the policy, the k3 KL is 0 and the gradient equals the kl = 0 gradient.
@@ -98,6 +99,14 @@ if not fails:
     rel = lambda g1, g2: max(float((a - b).abs().max()) for a, b in zip(g1, g2)) / max(float(b.abs().max()) for b in g2)
     check('2. gradient == autograd of -sum A_i log pi(rollout_i) / (P G divisor)', rel(grads[1], direct) < 1e-4, rel(grads[1], direct))
     check('2. gradient independent of chunk size (lp_batch 1 vs 512)', rel(grads[0], grads[1]) < 1e-4, rel(grads[0], grads[1]))
+    m7 = copy.deepcopy(model); m7.train()
+    gs.pg_update(m7, None, tok, rolls, adv, NoStep(m7), D, 0.0, 512, temperature=0.8)
+    g7 = [q.grad.clone() if q.grad is not None else torch.zeros_like(q) for q in m7.parameters()]
+    m8 = copy.deepcopy(model); m8.train(); m8.zero_grad()
+    (-(w * gs.token_logprobs(m8, x, mk, 0.8).sum(1)).sum() / D).backward()
+    g8 = [q.grad.clone() for q in m8.parameters()]
+    check('2. at T = 0.8 the gradient is of log softmax(logits / T) (the sampling distribution)', rel(g7, g8) < 1e-4 and rel(g7, grads[1]) > 1e-3,
+          (rel(g7, g8), rel(g7, grads[1])))
     # 3. zero advantages
     m4 = copy.deepcopy(model); before = [q.clone() for q in m4.parameters()]
     opt = torch.optim.AdamW(m4.parameters(), lr=1e-2)

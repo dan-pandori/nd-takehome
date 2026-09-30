@@ -8,8 +8,11 @@ Every function takes one group -- the G rollouts of one theorem from the same st
   default   A_i = R_i - mean(R)                                                   (grpo.py:117, run 4)
   unlikely  r_i = R_i (1 - beta_rank (G - rank_i) / G), A_i = r_i - mean(r)       He et al. 2506.02355v2 §4.1
             rank_i = 0-based rank of rollout i among the G by sequence log-prob under the sampling policy, most likely
-            first (so the most likely correct proof keeps 1 - beta_rank, the least likely 1 - beta_rank / G).  Groups
-            whose *unperturbed* advantage is zero (all fail / all succeed) stay at zero, as in the paper.
+            first (so the most likely correct proof keeps 1 - beta_rank, the least likely 1 - beta_rank / G); ranks are
+            over all G rollouts, as the formula's normalisation by G implies (failures stay at 0 whatever their rank).
+            Groups whose *unperturbed* advantage is zero (all fail / all succeed) stay at zero, as in the paper
+            (nd-rl lit note he2025-rewarding-unlikely: "samples with zero advantage before the perturbation are still
+            skipped").
   passk     Chen et al. 2508.10751v1 §2.4, analytic: with c = #correct, n = G,
               Rbar = 1 - C(n-c, k) / C(n, k)                        (expected pass@k of a random k-subset)
               A_pos = 1 - Rbar,  A_neg = 1 - Rbar - C(n-c-1, k-1) / C(n-1, k-1)

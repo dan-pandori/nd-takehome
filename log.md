@@ -806,3 +806,29 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 00:54 pod cr2 (A40, $0.49/h), `pod/cr/gpu_job3.sh`: fast_train per-step counting and a 2-round `grpo.py`
   (targets `data/lj/heldout200.jsonl`, k 8, eval_k 4): 6 / 6 new checks equal (`pod/cr/analyze.py`). GRPO's outputs
   (written by grpo.py to `artifacts/cr_grpo/`) copied to `artifacts/compute-record/grpo/`. Pod deleted (0.05 h, $0.03).
+
+# log — grpo-state (GRPO in the proof-state environment; code phase)
+
+## 2026-09-30
+- 02:10 run started (executor). Read `grpo.py`, `state_sample.py`, `state_ladder_ei.py`, `state_train.py`, the nd-rl
+  proposals (after-state-env item 3, literature shortlist #3) and the lit notes on He et al., Chen et al., PKPO.
+  A subagent collected the SN-cap12 / support-curves / `transfer_long2` / NOISE_FLOOR facts from the unmerged branches.
+  Only **four** SN-cap12 Stage-1 seeds exist (s0–s3); the brief's 6 seeds need two new Stage-1 trainings.
+- 02:14 `grpo_adv.py` (4 variants behind `--adv`) + `tests/test_grpo_adv.py`; one of my own test lines was wrong
+  (compared A_neg with 0), fixed. The pass@k advantage is checked against brute force over all k-subsets for
+  n ∈ {4, 8}, every k and c; k = 1 equals the default.
+- 02:16 `grpo_state.py`: new file, `state_sample.py` untouched (search-expert overlap). `env_rollouts` is
+  `env_generate`'s loop keeping each rollout's (state ids, action ids); the loss uses exactly those ids.
+  `tests/test_grpo_state.py` added to `ci/run_ci.sh`. No CPU torch on the VPS (disk 82 %), so CPU tests run in
+  GitHub Actions on `ci-grpo-state`. First CI run green but the tiny model never produced an accepted proof, so the
+  reward path was unexercised; trained it longer (400 steps) and required found proofs and nonzero-advantage updates
+  in every variant's smoke run. CI green (run on the latest `ci-grpo-state` push).
+- 02:17 **pre-registration committed** (`c21af4c`, before any pod). Budget registered (`podbudget grpo-state --set 6 3`).
+- 02:21 A40 out of stock; pod `gs-smoke` RTX 3090 secure, $0.50/h billed. GPU smoke `pod/gs/smoke.sh` (SN-cap12 s0,
+  pre-registered settings, `--no_eval`): all four variants run; ≈ 19.5 s / update alone, peak 8.6 GB; two concurrent
+  jobs (`pod/gs/conc.sh`) 26.5 s / update each → 1.47× throughput. Base reward ≈ 0.46 and ≈ 0.6 of groups mixed at
+  the start — above my pre-registered E5 (0.10–0.35); stated in Addendum 1, E5 not edited.
+- 02:36 pulled `artifacts/grpo_state/`, `artifacts/grpo-state/registry/`, `ckpts/grpo_state/` (57 files, md5 of the
+  listing equal to the pod's), uploaded, pod deleted (0.23 h, $0.11).
+- 02:45 Addendum 1 (timings, costed plan: full design ≈ $37–43 vs the brief's $10–20; Plans B/C) and a
+  `QUESTIONS.md` entry (default: Plan B). `publish_artifacts.py grpo-state` for the bulk files (30).
