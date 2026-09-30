@@ -220,3 +220,8 @@ Brief: nd-rl `docs/proposals/orchestration` run brief `grpo-state`. Policy: AGEN
 - Experiment not run (code phase): costed at ≈ $37–43 for the brief's 6 seeds (only s0–s3 exist); question in `QUESTIONS.md`, default Plan B (4 seeds, ≈ $24). Deliverables: `run_grpo_state.md`, `numbers.md` § grpo-state, `log.md`, bucket `hf://buckets/dan-pandori/nd-rl/grpo-state/`.
 
 GRPO-STATE DONE 2026-09-30T02:51:03Z
+
+## textbook72 (executor, started 2026-09-30 14:48 UTC)
+
+- Proof-state models (SN-cap12 T1/frozen s0–s3, SN-v2 cap-6 T1/frozen s0/s1) on the group's 72 textbook problems at
+  pass@256, T 0.8, Lean alone. Budget $3 / 6 pod-h. Pre-registration `preregistration/textbook72.md`.
