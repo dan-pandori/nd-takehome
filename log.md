@@ -839,3 +839,9 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   84 vs A 317 / 246 / 223 / 207 (s0), B 102–51 vs A 273–208 (s1). Pre-registered H1 (B ≥ 2× A) is failing at the expert
   level. Truncate-and-resume with 23–29 % of its budget beats its sampling pair: C 156 / 119 / 109 vs A2 102 / 60 / 50
   (s0), C 137 / 87 / 70 vs A2 70 / 64 / 48 (s1).
+- 05:25 first read-out (s1, the 91): A 23 / 91, B 21 / 91. For reference (inherited, long-pool-2 read, max_steps 48):
+  SN-cap12 T1 s1 (state-cap12's ladder: up to 4 random proofs per target, no step filter) solves 59 / 91. Added a
+  **secondary, not pre-registered** read: state-cap12's T1 s0–s3 final checkpoints re-read at this run's exact
+  read-out settings (`pod/sx/t1reads.sh`, ≈ 1.5 pod-h), so A (shortest-proof selection) can be compared with the
+  all-successes rule on the same seeds and read. It is the brief's optional arm A′, using existing ladders; it differs
+  from A also in the step filter (a sampling re-draw only) and the per-round evals (no effect on training).
