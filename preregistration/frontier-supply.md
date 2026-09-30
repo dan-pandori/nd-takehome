@@ -89,3 +89,15 @@ EI protocol = state-cap12's `sn_seed.sh` ladder: `state_ladder_ei.py`, 8 rounds,
 $20, 40 pod-hours. 10 new ladders (6 S, 2 C, 2 C′), 2 Stage-1 seeds, ≈ 22 read-outs. Stop and debug if the first S
 ladder keeps 0 candidates in rounds 1–2. At 80 % of budget: finish running ladders, drop C′ s1 before any S seed.
 Priority if cut: S s0–s5 and C s4–s5 > C′ s0 > C′ s1.
+
+## Deviation 2026-09-30 02:12 UTC (before any pod) — primary quantity, on Dan's suggestion
+
+Dan (02:11, via the orchestrator): the 91 have no fall-off, so "the two bins nearest the frontier" do not exist; use
+the quantity shared with `search-expert`. **Primary** is now, per seed, theorems solved (≥ 1 Lean-accepted proof in
+256) on the 91 (`transfer_long2` + calib) **plus rr600 `L_true` 15–16 (200)**: 291 theorems. S vs C paired per seed
+(IQM, stratified-bootstrap 95 % CI, paired MDD) and per theorem (per-theorem flips S-only / C-only, compared with the
+C vs C′ flips and the reviewer's 6–11 of 70 between identical reads). **Secondary:** exact-17 (61), ≥ 18 (30),
+rr600 13–14 (200). Provisional sd_d for the new primary: 16 (C's between-seed sd on the 91 scaled by 291/91 in
+variance, rounded up) → MDD ≈ 23; replaced by the C vs C′ spread once measured. Forecast unchanged in kind:
+S − C = +8 (80 % interval −8 … +24), inside the MDD. The read-out file `data/fsup/rr600_13_16.jsonl` already
+contains 15–16.

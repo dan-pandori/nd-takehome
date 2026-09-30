@@ -806,3 +806,13 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 00:54 pod cr2 (A40, $0.49/h), `pod/cr/gpu_job3.sh`: fast_train per-step counting and a 2-round `grpo.py`
   (targets `data/lj/heldout200.jsonl`, k 8, eval_k 4): 6 / 6 new checks equal (`pod/cr/analyze.py`). GRPO's outputs
   (written by grpo.py to `artifacts/cr_grpo/`) copied to `artifacts/compute-record/grpo/`. Pod deleted (0.05 h, $0.03).
+
+## frontier-supply
+
+- 2026-09-30 02:00 UTC  start. Pre-registration bbeca3f5 (02:06), code 01e9df5a. Namespace `fsup` (`pod/fs`, `artifacts/fs` belong to fast-stage1; an accidental overwrite of tracked `pod/fs/*` was restored from HEAD before any commit).
+- 2026-09-30 02:11 UTC  **Message from Dan (via orchestrator):** long-pool-2 finished; the 91-theorem pool has no fall-off
+  (SN-cap12 T1 solves 34 / 59 / 58 / 61), so the brief's "two bins nearest the control's frontier" do not exist.
+  Suggested primary, shared with search-expert: per seed, theorems solved (≥ 1 Lean-accepted proof in 256) on the 91
+  plus rr600 at `L_true` 15–16; arms paired per theorem and per seed; exact-17 and ≥ 18 as secondaries; reviewer's
+  per-theorem flip rate between identical reads 6–11 of 70. **Adopted** as a dated deviation in the pre-registration
+  (before any pod).
