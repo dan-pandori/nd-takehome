@@ -1,0 +1,171 @@
+{
+ "round": 1,
+ "k": 8,
+ "step": 3,
+ "samples": 1536,
+ "group": 8,
+ "prompts_per_step": 64,
+ "targets_cum": {
+  "n": 200,
+  "solved": 182,
+  "rate": 0.91,
+  "ci": [
+   0.8622332538615105,
+   0.9423130212854665
+  ],
+  "by_len": {
+   "2": {
+    "solved": 182,
+    "n": 200,
+    "rate": 0.91,
+    "ci": [
+     0.8622332538615105,
+     0.9423130212854665
+    ]
+   }
+  },
+  "written_hist": {
+   "2": 182,
+   "3": 1
+  },
+  "pruned_hist": {
+   "2": 182,
+   "3": 1
+  },
+  "frontier_written": 2,
+  "frontier_pruned": 2,
+  "reasons": {}
+ },
+ "transfer_cum": {
+  "n": 50,
+  "solved": 0,
+  "rate": 0.0,
+  "ci": [
+   0.0,
+   0.07135003417431873
+  ],
+  "by_len": {
+   "7": {
+    "solved": 0,
+    "n": 50,
+    "rate": 0.0,
+    "ci": [
+     0.0,
+     0.07135003417431873
+    ]
+   }
+  },
+  "written_hist": {},
+  "pruned_hist": {},
+  "frontier_written": 0,
+  "frontier_pruned": 0,
+  "reasons": {}
+ },
+ "transfer_greedy": {
+  "n": 50,
+  "solved": 0,
+  "rate": 0.0,
+  "ci": [
+   0.0,
+   0.07135003417431873
+  ],
+  "by_len": {
+   "7": {
+    "solved": 0,
+    "n": 50,
+    "rate": 0.0,
+    "ci": [
+     0.0,
+     0.07135003417431873
+    ]
+   }
+  },
+  "written_hist": {},
+  "pruned_hist": {},
+  "frontier_written": 0,
+  "frontier_pruned": 0,
+  "reasons": {
+   "lean rejected": 40,
+   "lean_seq parse: formula": 6,
+   "lean_seq parse: expected )": 2,
+   "lean_seq parse: unbound": 2
+  }
+ },
+ "heldout_greedy": {
+  "n": 200,
+  "solved": 0,
+  "rate": 0.0,
+  "ci": [
+   0.0,
+   0.018846005918320894
+  ],
+  "by_len": {
+   "7": {
+    "solved": 0,
+    "n": 166,
+    "rate": 0.0,
+    "ci": [
+     1.734723475976807e-18,
+     0.022618722386034983
+    ]
+   },
+   "8": {
+    "solved": 0,
+    "n": 34,
+    "rate": 0.0,
+    "ci": [
+     0.0,
+     0.10151790621961015
+    ]
+   }
+  },
+  "written_hist": {},
+  "pruned_hist": {},
+  "frontier_written": 0,
+  "frontier_pruned": 0,
+  "reasons": {
+   "lean rejected": 138,
+   "lean_seq parse: expected )": 23,
+   "lean_seq parse: formula": 19,
+   "lean_seq parse: unbound": 16,
+   "lean_seq parse: expected :=": 2,
+   "lean_seq parse: expected (": 1,
+   "lean_seq parse: trailing tokens": 1
+  }
+ },
+ "targets_round": {
+  "rate": 0.935546875,
+  "reasons": {}
+ },
+ "transfer_round": {
+  "rate": null
+ },
+ "frac_groups_with_variance_mean": 0.036458333333333336,
+ "steps": [
+  {
+   "step": 1,
+   "mean_reward": 0.939453125,
+   "frac_groups_with_variance": 0.078125,
+   "loss": -4.531944068730809e-05,
+   "grad_norm": 0.014107494615018368,
+   "samples": 512
+  },
+  {
+   "step": 2,
+   "mean_reward": 0.896484375,
+   "frac_groups_with_variance": 0.015625,
+   "loss": 3.418026608414948e-06,
+   "grad_norm": 0.006643843371421099,
+   "samples": 1024
+  },
+  {
+   "step": 3,
+   "mean_reward": 0.970703125,
+   "frac_groups_with_variance": 0.015625,
+   "loss": 5.750475338572869e-06,
+   "grad_norm": 0.0037731952033936977,
+   "samples": 1536
+  }
+ ],
+ "secs": 12.685426950454712
+}

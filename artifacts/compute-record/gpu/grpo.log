@@ -1,0 +1,63 @@
+200 targets, budget 3200 samples = 6 steps of 512; round boundaries at steps [3, 6]
+uploaded ckpts/cr_grpo_r1.pt -> hf://buckets/dan-pandori/nd-rl/compute-record/ckpts/cr_grpo_r1.pt (md5 0578330f40eec3e0353f0e42f4365bb8, 3.2s)
+[lean_gate] 200 samples, parse-fail 50 (no-eos 2, 1.000 %), distinct 148: ok 0, rej 148 (filter 148, prefilter=on); lean on 0 texts in 0 procs, 0.0s proc, exposed 0.0s, tail 0.0s, 7 workers
+[lean_gate] WARNING: 1.00 % of samples hit max_new (policy: raise max_new above 0.1 %)
+[lean_gate] 50 samples, parse-fail 10 (no-eos 0, 0.000 %), distinct 40: ok 0, rej 40 (filter 40, prefilter=on); lean on 0 texts in 0 procs, 0.0s proc, exposed 0.0s, tail 0.0s, 7 workers
+[lean_gate] 200 samples, parse-fail 62 (no-eos 0, 0.000 %), distinct 138: ok 0, rej 138 (filter 138, prefilter=on); lean on 0 texts in 0 procs, 0.0s proc, exposed 0.0s, tail 0.0s, 7 workers
+[cr_grpo r1] targets (cumulative, 1536 training samples) SOLVED 182/200 = 0.910 [0.862,0.942]
+  len 2: 182/200 = 0.910 [0.862,0.942]
+  written hist {2: 182, 3: 1}
+  pruned hist {2: 182, 3: 1}
+  frontier written 2 pruned 2
+  reasons []
+[cr_grpo r1] transfer pass@4 at boundary SOLVED 0/50 = 0.000 [0.000,0.071]
+  len 7: 0/50 = 0.000 [0.000,0.071]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons []
+[cr_grpo r1] transfer greedy SOLVED 0/50 = 0.000 [0.000,0.071]
+  len 7: 0/50 = 0.000 [0.000,0.071]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 40), ('lean_seq parse: formula', 6), ('lean_seq parse: expected )', 2), ('lean_seq parse: unbound', 2)]
+[cr_grpo r1] heldout greedy SOLVED 0/200 = 0.000 [0.000,0.019]
+  len 7: 0/166 = 0.000 [0.000,0.023]
+  len 8: 0/34 = 0.000 [0.000,0.102]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 138), ('lean_seq parse: expected )', 23), ('lean_seq parse: formula', 19), ('lean_seq parse: unbound', 16), ('lean_seq parse: expected :=', 2), ('lean_seq parse: expected (', 1)]
+[cr_grpo r1] step 3 samples 1536 targets solved 182/200 transfer 0/50 heldout greedy 0.000 var-groups 0.04
+uploaded ckpts/cr_grpo_r2.pt -> hf://buckets/dan-pandori/nd-rl/compute-record/ckpts/cr_grpo_r2.pt (md5 ca4d8c06ec36168e171ec46220ba1547, 3.1s)
+[lean_gate] 200 samples, parse-fail 45 (no-eos 0, 0.000 %), distinct 148: ok 0, rej 148 (filter 148, prefilter=on); lean on 0 texts in 0 procs, 0.0s proc, exposed 0.0s, tail 0.0s, 7 workers
+[lean_gate] 50 samples, parse-fail 11 (no-eos 0, 0.000 %), distinct 39: ok 0, rej 39 (filter 39, prefilter=on); lean on 0 texts in 0 procs, 0.0s proc, exposed 0.0s, tail 0.0s, 7 workers
+[lean_gate] 200 samples, parse-fail 65 (no-eos 0, 0.000 %), distinct 135: ok 0, rej 135 (filter 135, prefilter=on); lean on 0 texts in 0 procs, 0.0s proc, exposed 0.0s, tail 0.0s, 7 workers
+[cr_grpo r2] targets (cumulative, 3072 training samples) SOLVED 191/200 = 0.955 [0.917,0.976]
+  len 2: 191/200 = 0.955 [0.917,0.976]
+  written hist {2: 191, 3: 1}
+  pruned hist {2: 191, 3: 1}
+  frontier written 2 pruned 2
+  reasons []
+[cr_grpo r2] transfer pass@4 at boundary SOLVED 0/50 = 0.000 [0.000,0.071]
+  len 7: 0/50 = 0.000 [0.000,0.071]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons []
+[cr_grpo r2] transfer greedy SOLVED 0/50 = 0.000 [0.000,0.071]
+  len 7: 0/50 = 0.000 [0.000,0.071]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 39), ('lean_seq parse: expected )', 5), ('lean_seq parse: formula', 4), ('lean_seq parse: unbound', 2)]
+[cr_grpo r2] heldout greedy SOLVED 0/200 = 0.000 [0.000,0.019]
+  len 7: 0/166 = 0.000 [0.000,0.023]
+  len 8: 0/34 = 0.000 [0.000,0.102]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 135), ('lean_seq parse: expected )', 26), ('lean_seq parse: formula', 23), ('lean_seq parse: unbound', 14), ('lean_seq parse: trailing tokens', 1), ('lean_seq parse: expected :=', 1)]
+[cr_grpo r2] step 6 samples 3072 targets solved 191/200 transfer 0/50 heldout greedy 0.000 var-groups 0.01
+DONE

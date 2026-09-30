@@ -1417,6 +1417,9 @@ by `python3 pod/cr/analyze.py` → `artifacts/compute-record/gpu/analysis.json`.
 | EI round (`ladder`) `lean_checks` | 189 | 189 | `gpu/ladder_gate.jsonl` (`lean_texts`) |
 | 2-round EI (`ladder2`) `lean_checks` | 9,637 | 9,637 | `gpu/ladder2_gate.jsonl` |
 | 2-round EI fine-tune `train_steps` (child train.py) | 600 | 600 | `--ft_steps 300` × 2 |
+| fast_train counting per step (part 3, after review) `train_tokens` / `train_steps` | 37,560,900 / 600 | 37,560,900 / 600 | `gpu/expect.json`; `--steps 600` |
+| `grpo.py` sample-phase `attempts`, rounds 1 / 2 | 1,536 / 1,536 | 1,536 / 1,536 | `grpo/round_<r>.json` (3 steps × 64 prompts × 8) |
+| `grpo.py` `train_steps` (updates only), rounds 1 / 2 | 3 / 1 | 3 / 1 | `grpo/round_<r>.json` (steps with grad_norm ≠ 0) |
 | `ND_COMPUTE=0` runs: rows written | 0 | 0 | registry |
 
 | job | own wall-clock (s) | Σ `gpu_seconds` (s) | ratio | processes | source |
@@ -1425,6 +1428,8 @@ by `python3 pod/cr/analyze.py` → `artifacts/compute-record/gpu/analysis.json`.
 | legacy train, 600 steps (clock from `save_config`), ×2 | 129.28 / 129.15 | 126.02 / 125.83 | 0.975 / 0.974 | 1 | same |
 | fast train, 600 steps (clock from exec) | 59.26 | 56.94 | 0.961 | 1 | same |
 | 2-round EI, `ladder_ei.py` (clock from exec) | 79.88 | 75.04 | 0.939 | 3 | same |
+| fast train, 600 steps, per-step counting (part 3) | 64.32 | 61.45 | 0.955 | 1 | same |
+| 2-round GRPO, 6 steps (part 3) | 27.47 | 25.26 | 0.920 | 1 | same |
 
 Overhead: `train.py`'s per-step counter costs 49.7 µs at bs 500 (`gpu/expect.json`) against a 201.7 ms legacy step
 on the A40: 0.025 %. Legacy runs, recording off / on: 121 s / 121 s each (log's integer seconds). `fast_train.py`
@@ -1432,4 +1437,4 @@ counts once at the end (no per-step cost); the sampler adds one `declen.sum()` p
 11.24 GB (batch 4,096, max_new 288); 56 of 4,000 samples (1.4 %) hit max_new (a 6-min model; not a reported result).
 
 Per-arm compute table of this run: `artifacts/compute-record/compute_table.tsv` (`registry_merge.py --compute --by
-arm,seed,round,phase`). Pod: 0.36 h, $0.18. Bucket: `hf://buckets/dan-pandori/nd-rl/compute-record/`.
+arm,seed,round,phase`). Pods: cr1 0.36 h + cr2 0.05 h, A40 at $0.49/h billed: $0.21. Bucket: `hf://buckets/dan-pandori/nd-rl/compute-record/`.

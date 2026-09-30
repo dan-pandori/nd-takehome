@@ -1,0 +1,170 @@
+{
+ "round": 2,
+ "k": 8,
+ "step": 6,
+ "samples": 3072,
+ "group": 8,
+ "prompts_per_step": 64,
+ "targets_cum": {
+  "n": 200,
+  "solved": 191,
+  "rate": 0.955,
+  "ci": [
+   0.9167024063390322,
+   0.9761477282752958
+  ],
+  "by_len": {
+   "2": {
+    "solved": 191,
+    "n": 200,
+    "rate": 0.955,
+    "ci": [
+     0.9167024063390322,
+     0.9761477282752958
+    ]
+   }
+  },
+  "written_hist": {
+   "2": 191,
+   "3": 1
+  },
+  "pruned_hist": {
+   "2": 191,
+   "3": 1
+  },
+  "frontier_written": 2,
+  "frontier_pruned": 2,
+  "reasons": {}
+ },
+ "transfer_cum": {
+  "n": 50,
+  "solved": 0,
+  "rate": 0.0,
+  "ci": [
+   0.0,
+   0.07135003417431873
+  ],
+  "by_len": {
+   "7": {
+    "solved": 0,
+    "n": 50,
+    "rate": 0.0,
+    "ci": [
+     0.0,
+     0.07135003417431873
+    ]
+   }
+  },
+  "written_hist": {},
+  "pruned_hist": {},
+  "frontier_written": 0,
+  "frontier_pruned": 0,
+  "reasons": {}
+ },
+ "transfer_greedy": {
+  "n": 50,
+  "solved": 0,
+  "rate": 0.0,
+  "ci": [
+   0.0,
+   0.07135003417431873
+  ],
+  "by_len": {
+   "7": {
+    "solved": 0,
+    "n": 50,
+    "rate": 0.0,
+    "ci": [
+     0.0,
+     0.07135003417431873
+    ]
+   }
+  },
+  "written_hist": {},
+  "pruned_hist": {},
+  "frontier_written": 0,
+  "frontier_pruned": 0,
+  "reasons": {
+   "lean rejected": 39,
+   "lean_seq parse: expected )": 5,
+   "lean_seq parse: formula": 4,
+   "lean_seq parse: unbound": 2
+  }
+ },
+ "heldout_greedy": {
+  "n": 200,
+  "solved": 0,
+  "rate": 0.0,
+  "ci": [
+   0.0,
+   0.018846005918320894
+  ],
+  "by_len": {
+   "7": {
+    "solved": 0,
+    "n": 166,
+    "rate": 0.0,
+    "ci": [
+     1.734723475976807e-18,
+     0.022618722386034983
+    ]
+   },
+   "8": {
+    "solved": 0,
+    "n": 34,
+    "rate": 0.0,
+    "ci": [
+     0.0,
+     0.10151790621961015
+    ]
+   }
+  },
+  "written_hist": {},
+  "pruned_hist": {},
+  "frontier_written": 0,
+  "frontier_pruned": 0,
+  "reasons": {
+   "lean rejected": 135,
+   "lean_seq parse: expected )": 26,
+   "lean_seq parse: formula": 23,
+   "lean_seq parse: unbound": 14,
+   "lean_seq parse: trailing tokens": 1,
+   "lean_seq parse: expected :=": 1
+  }
+ },
+ "targets_round": {
+  "rate": 0.9544270833333334,
+  "reasons": {}
+ },
+ "transfer_round": {
+  "rate": null
+ },
+ "frac_groups_with_variance_mean": 0.005208333333333333,
+ "steps": [
+  {
+   "step": 4,
+   "mean_reward": 0.96875,
+   "frac_groups_with_variance": 0.0,
+   "loss": 0.0,
+   "grad_norm": 0.0,
+   "samples": 2048
+  },
+  {
+   "step": 5,
+   "mean_reward": 0.96875,
+   "frac_groups_with_variance": 0.0,
+   "loss": 0.0,
+   "grad_norm": 0.0,
+   "samples": 2560
+  },
+  {
+   "step": 6,
+   "mean_reward": 0.92578125,
+   "frac_groups_with_variance": 0.015625,
+   "loss": -2.044036364168278e-06,
+   "grad_norm": 0.009034289047122002,
+   "samples": 3072
+  }
+ ],
+ "secs": 21.088397979736328
+}

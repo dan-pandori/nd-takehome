@@ -284,6 +284,74 @@
    "n_rows": 0,
    "phases": [],
    "ratio": null
+  },
+  "train_fast_perstep": {
+   "wall_s": 64.32,
+   "gpu_seconds": 61.45,
+   "cpu_seconds": 0,
+   "train_steps": 600,
+   "train_tokens": 37560900,
+   "gen_tokens": 0,
+   "attempts": 0,
+   "lean_checks": 0,
+   "rc": 0,
+   "gpu": [
+    "NVIDIA A40"
+   ],
+   "n_rows": 3,
+   "phases": [
+    [
+     "job",
+     null
+    ]
+   ],
+   "ratio": 0.9553
+  },
+  "grpo": {
+   "wall_s": 27.47,
+   "gpu_seconds": 25.26,
+   "cpu_seconds": 0,
+   "train_steps": 4,
+   "train_tokens": 5586,
+   "gen_tokens": 279295,
+   "attempts": 3972,
+   "lean_checks": 211,
+   "rc": 0,
+   "gpu": [
+    "NVIDIA A40"
+   ],
+   "n_rows": 21,
+   "phases": [
+    [
+     "eval",
+     1
+    ],
+    [
+     "eval",
+     2
+    ],
+    [
+     "job",
+     null
+    ],
+    [
+     "sample",
+     1
+    ],
+    [
+     "sample",
+     2
+    ],
+    [
+     "update",
+     1
+    ],
+    [
+     "update",
+     2
+    ]
+   ],
+   "ratio": 0.9196
   }
  },
  "checks": {
@@ -355,6 +423,36 @@
   "train_fast_short tokens = 100 epochs": {
    "counter": 37560900,
    "independent": 37560900,
+   "equal": true
+  },
+  "train_fast_perstep tokens = 100 epochs": {
+   "counter": 37560900,
+   "independent": 37560900,
+   "equal": true
+  },
+  "train_fast_perstep steps": {
+   "counter": 600,
+   "independent": 600,
+   "equal": true
+  },
+  "grpo round 1 sample attempts = steps x 64 x 8": {
+   "counter": 1536,
+   "independent": 1536,
+   "equal": true
+  },
+  "grpo round 1 train_steps = steps with an update": {
+   "counter": 3,
+   "independent": 3,
+   "equal": true
+  },
+  "grpo round 2 sample attempts = steps x 64 x 8": {
+   "counter": 1536,
+   "independent": 1536,
+   "equal": true
+  },
+  "grpo round 2 train_steps = steps with an update": {
+   "counter": 1,
+   "independent": 1,
    "equal": true
   }
  },

@@ -796,3 +796,13 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   code was 4c34eb85 (part 1) and 9f970a9f (part 2; record.py as committed, rsynced just before the commit).
 - 00:41 pulled `artifacts/compute-record/` (pod ⊆ local), pod deleted (0.36 h, $0.18). Bulk files published
   (`publish_artifacts.py`, 29 files).
+- 00:45 GitHub Actions on `ci-compute-record` (f48159a4): green, run 36651698262, all 13 compute checks PASS in its log.
+- 00:47 independent review (subagent, read-only): no double counting, stack/clock logic correct; three robustness
+  findings, all fixed: a CUDA error at exit could lose open phase rows (`_cuda_sync` / `_device` now never raise); every
+  phase close uploaded the row file (now only the process block syncs, other rows follow the 120 s rule and the final
+  sync); `fast_train` counted at the end only (now per step, from the CPU `tot`). My own slip while fixing: `run()`'s
+  local `import record` would have made the per-step call an UnboundLocalError; removed (an AST scan of all
+  instrumented files finds no other use-before-local-import). CI cannot run the CUDA fast path, so:
+- 00:54 pod cr2 (A40, $0.49/h), `pod/cr/gpu_job3.sh`: fast_train per-step counting and a 2-round `grpo.py`
+  (targets `data/lj/heldout200.jsonl`, k 8, eval_k 4): 6 / 6 new checks equal (`pod/cr/analyze.py`). GRPO's outputs
+  (written by grpo.py to `artifacts/cr_grpo/`) copied to `artifacts/compute-record/grpo/`. Pod deleted (0.05 h, $0.03).

@@ -50,6 +50,16 @@ if 'ladder2' in J:
     ck['ladder2 train_steps = 2 rounds x 300 fine-tune steps'] = (J['ladder2']['train_steps'], 600)
     ck['train_fast_short steps'] = (J['train_fast_short']['train_steps'], 600)
     ck['train_fast_short tokens = 100 epochs'] = (J['train_fast_short']['train_tokens'], ex['legacy_600_expected'])
+if 'train_fast_perstep' in J:     # part 3, after the review fixes: fast_train counts per step; grpo phases
+    ck['train_fast_perstep tokens = 100 epochs'] = (J['train_fast_perstep']['train_tokens'], ex['legacy_600_expected'])
+    ck['train_fast_perstep steps'] = (J['train_fast_perstep']['train_steps'], 600)
+    gr = [r for r in comp if r['arm'] == 'cr_grpo']
+    for rnd in (1, 2):
+        st = json.load(open(os.path.join(D, 'grpo', f'round_{rnd}.json')))['steps']
+        att = sum(r['value'] for r in gr if r['metric'] == 'attempts' and r['labels']['phase'] == 'sample' and r['labels'].get('round') == rnd)
+        ck[f'grpo round {rnd} sample attempts = steps x 64 x 8'] = (att, 512 * len(st))
+        ts = sum(r['value'] for r in gr if r['metric'] == 'train_steps' and r['labels'].get('round') == rnd)
+        ck[f'grpo round {rnd} train_steps = steps with an update'] = (ts, sum(1 for x in st if x['grad_norm'] != 0))
 out['checks'] = {k: {'counter': a, 'independent': b, 'equal': a == b} for k, (a, b) in ck.items()}
 print('\ncheck\tcounter\tindependent\tequal')
 for k, v in out['checks'].items():
