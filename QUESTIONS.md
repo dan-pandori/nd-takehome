@@ -102,3 +102,13 @@
   them in a plain clone, they would have to be tracked again, and the 5 MB guard would need an allowlist entry.
   Default if unanswered: they stay out of git, and `CONTRIBUTING.md` says how to fetch them.
   - **Answer (Dan, 2026-09-30):** keep them out of git. The bucket and the manifest are fine.
+
+## 2026-09-30 — grpo-state (code phase): the experiment costs more than the brief's ≈ $10–20
+
+The GPU smoke (RTX 3090) puts one GRPO ladder in the state environment at ≈ 4.4 h alone, ≈ 3 pod-h effective with two
+jobs per card. The brief's full design (EI + 3 GRPO arms × 6 seeds on SN-cap12, + support-curves read-out) costs
+**≈ $37 (≈ $43 with margin)**, mostly the 18 GRPO ladders; SN-cap12 has only s0–s3, so 6 seeds also means training
+s4, s5. Costed alternatives in `preregistration/grpo-state.md` Addendum 1: Plan B (s0–s3, 3 GRPO arms, ≈ $24),
+Plan C (s0–s3, GRPO default + pass@4, ≈ $16).
+**Default if unanswered:** the experiment run uses **Plan B** (4 seeds, all three GRPO arms, EI inherited from
+state-cap12), and first measures s / update on a 16 GB card, moving to it if that halves the cost.

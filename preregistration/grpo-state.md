@@ -138,3 +138,47 @@ resolved", not as a finding. Report per-seed values, and the IQM with a stratifi
 ## 9. Costed pod plan
 
 *Filled in from the code phase's GPU smoke (addendum below).*
+
+## Addendum 1 (2026-09-30 02:45 UTC, after the GPU smoke; § 1–8 unchanged except the support deepening depth, last paragraph)
+
+### What the smoke measured
+Model: SN-cap12 Stage-1 s0 (`stage1_SN12_s0.pt`, 3,216,384 params, `lean_staten`, from scratch on `train_k12`).
+One RTX 3090 (24 GB, billed $0.50/h, cgroup quota ≈ 31 CPUs), `grpo_state.py` at the pre-registered settings
+(256 × G 8, decode batch 2,048, lr 3e-5, no KL), `--no_eval`. Sources: `artifacts/grpo_state/smoke_*/steps.jsonl`,
+`artifacts/grpo_state/logs/`, compute rows `artifacts/grpo-state/registry/` (table: `python3 gs_compute.py
+artifacts/grpo-state/registry`).
+
+| run | updates | s / update (sampling + Lean, update) | peak alloc | mean reward | groups with variance | groups with A ≠ 0 |
+|---|---|---|---|---|---|---|
+| default, alone | 8 | 18.6 (16.0, 2.6) | 8.60 GB | 0.465 | 0.565 | 0.565 |
+| unlikely, alone | 4 | 19.8 (17.0, 2.8) | 8.05 GB | 0.462 | 0.591 | 0.591 |
+| pass@4, alone | 4 | 19.2 (17.5, 1.7) | 8.15 GB | 0.463 | 0.606 | 0.320 |
+| distinct, alone | 4 | 20.7 (17.6, 3.1) | 8.09 GB | 0.463 | 0.601 | 0.664 |
+| default + pass@4, **two jobs on one card** | 6 each | 26.5 / 26.4 | 8.92 / 8.61 GB | 0.456 / 0.441 | 0.573 / 0.608 | — |
+
+Two jobs per card give 2 × 19.5 / 26.5 ≈ **1.47×** throughput. Per update ≈ 1.1 M training tokens (default),
+≈ 0.65 M (pass@4, which zeroes groups where every 4-subset already succeeds).
+
+**Seen after § 7 was committed, stated so the reviewer can weigh it:** the base's per-sample reward on the targets
+is ≈ 0.46 and ≈ 0.6 of groups have reward variance at the start, well above E5's pre-registered 0.10–0.35 run
+average. E5 stays as written (it is about the run average, and may still come out either way); E1's stated reason
+("most groups are all-correct") is contradicted at the start of training. E1–E4 are not changed.
+
+### Costed plan (RTX 3090 at $0.50/h billed; two jobs per card)
+| item | count | pod-h (effective) | $ |
+|---|---|---|---|
+| GRPO ladder: 561 updates × 19.5 s × 1.15 (EI rounds slowed ≈ 25 % over 8 rounds) + 8 boundary evals (80 k rollouts each, ≈ 400 s) ≈ 4.4 h alone, ÷ 1.47 | 18 (3 arms × 6 seeds) | 54 | 27.0 |
+| EI T1 ladder s4, s5 (state-cap12: 3.5–3.6 h on a 3090) | 2 | 5 | 2.5 |
+| Stage-1 s4, s5 (`state_train`, 6,000 steps; estimate) | 2 | 1.5 | 0.8 |
+| read-outs § 5.1, 5.2, 5.4 on 30 final checkpoints (≈ 125 k rollouts each) | 30 | 5 | 2.5 |
+| support deepening § 5.3 (base only, stop at first success; ≈ 250 theorems / seed) | 6 | 8.5 | 4.3 |
+| **total** (+ 15 % margin) | | **74 (85)** | **37 (43)** |
+
+This is above the brief's ≈ $10–20. Cheaper plans, in the order I would cut:
+- **Plan B (≈ $24):** seeds s0–s3 only (EI inherited, no new Stage-1). 12 GRPO ladders (36 pod-h), read-outs on 16
+  checkpoints, support on 4 seeds. MDD at n = 4: c = 2.37, so 30 on `transfer_long2` + calib, 96 on Q.
+- **Plan C (≈ $16):** Plan B with two GRPO arms (default, pass@4): Q1 plus the stronger half of Q2.
+- A 16 GB card (e.g. RTX A4000) holds one job (peak 8.9 GB); if it bills ≈ half a 3090 it cuts every plan by up to
+  ≈ 2× at one job per card. Measure s / update on it first.
+The support deepening in § 5.3 is **5,000 + 5,000** attempts (was 10,000 + 10,000), to fit the budget: a theorem at
+0 / 10,256 has base p < 2.9 × 10⁻⁴ at 95 %. Question and default in `QUESTIONS.md` (2026-09-30).

@@ -166,7 +166,7 @@ def pg_update(model, ref, tok, rolls, adv, opt, norm_div, kl, lp_batch):
             k3 = (torch.exp(d) - d - 1) * m[:, 1:]
             l = l + kl * k3.sum() / norm_div
             kl_sum += float(k3.sum()); kl_n += int(m[:, 1:].sum())
-        l.backward(); loss_t += float(l)
+        l.backward(); loss_t += float(l.detach())
     gn = float(torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0))
     opt.step()
     ntok = sum(len(p) + len(a) for _, (p, a) in flat)
