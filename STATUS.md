@@ -201,3 +201,9 @@ REPO-HYGIENE-2 DONE 2026-09-29T15:58:53Z
 
 ## compute-record (executor, started 2026-09-30T00:10Z)
 - 00:15 pre-registration `preregistration/compute-record.md` committed (34693ad2). One GPU pod planned (≤ 15 min job).
+- 00:19–00:41 pod cr1 (A40): GPU check parts 1–2; 00:54–00:57 pod cr2 (A40): part 3 after review fixes. Both deleted; 0.42 h, $0.21.
+- Pre-registered expectations met: overhead 0.025 % of a step; 20 / 20 counters equal to independent counts; gpu_seconds / wall 0.989 (6 min), 0.975 (2 min); shorter jobs lose a fixed ~2 s a process (0.92–0.96). `run_compute_record.md`, `numbers.md`.
+- Merged into `dan` (fast-forward to 03b620ed); GitHub Actions green on `dan` (run 36653017895) and on the same tip on `ci-compute-record` (36652863767). frontier-supply / search-expert get compute rows from any script that calls `record.save_config`; per-arm table: `python3 registry_merge.py --compute --q run_id=<run>`.
+- Bucket: `hf://buckets/dan-pandori/nd-rl/compute-record/` (ckpts/, artifacts/); registry rows under `registry/compute-record/`.
+
+COMPUTE-RECORD DONE 2026-09-30T01:02:02Z
