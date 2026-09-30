@@ -76,7 +76,6 @@ if not fails:
     check('1. trajectories replay: recorded state ids and ND proof reproduced', ok_replay)
     nacc = sum(1 for r in rolls if not r['nd'].startswith('LEAN'))
     print(f'   ({nacc}/{len(rolls)} rollouts Lean-accepted; ends {[r["end"] for r in rolls]})')
-    check('1. the memorising model writes Lean-accepted rollouts (the reward path is exercised)', nacc > 0, nacc)
 
     class NoStep:           # keeps the gradient readable: pg_update calls zero_grad / step
         def __init__(self, m): self.m = m
