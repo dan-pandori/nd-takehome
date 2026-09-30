@@ -1399,3 +1399,56 @@ Sources: `hf://buckets/dan-pandori/nd-rl/repo-hygiene/artifacts/repo-hygiene/` (
 | noise-floor `nf_analysis.py` after fetch vs tracked summary | byte-identical | `artifacts/repo-hygiene-2/nf_summary_refetched.json`, `fetch_nf.log` |
 
 Bucket: `hf://buckets/dan-pandori/nd-rl/repo-hygiene-2/` (`git_tip/` = the 9 moved ckpts/data files; `artifacts/repo-hygiene-2/`).
+
+## long-pool-2 (2026-09-29/30) — pool past `L_true` 17 and the frontier read-out
+
+Checker: Lean alone (`lean_judge`). Re-read settings: `lpool_reread.py`, k 256, T 0.8, seed 0; state batch 2,048 /
+`max_action` 512 / **`max_steps` 96**; whole-proof batch 1,024 / `max_new` 1,536. Models (all 4 layers, d 256, from scratch;
+sha256 prefixes `artifacts/lpool2/ckpt_sha.txt`):
+- SN-cap12 T1 s0–s3: `state-cap12/ckpts/sc12/ladder/la_T1_SN12_s{0-3}_r8.pt`, 3,216,384 params, `lean_staten`, Stage-1 on K12 (cap 12) + 8 ladder EI rounds.
+- SN-cap12 frozen s0–s3: `state-cap12/ckpts/sc12/stage1_SN12_s{0-3}.pt`, same, Stage-1 only.
+- K12 whole-proof T1 s0/s1: `state-cap12/ckpts/ladder/la_T1_K12_s{0,1}_r8.pt`, 3,214,336 params, `lean_seq`, cap-horizon K12 Stage-1 + 8 ladder rounds.
+- SN-v2 cap-6 T1 s0/s1: `state-env/ckpts/se/ladder/la_T1_SN_s{0,1}_r8.pt`, 3,216,384 params, `lean_staten`, cap-6 control set + 8 ladder rounds.
+
+- **LP2-1 Pool.** 231,809 generated rows (25 chunks; many duplicate streams) → 55 lower-bound-17 candidates → **21 distinct**, 0
+  shared renaming classes with 118 exclusion files (5,744,354 records). Strata new 21: 17 ×13, 18 ×4, ≥ 18 ×4; calibration 70:
+  17 ×48, 18 ×1, ≥ 18 ×21. Upper-bound proofs Lean-accepted 91 / 91. Source: `data/ladder/transfer_long2_summary.json`,
+  `artifacts/lpool2/assemble.log`, `artifacts/lpool2/lean_ub_*.jsonl`, stage files `data/lp2/` (bucket).
+- **LP2-2 Brief's upper-bound bins** (17–18 / 19–20 / 21–22 / 23–24 / 25+, best upper bound): 65 / 0 / 0 / 1 / 25 of 91. By
+  construction length alone: 0 / 0 / 0 / 2 / 89. Source: `data/ladder/transfer_long2*.jsonl` (`ub_bin`, `construction_pruned`).
+- **LP2-3 Read-out on all 91 (21 new + 70 calibration), solved theorems** — `artifacts/lpool2/tables.md` (§ all), rows
+  `artifacts/lpool2/rr/<ckpt>__{new,cal}.jsonl`:
+
+  | model | seed | all /91 | L = 17 /61 | L ≥ 18 /30 (exact 18 /5) | constr ≤ 28 /8 | 29–32 /19 | 33–36 /24 | ≥ 37 /40 |
+  |---|---|---:|---:|---:|---:|---:|---:|---:|
+  | SN-cap12 T1 | s0 | 34 | 25 | 9 (2) | 3 | 5 | 6 | 20 |
+  | SN-cap12 T1 | s1 | 59 | 43 | 16 (3) | 4 | 13 | 12 | 30 |
+  | SN-cap12 T1 | s2 | 58 | 38 | 20 (4) | 5 | 12 | 12 | 29 |
+  | SN-cap12 T1 | s3 | 61 | 42 | 19 (4) | 5 | 14 | 14 | 28 |
+  | SN-cap12 frozen | s0 | 11 | 9 | 2 (1) | 1 | 2 | 2 | 6 |
+  | SN-cap12 frozen | s1 | 16 | 11 | 5 (0) | 3 | 3 | 2 | 8 |
+  | SN-cap12 frozen | s2 | 21 | 17 | 4 (1) | 3 | 2 | 5 | 11 |
+  | SN-cap12 frozen | s3 | 23 | 19 | 4 (2) | 4 | 4 | 5 | 10 |
+  | K12 whole-proof T1 | s0 | 3 | 2 | 1 (0) | 1 | 1 | 1 | 0 |
+  | K12 whole-proof T1 | s1 | 2 | 1 | 1 (0) | 1 | 1 | 0 | 0 |
+  | SN-v2 cap-6 T1 | s0 | 4 | 4 | 0 (0) | 0 | 1 | 0 | 3 |
+  | SN-v2 cap-6 T1 | s1 | 0 | 0 | 0 (0) | 0 | 0 | 0 | 0 |
+
+  SN-cap12 T1, IQM over 4 seeds [stratified-bootstrap 95 %]: all 64.3 % [37.4, 67.0]; L = 17 65.6 % [41.0, 70.5]; L ≥ 18
+  56.0 % [28.0, 64.0]. Paired per-seed L17 − L≥18: +11, +17, −4, +6 pp (mean +7.5; the minimum detectable difference between strata of 61 and 30 theorems at p ≈ 0.6 is ≈ 30 pp).
+  SN-cap12 frozen: L = 17 23.0 % [14.8, 31.1]; L ≥ 18 10.0 % [4.0, 20.0].
+  `L*` on construction bins (≥ 5 solved with construction ≥ edge): ≥ 37 for all 8 SN-cap12 checkpoints, < 17 for K12 T1 and
+  SN-v2 T1. It is a statement about the construction upper bound only.
+- **LP2-4 New 21 alone** (`tables.md` § new): SN-cap12 T1 8 / 15 / 17 / 14; frozen 3 / 1 / 3 / 5; K12 T1 0 / 0; SN-v2 T1 0 / 0.
+- **LP2-5 Step cap** (SN-cap12 T1 s2 / s3, `max_steps` 96 vs 48 in state-cap12): rr600 471 / 468 (476 / 472), ≥ 17 file
+  42 / 41 (42 / 46); max steps used 89 / 86 of 96; 0 step-cap hits. Source `artifacts/lpool2/rr/T1_SN12_s*_ms96__*.json`.
+  On the 91: 1 of 17,920 samples at 96 steps (SN-cap12 T1 s3, calibration); action cap 0–0.03 %; whole-proof `max_new`
+  0.02–0.04 %. Peak memory 10.8 GB (whole-proof) – 17.2 GB (state). Source `artifacts/lpool2/caps.md`.
+- **LP2-6 Re-draw** of the calibration 70 (earlier `max_steps` 48 rows vs these): per-checkpoint totals differ by −1…+2 (T1) and −2…0
+  (frozen); per-theorem disagreement up to 13 theorems (frozen s2: 7 + 6). K12 T1 identical. `artifacts/lpool2/redraw_calib.md`.
+- **LP2-7 Literal-text Lean re-check** (`lpool2_recheck.py` + `lean_check.py --texts`, Lean 4.34.1): 292 / 292 shortest accepted
+  texts re-accepted; 72 / 72 negative controls rejected; dump-accepted sets = `solved` rows for 24 / 24 files.
+  `artifacts/lpool2/recheck/`.
+- **LP2-8 Spend.** `lp2-a` RTX A5000 $0.27/h 5.34 h $1.44; `lp2-b` RTX 4000 Ada $0.28/h 8.33 h $2.33; `lp2-c` RTX 4090 $0.74/h
+  3.41 h $2.52. **17.08 pod-hours, $6.29** of 20 h / $10 (`podbudget long-pool-2`).
+- Bucket: `hf://buckets/dan-pandori/nd-rl/long-pool-2/{data,artifacts,figures}`.

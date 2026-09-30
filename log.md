@@ -820,3 +820,9 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   1,800 CPU-s, 2 workers) on the calibration and e-chunk ≥ 18 theorems on `lp2-c` alongside; whatever finishes by the
   pod-hour cut counts.
 - 01:00 Stage F1 on `lp2-b` (10 lower-bound-18 theorems of the b/c/d chunks, 4 workers, 3,600 CPU-s): **9 exact 18**, 1 timeout (3,617 CPU-s), 517–1,519 CPU-s each. Upper-bound proofs (construction or stage E/F) of all 91 theorems Lean-accepted (Lean 4.34.1, VPS; `artifacts/lpool2/lean_ub_*.jsonl`) — re-run after the final assembly. `lp2-b` deleted after a full pull (8.33 h, $2.33).
+- 01:05 Re-read done (24 files, 00:41–01:08 on `lp2-c`, ≈ 1–3 min per checkpoint and file). Stage F2 on `lp2-c` (2 workers)
+  stopped 01:32: 1 exact 18, 2 OOM-killed (bound-18 search > 20 GB); the calibration's other ≥ 18 theorems stay unrefined.
+  `lp2-c` deleted after a full pull (3.41 h, $2.52). Total **17.08 pod-hours, $6.29**; RunPod balance $205.62.
+- 01:40 Final assembly with F results; `ub_proof` Lean re-check 91 / 91; literal-text re-check 292 / 292 accepted texts, 72 / 72
+  negative controls rejected (`lpool2_recheck.py`). Tables `artifacts/lpool2/tables.md` (`lpool2_analysis.py`), figure
+  `figures/lpool2_rate.png` (`lpool2_figure.py`), re-draw `artifacts/lpool2/redraw_calib.md`, caps `artifacts/lpool2/caps.md`.

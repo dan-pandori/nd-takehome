@@ -163,3 +163,51 @@ report per-bin rates.
 Measured on this pool (run `long-pool`, `numbers.md` LP6–LP7): textbook instances are much harder than generator theorems
 at the same `L_true`. Fourteen checkpoints solved 10 of 73 × 14 textbook reads at 11–14, while T1 models solved 1–52 % of
 generator theorems per bin. Report source-split rates in bins 11–14, where the pool mixes the two.
+
+# long-pool-2: `transfer_long2.jsonl` + `transfer_long2_calib.jsonl` — theorems with minimal length ≥ 17 (run `long-pool-2`, 2026-09-29)
+
+Built 16:35 (09-29) – 01:35 (09-30) UTC on pods `lp2-a` (RTX A5000, 7.65-CPU quota, CPU-starved), `lp2-b` (RTX 4000 Ada,
+10.2 CPUs), `lp2-c` (RTX 4090, 17.85 CPUs); CPU pods had no stock. Scripts: `pod/lpool2/label.sh` (generate + staged
+search), `pod/lpool2/minlen_cpu.py` (minlen's search, CPU-second limits, one process per theorem), `pod/lpool2/stageF.sh`,
+`pod/lpool2/retry_errors.sh`, `lpool2_assemble.py`. Raw chunks and every stage file: `hf://buckets/dan-pandori/nd-rl/long-pool-2/data/lp2/`.
+
+**Files.** `transfer_long2.jsonl` (**21** new theorems), `transfer_long2_calib.jsonl` (the **70** of `transfer_long_ge17.jsonl`
+with the same labels added), `transfer_long2_summary.json` (counts, disjointness). Read the two together (91) for any rate;
+21 alone is too few.
+
+**Source.** Long-pool's generator command (`make_coverage_sets.py gen --long`, take-home knobs), generated length 32–90, 25
+chunks, 231,809 generated rows. Chunk seeds were spaced by 1 while worker i uses seed + i, so most chunks repeated earlier
+streams: 55 candidates at ≥ 17 were only **21 distinct renaming classes**. Future chunks: space seeds by ≥ the worker count.
+
+**Labels (intervals; `L_lb` ≤ minimal ND length ≤ `L_ub`).**
+
+| stage | `minlen` bound / limit | result → label |
+|---|---|---|
+| A–D | 10 / 5 s, 12 / 30 s, 14 / 120 s, 16 / 600 s (long-pool's) | proof ≤ 16 → dropped; timeout → unknown, dropped (A 85, B 124, C 84, D 2); none → `L_lb` 17 |
+| E | 17 / 1,800 CPU-s | proof → **exact 17**; finished, none → `L_lb` 18; (0 timeouts after retrying OOM kills) |
+| F (added) | 18 / 3,600 or 1,800 CPU-s | proof → **exact 18**; not run / cut / OOM-killed → stays `L_lb` 18 |
+
+Limits in b1–d6 / early chunks are wall seconds on full cores, later ones CPU seconds (log). A bound-17 search holds 5–8 GB,
+bound 18 12–20+ GB; ≤ 3–4 concurrent per 40 GB container. `L_ub` = the stage-E/F proof when found, else the generator's
+construction length. Pruning the generator proof (dependency closure) removes nothing (`construction_pruned` = `gen_lines`
+for 91 / 91). Every `ub_proof` is **Lean-accepted** (`lean_check.py --field ub_proof`, 91 / 91; term size 10–42, median 13).
+The lower bounds hold only for `minlen`'s restricted search space, as for every ladder label (POOLS.md above). Under Lean,
+all these lengths are ND-derived.
+
+| field `stratum` | 17 | 18 | ≥ 18 (F not run / cut) | total |
+|---|---:|---:|---:|---:|
+| `transfer_long2` | 13 | 4 | 4 | 21 |
+| `transfer_long2_calib` | 48 | 1 | 21 | 70 |
+
+**The brief's upper-bound bins cannot be filled from this generator.** Construction length is 32–48 for the new 21
+(median 43) and 23–49 for the calibration 70 (median 34.5; 2 ≤ 24). By the best upper bound (stage E/F proof, else
+construction), bins 17–18 / 19–20 / 21–22 / 23–24 / 25+ hold 65 / 0 / 0 / 1 / 25 of the 91. The generator builds ≥ 17
+theorems with 15–30 redundant lines, and exact search above 18 is out of reach, so a label-by-search pool past ≈ 18 needs
+a different source.
+
+**Disjointness.** Against long-pool's 118-file manifest + `transfer_long*.jsonl` (`artifacts/lpool2/excl_manifest.txt`; 5,744,354
+records): **0 shared classes**, under `gen.canon_key` (premise order kept) and a premise-order-invariant key. The new 21 are
+also disjoint from the calibration 70.
+
+**Measured on this pool** (run long-pool-2, numbers.md § long-pool-2): SN-cap12 T1 solves 37–67 % of the 91 per seed, and
+construction length does not order difficulty for it.

@@ -1,0 +1,9 @@
+[lean_gate] 5376 samples, parse-fail 2489 (no-eos 0, 0.000 %), distinct 2784: ok 6, rej 2778 (filter 2778, prefilter=on); lean on 6 texts in 1 procs, 0.4s proc, exposed 0.6s, tail 0.4s, 16 workers
+stage1_SN12_s2.pt on transfer_long2.jsonl k=256 SOLVED 3/21 = 0.143 [0.050,0.346]
+  len 17: 2/13 = 0.154 [0.043,0.422]
+  len 18: 1/8 = 0.125 [0.022,0.471]
+  written hist {19: 1, 20: 2, 28: 1}
+  pruned hist {19: 1, 20: 2, 28: 1}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 2881), ('lean_seq parse: env: binder mismatch', 1002), ('lean_seq parse: env: unbound', 350), ('lean_seq parse: env: box on non-arrow', 303), ('lean_seq parse: env: formula', 293), ('lean_seq parse: env: Or.elim on non-or', 267)]
+{"n": 21, "solved": 3, "rate": 0.14285714285714285, "ci": [0.04980921798213492, 0.346364941492295], "written_hist": {"19": 1, "20": 2, "28": 1}, "pruned_hist": {"19": 1, "20": 2, "28": 1}, "frontier_written": 0, "frontier_pruned": 0, "reasons": {"lean rejected": 2881, "lean_seq parse: env: binder mismatch": 1002, "lean_seq parse: env: unbound": 350, "lean_seq parse: env: box on non-arrow": 303, "lean_seq parse: env: formula": 293, "lean_seq parse: env: Or.elim on non-or": 267, "lean_seq parse: env: exact goal mismatch": 174, "lean_seq parse: env: assign": 38, "lean_seq parse: env: term": 16, "lean_seq parse: env: box head": 13}, "ckpt": "ckpts/sc12/stage1_SN12_s2.pt", "in": "data/ladder/transfer_long2.jsonl", "k": 256, "temperature": 0.8, "seed": 0, "batch": 2048, "state_mode": true, "tok_mode": "lean_staten", "gen_s": 34.98200178146362, "wall_s": 34.986640214920044, "peak_mem_gb": 15.237705707550049, "n_samples": 5376, "max_action": 512, "max_steps": 96}

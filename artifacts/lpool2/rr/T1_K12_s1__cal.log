@@ -1,0 +1,9 @@
+[lean_gate] 17920 samples, parse-fail 8345 (no-eos 7, 0.039 %), distinct 8379: ok 22, rej 8357 (filter 8357, prefilter=on); lean on 22 texts in 1 procs, 4.7s proc, exposed 5.2s, tail 4.7s, 16 workers
+la_T1_K12_s1_r8.pt on transfer_long2_calib.jsonl k=256 SOLVED 2/70 = 0.029 [0.008,0.098]
+  len 17: 1/48 = 0.021 [0.004,0.109]
+  len 18: 1/22 = 0.045 [0.008,0.218]
+  written hist {19: 1, 20: 3}
+  pruned hist {19: 3, 20: 1}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 9549), ('lean_seq parse: unbound', 7693), ('lean_seq parse: name', 208), ('lean_seq parse: expected ;', 167), ('lean_seq parse: formula', 116), ('lean_seq parse: expected (', 61)]
+{"n": 70, "solved": 2, "rate": 0.02857142857142857, "ci": [0.007870446893806289, 0.09832443512391814], "written_hist": {"19": 1, "20": 3}, "pruned_hist": {"19": 3, "20": 1}, "frontier_written": 0, "frontier_pruned": 0, "reasons": {"lean rejected": 9549, "lean_seq parse: unbound": 7693, "lean_seq parse: name": 208, "lean_seq parse: expected ;": 167, "lean_seq parse: formula": 116, "lean_seq parse: expected (": 61, "lean_seq parse: exact not last": 40, "lean_seq parse: expected :=": 24, "lean_seq parse: expected )": 19, "lean_seq parse: no-eos": 7}, "ckpt": "ckpts/ladder/la_T1_K12_s1_r8.pt", "in": "data/ladder/transfer_long2_calib.jsonl", "k": 256, "temperature": 0.8, "seed": 0, "batch": 1024, "state_mode": false, "tok_mode": "lean_seq", "gen_s": 37.707711935043335, "wall_s": 37.722015619277954, "peak_mem_gb": 10.800981044769287, "n_samples": 17920, "max_new": 1536, "trunc_frac": 0.000390625, "declen_max": 1536, "sample_stats": {"steps": 8832, "rows": 17920, "rowsteps": 4844048, "prompt_len_max": 113, "chunks": 18, "stop_eos": 17913, "stop_exact": 0, "stop_goal": 0, "sample_wall_s": 32.201706647872925, "peak_alloc_gb": 10.800981044769287, "peak_reserved_gb": 11.609375}}

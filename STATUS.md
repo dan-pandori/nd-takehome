@@ -203,3 +203,4 @@ REPO-HYGIENE-2 DONE 2026-09-29T15:58:53Z
 - 16:32 pre-registration `preregistration/long-pool-2.md` committed before any pod. Pre-pod pilot: construction upper
   bounds are ≥ 23 for the ≥ 17 theorems (brief's 17–24 bins unfillable) and are not a difficulty axis for SN-cap12 T1;
   added stage E (bound 17) to split exact 17 / ≥ 18. Budget $10 / 20 h.
+- 01:45 Pool: 21 new ≥ 17 theorems (+70 calibration), strata exact 17 / exact 18 / ≥ 18; brief's construction bins unfillable. Read-out: SN-cap12 T1 41–70 % at L 17, 30–67 % at L ≥ 18, rising with construction length — no frontier up to 18; falsifier fired as predicted. Step cap closed (s2/s3 at 96: 471 / 468). 17.08 pod-h, $6.29. Write-up `run_long_pool_2.md`.

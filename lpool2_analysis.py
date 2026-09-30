@@ -5,7 +5,7 @@ file and both together.  Counts come from the per-theorem re-read rows (`solved`
   python3 lpool2_analysis.py --pool data/ladder/transfer_long2.jsonl --calib data/ladder/transfer_long2_calib.jsonl \
       --rows artifacts/lpool2/rr --calib_rows artifacts/lpool2/calib_rows --out artifacts/lpool2/tables.md
 
-Strata (`stratum`): 17 = exact 17 (stage E proof) / 18 = exact 18 (stage F proof) / >=19 = stage F finished without a proof / >=18 = stage E finished without a proof, stage F not run or cut.  --calib_rows same = the calibration rows are <stem>__cal.jsonl in --rows.  Upper-bound bins: the brief's
+Strata (`stratum`): 17 = exact 17 (stage E proof) / 18 = exact 18 (stage F proof) / >=19 = stage F finished without a proof / >=18 = stage E finished without a proof, stage F not run or cut.  --calib_rows same = the calibration rows are <stem>__cal.jsonl in --rows.  Bins: construction length (the brief's upper bound; `constr`) <=28 / 29-32 / 33-36 / 37+, and the best upper bound L_ub (stage E/F proof if found, else construction) in the brief's
 17-18 / 19-20 / 21-22 / 23-24 / 25+ and quartile-style <=28 / 29-32 / 33-36 / 37+.  L*_ub = the largest bin lower edge e
 such that >= 5 theorems with L_ub >= e are solved (a statement about the upper bound only).
 IQM + stratified-bootstrap 95 % CI over seeds for 4-seed arms (Agarwal et al. 2021; seeds resampled, 10,000 draws).
@@ -45,6 +45,8 @@ def main():
     ap.add_argument('--out', required=True); ap.add_argument('--json_out')
     a = ap.parse_args()
     pool = [json.loads(l) for l in open(a.pool)]; calib = [json.loads(l) for l in open(a.calib)]
+    for r in pool + calib:   # construction length (the brief's upper bound) in quartile-style bins
+        c = r['construction_pruned']; r['ub_qbin'] = '<=28' if c <= 28 else '29-32' if c <= 32 else '33-36' if c <= 36 else '37+'
     sets = {'new': pool, 'calib': calib, 'all': pool + calib}
     L = [f'# long-pool-2 tables (`lpool2_analysis.py`)', '',
          f'Pool {len(pool)} + calibration {len(calib)}. Solved = ≥ 1 Lean-accepted sample of 256 (T 0.8, seed 0).', '']
@@ -65,8 +67,8 @@ def main():
             res[(label, s)] = solved
     for nm, rs in sets.items():
         L += [f'## {nm} (n {len(rs)})', '',
-              '| model | seed | solved | ' + ' | '.join(f'L {x}' for x in STRATA) + ' | ' + ' | '.join(f'ub {b}' for b in Q)
-              + ' | ' + ' | '.join(f'ub {b}' for b in UB) + ' | L*_ub |',
+              '| model | seed | solved | ' + ' | '.join(f'L {x}' for x in STRATA) + ' | ' + ' | '.join(f'constr {b}' for b in Q)
+              + ' | ' + ' | '.join(f'ub {b}' for b in UB) + ' | L*_constr |',
               '|---|---|---|' + '---|' * (len(STRATA) + len(Q) + len(UB) + 1)]
         nS = collections.Counter(r['stratum'] for r in rs); nQ = collections.Counter(r['ub_qbin'] for r in rs)
         nU = collections.Counter(r['ub_bin'] for r in rs)
@@ -79,7 +81,7 @@ def main():
             ok = [r for r in rs if solved[r['name']]]
             cS = collections.Counter(r['stratum'] for r in ok); cQ = collections.Counter(r['ub_qbin'] for r in ok)
             cU = collections.Counter(r['ub_bin'] for r in ok)
-            lstar = max([e for b, e in QEDGE.items() if sum(1 for r in ok if r['L_ub'] >= e) >= 5], default=None)
+            lstar = max([e for b, e in QEDGE.items() if sum(1 for r in ok if r['construction_pruned'] >= e) >= 5], default=None)
             pct = lambda k, n: f'{k} ({100 * k / n:.0f} %)' if n else '—'
             L.append(f'| {label} | s{s} | {pct(len(ok), len(rs))} | ' + ' | '.join(pct(cS[x], nS[x]) for x in STRATA) + ' | '
                      + ' | '.join(pct(cQ[b], nQ[b]) for b in Q) + ' | ' + ' | '.join(pct(cU[b], nU[b]) for b in UB)
