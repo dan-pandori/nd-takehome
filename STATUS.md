@@ -207,3 +207,11 @@ REPO-HYGIENE-2 DONE 2026-09-29T15:58:53Z
 - Bucket: `hf://buckets/dan-pandori/nd-rl/compute-record/` (ckpts/, artifacts/); registry rows under `registry/compute-record/`.
 
 COMPUTE-RECORD DONE 2026-09-30T01:02:02Z
+
+
+# STATUS — grpo-state (GRPO in the proof-state environment, support-expanding advantages; code phase)
+
+Brief: nd-rl `docs/proposals/orchestration` run brief `grpo-state`. Policy: AGENT_POLICY.md. Run id: grpo-state. Budget $3 / 6 pod-hours (code phase only).
+
+## grpo-state
+- 2026-09-30 02:10 UTC  run started (executor). Code phase: `grpo_state.py` + advantage variants + tests; the experiment is pre-registered for later, not run.
