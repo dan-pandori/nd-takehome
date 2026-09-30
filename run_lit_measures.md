@@ -17,7 +17,7 @@ scratch). On the 7 theorems the base never reaches in 400,000 attempts, EI's bes
 - The high mode follows neither seed (permutation p: rows 0.16, columns 0.61).
 - **Re-runs at identical seeds span depth-3 0.22–0.90**, about half the grid's variance (E2.4 ✓). GPU training is not
   bit-deterministic.
-- So most of NOISE_FLOOR's depth-3 variance is chaotic training, not a seed effect. Choosing seeds cannot control it;
+- So about half of this depth-3 variance is re-run noise at fixed seeds, not a seed effect. Choosing seeds cannot control it;
   only more runs average it down.
 
 **M3 — mode shares by round** (19 EI arms, 41 seeds, 10 run families).
