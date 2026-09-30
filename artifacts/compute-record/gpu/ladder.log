@@ -1,0 +1,36 @@
+[lean_gate] 6400 samples, parse-fail 1602 (no-eos 92, 1.438 %), distinct 3924: ok 0, rej 3924 (filter 3924, prefilter=on); lean on 0 texts in 0 procs, 0.0s proc, exposed 0.1s, tail 0.0s, 7 workers
+[lean_gate] WARNING: 1.44 % of samples hit max_new (policy: raise max_new above 0.1 %)
+[cr_ladder r1] targets (this round) SOLVED 0/200 = 0.000 [0.000,0.019]
+  len 7: 0/166 = 0.000 [0.000,0.023]
+  len 8: 0/34 = 0.000 [0.000,0.102]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 4798), ('lean_seq parse: unbound', 460), ('lean_seq parse: expected )', 448), ('lean_seq parse: formula', 426), ('lean_seq parse: no-eos', 92), ('lean_seq parse: expected :=', 87)]
+[lean_gate] 1600 samples, parse-fail 412 (no-eos 22, 1.375 %), distinct 959: ok 0, rej 959 (filter 959, prefilter=on); lean on 0 texts in 0 procs, 0.0s proc, exposed 0.0s, tail 0.0s, 7 workers
+[lean_gate] WARNING: 1.38 % of samples hit max_new (policy: raise max_new above 0.1 %)
+[cr_ladder r1] transfer (this round, pass@32) SOLVED 0/50 = 0.000 [0.000,0.071]
+  len 7: 0/50 = 0.000 [0.000,0.071]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 1188), ('lean_seq parse: formula', 215), ('lean_seq parse: expected )', 93), ('lean_seq parse: unbound', 75), ('lean_seq parse: no-eos', 22), ('lean_seq parse: name', 4)]
+[lean_gate] 50 samples, parse-fail 13 (no-eos 1, 2.000 %), distinct 37: ok 0, rej 37 (filter 37, prefilter=on); lean on 0 texts in 0 procs, 0.0s proc, exposed 0.0s, tail 0.0s, 7 workers
+[lean_gate] WARNING: 2.00 % of samples hit max_new (policy: raise max_new above 0.1 %)
+[cr_ladder r1] transfer greedy SOLVED 0/50 = 0.000 [0.000,0.071]
+  len 7: 0/50 = 0.000 [0.000,0.071]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 37), ('lean_seq parse: formula', 6), ('lean_seq parse: unbound', 3), ('lean_seq parse: expected )', 2), ('lean_seq parse: no-eos', 1), ('lean_seq parse: name', 1)]
+[lean_gate] 200 samples, parse-fail 3 (no-eos 0, 0.000 %), distinct 197: ok 189, rej 8 (filter 8, prefilter=on); lean on 189 texts in 3 procs, 1.4s proc, exposed 0.5s, tail 0.5s, 7 workers
+[cr_ladder r1] heldout greedy SOLVED 189/200 = 0.945 [0.904,0.969]
+  len 2: 189/200 = 0.945 [0.904,0.969]
+  written hist {2: 188, 3: 1}
+  pruned hist {2: 188, 3: 1}
+  frontier written 2 pruned 2
+  reasons [('lean rejected', 8), ('lean_seq parse: formula', 3)]
+[cr_ladder r1] targets cumulative: solved 0/200 L*=0 ge={7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0}
+[cr_ladder r1] transfer cumulative: solved 0/50 L*=0 ge={7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0}
+no accepted proofs: skipping training this round
+=== round 1 done in 9s; new proofs 0; cum targets solved 0 L*=0; transfer L*=0

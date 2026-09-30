@@ -766,3 +766,33 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   2,054 / 2,054 manifest rows sha256-ok. Fresh non-sparse `dan` worktree 148.1 MB. `ci/install_hooks.sh` run: the
   clone's `core.hooksPath` is `ci/hooks`. Remote scratch branches `ci-rh2-green`, `ci-rh2-red6mb` deleted; their
   Actions runs remain.
+
+# log — compute-record (executor, 2026-09-30)
+
+- 00:10 pre-registration `preregistration/compute-record.md` (34693ad2), before the pod (cr1 created 00:19:26Z).
+- 00:15–00:18 `record.compute` / `count` / `phase` / `child` + process block from `save_config`; counters in `sample.py`
+  (`gen_tokens` in both decode paths, `attempts`), `state_sample.py` (`attempts`, `actions`), `train.py` (per step),
+  `fast_train.py` (at the end: one sync, no per-step cost), `state_train.py`, `grpo.py` (sample / update / eval phases,
+  updates only), `coverage.py` (`attempts`), `lean_gate.py` (`Gate.finish`, `check_sources`), `lean_check.check`;
+  `ladder_ei.py`, `state_ladder_ei.py`, `expert_iter.py` phases (4 one-line inserts each). `registry_merge.py --compute`.
+  Unit cases in `tests/test_registry.py` (VPS: pass); compute checks in `tests/test_smoke_train_sample.py`.
+- Deviation: the CPU smoke test was not run on the VPS: the disk was at 83 % (disk_watch acts at 85 %) and a CPU torch
+  install is ~1 GB. It ran on the pod with the GPU hidden (`CUDA_VISIBLE_DEVICES=`), and runs in GitHub Actions.
+- 00:19 pod cr1, A40 secure, $0.49/h billed. The template had no Lean and no `hf`: installed Lean v4.34.1 (the CI
+  version) and huggingface_hub. `pod/cr/gpu_job.sh` 00:20–00:36.
+- Deviation: the job took 16 min, not ≤ 15: the legacy-path overhead A/B (4 × 600 steps at bs 500) ran 128 s a run on
+  the A40, not the ~30 s I guessed.
+- Result 1: every counter equals its independent count (`pod/cr/analyze.py`). `gpu_seconds` / own wall-clock: 0.989
+  (6-min train), 0.975 (2-min runs), but 0.83 for the 17-s EI round: the gap was a fixed 3–4 s a process, Python
+  start-up before `save_config` plus the row upload at exit.
+- Change: the process block's clock now starts at process creation (`/proc/self/stat`), since the process holds its GPU
+  from exec. Re-checked in `pod/cr/gpu_job2.sh` (00:37–00:40): 1-min train 0.961, 80-s two-round EI job 0.939 (3
+  processes). What is left is the registry row upload at exit (~1.5–2 s a process, after the rows are written).
+- The first EI round (`targets200`) found no target proofs, so it skipped fine-tuning; part 2 used
+  `--targets data/lj/heldout200.jsonl` (solved by this model) so the fine-tune child path ran. A mechanics check only.
+- Test-script slip: part 1's `gpu_check.py expect` zeroed its benchmark counters after the block had closed, so one
+  `bench` row (200 steps, 12,496,799 tokens, CPU) is in the registry. It is not work; fixed in part 2 (`expect2`: no rows).
+- The pod's `.git_sha` was 34693ad2 (pre-registration commit) for both parts, so rows say `git_sha` 34693ad2 while the
+  code was 4c34eb85 (part 1) and 9f970a9f (part 2; record.py as committed, rsynced just before the commit).
+- 00:41 pulled `artifacts/compute-record/` (pod ⊆ local), pod deleted (0.36 h, $0.18). Bulk files published
+  (`publish_artifacts.py`, 29 files).

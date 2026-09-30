@@ -1,0 +1,394 @@
+{
+ "jobs": {
+  "train_fast": {
+   "wall_s": 376.85,
+   "gpu_seconds": 372.54,
+   "cpu_seconds": 0,
+   "train_steps": 6000,
+   "train_tokens": 375609000,
+   "gen_tokens": 0,
+   "attempts": 0,
+   "lean_checks": 0,
+   "rc": 0,
+   "gpu": [
+    "NVIDIA A40"
+   ],
+   "n_rows": 3,
+   "phases": [
+    [
+     "job",
+     null
+    ]
+   ],
+   "ratio": 0.9886
+  },
+  "legacy_off_1": {
+   "wall_s": 128.1,
+   "gpu_seconds": 0,
+   "cpu_seconds": 0,
+   "train_steps": 0,
+   "train_tokens": 0,
+   "gen_tokens": 0,
+   "attempts": 0,
+   "lean_checks": 0,
+   "rc": 0,
+   "gpu": [],
+   "n_rows": 0,
+   "phases": [],
+   "ratio": null
+  },
+  "legacy_on_1": {
+   "wall_s": 129.28,
+   "gpu_seconds": 126.02,
+   "cpu_seconds": 0,
+   "train_steps": 600,
+   "train_tokens": 37560900,
+   "gen_tokens": 0,
+   "attempts": 0,
+   "lean_checks": 0,
+   "rc": 0,
+   "gpu": [
+    "NVIDIA A40"
+   ],
+   "n_rows": 3,
+   "phases": [
+    [
+     "job",
+     null
+    ]
+   ],
+   "ratio": 0.9748
+  },
+  "legacy_off_2": {
+   "wall_s": 128.05,
+   "gpu_seconds": 0,
+   "cpu_seconds": 0,
+   "train_steps": 0,
+   "train_tokens": 0,
+   "gen_tokens": 0,
+   "attempts": 0,
+   "lean_checks": 0,
+   "rc": 0,
+   "gpu": [],
+   "n_rows": 0,
+   "phases": [],
+   "ratio": null
+  },
+  "legacy_on_2": {
+   "wall_s": 129.15,
+   "gpu_seconds": 125.83,
+   "cpu_seconds": 0,
+   "train_steps": 600,
+   "train_tokens": 37560900,
+   "gen_tokens": 0,
+   "attempts": 0,
+   "lean_checks": 0,
+   "rc": 0,
+   "gpu": [
+    "NVIDIA A40"
+   ],
+   "n_rows": 3,
+   "phases": [
+    [
+     "job",
+     null
+    ]
+   ],
+   "ratio": 0.9743
+  },
+  "sample": {
+   "wall_s": 8.04,
+   "gpu_seconds": 3.9,
+   "cpu_seconds": 0,
+   "train_steps": 0,
+   "train_tokens": 0,
+   "gen_tokens": 513325,
+   "attempts": 4000,
+   "lean_checks": 0,
+   "rc": 0,
+   "gpu": [
+    "NVIDIA A40"
+   ],
+   "n_rows": 3,
+   "phases": [
+    [
+     "sample_check",
+     null
+    ]
+   ],
+   "ratio": 0.4848
+  },
+  "ladder": {
+   "wall_s": 16.87,
+   "gpu_seconds": 14.02,
+   "cpu_seconds": 0,
+   "train_steps": 0,
+   "train_tokens": 0,
+   "gen_tokens": 1039290,
+   "attempts": 8250,
+   "lean_checks": 189,
+   "rc": 0,
+   "gpu": [
+    "NVIDIA A40"
+   ],
+   "n_rows": 9,
+   "phases": [
+    [
+     "eval",
+     1
+    ],
+    [
+     "finetune",
+     1
+    ],
+    [
+     "job",
+     null
+    ],
+    [
+     "sample",
+     1
+    ]
+   ],
+   "ratio": 0.831
+  },
+  "expect": {
+   "wall_s": 4.31,
+   "gpu_seconds": 0,
+   "cpu_seconds": 0.01,
+   "train_steps": 200,
+   "train_tokens": 12496799,
+   "gen_tokens": 0,
+   "attempts": 0,
+   "lean_checks": 0,
+   "rc": 0,
+   "gpu": [],
+   "n_rows": 3,
+   "phases": [
+    [
+     "bench",
+     null
+    ]
+   ],
+   "ratio": null
+  },
+  "test_registry": {
+   "wall_s": 6.23,
+   "gpu_seconds": 0,
+   "cpu_seconds": 0,
+   "train_steps": 0,
+   "train_tokens": 0,
+   "gen_tokens": 0,
+   "attempts": 0,
+   "lean_checks": 0,
+   "rc": 0,
+   "gpu": [],
+   "n_rows": 0,
+   "phases": [],
+   "ratio": null
+  },
+  "test_smoke": {
+   "wall_s": 39.21,
+   "gpu_seconds": 0,
+   "cpu_seconds": 0,
+   "train_steps": 0,
+   "train_tokens": 0,
+   "gen_tokens": 0,
+   "attempts": 0,
+   "lean_checks": 0,
+   "rc": 0,
+   "gpu": [],
+   "n_rows": 0,
+   "phases": [],
+   "ratio": null
+  },
+  "train_fast_short": {
+   "wall_s": 59.26,
+   "gpu_seconds": 56.94,
+   "cpu_seconds": 0,
+   "train_steps": 600,
+   "train_tokens": 37560900,
+   "gen_tokens": 0,
+   "attempts": 0,
+   "lean_checks": 0,
+   "rc": 0,
+   "gpu": [
+    "NVIDIA A40"
+   ],
+   "n_rows": 3,
+   "phases": [
+    [
+     "job",
+     null
+    ]
+   ],
+   "ratio": 0.9609
+  },
+  "ladder2": {
+   "wall_s": 79.88,
+   "gpu_seconds": 75.04,
+   "cpu_seconds": 0,
+   "train_steps": 600,
+   "train_tokens": 9103987,
+   "gen_tokens": 1169143,
+   "attempts": 16500,
+   "lean_checks": 9637,
+   "rc": 0,
+   "gpu": [
+    "NVIDIA A40"
+   ],
+   "n_rows": 23,
+   "phases": [
+    [
+     "eval",
+     1
+    ],
+    [
+     "eval",
+     2
+    ],
+    [
+     "finetune",
+     1
+    ],
+    [
+     "finetune",
+     2
+    ],
+    [
+     "job",
+     null
+    ],
+    [
+     "sample",
+     1
+    ],
+    [
+     "sample",
+     2
+    ]
+   ],
+   "ratio": 0.9394
+  },
+  "expect2": {
+   "wall_s": 2.26,
+   "gpu_seconds": 0,
+   "cpu_seconds": 0,
+   "train_steps": 0,
+   "train_tokens": 0,
+   "gen_tokens": 0,
+   "attempts": 0,
+   "lean_checks": 0,
+   "rc": 0,
+   "gpu": [],
+   "n_rows": 0,
+   "phases": [],
+   "ratio": null
+  }
+ },
+ "checks": {
+  "train_fast tokens = 1,000 epochs": {
+   "counter": 375609000,
+   "independent": 375609000,
+   "equal": true
+  },
+  "train_fast steps": {
+   "counter": 6000,
+   "independent": 6000,
+   "equal": true
+  },
+  "legacy_on_1 tokens = 100 epochs": {
+   "counter": 37560900,
+   "independent": 37560900,
+   "equal": true
+  },
+  "legacy_off_1 writes no rows (ND_COMPUTE=0)": {
+   "counter": 0,
+   "independent": 0,
+   "equal": true
+  },
+  "legacy_on_2 tokens = 100 epochs": {
+   "counter": 37560900,
+   "independent": 37560900,
+   "equal": true
+  },
+  "legacy_off_2 writes no rows (ND_COMPUTE=0)": {
+   "counter": 0,
+   "independent": 0,
+   "equal": true
+  },
+  "sample gen_tokens = sampled ids through <eos>": {
+   "counter": 513325,
+   "independent": 513325,
+   "equal": true
+  },
+  "sample attempts": {
+   "counter": 4000,
+   "independent": 4000,
+   "equal": true
+  },
+  "sample lean_checks = gate lean_texts": {
+   "counter": 0,
+   "independent": 0,
+   "equal": true
+  },
+  "ladder lean_checks = gate lean_texts": {
+   "counter": 189,
+   "independent": 189,
+   "equal": true
+  },
+  "ladder2 lean_checks = gate lean_texts": {
+   "counter": 9637,
+   "independent": 9637,
+   "equal": true
+  },
+  "ladder2 train_steps = 2 rounds x 300 fine-tune steps": {
+   "counter": 600,
+   "independent": 600,
+   "equal": true
+  },
+  "train_fast_short steps": {
+   "counter": 600,
+   "independent": 600,
+   "equal": true
+  },
+  "train_fast_short tokens = 100 epochs": {
+   "counter": 37560900,
+   "independent": 37560900,
+   "equal": true
+  }
+ },
+ "overhead": {
+  "legacy_secs_on": [
+   121,
+   121
+  ],
+  "legacy_secs_off": [
+   121,
+   121
+  ],
+  "counter_us_per_step_bs500": 49.74995001248317,
+  "legacy_step_ms": 201.66666666666666,
+  "counter_frac_of_step": 0.0002466939670040488
+ },
+ "sample": {
+  "ckpt": "ckpts/cr/fast_s0.pt",
+  "n_params": 3214336,
+  "prompts": 4000,
+  "batch": 4096,
+  "max_new": 288,
+  "gen_tokens": 513325,
+  "independent_tokens": 513325,
+  "attempts": 4000,
+  "lean_checks": 0,
+  "gate_lean_texts": 0,
+  "lean_s": 0.0,
+  "gate_lean_proc_s": 0.0,
+  "block_s": 3.896353734002332,
+  "wall_s": 5.637091636657715,
+  "hit_max_new": 56,
+  "accepted": 0,
+  "peak_alloc_gb": 11.242861270904541,
+  "gpu": "NVIDIA A40"
+ }
+}

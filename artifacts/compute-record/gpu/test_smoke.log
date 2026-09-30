@@ -1,0 +1,27 @@
+PASS train.py: 50 CPU steps exit 0
+PASS train.py: checkpoint written
+PASS train.py: <out>.args.json holds the resolved config
+PASS train.py: loss finite and falling (step 25 -> 50)
+PASS registry: rows name the config file
+PASS train.py: 100-step memorisation run exit 0
+[lean_gate] 32 samples, parse-fail 0 (no-eos 0, 0.000 %), distinct 4: ok 4, rej 0 (filter 0, prefilter=on); lean on 4 texts in 1 procs, 0.4s proc, exposed 0.4s, tail 0.4s, 7 workers
+[lean_gate] 32 samples, parse-fail 17 (no-eos 0, 0.000 %), distinct 5: ok 4, rej 1 (filter 1, prefilter=on); lean on 4 texts in 1 procs, 0.3s proc, exposed 0.4s, tail 0.4s, 7 workers
+[lean_gate] 32 samples, parse-fail 17 (no-eos 0, 0.000 %), distinct 5: ok 4, rej 1 (filter 1, prefilter=on); lean on 4 texts in 1 procs, 0.3s proc, exposed 0.3s, tail 0.3s, 7 workers
+PASS sampler: one result per prompt
+PASS sampler: every result is a clean ND proof or a reject marker
+PASS sampler: greedy reproduces the 4 memorised proofs, Lean-accepted (32/32)
+PASS sampler: sampled T=1, >= 8/32 Lean-accepted (14 on torch 2.8 CPU, 2026-09-29)
+PASS sampler: same seed, same samples
+PASS sampler: raw token ids filled
+PASS sampler: judge_many agrees with the gate
+PASS compute: train.py train_tokens = 100 steps x the 16 records' tokens (bs 16 = one epoch a step)
+PASS compute: train.py train_steps rows (50 and 100)
+PASS compute: train.py gpu_seconds rows, device=cpu, arm / seed labels
+[lean_gate] 32 samples, parse-fail 18 (no-eos 0, 0.000 %), distinct 4: ok 4, rej 0 (filter 0, prefilter=on); lean on 4 texts in 1 procs, 0.4s proc, exposed 0.4s, tail 0.4s, 7 workers
+PASS compute: gen_tokens = tokens in the sampled ids through <eos>
+PASS compute: attempts = prompts sampled
+PASS compute: lean_checks = texts the gate sent to Lean
+PASS compute: sample block rows labelled arm, seed, labels.round, device
+PASS compute: judge_many counts distinct texts sent to Lean (6), not duplicates or cache hits (0)
+PASS compute: a CPU block with no counted work writes no rows
+ALL PASS

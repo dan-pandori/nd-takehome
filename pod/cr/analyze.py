@@ -44,6 +44,12 @@ ck['sample attempts'] = (sc['attempts'], sc['prompts'])
 ck['sample lean_checks = gate lean_texts'] = (sc['lean_checks'], sc['gate_lean_texts'])
 gl = [json.loads(l) for l in open(os.path.join(G, 'ladder_gate.jsonl'))]
 ck['ladder lean_checks = gate lean_texts'] = (J['ladder']['lean_checks'], sum(g['lean_texts'] for g in gl))
+if 'ladder2' in J:
+    gl2 = [json.loads(l) for l in open(os.path.join(G, 'ladder2_gate.jsonl'))]
+    ck['ladder2 lean_checks = gate lean_texts'] = (J['ladder2']['lean_checks'], sum(g['lean_texts'] for g in gl2))
+    ck['ladder2 train_steps = 2 rounds x 300 fine-tune steps'] = (J['ladder2']['train_steps'], 600)
+    ck['train_fast_short steps'] = (J['train_fast_short']['train_steps'], 600)
+    ck['train_fast_short tokens = 100 epochs'] = (J['train_fast_short']['train_tokens'], ex['legacy_600_expected'])
 out['checks'] = {k: {'counter': a, 'independent': b, 'equal': a == b} for k, (a, b) in ck.items()}
 print('\ncheck\tcounter\tindependent\tequal')
 for k, v in out['checks'].items():

@@ -1,0 +1,13 @@
+PASS offline publish writes sidecar + row
+PASS publish without ND_RUN_ID raises
+PASS record fills config / labels / defaults
+PASS ND_REGISTRY=0 writes nothing
+PASS round_stats roles
+PASS merge dedupe + query
+PASS compute: counters per (arm, seed, round, phase), child labelled by its driver
+PASS compute: time is exclusive (job block excludes phases and the child)
+PASS compute: rows carry device=cpu, labels.round, one compute_id per block
+PASS compute: ND_COMPUTE=0 writes nothing; a CPU script with no counted work writes nothing
+PASS save_ckpt without ND_RUN_ID raises before writing
+PASS save_ckpt offline writes ckpt + sidecar
+ALL PASS

@@ -1399,3 +1399,37 @@ Sources: `hf://buckets/dan-pandori/nd-rl/repo-hygiene/artifacts/repo-hygiene/` (
 | noise-floor `nf_analysis.py` after fetch vs tracked summary | byte-identical | `artifacts/repo-hygiene-2/nf_summary_refetched.json`, `fetch_nf.log` |
 
 Bucket: `hf://buckets/dan-pandori/nd-rl/repo-hygiene-2/` (`git_tip/` = the 9 moved ckpts/data files; `artifacts/repo-hygiene-2/`).
+
+## compute-record (2026-09-30)
+
+Model behind every GPU number: `ckpts/cr/fast_s0.pt` (`hf://buckets/dan-pandori/nd-rl/compute-record/ckpts/cr/fast_s0.pt`),
+3,214,336 parameters, `lean_seq`, from scratch, 6,000 steps at bs 500 on `data/lj/train_retain.jsonl` (3,000 records,
+seed 0); a mechanics check model, its accuracy means nothing here. GPU: one NVIDIA A40 (secure, $0.49/h billed). All
+rows: `artifacts/compute-record/registry/*.jsonl` (bucket, `artifacts/MANIFEST.jsonl`); every number below is re-derived
+by `python3 pod/cr/analyze.py` → `artifacts/compute-record/gpu/analysis.json`.
+
+| check | counter | independent count | source |
+|---|---:|---:|---|
+| fast_train `train_tokens` (6,000 steps = 1,000 epochs) | 375,609,000 | 375,609,000 | `gpu/expect.json` (1,000 × 375,609 tokens an epoch) |
+| legacy train.py `train_tokens` (600 steps = 100 epochs), ×2 | 37,560,900 | 37,560,900 | same |
+| sampler `gen_tokens` (4,000 prompts, batch 4,096, max_new 288) | 513,325 | 513,325 | `gpu/sample_check.json` (sampled ids through `<eos>`) |
+| sampler `attempts` | 4,000 | 4,000 | same |
+| EI round (`ladder`) `lean_checks` | 189 | 189 | `gpu/ladder_gate.jsonl` (`lean_texts`) |
+| 2-round EI (`ladder2`) `lean_checks` | 9,637 | 9,637 | `gpu/ladder2_gate.jsonl` |
+| 2-round EI fine-tune `train_steps` (child train.py) | 600 | 600 | `--ft_steps 300` × 2 |
+| `ND_COMPUTE=0` runs: rows written | 0 | 0 | registry |
+
+| job | own wall-clock (s) | Σ `gpu_seconds` (s) | ratio | processes | source |
+|---|---:|---:|---:|---:|---|
+| fast train, 6,000 steps (clock from `save_config`) | 376.85 | 372.54 | 0.989 | 1 | `gpu/walls.jsonl`, registry |
+| legacy train, 600 steps (clock from `save_config`), ×2 | 129.28 / 129.15 | 126.02 / 125.83 | 0.975 / 0.974 | 1 | same |
+| fast train, 600 steps (clock from exec) | 59.26 | 56.94 | 0.961 | 1 | same |
+| 2-round EI, `ladder_ei.py` (clock from exec) | 79.88 | 75.04 | 0.939 | 3 | same |
+
+Overhead: `train.py`'s per-step counter costs 49.7 µs at bs 500 (`gpu/expect.json`) against a 201.7 ms legacy step
+on the A40: 0.025 %. Legacy runs, recording off / on: 121 s / 121 s each (log's integer seconds). `fast_train.py`
+counts once at the end (no per-step cost); the sampler adds one `declen.sum()` per decode chunk. Sampling peak memory
+11.24 GB (batch 4,096, max_new 288); 56 of 4,000 samples (1.4 %) hit max_new (a 6-min model; not a reported result).
+
+Per-arm compute table of this run: `artifacts/compute-record/compute_table.tsv` (`registry_merge.py --compute --by
+arm,seed,round,phase`). Pod: 0.36 h, $0.18. Bucket: `hf://buckets/dan-pandori/nd-rl/compute-record/`.

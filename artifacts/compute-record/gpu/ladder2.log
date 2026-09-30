@@ -1,0 +1,85 @@
+[lean_gate] 6400 samples, parse-fail 94 (no-eos 4, 0.062 %), distinct 4994: ok 4766, rej 228 (filter 228, prefilter=on); lean on 4766 texts in 18 procs, 25.1s proc, exposed 2.3s, tail 2.1s, 7 workers
+[cr_ladder2 r1] targets (this round) SOLVED 190/200 = 0.950 [0.910,0.973]
+  len 2: 190/200 = 0.950 [0.910,0.973]
+  written hist {2: 190, 3: 1, 5: 1}
+  pruned hist {2: 190, 3: 1, 5: 1}
+  frontier written 2 pruned 2
+  reasons [('lean rejected', 277), ('lean_seq parse: formula', 89), ('lean_seq parse: no-eos', 4), ('lean_seq parse: expected )', 1)]
+[lean_gate] 1600 samples, parse-fail 412 (no-eos 22, 1.375 %), distinct 959: ok 0, rej 959 (filter 959, prefilter=on); lean on 0 texts in 0 procs, 0.0s proc, exposed 0.0s, tail 0.0s, 7 workers
+[lean_gate] WARNING: 1.38 % of samples hit max_new (policy: raise max_new above 0.1 %)
+[cr_ladder2 r1] transfer (this round, pass@32) SOLVED 0/50 = 0.000 [0.000,0.071]
+  len 7: 0/50 = 0.000 [0.000,0.071]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 1188), ('lean_seq parse: formula', 215), ('lean_seq parse: expected )', 93), ('lean_seq parse: unbound', 75), ('lean_seq parse: no-eos', 22), ('lean_seq parse: name', 4)]
+[lean_gate] 50 samples, parse-fail 13 (no-eos 1, 2.000 %), distinct 37: ok 0, rej 37 (filter 37, prefilter=on); lean on 0 texts in 0 procs, 0.0s proc, exposed 0.0s, tail 0.0s, 7 workers
+[lean_gate] WARNING: 2.00 % of samples hit max_new (policy: raise max_new above 0.1 %)
+[cr_ladder2 r1] transfer greedy SOLVED 0/50 = 0.000 [0.000,0.071]
+  len 7: 0/50 = 0.000 [0.000,0.071]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 37), ('lean_seq parse: formula', 6), ('lean_seq parse: unbound', 3), ('lean_seq parse: expected )', 2), ('lean_seq parse: no-eos', 1), ('lean_seq parse: name', 1)]
+[lean_gate] 200 samples, parse-fail 60 (no-eos 2, 1.000 %), distinct 140: ok 0, rej 140 (filter 140, prefilter=on); lean on 0 texts in 0 procs, 0.0s proc, exposed 0.0s, tail 0.0s, 7 workers
+[lean_gate] WARNING: 1.00 % of samples hit max_new (policy: raise max_new above 0.1 %)
+[cr_ladder2 r1] heldout greedy SOLVED 0/200 = 0.000 [0.000,0.019]
+  len 7: 0/166 = 0.000 [0.000,0.023]
+  len 8: 0/34 = 0.000 [0.000,0.102]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 140), ('lean_seq parse: unbound', 21), ('lean_seq parse: formula', 16), ('lean_seq parse: expected )', 16), ('lean_seq parse: no-eos', 2), ('lean_seq parse: expected :=', 2)]
+[cr_ladder2 r1] targets cumulative: solved 190/200 L*=2 ge={7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0}
+[cr_ladder2 r1] transfer cumulative: solved 0/50 L*=0 ge={7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0}
+python3 train.py --data artifacts/compute-record/ladder2/cr_ladder2/mix_1.jsonl --init ckpts/cr/fast_s0.pt --steps 300 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/ladder/cr_ladder2_r1.pt --seed 1 --log_every 200
+params 3214336 mode lean_seq shift True
+train records 2768 max len 375
+step 200 loss 0.0634 lr 1.23e-04 10s
+step 300 loss 0.0600 lr 3.00e-05 15s
+uploaded ckpts/ladder/cr_ladder2_r1.pt -> hf://buckets/dan-pandori/nd-rl/compute-record/ckpts/ladder/cr_ladder2_r1.pt (md5 c4d1401b77ef99d491da37a4a31cb97c, 1.8s)
+saved ckpts/ladder/cr_ladder2_r1.pt (15s total, 0s in the per-bin validation = 0.0% overhead on 300 steps)
+=== round 1 done in 34s; new proofs 192; cum targets solved 190 L*=2; transfer L*=0
+[lean_gate] 6400 samples, parse-fail 63 (no-eos 32, 0.500 %), distinct 5001: ok 4871, rej 130 (filter 130, prefilter=on); lean on 4871 texts in 13 procs, 21.1s proc, exposed 2.4s, tail 2.2s, 7 workers
+[lean_gate] WARNING: 0.50 % of samples hit max_new (policy: raise max_new above 0.1 %)
+[cr_ladder2 r2] targets (this round) SOLVED 194/200 = 0.970 [0.936,0.986]
+  len 2: 194/200 = 0.970 [0.936,0.986]
+  written hist {2: 194, 3: 1, 5: 1}
+  pruned hist {2: 194, 3: 1, 5: 1}
+  frontier written 2 pruned 2
+  reasons [('lean rejected', 166), ('lean_seq parse: no-eos', 32), ('lean_seq parse: formula', 29), ('lean_seq parse: expected :=', 1), ('lean_seq parse: unbound', 1)]
+[lean_gate] 1600 samples, parse-fail 353 (no-eos 33, 2.062 %), distinct 1030: ok 0, rej 1030 (filter 1030, prefilter=on); lean on 0 texts in 0 procs, 0.0s proc, exposed 0.0s, tail 0.0s, 7 workers
+[lean_gate] WARNING: 2.06 % of samples hit max_new (policy: raise max_new above 0.1 %)
+[cr_ladder2 r2] transfer (this round, pass@32) SOLVED 0/50 = 0.000 [0.000,0.071]
+  len 7: 0/50 = 0.000 [0.000,0.071]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 1247), ('lean_seq parse: formula', 180), ('lean_seq parse: expected )', 73), ('lean_seq parse: unbound', 55), ('lean_seq parse: no-eos', 33), ('lean_seq parse: exact not last', 6)]
+[lean_gate] 50 samples, parse-fail 10 (no-eos 1, 2.000 %), distinct 40: ok 0, rej 40 (filter 40, prefilter=on); lean on 0 texts in 0 procs, 0.0s proc, exposed 0.0s, tail 0.0s, 7 workers
+[lean_gate] WARNING: 2.00 % of samples hit max_new (policy: raise max_new above 0.1 %)
+[cr_ladder2 r2] transfer greedy SOLVED 0/50 = 0.000 [0.000,0.071]
+  len 7: 0/50 = 0.000 [0.000,0.071]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 40), ('lean_seq parse: formula', 6), ('lean_seq parse: unbound', 2), ('lean_seq parse: expected )', 1), ('lean_seq parse: no-eos', 1)]
+[lean_gate] 200 samples, parse-fail 57 (no-eos 9, 4.500 %), distinct 143: ok 0, rej 143 (filter 143, prefilter=on); lean on 0 texts in 0 procs, 0.0s proc, exposed 0.0s, tail 0.0s, 7 workers
+[lean_gate] WARNING: 4.50 % of samples hit max_new (policy: raise max_new above 0.1 %)
+[cr_ladder2 r2] heldout greedy SOLVED 0/200 = 0.000 [0.000,0.019]
+  len 7: 0/166 = 0.000 [0.000,0.023]
+  len 8: 0/34 = 0.000 [0.000,0.102]
+  written hist {}
+  pruned hist {}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 143), ('lean_seq parse: formula', 16), ('lean_seq parse: expected )', 13), ('lean_seq parse: no-eos', 9), ('lean_seq parse: expected :=', 8), ('lean_seq parse: unbound', 8)]
+[cr_ladder2 r2] targets cumulative: solved 194/200 L*=2 ge={7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0}
+[cr_ladder2 r2] transfer cumulative: solved 0/50 L*=0 ge={7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0}
+python3 train.py --data artifacts/compute-record/ladder2/cr_ladder2/mix_2.jsonl --init ckpts/ladder/cr_ladder2_r1.pt --steps 300 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/ladder/cr_ladder2_r2.pt --seed 2 --log_every 200
+params 3214336 mode lean_seq shift True
+train records 2784 max len 375
+step 200 loss 0.0629 lr 1.23e-04 12s
+step 300 loss 0.0622 lr 3.00e-05 17s
+uploaded ckpts/ladder/cr_ladder2_r2.pt -> hf://buckets/dan-pandori/nd-rl/compute-record/ckpts/ladder/cr_ladder2_r2.pt (md5 356d2fc4df68932e904d04f0400deb39, 1.8s)
+saved ckpts/ladder/cr_ladder2_r2.pt (17s total, 0s in the per-bin validation = 0.0% overhead on 300 steps)
+=== round 2 done in 36s; new proofs 4; cum targets solved 194 L*=2; transfer L*=0
