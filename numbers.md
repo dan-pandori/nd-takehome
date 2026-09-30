@@ -1567,3 +1567,6 @@ theorems spends more. Pods: sr-1 A40 5.39 h $2.64, sr-2 A40 7.05 h $3.46, sr-3 R
 Bucket: `hf://buckets/dan-pandori/nd-rl/state-readouts/artifacts/state-readouts/` (records, re-reads `rr/`, gzipped Lean dumps `dump/`
 with every literal text judged, gate logs `logs/`, registry rows, re-check files) and `…/state-readouts/data/{sr,sc}/`. No new checkpoints
 (models: `state-env/ckpts/se/`, `state-cap12/ckpts/sc12/`). Registry rows also under `hf://buckets/dan-pandori/nd-rl/registry/state-readouts/`.
+Reproduce: `hf buckets sync hf://buckets/dan-pandori/nd-rl/state-readouts/artifacts/state-readouts artifacts/state-readouts` (the `.jsonl`
+records are bucket-only under the repo's artifacts rule), `git fetch origin dan_support-state` (SN comparator records), then
+`python3 sr_analysis.py`, `python3 sr_recheck.py`, `python3 sr_recheck_b.py`.
