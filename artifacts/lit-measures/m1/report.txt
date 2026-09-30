@@ -1,0 +1,56 @@
+MODEL: SN base s0 = state-env ckpts/se/stage1_SN_s0.pt  md5 ec3888d91a1f72cc0b438d3902fd26e7  3,216,384 params  format lean_staten  from scratch on data/p2/train_depth3_f0_a1.jsonl (6000 steps x 128 proofs, cap 6, seed 0)
+Scored in Env(canon=True, assign=True). Logs are NATURAL logs (nats). log p exactly marginalised over the name base (part D's rule).
+Primary temperature T 0.8 (log_softmax(logits/0.8)): the SN EI proofs were sampled at T 0.8 and the part D file this pre-registration
+  recounts (d_summary_T08.json) is part D's T 0.8 scoring.  NOTE: part D's own PRIMARY was T 1.0 (scored at T 1.0); T 1.0 is reported below as secondary.
+C1x (post hoc, NOT pre-registered): 35 forward-crux theorems reached by the base only in S2; L_true {7: 3, 8: 5, 9: 7, 10: 9, 11: 7, 12: 3, 13: 1}.
+Replay failures: 0.  Distinct (state, action) sequences scored: 112,878.  Sanity (batched step sums vs token-by-token direct): max |diff| 3.90e-05 over 16 (proof, base, T) checks.
+C1 theorems (35): sampling per L_true {'7': {'candidates': 39, 'S_theorems': 1, 'picked': 5}, '8': {'candidates': 49, 'S_theorems': 1, 'picked': 5}, '9': {'candidates': 45, 'S_theorems': 3, 'picked': 15}, '10': {'candidates': 28, 'S_theorems': 1, 'picked': 5}, '11': {'candidates': 18, 'S_theorems': 1, 'picked': 5}}
+
+==================== T0.8 (primary)
+S: best (highest total) EI proof per theorem
+name               L lines term nEI steps   total     w1     w2    rest    s1    s2  label         worst step (base-0 action)
+la_transfer_1108    7    9   44  12    10  -18.06 -12.71  -5.03   -0.32  0.70  0.98  concentrated  have:orelim: have n3 : ( ( S ∧ R ) → ( ¬ P ) ) := Or.elim n1 ( fun ( n4 : ( ¬ ( Q →
+la_transfer_198     8   13   57   2    14  -37.52 -32.83  -3.20   -1.49  0.88  0.96  concentrated  have:orelim: have n7 : S := Or.elim n1 ( fun ( n8 : ( ( ¬ R ) ∧ ( R → S ) ) ) => by
+la_transfer_2089    9   12   44   9    13  -16.01  -6.17  -5.16   -4.68  0.39  0.71  concentrated  have:Classical.byContradiction: have n5 : ( P ∨ P ) := Classical.byContradiction ( fun hh => n2 hh ) ;
+la_transfer_394     9    9   80   4    10  -18.72 -18.48  -0.13   -0.11  0.99  0.99  concentrated  have:Classical.byContradiction: have n8 : ( P → P ) := Classical.byContradiction ( fun hh => n5 hh ) ;
+la_transfer_988     9   11   58   9    12  -21.58 -10.65  -8.97   -1.96  0.49  0.91  concentrated  have:name: have n10 : ( Q ∨ P ) := n1 .2 ;
+la_transfer_1352   10   10   40  49    11  -15.16 -14.71  -0.35   -0.11  0.97  0.99  concentrated  have:orelim: have n4 : R := Or.elim n1 ( fun ( n5 : ( S ∧ R ) ) => by
+la_transfer_1185   11   13   73   6    14  -26.68 -20.34  -4.63   -1.71  0.76  0.94  concentrated  have:orelim: have n4 : ( P ∨ Q ) := Or.elim n1 ( fun ( n5 : P ) => by
+
+set  proofs thms | best/thm: total med  w1 med  w2 med  rest med  s2 med  steps | labels(best)  | all proofs: w1 med labels
+S        91    7 |  -18.72  -14.71   -4.63   -1.49    0.96 12 | {'concentrated': 7} |  -21.33 {'concentrated': 83, 'mixed': 8}
+C1      466   35 |   -2.39   -1.56   -0.28   -0.17    0.94 10 | {'mixed': 23, 'concentrated': 12} |  -12.88 {'concentrated': 394, 'mixed': 71, 'spread': 1}
+C2       86   35 |   -2.39   -1.56   -0.21   -0.17    0.94 10 | {'mixed': 24, 'concentrated': 11} |   -4.61 {'mixed': 51, 'concentrated': 34, 'spread': 1}
+C1x     728   35 |  -14.02  -10.59   -3.32   -0.50    0.97 11 | {'concentrated': 31, 'mixed': 4} |  -16.50 {'concentrated': 563, 'mixed': 165}
+
+E1.1 concentrated 7/7  labels {'concentrated': 7}  -> holds (>=5/7)
+E1.2  median w1 S -14.71  C1 -1.56  gap 13.14  one-sided perm p 0.0002 (100,000 perms, seed 0, n 7 vs 35)  -> holds (gap >= 2 and p < 0.10)
+E1.2x (post hoc, not pre-registered) median w1 S -14.71  C1x -10.59  gap 4.11  one-sided perm p 0.0033 (100,000 perms, seed 0, n 7 vs 35)  -> holds (gap >= 2 and p < 0.10)
+E1.3 w1 < ln(3/400000) = -11.80:  S 5/7  C1 2/35  C1x(post hoc) 9/35  part D 19/29
+E1.3 w1 < ln(3/200000) = -11.11:  S 5/7  C1 2/35  C1x(post hoc) 13/35  part D 22/29
+     S at N=400,000 -> holds (>=4/7);  part D field: d_summary_T08.json primary.rows[].w1 (WP base s0, T 0.8, best EI proof per survivor, rounded to 0.01)
+
+==================== T1.0 (secondary)
+S: best (highest total) EI proof per theorem
+name               L lines term nEI steps   total     w1     w2    rest    s1    s2  label         worst step (base-0 action)
+la_transfer_1108    7    9   44  12    10  -15.17 -10.60  -4.17   -0.40  0.70  0.97  concentrated  have:orelim: have n3 : ( ( S ∧ R ) → ( ¬ P ) ) := Or.elim n1 ( fun ( n4 : ( ¬ ( Q →
+la_transfer_198     8   13   57   2    14  -31.99 -26.91  -3.12   -1.95  0.84  0.94  concentrated  have:orelim: have n7 : S := Or.elim n1 ( fun ( n8 : ( ( ¬ R ) ∧ ( R → S ) ) ) => by
+la_transfer_2089    9   12   44   9    13  -13.42  -5.25  -4.27   -3.89  0.39  0.71  mixed         have:Classical.byContradiction: have n5 : ( P ∨ P ) := Classical.byContradiction ( fun hh => n2 hh ) ;
+la_transfer_394     9    9   80   4    10  -15.49 -15.21  -0.13   -0.14  0.98  0.99  concentrated  have:Classical.byContradiction: have n8 : ( P → P ) := Classical.byContradiction ( fun hh => n5 hh ) ;
+la_transfer_988     9   10   57   9    11  -18.40  -9.39  -8.66   -0.34  0.51  0.98  concentrated  have:name: have n2 : ( Q ∨ P ) := n1 .2 ;
+la_transfer_1352   10   10   40  49    11  -12.71 -12.06  -0.51   -0.14  0.95  0.99  concentrated  have:orelim: have n4 : R := Or.elim n1 ( fun ( n5 : ( S ∧ R ) ) => by
+la_transfer_1185   11   13   73   6    14  -22.21 -16.67  -3.87   -1.67  0.75  0.92  concentrated  have:orelim: have n4 : ( P ∨ Q ) := Or.elim n1 ( fun ( n5 : P ) => by
+
+set  proofs thms | best/thm: total med  w1 med  w2 med  rest med  s2 med  steps | labels(best)  | all proofs: w1 med labels
+S        91    7 |  -15.49  -12.06   -3.87   -0.40    0.97 11 | {'concentrated': 6, 'mixed': 1} |  -17.19 {'concentrated': 79, 'mixed': 12}
+C1      466   35 |   -2.61   -1.65   -0.32   -0.22    0.90 10 | {'mixed': 25, 'concentrated': 10} |  -10.60 {'concentrated': 374, 'mixed': 91, 'spread': 1}
+C2       86   35 |   -2.61   -1.65   -0.27   -0.21    0.91 10 | {'mixed': 27, 'concentrated': 8} |   -3.94 {'mixed': 66, 'concentrated': 19, 'spread': 1}
+C1x     728   35 |  -11.86   -8.51   -2.88   -0.63    0.94 11 | {'concentrated': 28, 'mixed': 6, 'spread': 1} |  -14.08 {'concentrated': 535, 'mixed': 192, 'spread': 1}
+
+E1.1 concentrated 6/7  labels {'concentrated': 6, 'mixed': 1}  -> holds (>=5/7)
+E1.2  median w1 S -12.06  C1 -1.65  gap 10.41  one-sided perm p 0.0002 (100,000 perms, seed 0, n 7 vs 35)  -> holds (gap >= 2 and p < 0.10)
+E1.2x (post hoc, not pre-registered) median w1 S -12.06  C1x -8.51  gap 3.56  one-sided perm p 0.0054 (100,000 perms, seed 0, n 7 vs 35)  -> holds (gap >= 2 and p < 0.10)
+E1.3 w1 < ln(3/400000) = -11.80:  S 4/7  C1 2/35  C1x(post hoc) 3/35  part D 19/29
+E1.3 w1 < ln(3/200000) = -11.11:  S 4/7  C1 2/35  C1x(post hoc) 5/35  part D 22/29
+     S at N=400,000 -> holds (>=4/7);  part D field: d_summary_T08.json primary.rows[].w1 (WP base s0, T 0.8, best EI proof per survivor, rounded to 0.01)
+

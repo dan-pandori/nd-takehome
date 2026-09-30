@@ -1,0 +1,1125 @@
+{
+ "model": {
+  "ckpt": "state-env ckpts/se/stage1_SN_s0.pt",
+  "md5": "ec3888d91a1f72cc0b438d3902fd26e7",
+  "params": 3216384,
+  "format": "lean_staten",
+  "training": {
+   "data": "data/p2/train_depth3_f0_a1.jsonl",
+   "heldout": "data/p2/heldout.jsonl",
+   "mode": "lean_staten",
+   "init": null,
+   "steps": 6000,
+   "recs": 128,
+   "lr": 0.001,
+   "min_lr": 0.0001,
+   "warmup": 200,
+   "wd": 0.1,
+   "n_layer": 4,
+   "d": 256,
+   "n_head": 8,
+   "cap": 6,
+   "seed": 0,
+   "out": "ckpts/se/stage1_SN_s0.pt",
+   "log_every": 200
+  }
+ },
+ "spec": "preregistration/lit-measures.md §M1",
+ "primary_temperature": "0.8",
+ "choices": "* Each proof (an ND body from the records) is turned into the environment's actions by\n    `state_env.decompose(prompt, proof, canon=True)`; it is then REPLAYED through `Env(canon=True, assign=True, base=b)`\n    for every base b used below: every action must apply, the attempt must close, the environment must not rename\n    anything (its assigned names = ours), and `inverse(env.text)` must give back the recorded ND proof.  Any failure is\n    counted and reported, and the proof is left out of the scores (listed in summary.json['replay_failures']).\n  * Prompt = `tok.encode_toks(env.state_tokens())` (what `state_sample.prompt_ids` gives for lean_staten), target =\n    the action tokens + <eos>.  Log p of each target token from the causal model on prompt + target (as state_train's\n    loss).  Natural logs.  Temperature: log_softmax(logits / T), T = 0.8 (primary: the EI sampling temperature and the\n    temperature of part D's `d_summary_T08.json` the pre-registration recounts) and T = 1.0 (secondary).\n  * Name base: the environment names what a step introduces from a base (the sampler draws b ~ U[0, 32]; training used\n    one random offset per proof).  As part D did for lean_seq's offset, the score is EXACTLY marginalised over the base:\n    the proof at base b is a distinct token sequence, so p = sum_b p(proof_b), b = 0 .. 64 - max name index; with\n    cum_b(t) = sum of step log p up to step t at base b, L(t) = logsumexp_b cum_b(t) and step t contributes L(t) - L(t-1)\n    (the first name token is in step 1, so every step is on the marginalised side).  Step contributions sum to the\n    proof's log p exactly (asserted).  The unmarginalised base-0 step scores are kept too (`raw_b0`).\n  * Steps = the model's actions (a `have` line; a box-opening `have` up to `=> by`; an `exact`).  Part D's steps also\n    had the second Or.elim branch opener, which here the environment supplies (not scored, no step).\n  * Label: part D's `label` (sf_d_analysis: concentrated s2 >= 0.50 and w1 <= -6; spread s2 < 0.50 and w1 > -6; else\n    mixed); s1 = w1/total, s2 = (w1+w2)/total, rest = total - w1 - w2 (w2 = 0 for a 1-step proof).",
+ "sets_meta": {
+  "record_files": [
+   "S1_base_T08_s0.s0.jsonl",
+   "S1_ei_T08_s0.s0.jsonl",
+   "S2fwd08k160_base_T08_s0.s0.jsonl",
+   "S2fwd08k30_base_T08_s0.s0.jsonl",
+   "S2fwd08k60_base_T08_s0.s0.jsonl",
+   "S2fwd10k160_base_T10_s0.s0.jsonl",
+   "S2fwd10k40_base_T10_s0.s0.jsonl",
+   "S2fwd10k60_base_T10_s0.s0.jsonl",
+   "S2revk20_ei_T08_s0.s0.jsonl"
+  ],
+  "S_theorems": [
+   "la_transfer_1108",
+   "la_transfer_1185",
+   "la_transfer_1352",
+   "la_transfer_198",
+   "la_transfer_2089",
+   "la_transfer_394",
+   "la_transfer_988"
+  ],
+  "C1_theorems": [
+   "la_transfer_111",
+   "la_transfer_1767",
+   "la_transfer_2150",
+   "la_transfer_297",
+   "la_transfer_644",
+   "la_transfer_2111",
+   "la_transfer_2218",
+   "la_transfer_296",
+   "la_transfer_481",
+   "la_transfer_528",
+   "la_transfer_1256",
+   "la_transfer_1314",
+   "la_transfer_1333",
+   "la_transfer_1423",
+   "la_transfer_1530",
+   "la_transfer_174",
+   "la_transfer_1759",
+   "la_transfer_1982",
+   "la_transfer_2016",
+   "la_transfer_2081",
+   "la_transfer_31",
+   "la_transfer_381",
+   "la_transfer_697",
+   "la_transfer_717",
+   "la_transfer_888",
+   "la_transfer_1176",
+   "la_transfer_1645",
+   "la_transfer_1729",
+   "la_transfer_185",
+   "la_transfer_1995",
+   "la_transfer_1932",
+   "la_transfer_2048",
+   "la_transfer_2168",
+   "la_transfer_370",
+   "la_transfer_430"
+  ],
+  "C1_sampling": {
+   "7": {
+    "candidates": 39,
+    "S_theorems": 1,
+    "picked": 5
+   },
+   "8": {
+    "candidates": 49,
+    "S_theorems": 1,
+    "picked": 5
+   },
+   "9": {
+    "candidates": 45,
+    "S_theorems": 3,
+    "picked": 15
+   },
+   "10": {
+    "candidates": 28,
+    "S_theorems": 1,
+    "picked": 5
+   },
+   "11": {
+    "candidates": 18,
+    "S_theorems": 1,
+    "picked": 5
+   }
+  },
+  "n_reached_by_base_S1_S2": 187,
+  "C1x_theorems": [
+   "la_transfer_1019",
+   "la_transfer_1132",
+   "la_transfer_1176",
+   "la_transfer_1246",
+   "la_transfer_1256",
+   "la_transfer_1463",
+   "la_transfer_1464",
+   "la_transfer_1520",
+   "la_transfer_1555",
+   "la_transfer_170",
+   "la_transfer_185",
+   "la_transfer_1883",
+   "la_transfer_1893",
+   "la_transfer_190",
+   "la_transfer_1905",
+   "la_transfer_1960",
+   "la_transfer_2016",
+   "la_transfer_2048",
+   "la_transfer_207",
+   "la_transfer_2103",
+   "la_transfer_2177",
+   "la_transfer_2180",
+   "la_transfer_2205",
+   "la_transfer_247",
+   "la_transfer_380",
+   "la_transfer_454",
+   "la_transfer_528",
+   "la_transfer_552",
+   "la_transfer_564",
+   "la_transfer_588",
+   "la_transfer_717",
+   "la_transfer_735",
+   "la_transfer_913",
+   "la_transfer_973",
+   "la_transfer_989"
+  ],
+  "C1x_note": "post hoc, NOT pre-registered: forward-crux (SN base 0/10,000 in S1 at T 0.8, SN EI >= 1) and reached by SN base in S2; all EI proofs",
+  "C1x_L_true": {
+   "7": 3,
+   "8": 5,
+   "9": 7,
+   "10": 9,
+   "11": 7,
+   "12": 3,
+   "13": 1
+  },
+  "C1x_base_S2_ok": {
+   "la_transfer_1019": 4,
+   "la_transfer_1132": 1,
+   "la_transfer_1176": 1,
+   "la_transfer_1246": 2,
+   "la_transfer_1256": 2,
+   "la_transfer_1463": 1,
+   "la_transfer_1464": 2,
+   "la_transfer_1520": 1,
+   "la_transfer_1555": 2,
+   "la_transfer_170": 1,
+   "la_transfer_185": 5,
+   "la_transfer_1883": 3,
+   "la_transfer_1893": 1,
+   "la_transfer_190": 2,
+   "la_transfer_1905": 2,
+   "la_transfer_1960": 1,
+   "la_transfer_2016": 1,
+   "la_transfer_2048": 2,
+   "la_transfer_207": 1,
+   "la_transfer_2103": 1,
+   "la_transfer_2177": 1,
+   "la_transfer_2180": 1,
+   "la_transfer_2205": 2,
+   "la_transfer_247": 1,
+   "la_transfer_380": 1,
+   "la_transfer_454": 1,
+   "la_transfer_528": 1,
+   "la_transfer_552": 3,
+   "la_transfer_564": 1,
+   "la_transfer_588": 3,
+   "la_transfer_717": 1,
+   "la_transfer_735": 1,
+   "la_transfer_913": 1,
+   "la_transfer_973": 1,
+   "la_transfer_989": 1
+  },
+  "C2_theorems_with_base_proofs": [
+   "la_transfer_111",
+   "la_transfer_1176",
+   "la_transfer_1256",
+   "la_transfer_1314",
+   "la_transfer_1333",
+   "la_transfer_1423",
+   "la_transfer_1530",
+   "la_transfer_1645",
+   "la_transfer_1729",
+   "la_transfer_174",
+   "la_transfer_1759",
+   "la_transfer_1767",
+   "la_transfer_185",
+   "la_transfer_1932",
+   "la_transfer_1982",
+   "la_transfer_1995",
+   "la_transfer_2016",
+   "la_transfer_2048",
+   "la_transfer_2081",
+   "la_transfer_2111",
+   "la_transfer_2150",
+   "la_transfer_2168",
+   "la_transfer_2218",
+   "la_transfer_296",
+   "la_transfer_297",
+   "la_transfer_31",
+   "la_transfer_370",
+   "la_transfer_381",
+   "la_transfer_430",
+   "la_transfer_481",
+   "la_transfer_528",
+   "la_transfer_644",
+   "la_transfer_697",
+   "la_transfer_717",
+   "la_transfer_888"
+  ]
+ },
+ "replay_failures": [],
+ "n_replay_failures": 0,
+ "n_distinct_sequences_scored": 112878,
+ "sanity_direct_vs_batched": [
+  {
+   "name": "la_transfer_2103",
+   "set": "C1x",
+   "base": 0,
+   "T": 0.8,
+   "batched_step_sum": -91.96292038836032,
+   "direct_tokenwise": -91.96295788950266,
+   "abs_diff": 3.7501142344353866e-05
+  },
+  {
+   "name": "la_transfer_2103",
+   "set": "C1x",
+   "base": 0,
+   "T": 1.0,
+   "batched_step_sum": -80.04928258600552,
+   "direct_tokenwise": -80.04932158752821,
+   "abs_diff": 3.900152269409318e-05
+  },
+  {
+   "name": "la_transfer_2103",
+   "set": "C1x",
+   "base": 3,
+   "T": 0.8,
+   "batched_step_sum": -109.83021126960415,
+   "direct_tokenwise": -109.83022138506634,
+   "abs_diff": 1.0115462188764468e-05
+  },
+  {
+   "name": "la_transfer_2103",
+   "set": "C1x",
+   "base": 3,
+   "T": 1.0,
+   "batched_step_sum": -93.20173152325302,
+   "direct_tokenwise": -93.20175344098351,
+   "abs_diff": 2.19177304927598e-05
+  },
+  {
+   "name": "la_transfer_2103",
+   "set": "C1x",
+   "base": 0,
+   "T": 0.8,
+   "batched_step_sum": -47.488442767201164,
+   "direct_tokenwise": -47.48843421029432,
+   "abs_diff": 8.556906841761247e-06
+  },
+  {
+   "name": "la_transfer_2103",
+   "set": "C1x",
+   "base": 0,
+   "T": 1.0,
+   "batched_step_sum": -39.79619757806466,
+   "direct_tokenwise": -39.79619991383849,
+   "abs_diff": 2.3357738356821756e-06
+  },
+  {
+   "name": "la_transfer_2103",
+   "set": "C1x",
+   "base": 3,
+   "T": 0.8,
+   "batched_step_sum": -47.86569601328374,
+   "direct_tokenwise": -47.86571664358742,
+   "abs_diff": 2.0630303680491124e-05
+  },
+  {
+   "name": "la_transfer_2103",
+   "set": "C1x",
+   "base": 3,
+   "T": 1.0,
+   "batched_step_sum": -40.340943872517244,
+   "direct_tokenwise": -40.340970053412164,
+   "abs_diff": 2.618089492045783e-05
+  },
+  {
+   "name": "la_transfer_1464",
+   "set": "C1x",
+   "base": 0,
+   "T": 0.8,
+   "batched_step_sum": -33.16998968707447,
+   "direct_tokenwise": -33.169991555871746,
+   "abs_diff": 1.8687972769271255e-06
+  },
+  {
+   "name": "la_transfer_1464",
+   "set": "C1x",
+   "base": 0,
+   "T": 1.0,
+   "batched_step_sum": -28.166861434296983,
+   "direct_tokenwise": -28.16686636216549,
+   "abs_diff": 4.9278685061437955e-06
+  },
+  {
+   "name": "la_transfer_1464",
+   "set": "C1x",
+   "base": 3,
+   "T": 0.8,
+   "batched_step_sum": -33.646355818500446,
+   "direct_tokenwise": -33.646343140949995,
+   "abs_diff": 1.2677550451201114e-05
+  },
+  {
+   "name": "la_transfer_1464",
+   "set": "C1x",
+   "base": 3,
+   "T": 1.0,
+   "batched_step_sum": -28.47962261572934,
+   "direct_tokenwise": -28.479616758917317,
+   "abs_diff": 5.856812023807834e-06
+  },
+  {
+   "name": "la_transfer_2103",
+   "set": "C1x",
+   "base": 0,
+   "T": 0.8,
+   "batched_step_sum": -26.90629646903343,
+   "direct_tokenwise": -26.906316996551823,
+   "abs_diff": 2.05275183944309e-05
+  },
+  {
+   "name": "la_transfer_2103",
+   "set": "C1x",
+   "base": 0,
+   "T": 1.0,
+   "batched_step_sum": -23.01744182700542,
+   "direct_tokenwise": -23.017464516116295,
+   "abs_diff": 2.2689110874551943e-05
+  },
+  {
+   "name": "la_transfer_2103",
+   "set": "C1x",
+   "base": 3,
+   "T": 0.8,
+   "batched_step_sum": -26.82599837033692,
+   "direct_tokenwise": -26.82598484657566,
+   "abs_diff": 1.3523761257516753e-05
+  },
+  {
+   "name": "la_transfer_2103",
+   "set": "C1x",
+   "base": 3,
+   "T": 1.0,
+   "batched_step_sum": -22.8849151281835,
+   "direct_tokenwise": -22.884913653105546,
+   "abs_diff": 1.4750779548933224e-06
+  }
+ ],
+ "by_T": {
+  "T0.8": {
+   "sets": {
+    "S": {
+     "n_proofs": 91,
+     "n_theorems": 7,
+     "all": {
+      "total_med": -49.19333536623853,
+      "w1_med": -21.328867680241462,
+      "s2_med": 0.7395013756241994,
+      "steps_med": 14,
+      "labels": {
+       "concentrated": 83,
+       "mixed": 8
+      }
+     },
+     "best": {
+      "total_med": -18.717338171592107,
+      "w1_med": -14.706092307448227,
+      "w2_med": -4.631510247688489,
+      "rest_med": -1.4895298023447907,
+      "s1_med": 0.762446765239974,
+      "s2_med": 0.960295472424496,
+      "steps_med": 12,
+      "labels": {
+       "concentrated": 7
+      },
+      "worst_step_kind": {
+       "have:orelim": 4,
+       "have:Classical.byContradiction": 2,
+       "have:name": 1
+      },
+      "raw_b0_w1_med": -15.086835957615158
+     }
+    },
+    "C1": {
+     "n_proofs": 466,
+     "n_theorems": 35,
+     "all": {
+      "total_med": -22.196861926393872,
+      "w1_med": -12.877867898523483,
+      "s2_med": 0.8714590318114604,
+      "steps_med": 12.0,
+      "labels": {
+       "concentrated": 394,
+       "mixed": 71,
+       "spread": 1
+      }
+     },
+     "best": {
+      "total_med": -2.394074750227435,
+      "w1_med": -1.5623803490141475,
+      "w2_med": -0.2837512925823069,
+      "rest_med": -0.16880265632934144,
+      "s1_med": 0.6754056913082876,
+      "s2_med": 0.9355252089533188,
+      "steps_med": 10,
+      "labels": {
+       "mixed": 23,
+       "concentrated": 12
+      },
+      "worst_step_kind": {
+       "have:name": 12,
+       "have:box": 9,
+       "have:⟨": 4,
+       "have:orelim": 4,
+       "have:Or.inr": 2,
+       "have:prem": 2,
+       "have:Or.inl": 2
+      },
+      "raw_b0_w1_med": -4.433431416014351
+     }
+    },
+    "C2": {
+     "n_proofs": 86,
+     "n_theorems": 35,
+     "all": {
+      "total_med": -6.530114372076068,
+      "w1_med": -4.614348526732542,
+      "s2_med": 0.9491703468879313,
+      "steps_med": 11.0,
+      "labels": {
+       "mixed": 51,
+       "concentrated": 34,
+       "spread": 1
+      }
+     },
+     "best": {
+      "total_med": -2.394074750227435,
+      "w1_med": -1.5623803490141475,
+      "w2_med": -0.20524178886339506,
+      "rest_med": -0.16740414621525979,
+      "s1_med": 0.7230269945485335,
+      "s2_med": 0.9411038378240931,
+      "steps_med": 10,
+      "labels": {
+       "mixed": 24,
+       "concentrated": 11
+      },
+      "worst_step_kind": {
+       "have:name": 8,
+       "have:box": 12,
+       "have:⟨": 4,
+       "have:orelim": 5,
+       "have:Or.inr": 2,
+       "have:prem": 2,
+       "have:Or.inl": 2
+      },
+      "raw_b0_w1_med": -4.333418846129916
+     }
+    },
+    "C1x": {
+     "n_proofs": 728,
+     "n_theorems": 35,
+     "all": {
+      "total_med": -42.74741923335603,
+      "w1_med": -16.50356439944865,
+      "s2_med": 0.6393752084229836,
+      "steps_med": 16.0,
+      "labels": {
+       "concentrated": 563,
+       "mixed": 165
+      }
+     },
+     "best": {
+      "total_med": -14.022184743638373,
+      "w1_med": -10.592825591458842,
+      "w2_med": -3.3167066053850647,
+      "rest_med": -0.5012316932914107,
+      "s1_med": 0.6414267866320699,
+      "s2_med": 0.966665166639088,
+      "steps_med": 11,
+      "labels": {
+       "concentrated": 31,
+       "mixed": 4
+      },
+      "worst_step_kind": {
+       "have:box": 8,
+       "have:name": 10,
+       "have:orelim": 14,
+       "have:⟨": 1,
+       "have:Or.inl": 1,
+       "have:Classical.byContradiction": 1
+      },
+      "raw_b0_w1_med": -11.663036018994248
+     }
+    }
+   },
+   "S_rows": [
+    {
+     "name": "la_transfer_1108",
+     "L_true": 7,
+     "n_lines": 9,
+     "term_size": 44,
+     "n_ei_proofs": 12,
+     "n_steps": 10,
+     "total": -18.06436776339922,
+     "w1": -12.714699879294738,
+     "w2": -5.030130993018755,
+     "rest": -0.31953689108572547,
+     "s1": 0.7038552384355454,
+     "s2": 0.9823112053922447,
+     "label": "concentrated",
+     "worst_step_kind": "have:orelim",
+     "worst_action_b0": "have n3 : ( ( S ∧ R ) → ( ¬ P ) ) := Or.elim n1 ( fun ( n4 : ( ¬ ( Q → R ) ) ) => by",
+     "raw_b0_w1": -13.11193897791214
+    },
+    {
+     "name": "la_transfer_198",
+     "L_true": 8,
+     "n_lines": 13,
+     "term_size": 57,
+     "n_ei_proofs": 2,
+     "n_steps": 14,
+     "total": -37.515363947152636,
+     "w1": -32.829473439673414,
+     "w2": -3.196360705134431,
+     "rest": -1.4895298023447907,
+     "s1": 0.8750940944067565,
+     "s2": 0.960295472424496,
+     "label": "concentrated",
+     "worst_step_kind": "have:orelim",
+     "worst_action_b0": "have n7 : S := Or.elim n1 ( fun ( n8 : ( ( ¬ R ) ∧ ( R → S ) ) ) => by",
+     "raw_b0_w1": -33.860704863879576
+    },
+    {
+     "name": "la_transfer_2089",
+     "L_true": 9,
+     "n_lines": 12,
+     "term_size": 44,
+     "n_ei_proofs": 9,
+     "n_steps": 13,
+     "total": -16.006691292912368,
+     "w1": -6.170740665358101,
+     "w2": -5.160844377411944,
+     "rest": -4.675106250142322,
+     "s1": 0.3855100690353449,
+     "s2": 0.7079280055702442,
+     "label": "concentrated",
+     "worst_step_kind": "have:Classical.byContradiction",
+     "worst_action_b0": "have n5 : ( P ∨ P ) := Classical.byContradiction ( fun hh => n2 hh ) ;",
+     "raw_b0_w1": -6.116708927607348
+    },
+    {
+     "name": "la_transfer_394",
+     "L_true": 9,
+     "n_lines": 9,
+     "term_size": 80,
+     "n_ei_proofs": 4,
+     "n_steps": 10,
+     "total": -18.717338171592107,
+     "w1": -18.47751329061826,
+     "w2": -0.1322041328238961,
+     "rest": -0.10762074814995293,
+     "s1": 0.9871870199290496,
+     "s2": 0.994250210838564,
+     "label": "concentrated",
+     "worst_step_kind": "have:Classical.byContradiction",
+     "worst_action_b0": "have n8 : ( P → P ) := Classical.byContradiction ( fun hh => n5 hh ) ;",
+     "raw_b0_w1": -21.072393237153094
+    },
+    {
+     "name": "la_transfer_988",
+     "L_true": 9,
+     "n_lines": 11,
+     "term_size": 58,
+     "n_ei_proofs": 9,
+     "n_steps": 12,
+     "total": -21.57792509051791,
+     "w1": -10.649699995338699,
+     "w2": -8.969669088675253,
+     "rest": -1.9585560065039562,
+     "s1": 0.4935460638900145,
+     "s2": 0.9092333485129851,
+     "label": "concentrated",
+     "worst_step_kind": "have:name",
+     "worst_action_b0": "have n10 : ( Q ∨ P ) := n1 .2 ;",
+     "raw_b0_w1": -12.456119485086639
+    },
+    {
+     "name": "la_transfer_1352",
+     "L_true": 10,
+     "n_lines": 10,
+     "term_size": 40,
+     "n_ei_proofs": 49,
+     "n_steps": 11,
+     "total": -15.164090074976038,
+     "w1": -14.706092307448227,
+     "w2": -0.34619006023758914,
+     "rest": -0.11180770729022171,
+     "s1": 0.9697972139928392,
+     "s2": 0.9926268106600917,
+     "label": "concentrated",
+     "worst_step_kind": "have:orelim",
+     "worst_action_b0": "have n4 : R := Or.elim n1 ( fun ( n5 : ( S ∧ R ) ) => by",
+     "raw_b0_w1": -15.086835957615158
+    },
+    {
+     "name": "la_transfer_1185",
+     "L_true": 11,
+     "n_lines": 13,
+     "term_size": 73,
+     "n_ei_proofs": 6,
+     "n_steps": 14,
+     "total": -26.67748978992419,
+     "w1": -20.340165795050133,
+     "w2": -4.631510247688489,
+     "rest": -1.7058137471855694,
+     "s1": 0.762446765239974,
+     "s2": 0.9360579364618542,
+     "label": "concentrated",
+     "worst_step_kind": "have:orelim",
+     "worst_action_b0": "have n4 : ( P ∨ Q ) := Or.elim n1 ( fun ( n5 : P ) => by",
+     "raw_b0_w1": -20.178147364221758
+    }
+   ],
+   "E1.1": {
+    "labels": {
+     "concentrated": 7
+    },
+    "concentrated": 7,
+    "of": 7,
+    "verdict": "holds (>=5/7)"
+   },
+   "E1.2": {
+    "control": "C1",
+    "median_w1_S": -14.706092307448227,
+    "median_w1_C": -1.5623803490141475,
+    "gap_C_minus_S": 13.143711958434078,
+    "n_S": 7,
+    "n_C": 35,
+    "n_perm": 100000,
+    "seed": 0,
+    "statistic": "median(C1 w1) - median(S w1), theorem level (best proof each); p = (#perm >= obs + 1)/(N + 1), numpy default_rng(0)",
+    "p_one_sided": 0.00018999810001899982,
+    "verdict": "holds (gap >= 2 and p < 0.10)"
+   },
+   "E1.2_C1x_not_preregistered": {
+    "control": "C1x",
+    "median_w1_S": -14.706092307448227,
+    "median_w1_C": -10.592825591458842,
+    "gap_C_minus_S": 4.1132667159893845,
+    "n_S": 7,
+    "n_C": 35,
+    "n_perm": 100000,
+    "seed": 0,
+    "statistic": "median(C1x w1) - median(S w1), theorem level (best proof each); p = (#perm >= obs + 1)/(N + 1), numpy default_rng(0)",
+    "p_one_sided": 0.0033299667003329966,
+    "verdict": "holds (gap >= 2 and p < 0.10)"
+   },
+   "E1.3": {
+    "thresholds": {
+     "N400000": -11.800607537422009,
+     "N200000": -11.107460356862065
+    },
+    "S": {
+     "N400000": {
+      "below": 5,
+      "of": 7,
+      "frac": 0.7142857142857143
+     },
+     "N200000": {
+      "below": 5,
+      "of": 7,
+      "frac": 0.7142857142857143
+     }
+    },
+    "C1": {
+     "N400000": {
+      "below": 2,
+      "of": 35,
+      "frac": 0.05714285714285714
+     },
+     "N200000": {
+      "below": 2,
+      "of": 35,
+      "frac": 0.05714285714285714
+     }
+    },
+    "C1x": {
+     "N400000": {
+      "below": 9,
+      "of": 35,
+      "frac": 0.2571428571428571
+     },
+     "N200000": {
+      "below": 13,
+      "of": 35,
+      "frac": 0.37142857142857144
+     }
+    },
+    "partD_29": {
+     "N400000": {
+      "below": 19,
+      "of": 29,
+      "frac": 0.6551724137931034
+     },
+     "N200000": {
+      "below": 22,
+      "of": 29,
+      "frac": 0.7586206896551724
+     }
+    },
+    "partD_field": "d_summary_T08.json primary.rows[].w1 (WP base s0, T 0.8, best EI proof per survivor, rounded to 0.01)",
+    "verdict_S_N400000": "holds (>=4/7)"
+   }
+  },
+  "T1.0": {
+   "sets": {
+    "S": {
+     "n_proofs": 91,
+     "n_theorems": 7,
+     "all": {
+      "total_med": -40.78349761335932,
+      "w1_med": -17.19225554488577,
+      "s2_med": 0.7301682036248256,
+      "steps_med": 14,
+      "labels": {
+       "concentrated": 79,
+       "mixed": 12
+      }
+     },
+     "best": {
+      "total_med": -15.485797093479967,
+      "w1_med": -12.064231022454152,
+      "w2_med": -3.870009464031856,
+      "rest_med": -0.4035950112929374,
+      "s1_med": 0.7504693246647681,
+      "s2_med": 0.9734017128721825,
+      "steps_med": 11,
+      "labels": {
+       "concentrated": 6,
+       "mixed": 1
+      },
+      "worst_step_kind": {
+       "have:orelim": 4,
+       "have:Classical.byContradiction": 2,
+       "have:name": 1
+      },
+      "raw_b0_w1_med": -12.29096386155939
+     }
+    },
+    "C1": {
+     "n_proofs": 466,
+     "n_theorems": 35,
+     "all": {
+      "total_med": -18.873208372988763,
+      "w1_med": -10.604456147378514,
+      "s2_med": 0.8479473604450373,
+      "steps_med": 12.0,
+      "labels": {
+       "concentrated": 374,
+       "mixed": 91,
+       "spread": 1
+      }
+     },
+     "best": {
+      "total_med": -2.608752413585709,
+      "w1_med": -1.653082646956444,
+      "w2_med": -0.31976620204277983,
+      "rest_med": -0.22192810213825842,
+      "s1_med": 0.6620116728626542,
+      "s2_med": 0.9040993996919479,
+      "steps_med": 10,
+      "labels": {
+       "mixed": 25,
+       "concentrated": 10
+      },
+      "worst_step_kind": {
+       "have:name": 12,
+       "have:box": 9,
+       "have:⟨": 4,
+       "have:orelim": 4,
+       "have:Or.inr": 2,
+       "have:prem": 2,
+       "have:Or.inl": 2
+      },
+      "raw_b0_w1_med": -4.3841609612075345
+     }
+    },
+    "C2": {
+     "n_proofs": 86,
+     "n_theorems": 35,
+     "all": {
+      "total_med": -5.624585463406868,
+      "w1_med": -3.9360440001120045,
+      "s2_med": 0.9191657185427673,
+      "steps_med": 11.0,
+      "labels": {
+       "mixed": 66,
+       "concentrated": 19,
+       "spread": 1
+      }
+     },
+     "best": {
+      "total_med": -2.608752413585709,
+      "w1_med": -1.653082646956444,
+      "w2_med": -0.26817433829765713,
+      "rest_med": -0.20596337380341145,
+      "s1_med": 0.6964247709906577,
+      "s2_med": 0.9083484713714405,
+      "steps_med": 10,
+      "labels": {
+       "mixed": 27,
+       "concentrated": 8
+      },
+      "worst_step_kind": {
+       "have:name": 8,
+       "have:box": 12,
+       "have:⟨": 4,
+       "have:orelim": 5,
+       "have:Or.inr": 2,
+       "have:prem": 2,
+       "have:Or.inl": 2
+      },
+      "raw_b0_w1_med": -4.298671602705667
+     }
+    },
+    "C1x": {
+     "n_proofs": 728,
+     "n_theorems": 35,
+     "all": {
+      "total_med": -36.193318570803896,
+      "w1_med": -14.08464447063076,
+      "s2_med": 0.625288063585645,
+      "steps_med": 16.0,
+      "labels": {
+       "concentrated": 535,
+       "mixed": 192,
+       "spread": 1
+      }
+     },
+     "best": {
+      "total_med": -11.8600396135692,
+      "w1_med": -8.505502155399636,
+      "w2_med": -2.8832354566686234,
+      "rest_med": -0.6347859694177069,
+      "s1_med": 0.6289814408427031,
+      "s2_med": 0.942993144584867,
+      "steps_med": 11,
+      "labels": {
+       "concentrated": 28,
+       "mixed": 6,
+       "spread": 1
+      },
+      "worst_step_kind": {
+       "have:box": 8,
+       "have:name": 10,
+       "have:orelim": 14,
+       "have:⟨": 1,
+       "have:Or.inl": 1,
+       "have:Classical.byContradiction": 1
+      },
+      "raw_b0_w1_med": -9.404919224992454
+     }
+    }
+   },
+   "S_rows": [
+    {
+     "name": "la_transfer_1108",
+     "L_true": 7,
+     "n_lines": 9,
+     "term_size": 44,
+     "n_ei_proofs": 12,
+     "n_steps": 10,
+     "total": -15.173721877407718,
+     "w1": -10.595786355191642,
+     "w2": -4.174340510923139,
+     "rest": -0.4035950112929374,
+     "s1": 0.6982984425836747,
+     "s2": 0.9734017128721825,
+     "label": "concentrated",
+     "worst_step_kind": "have:orelim",
+     "worst_action_b0": "have n3 : ( ( S ∧ R ) → ( ¬ P ) ) := Or.elim n1 ( fun ( n4 : ( ¬ ( Q → R ) ) ) => by",
+     "raw_b0_w1": -10.819278714939436
+    },
+    {
+     "name": "la_transfer_198",
+     "L_true": 8,
+     "n_lines": 13,
+     "term_size": 57,
+     "n_ei_proofs": 2,
+     "n_steps": 14,
+     "total": -31.985631360563126,
+     "w1": -26.911874142285367,
+     "w2": -3.1196789488409102,
+     "rest": -1.9540782694368488,
+     "s1": 0.8413738606225082,
+     "s2": 0.9389076223817754,
+     "label": "concentrated",
+     "worst_step_kind": "have:orelim",
+     "worst_action_b0": "have n7 : S := Or.elim n1 ( fun ( n8 : ( ( ¬ R ) ∧ ( R → S ) ) ) => by",
+     "raw_b0_w1": -27.772099150235867
+    },
+    {
+     "name": "la_transfer_2089",
+     "L_true": 9,
+     "n_lines": 12,
+     "term_size": 44,
+     "n_ei_proofs": 9,
+     "n_steps": 13,
+     "total": -13.415647658644994,
+     "w1": -5.252375930519606,
+     "w2": -4.274557647845251,
+     "rest": -3.8887140802801365,
+     "s1": 0.3915111714442645,
+     "s2": 0.7101359413107228,
+     "label": "mixed",
+     "worst_step_kind": "have:Classical.byContradiction",
+     "worst_action_b0": "have n5 : ( P ∨ P ) := Classical.byContradiction ( fun hh => n2 hh ) ;",
+     "raw_b0_w1": -5.219750776560041
+    },
+    {
+     "name": "la_transfer_394",
+     "L_true": 9,
+     "n_lines": 9,
+     "term_size": 80,
+     "n_ei_proofs": 4,
+     "n_steps": 10,
+     "total": -15.485797093479967,
+     "w1": -15.207958219729981,
+     "w2": -0.13433451349819236,
+     "rest": -0.14350436025179292,
+     "s1": 0.9820584712512497,
+     "s2": 0.9907331628210334,
+     "label": "concentrated",
+     "worst_step_kind": "have:Classical.byContradiction",
+     "worst_action_b0": "have n8 : ( P → P ) := Classical.byContradiction ( fun hh => n5 hh ) ;",
+     "raw_b0_w1": -17.05925786912411
+    },
+    {
+     "name": "la_transfer_988",
+     "L_true": 9,
+     "n_lines": 10,
+     "term_size": 57,
+     "n_ei_proofs": 9,
+     "n_steps": 11,
+     "total": -18.395421951407116,
+     "w1": -9.388263803665259,
+     "w2": -8.663305532654801,
+     "rest": -0.3438526150870551,
+     "s1": 0.510358709273702,
+     "s2": 0.981307707102595,
+     "label": "concentrated",
+     "worst_step_kind": "have:name",
+     "worst_action_b0": "have n2 : ( Q ∨ P ) := n1 .2 ;",
+     "raw_b0_w1": -9.467211246570514
+    },
+    {
+     "name": "la_transfer_1352",
+     "L_true": 10,
+     "n_lines": 10,
+     "term_size": 40,
+     "n_ei_proofs": 49,
+     "n_steps": 11,
+     "total": -12.714031773972629,
+     "w1": -12.064231022454152,
+     "w2": -0.5097335699217727,
+     "rest": -0.14006718159670406,
+     "s1": 0.9488910549328099,
+     "s2": 0.9889832600636219,
+     "label": "concentrated",
+     "worst_step_kind": "have:orelim",
+     "worst_action_b0": "have n4 : R := Or.elim n1 ( fun ( n5 : ( S ∧ R ) ) => by",
+     "raw_b0_w1": -12.29096386155939
+    },
+    {
+     "name": "la_transfer_1185",
+     "L_true": 11,
+     "n_lines": 13,
+     "term_size": 73,
+     "n_ei_proofs": 6,
+     "n_steps": 14,
+     "total": -22.21054045989498,
+     "w1": -16.668329299376893,
+     "w2": -3.870009464031856,
+     "rest": -1.6722016964862298,
+     "s1": 0.7504693246647681,
+     "s2": 0.9247113459708158,
+     "label": "concentrated",
+     "worst_step_kind": "have:orelim",
+     "worst_action_b0": "have n4 : ( P ∨ Q ) := Or.elim n1 ( fun ( n5 : P ) => by",
+     "raw_b0_w1": -16.541731674971246
+    }
+   ],
+   "E1.1": {
+    "labels": {
+     "concentrated": 6,
+     "mixed": 1
+    },
+    "concentrated": 6,
+    "of": 7,
+    "verdict": "holds (>=5/7)"
+   },
+   "E1.2": {
+    "control": "C1",
+    "median_w1_S": -12.064231022454152,
+    "median_w1_C": -1.653082646956444,
+    "gap_C_minus_S": 10.411148375497708,
+    "n_S": 7,
+    "n_C": 35,
+    "n_perm": 100000,
+    "seed": 0,
+    "statistic": "median(C1 w1) - median(S w1), theorem level (best proof each); p = (#perm >= obs + 1)/(N + 1), numpy default_rng(0)",
+    "p_one_sided": 0.0001799982000179998,
+    "verdict": "holds (gap >= 2 and p < 0.10)"
+   },
+   "E1.2_C1x_not_preregistered": {
+    "control": "C1x",
+    "median_w1_S": -12.064231022454152,
+    "median_w1_C": -8.505502155399636,
+    "gap_C_minus_S": 3.5587288670545156,
+    "n_S": 7,
+    "n_C": 35,
+    "n_perm": 100000,
+    "seed": 0,
+    "statistic": "median(C1x w1) - median(S w1), theorem level (best proof each); p = (#perm >= obs + 1)/(N + 1), numpy default_rng(0)",
+    "p_one_sided": 0.005399946000539994,
+    "verdict": "holds (gap >= 2 and p < 0.10)"
+   },
+   "E1.3": {
+    "thresholds": {
+     "N400000": -11.800607537422009,
+     "N200000": -11.107460356862065
+    },
+    "S": {
+     "N400000": {
+      "below": 4,
+      "of": 7,
+      "frac": 0.5714285714285714
+     },
+     "N200000": {
+      "below": 4,
+      "of": 7,
+      "frac": 0.5714285714285714
+     }
+    },
+    "C1": {
+     "N400000": {
+      "below": 2,
+      "of": 35,
+      "frac": 0.05714285714285714
+     },
+     "N200000": {
+      "below": 2,
+      "of": 35,
+      "frac": 0.05714285714285714
+     }
+    },
+    "C1x": {
+     "N400000": {
+      "below": 3,
+      "of": 35,
+      "frac": 0.08571428571428572
+     },
+     "N200000": {
+      "below": 5,
+      "of": 35,
+      "frac": 0.14285714285714285
+     }
+    },
+    "partD_29": {
+     "N400000": {
+      "below": 19,
+      "of": 29,
+      "frac": 0.6551724137931034
+     },
+     "N200000": {
+      "below": 22,
+      "of": 29,
+      "frac": 0.7586206896551724
+     }
+    },
+    "partD_field": "d_summary_T08.json primary.rows[].w1 (WP base s0, T 0.8, best EI proof per survivor, rounded to 0.01)",
+    "verdict_S_N400000": "holds (>=4/7)"
+   }
+  }
+ }
+}
