@@ -216,3 +216,7 @@ COMPUTE-RECORD DONE 2026-09-30T01:02:02Z
 - Code: `state_search.py` (best-first, truncate-and-resume, per-step filter), ladder flags; CPU self-test `se_selftest.py`.
 - 02:31 pre-registration `9d138b60` (before first pod 02:31:47). 02:35–02:45 8 A40 pods: sx-0..5 A ∥ B (seeds 0–5), sx-6/7 A2 ∥ C (seeds 0/1).
 - 03:10 round 1: A solves 3,582 / 3,740 / 3,727 / 3,685 targets (s0–s3), B 3,401 / 3,569 / 3,539 / 3,497. ≈ 17 min per round.
+- 06:40 all 20 read-outs in, pods deleted (29.1 h, $14.26). B − A on Q mean −1.3 (per seed −3…+7), MDD 18: falsifier fires; expert H1 fails (B/A 0.33). C − A2 −8, −8. Secondary: shortest-proof selection costs 63–96 vs state-cap12 T1.
+- Code awaits review before merging into `dan` (brief). Write-up `run_search_expert.md`; `numbers.md` § search-expert.
+
+SEARCH-EXPERT DONE 2026-09-30T06:39:25Z

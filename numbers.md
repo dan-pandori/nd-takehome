@@ -1438,3 +1438,45 @@ counts once at the end (no per-step cost); the sampler adds one `declen.sum()` p
 
 Per-arm compute table of this run: `artifacts/compute-record/compute_table.tsv` (`registry_merge.py --compute --by
 arm,seed,round,phase`). Pods: cr1 0.36 h + cr2 0.05 h, A40 at $0.49/h billed: $0.21. Bucket: `hf://buckets/dan-pandori/nd-rl/compute-record/`.
+
+## search-expert (2026-09-30)
+
+Models: SN-cap12 — `lean_staten`, 3,216,384 params, 4 layers d 256, from scratch; Stage-1 on K12 (`cap-horizon`
+`train_k12.jsonl`, cap 12, 155,000). Stage-1 s0–s3 = `state-cap12`'s `stage1_SN12_s{0-3}.pt`; s4 / s5 trained here
+(held-out p2 greedy 0.9702 / 0.9762, `artifacts/sx/heldout_SN12_s{4,5}.json`). Arms = 8 EI rounds from Stage-1 on the
+4,495 `rl_targets.jsonl` (k 32, T 0.8, batch 2,048, fine-tune 600 steps lr 3e-4, replay 20,000 K12, `--select shortest
+--max_per_thm 1 --rl_weight 4 --step_filter --no_eval`): checkpoints `ckpts/sx/ladder/{A,B,A2,C}_s<S>_r8.pt`. T1 =
+`state-cap12`'s `la_T1_SN12_s{0-3}_r8.pt` (up to 4 random proofs × 4, no filter). Checker: Lean alone.
+
+Read-outs: `lpool_reread.py` k 256, T 0.8, seed 0, batch 2,048, `max_action` 512, `max_steps` 96; files
+`artifacts/sx/rr/<arm>_s<S>__{l2,rr1316}.jsonl` (+ `.json` summaries); Lean dumps (literal texts)
+`hf://…/search-expert/artifacts/sx/dump/rr_*.jsonl.gz`. Table: `artifacts/sx/analysis.md` (`python3 sx_analysis.py --termsize`).
+
+| arm | Q s0 | s1 | s2 | s3 | s4 | s5 |
+|---|---:|---:|---:|---:|---:|---:|
+| A | 79 | 111 | 129 | 148 | 113 | 102 |
+| B | 76 | 118 | 122 | 144 | 117 | 97 |
+| A2 | 80 | 129 | | | | |
+| C | 72 | 121 | | | | |
+| T1 (secondary) | 142 | 207 | 218 | 220 | | |
+
+- Q = solved of `transfer_long2_91.jsonl` (91) + rr600 generator `L_true` 15–16 (200). Strata (17 / ≥ 18 / rr15 / rr16 / rr13 /
+  rr14) per arm and seed in `analysis.md`. Step-cap hits at `max_steps` 96: none recorded in any read (`env_end`).
+- B − A: −3, +7, −7, −4, +4, −5; mean −1.3; IQM −2.5 [−5.7, +4.3]; sd 5.5. Same-checkpoint s = 9.0 (A vs A2, s0–s1) → MDD
+  18.2 (paired t, 6 seeds, α 0.05, power 0.8); MDD from the B − A sd itself 7.9. Discordant theorems only-B / only-A: 26/29,
+  38/31, 34/41, 34/38, 33/29, 32/37. A vs A2 per-theorem flips 47, 66 (of 291).
+- C − A2: −8, −8. A − T1: −63, −96, −89, −72.
+- Expert (targets, `artifacts/sx/<arm>/alloc_<r>.json` accepted counts): solved in round r and never by the other expert in
+  rounds ≤ r, summed over 8 rounds: B 746 / 483 / 508 / 455 / 668 / 698 vs A 1,800 / 1,753 / 1,708 / 1,737 / 1,850 / 1,787;
+  C 762 / 542 vs A2 474 / 419. Actions spent / budget: B 0.226–0.246, C 0.185–0.204. Final cumulative targets solved: A
+  4,075–4,206, B 3,950–4,039, A2 4,122 / 4,183, C 4,131 / 4,184.
+- Shortest training proof, targets solved by both (final found files): B longer than A on 826–924 of 3,872–3,997, shorter on
+  19–45; C longer than A2 on 624 / 612, shorter 39 / 35. Median 8 lines everywhere.
+- Read-out proof length (shortest accepted per solved theorem of Q): median 18–19 lines, elaborated term size 11–14
+  (`lean_check`); on theorems both solve, B / A medians 18 / 17–18 lines, term size 11–13 / 11–12.
+- Compute (`artifacts/sx/compute_table.md`, from `registry/search-expert` rows, excl. B/C's wait-for-budget phase; A40
+  shared by two arms): A 8,296–10,375 GPU-s, 9.75–10.11 M actions, 192–196 M gen tokens, 611–651 k Lean checks; B 4,708–5,651
+  GPU-s, 2.28–2.40 M actions, 43–46 M tokens, 30–31 k checks; C 5,468 / 5,663 GPU-s, 1.86 / 2.00 M actions; every arm 4,800
+  fine-tune steps, 504–525 M train tokens. Pods: 8 A40 (sx-0..7), 29.1 h, $14.26.
+- Bucket: `hf://buckets/dan-pandori/nd-rl/search-expert/{ckpts/sx,artifacts/sx,figures}`, registry rows
+  `hf://buckets/dan-pandori/nd-rl/registry/search-expert/`.

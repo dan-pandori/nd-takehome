@@ -845,3 +845,12 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   read-out settings (`pod/sx/t1reads.sh`, ≈ 1.5 pod-h), so A (shortest-proof selection) can be compared with the
   all-successes rule on the same seeds and read. It is the brief's optional arm A′, using existing ladders; it differs
   from A also in the step filter (a sampling re-draw only) and the per-round evals (no effect on training).
+- 05:35–06:35 pairs finished (s1 05:35 … s4 06:35); each pod gzipped its Lean dumps and uploaded `artifacts/sx`, `ckpts/sx`
+  and its registry rows (`pod/sx/finalize.sh`), then was pulled (`pod/sx/pullsmall.sh --with-found`, dumps stay in the
+  bucket) and deleted. 8 pods, 29.10 h, $14.26 (`podbudget`); RunPod balance $172.57.
+- 06:40 results (`sx_analysis.py --termsize`): B − A on Q −3 / +7 / −7 / −4 / +4 / −5 (mean −1.3), MDD 18 from the
+  same-checkpoint s 9.0 → the pre-registered falsifier fires; H1 fails (B/A 0.33 on past-the-other solves). C − A2 −8 / −8.
+  Secondary: A − T1 −63 to −96 on all 4 seeds (selection rule + RL volume). No A+ (B's GPU-seconds below A's).
+  Deviation noted: the B−A per-seed sd (5.5) is smaller than the same-checkpoint prediction (√2·9 = 12.7); both MDDs
+  reported. The smoke test's registry rows carry arms `A`/`B`/`C` (no seed) and are excluded from the compute table.
+- 06:45 write-up `run_search_expert.md`, figure `figures/search_expert.png` (`sx_figure.py`), `numbers.md` § search-expert.
