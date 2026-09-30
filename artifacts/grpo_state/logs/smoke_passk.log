@@ -1,0 +1,12 @@
+4495 targets, budget 1150720 rollouts = 561 steps of 2048 (256 x G 8); adv passk; boundaries [4]; params 3216384 mode lean_staten
+[lean_gate] 2048 samples, parse-fail 267 (no-eos 0, 0.000 %), distinct 1717: ok 912, rej 805 (filter 805, prefilter=on); lean on 912 texts in 3 procs, 7.4s proc, exposed 3.3s, tail 3.1s, 32 workers
+/workspace/nd-takehome/grpo_state.py:169: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  l.backward(); loss_t += float(l)
+[lean_gate] 2048 samples, parse-fail 271 (no-eos 0, 0.000 %), distinct 1722: ok 862, rej 860 (filter 860, prefilter=on); lean on 862 texts in 3 procs, 7.0s proc, exposed 3.3s, tail 3.2s, 32 workers
+[lean_gate] 2048 samples, parse-fail 250 (no-eos 0, 0.000 %), distinct 1732: ok 939, rej 793 (filter 793, prefilter=on); lean on 939 texts in 3 procs, 7.4s proc, exposed 3.3s, tail 3.2s, 32 workers
+[lean_gate] 2048 samples, parse-fail 267 (no-eos 0, 0.000 %), distinct 1712: ok 874, rej 838 (filter 838, prefilter=on); lean on 874 texts in 3 procs, 7.3s proc, exposed 3.5s, tail 3.4s, 32 workers
+step 4/561 r1 reward 0.455 var-groups 0.59 new 367 loss -0.0001 gn 0.00 t 17+2s solved 771/4495 77s
+uploaded ckpts/grpo_state/smoke_passk_r1.pt -> hf://buckets/dan-pandori/nd-rl/grpo-state/ckpts/grpo_state/smoke_passk_r1.pt (md5 22021f191522080acef17d055d8d0a46, 3.9s)
+[smoke_passk r1] targets cumulative: solved 771/4495 L*=11
+DONE
