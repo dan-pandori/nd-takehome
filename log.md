@@ -829,3 +829,7 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   17.5 GB reserved, growing with rounds). New layout, **two ladders per pod**: fsup1 S s0 + S s1 (after Stage-1 ends),
   fsup2 S s2 + S s3 (C′ s1 killed in round 1), fsup3 S s4 + C s4 (+ fixed read-outs), fsup4 S s5 + C s5, fsup5 (new,
   02:55) C′ s0 + C′ s1. Cost: ≈ 5 pods × ~6 h ≈ 30 pod-hours ≈ $15.
+- 2026-09-30 03:55 UTC  Stage-1 s4, s5 done on fsup1 (≈ 85 min each under contention). Round 1–2 filter: S s2 152 / 152,
+  S s3 172 / 153 kept of 1,123 (13–15 %); window moved 13–16 → 14–17 after round 1 (more too-easy than p̂ = 0 in (a)).
+  Round 1 wall: S 2,415 / 2,398 s (fsup2), C′ 2,133 / 2,150 s (fsup5). Re-read of the reused C r8 checkpoints on the 91
+  (fsup3): s0 33, s1 60, s2 57 vs long-pool-2's 34 / 59 / 58 (same settings, another pod: a sampling re-draw).
