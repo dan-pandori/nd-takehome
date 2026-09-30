@@ -1465,6 +1465,11 @@ Compute rows (registry, `python3 gs_compute.py artifacts/grpo-state/registry`), 
 | conc_default | 169 | 2,275,190 | 12,288 | 121,103 | 6 | 6,731,648 | 5,320 |
 | conc_passk | 168 | 2,307,410 | 12,288 | 123,320 | 6 | 3,989,653 | 5,165 |
 
-(`attempts` counts rollouts; `lean_checks` counts distinct texts sent to Lean after the prefilter.) Pod: `gs-smoke`
-0.23 h, $0.11. Bucket: `hf://buckets/dan-pandori/nd-rl/grpo-state/{artifacts/grpo_state,artifacts/grpo-state,ckpts/grpo_state}`
+| smoke2_default (A40, KL 0.02, subsets, with boundary evals) | 107 | 1,614,519 | 8,720 | 87,652 | 2 | 4,400,566 | 2,431 |
+| smoke2_unlikely (A40, subsets, with boundary evals) | 97 | 1,621,632 | 8,720 | 88,139 | 2 | 2,429,445 | 2,436 |
+
+(`attempts` counts rollouts, evaluation included; `lean_checks` counts distinct texts sent to Lean after the
+prefilter.) Smoke 2 (after the review fixes; `artifacts/grpo_state/smoke2_*/round_{1,2}.json`) ran on subsets of 64
+targets, 64 transfer and 200 held-out theorems (the first lines of each pool) only to exercise the boundary path.
+Pods: `gs-smoke` RTX 3090 0.23 h $0.11, `gs-smoke2` A40 ($0.49/h) 0.09 h $0.05; total 0.32 h, $0.16. Bucket: `hf://buckets/dan-pandori/nd-rl/grpo-state/{artifacts/grpo_state,artifacts/grpo-state,ckpts/grpo_state}`
 (rows in `artifacts/MANIFEST.jsonl`).

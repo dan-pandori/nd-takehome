@@ -832,3 +832,14 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   listing equal to the pod's), uploaded, pod deleted (0.23 h, $0.11).
 - 02:45 Addendum 1 (timings, costed plan: full design ≈ $37–43 vs the brief's $10–20; Plans B/C) and a
   `QUESTIONS.md` entry (default: Plan B). `publish_artifacts.py grpo-state` for the bulk files (30).
+- 02:50 independent code review (subagent, read-only): nothing serious; the ids, masking, positions, both paper
+  formulas, the KL term, found-file fields and seeds all check out. Acted on: (1) log-probs now of the sampling
+  distribution (logits / T) for the loss, KL and the unlikeliness ranking (run 4 used T = 1; recorded in the
+  pre-registration addendum); (3) boundaries when steps < rounds or with `--max_steps_total`; (4) `env` stats reset per
+  round-equivalent (the ladder's convention; the declen list grew without bound); (5) action ids kept exactly as fed
+  (a mid-action pad was dropped). Kept, with the reason in `grpo_adv.py`: unlikeliness zeroes all-correct groups and
+  ranks over all G (the lit note's reading of He et al. §4.1). CI green with a new T = 0.8 gradient check.
+- 02:40 second GPU smoke `pod/gs/smoke2.sh` on pod `gs-smoke2` (A40 secure, $0.49/h; 3090 out of stock): the full
+  boundary path on subsets (64 targets / 64 transfer / 200 held-out, 2 round-equivalents of one update), default with
+  KL 0.02 and unlikely: both DONE, KL 0 at step 1 and 1.8e-4 / token at step 2, env stats per round. Pulled (34
+  files, md5 equal), uploaded, pod deleted (0.09 h, $0.05). Run total **0.32 pod-h, $0.16**.

@@ -1,0 +1,77 @@
+64 targets, budget 4096 rollouts = 2 steps of 2048 (256 x G 8); adv unlikely; boundaries [1, 2]; params 3216384 mode lean_staten
+[lean_gate] 2048 samples, parse-fail 357 (no-eos 0, 0.000 %), distinct 1566: ok 509, rej 1057 (filter 1057, prefilter=on); lean on 509 texts in 2 procs, 3.8s proc, exposed 3.0s, tail 2.9s, 32 workers
+uploaded ckpts/grpo_state/smoke2_unlikely_r1.pt -> hf://buckets/dan-pandori/nd-rl/grpo-state/ckpts/grpo_state/smoke2_unlikely_r1.pt (md5 758439caa9ac79bbc63f094eb4c78ae3, 3.1s)
+[lean_gate] 2048 samples, parse-fail 384 (no-eos 0, 0.000 %), distinct 1477: ok 436, rej 1041 (filter 1041, prefilter=on); lean on 436 texts in 2 procs, 3.5s proc, exposed 3.0s, tail 3.0s, 32 workers
+[smoke2_unlikely r1] transfer (boundary, pass@32) SOLVED 40/64 = 0.625 [0.503,0.733]
+  len 7: 3/5 = 0.600 [0.231,0.882]
+  len 8: 8/14 = 0.571 [0.326,0.786]
+  len 9: 18/25 = 0.720 [0.524,0.857]
+  len 10: 9/12 = 0.750 [0.468,0.911]
+  len 11: 2/4 = 0.500 [0.150,0.850]
+  len 12: 0/3 = 0.000 [0.000,0.562]
+  len 13: 0/1 = 0.000 [0.000,0.793]
+  written hist {7: 3, 8: 17, 9: 34, 10: 25, 11: 8, 12: 8, 13: 6, 14: 3, 15: 2, 16: 2, 17: 7, 18: 1, 21: 1, 24: 1}
+  pruned hist {7: 19, 8: 24, 9: 28, 10: 16, 11: 4, 12: 10, 13: 3, 14: 2, 15: 3, 16: 1, 17: 5, 18: 1, 19: 1, 21: 1}
+  frontier written 17 pruned 17
+  reasons [('lean rejected', 1129), ('lean_seq parse: env: unbound', 132), ('lean_seq parse: env: Or.elim on non-or', 110), ('lean_seq parse: env: binder mismatch', 53), ('lean_seq parse: env: exact goal mismatch', 47), ('lean_seq parse: env: formula', 33)]
+[lean_gate] 64 samples, parse-fail 7 (no-eos 0, 0.000 %), distinct 57: ok 25, rej 32 (filter 32, prefilter=on); lean on 25 texts in 1 procs, 0.4s proc, exposed 0.4s, tail 0.4s, 32 workers
+[smoke2_unlikely r1] transfer greedy SOLVED 25/64 = 0.391 [0.281,0.513]
+  len 7: 3/5 = 0.600 [0.231,0.882]
+  len 8: 7/14 = 0.500 [0.268,0.732]
+  len 9: 12/25 = 0.480 [0.300,0.665]
+  len 10: 2/12 = 0.167 [0.047,0.448]
+  len 11: 1/4 = 0.250 [0.046,0.699]
+  len 12: 0/3 = 0.000 [0.000,0.562]
+  len 13: 0/1 = 0.000 [0.000,0.793]
+  written hist {7: 3, 8: 6, 9: 13, 12: 1, 17: 1, 19: 1}
+  pruned hist {7: 5, 8: 7, 9: 10, 12: 1, 17: 1, 19: 1}
+  frontier written 9 pruned 9
+  reasons [('lean rejected', 32), ('lean_seq parse: env: Or.elim on non-or', 3), ('lean_seq parse: env: binder mismatch', 2), ('lean_seq parse: env: unbound', 1), ('lean_seq parse: env: exact goal mismatch', 1)]
+[lean_gate] 200 samples, parse-fail 0 (no-eos 0, 0.000 %), distinct 200: ok 200, rej 0 (filter 0, prefilter=on); lean on 200 texts in 1 procs, 0.8s proc, exposed 0.8s, tail 0.8s, 32 workers
+[smoke2_unlikely r1] heldout greedy SOLVED 200/200 = 1.000 [0.981,1.000]
+  len 2: 200/200 = 1.000 [0.981,1.000]
+  written hist {2: 200}
+  pruned hist {2: 200}
+  frontier written 2 pruned 2
+  reasons []
+[smoke2_unlikely r1] targets cumulative: solved 45/64 L*=10
+[smoke2_unlikely r1] transfer cumulative: solved 40/64 L*=10
+[lean_gate] 2048 samples, parse-fail 291 (no-eos 0, 0.000 %), distinct 1630: ok 577, rej 1053 (filter 1053, prefilter=on); lean on 577 texts in 2 procs, 4.3s proc, exposed 3.0s, tail 2.9s, 32 workers
+step 2/2 r2 reward 0.326 var-groups 0.57 new 72 loss -0.0007 gn 0.00 t 16+3s solved 48/64 69s
+uploaded ckpts/grpo_state/smoke2_unlikely_r2.pt -> hf://buckets/dan-pandori/nd-rl/grpo-state/ckpts/grpo_state/smoke2_unlikely_r2.pt (md5 9b9d3f773614eed8135205bd5f868e78, 3.1s)
+[lean_gate] 2048 samples, parse-fail 329 (no-eos 0, 0.000 %), distinct 1532: ok 464, rej 1068 (filter 1068, prefilter=on); lean on 464 texts in 2 procs, 3.6s proc, exposed 3.0s, tail 3.0s, 32 workers
+[smoke2_unlikely r2] transfer (boundary, pass@32) SOLVED 38/64 = 0.594 [0.471,0.705]
+  len 7: 3/5 = 0.600 [0.231,0.882]
+  len 8: 8/14 = 0.571 [0.326,0.786]
+  len 9: 18/25 = 0.720 [0.524,0.857]
+  len 10: 7/12 = 0.583 [0.320,0.807]
+  len 11: 2/4 = 0.500 [0.150,0.850]
+  len 12: 0/3 = 0.000 [0.000,0.562]
+  len 13: 0/1 = 0.000 [0.000,0.793]
+  written hist {7: 3, 8: 16, 9: 37, 10: 22, 11: 13, 12: 9, 13: 7, 14: 3, 15: 4, 16: 2, 17: 4, 18: 1, 19: 1, 21: 1}
+  pruned hist {7: 22, 8: 20, 9: 36, 10: 16, 11: 7, 12: 8, 13: 4, 14: 2, 15: 5, 17: 2, 19: 1}
+  frontier written 13 pruned 15
+  reasons [('lean rejected', 1163), ('lean_seq parse: env: unbound', 116), ('lean_seq parse: env: Or.elim on non-or', 105), ('lean_seq parse: env: binder mismatch', 51), ('lean_seq parse: env: exact goal mismatch', 37), ('lean_seq parse: env: formula', 10)]
+[lean_gate] 64 samples, parse-fail 6 (no-eos 0, 0.000 %), distinct 58: ok 25, rej 33 (filter 33, prefilter=on); lean on 25 texts in 1 procs, 0.4s proc, exposed 0.4s, tail 0.4s, 32 workers
+[smoke2_unlikely r2] transfer greedy SOLVED 25/64 = 0.391 [0.281,0.513]
+  len 7: 3/5 = 0.600 [0.231,0.882]
+  len 8: 7/14 = 0.500 [0.268,0.732]
+  len 9: 12/25 = 0.480 [0.300,0.665]
+  len 10: 2/12 = 0.167 [0.047,0.448]
+  len 11: 1/4 = 0.250 [0.046,0.699]
+  len 12: 0/3 = 0.000 [0.000,0.562]
+  len 13: 0/1 = 0.000 [0.000,0.793]
+  written hist {7: 3, 8: 6, 9: 13, 12: 1, 13: 1, 17: 1}
+  pruned hist {7: 5, 8: 8, 9: 9, 11: 1, 12: 1, 17: 1}
+  frontier written 9 pruned 9
+  reasons [('lean rejected', 33), ('lean_seq parse: env: Or.elim on non-or', 3), ('lean_seq parse: env: binder mismatch', 1), ('lean_seq parse: env: unbound', 1), ('lean_seq parse: env: exact goal mismatch', 1)]
+[lean_gate] 200 samples, parse-fail 0 (no-eos 0, 0.000 %), distinct 200: ok 200, rej 0 (filter 0, prefilter=on); lean on 200 texts in 1 procs, 0.8s proc, exposed 0.9s, tail 0.8s, 32 workers
+[smoke2_unlikely r2] heldout greedy SOLVED 200/200 = 1.000 [0.981,1.000]
+  len 2: 200/200 = 1.000 [0.981,1.000]
+  written hist {2: 200}
+  pruned hist {2: 200}
+  frontier written 2 pruned 2
+  reasons []
+[smoke2_unlikely r2] targets cumulative: solved 48/64 L*=10
+[smoke2_unlikely r2] transfer cumulative: solved 41/64 L*=10
+DONE
