@@ -205,7 +205,8 @@ def save_config(cfg, out, **labels):
 # phase, round (labels.round), device ('cuda'/'cpu'), gpu (device name), n_gpu, wall_s, compute_id.
 # Time is EXCLUSIVE: a block's clock stops while a nested block (or a child process, `child()`) runs, so summing
 # gpu_seconds over all rows of a run gives its total with nothing counted twice.  save_config() opens a process-level
-# block (phase 'job', or ND_PHASE) closed at exit, so every script that registers its config records its compute.
+# block (phase 'job', or ND_PHASE) closed at exit, so every script that registers its config records its compute; its
+# clock starts at the process's creation (/proc), since the process holds its GPU from then.
 # gpu_seconds = exclusive wall-clock x n_gpu when the process initialised CUDA (n_gpu = 1, or ND_N_GPU); on CPU it is
 # the wall-clock with device='cpu' (one CPU process), and a CPU block with every counter zero writes no rows.
 # ND_COMPUTE=0 turns it off.  See REGISTRY.md.
@@ -330,13 +331,24 @@ def count(**kw):
             n[k] += v
 
 
+def _proc_age():
+    """Seconds since this process started (Linux /proc), else 0."""
+    try:
+        ticks = int(open('/proc/self/stat').read().rsplit(')', 1)[1].split()[19])
+        return max(0.0, float(open('/proc/uptime').read().split()[0]) - ticks / os.sysconf('SC_CLK_TCK'))
+    except Exception:
+        return 0.0
+
+
 def job_compute():
     """The process-level block (opened by save_config), closed at exit."""
     if not enabled() or any(b.job for b in _blocks):
         return None
     c = compute()
     c.job = True
-    atexit.register(c.start().close, 'exit')
+    c.start()
+    c._t -= _proc_age()    # the process held its GPU from exec, not from save_config (imports: ~2-5 s)
+    atexit.register(c.close, 'exit')
     return c
 
 

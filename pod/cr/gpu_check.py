@@ -47,7 +47,7 @@ def expect(a):
         for idxs in idx:
             record.count(train_steps=1, train_tokens=sum(len(data[i][0]) + len(data[i][1]) for i in idxs))
         per_step_s = (time.perf_counter() - t0) / len(idx)
-    c.n = dict.fromkeys(c.n, 0)                      # a benchmark, not work: no rows
+        c.n = dict.fromkeys(c.n, 0)                  # a benchmark, not work: no rows
     res = {'records': len(data), 'tokens_per_epoch': total, 'train_fast_expected': 1000 * total,
            'legacy_600_expected': 100 * total, 'ladder_ft_note': 'fine-tune mix is written by ladder_ei; see analyze.py',
            'counter_us_per_step_bs500': per_step_s * 1e6}
