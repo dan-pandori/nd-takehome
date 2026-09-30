@@ -1,0 +1,47 @@
+A_s0 [(1065388, 1065388, None), (1181376, 1181376, None), (1220681, 1220681, None)]
+B_s0 [(361280, 361280, 1065388), (322268, 322268, 1181376), (302748, 302748, 1220681)]
+--- budget matching (B vs A same seed/round/target; C vs A2) ---
+B_s0: targets-rounds over budget 0; actions 2397212 vs A 9746454 = 0.246
+B_s1: targets-rounds over budget 0; actions 2277420 vs A 10081630 = 0.226
+B_s2: targets-rounds over budget 0; actions 2281904 vs A 10114241 = 0.226
+B_s3: targets-rounds over budget 0; actions 2308720 vs A 10048307 = 0.230
+B_s4: targets-rounds over budget 0; actions 2341764 vs A 9882972 = 0.237
+B_s5: targets-rounds over budget 0; actions 2292520 vs A 10036818 = 0.228
+C_s0: targets-rounds over budget 0; actions 1998829 vs A2 9813147 = 0.204
+C_s1: targets-rounds over budget 0; actions 1859685 vs A2 10050482 = 0.185
+--- H1: per round, solves by X in round r on targets Y never solved in rounds 1..r ---
+s0 B-only-past-A: [136, 99, 93, 84, 87, 79, 81, 87] sum 746 | A-only-past-B: [317, 246, 223, 207, 196, 204, 204, 203] sum 1800
+    first-ever solves B [3401, 256, 114, 61, 55, 24, 23, 27] (tot 3961) A [3582, 219, 96, 55, 44, 40, 21, 18] (tot 4075); cum r8 B 3961 A 4075; L>=13 cum B 5 A 4
+s1 B-only-past-A: [102, 74, 60, 51, 55, 50, 49, 42] sum 483 | A-only-past-B: [273, 230, 218, 208, 204, 201, 210, 209] sum 1753
+    first-ever solves B [3569, 229, 81, 46, 37, 29, 23, 25] (tot 4039) A [3740, 211, 84, 46, 29, 32, 33, 31] (tot 4206); cum r8 B 4039 A 4206; L>=13 cum B 5 A 5
+s2 B-only-past-A: [84, 71, 70, 73, 64, 52, 47, 47] sum 508 | A-only-past-B: [272, 229, 206, 205, 205, 207, 194, 190] sum 1708
+    first-ever solves B [3539, 242, 100, 50, 32, 27, 28, 14] (tot 4032) A [3727, 210, 79, 48, 39, 42, 20, 10] (tot 4175); cum r8 B 4032 A 4175; L>=13 cum B 5 A 5
+s3 B-only-past-A: [89, 72, 67, 57, 47, 46, 38, 39] sum 455 | A-only-past-B: [277, 229, 215, 219, 204, 204, 197, 192] sum 1737
+    first-ever solves B [3497, 264, 93, 42, 39, 24, 16, 20] (tot 3995) A [3685, 234, 82, 57, 34, 25, 16, 13] (tot 4146); cum r8 B 3995 A 4146; L>=13 cum B 5 A 5
+s4 B-only-past-A: [120, 87, 87, 78, 79, 70, 74, 73] sum 668 | A-only-past-B: [299, 240, 230, 223, 223, 215, 213, 207] sum 1850
+    first-ever solves B [3487, 224, 80, 50, 41, 26, 19, 23] (tot 3950) A [3666, 196, 70, 53, 40, 25, 16, 18] (tot 4084); cum r8 B 3950 A 4084; L>=13 cum B 5 A 5
+s5 B-only-past-A: [127, 98, 96, 76, 74, 77, 79, 71] sum 698 | A-only-past-B: [283, 235, 228, 213, 204, 203, 207, 214] sum 1787
+    first-ever solves B [3526, 230, 83, 49, 40, 29, 22, 9] (tot 3988) A [3682, 210, 78, 55, 31, 27, 24, 24] (tot 4131); cum r8 B 3988 A 4131; L>=13 cum B 6 A 5
+s0 C-only-past-A2: [156, 119, 109, 101, 86, 70, 56, 65] sum 762 | A2-only-past-C: [102, 60, 50, 51, 47, 60, 48, 56] sum 474
+    first-ever solves C [3656, 214, 96, 59, 40, 22, 24, 20] (tot 4131) A2 [3602, 206, 98, 69, 49, 53, 23, 22] (tot 4122); cum r8 C 4131 A2 4122; L>=13 cum C 4 A2 3
+s1 C-only-past-A2: [137, 87, 70, 61, 56, 46, 43, 42] sum 542 | A2-only-past-C: [70, 64, 48, 50, 46, 51, 49, 41] sum 419
+    first-ever solves C [3780, 197, 78, 42, 28, 19, 22, 18] (tot 4184) A2 [3713, 240, 80, 53, 29, 34, 23, 11] (tot 4183); cum r8 C 4184 A2 4183; L>=13 cum C 5 A2 4
+B sum over seeds: X-only 3558 base-only 10635 ratio 0.33
+C sum over seeds: X-only 1304 base-only 893 ratio 1.46
+--- per-round solved totals & per-round time ---
+A_s0 [3582, 3798, 3897, 3952, 3995, 4036, 4057, 4075] secs 9749 actions 9746454 mix_rl 16300
+A_s1 [3740, 3946, 4035, 4081, 4110, 4142, 4175, 4206] secs 8988 actions 10081630 mix_rl 16824
+A_s2 [3727, 3936, 4016, 4063, 4103, 4145, 4165, 4175] secs 10070 actions 10114241 mix_rl 16700
+A_s3 [3685, 3917, 4001, 4058, 4092, 4117, 4133, 4146] secs 10378 actions 10048307 mix_rl 16584
+A_s4 [3666, 3859, 3931, 3984, 4024, 4050, 4066, 4084] secs 9812 actions 9882972 mix_rl 16336
+A_s5 [3682, 3891, 3970, 4025, 4056, 4083, 4107, 4131] secs 8297 actions 10036818 mix_rl 16524
+B_s0 [3401, 3640, 3763, 3827, 3884, 3910, 3934, 3958] secs 5557 actions 2397212 mix_rl 15844
+B_s1 [3569, 3790, 3876, 3924, 3959, 3991, 4014, 4039] secs 4789 actions 2277420 mix_rl 16156
+B_s2 [3539, 3778, 3878, 3929, 3962, 3990, 4018, 4031] secs 5491 actions 2281904 mix_rl 16128
+B_s3 [3497, 3759, 3853, 3895, 3934, 3959, 3974, 3993] secs 5654 actions 2308720 mix_rl 15980
+B_s4 [3487, 3704, 3783, 3833, 3879, 3905, 3923, 3950] secs 5599 actions 2341764 mix_rl 15800
+B_s5 [3526, 3752, 3837, 3887, 3926, 3957, 3979, 3988] secs 4710 actions 2292520 mix_rl 15952
+A2_s0 [3602, 3805, 3906, 3974, 4024, 4077, 4100, 4122] secs 9706 actions 9813147 mix_rl 16488
+A2_s1 [3713, 3952, 4033, 4086, 4115, 4149, 4172, 4183] secs 9605 actions 10050482 mix_rl 16732
+C_s0 [3656, 3865, 3962, 4023, 4062, 4086, 4108, 4131] secs 5665 actions 1998829 mix_rl 16524
+C_s1 [3780, 3976, 4055, 4097, 4125, 4143, 4166, 4183] secs 5472 actions 1859685 mix_rl 16736
