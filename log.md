@@ -806,3 +806,8 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 00:54 pod cr2 (A40, $0.49/h), `pod/cr/gpu_job3.sh`: fast_train per-step counting and a 2-round `grpo.py`
   (targets `data/lj/heldout200.jsonl`, k 8, eval_k 4): 6 / 6 new checks equal (`pod/cr/analyze.py`). GRPO's outputs
   (written by grpo.py to `artifacts/cr_grpo/`) copied to `artifacts/compute-record/grpo/`. Pod deleted (0.05 h, $0.03).
+
+# log — state-readouts
+
+- 2026-09-30 02:10 UTC start. Read the six summaries, `ss_support.py`, `lpool_reread.py`. Took `ss_support.py`, `support.py`, `data/sc/{theorems.jsonl,falsifier_survivors.txt}` from `origin/dan_support-state` and its `state_sample.py` `texts_out` patch; `lpool_reread.py` from `origin/dan_state-cap12`. Added one `record.save_config` line to `ss_support.py` (compute rows).
+- 02:12 Inherited per-schema in-loop T1 counts (state-env S/SH/SN, state-cap12 SN-cap12) with `sr_schema_inherited.py` → `artifacts/state-readouts/inherited_schema.json`: SN-cap12 T1 in-loop already has 11 / 12 dead schemata ≥ 5 on all seeds (excluded_middle 0–1). Disclosed in the pre-registration.

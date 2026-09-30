@@ -207,3 +207,9 @@ REPO-HYGIENE-2 DONE 2026-09-29T15:58:53Z
 - Bucket: `hf://buckets/dan-pandori/nd-rl/compute-record/` (ckpts/, artifacts/); registry rows under `registry/compute-record/`.
 
 COMPUTE-RECORD DONE 2026-09-30T01:02:02Z
+
+
+# STATUS — state-readouts
+
+## state-readouts (executor, started 2026-09-30T02:10Z)
+- Part A: S / SH Stage-1 bases on support-curves' 29 survivors, support-state's H protocol. Part B: SN-cap12 T1 / frozen s0–s3, k 256 on the textbook theorems of transfer / transfer_long. Budget $12 / 24 pod-hours.
