@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Part B queue: re-read the listed checkpoints one after another. Usage: bq.sh <label:ckpt> ...
+for x in "$@"; do bash pod/sr/b.sh ${x#*:} ${x%%:*} || exit 1; done
