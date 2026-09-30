@@ -151,3 +151,80 @@ counter and rule counter.
   "at least half" expectation misses.
 - **Lean.** M3 counts found files that earlier runs judged; this run adds no new counted proofs. I did not re-check M3
   proofs in Lean. The earlier runs' reviews cover them.
+
+## §Compare (phase 2: `run_lit_measures.md`, `numbers.md` § lit-measures, `log.md`)
+
+Gate 0: the pre-registration was committed at `bd3b330e` 00:04:53 UTC, before the first pod (lm1 at ~00:06). M1 ran
+at ~01:01 and M3 was committed at 00:40, both after it. Amendment 1 (the replicates) was committed at 00:40:07. Its text
+says "~00:55", but the commit time is earlier, which is harmless. It was committed while lm2's first grid cells were
+running. That no grid result had been read cannot be checked from files, but the amendment adds a read-out and changes
+no hypothesis.
+
+| # | claim (where) | independent value | verdict |
+|---|---|---|---|
+| 1 | S = 7 theorems the base never reaches in 400,000 attempts (run) | 7; 200,000 per temperature × 2, same 7 names | reproduces |
+| 2 | M1 model label (SN base s0 `ec3888d9`, 3.2 M, `lean_staten`, from scratch) | md5 checked | reproduces |
+| 3 | median worst step −14.7 nats (T 0.8), 7/7 concentrated, E1.1 ✓ (run, numbers) | −14.71 (executor's attribution); −15.23 (sampler mixture b ∈ [0, 32]); 7/7 under all 4 variants | reproduces |
+| 4 | "remaining steps −1.5" (run) | median rest = total − w1 − w2 = −1.49, but w2 median is −4.63 and is left out | reproduces; **reword** ("second-worst −4.6, all others together −1.5") |
+| 5 | 13 nats below C1, p 0.0002, E1.2 ✓ | 13.14, p 0.0002 (0.0001 under the sampler mixture) | reproduces |
+| 6 | 4.1 nats below C1x, p 0.003; 31/35 C1x concentrated (post hoc, labelled) | from the executor's scored C1x rows (the same code reproduces to 1e-5 on S/C1/C2; I did not re-score C1x): −14.71 vs −10.59, 31/35; p not re-derived. C1x = 35 forward-crux theorems reached only in S2: checked. Lean: 728/728 C1x proofs accepted | reproduces (derived from the executor's scores) |
+| 7 | E1.3 5/7 (4/7 at T 1.0); part D 19/29; 9/35 C1x below | 5/7, 4/7; 19/29 (22/29 at −11.11); 9/35 | reproduces |
+| 8 | worst steps: 4/7 `Or.elim`, 2 `byContradiction` | same | reproduces |
+| 9 | name base "marginalised as in part D" (log, report) | The pre-registration said "no name marginalisation needed", and the log does not call this a deviation. It also sums over b ≤ 64 − mx, where the sampler draws b ∈ [0, 32]. Every E1 verdict is unchanged under the sampler mixture and under base 0 (§Recount table) | deviation not labelled; immaterial |
+| 10 | M2 shares: data 0.02 [0, 0.42], init 0.17 [0, 0.60], residual 0.81 [0.31, 0.99] | 0.02 [0, 0.41], 0.17 [0, 0.59], 0.81 [0.31, 1.00] (own bootstrap) | reproduces |
+| 11 | E2.1 "not supported, not falsified" | point 0.02 against 30 %, upper bound 0.41 > 0.30 | reproduces; wording correct |
+| 12 | "high mode follows neither seed" (p rows 0.16, cols 0.61) | same for the binary mode. On the continuous depth-3 rate the init F-test gives p = 0.020 (overall p = 0.007); data p = 0.34 | reproduces for the binary; **add** that the init seed has a detectable effect on the continuous rate and the data order has none |
+| 13 | E2.2 (data share > init share) | data 0.02 < init 0.17, overlapping intervals: a miss, falsifier not met | **not reported** in run/numbers; must be stated as a miss |
+| 14 | identical-seed re-runs 0.22–0.90, ≈ half the grid variance, E2.4 ✓ | 0.222–0.900, sd 0.225, 0.55 × grid variance | reproduces |
+| 15 | E2.3 (bimodality reproduced on the fast path) | sd 0.305, range 0.006–0.900 ✓ | holds; not stated in run.md |
+| 16 | legacy 6,000-step run vs noise-floor `stage1_p1_s0`: max \|Δ val\| 0.032 over steps 200–1,400 | 0.0318 at step 400; ≤ 0.0009 from step 2,000; final 0.0724 vs 0.0729 | reproduces |
+| 17 | M2 model label (3,214,336, `lean_seq`, from scratch, cap 6, fast, `train_p1` `e80aaa0c`) | checked in all 72 metrics headers | reproduces |
+| 18 | compute: grid 8,113 GPU-s, rep 995, repro 338; 384,000 + 48,000 steps; 360,000 Lean-judged attempts | 8,112.7 / 994.8 / 338.0; 64 × 6,000, 8 × 6,000; 72 × 5,000 | reproduces. Eval GPU-s, gen tokens, M1 CPU-s and M3 pod-s are not recorded, and there is no per-arm table in run.md (only in numbers/compute.tsv) |
+| 19 | pod as nuisance factor (log 01:26) | depth-3 by pod parity: lm5 0.433 vs lm2/lm6 0.560, permutation p 0.09. It sits in the residual; the checkerboard keeps it off both factors | in the log only; **add a sentence** to the write-up |
+| 20 | (not claimed) max_new | depth-3 stratum no-`<eos>` 0.22 % > 0.1 % policy line (worst cell 4/500) | **unreported policy miss**, immaterial to the shares |
+| 21 | "19 EI arms, 41 seeds, 10 run families" (run) | 19 arms, 10 families, **44** seeds (numbers.md's own E3.2 denominator is 44) | differs by 3; fix |
+| 22 | E3.1 = 0.75 at round 2, "met, but weakly"; new-proof share 0.56; frozen 0.89 (numbers) | 19.5/26 = 0.75 (after start-index dedup too); 0.56; 0.89. Also: ties uncredited 0.69; disjoint early vs late sets 0.52 | reproduces. The frozen 0.89 should be in run.md: it shows the cumulative statistic measures persistence of the base's style, not RL separating modes |
+| 23 | per-round counts (`per_round.tsv`, all of M3) | 1,364/1,488 cells identical. **All 124 round3-run4b cells count start-index variants as distinct proofs** (my raw rows reproduce them 160/160; e.g. 4,377 rows = 115 distinct proofs) | **differs**: round3-run4b rows must be start-index-normalised |
+| 24 | "EI arms whose seeds differ by > 0.05 at the end: 25Mr 0.65, 85Mr 0.54" (numbers) | deduplicated: 25Mr 0.726 (0.770 − 0.044), 85Mr 0.751 (0.760 − 0.009) | **differs** (consequence of #23); the qualitative claim stands |
+| 25 | "only round3-run4b's r arms end bimodal; a seed takes off at rounds 2–3 (25Mr), 5–8 (85Mr), or never" | deduplicated trajectories agree: 25Mr s0/s1 take off r2–r4, s2 never (0.044); 85Mr s2 r5–r7, s1 r7–r8, s0 never | reproduces; **model label missing**: these are round3-run4b's 25 M / 85 M models, not 3.2 M |
+| 26 | "clearer pattern is convergence": ds-generator g1/g2 seed spread 0.56 → 0.03 / frozen 0.56 → 0.51; 0.46 → 0.01 / 0.41 | g1 0.56 → 0.03 (EI) / 0.50 (frozen); g2 0.47 → 0.01 / 0.41. The low seed jumps from 0.05 to 0.62 (g1) and from 0.17 to 0.68 (g2) in one EI round | reproduces; **label post hoc** and scope it to ds-generator g1/g2 (2 arms of one family). The other arms' seeds start within ≈ 0.03 of each other, so there is nothing to converge |
+| 27 | E3.2 5/44 (numbers) | non-flat increasing 4/44 after dedup (+ 6 constant-zero ladders), executor 5/44 | differs by 1 (dedup); both are **misses of E3.2** ("at least half"), which the write-up does not say |
+| 28 | spend 3.75 pod-h, $1.50 + ≈ $0.05 unregistered | not independently billed; within the $3 / 6 h budget | plausible |
+| 29 | deliverables | run_lit_measures.md 352 words (limit 350); STATUS line present; `--data_seed` not merged (correct: after review) | minor overrun |
+
+## §Verdict
+
+**Hard constraints:** clean. `nd_verify` is unmodified and on no path, `TEST_RUN_DONE` is unchanged, and no
+evaluation file is used for training. No quarantine.
+
+**Stands:**
+- **M1, all three E1 expectations**, on SN base s0 (`ec3888d9`, 3.2 M, `lean_staten`, from scratch). They are robust to
+  how the environment-assigned name base is attributed (four variants), and every scored proof is Lean-accepted.
+- **M2:** the variance decomposition, and E2.1 "not supported, not falsified". The identical-seed replicate result is
+  the most useful finding of the run: GPU non-determinism alone produces a depth-3 sd of 0.225, about 55 % of the grid's
+  variance, on the fast `lean_seq` 3.2 M recipe. The `--data_seed` change is correct. The old and new trainer are
+  bit-identical on CPU, and the change is fit to merge.
+- **M3:** the qualitative reading. E3.1's 0.75 is on the letter only, and the round3-run4b `r` arms are the only
+  bimodal ones.
+
+**Must be reworded or added:**
+- (a) M2: E2.2 is a miss (data 0.02 < init 0.17) and must be stated. Say that the init seed has a detectable effect on
+  the continuous depth-3 rate (F p = 0.02) while the data order has none (p = 0.34). Add the pod nuisance (p 0.09, in the
+  residual) and the 0.22 % depth-3 truncation.
+- (b) M1: "remaining steps −1.5" must mention w2 (−4.6). Label the name-base marginalisation as a deviation from the
+  pre-registration's "no marginalisation", noting that it is immaterial.
+- (c) M3: put the frozen 0.89 and the disjoint-set 0.52 next to the 0.75, and state that E3.2 missed. Label the
+  convergence finding post hoc and restrict it to ds-generator g1/g2. Give the round3-run4b model sizes (25 M / 85 M).
+  Fix "41 seeds" to 44.
+
+**Not supported as it stands:** round3-run4b per-round counts and depth shares in `per_round.tsv` / `numbers.md`
+(#23, #24). They count start-index variants of one proof as distinct. They must be recomputed with start-index
+normalisation. The corrected values are in `review/m3_analysis.txt`, and the E3.1 headline does not move.
+
+**Next measurements:**
+1. Whether the depth-3 mode is set by early training noise at all: 16–32 identical-seed replicates of 2–3 cells, one
+   per GPU class, then fork replicates from a common step-k checkpoint (k = 500, 1,500, 3,000) to find when the mode is
+   decided.
+2. For M3, the one bimodal family that decides "by round 2 vs later": more seeds of round3-run4b's `85Mr_mix`/`25Mr_mix`
+   (currently 3 each). Or a 3.2 M analogue started from bases in the low depth-3 mode, since ds-generator shows EI pulls a
+   low-mode seed up in one round.

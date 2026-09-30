@@ -107,3 +107,9 @@ print('\nbimodal arms (round3-run4b r-arms), cumulative depth>=3 share by round 
 for k in [('round3-run4b', 'ei_depth3_25Mr_mix'), ('round3-run4b', 'ei_depth3_85Mr_mix')]:
     for s, p in sorted(G[k].items()):
         print(' ', k[1], f's{s}', ' '.join(f"r{r}:{cum_share(p, r):.3f}" for r in range(1, 9)), '| n', sum(v['rows'] for v in p.values()))
+inc_n = dec_n = 0
+for (fam, arm), seeds in G.items():
+    for s, p in seeds.items():
+        v = [x for x in (range_share(p, r, r) for r in range(1, LAST + 1)) if x is not None]
+        inc_n += all(v[i] <= v[i + 1] for i in range(len(v) - 1)); dec_n += all(v[i] >= v[i + 1] for i in range(len(v) - 1))
+print(f'E3.2 split: non-decreasing {inc_n}, non-increasing {dec_n} (a constant-0 ladder counts in both)')
