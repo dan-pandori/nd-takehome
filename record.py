@@ -283,15 +283,22 @@ class Compute:
 
 def _cuda_sync():
     t = sys.modules.get('torch')
-    if t is not None and t.cuda.is_available() and t.cuda.is_initialized():
-        t.cuda.synchronize()
+    try:
+        if t is not None and t.cuda.is_available() and t.cuda.is_initialized():
+            t.cuda.synchronize()
+    except Exception:       # a sticky CUDA error must not cost the rows (the job's own traceback reports it)
+        pass
 
 
 def _device():
     """('cuda', device name, n_gpu) if this process initialised CUDA, else ('cpu', None, 0)."""
     t = sys.modules.get('torch')
     if t is not None and t.cuda.is_available() and t.cuda.is_initialized():
-        return 'cuda', t.cuda.get_device_name(t.cuda.current_device()), int(os.environ.get('ND_N_GPU', 1))
+        try:
+            name = t.cuda.get_device_name(t.cuda.current_device())
+        except Exception:
+            name = None
+        return 'cuda', name, int(os.environ.get('ND_N_GPU', 1))
     return 'cpu', None, 0
 
 
@@ -305,7 +312,9 @@ def _write(c, status):
     for k in COUNTERS[:-1]:
         if c.n[k]:
             record(k, c.n[k], **({**lab, 'lean_s': round(c.n['lean_s'], 3)} if k == 'lean_checks' else lab))
-    sync(raise_on_fail=False)     # the process-level block closes after _final_sync has run
+    if c.job:
+        sync(raise_on_fail=False)     # the process-level block closes after _final_sync has run; other blocks' rows
+                                      # follow record()'s ND_REGISTRY_SYNC_S rule and this final sync
 
 
 def enabled():

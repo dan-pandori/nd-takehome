@@ -27,6 +27,7 @@ permutations and the per-step augmentation draws come from CUDA generators seede
 """
 import hashlib, json, math, os, random, time
 import torch, torch.nn.functional as F
+import record    # compute counters (REGISTRY.md): train_steps, train_tokens
 
 CACHE = os.environ.get('ND_TRAIN_CACHE', os.path.expanduser('~/.cache/nd_train'))
 BLOCK = 128                         # flex_attention block size; the stream length is a multiple of 2 * BLOCK
@@ -456,6 +457,7 @@ def run(a, model, tok, dev, loader, lr_at, load_val, save_ckpt, VAL_SHIFT_SEED, 
             for pg in opt.param_groups:
                 pg['lr'] = lr_at(a, step)
             loss = body(idx_all[step - 1], draw(step), T if pack else Tb[step - 1])
+        record.count(train_steps=1, train_tokens=int(tot[step - 1]))   # records' tokens, packing pad excluded (tot: CPU)
         if first_step_s is None:
             torch.cuda.synchronize(); first_step_s = time.time() - t0
             print(f'first step (incl. compile) {first_step_s:.1f}s', flush=True)
@@ -489,8 +491,6 @@ def run(a, model, tok, dev, loader, lr_at, load_val, save_ckpt, VAL_SHIFT_SEED, 
     secs = time.time() - t0
     peak = torch.cuda.max_memory_allocated()
     n_run = a.steps - step0
-    import record
-    record.count(train_steps=n_run, train_tokens=int(tot[step0:].sum()))   # records' tokens (packing pad excluded)
     train_s = secs - val_s
     frac = useful * (n_run / a.steps)
     extra = {'args': vars(a), 'n_params': model.n_params(), 'secs': secs, 'val_full_s': val_s, 'steps_run': n_run,
@@ -498,7 +498,6 @@ def run(a, model, tok, dev, loader, lr_at, load_val, save_ckpt, VAL_SHIFT_SEED, 
              'setup_s': t0 - t_setup, 'peak_mem': peak, 'useful_tokens': useful, 'computed_tokens': computed,
              'useful_tok_per_s_train': frac / max(train_s, 1e-9)}
     save_ckpt(a.out, model, tok.mode, extra=extra)
-    import record    # results registry: final losses (config was registered by train.py)
     record.train_rows(a, locals().get('rec', {}), extra)
     if mf:
         mf.write(json.dumps({'kind': 'done', 'utc': time.strftime('%FT%TZ', time.gmtime()), 'out': a.out, 'secs': secs,
