@@ -4,7 +4,7 @@
 # Settings: T 0.8, seed 0, max_action 512, max_steps 96 for every sampled read; held-out greedy k 1 T 0.
 # LEAN_GATE_DUMP keeps the literal text of every sample (gzipped; bucket only).
 source pod/bs/env.sh
-CK=$1; L=$2; shift 2; B=${B:-4096}; mkdir -p artifacts/bs/eval artifacts/bs/logs/read
+CK=$1; L=$2; shift 2; B=${B:-2048}; mkdir -p artifacts/bs/eval artifacts/bs/logs/read
 for R in "$@"; do
   O=artifacts/bs/eval/${L}__$R; [ -s $O.json ] && { echo "skip $L $R"; continue; }
   echo "=== $L $R $(date -u +%FT%TZ)"; export LEAN_GATE_DUMP=artifacts/bs/dump/${L}__$R.jsonl
