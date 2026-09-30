@@ -138,3 +138,58 @@ runners stop jobs with a plain `kill`, which sends SIGTERM.
 - `tests/test_registry.py` locally (VPS, no torch): ALL PASS, including the 4 new compute cases.
 - GitHub Actions on `dan` at `3fc57e41` (= run HEAD, merged): success.
 - My own CPU checks (Actions run 36654170471): results in the tables above.
+
+## Compare (phase 2)
+
+Read after committing phase 1 (`22025128`): `run_compute_record.md`, the compute-record sections of `numbers.md` and
+`log.md`, `artifacts/compute-record/compute_table.tsv`.
+
+| claim (executor) | my independent value | verdict |
+|---|---|---|
+| overhead < 1 % of step time: 0.025 % (49.7 µs per 201.7 ms legacy step) | 103 µs on the VPS CPU → 0.05 %; A/B walls +1.14 s a process (0.89 % of a 2-min job), a fixed cost, not per step | **reproduces** (< 1 %). The write-up reports the A/B only as "121 s / 121 s" and leaves out the +1.1 s fixed cost the same runs show |
+| "fast path counts once per run" (run md); "`fast_train.py` counts once at the end (no per-step cost)" (numbers.md) | code at HEAD counts per step (`fast_train.py:460`); numbers.md's own part-3 row says per step | **must be reworded** — stale since the review fix. The per-step fast-path overhead was never A/B'd (the only comparison is across two pods, −2.7 % tok/s) |
+| counters = independent counts: 20 / 20 equal | every derivable counter reproduces exactly: train tokens of 7 train jobs (incl. the two ladder2 child fine-tunes, which the executor checked only by step count), steps, attempts, GRPO update steps, `lean_checks` vs gate logs (189; 4,766 + 4,871 = 9,637); my CPU `gen_tokens` test is exact on base, fast and fast-without-compaction, including cut-off rows | **reproduces**. Not derivable from files: pod `gen_tokens` (raw ids not stored; the executor's `sample_check` is its own count), GRPO `train_tokens` and `lean_checks`. Two definition edges outside the checks: `ND_SAMPLE_EARLY=exact/goal` rows (the counter excludes injected tokens: 3,881 vs 3,898 in `raw`), and duplicates counted by `lean_check.check` although REGISTRY.md says "distinct" |
+| `gpu_seconds` within 5 % for jobs ≥ ~3 min: 0.989 (6 min), 0.975 (2 min) | same values | **reproduces**, but the pre-registered criterion rests on **one** job ≥ 3 min, run with the superseded clock (from `save_config`). The final clock (from exec) can only raise the ratio, but it was never run on a ≥ 3-min job |
+| shorter jobs miss by a fixed ~1.5–2 s a process, "the row upload at exit" | gaps 2.3 s (1 proc), 2.9 s (1), 2.2 s (1), 4.9 s (3 procs) | sizes **reproduce**; the cause is asserted, not measured |
+| CI green, compute checks included | Actions on `dan` at `3fc57e41`: success; `tests/test_registry.py` passes locally | **reproduces** |
+| "A process killed by a signal writes no rows" | SIGINT: all rows; SIGTERM: blocks already closed (earlier rounds) survive, the open round's and the process block are lost | **reword**: too pessimistic for SIGINT and closed rounds. It understates the practical gap: `kill` (SIGTERM) is how the pod runners stop jobs, and a killed single-process `train.py` loses everything |
+| log.md: "rows say `git_sha` 34693ad2 while the code was 4c34eb85 (part 1) and 9f970a9f (part 2)" | all 97 part-1/2 rows (and both ladder `args.json`) say `4c34eb85`; part 3's 36 say `7fd4ddb1` | **differs**. Part 1 is labelled correctly. Part 2 is mislabelled `4c34eb85` (not 34693ad2) while running 9f970a9f code. My phase-1 evidence agrees: `expect2` wrote no bench rows; the process block grew |
+| bench row "is in the registry; it is not work" (log.md) | the row is also in the published `compute_table.tsv` (arm None, seed None, `bench`, 200 steps, 12,496,799 tokens), which numbers.md cites without the caveat | **disclosed in log only**; flag it next to the table or drop it from the table |
+| model label on every number | numbers.md and run md name `ckpts/cr/fast_s0.pt`, 3.2 M, `lean_seq`, from scratch, training set, seed; GPU A40 at $0.49/h billed | **stands** |
+| budget: $0.21 of $2; pre-registration before the pod | pre-registration `34693ad2` 00:10:29Z; `pods.log`: cr1 00:19:26Z, cr2 00:54:25Z | **stands** (job 16 min vs ≤ 15 min, disclosed) |
+| per-arm compute table (policy) | `compute_table.tsv` = my sums (`table.py`: no difference vs `registry_merge.compute_table`) | **stands**; the default grouping merges the 6,000-step `fast_s0` job and the two legacy A/B jobs into one row (arm None, seed 0, 7,200 steps) because `train.py` jobs carry no arm |
+
+Wording against n: there are no comparative claims between arms. The overhead A/B is n = 2 per side, and the write-up
+does not call it more than that.
+
+## Verdict
+
+**Stands.** The instrumentation is correct where it can be checked from files or by rerunning the code. Every counter
+I could re-derive matches exactly: tokens trained on (seven jobs, including the child fine-tunes), steps, attempts,
+Lean checks against the gate logs, and decoded tokens on all three decode paths. Time is exclusive: the per-job sums
+never exceed the wall-clock, and `registry_merge --compute` equals my own sums. The per-step cost is ≈ 0.05 %. Hard
+constraints are clean.
+
+**Reword:**
+1. "fast path counts once per run" / "`fast_train.py` counts once at the end": it counts per step since part 3, and
+   that overhead was not measured on one host. REGISTRY.md has the same stale sentence, plus "start-up before
+   `save_config` not counted", which the process-age clock made false.
+2. The gpu_seconds criterion: "met on the one job ≥ 3 min (6 min, 0.989), run before the clock change".
+3. The signal limit: SIGTERM loses the open blocks (all of a single-process job); SIGINT and exceptions keep them.
+   Exceptions leave phase rows with `status: ok`.
+4. log.md's `git_sha` sentence: part-2 rows say `4c34eb85`, not 34693ad2, and part 1 is correct.
+5. Flag the `bench` row in `compute_table.tsv` / numbers.md.
+6. REGISTRY.md: `lean_check.check` counts duplicates; under `ND_SAMPLE_EARLY=exact|goal`, `gen_tokens` excludes the
+   injected tokens.
+
+**Not supported / not measured:** the overhead of per-step counting on the fast (CUDA-graph) path; the cause of the
+fixed ~2 s a process; pod `gen_tokens`, GRPO `train_tokens` and GRPO `lean_checks` from stored files.
+
+**Before later runs rely on it:** a SIGTERM handler in `job_compute` (e.g. turn SIGTERM into `SystemExit` so `atexit`
+runs), since budget-watch deletions and runner kills would otherwise drop the current round's compute. Also note that
+`run_vllm.py` records no `gen_tokens` / `attempts`, and records `n_gpu = 1` under tensor parallelism.
+
+**Next measurement** (one pod, ~15 min): (a) fast_train 600 steps with `ND_COMPUTE=0` vs on, alternated on one host
+(fast-path overhead); (b) one ≥ 3-min job on the final code (clock from exec); (c) `kill -TERM` of a `ladder_ei.py`
+mid-round, before and after a SIGTERM handler, counting rows; (d) GRPO with its completions stored, to recount
+`train_tokens` and `lean_checks`.
