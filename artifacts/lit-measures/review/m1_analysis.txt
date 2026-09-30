@@ -1,0 +1,19 @@
+T0.8 exec_sum_allbases_full         S labels {'concentrated': 7} | C1 {'mixed': 23, 'concentrated': 12} | C2 {'mixed': 24, 'concentrated': 11} | med w1 S -14.71 C1 -1.56 diff 13.14 p 0.0002 | w1<ln3/N S 5/7 (400k) 5/7 (200k); C1 2/35, 2/35
+    vs executor steps.jsonl T0.8: max |diff| total/w1 over 643 proofs = 1.12e-05
+T0.8 sampler_mean_b0to32_skipname   S labels {'concentrated': 7} | C1 {'mixed': 23, 'concentrated': 12} | C2 {'mixed': 24, 'concentrated': 11} | med w1 S -15.23 C1 -1.57 diff 13.67 p 0.0001 | w1<ln3/N S 5/7 (400k) 5/7 (200k); C1 2/35, 2/35
+T0.8 sampler_mean_b0to32_full       S labels {'concentrated': 7} | C1 {'mixed': 23, 'concentrated': 12} | C2 {'mixed': 24, 'concentrated': 11} | med w1 S -15.23 C1 -4.17 diff 11.05 p 0.0000 | w1<ln3/N S 5/7 (400k) 5/7 (200k); C1 2/35, 2/35
+T0.8 raw_b0_full                    S labels {'concentrated': 7} | C1 {'mixed': 23, 'concentrated': 12} | C2 {'mixed': 24, 'concentrated': 11} | med w1 S -15.38 C1 -4.43 diff 10.94 p 0.0007 | w1<ln3/N S 5/7 (400k) 6/7 (200k); C1 4/35, 4/35
+T1.0 exec_sum_allbases_full         S labels {'concentrated': 6, 'mixed': 1} | C1 {'mixed': 25, 'concentrated': 10} | C2 {'mixed': 27, 'concentrated': 8} | med w1 S -12.06 C1 -1.65 diff 10.41 p 0.0001 | w1<ln3/N S 4/7 (400k) 4/7 (200k); C1 2/35, 2/35
+    vs executor steps.jsonl T1.0: max |diff| total/w1 over 643 proofs = 6.53e-06
+T1.0 sampler_mean_b0to32_skipname   S labels {'concentrated': 6, 'mixed': 1} | C1 {'mixed': 25, 'concentrated': 10} | C2 {'mixed': 26, 'concentrated': 9} | med w1 S -12.56 C1 -1.54 diff 11.02 p 0.0000 | w1<ln3/N S 4/7 (400k) 4/7 (200k); C1 1/35, 2/35
+T1.0 sampler_mean_b0to32_full       S labels {'concentrated': 6, 'mixed': 1} | C1 {'mixed': 25, 'concentrated': 10} | C2 {'mixed': 25, 'concentrated': 9, 'spread': 1} | med w1 S -12.56 C1 -4.17 diff 8.39 p 0.0001 | w1<ln3/N S 4/7 (400k) 4/7 (200k); C1 1/35, 2/35
+T1.0 raw_b0_full                    S labels {'concentrated': 6, 'mixed': 1} | C1 {'mixed': 25, 'concentrated': 10} | C2 {'mixed': 27, 'concentrated': 8} | med w1 S -12.60 C1 -4.38 diff 8.22 p 0.0008 | w1<ln3/N S 4/7 (400k) 4/7 (200k); C1 2/35, 2/35
+
+S theorems, best proof, sampler-mixture skip-name T0.8 vs exec variant:
+  la_transfer_1108: total -18.07 w1 -12.63 s2 0.99 concentrated | exec total -18.06 w1 -12.71 concentrated | raw b0 w1 -13.11 | worst step: have n3 : ( ( S ∧ R ) → ( ¬ P ) ) := Or.elim n1 ( fun ( n4 : ( ¬ ( Q → R ) ) ) => by
+  la_transfer_1185: total -26.62 w1 -20.32 s2 0.94 concentrated | exec total -26.68 w1 -20.34 concentrated | raw b0 w1 -20.18 | worst step: have n4 : ( P ∨ Q ) := Or.elim n1 ( fun ( n5 : P ) => by
+  la_transfer_1352: total -15.30 w1 -15.23 s2 1.00 concentrated | exec total -15.16 w1 -14.71 concentrated | raw b0 w1 -15.38 | worst step: have n2 : R := Or.elim n1 ( fun ( n3 : ( S ∧ R ) ) => by
+  la_transfer_198: total -37.28 w1 -32.34 s2 0.96 concentrated | exec total -37.52 w1 -32.83 concentrated | raw b0 w1 -33.86 | worst step: have n7 : S := Or.elim n1 ( fun ( n8 : ( ( ¬ R ) ∧ ( R → S ) ) ) => by
+  la_transfer_2089: total -15.67 w1 -6.16 s2 0.71 concentrated | exec total -16.01 w1 -6.17 concentrated | raw b0 w1 -6.12 | worst step: have n5 : ( P ∨ P ) := Classical.byContradiction ( fun hh => n2 hh ) ;
+  la_transfer_394: total -18.60 w1 -18.45 s2 1.00 concentrated | exec total -18.72 w1 -18.48 concentrated | raw b0 w1 -21.07 | worst step: have n8 : ( P → P ) := Classical.byContradiction ( fun hh => n5 hh ) ;
+  la_transfer_988: total -21.76 w1 -10.68 s2 0.90 concentrated | exec total -21.58 w1 -10.65 concentrated | raw b0 w1 -11.35 | worst step: have n10 : ( Q ∨ P ) := n1 .2 ;
