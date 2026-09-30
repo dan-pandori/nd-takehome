@@ -215,3 +215,4 @@ COMPUTE-RECORD DONE 2026-09-30T01:02:02Z
   Design: C s0–s3 reused from state-cap12; new: S s0–s5, C s4–s5, C′ s0–s1 (same-checkpoint rerun); 25 % of each
   round's attempts to supply (filter included); read-out of every r8 and Stage-1 checkpoint on long-pool-2 (91) + rr600 13–16.
 - 2026-09-30 02:45 UTC  4 A40 pods (fsup1–4), 10 ladders running (S s0–s5, C s4–s5, C′ s0–s1); smoke passed (control path byte-identical).
+- 2026-09-30 04:00 UTC  pods deleted by the host watchdog (my session was not alive between wake-ups); 04:25 all 10 ladders relaunched from scratch on fsup6–10. ≈ $3.40 lost.

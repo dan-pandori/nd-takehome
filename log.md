@@ -833,3 +833,12 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   S s3 172 / 153 kept of 1,123 (13–15 %); window moved 13–16 → 14–17 after round 1 (more too-easy than p̂ = 0 in (a)).
   Round 1 wall: S 2,415 / 2,398 s (fsup2), C′ 2,133 / 2,150 s (fsup5). Re-read of the reused C r8 checkpoints on the 91
   (fsup3): s0 33, s1 60, s2 57 vs long-pool-2's 34 / 59 / 58 (same settings, another pod: a sampling re-draw).
+- 2026-09-30 04:00 UTC  **All five pods deleted by `pod_watchdog` → `killswitch`** ("no Claude process for 30 min"): I
+  had ended turns between driver wake-ups while the ladders ran, and both 15-min ticks (03:45, 04:00) fell in gaps.
+  Lost ≈ 1.5 h of 10 ladders (≈ 6.9 pod-hours, ≈ $3.40). Kept: Stage-1 s4 / s5 (bucket), the fixed re-reads already
+  pulled (C s0–s2, C s3 lp2), round-1 jsons (`artifacts/fsup/killed_0400/`, not used for results). The killswitch pulled
+  into `~/nd-takehome/artifacts/fsup` (513 MB; the small files moved here, the rest deleted). Fix: I now keep a foreground
+  wait loop alive whenever a pod exists.
+- 04:10–04:25 UTC  relaunched every ladder from scratch on fsup6–10 (same layout: fsup6 S s0 / s1, fsup7 S s2 / s3,
+  fsup8 S s4 / C s4 + fixed re-reads, fsup9 S s5 / C s5, fsup10 C′ s0 / s1). Round-1 filter numbers from the killed
+  run (S s0 136, s2 152, s3 172 of 1,123) are not results.
