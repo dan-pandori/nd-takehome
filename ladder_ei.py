@@ -204,6 +204,7 @@ def main():
             ckpt = f'ckpts/ladder/{a.name}_r{r0}.pt'
         print(f'resumed round {r0}: {sum(len(v) for v in found.values())} target proofs; ckpt {ckpt}', flush=True)
     for r in range(a.start_round, a.start_round + a.rounds):
+        record.phase('sample', round=r)    # compute rows per (phase, round) (REGISTRY.md): targets sampled + judged
         t0 = time.time()
         model, tok, _ = load_ckpt(ckpt, dev)
         seed = a.seed * 1000 + r + 100 * a.sibling
@@ -248,6 +249,7 @@ def main():
                 for x in relabelled.values():
                     f.write(json.dumps(x) + '\n')
         ph['relabel'] = time.time() - tp; tp = time.time()
+        record.phase('eval', round=r)
         # 2. transfer, sampled (uniform k; T6 siblings each sample k)
         prompts = [t['prompt'] for t in transfer for _ in range(a.k)]
         flat = generate(model, tok, prompts, greedy=False, temperature=a.temperature, batch=a.batch, seed=seed + 500, max_new=a.max_new)
@@ -322,6 +324,7 @@ def main():
                     f.write(json.dumps(x) + '\n')
             print(f"[{a.name} r{r}] injection set: {len(inject_recs)} records; {ilog.get('shapes')}", flush=True)
         ph['bookkeeping'] = time.time() - tp; tp = time.time()
+        record.phase('finetune', round=r)
         # 4. train
         if not a.no_train:
             mix = f'{out}/mix_{r}.jsonl'
@@ -352,7 +355,8 @@ def main():
                 cmd = ['python3', 'train.py', '--data', mix, '--init', ckpt, '--steps', str(a.ft_steps), '--lr', str(a.ft_lr),
                        '--min_lr', str(a.ft_lr / 10), '--warmup', '50', '--cap', '0', '--out', new_ckpt, '--seed', str(seed), '--log_every', '200']
                 print(' '.join(cmd), flush=True)
-                subprocess.run(cmd, check=True)
+                with record.child('finetune', round=r):    # train.py records its own compute rows
+                    subprocess.run(cmd, check=True)
                 ckpt = new_ckpt
         ph['train'] = time.time() - tp
         stats['phase_s'] = ph

@@ -27,6 +27,7 @@ Environment overrides (so older drivers inherit the fast path without a code cha
 `stats` (a dict passed to generate) is filled with decoded-token and timing counters.
 """
 import os, time, torch, torch.nn.functional as F
+import record    # compute counters (REGISTRY.md): gen_tokens, attempts
 from model import rope_cache
 
 PATH = os.environ.get('ND_SAMPLE_PATH', 'fast')
@@ -82,6 +83,7 @@ def generate_ids(model, tok, prompt_ids, greedy=True, temperature=1.0, max_new=4
         keep = torch.cat([keep, torch.ones(B, 1, dtype=torch.bool, device=dev)], 1)
         mask = keep[:, None, None, :]
         logits = model(nxt[:, None], pos=cur_pos[:, None], mask=mask, caches=caches)[:, -1]
+    record.count(gen_tokens=int(declen.sum()))    # decoded tokens up to and including <eos> (max_new if none)
     if stats is not None:
         _acc(stats, declen, steps, B, steps * B, L)
     return out.tolist()
@@ -248,6 +250,7 @@ def generate_ids_fast(model, tok, prompt_ids, goals=None, greedy=True, temperatu
         cur_pos = cur_pos + 1
         logits = model(nxt[:, None], pos=cur_pos[:, None], mask=keepb[:, None, None, :L + t + 1], caches=caches)[:, -1]
     n_eos, n_exact, n_goal = int(n_eo), int(n_ex), int(n_go)
+    record.count(gen_tokens=int(declen.sum()))    # decoded tokens up to and including <eos> (max_new if none)
     if stats is not None:
         _acc(stats, declen, steps, B0, rowsteps, L)
         stats['stop_eos'] = stats.get('stop_eos', 0) + n_eos
@@ -268,6 +271,7 @@ def generate(model, tok, prompts, greedy=True, temperature=1.0, max_new=400, bat
         gen = torch.Generator(device=dev)
         gen.manual_seed(seed)
     ids = [tok.encode_prompt(p) for p in prompts]
+    record.count(attempts=len(prompts))
     order = sorted(range(len(prompts)), key=lambda i: len(ids[i]))
     res = [None] * len(prompts)
     is_lean = hasattr(tok, 'statement')      # LeanTokenizer: decode() returns the denoted ND proof, last_text the literal Lean text

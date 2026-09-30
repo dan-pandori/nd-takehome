@@ -18,6 +18,7 @@ action truncation rate.
 import collections, os, random, sys, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import torch
+import record    # compute counters (REGISTRY.md): attempts, actions (gen_tokens: generate_ids_fast)
 from sample import generate_ids_fast
 from state_env import Env
 
@@ -44,6 +45,7 @@ def env_generate(model, tok, prompts, greedy=True, temperature=1.0, max_action=2
     nxt = 0
     wave = 0
     t0 = time.time()
+    record.count(attempts=len(prompts))
 
     def finish(i, e):
         st['names_defined'] = st.get('names_defined', 0) + e.defined
@@ -62,6 +64,7 @@ def env_generate(model, tok, prompts, greedy=True, temperature=1.0, max_action=2
                 e = Env(prompts[nxt])
             live.append((nxt, e)); nxt += 1
         pids = [prompt_ids(tok, e) for _, e in live]
+        record.count(actions=len(live))
         st['prompt_tokens'] = st.get('prompt_tokens', 0) + sum(len(p) for p in pids)   # prefill cost of the env loop
         with torch.autocast('cuda', dtype=torch.bfloat16, enabled=(dev.type == 'cuda')):
             outs = generate_ids_fast(model, tok, pids, goals=None, greedy=greedy, temperature=temperature,

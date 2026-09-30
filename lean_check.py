@@ -217,7 +217,10 @@ def check(sources, workers=None, chunk=None):
     shutil.rmtree(wd, ignore_errors=True)
     out = [x for r, _ in res for x in r]
     assert len(out) == len(sources)
-    return out, time.time() - t0, sum(c for _, c in res)
+    cpu = sum(c for _, c in res)
+    import record    # compute rows (REGISTRY.md): texts sent to Lean, Lean process-seconds
+    record.count(lean_checks=len(sources), lean_s=cpu)
+    return out, time.time() - t0, cpu
 
 
 # ---------------------------------------------------------------- hand-written cases

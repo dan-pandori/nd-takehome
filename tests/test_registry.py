@@ -109,6 +109,47 @@ print(len(rs), len([r for r in rs if m.match(r, ['role=stage1,init', 'L='])]), l
 """)
 case('merge dedupe + query', p.returncode == 0 and p.stdout.split() == ['2', '1', '1', '1'], p.stdout + p.stderr)
 
+# 5b. compute rows (run compute-record): exclusive time, one block per (phase, round) however often a loop alternates,
+# a child process labelled with its driver's phase / round / seed / arm, counters summed by registry_merge --compute
+d = tempfile.mkdtemp(); reg = os.path.join(d, 'reg')
+env = {'ND_OFFLINE': '1', 'ND_REGISTRY_DIR': reg, 'ND_REGISTRY_SYNC': '0'}
+p = run("""
+import os, sys, time, subprocess, record
+record.save_config({'seed': 7}, None, arm='A')
+for step in range(4):
+    r = 1 if step < 2 else 2
+    record.phase('sample', round=r); record.count(gen_tokens=10, attempts=2); time.sleep(0.05)
+    record.phase('update', round=r); record.count(train_steps=1, train_tokens=5); time.sleep(0.05)
+record.phase(None)
+with record.child('finetune', round=2):
+    subprocess.run([sys.executable, '-c', "import sys; sys.path.insert(0, %r); import record, time; "
+                    "record.save_config({'seed': 99}, None); record.count(train_steps=3); time.sleep(0.2)" % os.getcwd()], check=True)
+time.sleep(0.1)
+record.count(lean_checks=1, lean_s=0.5)
+""", env=env)
+rs = rows(reg) if os.path.isdir(reg) else []
+sys.path.insert(0, HERE)
+import registry_merge
+t = registry_merge.compute_table(rs, ['arm', 'seed', 'round', 'phase'])
+got = {k: (v['gen_tokens'], v['attempts'], v['train_steps'], v['train_tokens'], v['lean_checks'], v['lean_s']) for k, v in t.items()}
+want = {('A', '7', '1', 'sample'): (20, 4, 0, 0, 0, 0), ('A', '7', '2', 'sample'): (20, 4, 0, 0, 0, 0),
+        ('A', '7', '1', 'update'): (0, 0, 2, 10, 0, 0), ('A', '7', '2', 'update'): (0, 0, 2, 10, 0, 0),
+        ('A', '7', '2', 'finetune'): (0, 0, 3, 0, 0, 0), ('A', '7', 'None', 'job'): (0, 0, 0, 0, 1, 0.5)}
+case('compute: counters per (arm, seed, round, phase), child labelled by its driver', p.returncode == 0 and got == want,
+     f'{got} {p.stderr}')
+sec = {k: v['cpu_seconds'] for k, v in t.items()}
+case('compute: time is exclusive (job block excludes phases and the child)',
+     p.returncode == 0 and 0.09 <= sec.get(('A', '7', '1', 'sample'), 0) < 0.2 and 0.2 <= sec.get(('A', '7', '2', 'finetune'), 0) < 0.5
+     and 0.09 <= sec.get(('A', '7', 'None', 'job'), 0) < 0.3, sec)
+case('compute: rows carry device=cpu, labels.round, one compute_id per block',
+     all(r['labels']['device'] == 'cpu' for r in rs) and len({r['labels']['compute_id'] for r in rs}) == 6
+     and {r['labels'].get('round') for r in rs} == {1, 2, None}, [r['labels'] for r in rs][:2])
+d = tempfile.mkdtemp(); reg = os.path.join(d, 'reg')
+p = run("import record; record.save_config({}, None); record.count(gen_tokens=1)", env={**env, 'ND_REGISTRY_DIR': reg, 'ND_COMPUTE': '0'})
+p2 = run("import record; record.save_config({}, None)", env={**env, 'ND_REGISTRY_DIR': reg})
+case('compute: ND_COMPUTE=0 writes nothing; a CPU script with no counted work writes nothing',
+     p.returncode == 0 and p2.returncode == 0 and not os.path.exists(reg), p.stderr + p2.stderr)
+
 if ONLINE:
     # 6. real upload; the downloaded copy has the recorded md5; a one-byte flip does not (negative control)
     reg = os.path.join(tmp, 'reg6')

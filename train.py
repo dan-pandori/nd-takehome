@@ -279,6 +279,7 @@ def main():
             rng.shuffle(perm)
         idxs = [perm.pop() for _ in range(a.bs)]
         x, m = batch(data, idxs, tok, rng, dev)
+        record.count(train_steps=1, train_tokens=sum(len(data[i][0]) + len(data[i][1]) for i in idxs))   # non-pad tokens
         for g in opt.param_groups:
             g['lr'] = sched(step)
         with torch.autocast('cuda', dtype=torch.bfloat16, enabled=(dev == 'cuda')):

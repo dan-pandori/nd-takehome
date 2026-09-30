@@ -229,6 +229,7 @@ def main():
             ckpt = f'{a.ckptdir}/{a.name}_r{r0}.pt'
         print(f'resumed round {r0}: {sum(len(v) for v in found.values())} target proofs; ckpt {ckpt}', flush=True)
     for r in range(a.start_round, a.start_round + a.rounds):
+        record.phase('sample', round=r)    # compute rows per (phase, round) (REGISTRY.md): targets sampled + judged
         t0 = time.time()
         model, tok, _ = load_ckpt(ckpt, dev)
         seed = a.seed * 1000 + r + 100 * a.sibling
@@ -272,6 +273,7 @@ def main():
             with open(f'{out}/relabelled_{r}.jsonl', 'w') as f:
                 for x in relabelled.values():
                     f.write(json.dumps(x) + '\n')
+        record.phase('eval', round=r)
         # 2. transfer, sampled (uniform k; T6 siblings each sample k)
         prompts = [t['prompt'] for t in transfer for _ in range(a.k)]
         flat = generate(model, tok, prompts, greedy=False, temperature=a.temperature, batch=a.batch, seed=seed + 500, max_new=a.max_new)
@@ -343,6 +345,7 @@ def main():
                 for x in inject_recs:
                     f.write(json.dumps(x) + '\n')
             print(f"[{a.name} r{r}] injection set: {len(inject_recs)} records; {ilog.get('shapes')}", flush=True)
+        record.phase('finetune', round=r)
         # 4. train
         if not a.no_train:
             mix = f'{out}/mix_{r}.jsonl'
@@ -374,7 +377,8 @@ def main():
                        '--min_lr', str(a.ft_lr / 10), '--warmup', '50', '--cap', '0', '--out', new_ckpt, '--seed', str(seed), '--log_every', '200',
                        '--recs', str(a.ft_recs)]
                 print(' '.join(cmd), flush=True)
-                subprocess.run(cmd, check=True)
+                with record.child('finetune', round=r):    # train.py records its own compute rows
+                    subprocess.run(cmd, check=True)
                 ckpt = new_ckpt
         stats['env'] = env_stats_json(ENV['stats'])
         stats['secs'] = time.time() - t0

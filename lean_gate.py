@@ -110,7 +110,16 @@ def check_sources(srcs):
     finally:
         shutil.rmtree(wd, ignore_errors=True)
     ok = [x for r, _ in res for x in r]
-    return ok, time.time() - t0, sum(c for _, c in res)
+    cpu = sum(c for _, c in res)
+    _count(len(srcs), cpu)
+    return ok, time.time() - t0, cpu
+
+
+def _count(n_texts, proc_s):
+    """compute rows (REGISTRY.md): texts sent to a Lean process (registry / cache hits, parse failures and pre-filter
+    rejects never reach here) and Lean process-seconds, added to the caller's open record.compute block."""
+    import record
+    record.count(lean_checks=n_texts, lean_s=proc_s)
 
 
 def lean_check(items):
@@ -189,6 +198,7 @@ class Gate:
                 self.lean_ok[k] = bool(v)
         self.ex.shutdown()
         shutil.rmtree(self.wd, ignore_errors=True)
+        _count(len(self.lean_ok), cpu)
         self.exposed_s += time.time() - t0
         return self._record(prompts, nd_proofs, texts, cpu, time.time() - t0)
 

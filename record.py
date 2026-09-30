@@ -184,6 +184,7 @@ def save_config(cfg, out, **labels):
     directly) plus one key `_meta` {script, argv, run_id, git_sha, git_dirty, host, utc}.  Every later row names the file (label `config_file`).
     Returns the path written, or None when `out` is None (output to stdout)."""
     set_config(cfg, **labels)
+    job_compute()    # the process's compute rows (gpu_seconds, counters), written at exit
     if not out:
         return None
     out = str(out)
@@ -196,6 +197,205 @@ def save_config(cfg, out, **labels):
                    'utc': time.strftime('%FT%TZ', time.gmtime())}}, f, indent=1, default=str)
     _ctx['labels']['config_file'] = _rel(path)
     return path
+
+
+# ---- compute (AGENT_POLICY 2026-09-29: record the compute behind every arm) ------------------------------------
+# Rows: gpu_seconds (always) and each counter that is non-zero: gen_tokens, attempts, actions, train_steps,
+# train_tokens, lean_checks (label lean_s: summed Lean process seconds).  Every row of one block carries the labels
+# phase, round (labels.round), device ('cuda'/'cpu'), gpu (device name), n_gpu, wall_s, compute_id.
+# Time is EXCLUSIVE: a block's clock stops while a nested block (or a child process, `child()`) runs, so summing
+# gpu_seconds over all rows of a run gives its total with nothing counted twice.  save_config() opens a process-level
+# block (phase 'job', or ND_PHASE) closed at exit, so every script that registers its config records its compute.
+# gpu_seconds = exclusive wall-clock x n_gpu when the process initialised CUDA (n_gpu = 1, or ND_N_GPU); on CPU it is
+# the wall-clock with device='cpu' (one CPU process), and a CPU block with every counter zero writes no rows.
+# ND_COMPUTE=0 turns it off.  See REGISTRY.md.
+COUNTERS = ('gen_tokens', 'attempts', 'actions', 'train_steps', 'train_tokens', 'lean_checks', 'lean_s')
+_blocks = []                                   # open compute blocks, innermost last
+
+
+class Compute:
+    def __init__(self, labels):
+        self.labels = labels
+        self.n = dict.fromkeys(COUNTERS, 0)
+        self.active_s, self._t, self.closed, self.job = 0.0, None, False, False
+        self.id = f'{socket.gethostname()}-{os.getpid()}-{time.time_ns() % 10 ** 12}'
+
+    def __getattr__(self, k):                  # c.gen_tokens += n
+        if k in COUNTERS:
+            return self.n[k]
+        raise AttributeError(k)
+
+    def __setattr__(self, k, v):
+        if k in COUNTERS:
+            self.n[k] = v
+        else:
+            object.__setattr__(self, k, v)
+
+    def _run(self):
+        if self._t is None:
+            self._t = time.perf_counter()
+
+    def _stop(self):
+        if self._t is not None:
+            _cuda_sync()
+            self.active_s += time.perf_counter() - self._t
+            self._t = None
+
+    def start(self):
+        if _blocks:
+            self.labels.setdefault('round', _blocks[-1].labels.get('round'))    # a phase inside a round block
+            if self.labels['round'] is None:
+                del self.labels['round']
+            _blocks[-1]._stop()
+        _blocks.append(self)
+        _cuda_sync()
+        self._run()
+        return self
+
+    def close(self, status='ok'):
+        if self.closed:
+            return
+        self.closed = True
+        self._stop()
+        top = bool(_blocks) and _blocks[-1] is self
+        if self in _blocks:
+            _blocks.remove(self)
+        if top and _blocks:
+            _blocks[-1]._run()
+        _write(self, status)
+
+    def suspend(self):
+        """Stop the clock and leave the stack (the block stays open; start() resumes it)."""
+        if self in _blocks:
+            top = _blocks[-1] is self
+            self._stop()
+            _blocks.remove(self)
+            if top and _blocks:
+                _blocks[-1]._run()
+
+    def __enter__(self):
+        return self.start()
+
+    def __exit__(self, et, ev, tb):
+        self.close('ok' if et is None else 'error')
+
+
+def _cuda_sync():
+    t = sys.modules.get('torch')
+    if t is not None and t.cuda.is_available() and t.cuda.is_initialized():
+        t.cuda.synchronize()
+
+
+def _device():
+    """('cuda', device name, n_gpu) if this process initialised CUDA, else ('cpu', None, 0)."""
+    t = sys.modules.get('torch')
+    if t is not None and t.cuda.is_available() and t.cuda.is_initialized():
+        return 'cuda', t.cuda.get_device_name(t.cuda.current_device()), int(os.environ.get('ND_N_GPU', 1))
+    return 'cpu', None, 0
+
+
+def _write(c, status):
+    dev, name, ngpu = _device()
+    if dev == 'cpu' and not any(c.n.values()):
+        return
+    lab = {**c.labels, 'device': dev, 'gpu': name, 'n_gpu': ngpu, 'wall_s': round(c.active_s, 3),
+           'compute_id': c.id, 'status': status}
+    record('gpu_seconds', round(c.active_s * (ngpu or 1), 3), **lab)
+    for k in COUNTERS[:-1]:
+        if c.n[k]:
+            record(k, c.n[k], **({**lab, 'lean_s': round(c.n['lean_s'], 3)} if k == 'lean_checks' else lab))
+    sync(raise_on_fail=False)     # the process-level block closes after _final_sync has run
+
+
+def enabled():
+    return os.environ.get('ND_COMPUTE', '1') != '0' and os.environ.get('ND_REGISTRY', '1') != '0'
+
+
+def compute(phase=None, round=None, **labels):
+    """A compute block: `with record.compute(phase='sample', round=r) as c: ... c.gen_tokens += n`.  arm / seed come
+    from set_config / ND_ARM / ND_SEED unless given; round defaults to ND_ROUND (set for child processes by child())."""
+    if round is None and os.environ.get('ND_ROUND', '').lstrip('-').isdigit():
+        round = int(os.environ['ND_ROUND'])
+    sd = os.environ.get('ND_COMPUTE_SEED', '')    # a child process's rows carry its driver's seed (child())
+    lab = {'phase': phase or os.environ.get('ND_PHASE') or 'job', 'round': round,
+           'seed': int(sd) if sd.lstrip('-').isdigit() else None, **labels}
+    return Compute({k: v for k, v in lab.items() if v is not None})
+
+
+def count(**kw):
+    """Add to the innermost open block's counters (library code: sampler, Lean gate).  No-op when none is open."""
+    if _blocks:
+        n = _blocks[-1].n
+        for k, v in kw.items():
+            n[k] += v
+
+
+def job_compute():
+    """The process-level block (opened by save_config), closed at exit."""
+    if not enabled() or any(b.job for b in _blocks):
+        return None
+    c = compute()
+    c.job = True
+    atexit.register(c.start().close, 'exit')
+    return c
+
+
+_phases = {}                                   # (phase, round) -> open phase block
+
+
+def phase(name, round=None, **labels):
+    """Driver loops, without re-indenting: `record.phase('sample', round=r)` suspends the current phase block and
+    starts (or resumes) the one for (name, round); blocks of other rounds are closed and written, so a loop that
+    alternates phases every step still writes one set of rows per (phase, round).  phase(None) closes them all
+    (also done at exit)."""
+    if not _state.get('phase_atexit'):
+        _state['phase_atexit'] = True
+        atexit.register(phase, None)          # runs before the job block's closer (atexit is LIFO)
+    key = (name, round)
+    for k, b in list(_phases.items()):
+        if k == key:
+            continue
+        if name is None or k[1] != round:
+            b.close(); del _phases[k]
+        else:
+            b.suspend()
+    if name is None or not enabled():
+        return None
+    if key not in _phases:
+        _phases[key] = compute(name, round, **labels)
+    b = _phases[key]
+    if b not in _blocks:
+        b.start()
+    return b
+
+
+class child:
+    """`with record.child('finetune', round=r): subprocess.run(...)`: the child process records its own compute
+    (its save_config block, labelled with this phase and round via ND_PHASE / ND_ROUND); this process's clock stops."""
+    def __init__(self, phase, round=None):
+        sd = _default('seed', ('seed',))
+        self.env = {'ND_PHASE': phase, 'ND_ROUND': None if round is None else str(round),
+                    'ND_COMPUTE_SEED': None if sd is None else str(sd)}
+
+    def __enter__(self):
+        self.old = {k: os.environ.get(k) for k in self.env}
+        for k, v in self.env.items():
+            if v is None:
+                os.environ.pop(k, None)
+            else:
+                os.environ[k] = v
+        if _blocks:
+            _blocks[-1]._stop()
+        return self
+
+    def __exit__(self, *e):
+        for k, v in self.old.items():
+            if v is None:
+                os.environ.pop(k, None)
+            else:
+                os.environ[k] = v
+        if _blocks:
+            _blocks[-1]._run()
 
 
 def _default(name, cfg_keys):

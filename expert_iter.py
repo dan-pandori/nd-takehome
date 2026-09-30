@@ -141,6 +141,7 @@ def main():
             x = json.loads(l); found_t[x['name']].append({'proof': x['proof'], 'written': x['written'], 'pruned': x['pruned'], 'round': x['round']})
         print(f'resumed {sum(len(v) for v in found.values())} target proofs, {sum(len(v) for v in found_t.values())} transfer proofs', flush=True)
     for r in range(a.start_round, a.start_round + a.rounds):
+        record.phase('sample', round=r)    # compute rows per (phase, round) (REGISTRY.md): targets sampled + judged
         t0 = time.time()
         model, tok, _ = load_ckpt(ckpt, dev)
         seed = a.seed * 1000 + r
@@ -185,6 +186,7 @@ def main():
                     relabelled[thm] = {'prompt': newp, 'proof': strip_rej(p), 'n_lines': nl, 'thm': thm, 'round': r}
                     nrl += 1
             stats['relabelled_new'] = nrl; stats['relabelled_total'] = len(relabelled)
+        record.phase('eval', round=r)
         # 2. transfer, sampled
         prompts = [t['prompt'] for t in transfer for _ in range(a.k)]
         flat = generate(model, tok, prompts, greedy=False, temperature=a.temperature, batch=a.batch, seed=seed + 500)
@@ -214,6 +216,7 @@ def main():
             for t in transfer:
                 for x in found_t[t['name']]:
                     f.write(json.dumps({'name': t['name'], 'thm': t['thm'], 'prompt': t['prompt'], 'gen_lines': t['n_lines'], **x}) + '\n')
+        record.phase('finetune', round=r)
         # 4. train
         del model
         torch.cuda.empty_cache()
@@ -246,7 +249,8 @@ def main():
                 cmd = ['python3', 'train.py', '--data', mix, '--init', ckpt, '--steps', str(a.ft_steps), '--lr', str(a.ft_lr),
                        '--min_lr', str(a.ft_lr / 10), '--warmup', '50', '--cap', '0', '--out', new_ckpt, '--seed', str(seed), '--log_every', '200']
                 print(' '.join(cmd), flush=True)
-                subprocess.run(cmd, check=True)
+                with record.child('finetune', round=r):    # train.py records its own compute rows
+                    subprocess.run(cmd, check=True)
                 ckpt = new_ckpt
         stats['secs'] = time.time() - t0
         json.dump(stats, open(f'{out}/round_{r}.json', 'w'), indent=1)

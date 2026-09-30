@@ -489,6 +489,8 @@ def run(a, model, tok, dev, loader, lr_at, load_val, save_ckpt, VAL_SHIFT_SEED, 
     secs = time.time() - t0
     peak = torch.cuda.max_memory_allocated()
     n_run = a.steps - step0
+    import record
+    record.count(train_steps=n_run, train_tokens=int(tot[step0:].sum()))   # records' tokens (packing pad excluded)
     train_s = secs - val_s
     frac = useful * (n_run / a.steps)
     extra = {'args': vars(a), 'n_params': model.n_params(), 'secs': secs, 'val_full_s': val_s, 'steps_run': n_run,

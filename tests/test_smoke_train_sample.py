@@ -7,7 +7,9 @@
 Checks: train.py runs 50 steps on CPU and writes a checkpoint, a metrics file and `<out>.args.json` (the resolved
 config, `record.save_config`), with a finite loss that falls from step 25 to step 50 and a registry row naming the
 config file; on a second model that memorises 4 fixture proofs (100 steps) the sampler (`sample.generate`, fast path)
-reproduces them greedily and Lean accepts them, sampling is deterministic for a fixed seed, `raw` ids are filled.
+reproduces them greedily and Lean accepts them, sampling is deterministic for a fixed seed, `raw` ids are filled;
+the compute rows (record.compute, run compute-record) equal independent counts of the tokens trained on and sampled and
+of the texts sent to Lean.
 """
 import glob, json, math, os, subprocess, sys, tempfile
 
@@ -81,6 +83,47 @@ if not fails:
     check('sampler: raw token ids filled', bool((raw != 0).any()))
     res = lean_judge.judge_many(list(zip(prompts, s1)))
     check('sampler: judge_many agrees with the gate', all((not r.startswith('LEAN')) == ok for r, (ok, _, _) in zip(s1, res)))
+
+    # compute rows (run compute-record): the counters equal independent counts of the work done
+    import record, train
+    from tokenizer import make_tokenizer
+    allrows = lambda: [json.loads(l) for f in glob.glob(os.path.join(tmp, 'registry', '*.jsonl')) for l in open(f)]
+    crow = lambda rs, m, **kw: [r for r in rs if r['metric'] == m and 'compute_id' in r['labels']
+                                and all(r['labels'].get(k, r.get(k)) == v for k, v in kw.items())]
+    rs = allrows()
+    tiny_cfg = lambda r: r['labels'].get('config_file', '').endswith('tiny.pt.args.json')
+    ntok = sum(len(p) + len(q) for p, q in train.load(os.path.join(tmp, 'tiny.jsonl'), make_tokenizer('lean_seq'), 0))
+    got = [r['value'] for r in crow(rs, 'train_tokens') if tiny_cfg(r)]
+    check('compute: train.py train_tokens = 100 steps x the 16 records\' tokens (bs 16 = one epoch a step)',
+          got == [100 * ntok], (got, 100 * ntok))
+    check('compute: train.py train_steps rows (50 and 100)', sorted(r['value'] for r in crow(rs, 'train_steps')) == [50, 100],
+          [r['value'] for r in crow(rs, 'train_steps')])
+    g = crow(rs, 'gpu_seconds', phase='job')
+    check('compute: train.py gpu_seconds rows, device=cpu, arm / seed labels', len(g) == 2 and all(
+          r['labels']['device'] == 'cpu' and r['value'] > 0 and r['seed'] == 0 for r in g), [r['labels'] for r in g])
+    raw = np.full((len(prompts), 96), tok.pad, dtype=np.int64)
+    glog = os.environ['LEAN_GATE_LOG']
+    n_gate0 = sum(1 for _ in open(glog)) if os.path.exists(glog) else 0
+    with record.compute(phase='sample', round=1, arm='smoke', seed=0) as c:
+        s3 = sample.generate(model, tok, prompts, greedy=False, temperature=1.0, max_new=96, batch=16, seed=11, raw=raw)
+    ind = sum(list(row).index(tok.eos) + 1 if tok.eos in row else 96 for row in raw.tolist())   # decoded through <eos>
+    gl = [json.loads(l) for l in open(glog)][n_gate0:]
+    check('compute: gen_tokens = tokens in the sampled ids through <eos>', c.gen_tokens == ind > 0, (c.gen_tokens, ind))
+    check('compute: attempts = prompts sampled', c.attempts == len(prompts), c.attempts)
+    check('compute: lean_checks = texts the gate sent to Lean', len(gl) == 1 and c.lean_checks == gl[0]['lean_texts'] > 0
+          and c.lean_s > 0, (c.lean_checks, gl))
+    rs = allrows()
+    lab = [(r['arm'], r['seed'], r['labels'].get('round'), r['labels']['device']) for r in crow(rs, 'gen_tokens', phase='sample')]
+    check('compute: sample block rows labelled arm, seed, labels.round, device', lab == [('smoke', 0, 1, 'cpu')], lab)
+    fresh = [r for r in fixture if r['prompt'] not in {t['prompt'] for t in tiny}][:6]
+    pairs = [(r['prompt'], r['proof']) for r in fresh]
+    with record.compute(phase='judge', arm='smoke', seed=0) as cj:
+        v1 = lean_judge.judge_many(pairs + pairs)
+    with record.compute(phase='judge_again', arm='smoke', seed=0) as cj2:
+        v2 = lean_judge.judge_many(pairs)
+    check('compute: judge_many counts distinct texts sent to Lean (6), not duplicates or cache hits (0)',
+          cj.lean_checks == 6 and cj2.lean_checks == 0 and all(ok for ok, _, _ in v1 + v2), (cj.lean_checks, cj2.lean_checks))
+    check('compute: a CPU block with no counted work writes no rows', not crow(allrows(), 'gpu_seconds', phase='judge_again'))
 
 print(f'{len(fails)} failed' if fails else 'ALL PASS')
 sys.exit(1 if fails else 0)

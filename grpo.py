@@ -86,6 +86,8 @@ def main():
     stats_steps = []
     t0 = time.time(); samples_seen = 0
     for step in range(1, steps + 1):
+        rnum = boundaries.get(min(b for b in boundaries if b >= step), a.rounds) if any(b >= step for b in boundaries) else a.rounds
+        record.phase('sample', round=rnum)    # compute rows per (phase, round) (REGISTRY.md): sampling + Lean judging
         # ---- sample P prompts x G completions (on-policy)
         idxs = []
         for _ in range(a.prompts):
@@ -93,6 +95,7 @@ def main():
             idxs.append(order[ptr]); ptr += 1
         prompts = [targets[i] for i in idxs]
         pid = [pids[t['name']] for t in prompts for _ in range(a.group)]
+        record.count(attempts=len(pid))
         model.eval()
         comps = []
         with torch.no_grad():
@@ -102,7 +105,6 @@ def main():
         model.train()
         texts = [tok.decode(c) for c in comps]
         rewards = torch.zeros(len(pid), device=dev)
-        rnum = boundaries.get(min(b for b in boundaries if b >= step), a.rounds) if any(b >= step for b in boundaries) else a.rounds
         flat_t = [t for t in prompts for _ in range(a.group)]
         verdicts = judge_many([(t['prompt'], txt) for t, txt in zip(flat_t, texts)])   # batched (grpo uses generate_ids: no gate)
         for j, (t, txt) in enumerate(zip(flat_t, texts)):
@@ -118,6 +120,7 @@ def main():
         var_groups = float(((R.mean(1) > 0) & (R.mean(1) < 1)).float().mean())
         # ---- one policy-gradient update with the group-mean baseline, fixed divisor
         loss = torch.zeros((), device=dev)
+        record.phase('update', round=rnum)
         if adv.abs().sum() > 0:
             opt.zero_grad(set_to_none=True)
             for s in range(0, len(pid), a.lp_batch):      # chunked forward/backward: gradients accumulate, memory stays bounded
@@ -128,6 +131,9 @@ def main():
                 l.backward(); loss = loss + l.detach()
             gn = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
             opt.step()
+            upd = [j for j, v in enumerate(adv.tolist()) if v != 0]    # non-pad tokens forwarded: prompt + completion to <eos>
+            record.count(train_steps=1, train_tokens=sum(len(pid[j]) + (comps[j].index(tok.eos) + 1 if tok.eos in comps[j]
+                                                                        else len(comps[j])) for j in upd))
         else:
             gn = torch.zeros(())
         st = {'step': step, 'mean_reward': float(R.mean()), 'frac_groups_with_variance': var_groups, 'loss': float(loss), 'grad_norm': float(gn), 'samples': samples_seen}
@@ -137,6 +143,7 @@ def main():
         # ---- round-equivalent boundary: EI-style bookkeeping
         if step in boundaries:
             r = boundaries[step]
+            record.phase('eval', round=r)
             model.eval()
             ck = f'ckpts/{a.name}_r{r}.pt'
             save_ckpt(ck, model, tok.mode, extra={'grpo_round': r, 'step': step})    # uploads before returning

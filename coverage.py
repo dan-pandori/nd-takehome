@@ -95,6 +95,7 @@ def main():
                 b = min(a.batch, a.k - n)
                 with torch.autocast('cuda', dtype=torch.bfloat16):
                     outs = generate_ids(model, tok, [pid] * b, greedy=False, temperature=a.temperature, max_new=a.max_new, gen=gen)
+                record.count(attempts=b)    # compute rows (REGISTRY.md); gen_tokens are counted in generate_ids
                 for j, o in enumerate(outs):
                     nd = tok.decode(o)
                     s = nd if (is_lean and nd.startswith('LEANPARSE')) else norm(nd)

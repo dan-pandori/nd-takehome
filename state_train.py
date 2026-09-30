@@ -122,6 +122,7 @@ def main():
         idxs = [perm.pop() for _ in range(a.recs)]
         x, m = batch(data, idxs, tok, rng, dev)
         npb.append(x.shape[0])
+        record.count(train_steps=1, train_tokens=sum(len(p) + len(q) for i in idxs for p, q in data[i]))   # non-pad tokens
         for g in opt.param_groups:
             g['lr'] = sched(step)
         opt.zero_grad(set_to_none=True)

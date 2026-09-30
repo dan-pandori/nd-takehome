@@ -6,6 +6,7 @@
   python3 registry_merge.py --out registry_merged    # writes <out>.jsonl and <out>.csv (labels flattened to label.*)
   python3 registry_merge.py --upload                 # push local row files to hf://…/registry/<run>/ (after a pull)
   python3 registry_merge.py --q metric=heldout_greedy_acc role=stage1,init,frozen L= --cols run_id,arm,seed,value,n
+  python3 registry_merge.py --compute [--by run_id,arm,seed,round,phase] [--q run_id=<run>]   # per-arm compute table
 
 Query syntax: key=v1,v2 keeps rows whose key is one of the values; key= keeps rows where key is missing / null;
 key!=v drops; key~substr keeps rows containing substr. Keys are row columns or label names (L, round, k, kind, ...).
@@ -64,6 +65,43 @@ def match(r, cond):
     return True
 
 
+COMPUTE_COLS = ('gpu_seconds', 'cpu_seconds', 'gen_tokens', 'attempts', 'actions', 'train_steps', 'train_tokens',
+                'lean_checks', 'lean_s')
+
+
+def compute_table(rows, by):
+    """record.compute rows -> {group key: {column: sum}, 'gpu': GPU types}.  gpu_seconds rows with device=cpu are
+    summed as cpu_seconds; lean_s is the lean_checks rows' label.  Time is exclusive per block, so sums never double count."""
+    out = {}
+    for r in rows:
+        lab = r.get('labels') or {}
+        if 'compute_id' not in lab or r['metric'] not in COMPUTE_COLS:
+            continue
+        g = out.setdefault(tuple(str(get(r, k)) for k in by), dict.fromkeys(COMPUTE_COLS, 0) | {'gpu': set()})
+        m = r['metric']
+        if m == 'gpu_seconds':
+            m = 'cpu_seconds' if lab.get('device') == 'cpu' else m
+            if lab.get('gpu'):
+                g['gpu'].add(lab['gpu'])
+        g[m] += r['value'] or 0
+        if r['metric'] == 'lean_checks':
+            g['lean_s'] += lab.get('lean_s') or 0
+    return out
+
+
+def print_compute(rows, by, fn=None):
+    t = compute_table(rows, by)
+    lines = ['\t'.join(list(by) + list(COMPUTE_COLS) + ['gpu'])]
+    for k in sorted(t, key=lambda k: tuple((0, int(x)) if x.lstrip('-').isdigit() else (1, x) for x in k)):
+        v = t[k]
+        lines.append('\t'.join(list(k) + [f'{v[c]:.1f}' if c.endswith('seconds') or c == 'lean_s' else str(v[c])
+                                          for c in COMPUTE_COLS] + [','.join(sorted(v['gpu']))]))
+    print('\n'.join(lines))
+    if fn:
+        open(fn, 'w').write('\n'.join(lines) + '\n')
+        print('wrote', fn, file=sys.stderr)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--bucket', action='store_true', help='also read every run\'s rows from the bucket')
@@ -73,6 +111,8 @@ def main():
     ap.add_argument('--q', nargs='*', default=None)
     ap.add_argument('--cols', default='run_id,arm,seed,role,metric,value,n,ckpt,source')
     ap.add_argument('--sort', default='run_id,arm,seed')
+    ap.add_argument('--compute', action='store_true', help='per-arm compute table (sums of record.compute rows)')
+    ap.add_argument('--by', default='run_id,arm,seed,round', help='--compute grouping (row columns or labels)')
     a = ap.parse_args()
     import record as ndrec; ndrec.save_config(vars(a), a.out)    # the resolved config next to the outputs
     local = [] if a.no_local else sorted(glob.glob(os.path.join(ROOT, 'artifacts', '*', 'registry', '*.jsonl'))
@@ -103,7 +143,9 @@ def main():
                 w.writerow([r.get(k) for k in base] + [(r.get('labels') or {}).get(k) for k in labs]
                            + [json.dumps(r.get('config'), default=str)])
         print('wrote', a.out + '.jsonl', a.out + '.csv', file=sys.stderr)
-    if a.q is not None:
+    if a.compute:
+        print_compute([r for r in rows if match(r, a.q or [])], a.by.split(','), a.out and a.out + '_compute.tsv')
+    elif a.q is not None:
         sel = [r for r in rows if match(r, a.q)]
         cols = a.cols.split(',')
         sk = a.sort.split(',')
