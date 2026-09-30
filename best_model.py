@@ -111,8 +111,41 @@ class ALiBiGPT(GPT):
         self.cfg.update(d_ff=d_ff, arch='best')
         self.register_buffer('slopes', torch.tensor(alibi_slopes(n_head)).view(1, n_head, 1, 1), persistent=False)
 
+    PREFILL_ELEMS = 2 ** 29    # rows per prefill chunk: keep one (rows, H, T, S) bias / score tensor near 1 GB in bf16
+
     def forward(self, idx, pos=None, mask=None, caches=None):
+        B, T = idx.shape
+        if caches is not None and T > 1 and B > 1 and B * self.cfg['n_head'] * T * T > self.PREFILL_ELEMS:
+            return self._chunked_prefill(idx, pos, mask, caches)
         return self.head(self.ln_f(self.features(idx, pos, mask, caches)[0]))
+
+    def _chunked_prefill(self, idx, pos, mask, caches):
+        """The prompt forward of cached sampling, in row chunks.  An additive float mask sends SDPA to a kernel whose
+        memory grows as B x H x T^2 (a batch-2,048 prefill of 500-token states OOMs a 48 GB card).  Rows are independent,
+        so each chunk writes its K/V (and key positions) into row slices of the full preallocated caches."""
+        B, T = idx.shape
+        hd = self.cfg['d'] // self.cfg['n_head']
+        rows = max(1, self.PREFILL_ELEMS // (self.cfg['n_head'] * T * T))
+        if pos is None:
+            pos = torch.arange(T, device=idx.device)[None].expand(B, T)
+        dt = self.emb.weight.dtype
+        if idx.is_cuda and torch.is_autocast_enabled('cuda'):
+            dt = torch.get_autocast_dtype('cuda')
+        for c in caches:
+            assert 'k' not in c, 'chunked prefill expects fresh caches'
+            c['k'] = torch.empty(B, self.cfg['n_head'], c['max'], hd, device=idx.device, dtype=dt)
+            c['v'] = torch.empty_like(c['k'])
+        caches[0]['pos'] = pos.new_empty(B, caches[0]['max'])
+        out = []
+        for r0 in range(0, B, rows):
+            r1 = min(B, r0 + rows)
+            sub = [{'max': c['max'], 'k': c['k'][r0:r1], 'v': c['v'][r0:r1], 'n': 0} for c in caches]
+            sub[0].update(pos=caches[0]['pos'][r0:r1], n_pos=0)
+            out.append(self.head(self.ln_f(self.features(idx[r0:r1], pos[r0:r1], None if mask is None else mask[r0:r1], sub)[0])))
+        for c in caches:
+            c['n'] = T
+        caches[0]['n_pos'] = T
+        return torch.cat(out)
 
     def features(self, idx, pos=None, mask=None, caches=None):
         """The trunk: (final hidden state before ln_f, the ALiBi bias used)."""
