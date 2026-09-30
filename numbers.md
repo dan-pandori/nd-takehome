@@ -1438,3 +1438,53 @@ counts once at the end (no per-step cost); the sampler adds one `declen.sum()` p
 
 Per-arm compute table of this run: `artifacts/compute-record/compute_table.tsv` (`registry_merge.py --compute --by
 arm,seed,round,phase`). Pods: cr1 0.36 h + cr2 0.05 h, A40 at $0.49/h billed: $0.21. Bucket: `hf://buckets/dan-pandori/nd-rl/compute-record/`.
+
+## frontier-supply (2026-09-30)
+
+**Model** (every number here): SN-cap12 — `lean_staten` state policy, 3,216,384 params, from scratch, Stage-1
+`state_train.py --mode lean_staten --steps 6000 --recs 128 --cap 12` on K12 (cap-horizon's cap-12 set, 155,000
+proofs, md5 800b5486…). Stage-1 s0–s3 from state-cap12, s4–s5 trained here (identical recipe). Arms after 8 EI rounds
+(k 32, T 0.8, batch 2048, `max_action` 256, `max_steps` 48, 600 ft steps / round): **C** control (s0–s3 = state-cap12's
+`la_T1_SN12_s*_r8.pt`, s4–s5 new), **S** supply 25 % (s0–s5), **C′** control rerun with EI seed + 100 (s0, s1).
+Checker: Lean alone (`lean_judge`). Read-out: `lpool_reread.py` k 256, T 0.8, seed 0, batch 2048, `max_action` 512,
+`max_steps` 96. Sources: `artifacts/fsup/rr/<label>__{lp2,rr}.jsonl`, tables by `fsup_analysis.py` →
+`artifacts/fsup/summary.json`.
+
+FS-1 Per seed, theorems solved (primary = the 91 of `data/fsup/lp2_91.jsonl` + rr600 `L_true` 15–16, of 291):
+
+| seed | C primary | S primary | C′ primary | C / S / C′ on the 91 | Stage-1 base on the 91 |
+|---|---|---|---|---|---|
+| s0 | 142 | 139 | 145 | 33 / 36 / 34 | 7 |
+| s1 | 207 | 217 | 197 | 60 / 62 / 52 | 20 |
+| s2 | 218 | 226 | — | 57 / 61 / — | 18 |
+| s3 | 220 | 233 | — | 58 / 66 / — | 23 |
+| s4 | 220 | 228 | — | 61 / 66 / — | 25 |
+| s5 | 207 | 216 | — | 47 / 58 / — | 19 |
+
+FS-2 Paired S − C (per seed; IQM; stratified-bootstrap 95 % CI over seeds; per-theorem flips S-only / C-only summed):
+primary −3, +10, +8, +13, +8, +9 (mean 7.5, IQM 8.8, CI [2.5, 11.0], flips 158 / 113); the 91 +3, +2, +4, +8, +5,
++11 (mean 5.5, CI [2.8, 8.8], flips 69 / 36); exact-17 (61) mean +4.0 (6 / 6 positive); ≥ 18 (30) +1.5; rr 15–16
++2.0 (CI [−2.8, 6.0]); rr 13–14 +1.3.
+
+FS-3 No-treatment spread C′ − C (s0, s1): primary +3, −10 (flips 48 / 55); the 91 +1, −8. sd_d = √mean d² = 7.4 →
+**paired MDD (n 6) = 1.425 · 7.4 = 10.5** (pre-registered provisional: 23). S − C mean 7.5 is **inside** it; the S − C
+differences themselves have sd 5.5 (paired t 3.4, 5 of 6 positive on the primary, 6 of 6 on the 91).
+
+FS-4 Filter (`artifacts/fsup/la_S_s*/round_*.json`, `cands_*.jsonl`): 53,904 candidates made, **6,894 pass (12.8 %)**,
+p̂ = 0 40,686, too easy 6,324. (a) 26,928 made, 15.8 % pass (chain 10.5 %, conj 14.0 %, case 15.4 %, contrapose
+22.7 %, hyp 32.3 %; S s0–s3, s5 per-op); (b) 26,976 made, 9.8 % pass. Upper-bound window 13–16 → 14–17 from round
+2 (s2, s4), 3 (s1, s3, s5) or 7 (s0), then stable. No shortfall. Leak drops: 75 (21 / 14 / 4 / 10 / 10 / 16). Kept pool after round 8:
+1,075 / 1,255 / 1,151 / 1,165 / 1,128 / 1,120; shortest found proof of a kept target, median lines (term size):
+(a) 13–15 (8–10), (b) 9–10 (5–6) — `artifacts/fsup/terms.json`.
+
+FS-5 Proof length of read-out solves (shortest per theorem, re-checked alone by `lean_check`, 0 rejected): the 91 —
+median 20–22 lines, term size 14–17 in every arm; rr 13–16 — 16 lines, term 11–12. S and C do not differ.
+
+FS-6 Compute per ladder (registry rows `artifacts/frontier-supply/registry/`, A40): S 19,340–20,434 GPU-s; C s4 / s5
+20,491 / 19,689; C′ 19,880 / 19,918. Attempts 1,150,720 (targets + filter) in every new arm; 4,800 ft steps; train
+tokens S 0.68–0.72 G vs C / C′ 0.66–0.69 G; generated tokens S 244–258 M vs 244–247 M; Lean checks S 0.61–0.69 M vs
+0.76–0.86 M. No arm exceeds its comparator by 25 %. C s0–s3 were run by state-cap12 with sampled transfer each round
+(≈ +50 % attempts; not counted here). Pods: 39.0 pod-hours, $19.10 (A40 $0.49/h), incl. ≈ 6.9 h lost to the 04:00
+watchdog deletion.
+
+Bucket: `hf://buckets/dan-pandori/nd-rl/frontier-supply/{artifacts/fsup,ckpts/fsup,artifacts/frontier-supply,data/fsup}`.

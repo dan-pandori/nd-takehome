@@ -24,9 +24,10 @@ def label(arm, s):
 def solved_sets(lab):
     """-> dict quantity -> set of solved theorem names, or None if the read-out is missing."""
     f1, f2 = f'{RR}/{lab}__lp2.jsonl', f'{RR}/{lab}__rr.jsonl'
-    if not (os.path.exists(f1) and os.path.exists(f2)):
+    if not os.path.exists(f1) or not (os.path.exists(f2) or lab.startswith('stage1')):
         return None
-    lp2, rr = read(f1), read(f2)
+    lp2 = read(f1)
+    rr = read(f2) if os.path.exists(f2) else []     # Stage-1 bases were read on the 91 only (budget, log 10:10 UTC)
     q = {'lp2_91': {r['name'] for r in lp2 if r['solved']},
          'exact17': {r['name'] for r in lp2 if r['solved'] and r['L_true_lb'] == 17},
          'ge18': {r['name'] for r in lp2 if r['solved'] and r['L_true_lb'] >= 18},
@@ -79,7 +80,7 @@ def readouts():
 def supply_filter():
     out = {}
     tot = collections.defaultdict(lambda: {'made': 0, 'zero': 0, 'pass': 0, 'easy': 0})
-    for d in sorted(glob.glob('artifacts/fsup/la_S_s*')):
+    for d in sorted(d for d in glob.glob('artifacts/fsup/la_S_s*') if os.path.isdir(d)):
         name = os.path.basename(d); per = []
         for r in range(1, 9):
             fn = f'{d}/round_{r}.json'
@@ -104,7 +105,7 @@ def ladder_compute():
     """per ladder, from round jsons: attempts, env actions (steps), prompt tokens, decoded action tokens, wall s,
     fine-tune records; and GPU-seconds by phase from the registry rows."""
     out = {}
-    dirs = sorted(glob.glob('artifacts/fsup/la_*_s*'))
+    dirs = sorted(d for d in glob.glob('artifacts/fsup/la_*_s*') if os.path.isdir(d))
     for d in dirs:
         name = os.path.basename(d); acc = collections.Counter()
         for r in range(1, 9):

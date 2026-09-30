@@ -842,3 +842,14 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 04:10–04:25 UTC  relaunched every ladder from scratch on fsup6–10 (same layout: fsup6 S s0 / s1, fsup7 S s2 / s3,
   fsup8 S s4 / C s4 + fixed re-reads, fsup9 S s5 / C s5, fsup10 C′ s0 / s1). Round-1 filter numbers from the killed
   run (S s0 136, s2 152, s3 172 of 1,123) are not results.
+- 2026-09-30 10:10 UTC  budget cut: fixed read-outs reduced to C s3 (both files) + every Stage-1 base on the 91 only
+  (`pod/fsup/reread_fixed2.sh`); an rr600 read-out takes ≈ 16 min alone. 10:18 C s4's read-out OOM'd beside S s4's
+  read-out and the fixed ones (my scheduling); rerun alone on fsup11 11:03–11:22 from the bucket checkpoint
+  (md5 b22a755f…).
+- 09:50–11:25 UTC  pods finished, pulled (`pod/fsup/finish.sh`: round / cands / supply_found_8 / found_8 / read-outs /
+  registry), uploaded, deleted as each completed (fsup7 10:08, fsup6 10:21, fsup10 10:22, fsup9 10:25, fsup8 11:00,
+  fsup11 11:23). Total 39.0 pod-hours, $19.10. Balance $159.5.
+- 11:30 UTC  analysis (`fsup_analysis.py`, `fsup_terms.py` — 0 Lean rejections on re-check, `fsup_figure.py`):
+  filter 12.8 % pass; S − C primary +7.5 mean (−3, +10, +8, +13, +8, +9) against a C′-based MDD of 10.5 → inside the
+  MDD (falsifier met); on the 91 S > C in 6 / 6 seeds (+5.5). Write-up `run_frontier_supply.md`, `numbers.md` FS-1…6.
+  Supply code is on this branch for the reviewer; not merged into `dan` (the brief says after review).

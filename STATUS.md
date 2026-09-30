@@ -216,3 +216,10 @@ COMPUTE-RECORD DONE 2026-09-30T01:02:02Z
   round's attempts to supply (filter included); read-out of every r8 and Stage-1 checkpoint on long-pool-2 (91) + rr600 13–16.
 - 2026-09-30 02:45 UTC  4 A40 pods (fsup1–4), 10 ladders running (S s0–s5, C s4–s5, C′ s0–s1); smoke passed (control path byte-identical).
 - 2026-09-30 04:00 UTC  pods deleted by the host watchdog (my session was not alive between wake-ups); 04:25 all 10 ladders relaunched from scratch on fsup6–10. ≈ $3.40 lost.
+- 2026-09-30 11:35 UTC  **Result.** Filter works: 12.8 % of 53,904 candidates pass p̂ ∈ (0, 1/4] ((a) 15.8 %, (b) 9.8 %).
+  S − C on the primary (the 91 + rr600 15–16, SN-cap12 r8, 6 seeds): −3, +10, +8, +13, +8, +9 (mean +7.5, IQM 8.8,
+  CI [2.5, 11.0]) — **inside the paired MDD 10.5** measured from the C′ reruns (+3, −10): falsifier met. Direction
+  consistent: on the 91 long theorems S > C in 6 / 6 seeds (+5.5). Kept supply targets are rare but short (median
+  9–15 lines). Compute matched (GPU-s ±5 %). 39.0 pod-hours, $19.10; all pods deleted. Suggested follow-up: C′ on all
+  six seeds (≈ 6 ladders, ≈ $9) to pin the MDD. Supply code awaits review before merging into `dan`.
+FRONTIER-SUPPLY DONE 2026-09-30T11:35:00Z

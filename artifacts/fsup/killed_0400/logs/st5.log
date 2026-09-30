@@ -1,0 +1,51 @@
+=== stage1 s5 2026-09-30T02:26:41Z
+params 3216384 mode lean_staten
+train records 155000 (skipped 0); pairs 1239995; mean 8.000 per proof; max pair len 392; load 75s
+/workspace/nd-takehome/state_train.py:142: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss_sum += float(lb)
+step 200 loss 0.8082 lr 1.00e-03 pairs/batch 1021 167s val 0.8044
+step 400 loss 0.2425 lr 9.97e-04 pairs/batch 1025 336s val 0.1562
+step 600 loss 0.1507 lr 9.89e-04 pairs/batch 1022 505s val 0.1078
+step 800 loss 0.1381 lr 9.76e-04 pairs/batch 1026 676s val 0.0975
+step 1000 loss 0.1300 lr 9.58e-04 pairs/batch 1023 854s val 0.0925
+step 1200 loss 0.1279 lr 9.36e-04 pairs/batch 1027 1033s val 0.0867
+step 1400 loss 0.1017 lr 9.08e-04 pairs/batch 1024 1197s val 0.0813
+step 1600 loss 0.0929 lr 8.77e-04 pairs/batch 1027 1362s val 0.0798
+step 1800 loss 0.0902 lr 8.41e-04 pairs/batch 1019 1528s val 0.0787
+step 2000 loss 0.0801 lr 8.03e-04 pairs/batch 1024 1695s val 0.0767
+step 2200 loss 0.0795 lr 7.61e-04 pairs/batch 1025 1859s val 0.0769
+step 2400 loss 0.0807 lr 7.17e-04 pairs/batch 1026 2027s val 0.0769
+step 2600 loss 0.0797 lr 6.70e-04 pairs/batch 1025 2195s val 0.0744
+step 2800 loss 0.0652 lr 6.23e-04 pairs/batch 1025 2362s val 0.0761
+step 3000 loss 0.0647 lr 5.74e-04 pairs/batch 1021 2526s val 0.0755
+step 3200 loss 0.0640 lr 5.26e-04 pairs/batch 1019 2686s val 0.0735
+step 3400 loss 0.0597 lr 4.77e-04 pairs/batch 1024 2856s val 0.0729
+step 3600 loss 0.0604 lr 4.30e-04 pairs/batch 1030 3024s val 0.0736
+step 3800 loss 0.0621 lr 3.83e-04 pairs/batch 1021 3189s val 0.0737
+step 4000 loss 0.0621 lr 3.39e-04 pairs/batch 1025 3354s val 0.0729
+step 4200 loss 0.0563 lr 2.97e-04 pairs/batch 1027 3519s val 0.0728
+step 4400 loss 0.0526 lr 2.59e-04 pairs/batch 1026 3686s val 0.0725
+step 4600 loss 0.0582 lr 2.23e-04 pairs/batch 1023 3851s val 0.0723
+step 4800 loss 0.0523 lr 1.92e-04 pairs/batch 1024 4013s val 0.0722
+step 5000 loss 0.0507 lr 1.64e-04 pairs/batch 1024 4174s val 0.0718
+step 5200 loss 0.0590 lr 1.42e-04 pairs/batch 1027 4338s val 0.0719
+step 5400 loss 0.0554 lr 1.24e-04 pairs/batch 1024 4511s val 0.0724
+step 5600 loss 0.0558 lr 1.11e-04 pairs/batch 1023 4675s val 0.0721
+step 5800 loss 0.0561 lr 1.03e-04 pairs/batch 1027 4845s val 0.0718
+step 6000 loss 0.0582 lr 1.00e-04 pairs/batch 1020 5004s val 0.0718
+uploaded ckpts/fsup/stage1_SN12_s5.pt -> hf://buckets/dan-pandori/nd-rl/frontier-supply/ckpts/fsup/stage1_SN12_s5.pt (md5 5d0a5a9e71c78ce96cb67cee3aaa5aa3, 3.3s)
+saved ckpts/fsup/stage1_SN12_s5.pt
+[lean_gate] 5000 samples, parse-fail 14 (no-eos 0, 0.000 %), distinct 4986: ok 4895, rej 91 (filter 91, prefilter=on); lean on 4895 texts in 13 procs, 58.1s proc, exposed 6.6s, tail 6.1s, 32 workers
+[stage1_SN12_s5.pt on heldout.jsonl k=1 T=0.0] SOLVED 4895/5000 = 0.979 [0.975,0.983]
+  len 2: 1000/1000 = 1.000 [0.996,1.000]
+  len 3: 994/1000 = 0.994 [0.987,0.997]
+  len 4: 981/1000 = 0.981 [0.971,0.988]
+  len 5: 970/1000 = 0.970 [0.957,0.979]
+  len 6: 950/1000 = 0.950 [0.935,0.962]
+  written hist {2: 1027, 3: 981, 4: 931, 5: 965, 6: 844, 7: 37, 8: 35, 9: 37, 10: 18, 11: 12, 12: 4, 13: 2, 14: 2}
+  pruned hist {2: 1032, 3: 983, 4: 936, 5: 964, 6: 852, 7: 24, 8: 34, 9: 35, 10: 15, 11: 12, 12: 4, 13: 2, 14: 2}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 91), ('lean_seq parse: env: formula', 6), ('lean_seq parse: env: exact goal mismatch', 4), ('lean_seq parse: env: box on non-arrow', 1), ('lean_seq parse: env: unbound', 1), ('lean_seq parse: env: action truncated', 1)]
+env {"env_end": {"done": 4986, "syntax": 13, "truncated": 1}, "env_fail_reason": {"unbound": 1, "exact goal mismatch": 4, "formula": 6, "box on non-arrow": 1, "exact not last": 1}, "env_steps": {"3": 1031, "4": 990, "5": 943, "1": 6, "0": 1, "6": 982, "7": 858, "8": 47, "9": 40, "10": 46, "11": 26, "12": 16, "15": 4, "16": 2, "13": 4, "14": 3, "24": 1}, "prompt_tokens": 1712463, "steps": 2480, "rows": 25557, "rowsteps": 713520, "prompt_len_max": 346, "chunks": 32, "stop_eos": 25556, "stop_exact": 0, "stop_goal": 0, "names_defined": 20402, "names_renamed": 5945, "env_waves": 32, "env_wall_s": 36.0446503162384, "peak_alloc_gb": 8.729084014892578, "peak_reserved_gb": 10.166015625, "action_declen_mean": 18.585475603552844}
+=== stage1 done 2026-09-30T03:52:29Z

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Pull what the analysis needs from a pod into THIS worktree (the full artifacts are in the bucket via `up`):
 # round / alloc / args / supply jsons, cands_*, supply_found_8, found_8, logs, read-outs, registry rows.  Usage: pod/fsup/finish.sh <pod>
-. ~/.config/nd-rl/env; N=$1; . ~/.config/nd-rl/pods/$N
+set -e; . ~/.config/nd-rl/env; N=$1; . ~/.config/nd-rl/pods/$N
 SSHO="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o BatchMode=yes -o LogLevel=ERROR -o ServerAliveInterval=30"
 cd /home/dan/work/frontier-supply
 rsync -rlptz --no-o --no-g -m -e "ssh $SSHO -p $POD_PORT" --include '*/' --include 'round_*.json' --include 'args.json' \
