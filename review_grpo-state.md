@@ -186,3 +186,77 @@ Findings (none invalidates the smoke):
   reward is 0.46, 0.57–0.61 of groups have variance, and 0.25–0.28 are all-fail.
 - E5 (variance fraction 0.10–0.35 run average) now looks unlikely from a 0.57 start. It was committed before the smoke
   and not changed, which is right.
+
+## §Comparison (phase 2: `run_grpo_state.md`, `numbers.md` § grpo-state, `log.md`, `STATUS.md`, `QUESTIONS.md`)
+
+| claim (where) | my independent value | verdict |
+|---|---|---|
+| 19.5 s per update of 2,048 rollouts, RTX 3090 (run, numbers, addendum) | 18.64 / 19.83 / 19.17 / 20.68 across the four solo arms, mean 19.58 | reproduces |
+| peak 8.6 GB (run) and per-arm peaks (numbers) | 8.60 / 8.05 / 8.15 / 8.09; conc 8.92 / 8.62 | reproduces |
+| two jobs per card give 1.47× (run, addendum) | 2 × 19.5 / 26.5 = 1.47; conc 26.51 / 26.37 s | reproduces |
+| base reward ≈ 0.46, ≈ 0.6 of groups mixed, above E5 (run, addendum) | 0.462–0.465 reward; 0.565–0.608 with variance | reproduces |
+| numbers.md smoke table (reward, variance, s / update per arm) | every cell equal at printed precision | reproduces |
+| numbers.md compute table (gpu_seconds … lean_checks, 8 arms) | my registry sums equal every cell (e.g. smoke_default 159 / 3,015,571 / 16,384 / 162,298 / 8 / 8,802,833 / 7,201) | reproduces |
+| "A40 smoke on pool subsets ran the boundary evaluations" (run, log) | smoke2: round / found / found_transfer / ckpt per boundary; my counts equal `round_*.json` (45 → 49, 48 targets; 36 → 38, 40 → 41 transfer); 322 + 305 proofs Lean re-checked | reproduces |
+| "KL 0 at step 1 and 1.8e-4 / token at step 2" (log) | steps.jsonl `kl_per_token` [0.0, 1.8e-4] for smoke2_default | reproduces |
+| cost 0.32 pod-h, $0.16; pods deleted (run, numbers, STATUS) | podhours.log 0.2292 + 0.0947 h, $0.11 + $0.05; both logged at deletion | reproduces |
+| budget registered before first pod, pre-registration before any pod (log, STATUS) | 02:10 budget, 02:17:48 `c21af4c9`, 02:21 first pod | reproduces |
+| CI: pass@k = brute force, k = 1 = default (run) | my brute force to G 16, all k, c: max diff 1.7e-16 | reproduces |
+| CI: "trajectories replay" (run) | true, but in the CI log all 8 CPU rollouts end after one action (`syntax`), so only 1-step trajectories are replayed | reproduces as stated; **weaker than it reads** (finding 1) |
+| CI: gradient = autograd of −Σ A log π, at T = 0.8, chunk-size independent; KL 0 at the reference (run) | CI run 36661730711 PASS lines for tests 2–5 | reproduces (from the CI log; no CPU torch here to rerun) |
+| "A tiny CPU run of each variant finds Lean-accepted proofs" (run) | CI: "every found proof Lean-accepted (1)" per variant, i.e. one proof each | reproduces; n = 1 per variant |
+| merged into `dan`, Actions green (STATUS) | `4eb500d3` and `d7411772` are on `origin/dan`; runs 36661560510 / 36661730711 success | reproduces |
+| six seeds ≈ $37–43; Plan B ≈ $24; Plan C ≈ $16 (run, QUESTIONS, addendum) | arithmetic reproduces from its inputs. Two inputs look low: boundary eval ≈ 630 s, not 400 s (+≈ 6 pod-h over 18 ladders); support deepening is at risk of ≈ 3× under-costing if more than ≈ ⅓ of the k256-unsolved theorems stay unreached at 10k | **differs in inputs**: likely ≈ $40–50 full and ≈ $27–33 for Plan B; not derivable exactly without a boundary-eval and a deepening timing |
+| numbers.md header "One RTX 3090 … for every number here" | smoke2 rows are A40 and are labelled A40 in their own rows | fine (row labels override) |
+| addendum "the smoke" on "One RTX 3090" | smoke2 was on an A40 (the addendum's table omits smoke2, so the table itself is right) | wording only |
+| log / addendum timestamps: "02:50 independent code review", "(after the code review, 02:55 UTC)" | the commit carrying the review fixes is `d42cb7d8` at **02:39:03**, and the smoke2 pod started 02:42 | **log times are wrong** by ≥ 11 min; the order (fix → smoke2) is right. Cosmetic, but the pre-registration's addendum carries a timestamp later than its own commit |
+| MDD table: held-out 0.7 pp from "SN-cap12 T1 values" (prereg § 6) | the values are Stage-1 held-out; T1 round-8 values 0.962 / 0.9756 / 0.977 / 0.9772 give 1.3 pp | **mislabel**; E4's 2 pp threshold is still above the correct floor |
+| lr 3e-5 "kept held-out greedy at 0.75–0.87; 1e-4 dropped it to 0.58–0.72" (prereg § 3) | a run-4 number, from the token format, cap 6, under Lean ∧ `nd_verify`. The sentence names neither model nor checker. `numbers.md`'s run-4 GRPO lines show end-of-run held-out 0.38–0.66 for the G 32 / G 8 arms, against Stage-1 ≈ 0.87–0.95 | **not derivable here; label missing**. Add "(run 4, token format, cap 6, Lean ∧ nd_verify)" |
+
+Wording against n: the write-ups make no claim about GRPO's effect; `numbers.md` says so explicitly ("smoke
+measurements … not results"). The only comparative statements are the E1 / E5 remarks in the addendum. Both are
+disclosed as seen after § 7 was committed, and neither was used to edit § 7. Expectations were committed before the pod,
+and the one post-smoke change (support deepening 10k + 10k → 5k + 5k) is declared in the addendum with its new bound.
+Model labels: `numbers.md`, `run_grpo_state.md` and the addendum name SN-cap12 Stage-1 s0 with size, format,
+from-scratch and training set. The only unlabelled inherited number is the run-4 lr sentence above.
+
+## §Verdict
+
+**Stands.**
+- The code does what the brief asks. I found no bug in `grpo_state.py` or `grpo_adv.py`: pass@k equals brute force,
+  unlikeliness equals He et al. §4.1, the loss is on-policy at T with the sampled ids, and the budget is matched to EI's
+  within 0.16 %.
+- Every smoke number, compute row and bookkeeping count reproduces. All 1,527 re-checked counted proofs are accepted by
+  Lean (two renderers), and the controls discriminate.
+- No hard-constraint violation: `nd_verify` unchanged and unused, `TEST_RUN_DONE` unchanged, no evaluation file in
+  training, budget and pre-registration before the first pod, pods deleted.
+
+**Reword or fix before the experiment run (none blocks the merge already made).**
+1. Pre-registration § 6: relabel the held-out row as Stage-1, and state MDD ≈ 1.3 pp for final-checkpoint held-out (T1
+   r8 sd 0.0073).
+2. Pre-registration § 3: label the run-4 lr evidence (token format, cap 6, Lean ∧ `nd_verify`, different model).
+3. Pre-registration § 4: add under "not matched" that EI's fine-tunes replay Stage-1 data (`--train train_k12`,
+   `rl_weight 4`, `retain 20000`) and GRPO has neither replay nor KL. E4 (held-out cost) and any support comparison
+   inherit this confound.
+4. The experiment needs `lpool_reread.py`, `ss_support.py` and `pod/sc12/sn_seed.sh`, none of which is on `dan`.
+   Merge them (and `dan_state-cap12`'s pod scripts) before the first pod.
+5. Re-cost two items with one short measurement each, before choosing among Plans A / B / C: one full boundary evaluation
+   (73k transfer + greedy + 5k held-out) on a 3090, and the base deepening rate on the 471-theorem pool at
+   `max_action 512 / max_steps 96`. My estimate is ≈ +$3 for the boundary evaluations, and up to ≈ 3× on the support
+   item.
+6. Minor code hygiene: make `grpo_state.py`'s defaults match the pre-registration (`--heldout data/p2/heldout.jsonl`,
+   `--lr 3e-5`), so a hand launch cannot drift. Store the literal assembled text (`res_tx`) or a `LEAN_GATE_DUMP` next
+   to the found files, so a later reviewer can re-check the literal text. Make CI's replay test use a model or fixture
+   that yields multi-step trajectories.
+7. Fix the log / addendum timestamps (02:50 / 02:55 → before 02:39).
+
+**Interpretive caveats for the experiment's write-up.**
+- pass@4 at G 8 zeroes every group with c ≥ 5, so its training tokens are ≈ 0.6× default's by construction. The
+  1.25× compute flag will fire on `train_tokens` (default vs pass@k) for design reasons, not a bug.
+- The unlikeliness ranking sums log-probs over whole multi-step trajectories, so it upweights longer correct proofs.
+  Any E3 "support" effect should be read next to a length breakdown.
+- E1's stated mechanism (all-correct groups carry no gradient) is contradicted at the start (0.25–0.28 all-fail and
+  0.57–0.61 mixed groups). The executor already says so.
+
+**Next measurement that would settle what is open.** The ≈ 15-min pod measurement in item 5. It fixes the plan's cost
+before Dan chooses a plan, and it is the only quantitative claim of this run that the artefacts cannot settle.
