@@ -824,3 +824,8 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   evaluation pool). Stage-1 s4, s5 training on fsup1 from 02:27.
 - 02:35–02:45  ladders launched: fsup1 S s0, S s1, C′ s0; fsup2 S s2, S s3, C′ s1; fsup3 S s4, C s4 (wait for the
   Stage-1 checkpoint in the bucket); fsup4 S s5, C s5. S and its comparator share a pod for GPU-seconds.
+- 2026-09-30 02:50 UTC  **CUDA OOM on fsup1**: 2 Stage-1 trainings (9.7 GB each) + the smoke + 3 ladders; C′ s0 and S s1
+  died in round 1 (partial outputs deleted). Three ladders per 48 GB A40 is unsafe (a ladder peaks at 13.4 GB allocated /
+  17.5 GB reserved, growing with rounds). New layout, **two ladders per pod**: fsup1 S s0 + S s1 (after Stage-1 ends),
+  fsup2 S s2 + S s3 (C′ s1 killed in round 1), fsup3 S s4 + C s4 (+ fixed read-outs), fsup4 S s5 + C s5, fsup5 (new,
+  02:55) C′ s0 + C′ s1. Cost: ≈ 5 pods × ~6 h ≈ 30 pod-hours ≈ $15.
