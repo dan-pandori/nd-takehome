@@ -33,7 +33,11 @@ def prompt_ids(tok, env):
 
 @torch.no_grad()
 def env_generate(model, tok, prompts, greedy=True, temperature=1.0, max_action=256, max_steps=48,
-                 batch=2048, seed=0, stats=None, gate=True):
+                 batch=2048, seed=0, stats=None, gate=True, fail_states=None):
+    """fail_states (run frontier-supply): a list; for every attempt that ends in the environment without a finished
+    proof (syntax / truncation / step cap) append {'i', 'prem', 'concl', 'steps', 'why'}: every hypothesis in scope
+    (the theorem's premises and each frame's bindings) and the focused goal, i.e. the state before the failing
+    action (Env raises before it mutates)."""
     dev = next(model.parameters()).device
     st = stats if stats is not None else {}
     cnt = st.setdefault('env_end', collections.Counter())
@@ -54,6 +58,9 @@ def env_generate(model, tok, prompts, greedy=True, temperature=1.0, max_action=2
         res_nd[i] = nd
         res_tx[i] = tok.text(e.text) if e.done and not nd.startswith('LEANPARSE') else None
         steps_hist[e.steps] += 1
+        if fail_states is not None and not e.done:
+            hyps = list(e.prem) + [f for fr in e.frames for f in fr.names.values()]
+            fail_states.append({'i': i, 'prem': hyps, 'concl': e.frames[-1].goal, 'steps': e.steps, 'why': e.failed})
 
     while nxt < len(prompts) or live:
         while len(live) < batch and nxt < len(prompts):

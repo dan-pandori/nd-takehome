@@ -211,6 +211,6 @@ COMPUTE-RECORD DONE 2026-09-30T01:02:02Z
 # STATUS — frontier-supply
 
 ## frontier-supply (executor, started 2026-09-30T02:00Z)
-- 2026-09-30 02:45 UTC  run started. Pre-registration `preregistration/frontier-supply.md` committed before any pod.
+- 2026-09-30 02:00 UTC  run started. Pre-registration `preregistration/frontier-supply.md` committed before any pod.
   Design: C s0–s3 reused from state-cap12; new: S s0–s5, C s4–s5, C′ s0–s1 (same-checkpoint rerun); 25 % of each
   round's attempts to supply (filter included); read-out of every r8 and Stage-1 checkpoint on long-pool-2 (91) + rr600 13–16.

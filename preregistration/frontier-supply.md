@@ -1,6 +1,6 @@
 # Pre-registration — run `frontier-supply` (proposal 16 item 1: new EI targets just past the frontier)
 
-Written 2026-09-30 ≈ 02:40 UTC, **before any pod exists for this run** (`podbudget frontier-supply`: 40 h / $20;
+Written 2026-09-30 ≈ 02:05 UTC (committed bbeca3f5, 02:06), **before any pod exists for this run** (`podbudget frontier-supply`: 40 h / $20;
 `~/pods.log` has no `fs-*` line at this commit). Executor: agent:claude. Branch `dan_frontier-supply` (from the fork's
 `origin/dan`, d3abe474). Policy: `AGENT_POLICY.md` (nd-rl canonical). Lean alone decides throughout.
 

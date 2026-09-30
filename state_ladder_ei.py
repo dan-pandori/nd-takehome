@@ -48,10 +48,10 @@ from eval_set import judge, summarize, wilson
 ENV = {'max_action': 256, 'max_steps': 48, 'stats': None}
 
 
-def generate(model, tok, prompts, greedy=True, temperature=1.0, batch=512, seed=0, max_new=None):
+def generate(model, tok, prompts, greedy=True, temperature=1.0, batch=512, seed=0, max_new=None, fail_states=None):
     """the env-loop stand-in for sample.generate: same contract (ND strings out), `max_new` is per ACTION."""
     return env_generate(model, tok, prompts, greedy=greedy, temperature=temperature, max_action=ENV['max_action'],
-                        max_steps=ENV['max_steps'], batch=batch, seed=seed, stats=ENV['stats'])
+                        max_steps=ENV['max_steps'], batch=batch, seed=seed, stats=ENV['stats'], fail_states=fail_states)
 
 
 def read(fn):
@@ -143,11 +143,75 @@ def allocate(mode, targets, k, tried, okc, found, cap, rng, r, log):
     return ks
 
 
-def sample_targets(model, tok, targets, ks, temperature, batch, seed, max_new):
+def supply_round(model, tok, a, r, seed, sub, rows, fails, n_c, sup, lstar_cur, out):
+    """frontier-supply: build this round's candidates (supply.py), filter them with a.supply_k attempts each, keep
+    0 < n_ok <= a.supply_keep_max.  Kept candidates and their Lean-accepted proofs go into sup['pool'] / sup['found'].
+    -> (log, shortfall in candidates)."""
+    import supply as SUP
+    from state_env import prompt_parts
+    # parents for (a): rl_targets solved this round (shortest written proof), and every kept supply target
+    solved = []
+    for (t, ki), row in zip(sub, rows):
+        wl = [x for x in row['written_lens'] if x]
+        if row['n_ok'] and wl:
+            prem, concl, _ = prompt_parts(t['prompt'])
+            solved.append({'prem': list(prem), 'concl': concl, 'w': min(wl)})
+    solved += [{'prem': c['prem'], 'concl': c['concl'], 'w': c['w']} for c in sup['pool'].values()]
+    # (b): failure states of this round's rl_targets attempts, targets with p-hat <= 1/4 first
+    owner = [j for j, (t, ki) in enumerate(sub) for _ in range(ki)]
+    fl = [{'prem': x['prem'], 'concl': x['concl'], 'steps': x['steps'],
+           'pri': 0 if rows[owner[x['i']]]['n_ok'] <= sub[owner[x['i']]][1] / 4 else 1} for x in fails]
+    sup['base'] = lstar_cur if sup['base'] is None else max(sup['base'], lstar_cur)
+    window = (sup['base'] + 1, sup['base'] + 4)
+    cands, log = SUP.make_candidates(solved, fl, n_c, window, sup['block'], sup['leak'], sup['rng'], r)
+    sup['leaked'] |= set(log.pop('leak_keys'))
+    log.update({'parents': len(solved), 'fail_states': len(fails), 'base': sup['base']})
+    # the filter
+    outs = sample_targets(model, tok, cands, [a.supply_k] * len(cands), a.temperature, a.batch, seed + 700, a.max_new)
+    rows_c = judge(cands, outs, 'n_lines')
+    q = a.supply_keep_max
+    tab = collections.defaultdict(lambda: {'made': 0, 'zero': 0, 'pass': 0, 'easy': 0})
+    for c, row in zip(cands, rows_c):
+        c['n_ok'] = row['n_ok']
+        cls = 'zero' if row['n_ok'] == 0 else 'pass' if row['n_ok'] <= q else 'easy'
+        for key in (c['source'], f"{c['source']}:{c['op']}", f"{c['source']}:ub{c['n_lines']}", 'all'):
+            tab[key]['made'] += 1; tab[key][cls] += 1
+        if cls != 'pass':
+            continue
+        wl = [x for x in row['written_lens'] if x]
+        c['w'] = min(wl) if wl else c['n_lines']
+        sup['pool'][c['name']] = c
+        for p, wl_, pl in zip(row['proofs'], row['written_lens'], row['pruned_lens']):
+            sup['found'][c['name']].append({'proof': p, 'norm': norm(p), 'written': wl_, 'pruned': pl, 'round': r})
+    log['filter'] = {k: dict(v) for k, v in sorted(tab.items())}
+    log['filter_attempts'] = a.supply_k * len(cands)
+    a_ = tab['a']
+    if a_['made']:     # the length window follows the model (Lee et al. sec. 7.1: too hard hurts)
+        if a_['easy'] > a_['zero']:
+            sup['base'] += 1
+        elif a_['zero'] > 0.75 * a_['made']:
+            sup['base'] = max(lstar_cur, sup['base'] - 1)
+    log['base_next'] = sup['base']
+    with open(f'{out}/cands_{r}.jsonl', 'w') as f:
+        for c in cands:
+            f.write(json.dumps(SUP.strip(c)) + '\n')
+    with open(f'{out}/supply_found_{r}.jsonl', 'w') as f:
+        for name, c in sup['pool'].items():
+            for x in sup['found'][name]:
+                f.write(json.dumps({'name': name, 'thm': c['thm'], 'prompt': c['prompt'], 'ub': c['n_lines'], 'source': c['source'],
+                                    'op': c['op'], 'made_round': int(name.split('_')[1][1:]), **x}) + '\n')
+    log['pool'] = len(sup['pool']); log['pool_proofs'] = sum(len(v) for v in sup['found'].values())
+    print(f"[supply r{r}] window {window} made {len(cands)} (a {log['a_made']} / b {log['b_made']}) pass {tab['all']['pass']} "
+          f"(a {tab['a']['pass']} / b {tab['b']['pass']}) zero {tab['all']['zero']} easy {tab['all']['easy']}; pool {log['pool']}", flush=True)
+    return log, n_c - len(cands)
+
+
+def sample_targets(model, tok, targets, ks, temperature, batch, seed, max_new, fail_states=None):
     prompts, owner = [], []
     for t, ki in zip(targets, ks):
         prompts += [t['prompt']] * ki
-    flat = generate(model, tok, prompts, greedy=False, temperature=temperature, batch=batch, seed=seed, max_new=max_new)
+    flat = generate(model, tok, prompts, greedy=False, temperature=temperature, batch=batch, seed=seed, max_new=max_new,
+                    fail_states=fail_states)
     outs, pos = [], 0
     for ki in ks:
         outs.append(flat[pos:pos + ki]); pos += ki
@@ -191,7 +255,20 @@ def main():
     ap.add_argument('--sibling', type=int, default=0)
     ap.add_argument('--start_round', type=int, default=1)
     ap.add_argument('--resume', action='store_true', help='resume from artifacts/<name>/found_<start_round-1>.jsonl and its ckpt')
+    # run frontier-supply (supply.py): 0 = control, byte-identical path
+    ap.add_argument('--supply_frac', type=float, default=0.0, help='share of each round\'s N*k attempts spent filtering supply candidates')
+    ap.add_argument('--supply_k', type=int, default=32, help='filter attempts per candidate')
+    ap.add_argument('--supply_keep_max', type=int, default=8, help='keep a candidate iff 0 < n_ok <= this (8/32 = p-hat 1/4)')
+    ap.add_argument('--supply_leak', default='data/ladder/transfer.jsonl,data/ladder/transfer_long.jsonl,data/ladder/transfer_long2.jsonl,'
+                    'data/ladder/transfer_long2_calib.jsonl,data/ladder/transfer_long_rr600.jsonl,data/ladder/transfer_long_ge17.jsonl,'
+                    'data/heldout.jsonl,data/p2/heldout.jsonl,targets/validation_36.jsonl,data/ladder/reserve.jsonl',
+                    help='pools a candidate must not match by renaming class (premise order ignored); missing files are reported')
+    ap.add_argument('--ei_seed', type=int, default=None, help='EI randomness (sampling, mix shuffles, fine-tune seed); default --seed')
+    ap.add_argument('--transfer_k', type=int, default=None, help='sampled transfer attempts per theorem each round; 0 skips it (default --k)')
     a = ap.parse_args()
+    ei_seed = a.seed if a.ei_seed is None else a.ei_seed
+    transfer_k = a.k if a.transfer_k is None else a.transfer_k
+    assert not (a.supply_frac and (a.resume or a.share_dir or a.relabel or a.inject_pool or a.alloc != 'uniform')), 'supply: T1 protocol only'
     out = f'{a.outdir}/{a.name}'
     os.makedirs(out, exist_ok=True); os.makedirs(os.path.dirname(a.ckptdir + '/x'), exist_ok=True)
     import record    # results registry (REGISTRY.md): each round's headline stats
@@ -207,7 +284,21 @@ def main():
         if os.path.exists(fn):
             eval_keys |= {r['key'] for r in read(fn)}
     train_recs = read(a.train)
-    rng = random.Random(a.seed * 7919 + a.sibling)
+    sup = None
+    if a.supply_frac:     # frontier-supply: evaluation classes a candidate must avoid, and the classes never to re-make
+        import supply as SUP
+        leak, leak_log = set(), {}
+        for fn in a.supply_leak.split(','):
+            if not os.path.exists(fn):
+                leak_log[fn] = 'missing'; continue
+            ks_ = {SUP.leak_key_thm(x['thm']) for x in read(fn) if x.get('thm')}
+            leak |= ks_; leak_log[fn] = len(ks_)
+        sup = {'pool': {}, 'found': collections.defaultdict(list), 'base': None, 'leak': leak, 'leaked': set(),
+               'block': {SUP.leak_key_thm(t['thm']) for t in targets}, 'rng': random.Random(ei_seed * 7919 + 17)}
+        json.dump({'files': leak_log, 'leak_classes': len(leak), 'rl_target_classes': len(sup['block'])},
+                  open(f'{out}/supply_leak.json', 'w'), indent=1)
+        print(f'supply: {len(leak)} evaluation classes from {leak_log}', flush=True)
+    rng = random.Random(ei_seed * 7919 + a.sibling)
     ckpt = a.init
     found = collections.defaultdict(list)     # target name -> [{proof, norm, written, pruned, round}]
     found_t = collections.defaultdict(list)
@@ -232,29 +323,61 @@ def main():
         record.phase('sample', round=r)    # compute rows per (phase, round) (REGISTRY.md): targets sampled + judged
         t0 = time.time()
         model, tok, _ = load_ckpt(ckpt, dev)
-        seed = a.seed * 1000 + r + 100 * a.sibling
+        seed = ei_seed * 1000 + r + 100 * a.sibling
         ENV['stats'] = {}
         stats = {'round': r, 'ckpt': ckpt, 'k': a.k, 'temperature': a.temperature, 'seed': seed, 'max_new': a.max_new, 'alloc': a.alloc}
         alog = {}
         ks = allocate(a.alloc, targets, a.k, tried, okc, found, a.alloc_cap, rng, r, alog)
         stats['alloc_log'] = alog
+        fails = None
+        if sup is not None:     # supply arm: n_c candidates x supply_k come out of the N*k budget; the rest is uniform
+            N = len(targets); B = N * a.k
+            n_c = int(B * a.supply_frac) // a.supply_k
+            rest = B - n_c * a.supply_k
+            ks = [rest // N] * N
+            for i in sup['rng'].sample(range(N), rest - (rest // N) * N):
+                ks[i] += 1
+            fails = []
         stats['k_hist'] = dict(sorted(collections.Counter(ks).items()))
+
+        def book(sub, rows):
+            nw = 0
+            for (t, ki), row in zip(sub, rows):
+                tried[t['name']] += ki; okc[t['name']] += row['n_ok']
+                have = {x['norm'] for x in found[t['name']]}
+                for p, wl, pl in zip(row['proofs'], row['written_lens'], row['pruned_lens']):
+                    pn = norm(p)
+                    if pn not in have:
+                        have.add(pn)
+                        found[t['name']].append({'proof': p, 'norm': pn, 'written': wl, 'pruned': pl, 'round': r}); nw += 1
+            return nw
         # 1. RL targets
         sub = [(t, ki) for t, ki in zip(targets, ks) if ki > 0]
-        outs = sample_targets(model, tok, [t for t, _ in sub], [ki for _, ki in sub], a.temperature, a.batch, seed, a.max_new)
+        outs = sample_targets(model, tok, [t for t, _ in sub], [ki for _, ki in sub], a.temperature, a.batch, seed, a.max_new,
+                              fail_states=fails)
         rows = judge([t for t, _ in sub], outs, 'n_lines')
-        new_this = 0
-        for (t, ki), row in zip(sub, rows):
-            tried[t['name']] += ki; okc[t['name']] += row['n_ok']
-            have = {x['norm'] for x in found[t['name']]}
-            for p, wl, pl in zip(row['proofs'], row['written_lens'], row['pruned_lens']):
-                pn = norm(p)
-                if pn not in have:
-                    have.add(pn)
-                    found[t['name']].append({'proof': p, 'norm': pn, 'written': wl, 'pruned': pl, 'round': r}); new_this += 1
+        new_this = book(sub, rows)
+        if sup is not None:
+            record.phase('supply', round=r)
+            slog, short = supply_round(model, tok, a, r, seed, sub, rows, fails, n_c, sup, lstar(found, targets)[0], out)
+            del fails
+            slog['shortfall_attempts'] = short * a.supply_k
+            record.phase('sample', round=r)
+            if short:     # candidates the round could not make: their attempts go back to rl_targets, at random
+                k2 = collections.Counter(sup['rng'].randrange(len(targets)) for _ in range(short * a.supply_k))
+                sub2 = [(targets[i], ki) for i, ki in sorted(k2.items())]
+                outs2 = sample_targets(model, tok, [t for t, _ in sub2], [ki for _, ki in sub2], a.temperature, a.batch, seed + 800, a.max_new)
+                rows2 = judge([t for t, _ in sub2], outs2, 'n_lines')
+                new_this += book(sub2, rows2)
+                for t, ki in sub2:
+                    ks[targets.index(t)] += ki
+                rows = rows + rows2
+            stats['supply'] = slog
+            stats['supply_attempts'] = slog['filter_attempts']
         stats['targets_round'] = summarize(rows, 'n_lines', f'[{a.name} r{r}] targets (this round)')
         stats['new_proofs_this_round'] = new_this
-        stats['target_samples'] = sum(ks); stats['target_sample_acc'] = sum(x['n_ok'] for x in rows) / max(1, sum(ks))
+        stats['target_samples'] = sum(ks); stats['total_attempts'] = sum(ks) + stats.get('supply_attempts', 0)
+        stats['target_sample_acc'] = sum(x['n_ok'] for x in rows) / max(1, sum(ks))
         # relabelling by-products (T3)
         if a.relabel:
             from expert_iter import relabel_batch, strip_rej   # imported only for T3
@@ -275,12 +398,14 @@ def main():
                     f.write(json.dumps(x) + '\n')
         record.phase('eval', round=r)
         # 2. transfer, sampled (uniform k; T6 siblings each sample k)
-        prompts = [t['prompt'] for t in transfer for _ in range(a.k)]
-        flat = generate(model, tok, prompts, greedy=False, temperature=a.temperature, batch=a.batch, seed=seed + 500, max_new=a.max_new)
-        outs_t = [flat[i * a.k:(i + 1) * a.k] for i in range(len(transfer))]
-        rows_t = judge(transfer, outs_t, 'n_lines')
-        stats['transfer_round'] = summarize(rows_t, 'n_lines', f'[{a.name} r{r}] transfer (this round, pass@{a.k})')
-        stats['transfer_sample_acc'] = sum(x['n_ok'] for x in rows_t) / sum(x['n_tried'] for x in rows_t)
+        tk = transfer_k     # frontier-supply: 0 skips the sampled transfer evaluation (never touches training)
+        prompts = [t['prompt'] for t in transfer for _ in range(tk)]
+        flat = generate(model, tok, prompts, greedy=False, temperature=a.temperature, batch=a.batch, seed=seed + 500, max_new=a.max_new) if tk else []
+        outs_t = [flat[i * tk:(i + 1) * tk] for i in range(len(transfer))]
+        rows_t = judge(transfer, outs_t, 'n_lines') if tk else []
+        if tk:
+            stats['transfer_round'] = summarize(rows_t, 'n_lines', f'[{a.name} r{r}] transfer (this round, pass@{tk})')
+            stats['transfer_sample_acc'] = sum(x['n_ok'] for x in rows_t) / sum(x['n_tried'] for x in rows_t)
         for t, row in zip(transfer, rows_t):
             have = {x['norm'] for x in found_t[t['name']]}
             for p, wl, pl in zip(row['proofs'], row['written_lens'], row['pruned_lens']):
@@ -299,7 +424,7 @@ def main():
             ls, ge = lstar(fd, recs)
             stats[f'{pool}_cum'] = {'solved': sum(1 for t in recs if fd.get(t['name'])), 'n': len(recs), 'lstar': ls, 'ge': ge, 'by_bin': by_bin(fd, recs),
                                     'distinct_proofs': sum(len(v) for v in fd.values()),
-                                    'attempts_per_theorem': (sum(tried.values()) / len(recs)) if pool == 'targets' else r * a.k}
+                                    'attempts_per_theorem': (sum(tried.values()) / len(recs)) if pool == 'targets' else r * transfer_k}
             print(f"[{a.name} r{r}] {pool} cumulative: solved {stats[f'{pool}_cum']['solved']}/{len(recs)} L*={ls} ge={ {L: ge[L] for L in (7, 8, 9, 10, 11, 12)} }", flush=True)
         with open(f'{out}/found_{r}.jsonl', 'w') as f:
             for t in targets:
@@ -357,6 +482,13 @@ def main():
                     for x in fs[:a.max_per_thm]:
                         for _ in range(a.rl_weight):
                             f.write(json.dumps({'prompt': t['prompt'], 'proof': x['proof'], 'n_lines': x['written']}) + '\n'); n_rl += 1
+                if sup is not None:     # kept supply targets: the same cap and weight as any target
+                    for name, c in sup['pool'].items():
+                        fs = list(sup['found'][name])
+                        rng.shuffle(fs)
+                        for x in fs[:a.max_per_thm]:
+                            for _ in range(a.rl_weight):
+                                f.write(json.dumps({'prompt': c['prompt'], 'proof': x['proof'], 'n_lines': x['written']}) + '\n'); n_rl += 1
                 for x in relabelled.values():
                     for _ in range(a.rl_weight):
                         f.write(json.dumps({'prompt': x['prompt'], 'proof': x['proof'], 'n_lines': x['n_lines']}) + '\n'); n_rl += 1
