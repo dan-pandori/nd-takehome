@@ -45,13 +45,13 @@ from normalize import norm
 from eval_set import judge, summarize, wilson
 
 
-ENV = {'max_action': 256, 'max_steps': 48, 'stats': None}
+ENV = {'max_action': 256, 'max_steps': 48, 'stats': None, 'filter': None}
 
 
 def generate(model, tok, prompts, greedy=True, temperature=1.0, batch=512, seed=0, max_new=None):
     """the env-loop stand-in for sample.generate: same contract (ND strings out), `max_new` is per ACTION."""
     return env_generate(model, tok, prompts, greedy=greedy, temperature=temperature, max_action=ENV['max_action'],
-                        max_steps=ENV['max_steps'], batch=batch, seed=seed, stats=ENV['stats'])
+                        max_steps=ENV['max_steps'], batch=batch, seed=seed, stats=ENV['stats'], step_filter=ENV['filter'])
 
 
 def read(fn):
@@ -143,15 +143,39 @@ def allocate(mode, targets, k, tried, okc, found, cap, rng, r, log):
     return ks
 
 
-def sample_targets(model, tok, targets, ks, temperature, batch, seed, max_new):
+def sample_targets(model, tok, targets, ks, temperature, batch, seed, max_new, acts_out=None):
     prompts, owner = [], []
     for t, ki in zip(targets, ks):
         prompts += [t['prompt']] * ki
-    flat = generate(model, tok, prompts, greedy=False, temperature=temperature, batch=batch, seed=seed, max_new=max_new)
+    acts = [0] * len(prompts)
+    flat = env_generate(model, tok, prompts, greedy=False, temperature=temperature, max_action=ENV['max_action'],
+                        max_steps=ENV['max_steps'], batch=batch, seed=seed, stats=ENV['stats'], step_filter=ENV['filter'], acts=acts)
     outs, pos = [], 0
     for ki in ks:
-        outs.append(flat[pos:pos + ki]); pos += ki
+        outs.append(flat[pos:pos + ki])
+        if acts_out is not None:
+            acts_out.append(sum(acts[pos:pos + ki]))
+        pos += ki
     return outs
+
+
+def read_budgets(budget_from, r, targets, wait):
+    """run search-expert: the per-theorem action budget of round r = the sampling arm's actions on that theorem in its
+    round r (same seed), read from its alloc_<r>.json (written as soon as its round-r sampling is judged)."""
+    fn = f'{budget_from}/alloc_{r}.json'
+    t0 = time.time()
+    while not os.path.exists(fn):
+        if time.time() - t0 > wait:
+            raise SystemExit(f'budget file {fn} did not appear in {wait}s')
+        time.sleep(15)
+    time.sleep(2)
+    acts = json.load(open(fn))['actions']
+    return [int(acts[t['name']]) for t in targets]
+
+
+def shortest_first(fs):
+    """HTPS's selection (2205.11491v1 Table 4): the shortest found proof -- fewest written lines, then fewest tokens."""
+    return sorted(fs, key=lambda x: (x['written'], len(x['proof'].split()), x['proof']))
 
 
 def main():
@@ -191,6 +215,17 @@ def main():
     ap.add_argument('--sibling', type=int, default=0)
     ap.add_argument('--start_round', type=int, default=1)
     ap.add_argument('--resume', action='store_true', help='resume from artifacts/<name>/found_<start_round-1>.jsonl and its ckpt')
+    # run search-expert
+    ap.add_argument('--expert', default='sample', choices=['sample', 'search', 'resume'],
+                    help='sample: k independent attempts per target (the ladder); search: best-first (state_search); resume: truncate-and-resume')
+    ap.add_argument('--budget_from', default=None, help='search/resume: per-theorem action budgets = this sampling arm\'s actions in the same round')
+    ap.add_argument('--budget_wait', type=int, default=6 * 3600)
+    ap.add_argument('--width', type=int, default=4); ap.add_argument('--alpha', type=float, default=1.0)
+    ap.add_argument('--chains', type=int, default=32); ap.add_argument('--resume_max', type=int, default=4)
+    ap.add_argument('--step_filter', action='store_true', help='end an attempt at a `have` whose term Lean certainly rejects (lean_prefilter)')
+    ap.add_argument('--select', default='random', choices=['random', 'shortest'], help='which <= max_per_thm found proofs a target trains on')
+    ap.add_argument('--no_eval', action='store_true', help='skip the per-round transfer sampling and greedy passes')
+    ap.add_argument('--seed_offset', type=int, default=0, help='added to every sampling / fine-tune / mix seed (same-checkpoint re-draws)')
     a = ap.parse_args()
     out = f'{a.outdir}/{a.name}'
     os.makedirs(out, exist_ok=True); os.makedirs(os.path.dirname(a.ckptdir + '/x'), exist_ok=True)
@@ -207,7 +242,9 @@ def main():
         if os.path.exists(fn):
             eval_keys |= {r['key'] for r in read(fn)}
     train_recs = read(a.train)
-    rng = random.Random(a.seed * 7919 + a.sibling)
+    rng = random.Random(a.seed * 7919 + a.sibling + a.seed_offset)
+    if a.step_filter:
+        from state_search import StepFilter
     ckpt = a.init
     found = collections.defaultdict(list)     # target name -> [{proof, norm, written, pruned, round}]
     found_t = collections.defaultdict(list)
@@ -229,11 +266,16 @@ def main():
             ckpt = f'{a.ckptdir}/{a.name}_r{r0}.pt'
         print(f'resumed round {r0}: {sum(len(v) for v in found.values())} target proofs; ckpt {ckpt}', flush=True)
     for r in range(a.start_round, a.start_round + a.rounds):
+        if a.expert != 'sample':    # read, waiting if need be; the wait is its own phase, not this arm's sampling compute
+            record.phase('wait', round=r)
+            budgets = read_budgets(a.budget_from, r, targets, a.budget_wait)
         record.phase('sample', round=r)    # compute rows per (phase, round) (REGISTRY.md): targets sampled + judged
         t0 = time.time()
         model, tok, _ = load_ckpt(ckpt, dev)
-        seed = a.seed * 1000 + r + 100 * a.sibling
+        seed = a.seed * 1000 + r + 100 * a.sibling + a.seed_offset
         ENV['stats'] = {}
+        if a.step_filter:
+            ENV['filter'] = StepFilter(tok)
         stats = {'round': r, 'ckpt': ckpt, 'k': a.k, 'temperature': a.temperature, 'seed': seed, 'max_new': a.max_new, 'alloc': a.alloc}
         alog = {}
         ks = allocate(a.alloc, targets, a.k, tried, okc, found, a.alloc_cap, rng, r, alog)
@@ -241,7 +283,24 @@ def main():
         stats['k_hist'] = dict(sorted(collections.Counter(ks).items()))
         # 1. RL targets
         sub = [(t, ki) for t, ki in zip(targets, ks) if ki > 0]
-        outs = sample_targets(model, tok, [t for t, _ in sub], [ki for _, ki in sub], a.temperature, a.batch, seed, a.max_new)
+        acts_t = []
+        if a.expert == 'sample':
+            outs = sample_targets(model, tok, [t for t, _ in sub], [ki for _, ki in sub], a.temperature, a.batch, seed, a.max_new, acts_out=acts_t)
+        else:
+            from state_search import search_generate, resume_generate
+            assert len(sub) == len(targets)
+            kw = dict(temperature=a.temperature, max_action=a.max_action, max_steps=a.max_steps, batch=a.batch, seed=seed,
+                      stats=ENV['stats'], step_filter=ENV['filter'])
+            if a.expert == 'search':
+                flat, info = search_generate(model, tok, [t['prompt'] for t, _ in sub], budgets, width=a.width, alpha=a.alpha, **kw)
+            else:
+                flat, info = resume_generate(model, tok, [t['prompt'] for t, _ in sub], budgets, chains=a.chains, resume_max=a.resume_max, **kw)
+            outs = [[p] for p in flat]
+            acts_t = [x['actions'] for x in info]
+            stats['budget_actions'] = sum(budgets)
+            json.dump({'budget': {t['name']: b for (t, _), b in zip(sub, budgets)}, 'info': {t['name']: x for (t, _), x in zip(sub, info)}},
+                      open(f'{out}/search_{r}.json', 'w'))
+        stats['actions'] = sum(acts_t)
         rows = judge([t for t, _ in sub], outs, 'n_lines')
         new_this = 0
         for (t, ki), row in zip(sub, rows):
@@ -254,7 +313,11 @@ def main():
                     found[t['name']].append({'proof': p, 'norm': pn, 'written': wl, 'pruned': pl, 'round': r}); new_this += 1
         stats['targets_round'] = summarize(rows, 'n_lines', f'[{a.name} r{r}] targets (this round)')
         stats['new_proofs_this_round'] = new_this
-        stats['target_samples'] = sum(ks); stats['target_sample_acc'] = sum(x['n_ok'] for x in rows) / max(1, sum(ks))
+        stats['target_samples'] = sum(x['n_tried'] for x in rows); stats['target_sample_acc'] = sum(x['n_ok'] for x in rows) / max(1, stats['target_samples'])
+        # the per-theorem actions of this round, written now: a search arm run beside this one takes its budgets from it
+        json.dump({'k': {t['name']: ki for t, ki in zip(targets, ks)}, 'tried': dict(tried), 'accepted': dict(okc),
+                   'actions': {t['name']: n for (t, _), n in zip(sub, acts_t)}}, open(f'{out}/alloc_{r}.json.tmp', 'w'))
+        os.replace(f'{out}/alloc_{r}.json.tmp', f'{out}/alloc_{r}.json')
         # relabelling by-products (T3)
         if a.relabel:
             from expert_iter import relabel_batch, strip_rej   # imported only for T3
@@ -275,13 +338,14 @@ def main():
                     f.write(json.dumps(x) + '\n')
         record.phase('eval', round=r)
         # 2. transfer, sampled (uniform k; T6 siblings each sample k)
-        prompts = [t['prompt'] for t in transfer for _ in range(a.k)]
-        flat = generate(model, tok, prompts, greedy=False, temperature=a.temperature, batch=a.batch, seed=seed + 500, max_new=a.max_new)
-        outs_t = [flat[i * a.k:(i + 1) * a.k] for i in range(len(transfer))]
-        rows_t = judge(transfer, outs_t, 'n_lines')
-        stats['transfer_round'] = summarize(rows_t, 'n_lines', f'[{a.name} r{r}] transfer (this round, pass@{a.k})')
-        stats['transfer_sample_acc'] = sum(x['n_ok'] for x in rows_t) / sum(x['n_tried'] for x in rows_t)
-        for t, row in zip(transfer, rows_t):
+        prompts = [t['prompt'] for t in transfer for _ in range(a.k)] if not a.no_eval else []
+        flat = generate(model, tok, prompts, greedy=False, temperature=a.temperature, batch=a.batch, seed=seed + 500, max_new=a.max_new) if prompts else []
+        outs_t = [flat[i * a.k:(i + 1) * a.k] for i in range(len(transfer))] if prompts else []
+        rows_t = judge(transfer, outs_t, 'n_lines') if prompts else []
+        if prompts:
+            stats['transfer_round'] = summarize(rows_t, 'n_lines', f'[{a.name} r{r}] transfer (this round, pass@{a.k})')
+            stats['transfer_sample_acc'] = sum(x['n_ok'] for x in rows_t) / sum(x['n_tried'] for x in rows_t)
+        for t, row in zip(transfer if prompts else [], rows_t):
             have = {x['norm'] for x in found_t[t['name']]}
             for p, wl, pl in zip(row['proofs'], row['written_lens'], row['pruned_lens']):
                 pn = norm(p)
@@ -289,10 +353,11 @@ def main():
                     have.add(pn)
                     found_t[t['name']].append({'proof': p, 'norm': pn, 'written': wl, 'pruned': pl, 'round': r})
         # 3. greedy
-        g = generate(model, tok, [t['prompt'] for t in transfer], greedy=True, batch=a.batch, max_new=a.max_new)
-        stats['transfer_greedy'] = summarize(judge(transfer, [[p] for p in g], 'n_lines'), 'n_lines', f'[{a.name} r{r}] transfer greedy')
-        g = generate(model, tok, [t['prompt'] for t in heldout], greedy=True, batch=a.batch, max_new=a.max_new)
-        stats['heldout_greedy'] = summarize(judge(heldout, [[p] for p in g], 'n_lines'), 'n_lines', f'[{a.name} r{r}] heldout greedy')
+        if not a.no_eval:
+            g = generate(model, tok, [t['prompt'] for t in transfer], greedy=True, batch=a.batch, max_new=a.max_new)
+            stats['transfer_greedy'] = summarize(judge(transfer, [[p] for p in g], 'n_lines'), 'n_lines', f'[{a.name} r{r}] transfer greedy')
+            g = generate(model, tok, [t['prompt'] for t in heldout], greedy=True, batch=a.batch, max_new=a.max_new)
+            stats['heldout_greedy'] = summarize(judge(heldout, [[p] for p in g], 'n_lines'), 'n_lines', f'[{a.name} r{r}] heldout greedy')
         del model; torch.cuda.empty_cache()
         # cumulative bookkeeping (L_true bins, L*)
         for pool, fd, recs in (('targets', found, targets), ('transfer', found_t, transfer)):
@@ -309,7 +374,6 @@ def main():
             for t in transfer:
                 for x in found_t[t['name']]:
                     f.write(json.dumps({'name': t['name'], 'thm': t['thm'], 'prompt': t['prompt'], 'L_true': t['n_lines'], 'gen_lines': t.get('gen_lines'), 'source': t.get('source'), 'schema': t.get('schema'), **x}) + '\n')
-        json.dump({'k': {t['name']: ki for t, ki in zip(targets, ks)}, 'tried': dict(tried), 'accepted': dict(okc)}, open(f'{out}/alloc_{r}.json', 'w'))
         # T6: exchange found proofs with siblings (union used for training and reported as found_union_r)
         train_found = found
         if a.share_dir:
@@ -354,6 +418,8 @@ def main():
                 for t in targets:
                     fs = list(train_found.get(t['name'], []))
                     rng.shuffle(fs)
+                    if a.select == 'shortest':
+                        fs = shortest_first(fs)
                     for x in fs[:a.max_per_thm]:
                         for _ in range(a.rl_weight):
                             f.write(json.dumps({'prompt': t['prompt'], 'proof': x['proof'], 'n_lines': x['written']}) + '\n'); n_rl += 1

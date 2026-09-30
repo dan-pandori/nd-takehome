@@ -207,3 +207,10 @@ REPO-HYGIENE-2 DONE 2026-09-29T15:58:53Z
 - Bucket: `hf://buckets/dan-pandori/nd-rl/compute-record/` (ckpts/, artifacts/); registry rows under `registry/compute-record/`.
 
 COMPUTE-RECORD DONE 2026-09-30T01:02:02Z
+
+
+# STATUS — search-expert
+
+## search-expert (executor, started 2026-09-30T02:00Z)
+- 02:11 Dan's message (primary Q = solves on the 91 + rr600 15–16) adopted; log.md.
+- Code: `state_search.py` (best-first, truncate-and-resume, per-step filter), ladder flags; CPU self-test `se_selftest.py`.

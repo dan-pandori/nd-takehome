@@ -131,7 +131,10 @@ def _grammar_ids(tok):
 # ----------------------------------------------------------------- the fast path
 @torch.no_grad()
 def generate_ids_fast(model, tok, prompt_ids, goals=None, greedy=True, temperature=1.0, max_new=400,
-                      seed=0, early='goal', compact=True, compact_frac=0.75, stats=None):
+                      seed=0, early='goal', compact=True, compact_frac=0.75, stats=None, logp=None):
+    """`logp`: a list; when given, one float per row is appended to it -- the sum over the row's decoded tokens (up to
+    and including <eos>) of the model's log-probability at temperature 1 (run search-expert: best-first priority).
+    Only the `eos` early stop is supported with it; the sampled tokens do not depend on it."""
     dev = next(model.parameters()).device
     B0 = len(prompt_ids)
     L = max(len(p) for p in prompt_ids)
@@ -181,11 +184,17 @@ def generate_ids_fast(model, tok, prompt_ids, goals=None, greedy=True, temperatu
     n_go = torch.zeros((), dtype=torch.long, device=dev)
     n_eo = torch.zeros((), dtype=torch.long, device=dev)
     check_every = 16          # the only host<->device sync in the loop; the base path syncs on `done.all()` every step
+    if logp is not None:
+        assert early == 'eos', 'logp is only supported with early=eos'
+        lpsum = torch.zeros(B0, dtype=torch.float32, device=dev)
     for t in range(max_new):
         rowsteps += act.numel()
         steps = t + 1
         nxt = logits.argmax(-1) if greedy else _gumbel_pick(logits, temperature, rgen, seed, t, B0, act)
         live = ~done
+        if logp is not None:
+            lp = torch.log_softmax(logits.float(), -1).gather(1, nxt[:, None])[:, 0]
+            lpsum[act] += torch.where(live, lp, torch.zeros_like(lp))
         keepv = out[act, t]                      # a terminator this row was given earlier, or pad
         out[act, t] = torch.where(live, nxt, keepv)
         newfin = live & (nxt == tok.eos)
@@ -256,6 +265,8 @@ def generate_ids_fast(model, tok, prompt_ids, goals=None, greedy=True, temperatu
         stats['stop_eos'] = stats.get('stop_eos', 0) + n_eos
         stats['stop_exact'] = stats.get('stop_exact', 0) + n_exact
         stats['stop_goal'] = stats.get('stop_goal', 0) + n_goal
+    if logp is not None:
+        logp.extend(lpsum.tolist())
     return out.tolist()
 
 

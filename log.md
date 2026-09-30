@@ -806,3 +806,20 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 00:54 pod cr2 (A40, $0.49/h), `pod/cr/gpu_job3.sh`: fast_train per-step counting and a 2-round `grpo.py`
   (targets `data/lj/heldout200.jsonl`, k 8, eval_k 4): 6 / 6 new checks equal (`pod/cr/analyze.py`). GRPO's outputs
   (written by grpo.py to `artifacts/cr_grpo/`) copied to `artifacts/compute-record/grpo/`. Pod deleted (0.05 h, $0.03).
+
+# log — search-expert (executor, 2026-09-30)
+
+- 2026-09-30 02:00 UTC start. Read the brief's sources. frontier-supply has not run: no s4–s5 checkpoints and no
+  same-checkpoint measurement exist, so s4–s5 are trained here and arm A is run twice on 2 seeds.
+- 02:11 **Message from Dan (via the orchestrator, 02:11:17Z):** long-pool-2 finished; the brief's "two bins nearest
+  the control's frontier" do not exist (no fall-off up to 18; SN-cap12 T1 solves 34 / 59 / 58 / 61 of the 91).
+  Suggested primary quantity, shared with frontier-supply: per seed, theorems solved (≥ 1 Lean-accepted proof in 256)
+  on `transfer_long2` + calibration (91) plus rr600 at `L_true` 15–16, arms paired per theorem and seed; exact-17 and
+  ≥ 18 as secondary; note the reviewer's per-theorem flip rate between identical reads (6–11 of 70). **Adopted** as
+  the primary quantity in the pre-registration (not yet committed, so no deviation).
+- 02:05–02:10 code: `state_search.py` (StepFilter, clone, best-first `search_generate`, `resume_generate`),
+  `sample.generate_ids_fast(logp=...)`, `env_generate(step_filter=, acts=)`, ladder flags `--expert/--budget_from/
+  --select shortest/--step_filter/--no_eval/--seed_offset`. CPU self-test (`se_selftest.py`, Stage-1 s0, 12 targets
+  L ≥ 9, k 8): step filter 0 unsound stops (0 Lean-accepted attempts it would have stopped), 0 Lean rejects missed;
+  it would stop 70 / 96 attempts early. Best-first at width 4 found 0 / 12 at the sampler's budgets (sampling 11
+  proofs): 312 of 736 sampled actions were duplicates. Under investigation.

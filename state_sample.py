@@ -33,7 +33,10 @@ def prompt_ids(tok, env):
 
 @torch.no_grad()
 def env_generate(model, tok, prompts, greedy=True, temperature=1.0, max_action=256, max_steps=48,
-                 batch=2048, seed=0, stats=None, gate=True):
+                 batch=2048, seed=0, stats=None, gate=True, step_filter=None, acts=None):
+    """`step_filter` (run search-expert; `state_search.StepFilter`): called on the environment after every applied action;
+    a reason string ends the attempt there, as an invalid step does (a reject-only check: Lean would reject any
+    completion).  `acts`: a list of len(prompts) ints, incremented by the actions generated for each prompt."""
     dev = next(model.parameters()).device
     st = stats if stats is not None else {}
     cnt = st.setdefault('env_end', collections.Counter())
@@ -65,6 +68,9 @@ def env_generate(model, tok, prompts, greedy=True, temperature=1.0, max_action=2
             live.append((nxt, e)); nxt += 1
         pids = [prompt_ids(tok, e) for _, e in live]
         record.count(actions=len(live))
+        if acts is not None:
+            for i, _ in live:
+                acts[i] += 1
         st['prompt_tokens'] = st.get('prompt_tokens', 0) + sum(len(p) for p in pids)   # prefill cost of the env loop
         with torch.autocast('cuda', dtype=torch.bfloat16, enabled=(dev.type == 'cuda')):
             outs = generate_ids_fast(model, tok, pids, goals=None, greedy=greedy, temperature=temperature,
@@ -77,8 +83,12 @@ def env_generate(model, tok, prompts, greedy=True, temperature=1.0, max_action=2
             if not ended:
                 e.failed = 'action truncated'; cnt['truncated'] += 1; finish(i, e); continue
             ok, why = e.apply(atoks)
+            if ok and step_filter is not None:
+                why = step_filter(e)
+                if why:
+                    ok = False; e.failed = 'filter ' + why; why = 'filter ' + why
             if not ok:
-                cnt['syntax'] += 1; why_cnt[why] += 1; finish(i, e); continue
+                cnt['filter' if why.startswith('filter') else 'syntax'] += 1; why_cnt[why] += 1; finish(i, e); continue
             if e.done:
                 cnt['done'] += 1; finish(i, e); continue
             if e.steps >= max_steps:
