@@ -119,6 +119,21 @@ def part_b():
                 f"{100 * res[l][t]['env']['env_end'].get(key, 0) / max(1, sum(res[l][t]['env']['env_end'].values())) if t in res[l] else float('nan'):>11.3f}"
                 for l in labs))
         print(f"{'peak GB':30s}" + ''.join(f"{res[l][t]['peak_mem_gb'] if t in res[l] else float('nan'):>11.1f}" for l in labs))
+    # classical-only instances (intuit.py G4ip label): solves that need a classical step
+    icl = json.load(open('data/sr/intuit_labels.json'))
+    for t, title in (('tb', 'transfer.jsonl textbook'), ('tbl', 'transfer_long.jsonl textbook')):
+        rows = {l: [json.loads(x) for x in open(f'{D}/rr/{l}__{t}.jsonl')] for l in labs if t in res[l]}
+        if not rows:
+            continue
+        sch = sorted({pool[r['name']]['schema'] for l in rows for r in rows[l] if not icl[r['name']]})
+        print(f'\nPart B: solves on CLASSICAL-ONLY instances (not intuitionistically provable) — {title}')
+        print(f"{'schema':26s}{'n_cl':>5s}" + ''.join(f'{l:>11s}' for l in labs))
+        for s_ in sch:
+            ncl = sum(1 for r in next(iter(rows.values())) if pool[r['name']]['schema'] == s_ and not icl[r['name']])
+            print(f"{s_:26s}{ncl:>5d}" + ''.join(f"{sum(1 for r in rows[l] if pool[r['name']]['schema'] == s_ and not icl[r['name']] and r['n_ok'] > 0) if l in rows else '-':>11}" for l in labs))
+            for l in rows:
+                res[l][t].setdefault('classical_by_schema', {})[s_] = sum(1 for r in rows[l] if pool[r['name']]['schema'] == s_ and not icl[r['name']] and r['n_ok'] > 0)
+                res[l][t].setdefault('n_classical_by_schema', {})[s_] = ncl
     return res
 
 

@@ -1438,3 +1438,75 @@ counts once at the end (no per-step cost); the sampler adds one `declen.sum()` p
 
 Per-arm compute table of this run: `artifacts/compute-record/compute_table.tsv` (`registry_merge.py --compute --by
 arm,seed,round,phase`). Pods: cr1 0.36 h + cr2 0.05 h, A40 at $0.49/h billed: $0.21. Bucket: `hf://buckets/dan-pandori/nd-rl/compute-record/`.
+
+# state-readouts (2026-09-30)
+
+Judge: **Lean alone** (Lean 4.34.0 core; `lean_gate.gate` on the literal `lean_seq` text the environment assembles, with the
+exact `lean_prefilter`; `LEAN_GATE_DUMP` on every job). `nd_verify` judges nothing. `intuit.py` labels theorems only (it uses
+`nd_verify`'s formula parser to read them). All models: 4 layers, d 256, from scratch. Analysis: `python3 sr_analysis.py`
+(stdout tables; `artifacts/state-readouts/summary.json`). Compute rows: `artifacts/state-readouts/registry/`
+(`registry_merge.py --compute --q run_id=state-readouts --by config_file`).
+
+## B — SN-cap12 on the textbook schemata (k 256, T 0.8, seed 0, `max_steps` 96, `max_action` 512, batch 4,096)
+
+Models: SN-cap12 T1 `state-cap12/ckpts/sc12/ladder/la_T1_SN12_s{0-3}_r8.pt` (md5 82206356 / ea02cd0c / f2c6c062 / 46c3058c) and
+frozen `…/sc12/stage1_SN12_s{0-3}.pt` (173f4047 / b85cbc63 / 21d74747 / 2ca59f8d); 3,216,384 params, `lean_staten`, Stage-1 on K12
+(`data/kh/train_k12.jsonl`, cap 12, 155,000), T1 = + 8 ladder EI rounds. Source: `artifacts/state-readouts/rr/{T1,Fz}_s<k>__{tb,tbl}.jsonl`
+(`lpool_reread.py`); pools `data/sr/textbook_transfer.jsonl` (760 = 19 × 40, md5 a4c8161a) and `data/sr/textbook_long.jsonl`
+(282, 6 schemata, `L_true` 11–14, md5 3e9c967b). A theorem is solved if ≥ 1 of 256 samples is accepted. `*` = the 12 dead schemata.
+
+| schema (transfer, /40) | T1 s0 | s1 | s2 | s3 | frozen s0 | s1 | s2 | s3 |
+|---|---|---|---|---|---|---|---|---|
+| constructive_dilemma | 37 | 36 | 36 | 35 | 31 | 33 | 34 | 30 |
+| contraposition | 40 | 40 | 40 | 39 | 40 | 40 | 40 | 39 |
+| contraposition_conv | 39 | 38 | 39 | 40 | 14 | 23 | 28 | 23 |
+| demorgan_and_to_nor * | 27 | 30 | 35 | 20 | 3 | 10 | 11 | 7 |
+| demorgan_nand_to_or | 11 | 16 | 5 | 11 | 6 | 6 | 6 | 8 |
+| demorgan_nor_to_and * | 39 | 40 | 40 | 40 | 31 | 35 | 32 | 37 |
+| demorgan_or_to_nand * | 28 | 28 | 33 | 25 | 0 | 4 | 2 | 2 |
+| disjunctive_syllogism | 40 | 40 | 40 | 39 | 40 | 40 | 40 | 40 |
+| dist_and_over_or * | 17 | 10 | 23 | 11 | 5 | 5 | 6 | 5 |
+| dist_and_over_or_conv * | 27 | 37 | 34 | 37 | 15 | 21 | 20 | 26 |
+| dist_or_over_and * | 20 | 34 | 34 | 32 | 10 | 27 | 26 | 13 |
+| dist_or_over_and_conv | 23 | 24 | 26 | 30 | 8 | 13 | 15 | 17 |
+| excluded_middle * | 1 | 0 | 1 | 1 | 1 | 0 | 0 | 0 |
+| export | 37 | 39 | 39 | 40 | 35 | 39 | 40 | 39 |
+| import * | 9 | 20 | 9 | 15 | 1 | 8 | 5 | 3 |
+| negated_conditional * | 36 | 35 | 18 | 16 | 13 | 13 | 11 | 12 |
+| negated_conditional_conv * | 39 | 40 | 40 | 37 | 15 | 11 | 16 | 8 |
+| peirce * | 26 | 27 | 26 | 27 | 4 | 6 | 20 | 15 |
+| peirce_sequent * | 17 | 18 | 19 | 19 | 3 | 12 | 9 | 9 |
+| **total /760** | 513 | 552 | 537 | 514 | 275 | 346 | 361 | 333 |
+| **dead schemata ≥ 5 (/12)** | **11** | **11** | **11** | **11** | 6 | 10 | 10 | 9 |
+
+| schema (transfer_long) | n | T1 s0 | s1 | s2 | s3 | frozen s0 | s1 | s2 | s3 |
+|---|---|---|---|---|---|---|---|---|---|
+| demorgan_nand_to_or | 56 | 4 | 2 | 5 | 2 | 0 | 0 | 0 | 1 |
+| dist_and_over_or_conv * | 49 | 34 | 44 | 43 | 44 | 15 | 28 | 24 | 26 |
+| dist_or_over_and * | 44 | 24 | 37 | 34 | 33 | 10 | 19 | 20 | 13 |
+| dist_or_over_and_conv | 49 | 4 | 7 | 8 | 16 | 0 | 3 | 4 | 3 |
+| negated_conditional * | 44 | 29 | 33 | 18 | 16 | 10 | 7 | 7 | 10 |
+| peirce * | 40 | 7 | 2 | 3 | 2 | 0 | 0 | 1 | 0 |
+| **total /282** | | 102 | 125 | 111 | 113 | 35 | 57 | 56 | 53 |
+
+- Existing arms of the schema table for comparison (`ds-composition` D4b, whole-proof `lean_seq`, 3,214,336 params, seed 0,
+  **in-loop cumulative T1 solves at 8 × k 32**, **Lean ∧ `nd_verify`**, 2026-09-24): every dead schema ≤ 2 in C0 / A1 / A2 / A4 / A3.
+  Not the same estimator (k 256 on the final checkpoint here) nor the same checker; the gap (≤ 2 vs 9–40) is far larger than
+  either difference could make.
+- Inherited in-loop cumulative T1 counts (Lean alone; `artifacts/state-readouts/inherited_schema_{sn12,state_env}.json`, `sr_schema_inherited.py`):
+  SN-cap12 T1 s0–s3 already 11 / 12 dead schemata ≥ 5 in-loop (excluded_middle 1 / 0 / 0 / 1); cap-6 state arms (`state-env`):
+  S T1 3 / 4, SH T1 1 / 2, SN T1 6 / 3 dead schemata ≥ 5 (s0 / s1; frozen 1 / 1, 0 / 0, 1 / 1).
+- Caps: `max_steps` 96 hit 0 times in 16 re-reads; `max_action` 512 hit 0.002–0.048 % (tb), 0.000–0.129 % (tbl; frozen s0 0.129 %).
+  Peak `max_memory_allocated` 30.1–38.5 GB at batch 4,096.
+- **Classical-only instances** (post hoc; `intuit.py` G4ip: not intuitionistically provable; `data/sr/intuit_labels.json`):
+  on `transfer.jsonl`, excluded_middle 39 / 40 instances are classical-only, peirce 13 / 40, peirce_sequent 19, demorgan_nand_to_or 11,
+  negated_conditional 18, contraposition_conv 23. Solves on those, T1 s0–s3 / frozen s0–s3: excluded_middle **0 / 0 / 0 / 0**
+  / 0 / 0 / 0 / 0; peirce **0 × 8**; peirce_sequent 0 / 0 / 0 / 1 / 0 × 4; demorgan_nand_to_or 0 × 8; negated_conditional
+  16 / 15 / 3 / 1 / 3 / 1 / 3 / 1; contraposition_conv 22 / 22 / 23 / 23 / 7 / 13 / 16 / 10. The single excluded_middle solve
+  (`la_transfer_882`, `|- (((Q & R) & ~R) v ~((Q & R) & ~R))`) is the one intuitionistically provable instance (`Or.inr` of a
+  constructive negation). The peirce solves (26–27) are the 27 intuitionistic instances. `transfer_long` classical-only:
+  peirce 34 / 40 instances, solved T1 6 / 0 / 0 / 0, frozen 0 × 4 (T1 s0's six use `Classical.byContradiction` on `¬¬R`);
+  negated_conditional 21, solved 9 / 12 / 2 / 0 / 1 / 0 / 0 / 0; demorgan_nand_to_or 39, solved 0 × 8.
+- Lean re-check (VPS, Lean 4.34.1, own process per text; `sr_recheck_b.py` → `recheck_b.json`): one literal accepted text per
+  solved (re-read, dead-schema theorem): **2,338 / 2,338 accepted**; 0 counted solves without an accepted text in the dump;
+  negative controls (one connective of the first `have` flipped) **2,338 / 2,338 rejected**.

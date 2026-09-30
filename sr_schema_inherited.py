@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """state-readouts: per-schema textbook solves from existing found_transfer files (inherited arms).
 Usage: python3 sr_schema_inherited.py LABEL=gitref:path [LABEL=localpath ...]  -> table to stdout, json to artifacts/state-readouts/inherited_schema.json"""
-import json, sys, subprocess, collections
+import json, os, sys, subprocess, collections
 pool = [json.loads(l) for l in open('data/ladder/transfer.jsonl')]
 tb = {r['name']: r['schema'] for r in pool if r['source'] == 'textbook'}
 schemas = sorted(set(tb.values()))
@@ -16,4 +16,4 @@ print('schema'.ljust(26) + ''.join(l[:9].rjust(10) for l in out))
 for s in schemas:
     print(s.ljust(26) + ''.join(str(out[l][s]).rjust(10) for l in out))
 print('total'.ljust(26) + ''.join(str(sum(out[l].values())).rjust(10) for l in out))
-json.dump(out, open('artifacts/state-readouts/inherited_schema.json', 'w'), indent=1)
+json.dump(out, open(os.environ.get('OUT', 'artifacts/state-readouts/inherited_schema.json'), 'w'), indent=1)
