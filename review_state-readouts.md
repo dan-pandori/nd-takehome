@@ -129,3 +129,99 @@ that reached Lean and was rejected: every rejection in this run was made by the 
 | Fz s0–s3 (tb + tbl) | 0.32–0.36 each | 266,752 each |
 
 GPU: NVIDIA A40 (46 GB) per the setup log. `podbudget`: 22.67 of 24 pod-hours, $11.25 (at `podbudget`'s rate).
+
+## Compare (phase 2: `run_state_readouts.md`, `numbers.md` § state-readouts, `log.md`, `STATUS.md`)
+
+Correction to my §Recount: Part B ran on `sr-3`, an RTX A6000 ($0.53/h), not an A40 (the setup log I read covers the
+A40 pods only). Part A ran on three A40s ($0.49/h).
+
+| claim (where) | my value | verdict |
+|---|---|---|
+| S reached 28 / 25 (run, numbers, STATUS) | 28 / 25 | reproduces |
+| SH reached 21 / 15, SH s1 T 1.0 cut, ≤ 21 if finished (run, numbers) | 21 / ≥ 15; 6 rows without T 1.0; 15 + 6 = 21 | reproduces |
+| SN 28 / 28 (inherited, `support-state`) | 28 / 28 from `origin/dan_support-state:artifacts/ss/H_base_*` (SN union 29, intersection 27) | reproduces |
+| Whole-proof base 0 / 29 at 400,000 (inherited, `support-curves`) | not re-derived | not derivable here (the run table shows "0" under "s0 / s1"; only `stage1_a1_seq_s0.pt`, one seed, exists — label it) |
+| "at T 0.8" 25 / 25 / 17 / 13; "within 10k" 21 / 20 / 11 / 12; SN 27 / 26, 26 / 23 (numbers) | same | reproduces |
+| Median p̂ T 0.8: S 0.0054 / 0.0144, SH 0 / 0, SN 0.188 / 0.0088 (numbers) | SH s0 **2.0e-5** (17 of 29 nonzero, so the 15th value is 4 / 200,000); rest same | differs (SH s0 cell), trivially; A4 unaffected |
+| Attempts S 2,568,640 / 3,941,376, SH 6,066,944 / 5,433,472 (+192,512 unrecorded), SN 1,041,664 / 2,190,528 | same (the 192,512 is from the log, no row) | reproduces |
+| Union / intersection: S 29 / 24, SH 21 / 15, SN 29 / 27 | same | reproduces |
+| Paired: S s0's miss (1893) SN s0 misses too; S s1's four misses are all reached by SN s1 | same (A5: 0 exceptions) | reproduces |
+| Caps: step 0; action S 0.042 / 0.753 %, SH 0.297 / 0.572 %; A6 miss (run, numbers) | same | reproduces; miss reported as a miss |
+| Diagnostic: S s1's 4 misses at `max_action` 1,024 → 0 successes, 0 cuts; SH 1858 unchecked | same; SH s0 1004 (0.57 % / 1.40 % cut, unreached) is also unchecked (numbers says so, run does not) | reproduces |
+| Sizes: S 10 / 85, 10 / 79; SH 9 / 75, 9 / 80 (lines / `support.proof_term_size`) | same from the rows' fields; my Lean-text measure: 7 / 21, 6 / 21, 6 / 20, 6 / 20 (`have` count / proof-term nodes) | reproduces; see wording 5 |
+| **"S differs from SN only in naming and reaches 28 / 25, so seeing the state is what matters"** (run) | S in the pre-registered state band on both seeds (mean 26.5) | stands as the pre-registered per-arm reading for S |
+| **"Naming is worth ≤ ≈ 3 theorems at n = 2"** (run, STATUS) | S − SN = 0 and −3 reached; median p̂ S 0.0054 / 0.0144 vs SN 0.188 / 0.0088 | reword — see Verdict 1 |
+| "SH (≥ 18) misses the joint 'both ≥ 20' rule, so the letter reads 'in between'" | SH mean 18.0 (≥ 18) → middle band | reproduces |
+| **"SH names like S, so its shortfall is from history, not naming"** (run) | SH − S = −7 (s0); −10 on s1 as recorded, −4 if all six unfinished T 1.0 rows had succeeded | partly supported — see Verdict 2 |
+| Part B: 11 / 12 dead schemata ≥ 5 on every T1 seed; frozen 6 / 10 / 10 / 9; excluded_middle 0–1 | same | reproduces |
+| Part B per-schema tables (numbers, 19 + 6 rows × 8 checkpoints) | same, every cell | reproduces |
+| Totals T1 513 / 552 / 537 / 514, frozen 275 / 346 / 361 / 333; long T1 102 / 125 / 111 / 113, frozen 35 / 57 / 56 / 53 | same | reproduces |
+| B3 miss (frozen s0 275 < 280); B4 miss on 3 of 4 seeds | same (long schemata ≥ 5 on T1: 4 / 4 / 5 / 4) | reproduces; misses reported |
+| B5 step cap 96 hit 0; action cap ≤ 0.129 % (frozen s0 tbl) | same | reproduces |
+| Classical-only, textbook transfer pool: EM 0 / 39, Peirce 0 / 13, Peirce-sequent 0–1 / 19 "in all 8 checkpoints"; Peirce solves are the intuitionistic instances; EM solve `la_transfer_882` intuitionistic | same (my own G4ip, labels identical on all 1,242 theorems); `la_transfer_882`'s 179 literal accepted texts re-checked in Lean, all accepted | reproduces (the run's Lean block is a reformatted rendering, not the literal text — say so) |
+| Long pool: 6 classical-only Peirce solved by T1 s0 via `Classical.byContradiction` | 6; all 441 distinct texts accepted by my harness | reproduces |
+| **STATUS: "on classical-only instances excluded middle and Peirce stay at 0"**; commit `ee7adab1` "classical-only EM/Peirce 0" | Peirce classical-only: 0 on the 760 pool, **6 on `transfer_long` (T1 s0)**; peirce_sequent 1 (T1 s3) | not supported as written — see Verdict 3 |
+| Lean re-checks: A 190 / 190, controls 142 / 142; B 2,338 / 2,338, controls 2,338 / 2,338 | my harness: 4,617 / 4,617 (all Part A), 2,400 / 2,400 (Part B sample), 441 / 441; 0 / 2,310 prefilter-rejected texts accepted | consistent |
+| Compute table: every S / SH arm > 1.25× SN's attempts, flagged; matched on protocol, not attempts | flagged as required; my job wall-hours agree with the GPU-h column within the OOM-restart attempts the executor names | reproduces |
+| 22.67 pod-hours, $11.25; 3 × A40 $0.49, 1 × A6000 $0.53, all deleted | `podbudget`: 22.67 h, $11.25 | reproduces |
+| numbers.md header "Lean 4.34.0 core" | the re-check logs and my harness: 4.34.1 | typo |
+
+**Model labels.** Every number in `numbers.md` names checkpoint (with md5), parameter count, format, from-scratch,
+training set, and EI rounds for T1. The run note's Part A table names neither the whole-proof row's checkpoint nor its
+attempt count (400,000, not the 200,000 + 200,000 of the other rows) — numbers.md does. Inherited comparisons name
+their checker (D4b: Lean ∧ `nd_verify`, 2026-09-24; SN, WP: Lean alone).
+
+**Gate 0 / expectations.** Pre-registration with numeric expectations committed 02:15:23Z, before the first job
+(02:18:14Z). Misses (A3 joint band, A6, B3, B4) are reported as misses. The truncation diagnostic and the
+classical-only labels are marked post hoc.
+
+**Process notes (no effect on counts found).** (a) S / SH were judged with the reject-only Lean prefilter on; SN's
+`support-state` numbers were not (the prefilter did not exist then). The log says so; the run note does not. My
+sample (2,310 prefilter-rejected texts, 0 accepted by Lean) finds no loss. (b) OOM restarts resumed per theorem with the
+same seeds; each final record file has exactly 29 rows with consistent `n_ok + n_parse_fail + n_leanrej = n_tried`.
+
+## Verdict
+
+**Hard constraints: none violated.** `nd_verify` identical to `origin/main` and on no counting path;
+`TEST_RUN_DONE` unchanged; no training; evaluation pools disjoint by renaming class from every training file
+(0 collisions); every counted proof I re-checked is accepted by Lean, and the harness rejects all 2,310 controls.
+
+**Stands.**
+- Part A counts: S 28 / 25, SH 21 / ≥ 15, SN 28 / 28 on the 29 survivors, same protocol and sampling seeds.
+- S is in the pre-registered state band on both seeds. A model that writes its own names but sees the state reaches
+  25–28 of the survivors the whole-proof base reaches 0 of. That is the run's main result.
+- Part B: SN-cap12 T1 has 11 / 12 of the dead textbook schemata at ≥ 5 / 40 on all four seeds at k 256; frozen
+  6–10. Excluded middle ≤ 1 everywhere, and the one solve is an intuitionistic instance. On the 760 pool no checkpoint
+  solves a classical-only excluded_middle or peirce instance.
+
+**Reword.**
+1. "Naming is worth ≤ ≈ 3 theorems at n = 2" → "S and SN reach 28 / 25 vs 28 / 28: a difference of 0 and 3 theorems,
+   inside the pre-registered 5-theorem no-finding margin. No naming effect on *reach* is detected at n = 2, and n = 2
+   cannot bound it." Add that reach at 400,000 attempts is coarse. Per-theorem rates differ a lot: S's median p̂ is
+   0.0054 / 0.0144 against SN's 0.188 / 0.0088, and SN s0 is ≈ 35× S s0. So naming may matter for rate even where it
+   does not for reach.
+2. "SH names like S, so its shortfall is from history, not naming" → "SH reaches 7 fewer than S on s0. On s1 the gap
+   is 10 as recorded, but only 4 if SH s1's six unfinished T 1.0 rows had all succeeded, so on s1 it may sit inside the
+   margin. SH differs from S only in adding the action history to the prompt, so history is the candidate cause, shown
+   on one seed. Two unreached SH theorems carry heavy action-cap truncation that was never re-run: 1858 (14.4 %, s1)
+   and 1004 (0.6–1.4 %, s0)."
+3. STATUS.md (and the DONE commit's subject): "on classical-only instances excluded middle and Peirce stay at 0" →
+   "on the 760-theorem textbook pool, 0 classical-only excluded_middle / peirce solves on any checkpoint, and 1
+   peirce_sequent (T1 s3). On `transfer_long`, T1 s0 solves 6 classical-only Peirce instances through ¬¬-elimination."
+   The run note already says this correctly; the STATUS line contradicts it.
+4. Run note Part A table: label the whole-proof row (`stage1_a1_seq_s0.pt`, one seed, 400,000 attempts,
+   `support-curves`, Lean alone) and replace its "s0 / s1" framing.
+5. Proof length: say that `support.proof_term_size` counts formula nodes over ND lines *including premise lines*.
+   It is therefore not invariant to premise re-statement, which is the property the policy asks term size for. The
+   ranking of arms is the same under my Lean-term measure (S 21 / 21, SH 20 / 20). Also fix "Lean 4.34.0" → 4.34.1, and
+   the SH s0 median p̂ (2.0e-5, not 0).
+
+**Not supported.** The STATUS classical-only sentence (item 3). Nothing else.
+
+**Next measurements that would settle what is open.**
+- Finish SH s1's T 1.0 phase on its six theorems (≤ 1.2 M attempts, ≈ 1.5 A40-h). This fixes SH s1 between 15 and 21
+  and decides whether SH − S exceeds the margin on both seeds.
+- Re-run SH's truncated zeros (s1 1858, s0 1004) at `max_action` 1,024, as was done for S s1.
+- For naming, compare per-theorem p̂ paired S vs SN (same 29 theorems, same seeds) rather than reach. Then add S
+  s2 / s3 (`state-frontier` `sf2`, pre-registered priority 4, not run) against SN seeds at the same protocol. That gives
+  n = 4 before any statement about the size of the naming effect.
