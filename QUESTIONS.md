@@ -101,3 +101,4 @@
   (`python3 fetch_artifacts.py ckpts/`; sha256 checked against the bucket copy). If the take-home's graders expect
   them in a plain clone, they would have to be tracked again, and the 5 MB guard would need an allowlist entry.
   Default if unanswered: they stay out of git, and `CONTRIBUTING.md` says how to fetch them.
+  - **Answer (Dan, 2026-09-30):** keep them out of git. The bucket and the manifest are fine.
