@@ -816,3 +816,11 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   plus rr600 at `L_true` 15–16; arms paired per theorem and per seed; exact-17 and ≥ 18 as secondaries; reviewer's
   per-theorem flip rate between identical reads 6–11 of 70. **Adopted** as a dated deviation in the pre-registration
   (before any pod).
+- 2026-09-30 02:22–02:41 UTC  pods (community A6000 out of stock twice → secure A40 $0.49/h): fsup1 02:22, fsup2 02:39,
+  fsup3 02:39, fsup4 02:40. Smoke on fsup1 (Stage-1 s0, 300 targets, ft 20 steps): new driver's control path
+  **byte-identical** to the pre-change driver (found_1 / mix_1 / alloc_1 md5 equal); supply round 1: 75 candidates
+  (a 37 / b 38), pass 9 (a 3 / b 6), p̂ = 0 63, too easy 3; total attempts 9,600 = 300 × 32; peak 9.5 GB at batch 2048.
+  `data/ladder/reserve.jsonl` is not in the repo (leak check reports it missing; it is a generator reserve, not an
+  evaluation pool). Stage-1 s4, s5 training on fsup1 from 02:27.
+- 02:35–02:45  ladders launched: fsup1 S s0, S s1, C′ s0; fsup2 S s2, S s3, C′ s1; fsup3 S s4, C s4 (wait for the
+  Stage-1 checkpoint in the bucket); fsup4 S s5, C s5. S and its comparator share a pod for GPU-seconds.

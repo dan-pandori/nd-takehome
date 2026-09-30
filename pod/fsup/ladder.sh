@@ -4,6 +4,7 @@
 source pod/fsup/env.sh
 A=$1; S=$2; shift 2; N=la_${A}_s$S
 CK=ckpts/sc12/stage1_SN12_s$S.pt; [ -s $CK ] || CK=ckpts/fsup/stage1_SN12_s$S.pt
+[ -s $CK ] || { echo "waiting for $CK in the bucket $(date -u +%FT%TZ)"; until [ -s $CK ]; do hf buckets cp $BK/$CK $CK >/dev/null 2>&1 || sleep 120; done; }
 case $A in C) X="";; S) X="--supply_frac 0.25";; R) X="--ei_seed $((S+100))";; *) echo "bad arm"; exit 1;; esac
 if [ ! -s ckpts/fsup/ladder/${N}_r8.pt ]; then
   echo "=== ladder $N $(date -u +%FT%TZ) init $CK"
