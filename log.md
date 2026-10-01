@@ -933,3 +933,7 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   shortcut — seed 0 only at r0 / r8 — is withdrawn), no checkpoints or theorems dropped, and finish the bound-22 minlen
   searches for the remaining textbook72 reference proofs if time allows. Plan: seed-0 reads at the other 20 checkpoints
   per seed (60 reads) on extra reader pods.
+- 16:50 Seed-0 read of s2_r3 holdout250 went CUDA-OOM at batch 2,048 three times on tj-r4 (prefill on long states, as the
+  s2 ladder did). `pod/tj/read.sh` now retries a read that dies of `OutOfMemoryError` once at batch **1,024** (a sampling
+  re-draw; the summary's `batch` field records it, the OOM log is kept as `*.oom2048.log`). The item moved to tj-r2.
+  Six readers for the 60 seed-0 reads: tj-r0, tj-r2, tj-r4 (RTX A6000), tj-p0, tj-r1, tj-r3 (A40).

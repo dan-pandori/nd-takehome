@@ -14,6 +14,11 @@ for R in "$@"; do
   esac
   python3 state_eval.py --ckpt $CK --in $IN --k 256 --temperature 0.8 --seed $SS --batch $B --max_action $MA --max_steps $MS \
     --lenfield $LF --out $O.jsonl.tmp --summary $O.json.tmp > artifacts/tj/logs/read/${L}__${R}_x$SS.log 2>&1 \
+    || { [ "$B" != 1024 ] && grep -q OutOfMemoryError artifacts/tj/logs/read/${L}__${R}_x$SS.log && {   # prefill OOM on long states:
+           echo "=== retry $L $R x$SS at batch 1024 (OOM at $B)"                                     # one retry at 1,024 (summary 'batch')
+           mv artifacts/tj/logs/read/${L}__${R}_x$SS.log artifacts/tj/logs/read/${L}__${R}_x$SS.oom$B.log
+           python3 state_eval.py --ckpt $CK --in $IN --k 256 --temperature 0.8 --seed $SS --batch 1024 --max_action $MA --max_steps $MS \
+             --lenfield $LF --out $O.jsonl.tmp --summary $O.json.tmp > artifacts/tj/logs/read/${L}__${R}_x$SS.log 2>&1; }; } \
     || { echo "READ FAILED $L $R x$SS"; continue; }
   mv $O.jsonl.tmp $O.jsonl; mv $O.json.tmp $O.json
   [ -n "$LEAN_GATE_DUMP" ] && [ -s $LEAN_GATE_DUMP ] && gzip -f $LEAN_GATE_DUMP
