@@ -61,11 +61,23 @@ def groups(s):
     return g, lost, {n: a[n][2] for n in a}
 
 
+def refine(m):
+    """step kinds with tj_score's 'name' split by the term's shape: app (n n: ->E / not-E), proj (n .1 / n .2: and-E),
+    elim (n .elim), copy (n)."""
+    out = []
+    for a, k in zip(m.get('actions_b0', []), m.get('step_kind', [])):
+        if k == 'name':
+            t = a.split(); r = t[t.index(':=') + 2:]
+            k = 'app' if r and r[0].startswith('n') else 'proj' if r[:1] in (['.1'], ['.2']) else 'elim' if r[:1] == ['.elim'] else 'copy'
+        out.append('andI' if k == '⟨' else k)
+    return out
+
+
 def scores(s, sub):
     d = f'artifacts/tj/score/{sub}'
     if not os.path.isdir(d):
         return None, None
-    meta = {m['tid']: m for m in rj(f'{d}/targets.jsonl')}
+    meta = {m['tid']: dict(m, step_kind=refine(m)) for m in rj(f'{d}/targets.jsonl')}
     sc = {}
     for ck in CK:
         p = f'{d}/s{s}_{ck}.jsonl'
@@ -338,7 +350,7 @@ def main():
             for n, gr in G[s][0].items():
                 o = LP[s][1]['pend'].get(f'ev:{n}')
                 if gr == 'B' and o:
-                    kinds[o[a.T]['w1_kind']] += 1
+                    kinds[LP[s][0][f'ev:{n}']['step_kind'][o[a.T]['w1_idx']]] += 1
         chk['B_ev_w1_kind_r0'] = dict(kinds.most_common())
         out['checks'] = chk
         print('\n## pre-registered quantities (per-seed medians over the group, IQM over seeds, stratified bootstrap 95 %)')

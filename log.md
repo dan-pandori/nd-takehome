@@ -928,3 +928,8 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   them are conditioned on the canonical names. Checked: on all 3,070 reference-proof actions, writing a wrong name at
   exactly the masked positions makes the environment rename exactly those. The with-names total is kept
   (`incl_names_total`). Pretraining reference scores for seed 0 re-run.
+- 2026-10-01 15:46 **Message from Dan (via the orchestrator): budget raised to $50 / 100 pod-hours** (registered with
+  `podbudget`). Prefer completeness over cost: both sampling seeds at every checkpoint (the brief's "budget tight"
+  shortcut — seed 0 only at r0 / r8 — is withdrawn), no checkpoints or theorems dropped, and finish the bound-22 minlen
+  searches for the remaining textbook72 reference proofs if time allows. Plan: seed-0 reads at the other 20 checkpoints
+  per seed (60 reads) on extra reader pods.
