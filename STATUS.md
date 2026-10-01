@@ -244,3 +244,4 @@ Brief: run brief `trajectory` (proposal 18, Dan 2026-10-01). Policy: AGENT_POLIC
 
 ## trajectory
 - 2026-10-01 06:45 UTC  run started (executor). Pre-registration `preregistration/trajectory.md` committed before the first pod. Reference proofs: holdout250 from ladder-A's minlen labels (250/250 convert); textbook72 has no reference texts, so minlen on its 72 prompts (Lean-checked).
+- 08:00 UTC  Stage-1 ×3 done on tj-p0 (A40; A40 stock ran out after one pod, so Stage-1s ran one after another): 24,077 / 24,345 / 24,328 steps, held-out greedy 0.921 / 0.936 / 0.962 (best-state best-cap12: 23,951–24,123 steps, 0.903–0.951); 14 checkpoints each in the bucket. T1 ladders on RTX A6000 (tj-p1/p2/p3, same GA102 chip as the A40) since 07:06 / 07:30 / 07:52; ≈ 40 min per early round. Readers tj-r0 (A6000) and tj-p0 (A40). textbook72 reference proofs: minlen 57/72 at bound 14; bound 22 running for the other 15. Pods: 5 (4 × A6000 $0.53/h, 1 × A40 $0.49/h).
