@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Sampled read-outs of one checkpoint.  Usage: bash pod/tj/read.sh <ckpt> <label> <sample seed> <reads...>   reads: tb72 h250
+# Settings (fixed for every checkpoint, best-state's): k 256, T 0.8, max_action 512, max_steps 96, batch 2,048.
+# Restartable: a read whose summary exists is skipped.  DUMP=1 keeps the literal text of every sample (gzipped; bucket only).
+source pod/tj/env.sh
+CK=$1; L=$2; SS=$3; shift 3; B=${B:-2048}; MA=${MA:-512}; MS=${MS:-96}; mkdir -p artifacts/tj/eval artifacts/tj/logs/read
+for R in "$@"; do
+  O=artifacts/tj/eval/${L}__${R}_x$SS; [ -s $O.json ] && { echo "skip $L $R x$SS"; continue; }
+  echo "=== $L $R x$SS $(date -u +%FT%TZ)"
+  if [ "${DUMP:-0}" = 1 ]; then export LEAN_GATE_DUMP=artifacts/tj/dump/${L}__${R}_x$SS.jsonl; else unset LEAN_GATE_DUMP; fi
+  case $R in
+    tb72) IN=data/bs/textbook72.jsonl; LF=reference_lines ;;
+    h250) IN=data/bs/holdout250.jsonl; LF=n_lines ;;
+  esac
+  python3 state_eval.py --ckpt $CK --in $IN --k 256 --temperature 0.8 --seed $SS --batch $B --max_action $MA --max_steps $MS \
+    --lenfield $LF --out $O.jsonl.tmp --summary $O.json.tmp > artifacts/tj/logs/read/${L}__${R}_x$SS.log 2>&1 \
+    || { echo "READ FAILED $L $R x$SS"; continue; }
+  mv $O.jsonl.tmp $O.jsonl; mv $O.json.tmp $O.json
+  [ -n "$LEAN_GATE_DUMP" ] && [ -s $LEAN_GATE_DUMP ] && gzip -f $LEAN_GATE_DUMP
+  echo "=== done $L $R x$SS $(date -u +%FT%TZ) $(grep -m1 -o '"solved": [0-9]*' $O.json)"
+done
+up artifacts/tj

@@ -92,6 +92,7 @@ def main():
     ap.add_argument('--best_steps', type=int, default=0, help='best: schedule over this many steps instead of --budget_secs')
     ap.add_argument('--tok_budget', type=int, default=128 * 144, help='best: padded tokens per step')
     ap.add_argument('--mtp', type=float, default=0.3, help='best: MTP loss weight')
+    ap.add_argument('--save_steps', default='', help='best: comma-separated steps at which to keep a checkpoint <out>_step<N>.pt (run trajectory)')
     ap.add_argument('--curve_every', type=float, default=30, help='best: seconds between curve / val points')
     ap.add_argument('--no_compile', action='store_true')
     ap.add_argument('--best_dims', default=None, help='best: "layers,d,heads,d_ff" override (CPU tests only; the recipe is 6,384,8,1280)')

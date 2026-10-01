@@ -126,6 +126,21 @@ def train(a, tok, data, held, dev, record):
     muon_graph = None
     model.train()
     step, seen, curve, recent, recent_aux = 0, 0, [], [], []
+    save_steps = sorted({int(x) for x in a.save_steps.split(',')}) if getattr(a, 'save_steps', '') else []
+
+    def save_at(step):
+        """run trajectory: keep a checkpoint at this step (`<out>_step<N>.pt`, uploaded by save_ckpt).  The schedule clock
+        is paused while saving, so the cosine schedule is the one an unsaved run follows."""
+        nonlocal t0
+        ts = time.time()
+        from model import save_ckpt
+        path = a.out[:-3] + f'_step{step}.pt' if a.out.endswith('.pt') else f'{a.out}_step{step}'
+        save_ckpt(path, model, tok.mode, extra={'args': vars(a), 'n_params': model.n_params(), 'recipe': 'best',
+                                                'step': step, 'secs': ts - t0, 'pairs_seen': seen, 'partial': True})
+        t0 += time.time() - ts
+        print(f'saved {path} at step {step} ({time.time() - ts:.1f}s, clock paused)', flush=True)
+    if 0 in save_steps:
+        save_at(0)
     next_point = a.curve_every
     cuts, order, epochs_cuts = [], None, None
     while True:
@@ -173,6 +188,8 @@ def train(a, tok, data, held, dev, record):
             muon_graph.replay()
         if step % 20 == 0 or not cuda:
             recent.append(float(main)); recent_aux.append(float(aux))
+        if step in save_steps:
+            save_at(step)
         el = time.time() - t0
         if el >= next_point or (a.best_steps and step == a.best_steps):
             if not recent:
