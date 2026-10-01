@@ -1,0 +1,46 @@
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/state_eval.py", line 68, in <module>
+    main()
+  File "/workspace/nd-takehome/state_eval.py", line 43, in main
+    flat = env_generate(model, tok, prompts, greedy=(a.temperature == 0), temperature=max(a.temperature, 1e-6),
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/state_sample.py", line 70, in env_generate
+    outs = generate_ids_fast(model, tok, pids, goals=None, greedy=greedy, temperature=temperature,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/sample.py", line 148, in generate_ids_fast
+    logits = model(idx, pos=pos, mask=mask, caches=caches)[:, -1]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/best_model.py", line 119, in forward
+    return self._chunked_prefill(idx, pos, mask, caches)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/best_model.py", line 144, in _chunked_prefill
+    out.append(self.head(self.ln_f(self.features(idx[r0:r1], pos[r0:r1], None if mask is None else mask[r0:r1], sub)[0])))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/best_model.py", line 179, in features
+    x = b(x, None, None, bias, None if caches is None else caches[i])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/best_model.py", line 97, in forward
+    x = x + self.ln_attn_out(self.attn(self.ln1(x), cos, sin, mask, cache))
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/best_model.py", line 93, in attn
+    y = F.scaled_dot_product_attention(q, k, v, attn_mask=mask.to(q.dtype))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1010.00 MiB. GPU 0 has a total capacity of 44.42 GiB of which 1011.81 MiB is free. Process 1277504 has 43.43 GiB memory in use. Of the allocated memory 42.98 GiB is allocated by PyTorch, and 130.95 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

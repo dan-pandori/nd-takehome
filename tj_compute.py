@@ -11,7 +11,7 @@ record.compute on the pods), split by training seed and kind:
 import collections, glob, json, re
 
 M = ('gpu_seconds', 'gen_tokens', 'attempts', 'actions', 'train_steps', 'train_tokens', 'lean_checks')
-GPU = {'stage1': 'A40', 'T1 ladder': 'RTX A6000', 'reads': 'RTX A6000 (tj-r0) / A40 (tj-p0)', 'held-out greedy': 'A40'}
+GPU = {'stage1': 'A40', 'T1 ladder': 'RTX A6000', 'reads': 'RTX A6000 / A40 (8 reader pods)', 'held-out greedy': 'A40'}
 
 
 def classify(r):

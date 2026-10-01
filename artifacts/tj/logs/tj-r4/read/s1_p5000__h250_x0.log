@@ -1,0 +1,15 @@
+[lean_gate] 64000 samples, parse-fail 29664 (no-eos 0, 0.000 %), distinct 22437: ok 3174, rej 19263 (filter 19263, prefilter=on); lean on 3174 texts in 8 procs, 30.6s proc, exposed 5.4s, tail 4.3s, 32 workers
+[stage1_best12_s1_b1200_step5000.pt on holdout250.jsonl k=256 T=0.8] SOLVED 131/250 = 0.524 [0.462,0.585]
+  len 7: 14/31 = 0.452 [0.292,0.622]
+  len 8: 17/32 = 0.531 [0.364,0.691]
+  len 9: 75/115 = 0.652 [0.561,0.733]
+  len 10: 20/48 = 0.417 [0.288,0.557]
+  len 11: 5/14 = 0.357 [0.163,0.612]
+  len 12: 0/7 = 0.000 [0.000,0.354]
+  len 13: 0/2 = 0.000 [0.000,0.658]
+  len 14: 0/1 = 0.000 [0.000,0.793]
+  written hist {7: 13, 8: 31, 9: 166, 10: 192, 11: 99, 12: 82, 13: 68, 14: 60, 15: 64, 16: 27, 17: 9, 18: 13, 19: 3, 20: 8, 21: 4, 22: 4, 23: 1, 24: 2, 25: 1, 26: 1, 27: 2, 28: 1, 32: 1}
+  pruned hist {6: 1, 7: 72, 8: 100, 9: 227, 10: 128, 11: 62, 12: 58, 13: 57, 14: 50, 15: 50, 16: 11, 17: 6, 18: 12, 19: 3, 20: 4, 21: 2, 22: 3, 24: 1, 26: 1, 27: 3, 32: 1}
+  frontier written 20 pruned 18
+  reasons [('lean rejected', 28274), ('lean_seq parse: env: unbound', 6817), ('lean_seq parse: env: formula', 6318), ('lean_seq parse: env: exact goal mismatch', 5668), ('lean_seq parse: env: binder mismatch', 2844), ('lean_seq parse: env: box on non-arrow', 1876)]
+env {"env_end": {"syntax": 28415, "truncated": 1249, "done": 34336}, "env_fail_reason": {"formula": 6318, "have name": 475, "box head": 1167, "box on non-arrow": 1876, "unbound": 6817, "binder mismatch": 2844, "malformed": 154, "Or.elim on non-or": 629, "exact goal mismatch": 5668, "term": 513, "no semicolon": 130, "exact not last": 691, "assign": 893, "PR position": 148, "Or.elim name": 77, "empty term": 9, "PR form": 3, "exact form": 3}, "env_steps": {"1": 3928, "0": 345, "2": 5469, "3": 5908, "4": 2396, "5": 4138, "6": 3773, "7": 5321, "8": 4871, "9": 5150, "10": 6749, "11": 4402, "12": 2740, "13": 2288, "14": 1803, "15": 1458, "16": 983, "17": 595, "18": 433, "19": 382, "20": 218, "21": 156, "22": 134, "23": 84, "24": 64, "25": 63, "27": 28, "29": 14, "30": 17, "26": 37, "31": 11, "32": 4, "28": 18, "36": 1, "35": 5, "34": 7, "37": 2, "33": 4, "39": 1}, "prompt_tokens": 39037502, "steps": 70304, "rows": 495787, "rowsteps": 15047280, "prompt_len_max": 430, "chunks": 264, "stop_eos": 494538, "stop_exact": 0, "stop_goal": 0, "names_defined": 461562, "names_renamed": 69510, "env_waves": 264, "env_wall_s": 414.0675759315491, "peak_alloc_gb": 20.082189083099365, "peak_reserved_gb": 20.390625, "action_declen_mean": 21.049747169651482}

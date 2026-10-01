@@ -937,3 +937,13 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   s2 ladder did). `pod/tj/read.sh` now retries a read that dies of `OutOfMemoryError` once at batch **1,024** (a sampling
   re-draw; the summary's `batch` field records it, the OOM log is kept as `*.oom2048.log`). The item moved to tj-r2.
   Six readers for the 60 seed-0 reads: tj-r0, tj-r2, tj-r4 (RTX A6000), tj-p0, tj-r1, tj-r3 (A40).
+- 17:10 The bound-22 minlen run (started 06:53) was hung: after 10 h all pool workers were at 0 % CPU and nothing was
+  written (the first `imap` chunk never returned). Killed; rerun as one `minlen.py` per theorem (15 in parallel on
+  tj-r0, bound 22, `timeout` 90 min each), so any theorem that finishes keeps its proof.
+- 17:05 All three seeds scored (`pod/tj/score.sh <s> full`): eventual proofs for 286 / 286 / 293 theorems; candidate
+  replay failures 3 / 4 / 3 of 19,969 / 21,672 / 21,177 distinct accepted proofs (every solved theorem kept a candidate);
+  all 307 references and all eventual proofs Lean-accepted (`lean_check`, 593 / 593 / 600).
+- 18:05 The 17:10 per-theorem minlen relaunch never started (a quoting error in a nested `sh -c` inside `bg.sh`; no log).
+  Relaunched from a script (`pod/tj/minlen22.sh`, 60 min per theorem). Meanwhile: all 264 sampled reads done (both
+  sample seeds at all 22 checkpoints × 3 seeds × 2 pools; one at batch 1,024 after OOM); reader pods tj-r1–r4 and tj-p0
+  deleted after pulling. Registry: 81,796 per-theorem rows (`tj_registry.py`).

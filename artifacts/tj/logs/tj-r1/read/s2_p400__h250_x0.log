@@ -1,0 +1,15 @@
+[lean_gate] 64000 samples, parse-fail 53091 (no-eos 0, 0.000 %), distinct 7572: ok 13, rej 7559 (filter 7559, prefilter=on); lean on 13 texts in 1 procs, 0.4s proc, exposed 0.7s, tail 0.4s, 32 workers
+[stage1_best12_s2_b1200_step400.pt on holdout250.jsonl k=256 T=0.8] SOLVED 4/250 = 0.016 [0.006,0.040]
+  len 7: 1/31 = 0.032 [0.006,0.162]
+  len 8: 1/32 = 0.031 [0.006,0.157]
+  len 9: 1/115 = 0.009 [0.002,0.048]
+  len 10: 1/48 = 0.021 [0.004,0.109]
+  len 11: 0/14 = 0.000 [0.000,0.215]
+  len 12: 0/7 = 0.000 [0.000,0.354]
+  len 13: 0/2 = 0.000 [0.000,0.658]
+  len 14: 0/1 = 0.000 [0.000,0.793]
+  written hist {7: 1, 8: 1, 9: 1, 13: 1}
+  pruned hist {7: 2, 8: 1, 10: 1}
+  frontier written 0 pruned 0
+  reasons [('lean_seq parse: env: formula', 14737), ('lean rejected', 10893), ('lean_seq parse: env: unbound', 9858), ('lean_seq parse: env: PR position', 5631), ('lean_seq parse: env: exact goal mismatch', 4802), ('lean_seq parse: env: binder mismatch', 4391)]
+env {"env_end": {"syntax": 50918, "truncated": 2173, "done": 10909}, "env_fail_reason": {"formula": 14737, "binder mismatch": 4391, "have name": 245, "box head": 3377, "exact form": 59, "assign": 1478, "exact goal mismatch": 4802, "unbound": 9858, "Or.elim on non-or": 3987, "PR position": 5631, "box on non-arrow": 1123, "malformed": 94, "term": 306, "exact not last": 763, "Or.elim name": 7, "no semicolon": 35, "empty term": 17, "colon": 6, "action head": 1, "PR form": 1}, "env_steps": {"1": 11193, "0": 502, "2": 12684, "3": 16260, "4": 7079, "5": 4517, "6": 2789, "7": 2848, "8": 2249, "9": 1858, "10": 792, "11": 463, "12": 239, "13": 182, "14": 115, "15": 72, "16": 36, "17": 47, "18": 24, "23": 4, "21": 7, "19": 15, "22": 6, "26": 1, "28": 1, "24": 1, "20": 10, "39": 1, "25": 2, "29": 1, "27": 1, "31": 1}, "prompt_tokens": 15569187, "steps": 57328, "rows": 233653, "rowsteps": 9266320, "prompt_len_max": 476, "chunks": 130, "stop_eos": 231480, "stop_exact": 0, "stop_goal": 0, "names_defined": 235662, "names_renamed": 66318, "env_waves": 130, "env_wall_s": 258.38759183883667, "peak_alloc_gb": 20.912782192230225, "peak_reserved_gb": 21.189453125, "action_declen_mean": 30.442185634252503}

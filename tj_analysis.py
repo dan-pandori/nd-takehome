@@ -128,7 +128,7 @@ def main():
     cks = PRE if a.pre else CK
 
     # ---------------- per seed: groups, pass@k (seed 1), log p
-    G, PK, LP, TRUNC = {}, {}, {}, {}
+    G, PK, PK0, LP, TRUNC = {}, {}, {}, {}, {}
     for s in a.seeds:
         gg = groups(s)
         if a.pre:
@@ -149,8 +149,12 @@ def main():
             r0 = reads(s, ck, 0)
             if r0:
                 out['seeds'][s][f'solved_x0_{ck}'] = {p: sum(1 for n in r0 if r0[n][2] == p and r0[n][0] > 0) for p in POOLS}
-        PK[s] = {}
+        PK[s] = {}; PK0.setdefault(s, {})
         for ck in cks:
+            r0_ = reads(s, ck, 0)
+            if r0_ is not None:      # sample seed 0 (every checkpoint since Dan's 15:46 message): a second, independent estimate
+                PK0[s][ck] = {n: {k: passk(r0_[n][1], r0_[n][0], k) for k in KS} for n in r0_}
+                out['seeds'][s].setdefault('solved_x0', {})[ck] = {p: sum(1 for n in r0_ if r0_[n][2] == p and r0_[n][0] > 0) for p in POOLS}
             r1 = reads(s, ck, 1)
             if r1 is None:
                 continue
@@ -282,7 +286,11 @@ def main():
                     ys = [np.mean([PK[s][ck][n][k] for n in PK[s][ck] if G[s][0].get(n) == grp and inpool(n, s)] or [np.nan])
                           if ck in PK[s] else np.nan for ck in cks]
                     ax.plot(xs, ys, color=c, lw=1.4, alpha=0.8, label=grp if s == min(PK) else None)
-            ax.set_title(f'pass@{k} (sample seed 1)', fontsize=10); ax.set_ylim(-0.02, 1.02); axfmt(ax)
+                    if s in PK0:
+                        y0 = [np.mean([PK0[s][ck][n][k] for n in PK0[s][ck] if G[s][0].get(n) == grp and inpool(n, s)] or [np.nan])
+                              if ck in PK0[s] else np.nan for ck in cks]
+                        ax.plot(xs, y0, color=c, lw=0.8, ls=':', alpha=0.8, label=f'{grp} (sample seed 0)' if s == min(PK) and j == 0 else None)
+            ax.set_title(f'pass@{k}: solid sample seed 1, dotted seed 0 (defines groups)', fontsize=9); ax.set_ylim(-0.02, 1.02); axfmt(ax)
             if j == 0:
                 ax.legend(fontsize=8)
         fig.suptitle(f'pass@k by group, {pname}; one line per training seed' + ('  [INTERMEDIATE, unreviewed]' if a.pre else ''), fontsize=10)
