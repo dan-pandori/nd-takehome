@@ -251,3 +251,8 @@ Brief: run brief `trajectory` (proposal 18, Dan 2026-10-01). Policy: AGENT_POLIC
 - 19:20 UTC  Bound-22 minlen added 8 textbook72 references (65 / 72; 6 timed out at 60 min, 1 outside minlen's space); scored under all 66 checkpoints, analysis re-run, conclusions unchanged. All pods deleted; 53.92 pod-hours, $28.00 of $50 / 100 h. Bucket `hf://buckets/dan-pandori/nd-rl/trajectory/{ckpts,artifacts,data}` (66 checkpoints, all reads, scores, targets, 82,324 registry rows).
 
 TRAJECTORY DONE 2026-10-01T19:20:00Z
+
+## trajectory-cap6 (executor, started 2026-10-01 19:30 UTC)
+
+- Run brief: nd-rl `docs/proposals/state-env/BRIEF_trajectory-cap6.md`; budget $40 / 80 pod-hours. Pre-registration
+  `preregistration/trajectory-cap6.md`. Code: `dan_trajectory` merged in; scripts `pod/tj6/`, `tj6_*.py`.
