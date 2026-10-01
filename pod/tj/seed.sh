@@ -11,12 +11,13 @@ if [ ! -s $CK ]; then
   ND_ARM=best12 ND_SEED=$S python3 state_train.py --recipe best --data $D --heldout data/p2/heldout.jsonl --mode lean_staten \
     --cap 12 --seed $S --budget_secs $BU --save_steps $SAVE --out $CK || exit 1
 fi
-if [ ! -s artifacts/tj/eval/heldout_$N.json ]; then
+if [ "${LADDER_ONLY:-0}" != 1 ] && [ ! -s artifacts/tj/eval/heldout_$N.json ]; then
   echo "=== heldout $N $(date -u +%FT%TZ)"
   ND_ARM=best12 ND_SEED=$S python3 state_eval.py --ckpt $CK --in data/p2/heldout.jsonl --k 1 --temperature 0 --batch 2048 \
     --out artifacts/tj/eval/heldout_$N.jsonl --summary artifacts/tj/eval/heldout_$N.json || exit 1
 fi
 up artifacts/tj
+[ "${STAGE1_ONLY:-0}" = 1 ] && { echo "=== stage1 only, done $N $(date -u +%FT%TZ)"; exit 0; }
 if [ ! -s ckpts/tj/ladder/la_T1_best12_s${S}_r8.pt ]; then
   echo "=== ladder T1 best12 s$S $(date -u +%FT%TZ)"
   ND_ARM=best12 ND_SEED=$S python3 state_ladder_ei.py --init $CK \
