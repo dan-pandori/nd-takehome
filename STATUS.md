@@ -256,7 +256,7 @@ TRAJECTORY DONE 2026-10-01T19:20:00Z
 
 - Run brief: nd-rl `docs/proposals/state-env/BRIEF_trajectory-cap6.md`; budget $40 / 80 pod-hours. Pre-registration
   `preregistration/trajectory-cap6.md`. Code: `dan_trajectory` merged in; scripts `pod/tj6/`, `tj6_*.py`.
-- 2026-10-01 21:50 **Pretraining half (UNREVIEWED, intermediate)** — fresh best-cap6 s0–s2 (9,560,832 params, `lean_staten`,
+- 2026-10-01 21:29 **Pretraining half (UNREVIEWED, intermediate)** — fresh best-cap6 s0–s2 (9,560,832 params, `lean_staten`,
   from scratch on the cap-6 set, Stage-1 1,200 s on an A40; 24.5k steps for s0, held-out greedy s0 0.973). End of pretraining,
   seed-0 reads (k 256): textbook72 17 / 14 / 15, holdout250 152 / 124 / 125 (`best-state` best-cap6: 19 / 18 / 20 and
   149 / 125 / 122) → sanity in range. Reference proofs: A's worst step climbs to ≈ −2 nats by the end; for the not-yet-solved
