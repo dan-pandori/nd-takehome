@@ -951,3 +951,18 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   textbook theorem (premise = conclusion) is outside minlen's search space. textbook72 references 65 / 72. The 8 new
   ones were scored under all 66 checkpoints (`pod/tj/score_new8.sh`, 8 / 8 Lean-accepted) and appended to
   `artifacts/tj/score/s<S>/`; analysis re-run (C reference worst step still ≈ −9 throughout; B reference Δ_RL 1.55).
+
+## trajectory-cap6 (executor, 2026-10-01)
+
+- 19:30 start. Read the brief, `BRIEF_trajectory.md`, `run_trajectory.md`, `review_trajectory.md` (verdict, rewordings,
+  next measurements) and `trajectory`'s log. Merged `origin/dan_trajectory` (tj_* code, pod/tj, references).
+- Scripts: `pod/tj6/*.sh` and `tj6_{targets,analysis,registry,compute}.py` are sed copies of `trajectory`'s (paths
+  tj → tj6, best12 → best6, `--cap 12` → 6, K12 → the cap-6 set `data/p2/train_depth3_f0_a1.jsonl` from the bucket's
+  `state-env/data/p2/`); `tj_score.py` is used unchanged. Added: `tj6_targets.py cross` + `pod/tj6/score_cross.sh`
+  (cross-seed and cap-12 eventual proofs under cap-6 checkpoints).
+- 19:33 pre-registration committed (f6e9ff57), before the first pod (tj6-p0, 19:35).
+- 19:35–19:45 trainer pods tj6-p0/p1/p2 (A40, $0.49/h); one seed each: Stage-1 (1,200 s) → held-out greedy → T1 ladder
+  on the same pod. Cap-6 set md5 29276f24… on the pods.
+- 19:50–20:10 reader pods: A40 stock ran out again; tj6-r0, tj6-r1 (A40, $0.49/h), tj6-r2, tj6-r3 (RTX A6000, $0.53/h;
+  same GA102; a sampling re-draw, not a correctness change). Four disjoint queues `pod/tj6/q0–q3.txt` (132 reads: 3 seeds
+  × 22 checkpoints × sample seeds 0 and 1, both pools; literal-text dumps for x0 at pend and r8).
