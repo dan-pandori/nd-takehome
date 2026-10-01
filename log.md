@@ -912,3 +912,19 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   0.903–0.951). Ladder s0 started on tj-p1.
 - Sample dumps (literal text of every sample) are kept only for the seed-0 reads at pend and r8 (where the eventual
   proofs are chosen); every count comes from the `state_eval` rows (`n_ok` of 256, distinct accepted proofs).
+- 08:40 Two concurrent reads on one A6000 went out of memory (25 + 19 GB of 44.4 GiB); the queue's own read survived.
+  One read per GPU from here; the failed one-off's files were deleted and seed 0's end-of-pretraining reads moved to
+  reader B (tj-p0, A40). Queue files are re-read every iteration, so they are edited live (disjoint lists kept).
+- 09:10 **Ladder s2 OOM** in round 2 sampling (chunked prefill, 43 GB allocated of the A6000's 44.4 GiB; s0's round-3 peak
+  was 29.6 GB at the same batch). **Deviation:** resumed from round 2 (`pod/tj/ladder_resume.sh`: `--resume
+  --start_round 2`, round 1's found set and checkpoint) at ladder sampling batch **1,024**; a batch change is a sampling
+  re-draw. The resumed run's replay-mix RNG restarts from the seed (as any `--resume`). s0 / s1 get the same automatic
+  resume if they fail.
+- 09:25 **Scoring definition fixed before any group result** (deviation from the pre-registration's wording "target =
+  action tokens + <eos>"): the first intermediate table showed the reference proofs' worst step at −4.18 nats for
+  nearly every A theorem, which is ln 65 — the model guessing the name base at the first `have` (training drew one
+  offset per pair, uniform over ≈ 65 values). With assign=True the environment overwrites every name an action defines
+  (`have n<k>`, a box binder), so those tokens are not the model's choice and are no longer scored; the tokens after
+  them are conditioned on the canonical names. Checked: on all 3,070 reference-proof actions, writing a wrong name at
+  exactly the masked positions makes the environment rename exactly those. The with-names total is kept
+  (`incl_names_total`). Pretraining reference scores for seed 0 re-run.

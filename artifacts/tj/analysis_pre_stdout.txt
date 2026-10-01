@@ -1,0 +1,31 @@
+# trajectory analysis (pretraining half, INTERMEDIATE); log p at T1.0, nats; model: best-cap12 recipe, 9,560,832 params, lean_staten, from scratch on K12; Lean alone
+
+## groups (seed-0 samples at pend / r8)
+seed 0: {'A': 232, 'notA': 90}  by pool {'tb72': {'A': 32, 'notA': 40}, 'h250': {'notA': 50, 'A': 200}}  A-lost 0  solved x0 pend {'tb72': 32, 'h250': 200} r8 None
+
+## tb72: mean pass@k (sample seed 1, unbiased, n 256) by group; per seed, then mean over seeds
+A      p0: @1 0.000 @256 0.000  p12000: @1 0.212 @256 0.781  pend: @1 0.377 @256 0.969
+notA   p0: @1 0.000 @256 0.000  p12000: @1 0.001 @256 0.050  pend: @1 0.000 @256 0.075
+
+## tb72: ref proof log p (T1.0) by group: median [IQR] over theorem-seed pairs
+A      p0: tot -406.8 w1 -110.48 [-139.6,-85.2] mean -49.85 (n 31)  p12000: tot -4.5 w1 -2.90 [-4.2,-1.8] mean -0.66 (n 31)  pend: tot -2.3 w1 -1.90 [-3.2,-1.0] mean -0.34 (n 31)
+notA   p0: tot -674.4 w1 -148.80 [-201.5,-107.4] mean -56.73 (n 26)  p12000: tot -18.5 w1 -7.16 [-10.5,-6.0] mean -1.52 (n 26)  pend: tot -16.7 w1 -7.49 [-8.9,-5.3] mean -1.36 (n 26)
+
+## h250: mean pass@k (sample seed 1, unbiased, n 256) by group; per seed, then mean over seeds
+A      p0: @1 0.000 @256 0.000  p12000: @1 0.270 @256 0.795  pend: @1 0.411 @256 0.975
+notA   p0: @1 0.000 @256 0.000  p12000: @1 0.008 @256 0.060  pend: @1 0.000 @256 0.020
+
+## h250: ref proof log p (T1.0) by group: median [IQR] over theorem-seed pairs
+A      p0: tot -843.5 w1 -234.64 [-284.8,-178.3] mean -83.06 (n 200)  p12000: tot -5.9 w1 -3.27 [-5.8,-1.4] mean -0.58 (n 200)  pend: tot -4.6 w1 -2.26 [-4.4,-1.0] mean -0.45 (n 200)
+notA   p0: tot -810.4 w1 -252.21 [-304.9,-184.7] mean -77.28 (n 50)  p12000: tot -23.6 w1 -9.26 [-10.9,-6.8] mean -2.09 (n 50)  pend: tot -14.1 w1 -6.81 [-8.9,-5.4] mean -1.38 (n 50)
+
+## combined: mean pass@k (sample seed 1, unbiased, n 256) by group; per seed, then mean over seeds
+A      p0: @1 0.000 @256 0.000  p12000: @1 0.262 @256 0.793  pend: @1 0.406 @256 0.974
+notA   p0: @1 0.000 @256 0.000  p12000: @1 0.005 @256 0.056  pend: @1 0.000 @256 0.044
+
+## combined: ref proof log p (T1.0) by group: median [IQR] over theorem-seed pairs
+A      p0: tot -777.0 w1 -220.46 [-277.4,-147.3] mean -78.22 (n 231)  p12000: tot -5.8 w1 -3.13 [-5.6,-1.5] mean -0.59 (n 231)  pend: tot -4.4 w1 -2.20 [-4.3,-1.0] mean -0.43 (n 231)
+notA   p0: tot -770.7 w1 -207.30 [-279.6,-153.1] mean -70.67 (n 76)  p12000: tot -21.8 w1 -8.95 [-10.9,-6.3] mean -1.97 (n 76)  pend: tot -14.6 w1 -6.90 [-8.9,-5.4] mean -1.36 (n 76)
+
+## truncation (action-truncated + step-capped, fraction of all seed-1 samples) per checkpoint
+seed 0: p0 0.90% p50 0.00% p100 0.00% p200 0.01% p400 2.00% p800 0.77% p1600 2.33% p3000 0.01% p5000 1.67% p8000 0.02% p12000 0.03% p16000 0.58% p20000 1.42% pend 0.49%

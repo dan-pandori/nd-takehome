@@ -22,6 +22,7 @@ POOLS = ('tb72', 'h250')
 KS = (1, 8, 64, 256)
 KEY = {'init': 'p0', 'mid-pretraining (12k)': 'p12000', 'end of pretraining (r0)': 'pend', 'RL r1': 'r1', 'RL r4': 'r4',
        'RL r8': 'r8'}
+YLIM = {'total': (-40, 1), 'mean': (-6, 0.2), 'w1': (-20, 0.5)}   # init / earliest checkpoints lie far below (table)
 GC = {'A': '#2a6fdb', 'B': '#e8590c', 'C': '#5f6b7a'}
 E = 'artifacts/tj/eval'
 
@@ -252,7 +253,7 @@ def main():
                     c = GC.get(grp, '#888')
                     ax.plot(xs, [np.nan if m is None else m for m in med], color=c, lw=2, label=f'{grp}')
                     ax.fill_between(xs, [np.nan if m is None else m for m in lo], [np.nan if m is None else m for m in hi], color=c, alpha=0.18)
-                ax.set_title(lab, fontsize=10); axfmt(ax)
+                ax.set_ylim(*YLIM[fld]); ax.set_title(lab + f' (axis clipped at {YLIM[fld][0]})', fontsize=10); axfmt(ax)
                 if j == 0:
                     ax.set_ylabel(f'nats ({a.T})'); ax.legend(fontsize=8)
             fig.suptitle(f'{"eventual" if kind == "ev" else "reference"} proof, {pname}: median and IQR over theorem-seed pairs '

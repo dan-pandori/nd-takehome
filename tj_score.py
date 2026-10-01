@@ -14,6 +14,11 @@ Definition (preregistration/trajectory.md; after lit-measures' lm_m1.py):
     reported as a replay failure and not scored.
   * prompt = `tok.encode_toks(env.state_tokens())`, target = action tokens + <eos>; log p from one causal forward pass
     over prompt + target, natural logs, `log_softmax(logits / T)`.
+  * the names an action DEFINES (`have n<k>`, and the binder of a box opener) are not scored: with assign=True the
+    environment overwrites whatever the model writes there, so they are not the model's choice (at the first `have` the
+    model can only guess the name base, ln 65 ~ 4.17 nats, which otherwise dominates every short proof's worst step).
+    The tokens after them are conditioned on the canonical names, as the environment renders them.  The total with
+    those tokens included is kept as `incl_names_total`.
   * the sampler draws b ~ U{0..32}: L(t) = logsumexp_b cum_b(t) - ln 33 (bases whose names would exceed MAXN have
     probability 0), step t contributes L(t) - L(t-1), L(0) = 0.  Contributions sum to log p(proof).
 """
@@ -46,6 +51,14 @@ def step_kind(x):
     if h.startswith('h'):
         return 'prem'
     return h if not is_name(h) else 'name'
+
+
+def defining(act):
+    """positions (in the action's token list) of the names the environment assigns (state_env.Env._assign_names)."""
+    if act[0] == 'exact':
+        return ()
+    j = act.index(':=')
+    return (1, j + 4) if act[j + 1] == '(' else (1, j + 6) if act[j + 1] == 'Or.elim' else (1,)
 
 
 def replay(prompt, proof):
@@ -86,7 +99,8 @@ def build(targets, tok):
                 ks = []
                 for st, act in zip(states_at(t['prompt'], t['proof'], acts, b), acts):
                     pid = tuple(tok.encode_toks(st)); qid = tuple(tok.encode_toks(shift(act, b)) + [tok.eos])
-                    seqs.setdefault((pid, qid), None); ks.append((pid, qid))
+                    key = (pid, qid, defining(act))
+                    seqs.setdefault(key, None); ks.append(key)
                 per_b.append(ks)
         except (ParseFail, ValueError, KeyError, IndexError, AssertionError) as e:
             m.update(replay_ok=False, why=str(e)[:200]); meta.append(m); continue
@@ -99,7 +113,7 @@ def build(targets, tok):
 
 @torch.no_grad()
 def score_seqs(model, keys, dev):
-    """-> {key: {T: sum log p of the target tokens}}"""
+    """-> {key: {T: sum log p of the scored target tokens, ('incl', T): sum over all target tokens}}"""
     order = sorted(range(len(keys)), key=lambda i: len(keys[i][0]) + len(keys[i][1]))
     out = {}
     i = 0
@@ -110,9 +124,9 @@ def score_seqs(model, keys, dev):
             j += 1
         j = max(j, i + 1)
         ch = [keys[order[q]] for q in range(i, j)]
-        L = max(len(p) + len(q) for p, q in ch)
+        L = max(len(p) + len(q) for p, q, _ in ch)
         x = torch.zeros((len(ch), L), dtype=torch.long)
-        for r, (p, q) in enumerate(ch):
+        for r, (p, q, _) in enumerate(ch):
             x[r, :len(p) + len(q)] = torch.tensor(p + q)
         x = x.to(dev)
         with torch.autocast('cuda', dtype=torch.bfloat16, enabled=FP16):
@@ -121,8 +135,11 @@ def score_seqs(model, keys, dev):
         tgt = x[:, 1:, None]
         for T in TEMPS:
             lp = F.log_softmax(logits / T, -1).gather(-1, tgt).squeeze(-1).double().cpu()
-            for r, (p, q) in enumerate(ch):
-                out.setdefault((p, q), {})[T] = float(lp[r, len(p) - 1:len(p) + len(q) - 1].sum())
+            for r, (p, q, dm) in enumerate(ch):
+                v = lp[r, len(p) - 1:len(p) + len(q) - 1]
+                o = out.setdefault((p, q, dm), {})
+                o[('incl', T)] = float(v.sum())
+                o[T] = float(v.sum()) - sum(float(v[d]) for d in dm)
         i = j
     return out
 
@@ -137,17 +154,19 @@ def summarise(c, kinds):
 
 def per_target(res, per_b, T):
     M = torch.tensor([[res[k][T] for k in ks] for ks in per_b], dtype=torch.float64)    # [base, step]
+    Mi = torch.tensor([[res[k][('incl', T)] for k in ks] for ks in per_b], dtype=torch.float64)
+    incl = float(torch.logsumexp(Mi.sum(1), 0) - math.log(NB))
     Lc = torch.logsumexp(M.cumsum(1), 0) - math.log(NB)
     c = torch.diff(Lc, prepend=torch.zeros(1, dtype=Lc.dtype)).tolist()
     assert abs(sum(c) - float(Lc[-1])) < 1e-6
-    return c, M[0].tolist()
+    return c, M[0].tolist(), incl
 
 
 @torch.no_grad()
 def direct_sum(model, per_b, dev):
-    """independent check of base 0: each (state, action) alone, unpadded, T 1.0."""
+    """independent check of base 0: each (state, action) alone, unpadded, T 1.0, all target tokens."""
     s = 0.0
-    for p, q in per_b[0]:
+    for p, q, _ in per_b[0]:
         x = torch.tensor([list(p) + list(q)], device=dev)
         with torch.autocast('cuda', dtype=torch.bfloat16, enabled=FP16):
             lg = model(x[:, :-1])
@@ -211,15 +230,16 @@ def main():
             for tid, per_b in plan.items():
                 o = {'tid': tid, 'ckpt': label}
                 for T in TEMPS:
-                    c, raw = per_target(res, per_b, T)
+                    c, raw, incl = per_target(res, per_b, T)
                     s = summarise(c, kinds[tid])
                     s['step_lp'] = [round(v, 4) for v in c]
                     s['raw_b0_total'] = sum(raw)
+                    s['incl_names_total'] = incl
                     o[f'T{T}'] = s
                 f.write(json.dumps(o) + '\n')
         os.replace(op + '.tmp', op)
         for tid in list(plan)[:3]:
-            d = direct_sum(model, plan[tid], dev); b = sum(res[k][1.0] for k in plan[tid][0])
+            d = direct_sum(model, plan[tid], dev); b = sum(res[k][('incl', 1.0)] for k in plan[tid][0])
             print(f'  sanity {tid}: batched {b:.4f} direct {d:.4f} |diff| {abs(b - d):.4f}', flush=True)
         print(f'{label}: {len(plan)} targets, {time.time() - t1:.1f}s', flush=True)
         del model
