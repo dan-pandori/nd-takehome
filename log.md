@@ -889,3 +889,26 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `max_steps` 192. Truncation stays 1.0–1.8 % (non-terminating actions); solved sets 0 lost, +2 / +1 / 0 / 0 gained.
 - Pre-registration vs outcome: frozen predictions hit, every T1 prediction missed high (see `run_best_state.md`).
 - Total 60.74 pod-hours, $29.76 (A40 $0.49/h); balance $329 after.
+
+## trajectory (executor, 2026-10-01)
+
+- 06:29 start. Read the proposal, the four summaries, the recipe and `lm_m1.py` (lit-measures M1, the scoring template).
+- 06:35 pre-registration `preregistration/trajectory.md` committed (68edd09e) before the first pod (tj-p0, 06:36:41).
+- Reference proofs: neither pool record nor textbook72 carries a proof text (textbook72 has only `reference_lines`; Dmitry's
+  and Robbie's copies are the same). holdout250 → ladder-A's minlen labels in the bucket (`raw_textbook_minlen.jsonl`,
+  `pool_long_minlen.jsonl`), matched by prompt: 250/250, all convert with `decompose`. textbook72 → `minlen.py` on the
+  72 prompts on tj-r0 (bound 14, 300 s): 57/72 labelled, 0 timeouts; the 15 unlabelled (reference_lines 1–33) rerun at
+  bound 22. All 307 references replay in the sampler's environment and are Lean-accepted (`lean_check`).
+- Stage-1 code: `state_train.py --save_steps` (kept checkpoints `<out>_step<N>.pt`, uploaded by `save_ckpt`; the schedule
+  clock is paused while saving, ≈ 4–6 s per save).
+- 06:36–06:50 pods. A40 stock ran out after tj-p0; A40 has the same GA102 chip as the RTX A6000, which was in stock
+  (EU-SE-1, $0.53/h). **Deviation:** all three Stage-1 runs on tj-p0 (A40, the wall-clock budget is GPU-dependent),
+  one after another; the three ladders on A6000s (tj-p1/p2/p3; the ladder is step-based, so the GPU changes only its
+  speed); reads on tj-r0 (A6000) and on tj-p0 after the Stage-1s (A40). Sampled reads are a re-draw across GPU classes
+  (bf16 reduction order), never a correctness change (`NOISE_FLOOR.md`).
+- `tj_score.py` smoke test: fp32 scoring; batched step sums equal unpadded token-by-token sums to 4 decimals (bf16
+  autocast differed by up to 0.2 nats on a 36-nat total, so fp32 it is; 35 s per checkpoint for 307 targets).
+- 07:06 Stage-1 s0 done: 24,077 steps, held-out greedy 4,603/5,000 = 0.921 (best-state best-cap12: 23,951–24,123 steps,
+  0.903–0.951). Ladder s0 started on tj-p1.
+- Sample dumps (literal text of every sample) are kept only for the seed-0 reads at pend and r8 (where the eventual
+  proofs are chosen); every count comes from the `state_eval` rows (`n_ok` of 256, distinct accepted proofs).
