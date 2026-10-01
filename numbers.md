@@ -1735,17 +1735,17 @@ not scored; `tj_score.py` → `artifacts/tj/score/s<S>/`). Per-seed group median
 | B Δ_RL (r8 − end PT) | 5.09 / 4.62 / 4.07 | 4.59 [4.18, 5.27] | +3 to +10 ✓ |
 | B Δ_PT (end PT − step 1,600) | 3.42 / 4.06 / 4.79 | 4.09 [3.50, 5.09] | −1 to +3 ✗ |
 | B Δ_RL − Δ_PT | 1.86 / −0.22 / −0.84 | 0.27 [−0.74, 1.60] | falsifier: ≤ 0 in 2 / 3 seeds → **headline falsified** |
-| B reference Δ_RL | 1.93 / 1.02 / 1.92 | 1.62 [0.83, 2.38] | < eventual by ≥ 1 in 2 / 3 ✓ (3 / 3) |
+| B reference Δ_RL | 1.79 / 0.96 / 1.89 | 1.55 [0.79, 2.31] | < eventual by ≥ 1 in 2 / 3 ✓ (3 / 3) |
 | late PT (8k → end), B / A | 1.80 / 2.77 / 3.23; 1.77 / 2.91 / 2.15 | 2.60; 2.28 | < 1.5 / < 1.0 ✗ |
-| C reference Δ_RL | −1.30 / 1.30 / 1.28 | 0.42 [−2.33, 1.60] | < 2 ✓ |
-| C reference worst step | ≤ −8.2 (IQM) at every checkpoint | — | ≤ −8 ✓ |
+| C reference Δ_RL | −3.29 / 1.46 / 1.13 | −0.23 [−1.79, 1.06] | < 2 ✓ |
+| C reference worst step | ≤ −8.5 (IQM) at every checkpoint | — | ≤ −8 ✓ |
 | total, end PT: A / B | −3.77 / −4.37 / −3.95; −16.9 / −14.2 / −15.0 | −4.03; −15.3 | ≈ −3 (−6, −1) ✓; ≈ −14 (−25, −7) ✓ |
 | total, r8: A / B | — | −2.14; −2.86 | ≈ −1.5; ≈ −3 ✓ |
 | B worst − mean of the rest, end PT | −5.89 / −5.61 / −4.98 | −5.49 | ≤ −4 ✓ |
 | B worst-step kind, end PT (165) | box opener 82 (imp 30, neg 28, Or.elim 24), ∧E proj 48, app 9, copy 6, Or.intro 12, ∧I 5, byContradiction 2, prem 1 | 49.7 % box | ≥ 50 % ✗ (marginal) |
 
 Per-step mean at end PT: A −0.34, B −1.07 (B lower by 0.73 ≥ 0.5 ✓). Proof size (median actions / Lean term size):
-eventual A 11 / 7, B 14 / 10; reference A 10 / 5, B 11 / 7, C 11 / 9.
+eventual A 11 / 7, B 14 / 10; reference A 10 / 5, B 11 / 7, C 11 / 9 (before the 8 bound-22 references were added).
 
 **pass@k** (sample seed 1, unbiased, mean over group and seeds; combined pools):
 
@@ -1764,8 +1764,8 @@ end by 0.11 / 0.12) — at the checkpoint whose seed-0 failures define B, so sel
 RL 0.00–0.15 %. Above the policy's 0.1 % during pretraining; caps held at best-state's for comparability (best-state's
 2× diagnostic: non-terminating actions, ≤ +2 solves).
 
-**Reference proofs:** holdout250 250 / 250 (ladder-A minlen labels), textbook72 57 / 72 (minlen bound 14 here); 15
-without one (bound-22 search hung once, re-running). `data/tj/ref_targets.jsonl`.
+**Reference proofs:** holdout250 250 / 250 (ladder-A minlen labels), textbook72 65 / 72 (minlen here: 57 at bound 14,
+8 more at bound 22 with 60 min per theorem; 6 timed out and the 1-line theorem is outside minlen's space). All 315 Lean-accepted. `data/tj/ref_targets.jsonl`.
 
 **Compute** (`tj_compute.py` → `artifacts/tj/compute_stdout.txt`, from record.compute rows; per seed):
 
@@ -1776,8 +1776,8 @@ without one (bound-22 search hung once, re-running). `data/tj/ref_targets.jsonl`
 | sampled reads s0 / s1 / s2 (44 reads each) | A6000 / A40 | 24,257 / 27,007 / 26,196 | 581 / 615 / 630 | 3,792 / 3,627 / 4,157 (incl. a duplicate and OOM'd attempts) | 0 | 0 | 682 / 721 / 718 |
 | teacher-forced scoring s0 / s1 / s2 (log seconds) | A6000 / A40 | ≈ 3,050 / 3,000 / 4,100 | 0 | 0 | 0 | 0 | 0 |
 
-No arm exceeds 1.25× its sibling seed. Spend: 52.8 pod-hours, $27.42 at 18:10 (`podbudget trajectory`; A40 $0.49/h,
+No arm exceeds 1.25× its sibling seed. Spend: 53.92 pod-hours, $28.00 final, all pods deleted (`podbudget trajectory`; A40 $0.49/h,
 RTX A6000 $0.53/h); budget $50 / 100 h after Dan's 15:46 raise.
 
-**Registry:** 81,796 rows (`pass_count` per theorem × checkpoint × sample seed; `tf_logp` per target × checkpoint, with
+**Registry:** 82,324 rows (81,796 + 528 for the 8 late references) (`pass_count` per theorem × checkpoint × sample seed; `tf_logp` per target × checkpoint, with
 per-step log p) in `artifacts/trajectory/registry/`. **Bucket:** `hf://buckets/dan-pandori/nd-rl/trajectory/{ckpts,artifacts,data}`.

@@ -13,8 +13,8 @@ unscored. pass@k: sample seed 1. Medians over theorem-seed pairs.
 |---|---|---|---|---|---|---|---|
 | A | eventual worst step | −215 | −4.2 | −2.1 | −1.2 | −1.0 | −1.0 |
 | B | eventual worst step | −191 | −8.2 | −6.3 | −4.4 | −1.8 | −1.3 |
-| B | reference worst step | −189 | −7.4 | −5.8 | −4.8 | −4.3 | −4.4 |
-| C | reference worst step | −241 | −9.3 | −8.8 | −9.4 | −9.0 | −8.8 |
+| B | reference worst step | −187 | −7.6 | −5.8 | −4.7 | −4.3 | −4.5 |
+| C | reference worst step | −217 | −9.5 | −8.9 | −9.2 | −9.2 | −9.1 |
 | A / B / C | pass@1 | 0 | .18 / .007 / 0 | .40 / .001 / 0 | .77 / .12 / 0 | .83 / .44 / 0 | .85 / .56 / 0 |
 | A / B / C | pass@256 | 0 | .72 / .11 / 0 | .97 / .15 / 0 | .99 / .65 / .01 | .99 / .91 / .07 | .99 / .96 / .05 |
 
@@ -23,9 +23,9 @@ unscored. pass@k: sample seed 1. Medians over theorem-seed pairs.
    +4.1 nats (IQM; per seed 3.4 / 4.1 / 4.8). In RL it rises +4.6 (5.1 / 4.6 / 4.1), mostly in r1–r4. The pre-registered
    headline ("mainly in RL") is **falsified**: Δ_RL ≤ Δ_PT in 2 of 3 seeds. At the end of pretraining, B is within
    reach but improbable: worst step −6.2, total −15 nats, pass@256 0.15.
-2. **RL lifts its own proofs, not known ones.** For B, the reference proof's worst step gains +1.6 nats in RL (all at r1),
+2. **RL lifts its own proofs, not known ones.** For B, the reference proof's worst step gains +1.5 nats in RL (nearly all at r1),
    against +4.6 for the eventual proof (3 / 3 seeds).
-3. **C stays at one bad step.** Its reference worst step is about −9 nats through all of RL (Δ_RL +0.4).
+3. **C stays at one bad step.** Its reference worst step is about −9 nats through all of RL (Δ_RL −0.2).
 4. B's bad step at the end of pretraining: a box opener in 82 / 165, an ∧E projection in 48.
 
 Example (B, seed 0, `la_transfer_1015`, eventual proof): the worst step is `n5 := n1.2`, at −14.9 nats at the end of
@@ -48,5 +48,5 @@ hit: textbook72 32 / 32 / 38 → 48 / 49 / 54 (best-state 27–32 → 51–52). 
 Δ_PT was +4.1 against a predicted −1 to +3, and late pretraining is not flat. pass@1 at r8 is higher than predicted.
 B's pass@256 dips at the checkpoint that defines the groups; that is selection, not a reversal.
 
-**Limits.** n = 3. Pretraining reads truncate 0.1–3.5 % of samples; the caps were held at best-state's values. 15 / 72
-textbook theorems have no reference proof. Spend: 52.8 pod-hours, $27.42.
+**Limits.** n = 3. Pretraining reads truncate 0.1–3.5 % of samples; the caps were held at best-state's values. 7 / 72
+textbook theorems have no reference proof. Spend: 53.9 pod-hours, $28.00 (budget $50).

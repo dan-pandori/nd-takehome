@@ -947,3 +947,7 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   Relaunched from a script (`pod/tj/minlen22.sh`, 60 min per theorem). Meanwhile: all 264 sampled reads done (both
   sample seeds at all 22 checkpoints × 3 seeds × 2 pools; one at batch 1,024 after OOM); reader pods tj-r1–r4 and tj-p0
   deleted after pulling. Registry: 81,796 per-theorem rows (`tj_registry.py`).
+- 19:00 Bound-22 minlen (per theorem, 60 min): 9 finished, 8 with a proof (15–19 lines), 6 timed out; the 1-line
+  textbook theorem (premise = conclusion) is outside minlen's search space. textbook72 references 65 / 72. The 8 new
+  ones were scored under all 66 checkpoints (`pod/tj/score_new8.sh`, 8 / 8 Lean-accepted) and appended to
+  `artifacts/tj/score/s<S>/`; analysis re-run (C reference worst step still ≈ −9 throughout; B reference Δ_RL 1.55).
