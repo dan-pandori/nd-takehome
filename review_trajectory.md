@@ -184,3 +184,77 @@ rankings are comparable.
   The run's only training-code change is `--save_steps` (checkpoint saving with the schedule clock paused).
 
 No hard-constraint violation.
+
+## Compare (phase 2 — `run_trajectory.md`, `numbers.md` § trajectory, `log.md` read after the recount was committed in 79016ade)
+
+Model for every row: fresh best-cap12 s0 / s1 / s2 (ALiBiGPT 9,560,832 params, `lean_staten`, from scratch on K12,
+1,200 s Stage-1 + T1 ladder), Lean-only. The write-up labels its models correctly in its header and in `numbers.md`;
+the bracketed `best-state` numbers are labelled as `best-state` best-cap12 (also Lean-only, post-2026-09-27).
+
+| claim (executor) | my value | verdict |
+|---|---|---|
+| Groups A 232 / 236 / 234, B 54 / 51 / 60, C 36 / 35 / 28, A-lost 0 / 1 / 1 | identical | reproduces |
+| Sanity: tb72 r0 32 / 32 / 38, r8 48 / 49 / 54; h250 r0 200 / 204 / 196, r8 238 / 237 / 239 | identical | reproduces |
+| Held-out greedy 0.921 / 0.936 / 0.962; ladder cumulative 4,383 / 4,365 / 4,407 of 4,495 | identical (summary files, round_8.json) | reproduces |
+| Key-checkpoint table, worst-step medians over theorem-seed pairs (A ev −215 / −4.2 / −2.1 / −1.2 / −1.0 / −1.0; B ev −191 / −8.2 / −6.3 / −4.4 / −1.8 / −1.3; B ref −187 / −7.6 / −5.8 / −4.7 / −4.3 / −4.5; C ref −217 / −9.5 / −8.9 / −9.2 / −9.2 / −9.1) | identical to 0.1 | reproduces |
+| pass@1 / pass@256 table (mean over group and seeds, x1) | identical to 0.001 | reproduces |
+| Per-step log p values themselves | my CPU re-score of 386 target-checkpoint pairs: max diff 7e-5 nats | reproduces |
+| Eventual proof = r8's most likely accepted x0 sample | 0 mismatches / 865; candidate set = accepted set | reproduces |
+| B Δ_RL 5.09 / 4.62 / 4.07 (IQM 4.59), Δ_PT 3.42 / 4.06 / 4.79 (IQM 4.09), w1 r0 −6.58 / −6.53 / −5.50, r8 −1.28 / −1.34 / −1.24 | identical (bootstrap CIs within 0.1) | reproduces |
+| Finding 1: "The pre-registered headline ('mainly in RL') is **falsified**: Δ_RL ≤ Δ_PT in 2 of 3 seeds" | The 2 / 3 is the *paired* median of (Δ_RL − Δ_PT) (+1.86 / −0.22 / −0.84). The pre-registered falsifier compares group medians, median_B Δ_RL ≤ median_B Δ_PT: 5.09 > 3.42, 4.62 > 4.06, 4.07 ≤ 4.79 → **1 / 3, not triggered**. The pre-registered decision rule (all three seeds in one direction, else "not resolved at n = 3") gives **not resolved**. The miss that *is* clean: Δ_PT predicted −1 to +3, observed +3.4 to +4.8 (3 / 3) | **reword**: "not supported / not resolved at n = 3; Δ_PT far above prediction", not "falsified" by the pre-registered falsifier. The substance ("climbs about as much after step 1,600 as in RL") stands |
+| Finding 1: "as much **late** in pretraining as in RL" | Δ_PT runs from step 1,600 (≈ 7 % of pretraining) to the end; the 8k → end part is +1.8 / +2.8 / +3.2 | reword "late" → "after step 1,600" (or quote the 8k → end numbers) |
+| Finding 1: "At the end of pretraining B is within reach but improbable: worst step −6.2, total −15, pass@256 0.15" | −6.21; −16.9 / −14.2 / −15.0; 0.074 / 0.176 / 0.183 (x1) | reproduces (pass@256 is biased down by group selection — the write-up says so) |
+| Finding 2: "RL lifts its own proofs, **not known ones**": reference Δ_RL +1.5 vs eventual +4.6, 3 / 3; "nearly all at r1" | +1.79 / +0.96 / +1.89 (IQM 1.55, CI [0.79, 2.31] excludes 0) vs +5.09 / +4.62 / +4.07; pooled reference gain pend → r1 +1.03 of +1.31 | numbers reproduce; **reword** "not known ones": RL does lift the known proof (+1.5 nats, CI excludes 0), just less. Part of the eventual-vs-reference gap is by construction (the eventual proof is chosen as r8's argmax, so its r8 likelihood is selected upward); say so |
+| Finding 3: "C stays at **one bad step**", worst step ≈ −9 through RL, Δ_RL −0.2 | worst step: reproduces (pooled −8.9 → −9.1; IQM Δ_RL −0.23). But C's references usually have a *second* bad step: median second-worst −6.0 / −6.9 / −7.9 at r0 and −5.7 / −4.2 / −5.0 at r8; 55–86 % have a second step below −4 nats | **not supported** as "one bad step"; reword to "the worst step stays near −9 to −10 nats; most also have a second step below −4" |
+| `numbers.md`: "C reference worst step ≤ −8 at every checkpoint ✓" | pre-registered per seed: fails at step 20,000 in s0 (−6.68) and s1 (−7.82); holds at every RL checkpoint and on the across-seed IQM | **reword**: ✓ only on the IQM; per seed a miss in 2 / 3 (at one pretraining checkpoint) |
+| `numbers.md`: "C reference Δ_RL < 2 ✓" (IQM −0.23) | per seed −3.29 / +1.46 / +1.13; \|−3.29\| > 2 in s0 | **reword**: miss in s0 (RL makes s0's C references *less* likely) |
+| Finding 4: B's r0 worst step a box opener in 82 / 165 (imp 30, neg 28, Or.elim 24), ∧E projection 48 | box openers 82 (30 / 28 / 24) identical; never an `exact` | reproduces |
+| Example `la_transfer_1015` (s0, B, eventual): worst step `n1.2` −14.9 end PT, −7.7 r1, −1.1 r4, −0.37 r8; "every other step above −0.6 throughout" | −14.85, −7.66, −1.09, −0.37; other steps ≥ −0.57 at those four checkpoints (in pretraining before the end they reach −3.2 to −106). It is in my heatmap-rule set for B (seed 0) | reproduces ("throughout" = the four quoted checkpoints) |
+| Expected vs outcome: group sizes A ✗, B ✗ (2 seeds), C ✓; B r8 pass@1 ✗; A r8 pass@1 ✗; late-PT flat ✗; B pass@256 monotone ✗ (2 / 3, selection); concentration kind ≥ 50 % ✗ marginal | same verdicts | reproduces; misses are reported as misses |
+| Limits: "Pretraining reads truncate **0.1–3.5 %** of samples"; `numbers.md`: "pretraining 0–3.5 % (9.8 % at s1's init), RL 0.00–0.15 %" | per checkpoint overall: 0–9.8 % (PT), 0.00–0.15 % (RL) reproduce. **Per stratum (pool × group), which is what the policy's 0.1 % rule is about:** up to 18.7 % in pretraining (s1 step 12,000, h250-C) and 1.7 % in RL (s1 r5, h250-C); 44 / 144 RL strata and ≈ 50 % of PT strata exceed 0.1 % | **reword**: the run doc's "0.1–3.5 %" contradicts `numbers.md`'s own 9.8 %; and the per-stratum rates on C (and on B in pretraining) are much higher than the overall ones. Caps not raising was pre-registered, so this is a disclosure issue, not a protocol breach; truncation can only move C → B |
+| Proof size (median actions / term size): eventual A 11 / 7, B 14 / 10; reference A 10 / 5, B 11 / 7, C 11 / 9 | actions identical (C 12 with the 8 bound-22 references, as the write-up notes); term size on my own definition 29 / 40–43 / 24 / 31 / 36–47 — same ordering | reproduces (different size definition; ranks agree) |
+| All 315 references and all eventual proofs Lean-accepted | 896 / 896 distinct targets accepted (my renderer + axioms check) | reproduces |
+| Compute table; "no arm exceeds 1.25× its sibling seed"; 53.92 pod-hours, $28.00 | `podbudget trajectory`: 53.92 h, $28.00; ladder GPU-s max / min 1.21, reads 1.11; registry has `gpu_seconds`, `gen_tokens`, `lean_checks`, `train_steps`, `train_tokens` rows | spend reproduces; GPU-seconds not re-derived from logs (not derivable independently here beyond the registry rows) |
+| Pre-registration before the first pod (gate 0) | commit 68edd09e 06:35:22Z; first pod tj-p0 06:37:01Z (`~/pods.log`); file not changed afterwards | holds |
+| Scoring change at 09:25 (stop scoring env-assigned names) "before any group result" | logged as a deviation with its reason; the change is correct for the sampler (the env overwrites those tokens). Caveat (R5a): tokens after an introduced name are scored given the canonical name, while the sampler conditions them on the model's own sampled name | stands; add the caveat |
+
+Hard constraints: none violated (R9). One inherited textbook72 ↔ K12 renaming-class overlap (`P ∨ Q, ¬P ⊢ Q`), as in
+`best-state`; it is in A in every seed, so it does not touch B or C.
+
+## Verdict
+
+**Stands.** Every count, group, pass@k value, per-step log p and table entry reproduces from the raw files, and an
+independent CPU re-score matches the stored per-step log p to 1e-4 nats. Lean accepts every counted proof checked
+(1,350 / 1,350 sampled + 896 / 896 targets; negative controls behave). The sanity check against `best-state` holds.
+The pre-registration was committed before the first pod, and its misses are reported as misses. Substantive results that
+stand at n = 3:
+(i) B's eventual-proof worst step goes from ≈ −6.2 at the end of pretraining to ≈ −1.3 at r8, most of it by r4;
+(ii) after step 1,600 that worst step rises about as much in pretraining (+4.1) as in RL (+4.6); the paired difference
+spans 0;
+(iii) B's eventual proofs gain far more in RL than B's fixed reference proofs (+4.6 vs +1.5, 3 / 3 seeds);
+(iv) C's reference proofs do not improve under RL.
+
+**Must be reworded.**
+1. "Headline **falsified**": the pre-registered falsifier compares group medians and fires in 1 / 3 seeds. The
+   pre-registered rule makes this "not resolved at n = 3". The clean miss is Δ_PT (3 / 3 above its range).
+2. "late in pretraining" → "after step 1,600".
+3. "RL lifts its own proofs, **not known ones**" → "lifts the known proof too (+1.5, CI excludes 0), three times less".
+   Also note that eventual proofs are selected by r8's likelihood, so part of the gap is by construction.
+4. "C stays at **one** bad step": most C references have a second step below −4 nats.
+5. `numbers.md` ✓ marks for C (≤ −8 at every checkpoint; |Δ_RL| < 2) hold only on the IQM. Per seed, as
+   pre-registered, they miss in 2 / 3 and 1 / 3.
+6. Truncation: state per-stratum rates (up to 18.7 % in pretraining and 1.7 % in RL, both on C), and fix the run
+   doc's "0.1–3.5 %", which contradicts `numbers.md`'s 9.8 %.
+
+**Not supported.** "One bad step" for C (above). No claim rests on `nd_verify`, and none lacks a model label.
+
+**Next measurements.**
+(a) To separate selection from learning in Finding 2: pick the eventual proof from an *independent* r8 sample (e.g. the
+x1 draw), or score r8's argmax under a held-out seed's r8. Then Δ_RL on eventual proofs is not inflated by choosing
+r8's own most likely sample.
+(b) Define B by a sample draw disjoint from the pass@k draw at *both* endpoints. This removes the B pass@256 dip at r0.
+(c) Score with the within-action name conditioning the sampler actually uses (marginalise the model's own name token)
+on a subset, to bound the caveat in R5a.
+(d) Re-read the C and pretraining strata at 2× `max_action` to bound truncation's effect on C → B.
+(e) 5+ seeds to resolve Δ_RL vs Δ_PT: the measured seed SD (≈ 0.5–0.7 nats per group median) gives an MDD of about
+2 nats at n = 3, against a measured difference of +0.5.
