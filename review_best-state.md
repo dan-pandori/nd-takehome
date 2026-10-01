@@ -255,7 +255,7 @@ and ≤ 1 / 72, so worth one line.
 5. "An independent review found no result-changing bug": say it was the executor's own code-review subagent.
 6. Compute: say the 2× mixes GPU classes. On the same class (A40) it is 1.6–1.9×.
 7. Caps: report truncation per stratum (worst 4.1 %), say most best-arm read-outs exceed 0.1 %, and say the 2× diagnostic
-   covered 4 of 26 best-arm read-outs, chosen as worst by truncation or step cap, with Fz best6 s2 long2 not included.
+   covered 4 of the 72 best-arm read-outs, chosen as worst by truncation or step cap, with Fz best6 s2 long2 not included.
 8. Label Robbie's combined model (runs, format) where it is quoted.
 
 **Not supported.** Nothing that the conclusions rest on. The interaction ("cap 12 helps less on the better network") is
