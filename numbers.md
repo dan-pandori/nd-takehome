@@ -1473,3 +1473,231 @@ prefilter.) Smoke 2 (after the review fixes; `artifacts/grpo_state/smoke2_*/roun
 targets, 64 transfer and 200 held-out theorems (the first lines of each pool) only to exercise the boundary path.
 Pods: `gs-smoke` RTX 3090 0.23 h $0.11, `gs-smoke2` A40 ($0.49/h) 0.09 h $0.05; total 0.32 h, $0.16. Bucket: `hf://buckets/dan-pandori/nd-rl/grpo-state/{artifacts/grpo_state,artifacts/grpo-state,ckpts/grpo_state}`
 (rows in `artifacts/MANIFEST.jsonl`).
+
+
+## best-state (2026-09-30 / 10-01)
+
+**Models.** All `lean_staten` (proof-state format, SN-v2 naming), sampled in the proof-state environment, **Lean alone
+decides** (state env gate, `lean_judge`).
+- **best-cap6 s0–s2** (new): `ckpts/bs/stage1_best6_s{0,1,2}_b1200.pt`, 9,560,832 params, Robbie's recipe ported
+  (`state_train.py --recipe best`: 6 × 384 Peri-LN, ALiBi/NoPE, Muon + AdamW, MTP 0.3, token budget 128 × 144), from
+  scratch, 1,200 s on one A40 (≈ 24,000 steps, 6.8 epochs of pairs), on the cap-6 control set
+  `data/p2/train_depth3_f0_a1.jsonl` (155,000; md5 29276f24…). T1 = + 8 ladder rounds:
+  `ckpts/bs/ladder/la_T1_best6_s{0,1,2}_r8.pt`.
+- **best-cap12 s0–s2** (new): `ckpts/bs/stage1_best12_s{0,1,2}_b1200.pt`, same recipe and budget (≈ 24,000 steps, 3.7
+  epochs), on K12 `data/kh/train_k12.jsonl` (155,000; md5 800b5486…). T1: `ckpts/bs/ladder/la_T1_best12_s{0,1,2}_r8.pt`.
+- **ours-cap6** (inherited): SN-v2 cap-6 Stage-1 / T1 s0–s1 (`state-env`), 3,216,384 params, `state_train.py` 6,000 × 128
+  proofs, same cap-6 set. **ours-cap12** (inherited): SN-cap12 Stage-1 / T1 s0–s3 (`state-cap12`), 3,216,384 params, K12.
+- T1 protocol for every cell: `state_ladder_ei.py` defaults (8 rounds, k 32, T 0.8, `rl_targets.jsonl`, replay from the
+  cell's Stage-1 set, `max_steps` 48, `max_action` 256); new ladders at batch 2,048 (inherited: 2,048).
+- Budget rule (pre-registered): pilot seed 0 cap 6, 300 s → held-out greedy 0.9424 / val 0.0709
+  (`artifacts/bs/eval/heldout_best6_s0_b300.json`), 1,200 s → 0.9626 / 0.0715 → 1,200 s.
+
+**Read-out settings.** textbook72: `state_eval.py` k 256, T 0.8, seed 0, `max_action` 512, `max_steps` 96 (= the
+`textbook72` run; inherited values from its `summary.json` on `dan_textbook72`). Dev metric (Robbie's): dev half of
+`data/ladder/transfer.jsonl` by `sha1(key) % 2 == 0` (1,108, all L_true ≥ 7; `data/bs/dev1108.jsonl`), k 64, solved count.
+holdout250: his `passk.py` pool (`data/bs/holdout250.jsonl`), k 256. rr600 / transfer_long2: `lpool_reread.py` k 256,
+`max_action` 512, `max_steps` 96 (inherited SN-cap12 / SN-v2 Q at `max_steps` 48 from `state-cap12`; inherited long2 from
+`long-pool-2` except SN-v2 frozen, read here). Held-out greedy: `data/p2/heldout.jsonl` 5,000, k 1, T 0. Read batch 2,048
+everywhere here (inherited reads used 2,048–4,096: a sampling re-draw, `NOISE_FLOOR.md`). Sources: new
+`artifacts/bs/eval/<ckpt>__<read>.json(l)`; inherited dev / h250 / long2 / held `artifacts/bs/eval/{Fz,T1}_SN*__*.json(l)`;
+literal texts of every sample in `hf://…/best-state/artifacts/bs/dump/*.jsonl.gz`. Tables: `python3 bs_analysis.py`
+(→ `artifacts/bs/analysis_stdout.txt`, `summary.json`). IQM with stratified-bootstrap 95 % interval; at n = 3 the IQM is
+the mean. L_true labels are ND-derived upper bounds under Lean.
+
+### textbook72 all 72
+
+| cell | frozen per seed | frozen IQM | T1 per seed | T1 IQM |
+|---|---|---|---|---|
+| ours-cap6 | 16 / 14 | 15 [14, 16] | 22 / 16 | 19 [16, 22] |
+| best-cap6 | 19 / 18 / 20 | 19 [18, 20] | 39 / 40 / 33 | 37.3333 [33, 40] |
+| ours-cap12 | 26 / 29 / 32 / 26 | 27.5 [26, 32] | 37 / 38 / 36 / 38 | 37.5 [36, 38] |
+| best-cap12 | 32 / 27 / 27 | 28.6667 [27, 32] | 52 / 51 / 52 | 51.6667 [51, 52] |
+
+### textbook72 dev58
+
+| cell | frozen per seed | frozen IQM | T1 per seed | T1 IQM |
+|---|---|---|---|---|
+| ours-cap6 | 13 / 12 | 12.5 [12, 13] | 18 / 12 | 15 [12, 18] |
+| best-cap6 | 13 / 13 / 15 | 13.6667 [13, 15] | 34 / 33 / 26 | 31 [26, 34] |
+| ours-cap12 | 20 / 23 / 26 / 21 | 22 [20, 26] | 30 / 32 / 30 / 32 | 31 [30, 32] |
+| best-cap12 | 27 / 22 / 21 | 23.3333 [21, 27] | 42 / 44 / 42 | 42.6667 [42, 44] |
+
+### textbook72 train14
+
+| cell | frozen per seed | frozen IQM | T1 per seed | T1 IQM |
+|---|---|---|---|---|
+| ours-cap6 | 3 / 2 | 2.5 [2, 3] | 4 / 4 | 4 [4, 4] |
+| best-cap6 | 6 / 5 / 5 | 5.33333 [5, 6] | 5 / 7 / 7 | 6.33333 [5, 7] |
+| ours-cap12 | 6 / 6 / 6 / 5 | 6 [5, 6] | 7 / 6 / 6 / 6 | 6 [6, 7] |
+| best-cap12 | 5 / 5 / 6 | 5.33333 [5, 6] | 10 / 7 / 10 | 9 [7, 10] |
+
+### dev metric (1,108, k 64, >= 7)
+
+| cell | frozen per seed | frozen IQM | T1 per seed | T1 IQM |
+|---|---|---|---|---|
+| ours-cap6 | 405 / 329 | 367 [329, 405] | 746 / 663 | 704.5 [663, 746] |
+| best-cap6 | 569 / 466 / 506 | 513.667 [466, 569] | 1002 / 986 / 1002 | 996.667 [986, 1002] |
+| ours-cap12 | 745 / 782 / 804 / 781 | 781.5 [745, 804] | 927 / 972 / 961 / 940 | 950.5 [927, 972] |
+| best-cap12 | 782 / 767 / 741 | 763.333 [741, 782] | 1058 / 1050 / 1055 | 1054.33 [1050, 1058] |
+
+### holdout250 pass@256
+
+| cell | frozen per seed | frozen IQM | T1 per seed | T1 IQM |
+|---|---|---|---|---|
+| ours-cap6 | 103 / 83 | 93 [83, 103] | 169 / 151 | 160 [151, 169] |
+| best-cap6 | 149 / 125 / 122 | 132 [122, 149] | 226 / 229 / 227 | 227.333 [226, 229] |
+| ours-cap12 | 183 / 188 / 198 / 185 | 186.5 [183, 198] | 217 / 221 / 223 / 219 | 220 [217, 223] |
+| best-cap12 | 184 / 195 / 182 | 187 [182, 195] | 239 / 237 / 237 | 237.667 [237, 239] |
+
+### rr600 Q (13-16, /380)
+
+| cell | frozen per seed | frozen IQM | T1 per seed | T1 IQM |
+|---|---|---|---|---|
+| ours-cap6 | 3 / 0 | 1.5 [0, 3] | 102 / 28 | 65 [28, 102] |
+| best-cap6 | 8 / 4 / 7 | 6.33333 [4, 8] | 350 / 346 / 339 | 345 [339, 350] |
+| ours-cap12 | 134 / 212 / 228 / 216 | 214 [134, 228] | 233 / 295 / 320 / 317 | 306 [233, 320] |
+| best-cap12 | 271 / 237 / 216 | 241.333 [216, 271] | 377 / 375 / 376 | 376 [375, 377] |
+
+### transfer_long2 (/21)
+
+| cell | frozen per seed | frozen IQM | T1 per seed | T1 IQM |
+|---|---|---|---|---|
+| ours-cap6 | 0 / 0 | 0 [0, 0] | 0 / 0 | 0 [0, 0] |
+| best-cap6 | 0 / 0 / 0 | 0 [0, 0] | 18 / 18 / 17 | 17.6667 [17, 18] |
+| ours-cap12 | 3 / 1 / 3 / 5 | 3 [1, 5] | 8 / 15 / 17 / 14 | 14.5 [8, 17] |
+| best-cap12 | 10 / 5 / 4 | 6.33333 [4, 10] | 21 / 21 / 20 | 20.6667 [20, 21] |
+
+### held-out greedy
+
+| cell | frozen per seed | frozen IQM | T1 per seed | T1 IQM |
+|---|---|---|---|---|
+| ours-cap6 | 0.970 / 0.958 | 0.964 [0.958, 0.970] | 0.972 / 0.971 | 0.971 [0.971, 0.972] |
+| best-cap6 | 0.963 / 0.967 / 0.955 | 0.962 [0.955, 0.967] | 0.992 / 0.996 / 0.994 | 0.994 [0.992, 0.996] |
+| ours-cap12 | 0.969 / 0.977 / 0.978 / 0.974 | 0.976 [0.969, 0.978] | 0.963 / 0.976 / 0.973 / 0.979 | 0.975 [0.963, 0.979] |
+| best-cap12 | 0.926 / 0.951 / 0.903 | 0.927 [0.903, 0.951] | 0.992 / 0.990 / 0.993 | 0.992 [0.990, 0.993] |
+
+### best − ours (IQM difference; MDD from the pre-registration)
+
+| quantity | cap | frozen | T1 | MDD |
+|---|---|---|---|---|
+| tb72 | 6 | +4.0 | +18.3 | 9.3 |
+| tb72 | 12 | +1.2 | +14.2 | 6.5 |
+| dev | 6 | +146.7 | +292.2 | 88 |
+| dev | 12 | -18.2 | +103.8 | 61 |
+| h250 | 6 | +39.0 | +67.3 | – |
+| h250 | 12 | +0.5 | +17.7 | – |
+| Q | 6 | +4.8 | +280.0 | – |
+| Q | 12 | +27.3 | +70.0 | – |
+| long2 | 6 | +0.0 | +17.7 | – |
+| long2 | 12 | +3.3 | +6.2 | – |
+
+### textbook72 by reference_lines (per seed)
+
+| checkpoint | 1-5 | 6-10 | 11-15 | 16+ | train14 |
+|---|---|---|---|---|---|
+| Fz_SN6_s0 | 5 | 8 | 0 | 0 | 3 |
+| Fz_SN6_s1 | 5 | 7 | 0 | 0 | 2 |
+| T1_SN6_s0 | 5 | 12 | 1 | 0 | 4 |
+| T1_SN6_s1 | 5 | 7 | 0 | 0 | 4 |
+| Fz_best6_s0 | 5 | 8 | 0 | 0 | 6 |
+| Fz_best6_s1 | 5 | 8 | 0 | 0 | 5 |
+| Fz_best6_s2 | 5 | 10 | 0 | 0 | 5 |
+| T1_best6_s0 | 5 | 22 | 6 | 1 | 5 |
+| T1_best6_s1 | 5 | 20 | 7 | 1 | 7 |
+| T1_best6_s2 | 5 | 18 | 2 | 1 | 7 |
+| Fz_SN12_s0 | 5 | 12 | 2 | 1 | 6 |
+| Fz_SN12_s1 | 5 | 14 | 4 | 0 | 6 |
+| Fz_SN12_s2 | 5 | 17 | 4 | 0 | 6 |
+| Fz_SN12_s3 | 5 | 13 | 3 | 0 | 5 |
+| T1_SN12_s0 | 5 | 18 | 5 | 2 | 7 |
+| T1_SN12_s1 | 5 | 18 | 7 | 2 | 6 |
+| T1_SN12_s2 | 5 | 18 | 4 | 3 | 6 |
+| T1_SN12_s3 | 5 | 19 | 6 | 2 | 6 |
+| Fz_best12_s0 | 5 | 16 | 6 | 0 | 5 |
+| Fz_best12_s1 | 5 | 15 | 2 | 0 | 5 |
+| Fz_best12_s2 | 5 | 13 | 3 | 0 | 6 |
+| T1_best12_s0 | 5 | 22 | 10 | 5 | 10 |
+| T1_best12_s1 | 5 | 23 | 12 | 4 | 7 |
+| T1_best12_s2 | 5 | 23 | 11 | 3 | 10 |
+
+### textbook72, shortest accepted proof per solved problem (new checkpoints)
+
+| checkpoint | solved | median lines | median term size | lean_check ok |
+|---|---|---|---|---|
+| Fz_best12_s0 | 32 | 8 | 6 | 32/32 |
+| Fz_best12_s1 | 27 | 6 | 4 | 27/27 |
+| Fz_best12_s2 | 27 | 6 | 4 | 27/27 |
+| Fz_best6_s0 | 19 | 6 | 4 | 19/19 |
+| Fz_best6_s1 | 18 | 6 | 4 | 18/18 |
+| Fz_best6_s2 | 20 | 6 | 4 | 20/20 |
+| T1_best12_s0 | 52 | 9 | 7 | 52/52 |
+| T1_best12_s1 | 51 | 9 | 7 | 51/51 |
+| T1_best12_s2 | 52 | 9 | 7 | 52/52 |
+| T1_best6_s0 | 39 | 7 | 5 | 39/39 |
+| T1_best6_s1 | 40 | 7 | 5 | 40/40 |
+| T1_best6_s2 | 33 | 7 | 4 | 33/33 |
+
+Term size = `lean_check`'s inference-node count of the shortest accepted proof's elaborated term (the `textbook72` run's
+measure), median over the problems that checkpoint solves; lines = written `lean_seq` lines.
+
+**Compute** (`python3 bs_compute.py` → `artifacts/bs/compute_stdout.txt`; registry rows `artifacts/best-state/registry/`).
+Ladder rows include the sampling of aborted first attempts (OOM before the ALiBi memory fixes): s0 cap 6 two, the other
+five one each (≈ 144k attempts each); a clean ladder is 1,794k attempts.
+
+## Compute per arm and seed (A40 for every new job; `gpu_seconds` from record.compute)
+
+| arm | seed | kind | GPU-s | gen tokens (M) | attempts (k) | train steps | train tokens (M) | Lean checks (k) |
+|---|---|---|---|---|---|---|---|---|
+| best-cap12 | 0 | T1 ladder (sampling, eval, fine-tune) | 25,876 | 419.1 | 1,938 | 4,800 | 767 | 1,282 |
+| best-cap12 | 0 | read-outs | 8,609 | 172.3 | 635 | 0 | 0 | 226 |
+| best-cap12 | 0 | stage1 | 1,292 | 0.0 | 0 | 23,951 | 440 | 0 |
+| best-cap12 | 1 | T1 ladder (sampling, eval, fine-tune) | 30,524 | 395.5 | 1,938 | 4,800 | 723 | 1,292 |
+| best-cap12 | 1 | read-outs | 10,855 | 170.2 | 635 | 0 | 0 | 226 |
+| best-cap12 | 1 | stage1 | 1,283 | 0.0 | 0 | 23,987 | 441 | 0 |
+| best-cap12 | 2 | T1 ladder (sampling, eval, fine-tune) | 28,952 | 393.4 | 1,938 | 4,800 | 707 | 1,299 |
+| best-cap12 | 2 | read-outs | 8,719 | 156.4 | 635 | 0 | 0 | 217 |
+| best-cap12 | 2 | stage1 | 1,290 | 0.0 | 0 | 24,123 | 443 | 0 |
+| best-cap6 | 0 | T1 ladder (sampling, eval, fine-tune) | 20,057 | 365.8 | 2,225 | 4,800 | 556 | 1,123 |
+| best-cap6 | 0 | pilot (300 s) | 382 | 0.0 | 0 | 5,028 | 92 | 0 |
+| best-cap6 | 0 | read-outs | 6,300 | 145.7 | 711 | 0 | 0 | 166 |
+| best-cap6 | 0 | stage1 | 1,261 | 0.0 | 0 | 24,178 | 444 | 0 |
+| best-cap6 | 1 | T1 ladder (sampling, eval, fine-tune) | 16,881 | 330.0 | 1,794 | 4,800 | 500 | 1,060 |
+| best-cap6 | 1 | read-outs | 5,197 | 129.4 | 635 | 0 | 0 | 144 |
+| best-cap6 | 1 | stage1 | 1,275 | 0.0 | 0 | 23,974 | 441 | 0 |
+| best-cap6 | 2 | T1 ladder (sampling, eval, fine-tune) | 17,885 | 349.8 | 1,938 | 4,800 | 517 | 1,077 |
+| best-cap6 | 2 | read-outs | 5,065 | 131.6 | 635 | 0 | 0 | 143 |
+| best-cap6 | 2 | stage1 | 1,267 | 0.0 | 0 | 23,999 | 441 | 0 |
+
+## Inherited arms (from copied logs; see docstring)
+
+| arm | seed | GPU | Stage-1 s | Stage-1 train tokens (M, est.) | ladder s (8 rounds) |
+|---|---|---|---|---|---|
+| ours-cap6 | 0 | RTX 3090 / RTX PRO 4000 (state-env pods) | 782 | 333 | 8,297 |
+| ours-cap6 | 1 | RTX 3090 / RTX PRO 4000 (state-env pods) | 565 | 333 | 8,761 |
+| ours-cap12 | 0 | RTX 3090 | 1,852 | 591 | 12,672 |
+| ours-cap12 | 1 | RTX 3090 | 1,835 | 591 | 12,992 |
+| ours-cap12 | 2 | A40 | 2,244 | 591 | 16,623 |
+| ours-cap12 | 3 | A40 | 2,250 | 591 | 16,042 |
+
+Recipe against recipe, **not compute-matched**. Flags (> 1.25× the comparator): best-cap6 Stage-1 ≈ 1,270 A40-s vs
+565–782 s (3090 / RTX PRO 4000) for ours; every best T1 ladder in GPU-seconds. Not flagged: best-cap12 Stage-1 ≈ 1,290 s is
+*less* than ours-cap12's 1,835–2,250 s (3090 / A40). T1 ladders 16.9–20.1k vs 8.3–8.8k s at cap 6 and 25.9–30.5k vs 12.7–16.6k s at cap 12), while ladder attempts are
+equal by protocol (8 × k 32). Stage-1 training tokens: best 440–444M vs ours ≈ 333M (cap 6) and ≈ 591M (cap 12, estimated).
+
+Pods: bs-p0..p5, bs-r0..r2, bs-d0, all A40 at $0.49/h; 60.1 pod-hours, $29.44 before the cap diagnostic. Bucket:
+`hf://buckets/dan-pandori/nd-rl/best-state/{ckpts,artifacts}`.
+
+**Cap diagnostics** (`pod/bs/capdiag.sh`, pod bs-d0 0.64 h $0.32): the four reads with the highest action-truncation /
+step-cap rates re-read at `max_action` 1,024, `max_steps` 192 (`artifacts/bs/eval/*_cap.json(l)`):
+
+| read | solved 512/96 → 1,024/192 | lost / gained | truncated | step cap |
+|---|---|---|---|---|
+| T1_best12_s1 textbook72 | 51 → 53 | 0 / 2 | 1.910 % → 1.817 % | 0.125 % → 0.005 % |
+| T1_best12_s2 textbook72 | 52 → 53 | 0 / 1 | 1.172 % → 1.009 % | 0.174 % → 0 |
+| T1_best6_s0 transfer_long2 | 18 → 18 | 0 / 0 | 0.186 % → 0.093 % | 0.335 % → 0 |
+| Fz_best6_s2 rr600 | 23 → 23 | 0 / 0 | 1.472 % → 1.264 % | 0 |
+
+Truncation barely falls at twice the action budget: these are non-terminating actions, not long proofs cut off. The
+caps make the best-recipe numbers slightly low (≤ 2 textbook problems per checkpoint); no conclusion changes. Final spend
+60.74 pod-hours, $29.76.

@@ -1,0 +1,15 @@
+[lean_gate] 64000 samples, parse-fail 7576 (no-eos 0, 0.000 %), distinct 23100: ok 2958, rej 20142 (filter 20142, prefilter=on); lean on 2958 texts in 8 procs, 27.9s proc, exposed 5.2s, tail 4.3s, 32 workers
+[Fz_SN6_s0.pt on holdout250.jsonl k=256 T=0.8] SOLVED 103/250 = 0.412 [0.353,0.474]
+  len 7: 14/31 = 0.452 [0.292,0.622]
+  len 8: 20/32 = 0.625 [0.453,0.771]
+  len 9: 60/115 = 0.522 [0.431,0.611]
+  len 10: 9/48 = 0.188 [0.102,0.319]
+  len 11: 0/14 = 0.000 [0.000,0.215]
+  len 12: 0/7 = 0.000 [0.000,0.354]
+  len 13: 0/2 = 0.000 [0.000,0.658]
+  len 14: 0/1 = 0.000 [0.000,0.793]
+  written hist {7: 16, 8: 35, 9: 106, 10: 55, 11: 3, 12: 4, 14: 3}
+  pruned hist {6: 4, 7: 30, 8: 62, 9: 103, 10: 19, 11: 3, 12: 1}
+  frontier written 10 pruned 10
+  reasons [('lean rejected', 45050), ('lean_seq parse: env: exact goal mismatch', 2412), ('lean_seq parse: env: unbound', 2225), ('lean_seq parse: env: formula', 888), ('lean_seq parse: env: binder mismatch', 766), ('lean_seq parse: env: Or.elim on non-or', 426)]
+env {"env_end": {"syntax": 7576, "done": 56424}, "env_fail_reason": {"box head": 169, "have name": 18, "term": 49, "unbound": 2225, "formula": 888, "exact not last": 44, "binder mismatch": 766, "exact goal mismatch": 2412, "Or.elim on non-or": 426, "box on non-arrow": 243, "action head": 14, "no semicolon": 108, "PR position": 186, "malformed": 20, "assign": 6, "empty term": 1, "Or.elim name": 1}, "env_steps": {"1": 915, "3": 3441, "4": 3322, "5": 3577, "6": 5478, "7": 8128, "8": 10321, "2": 1160, "9": 11419, "10": 11741, "11": 2844, "12": 1004, "13": 313, "14": 180, "15": 120, "16": 24, "17": 7, "22": 3, "18": 1, "19": 2}, "prompt_tokens": 37983054, "steps": 18512, "rows": 489590, "rowsteps": 14492992, "prompt_len_max": 268, "chunks": 246, "stop_eos": 489590, "stop_exact": 0, "stop_goal": 0, "names_defined": 437817, "names_renamed": 71963, "env_waves": 246, "env_wall_s": 176.80544233322144, "peak_alloc_gb": 11.729084014892578, "peak_reserved_gb": 13.73828125, "action_declen_mean": 20.115455789538185}

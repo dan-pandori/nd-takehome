@@ -1,0 +1,12 @@
+[lean_gate] 5000 samples, parse-fail 24 (no-eos 0, 0.000 %), distinct 4976: ok 4969, rej 7 (filter 7, prefilter=on); lean on 4969 texts in 13 procs, 62.5s proc, exposed 6.6s, tail 6.2s, 32 workers
+[la_T1_best6_s2_r8.pt on heldout.jsonl k=1 T=0.0] SOLVED 4969/5000 = 0.994 [0.991,0.996]
+  len 2: 999/1000 = 0.999 [0.994,1.000]
+  len 3: 999/1000 = 0.999 [0.994,1.000]
+  len 4: 997/1000 = 0.997 [0.991,0.999]
+  len 5: 992/1000 = 0.992 [0.984,0.996]
+  len 6: 982/1000 = 0.982 [0.972,0.989]
+  written hist {2: 1027, 3: 1005, 4: 959, 5: 998, 6: 843, 7: 62, 8: 17, 9: 45, 11: 3, 12: 3, 13: 3, 14: 2, 15: 1, 19: 1}
+  pruned hist {2: 1031, 3: 1006, 4: 968, 5: 999, 6: 895, 7: 19, 8: 7, 9: 40, 11: 1, 13: 2, 15: 1}
+  frontier written 9 pruned 9
+  reasons [('lean_seq parse: env: Or.elim on non-or', 10), ('lean rejected', 7), ('lean_seq parse: env: exact not last', 3), ('lean_seq parse: env: binder mismatch', 3), ('lean_seq parse: env: exact goal mismatch', 2), ('lean_seq parse: env: action truncated', 2)]
+env {"env_end": {"done": 4976, "syntax": 20, "truncated": 2, "step_cap": 2}, "env_fail_reason": {"Or.elim on non-or": 10, "exact goal mismatch": 2, "unbound": 2, "binder mismatch": 3, "exact not last": 3}, "env_steps": {"3": 1029, "4": 1008, "5": 962, "2": 3, "6": 999, "7": 848, "0": 1, "8": 62, "9": 18, "10": 46, "12": 4, "14": 4, "15": 2, "16": 2, "13": 4, "22": 1, "19": 1, "20": 2, "44": 1, "42": 1, "48": 2}, "prompt_tokens": 1725639, "steps": 4416, "rows": 25466, "rowsteps": 717088, "prompt_len_max": 752, "chunks": 56, "stop_eos": 25464, "stop_exact": 0, "stop_goal": 0, "names_defined": 20489, "names_renamed": 6075, "env_waves": 56, "env_wall_s": 21.083555698394775, "peak_alloc_gb": 12.266272068023682, "peak_reserved_gb": 13.826171875, "action_declen_mean": 18.82081991675175}

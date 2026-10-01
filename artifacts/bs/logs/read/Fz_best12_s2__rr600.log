@@ -1,0 +1,13 @@
+[lean_gate] 153600 samples, parse-fail 72340 (no-eos 0, 0.000 %), distinct 66828: ok 6863, rej 59965 (filter 59965, prefilter=on); lean on 6863 texts in 18 procs, 338.7s proc, exposed 28.0s, tail 23.8s, 32 workers
+stage1_best12_s2_b1200.pt on transfer_long_rr600.jsonl k=256 SOLVED 311/600 = 0.518 [0.478,0.558]
+  len 11: 58/100 = 0.580 [0.482,0.672]
+  len 12: 37/100 = 0.370 [0.282,0.468]
+  len 13: 54/100 = 0.540 [0.443,0.634]
+  len 14: 52/100 = 0.520 [0.423,0.615]
+  len 15: 66/100 = 0.660 [0.563,0.745]
+  len 16: 44/100 = 0.440 [0.347,0.538]
+  written hist {11: 112, 12: 175, 13: 204, 14: 233, 15: 317, 16: 342, 17: 323, 18: 271, 19: 183, 20: 127, 21: 119, 22: 104, 23: 69, 24: 70, 25: 32, 26: 17, 27: 13, 28: 6, 29: 8, 30: 7, 31: 3, 32: 2, 34: 1, 35: 1}
+  pruned hist {9: 44, 10: 96, 11: 172, 12: 157, 13: 218, 14: 270, 15: 323, 16: 371, 17: 228, 18: 211, 19: 151, 20: 129, 21: 99, 22: 82, 23: 58, 24: 55, 25: 27, 26: 14, 27: 9, 28: 8, 29: 6, 30: 6, 31: 3, 32: 2}
+  frontier written 30 pruned 30
+  reasons [('lean rejected', 72092), ('lean_seq parse: env: formula', 16428), ('lean_seq parse: env: unbound', 15926), ('lean_seq parse: env: binder mismatch', 11744), ('lean_seq parse: env: exact goal mismatch', 10813), ('lean_seq parse: env: box head', 4553)]
+{"n": 600, "solved": 311, "rate": 0.5183333333333333, "ci": [0.47836248080471727, 0.5580709149732483], "written_hist": {"11": 112, "12": 175, "13": 204, "14": 233, "15": 317, "16": 342, "17": 323, "18": 271, "19": 183, "20": 127, "21": 119, "22": 104, "23": 69, "24": 70, "25": 32, "26": 17, "27": 13, "28": 6, "29": 8, "30": 7, "31": 3, "32": 2, "34": 1, "35": 1}, "pruned_hist": {"9": 44, "10": 96, "11": 172, "12": 157, "13": 218, "14": 270, "15": 323, "16": 371, "17": 228, "18": 211, "19": 151, "20": 129, "21": 99, "22": 82, "23": 58, "24": 55, "25": 27, "26": 14, "27": 9, "28": 8, "29": 6, "30": 6, "31": 3, "32": 2}, "frontier_written": 30, "frontier_pruned": 30, "reasons": {"lean rejected": 72092, "lean_seq parse: env: formula": 16428, "lean_seq parse: env: unbound": 15926, "lean_seq parse: env: binder mismatch": 11744, "lean_seq parse: env: exact goal mismatch": 10813, "lean_seq parse: env: box head": 4553, "lean_seq parse: env: box on non-arrow": 3216, "lean_seq parse: env: exact not last": 2892, "lean_seq parse: env: term": 2015, "lean_seq parse: env: have name": 1497}, "ckpt": "ckpts/bs/stage1_best12_s2_b1200.pt", "in": "data/ladder/transfer_long_rr600.jsonl", "k": 256, "temperature": 0.8, "seed": 0, "batch": 2048, "state_mode": true, "tok_mode": "lean_staten", "gen_s": 1133.3462119102478, "wall_s": 1133.831636428833, "peak_mem_gb": 27.172865390777588, "n_samples": 153600, "max_action": 512, "max_steps": 96}

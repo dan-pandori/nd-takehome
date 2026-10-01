@@ -1,0 +1,9 @@
+[lean_gate] 5376 samples, parse-fail 3131 (no-eos 0, 0.000 %), distinct 2082: ok 12, rej 2070 (filter 2070, prefilter=on); lean on 12 texts in 1 procs, 0.4s proc, exposed 0.5s, tail 0.4s, 32 workers
+stage1_best12_s2_b1200.pt on transfer_long2.jsonl k=256 SOLVED 4/21 = 0.190 [0.077,0.400]
+  len 17: 3/13 = 0.231 [0.082,0.503]
+  len 18: 1/8 = 0.125 [0.022,0.471]
+  written hist {18: 4, 19: 1, 20: 1, 21: 2, 22: 2, 23: 1, 29: 1}
+  pruned hist {16: 1, 17: 2, 18: 2, 19: 1, 20: 2, 21: 2, 22: 1, 28: 1}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 2233), ('lean_seq parse: env: formula', 927), ('lean_seq parse: env: binder mismatch', 906), ('lean_seq parse: env: unbound', 698), ('lean_seq parse: env: exact not last', 138), ('lean_seq parse: env: exact goal mismatch', 117)]
+{"n": 21, "solved": 4, "rate": 0.19047619047619047, "ci": [0.07667440615177301, 0.40000986539273287], "written_hist": {"18": 4, "19": 1, "20": 1, "21": 2, "22": 2, "23": 1, "29": 1}, "pruned_hist": {"16": 1, "17": 2, "18": 2, "19": 1, "20": 2, "21": 2, "22": 1, "28": 1}, "frontier_written": 0, "frontier_pruned": 0, "reasons": {"lean rejected": 2233, "lean_seq parse: env: formula": 927, "lean_seq parse: env: binder mismatch": 906, "lean_seq parse: env: unbound": 698, "lean_seq parse: env: exact not last": 138, "lean_seq parse: env: exact goal mismatch": 117, "lean_seq parse: env: box head": 97, "lean_seq parse: env: box on non-arrow": 59, "lean_seq parse: env: Or.elim on non-or": 48, "lean_seq parse: env: have name": 47}, "ckpt": "ckpts/bs/stage1_best12_s2_b1200.pt", "in": "data/ladder/transfer_long2.jsonl", "k": 256, "temperature": 0.8, "seed": 0, "batch": 2048, "state_mode": true, "tok_mode": "lean_staten", "gen_s": 38.68415594100952, "wall_s": 38.6901957988739, "peak_mem_gb": 18.549973964691162, "n_samples": 5376, "max_action": 512, "max_steps": 96}

@@ -1,0 +1,11 @@
+PASS state_train.py --recipe best exit 0
+PASS checkpoint: arch best, ALiBiGPT
+PASS checkpoint: ~10M params (6 x 384, MLP 1280, MTP not saved)
+PASS loss falls on a small slice
+PASS val loss falls
+PASS extra records steps / secs / tok_budget
+PASS round trip: identical weights and logits
+PASS fast sampler (KV cache, left pad, compaction) == full forward, greedy
+PASS state_eval greedy episode runs; Lean accepts >= 1 of 4 memorised
+PASS control recipe still builds the RoPE GPT
+ALL PASS

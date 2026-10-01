@@ -1,0 +1,39 @@
+{
+ "ckpt": "ckpts/bs/stage1_best12_s1_b1200.pt",
+ "inp": "data/p2/heldout.jsonl",
+ "out": "artifacts/bs/eval/heldout_best12_s1_b1200.jsonl",
+ "summary": "artifacts/bs/eval/heldout_best12_s1_b1200.json",
+ "k": 1,
+ "temperature": 0.0,
+ "seed": 0,
+ "batch": 2048,
+ "max_action": 256,
+ "max_steps": 48,
+ "lenfield": "n_lines",
+ "limit": 0,
+ "_meta": {
+  "script": "state_eval.py",
+  "argv": [
+   "state_eval.py",
+   "--ckpt",
+   "ckpts/bs/stage1_best12_s1_b1200.pt",
+   "--in",
+   "data/p2/heldout.jsonl",
+   "--k",
+   "1",
+   "--temperature",
+   "0",
+   "--batch",
+   "2048",
+   "--out",
+   "artifacts/bs/eval/heldout_best12_s1_b1200.jsonl",
+   "--summary",
+   "artifacts/bs/eval/heldout_best12_s1_b1200.json"
+  ],
+  "run_id": "best-state",
+  "git_sha": null,
+  "git_dirty": null,
+  "host": "b6b2a0d6f302",
+  "utc": "2026-09-30T16:52:33Z"
+ }
+}

@@ -1,0 +1,79 @@
+=== stage1 best6_s0_b1200 2026-09-30T16:06:33Z
+params 10732800 mode lean_staten
+train records 155000 (skipped 0); pairs 775000; mean 5.000 per proof; max pair len 362; load 46s
+best: 775,000 train pairs (T 362), 7,000 val pairs, on cuda in 2s
+best: 9,560,832 params (+1,875,584 MTP, not saved)
+W0930 16:07:27.427000 618 torch/fx/experimental/symbolic_shapes.py:6823] [0/0] _maybe_guard_rel() was called on non-relation expression Eq(s64, 1) | Eq(s64, 8)
+W0930 16:07:29.346000 618 torch/fx/experimental/symbolic_shapes.py:6823] [0/0_1] _maybe_guard_rel() was called on non-relation expression Eq(s64, 1) | Eq(s64, 8)
+W0930 16:07:36.731000 618 torch/fx/experimental/symbolic_shapes.py:6823] [0/1] _maybe_guard_rel() was called on non-relation expression Eq(s30, 1) | Eq(s30, 8)
+W0930 16:07:36.736000 618 torch/fx/experimental/symbolic_shapes.py:6823] [0/1] _maybe_guard_rel() was called on non-relation expression Eq(s27, s99) | Eq(s99, 1)
+W0930 16:07:36.741000 618 torch/fx/experimental/symbolic_shapes.py:6823] [0/1] _maybe_guard_rel() was called on non-relation expression Eq(s27, s82) | Eq(s82, 1)
+/workspace/nd-takehome/state_train_best.py:174: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  recent.append(float(main)); recent_aux.append(float(aux))
+W0930 16:07:54.316000 618 torch/fx/experimental/symbolic_shapes.py:6823] [0/2] _maybe_guard_rel() was called on non-relation expression Eq(s64, 1) | Eq(s64, 8)
+W0930 16:07:54.321000 618 torch/fx/experimental/symbolic_shapes.py:6823] [0/2] _maybe_guard_rel() was called on non-relation expression Eq(s27, s98) | Eq(s98, 1)
+W0930 16:07:54.325000 618 torch/fx/experimental/symbolic_shapes.py:6823] [0/2] _maybe_guard_rel() was called on non-relation expression Eq(s27, s82) | Eq(s82, 1)
+step 210 loss 1.2075 mtp 1.3470 lr 9.99e-04 epochs 0.06 30s val 0.1797
+step 779 loss 0.1227 mtp 0.1180 lr 9.96e-04 epochs 0.22 60s val 0.0928
+step 1406 loss 0.0926 mtp 0.0918 lr 9.90e-04 epochs 0.40 90s val 0.0793
+step 2030 loss 0.0971 mtp 0.0983 lr 9.83e-04 epochs 0.57 120s val 0.0905
+W0930 16:09:47.892000 618 torch/fx/experimental/symbolic_shapes.py:6823] [0/3] _maybe_guard_rel() was called on non-relation expression Eq(s64, 1) | Eq(s64, 8)
+W0930 16:09:47.899000 618 torch/fx/experimental/symbolic_shapes.py:6823] [0/3] _maybe_guard_rel() was called on non-relation expression Eq(s27, s98) | Eq(s98, 1)
+W0930 16:09:47.904000 618 torch/fx/experimental/symbolic_shapes.py:6823] [0/3] _maybe_guard_rel() was called on non-relation expression Eq(s27, s82) | Eq(s82, 1)
+W0930 16:09:53.183000 618 torch/fx/experimental/symbolic_shapes.py:6823] [0/4] _maybe_guard_rel() was called on non-relation expression Eq(s30, 1) | Eq(s30, 8)
+W0930 16:09:53.188000 618 torch/fx/experimental/symbolic_shapes.py:6823] [0/4] _maybe_guard_rel() was called on non-relation expression Eq(s27, s99) | Eq(s99, 1)
+W0930 16:09:53.193000 618 torch/fx/experimental/symbolic_shapes.py:6823] [0/4] _maybe_guard_rel() was called on non-relation expression Eq(s27, s82) | Eq(s82, 1)
+step 2518 loss 0.0691 mtp 0.0665 lr 9.76e-04 epochs 0.71 155s val 0.0965
+step 3048 loss 0.0707 mtp 0.0677 lr 9.62e-04 epochs 0.85 180s val 0.0748
+step 3669 loss 0.0901 mtp 0.0923 lr 9.48e-04 epochs 1.03 210s val 0.0804
+step 4292 loss 0.0921 mtp 0.0928 lr 9.33e-04 epochs 1.21 240s val 0.0751
+step 4916 loss 0.0582 mtp 0.0582 lr 9.16e-04 epochs 1.38 270s val 0.0787
+step 5539 loss 0.0598 mtp 0.0603 lr 8.98e-04 epochs 1.56 300s val 0.0841
+step 6160 loss 0.0551 mtp 0.0554 lr 8.77e-04 epochs 1.73 330s val 0.0706
+step 6781 loss 0.0605 mtp 0.0613 lr 8.56e-04 epochs 1.90 360s val 0.0811
+step 7400 loss 0.0575 mtp 0.0577 lr 8.33e-04 epochs 2.08 390s val 0.0774
+step 8021 loss 0.0699 mtp 0.0704 lr 8.09e-04 epochs 2.25 420s val 0.0754
+step 8643 loss 0.0538 mtp 0.0543 lr 7.84e-04 epochs 2.42 450s val 0.0751
+step 9264 loss 0.0656 mtp 0.0661 lr 7.58e-04 epochs 2.60 480s val 0.0760
+step 9886 loss 0.0898 mtp 0.0915 lr 7.32e-04 epochs 2.77 510s val 0.0842
+step 10510 loss 0.0661 mtp 0.0667 lr 7.05e-04 epochs 2.95 540s val 0.0677
+step 11131 loss 0.0551 mtp 0.0564 lr 6.77e-04 epochs 3.13 570s val 0.0720
+step 11753 loss 0.0550 mtp 0.0554 lr 6.50e-04 epochs 3.30 600s val 0.0712
+step 12374 loss 0.0645 mtp 0.0649 lr 6.23e-04 epochs 3.47 630s val 0.0719
+step 12995 loss 0.0578 mtp 0.0571 lr 5.95e-04 epochs 3.65 660s val 0.0709
+step 13616 loss 0.0692 mtp 0.0701 lr 5.68e-04 epochs 3.82 690s val 0.0791
+step 14237 loss 0.0498 mtp 0.0504 lr 5.42e-04 epochs 4.00 720s val 0.0731
+step 14854 loss 0.0522 mtp 0.0529 lr 5.16e-04 epochs 4.16 750s val 0.0690
+step 15476 loss 0.0742 mtp 0.0748 lr 4.91e-04 epochs 4.34 780s val 0.0607
+step 16099 loss 0.0657 mtp 0.0659 lr 4.67e-04 epochs 4.52 810s val 0.0691
+step 16720 loss 0.0535 mtp 0.0541 lr 4.44e-04 epochs 4.69 840s val 0.0688
+step 17342 loss 0.0769 mtp 0.0775 lr 4.23e-04 epochs 4.87 870s val 0.0669
+step 17960 loss 0.0678 mtp 0.0680 lr 4.03e-04 epochs 5.04 900s val 0.0690
+step 18584 loss 0.0584 mtp 0.0587 lr 3.84e-04 epochs 5.22 930s val 0.0756
+step 19206 loss 0.0289 mtp 0.0293 lr 3.67e-04 epochs 5.39 960s val 0.0751
+step 19828 loss 0.0552 mtp 0.0548 lr 3.52e-04 epochs 5.57 990s val 0.0752
+step 20452 loss 0.0517 mtp 0.0522 lr 3.38e-04 epochs 5.74 1020s val 0.0787
+step 21073 loss 0.0381 mtp 0.0380 lr 3.27e-04 epochs 5.91 1050s val 0.0713
+step 21692 loss 0.0656 mtp 0.0662 lr 3.17e-04 epochs 6.09 1080s val 0.0653
+step 22312 loss 0.0491 mtp 0.0493 lr 3.10e-04 epochs 6.26 1110s val 0.0762
+step 22934 loss 0.0620 mtp 0.0623 lr 3.04e-04 epochs 6.44 1140s val 0.0810
+step 23556 loss 0.0571 mtp 0.0571 lr 3.01e-04 epochs 6.61 1170s val 0.0727
+step 24178 loss 0.0394 mtp 0.0400 lr 3.00e-04 epochs 6.79 1200s val 0.0715
+best: done 24178 steps, 6.79 epochs of pairs, 1201s, final val 0.07147781931531744
+uploaded ckpts/bs/stage1_best6_s0_b1200.pt -> hf://buckets/dan-pandori/nd-rl/best-state/ckpts/bs/stage1_best6_s0_b1200.pt (md5 931239c7c8180d10876c73c168738227, 4.2s)
+saved ckpts/bs/stage1_best6_s0_b1200.pt
+=== heldout best6_s0_b1200 2026-09-30T16:27:37Z
+[lean_gate] 5000 samples, parse-fail 89 (no-eos 0, 0.000 %), distinct 4911: ok 4813, rej 98 (filter 98, prefilter=on); lean on 4813 texts in 13 procs, 44.3s proc, exposed 5.1s, tail 4.5s, 32 workers
+[stage1_best6_s0_b1200.pt on heldout.jsonl k=1 T=0.0] SOLVED 4813/5000 = 0.963 [0.957,0.968]
+  len 2: 997/1000 = 0.997 [0.991,0.999]
+  len 3: 987/1000 = 0.987 [0.978,0.992]
+  len 4: 968/1000 = 0.968 [0.955,0.977]
+  len 5: 956/1000 = 0.956 [0.941,0.967]
+  len 6: 905/1000 = 0.905 [0.885,0.922]
+  written hist {2: 1024, 3: 983, 4: 964, 5: 948, 6: 869, 7: 14, 8: 6, 9: 5}
+  pruned hist {2: 1027, 3: 990, 4: 960, 5: 952, 6: 866, 7: 11, 8: 5, 9: 2}
+  frontier written 9 pruned 8
+  reasons [('lean rejected', 98), ('lean_seq parse: env: exact goal mismatch', 26), ('lean_seq parse: env: formula', 25), ('lean_seq parse: env: action truncated', 7), ('lean_seq parse: env: box on non-arrow', 7), ('lean_seq parse: env: exact not last', 7)]
+env {"env_end": {"syntax": 82, "done": 4911, "truncated": 7}, "env_fail_reason": {"formula": 25, "box on non-arrow": 7, "exact goal mismatch": 26, "assign": 2, "term": 2, "binder mismatch": 6, "unbound": 6, "Or.elim on non-or": 1, "exact not last": 7}, "env_steps": {"1": 18, "2": 17, "3": 1040, "4": 1001, "0": 2, "5": 996, "6": 979, "7": 892, "8": 22, "10": 8, "9": 8, "12": 1, "18": 1, "21": 1, "25": 1, "23": 1, "27": 1, "28": 1, "31": 1, "32": 1, "33": 1, "34": 1, "39": 1, "40": 3, "43": 1, "44": 1}, "prompt_tokens": 1703224, "steps": 4704, "rows": 25139, "rowsteps": 711040, "prompt_len_max": 385, "chunks": 52, "stop_eos": 25132, "stop_exact": 0, "stop_goal": 0, "names_defined": 20198, "names_renamed": 5971, "env_waves": 52, "env_wall_s": 22.781362771987915, "peak_alloc_gb": 15.02389907836914, "peak_reserved_gb": 15.3515625, "action_declen_mean": 18.94605990691754}
+=== done best6_s0_b1200 2026-09-30T16:28:16Z

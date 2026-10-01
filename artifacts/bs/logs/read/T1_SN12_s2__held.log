@@ -1,0 +1,12 @@
+[lean_gate] 5000 samples, parse-fail 35 (no-eos 0, 0.000 %), distinct 4965: ok 4867, rej 98 (filter 98, prefilter=on); lean on 4867 texts in 13 procs, 51.5s proc, exposed 6.0s, tail 5.5s, 32 workers
+[T1_SN12_s2.pt on heldout.jsonl k=1 T=0.0] SOLVED 4867/5000 = 0.973 [0.969,0.978]
+  len 2: 997/1000 = 0.997 [0.991,0.999]
+  len 3: 992/1000 = 0.992 [0.984,0.996]
+  len 4: 974/1000 = 0.974 [0.962,0.982]
+  len 5: 960/1000 = 0.960 [0.946,0.970]
+  len 6: 944/1000 = 0.944 [0.928,0.957]
+  written hist {2: 1022, 3: 955, 4: 867, 5: 868, 6: 650, 7: 190, 8: 70, 9: 79, 10: 58, 11: 71, 12: 24, 13: 5, 14: 3, 15: 2, 16: 1, 17: 1, 18: 1}
+  pruned hist {2: 1033, 3: 963, 4: 871, 5: 884, 6: 802, 7: 43, 8: 48, 9: 80, 10: 47, 11: 68, 12: 20, 13: 2, 14: 1, 15: 2, 16: 1, 17: 1, 18: 1}
+  frontier written 13 pruned 12
+  reasons [('lean rejected', 98), ('lean_seq parse: env: binder mismatch', 8), ('lean_seq parse: env: formula', 7), ('lean_seq parse: env: exact goal mismatch', 6), ('lean_seq parse: env: Or.elim on non-or', 6), ('lean_seq parse: env: box on non-arrow', 5)]
+env {"env_end": {"syntax": 35, "done": 4965}, "env_fail_reason": {"formula": 7, "binder mismatch": 8, "Or.elim on non-or": 6, "unbound": 2, "exact goal mismatch": 6, "box on non-arrow": 5, "no semicolon": 1}, "env_steps": {"1": 7, "3": 1032, "4": 964, "5": 881, "2": 4, "6": 881, "7": 658, "8": 201, "9": 74, "10": 91, "11": 65, "12": 78, "13": 28, "14": 7, "17": 6, "16": 10, "18": 3, "19": 3, "20": 1, "15": 3, "24": 1, "23": 1, "27": 1}, "prompt_tokens": 1860359, "steps": 2576, "rows": 27073, "rowsteps": 756816, "prompt_len_max": 265, "chunks": 35, "stop_eos": 27073, "stop_exact": 0, "stop_goal": 0, "names_defined": 21795, "names_renamed": 5880, "env_waves": 35, "env_wall_s": 14.383212566375732, "peak_alloc_gb": 8.0903902053833, "peak_reserved_gb": 8.54296875, "action_declen_mean": 18.623462490303993}

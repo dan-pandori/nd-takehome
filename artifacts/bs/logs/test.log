@@ -1,0 +1,11 @@
+PASS state_train.py --recipe best exit 0
+PASS checkpoint: arch best, ALiBiGPT
+PASS checkpoint: ~10M params (6 x 384, MLP 1280, MTP not saved)
+PASS loss falls on a small slice
+PASS val loss falls
+PASS extra records steps / secs / tok_budget
+PASS round trip: identical weights and logits
+PASS fast sampler (KV cache, left pad, compaction) == full forward, greedy
+FAIL state_eval greedy episode runs; Lean accepts >= 1 of 4 memorised -- (1, None, '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 698, in default_restore_location\n    result = fn(storage, location)\n             ^^^^^^^^^^^^^^^^^^^^^\n  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 636, in _deserialize\n    device = _validate_device(location, backend_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 605, in _validate_device\n    raise RuntimeError(\nRuntimeError: Attempting to deserialize object on a CUDA device but torch.cuda.is_available() is False. If you are running on a CPU-only machine, please use torch.load with map_location=torch.device(\'cpu\') to map your storages to the CPU.\n')
+PASS control recipe still builds the RoPE GPT
+FAILED: state_eval greedy episode runs; Lean accepts >= 1 of 4 memorised

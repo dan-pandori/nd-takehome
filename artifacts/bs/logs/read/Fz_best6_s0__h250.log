@@ -1,0 +1,15 @@
+[lean_gate] 64000 samples, parse-fail 20246 (no-eos 0, 0.000 %), distinct 20410: ok 4062, rej 16348 (filter 16348, prefilter=on); lean on 4062 texts in 11 procs, 53.3s proc, exposed 7.4s, tail 6.4s, 32 workers
+[stage1_best6_s0_b1200.pt on holdout250.jsonl k=256 T=0.8] SOLVED 149/250 = 0.596 [0.534,0.655]
+  len 7: 18/31 = 0.581 [0.408,0.736]
+  len 8: 22/32 = 0.688 [0.514,0.820]
+  len 9: 86/115 = 0.748 [0.661,0.818]
+  len 10: 20/48 = 0.417 [0.288,0.557]
+  len 11: 3/14 = 0.214 [0.076,0.476]
+  len 12: 0/7 = 0.000 [0.000,0.354]
+  len 13: 0/2 = 0.000 [0.000,0.658]
+  len 14: 0/1 = 0.000 [0.000,0.793]
+  written hist {7: 19, 8: 47, 9: 181, 10: 94, 11: 38, 12: 20, 13: 19, 14: 4, 15: 7, 16: 3}
+  pruned hist {6: 4, 7: 38, 8: 99, 9: 169, 10: 58, 11: 23, 12: 24, 13: 10, 14: 1, 15: 5, 16: 1}
+  frontier written 15 pruned 15
+  reasons [('lean rejected', 29929), ('lean_seq parse: env: box on non-arrow', 4137), ('lean_seq parse: env: unbound', 4094), ('lean_seq parse: env: formula', 3935), ('lean_seq parse: env: exact goal mismatch', 3744), ('lean_seq parse: env: binder mismatch', 1274)]
+env {"env_end": {"syntax": 19793, "done": 43754, "truncated": 453}, "env_fail_reason": {"formula": 3935, "have name": 435, "unbound": 4094, "box on non-arrow": 4137, "exact goal mismatch": 3744, "no semicolon": 150, "exact not last": 1005, "binder mismatch": 1274, "box head": 147, "Or.elim on non-or": 644, "term": 184, "PR form": 7, "exact form": 1, "Or.elim name": 5, "malformed": 10, "empty term": 2, "PR position": 5, "assign": 14}, "env_steps": {"1": 1392, "2": 4379, "3": 3292, "4": 2758, "5": 4137, "6": 6042, "7": 6525, "8": 8990, "9": 9091, "10": 11580, "11": 2878, "12": 1138, "13": 602, "14": 296, "15": 244, "16": 130, "18": 45, "17": 87, "20": 46, "19": 22, "21": 14, "23": 18, "30": 5, "22": 12, "24": 8, "25": 8, "26": 6, "27": 5, "28": 2, "29": 7, "31": 8, "32": 5, "33": 4, "34": 2, "35": 1, "36": 1, "38": 6, "39": 2, "40": 1, "41": 3, "42": 1, "43": 3, "44": 1, "47": 3, "49": 1, "52": 1, "0": 198}, "prompt_tokens": 36289573, "steps": 40768, "rows": 473982, "rowsteps": 14514256, "prompt_len_max": 479, "chunks": 241, "stop_eos": 473529, "stop_exact": 0, "stop_goal": 0, "names_defined": 446466, "names_renamed": 71158, "env_waves": 241, "env_wall_s": 308.36910223960876, "peak_alloc_gb": 20.98464345932007, "peak_reserved_gb": 21.232421875, "action_declen_mean": 21.234310585634052}

@@ -1,0 +1,13 @@
+[lean_gate] 153600 samples, parse-fail 89863 (no-eos 0, 0.000 %), distinct 46834: ok 186, rej 46648 (filter 46648, prefilter=on); lean on 186 texts in 1 procs, 1.9s proc, exposed 3.7s, tail 1.9s, 32 workers
+stage1_best6_s2_b1200.pt on transfer_long_rr600.jsonl k=256 SOLVED 23/600 = 0.038 [0.026,0.057]
+  len 11: 12/100 = 0.120 [0.070,0.198]
+  len 12: 4/100 = 0.040 [0.016,0.098]
+  len 13: 4/100 = 0.040 [0.016,0.098]
+  len 14: 1/100 = 0.010 [0.002,0.054]
+  len 15: 0/100 = 0.000 [0.000,0.037]
+  len 16: 2/100 = 0.020 [0.006,0.070]
+  written hist {9: 1, 11: 17, 12: 11, 13: 7, 14: 2, 16: 1, 17: 6, 18: 1}
+  pruned hist {6: 1, 10: 13, 11: 5, 12: 11, 13: 6, 14: 2, 16: 5, 17: 3}
+  frontier written 17 pruned 16
+  reasons [('lean rejected', 63422), ('lean_seq parse: env: unbound', 22800), ('lean_seq parse: env: formula', 19813), ('lean_seq parse: env: exact goal mismatch', 12056), ('lean_seq parse: env: PR position', 9064), ('lean_seq parse: env: exact not last', 8308)]
+{"n": 600, "solved": 23, "rate": 0.03833333333333333, "ci": [0.02567709025890139, 0.05686376151414639], "written_hist": {"9": 1, "11": 17, "12": 11, "13": 7, "14": 2, "16": 1, "17": 6, "18": 1}, "pruned_hist": {"6": 1, "10": 13, "11": 5, "12": 11, "13": 6, "14": 2, "16": 5, "17": 3}, "frontier_written": 17, "frontier_pruned": 16, "reasons": {"lean rejected": 63422, "lean_seq parse: env: unbound": 22800, "lean_seq parse: env: formula": 19813, "lean_seq parse: env: exact goal mismatch": 12056, "lean_seq parse: env: PR position": 9064, "lean_seq parse: env: exact not last": 8308, "lean_seq parse: env: assign": 7144, "lean_seq parse: env: binder mismatch": 2376, "lean_seq parse: env: action truncated": 2261, "lean_seq parse: env: term": 1869}, "ckpt": "ckpts/bs/stage1_best6_s2_b1200.pt", "in": "data/ladder/transfer_long_rr600.jsonl", "k": 256, "temperature": 0.8, "seed": 0, "batch": 2048, "state_mode": true, "tok_mode": "lean_staten", "gen_s": 901.8376104831696, "wall_s": 901.9883944988251, "peak_mem_gb": 20.29836893081665, "n_samples": 153600, "max_action": 512, "max_steps": 96}

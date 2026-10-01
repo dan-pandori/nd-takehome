@@ -1,0 +1,34 @@
+## Compute per arm and seed (A40 for every new job; `gpu_seconds` from record.compute)
+
+| arm | seed | kind | GPU-s | gen tokens (M) | attempts (k) | train steps | train tokens (M) | Lean checks (k) |
+|---|---|---|---|---|---|---|---|---|
+| best-cap12 | 0 | T1 ladder (sampling, eval, fine-tune) | 25,876 | 419.1 | 1,938 | 4,800 | 767 | 1,282 |
+| best-cap12 | 0 | read-outs | 8,609 | 172.3 | 635 | 0 | 0 | 226 |
+| best-cap12 | 0 | stage1 | 1,292 | 0.0 | 0 | 23,951 | 440 | 0 |
+| best-cap12 | 1 | T1 ladder (sampling, eval, fine-tune) | 30,524 | 395.5 | 1,938 | 4,800 | 723 | 1,292 |
+| best-cap12 | 1 | read-outs | 10,855 | 170.2 | 635 | 0 | 0 | 226 |
+| best-cap12 | 1 | stage1 | 1,283 | 0.0 | 0 | 23,987 | 441 | 0 |
+| best-cap12 | 2 | T1 ladder (sampling, eval, fine-tune) | 28,952 | 393.4 | 1,938 | 4,800 | 707 | 1,299 |
+| best-cap12 | 2 | read-outs | 8,719 | 156.4 | 635 | 0 | 0 | 217 |
+| best-cap12 | 2 | stage1 | 1,290 | 0.0 | 0 | 24,123 | 443 | 0 |
+| best-cap6 | 0 | T1 ladder (sampling, eval, fine-tune) | 20,057 | 365.8 | 2,225 | 4,800 | 556 | 1,123 |
+| best-cap6 | 0 | pilot (300 s) | 382 | 0.0 | 0 | 5,028 | 92 | 0 |
+| best-cap6 | 0 | read-outs | 6,300 | 145.7 | 711 | 0 | 0 | 166 |
+| best-cap6 | 0 | stage1 | 1,261 | 0.0 | 0 | 24,178 | 444 | 0 |
+| best-cap6 | 1 | T1 ladder (sampling, eval, fine-tune) | 16,881 | 330.0 | 1,794 | 4,800 | 500 | 1,060 |
+| best-cap6 | 1 | read-outs | 5,197 | 129.4 | 635 | 0 | 0 | 144 |
+| best-cap6 | 1 | stage1 | 1,275 | 0.0 | 0 | 23,974 | 441 | 0 |
+| best-cap6 | 2 | T1 ladder (sampling, eval, fine-tune) | 17,885 | 349.8 | 1,938 | 4,800 | 517 | 1,077 |
+| best-cap6 | 2 | read-outs | 5,065 | 131.6 | 635 | 0 | 0 | 143 |
+| best-cap6 | 2 | stage1 | 1,267 | 0.0 | 0 | 23,999 | 441 | 0 |
+
+## Inherited arms (from copied logs; see docstring)
+
+| arm | seed | GPU | Stage-1 s | Stage-1 train tokens (M, est.) | ladder s (8 rounds) |
+|---|---|---|---|---|---|
+| ours-cap6 | 0 | RTX 3090 / RTX PRO 4000 (state-env pods) | 782 | 333 | 8,297 |
+| ours-cap6 | 1 | RTX 3090 / RTX PRO 4000 (state-env pods) | 565 | 333 | 8,761 |
+| ours-cap12 | 0 | RTX 3090 | 1,852 | 591 | 12,672 |
+| ours-cap12 | 1 | RTX 3090 | 1,835 | 591 | 12,992 |
+| ours-cap12 | 2 | A40 | 2,244 | 591 | 16,623 |
+| ours-cap12 | 3 | A40 | 2,250 | 591 | 16,042 |

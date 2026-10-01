@@ -866,3 +866,26 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 16:32 Stage-1 (cap 6 s1–s2, cap 12 s0–s2) + T1 ladders launched on bs-p0..p5 (A40, $0.49/h). Deviation: each
   ladder starts as soon as its Stage-1 finishes, not after the frozen read-outs are posted (they run on reader pods
   bs-r0 / bs-r1 in parallel), to save wall-clock. Ladder sampling batch 4,096.
+- 16:41–17:08 OOMs: the first ladders died in the sampler's prompt prefill at batch 4,096 and 2,048. Cause: ALiBi's
+  additive (B, H, T, S) bias, built in fp32 with int64 / masked copies, and SDPA's math path for float masks (memory
+  ∝ B·H·T²; ladder states reach ~500 tokens). Fixes: bias built in bf16 in place (bit-identical on GPU,
+  `pod/bs/biascheck.py`); prefill chunked over rows when B·H·T² > 2²⁹ (`pod/bs/prefillcheck.py`: 0 / 256 greedy rows differ
+  in fp32; 7 / 256 in bf16 with 1-row chunks = kernel noise). Every ladder restarted from round 1 at ≈ 16:58–17:10
+  (batch 2,048); the aborted sampling is in the compute rows.
+- 17:25 three reader pods (bs-r0 inherited dev / holdout250 / long2 / held; bs-r1, bs-r2 new frozen). r1 started
+  re-reading cap-12 checkpoints that r2 had done (read.sh checks local files only); split by hand at 18:55.
+- 17:55 frozen textbook72 + dev in STATUS; 19:55 all frozen read-outs in STATUS. Analysis bug caught before posting:
+  rr600 Q first counted 0 for every new model because `lpool_reread` rows carry no `source` / `L_true`; Q now joins
+  the pool file.
+- 18:00 independent code review (subagent) of the port: no result-changing bug; nits fixed (token-budget assert, cached
+  `pos=None` rows, last-loss fallback, docstring) and not pushed to the running pods (behaviour-neutral for them).
+- 19:15–19:45 CI on `ci-best-state`: first failure was `test_configs` (`bs_analysis.py` lacked `record.save_config`);
+  second was cancelled at the 10-min limit (80 CPU steps of the full network). The test now trains a 2 × 128 copy
+  (`--best_dims`, 300 steps, 35 s) and checks the full size by construction; green (run 36767006465).
+- Ladder round times: cap 6 ≈ 30 → 48 min, cap 12 ≈ 47 → 71 min (the replay mix grows). Cap-6 T1 done 21:41–22:22,
+  cap-12 T1 00:11–01:35 (2026-10-01); T1 read-outs on the same pods; each pod deleted after its files were pulled and its
+  24 ladder checkpoints confirmed in the bucket.
+- 2026-10-01 03:20–04:05 cap diagnostic (bs-d0): the worst truncation / step-cap reads at `max_action` 1,024 /
+  `max_steps` 192. Truncation stays 1.0–1.8 % (non-terminating actions); solved sets 0 lost, +2 / +1 / 0 / 0 gained.
+- Pre-registration vs outcome: frozen predictions hit, every T1 prediction missed high (see `run_best_state.md`).
+- Total 60.74 pod-hours, $29.76 (A40 $0.49/h); balance $329 after.
