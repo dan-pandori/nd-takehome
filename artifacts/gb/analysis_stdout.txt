@@ -1,0 +1,102 @@
+# grpo-best — read-outs (Lean alone).  Models: best-cap12 s0/s1/s2 (ALiBiGPT 9,560,832 params, lean_staten, from scratch on K12,
+#   Stage-1 1,200 s); EI = trajectory T1 ladder r<k>; GRPO arms = grpo_state.py round-equivalent r<k> from the same base.
+# per seed s0 / s1 / s2; IQM (n = 3: the mean) with a stratified-bootstrap 95 % interval.
+
+## 1. Group C (EI never solved on sample seed 0: end of pretraining nor r8) solved at k 256
+ r8, sample seed 1 (headline)  (C sizes [36, 35, 28])
+  EI                                3 / 1 / 1   IQM 1.7 [1.0, 3.0]
+  default                           2 / 9 / 3   IQM 4.7 [2.0, 9.0]   Δ vs EI +3.0 (MDD 3.5; inside)
+  unlikely                          3 / 8 / 4   IQM 5.0 [3.0, 8.0]   Δ vs EI +3.3 (MDD 3.5; inside)
+  passk                             6 / 19 / 3   IQM 9.3 [3.0, 19.0]   Δ vs EI +7.7 (MDD 3.5; outside)
+  distinct                          — / — / —
+ r8, either sample seed  (C sizes [36, 35, 28])
+  EI                                3 / 1 / 1   IQM 1.7 [1.0, 3.0]
+  default                           4 / 10 / 3   IQM 5.7 [3.0, 10.0]   Δ vs EI +4.0
+  unlikely                          3 / 9 / 4   IQM 5.3 [3.0, 9.0]   Δ vs EI +3.7
+  passk                             10 / 19 / 4   IQM 11.0 [4.0, 19.0]   Δ vs EI +9.3
+  distinct                          — / — / —
+ r4, sample seed 1  (C sizes [36, 35, 28])
+  EI                                3 / 1 / 3   IQM 2.3 [1.0, 3.0]
+  default                           1 / 5 / 1   IQM 2.3 [1.0, 5.0]   Δ vs EI +0.0
+  unlikely                          0 / 5 / 2   IQM 2.3 [0.0, 5.0]   Δ vs EI +0.0
+  passk                             4 / 9 / 3   IQM 5.3 [3.0, 9.0]   Δ vs EI +3.0
+  distinct                          — / — / —
+ r2, sample seed 1  (C sizes [36, 35, 28])
+  EI                                0 / 0 / 1   IQM 0.3 [0.0, 1.0]
+  default                           2 / 2 / 2   IQM 2.0 [2.0, 2.0]   Δ vs EI +1.7
+  unlikely                          0 / 2 / 1   IQM 1.0 [0.0, 2.0]   Δ vs EI +0.7
+  passk                             2 / 6 / 1   IQM 3.0 [1.0, 6.0]   Δ vs EI +2.7
+  distinct                          0 / 4 / 2   IQM 2.0 [0.0, 4.0]   Δ vs EI +1.7
+
+## 2. Discordant theorems vs EI r8 (solved on either sample seed; all 322 per seed, pooled over seeds)
+  arm        arm-only  EI-only   both  neither   sign-test p   (C only: arm-only / EI-only)
+  default          15       38    832       81   0.00219          15 / 3   per seed [(2, 10), (10, 13), (3, 15)]
+  unlikely         15       44    826       81   0.000204          15 / 4   per seed [(2, 13), (9, 14), (4, 17)]
+  passk            33       20    850       63   0.0984          32 / 4   per seed [(9, 6), (20, 4), (4, 10)]
+  distinct   (reads missing)
+
+## 3. pass@1 / pass@256 by group (sample seed 1; mean over the group, then IQM over seeds)
+ group A
+  EI        pend 0.401 / 0.969   r2 0.815 / 0.997   r4 0.834 / 0.994   r8 0.851 / 0.994
+  default   r2 0.820 / 0.979   r4 0.870 / 0.976   r8 0.893 / 0.979
+  unlikely  r2 0.814 / 0.973   r4 0.865 / 0.984   r8 0.892 / 0.980
+  passk     r2 0.740 / 0.991   r4 0.791 / 0.994   r8 0.830 / 0.996
+  distinct  r2 0.707 / 0.970   r4 —   r8 —
+ group B
+  EI        pend 0.001 / 0.145   r2 0.292 / 0.806   r4 0.438 / 0.914   r8 0.564 / 0.964
+  default   r2 0.270 / 0.638   r4 0.407 / 0.757   r8 0.542 / 0.811
+  unlikely  r2 0.266 / 0.618   r4 0.413 / 0.741   r8 0.547 / 0.788
+  passk     r2 0.219 / 0.738   r4 0.348 / 0.849   r8 0.460 / 0.881
+  distinct  r2 0.203 / 0.598   r4 —   r8 —
+ group C
+  EI        pend 0.000 / 0.000   r2 0.000 / 0.012   r4 0.000 / 0.073   r8 0.000 / 0.049
+  default   r2 0.001 / 0.061   r4 0.007 / 0.069   r8 0.057 / 0.140
+  unlikely  r2 0.001 / 0.031   r4 0.003 / 0.071   r8 0.050 / 0.152
+  passk     r2 0.002 / 0.088   r4 0.007 / 0.158   r8 0.091 / 0.272
+  distinct  r2 0.004 / 0.062   r4 —   r8 —
+
+## 4. Totals and retention
+ all 322 solved, r8, sample seed 1
+  EI                                288 / 284 / 290   IQM 287.3 [284.0, 290.0]
+  default                           278 / 278 / 279   IQM 278.3 [278.0, 279.0]   Δ vs EI -9.0 (MDD 9.3; inside)
+  unlikely                          277 / 277 / 279   IQM 277.7 [277.0, 279.0]   Δ vs EI -9.7 (MDD 9.3; outside)
+  passk                             286 / 301 / 285   IQM 290.7 [285.0, 301.0]   Δ vs EI +3.3 (MDD 9.3; inside)
+  distinct                          — / — / —
+ textbook72 solved, r8, sample seed 0
+  EI                                48 / 49 / 54   IQM 50.3 [48.0, 54.0]
+  default                           43 / 46 / 49   IQM 46.0 [43.0, 49.0]   Δ vs EI -4.3 (MDD 9.8; inside)
+  unlikely                          41 / 45 / 49   IQM 45.0 [41.0, 49.0]   Δ vs EI -5.3 (MDD 9.8; inside)
+  passk                             52 / 52 / 48   IQM 50.7 [48.0, 52.0]   Δ vs EI +0.3 (MDD 9.8; inside)
+  distinct                          — / — / —
+ holdout250 solved, r8, sample seed 0
+  EI                                238 / 237 / 239   IQM 238.0 [237.0, 239.0]
+  default                           236 / 236 / 233   IQM 235.0 [233.0, 236.0]   Δ vs EI -3.0
+  unlikely                          236 / 235 / 232   IQM 234.3 [232.0, 236.0]   Δ vs EI -3.7
+  passk                             239 / 246 / 236   IQM 240.3 [236.0, 246.0]   Δ vs EI +2.3
+  distinct                          — / — / —
+ held-out greedy (5,000), r8
+  EI                                0.985 / 0.992 / 0.994   IQM 0.990 [0.985, 0.994]
+  default                           0.992 / 0.984 / 0.990   IQM 0.989 [0.984, 0.992]   Δ vs EI -0.002 (MDD 0.063; inside)
+  unlikely                          0.990 / 0.988 / 0.989   IQM 0.989 [0.988, 0.990]   Δ vs EI -0.002 (MDD 0.063; inside)
+  passk                             0.985 / 0.980 / 0.985   IQM 0.983 [0.980, 0.985]   Δ vs EI -0.007 (MDD 0.063; inside)
+  distinct                          — / — / —
+ dev metric (1,108, k 64), r8
+  EI                                1055 / 1043 / 1060   IQM 1052.7 [1043.0, 1060.0]
+  default                           1022 / 1024 / 1031   IQM 1025.7 [1022.0, 1031.0]   Δ vs EI -27.0
+  unlikely                          1024 / 1023 / 1034   IQM 1027.0 [1023.0, 1034.0]   Δ vs EI -25.7
+  passk                             1064 / 1070 / 1039   IQM 1057.7 [1039.0, 1070.0]   Δ vs EI +5.0
+  distinct                          — / — / —
+  (Stage-1 held-out greedy, trajectory: 0.921 / 0.936 / 0.962)
+
+## 5. Samples hitting a cap (action truncated + step cap; the read summaries' env_end), all reads of each arm
+  EI             742 / 1483776 = 0.050 %   worst read 0.407 % (s1_r8_tb72_x1)
+  default        151 / 1483776 = 0.010 %   worst read 0.042 % (s1_r4_h250_x1)
+  unlikely       163 / 1483776 = 0.011 %   worst read 0.060 % (s2_r4_tb72_x1)
+  passk          164 / 1483776 = 0.011 %   worst read 0.060 % (s1_r8_tb72_x1)
+  distinct      4260 / 595456 = 0.715 %   worst read 6.185 % (s0_r4_tb72_x0)
+
+## 6. GRPO mechanics per round-equivalent (IQM over seeds): mean reward / groups with variance / all-fail / targets cum. solved / held-out greedy (boundary)
+  default   r1 0.72/0.38/0.14/4049/0.986  r2 0.83/0.24/0.10/4166/0.988  r3 0.88/0.19/0.08/4225/0.989  r4 0.90/0.15/0.07/4241/0.989  r5 0.92/0.12/0.06/4288/0.988  r6 0.93/0.10/0.05/4312/0.988  r7 0.94/0.08/0.04/4329/0.988  r8 0.95/0.07/0.04/4336/0.989
+  unlikely  r1 0.72/0.39/0.15/4043/0.986  r2 0.83/0.25/0.10/4169/0.987  r3 0.87/0.20/0.08/4223/0.989  r4 0.90/0.16/0.07/4255/0.989  r5 0.91/0.14/0.06/4279/0.989  r6 0.92/0.13/0.05/4304/0.989  r7 0.93/0.12/0.05/4327/0.989  r8 0.94/0.11/0.04/4338/0.989
+  passk     r1 0.67/0.54/0.14/4090/0.982  r2 0.76/0.49/0.09/4218/0.984  r3 0.80/0.46/0.07/4278/0.985  r4 0.83/0.44/0.05/4319/0.986  r5 0.85/0.42/0.04/4348/0.984  r6 0.86/0.40/0.03/4368/0.984  r7 0.88/0.39/0.03/4387/0.983  r8 0.89/0.37/0.03/4394/0.983
+  distinct  
