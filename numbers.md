@@ -1701,3 +1701,77 @@ step-cap rates re-read at `max_action` 1,024, `max_steps` 192 (`artifacts/bs/eva
 Truncation barely falls at twice the action budget: these are non-terminating actions, not long proofs cut off. The
 caps make the best-recipe numbers slightly low (≤ 2 textbook problems per checkpoint); no conclusion changes. Final spend
 60.74 pod-hours, $29.76.
+
+## rl-from-ckpt (2026-10-02)
+
+**Models (every number here):** `trajectory`'s best-cap12 seeds 0–2 — `best_model.ALiBiGPT` 6 × 384, 9,560,832 params,
+`lean_staten`, from scratch on K12 (`data/kh/train_k12.jsonl`, 155,000 records, cap 12), Stage-1 1,200 s on an A40
+(≈ 24,100 steps). Starts = kept Stage-1 checkpoints `stage1_best12_s<S>_b1200_step{0,1600,5000,12000,16000}.pt`
+(p0 … p16000) and the end checkpoint (pend). T1 ladders `la_T1_best12_s<S>_<start>` (this run; pend = `trajectory`'s,
+inherited). Replay-only controls `rc_best12_s<S>_<start>` (`rfc_replay.py`, this run). Lean alone. Reads: k 256, T 0.8,
+`max_steps` 96, `max_action` 512, batch 2,048 (1,024 on OOM), textbook72 + holdout250 (eval only). Teacher-forced
+log p: `tj_score.py`, T 1.0. Source of every table: `artifacts/rfc/analysis_stdout.txt` (`python3 rfc_analysis.py`
+after `bash pod/rfc/fetch_inherit.sh`), `artifacts/rfc/summary.json`; compute `artifacts/rfc/compute_stdout.txt`.
+
+**p0 (initialisation):** target accepts in rounds 1 / 2 = 0 / 0 of 4,495 in all three seeds (143,840 attempts per
+round); stop rule fired, no fine-tune ran. `artifacts/rfc/la_T1_best12_s*_p0/round_{1,2}.json`.
+
+**Solved at k 256, sample seed 1 (s0 / s1 / s2).** r0 = the start (`trajectory`'s reads); c8 = control r8.
+
+| start | r0 tb72 | r8 tb72 | c8 tb72 | r0 h250 | r8 h250 | c8 h250 |
+|---|---|---|---|---|---|---|
+| p1600 | 10 / 14 / 13 | 38 / 34 / 38 | 32 / 28 / 33 | 67 / 60 / 66 | 223 / 212 / 222 | 202 / 196 / 195 |
+| p5000 | 19 / 19 / 18 | 48 / 44 / 46 | 32 / 27 / 36 | 138 / 129 / 112 | 234 / 234 / 238 | 205 / 203 / 204 |
+| p12000 | 27 / 20 / 22 | 45 / 51 / 46 | 39 / 37 / 39 | 162 / 153 / 142 | 233 / 235 / 233 | 214 / 210 / 211 |
+| p16000 | 26 / 29 / 28 | 49 / 47 / 51 | 41 / 37 / 38 | 176 / 195 / 155 | 235 / 232 / 232 | 211 / 216 / 207 |
+| pend (inherited ladder) | 34 / 33 / 36 | 48 / 48 / 53 | 38 / 31 / 35 | 196 / 205 / 200 | 240 / 236 / 237 | 206 / 210 / 213 |
+
+r2 / r4 rows and sample seed 0 are in the stdout. Ladder − control (IQM over seeds, 95 % stratified bootstrap over
+theorems): textbook72 +5.7 [2.7, 9.0] / +14.3 / +9.0 / +10.3 / +15.0 [11.0, 19.3] (p1600 … pend); holdout250 +21.3
+/ +31.3 / +22.0 / +21.7 / +28.0. Seed σ of r8 textbook72 2.0–3.2 → MDD ≈ 7; holdout250 σ 2–6 → MDD ≈ 5 (p1600: 14).
+
+**Threshold test** (y = ladder r8 solves, sample seed 1; logistic, x clipped at −40; mean x50 over seeds; count =
+pairs with x < −12 solved, starts p1600–p16000 × 3 seeds; E = count − null expectation).
+
+| x | null | x50 p1600 / p5000 / p12000 / p16000 / pend | count | null E | excess | falsifier |
+|---|---|---|---|---|---|---|
+| x_start (brief's, pre-registered) | end arm on x_start (x50 −11.1) | −13.1 / −14.7 / −15.3 / −11.6 / −11.1 | 131 | 49.1 | +81.9 | fires |
+| x_ctrl (pre-registered) | same | −11.9 / −15.6 / −14.9 / −15.2 / −16.1 | 187 | 60.7 | +126.3 | fires — also on pend itself (+42.3) |
+| x_ctrl_cal (post hoc) | pend ladder on x under the pend control (x50 −16.1) | as above | 187 | 196.2 | −9.2 | does not fire |
+| x_ev (trajectory's eventual proof) | end arm on x_ev (x50 −23.4) | | 201 | 245.4 | −44.4 | does not fire |
+
+**RL-only solves from x_start < −12** (ladder r8 x1 solves; start and control r8 solve with neither sample seed):
+p1600 15, p5000 16, p12000 12, p16000 8 (theorem-seed pairs), pend 3; 44 of the 51 are `trajectory` group B
+(the end arm's RL also solves them), 4 group C. Lowest: `la_transfer_1809`, p12000 s0, x_start −26.05, x_ctrl −17.35,
+r8 102 / 256; its eventual proof = 8 actions, `lean_check` term size 5, same size as the reference.
+
+**Group C** (`trajectory`'s: end arm fails on sample seed 0 at r0 and r8; 99 pairs) solved at r8 x1, per seed:
+p1600 1 / 1 / 2, p5000 5 / 5 / 3, p12000 3 / 5 / 4, p16000 6 / 6 / 2, pend 3 / 1 / 1. pend's count is biased down by
+the group's definition. **Selection-free reach** (r8, union of both sample seeds): theorems only this start's ladder
+solves / only the pend ladder solves, per seed: p1600 1/24, 1/38, 2/35; p5000 5/7, 6/11, 5/11; p12000 4/10, 5/4, 4/17;
+p16000 7/8, 5/10, 2/10.
+
+**Reproducibility:** seed-0 starts re-read (sample seed 1) = `trajectory`'s, 0 of 4 × 322 verdicts differ;
+re-scored references under all 12 (seed, start) starts max |Δ w1| = 0. Lean accepted 7,086 / 7,086 scored targets.
+
+**Truncation** (action cap + step cap): RL / control checkpoints 0.086 % of samples overall; 136 of 612 strata
+(read × pool × group) over 0.1 %, worst 4.27 % (s1 p16000 r8, holdout250 group C). Settings held at `trajectory`'s.
+
+**Compute** (`rfc_compute.py`, record.compute rows; RTX A6000 except ladder s1 p16000 on an A40):
+
+| arm | GPU-s per seed | gen tokens (M) | attempts (k) | train steps | train tokens (M) | Lean checks (k) |
+|---|---|---|---|---|---|---|
+| ladder p0 | 362 / 504 / 409 | 50–76 | 448 | 0 | 0 | 0 |
+| ladder p1600 | 21,745 / 19,015 / 22,943 | 346–401 | 1,794–2,011 | 4,800 | 634–669 | 915–1,037 |
+| ladder p5000 | 24,714 / 24,629 / 20,896 | 374–400 | 1,794–1,938 | 4,800 | 693–742 | 1,101–1,124 |
+| ladder p12000 | 23,804 / 26,427 / 23,972 | 394–450 | 1,794–2,011 | 4,800 | 720–779 | 1,174–1,291 |
+| ladder p16000 | 26,365 / 26,961 (A40) / 25,829 | 394–409 | 1,794–1,938 | 4,800 | 729–758 | 1,229–1,268 |
+| ladder pend (`trajectory`) | 22,350 / 24,467 / 27,021 | 399–435 | 1,794–2,011 | 4,800 | 751–783 | 1,299–1,417 |
+| control (each start) | ≈ 6,150 (two per card) / ≈ 3,170 (pend, alone) | 0 | 0 | 4,800 | 476–477 | 0 |
+
+Stage-1 (`trajectory`): 1,350 A40-s per seed. Flags: every ladder's training tokens are 1.33–1.63× its control's (the
+control is matched on steps and replay records, not tokens). No ladder exceeds 1.25× the pend ladder on any measure.
+Pods: 17, 120.87 pod-hours, $63.72 (`podbudget`; RTX A6000 $0.53/h, A40 $0.49/h).
+
+**Bucket:** `hf://buckets/dan-pandori/nd-rl/rl-from-ckpt/{ckpts/rfc/{ladder,control},artifacts/rfc,artifacts/rl-from-ckpt/registry,data/rfc}`
+(216 checkpoints; reads `artifacts/rfc/eval/*.jsonl`; scores `artifacts/rfc/score/`; ladder `found_*.jsonl`).

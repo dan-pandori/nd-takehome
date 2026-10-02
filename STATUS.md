@@ -251,3 +251,7 @@ Budget $90 / 180 pod-hours.
   holdout250 202 / 196 / 195; from step 5,000 32 / 27 / 36 and 205 / 203 / 204 (s0 / s1 / s2). End of pretraining
   (`trajectory` r0): 34 / 33 / 36 and 196 / 205 / 200. The ladder's replay alone recovers end-of-pretraining
   performance from 7 % of pretraining. Source `artifacts/rfc/eval/c{S}_p{1600,5000}_r8__*_x1.json`.
+- (unreviewed) Results: `run_rl_from_ckpt.md`, `numbers.md` § rl-from-ckpt. r8 textbook72 34–38 (p1600) vs 44–53 for
+  p5000…pend; replay-only controls recover end-of-pretraining performance; threshold test fires on x under the start
+  (+82 excess), not on a same-scale replay-corrected null (post hoc, −9); no selection-free sign of reach beyond the end arm.
+RL-FROM-CKPT DONE 2026-10-02T10:54:51Z

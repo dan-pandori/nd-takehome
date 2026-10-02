@@ -923,3 +923,15 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   labelled as miscalibrated, not dropped.
 - 08:45 reproducibility: seed-0 start re-reads identical to `trajectory` (0 verdicts differ, 4 starts × 322);
   re-scored references identical (max |Δ w1| = 0).
+- 09:33 last ladder done (s1 p16000, A40); 10:45 last post job done; every pod pulled (`pod/rfc/finish.sh`: ckpts
+  checked in the bucket before `podrm`) and deleted by 10:49. 216 checkpoints in the bucket (96 ladder, 120 control).
+- 10:55 analysis (`rfc_analysis.py`): added after seeing the data, both labelled in the stdout: a selection-free
+  "reach" comparison (theorems only this start's ladder / only the pend ladder solves, both sample seeds), because
+  group C is defined by the end arm's own failures and so biases its count down; and the RL-checkpoint-only
+  truncation line.
+- Pre-registration vs outcome: p0 stop rule hit; r8 and control counts all inside their ranges; rank order holds on
+  textbook72, not strictly on holdout250 (within MDD); literal threshold falsifier fires as predicted (131 vs ≈ 110);
+  x50 shifts smaller than predicted (p1600 −13.1 vs −22; p16000 none); replay-corrected falsifier fires against my
+  prediction, through a scale mismatch (it fires on pend itself); group C ≤ 4 per seed missed in 5 of 12;
+  truncation ≤ 2 % per RL stratum missed (worst 4.3 %); reproducibility exact.
+- Total 120.87 pod-hours, $63.72 (17 pods; RTX A6000 $0.53/h, one A40 $0.49/h). Done 2026-10-02T10:54:51Z.
