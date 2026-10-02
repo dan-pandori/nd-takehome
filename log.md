@@ -910,3 +910,4 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   children `cm12k64`; both are summed as cm12k64 (s2 total 30,675 s = the sum of its logged round times, 30,676 s).
 - 2026-10-02 result: best12 − cm12 = +15.7 textbook72 (MDD 6.5), +87.3 dev (MDD 61); cm12 − SN12 paired: textbook72 0 / −4 / 0,
   dev +7 / +23 / +11. Falsifier not met. Write-up `run_compute_match.md`, numbers § compute-match.
+- 2026-10-02T11:36:07Z secret scan: the 128 committed files, 0 hits (`scan_secrets.py`). The streaming scan of the 10 GB bucket was stopped unfinished (slow on the VPS). The bucket holds only pod job outputs.

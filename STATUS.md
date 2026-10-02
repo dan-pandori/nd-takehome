@@ -253,4 +253,4 @@ BEST-STATE DONE 2026-10-01T05:00:12Z
   (paired textbook72 0 / −4 / 0, dev +7 / +23 / +11). `run_compute_match.md`, `numbers.md` § compute-match. 28.43
   pod-hours, $13.93; pods deleted; bucket `compute-match/`.
 
-COMPUTE-MATCH DONE 2026-10-02T11:45:00Z
+COMPUTE-MATCH DONE 2026-10-02T11:36:07Z
