@@ -905,3 +905,10 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   rfc-p14 A40 $0.49/h (A6000 stock ran out once). Each pod also holds `pod/rfc/post.sh` waiting for its ladder.
 - 02:0x controls: 2 per A6000 (≈ 40.5 GB together) on rfc-p1..p3; then reader queues `pod/rfc/q{0,1,2}.txt`.
   First control launch failed silently (nested quotes in `bg.sh`); relaunched via `pod/rfc/jobs/*.sh`.
+- 03:28 la_T1_best12_s2_p1600 (rfc-p6): CUDA OOM in round 3 sampling at ladder batch 2,048; `ladder.sh` resumed from
+  round 3 at batch 1,024 (as `trajectory`'s s2; a sampling re-draw, `NOISE_FLOOR.md`). Rounds 3–8 of this ladder
+  are at batch 1,024.
+- Round times ≈ 25–36 min (r1), ≈ 38–40 min (r2); controls ≈ 13 min / round with two per card.
+- 04:05 two extra reader pods rfc-r1, rfc-r2 (RTX A6000) for the control r8 reads (`pod/rfc/qc1.txt` sample seed 1,
+  `qc0.txt` sample seed 0); those lines removed from `q{0,1,2}.txt` so reader lists stay disjoint.
+- 04:23 r2 reads moved from q{0,1,2} to qc{1,0} (rfc-r1 / rfc-r2).
