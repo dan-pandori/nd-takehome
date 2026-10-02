@@ -135,3 +135,97 @@ move" holds with margin, and the exact labels need no search bound.
 | P1 FOL (generator proofs) | 1,000 committed + 1,000 regenerated | 0 |
 | P3 induction (hand-written by the executor, as a feasibility probe, not training data) | 4 theorems + my 1 | 0 |
 | P2 | no proofs counted (labels only) | — |
+
+## §Compare (phase 2)
+
+Read after the phase-1 commit `5e826fb4`: `run_radical_scoping.md`, `numbers.md` § radical-scoping, `STATUS.md`,
+`radical_scoping/SCOPING.md` and the pilot summary files. I also re-ran `neg_control.py` and `mut_agreement.py`; both print
+to stdout and leave the committed files untouched.
+
+| claim (where) | my independent value | verdict |
+|---|---|---|
+| Sprint FOL generator and verifier run unchanged, stdlib, 1,000 theorems in 3 s (SCOPING §B, numbers) | byte-identical to nd-rl archive; 3.2 s | reproduces |
+| pool: mean 4.25 lines, 731 / 1,000 with a quantifier, no EXE (numbers) | 4.252; 731; EXE 0 | reproduces. **Also ORE 0, not stated.** The sampler's rule list (`core.py:436`) has neither ORE nor EXE, so "no ∃-elim, which matches the sprint's under-sampling" should read "the sampler *cannot* emit ∃-elim or ∨-elim". |
+| Lean 4 core accepts 1,000 / 1,000 (`fol2lean.py`) | my independent renderer: 1,000 / 1,000, plus 1,000 / 1,000 on a regenerated pool; 943 / 994 of my own mutants rejected, and the 51 accepted are valid (ORI1 / BOTE) | reproduces |
+| controls: 231 / 231 conclusion swaps, 41 / 41 eigenvariable clashes rejected; 578 one-line mutants, 577 agree (24 + 553), 1 verifier-reject / Lean-accept | re-run: identical. The one disagreement generalises `e`, which occurs in a premise only inside a conjunct the cited line discards; Lean is right to accept. | reproduces. "a premise constant that the cited line does not depend on" is loosely worded: the line depends on the premise but not on its `e`-part. |
+| "All 272 mutants are rejected" (run md) | 272 = the two control families; the 578-mutant set has 24 valid mutants that both accept | reproduces, but the sentence is ambiguous next to the 578 |
+| P2: ORE 2,277 (1.47 %), BOTE 2,951, DN 12,950 (8.36 %), NEGI 16,068 in `data/train.jsonl` (154,990) | identical | reproduces |
+| `data/train.jsonl` is "the cap-6 Stage-1 set … source of the cap-6 `lean_seq` / `lean_staten` training sets" (numbers, SCOPING §A) | The `lean_seq` 3.2 M models (`FAST_STAGE1.md`) and the **9.56 M best-cap6 `lean_staten` model** that pilot A proposes to retrain (best-state summary) were trained on `data/p2/train_depth3_f0_a1.jsonl` (155,000), not `data/train.jsonl`. On that set: ORE 1.46 %, DN 8.33 %. | **mislabelled set**. The numbers move ≤ 0.05 pt and the conclusion stands, but pilot A must filter `train_depth3_f0_a1` and should quote its counts. |
+| textbook72: 51 / 72 found within bound 12; 14 require ORE, 9 require DN, 1 both; 2 costlier | re-run identical (0 / 72 rows differ); own summary identical | reproduces |
+| "The other 21 have no proof within the bound" | 15 have no proof in the search space; **6 timed out** | reword: "no proof found (6 timeouts)" |
+| "a required pool exists" (14 ORE-required problems) | exact, unbounded labels: **21 / 72 need ORE, 19 / 72 need DN, 4 both**. All 14 + 9 bounded labels agree with the exact ones, with 0 disagreements on the 51 decided problems. | stands, and is stronger than written: the labels need no search bound (G3c − L∨ / G4ip) |
+| `Or.elim` and `Classical.byContradiction` are single tokens, so the knockout is a filter | true in the `lean_seq` grammar. Free-form Lean also has `Or.casesOn` / `Or.rec` / `Or.resolve_*` / `Classical.em` / `Decidable.em` on `lean_check`'s allowlist. | stands for `lean_seq` / `lean_staten`; add the free-form caveat |
+| P3: `z_add`, `s_add`, `add_comm`, `add_assoc` check with no axioms; `simp [add]`, `omega`, `decide` fail on `add_comm` | identical | reproduces |
+| "so the core library cannot trivialise the domain" (SCOPING §C) | `induction n <;> simp_all [add]` proves `z_add` and `s_add` outright; it fails only on `add_comm` | **overstated**. The trivialisers fail on `add_comm`, not on the base lemmas. A tactic grammar for C must exclude `simp_all` (or `simp` with the definition), or the L0 / L1 lemma families can be closed by automation. |
+| "add_comm has no direct inductive proof without [the two lemmas], or a nested induction" (§C); `ind.lean` comment "lemma invention is necessary" | a one-theorem nested-induction proof with no auxiliary statement checks | SCOPING's wording ("or a nested induction") stands. The comment in `ind.lean` is false as written: a lemma statement is not necessary. C's falsifier already counts nested induction as a non-lemma solve, which is consistent. |
+| "minlen's complete search relies on [the subformula property]" (SCOPING, organising observation) | `minlen.py`'s own docstring: the space is *restricted* to S, and "None is NOT a proof that no ≤ bound-line proof exists" | **wrong word**: minlen is not complete. The subformula property holds for *normal* proofs, not for every shortest proof. So "every proof our RL finds is a re-ordering of objects already in the prompt" is an overstatement: it holds for normal proofs; Lean `have`s can introduce non-subformulas. |
+| "A never-seen action cannot be sampled, so a non-zero solve rate is creation by construction" / "K0: 0 required solves (structural)" (§A) | Not measured here. A softmax LM gives the never-targeted `Or.elim` token a small but **non-zero** probability, because the token stays in the vocabulary. And K0+ε injects `Or.elim` through a hand-designed operator. | **reword**. The null is near-structural, not structural, so measure it: report the frozen K0 model's `Or.elim` log p at legal positions and its pass@N on the required pool at equal attempts. "Creation by construction" is also too strong for K0+ε: what it tests is whether RL can *adopt* a move that a non-learned proposer supplies. That is a legitimate question, but it is not unaided creation. |
+| exact-permutation p: 3 v 3 ≥ 0.05, 5 v 5 = 0.004 | 1 / C(6,3) = 0.05; 1 / C(10,5) = 0.00397 | reproduces |
+| costs: A40 $0.49/h; Stage-1 1,200 A40-s ≈ $0.16; pilot A ≈ $15 | best-state summary: 1,200 s on one A40, $0.49/h → $0.163; 6 × 0.16 + 6 × ≈ $2 ≈ $13 | reproduces (the ≈ $2 per half-ladder and "$3–4 per 8-round ladder" are inherited and I did not trace them) |
+| `trajectory`: worst step −6.2 → −1.3 nats (best-cap12, 9.56 M `lean_staten`, 3 seeds); −15 nats total | summary: w1 r0 −6.21, r8 −1.29; total −15.3 | reproduces, labelled |
+| "The 25 textbook72 problems that no checkpoint solves stay put" (in the `trajectory` bullet) | The 25 unsolved come from the `textbook72` run on **SN-cap12 T1 (3.2 M `lean_staten`)**, not best-cap12. | **model label missing / wrong**: name the model |
+| prior knockouts: "`round2-run5`: reductio stays 0/300 at f = 0" | round2-run5 summary: s1 and s2 are 0/300, but **s0 ignites to 0.170 by round 4** | **cherry-picked**: 2 of 3 draws. All of round2-run2/5 are token-format, `nd_verify`-era numbers, and the checker is not named. |
+| `round2-run2` 0 of 6 patterns; `run4-grpo-review` 67–71 % vacuous box | not traced in the time I spent | not checked |
+| "The sprint's FOL was easy (pass@8 ≈ 0.94–0.96)" | sprint summary: 0.94 / 0.96 (eigenvariable vs not), 0.953 / 0.955 | value traces. **The model is unlabelled** (June sprint FOL model, sprint verifier, not Lean). |
+| `frontier-supply` "+7.5, inside the MDD" | summary: +7.5 of 291, MDD 10.5 | reproduces; model unlabelled in SCOPING |
+| LILO / Stitch / LEGO-Prover not in `references.bib`; EDL key present | nd-rl `references.bib`: 0 hits; `donoway2026…` present | reproduces |
+| SCOPING ≤ 2,500 words, run md ≤ 200 | 2,500 / 200 (`wc -w`) | meets the limit exactly |
+| "Every pre-registered expectation held … ranking as predicted" | P1 ≥ 90 % ✔ (100 %); P2 ranges ✔; required family ✔; ranking: knockout 1, FOL 2, self-play last ✔ | reproduces. The expectations were committed in `77e1a795`, before the pilot commit. |
+| $0 pod spend; bucket `hf://…/radical-scoping/radical_scoping` | `podbudget` 0.00 h / $0; bucket listing has all files | reproduces |
+
+Gate 0: pre-registration committed before results ✔. No misses to report: every expectation held. The ranges were wide,
+which makes "every expectation held" weak evidence, though it is not wrong.
+
+## §Verdict
+
+**No hard-constraint violation.** `nd_verify` is unmodified and judged nothing. Its only path into a label (minlen's
+self-check) never fired. `TEST_RUN_DONE` is untouched, there was no training, and $0 was spent.
+
+**What stands.**
+- **Every pilot number reproduces**, from my own code or an identical re-run. That covers the FOL Lean acceptance and
+  controls, the rule counts, the bounded necessity labels and the induction file.
+- P1's core feasibility claim is well supported: Lean 4 core checks the sprint's FOL proofs, and an independent second
+  renderer agrees 1,000 / 1,000.
+- P2's feasibility is **stronger than written**. Exact sequent-calculus labels show 21 / 72 textbook72 problems need ORE
+  and 19 / 72 need DN, with no search bound and 0 disagreements against the executor's bounded labels.
+- The ranking matches the pre-registration.
+
+**What must be reworded.**
+1. The P2 counts name the wrong training set. Pilot A's model (best-cap6, 9.56 M `lean_staten`) was trained on
+   `data/p2/train_depth3_f0_a1.jsonl` (ORE 1.46 %), not `data/train.jsonl`. The numbers barely move, but the filter
+   must be applied to the right file.
+2. §A's "never-seen action cannot be sampled … creation by construction" and "K0 = 0 (structural)":
+   - The probability is near zero, not zero. Measure the K0 base's `Or.elim` log p and its pass@N at equal attempts.
+   - K0+ε tests whether RL adopts a move supplied by a hand-built proposer, not unaided creation.
+3. The organising paragraph: minlen's search is not complete (its own docstring), and the subformula property holds
+   for normal proofs, not for every proof RL finds.
+4. §C: "the core library cannot trivialise the domain" — `induction <;> simp_all [add]` proves the helper lemmas.
+   Restrict the tactic grammar. Separately, the comment in `ind.lean`, "lemma invention is necessary", is false:
+   nested induction proves `add_comm` with no lemma.
+5. §B gaps: the FOL sampler cannot emit **∃-elim or ∨-elim** at all. This is structural, not under-sampling, and the
+   missing ORE is not mentioned.
+6. Inherited evidence:
+   - "round2-run5: reductio stays 0/300" holds for 2 of 3 draws (s0 ignited).
+   - "25 textbook72 problems no checkpoint solves" belongs to SN-cap12 3.2 M, not the best-cap12 model it sits beside.
+   - The sprint pass@8 and frontier-supply numbers lack model labels.
+   - Pre-2026-09-27 numbers lack their checker.
+7. "The other 21 have no proof within the bound" — 6 of the 21 timed out.
+
+**Not supported.** Nothing central. The recommendation (A, then B) is a judgment call that the pilots make feasible,
+not one they test. The claim closest to unsupported is A's "structural null", which is the premise of the
+recommended pilot.
+
+**Minor.**
+- `pool1k.jsonl` cannot be regenerated byte-for-byte (`PYTHONHASHSEED` was not recorded), though the committed file
+  makes every count reproducible.
+- No compute rows were recorded. None are needed: no GPU was used, and the Lean checks took seconds.
+
+**Next measurement that would settle what is open** (≈ $1, before pilot A's ≈ $15):
+- Train one ORE-free best-cap6 Stage-1 (filter `train_depth3_f0_a1`, 1,200 A40-s ≈ $0.16).
+- Report the frozen model's `Or.elim` probability at every legal position, and its pass@4,096 on the 21 exact-ORE
+  textbook72 problems plus a `necessity.py` ORE-required pool.
+- If the pass rate is > 0, the K0 null is not structural and pilot A needs a frozen-at-equal-attempts comparison
+  rather than a "0 vs > 0" design.
+
+For B, before any GPU spend: probe on CPU whether adding EXE / ORE / function symbols to the sprint generator yields
+≥ 1 % multi-instance proofs.
