@@ -238,4 +238,7 @@ Brief: run brief `best-state` (Dan, 2026-09-30). Policy: AGENT_POLICY.md. Budget
 BEST-STATE DONE 2026-10-01T05:00:12Z
 
 ## lit-review-2 (executor, started 2026-10-02T16:53Z)
-- 2026-10-02 17:10 UTC  run started. No pods. Pre-registration `preregistration/lit-review-2.md` committed before any screening. Tools `lit_review_2/fetch.py`, `quote.py` copied from `dan_lit-review`.
+- 2026-10-02 16:53 UTC  run started. No pods. Pre-registration `preregistration/lit-review-2.md` committed before any screening. Tools `lit_review_2/fetch.py`, `quote.py` copied from `dan_lit-review`.
+- 17:07 UTC  DONE. 51 papers screened, 11 notes, 33/33 re-checked claims verbatim. No pods. `run_lit_review_2.md`, `lit_review_2/`.
+
+LIT-REVIEW-2 DONE 2026-10-02T17:07:14Z

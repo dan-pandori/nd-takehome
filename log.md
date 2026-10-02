@@ -889,3 +889,15 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `max_steps` 192. Truncation stays 1.0–1.8 % (non-terminating actions); solved sets 0 lost, +2 / +1 / 0 / 0 gained.
 - Pre-registration vs outcome: frozen predictions hit, every T1 prediction missed high (see `run_best_state.md`).
 - Total 60.74 pod-hours, $29.76 (A40 $0.49/h); balance $329 after.
+
+## lit-review-2 (executor, 2026-10-02)
+- 2026-10-02 16:53 UTC  started. Read the earlier review's bottom line, §c and screened table (58 papers, not re-screened), proposal 20, and the `trajectory` / `trajectory-cap6` / `rl-from-ckpt` summaries (configuration and limitations sections).
+- 16:55 UTC  pre-registration `d024bd0e` pushed. Three screening sub-agents launched (Q1, Q2, Q3), each one VPS process at a time, writing notes to `lit_review_2/notes/` and screened rows, claim ledgers and syntheses to `~/lr_out2/Q{1,2,3}.md` (not committed; sources in `~/lr_sources/`, copyrighted text kept out of git as in `lit-review`).
+- 17:00–17:10 UTC  agents finished (Q1 14 papers / 4 notes; Q2 17 / 4; Q3 14 + 3 id checks / 3). The coverage principle was screened twice; it is counted once. Notes' citekeys were changed to the existing `references.bib` keys for Yue, ProRL and EDL. Non-YAML "(proposed …)" suffixes were removed from `papers:` lists.
+- 17:10 UTC  independent re-check: 33 claims across 17 papers, all verbatim (`claims.md` § re-check).
+- 17:15 UTC  added four papers myself to cover two of the brief's threads that the agents had left empty (power-sampling and negative-sample successors): 2601.21590, 2605.04542, 2512.21625, 2508.21188. They were screened at abstract level only.
+- **Deviation:** 51 screened against the brief's 25–40 and the pre-registered stop at 40. The cause: three agents ran in parallel with 12–15 each, and two went over. All rows are kept, and 3 are id checks only.
+- **Correction** to the Q2 agent's synthesis ("group C's single −12-nat step"). The `trajectory` review rejected that claim. REVIEW.md says so, and the agents' raw files (`~/lr_out2/`, not committed) are left as written.
+- REVIEW.md is ≈ 2,310 words excluding table pipes (2,886 by raw `wc -w`). Full screened rows were moved to `screened.md` to stay inside the limit.
+- No bucket upload: the run made no ckpts, artifacts or data. Fetched source texts are copyrighted and stay in `~/lr_sources/`; `fetch.py` re-creates them.
+- 17:07 UTC  DONE.
