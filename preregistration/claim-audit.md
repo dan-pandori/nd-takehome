@@ -53,3 +53,14 @@ negative controls?
 Pod budget $8 / 16 h (`podbudget claim-audit --set 16 8` before any pod), re-sampling only, no training.
 Balance floor $100. Stop when all seven claims are rated with evidence, or when the pod budget is spent
 (then rate on artefacts alone). At most 4 concurrent processes on the VPS.
+
+## Addendum 1 (2026-10-02 ~19:25 UTC, before R3 is launched; R1 still running, R2 read)
+
+R2 (EI s0 fresh seed) is read: 29 / 29 at p̂ ≥ 0.01. The C1 sub-auditor found that "its base never solved" rests on one
+base seed (s0): base s1 reached 2 of the 29 in 20,000 pooled T 0.8 attempts. New job **R3**: WP base s1
+(`lean-format/ckpts/lf/stage1_a1_seq_s1.pt`, 3,214,336 params, `lean_seq`, cap 6, from scratch on
+`train_depth3_f0_a1`) on the 29 survivors, T 0.8, k 200,000, `stop_at` 1 (reach only), `max_new` 400, seed 9003 —
+the same per-temperature budget base s0 had at T 0.8.
+**Expected:** base s1 reaches **3–8** of 29 (≥ 2 is already known). Reading: ≤ 4 → "never" is near-seed-independent
+and C1 stands with the one-seed caveat; ≥ 10 → C1 becomes *weaker than stated* (the 29 are largely base-s0-specific
+misses). Cost ≈ 2 h of the A6000 ($0.53/h).
