@@ -53,7 +53,7 @@ ARCH = os.environ.get('ND_GRPO_TEST_ARCH', 'sn')
 ck = os.path.join(tmp, f'tiny_{ARCH}.pt')
 if ARCH == 'best':
     cmd = [sys.executable, os.path.join(HERE, 'state_train.py'), '--recipe', 'best', '--data', os.path.join(tmp, 'tiny_x4.jsonl'),
-           '--heldout', pool, '--mode', 'lean_staten', '--cap', '0', '--best_steps', '150', '--best_dims', '2,128,4,256',
+           '--heldout', pool, '--mode', 'lean_staten', '--cap', '0', '--best_steps', '300', '--best_dims', '2,128,4,256',
            '--curve_every', '0', '--no_compile', '--seed', '0', '--out', ck]
 else:
     cmd = [sys.executable, os.path.join(HERE, 'state_train.py'), '--data', os.path.join(tmp, 'tiny_x4.jsonl'), '--mode', 'lean_staten',
