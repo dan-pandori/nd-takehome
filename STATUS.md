@@ -244,3 +244,4 @@ Brief: run brief `grpo-best` (Dan, 2026-10-02). Policy: AGENT_POLICY.md. Budget 
 
 ## grpo-best
 - 2026-10-02 11:24 UTC  run started (executor). grpo_state CPU tests extended to a tiny ALiBiGPT (CI branch `ci-grpo-best`). trajectory's groups reproduced from its per-theorem files (`gb_groups.py`: A/B/C 232/54/36, 236/51/35, 234/60/28). Pre-registration `preregistration/grpo-best.md` committed before the first pod.
+- 2026-10-02 11:52 UTC  CI: grpo_state gradient / chunk independence / T-scaled gradient / replay / train-sample consistency pass on a tiny ALiBiGPT (first two CI runs); smoke calibration fixed (0 failures on a pod). GPU smoke (A6000, 9.56M best-cap12 s0): 26 s / update alone, 12.7 GB, 1.38× with two jobs per card; base reward ≈ 0.55. Addendum 1: all four GRPO arms (default, unlikely, pass@4, distinct) × s0–s2, ≈ $34 projected. 12 ladders running on gb-p0..p5 (4 × A6000, 2 × A40), ≈ 8 h.
