@@ -889,3 +889,15 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `max_steps` 192. Truncation stays 1.0–1.8 % (non-terminating actions); solved sets 0 lost, +2 / +1 / 0 / 0 gained.
 - Pre-registration vs outcome: frozen predictions hit, every T1 prediction missed high (see `run_best_state.md`).
 - Total 60.74 pod-hours, $29.76 (A40 $0.49/h); balance $329 after.
+
+## claim-audit (executor), 2026-10-02
+
+- 18:40  Run start. Read week-in-review § What seems important and headline paragraphs only; pre-registration
+  `eb12ce49` pushed 18:41. Three sub-auditors launched (C1–C2 support; C3–C4 compound / Robbie / textbook72;
+  C5–C7 trajectory / rl-from-ckpt / M2), each with its own code under `audit/scripts/`, ≤ 1 heavy VPS process each,
+  Lean and hf downloads under `flock`. Rules: `/tmp/ca_common.md` (copied to `audit/AUDITOR_RULES.md`).
+- 18:46  `podbudget claim-audit --set 16 8`. Re-sampling job prepared (`audit/pod/job.sh`): R1 SN base s0 on the 29
+  survivors, T 0.8, k 10,000, no early stop, seed 9001; R2 support-curves EI s0 on the 29, T 0.8, k 2,000, seed 9002.
+  Code = `git archive origin/dan_support-state` (*.py, data/sc, pod/ss). `podnew ca1` (A40) waiting for stock.
+- 18:58  C5–C7 sub-auditor done: every stated number re-derives exactly; C5 caveats (week-in-review sentence weaker),
+  C6 caveats, C7 weaker than stated. Lean 122/122 accepted, 366/366 negative controls rejected.
