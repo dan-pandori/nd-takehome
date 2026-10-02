@@ -242,4 +242,5 @@ BEST-STATE DONE 2026-10-01T05:00:12Z
 Brief: nd-rl `docs/proposals/2026-10-02-mcts.md`, run brief mcts-a. Policy: AGENT_POLICY.md. Budget $15 / 30 pod-h.
 
 ## mcts-a
-- 2026-10-02 23:05 UTC  run started (executor). Branch `dan_mcts-a`. Pre-registration to follow before any pod.
+- 2026-10-02 23:05 UTC  run started (executor). Branch `dan_mcts-a`. Pre-registration `339d0876` pushed 23:13:52, first pod 23:14:12.
+- 2026-10-02 23:31 UTC  smoke test passed after one fix (log.md); three A40 pods (mc-0..2, one seed each) running value heads, tuning (s0), then read-outs.

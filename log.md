@@ -889,3 +889,25 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `max_steps` 192. Truncation stays 1.0–1.8 % (non-terminating actions); solved sets 0 lost, +2 / +1 / 0 / 0 gained.
 - Pre-registration vs outcome: frozen predictions hit, every T1 prediction missed high (see `run_best_state.md`).
 - Total 60.74 pod-hours, $29.76 (A40 $0.49/h); balance $329 after.
+
+# log — mcts-a (proposal 22, Phases 0 + A)
+
+- 2026-10-02 23:01 UTC  start. Read proposal 22, `trajectory` / `search-expert` / `best-state` summaries (via a
+  sub-agent), the state environment, sampler and ALiBiGPT code.
+- 23:05–23:12  built `mcts.py` (PUCT, batched sampler with K-way KV fan-out and log-probs, per-step sound type check,
+  Lean at terminals), `value_head.py`, `mcts_value_data.py`, `mcts_value_train.py`, `mcts_eval.py`; CPU tests
+  `tests/test_mcts.py` all pass (CPU torch venv on the VPS). Eval pools `data/mcts/` (group C per seed from
+  `origin/dan_trajectory:review_tj/groups.json`: 36 / 35 / 28; rrQ100 = 100 of the 400 rr600 L_true 13–16, rng
+  20261002; long2 21; tune200 = 184 held-out rl_targets with L_true ≥ 9). Pools disjoint from rl_targets under atom
+  renaming.
+- 23:13:52  pre-registration `339d0876` pushed. (Its header says "~23:50"; the commit time is the real one.) First
+  pod mc-0 created 23:14:12 (A40, $0.49/h).
+- 23:15–23:23  GPU smoke test (s0 r8, group C s0, budget = the sampling read's 132 s): value data on 400 theorems
+  (6,400 attempts, 132 s, peak 12.2 GB, 88 % accepted at r8); head AUC 0.85, Brier 0.075 vs constant 0.129, steps-to-go
+  Spearman 0.59. Search found a **bug**: `select` returned None when a descent met a node with every child dead and no
+  samples left, and the round loop then marked the whole tree dead ("stalled": 28–32 of 36 trees). Fixed (the descent
+  restarts after marking the node dead); re-run: sample 4 / prior 2 / value 4 of 36, GPU util 87 / 83 %, peak
+  4–7 GB. 2/3 of sampled actions duplicate an action already sampled at their node (the tuning grid's T 1.5 / K 16
+  address this). Smoke numbers are not results (smoke value head, one draw).
+- 23:31  ckpt md5s checked against `trajectory`'s `ckpts_s0.md5`. Pipelines launched: mc-0 seed 0 (value pend →
+  tuning → value r8 → read-outs r8, pend), mc-1 / mc-2 (A40, $0.49/h) seeds 1 / 2.
