@@ -7,6 +7,8 @@ from sklearn.metrics import roc_auc_score
 import rvc
 X_ = int(sys.argv[1]) if len(sys.argv) > 1 else 0
 REF = {d['name']: d for d in map(json.loads, open('rv/ref_targets.jsonl'))}
+import os
+if os.environ.get('ONLY307'): REF = {k: v for k, v in REF.items() if k in rvc.refs()}
 PEND = {('c12',0):24077,('c12',1):24345,('c12',2):24328,('c6',0):24511,('c6',1):24120,('c6',2):24113}
 def stepn(ck, run, s): return PEND[(run, s)] if ck == 'pend' else int(ck[1:])
 def feats(run, seed, ck, name):
@@ -99,8 +101,8 @@ for st in rvc.STARTS:
                                   w1_auc_raw=round(roc_auc_score(y, [r['w1'] for r in te]), 3))
     print(st, res['c12->rfc_' + st], flush=True)
 print('transfer', res['c12->c6'], res['c6->c12'])
-json.dump(res, open(f'rv/q1_x{X_}.json', 'w'), indent=1, default=str)
-json.dump(rows, open(f'rv/q1_rows_x{X_}.json', 'w'), default=float)
+json.dump(res, open(f'rv/q1_x{X_}' + ('_307' if os.environ.get('ONLY307') else '') + '.json', 'w'), indent=1, default=str)
+json.dump(rows, open(f'rv/q1_rows_x{X_}' + ('_307' if os.environ.get('ONLY307') else '') + '.json', 'w'), default=float)
 # theorem-fold-disjoint transfer (train folds != f on source, test fold f on target) + GBM permutation importance
 def tr_te_disj(src, dst):
     P = {k: np.full(len(dst), np.nan) for k in ('w1', 'logit', 'gbm')}
@@ -129,4 +131,4 @@ for run, rs in (('c12', c12), ('c6', c6)):
                 imp[k].append(np.mean(d))
     res['perm_' + run] = dict(sorted({k: round(float(np.mean(v)), 3) for k, v in imp.items()}.items(), key=lambda kv: -kv[1]))
     print('perm', run, res['perm_' + run])
-json.dump(res, open(f'rv/q1_x{X_}.json', 'w'), indent=1, default=str)
+json.dump(res, open(f'rv/q1_x{X_}' + ('_307' if os.environ.get('ONLY307') else '') + '.json', 'w'), indent=1, default=str)

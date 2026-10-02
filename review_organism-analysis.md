@@ -255,3 +255,95 @@ rounds (cumulative group-C solves, x0 ∪ x1) are 5, 7, 8 (c12) and 5, 8, 6 (c6)
 | on-policy entropy | 111 checkpoint jobs, Σ `secs_onpol` + `secs_tf` = 7,165 s on A40, 92.6 M tokens generated (4,096 attempts per checkpoint) |
 | pods | 2 × A40, 1.90 pod-h, $0.93 |
 | training | none |
+
+## §Comparison (phase 2: `run_organism_analysis.md`, `organism/ANALYSIS.md`, `numbers.md` § organism-analysis, `log.md`)
+
+**The main source of disagreement is the theorem set.**
+- **The cause.** The executor's loader (`oa_load.ref_inputs`) reads `tj/targets/targets_s0.jsonl`. That file holds 307
+  references. It predates the 8 references that `trajectory` added later (`new8`): textbook theorems with term size
+  11–16.
+- **The write-up's reason is wrong.** It says "307 replay in the environment". In the scorer's own `targets.jsonl`, all
+  315 have `replay_ok` and `lean_ok`, under every seed and run, and my Lean re-check accepts all 315. The 8 were dropped
+  by a file choice.
+- **These theorems are mostly never solved.** 74 of their 82 c12 hard steps and 144 of 156 c6 hard steps are in
+  never-solved theorems. Adding them raises c12's never-solved theorems from 10–15 to 16–22 per seed.
+- **The executor's arithmetic is right.** With my own code restricted to the executor's 307 theorems, I reproduce their
+  numbers:
+  - Q1: c12 223 units, w1 / logit / GBM 0.757 / 0.767 / 0.871 vs 0.765 / 0.774 / 0.872, 50 % point −10.54 vs −10.5;
+    c6 −21.6 vs −21.6.
+  - Q2: 629 / 1,282 hard steps; matched app +7.22, →I +6.45, ¬I −6.79 / −7.56; ρ 0.80 over 4 classes and 0.39 over 7.
+  - ¬I medians −7.17 → −6.41 and −9.34 → −8.82; ¬¬X split +0.90 / −1.46 with per-seed −0.67 / −2.12 / −0.76.
+
+  The table therefore gives my 315-theorem value, with the 307 value where it differs.
+
+| claim (executor) | my value | verdict |
+|---|---|---|
+| "Of their reference proofs … 307 replay in the environment" | 315/315 replay and are Lean-accepted; 8 omitted by loader file choice | **wrong; reword and rerun on 315** |
+| Q1 c12 CV AUC w1 / logit / GBM 0.765 / 0.774 / 0.872; n 223 | 315: 0.794 / 0.826 / 0.904, n 246 (307: 0.757 / 0.767 / 0.871) | reproduces on 307; differs by +0.03–0.05 on 315 |
+| c6 0.634 / 0.754 / 0.805; n 477 | 315: 0.651 / 0.787 / 0.813, n 501 (307: 0.601 / 0.751 / 0.791) | reproduces in substance |
+| "One worst-step threshold suffices only at cap 12 … (by the pre-registered rule)"; run summary "works about as well as any model" | rule: logit − w1 = +0.032 on 315 (fails; needs < 0.03), +0.010 on 307 (passes). GBM − w1 = +0.11 on both sets; seed SD of c12 w1 AUC 0.09 (MDD ≈ 0.09–0.15, executor's own table) | **not supported as stated.** The rule's 0.03 margin sits far inside the MDD, and its verdict flips with 8 theorems. Say "at c12 no model beats w1 resolvably at n = 3 (GBM +0.10, inside MDD); at c6 and the early starts they do" |
+| Cap 6 / early starts: multi-feature models add 0.10–0.16 AUC | c6 logit +0.136, GBM +0.162; rfc starts logit 0.85–0.87 vs w1 0.69–0.77 | reproduces |
+| Top feature = reference term size, by coefficient and permutation importance | term size is first in both models in c12 and c6 on 315, 307 and x1 | reproduces; holds with an independent inference count (AUC 0.79 / 0.78), not with a full expression size (0.63 / 0.67). Name the measure ("inference nodes") |
+| P(solve) 0.80–1.0 at term size ≤ 8, 0.39–0.47 at ≥ 9 | 315: 0.97 / 0.88 / 0.91 vs 0.38 / 0.35 / 0.41 (c12 / c6 / rfc) | reproduces in substance (≥ 9 band 0.35–0.41 on 315) |
+| POST HOC reductio ∧ size ≥ 9 → P 0.31 / 0.22 / 0.26 | not recounted | labelled post hoc ✔ |
+| 50 % point −10.5 (c12) vs −21.6 (c6): calibration does not transfer | 315: −9.8 vs −19.1; 307: −10.5 vs −21.6 | reproduces (gap 9–11 nats) |
+| c12 → c6 logit 0.766, GBM 0.791; c12 → rfc logit 0.78–0.80 at every start | 307, fold-disjoint: 0.747 / 0.773; rfc 0.76–0.78. 315: 0.786 / 0.801; rfc 0.81–0.83 | reproduces (±0.03) |
+| "Lower AUC at p1600" missed (0.80) | p1600 is among the highest by w1 (0.77) and logit | reproduces the miss |
+| Hard steps 629 / 1,282 / 4,585; box + ∧E 65 / 60 / 59 % | 315: 711 / 1,438 / 5,093; 64.7 / 59.5 / 58.9 % | reproduces on 307. On 315 the c6 share is 59.5 %: the "≥ 60 %" hit is a 0.5 pp miss |
+| c6 →I / app / ∧E / ∨I rise 6–7 nats, mostly r1–r2 | class medians r0 → r8: →I −6.8 → −0.5, app −7.2 → −1.1, ∧E −8.7 → −2.9, ∨I −8.9 → −1.3; most of it by r2 | reproduces |
+| ∨E boxes fall at c12 (−5.2 → −6.8) | −5.34 → −7.05 | reproduces |
+| ¬I boxes do not move (c12 −7.2 → −6.4; c6 −9.3 → −8.8) | 315: −7.33 → −6.88; −9.36 → −9.25; rfc −7.58 → −8.28 | reproduces (stronger on 315) |
+| POST HOC ¬¬X boxes: c6 −1.46 (−0.67 / −2.12 / −0.76), c12 +0.9; others +4.3 / +2.4 | own parse, 315: c6 −1.50 (−0.39 / −1.66 / −1.75), c12 +0.15 (−3.05 / +0.97 / +1.38); others +4.3 / +2.7 | reproduces. The c6 3/3-seed sign holds on 315. Labelled post hoc ✔ |
+| ¬¬X = 48.3 % / 36.1 % of RL training negation boxes | arithmetic in `q2_exposure_stdout.txt` consistent; the counts (pod, EI mixes) were not recounted | not re-derived |
+| Never-solved hard steps still gain (+0.5 / +2.8 / +3.4 c12; +4.5 / +2.9 / +3.0 c6, per-theorem medians) | per-step medians on 315: c12 +1.36 / +3.06 / +3.09, c6 +5.38 / +4.24 / +3.91 | reproduces in direction; the c12 s0 value is small in both |
+| Class partial R² 0.12 / 0.37 (c12), 0.18 / 0.35 (c6) | 315, without the seed term: 0.11 / 0.25, 0.23 / 0.38 | reproduces (≥ 0.05) |
+| Matched controls: app +7.2 / +3.2, →I +6.5 / +3.4, ∨I +1.9 / +6.5; ¬I −6.8 / −7.6 | 315: app +2.1 / +2.8, →I +2.5 / +3.1, ∨I +3.0 / +4.8; ¬I −3.6 / −6.4 | **sign reproduces, size does not.** The c12 values are 2–3× smaller once the 8 omitted (mostly never-solved) theorems are in. The c12 app / →I cells rest on 6–7 steps on 307 |
+| Cross-class ρ 0.80 (c12, 4 classes) = hit; c6 0.39 = miss | executor definition (rl-solved vs never, ≥ 5 each), 315: c12 0.90 (5 classes), c6 0.40 (8). With "solved" including group A: 0.09 / 0.50 | "hit" stands only under the rl-solved definition and on 4–5 classes (ρ over 4 points has p ≈ 0.2). Report n and that it is not resolved |
+| Entropy drops 16–30 % at r1, then flat (c12) or rising (c6); r0 → r8 −21…−24 % (c12), −3.5…−25 % (c6) | r0 → r1: 25 / 26 / 23 % and 16 / 30 / 19 %; r0 → r8 21–23 % and 3–25 % | reproduces exactly (same pod files) |
+| Hard-step TF entropy falls more than easy-step | c12 s0 hard 0.113 → 0.045, easy 0.042 → 0.036 | reproduces (my levels differ: 315 and mean vs the executor's median) |
+| **Cui fit: "R² ≥ 0.8 in ≥ 4/6" missed (3/6)** | the executor's own `q3_entropy_stdout.txt`: 0.815, 0.864, 0.931, 0.179, 0.743, 0.851, which is **4/6** ≥ 0.8; mine identical (pairing ckpt r with `round_{r+1}`) | **miscounted.** By the letter the expectation is a hit. The executor's substantive point stands: the fit rests on the r0 → r1 jump, and b − a = 1.8–2.7 is impossible |
+| Within-RL (r1–r8) fit: a < 0 in 5/6 | executor's stdout: a = −52, −38, +33, −25, −30, −23 | reproduces |
+| Diversity rises every round; no collapse, so no collapse before stall; stall rounds 5 / 7 / 8, 5 / 8 / 6 | raw distinct per A-theorem: c12 7 / 12 / 9 → 66 / 70.5 / 70, c6 2 / 2 / 2 → 21 / 15 / 12; no collapse in any ladder; stall rounds identical | reproduces |
+| "action truncation ≤ 0.67 %" | that is per action. Per attempt: > 0.1 % in 42/111 checkpoints, up to 3.5 % (c12 s0 p1600, c6 s1 pend) | reword. Truncated actions enter the token-mean entropy, mostly at r0, so the r0 → r1 drop may be overstated |
+| Compute 6,991 A40 GPU-s, 92.6 M tokens, 1.90 pod-h, $0.93; registry rows | Σ job secs 7,165 s (incl. TF passes); 92.6 M tokens; pods.log / podhours.log agree; registry rows under `artifacts/organism-analysis/registry/` | reproduces (2.5 % accounting difference) |
+| Model labels | every section names c12 / c6 / rfc with checkpoint family, 9.56 M, `lean_staten`, from scratch, training set | ✔ |
+| Gallery: 15 examples by the pre-registered median rule | same 6 classes; the code takes each theorem's *worst* hard step of the class, then the lower median. My per-theorem mean gives different picks for 7/15 | a reasonable reading of the rule; state it in `gallery.md` |
+| Expectations before the run | pre-registration committed 6 min before the first pod; misses reported as misses (except the Cui count, which is reported as a miss but is a hit) | ✔ |
+
+## §Verdict
+
+**What stands.**
+- **Q1, rankings.** Term size of the reference (inference nodes) is the strongest single predictor of "solved at r8"
+  in both caps. The worst step alone is weak at cap 6 (AUC 0.60–0.65). The 50 % point of the worst step does not
+  transfer between caps (≈ −10 vs ≈ −19 to −22 nats), while rankings do transfer (AUC 0.75–0.83 across caps and starts).
+- **Q2, the immovable class.** ¬I boxes are the one class whose hard steps do not move under EI in any run. The
+  post-hoc ¬¬X split falls in 3/3 c6 seeds on both theorem sets.
+- **Q2, transfer by class.** Hard steps in theorems RL never solved still gain, and class explains part of the gain.
+- **Q3.** On-policy entropy falls once, at r1, and then flattens or rises. The Cui fit is degenerate. Distinct accepted
+  proofs per theorem rise every round with no collapse.
+- **Process.** Every Lean re-check I ran passed (915 proofs and controls). There are no hard-constraint violations.
+
+**Must be reworded.**
+1. "307 replay in the environment" is false. All 315 replay and are Lean-accepted. Rerun Q1/Q2 on 315, or say that 8
+   large, mostly never-solved theorems were left out by a loader file.
+2. Q2 matched-control magnitudes at c12 (app +7.2, →I +6.5, ¬I −6.8) fall to +2.1 / +2.5 / −3.6 on 315. Quote the
+   signs, or the 315 values.
+3. "One worst-step threshold suffices at cap 12 / works about as well as any model". The pre-registered rule passes on
+   307 (+0.010) and fails on 315 (+0.032), and its 0.03 margin is inside the MDD (0.09). Say it is **not resolved** at
+   c12. The finding is that at c6 and the early starts the extra features do help.
+4. The Cui "R² ≥ 0.8 in ≥ 4/6" expectation was met by the letter (4/6, by the executor's own numbers), not 3/6.
+   Correct the count and keep the degeneracy caveat.
+5. The c12 cross-class ρ "hit" (0.80) rests on 4 classes and on the rl-solved definition. Report it as unresolved.
+6. "Truncation ≤ 0.67 %" is per action. Per attempt it is up to 3.5 %, so caveat the r0 entropy level.
+7. On 315, c6's box + ∧E share is 59.5 %, so the "≥ 60 %" expectation is a narrow miss there.
+
+**Not supported.** Nothing beyond the items above. The post-hoc reductio and ¬¬X findings are correctly labelled as
+hypotheses.
+
+**Next measurement.**
+- Rerun `oa_q1_models.py` / `oa_q2.py` with the 315-target `targets.jsonl` from the scorer, not
+  `tj/targets/targets_s0.jsonl` (minutes on the VPS, no GPU).
+- For the one open Q1 question (does anything beat w1 at c12?), use more seeds, or pool c12 + rfc p16000 as a
+  within-model replicate. At n = 3 the MDD (≈ 0.09–0.15 AUC) is larger than any plausible gain.
+- The ¬¬X hypothesis needs a pre-registered test: a held-out set of ¬¬-introduction theorems scored across a fresh EI
+  ladder, or a ladder with ¬¬X boxes up-weighted.
