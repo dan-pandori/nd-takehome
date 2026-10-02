@@ -889,3 +889,17 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `max_steps` 192. Truncation stays 1.0–1.8 % (non-terminating actions); solved sets 0 lost, +2 / +1 / 0 / 0 gained.
 - Pre-registration vs outcome: frozen predictions hit, every T1 prediction missed high (see `run_best_state.md`).
 - Total 60.74 pod-hours, $29.76 (A40 $0.49/h); balance $329 after.
+
+
+# log — evidence-atlas
+
+- 2026-10-02 17:00 UTC  Pre-registration committed (453cebab). Raw-part schema `atlas/raw/SCHEMA.md`. Wave 1: four read-only extraction agents (A: summaries Jun–09-19; B: 09-21–09-28; C: 09-29–10-02; D: Robbie's branches), commands serialised per agent (VPS process limit).
+- 2026-10-02 17:00–17:10 UTC  Wave 1 done: A 26 rows (Jun–09-19), B 21 (09-21–09-28), C 18 (09-29–10-02), D 15 (Robbie). All metric values `copied`. Robbie's textbook72 / dev1108 / holdout250 are the same sets as the fork's.
+- 2026-10-02 17:04–17:20 UTC  Wave 2: E 15 rows (Leon, Dmitry, Charles, main). Leon's `nd-verify-fix` finds that the fork's `nd_verify` accepts forward box citations. F recomputed 243 fork read-outs plus Robbie's factorial `passk.csv`, with 0 disagreements. G recomputed the length frontier (878 rows), with 0 disagreements. F found that no fork whole-proof model was ever scored on the shared pools.
+- 2026-10-02 17:23 UTC  Pre-registration addendum 1 (re-score of 8 whole-proof checkpoints) committed (b4f08b79); `podbudget evidence-atlas --set 10 5`.
+- 2026-10-02 17:24 UTC  `ea-rescore` (A40): every read failed because Lean was not installed on the pod. Added the Lean 4.34.0 install from `pod/fs/setup.sh` to the job script. Killing the jobs left `podjob` waiting, so I sent it SIGTERM; the pod was deleted (0.15 h).
+- 2026-10-02 17:33 UTC  `ea-rescore2` (RTX 3090): batch 4,096 with `max_new` 512 peaks at 16.5 GB per job, so two jobs per 24 GB card ran out of memory. 11 reads completed once memory freed; they are kept as re-draws in `artifacts/atlas/b4096_partial/`. Batch set to 2,048 for every read (deviation from the policy's "largest that fits", to keep two jobs per card and one batch across all arms).
+- 2026-10-02 17:46–18:07 UTC  `ea-rescore3`: all 24 reads at batch 2,048, peak 8.4 GB. 11 of 24 reads have > 0.1 % of samples at `max_new`.
+- 2026-10-02 18:08–18:31 UTC  `ea-trunc` / `ea-trunc2`: the 11 reads re-read at `max_new` 1,024. Every solved set is identical. (One job failed with rc 127 because `READS="tb72 dev"` lost its quoting through `podrun`; re-run as two single-read jobs.)
+- 2026-10-02 18:33 UTC  Bulk `.jsonl` published (`publish_artifacts.py evidence-atlas artifacts/atlas`, 46 files, manifest rows). Secret scan of every file: 0 hits. Bucket `evidence-atlas/{artifacts,atlas}`. Two CPU smoke-test registry files (3-theorem test reads) removed from `registry/evidence-atlas/`.
+- Total pods: 5, 1.08 pod-hours, $0.54 (RTX 3090 $0.50/h, A40 $0.49/h); balance $173 after.

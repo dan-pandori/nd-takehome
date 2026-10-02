@@ -1,0 +1,41 @@
+{
+ "ckpt": "ckpts/atlas/k12fz_s1.pt",
+ "inp": "data/bs/dev1108.jsonl",
+ "out": "artifacts/atlas/eval/k12fz_s1__dev.jsonl",
+ "k": 64,
+ "temperature": 0.8,
+ "seed": 0,
+ "limit": null,
+ "lenfield": "n_lines",
+ "batch": 4096,
+ "summary": "artifacts/atlas/eval/k12fz_s1__dev.json",
+ "_meta": {
+  "script": "rescore.py",
+  "argv": [
+   "atlas/scripts/rescore.py",
+   "--ckpt",
+   "ckpts/atlas/k12fz_s1.pt",
+   "--in",
+   "data/bs/dev1108.jsonl",
+   "--k",
+   "64",
+   "--temperature",
+   "0.8",
+   "--seed",
+   "0",
+   "--batch",
+   "4096",
+   "--lenfield",
+   "n_lines",
+   "--out",
+   "artifacts/atlas/eval/k12fz_s1__dev.jsonl",
+   "--summary",
+   "artifacts/atlas/eval/k12fz_s1__dev.json"
+  ],
+  "run_id": "evidence-atlas",
+  "git_sha": null,
+  "git_dirty": null,
+  "host": "9421b2ebe8e2",
+  "utc": "2026-10-02T17:36:02Z"
+ }
+}

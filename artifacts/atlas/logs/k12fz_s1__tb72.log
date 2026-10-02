@@ -1,0 +1,31 @@
+[lean_gate] 18432 samples, parse-fail 4719 (no-eos 30, 0.163 %), distinct 10536: ok 1096, rej 9440 (filter 9440, prefilter=on); lean on 1096 texts in 7 procs, 6.6s proc, exposed 1.0s, tail 0.6s, 12 workers
+[lean_gate] WARNING: 0.16 % of samples hit max_new (policy: raise max_new above 0.1 %)
+generated 18432 proofs in 31s
+k12fz_s1.pt on textbook72.jsonl k=256 SOLVED 21/72 = 0.292 [0.199,0.405]
+  len 1: 1/1 = 1.000 [0.207,1.000]
+  len 2: 2/2 = 1.000 [0.342,1.000]
+  len 3: 1/1 = 1.000 [0.207,1.000]
+  len 5: 1/1 = 1.000 [0.207,1.000]
+  len 6: 6/10 = 0.600 [0.313,0.832]
+  len 7: 2/4 = 0.500 [0.150,0.850]
+  len 8: 0/2 = 0.000 [0.000,0.658]
+  len 9: 1/3 = 0.333 [0.061,0.792]
+  len 10: 1/5 = 0.200 [0.036,0.624]
+  len 11: 1/4 = 0.250 [0.046,0.699]
+  len 12: 0/2 = 0.000 [0.000,0.658]
+  len 13: 0/3 = 0.000 [0.000,0.562]
+  len 14: 0/3 = 0.000 [0.000,0.562]
+  len 15: 0/4 = 0.000 [0.000,0.490]
+  len 16: 0/2 = 0.000 [0.000,0.658]
+  len 18: 0/4 = 0.000 [0.000,0.490]
+  len 20: 0/3 = 0.000 [0.000,0.562]
+  len 22: 0/1 = 0.000 [0.000,0.793]
+  len 25: 0/1 = 0.000 [0.000,0.793]
+  len 29: 0/1 = 0.000 [0.000,0.793]
+  len 33: 0/1 = 0.000 [0.000,0.793]
+  len None: 5/14 = 0.357 [0.163,0.612]
+  written hist {2: 3, 3: 1, 4: 6, 5: 9, 6: 21, 7: 66, 8: 175, 9: 67, 10: 33, 11: 14, 12: 9, 13: 3, 14: 3}
+  pruned hist {2: 4, 3: 2, 4: 9, 5: 11, 6: 22, 7: 66, 8: 174, 9: 67, 10: 31, 11: 12, 12: 6, 13: 3, 14: 3}
+  frontier written 12 pruned 12
+  reasons [('lean rejected', 12104), ('lean_seq parse: unbound', 4387), ('lean_seq parse: formula', 87), ('lean_seq parse: expected (', 51), ('lean_seq parse: name', 50), ('lean_seq parse: expected )', 40)]
+genstats {"steps": 4448, "rows": 18432, "rowsteps": 2464544, "prompt_len_max": 83, "chunks": 9, "stop_eos": 18402, "stop_exact": 0, "stop_goal": 0, "sample_wall_s": 29.971250534057617, "peak_alloc_gb": 8.007687091827393, "peak_reserved_gb": 8.54296875, "max_new": 512, "declen_max": 512, "declen_ge_max_new": 30, "declen_by_prompt_max": 512, "declen_by_prompt_ge_max_new": 30, "truncated": 30}

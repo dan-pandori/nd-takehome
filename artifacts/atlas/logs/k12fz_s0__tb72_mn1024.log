@@ -1,0 +1,31 @@
+[lean_gate] 18432 samples, parse-fail 5165 (no-eos 24, 0.130 %), distinct 9934: ok 1231, rej 8703 (filter 8703, prefilter=on); lean on 1231 texts in 4 procs, 6.4s proc, exposed 0.9s, tail 0.5s, 12 workers
+[lean_gate] WARNING: 0.13 % of samples hit max_new (policy: raise max_new above 0.1 %)
+generated 18432 proofs in 41s
+k12fz_s0.pt on textbook72.jsonl k=256 SOLVED 21/72 = 0.292 [0.199,0.405]
+  len 1: 1/1 = 1.000 [0.207,1.000]
+  len 2: 2/2 = 1.000 [0.342,1.000]
+  len 3: 1/1 = 1.000 [0.207,1.000]
+  len 5: 1/1 = 1.000 [0.207,1.000]
+  len 6: 7/10 = 0.700 [0.397,0.892]
+  len 7: 3/4 = 0.750 [0.301,0.954]
+  len 8: 0/2 = 0.000 [0.000,0.658]
+  len 9: 1/3 = 0.333 [0.061,0.792]
+  len 10: 0/5 = 0.000 [0.000,0.434]
+  len 11: 0/4 = 0.000 [0.000,0.490]
+  len 12: 0/2 = 0.000 [0.000,0.658]
+  len 13: 0/3 = 0.000 [0.000,0.562]
+  len 14: 0/3 = 0.000 [0.000,0.562]
+  len 15: 0/4 = 0.000 [0.000,0.490]
+  len 16: 0/2 = 0.000 [0.000,0.658]
+  len 18: 0/4 = 0.000 [0.000,0.490]
+  len 20: 0/3 = 0.000 [0.000,0.562]
+  len 22: 0/1 = 0.000 [0.000,0.793]
+  len 25: 0/1 = 0.000 [0.000,0.793]
+  len 29: 0/1 = 0.000 [0.000,0.793]
+  len 33: 0/1 = 0.000 [0.000,0.793]
+  len None: 5/14 = 0.357 [0.163,0.612]
+  written hist {2: 3, 3: 4, 4: 5, 5: 15, 6: 26, 7: 43, 8: 167, 9: 97, 10: 32, 11: 16, 12: 4}
+  pruned hist {2: 7, 3: 1, 4: 25, 5: 13, 6: 27, 7: 38, 8: 168, 9: 95, 10: 23, 11: 14, 12: 1}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 11362), ('lean_seq parse: unbound', 4645), ('lean_seq parse: name', 256), ('lean_seq parse: formula', 78), ('lean_seq parse: expected )', 69), ('lean_seq parse: expected ;', 36)]
+genstats {"steps": 7376, "rows": 18432, "rowsteps": 2465264, "prompt_len_max": 83, "chunks": 9, "stop_eos": 18408, "stop_exact": 0, "stop_goal": 0, "sample_wall_s": 39.19013524055481, "peak_alloc_gb": 14.353789806365967, "peak_reserved_gb": 15.6328125, "max_new": 1024, "declen_max": 1024, "declen_ge_max_new": 24, "declen_by_prompt_max": 1024, "declen_by_prompt_ge_max_new": 24, "truncated": 24}

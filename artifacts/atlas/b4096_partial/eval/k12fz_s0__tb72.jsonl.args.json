@@ -1,0 +1,41 @@
+{
+ "ckpt": "ckpts/atlas/k12fz_s0.pt",
+ "inp": "data/bs/textbook72.jsonl",
+ "out": "artifacts/atlas/eval/k12fz_s0__tb72.jsonl",
+ "k": 256,
+ "temperature": 0.8,
+ "seed": 0,
+ "limit": null,
+ "lenfield": "reference_lines",
+ "batch": 4096,
+ "summary": "artifacts/atlas/eval/k12fz_s0__tb72.json",
+ "_meta": {
+  "script": "rescore.py",
+  "argv": [
+   "atlas/scripts/rescore.py",
+   "--ckpt",
+   "ckpts/atlas/k12fz_s0.pt",
+   "--in",
+   "data/bs/textbook72.jsonl",
+   "--k",
+   "256",
+   "--temperature",
+   "0.8",
+   "--seed",
+   "0",
+   "--batch",
+   "4096",
+   "--lenfield",
+   "reference_lines",
+   "--out",
+   "artifacts/atlas/eval/k12fz_s0__tb72.jsonl",
+   "--summary",
+   "artifacts/atlas/eval/k12fz_s0__tb72.json"
+  ],
+  "run_id": "evidence-atlas",
+  "git_sha": null,
+  "git_dirty": null,
+  "host": "9421b2ebe8e2",
+  "utc": "2026-10-02T17:34:22Z"
+ }
+}

@@ -1701,3 +1701,62 @@ step-cap rates re-read at `max_action` 1,024, `max_steps` 192 (`artifacts/bs/eva
 Truncation barely falls at twice the action budget: these are non-terminating actions, not long proofs cut off. The
 caps make the best-recipe numbers slightly low (≤ 2 textbook problems per checkpoint); no conclusion changes. Final spend
 60.74 pod-hours, $29.76.
+
+
+## evidence-atlas (2026-10-02)
+
+The atlas itself is `atlas/ATLAS.md` (figures `atlas/figures/`, tables `atlas/data/`). Every copied number there carries its
+source file in the CSV's `source_file` column; recomputed ones name the per-theorem file. This section lists only the
+numbers **measured in this run**: the whole-proof re-score.
+
+**Models (all eight):** 3,214,336 params (4 × 256, 8 heads, vocab 107), `lean_seq` whole proof, from scratch, sampled with
+`eval_set.py` (whole-proof `sample.generate`, fast path), **Lean alone decides** (`lean_judge`).
+- **C0 cap 6, frozen** s0/s1: `hf://buckets/dan-pandori/nd-rl/lean-format/ckpts/lf/stage1_a1_seq_s{0,1}.pt`, trained on the cap-6
+  control set (depth3 f0 a1, 155k).
+- **C0 cap 6, T1** s0/s1: `…/ds-generator/ckpts/ladder/la_T1_c0_s{0,1}_r8.pt`, the same base plus 8 T1 ladder rounds.
+- **K12 cap 12, frozen** s0/s1: `…/cap-horizon/ckpts/kh/stage1_k12_s{0,1}.pt`, trained on `data/kh/train_k12.jsonl` (155k).
+- **K12 cap 12, T1** s0/s1: `…/state-cap12/ckpts/ladder/la_T1_K12_s{0,1}_r8.pt`, initialised from `stage1_k12_s{0,1}`.
+
+**Reads.**
+- Pools: textbook72 (`data/bs/textbook72.jsonl`, md5 90355c36…) at k 256; dev1108 (`data/bs/dev1108.jsonl`, md5 49697a77…)
+  at k 64; holdout250 (`data/bs/holdout250.jsonl`, md5 dfdd72e0…) at k 256.
+- Settings: T 0.8, sample seed 0, batch 2,048, `max_new` 512, two jobs per RTX 3090, peak 8.4 GB per job.
+- Source: `artifacts/atlas/eval/<model>_s<seed>__<pool>.json` (counts; `.jsonl` per-theorem rows are in the bucket, listed in
+  `artifacts/MANIFEST.jsonl`), tabulated by `atlas/scripts/rescore_rows.py`.
+
+| model | textbook72 /72 | dev1108 /1108 | holdout250 /250 |
+|---|---|---|---|
+| C0 cap 6 frozen | 12 / 11 | 54 / 36 | 15 / 8 |
+| C0 cap 6 T1 | 15 / 13 | 417 / 465 | 104 / 102 |
+| K12 cap 12 frozen | 21 / 21 | 415 / 384 | 115 / 104 |
+| K12 cap 12 T1 | 25 / 22 | 797 / 771 | 181 / 177 |
+
+**Truncation** (share of samples that hit `max_new` 512): 0.00–0.26 %; over 0.1 % on 11 of 24 reads.
+- Those 11 were re-read at `max_new` 1,024 (`artifacts/atlas/eval_mn1024/`).
+- All 11 give the identical solved set (`atlas/data/truncation_check.csv`, from `atlas/scripts/trunc_check.py`).
+
+**Re-draws at batch 4,096** (first attempt; `artifacts/atlas/b4096_partial/eval/`, 11 reads): differences against the
+batch-2,048 reads are −5 to +7 on dev, −2 to +3 on holdout250 and −4 to 0 on textbook72.
+
+**Compute** (`atlas/data/compute_rescore.csv`, from `atlas/scripts/compute_table.py`, which parses the job logs; GPU
+NVIDIA GeForce RTX 3090; training steps and tokens 0):
+
+| arm | max_new | GPU-s | attempts | generated tokens | Lean checks |
+|---|---|---|---|---|---|
+| C0 frozen | 512 | 491 | 306,688 | 45,206,496 | 1,846 |
+| C0 T1 | 512 | 548 | 306,688 | 50,304,304 | 39,783 |
+| K12 frozen | 512 | 551 | 306,688 | 56,807,536 | 16,952 |
+| K12 T1 | 512 | 574 | 306,688 | 62,335,136 | 91,615 |
+| C0 frozen (truncation check) | 1,024 | 213 | 160,256 | 23,977,088 | 1,209 |
+| C0 T1 (truncation check) | 1,024 | 119 | 89,344 | 14,205,296 | 14,716 |
+| K12 frozen (truncation check) | 1,024 | 619 | 306,688 | 56,954,032 | 16,952 |
+
+The registry rows the scripts wrote themselves are at `hf://buckets/dan-pandori/nd-rl/registry/evidence-atlas/`.
+
+**Pods.** Five `podjob` pods:
+- `ea-rescore`: A40, Lean missing;
+- `ea-rescore2`: RTX 3090, OOM at batch 4,096 with two jobs;
+- `ea-rescore3`: the reads;
+- `ea-trunc` and `ea-trunc2`: the truncation check.
+
+Total 1.08 pod-hours, $0.54 (`~/podhours.log`). Bucket: `hf://buckets/dan-pandori/nd-rl/evidence-atlas/{artifacts,atlas}`.

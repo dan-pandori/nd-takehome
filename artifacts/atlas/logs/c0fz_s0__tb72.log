@@ -1,0 +1,31 @@
+[lean_gate] 18432 samples, parse-fail 4555 (no-eos 38, 0.206 %), distinct 8549: ok 515, rej 8034 (filter 8034, prefilter=on); lean on 515 texts in 3 procs, 2.4s proc, exposed 0.8s, tail 0.6s, 12 workers
+[lean_gate] WARNING: 0.21 % of samples hit max_new (policy: raise max_new above 0.1 %)
+generated 18432 proofs in 21s
+c0fz_s0.pt on textbook72.jsonl k=256 SOLVED 12/72 = 0.167 [0.098,0.269]
+  len 1: 1/1 = 1.000 [0.207,1.000]
+  len 2: 2/2 = 1.000 [0.342,1.000]
+  len 3: 1/1 = 1.000 [0.207,1.000]
+  len 5: 1/1 = 1.000 [0.207,1.000]
+  len 6: 4/10 = 0.400 [0.168,0.687]
+  len 7: 0/4 = 0.000 [0.000,0.490]
+  len 8: 0/2 = 0.000 [0.000,0.658]
+  len 9: 0/3 = 0.000 [0.000,0.562]
+  len 10: 0/5 = 0.000 [0.000,0.434]
+  len 11: 0/4 = 0.000 [0.000,0.490]
+  len 12: 0/2 = 0.000 [0.000,0.658]
+  len 13: 0/3 = 0.000 [0.000,0.562]
+  len 14: 0/3 = 0.000 [0.000,0.562]
+  len 15: 0/4 = 0.000 [0.000,0.490]
+  len 16: 0/2 = 0.000 [0.000,0.658]
+  len 18: 0/4 = 0.000 [0.000,0.490]
+  len 20: 0/3 = 0.000 [0.000,0.562]
+  len 22: 0/1 = 0.000 [0.000,0.793]
+  len 25: 0/1 = 0.000 [0.000,0.793]
+  len 29: 0/1 = 0.000 [0.000,0.793]
+  len 33: 0/1 = 0.000 [0.000,0.793]
+  len None: 3/14 = 0.214 [0.076,0.476]
+  written hist {2: 2, 3: 2, 4: 7, 5: 13, 6: 6, 7: 2}
+  pruned hist {2: 2, 3: 2, 4: 9, 5: 12, 6: 5, 7: 2}
+  frontier written 6 pruned 6
+  reasons [('lean rejected', 12834), ('lean_seq parse: unbound', 3629), ('lean_seq parse: name', 436), ('lean_seq parse: ORE box', 176), ('lean_seq parse: formula', 139), ('lean_seq parse: expected )', 47)]
+genstats {"steps": 2896, "rows": 18432, "rowsteps": 1730032, "prompt_len_max": 83, "chunks": 9, "stop_eos": 18394, "stop_exact": 0, "stop_goal": 0, "sample_wall_s": 20.150413751602173, "peak_alloc_gb": 8.007687091827393, "peak_reserved_gb": 8.30859375, "max_new": 512, "declen_max": 512, "declen_ge_max_new": 38, "declen_by_prompt_max": 512, "declen_by_prompt_ge_max_new": 38, "truncated": 38}

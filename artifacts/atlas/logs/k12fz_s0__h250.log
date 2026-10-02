@@ -1,0 +1,17 @@
+[lean_gate] 64000 samples, parse-fail 30919 (no-eos 89, 0.139 %), distinct 23010: ok 3116, rej 19894 (filter 19894, prefilter=on); lean on 3116 texts in 13 procs, 28.6s proc, exposed 2.2s, tail 1.0s, 12 workers
+[lean_gate] WARNING: 0.14 % of samples hit max_new (policy: raise max_new above 0.1 %)
+generated 64000 proofs in 120s
+k12fz_s0.pt on holdout250.jsonl k=256 SOLVED 115/250 = 0.460 [0.399,0.522]
+  len 7: 17/31 = 0.548 [0.378,0.708]
+  len 8: 22/32 = 0.688 [0.514,0.820]
+  len 9: 59/115 = 0.513 [0.423,0.602]
+  len 10: 14/48 = 0.292 [0.182,0.432]
+  len 11: 3/14 = 0.214 [0.076,0.476]
+  len 12: 0/7 = 0.000 [0.000,0.354]
+  len 13: 0/2 = 0.000 [0.000,0.658]
+  len 14: 0/1 = 0.000 [0.000,0.793]
+  written hist {7: 18, 8: 39, 9: 121, 10: 85, 11: 53, 12: 38, 13: 31, 14: 22, 15: 8, 16: 2}
+  pruned hist {6: 5, 7: 33, 8: 102, 9: 117, 10: 37, 11: 33, 12: 43, 13: 29, 14: 12, 15: 4, 16: 2}
+  frontier written 15 pruned 14
+  reasons [('lean rejected', 28258), ('lean_seq parse: unbound', 24329), ('lean_seq parse: expected )', 4374), ('lean_seq parse: formula', 980), ('lean_seq parse: name', 595), ('lean_seq parse: exact not last', 182)]
+genstats {"steps": 15424, "rows": 64000, "rowsteps": 12317152, "prompt_len_max": 108, "chunks": 32, "stop_eos": 63911, "stop_exact": 0, "stop_goal": 0, "sample_wall_s": 117.60288190841675, "peak_alloc_gb": 8.440860271453857, "peak_reserved_gb": 8.81640625, "max_new": 512, "declen_max": 512, "declen_ge_max_new": 89, "declen_by_prompt_max": 512, "declen_by_prompt_ge_max_new": 89, "truncated": 89}

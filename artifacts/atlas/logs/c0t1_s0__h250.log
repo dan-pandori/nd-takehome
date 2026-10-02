@@ -1,0 +1,16 @@
+[lean_gate] 64000 samples, parse-fail 9269 (no-eos 5, 0.008 %), distinct 26984: ok 6285, rej 20699 (filter 20699, prefilter=on); lean on 6285 texts in 20 procs, 62.8s proc, exposed 3.9s, tail 2.4s, 12 workers
+generated 64000 proofs in 114s
+c0t1_s0.pt on holdout250.jsonl k=256 SOLVED 104/250 = 0.416 [0.357,0.478]
+  len 7: 11/31 = 0.355 [0.211,0.531]
+  len 8: 17/32 = 0.531 [0.364,0.691]
+  len 9: 66/115 = 0.574 [0.483,0.660]
+  len 10: 10/48 = 0.208 [0.117,0.343]
+  len 11: 0/14 = 0.000 [0.000,0.215]
+  len 12: 0/7 = 0.000 [0.000,0.354]
+  len 13: 0/2 = 0.000 [0.000,0.658]
+  len 14: 0/1 = 0.000 [0.000,0.793]
+  written hist {7: 13, 8: 30, 9: 144, 10: 86, 11: 9}
+  pruned hist {6: 4, 7: 24, 8: 73, 9: 156, 10: 24, 11: 1}
+  frontier written 11 pruned 10
+  reasons [('lean rejected', 38647), ('lean_seq parse: unbound', 7936), ('lean_seq parse: formula', 625), ('lean_seq parse: ORE box', 274), ('lean_seq parse: name', 196), ('lean_seq parse: expected (', 69)]
+genstats {"steps": 9472, "rows": 64000, "rowsteps": 11005568, "prompt_len_max": 108, "chunks": 32, "stop_eos": 63995, "stop_exact": 0, "stop_goal": 0, "sample_wall_s": 110.04552745819092, "peak_alloc_gb": 8.440860271453857, "peak_reserved_gb": 8.81640625, "max_new": 512, "declen_max": 512, "declen_ge_max_new": 5, "declen_by_prompt_max": 512, "declen_by_prompt_ge_max_new": 5, "truncated": 5}
