@@ -128,3 +128,124 @@ efficient", 14B, "over 50%"). I did not check the Tsilivis depth/width list (L �
   re-fetch outside the repo.
 
 No hard-constraint violation.
+
+## §Compare (phase 2)
+
+After committing §Recount (`f8372285`), I read `run_lit_review_2.md`, `lit_review_2/REVIEW.md`, `log.md` and `STATUS.md`
+in the run worktree. I checked claims that are not in the ledger against my own fetches (`review_lit_review_2/`) or
+against the cited project documents (nd-rl `experiment-summaries/`, `docs/proposals/`, `docs/literature/`).
+
+### Claims about the literature
+
+| claim (REVIEW.md unless noted) | my value | verdict |
+|---|---|---|
+| 51 new papers screened, 11 in depth; over 25–40, disclosed | 51 rows, 0 id overlap with `lit-review`, 11 `full` | reproduces; the deviation is disclosed in REVIEW.md, `log.md` and run_*.md |
+| "110 claims; 8 marked wholly or partly UNVERIFIED" (also run_*.md: "110 ledger claims") | **108** ledger rows; **5** UNVERIFIED (3 wholly, 2 partly). The agents' raw `~/lr_out2/Q*.md` hold the same 108 rows; the extra counts are table header lines containing "V / UNVERIFIED" | **differs** (count inflated by headers; no claim is missing) |
+| "my independent re-check (33 / 33 verbatim)" | 106 / 106 checkable rows verbatim in my own re-fetch at the cited versions | reproduces, and holds more widely |
+| Yue: ✗✓ 0.0 % (AIME24 k 1,024) / 1.0 % (MATH500 k 128); likelihood evidence on two problems | same (Table 2; Fig. 6 caption) | reproduces |
+| ProRL: "where base models fail entirely"; base "struggles with formatting" (§4) | in 2505.24864v1 | reproduces |
+| BroRL "revives models saturated after 3K ProRL training steps" | in 2510.01180v1 abstract | reproduces |
+| Mirage or Method: "only when the model and task already exhibit strong model-task alignment" | in 2508.21188v2 abstract | reproduces |
+| A3PO: "negative samples encourage exploration of new reasoning paths" | in 2512.21625v1 | reproduces |
+| Scalable power sampling "matches or surpasses one-shot GRPO" at > 10× less latency than MCMC | "reducing inference latency by over 10\times compared to MCMC-based sampling" (2601.21590v1) | reproduces |
+| Power distribution = "closed-form optimizer of KL-regularized RL when the model's sequence-level log-probabilities are used as the reward" | verbatim in 2605.04542v1 | reproduces |
+| Zhu 2506.01347, Interplay 2512.07783 | titles match on arXiv | reproduces |
+| ln 256 = 5.5 nats | 5.545 | reproduces |
+| RMaxTS +1.2 points (earlier note) | `lit-review`: 58.4 → 59.6, 2408.08152v1 Table 3 | reproduces |
+| SvS: pass@k to 1,024 above the initial model | "scaling Pass@k from 1 to 1024" (2508.14029v4 §5.2) | reproduces |
+| DeepHOL-Zero 7.0 % vs 56.3 %; "learning process would stall" | Fig. 4; §4.1 | reproduces |
+| 2607.07646: base 0 % on B4–5 at pass@1024; RL solves at pass@16; RFT plateaus | reproduces. REVIEW.md omits that each bucket has **16 problems** and the curves are 3 seeds; the note has both | reproduces; add n |
+| Q2 table: Go-Explore "completely" solved Montezuma; 15 rooms (pseudo-counts); AZ concepts to 4 grandmasters (Table 4); noise never ablated | all in source | reproduces |
+
+### Claims about our own runs (model labels)
+
+REVIEW.md gives the model label: best-cap12, 9,560,832 params, `lean_staten`, from scratch on K12, 3 seeds, Lean
+alone. This matches the `trajectory` and `rl-from-ckpt` summaries. The other numbers match too: 8 rounds × k 32; the
+x < −12 threshold; proposal 20's "reference worst step ≈ −12 nats, group C"; and the post-hoc-calibrated threshold
+form, which is `rl-from-ckpt`'s own wording. The correction "group C's single −12-nat step is not supported" agrees
+with the `trajectory` review ("C stays at one bad step" not supported).
+
+**One mis-characterisation.**
+- REVIEW.md's Q1 shortfall table says "Base read at k 256; 'B' is RL-solved within an unequal budget". Bottom line 1
+  calls our split "weaker still" than Yue.
+- In `trajectory`, groups come from sample seed 0 at **r0 and r8, both at k 256**, on textbook72 + holdout250. Those
+  are evaluation-only pools that the ladder did not train on (summary §Sampled reads / Groups). So B is
+  ✗(r0, k 256) ✓(r8, k 256): the same equal-k cell as Yue's Table 2.
+- Yue used k 1,024 on AIME24 and k 128 on MATH500.
+- The real gaps are these: k is 256, not ≥ 1,024; there is no large-k base curve on B ∪ C; groups come from one sample
+  seed. The budget is not unequal.
+
+The proposed fix (re-read B ∪ C at k ≥ 4,096) is still right. The stated reason is wrong, and "weaker still" should be
+"the same design at a smaller k".
+
+### Pre-registered expectations
+
+| # | executor | my assessment (R5) | verdict |
+|---|---|---|---|
+| 1 | held | not falsified within a 51-paper screen, 34 of them read at abstract level | agree; word it as "none found in this screen" |
+| 2 | held, partly | partly supported | agree |
+| 3 | held | met | agree |
+| 4 | partly falsified: heuristic injection, oracle prefixes, LLM evolution | the first clause is contradicted by the run's own Q3 sources (plain GRPO / PG on from-scratch organisms: 2607.07646, 2509.22613); the second clause holds | agree that it is partly falsified, but for a different and stronger reason (see V2) |
+| 5 | held | holds, with 3–4 families depending on how they are split | agree |
+| 6 | held, 33 / 33 | holds, 106 / 106 | agree |
+| 7 | "not met as an error: three qualifications only" | the pre-registration says "mis-stated **or needs a qualification**", so three qualifications meet it. One is arguably a mis-statement: `lit-review` §c item 1 compares a **per-step** probability with an unseen-in-k bound, but that bound applies to whole sequences. | **misgraded conservatively**: #7 held. run_*.md's "5 of 7 held" should be 6 of 7 held plus #4 partly falsified |
+
+Expectations were written and pushed before any fetch (R1: prereg commit 16:55:04; first source 16:55:09). The miss
+(#4) is reported as a miss.
+
+### Process and log
+
+- `log.md` times "17:10 independent re-check" and "17:15 added four papers" come after the DONE commit (17:07:14) and
+  the executor's exit (17:07:35). The four added papers' sources are dated 17:04:08–09, and the agents' raw files
+  17:00–17:03. The log was written after the fact with estimated times. This is minor and does not change any
+  result.
+- The executor's run took 14 min from pre-registration to DONE with three parallel screening agents. Breadth over
+  depth shows in the table: 34 / 51 papers were read at abstract level. That is within the brief, and the depth
+  column says so for every row.
+- Orchestration (not the executor's fault): the phase-1 copy kept `lit_review_2/REVIEW.md` and `log.md`, because the
+  removal patterns do not match a lit-review's deliverable names. I did not read them in phase 1.
+
+## §Verdict
+
+**Stands.** No hard-constraint violation. All 45 cited arXiv versions exist with the cited titles. Every one of the
+106 checkable ledger quotes, and every quote that matters in REVIEW.md, is verbatim at the cited version in my own
+re-fetch. The three UNVERIFIED rows are honestly marked. The descriptions of our runs carry correct model labels.
+The ranked implications follow from the sources: an equal-budget large-k re-read with a pre-registered coverage
+threshold; reference-prefix starts; ε after return and kept on throughout; a coverage-removal intervention; a GRPO
+arm beside the RFT-like ladder.
+
+**Must be reworded:**
+- **V1.** Bottom line 1 and the Q1 shortfall row 1: our A/B split *is* equal-k (r0 vs r8, both k 256, on eval-only
+  pools). The shortfall is the small k and the missing large-k base curve, not an unequal budget, and "weaker still"
+  should read "the same design at k 256".
+- **V2.** Bottom line 3 ("Exploration that reaches outside support **always** has a source other than the policy's own
+  samples") and Implication 2 ("the **only** literature-backed route for zero-reward targets") contradict the review's
+  own bottom line 2 and Q3. In 2607.07646, plain GRPO, using only on-policy samples, solves buckets where the base gets
+  0 % at pass@1024. In 2509.22613, PG "can explore and discover new correct paths that were absent from the initial
+  training set".
+  - Neither measures base support, but neither do Go-Explore, DeepHOL-Zero, POPE or AlphaEvolve, which the review
+    counts.
+  - Reword along these lines: external sources are what move *pretrained-LLM* zero-reward problems (2601.18779), while
+    in small from-scratch organisms on-policy RL alone reaches base-pass@1024 = 0 problems through iterated shifts.
+  - Expectation #4's falsification should cite this as well.
+- **V3.** "110 claims; 8 UNVERIFIED" → 108 and 5 (REVIEW.md and run_*.md).
+- **V4.** Expectation #7 held under its pre-registered wording ("or needs a qualification"). The tally is 6 held and
+  1 partly falsified, not 5 of 7.
+- **V5.** Give n wherever 2607.07646's frontier is used: 16 problems per bucket and 3 seeds. "0 % at pass@1024" on 16
+  problems is a weak support statement. That is the same caveat the review rightly applies to Yue's two-problem
+  Fig. 6.
+- **V6.** In `notes/donoway2026-edl.md:30`, change "pre-teaching a skill converts teaching to elicitation" to the
+  source's words, "converts a teaching task to an elicitation task", or drop the quotation marks.
+- **V7.** Correct the `log.md` times (17:10 and 17:15 are after the DONE commit).
+
+**Not supported as worded:** the "always" / "only" claims in V2. Everything else is supported at the depth stated in
+the table.
+
+**Next measurement** (it would settle V1/V2 for our own setting):
+- **What:** the review's Implication 1, done as a read.
+- **Model:** best-cap12 r0 (9.56 M `lean_staten`, from scratch on K12), 3 seeds.
+- **Pools:** `trajectory`'s B ∪ C theorems.
+- **Budget:** k 4,096, plus the sequence log p of every Lean-accepted sample.
+- **How to read it:** if r0 solves a substantial share of B at k 4,096, then B is elicitation at the field's standard.
+  If B and C stay at 0 with every reference below −ln 4,096, then `rl-from-ckpt`'s ladder solves are the first
+  likelihood-checked base-fails result in this literature.
