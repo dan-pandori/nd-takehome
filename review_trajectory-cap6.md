@@ -237,3 +237,90 @@ Caveats to look for:
 - B at r0 is a single-draw label (≈ 5–10 % flips on re-draw);
 - truncation exceeds 0.1 % in most r1–r8 strata, so r8 pass@k for B and C is biased low by up to ≈ 4 % of samples;
 - Δ_PT is measured from step 1,600, where B's w1 is already −12 to −14.
+
+## Phase 2 — compare (read `run_trajectory_cap6.md`, `numbers.md` § trajectory-cap6, `log.md` § trajectory-cap6)
+
+Extra reviewer scripts: `review_tj6/phase2.py` and `review_tj6/robust_x1.py` (outputs in `rv6/phase2.log` and
+`rv6/robust_x1.log`).
+
+**Two aggregation notes.**
+
+- For the cross-seed and cap-12 target rows, the executor averages a theorem's several fixed proofs and then takes the
+  median over theorems. My phase 1 took the median over (theorem, proof) pairs. With the executor's aggregation I
+  reproduce its numbers exactly (`phase2.log`, last two lines). The conclusions are the same under both.
+- The "key checkpoints" table is pooled over (theorem, seed) pairs. It reproduces to the second decimal.
+
+| claim (executor) | reviewer value | verdict |
+|---|---|---|
+| Models: best-cap6 s0–s2, 9,560,832 params, `lean_staten`, from scratch on the cap-6 set, Stage-1 1,200 s A40 + T1 ladder; cap-12 rows labelled as `trajectory`'s best-cap12 | read from the checkpoints; set md5 matches | reproduces; every number is labelled |
+| Groups A 169 / 138 / 140, B 101 / 132 / 122, C 52 / 52 / 60, A-lost 2 / 1 / 0 | identical | reproduces |
+| Sanity: tb72 pend 17 / 14 / 15, r8 43 / 41 / 38; h250 pend 152 / 124 / 125, r8 225 / 228 / 224; held-out greedy .973 / .953 / .956 | identical | reproduces |
+| F1: B worst step −10.0 (end PT) → −0.98 (r8); Δ_RL +8.8 [8.2, 9.5] vs Δ_PT +2.2 [1.6, 2.7], 3 / 3 | pooled −10.00 → −0.98; IQM 8.81 vs 2.18; 3 / 3; paired 6.89 | reproduces. The rule's "RL-dominated" is met (3 / 3, IQM difference 6.6 ≥ 2-nat MDD) |
+| F1: holds on references (+5.1 vs +1.5), another seed's eventual (+6.0 vs +2.2), cap-12 eventual (+4.6 vs +1.5) | 5.12 vs 1.47; 5.97 vs 2.17 (per-theorem mean; pair median 6.09 vs 1.95); 4.57 vs 1.50 (pair median 4.93 vs 1.74); each 3 / 3, each paired IQM ≥ 3 | reproduces |
+| (robustness, reviewer) groups defined from the independent x1 draw, or B = r0 fails in both draws | own: Δ_RL − Δ_PT IQM 6.71 / 7.17; references: 3.70 / 3.86; 3 / 3 in each | the headline does not depend on the single-draw group label |
+| F1: "After step 8,000 B is flat (+0.6)" | per seed −1.39 / +2.16 / +0.93 (mean 0.57); A +2.49 | **reword**: "+0.6 on average (−1.4 to +2.2 by seed)". s1's +2.2 is not flat |
+| F1: "At cap 12 the two were about equal (+4.1 vs +4.6), and references gained only +1.5" | cap-12 (reviewed in `review_trajectory.md`): Δ_PT +4.09, Δ_RL +4.59, reference Δ_RL +1.55 | numbers right, **order swapped** relative to the sentence before it ("Δ_RL … vs Δ_PT"). Write "Δ_RL +4.6 vs Δ_PT +4.1", and label it best-cap12 |
+| F2: B6∩A12 = 75; cap-12 eventual +4.7 in cap-12 PT, to −2.8; under cap 6 −11.8 → −6.4 under r8; cap-6 own proof reaches −0.9 | 75; +4.72 (paired), −2.81; −11.76 → −6.44; own −8.89 → −0.90 | numbers reproduce |
+| F2: "RL at cap 6 finds its own route, not cap 12's" | (i) RL *does* lift cap 12's proof: +5.3 (medians), +4.4 paired, against a cap-6 Δ_PT of +1.5 on cap-12 proofs (B rows). (ii) The −0.9 for the own proof is r8's argmax, selected upward by construction. A selection-free cap-6-style proof, another cap-6 seed's eventual proof, reaches **−3.30** under r8 on B6∩A12 (pend −10.0). So the like-for-like gap at r8 is ≈ 3 nats, not ≈ 5.5. (iii) 4c missed (only 34 % of bad steps sit past action 7), so the bad step is mostly *not* past the trained length | **reword**: "RL raises cap 12's proof too (+4–5 nats), but cap-6-style proofs from other seeds end ≈ 3 nats higher (−3.3 vs −6.4): RL favours the cap-6 model's kind of proof". Drop "not cap 12's". Also say what 4c's miss implies: the gap is not mainly a too-long proof |
+| F2 title: "longer training proofs do in pretraining what RL does at cap 6" | 4e (+4.7 ≥ 3) met; 4b met; 4d met | supported as a description of where the climb happens (cap-12 PT vs cap-6 RL). The mechanism behind it is not shown (4c miss, 4a only at the edge: 12 vs 10 actions) |
+| F3: C references ≈ −12 throughout | pooled −12.8 (pend) … −12.1 (r8); per seed ≥ −9.9 max | reproduces |
+| F3: "at 2× caps C is solved no more often than by a fresh draw" | C@r8 solved at 2×: 4 / 52, 1 / 52, 3 / 60. Expected from x1 pass@256 (.077 / .038 / .050): ≈ 4 / 2 / 3 | reproduces. `numbers.md` "the caps are not what keeps C unsolved" is fine **for doubling**: 2× still cuts off 5.7 % of C's r8 samples (1–10 % by seed × pool), so "not what keeps C unsolved at up to 2× caps" is the supported wording |
+| B at pend solved at 2×: 5 / 101, 8 / 132, 10 / 122, "the rate a fresh draw gives" | identical; s0 / s2 had ≈ 0 % cut-off at 1× | reproduces. It also means B membership at r0 is "r0 pass@256 ≲ 0.07", which is worth one sentence in the write-up |
+| Example (B6∩A12, s0, `la_transfer_1888`): `n1.2` at −14.9 / −4.3 / −0.40 / −0.43 | −14.85 / −4.26 / −0.40 / −0.43; the shown Lean text is accepted (no axioms) | reproduces |
+| Hits / misses list: misses = reference Δ_PT ≥ Δ_RL; 4c; C \|Δ_RL\| < 2 in s0 | same three misses in my recount | reproduces. Also: B r8 pass@1 s0 .653 is marked ✓ "at the edge" of 0.25–0.65; it is outside by .003 (**trivial miss**, should be listed). 4a "at the edge" is correctly flagged |
+| `numbers.md` totals: pend A −4.16, B −21.8; r8 A −1.21, B −1.91 | means of my per-seed medians: −4.16, −21.83, −1.21, −1.91 | reproduces |
+| `numbers.md` cross-tab: A→A 152, B→A 75, B→B 37, C→A 9 | identical | reproduces |
+| `numbers.md` 4a–4e, descriptive rows (cap-6 eventual under cap-12 pend −4.5; references −9.0 / −3.7) | 2; −11.8 / −2.8; 34 %; +4.4; +4.7; −4.49; −9.05 / −3.70 | reproduces |
+| `numbers.md` "box opener in 160 / 355 (Or.elim 84, imp 54, neg 22), ∧E projection 71" | Or.elim 84, other boxes 76, projection 71 of 355 | reproduces |
+| Proof size: eventual A 10 / 5, B 12 / 7; reference A 10 / 5, B 10 / 6, C 11 / 9 (actions / term size) | actions identical. My term size (a different node count) gives the same ordering: B eventual > B reference > A; C reference largest | reproduces (ordering). Term-size definitions differ (Spearman 0.71); both are internal |
+| All targets Lean-accepted 583 / 584 / 577, cross 1,664 | all 1,291 distinct targets; all 20,936 counted pend / r8 x0 proofs | reproduces |
+| Truncation: 494 / 792 strata > 0.1 %, max 14.2 % (RL), 11.7 % (PT), 200 / 288 RL strata | identical | reproduces. The Limits line names only C. B at r8 on textbook72 is 3.9–4.5 % cut off, so B's r8 pass@k is biased low by up to that much; say so |
+| Re-score determinism: 19,030 pairs, max \|Δw1\| 0 | my 2,595-pair subset: 0 | reproduces |
+| Compute: ladder 17,990 / 17,730 / 16,763 GPU-s A40; cap-12 ladders 22,350–27,021 (≈ 1.4×, A6000) and train tokens ≈ 1.5×, flagged > 1.25× | round files Σ secs 17,992 / 17,733 / 16,766; `trajectory`'s compute.json 22,350 / 24,467 / 27,021, 754 / 783 / 751 M tokens | reproduces; correctly flagged |
+| Reads compute 19,632 / 20,644 / 19,889 GPU-s "incl. the 2× diagnostic" | attempts reproduce for s0. s1 / s2 include ≈ 5 h250-reads' and 1 full read's worth of extra attempts (retries after the dead GPU / OOM) | **add**: say the read rows include the retries |
+| Spend 45.2 pod-hours, $22.62 | `podbudget`: 45.19 h, $22.62 | reproduces |
+| Pre-registration before the run | commit 19:33:46; first pod 19:34:15 (`log.md`); ladders ≥ 19:59; file unchanged since | holds. The header's "~20:00" is disclosed in `log.md` |
+| `nd_verify` not used; checker named | no use; all numbers post-2026-09-27, Lean only | holds |
+| Literal-text dumps lost (disclosed in `log.md`) | My re-check renders ND → Lean from the stored `proofs`. Every counted proof passes, but the literal sampled text cannot be re-checked | **finding (minor, repeat from `trajectory`)**: fix `up()` to include `dump/` before the next run |
+
+## §Verdict
+
+**Stands.**
+
+- The data and every pre-registered quantity reproduce from raw files with independent code: groups, sanity, pass@k,
+  eventual selection, scores (≤ 2e-4), the headline, 4a–4e, totals, C, truncation and compute.
+- No counted proof is rejected by Lean, and the negative controls fail as they should.
+- Splits are disjoint and there is no hard-constraint violation.
+- The headline is supported under the pre-registered rule, on own, reference and cross-seed targets: at cap 6, B's worst
+  step climbs mainly in RL (Δ_RL − Δ_PT IQM 6.6 / 3.6 / 4.2 nats, 3 / 3 seeds, all ≥ the 2-nat MDD). It survives
+  re-defining the groups from the independent draw.
+- The contrast with cap 12 (about equal there; RL-dominated here) stands on these two model organisms. Note that the
+  cap-12 comparison is between runs: different GPUs (A6000 vs A40) and > 1.25× ladder compute, as flagged.
+- The misses are reported honestly.
+
+**Reword.**
+
+1. F2 "RL at cap 6 finds its own route, not cap 12's" → RL lifts cap 12's proof too (+4–5 nats), but cap-6-style proofs
+   from other seeds end ≈ 3 nats higher at r8 (−3.3 vs −6.4). Compare against the selection-free −3.3, not the
+   argmax-selected −0.9.
+2. F1 "After step 8,000 B is flat (+0.6)" → give per-seed values (−1.4 / +2.2 / +0.9).
+3. F1 cap-12 parenthesis: write "Δ_RL +4.6 vs Δ_PT +4.1 (best-cap12)"; the current order reads as swapped.
+4. List the B r8 pass@1 s0 (.653 vs ≤ .65) as a (trivial) miss.
+5. Limits: B's r8 pass@k is biased low by up to ≈ 4 % cut-off samples on textbook72. "Caps are not what keeps C
+   unsolved" holds for doubling only: 2× still cuts off ≈ 6 %.
+6. Say the read compute rows include retries. Say B at r0 means "r0 pass@256 ≲ 0.07": a re-draw moves 5–10 % of B to A.
+
+**Not supported.**
+
+- Any mechanism in which cap 6's bad step lies past the trained length: 4c missed, at 34 %.
+- F2's title as an explanation rather than a description.
+
+**Next measurements.**
+
+- (a) Score r8 on proofs it did not select within the *same* seed (r8 x1's highest-likelihood proof that differs from the
+  x0 argmax). This separates selection from preference without a cross-seed model difference.
+- (b) To settle F2's "own route": on B6∩A12, give the cap-6 ladder cap 12's eventual proofs as injected targets (or
+  score cap-12 proofs after one more round). That shows whether the ≈ 3-nat gap is a preference or just that RL never
+  sampled them.
+- (c) Re-read C at r8 at 4× caps on a pod (≈ 1 GPU-hour) to close the residual truncation question.
+- (d) Keep the x0 literal-text dumps (`up()` excluding `dump/`).
