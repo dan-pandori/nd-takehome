@@ -910,7 +910,7 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - Q3 diversity: distinct accepted proofs per theorem rise every round; added a pruned canonical form
   (`oa_common.nd_pruned_canon`, a text parse, no checker) so padding does not count as diversity.
 - 17:36 second pod oa-p1 (A40) for seed 2 (wall time); the chained seed-2 job on oa-p0 was cancelled before starting.
-- 18:09 oa-p0 pulled + deleted; 18:5x oa-p1 pulled + deleted. All 111 checkpoint md5s match the inherited md5 files.
+- 18:09 oa-p0 pulled + deleted; 18:29 oa-p1 pulled + deleted. All 111 checkpoint md5s match the inherited md5 files.
   Peak memory 12–23 GB at batch 2,048 (one A40, two jobs); on-policy action truncation ≤ 0.67 % (entropy measurement
   only, nothing counted). GPU-s from `record.compute` (6,991) exceed billed pod time (6,840 s) because two jobs shared
   oa-p0's card.
