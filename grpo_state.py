@@ -210,6 +210,8 @@ def main():
     ap.add_argument('--max_steps_total', type=int, default=0, help='smoke tests: stop after this many updates (0 = the budget)')
     ap.add_argument('--steps_log', action='store_true', help='append every step\'s stats to <out>/steps.jsonl as it happens')
     ap.add_argument('--no_eval', action='store_true', help='smoke tests: skip the boundary transfer / greedy evaluations')
+    ap.add_argument('--resume_round', type=int, default=0, help='resume after a crash from <ckptdir>/<name>_r<R>.pt: replay the theorem '
+                    'order, reload the archive of the last completed boundary, re-run boundary R, continue (run grpo-best)')
     a = ap.parse_args()
     out = f'{a.outdir}/{a.name}'
     os.makedirs(out, exist_ok=True); os.makedirs(a.ckptdir, exist_ok=True)
@@ -249,72 +251,115 @@ def main():
     stats_steps = []
     env_st = {}
     t0 = time.time(); samples = 0
-    for step in range(1, last + 1):
-        rnum = min((r for s, r in boundaries.items() if s >= step), default=a.rounds)
-        record.phase('sample', round=rnum)
-        idxs = []
-        for _ in range(a.prompts):
+    start_step, resume_at = 1, None
+    if a.resume_round:
+        R = a.resume_round
+        resume_at = next(s_ for s_, r_ in boundaries.items() if r_ == R)
+        m2, _, _ = load_ckpt(f'{a.ckptdir}/{a.name}_r{R}.pt', dev)
+        model.load_state_dict(m2.state_dict()); del m2
+        model.train()
+        opt_note = 'fresh AdamW (no saved state for this boundary)'
+        op = f'{a.ckptdir}/{a.name}_opt.pt'
+        if os.path.exists(op):
+            o = torch.load(op, map_location=dev)
+            if o.get('round') == R:
+                opt.load_state_dict(o['opt']); opt_note = f'AdamW state saved at boundary {R}'
+        for _ in range(resume_at * a.prompts):    # replay the theorem order exactly as the crashed run drew it
             if ptr >= N:
                 rng.shuffle(order); ptr = 0
-            idxs.append(order[ptr]); ptr += 1
-        flat_t = [targets[i] for i in idxs for _ in range(a.group)]
-        model.eval()
-        ts = time.time()
-        rolls = env_rollouts(model, tok, [t['prompt'] for t in flat_t], temperature=a.temperature, max_action=a.max_action,
-                             max_steps=a.max_steps, batch=a.batch, seed=a.seed * 1000003 + step, stats=env_st)
-        verdicts = judge_many([(t['prompt'], r['nd']) for t, r in zip(flat_t, rolls)])    # registry hits after the gate
-        t_sample = time.time() - ts
-        R, novel = [], []
-        new_step = 0
-        for t, r, (ok, reason, nl) in zip(flat_t, rolls, verdicts):
-            R.append(1 if ok else 0); tried[t['name']] += 1
-            key = None
-            if ok:
-                okc[t['name']] += 1
-                pn = norm(r['nd'])
-                if pn not in found_keys[t['name']]:
-                    key = pn
-            novel.append(key)
-        for t, r, (ok, reason, nl), key in zip(flat_t, rolls, verdicts, novel):    # archive update after the novelty keys
-            if key is not None and key not in found_keys[t['name']]:
-                found_keys[t['name']].add(key)
-                found[t['name']].append({'proof': r['nd'], 'norm': key, 'written': nl, 'pruned': pruned_length(t['prompt'], r['nd']), 'round': rnum})
-                new_step += 1
-        samples += len(rolls)
-        logp = None
-        mixed = [g for g in range(a.prompts) if 0 < sum(R[g * a.group:(g + 1) * a.group]) < a.group]
-        if a.adv == 'unlikely' and mixed:
-            sel = [j for g in mixed for j in range(g * a.group, (g + 1) * a.group)]
-            lps = rollout_logprobs(model, tok, [rolls[j] for j in sel], a.lp_batch, a.temperature)
-            logp = [0.0] * len(rolls)
-            for j, v in zip(sel, lps):
-                logp[j] = v
-        adv = []
-        for g in range(a.prompts):
-            sl_ = slice(g * a.group, (g + 1) * a.group)
-            adv += group_advantages(a.adv, R[sl_], logp=(logp[sl_] if logp else None), novel_keys=novel[sl_], k=a.passk_k,
-                                    beta_rank=a.beta_rank, bonus=a.bonus, std=a.adv_std)
-        record.phase('update', round=rnum)
-        model.train()
-        tu = time.time()
-        loss, klm, gn, npairs, ntok = pg_update(model, ref, tok, rolls, adv, opt, norm_div, a.kl, a.lp_batch, a.temperature)
-        if npairs:
-            record.count(train_steps=1, train_tokens=ntok)
-        Rg = [sum(R[g * a.group:(g + 1) * a.group]) / a.group for g in range(a.prompts)]
-        st = {'step': step, 'round': rnum, 'mean_reward': sum(R) / len(R), 'frac_groups_with_variance': len(mixed) / a.prompts,
-              'frac_groups_nonzero_adv': sum(1 for g in range(a.prompts) if any(adv[g * a.group:(g + 1) * a.group])) / a.prompts,
-              'frac_groups_all_fail': sum(1 for x in Rg if x == 0) / a.prompts, 'new_proofs': new_step,
-              'actions': sum(len(r['traj']) for r in rolls), 'update_pairs': npairs, 'update_tokens': ntok,
-              'loss': loss, 'kl_per_token': klm, 'grad_norm': gn, 'samples': samples, 'secs': time.time() - t0,
-              'sample_judge_s': t_sample, 'update_s': time.time() - tu,
-              'peak_alloc_gb': torch.cuda.max_memory_allocated() / 2 ** 30 if dev == 'cuda' else None}
-        stats_steps.append(st)
-        if step % 10 == 0 or step == last:
-            print(f"step {step}/{steps} r{rnum} reward {st['mean_reward']:.3f} var-groups {st['frac_groups_with_variance']:.2f} "
-                  f"new {new_step} loss {loss:.4f} gn {gn:.2f} t {t_sample:.0f}+{st['update_s']:.0f}s solved {sum(1 for v in found.values() if v)}/{N} {time.time()-t0:.0f}s", flush=True)
-        if a.steps_log:
-            with open(f'{out}/steps.jsonl', 'a') as f:
-                f.write(json.dumps(st) + '\n')
+            ptr += 1
+        allsteps = [json.loads(l) for l in open(f'{out}/steps.jsonl')]
+        stats_steps = allsteps[:resume_at]
+        assert len(stats_steps) == resume_at and stats_steps[-1]['step'] == resume_at, 'steps.jsonl does not reach the boundary'
+        os.replace(f'{out}/steps.jsonl', f'{out}/steps_before_resume_r{R}.jsonl')
+        with open(f'{out}/steps.jsonl', 'w') as f:
+            f.write(''.join(json.dumps(x) + '\n' for x in stats_steps))
+        samples = stats_steps[-1]['samples']
+        Rf = max((r_ for r_ in range(1, R + 1) if os.path.exists(f'{out}/round_{r_}.json')), default=0)
+        if Rf:
+            for fn, fd, fk in ((f'{out}/found_{Rf}.jsonl', found, found_keys), (f'{out}/found_transfer_{Rf}.jsonl', found_t, None)):
+                if not os.path.exists(fn):
+                    continue
+                for l in open(fn):
+                    x = json.loads(l)
+                    fd[x['name']].append({k: x[k] for k in ('proof', 'norm', 'written', 'pruned', 'round')})
+                    if fk is not None:
+                        fk[x['name']].add(x['norm'])
+            al = json.load(open(f'{out}/alloc_{Rf}.json'))
+            tried.update(al['tried']); okc.update(al['accepted'])
+        start_step = resume_at
+        info = {'resume_round': R, 'resume_step': resume_at, 'optimizer': opt_note, 'archive_from_boundary': Rf,
+                'lost': f'new target proofs and tried/accepted counts of round-equivalents {Rf + 1}..{R} (only targets_cum / alloc are affected)',
+                'steps_logged_before_resume': len(allsteps)}
+        json.dump(info, open(f'{out}/resume_r{R}.json', 'w'), indent=1)
+        print('RESUME', info, flush=True)
+    for step in range(start_step, last + 1):
+        if step != resume_at:    # (a resumed run re-enters at boundary R without re-training)
+            rnum = min((r for s, r in boundaries.items() if s >= step), default=a.rounds)
+            record.phase('sample', round=rnum)
+            idxs = []
+            for _ in range(a.prompts):
+                if ptr >= N:
+                    rng.shuffle(order); ptr = 0
+                idxs.append(order[ptr]); ptr += 1
+            flat_t = [targets[i] for i in idxs for _ in range(a.group)]
+            model.eval()
+            ts = time.time()
+            rolls = env_rollouts(model, tok, [t['prompt'] for t in flat_t], temperature=a.temperature, max_action=a.max_action,
+                                 max_steps=a.max_steps, batch=a.batch, seed=a.seed * 1000003 + step, stats=env_st)
+            verdicts = judge_many([(t['prompt'], r['nd']) for t, r in zip(flat_t, rolls)])    # registry hits after the gate
+            t_sample = time.time() - ts
+            R, novel = [], []
+            new_step = 0
+            for t, r, (ok, reason, nl) in zip(flat_t, rolls, verdicts):
+                R.append(1 if ok else 0); tried[t['name']] += 1
+                key = None
+                if ok:
+                    okc[t['name']] += 1
+                    pn = norm(r['nd'])
+                    if pn not in found_keys[t['name']]:
+                        key = pn
+                novel.append(key)
+            for t, r, (ok, reason, nl), key in zip(flat_t, rolls, verdicts, novel):    # archive update after the novelty keys
+                if key is not None and key not in found_keys[t['name']]:
+                    found_keys[t['name']].add(key)
+                    found[t['name']].append({'proof': r['nd'], 'norm': key, 'written': nl, 'pruned': pruned_length(t['prompt'], r['nd']), 'round': rnum})
+                    new_step += 1
+            samples += len(rolls)
+            logp = None
+            mixed = [g for g in range(a.prompts) if 0 < sum(R[g * a.group:(g + 1) * a.group]) < a.group]
+            if a.adv == 'unlikely' and mixed:
+                sel = [j for g in mixed for j in range(g * a.group, (g + 1) * a.group)]
+                lps = rollout_logprobs(model, tok, [rolls[j] for j in sel], a.lp_batch, a.temperature)
+                logp = [0.0] * len(rolls)
+                for j, v in zip(sel, lps):
+                    logp[j] = v
+            adv = []
+            for g in range(a.prompts):
+                sl_ = slice(g * a.group, (g + 1) * a.group)
+                adv += group_advantages(a.adv, R[sl_], logp=(logp[sl_] if logp else None), novel_keys=novel[sl_], k=a.passk_k,
+                                        beta_rank=a.beta_rank, bonus=a.bonus, std=a.adv_std)
+            record.phase('update', round=rnum)
+            model.train()
+            tu = time.time()
+            loss, klm, gn, npairs, ntok = pg_update(model, ref, tok, rolls, adv, opt, norm_div, a.kl, a.lp_batch, a.temperature)
+            if npairs:
+                record.count(train_steps=1, train_tokens=ntok)
+            Rg = [sum(R[g * a.group:(g + 1) * a.group]) / a.group for g in range(a.prompts)]
+            st = {'step': step, 'round': rnum, 'mean_reward': sum(R) / len(R), 'frac_groups_with_variance': len(mixed) / a.prompts,
+                  'frac_groups_nonzero_adv': sum(1 for g in range(a.prompts) if any(adv[g * a.group:(g + 1) * a.group])) / a.prompts,
+                  'frac_groups_all_fail': sum(1 for x in Rg if x == 0) / a.prompts, 'new_proofs': new_step,
+                  'actions': sum(len(r['traj']) for r in rolls), 'update_pairs': npairs, 'update_tokens': ntok,
+                  'loss': loss, 'kl_per_token': klm, 'grad_norm': gn, 'samples': samples, 'secs': time.time() - t0,
+                  'sample_judge_s': t_sample, 'update_s': time.time() - tu,
+                  'peak_alloc_gb': torch.cuda.max_memory_allocated() / 2 ** 30 if dev == 'cuda' else None}
+            stats_steps.append(st)
+            if step % 10 == 0 or step == last:
+                print(f"step {step}/{steps} r{rnum} reward {st['mean_reward']:.3f} var-groups {st['frac_groups_with_variance']:.2f} "
+                      f"new {new_step} loss {loss:.4f} gn {gn:.2f} t {t_sample:.0f}+{st['update_s']:.0f}s solved {sum(1 for v in found.values() if v)}/{N} {time.time()-t0:.0f}s", flush=True)
+            if a.steps_log:
+                with open(f'{out}/steps.jsonl', 'a') as f:
+                    f.write(json.dumps(st) + '\n')
         if step not in boundaries:
             continue
         # ---- round-equivalent boundary: the state ladder's bookkeeping
@@ -323,6 +368,7 @@ def main():
         model.eval()
         ck = f'{a.ckptdir}/{a.name}_r{r}.pt'
         save_ckpt(ck, model, tok.mode, extra={'grpo_round': r, 'step': step, 'adv': a.adv})
+        torch.save({'round': r, 'opt': opt.state_dict()}, f'{a.ckptdir}/{a.name}_opt.pt')    # local only (--resume_round)
         seed = a.seed * 1000 + r
         stats = {'round': r, 'ckpt': ck, 'k': a.k, 'temperature': a.temperature, 'seed': seed, 'adv': a.adv, 'step': step,
                  'samples': samples, 'group': a.group, 'prompts_per_step': a.prompts}

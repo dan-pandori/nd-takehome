@@ -198,5 +198,32 @@ if not fails:
     check('6. compute rows: attempts, actions, gen_tokens, train_steps, train_tokens',
           {'attempts', 'actions', 'gen_tokens', 'train_steps', 'train_tokens'} <= mets, mets)
 
+if not fails:
+    # 8. --resume_round (run grpo-best): a 3-round run, then the same run "crashed" in its boundary-2 evaluation
+    # (run to boundary 2 with --max_steps_total 2, then round_2 / found_2 / alloc_2 removed) resumes from <name>_r2.pt and reaches DONE;
+    # the theorem order is replayed, so round 3 trains on the same theorems as the uninterrupted run.
+    out = os.path.join(tmp, 'res'); ckd = os.path.join(tmp, 'resck')
+    base = [sys.executable, os.path.join(HERE, 'grpo_state.py'), '--init', ck, '--outdir', out, '--ckptdir', ckd,
+            '--targets', pool, '--transfer', pool, '--heldout', pool, '--rounds', '3', '--k', '4', '--prompts', '4', '--group', '4',
+            '--adv', 'default', '--max_action', '64', '--max_steps', '12', '--batch', '16', '--lr', '1e-3',
+            '--temperature', ('1.5' if ARCH == 'best' else '1.0'), '--seed', '0', '--steps_log']
+    p1 = subprocess.run(base + ['--name', 'full'], capture_output=True, text=True, cwd=HERE, env=env, timeout=900)
+    p2 = subprocess.run(base + ['--name', 'crash', '--max_steps_total', '2'], capture_output=True, text=True, cwd=HERE, env=env, timeout=900)
+    d = os.path.join(out, 'crash')
+    for f in ('round_2.json', 'found_2.jsonl', 'found_transfer_2.jsonl', 'alloc_2.json'):
+        os.remove(os.path.join(d, f))
+    p3 = subprocess.run(base + ['--name', 'crash', '--resume_round', '2'], capture_output=True, text=True, cwd=HERE, env=env, timeout=900)
+    ok = p1.returncode == 0 and p3.returncode == 0 and 'DONE' in p3.stdout and 'RESUME' in p3.stdout
+    check('8. resume: --resume_round 2 after a boundary-2 crash reaches DONE', ok, (p3.stdout[-500:] + p3.stderr[-1200:]))
+    if ok:
+        st = [json.loads(l) for l in open(os.path.join(d, 'steps.jsonl'))]
+        fu = [json.loads(l) for l in open(os.path.join(out, 'full', 'steps.jsonl'))]
+        check('8. resume: one steps.jsonl row per update, 1..last', [x['step'] for x in st] == [x['step'] for x in fu], ([x['step'] for x in st], len(fu)))
+        check('8. resume: round_2 / round_3 / resume_r2.json written', all(os.path.exists(os.path.join(d, f)) for f in ('round_2.json', 'round_3.json', 'resume_r2.json')))
+        r2 = json.load(open(os.path.join(d, 'round_2.json')))
+        check('8. resume: boundary 2 re-evaluated (transfer / held-out greedy present)', 'heldout_greedy' in r2 and 'transfer_round' in r2)
+        ri = json.load(open(os.path.join(d, 'resume_r2.json')))
+        check('8. resume: AdamW state of boundary 2 reloaded', ri['optimizer'].startswith('AdamW state saved at boundary 2'), ri)
+
 print('FAIL' if fails else 'PASS', f'({len(fails)} failures)')
 sys.exit(1 if fails else 0)
