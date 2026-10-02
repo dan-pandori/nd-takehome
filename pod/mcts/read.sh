@@ -13,9 +13,11 @@ for P in "$@"; do
   O=artifacts/mcts/eval/s${S}_${C}__$P
   if [ ! -s ${O}__sample.json ]; then
     echo "=== sample s$S $C $P $(ts)"
+    nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits -l 1 > ${O}__sample.util & UP=$!
     python3 state_eval.py --ckpt $CK --in $IN --k 256 --temperature 0.8 --seed 2 --batch 2048 --max_action 512 --max_steps 96 \
       --lenfield len --out ${O}__sample.jsonl.tmp --summary ${O}__sample.json.tmp > artifacts/mcts/logs/s${S}_${C}__${P}__sample.log 2>&1 \
-      || { echo "SAMPLE FAILED $P"; continue; }
+      || { kill $UP 2>/dev/null; echo "SAMPLE FAILED $P"; continue; }
+    kill $UP 2>/dev/null
     mv ${O}__sample.jsonl.tmp ${O}__sample.jsonl; mv ${O}__sample.json.tmp ${O}__sample.json
   fi
   W=$(python3 -c "import json;print(json.load(open('${O}__sample.json'))['wall_s'])")

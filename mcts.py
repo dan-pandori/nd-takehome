@@ -148,7 +148,15 @@ class Tree:
         return nd.expanded and nd.n_sampled < c['max_samples'] and nd.n_sampled <= c['C'] * max(nd.N, 1) ** c['alpha']
 
     def select(self):
-        """one descent with virtual loss -> the leaf to expand (or widen), or None if the tree has nothing to do."""
+        """one descent with virtual loss -> the leaf to expand (or widen), or None if the tree has nothing to do.  A
+        descent that finds a node with every child dead and no samples left marks it dead and starts again."""
+        for _ in range(64):
+            r = self._descend()
+            if r is not False:
+                return r
+        return None
+
+    def _descend(self):
         nd = self.root
         path = [nd]
         while True:
@@ -171,7 +179,7 @@ class Tree:
                 if nd.n_sampled < self.cfg['max_samples']:
                     break                                       # ... unless more samples could still find one
                 self.mark_dead(nd)
-                return None
+                return None if self.root.dead else False
             nd = best
             path.append(nd)
         for x in path:
