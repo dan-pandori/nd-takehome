@@ -241,6 +241,6 @@ BEST-STATE DONE 2026-10-01T05:00:12Z
 
 ## compute-match (executor, started 2026-10-02T01:28Z)
 
-- 2026-10-02 ~02:00Z pre-registration `preregistration/compute-match.md`. Stage-1 is not extended: at cap 12 our 6,000-step
+- 2026-10-02T01:31Z pre-registration (commit 0e1d9fdf) `preregistration/compute-match.md`. Stage-1 is not extended: at cap 12 our 6,000-step
   Stage-1 already uses 2,244–2,250 A40-s vs best-cap12's 1,288 s. Ladders start from the inherited SN12 s0–s2 Stage-1
   checkpoints; only k is raised to match best-cap12's mean ladder A40-s (28,451 s). Pilot at k 64 picks k.
