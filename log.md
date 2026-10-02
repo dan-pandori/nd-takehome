@@ -889,3 +889,23 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `max_steps` 192. Truncation stays 1.0–1.8 % (non-terminating actions); solved sets 0 lost, +2 / +1 / 0 / 0 gained.
 - Pre-registration vs outcome: frozen predictions hit, every T1 prediction missed high (see `run_best_state.md`).
 - Total 60.74 pod-hours, $29.76 (A40 $0.49/h); balance $329 after.
+
+## radical-scoping (executor, 2026-10-02)
+- 16:53 UTC pre-registration `preregistration/radical-scoping.md` committed (77e1a795); no pod planned or created.
+- 17:00 read-through via three read-only sub-agents (nd-rl STATE / week-in-review / proposals 16–21 / trajectory,
+  trajectory-cap6, rl-from-ckpt summaries; both literature reviews; June FOL sprint code location). Proposal numbering:
+  16 = literature-shortlist, 17 = best-network-proof-state, 18 = learning-trajectory, 19 = rl-from-pretraining-checkpoints,
+  20 = exploration, 21 = claude-heavy-set.
+- P1 FOL (VPS, CPU): copied the sprint's `fol/{core,verify,tokenizer,gen_data}.py` from nd-rl
+  `code/experiments/archived/nd_sprints_20260609_11/fol/` unchanged; 1,000 theorems in 3 s. New `fol2lean.py` renders Fitch
+  proofs to Lean 4 core terms: 1,000 / 1,000 accepted (`lean_summary_1000.txt`). First pass 149 / 200 because sprint formulas
+  carry free variables (fixed by declaring `x y z w : U`); a later 44 % mutant-rejection reading was an artefact of Lean's
+  100-error cap (in-file `set_option maxErrors` does not lift it; `-DmaxErrors=` does). Final controls: 231 / 231 and
+  41 / 41 mutants rejected (`neg_control.txt`); verifier-vs-Lean agreement 577 / 578 on one-line proof mutants
+  (`mut_agreement.txt`), the one split being a verifier-only conservative freshness rejection.
+- P2 knockout: rule counts on the cap-6 Stage-1 set `~/nd-takehome/data/train.jsonl` (`p2_move_counts_train.txt`).
+  Necessity labels for textbook72 by minlen bound 12 / 20 s with ORE removed (subclass) or DN forbidden
+  (`p2_necessity.py` → `p2_necessity_textbook72.jsonl`), 2 processes on the VPS.
+- P3 induction (`ind_pilot/ind.lean`): Lean core custom `N`, induction proofs check without axioms; simp / omega / decide fail.
+- Deviation from the pre-registration: P2's "≥ 70 % of the set remains" and usage ranges are scored on the cap-6 set,
+  not the K12 set behind the current best models (not on local disk); the knockout filter is the same on both.

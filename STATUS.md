@@ -241,3 +241,6 @@ BEST-STATE DONE 2026-10-01T05:00:12Z
 
 ## radical-scoping
 - 2026-10-02 17:00 UTC  run started (executor). Pre-registration `preregistration/radical-scoping.md` committed before any pod (none planned; CPU pilots on the VPS).
+- 2026-10-02 17:07 UTC  done. `radical_scoping/SCOPING.md` (draft for Dan, 2,500 words): ranked 6 departures; recommends (1) `Or.elim` knockout × ε-exploration as proposal 20's target, (2) FOL with function symbols. Pilots (CPU, $0): sprint FOL generator revived, Lean core accepts 1,000 / 1,000 rendered proofs with all mutants rejected; ORE in 1.47 % of cap-6 Stage-1 proofs, 14 textbook72 problems require it; Lean-core induction over a custom `N` works and `simp`/`omega`/`decide` fail. No pod created. Bucket `hf://buckets/dan-pandori/nd-rl/radical-scoping/`.
+
+RADICAL-SCOPING DONE 2026-10-02T17:07:11Z

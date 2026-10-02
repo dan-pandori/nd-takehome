@@ -1701,3 +1701,20 @@ step-cap rates re-read at `max_action` 1,024, `max_steps` 192 (`artifacts/bs/eva
 Truncation barely falls at twice the action budget: these are non-terminating actions, not long proofs cut off. The
 caps make the best-recipe numbers slightly low (≤ 2 textbook problems per checkpoint); no conclusion changes. Final spend
 60.74 pod-hours, $29.76.
+
+## radical-scoping (2026-10-02; CPU pilots on the VPS, no model trained or sampled — no checkpoint applies)
+All files under `radical_scoping/`. No number below is measured on a model.
+- P1 FOL. Data: June-sprint generator (`fol_pilot/fol/`, unchanged), seed 0, consts a–e, 2–16 lines → `fol_pilot/pool1k.jsonl`
+  (1,000 theorems, mean 4.25 lines, 731 with a quantifier; rule counts: no EXE). Lean 4 core via `fol_pilot/fol2lean.py`:
+  **1,000 / 1,000 accepted**, 13.1 s one process (`fol_pilot/lean_summary_1000.txt`). Controls (`fol_pilot/neg_control.txt`):
+  conclusion-constant swap 231 / 231 rejected, ALLI eigenvariable clash 41 / 41 rejected. One-line proof mutants
+  (`fol_pilot/mut_agreement.txt`): 578 mutants, sprint verifier vs Lean agree on 577 (24 both accept, 553 both reject),
+  1 verifier-reject / Lean-accept (conservative freshness rule), 0 verifier-accept / Lean-reject.
+- P2 knockout. Cap-6 Stage-1 set `~/nd-takehome/data/train.jsonl` (154,990 ND proofs; source of the cap-6 `lean_seq` /
+  `lean_staten` training sets): ORE 2,277 (1.47 %), BOTE 2,951 (1.90 %), DN 12,950 (8.36 %), NEGI 16,068 (10.37 %)
+  (`p2_move_counts_train.txt`). textbook72 necessity (minlen bound 12, 20 s, minlen's restricted space;
+  `p2_necessity_summary.txt`): 51 / 72 found within the bound; of those, **14 require ORE**, **9 require DN**, 1 both;
+  2 more have a longer DN-free proof.
+- P3 induction (`ind_pilot/ind.lean`): custom `N`; `z_add`, `s_add`, `add_comm`, `add_assoc` by induction check with no
+  axioms in 0.7 s; `simp [add]`, `omega`, `decide` fail on `add_comm`.
+- Pod spend: $0 (no pod). Bucket: `hf://buckets/dan-pandori/nd-rl/radical-scoping/radical_scoping`.
