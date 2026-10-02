@@ -1,0 +1,379 @@
+[
+ {
+  "eval": "textbook72",
+  "name": "textbook_3ed45280e6c686e76ac6",
+  "thm": "THM ( P v Q ) , ( ~ P ) SEQ Q PRF",
+  "eval_okey": "( P v Q ) , ( ~ P ) |- Q",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "( ~ P ) , ( P v Q ) |- Q",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "dev1108",
+  "name": "la_transfer_307",
+  "thm": "( Q > P ) , ( Q v R ) , ( ~ R ) |- P",
+  "eval_okey": "( P > Q ) , ( P v R ) , ( ~ R ) |- Q",
+  "train": [
+   {
+    "src": "rl_targets",
+    "thm": "( ~ Q ) , ( R v Q ) , ( R > S ) |- S",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "dev1108",
+  "name": "la_transfer_396",
+  "thm": "Q , ( ( ~ P ) v R ) , ( Q > ( ~ R ) ) |- ( ~ P )",
+  "eval_okey": "P , ( ( ~ Q ) v R ) , ( P > ( ~ R ) ) |- ( ~ Q )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "S , ( S > ( ~ P ) ) , ( ( ~ R ) v P ) |- ( ~ R )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_1210",
+  "thm": "( R v S ) , ( ( R v S ) > ( Q & F ) ) |- ( Q & F )",
+  "eval_okey": "( P v Q ) , ( ( P v Q ) > ( R & F ) ) |- ( R & F )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "( ( R v P ) > ( S & F ) ) , ( R v P ) |- ( S & F )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_1422",
+  "thm": "( ( P & S ) v ( ~ R ) ) , P |- ( ( ( P & S ) v ( ~ R ) ) & P )",
+  "eval_okey": "( ( P & Q ) v ( ~ R ) ) , P |- ( ( ( P & Q ) v ( ~ R ) ) & P )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "P , ( ( P & R ) v ( ~ Q ) ) |- ( ( ( P & R ) v ( ~ Q ) ) & P )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_1499",
+  "thm": "( ( P v S ) > ( ~ F ) ) , ( P v S ) |- ( ~ F )",
+  "eval_okey": "( ( P v Q ) > ( ~ F ) ) , ( P v Q ) |- ( ~ F )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "( Q v S ) , ( ( Q v S ) > ( ~ F ) ) |- ( ~ F )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_1585",
+  "thm": "P , ( ( Q v P ) > Q ) |- ( ( ( Q v P ) > Q ) & P )",
+  "eval_okey": "P , ( ( Q v P ) > Q ) |- ( ( ( Q v P ) > Q ) & P )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "( ( S v R ) > S ) , R |- ( ( ( S v R ) > S ) & R )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_1602",
+  "thm": "P , ( P > ( Q & Q ) ) |- ( P & ( P > ( Q & Q ) ) )",
+  "eval_okey": "P , ( P > ( Q & Q ) ) |- ( P & ( P > ( Q & Q ) ) )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "( Q > ( P & P ) ) , Q |- ( Q & ( Q > ( P & P ) ) )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_1764",
+  "thm": "( ~ ( R & P ) ) , ( ~ ( S > Q ) ) |- ( ( ~ ( R & P ) ) & ( ~ ( S > Q ) ) )",
+  "eval_okey": "( ~ ( P & Q ) ) , ( ~ ( R > S ) ) |- ( ( ~ ( P & Q ) ) & ( ~ ( R > S ) ) )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "( ~ ( P > Q ) ) , ( ~ ( S & R ) ) |- ( ( ~ ( S & R ) ) & ( ~ ( P > Q ) ) )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_1983",
+  "thm": "( S & P ) , ( ( S & P ) > ( Q & P ) ) |- ( Q & P )",
+  "eval_okey": "( P & Q ) , ( ( P & Q ) > ( R & Q ) ) |- ( R & Q )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "( ( R & P ) > ( Q & P ) ) , ( R & P ) |- ( Q & P )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_2043",
+  "thm": "Q , ( Q > ( S & S ) ) |- ( ( S & S ) v F )",
+  "eval_okey": "P , ( P > ( Q & Q ) ) |- ( ( Q & Q ) v F )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "( Q > ( R & R ) ) , Q |- ( ( R & R ) v F )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_2098",
+  "thm": "( P > Q ) , ( ( P > Q ) > S ) |- ( Q v S )",
+  "eval_okey": "( P > Q ) , ( ( P > Q ) > R ) |- ( Q v R )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "( ( R > P ) > S ) , ( R > P ) |- ( P v S )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_2153",
+  "thm": "( ( ~ Q ) v R ) , Q |- ( ( Q & ( ( ~ Q ) v R ) ) & ( ( ~ Q ) v R ) )",
+  "eval_okey": "( ( ~ P ) v Q ) , P |- ( ( P & ( ( ~ P ) v Q ) ) & ( ( ~ P ) v Q ) )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "R , ( ( ~ R ) v Q ) |- ( ( R & ( ( ~ R ) v Q ) ) & ( ( ~ R ) v Q ) )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_2488",
+  "thm": "R , ( P > S ) |- ( ( P > S ) & ( R & ( P > S ) ) )",
+  "eval_okey": "P , ( Q > R ) |- ( ( Q > R ) & ( P & ( Q > R ) ) )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "( S > P ) , R |- ( ( S > P ) & ( R & ( S > P ) ) )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_2609",
+  "thm": "S , ( ( ~ S ) & P ) |- F",
+  "eval_okey": "P , ( ( ~ P ) & Q ) |- F",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "( ( ~ P ) & Q ) , P |- F",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_3015",
+  "thm": "Q , R , S |- ( R & ( Q & S ) )",
+  "eval_okey": "P , Q , R |- ( Q & ( P & R ) )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "R , Q , S |- ( Q & ( S & R ) )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_3436",
+  "thm": "( ~ P ) , ( Q v R ) |- ( P > ( ( ~ P ) & ( Q v R ) ) )",
+  "eval_okey": "( ~ P ) , ( Q v R ) |- ( P > ( ( ~ P ) & ( Q v R ) ) )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "( P v R ) , ( ~ S ) |- ( S > ( ( ~ S ) & ( P v R ) ) )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_3785",
+  "thm": "R , ( S v R ) , ( ( S v R ) > ( ~ R ) ) |- F",
+  "eval_okey": "P , ( Q v P ) , ( ( Q v P ) > ( ~ P ) ) |- F",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "( ( S v P ) > ( ~ P ) ) , P , ( S v P ) |- F",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_3856",
+  "thm": "P , Q |- ( ( R & R ) > ( Q & P ) )",
+  "eval_okey": "P , Q |- ( ( R & R ) > ( Q & P ) )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "P , Q |- ( ( S & S ) > ( P & Q ) )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_3882",
+  "thm": "( S > S ) , S |- ( S > ( ( S > S ) & S ) )",
+  "eval_okey": "( P > P ) , P |- ( P > ( ( P > P ) & P ) )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "P , ( P > P ) |- ( P > ( ( P > P ) & P ) )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_3980",
+  "thm": "R , ( R > ( R & Q ) ) |- ( R & ( R & Q ) )",
+  "eval_okey": "P , ( P > ( P & Q ) ) |- ( P & ( P & Q ) )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "( P > ( P & R ) ) , P |- ( P & ( P & R ) )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_4062",
+  "thm": "( ~ Q ) , Q |- ( ( ~ P ) > S )",
+  "eval_okey": "( ~ P ) , P |- ( ( ~ Q ) > R )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "S , ( ~ S ) |- ( ( ~ R ) > Q )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_4123",
+  "thm": "( P v S ) , ( ~ ( P v S ) ) |- ( Q & ( R > R ) )",
+  "eval_okey": "( P v Q ) , ( ~ ( P v Q ) ) |- ( R & ( S > S ) )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "( ~ ( P v R ) ) , ( P v R ) |- ( Q & ( S > S ) )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_4259",
+  "thm": "( P & Q ) , ( ~ ( P & Q ) ) |- ( ( R & P ) & ( ~ Q ) )",
+  "eval_okey": "( P & Q ) , ( ~ ( P & Q ) ) |- ( ( R & P ) & ( ~ Q ) )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "( ~ ( R & S ) ) , ( R & S ) |- ( ( P & R ) & ( ~ S ) )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "heldout5000",
+  "name": "heldout_4828",
+  "thm": "( R & Q ) , ( Q v R ) |- Q",
+  "eval_okey": "( P & Q ) , ( Q v P ) |- Q",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "( Q v P ) , ( P & Q ) |- Q",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "transfer2285",
+  "name": "la_transfer_307",
+  "thm": "( Q > P ) , ( Q v R ) , ( ~ R ) |- P",
+  "eval_okey": "( P > Q ) , ( P v R ) , ( ~ R ) |- Q",
+  "train": [
+   {
+    "src": "rl_targets",
+    "thm": "( ~ Q ) , ( R v Q ) , ( R > S ) |- S",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "transfer2285",
+  "name": "la_transfer_396",
+  "thm": "Q , ( ( ~ P ) v R ) , ( Q > ( ~ R ) ) |- ( ~ P )",
+  "eval_okey": "P , ( ( ~ Q ) v R ) , ( P > ( ~ R ) ) |- ( ~ Q )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "S , ( S > ( ~ P ) ) , ( ( ~ R ) v P ) |- ( ~ R )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "transfer2285",
+  "name": "la_transfer_842",
+  "thm": "( ( ~ S ) v P ) , ( ~ P ) |- ( S > ( ~ S ) )",
+  "eval_okey": "( ( ~ P ) v Q ) , ( ~ Q ) |- ( P > ( ~ P ) )",
+  "train": [
+   {
+    "src": "rl_targets",
+    "thm": "( ~ R ) , ( ( ~ P ) v R ) |- ( P > ( ~ P ) )",
+    "same_order": false
+   }
+  ]
+ },
+ {
+  "eval": "transfer2285",
+  "name": "la_transfer_1061",
+  "thm": "Q , ( ( R > S ) v S ) |- ( Q & ( R > S ) )",
+  "eval_okey": "P , ( ( Q > R ) v R ) |- ( P & ( Q > R ) )",
+  "train": [
+   {
+    "src": "train_k12",
+    "thm": "( ( Q > S ) v S ) , P |- ( P & ( Q > S ) )",
+    "same_order": false
+   }
+  ]
+ }
+]
