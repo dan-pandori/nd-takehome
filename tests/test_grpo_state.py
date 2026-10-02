@@ -53,7 +53,7 @@ ARCH = os.environ.get('ND_GRPO_TEST_ARCH', 'sn')
 ck = os.path.join(tmp, f'tiny_{ARCH}.pt')
 if ARCH == 'best':
     cmd = [sys.executable, os.path.join(HERE, 'state_train.py'), '--recipe', 'best', '--data', os.path.join(tmp, 'tiny_x4.jsonl'),
-           '--heldout', pool, '--mode', 'lean_staten', '--cap', '0', '--best_steps', '300', '--best_dims', '2,128,4,256',
+           '--heldout', pool, '--mode', 'lean_staten', '--cap', '0', '--best_steps', '150', '--best_dims', '2,128,4,256',
            '--curve_every', '0', '--no_compile', '--seed', '0', '--out', ck]
 else:
     cmd = [sys.executable, os.path.join(HERE, 'state_train.py'), '--data', os.path.join(tmp, 'tiny_x4.jsonl'), '--mode', 'lean_staten',
@@ -129,7 +129,8 @@ if not fails:
     j = max(range(len(rolls)), key=lambda i: len(rolls[i]['traj']))
     for sign in (1.0, -1.0):
         m5 = copy.deepcopy(model); m5.train()
-        opt = torch.optim.AdamW(m5.parameters(), lr=1e-3, weight_decay=0.0)
+        opt = torch.optim.AdamW(m5.parameters(), lr=(3e-5 if ARCH == 'best' else 1e-3), weight_decay=0.0)   # best: the run's RL lr
+                                                                         # (1e-3 overshoots the Muon-trained ALiBi copy: both signs lower it)
         l0 = gs.rollout_logprobs(m5, tok, [rolls[j]], 512)[0]
         a = [0.0] * len(rolls); a[j] = sign
         for _ in range(3):
@@ -162,7 +163,7 @@ if not fails:
         cmd = [sys.executable, os.path.join(HERE, 'grpo_state.py'), '--init', ck, '--name', name, '--outdir', out, '--ckptdir', ckd,
                '--targets', pool, '--transfer', pool, '--heldout', pool, '--rounds', '2', '--k', '4', '--prompts', '4', '--group', '4',
                '--adv', adv_kind, '--passk_k', '2', '--max_action', '64', '--max_steps', '12', '--batch', '16', '--lr', '1e-3',
-               '--temperature', '1.0', '--seed', '0'] + (['--kl', '0.05'] if adv_kind == 'default' else [])
+               '--temperature', ('1.5' if ARCH == 'best' else '1.0'), '--seed', '0']   # best: a hotter draw keeps groups mixed (pass@k) + (['--kl', '0.05'] if adv_kind == 'default' else [])
         p = subprocess.run(cmd, capture_output=True, text=True, cwd=HERE, env=env, timeout=900)
         ok = p.returncode == 0 and 'DONE' in p.stdout
         check(f'6. smoke {adv_kind}: exit 0, DONE', ok, (p.stdout[-600:] + p.stderr[-1200:]))
