@@ -303,6 +303,39 @@ def main():
                 out['passk'][f'{start}|{g}'] = {k: float(np.mean(v[k])) for k in KS} | {'solved': cs, 'n': len(v[1])}
         print(f'  {start:8s} ' + '   '.join(line))
 
+    # ---- group C (trajectory's, per seed): who solves them at sample seed 1, and ladder-only solves
+    print('\n## group C pairs (end arm never solves with sample seed 0): solved with sample seed 1 by ladder r8 / control r8 / start;'
+          ' ladder-only = ladder r8 x1 solves, control r8 and start solve with neither sample seed')
+    out['groupC'] = {}
+    for start in EARLY + ['pend']:
+        lad = con = st0 = only = n = 0
+        for s in SEEDS:
+            Y, C1, S1 = solved(f's{s}_{start}_r8', 1), solved(f'c{s}_{start}_r8', 1), solved(f's{s}_{start}_r0', 1)
+            C0, S0 = solved(f'c{s}_{start}_r8', 0), solved(f's{s}_{start}_r0', 0)
+            if Y is None or C1 is None or C0 is None:
+                continue
+            for nme, g in G[s].items():
+                if g != 'C':
+                    continue
+                n += 1; lad += Y[nme]; con += C1[nme]; st0 += S1[nme]
+                only += Y[nme] and not (C1[nme] or C0[nme] or S1[nme] or S0[nme])
+        print(f'  {start:7s} n {n:3d}: ladder {lad:3d}  control {con:3d}  start {st0:3d}  ladder-only {only:3d}')
+        out['groupC'][start] = {'n': n, 'ladder': lad, 'control': con, 'start': st0, 'ladder_only': only}
+
+    # ---- selection-free reach comparison: theorems a ladder's r8 solves (sample seed 0 or 1) that the pend ladder's r8
+    # never solves (either sample seed), and the reverse; per seed
+    print('\n## reach vs the end arm (r8, union of sample seeds 0 and 1): only-this-start / only-pend, per seed s0 s1 s2 '
+          '(and the same for the replay control r8 vs the pend ladder)')
+    out['reach'] = {}
+    for start in EARLY:
+        row, rowc = [], []
+        for s in SEEDS:
+            u = lambda lab: {n for x in (0, 1) for n, v in (solved(lab, x) or {}).items() if v}
+            a, b, c = u(f's{s}_{start}_r8'), u(f's{s}_pend_r8'), u(f'c{s}_{start}_r8')
+            row.append((len(a - b), len(b - a))); rowc.append((len(c - b), len(b - c)))
+        out['reach'][start] = {'ladder': row, 'control': rowc}
+        print(f'  {start:7s} ladder ' + '  '.join(f'{x}/{y}' for x, y in row) + '    control ' + '  '.join(f'{x}/{y}' for x, y in rowc))
+
     # ---- trajectories: reference worst step (median) by group at r0, r2, r4, r8 per start (this run's scores)
     print('\n## reference worst step (median over theorem-seed pairs) by group, per start: r0 / r2 / r4 / r8 / control r8')
     out['traj_ref'] = {}
@@ -357,6 +390,10 @@ def main():
     for v, lab, pool, x, g, n in tr[:8]:
         print(f'  {v * 100:5.2f} %  {lab} {pool} x{x} group {g} ({n} samples)')
     print(f'  strata over 0.1 %: {sum(v > 0.001 for v, *_ in tr)} of {len(tr)}')
+    rl = [t for t in tr if '_rr' not in t[1]]
+    print(f'  RL / control checkpoints only (r2, r4, r8, control r8): {sum(v > 0.001 for v, *_ in rl)} of {len(rl)} strata over 0.1 %; '
+          f'worst {rl[0][0] * 100:.2f} % ({rl[0][1]} {rl[0][2]} x{rl[0][3]} group {rl[0][4]}); overall share '
+          f'{sum(v * n for v, *_, n in rl) / sum(n for *_, n in rl) * 100:.3f} %')
     out['truncation_top'] = tr[:40]
 
     # ---- examples in Lean: RL-only solves from the lowest x_start
@@ -390,7 +427,7 @@ def figures(out, endrows, bnull):
             if bs:
                 bm = np.mean(bs, axis=0)
                 ax.plot(xx, 1 / (1 + np.exp(-(bm[0] + bm[1] * xx))), color=col[start], lw=2.2, label=start)
-        ax.plot(xx, 1 / (1 + np.exp(-(bnull[0] + bnull[1] * xx))), 'k--', lw=1, label='null (end arm)')
+        ax.plot(xx, 1 / (1 + np.exp(-(bnull[0] + bnull[1] * xx))), 'k--', lw=1, label='pre-registered null (end arm, x under pend)')
         ax.axvline(LO, color='grey', lw=0.8, ls=':')
         ax.set_xlabel({'x_start': 'reference worst step under the start (nats)',
                        'x_ctrl': "reference worst step under the start's replay control r8",

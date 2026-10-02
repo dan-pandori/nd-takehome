@@ -1,0 +1,97 @@
+python3 state_train.py --data artifacts/rfc/rc_best12_s0_p12000/mix_1.jsonl --init ckpts/tj/stage1_best12_s0_b1200_step12000.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/rfc/control/rc_best12_s0_p12000_r1.pt --seed 1 --log_every 200 --recs 128
+params 9560832 mode lean_staten
+train records 20000 (skipped 0); pairs 160382; mean 8.019 per proof; max pair len 392; load 9s
+/workspace/nd-takehome/state_train.py:168: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss_sum += float(lb)
+step 200 loss 0.0555 lr 2.53e-04 pairs/batch 1026 236s
+step 400 loss 0.0514 lr 1.09e-04 pairs/batch 1025 490s
+step 600 loss 0.0476 lr 3.00e-05 pairs/batch 1028 749s
+uploaded ckpts/rfc/control/rc_best12_s0_p12000_r1.pt -> hf://buckets/dan-pandori/nd-rl/rl-from-ckpt/ckpts/rfc/control/rc_best12_s0_p12000_r1.pt (md5 a9905f4ece0da2eca50ab18c4eb90afd, 4.0s)
+saved ckpts/rfc/control/rc_best12_s0_p12000_r1.pt
+=== control round 1 done in 770s
+python3 state_train.py --data artifacts/rfc/rc_best12_s0_p12000/mix_2.jsonl --init ckpts/rfc/control/rc_best12_s0_p12000_r1.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/rfc/control/rc_best12_s0_p12000_r2.pt --seed 2 --log_every 200 --recs 128
+params 9560832 mode lean_staten
+train records 20000 (skipped 0); pairs 159844; mean 7.992 per proof; max pair len 350; load 9s
+/workspace/nd-takehome/state_train.py:168: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss_sum += float(lb)
+step 200 loss 0.0513 lr 2.53e-04 pairs/batch 1022 232s
+step 400 loss 0.0520 lr 1.09e-04 pairs/batch 1023 486s
+step 600 loss 0.0506 lr 3.00e-05 pairs/batch 1023 739s
+uploaded ckpts/rfc/control/rc_best12_s0_p12000_r2.pt -> hf://buckets/dan-pandori/nd-rl/rl-from-ckpt/ckpts/rfc/control/rc_best12_s0_p12000_r2.pt (md5 3e7606dfdffe683dc08d871cea45ed1c, 4.0s)
+saved ckpts/rfc/control/rc_best12_s0_p12000_r2.pt
+=== control round 2 done in 760s
+python3 state_train.py --data artifacts/rfc/rc_best12_s0_p12000/mix_3.jsonl --init ckpts/rfc/control/rc_best12_s0_p12000_r2.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/rfc/control/rc_best12_s0_p12000_r3.pt --seed 3 --log_every 200 --recs 128
+params 9560832 mode lean_staten
+train records 20000 (skipped 0); pairs 160197; mean 8.010 per proof; max pair len 387; load 9s
+/workspace/nd-takehome/state_train.py:168: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss_sum += float(lb)
+step 200 loss 0.0487 lr 2.53e-04 pairs/batch 1024 235s
+step 400 loss 0.0483 lr 1.09e-04 pairs/batch 1024 488s
+step 600 loss 0.0467 lr 3.00e-05 pairs/batch 1029 744s
+uploaded ckpts/rfc/control/rc_best12_s0_p12000_r3.pt -> hf://buckets/dan-pandori/nd-rl/rl-from-ckpt/ckpts/rfc/control/rc_best12_s0_p12000_r3.pt (md5 a0076287fef8297d28802b14542ce2d8, 4.3s)
+saved ckpts/rfc/control/rc_best12_s0_p12000_r3.pt
+=== control round 3 done in 766s
+python3 state_train.py --data artifacts/rfc/rc_best12_s0_p12000/mix_4.jsonl --init ckpts/rfc/control/rc_best12_s0_p12000_r3.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/rfc/control/rc_best12_s0_p12000_r4.pt --seed 4 --log_every 200 --recs 128
+params 9560832 mode lean_staten
+train records 20000 (skipped 0); pairs 159764; mean 7.988 per proof; max pair len 323; load 9s
+/workspace/nd-takehome/state_train.py:168: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss_sum += float(lb)
+step 200 loss 0.0525 lr 2.53e-04 pairs/batch 1022 233s
+step 400 loss 0.0516 lr 1.09e-04 pairs/batch 1022 489s
+step 600 loss 0.0464 lr 3.00e-05 pairs/batch 1022 743s
+uploaded ckpts/rfc/control/rc_best12_s0_p12000_r4.pt -> hf://buckets/dan-pandori/nd-rl/rl-from-ckpt/ckpts/rfc/control/rc_best12_s0_p12000_r4.pt (md5 1ea4abf2c4af931a0df06a73a51b33ca, 4.2s)
+saved ckpts/rfc/control/rc_best12_s0_p12000_r4.pt
+=== control round 4 done in 765s
+python3 state_train.py --data artifacts/rfc/rc_best12_s0_p12000/mix_5.jsonl --init ckpts/rfc/control/rc_best12_s0_p12000_r4.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/rfc/control/rc_best12_s0_p12000_r5.pt --seed 5 --log_every 200 --recs 128
+params 9560832 mode lean_staten
+train records 20000 (skipped 0); pairs 160660; mean 8.033 per proof; max pair len 378; load 9s
+/workspace/nd-takehome/state_train.py:168: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss_sum += float(lb)
+step 200 loss 0.0464 lr 2.53e-04 pairs/batch 1028 234s
+step 400 loss 0.0495 lr 1.09e-04 pairs/batch 1028 497s
+step 600 loss 0.0482 lr 3.00e-05 pairs/batch 1029 755s
+uploaded ckpts/rfc/control/rc_best12_s0_p12000_r5.pt -> hf://buckets/dan-pandori/nd-rl/rl-from-ckpt/ckpts/rfc/control/rc_best12_s0_p12000_r5.pt (md5 670ec6ec31066926d64c94422a3cd8a5, 4.1s)
+saved ckpts/rfc/control/rc_best12_s0_p12000_r5.pt
+=== control round 5 done in 776s
+python3 state_train.py --data artifacts/rfc/rc_best12_s0_p12000/mix_6.jsonl --init ckpts/rfc/control/rc_best12_s0_p12000_r5.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/rfc/control/rc_best12_s0_p12000_r6.pt --seed 6 --log_every 200 --recs 128
+params 9560832 mode lean_staten
+train records 20000 (skipped 0); pairs 160603; mean 8.030 per proof; max pair len 387; load 9s
+/workspace/nd-takehome/state_train.py:168: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss_sum += float(lb)
+step 200 loss 0.0469 lr 2.53e-04 pairs/batch 1028 242s
+step 400 loss 0.0452 lr 1.09e-04 pairs/batch 1028 507s
+step 600 loss 0.0454 lr 3.00e-05 pairs/batch 1027 767s
+uploaded ckpts/rfc/control/rc_best12_s0_p12000_r6.pt -> hf://buckets/dan-pandori/nd-rl/rl-from-ckpt/ckpts/rfc/control/rc_best12_s0_p12000_r6.pt (md5 e9e54bf5fffb2e7304c653cd0d459005, 4.1s)
+saved ckpts/rfc/control/rc_best12_s0_p12000_r6.pt
+=== control round 6 done in 789s
+python3 state_train.py --data artifacts/rfc/rc_best12_s0_p12000/mix_7.jsonl --init ckpts/rfc/control/rc_best12_s0_p12000_r6.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/rfc/control/rc_best12_s0_p12000_r7.pt --seed 7 --log_every 200 --recs 128
+params 9560832 mode lean_staten
+train records 20000 (skipped 0); pairs 159145; mean 7.957 per proof; max pair len 365; load 9s
+/workspace/nd-takehome/state_train.py:168: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss_sum += float(lb)
+step 200 loss 0.0521 lr 2.53e-04 pairs/batch 1018 232s
+step 400 loss 0.0501 lr 1.09e-04 pairs/batch 1019 490s
+step 600 loss 0.0515 lr 3.00e-05 pairs/batch 1018 744s
+uploaded ckpts/rfc/control/rc_best12_s0_p12000_r7.pt -> hf://buckets/dan-pandori/nd-rl/rl-from-ckpt/ckpts/rfc/control/rc_best12_s0_p12000_r7.pt (md5 066a552e06c95defd6bca23cb311ee46, 4.1s)
+saved ckpts/rfc/control/rc_best12_s0_p12000_r7.pt
+=== control round 7 done in 766s
+python3 state_train.py --data artifacts/rfc/rc_best12_s0_p12000/mix_8.jsonl --init ckpts/rfc/control/rc_best12_s0_p12000_r7.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/rfc/control/rc_best12_s0_p12000_r8.pt --seed 8 --log_every 200 --recs 128
+params 9560832 mode lean_staten
+train records 20000 (skipped 0); pairs 160530; mean 8.027 per proof; max pair len 326; load 9s
+/workspace/nd-takehome/state_train.py:168: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss_sum += float(lb)
+step 200 loss 0.0472 lr 2.53e-04 pairs/batch 1025 240s
+step 400 loss 0.0512 lr 1.09e-04 pairs/batch 1031 498s
+step 600 loss 0.0432 lr 3.00e-05 pairs/batch 1028 759s
+uploaded ckpts/rfc/control/rc_best12_s0_p12000_r8.pt -> hf://buckets/dan-pandori/nd-rl/rl-from-ckpt/ckpts/rfc/control/rc_best12_s0_p12000_r8.pt (md5 28a12c835b1a78140cb0f095e195a036, 4.0s)
+saved ckpts/rfc/control/rc_best12_s0_p12000_r8.pt
+=== control round 8 done in 780s
+=== control done rc_best12_s0_p12000 2026-10-02T05:23:28Z

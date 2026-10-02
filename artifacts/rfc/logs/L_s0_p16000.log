@@ -1,0 +1,592 @@
+=== start la_T1_best12_s0_p16000 from ckpts/tj/stage1_best12_s0_b1200_step16000.pt md5 bcc57528 2026-10-02T02:02:15Z
+[lean_gate] 143840 samples, parse-fail 43239 (no-eos 0, 0.000 %), distinct 89052: ok 48996, rej 40056 (filter 40056, prefilter=on); lean on 48996 texts in 123 procs, 3079.4s proc, exposed 107.3s, tail 102.6s, 32 workers
+[la_T1_best12_s0_p16000 r1] targets (this round) SOLVED 3452/4495 = 0.768 [0.755,0.780]
+  len 7: 1551/1800 = 0.862 [0.845,0.877]
+  len 8: 838/1000 = 0.838 [0.814,0.860]
+  len 9: 752/1004 = 0.749 [0.721,0.775]
+  len 10: 244/456 = 0.535 [0.489,0.580]
+  len 11: 48/99 = 0.485 [0.389,0.582]
+  len 12: 16/106 = 0.151 [0.095,0.231]
+  len 13: 3/16 = 0.188 [0.066,0.430]
+  len 14: 0/14 = 0.000 [0.000,0.215]
+  written hist {7: 1618, 8: 2462, 9: 2861, 10: 2119, 11: 1438, 12: 1147, 13: 1019, 14: 770, 15: 515, 16: 276, 17: 147, 18: 136, 19: 67, 20: 44, 21: 22, 22: 13, 23: 13, 24: 15, 25: 2, 26: 3, 28: 1, 30: 1}
+  pruned hist {4: 2, 5: 174, 6: 687, 7: 2733, 8: 2832, 9: 2404, 10: 1461, 11: 1090, 12: 952, 13: 822, 14: 612, 15: 394, 16: 197, 17: 106, 18: 92, 19: 55, 20: 34, 21: 15, 22: 8, 23: 6, 24: 8, 25: 1, 26: 3, 27: 1}
+  frontier written 24 pruned 24
+  reasons [('lean rejected', 42109), ('lean_seq parse: env: unbound', 11716), ('lean_seq parse: env: exact goal mismatch', 9473), ('lean_seq parse: env: formula', 9100), ('lean_seq parse: env: binder mismatch', 5165), ('lean_seq parse: env: assign', 1742)]
+[lean_gate] 73120 samples, parse-fail 25864 (no-eos 0, 0.000 %), distinct 43334: ok 16823, rej 26511 (filter 26511, prefilter=on); lean on 16823 texts in 43 procs, 1100.0s proc, exposed 42.5s, tail 40.1s, 32 workers
+[la_T1_best12_s0_p16000 r1] transfer (this round, pass@32) SOLVED 1412/2285 = 0.618 [0.598,0.638]
+  len 7: 185/300 = 0.617 [0.561,0.670]
+  len 8: 225/300 = 0.750 [0.698,0.796]
+  len 9: 730/1010 = 0.723 [0.694,0.749]
+  len 10: 207/451 = 0.459 [0.414,0.505]
+  len 11: 41/99 = 0.414 [0.322,0.513]
+  len 12: 20/102 = 0.196 [0.131,0.284]
+  len 13: 3/13 = 0.231 [0.082,0.503]
+  len 14: 1/10 = 0.100 [0.018,0.404]
+  written hist {7: 190, 8: 386, 9: 1349, 10: 1453, 11: 741, 12: 454, 13: 369, 14: 366, 15: 274, 16: 155, 17: 105, 18: 49, 19: 41, 20: 24, 21: 16, 22: 11, 23: 5, 24: 1, 25: 3, 26: 1, 27: 1, 31: 1}
+  pruned hist {5: 15, 6: 48, 7: 456, 8: 864, 9: 1694, 10: 962, 11: 444, 12: 347, 13: 355, 14: 273, 15: 221, 16: 125, 17: 72, 18: 47, 19: 26, 20: 21, 21: 13, 22: 5, 23: 5, 25: 1, 27: 1}
+  frontier written 23 pruned 23
+  reasons [('lean rejected', 27933), ('lean_seq parse: env: unbound', 7492), ('lean_seq parse: env: formula', 5142), ('lean_seq parse: env: exact goal mismatch', 5029), ('lean_seq parse: env: binder mismatch', 3857), ('lean_seq parse: env: assign', 906)]
+[lean_gate] 2285 samples, parse-fail 522 (no-eos 0, 0.000 %), distinct 1763: ok 844, rej 919 (filter 919, prefilter=on); lean on 844 texts in 3 procs, 6.6s proc, exposed 3.3s, tail 3.1s, 32 workers
+[la_T1_best12_s0_p16000 r1] transfer greedy SOLVED 844/2285 = 0.369 [0.350,0.389]
+  len 7: 119/300 = 0.397 [0.343,0.453]
+  len 8: 144/300 = 0.480 [0.424,0.536]
+  len 9: 449/1010 = 0.445 [0.414,0.475]
+  len 10: 103/451 = 0.228 [0.192,0.269]
+  len 11: 22/99 = 0.222 [0.152,0.314]
+  len 12: 5/102 = 0.049 [0.021,0.110]
+  len 13: 1/13 = 0.077 [0.014,0.333]
+  len 14: 1/10 = 0.100 [0.018,0.404]
+  written hist {7: 90, 8: 111, 9: 309, 10: 174, 11: 64, 12: 37, 13: 21, 14: 14, 15: 15, 16: 3, 17: 1, 19: 4, 20: 1}
+  pruned hist {5: 3, 6: 8, 7: 115, 8: 164, 9: 296, 10: 120, 11: 53, 12: 32, 13: 18, 14: 15, 15: 12, 16: 3, 19: 4, 20: 1}
+  frontier written 15 pruned 15
+  reasons [('lean rejected', 919), ('lean_seq parse: env: exact goal mismatch', 117), ('lean_seq parse: env: binder mismatch', 113), ('lean_seq parse: env: unbound', 95), ('lean_seq parse: env: formula', 91), ('lean_seq parse: env: action truncated', 46)]
+[lean_gate] 5000 samples, parse-fail 197 (no-eos 0, 0.000 %), distinct 4803: ok 4630, rej 173 (filter 173, prefilter=on); lean on 4630 texts in 12 procs, 36.6s proc, exposed 4.6s, tail 4.3s, 32 workers
+[la_T1_best12_s0_p16000 r1] heldout greedy SOLVED 4630/5000 = 0.926 [0.918,0.933]
+  len 2: 959/1000 = 0.959 [0.945,0.970]
+  len 3: 977/1000 = 0.977 [0.966,0.985]
+  len 4: 943/1000 = 0.943 [0.927,0.956]
+  len 5: 896/1000 = 0.896 [0.876,0.913]
+  len 6: 855/1000 = 0.855 [0.832,0.875]
+  written hist {2: 997, 3: 979, 4: 888, 5: 898, 6: 774, 7: 30, 8: 21, 9: 26, 10: 4, 11: 9, 12: 1, 14: 1, 19: 1, 22: 1}
+  pruned hist {2: 1004, 3: 986, 4: 899, 5: 891, 6: 761, 7: 27, 8: 20, 9: 26, 10: 3, 11: 9, 12: 1, 13: 1, 19: 1, 22: 1}
+  frontier written 11 pruned 11
+  reasons [('lean rejected', 173), ('lean_seq parse: env: exact goal mismatch', 61), ('lean_seq parse: env: formula', 44), ('lean_seq parse: env: binder mismatch', 23), ('lean_seq parse: env: action truncated', 20), ('lean_seq parse: env: assign', 15)]
+[la_T1_best12_s0_p16000 r1] targets cumulative: solved 3452/4495 L*=12 ge={7: 3452, 8: 1901, 9: 1063, 10: 311, 11: 67, 12: 19}
+[la_T1_best12_s0_p16000 r1] transfer cumulative: solved 1412/2285 L*=12 ge={7: 1412, 8: 1227, 9: 1002, 10: 272, 11: 65, 12: 24}
+python3 state_train.py --data artifacts/rfc/la_T1_best12_s0_p16000/mix_1.jsonl --init ckpts/tj/stage1_best12_s0_b1200_step16000.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/rfc/ladder/la_T1_best12_s0_p16000_r1.pt --seed 1 --log_every 200 --recs 128
+params 9560832 mode lean_staten
+train records 61392 (skipped 0); pairs 624975; mean 10.180 per proof; max pair len 349; load 31s
+/workspace/nd-takehome/state_train.py:168: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss_sum += float(lb)
+step 200 loss 0.0431 lr 2.53e-04 pairs/batch 1303 148s
+step 400 loss 0.0453 lr 1.09e-04 pairs/batch 1303 297s
+step 600 loss 0.0400 lr 3.00e-05 pairs/batch 1297 445s
+uploaded ckpts/rfc/ladder/la_T1_best12_s0_p16000_r1.pt -> hf://buckets/dan-pandori/nd-rl/rl-from-ckpt/ckpts/rfc/ladder/la_T1_best12_s0_p16000_r1.pt (md5 a173279114a45e91ee33780643a70adc, 4.9s)
+saved ckpts/rfc/ladder/la_T1_best12_s0_p16000_r1.pt
+=== round 1 done in 2495s; new proofs 14689; cum targets solved 3452 L*=12; transfer L*=12
+[lean_gate] 143840 samples, parse-fail 13026 (no-eos 0, 0.000 %), distinct 113714: ok 92959, rej 20755 (filter 20755, prefilter=on); lean on 92959 texts in 233 procs, 6819.2s proc, exposed 229.2s, tail 221.5s, 32 workers
+[la_T1_best12_s0_p16000 r2] targets (this round) SOLVED 4034/4495 = 0.897 [0.888,0.906]
+  len 7: 1728/1800 = 0.960 [0.950,0.968]
+  len 8: 966/1000 = 0.966 [0.953,0.976]
+  len 9: 892/1004 = 0.888 [0.867,0.906]
+  len 10: 325/456 = 0.713 [0.670,0.752]
+  len 11: 66/99 = 0.667 [0.569,0.752]
+  len 12: 51/106 = 0.481 [0.388,0.575]
+  len 13: 4/16 = 0.250 [0.102,0.495]
+  len 14: 2/14 = 0.143 [0.040,0.399]
+  written hist {7: 1904, 8: 3850, 9: 4869, 10: 3979, 11: 2944, 12: 2743, 13: 2593, 14: 2078, 15: 1434, 16: 962, 17: 667, 18: 461, 19: 359, 20: 271, 21: 149, 22: 133, 23: 87, 24: 77, 25: 45, 26: 24, 27: 12, 28: 19, 29: 11, 30: 8, 31: 6, 32: 3, 33: 3, 34: 5, 35: 4, 36: 2, 39: 2, 40: 1, 43: 1, 44: 1}
+  pruned hist {4: 2, 5: 220, 6: 949, 7: 4246, 8: 4895, 9: 4443, 10: 2843, 11: 2169, 12: 2419, 13: 2113, 14: 1674, 15: 1171, 16: 761, 17: 533, 18: 359, 19: 272, 20: 194, 21: 113, 22: 108, 23: 66, 24: 55, 25: 27, 26: 21, 27: 10, 28: 12, 29: 7, 30: 5, 31: 4, 32: 1, 33: 2, 34: 5, 35: 4, 38: 1, 39: 2, 44: 1}
+  frontier written 34 pruned 34
+  reasons [('lean rejected', 21679), ('lean_seq parse: env: binder mismatch', 3485), ('lean_seq parse: env: unbound', 3196), ('lean_seq parse: env: Or.elim on non-or', 1796), ('lean_seq parse: env: exact goal mismatch', 1286), ('lean_seq parse: env: box on non-arrow', 1078)]
+[lean_gate] 73120 samples, parse-fail 10680 (no-eos 0, 0.000 %), distinct 55877: ok 37587, rej 18290 (filter 18290, prefilter=on); lean on 37587 texts in 94 procs, 2959.3s proc, exposed 105.3s, tail 101.3s, 32 workers
+[la_T1_best12_s0_p16000 r2] transfer (this round, pass@32) SOLVED 1862/2285 = 0.815 [0.798,0.830]
+  len 7: 234/300 = 0.780 [0.730,0.823]
+  len 8: 276/300 = 0.920 [0.884,0.946]
+  len 9: 905/1010 = 0.896 [0.876,0.913]
+  len 10: 324/451 = 0.718 [0.675,0.758]
+  len 11: 72/99 = 0.727 [0.632,0.805]
+  len 12: 47/102 = 0.461 [0.367,0.557]
+  len 13: 2/13 = 0.154 [0.043,0.422]
+  len 14: 2/10 = 0.200 [0.057,0.510]
+  written hist {7: 245, 8: 577, 9: 2121, 10: 2681, 11: 1615, 12: 1109, 13: 1083, 14: 1012, 15: 802, 16: 563, 17: 414, 18: 294, 19: 199, 20: 157, 21: 108, 22: 85, 23: 55, 24: 43, 25: 37, 26: 28, 27: 11, 28: 12, 29: 3, 30: 8, 31: 8, 32: 2, 33: 3, 34: 7, 35: 4, 37: 2, 39: 2, 45: 1}
+  pruned hist {5: 20, 6: 62, 7: 760, 8: 1493, 9: 3075, 10: 1880, 11: 1023, 12: 951, 13: 904, 14: 860, 15: 658, 16: 478, 17: 320, 18: 213, 19: 153, 20: 116, 21: 91, 22: 57, 23: 41, 24: 37, 25: 30, 26: 17, 27: 8, 28: 9, 29: 4, 30: 6, 31: 7, 32: 2, 33: 3, 34: 6, 35: 2, 37: 2, 38: 1, 39: 1, 45: 1}
+  frontier written 34 pruned 34
+  reasons [('lean rejected', 19180), ('lean_seq parse: env: binder mismatch', 2839), ('lean_seq parse: env: unbound', 2763), ('lean_seq parse: env: Or.elim on non-or', 1466), ('lean_seq parse: env: exact goal mismatch', 961), ('lean_seq parse: env: box on non-arrow', 879)]
+[lean_gate] 2285 samples, parse-fail 251 (no-eos 0, 0.000 %), distinct 2034: ok 1471, rej 563 (filter 563, prefilter=on); lean on 1471 texts in 4 procs, 12.4s proc, exposed 3.8s, tail 3.6s, 32 workers
+[la_T1_best12_s0_p16000 r2] transfer greedy SOLVED 1471/2285 = 0.644 [0.624,0.663]
+  len 7: 176/300 = 0.587 [0.530,0.641]
+  len 8: 247/300 = 0.823 [0.776,0.862]
+  len 9: 757/1010 = 0.750 [0.722,0.775]
+  len 10: 217/451 = 0.481 [0.435,0.527]
+  len 11: 47/99 = 0.475 [0.379,0.572]
+  len 12: 25/102 = 0.245 [0.172,0.337]
+  len 13: 1/13 = 0.077 [0.014,0.333]
+  len 14: 1/10 = 0.100 [0.018,0.404]
+  written hist {7: 121, 8: 172, 9: 510, 10: 305, 11: 125, 12: 73, 13: 40, 14: 40, 15: 23, 16: 25, 17: 17, 18: 5, 19: 2, 20: 4, 21: 1, 22: 5, 23: 2, 28: 1}
+  pruned hist {5: 2, 6: 8, 7: 166, 8: 256, 9: 500, 10: 237, 11: 90, 12: 70, 13: 30, 14: 37, 15: 23, 16: 20, 17: 14, 18: 5, 19: 1, 20: 3, 21: 1, 22: 5, 23: 2, 27: 1}
+  frontier written 22 pruned 22
+  reasons [('lean rejected', 563), ('lean_seq parse: env: binder mismatch', 72), ('lean_seq parse: env: Or.elim on non-or', 48), ('lean_seq parse: env: unbound', 27), ('lean_seq parse: env: exact goal mismatch', 19), ('lean_seq parse: env: step cap', 19)]
+[lean_gate] 5000 samples, parse-fail 20 (no-eos 0, 0.000 %), distinct 4980: ok 4937, rej 43 (filter 43, prefilter=on); lean on 4937 texts in 13 procs, 46.3s proc, exposed 4.7s, tail 4.5s, 32 workers
+[la_T1_best12_s0_p16000 r2] heldout greedy SOLVED 4937/5000 = 0.987 [0.984,0.990]
+  len 2: 998/1000 = 0.998 [0.993,0.999]
+  len 3: 997/1000 = 0.997 [0.991,0.999]
+  len 4: 988/1000 = 0.988 [0.979,0.993]
+  len 5: 978/1000 = 0.978 [0.967,0.985]
+  len 6: 976/1000 = 0.976 [0.965,0.984]
+  written hist {2: 1027, 3: 960, 4: 905, 5: 956, 6: 892, 7: 44, 8: 30, 9: 68, 10: 20, 11: 20, 12: 10, 13: 3, 14: 1, 15: 1}
+  pruned hist {2: 1034, 3: 969, 4: 915, 5: 947, 6: 885, 7: 38, 8: 27, 9: 70, 10: 19, 11: 19, 12: 10, 13: 3, 14: 1}
+  frontier written 12 pruned 12
+  reasons [('lean rejected', 43), ('lean_seq parse: env: binder mismatch', 5), ('lean_seq parse: env: exact goal mismatch', 3), ('lean_seq parse: env: action truncated', 3), ('lean_seq parse: env: unbound', 2), ('lean_seq parse: env: Or.elim on non-or', 2)]
+[la_T1_best12_s0_p16000 r2] targets cumulative: solved 4036/4495 L*=13 ge={7: 4036, 8: 2308, 9: 1341, 10: 449, 11: 124, 12: 58}
+[la_T1_best12_s0_p16000 r2] transfer cumulative: solved 1870/2285 L*=13 ge={7: 1870, 8: 1633, 9: 1356, 10: 449, 11: 125, 12: 53}
+python3 state_train.py --data artifacts/rfc/la_T1_best12_s0_p16000/mix_2.jsonl --init ckpts/rfc/ladder/la_T1_best12_s0_p16000_r1.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/rfc/ladder/la_T1_best12_s0_p16000_r2.pt --seed 2 --log_every 200 --recs 128
+params 9560832 mode lean_staten
+train records 79808 (skipped 0); pairs 884288; mean 11.080 per proof; max pair len 324; load 45s
+/workspace/nd-takehome/state_train.py:168: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss_sum += float(lb)
+step 200 loss 0.0452 lr 2.53e-04 pairs/batch 1420 170s
+step 400 loss 0.0457 lr 1.09e-04 pairs/batch 1418 341s
+step 600 loss 0.0385 lr 3.00e-05 pairs/batch 1417 512s
+uploaded ckpts/rfc/ladder/la_T1_best12_s0_p16000_r2.pt -> hf://buckets/dan-pandori/nd-rl/rl-from-ckpt/ckpts/rfc/ladder/la_T1_best12_s0_p16000_r2.pt (md5 6514aeed15ba125b8089e80487b3876f, 4.3s)
+saved ckpts/rfc/ladder/la_T1_best12_s0_p16000_r2.pt
+=== round 2 done in 3003s; new proofs 20854; cum targets solved 4036 L*=13; transfer L*=13
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/state_ladder_ei.py", line 391, in <module>
+    main()
+  File "/workspace/nd-takehome/state_ladder_ei.py", line 244, in main
+    outs = sample_targets(model, tok, [t for t, _ in sub], [ki for _, ki in sub], a.temperature, a.batch, seed, a.max_new)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/state_ladder_ei.py", line 150, in sample_targets
+    flat = generate(model, tok, prompts, greedy=False, temperature=temperature, batch=batch, seed=seed, max_new=max_new)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/state_ladder_ei.py", line 53, in generate
+    return env_generate(model, tok, prompts, greedy=greedy, temperature=temperature, max_action=ENV['max_action'],
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/state_sample.py", line 70, in env_generate
+    outs = generate_ids_fast(model, tok, pids, goals=None, greedy=greedy, temperature=temperature,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/sample.py", line 148, in generate_ids_fast
+    logits = model(idx, pos=pos, mask=mask, caches=caches)[:, -1]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/best_model.py", line 119, in forward
+    return self._chunked_prefill(idx, pos, mask, caches)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/best_model.py", line 144, in _chunked_prefill
+    out.append(self.head(self.ln_f(self.features(idx[r0:r1], pos[r0:r1], None if mask is None else mask[r0:r1], sub)[0])))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/best_model.py", line 179, in features
+    x = b(x, None, None, bias, None if caches is None else caches[i])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/best_model.py", line 97, in forward
+    x = x + self.ln_attn_out(self.attn(self.ln1(x), cos, sin, mask, cache))
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/best_model.py", line 93, in attn
+    y = F.scaled_dot_product_attention(q, k, v, attn_mask=mask.to(q.dtype))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1016.00 MiB. GPU 0 has a total capacity of 44.42 GiB of which 927.81 MiB is free. Process 2291642 has 43.51 GiB memory in use. Of the allocated memory 43.13 GiB is allocated by PyTorch, and 60.93 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+=== failure after round 2; retry at batch 1024 2026-10-02T03:37:49Z
+resumed round 2: 35543 target proofs; ckpt ckpts/rfc/ladder/la_T1_best12_s0_p16000_r2.pt
+[lean_gate] 143840 samples, parse-fail 13037 (no-eos 0, 0.000 %), distinct 117690: ok 104801, rej 12889 (filter 12889, prefilter=on); lean on 104801 texts in 263 procs, 8482.1s proc, exposed 283.8s, tail 275.7s, 32 workers
+[la_T1_best12_s0_p16000 r3] targets (this round) SOLVED 4168/4495 = 0.927 [0.919,0.934]
+  len 7: 1754/1800 = 0.974 [0.966,0.981]
+  len 8: 976/1000 = 0.976 [0.965,0.984]
+  len 9: 925/1004 = 0.921 [0.903,0.936]
+  len 10: 361/456 = 0.792 [0.752,0.826]
+  len 11: 71/99 = 0.717 [0.622,0.796]
+  len 12: 74/106 = 0.698 [0.605,0.777]
+  len 13: 5/16 = 0.312 [0.142,0.556]
+  len 14: 2/14 = 0.143 [0.040,0.399]
+  written hist {7: 1904, 8: 5426, 9: 6477, 10: 5357, 11: 3996, 12: 4239, 13: 4039, 14: 3104, 15: 2217, 16: 1409, 17: 1008, 18: 786, 19: 575, 20: 430, 21: 280, 22: 241, 23: 188, 24: 146, 25: 88, 26: 76, 27: 46, 28: 32, 29: 34, 30: 28, 31: 23, 32: 13, 33: 4, 34: 6, 35: 9, 36: 6, 37: 2, 39: 1, 42: 2, 44: 1, 45: 1}
+  pruned hist {4: 4, 5: 248, 6: 1143, 7: 5980, 8: 6627, 9: 5734, 10: 3725, 11: 2986, 12: 3892, 13: 3376, 14: 2555, 15: 1748, 16: 1071, 17: 786, 18: 617, 19: 443, 20: 317, 21: 232, 22: 163, 23: 141, 24: 114, 25: 70, 26: 52, 27: 39, 28: 19, 29: 36, 30: 31, 31: 10, 32: 6, 33: 2, 34: 9, 35: 8, 36: 5, 37: 1, 42: 2, 44: 1, 45: 1}
+  frontier written 36 pruned 36
+  reasons [('lean rejected', 13346), ('lean_seq parse: env: binder mismatch', 3799), ('lean_seq parse: env: unbound', 2931), ('lean_seq parse: env: Or.elim on non-or', 2247), ('lean_seq parse: env: box on non-arrow', 959), ('lean_seq parse: env: exact goal mismatch', 823)]
+[lean_gate] 73120 samples, parse-fail 11649 (no-eos 0, 0.000 %), distinct 56102: ok 43374, rej 12728 (filter 12728, prefilter=on); lean on 43374 texts in 109 procs, 4091.8s proc, exposed 141.5s, tail 137.2s, 32 workers
+[la_T1_best12_s0_p16000 r3] transfer (this round, pass@32) SOLVED 1958/2285 = 0.857 [0.842,0.871]
+  len 7: 260/300 = 0.867 [0.824,0.901]
+  len 8: 282/300 = 0.940 [0.907,0.962]
+  len 9: 927/1010 = 0.918 [0.899,0.933]
+  len 10: 357/451 = 0.792 [0.752,0.827]
+  len 11: 71/99 = 0.717 [0.622,0.796]
+  len 12: 56/102 = 0.549 [0.452,0.642]
+  len 13: 3/13 = 0.231 [0.082,0.503]
+  len 14: 2/10 = 0.200 [0.057,0.510]
+  written hist {7: 277, 8: 867, 9: 2534, 10: 3552, 11: 2016, 12: 1482, 13: 1629, 14: 1523, 15: 1144, 16: 844, 17: 648, 18: 419, 19: 368, 20: 257, 21: 176, 22: 187, 23: 120, 24: 88, 25: 60, 26: 48, 27: 32, 28: 12, 29: 18, 30: 7, 31: 15, 32: 10, 33: 9, 34: 14, 35: 6, 36: 3, 37: 1, 38: 3, 39: 1, 40: 2, 43: 2}
+  pruned hist {5: 18, 6: 62, 7: 1175, 8: 1983, 9: 3892, 10: 2299, 11: 1268, 12: 1436, 13: 1403, 14: 1234, 15: 985, 16: 688, 17: 501, 18: 319, 19: 297, 20: 194, 21: 132, 22: 149, 23: 92, 24: 62, 25: 46, 26: 35, 27: 27, 28: 9, 29: 15, 30: 7, 31: 10, 32: 6, 33: 7, 34: 10, 35: 5, 36: 2, 37: 1, 39: 1, 40: 2, 42: 1, 43: 1}
+  frontier written 35 pruned 35
+  reasons [('lean rejected', 13199), ('lean_seq parse: env: binder mismatch', 3452), ('lean_seq parse: env: unbound', 2683), ('lean_seq parse: env: Or.elim on non-or', 2035), ('lean_seq parse: env: box on non-arrow', 812), ('lean_seq parse: env: formula', 713)]
+[lean_gate] 2285 samples, parse-fail 299 (no-eos 0, 0.000 %), distinct 1986: ok 1629, rej 357 (filter 357, prefilter=on); lean on 1629 texts in 5 procs, 13.4s proc, exposed 3.6s, tail 3.4s, 32 workers
+[la_T1_best12_s0_p16000 r3] transfer greedy SOLVED 1629/2285 = 0.713 [0.694,0.731]
+  len 7: 204/300 = 0.680 [0.625,0.730]
+  len 8: 255/300 = 0.850 [0.805,0.886]
+  len 9: 804/1010 = 0.796 [0.770,0.820]
+  len 10: 279/451 = 0.619 [0.573,0.662]
+  len 11: 52/99 = 0.525 [0.428,0.621]
+  len 12: 32/102 = 0.314 [0.232,0.409]
+  len 13: 2/13 = 0.154 [0.043,0.422]
+  len 14: 1/10 = 0.100 [0.018,0.404]
+  written hist {7: 103, 8: 157, 9: 494, 10: 355, 11: 139, 12: 100, 13: 70, 14: 66, 15: 44, 16: 35, 17: 18, 18: 9, 19: 13, 20: 4, 21: 4, 22: 8, 23: 4, 24: 2, 25: 2, 26: 2}
+  pruned hist {5: 2, 6: 7, 7: 158, 8: 253, 9: 491, 10: 265, 11: 115, 12: 102, 13: 57, 14: 55, 15: 39, 16: 29, 17: 15, 18: 11, 19: 10, 20: 3, 21: 3, 22: 8, 23: 3, 25: 2, 26: 1}
+  frontier written 22 pruned 22
+  reasons [('lean rejected', 357), ('lean_seq parse: env: binder mismatch', 99), ('lean_seq parse: env: Or.elim on non-or', 70), ('lean_seq parse: env: unbound', 23), ('lean_seq parse: env: term', 18), ('lean_seq parse: env: have name', 16)]
+[lean_gate] 5000 samples, parse-fail 19 (no-eos 0, 0.000 %), distinct 4981: ok 4943, rej 38 (filter 38, prefilter=on); lean on 4943 texts in 13 procs, 55.8s proc, exposed 5.8s, tail 5.4s, 32 workers
+[la_T1_best12_s0_p16000 r3] heldout greedy SOLVED 4943/5000 = 0.989 [0.985,0.991]
+  len 2: 999/1000 = 0.999 [0.994,1.000]
+  len 3: 998/1000 = 0.998 [0.993,0.999]
+  len 4: 988/1000 = 0.988 [0.979,0.993]
+  len 5: 979/1000 = 0.979 [0.968,0.986]
+  len 6: 979/1000 = 0.979 [0.968,0.986]
+  written hist {2: 1028, 3: 955, 4: 870, 5: 937, 6: 850, 7: 59, 8: 58, 9: 85, 10: 47, 11: 39, 12: 11, 13: 3, 17: 1}
+  pruned hist {2: 1034, 3: 965, 4: 879, 5: 928, 6: 854, 7: 48, 8: 55, 9: 86, 10: 44, 11: 36, 12: 11, 13: 3}
+  frontier written 12 pruned 12
+  reasons [('lean rejected', 38), ('lean_seq parse: env: exact goal mismatch', 4), ('lean_seq parse: env: binder mismatch', 3), ('lean_seq parse: env: action truncated', 3), ('lean_seq parse: env: term', 2), ('lean_seq parse: env: step cap', 2)]
+[la_T1_best12_s0_p16000 r3] targets cumulative: solved 4174/4495 L*=13 ge={7: 4174, 8: 2420, 9: 1443, 10: 514, 11: 153, 12: 82}
+[la_T1_best12_s0_p16000 r3] transfer cumulative: solved 1983/2285 L*=13 ge={7: 1983, 8: 1717, 9: 1433, 10: 495, 11: 135, 12: 61}
+python3 state_train.py --data artifacts/rfc/la_T1_best12_s0_p16000/mix_3.jsonl --init ckpts/rfc/ladder/la_T1_best12_s0_p16000_r2.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/rfc/ladder/la_T1_best12_s0_p16000_r3.pt --seed 3 --log_every 200 --recs 128
+params 9560832 mode lean_staten
+train records 84492 (skipped 0); pairs 977929; mean 11.574 per proof; max pair len 387; load 50s
+/workspace/nd-takehome/state_train.py:168: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss_sum += float(lb)
+step 200 loss 0.0460 lr 2.53e-04 pairs/batch 1484 182s
+step 400 loss 0.0450 lr 1.09e-04 pairs/batch 1481 364s
+step 600 loss 0.0393 lr 3.00e-05 pairs/batch 1482 545s
+uploaded ckpts/rfc/ladder/la_T1_best12_s0_p16000_r3.pt -> hf://buckets/dan-pandori/nd-rl/rl-from-ckpt/ckpts/rfc/ladder/la_T1_best12_s0_p16000_r3.pt (md5 f3f230e9141301379625f36f3f427ef3, 4.5s)
+saved ckpts/rfc/ladder/la_T1_best12_s0_p16000_r3.pt
+=== round 3 done in 3181s; new proofs 25923; cum targets solved 4174 L*=13; transfer L*=13
+[lean_gate] 143840 samples, parse-fail 12841 (no-eos 0, 0.000 %), distinct 121967: ok 112936, rej 9031 (filter 9031, prefilter=on); lean on 112936 texts in 283 procs, 9403.0s proc, exposed 313.0s, tail 304.4s, 32 workers
+[la_T1_best12_s0_p16000 r4] targets (this round) SOLVED 4246/4495 = 0.945 [0.938,0.951]
+  len 7: 1767/1800 = 0.982 [0.974,0.987]
+  len 8: 980/1000 = 0.980 [0.969,0.987]
+  len 9: 939/1004 = 0.935 [0.918,0.949]
+  len 10: 395/456 = 0.866 [0.832,0.894]
+  len 11: 73/99 = 0.737 [0.643,0.814]
+  len 12: 85/106 = 0.802 [0.716,0.867]
+  len 13: 5/16 = 0.312 [0.142,0.556]
+  len 14: 2/14 = 0.143 [0.040,0.399]
+  written hist {7: 1849, 8: 7053, 9: 8191, 10: 6538, 11: 5155, 12: 6191, 13: 5672, 14: 4349, 15: 3003, 16: 1996, 17: 1538, 18: 1221, 19: 834, 20: 692, 21: 427, 22: 356, 23: 289, 24: 221, 25: 153, 26: 126, 27: 76, 28: 70, 29: 41, 30: 33, 31: 26, 32: 15, 33: 12, 34: 19, 35: 15, 36: 11, 37: 10, 38: 12, 39: 9, 40: 3, 41: 3, 42: 3, 44: 2, 45: 1, 46: 3, 47: 3}
+  pruned hist {4: 2, 5: 260, 6: 1399, 7: 7956, 8: 8697, 9: 6968, 10: 4601, 11: 3725, 12: 5662, 13: 4941, 14: 3479, 15: 2358, 16: 1506, 17: 1168, 18: 936, 19: 663, 20: 496, 21: 291, 22: 241, 23: 229, 24: 164, 25: 107, 26: 90, 27: 61, 28: 45, 29: 29, 30: 26, 31: 20, 32: 11, 33: 12, 34: 13, 35: 11, 36: 12, 37: 15, 38: 8, 39: 4, 40: 3, 41: 1, 42: 2, 43: 1, 44: 1, 45: 1, 46: 4, 47: 2}
+  frontier written 39 pruned 38
+  reasons [('lean rejected', 9268), ('lean_seq parse: env: binder mismatch', 4085), ('lean_seq parse: env: unbound', 3045), ('lean_seq parse: env: Or.elim on non-or', 2006), ('lean_seq parse: env: formula', 703), ('lean_seq parse: env: exact goal mismatch', 679)]
+[lean_gate] 73120 samples, parse-fail 12131 (no-eos 0, 0.000 %), distinct 57062: ok 47663, rej 9399 (filter 9399, prefilter=on); lean on 47663 texts in 120 procs, 4087.3s proc, exposed 141.6s, tail 137.3s, 32 workers
+[la_T1_best12_s0_p16000 r4] transfer (this round, pass@32) SOLVED 2036/2285 = 0.891 [0.878,0.903]
+  len 7: 274/300 = 0.913 [0.876,0.940]
+  len 8: 285/300 = 0.950 [0.919,0.969]
+  len 9: 941/1010 = 0.932 [0.914,0.946]
+  len 10: 388/451 = 0.860 [0.825,0.889]
+  len 11: 75/99 = 0.758 [0.665,0.831]
+  len 12: 67/102 = 0.657 [0.561,0.742]
+  len 13: 4/13 = 0.308 [0.127,0.576]
+  len 14: 2/10 = 0.200 [0.057,0.510]
+  written hist {7: 271, 8: 1241, 9: 2883, 10: 4442, 11: 2611, 12: 2022, 13: 2059, 14: 2093, 15: 1602, 16: 1150, 17: 928, 18: 661, 19: 492, 20: 406, 21: 288, 22: 248, 23: 173, 24: 138, 25: 89, 26: 89, 27: 54, 28: 42, 29: 42, 30: 27, 31: 26, 32: 13, 33: 12, 34: 15, 35: 8, 36: 9, 37: 5, 38: 7, 39: 5, 40: 1, 41: 2, 42: 2, 44: 2, 47: 1}
+  pruned hist {5: 22, 6: 94, 7: 1732, 8: 2600, 9: 4765, 10: 2752, 11: 1595, 12: 1969, 13: 1822, 14: 1748, 15: 1314, 16: 902, 17: 695, 18: 480, 19: 423, 20: 289, 21: 195, 22: 186, 23: 139, 24: 114, 25: 61, 26: 61, 27: 38, 28: 35, 29: 30, 30: 19, 31: 17, 32: 12, 33: 6, 34: 11, 35: 7, 36: 7, 37: 5, 38: 3, 39: 5, 40: 2, 42: 2, 44: 1, 45: 1}
+  frontier written 39 pruned 39
+  reasons [('lean rejected', 9638), ('lean_seq parse: env: binder mismatch', 4010), ('lean_seq parse: env: unbound', 2986), ('lean_seq parse: env: Or.elim on non-or', 1947), ('lean_seq parse: env: formula', 661), ('lean_seq parse: env: box on non-arrow', 552)]
+[lean_gate] 2285 samples, parse-fail 353 (no-eos 0, 0.000 %), distinct 1932: ok 1689, rej 243 (filter 243, prefilter=on); lean on 1689 texts in 5 procs, 14.8s proc, exposed 4.1s, tail 3.9s, 32 workers
+[la_T1_best12_s0_p16000 r4] transfer greedy SOLVED 1689/2285 = 0.739 [0.721,0.757]
+  len 7: 215/300 = 0.717 [0.663,0.765]
+  len 8: 250/300 = 0.833 [0.787,0.871]
+  len 9: 826/1010 = 0.818 [0.793,0.840]
+  len 10: 304/451 = 0.674 [0.629,0.716]
+  len 11: 54/99 = 0.545 [0.448,0.640]
+  len 12: 37/102 = 0.363 [0.276,0.459]
+  len 13: 2/13 = 0.154 [0.043,0.422]
+  len 14: 1/10 = 0.100 [0.018,0.404]
+  written hist {7: 75, 8: 145, 9: 437, 10: 358, 11: 157, 12: 122, 13: 89, 14: 91, 15: 62, 16: 39, 17: 31, 18: 14, 19: 11, 20: 15, 21: 9, 22: 13, 23: 5, 24: 9, 25: 2, 26: 2, 28: 1, 29: 2}
+  pruned hist {5: 2, 6: 10, 7: 147, 8: 231, 9: 463, 10: 273, 11: 111, 12: 137, 13: 69, 14: 76, 15: 56, 16: 28, 17: 23, 18: 9, 19: 12, 20: 8, 21: 5, 22: 11, 23: 4, 24: 10, 26: 2, 28: 1, 29: 1}
+  frontier written 24 pruned 24
+  reasons [('lean rejected', 243), ('lean_seq parse: env: binder mismatch', 138), ('lean_seq parse: env: Or.elim on non-or', 62), ('lean_seq parse: env: unbound', 38), ('lean_seq parse: env: term', 29), ('lean_seq parse: env: step cap', 28)]
+[lean_gate] 5000 samples, parse-fail 20 (no-eos 0, 0.000 %), distinct 4980: ok 4949, rej 31 (filter 31, prefilter=on); lean on 4949 texts in 13 procs, 45.8s proc, exposed 5.0s, tail 4.8s, 32 workers
+[la_T1_best12_s0_p16000 r4] heldout greedy SOLVED 4949/5000 = 0.990 [0.987,0.992]
+  len 2: 999/1000 = 0.999 [0.994,1.000]
+  len 3: 997/1000 = 0.997 [0.991,0.999]
+  len 4: 989/1000 = 0.989 [0.980,0.994]
+  len 5: 980/1000 = 0.980 [0.969,0.987]
+  len 6: 984/1000 = 0.984 [0.974,0.990]
+  written hist {2: 1026, 3: 962, 4: 860, 5: 936, 6: 833, 7: 81, 8: 65, 9: 78, 10: 51, 11: 39, 12: 9, 13: 6, 14: 1, 16: 1, 18: 1}
+  pruned hist {2: 1032, 3: 972, 4: 874, 5: 930, 6: 846, 7: 54, 8: 60, 9: 77, 10: 51, 11: 37, 12: 9, 13: 4, 14: 1, 16: 1, 18: 1}
+  frontier written 13 pruned 12
+  reasons [('lean rejected', 31), ('lean_seq parse: env: Or.elim on non-or', 5), ('lean_seq parse: env: binder mismatch', 5), ('lean_seq parse: env: unbound', 2), ('lean_seq parse: env: exact goal mismatch', 2), ('lean_seq parse: env: action truncated', 2)]
+[la_T1_best12_s0_p16000 r4] targets cumulative: solved 4252/4495 L*=13 ge={7: 4252, 8: 2485, 9: 1504, 10: 562, 11: 167, 12: 93}
+[la_T1_best12_s0_p16000 r4] transfer cumulative: solved 2058/2285 L*=13 ge={7: 2058, 8: 1778, 9: 1490, 10: 542, 11: 152, 12: 74}
+python3 state_train.py --data artifacts/rfc/la_T1_best12_s0_p16000/mix_4.jsonl --init ckpts/rfc/ladder/la_T1_best12_s0_p16000_r3.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/rfc/ladder/la_T1_best12_s0_p16000_r4.pt --seed 4 --log_every 200 --recs 128
+params 9560832 mode lean_staten
+train records 86876 (skipped 0); pairs 1040239; mean 11.974 per proof; max pair len 382; load 51s
+/workspace/nd-takehome/state_train.py:168: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss_sum += float(lb)
+step 200 loss 0.0456 lr 2.53e-04 pairs/batch 1529 189s
+step 400 loss 0.0426 lr 1.09e-04 pairs/batch 1534 381s
+step 600 loss 0.0415 lr 3.00e-05 pairs/batch 1534 575s
+uploaded ckpts/rfc/ladder/la_T1_best12_s0_p16000_r4.pt -> hf://buckets/dan-pandori/nd-rl/rl-from-ckpt/ckpts/rfc/ladder/la_T1_best12_s0_p16000_r4.pt (md5 6fef1750974e03a6fb3e4ac11c6eda0f, 4.0s)
+saved ckpts/rfc/ladder/la_T1_best12_s0_p16000_r4.pt
+=== round 4 done in 3350s; new proofs 35018; cum targets solved 4252 L*=13; transfer L*=13
+[lean_gate] 143840 samples, parse-fail 11381 (no-eos 0, 0.000 %), distinct 125236: ok 117691, rej 7545 (filter 7545, prefilter=on); lean on 117691 texts in 295 procs, 4685.6s proc, exposed 161.4s, tail 151.4s, 32 workers
+[la_T1_best12_s0_p16000 r5] targets (this round) SOLVED 4289/4495 = 0.954 [0.948,0.960]
+  len 7: 1781/1800 = 0.989 [0.984,0.993]
+  len 8: 982/1000 = 0.982 [0.972,0.989]
+  len 9: 950/1004 = 0.946 [0.930,0.959]
+  len 10: 403/456 = 0.884 [0.851,0.910]
+  len 11: 75/99 = 0.758 [0.665,0.831]
+  len 12: 91/106 = 0.858 [0.780,0.912]
+  len 13: 5/16 = 0.312 [0.142,0.556]
+  len 14: 2/14 = 0.143 [0.040,0.399]
+  written hist {7: 1760, 8: 8095, 9: 9408, 10: 7420, 11: 5735, 12: 7047, 13: 6498, 14: 5107, 15: 3505, 16: 2431, 17: 1847, 18: 1450, 19: 1072, 20: 834, 21: 583, 22: 441, 23: 393, 24: 345, 25: 224, 26: 151, 27: 145, 28: 93, 29: 99, 30: 55, 31: 50, 32: 33, 33: 25, 34: 35, 35: 23, 36: 27, 37: 33, 38: 16, 39: 16, 40: 4, 41: 6, 42: 2, 43: 6, 44: 4, 45: 2, 46: 5}
+  pruned hist {4: 5, 5: 267, 6: 1479, 7: 9230, 8: 9953, 9: 7796, 10: 5071, 11: 4150, 12: 6631, 13: 5586, 14: 4125, 15: 2813, 16: 1856, 17: 1360, 18: 1089, 19: 828, 20: 633, 21: 424, 22: 336, 23: 339, 24: 241, 25: 167, 26: 110, 27: 95, 28: 78, 29: 71, 30: 51, 31: 38, 32: 21, 33: 28, 34: 31, 35: 29, 36: 29, 37: 31, 38: 9, 39: 6, 40: 1, 41: 4, 42: 1, 43: 8, 45: 2, 46: 3}
+  frontier written 46 pruned 43
+  reasons [('lean rejected', 7706), ('lean_seq parse: env: binder mismatch', 3638), ('lean_seq parse: env: unbound', 2688), ('lean_seq parse: env: Or.elim on non-or', 1632), ('lean_seq parse: env: term', 828), ('lean_seq parse: env: exact goal mismatch', 561)]
+[lean_gate] 73120 samples, parse-fail 11661 (no-eos 0, 0.000 %), distinct 57996: ok 49757, rej 8239 (filter 8239, prefilter=on); lean on 49757 texts in 125 procs, 4954.6s proc, exposed 170.3s, tail 165.5s, 32 workers
+[la_T1_best12_s0_p16000 r5] transfer (this round, pass@32) SOLVED 2077/2285 = 0.909 [0.896,0.920]
+  len 7: 279/300 = 0.930 [0.895,0.954]
+  len 8: 286/300 = 0.953 [0.923,0.972]
+  len 9: 947/1010 = 0.938 [0.921,0.951]
+  len 10: 401/451 = 0.889 [0.857,0.915]
+  len 11: 73/99 = 0.737 [0.643,0.814]
+  len 12: 84/102 = 0.824 [0.738,0.885]
+  len 13: 5/13 = 0.385 [0.177,0.645]
+  len 14: 2/10 = 0.200 [0.057,0.510]
+  written hist {7: 233, 8: 1382, 9: 2967, 10: 5042, 11: 2951, 12: 2336, 13: 2328, 14: 2295, 15: 1870, 16: 1293, 17: 1112, 18: 767, 19: 620, 20: 494, 21: 357, 22: 327, 23: 227, 24: 186, 25: 119, 26: 91, 27: 84, 28: 50, 29: 61, 30: 39, 31: 28, 32: 20, 33: 17, 34: 22, 35: 13, 36: 8, 37: 19, 38: 13, 39: 5, 40: 9, 41: 6, 42: 6, 43: 1, 44: 2, 46: 3, 47: 3}
+  pruned hist {5: 29, 6: 82, 7: 1990, 8: 2748, 9: 5291, 10: 3193, 11: 1711, 12: 2188, 13: 1979, 14: 1920, 15: 1564, 16: 1064, 17: 832, 18: 577, 19: 552, 20: 352, 21: 275, 22: 239, 23: 177, 24: 170, 25: 88, 26: 82, 27: 52, 28: 35, 29: 45, 30: 36, 31: 20, 32: 14, 33: 11, 34: 19, 35: 13, 36: 10, 37: 11, 38: 11, 39: 2, 40: 9, 41: 4, 42: 3, 43: 1, 44: 1, 46: 3, 47: 3}
+  frontier written 42 pruned 40
+  reasons [('lean rejected', 8479), ('lean_seq parse: env: binder mismatch', 3818), ('lean_seq parse: env: unbound', 2575), ('lean_seq parse: env: Or.elim on non-or', 1778), ('lean_seq parse: env: term', 867), ('lean_seq parse: env: formula', 481)]
+[lean_gate] 2285 samples, parse-fail 316 (no-eos 0, 0.000 %), distinct 1969: ok 1758, rej 211 (filter 211, prefilter=on); lean on 1758 texts in 5 procs, 15.6s proc, exposed 4.0s, tail 3.7s, 32 workers
+[la_T1_best12_s0_p16000 r5] transfer greedy SOLVED 1758/2285 = 0.769 [0.752,0.786]
+  len 7: 225/300 = 0.750 [0.698,0.796]
+  len 8: 260/300 = 0.867 [0.824,0.901]
+  len 9: 851/1010 = 0.843 [0.819,0.864]
+  len 10: 319/451 = 0.707 [0.664,0.747]
+  len 11: 54/99 = 0.545 [0.448,0.640]
+  len 12: 46/102 = 0.451 [0.358,0.548]
+  len 13: 2/13 = 0.154 [0.043,0.422]
+  len 14: 1/10 = 0.100 [0.018,0.404]
+  written hist {7: 48, 8: 136, 9: 406, 10: 388, 11: 170, 12: 139, 13: 114, 14: 108, 15: 72, 16: 39, 17: 42, 18: 18, 19: 19, 20: 13, 21: 12, 22: 12, 23: 5, 24: 11, 25: 1, 27: 1, 29: 2, 32: 1, 37: 1}
+  pruned hist {5: 2, 6: 7, 7: 140, 8: 225, 9: 459, 10: 270, 11: 124, 12: 155, 13: 81, 14: 91, 15: 59, 16: 34, 17: 33, 18: 12, 19: 18, 20: 10, 21: 10, 22: 11, 23: 5, 24: 9, 29: 1, 32: 1, 37: 1}
+  frontier written 24 pruned 24
+  reasons [('lean rejected', 211), ('lean_seq parse: env: binder mismatch', 113), ('lean_seq parse: env: Or.elim on non-or', 45), ('lean_seq parse: env: term', 42), ('lean_seq parse: env: have name', 29), ('lean_seq parse: env: unbound', 25)]
+[lean_gate] 5000 samples, parse-fail 16 (no-eos 0, 0.000 %), distinct 4984: ok 4954, rej 30 (filter 30, prefilter=on); lean on 4954 texts in 13 procs, 48.9s proc, exposed 5.5s, tail 5.3s, 32 workers
+[la_T1_best12_s0_p16000 r5] heldout greedy SOLVED 4954/5000 = 0.991 [0.988,0.993]
+  len 2: 1000/1000 = 1.000 [0.996,1.000]
+  len 3: 998/1000 = 0.998 [0.993,0.999]
+  len 4: 991/1000 = 0.991 [0.983,0.995]
+  len 5: 984/1000 = 0.984 [0.974,0.990]
+  len 6: 981/1000 = 0.981 [0.971,0.988]
+  written hist {2: 1028, 3: 960, 4: 865, 5: 914, 6: 785, 7: 108, 8: 67, 9: 85, 10: 61, 11: 52, 12: 19, 13: 3, 14: 2, 17: 3, 18: 1, 19: 1}
+  pruned hist {2: 1035, 3: 973, 4: 874, 5: 908, 6: 818, 7: 66, 8: 61, 9: 84, 10: 59, 11: 53, 12: 15, 13: 3, 14: 2, 17: 2, 19: 1}
+  frontier written 12 pruned 12
+  reasons [('lean rejected', 30), ('lean_seq parse: env: Or.elim on non-or', 7), ('lean_seq parse: env: binder mismatch', 4), ('lean_seq parse: env: no semicolon', 1), ('lean_seq parse: env: unbound', 1), ('lean_seq parse: env: exact goal mismatch', 1)]
+[la_T1_best12_s0_p16000 r5] targets cumulative: solved 4296/4495 L*=13 ge={7: 4296, 8: 2515, 9: 1532, 10: 579, 11: 175, 12: 99}
+[la_T1_best12_s0_p16000 r5] transfer cumulative: solved 2108/2285 L*=13 ge={7: 2108, 8: 1824, 9: 1535, 10: 578, 11: 170, 12: 92}
+python3 state_train.py --data artifacts/rfc/la_T1_best12_s0_p16000/mix_5.jsonl --init ckpts/rfc/ladder/la_T1_best12_s0_p16000_r4.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/rfc/ladder/la_T1_best12_s0_p16000_r5.pt --seed 5 --log_every 200 --recs 128
+params 9560832 mode lean_staten
+train records 88080 (skipped 0); pairs 1080546; mean 12.268 per proof; max pair len 382; load 53s
+/workspace/nd-takehome/state_train.py:168: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss_sum += float(lb)
+step 200 loss 0.0481 lr 2.53e-04 pairs/batch 1565 196s
+step 400 loss 0.0418 lr 1.09e-04 pairs/batch 1578 395s
+step 600 loss 0.0427 lr 3.00e-05 pairs/batch 1569 594s
+uploaded ckpts/rfc/ladder/la_T1_best12_s0_p16000_r5.pt -> hf://buckets/dan-pandori/nd-rl/rl-from-ckpt/ckpts/rfc/ladder/la_T1_best12_s0_p16000_r5.pt (md5 9dbf91b228eb78dd2e04ab6547fb9a8a, 4.2s)
+saved ckpts/rfc/ladder/la_T1_best12_s0_p16000_r5.pt
+=== round 5 done in 3325s; new proofs 39481; cum targets solved 4296 L*=13; transfer L*=13
+[lean_gate] 143840 samples, parse-fail 10810 (no-eos 0, 0.000 %), distinct 127087: ok 121155, rej 5932 (filter 5932, prefilter=on); lean on 121155 texts in 303 procs, 11877.6s proc, exposed 393.0s, tail 382.7s, 32 workers
+[la_T1_best12_s0_p16000 r6] targets (this round) SOLVED 4323/4495 = 0.962 [0.956,0.967]
+  len 7: 1788/1800 = 0.993 [0.988,0.996]
+  len 8: 986/1000 = 0.986 [0.977,0.992]
+  len 9: 955/1004 = 0.951 [0.936,0.963]
+  len 10: 413/456 = 0.906 [0.875,0.929]
+  len 11: 78/99 = 0.788 [0.697,0.857]
+  len 12: 95/106 = 0.896 [0.824,0.941]
+  len 13: 6/16 = 0.375 [0.185,0.614]
+  len 14: 2/14 = 0.143 [0.040,0.399]
+  written hist {7: 1608, 8: 8351, 9: 9501, 10: 7867, 11: 5967, 12: 8107, 13: 7556, 14: 5922, 15: 4148, 16: 2905, 17: 2179, 18: 1786, 19: 1470, 20: 1094, 21: 794, 22: 651, 23: 536, 24: 450, 25: 338, 26: 232, 27: 173, 28: 127, 29: 110, 30: 91, 31: 63, 32: 44, 33: 33, 34: 34, 35: 27, 36: 26, 37: 40, 38: 23, 39: 17, 40: 12, 41: 10, 42: 5, 43: 6, 44: 4, 46: 3, 47: 1}
+  pruned hist {4: 5, 5: 271, 6: 1488, 7: 9578, 8: 10337, 9: 8299, 10: 5395, 11: 4311, 12: 7735, 13: 6654, 14: 4937, 15: 3393, 16: 2154, 17: 1640, 18: 1352, 19: 1145, 20: 771, 21: 584, 22: 470, 23: 428, 24: 321, 25: 235, 26: 145, 27: 133, 28: 87, 29: 80, 30: 73, 31: 48, 32: 39, 33: 27, 34: 31, 35: 20, 36: 45, 37: 37, 38: 9, 39: 5, 40: 7, 41: 8, 42: 4, 43: 5, 44: 2, 45: 1, 46: 1, 47: 1}
+  frontier written 43 pruned 43
+  reasons [('lean rejected', 6023), ('lean_seq parse: env: binder mismatch', 3411), ('lean_seq parse: env: unbound', 2493), ('lean_seq parse: env: Or.elim on non-or', 1709), ('lean_seq parse: env: term', 583), ('lean_seq parse: env: exact goal mismatch', 529)]
+[lean_gate] 73120 samples, parse-fail 11657 (no-eos 0, 0.000 %), distinct 58458: ok 51758, rej 6700 (filter 6700, prefilter=on); lean on 51758 texts in 130 procs, 5419.4s proc, exposed 184.8s, tail 179.6s, 32 workers
+[la_T1_best12_s0_p16000 r6] transfer (this round, pass@32) SOLVED 2109/2285 = 0.923 [0.911,0.933]
+  len 7: 287/300 = 0.957 [0.927,0.975]
+  len 8: 291/300 = 0.970 [0.944,0.984]
+  len 9: 951/1010 = 0.942 [0.925,0.954]
+  len 10: 406/451 = 0.900 [0.869,0.925]
+  len 11: 77/99 = 0.778 [0.686,0.848]
+  len 12: 88/102 = 0.863 [0.783,0.916]
+  len 13: 7/13 = 0.538 [0.291,0.768]
+  len 14: 2/10 = 0.200 [0.057,0.510]
+  written hist {7: 244, 8: 1427, 9: 2923, 10: 5249, 11: 3032, 12: 2550, 13: 2564, 14: 2590, 15: 2177, 16: 1560, 17: 1247, 18: 1004, 19: 776, 20: 682, 21: 478, 22: 395, 23: 313, 24: 277, 25: 159, 26: 129, 27: 108, 28: 78, 29: 82, 30: 51, 31: 53, 32: 32, 33: 21, 34: 42, 35: 29, 36: 28, 37: 36, 38: 19, 39: 23, 40: 8, 41: 9, 42: 8, 43: 8, 44: 2, 45: 3, 47: 5}
+  pruned hist {5: 30, 6: 94, 7: 2034, 8: 2881, 9: 5506, 10: 3277, 11: 1809, 12: 2412, 13: 2324, 14: 2206, 15: 1825, 16: 1263, 17: 1000, 18: 738, 19: 675, 20: 485, 21: 365, 22: 305, 23: 269, 24: 206, 25: 114, 26: 112, 27: 63, 28: 78, 29: 63, 30: 37, 31: 35, 32: 25, 33: 13, 34: 33, 35: 29, 36: 29, 37: 34, 38: 14, 39: 11, 40: 4, 41: 7, 42: 7, 43: 4, 44: 1, 45: 1, 46: 1, 47: 2}
+  frontier written 47 pruned 42
+  reasons [('lean rejected', 6865), ('lean_seq parse: env: binder mismatch', 3707), ('lean_seq parse: env: unbound', 2602), ('lean_seq parse: env: Or.elim on non-or', 2123), ('lean_seq parse: env: term', 654), ('lean_seq parse: env: exact goal mismatch', 430)]
+[lean_gate] 2285 samples, parse-fail 332 (no-eos 0, 0.000 %), distinct 1953: ok 1788, rej 165 (filter 165, prefilter=on); lean on 1788 texts in 5 procs, 16.4s proc, exposed 4.4s, tail 4.2s, 32 workers
+[la_T1_best12_s0_p16000 r6] transfer greedy SOLVED 1788/2285 = 0.782 [0.765,0.799]
+  len 7: 232/300 = 0.773 [0.723,0.817]
+  len 8: 263/300 = 0.877 [0.835,0.909]
+  len 9: 859/1010 = 0.850 [0.827,0.871]
+  len 10: 329/451 = 0.729 [0.687,0.768]
+  len 11: 58/99 = 0.586 [0.487,0.678]
+  len 12: 43/102 = 0.422 [0.330,0.519]
+  len 13: 2/13 = 0.154 [0.043,0.422]
+  len 14: 2/10 = 0.200 [0.057,0.510]
+  written hist {7: 35, 8: 126, 9: 355, 10: 375, 11: 155, 12: 165, 13: 144, 14: 124, 15: 91, 16: 52, 17: 44, 18: 20, 19: 20, 20: 9, 21: 16, 22: 12, 23: 12, 24: 14, 25: 2, 26: 1, 27: 3, 28: 2, 29: 3, 30: 1, 32: 1, 33: 2, 34: 1, 37: 2, 38: 1}
+  pruned hist {5: 2, 6: 5, 7: 119, 8: 194, 9: 427, 10: 265, 11: 115, 12: 174, 13: 116, 14: 113, 15: 80, 16: 43, 17: 37, 18: 15, 19: 17, 20: 8, 21: 7, 22: 13, 23: 10, 24: 16, 25: 1, 26: 2, 27: 2, 28: 2, 29: 1, 30: 1, 32: 1, 37: 2}
+  frontier written 24 pruned 24
+  reasons [('lean rejected', 165), ('lean_seq parse: env: binder mismatch', 120), ('lean_seq parse: env: Or.elim on non-or', 65), ('lean_seq parse: env: have name', 29), ('lean_seq parse: env: unbound', 26), ('lean_seq parse: env: term', 22)]
+[lean_gate] 5000 samples, parse-fail 17 (no-eos 0, 0.000 %), distinct 4983: ok 4961, rej 22 (filter 22, prefilter=on); lean on 4961 texts in 13 procs, 46.5s proc, exposed 5.0s, tail 4.8s, 32 workers
+[la_T1_best12_s0_p16000 r6] heldout greedy SOLVED 4961/5000 = 0.992 [0.989,0.994]
+  len 2: 1000/1000 = 1.000 [0.996,1.000]
+  len 3: 999/1000 = 0.999 [0.994,1.000]
+  len 4: 989/1000 = 0.989 [0.980,0.994]
+  len 5: 989/1000 = 0.989 [0.980,0.994]
+  len 6: 984/1000 = 0.984 [0.974,0.990]
+  written hist {2: 1028, 3: 965, 4: 849, 5: 896, 6: 785, 7: 116, 8: 73, 9: 92, 10: 68, 11: 55, 12: 19, 13: 7, 14: 2, 15: 1, 16: 1, 17: 1, 18: 2, 21: 1}
+  pruned hist {2: 1034, 3: 979, 4: 860, 5: 891, 6: 820, 7: 69, 8: 67, 9: 95, 10: 62, 11: 55, 12: 18, 13: 5, 14: 2, 16: 1, 17: 1, 18: 1, 21: 1}
+  frontier written 13 pruned 13
+  reasons [('lean rejected', 22), ('lean_seq parse: env: Or.elim on non-or', 4), ('lean_seq parse: env: binder mismatch', 3), ('lean_seq parse: env: step cap', 2), ('lean_seq parse: env: exact goal mismatch', 2), ('lean_seq parse: env: formula', 2)]
+[la_T1_best12_s0_p16000 r6] targets cumulative: solved 4325/4495 L*=13 ge={7: 4325, 8: 2537, 9: 1551, 10: 595, 11: 182, 12: 103}
+[la_T1_best12_s0_p16000 r6] transfer cumulative: solved 2137/2285 L*=13 ge={7: 2137, 8: 1846, 9: 1554, 10: 594, 11: 181, 12: 101}
+python3 state_train.py --data artifacts/rfc/la_T1_best12_s0_p16000/mix_6.jsonl --init ckpts/rfc/ladder/la_T1_best12_s0_p16000_r5.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/rfc/ladder/la_T1_best12_s0_p16000_r6.pt --seed 6 --log_every 200 --recs 128
+params 9560832 mode lean_staten
+train records 88764 (skipped 0); pairs 1110132; mean 12.507 per proof; max pair len 392; load 55s
+/workspace/nd-takehome/state_train.py:168: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss_sum += float(lb)
+step 200 loss 0.0445 lr 2.53e-04 pairs/batch 1601 208s
+step 400 loss 0.0450 lr 1.09e-04 pairs/batch 1596 415s
+step 600 loss 0.0430 lr 3.00e-05 pairs/batch 1601 620s
+uploaded ckpts/rfc/ladder/la_T1_best12_s0_p16000_r6.pt -> hf://buckets/dan-pandori/nd-rl/rl-from-ckpt/ckpts/rfc/ladder/la_T1_best12_s0_p16000_r6.pt (md5 907b5952c3639aff6d07ae20419eaf34, 4.2s)
+saved ckpts/rfc/ladder/la_T1_best12_s0_p16000_r6.pt
+=== round 6 done in 3567s; new proofs 43242; cum targets solved 4325 L*=13; transfer L*=13
+[lean_gate] 143840 samples, parse-fail 9355 (no-eos 0, 0.000 %), distinct 129226: ok 123918, rej 5308 (filter 5308, prefilter=on); lean on 123918 texts in 310 procs, 11128.4s proc, exposed 371.7s, tail 361.6s, 32 workers
+[la_T1_best12_s0_p16000 r7] targets (this round) SOLVED 4345/4495 = 0.967 [0.961,0.971]
+  len 7: 1790/1800 = 0.994 [0.990,0.997]
+  len 8: 989/1000 = 0.989 [0.980,0.994]
+  len 9: 958/1004 = 0.954 [0.939,0.965]
+  len 10: 420/456 = 0.921 [0.893,0.942]
+  len 11: 82/99 = 0.828 [0.742,0.890]
+  len 12: 96/106 = 0.906 [0.835,0.948]
+  len 13: 8/16 = 0.500 [0.280,0.720]
+  len 14: 2/14 = 0.143 [0.040,0.399]
+  written hist {7: 1532, 8: 9374, 9: 10370, 10: 8386, 11: 6447, 12: 8645, 13: 7806, 14: 5972, 15: 4194, 16: 3122, 17: 2361, 18: 1918, 19: 1534, 20: 1207, 21: 844, 22: 726, 23: 642, 24: 493, 25: 363, 26: 304, 27: 217, 28: 169, 29: 123, 30: 106, 31: 71, 32: 60, 33: 47, 34: 57, 35: 30, 36: 45, 37: 44, 38: 43, 39: 19, 40: 14, 41: 5, 42: 11, 43: 8, 44: 8, 45: 7, 46: 14, 47: 1}
+  pruned hist {4: 4, 5: 275, 6: 1614, 7: 10924, 8: 11225, 9: 8691, 10: 5864, 11: 4566, 12: 8141, 13: 6849, 14: 4972, 15: 3306, 16: 2430, 17: 1735, 18: 1429, 19: 1161, 20: 850, 21: 605, 22: 529, 23: 508, 24: 362, 25: 254, 26: 183, 27: 164, 28: 114, 29: 88, 30: 92, 31: 58, 32: 42, 33: 41, 34: 53, 35: 26, 36: 40, 37: 56, 38: 21, 39: 10, 40: 6, 41: 5, 42: 14, 43: 8, 44: 6, 45: 5, 46: 12, 47: 1}
+  frontier written 46 pruned 46
+  reasons [('lean rejected', 5392), ('lean_seq parse: env: binder mismatch', 3112), ('lean_seq parse: env: unbound', 2189), ('lean_seq parse: env: Or.elim on non-or', 1359), ('lean_seq parse: env: term', 537), ('lean_seq parse: env: formula', 400)]
+[lean_gate] 73120 samples, parse-fail 10931 (no-eos 0, 0.000 %), distinct 59252: ok 52966, rej 6286 (filter 6286, prefilter=on); lean on 52966 texts in 133 procs, 4605.7s proc, exposed 159.0s, tail 153.9s, 32 workers
+[la_T1_best12_s0_p16000 r7] transfer (this round, pass@32) SOLVED 2123/2285 = 0.929 [0.918,0.939]
+  len 7: 292/300 = 0.973 [0.948,0.986]
+  len 8: 292/300 = 0.973 [0.948,0.986]
+  len 9: 956/1010 = 0.947 [0.931,0.959]
+  len 10: 411/451 = 0.911 [0.881,0.934]
+  len 11: 79/99 = 0.798 [0.708,0.865]
+  len 12: 84/102 = 0.824 [0.738,0.885]
+  len 13: 7/13 = 0.538 [0.291,0.768]
+  len 14: 2/10 = 0.200 [0.057,0.510]
+  written hist {7: 216, 8: 1636, 9: 2948, 10: 5492, 11: 3201, 12: 2570, 13: 2651, 14: 2825, 15: 2284, 16: 1670, 17: 1334, 18: 997, 19: 858, 20: 696, 21: 463, 22: 421, 23: 343, 24: 298, 25: 182, 26: 160, 27: 128, 28: 99, 29: 73, 30: 67, 31: 61, 32: 42, 33: 34, 34: 58, 35: 29, 36: 29, 37: 33, 38: 23, 39: 16, 40: 9, 41: 12, 42: 1, 43: 5, 44: 3, 45: 4, 46: 5, 47: 4}
+  pruned hist {5: 32, 6: 94, 7: 2351, 8: 3076, 9: 5766, 10: 3502, 11: 1833, 12: 2457, 13: 2375, 14: 2408, 15: 1810, 16: 1299, 17: 997, 18: 749, 19: 734, 20: 489, 21: 327, 22: 332, 23: 266, 24: 249, 25: 125, 26: 110, 27: 93, 28: 72, 29: 68, 30: 55, 31: 56, 32: 30, 33: 24, 34: 56, 35: 22, 36: 33, 37: 33, 38: 10, 39: 11, 40: 6, 41: 9, 42: 5, 43: 5, 44: 1, 45: 3, 46: 5, 47: 2}
+  frontier written 46 pruned 46
+  reasons [('lean rejected', 6427), ('lean_seq parse: env: binder mismatch', 3706), ('lean_seq parse: env: unbound', 2497), ('lean_seq parse: env: Or.elim on non-or', 1682), ('lean_seq parse: env: term', 613), ('lean_seq parse: env: formula', 396)]
+[lean_gate] 2285 samples, parse-fail 316 (no-eos 0, 0.000 %), distinct 1969: ok 1821, rej 148 (filter 148, prefilter=on); lean on 1821 texts in 5 procs, 17.7s proc, exposed 4.6s, tail 4.4s, 32 workers
+[la_T1_best12_s0_p16000 r7] transfer greedy SOLVED 1821/2285 = 0.797 [0.780,0.813]
+  len 7: 243/300 = 0.810 [0.762,0.850]
+  len 8: 265/300 = 0.883 [0.842,0.915]
+  len 9: 859/1010 = 0.850 [0.827,0.871]
+  len 10: 340/451 = 0.754 [0.712,0.791]
+  len 11: 57/99 = 0.576 [0.477,0.668]
+  len 12: 53/102 = 0.520 [0.424,0.614]
+  len 13: 2/13 = 0.154 [0.043,0.422]
+  len 14: 2/10 = 0.200 [0.057,0.510]
+  written hist {7: 30, 8: 134, 9: 324, 10: 376, 11: 168, 12: 145, 13: 139, 14: 138, 15: 103, 16: 65, 17: 52, 18: 27, 19: 17, 20: 23, 21: 15, 22: 17, 23: 15, 24: 14, 25: 4, 26: 1, 27: 2, 28: 3, 30: 1, 32: 1, 34: 1, 37: 2, 38: 1, 40: 2, 42: 1}
+  pruned hist {5: 2, 6: 7, 7: 139, 8: 210, 9: 409, 10: 260, 11: 104, 12: 162, 13: 110, 14: 110, 15: 99, 16: 46, 17: 41, 18: 18, 19: 19, 20: 20, 21: 14, 22: 15, 23: 12, 24: 11, 25: 1, 26: 1, 27: 1, 28: 1, 30: 1, 32: 1, 34: 1, 37: 3, 40: 2, 42: 1}
+  frontier written 24 pruned 24
+  reasons [('lean rejected', 148), ('lean_seq parse: env: binder mismatch', 113), ('lean_seq parse: env: Or.elim on non-or', 49), ('lean_seq parse: env: term', 32), ('lean_seq parse: env: unbound', 27), ('lean_seq parse: env: step cap', 23)]
+[lean_gate] 5000 samples, parse-fail 21 (no-eos 0, 0.000 %), distinct 4979: ok 4962, rej 17 (filter 17, prefilter=on); lean on 4962 texts in 13 procs, 50.1s proc, exposed 5.4s, tail 5.1s, 32 workers
+[la_T1_best12_s0_p16000 r7] heldout greedy SOLVED 4962/5000 = 0.992 [0.990,0.994]
+  len 2: 999/1000 = 0.999 [0.994,1.000]
+  len 3: 999/1000 = 0.999 [0.994,1.000]
+  len 4: 990/1000 = 0.990 [0.982,0.995]
+  len 5: 989/1000 = 0.989 [0.980,0.994]
+  len 6: 985/1000 = 0.985 [0.975,0.991]
+  written hist {2: 1028, 3: 970, 4: 856, 5: 897, 6: 752, 7: 127, 8: 68, 9: 97, 10: 72, 11: 61, 12: 19, 13: 5, 15: 3, 17: 2, 18: 1, 19: 1, 20: 1, 21: 1, 22: 1}
+  pruned hist {2: 1033, 3: 982, 4: 864, 5: 896, 6: 811, 7: 62, 8: 58, 9: 98, 10: 70, 11: 58, 12: 18, 13: 5, 15: 1, 17: 2, 19: 1, 20: 1, 21: 1, 22: 1}
+  frontier written 13 pruned 13
+  reasons [('lean rejected', 17), ('lean_seq parse: env: Or.elim on non-or', 8), ('lean_seq parse: env: formula', 4), ('lean_seq parse: env: binder mismatch', 3), ('lean_seq parse: env: unbound', 2), ('lean_seq parse: env: box on non-arrow', 1)]
+[la_T1_best12_s0_p16000 r7] targets cumulative: solved 4346/4495 L*=13 ge={7: 4346, 8: 2556, 9: 1567, 10: 608, 11: 188, 12: 106}
+[la_T1_best12_s0_p16000 r7] transfer cumulative: solved 2157/2285 L*=13 ge={7: 2157, 8: 1862, 9: 1567, 10: 605, 11: 187, 12: 106}
+python3 state_train.py --data artifacts/rfc/la_T1_best12_s0_p16000/mix_7.jsonl --init ckpts/rfc/ladder/la_T1_best12_s0_p16000_r6.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/rfc/ladder/la_T1_best12_s0_p16000_r7.pt --seed 7 --log_every 200 --recs 128
+params 9560832 mode lean_staten
+train records 89200 (skipped 0); pairs 1130364; mean 12.672 per proof; max pair len 547; load 57s
+/workspace/nd-takehome/state_train.py:168: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss_sum += float(lb)
+step 200 loss 0.0472 lr 2.53e-04 pairs/batch 1628 215s
+step 400 loss 0.0421 lr 1.09e-04 pairs/batch 1617 434s
+step 600 loss 0.0449 lr 3.00e-05 pairs/batch 1624 649s
+uploaded ckpts/rfc/ladder/la_T1_best12_s0_p16000_r7.pt -> hf://buckets/dan-pandori/nd-rl/rl-from-ckpt/ckpts/rfc/ladder/la_T1_best12_s0_p16000_r7.pt (md5 70b6762a13a34b8a61a44dab3f4231bb, 9.7s)
+saved ckpts/rfc/ladder/la_T1_best12_s0_p16000_r7.pt
+=== round 7 done in 3603s; new proofs 44877; cum targets solved 4346 L*=13; transfer L*=13
+[lean_gate] 143840 samples, parse-fail 9229 (no-eos 0, 0.000 %), distinct 130021: ok 125336, rej 4685 (filter 4685, prefilter=on); lean on 125336 texts in 314 procs, 11526.5s proc, exposed 381.8s, tail 371.2s, 32 workers
+[la_T1_best12_s0_p16000 r8] targets (this round) SOLVED 4358/4495 = 0.970 [0.964,0.974]
+  len 7: 1790/1800 = 0.994 [0.990,0.997]
+  len 8: 989/1000 = 0.989 [0.980,0.994]
+  len 9: 961/1004 = 0.957 [0.943,0.968]
+  len 10: 425/456 = 0.932 [0.905,0.952]
+  len 11: 84/99 = 0.848 [0.765,0.906]
+  len 12: 99/106 = 0.934 [0.870,0.968]
+  len 13: 8/16 = 0.500 [0.280,0.720]
+  len 14: 2/14 = 0.143 [0.040,0.399]
+  written hist {7: 1360, 8: 9704, 9: 10722, 10: 8769, 11: 6474, 12: 9095, 13: 8351, 14: 6539, 15: 4632, 16: 3318, 17: 2755, 18: 2103, 19: 1743, 20: 1438, 21: 1016, 22: 852, 23: 712, 24: 571, 25: 452, 26: 317, 27: 231, 28: 187, 29: 151, 30: 119, 31: 113, 32: 63, 33: 72, 34: 84, 35: 49, 36: 54, 37: 62, 38: 46, 39: 16, 40: 20, 41: 13, 42: 14, 43: 10, 44: 4, 45: 6, 46: 11, 47: 3}
+  pruned hist {4: 3, 5: 329, 6: 1696, 7: 11377, 8: 11515, 9: 9070, 10: 6000, 11: 4676, 12: 8701, 13: 7428, 14: 5493, 15: 3746, 16: 2593, 17: 1941, 18: 1570, 19: 1308, 20: 995, 21: 683, 22: 586, 23: 516, 24: 422, 25: 355, 26: 193, 27: 181, 28: 137, 29: 110, 30: 98, 31: 79, 32: 48, 33: 49, 34: 81, 35: 43, 36: 79, 37: 54, 38: 22, 39: 10, 40: 10, 41: 10, 42: 16, 43: 10, 44: 2, 45: 7, 46: 7, 47: 2}
+  frontier written 46 pruned 46
+  reasons [('lean rejected', 4774), ('lean_seq parse: env: binder mismatch', 3234), ('lean_seq parse: env: unbound', 2098), ('lean_seq parse: env: Or.elim on non-or', 1392), ('lean_seq parse: env: term', 491), ('lean_seq parse: env: formula', 349)]
+[lean_gate] 73120 samples, parse-fail 10950 (no-eos 0, 0.000 %), distinct 59597: ok 53586, rej 6011 (filter 6011, prefilter=on); lean on 53586 texts in 134 procs, 4829.4s proc, exposed 166.4s, tail 160.7s, 32 workers
+[la_T1_best12_s0_p16000 r8] transfer (this round, pass@32) SOLVED 2130/2285 = 0.932 [0.921,0.942]
+  len 7: 291/300 = 0.970 [0.944,0.984]
+  len 8: 291/300 = 0.970 [0.944,0.984]
+  len 9: 955/1010 = 0.946 [0.930,0.958]
+  len 10: 414/451 = 0.918 [0.889,0.940]
+  len 11: 80/99 = 0.808 [0.720,0.874]
+  len 12: 91/102 = 0.892 [0.817,0.939]
+  len 13: 6/13 = 0.462 [0.232,0.709]
+  len 14: 2/10 = 0.200 [0.057,0.510]
+  written hist {7: 200, 8: 1637, 9: 2981, 10: 5680, 11: 3257, 12: 2739, 13: 2725, 14: 2922, 15: 2375, 16: 1757, 17: 1474, 18: 1161, 19: 889, 20: 760, 21: 547, 22: 470, 23: 387, 24: 363, 25: 228, 26: 175, 27: 151, 28: 104, 29: 115, 30: 81, 31: 85, 32: 51, 33: 37, 34: 81, 35: 40, 36: 48, 37: 53, 38: 38, 39: 22, 40: 15, 41: 10, 42: 12, 43: 11, 44: 3, 45: 3, 46: 9, 47: 4}
+  pruned hist {5: 34, 6: 92, 7: 2333, 8: 3293, 9: 5901, 10: 3613, 11: 1936, 12: 2676, 13: 2294, 14: 2478, 15: 1963, 16: 1364, 17: 1186, 18: 834, 19: 733, 20: 573, 21: 377, 22: 346, 23: 320, 24: 285, 25: 171, 26: 137, 27: 94, 28: 78, 29: 103, 30: 61, 31: 61, 32: 39, 33: 21, 34: 71, 35: 46, 36: 52, 37: 52, 38: 18, 39: 12, 40: 8, 41: 10, 42: 13, 43: 9, 44: 1, 45: 2, 46: 10}
+  frontier written 46 pruned 46
+  reasons [('lean rejected', 6143), ('lean_seq parse: env: binder mismatch', 3967), ('lean_seq parse: env: unbound', 2368), ('lean_seq parse: env: Or.elim on non-or', 1727), ('lean_seq parse: env: term', 565), ('lean_seq parse: env: formula', 384)]
+[lean_gate] 2285 samples, parse-fail 321 (no-eos 0, 0.000 %), distinct 1964: ok 1799, rej 165 (filter 165, prefilter=on); lean on 1799 texts in 5 procs, 18.3s proc, exposed 4.7s, tail 4.5s, 32 workers
+[la_T1_best12_s0_p16000 r8] transfer greedy SOLVED 1799/2285 = 0.787 [0.770,0.804]
+  len 7: 234/300 = 0.780 [0.730,0.823]
+  len 8: 268/300 = 0.893 [0.853,0.923]
+  len 9: 849/1010 = 0.841 [0.817,0.862]
+  len 10: 332/451 = 0.736 [0.694,0.775]
+  len 11: 59/99 = 0.596 [0.497,0.687]
+  len 12: 53/102 = 0.520 [0.424,0.614]
+  len 13: 2/13 = 0.154 [0.043,0.422]
+  len 14: 2/10 = 0.200 [0.057,0.510]
+  written hist {7: 23, 8: 120, 9: 288, 10: 372, 11: 168, 12: 162, 13: 137, 14: 132, 15: 110, 16: 63, 17: 50, 18: 31, 19: 26, 20: 25, 21: 12, 22: 15, 23: 12, 24: 23, 25: 2, 26: 7, 27: 1, 28: 1, 29: 2, 30: 1, 31: 1, 32: 2, 34: 2, 35: 3, 36: 3, 37: 1, 38: 1, 39: 2, 41: 1}
+  pruned hist {5: 4, 6: 6, 7: 129, 8: 199, 9: 385, 10: 228, 11: 124, 12: 179, 13: 114, 14: 105, 15: 88, 16: 51, 17: 44, 18: 23, 19: 24, 20: 17, 21: 12, 22: 13, 23: 12, 24: 17, 25: 2, 26: 5, 28: 1, 29: 4, 31: 1, 34: 2, 35: 3, 36: 2, 37: 3, 39: 1, 41: 1}
+  frontier written 26 pruned 26
+  reasons [('lean rejected', 165), ('lean_seq parse: env: binder mismatch', 127), ('lean_seq parse: env: Or.elim on non-or', 45), ('lean_seq parse: env: term', 34), ('lean_seq parse: env: unbound', 27), ('lean_seq parse: env: step cap', 23)]
+[lean_gate] 5000 samples, parse-fail 23 (no-eos 0, 0.000 %), distinct 4977: ok 4957, rej 20 (filter 20, prefilter=on); lean on 4957 texts in 13 procs, 44.7s proc, exposed 4.9s, tail 4.6s, 32 workers
+[la_T1_best12_s0_p16000 r8] heldout greedy SOLVED 4957/5000 = 0.991 [0.988,0.994]
+  len 2: 999/1000 = 0.999 [0.994,1.000]
+  len 3: 999/1000 = 0.999 [0.994,1.000]
+  len 4: 988/1000 = 0.988 [0.979,0.993]
+  len 5: 984/1000 = 0.984 [0.974,0.990]
+  len 6: 987/1000 = 0.987 [0.978,0.992]
+  written hist {2: 1025, 3: 967, 4: 860, 5: 889, 6: 719, 7: 161, 8: 72, 9: 92, 10: 73, 11: 63, 12: 21, 13: 9, 14: 4, 17: 1, 22: 1}
+  pruned hist {2: 1030, 3: 980, 4: 867, 5: 884, 6: 801, 7: 72, 8: 66, 9: 95, 10: 69, 11: 62, 12: 19, 13: 8, 14: 3, 22: 1}
+  frontier written 13 pruned 13
+  reasons [('lean rejected', 20), ('lean_seq parse: env: Or.elim on non-or', 13), ('lean_seq parse: env: binder mismatch', 3), ('lean_seq parse: env: unbound', 2), ('lean_seq parse: env: have name', 2), ('lean_seq parse: env: action truncated', 2)]
+[la_T1_best12_s0_p16000 r8] targets cumulative: solved 4363/4495 L*=13 ge={7: 4363, 8: 2572, 9: 1582, 10: 621, 11: 196, 12: 111}
+[la_T1_best12_s0_p16000 r8] transfer cumulative: solved 2167/2285 L*=13 ge={7: 2167, 8: 1872, 9: 1577, 10: 614, 11: 191, 12: 108}
+python3 state_train.py --data artifacts/rfc/la_T1_best12_s0_p16000/mix_8.jsonl --init ckpts/rfc/ladder/la_T1_best12_s0_p16000_r7.pt --steps 600 --lr 0.0003 --min_lr 2.9999999999999997e-05 --warmup 50 --cap 0 --out ckpts/rfc/ladder/la_T1_best12_s0_p16000_r8.pt --seed 8 --log_every 200 --recs 128
+params 9560832 mode lean_staten
+train records 89500 (skipped 0); pairs 1145937; mean 12.804 per proof; max pair len 421; load 58s
+/workspace/nd-takehome/state_train.py:168: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss_sum += float(lb)
+step 200 loss 0.0469 lr 2.53e-04 pairs/batch 1642 219s
+step 400 loss 0.0430 lr 1.09e-04 pairs/batch 1639 433s
+step 600 loss 0.0449 lr 3.00e-05 pairs/batch 1638 647s
+uploaded ckpts/rfc/ladder/la_T1_best12_s0_p16000_r8.pt -> hf://buckets/dan-pandori/nd-rl/rl-from-ckpt/ckpts/rfc/ladder/la_T1_best12_s0_p16000_r8.pt (md5 79dbf53cbf60576f0776c5915ba9a7d1, 5.8s)
+saved ckpts/rfc/ladder/la_T1_best12_s0_p16000_r8.pt
+=== round 8 done in 3613s; new proofs 47763; cum targets solved 4363 L*=13; transfer L*=13
+=== ladder done la_T1_best12_s0_p16000 2026-10-02T09:22:25Z

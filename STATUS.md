@@ -247,3 +247,7 @@ Budget $90 / 180 pod-hours.
   targets each (143,840 attempts per round; transfer 0 / 2,285), so no fine-tune ran. Source
   `artifacts/rfc/la_T1_best12_s{0,1,2}_p0/round_{1,2}.json`. 12 ladders (p1600–p16000) running on rfc-p4…p15;
   replay-only controls on rfc-p1…p3.
+- 2026-10-02 05:15 (unreviewed) Replay-only controls (r8, sample seed 1, k 256): from step 1,600 textbook72 32 / 28 / 33,
+  holdout250 202 / 196 / 195; from step 5,000 32 / 27 / 36 and 205 / 203 / 204 (s0 / s1 / s2). End of pretraining
+  (`trajectory` r0): 34 / 33 / 36 and 196 / 205 / 200. The ladder's replay alone recovers end-of-pretraining
+  performance from 7 % of pretraining. Source `artifacts/rfc/eval/c{S}_p{1600,5000}_r8__*_x1.json`.
