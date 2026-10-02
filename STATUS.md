@@ -244,3 +244,7 @@ BEST-STATE DONE 2026-10-01T05:00:12Z
 - 2026-10-02T01:31Z pre-registration (commit 0e1d9fdf) `preregistration/compute-match.md`. Stage-1 is not extended: at cap 12 our 6,000-step
   Stage-1 already uses 2,244–2,250 A40-s vs best-cap12's 1,288 s. Ladders start from the inherited SN12 s0–s2 Stage-1
   checkpoints; only k is raised to match best-cap12's mean ladder A40-s (28,451 s). Pilot at k 64 picks k.
+- 2026-10-02T02:25Z **K = 64 chosen** (pilot round 1 on cm-p2, s2): k 64 round 1 = 2,988 s (fine-tune 289 s) vs inherited
+  SN12 s2 k 32 round 1 = 1,709 s (ft 280 s) → k-proportional part × 1.889 (α = 0.944 per unit k). Projection over the
+  inherited s2/s3 A40 ladders (ft 2,574 s, k-proportional 13,759 s): 2,574 + 0.944 · 2 · 13,759 = **28,550 s** vs target
+  28,451 s (1.00×); k 56 would give 25,150 s (0.88×). The pilot ladder continues as cm12 s2; s0 and s1 launch now.

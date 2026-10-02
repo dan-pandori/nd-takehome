@@ -889,3 +889,15 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `max_steps` 192. Truncation stays 1.0–1.8 % (non-terminating actions); solved sets 0 lost, +2 / +1 / 0 / 0 gained.
 - Pre-registration vs outcome: frozen predictions hit, every T1 prediction missed high (see `run_best_state.md`).
 - Total 60.74 pod-hours, $29.76 (A40 $0.49/h); balance $329 after.
+
+# log — compute-match
+
+- 2026-10-02T01:31Z pre-registration committed (`0e1d9fdf`). Deviation from the brief: no compute-matched Stage-1 (ours
+  already uses 1.74× best-cap12's Stage-1 A40-s at cap 12); ladders start from the inherited SN12 s0–s2 Stage-1 ckpts.
+- 2026-10-02 pods `cm-p2` (pilot, s2 ladder at k 64), `cm-p0`, `cm-p1`: A40 secure, $0.49/h billed, cgroup quota 7.65 CPU
+  (cm-p2). Budget registered: 60 h / $30.
+- 2026-10-02T01:33Z pilot ladder `la_T1_cm12k64_s2` started on cm-p2 (inherited `stage1_SN12_s2.pt`, md5 21d74747…).
+  While K is chosen, cm-p0 / cm-p1 re-read inherited SN12 T1 s0–s2 (tb72, long2, rr600) at best-state settings.
+- 2026-10-02T02:25Z pilot round 1 (k 64): 2,988 s, 3,791 targets solved after round 1 (inherited k 32: 1,709 s, 3,717).
+  K = 64 (projection 28,550 s vs target 28,451 s; STATUS). Inherited re-reads (best-state settings, batch 2,048):
+  T1_SN12 tb72 s0 36 / s1 40 / s2 36 (batch-4,096 reads: 37 / 38 / 36).
