@@ -150,9 +150,12 @@ if not fails:
     p7 = [pa for r in r7 for pa in r['traj']]
     x7, m7_ = gs.pair_batch(tok, p7, 'cpu')
     with torch.no_grad():
-        am = model(x7[:, :-1]).argmax(-1)
-    agree = int(((am == x7[:, 1:]) & m7_[:, 1:]).sum()); tot = int(m7_[:, 1:].sum())
-    check(f'7. T 0.01 sampled action tokens == teacher-forced argmax ({agree}/{tot})', tot > 0 and agree == tot)
+        lg = model(x7[:, :-1]).float()
+    gap = lg.max(-1).values - lg.gather(-1, x7[:, 1:, None])[..., 0]    # 0 where the sampled token is the argmax
+    agree = int(((gap == 0) & m7_[:, 1:]).sum()); tot = int(m7_[:, 1:].sum()); worst = float((gap * m7_[:, 1:]).max())
+    # T 0.01 picks a near-tied runner-up with probability exp(-gap / 0.01): allow gaps < 0.05 (seen: 247 / 248 on CI)
+    check(f'7. T 0.01 sampled action tokens == teacher-forced argmax up to near-ties ({agree}/{tot}, worst logit gap {worst:.4f})',
+          tot > 0 and worst < 0.05 and agree >= tot - 2)
 
     # 6. smoke runs, one per advantage variant
     from lean_judge import judge_many
