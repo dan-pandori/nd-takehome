@@ -1,0 +1,15 @@
+[lean_gate] 64000 samples, parse-fail 25148 (no-eos 0, 0.000 %), distinct 19476: ok 520, rej 18956 (filter 18956, prefilter=on); lean on 520 texts in 2 procs, 4.1s proc, exposed 3.9s, tail 3.2s, 32 workers
+[stage1_best6_s1_b1200_step3000.pt on holdout250.jsonl k=256 T=0.8] SOLVED 56/250 = 0.224 [0.177,0.280]
+  len 7: 5/31 = 0.161 [0.071,0.326]
+  len 8: 10/32 = 0.312 [0.180,0.486]
+  len 9: 35/115 = 0.304 [0.228,0.394]
+  len 10: 6/48 = 0.125 [0.059,0.247]
+  len 11: 0/14 = 0.000 [0.000,0.215]
+  len 12: 0/7 = 0.000 [0.000,0.354]
+  len 13: 0/2 = 0.000 [0.000,0.658]
+  len 14: 0/1 = 0.000 [0.000,0.793]
+  written hist {7: 4, 8: 12, 9: 47, 10: 12, 12: 2, 14: 2, 15: 1}
+  pruned hist {7: 8, 8: 24, 9: 41, 10: 7}
+  frontier written 10 pruned 10
+  reasons [('lean rejected', 37290), ('lean_seq parse: env: unbound', 8145), ('lean_seq parse: env: exact goal mismatch', 6405), ('lean_seq parse: env: formula', 4882), ('lean_seq parse: env: box head', 1078), ('lean_seq parse: env: action truncated', 665)]
+env {"env_end": {"syntax": 24483, "truncated": 665, "done": 38852}, "env_fail_reason": {"binder mismatch": 650, "formula": 4882, "box head": 1078, "have name": 330, "assign": 418, "unbound": 8145, "exact goal mismatch": 6405, "term": 295, "no semicolon": 171, "Or.elim on non-or": 556, "box on non-arrow": 595, "exact not last": 492, "PR position": 398, "malformed": 58, "exact form": 1, "empty term": 1, "PR form": 5, "colon": 2, "Or.elim name": 1}, "env_steps": {"1": 2639, "2": 5307, "3": 7237, "4": 6970, "5": 8781, "6": 6450, "7": 7985, "8": 7569, "9": 5840, "10": 3969, "11": 555, "13": 158, "16": 7, "12": 211, "14": 31, "15": 43, "17": 17, "18": 1, "0": 228, "19": 1, "21": 1}, "prompt_tokens": 27038369, "steps": 50176, "rows": 367040, "rowsteps": 11910016, "prompt_len_max": 459, "chunks": 187, "stop_eos": 366375, "stop_exact": 0, "stop_goal": 0, "names_defined": 339842, "names_renamed": 73529, "env_waves": 187, "env_wall_s": 265.5197274684906, "peak_alloc_gb": 20.61736488342285, "peak_reserved_gb": 20.861328125, "action_declen_mean": 23.065483326068005}

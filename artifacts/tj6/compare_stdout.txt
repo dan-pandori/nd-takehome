@@ -1,0 +1,50 @@
+## majority groups: rows cap 6, columns cap 12 (theorems; >= 2 of 3 seeds, else "mixed")
+cap6 \ cap12 | A | B | C | mixed | total
+A | 152 | 1 | 0 | 0 | 153
+B | 75 | 37 | 0 | 1 | 113
+C | 9 | 13 | 31 | 0 | 53
+mixed | 3 | 0 | 0 | 0 | 3
+B6∩A12: 75 (tb72 14, h250 61); A6∩A12: 152
+
+## B (per seed): Δ_RL = w1(r8) − w1(pend), Δ_PT = w1(pend) − w1(p1600); medians over B, IQM over seeds [95 %]
+own eventual: w1_pend {'per_seed': [-10.7, -10.03, -9.69], 'iqm': -10.14, 'ci95': [-10.76, -9.45], 'n': [101, 132, 122]}; w1_r8 {'per_seed': [-0.92, -0.97, -1.04], 'iqm': -0.98, 'ci95': [-1.08, -0.9], 'n': [101, 132, 122]}; dRL {'per_seed': [9.32, 8.58, 8.51], 'iqm': 8.81, 'ci95': [8.24, 9.47], 'n': [101, 132, 122]}; dPT {'per_seed': [3.59, 1.11, 1.84], 'iqm': 2.18, 'ci95': [1.55, 2.7], 'n': [101, 132, 122]}; paired_dRL_minus_dPT {'per_seed': [5.97, 7.49, 7.2], 'iqm': 6.89, 'ci95': [5.73, 7.75], 'n': [101, 132, 122]}; seeds_dRL_gt_dPT 3
+reference: w1_pend {'per_seed': [-10.46, -9.93, -8.54], 'iqm': -9.64, 'ci95': [-10.4, -8.98], 'n': [101, 132, 122]}; w1_r8 {'per_seed': [-3.52, -2.98, -3.99], 'iqm': -3.5, 'ci95': [-4.16, -2.84], 'n': [101, 132, 122]}; dRL {'per_seed': [5.93, 4.98, 4.45], 'iqm': 5.12, 'ci95': [4.51, 5.62], 'n': [101, 132, 122]}; dPT {'per_seed': [1.72, 1.48, 1.22], 'iqm': 1.47, 'ci95': [0.87, 2.14], 'n': [101, 132, 122]}; paired_dRL_minus_dPT {'per_seed': [4.13, 3.01, 3.27], 'iqm': 3.47, 'ci95': [2.08, 4.51], 'n': [101, 132, 122]}; seeds_dRL_gt_dPT 3
+cross-seed eventual: w1_pend {'per_seed': [-11.14, -10.64, -11.26], 'iqm': -11.01, 'ci95': [-11.64, -10.28], 'n': [96, 127, 120]}; w1_r8 {'per_seed': [-4.23, -3.6, -4.89], 'iqm': -4.24, 'ci95': [-4.61, -3.8], 'n': [96, 127, 120]}; dRL {'per_seed': [6.41, 6.17, 5.34], 'iqm': 5.97, 'ci95': [5.52, 6.51], 'n': [96, 127, 120]}; dPT {'per_seed': [3.63, 1.13, 1.74], 'iqm': 2.17, 'ci95': [1.37, 2.69], 'n': [96, 127, 120]}; paired_dRL_minus_dPT {'per_seed': [4.04, 4.8, 4.34], 'iqm': 4.39, 'ci95': [3.1, 5.19], 'n': [96, 127, 120]}; seeds_dRL_gt_dPT 3
+cap-12 eventual: w1_pend {'per_seed': [-13.89, -12.54, -13.09], 'iqm': -13.17, 'ci95': [-13.7, -12.46], 'n': [101, 132, 122]}; w1_r8 {'per_seed': [-7.32, -7.32, -8.51], 'iqm': -7.71, 'ci95': [-8.51, -6.7], 'n': [101, 132, 122]}; dRL {'per_seed': [4.87, 4.67, 4.18], 'iqm': 4.57, 'ci95': [4.19, 5.21], 'n': [101, 132, 122]}; dPT {'per_seed': [2.0, 0.95, 1.54], 'iqm': 1.5, 'ci95': [0.92, 2.28], 'n': [101, 132, 122]}; paired_dRL_minus_dPT {'per_seed': [2.93, 3.71, 2.56], 'iqm': 3.07, 'ci95': [2.01, 4.14], 'n': [101, 132, 122]}; seeds_dRL_gt_dPT 3
+
+## cap 6 vs cap 12 on B6∩A12 (pooled over seed pairs; medians)
+n_steps_ev6_B6A12: 12.0
+n_steps_ev12_B6A12: 12.5
+n_steps_ev6_A6A12: 10.0
+n_steps_ev12_A6A12: 11.0
+4a_diff: 2.0
+4b_ev12_under6_pend_w1: -11.759
+4b_ev12_under12_pend_w1: -2.812
+4c_frac_w1_idx_ge7: 0.342
+4c_n: 219
+4d_ev12_under6_r8_minus_pend: 4.409
+4e_ev12_under12_pend_minus_p1600: 4.724
+ev6_under6_pend_w1: -8.886
+ev6_under6_r8_w1: -0.903
+ev6_under12_pend_w1: -4.489
+ref_under6_pend_w1: -9.045
+ref_under12_pend_w1: -3.696
+
+re-score check (cap-12 eventual under cap-12 ckpts, this run vs trajectory): 19030 pairs, max |Δw1| 0.0
+
+## proof size, cap 6 (median actions / term size over theorem-seed pairs)
+ev A: actions 10.0, term size 5.0 (n 444)
+ev B: actions 12.0, term size 7.0 (n 355)
+ref A: actions 10.0, term size 5.0 (n 444)
+ref B: actions 10.0, term size 6.0 (n 355)
+ref C: actions 11.0, term size 9.0 (n 146)
+
+## truncation per stratum (s|ck|x|pool|group): 792 strata; > 0.1 %: 494; max pretraining (0.11662946428571429, 's1|p0|x1|h250|C'); max RL (0.14241536458333334, 's0|r6|x1|h250|C'); RL strata > 0.1 %: 200 / 288
+
+## 2x-cap diagnostic (seed 0 draw, k 256): theorems the caps could move; solved at 2x caps = would change group
+s0|r8|C: {'n': 52, 'solved_2x': 4, 'trunc_2x': 0.051832932692307696}
+s0|pend|B: {'n': 101, 'solved_2x': 5, 'trunc_2x': 0.0}
+s1|r8|C: {'n': 52, 'solved_2x': 1, 'trunc_2x': 0.04634915865384615}
+s1|pend|B: {'n': 132, 'solved_2x': 8, 'trunc_2x': 0.017223011363636364}
+s2|r8|C: {'n': 60, 'solved_2x': 3, 'trunc_2x': 0.059375}
+s2|pend|B: {'n': 122, 'solved_2x': 10, 'trunc_2x': 3.201844262295082e-05}

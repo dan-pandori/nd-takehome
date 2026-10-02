@@ -1,0 +1,14 @@
+[lean_gate] 18944 samples, parse-fail 3544 (no-eos 0, 0.000 %), distinct 7143: ok 7, rej 7136 (filter 7136, prefilter=on); lean on 7 texts in 1 procs, 0.3s proc, exposed 0.6s, tail 0.3s, 32 workers
+[stage1_best6_s0_b1200.pt on capdiag_s0_pend_h250.jsonl k=256 T=0.8] SOLVED 5/74 = 0.068 [0.029,0.149]
+  len 7: 0/10 = 0.000 [0.000,0.278]
+  len 8: 0/9 = 0.000 [0.000,0.299]
+  len 9: 3/23 = 0.130 [0.045,0.321]
+  len 10: 0/16 = 0.000 [0.000,0.194]
+  len 11: 2/8 = 0.250 [0.071,0.591]
+  len 12: 0/7 = 0.000 [0.000,0.354]
+  len 13: 0/1 = 0.000 [0.000,0.793]
+  written hist {9: 1, 10: 1, 11: 2, 12: 1}
+  pruned hist {9: 1, 10: 1, 11: 2, 12: 1}
+  frontier written 0 pruned 0
+  reasons [('lean rejected', 15393), ('lean_seq parse: env: unbound', 1147), ('lean_seq parse: env: binder mismatch', 750), ('lean_seq parse: env: Or.elim on non-or', 632), ('lean_seq parse: env: exact goal mismatch', 271), ('lean_seq parse: env: exact not last', 177)]
+env {"env_end": {"syntax": 3544, "done": 15400}, "env_fail_reason": {"have name": 146, "formula": 144, "binder mismatch": 750, "unbound": 1147, "exact goal mismatch": 271, "term": 150, "Or.elim on non-or": 632, "empty term": 1, "no semicolon": 69, "exact not last": 177, "PR form": 4, "PR position": 9, "box on non-arrow": 26, "box head": 5, "assign": 8, "malformed": 5}, "env_steps": {"1": 178, "2": 1488, "3": 1547, "4": 1791, "5": 3602, "6": 1532, "7": 2054, "8": 2075, "9": 2633, "11": 541, "12": 46, "10": 1243, "14": 120, "13": 56, "17": 4, "18": 13, "15": 15, "16": 2, "19": 2, "21": 1, "25": 1}, "prompt_tokens": 9018493, "steps": 8416, "rows": 118820, "rowsteps": 3428480, "prompt_len_max": 270, "chunks": 130, "stop_eos": 118820, "stop_exact": 0, "stop_goal": 0, "names_defined": 104999, "names_renamed": 20573, "env_waves": 130, "env_wall_s": 103.5037214756012, "peak_alloc_gb": 15.005951404571533, "peak_reserved_gb": 15.953125, "action_declen_mean": 19.5445042922067}

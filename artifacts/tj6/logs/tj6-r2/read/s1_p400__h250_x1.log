@@ -1,0 +1,15 @@
+[lean_gate] 64000 samples, parse-fail 46583 (no-eos 0, 0.000 %), distinct 10441: ok 23, rej 10418 (filter 10418, prefilter=on); lean on 23 texts in 1 procs, 0.4s proc, exposed 0.7s, tail 0.4s, 32 workers
+[stage1_best6_s1_b1200_step400.pt on holdout250.jsonl k=256 T=0.8] SOLVED 9/250 = 0.036 [0.019,0.067]
+  len 7: 2/31 = 0.065 [0.018,0.207]
+  len 8: 2/32 = 0.062 [0.017,0.201]
+  len 9: 5/115 = 0.043 [0.019,0.098]
+  len 10: 0/48 = 0.000 [0.000,0.074]
+  len 11: 0/14 = 0.000 [0.000,0.215]
+  len 12: 0/7 = 0.000 [0.000,0.354]
+  len 13: 0/2 = 0.000 [0.000,0.658]
+  len 14: 0/1 = 0.000 [0.000,0.793]
+  written hist {7: 2, 8: 2, 9: 8}
+  pruned hist {7: 4, 8: 4, 9: 4}
+  frontier written 9 pruned 0
+  reasons [('lean rejected', 17392), ('lean_seq parse: env: formula', 14671), ('lean_seq parse: env: exact goal mismatch', 11235), ('lean_seq parse: env: unbound', 9138), ('lean_seq parse: env: binder mismatch', 1852), ('lean_seq parse: env: PR position', 1829)]
+env {"env_end": {"syntax": 45346, "truncated": 1237, "done": 17417}, "env_fail_reason": {"binder mismatch": 1852, "formula": 14671, "box head": 863, "have name": 430, "assign": 580, "PR position": 1829, "exact goal mismatch": 11235, "unbound": 9138, "box on non-arrow": 1326, "Or.elim on non-or": 602, "term": 728, "malformed": 258, "no semicolon": 104, "Or.elim name": 11, "exact not last": 1648, "exact form": 68, "PR form": 3}, "env_steps": {"1": 8319, "0": 753, "2": 11043, "3": 12827, "4": 6554, "5": 8412, "6": 5659, "7": 4769, "8": 2891, "9": 1756, "10": 685, "11": 160, "12": 67, "13": 31, "14": 27, "19": 6, "15": 19, "16": 7, "17": 9, "18": 2, "20": 1, "21": 2, "23": 1}, "prompt_tokens": 17839728, "steps": 49536, "rows": 255648, "rowsteps": 9150080, "prompt_len_max": 505, "chunks": 132, "stop_eos": 254411, "stop_exact": 0, "stop_goal": 0, "names_defined": 236418, "names_renamed": 65820, "env_waves": 132, "env_wall_s": 237.08127808570862, "peak_alloc_gb": 21.456697940826416, "peak_reserved_gb": 21.833984375, "action_declen_mean": 26.578459444235826}

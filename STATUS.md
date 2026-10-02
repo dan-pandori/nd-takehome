@@ -263,3 +263,8 @@ TRAJECTORY DONE 2026-10-01T19:20:00Z
   theorems it plateaus at ≈ −10 from step 12,000 on (cap 12's B references kept climbing). Figures:
   `figures/tj6_pre_ref_combined.png`, `figures/tj6_pre_passk_combined.png`; tables `artifacts/tj6/analysis_pre_stdout.txt`.
   Ladders in round 3 (≈ 20–33 min per round so far).
+- Results (UNREVIEWED): `run_trajectory_cap6.md`, `numbers.md` § trajectory-cap6. At cap 6, B's eventual-proof worst step
+  climbs +8.8 nats in RL vs +2.2 in pretraining (3 / 3 seeds; also on reference, cross-seed and cap-12 proofs). 75 theorems
+  are B at cap 6 and A at cap 12. Sanity vs best-state in range. 45.2 pod-hours, $22.62; pods deleted.
+
+TRAJECTORY-CAP6 DONE 2026-10-02T03:08Z

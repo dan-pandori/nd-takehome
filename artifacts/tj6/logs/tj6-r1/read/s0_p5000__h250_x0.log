@@ -1,0 +1,15 @@
+[lean_gate] 64000 samples, parse-fail 26516 (no-eos 0, 0.000 %), distinct 18083: ok 1143, rej 16940 (filter 16940, prefilter=on); lean on 1143 texts in 3 procs, 8.3s proc, exposed 3.7s, tail 3.0s, 32 workers
+[stage1_best6_s0_b1200_step5000.pt on holdout250.jsonl k=256 T=0.8] SOLVED 74/250 = 0.296 [0.243,0.355]
+  len 7: 13/31 = 0.419 [0.264,0.592]
+  len 8: 13/32 = 0.406 [0.255,0.577]
+  len 9: 40/115 = 0.348 [0.267,0.439]
+  len 10: 8/48 = 0.167 [0.087,0.296]
+  len 11: 0/14 = 0.000 [0.000,0.215]
+  len 12: 0/7 = 0.000 [0.000,0.354]
+  len 13: 0/2 = 0.000 [0.000,0.658]
+  len 14: 0/1 = 0.000 [0.000,0.793]
+  written hist {6: 1, 7: 12, 8: 25, 9: 61, 10: 22, 12: 1}
+  pruned hist {5: 3, 7: 23, 8: 30, 9: 51, 10: 14, 12: 1}
+  frontier written 10 pruned 10
+  reasons [('lean rejected', 33775), ('lean_seq parse: env: formula', 9924), ('lean_seq parse: env: exact goal mismatch', 5668), ('lean_seq parse: env: unbound', 5030), ('lean_seq parse: env: box head', 1807), ('lean_seq parse: env: malformed', 1737)]
+env {"env_end": {"syntax": 26472, "done": 37484, "truncated": 44}, "env_fail_reason": {"box head": 1807, "formula": 9924, "have name": 351, "binder mismatch": 332, "exact goal mismatch": 5668, "unbound": 5030, "malformed": 1737, "Or.elim on non-or": 35, "no semicolon": 325, "exact not last": 666, "term": 207, "box on non-arrow": 312, "assign": 30, "exact form": 6, "PR position": 23, "empty term": 12, "PR form": 6, "colon": 1}, "env_steps": {"1": 5208, "2": 5245, "3": 8275, "4": 4688, "5": 7182, "6": 6329, "7": 6669, "8": 8802, "9": 5616, "10": 4604, "11": 947, "12": 234, "13": 103, "14": 41, "15": 28, "16": 20, "17": 4, "18": 4, "24": 1}, "prompt_tokens": 26300378, "steps": 25232, "rows": 362928, "rowsteps": 11036784, "prompt_len_max": 220, "chunks": 185, "stop_eos": 362884, "stop_exact": 0, "stop_goal": 0, "names_defined": 331076, "names_renamed": 66862, "env_waves": 185, "env_wall_s": 177.81646037101746, "peak_alloc_gb": 16.861539363861084, "peak_reserved_gb": 18.103515625, "action_declen_mean": 21.35825563197108}

@@ -243,6 +243,39 @@ def main():
                  'theorem-seed(-pair)s. x: pretraining step | RL round', fontsize=10)
     fig.tight_layout(); fig.savefig('figures/tj6_b6a12.png', dpi=110); plt.close(fig)
 
+    # ---- heatmaps for 4 B6∩A12 theorems (pre-registered rule: smallest sha1(name) whose cap-6 seed-0 eventual proof has
+    # 6-14 actions); left: cap-6 s0's eventual proof under cap 6 s0, right: cap-12 s0's eventual proof under cap 12 s0
+    import hashlib
+    cand = [n for n in B6A12 if S6[0] and 6 <= (nst(S6, 0, f'ev:{n}') or 0) <= 14 and S12[0] and f'ev:{n}' in S12[0][0]]
+    ex = sorted(cand, key=lambda n: hashlib.sha1(n.encode()).hexdigest())[:4]
+    out['heatmap_B6A12'] = ex
+    if ex:
+        fig, axs = plt.subplots(len(ex), 2, figsize=(14, 2.6 * len(ex)), squeeze=False)
+        for i, n in enumerate(ex):
+            for j, (L, tag) in enumerate(((S6, 'cap-6 s0 eventual under cap 6'), (S12, 'cap-12 s0 eventual under cap 12'))):
+                ax = axs[i][j]
+                cols = [(rec(L, 0, ck, f'ev:{n}') or {}).get('step_lp') for ck in CK]
+                ns = max(len(c_) for c_ in cols if c_)
+                M = np.array([c_ if c_ else [np.nan] * ns for c_ in cols], float).T
+                im = ax.imshow(np.clip(M, -15, 0), aspect='auto', cmap='magma', vmin=-15, vmax=0)
+                ax.set_xticks(xs); ax.set_xticklabels(xtl, rotation=60, fontsize=6); ax.axvline(len(PRE) - 0.5, color='w', lw=0.8)
+                ax.set_ylabel('step', fontsize=7); ax.set_title(f'{n} ({pool[n]}): {tag}', fontsize=8)
+        fig.subplots_adjust(hspace=0.75, wspace=0.15, right=0.85)
+        fig.colorbar(im, ax=axs, shrink=0.6, label='log p of step (nats, clipped at −15)')
+        fig.savefig('figures/tj6_heatmaps_b6a12.png', dpi=100); plt.close(fig)
+
+    # ---- proof size by group (cap 6): actions and Lean term size (tj_score --lean), medians over theorem-seed pairs
+    print('\n## proof size, cap 6 (median actions / term size over theorem-seed pairs)')
+    sz = {}
+    for kind in ('ev', 'ref'):
+        for g in 'ABC':
+            ms = [S6[s][0].get(f'{kind}:{n}') for s in SEEDS if S6[s] and G6[s] for n, gg in G6[s][0].items() if gg == g]
+            ms = [m for m in ms if m]
+            if ms:
+                sz[f'{kind}|{g}'] = (med([m['n_steps'] for m in ms]), med([m.get('term_size') for m in ms]), len(ms))
+                print(f'{kind} {g}: actions {sz[f"{kind}|{g}"][0]}, term size {sz[f"{kind}|{g}"][1]} (n {len(ms)})')
+    out['size'] = sz
+
     # ---- truncation per stratum (pool x group x checkpoint x sample seed), cap 6
     TR = {}
     for s in SEEDS:
@@ -267,6 +300,21 @@ def main():
         print(f'\n## truncation per stratum (s|ck|x|pool|group): {len(TR)} strata; > 0.1 %: {int((v > 0.001).sum())}; '
               f'max pretraining {max((TR[k], k) for k in ptk) if ptk else None}; max RL {max((TR[k], k) for k in rlk) if rlk else None}; '
               f'RL strata > 0.1 %: {sum(TR[k] > 0.001 for k in rlk)} / {len(rlk)}')
+    # ---- 2x-cap diagnostic (pod/tj6/capdiag.sh): C at r8 and B at pend re-read at max_action 1024 / max_steps 192
+    cd = {}
+    for s in SEEDS:
+        for ck, g in (('r8', 'C'), ('pend', 'B')):
+            fs = [f'{D6}/capdiag/s{s}_{ck}__{p}_x0_2x.jsonl' for p in POOLS]
+            if all(os.path.exists(f) for f in fs):
+                rows = [r for f in fs for r in rj(f)]
+                cd[f's{s}|{ck}|{g}'] = {'n': len(rows), 'solved_2x': sum(1 for r in rows if r['n_ok']),
+                                        'trunc_2x': sum(1 for r in rows for z in r['reasons'] if 'trunc' in z or 'step cap' in z)
+                                        / max(1, sum(r['n_tried'] for r in rows))}
+    if cd:
+        print('\n## 2x-cap diagnostic (seed 0 draw, k 256): theorems the caps could move; solved at 2x caps = would change group')
+        for k, v in cd.items():
+            print(f'{k}: {v}')
+    out['capdiag'] = cd
     json.dump(out, open(f'{D6}/compare.json', 'w'), indent=1, default=str)
 
 

@@ -1,0 +1,15 @@
+[lean_gate] 64000 samples, parse-fail 30176 (no-eos 0, 0.000 %), distinct 15894: ok 663, rej 15231 (filter 15231, prefilter=on); lean on 663 texts in 2 procs, 4.9s proc, exposed 3.6s, tail 3.1s, 32 workers
+[stage1_best6_s1_b1200_step8000.pt on holdout250.jsonl k=256 T=0.8] SOLVED 56/250 = 0.224 [0.177,0.280]
+  len 7: 9/31 = 0.290 [0.161,0.466]
+  len 8: 13/32 = 0.406 [0.255,0.577]
+  len 9: 27/115 = 0.235 [0.167,0.320]
+  len 10: 7/48 = 0.146 [0.072,0.272]
+  len 11: 0/14 = 0.000 [0.000,0.215]
+  len 12: 0/7 = 0.000 [0.000,0.354]
+  len 13: 0/2 = 0.000 [0.000,0.658]
+  len 14: 0/1 = 0.000 [0.000,0.793]
+  written hist {7: 11, 8: 19, 9: 47, 10: 16}
+  pruned hist {6: 3, 7: 15, 8: 29, 9: 38, 10: 8}
+  frontier written 10 pruned 10
+  reasons [('lean rejected', 32135), ('lean_seq parse: env: formula', 9854), ('lean_seq parse: env: unbound', 8589), ('lean_seq parse: env: exact goal mismatch', 3398), ('lean_seq parse: env: box head', 2818), ('lean_seq parse: env: PR position', 1342)]
+env {"env_end": {"syntax": 29570, "done": 33824, "truncated": 606}, "env_fail_reason": {"formula": 9854, "box on non-arrow": 488, "have name": 435, "PR position": 1342, "binder mismatch": 564, "unbound": 8589, "box head": 2818, "Or.elim on non-or": 601, "term": 207, "exact goal mismatch": 3398, "no semicolon": 127, "exact not last": 923, "assign": 185, "empty term": 4, "malformed": 23, "Or.elim name": 3, "colon": 1, "PR form": 8}, "env_steps": {"1": 3871, "2": 7203, "3": 7620, "4": 6264, "5": 9104, "6": 5447, "7": 8114, "8": 6516, "9": 5341, "10": 3530, "11": 485, "12": 222, "13": 115, "14": 65, "0": 43, "15": 39, "17": 4, "16": 15, "18": 2}, "prompt_tokens": 24801588, "steps": 30608, "rows": 348629, "rowsteps": 11033216, "prompt_len_max": 566, "chunks": 175, "stop_eos": 348023, "stop_exact": 0, "stop_goal": 0, "names_defined": 324872, "names_renamed": 70121, "env_waves": 175, "env_wall_s": 204.68074464797974, "peak_alloc_gb": 22.590425491333008, "peak_reserved_gb": 22.888671875, "action_declen_mean": 22.458303812935814}

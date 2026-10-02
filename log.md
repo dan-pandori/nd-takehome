@@ -966,3 +966,25 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 19:39–19:43 reader pods: A40 stock ran out again; tj6-r0, tj6-r1 (A40, $0.49/h), tj6-r2, tj6-r3 (RTX A6000, $0.53/h;
   same GA102; a sampling re-draw, not a correctness change). Four disjoint queues `pod/tj6/q0–q3.txt` (132 reads: 3 seeds
   × 22 checkpoints × sample seeds 0 and 1, both pools; literal-text dumps for x0 at pend and r8).
+- 00:41 Ladder s2 done (tj6-p2). ~00:23 **tj6-r2's GPU failed** ("CUDA unknown error", device count 0) during s1_r7 h250 x1; the
+  read failed and the reader retried on CPU. Killed; its finished reads pulled; the 3 remaining items (`pod/tj6/q2b.txt`; the
+  s1_r7 tb72 x1 read was already done) moved to tj6-p2; tj6-r2 deleted (5.27 h, $2.80).
+- 00:57–01:00 Ladders s1, s0 done. To finish the r8 reads sooner the queues were edited live (re-read every iteration):
+  s2_r8 x1 moved from q2b (tj6-p2) to `q4.txt` on tj6-p0, s2_r8 x0 from q3 (tj6-r3) to `q5.txt` on tj6-p1.
+- 01:20–01:45 All 132 reads done (`pod/tj6/q*.txt`; 2 reads at batch 1,024 after OOM, `*.oom2048.log`). `score.sh <S> full`:
+  eventual proofs for 268 / 269 / 262 theorems from 8,859 / 6,472 / 4,579 distinct accepted r8 x0 proofs, 0 replay
+  failures; Lean accepts 583 / 584 / 577 targets.
+- 01:50–03:00 Added scoring (`tj6_targets.py cross`): every cap-6 seed's eventual proof and `trajectory`'s cap-12 eventual
+  proofs (1,664 targets, all Lean-accepted) under all 22 checkpoints of each cap-6 seed (`score_cross.sh`) and of each
+  cap-12 seed (`score_rev.sh`, checkpoints from the `trajectory` bucket; not pre-registered). The cap-12 eventual proofs
+  re-scored under cap-12 checkpoints equal `trajectory`'s stored values exactly (19,030 pairs).
+- 02:25 The per-stratum truncation table (asked for by the cap-12 review) showed up to 14 % on C in RL, so I added a 2×-cap
+  diagnostic (`pod/tj6/capdiag.sh`: C at r8, B at pend, x0, `max_action` 1,024, `max_steps` 192, batch 1,024). The
+  extra solves match a fresh draw's rate (`numbers.md`).
+- 03:05 Pods all deleted (45.2 pod-hours, $22.62). Analysis on the VPS: `tj6_analysis.py`, `tj6_compare.py`,
+  `tj6_compute.py`, `tj6_registry.py` (80,872 rows).
+- 03:15 Bucket: `hf://buckets/dan-pandori/nd-rl/trajectory-cap6/{ckpts,artifacts,data}` (66 checkpoints uploaded by
+  `save_ckpt` on save; artifacts and data synced from the VPS; `scan_secrets.py` over logs + registry: 0 hits).
+  **Lost:** the literal-text sample dumps (x0 at pend and r8) lived only on the pods — `up` excludes `dump/`, as in
+  `trajectory` — and went with them. No count uses them: groups, candidates and pass@k come from the `state_eval` rows
+  (`artifacts/tj6/eval/*.jsonl`, accepted proof texts in `proofs`), which are in the bucket.

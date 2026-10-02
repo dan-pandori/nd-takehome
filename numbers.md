@@ -1781,3 +1781,97 @@ RTX A6000 $0.53/h); budget $50 / 100 h after Dan's 15:46 raise.
 
 **Registry:** 82,324 rows (81,796 + 528 for the 8 late references) (`pass_count` per theorem × checkpoint × sample seed; `tf_logp` per target × checkpoint, with
 per-step log p) in `artifacts/trajectory/registry/`. **Bucket:** `hf://buckets/dan-pandori/nd-rl/trajectory/{ckpts,artifacts,data}`.
+
+## trajectory-cap6 (2026-10-02, executor; UNREVIEWED)
+
+**Models.** best-cap6 s0 / s1 / s2 (fresh): `best-state`'s best-cap6 recipe (ALiBiGPT 6 × 384, 9,560,832 params,
+`lean_staten`, from scratch on the cap-6 set `state-env/data/p2/train_depth3_f0_a1.jsonl`, 155,000 records), Stage-1
+1,200 s on an A40 (24,511 / 24,120 / 24,113 steps; 14 kept checkpoints), then the T1 ladder on the same A40 (r1–r8).
+Checkpoints: `hf://buckets/dan-pandori/nd-rl/trajectory-cap6/ckpts/tj6/` (66; md5s `artifacts/tj6/score/ckpts_s<S>.md5`).
+Comparison model: `trajectory`'s best-cap12 s0–s2 (same recipe on K12; their records, `cap12_in/` ← bucket
+`trajectory/artifacts/tj/`). **Lean alone** (post-2026-09-27). Theorems: textbook72 + holdout250 = 322. Reads: k 256,
+T 0.8, `max_action` 512, `max_steps` 96, batch 2,048 (1,024 after OOM); groups from sample seed 0, pass@k from seed 1.
+Log p: teacher-forced, T 1.0, base-marginalised, environment-assigned names unscored (`tj_score.py`, unchanged).
+Sources: `artifacts/tj6/analysis_stdout.txt` (`tj6_analysis.py`), `artifacts/tj6/compare_stdout.txt` + `compare.json`
+(`tj6_compare.py`), `artifacts/tj6/compute_stdout.txt` (`tj6_compute.py`), raw rows `artifacts/tj6/eval/`, `score/`.
+
+**Sanity vs `best-state` best-cap6** (x0; pre-registered ranges): held-out greedy 0.973 / 0.953 / 0.956 (best-state
+0.963 / 0.967 / 0.955). textbook72 pend 17 / 14 / 15 (19 / 18 / 20; range 9–29 ✓), r8 43 / 41 / 38 (39 / 40 / 33;
+24–49 ✓). holdout250 pend 152 / 124 / 125 (149 / 125 / 122; 105–165 ✓), r8 225 / 228 / 224 (226 / 229 / 227; 210–245 ✓).
+Ladder cumulative targets solved after r8: 4,257 / 4,235 / 4,204.
+
+**Groups** (x0 at pend / r8): A 169 / 138 / 140 (125–180 ✓), B 101 / 132 / 122 (85–135 ✓), C 52 / 52 / 60 (40–80 ✓),
+A-lost 2 / 1 / 0 (≤ 6 ✓). B larger than cap 12's (54 / 51 / 60) in 3 / 3 ✓.
+
+**Key checkpoints** (median over theorem-seed pairs, worst step w1 / total, nats, T 1.0):
+
+| group, target | init | 12k | end PT | r1 | r4 | r8 |
+|---|---|---|---|---|---|---|
+| A eventual w1 | −233 | −4.5 | −2.9 | −1.2 | −0.75 | −0.73 |
+| B eventual w1 | −195 | −10.4 | −10.0 | −5.7 | −2.1 | −0.98 |
+| B eventual total | −909 | −25.2 | −21.5 | −9.7 | −3.2 | −1.9 |
+| B reference w1 | −197 | −9.2 | −9.7 | −7.1 | −4.2 | −3.4 |
+| C reference w1 | −166 | −11.7 | −12.8 | −12.9 | −11.3 | −12.1 |
+| pass@1 A / B / C (x1, mean) | 0 | .22 / .008 / 0 | .38 / .000 / 0 | .87 / .20 / 0 | .93 / .51 / .001 | .92 / .62 / 0 |
+| pass@256 A / B / C | 0 | .73 / .12 / .006 | .96 / .075 / .006 | .99 / .53 / .02 | .99 / .86 / .04 | .99 / .97 / .055 |
+
+**Headline (expectation 3): B's worst step, Δ_RL = w1(r8) − w1(pend), Δ_PT = w1(pend) − w1(step 1,600)**, per-seed
+medians over B, IQM [stratified bootstrap 95 %]:
+
+| target | w1 pend | w1 r8 | Δ_RL | Δ_PT | paired Δ_RL − Δ_PT | Δ_RL > Δ_PT |
+|---|---|---|---|---|---|---|
+| own eventual (pre-registered) | −10.7 / −10.0 / −9.7 | −0.92 / −0.97 / −1.04 | 9.32 / 8.58 / 8.51 (8.81 [8.24, 9.47]) | 3.59 / 1.11 / 1.84 (2.18 [1.55, 2.70]) | 6.89 [5.73, 7.75] | 3 / 3 |
+| reference | −10.5 / −9.9 / −8.5 | −3.5 / −3.0 / −4.0 | 5.93 / 4.98 / 4.45 (5.12 [4.51, 5.62]) | 1.72 / 1.48 / 1.22 (1.47 [0.87, 2.14]) | 3.47 [2.08, 4.51] | 3 / 3 |
+| cross-seed eventual | −11.1 / −10.6 / −11.3 | −4.2 / −3.6 / −4.9 | 5.97 [5.52, 6.51] | 2.17 [1.37, 2.69] | 4.39 [3.10, 5.19] | 3 / 3 |
+| cap-12 eventual | −13.9 / −12.5 / −13.1 | −7.3 / −7.3 / −8.5 | 4.57 [4.19, 5.21] | 1.50 [0.92, 2.28] | 3.07 [2.01, 4.14] | 3 / 3 |
+
+Predicted: w1(pend) ≈ −7 (−12 to −4) ✓; w1(r8) ≥ −1.5 ✓; Δ_RL ≈ +6 (+3 to +10) ✓; Δ_PT ≈ +3 (0 to +5) ✓. Decision rule
+(3 / 3 seeds and IQM difference ≥ 2 nats): **"RL-dominated" — met**, on every target kind. Prediction "reference Δ_PT ≥
+Δ_RL": **miss** (RL lifts B's reference proofs +5.1 vs +1.5 in pretraining). Cross-seed Δ_RL between reference and
+own, ≥ +2 ✓.
+
+**Other expectations.** 5: totals at pend A −4.16 (−7 to −1 ✓), B −21.8 (−30 to −8 ✓); at r8 A −1.21 (≈ −2: off by
+0.8, no range), B −1.91 (−6 to −1 ✓). 6: C reference w1 per seed at r0–r8 always ≤ −9.9 ✓; |Δ_RL| per seed 2.16 / 0.93 /
+0.16: **miss in s0**. 7: B pass@256 at pend .069 / .083 / .074 ✓; B pass@1 at r8 .653 / .630 / .586 ✓ (0.25–0.65; s0
+at the edge), B pass@256 r8 .96–.99 ✓; A pass@1 pend .46 / .33 / .35 (≈ .35), r8 .91–.93 (≈ .8: above); C pass@256
+at r8 .077 / .038 / .050 ✓. Late pretraining (p8000 → pend), B eventual w1: −1.39 / +2.16 / +0.93 (IQM 0.57); A: 2.49.
+At pend, B's worst step is a box opener in 160 / 355 (Or.elim 84, imp 54, neg 22), an ∧E projection in 71.
+
+**Cap 6 vs cap 12** (majority sets; cross-tab rows cap 6, columns cap 12: A→A 152, B→A **75**, B→B 37, C→A 9, C→B 13,
+C→C 31, A→B 1, mixed 4). B6∩A12 = 75 (tb72 14, h250 61; predicted 45–100 ✓). On B6∩A12, pooled medians:
+
+| quantity | value | prediction |
+|---|---|---|
+| 4a actions of cap-6 eventual, B6∩A12 − A6∩A12 | 12 − 10 = 2 | ≥ 2 ✓ (at the edge) |
+| 4b cap-12 eventual w1 under cap-6 pend / under cap-12 pend | −11.8 / −2.8 | ≤ −4 / ≥ −3 ✓ |
+| 4c cap-6 pend worst step at action ≥ 7 | 34 % (of 219 theorem-seeds) | ≥ 50 % **miss** |
+| 4d cap-12 eventual under cap 6: w1(r8) − w1(pend) | +4.4 | ≥ 2 ✓ |
+| 4e cap-12 eventual under cap 12: w1(pend) − w1(p1600) | +4.7 | ≥ 3 ✓ |
+| cap-6 eventual w1 under cap 6 pend → r8 | −8.9 → −0.90 | (descriptive) |
+| cap-6 eventual w1 under cap-12 pend (added, `score_rev.sh`) | −4.5 | not pre-registered |
+| reference w1 under cap-6 pend / cap-12 pend | −9.0 / −3.7 | (descriptive) |
+
+Re-score check: the cap-12 eventual proofs scored here under the cap-12 checkpoints equal `trajectory`'s stored per-step
+values exactly (19,030 target-checkpoint pairs, max |Δw1| 0; fp32 scoring is deterministic).
+
+**Proof size (cap 6, median actions / Lean term size):** eventual A 10 / 5, B 12 / 7; reference A 10 / 5, B 10 / 6, C 11 / 9.
+Reference lengths are minlen labels (ND-derived upper bounds under Lean). All targets Lean-accepted: per seed 583 / 584 /
+577 (refs + eventual), cross targets 1,664 / 1,664 × 3.
+
+**Truncation** (per stratum = seed × checkpoint × sample seed × pool × group; 792 strata): 494 exceed 0.1 %; max in
+pretraining 11.7 % (s1 init, h250 C), max in RL 14.2 % (s0 r6 x1, h250 C); 200 / 288 RL strata exceed 0.1 %. Caps
+held at best-state's (pre-registered). **2× cap diagnostic** (`pod/tj6/capdiag.sh`, x0 redraw at batch 1,024,
+`max_action` 1,024, `max_steps` 192): C at r8 solved 4 / 52, 1 / 52, 3 / 60; B at pend solved 5 / 101, 8 / 132,
+10 / 122 — the rate a fresh 256-sample draw gives anyway (x1 pass@256: C r8 ≈ .055, B pend ≈ .075), and 2× caps still
+truncate 5 % of C's r8 samples (non-terminating actions). The caps are not what keeps C unsolved.
+
+**Compute** (`tj6_compute.py`, registry rows; GPU-s): Stage-1 1,325 / 1,327 / 1,289 (A40); T1 ladder 17,990 / 17,730 /
+16,763 (A40; 1,794 k attempts, 4,800 train steps, 522 / 497 / 493 M train tokens, 1.13 / 1.07 / 1.03 M Lean checks);
+reads 19,632 / 20,644 / 19,889 (A40 / RTX A6000; incl. the 2× diagnostic); held-out 23–28. No seed exceeds 1.25× its
+siblings. **Against cap 12** (`trajectory`): ladder GPU-s 22,350–27,021 on RTX A6000 (≈ 1.4× cap 6's, partly GPU class)
+and train tokens 751–783 M (≈ 1.5×; longer proofs): **cap 12 used > 1.25× cap 6's ladder compute** on both; attempts and
+steps are equal. Teacher-forced scoring ≈ 35–80 s per checkpoint (not in the registry). Spend: 45.2 pod-hours, $22.62
+(`podbudget`; A40 $0.49/h, RTX A6000 $0.53/h).
+
+**Bucket:** `hf://buckets/dan-pandori/nd-rl/trajectory-cap6/{ckpts,artifacts,data}`. Registry: 80,872 per-theorem rows
+(`tj6_registry.py`) + compute rows, `artifacts/trajectory-cap6/registry/`.
