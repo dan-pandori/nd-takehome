@@ -24,5 +24,6 @@ step "50-step CPU training + sampler smoke" $PY tests/test_smoke_train_sample.py
 step "GRPO advantage variants on hand-made groups (grpo-state)" $PY tests/test_grpo_adv.py
 step "grpo_state: gradient sanity + tiny CPU smoke per variant (grpo-state)" $PY tests/test_grpo_state.py
 step "best recipe in the state trainer: round trip, cached ALiBi sampling, one episode (best-state)" $PY tests/test_best_state.py
+step "grpo_state on a tiny ALiBiGPT (best recipe): gradient, consistency, smoke per variant (grpo-best)" env ND_GRPO_TEST_ARCH=best $PY tests/test_grpo_state.py
 rm -rf "$TMP"
 echo "CI PASS ($(( $(date +%s) - T0 ))s)"

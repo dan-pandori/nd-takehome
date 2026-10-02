@@ -16,6 +16,11 @@
 6. Smoke: grpo_state.py --rounds 2 runs to DONE for each advantage variant, writes round_<r>.json / found_<r>.jsonl /
    found_transfer_<r>.jsonl and a checkpoint per boundary; found proofs are Lean-accepted; compute rows name phases
    sample / update / eval with attempts, actions, gen_tokens, train_steps, train_tokens.
+7. Train / sample consistency: at T 0.01 every recorded action token is the argmax of the teacher-forced logits that
+   pg_update differentiates (batched, left-padded sampling with caches vs one right-padded forward).
+
+ND_GRPO_TEST_ARCH=best (run `grpo-best`) runs 1-7 on a tiny copy of Robbie's ALiBiGPT (`state_train.py --recipe best
+--best_dims 2,128,4,256`, as tests/test_best_state.py) instead of the 2 x 64 GPT, loaded through the same `load_ckpt`.
 """
 import copy, glob, json, os, random, subprocess, sys, tempfile
 
@@ -44,12 +49,18 @@ with open(pool, 'w') as f:
     f.write(''.join(json.dumps(r) + '\n' for r in tiny))
 with open(os.path.join(tmp, 'tiny_x4.jsonl'), 'w') as f:
     f.write(''.join(json.dumps(r) + '\n' for r in tiny) * 4)
-ck = os.path.join(tmp, 'tiny_sn.pt')
-cmd = [sys.executable, os.path.join(HERE, 'state_train.py'), '--data', os.path.join(tmp, 'tiny_x4.jsonl'), '--mode', 'lean_staten',
-       '--cap', '0', '--steps', '400', '--recs', '8', '--n_layer', '2', '--d', '64', '--n_head', '4', '--warmup', '5',
-       '--lr', '3e-3', '--log_every', '30', '--seed', '0', '--out', ck]
+ARCH = os.environ.get('ND_GRPO_TEST_ARCH', 'sn')
+ck = os.path.join(tmp, f'tiny_{ARCH}.pt')
+if ARCH == 'best':
+    cmd = [sys.executable, os.path.join(HERE, 'state_train.py'), '--recipe', 'best', '--data', os.path.join(tmp, 'tiny_x4.jsonl'),
+           '--heldout', pool, '--mode', 'lean_staten', '--cap', '0', '--best_steps', '300', '--best_dims', '2,128,4,256',
+           '--curve_every', '0', '--no_compile', '--seed', '0', '--out', ck]
+else:
+    cmd = [sys.executable, os.path.join(HERE, 'state_train.py'), '--data', os.path.join(tmp, 'tiny_x4.jsonl'), '--mode', 'lean_staten',
+           '--cap', '0', '--steps', '400', '--recs', '8', '--n_layer', '2', '--d', '64', '--n_head', '4', '--warmup', '5',
+           '--lr', '3e-3', '--log_every', '30', '--seed', '0', '--out', ck]
 p = subprocess.run(cmd, capture_output=True, text=True, cwd=HERE, env=env, timeout=900)
-check('state_train.py: tiny lean_staten model exit 0', p.returncode == 0, p.stderr[-800:])
+check(f'state_train.py: tiny lean_staten model ({ARCH}) exit 0', p.returncode == 0, p.stderr[-800:])
 
 if not fails:
     import torch
@@ -59,6 +70,8 @@ if not fails:
     import grpo_state as gs
     torch.manual_seed(0)
     model, tok, _ = load_ckpt(ck, 'cpu')
+    print(f'   arch {ARCH}: {type(model).__name__}, {model.n_params()} params')
+    check(f'0. checkpoint loads as the {ARCH} class', (type(model).__name__ == 'ALiBiGPT') == (ARCH == 'best'), type(model).__name__)
     prompts = [r['prompt'] for r in tiny[:2] for _ in range(4)]
     rolls = gs.env_rollouts(model, tok, prompts, temperature=1.0, max_action=64, max_steps=12, batch=8, seed=3)
     # 1. replay
@@ -129,6 +142,16 @@ if not fails:
     g6 = [q.grad.clone() if q.grad is not None else torch.zeros_like(q) for q in m6.parameters()]
     check('5. KL(pi || pi_ref) = 0 when ref == policy', res[1] is not None and abs(res[1]) < 1e-5, res[1])
     check('5. KL gradient is 0 there (grad == kl-0 grad)', rel(g6, grads[1]) < 1e-3, rel(g6, grads[1]))
+
+    # 7. train / sample consistency (prompts of different lengths share decode batches)
+    pr7 = [r['prompt'] for r in tiny for _ in range(2)]
+    r7 = gs.env_rollouts(model, tok, pr7, temperature=0.01, max_action=64, max_steps=12, batch=8, seed=5)
+    p7 = [pa for r in r7 for pa in r['traj']]
+    x7, m7_ = gs.pair_batch(tok, p7, 'cpu')
+    with torch.no_grad():
+        am = model(x7[:, :-1]).argmax(-1)
+    agree = int(((am == x7[:, 1:]) & m7_[:, 1:]).sum()); tot = int(m7_[:, 1:].sum())
+    check(f'7. T 0.01 sampled action tokens == teacher-forced argmax ({agree}/{tot})', tot > 0 and agree == tot)
 
     # 6. smoke runs, one per advantage variant
     from lean_judge import judge_many
