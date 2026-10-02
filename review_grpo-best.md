@@ -270,3 +270,118 @@ The policy threshold is 0.1 % of any reported stratum.
   So distinct-arm counts are depressed by the length cap, and EI's B / C counts may be slightly understated.
 
 The distinct-arm numbers in R2 and R3 are therefore a lower bound.
+
+## Compare (phase 2: `run_grpo_best.md`, `numbers.md` § grpo-best, `log.md`, `STATUS.md`, `figures/grpo_best.png`)
+
+Every number in the table is on the models above (best-cap12 s0–s2, 9.56 M ALiBiGPT, `lean_staten`, from scratch on
+K12). Lean alone is the checker on both sides.
+
+| claim (executor) | reviewer value | verdict |
+|---|---|---|
+| Groups A/B/C = 232/54/36, 236/51/35, 234/60/28 | same | reproduces |
+| C solved at r8, sample seed 1: EI 3/1/1; default 2/9/3; unlikely 3/8/4; pass@4 6/19/3 | same (R2) | reproduces |
+| IQM Δ vs EI +3.0 / +3.3 / +7.7 (MDD 3.5); bootstrap 95 % intervals in `analysis_stdout.txt` | same, with the same intervals | reproduces. `run_grpo_best.md` shows no interval; the pass@4 interval is [3, 19] |
+| C solved, either sample seed (pooled, "17, 16, 33 against EI's 5") | 17 / 16 / 33 vs 5 | reproduces, but **the comparison is unequal**: EI's sample seed 0 cannot solve a C theorem (C is defined by it), so EI gets one draw against GRPO's two. On sample seed 1 alone the totals are 14 / 15 / 28 vs 5 |
+| All 322 at r8, sample seed 1: 288/284/290; 278/278/279; 277/277/279; 286/301/285 | same | reproduces |
+| textbook72, sample seed 0, at r8 | same | reproduces |
+| Arm-only vs EI-only, all 322, pooled: 15 vs 38 (p 0.0022), 15 vs 44 (p 0.0002), 33 vs 20 (p 0.098); within C 15/3, 15/4, 32/4 | same (R3) | reproduces |
+| pass@1 / pass@256 by group at r2 / r4 / r8 (IQM, sample seed 1) | every cell agrees to the stated precision | reproduces |
+| Held-out greedy at r8 (all arms); dev metric per seed; dev means 1,053 / 1,026 / 1,027 / 1,058 | same | reproduces. "Dev metric is 26 lower" is 26–27 |
+| C solves with a ⊥-elim + DN proof: 2/5, 7/17, 8/16, 13/33 (`gb_peirce.py`) | same, with the reviewer's own predicate (some accepted proof contains both BOTE and DN) | reproduces. This read-out was **not pre-registered** and is not labelled as post hoc |
+| Peirce's law: pass@4 s0 r8, 230/256 accepted | 230/256 on both sample seeds | reproduces |
+| ... term size 10 | the reviewer's Expr-node count for the 20 shortest-listed proofs is 25–44 | **not derivable as stated**: the measure behind "10" is not named. Presumably `lean_check` inference nodes; the write-up should say |
+| Mechanics: default variance fraction 0.38 → 0.07, mean 0.17; pass@4 0.54 → 0.37 | round means 0.37–0.39 → 0.07; run means 0.16–0.17; pass@4 0.54–0.55 → 0.36–0.38 | reproduces |
+| Mechanics: reward 0.72 → 0.95 (round means) | step 1 → step 561: 0.53 → 0.96 | consistent (a different window) |
+| Compute table and "no pre-registered ladder > 1.25× EI (max 1.09×)" | registry sums identical; max 29,360 / 27,021 = 1.09 | reproduces |
+| Train tokens 0.17–0.37× EI's | 0.17–0.37 | reproduces |
+| Distinct arm compute | 31.7–34.1 k GPU-s and 668–864 M train tokens, by r4 / r5 | **not flagged**. It exceeds 1.25× EI's *full-r8* GPU-seconds (1.27–1.42×), and ≈ 2–3× EI's at matched r4. Policy asks for the flag on any arm, optional or not. Restarts inflate it |
+| Truncation: EI 0.050 % (worst read 0.41 %), default 0.010 %, unlikely 0.011 %, pass@4 0.011 %, distinct 0.58 % (worst read 6.2 %) | identical per read (action-truncated + step cap) | reproduces as defined, but **per read, not per stratum**. Policy (> 0.1 % of any reported stratum) is breached: EI r8 2.9–6.6 % and default 0.4–1.7 % in their worst `reference_lines` strata, distinct 23.8 %. These are small strata, so the effect on the counts is a few theorems at most. "Names exhausted" endings (a further 0.02–0.06 %) are not counted |
+| Gate 0: pre-registration before the first pod | commit `fa5d9b0` 11:24:52Z; `~/pods.log` gb-p0 created 11:32:35Z; Addendum 1 at 11:49, after the smoke and before the ladders, appended only | holds |
+| Resumes: default s2 (fresh, then saved AdamW), pass@4 s2 (fresh) | same in `resume_r*.json` | reproduces. Distinct s0 and s1 also resumed with a fresh AdamW (log.md only) |
+| Distinct s1 r2 relabelled `oom2048` (crashed-run checkpoint, md5 0454f374) | the same md5s in the logs | consistent |
+| Spend 68.10 pod-h, $35.27 | not re-derived (`podbudget` ledger) | not checked |
+
+### Expected vs outcome (the write-up's scoring, checked)
+
+| prediction | outcome (reviewer) | write-up | verdict |
+|---|---|---|---|
+| E1, IQM part | pass@4 +7.7 > MDD; default and unlikely inside | "E1 missed for pass@4" | right |
+| E1, per-seed range 0–5 | missed by **all three arms**: default s1 9, unlikely s1 8, pass@4 6 and 19 | mentioned for pass@4 only | **under-reported** |
+| E2 | pass@4 ≥ default (59 vs 31) holds; unlikely within ±2 of default (29 vs 31) holds; pass@4 − default 4.7 > MDD, a miss | as stated | right |
+| E3 | 15 vs 38, favours EI | "hit" | right |
+| E4 | B pass@1 below EI and in range (arm IQMs); B pass@256 in range; A pass@1 0.89 for default and unlikely, above the band | "mostly hit" | right |
+| E5, part 1 | +2.3 to +7.2 pp above base, so outside "within 3 pp" | "missed upward, 2.5–7 pp" | right; the low end is 2.3 |
+| E5, part 2 | EI ≥ default in 2 of 3 seeds (s1, s2): a hit | not mentioned | omission |
+| E6 | variance mean 0.17 (miss); reward rise (hit) | "missed" | right |
+| E7 | GPU-s hit; train tokens miss | as stated | right |
+| "Changes the story" | IQM condition met by pass@4; all-322 p = 0.098 | "not met" | right |
+
+### Wording
+
+- **Finding 1 overstates for default and unlikely.** As worded ("GRPO reaches theorems that EI from the same checkpoint
+  does not. All three arms do"), it is literally true theorem by theorem, but the symmetric test (R3) says the reverse
+  is more true: EI reaches 38 and 44 that they miss, against 15. Their C differences are inside the MDD, which the
+  pre-registration calls "not resolved". The finding should say "GRPO-default and -unlikely solve different theorems,
+  not more", and keep the claim of reaching more for pass@4 only. Finding 2 already says this; finding 1's heading
+  should not contradict it.
+- **pass@4 "beyond the MDD" is one seed's effect.** The rule is the pre-registered one and it is met. But:
+  - the MDD assumed EI's between-seed sd (1.15), while pass@4's own sd is 8.5 (6 / 19 / 3);
+  - a Welch t-test on the seeds gives t ≈ 1.55 (not significant at n = 3);
+  - the bootstrap interval [3, 19] touches EI's maximum.
+
+  What does stand: the paired per-seed differences are positive in 3 of 3 seeds (+3, +18, +2), and the seed-swap
+  robustness check (R2) gives the same order. Suggested wording: "pass@4 exceeds EI on C in all three seeds, by 2 to 18;
+  the mean difference passes the pre-registered MDD, but most of it is seed 1".
+- **"EI never solved" is wrong.** The figure's panel (a) title says "Group C (EI never solved)", and `STATUS.md` says
+  "EI's never-solved theorems". C is "unsolved by pend and by EI r8 on sample seed 0". EI r4 solves 3 / 1 / 3 C
+  theorems, and EI r8 solves 3 / 1 / 1 on seed 1. Peirce's law is C for s0 and s1 but solved by EI s2 (245 / 256).
+- **The ⊥-elim + DN read-out should be marked post hoc.** It was not pre-registered.
+- **Every number carries its model label.** `run_grpo_best.md` opens with the models, `numbers.md` repeats them, and
+  the figure title carries them. Inherited EI numbers are labelled `trajectory` T1 on RTX A6000.
+- **Checker labels.** No comparison crosses the 2026-09-27 date. The run-4 finding is cited in the pre-registration as
+  "under Lean ∧ `nd_verify`", which is correct.
+
+## Verdict
+
+**Hard constraints:** none violated (R10). There is no quarantine.
+
+**Stands:**
+
+- **Counts.** Every pre-registered count reproduces from the per-theorem files, with independent code.
+- **Lean.** All 1,811 re-checked counted proofs pass Lean in a harness whose five negative controls behave.
+- **Gate 0 and splits.** The expectations were committed before the first pod. Splits are clean for every group-C
+  theorem.
+- **Default and unlikely trade theorems.** At equal sampled attempts, from the same checkpoints, they solve some group-C
+  theorems EI misses, but significantly fewer theorems overall (all-322 sign test p = 0.002 and 0.0002, pooled over 3
+  seeds). Their dev metric is lower in every seed.
+- **pass@4 shifts towards coverage.** It keeps ≈ 0.4 of its groups mixed, has the highest C pass@256 (0.27 vs EI's
+  0.05) and the lowest A / B pass@1 of the r8 arms. It is level with EI on all 322 (33 vs 20, p 0.098, not resolved).
+- **Retention.** Held-out greedy at r8 is 0.98–0.99 for every arm (EI included), up from 0.92–0.96.
+- **Compute.** Each pre-registered GRPO ladder used 1.00–1.13× EI's GPU-seconds (co-tenant) and 0.17–0.37× its train
+  tokens.
+
+**Must be reworded:**
+
+1. Finding 1's lead, so that it covers pass@4 only and treats default and unlikely as "different, not more" (above).
+2. pass@4's C excess: per-seed +3 / +18 / +2, mostly seed 1. Do not cite the IQM alone.
+3. "17 / 16 / 33 against EI's 5" (both sample seeds): either drop it or state that EI's seed 0 contributes 0 by
+   construction. On seed 1 alone it is 14 / 15 / 28 vs 5.
+4. "EI never solved", in the figure title and in STATUS.
+5. E1's per-seed band was missed by all three arms, not only pass@4. E5's low end is 2.3 pp, and E5's second half
+   (EI ≥ default in 2 / 3 seeds) is a hit.
+6. Name the term-size measure behind "term size 10", and label the Peirce / ⊥-elim + DN count as post hoc.
+7. Flag the distinct arm's compute (> 1.25× EI on GPU-seconds), and report truncation per stratum: the strata above
+   0.1 % are listed in R11.
+
+**Not supported as worded:** "GRPO reaches theorems that EI does not", as an unqualified headline for all three arms.
+
+**Next measurements that would settle what is open:**
+
+1. **More seeds for pass@4 against EI on C.** With 3 seeds and one outlier, the arm's sd is ≈ 8. Five to ten
+   base-checkpoint seeds (fast Stage-1 makes them cheap), with the same paired per-seed difference and the same
+   all-322 sign test, would show whether s1's +18 is typical or a lucky trajectory.
+2. **A fresh third sample draw (seed 2) of every r8.** Groups are then defined on one draw and scored on an untouched
+   one for both arms. This removes the selection effect without new training.
+3. **Peirce's law in particular.** pass@4 solves it on s0 and s1, where EI never does in either draw, and default and
+   unlikely solve it on s1. A per-seed log-p trace of its reference proof along both ladders would show whether this
+   is acquisition or a near-miss that EI's K12 replay suppresses.
