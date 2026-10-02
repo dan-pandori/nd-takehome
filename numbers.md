@@ -1701,3 +1701,48 @@ step-cap rates re-read at `max_action` 1,024, `max_steps` 192 (`artifacts/bs/eva
 Truncation barely falls at twice the action budget: these are non-terminating actions, not long proofs cut off. The
 caps make the best-recipe numbers slightly low (≤ 2 textbook problems per checkpoint); no conclusion changes. Final spend
 60.74 pod-hours, $29.76.
+
+## compute-match (2026-10-02)
+
+**Models.** All `lean_staten`, from scratch on K12 `data/kh/train_k12.jsonl` (155,000), sampled in the proof-state
+environment; **Lean alone decides** (state env gate, `lean_judge`).
+- **cm12 T1 s0–s2** (new): SN-cap12 Stage-1 `stage1_SN12_s{0,1,2}.pt` (inherited from `state-cap12`; 3,216,384-param GPT,
+  4 × 256, `state_train.py` 6,000 steps × 128 proofs; md5 173f4047… / b85cbc63… / 21d74747…) + 8 T1 ladder rounds at
+  **k 64** (otherwise `state-cap12`'s protocol): `ckpts/cm/ladder/la_T1_cm12k64_s{0,1,2}_r8.pt`.
+- **SN12 T1 s0–s2** (inherited, `state-cap12`): same Stage-1 + the ladder at k 32. **best12 T1 s0–s2** (inherited,
+  `best-state`): 9,560,832-param ALiBiGPT, Robbie's recipe 1,200 s on an A40, + the ladder at k 32.
+
+**Sources.** `artifacts/cm/analysis_stdout.txt` and `summary.json` (`python3 cm_analysis.py`), from
+`artifacts/cm/eval/*.json` (+ `.jsonl` in the bucket) and `git show HEAD:artifacts/bs/summary.json`;
+`artifacts/cm/compute_stdout.txt` (`python3 cm_compute.py`) from `artifacts/compute-match/registry/*.jsonl` (bucket).
+Read settings = `best-state` (`pod/cm/read.sh`, batch 2,048, T 0.8, seed 0, `max_action` 512, `max_steps` 96).
+
+| pool | best12 T1 | cm12 T1 (k 64) | SN12 T1 (k 32) | best12 − cm12 [95 % boot] | MDD | cm12 − SN12, paired |
+|---|---|---|---|---|---|---|
+| textbook72 /72 | 52 / 51 / 52 | 36 / 36 / 36 | 36 / 40 / 36 † | **+15.7** [+15.0, +16.0] | 6.5 | 0 / −4 / 0 |
+| dev metric /1,108 | 1,058 / 1,050 / 1,055 | 934 / 995 / 972 | 927 / 972 / 961 | **+87.3** [+61.0, +119.3] | 61 | +7 / +23 / +11 |
+| holdout250 /250 | 239 / 237 / 237 | 220 / 224 / 225 | 217 / 221 / 223 | +14.7 | – | +3 / +3 / +2 |
+| rr600 Q /380 | 377 / 375 / 376 | 232 / 295 / 320 | 227 / 293 / 317 † | +93.7 | – | +5 / +2 / +3 |
+| transfer_long2 /21 | 21 / 21 / 20 | 11 / 11 / 15 | 9 / 14 / 18 † | +8.3 | – | +2 / −3 / −3 |
+| held-out greedy | .992 / .990 / .993 | .964 / .977 / .976 | .963 / .976 / .973 | +0.019 | – | +.001 / +.001 / +.002 |
+
+† re-read in this run at the settings above (`artifacts/cm/eval/T1_SN12_s*`); the other SN12 values are `best-state`'s
+reads. Ladder cumulative `rl_targets` solved at round 8 (/4,495): cm12 4,206 / 4,268 / 4,258 vs SN12 k 32 4,171 / 4,228 /
+4,215 (`state-cap12` logs). Shortest accepted textbook72 proof per solved problem, cm12: median 7–8 lines, term size 5–6
+(36 / 36 Lean-accepted per seed); SN12 re-read 7–8 lines, term size 5–6. Max cut-off (action-truncated or step-capped):
+cm12 ≤ 0.15 % (holdout250), SN12 re-read ≤ 0.17 % (textbook72).
+
+**Compute (A40 GPU-seconds, `artifacts/cm/compute_stdout.txt`).**
+
+| arm | Stage-1 | T1 ladder | ladder attempts (k) | ladder gen tokens (M) | ladder train steps / tokens (M) | ladder Lean checks (k) |
+|---|---|---|---|---|---|---|
+| best12 (best-state) | 1,283–1,292 (mean 1,288) | 25,876 / 30,524 / 28,952 (mean 28,451) | 1,938 (1,794 clean) | 393–419 | 4,800 / 707–767 | 1,282–1,299 |
+| cm12 k 64 | 2,244–2,250 (SN12 s2–s3 on A40; inherited) | 27,485 / 29,226 / 30,675 (mean 29,129) | 3,530 | 756–773 | 4,800 / 699–731 | 1,804–2,080 |
+| SN12 k 32 (state-cap12) | same | 16,623 / 16,042 (A40 s2–s3) | 1,799 | – | 4,800 / – | 990–1,130 |
+
+cm12 / best12: ladder 1.02×, Stage-1 + ladder 1.06×. **Flagged > 1.25×:** cm12 Stage-1 (1.74×), attempts (1.82×), gen
+tokens (1.9×), Lean checks (1.4–1.6×), all by design (matched on GPU-seconds). Read-outs: cm12 2,602–2,826 s; SN12
+re-reads 1,466–1,579 s. Pods `cm-p0/p1/p2`, A40 secure $0.49/h: **28.43 pod-hours, $13.93** (`podbudget compute-match`).
+
+Bucket: `hf://buckets/dan-pandori/nd-rl/compute-match/{ckpts/cm,artifacts/cm,artifacts/compute-match}` (ladder
+directories, every eval `.jsonl`, sample dumps `artifacts/cm/dump/*.jsonl.gz`, registry rows).

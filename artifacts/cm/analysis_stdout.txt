@@ -1,0 +1,117 @@
+## compute-match read-outs (Lean alone; seeds 0 / 1 / 2, IQM = mean at n 3, [stratified-bootstrap 95 %])
+
+*Re-read here at best-state settings (batch 2,048, max_steps 96): tb72, long2, rr600 Q; dev / h250 / held are best-state's reads of the same checkpoints.
+
+
+### textbook72 /72
+
+| arm | per seed | IQM [95 %] | max cut-off % |
+|---|---|---|---|
+| best12 T1 (best-state) | 52 / 51 / 52 | 51.7 [51.0, 52.0] | – |
+| cm12 T1, k 64 (this run) | 36 / 36 / 36 | 36.0 [36.0, 36.0] | 0.05 |
+| SN12 T1, k 32 (re-read here*) | 36 / 40 / 36 | 37.3 [36.0, 40.0] | 0.17 |
+| SN12 T1, k 32 (as best-state) | 37 / 38 / 36 | 37.0 [36.0, 38.0] | – |
+| SN12 frozen (best-state) | 26 / 29 / 32 | 29.0 [26.0, 32.0] | – |
+
+### textbook72 dev58
+
+| arm | per seed | IQM [95 %] | max cut-off % |
+|---|---|---|---|
+| best12 T1 (best-state) | 42 / 44 / 42 | 42.7 [42.0, 44.0] | – |
+| cm12 T1, k 64 (this run) | 28 / 30 / 30 | 29.3 [28.0, 30.0] | 0.05 |
+| SN12 T1, k 32 (re-read here*) | 29 / 32 / 30 | 30.3 [29.0, 32.0] | 0.17 |
+| SN12 T1, k 32 (as best-state) | 30 / 32 / 30 | 30.7 [30.0, 32.0] | – |
+| SN12 frozen (best-state) | 20 / 23 / 26 | 23.0 [20.0, 26.0] | – |
+
+### dev metric /1,108 (k 64)
+
+| arm | per seed | IQM [95 %] | max cut-off % |
+|---|---|---|---|
+| best12 T1 (best-state) | 1058 / 1050 / 1055 | 1054.3 [1050.0, 1058.0] | – |
+| cm12 T1, k 64 (this run) | 934 / 995 / 972 | 967.0 [934.0, 995.0] | 0.03 |
+| SN12 T1, k 32 (re-read here*) | 927 / 972 / 961 | 953.3 [927.0, 972.0] | – |
+| SN12 T1, k 32 (as best-state) | 927 / 972 / 961 | 953.3 [927.0, 972.0] | – |
+| SN12 frozen (best-state) | 745 / 782 / 804 | 777.0 [745.0, 804.0] | – |
+
+### holdout250 /250 (k 256)
+
+| arm | per seed | IQM [95 %] | max cut-off % |
+|---|---|---|---|
+| best12 T1 (best-state) | 239 / 237 / 237 | 237.7 [237.0, 239.0] | – |
+| cm12 T1, k 64 (this run) | 220 / 224 / 225 | 223.0 [220.0, 225.0] | 0.15 |
+| SN12 T1, k 32 (re-read here*) | 217 / 221 / 223 | 220.3 [217.0, 223.0] | – |
+| SN12 T1, k 32 (as best-state) | 217 / 221 / 223 | 220.3 [217.0, 223.0] | – |
+| SN12 frozen (best-state) | 183 / 188 / 198 | 189.7 [183.0, 198.0] | – |
+
+### rr600 Q (L_true 13-16, /380)
+
+| arm | per seed | IQM [95 %] | max cut-off % |
+|---|---|---|---|
+| best12 T1 (best-state) | 377 / 375 / 376 | 376.0 [375.0, 377.0] | – |
+| cm12 T1, k 64 (this run) | 232 / 295 / 320 | 282.3 [232.0, 320.0] | 0.03 |
+| SN12 T1, k 32 (re-read here*) | 227 / 293 / 317 | 279.0 [227.0, 317.0] | 0.02 |
+| SN12 T1, k 32 (as best-state) | 233 / 295 / 320 | 282.7 [233.0, 320.0] | – |
+| SN12 frozen (best-state) | 134 / 212 / 228 | 191.3 [134.0, 228.0] | – |
+
+### transfer_long2 /21
+
+| arm | per seed | IQM [95 %] | max cut-off % |
+|---|---|---|---|
+| best12 T1 (best-state) | 21 / 21 / 20 | 20.7 [20.0, 21.0] | – |
+| cm12 T1, k 64 (this run) | 11 / 11 / 15 | 12.3 [11.0, 15.0] | 0.02 |
+| SN12 T1, k 32 (re-read here*) | 9 / 14 / 18 | 13.7 [9.0, 18.0] | 0.02 |
+| SN12 T1, k 32 (as best-state) | 8 / 15 / 17 | 13.3 [8.0, 17.0] | – |
+| SN12 frozen (best-state) | 3 / 1 / 3 | 2.3 [1.0, 3.0] | – |
+
+### held-out greedy /5,000 (rate)
+
+| arm | per seed | IQM [95 %] | max cut-off % |
+|---|---|---|---|
+| best12 T1 (best-state) | 0.992 / 0.99 / 0.993 | 0.992 [0.990, 0.993] | – |
+| cm12 T1, k 64 (this run) | 0.9642 / 0.977 / 0.9758 | 0.972 [0.964, 0.977] | – |
+| SN12 T1, k 32 (re-read here*) | 0.9634 / 0.9756 / 0.9734 | 0.971 [0.963, 0.976] | – |
+| SN12 T1, k 32 (as best-state) | 0.9634 / 0.9756 / 0.9734 | 0.971 [0.963, 0.976] | – |
+| SN12 frozen (best-state) | 0.969 / 0.977 / 0.978 | 0.975 [0.969, 0.978] | – |
+
+### Headline: best12 T1 − cm12 T1 (and the k 32 control)
+
+| quantity | best12 − cm12 [95 % boot] | MDD | best12 − SN12 k 32 (same read) | cm12 − SN12, paired per seed | mean paired |
+|---|---|---|---|---|---|
+| tb72 | +15.7 [+15.0, +16.0] | 6.5 | +14.3 | +0.0 / -4.0 / +0.0 | -1.3 |
+| dev | +87.3 [+61.0, +119.3] | 61 | +101.0 | +7.0 / +23.0 / +11.0 | +13.7 |
+| h250 | +14.7 [+12.3, +17.7] | – | +17.3 | +3.0 / +3.0 / +2.0 | +2.7 |
+| Q | +93.7 [+56.3, +143.7] | – | +97.0 | +5.0 / +2.0 / +3.0 | +3.3 |
+| long2 | +8.3 [+6.0, +10.0] | – | +7.0 | +2.0 / -3.0 / -3.0 | -1.3 |
+| held | +0.019 [+0.014, +0.027] | – | +0.021 | +0.001 / +0.001 / +0.002 | +0.002 |
+
+Falsifier ("the recipe, not the compute"): gap < MDD → tb72: open, dev: open
+
+### textbook72 by reference_lines (per seed)
+
+| checkpoint | 1-5 | 6-10 | 11-15 | 16+ | train14 |
+|---|---|---|---|---|---|
+| T1_cm12k64_s0 | 5 | 17 | 4 | 2 | 8 |
+| T1_cm12k64_s1 | 5 | 17 | 6 | 2 | 6 |
+| T1_cm12k64_s2 | 5 | 17 | 5 | 3 | 6 |
+| T1_SN12_s0 (re-read) | 5 | 18 | 5 | 1 | 7 |
+| T1_SN12_s1 (re-read) | 5 | 19 | 6 | 2 | 8 |
+| T1_SN12_s2 (re-read) | 5 | 18 | 4 | 3 | 6 |
+
+### Ladder: cumulative rl_targets solved (/4,495) by round, cm12 k 64 (from found_<r>.jsonl)
+
+| seed | r1 | r2 | r3 | r4 | r5 | r6 | r7 | r8 |
+|---|---|---|---|---|---|---|---|---|
+| 0 | 3,719 | 3,937 | 4,019 | 4,080 | 4,131 | 4,162 | 4,185 | 4,206 |
+| 1 | 3,823 | 4,033 | 4,114 | 4,172 | 4,198 | 4,232 | 4,254 | 4,268 |
+| 2 | 3,791 | 4,024 | 4,104 | 4,153 | 4,176 | 4,204 | 4,234 | 4,258 |
+
+### textbook72, shortest accepted proof per solved problem
+
+| checkpoint | solved | median lines | median term size | lean_check ok |
+|---|---|---|---|---|
+| T1_SN12_s0 (re-read) | 36 | 7 | 5 | 36/36 |
+| T1_SN12_s1 (re-read) | 40 | 8 | 6 | 40/40 |
+| T1_SN12_s2 (re-read) | 36 | 7 | 5 | 36/36 |
+| T1_cm12k64_s0 | 36 | 8 | 6 | 36/36 |
+| T1_cm12k64_s1 | 36 | 7 | 5 | 36/36 |
+| T1_cm12k64_s2 | 36 | 8 | 5 | 36/36 |

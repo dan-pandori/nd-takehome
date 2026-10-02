@@ -1,0 +1,31 @@
+## compute-match: compute per arm and seed (A40, $0.49/h; `gpu_seconds` from record.compute)
+
+| arm | seed | kind | GPU-s | gen tokens (M) | attempts (k) | train steps | train tokens (M) | Lean checks (k) |
+|---|---|---|---|---|---|---|---|---|
+| SN12 | 0 | read-outs | 1,466 | 51.8 | 177 | 0 | 0 | 17 |
+| SN12 | 1 | read-outs | 1,532 | 52.7 | 177 | 0 | 0 | 30 |
+| SN12 | 2 | read-outs | 1,579 | 53.6 | 177 | 0 | 0 | 33 |
+| cm12k64 | 0 | T1 ladder | 27,485 | 756.3 | 3,530 | 4,800 | 699 | 1,804 |
+| cm12k64 | 0 | read-outs | 2,602 | 87.6 | 317 | 0 | 0 | 81 |
+| cm12k64 | 1 | T1 ladder | 29,226 | 772.8 | 3,530 | 4,800 | 731 | 2,052 |
+| cm12k64 | 1 | read-outs | 2,730 | 89.2 | 317 | 0 | 0 | 104 |
+| cm12k64 | 2 | T1 ladder | 30,675 | 770.7 | 3,530 | 4,800 | 730 | 2,080 |
+| cm12k64 | 2 | read-outs | 2,826 | 88.5 | 317 | 0 | 0 | 108 |
+
+### cm12 ladder GPU-s per round
+
+| seed | r1 | r2 | r3 | r4 | r5 | r6 | r7 | r8 |
+|---|---|---|---|---|---|---|---|---|
+| 0 | 2,705 | 2,950 | 3,230 | 3,417 | 3,627 | 3,646 | 3,889 | 4,019 |
+| 1 | 2,911 | 3,254 | 3,281 | 3,727 | 3,750 | 4,081 | 4,075 | 4,144 |
+| 2 | 2,987 | 3,281 | 3,605 | 3,665 | 4,072 | 4,164 | 4,391 | 4,506 |
+
+### The match (A40-seconds)
+
+| arm | Stage-1 | T1 ladder per seed | ladder mean | Stage-1 + ladder | ratio to best12 (ladder / total) |
+|---|---|---|---|---|---|
+| best12 T1 (best-state) | 1,288 | 25,876 / 30,524 / 28,952 | 28,451 | 29,739 | 1 / 1 |
+| cm12 T1 k 64 (this run) | 2,247 (SN12 Stage-1, A40 s2-s3) | 27,485 / 29,226 / 30,675 | 29,129 | 31,376 | 1.02 / 1.06 |
+| SN12 T1 k 32 (state-cap12, A40 s2-s3) | 2,247 | 16,623 / 16,042 | 16,332 | 18,580 | 0.57 / 0.62 |
+
+SN12 k 32 per seed (GPU, Stage-1 s, ladder s): s0 RTX 3090 1,852 / 12,672; s1 RTX 3090 1,835 / 12,992; s2 A40 2,244 / 16,623; s3 A40 2,250 / 16,042

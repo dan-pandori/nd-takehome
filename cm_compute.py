@@ -44,6 +44,8 @@ def main():
             if k is None:
                 continue
             arm, seed = r.get('arm'), r.get('seed')
+            if arm and 'cm12k64' in arm:    # the ladder driver labels its rows with the ladder name, its fine-tune children with ND_ARM
+                arm = 'cm12k64'
             tot[(arm, seed, k)][r['metric']] += r['value']
             if k == 'T1 ladder' and lab.get('round') is not None:
                 rnd[(arm, seed, int(lab['round']))][r['metric']] += r['value']

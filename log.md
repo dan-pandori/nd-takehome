@@ -901,3 +901,12 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 2026-10-02T02:25Z pilot round 1 (k 64): 2,988 s, 3,791 targets solved after round 1 (inherited k 32: 1,709 s, 3,717).
   K = 64 (projection 28,550 s vs target 28,451 s; STATUS). Inherited re-reads (best-state settings, batch 2,048):
   T1_SN12 tb72 s0 36 / s1 40 / s2 36 (batch-4,096 reads: 37 / 38 / 36).
+- 2026-10-02T02:24–02:27Z cm12 s0 ladder on cm-p1, s1 on cm-p0 (after its re-reads), both k 64.
+- 2026-10-02T10:03–10:53Z ladders s0 / s2 done (27,485 / 30,675 A40-s), T1 read-outs; cm-p1, cm-p2 pulled, bucket checked
+  (r8 checkpoints, found files, eval + dump), pods deleted.
+- 2026-10-02T11:21Z s1 done (ladder 29,226 A40-s); pulled, bucket checked, cm-p0 deleted. 28.43 pod-hours, $13.93; balance
+  $200.31.
+- 2026-10-02 `cm_compute.py` fix: the ladder driver's registry rows carry `arm = la_T1_cm12k64_s<seed>` and its fine-tune
+  children `cm12k64`; both are summed as cm12k64 (s2 total 30,675 s = the sum of its logged round times, 30,676 s).
+- 2026-10-02 result: best12 − cm12 = +15.7 textbook72 (MDD 6.5), +87.3 dev (MDD 61); cm12 − SN12 paired: textbook72 0 / −4 / 0,
+  dev +7 / +23 / +11. Falsifier not met. Write-up `run_compute_match.md`, numbers § compute-match.

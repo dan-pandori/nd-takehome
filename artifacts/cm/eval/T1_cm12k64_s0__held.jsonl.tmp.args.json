@@ -1,0 +1,39 @@
+{
+ "ckpt": "ckpts/cm/ladder/la_T1_cm12k64_s0_r8.pt",
+ "inp": "data/p2/heldout.jsonl",
+ "out": "artifacts/cm/eval/T1_cm12k64_s0__held.jsonl.tmp",
+ "summary": "artifacts/cm/eval/T1_cm12k64_s0__held.json.tmp",
+ "k": 1,
+ "temperature": 0.0,
+ "seed": 0,
+ "batch": 2048,
+ "max_action": 256,
+ "max_steps": 48,
+ "lenfield": "n_lines",
+ "limit": 0,
+ "_meta": {
+  "script": "state_eval.py",
+  "argv": [
+   "state_eval.py",
+   "--ckpt",
+   "ckpts/cm/ladder/la_T1_cm12k64_s0_r8.pt",
+   "--in",
+   "data/p2/heldout.jsonl",
+   "--k",
+   "1",
+   "--temperature",
+   "0",
+   "--batch",
+   "2048",
+   "--out",
+   "artifacts/cm/eval/T1_cm12k64_s0__held.jsonl.tmp",
+   "--summary",
+   "artifacts/cm/eval/T1_cm12k64_s0__held.json.tmp"
+  ],
+  "run_id": "compute-match",
+  "git_sha": null,
+  "git_dirty": null,
+  "host": "5b2131402579",
+  "utc": "2026-10-02T10:14:57Z"
+ }
+}

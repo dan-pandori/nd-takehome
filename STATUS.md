@@ -248,3 +248,9 @@ BEST-STATE DONE 2026-10-01T05:00:12Z
   SN12 s2 k 32 round 1 = 1,709 s (ft 280 s) → k-proportional part × 1.889 (α = 0.944 per unit k). Projection over the
   inherited s2/s3 A40 ladders (ft 2,574 s, k-proportional 13,759 s): 2,574 + 0.944 · 2 · 13,759 = **28,550 s** vs target
   28,451 s (1.00×); k 56 would give 25,150 s (0.88×). The pilot ladder continues as cm12 s2; s0 and s1 launch now.
+- Result: best12 T1 − cm12 T1 (k 64, ladder 29,129 A40-s = 1.02× best12) = **+15.7 textbook72** (MDD 6.5), **+87.3 dev**
+  (MDD 61). Falsifier not met; the recipe, not the GPU time, explains best-state's gap. Doubling k barely moves ours
+  (paired textbook72 0 / −4 / 0, dev +7 / +23 / +11). `run_compute_match.md`, `numbers.md` § compute-match. 28.43
+  pod-hours, $13.93; pods deleted; bucket `compute-match/`.
+
+COMPUTE-MATCH DONE 2026-10-02T11:45:00Z
