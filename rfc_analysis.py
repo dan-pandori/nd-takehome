@@ -215,9 +215,11 @@ def main():
     print(f'  null (end arm, pooled): b0 {bnull[0]:.2f} b1 {bnull[1]:.3f} x50 {x50(bnull):.1f}')
     out['null'] = {'b': bnull.tolist(), 'x50': x50(bnull)}
     out['threshold'] = {}
-    for xs_name in ('x_start', 'x_ctrl', 'x_ev'):
+    for xs_name in ('x_start', 'x_ctrl', 'x_ctrl_cal', 'x_ev'):
         print(f'\n  ### x = {xs_name}' + {'x_start': ' (reference worst step under the start checkpoint; brief\'s form)',
                                          'x_ctrl': ' (reference worst step under the same start\'s replay-only control r8)',
+                                         'x_ctrl_cal': ' (as x_ctrl; null = the pend ladder against x under the pend control: '
+                                                       'same log-p scale.  POST HOC, not pre-registered)',
                                          'x_ev': ' (worst step of trajectory\'s eventual proof, end-arm r8\'s own, under the start; '
                                                  'exists only where the end arm solved)'}[xs_name])
         print('  start   seed  pairs  x50     #x<-12  solved(x<-12)  null E   excess')
@@ -228,12 +230,17 @@ def main():
                   for n in w1_start(s, 'pend', 'ev')]
             bn = logit_fit(np.array([a for a, _ in ev]), np.array([y for _, y in ev]))
             print(f'  null for x_ev (end arm, pooled): b0 {bn[0]:.2f} b1 {bn[1]:.3f} x50 {x50(bn):.1f}')
+        if xs_name == 'x_ctrl_cal':
+            ev = [(max(w1_own(s, 'pend', 'c8')[n], XCLIP), float(solved(f's{s}_pend_r8', 1)[n])) for s in SEEDS
+                  for n in (w1_own(s, 'pend', 'c8') or {})]
+            bn = logit_fit(np.array([a for a, _ in ev]), np.array([y for _, y in ev]))
+            print(f'  null for x_ctrl_cal (pend ladder vs x under pend control, pooled): b0 {bn[0]:.2f} b1 {bn[1]:.3f} x50 {x50(bn):.1f}')
         for start in STARTS:
             for s in SEEDS:
                 Y = solved(f's{s}_{start}_r8', 1)
                 if xs_name == 'x_start':
                     X = w1_start(s, start)
-                elif xs_name == 'x_ctrl':
+                elif xs_name in ('x_ctrl', 'x_ctrl_cal'):
                     X = w1_own(s, start, 'c8')
                 else:
                     X = w1_start(s, start, 'ev')

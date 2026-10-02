@@ -912,3 +912,14 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 04:05 two extra reader pods rfc-r1, rfc-r2 (RTX A6000) for the control r8 reads (`pod/rfc/qc1.txt` sample seed 1,
   `qc0.txt` sample seed 0); those lines removed from `q{0,1,2}.txt` so reader lists stay disjoint.
 - 04:23 r2 reads moved from q{0,1,2} to qc{1,0} (rfc-r1 / rfc-r2).
+- 04:47 la_T1_best12_s1_p12000 (rfc-p11): sampling OOM in round 4 at batch 2,048; resumed round 4 at batch 1,024.
+- 07:50 first ladder done (s1 p1600, 07:11); post (r8 reads + scoring) 07:11–07:49; rfc-p5 pulled and deleted. found_*.jsonl (≈ 0.9 GB / ladder) stay in the bucket only.
+- 08:50 **Calibration issue in the pre-registered replay-corrected test (found on partial data, before the last 7
+  ladders finished).** The null curve was fitted on x under the pend checkpoint. The replay-only controls put lower
+  worst-step log p on the reference proofs (pend arm: 32–45 refs below −12 under its control vs 4–11 under pend),
+  so the pre-registered x_ctrl falsifier fires **on the pend arm itself** (+11 to +16 per seed), where by
+  construction nothing about the start changed. Added a post-hoc variant `x_ctrl_cal` whose null is the pend
+  ladder against x under the pend control (the same log-p scale). Both are reported; the pre-registered one is
+  labelled as miscalibrated, not dropped.
+- 08:45 reproducibility: seed-0 start re-reads identical to `trajectory` (0 verdicts differ, 4 starts × 322);
+  re-scored references identical (max |Δ w1| = 0).
