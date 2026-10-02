@@ -1,0 +1,42 @@
+-- C5 C5 trajectory s0 la_transfer_424
+theorem t (P Q R S : Prop) (h1 : (((¬R) ∨ (Q ∨ S)) ∨ P)) : ((¬(¬(Q → R))) → (R → (Q → (((Q ∧ R) ∧ R) ∧ (Q → R))))) := by have n1 : ( ( ( ¬ R ) ∨ ( Q ∨ S ) ) ∨ P ) := h1 ; have n2 : ( ( ¬ ( ¬ ( Q → R ) ) ) → ( R → ( Q → ( ( ( Q ∧ R ) ∧ R ) ∧ ( Q → R ) ) ) ) ) := ( fun ( n3 : ( ¬ ( ¬ ( Q → R ) ) ) ) => by have n4 : ( R → ( Q → ( ( ( Q ∧ R ) ∧ R ) ∧ ( Q → R ) ) ) ) := ( fun ( n5 : R ) => by have n6 : ( Q → R ) := Or.elim n1 ( fun ( n7 : ( ( ¬ R ) ∨ ( Q ∨ S ) ) ) => by have n8 : ( Q → R ) := Classical.byContradiction ( fun hh => n3 hh ) ; exact n8 ) ( fun ( n7 : P ) => by have n8 : ( Q → R ) := Classical.byContradiction ( fun hh => n3 hh ) ; exact n8 ) ; have n7 : ( Q → ( ( ( Q ∧ R ) ∧ R ) ∧ ( Q → R ) ) ) := ( fun ( n8 : Q ) => by have n9 : ( Q ∧ R ) := ⟨ n8 , n5 ⟩ ; have n10 : ( ( Q ∧ R ) ∧ R ) := ⟨ n9 , n5 ⟩ ; have n11 : ( ( ( Q ∧ R ) ∧ R ) ∧ ( Q → R ) ) := ⟨ n10 , n6 ⟩ ; exact n11 ) ; exact n7 ) ; exact n4 ) ; exact n2
+
+-- C5 C5 trajectory s2 la_transfer_2100
+theorem t (P Q R S : Prop) (h1 : S) (h2 : (((Q ∨ P) → (Q → Q)) ∨ (Q ∨ R))) : ((¬(¬(¬P))) → ((¬(¬(P ∨ R))) → ((¬(¬(¬P))) → ((((Q ∨ P) → (Q → Q)) ∨ (Q ∨ R)) ∧ S)))) := by have n1 : S := h1 ; have n2 : ( ( ( Q ∨ P ) → ( Q → Q ) ) ∨ ( Q ∨ R ) ) := h2 ; have n3 : ( ( ¬ ( ¬ ( ¬ P ) ) ) → ( ( ¬ ( ¬ ( P ∨ R ) ) ) → ( ( ¬ ( ¬ ( ¬ P ) ) ) → ( ( ( ( Q ∨ P ) → ( Q → Q ) ) ∨ ( Q ∨ R ) ) ∧ S ) ) ) ) := ( fun ( n4 : ( ¬ ( ¬ ( ¬ P ) ) ) ) => by have n5 : ( ( ( ( Q ∨ P ) → ( Q → Q ) ) ∨ ( Q ∨ R ) ) ∧ S ) := ⟨ n2 , n1 ⟩ ; have n6 : ( ( ¬ ( ¬ ( P ∨ R ) ) ) → ( ( ¬ ( ¬ ( ¬ P ) ) ) → ( ( ( ( Q ∨ P ) → ( Q → Q ) ) ∨ ( Q ∨ R ) ) ∧ S ) ) ) := ( fun ( n7 : ( ¬ ( ¬ ( P ∨ R ) ) ) ) => by have n8 : ( ( ¬ ( ¬ ( ¬ P ) ) ) → ( ( ( ( Q ∨ P ) → ( Q → Q ) ) ∨ ( Q ∨ R ) ) ∧ S ) ) := ( fun ( n9 : ( ¬ ( ¬ ( ¬ P ) ) ) ) => by have n10 : ( ( ( ( Q ∨ P ) → ( Q → Q ) ) ∨ ( Q ∨ R ) ) ∧ S ) := Or.elim n2 ( fun ( n11 : ( ( Q ∨ P ) → ( Q → Q ) ) ) => by have n12 : ( ( ( ( Q ∨ P ) → ( Q → Q ) ) ∨ ( Q ∨ R ) ) ∧ S ) := ⟨ n2 , n1 ⟩ ; exact n12 ) ( fun ( n11 : ( Q ∨ R ) ) => by have n12 : ( ( ( ( Q ∨ P ) → ( Q → Q ) ) ∨ ( Q ∨ R ) ) ∧ S ) := n5 ; exact n12 ) ; exact n10 ) ; exact n8 ) ; exact n6 ) ; exact n3
+
+-- C5 C5 trajectory s0 la_transfer_2279
+theorem t (P Q R S : Prop) (h1 : (R → (S ∧ P))) (h2 : R) : (R → ((¬S) → (R ∧ S))) := by have n1 : ( R → ( S ∧ P ) ) := h1 ; have n2 : R := h2 ; have n3 : ( R → ( ( ¬ S ) → ( R ∧ S ) ) ) := ( fun ( n4 : R ) => by have n5 : ( S ∧ P ) := n1 n4 ; have n6 : ( ( ¬ S ) → ( R ∧ S ) ) := ( fun ( n7 : ( ¬ S ) ) => by have n8 : S := n5.1 ; have n9 : ( R ∧ S ) := ⟨ n4 , n8 ⟩ ; exact n9 ) ; exact n6 ) ; exact n3
+
+-- C7 C7 r8 heldout_4383
+theorem t (P Q R S : Prop)  : ((R ∨ R) → ((¬(¬(R ∨ Q))) → (R → R))) := by
+  have n6 : ((R ∨ R) → ((¬(¬(R ∨ Q))) → (R → R))) := (fun (n1 : (R ∨ R)) => by
+    have n5 : ((¬(¬(R ∨ Q))) → (R → R)) := (fun (n2 : (¬(¬(R ∨ Q)))) => by
+      have n4 : (R → R) := (fun (n3 : R) => by
+        exact n3)
+      exact n4)
+    exact n5)
+  exact n6
+
+
+-- C7 C7 r7 heldout_4698
+theorem t (P Q R S : Prop)  : ((P ∨ P) → ((P ∧ S) → (R → R))) := by
+  have n6 : ((P ∨ P) → ((P ∧ S) → (R → R))) := (fun (n1 : (P ∨ P)) => by
+    have n5 : ((P ∧ S) → (R → R)) := (fun (n2 : (P ∧ S)) => by
+      have n4 : (R → R) := (fun (n3 : R) => by
+        exact n3)
+      exact n4)
+    exact n5)
+  exact n6
+
+
+-- C7 C7 r3 heldout_4982
+theorem t (P Q R S : Prop)  : ((¬(¬Q)) → ((¬(¬R)) → ((R → (¬S)) → (R → (¬S))))) := by
+  have n6 : ((¬(¬Q)) → ((¬(¬R)) → ((R → (¬S)) → (R → (¬S))))) := (fun (n1 : (¬(¬Q))) => by
+    have n5 : ((¬(¬R)) → ((R → (¬S)) → (R → (¬S)))) := (fun (n2 : (¬(¬R))) => by
+      have n4 : ((R → (¬S)) → (R → (¬S))) := (fun (n3 : (R → (¬S))) => by
+        exact n3)
+      exact n4)
+    exact n5)
+  exact n6
+
+
