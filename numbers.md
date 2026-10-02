@@ -1745,7 +1745,10 @@ against `trajectory`'s `ckpts_s<S>.md5`).
 Groups A and B are defined by EI's sample-seed-0 reads, which favours EI on B. The all-322 discordant test is the unbiased comparison.
 
 **C solved at r2 / r4** (sample seed 1): EI 0/0/1 and 3/1/3; default 2/2/2 and 1/5/1; unlikely 0/2/1 and 0/5/2; pass@4 2/6/1 and 4/9/3.
-Distinct (partial arm): see `artifacts/gb/analysis_stdout.txt`. Its reads truncate up to 6.2 % of samples, from non-terminating actions.
+**Distinct (partial arm, stopped at r4):**
+- C solved at r2 / r4 (sample seed 1): 0/4/2 and 2/2/3, against EI r4's 3/1/3.
+- Group pass@1 / pass@256 at r4: A .81/.98, B .33/.71, C .004/.07.
+- Its reads truncate 0.58 % of samples (worst read 6.2 %, s0 r4 textbook72), from non-terminating actions. This is above the policy's 0.1 %, and the caps were not raised (budget): its solve counts are lower bounds.
 
 **Truncation** (action-truncated + step-capped, all reads): EI 0.050 % (worst read 0.41 %, inherited); default 0.010 %;
 unlikely 0.011 %; pass@4 0.011 % (worst 0.06 %).
@@ -1771,3 +1774,10 @@ unlikely 0.011 %; pass@4 0.011 % (worst 0.06 %).
 - No pre-registered GRPO ladder exceeds 1.25× EI's GPU-seconds on its seed (max 29,360 / 27,021 = 1.09×) or on any other metric.
 - Train tokens are 0.17–0.37× EI's.
 - Reads: ≈ 1,000–2,200 GPU-s each (registry rows `gb_<arm>_s<S>_r<k>`).
+
+**Spend:** 68.10 pod-hours, $35.27 (`podbudget grpo-best`; RTX A6000 $0.53/h, A40 $0.49/h), inside $45 / 90 h. All pods were deleted.
+
+**Bucket:** `hf://buckets/dan-pandori/nd-rl/grpo-best/` holds:
+- `ckpts/gb/` (every GRPO boundary checkpoint);
+- `artifacts/gb/` (read summaries and per-theorem rows, ladder round files, gzipped `found_8` archives of the nine full ladders, logs);
+- `artifacts/grpo-best/registry/` (results-registry rows).

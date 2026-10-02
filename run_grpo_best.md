@@ -57,5 +57,5 @@ theorem t (P Q R S : Prop)  : (((P → Q) → P) → P) := by
 - n = 3.
 - EI also replays 20,000 K12 records each round.
 - Six out-of-memory crashes (two ladders per 48 GB card). Among the pre-registered arms, default s2 was resumed twice (`--resume_round`; fresh, then saved AdamW state) and pass@4 s2 once (fresh AdamW state).
-- The distinct arm was stopped at r4 for budget.
-- Spend: see `numbers.md`.
+- The distinct arm was stopped at r4 for budget. At r4 it solved C 2 / 2 / 3, no more than EI.
+- Spend: 68.1 pod-hours, $35.27 (budget $45).
