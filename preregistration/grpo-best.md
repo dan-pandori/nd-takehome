@@ -135,3 +135,34 @@ Estimate before the smoke: a GRPO ladder ≈ the EI ladder's 22–27 k GPU-s on 
 tokens) ≈ 7 h × $0.53 ≈ $3.7, × 9 = $33; read-outs 9 × 3 checkpoints × 2 sample seeds × ≈ 9.5 min ≈ 8.6 h ≈ $4.5;
 end reads (dev + held-out greedy, 12 checkpoints) ≈ 2 h ≈ $1; smoke + setup ≈ $2. **≈ $41**. The smoke replaces these
 with measurements (addendum).
+
+## Addendum 1 (2026-10-02 11:48 UTC, after the smoke; before the ladders; §§ 1–8 unchanged)
+
+**Smoke** (`pod/gb/smoke.sh` on gb-p0, RTX A6000 48 GB, 8 vCPU, $0.53/h; base `stage1_best12_s0_b1200.pt`, 9,560,832 params,
+pre-registered settings, `--no_eval`; files `artifacts/gb/smoke/*/steps.jsonl`, log `artifacts/gb/logs/smoke.log`):
+
+| run | updates | s / update (sample + Lean, update) | peak alloc | mean reward | groups with variance | update pairs |
+|---|---|---|---|---|---|---|
+| default, alone | 6 | 25.9 (19.7, 6.2) | 12.7 GB | 0.53–0.61 | 0.50–0.62 | ≈ 12,000 |
+| unlikely, alone | 3 | 25.3 (19.1, 6.2) | 12.3 GB | 0.53–0.61 | 0.60–0.61 | ≈ 12,400 |
+| default + pass@4, two jobs on one card | 4 / 5 | 37.5 / 36.5 | 12.3 / 12.3 GB | — | — | ≈ 12,000 / ≈ 5,500 |
+
+Two jobs per card give 2 × 25.9 / 37.5 ≈ **1.38×**. `lp_batch` 256. The base's per-sample reward on the targets
+(≈ 0.55) and the mixed-group fraction (≈ 0.6) are measured here, after E6 was written; E6 stays as written.
+
+**Projection** (per ladder alone: 561 × 26 s ≈ 4.05 h + 8 boundary evaluations ≈ 1.6 h ≈ 5.7 h ≈ 20.5 k GPU-s, inside E7's
+range; two per card ≈ 4.1 pod-h per ladder):
+three arms × 3 seeds ≈ 37 pod-h; read-outs (54 + 12 end reads) ≈ 10 pod-h; smoke and set-up ≈ 3 pod-h → ≈ 50 pod-h,
+≈ $26. That leaves > $12, so **GRPO-distinct (`--bonus 0.5`) runs too, seeds 0–2** (≈ 14 pod-h, ≈ $7.5): ≈ 64 pod-h,
+≈ $34 in total, inside $45 / 90 h. No cut from § 8 applies.
+
+**GPU classes.** RTX A6000 stock ran out after four pods; two A40 pods ($0.49/h, same GA102 chip, 48 GB) were made in
+EU-SE-1. Placement (two ladders per card): gb-p0 default s0 + unlikely s0; gb-p1 pass@k s0 + default s1; gb-p2 unlikely s1
++ pass@k s1; gb-p3 default s2 + unlikely s2 (A6000); gb-p4 pass@k s2 + distinct s0; gb-p5 distinct s1 + distinct s2
+(A40). Every compute row names its GPU; GPU-seconds are compared with EI's (A6000) only for A6000 ladders, and per-arm
+GPU-seconds note that two jobs shared each card (each job's wall-clock seconds are its GPU-seconds, so co-tenancy
+inflates them by ≈ 1.45× against a job alone; the write-up reports both).
+
+**Read-out placement.** r2 / r4 reads on a separate reader pod as the checkpoints appear; r8 reads, dev metric and
+held-out greedy on each ladder pod after its two ladders; EI r8 dev and held-out greedy on the reader pod. Same
+settings everywhere (§ 5).
