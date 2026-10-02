@@ -236,3 +236,10 @@ Brief: run brief `best-state` (Dan, 2026-09-30). Policy: AGENT_POLICY.md. Budget
 - 04:50 UTC (2026-10-01)  **All read-outs done, UNREVIEWED.** T1 IQM, best vs ours: textbook72 37.3 vs 19 (cap 6), 51.7 vs 37.5 (cap 12); dev metric 997 vs 705, 1,054 vs 951; rr600 Q 345 vs 65, 376 vs 306; transfer_long2 17.7 vs 0, 20.7 vs 14.5. Frozen differences are small (textbook72 +4.0 / +1.2, inside the MDD; dev +147 / −18). Not compute-matched: equal attempts, ≈ 2× GPU-seconds per best ladder. Pre-registered "supported" condition holds; every T1 prediction missed high. Cap diagnostic: truncation is non-terminating actions; solved sets only grow at 2× caps (+2 max). `run_best_state.md`, `numbers.md` § best-state, `log.md`, `figures/best_state.png`. Port merged into the fork's `dan` (CI green on the same code). All pods deleted; 60.74 pod-hours, $29.76. Bucket `hf://buckets/dan-pandori/nd-rl/best-state/{ckpts,artifacts}` (manifest rows in `artifacts/MANIFEST.jsonl`).
 
 BEST-STATE DONE 2026-10-01T05:00:12Z
+
+## rl-from-ckpt (executor, started 2026-10-02T01:47:18Z)
+
+T1 ladder from `trajectory`'s earlier Stage-1 checkpoints (steps 0 / 1,600 / 5,000 / 12,000 / 16,000; best-cap12,
+9.56 M ALiBiGPT, `lean_staten`, K12; seeds 0–2) plus replay-only controls (added: the ladder's fine-tune replays 20k
+K12 records per round, which is further pretraining). Pre-registration: `preregistration/rl-from-ckpt.md`.
+Budget $90 / 180 pod-hours.

@@ -1,0 +1,46 @@
+start  seed  n_ref  med_x  #x<-12  #x<-8  #x<-6 | solved@start x1 tb72/h250 | end-ladder r8 x1 solved with x<-12 at start
+p0      0   315 -217.11    315    315    315 |   0/  0 | 287
+p0      1   315 -209.30    315    315    315 |   0/  0 | 283
+p0      2   315 -214.39    315    315    315 |   0/  0 | 289
+p1600   0   315   -6.88     46    113    191 |  10/ 67 | 27
+p1600   1   315   -6.91     41    124    185 |  14/ 60 | 25
+p1600   2   315   -7.01     33    123    193 |  13/ 66 | 17
+p5000   0   315   -5.12     18     69    131 |  19/138 | 13
+p5000   1   315   -5.64     23     90    137 |  19/129 | 12
+p5000   2   315   -5.72     25     95    147 |  18/112 | 11
+p12000  0   315   -4.60     17     74    118 |  27/162 | 13
+p12000  1   315   -5.18     19     67    132 |  20/153 | 8
+p12000  2   315   -5.13     14     84    131 |  22/142 | 11
+p16000  0   315   -4.17     11     51     99 |  26/176 | 4
+p16000  1   315   -3.40     17     49     92 |  29/195 | 9
+p16000  2   315   -4.57     15     57    121 |  28/155 | 6
+pend    0   315   -3.71      4     44     87 |  34/196 | 2
+pend    1   315   -3.35     11     55     86 |  33/205 | 3
+pend    2   315   -3.27     10     41     71 |  36/200 | 2
+
+end ladder (trajectory): P(r8 x1 solves | x_ref at pend), pooled over seeds
+  [ -99,-12.0) n=  25 P=0.280
+  [ -12, -8.0) n= 115 P=0.670
+  [  -8, -6.0) n= 104 P=0.817
+  [  -6, -4.0) n= 162 P=0.932
+  [  -4, -2.0) n= 231 P=1.000
+  [  -2,  0.1) n= 308 P=1.000
+
+end-arm logistic P(r8 x1 | x_ref at pend): b0, b1, x(P=0.5)
+  seed 0: b0 5.27 b1 0.482 x50 -10.9
+  seed 1: b0 5.36 b1 0.476 x50 -11.3
+  seed 2: b0 5.43 b1 0.491 x50 -11.1
+  seed all: b0 5.34 b1 0.482 x50 -11.1
+
+null (end-arm pooled curve) expected solves among x<-12 pairs, per start (3 seeds summed); x clipped at -40
+  p0      pairs  945 expected    0.0
+  p1600   pairs  120 expected   20.9
+  p5000   pairs   66 expected   10.4
+  p12000  pairs   50 expected    8.4
+  p16000  pairs   43 expected    9.4
+  pend    pairs   25 expected    4.7
+
+end arm r8: solved status differs between sample seeds 0 and 1 in 13/966 theorem-seed pairs
+seed 0: group C 36; r8 x1 solves 3
+seed 1: group C 35; r8 x1 solves 1
+seed 2: group C 28; r8 x1 solves 1
