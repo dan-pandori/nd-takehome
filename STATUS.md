@@ -236,3 +236,11 @@ Brief: run brief `best-state` (Dan, 2026-09-30). Policy: AGENT_POLICY.md. Budget
 - 04:50 UTC (2026-10-01)  **All read-outs done, UNREVIEWED.** T1 IQM, best vs ours: textbook72 37.3 vs 19 (cap 6), 51.7 vs 37.5 (cap 12); dev metric 997 vs 705, 1,054 vs 951; rr600 Q 345 vs 65, 376 vs 306; transfer_long2 17.7 vs 0, 20.7 vs 14.5. Frozen differences are small (textbook72 +4.0 / +1.2, inside the MDD; dev +147 / −18). Not compute-matched: equal attempts, ≈ 2× GPU-seconds per best ladder. Pre-registered "supported" condition holds; every T1 prediction missed high. Cap diagnostic: truncation is non-terminating actions; solved sets only grow at 2× caps (+2 max). `run_best_state.md`, `numbers.md` § best-state, `log.md`, `figures/best_state.png`. Port merged into the fork's `dan` (CI green on the same code). All pods deleted; 60.74 pod-hours, $29.76. Bucket `hf://buckets/dan-pandori/nd-rl/best-state/{ckpts,artifacts}` (manifest rows in `artifacts/MANIFEST.jsonl`).
 
 BEST-STATE DONE 2026-10-01T05:00:12Z
+
+
+# STATUS — organism-analysis (what predicts RL success, and what RL learns, from data already on disk)
+
+Brief: proposal 21 (Dan, 2026-10-02). Policy: AGENT_POLICY.md. Run id: organism-analysis. Budget $8 / 16 pod-hours (forward passes only; no training).
+
+## organism-analysis
+- 2026-10-02 17:20 UTC  run started (executor). Inputs: trajectory (c12), trajectory-cap6 (c6), rl-from-ckpt (rfc) reads + per-step scores pulled from the bucket; grpo-best not DONE yet. Pre-registration `preregistration/organism-analysis.md`.
