@@ -249,3 +249,89 @@ theorems). Theorems solved at ladder r8 x1:
   have not established which.
 - The ladder's mixes also hold 0.41–0.52 M RL records per arm over 8 rounds; the controls hold none.
 - I did not derive training tokens or Lean-check counts.
+
+## §Compare (phase 2: `run_rl_from_ckpt.md`, `numbers.md` § rl-from-ckpt, `log.md` § rl-from-ckpt)
+
+Pre-registration timing: committed 01:47:18 UTC, before the first pod (01:47:27) and the first ladder (01:48:31). The
+replay-only control was a deviation from the brief, and it is in the pre-registration with its reason. The
+miscalibration of the x_ctrl test was found at 08:50 on partial data, before the last 7 ladders finished. The
+calibrated variant and the "reach" comparison are both labelled post hoc. Misses are reported as misses (log 10:55 and
+the write-up's **Misses**).
+
+| claim (executor) | my value | verdict |
+|---|---|---|
+| p0: 0 / 4,495 accepted in rounds 1–2, all seeds; stop rule fired | 0 accepted of 287,680 samples per seed; nothing trained | reproduces |
+| control from p1600 reaches 28–33 / 72, 195–202 / 250; pend start 33–36, 196–205 | same | reproduces |
+| r8 tb72 34–38 (p1600), 44–51 from p5000 (pend 48–53); h250 212–223, then 232–238 | same (full table, §Recount) | reproduces |
+| "only p1600 is resolvably below pend" | pend − p1600 = +13.0 tb72, +18.7 h250. The others are within 4.7 / 5.0, inside the MDD (7 / 5) | reproduces |
+| all inside pre-registered ranges | every ladder and control r8 cell (x1) is inside its range | reproduces |
+| RL adds to replay at every start: +6 to +15 tb72, +21 to +31 h250 | +5.7 / +14.3 / +9.0 / +10.3 / +15.0; +21.3 / +31.3 / +22.0 / +21.7 / +28.0. Positive in every seed at every start | reproduces. Caveat, flagged by the executor: ladders train on 1.33–1.63× the control's tokens (I did not derive tokens) |
+| x50 under x_start: −13.1 / −14.7 / −15.3 / −11.6 / −11.1 | −13.13 / −14.69 / −15.30 / −11.62 / −11.08 (per-seed-fit means). Seed-FE means: −13.1 / −14.7 / −15.2 / −11.7 | reproduces |
+| 131 solved from x_start < −12 against 49 expected; excess +81.9; fires | 131; 48.7; +82.3 (per seed +30.4 / +30.0 / +21.9) | reproduces |
+| x_ctrl: x50 −11.9 / −15.6 / −14.9 / −15.2 / −16.1; 187 vs 60.7; +126.3; fires, also on pend (+42.3) | −11.95 / −15.64 / −14.88 / −15.24 / −16.07; 187 vs 60.2; +126.8; pend +42.4 | reproduces |
+| mechanism: "the controls put lower log p on the reference proofs" | true **only for the pend control** (median x_ctrl − x_start −0.9 per seed) and roughly p16000 (−0.1 to −0.4). From p1600 / p5000 / p12000 the control **raises** the worst step (+1.7 to +2.2 / +0.4 to +1.0 / +0.4 to +0.6). The miscalibration is that x has a different meaning under the replay-fine-tuned model than under the Stage-1 end checkpoint. The pend control's x is lower *and* the fitted curve is flatter (b1 0.32 vs 0.48) | **reword** (the conclusion stands; the stated mechanism is too general) |
+| calibrated null (post hoc): x50 −16.1, 187 vs 196.2, excess −9.2, does not fire | b0 5.108, b1 0.317, x50 −16.12; −9.1 (per seed −5.6 / +0.8 / −4.3); at x < −16, −0.6 | reproduces |
+| x_ev form: excess −44.4 | not recomputed | not derived by me |
+| RL-only solves from x_start < −12: 15 / 16 / 12 / 8, pend 3; lowest `la_transfer_1809` p12000 s0, x −26.05 / −17.35, 102 / 256 | 15 / 16 / 12 / 8, pend 3; `la_transfer_1809`, −26.05 / −17.35, n_ok 102. All 54 stored distinct proofs pass my Lean re-check (min 7 ND lines) | reproduces. The 44 / 51 in B and 4 in C were not checked |
+| term size 5 for that proof, "as the reference" | `lean_check`'s inference-node count, labelled as such. My whole-expression count differs by construction | ok (metric named) |
+| group C: p1600 1/1/2, p5000 5/5/3, p12000 3/5/4, p16000 6/6/2, pend 3/1/1; "C ≤ 4 missed in 5 of 12" | same counts. Values above 4: p5000 5, 5; p12000 5; p16000 6, 6, i.e. **5** cells. My §Recount said "4 of 9 seed-cells"; that was **my miscount**, and the correct figure is 5 (of 9 early-start cells, or of 12 incl. p1600) | reproduces (reviewer erratum) |
+| reach (union of both sample seeds), only start / only pend per seed: p1600 1/24, 1/38, 2/35; p5000 5/7, 6/11, 5/11; p12000 4/10, 5/4, 4/17; p16000 7/8, 5/10, 2/10 | identical | reproduces |
+| "an early-start ladder solves 1–7 theorems the end-arm ladder never solves" | "never" = in neither of two k 256 sample draws at r8 | reword: say "in neither sample seed at r8" |
+| reproducibility: seed-0 re-reads identical (0 / 4 × 322); re-scored refs max \|Δ w1\| 0 | same. My own CPU scorer also matches x_ctrl to ≤ 5.4e-5 nats on 24 references | reproduces |
+| Lean accepted 7,086 / 7,086 scored targets | not re-checked (I re-checked 1,950 counted proofs from the reads, 1,950 accepted) | not derived |
+| truncation: 0.086 % overall at RL / control checkpoints; worst stratum 4.27 % (read × pool × group); "≤ 2 % per RL stratum missed" | per read max 0.99 %. Per read × length bin, 6 of 486 strata > 2 %, the worst 12.1 % (one 14-line theorem, s0 p12000 h250) and 6.0 % (control pend s2 h250, 8-line bin, 32 theorems). Different strata, same verdict: missed | reproduces the miss |
+| compute: ladder 19–27 k GPU-s; 14–20× Stage-1 (1,350 A40-s); no ladder > 1.25× pend | from round files 19,017–26,964 s. Some per-seed values are lower than the executor's (e.g. s2 p1600 21,094 vs 22,943; s1 p12000 24,597 vs 26,427), consistent with the executor counting the OOM'd round attempts that the resumed round files overwrite. No ladder > 1.25× pend | reproduces. Note: the "14–20×" ratio divides A6000-s by A40-s |
+| 120.87 pod-h, $63.72 | not derivable from artefacts (`podbudget`) | not derived |
+
+**Model labels.** `run_rl_from_ckpt.md` names the models in its first line (best-cap12 s0–2, 9.56 M, `lean_staten`,
+from scratch on K12). `numbers.md` gives the full label, and inherited pend numbers are marked inherited. I found no
+unlabelled number. Every number here is under Lean alone; no comparison crosses the 2026-09-27 checker change.
+
+**Wording vs n.**
+- n = 3 seeds per arm throughout, and per-seed values are given.
+- "Resolvably below" is used only where the difference exceeds the MDD.
+- "Does not fire" for the calibrated null rests on a post hoc construction, and the write-up says so.
+- The headline "finishes what pretraining *plus the ladder's own replay* started" rests on that post hoc calibrated
+  test plus the selection-free reach comparison. The pre-registered decisive test fired. The write-up states this
+  plainly, and I agree the firing is a calibration failure (it fires equally on the pend negative control). It is
+  still a post hoc rescue of a pre-registered test, and should stay worded as "consistent with", as it is.
+
+## §Verdict
+
+**Stands.**
+- All hard constraints hold.
+- Every pre-registered count reproduces from the raw reads with my own code.
+- 1,950 / 1,950 sampled counted proofs pass Lean (controls validated).
+- Splits are clean apart from the one inherited textbook72 ↔ K12 premise-permutation class.
+- The p0 stop rule fired cleanly.
+- Ladder r8 counts fall inside every pre-registered range. From p5000 on the ladders are indistinguishable from the end
+  arm at n = 3; p1600 is 13 textbook72 / 19 holdout250 below it.
+- RL adds to replay at every start in every seed.
+- The literal threshold falsifier fires (+82), as predicted.
+- The pre-registered x_ctrl falsifier fires (+127) but also fires on the pend arm (+42), so it cannot discriminate.
+  With the null fitted on the same scale (post hoc) the excess is −9, and selection-free reach favours the end arm at
+  every start.
+- The compute flags are correctly reported.
+
+**Reword.**
+1. The miscalibration mechanism: the controls do not generally lower reference log p. Only the pend (and ≈ p16000)
+   control does; earlier controls raise it. Say that x means something different under a replay-fine-tuned model, and
+   that the end arm's curve on that scale is shifted and flatter.
+2. "Never solves" → "solves in neither sample seed at r8".
+3. Label "14–20× Stage-1" as A6000-s vs A40-s.
+
+**Not supported / not checked.**
+- The x_ev excess (−44) and the 7,086-target Lean count were not recomputed here.
+- Training tokens and the pod-hour cost were not derived.
+- Nothing in the write-up is contradicted.
+
+**Next measurement.** The decisive comparison is now post hoc. To settle it, pre-register the calibrated form and run
+it on a fresh draw: new sample seeds (x2, x3) for the ladder and control r8 reads, with the null fitted on pend-ladder
+vs pend-control x and the threshold fixed in advance.
+
+A second, sharper test is a **token-matched** control. The ladders train on 1.3–1.6× the control's tokens, which
+leaves the RL-vs-replay increment (+6 to +15 textbook72) partly confounded with training length. Either match the
+control's tokens to its ladder or replace the replay records with the ladder's own mix minus the RL records.
+
+At p1600, where RL's increment is smallest (+5.7) and the replay shift of x is largest (+2 nats), 5 seeds would bring
+the MDD below the observed increment.
