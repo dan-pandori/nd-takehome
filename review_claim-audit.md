@@ -185,3 +185,92 @@ Model: 3,214,336-param GPT, `lean_seq`, from scratch, cap 6, `train_p1`.
 | E3 | 0 survivor classes in training sets | holds: 0 |
 | E4 | 0 Lean rejections, all negative controls rejected | holds: 2,782 / 2,782 accepted; 981 / 981 controls rejected |
 | E5 | predicted ratings | my ratings (phase 2) |
+
+## Compare (executor's `run_claim_audit.md`, `audit/CLAIMS.md`, `audit/C1–C7.md`, `numbers.md` § claim-audit, `log.md`)
+
+Read after §Recount was committed (`e1361f41`).
+
+| claim (executor) | my independent value | verdict |
+|---|---|---|
+| All 7 headline counts re-derive exactly | 7/7 exact (C4 dev cap 12: +104.3 mean vs stated +103.8; the executor writes +104) | reproduces |
+| C1: 29 survivors, base s0 0/400k, EI p̂ ≥ 0.02 | 29 = `falsifier_survivors.txt`; 400k each; EI 0.0220–0.9995 | reproduces |
+| C1: the 8× base reaches 0 (s0) and 2 (s1) | big s0 0, big s1 2 (md5 `05ed88`) | reproduces |
+| CA2: base s1 2/29 in 20k pooled (1645: 1+3; 543: 0+1) | 2/29 (1645 4/20k, 543 1/20k) | reproduces |
+| R3: base s1 3/29 in 200k, first hits 654 / 7,058 / 27,493; 26 at 0/200k | 3/29, same first hits, 26 × 0/200,000 | reproduces |
+| R3 reading: ≤ 4 → "never" near seed-independent; C1 stays *holds with caveats* | follows the addendum's pre-stated rule (committed 19:20:03Z, before launch) | reproduces |
+| R2: EI s0 29/29 at p̂ ≥ 0.01, min 0.0245, \|z\| > 2 on 1/29 | 29/29, min 0.0245, max \|z\| 2.14 (one > 2) | reproduces |
+| R1: SN s0 26/29 within 10k (on file 26), 21 at p̂ ≥ 0.01 (on file 21); `la_transfer_149` z > 3 | 26; on-file first_hit ≤ 10k = 26; 21 / 21; z = 3.13 | reproduces |
+| C2a: SN reaches 28/29 per seed; "23–26 within 10,000" | 28 / 28 (T0.8 ∪ T1.0; misses 1893 / 1110); within 10k 26 / 23 | reproduces |
+| CA1: SN at p̂ ≥ 0.01 clears 21 (s0) / 14 (s1) | 21 / 14 | reproduces |
+| C2b: S reaches 28 and 25 | 28 / 25 | reproduces. The S/SN p̂ ratio (0.16 / 0.69) and the step-interface confound are not re-derived |
+| C3 cells 233/295/320/317 etc., "≤ 102 for either lever alone", re-reads agree | identical; SN6 T1 102; re-reads ≤ 4 apart | reproduces |
+| C4a: +18.3 cap 6, +14.4 cap 12; replication +21.7 / +13.1, permutation p 0.036 / 0.005 | +18.33; +14.42 mean (14.17 IQM); +21.67 / +13.08; p 1/28 / 1/210 | reproduces |
+| C4b: per seed 37/38/36/38; 1 premise-order K12 copy in textbook72 | same; 1 K12 class in textbook72 | reproduces. The dev set (1,108) also shares 1 class with K12 and 1 with `rl_targets`; the run does not report this (negligible) |
+| C5b: 1-in-400 is a median; by seed 1/245–1/724; cap 6 ≈ 1/22,000; rest of proof 7–9 nats | IQM −6.21 (1/495), pooled median 1/564; cap 6 −10.1 (≈ 1/25,000); rest −7 to −9 | reproduces |
+| C5b: ≈ 2.4 nats of the own-proof premium is selection; other seeds' proofs gain ≈ 1 nat over references | paired medians: own 4.59, other seeds 2.62, reference 1.55 → **2.0** selection, 1.07 over reference | **differs by 0.4 nat**; aggregation choice (median-of-group per seed vs paired median). Same direction; say "≈ 2–2.4" |
+| C5: x0/x1 group-redefinition moves w1 ≤ 0.4 nat; 4/9/11 of B solved by r0 on x1 | −6.46/−6.46/−5.89; 4/9/11 | reproduces |
+| C6: "level" is a non-rejection at n = 3; early starts 4–6 of 322 below | per-seed-mean gaps on the x1 read, tb72 + h250: p5000 6.0, p12000 6.3, p16000 5.4; h250 pend > p16000 in 3/3 | reproduces approximately (my upper end 6.3 vs "4–6"; different draws and pairing) |
+| C7: ratio 0.54, bootstrap [0.02, 1.08], SD ratio 0.74, one cell, one pod | 0.543, [0.02, 1.07], √0.543 = 0.74, F [0.23, 2.05] | reproduces |
+| Cross-run: no disagreement beyond multiplicity; several "agreements" are deterministic replays | none beyond multiplicity; trajectory-cap6 re-scoring of cap-12 proofs bit-identical (max \|Δ\| = 0) | reproduces |
+| Leakage: 0 survivor classes in the Stage-1 set, `rl_targets`, or EI-s0 mixes (272,632) | 0 / 0 / 0 (272,632 rows) | reproduces |
+| Lean: 471/471 accepted, 1,435/1,435 controls rejected | own: 2,782/2,782 accepted, 981/981 controls rejected | reproduces (no rejections on either side) |
+| Re-sampling cost 2.0 h, $1.06, RTX A6000 | registry note: card total 7,198 s, $1.06 | reproduces |
+| E1 hit, E2 missed, E3 hit, E4 hit; E5 partly | same scoring | reproduces; misses reported as misses |
+
+**Gate 0.** The pre-registration (`eb12ce49`, 18:41:27Z) came before any recount output, by the log and by the commit
+order: the first audit outputs were committed at 19:19. The R3 addendum came before R3's launch. R1/R2 had only E2's
+generic expectation, which is acceptable for reproduction jobs.
+
+**Checker.** The audited numbers are Lean-alone. The run's pod code imports `nd_verify.verify.parse_formula` (via
+`state_env.py`) only for parsing, and the log discloses this. `support.py` and `ss_support.py` judge with
+`lean_judge` / `lean_gate`. The one pre-2026-09-27 element (C3's whole-proof cap-6 ladder, trained under Lean ∧
+`nd_verify`) is labelled in the ledger.
+
+**Model labels.** `numbers.md` and `C1–C7.md` label models with checkpoint, md5, parameters, format and training set.
+In the **ledger**, the file that is meant to travel, several suggested wordings drop the label:
+- C3 does not say that the arms are SN-cap12 T1 (3.2 M `lean_staten`, K12) and K12 T1 (3.2 M `lean_seq`).
+- C5a/C5b do not say best-cap12 / best-cap6 (9.56 M ALiBiGPT `lean_staten`, from scratch).
+- C6 does not say best-cap12, s0–s2.
+- C2b does not say 3.2 M, from scratch, cap 6.
+
+**Compute record.** The registry has `gpu_seconds`, `attempts` and `train_steps` per job, but no `gen_tokens` or
+`lean_checks` (policy, 2026-09-29). The per-job `gpu_seconds` are wall time on one shared card and sum to 15,829 s
+against a 7,198 s card total. The note says so, but a reader summing the rows doubles the cost.
+
+## Verdict
+
+**Stands.** No hard-constraint violation; nothing quarantined. Every count in the ledger that I or my helpers
+recomputed reproduces, all on independent code, statement builders and Lean drivers.
+- Every counted proof I re-checked is Lean-accepted, and every negative control is rejected.
+- The R3 addendum's pre-stated reading was applied as written.
+- I agree with all ten ratings, including the four *weaker than stated* (C2b, C5b, C7) and the one *solid* count (C2a,
+  C4b).
+
+**Reword (in `audit/CLAIMS.md` before it travels):**
+1. Add model labels to the suggested wordings of C2b, C3, C5a/b and C6 (see §Compare, "Model labels").
+2. C5b: "≈ 2.4 nats … cannot be separated from selection" → "≈ 2–2.4 nats (depending on aggregation) …". On
+   other seeds' proofs, RL's lift (≈ 2.6 nats, paired median) is about 1.7× the reference's, not 3×.
+3. C6: "4–6 of 322 below" → "≈ 4–6 of 322 below (≈ 5–6 on the x1 read, per-seed means)".
+4. C4b: add that the dev set shares 1 class with K12 and 1 with `rl_targets` (1,108 records; it does not change
+   +292 / +104).
+5. C3: state that the MDD comes from the observed spread of 4 vs 2 seeds. `NOISE_FLOOR.md` has no row for these
+   models. If the hard-pool CV of the floor (≈ 0.45) transferred, the MDD would be ≈ 250 and the +216 gap would sit
+   inside it. "Compound" therefore rests on complete separation in 4 vs 2 seeds, not on a measured floor.
+
+**Not supported:** nothing in the ledger.
+
+**Process findings (minor):**
+- The registry lacks `gen_tokens` and `lean_checks`, and its `gpu_seconds` double-count the shared card.
+- The re-sample Lean check covered 27 proofs with one kind of control. My check of all 216 re-sampled proofs with
+  four kinds found nothing, so no number moves.
+- `run_claim_audit.md` is 252 words against a limit of 250.
+
+**Next measurements that would settle what is open:**
+- **C7:** identical-seed re-runs from ≥ 3 cells (including a low-mode cell), on ≥ 2 pods, ≈ 6 each. This would turn
+  "0.54 [0.02, 1.07]" into a usable fraction. It matters because every MDD in the project is planned against it.
+- **C2b:** an arm with the step interface but without the rendered state, at the survivors' 200k × 2 T budget, ≥ 3
+  seeds. This separates "state" from "step interface".
+- **C6:** 3 more seeds of pend and p5000 (n = 6). This bounds "level" as an equivalence statement (the current paired
+  interval allows +12 on tb72).
+- **C3:** 2 more K12 T1 seeds and the SN6 cells at n = 4. This lets the interaction be tested rather than declared
+  unresolved.
