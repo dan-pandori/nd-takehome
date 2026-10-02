@@ -1,0 +1,68 @@
+Hard steps (r0 log p < -4) by class: count (share) per run, pooled over seeds; c12 / c6 at pend, rfc at starts
+  c12: n 629: and_proj 157 (25%), box:neg 127 (20%), app 97 (15%), box:imp 67 (11%), false_elim 49 (8%), box:orelim 43 (7%), or_intro 42 (7%), and_intro 33 (5%), box:bycontra 12 (2%), prem 2 (0%)
+        box openers + and_proj: 65%
+  c6: n 1282: and_proj 275 (21%), app 263 (21%), box:orelim 179 (14%), box:neg 161 (13%), box:imp 123 (10%), or_intro 122 (10%), and_intro 69 (5%), false_elim 43 (3%), box:bycontra 31 (2%), restate 14 (1%), exact 1 (0%), prem 1 (0%)
+        box openers + and_proj: 60%
+  rfc: n 4585: and_proj 1081 (24%), app 1016 (22%), box:imp 636 (14%), box:neg 597 (13%), or_intro 384 (8%), and_intro 275 (6%), box:orelim 272 (6%), false_elim 197 (4%), box:bycontra 106 (2%), prem 19 (0%), restate 2 (0%)
+        box openers + and_proj: 59%
+
+Median hard-step log p by class and round (pooled seeds; n = hard steps). Rounds: r0(pend) r1..r8
+  c12 and_proj      n  157:  -6.13  -5.28   -4.2  -3.39  -3.84  -3.08  -3.29  -2.98  -2.83
+  c12 box:neg       n  127:  -7.17  -6.97  -7.37  -7.44  -6.84   -7.3   -6.8  -7.18  -6.41
+  c12 app           n   97:  -5.46  -5.22  -4.45  -4.22  -4.17  -4.54  -4.15  -3.69   -4.3
+  c12 box:imp       n   67:   -5.9   -2.9  -1.53  -1.37  -1.55  -1.76  -1.58  -1.63  -1.88
+  c12 false_elim    n   49:  -7.15  -6.88  -6.48  -6.51  -6.16  -6.34  -6.41  -5.81  -6.35
+  c12 box:orelim    n   43:  -5.22  -5.26  -5.91  -5.64   -5.7  -5.81  -5.76  -6.45  -6.83
+  c12 or_intro      n   42:  -5.13   -3.7  -3.18  -3.62  -3.48  -3.12  -2.92   -3.0  -2.81
+  c12 and_intro     n   33:  -6.31  -4.71  -4.41   -4.4  -3.41  -3.76  -3.74  -3.52  -3.28
+  c12 box:bycontra  n   12:  -5.84  -5.12  -4.51  -4.18  -3.56  -4.16  -3.36   -3.7  -3.33
+  c6 and_proj      n  275:  -8.64  -6.41  -4.95  -4.25  -3.24  -3.16  -2.65  -2.69  -2.51
+  c6 app           n  263:  -7.49  -4.59  -3.39  -2.46  -2.25  -1.51  -1.39  -1.36  -1.23
+  c6 box:orelim    n  179:  -9.06  -7.69  -6.43  -5.92  -5.48  -5.46  -4.94  -4.55  -4.69
+  c6 box:neg       n  161:  -9.34  -9.48  -9.01  -8.25  -8.77   -8.7  -8.87  -9.06  -8.82
+  c6 box:imp       n  123:   -6.7  -2.02  -0.96   -0.8  -0.46  -0.62  -0.49  -0.54   -0.4
+  c6 or_intro      n  122:  -8.44  -3.02  -1.06  -0.75  -1.09   -0.8  -0.96  -1.02  -1.29
+  c6 and_intro     n   69:  -7.44  -4.56  -2.82  -2.77   -3.2  -3.24  -2.95  -2.23  -2.09
+  c6 false_elim    n   43:  -7.62  -3.68  -3.17  -2.33  -1.89  -2.09   -2.2  -1.93  -1.81
+  c6 box:bycontra  n   31:  -7.45  -4.74  -2.44  -0.69  -0.48  -0.72  -0.85   -0.9  -1.03
+  c6 restate       n   14:  -7.61  -3.35  -0.23  -0.17  -0.17  -0.05  -0.08  -0.08  -0.05
+
+Gain r0 -> r8 (nats) of hard steps, by class: rl-solved theorems vs never-solved; matched control = never-solved hard steps
+of OTHER classes in the same run/seed and r0 log p bin (1 nat); diff = class - control (stratified), 95 % theorem bootstrap.
+  c12: class        start-solved      rl-solved        never-solved    never: class - matched control [CI] (n matched)
+      and_proj      [1.53, 46]        [3.41, 106]      [1.39, 5]       +1.70 [-2.77, 9.63] (5)
+      box:neg       [-3.04, 12]       [1.2, 56]        [1.76, 59]      -6.82 [-11.42, -4.09] (27)
+      app           [0.97, 72]        [3.68, 19]       [3.13, 6]       +7.22 [5.86, 15.5] (6)
+      box:imp       [2.35, 25]        [4.27, 34]       [5.31, 8]       +6.45 [0.67, 12.46] (7)
+      false_elim    [0.66, 40]        [1.6, 9]         [None, 0]       -
+      box:orelim    [-0.87, 21]       [-0.21, 22]      [None, 0]       -
+      or_intro      [1.46, 26]        [2.87, 4]        [4.58, 12]      +1.94 [-1.96, 5.74] (9)
+      and_intro     [2.36, 13]        [4.38, 17]       [3.09, 3]       -
+      box:bycontra  [1.97, 10]        [4.48, 2]        [None, 0]       -
+      prem          [None, 0]         [5.14, 2]        [None, 0]       -
+  c6: class        start-solved      rl-solved        never-solved    never: class - matched control [CI] (n matched)
+      and_proj      [3.32, 16]        [6.24, 223]      [2.84, 36]      +0.31 [-1.46, 1.76] (35)
+      app           [4.26, 90]        [5.66, 127]      [5.36, 46]      +3.21 [1.44, 4.75] (46)
+      box:orelim    [3.35, 20]        [4.24, 134]      [2.52, 25]      -1.62 [-4.95, 1.83] (23)
+      box:neg       [2.43, 6]         [3.12, 51]       [-0.58, 104]    -7.56 [-9.08, -5.8] (83)
+      box:imp       [5.61, 19]        [5.74, 89]       [4.54, 15]      +3.42 [-0.85, 6.02] (15)
+      or_intro      [3.0, 24]         [5.42, 60]       [8.92, 38]      +6.49 [4.28, 9.2] (37)
+      and_intro     [3.02, 8]         [6.26, 36]       [4.87, 25]      +3.41 [1.46, 5.15] (24)
+      false_elim    [2.86, 25]        [5.23, 17]       [7.72, 1]       -
+      box:bycontra  [4.29, 10]        [6.11, 19]       [6.16, 2]       -
+      restate       [None, 0]         [7.54, 10]       [7.28, 4]       -
+      exact         [None, 0]         [None, 0]        [4.13, 1]       -
+      prem          [None, 0]         [4.03, 1]        [None, 0]       -
+  c12: Spearman over 4 classes, rl-solved vs never-solved median gain: 0.800
+  c6: Spearman over 7 classes, rl-solved vs never-solved median gain: 0.393
+  c12 all  : partial R^2 of class (gain ~ r0 lp + seed + class) = 0.120  (n 629)
+  c12 never: partial R^2 of class (gain ~ r0 lp + seed + class) = 0.366  (n 93)
+  c6 all  : partial R^2 of class (gain ~ r0 lp + seed + class) = 0.180  (n 1282)
+  c6 never: partial R^2 of class (gain ~ r0 lp + seed + class) = 0.349  (n 297)
+  per-theorem median hard-step gain: {'c12|rl': [2.81, 160], 'c12|never': [2.43, 37], 'c6|rl': [5.83, 356], 'c6|never': [3.35, 97]}
+
+POST HOC: box:neg hard steps split by the formula the box proves: ¬¬X vs other ¬X (gain r0 -> r8, median; by status)
+  c12 dneg       {'n': 76, 'r0_median': -6.98, 'gain_median': 0.9, 'by_status': {'start': [-2.9, 9], 'rl': [1.41, 32], 'never': [0.55, 35]}, 'per_seed_gain': [-2.98, 1.43, 1.59]}
+  c12 neg_other  {'n': 51, 'r0_median': -7.62, 'gain_median': 2.42, 'by_status': {'start': [-3.18, 3], 'rl': [0.99, 24], 'never': [3.64, 24]}, 'per_seed_gain': [1.71, 4.58, 1.43]}
+  c6 dneg       {'n': 104, 'r0_median': -10.25, 'gain_median': -1.46, 'by_status': {'start': [2.1, 3], 'rl': [1.13, 37], 'never': [-3.48, 64]}, 'per_seed_gain': [-0.67, -2.12, -0.76]}
+  c6 neg_other  {'n': 57, 'r0_median': -7.86, 'gain_median': 4.3, 'by_status': {'start': [2.77, 3], 'rl': [4.73, 14], 'never': [3.66, 40]}, 'per_seed_gain': [9.27, 0.54, 4.13]}

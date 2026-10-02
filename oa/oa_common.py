@@ -53,3 +53,32 @@ def _closes_at_end(f):
         if d == 0:
             return f[i + 1:i + 2] == [')']
     return False
+
+
+def nd_pruned_canon(proof):
+    """ND proof text -> canonical pruned form: keep the lines the last line transitively cites (a box citation cites
+    the AS line and the box's last line, which pull in what they cite), renumber them in order.  Two proofs that differ
+    only by unused lines or numbering map to the same string.  A plain text parse (no checker); None if unparsable."""
+    lines = [s.split() for s in proof.replace(' QED', '').split(' ; ') if s.strip() and s.strip() != 'QED']
+    try:
+        info = {}
+        order = []
+        for t in lines:
+            lab = t[0]
+            k = t.index(':', 1) if ':' in t[1:] else None
+            # the rule's ':' is the last ':' token (formulas contain no ':')
+            k = len(t) - 1 - t[::-1].index(':')
+            refs = [x for x in t[k + 2:] if x.startswith('N')]
+            info[lab] = (t[1:k], t[k + 1], refs)
+            order.append(lab)
+    except (ValueError, IndexError):
+        return None
+    keep, stack = set(), [order[-1]]
+    while stack:
+        i = stack.pop()
+        if i in keep or i not in info:
+            continue
+        keep.add(i); stack.extend(info[i][2])
+    ren = {lab: f'N{j + 1}' for j, lab in enumerate(l for l in order if l in keep)}
+    return ' ; '.join(' '.join([ren[l]] + info[l][0] + [':', info[l][1]] + [ren.get(r, r) for r in info[l][2]])
+                      for l in order if l in keep)

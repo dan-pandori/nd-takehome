@@ -889,3 +889,31 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `max_steps` 192. Truncation stays 1.0–1.8 % (non-terminating actions); solved sets 0 lost, +2 / +1 / 0 / 0 gained.
 - Pre-registration vs outcome: frozen predictions hit, every T1 prediction missed high (see `run_best_state.md`).
 - Total 60.74 pod-hours, $29.76 (A40 $0.49/h); balance $329 after.
+
+## organism-analysis (2026-10-02, executor)
+
+- 2026-10-02 16:53 start. Inputs pulled from the bucket to `data/oa_in/` (not tracked): trajectory / trajectory-cap6 /
+  rl-from-ckpt per-step scores and targets (`score/`, `targets/`), ladder `round_<r>.json`, and all 740 stored reads
+  compacted by `oa/oa_compact_read.py` (keeps name, n_ok, n_tried, the distinct accepted proofs; drops failure reasons).
+  First batch missed the six `*_pend__h250_x0` reads (a stray grep filter); fetched in a second pass, nothing used before.
+- 17:03 pre-registration committed (3ac05e64); first pod oa-p0 created 17:09 (`~/pods.log`).
+- Taxonomy refinement before any result: the pre-registered "other" class split into `box:bycontra`
+  (`Classical.byContradiction` box), `false_elim` (`n .elim`) and `restate` (`n` alone); box kinds match tj_score's
+  `step_kind` exactly on all 601 c12 s0 targets.
+- `tj_score.py` copied from `origin/dan_trajectory` (used by `oa_entropy.py` to rebuild the scored states). CPU check:
+  base-0 per-step log p from `oa_entropy.py` equals the stored `raw_b0_total` to 1e-4 on 5 targets.
+- scikit-learn installed on the VPS with apt (no pip there). Q1/Q2 run on the VPS (single process).
+- Q1 (x0) done; x1 robustness done. The c12 GBM advantage (0.87 vs logistic 0.77) does not survive x1 (0.75).
+- POST HOC (labelled in the write-up): (a) reference uses `byContradiction` x term size, after term size came out as the
+  top Q1 feature; (b) box:neg split into ¬¬X vs other ¬X after box:neg was the one class that did not move;
+  (c) exposure counts of ¬¬-boxes in the EI training mixes (VPS, one process, `artifacts/oa/exposure_dneg/`).
+- Q3 diversity: distinct accepted proofs per theorem rise every round; added a pruned canonical form
+  (`oa_common.nd_pruned_canon`, a text parse, no checker) so padding does not count as diversity.
+- 17:36 second pod oa-p1 (A40) for seed 2 (wall time); the chained seed-2 job on oa-p0 was cancelled before starting.
+- 18:09 oa-p0 pulled + deleted; 18:5x oa-p1 pulled + deleted. All 111 checkpoint md5s match the inherited md5 files.
+  Peak memory 12–23 GB at batch 2,048 (one A40, two jobs); on-policy action truncation ≤ 0.67 % (entropy measurement
+  only, nothing counted). GPU-s from `record.compute` (6,991) exceed billed pod time (6,840 s) because two jobs shared
+  oa-p0's card.
+- Within-RL Cui fit (r1–r8) added as a check after the full fit looked degenerate (entropy range 0.031–0.050);
+  reported as such.
+- Uploads: bucket `organism-analysis/{artifacts/oa,artifacts/organism-analysis,data/oa,data/oa_in}`.

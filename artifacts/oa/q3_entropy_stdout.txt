@@ -1,0 +1,89 @@
+on-policy entropy (T 0.8 policy, nats / token) by checkpoint; R_tr = EI training sample accuracy of samples drawn from it; R_ev = eval pass@1 (x1)
+  c12 s0           r0:0.0464 r1:0.0349 r2:0.0358 r3:0.0358 r4:0.0368 r5:0.0366 r6:0.0369 r7:0.0366 r8:0.0365
+  c12 s1           r0:0.0500 r1:0.0369 r2:0.0363 r3:0.0371 r4:0.0376 r5:0.0375 r6:0.0382 r7:0.0385 r8:0.0389
+  c12 s2           r0:0.0489 r1:0.0378 r2:0.0379 r3:0.0386 r4:0.0376 r5:0.0379 r6:0.0376 r7:0.0374 r8:0.0374
+  c6 s0            r0:0.0373 r1:0.0314 r2:0.0313 r3:0.0328 r4:0.0338 r5:0.0345 r6:0.0347 r7:0.0357 r8:0.0360
+  c6 s1            r0:0.0460 r1:0.0320 r2:0.0316 r3:0.0343 r4:0.0332 r5:0.0330 r6:0.0350 r7:0.0353 r8:0.0343
+  c6 s2            r0:0.0398 r1:0.0322 r2:0.0312 r3:0.0316 r4:0.0316 r5:0.0317 r6:0.0327 r7:0.0329 r8:0.0334
+  rfc p1600 s0     r0:0.0898 r2:0.0375 r4:0.0375 r8:0.0386
+  rfc p5000 s0     r0:0.0592 r2:0.0368 r4:0.0376 r8:0.0379
+  rfc p12000 s0    r0:0.0537 r2:0.0397 r4:0.0400 r8:0.0410
+  rfc p16000 s0    r0:0.0546 r2:0.0405 r4:0.0408 r8:0.0400
+  rfc p1600 s1     r0:0.0755 r2:0.0376 r4:0.0376 r8:0.0372
+  rfc p5000 s1     r0:0.0558 r2:0.0362 r4:0.0358 r8:0.0363
+  rfc p12000 s1    r0:0.0683 r2:0.0361 r4:0.0364 r8:0.0363
+  rfc p16000 s1    r0:0.0501 r2:0.0365 r4:0.0387 r8:0.0401
+  rfc p1600 s2     r0:0.0882 r2:0.0371 r4:0.0373 r8:0.0364
+  rfc p5000 s2     r0:0.0662 r2:0.0361 r4:0.0369 r8:0.0374
+  rfc p12000 s2    r0:0.0673 r2:0.0408 r4:0.0409 r8:0.0411
+  rfc p16000 s2    r0:0.0588 r2:0.0401 r4:0.0400 r8:0.0402
+
+Cui fit R = -a exp(H) + b (H = T 0.8 on-policy token entropy):
+  c12 s0           tr: a 34.324 b 36.469 R2 0.815 b-a 2.145 (max observed 0.918, n 8)
+  c12 s0           tr_rl: a -52.176 b -53.216 R2 0.896 b-a -1.040 (max observed 0.918, n 7)
+  c12 s0           ev: a 32.618 b 34.490 R2 0.753 b-a 1.873 (max observed 0.719, n 9)
+  c12 s0           ev_rl: a -63.837 b -65.520 R2 0.843 b-a -1.683 (max observed 0.719, n 8)
+  c12 s1           tr: a 30.891 b 32.949 R2 0.864 b-a 2.058 (max observed 0.918, n 8)
+  c12 s1           tr_rl: a -38.306 b -38.884 R2 0.526 b-a -0.579 (max observed 0.918, n 7)
+  c12 s1           ev: a 27.924 b 29.658 R2 0.81 b-a 1.734 (max observed 0.699, n 9)
+  c12 s1           ev_rl: a -33.651 b -34.275 R2 0.524 b-a -0.624 (max observed 0.699, n 8)
+  c12 s2           tr: a 33.533 b 35.710 R2 0.931 b-a 2.177 (max observed 0.924, n 8)
+  c12 s2           tr_rl: a 32.904 b 35.057 R2 0.092 b-a 2.153 (max observed 0.924, n 7)
+  c12 s2           ev: a 32.254 b 34.174 R2 0.903 b-a 1.921 (max observed 0.726, n 9)
+  c12 s2           ev_rl: a 42.396 b 44.707 R2 0.127 b-a 2.311 (max observed 0.726, n 8)
+  c6 s0            tr: a 29.137 b 30.957 R2 0.179 b-a 1.820 (max observed 0.902, n 8)
+  c6 s0            tr_rl: a -24.696 b -24.671 R2 0.752 b-a 0.025 (max observed 0.902, n 7)
+  c6 s0            ev: a 13.094 b 14.135 R2 0.038 b-a 1.040 (max observed 0.684, n 9)
+  c6 s0            ev_rl: a -31.991 b -32.461 R2 0.842 b-a -0.470 (max observed 0.684, n 8)
+  c6 s1            tr: a 36.230 b 38.306 R2 0.743 b-a 2.076 (max observed 0.899, n 8)
+  c6 s1            tr_rl: a -29.731 b -29.892 R2 0.512 b-a -0.161 (max observed 0.899, n 7)
+  c6 s1            ev: a 29.625 b 31.230 R2 0.654 b-a 1.604 (max observed 0.651, n 9)
+  c6 s1            ev_rl: a -34.556 b -35.136 R2 0.548 b-a -0.580 (max observed 0.651, n 8)
+  c6 s2            tr: a 56.669 b 59.350 R2 0.851 b-a 2.681 (max observed 0.889, n 8)
+  c6 s2            tr_rl: a -22.764 b -22.663 R2 0.07 b-a 0.101 (max observed 0.889, n 7)
+  c6 s2            ev: a 46.608 b 48.697 R2 0.738 b-a 2.089 (max observed 0.627, n 9)
+  c6 s2            ev_rl: a -33.551 b -34.078 R2 0.228 b-a -0.527 (max observed 0.627, n 8)
+  rfc p1600 s0     tr: a 11.910 b 13.084 R2 0.981 b-a 1.175 (max observed 0.773, n 3)
+  rfc p1600 s0     ev: a 7.678 b 8.428 R2 0.867 b-a 0.750 (max observed 0.550, n 4)
+  rfc p1600 s0     ev_rl: a -132.005 b -136.644 R2 0.737 b-a -4.639 (max observed 0.550, n 3)
+  rfc p5000 s0     tr: a 24.527 b 26.250 R2 0.982 b-a 1.723 (max observed 0.829, n 3)
+  rfc p5000 s0     ev: a 19.395 b 20.679 R2 0.926 b-a 1.284 (max observed 0.612, n 4)
+  rfc p5000 s0     ev_rl: a -106.762 b -110.287 R2 0.924 b-a -3.525 (max observed 0.612, n 3)
+  rfc p12000 s0    tr: a 32.123 b 34.270 R2 0.985 b-a 2.147 (max observed 0.869, n 3)
+  rfc p12000 s0    ev: a 29.048 b 30.847 R2 0.92 b-a 1.799 (max observed 0.662, n 4)
+  rfc p12000 s0    ev_rl: a -73.052 b -75.442 R2 0.925 b-a -2.389 (max observed 0.662, n 3)
+  rfc p16000 s0    tr: a 29.663 b 31.735 R2 0.985 b-a 2.072 (max observed 0.867, n 3)
+  rfc p16000 s0    ev: a 27.717 b 29.496 R2 0.966 b-a 1.779 (max observed 0.684, n 4)
+  rfc p16000 s0    ev_rl: a 56.364 b 59.324 R2 0.232 b-a 2.960 (max observed 0.684, n 3)
+  rfc p1600 s1     tr: a 15.030 b 16.292 R2 0.984 b-a 1.262 (max observed 0.731, n 3)
+  rfc p1600 s1     ev: a 9.228 b 9.974 R2 0.901 b-a 0.746 (max observed 0.473, n 4)
+  rfc p1600 s1     ev_rl: a 305.163 b 317.207 R2 0.837 b-a 12.044 (max observed 0.473, n 3)
+  rfc p5000 s1     tr: a 26.716 b 28.479 R2 0.991 b-a 1.763 (max observed 0.819, n 3)
+  rfc p5000 s1     ev: a 21.815 b 23.165 R2 0.925 b-a 1.349 (max observed 0.627, n 4)
+  rfc p5000 s1     ev_rl: a -61.340 b -63.049 R2 0.051 b-a -1.709 (max observed 0.627, n 3)
+  rfc p12000 s1    tr: a 17.401 b 18.869 R2 0.99 b-a 1.468 (max observed 0.859, n 3)
+  rfc p12000 s1    ev: a 14.782 b 15.931 R2 0.97 b-a 1.149 (max observed 0.650, n 4)
+  rfc p12000 s1    ev_rl: a -252.222 b -260.930 R2 0.498 b-a -8.709 (max observed 0.650, n 3)
+  rfc p16000 s1    tr: a 32.262 b 34.360 R2 0.946 b-a 2.098 (max observed 0.888, n 3)
+  rfc p16000 s1    ev: a 28.010 b 29.732 R2 0.812 b-a 1.722 (max observed 0.680, n 4)
+  rfc p16000 s1    ev_rl: a -25.166 b -25.519 R2 0.998 b-a -0.352 (max observed 0.680, n 3)
+  rfc p1600 s2     tr: a 11.778 b 12.942 R2 0.986 b-a 1.164 (max observed 0.761, n 3)
+  rfc p1600 s2     ev: a 7.684 b 8.419 R2 0.925 b-a 0.735 (max observed 0.522, n 4)
+  rfc p1600 s2     ev_rl: a 134.527 b 140.036 R2 0.662 b-a 5.509 (max observed 0.522, n 3)
+  rfc p5000 s2     tr: a 20.491 b 22.044 R2 0.984 b-a 1.553 (max observed 0.830, n 3)
+  rfc p5000 s2     ev: a 15.883 b 17.044 R2 0.92 b-a 1.161 (max observed 0.645, n 4)
+  rfc p5000 s2     ev_rl: a -116.429 b -120.226 R2 0.99 b-a -3.797 (max observed 0.645, n 3)
+  rfc p12000 s2    tr: a 20.264 b 21.920 R2 0.985 b-a 1.655 (max observed 0.850, n 3)
+  rfc p12000 s2    ev: a 17.600 b 18.927 R2 0.932 b-a 1.328 (max observed 0.660, n 4)
+  rfc p12000 s2    ev_rl: a -360.436 b -374.900 R2 0.803 b-a -14.464 (max observed 0.660, n 3)
+  rfc p16000 s2    tr: a 25.044 b 26.907 R2 0.99 b-a 1.863 (max observed 0.870, n 3)
+  rfc p16000 s2    ev: a 21.963 b 23.478 R2 0.95 b-a 1.515 (max observed 0.674, n 4)
+  rfc p16000 s2    ev_rl: a -281.160 b -292.042 R2 0.297 b-a -10.882 (max observed 0.674, n 3)
+
+teacher-forced token entropy (T 1.0) on reference steps, median over steps: hard (r0 lp < -4) / other, by round
+  c12 hard  [0.0949, 0.0448, 0.0377, 0.035, 0.0315, 0.0321, 0.0326, 0.0333, 0.0315]
+  c12 other [0.017, 0.008, 0.0089, 0.0102, 0.0109, 0.0112, 0.0117, 0.0115, 0.0115]
+  c12 hard, first token [0.0009, 0.0002, 0.0002, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001, 0.0001]
+  c6 hard  [0.0872, 0.0343, 0.0285, 0.0256, 0.0265, 0.0275, 0.0268, 0.0282, 0.0286]
+  c6 other [0.0046, 0.001, 0.001, 0.001, 0.0011, 0.0012, 0.0014, 0.0015, 0.0016]
+  c6 hard, first token [0.0005, 0.0001, 0.0001, 0.0001, 0.0, 0.0, 0.0001, 0.0001, 0.0001]

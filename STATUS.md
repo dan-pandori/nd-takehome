@@ -243,4 +243,10 @@ BEST-STATE DONE 2026-10-01T05:00:12Z
 Brief: proposal 21 (Dan, 2026-10-02). Policy: AGENT_POLICY.md. Run id: organism-analysis. Budget $8 / 16 pod-hours (forward passes only; no training).
 
 ## organism-analysis
-- 2026-10-02 17:20 UTC  run started (executor). Inputs: trajectory (c12), trajectory-cap6 (c6), rl-from-ckpt (rfc) reads + per-step scores pulled from the bucket; grpo-best not DONE yet. Pre-registration `preregistration/organism-analysis.md`.
+- 2026-10-02 16:53 UTC  run started (executor). Inputs: trajectory (c12), trajectory-cap6 (c6), rl-from-ckpt (rfc) reads + per-step scores pulled from the bucket; grpo-best not DONE yet. Pre-registration `preregistration/organism-analysis.md`.
+- 17:09 UTC  pod oa-p0 (A40, $0.49/h) created after the pre-registration commit (3ac05e64, 17:03). Forward passes: teacher-forced + on-policy entropy, 111 checkpoints (c12 14 / c6 11 / rfc 12 per seed); first job: ≈ 45 s per checkpoint, peak 14.2 GB at batch 2,048. Exposure counts (EI training mixes) on the same pod's CPU.
+- 17:36 UTC  second pod oa-p1 (A40, $0.49/h) for seed 2's forward passes (wall time); oa-p0 runs seeds 0-1 + exposure.
+- 18:09 UTC  oa-p0 done (seeds 0-1, exposure), pulled, deleted (1.00 h, $0.49).
+- 18:32 UTC  oa-p1 done (seed 2), pulled, deleted (0.90 h, $0.44). **All read-outs UNREVIEWED** (models: best-cap12 / best-cap6 s0-s2, 9.56M, lean_staten; rfc starts). Q1: worst-step-only CV AUC 0.77 (c12) / 0.63 (c6) / 0.70 (rfc); multi-feature +0.10-0.16 at c6 / rfc; top feature reference term size (post hoc: reductio). Q2: ¬I boxes (post hoc: ¬¬X) do not move; other classes gain also in never-solved theorems. Q3: entropy drops 16-30 % at r1 only; distinct proofs rise every round (no collapse). 1.90 pod-h, $0.93. `organism/ANALYSIS.md`, `run_organism_analysis.md`, `numbers.md` § organism-analysis. Bucket `hf://buckets/dan-pandori/nd-rl/organism-analysis/`.
+
+ORGANISM-ANALYSIS DONE 2026-10-02T18:32:43Z

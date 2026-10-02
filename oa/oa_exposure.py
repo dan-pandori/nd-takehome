@@ -41,6 +41,9 @@ for r in range(1, a.rounds + 1):
                 fail += 1; continue
             ks = [step_class(' '.join(act)) for _, act, _ in steps]
             cls.update(ks)
+            # post hoc: negation boxes that prove a double negation (have n : ( ¬ ( ¬ X ) ) := ( fun ...)
+            cls.update('box:neg:dneg' for (_, act, _), k in zip(steps, ks)
+                       if k == 'box:neg' and '( ¬ ( ¬' in ' '.join(act).split(':=')[0])
     thms = len({p for p, _ in seen})
     res[str(r)] = {'mix_records': n_all, 'rl_distinct': len(seen), 'rl_theorems': thms, 'decompose_fail': fail,
                    'class_steps': dict(cls)}

@@ -1701,3 +1701,35 @@ step-cap rates re-read at `max_action` 1,024, `max_steps` 192 (`artifacts/bs/eva
 Truncation barely falls at twice the action budget: these are non-terminating actions, not long proofs cut off. The
 caps make the best-recipe numbers slightly low (≤ 2 textbook problems per checkpoint); no conclusion changes. Final spend
 60.74 pod-hours, $29.76.
+
+## organism-analysis (2026-10-02, executor; UNREVIEWED)
+
+**Models (inherited, no training).** best-cap12 (**c12**, `trajectory`) and best-cap6 (**c6**, `trajectory-cap6`)
+seeds 0–2: `best_model.ALiBiGPT` 6 × 384, 9,560,832 params, `lean_staten`, from scratch (K12 / cap-6 sets, Stage-1
+1,200 s A40), T1 EI ladders r1–r8; **rfc** = c12 seeds with ladders from steps 1,600 / 5,000 / 12,000 / 16,000
+(`rl-from-ckpt`). Lean alone (post-2026-09-27). Theorems: textbook72 + holdout250 (307 with a replayable reference).
+Write-up `organism/ANALYSIS.md`; scripts `oa/`.
+
+| quantity | value | source |
+|---|---|---|
+| Q1 CV AUC, start-unsolved → solved at r8, w1 / logistic / GBM: c12 | 0.765 / 0.774 / 0.872 (x1: 0.741 / 0.724 / 0.747) | `artifacts/oa/q1_stdout_x0.txt`, `q1_stdout_x1.txt` |
+| same, c6 | 0.634 / 0.754 / 0.805 | same |
+| same, rfc (4 starts) | 0.697 / 0.831 / 0.864 | same |
+| w1 at P(solve) = 0.5: c12 / c6 / rfc | −10.5 / −21.6 / −15.0 nats | same |
+| P(solved at r8), term size ≤ 8 vs ≥ 9 | 0.80–1.0 vs 0.39–0.47 (all three) | `q1_extra_stdout.txt` |
+| POST HOC P(solved), reductio ∧ term ≥ 9: c12 / c6 / rfc | 0.31 / 0.22 / 0.26 | same |
+| transfer c12 → c6, logistic / GBM AUC | 0.766 / 0.791 | `q1_stdout_x0.txt` |
+| hard steps (r0 < −4): c12 / c6 / rfc | 629 / 1,282 / 4,585; box + ∧E 65 / 60 / 59 % | `q2_stdout.txt` |
+| ¬I box hard steps, median r0 → r8: c12 / c6 | −7.17 → −6.41 / −9.34 → −8.82 | same |
+| POST HOC ¬¬X boxes, median gain: c12 / c6 (per seed c6 −0.67 / −2.12 / −0.76) | +0.90 / −1.46 | same |
+| never-solved theorems' hard-step gain per seed: c12 / c6 | +0.53 / +2.79 / +3.44; +4.49 / +2.91 / +2.96 | `q2_results.json`, this run's log |
+| class partial R² (all / never-solved): c12, c6 | 0.12 / 0.37; 0.18 / 0.35 | `q2_stdout.txt` |
+| ¬¬X share of negation boxes in RL training steps: c12 / c6 | 48.3 % / 36.1 % | `q2_exposure_stdout.txt` |
+| on-policy entropy (T 0.8) r0 → r1 → r8, c12 s0/s1/s2 | .0464→.0349→.0365; .0500→.0369→.0389; .0489→.0378→.0374 | `q3_entropy_stdout.txt` |
+| same, c6 | .0373→.0314→.0360; .0460→.0320→.0343; .0398→.0322→.0334 | same |
+| Cui fit R² (r0–r8, training acc.): c12; c6 | .82/.86/.93; .18/.74/.85; b − a 1.8–2.7 | same |
+| median distinct pruned proofs per A-theorem r0 → r8: c12; c6 | 5/8/6 → 31/37/39; 2/2/1 → 13/7/6.5 | `q3_div_stdout.txt` |
+| compute | 6,991 A40 GPU-s, 92.6 M gen tokens, 454,656 attempts; 0 training; pods 1.90 h, $0.93 | `compute_stdout.txt`, `~/podhours.log` |
+
+**Bucket:** `hf://buckets/dan-pandori/nd-rl/organism-analysis/{artifacts/oa,artifacts/organism-analysis,data/oa,data/oa_in}`
+(entropy JSONs per checkpoint, compacted reads, registry rows). Checkpoints are the inherited runs' (md5s match, 111 / 111).
