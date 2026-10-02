@@ -1,0 +1,77 @@
+{
+"ctl_untouched": {
+"n": 60,
+"pass": 60,
+"unexpected": []
+},
+"ctl_leanrej": {
+"n": 60,
+"pass": 0,
+"unexpected": []
+},
+"ctl_flip": {
+"n": 60,
+"pass": 4,
+"unexpected": [
+[
+"passk s1 r8 x0 la_transfer_1430",
+"THM R , ( S v ( ~ R ) ) SEQ ( S v S ) PRF",
+"N1 R : PR ; N2 ( S v ( ~ R ) ) : PR ; N3 | S : AS ; N4 | | S : AS ; N5 | | ( S v S ) : ORI1 N4 ; N6 | | ( ~ R ) : AS ; N7 | | S : R N3 ; N8 | | ( S v S ) : ORI1 N7 ; N9 | ( S v S ) : ORE N2 N4 N5 N6 N8 ; N10 | ( ~ R ) : AS ; N11 | | ( ~ S ) : AS ; N12 | | | S : AS ; N13 | | | F : NEGE N12 N11 ; N14 | | | ( ~ R ) : AS ; N15 | | | F : NEGE N1 N10 ; N16 | | F : ORE N2 N12 N13 N14 N15 ; N17 | ( ~ ( ~ S ) ) : NEGI N11 N16 ; N18 | S : DN N17 ; N19 | ( S v S ) : ORI1 N18 ; N20 ( S v S ) : ORE N2 N3 N9 N10 N19 ; QED",
+""
+],
+[
+"distinct s2 r4 x1 la_transfer_1206",
+"THM ( ( ~ P ) v ( P & R ) ) SEQ ( ( ~ ( ~ R ) ) > ( ( ~ ( ~ ( R & Q ) ) ) > ( R v R ) ) ) PRF",
+"N1 ( ( ~ P ) v ( P & R ) ) : PR ; N2 | ( ~ ( ~ R ) ) : AS ; N3 | | ( ~ P ) : AS ; N4 | | R : DN N2 ; N5 | | R : R N4 ; N6 | | ( P & R ) : AS ; N7 | | R : ANDE2 N6 ; N8 | | R : R N7 ; N9 | | R : R N7 ; N10 | R : ORE N1 N3 N5 N6 N9 ; N11 | R : R N10 ; N12 | | ( ~ ( ~ ( R & Q ) ) ) : AS ; N13 | | R : R N11 ; N14 | | ( R v R ) : ORI1 N13 ; N15 | ( ( ~ ( ~ ( R & Q ) ) ) > ( R v R ) ) : IMPI N12 N14 ; N16 ( ( ~ ( ~ R ) ) > ( ( ~ ( ~ ( R & Q ) ) ) > ( R v R ) ) ) : IMPI N2 N15 ; N17 ( ( ~ ( ~ R ) ) > ( ( ~ ( ~ ( R & Q ) ) ) > ( R v R ) ) ) : R N16 ; QED",
+""
+],
+[
+"unlikely s1 r8 x1 la_transfer_1430",
+"THM R , ( S v ( ~ R ) ) SEQ ( S v S ) PRF",
+"N1 R : PR ; N2 ( S v ( ~ R ) ) : PR ; N3 | S : AS ; N4 | | S : AS ; N5 | | ( S v S ) : ORI1 N3 ; N6 | | ( ~ R ) : AS ; N7 | | S : R N3 ; N8 | | ( S v S ) : ORI1 N7 ; N9 | ( S v S ) : ORE N2 N4 N5 N6 N8 ; N10 | ( ~ R ) : AS ; N11 | F : NEGE N1 N10 ; N12 | ( S v S ) : BOTE N11 ; N13 ( S v S ) : ORE N2 N3 N9 N10 N12 ; QED",
+""
+],
+[
+"default s0 r8 x0 la_transfer_508",
+"THM R , ( ( P v P ) v R ) SEQ ( ( ~ ( ~ ( R > P ) ) ) > ( R > ( P v P ) ) ) PRF",
+"N1 R : PR ; N2 ( ( P v P ) v R ) : PR ; N3 | ( ~ ( ~ ( R > P ) ) ) : AS ; N4 | | R : AS ; N5 | | ( R > P ) : DN N3 ; N6 | | P : IMPE N5 N1 ; N7 | | ( P v P ) : ORI1 N6 ; N8 | ( R > ( P v P ) ) : IMPI N4 N7 ; N9 ( ( ~ ( ~ ( R > P ) ) ) > ( R > ( P v P ) ) ) : IMPI N3 N8 ; QED",
+""
+]
+]
+},
+"ctl_mismatch": {
+"n": 60,
+"pass": 0,
+"unexpected": []
+},
+"EI": {
+"n": 150,
+"pass": 150,
+"unexpected": []
+},
+"default": {
+"n": 235,
+"pass": 235,
+"unexpected": []
+},
+"unlikely": {
+"n": 400,
+"pass": 400,
+"unexpected": []
+},
+"passk": {
+"n": 727,
+"pass": 727,
+"unexpected": []
+},
+"distinct": {
+"n": 299,
+"pass": 299,
+"unexpected": []
+},
+"ctl_sorry": {
+"n": 1,
+"pass": 0,
+"unexpected": []
+}
+}
