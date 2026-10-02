@@ -171,6 +171,22 @@ def pg_update(model, ref, tok, rolls, adv, opt, norm_div, kl, lp_batch, temperat
     return loss_t, (kl_sum / kl_n if kl_n else None), gn, len(flat), ntok
 
 
+def eval_generate(stats, model, tok, prompts, batch, **kw):
+    """sl.generate for the boundary evaluations, halving the decode batch after a CUDA OOM (run grpo-best: two ladders
+    per 48 GB card OOM'd here at 2,048).  A decode-batch change is a sampling re-draw, not a correctness change; each
+    fallback is recorded in the round's stats as 'eval_batch_fallback'."""
+    while True:
+        try:
+            return sl.generate(model, tok, prompts, batch=batch, **kw)
+        except torch.OutOfMemoryError:
+            if batch <= 128:
+                raise
+            torch.cuda.empty_cache()
+            stats.setdefault('eval_batch_fallback', []).append(batch // 2)
+            print(f'boundary evaluation OOM at decode batch {batch}: retrying at {batch // 2}', flush=True)
+            batch //= 2
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--init', required=True); ap.add_argument('--name', required=True)
@@ -319,7 +335,7 @@ def main():
         if not a.no_eval:
             sl.ENV['stats'] = {}
             prompts = [t['prompt'] for t in transfer for _ in range(a.k)]
-            flat = sl.generate(model, tok, prompts, greedy=False, temperature=a.temperature, batch=a.batch, seed=seed + 500)
+            flat = eval_generate(stats, model, tok, prompts, greedy=False, temperature=a.temperature, batch=a.batch, seed=seed + 500)
             rows_t = judge(transfer, [flat[i * a.k:(i + 1) * a.k] for i in range(len(transfer))], 'n_lines')
             stats['transfer_round'] = summarize(rows_t, 'n_lines', f'[{a.name} r{r}] transfer (boundary, pass@{a.k})')
             stats['transfer_sample_acc'] = sum(x['n_ok'] for x in rows_t) / sum(x['n_tried'] for x in rows_t)
@@ -329,9 +345,9 @@ def main():
                     pn = norm(p)
                     if pn not in have:
                         have.add(pn); found_t[t['name']].append({'proof': p, 'norm': pn, 'written': wl, 'pruned': pl, 'round': r})
-            g = sl.generate(model, tok, [t['prompt'] for t in transfer], greedy=True, batch=a.batch)
+            g = eval_generate(stats, model, tok, [t['prompt'] for t in transfer], greedy=True, batch=a.batch)
             stats['transfer_greedy'] = summarize(judge(transfer, [[p] for p in g], 'n_lines'), 'n_lines', f'[{a.name} r{r}] transfer greedy')
-            g = sl.generate(model, tok, [t['prompt'] for t in heldout], greedy=True, batch=a.batch)
+            g = eval_generate(stats, model, tok, [t['prompt'] for t in heldout], greedy=True, batch=a.batch)
             stats['heldout_greedy'] = summarize(judge(heldout, [[p] for p in g], 'n_lines'), 'n_lines', f'[{a.name} r{r}] heldout greedy')
             stats['env_eval'] = env_stats_json(sl.ENV['stats'])
         for pool, fd, recs in (('targets', found, targets), ('transfer', found_t, transfer)):
