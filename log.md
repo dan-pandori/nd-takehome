@@ -901,3 +901,16 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   Code = `git archive origin/dan_support-state` (*.py, data/sc, pod/ss). `podnew ca1` (A40) waiting for stock.
 - 18:58  C5–C7 sub-auditor done: every stated number re-derives exactly; C5 caveats (week-in-review sentence weaker),
   C6 caveats, C7 weaker than stated. Lean 122/122 accepted, 366/366 negative controls rejected.
+- 19:05  A40 never got an SSH port (12 min, removed by `podnew`); `ca1` = RTX A6000, $0.53/h billed. First launch died
+  on a missing `nd_verify` package (imported for parsing; judges nothing) — pushed and relaunched 19:16.
+- 19:15  C1–C2 sub-auditor done (C1 caveats; C2a solid; C2b caveats/weaker). Lead recount corrected one sentence in
+  `C1.md` (base s1: la_transfer_1645 in both 10k draws, _543 in support-followups A only).
+- 19:19  R2 read: EI s0 29 / 29 at p̂ ≥ 0.01 on a fresh seed (min 0.0245).
+- 19:20  Pre-registration addendum 1 (R3: WP base s1, 29 survivors, 200k at T 0.8; expected 3–8 reached), launched.
+- 19:25  C3–C4 sub-auditor done (both caveats). compute-match (2026-10-02) already answers C4's ladder-compute objection
+  at cap 12; folded into the ledger.
+- 19:30  Definitional check: at EI's p̂ ≥ 0.01 bar the SN base clears 21 (s0) / 14 (s1) of the 29, not 28.
+- 20:20  R1 done: SN base s0 26 / 29 within 10k at T 0.8 (on file 26), 21 at p̂ ≥ 0.01 (on file 21).
+- 21:04  R3 done: base s1 reaches 3 / 29 in 200k (1645, 1759, 543); 26 at 0 / 200,000. Pod deleted 21:05 (2.0 h, $1.06;
+  balance $164.85). Lean on re-samples: 27 / 27 accepted, 27 / 27 wrong-theorem controls rejected.
+- 21:07  Compute rows to the registry (`artifacts/claim-audit/registry/`). Ledger, run file, numbers written.

@@ -1701,3 +1701,37 @@ step-cap rates re-read at `max_action` 1,024, `max_steps` 192 (`artifacts/bs/eva
 Truncation barely falls at twice the action budget: these are non-terminating actions, not long proofs cut off. The
 caps make the best-recipe numbers slightly low (≤ 2 textbook problems per checkpoint); no conclusion changes. Final spend
 60.74 pod-hours, $29.76.
+
+## claim-audit (2026-10-02)
+
+Adversarial audit of the project's headline claims; ledger `audit/CLAIMS.md`, per-claim detail `audit/C1.md`–`C7.md`
+(every number there names its source file, md5 and model). Checker: Lean alone. Numbers new to this run:
+
+**Re-derivations.** Every stated headline count re-derived exactly with new code (`audit/scripts/c*_*.py`, outputs
+`audit/out/`). Lean re-check with own drivers: 471 / 471 accepted proofs accepted, 1,435 / 1,435 negative controls
+rejected (incl. 27 / 27 + 27 / 27 on the CA3 re-samples, `audit/out/ca_resample_lean.tsv`) (`audit/out/c12_lean_out.tsv`, `c34_lean_c3.json`, `c34_lean_c4*.json`, `c567_lean.json`).
+
+**CA1 — SN base at EI's "solves" bar** (`audit/raw/ss/H_base_T08_s{0,1}.s0.jsonl` = bucket
+`support-state/artifacts/ss/`; SN base s0/s1 `stage1_SN_s{0,1}.pt` ec3888d9 / d8b21e4c, 3,216,384 params, `lean_staten`,
+from scratch on `train_depth3_f0_a1`, no RL): survivors with T 0.8 p̂ ≥ 0.01: **21 (s0), 14 (s1)** of 29; ≥ 1 hit at
+T 0.8: 27 / 26 (p̂ from `stop_at` 5 rows).
+
+**CA2 — base s1 on the survivors, prior files** (bucket `support-curves/artifacts/sc/s3_base_T08_s1.s*.jsonl`,
+`support-followups/artifacts/sf/a_base_T08_s1.s0.jsonl`; WP base s1 `stage1_a1_seq_s1.pt` fc27e52d, 3,214,336 params,
+`lean_seq`, cap 6, from scratch, no RL): la_transfer_1645 1 / 10,000 and 3 / 10,000; la_transfer_543 0 / 10,000 and
+1 / 10,000. 2 of 29 over 20,000 pooled.
+
+**CA3 — re-sampling, pod `ca1` (RTX A6000, $0.53/h billed), fresh sampling seeds, no early stopping**
+(`audit/scripts/ca_resample.py`; raw `audit/raw/ca/`, bucket `claim-audit/audit/raw/ca/`):
+- R2: support-curves EI s0 `la_T1_sc_s0_r8.pt` (5cebd7ec; 3,214,336 params, `lean_seq`, base s0 + 8 EI rounds) on the 29,
+  T 0.8, k 2,000, seed 9002: **29 / 29 at p̂ ≥ 0.01**, min 0.0245, median 0.573 (on file: 29, min 0.022). |z| > 2 on 1 / 29.
+- R1: SN base s0 (as CA1) on the 29, T 0.8, k 10,000, seed 9001: **26 / 29 reached** (on file: 26 within the first
+  10,000), **21 at p̂ ≥ 0.01** (on file 21); zeros la_transfer_588, _1893, _454. |z| > 3 on 1 / 29 (la_transfer_149,
+  0.552 vs 0.523).
+- R3: WP base **s1** `stage1_a1_seq_s1.pt` (fc27e52d; as CA2) on the 29, T 0.8, k 200,000, `stop_at` 1, seed 9003
+  (5,240,960 attempts): **3 / 29 reached** (la_transfer_1645 first hit 654, _1759 7,058, _543 27,493); 26 at 0 / 200,000.
+- Compute (CA3, from job logs `audit/raw/ca/*.log` and `podrm`): one RTX A6000, 2.0 pod-hours, $1.06; R1 290,000 env
+  attempts, R2 58,000 samples, R3 5,240,960 samples; 0 training steps.
+- Bucket: `hf://buckets/dan-pandori/nd-rl/claim-audit/audit/` (ledger, C1–C7, scripts, outputs, `raw/ca/` re-sample rows,
+  logs and Lean dump) and `.../claim-audit/artifacts/claim-audit/registry/` (compute rows). Other runs' raw files the
+  audit read are referenced by their own bucket paths and md5s in `audit/out/` (not re-uploaded).

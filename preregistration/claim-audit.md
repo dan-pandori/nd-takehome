@@ -54,7 +54,7 @@ Pod budget $8 / 16 h (`podbudget claim-audit --set 16 8` before any pod), re-sam
 Balance floor $100. Stop when all seven claims are rated with evidence, or when the pod budget is spent
 (then rate on artefacts alone). At most 4 concurrent processes on the VPS.
 
-## Addendum 1 (2026-10-02 ~19:25 UTC, before R3 is launched; R1 still running, R2 read)
+## Addendum 1 (2026-10-02 19:20 UTC, before R3 is launched; R1 still running, R2 read)
 
 R2 (EI s0 fresh seed) is read: 29 / 29 at p̂ ≥ 0.01. The C1 sub-auditor found that "its base never solved" rests on one
 base seed (s0): base s1 reached 2 of the 29 in 20,000 pooled T 0.8 attempts. New job **R3**: WP base s1

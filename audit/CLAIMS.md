@@ -16,7 +16,7 @@ One claim is solid as stated (the state base's 28 / 29). The others need narrowe
 
 | # | claim (as shared) | rating | strongest objection | suggested wording |
 |---|---|---|---|---|
-| C1 | EI solves 29 theorems its base never solved in 400k attempts; an 8× base does not reach them | **holds with caveats** | "Never" is one base seed (s0). Base s1 reaches 2 of the 29 (1 per 10k draw, 2 over 20k). The 8× base reaches 0 and 2, and it is not a better prover (worse on 6-line held-out). | "After 8 EI rounds one model solves 29 transfer theorems (held-out p̂ 0.04–0.99) that its base seed solved 0 times in 400,000 attempts; a second base seed reaches 2 of them in 20,000; a 7.9× larger base on the same data reaches 0 and 2." |
+| C1 | EI solves 29 theorems its base never solved in 400k attempts; an 8× base does not reach them | **holds with caveats** | "Never" was one base seed (s0). This audit's R3 gave base s1 200,000 T 0.8 attempts on each: it reaches **3** of the 29 and 26 stay at 0. The 8× base reaches 0 and 2, and it is not a better prover (worse on 6-line held-out). EI's p̂ reproduces on fresh draws (R2: 29 / 29 ≥ 0.01). Selection, leakage, truncation and the checker all pass. | "After 8 EI rounds one model solves 29 transfer theorems (p̂ ≥ 0.02 on fresh draws) that its base seed solved 0 times in 400,000 attempts; a second base seed reaches 3 of them in 200,000 and 26 not at all; a 7.9× larger base on the same data reaches 0 and 2." |
 | C2a | A proof-state base reaches 28 of the 29 with no RL | **solid** (as a *reach* statement) | "Reaches" means ≥ 1 Lean-accepted proof within ≤ 400k attempts. At EI's own bar for "solves" (p̂ ≥ 0.01) the SN base clears **21 (s0) / 14 (s1)** of 29. | Keep "reaches 28 of 29 per seed (23–26 within 10,000 attempts)". Do not set it against "EI solves 29" without saying the two use different bars. |
 | C2b | It is seeing the state, not the environment's naming | **weaker than stated** | "State" is confounded with the whole step interface. The environment writes the box-closing and Or.elim-branch tokens, and a failed action ends the attempt. No arm has the steps without the state. "Not naming" is a null on reach at n = 2 per arm, and naming lowers per-theorem rates (S/SN median p̂ ratio 0.16 on s0, 0.69 on s1). | "A base acting through the proof-state step interface reaches 28/29; a variant that writes its own names reaches 28 and 25. No naming effect on reach is detected at 2 seeds, though its per-theorem rates are lower. The state and the step interface are not separated." |
 | C3 | The proof state and cap 12 compound; the best model solves nearly all of the long pools | **holds with caveats** | "Compound" holds as "together far beyond either alone": 233–320 of 380 vs ≤ 102, every seed. Super-additivity is scale-dependent: +153 on counts (p 0.09), −0.63 on logit (p 0.55). Three of the four cells have n = 2 and the ladders are unmatched. The best model was read on 2 of the 3 long pools (not the ≥ 17 file). "No fall-off past 17" has power 0.72 for a 20 pp drop, and no theorem is labelled > 18. | "With the proof state and cap-12 training together the model solves 233–320 of 380 long theorems, against ≤ 102 for either lever alone. Whether the levers interact is unresolved. The best model saturates rr600 and long2 (it was not read on the ≥ 17 pool)." |
@@ -42,8 +42,9 @@ the long pools" covers 2 of 3 pools (C3).
 | SN-cap12 / SN-v2 / K12, long pools | state-cap12, long-pool, long-pool-2 (38 pairs) | Q differences ≤ 7 (\|z\| ≤ 1.31); ≥ 17 file: 1 / 24 at z 2.6 (s3, 46 vs 41) |
 | 66 checkpoints, textbook72 | trajectory x0 vs x1 draws (133 pairs) | ≤ 4 problems apart; 7 / 133 at \|z\| > 1.96 (6.6 expected); sd(z) 1.11 |
 | best12 / best6 recipes, textbook72 | best-state vs trajectory (fresh trainings) | +1.3 and −3.3; inside the spread |
-| SN base s0, 29 survivors (**this audit**, fresh seed) | support-state H vs claim-audit R1 | see § Re-sampling |
-| EI s0, 29 survivors (**this audit**, fresh seed) | support-curves stage 1 vs claim-audit R2 | see § Re-sampling |
+| SN base s0, 29 survivors (**this audit**, fresh seed) | support-state H vs claim-audit R1 | 26 vs 26 reached within 10k; 21 vs 21 at p̂ ≥ 0.01; \|z\| > 3 on 1 / 29 |
+| EI s0, 29 survivors (**this audit**, fresh seed) | support-curves stage 1 vs claim-audit R2 | 29 vs 29 at p̂ ≥ 0.01; \|z\| > 2 on 1 / 29 |
+| WP base s1, 29 survivors | support-curves s3 / support-followups A vs claim-audit R3 | 1 and 2 reached in 10k each vs 3 in 200k; consistent |
 
 **No disagreement beyond what multiplicity predicts.** One caution: several "agreements" are **deterministic replays**,
 not independent checks: the same checkpoint and the same sampling seed give bit-identical reads. These are
@@ -75,13 +76,28 @@ reproducibility of the pipeline, not the size of the sampling spread. Do not cit
 | C1 / C2 (survivors: EI, base, big, SN, S) | 82 / 82 | 82 / 82 |
 | C3 / C4 (long pools, textbook72; 48 are `nd2lean` renderings of stored ND) | 240 / 240 | 960 / 960 (4 kinds × 240) |
 | C5–C7 (trajectory, rl-from-ckpt, M2) | 122 / 122 | 366 / 366 |
+| this audit's re-samples (R1–R3) | 27 / 27 | 27 / 27 |
+| **total** | **471 / 471** | **1,435 / 1,435** |
 
 The harness is valid: every control kind was rejected. The controls were wrong theorem, negated goal, final step
 dropped, `exact sorry`, swapped names and truncated text.
 
-## Re-sampling (pod `ca1`, RTX A6000)
+## Re-sampling (pod `ca1`, RTX A6000, $0.53/h billed; 2.0 h, $1.06; fresh sampling seeds, no early stopping)
 
-PENDING
+Script `audit/scripts/ca_resample.py`; raw rows `audit/raw/ca/` (bucket `claim-audit/audit/raw/ca/`); job scripts
+`audit/pod/`. Code = `git archive origin/dan_support-state` (`support.py`, `ss_support.py`, unchanged).
+
+| job | model | setting | result | on file |
+|---|---|---|---|---|
+| R2 | support-curves EI s0 `la_T1_sc_s0_r8.pt` (5cebd7ec; 3.2 M, `lean_seq`, base s0 + 8 EI rounds) | 29 survivors, T 0.8, k 2,000, seed 9002 | **29 / 29 at p̂ ≥ 0.01**, min 0.0245, median 0.57; \|z\| > 2 on 1 / 29 | 29 / 29, min 0.022 |
+| R1 | SN base s0 `stage1_SN_s0.pt` (ec3888d9; 3.2 M, `lean_staten`, no RL) | 29 survivors, T 0.8, k 10,000, seed 9001 | **26 / 29 reached**, 21 at p̂ ≥ 0.01; \|z\| > 3 on 1 / 29 (la_transfer_149, 0.55 vs 0.52) | 26 within 10,000; 21 |
+| R3 | WP base **s1** `stage1_a1_seq_s1.pt` (fc27e52d; 3.2 M, `lean_seq`, no RL) | 29 survivors, T 0.8, k 200,000, `stop_at` 1, seed 9003 | **3 / 29 reached** (1645 at 654, 1759 at 7,058, 543 at 27,493); 26 at 0 / 200,000 | (2 / 29 in 20,000) |
+
+Lean (own driver `c12_lean.py`): 27 / 27 re-sampled accepted proofs accepted (all 3 R3 hits, 12 R2, 12 R1), 27 / 27
+wrong-theorem controls rejected (`audit/out/ca_resample_lean.tsv`).
+Reading: C1's EI side and C2a reproduce on fresh draws. Pre-registered expectation for R3 was 3–8 reached, with ≤ 4 meaning
+"never" is close to seed-independent. Outcome 3: **26 of the 29 are unreached by both base seeds** at ≥ 200,000 T 0.8 attempts
+each. C1 stays *holds with caveats*; the caveat narrows from "one seed" to "3 of the 29 fall to the other seed".
 
 ## Multiple comparisons, forking paths, seeds
 
@@ -92,3 +108,16 @@ PENDING
 - Seed counts: C2b and C3's cells are n = 2 per arm. `NOISE_FLOOR.md` notes that 2 vs 2 can never reach p < 0.05.
   `NOISE_FLOOR.md` has no row for the state models, textbook72 or long pools, so the MDDs here come from observed seed
   spread.
+
+## Pre-registered expectations vs outcome (`preregistration/claim-audit.md`)
+
+- E1 (≥ 6 of 7 re-derive exactly): **hit**. All 7 re-derived exactly. One sub-auditor sentence was wrong and is corrected
+  in `C1.md`: base s1's two hits are not both in both draws.
+- E2 (≥ 1 cross-run pair outside the sampling spread): **missed**. The extremes (1 / 24 at z 2.6, 1 / 40 and 1 / 29 at
+  \|z\| > 3) are what multiplicity predicts.
+- E3 (0 survivors leak): **hit**. There is 1 textbook72 premise-order overlap, outside the survivors.
+- E4 (0 Lean rejections; all controls rejected): **hit**.
+- E5 (ratings): C1, C3, C6 and C7 as predicted. C2 split: the 28 / 29 itself is *solid* (I predicted caveats), and the
+  naming half is weaker. C4 came out *holds with caveats*, not the predicted *weaker*: it replicates in independent runs
+  and compute-match removed the ladder-compute objection. C5's run findings hold with caveats; the week-in-review
+  sentence is weaker, as predicted. Addendum R3 (3–8 expected): 3.

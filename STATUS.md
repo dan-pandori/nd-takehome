@@ -241,3 +241,6 @@ BEST-STATE DONE 2026-10-01T05:00:12Z
 
 - 18:41 pre-registration `preregistration/claim-audit.md` (eb12ce49). Audit of 7 headline claims from raw
   artefacts; deliverable `audit/CLAIMS.md`. Pod budget $8 / 16 h, re-sampling only.
+- 21:05  Re-sampling done (R1–R3, RTX A6000 2.0 h, $1.06); pod deleted. All 7 claims rated in `audit/CLAIMS.md`:
+  2 solid parts (C2a, C4b), 6 holds-with-caveats, 3 weaker-than-stated (C2b, C5b, C7), 0 not supported.
+CLAIM-AUDIT DONE 2026-10-02T21:07:57Z
