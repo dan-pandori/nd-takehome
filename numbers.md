@@ -1701,3 +1701,73 @@ step-cap rates re-read at `max_action` 1,024, `max_steps` 192 (`artifacts/bs/eva
 Truncation barely falls at twice the action budget: these are non-terminating actions, not long proofs cut off. The
 caps make the best-recipe numbers slightly low (≤ 2 textbook problems per checkpoint); no conclusion changes. Final spend
 60.74 pod-hours, $29.76.
+
+## grpo-best (2026-10-02, executor; UNREVIEWED)
+
+**Models (every number here).** Base: `trajectory`'s best-cap12 s0 / s1 / s2. These are `best_model.ALiBiGPT` 6 × 384, 9,560,832 params,
+`lean_staten`, trained from scratch on K12 `data/kh/train_k12.jsonl` (155,000) for 1,200 s on an A40:
+`hf://buckets/dan-pandori/nd-rl/trajectory/ckpts/tj/stage1_best12_s<S>_b1200.pt` (md5 2bf801fd / eaff7f4d / abca9c63, checked
+against `trajectory`'s `ckpts_s<S>.md5`).
+- **EI (inherited):** `trajectory`'s T1 ladder, `trajectory/ckpts/tj/ladder/la_T1_best12_s<S>_r<k>.pt` (RTX A6000). Its read-outs are
+  `trajectory`'s files, copied to `artifacts/gb/ei_eval/` (bucket only). Its r8 dev metric and held-out greedy were read here.
+- **GRPO:** `grpo_state.py` from the same base → `hf://buckets/dan-pandori/nd-rl/grpo-best/ckpts/gb/gb_<adv>_s<S>_r<k>.pt`.
+  Settings: G 8, 256 theorems per update, 561 updates, AdamW lr 3e-5 (β 0.9 / 0.95, wd 0, clip 1), no KL, T 0.8, caps 256 / 48,
+  decode batch 2,048. Arms: `default`, `unlikely` (β_rank 0.25), `passk` (k 4), and `distinct` (bonus 0.5; stopped at r4).
+- **Checker:** Lean alone (state-env gate).
+
+**Read-outs.** `state_eval.py` with k 256, T 0.8, `max_action` 512, `max_steps` 96, sample seeds 0 and 1, on textbook72 + holdout250
+(`pod/gb/read.sh`, as `trajectory`'s `pod/tj/read.sh`). Some reads ran at decode batch 1,024 (see log.md).
+- Dev metric: dev1108, k 64, seed 0. Held-out greedy: 5,000, T 0.
+- Files: `artifacts/gb/eval/<label>__<read>_x<seed>.json` (summaries in git; per-theorem `.jsonl` in the bucket).
+- Tables: `python3 gb_analysis.py` → `artifacts/gb/analysis_stdout.txt`, `artifacts/gb/summary.json`.
+- Groups: `gb_groups.py` → `artifacts/gb/groups.json`, reproducing `trajectory`'s A / B / C = 232 / 54 / 36, 236 / 51 / 35, 234 / 60 / 28.
+
+| r8, per seed s0 / s1 / s2 → IQM (n = 3: mean) | EI | GRPO default | GRPO unlikely | GRPO pass@4 |
+|---|---|---|---|---|
+| group C solved, k 256, sample seed 1 (MDD 3.5) | 3 / 1 / 1 → 1.7 | 2 / 9 / 3 → 4.7 (+3.0, inside) | 3 / 8 / 4 → 5.0 (+3.3, inside) | 6 / 19 / 3 → 9.3 (+7.7, outside) |
+| group C solved, either sample seed | 3 / 1 / 1 | 4 / 10 / 3 | 3 / 9 / 4 | 10 / 19 / 4 |
+| all 322 solved, sample seed 1 (MDD 9.3) | 288 / 284 / 290 | 278 / 278 / 279 | 277 / 277 / 279 | 286 / 301 / 285 |
+| textbook72 solved, sample seed 0 (MDD 9.8) | 48 / 49 / 54 | 43 / 46 / 49 | 41 / 45 / 49 | 52 / 52 / 48 |
+| arm-only vs EI-only theorems (322 × 3 seeds, either sample seed); sign test | — | 15 vs 38, p 0.0022 | 15 vs 44, p 0.0002 | 33 vs 20, p 0.098 |
+| … of which in C (arm-only / EI-only) | — | 15 / 3 | 15 / 4 | 32 / 4 |
+| held-out greedy (Stage-1: .921 / .936 / .962) | .985 / .992 / .994 | .992 / .984 / .990 | .990 / .988 / .989 | .985 / .980 / .985 |
+| dev metric (1,108, k 64) | 1,055 / 1,043 / 1,060 | 1,022 / 1,024 / 1,031 | 1,024 / 1,023 / 1,034 | 1,064 / 1,070 / 1,039 |
+| C solves with a ⊥-elim + DN proof (pooled; `gb_peirce.py`) | 2 of 5 | 7 of 17 | 8 of 16 | 13 of 33 |
+
+**pass@1 / pass@256 by group** (sample seed 1; IQM over seeds):
+
+| group | EI r2 / r4 / r8 | default r2 / r4 / r8 | unlikely r2 / r4 / r8 | pass@4 r2 / r4 / r8 |
+|---|---|---|---|---|
+| A | .82/.997, .83/.994, .85/.994 | .82/.98, .87/.98, .89/.98 | .81/.97, .87/.98, .89/.98 | .74/.991, .79/.994, .83/.996 |
+| B | .29/.81, .44/.91, .56/.96 | .27/.64, .41/.76, .54/.81 | .27/.62, .41/.74, .55/.79 | .22/.74, .35/.85, .46/.88 |
+| C | .000/.012, .000/.073, .000/.049 | .001/.06, .007/.07, .057/.14 | .001/.03, .003/.07, .050/.15 | .002/.09, .007/.16, .091/.27 |
+
+Groups A and B are defined by EI's sample-seed-0 reads, which favours EI on B. The all-322 discordant test is the unbiased comparison.
+
+**C solved at r2 / r4** (sample seed 1): EI 0/0/1 and 3/1/3; default 2/2/2 and 1/5/1; unlikely 0/2/1 and 0/5/2; pass@4 2/6/1 and 4/9/3.
+Distinct (partial arm): see `artifacts/gb/analysis_stdout.txt`. Its reads truncate up to 6.2 % of samples, from non-terminating actions.
+
+**Truncation** (action-truncated + step-capped, all reads): EI 0.050 % (worst read 0.41 %, inherited); default 0.010 %;
+unlikely 0.011 %; pass@4 0.011 % (worst 0.06 %).
+
+**Mechanics** (IQM over seeds, from `artifacts/gb/gb_<arm>_s<S>/round_<r>.json`):
+- default: mean target reward 0.72 → 0.95 (r1 → r8); fraction of groups with reward variance 0.38 → 0.07 (mean 0.17); all-fail 0.14 → 0.04.
+- pass@4: reward 0.67 → 0.89; variance fraction 0.54 → 0.37.
+- Base reward at the smoke: ≈ 0.55.
+
+**Compute per ladder** (`python3 gs_compute.py artifacts/grpo-best/registry` → `artifacts/gb/compute_stdout.txt`; registry rows
+`artifacts/grpo-best/registry/`).
+- GPU-seconds are wall-clock seconds of jobs that shared a card two at a time (≈ 1.4× a job alone).
+- default s2 and pass@4 s2 include redone work and extra boundary evaluations after resumes. All distinct runs include restarts.
+
+| ladder | GPU | GPU-s | gen tokens (M) | attempts (M) | train steps | train tokens (M) | Lean checks (M) |
+|---|---|---|---|---|---|---|---|
+| default s0 / s1 / s2 | A6000 | 25,250 / 24,571 / 28,861 | 340 / 336 / 384 | 1.79 / 1.79 / 2.14 | 561 / 561 / 620 | 217 / 210 / 225 | 1.32 / 1.33 / 1.48 |
+| unlikely s0 / s1 / s2 | A6000 | 25,460 / 24,825 / 25,061 | 344 / 339 / 338 | 1.79 each | 561 | 277 / 226 / 222 | 1.32 / 1.34 / 1.32 |
+| pass@4 s0 / s1 / s2 | A6000 / A6000 / A40 | 25,392 / 25,271 / 29,360 | 355 / 355 / 352 | 1.79 / 1.79 / 1.87 | 561 | 141 / 128 / 132 | 1.29 / 1.30 / 1.28 |
+| distinct s0 / s1 / s2 (to r4–r5) | A40 / A40→A6000 / A40 | 31,713 / 34,112 / 32,392 | 321 / 358 / 326 | 1.10 / 1.42 / 1.34 | 340 / 420 / 421 | 668 / 864 / 800 | 0.80 / 0.94 / 0.91 |
+| EI T1 (inherited, `trajectory`) | A6000 alone | 22,350 / 24,467 / 27,021 | 399 / 415 / 435 | 1.79 / 1.79 / 2.01 | 4,800 | 754 / 783 / 751 | 1.30 / 1.31 / 1.42 |
+
+- No pre-registered GRPO ladder exceeds 1.25× EI's GPU-seconds on its seed (max 29,360 / 27,021 = 1.09×) or on any other metric.
+- Train tokens are 0.17–0.37× EI's.
+- Reads: ≈ 1,000–2,200 GPU-s each (registry rows `gb_<arm>_s<S>_r<k>`).
