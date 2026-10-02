@@ -3,4 +3,4 @@
 . ~/.config/nd-rl/env; N=$1; shift; F=~/.config/nd-rl/pods/$N; [ -f "$F" ] || { echo "no pod $N"; exit 1; }; . "$F" 2>/dev/null
 SSHO="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o BatchMode=yes -o LogLevel=ERROR -o ServerAliveInterval=30"
 D=/home/dan/work/rl-from-ckpt/$1; mkdir -p "$(dirname "$D")"
-exec rsync -rlptz --no-o --no-g --exclude 'dump/' -e "ssh $SSHO -p $POD_PORT" "root@$POD_IP:/workspace/nd-takehome/$1" "$(dirname "$D")/"
+exec rsync -rlptz --no-o --no-g --exclude 'dump/' --exclude 'mix_*' --exclude '*.pt' -e "ssh $SSHO -p $POD_PORT" "root@$POD_IP:/workspace/nd-takehome/$1" "$(dirname "$D")/"

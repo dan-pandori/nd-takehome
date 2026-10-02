@@ -243,3 +243,7 @@ T1 ladder from `trajectory`'s earlier Stage-1 checkpoints (steps 0 / 1,600 / 5,0
 9.56 M ALiBiGPT, `lean_staten`, K12; seeds 0–2) plus replay-only controls (added: the ladder's fine-tune replays 20k
 K12 records per round, which is further pretraining). Pre-registration: `preregistration/rl-from-ckpt.md`.
 Budget $90 / 180 pod-hours.
+- 2026-10-02 02:00 (unreviewed) **Step-0 arm: stop rule fired in 3 / 3 seeds.** Rounds 1 and 2 accepted 0 of 4,495
+  targets each (143,840 attempts per round; transfer 0 / 2,285), so no fine-tune ran. Source
+  `artifacts/rfc/la_T1_best12_s{0,1,2}_p0/round_{1,2}.json`. 12 ladders (p1600–p16000) running on rfc-p4…p15;
+  replay-only controls on rfc-p1…p3.

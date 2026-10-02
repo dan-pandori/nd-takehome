@@ -889,3 +889,19 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `max_steps` 192. Truncation stays 1.0–1.8 % (non-terminating actions); solved sets 0 lost, +2 / +1 / 0 / 0 gained.
 - Pre-registration vs outcome: frozen predictions hit, every T1 prediction missed high (see `run_best_state.md`).
 - Total 60.74 pod-hours, $29.76 (A40 $0.49/h); balance $329 after.
+
+## rl-from-ckpt (executor)
+
+- 2026-10-02 01:38 start. Took `tj_score.py tj_targets.py tj_analysis.py tj_compute.py tj_registry.py pod/tj/` from
+  `origin/dan_trajectory`. `tj_targets.py` gained `--label/--root/--data/--refs` (defaults = trajectory's paths).
+- 01:45 Found that `state_ladder_ei.py` fine-tunes on 20,000 random K12 records each round whenever ≥ 1 proof was
+  accepted (≈ 750 M training tokens over 8 rounds vs ≈ 445 M for Stage-1), so early-start ladders also pretrain.
+  **Deviation:** added replay-only controls (`rfc_replay.py`, `pod/rfc/control.sh`), pre-registered.
+- 01:47:18 pre-registration committed (`224cd387`); budget $90 / 180 h registered; first pod rfc-p1 created
+  01:47:27 (RTX A6000, $0.53/h).
+- 02:00 p0 ladders (rfc-p1..p3): 0 / 4,495 target accepts in rounds 1 and 2 in all three seeds (every attempt a
+  `lean_seq` parse failure, mostly "action head"); stop rule fired; no control for p0 (its ladder never trained).
+- 01:49–02:04 12 ladder pods created sequentially (`pod/rfc/spawn.sh`): rfc-p4..p13, p15 RTX A6000 $0.53/h;
+  rfc-p14 A40 $0.49/h (A6000 stock ran out once). Each pod also holds `pod/rfc/post.sh` waiting for its ladder.
+- 02:0x controls: 2 per A6000 (≈ 40.5 GB together) on rfc-p1..p3; then reader queues `pod/rfc/q{0,1,2}.txt`.
+  First control launch failed silently (nested quotes in `bg.sh`); relaunched via `pod/rfc/jobs/*.sh`.
