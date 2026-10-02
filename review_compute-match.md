@@ -174,3 +174,79 @@ I compared the training side (`train_k12` 154,382 classes, `rl_targets` 4,495) w
 | ladder cumulative ≈ 4,260 | 4,244 | close |
 | best12 − cm12 ≈ +12 tb72 (≥ 6.5) and ≈ +80 dev (≥ 61) | +15.7, +87.3 | hit (gap stays) |
 | K 56 or 64 | 64 | hit |
+
+## §Compare (phase 2)
+
+I read `run_compute_match.md`, `numbers.md` § compute-match and `log.md` § compute-match after committing §Recount
+(`08fd1236`).
+
+**Disclosure.** Before that commit, `git log` showed me the executor's DONE commit subject ("k 64 ladders (1.02x best12
+A40-s)"). I had already derived 1.02× from the logs.
+
+| claim (write-up / numbers) | my value | verdict |
+|---|---|---|
+| per-seed textbook72, dev, holdout250, Q, long2, held-out greedy for best12 / cm12 / SN12 (both tables) | identical, every cell (Lean-recounted from the raw files, best12 from the bucket) | reproduces |
+| best12 − cm12: textbook72 +15.7 [+15.0, +16.0], dev +87.3 [+61.0, +119.3] | +15.67 [15, 16], +87.3 [60.3, 119.3] | reproduces |
+| "every best seed beats every cm12 seed" | textbook72 51–52 vs 36; dev 1,050–1,058 vs 934–995 | reproduces |
+| paired cm12 − SN12: textbook72 0 / −4 / 0, dev +7 / +23 / +11, h250 +3 / +3 / +2, Q +5 / +2 / +3, long2 +2 / −3 / −3 | same | reproduces |
+| ladder cumulative 4,206 / 4,268 / 4,258 vs 4,171 / 4,228 / 4,215; "+35 to +43" | same (mine from `found_8`; SN12 from the state-cap12 reviewer) | reproduces |
+| ladder A40-s 27,485 / 29,226 / 30,675, mean 29,129, 1.02× best12 | logs 27,486 / 29,222 / 30,676; registry 27,485 / 29,226 / 30,675 | reproduces |
+| 1.06× including Stage-1 | (29,129 + 2,247) / (28,451 + 1,288) = 1.055 | reproduces (Stage-1 values inherited) |
+| attempts 1.82×, gen tokens 1.9×, Lean checks 1.4–1.6× (flagged) | 1.82×, 1.90×, 1.40–1.62× per seed | reproduces |
+| best12 attempts "1,938 k (1,794 clean)" | 8 × (4,495·32 + 2,285·32 + 7,285) = 1,793,960 | reproduces |
+| pilot: 2,988 s vs 1,709 s, projection 28,550 s | (2,988 − 289) / (1,709 − 280) = 1.889, giving 28,551–28,565 | reproduces |
+| K = 64 chosen before s0 / s1 | commit 02:24:03Z, ladders 02:24:13Z / 02:26:47Z | reproduces |
+| "Cut-offs ≤ 0.17 %" | max 0.168 % (SN12 s0 tb72), 0.145 % (cm12 s0 h250) | reproduces; see wording |
+| textbook72 shortest proof: cm12 and SN12 median 7–8 lines, term size 5–6 | my definitions differ (PR lines excluded; term = rule applications excluding AS/R): 6.7 / 4.0 vs 6.7 / 4.3; on the common set they are equal | consistent; not derivable at their definition |
+| spend 28.43 pod-hours, $13.93 | not derivable (podbudget) | – |
+| models: 3,216,384-param `lean_staten` GPT (cm12, SN12) vs 9,560,832-param ALiBiGPT (best12) | Stage-1 md5 21d74747… for s2 in the s2 log; the rest inherited labels | labels present |
+
+**Wording, n and expectations.**
+- Every between-arm claim has n = 3 per arm, and the write-up says so. The two headline gaps are beyond the
+  pre-registered MDDs. Those MDDs were computed for 3 vs 4 seeds; at 3 vs 3 they are about 6.9 and 65, which changes
+  nothing.
+- The pre-registration was committed before the first pod. The misses are reported (paired textbook72, cm12 Q 282 vs 330).
+- The cm12 textbook72 *level* also missed (36 against a predicted 40, range 37–44). The write-up shows this only through
+  the paired miss, not as its own line. Minor.
+- **"Best-state's advantage comes from the recipe, not the extra GPU time" is too broad.** What was tested is extra
+  *ladder* GPU time spent as more samples per round (k 32 → 64). Our Stage-1 already had more GPU time. Supported
+  wording: "giving our ladder best12's GPU time, as twice the samples per round, does not close the gap. The remaining
+  difference sits in the recipe (model size and architecture, Stage-1 procedure), which this run does not separate."
+  Matching on GPU-seconds gave cm12 1.8× the attempts, which favours cm12, so the conclusion is conservative in that
+  direction.
+- **Cut-offs.** "Cut-offs ≤ 0.17 %" is accurate, but two reads exceed the policy's ≈ 0.1 % threshold, and the write-up
+  does not say so. best-state's cap diagnostic shows these are non-terminating actions and that raising the caps changes
+  ≤ 2 textbook72 solves. Citing it would close the point.
+
+**Not reported by the executor (from §Recount):**
+1. `pod/cm/read.sh` copies its dumps into **`best-state/artifacts/cm/dump`** in the bucket, another run's namespace.
+2. Registry rows: the ladder rows carry `arm = la_T1_cm12k64_s<seed>`. `cm_compute.py` works around this and the log
+   says so. Some read rows also carry `seed` 8 / 1008 / 2008; that is not mentioned. `git_sha` is null throughout.
+3. Order-free renaming overlaps: 1 textbook72 and 2 dev1108 items are premise permutations of training theorems. This is
+   inherited and shared by every arm, so it is immaterial here.
+
+## §Verdict
+
+- **No hard-constraint violation.** `nd_verify` is unmodified and judges nothing, `TEST_RUN_DONE` is unchanged, and no
+  evaluation file is read in training. Every counted proof I re-checked is accepted by Lean: every solved target in all
+  read files has a Lean-valid proof, 2,079 / 2,079 literal sampled texts are accepted, 900 / 900 ladder proofs are
+  accepted, and the negative control rejects 0 / 600 wrongly. Splits are disjoint by the project's renaming class.
+- **What stands.** Every number in the write-up and in `numbers.md` reproduces.
+  - At matched ladder A40-seconds (1.02×), best-cap12 T1 still beats cm12 T1 by +15.7 textbook72 and +87.3 dev. Both are
+    beyond the pre-registered MDDs, with every seed separated, so the falsifier is not met.
+  - Doubling k from 32 to 64 moved nothing beyond the noise floor. The paired dev, Q and holdout250 differences are all
+    small and positive; textbook72 is 0 / −4 / 0.
+  - The compute table is correct, and the over-1.25× quantities are flagged.
+- **Reword.**
+  - The causal sentence "comes from the recipe, not the extra GPU time" should be narrowed to extra *ladder* compute as
+    more samples (see above).
+  - The two over-threshold cut-off reads should be flagged as such, citing best-state's cap diagnostic.
+- **Fix (housekeeping).** Remove or relabel the `best-state/artifacts/cm/dump` copies, and note the registry seed labels
+  8 / 1008 / 2008.
+- **Next measurement.** This run cannot say which part of the recipe carries the gap. The clean next step is a 2 × 2 on
+  Stage-1, one change at a time from SN12, each through the same k 32 ladder with 3 seeds:
+  - our 3.2 M model on Robbie's Stage-1 procedure;
+  - Robbie's 9.56 M ALiBiGPT on our K12 data and `state_train` schedule.
+
+  Separately, a ladder that spends the extra GPU time on more fine-tune steps per round, rather than more samples, would
+  test the other way to use the compute.
