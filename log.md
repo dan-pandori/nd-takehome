@@ -889,3 +889,11 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `max_steps` 192. Truncation stays 1.0–1.8 % (non-terminating actions); solved sets 0 lost, +2 / +1 / 0 / 0 gained.
 - Pre-registration vs outcome: frozen predictions hit, every T1 prediction missed high (see `run_best_state.md`).
 - Total 60.74 pod-hours, $29.76 (A40 $0.49/h); balance $329 after.
+
+## grpo-best (executor)
+- 2026-10-02 11:20 UTC  start. CI: grpo_state tests extended to a tiny ALiBiGPT (gradient = autograd at T, chunk independence, replay, sampled tokens = teacher-forced argmax at T 0.01 up to near-ties, smoke per variant); green on `ci-grpo-best` run 37004094686. Two calibration fixes on the way (direction check at the RL lr; tiny copy 300 steps + smoke T 1.5 so pass@k groups are mixed; a 247/248 near-tie at T 0.01).
+- 11:24  pre-registration committed (fa5d9b0); first pod gb-p0 at ≈ 11:27.
+- 11:34–11:46  smoke on gb-p0 (A6000): 26 s / update alone, 12.7 GB, 1.38× with two per card. Addendum 1: all four arms.
+- 11:50–11:52  12 ladders launched, two per card: gb-p0..p3 RTX A6000, gb-p4/p5 A40 (A6000 stock out).
+- 12:50  gb_distinct_s2 CUDA-OOM'd in its round-equivalent-1 boundary evaluation (A40 44.4 GB; transfer decode at batch 2,048 ≈ 26 GB + co-tenant 18 GB). **Deviation:** restarted from scratch at 13:50 at decode batch 1,024 (`pod/gb/rerun.sh`; the update still uses 2,048 rollouts; a decode-batch change is a sampling re-draw, not a correctness change). Old files kept as `*_oom2048`.
+- 12:48 / 13:30  reader pods gb-r0 (A6000) and gb-r1 (A6000, EU-SE-1): EI r8 dev + held-out greedy, then GRPO r2 / r4 reads (disjoint queues `pod/gb/qR0.txt`, `qR1.txt`).
