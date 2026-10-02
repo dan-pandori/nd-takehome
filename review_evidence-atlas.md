@@ -241,3 +241,94 @@ seeds for those two protocols.
   strength ratings) are judgements, not counts. I check their wording in phase 2.
 - **Create-vs-elicit table.** It rates 11 lines of evidence, and none is rated above "moderate".
 - **Length-frontier CSV** (477 KB): not recounted beyond the re-score.
+
+## §Comparison (phase 2: executor's `run_evidence_atlas.md`, `atlas/ATLAS.md`, `numbers.md` § evidence-atlas, `log.md`, `STATUS.md`)
+
+**Gate 0.** The pre-registration (453cebab, 16:53Z) and Addendum 1 (b4f08b79, 17:23:40Z, pushed to
+`origin/dan_evidence-atlas`) were both committed before the first pod (`ea-rescore`, 17:24:44Z). The addendum's ranges
+and statements were written before any whole-proof read existed.
+
+| # | claim (where) | my value | verdict |
+|---|---|---|---|
+| 1 | Re-score table, 24 per-seed counts (numbers.md, ATLAS §3 / §5) | identical in all 24 (§Recount) | **reproduces** |
+| 2 | Lean alone decides; `nd_verify` unused | unmodified hash; judge path is `lean_judge`; 4,356 / 4,356 Lean-confirmed; negative controls 0 / 1,200 | **reproduces** |
+| 3 | Map has 95 experiments; expectation 1 (≥ 55) hit | 95 rows, 95 ids | **reproduces** |
+| 4 | "14 of 23 create-vs-elicit rows judged by `nd_verify` alone" (ATLAS headline 7) | 14 of 23 `checker_class = nd_verify` | **reproduces** |
+| 5 | (i) "whole proof below state … **held, 4 / 4 on both**" (ATLAS §5); "proof state beats whole proof in all 12 cap × stage × pool cells" (ATLAS headline 3, run summary, STATUS) | holdout250 +81.5, +57, +79, +41 (reproduces); dev 4 / 4 large; textbook72 +3.5, +5, +7.25, +13.75 | **reproduces as a direction; must be reworded.** On textbook72 the same paragraph and the pre-registration say differences under ≈ 7 are inside the floor. So only cap-12 T1 (+13.75) is a finding there, cap-12 frozen is at the edge, and the two cap-6 cells are not differences. "Beats in all 12 cells" should read "beats in all 8 dev / holdout250 cells and in the cap-12 T1 textbook72 cell; the other textbook72 cells point the same way but are inside the floor". Whole proof has 2 seeds against 2–4 for state. The state reads also used a different batch (4,096) and decode limits (`max_steps` 96 / `max_action` 512). |
+| 6 | Expectation 2 hit: "best-cap12 T1 has the top textbook72 number (51.7)" (run summary); "The best textbook72 number on file is best-9.56M state cap 12 after its T1 ladder: 52 / 51 / 52" (ATLAS headline 2) | best-state reads 52, 51, 52, with `_cap` re-reads at 53. The atlas's own `textbook72_harmonized.csv` contains **57** (trajectory `la_T1_best12_s2_r6`, which I recounted from the bucket `.jsonl`) and 53–56 at other seed-2 rounds. The trajectory re-run's own round-8 T1 reads are 48–54. | **differs.** Highest on file is 57, not 52; the family is the same recipe, but the claim as written is false. Reword to "best-cap12 (9.56M state, cap 12) is the top family: round-8 T1 51–53 in best-state, 48–54 in trajectory's re-run, with a maximum of 57 at seed 2, round 6". Expectation 2 is a **partial miss**: the family is right, the "≈ 52 is the highest" number is not. |
+| 7 | (ii) "C0 T1 above Robbie's `lean-naive-ei` … textbook72 14 vs 8, holdout250 103 vs 41" (ATLAS §5) | Robbie's cells 8, 6, 10 / 45, 42, 37 (recounted from `passk.csv`); C0 T1 15, 13 / 104, 102 | **reproduces.** But two caveats are missing. **(a)** 14 of the 72 textbook72 theorems are `split = train` (RL targets) for Robbie's factorial cells; the atlas never says so, and it bears on every fork ↔ Robbie textbook72 row (Figure 2, headline 2's "32 / 30 / 32 †"). **(b)** The checker differs (†). Both favour Robbie's cells, so the direction stands. |
+| 8 | "fork whole proof vs Robbie naive lean cells: **mostly** apples to apples … same format, **size class**" (ATLAS §6) | `params` is **empty** for every `robbie-factorial` row in `textbook72_harmonized.csv`. The model label is "pre=012 baseline". | **not derivable from the run's files.** This is an unlabelled model size in a headline comparison: label it or drop "same size class". With (7a), "mostly" should become "partly" on textbook72. |
+| 9 | (iii) truncation "**missed** … 0.12–0.26 % on 11 of 24 … identical solved set" (ATLAS §5) | 11 of 24 over 0.1 %, maximum 0.258 %; identical solved sets in 11 of 11; 4 reads still over 0.1 % at 1,024 | **reproduces**, and is reported as a miss. "Truncation stays at 0.01–0.23 %" matches the 1,024 reads (0.006–0.233 %). |
+| 10 | Range predictions: textbook72 7 / 8 seeds in range; frozen holdout / dev below; T1 rows in range (ATLAS §5) | same; C0 frozen textbook72 12 and K12 T1 s0 25 are on the boundary | **reproduces**; misses are reported as misses |
+| 11 | batch 4,096 vs 2,048 re-draws: −5 to +7 dev, −2 to +3 holdout250, −4 to 0 textbook72 (numbers.md, ATLAS §5) | +3, +7, −5 / −2, −2, 0, +3 / 0, −2, −4, −3 | **reproduces** |
+| 12 | Batch 2,048 instead of the pre-registered 4,096 | all 24 reads at 2,048; the log gives the OOM reason | **reproduces**. The deviation is disclosed in `log.md` as a policy deviation. ATLAS §5 states batch 2,048 but does not say it differs from the pre-registration. Minor. |
+| 13 | Compute: per arm 491–574 GPU-s, 306,688 attempts, 45–62 M generated tokens; registry rows written (numbers.md) | sampler wall 477–546 s per arm (sum of 2 seeds), job wall 535–621 s; 306,688 attempts; 45.2 / 50.3 / 56.8 / 62.3 M tokens; 62 registry files with `gpu_seconds`, `gen_tokens`, `lean_checks` | **reproduces** (GPU-s within ≈ 10 % of my log-derived wall). Two jobs shared each 3090, so "GPU-seconds" is shared-card wall time; say so. |
+| 14 | Cost "$0.54", "RTX 3090 $0.50/h, A40 $0.49/h" (log, run summary) | `podhours.log` 1.078 h; $0.54 equals `podbudget`'s $0.50/h fallback | **not derivable.** The policy asks for the real billed rate, and the logs I read only show the fallback. Either way the cost is under the $1.5 pre-registered cap. |
+| 15 | Pods: "0 (p ≈ 0.7)" reported as a miss, with 5 used (run summary) | 5 pods, 1.078 h | **reproduces**; reported as a miss |
+| 16 | "Re-reading one checkpoint at another batch flips 6–11 of 70 textbook72 problems" (ATLAS §3, §6) | this run's 4 textbook72 re-draw pairs flip 0, 2, 4 and 5 of 72 | **inherited, not re-derived here.** It is consistent in size with this run's own pairs. |
+| 17 | Frozen best vs ours on textbook72 +4.0 / +0.5; after T1 +18 / +14 (ATLAS headline 4) | from the table rows: 19.0−15.0, 28.7−28.25, 37.3−19.0, 51.7−37.25 | **reproduces** arithmetically. The heading "pretraining recipe matters more after RL" compares 9.56M with 3.2M, so the recipe includes 3× parameters and more RL compute per sample. Add "and size" to the heading. |
+| 18 | rr600 13–16-line rates (2 % → 87 % etc.), support-survivor 28 / 29, depth-3 13–28 %, Robbie's +408 / +268 / +92 main effects (ATLAS headlines 5–6) | not recounted (inherited; the per-stratum files are in other runs) | **not derivable here**; these carry their source runs' review status |
+| 19 | "All textbook72 files are byte-identical … dev1108 and holdout250 the same sets" (ATLAS headline 1) | Robbie's `passk.csv` problem names equal `data/bs` for textbook72 (72 / 72) and holdout250 (250 / 250); Dmitry's and Charles's files not checked | **reproduces** for the part checked |
+| 20 | Harmonized tables trace to files (stop rule) | spot checks all match (§Recount). `protocol_differences.csv` has 2 of 10 rows with shifted columns (unquoted commas). | **finding**: fix the CSV quoting. The prose table in ATLAS §6 is unaffected. |
+| 21 | Split hygiene (not claimed in the write-up) | K12 Stage-1 ∩ textbook72 = 1 theorem (`textbook_3ed45280…`, solved by all K12 checkpoints, in training with its premises swapped) | **finding (minor).** Every cap-12 family's textbook72 count (K12 whole proof, SN-cap12, best-cap12) includes one theorem that is in its training set. Interface comparisons at cap 12 are unaffected, because both sides share it. |
+| 22 | Term size (policy) | re-score proofs: median 8–11, maximum 11–44 by cell (§Recount); the atlas reports none for the re-score | **missing (minor).** The re-score reports counts only, and the atlas length figure uses `L_true` strata. G_notes explains why some runs' term sizes are absent. |
+| 23 | Model labels | every fork row in ATLAS §3 and numbers.md names checkpoint, size, format, init and training set; Robbie's rows lack size (row 8) | **reproduces**, except row 8 |
+
+Wording against n:
+- Whole-proof rows have 2 seeds, the pre-registered count, and only per-seed values and means are given (no IQM or
+  bootstrap interval, which is equivalent to the mean at n = 2).
+- "Barely solves dev theorems at all" for C0 frozen (54 / 36 of 1,108) is fair.
+- "Weight of evidence is elicitation or amplification" is labelled as a rating with a rubric, not a measurement.
+
+## §Verdict
+
+**No hard-constraint violation.**
+- `nd_verify` is unmodified and unused as a judge.
+- `TEST_RUN_DONE` is unchanged.
+- There was no training and no test-file run.
+- The pre-registration and addendum predate every pod.
+
+**Stands.**
+- The whole-proof re-score: all 24 per-seed counts reproduce exactly, and every counted theorem is Lean-confirmed by an
+  independent header and harness with working negative controls.
+- The truncation check: identical solved sets at 1,024.
+- The batch-4,096 re-draw spreads.
+- The holdout250 and dev1108 interface gaps (whole proof below state in all 8 cells, by 41–322 theorems).
+- C0 T1 above Robbie's `lean-naive-ei`.
+- The map size, the create-vs-elicit checker tally, the per-arm compute, and the reported misses (pods, truncation,
+  frozen ranges).
+
+**Must be reworded.**
+1. **"Proof state beats whole proof in all 12 cap × stage × pool cells"** (ATLAS headline 3, §5 "4 / 4 on both", run
+   summary, STATUS). On textbook72 only the cap-12 T1 cell is outside the floor the atlas itself quotes. The two cap-6
+   cells (+3.5, +5) are not differences.
+2. **"The best textbook72 number on file is best-cap12 T1, 52 / 51 / 52"**, and expectation 2 listed as a hit. The
+   atlas's own table holds 57 (trajectory, seed 2, round 6). State it as the family's range (48–57 across best-state
+   and trajectory reads), and mark expectation 2 as a partial miss.
+3. **Fork ↔ Robbie textbook72 comparisons** (Figure 2, headline 2, §6 "mostly apples to apples"). Robbie's factorial
+   cells were RL-trained on 14 of the 72 textbook72 theorems (`split = train`), which the atlas does not mention, and
+   their parameter count is not recorded. Downgrade to "partly" and label the size.
+4. **Headline 4.** "Pretraining recipe" → "pretraining recipe and size (9.56M vs 3.2M)".
+5. **GPU-seconds and dollars.** Say "two jobs per shared 3090". The $0.50/h is `podbudget`'s fallback rate, not a
+   verified billed rate.
+
+**Fix.** Quote the free-text fields in `protocol_differences.csv`: 2 of its 10 rows are column-shifted.
+
+**Minor.**
+- The K12 training set contains one textbook72 theorem (disjunctive syllogism, premises swapped), affecting every
+  cap-12 family's textbook72 count by ≤ 1.
+- The re-score reports no term sizes. Mine: median 8–11, max 11–44.
+
+**Not supported or not derivable here.**
+- The billed rate.
+- Robbie's model size.
+- The inherited headline numbers in rows 16 and 18, which carry their source runs' review status.
+
+**Next measurements that would settle what is open.**
+- **(a)** Read the textbook72 interface comparison at more seeds or at higher k, in a paired design: same theorems,
+  whole proof vs state at matched cap, 4+ seeds each. Only then can the cap-6 textbook72 cells be called. The atlas
+  already has 4 seeds for SN-cap12.
+- **(b)** Re-read Robbie's `lean-naive-ei` cells on the 58 `textbook_dev` theorems only, or report the fork rows on
+  the same 58, for a held-out fork ↔ Robbie textbook comparison.
+- **(c)** Get the frozen best-cap12 pass@4,096 on textbook72 (atlas open question 4). That is the base-reachability
+  number every "RL solved X" there lacks.
