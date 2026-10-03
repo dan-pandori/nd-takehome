@@ -244,7 +244,7 @@ Brief: nd-rl `docs/proposals/2026-10-02-mcts.md`, run brief mcts-a. Policy: AGEN
 ## mcts-a
 - 2026-10-02 23:05 UTC  run started (executor). Branch `dan_mcts-a`. Pre-registration `339d0876` pushed 23:13:52, first pod 23:14:12.
 - 2026-10-02 23:31 UTC  smoke test passed after one fix (log.md); three A40 pods (mc-0..2, one seed each) running value heads, tuning (s0), then read-outs.
-- 2026-10-03 03:25 UTC  **MCTS-A GATE: FAIL.** Group C at r8, at matched GPU-seconds (the sampling read's wall clock on
+- 2026-10-03 02:52 UTC  **MCTS-A GATE: FAIL.** Group C at r8, at matched GPU-seconds (the sampling read's wall clock on
   the same A40). PUCT with value vs plain sampling (k 256, T 0.8, sample seed 2):
   - s0: 2 vs 4 of 36 (Δ −2);
   - s1: 2 vs 2 of 35 (0);

@@ -919,7 +919,7 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   samples. The grid gains K ∈ {2, 4} × T ∈ {0.8, 1.0}, and the four pre-registered configs are kept. mc-0's chain
   was restarted, losing the in-flight value_t0 run, which re-runs. Seeds 1 / 2 run their sampling read-outs while
   tuning finishes (`pod/mcts/seedB.sh`). The s0 r8 value head is trained on mc-2.
-- 2026-10-03 00:45  **Bug (found while debugging the tuning gap): `mcts.DEFAULT['max_action']` was 64**, and the tuning
+- 2026-10-03 00:31  **Bug (found while debugging the tuning gap): `mcts.DEFAULT['max_action']` was 64**, and the tuning
   configs override only K and T. The correct first actions of long theorems are 60–75 tokens, so they were truncated
   and only short, mostly invalid actions survived. Example: a theorem sampling solves in 217 of 256 attempts got 64
   root samples and 0 valid children. The pre-registered search setting is 256. Every search result before this point is
@@ -929,9 +929,13 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   max_action 256 and max_depth 96 (= sampling's max_steps). A GPU check solves 31 / 33 of the problem theorems.
   Tuning restarted from t0. Addendum 1's extra configs stay in the grid; they were motivated partly by the buggy
   numbers, but the duplicate-sample argument stands and they were added before any evaluation read-out.
-- 2026-10-03 02:50  tuning done (s0 pend, tune200, 466 s budget, A40 mc-0), solved / 184. Sampling: 140.
+- 2026-10-03 02:35  tuning done (s0 pend, tune200, 466 s budget, A40 mc-0), solved / 184. Sampling: 140.
   - prior, t0–t7: 143 143 140 140 146 144 144 146.
   - value, t0–t7: 142 146 151 145 150 146 145 147.
   - Chosen (`artifacts/mcts/cfg_final.json`): prior **K 2 / T 1.0**, value **K 8 / T 1.5**.
   - The spread across configs (≤ 11) is about the size of a re-draw, so the choice is weakly determined. Any config
     would have put both search arms at or above sampling here.
+- 2026-10-03 03:05  mc-0 was the bottleneck (6 of 30 read-outs, against 14–15 on mc-1 / mc-2). s0's pend read-outs
+  moved to a fourth A40, mc-3 (`pod/mcts/s0pend.sh`, $0.49/h): every arm of (s0, pend) runs there, so matching stays
+  within one pod. A watcher stops mc-0's chain once its r8 read-outs finish. (Times in this log before 03:00 were
+  corrected to the commit times.)
