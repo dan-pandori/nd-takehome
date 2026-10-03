@@ -898,3 +898,7 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `artifacts/tj/score/ckpts_s*.md5`; resume loaded 229,482 / 271,490 / 250,560 target proofs = `found_8.jsonl` lines.
 - 2026-10-03  `rc_analysis.py` reproduces `trajectory`'s groups (A 232/236/234, B 54/51/60, C 36/35/28) and C pass@256
   at r8, sample seed 1 (0.083 / 0.029 / 0.036, mean 0.049; seed spread 0.054). Falsifier-2 threshold: mean r16 C pass@256 > 0.103.
+- 2026-10-03 18:30 UTC  r9 done on s0 / s2 in 3,694 / 3,660 s on A40 (r8 on A6000: 3,274 / 3,513 s). Projection ≈ 32 pod-h
+  with all planned reads, so per the pre-registered priority order the r12 sample-seed-0 tb72/h250 reads are dropped
+  (`SKIP_r12x0` on every pod). Found-set carry-over: every (target, proof) pair in `found_8` is in `found_9`
+  (s0 229,482 ⊂ 273,491; s1 271,490 ⊂ 321,168; s2 250,560 ⊂ 292,958; `artifacts/rc/seamless_s*.txt`). r9: s0 +4, s1 +6, s2 +4 targets.
