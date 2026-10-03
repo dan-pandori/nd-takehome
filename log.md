@@ -898,3 +898,6 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - Seamlessness checks 1–2: the r8 checkpoints placed at the resume paths have md5 586baf0b… / a8dfc589… / 1b1843d5…,
   equal to the md5s `trajectory-cap6`'s ladder logs printed on upload (`logs/seed{0,1,2}.log`); the resume lines read
   72,175 (s0) / 48,085 (s1) / 36,334 (s2) target proofs = `found_8.jsonl` line counts.
+- 2026-10-03 18:43–18:47 UTC  r9 done on all seeds (s0 3,542 s, s1 2,868 s, s2 2,859 s). New targets r9: +11 / +30 / +30;
+  transfer +9 / +21 / +22. Seamlessness check 3 (`pod/rc6/seam.py`): 0 r8-solved targets or transfer theorems missing
+  from the r9 found sets on every seed. Projection at these round times: ≈ 21.5 pod-hours incl. r16 reads (≈ $10.5).
