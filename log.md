@@ -904,3 +904,9 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 2026-10-03 19:57 UTC  r10 done (s0 3,697 s, s1 2,906 s, s2 3,086 s): new targets +6 / +12 / +19. `podbudget`: 6.54 h,
   $3.20 used. Projection with s0's rounds at ≈ 3,850 s and s1/s2 at ≈ 3,050 s: ≈ 23.4 pod-hours (≈ $11.5) incl. the core
   r16 reads, so the optional reads stay off unless Dan extends the budget.
+- 2026-10-03 21:00–21:10 UTC  r11 done (s0 4,065 s, s1 3,068 s, s2 3,111 s); targets_cum 4,285 / 4,291 / 4,263.
+  Round time grows on s0 (more distinct proofs to check, longer fine-tune pairs). Projection: ladders ≈ 24.2 pod-hours
+  (≈ $11.8), full r16 reads would take the run to ≈ $12.35. More Lean workers would not help: every pod has a cgroup CPU
+  quota of ≈ 7.6 CPUs (`lean_gate.cpu_quota()` = 7), so 32 workers already oversubscribe. Prepared a budget fallback
+  in `pod/rc6/read.sh` (flag file `artifacts/rc6/H250_C`): holdout250 read on each seed's group-C theorems only
+  (`data/rc6/h250_C_s{0,1,2}.jsonl`, 24 / 21 / 26 rows, from `trajectory-cap6`'s pend/r8 seed-0 reads). Question updated.

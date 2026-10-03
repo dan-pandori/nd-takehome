@@ -120,3 +120,11 @@ own. The core read (r16 textbook72 + holdout250, sample seed 1, for group C) fit
 rr600 13–16 / long2 at r8 + r16 (as in `rl-continue`) would add ≈ 4 h. Would you extend to **$14 / 28 pod-hours**?
 **Default if unanswered:** stay within $12 / 24 h — ladders r9–r16 and the core r16 read only; the optional reads are
 added (in the order r16 seed 0, r12 seed 1, rr600/long2) only if the measured spend leaves room.
+
+**Update 2026-10-03 21:10 UTC (rl-continue-cap6):** rounds are slower than `trajectory-cap6`'s r8 (s0: 3,542 → 3,697 →
+4,065 s at r9–r11; s1/s2 ≈ 2,900–3,100 s). Projection: the ladders alone ≈ 24.2 pod-hours ≈ $11.8; with the full r16
+reads ≈ $12.35. Would you allow **$13 / 26.5 pod-hours** (the optional reads still off)?
+**Default if unanswered:** stay within $12. (1) The ladders keep priority. (2) The r16 read becomes textbook72 (full) plus
+holdout250 restricted to each seed's group-C theorems (24 / 21 / 26; `data/rc6/h250_C_s<S>.jsonl`), which keeps the
+group-C falsifier intact and drops the full holdout250 count. (3) If the ladders alone are projected past $12 at r15, s0's
+r16 read is moved to the cheapest available card.
