@@ -939,3 +939,9 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   moved to a fourth A40, mc-3 (`pod/mcts/s0pend.sh`, $0.49/h): every arm of (s0, pend) runs there, so matching stays
   within one pod. A watcher stops mc-0's chain once its r8 read-outs finish. (Times in this log before 03:00 were
   corrected to the commit times.)
+- 2026-10-03 04:15  mc-2 (seed 2) and mc-3 (s0 pend) finished, were pulled (remote and local listings match) and were
+  deleted. mc-0's watcher never ran: I quoted inside a `bg.sh` command, which the pod-helper notes warn against. So
+  mc-0 went on into s0 pend and produced a **second draw** of s0 pend C (sample / prior / value) and tb72 (sample)
+  before I stopped it. Those files are kept apart in `artifacts/mcts/dup_s0_pend_mc0/` and used in no table. The
+  tables use mc-3's s0 pend read-outs. mc-0 was pulled and deleted. mc-0 may have uploaded its copies of
+  `s0_pend__C__*` over mc-3's in the bucket; the final sync from the worktree restores mc-3's.
