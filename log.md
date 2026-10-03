@@ -889,3 +889,12 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `max_steps` 192. Truncation stays 1.0–1.8 % (non-terminating actions); solved sets 0 lost, +2 / +1 / 0 / 0 gained.
 - Pre-registration vs outcome: frozen predictions hit, every T1 prediction missed high (see `run_best_state.md`).
 - Total 60.74 pod-hours, $29.76 (A40 $0.49/h); balance $329 after.
+
+## rl-continue
+
+- 2026-10-03 17:23 UTC  pre-registration committed (8cf9ccf); budget $15 / 30 h registered; first pod created 17:24.
+- 2026-10-03 17:26–17:28 UTC  three A40 pods ($0.49/h), one ladder each: `pod/rc/run.sh <seed>` resumes
+  `trajectory`'s `la_T1_best12_s<S>` at r9. Seamless checks: r8 checkpoint md5 f9afd386 / c85481f9 / 3b62784b = `trajectory`'s
+  `artifacts/tj/score/ckpts_s*.md5`; resume loaded 229,482 / 271,490 / 250,560 target proofs = `found_8.jsonl` lines.
+- 2026-10-03  `rc_analysis.py` reproduces `trajectory`'s groups (A 232/236/234, B 54/51/60, C 36/35/28) and C pass@256
+  at r8, sample seed 1 (0.083 / 0.029 / 0.036, mean 0.049; seed spread 0.054). Falsifier-2 threshold: mean r16 C pass@256 > 0.103.
