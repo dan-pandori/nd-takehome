@@ -112,3 +112,11 @@ s4, s5. Costed alternatives in `preregistration/grpo-state.md` Addendum 1: Plan 
 Plan C (s0–s3, GRPO default + pass@4, ≈ $16).
 **Default if unanswered:** the experiment run uses **Plan B** (4 seeds, all three GRPO arms, EI inherited from
 state-cap12), and first measures s / update on a 16 GB card, moving to it if that halves the cost.
+
+## 2026-10-03 — rl-continue: the brief's full read-out list does not fit in $15 / 30 pod-hours
+
+r8 rounds took ≈ 3,300–3,550 s each on an A6000, so the 24 continuation rounds alone are ≈ 24–25 pod-hours. Reading
+rr600 13–16 + long2 at r12 and r16 with both sampling seeds (plus an r8 baseline, which `trajectory` never read) adds
+≈ 8 h. Would you extend to **$18 / 36 pod-hours**?
+**Default if unanswered:** stay within $15 / 30 h: rr600 13–16 and long2 at r8 and r16 with sample seed 0 only;
+textbook72 / holdout250 at r12 and r16 with both seeds (seed 1 first). Priority order in `preregistration/rl-continue.md`.
