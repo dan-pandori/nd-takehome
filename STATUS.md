@@ -244,3 +244,4 @@ Brief: run brief `guided-tts` (Dan, 2026-10-03). Policy: AGENT_POLICY.md. Budget
 
 ## guided-tts
 - 2026-10-03 18:05 UTC  run started (executor). Pre-registration `preregistration/guided-tts.md` committed before the first pod. Problem files copied to `data/gt/` (sha256 match both manifests).
+- 18:50 UTC  Three A40 pods (gt-p0..p2, one model seed each). Plain reads done for 5 / 6 models (best12 s0 plain 178 / 259 solved; textbook72 48 = `trajectory`'s 48). **Checker gate passed on s1**: 109,151 distinct (state, step) pairs from the plain arm (cap 12 + cap 6), checker vs Lean 62,080 accept/accept, 47,071 reject/reject, **0 false rejects**, 0 misses. Guided-logical reads running.
