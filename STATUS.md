@@ -244,3 +244,14 @@ Brief: nd-rl `docs/proposals/2026-10-02-mcts.md`, run brief mcts-a. Policy: AGEN
 ## mcts-a
 - 2026-10-02 23:05 UTC  run started (executor). Branch `dan_mcts-a`. Pre-registration `339d0876` pushed 23:13:52, first pod 23:14:12.
 - 2026-10-02 23:31 UTC  smoke test passed after one fix (log.md); three A40 pods (mc-0..2, one seed each) running value heads, tuning (s0), then read-outs.
+- 2026-10-03 03:25 UTC  **MCTS-A GATE: FAIL.** Group C at r8, at matched GPU-seconds (the sampling read's wall clock on
+  the same A40). PUCT with value vs plain sampling (k 256, T 0.8, sample seed 2):
+  - s0: 2 vs 4 of 36 (Δ −2);
+  - s1: 2 vs 2 of 35 (0);
+  - s2: 3 vs 4 of 28 (−1).
+
+  0 of 3 seeds reach the pre-registered Δ ≥ 3, and proposal 22's falsifier fires (Δ ≤ 0 on every seed). PUCT without
+  value: 2 / 1 / 3. Union of the three arms: 7 / 3 / 5. Models: `trajectory` cap-12 r8 (`la_T1_best12_s{0,1,2}_r8.pt`,
+  ALiBiGPT 9.56M, `lean_staten`, from scratch on K12, then T1 EI); value heads trained on that checkpoint's rollouts
+  on rl_targets + K12. Source: `artifacts/mcts/eval/s*_r8__C__*.json`, `mcts_analysis.py`. The other read-outs are
+  still running.
