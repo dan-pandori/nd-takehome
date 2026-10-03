@@ -911,3 +911,11 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   address this). Smoke numbers are not results (smoke value head, one draw).
 - 23:31  ckpt md5s checked against `trajectory`'s `ckpts_s0.md5`. Pipelines launched: mc-0 seed 0 (value pend →
   tuning → value r8 → read-outs r8, pend), mc-1 / mc-2 (A40, $0.49/h) seeds 1 / 2.
+- 2026-10-02 23:50  value heads s0 / s2 pend done. s0 pend held-out: AUC 0.770, Brier 0.122 (constant 0.171), steps-to-go
+  MAE 1.40 and Spearman 0.78; 44,954 / 95,920 rollouts accepted. mc-1 runs at about 1/3 of the others' GPU throughput
+  (GPU util 32 %); budgets are matched per pod, so the comparison is unaffected.
+- 2026-10-03 00:12  **Deviation (addendum 1, committed before any evaluation read-out).** The first tuning config
+  (K 8 / T 1.0) gives PUCT-prior 105 / 184 against sampling's 140 / 184 at the 466 s budget, with 57 % duplicate
+  samples. The grid gains K ∈ {2, 4} × T ∈ {0.8, 1.0}, and the four pre-registered configs are kept. mc-0's chain
+  was restarted, losing the in-flight value_t0 run, which re-runs. Seeds 1 / 2 run their sampling read-outs while
+  tuning finishes (`pod/mcts/seedB.sh`). The s0 r8 value head is trained on mc-2.

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """one line per finished read-out in artifacts/mcts/eval: name, solved/n, wall or budget, GPU util."""
 import glob, json, os
-for f in sorted(glob.glob('artifacts/mcts/eval/*.json')):
+for f in sorted(x for x in glob.glob('artifacts/mcts/eval/*.json') if not x.endswith('.args.json')):
     d = json.load(open(f))
     b = os.path.basename(f)[:-5]
     if b.endswith('__sample'):
