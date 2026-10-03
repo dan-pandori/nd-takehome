@@ -332,3 +332,85 @@ identical to the counted copies (0 / 0 / 0 and 32), with wall clocks within 1 s.
 4. **Same pod, not just same GPU class.** I could confirm only that every job ran on an A40. The per-job jsons carry no
    host for search jobs. That each (seed, checkpoint) read-out ran on one pod is the scripts' design (`read.sh` runs
    the three arms back to back), and I did not verify it per job.
+
+## §Compare (phase 2: `run_mcts_a.md`, `numbers.md` § mcts-a, `log.md`, `STATUS.md`)
+
+| claim (source) | my independent value | verdict |
+|---|---|---|
+| Gate: value vs sample on group C at r8 2 vs 4, 2 vs 2, 3 vs 4; Δ −2 / 0 / −1; **FAIL**, falsifier fires (all) | identical; group C and the seed-1 spread 3 / 1 / 1 rebuilt from `trajectory`'s files | reproduces |
+| prior on C r8 2 / 1 / 3; union of the arms 7 / 3 / 5 (numbers, STATUS) | 2 / 1 / 3; 7 / 3 / 5 | reproduces |
+| Both solved tables, r8 and pend, 5 pools × 3 arms × 3 seeds (numbers) | all 90 cells identical | reproduces |
+| Paired r8 C value − sample −1.00 [−3.00, +1.33]; prior − sample −1.33 [−3.67, +1.00] (numbers) | identical (own bootstrap, stratified by seed) | reproduces |
+| pend rrQ100 value − sample **+14.3** (CI +9.7 to +19.3), per seed +19 / +10 / +14 (run, numbers, STATUS) | +19 / +10 / +14, mean 14.33; I did not bootstrap this pool | reproduces (per seed; CI not re-derived) |
+| "about 45 % of what 8 EI rounds add on this pool" (run) | r8 − pend sampling on rrQ100 = 37 / 28 / 32, mean 32.3; 14.3 / 32.3 = 44 % | reproduces |
+| "still climbing" at pend rrQ100 (run; figure) | solves in the last 10 % of the budget: value 1 / 7 / 3 of 78 / 75 / 74 | reproduces weakly (flat on s0) |
+| "At r8, PUCT + value is within ±2 of sampling on every pool" (run); "At r8, every pool is within ±2" (STATUS) | value − sample at r8: h250 +1 / **+3** / +1, rrQ100 0 / **+3** / −2. The STATUS wording, with no arm named, also covers prior: tb72 −5 / −6, long2 −5, rrQ100 −4 | **differs**: ±3 for value; false for prior |
+| Value held-out AUC 0.74–0.82, Spearman 0.69–0.83, Brier below constant (run, numbers table) | table identical to the script reports; s0 pend and s0 r8 recomputed on CPU: AUC, Brier identical, Spearman within 0.0006 | reproduces. The **pre-registered 0.80–0.92 was missed on 5 of 6** heads: numbers gives the values, and `log.md`'s expectations list gives no AUC verdict (see below) |
+| GPU util search 72 % against sampling's 63 % (run, numbers) | value 72.0 %, sampling 63.2 %, prior 52.6 % | reproduces; prior's 53 % is in numbers but not in run |
+| 10×: value 9 / 5 / 7 against sampling k 2,560 10 / 7 / 5; value-only 1 / 3 / 3, sample-only 2 / 5 / 1; "stays level" | identical; mean −0.33, bootstrap [−2.67, +2.0] | reproduces |
+| Compute: read-outs 6.8 GPU-h, equal per arm; tuning 7,922 s (17 × 466 s); value data 8,929 s; sample tokens 109.5 M / 70.8 M (r8 / pend) | sum of read-out walls 24,528 s = 6.81 h; per-arm walls equal within 1 %; 17 × 466 s matches; r8 sample tokens 109.6 M (my derivation) | reproduces |
+| "Search arms used at most 1.0× their sampling budget; no arm above 1.25× its comparator" | wall 0.907–1.005×; actions and tokens 0.21–1.10× | reproduces |
+| Sampling "Lean checks" 268,861 / 226,224 (numbers) | equal to `env_end.done` sums, i.e. finished attempts. That is an upper bound on Lean checks, since `lean_gate` de-duplicates and prefilters | label: these are finished attempts, not Lean calls |
+| Peak memory "search ≤ 10.7 GB" (numbers) | read-outs ≤ 10.7 GB is consistent; tuning value_t0 11.3 GB, x10 s2 value **13.2 GB** | add "(read-outs)" |
+| Truncation: sampling 0.22 %, "above the 0.1 % guidance", trajectory's protocol; search 0.015 % (numbers, run) | pooled 0.22 %; 15 of 30 sampling jobs above 0.1 %, max 0.67 % | reproduces; disclosed |
+| "lean_check accepted 6,490 of 6,490 found proofs" (log) | Lean on the literal text accepted 6,700 / 6,700 search proofs (read-outs 4,361 + tuning + x10) and 2,333 / 2,333 sampled proofs, through my own translator. I did not re-run `lean_check` | consistent; not re-derived as stated |
+| Proof length: search proofs longer than sampling's shortest (numbers table, run caveat) | same direction on every pool: +0.2 to +4.0 term nodes, largest on r8 long2 / rrQ100 | reproduces |
+| Search statistics: hardest step = **lowest log π** (numbers) | the pre-registration defines it as the lowest **prior**. Under the prereg definition: group C value hard step depth ≥ 2 in 8/9 solves, rank median 2. With log π, the root (name-token entropy) wins on r8 rrQ100 (median depth 0), as numbers notes | definition deviates from prereg, unflagged; prereg expectation still holds under its own definition |
+| Pre-registration before the first pod (STATUS, log) | commit `339d0876` 23:13:52, first pod 23:14:12; header says "~23:50" and log corrects it | reproduces |
+| Addendum 1 before any evaluation read-out; its motivating 105 / 184 later found invalid (max_action 64) (log 00:31) | `invalid_maxaction64/`: 105 / 104 / 102; at 256, K 8 / T 1.0 prior = 143 > sampling 140 | disclosed in log. `run_mcts_a.md` says only "two bugs were fixed … grid widened". The **prior arm's winner (K 2) is one of the configs the bug motivated**; run does not say so |
+| Duplicate s0 pend draw quarantined, used in no table (log) | the duplicate's counts equal the counted ones (0 / 0 / 0, 32) | reproduces; changes nothing |
+| "Search pays where the frozen policy is unreliable over many steps, which EI already fixes" (run, "my reading") | pend gains are mixed. Value − sample: rrQ100 +14.3, tb72 +3.0, long2 +1.7, h250 +5.0 (−1 on s2). Value − prior on h250 is −4.67, so on that pool most of the gain is search without the value | a reading; supported on rrQ100 only. Should say the value adds +5.3 [+0.7, +10.0] over prior on rrQ100 |
+| "A value trained on that policy's rollouts cannot point to them [group C's rare steps]" (run) | not measured. No value prediction on group-C states exists in the artefacts. Indirect support: r8 value data is 89 % accepted rollouts on theorems the policy was trained on | **not supported as stated**; reword as a hypothesis |
+| Model labels (run, numbers, STATUS gate line) | every table and the gate line name the trajectory cap-12 checkpoints, size, format, from scratch, K12 | reproduces |
+| md5 "checked against trajectory's" (numbers, log 23:31) | registry `ckpt_md5` null for 5 of 6 checkpoints; x10 logs print r8 md5s | consistent with the log; registry rows incomplete |
+
+**Expectations written before the run; misses reported as misses?**
+- The gate and group-C misses are reported as misses (log expectations list, run, STATUS).
+- The AUC miss (5 of 6 below 0.80) is not called a miss anywhere: run and STATUS quote "0.74–0.82" without the
+  prediction.
+- The prior-arm misses on tb72 / long2 / rrQ100 at r8 (−5, −6, −5, −4 against ±4 / ±3) are visible in the tables
+  but not named.
+- The pend rrQ100 gain exceeded the predicted 0–10 range on 2 seeds, which is a miss in the favourable direction.
+- Sampling GPU util (63 %) fell below the predicted 70–95 %.
+
+## §Verdict
+
+**Stands.**
+- MCTS-A GATE: FAIL, and the falsifier. Every count reproduces from the per-theorem files.
+- Group C is exactly `trajectory`'s, and the seed-1 spread is right.
+- Matching on wall clock is honest (≤ 1 % overrun, same GPU class, and the search arms decoded fewer tokens).
+- All 6,700 search proofs and a 2,333-proof sample of sampled proofs pass Lean 4 core from stored text. The negative
+  controls fail.
+- Splits are disjoint by renaming class. The hard constraints hold. Value calibration reproduces.
+- The pend rrQ100 gain (+19 / +10 / +14, 3 of 3 seeds) and the 10× read-out's "level" result reproduce.
+- The pre-registration preceded the first pod, and the bug that invalidated the first tuning runs is disclosed in
+  `log.md`.
+
+**Must be reworded.**
+1. "At r8, PUCT + value is within ±2 of sampling on every pool" should be within ±3 (h250 and rrQ100 s1 are +3).
+   STATUS's "every pool within ±2" also needs "PUCT + value": the prior arm is −4 to −6 on tb72 / long2 / rrQ100.
+2. Value calibration: state that the pre-registered AUC 0.80–0.92 was missed on 5 of 6 heads. Say also that the
+   held-out theorems are `rl_targets`, on which r8 was EI-trained, with 89 % of r8 rollouts accepted. This
+   calibration does not speak to group-C states.
+3. "A value trained on that policy's rollouts cannot point to them" is a hypothesis; nothing measured it.
+4. Name what the value itself adds where search helps. On pend rrQ100, value − prior is +5.3 [+0.7, +10.0] of the
+   +14.3; on pend h250 the value arm is *below* prior (−4.7).
+5. `run_mcts_a.md` should say the prior arm's tuned config (K 2) came from the grid extension that a since-invalidated
+   number motivated. The gate is unaffected: the value arm's config was pre-registered.
+6. Smaller fixes:
+   - Sampling "Lean checks" are finished attempts.
+   - The search peak is 13.2 GB counting the x10 run.
+   - "Hardest step" uses log π where the pre-registration said prior.
+
+**Not supported.** Nothing the run claims as a finding. Only the causal reading in item 3 is unsupported.
+
+**Next measurement.** The gate leaves one question open: is the value blind on group C, or is the budget too small?
+1. **Score the r8 value heads on group-C states directly.** The x10 sampling read has 253k attempts with ≈ 21 accepted
+   proofs across seeds. Take the states on its accepted and its failed attempts and report AUC (on-track vs
+   off-track partial proofs) per seed.
+   - AUC ≈ 0.5 confirms the executor's reading.
+   - A clearly higher AUC points to the search, not the value, and would justify a value trained on group-C-like
+     data, e.g. rollouts on the 10× read's states.
+2. Any rerun of the gate needs more statistical power. At ≈ 0.1 solve probability per theorem the per-seed MDD is
+   ≈ 6–7, and the arms' solved sets barely overlap. Use several independent draws per arm (or a hard pool of ≥ 150
+   theorems) before calling a search-vs-sampling difference on group C.
