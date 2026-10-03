@@ -919,3 +919,13 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   samples. The grid gains K ∈ {2, 4} × T ∈ {0.8, 1.0}, and the four pre-registered configs are kept. mc-0's chain
   was restarted, losing the in-flight value_t0 run, which re-runs. Seeds 1 / 2 run their sampling read-outs while
   tuning finishes (`pod/mcts/seedB.sh`). The s0 r8 value head is trained on mc-2.
+- 2026-10-03 00:45  **Bug (found while debugging the tuning gap): `mcts.DEFAULT['max_action']` was 64**, and the tuning
+  configs override only K and T. The correct first actions of long theorems are 60–75 tokens, so they were truncated
+  and only short, mostly invalid actions survived. Example: a theorem sampling solves in 217 of 256 attempts got 64
+  root samples and 0 valid children. The pre-registered search setting is 256. Every search result before this point is
+  **invalid**: the smoke test's prior / value numbers and the tuning runs prior_t0 / t1 and value_t0 (105 / 102 of 184).
+  They are moved to `artifacts/mcts/invalid_maxaction64/` on mc-0 and are not used. Unaffected: the tuning sampling
+  budget (466 s, 140 / 184), every value-data rollout (CLI default 256), every value head. Fixed: DEFAULT
+  max_action 256 and max_depth 96 (= sampling's max_steps). A GPU check solves 31 / 33 of the problem theorems.
+  Tuning restarted from t0. Addendum 1's extra configs stay in the grid; they were motivated partly by the buggy
+  numbers, but the duplicate-sample argument stands and they were added before any evaluation read-out.

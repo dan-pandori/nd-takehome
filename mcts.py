@@ -343,7 +343,7 @@ class Sampler:
 
 # ------------------------------------------------------------------------------------------------------- the search
 DEFAULT = dict(K=8, C=1.0, alpha=0.5, max_samples=64, c_init=1.25, c_base=19652, tau=1.0, gamma=0.95, fpu=0.0,
-               leaves_per_tree=8, max_depth=48, max_expansions=400, temp=1.0, max_action=64)
+               leaves_per_tree=8, max_depth=96, max_expansions=400, temp=1.0, max_action=256)
 
 
 def run_search(model, tok, prompts, cfg=None, value=None, seed=0, budget_s=None, log=None, lean=True,
@@ -415,10 +415,10 @@ def run_search(model, tok, prompts, cfg=None, value=None, seed=0, budget_s=None,
                 e = clone(nd.env)
                 ok, why = e.apply(atoks)
                 if not ok:
-                    nd.acts[key_a] = -1; st['env_reject'] += 1; continue
+                    nd.acts[key_a] = -1; st['env_reject'] += 1; st['why_env:' + why] += 1; continue
                 r = step_reject(nd.env, e.hist[len(nd.env.hist):]) if not e.done else None
                 if r is not None:
-                    nd.acts[key_a] = -1; st['type_reject'] += 1; continue
+                    nd.acts[key_a] = -1; st['type_reject'] += 1; st['why_type:' + r] += 1; continue
                 k = state_key(e)
                 hit = None
                 for ci, ch in enumerate(nd.children):
