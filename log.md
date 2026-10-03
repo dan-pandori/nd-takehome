@@ -889,3 +889,12 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `max_steps` 192. Truncation stays 1.0–1.8 % (non-terminating actions); solved sets 0 lost, +2 / +1 / 0 / 0 gained.
 - Pre-registration vs outcome: frozen predictions hit, every T1 prediction missed high (see `run_best_state.md`).
 - Total 60.74 pod-hours, $29.76 (A40 $0.49/h); balance $329 after.
+
+## rl-continue-cap6
+
+- 2026-10-03 17:45 UTC  pre-registration committed (3889cde0) and pushed; budget registered (`podbudget rl-continue-cap6 --set 24 12`).
+- 2026-10-03 17:45:39–17:47:09 UTC (`~/pods.log`)  pods `rc6-s0`, `rc6-s1`, `rc6-s2` (A40, $0.49/h, SECURE), created one at a time.
+  First s0 launch wrote its log into a directory that did not exist yet (no-op); relaunched with `mkdir -p` first.
+- Seamlessness checks 1–2: the r8 checkpoints placed at the resume paths have md5 586baf0b… / a8dfc589… / 1b1843d5…,
+  equal to the md5s `trajectory-cap6`'s ladder logs printed on upload (`logs/seed{0,1,2}.log`); the resume lines read
+  72,175 (s0) / 48,085 (s1) / 36,334 (s2) target proofs = `found_8.jsonl` line counts.
