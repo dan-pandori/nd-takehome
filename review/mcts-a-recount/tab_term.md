@@ -1,0 +1,31 @@
+| ckpt/pool/arm | n solves | pruned lines (median) | term size (median / mean) |
+|---|---|---|---|
+| pend/C/prior | 1 | 8 | 6 / 6 |
+| pend/C/value | 2 | 15.0 | 13.0 / 13 |
+| pend/h250/prior | 639 | 9 | 6 / 6.97 |
+| pend/h250/sample | 610 | 9.0 | 5.0 / 6.19 |
+| pend/h250/value | 625 | 9 | 6 / 7.33 |
+| pend/long2/prior | 17 | 20 | 17 / 16.35 |
+| pend/long2/sample | 17 | 19 | 15 / 16 |
+| pend/long2/value | 22 | 21.0 | 16.5 / 17.73 |
+| pend/rrQ100/prior | 211 | 17 | 13 / 14.01 |
+| pend/rrQ100/sample | 184 | 16.0 | 12.0 / 12.55 |
+| pend/rrQ100/value | 227 | 18 | 14 / 15.29 |
+| pend/tb72/prior | 97 | 7 | 5 / 5.82 |
+| pend/tb72/sample | 100 | 7.0 | 4.0 / 5.37 |
+| pend/tb72/value | 109 | 8 | 6 / 6.5 |
+| r8/C/prior | 6 | 17.0 | 15.5 / 14.17 |
+| r8/C/sample | 10 | 17.0 | 15.0 / 15.1 |
+| r8/C/value | 7 | 15 | 12 / 12.57 |
+| r8/h250/prior | 715 | 10 | 7 / 7.34 |
+| r8/h250/sample | 714 | 9.0 | 5.5 / 6.23 |
+| r8/h250/value | 719 | 9 | 6 / 7.14 |
+| r8/long2/prior | 51 | 22 | 19 / 18.86 |
+| r8/long2/sample | 59 | 19 | 15 / 15.44 |
+| r8/long2/value | 58 | 21.0 | 18.0 / 18.05 |
+| r8/rrQ100/prior | 278 | 18.0 | 14.0 / 15.19 |
+| r8/rrQ100/sample | 281 | 16 | 12 / 12.67 |
+| r8/rrQ100/value | 282 | 18.0 | 14.0 / 14.71 |
+| r8/tb72/prior | 142 | 9.5 | 7.0 / 7.7 |
+| r8/tb72/sample | 154 | 9.0 | 6.5 / 7.19 |
+| r8/tb72/value | 153 | 10 | 7 / 7.93 |
