@@ -889,3 +889,13 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `max_steps` 192. Truncation stays 1.0–1.8 % (non-terminating actions); solved sets 0 lost, +2 / +1 / 0 / 0 gained.
 - Pre-registration vs outcome: frozen predictions hit, every T1 prediction missed high (see `run_best_state.md`).
 - Total 60.74 pod-hours, $29.76 (A40 $0.49/h); balance $329 after.
+
+# log — guided-tts (proposal 24 Part A, narrowed; executor)
+
+## 2026-10-03
+- 18:05  Start. Read proposal 24, Robbie's `engine.py` (`_swor_shift`), `state_env.py`, `state_sample.py`, the `trajectory*` numbers. Problem files copied to `data/gt/`, sha256 checked against both manifests.
+- 18:10  Pre-registration committed and pushed (`preregistration/guided-tts.md`); `podbudget guided-tts --set 20 10`. No pod before it.
+- Design choices made while coding: the per-step logical check reuses `lean_prefilter._term` (run lean-prefilter, 0 false rejects in 1.31 M whole texts) in the environment's scope (`step_check.py`); box openings need no check (the environment already checks them). One code path for all arms (`guided_sample.py`); plain = first rejection ends the attempt, as `state_sample.py`. Truncated actions cannot be forbidden exactly, so they are redrawn with replacement. Lean judges every finished proof (`lean_gate.gate`).
+- 18:15–18:19  gt-p0 (A40, $0.49/h): setup + smoke (20 textbook72 theorems × k 16, cap-12 s0): plain 161 / 320 attempts accepted, logical 181 / 320 with 0 Lean rejections of finished proofs (plain: 43, all flagged by the checker), 1.43× the sampled tokens.
+- 18:19–18:23  Queues launched on gt-p0/p1/p2 (A40), one model seed each: plain cap 12, plain cap 6 (both dump steps) → checker gate → logical → structural.
+- 18:35  best12 s0 plain: 178 / 259 solved (textbook72 48 = trajectory's 48 for this model), 986 s (GPU 868 s, check 17 s, env 39 s, final Lean 27 s), peak 25.8 GB at batch 2,048. Proof level: all 12,962 Lean-rejected finished proofs carry a checker flag; 0 flagged proofs accepted.
