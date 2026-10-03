@@ -910,3 +910,7 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   quota of ≈ 7.6 CPUs (`lean_gate.cpu_quota()` = 7), so 32 workers already oversubscribe. Prepared a budget fallback
   in `pod/rc6/read.sh` (flag file `artifacts/rc6/H250_C`): holdout250 read on each seed's group-C theorems only
   (`data/rc6/h250_C_s{0,1,2}.jsonl`, 24 / 21 / 26 rows, from `trajectory-cap6`'s pend/r8 seed-0 reads). Question updated.
+- 2026-10-03 22:05–22:20 UTC  r12 done on all seeds (targets_cum 4,296 / 4,300 / 4,275); s1/s2 r13 done (4,305 / 4,288).
+  `podbudget` 13.55 h / $6.64. Projection for the ladders ≈ 24.0 pod-hours, so the default in `QUESTIONS.md` is applied:
+  `artifacts/rc6/H250_C` created on every pod (r16 read = textbook72 full + holdout250 group-C theorems), and the hours
+  ceiling raised to 24.45 h (= $12 at $0.49/h; `podbudget --extend 0.45`), within the declared $12.
