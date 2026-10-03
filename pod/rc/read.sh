@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Sampled read-outs of one checkpoint (trajectory's pod/tj/read.sh + best-state's rr600/long2 reads).
 # Usage: bash pod/rc/read.sh <ckpt> <label> <sample seed> <reads...>     reads: tb72 h250 rr1316 long2
-# Settings for every read: k 256, T 0.8, max_action 512, max_steps 96, batch 2,048 (one retry at 1,024 on OOM).
+# Settings for every read: k 256 (rr1316: k 64, budget, 2026-10-03 20:40 UTC), T 0.8, max_action 512, max_steps 96, batch 2,048 (one retry at 1,024 on OOM).
 # Restartable: a read whose summary exists is skipped.
 source pod/rc/env.sh
 CK=$1; L=$2; SS=$3; shift 3; B=${B:-2048}; MA=512; MS=96
@@ -14,7 +14,7 @@ for R in "$@"; do
                 --batch $1 --max_action $MA --max_steps $MS --out $O.jsonl.tmp --summary $O.json.tmp ;;
       h250)   python3 state_eval.py --ckpt $CK --in data/bs/holdout250.jsonl --lenfield n_lines --k 256 --temperature 0.8 --seed $SS \
                 --batch $1 --max_action $MA --max_steps $MS --out $O.jsonl.tmp --summary $O.json.tmp ;;
-      rr1316) python3 lpool_reread.py --ckpt $CK --in data/rc/rr600_13_16.jsonl --lenfield L_true_lb --k 256 --temperature 0.8 --seed $SS \
+      rr1316) python3 lpool_reread.py --ckpt $CK --in data/rc/rr600_13_16.jsonl --lenfield L_true_lb --k 64 --temperature 0.8 --seed $SS \
                 --batch $1 --max_action $MA --max_steps $MS --out $O.jsonl.tmp --summary $O.json.tmp ;;
       long2)  python3 lpool_reread.py --ckpt $CK --in data/ladder/transfer_long2.jsonl --lenfield L_true_lb --k 256 --temperature 0.8 --seed $SS \
                 --batch $1 --max_action $MA --max_steps $MS --out $O.jsonl.tmp --summary $O.json.tmp ;;

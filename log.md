@@ -902,3 +902,8 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   with all planned reads, so per the pre-registered priority order the r12 sample-seed-0 tb72/h250 reads are dropped
   (`SKIP_r12x0` on every pod). Found-set carry-over: every (target, proof) pair in `found_8` is in `found_9`
   (s0 229,482 ⊂ 273,491; s1 271,490 ⊂ 321,168; s2 250,560 ⊂ 292,958; `artifacts/rc/seamless_s*.txt`). r9: s0 +4, s1 +6, s2 +4 targets.
+- 2026-10-03 20:40 UTC  r10 rounds took 3,700–4,070 s; r11 (s2) 3,881 s. Projection: ladders + r12 seed-1 reads ≈ 27.5 of the
+  30 pod-hours. Further cuts (still no answer in `QUESTIONS.md`): r16 sample-seed-0 tb72/h250 dropped (`SKIP_r16x0`);
+  rr600 13–16 read at **k 64** (sample seed 0, r8 and r16, all three seeds, paired) instead of k 256 (≈ 0.64 h per read at
+  k 256 would need ≈ 3.8 h); long2 stays k 256. pass@64 on rr600 13–16 is therefore not directly comparable with
+  `best-state`'s k 256 rr600 numbers; the r8 → r16 comparison within this run is matched.
