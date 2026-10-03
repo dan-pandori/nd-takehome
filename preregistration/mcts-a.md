@@ -144,3 +144,16 @@ attempts/actions): GPU-s, generated tokens, sampled actions and expansions, Lean
 policy), except the value head's own training steps, which are recorded separately.
 
 **Deviations** from this file will be written in `log.md` with the reason.
+
+## Addendum 1 (2026-10-03 00:12 UTC, before any evaluation read-out)
+
+The first tuning result (s0 pend, tune200, budget 466 s) is K 8 / T 1.0 PUCT-prior **105 / 184**, against sampling's
+**140 / 184**. 57 % of the search's sampled actions duplicate an action already sampled at the same node. Each expansion
+decodes K actions to go one step deeper. At a confident step that costs K× sampling for one distinct child, and
+progressive sampling already adds breadth where visits accumulate. The pre-registered grid only has K ≥ 8.
+
+**Change:** the tuning grid gains four configs, K ∈ {2, 4} × T ∈ {0.8, 1.0}, on the same set, checkpoint, pod and
+budget. The four pre-registered configs are all still run. Each arm's winner is chosen over all eight by the same rule
+(most solved; ties go to the earlier config in the order t0–t7). Nothing else changes: no evaluation pool has been
+read, and the gate, the pools and the expectations above stand. The s0 r8 value head is trained on another pod (mc-2)
+so that mc-0's extra tuning time does not delay its read-outs.
