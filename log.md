@@ -901,3 +901,6 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 2026-10-03 18:43–18:47 UTC  r9 done on all seeds (s0 3,542 s, s1 2,868 s, s2 2,859 s). New targets r9: +11 / +30 / +30;
   transfer +9 / +21 / +22. Seamlessness check 3 (`pod/rc6/seam.py`): 0 r8-solved targets or transfer theorems missing
   from the r9 found sets on every seed. Projection at these round times: ≈ 21.5 pod-hours incl. r16 reads (≈ $10.5).
+- 2026-10-03 19:57 UTC  r10 done (s0 3,697 s, s1 2,906 s, s2 3,086 s): new targets +6 / +12 / +19. `podbudget`: 6.54 h,
+  $3.20 used. Projection with s0's rounds at ≈ 3,850 s and s1/s2 at ≈ 3,050 s: ≈ 23.4 pod-hours (≈ $11.5) incl. the core
+  r16 reads, so the optional reads stay off unless Dan extends the budget.
