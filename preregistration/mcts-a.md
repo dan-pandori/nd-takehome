@@ -157,3 +157,12 @@ budget. The four pre-registered configs are all still run. Each arm's winner is 
 (most solved; ties go to the earlier config in the order t0–t7). Nothing else changes: no evaluation pool has been
 read, and the gate, the pools and the expectations above stand. The s0 r8 value head is trained on another pod (mc-2)
 so that mc-0's extra tuning time does not delay its read-outs.
+
+## Addendum 2 (2026-10-03 04:35 UTC): exploratory 10× read-out, not part of the gate
+
+The gate has failed: group C at r8 is 2 / 2 / 3 with the value against 4 / 2 / 4 with sampling. Matched budgets on
+group C were only 75–160 s per pool, about 3–5 GPU-s per theorem. One exploratory read asks whether the failure is
+about budget or about method: per seed, at r8, on group C, sampling at **k 2,560** (T 0.8, sample seed 3, otherwise the
+same protocol) against PUCT-value (cfg_final) at that read's wall clock. It runs one seed per A40 pod. **Expected:**
+sampling at k 2,560 solves about 2× its k 256 count (6–9 per seed). PUCT-value at 10× solves within ±3 of it; I give
+about 25 % to it being ≥ 3 ahead on ≥ 2 seeds. It is labelled exploratory in every table and does not change the gate.
