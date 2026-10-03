@@ -16,6 +16,7 @@ step "tokenizer + lean_seq round-trips, Lean judge on a fixed sample" $PY tests/
 step "lean_check selftest (free-form Lean allowlist: Not.elim and negatives)" $PY lean_check.py --selftest
 step "Lean-only judge (no nd_verify on any judging path)" $PY tests/test_lean_only_judge.py
 step "lean-prefilter soundness" $PY tests/test_lean_prefilter.py
+step "guided-tts per-step checker (step_check)" $PY -m pytest -q tests/test_step_check.py
 step "state-env round-trip and replay" $PY tests/test_state_env.py
 step "relabel marker" $PY -m pytest -q tests/test_relabel_marker.py
 step "results registry" $PY tests/test_registry.py

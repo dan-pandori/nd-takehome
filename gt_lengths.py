@@ -25,6 +25,8 @@ def main():
     ap.add_argument('--workers', type=int, default=2)
     ap.add_argument('--out', default='artifacts/gt/lengths.json')
     a = ap.parse_args()
+    import record
+    record.save_config(vars(a), a.out)
     from lean_check import check
     best = {}
     for fn in sorted(glob.glob(os.path.join(a.eval, '*.rows.jsonl.gz'))):

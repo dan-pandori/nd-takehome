@@ -19,6 +19,8 @@ def main():
     ap.add_argument('files', nargs='+')
     ap.add_argument('--out', required=True)
     a = ap.parse_args()
+    import record
+    record.save_config(vars(a), a.out)
     seen = {}
     for fn in a.files:
         for l in gzip.open(fn, 'rt'):
