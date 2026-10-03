@@ -14,6 +14,8 @@ Curves (pre-registered):
   matched wall    same with one ratio per job: (job seconds per attempt of A) / (of plain), job seconds = sampling loop
                   (GPU + checker + environment) + final Lean.
   per attempt     plain pass@k of each arm (not compute-matched).
+  wall_by_draws   (not pre-registered) matched wall with the job's seconds shared out to theorems by draws, since one
+                  ratio per job under-charges theorems where guided redraws are frequent.
 Groups: file, min_lines bin (release files; tb72 dev by reference_lines), long (release, min_lines > 10), Roy,
 Pelletier, batch3.  Differences vs plain per seed; IQM over seeds with a stratified bootstrap (theorems resampled
 within group) 95 % interval; MDD from a bootstrap over attempts within theorem (2.8 x sd of the difference).
@@ -80,6 +82,8 @@ def job_secs(summ):
 def curves(rows_a, rows_p, summ_a, summ_p, boot_att=None):
     """per theorem: arrays over KS of (matched-token, matched-wall, per-attempt) solve probability."""
     wr = (job_secs(summ_a) / summ_a['attempts']) / (job_secs(summ_p) / summ_p['attempts'])
+    # not pre-registered robustness variant: job seconds shared out to theorems by their share of draws (waves x rows)
+    da = sum(sum(r['draws']) for r in rows_a); dp = sum(sum(r['draws']) for r in rows_p)
     out = []
     for ra, rp in zip(rows_a, rows_p):
         assert ra['prompt'] == rp['prompt']
@@ -94,8 +98,10 @@ def curves(rows_a, rows_p, summ_a, summ_p, boot_att=None):
         tok = [interp(tab, k * cp / ca) for k in KS]
         wal = [interp(tab, k / wr) for k in KS]
         att = [interp(tab, k) for k in KS]
-        out.append((tok, wal, att))
-    return np.array(out)            # (theorems, 3, len(KS))
+        wa = job_secs(summ_a) * sum(ra['draws']) / da / n; wp = job_secs(summ_p) * sum(rp['draws']) / dp / n
+        wt = [interp(tab, k * wp / wa) for k in KS]
+        out.append((tok, wal, att, wt))
+    return np.array(out)            # (theorems, 4, len(KS))
 
 
 def iqm(x):
@@ -131,7 +137,7 @@ def main():
         att = summ['attempts']
         fin_rej = summ['finished'] - summ['accepted']
         out['jobs'][f'{m}_s{s}_{arm}'] = dict(
-            solved=summ['solved_total'], accepted=summ['accepted'], attempts=att, finished=summ['finished'],
+            solved=summ['solved_total'], accepted=summ['accepted'], batch=summ['batch'], attempts=att, finished=summ['finished'],
             sampled_tokens=st['sampled_tokens'], prefill_tokens=st['prefill_tokens'], draws=draws,
             gpu_s=st['gpu_s'], check_s=st['check_s'], env_s=st['env_s'], lean_s=st.get('lean_s'),
             loop_s=st['loop_wall_s'], wall_s=summ['wall_s'], peak_gb=st.get('peak_alloc_gb'), gpu=summ['gpu'],
@@ -148,6 +154,10 @@ def main():
               f"{100 * j['truncated_draws'] / draws:.3f} | {100 * j['step_cap'] / att:.3f} | {100 * j['max_rej'] / att:.1f} | "
               f"{j['redraws']} | {j['repeat_mean'] if j['repeat_mean'] is None else round(j['repeat_mean'], 3)} | {fin_rej}")
 
+    for (m, s, arm), (rows, summ) in sorted(D.items()):
+        if summ['batch'] != 2048:
+            print(f'NOTE: {m} s{s} {arm} ran at batch {summ["batch"]} (OOM at 2,048): its tokens-matched and per-attempt '
+                  f'values are comparable (a re-draw); its wall-matched values are not (smaller batch = more seconds).')
     # ---- step-level rejection rates (per draw), by kind and top causes
     print('\n## Rejections per draw (S = environment / structural, L = logical check, truncated) and logical failures '
           'let through (plain / structural: flagged accepted steps)')
@@ -174,7 +184,7 @@ def main():
         rp, sp = D[(m, s, 'plain')]
         per[(m, s, arm)] = curves(rows, rp, summ, sp)
     gidx = {g: [i for i, r in enumerate(any_rows) if g in groups_of(r)] for g in gnames}
-    kinds = ['tokens', 'wall', 'attempt']
+    kinds = ['tokens', 'wall', 'attempt', 'wall_by_draws']
     for (m, s, arm), C in sorted(per.items()):
         for g, ix in gidx.items():
             out['cells'][f'{m}|{s}|{arm}|{g}'] = {kd: C[ix, q, :].mean(0).tolist() for q, kd in enumerate(kinds)}

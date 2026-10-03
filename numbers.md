@@ -1701,3 +1701,98 @@ step-cap rates re-read at `max_action` 1,024, `max_steps` 192 (`artifacts/bs/eva
 Truncation barely falls at twice the action budget: these are non-terminating actions, not long proofs cut off. The
 caps make the best-recipe numbers slightly low (≤ 2 textbook problems per checkpoint); no conclusion changes. Final spend
 60.74 pod-hours, $29.76.
+
+## guided-tts (2026-10-03, executor; UNREVIEWED)
+
+**Models (every number here):** cap 12 = `trajectory`'s `la_T1_best12_s{0,1,2}_r8.pt`; cap 6 = `trajectory-cap6`'s
+`la_T1_best6_s{0,1,2}_r8.pt`. All `best_model.ALiBiGPT` 6 × 384, 9,560,832 params, `lean_staten` (environment-assigned
+names), Robbie's recipe from scratch (cap 12 on K12 `data/kh/train_k12.jsonl`, cap 6 on `train_depth3_f0_a1.jsonl`,
+155,000 each), then the 8-round T1 ladder. md5s match those runs' records (`artifacts/gt/logs/setup_*.log`). No training.
+**Checker: Lean alone** (post-2026-09-27): every finished proof's literal text through `lean_gate`; `nd_verify` not called.
+**Problems:** textbook72 (dev58 + train14) and Charles's release `candidate_v0` 87, `candidate_v1` 72, `batch3` 14,
+`hand_proved_14` 14 (sha256 checked; `data/gt/`), 259 theorems. **long** = release rows with `min_lines` > 10 (90).
+**Settings (all arms):** k 256 attempts per theorem, T 0.8, `max_steps` 96 accepted actions, `max_action` 512, ≤ 10
+rejections per attempt, sample seed 1, batch 2,048 on A40 (best12 s0 structural: batch 1,024 after an OOM; its
+wall-clock is excluded from wall comparisons). Sources: `artifacts/gt/eval/<model>_s<S>_<arm>.{json,rows.jsonl.gz}`;
+tables `gt_analysis.py` → `artifacts/gt/analysis_stdout.txt` / `analysis.json`; `gt_compute.py`, `gt_repeat.py`,
+`gt_lengths.py` → `artifacts/gt/{compute,repeat,lengths}_stdout.txt`; checker gate `artifacts/gt/validate_s{0,1,2}.json`.
+
+**Checker gate** (`step_check.py` vs Lean, distinct (state, step) pairs from the plain reads, each step a standalone
+theorem): 106,505 / 109,151 / 98,885 pairs (314,541 in all; 186,036 Lean-accepted, 128,505 Lean-rejected); **0 false
+rejects, 0 misses**. Proof level, all 12 plain + structural reads: every Lean-rejected finished proof carries a checker
+flag (e.g. best12 s0 structural 22,910 = 22,910) and no flagged proof was Lean-accepted; no attempt wrote a
+non-canonical formula. Guided-logical: 0 Lean-rejected finished proofs in all 6 reads.
+
+**Solved@256 attempts (not compute-matched), per file** tb72 / v0 / v1 / batch3 / hp14 (of 72 / 87 / 72 / 14 / 14):
+
+| model | plain | structural | logical |
+|---|---|---|---|
+| best12 s0 | 48 / 67 / 52 / 11 / 0 | 53 / 68 / 53 / 11 / 0 | 54 / 75 / 59 / 12 / 0 |
+| best12 s1 | 48 / 65 / 51 / 8 / 0 | 50 / 66 / 52 / 8 / 0 | 52 / 71 / 57 / 10 / 0 |
+| best12 s2 | 53 / 71 / 55 / 9 / 0 | 55 / 73 / 55 / 10 / 0 | 57 / 75 / 56 / 11 / 0 |
+| best6 s0 | 43 / 58 / 44 / 7 / 0 | 47 / 60 / 44 / 7 / 0 | 48 / 65 / 49 / 9 / 0 |
+| best6 s1 | 43 / 54 / 42 / 9 / 0 | 43 / 55 / 44 / 9 / 0 | 47 / 66 / 51 / 9 / 0 |
+| best6 s2 | 39 / 52 / 35 / 8 / 0 | 41 / 58 / 40 / 8 / 0 | 45 / 62 / 47 / 9 / 0 |
+
+Sanity vs `trajectory*` x0 textbook72 (48 / 49 / 54; 43 / 41 / 38): plain 48 / 48 / 53; 43 / 43 / 39 ✓ (± 3).
+
+**Headline: solve rate at matched sampled tokens, arm − plain (pp), per seed s0 / s1 / s2, IQM [stratified bootstrap 95 %]**
+(k = plain-equivalent attempts per theorem; MDD on long ≈ 2.7 pp at k 64, 3.7 at 256, from a bootstrap over attempts):
+
+| group (n) | cap | k | plain | logical − plain | structural − plain |
+|---|---|---|---|---|---|
+| long (90) | 12 | 64 | 36.8 / 28.7 / 40.2 | +10.0 / +9.9 / +5.2 → +9.1 [+3.7, +13.5] | −1.2 / +0.9 / −1.1 → −0.8 [−3.0, +2.2] |
+| long (90) | 12 | 256 | 42.2 / 34.4 / 46.7 | +11.1 / +12.7 / +3.4 → +10.0 [+2.4, +16.9] | −1.2 / +0.3 / −0.2 → −0.3 |
+| long (90) | 6 | 64 | 21.8 / 24.1 / 17.9 | +7.4 / +8.1 / +10.3 → +8.3 [+4.1, +14.0] | +0.8 / +0.7 / +1.1 → +0.8 |
+| long (90) | 6 | 256 | 26.7 / 27.8 / 21.1 | +6.6 / +8.0 / +11.4 → +8.4 [+3.5, +15.2] | −0.1 / −1.2 / +3.2 → +0.3 |
+| Roy (78) | 12 / 6 | 64 | | +5.2 [+1.0, +9.1] / +7.5 [+2.5, +12.4] | −0.1 / +0.3 |
+| batch3 (14) | 12 / 6 | 64 | | +11.8 [+1.2, +28.3] / +13.7 [+0.3, +30.5] | −0.3 / +6.4 |
+| Pelletier (8) | 12 / 6 | 64 | | +10.7 [0, +32.0] / +2.7 [0, +15.7] | −0.5 / −0.1 |
+| ≤ 10 lines (97) | 12 / 6 | 64 | | +2.6 [+0.4, +5.6] / +9.7 [+4.4, +14.6] | −0.8 / +1.6 |
+| 11–20 (67) | 12 / 6 | 64 | | +10.3 [+4.5, +15.6] / +10.4 [+5.4, +17.5] | −0.8 / +1.1 |
+| > 20 (23) | 12 / 6 | 64 | | +5.6 [−1.3, +14.0] / +2.1 [0, +7.0] | −0.4 / +0.1 |
+| textbook72 (72) | 12 / 6 | 64 | | +5.4 [+1.5, +9.5] / +4.8 [+1.1, +10.3] | −0.1 / +0.2 |
+| all (259) | 12 / 6 | 64 | 64.0 / 60.9 / 68.9; 53.2 / 53.4 / 47.7 | +5.6 [+3.0, +7.8] / +7.9 [+5.3, +11.0] | −0.5 / +1.1 |
+
+Matched wall-clock (job seconds per attempt, one ratio per job; sampling loop + final Lean), long, k 64: logical +9.1
+[+3.3, +14.8] (cap 12), +8.8 [+4.8, +14.1] (cap 6); structural −3.4 / +0.7. Not pre-registered, seconds shared out by
+draws per theorem: logical +7.9 / +8.2. At k = 1 every guided arm loses on wall-clock (a guided attempt costs > 1 plain
+attempt). Falsifier (logical ≤ plain at every k on long in ≥ 2 / 3 seeds at both caps): **not met** (0 / 3 seeds at each cap).
+
+**Per attempt (not matched):** per-attempt acceptance plain / structural / logical: cap 12 32.3–38.1 % / 34.8–40.2 % /
+42.2–47.6 %; cap 6 29.7–33.5 % / 33.6–38.0 % / 41.2–44.6 % (`accepted / 66,304`, `analysis_stdout.txt` jobs table).
+
+**Rejections** (per draw; `analysis_stdout.txt`): plain: structural 2.8–3.0 % (cap 12), 4.3–4.9 % (cap 6), top causes
+binder mismatch, `Or.elim` on a non-or, unbound name; logically wrong accepted steps 3.1–4.8 % of draws (top:
+application argument mismatch, `⟨,⟩` mismatch, byContradiction, projection). Guided-logical: S 13.8–21.7 %, L 10.0–15.8 %
+of draws; 52–59 % of attempts end at the 10-rejection cap. Truncated actions (512 tokens): plain 0.003–0.009 % (cap 12),
+0.16–0.28 % (cap 6, above the policy's 0.1 %; non-terminating actions per `best-state`'s 2× diagnostic), guided cap 6
+0.6–1.9 % of draws (redrawn, 512 tokens each, charged).
+
+**With-replacement repeats** (`gt_repeat.py`): per redraw, P(a with-replacement draw repeats an already-rejected action)
+mean 0.32–0.40 (cap 12 logical), 0.51–0.54 (cap 6 logical), 0.21–0.26 / 0.42–0.46 (structural); P > 0.9 for 13–15 %
+(cap 12) and 27–30 % (cap 6) of logical redraws. Exact token sequences, so a repeat that differs only in an
+environment-assigned name is not counted (an understatement).
+
+**Proof length** (`gt_lengths.py`; shortest accepted proof per theorem, on theorems all three arms solve; lines =
+`have` + `exact` actions; term size = `lean_check` elaborated inference nodes, 3,078 proofs, 0 rejected): cap 12 lines
+10.96 / 10.93 / 11.04 plain vs 10.86 / 10.60 / 10.89 logical, term size 7.37 / 7.31 / 7.47 vs 7.28 / 7.01 / 7.33; cap 6
+lines 10.28 / 9.96 / 9.90 vs 9.99 / 9.72 / 9.56, term size 6.64 / 6.39 / 6.32 vs 6.43 / 6.22 / 6.04. Guided proofs are
+not longer.
+
+**Compute per arm** (`gt_compute.py`; A40; mean over 3 model seeds; registry rows `artifacts/guided-tts/registry/`,
+`gpu_seconds` / `gen_tokens` / `attempts` / `actions` / `lean_checks`; 0 training steps / tokens):
+
+| cap, arm | GPU s (sampling) | sampled tokens | prefill tokens | actions | Lean checks | vs plain (GPU s, tokens) |
+|---|---|---|---|---|---|---|
+| 12 plain | 792 | 14.7 M | 87 M | 1.01 M | 17,054 | 1 |
+| 12 structural | 2,507 | 27.7 M | 217 M | 1.82 M | 18,492 | 3.17×, 1.88× |
+| 12 logical | 1,729 | 26.2 M | 166 M | 1.57 M | 22,724 | 2.18×, 1.78× |
+| 6 plain | 714 | 11.4 M | 52 M | 0.73 M | 9,154 | 1 |
+| 6 structural | 2,076 | 30.2 M | 126 M | 1.38 M | 10,606 | 2.91×, 2.65× |
+| 6 logical | 1,672 | 30.7 M | 110 M | 1.30 M | 13,553 | 2.34×, 2.68× |
+
+At equal attempts every guided arm used > 1.25× plain's compute (flagged); the comparisons above are at matched tokens /
+matched wall-clock. Step checks: ≈ 1 checker call per structurally valid draw, 8–18 s per read (CPU); on long, guided
+tokens per attempt are 2.0–2.3× plain (cap 12) and 2.8–3.3× (cap 6).
+**Spend:** 4 A40 pods ($0.49/h), 9.07 pod-hours, $4.45 (`podbudget`). **Bucket:** `hf://buckets/dan-pandori/nd-rl/guided-tts/{artifacts/gt,artifacts/guided-tts,data/gt}`.

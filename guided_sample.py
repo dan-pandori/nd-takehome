@@ -11,11 +11,14 @@ Arms (one code path; they differ only in which rejections are redrawn):
   logical     additionally, an action `step_check.check` rejects (Lean is certain to reject it) is redrawn.
 Up to `max_rej` rejections per attempt; the next one fails the attempt.  `max_steps` counts accepted actions.
 
-Redraws are **without replacement** at the action level, exactly: `_swor_shift` (Robbie's, from
+Redraws are **without replacement** over token sequences, exactly: `_swor_shift` (Robbie's, from
 nd-rl `robbie-experiments:code/experiments/current/test_time_scaling/engine.py`, unchanged; UniqueRandomizer, Shi et
 al. 2020) adds log(1 - R(path + c)) to the tempered logits of a row whose state has rejected actions, R being the
 probability of going on to write one of them exactly.  The forbidden set is per attempt and per state (cleared when
-an action is accepted), so attempts stay i.i.d.  A truncated action (no <eos> in `max_action` tokens) is not a
+an action is accepted), so attempts stay i.i.d.  Two sequences that differ only in a name the environment
+overrides (assign=True) are the same action but different sequences, so such a repeat is not excluded (rare: the
+model is trained on canonical names).  `rej` counts redrawn rejections; the rejection that ends an attempt at the cap
+is in `causes` but not in `rej` (status `fail:max_rej`).  A truncated action (no <eos> in `max_action` tokens) is not a
 complete sequence and cannot be forbidden; it is redrawn with replacement.
 
 Noise: Gumbel-max with noise keyed by (seed, wave, step, slot) (`sample._gumbel_pick`), as `state_sample.py`.

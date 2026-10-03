@@ -1,0 +1,28 @@
+per read: model_s_arm | GPU (sampling loop) s | wall s | sampled tokens M | prefill tokens M | attempts | actions (draws) | step checks (checker calls) | Lean checks (finished texts) | GPU type, batch
+best12_s0_logical | 1976 | 2174 | 27.03 | 183.8 | 66304 | 1673731 | 1441652 | 21685 | NVIDIA A40, 2048
+best12_s0_plain | 868 | 986 | 15.45 | 94.6 | 66304 | 1059305 | 1027480 | 15991 | NVIDIA A40, 2048
+best12_s0_structural | 2728 | 2928 | 29.67 | 252.9 | 66304 | 1999433 | 1748257 | 17705 | NVIDIA A40, 1024
+best12_s1_logical | 1617 | 1796 | 26.19 | 146.5 | 66304 | 1482156 | 1277648 | 22479 | NVIDIA A40, 2048
+best12_s1_plain | 777 | 891 | 14.14 | 82.1 | 66304 | 967827 | 940299 | 16628 | NVIDIA A40, 2048
+best12_s1_structural | 2439 | 2635 | 26.88 | 187.5 | 66304 | 1708787 | 1530003 | 18022 | NVIDIA A40, 2048
+best12_s2_logical | 1594 | 1792 | 25.46 | 168.1 | 66304 | 1551255 | 1321797 | 24008 | NVIDIA A40, 2048
+best12_s2_plain | 732 | 858 | 14.61 | 85.5 | 66304 | 1001346 | 973116 | 18544 | NVIDIA A40, 2048
+best12_s2_structural | 2355 | 2570 | 26.59 | 209.1 | 66304 | 1740141 | 1507561 | 19750 | NVIDIA A40, 2048
+best6_s0_logical | 2016 | 2147 | 31.56 | 118.9 | 66304 | 1328070 | 1036632 | 15682 | NVIDIA A40, 2048
+best6_s0_plain | 858 | 932 | 11.94 | 53.9 | 66304 | 741190 | 706689 | 11089 | NVIDIA A40, 2048
+best6_s0_structural | 2428 | 2558 | 31.25 | 136.6 | 66304 | 1427868 | 1177175 | 12805 | NVIDIA A40, 2048
+best6_s1_logical | 1409 | 1518 | 25.09 | 96.7 | 66304 | 1228657 | 971091 | 14284 | NVIDIA A40, 2048
+best6_s1_plain | 615 | 679 | 10.73 | 48.8 | 66304 | 707657 | 676131 | 9336 | NVIDIA A40, 2048
+best6_s1_structural | 1882 | 1996 | 23.32 | 109.4 | 66304 | 1290198 | 1088866 | 10798 | NVIDIA A40, 2048
+best6_s2_logical | 1590 | 1710 | 35.35 | 114.2 | 66304 | 1341022 | 1024871 | 10693 | NVIDIA A40, 2048
+best6_s2_plain | 668 | 734 | 11.60 | 52.0 | 66304 | 727335 | 690075 | 7036 | NVIDIA A40, 2048
+best6_s2_structural | 1918 | 2047 | 36.11 | 131.9 | 66304 | 1434794 | 1129439 | 8214 | NVIDIA A40, 2048
+
+per arm, mean over the 3 model seeds: GPU s | sampled tokens M | prefill tokens M | actions | Lean checks | ratio to plain (GPU s, sampled tokens)
+best12 logical | 1729 | 26.23 | 166.1 | 1569047 | 22724 | 2.18x, 1.78x
+best12 plain | 792 | 14.73 | 87.4 | 1009493 | 17054 | 1.00x, 1.00x
+best12 structural | 2507 | 27.71 | 216.5 | 1816120 | 18492 | 3.17x, 1.88x
+best6 logical | 1672 | 30.67 | 109.9 | 1299250 | 13553 | 2.34x, 2.68x
+best6 plain | 714 | 11.42 | 51.6 | 725394 | 9154 | 1.00x, 1.00x
+best6 structural | 2076 | 30.23 | 126.0 | 1384287 | 10606 | 2.91x, 2.65x
+training steps / tokens: 0 / 0 in every arm (no training).  Arms compared at matched sampled tokens and matched wall-clock by construction of the curves; at equal attempts (k 256) every guided arm used > 1.25x plain on GPU s and sampled tokens (flagged).
