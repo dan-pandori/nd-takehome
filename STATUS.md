@@ -255,3 +255,14 @@ Brief: nd-rl `docs/proposals/2026-10-02-mcts.md`, run brief mcts-a. Policy: AGEN
   ALiBiGPT 9.56M, `lean_staten`, from scratch on K12, then T1 EI); value heads trained on that checkpoint's rollouts
   on rl_targets + K12. Source: `artifacts/mcts/eval/s*_r8__C__*.json`, `mcts_analysis.py`. The other read-outs are
   still running.
+- 2026-10-03 05:25 UTC  results:
+  - Group C stays unsolved by search: r8 2 / 2 / 3 vs sampling 4 / 2 / 4; exploratory 10× 9 / 5 / 7 vs 10 / 7 / 5.
+  - At pend, PUCT + value beats sampling on rr600 L13–16 by +14.3 (CI +9.7 to +19.3).
+  - At r8, every pool is within ±2.
+  - Value heads: held-out AUC 0.74–0.82.
+  - Deliverables: `run_mcts_a.md`, `numbers.md` § mcts-a, `log.md`, `figures/mcts_a.png`,
+    bucket `hf://buckets/dan-pandori/nd-rl/mcts-a/`. All pods deleted; 17.67 pod-h, $8.66 of $15.
+  - The search / value code (`mcts.py`, `value_head.py`, `mcts_value_*.py`, `mcts_eval.py`, tests) awaits review
+    before any merge into `dan`.
+
+MCTS-A DONE 2026-10-03T05:25:00Z

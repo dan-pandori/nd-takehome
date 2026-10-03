@@ -945,3 +945,22 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   before I stopped it. Those files are kept apart in `artifacts/mcts/dup_s0_pend_mc0/` and used in no table. The
   tables use mc-3's s0 pend read-outs. mc-0 was pulled and deleted. mc-0 may have uploaded its copies of
   `s0_pend__C__*` over mc-3's in the bucket; the final sync from the worktree restores mc-3's.
+- 2026-10-03 04:21  all 90 read-outs done (3 seeds × {r8, pend} × 5 pools × 3 arms). mc-1 pulled.
+  `mcts_termsize.py` ran on mc-1: lean_check accepted 6,490 of 6,490 found proofs.
+- 2026-10-03 04:29  addendum 2 (exploratory 10× group-C read-out at r8) committed before running. Pods: mc-1 (s1) and
+  new mc-4 (s0) / mc-5 (s2). Result: sampling k 2,560 → 10 / 7 / 5; PUCT + value at the same wall clock → 9 / 5 / 7.
+- 2026-10-03 05:22  all pods pulled (remote and local listings diffed) and deleted; 17.67 pod-hours, $8.66, balance $153.6.
+  `mcts_analysis.py --record --fig` → `artifacts/mcts/analysis.md`, `summary.json`, `figures/mcts_a.png`, 606
+  registry rows. Secret scan: 0 hits on 510 files. Uploaded `artifacts/mcts`, `artifacts/mcts-a`, `data/mcts`;
+  `ckpts/mcts/value_*.pt` were already uploaded from the pods. The bucket's s0 pend read-outs were re-copied from the
+  worktree (mc-3's), because mc-0's duplicate draw may have overwritten them.
+- Expectations vs outcome:
+  - **Gate**: expected about 45 % PASS, with value 4–8 on group C at r8. Outcome FAIL: 2 / 2 / 3 against
+    sampling's 4 / 2 / 4.
+  - **prior vs sample** on C: expected ±2; outcome −2 / −1 / −1.
+  - **textbook72 r8**: expected ±4 → value −2 / −1 / +2 (hit); prior −5 / −6 / −1 (missed low).
+  - **pend**: expected value +0 to +6 on textbook72 → +3 / +5 / +1 (hit); +0 to +10 on rrQ100 → +19 / +10 / +14
+    (above).
+  - **h250 r8**: expected ±3 → hit.
+  - **Value AUC**: expected 0.80–0.92 → 0.74–0.82 (low). Steps-to-go Spearman 0.6–0.85 → 0.69–0.83 (hit).
+  - **GPU util**: expected search 40–75 % against sampling 70–95 % → search 53 / 72 %, sampling 63 %.

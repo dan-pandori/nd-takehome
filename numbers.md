@@ -1701,3 +1701,170 @@ step-cap rates re-read at `max_action` 1,024, `max_steps` 192 (`artifacts/bs/eva
 Truncation barely falls at twice the action budget: these are non-terminating actions, not long proofs cut off. The
 caps make the best-recipe numbers slightly low (≤ 2 textbook problems per checkpoint); no conclusion changes. Final spend
 60.74 pod-hours, $29.76.
+
+## mcts-a (proposal 22, Phases 0 + A; 2026-10-02 / 03)
+
+**Models (every number in this section):** `trajectory`'s cap-12 seeds s0–s2. Each is `best_model.ALiBiGPT` 6 × 384,
+9,560,832 parameters, `lean_staten`, trained from scratch on K12 (155,000 generator proofs, cap 12).
+- **pend** = `stage1_best12_s{S}_b1200.pt` (end of pretraining).
+- **r8** = `la_T1_best12_s{S}_r8.pt` (T1 EI ladder, round 8).
+- From `hf://buckets/dan-pandori/nd-rl/trajectory/ckpts/tj/`; md5 checked against `trajectory`'s.
+
+The policy is frozen. The value heads (`ckpts/mcts/value_s{S}_{ck}.pt`) are MLPs on that checkpoint's frozen trunk.
+**Checker:** Lean alone (`lean_gate.gate` on the literal `lean_seq` text). Every job ran alone on one A40 ($0.49/h).
+
+**Arms:**
+- **sample:** `state_eval.py`, k 256, T 0.8, max_action 512, max_steps 96, batch 2,048, sample seed 2 (a fresh draw).
+- **prior:** PUCT, prior only, K 2 / T 1.0.
+- **value:** PUCT + value, K 8 / T 1.5.
+
+Both search configs came from the pre-registered tuning (addendum 1). Search runs at max_action 256 and depth ≤ 96.
+Each search job's budget is the sampling job's wall clock on the same pool, checkpoint and pod.
+
+Sources: `artifacts/mcts/eval/s{S}_{ck}__{pool}__{arm}.json[l]`, `mcts_analysis.py` (→ `artifacts/mcts/analysis.md`,
+`summary.json`).
+
+### Solved (group C = `trajectory` group C of that seed: 36 / 35 / 28)
+
+### r8
+
+| pool | n | sample s0 | sample s1 | sample s2 | prior s0 | prior s1 | prior s2 | value s0 | value s1 | value s2 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| C | 36/35/28 | 4 | 2 | 4 | 2 | 1 | 3 | 2 | 2 | 3 |
+| tb72 | 72 | 49 | 50 | 55 | 44 | 44 | 54 | 47 | 49 | 57 |
+| h250 | 250 | 239 | 236 | 239 | 239 | 236 | 240 | 240 | 239 | 240 |
+| rrQ100 | 100 | 96 | 93 | 92 | 96 | 94 | 88 | 96 | 96 | 90 |
+| long2 | 21 | 21 | 19 | 19 | 20 | 14 | 17 | 21 | 18 | 19 |
+
+### pend
+
+| pool | n | sample s0 | sample s1 | sample s2 | prior s0 | prior s1 | prior s2 | value s0 | value s1 | value s2 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| C | 36/35/28 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | 1 |
+| tb72 | 72 | 32 | 32 | 36 | 29 | 34 | 34 | 35 | 37 | 37 |
+| h250 | 250 | 199 | 207 | 204 | 215 | 212 | 212 | 206 | 216 | 203 |
+| rrQ100 | 100 | 59 | 65 | 60 | 76 | 69 | 66 | 78 | 75 | 74 |
+| long2 | 21 | 8 | 5 | 4 | 9 | 3 | 5 | 12 | 4 | 6 |
+
+
+**Gate (pre-registered): MCTS-A GATE: FAIL.** Group C at r8, value vs sample: 2 vs 4, 2 vs 2, 3 vs 4 (Δ −2, 0, −1).
+0 of 3 seeds reach Δ ≥ 3, and proposal 22's falsifier fires. Union of the three arms on C at r8: 7 / 3 / 5.
+`trajectory`'s seed-1 k 256 read gave 3 / 1 / 1.
+
+### Paired differences
+
+Mean over seeds, stratified bootstrap 95 % CI over theorems, per-seed values in brackets. The CI covers sampling
+noise only; n = 3 seeds.
+
+| ck | pool | value − sample | prior − sample | value − prior |
+|---|---|---|---|---|
+| r8 | C | -1.00 [-3.00, +1.33] (-2, +0, -1) | -1.33 [-3.67, +1.00] (-2, -1, -1) | +0.33 [-1.00, +1.67] (+0, +1, +0) |
+| r8 | tb72 | -0.33 [-2.33, +1.67] (-2, -1, +2) | -4.00 [-6.67, -1.33] (-5, -6, -1) | +3.67 [+1.33, +6.33] (+3, +5, +3) |
+| r8 | h250 | +1.67 [+0.33, +3.33] (+1, +3, +1) | +0.33 [-0.67, +1.67] (+0, +0, +1) | +1.33 [+0.00, +3.00] (+1, +3, +0) |
+| r8 | rrQ100 | +0.33 [-1.67, +2.33] (+0, +3, -2) | -1.00 [-3.00, +1.00] (+0, +1, -4) | +1.33 [+0.00, +3.00] (+0, +2, +2) |
+| r8 | long2 | -0.33 [-1.33, +0.67] (+0, -1, +0) | -2.67 [-4.33, -1.00] (-1, -5, -2) | +2.33 [+0.67, +4.33] (+1, +4, +2) |
+| pend | C | +0.67 [+0.00, +1.67] (+0, +1, +1) | +0.33 [+0.00, +1.00] (+0, +1, +0) | +0.33 [+0.00, +1.00] (+0, +0, +1) |
+| pend | tb72 | +3.00 [+0.00, +6.00] (+3, +5, +1) | -1.00 [-4.00, +2.00] (-3, +2, -2) | +4.00 [+1.33, +7.00] (+6, +3, +3) |
+| pend | h250 | +5.00 [+0.00, +10.33] (+7, +9, -1) | +9.67 [+5.33, +14.33] (+16, +5, +8) | -4.67 [-9.33, -0.33] (-9, +4, -9) |
+| pend | rrQ100 | +14.33 [+9.67, +19.33] (+19, +10, +14) | +9.00 [+4.00, +13.67] (+17, +4, +6) | +5.33 [+0.67, +10.00] (+2, +6, +8) |
+| pend | long2 | +1.67 [+0.00, +3.67] (+4, -1, +2) | +0.00 [-2.00, +2.00] (+1, -2, +1) | +1.67 [-0.67, +4.00] (+3, +1, +1) |
+
+
+### Value calibration
+
+Held-out tenth of rl_targets + K12 theorems by name hash. Rollouts: k 16, T 1.0, on all 4,495 rl_targets + 1,500 K12.
+
+| seed | ck | states | AUC solvable | Brier (const) | steps-to-go MAE | Spearman | rollouts accepted |
+|---|---|---|---|---|---|---|---|
+| s0 | r8 | 51551 | 0.8161 | 0.05339 (0.07426) | 2.447 | 0.6871 | 85799/95920 |
+| s0 | pend | 27128 | 0.7703 | 0.12167 (0.17133) | 1.401 | 0.7828 | 44954/95920 |
+| s1 | r8 | 53687 | 0.7908 | 0.05844 (0.07586) | 2.368 | 0.7085 | 85109/95920 |
+| s1 | pend | 37859 | 0.7444 | 0.12539 (0.1745) | 1.811 | 0.7618 | 40586/95920 |
+| s2 | r8 | 49452 | 0.7936 | 0.05223 (0.06791) | 2.007 | 0.7653 | 85874/95920 |
+| s2 | pend | 27027 | 0.7645 | 0.11384 (0.16713) | 1.285 | 0.8252 | 44683/95920 |
+
+
+The steps-to-go MAE is in actions. Source: `artifacts/mcts/value/value_s{S}_{ck}.json` (10-bin reliability tables
+inside) and `artifacts/mcts/vdata/vdata_s{S}_{ck}.json`.
+
+### Proof length
+
+On theorems all three arms solved: ND lines / Lean term size (`mcts_termsize.py`, `artifacts/mcts/termsize.json`).
+Search reports the first proof its tree found; sampling reports the shortest of its accepted proofs, so this
+comparison favours sampling. `L_true` labels are ND-derived upper bounds under Lean.
+
+| ck | pool | common | sample | prior | value |
+|---|---|---|---|---|---|
+| r8 | C | 1 | 7.0 / 5.0 | 7.0 / 5.0 | 7.0 / 5.0 |
+| r8 | tb72 | 138 | 8.8 / 6.4 | 10.0 / 7.6 | 9.7 / 7.4 |
+| r8 | h250 | 713 | 9.5 / 6.3 | 10.8 / 7.4 | 10.5 / 7.1 |
+| r8 | rrQ100 | 274 | 16.9 / 12.2 | 19.7 / 14.7 | 19.1 / 14.2 |
+| r8 | long2 | 50 | 19.7 / 15.2 | 23.2 / 18.6 | 22.1 / 17.4 |
+| pend | tb72 | 86 | 6.7 / 4.7 | 7.7 / 5.5 | 8.2 / 5.9 |
+| pend | h250 | 580 | 9.5 / 6.1 | 10.2 / 6.7 | 10.8 / 7.2 |
+| pend | rrQ100 | 161 | 16.9 / 12.0 | 18.0 / 12.9 | 19.1 / 13.6 |
+| pend | long2 | 11 | 19.8 / 15.5 | 20.5 / 15.3 | 21.5 / 16.5 |
+
+
+### Search statistics on found proofs (3 seeds pooled)
+
+- "Hardest step" is the step with the lowest log π.
+- Its prior rank is its rank among the node's siblings.
+- Root steps carry the entropy of the name token the model writes; the environment overrides the name, so these are
+  merged by state.
+
+| ck | pool | arm | proofs | depth (mean) | hardest step depth (median) | its prior rank (median) | its log π (median) | steps < −4 nats (mean) | nodes per proof (median) |
+|---|---|---|---|---|---|---|---|---|---|
+| r8 | C | prior | 6 | 17.3 | 6 | 2 | -4.533 | 0.83 | 243 |
+| r8 | C | value | 7 | 15.3 | 4 | 2 | -4.415 | 0.57 | 116 |
+| r8 | rrQ100 | prior | 278 | 20.8 | 0 | 1 | -1.771 | 0.04 | 116 |
+| r8 | rrQ100 | value | 282 | 20.2 | 0 | 1 | -2.101 | 0.10 | 125 |
+| r8 | long2 | prior | 51 | 24.5 | 4 | 1 | -1.608 | 0.04 | 195 |
+| r8 | long2 | value | 58 | 23.7 | 4 | 1 | -2.086 | 0.16 | 252 |
+| pend | C | prior | 1 | 9.0 | 2 | 1 | -5.033 | 1.00 | 56 |
+| pend | C | value | 2 | 16.0 | 3 | 2 | -5.125 | 1.50 | 63 |
+| pend | rrQ100 | prior | 211 | 19.6 | 7 | 1 | -2.596 | 0.33 | 103 |
+| pend | rrQ100 | value | 227 | 21.6 | 7 | 1 | -4.106 | 1.15 | 95 |
+| pend | long2 | prior | 17 | 22.2 | 11 | 1 | -3.46 | 0.59 | 113 |
+| pend | long2 | value | 22 | 23.8 | 13 | 1 | -6.44 | 2.18 | 136 |
+
+### Exploratory (addendum 2, not part of the gate): group C at r8, 10× budget
+
+Sampling at k 2,560 (sample seed 3, otherwise the same protocol) against PUCT + value at that read's wall clock. Source:
+`artifacts/mcts/eval_x10/`.
+
+| seed | budget s | sample k 2,560 | PUCT + value | value-only | sample-only | sample k 256 (seed 2) |
+|---|---|---|---|---|---|---|
+| s0 | 1279 | 10 | 9 | 1 | 2 | 4 |
+| s1 | 1507 | 7 | 5 | 3 | 5 | 2 |
+| s2 | 819 | 5 | 7 | 3 | 1 | 4 |
+
+At 10× the budget, search and sampling stay level on group C (Δ −1, −2, +2). Each finds theorems the other does not.
+
+### Compute
+
+GPU-seconds are the job's wall clock on one A40. Registry rows: `artifacts/mcts-a/registry/*.jsonl`, 606 rows
+(`solved`, `gpu_seconds`, `gen_tokens`, `actions`, `lean_checks`, `train_steps`).
+
+| item | GPU-s | generated tokens | Lean checks | GPU util |
+|---|---|---|---|---|
+| read-outs, sample (r8 / pend) | 5,281 / 2,895 | 109.5 M / 70.8 M | 268,861 / 226,224 | 63 % |
+| read-outs, PUCT prior | 5,283 / 2,898 | 41.5 M / 25.0 M | 1,203 / 968 | 53 % |
+| read-outs, PUCT + value | 5,260 / 2,900 | 63.8 M / 41.4 M | 1,242 / 991 | 72 % |
+| tuning (17 runs × 466 s, s0 pend) | 7,922 | — | — | — |
+| value data (6 checkpoints, 95,920 rollouts each) | 8,929 | 111.3 M | 456,677 | — |
+| exploratory 10× (sample + value, 3 seeds) | 7,210 | — | — | — |
+
+- Search arms used at most 1.0× their sampling budget; no arm is above 1.25× its comparator. Sampling spends more
+  tokens per second because search's decode batches carry a K-way fan-out of one prefill.
+- Value heads: 30 epochs at batch 4,096, 1,710–3,360 steps each, on 0.23–0.46 M training states. No policy training.
+- Peak memory: search ≤ 10.7 GB, sampling ≤ 29.9 GB (batch 2,048, max_action 512).
+- Truncation: sampling 0.22 % of attempts at max_action 512 (above the 0.1 % guidance; this is `trajectory`'s
+  protocol, and best-state's cap diagnostic found such truncations are non-terminating). Search 0.015 % of samples at
+  256.
+- Pods: mc-0 … mc-5 (A40, $0.49/h), **17.67 pod-hours, $8.66**.
+
+**Bucket:** `hf://buckets/dan-pandori/nd-rl/mcts-a/` holds:
+- `ckpts/mcts/value_s{S}_{ck}.pt`;
+- `artifacts/mcts/` (per-theorem `.jsonl` read-outs, logs, `vdata/vdata_s{S}_{ck}.pt` rollout features + labels);
+- `data/mcts/`.

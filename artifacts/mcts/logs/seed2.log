@@ -1,0 +1,68 @@
+=== value data s2 pend 2026-10-02T23:32:01Z
+theorems 256/5995 states 11294 wall 39s ends {'syntax': 1391, 'truncated': 2, 'done': 2703}
+theorems 512/5995 states 22837 wall 85s ends {'syntax': 2789, 'truncated': 4, 'done': 5399}
+theorems 768/5995 states 34205 wall 128s ends {'syntax': 4133, 'truncated': 10, 'done': 8145}
+theorems 1024/5995 states 45797 wall 174s ends {'syntax': 5609, 'truncated': 17, 'done': 10758}
+theorems 1280/5995 states 56414 wall 221s ends {'syntax': 6952, 'truncated': 27, 'done': 13501}
+theorems 1536/5995 states 66778 wall 265s ends {'syntax': 8331, 'truncated': 34, 'done': 16211}
+theorems 1792/5995 states 77645 wall 307s ends {'syntax': 9719, 'truncated': 37, 'done': 18916}
+theorems 2048/5995 states 89507 wall 350s ends {'syntax': 11164, 'truncated': 38, 'done': 21566}
+theorems 2304/5995 states 100578 wall 390s ends {'syntax': 12568, 'truncated': 38, 'done': 24258}
+theorems 2560/5995 states 111938 wall 433s ends {'syntax': 13923, 'truncated': 48, 'done': 26989}
+theorems 2816/5995 states 123350 wall 475s ends {'syntax': 15252, 'truncated': 51, 'done': 29753}
+theorems 3072/5995 states 134827 wall 515s ends {'syntax': 16620, 'truncated': 54, 'done': 32478}
+theorems 3328/5995 states 146272 wall 554s ends {'syntax': 17974, 'truncated': 58, 'done': 35216}
+theorems 3584/5995 states 157429 wall 597s ends {'syntax': 19382, 'truncated': 59, 'done': 37903}
+theorems 3840/5995 states 168836 wall 643s ends {'syntax': 20752, 'truncated': 65, 'done': 40623}
+theorems 4096/5995 states 180013 wall 686s ends {'syntax': 22046, 'truncated': 67, 'done': 43423}
+theorems 4352/5995 states 190796 wall 732s ends {'syntax': 23384, 'truncated': 70, 'done': 46178}
+theorems 4608/5995 states 202127 wall 775s ends {'syntax': 24785, 'truncated': 88, 'done': 48855}
+theorems 4864/5995 states 213915 wall 815s ends {'syntax': 26217, 'truncated': 91, 'done': 51516}
+theorems 5120/5995 states 225317 wall 859s ends {'syntax': 27699, 'truncated': 100, 'done': 54121}
+theorems 5376/5995 states 236554 wall 896s ends {'syntax': 29097, 'truncated': 100, 'done': 56819}
+theorems 5632/5995 states 248402 wall 941s ends {'syntax': 30553, 'truncated': 109, 'done': 59450}
+theorems 5888/5995 states 259989 wall 984s ends {'syntax': 31910, 'truncated': 114, 'done': 62184}
+theorems 5995/5995 states 264973 wall 1011s ends {'syntax': 32554, 'truncated': 116, 'done': 63250}
+[lean_gate] 63250 samples, parse-fail 0 (no-eos 0, 0.000 %), distinct 30927: ok 15751, rej 15176 (filter 15176, prefilter=on); lean on 15751 texts in 40 procs, 1172.2s proc, exposed 44.4s, tail 42.4s, 32 workers
+{"ends": {"syntax": 32554, "truncated": 116, "done": 63250}, "attempts": 95920, "accepted": 44683, "lean_checks": 63250, "lean_s": 44.82486343383789, "wall_s": 1074.1195363998413, "sampler_gpu_s": 955.7586390972137, "gen_tokens": 15240229, "prompt_tokens": 26015152, "states": 264973, "ckpt": "ckpts/mcts/stage1_best12_s2_b1200.pt", "k": 16, "temp": 1.0, "n_theorems": 5995, "peak_alloc_gb": 10.461551189422607}
+=== value head s2 pend 2026-10-02T23:50:00Z
+/workspace/nd-takehome/mcts_value_train.py:133: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  tot += float(loss) * len(b)
+{"brier": 0.11384, "brier_const": 0.16713, "auc": 0.7645, "stg_mae": 1.285, "stg_spearman": 0.8252}
+=== done s2 pend 2026-10-02T23:50:14Z
+UPLOAD FAILED ckpts/mcts/value_s2_pend.pt
+=== value data s2 r8 2026-10-02T23:50:26Z
+theorems 256/5995 states 20501 wall 53s ends {'syntax': 249, 'done': 3847}
+theorems 512/5995 states 41401 wall 110s ends {'syntax': 505, 'done': 7686, 'truncated': 1}
+theorems 768/5995 states 61922 wall 168s ends {'syntax': 760, 'done': 11527, 'truncated': 1}
+theorems 1024/5995 states 82447 wall 227s ends {'syntax': 1062, 'done': 15321, 'truncated': 1}
+theorems 1280/5995 states 102420 wall 285s ends {'syntax': 1304, 'done': 19174, 'truncated': 2}
+theorems 1536/5995 states 121533 wall 347s ends {'syntax': 1584, 'done': 22987, 'truncated': 4, 'step_cap': 1}
+theorems 1792/5995 states 141051 wall 404s ends {'syntax': 1835, 'done': 26832, 'truncated': 4, 'step_cap': 1}
+theorems 2048/5995 states 161599 wall 463s ends {'syntax': 2156, 'done': 30607, 'truncated': 4, 'step_cap': 1}
+theorems 2304/5995 states 180227 wall 518s ends {'syntax': 2424, 'done': 34434, 'truncated': 5, 'step_cap': 1}
+theorems 2560/5995 states 200368 wall 575s ends {'syntax': 2691, 'done': 38262, 'truncated': 6, 'step_cap': 1}
+theorems 2816/5995 states 221529 wall 638s ends {'syntax': 2974, 'done': 42073, 'truncated': 8, 'step_cap': 1}
+theorems 3072/5995 states 242236 wall 697s ends {'syntax': 3281, 'done': 45861, 'truncated': 9, 'step_cap': 1}
+theorems 3328/5995 states 261774 wall 754s ends {'syntax': 3530, 'done': 49707, 'truncated': 10, 'step_cap': 1}
+theorems 3584/5995 states 281979 wall 814s ends {'syntax': 3855, 'done': 53477, 'truncated': 11, 'step_cap': 1}
+theorems 3840/5995 states 301710 wall 866s ends {'syntax': 4130, 'done': 57298, 'truncated': 11, 'step_cap': 1}
+theorems 4096/5995 states 321756 wall 916s ends {'syntax': 4414, 'done': 61110, 'truncated': 11, 'step_cap': 1}
+theorems 4352/5995 states 342084 wall 975s ends {'syntax': 4684, 'done': 64936, 'truncated': 11, 'step_cap': 1}
+theorems 4608/5995 states 362298 wall 1039s ends {'syntax': 4939, 'done': 68757, 'truncated': 31, 'step_cap': 1}
+theorems 4864/5995 states 382384 wall 1098s ends {'syntax': 5200, 'done': 72590, 'truncated': 33, 'step_cap': 1}
+theorems 5120/5995 states 402502 wall 1154s ends {'syntax': 5444, 'done': 76440, 'truncated': 35, 'step_cap': 1}
+theorems 5376/5995 states 422780 wall 1211s ends {'syntax': 5750, 'done': 80230, 'truncated': 35, 'step_cap': 1}
+theorems 5632/5995 states 442667 wall 1267s ends {'syntax': 6062, 'done': 84014, 'truncated': 35, 'step_cap': 1}
+theorems 5888/5995 states 463631 wall 1326s ends {'syntax': 6359, 'done': 87813, 'truncated': 35, 'step_cap': 1}
+theorems 5995/5995 states 472263 wall 1359s ends {'syntax': 6453, 'done': 89431, 'truncated': 35, 'step_cap': 1}
+[lean_gate] 89431 samples, parse-fail 0 (no-eos 0, 0.000 %), distinct 63684: ok 60333, rej 3351 (filter 3351, prefilter=on); lean on 60333 texts in 151 procs, 5854.3s proc, exposed 200.8s, tail 193.9s, 32 workers
+{"ends": {"syntax": 6453, "done": 89431, "truncated": 35, "step_cap": 1}, "attempts": 95920, "accepted": 85874, "lean_checks": 89431, "lean_s": 201.23117804527283, "wall_s": 1597.8026270866394, "sampler_gpu_s": 1264.1340832710266, "gen_tokens": 21048176, "prompt_tokens": 54274745, "states": 472263, "ckpt": "ckpts/mcts/la_T1_best12_s2_r8.pt", "k": 16, "temp": 1.0, "n_theorems": 5995, "peak_alloc_gb": 15.43513822555542}
+=== value head s2 r8 2026-10-03T00:17:11Z
+/workspace/nd-takehome/mcts_value_train.py:133: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  tot += float(loss) * len(b)
+{"brier": 0.05223, "brier_const": 0.06791, "auc": 0.7936, "stg_mae": 2.007, "stg_spearman": 0.7653}
+=== done s2 r8 2026-10-03T00:17:34Z
+UPLOAD FAILED ckpts/mcts/value_s2_r8.pt

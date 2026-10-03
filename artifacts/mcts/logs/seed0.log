@@ -1,0 +1,38 @@
+=== value data s0 pend 2026-10-02T23:29:28Z
+theorems 256/5995 states 10998 wall 48s ends {'syntax': 1248, 'truncated': 16, 'done': 2832}
+theorems 512/5995 states 21896 wall 100s ends {'syntax': 2487, 'truncated': 23, 'done': 5682}
+theorems 768/5995 states 32431 wall 150s ends {'syntax': 3666, 'truncated': 25, 'done': 8597}
+theorems 1024/5995 states 43273 wall 196s ends {'syntax': 4935, 'truncated': 28, 'done': 11421}
+theorems 1280/5995 states 54136 wall 247s ends {'syntax': 6280, 'truncated': 37, 'done': 14163}
+theorems 1536/5995 states 65665 wall 294s ends {'syntax': 7542, 'truncated': 44, 'done': 16990}
+theorems 1792/5995 states 77268 wall 345s ends {'syntax': 8804, 'truncated': 48, 'done': 19820}
+theorems 2048/5995 states 89301 wall 394s ends {'syntax': 10080, 'truncated': 52, 'done': 22636}
+theorems 2304/5995 states 101215 wall 447s ends {'syntax': 11324, 'truncated': 64, 'done': 25476}
+theorems 2560/5995 states 111494 wall 492s ends {'syntax': 12610, 'truncated': 70, 'done': 28280}
+theorems 2816/5995 states 122641 wall 547s ends {'syntax': 13849, 'truncated': 85, 'done': 31122}
+theorems 3072/5995 states 134190 wall 600s ends {'syntax': 15056, 'truncated': 90, 'done': 34006}
+theorems 3328/5995 states 144060 wall 648s ends {'syntax': 16346, 'truncated': 120, 'done': 36782}
+theorems 3584/5995 states 155008 wall 698s ends {'syntax': 17472, 'truncated': 131, 'done': 39741}
+theorems 3840/5995 states 165557 wall 752s ends {'syntax': 18731, 'truncated': 152, 'done': 42557}
+theorems 4096/5995 states 176436 wall 805s ends {'syntax': 20077, 'truncated': 161, 'done': 45298}
+theorems 4352/5995 states 187639 wall 855s ends {'syntax': 21442, 'truncated': 175, 'done': 48015}
+theorems 4608/5995 states 199408 wall 906s ends {'syntax': 22824, 'truncated': 182, 'done': 50722}
+theorems 4864/5995 states 210285 wall 958s ends {'syntax': 24113, 'truncated': 203, 'done': 53508}
+theorems 5120/5995 states 221450 wall 1001s ends {'syntax': 25291, 'truncated': 206, 'done': 56423}
+theorems 5376/5995 states 232374 wall 1056s ends {'syntax': 26522, 'truncated': 222, 'done': 59272}
+theorems 5632/5995 states 243041 wall 1107s ends {'syntax': 27861, 'truncated': 230, 'done': 62021}
+theorems 5888/5995 states 254352 wall 1162s ends {'syntax': 29181, 'truncated': 258, 'done': 64769}
+theorems 5995/5995 states 258613 wall 1189s ends {'syntax': 29704, 'truncated': 260, 'done': 65956}
+[lean_gate] 65956 samples, parse-fail 0 (no-eos 0, 0.000 %), distinct 32071: ok 14880, rej 17191 (filter 17191, prefilter=on); lean on 14880 texts in 38 procs, 1322.8s proc, exposed 49.0s, tail 47.0s, 32 workers
+{"ends": {"syntax": 29704, "truncated": 260, "done": 65956}, "attempts": 95920, "accepted": 44954, "lean_checks": 65956, "lean_s": 49.466938734054565, "wall_s": 1257.9462864398956, "sampler_gpu_s": 1135.35445022583, "gen_tokens": 15086307, "prompt_tokens": 26382744, "states": 258613, "ckpt": "ckpts/mcts/stage1_best12_s0_b1200.pt", "k": 16, "temp": 1.0, "n_theorems": 5995, "peak_alloc_gb": 10.461551189422607}
+=== value head s0 pend 2026-10-02T23:50:32Z
+/workspace/nd-takehome/mcts_value_train.py:133: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  tot += float(loss) * len(b)
+{"brier": 0.12167, "brier_const": 0.17133, "auc": 0.7703, "stg_mae": 1.401, "stg_spearman": 0.7828}
+=== done s0 pend 2026-10-02T23:50:47Z
+UPLOAD FAILED ckpts/mcts/value_s0_pend.pt
+=== sample s0 pend tune200 2026-10-02T23:50:52Z
+=== search prior_t0 s0 pend tune200 budget 466.12272238731384s 2026-10-02T23:58:44Z cfg {"K": 8, "temp": 1.0}
+SUMMARY {"ckpt": "ckpts/mcts/stage1_best12_s0_b1200.pt", "inp": "data/mcts/tune200.jsonl", "arm": "prior", "value": "ckpts/mcts/value_s0_pend.pt", "budget_s": 466.12272238731384, "seed": 0, "n": 184, "solved": 105, "gpu_util_mean": 90.63274336283186, "gpu_util_samples": 452, "lean_checks": 106, "sam
+=== search value_t0 s0 pend tune200 budget 466.12272238731384s 2026-10-03T00:06:34Z cfg {"K": 8, "temp": 1.0}

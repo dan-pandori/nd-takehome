@@ -1,0 +1,89 @@
+[32m✓ Downloaded[0m
+  src: hf://buckets/dan-pandori/nd-rl/trajectory/ckpts/tj/ladder/la_T1_best12_s0_r8.pt
+  dst: ckpts/mcts/la_T1_best12_s0_r8.pt
+f9afd386c3ac49e28c953a4895e2369a  ckpts/mcts/la_T1_best12_s0_r8.pt
+=== value data s0 r8 2026-10-03T00:18:59Z
+theorems 256/5995 states 21700 wall 65s ends {'syntax': 248, 'done': 3848}
+theorems 512/5995 states 43108 wall 132s ends {'syntax': 583, 'done': 7609}
+theorems 768/5995 states 63863 wall 200s ends {'syntax': 870, 'done': 11418}
+theorems 1024/5995 states 84928 wall 263s ends {'syntax': 1139, 'done': 15245}
+theorems 1280/5995 states 106388 wall 329s ends {'syntax': 1511, 'done': 18969}
+theorems 1536/5995 states 126569 wall 400s ends {'syntax': 1785, 'done': 22790, 'step_cap': 1}
+theorems 1792/5995 states 148571 wall 469s ends {'syntax': 2066, 'done': 26604, 'step_cap': 1, 'truncated': 1}
+theorems 2048/5995 states 169954 wall 536s ends {'syntax': 2397, 'done': 30369, 'step_cap': 1, 'truncated': 1}
+theorems 2304/5995 states 191665 wall 604s ends {'syntax': 2703, 'done': 34159, 'step_cap': 1, 'truncated': 1}
+theorems 2560/5995 states 212250 wall 666s ends {'syntax': 2951, 'done': 38007, 'step_cap': 1, 'truncated': 1}
+theorems 2816/5995 states 233494 wall 744s ends {'syntax': 3261, 'done': 41792, 'step_cap': 1, 'truncated': 2}
+theorems 3072/5995 states 255216 wall 816s ends {'syntax': 3551, 'done': 45597, 'step_cap': 1, 'truncated': 3}
+theorems 3328/5995 states 276755 wall 884s ends {'syntax': 3847, 'done': 49395, 'step_cap': 1, 'truncated': 5}
+theorems 3584/5995 states 296535 wall 945s ends {'syntax': 4090, 'done': 53246, 'step_cap': 1, 'truncated': 7}
+theorems 3840/5995 states 317760 wall 1014s ends {'syntax': 4404, 'done': 57028, 'step_cap': 1, 'truncated': 7}
+theorems 4096/5995 states 339381 wall 1084s ends {'syntax': 4725, 'done': 60803, 'step_cap': 1, 'truncated': 7}
+theorems 4352/5995 states 360328 wall 1152s ends {'syntax': 5003, 'done': 64621, 'step_cap': 1, 'truncated': 7}
+theorems 4608/5995 states 382055 wall 1224s ends {'syntax': 5321, 'done': 68398, 'step_cap': 1, 'truncated': 8}
+theorems 4864/5995 states 403353 wall 1295s ends {'syntax': 5648, 'done': 72165, 'step_cap': 3, 'truncated': 8}
+theorems 5120/5995 states 424469 wall 1358s ends {'syntax': 5949, 'done': 75959, 'step_cap': 3, 'truncated': 9}
+theorems 5376/5995 states 445755 wall 1421s ends {'syntax': 6225, 'done': 79778, 'step_cap': 3, 'truncated': 10}
+theorems 5632/5995 states 467213 wall 1490s ends {'syntax': 6529, 'done': 83567, 'step_cap': 4, 'truncated': 12}
+theorems 5888/5995 states 489620 wall 1556s ends {'syntax': 6868, 'done': 87322, 'step_cap': 4, 'truncated': 14}
+theorems 5995/5995 states 498251 wall 1592s ends {'syntax': 6951, 'done': 88951, 'step_cap': 4, 'truncated': 14}
+[lean_gate] 88951 samples, parse-fail 0 (no-eos 0, 0.000 %), distinct 63359: ok 60378, rej 2981 (filter 2981, prefilter=on); lean on 60378 texts in 151 procs, 5995.3s proc, exposed 205.1s, tail 199.5s, 32 workers
+{"ends": {"syntax": 6951, "done": 88951, "step_cap": 4, "truncated": 14}, "attempts": 95920, "accepted": 85799, "lean_checks": 88951, "lean_s": 205.47940754890442, "wall_s": 1835.1158039569855, "sampler_gpu_s": 1487.60200548172, "gen_tokens": 21883420, "prompt_tokens": 58873984, "states": 498251, "ckpt": "ckpts/mcts/la_T1_best12_s0_r8.pt", "k": 16, "temp": 1.0, "n_theorems": 5995, "peak_alloc_gb": 15.1380033493042}
+=== value head s0 r8 2026-10-03T00:49:41Z
+/workspace/nd-takehome/mcts_value_train.py:133: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  tot += float(loss) * len(b)
+{"brier": 0.05339, "brier_const": 0.07426, "auc": 0.8161, "stg_mae": 2.447, "stg_spearman": 0.6871}
+=== done s0 r8 2026-10-03T00:50:05Z
+UPLOAD FAILED ckpts/mcts/value_s0_r8.pt
+=== sample s2 r8 C 2026-10-03T00:50:19Z
+=== sample s2 r8 tb72 2026-10-03T00:51:43Z
+=== sample s2 r8 h250 2026-10-03T00:55:22Z
+=== sample s2 r8 rrQ100 2026-10-03T01:06:06Z
+=== sample s2 r8 long2 2026-10-03T01:14:58Z
+=== sample s2 pend C 2026-10-03T01:16:26Z
+=== sample s2 pend tb72 2026-10-03T01:17:06Z
+=== sample s2 pend h250 2026-10-03T01:18:39Z
+=== sample s2 pend rrQ100 2026-10-03T01:26:18Z
+=== sample s2 pend long2 2026-10-03T01:30:06Z
+=== search prior s2 r8 C budget 75.32198810577393s 2026-10-03T02:37:26Z cfg {"K": 2, "temp": 1.0}
+SUMMARY {"ckpt": "ckpts/mcts/la_T1_best12_s2_r8.pt", "inp": "data/mcts/groupC_s2.jsonl", "arm": "prior", "value": "ckpts/mcts/value_s2_r8.pt", "budget_s": 75.32198810577393, "seed": 2, "n": 28, "solved": 3, "gpu_util_mean": 51.229729729729726, "gpu_util_samples": 74, "lean_checks": 3, "sampled": 610
+=== search value s2 r8 C budget 75.32198810577393s 2026-10-03T02:38:44Z cfg {"K": 8, "temp": 1.5}
+SUMMARY {"ckpt": "ckpts/mcts/la_T1_best12_s2_r8.pt", "inp": "data/mcts/groupC_s2.jsonl", "arm": "value", "value": "ckpts/mcts/value_s2_r8.pt", "budget_s": 75.32198810577393, "seed": 2, "n": 28, "solved": 3, "gpu_util_mean": 83.72972972972973, "gpu_util_samples": 74, "lean_checks": 3, "sampled": 1285
+=== search prior s2 r8 tb72 budget 209.54793167114258s 2026-10-03T02:40:04Z cfg {"K": 2, "temp": 1.0}
+SUMMARY {"ckpt": "ckpts/mcts/la_T1_best12_s2_r8.pt", "inp": "data/mcts/tb72.jsonl", "arm": "prior", "value": "ckpts/mcts/value_s2_r8.pt", "budget_s": 209.54793167114258, "seed": 2, "n": 72, "solved": 54, "gpu_util_mean": 57.35294117647059, "gpu_util_samples": 204, "lean_checks": 55, "sampled": 15980
+=== search value s2 r8 tb72 budget 209.54793167114258s 2026-10-03T02:43:37Z cfg {"K": 8, "temp": 1.5}
+SUMMARY {"ckpt": "ckpts/mcts/la_T1_best12_s2_r8.pt", "inp": "data/mcts/tb72.jsonl", "arm": "value", "value": "ckpts/mcts/value_s2_r8.pt", "budget_s": 209.54793167114258, "seed": 2, "n": 72, "solved": 57, "gpu_util_mean": 66.64532019704434, "gpu_util_samples": 203, "lean_checks": 58, "sampled": 35645
+=== search prior s2 r8 h250 budget 634.2669591903687s 2026-10-03T02:47:12Z cfg {"K": 2, "temp": 1.0}
+SUMMARY {"ckpt": "ckpts/mcts/la_T1_best12_s2_r8.pt", "inp": "data/mcts/h250.jsonl", "arm": "prior", "value": "ckpts/mcts/value_s2_r8.pt", "budget_s": 634.2669591903687, "seed": 2, "n": 250, "solved": 240, "gpu_util_mean": 61.63414634146341, "gpu_util_samples": 615, "lean_checks": 242, "sampled": 334
+=== search value s2 r8 h250 budget 634.2669591903687s 2026-10-03T02:57:50Z cfg {"K": 8, "temp": 1.5}
+SUMMARY {"ckpt": "ckpts/mcts/la_T1_best12_s2_r8.pt", "inp": "data/mcts/h250.jsonl", "arm": "value", "value": "ckpts/mcts/value_s2_r8.pt", "budget_s": 634.2669591903687, "seed": 2, "n": 250, "solved": 240, "gpu_util_mean": 71.51628664495114, "gpu_util_samples": 614, "lean_checks": 244, "sampled": 574
+=== search prior s2 r8 rrQ100 budget 521.4735653400421s 2026-10-03T03:08:31Z cfg {"K": 2, "temp": 1.0}
+SUMMARY {"ckpt": "ckpts/mcts/la_T1_best12_s2_r8.pt", "inp": "data/mcts/rrQ100.jsonl", "arm": "prior", "value": "ckpts/mcts/value_s2_r8.pt", "budget_s": 521.4735653400421, "seed": 2, "n": 100, "solved": 88, "gpu_util_mean": 52.47430830039526, "gpu_util_samples": 506, "lean_checks": 88, "sampled": 254
+=== search value s2 r8 rrQ100 budget 521.4735653400421s 2026-10-03T03:17:16Z cfg {"K": 8, "temp": 1.5}
+SUMMARY {"ckpt": "ckpts/mcts/la_T1_best12_s2_r8.pt", "inp": "data/mcts/rrQ100.jsonl", "arm": "value", "value": "ckpts/mcts/value_s2_r8.pt", "budget_s": 521.4735653400421, "seed": 2, "n": 100, "solved": 90, "gpu_util_mean": 72.11881188118812, "gpu_util_samples": 505, "lean_checks": 92, "sampled": 568
+=== search prior s2 r8 long2 budget 78.23992156982422s 2026-10-03T03:26:04Z cfg {"K": 2, "temp": 1.0}
+SUMMARY {"ckpt": "ckpts/mcts/la_T1_best12_s2_r8.pt", "inp": "data/mcts/long2.jsonl", "arm": "prior", "value": "ckpts/mcts/value_s2_r8.pt", "budget_s": 78.23992156982422, "seed": 2, "n": 21, "solved": 17, "gpu_util_mean": 31.05263157894737, "gpu_util_samples": 76, "lean_checks": 17, "sampled": 23548,
+=== search value s2 r8 long2 budget 78.23992156982422s 2026-10-03T03:27:24Z cfg {"K": 8, "temp": 1.5}
+SUMMARY {"ckpt": "ckpts/mcts/la_T1_best12_s2_r8.pt", "inp": "data/mcts/long2.jsonl", "arm": "value", "value": "ckpts/mcts/value_s2_r8.pt", "budget_s": 78.23992156982422, "seed": 2, "n": 21, "solved": 19, "gpu_util_mean": 38.266666666666666, "gpu_util_samples": 75, "lean_checks": 20, "sampled": 70672
+=== search prior s2 pend C budget 31.22353172302246s 2026-10-03T03:28:47Z cfg {"K": 2, "temp": 1.0}
+SUMMARY {"ckpt": "ckpts/mcts/stage1_best12_s2_b1200.pt", "inp": "data/mcts/groupC_s2.jsonl", "arm": "prior", "value": "ckpts/mcts/value_s2_pend.pt", "budget_s": 31.22353172302246, "seed": 2, "n": 28, "solved": 0, "gpu_util_mean": 41.064516129032256, "gpu_util_samples": 31, "lean_checks": 0, "sampled
+=== search value s2 pend C budget 31.22353172302246s 2026-10-03T03:29:20Z cfg {"K": 8, "temp": 1.5}
+SUMMARY {"ckpt": "ckpts/mcts/stage1_best12_s2_b1200.pt", "inp": "data/mcts/groupC_s2.jsonl", "arm": "value", "value": "ckpts/mcts/value_s2_pend.pt", "budget_s": 31.22353172302246, "seed": 2, "n": 28, "solved": 1, "gpu_util_mean": 71.12903225806451, "gpu_util_samples": 31, "lean_checks": 1, "sampled"
+=== search prior s2 pend tb72 budget 84.01878523826599s 2026-10-03T03:29:56Z cfg {"K": 2, "temp": 1.0}
+SUMMARY {"ckpt": "ckpts/mcts/stage1_best12_s2_b1200.pt", "inp": "data/mcts/tb72.jsonl", "arm": "prior", "value": "ckpts/mcts/value_s2_pend.pt", "budget_s": 84.01878523826599, "seed": 2, "n": 72, "solved": 34, "gpu_util_mean": 38.79012345679013, "gpu_util_samples": 81, "lean_checks": 34, "sampled": 4
+=== search value s2 pend tb72 budget 84.01878523826599s 2026-10-03T03:31:22Z cfg {"K": 8, "temp": 1.5}
+SUMMARY {"ckpt": "ckpts/mcts/stage1_best12_s2_b1200.pt", "inp": "data/mcts/tb72.jsonl", "arm": "value", "value": "ckpts/mcts/value_s2_pend.pt", "budget_s": 84.01878523826599, "seed": 2, "n": 72, "solved": 37, "gpu_util_mean": 66.63414634146342, "gpu_util_samples": 82, "lean_checks": 37, "sampled": 7
+=== search prior s2 pend h250 budget 398.74963641166687s 2026-10-03T03:32:51Z cfg {"K": 2, "temp": 1.0}
+SUMMARY {"ckpt": "ckpts/mcts/stage1_best12_s2_b1200.pt", "inp": "data/mcts/h250.jsonl", "arm": "prior", "value": "ckpts/mcts/value_s2_pend.pt", "budget_s": 398.74963641166687, "seed": 2, "n": 250, "solved": 212, "gpu_util_mean": 56.23514211886305, "gpu_util_samples": 387, "lean_checks": 213, "sample
+=== search value s2 pend h250 budget 398.74963641166687s 2026-10-03T03:39:32Z cfg {"K": 8, "temp": 1.5}
+SUMMARY {"ckpt": "ckpts/mcts/stage1_best12_s2_b1200.pt", "inp": "data/mcts/h250.jsonl", "arm": "value", "value": "ckpts/mcts/value_s2_pend.pt", "budget_s": 398.74963641166687, "seed": 2, "n": 250, "solved": 203, "gpu_util_mean": 77.75, "gpu_util_samples": 388, "lean_checks": 205, "sampled": 384864, 
+=== search prior s2 pend rrQ100 budget 218.69628310203552s 2026-10-03T03:46:19Z cfg {"K": 2, "temp": 1.0}
+SUMMARY {"ckpt": "ckpts/mcts/stage1_best12_s2_b1200.pt", "inp": "data/mcts/rrQ100.jsonl", "arm": "prior", "value": "ckpts/mcts/value_s2_pend.pt", "budget_s": 218.69628310203552, "seed": 2, "n": 100, "solved": 66, "gpu_util_mean": 56.38028169014085, "gpu_util_samples": 213, "lean_checks": 66, "sample
+=== search value s2 pend rrQ100 budget 218.69628310203552s 2026-10-03T03:50:01Z cfg {"K": 8, "temp": 1.5}
+SUMMARY {"ckpt": "ckpts/mcts/stage1_best12_s2_b1200.pt", "inp": "data/mcts/rrQ100.jsonl", "arm": "value", "value": "ckpts/mcts/value_s2_pend.pt", "budget_s": 218.69628310203552, "seed": 2, "n": 100, "solved": 74, "gpu_util_mean": 67.77358490566037, "gpu_util_samples": 212, "lean_checks": 75, "sample
+=== search prior s2 pend long2 budget 40.655683517456055s 2026-10-03T03:53:44Z cfg {"K": 2, "temp": 1.0}
+SUMMARY {"ckpt": "ckpts/mcts/stage1_best12_s2_b1200.pt", "inp": "data/mcts/long2.jsonl", "arm": "prior", "value": "ckpts/mcts/value_s2_pend.pt", "budget_s": 40.655683517456055, "seed": 2, "n": 21, "solved": 5, "gpu_util_mean": 34.25, "gpu_util_samples": 40, "lean_checks": 5, "sampled": 14902, "expan
+=== search value s2 pend long2 budget 40.655683517456055s 2026-10-03T03:54:27Z cfg {"K": 8, "temp": 1.5}
+SUMMARY {"ckpt": "ckpts/mcts/stage1_best12_s2_b1200.pt", "inp": "data/mcts/long2.jsonl", "arm": "value", "value": "ckpts/mcts/value_s2_pend.pt", "budget_s": 40.655683517456055, "seed": 2, "n": 21, "solved": 6, "gpu_util_mean": 58.425, "gpu_util_samples": 40, "lean_checks": 6, "sampled": 50432, "expa
+SEED_DONE 2026-10-03T03:55:12Z

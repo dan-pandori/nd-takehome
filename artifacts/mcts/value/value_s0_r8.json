@@ -1,0 +1,578 @@
+{
+ "data": [
+  "artifacts/mcts/vdata/vdata_s0_r8.pt"
+ ],
+ "train_states": 446700,
+ "heldout_states": 51551,
+ "loss_by_epoch": [
+  2.43963,
+  1.50107,
+  1.39521,
+  1.33995,
+  1.29831,
+  1.25936,
+  1.2265,
+  1.19938,
+  1.16864,
+  1.14422,
+  1.12267,
+  1.10193,
+  1.08182,
+  1.06115,
+  1.04085,
+  1.02683,
+  1.00954,
+  0.99527,
+  0.9808,
+  0.97147,
+  0.95826,
+  0.94858,
+  0.93941,
+  0.9315,
+  0.92674,
+  0.92175,
+  0.91801,
+  0.91552,
+  0.91374,
+  0.91289
+ ],
+ "heldout": {
+  "states": 51551,
+  "attempts": 128794,
+  "solvable_states": 43384,
+  "brier": 0.05339,
+  "brier_const": 0.07426,
+  "auc_solvable": 0.8161,
+  "reliability": [
+   {
+    "bin": "0.0-0.1",
+    "states": 2901,
+    "attempts": 3756,
+    "pred": 0.0156,
+    "obs": 0.0879
+   },
+   {
+    "bin": "0.1-0.2",
+    "states": 467,
+    "attempts": 778,
+    "pred": 0.1469,
+    "obs": 0.428
+   },
+   {
+    "bin": "0.2-0.3",
+    "states": 459,
+    "attempts": 940,
+    "pred": 0.2507,
+    "obs": 0.5894
+   },
+   {
+    "bin": "0.3-0.4",
+    "states": 431,
+    "attempts": 782,
+    "pred": 0.3521,
+    "obs": 0.5729
+   },
+   {
+    "bin": "0.4-0.5",
+    "states": 490,
+    "attempts": 989,
+    "pred": 0.4488,
+    "obs": 0.6562
+   },
+   {
+    "bin": "0.5-0.6",
+    "states": 678,
+    "attempts": 1332,
+    "pred": 0.5535,
+    "obs": 0.7357
+   },
+   {
+    "bin": "0.6-0.7",
+    "states": 1093,
+    "attempts": 2531,
+    "pred": 0.6565,
+    "obs": 0.7586
+   },
+   {
+    "bin": "0.7-0.8",
+    "states": 2145,
+    "attempts": 5124,
+    "pred": 0.7554,
+    "obs": 0.8277
+   },
+   {
+    "bin": "0.8-0.9",
+    "states": 6576,
+    "attempts": 18576,
+    "pred": 0.8654,
+    "obs": 0.8798
+   },
+   {
+    "bin": "0.9-1.0",
+    "states": 36311,
+    "attempts": 93986,
+    "pred": 0.956,
+    "obs": 0.9323
+   }
+  ],
+  "stg_mae": 2.447,
+  "stg_spearman": 0.6871,
+  "stg_by_observed": {
+   "1": {
+    "states": 2207,
+    "pred_mean": 1.668
+   },
+   "2": {
+    "states": 3663,
+    "pred_mean": 3.064
+   },
+   "3": {
+    "states": 4193,
+    "pred_mean": 4.296
+   },
+   "4": {
+    "states": 4424,
+    "pred_mean": 5.352
+   },
+   "5": {
+    "states": 4255,
+    "pred_mean": 6.273
+   },
+   "6": {
+    "states": 4187,
+    "pred_mean": 6.932
+   },
+   "7": {
+    "states": 3526,
+    "pred_mean": 7.389
+   },
+   "8": {
+    "states": 3289,
+    "pred_mean": 7.88
+   },
+   "9": {
+    "states": 2545,
+    "pred_mean": 8.262
+   },
+   "10": {
+    "states": 2411,
+    "pred_mean": 8.598
+   },
+   "11": {
+    "states": 1773,
+    "pred_mean": 9.022
+   },
+   "12": {
+    "states": 1602,
+    "pred_mean": 9.521
+   },
+   "13": {
+    "states": 1164,
+    "pred_mean": 9.712
+   },
+   "14": {
+    "states": 1069,
+    "pred_mean": 10.106
+   },
+   "15": {
+    "states": 713,
+    "pred_mean": 10.192
+   },
+   "16": {
+    "states": 603,
+    "pred_mean": 10.944
+   },
+   "17": {
+    "states": 387,
+    "pred_mean": 10.934
+   },
+   "18": {
+    "states": 330,
+    "pred_mean": 11.368
+   },
+   "19": {
+    "states": 246,
+    "pred_mean": 11.708
+   },
+   "20": {
+    "states": 186,
+    "pred_mean": 11.596
+   },
+   "21": {
+    "states": 130,
+    "pred_mean": 11.619
+   },
+   "22": {
+    "states": 118,
+    "pred_mean": 11.808
+   },
+   "23": {
+    "states": 73,
+    "pred_mean": 12.425
+   },
+   "24": {
+    "states": 53,
+    "pred_mean": 10.879
+   },
+   "25": {
+    "states": 43,
+    "pred_mean": 11.892
+   },
+   "26": {
+    "states": 37,
+    "pred_mean": 12.777
+   },
+   "27": {
+    "states": 31,
+    "pred_mean": 13.432
+   },
+   "28": {
+    "states": 29,
+    "pred_mean": 13.426
+   },
+   "29": {
+    "states": 18,
+    "pred_mean": 12.96
+   },
+   "30": {
+    "states": 17,
+    "pred_mean": 12.225
+   },
+   "31": {
+    "states": 14,
+    "pred_mean": 11.935
+   },
+   "32": {
+    "states": 12,
+    "pred_mean": 12.388
+   },
+   "33": {
+    "states": 10,
+    "pred_mean": 13.079
+   },
+   "34": {
+    "states": 10,
+    "pred_mean": 13.518
+   },
+   "35": {
+    "states": 6,
+    "pred_mean": 10.07
+   },
+   "36": {
+    "states": 6,
+    "pred_mean": 13.104
+   },
+   "37": {
+    "states": 2,
+    "pred_mean": 14.039
+   },
+   "38": {
+    "states": 1,
+    "pred_mean": 8.637
+   },
+   "39": {
+    "states": 1,
+    "pred_mean": 7.822
+   }
+  },
+  "v_mean": 0.6117
+ },
+ "train": {
+  "states": 154653,
+  "attempts": 393644,
+  "solvable_states": 131551,
+  "brier": 0.03033,
+  "brier_const": 0.07274,
+  "auc_solvable": 0.9007,
+  "reliability": [
+   {
+    "bin": "0.0-0.1",
+    "states": 10452,
+    "attempts": 14599,
+    "pred": 0.0132,
+    "obs": 0.0058
+   },
+   {
+    "bin": "0.1-0.2",
+    "states": 1165,
+    "attempts": 1821,
+    "pred": 0.1455,
+    "obs": 0.0824
+   },
+   {
+    "bin": "0.2-0.3",
+    "states": 970,
+    "attempts": 1481,
+    "pred": 0.2488,
+    "obs": 0.1884
+   },
+   {
+    "bin": "0.3-0.4",
+    "states": 952,
+    "attempts": 1467,
+    "pred": 0.3505,
+    "obs": 0.2829
+   },
+   {
+    "bin": "0.4-0.5",
+    "states": 1087,
+    "attempts": 1737,
+    "pred": 0.4508,
+    "obs": 0.4266
+   },
+   {
+    "bin": "0.5-0.6",
+    "states": 1552,
+    "attempts": 2980,
+    "pred": 0.5528,
+    "obs": 0.5238
+   },
+   {
+    "bin": "0.6-0.7",
+    "states": 2632,
+    "attempts": 5585,
+    "pred": 0.6566,
+    "obs": 0.6777
+   },
+   {
+    "bin": "0.7-0.8",
+    "states": 5735,
+    "attempts": 14525,
+    "pred": 0.7584,
+    "obs": 0.7599
+   },
+   {
+    "bin": "0.8-0.9",
+    "states": 18758,
+    "attempts": 55949,
+    "pred": 0.8643,
+    "obs": 0.8639
+   },
+   {
+    "bin": "0.9-1.0",
+    "states": 111350,
+    "attempts": 293500,
+    "pred": 0.9567,
+    "obs": 0.9567
+   }
+  ],
+  "stg_mae": 1.773,
+  "stg_spearman": 0.835,
+  "stg_by_observed": {
+   "1": {
+    "states": 6297,
+    "pred_mean": 1.434
+   },
+   "2": {
+    "states": 10429,
+    "pred_mean": 2.619
+   },
+   "3": {
+    "states": 12287,
+    "pred_mean": 3.802
+   },
+   "4": {
+    "states": 12996,
+    "pred_mean": 4.819
+   },
+   "5": {
+    "states": 12562,
+    "pred_mean": 5.737
+   },
+   "6": {
+    "states": 12509,
+    "pred_mean": 6.482
+   },
+   "7": {
+    "states": 10652,
+    "pred_mean": 7.125
+   },
+   "8": {
+    "states": 9862,
+    "pred_mean": 7.757
+   },
+   "9": {
+    "states": 7616,
+    "pred_mean": 8.214
+   },
+   "10": {
+    "states": 7274,
+    "pred_mean": 8.743
+   },
+   "11": {
+    "states": 5705,
+    "pred_mean": 9.373
+   },
+   "12": {
+    "states": 5391,
+    "pred_mean": 10.093
+   },
+   "13": {
+    "states": 3826,
+    "pred_mean": 10.68
+   },
+   "14": {
+    "states": 3329,
+    "pred_mean": 11.251
+   },
+   "15": {
+    "states": 2320,
+    "pred_mean": 11.825
+   },
+   "16": {
+    "states": 2012,
+    "pred_mean": 12.467
+   },
+   "17": {
+    "states": 1327,
+    "pred_mean": 12.812
+   },
+   "18": {
+    "states": 1134,
+    "pred_mean": 13.264
+   },
+   "19": {
+    "states": 781,
+    "pred_mean": 14.002
+   },
+   "20": {
+    "states": 683,
+    "pred_mean": 14.823
+   },
+   "21": {
+    "states": 477,
+    "pred_mean": 15.171
+   },
+   "22": {
+    "states": 418,
+    "pred_mean": 15.756
+   },
+   "23": {
+    "states": 298,
+    "pred_mean": 16.487
+   },
+   "24": {
+    "states": 279,
+    "pred_mean": 16.785
+   },
+   "25": {
+    "states": 192,
+    "pred_mean": 16.851
+   },
+   "26": {
+    "states": 187,
+    "pred_mean": 17.732
+   },
+   "27": {
+    "states": 127,
+    "pred_mean": 18.483
+   },
+   "28": {
+    "states": 111,
+    "pred_mean": 19.695
+   },
+   "29": {
+    "states": 77,
+    "pred_mean": 19.447
+   },
+   "30": {
+    "states": 80,
+    "pred_mean": 20.434
+   },
+   "31": {
+    "states": 57,
+    "pred_mean": 19.971
+   },
+   "32": {
+    "states": 61,
+    "pred_mean": 21.465
+   },
+   "33": {
+    "states": 40,
+    "pred_mean": 22.551
+   },
+   "34": {
+    "states": 35,
+    "pred_mean": 23.176
+   },
+   "35": {
+    "states": 24,
+    "pred_mean": 21.561
+   },
+   "36": {
+    "states": 19,
+    "pred_mean": 23.612
+   },
+   "37": {
+    "states": 17,
+    "pred_mean": 23.139
+   },
+   "38": {
+    "states": 14,
+    "pred_mean": 21.898
+   },
+   "39": {
+    "states": 13,
+    "pred_mean": 22.803
+   },
+   "40": {
+    "states": 10,
+    "pred_mean": 22.521
+   },
+   "41": {
+    "states": 8,
+    "pred_mean": 22.372
+   },
+   "42": {
+    "states": 4,
+    "pred_mean": 20.991
+   },
+   "43": {
+    "states": 2,
+    "pred_mean": 24.089
+   },
+   "44": {
+    "states": 2,
+    "pred_mean": 28.214
+   },
+   "45": {
+    "states": 2,
+    "pred_mean": 26.582
+   },
+   "46": {
+    "states": 1,
+    "pred_mean": 40.672
+   },
+   "55": {
+    "states": 1,
+    "pred_mean": 6.773
+   },
+   "56": {
+    "states": 1,
+    "pred_mean": 8.276
+   },
+   "57": {
+    "states": 1,
+    "pred_mean": 15.673
+   },
+   "58": {
+    "states": 1,
+    "pred_mean": 12.831
+   }
+  },
+  "v_mean": 0.607
+ },
+ "args": {
+  "data": [
+   "artifacts/mcts/vdata/vdata_s0_r8.pt"
+  ],
+  "out": "ckpts/mcts/value_s0_r8.pt",
+  "report": "artifacts/mcts/value/value_s0_r8.json",
+  "epochs": 30,
+  "lr": 0.001,
+  "batch": 4096,
+  "gamma": 0.95,
+  "hidden": 512,
+  "seed": 0
+ }
+}

@@ -1,0 +1,9 @@
+[lean_gate] 5376 samples, parse-fail 3640 (no-eos 0, 0.000 %), distinct 1656: ok 19, rej 1637 (filter 1637, prefilter=on); lean on 19 texts in 1 procs, 0.5s proc, exposed 0.6s, tail 0.5s, 32 workers
+[stage1_best12_s2_b1200.pt on long2.jsonl k=256 T=0.8] SOLVED 4/21 = 0.190 [0.077,0.400]
+  len 17: 3/13 = 0.231 [0.082,0.503]
+  len 18: 1/8 = 0.125 [0.022,0.471]
+  written hist {18: 1, 19: 4, 20: 5, 21: 1, 23: 1, 25: 1, 31: 1, 32: 1}
+  pruned hist {17: 1, 18: 1, 19: 8, 20: 1, 22: 1, 25: 1, 31: 2}
+  frontier written 20 pruned 19
+  reasons [('lean rejected', 1717), ('lean_seq parse: env: unbound', 1276), ('lean_seq parse: env: binder mismatch', 1027), ('lean_seq parse: env: exact goal mismatch', 467), ('lean_seq parse: env: assign', 238), ('lean_seq parse: env: formula', 190)]
+env {"env_end": {"syntax": 3638, "done": 1736, "truncated": 2}, "env_fail_reason": {"have name": 52, "assign": 238, "exact goal mismatch": 467, "formula": 190, "unbound": 1276, "binder mismatch": 1027, "Or.elim on non-or": 94, "PR position": 18, "term": 91, "no semicolon": 48, "box head": 6, "box on non-arrow": 23, "malformed": 6, "exact not last": 97, "PR form": 4, "colon": 1}, "env_steps": {"1": 52, "2": 59, "3": 34, "4": 178, "5": 307, "6": 279, "7": 346, "8": 248, "9": 243, "10": 227, "11": 276, "12": 324, "13": 370, "14": 333, "15": 259, "16": 273, "17": 193, "18": 167, "19": 168, "20": 170, "21": 157, "22": 137, "23": 113, "24": 105, "25": 91, "26": 80, "27": 57, "28": 32, "29": 24, "30": 30, "31": 8, "32": 10, "33": 9, "34": 6, "37": 4, "38": 1, "41": 1, "42": 2, "35": 1, "36": 2}, "prompt_tokens": 7017122, "steps": 5552, "rows": 71889, "rowsteps": 1944080, "prompt_len_max": 284, "chunks": 57, "stop_eos": 71887, "stop_exact": 0, "stop_goal": 0, "names_defined": 71795, "names_renamed": 5535, "env_waves": 57, "env_wall_s": 39.32599186897278, "peak_alloc_gb": 17.70609998703003, "peak_reserved_gb": 18.18359375, "action_declen_mean": 18.68296957809957}
