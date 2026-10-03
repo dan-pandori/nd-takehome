@@ -143,3 +143,81 @@ longer; the differences (≤ 0.5 term atoms) are small.
 3. The "second check" on the checker is circular under the prefilter (above); the step-level agreement holds (my
    0 / 900 false rejects).
 4. Two cap-12 Stage-1 renaming-class overlaps with the evaluation pools (≤ 10 lines only).
+
+## Compare (phase 2: `run_guided_tts.md`, `numbers.md` § guided-tts, `log.md`, `STATUS.md`)
+
+Every number in the write-up names its models (the cap-12 / cap-6 T1 r8 checkpoints, 9.56M ALiBiGPT, `lean_staten`,
+from scratch + ladder, training sets named); the only inherited numbers (textbook72 48/49/54, 43/41/38) carry the
+`trajectory*` x0 label. Checker named (Lean alone, post-2026-09-27); no cross-date comparison. Expectations were
+committed before the first pod (`8ec7c0a6`, 18:10; first pod 18:14:47 in `~/pods.log`); deviations (batch 1,024 rerun,
+added draws-based wall variant) are logged when they happened.
+
+| claim (write-up) | my value | verdict |
+|---|---|---|
+| plain textbook72 48/48/53, 43/43/39; sanity ±3 ✓ | 48/48/53, 43/43/39 | reproduces |
+| per-file solved@256 table (18 rows) | identical | reproduces |
+| long, k 64 tokens, logical − plain +10.0/+9.9/+5.2 (c12), +7.4/+8.1/+10.3 (c6) | identical | reproduces |
+| IQM +9.1 [+3.7, +13.5] c12, +8.3 [+4.1, +14.0] c6 | +9.1 [+5.9, +11.7], +8.3 [+5.8, +11.6] | point estimates reproduce; my theorem-within-seed bootstrap is narrower (theirs also resamples attempts — conservative) |
+| k 256 +11.1/+12.7/+3.4, +6.6/+8.0/+11.4; IQM +10.0 / +8.4 | identical | reproduces |
+| structural − plain on long −1.2/+0.9/−1.1, +0.8/+0.7/+1.1 (IQM −0.8 / +0.8) | identical | reproduces |
+| Roy +5.2 / +7.5; ≤ 10 lines +2.6 / +9.7 (k 64 IQM) | +5.2 / +7.5; +2.6 / +9.7 | reproduces |
+| batch3 +11.8 / +13.7, Pelletier +10.7 / +2.7 | per seed batch3 +11.0/+17.0/+9.5, +12.8/+10.7/+20.3; Pelletier n = 8 | reproduces in sign; n = 14 / 8 — "✓ on batch3" rests on intervals that nearly touch 0, say so |
+| MDD on long ≈ 2.7 pp at k 64 | my per-seed theorem-bootstrap half-widths ≈ 4–5 pp; IQM interval half-width ≈ 3 pp | not independently derived as stated; every headline per-seed difference except c12 s2 (+5.2, CI [1.9, 9.0]) clears even the wider band |
+| matched wall-clock long k 64: logical +9.1 / +8.8, structural −3.4 / +0.7 (s0-structural cell excluded) | logical per seed +9.4/+11.5/+4.9, +8.0/+8.4/+10.8; structural incl. the excluded cell −3.8/−1.0/−4.7 | reproduces within ≈ 0.5 pp |
+| "at k = 1 every guided arm loses on wall-clock" | structural loses in 6/6; logical loses in 4/6, gains +1.1 / +0.5 in c6 s1 / s2 (my seconds include env + checker) | differs slightly — "logical loses at k = 1 at cap 12 and is ≈ even at cap 6" |
+| falsifier not met (0/3 seeds at each cap) | not met in 6/6 | reproduces |
+| per-attempt acceptance plain 32.3–38.1 %, logical 42.2–47.6 % (c12) etc. | 32.3–38.1 %, 42.2–47.6 %; c6 29.7–33.5 / 41.2–44.6 % | reproduces |
+| 52–59 % of logical attempts end at the rejection cap | 52.4–58.8 % | reproduces |
+| guided-logical S 13.8–21.7 %, L 10.0–15.8 % of draws | S 13.8–21.7 %, L 10.0–15.8 % (my per-accepted-step figures 14.5–22.4 % are a different denominator) | reproduces |
+| rescued structural attempts carry wrong steps: 20,525–30,613 rejected vs plain 9,346–17,303 | identical | reproduces |
+| guided-logical: 0 Lean-rejected finished proofs | 0 in 6/6; my Lean re-check 0 / 1,729 logical texts rejected | reproduces |
+| **checker: "every Lean-rejected plain/structural proof was flagged; no flagged proof was Lean-accepted"** | true of the files, but Lean rejected **0** finished texts in all 12 reads: every rejection is a prefilter rejection (`rej N (filter N)` in all 11 readable logs), and the prefilter applies the same `lean_prefilter._term` rules as the step checker | **not supported as worded** — it is a tautology under `LEAN_PREFILTER=on`, not a check against Lean |
+| checker gate 0 false rejects / 0 misses on 314,541 steps | my sample: 900 / 900 checker rejects Lean-rejected, 180 / 180 passes accepted | consistent (sample); scope: atomic `have` steps only, passes sampled at 25 % |
+| truncation: plain cap 6 0.16–0.28 % of draws, "above the policy's 0.1 %", guided 0.6–1.9 % redrawn and charged | identical; plus 1.7–3.2 % of plain cap-6 attempts end by truncation | reproduces; disclosed but `max_action` not raised. Mitigation I checked: structural also redraws truncations and gains ≈ 0 on long, so truncation recovery does not drive the logical gain there; at cap 6 ≤ 10 lines structural is +1.6, a possible small share |
+| with-replacement repeat 0.32–0.40 / 0.51–0.54 (logical), 0.21–0.26 / 0.42–0.46 (structural) | identical | reproduces |
+| guided proofs not longer (lines, term size) | lines identical to theirs; my term-size counter (different definition, scale ≈ 2×) gives the same ordering, logical ≤ plain by ≤ 0.5 | reproduces |
+| compute table (GPU s, tokens, ratios 2.18×/1.78× etc.) | identical from the summaries; tokens re-summed from rows equal `sampled_tokens` | reproduces; every guided arm > 1.25× plain at equal attempts is flagged ✓ |
+| "on long, guided tokens per attempt 2.0–2.3× (c12), 2.8–3.3× (c6)" | logical 1.97–2.33 / 3.13–3.33; structural 2.23–2.43 / 2.78–3.60 | reproduces (logical) |
+| spend 9.07 A40-h, $4.45; 4 pods | 4 `gt-*` pods in `~/pods.log`; hours not derivable from artifacts | not derivable (plausible) |
+| expectations scoring (run file) | 1 ✓, 2 ✓ except ≤ 10 at cap 6 ✗, 3 ✗, k 256 above range, wall ✗ | reproduces; but #4's "plain long k 64 ≈ 0.35–0.6" (c12 s1 0.287 below), #3's ratio (cap 6 above 2.5) and #5's L-rate are scored only in `log.md`, not in the run file |
+
+## Verdict
+
+**Stands.** On these six models (cap-12 and cap-6 T1 r8, 9.56M ALiBiGPT, `lean_staten`), at matched sampled tokens,
+guided-logical redraws beat plain resampling on **long** (90 release theorems > 10 lines) in 6 / 6 models: +5.2 to
++10.3 pp at 64 plain-equivalent attempts, +3.4 to +12.7 pp at 256; IQM +9.1 (cap 12) and +8.3 (cap 6). Matched
+wall-clock agrees to within ≈ 0.5 pp. Guided-structural is indistinguishable from plain on long (|Δ| ≤ 1.2 pp per seed).
+Every proof the run counts that I checked passes Lean: 5,211 texts, at least one per solved (model, arm, theorem).
+The negative controls fail as they should. The per-step checker made no false reject on my 900-step sample. The
+gains on Roy and on ≤ 10 lines at cap 6 also stand. No hard-constraint violation.
+
+**Reword.**
+1. "Every Lean-rejected plain/structural proof was flagged; no flagged proof was Lean-accepted" (run file, numbers,
+   log, STATUS) → "every finished proof the gate rejected was rejected by the prefilter, whose rules the step checker
+   shares; Lean itself rejected none. The checker's soundness evidence is the step-level agreement test." As written it
+   reads as a whole-proof check against Lean, and it is not one.
+2. "At k = 1 every guided arm loses on wall-clock" → logical loses at cap 12 (4 / 6 overall) and is about even at
+   cap 6 (s1 and s2 slightly positive under job seconds that include env + checker).
+3. batch3 (n = 14) and Pelletier (n = 8) should be described as "consistent with" a gain, not "✓". The batch3 IQM
+   intervals reach +0.3 and +1.2; per-seed intervals touch 0 in 4 / 6 models.
+4. Put the misses that only `log.md` scores into the run file's expectations paragraph: plain long k 64 below the
+   predicted range for c12 s1; c_logical / c_plain on long 2.8–3.3 at cap 6 (predicted ≤ 2.5); the logical rejection
+   rate of plain steps 3.1–4.8 % of draws (predicted 0.5–4 %).
+5. The cap-12 textbook72 / ≤ 10 numbers should carry the 2-theorem renaming-class overlap with `train_k12.jsonl`
+   (premise order and renaming; it does not affect long or any arm difference).
+
+**Not supported.** Nothing in the headline. The only unsupported statement is the whole-proof "proof-level agreement"
+in Reword 1.
+
+**Settings.** One cell (`best12_s0_structural`) ran at batch 1,024. The run disclosed this and excluded the cell from
+wall-clock comparisons, which is adequate. `max_action` 512 truncates 1.7–3.2 % of plain cap-6 attempts. That is above
+the policy's 0.1 % line; the run disclosed it but did not raise the cap.
+
+**Next measurements.**
+- One plain read with `LEAN_PREFILTER=off` (or `shadow`) on one model, ≈ 15 A40-min. Lean then judges the flagged
+  whole proofs and closes the circular check.
+- A plain and logical pair at cap 6 with `max_action` ≈ 1,024 on one seed. It would measure how much of the cap-6
+  gain on ≤ 10 lines (+9.7 pp, versus +2.6 at cap 12) is truncation recovery rather than the logical check.
+- The open design question is why guided-structural rescues attempts but not solves (it yields 20–30 k more
+  Lean-rejected finished proofs per read). An arm that redraws structural rejections but stops an attempt at its first
+  flagged logical step would show whether logical redraws are needed, or whether early termination alone helps.
