@@ -244,3 +244,4 @@ Brief: run brief `rl-continue` (Dan, 2026-10-03). Policy: AGENT_POLICY.md. Budge
 
 ## rl-continue
 - 2026-10-03 17:19 UTC  run started (executor). Pre-registration `preregistration/rl-continue.md`; budget question in `QUESTIONS.md` (default: rr600/long2 at one sampling seed, r8 and r16).
+- 2026-10-03 22:20 UTC  **r12 interim, UNREVIEWED** (trajectory's best-cap12 T1 ladders, 9.56M ALiBiGPT, `lean_staten`, K12; Lean alone; `artifacts/rc/analysis_stdout_r12.txt`). New targets r9–r12: s0 +15, s1 +20, s2 +13; transfer +7 / +12 / +5. textbook72 pass@256 (seed 1) r8 → r12: 48→51, 48→52, 53→58; holdout250 240→239, 236→241, 237→239. Group C pass@256 (seed 1): 0.083→0.139, 0.029→0.229, 0.036→0.179 (falsifier-2 threshold 0.103 in the mean; judged at r16). Cuts for budget in `log.md`.
