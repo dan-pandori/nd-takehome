@@ -40,9 +40,11 @@ def round_json12(s, r):
     return json.load(open(p)) if os.path.exists(p) else None
 
 
-def read(s, ck, pool, x):
+def read(s, ck, pool, x, fallback=False):
     """{name: (n_ok, n_tried)} or None."""
     p = f'{RC}/tj6_eval/s{s}_{ck}__{pool}_x{x}.jsonl' if ck in ('pend', 'r8') and pool in POOLS else f'{RC}/eval/s{s}_{ck}__{pool}_x{x}.jsonl'
+    if fallback and not os.path.exists(p) and pool == 'h250':       # budget fallback: holdout250 read on the seed's group-C theorems only
+        p = f'{RC}/eval/s{s}_{ck}__h250C_x{x}.jsonl'
     if not os.path.exists(p):
         return None
     return {r['name']: (r['n_ok'], r['n_tried']) for r in rj(p)}
@@ -99,7 +101,7 @@ def main():
     print('| seed | ckpt | read | x0 | x1 |\n|---|---|---|---|---|')
     for s in SEEDS:
         for ck in ('r8', 'r12', 'r16'):
-            for pool in ('tb72', 'h250', 'rr1316', 'long2'):
+            for pool in ('tb72', 'h250', 'h250C', 'rr1316', 'long2'):
                 v = []
                 for x in (0, 1):
                     d = read(s, ck, pool, x)
@@ -129,11 +131,11 @@ def main():
                 for x in (1, 0):
                     d = {}
                     for pool in POOLS:
-                        dd = read(s, ck, pool, x)
+                        dd = read(s, ck, pool, x, fallback=True)
                         if dd is None:
                             d = None; break
                         d.update(dd)
-                    if not d:
+                    if not d or any(n not in d for n in names):     # h250C covers group C only
                         continue
                     p1 = float(np.mean([passk(d[n][1], d[n][0], 1) for n in names]))
                     p256 = float(np.mean([passk(d[n][1], d[n][0], 256) for n in names]))
