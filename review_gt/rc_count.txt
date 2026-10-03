@@ -1,0 +1,136 @@
+group sizes {'all': 259, 'tb72': 72, 'release': 187, 'long': 90, 'roy': 78, 'pelletier': 8, 'batch3': 14, 'bin<=10': 97, 'bin11-20': 67, 'bin>20': 23, 'file:tb72_textbook_dev': 58, 'file:tb72_textbook_train': 14, 'file:candidate_v0': 87, 'file:candidate_v1': 72, 'file:batch3': 14, 'file:hand_proved_14': 14}
+summary mismatches: []
+
+solved@256 (attempt-k) per group
+tb72       best12_s0:48/53/54  best12_s1:48/50/52  best12_s2:53/55/57  best6_s0:43/47/48  best6_s1:43/43/47  best6_s2:39/41/45
+release    best12_s0:130/132/146  best12_s1:124/126/138  best12_s2:135/138/142  best6_s0:109/111/123  best6_s1:105/108/126  best6_s2:95/106/118
+long       best12_s0:38/38/50  best12_s1:31/34/45  best12_s2:42/43/47  best6_s0:24/26/32  best6_s1:25/25/35  best6_s2:19/25/31
+roy        best12_s0:48/49/55  best12_s1:47/48/53  best12_s2:51/51/52  best6_s0:40/40/45  best6_s1:38/40/47  best6_s2:32/36/43
+pelletier  best12_s0:2/2/3  best12_s1:1/1/2  best12_s2:2/2/2  best6_s0:1/1/2  best6_s1:2/2/2  best6_s2:1/1/2
+batch3     best12_s0:11/11/12  best12_s1:8/8/10  best12_s2:9/10/11  best6_s0:7/7/9  best6_s1:9/9/9  best6_s2:8/8/9
+bin<=10    best12_s0:92/94/96  best12_s1:93/92/93  best12_s2:93/95/95  best6_s0:85/85/91  best6_s1:80/83/91  best6_s2:76/81/87
+bin11-20   best12_s0:36/36/46  best12_s1:29/31/41  best12_s2:40/42/45  best6_s0:22/24/30  best6_s1:24/24/33  best6_s2:18/23/30
+bin>20     best12_s0:2/2/4  best12_s1:2/3/4  best12_s2:2/1/2  best6_s0:2/2/2  best6_s1:1/1/2  best6_s2:1/2/1
+all        best12_s0:178/185/200  best12_s1:172/176/190  best12_s2:188/193/199  best6_s0:152/158/171  best6_s1:148/151/173  best6_s2:134/147/163
+
+== long: matched-token solve rate at k=1,64,256 (plain / structural / logical), diff vs plain [95% theorem-bootstrap]
+best12_s0  k1: 0.085/0.068/0.103 k64: 0.368/0.355/0.467 k256: 0.422/0.411/0.533
+      structural k1: -1.8 [-3.0,-0.8] k64: -1.2 [-4.0,+2.0] k256: -1.2 [-4.6,+2.2]  wall k64/256: -3.8 -3.0  attempt k1/64/256: +1.8 +1.5 +0.0
+      logical k1: +1.8 [+0.3,+3.5] k64: +10.0 [+5.3,+14.9] k256: +11.1 [+4.7,+17.8]  wall k64/256: +9.4 +10.2  attempt k1/64/256: +7.7 +13.4 +13.3
+best12_s1  k1: 0.077/0.071/0.093 k64: 0.287/0.295/0.386 k256: 0.344/0.347/0.471
+      structural k1: -0.6 [-1.2,+0.0] k64: +0.9 [-1.7,+3.6] k256: +0.3 [-3.6,+4.3]  wall k64/256: -1.0 -0.8  attempt k1/64/256: +1.2 +3.9 +3.3
+      logical k1: +1.6 [+0.5,+3.0] k64: +9.9 [+5.6,+14.9] k256: +12.7 [+5.8,+20.3]  wall k64/256: +11.5 +13.2  attempt k1/64/256: +5.7 +15.7 +15.6
+best12_s2  k1: 0.130/0.114/0.153 k64: 0.402/0.391/0.454 k256: 0.467/0.464/0.501
+      structural k1: -1.6 [-2.7,-0.6] k64: -1.1 [-3.3,+1.0] k256: -0.2 [-3.7,+3.3]  wall k64/256: -4.7 -3.2  attempt k1/64/256: +2.3 +1.7 +1.1
+      logical k1: +2.3 [+0.4,+4.6] k64: +5.2 [+1.9,+9.0] k256: +3.4 [-1.1,+8.5]  wall k64/256: +4.9 +3.6  attempt k1/64/256: +7.9 +7.9 +5.6
+best6_s0   k1: 0.075/0.079/0.106 k64: 0.218/0.225/0.292 k256: 0.267/0.266/0.333
+      structural k1: +0.4 [-0.6,+1.3] k64: +0.8 [-2.9,+5.4] k256: -0.1 [-4.2,+4.4]  wall k64/256: +0.8 +0.2  attempt k1/64/256: +3.2 +4.0 +2.2
+      logical k1: +3.1 [+1.0,+5.4] k64: +7.4 [+3.4,+12.2] k256: +6.6 [+2.1,+11.9]  wall k64/256: +8.0 +7.3  attempt k1/64/256: +8.4 +10.8 +8.9
+best6_s1   k1: 0.058/0.053/0.080 k64: 0.241/0.248/0.322 k256: 0.278/0.265/0.358
+      structural k1: -0.5 [-1.2,-0.0] k64: +0.7 [-1.9,+3.8] k256: -1.2 [-4.8,+2.2]  wall k64/256: -0.3 -1.7  attempt k1/64/256: +2.6 +1.5 +0.0
+      logical k1: +2.2 [+0.4,+4.1] k64: +8.1 [+3.4,+13.6] k256: +8.0 [+1.5,+14.7]  wall k64/256: +8.4 +8.4  attempt k1/64/256: +9.7 +10.5 +11.1
+best6_s2   k1: 0.054/0.056/0.083 k64: 0.179/0.190/0.282 k256: 0.211/0.244/0.325
+      structural k1: +0.2 [-0.9,+1.6] k64: +1.1 [-1.7,+3.8] k256: +3.2 [+0.4,+6.5]  wall k64/256: +1.1 +2.8  attempt k1/64/256: +2.9 +4.8 +6.7
+      logical k1: +2.9 [+0.9,+5.5] k64: +10.3 [+5.2,+16.0] k256: +11.4 [+5.7,+18.0]  wall k64/256: +10.8 +12.0  attempt k1/64/256: +8.4 +13.9 +13.3
+
+== bin<=10: matched-token solve rate at k=1,64,256 (plain / structural / logical), diff vs plain [95% theorem-bootstrap]
+best12_s0  k1: 0.498/0.459/0.514 k64: 0.904/0.895/0.940 k256: 0.948/0.952/0.972
+      structural k1: -4.0 [-5.7,-2.3] k64: -0.9 [-2.9,+1.2] k256: +0.3 [-2.8,+3.2]  wall k64/256: -4.1 -1.4  attempt k1/64/256: +5.0 +1.7 +2.1
+      logical k1: +1.6 [-0.9,+4.1] k64: +3.7 [+0.7,+7.3] k256: +2.3 [-1.0,+6.2]  wall k64/256: +3.3 +2.5  attempt k1/64/256: +15.3 +5.6 +4.1
+best12_s1  k1: 0.524/0.505/0.551 k64: 0.903/0.896/0.923 k256: 0.959/0.940/0.949
+      structural k1: -1.9 [-3.1,-0.7] k64: -0.8 [-2.4,+0.8] k256: -1.8 [-4.5,-0.1]  wall k64/256: -4.6 -2.9  attempt k1/64/256: +3.8 +1.6 -1.0
+      logical k1: +2.6 [+0.5,+4.8] k64: +2.0 [-0.3,+4.6] k256: -1.0 [-4.7,+2.8]  wall k64/256: +1.6 -1.1  attempt k1/64/256: +14.6 +3.3 +0.0
+best12_s2  k1: 0.579/0.534/0.593 k64: 0.935/0.927/0.960 k256: 0.959/0.974/0.979
+      structural k1: -4.5 [-6.1,-2.9] k64: -0.8 [-3.2,+1.7] k256: +1.5 [-0.5,+4.5]  wall k64/256: -4.7 -0.6  attempt k1/64/256: +2.3 +0.6 +2.1
+      logical k1: +1.3 [-1.0,+3.6] k64: +2.5 [+0.7,+4.7] k256: +2.0 [-0.0,+5.1]  wall k64/256: +2.3 +2.0  attempt k1/64/256: +12.3 +3.9 +2.1
+best6_s0   k1: 0.539/0.528/0.576 k64: 0.818/0.826/0.896 k256: 0.876/0.867/0.932
+      structural k1: -1.0 [-2.5,+0.5] k64: +0.7 [-1.1,+2.4] k256: -1.0 [-3.7,+1.2]  wall k64/256: -0.4 -2.0  attempt k1/64/256: +5.6 +2.7 +0.0
+      logical k1: +3.7 [+1.1,+6.6] k64: +7.7 [+3.2,+12.7] k256: +5.6 [+0.6,+11.1]  wall k64/256: +8.4 +5.8  attempt k1/64/256: +15.6 +10.6 +6.2
+best6_s1   k1: 0.501/0.510/0.579 k64: 0.794/0.822/0.899 k256: 0.825/0.848/0.928
+      structural k1: +0.8 [-1.1,+2.9] k64: +2.8 [+0.6,+5.7] k256: +2.3 [-0.1,+5.5]  wall k64/256: +1.5 +1.2  attempt k1/64/256: +8.4 +3.8 +3.1
+      logical k1: +7.8 [+4.3,+11.5] k64: +10.5 [+5.5,+16.6] k256: +10.3 [+4.3,+16.7]  wall k64/256: +10.6 +10.5  attempt k1/64/256: +22.6 +12.7 +11.3
+best6_s2   k1: 0.498/0.480/0.541 k64: 0.731/0.746/0.831 k256: 0.784/0.808/0.868
+      structural k1: -1.8 [-4.5,+0.9] k64: +1.5 [-0.6,+4.1] k256: +2.5 [-0.4,+6.1]  wall k64/256: -0.7 +0.9  attempt k1/64/256: +5.7 +4.4 +5.2
+      logical k1: +4.4 [+0.8,+7.9] k64: +10.0 [+4.8,+15.5] k256: +8.4 [+3.4,+14.4]  wall k64/256: +11.0 +9.2  attempt k1/64/256: +18.0 +13.2 +11.3
+
+== roy: matched-token solve rate at k=1,64,256 (plain / structural / logical), diff vs plain [95% theorem-bootstrap]
+best12_s0  k1: 0.274/0.253/0.305 k64: 0.581/0.583/0.647 k256: 0.615/0.620/0.693
+      structural k1: -2.1 [-3.4,-0.9] k64: +0.2 [-2.2,+3.2] k256: +0.4 [-3.4,+4.0]  wall k64/256: -1.9 -0.2  attempt k1/64/256: +4.2 +2.4 +1.3
+      logical k1: +3.1 [+0.9,+5.6] k64: +6.6 [+2.8,+11.2] k256: +7.8 [+2.5,+13.8]  wall k64/256: +6.5 +7.6  attempt k1/64/256: +12.3 +9.6 +9.0
+best12_s1  k1: 0.273/0.268/0.300 k64: 0.544/0.547/0.600 k256: 0.603/0.599/0.659
+      structural k1: -0.4 [-1.4,+0.4] k64: +0.4 [-1.8,+2.5] k256: -0.4 [-4.0,+2.9]  wall k64/256: -2.6 -1.3  attempt k1/64/256: +3.5 +3.5 +1.3
+      logical k1: +2.7 [+0.8,+4.8] k64: +5.7 [+2.4,+9.4] k256: +5.7 [-0.1,+12.0]  wall k64/256: +7.2 +6.4  attempt k1/64/256: +10.1 +10.4 +7.7
+best12_s2  k1: 0.328/0.306/0.342 k64: 0.610/0.591/0.630 k256: 0.654/0.647/0.653
+      structural k1: -2.2 [-3.6,-0.9] k64: -1.9 [-4.1,+0.1] k256: -0.7 [-4.4,+3.0]  wall k64/256: -4.9 -3.0  attempt k1/64/256: +2.7 +0.2 +0.0
+      logical k1: +1.3 [-0.3,+2.9] k64: +2.1 [-0.3,+5.4] k256: -0.1 [-3.9,+3.8]  wall k64/256: +2.1 +0.8  attempt k1/64/256: +8.2 +4.1 +1.3
+best6_s0   k1: 0.270/0.268/0.297 k64: 0.472/0.467/0.529 k256: 0.513/0.501/0.564
+      structural k1: -0.2 [-1.5,+1.0] k64: -0.5 [-2.5,+1.2] k256: -1.1 [-2.5,-0.0]  wall k64/256: -0.4 -1.0  attempt k1/64/256: +3.5 +2.3 +0.0
+      logical k1: +2.6 [+0.4,+5.4] k64: +5.7 [+1.9,+10.4] k256: +5.2 [+0.8,+10.6]  wall k64/256: +6.1 +5.2  attempt k1/64/256: +10.0 +8.1 +6.4
+best6_s1   k1: 0.278/0.282/0.320 k64: 0.475/0.484/0.556 k256: 0.487/0.512/0.592
+      structural k1: +0.5 [-1.0,+2.0] k64: +0.9 [-1.4,+3.7] k256: +2.5 [-0.2,+6.4]  wall k64/256: +0.1 +0.9  attempt k1/64/256: +6.0 +1.7 +2.6
+      logical k1: +4.3 [+1.1,+7.7] k64: +8.1 [+3.0,+14.2] k256: +10.5 [+4.3,+17.6]  wall k64/256: +8.7 +11.0  attempt k1/64/256: +14.2 +11.1 +11.5
+best6_s2   k1: 0.228/0.229/0.262 k64: 0.387/0.390/0.465 k256: 0.410/0.433/0.515
+      structural k1: +0.1 [-1.4,+1.8] k64: +0.3 [-1.7,+2.3] k256: +2.3 [-0.4,+5.6]  wall k64/256: -0.8 +2.0  attempt k1/64/256: +3.1 +3.0 +5.1
+      logical k1: +3.4 [+0.9,+6.4] k64: +7.8 [+2.4,+14.0] k256: +10.5 [+4.1,+17.6]  wall k64/256: +9.0 +11.6  attempt k1/64/256: +9.5 +12.1 +14.1
+
+== pelletier: matched-token solve rate at k=1,64,256 (plain / structural / logical), diff vs plain [95% theorem-bootstrap]
+best12_s0  k1: 0.164/0.150/0.159 k64: 0.250/0.250/0.374 k256: 0.250/0.250/0.375
+      structural k1: -1.4 [-3.4,+0.0] k64: -0.0 [-0.0,+0.0] k256: +0.0 [+0.0,+0.0]  wall k64/256: -0.0 -0.0  attempt k1/64/256: -0.7 -0.0 +0.0
+      logical k1: -0.5 [-3.5,+2.3] k64: +12.4 [-0.0,+37.3] k256: +12.5 [+0.0,+37.5]  wall k64/256: +12.2 +12.5  attempt k1/64/256: +2.8 +12.5 +12.5
+best12_s1  k1: 0.113/0.103/0.116 k64: 0.125/0.125/0.241 k256: 0.125/0.125/0.250
+      structural k1: -1.0 [-2.9,+0.0] k64: +0.0 [+0.0,+0.0] k256: +0.0 [+0.0,+0.0]  wall k64/256: +0.0 +0.0  attempt k1/64/256: +0.4 +0.0 +0.0
+      logical k1: +0.3 [-0.4,+1.4] k64: +11.6 [+0.0,+34.8] k256: +12.5 [+0.0,+37.5]  wall k64/256: +11.4 +12.5  attempt k1/64/256: +1.6 +12.4 +12.5
+best12_s2  k1: 0.125/0.121/0.136 k64: 0.197/0.166/0.250 k256: 0.250/0.241/0.250
+      structural k1: -0.5 [-1.3,+0.0] k64: -3.1 [-9.3,+0.0] k256: -0.9 [-2.8,+0.0]  wall k64/256: -5.3 -5.6  attempt k1/64/256: -0.2 -1.8 +0.0
+      logical k1: +1.1 [-1.7,+5.0] k64: +5.3 [+0.0,+15.8] k256: +0.0 [+0.0,+0.0]  wall k64/256: +5.3 +0.0  attempt k1/64/256: +2.8 +5.3 +0.0
+best6_s0   k1: 0.114/0.122/0.125 k64: 0.125/0.125/0.146 k256: 0.125/0.125/0.192
+      structural k1: +0.8 [+0.0,+2.4] k64: +0.0 [+0.0,+0.0] k256: +0.0 [+0.0,+0.0]  wall k64/256: +0.0 +0.0  attempt k1/64/256: +1.0 +0.0 +0.0
+      logical k1: +1.1 [+0.0,+3.2] k64: +2.1 [+0.0,+6.3] k256: +6.7 [+0.0,+20.0]  wall k64/256: +7.5 +12.4  attempt k1/64/256: +1.5 +11.3 +12.5
+best6_s1   k1: 0.123/0.119/0.140 k64: 0.250/0.245/0.250 k256: 0.250/0.250/0.250
+      structural k1: -0.4 [-2.4,+1.1] k64: -0.5 [-1.4,+0.0] k256: -0.0 [-0.0,+0.0]  wall k64/256: -1.5 -0.0  attempt k1/64/256: +0.3 -0.0 +0.0
+      logical k1: +1.7 [+0.0,+4.8] k64: +0.0 [+0.0,+0.0] k256: +0.0 [+0.0,+0.0]  wall k64/256: +0.0 +0.0  attempt k1/64/256: +3.9 +0.0 +0.0
+best6_s2   k1: 0.101/0.047/0.040 k64: 0.125/0.125/0.203 k256: 0.125/0.125/0.249
+      structural k1: -5.4 [-16.2,+0.0] k64: +0.0 [+0.0,+0.0] k256: +0.0 [+0.0,+0.0]  wall k64/256: +0.0 +0.0  attempt k1/64/256: +1.4 +0.0 +0.0
+      logical k1: -6.1 [-18.8,+0.5] k64: +7.8 [+0.0,+23.5] k256: +12.4 [+0.0,+37.2]  wall k64/256: +8.5 +12.5  attempt k1/64/256: +1.5 +11.8 +12.5
+
+== batch3: matched-token solve rate at k=1,64,256 (plain / structural / logical), diff vs plain [95% theorem-bootstrap]
+best12_s0  k1: 0.322/0.273/0.319 k64: 0.740/0.731/0.850 k256: 0.786/0.786/0.857
+      structural k1: -4.9 [-10.5,+0.2] k64: -0.9 [-3.3,+1.2] k256: -0.0 [-0.0,+0.0]  wall k64/256: -4.9 -3.2  attempt k1/64/256: +6.2 +0.5 +0.0
+      logical k1: -0.3 [-5.9,+5.9] k64: +11.0 [+0.9,+26.1] k256: +7.1 [-0.0,+21.4]  wall k64/256: +10.6 +7.1  attempt k1/64/256: +14.7 +11.7 +7.1
+best12_s1  k1: 0.269/0.250/0.266 k64: 0.505/0.492/0.674 k256: 0.571/0.532/0.714
+      structural k1: -1.9 [-5.0,+0.3] k64: -1.2 [-3.5,+0.1] k256: -4.0 [-11.9,+0.0]  wall k64/256: -1.2 -3.2  attempt k1/64/256: +2.7 +2.6 +0.0
+      logical k1: -0.3 [-3.0,+2.2] k64: +17.0 [+0.6,+37.4] k256: +14.3 [-14.3,+42.9]  wall k64/256: +15.8 +14.2  attempt k1/64/256: +7.3 +19.6 +14.3
+best12_s2  k1: 0.372/0.322/0.373 k64: 0.610/0.636/0.705 k256: 0.643/0.709/0.762
+      structural k1: -5.0 [-9.0,-1.8] k64: +2.6 [-6.8,+16.2] k256: +6.6 [-1.6,+21.4]  wall k64/256: -1.6 +3.0  attempt k1/64/256: +0.3 +4.7 +7.1
+      logical k1: +0.1 [-4.7,+5.7] k64: +9.5 [+0.4,+21.6] k256: +11.9 [-0.0,+31.0]  wall k64/256: +10.0 +10.5  attempt k1/64/256: +7.8 +12.1 +14.3
+best6_s0   k1: 0.296/0.292/0.312 k64: 0.416/0.473/0.545 k256: 0.500/0.500/0.607
+      structural k1: -0.4 [-5.2,+2.9] k64: +5.6 [+0.0,+16.6] k256: -0.0 [-0.1,+0.0]  wall k64/256: +4.7 -0.3  attempt k1/64/256: +2.3 +7.4 +0.0
+      logical k1: +1.6 [-4.1,+6.5] k64: +12.8 [-0.8,+29.7] k256: +10.7 [-0.6,+28.3]  wall k64/256: +15.7 +13.8  attempt k1/64/256: +7.0 +20.3 +14.3
+best6_s1   k1: 0.273/0.277/0.352 k64: 0.535/0.575/0.643 k256: 0.643/0.596/0.643
+      structural k1: +0.4 [-1.4,+2.2] k64: +3.9 [-3.5,+15.8] k256: -4.7 [-14.0,+0.0]  wall k64/256: +3.0 -4.7  attempt k1/64/256: +5.9 +5.4 +0.0
+      logical k1: +7.9 [+2.6,+14.8] k64: +10.7 [-3.5,+30.3] k256: -0.0 [-21.4,+21.4]  wall k64/256: +10.7 +0.0  attempt k1/64/256: +21.5 +10.7 +0.0
+best6_s2   k1: 0.234/0.218/0.273 k64: 0.411/0.529/0.614 k256: 0.571/0.571/0.642
+      structural k1: -1.6 [-9.5,+4.0] k64: +11.8 [-0.0,+27.2] k256: -0.0 [-0.0,+0.0]  wall k64/256: +10.0 -3.0  attempt k1/64/256: +7.6 +12.1 +0.0
+      logical k1: +3.9 [-6.9,+12.5] k64: +20.3 [+4.5,+36.7] k256: +7.1 [-0.0,+21.2]  wall k64/256: +20.9 +7.1  attempt k1/64/256: +18.8 +22.8 +7.1
+
+falsifier (logical<=plain at all k, long, tokens): {'best12_s0': False, 'best12_s1': False, 'best12_s2': False, 'best6_s0': False, 'best6_s1': False, 'best6_s2': False}
+
+cost per model|arm: tokensM, ratio, longratio, draws, steps, S-rej, L-rej, trunc/draws, ends, lean-rejected finals, gpu_s, secs, batch, peak
+best12_s0|plain       15.45 1.00x long 1.00x dr 1059305 st 1027480 S 31757 (3.09%/step) L 0 (0.00%) tr 0.006% ends {'done': 34467, 'fail:S:unbound': 6111, 'fail:S:box on non-arrow': 2259, 'fail:S:term': 1371, 'fail:S:binder mismatch': 10417, 'fail:S:Or.elim on non-or': 6593, 'fail:S:exact not last': 686, 'fail:S:formula': 402, 'fail:S:have name': 97, 'fail:S:names exhausted': 88, 'fail:S:no semicolon': 992, 'fail:S:box head': 821, 'fail:S:malformed': 433, 'fail:S:exact goal mismatch': 688, 'fail:step_cap': 12, 'fail:truncated': 68, 'fail:S:PR position': 503, 'fail:S:exact form': 13, 'fail:S:Or.elim name': 42, 'fail:S:assign': 238, 'fail:S:empty term': 3} leanrej 12962 gpu 868 s 951 b 2048 pk 25.8 rep None
+best12_s0|structural  29.67 1.92x long 2.23x dr 1999433 st 1748257 S 250787 (14.34%/step) L 0 (0.00%) tr 0.019% ends {'done': 46569, 'fail:max_rej': 18624, 'fail:step_cap': 1111} leanrej 22910 gpu 2728 s 2868 b 1024 pk 25.5 rep 0.2614402948028893
+best12_s0|logical     27.03 1.75x long 1.97x dr 1673731 st 1238911 S 231551 (18.69%/step) L 202741 (16.36%) tr 0.032% ends {'done': 28348, 'fail:max_rej': 37948, 'fail:step_cap': 8} leanrej 0 gpu 1976 s 2126 b 2048 pk 32.0 rep 0.3950474792844392
+best12_s1|plain       14.14 1.00x long 1.00x dr 967827 st 940299 S 27440 (2.92%/step) L 0 (0.00%) tr 0.009% ends {'done': 38722, 'fail:S:binder mismatch': 6491, 'fail:S:unbound': 5598, 'fail:S:formula': 860, 'fail:S:box on non-arrow': 3927, 'fail:S:exact not last': 641, 'fail:S:exact goal mismatch': 628, 'fail:S:Or.elim on non-or': 4974, 'fail:S:term': 932, 'fail:S:no semicolon': 1088, 'fail:S:empty term': 14, 'fail:S:malformed': 129, 'fail:truncated': 88, 'fail:S:have name': 172, 'fail:S:exact form': 50, 'fail:S:names exhausted': 54, 'fail:S:assign': 183, 'fail:S:box head': 27, 'fail:step_cap': 54, 'fail:S:PR position': 1540, 'fail:S:Or.elim name': 114, 'fail:S:action head': 18} leanrej 17303 gpu 777 s 857 b 2048 pk 24.0 rep None
+best12_s1|structural  26.88 1.90x long 2.43x dr 1708787 st 1530003 S 178421 (11.66%/step) L 0 (0.00%) tr 0.021% ends {'done': 53179, 'fail:max_rej': 11774, 'fail:step_cap': 1351} leanrej 30104 gpu 2439 s 2572 b 2048 pk 30.9 rep 0.25636051065342347
+best12_s1|logical     26.19 1.85x long 2.33x dr 1482156 st 1043627 S 203947 (19.54%/step) L 234021 (22.42%) tr 0.038% ends {'done': 27992, 'fail:max_rej': 38292, 'fail:step_cap': 20} leanrej 0 gpu 1617 s 1750 b 2048 pk 23.8 rep 0.3871675281623761
+best12_s2|plain       14.61 1.00x long 1.00x dr 1001346 st 973116 S 28197 (2.90%/step) L 0 (0.00%) tr 0.003% ends {'done': 38061, 'fail:S:term': 1399, 'fail:S:box head': 632, 'fail:S:have name': 781, 'fail:S:binder mismatch': 6341, 'fail:S:unbound': 7807, 'fail:S:malformed': 979, 'fail:S:no semicolon': 1314, 'fail:S:exact not last': 617, 'fail:S:Or.elim on non-or': 5259, 'fail:S:formula': 468, 'fail:S:names exhausted': 228, 'fail:truncated': 33, 'fail:S:exact goal mismatch': 439, 'fail:S:box on non-arrow': 765, 'fail:S:Or.elim name': 625, 'fail:step_cap': 13, 'fail:S:PR position': 313, 'fail:S:empty term': 14, 'fail:S:action head': 1, 'fail:S:assign': 213, 'fail:S:PR form': 1, 'fail:S:exact form': 1} leanrej 12822 gpu 732 s 828 b 2048 pk 28.7 rep None
+best12_s2|structural  26.59 1.82x long 2.26x dr 1740141 st 1507561 S 232417 (15.42%/step) L 0 (0.00%) tr 0.009% ends {'done': 47580, 'fail:max_rej': 18083, 'fail:step_cap': 641} leanrej 20950 gpu 2355 s 2509 b 2048 pk 42.3 rep 0.20794549555711897
+best12_s2|logical     25.46 1.74x long 2.04x dr 1551255 st 1154279 S 229285 (19.86%/step) L 167518 (14.51%) tr 0.011% ends {'fail:max_rej': 34732, 'done': 31554, 'fail:step_cap': 18} leanrej 0 gpu 1594 s 1747 b 2048 pk 33.3 rep 0.32173530079436186
+best6_s0|plain       11.94 1.00x long 1.00x dr 741190 st 706689 S 32405 (4.59%/step) L 0 (0.00%) tr 0.283% ends {'fail:S:formula': 1247, 'fail:truncated': 2096, 'done': 31797, 'fail:S:have name': 720, 'fail:S:box on non-arrow': 235, 'fail:S:no semicolon': 311, 'fail:S:binder mismatch': 3590, 'fail:S:unbound': 3187, 'fail:S:exact goal mismatch': 668, 'fail:S:Or.elim on non-or': 17845, 'fail:S:box head': 1024, 'fail:S:term': 685, 'fail:S:exact not last': 591, 'fail:S:names exhausted': 236, 'fail:S:malformed': 239, 'fail:S:Or.elim name': 208, 'fail:S:PR position': 1539, 'fail:step_cap': 6, 'fail:S:exact form': 9, 'fail:S:empty term': 1, 'fail:S:assign': 70} leanrej 9605 gpu 858 s 909 b 2048 pk 30.9 rep None
+best6_s0|structural  31.25 2.62x long 3.27x dr 1427868 st 1177175 S 231475 (19.66%/step) L 0 (0.00%) tr 1.346% ends {'fail:max_rej': 17315, 'done': 48804, 'fail:step_cap': 185} leanrej 23620 gpu 2428 s 2513 b 2048 pk 37.7 rep 0.4480010504823156
+best6_s0|logical     31.56 2.64x long 3.13x dr 1328070 st 904233 S 272740 (30.16%/step) L 132399 (14.64%) tr 1.408% ends {'fail:max_rej': 36708, 'done': 29596} leanrej 0 gpu 2016 s 2110 b 2048 pk 38.9 rep 0.5096327344153136
+best6_s1|plain       10.73 1.00x long 1.00x dr 707657 st 676131 S 30402 (4.50%/step) L 0 (0.00%) tr 0.159% ends {'done': 34776, 'fail:truncated': 1124, 'fail:S:exact not last': 742, 'fail:S:unbound': 3974, 'fail:S:Or.elim on non-or': 13905, 'fail:S:term': 978, 'fail:S:exact form': 11, 'fail:S:box head': 131, 'fail:S:PR position': 1624, 'fail:S:binder mismatch': 3910, 'fail:S:malformed': 303, 'fail:S:box on non-arrow': 987, 'fail:S:no semicolon': 1386, 'fail:S:exact goal mismatch': 935, 'fail:S:formula': 1282, 'fail:S:have name': 44, 'fail:S:Or.elim name': 36, 'fail:S:empty term': 4, 'fail:S:assign': 146, 'fail:S:PR form': 4, 'fail:step_cap': 2} leanrej 14932 gpu 615 s 658 b 2048 pk 22.6 rep None
+best6_s1|structural  23.32 2.17x long 2.78x dr 1290198 st 1088866 S 193496 (17.77%/step) L 0 (0.00%) tr 0.607% ends {'done': 53748, 'fail:max_rej': 12504, 'fail:step_cap': 52} leanrej 30613 gpu 1882 s 1955 b 2048 pk 34.4 rep 0.41512339269046417
+best6_s1|logical     25.09 2.34x long 2.82x dr 1228657 st 798570 S 247568 (31.00%/step) L 172521 (21.60%) tr 0.814% ends {'done': 29417, 'fail:max_rej': 36887} leanrej 0 gpu 1409 s 1486 b 2048 pk 26.6 rep 0.5249085421180208
+best6_s2|plain       11.60 1.00x long 1.00x dr 727335 st 690075 S 35513 (5.15%/step) L 0 (0.00%) tr 0.240% ends {'done': 29031, 'fail:S:exact not last': 1237, 'fail:truncated': 1747, 'fail:S:unbound': 3257, 'fail:S:no semicolon': 238, 'fail:S:exact goal mismatch': 471, 'fail:S:Or.elim on non-or': 18664, 'fail:S:malformed': 161, 'fail:S:Or.elim name': 59, 'fail:S:binder mismatch': 7404, 'fail:S:have name': 111, 'fail:S:formula': 1016, 'fail:S:box on non-arrow': 639, 'fail:S:box head': 57, 'fail:S:term': 290, 'fail:S:names exhausted': 119, 'fail:S:PR position': 1545, 'fail:step_cap': 13, 'fail:S:exact form': 8, 'fail:S:PR form': 2, 'fail:S:empty term': 13, 'fail:S:assign': 222} leanrej 9346 gpu 668 s 714 b 2048 pk 20.8 rep None
+best6_s2|structural  36.11 3.11x long 3.60x dr 1434794 st 1129439 S 278774 (24.68%/step) L 0 (0.00%) tr 1.853% ends {'done': 42805, 'fail:max_rej': 23234, 'fail:step_cap': 265} leanrej 20525 gpu 1918 s 2003 b 2048 pk 25.1 rep 0.4585957941881273
+best6_s2|logical     35.35 3.05x long 3.33x dr 1341022 st 891370 S 290608 (32.60%/step) L 133501 (14.98%) tr 1.905% ends {'done': 27285, 'fail:max_rej': 39018, 'fail:step_cap': 1} leanrej 0 gpu 1590 s 1676 b 2048 pk 23.3 rep 0.5419375014571963
