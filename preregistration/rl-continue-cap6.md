@@ -1,7 +1,7 @@
 # Pre-registration — rl-continue-cap6: the cap-6 ladders, rounds 9–16 on the same targets
 
 Run id `rl-continue-cap6`, executor, branch `dan_rl-continue-cap6` (from the fork's `origin/dan`). Written 2026-10-03
-≈ 17:55 UTC, before the first pod. Authorised by Dan 2026-10-03 as the cap-6 companion to `rl-continue` (same protocol
+17:45 UTC, before the first pod. Authorised by Dan 2026-10-03 as the cap-6 companion to `rl-continue` (same protocol
 on cap 12). Brief: `nd-rl/docs/proposals/state-env/BRIEF_rl-continue-cap6.md` (+ `BRIEF_rl-continue.md`).
 
 ## Question
