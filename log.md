@@ -929,3 +929,9 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   max_action 256 and max_depth 96 (= sampling's max_steps). A GPU check solves 31 / 33 of the problem theorems.
   Tuning restarted from t0. Addendum 1's extra configs stay in the grid; they were motivated partly by the buggy
   numbers, but the duplicate-sample argument stands and they were added before any evaluation read-out.
+- 2026-10-03 02:50  tuning done (s0 pend, tune200, 466 s budget, A40 mc-0), solved / 184. Sampling: 140.
+  - prior, t0–t7: 143 143 140 140 146 144 144 146.
+  - value, t0–t7: 142 146 151 145 150 146 145 147.
+  - Chosen (`artifacts/mcts/cfg_final.json`): prior **K 2 / T 1.0**, value **K 8 / T 1.5**.
+  - The spread across configs (≤ 11) is about the size of a re-draw, so the choice is weakly determined. Any config
+    would have put both search arms at or above sampling here.
