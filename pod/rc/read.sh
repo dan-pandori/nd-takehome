@@ -19,7 +19,8 @@ for R in "$@"; do
       long2)  python3 lpool_reread.py --ckpt $CK --in data/ladder/transfer_long2.jsonl --lenfield L_true_lb --k 256 --temperature 0.8 --seed $SS \
                 --batch $1 --max_action $MA --max_steps $MS --out $O.jsonl.tmp --summary $O.json.tmp ;;
     esac > $LG 2>&1; }
-  run $B || { [ "$B" != 1024 ] && grep -q OutOfMemoryError $LG && { echo "=== retry $L $R x$SS at batch 1024"; mv $LG ${LG%.log}.oom$B.log; run 1024; }; } \
+  BB=$B; case $R in rr1316|long2) BB=${RRB:-512} ;; esac   # rr reads at 512: r8 baseline runs beside a ladder (budget, 2026-10-03 23:40)
+  run $BB || { [ "$BB" -gt 1024 ] && grep -q OutOfMemoryError $LG && { echo "=== retry $L $R x$SS at batch 1024"; mv $LG ${LG%.log}.oom$BB.log; run 1024; }; } \
     || { echo "READ FAILED $L $R x$SS"; continue; }
   mv $O.jsonl.tmp $O.jsonl; mv $O.json.tmp $O.json
   echo "=== done $L $R x$SS $(date -u +%FT%TZ) $(grep -m1 -o '"solved": [0-9]*' $O.json)"

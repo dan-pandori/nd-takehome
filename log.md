@@ -907,3 +907,8 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   rr600 13–16 read at **k 64** (sample seed 0, r8 and r16, all three seeds, paired) instead of k 256 (≈ 0.64 h per read at
   k 256 would need ≈ 3.8 h); long2 stays k 256. pass@64 on rr600 13–16 is therefore not directly comparable with
   `best-state`'s k 256 rr600 numbers; the r8 → r16 comparison within this run is matched.
+- 2026-10-03 23:35 UTC  r8 baseline rr600 13–16 (k 64) and long2 reads launched beside the running ladders (the GPU idles
+  during Lean checks) at read batch 512, to save pod-hours; r16 rr/long2 reads use the same batch 512 (matched).
+  r8 results: rr1316 377 / 362 / 367 of 400, long2 21 / 20 / 20 of 21.
+- 2026-10-04 01:45 UTC  projection ≈ 30.2 pod-h. `run.sh` queues killed (ladder processes left running into r16);
+  `pod/rc/finish.sh` waits for r16 and runs the r16 reads as two parallel jobs (tb72/h250 seed 1 | long2/rr1316 seed 0).
