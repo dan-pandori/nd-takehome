@@ -914,3 +914,7 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `podbudget` 13.55 h / $6.64. Projection for the ladders ≈ 24.0 pod-hours, so the default in `QUESTIONS.md` is applied:
   `artifacts/rc6/H250_C` created on every pod (r16 read = textbook72 full + holdout250 group-C theorems), and the hours
   ceiling raised to 24.45 h (= $12 at $0.49/h; `podbudget --extend 0.45`), within the declared $12.
+- 2026-10-04 00:56 / 01:10 UTC  s1 / s2 RUN DONE (r16 targets_cum 4,317 / 4,3xx; r16 reads tb72 + h250C, 3–6 min each).
+  Pulled `artifacts/rc6` and the registry rows; r9–r16 checkpoints confirmed in the bucket (8 per seed); pods deleted
+  (`podrm`: rc6-s1 7.18 h $3.52, rc6-s2 7.40 h $3.63). First look: group C pass@256 (x1) r8 → r16 is 0.038 → 0.154 (s1)
+  and 0.050 → 0.183 (s2), above the r8 seed spread (0.038); s0 pending.
