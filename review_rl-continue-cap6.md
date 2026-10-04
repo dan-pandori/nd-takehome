@@ -221,4 +221,4 @@ second base draw is the honest reachability number. At k = 256 × 2 draws, the g
   pre-registered holdout250 number.
 - A cap diagnostic on s0's h250-C read (max_action 1,024 / max_steps 192, 18.7 % cut-off) to bound how much C reach the cap hides.
 - Rounds 17–24 on the cap-6 ladders, set beside `rl-continue`'s cap-12 r16. Only that can tell "converges to cap 12's ceiling" from
-  "stops below it". At the r13–r16 rates, cap 6 would need ≈ 8–15 more rounds to reach cap 12's r16.
+  "stops below it". At the r13–r16 rates (cap 6 +30 / +17 / +52, cap 12 +5 / +48 / +9 over four rounds), s0 and s2 would close the r16 gap in ≈ 12 and ≈ 10 rounds if cap 12 kept its pace. s1 would not close it, because cap 12's s1 outpaced cap 6's there.
