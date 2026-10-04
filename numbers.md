@@ -1701,3 +1701,56 @@ step-cap rates re-read at `max_action` 1,024, `max_steps` 192 (`artifacts/bs/eva
 Truncation barely falls at twice the action budget: these are non-terminating actions, not long proofs cut off. The
 caps make the best-recipe numbers slightly low (≤ 2 textbook problems per checkpoint); no conclusion changes. Final spend
 60.74 pod-hours, $29.76.
+
+
+## rl-continue (2026-10-03/04; UNREVIEWED)
+
+**Models:** `trajectory`'s best-cap12 T1 ladders, seeds 0–2: ALiBiGPT 9,560,832 params (`best-state` recipe),
+`lean_staten`, from scratch on K12 (`data/kh/train_k12.jsonl`, cap 12; Stage-1 1,200 s), EI r1–r8 in `trajectory`
+(RTX A6000), continued here for r9–r16 (A40) with identical flags (k 32, T 0.8, 600 fine-tune steps, replay 20,000,
+4,495 `rl_targets`, 2,285 `transfer`). **Lean alone.** Sources: `artifacts/rc/analysis_stdout.txt` (from
+`rc_analysis.py`), round JSONs `artifacts/rc/la_T1_best12_s*/round_*.json` (r1–r8: `artifacts/rc/tj_rounds/`), reads
+`artifacts/rc/eval/*.json`. Lengths: `L_true` / `L_true_lb` labels are ND-derived (upper / lower bounds under Lean).
+
+Seamless continuation: r9 sampled from checkpoints with md5 f9afd386 / c85481f9 / 3b62784b = `trajectory`'s r8
+(`artifacts/tj/score/ckpts_s*.md5` on `origin/dan_trajectory`); every (target, proof) of `found_8` is in `found_9`
+(`artifacts/rc/seamless_s*.txt`).
+
+| seed | new targets r9–r16 | targets_cum r8 → r16 (of 4,495) | new transfer r9–r16 | transfer_cum r8 → r16 (of 2,285) | target sample acc r8 → r16 |
+|---|---|---|---|---|---|
+| 0 | **+20** | 4,383 → 4,403 | +17 | 2,185 → 2,202 | 0.918 → 0.937 |
+| 1 | **+68** | 4,365 → 4,433 | +60 | 2,170 → 2,230 | 0.918 → 0.944 |
+| 2 | **+22** | 4,407 → 4,429 | +33 | 2,190 → 2,223 | 0.924 → 0.942 |
+
+s1's +68 includes +18 / +20 at r13 / r14: 35 of its 48 new targets in r13–r16 have `L_true` 9, and 34 of them are
+the textbook `excluded_middle` schema (A ∨ ¬A instances; `rl_targets.jsonl` `schema`). At r16, s0 solves 1 of those 35
+and s2 solves 9 (`alloc_16.json` accepted counts).
+
+Read-outs (k 256, T 0.8, max_action 512, max_steps 96; r8 tb72/h250 = `trajectory`'s files; solved / n):
+
+| seed | textbook72 x1 r8 / r12 / r16 | holdout250 x1 r8 / r12 / r16 | rr600 13–16 (k 64, x0) r8 / r16 | long2 (x0) r8 / r16 |
+|---|---|---|---|---|
+| 0 | 48 / 51 / 51 | 240 / 239 / 240 | 377 / 382 | 21 / 21 |
+| 1 | 48 / 52 / 57 | 236 / 241 / 246 | 362 / 370 | 20 / 21 |
+| 2 | 53 / 58 / 56 | 237 / 239 / 239 | 367 / 376 | 20 / 20 |
+
+Group C (`trajectory`'s per-seed groups: neither end-of-pretraining nor r8 solves at sample seed 0; 36 / 35 / 28
+theorems of textbook72 + holdout250), mean pass@256 at sample seed 1: r8 0.083 / 0.029 / 0.036 (mean 0.049, spread
+0.055) → r12 0.139 / 0.229 / 0.179 → r16 0.167 / 0.486 / 0.143 (mean 0.265). C theorems solved: 3 / 1 / 1 → 6 / 17 / 4.
+s1's 16 new C solves include 7 A ∨ ¬A instances, Peirce's law and (P → Q) ∨ (Q → P).
+
+Pre-registered checks: falsifier 1 (≥ 60 new targets on ≥ 2 seeds) **not met** (1 seed). Falsifier 2 (C pass@256 rises
+by more than the r8 seed spread, ≥ 2 seeds rising) **met**: +0.216 > 0.055, 3 / 3 seeds.
+
+Read settings that differ from the brief (budget): r12 reads only sample seed 1; rr600 13–16 at k 64 (not comparable
+with `best-state`'s k 256); rr600 / long2 at read batch 512 (r8 baseline run beside the ladders); s2 r16 holdout250
+retried at batch 1,024 after an OOM (a re-draw). Truncated + step-capped samples: ladder 0.19–0.47 % per round (caps
+as in `trajectory`), reads 0–0.54 % (`best-state`'s cap diagnostic: non-terminating actions, ≤ 2 textbook problems).
+
+Compute (`artifacts/rc/compute_stdout.txt`, from `record.compute` rows; A40). T1 ladder r9–r16 per seed: 33,261 /
+32,844 / 31,471 GPU-s; 479 / 482 / 470 M generated tokens; 1.794 M attempts; 4,800 fine-tune steps, 906 / 905 / 883 M
+training tokens; 1.57 M Lean checks. Reads per seed: 6,074 / 6,826 / 6,084 GPU-s (overlapping jobs counted
+separately). All seeds received equal attempts and steps by protocol, so no arm exceeds 1.25× another. Pods rc-s0..s2,
+A40 $0.49/h: 29.96 pod-hours, $14.68 (ceiling extended 30 → 30.4 h at 03:27 UTC to finish two holdout250 reads, within
+$15; 29.96 h used). Bucket: `hf://buckets/dan-pandori/nd-rl/rl-continue/{ckpts,artifacts}` (r9–r16 checkpoints in
+`ckpts/rc/ladder/`, uploaded on save; r16 = control arm for proposal 23).

@@ -912,3 +912,11 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   r8 results: rr1316 377 / 362 / 367 of 400, long2 21 / 20 / 20 of 21.
 - 2026-10-04 01:45 UTC  projection ≈ 30.2 pod-h. `run.sh` queues killed (ladder processes left running into r16);
   `pod/rc/finish.sh` waits for r16 and runs the r16 reads as two parallel jobs (tb72/h250 seed 1 | long2/rr1316 seed 0).
+- 2026-10-04 02:30–03:33 UTC  r16 reached (s2 02:30, s1 02:54, s0 03:00); r16 reads in two parallel jobs per pod (s2
+  holdout250 OOM'd at batch 2,048 beside the rr job, retried at 1,024). At 03:27 UTC the hour ceiling was extended
+  30 → 30.4 h (`podbudget --extend 0.4`, within the declared $15) so that s0/s1 r16 holdout250 seed-1 reads (falsifier 2)
+  could finish; pods deleted as each finished (s2 ≈ 03:07, s1 ≈ 03:33, s0 ≈ 03:34; from `podrm` durations). Final 29.96 pod-h, $14.68.
+- 2026-10-04  Outcome: new targets r9–r16 +20 / +68 / +22, transfer +17 / +60 / +33; falsifier 1 not met, falsifier 2 met
+  (group C pass@256 seed 1: mean 0.049 → 0.265, 3/3 seeds). s1's burst (r13–r14) = 34 textbook `excluded_middle`
+  targets; s0 / s2 solve 1 / 9 of s1's 35 new L_true-9 targets. Note: the pre-registration's header says "17:25 UTC"; its
+  commit is 17:23:14, before the first pod (17:24).
