@@ -244,3 +244,6 @@ Brief: `nd-rl/docs/proposals/state-env/BRIEF_rl-continue-cap6.md`. Run id rl-con
 
 ## rl-continue-cap6
 - 2026-10-03 17:41 UTC  run started. Pre-registration `preregistration/rl-continue-cap6.md` committed before any pod.
+- 2026-10-04 03:10 UTC  done. r9–r16 on all 3 seeds: +69 / +82 / +123 targets (r16 4,326 / 4,317 / 4,327 — below cap 12's r8), +60 / +80 / +98 transfer; group C pass@256 0.077 / 0.038 / 0.050 → 0.192 / 0.154 / 0.183 (falsifier 2 met: not saturating). 23.93 A40 pod-hours, $11.73. `run_rl_continue_cap6.md`, `numbers.md` § rl-continue-cap6. Unreviewed.
+
+RL-CONTINUE-CAP6 DONE 2026-10-04T03:10:04Z

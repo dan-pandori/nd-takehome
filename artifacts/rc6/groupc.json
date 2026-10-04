@@ -1,0 +1,1108 @@
+{
+ "0": {
+  "textbook_0713eb0885a366161011": {
+   "pool": "tb72",
+   "ref_lines": 11,
+   "r8_n_ok": 0,
+   "r16_n_ok": 90,
+   "lines": 10,
+   "lean_ok": true,
+   "term_size": 9,
+   "lean": "theorem t (P Q R S : Prop) (h1 : (P \u2227 (Q \u2228 R))) : ((P \u2227 Q) \u2228 (P \u2227 R)) := by\n  have n1 : (P \u2227 (Q \u2228 R)) := h1\n  have n2 : P := n1.1\n  have n3 : (Q \u2228 R) := n1.2\n  have n10 : ((P \u2227 Q) \u2228 (P \u2227 R)) := Or.elim n3 (fun (n4 : Q) => by\n    have n5 : (P \u2227 Q) := \u27e8n2, n4\u27e9\n    have n6 : ((P \u2227 Q) \u2228 (P \u2227 R)) := Or.inl n5\n    exact n6) (fun (n7 : R) => by\n    have n8 : (P \u2227 R) := \u27e8n2, n7\u27e9\n    have n9 : ((P \u2227 Q) \u2228 (P \u2227 R)) := Or.inr n8\n    exact n9)\n  exact n10\n"
+  },
+  "textbook_79e3c381d248c69d315c": {
+   "pool": "tb72",
+   "ref_lines": 15,
+   "r8_n_ok": 1,
+   "r16_n_ok": 3,
+   "lines": 18,
+   "lean_ok": true,
+   "term_size": 13,
+   "lean": "theorem t (P Q R S : Prop)  : ((((P \u2192 Q) \u2192 P) \u2227 (P \u2192 (P \u2192 Q))) \u2192 ((P \u2192 Q) \u2227 (Q \u2192 P))) := by\n  have n18 : ((((P \u2192 Q) \u2192 P) \u2227 (P \u2192 (P \u2192 Q))) \u2192 ((P \u2192 Q) \u2227 (Q \u2192 P))) := (fun (n1 : (((P \u2192 Q) \u2192 P) \u2227 (P \u2192 (P \u2192 Q)))) => by\n    have n2 : ((P \u2192 Q) \u2192 P) := n1.1\n    have n13 : (P \u2192 Q) := (fun (n3 : P) => by\n      have n10 : (P \u2192 (P \u2192 Q)) := (fun (n4 : P) => by\n        have n9 : (P \u2192 Q) := (fun (n5 : P) => by\n          have n6 : (P \u2192 (P \u2192 Q)) := n1.2\n          have n7 : (P \u2192 Q) := n6 n5\n          have n8 : Q := n7 n4\n          exact n8)\n        exact n9)\n      have n11 : (P \u2192 Q) := n10 n3\n      have n12 : Q := n11 n3\n      exact n12)\n    have n16 : (Q \u2192 P) := (fun (n14 : Q) => by\n      have n15 : P := n2 n13\n      exact n15)\n    have n17 : ((P \u2192 Q) \u2227 (Q \u2192 P)) := \u27e8n13, n16\u27e9\n    exact n17)\n  exact n18\n"
+  },
+  "textbook_b98931f273313e2c32e7": {
+   "pool": "tb72",
+   "ref_lines": 18,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_9f83d4425b7684ef58e7": {
+   "pool": "tb72",
+   "ref_lines": 18,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_8244c4b1090af406e68f": {
+   "pool": "tb72",
+   "ref_lines": 12,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_35e75d37fcd6e6fc7dfe": {
+   "pool": "tb72",
+   "ref_lines": 33,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_c070bcc0c3bc8e3b8386": {
+   "pool": "tb72",
+   "ref_lines": 22,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_7ea17063b2c61d0c16d9": {
+   "pool": "tb72",
+   "ref_lines": 20,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_920bfc2896e73d80d8cd": {
+   "pool": "tb72",
+   "ref_lines": 15,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_078f26deb57f268c2fae": {
+   "pool": "tb72",
+   "ref_lines": 15,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_a104fab36312807439b0": {
+   "pool": "tb72",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_970fbf60225a4d6e78b3": {
+   "pool": "tb72",
+   "ref_lines": 20,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_201dc6c52fcdedeac240": {
+   "pool": "tb72",
+   "ref_lines": 12,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_3d2b05bca4cbb83ed73b": {
+   "pool": "tb72",
+   "ref_lines": 29,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_3f4b5ba98e9f3445b303": {
+   "pool": "tb72",
+   "ref_lines": 14,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_1e1d3b9a628f0b73c258": {
+   "pool": "tb72",
+   "ref_lines": 18,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_33e465a968d29efbb443": {
+   "pool": "tb72",
+   "ref_lines": 15,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_49c48adca28f05789420": {
+   "pool": "tb72",
+   "ref_lines": 13,
+   "r8_n_ok": 2,
+   "r16_n_ok": 1,
+   "lines": 24,
+   "lean_ok": true,
+   "term_size": 16,
+   "lean": "theorem t (P Q R S : Prop) (h1 : ((\u00acP) \u2192 (Q \u2227 R))) (h2 : (\u00ac(R \u2228 P))) : (\u00acQ) := by\n  have n1 : ((\u00acP) \u2192 (Q \u2227 R)) := h1\n  have n2 : (\u00ac(R \u2228 P)) := h2\n  have n24 : (\u00acQ) := (fun (n3 : Q) => by\n    have n19 : (\u00acP) := (fun (n4 : P) => by\n      have n17 : (\u00acP) := (fun (n5 : P) => by\n        have n15 : (\u00acP) := (fun (n6 : P) => by\n          have n13 : (\u00acP) := (fun (n7 : P) => by\n            have n11 : (\u00acP) := (fun (n8 : P) => by\n              have n9 : (R \u2228 P) := Or.inr n4\n              have n10 : False := n2 n9\n              exact (n10 : False))\n            have n12 : False := n11 n6\n            exact (n12 : False))\n          have n14 : False := n13 n5\n          exact (n14 : False))\n        have n16 : False := n15 n5\n        exact (n16 : False))\n      have n18 : False := n17 n4\n      exact (n18 : False))\n    have n20 : (Q \u2227 R) := n1 n19\n    have n21 : R := n20.2\n    have n22 : (R \u2228 P) := Or.inl n21\n    have n23 : False := n2 n22\n    exact (n23 : False))\n  exact n24\n"
+  },
+  "textbook_68c64ac26ce426bfc04e": {
+   "pool": "tb72",
+   "ref_lines": 25,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_0824150e3d98b3ab201f": {
+   "pool": "tb72",
+   "ref_lines": 6,
+   "r8_n_ok": 1,
+   "r16_n_ok": 5,
+   "lines": 6,
+   "lean_ok": true,
+   "term_size": 4,
+   "lean": "theorem t (P Q R S : Prop) (h1 : (P \u2227 (Q \u2227 R))) (h2 : ((Q \u2228 R) \u2192 S)) : S := by\n  have n1 : (P \u2227 (Q \u2227 R)) := h1\n  have n2 : ((Q \u2228 R) \u2192 S) := h2\n  have n3 : (Q \u2227 R) := n1.2\n  have n4 : R := n3.2\n  have n5 : (Q \u2228 R) := Or.inr n4\n  have n6 : S := n2 n5\n  exact n6\n"
+  },
+  "textbook_f900b1d7c659ef00e06b": {
+   "pool": "tb72",
+   "ref_lines": 20,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_55c0251debc570e4f3e3": {
+   "pool": "tb72",
+   "ref_lines": 18,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_54e1d81ad54a80f1f835": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_58b532c9c8cc1819378b": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_92b4192856ec54a3e1ee": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_936ceade34df08c26377": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 1,
+   "lines": 22,
+   "lean_ok": true,
+   "term_size": 15,
+   "lean": "theorem t (P Q R S : Prop) (h1 : (\u00ac(P \u2227 Q))) (h2 : (\u00ac((\u00acP) \u2228 (\u00acQ)))) : ((\u00acP) \u2228 (\u00acQ)) := by\n  have n1 : (\u00ac(P \u2227 Q)) := h1\n  have n2 : (\u00ac((\u00acP) \u2228 (\u00acQ))) := h2\n  have n21 : (\u00acP) := (fun (n3 : P) => by\n    have n18 : (\u00acP) := (fun (n4 : P) => by\n      have n16 : (\u00acP) := (fun (n5 : P) => by\n        have n14 : (\u00acP) := (fun (n6 : P) => by\n          have n11 : (\u00acQ) := (fun (n7 : Q) => by\n            have n8 : (\u00ac(P \u2227 Q)) := n1.elim\n            have n9 : (P \u2227 Q) := \u27e8n5, n7\u27e9\n            have n10 : False := n1 n9\n            exact (n10 : False))\n          have n12 : ((\u00acP) \u2228 (\u00acQ)) := Or.inr n11\n          have n13 : False := n2 n12\n          exact (n13 : False))\n        have n15 : False := n14 n5\n        exact (n15 : False))\n      have n17 : False := n16 n4\n      exact (n17 : False))\n    have n19 : ((\u00acP) \u2228 (\u00acQ)) := Or.inl n18\n    have n20 : False := n2 n19\n    exact (n20 : False))\n  have n22 : ((\u00acP) \u2228 (\u00acQ)) := Or.inl n21\n  exact n22\n"
+  },
+  "textbook_bcb4f30a22574210fc12": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_f918caefa752f2beda53": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1833": {
+   "pool": "h250",
+   "ref_lines": 11,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_478": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_406": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1572": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_956": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_2097": {
+   "pool": "h250",
+   "ref_lines": 11,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_205": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 43,
+   "lines": 21,
+   "lean_ok": true,
+   "term_size": 20,
+   "lean": "theorem t (P Q R S : Prop) (h1 : (R \u2227 (((S \u2228 P) \u2192 (\u00acS)) \u2228 ((P \u2228 S) \u2227 S)))) : ((R \u2227 ((S \u2228 P) \u2192 (\u00acS))) \u2228 (R \u2227 ((P \u2228 S) \u2227 S))) := by\n  have n1 : (R \u2227 (((S \u2228 P) \u2192 (\u00acS)) \u2228 ((P \u2228 S) \u2227 S))) := h1\n  have n2 : (((S \u2228 P) \u2192 (\u00acS)) \u2228 ((P \u2228 S) \u2227 S)) := n1.2\n  have n21 : ((R \u2227 ((S \u2228 P) \u2192 (\u00acS))) \u2228 (R \u2227 ((P \u2228 S) \u2227 S))) := Or.elim n2 (fun (n3 : ((S \u2228 P) \u2192 (\u00acS))) => by\n    have n10 : (R \u2227 ((S \u2228 P) \u2192 (\u00acS))) := Or.elim n2 (fun (n4 : ((S \u2228 P) \u2192 (\u00acS))) => by\n      have n5 : R := n1.1\n      have n6 : (R \u2227 ((S \u2228 P) \u2192 (\u00acS))) := \u27e8n5, n4\u27e9\n      exact n6) (fun (n7 : ((P \u2228 S) \u2227 S)) => by\n      have n8 : R := n1.1\n      have n9 : (R \u2227 ((S \u2228 P) \u2192 (\u00acS))) := \u27e8n8, n3\u27e9\n      exact n9)\n    have n11 : ((R \u2227 ((S \u2228 P) \u2192 (\u00acS))) \u2228 (R \u2227 ((P \u2228 S) \u2227 S))) := Or.inl n10\n    exact n11) (fun (n12 : ((P \u2228 S) \u2227 S)) => by\n    have n19 : (R \u2227 ((P \u2228 S) \u2227 S)) := Or.elim n2 (fun (n13 : ((S \u2228 P) \u2192 (\u00acS))) => by\n      have n14 : R := n1.1\n      have n15 : (R \u2227 ((P \u2228 S) \u2227 S)) := \u27e8n14, n12\u27e9\n      exact n15) (fun (n16 : ((P \u2228 S) \u2227 S)) => by\n      have n17 : R := n1.1\n      have n18 : (R \u2227 ((P \u2228 S) \u2227 S)) := \u27e8n17, n16\u27e9\n      exact n18)\n    have n20 : ((R \u2227 ((S \u2228 P) \u2192 (\u00acS))) \u2228 (R \u2227 ((P \u2228 S) \u2227 S))) := Or.inr n19\n    exact n20)\n  exact n21\n"
+  },
+  "la_transfer_376": {
+   "pool": "h250",
+   "ref_lines": 14,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1802": {
+   "pool": "h250",
+   "ref_lines": 11,
+   "r8_n_ok": 0,
+   "r16_n_ok": 164,
+   "lines": 13,
+   "lean_ok": true,
+   "term_size": 12,
+   "lean": "theorem t (P Q R S : Prop) (h1 : ((((S \u2227 P) \u2228 (P \u2192 R)) \u2228 (\u00acP)) \u2227 (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acR) \u2228 P)))) : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := by\n  have n1 : ((((S \u2227 P) \u2228 (P \u2192 R)) \u2228 (\u00acP)) \u2227 (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acR) \u2228 P))) := h1\n  have n2 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 (\u00acP)) := n1.1\n  have n13 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := Or.elim n2 (fun (n3 : ((S \u2227 P) \u2228 (P \u2192 R))) => by\n    have n4 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := Or.inl n3\n    exact n4) (fun (n5 : (\u00acP)) => by\n    have n6 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acR) \u2228 P)) := n1.2\n    have n12 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := Or.elim n6 (fun (n7 : ((S \u2227 P) \u2228 (P \u2192 R))) => by\n      have n8 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := Or.inl n7\n      exact n8) (fun (n9 : ((\u00acR) \u2228 P)) => by\n      have n10 : ((\u00acP) \u2227 ((\u00acR) \u2228 P)) := \u27e8n5, n9\u27e9\n      have n11 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := Or.inr n10\n      exact n11)\n    exact n12)\n  exact n13\n"
+  },
+  "la_transfer_1821": {
+   "pool": "h250",
+   "ref_lines": 8,
+   "r8_n_ok": 1,
+   "r16_n_ok": 13,
+   "lines": 8,
+   "lean_ok": true,
+   "term_size": 5,
+   "lean": "theorem t (P Q R S : Prop) (h1 : ((\u00ac(\u00acR)) \u2192 P)) (h2 : (\u00ac(Q \u2228 ((\u00ac(\u00acR)) \u2192 (((\u00ac(\u00acR)) \u2192 P) \u2228 (\u00acQ)))))) : S := by\n  have n1 : ((\u00ac(\u00acR)) \u2192 P) := h1\n  have n2 : (\u00ac(Q \u2228 ((\u00ac(\u00acR)) \u2192 (((\u00ac(\u00acR)) \u2192 P) \u2228 (\u00acQ))))) := h2\n  have n5 : ((\u00ac(\u00acR)) \u2192 (((\u00ac(\u00acR)) \u2192 P) \u2228 (\u00acQ))) := (fun (n3 : (\u00ac(\u00acR))) => by\n    have n4 : (((\u00ac(\u00acR)) \u2192 P) \u2228 (\u00acQ)) := Or.inl n1\n    exact n4)\n  have n6 : (Q \u2228 ((\u00ac(\u00acR)) \u2192 (((\u00ac(\u00acR)) \u2192 P) \u2228 (\u00acQ)))) := Or.inr n5\n  have n7 : False := n2 n6\n  have n8 : S := n7.elim\n  exact n8\n"
+  },
+  "la_transfer_795": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_2220": {
+   "pool": "h250",
+   "ref_lines": 7,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_428": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 248,
+   "lines": 21,
+   "lean_ok": true,
+   "term_size": 20,
+   "lean": "theorem t (P Q R S : Prop) (h1 : (R \u2227 ((\u00acS) \u2228 S))) : ((R \u2227 (\u00acS)) \u2228 (R \u2227 S)) := by\n  have n1 : (R \u2227 ((\u00acS) \u2228 S)) := h1\n  have n2 : ((\u00acS) \u2228 S) := n1.2\n  have n21 : ((R \u2227 (\u00acS)) \u2228 (R \u2227 S)) := Or.elim n2 (fun (n3 : (\u00acS)) => by\n    have n10 : (R \u2227 (\u00acS)) := Or.elim n2 (fun (n4 : (\u00acS)) => by\n      have n5 : R := n1.1\n      have n6 : (R \u2227 (\u00acS)) := \u27e8n5, n4\u27e9\n      exact n6) (fun (n7 : S) => by\n      have n8 : R := n1.1\n      have n9 : (R \u2227 (\u00acS)) := \u27e8n8, n3\u27e9\n      exact n9)\n    have n11 : ((R \u2227 (\u00acS)) \u2228 (R \u2227 S)) := Or.inl n10\n    exact n11) (fun (n12 : S) => by\n    have n19 : (R \u2227 S) := Or.elim n2 (fun (n13 : (\u00acS)) => by\n      have n14 : R := n1.1\n      have n15 : (R \u2227 S) := \u27e8n14, n12\u27e9\n      exact n15) (fun (n16 : S) => by\n      have n17 : R := n1.1\n      have n18 : (R \u2227 S) := \u27e8n17, n12\u27e9\n      exact n18)\n    have n20 : ((R \u2227 (\u00acS)) \u2228 (R \u2227 S)) := Or.inr n19\n    exact n20)\n  exact n21\n"
+  },
+  "la_transfer_1909": {
+   "pool": "h250",
+   "ref_lines": 13,
+   "r8_n_ok": 0,
+   "r16_n_ok": 69,
+   "lines": 18,
+   "lean_ok": true,
+   "term_size": 16,
+   "lean": "theorem t (P Q R S : Prop) (h1 : (((\u00acS) \u2228 (P \u2227 Q)) \u2227 ((\u00acS) \u2228 (R \u2227 P)))) : ((\u00acS) \u2228 ((P \u2227 Q) \u2227 (R \u2227 P))) := by\n  have n1 : (((\u00acS) \u2228 (P \u2227 Q)) \u2227 ((\u00acS) \u2228 (R \u2227 P))) := h1\n  have n2 : ((\u00acS) \u2228 (P \u2227 Q)) := n1.1\n  have n18 : ((\u00acS) \u2228 ((P \u2227 Q) \u2227 (R \u2227 P))) := Or.elim n2 (fun (n3 : (\u00acS)) => by\n    have n4 : ((\u00acS) \u2228 ((P \u2227 Q) \u2227 (R \u2227 P))) := Or.inl n3\n    exact n4) (fun (n5 : (P \u2227 Q)) => by\n    have n6 : ((\u00acS) \u2228 (R \u2227 P)) := n1.2\n    have n17 : ((\u00acS) \u2228 ((P \u2227 Q) \u2227 (R \u2227 P))) := Or.elim n2 (fun (n7 : (\u00acS)) => by\n      have n8 : ((\u00acS) \u2228 ((P \u2227 Q) \u2227 (R \u2227 P))) := Or.inl n7\n      exact n8) (fun (n9 : (P \u2227 Q)) => by\n      have n10 : ((\u00acS) \u2228 (R \u2227 P)) := n6\n      have n16 : ((\u00acS) \u2228 ((P \u2227 Q) \u2227 (R \u2227 P))) := Or.elim n10 (fun (n11 : (\u00acS)) => by\n        have n12 : ((\u00acS) \u2228 ((P \u2227 Q) \u2227 (R \u2227 P))) := Or.inl n11\n        exact n12) (fun (n13 : (R \u2227 P)) => by\n        have n14 : ((P \u2227 Q) \u2227 (R \u2227 P)) := \u27e8n9, n13\u27e9\n        have n15 : ((\u00acS) \u2228 ((P \u2227 Q) \u2227 (R \u2227 P))) := Or.inr n14\n        exact n15)\n      exact n16)\n    exact n17)\n  exact n18\n"
+  },
+  "la_transfer_720": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_2071": {
+   "pool": "h250",
+   "ref_lines": 8,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1453": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1648": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1128": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_975": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_870": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_2060": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_872": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1424": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  }
+ },
+ "1": {
+  "textbook_0713eb0885a366161011": {
+   "pool": "tb72",
+   "ref_lines": 11,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_5758428c8c74f96345ad": {
+   "pool": "tb72",
+   "ref_lines": 10,
+   "r8_n_ok": 2,
+   "r16_n_ok": 0
+  },
+  "textbook_b98931f273313e2c32e7": {
+   "pool": "tb72",
+   "ref_lines": 18,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_03549baa1134033548d6": {
+   "pool": "tb72",
+   "ref_lines": 11,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_9f83d4425b7684ef58e7": {
+   "pool": "tb72",
+   "ref_lines": 18,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_35e75d37fcd6e6fc7dfe": {
+   "pool": "tb72",
+   "ref_lines": 33,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_c070bcc0c3bc8e3b8386": {
+   "pool": "tb72",
+   "ref_lines": 22,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_98cdc8d06ea0d36428a2": {
+   "pool": "tb72",
+   "ref_lines": 6,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_7ea17063b2c61d0c16d9": {
+   "pool": "tb72",
+   "ref_lines": 20,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_920bfc2896e73d80d8cd": {
+   "pool": "tb72",
+   "ref_lines": 15,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_078f26deb57f268c2fae": {
+   "pool": "tb72",
+   "ref_lines": 15,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_a104fab36312807439b0": {
+   "pool": "tb72",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_970fbf60225a4d6e78b3": {
+   "pool": "tb72",
+   "ref_lines": 20,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_201dc6c52fcdedeac240": {
+   "pool": "tb72",
+   "ref_lines": 12,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_fef8f88a0e6c1c196603": {
+   "pool": "tb72",
+   "ref_lines": 13,
+   "r8_n_ok": 1,
+   "r16_n_ok": 13,
+   "lines": 18,
+   "lean_ok": true,
+   "term_size": 16,
+   "lean": "theorem t (P Q R S : Prop) (h1 : (\u00ac(Q \u2227 P))) (h2 : ((R \u2227 Q) \u2228 (P \u2227 Q))) : R := by\n  have n1 : (\u00ac(Q \u2227 P)) := h1\n  have n2 : ((R \u2227 Q) \u2228 (P \u2227 Q)) := h2\n  have n17 : (R \u2227 Q) := Or.elim n2 (fun (n3 : (R \u2227 Q)) => by\n    exact n3) (fun (n4 : (P \u2227 Q)) => by\n    have n13 : (Q \u2227 P) := Or.elim n2 (fun (n5 : (R \u2227 Q)) => by\n      have n6 : Q := n4.2\n      have n7 : P := n4.1\n      have n8 : (Q \u2227 P) := \u27e8n6, n7\u27e9\n      exact n8) (fun (n9 : (P \u2227 Q)) => by\n      have n10 : Q := n4.2\n      have n11 : P := n9.1\n      have n12 : (Q \u2227 P) := \u27e8n10, n11\u27e9\n      exact n12)\n    have n14 : False := n1 n13\n    have n15 : P := n14.elim\n    have n16 : (R \u2227 Q) := n14.elim\n    exact n16)\n  have n18 : R := n17.1\n  exact n18\n"
+  },
+  "textbook_3d2b05bca4cbb83ed73b": {
+   "pool": "tb72",
+   "ref_lines": 29,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_3f4b5ba98e9f3445b303": {
+   "pool": "tb72",
+   "ref_lines": 14,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_1e1d3b9a628f0b73c258": {
+   "pool": "tb72",
+   "ref_lines": 18,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_33e465a968d29efbb443": {
+   "pool": "tb72",
+   "ref_lines": 15,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_68c64ac26ce426bfc04e": {
+   "pool": "tb72",
+   "ref_lines": 25,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_f900b1d7c659ef00e06b": {
+   "pool": "tb72",
+   "ref_lines": 20,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_55c0251debc570e4f3e3": {
+   "pool": "tb72",
+   "ref_lines": 18,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_0dd5ea3d0aa761fea3d9": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_54e1d81ad54a80f1f835": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_58b532c9c8cc1819378b": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_6997656e16fb567550a6": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_92b4192856ec54a3e1ee": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_936ceade34df08c26377": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_9fa52f90369a7b6286f7": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 2,
+   "lines": 20,
+   "lean_ok": true,
+   "term_size": 16,
+   "lean": "theorem t (P Q R S : Prop) (h1 : ((P \u2192 (\u00ac(\u00acQ))) \u2227 ((\u00ac(\u00acQ)) \u2192 P))) : ((P \u2192 Q) \u2227 (Q \u2192 P)) := by\n  have n1 : ((P \u2192 (\u00ac(\u00acQ))) \u2227 ((\u00ac(\u00acQ)) \u2192 P)) := h1\n  have n2 : ((\u00ac(\u00acQ)) \u2192 P) := n1.2\n  have n3 : (P \u2192 (\u00ac(\u00acQ))) := n1.1\n  have n6 : ((\u00ac(\u00acQ)) \u2192 P) := (fun (n4 : (\u00ac(\u00acQ))) => by\n    have n5 : P := n2 n4\n    exact n5)\n  have n9 : (P \u2192 (\u00ac(\u00acQ))) := (fun (n7 : P) => by\n    have n8 : (\u00ac(\u00acQ)) := n3 n7\n    exact n8)\n  have n13 : (P \u2192 Q) := (fun (n10 : P) => by\n    have n11 : (\u00ac(\u00acQ)) := n9 n10\n    have n12 : Q := Classical.byContradiction (fun hh => n11 hh)\n    exact n12)\n  have n19 : (Q \u2192 P) := (fun (n14 : Q) => by\n    have n17 : (\u00ac(\u00acQ)) := (fun (n15 : (\u00acQ)) => by\n      have n16 : False := n15 n14\n      exact (n16 : False))\n    have n18 : P := n6 n17\n    exact n18)\n  have n20 : ((P \u2192 Q) \u2227 (Q \u2192 P)) := \u27e8n13, n19\u27e9\n  exact n20\n"
+  },
+  "textbook_bcb4f30a22574210fc12": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_f918caefa752f2beda53": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1833": {
+   "pool": "h250",
+   "ref_lines": 11,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_478": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_406": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1572": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_956": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_127": {
+   "pool": "h250",
+   "ref_lines": 7,
+   "r8_n_ok": 0,
+   "r16_n_ok": 48,
+   "lines": 9,
+   "lean_ok": true,
+   "term_size": 8,
+   "lean": "theorem t (P Q R S : Prop) (h1 : ((P \u2192 S) \u2192 ((\u00ac(\u00acS)) \u2192 (\u00ac(R \u2192 S))))) : (((P \u2192 S) \u2227 (\u00ac(\u00acS))) \u2192 (\u00ac(R \u2192 S))) := by\n  have n1 : ((P \u2192 S) \u2192 ((\u00ac(\u00acS)) \u2192 (\u00ac(R \u2192 S)))) := h1\n  have n9 : (((P \u2192 S) \u2227 (\u00ac(\u00acS))) \u2192 (\u00ac(R \u2192 S))) := (fun (n2 : ((P \u2192 S) \u2227 (\u00ac(\u00acS)))) => by\n    have n3 : (\u00ac(\u00acS)) := n2.2\n    have n6 : (P \u2192 S) := (fun (n4 : P) => by\n      have n5 : S := Classical.byContradiction (fun hh => n3 hh)\n      exact n5)\n    have n7 : ((\u00ac(\u00acS)) \u2192 (\u00ac(R \u2192 S))) := n1 n6\n    have n8 : (\u00ac(R \u2192 S)) := n7 n3\n    exact n8)\n  exact n9\n"
+  },
+  "la_transfer_2097": {
+   "pool": "h250",
+   "ref_lines": 11,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_205": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 145,
+   "lines": 10,
+   "lean_ok": true,
+   "term_size": 9,
+   "lean": "theorem t (P Q R S : Prop) (h1 : (R \u2227 (((S \u2228 P) \u2192 (\u00acS)) \u2228 ((P \u2228 S) \u2227 S)))) : ((R \u2227 ((S \u2228 P) \u2192 (\u00acS))) \u2228 (R \u2227 ((P \u2228 S) \u2227 S))) := by\n  have n1 : (R \u2227 (((S \u2228 P) \u2192 (\u00acS)) \u2228 ((P \u2228 S) \u2227 S))) := h1\n  have n2 : R := n1.1\n  have n3 : (((S \u2228 P) \u2192 (\u00acS)) \u2228 ((P \u2228 S) \u2227 S)) := n1.2\n  have n10 : ((R \u2227 ((S \u2228 P) \u2192 (\u00acS))) \u2228 (R \u2227 ((P \u2228 S) \u2227 S))) := Or.elim n3 (fun (n4 : ((S \u2228 P) \u2192 (\u00acS))) => by\n    have n5 : (R \u2227 ((S \u2228 P) \u2192 (\u00acS))) := \u27e8n2, n4\u27e9\n    have n6 : ((R \u2227 ((S \u2228 P) \u2192 (\u00acS))) \u2228 (R \u2227 ((P \u2228 S) \u2227 S))) := Or.inl n5\n    exact n6) (fun (n7 : ((P \u2228 S) \u2227 S)) => by\n    have n8 : (R \u2227 ((P \u2228 S) \u2227 S)) := \u27e8n2, n7\u27e9\n    have n9 : ((R \u2227 ((S \u2228 P) \u2192 (\u00acS))) \u2228 (R \u2227 ((P \u2228 S) \u2227 S))) := Or.inr n8\n    exact n9)\n  exact n10\n"
+  },
+  "la_transfer_376": {
+   "pool": "h250",
+   "ref_lines": 14,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1802": {
+   "pool": "h250",
+   "ref_lines": 11,
+   "r8_n_ok": 0,
+   "r16_n_ok": 59,
+   "lines": 13,
+   "lean_ok": true,
+   "term_size": 12,
+   "lean": "theorem t (P Q R S : Prop) (h1 : ((((S \u2227 P) \u2228 (P \u2192 R)) \u2228 (\u00acP)) \u2227 (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acR) \u2228 P)))) : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := by\n  have n1 : ((((S \u2227 P) \u2228 (P \u2192 R)) \u2228 (\u00acP)) \u2227 (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acR) \u2228 P))) := h1\n  have n2 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 (\u00acP)) := n1.1\n  have n3 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acR) \u2228 P)) := n1.2\n  have n13 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := Or.elim n3 (fun (n4 : ((S \u2227 P) \u2228 (P \u2192 R))) => by\n    have n5 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := Or.inl n4\n    exact n5) (fun (n6 : ((\u00acR) \u2228 P)) => by\n    have n12 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := Or.elim n2 (fun (n7 : ((S \u2227 P) \u2228 (P \u2192 R))) => by\n      have n8 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := Or.inl n7\n      exact n8) (fun (n9 : (\u00acP)) => by\n      have n10 : ((\u00acP) \u2227 ((\u00acR) \u2228 P)) := \u27e8n9, n6\u27e9\n      have n11 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := Or.inr n10\n      exact n11)\n    exact n12)\n  exact n13\n"
+  },
+  "la_transfer_795": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_428": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1552": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_2071": {
+   "pool": "h250",
+   "ref_lines": 8,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1453": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1648": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 100,
+   "lines": 11,
+   "lean_ok": true,
+   "term_size": 9,
+   "lean": "theorem t (P Q R S : Prop) (h1 : ((\u00ac((P \u2227 Q) \u2228 (R \u2192 S))) \u2227 (\u00ac(\u00acS)))) : (\u00ac(((P \u2227 Q) \u2228 (R \u2192 S)) \u2228 (\u00acS))) := by\n  have n1 : ((\u00ac((P \u2227 Q) \u2228 (R \u2192 S))) \u2227 (\u00ac(\u00acS))) := h1\n  have n2 : (\u00ac(\u00acS)) := n1.2\n  have n3 : (\u00ac((P \u2227 Q) \u2228 (R \u2192 S))) := n1.1\n  have n11 : (\u00ac(((P \u2227 Q) \u2228 (R \u2192 S)) \u2228 (\u00acS))) := (fun (n4 : (((P \u2227 Q) \u2228 (R \u2192 S)) \u2228 (\u00acS))) => by\n    have n9 : ((P \u2227 Q) \u2228 (R \u2192 S)) := Or.elim n4 (fun (n5 : ((P \u2227 Q) \u2228 (R \u2192 S))) => by\n      exact n5) (fun (n6 : (\u00acS)) => by\n      have n7 : False := n2 n6\n      have n8 : ((P \u2227 Q) \u2228 (R \u2192 S)) := n7.elim\n      exact n8)\n    have n10 : False := n3 n9\n    exact (n10 : False))\n  exact n11\n"
+  },
+  "la_transfer_925": {
+   "pool": "h250",
+   "ref_lines": 8,
+   "r8_n_ok": 0,
+   "r16_n_ok": 90,
+   "lines": 8,
+   "lean_ok": true,
+   "term_size": 7,
+   "lean": "theorem t (P Q R S : Prop) (h1 : ((\u00acQ) \u2192 (\u00ac(\u00acR)))) : ((\u00acR) \u2192 Q) := by\n  have n1 : ((\u00acQ) \u2192 (\u00ac(\u00acR))) := h1\n  have n8 : ((\u00acR) \u2192 Q) := (fun (n2 : (\u00acR)) => by\n    have n6 : (\u00ac(\u00acQ)) := (fun (n3 : (\u00acQ)) => by\n      have n4 : (\u00ac(\u00acR)) := n1 n3\n      have n5 : False := n4 n2\n      exact (n5 : False))\n    have n7 : Q := Classical.byContradiction (fun hh => n6 hh)\n    exact n7)\n  exact n8\n"
+  },
+  "la_transfer_975": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_870": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_2060": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 15,
+   "lines": 15,
+   "lean_ok": true,
+   "term_size": 14,
+   "lean": "theorem t (P Q R S : Prop) (h1 : ((\u00ac((S \u2228 P) \u2227 (R \u2227 P))) \u2227 (\u00ac(\u00ac(Q \u2192 S))))) : (\u00ac(((S \u2228 P) \u2227 (R \u2227 P)) \u2228 (\u00ac(Q \u2192 S)))) := by\n  have n1 : ((\u00ac((S \u2228 P) \u2227 (R \u2227 P))) \u2227 (\u00ac(\u00ac(Q \u2192 S)))) := h1\n  have n2 : (\u00ac((S \u2228 P) \u2227 (R \u2227 P))) := n1.1\n  have n15 : (\u00ac(((S \u2228 P) \u2227 (R \u2227 P)) \u2228 (\u00ac(Q \u2192 S)))) := (fun (n3 : (((S \u2228 P) \u2227 (R \u2227 P)) \u2228 (\u00ac(Q \u2192 S)))) => by\n    have n4 : (\u00ac(\u00ac(Q \u2192 S))) := n1.2\n    have n7 : (\u00ac(\u00ac(Q \u2192 S))) := (fun (n5 : (\u00ac(Q \u2192 S))) => by\n      have n6 : False := n4 n5\n      exact (n6 : False))\n    have n8 : (Q \u2192 S) := Classical.byContradiction (fun hh => n7 hh)\n    have n13 : ((S \u2228 P) \u2227 (R \u2227 P)) := Or.elim n3 (fun (n9 : ((S \u2228 P) \u2227 (R \u2227 P))) => by\n      exact n9) (fun (n10 : (\u00ac(Q \u2192 S))) => by\n      have n11 : False := n4 n10\n      have n12 : ((S \u2228 P) \u2227 (R \u2227 P)) := n11.elim\n      exact n12)\n    have n14 : False := n2 n13\n    exact (n14 : False))\n  exact n15\n"
+  },
+  "la_transfer_1424": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  }
+ },
+ "2": {
+  "textbook_0713eb0885a366161011": {
+   "pool": "tb72",
+   "ref_lines": 11,
+   "r8_n_ok": 0,
+   "r16_n_ok": 74,
+   "lines": 21,
+   "lean_ok": true,
+   "term_size": 20,
+   "lean": "theorem t (P Q R S : Prop) (h1 : (P \u2227 (Q \u2228 R))) : ((P \u2227 Q) \u2228 (P \u2227 R)) := by\n  have n1 : (P \u2227 (Q \u2228 R)) := h1\n  have n2 : (Q \u2228 R) := n1.2\n  have n21 : ((P \u2227 Q) \u2228 (P \u2227 R)) := Or.elim n2 (fun (n3 : Q) => by\n    have n10 : (P \u2227 Q) := Or.elim n2 (fun (n4 : Q) => by\n      have n5 : P := n1.1\n      have n6 : (P \u2227 Q) := \u27e8n5, n4\u27e9\n      exact n6) (fun (n7 : R) => by\n      have n8 : P := n1.1\n      have n9 : (P \u2227 Q) := \u27e8n8, n3\u27e9\n      exact n9)\n    have n11 : ((P \u2227 Q) \u2228 (P \u2227 R)) := Or.inl n10\n    exact n11) (fun (n12 : R) => by\n    have n19 : (P \u2227 R) := Or.elim n2 (fun (n13 : Q) => by\n      have n14 : P := n1.1\n      have n15 : (P \u2227 R) := \u27e8n14, n12\u27e9\n      exact n15) (fun (n16 : R) => by\n      have n17 : P := n1.1\n      have n18 : (P \u2227 R) := \u27e8n17, n12\u27e9\n      exact n18)\n    have n20 : ((P \u2227 Q) \u2228 (P \u2227 R)) := Or.inr n19\n    exact n20)\n  exact n21\n"
+  },
+  "textbook_5758428c8c74f96345ad": {
+   "pool": "tb72",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_b98931f273313e2c32e7": {
+   "pool": "tb72",
+   "ref_lines": 18,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_03549baa1134033548d6": {
+   "pool": "tb72",
+   "ref_lines": 11,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_9f83d4425b7684ef58e7": {
+   "pool": "tb72",
+   "ref_lines": 18,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_8244c4b1090af406e68f": {
+   "pool": "tb72",
+   "ref_lines": 12,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_35e75d37fcd6e6fc7dfe": {
+   "pool": "tb72",
+   "ref_lines": 33,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_c070bcc0c3bc8e3b8386": {
+   "pool": "tb72",
+   "ref_lines": 22,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_dd8d30b16bfb0b99a5d7": {
+   "pool": "tb72",
+   "ref_lines": 6,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_3d573ac42c0db3988c20": {
+   "pool": "tb72",
+   "ref_lines": 11,
+   "r8_n_ok": 0,
+   "r16_n_ok": 1,
+   "lines": 11,
+   "lean_ok": true,
+   "term_size": 7,
+   "lean": "theorem t (P Q R S : Prop) (h1 : ((P \u2227 Q) \u2192 (Q \u2227 R))) (h2 : (R \u2192 (\u00acP))) : (P \u2192 (\u00acQ)) := by\n  have n1 : ((P \u2227 Q) \u2192 (Q \u2227 R)) := h1\n  have n2 : (R \u2192 (\u00acP)) := h2\n  have n11 : (P \u2192 (\u00acQ)) := (fun (n3 : P) => by\n    have n10 : (\u00acQ) := (fun (n4 : Q) => by\n      have n5 : (P \u2227 Q) := \u27e8n3, n4\u27e9\n      have n6 : (Q \u2227 R) := n1 n5\n      have n7 : R := n6.2\n      have n8 : (\u00acP) := n2 n7\n      have n9 : False := n8 n3\n      exact (n9 : False))\n    exact n10)\n  exact n11\n"
+  },
+  "textbook_7ea17063b2c61d0c16d9": {
+   "pool": "tb72",
+   "ref_lines": 20,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_920bfc2896e73d80d8cd": {
+   "pool": "tb72",
+   "ref_lines": 15,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_078f26deb57f268c2fae": {
+   "pool": "tb72",
+   "ref_lines": 15,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_a104fab36312807439b0": {
+   "pool": "tb72",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_970fbf60225a4d6e78b3": {
+   "pool": "tb72",
+   "ref_lines": 20,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_201dc6c52fcdedeac240": {
+   "pool": "tb72",
+   "ref_lines": 12,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_3d2b05bca4cbb83ed73b": {
+   "pool": "tb72",
+   "ref_lines": 29,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_3f4b5ba98e9f3445b303": {
+   "pool": "tb72",
+   "ref_lines": 14,
+   "r8_n_ok": 2,
+   "r16_n_ok": 0
+  },
+  "textbook_33a5b9f5c6c6ad7582e7": {
+   "pool": "tb72",
+   "ref_lines": 13,
+   "r8_n_ok": 0,
+   "r16_n_ok": 1,
+   "lines": 21,
+   "lean_ok": true,
+   "term_size": 20,
+   "lean": "theorem t (P Q R S : Prop) (h1 : ((P \u2228 Q) \u2227 (P \u2228 R))) : (P \u2228 (Q \u2227 R)) := by\n  have n1 : ((P \u2228 Q) \u2227 (P \u2228 R)) := h1\n  have n2 : (P \u2228 R) := n1.2\n  have n3 : (P \u2228 Q) := n1.1\n  have n21 : (P \u2228 (Q \u2227 R)) := Or.elim n3 (fun (n4 : P) => by\n    have n5 : (P \u2228 (Q \u2227 R)) := Or.inl n4\n    exact n5) (fun (n6 : Q) => by\n    have n20 : (P \u2228 (Q \u2227 R)) := Or.elim n3 (fun (n7 : P) => by\n      have n8 : (P \u2228 (Q \u2227 R)) := Or.inl n7\n      exact n8) (fun (n9 : Q) => by\n      have n19 : (P \u2228 (Q \u2227 R)) := Or.elim n2 (fun (n10 : P) => by\n        have n11 : (P \u2228 (Q \u2227 R)) := Or.inl n10\n        exact n11) (fun (n12 : R) => by\n        have n18 : (P \u2228 (Q \u2227 R)) := Or.elim n2 (fun (n13 : P) => by\n          have n14 : (P \u2228 (Q \u2227 R)) := Or.inl n13\n          exact n14) (fun (n15 : R) => by\n          have n16 : (Q \u2227 R) := \u27e8n6, n15\u27e9\n          have n17 : (P \u2228 (Q \u2227 R)) := Or.inr n16\n          exact n17)\n        exact n18)\n      exact n19)\n    exact n20)\n  exact n21\n"
+  },
+  "textbook_1e1d3b9a628f0b73c258": {
+   "pool": "tb72",
+   "ref_lines": 18,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_33e465a968d29efbb443": {
+   "pool": "tb72",
+   "ref_lines": 15,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_49c48adca28f05789420": {
+   "pool": "tb72",
+   "ref_lines": 13,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_68c64ac26ce426bfc04e": {
+   "pool": "tb72",
+   "ref_lines": 25,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_48e30865966e132d65ad": {
+   "pool": "tb72",
+   "ref_lines": 16,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_f900b1d7c659ef00e06b": {
+   "pool": "tb72",
+   "ref_lines": 20,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_55c0251debc570e4f3e3": {
+   "pool": "tb72",
+   "ref_lines": 18,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_0dd5ea3d0aa761fea3d9": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_54e1d81ad54a80f1f835": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_58b532c9c8cc1819378b": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_92b4192856ec54a3e1ee": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_936ceade34df08c26377": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_9fa52f90369a7b6286f7": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 1,
+   "r16_n_ok": 0
+  },
+  "textbook_bcb4f30a22574210fc12": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "textbook_f918caefa752f2beda53": {
+   "pool": "tb72",
+   "ref_lines": null,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1833": {
+   "pool": "h250",
+   "ref_lines": 11,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_2138": {
+   "pool": "h250",
+   "ref_lines": 8,
+   "r8_n_ok": 1,
+   "r16_n_ok": 0
+  },
+  "la_transfer_478": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_406": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1572": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_956": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_2097": {
+   "pool": "h250",
+   "ref_lines": 11,
+   "r8_n_ok": 0,
+   "r16_n_ok": 1,
+   "lines": 16,
+   "lean_ok": true,
+   "term_size": 12,
+   "lean": "theorem t (P Q R S : Prop)  : ((((S \u2227 Q) \u2192 (\u00acR)) \u2192 (S \u2227 Q)) \u2192 (S \u2227 Q)) := by\n  have n16 : ((((S \u2227 Q) \u2192 (\u00acR)) \u2192 (S \u2227 Q)) \u2192 (S \u2227 Q)) := (fun (n1 : (((S \u2227 Q) \u2192 (\u00acR)) \u2192 (S \u2227 Q))) => by\n    have n14 : (\u00ac(\u00ac(S \u2227 Q))) := (fun (n2 : (\u00ac(S \u2227 Q))) => by\n      have n6 : (\u00ac(S \u2227 Q)) := (fun (n3 : (S \u2227 Q)) => by\n        have n4 : (\u00ac(S \u2227 Q)) := n2\n        have n5 : False := n2 n3\n        exact (n5 : False))\n      have n11 : ((S \u2227 Q) \u2192 (\u00acR)) := (fun (n7 : (S \u2227 Q)) => by\n        have n10 : (\u00acR) := (fun (n8 : R) => by\n          have n9 : False := n2 n7\n          exact (n9 : False))\n        exact n10)\n      have n12 : (S \u2227 Q) := n1 n11\n      have n13 : False := n2 n12\n      exact (n13 : False))\n    have n15 : (S \u2227 Q) := Classical.byContradiction (fun hh => n14 hh)\n    exact n15)\n  exact n16\n"
+  },
+  "la_transfer_205": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 122,
+   "lines": 21,
+   "lean_ok": true,
+   "term_size": 20,
+   "lean": "theorem t (P Q R S : Prop) (h1 : (R \u2227 (((S \u2228 P) \u2192 (\u00acS)) \u2228 ((P \u2228 S) \u2227 S)))) : ((R \u2227 ((S \u2228 P) \u2192 (\u00acS))) \u2228 (R \u2227 ((P \u2228 S) \u2227 S))) := by\n  have n1 : (R \u2227 (((S \u2228 P) \u2192 (\u00acS)) \u2228 ((P \u2228 S) \u2227 S))) := h1\n  have n2 : (((S \u2228 P) \u2192 (\u00acS)) \u2228 ((P \u2228 S) \u2227 S)) := n1.2\n  have n21 : ((R \u2227 ((S \u2228 P) \u2192 (\u00acS))) \u2228 (R \u2227 ((P \u2228 S) \u2227 S))) := Or.elim n2 (fun (n3 : ((S \u2228 P) \u2192 (\u00acS))) => by\n    have n10 : (R \u2227 ((S \u2228 P) \u2192 (\u00acS))) := Or.elim n2 (fun (n4 : ((S \u2228 P) \u2192 (\u00acS))) => by\n      have n5 : R := n1.1\n      have n6 : (R \u2227 ((S \u2228 P) \u2192 (\u00acS))) := \u27e8n5, n4\u27e9\n      exact n6) (fun (n7 : ((P \u2228 S) \u2227 S)) => by\n      have n8 : R := n1.1\n      have n9 : (R \u2227 ((S \u2228 P) \u2192 (\u00acS))) := \u27e8n8, n3\u27e9\n      exact n9)\n    have n11 : ((R \u2227 ((S \u2228 P) \u2192 (\u00acS))) \u2228 (R \u2227 ((P \u2228 S) \u2227 S))) := Or.inl n10\n    exact n11) (fun (n12 : ((P \u2228 S) \u2227 S)) => by\n    have n19 : (R \u2227 ((P \u2228 S) \u2227 S)) := Or.elim n2 (fun (n13 : ((S \u2228 P) \u2192 (\u00acS))) => by\n      have n14 : R := n1.1\n      have n15 : (R \u2227 ((P \u2228 S) \u2227 S)) := \u27e8n14, n12\u27e9\n      exact n15) (fun (n16 : ((P \u2228 S) \u2227 S)) => by\n      have n17 : R := n1.1\n      have n18 : (R \u2227 ((P \u2228 S) \u2227 S)) := \u27e8n17, n16\u27e9\n      exact n18)\n    have n20 : ((R \u2227 ((S \u2228 P) \u2192 (\u00acS))) \u2228 (R \u2227 ((P \u2228 S) \u2227 S))) := Or.inr n19\n    exact n20)\n  exact n21\n"
+  },
+  "la_transfer_570": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_376": {
+   "pool": "h250",
+   "ref_lines": 14,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1802": {
+   "pool": "h250",
+   "ref_lines": 11,
+   "r8_n_ok": 0,
+   "r16_n_ok": 18,
+   "lines": 18,
+   "lean_ok": true,
+   "term_size": 16,
+   "lean": "theorem t (P Q R S : Prop) (h1 : ((((S \u2227 P) \u2228 (P \u2192 R)) \u2228 (\u00acP)) \u2227 (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acR) \u2228 P)))) : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := by\n  have n1 : ((((S \u2227 P) \u2228 (P \u2192 R)) \u2228 (\u00acP)) \u2227 (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acR) \u2228 P))) := h1\n  have n2 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 (\u00acP)) := n1.1\n  have n18 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := Or.elim n2 (fun (n3 : ((S \u2227 P) \u2228 (P \u2192 R))) => by\n    have n4 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := Or.inl n3\n    exact n4) (fun (n5 : (\u00acP)) => by\n    have n6 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acR) \u2228 P)) := n1.2\n    have n17 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := Or.elim n6 (fun (n7 : ((S \u2227 P) \u2228 (P \u2192 R))) => by\n      have n8 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := Or.inl n7\n      exact n8) (fun (n9 : ((\u00acR) \u2228 P)) => by\n      have n16 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := Or.elim n6 (fun (n10 : ((S \u2227 P) \u2228 (P \u2192 R))) => by\n        have n11 : ((S \u2227 P) \u2228 (P \u2192 R)) := n10\n        have n12 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := Or.inl n11\n        exact n12) (fun (n13 : ((\u00acR) \u2228 P)) => by\n        have n14 : ((\u00acP) \u2227 ((\u00acR) \u2228 P)) := \u27e8n5, n13\u27e9\n        have n15 : (((S \u2227 P) \u2228 (P \u2192 R)) \u2228 ((\u00acP) \u2227 ((\u00acR) \u2228 P))) := Or.inr n14\n        exact n15)\n      exact n16)\n    exact n17)\n  exact n18\n"
+  },
+  "la_transfer_1398": {
+   "pool": "h250",
+   "ref_lines": 8,
+   "r8_n_ok": 0,
+   "r16_n_ok": 191,
+   "lines": 8,
+   "lean_ok": true,
+   "term_size": 7,
+   "lean": "theorem t (P Q R S : Prop) (h1 : ((\u00ac((P \u2228 R) \u2228 S)) \u2192 (\u00ac((P \u2192 R) \u2192 (Q \u2227 R))))) : (((P \u2192 R) \u2192 (Q \u2227 R)) \u2192 ((P \u2228 R) \u2228 S)) := by\n  have n1 : ((\u00ac((P \u2228 R) \u2228 S)) \u2192 (\u00ac((P \u2192 R) \u2192 (Q \u2227 R)))) := h1\n  have n8 : (((P \u2192 R) \u2192 (Q \u2227 R)) \u2192 ((P \u2228 R) \u2228 S)) := (fun (n2 : ((P \u2192 R) \u2192 (Q \u2227 R))) => by\n    have n6 : (\u00ac(\u00ac((P \u2228 R) \u2228 S))) := (fun (n3 : (\u00ac((P \u2228 R) \u2228 S))) => by\n      have n4 : (\u00ac((P \u2192 R) \u2192 (Q \u2227 R))) := n1 n3\n      have n5 : False := n4 n2\n      exact (n5 : False))\n    have n7 : ((P \u2228 R) \u2228 S) := Classical.byContradiction (fun hh => n6 hh)\n    exact n7)\n  exact n8\n"
+  },
+  "la_transfer_1032": {
+   "pool": "h250",
+   "ref_lines": 8,
+   "r8_n_ok": 0,
+   "r16_n_ok": 252,
+   "lines": 8,
+   "lean_ok": true,
+   "term_size": 7,
+   "lean": "theorem t (P Q R S : Prop) (h1 : ((\u00ac((P \u2228 Q) \u2228 P)) \u2192 (\u00ac(\u00acQ)))) : ((\u00acQ) \u2192 ((P \u2228 Q) \u2228 P)) := by\n  have n1 : ((\u00ac((P \u2228 Q) \u2228 P)) \u2192 (\u00ac(\u00acQ))) := h1\n  have n8 : ((\u00acQ) \u2192 ((P \u2228 Q) \u2228 P)) := (fun (n2 : (\u00acQ)) => by\n    have n6 : (\u00ac(\u00ac((P \u2228 Q) \u2228 P))) := (fun (n3 : (\u00ac((P \u2228 Q) \u2228 P))) => by\n      have n4 : (\u00ac(\u00acQ)) := n1 n3\n      have n5 : False := n4 n2\n      exact (n5 : False))\n    have n7 : ((P \u2228 Q) \u2228 P) := Classical.byContradiction (fun hh => n6 hh)\n    exact n7)\n  exact n8\n"
+  },
+  "la_transfer_795": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_2220": {
+   "pool": "h250",
+   "ref_lines": 7,
+   "r8_n_ok": 0,
+   "r16_n_ok": 135,
+   "lines": 16,
+   "lean_ok": true,
+   "term_size": 15,
+   "lean": "theorem t (P Q R S : Prop) (h1 : (Q \u2227 (S \u2228 ((\u00acR) \u2192 Q)))) : ((Q \u2227 S) \u2228 (Q \u2227 ((\u00acR) \u2192 Q))) := by\n  have n1 : (Q \u2227 (S \u2228 ((\u00acR) \u2192 Q))) := h1\n  have n2 : (S \u2228 ((\u00acR) \u2192 Q)) := n1.2\n  have n16 : ((Q \u2227 S) \u2228 (Q \u2227 ((\u00acR) \u2192 Q))) := Or.elim n2 (fun (n3 : S) => by\n    have n4 : Q := n1.1\n    have n5 : (Q \u2227 S) := \u27e8n4, n3\u27e9\n    have n6 : ((Q \u2227 S) \u2228 (Q \u2227 ((\u00acR) \u2192 Q))) := Or.inl n5\n    exact n6) (fun (n7 : ((\u00acR) \u2192 Q)) => by\n    have n14 : (Q \u2227 ((\u00acR) \u2192 Q)) := Or.elim n2 (fun (n8 : S) => by\n      have n9 : Q := n1.1\n      have n10 : (Q \u2227 ((\u00acR) \u2192 Q)) := \u27e8n9, n7\u27e9\n      exact n10) (fun (n11 : ((\u00acR) \u2192 Q)) => by\n      have n12 : Q := n1.1\n      have n13 : (Q \u2227 ((\u00acR) \u2192 Q)) := \u27e8n12, n11\u27e9\n      exact n13)\n    have n15 : ((Q \u2227 S) \u2228 (Q \u2227 ((\u00acR) \u2192 Q))) := Or.inr n14\n    exact n15)\n  exact n16\n"
+  },
+  "la_transfer_428": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 121,
+   "lines": 10,
+   "lean_ok": true,
+   "term_size": 9,
+   "lean": "theorem t (P Q R S : Prop) (h1 : (R \u2227 ((\u00acS) \u2228 S))) : ((R \u2227 (\u00acS)) \u2228 (R \u2227 S)) := by\n  have n1 : (R \u2227 ((\u00acS) \u2228 S)) := h1\n  have n2 : R := n1.1\n  have n3 : ((\u00acS) \u2228 S) := n1.2\n  have n10 : ((R \u2227 (\u00acS)) \u2228 (R \u2227 S)) := Or.elim n3 (fun (n4 : (\u00acS)) => by\n    have n5 : (R \u2227 (\u00acS)) := \u27e8n2, n4\u27e9\n    have n6 : ((R \u2227 (\u00acS)) \u2228 (R \u2227 S)) := Or.inl n5\n    exact n6) (fun (n7 : S) => by\n    have n8 : (R \u2227 S) := \u27e8n2, n7\u27e9\n    have n9 : ((R \u2227 (\u00acS)) \u2228 (R \u2227 S)) := Or.inr n8\n    exact n9)\n  exact n10\n"
+  },
+  "la_transfer_1552": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 4,
+   "lines": 23,
+   "lean_ok": true,
+   "term_size": 17,
+   "lean": "theorem t (P Q R S : Prop) (h1 : (\u00ac(((P \u2227 S) \u2227 (\u00acP)) \u2192 Q))) : (((P \u2227 S) \u2227 (\u00acP)) \u2227 (\u00acQ)) := by\n  have n1 : (\u00ac(((P \u2227 S) \u2227 (\u00acP)) \u2192 Q)) := h1\n  have n21 : (((P \u2227 S) \u2227 (\u00acP)) \u2192 Q) := (fun (n2 : ((P \u2227 S) \u2227 (\u00acP))) => by\n    have n19 : (((P \u2227 S) \u2227 (\u00acP)) \u2192 Q) := (fun (n3 : ((P \u2227 S) \u2227 (\u00acP))) => by\n      have n17 : (((P \u2227 S) \u2227 (\u00acP)) \u2192 Q) := (fun (n4 : ((P \u2227 S) \u2227 (\u00acP))) => by\n        have n15 : (((P \u2227 S) \u2227 (\u00acP)) \u2192 Q) := (fun (n5 : ((P \u2227 S) \u2227 (\u00acP))) => by\n          have n6 : (\u00acP) := n4.2\n          have n13 : (((P \u2227 S) \u2227 (\u00acP)) \u2192 Q) := (fun (n7 : ((P \u2227 S) \u2227 (\u00acP))) => by\n            have n8 : (\u00acP) := n7.2\n            have n9 : (P \u2227 S) := n7.1\n            have n10 : P := n9.1\n            have n11 : False := n8 n10\n            have n12 : Q := n11.elim\n            exact n12)\n          have n14 : Q := n13 n4\n          exact n14)\n        have n16 : Q := n15 n4\n        exact n16)\n      have n18 : Q := n17 n2\n      exact n18)\n    have n20 : Q := n19 n2\n    exact n20)\n  have n22 : False := n1 n21\n  have n23 : (((P \u2227 S) \u2227 (\u00acP)) \u2227 (\u00acQ)) := n22.elim\n  exact n23\n"
+  },
+  "la_transfer_720": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_2071": {
+   "pool": "h250",
+   "ref_lines": 8,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1453": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_925": {
+   "pool": "h250",
+   "ref_lines": 8,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_975": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_870": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_872": {
+   "pool": "h250",
+   "ref_lines": 10,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1424": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  },
+  "la_transfer_1179": {
+   "pool": "h250",
+   "ref_lines": 9,
+   "r8_n_ok": 0,
+   "r16_n_ok": 0
+  }
+ }
+}

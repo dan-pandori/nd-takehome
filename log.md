@@ -914,7 +914,16 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `podbudget` 13.55 h / $6.64. Projection for the ladders ≈ 24.0 pod-hours, so the default in `QUESTIONS.md` is applied:
   `artifacts/rc6/H250_C` created on every pod (r16 read = textbook72 full + holdout250 group-C theorems), and the hours
   ceiling raised to 24.45 h (= $12 at $0.49/h; `podbudget --extend 0.45`), within the declared $12.
-- 2026-10-04 00:56 / 01:10 UTC  s1 / s2 RUN DONE (r16 targets_cum 4,317 / 4,3xx; r16 reads tb72 + h250C, 3–6 min each).
+- 2026-10-04 00:56 / 01:10 UTC  s1 / s2 RUN DONE (r16 targets_cum 4,317 / 4,327; r16 reads tb72 + h250C, 3–6 min each).
   Pulled `artifacts/rc6` and the registry rows; r9–r16 checkpoints confirmed in the bucket (8 per seed); pods deleted
   (`podrm`: rc6-s1 7.18 h $3.52, rc6-s2 7.40 h $3.63). First look: group C pass@256 (x1) r8 → r16 is 0.038 → 0.154 (s1)
   and 0.050 → 0.183 (s2), above the r8 seed spread (0.038); s0 pending.
+- 2026-10-04 03:05 UTC  s0 RUN DONE (r16 targets_cum 4,326); pulled; rc6-s0 deleted (9.35 h, $4.58). Run total 23.93 pod-hours,
+  $11.73 of $12. All pods deleted.
+- 2026-10-04 03:06–03:10 UTC  analysis (`rc6_analysis.py`, `rc6_compute.py`, `rc6_groupc.py`, Lean 4.34.1 on the VPS for
+  `lean_check`). Falsifier 1 not met (≥ 100 new targets on 1 seed: s2 +123); falsifier 2 met (group C pass@256 x1 mean
+  +0.121 vs r8 spread 0.038, 3 / 3 seeds rising). Checked that the fine-tune mix holds only `rl_targets` proofs + replay,
+  so the group-C rise on holdout250 (⊂ transfer pool) is not trained-on data. Cap-12 r9–r16 round JSONs taken from
+  `rl-continue`'s bucket (that run unreviewed). Uploaded `artifacts/rc6`, registry rows and `data/rc6` to the bucket.
+- Deviations: (1) holdout250 at r16 read on group C only (budget; QUESTIONS default); (2) no r12 reads, no rr600/long2
+  (pre-registered as optional); (3) the replay RNG restarts at r9 (pre-registered).

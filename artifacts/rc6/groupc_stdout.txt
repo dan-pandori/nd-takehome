@@ -1,0 +1,62 @@
+## Group C (trajectory-cap6 per-seed C) solved at r16, sample seed 1: shortest accepted proof per theorem
+
+| seed | theorem | pool | ref lines | r8 n_ok/256 | r16 n_ok/256 | lines | term size | lean_check |
+|---|---|---|---|---|---|---|---|---|
+| s0 | la_transfer_428 | h250 | 10 | 0 | 248 | 21 | 20 | True |
+| s0 | la_transfer_1802 | h250 | 11 | 0 | 164 | 13 | 12 | True |
+| s0 | textbook_0713eb0885a36616101 | tb72 | 11 | 0 | 90 | 10 | 9 | True |
+| s0 | la_transfer_1909 | h250 | 13 | 0 | 69 | 18 | 16 | True |
+| s0 | la_transfer_205 | h250 | 10 | 0 | 43 | 21 | 20 | True |
+| s0 | la_transfer_1821 | h250 | 8 | 1 | 13 | 8 | 5 | True |
+| s0 | textbook_0824150e3d98b3ab201 | tb72 | 6 | 1 | 5 | 6 | 4 | True |
+| s0 | textbook_79e3c381d248c69d315 | tb72 | 15 | 1 | 3 | 18 | 13 | True |
+| s0 | textbook_49c48adca28f0578942 | tb72 | 13 | 2 | 1 | 24 | 16 | True |
+| s0 | textbook_936ceade34df08c2637 | tb72 | None | 0 | 1 | 22 | 15 | True |
+| s1 | la_transfer_205 | h250 | 10 | 0 | 145 | 10 | 9 | True |
+| s1 | la_transfer_1648 | h250 | 9 | 0 | 100 | 11 | 9 | True |
+| s1 | la_transfer_925 | h250 | 8 | 0 | 90 | 8 | 7 | True |
+| s1 | la_transfer_1802 | h250 | 11 | 0 | 59 | 13 | 12 | True |
+| s1 | la_transfer_127 | h250 | 7 | 0 | 48 | 9 | 8 | True |
+| s1 | la_transfer_2060 | h250 | 10 | 0 | 15 | 15 | 14 | True |
+| s1 | textbook_fef8f88a0e6c1c19660 | tb72 | 13 | 1 | 13 | 18 | 16 | True |
+| s1 | textbook_9fa52f90369a7b6286f | tb72 | None | 0 | 2 | 20 | 16 | True |
+| s2 | la_transfer_1032 | h250 | 8 | 0 | 252 | 8 | 7 | True |
+| s2 | la_transfer_1398 | h250 | 8 | 0 | 191 | 8 | 7 | True |
+| s2 | la_transfer_2220 | h250 | 7 | 0 | 135 | 16 | 15 | True |
+| s2 | la_transfer_205 | h250 | 10 | 0 | 122 | 21 | 20 | True |
+| s2 | la_transfer_428 | h250 | 10 | 0 | 121 | 10 | 9 | True |
+| s2 | textbook_0713eb0885a36616101 | tb72 | 11 | 0 | 74 | 21 | 20 | True |
+| s2 | la_transfer_1802 | h250 | 11 | 0 | 18 | 18 | 16 | True |
+| s2 | la_transfer_1552 | h250 | 10 | 0 | 4 | 23 | 17 | True |
+| s2 | la_transfer_2097 | h250 | 11 | 0 | 1 | 16 | 12 | True |
+| s2 | textbook_3d573ac42c0db3988c2 | tb72 | 11 | 0 | 1 | 11 | 7 | True |
+| s2 | textbook_33a5b9f5c6c6ad7582e | tb72 | 13 | 0 | 1 | 21 | 20 | True |
+
+C theorems common to all three seeds: 40; solved at r16 by >= 1 seed: 23 distinct; by all three: 2
+solved at r8 (x1) and at r16 (x1), per seed: s0 4 -> 10 (both 4), s1 2 -> 8 (both 1), s2 3 -> 11 (both 0)
+summed n_ok over C (r8 -> r16): s0 5 -> 637, s1 3 -> 472, s2 4 -> 920
+
+Example (s0, la_transfer_1909, ref 13 lines; r8 0/256, r16 69/256):
+```lean
+theorem t (P Q R S : Prop) (h1 : (((¬S) ∨ (P ∧ Q)) ∧ ((¬S) ∨ (R ∧ P)))) : ((¬S) ∨ ((P ∧ Q) ∧ (R ∧ P))) := by
+  have n1 : (((¬S) ∨ (P ∧ Q)) ∧ ((¬S) ∨ (R ∧ P))) := h1
+  have n2 : ((¬S) ∨ (P ∧ Q)) := n1.1
+  have n18 : ((¬S) ∨ ((P ∧ Q) ∧ (R ∧ P))) := Or.elim n2 (fun (n3 : (¬S)) => by
+    have n4 : ((¬S) ∨ ((P ∧ Q) ∧ (R ∧ P))) := Or.inl n3
+    exact n4) (fun (n5 : (P ∧ Q)) => by
+    have n6 : ((¬S) ∨ (R ∧ P)) := n1.2
+    have n17 : ((¬S) ∨ ((P ∧ Q) ∧ (R ∧ P))) := Or.elim n2 (fun (n7 : (¬S)) => by
+      have n8 : ((¬S) ∨ ((P ∧ Q) ∧ (R ∧ P))) := Or.inl n7
+      exact n8) (fun (n9 : (P ∧ Q)) => by
+      have n10 : ((¬S) ∨ (R ∧ P)) := n6
+      have n16 : ((¬S) ∨ ((P ∧ Q) ∧ (R ∧ P))) := Or.elim n10 (fun (n11 : (¬S)) => by
+        have n12 : ((¬S) ∨ ((P ∧ Q) ∧ (R ∧ P))) := Or.inl n11
+        exact n12) (fun (n13 : (R ∧ P)) => by
+        have n14 : ((P ∧ Q) ∧ (R ∧ P)) := ⟨n9, n13⟩
+        have n15 : ((¬S) ∨ ((P ∧ Q) ∧ (R ∧ P))) := Or.inr n14
+        exact n15)
+      exact n16)
+    exact n17)
+  exact n18
+
+```

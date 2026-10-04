@@ -1,0 +1,42 @@
+## Compute per kind and training seed (model: trajectory-cap6 best-cap6 T1 ladders, 9,560,832 params, lean_staten, cap-6 set; record.compute rows)
+
+| kind | seed | GPU | GPU-s | gen tokens (M) | attempts (k) | actions (k) | train steps | train tokens (M) | Lean checks (k) |
+|---|---|---|---|---|---|---|---|---|---|
+| T1 ladder | 0 | A40 | 33,005 | 424.8 | 1,794 | 23,852 | 4,800 | 714 | 1,473 |
+| T1 ladder | 1 | A40 | 25,349 | 394.6 | 1,794 | 22,246 | 4,800 | 656 | 1,438 |
+| T1 ladder | 2 | A40 | 26,140 | 412.4 | 1,794 | 23,267 | 4,800 | 682 | 1,388 |
+| reads | 0 | A40 | 459 | 6.2 | 25 | 340 | 0 | 0 | 4 |
+| reads | 1 | A40 | 317 | 5.1 | 24 | 322 | 0 | 0 | 4 |
+| reads | 2 | A40 | 377 | 6.1 | 25 | 384 | 0 | 0 | 3 |
+
+## by RL round (ladder) and by checkpoint group (reads)
+
+| kind | seed | round | GPU-s | gen tokens (M) | train steps | Lean checks (k) |
+|---|---|---|---|---|---|---|
+| T1 ladder | 0 | 10 | 3,696 | 50.5 | 600 | 180 |
+| T1 ladder | 0 | 11 | 4,064 | 51.7 | 600 | 182 |
+| T1 ladder | 0 | 12 | 4,233 | 52.4 | 600 | 184 |
+| T1 ladder | 0 | 13 | 3,940 | 53.3 | 600 | 185 |
+| T1 ladder | 0 | 14 | 4,560 | 55.3 | 600 | 187 |
+| T1 ladder | 0 | 15 | 4,431 | 55.9 | 600 | 188 |
+| T1 ladder | 0 | 16 | 4,536 | 56.4 | 600 | 189 |
+| T1 ladder | 0 | 9 | 3,542 | 49.4 | 600 | 177 |
+| T1 ladder | 1 | 10 | 2,906 | 47.4 | 600 | 175 |
+| T1 ladder | 1 | 11 | 3,067 | 48.4 | 600 | 177 |
+| T1 ladder | 1 | 12 | 3,188 | 48.9 | 600 | 179 |
+| T1 ladder | 1 | 13 | 3,312 | 49.7 | 600 | 182 |
+| T1 ladder | 1 | 14 | 3,244 | 50.5 | 600 | 184 |
+| T1 ladder | 1 | 15 | 3,284 | 51.2 | 600 | 184 |
+| T1 ladder | 1 | 16 | 3,478 | 52.0 | 600 | 185 |
+| T1 ladder | 1 | 9 | 2,868 | 46.5 | 600 | 171 |
+| T1 ladder | 2 | 10 | 3,085 | 49.1 | 600 | 168 |
+| T1 ladder | 2 | 11 | 3,111 | 50.1 | 600 | 171 |
+| T1 ladder | 2 | 12 | 3,259 | 51.1 | 600 | 173 |
+| T1 ladder | 2 | 13 | 3,242 | 52.2 | 600 | 175 |
+| T1 ladder | 2 | 14 | 3,484 | 53.1 | 600 | 177 |
+| T1 ladder | 2 | 15 | 3,519 | 54.5 | 600 | 179 |
+| T1 ladder | 2 | 16 | 3,579 | 55.1 | 600 | 181 |
+| T1 ladder | 2 | 9 | 2,858 | 47.3 | 600 | 164 |
+| reads | 0 | r16 | 459 | 6.2 | 0 | 4 |
+| reads | 1 | r16 | 317 | 5.1 | 0 | 4 |
+| reads | 2 | r16 | 377 | 6.1 | 0 | 3 |

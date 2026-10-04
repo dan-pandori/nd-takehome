@@ -1701,3 +1701,63 @@ step-cap rates re-read at `max_action` 1,024, `max_steps` 192 (`artifacts/bs/eva
 Truncation barely falls at twice the action budget: these are non-terminating actions, not long proofs cut off. The
 caps make the best-recipe numbers slightly low (≤ 2 textbook problems per checkpoint); no conclusion changes. Final spend
 60.74 pod-hours, $29.76.
+
+## rl-continue-cap6 (2026-10-03 / 10-04)
+
+**Models (every number in this section):** `trajectory-cap6`'s best-cap6 T1 ladders `la_T1_best6_s{0,1,2}`: ALiBiGPT
+6 × 384, 9,560,832 params, `lean_staten`, from scratch on the cap-6 set (`data/p2/train_depth3_f0_a1.jsonl`, 155,000
+records), Stage-1 1,200 s (A40), EI r1–r8 in `trajectory-cap6`, **r9–r16 here** (`state_ladder_ei.py --resume
+--start_round 9`, k 32, T 0.8, 600 fine-tune steps, replay 20,000 cap-6 records, batch 2,048). Checkpoints
+`hf://buckets/dan-pandori/nd-rl/rl-continue-cap6/ckpts/rc6/ladder/la_T1_best6_s<S>_r{9..16}.pt`. **Lean alone** (state-env
+Lean gate; `trajectory-cap6`'s r1–r8 are Lean-alone too). Cap-12 overlay: `trajectory` / `rl-continue` best-cap12 (same
+recipe on K12), round JSONs copied to `artifacts/rc6/cap12_rounds/` (r1–r8 from `origin/dan_rl-continue:artifacts/rc/tj_rounds`,
+r9–r16 from `hf://…/rl-continue/artifacts/rc/la_T1_best12_s<S>/`, fetched 2026-10-04 03:10 UTC, unreviewed).
+`L_true` labels are ND-derived upper bounds under Lean.
+
+Per round (source `artifacts/rc6/analysis_stdout.txt` from `rc6_analysis.py`; inputs `artifacts/rc6/la_T1_best6_s<S>/round_<r>.json`):
+
+| seed | r8 targets_cum | r16 targets_cum | new r9–r16 | r8 transfer_cum | r16 transfer_cum | new transfer | target acc r8 → r16 |
+|---|---|---|---|---|---|---|---|
+| s0 | 4,257 | 4,326 | +69 | 2,071 | 2,131 | +60 | 0.902 → 0.918 |
+| s1 | 4,235 | 4,317 | +82 | 2,055 | 2,135 | +80 | 0.899 → 0.918 |
+| s2 | 4,204 | 4,327 | +123 | 2,031 | 2,129 | +98 | 0.889 → 0.903 |
+
+New targets per round r9…r16: s0 11 6 11 11 8 10 3 9; s1 30 12 14 9 5 5 5 2; s2 30 19 10 12 13 20 12 7.
+Cap 12 (same rounds): s0 4 9 2 0 1 3 0 1; s1 6 6 2 6 18 20 5 5; s2 4 3 3 3 2 3 2 2; r16 targets_cum 4,403 / 4,433 / 4,429.
+Pre-registered falsifier 1 (≥ 100 new targets on ≥ 2 seeds): **not met** (1 seed). No seed reaches cap 12's r8 (4,365–4,407).
+
+Seamlessness (`log.md`): r8 checkpoint md5s equal `trajectory-cap6`'s upload md5s; resume proof counts = `found_8.jsonl`
+line counts (72,175 / 48,085 / 36,334); 0 r8-solved targets / transfer theorems missing at r9 (`pod/rc6/seam.py`).
+
+Read-outs, k 256, T 0.8, max_action 512, max_steps 96, batch 2,048, sample seed 1 (r8 = `trajectory-cap6`'s files,
+`artifacts/rc6/tj6_eval/`; r16 = `artifacts/rc6/eval/s<S>_r16__{tb72,h250C}_x1.jsonl`). Holdout250 at r16 was read on
+each seed's group-C theorems only (`data/rc6/h250_C_s<S>.jsonl`; budget fallback, `log.md`).
+
+| seed | textbook72 r8 → r16 | group C n | C solved r8 → r16 | C pass@1 r8 → r16 | C pass@256 r8 → r16 |
+|---|---|---|---|---|---|
+| s0 | 43 → 45 | 52 | 4 → 10 | 0.000 → 0.048 | 0.077 → 0.192 |
+| s1 | 43 → 41 | 52 | 2 → 8 | 0.000 → 0.035 | 0.038 → 0.154 |
+| s2 | 39 → 40 | 60 | 3 → 11 | 0.000 → 0.060 | 0.050 → 0.183 |
+
+Falsifier 2 (mean C pass@256 change > r8 spread 0.038, ≥ 2 seeds rising): +0.121, 3 seeds → **met** ("saturating"
+falsified). Group C = `trajectory-cap6`'s per-seed C (seed-0 samples unsolved at `pend` and r8), recomputed with its rule:
+52 / 52 / 60 (A 169 / 138 / 140, B 101 / 132 / 122). Summed successes over C (of 256 per theorem) r8 → r16: 5 → 637,
+3 → 472, 4 → 920. 23 distinct C theorems are solved at r16 (29 seed-theorem pairs, 24 of them at 0 / 256 at r8; 17 theorems
+never solved at r8 by any seed); 2 solved by all three seeds. Shortest proofs: 6–24 lines, elaborated term size 4–20,
+all accepted by `lean_check` (`rc6_groupc.py` → `artifacts/rc6/groupc_stdout.txt`, `groupc.json`). Training mix =
+targets' proofs + cap-6 replay only (`state_ladder_ei.py` mix block); holdout250 ⊂ transfer pool is sampled, never trained on.
+
+Compute (`rc6_compute.py` → `artifacts/rc6/compute_stdout.txt`, from the record.compute rows in
+`artifacts/rl-continue-cap6/registry/`; all A40, $0.49/h):
+
+| kind | seed | GPU-s | gen tokens (M) | attempts (k) | train steps | train tokens (M) | Lean checks (k) |
+|---|---|---|---|---|---|---|---|
+| T1 ladder r9–r16 | 0 | 33,005 | 424.8 | 1,794 | 4,800 | 714 | 1,473 |
+| T1 ladder r9–r16 | 1 | 25,349 | 394.6 | 1,794 | 4,800 | 656 | 1,438 |
+| T1 ladder r9–r16 | 2 | 26,140 | 412.4 | 1,794 | 4,800 | 682 | 1,388 |
+| r16 reads | 0 / 1 / 2 | 459 / 317 / 377 | 6.2 / 5.1 / 6.1 | 25 / 24 / 25 | 0 | 0 | 4 / 4 / 3 |
+
+s0's ladder used 1.30× s1's GPU-seconds at 1.08× its generated tokens (longer rounds on its pod; same protocol, no
+arm comparison rests on it). Pod time (`podrm`): rc6-s0 9.35 h $4.58, rc6-s1 7.18 h $3.52, rc6-s2 7.40 h $3.63;
+total 23.93 h, $11.73 of $12.
+Bucket: `hf://buckets/dan-pandori/nd-rl/rl-continue-cap6/{ckpts,artifacts}`.
