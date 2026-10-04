@@ -1,52 +1,37 @@
 #!/usr/bin/env python3
-"""Reviewer phase-2 checks of specific executor claims: distinct C theorems solved at r16, pairs at 0/256 at r8,
-'never solved at r8 by any seed' (x1 and x0+x1), summed successes, A/B sizes."""
+"""Reviewer phase 2 (rl-continue): executor claims on s1's burst (schema / L_true / cross-seed), s1's new C solves (by
+statement), cap concentration in reads."""
 import json, os, collections
-R = os.path.expanduser('~/review/rl-continue-cap6'); A = f'{R}/artifacts/rc6'
-def load(f): return {json.loads(l)['name']: json.loads(l) for l in open(f) if l.strip()}
-G = json.load(open(f'{R}/review_rc6/rv/groupc.json'))
-pairs = []; summ = {}; AB = {}
-r8any = collections.defaultdict(lambda: [0, 0])
+R = os.path.expanduser('~/review/rl-continue'); A = f'{R}/artifacts/rc'; D = os.path.expanduser('~/review/rc_data')
+rc = json.load(open(f'{R}/review_rc/rv/recount.json')); G = json.load(open(f'{R}/review_rc/rv/groupc.json'))
+TG = {json.loads(l)['name']: json.loads(l) for l in open(f'{R}/data/ladder/rl_targets.jsonl')}
+first = {}
 for s in (0, 1, 2):
-    g = {}
-    for pool in ('tb72', 'h250'):
-        p0 = load(f'{A}/tj6_eval/s{s}_pend__{pool}_x0.jsonl'); p8 = load(f'{A}/tj6_eval/s{s}_r8__{pool}_x0.jsonl')
-        for n in p0: g[f'{pool}:{n}'] = 'A' if p0[n]['proofs'] else ('B' if p8[n]['proofs'] else 'C')
-        for xs in (0, 1):
-            d = load(f'{A}/tj6_eval/s{s}_r8__{pool}_x{xs}.jsonl')
-            for n, r in d.items(): r8any[f'{pool}:{n}'][xs] += r['n_ok']
-    AB[s] = collections.Counter(g.values())
-    r8 = {**{f'tb72:{n}': r for n, r in load(f'{A}/tj6_eval/s{s}_r8__tb72_x1.jsonl').items()}, **{f'h250:{n}': r for n, r in load(f'{A}/tj6_eval/s{s}_r8__h250_x1.jsonl').items()}}
-    r16 = {**{f'tb72:{n}': r for n, r in load(f'{A}/eval/s{s}_r16__tb72_x1.jsonl').items()}, **{f'h250:{n}': r for n, r in load(f'{A}/eval/s{s}_r16__h250C_x1.jsonl').items()}}
-    C = [k for k, v in g.items() if v == 'C']
-    summ[s] = (sum(r8[k]['n_ok'] for k in C), sum(r16[k]['n_ok'] for k in C))
-    for k in G[str(s)]['r16']['C_solved']: pairs.append((s, k, r8[k]['n_ok']))
-dist = {k for _, k, _ in pairs}
-print('A/B/C sizes', {s: dict(v) for s, v in AB.items()})
-print('summed successes over C r8 -> r16', summ)
-print('pairs', len(pairs), 'distinct', len(dist), 'pairs at 0/256 at r8 (x1)', sum(1 for p in pairs if p[2] == 0))
-cnt = collections.Counter(k for _, k, _ in pairs); print('solved by all 3 seeds', [k for k, v in cnt.items() if v == 3])
-print('distinct never solved at r8 by any seed, x1 only:', sum(1 for k in dist if r8any[k][1] == 0), '; x0 and x1:', sum(1 for k in dist if sum(r8any[k]) == 0))
-# definition check for "never solved at r8 by any seed": restricted to seeds whose C holds the theorem (x1 r8 read) vs all seeds' r8 reads
-Cmem = collections.defaultdict(set)
+    f = {}
+    for l in open(f'{D}/s{s}/found_16.jsonl'):
+        x = json.loads(l); f[x['name']] = min(f.get(x['name'], 99), x['round'])
+    first[s] = f
+new1 = rc['1']['targets']['new_names']
+late = [n for n in new1 if first[1][n] >= 13]
+L9 = [n for n in late if TG[n]['n_lines'] == 9]
+print('s1 new', len(new1), '; first in r13-16', len(late), '; of those L_true 9:', len(L9), '; schema of those:', collections.Counter(TG[n]['schema'] for n in L9))
+print('s1 new by schema (all 68):', collections.Counter(TG[n]['schema'] for n in new1).most_common(8))
+allL9 = [n for n in new1 if TG[n]['n_lines'] == 9]
+for S in (0, 2):
+    print(f's{S} solves by r16: of s1 late-L9 {sum(n in first[S] for n in L9)}/{len(L9)}; of all s1 new L9 {sum(n in first[S] for n in allL9)}/{len(allL9)}; of all 68 {sum(n in first[S] for n in new1)}; '
+          f'of the excluded_middle ones {sum(n in first[S] for n in new1 if TG[n]["schema"]=="excluded_middle")}/{sum(TG[n]["schema"]=="excluded_middle" for n in new1)}')
+L9em = [n for n in L9 if TG[n]['schema'] == 'excluded_middle']
+print('of the 34 late excluded_middle: s0 solves', sum(n in first[0] for n in L9em), 's2 solves', sum(n in first[2] for n in L9em), '; the non-EM late-L9 one:', [(n, TG[n]['thm'], n in first[0], n in first[2]) for n in L9 if n not in L9em])
+em = [n for n in TG if TG[n]['schema'] == 'excluded_middle']
+print('excluded_middle targets in pool', len(em), '; solved by r8 / r16 per seed', [(sum(first[s].get(n, 99) <= 8 for n in em), sum(n in first[s] for n in em)) for s in (0, 1, 2)])
+# s1's new C solves: statements
+ev = {p: {json.loads(l)['name']: json.loads(l) for l in open(f'{A}/eval/s1_r16__{p}_x1.jsonl')} for p in ('tb72', 'h250')}
+for t in G['1']['C_gained_r16']:
+    p, n = t.split(':'); r = ev[p][n]; print(f'   {t:40s} {r["thm"] or r["prompt"]}  n_ok {r["n_ok"]}')
+# cap concentration in r16 tb72 reads
 for s in (0, 1, 2):
-    for pool in ('tb72', 'h250'):
-        p0 = load(f'{A}/tj6_eval/s{s}_pend__{pool}_x0.jsonl'); p8 = load(f'{A}/tj6_eval/s{s}_r8__{pool}_x0.jsonl')
-        for n in p0:
-            if not p0[n]['proofs'] and not p8[n]['proofs']: Cmem[f'{pool}:{n}'].add(s)
-r8x1 = {s: {**{f'tb72:{n}': r['n_ok'] for n, r in load(f'{A}/tj6_eval/s{s}_r8__tb72_x1.jsonl').items()}, **{f'h250:{n}': r['n_ok'] for n, r in load(f'{A}/tj6_eval/s{s}_r8__h250_x1.jsonl').items()}} for s in (0, 1, 2)}
-restricted = [k for k in dist if all(r8x1[s][k] == 0 for s in Cmem[k])]
-full = [k for k in dist if all(r8x1[s][k] == 0 for s in (0, 1, 2))]
-print('never solved at r8 (x1): over seeds whose C holds it', len(restricted), '; over all three seeds', len(full))
-print('  in C of all 3 seeds:', sum(1 for k in dist if len(Cmem[k]) == 3), '; theorems solved at r8 x1 by a seed where they are in A/B:',
-      sorted(k for k in restricted if k not in full))
-# base reachability: the 29 r16 C (seed, theorem) pairs at pend on the independent sample draw x1 (C requires x0 failure only)
-pend1 = {s: {**{f'tb72:{n}': r['n_ok'] for n, r in load(f'{A}/tj6_eval/s{s}_pend__tb72_x1.jsonl').items()}, **{f'h250:{n}': r['n_ok'] for n, r in load(f'{A}/tj6_eval/s{s}_pend__h250_x1.jsonl').items()}} for s in (0, 1, 2)}
-pp = [(s, k) for s, k, _ in pairs if pend1[s][k] > 0]
-print('r16-solved C pairs already solved at pend on sample draw x1 (same seed):', len(pp), 'of', len(pairs), pp)
-anyp = [k for k in dist if any(pend1[s][k] > 0 for s in (0, 1, 2))]
-print('distinct r16-solved C theorems solved at pend x1 by any seed:', len(anyp), 'of', len(dist))
-allC = [k for k in Cmem if Cmem[k]]
-for s in (0, 1, 2):
-    C = [k for k in Cmem if s in Cmem[k]]
-    print(f's{s}: C pass@256 at pend x1 {sum(pend1[s][k] > 0 for k in C)}/{len(C)}')
+    d = [json.loads(l) for l in open(f'{A}/eval/s{s}_r16__tb72_x1.jsonl')]
+    it = lambda r: r['reasons'].items() if isinstance(r['reasons'], dict) else collections.Counter(r['reasons']).items()
+    c = sorted(((sum(v for z, v in it(r) if 'truncat' in z or 'step cap' in z), r['name']) for r in d), reverse=True)
+    tot = sum(x for x, _ in c)
+    print(f's{s} r16 tb72 cut samples {tot} in {sum(x > 0 for x, _ in c)} rows; top-2 rows hold {sum(x for x, _ in c[:2])} ({c[:2]})')

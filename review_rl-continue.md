@@ -154,3 +154,82 @@ to be split by `ckpt`). Ladder + reads = 32.4 GPU-h; reads ran beside the ladder
 My phase-1 reading: "saturated" as pre-registered is **falsified** (falsifier 2), on the pre-registered quantity. The
 target-count side looks saturated on two seeds; s1 escaped by picking up excluded-middle proofs at r13–r14, and its
 group-C, tb72 and h250 gains are mostly that. n = 3 training seeds, one continuation each.
+
+## §Compare (phase 2: `run_rl_continue.md`, `numbers.md` § rl-continue, `log.md` § rl-continue, `STATUS.md`)
+
+Extra reviewer checks for this phase: `review_rc/phase2.py` → `review_rc/rv/phase2.log`; the Lean example in
+`run_rl_continue.md` was re-run by me (`'t' depends on axioms: [propext, Classical.choice, Quot.sound]`, no errors).
+
+| claim (where) | my value | verdict |
+|---|---|---|
+| r8 checkpoints md5 = `trajectory`'s; resume loaded 229,482 / 271,490 / 250,560 proofs; found_8 ⊆ found_9 (log, numbers) | same; and found_8 ⊆ found_16 (all rows) | reproduces |
+| new targets r9–r16 +20 / +68 / +22; targets_cum 4,383→4,403, 4,365→4,433, 4,407→4,429 (all) | same | reproduces |
+| new transfer +17 / +60 / +33; transfer_cum 2,185→2,202, 2,170→2,230, 2,190→2,223 | same | reproduces |
+| target sample acc 0.918→0.937, 0.918→0.944, 0.924→0.942 | same | reproduces |
+| s1 +18 / +20 at r13 / r14 | same | reproduces |
+| "35 of its 48 new targets in r13–r16 have L_true 9, and 34 of them are the `excluded_middle` schema" (numbers) | 48 → 35 → 34 | reproduces |
+| "At r16, s0 solves 1 of those 35 and s2 solves 9" (numbers, log) | 1 / 9 of the 35 | reproduces |
+| "34 new targets are excluded-middle instances (s0 solves 1 of them at r16, s2 9)" (run headline) | of the **34 excluded-middle** targets s0 solves **0** and s2 **8**; the "1 / 9" are of the 35 L_true-9 targets (the extra one, `la_rl_targets_329`, is not an excluded-middle instance and both seeds solve it) | **differs** — reword (numbers.md has it right) |
+| s1's burst = excluded middle ("one skill") (run) | 34/35 late L_true-9 targets are the schema; 36/68 of s1's new targets have an `X ∨ ¬X` line in the first proof (r13 11/18, r14 16/20). Of the pool's 40 `excluded_middle` targets s1 holds 1 at r8 → 38 at r16; s2 2 → 11; s0 1 → 1 | supported for the burst; the other ~30 of s1's +68 are spread over other schemas |
+| group C sizes 36 / 35 / 28; C pass@256 (x1) r8 .083/.029/.036 → r12 .139/.229/.179 → r16 .167/.486/.143; mean 0.049 → 0.265; C solved 3/1/1 → 6/17/4 | same | reproduces |
+| r8 seed spread 0.055 (numbers) / 0.054 (log) | 0.0548 | reproduces (rounding) |
+| Falsifier 1 not met; falsifier 2 met (+0.216 > 0.055, 3/3) | same | reproduces |
+| "s1's 16 new C solves include 7 A ∨ ¬A instances, Peirce's law and (P → Q) ∨ (Q → P)" (numbers) | 7 A ∨ ¬A (6 h250 + `textbook_a104fab`), Peirce, (P→Q)∨(Q→P); plus two Peirce-shaped h250 instances | reproduces |
+| "Its new group C solves are classical too" (run) | 3 of the 16 are intuitionistically valid (`textbook_48e308…` ⊢ F, `textbook_94b2fb…` S-combinator, `la_transfer_205` distribution) | **overstated** — "most (13 of 16)" |
+| "The RL is not saturated on the hard theorems" (run) | C rises on 3/3 seeds; the s0 / s2 gains are 3 theorems each (s2 also lost one 1/256 solve), but C pass@8 rises 0.003 → 0.081 and 0.001 → 0.081, far beyond single-hit re-draw | stands, as "not saturated on group C at k 256 on any seed; large on one seed" |
+| tb72 x1 r8/r12/r16 48/51/51, 48/52/57, 53/58/56; h250 240/239/240, 236/241/246, 237/239/239 | same | reproduces |
+| rr600 13–16 (k 64) 377→382, 362→370, 367→376; long2 21→21, 20→21, 20→20 | same; r8 and r16 at identical settings (k 64, batch 512, seed 0) | reproduces |
+| "reads 0–0.54 % [cut off] (`best-state`'s cap diagnostic: non-terminating actions, ≤ 2 textbook problems)" (numbers); "0–0.54 % of read samples hit the caps" (run) | 0.54 % is the largest **whole-read** fraction. Per stratum: tb72 group C 1.03 % (s1 r16), h250 C 0.75 %, rr1316 L 13 0.73 %, tb72 rows up to 6.6 %. Cut samples are spread over 18 / 23 / 9 tb72 rows at r16, the top 2 rows hold 29/72, 27/100, 10/23 | **differs** — the "≤ 2 textbook problems" diagnostic is inherited and does not hold here; most reported strata exceed the policy's ≈ 0.1 % (settings inherited from `trajectory`, same at r8; the bias is downward on C at both endpoints, so the falsifier-2 verdict is not at risk, but the policy breach should be stated) |
+| ladder truncated + step-capped 0.19–0.47 % per round | 0.19–0.47 % from round JSON `env_end` | reproduces |
+| compute: ladder 33,261 / 32,844 / 31,471 GPU-s, 479/482/470 M gen tokens, 1.794 M attempts, 4,800 steps, 906/905/883 M train tokens, 1.57 M Lean checks; reads 6,074 / 6,826 / 6,084 GPU-s | 33,248 / 32,830 / 31,457 (+ 13–14 s of job-level rows the executor included); reads total 18,998 vs 18,984 | reproduces |
+| 29.96 pod-h, $14.68 (A40 $0.49/h) | `BUDGET_WARNING` at 03:30: 29.86 of 30.40 h; consistent | not independently derivable (podbudget) |
+| pre-registration before the first pod (17:23:14 vs 17:24) | commit `8cf9ccfe` 17:23:14; first ladder line 17:26:30; file never edited | reproduces |
+| budget deviations: r12 x0 and r16 x0 tb72/h250 dropped, rr1316 at k 64, rr/long2 at batch 512 | as in `pod/rc/*` and the eval args; numbers.md lists r12 seed-1-only but not the dropped r16 x0 reads (log.md does) | minor omission in numbers.md |
+
+**Labels.** Every number in `run_rl_continue.md`, `numbers.md` and the STATUS lines names the models (`trajectory`'s
+best-cap12 T1 ladders, 9.56 M ALiBiGPT, `lean_staten`, from scratch on K12) and the checker (Lean alone). The r8 tb72/h250
+values are `trajectory`'s files and are labelled so. No pre-2026-09-27 numbers are compared. No unlabelled number found.
+
+**Wording against n.** The run claims a difference across seeds only as "3/3 seeds" (falsifier 2) and calls the
+excluded-middle burst "on one seed" — both match n = 3. "Finding: s1's jump is one skill" is a single-seed observation and
+the write-up says so in Limits.
+
+**Expectations.** Written and committed before the first pod; the misses (s1 targets, s1/s2 transfer, C pass@256, s1
+tb72/h250) are reported as misses in the headline table.
+
+**Missing per policy.** (1) No term sizes are reported anywhere (policy: report term size as well as lines); mine are in
+§Recount (new-target first proofs: median 70–97 Expr nodes vs 17–20.5 lines). (2) No guided read-out — the guided-by-default
+rule is dated 2026-10-04, after this run's pre-registration and reads, so this is not held against the run; a guided
+read of the r16 checkpoints is the natural follow-up. (3) Max-cap cut-offs above ≈ 0.1 % per stratum not reported as such
+(row above).
+
+## §Verdict
+
+**Stands.** Every count the pre-registration promised reproduces from the pulled files with my own code: per-seed new
+targets (+20 / +68 / +22) and transfer (+17 / +60 / +33), sample accuracy, tb72 / h250 / rr1316 / long2 read-outs, group C
+pass@256 at r8 / r12 / r16, compute. The continuation is seamless (checkpoint md5s, found-set carry-over, round chain). 0 of
+1,669 counted proofs re-checked in Lean were rejected (harness validated on four negative controls). No hard-constraint
+violation; splits are clean (the 1 tb72 and 4 transfer class overlaps with training touch no counted new solve or C theorem).
+**Falsifier 2 fires on the pre-registered quantity, on every seed, and "saturated" is falsified as pre-registered**;
+falsifier 1 does not fire. On target counts, s0 and s2 look saturated (≤ 4 per round after r10 on s2, ≤ 3 after r11 on s0);
+s1 is not, and s1's r13–r14 burst is the `excluded_middle` schema (1 → 38 of 40 pool instances).
+
+**Reword.**
+1. `run_rl_continue.md` headline: "34 new targets are excluded-middle instances (s0 solves 1 of them at r16, s2 9)" →
+   s0 solves **0** and s2 **8** of the 34; the 1 / 9 refer to the 35 L_true-9 targets.
+2. "Its new group C solves are classical too" → 13 of the 16; three are intuitionistic.
+3. Cap-offs: "0–0.54 %" is the whole-read maximum; per stratum it reaches 1.03 % (group C) and single rows 6.6 %, above
+   the policy's ≈ 0.1 %, and the inherited "≤ 2 textbook problems" diagnostic does not hold here. State it and the
+   direction of the bias (downward on C at both endpoints).
+4. "Not saturated on the hard theorems": add that on s0 and s2 the C gain is 3 theorems each at k 256 (pass@8 rises
+   ≈ 25–75×, which is what makes it more than re-draw noise), and that the large gain is s1's.
+
+**Not supported / not derivable.** Pod-hours and dollars come from `podbudget`, not from pulled files (consistent with
+`BUDGET_WARNING`).
+
+**Next measurements.** (a) Whether excluded middle is reachable for s0 / s2 with more rounds or is a seed-specific
+discovery: continue s0 and s2 from r16 for 8 rounds (or seed-swap: inject s1's r14 accepted LEM proofs into s0's mix as a
+replay-only control), with the 40-instance `excluded_middle` schema count as the pre-registered readout. (b) Re-read r8 and
+r16 group C at max_action / max_steps doubled to bound the cap bias. (c) Guided read-out of the r16 checkpoints (policy
+2026-10-04). (d) More seeds: the target-count verdict rests on one seed escaping; with 3 seeds one cannot say how often
+the escape happens.

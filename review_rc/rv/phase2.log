@@ -1,0 +1,25 @@
+s1 new 68 ; first in r13-16 48 ; of those L_true 9: 35 ; schema of those: Counter({'excluded_middle': 34, None: 1})
+s1 new by schema (all 68): [('excluded_middle', 37), ('negated_conditional', 11), (None, 8), ('dist_and_over_or', 4), ('demorgan_nand_to_or', 3), ('dist_or_over_and_conv', 2), ('demorgan_nor_to_and', 1), ('peirce', 1)]
+s0 solves by r16: of s1 late-L9 1/35; of all s1 new L9 3/40; of all 68 27; of the excluded_middle ones 0/37
+s2 solves by r16: of s1 late-L9 9/35; of all s1 new L9 13/40; of all 68 37; of the excluded_middle ones 10/37
+of the 34 late excluded_middle: s0 solves 0 s2 solves 8 ; the non-EM late-L9 one: [('la_rl_targets_329', '( ( ~ ( ~ S ) ) v S ) |- ( ( ~ S ) > ( ~ ( ( ( ~ ( ~ S ) ) v S ) v ( Q & P ) ) ) )', True, True)]
+excluded_middle targets in pool 40 ; solved by r8 / r16 per seed [(1, 1), (1, 38), (2, 11)]
+   h250:la_transfer_1424                    |- ( ( ( ~ R ) > R ) v ( ~ ( ( ~ R ) > R ) ) )  n_ok 151
+   h250:la_transfer_1453                    |- ( ( ( P & R ) & ( R & S ) ) v ( ~ ( ( P & R ) & ( R & S ) ) ) )  n_ok 222
+   h250:la_transfer_1572                    |- ( ( Q > ( Q > P ) ) v ( ~ ( Q > ( Q > P ) ) ) )  n_ok 90
+   h250:la_transfer_205                     ( R & ( ( ( S v P ) > ( ~ S ) ) v ( ( P v S ) & S ) ) ) |- ( ( R & ( ( S v P ) > ( ~ S ) ) ) v ( R & ( ( P v S ) & S ) ) )  n_ok 8
+   h250:la_transfer_406                     ( ( ( P v Q ) > ( ~ S ) ) > ( P v Q ) ) |- ( P v Q )  n_ok 15
+   h250:la_transfer_478                     |- ( ( ( R > Q ) > ( P & R ) ) v ( ~ ( ( R > Q ) > ( P & R ) ) ) )  n_ok 242
+   h250:la_transfer_795                     |- ( ( ( R v P ) > ( ~ P ) ) v ( ~ ( ( R v P ) > ( ~ P ) ) ) )  n_ok 248
+   h250:la_transfer_956                     |- ( ( R & S ) v ( ~ ( R & S ) ) )  n_ok 7
+   h250:la_transfer_975                     ( ( ( P v S ) > S ) > ( P v S ) ) |- ( P v S )  n_ok 16
+   tb72:textbook_48e30865966e132d65ad       THM ( P v ( Q > R ) ) , ( ( ~ R ) & ( ~ ( P v ( ~ Q ) ) ) ) SEQ F PRF  n_ok 13
+   tb72:textbook_58b532c9c8cc1819378b       THM SEQ ( ( ( P > Q ) > P ) > P ) PRF  n_ok 1
+   tb72:textbook_8244c4b1090af406e68f       THM ( ( ~ P ) > ( Q v R ) ) , ( ~ Q ) , ( ~ R ) SEQ P PRF  n_ok 13
+   tb72:textbook_920bfc2896e73d80d8cd       THM SEQ ( ( P > Q ) v ( Q > P ) ) PRF  n_ok 1
+   tb72:textbook_94b2fb662310a6f7ac8d       THM ( P > ( Q > R ) ) SEQ ( ( P > Q ) > ( P > R ) ) PRF  n_ok 18
+   tb72:textbook_a104fab36312807439b0       THM SEQ ( ( ~ ( P v ( Q v R ) ) ) v ( P v ( Q v R ) ) ) PRF  n_ok 218
+   tb72:textbook_b98931f273313e2c32e7       THM ( ~ ( P > Q ) ) SEQ ( P & ( ~ Q ) ) PRF  n_ok 25
+s0 r16 tb72 cut samples 72 in 18 rows; top-2 rows hold 29 ([(17, 'textbook_fef8f88a0e6c1c196603'), (12, 'textbook_c070bcc0c3bc8e3b8386')])
+s1 r16 tb72 cut samples 100 in 23 rows; top-2 rows hold 27 ([(16, 'textbook_35e75d37fcd6e6fc7dfe'), (11, 'textbook_cea8801c51d3f9d213d6')])
+s2 r16 tb72 cut samples 23 in 9 rows; top-2 rows hold 10 ([(6, 'textbook_b3af45532093373816b1'), (4, 'textbook_a104fab36312807439b0')])
