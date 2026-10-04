@@ -138,3 +138,87 @@ GPU-s include the r16 reads, about 320–460 s per seed. Round-JSON `secs` for r
 two `gpu_seconds` rows per fine-tune (the trainer's own row plus a ≈ 2 s parent-phase row), which overstates the total by ≈ 0.1 %.
 s0 used 1.30× s1's GPU-seconds on an identical protocol (same attempts and steps), so the difference is pod speed, not workload.
 Seeds are not arms, so the 1.25× flag does not apply. Round time grows from r9 to r16 on every seed (s0 3,542 → 4,535 s).
+
+## §Compare (phase 2: `run_rl_continue_cap6.md`, `numbers.md` § rl-continue-cap6, `log.md` § rl-continue-cap6)
+
+Extra phase-2 derivations are in `review_rc6/phase2.py` → `rv/phase2.log`.
+
+| claim (executor) | my value | verdict |
+|---|---|---|
+| new targets r9–r16 +69 / +82 / +123 | +69 / +82 / +123 | reproduces |
+| new transfer +60 / +80 / +98 | +60 / +80 / +98 | reproduces |
+| `targets_cum` r16 4,326 / 4,317 / 4,327; transfer 2,131 / 2,135 / 2,129 | same | reproduces |
+| new targets per round (both seeds' sequences, numbers.md) | same | reproduces |
+| target accuracy 0.902 → 0.918, 0.899 → 0.918, 0.889 → 0.903 | 0.9025 → 0.9182, 0.8993 → 0.9179, 0.8887 → 0.9031 | reproduces |
+| falsifier 1 not met (1 seed ≥ 100) | 1/3 seeds | reproduces |
+| `targets_cum` r16 below cap 12's r8 on all seeds | 3/3 below | reproduces |
+| seamlessness 1–3 | md5s = `trajectory-cap6`'s `ckpts_s*.md5`; resume counts = `found_8` lines; 0 lost, and also every r8 *proof* kept | reproduces |
+| group C n 52 / 52 / 60; A 169 / 138 / 140; B 101 / 132 / 122 | same | reproduces |
+| C solved r8 → r16 4 → 10, 2 → 8, 3 → 11; pass@256 0.077 → 0.192, 0.038 → 0.154, 0.050 → 0.183 | same | reproduces |
+| C pass@1 r8 → r16 0.000 → 0.048 / 0.035 / 0.060 | 0.0004 → 0.0479, 0.0002 → 0.0355, 0.0003 → 0.0599 | reproduces (rounding) |
+| falsifier 2 met: +0.121 > 0.038, 3 seeds rising | +0.1214, 3/3 | reproduces |
+| summed C successes 5 → 637, 3 → 472, 4 → 920 | same | reproduces |
+| 23 distinct C theorems solved at r16; 29 seed–theorem pairs, 24 at 0/256 at r8; 2 solved by all three | 23; 29; 24; 2 (`la_transfer_1802`, `la_transfer_205`) | reproduces |
+| **"17 theorems never solved at r8 by any seed"** (numbers.md); "17 of them never solved at r8" (run.md) | 17 only when each theorem is checked against the seeds whose C contains it. Against all three r8 models' x1 reads it is **9** (8 when x0 is added): 8 of the 17 (`la_transfer_1032`, `_127`, `_1398`, `_1552`, `_1648`, `_1909`, `textbook_33a5…`, `textbook_3d57…`) were solved at r8 by another seed, where they sit in A/B | **differs — reword** |
+| shortest C proofs 6–24 lines, all `lean_check`-accepted, term size 4–20 | 6–24 lines (my shortest-per-theorem list agrees). My Lean re-check accepts every one of the 662 r16 C proofs. "Term size 4–20" is `lean_check`'s inference-node count; my Expr-node count of the same theorems is 20–181. These are different measures, not a contradiction | reproduces; name the measure |
+| holdout250 ⊂ transfer pool, sampled and never trained on | confirmed: the r16 mixes hold 0 h250 / tb72 classes; 0 class overlap with replay or `rl_targets` | reproduces |
+| textbook72 43 → 45, 43 → 41, 39 → 40 | same | reproduces |
+| cap 12 r16 4,403 / 4,433 / 4,429, 77–116 ahead; r13–r16 cap 6 +2–20 / round vs cap 12 0–5 (s1 18, 20) | same from the copied round JSONs (inherited, labelled unreviewed) | reproduces |
+| compute per seed (GPU-s 33,005 / 25,349 / 26,140; gen tokens 424.8 / 394.6 / 412.4 M; attempts 1,794 k; 4,800 steps; Lean checks) | my registry sums minus the read rows give the same figures | reproduces |
+| 23.93 pod-hours, $11.73 of $12 | `podbudget`: 23.93 h, $11.73 | reproduces |
+| pre-registration before the first pod | commit `3889cde0` 17:45:00, first pod 17:45:39 (`~/pods.log`), budget registered 17:45 | reproduces |
+
+**Not derivable or not reported.**
+- The pre-registered holdout250 "±5 of r8" expectation could not be evaluated, because only group C was read. `numbers.md` explains why,
+  but `run_rl_continue_cap6.md` does not list the expectation as unevaluated.
+- The "≤ +8 per round on most seeds by r14–r16" expectation is not scored anywhere. It is a miss on s2 (20, 12, 7) and mixed on s0
+  (10, 3, 9).
+- The run.md table shows outcomes next to expectations but never writes "miss". New targets and new transfer were above the
+  pre-registered range on 2/3 seeds, and group C was not "unchanged". These are misses of the expectation and should be called that.
+- **Truncation is not reported.** Cut-off ("action truncated" + step cap) runs 2.5–18.7 % in the group-C strata of the reads and
+  1–3.7 % on tb72. The ladder's own sampling sits at 0.4–1.1 % per round. Policy requires reporting the fraction, and raising the cap
+  above 0.1 % per stratum. The settings are `trajectory-cap6`'s and are held fixed against r8, so the comparison is fair. `best-state`'s
+  cap diagnostic (numbers.md, "Cap diagnostics") found that doubling the action budget barely moves truncation, which points to
+  non-terminating actions. Even so, the absolute C levels are lower bounds, and this must be said.
+- **Guided read-out.** Policy (2026-10-04) asks for plain and guided numbers for every proof-state evaluation. Only plain was run.
+  The r16 reads ran on 2026-10-04, so the rule had just landed. The numbers should at least be labelled "plain".
+
+**Model labels.** run.md and numbers.md name the checkpoints, size, format, from-scratch status and training set, and both say Lean
+alone. The cap-12 overlay is labelled as `trajectory` / `rl-continue`, K12, unreviewed. I found no unlabelled number.
+
+**Base reachability (my addition).** None of the 29 r16-solved C pairs was solved at `pend` on the independent sample draw x1
+(0/29 on the same seed). Only 2 of the 23 theorems were solved at `pend` x1 by any seed. C was defined on draw x0 alone, so this
+second base draw is the honest reachability number. At k = 256 × 2 draws, the gain is not a base-model re-draw.
+
+## §Verdict
+
+**Stands.**
+- Every count in the write-up reproduces from the raw files with my own code, and every hard constraint holds.
+- The continuation is seamless.
+- 1,864 / 1,864 re-checked proofs are accepted by Lean, including every first proof of every new target and every r16 group-C proof.
+  The harness rejects all of its negative controls.
+- Falsifier 1 does not fire. Falsifier 2 fires: group C pass@256 rose on 3/3 seeds by +0.115 / +0.115 / +0.133, about 3× the r8 seed
+  spread, and pass@1 rose by two orders of magnitude.
+- "Saturating" is refuted by the run's own pre-registered test. Two independent sample streams corroborate it: the ladder's in-loop
+  transfer sampling solved 6 / 6 / 10 of the h250-C theorems by r16, against 2 / 0 / 3 by r8.
+- Cap 6's r16 is below cap 12's r8 on all three seeds.
+
+**Must be reworded.**
+1. "17 theorems never solved at r8 by any seed" should read either "17 never solved at r8 by a seed whose group C contains them",
+   or "9 of 23 not solved by any of the three r8 models (sample seed 1)". 8 of the 17 were in another r8 model's reach.
+2. run.md should call the misses misses: new targets and new transfer above range on s1/s2; the per-round decline missed on s2;
+   group C not unchanged. It should also state that the holdout250 expectation was not evaluated.
+3. Report the truncation fractions per stratum, and say that the group-C levels are lower bounds under a 3–19 % cut-off.
+4. Label the read-out numbers "plain". Name the term-size measure (`lean_check` inference nodes).
+5. Item 2 ("Cap 6 stays below cap 12") is accurate at r16. It should add that the gap narrowed on every seed (126 → 77, 130 → 116,
+   203 → 102 targets) while cap 6 was still adding 2–20 targets per round. "Stops below" is therefore not shown; only "has not yet
+   reached".
+
+**Not supported.** Nothing in the write-up is unsupported beyond item 1. The run claims no cross-seed difference.
+
+**Next measurements.**
+- An r16 read on sample seed 0 (x0) for group C, plus the full holdout250 at r16. That gives a second draw of the C gain and the
+  pre-registered holdout250 number.
+- A cap diagnostic on s0's h250-C read (max_action 1,024 / max_steps 192, 18.7 % cut-off) to bound how much C reach the cap hides.
+- Rounds 17–24 on the cap-6 ladders, set beside `rl-continue`'s cap-12 r16. Only that can tell "converges to cap 12's ceiling" from
+  "stops below it". At the r13–r16 rates, cap 6 would need ≈ 8–15 more rounds to reach cap 12's r16.
