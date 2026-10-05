@@ -23,6 +23,13 @@ sides. No new modelling assumption is needed; each side is valid on its own.
 - **RL's coverage by F:** Σ_{y ∈ F(t)} π_R(y | t) / p̂_R(t), the share of RL's success mass that the known proofs
   carry. This checks how complete F is.
 
+**Measured caveat (Part 3).** The sum is *not strictly* a lower bound in practice.
+- On seed 0's 57 measurable theorems, LB / p̂ has 10th–90th percentiles of 0.54–1.43 (median 0.96), and it exceeds the
+  sampling 95 % upper bound on 3 of 57.
+- The likely cause is name conditioning. The scorer conditions on canonical names, while the sampler conditions on its
+  own sampled names, which the environment then renames: ≈ 14 % of names defined in J2.
+- So it is a well-calibrated *estimate*, and certificates use a factor-2 margin (LB ≥ 2 / K).
+
 ## 2. Decision rule
 
 *Revised after the critic pass (§9).* **The primary output is budget-free:** each theorem's k-to-solve interval for the
