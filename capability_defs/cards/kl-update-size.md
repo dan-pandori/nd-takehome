@@ -1,4 +1,4 @@
-# Card: how far did RL move the model? (KL to the base and the size of the update)
+# Card: how far did RL move the model? (KL to the base and the size of the update) — DROPPED as a decision rule; kept as description (critic, §9)
 
 Family D. Slug `kl-update-size`. Notation: `_FRAME.md`.
 
@@ -100,4 +100,23 @@ to land.
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic): the size verdict is set by the optimizer, not by pend.**
+- Stage-1 trains the block matrices and head with Muon (orthogonalised steps); EI and the placebo use AdamW. So "RL ≪
+  late pretraining" compares two optimizers, and the comparison flips by matrix:
+  - blocks: 0.27 vs 0.84;
+  - embedding (AdamW in both): r8 0.170 vs 0.203;
+  - head: 0.78 vs 0.38.
+- The placebo matches RL on each.
+- Counterexample: 30 J2 theorems get 0 pend successes in ≥ 17,152 attempts (s0; e.g. `la_transfer_2066`, r8
+  252 / 256). RL's update reproduces those gains and is "small", so the rule says "elicited" for all 30, while the
+  equally large placebo update solves only 3–4 of them.
+- Secondary arguments:
+  - The seed gap is the random-relabelling ceiling (matrices orthogonal), not a scale.
+  - One model-level number cannot give per-theorem verdicts.
+  - "KL small relative to the selection bits" fails both ways.
+
+**My answer: accepted; dropped as a decision rule.** The update table stays as a description: RL's update is the size
+and rank of the replay-only update and shares its direction (cosine 0.45). The useful model-level statement is "RL's
+weight change is not larger than plain replay training's". The per-theorem questions belong to `sharpen-expand` and
+`elicit-finetune`.
+

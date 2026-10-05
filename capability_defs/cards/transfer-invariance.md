@@ -77,4 +77,21 @@ This card **qualifies** other definitions: it decides the unit of a capability (
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic): the base's *max* over G(t) lets a degenerate substitution veto creation.**
+- In 17 / 40 trained-on and 20 / 40 held-out `dist_and_over_or` members, one disjunct follows from the premise alone
+  (G4ip), so the distribution step is unnecessary. These are pend's only round-1 hits in the family.
+- One hit in 32 gives p_B ≥ 1.6 × 10⁻³, which vetoes "created" for the whole family on all three seeds, though pend hits
+  none of the 43 members that need distribution and RL solves the held-out ones (1.00 / 1.00 / 0.80 by r16).
+- 10 of the 11 created (family, seed) cells in `schema_c12_keystep` would be vetoed this way.
+- Secondary arguments:
+  - Currying *is* the `import` / `export` families, so neither could ever be "created".
+  - Extreme values over a growing G track atom and premise counts and cost ≈ 60 K attempts per variant.
+  - §4 compared cumulative held-out unions with single-round trained-on shares.
+
+**My answer: accepted.**
+- Base and RL are scored with the same statistic: mean p over a pre-registered sample of G(t), restricted to members
+  that need the key step (G4ip for classical schemata; neither disjunct derivable alone for disjunctive conclusions).
+- Currying is dropped from G.
+- The card becomes the held-out check inside `schema-acquisition` rather than a separate verdict. A shortcut member
+  now moves the mean by 1 / |G| instead of vetoing.
+
