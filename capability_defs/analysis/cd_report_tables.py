@@ -139,9 +139,10 @@ def t_j9():
                         if r['name'] == n:
                             c += r['n_ok']; t += r['n_tried']
         return c, t
-    print('| seed | theorem | r8 pass@1 (x0) | own base: successes / attempts | UB95 vs 0.05 / K_eval-set | certified at K_eval-set? | '
-          'other seeds\' bases | replay-only (512) | J7 continuation (512) |')
-    print('|---|---|---|---|---|---|---|---|---|')
+    B = json.load(open(f'{OUT}/bracket.json'))
+    print('| seed | theorem | r8 pass@1 (x0) | own base: successes / attempts | known-proof estimate | UB95 vs 0.05 / K_eval-set | '
+          'certified at K_eval-set? | other seeds\' bases | replay-only (512) | J7 continuation (512) |')
+    print('|---|---|---|---|---|---|---|---|---|---|')
     for s in SEEDS:
         sel = f'{ROOT}/data/cd/j9/s{s}.jsonl'
         if not os.path.exists(sel):
@@ -157,8 +158,10 @@ def t_j9():
             ctrl = f"{sum(v[0] for v in cc.values())} / {sum(v[1] for v in cc.values())}"
             jc, jt = j7(s, n)
             r8 = T['seeds'][str(s)][n]['counts']['r8']['0']
-            print(f'| s{s} | `{n}` | {r8[0] / r8[1]:.2f} | {c} / {k:,} | {ub:.1e} vs {0.05 / K:.1e} | {cert} | {other} | {ctrl} | '
-                  f'{jc} / {jt} |')
+            lb = B[str(s)].get(n, {}).get('LB08')
+            est = f'10^{lb / math.log(10):.1f}' if lb is not None and lb > -1e9 else '–'
+            print(f'| s{s} | `{n}` | {r8[0] / r8[1]:.2f} | {c} / {k:,} | {est} | {ub:.1e} vs {0.05 / K:.1e} | {cert} | {other} | '
+                  f'{ctrl} | {jc} / {jt} |')
 
 JOBS = {'j1': 'J1 teacher-forced scores (stage 1 + 2)', 'j2': 'J2 stage A + calibration', 'j2b': "J2 stages A', B, truncation",
         'logical': 'J3 guided reads (both caps)', 'j4': 'J4 demonstration fine-tunes + reads', 'j5': 'J5 missing plain draws',

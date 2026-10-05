@@ -100,17 +100,17 @@
 
 ## J9
 
-| seed | theorem | r8 pass@1 (x0) | base attempts before J9 | J9 attempts | J9 successes | UB95, all base attempts | 0.05 / K_eval-set | certified created at K_eval-set? |
-|---|---|---|---|---|---|---|---|---|
-| s0 | `la_transfer_2060` | 0.95 | 66,304 | 262,144 | 0 | 9.12e-06 | 2.59e-06 | not yet (262,144 J9 attempts) |
-| s0 | `la_transfer_205` | 0.79 | 66,304 | 262,144 | 0 | 9.12e-06 | 2.59e-06 | not yet (262,144 J9 attempts) |
-| s0 | `la_transfer_1077` | 0.62 | 66,304 | 262,144 | 0 | 9.12e-06 | 2.59e-06 | not yet (262,144 J9 attempts) |
-| s1 | `la_transfer_1648` | 0.95 | 66,304 | 655,360 | 0 | 4.15e-06 | 2.37e-06 | not yet (655,360 J9 attempts) |
-| s1 | `la_transfer_1077` | 0.80 | 66,304 | 655,360 | 0 | 4.15e-06 | 2.37e-06 | not yet (655,360 J9 attempts) |
-| s1 | `la_transfer_2060` | 0.61 | 66,304 | 655,360 | 0 | 4.15e-06 | 2.37e-06 | not yet (655,360 J9 attempts) |
-| s2 | `la_transfer_1648` | 0.91 | 66,304 | 655,360 | 1 | 6.57e-06 | 2.14e-06 | no (a success) |
-| s2 | `la_transfer_1833` | 0.82 | 66,304 | 655,360 | 0 | 4.15e-06 | 2.14e-06 | not yet (655,360 J9 attempts) |
-| s2 | `la_transfer_2060` | 0.30 | 66,304 | 655,360 | 0 | 4.15e-06 | 2.14e-06 | not yet (655,360 J9 attempts) |
+| seed | theorem | r8 pass@1 (x0) | own base: successes / attempts | known-proof estimate | UB95 vs 0.05 / K_eval-set | certified at K_eval-set? | other seeds' bases | replay-only (512) | J7 continuation (512) |
+|---|---|---|---|---|---|---|---|---|---|
+| s0 | `la_transfer_2060` | 0.95 | 0 / 328,448 | 10^-7.9 | 9.1e-06 vs 2.6e-06 | not yet | s1 0 / 1,377,024, s2 0 / 1,508,096 | 0 / 512 | 7 / 512 |
+| s0 | `la_transfer_205` | 0.79 | 0 / 328,448 | 10^-13.2 | 9.1e-06 vs 2.6e-06 | not yet | s1 0 / 66,560, s2 0 / 17,408 | 0 / 512 | 0 / 512 |
+| s0 | `la_transfer_1077` | 0.62 | 0 / 328,448 | 10^-8.8 | 9.1e-06 vs 2.6e-06 | not yet | s1 1 / 1,377,024, s2 0 / 66,304 | 0 / 512 | 0 / 512 |
+| s1 | `la_transfer_1648` | 0.95 | 0 / 1,377,024 | 10^-8.1 | 2.2e-06 vs 2.4e-06 | yes | s0 5 / 66,304, s2 1 / 1,114,880 | 0 / 512 | 0 / 512 |
+| s1 | `la_transfer_1077` | 0.80 | 1 / 1,377,024 | 10^-7.7 | 3.4e-06 vs 2.4e-06 | no: base found it | s0 0 / 328,448, s2 0 / 66,304 | 0 / 512 | 0 / 512 |
+| s1 | `la_transfer_2060` | 0.61 | 0 / 1,377,024 | 10^-12.7 | 2.2e-06 vs 2.4e-06 | yes | s0 0 / 328,448, s2 0 / 1,508,096 | 0 / 512 | 0 / 512 |
+| s2 | `la_transfer_1648` | 0.91 | 1 / 1,114,880 | 10^-6.2 | 4.3e-06 vs 2.1e-06 | no: base found it | s0 5 / 66,304, s1 0 / 1,377,024 | 0 / 512 | 0 / 512 |
+| s2 | `la_transfer_1833` | 0.82 | 0 / 1,508,096 | 10^-10.2 | 2.0e-06 vs 2.1e-06 | yes | s0 0 / 17,408, s1 0 / 17,408 | 0 / 512 | 0 / 512 |
+| s2 | `la_transfer_2060` | 0.30 | 0 / 1,508,096 | 10^-12.4 | 2.0e-06 vs 2.1e-06 | yes | s0 0 / 328,448, s1 0 / 1,377,024 | 0 / 512 | 0 / 512 |
 
 ## compute
 

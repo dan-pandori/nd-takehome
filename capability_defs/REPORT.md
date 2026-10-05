@@ -455,7 +455,19 @@ pend attempts (9 / 10 / 11 chunks of 131,072 for s0 / s1 / s2), on top of the 66
 
 ⟨S38 TABLE⟩
 
-⟨S38 TEXT⟩
+- **Certified created at K_eval-set**, relative to the seed's own base (0 successes in 1.38–1.51 M attempts each; the
+  base's chance of a proof within K_eval-set attempts is below 5 % at 95 % confidence): `la_transfer_1648` and
+  `la_transfer_2060` on s1; `la_transfer_1833` and `la_transfer_2060` on s2⟨s0 certified⟩.
+- **Not certified:** the base found `la_transfer_1077` (s1) and `la_transfer_1648` (s2) once each in ≈ 10⁶ attempts
+  (p̂ ≈ 10⁻⁶, still beyond the budget by the point estimate). These two had the highest known-proof estimates in
+  their seeds' lists, so the estimate ranked them correctly. s2's proof of `la_transfer_1648` is the same
+  Or-elimination RL writes (7 `have` lines, term size 8, Lean accepts).
+- **Against every RL-free control:** no replay-only control solves any of them; s0's compute-matched continuation
+  solves `la_transfer_2060` (7 / 512), and other seeds' bases solve `la_transfer_1648` (s0: 5 / 66,304). What survives
+  everything here is `la_transfer_2060` on s1 and s2 and `la_transfer_1833` on s2⟨s0 survive⟩: the run's certified
+  examples of RL-created theorems at the compute-matched budget. They are held-out members of families RL trained on
+  (De Morgan with a double negation; Peirce), and their known-proof estimates put the base's k-to-solve at 10^10 to
+  10^13 attempts.
 
 ### 3.9 Pre-registered expectations vs outcomes
 

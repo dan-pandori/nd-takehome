@@ -120,14 +120,22 @@ predicted 56.8 / 58.8 / 59.5 vs observed 57 / 52 / 64 J2 theorems with ≥ 1 suc
 pend fails at x2): 9 / 13, 10 / 16, 10 / 16 get ≥ 1 success (29 / 45).
 
 **IRT** (`cd_irt.py` → `out/irt_c12.txt`; `cd_irt_matched.py` → `out/irt_matched.txt`): θ (pend = 0) r8 2.10 / 1.91 /
-2.18, r16 2.45 / 2.34 / 2.24; replay-only r8 0.55 / 0.70 / 0.64; J7 ⟨⟩. Matched placebo from p5000: EI r2 created 48 /
+2.18, r16 2.45 / 2.34 / 2.24; replay-only r8 0.55 / 0.70 / 0.64; J7 continuation 0.51 / 0.58 / 0.58. Matched placebo from p5000: EI r2 created 48 /
 41 / 48 at Δθ 2.33 / 2.05 / 2.69; replay-only r8 50 / 49 / 54 at Δθ 2.12 / 2.09 / 2.14.
 
-**J7** (`artifacts/cd/j7/`): ⟨J7⟩
+**J7** (`artifacts/cd/j7/`; pend + 28,054 / 31,462 / 33,535 K12 steps, lr re-warmed to 3 × 10⁻⁴, cosine to 3 × 10⁻⁵;
+60,863 of the r8 ladders' 73,838 A40-seconds = 82 %; checkpoints `ckpts/cd/j7/cont_s{0,1,2}.pt` md5 d914b9c4… /
+b8fde121… / 5f25b5e9…): solved of 322 at k 256, x0 / x1: 220 / 214, 215 / 208, 219 / 224 (pend 232 / 230, 236 / 238,
+234 / 236; r8 286 / 288, 286 / 284, 293 / 290); solves 19 / 54, 18 / 51, 16 / 60 of B (x0) and 4 / 22, 4 / 21, 0 / 14
+of the compute-matched set; θ 0.51 / 0.58 / 0.58 (+0.53 / +0.65 / +0.49 over each seed's pend).
 
 **J9** (`artifacts/cd/j9/`): ⟨J9⟩
 
 **Compute per job family** (results registry rows, `cd_compute.py` → `out/compute.txt`; A40): ⟨compute⟩
 
-**Spend:** ⟨spend⟩. **Bucket:** ⟨bucket⟩.
+**Spend:** ⟨spend⟩. **Bucket** (`hf://buckets/dan-pandori/nd-rl/capability-defs/`): `artifacts/cd/` (pod outputs: J1 / J8
+compact scores, J2 / J9 / J10 sampling rows, J3 guided rows, J4–J7 reads, logs), `artifacts/cd_targets_gz/` (J1 / J8
+scorer inputs, gzipped), `data/cd/` (job inputs: J2 / J9 / J10 chunk files, J4 / J6b mixes and demonstrations, the
+knockout corpus `k12_nodn.jsonl`), `ckpts/cd/{j4,j6,j6b,j7}/` (fine-tunes, knockout Stage 1, continuations); registry
+rows `hf://buckets/dan-pandori/nd-rl/registry/capability-defs/`.
 
