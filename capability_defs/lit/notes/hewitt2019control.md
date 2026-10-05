@@ -5,9 +5,9 @@ papers:
   - hewitt2019designing
 ---
 
-# Control tasks and selectivity: a null model for "the representation already encodes it"
+# Control tasks and selectivity: a null model for 'the representation already encodes it'
 
-Paper: [@hewitt2019designing] (Hewitt & Liang, EMNLP 2019)
+Paper: [@hewitt2019designing] (Hewitt & Liang, 2019)
 Source: arXiv 1909.03368v1 (HTML rendering read in full: Abstract, Sec. 1-6, Tables 1-2; no appendix exists)
 
 ## Learnings
@@ -52,8 +52,9 @@ Source: arXiv 1909.03368v1 (HTML rendering read in full: Abstract, Sec. 1-6, Tab
   Table 2 (Proj0, ELMo1, ELMo2), one representation family (ELMo), two tasks (PoS, dependency edges), PTB dev set.
 - Selectivity is a difference of two accuracies with no significance test, no seeds reported in the tables and
   no principled threshold; hyperparameters were hand-picked by selectivity (Table 1 caption), which can overfit.
-- Internal inconsistency: Sec. 3.5 says "the bilinear probe achieves 16.7 selectivity", but Table 1 gives 6.6
-  for the default bilinear probe and 16.7 with 0.4 dropout.
+- Internal inconsistencies: Sec. 3.5 says "the bilinear probe achieves 16.7 selectivity", but Table 1 gives 6.6
+  for the default bilinear probe and 16.7 with 0.4 dropout; the Table 1 caption says all selectivity-designed PoS
+  probes use rank 10, while Sec. 3.5 says "We chose rank constraints of 10 and 45, respectively" for linear and MLP.
 - The control task only nulls *type memorisation*. It says nothing about whether the model *uses* the decoded
   property (no causal test); a selective probe can still read a feature the network ignores. Later work
   (MDL probing, `voita2020mdlprobing.md`; amnesic probing and the Ravichander et al. critique, rows in
@@ -61,31 +62,31 @@ Source: arXiv 1909.03368v1 (HTML rendering read in full: Abstract, Sec. 1-6, Tab
 
 ## Connections and questions
 
-- **Definition offered:** "the representation encodes property Y" = a low-capacity probe decodes Y from frozen
+- **Definition offered:** 'the representation encodes property Y' = a low-capacity probe decodes Y from frozen
   activations with high accuracy **and** high selectivity, i.e. well above what the same probe reaches on a
   matched control task whose labels are random per type. The quantity is accuracy(Y) − accuracy(control), computed
   on held-out data at fixed probe family and hyperparameters.
 - **New vs better access:** not posed for training stages, but the measure gives a clean decision rule when
   applied to checkpoints. With the probe family fixed, compare selectivity on the **init**, **pend** and **r16**
-  residual streams: "already represented before RL" if S_pend is well above S_init (bootstrap over theorems) and
-  close to S_r16; "built by RL" if S_pend ≈ S_init while S_r16 is high. Representation present in pend but
-  behaviour absent is exactly the "elicitable" case; representation absent in pend and present in r16 is a
-  candidate "created" case. The paper's own Proj0 comparison is the template: accuracy alone would have called
+  residual streams: 'already represented before RL' if S_pend is well above S_init (bootstrap over theorems) and
+  close to S_r16; 'built by RL' if S_pend ≈ S_init while S_r16 is high. Representation present in pend but
+  behaviour absent is exactly the 'elicitable' case; representation absent in pend and present in r16 is a
+  candidate 'created' case. The paper's own Proj0 comparison is the template: accuracy alone would have called
   ELMo2 empty.
 - **Null / floor:** two nulls, both needed here: (1) the control task (what the probe can learn by memorising
-  surface types), (2) a random-weights representation (Proj0; our init checkpoint). It does not answer "any k
-  solves it eventually" directly, but the logic is the same: a capacity-matched learner on random structure is
+  surface types), (2) a random-weights representation (Proj0; our init checkpoint). It does not answer 'any k
+  solves it eventually' directly, but the logic is the same: a capacity-matched learner on random structure is
   the floor, and only the margin above it counts.
 - **Transfer to our setting:** concrete case = the excluded-middle schema. Label each proof state (goal +
-  context) by a semantic property that is not a surface feature, e.g. "classically provable but not
-  intuitionistically provable" (decidable for propositional logic) or "the reference proof's next step is
-  by_contra / double-negation elimination". Control task: give each **formula skeleton** (canonical key up to
+  context) by a semantic property that is not a surface feature, e.g. 'classically provable but not
+  intuitionistically provable' (decidable for propositional logic) or 'the reference proof's next step is
+  by_contra / double-negation elimination'. Control task: give each **formula skeleton** (canonical key up to
   atom renaming) an independent random label with the same marginal, so the only way to fit it is to memorise
   skeletons; evaluate on held-out theorems whose skeletons recur (as word types recur in PTB). Collect residual
   activations at the goal's last token for all 6 layers of init, every pretraining checkpoint, pend, r8, r16
   (one forward pass per state; ~10^4 states × 384 dims), fit rank-constrained linear probes (seconds each),
   report selectivity per layer and checkpoint with theorem-level bootstrap CIs. Cost: minutes on one GPU, CPU
-  for the probes. Main failure modes: (a) decodable ≠ used — the base may linearly encode "needs reductio" yet
+  for the probes. Main failure modes: (a) decodable ≠ used — the base may linearly encode 'needs reductio' yet
   never act on it, so this must be paired with a causal test (steering / ablation, see
   `venhoff2025base.md`, `ward2025repurposes.md`); (b) the label correlates with surface features (¬¬ in the goal,
   formula depth), so the control task must be built on those surface features, not only on skeleton identity;

@@ -21,7 +21,7 @@ Also screened at abstract level by L3 (`_screen_L3.md`); this is the in-depth no
   the optimal policy for J_KL-RL" (Eq. 6), and J_KL-RL ∝ −D_KL(π_θ, π*) (Eq. 7), i.e. the objective is an
   ELBO on log p(O = 1) (Appendix, Eqs. 11-17).
 - **Z is the base's success probability.** In the Appendix the reward is turned into an optimality variable,
-  p(O = 1 | x) = exp(r(x)), and the authors "redefined the marginal p(O=1) as the normalising constant Z"
+  p(O = 1 | x) = exp(r(x)), and the authors "redefined the marginal" p(O = 1) "as the normalising constant" Z
   (Eqs. 8-10); the marginal is "a probability that a random sample from \pi is non-offensive". For a binary
   verifier this Z is exactly the base solve probability p_B(t).
 - **Binary rewards.** Following Khalifa et al., π*(x) = (1/Z) π0(x) b(x): excluded strings get probability

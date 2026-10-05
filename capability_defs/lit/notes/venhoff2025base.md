@@ -9,8 +9,11 @@ papers:
 
 Paper: [@venhoff2025base] (Venhoff, Arcuschin, Torr, Conmy, Nanda; "Base Models Know How to Reason, Thinking Models
 Learn When")
-Source: arXiv 2510.07364v4 (HTML rendering read: Abstract, Sec. 1-6, App. E.1-E.2; App. A-D, G by headings). v4
-differs from earlier versions in numbers; all figures below are v4's.
+Source: arXiv 2510.07364v4 (dated 7 Jul 2026; HTML rendering read: Abstract, Sec. 1-6, App. E.1-E.2; App. A-D, G by
+headings); v1 abstract page also read. All figures below are v4's. **Version warning:** v1 (Oct 2025) claimed, over
+"three base and four thinking models", that the hybrid "recovers up to 91% of the performance gap ... while steering
+only 12% of tokens" and that "pre-training is when models acquire most of their reasoning mechanisms" (v1 Abstract).
+v4 splits RL-trained from SFT-distilled pairs and finds the general claim holds only for RL (below); cite v4.
 
 ## Learnings
 
@@ -60,7 +63,7 @@ differs from earlier versions in numbers; all figures below are v4's.
 
 ## Connections and questions
 
-- **Definition offered:** the base model "has" the thinking model's mechanisms to the extent that a small set of
+- **Definition offered:** the base model 'has' the thinking model's mechanisms to the extent that a small set of
   base-model steering directions (one per behaviour category), applied only where the two models disagree, recovers
   the thinking model's accuracy: capability-in-base = gap recovered (Rec.%), with category-vector held-out CE as a
   second readout.
@@ -68,13 +71,13 @@ differs from earlier versions in numbers; all figures below are v4's.
   *when* to use existing mechanisms (elicitation / orchestration); low Rec.% (~11 % for SFT) → it installed or
   changed mechanisms (creation). No threshold is stated; the four ablations act as the null distribution.
 - **Null / floor:** random category, norm-matched random vectors, magnitude-only, random positions (Sec. 3.8). The
-  base model itself is the floor of the gap. "Any k" is not addressed (greedy decoding).
+  base model itself is the floor of the gap. 'Any k' is not addressed (greedy decoding).
 - **Transfer to our setting:** possible, with two adjustments. Protocol: teacher-force r16's proofs (holdout250, the
   excluded-middle family) through pend; at positions where pend's greedy next token differs from r16's, label the
   step by tactic category (our steps are explicit, so no SAE is needed: e.g. intro / apply / cases / exact /
   classical-step); train K vectors (K × 384) at layer 2 of 6 (≈ 37 % depth) on pend to maximise r16's token at those
   positions; build the hybrid and report gap recovered on held-out theorems with Lean (pass@1 greedy and pass@256).
-  For the excluded-middle schema specifically: does a "classical step" vector exist in pend whose application, at
+  For the excluded-middle schema specifically: does a 'classical step' vector exist in pend whose application, at
   r16's disagreement points, makes pend produce A ∨ ¬A proofs? Cost: one teacher-forced pass over r16's proofs, a
   few minutes of vector training, Lean checks of hybrid samples. Adjustments / failure modes: (1) **information
   leak** — our proofs are 10-40 tokens and our categories nearly name the next tactic, so the oracle's log2 K bits per
@@ -86,4 +89,4 @@ differs from earlier versions in numbers; all figures below are v4's.
 - Related: `ward2025repurposes.md` (base-derived vector works only in the tuned model), `prakash2024finetuning.md`
   (cross-model patching), `jain2023mechanistically.md`, `hofstatter2025elicitation.md` (steering as elicitation),
   `greenblatt2024passwordlocked.md`, `aghajanyan2020intrinsic.md` and `mukherjee2025subnetworks.md` (size of the
-  update as the alternative "how much was added" measure).
+  update as the alternative 'how much was added' measure).

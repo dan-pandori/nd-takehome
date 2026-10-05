@@ -31,13 +31,10 @@ Source: arXiv 2307.15936v2 (HTML rendering read: abstract, Sec. 1-8; appendix pr
   (Assumption 2); Thm. 3 (Pinsker): excess entropy ε at a position gives a binary cloze question answered
   wrongly with probability at most √(2ε).
 - **Emergence of tuples.** Random-graph bounds (Thm. 8, 14) give performance curves; tensorisation gives
-  Cor. 13: when the loss falls from δ to δ/k′, "the performance curve inferred by our method for k′-tuples
-  of skills using M_2 is identical" to the single-skill curve of M_1 (Sec. 5.1.1). Takeaways: halving the
+  Cor. 13: when the loss falls from δ to δ/k′, "the performance curve inferred by our method for" k′-tuples "of skills using" M_2 "is identical" to the single-skill curve of M_1 (Sec. 5.1.1). Takeaways: halving the
   error fraction (≈ 10× scale) raises competence on 2k′-tuples to the previous k′-tuple level;
-  "k′-tuples that include more frequent skills will tend to emerge faster" (Sec. 7).
-- **Paucity of stimulus.** Tuples outnumber the corpus, so "if the model displays competency on even 10%
-  of the k′-tuples of skills then it must have somehow acquired competence in k′-tuples that were not seen
-  during training" (Sec. 1.1).
+  k′-tuples "that include more frequent skills will tend to emerge faster" (Sec. 7).
+- **Paucity of stimulus.** Tuples outnumber the corpus, so "if the model displays competency on even" 10% of the k′-tuples of skills "then it must have somehow acquired competence in" k′-tuples "that were not seen during training" (Sec. 1.1).
 
 ## Evidence and limitations
 

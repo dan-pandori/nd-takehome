@@ -40,8 +40,10 @@ proofs in App. C-G not read).
 ## Evidence and limitations
 
 - Theory is per prompt, single-shot; the reward-model error ε_RM is measured on base samples. With a
-  perfect verifier (ε_RM = 0, our Lean case) only the coverage terms remain (the log(R_max/ε_RM) factor in
-  Eq. 7 is an artefact of the imperfect-RM analysis; Eq. 12 is the clean form).
+  perfect verifier (ε_RM = 0, our Lean case) only the coverage terms matter; Eq. 7's log(R_max/ε_RM)
+  factor diverges as ε_RM → 0, so the uniform-coverage form (Eq. 12, R_max exp(−N/C∞)) is the one to use
+  (our reading; with π* = π_B(·|S_t), C∞ = 1/p_B(t) and Eq. 12 reduces to ≈ (1 − p_B)^N, the pass@N miss
+  rate).
 - Experiments: GSM8K, MMLU, MATH with Phi-3-Mini and other bases, four reward models, N up to 2^13
   (Sec. 5, Table 1, Fig. 2). Not checked in detail.
 - The authors' own limit: the base is treated as a black box and the analysis "does not take advantage of

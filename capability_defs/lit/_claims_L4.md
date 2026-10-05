@@ -181,3 +181,13 @@ math-markup normalisation (LaTeX in HTML renderings appears as `\theta_l` etc. i
 | 172 | 2603.23682v2 | "the MH-DIF, typically the default choice due to its simplicity, produces considerable noise and a high false positive rate"; LR-DIF more stable but needs larger samples | Sec. 5 | V |
 | 173 | 2603.23682v2 | DIF "can identify items as positive/negative DIF (chatbots over/under-perform learners of the same skill) even if the difference between the mean group performance is in the opposite direction" | Sec. 5 | V |
 | 174 | 2605.09305v1 | RLMM "decouples person-level choice sensitivity from task-level value representation through a shared parametric action-value function"; "combines a Boltzmann choice rule with normalized advantages"; gives "step-level influence diagnostics for identifying behaviorally critical decisions" | Abstract | V |
+| 175 | 2503.14499v4 | task suite "totaling 170 tasks with a wide range of difficulty"; "12 frontier models from 2019 to 2025" | Sec. 1 | V |
+| 176 | 2503.14499v4 | "The doubling time in 80% time horizon (204 days) is similar to the doubling time of 50% time horizon (207 days)" | Sec. 3.2.1 | V |
+| 177 | 2402.14992v2 | motivation includes checkpoint monitoring: "evaluation of a single model is often performed many times to monitor checkpoints during pre-training" | Sec. 1 | V |
+| 178 | 2402.14992v2 | specialized-model test: "collect a new hand-picked test set of 40 specialized models" (MMLU) | Sec. 5 | V |
+| 179 | 2405.10938v3 | holdout: "a training set of 47 models and a test set of 30 models"; preregistration: "an additional test set of 20 models" | Sec. 4 | V |
+| 180 | 2306.10062v1 | Bayesian FA: "it is most likely that the data are explained by three underlying factors"; factor interpretation from "a cognitive science expert (the first author)" annotating tasks | App. B, Fig. 7; Sec. 2.3 | V |
+| 181 | 2306.10062v1 | language-modelling factor: next-token tasks "(as measured by bits-per-byte) tended to load strongly on factor 2" | Sec. 3.2 | V |
+| 182 | 2503.14499v4 | success vs human time: R² ≈ 0.80 "when regressing model success rate against the logarithm of human time-to-complete" | Sec. 2.3 | V |
+| 183 | 2503.06378v2 | ability scaling: "the clear diminishing return from the second largest to the largest model" (LLaMA, R1-Distill-Qwen) | App. 8.2 | V |
+| 184 | 2606.07616v1 | DataDecide: 25 mixtures × 14 sizes (4M-1B); "Each run includes 6 to 30 checkpoints depending on the model size" | Sec. 4.2 | V |

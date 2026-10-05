@@ -7,7 +7,7 @@ papers:
 
 # Reasoning fine-tuning repurposes a base-model direction: the 2 × 2 steering test (vector source × steered model)
 
-Paper: [@ward2025reasoning] (Ward, Lin, Venhoff, Nanda; ICML 2025 workshop format)
+Paper: [@ward2025reasoning] (Ward, Lin, Venhoff, Nanda; short paper in ICML template)
 Source: arXiv 2507.12638v1 (HTML rendering read in full: Abstract, Sec. 1-5, App. A-C)
 
 ## Learnings
@@ -50,7 +50,7 @@ Source: arXiv 2507.12638v1 (HTML rendering read in full: Abstract, Sec. 1-5, App
 - The fine-tuned model is a *distilled* reasoning model (Abstract wording). That the distillation was supervised
   fine-tuning on R1 outputs, not RL, comes from the DeepSeek-R1 report and was not checked here; the paper itself
   does not separate SFT from RL effects.
-- Short workshop paper: figures carry most results; no statistics beyond one-standard-deviation error bars (Fig. 3).
+- Short paper (four pages plus appendix): figures carry most results; no statistics beyond one-standard-deviation error bars (Fig. 3).
 
 ## Connections and questions
 
@@ -68,7 +68,7 @@ Source: arXiv 2507.12638v1 (HTML rendering read in full: Abstract, Sec. 1-5, App
   The paper sits in case 2 and calls it "rather than learn new capabilities from scratch"; for us case 2 is
   partial creation (RL built the reader), and should be reported as such rather than as elicitation.
 - **Null / floor:** baselines = mean-activation, noise, self-amplification and other-category vectors (Fig. 4). No
-  random-init model and no answer to "any k": the behaviour metric is a frequency in sampled text.
+  random-init model and no answer to 'any k': the behaviour metric is a frequency in sampled text.
 - **Transfer to our setting:** cheap and direct. On r16's excluded-middle proofs, take residual activations at the
   positions just before the classical step (by_contra / Classical.em / double-negation elimination) and at matched
   non-classical steps, in **both** pend and r16 run on the same r16 traces; difference of means per layer (6 layers ×
@@ -78,7 +78,7 @@ Source: arXiv 2507.12638v1 (HTML rendering read in full: Abstract, Sec. 1-5, App
   norm, mean activation, a vector for an intuitionistic step type, and the same pipeline on init activations. Our
   behaviour metric is crisp (the classical tactic token), unlike their keyword proxy. Cost: one forward pass per
   state plus a few hundred steered samples per setting: minutes. Failure modes: (i) the noise effect they saw means
-  steering "success" must beat a norm-matched noise vector; (ii) at 384 dimensions a difference of means may mix the
+  steering 'success' must beat a norm-matched noise vector; (ii) at 384 dimensions a difference of means may mix the
   goal's surface form (¬¬ present) with the decision, so use held-out goal shapes; (iii) case 2 vs case 1 depends on
   the steering scale searched, so the scale sweep must be identical for pend and r16.
 - Related: `venhoff2025base.md` (same group; steering the base with thinking-model vectors at chosen times),

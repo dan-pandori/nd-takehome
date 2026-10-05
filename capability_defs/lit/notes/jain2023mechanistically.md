@@ -7,7 +7,7 @@ papers:
 
 # Fine-tuning learns "wrappers" over existing capabilities; revival speed vs a never-had-it control
 
-Paper: [@jain2023mechanistically] (Jain, Kirk, Lubana, Dick, Tanaka, Grefenstette, Rocktäschel, Krueger; ICLR 2024)
+Paper: [@jain2023mechanistically] (Jain, Kirk, Lubana, Dick, Tanaka, Grefenstette, Rocktäschel, Krueger)
 Source: arXiv 2311.12786v2 (HTML rendering read: Abstract, Sec. 1-6, App. D, E.1-E.4, F.1-F.3; App. B, C, G, H skimmed
 by headings only). Also screened at section level by L2 (`_screen_L2.md`); this is the in-depth note.
 
@@ -63,8 +63,8 @@ by headings only). Also screened at section level by L2 (`_screen_L2.md`); this 
   fine-tuning.
 - The wrapper picture is shown for *weakly relevant* capabilities with a planted spurious feature; it is not a
   claim that fine-tuning never builds anything (Sec. 5.1 quote above).
-- No statistics: the decision "few steps" vs "many steps" is read off curves; no threshold or CI. Probing even
-  loses "a small amount of information" (App. F.3), so "persists" is graded.
+- No statistics: the decision 'few steps' vs 'many steps' is read off curves; no threshold or CI. Probing even
+  loses "a small amount of information" (App. F.3), so 'persists' is graded.
 - The capability definition needs a known target function f_C and a linear readout trained on pretraining data;
   for open-ended generation (stories) they fall back on probing for story features and a GPT-3.5 classifier
   (92 % held-out accuracy, App. F.2).
@@ -81,19 +81,19 @@ by headings only). Also screened at section level by L2 (`_screen_L2.md`); this 
   was not readable before fine-tuning and its acquisition is no faster than from the control (their low-prior
   case). The rule is comparative (vs control), not absolute.
 - **Null / floor:** the Scr.+FT / "Not in PT" control model is the floor: the same fine-tune applied to a model
-  that never had the capability. Speed is judged against it, so the "with enough steps anything is learnable"
+  that never had the capability. Speed is judged against it, so the 'with enough steps anything is learnable'
   objection is handled by the ratio, not by a fixed budget. Random-init is not used.
 - **Transfer to our setting:** our direction is reversed (did RL create something that pend lacks?), but all three
   tools apply. (1) *reFT analogue = J4*: fine-tune pend on 16 excluded-middle demonstrations and count the steps or
   examples to reach the r16 behaviour (pass@256 on held-out instances), against the same fine-tune from init and
-  from early pretraining checkpoints (our "never had it" controls); elicited if pend's sample cost is a small
+  from early pretraining checkpoints (our 'never had it' controls); elicited if pend's sample cost is a small
   fraction of the controls'. (2) *Pruning in reverse*: in r16, prune the top-K neurons by gradient×weight of pend's
   loss on pend's own outputs; if a handful of neurons revert r16 to pend-like behaviour on the excluded-middle family
   (and nowhere else), RL added a localized wrapper; if hundreds are needed, the change is distributed. (3) *Probe*:
-  is "goal needs reductio" linearly readable in pend (see `hewitt2019control.md` for the null)? Cost: each
+  is 'goal needs reductio' linearly readable in pend (see `hewitt2019control.md` for the null)? Cost: each
   fine-tune minutes on one GPU; pruning sweeps one backward pass per K. Main failure modes: the best control (a
   pend pretrained without any classical proofs) does not exist and costs a full pretraining run; RL's change is
-  multi-step generation, not one readout, so "f_C" must be chosen per proof step; reFT sample efficiency depends
+  multi-step generation, not one readout, so 'f_C' must be chosen per proof step; reFT sample efficiency depends
   on lr and data, which must be identical across arms.
 - Related: `prakash2024finetuning.md` (same conclusion via circuits), `greenblatt2024passwordlocked.md` (unlocking
   hidden capabilities with few demonstrations), `deeb2024unlearning.md` (recovery-rate test of information in

@@ -7,7 +7,7 @@ papers:
 
 # Fine-tuning enhances an existing circuit (entity tracking): circuit transfer, faithfulness and cross-model patching
 
-Paper: [@prakash2024finetuning] (Prakash, Shaham, Haklay, Belinkov, Bau; ICLR 2024)
+Paper: [@prakash2024finetuning] (Prakash, Shaham, Haklay, Belinkov, Bau)
 Source: arXiv 2402.14811v1 (HTML rendering read: Abstract, Sec. 1-7, App. C headline; other appendices by heading)
 
 ## Learnings
@@ -48,8 +48,8 @@ Source: arXiv 2402.14811v1 (HTML rendering read: Abstract, Sec. 1-7, App. C head
   Sec. 1).
 - Circuit size is a judgement call: path patching "does not provide a clear threshold for the number of heads that
   should be included in the circuit" (Sec. 4.2); the base circuit "is not perfectly complete" (App. C).
-- "Enhances" covers adding ~100 heads with the same roles. So "same mechanism" here means same algorithm (roles,
-  information flow), not same parameters or same components; a strict "no new components" criterion would call it
+- 'Enhances' covers adding ~100 heads with the same roles. So 'same mechanism' here means same algorithm (roles,
+  information flow), not same parameters or same components; a strict 'no new components' criterion would call it
   partly new.
 - The fine-tuning task (arithmetic) differs from the evaluated task (entity tracking): the evidence is about
   transfer, not about the fine-tuning target itself. No RL.
@@ -66,9 +66,9 @@ Source: arXiv 2402.14811v1 (HTML rendering read: Abstract, Sec. 1-7, App. C head
   show as low faithfulness of the base circuit in the tuned model, different roles, or base-incompatible activations
   (CMAP fails). No numeric threshold is stated; random equal-size circuits are the null.
 - **Null / floor:** random circuits with the same number and placement of heads (accuracy ≈ 0) and task chance
-  (0.14). Nothing on the "any k" objection: everything is scored by greedy accuracy on a 7-way task.
+  (0.14). Nothing on the 'any k' objection: everything is scored by greedy accuracy on a 7-way task.
 - **Transfer to our setting:** feasible and cheap at our scale (6 layers × few heads, 9.6 M params), and CMAP is the
-  most direct test of "the RL change is a better input to an old mechanism". Concrete protocol on the excluded-middle
+  most direct test of 'the RL change is a better input to an old mechanism'. Concrete protocol on the excluded-middle
   family: (1) find a minimal faithful circuit for the classical step in r16 (activation / path patching on
   corrupted goals, e.g. A ∨ ¬A vs an intuitionistically provable goal of the same shape); (2) evaluate the same
   components in pend (does pend use them at all on this family?) and the reverse (pend's circuit for a related
@@ -77,8 +77,8 @@ Source: arXiv 2402.14811v1 (HTML rendering read: Abstract, Sec. 1-7, App. C head
   to r16's step probability, RL improved access via an existing pathway; if every layer must be patched, or pend's
   downstream components cannot use r16's activations, RL built something new. Cost: one forward pass per patch, ~10^3
   states × (6 layers × components): minutes. Failure modes: circuits for multi-step proof generation are much less
-  clean than single-token entity lookup; "minimal circuit" depends on the corruption distribution and on a threshold
-  the paper does not supply; with only 6 layers a "superset circuit" may simply be most of the network.
+  clean than single-token entity lookup; 'minimal circuit' depends on the corruption distribution and on a threshold
+  the paper does not supply; with only 6 layers a 'superset circuit' may simply be most of the network.
 - Related: `jain2023mechanistically.md` (wrappers, revival), `ward2025repurposes.md` and `venhoff2025base.md`
   (transfer of base-model directions into reasoning models), `mukherjee2025subnetworks.md` (RL updates small
   subnetworks), `hewitt2019control.md`.

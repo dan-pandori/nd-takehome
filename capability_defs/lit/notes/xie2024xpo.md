@@ -23,12 +23,8 @@ Prop. 2.1; proofs in App. C not read).
   chance" (Sec. 1).
 - **Prop. 2.1 (the lower bound).** Two actions, r(a) = 1, r(b) = 1/2, π_ref(a) = ε = exp(−c/β) (App. D.1).
   For all T ≤ ½ exp(1/(8β)), with constant probability every iterate of Online DPO stays ≥ 1/8 suboptimal:
-  "the sample complexity required by Online DPO is exponential in 1/β", and the same holds for Iterative
-  and offline DPO (Sec. 2.3, Eq. 5). Mechanism: "if \pi_ref places small probability mass on the optimal
-  action, Online DPO may fail to ever explore this action until the number of iterations is exponentially
-  large"; "more deliberate exploration is required to discover behaviors or capabilities not already
-  covered by \pi_ref" (Sec. 2.3). The failure is due to "poor coverage from \pi_ref, in spite of on-policy
-  sampling" (Remark 2.1).
+  "the sample complexity required by Online DPO is exponential in" 1/β, and the same holds for Iterative
+  and offline DPO (Sec. 2.3, Eq. 5). Mechanism: if π_ref "places small probability mass on the optimal action, Online DPO may fail to ever explore this action until the number of iterations is exponentially large"; "more deliberate exploration is required to discover behaviors or capabilities not already covered by" π_ref (Sec. 2.3). The failure is due to "poor coverage from" π_ref, "in spite of on-policy sampling" (Remark 2.1).
 - **Two coverage quantities.** Passive methods scale with the concentrability C_conc(Π) = sup_τ sup_π
   π(τ)/π_ref(τ), which equals exp(V_max/β) under bounded density ratios (Sec. 3.2). XPO scales with the
   coverability C_cov(Π) = inf_μ sup_τ sup_{π∈Π} d^π(τ)/μ(τ) (Def. 3.1, Eq. 11), which "measures coverage with
@@ -44,7 +40,7 @@ Prop. 2.1; proofs in App. C not read).
   (Remark 3.2) and trajectory-level coverability (Remark 3.3); finite classes. The objective is non-convex
   and harder to optimise as β → 0.
 - Experiments are preliminary: Llama-3-8B, iterative DPO with T = 3, chat / academic benchmarks; XPO matches
-  heuristic-exploration baselines with "only 1/4 the number of generated responses" (Sec. 3.4, Table 1).
+  heuristic-exploration baselines with "only" 1/4 "the number of generated responses" (Sec. 3.4, Table 1).
   Nothing in the experiments tests leaving the base's support.
 - Preference feedback (Bradley-Terry), not a binary verifier; the exp(2 R_max) factor is from that model.
 

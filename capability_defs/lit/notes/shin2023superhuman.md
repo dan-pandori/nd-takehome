@@ -14,8 +14,8 @@ the technical definitions in its sections 2.2-2.3 and Figs. S1-S6, is a separate
 ## Learnings
 
 - **Data and question.** "more than 5.8 million move decisions made by professional Go players over the past 71
-  years (1950-2021)" (Abstract); the advent of superhuman AI is dated to AlphaGo's March 2016 win and the 2016-2017
-  program releases (p. 3, footnote 1). Main finding: "novel decisions (i.e., previously unobserved moves) occurred
+  years (1950-2021)" (Abstract); the advent of superhuman AI is dated to AlphaGo's win on "March 15, 2016" (p. 3) and, more broadly,
+  "a series of events that occurred between 2016 and 2017" (p. 4, footnote 1). Main finding: "novel decisions (i.e., previously unobserved moves) occurred
   more frequently and became associated with higher decision quality after the advent of superhuman AI" (Abstract).
 - **Novelty Index (NI).** Borrowed from chess practice: find "the first move that makes the game's move sequence
   historically novel" relative to every earlier game in the database (p. 7); then "subtracted its move number from
@@ -53,28 +53,28 @@ the technical definitions in its sections 2.2-2.3 and Figs. S1-S6, is a separate
 ## Connections and questions
 
 - **Definition offered:** novelty of a behaviour = how early a sequence of decisions leaves the set of all previously
-  observed sequences (prefix novelty against a dated corpus), paired with an external quality score; "copied from a
-  source" is tested by adding the source's outputs to the corpus and checking that novelty survives.
-- **New vs better access:** not about model capabilities, but it supplies a corpus-relative operationalisation of "new"
+  observed sequences (prefix novelty against a dated corpus), paired with an external quality score; 'copied from a
+  source' is tested by adding the source's outputs to the corpus and checking that novelty survives.
+- **New vs better access:** not about model capabilities, but it supplies a corpus-relative operationalisation of 'new'
   plus a copying control. Turned into a rule for us: an RL proof is **created** relative to the base if it departs
   early from every proof prefix the base produces (and from every pretraining proof) *and* is valid; it is
   **elicited** if its prefixes, up to the last few steps, already occur in a large base-sample database. The
-  "insert the AI's games" control becomes: add N base samples per theorem to the reference corpus and re-measure;
+  'insert the AI's games' control becomes: add N base samples per theorem to the reference corpus and re-measure;
   novelty that survives large N is novelty beyond what sampling the base would find.
 - **Null / floor:** the pre-2016 trend (decreasing NI as the corpus grows) is the null; nothing like a random agent. A
-  random policy would be maximally "novel" and worthless, which is why NI must be read jointly with quality (DQI here,
+  random policy would be maximally 'novel' and worthless, which is why NI must be read jointly with quality (DQI here,
   Lean validity and proof length for us).
 - **Transfer to our setting:** cheap (string/prefix matching, no GPU). For each theorem, reference set R = canonicalised
   proof-step sequences from (a) the pretraining corpus, (b) pend's k = 256 samples, optionally (c) pend's samples at
   larger budgets. For each Lean-accepted r8 / r16 proof, record the first step index at which its prefix leaves R and
-  report proof length minus that index ("steps of novel continuation"), plus whether the whole proof's canonical key is
+  report proof length minus that index ('steps of novel continuation'), plus whether the whole proof's canonical key is
   in R. Plot the distribution per seed, and the same for pend's own held-out samples against a disjoint pend sample
-  (the null for "novel by chance"). Excluded middle: are r16's A ∨ ¬A proofs novel from step 1 (new opening, e.g. an
+  (the null for 'novel by chance'). Excluded middle: are r16's A ∨ ¬A proofs novel from step 1 (new opening, e.g. an
   immediate by_contra), or do they share a long prefix with pend's failed attempts and differ only at the classical
   step? Failure modes: (1) the drift the paper itself shows — novelty grows with proof length and shrinks with |R|, so
-  compare at fixed |R| and stratify by length; (2) renaming and step-order variants make trivially "novel" proofs —
+  compare at fixed |R| and stratify by length; (2) renaming and step-order variants make trivially 'novel' proofs —
   canonicalise up to atom renaming and commuting steps (note `gen.canon_key` is premise-order sensitive); (3) it is a
-  support measure, so it inherits the "any k" problem unless R's size is tied to a budget K.
+  support measure, so it inherits the 'any k' problem unless R's size is tied to a budget K.
 - Related: `brown2024monkeys.md` and `kazdan2025passk.md` (coverage at budget), the prior-list Schut et al. (concepts
   taught back to grandmasters, cited for context), and the AlphaGo / AlphaGo Zero / Zahavy rows in `_screen_L6.md`
   (novelty as low prior probability under a human-trained policy).

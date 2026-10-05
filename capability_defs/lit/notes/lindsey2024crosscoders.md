@@ -6,7 +6,7 @@ papers:
   - minder2025overcoming
 ---
 
-# Crosscoder model diffing: shared vs model-specific features (and why "base decoder norm ≈ 0" overstates novelty)
+# Crosscoder model diffing: shared vs model-specific features (and why 'base decoder norm ≈ 0' overstates novelty)
 
 Papers: [@lindsey2024crosscoders] (Lindsey, Templeton, Marcus, Conerly, Batson, Olah; Transformer Circuits research
 update, Oct 2024); critique and fix in [@minder2025overcoming] (Minder, Dumas, Juang, Chughtai, Nanda; arXiv
@@ -58,9 +58,9 @@ row in `_screen_L6.md`.
 ## Evidence and limitations
 
 - Lindsey et al.: one diff (Claude 3 Sonnet), qualitative examples, no ablations or causal tests of model-specific
-  features, no quantitative null (how many "model-specific" features would two seeds of the *same* model produce?).
+  features, no quantitative null (how many 'model-specific' features would two seeds of the *same* model produce?).
 - Minder et al. supply the missing control (Latent Scaling) and a causal check (Sec. 3.2, not read), but the two key
-  thresholds (ν^r < 0.5, ν^ε < 0.2) are chosen by the authors, and novelty vs "shifted activation pattern" remains
+  thresholds (ν^r < 0.5, ν^ε < 0.2) are chosen by the authors, and novelty vs 'shifted activation pattern' remains
   undecidable in this framework (Sec. 5 quote).
 
 ## Connections and questions
@@ -71,11 +71,11 @@ row in `_screen_L6.md`.
   fitted to base activations (Minder's ν ≈ 0). *Shared but re-used* = shared latent with misaligned decoders.
 - **New vs better access:** yes, as feature-set membership: base-only / shared / fine-tune-only. Fine-tune-only and
   ν ≈ 0 → created representation; shared with aligned decoders but changed activation frequency → elicited (old concept
-  used more often); shared with misaligned decoders → old concept, new downstream use (the same "repurposing" category
-  as `ward2025repurposes.md`). Minder's limitation means the rule cannot separate "new latent" from "old latent firing
-  in new contexts" without extra activation-statistics tests.
+  used more often); shared with misaligned decoders → old concept, new downstream use (the same 'repurposing' category
+  as `ward2025repurposes.md`). Minder's limitation means the rule cannot separate 'new latent' from 'old latent firing
+  in new contexts' without extra activation-statistics tests.
 - **Null / floor:** none in Lindsey. The natural null for us: train the same crosscoder on two *pretraining*
-  checkpoints separated by the same number of steps as RL, or on pend vs a second pend seed, and count "model-specific"
+  checkpoints separated by the same number of steps as RL, or on pend vs a second pend seed, and count 'model-specific'
   latents; RL-specific latents only count above that baseline. Minder's ν ratios are a per-latent null.
 - **Transfer to our setting:** cheap at our scale: a BatchTopK crosscoder (say 4-16 k latents) on the 384-d residual
   stream at each of the 6 layers, pend vs r16, trained on activations from proof states of both models' own samples plus
@@ -84,7 +84,7 @@ row in `_screen_L6.md`.
   latents most active before r16's classical step are shared (ν ≈ 1, elicited/repurposed) or r16-only (created); then a
   causal check by steering pend with the latent's r16 decoder direction (see `ward2025repurposes.md`). Because the
   pretraining checkpoints exist, a multi-snapshot crosscoder over init → … → pend → r8 → r16 can date each latent's
-  appearance (Lindsey's "Training Snapshots"), which turns "created by RL" into "first appears after pend". Failure
+  appearance (Lindsey's "Training Snapshots"), which turns 'created by RL' into 'first appears after pend'. Failure
   modes: L1 artefacts (use BatchTopK + Latent Scaling), dictionary size and seed dependence of what counts as a latent,
   and the reconstruction error hiding exactly the RL-specific signal (Minder Sec. 5).
 - Related: `venhoff2025base.md` (argues the diff may not be linear-feature-level at all), `ward2025repurposes.md`,
