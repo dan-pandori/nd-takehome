@@ -259,3 +259,9 @@ Brief: run brief `capability-defs` (Dan, 2026-10-04). Policy: AGENT_POLICY.md. B
 ## capability-defs
 - 2026-10-05 04:56 UTC  run started (executor, `--effort max`). Parts: 1 literature (≥ 60 new papers screened, ≥ 20 in depth, claims verified against source text), 2 catalogue (≥ 15 definition cards with critic passes), 3 quantification on our models (≥ 6 definitions), 4 recommendation. Deliverables under `capability_defs/`. Pre-registration `preregistration/capability-defs.md` will be committed before any pod.
 - 2026-10-05 05:43 UTC  Pre-registration committed (3e6f9865) before any pod: Part 3 definitions, pod jobs J1–J4, expectations L1–L3 / Q1–Q16. RunPod balance $122.55 vs the $100 floor limits pods to ≈ $20 (question in `QUESTIONS.md`). Literature readers L1 (done: 32 screened / 12 in depth), L2, L3 running.
+- 08:08 UTC  **Part 1 (literature):** `capability_defs/lit/REVIEW.md` — six readers, 185 papers new to the two earlier reviews screened (`screened.md`), 57 in depth (`notes/`), 1,180 / 1,183 ledger claims verified against source text, my re-check 32 / 32.
+PART 1 DONE 2026-10-05T08:08:19Z
+- 08:08 UTC  **Part 2 (catalogue):** 20 cards in `capability_defs/cards/` (frame `_FRAME.md`), each with a critic subagent's strongest argument and my answer. Every critic landed a failure I accepted (L3 expectation ≥ 1 / 3: held, 20 / 20): 6 dropped as decision rules (bits-over-null, chain-reachability, kl-update-size, composition, out-of-data-novelty, latent-probe-steer), 2 demoted to descriptive (passk-equal-k, sharpen-expand's ε-split), 1 folded (transfer-invariance → schema), the rest revised (budget, controls, key-step families, cross-theorem new-method test).
+PART 2 DONE 2026-10-05T08:08:19Z
+- Part 3 in progress: pods cd-a…cd-g (J1 stage 2, J2 large-k, J3 guided, J4 / J6 / J6b fine-tunes, J5 missing draws, J7 compute-matched continuation); seed-0 results logged in `log.md`.
+
