@@ -50,7 +50,7 @@ def main():
                             if r['n_ok'] > 0:
                                 ctrl.add(r['name'])
             row[st] = {'n_new': len(new), 'scored': sum(1 for n in new if terms[n][lab]),
-                       **{k: sum(1 for v in lbs if v >= -math.log(K)) / max(1, len(new)) for k, K in KS.items()},
+                       **{k: sum(1 for v in lbs if v >= math.log(2) - math.log(K)) / max(1, len(new)) for k, K in KS.items()},   # factor-2 margin
                        'median_LB': float(np.median(lbs)) if lbs else None,
                        'ctrl_solves_share': len(ctrl & set(new)) / max(1, len(new))}
         res[s] = row

@@ -124,8 +124,8 @@ def main():
         for rl in ('r8', 'r16'):
             B = budgets(s, rl)
             H = [(n, r) for n, r in rows.items() if r['grp'] == 'H' and r[f'phat_{rl}'] > 0]
-            el = [n for n, r in H if r['LB08'] >= -math.log(B['K_total'])]
-            el_p = [n for n, r in H if r['LB08'] >= -math.log(B['K_per'])]
+            el = [n for n, r in H if r['LB08'] >= math.log(2) - math.log(B['K_total'])]   # factor-2 margin
+            el_p = [n for n, r in H if r['LB08'] >= math.log(2) - math.log(B['K_per'])]
             el_s = [n for n, r in H if r['lo'] >= 1 / B['K_per']]
             cr_p = [n for n, r in H if r['ub'] < 0.05 / B['K_per']]
             cr_t = [n for n, r in H if r['ub'] < 0.05 / B['K_total']]

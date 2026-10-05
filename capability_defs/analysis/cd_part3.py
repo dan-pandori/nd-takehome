@@ -192,7 +192,7 @@ def main():
                     if n in H:
                         LB = lse([v[lab_b][0] for v in terms.values() if lab_b in v]) if terms else -math.inf
                         lo = cp_lower(cB, nB)
-                        if not (LB >= -lnK or lo >= 1 / K):
+                        if not (LB >= math.log(2) - lnK or lo >= 1 / K):     # factor-2 margin on the known-proof estimate
                             D['brk_ne'].append(n)
                         # rho: R's mass on known proofs with pi_pend < 1/K (point scores: exact where available else b0)
                         if terms:
@@ -259,7 +259,7 @@ def main():
                     terms = by.get(n, {})
                     LB = lse([v[f's{s}_pend'][0] for v in terms.values() if f's{s}_pend' in v]) if terms else -math.inf
                     cB, nB = pend_all(n)
-                    if LB >= -math.log(Kc) or cp_lower(cB, nB) >= 1 / Kc:
+                    if LB >= math.log(2) - math.log(Kc) or cp_lower(cB, nB) >= 1 / Kc:
                         el += 1
                     elif cp_upper(cB, nB) < 0.05 / Kc:
                         cr_ += 1
