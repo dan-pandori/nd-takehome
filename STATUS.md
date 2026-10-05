@@ -258,3 +258,4 @@ Brief: run brief `capability-defs` (Dan, 2026-10-04). Policy: AGENT_POLICY.md. B
 
 ## capability-defs
 - 2026-10-05 04:56 UTC  run started (executor, `--effort max`). Parts: 1 literature (≥ 60 new papers screened, ≥ 20 in depth, claims verified against source text), 2 catalogue (≥ 15 definition cards with critic passes), 3 quantification on our models (≥ 6 definitions), 4 recommendation. Deliverables under `capability_defs/`. Pre-registration `preregistration/capability-defs.md` will be committed before any pod.
+- 2026-10-05 05:43 UTC  Pre-registration committed (3e6f9865) before any pod: Part 3 definitions, pod jobs J1–J4, expectations L1–L3 / Q1–Q16. RunPod balance $122.55 vs the $100 floor limits pods to ≈ $20 (question in `QUESTIONS.md`). Literature readers L1 (done: 32 screened / 12 in depth), L2, L3 running.
