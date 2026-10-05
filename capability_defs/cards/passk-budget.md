@@ -81,14 +81,19 @@ everywhere (§9), so report it as a separate scale.
     ≈ 17,152 attempts, which already puts p̂ above 1 / K_eval-set. UB95 at 0 / 66,304 = 4.5 × 10⁻⁵ certifies "created"
     only for K ≤ ≈ 1,100.
   - J9: ≈ 1.2–1.4 M more attempts on 3 theorems per seed, enough to certify at K_eval-set (r8).
-  - Cost: J1 + J2 ≈ 4.3 A40-hours per seed (≈ 60 % of the r8 ladder's GPU time); J9 ≈ ⟨J9 cost⟩ per theorem.
+  - Cost: J1 + J2 ≈ 4.3 A40-hours per seed (≈ 60 % of the r8 ladder's GPU time); J9 ≈ 2.4 A40-hours per theorem
+    (21.3 for nine).
 - **Analysis.** `cd_part3.py` (the set: `cm`, `cm0`, `cm_recipe`, nets; Δ_cov), `cd_bracket.py` (the bracket),
   `cd_report_tables.py` (tables), a few CPU-minutes.
 - **Result (cap 12, r8, draw x0; s0 / s1 / s2).** Set level: r8 at 256 solves 286 / 286 / 293 of 322; the base reaches
   265 / 270 / 281 at K_eval-set; **Δ_cov = +21 / +16 / +12** (r16: +24 / +32 / +14). The replay-only ladder at 256
   solves 239 / 244 / 249. Per theorem: equal-k 54 / 51 / 60 → not within reach at K_eval-set **22 / 21 / 14** (redraw
-  Jaccard 0.84–0.87, seed 0.16–0.25) → net of replay 20 / 14 / 8 → 0 base successes 18 / 18 / 9 → no seed's base ever
-  solved 5 / 6 / 6 (net 5 / 4 / 5). Certified created: ⟨J9⟩.
+  Jaccard 0.84–0.87, seed 0.16–0.25) → net of replay 20 / 14 / 8 → 0 base successes 18 / 17 / 8 → no seed's base ever
+  solved 4 / 5 / 5 (net 4 / 3 / 5). **Certified created (J9): 7 of the 9 headline candidates** (0 successes in
+  1.25–1.51 M attempts each): s0 `la_transfer_2060`, `la_transfer_205`, `la_transfer_1077`; s1 `la_transfer_1648`,
+  `la_transfer_2060`; s2 `la_transfer_1833`, `la_transfer_2060`. The other two were found once in ≈ 10⁶ attempts.
+  Net of every RL-free control (other seeds' bases, replay-only, the compute-matched continuation) four remain:
+  `la_transfer_205` (s0), `la_transfer_2060` (s1, s2), `la_transfer_1833` (s2).
 - **Structural limit.** Certifying creation at K_total needs ≈ 60 K_total ≈ 2 × 10⁸ base attempts per theorem. That
   is ≈ 200 A40-hours per theorem, so creation at K_total cannot be certified by sampling. Only elicitation can be
   certified there.

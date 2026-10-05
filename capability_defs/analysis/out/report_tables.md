@@ -36,7 +36,7 @@
 | base found it, but not certifiably within reach | 12 | 9 | 18 |
 | not reached: 0 base successes in ≥ K attempts | 21 | 18 | 10 |
 | undetermined (0 successes, fewer than K attempts) | 0 | 0 | 0 |
-| certified created (UB95 < 0.05 / K) | 0 | 2 | 2 |
+| certified created (UB95 < 0.05 / K) | 3 | 2 | 2 |
 
 ## threshold sensitivity
 
@@ -102,15 +102,15 @@
 
 | seed | theorem | r8 pass@1 (x0) | own base: successes / attempts | known-proof estimate | UB95 vs 0.05 / K_eval-set | certified at K_eval-set? | other seeds' bases | replay-only (512) | J7 continuation (512) |
 |---|---|---|---|---|---|---|---|---|---|
-| s0 | `la_transfer_2060` | 0.95 | 0 / 1,114,880 | 10^-7.9 | 2.7e-06 vs 2.6e-06 | not yet | s1 0 / 1,377,024, s2 0 / 1,508,096 | 0 / 512 | 7 / 512 |
-| s0 | `la_transfer_205` | 0.79 | 0 / 1,114,880 | 10^-13.2 | 2.7e-06 vs 2.6e-06 | not yet | s1 0 / 66,560, s2 0 / 17,408 | 0 / 512 | 0 / 512 |
-| s0 | `la_transfer_1077` | 0.62 | 0 / 1,114,880 | 10^-8.8 | 2.7e-06 vs 2.6e-06 | not yet | s1 1 / 1,377,024, s2 0 / 66,304 | 0 / 512 | 0 / 512 |
+| s0 | `la_transfer_2060` | 0.95 | 0 / 1,245,952 | 10^-7.9 | 2.4e-06 vs 2.6e-06 | yes | s1 0 / 1,377,024, s2 0 / 1,508,096 | 0 / 512 | 7 / 512 |
+| s0 | `la_transfer_205` | 0.79 | 0 / 1,245,952 | 10^-13.2 | 2.4e-06 vs 2.6e-06 | yes | s1 0 / 66,560, s2 0 / 17,408 | 0 / 512 | 0 / 512 |
+| s0 | `la_transfer_1077` | 0.62 | 0 / 1,245,952 | 10^-8.8 | 2.4e-06 vs 2.6e-06 | yes | s1 1 / 1,377,024, s2 0 / 66,304 | 0 / 512 | 0 / 512 |
 | s1 | `la_transfer_1648` | 0.95 | 0 / 1,377,024 | 10^-8.1 | 2.2e-06 vs 2.4e-06 | yes | s0 5 / 66,304, s2 1 / 1,114,880 | 0 / 512 | 0 / 512 |
-| s1 | `la_transfer_1077` | 0.80 | 1 / 1,377,024 | 10^-7.7 | 3.4e-06 vs 2.4e-06 | no: base found it | s0 0 / 1,114,880, s2 0 / 66,304 | 0 / 512 | 0 / 512 |
-| s1 | `la_transfer_2060` | 0.61 | 0 / 1,377,024 | 10^-12.7 | 2.2e-06 vs 2.4e-06 | yes | s0 0 / 1,114,880, s2 0 / 1,508,096 | 0 / 512 | 0 / 512 |
+| s1 | `la_transfer_1077` | 0.80 | 1 / 1,377,024 | 10^-7.7 | 3.4e-06 vs 2.4e-06 | no: base found it | s0 0 / 1,245,952, s2 0 / 66,304 | 0 / 512 | 0 / 512 |
+| s1 | `la_transfer_2060` | 0.61 | 0 / 1,377,024 | 10^-12.7 | 2.2e-06 vs 2.4e-06 | yes | s0 0 / 1,245,952, s2 0 / 1,508,096 | 0 / 512 | 0 / 512 |
 | s2 | `la_transfer_1648` | 0.91 | 1 / 1,114,880 | 10^-6.2 | 4.3e-06 vs 2.1e-06 | no: base found it | s0 5 / 66,304, s1 0 / 1,377,024 | 0 / 512 | 0 / 512 |
 | s2 | `la_transfer_1833` | 0.82 | 0 / 1,508,096 | 10^-10.2 | 2.0e-06 vs 2.1e-06 | yes | s0 0 / 17,408, s1 0 / 17,408 | 0 / 512 | 0 / 512 |
-| s2 | `la_transfer_2060` | 0.30 | 0 / 1,508,096 | 10^-12.4 | 2.0e-06 vs 2.1e-06 | yes | s0 0 / 1,114,880, s1 0 / 1,377,024 | 0 / 512 | 0 / 512 |
+| s2 | `la_transfer_2060` | 0.30 | 0 / 1,508,096 | 10^-12.4 | 2.0e-06 vs 2.1e-06 | yes | s0 0 / 1,245,952, s1 0 / 1,377,024 | 0 / 512 | 0 / 512 |
 
 ## compute
 
@@ -126,6 +126,6 @@
 | J6b DN-free-replay fine-tunes + reads | 3.0 | 0.25 M | 46 M | 1.38 B | 19,457 |
 | J7 compute-matched continuation + reads | 17.9 | 0.49 M | 87 M | 9.32 B | 55,606 |
 | J8 start-dependence scores | 4.5 | 0.00 M | 0 M | 0.00 B | 0 |
-| J9 certification sampling | 8.6 | 4.72 M | 871 M | 0.00 B | 1 |
+| J9 certification sampling | 21.3 | 11.40 M | 2,122 M | 0.00 B | 2 |
 | J10 long-pool sampling | 1.9 | 0.87 M | 197 M | 0.00 B | 441 |
-| **total** | **64.2** | 17.7 M | 3.17 B | 13.1 B | 1,110,392 |
+| **total** | **77.0** | 24.4 M | 4.43 B | 13.1 B | 1,110,393 |

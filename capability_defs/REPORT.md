@@ -17,7 +17,7 @@ attempt ends in a Lean-accepted proof; 1 / p, the *k-to-solve*, is the expected 
 p > 0 but need e^290 to e^3,200 attempts here, so every claim needs a budget K. We recommend **K_eval-set**: RL's GPU
 time spent instead on base attempts over the evaluation theorems (≈ 2 × 10⁴ each). RL **created** t if RL solves t,
 the base cannot within K, and training without RL proofs cannot either. Of the 51–60 theorems per seed that RL
-"creates" at equal k, 14–22 survive the budget, 8–20 the replay-only control, 5–6 every seed's base; ⟨J9 short⟩.
+"creates" at equal k, 14–22 survive the budget, 8–20 the replay-only control, 4–5 every seed's base; certified: 7 of 9 tested.
 Excluded middle, acquired by one seed's RL, is taught by 16 demonstrations even to a base pretrained without its key
 step.
 
@@ -73,8 +73,7 @@ What the critics established:
 
 ### 3.0 Set-up
 
-- **Existing artefacts:** plain reads of 22 checkpoints × 3 seeds × 2 draws at both caps; teacher-forced scores of
-  references and RL's proofs; ladder logs; `rl-from-ckpt`'s ladders and replay-only controls.
+- **Existing artefacts:** plain reads of 22 checkpoints × 3 seeds × 2 draws at both caps; ladder logs; `rl-from-ckpt`.
 - **Ten pod jobs** (NVIDIA A40, $0.49 / h), each pre-registered in `log.md` before launch:
 
   | job | what it did |
@@ -127,12 +126,12 @@ the base's best known proof. It costs one forward pass per proof instead of 1 / 
 | base found it, but not certifiably within reach | 12 | 9 | 18 |
 | not reached: 0 base successes in ≥ K attempts | 21 | 18 | 10 |
 | undetermined (0 successes, fewer than K attempts) | 0 | 0 | 0 |
-| certified created (UB95 < 0.05 / K) | 0 | 2 | 2 |
+| certified created (UB95 < 0.05 / K) | 3 | 2 | 2 |
 
-- At k 256 all 152 look "created". At K_eval-set, 64 are elicited and 51 **not reached** (0 base successes in
-  ≥ 65,536 attempts); the base found the other 37 one to seven times, without a certificate either way.
+- At k 256 all 152 look "created". At K_eval-set, 64 are elicited and 49 **not reached** (0 base successes in
+  ≥ 65,536 attempts); the base found the other 39 one to seven times, without a certificate either way.
 - Certifying creation takes ≈ 60 K zero-success attempts: stage B's 66,000 certify only K ≤ 1,100; J9 paid for
-  K_eval-set on nine theorems (§3.8).
+  K_eval-set on nine theorems and certified seven (§3.8).
 
 ### 3.2 What each definition calls "created", and how noisy that is
 
@@ -167,8 +166,8 @@ Set level, `passk-budget`'s headline (coverage of the 322 at each model's budget
 | s2 | 281 / 281 | 249 | 219 | 293 | 295 | +12 / +14 |
 
 - **Asking more of the base shrinks the sets.** Equal-k "creates" 54 / 51 / 60 at r8. With RL's GPU time spent on
-  base attempts instead, 22 / 21 / 14 stay out of reach (18 / 18 / 9 with not one base success), 20 / 14 / 8 net of
-  replay, and **5 / 6 / 6 were never solved by any seed's base**.
+  base attempts instead, 22 / 21 / 14 stay out of reach (18 / 17 / 8 with not one base success), 20 / 14 / 8 net of
+  replay, and **4 / 5 / 5 were never solved by any seed's base**.
 - **Set level, RL is ahead at matched compute on every seed:** r8 at 256 attempts solves 12–21 more of the 322 than
   the base reaches at K_eval-set (r16: 14–32). Neither RL-free control closes the gap (replay-only 239 / 244 / 249;
   compute-matched continuation 220 / 215 / 219).
@@ -283,27 +282,26 @@ Created-set sizes (cap 12, r8, draw x0; s0 / s1 / s2) as each definition's thres
 
 | definition | threshold | sizes |
 |---|---|---|
-| compute-matched | K = 0.1 / 0.3 / 1 / 3 × K_eval-set | 38 / 36 / 36 → 33 / 28 / 28 → **22 / 21 / 14** → 21 / 20 / – (s2: n < 3 K) |
+| compute-matched | K = 0.1 / 0.3 / 1 / 3 × K_eval-set | 38 / 36 / 36 → 33 / 28 / 28 → **22 / 21 / 14** → 21 / 20 / 3 (s2: 6 more have n < 3 K) |
 | best known proof < 1 / K | same | 42 / 41 / 42 → 34 / 34 / 32 → **29 / 27 / 24** → 26 / 24 / 21 |
 | bracket: not certified elicited | same | 43 / 40 / 37 → 36 / 34 / 32 → **29 / 26 / 25** → 25 / 23 / 19 |
 | equal-k | base sample 256 / 512 / all reads (≥ 768) | **54 / 51 / 60** → 50 / 42 / 49 → 47 / 40 / 43 |
 | reliable (within compute-matched) | p̂_R ≥ 0.1 / 0.25 / 0.5 / 0.75 | 13 / 14 / 11 → 12 / 11 / 8 → **12 / 9 / 5** → 9 / 6 / 5 |
 | expansion share | ρ ≥ 0.25 / 0.5 / 0.75 / 0.9 | 50 / 42 / 48 → **48 / 42 / 46** → 44 / 39 / 40 → 37 / 38 / 36 |
-| schema family | RL ≥ 0.3 / 0.5 / 0.7 (pend ≤ 0 / 0.05 / 0.1 changes nothing) | 12 / 6 / 11 → **12 / 6 / 11** → 10 / 3 / 9 |
+| schema family (key-step, at the budget) | RL ≥ 0.3 / 0.5 / 0.7 (base ≤ 0 / 0.05 / 0.1 changes nothing) | 3 / 2 / 0 → **0 / 2 / 0** → 0 / 0 / 0 |
 
 - **The budget is the dominant free parameter.** A tenfold smaller budget makes the compute-matched set 1.7–2.6×
   larger. Above K_eval-set it hardly shrinks: what remains is far out of reach (known-proof estimates 10^−4.6 to
   10^−16.8, median ≈ 10^−6.3).
-- **"Created at k" is a fact about n.** Giving the base 512 or ≥ 768 attempts instead of 256 removes 7–17 theorems
-  from the equal-k set.
-- Reliability and family thresholds matter less than the budget; expansion share barely moves.
+- **"Created at k" is a fact about n:** 512 or ≥ 768 base attempts instead of 256 remove 7–17 equal-k theorems.
+- Reliability and family thresholds matter less; expansion share barely moves.
 
 ### 3.5 Plain vs guided
 
-Every proof-state model is read both ways (AGENT_POLICY): **plain** (a rejected action ends the attempt) and
-**guided** (`--arm logical`: a step the logical checker rejects is redrawn, ≤ 10 times per attempt). Both at k 256,
-T 0.8; solved counts per set, plain / guided (`cd_j3.py`, `out/j3.txt`). A guided attempt costs ≈ 1.8× the tokens
-and 2.2× the GPU time of a plain one (`guided-tts`, same r8 checkpoints), so this is not compute-matched.
+Every proof-state model is read both ways: **plain** (a rejected action ends the attempt) and **guided** (`--arm
+logical`: a step the logical checker rejects is redrawn, ≤ 10 times). Both at k 256, T 0.8; solved, plain / guided
+(`cd_j3.py`). A guided attempt costs ≈ 1.8× the tokens and 2.2× the GPU time of a plain one (`guided-tts`), so this is
+not compute-matched.
 
 | model | textbook72 dev58: plain / guided | train14 | holdout250 | guided tokens per attempt |
 |---|---|---|---|---|
@@ -391,12 +389,9 @@ is cheap to teach.
 
 ### 3.7 Is RL "more of the same"?
 
-Four set-level tests of whether RL is "more training of the same kind".
-
-**IRT at matched ability** (`cd_irt_matched.py`, `out/irt_matched.txt`). A 2PL model calibrated on the pretraining
-checkpoints puts every model on one ability scale θ. An item is "created" if the model solves it far above what its θ
-predicts (DIF+, log-odds residual > ln 10) while the start checkpoint failed it in 512 attempts. Rate = created per
-start-failed item the model solves.
+**IRT at matched ability** (`cd_irt_matched.py`). A 2PL model calibrated on the pretraining checkpoints puts every
+model on one ability scale θ; an item is "created" if solved far above what θ predicts (DIF+, log-odds residual > ln
+10) while the start failed it in 512 attempts. Rate = created per start-failed item solved.
 
 | calibrated through p5000 (s0 / s1 / s2) | Δθ | created | rate |
 |---|---|---|---|
@@ -405,14 +400,11 @@ start-failed item the model solves.
 | EI r2 | +2.33 / +2.05 / +2.69 | 48 / 41 / 48 | 0.86 / 0.72 / 0.62 |
 | EI r8 | +4.37 / +4.53 / +5.14 | 60 / 54 / 51 | 0.65 / 0.55 / 0.40 |
 
-At matched Δθ, EI "creates" no more than RL-free training (calibrated through p12000 the same holds: EI r2 37 / 46 /
-46 vs replay 33 / 47 / 48). The original contrast, 26–30 for r8 against 4–7 for the replay-only placebo, compared
-Δθ ≈ 2.1 with Δθ ≈ 0.6.
+At matched Δθ, EI "creates" no more than RL-free training (also when calibrated through p12000). The original
+contrast, 26–30 for r8 against 4–7 for the replay-only placebo, compared Δθ ≈ 2.1 with Δθ ≈ 0.6.
 
-**Update size** (`cd_update.py`, s0; relative Frobenius norm of the weight change, summed over 26 matrices). RL r8
-0.28; replay-only r8 0.30; late pretraining (step 20,000 → pend) 0.81; the gap between two seeds' bases 1.43. The RL
-and replay-only updates have cosine 0.45; the RL-specific part (r8 minus replay-only) has norm 0.30. RL moves the
-weights less than the last stretch of pretraining did.
+**Update size** (`cd_update.py`, s0; relative Frobenius norm of the weight change): RL r8 0.28, replay-only 0.30,
+late pretraining (step 20,000 → pend) 0.81, two seeds' bases 1.43; RL and replay-only updates have cosine 0.45.
 
 **A compute-matched pretraining continuation (J7).** pend trained further on K12 (same recipe, learning rate re-warmed
 to 3 × 10⁻⁴ and decayed) for 28,054 / 31,462 / 33,535 steps. A probe sized this to the r8 ladder's GPU time; the run
@@ -441,9 +433,8 @@ theorems its r8 solves that the start failed in 512 attempts, scored by the star
 | step 16,000 | 76 / 48 / 90 | 32 / 42 / 34 % | 53 / 56 / 61 % | 36 / 21 / 35 |
 | pend (§3.1) | 55 / 45 / 52 | 76 / 71 / 85 % | 29 / 40 / 46 % | 39 / 27 / 28 |
 
-From an earlier start, RL's new solves sit further outside the start's reach, but most of them are what any further
-training on pretraining data brings. What remains net of replay is 21–47 theorems at every start, and it is mostly
-*not* certified elicited even at K_total (0–24 %).
+From an earlier start, RL's new solves sit further outside the start's reach, but most are what further training
+on pretraining data brings; 21–47 remain net of replay at every start, mostly not certified elicited even at K_total.
 
 ### 3.8 Certifying a few theorems (J9)
 
@@ -455,29 +446,31 @@ pend attempts (9 / 10 / 11 chunks of 131,072 for s0 / s1 / s2), on top of the 66
 
 | seed | theorem | r8 pass@1 (x0) | own base: successes / attempts | known-proof estimate | UB95 vs 0.05 / K_eval-set | certified at K_eval-set? | other seeds' bases | replay-only (512) | J7 continuation (512) |
 |---|---|---|---|---|---|---|---|---|---|
-| s0 | `la_transfer_2060` | 0.95 | 0 / 1,114,880 | 10^-7.9 | 2.7e-06 vs 2.6e-06 | not yet | s1 0 / 1,377,024, s2 0 / 1,508,096 | 0 / 512 | 7 / 512 |
-| s0 | `la_transfer_205` | 0.79 | 0 / 1,114,880 | 10^-13.2 | 2.7e-06 vs 2.6e-06 | not yet | s1 0 / 66,560, s2 0 / 17,408 | 0 / 512 | 0 / 512 |
-| s0 | `la_transfer_1077` | 0.62 | 0 / 1,114,880 | 10^-8.8 | 2.7e-06 vs 2.6e-06 | not yet | s1 1 / 1,377,024, s2 0 / 66,304 | 0 / 512 | 0 / 512 |
+| s0 | `la_transfer_2060` | 0.95 | 0 / 1,245,952 | 10^-7.9 | 2.4e-06 vs 2.6e-06 | yes | s1 0 / 1,377,024, s2 0 / 1,508,096 | 0 / 512 | 7 / 512 |
+| s0 | `la_transfer_205` | 0.79 | 0 / 1,245,952 | 10^-13.2 | 2.4e-06 vs 2.6e-06 | yes | s1 0 / 66,560, s2 0 / 17,408 | 0 / 512 | 0 / 512 |
+| s0 | `la_transfer_1077` | 0.62 | 0 / 1,245,952 | 10^-8.8 | 2.4e-06 vs 2.6e-06 | yes | s1 1 / 1,377,024, s2 0 / 66,304 | 0 / 512 | 0 / 512 |
 | s1 | `la_transfer_1648` | 0.95 | 0 / 1,377,024 | 10^-8.1 | 2.2e-06 vs 2.4e-06 | yes | s0 5 / 66,304, s2 1 / 1,114,880 | 0 / 512 | 0 / 512 |
-| s1 | `la_transfer_1077` | 0.80 | 1 / 1,377,024 | 10^-7.7 | 3.4e-06 vs 2.4e-06 | no: base found it | s0 0 / 1,114,880, s2 0 / 66,304 | 0 / 512 | 0 / 512 |
-| s1 | `la_transfer_2060` | 0.61 | 0 / 1,377,024 | 10^-12.7 | 2.2e-06 vs 2.4e-06 | yes | s0 0 / 1,114,880, s2 0 / 1,508,096 | 0 / 512 | 0 / 512 |
+| s1 | `la_transfer_1077` | 0.80 | 1 / 1,377,024 | 10^-7.7 | 3.4e-06 vs 2.4e-06 | no: base found it | s0 0 / 1,245,952, s2 0 / 66,304 | 0 / 512 | 0 / 512 |
+| s1 | `la_transfer_2060` | 0.61 | 0 / 1,377,024 | 10^-12.7 | 2.2e-06 vs 2.4e-06 | yes | s0 0 / 1,245,952, s2 0 / 1,508,096 | 0 / 512 | 0 / 512 |
 | s2 | `la_transfer_1648` | 0.91 | 1 / 1,114,880 | 10^-6.2 | 4.3e-06 vs 2.1e-06 | no: base found it | s0 5 / 66,304, s1 0 / 1,377,024 | 0 / 512 | 0 / 512 |
 | s2 | `la_transfer_1833` | 0.82 | 0 / 1,508,096 | 10^-10.2 | 2.0e-06 vs 2.1e-06 | yes | s0 0 / 17,408, s1 0 / 17,408 | 0 / 512 | 0 / 512 |
-| s2 | `la_transfer_2060` | 0.30 | 0 / 1,508,096 | 10^-12.4 | 2.0e-06 vs 2.1e-06 | yes | s0 0 / 1,114,880, s1 0 / 1,377,024 | 0 / 512 | 0 / 512 |
+| s2 | `la_transfer_2060` | 0.30 | 0 / 1,508,096 | 10^-12.4 | 2.0e-06 vs 2.1e-06 | yes | s0 0 / 1,245,952, s1 0 / 1,377,024 | 0 / 512 | 0 / 512 |
 
-- **Certified created at K_eval-set**, relative to the seed's own base (0 successes in 1.38–1.51 M attempts each; the
-  base's chance of a proof within K_eval-set attempts is below 5 % at 95 % confidence): `la_transfer_1648` and
-  `la_transfer_2060` on s1; `la_transfer_1833` and `la_transfer_2060` on s2⟨s0 certified⟩.
+- **Certified created at K_eval-set**, relative to the seed's own base (0 successes in 1.25–1.51 M attempts each; the
+  base's chance of a proof within K_eval-set attempts is below 5 % at 95 % confidence): **7 of 9**: `la_transfer_2060`,
+  `la_transfer_205` and `la_transfer_1077` on s0; `la_transfer_1648` and `la_transfer_2060` on s1; `la_transfer_1833`
+  and `la_transfer_2060` on s2 (pre-registered ≥ 6 of 9: hit).
 - **Not certified:** the base found `la_transfer_1077` (s1) and `la_transfer_1648` (s2) once each in ≈ 10⁶ attempts
   (p̂ ≈ 10⁻⁶, still beyond the budget by the point estimate). These two had the highest known-proof estimates in
-  their seeds' lists, so the estimate ranked them correctly. s2's proof of `la_transfer_1648` is the same
-  Or-elimination RL writes (7 `have` lines, term size 8, Lean accepts).
+  their seeds' lists, so the estimate ranked them correctly. s2's one success on `la_transfer_1648` is exactly r8's
+  shortest proof (an Or-elimination, 7 `have` lines, term size 8, Lean accepts): RL made a one-in-a-million proof
+  reliable (pass@1 0.91).
 - **Against every RL-free control:** no replay-only control solves any of them; s0's compute-matched continuation
-  solves `la_transfer_2060` (7 / 512), and other seeds' bases solve `la_transfer_1648` (s0: 5 / 66,304). What survives
-  everything here is `la_transfer_2060` on s1 and s2 and `la_transfer_1833` on s2⟨s0 survive⟩: the run's certified
-  examples of RL-created theorems at the compute-matched budget. They are held-out members of families RL trained on
-  (De Morgan with a double negation; Peirce), and their known-proof estimates put the base's k-to-solve at 10^10 to
-  10^13 attempts.
+  solves `la_transfer_2060` on s0 (7 / 512), and other seeds' bases solve `la_transfer_1648` (s0: 5 / 66,304) and
+  `la_transfer_1077` (s1: 1 / 1,377,024). **What survives everything** is `la_transfer_205` on s0, `la_transfer_2060`
+  on s1 and s2, and `la_transfer_1833` on s2: the run's certified examples of RL-created theorems at the
+  compute-matched budget. They are held-out members of families RL trained on (distribution, De Morgan with a double
+  negation, Peirce), and their known-proof estimates put the base's k-to-solve at 10^10 to 10^13 attempts.
 
 ### 3.9 Pre-registered expectations vs outcomes
 
@@ -515,7 +508,7 @@ inside the pre-registered range on every seed unless counted.
 | J6b | pend's gain − knockout's gain within 0.2 (teachable) | +0.05 / −0.01 / −0.01 | hit |
 | J7 | (i) θ between pend + 0.5 and r8; (ii) solves 30–70 % of B; (iii) solves fewer of the 322 than r8 | (i) +0.53 / +0.65 / +0.49 over pend; (ii) 35 / 35 / 27 %; (iii) 220 / 215 / 219 vs 286 / 286 / 293 | (i) 2 / 3; (ii) 2 / 3; (iii) hit |
 | J8 | elicited share at K_total falls monotonically from pend to p1600; ≥ 50 % for pend, ≤ 25 % for p1600 | pend 76 / 71 / 85 %; p1600 21 / 33 / 25.1 %; not monotone on any seed | monotone miss; pend hit; p1600 1 / 3 |
-| J9 | ≥ 6 of 9 theorems stay at 0 successes | ⟨⟩ | ⟨⟩ |
+| J9 | ≥ 6 of 9 theorems stay at 0 successes | 7 of 9 (the other two: 1 success in ≈ 1.1–1.4 M) | hit |
 | J10 | ≤ 40 % of the 45 long-pool pairs get a base success in 16,384 | 29 / 45 (64 %) | miss |
 
 ### 3.10 Compute
@@ -536,11 +529,11 @@ line.
 | J6b DN-free-replay fine-tunes + reads | 3.0 | 0.25 M | 46 M | 1.38 B | 19,457 |
 | J7 compute-matched continuation + reads | 17.9 | 0.49 M | 87 M | 9.32 B | 55,606 |
 | J8 start-dependence scores | 4.5 | 0.00 M | 0 M | 0.00 B | 0 |
-| J9 certification sampling | 8.6 | 4.72 M | 871 M | 0.00 B | 1 |
+| J9 certification sampling | 21.3 | 11.40 M | 2,122 M | 0.00 B | 2 |
 | J10 long-pool sampling | 1.9 | 0.87 M | 197 M | 0.00 B | 441 |
-| **total** | **64.2** | 17.7 M | 3.17 B | 13.1 B | 1,110,392 |
+| **total** | **77.0** | 24.4 M | 4.43 B | 13.1 B | 1,110,393 |
 
-J1 scored 385,641 proofs at one name base and 13,566 at 33; J8 scored ≈ 2 M. Spend: ⟨spend⟩ (`podbudget
+J1 scored 385,641 proofs at one name base and 13,566 at 33; J8 scored ≈ 2 M. Spend: **77.2 pod-hours, $37.84** (`podbudget
 capability-defs`), within the $50 budget and under the pre-registered $40 stop.
 
 ## 4. Recommendation
@@ -569,8 +562,9 @@ made strict, with his (a) as the estimator).
 - *Cost here:* ≈ 4.3 A40-hours per seed (J1 0.7, J2 3.6), ≈ 60 % of the r8 ladder's GPU time.
 - *Found:* RL is ahead at matched compute on every seed: r8 at 256 attempts solves 12–21 more of the 322 than the base
   reaches at K_eval-set (r16: 14–32), and neither RL-free control closes the gap. Per theorem, 51–60 equal-k
-  "creations" shrink to 14–22 outside the base's reach, 8–20 net of replay, 5–6 never solved by any seed's base;
-  ⟨J9 found⟩.
+  "creations" shrink to 14–22 outside the base's reach, 8–20 net of replay, 4–5 never solved by any seed's base.
+  J9 certified 7 of 9 headline candidates at K_eval-set; 4 (three distinct theorems) also survive every RL-free
+  control.
 
 **B. Capability vs propensity** (`capability-vs-propensity`; the format for every evaluation).
 - *Protocol:* per model and set, **propensity** = plain pass@1 (k 256 reads) and **capability** = solved within the
@@ -660,9 +654,9 @@ the n sampled.
 6. **If four demonstrations install a schema, was it latent?** *Recommendation:* call it **teachable**, and reserve
    **latent** for a base that learns markedly faster than a model pretrained without the key step (here it does not:
    +0.05 / −0.01 / −0.01).
-7. **How much certification to pay for?** ≈ 60 K zero-success attempts per theorem: ⟨J9 cost per theorem⟩ at
-   K_eval-set. *Recommendation:* label the cheap verdict "not reached within budget" and certify only the theorems a
-   headline rests on (J9: 9 theorems for ⟨J9 cost⟩).
+7. **How much certification to pay for?** ≈ 60 K zero-success attempts per theorem: 1.2–1.5 M, ≈ 2.4 A40-hours
+   (≈ $1.2) per theorem at K_eval-set. *Recommendation:* label the cheap verdict "not reached within budget" and
+   certify only the theorems a headline rests on (J9: 9 theorems, 21 A40-hours, 7 certified).
 8. **The next experiment for "can RL create?"** *Recommendation:* ablate a *composition* (DN applied to a
    negation-introduction line, 16,703 records), not a primitive; pretrain three seeds without it, run 16 EI rounds, and
    read the key-step excluded-middle family on held-out members (≈ $26), before moving to a richer domain.

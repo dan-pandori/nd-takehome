@@ -71,8 +71,9 @@ The bracket's width, log UB − log LB, is reported for every theorem. It says h
     (10th–90th percentile 0.75–1.11). The best single proof carries a median 0.62 / 0.50 / 0.51 of LB.
   - Of the hard theorems r8 solves (55 / 45 / 52), certified elicited at K_total by LB: 42 / 32 / 44; at K_per by
     LB: 2 / 0 / 4 (by the sampling lower bound 3 / 0 / 5); certified created at K_per (0 in ≥ 65,536): 21 / 19 / 11.
-  - At K_eval-set: elicited 22 / 18 / 24, found but not certifiably within reach 12 / 8 / 17, not reached (0 in ≥ K)
-    21 / 19 / 11, undetermined 0, certified created 0 before J9 (REPORT §3.1, §3.8).
+  - At K_eval-set: elicited 22 / 18 / 24, found but not certifiably within reach 12 / 9 / 18, not reached (0 in ≥ K)
+    21 / 18 / 10, undetermined 0; certified created 3 / 2 / 2 after J9's ≈ 1.2–1.5 M extra attempts on nine theorems
+    (REPORT §3.1, §3.8).
   - The k-to-solve intervals put the median RL-solved hard theorem at 10^4.6 / 10^5.3 / 10^4.5 attempts (F1).
   - The set this card contributes to the agreement matrix ("not certified elicited at K_eval-set", i.e. created ∪
     undetermined ∪ not certifiably within reach): 29 / 26 / 25 (r8, x0).
