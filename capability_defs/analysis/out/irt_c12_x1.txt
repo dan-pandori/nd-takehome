@@ -1,0 +1,66 @@
+cap 12: 72 examinees (42 pretraining), 322 items, 5,935,104 attempts, 1,991,899 successes
+PT fit: converged=True nit=1559; a median 1.62 [0.84, 2.66]
+
+ability theta by checkpoint (pend mean = 0):
+ckpt          s0      s1      s2
+p0        -22.48  -22.48  -22.48
+p50       -22.48  -22.48  -22.48
+p100      -22.48  -22.48  -22.48
+p200      -18.52  -19.08  -19.64
+p400      -11.06  -10.28   -9.23
+p800       -5.70   -5.70   -5.99
+p1600      -3.63   -3.90   -3.68
+p3000      -2.34   -2.76   -2.49
+p5000      -1.62   -1.64   -2.14
+p8000      -1.24   -1.16   -1.55
+p12000     -0.61   -1.47   -1.51
+p16000     -0.41   -0.23   -0.74
+p20000     -0.09   -0.11   -0.30
+pend       -0.02   -0.06    0.08
+r1          0.94    0.99    1.11
+r2          1.38    1.54    1.61
+r3          1.61    1.71    1.88
+r4          1.88    1.89    1.95
+r5          2.05    1.90    2.12
+r6          2.13    2.02    2.16
+r7          2.21    2.12    2.29
+r8          2.35    2.10    2.43
+r12         2.59    2.38    2.34
+r16         2.78    2.61    2.50
+
+Q8a: Spearman(predicted p from the PT-only 1-D model at the RL ability, observed p-hat), per seed:
+  r8: 0.572 0.594 0.554
+  r16: 0.572 0.502 0.513
+
+DIF+ items per RL examinee (tail p < 1e-3 and log-odds residual > ln 10); "created" = DIF+ and pend 0/512:
+  s0 r4  : DIF+  57  DIF-  33  created  30
+  s0 r8  : DIF+  62  DIF-  46  created  32
+  s0 r12 : DIF+  56  DIF-  59  created  29
+  s0 r16 : DIF+  51  DIF-  65  created  35
+  s1 r4  : DIF+  58  DIF-  38  created  25
+  s1 r8  : DIF+  55  DIF-  45  created  26
+  s1 r12 : DIF+  53  DIF-  49  created  25
+  s1 r16 : DIF+  59  DIF-  62  created  33
+  Q8c: s1 r16 top-decile positive residuals contain 5 of the 6 holdout250 A v ~A instances: ['la_transfer_478', 'la_transfer_1572', 'la_transfer_795', 'la_transfer_1453', 'la_transfer_1424']
+  s2 r4  : DIF+  67  DIF-  41  created  26
+  s2 r8  : DIF+  56  DIF-  56  created  31
+  s2 r12 : DIF+  60  DIF-  58  created  35
+  s2 r16 : DIF+  64  DIF-  60  created  37
+
+deviance per (examinee, item) cell: PT cells under PT items 13.85, under all-fit items 15.22; RL cells under PT items 186.28, under all-fit items 35.98
+2-D fit (all examinees): deviance per cell PT 14.45, RL 21.09
+2-D abilities (mean over seeds) on the PT-progress axis u and the orthogonal axis w:
+  p1600   u   -6.65  w    1.52
+  p5000   u   -4.33  w    2.29
+  p12000  u   -3.88  w    1.26
+  pend    u   -2.16  w    1.52
+  r1      u    0.03  w    2.37
+  r4      u    0.80  w    2.50
+  r8      u    0.99  w    2.39
+  r12     u    1.09  w    2.60
+  r16     u    1.15  w    2.67
+
+PT-step equivalent (theta = alpha + beta ln step, fitted per seed on steps 3,000 ... 20,000 and pend at its recorded step count):
+  s0: slope 1.126 per e-fold of steps; RL ability = PT length x r1 2.2, r4 5.0, r8 7.6, r12 9.4, r16 11.1
+  s1: slope 1.238 per e-fold of steps; RL ability = PT length x r1 2.2, r4 4.5, r8 5.4, r12 6.7, r16 8.1
+  s2: slope 1.202 per e-fold of steps; RL ability = PT length x r1 2.9, r4 5.9, r8 8.8, r12 8.2, r16 9.3

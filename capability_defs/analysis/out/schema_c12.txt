@@ -1,0 +1,31 @@
+cap 12: rl_targets family share with >= 1 success per round (k 32; round 1 = pend), seeds s0 / s1 / s2
+family                              r1 (pend)               r8              r16   verdicts
+constructive_dilemma           0.65/0.93/0.72   1.00/1.00/1.00   1.00/1.00/1.00   elic elic elic
+contraposition                 0.95/0.93/1.00   1.00/1.00/1.00   1.00/1.00/1.00   elic elic elic
+contraposition_conv            0.75/0.15/0.90   1.00/1.00/1.00   1.00/1.00/1.00   elic elic elic
+demorgan_and_to_nor            0.23/0.28/0.17   0.97/0.97/0.97   1.00/0.97/1.00   elic elic elic
+demorgan_nand_to_or            0.03/0.03/0.05   0.35/0.40/0.45   0.57/0.47/0.53   crea neit crea
+demorgan_nor_to_and            0.82/0.65/0.82   1.00/0.97/1.00   1.00/1.00/1.00   elic elic elic
+demorgan_or_to_nand            0.07/0.28/0.20   1.00/1.00/0.97   1.00/1.00/1.00   elic elic elic
+disjunctive_syllogism          0.97/0.93/0.90   1.00/1.00/1.00   1.00/1.00/1.00   elic elic elic
+dist_and_over_or               0.00/0.00/0.00   0.97/0.90/0.78   0.97/1.00/0.93   crea crea crea
+dist_and_over_or_conv          0.53/0.70/0.12   1.00/1.00/1.00   1.00/1.00/1.00   elic elic elic
+dist_or_over_and               0.28/0.33/0.23   0.95/1.00/0.95   0.97/1.00/1.00   elic elic elic
+dist_or_over_and_conv          0.12/0.23/0.05   0.97/0.93/0.70   1.00/0.97/0.70   elic elic crea
+excluded_middle                0.03/0.00/0.00   0.03/0.03/0.05   0.03/0.95/0.28   neit crea neit
+export                         0.97/0.78/0.97   1.00/1.00/1.00   1.00/1.00/1.00   elic elic elic
+import                         0.25/0.23/0.28   0.95/1.00/0.93   1.00/1.00/0.95   elic elic elic
+negated_conditional            0.20/0.10/0.17   0.97/0.53/1.00   0.97/0.82/1.00   elic elic elic
+negated_conditional_conv       0.45/0.47/0.25   1.00/1.00/1.00   1.00/1.00/1.00   elic elic elic
+peirce                         0.03/0.30/0.07   0.62/0.68/1.00   0.62/0.70/1.00   crea elic elic
+peirce_sequent                 0.30/0.30/0.33   0.55/0.53/1.00   0.65/0.53/1.00   elic elic elic
+
+transfer (held out) cumulative share solved by round 1 / 8 / 16, s0 / s1 / s2, families that move most:
+  dist_and_over_or             0.03/0.97/1.00  0.03/0.88/1.00  0.03/0.70/0.88
+  demorgan_and_to_nor          0.10/1.00/1.00  0.12/1.00/1.00  0.07/1.00/1.00
+  peirce                       0.00/0.70/0.72  0.42/0.78/0.82  0.07/0.97/1.00
+  excluded_middle              0.00/0.03/0.03  0.00/0.05/0.93  0.00/0.03/0.23
+  demorgan_or_to_nand          0.10/1.00/1.00  0.12/1.00/1.00  0.25/0.97/1.00
+  dist_and_over_or_conv        0.35/1.00/1.00  0.45/1.00/1.00  0.07/0.93/0.97
+  dist_or_over_and_conv        0.17/0.95/0.97  0.12/1.00/1.00  0.05/0.70/0.82
+  import                       0.20/0.97/1.00  0.23/0.97/0.97  0.15/0.95/1.00
