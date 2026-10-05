@@ -98,4 +98,23 @@ That case is exactly "created" here.
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic): M measures sharpening, and ranks pure elicitation above pure creation.**
+- θ is calibrated on pretraining checkpoints, so it rides on the ≈ 240 theorems pend already solves. 46 of the theorems
+  pend fails were never solved by any pretraining checkpoint, so their difficulty is fixed by the prior.
+- Synthetic counterexamples on our items:
+  - pend plus *every* theorem it fails at 95 % gives θ +0.6–0.8, M 1.6–2.1× ("elicited");
+  - pend with nothing new, but each theorem it solves even once in 512 sharpened to 95 %, gives M 4.1–6.3×, close to
+    r8's 4.7–7.1×.
+- r8's actual new solves alone give M 1.2–1.5×. Sharpening reproduces 78–104 % of r8's Δθ.
+- Secondary arguments:
+  - The slope's ±2 SE spans r8 = 2.7–17×, and the fit window moves s0 to 10.3×.
+  - The real counterfactual is a longer pretraining run, not an extrapolation.
+  - r8's ladder used 17–20× Stage-1's GPU-seconds to be "worth" 4.7–7.1×.
+
+**My answer: accepted. The θ-extrapolation is kept only as a descriptive exchange rate**, with its ±2 SE range and the
+caveat that sharpening dominates it. The decision becomes the measured counterfactual (critic's fix, run as **J7**):
+- a pretraining continuation from pend that gets the r8 ladder's GPU-seconds;
+- RL "created relative to more pretraining" what r8 solves at k 256 that the compute-matched continuation does not.
+
+Pre-registered in `log.md` before launch.
+

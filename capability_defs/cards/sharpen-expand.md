@@ -31,12 +31,15 @@ q_B = π_B(· | t, success) the base's.
 
 ## 2. Decision rule
 
+*Revised after the critic pass (§9).* The ε-support split degenerates on hard theorems: if p_B(t) < ε, every proof has
+π_B(y) < ε, so ρ = 1 for any policy, including pure conditioning. The split therefore cannot be the creation test.
+
 | verdict | rule |
 |---|---|
-| **elicited (sharpening)** | ρ(t) < 1/2 and the reshaping bits are small (≤ 1 bit), i.e. RL roughly conditions the base on success |
-| **created (expansion)** | ρ(t) ≥ 1/2: most of RL's success mass is on proofs the base would not produce within K |
-| **reshaped access** | ρ(t) < 1/2 but the reshaping bits are large: RL reorders the base's own routes. Reported, not counted as creation |
-| **neither** | R fails |
+| **gate (theorem level)** | first apply `marginal-bracket` at a declared K. If p_B ≥ 1 / K is certified, the theorem is elicited, whatever ρ says |
+| **reshaped beyond the placebo** (the card's own contribution) | the reshaping bits KL(q̂_R ‖ q̂_B) exceed the range the replay-only control (no RL) produces on the same theorems |
+| **amplified latent route** | reshaping bits within the placebo's range |
+| **ρ** | reported as descriptive only ("RL's routes are ones the base rarely takes"), never as a verdict |
 
 ## 3. Null or floor
 
@@ -96,4 +99,24 @@ q_B = π_B(· | t, success) the base's.
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic): "created" never asked whether pend can prove t.**
+- Counterexample: s0 `la_transfer_1100`. pend proves it in 106 of 768 attempts. r8 puts 47 % of its success mass on a
+  14-line nested-∨E proof that pend writes with probability e^(−21.8), so ρ = 0.94 at K_per: "created".
+- After pruning and detour normalisation, 15 / 30 (s0) and 11 / 30 (s1) calibration theorems are still "created", and
+  pend solves every one of them.
+- On hard theorems ρ = 1 for every policy: Korbak's pure-conditioning null is "created" on 146 / 152.
+- Secondary arguments:
+  - "Elicited" (≤ 1 reshaping bit) holds on only 4 / 30 and 9 / 30 calibration theorems (median 3.2 bits). EI has no
+    KL term and uses replay, so it breaks the odds anyway.
+  - The null's verdict depends on the scoring convention (b0 vs b0 − ln 33).
+  - Padding games ρ.
+
+**My answer: accepted.**
+- ρ is demoted to a descriptive statistic.
+- The theorem-level verdict comes from `marginal-bracket`.
+- The card's own contribution becomes the reshaping bits, measured against the replay-only placebo. Pure conditioning
+  gives exactly 0, so the reshaping bits measure something k-to-solve cannot: whether RL reorders the base's own
+  routes more than non-RL training does.
+- Computing the placebo's reshaping bits needs J1 scores under the replay-only control, which were not run. This is
+  stated as not computed here.
+

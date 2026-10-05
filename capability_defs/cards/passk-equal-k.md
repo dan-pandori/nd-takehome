@@ -1,4 +1,4 @@
-# Card: equal-k support (the field's standard: Yue et al.)
+# Card: equal-k support (the field's standard: Yue et al.) — kept as a descriptive label, not a decision rule (critic, §9)
 
 Family S. Slug `passk-equal-k`. Notation: `_FRAME.md`.
 
@@ -60,7 +60,6 @@ R's training budget (`support-curves` used 4 × 10⁵).
 ## 7. Relations
 
 - The special case K = k_eval of `passk-budget`.
-- The same verdicts as `marginal-bracket` at K = 256.
 - Its created set is a superset of `passk-budget`'s at any K ≥ 256.
 - At equal k, the extra theorems R solves are what `reliability` treats as access.
 
@@ -74,4 +73,24 @@ R's training budget (`support-curves` used 4 × 10⁵).
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic): "created" is a fact about n, not about the base.**
+- A base at 0 / 512 has k-to-solve bounded only above ≈ 170 (UB95 3 / 512). The project's budgets are 10³–10⁴, and
+  redraws cannot close the gap.
+- Counterexample: `textbook_245a0349` (s0, L 8). pend 0 / 768; r8 246 / 256 and 248 / 256, so "created", confirmed on a
+  redraw. But in J2 pend solves it 10 / 16,384 (k-to-solve 1,000–3,200), which certifies it *elicited* at K_eval-set.
+  The replay-only control solves it 40 / 256, and s2's pend 505 / 768.
+- Typical cases:
+  - J2 hits 4 of the 7 confirmed-created theorems it sampled in its first chunk.
+  - 17 of 135 confirmed-created theorems already have a base success elsewhere, 13 within ≤ 288 extra attempts; 4
+    were solved by pend in RL's own round 1.
+- Secondary arguments:
+  - The replay-only control passes the same test against pend on 13 / 16 / 19 theorems, most of them inside RL's set.
+  - No crossover can occur within n (pend solves 0–1 theorems that r8 misses).
+  - The claim in §7 ("the same verdicts as `marginal-bracket`") was false: the frame's created-at-256 rule holds for
+    3 of 141 RL-solved hard theorems.
+
+**My answer: accepted.** Equal-k at 256 stays as the field's standard **descriptive label** (the project's "group B"),
+and as a comparison with the literature. It is not a create / elicit rule. The decision moves to `passk-budget`'s
+per-theorem rule with the compute-matched base budget, plus an undetermined row. The false sentence in §7 is
+withdrawn.
+
