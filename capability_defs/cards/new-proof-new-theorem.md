@@ -23,11 +23,18 @@ Two binary properties for each theorem t that R solves, at budget K:
 
 ## 2. Decision rule
 
+*Revised after the critic pass (§9).*
+- **NT (new theorem)** must be the strict, sampling-certified form: zero base successes in enough attempts to bound
+  p_B below the declared budget. "Not found within the compute-matched budget" is reported as the weaker label it is.
+- **NP (new method)** is defined **across theorems**: RL's detour-free route class (its rule set, or its key-step
+  family) occurs in **no** proof pend has ever had accepted, on any theorem.
+- Measured on proofs of t alone, NP is implied by NT (π_B(y) ≤ p_B) and could never decide anything.
+
 | verdict | rule |
 |---|---|
-| **created** | NT ∧ NP |
-| **elicited** | ¬NT ∧ ¬NP |
-| **"new route, old theorem"** | ¬NT ∧ NP: reported separately, not counted as capability creation |
+| **new theorem, new method (strongest creation)** | NT ∧ NP |
+| **new theorem, known method** | NT ∧ ¬NP (an old method applied to an instance the base cannot finish) |
+| **elicited** | ¬NT |
 | **neither** | R fails |
 
 ## 3. Null or floor
@@ -87,4 +94,20 @@ Two binary properties for each theorem t that R solves, at budget K:
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic): "created" was just NT, and NT as written was either uncomputable or invalid.**
+- Every valid proof has π_B(y) ≤ p_B, so once NT is certified, ρ = 1 for any policy that solves t, even the base
+  conditioned on success. In Part 3, npnt = cm in every comparison.
+- Strict NT at K_eval-set needs ≈ 1.2 M clean base attempts; 0 / 17,152 certifies only up to K ≈ 290.
+- Weak NT (LB < 1 / K) treats a lower bound as an upper bound. Counterexample `la_transfer_1728` (s0): pend proves it
+  2 / 768 (95 % lower bound 4.6 × 10⁻⁴, certified elicited), yet LB = e^(−15.7) and ρ = 1.00, so the card said
+  "created".
+- Secondary arguments:
+  - NP measured the base's spread, not new routes: detour-free NP holds on 22–23 of 30 calibration theorems that pend
+    solves at 2–4.5 % per attempt.
+  - Loose bounds reward NT.
+  - Distilling base + search passes both tests.
+
+**My answer: accepted.** Weak NT is deleted. NP becomes cross-theorem (the route class is absent from every pend-accepted
+proof), which makes the 2 × 2 informative: NT ∧ ¬NP is "new theorem, known method". `cd_part3.py` is changed to match:
+NP = RL's rule set absent from the rule sets of all pend-accepted proofs (any theorem, all reads, J2).
+

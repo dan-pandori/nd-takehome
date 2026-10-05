@@ -21,7 +21,8 @@ Definitions (card slug -> key):
   schema-acq.     schema   holdout250 members of families created at family level (pend <= 0.05, R >= 0.5)
   cap-vs-prop.    guided   R solves t on x; pend 0 in all plain attempts AND 0 in its guided read (J3, k 256)
   sharpen-expand  sharp    R solves t; t in H; rho >= 1/2 (R's success mass on known proofs with pi_pend < 1 / K)
-  new-proof/thm   npnt     cm AND rho >= 1/2 computed on detour-free proofs only
+  new-proof/thm   npnt     cm AND NP across theorems: every one of R's accepted proofs of t uses a rule set that occurs in
+                           no pend-accepted proof of any theorem (all pend reads + J2)  [revised after the card's critic]
   chain           chain    holdout250 t first solved by the ladder's sampler at round >= 2, and cm
   out-of-data     ood      R solves t and none of R's proofs of t uses a K12 rule set (coarsest skeleton level)
 Each also "_net": minus theorems the replay-only control (rl-from-ckpt c<s>_pend_r8) solves on the same draw.
@@ -137,6 +138,16 @@ def main():
         by, tgt = load_scores(s)
         H = set(sets_j1[str(s)]['H'])
         g_pend = guided_counts(s, 'pend')
+        pend_rulesets = set()                       # rule sets of every proof pend ever had accepted (any theorem)
+        for n0 in names:
+            for x0 in ('0', '1'):
+                d0 = R.read(12, s, 'pend', meta[n0]['pool'], int(x0))
+                if d0 and n0 in d0:
+                    for p0 in d0[n0][2]:
+                        pend_rulesets.add(tuple(sorted(set(r for _, r, _ in skeleton(p0)))))
+        for v in J2.values():
+            for p0 in v[2]:
+                pend_rulesets.add(tuple(sorted(set(r for _, r, _ in skeleton(p0)))))
 
         def pend_all(n):
             c = n_ = 0
@@ -200,8 +211,7 @@ def main():
                             rho_all[n] = (r_all, r_nod)
                             if r_all >= 0.5:
                                 D['sharp'].append(n)
-                            if base_zero_big and r_nod >= 0.5:
-                                D['npnt'].append(n)
+                            pass
                     if base_zero_big and g_pend is not None and n in g_pend and g_pend[n][0] == 0:
                         D['guided'].append(n)
                     if base_zero_big and meta[n]['pool'] == 'h250' and first_round[s].get(n, 99) >= 2:
@@ -212,6 +222,8 @@ def main():
                     rs = [tuple(sorted(set(r for _, r, _ in skeleton(p)))) for p in proofs]
                     if rs and not any(r in k12_rulesets for r in rs):
                         D['ood'].append(n)
+                    if base_zero_big and rs and not any(r in pend_rulesets for r in rs):
+                        D['npnt'].append(n)
                 D['irt'] = list(irt['dif'].get(f's{s}_{rl}', {}).get('created', []))
                 # schema: family-level verdict on holdout250 members, this draw
                 fam = collections.defaultdict(list)
