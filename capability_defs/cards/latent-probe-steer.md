@@ -1,4 +1,4 @@
-# Card: latent capability — probes, steering and model diffing
+# Card: latent capability — probes, steering and model diffing — not computed; DROPPED as a decision rule, kept as diagnostics (critic, §9)
 
 Family M (mechanistic). Slug `latent-probe-steer`. Notation: `_FRAME.md`.
 
@@ -82,4 +82,19 @@ Three operational tests of "the base already represents / implements it".
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic): the steering test alone can say "elicited", and it measures *where* pend's surprisal
+sits, not *how much* there is.**
+- `la_transfer_795` (an A ∨ ¬A): 24.7 of its reference proof's 29.3 nats sit in the first two actions, both opening a
+  ¬-box. Forcing them with a pend-derived direction leaves ≈ 4.6 nats, so the verdict is "elicited".
+- Yet pend solves it 0 / 1,024, r8 0 / 3,584, the replay-only control 0 / 512, and only 1 of 3 seeds ever learned it.
+- `la_transfer_2208` costs about the same but is spread over five steps, so it gets the opposite verdict, although RL
+  learned it on all 3 seeds.
+- Secondary arguments:
+  - (D) and (S) can give opposite verdicts on the same pair, with no rule for which wins.
+  - The placebo update is as large as RL's.
+  - Probing the seed that learned the skill is selection by outcome.
+  - The thresholds were never set.
+
+**My answer: accepted; dropped as a decision rule.** Probes and steering stay as diagnostics of where RL's change sits.
+The only repair that survives (charge each steered step −log π_pend against ln K) reduces to `tf-proof-prob`'s
+teacher-forced test, which needs no activations.

@@ -75,4 +75,23 @@ The only design in the literature that *intervenes* on what the base can have:
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic): with σ = DN the card tests whether an ingredient was *necessary*, not whether pend
+*had* the capability, and the verdict is fixed before RL runs.**
+- DN is a single token (`Classical.byContradiction`). In the knockout, its output row only ever receives push-down, so
+  the base is *anti*-σ, not "random weights on σ": 0 DN steps in 2,997 distinct accepted holdout250 proofs (J6 s0).
+- EI reinforces only what it samples, so "created" is unreachable.
+- Every success from pend then becomes "elicited (σ needed in pretraining)", the same label pure sharpening gets.
+- Secondary arguments:
+  - Two of the 80 A ∨ ¬A instances need no DN (G4ip), and the knockout solves one.
+  - The positive control meets the bar on at most one seed.
+  - Usual RL replay re-injects ≈ 2,700 DN records per round.
+
+**My answer: accepted. The design is changed to ablate a *composition*, not a primitive:**
+- drop only the K12 records where DN is applied to a NEGI line (16,703), keeping DN elsewhere (≈ 3 % of records);
+- restrict the family to classical-only instances (G4ip);
+- draw replay from the ablated corpus;
+- rename the negative verdict "not acquired from this base".
+
+J6 / J6b remain valid as the never-had-it control for `elicit-finetune` (teachability), not as this card's test. The
+full design (pretrain the composition-ablated base, then 16 EI rounds, 3 seeds) is proposed with a cost of ≈ $26 and
+was not run here.

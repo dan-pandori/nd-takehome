@@ -1,4 +1,4 @@
-# Card: composition of skills that each exist in the base
+# Card: composition of skills that each exist in the base — DROPPED as a decision rule; kept as a descriptive column (critic, §9)
 
 Families T / N. Slug `composition`. Notation: `_FRAME.md`.
 
@@ -80,4 +80,20 @@ A proof is a sequence of moves; a move is a (state → action) decision.
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic): the "new move" test measures where a step is placed, not whether the base has the move.**
+- All 13 rules occur in ≥ 4 % of K12 records, so a "new move" can only be state-relative. A known move in a new
+  position is, by the card's own definition, composition.
+- Counterexample: `la_transfer_1015` (s0). pend 0 / 768 at k_eval and 9 / 17,152 in J2; the replay-only control 0 / 512.
+  RL's proof is the 8-step reference. Its one bad step is `have n6 : ¬((Q→P)→P) := n1.2` (∧E) at −17.4 nats under pend,
+  so the card says "new move". Yet all three proofs pend found contain this exact ∧E step, placed elsewhere.
+- Of s0's 24 J2 "not reached" theorems, 21 get "new move" at ε = 1 / K_per, every one on an ordinary rule.
+- Secondary arguments:
+  - It judges RL's route, not the theorem (46 of 90 verdicts flip with the best known route).
+  - ε_step is unjustified (the "new move" share moves 7 %–48 % with the settings).
+  - It has no creation criterion of its own.
+
+**My answer: accepted; dropped as a decision rule.** By rule type, "new move" is empty by construction here (every rule
+is in the pretraining data). Per state, it measures placement, which is composition. The best known route's worst
+step (max over F(t)) is kept as a descriptive "bottleneck" column on the `marginal-bracket` created set. Every
+creation candidate in this run is therefore a new composition of old moves; the card's one firm statement survives as
+a description, not a test.

@@ -1,4 +1,4 @@
-# Card: novelty relative to the pretraining data (including "longer than the data")
+# Card: novelty relative to the pretraining data (including "longer than the data") — DROPPED as a decision rule; kept as a descriptive column (critic, §9)
 
 Family N. Slug `out-of-data-novelty`. Notation: `_FRAME.md`.
 
@@ -97,4 +97,17 @@ CPU only, from K12 (`data/kh/train_k12.jsonl`) and the cap-6 set.
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic): the verdict never looks at the base, so it measures how far pend already generalises
+beyond K12, not what RL added.**
+- pend's own proofs are skeleton-novel on 211 / 236 solved theorems (s0), and cap-6 pend solves 135–162 theorems only
+  with proofs longer than 6 lines.
+- At the rule-set level, `la_transfer_833` is "created" though pend solves it 336 / 512 with only rule-set-novel
+  proofs. `la_transfer_2066` (pend 0 / 17,152) is "elicited" because its rule set occurs in 120 K12 proofs.
+- Secondary arguments:
+  - The premise line (PR) counts as a rule, and K12's premise-free proofs cover only 88 rule sets, so most of r16's
+    rule-set-novel theorems are premise-free. Without PR, pend → r16 is 0 → 6, 5 → 9, 7 → 7.
+  - Verbosity, and the number of distinct proofs drawn (12–17 at pend vs 85–152 at r16), drive "novel".
+
+**My answer: accepted; dropped as a decision rule.** It stays as a descriptive column: the excluded-middle *type*
+(premise-free A ∨ ¬A) is absent from K12; rule sets are counted without PR. Any repair must consult π_B, and that is
+`new-proof-new-theorem`'s cross-theorem NP test.
