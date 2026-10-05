@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 # J9 (pre-registered in log.md before launch): certification sampling.  pend_S on the theorems in data/cd/j9/s<S>.jsonl
-# (chosen on the VPS by capability_defs/analysis/cd_j9_select.py), chunks of k 131,072 (seed 7500 + chunk), up to 9
-# chunks = 1,179,648 attempts per theorem on top of J2's 65,536; a theorem leaves the queue at its first success.
+# (chosen on the VPS by capability_defs/analysis/cd_j9_select.py), chunks of k 131,072 (seed 7500 + chunk); the seed's
+# chunk count (9 / 10 / 11 for s0 / s1 / s2) brings every theorem past 60 x K_eval-set(r8) attempts; one pod runs the
+# chunks it is given (usage: j9.sh S 0,2,4,...); a theorem leaves this pod's queue at its first success.
 # Standard read caps (96 steps, 512 tokens per action), T 0.8, batch 2048.  Rows are compacted on the pod (failure
 # reasons counted, not listed).  Resumable per chunk.
 . pod/cd/env.sh
-S=$1; IN=data/cd/j9/s${S}.jsonl; D=artifacts/cd/j9; mkdir -p $D
+S=$1; CHUNKS=${2:-0,1,2,3,4,5,6,7,8}; CHUNKS=${CHUNKS//,/ }; IN=data/cd/j9/s${S}.jsonl; D=artifacts/cd/j9; mkdir -p $D
 [ -s $IN ] || { echo "missing $IN"; exit 1; }
-for C in 0 1 2 3 4 5 6 7 8; do
+for C in $CHUNKS; do
   O=$D/s${S}_k${C}
   [ -s $O.json ] && { echo "skip $O"; continue; }
   python3 - $IN $S > $D/s${S}_in${C}.jsonl <<'EOF'
