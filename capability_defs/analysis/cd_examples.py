@@ -13,6 +13,14 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
 import cd_reads as R
 import nd2lean
+from lean_check import check as lean_check
+
+
+def lean_meta(src):
+    """(Lean accepts?, term size = inference nodes of the elaborated value, lines) for one rendered theorem."""
+    res, _, _ = lean_check([src], workers=1)
+    r = res[0]
+    return r['ok'], r.get('size'), sum(1 for l in src.splitlines() if l.strip().startswith('have'))
 from cd_bracket import cp_upper, lse, LN33
 from cd_part3 import load_scores, j2_counts
 
@@ -55,14 +63,19 @@ def main():
         if prs:
             y = prs[0]
             lp = next((v for v, tid in vals if tgt.get(tid) == y), None)
-            print(f'\nr8\'s shortest accepted proof (log p under pend at T 0.8: {lp if lp is None else round(lp, 1)}):\n')
-            print('```lean\n' + nd2lean.translate(meta[n]['prompt'], y, require_all_pr=False) + '\n```')
+            src = nd2lean.translate(meta[n]['prompt'], y, require_all_pr=False)
+            ok, size, nl = lean_meta(src)
+            print(f'\nr8\'s shortest accepted proof (log p under pend at T 0.8: {lp if lp is None else round(lp, 1)}; Lean {"accepts" if ok else "REJECTS"}; '
+                  f'{nl} `have` lines; term size {size}):\n')
+            print('```lean\n' + src + '\n```')
         if vals:
             best = max(vals)
             yb = tgt.get(best[1])
             if yb and (not prs or yb != prs[0]):
-                print(f'\npend\'s most probable known proof (log p {best[0]:.1f}):\n')
-                print('```lean\n' + nd2lean.translate(meta[n]['prompt'], yb, require_all_pr=False) + '\n```')
+                src = nd2lean.translate(meta[n]['prompt'], yb, require_all_pr=False)
+                ok, size, nl = lean_meta(src)
+                print(f'\npend\'s most probable known proof (log p {best[0]:.1f}; Lean {"accepts" if ok else "REJECTS"}; {nl} `have` lines; term size {size}):\n')
+                print('```lean\n' + src + '\n```')
         print()
 
 
