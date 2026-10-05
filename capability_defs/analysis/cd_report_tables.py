@@ -123,33 +123,42 @@ def t_j3(J):
 def t_j9():
     from cd_part3 import j2_counts
     T = json.load(open(f'{OUT}/table_c12.json'))
-    print('| seed | theorem | r8 pass@1 (x0) | base attempts before J9 | J9 attempts | J9 successes | UB95, all base attempts | '
-          '0.05 / K_eval-set | certified created at K_eval-set? |')
+    allc = {s: j2_counts(s) for s in SEEDS}
+    def base(s, n):
+        c = T['seeds'][str(s)][n]['counts'].get('pend', {})
+        return (sum(v[0] for v in c.values()) + (allc[s][n][0] if n in allc[s] else 0),
+                sum(v[1] for v in c.values()) + (allc[s][n][1] if n in allc[s] else 0))
+    def j7(s, n):
+        c = t = 0
+        for x in (0, 1):
+            for pool in ('tb72', 'h250'):
+                p = f'{ROOT}/artifacts/cd/j7/s{s}_cont__{pool}_x{x}.jsonl'
+                if os.path.exists(p):
+                    for l in open(p):
+                        r = json.loads(l)
+                        if r['name'] == n:
+                            c += r['n_ok']; t += r['n_tried']
+        return c, t
+    print('| seed | theorem | r8 pass@1 (x0) | own base: successes / attempts | UB95 vs 0.05 / K_eval-set | certified at K_eval-set? | '
+          'other seeds\' bases | replay-only (512) | J7 continuation (512) |')
     print('|---|---|---|---|---|---|---|---|---|')
     for s in SEEDS:
         sel = f'{ROOT}/data/cd/j9/s{s}.jsonl'
         if not os.path.exists(sel):
             continue
         K = LADDER_S['r8'][s] / (322 * 3.6e-3)
-        allc = j2_counts(s)
-        j9 = {}
-        for p in glob.glob(f'{ROOT}/artifacts/cd/j9/s{s}_k*.jsonl'):
-            if p.endswith('.full.jsonl'):
-                continue
-            for l in open(p):
-                r = json.loads(l)
-                v = j9.setdefault(r['name'], [0, 0]); v[0] += r['n_ok']; v[1] += r['n_tried']
         for l in open(sel):
             n = json.loads(l)['name']
-            c = T['seeds'][str(s)][n]['counts']
-            pc = sum(v[0] for v in c.get('pend', {}).values()) + allc[n][0] if n in allc else None
-            pn = sum(v[1] for v in c.get('pend', {}).values()) + allc[n][1] if n in allc else None
-            jc, jn = j9.get(n, [0, 0])
-            r8 = c['r8']['0']
-            ub = cp_upper(pc, pn)
-            cert = 'yes' if ub < 0.05 / K else ('no (a success)' if pc else f'not yet ({jn:,} J9 attempts)')
-            print(f'| s{s} | `{n}` | {r8[0] / r8[1]:.2f} | {pn - jn:,} | {jn:,} | {jc} | {ub:.2e} | {0.05 / K:.2e} | {cert} |')
-
+            c, k = base(s, n)
+            ub = cp_upper(c, k)
+            cert = 'yes' if ub < 0.05 / K else ('no: base found it' if c else 'not yet')
+            other = ', '.join(f's{o} {base(o, n)[0]} / {base(o, n)[1]:,}' for o in SEEDS if o != s)
+            cc = T['seeds'][str(s)][n]['counts'].get('ctrl8', {})
+            ctrl = f"{sum(v[0] for v in cc.values())} / {sum(v[1] for v in cc.values())}"
+            jc, jt = j7(s, n)
+            r8 = T['seeds'][str(s)][n]['counts']['r8']['0']
+            print(f'| s{s} | `{n}` | {r8[0] / r8[1]:.2f} | {c} / {k:,} | {ub:.1e} vs {0.05 / K:.1e} | {cert} | {other} | {ctrl} | '
+                  f'{jc} / {jt} |')
 
 JOBS = {'j1': 'J1 teacher-forced scores (stage 1 + 2)', 'j2': 'J2 stage A + calibration', 'j2b': "J2 stages A', B, truncation",
         'logical': 'J3 guided reads (both caps)', 'j4': 'J4 demonstration fine-tunes + reads', 'j5': 'J5 missing plain draws',
