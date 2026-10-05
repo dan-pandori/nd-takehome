@@ -52,12 +52,15 @@ def load_j1(s):
                 if r['replay_ok']:
                     out[r['name']].append(r)
     exact = {}
+    have = {r['tid'] for rs in out.values() for r in rs}
     for p in sorted(glob.glob(f'{ROOT}/artifacts/cd/j1/b33_s{s}*/compact.jsonl.gz')):
         with gzip.open(p, 'rt') as f:
             for l in f:
                 r = json.loads(l)
                 if r['replay_ok']:
                     exact[r['tid']] = r['sc']
+                    if r['tid'] not in have:      # proofs only stage 2 scored (pend's own J2 finds): part of F(t) too
+                        out[r['name']].append(r); have.add(r['tid'])
     return out, exact
 
 
