@@ -53,13 +53,17 @@ def main():
                        **{k: sum(1 for v in lbs if v >= math.log(2) - math.log(K)) / max(1, len(new)) for k, K in KS.items()},   # factor-2 margin
                        'median_LB': float(np.median(lbs)) if lbs else None,
                        'ctrl_solves_share': len(ctrl & set(new)) / max(1, len(new))}
+            net = [(n, lb) for n, lb in zip(new, lbs) if n not in ctrl]
+            row[st]['n_net'] = len(net)
+            row[st]['net_elicited_K_total'] = sum(1 for n, lb in net if lb >= math.log(2) - math.log(3.5e6)) / max(1, len(net))
         res[s] = row
         print(f's{s}:')
         for st in ('p1600', 'p5000', 'p12000', 'p16000'):
             v = row[st]
             print(f"  start {st:6s}: ladder's new solves {v['n_new']:3d} (scored {v['scored']}); certified elicited at "
                   + ', '.join(f"{k} {v[k]:.2f}" for k in KS) + f"; median LB {v['median_LB']:.1f} nats; "
-                  f"replay-only control from the same start solves {v['ctrl_solves_share']:.2f}")
+                  f"replay-only control from the same start solves {v['ctrl_solves_share']:.2f}; net of it {v['n_net']} theorems, "
+                  f"of which certified elicited at K_total {v['net_elicited_K_total']:.2f}")
     json.dump(res, open(f'{OUT}/j8.json', 'w'), indent=1)
 
 
