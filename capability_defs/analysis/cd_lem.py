@@ -9,7 +9,8 @@ intuitionistically provable (G4ip, `intuit.py`) are the "classical-only" set the
 (A0 replay only, A4 / A16 LEM demonstrations, C16 matched non-LEM, all with K12 replay); J6 no-DN knockout (pend-recipe
 Stage 1 on K12 minus DN records) and its A0 / A16 fine-tunes (K12 replay, which re-teaches DN: see the critic);
 J6b fine-tunes of pend and of the knockout on knockout-corpus replay (A16n / C16n, two fine-tune seeds).
-Decision quantity (J6b, pre-registered): gain = mean pass@1(A16n) - mean pass@1(C16n), pend vs knockout.
+Decision quantity (J6b, pre-registered in log.md): gain = mean held-out pass@256 (= share solved at k 256) of A16n minus
+C16n, pend vs knockout; computed on the 39 classical-only instances (all 40 printed too); mean pass@1 printed as a secondary.
 """
 import glob, json, os, sys, collections
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
@@ -39,21 +40,29 @@ def main():
     for k, v in sorted(res.items()):
         print(f"  {k:52s} solved {v['solved39']:2d}/39  mean pass@1 {v['pass1_39']:.3f}  (all 40: {v['solved40']}; k {v['k']})")
     # J6b decision quantity per training seed
-    print('\nJ6b gain = mean pass@1 (A16n) - mean pass@1 (C16n), averaged over fine-tune seeds; pend vs no-DN knockout:')
+    print('\nJ6b gain = mean pass@256 (A16n) - mean pass@256 (C16n), averaged over fine-tune seeds; pend vs no-DN knockout'
+          ' (pre-registered: latent if pend - knockout >= 0.3 on >= 2/3 seeds; teachable if within 0.2):')
     out = {}
     for s in (0, 1, 2):
         g = {}
-        for m in ('pend', 'nodn'):
-            a = [res[k]['pass1_39'] for k in res if k.startswith(f'j6b/s{s}_{m}_A16n')]
-            c = [res[k]['pass1_39'] for k in res if k.startswith(f'j6b/s{s}_{m}_C16n')]
-            if a and c:
-                g[m] = sum(a) / len(a) - sum(c) / len(c)
-        if g:
+        for q, n in (('solved39', 39), ('solved40', 40), ('pass1_39', 1)):
+            for m in ('pend', 'nodn'):
+                a = [res[k][q] / n for k in res if k.startswith(f'j6b/s{s}_{m}_A16n')]
+                c = [res[k][q] / n for k in res if k.startswith(f'j6b/s{s}_{m}_C16n')]
+                if a and c:
+                    g[f'{m}_{q}'] = sum(a) / len(a) - sum(c) / len(c)
+                    g[f'{m}_n'] = (len(a), len(c))
+        if 'pend_solved39' in g and 'nodn_solved39' in g:
             out[s] = g
-            diff = g.get('pend', float('nan')) - g.get('nodn', float('nan'))
-            verdict = 'latent in pend' if diff >= 0.3 else 'teachable from scratch' if abs(diff) <= 0.2 else 'between'
-            print(f"  s{s}: pend gain {g.get('pend', float('nan')):.3f}, knockout gain {g.get('nodn', float('nan')):.3f}, "
-                  f"difference {diff:+.3f} -> {verdict}")
+            for q, lab in (('solved39', 'pass@256, 39 classical-only (decision)'), ('solved40', 'pass@256, all 40'),
+                           ('pass1_39', 'mean pass@1, 39 (secondary)')):
+                diff = g[f'pend_{q}'] - g[f'nodn_{q}']
+                verdict = 'latent in pend' if diff >= 0.3 else 'teachable from scratch' if abs(diff) <= 0.2 else 'between'
+                print(f"  s{s} {lab:40s}: pend gain {g[f'pend_{q}']:.3f}, knockout gain {g[f'nodn_{q}']:.3f}, "
+                      f"difference {diff:+.3f} -> {verdict}")
+                g[f'verdict_{q}'] = verdict
+        elif g:
+            print(f'  s{s}: incomplete ({sorted(g)})')
     json.dump({'reads': res, 'j6b': out}, open(f'{OUT}/lem.json', 'w'), indent=1)
 
 

@@ -10,9 +10,11 @@ Comparisons: (s, R, draw x) for R = r8 (x0 defines, x1 = redraw) and r16 (x1 def
 
 Definitions (card slug -> key):
   passk-equal-k   eqk      R solves t on draw x (>= 1 / 256), pend 0 / 256 on the same draw
-  passk-budget    cm       R solves t on draw x; pend 0 in ALL its attempts (x0, x1, x2, x4, J2 stage A / A' / B);
-                           only theorems pend got >= 10,000 attempts on can qualify (the compute-matched budget)
-  reliability     rel      p-hat_R >= 1/2 on draw x and pend 0 in all attempts (>= 10,000)
+  passk-budget    cm       R solves t on draw x; pend 0 / 256 on x; pend NOT within reach at K = K_eval-set: over all its
+                           standard-cap attempts (x0, x1, x2, x4, J2 stage A / A' / B; n >= K required) p-hat = c / n < 1 / K
+                           (the card's capability statement p >= 1 / K).  cm0 = the subset with c = 0 ("not reached").
+                           Theorems with n < K stay undetermined.  J2's doubled-cap truncation chunks (t) are excluded.
+  reliability     rel      p-hat_R >= 1/2 on draw x and t in cm
   tf-proof-prob   tfmax    R solves t on x, pend 0 / 256 on x, and max over known proofs of pi_pend(y) < 1 / K_eval-set
                            (T 0.8; exact 33-base score where stage 2 scored it, else the stage-1 bound b0 - ln 33)
   marginal-bracket brk_ne  R solves t on x, t in H (pend 0 / 512), and NOT certified elicited at K_eval-set
@@ -39,7 +41,7 @@ from cd_skeleton import skeleton
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out')
 DEFS = ['eqk', 'cm', 'rel', 'tfmax', 'brk_ne', 'irt', 'schema', 'guided', 'sharp', 'npnt', 'chain', 'ood']
-EXTRA = ['cm_recipe', 'cm_j7', 'eqk_j7']
+EXTRA = ['cm0', 'cm_undet', 'cm_recipe', 'cm_j7', 'eqk_j7']
 J2_COST = 3.6e-3          # A40 seconds per pend attempt on hard theorems (J2 chunk s0_c00: 470 s / 131,072)
 
 
@@ -47,9 +49,13 @@ def k_evalset(s, rl):
     return LADDER_S[rl][s] / (322 * J2_COST)
 
 
-def j2_counts(s):
+def j2_counts(s, trunc=False):
+    """pend's J2 attempts per theorem: standard caps (stage A c*, calibration cal, A' d*, B b*), or with trunc=True only
+    the doubled-cap truncation chunks t*."""
     out = collections.defaultdict(lambda: [0, 0, set()])
     for p in glob.glob(f'{ROOT}/artifacts/cd/j2/s{s}_*.jsonl'):
+        if os.path.basename(p).split('_')[1].startswith('t') != trunc:
+            continue
         for l in open(p):
             r = json.loads(l)
             c = out[r['name']]; c[0] += r['n_ok']; c[1] += r['n_tried']; c[2].update(r.get('proofs') or [])
@@ -132,7 +138,7 @@ def main():
                 if r['name'] in meta:
                     fr[r['name']] = min(fr.get(r['name'], 99), r.get('round') or 99)
         first_round[s] = fr
-    res = {'sets': {}, 'curves': {}, 'cov': {}, 'meta': {'J2_COST': J2_COST}}
+    res = {'sets': {}, 'curves': {}, 'cov': {}, 'sens': {}, 'meta': {'J2_COST': J2_COST}}
     J2ALL = {s: j2_counts(s) for s in R.SEEDS}
 
     def pend_any_seed(n):
@@ -200,11 +206,15 @@ def main():
                         continue
                     pR = cr[0] / cr[1]
                     cB, nB = pend_all(n)
-                    base_zero_big = cB == 0 and nB >= 10000
+                    base_zero_big = cb[0] == 0 and nB >= K and cB / nB < 1 / K     # not within reach at K_eval-set
                     if cb[0] == 0:
                         D['eqk'].append(n)
+                        if nB < K and cB == 0:          # c >= 1 with n < K already means p-hat > 1 / K (reached)
+                            D['cm_undet'].append(n)
                     if base_zero_big:
                         D['cm'].append(n)
+                        if cB == 0:
+                            D['cm0'].append(n)
                         if pR >= 0.5:
                             D['rel'].append(n)
                     terms = by.get(n, {})
@@ -277,9 +287,11 @@ def main():
             x = xs[0]
             r_cov = sum(1 for n in names if (S[n]['counts'].get(rl, {}).get(str(x)) or [0])[0] > 0)
             b_cov = sum(1 for n in names if pend_all(n)[0] > 0)
-            b_n = [pend_all(n)[1] for n in names]
-            res['cov'][f's{s}_{rl}'] = {'rl_solved_256': r_cov, 'base_solved_all': b_cov, 'K_evalset': K,
-                                        'base_attempts_median_H': float(np.median([pend_all(n)[1] for n in H])) if H else 0}
+            b_reach = sum(1 for n in names if pend_all(n)[0] / max(pend_all(n)[1], 1) >= 1 / K)
+            res['cov'][f's{s}_{rl}'] = {'rl_solved_256': r_cov, 'base_solved_all': b_cov, 'base_within_K': b_reach,
+                                        'K_evalset': K,
+                                        'base_attempts_median_H': float(np.median([pend_all(n)[1] for n in H])) if H else 0,
+                                        'base_attempts_min_H': float(min(pend_all(n)[1] for n in H)) if H else 0}
             # elicitation curve over budgets for RL-solved hard theorems
             Ks = np.logspace(np.log10(256), 7, 25)
             cur = []
@@ -296,6 +308,51 @@ def main():
                         cr_ += 1
                 cur.append((float(Kc), el, cr_, len(Hs) - el - cr_))
             res['curves'][f's{s}_{rl}'] = cur
+        # ---- threshold sensitivity (r8, draw x0): created-set sizes as each definition's threshold moves
+        rl, x = 'r8', 0
+        K0 = k_evalset(s, rl)
+        lab_b = f's{s}_pend'
+        cand = [n for n in names if (S[n]['counts'].get(rl, {}).get(str(x)) or [0])[0] > 0
+                and (S[n]['counts'].get('pend', {}).get(str(x)) or [1])[0] == 0]          # = eqk on the defining draw
+        sens = {'n_eqk': len(cand)}
+        for mul in (0.1, 0.3, 1, 3):
+            K = K0 * mul
+            row = {'K': K, 'cm': 0, 'cm_undet': 0, 'tfmax': 0, 'brk_ne': 0}
+            for n in cand:
+                cB, nB = pend_all(n)
+                terms = by.get(n, {})
+                row['cm'] += nB >= K and cB / nB < 1 / K
+                row['cm_undet'] += nB < K and cB == 0
+                mx = max((v[lab_b][0] for v in terms.values() if lab_b in v), default=-math.inf)
+                row['tfmax'] += bool(terms) and mx < -math.log(K)
+                if n in H:
+                    LB = lse([v[lab_b][0] for v in terms.values() if lab_b in v]) if terms else -math.inf
+                    row['brk_ne'] += not (LB >= math.log(2) - math.log(K) or cp_lower(cB, nB) >= 1 / K)
+            sens[f'K x{mul}'] = row
+        e = {}
+        for lab, keys in (('256 (x0)', ('0',)), ('512 (x0+x1)', ('0', '1')), ('all reads', None)):
+            def z(n, keys=keys):
+                pc = S[n]['counts'].get('pend', {})
+                return all((pc.get(k) or [0])[0] == 0 for k in (keys or list(pc)))
+            e[lab] = sum(1 for n in cand if z(n))
+        sens['eqk base sample'] = e
+        cmK0 = [n for n in cand if pend_all(n)[1] >= K0 and pend_all(n)[0] / pend_all(n)[1] < 1 / K0]
+        sens['rel q'] = {str(q): sum(1 for n in cmK0 if S[n]['counts'][rl][str(x)][0] / S[n]['counts'][rl][str(x)][1] >= q)
+                         for q in (0.1, 0.25, 0.5, 0.75)}
+        rh = res['sets'].get(f's{s}_r8_x0_rho', {})
+        sens['sharp rho'] = {str(q): sum(1 for n, (ra, rn) in rh.items() if ra >= q) for q in (0.25, 0.5, 0.75, 0.9)}
+        fam = collections.defaultdict(list)
+        for n in names:
+            if n in fam_of and meta[n]['pool'] == 'h250':
+                fam[fam_of[n]].append(n)
+        def frate(mem, ck):
+            v = [S[m]['counts'].get(ck, {}).get(str(x)) for m in mem]
+            v = [c for c in v if c]
+            return np.mean([c[0] > 0 for c in v]) if v else float('nan')
+        sens['schema (pend<=lo, RL>=hi)'] = {f'{lo}/{hi}': sum(len(m) for m in fam.values()
+                                             if frate(m, 'pend') <= lo and frate(m, rl) >= hi)
+                                             for lo in (0.0, 0.05, 0.1) for hi in (0.3, 0.5, 0.7)}
+        res['sens'][f's{s}'] = sens
     # ---- print summary
     print('created-set sizes (of 322) per comparison; _net = minus replay-only-control solves')
     keys = [k for k in res['sets'] if not k.endswith('_rho')]
@@ -303,9 +360,11 @@ def main():
     for d in DEFS + EXTRA:
         print(f'{d:10s} ' + ' '.join(f'{len(res["sets"][k].get(d, [])):11d}' for k in keys))
         print(f'{d + "_net":10s} ' + ' '.join(f'{len(res["sets"][k].get(d + "_net", [])):11d}' for k in keys))
-    print('\nset-level compute-matched coverage (r8: draw x0; r16: x1): RL solved@256 vs base solved within all its attempts')
+    print('\nset-level compute-matched coverage (r8: draw x0; r16: x1): RL solved@256 vs base within reach at K_eval-set')
     for k, v in res['cov'].items():
-        print(f'  {k}: RL {v["rl_solved_256"]} vs base {v["base_solved_all"]} (K_eval-set {v["K_evalset"]:,.0f}; median base attempts on H {v["base_attempts_median_H"]:,.0f})')
+        print(f'  {k}: RL {v["rl_solved_256"]} at 256 vs base {v["base_within_K"]} within reach at K_eval-set {v["K_evalset"]:,.0f} '
+              f'(p-hat >= 1/K; base ever solved {v["base_solved_all"]}); base attempts on H: median {v["base_attempts_median_H"]:,.0f}, '
+              f'min {v["base_attempts_min_H"]:,.0f}')
     print('\nredraw floor (Jaccard, defining draw vs redraw) and seed floor (mean pairwise Jaccard across seeds, defining draw):')
     for d in DEFS:
         rd = [jac(res['sets'][f's{s}_{rl}_x{a}'].get(d, []), res['sets'][f's{s}_{rl}_x{b}'].get(d, []))
@@ -332,6 +391,14 @@ def main():
     for s in R.SEEDS:
         cur = res['curves'][f's{s}_r8']
         print(f'  s{s}: ' + ' '.join(f'{K:.0e}:{e}/{c}/{u}' for K, e, c, u in cur[::4]))
+    print('\nthreshold sensitivity (cap 12, r8, draw x0; K in multiples of K_eval-set): created-set sizes per seed')
+    for sk, v in res['sens'].items():
+        print(f'  {sk}: eqk (pend 0 / 256 on x0, r8 solves) {v["n_eqk"]}')
+        for mul in (0.1, 0.3, 1, 3):
+            r = v[f'K x{mul}']
+            print(f'    K x{mul:<4} ({r["K"]:9,.0f}): cm {r["cm"]:3d} (undetermined, n < K: {r["cm_undet"]:3d})  tfmax {r["tfmax"]:3d}  brk_ne {r["brk_ne"]:3d}')
+        for lab in ('eqk base sample', 'rel q', 'sharp rho', 'schema (pend<=lo, RL>=hi)'):
+            print(f'    {lab}: ' + ', '.join(f'{k} -> {c}' for k, c in v[lab].items()))
     json.dump(res, open(f'{OUT}/part3.json', 'w'))
 
 
