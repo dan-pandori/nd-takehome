@@ -18,6 +18,7 @@ OA = f'{HOME}/work/organism-analysis/data/oa_in/reads'
 RC = f'{HOME}/work/rl-continue/artifacts/rc/eval'
 RC6 = f'{HOME}/work/rl-continue-cap6/artifacts/rc6/eval'
 MC = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'artifacts', 'cd', 'in')
+J5 = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'artifacts', 'cd', 'j5')
 CKS = ['p0', 'p50', 'p100', 'p200', 'p400', 'p800', 'p1600', 'p3000', 'p5000', 'p8000', 'p12000', 'p16000', 'p20000',
        'pend'] + [f'r{i}' for i in range(1, 9)]
 PT_STEPS = {'p0': 0, 'p50': 50, 'p100': 100, 'p200': 200, 'p400': 400, 'p800': 800, 'p1600': 1600, 'p3000': 3000,
@@ -56,8 +57,13 @@ def read(cap, s, ck, pool, x):
         path = f'{OA}/{sub}/s{s}_{ck}__{pool}_x{x}.jsonl.gz'
     elif cap == 12 and ck in ('r12', 'r16') and x == 1:
         path = f'{RC}/s{s}_{ck}__{pool}_x1.jsonl'
+    elif cap == 12 and ck == 'r16' and x == 0:       # J5 (this run): the x0 draw rl-continue skipped
+        path = f'{J5}/s{s}_r16__{pool}_x0.jsonl'
     elif cap == 6 and ck == 'r16' and x == 1:
-        path = f'{RC6}/s{s}_r16__' + ('tb72' if pool == 'tb72' else 'h250C') + '_x1.jsonl'
+        if pool == 'h250' and os.path.exists(f'{J5}/c6_s{s}_r16__h250_x1.jsonl'):
+            path = f'{J5}/c6_s{s}_r16__h250_x1.jsonl'     # J5: all of holdout250 (rl-continue-cap6 read only C)
+        else:
+            path = f'{RC6}/s{s}_r16__' + ('tb72' if pool == 'tb72' else 'h250C') + '_x1.jsonl'
     if path is None or not os.path.exists(path):
         _cache[key] = None
         return None

@@ -49,7 +49,20 @@ CPU only, from K12 (`data/kh/train_k12.jsonl`) and the cap-6 set.
   are out of data at level T but not at level M. The base solves 0 / 6 holdout250 members at k 256 on every seed.
 - **(L):** at cap 6, the theorems whose RL proofs need > 6 lines; cap-6 reads and L_true labels exist. `trajectory-cap6`
   B / C groups and `rl-continue-cap6`: cap-6 r16 solves group-C theorems with L_true 7–12.
-- **(S):** a skeleton index of K12 (≈ 1 min CPU), then a lookup for every RL proof. Done in Part 3 if time allows.
+- **(S), computed** (`analysis/cd_skeleton.py`, `out/skeleton.txt`, `log.md` 07:15). Skeletons are indexed from K12
+  (155,000 proofs). A theorem counts as "novel" for a model if none of the model's accepted proofs of it (x0 ∪ x1) has
+  an in-data skeleton. Theorems novel / solved:
+
+  | abstraction | pend s0 | r8 s0 | r16 s0 | pend s1 | r8 s1 | r16 s1 |
+  |---|---|---|---|---|---|---|
+  | (depth, rule, citation offsets) | 211 / 236 | 261 / 289 | 268 / 294 | 218 / 245 | 259 / 287 | 277 / 303 |
+  | (depth, rule) sequence | 176 / 236 | 227 / 289 | 236 / 294 | 186 / 245 | 226 / 287 | 244 / 303 |
+  | rule multiset | 82 / 236 | 120 / 289 | 129 / 294 | 91 / 245 | 122 / 287 | 148 / 303 |
+  | **rule set** | **3 / 236** | **14 / 289** | **15 / 294** | **15 / 245** | **18 / 287** | **29 / 303** |
+
+  **The base itself solves most theorems only with skeletons that never occur in its data.** At any abstraction finer
+  than the rule set, data-novelty does not separate RL from the base. At the rule-set level, RL adds 11–14 theorems
+  whose combination of rules never occurs in K12. That is a small, coarse signal.
 
 ## 5. Sensitivity
 
