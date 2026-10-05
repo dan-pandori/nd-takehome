@@ -20,6 +20,7 @@ import matplotlib.pyplot as plt
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out')
 FIG = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'figures')
+ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
 SURF, INK, INK2, GRID = '#fcfcfb', '#0b0b0b', '#52514e', '#e4e3df'
 C = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100']       # categorical slots 1-4 (fixed order)
 BLUES = ['#cde2fb', '#9ec5f4', '#6da7ec', '#3987e5', '#256abf', '#184f95', '#0d366b']
@@ -36,14 +37,19 @@ def fig_kts(P, B):
         H = [(n, r) for n, r in rows.items() if r['grp'] == 'H' and r.get('phat_r8', 0) > 0]
         if not H:
             ax.set_title(f'seed {s}: no data'); continue
+        j9 = set()
+        if os.path.exists(f'{ROOT}/data/cd/j9/s{s}.jsonl'):
+            j9 = {json.loads(l)['name'] for l in open(f'{ROOT}/data/cd/j9/s{s}.jsonl')}
         iv = []
         for n, r in H:
             lo_k = 1 / r['ub'] if r['ub'] > 0 else float('inf')                     # fewest attempts consistent with data
             hi_k = math.exp(-r['LB08']) if r['LB08'] > -math.inf else float('inf')    # most attempts (from the known-proof bound)
-            iv.append((lo_k, hi_k, r['c'] > 0))
+            iv.append((lo_k, hi_k, r['c'] > 0, n in j9))
         iv.sort(key=lambda t: (t[1], t[0]))
-        for i, (a, b, hit) in enumerate(iv):
+        for i, (a, b, hit, cert) in enumerate(iv):
             ax.plot([a, b], [i, i], color=C[0] if hit else C[1], lw=2, solid_capstyle='round')
+            if cert:
+                ax.plot([a], [i], marker='D', ms=5, color=INK, mec=SURF, mew=1, zorder=5)
         K = P['cov'].get(f's{s}_r8', {}).get('K_evalset')
         import matplotlib.transforms as mt
         tr = mt.blended_transform_factory(ax.transData, ax.transAxes)
@@ -58,7 +64,8 @@ def fig_kts(P, B):
         ax.set_yticks([])
     axes[0].plot([], [], color=C[0], lw=2, label='pend found a proof (J2 or earlier draws)')
     axes[0].plot([], [], color=C[1], lw=2, label='pend never succeeded')
-    fig.legend(*axes[0].get_legend_handles_labels(), loc='lower center', ncol=2, frameon=False, fontsize=8.5,
+    axes[0].plot([], [], marker='D', ms=5, color=INK, lw=0, label='J9 theorem (sampling bound after ≈ 1.3 M attempts)')
+    fig.legend(*axes[0].get_legend_handles_labels(), loc='lower center', ncol=3, frameon=False, fontsize=8.5,
                bbox_to_anchor=(0.5, 0.0))
     fig.suptitle("How many attempts would the base need? One line per theorem r8 solves that pend failed in 512 attempts:\n"
                  "from the sampling bound (left end) to the known-proof estimate (right end). Dashed: budgets RL's compute buys (cap 12).",

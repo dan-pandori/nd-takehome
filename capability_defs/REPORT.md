@@ -502,82 +502,65 @@ inside the pre-registered range on every seed unless counted.
 
 ## 4. Recommendation
 
-Three definitions as the project standard, used together, plus one diagnostic. All use Lean as the only judge and
-three training seeds, and report per-seed sets with the redraw and seed floors beside them.
+Three definitions as the project standard, used together, plus one diagnostic. Lean is the only judge; three training
+seeds; per-seed sets reported with their redraw and seed floors.
 
 **A. Compute-matched reach, with each theorem's k-to-solve interval** (`passk-budget` + `marginal-bracket`: Dan's (b)
 made strict, with his (a) as the estimator).
 - *Protocol:*
-  1. RL model: plain reads (T 0.8, 96 steps, 512 tokens per action), k 256 on two sample seeds. "Solves" = ≥ 1
-     Lean-accepted proof on the defining draw; the other draw gives the redraw floor.
-  2. Base: the same protocol, 512 attempts per evaluation theorem. On every theorem RL solves and the base fails, add
-     attempts until n ≥ K_eval-set = (ladder GPU-seconds) / (N_eval × measured seconds per base attempt). Here: 16,384,
-     then 49,152 more where the first 16,384 found nothing.
-  3. Known-proof estimate: teacher-force the base (T 0.8) on every accepted proof of t that any model found, including
-     the base's own large-k proofs; 33 name bases for each checkpoint's top 20 proofs per theorem, the one-base bound
-     (−ln 33) for the rest.
-  4. Per theorem, print the **k-to-solve interval** [1 / UB95, 1 / estimate]. Verdict at K: **elicited** if p̂ ≥ 1 / K or
-     the estimate is ≥ 2 / K; **not reached** if 0 successes in ≥ K attempts; **created (certified)** only if
-     UB95 < 0.05 / K (≈ 60 K zero-success attempts, bought for headline theorems only); otherwise undetermined.
-  5. Set level (the headline): Δ_cov = #{RL solves at 256} − #{base within reach at K_eval-set}, and the candidate
-     created set **net of both RL-free controls** (the replay-only ladder; a pretraining continuation matched to the
-     ladder's GPU time) and of other seeds' bases.
-- *What counts as created:* a non-empty net set on ≥ 2 / 3 seeds, larger than the redraw floor, with its theorems
-  certified if a headline rests on them.
-- *Cost here:* ≈ 4.3 A40-hours per seed (J1 0.7, J2 3.6), ≈ 60 % of the r8 ladder's GPU time; most of it is the
-  49,152 extra attempts on stage-A zeros, which only matter for theorems near the budget.
-- *What existing results show:* RL is ahead at matched compute on every seed. r8 at 256 attempts solves 12–21 more of
-  the 322 theorems than the base reaches with K_eval-set attempts each (r16: 14–32), and neither RL-free control
-  closes the gap. Per theorem, the 51–60 equal-k "creations" per seed shrink to 14–22 outside the base's reach, 8–20
-  net of replay, and 5–6 that no seed's base ever solved; ⟨J9 found⟩. The creation sets of different seeds overlap
-  little (Jaccard 0.16–0.25), but `la_transfer_2060` is in all three.
+  1. RL model: plain reads (T 0.8, 96 steps, 512 tokens per action), k 256 on two sample seeds; "solves" = ≥ 1
+     Lean-accepted proof on the defining draw, the other draw gives the redraw floor.
+  2. Base: same protocol, 512 attempts per theorem; on every theorem RL solves and the base fails, add attempts until
+     n ≥ K_eval-set = ladder GPU-seconds / (N_eval × seconds per base attempt) (here 16,384, then 49,152 more where
+     those found nothing).
+  3. Known-proof estimate: teacher-force the base (T 0.8) on every accepted proof any model found, the base's own
+     included (33 name bases for each checkpoint's top 20 proofs per theorem, the one-base bound for the rest).
+  4. Per theorem, print the **k-to-solve interval** [1 / UB95, 1 / estimate]. At K: **elicited** if p̂ ≥ 1 / K or the
+     estimate is ≥ 2 / K; **not reached** if 0 successes in ≥ K attempts; **created (certified)** only if UB95 <
+     0.05 / K (≈ 60 K zero-success attempts, bought for headline theorems).
+  5. Headline: Δ_cov = #{RL solves at 256} − #{base within reach at K_eval-set}, and the candidate set net of both
+     RL-free controls (replay-only ladder; compute-matched continuation) and of other seeds' bases.
+- *Created:* a non-empty net set on ≥ 2 / 3 seeds, beyond the redraw floor; certified where a headline rests on it.
+- *Cost here:* ≈ 4.3 A40-hours per seed (J1 0.7, J2 3.6), ≈ 60 % of the r8 ladder's GPU time.
+- *Found:* RL is ahead at matched compute on every seed: r8 at 256 attempts solves 12–21 more of the 322 than the base
+  reaches at K_eval-set (r16: 14–32), and neither RL-free control closes the gap. Per theorem, 51–60 equal-k
+  "creations" shrink to 14–22 outside the base's reach, 8–20 net of replay, 5–6 never solved by any seed's base;
+  ⟨J9 found⟩.
 
-**B. Capability vs propensity** (`capability-vs-propensity`: the reporting format for every evaluation).
-- *Protocol:* per model and theorem set, two numbers:
-  - **propensity** = plain pass@1 (mean over theorems, k 256 reads);
-  - **capability** = solved within the budget by the best *per-theorem* method: plain sampling up to K_eval-set, and
-    guided reads (`guided_eval.py --arm logical`, k 256, T 0.8, max_rej 10).
-  Nothing trained on verifier verdicts for other theorems counts as a per-theorem method.
-- *What counts as created:* RL raises capability, not just propensity. Where it raises only propensity, it "converted
-  capability into propensity" (elicited).
-- *What existing results show:* much of RL's plain gain is propensity. pend's guided read solves half of the equal-k
-  set (50 / 55 / 60 %) and halves the holdout250 gap to r8 (44 / 31 / 37 → 21 / 14 / 19). But it rescues only 1–4 of
-  the theorems that compute-matched sampling cannot reach.
+**B. Capability vs propensity** (`capability-vs-propensity`; the format for every evaluation).
+- *Protocol:* per model and set, **propensity** = plain pass@1 (k 256 reads) and **capability** = solved within the
+  budget by the best *per-theorem* method (plain sampling to K_eval-set; guided reads, `guided_eval.py --arm logical`,
+  k 256, max_rej 10). Nothing trained on other theorems' verifier verdicts counts.
+- *Created:* RL raises capability, not only propensity; raising only propensity is elicitation.
+- *Found:* much of RL's plain gain is propensity: pend's guided read solves half the equal-k set (50 / 55 / 60 %) and
+  halves the holdout250 gap to r8 (44 / 31 / 37 → 21 / 14 / 19). It rescues only 1–4 of the theorems that
+  compute-matched sampling cannot reach.
 
 **C. Key-step family acquisition, with a teachability test** (`schema-acquisition` + `elicit-finetune`).
-- *Protocol:*
-  - A family is a generator schema restricted to members that need its key step (classical families: members not
-    provable by the G4ip decision procedure, `intuit.py`). Rates on held-out members: base within the budget, RL at
-    k 256.
-  - **Created at family level:** base ≤ 0.05 and RL ≥ 0.5 on held-out key-step members, on the seed in question; a
-    recipe-level claim needs ≥ 2 / 3 seeds.
-  - **Teachability:** fine-tune the base and a knockout pretrained without the key step on 16 demonstrations (control:
-    16 length-matched non-family proofs; replay drawn from the knockout's corpus; two fine-tune seeds). **Latent** if
-    the base's gain exceeds the knockout's by ≥ 0.3 (held-out pass@256) on ≥ 2 / 3 seeds; **teachable** if within 0.2.
-- *What existing results show:* excluded middle (s1 only) and Peirce (s2 only) are created at family level on single
-  seeds; the classical members of the negated-conditional family and the intuitionistic distribution family on all
-  three. Excluded middle is **teachable, not latent**: 16 demonstrations lift held-out pass@256 by 0.87–0.92 in the
-  base and in a knockout pretrained without double negation alike (differences +0.05 / −0.01 / −0.01), and 4
-  demonstrations already give 33–36 of 39.
+- *Protocol:* a family is a generator schema restricted to members that need its key step (classical families: not
+  provable by G4ip, `intuit.py`). **Created at family level** if the base reaches ≤ 5 % of the held-out key-step
+  members within K_eval-set and RL solves ≥ 50 % at k 256 (recipe level: ≥ 2 / 3 seeds). **Teachability:** fine-tune
+  the base and a knockout pretrained without the key step on 16 demonstrations vs 16 length-matched non-family proofs
+  (replay from the knockout's corpus, two fine-tune seeds); **latent** if the base's gain exceeds the knockout's by
+  ≥ 0.3 on ≥ 2 / 3 seeds, **teachable** if within 0.2.
+- *Found:* at the budget only s1's classical families are created (excluded middle: base 0 / 6 held-out members, r16
+  6 / 6); the negated-conditional, distribution and s2's Peirce families are elicited. Excluded middle is
+  **teachable, not latent** (+0.05 / −0.01 / −0.01); 4 demonstrations already give 33–36 of 39 held-out instances.
 
-**D. Diagnostic: IRT ability with an ability-matched placebo** (`irt-ability`, with `compute-equivalent`).
-- *Protocol:* fit a 2PL item-response model on the pretraining checkpoints (calibration through a fixed checkpoint),
-  place RL and RL-free models on the same θ scale, and count items with DIF+ (success far above what θ predicts). RL is
-  "off the pretraining axis" only if its DIF+ rate exceeds that of RL-free models at the same Δθ.
-- *What existing results show:* RL moves the model much further along the pretraining ability axis than RL-free
-  training of the same compute (Δθ ≈ 2.1 for r8 against 0.55–0.70 for replay-only and 0.51–0.58 for the
-  continuation), but at matched Δθ its item-level gains are no larger than theirs (from p5000: EI r2 48 / 41 / 48
-  DIF+ items at Δθ 2.0–2.7, replay-only 50 / 49 / 54 at Δθ ≈ 2.1). RL is "more of the same", obtained far more
-  efficiently.
+**D. Diagnostic: IRT ability with an ability-matched placebo** (`irt-ability`, `compute-equivalent`).
+- *Protocol:* a 2PL item-response model calibrated on the pretraining checkpoints puts every model on one θ scale; RL
+  is "off the pretraining axis" only if its DIF+ rate exceeds that of RL-free models at the same Δθ.
+- *Found:* RL moves much further along the pretraining axis than RL-free training of similar compute (Δθ ≈ 2.1 vs
+  0.55–0.70 for replay-only and 0.51–0.58 for the continuation), but at matched Δθ its item-level gains are no larger
+  (from p5000: EI r2 48 / 41 / 48 DIF+ items at Δθ 2.0–2.7, replay-only 50 / 49 / 54 at ≈ 2.1). RL is more of the
+  same, obtained far more efficiently.
 
-**Dan's two notions, as we recommend using them.**
-- **(a) Teacher-forced probability.** Use it as an *estimator* of the base's p, summed over every known accepted proof,
-  never on RL's own proof alone (padding). It recovers 0.93–0.98 of the measured p (median), so it extends sampling
-  to probabilities far below 1 / n cheaply: one forward pass per proof instead of 1 / p samples.
-- **(b) pass@k at large k.** Replace "large k" by K_eval-set and report k-to-solve intervals. Extrapolate only at the set
-  level: a beta-binomial fitted to ≈ 768 attempts per theorem predicted the number of hard theorems the base solves in
-  16,384 attempts within 0–13 % on every seed (§3.9, Q16); per theorem, no unbiased estimate exists beyond the n
-  sampled.
+**Dan's two notions.** (a) Teacher-forced probability: use it as an *estimator* of the base's p, summed over every known
+proof, never on RL's own proof alone (padding); it recovers 0.93–0.98 of the measured p, at one forward pass per proof
+instead of 1 / p samples. (b) pass@k at large k: replace "large k" by K_eval-set and report k-to-solve intervals;
+extrapolate only at the set level (a beta-binomial fitted to ≈ 768 attempts per theorem predicted how many J2
+theorems the base solves in 16,384 attempts to within −7 to +13 %, Q16); per theorem nothing unbiased exists beyond
+the n sampled.
 
 ## 5. Glossary
 
