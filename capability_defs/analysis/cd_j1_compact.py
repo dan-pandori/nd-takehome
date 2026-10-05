@@ -15,6 +15,8 @@ def main():
         part = os.path.basename(d.rstrip('/')).split('_', 1)[1]          # b1_s0_p0 -> s0_p0
         src = {}
         tf = os.path.join(os.path.dirname(d.rstrip('/')), f'targets_{part}.jsonl')
+        if os.path.basename(d.rstrip('/')).startswith('b33_'):
+            tf = os.path.join(os.path.dirname(d.rstrip('/')), f's2targets_{part}.jsonl')
         with open(tf) as f:
             for l in f:
                 r = json.loads(l)
