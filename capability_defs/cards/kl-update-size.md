@@ -47,7 +47,20 @@ to land.
 - **Output KL on R's samples:** J3's plain arm stores R's accepted texts with counts, but not its failures. Scoring
   every R attempt is a new job (not run).
 - **Low-rank sufficiency:** a LoRA sweep is a new job (≈ 1 GPU-hour); not run here (stated).
-- **Result:** in Part 3 (`out/update_size.txt`), if run.
+- **Result, parameter view** (seed 0, cap 12; `analysis/cd_update.py`, `out/update_size.txt`; 26 weight matrices):
+
+  | update | relative Frobenius norm | effective rank (90 % energy), median share of full |
+  |---|---|---|
+  | RL, pend → r8 | 0.282 | 0.272 |
+  | RL, pend → r16 | 0.384 | 0.336 |
+  | replay-only control, pend → c_pend_r8 (no RL proofs) | 0.297 | 0.270 |
+  | late pretraining, step 20,000 → pend | 0.809 | 0.533 |
+  | seed gap, pend s0 vs pend s1 | 1.426 | 0.555 |
+
+  Cosine between the RL r8 update and the replay-only update: **0.45**. Both are slightly anti-aligned with the
+  late-pretraining update (−0.12). **RL's update is as large and as low-rank as the replay-only control's, and shares
+  much of its direction.** By size or rank alone, RL cannot be told apart from training on pretraining data, and both
+  are far smaller than pretraining's own late steps or a seed change.
 
 ## 5. Sensitivity
 
