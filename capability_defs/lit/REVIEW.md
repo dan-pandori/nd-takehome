@@ -228,7 +228,7 @@ a time). Instructions: `AGENT_INSTRUCTIONS.md`. Earlier reviews this one extends
 |---|---|---|
 | L1 | ≥ 60 new papers screened, ≥ 20 in depth; ≥ 90 % of claims verified; my re-check of ≥ 30 finds ≤ 2 errors | **held:** 185 / 57; 1,180 of 1,183 ledger claims (99.75 %) verified; 32 / 32 in my re-check |
 | L2 | no quantitative definition separates creation from elicitation without a budget, threshold or reference model; the principled budgets are tied to compute | **held** (Bottom line 1). The closest exceptions are controls (Deeb & Roger) and theory (Korbak), each of which still needs a reference model |
-| L3 | critics break ≥ 1/3 of the cards | scored in `capability_defs/REPORT.md` after the critic pass |
+| L3 | critics break ≥ 1/3 of the cards | **held: 20 / 20** cards had a failure I accepted (REPORT §2, §3.9) |
 
 ## Files
 

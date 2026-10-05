@@ -102,12 +102,30 @@
 
 | seed | theorem | r8 pass@1 (x0) | base attempts before J9 | J9 attempts | J9 successes | UB95, all base attempts | 0.05 / K_eval-set | certified created at K_eval-set? |
 |---|---|---|---|---|---|---|---|---|
-| s0 | `la_transfer_2060` | 0.95 | 66,304 | 0 | 0 | 4.52e-05 | 2.59e-06 | not yet (0 J9 attempts) |
-| s0 | `la_transfer_205` | 0.79 | 66,304 | 0 | 0 | 4.52e-05 | 2.59e-06 | not yet (0 J9 attempts) |
-| s0 | `la_transfer_1077` | 0.62 | 66,304 | 0 | 0 | 4.52e-05 | 2.59e-06 | not yet (0 J9 attempts) |
-| s1 | `la_transfer_1648` | 0.95 | 66,304 | 393,216 | 0 | 6.52e-06 | 2.37e-06 | not yet (393,216 J9 attempts) |
-| s1 | `la_transfer_1077` | 0.80 | 66,304 | 393,216 | 0 | 6.52e-06 | 2.37e-06 | not yet (393,216 J9 attempts) |
-| s1 | `la_transfer_2060` | 0.61 | 66,304 | 393,216 | 0 | 6.52e-06 | 2.37e-06 | not yet (393,216 J9 attempts) |
-| s2 | `la_transfer_1648` | 0.91 | 66,304 | 262,144 | 0 | 9.12e-06 | 2.14e-06 | not yet (262,144 J9 attempts) |
-| s2 | `la_transfer_1833` | 0.82 | 66,304 | 262,144 | 0 | 9.12e-06 | 2.14e-06 | not yet (262,144 J9 attempts) |
-| s2 | `la_transfer_2060` | 0.30 | 66,304 | 262,144 | 0 | 9.12e-06 | 2.14e-06 | not yet (262,144 J9 attempts) |
+| s0 | `la_transfer_2060` | 0.95 | 66,304 | 262,144 | 0 | 9.12e-06 | 2.59e-06 | not yet (262,144 J9 attempts) |
+| s0 | `la_transfer_205` | 0.79 | 66,304 | 262,144 | 0 | 9.12e-06 | 2.59e-06 | not yet (262,144 J9 attempts) |
+| s0 | `la_transfer_1077` | 0.62 | 66,304 | 262,144 | 0 | 9.12e-06 | 2.59e-06 | not yet (262,144 J9 attempts) |
+| s1 | `la_transfer_1648` | 0.95 | 66,304 | 655,360 | 0 | 4.15e-06 | 2.37e-06 | not yet (655,360 J9 attempts) |
+| s1 | `la_transfer_1077` | 0.80 | 66,304 | 655,360 | 0 | 4.15e-06 | 2.37e-06 | not yet (655,360 J9 attempts) |
+| s1 | `la_transfer_2060` | 0.61 | 66,304 | 655,360 | 0 | 4.15e-06 | 2.37e-06 | not yet (655,360 J9 attempts) |
+| s2 | `la_transfer_1648` | 0.91 | 66,304 | 655,360 | 1 | 6.57e-06 | 2.14e-06 | no (a success) |
+| s2 | `la_transfer_1833` | 0.82 | 66,304 | 655,360 | 0 | 4.15e-06 | 2.14e-06 | not yet (655,360 J9 attempts) |
+| s2 | `la_transfer_2060` | 0.30 | 66,304 | 655,360 | 0 | 4.15e-06 | 2.14e-06 | not yet (655,360 J9 attempts) |
+
+## compute
+
+| job | A40-hours (process level) | attempts | generated tokens | training tokens | Lean checks |
+|---|---|---|---|---|---|
+| J1 teacher-forced scores (stage 1 + 2) | 2.1 | 0.00 M | 0 M | 0.00 B | 0 |
+| J2 stage A + calibration | 4.0 | 3.17 M | 469 M | 0.00 B | 10,509 |
+| J2 stages A', B, truncation | 6.6 | 5.55 M | 752 M | 0.00 B | 60 |
+| J3 guided reads (both caps) | 9.1 | 1.57 M | 513 M | 0.00 B | 641,571 |
+| J4 demonstration fine-tunes + reads | 2.2 | 0.28 M | 55 M | 0.72 B | 53,450 |
+| J5 missing plain draws | 1.9 | 0.44 M | 121 M | 0.00 B | 265,013 |
+| J6 no-DN knockout pretraining + fine-tunes + reads | 2.4 | 0.35 M | 62 M | 1.70 B | 64,284 |
+| J6b DN-free-replay fine-tunes + reads | 3.0 | 0.25 M | 46 M | 1.38 B | 19,457 |
+| J7 compute-matched continuation + reads | 17.9 | 0.49 M | 87 M | 9.32 B | 55,606 |
+| J8 start-dependence scores | 4.5 | 0.00 M | 0 M | 0.00 B | 0 |
+| J9 certification sampling | 8.6 | 4.72 M | 871 M | 0.00 B | 1 |
+| J10 long-pool sampling | 1.9 | 0.87 M | 197 M | 0.00 B | 441 |
+| **total** | **64.2** | 17.7 M | 3.17 B | 13.1 B | 1,110,392 |

@@ -151,6 +151,31 @@ def t_j9():
             print(f'| s{s} | `{n}` | {r8[0] / r8[1]:.2f} | {pn - jn:,} | {jn:,} | {jc} | {ub:.2e} | {0.05 / K:.2e} | {cert} |')
 
 
+JOBS = {'j1': 'J1 teacher-forced scores (stage 1 + 2)', 'j2': 'J2 stage A + calibration', 'j2b': "J2 stages A', B, truncation",
+        'logical': 'J3 guided reads (both caps)', 'j4': 'J4 demonstration fine-tunes + reads', 'j5': 'J5 missing plain draws',
+        'j6': 'J6 no-DN knockout pretraining + fine-tunes + reads', 'j6b': 'J6b DN-free-replay fine-tunes + reads',
+        'j7': 'J7 compute-matched continuation + reads', 'j8': 'J8 start-dependence scores', 'j9': 'J9 certification sampling',
+        'j10': 'J10 long-pool sampling'}
+
+
+def t_compute():
+    rows = {}
+    for l in open(f'{OUT}/compute.txt'):
+        parts = l.split()
+        if parts and parts[0] in JOBS and len(parts) == 8:
+            rows[parts[0]] = [int(x.replace(',', '')) for x in parts[1:]]
+    print('| job | A40-hours (process level) | attempts | generated tokens | training tokens | Lean checks |')
+    print('|---|---|---|---|---|---|')
+    tot = [0] * 7
+    for k in ('j1', 'j2', 'j2b', 'logical', 'j4', 'j5', 'j6', 'j6b', 'j7', 'j8', 'j9', 'j10'):
+        if k not in rows:
+            continue
+        g, tok, att, act, steps, ttok, lean = rows[k]
+        tot = [a + b for a, b in zip(tot, rows[k])]
+        print(f'| {JOBS[k]} | {g / 3600:.1f} | {att / 1e6:.2f} M | {tok / 1e6:,.0f} M | {ttok / 1e9:.2f} B | {lean:,} |')
+    print(f'| **total** | **{tot[0] / 3600:.1f}** | {tot[2] / 1e6:.1f} M | {tot[1] / 1e9:.2f} B | {tot[5] / 1e9:.1f} B | {tot[6]:,} |')
+
+
 def main():
     P = json.load(open(f'{OUT}/part3.json'))
     B = json.load(open(f'{OUT}/bracket.json'))
@@ -161,6 +186,8 @@ def main():
     if os.path.exists(f'{OUT}/j3.json'):
         print('\n## plain vs guided\n'); t_j3(json.load(open(f'{OUT}/j3.json')))
     print('\n## J9\n'); t_j9()
+    if os.path.exists(f'{OUT}/compute.txt'):
+        print('\n## compute\n'); t_compute()
 
 
 if __name__ == '__main__':

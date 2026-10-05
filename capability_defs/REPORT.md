@@ -482,7 +482,7 @@ inside the pre-registered range on every seed unless counted.
 | Q13 | guided pend reads solve ≥ 10 % of B (cap 12; J3c6: also cap 6) | 50 / 55 / 60 %; cap 6 40 / 38 / 44 % | hit |
 | Q14 | mean pairwise Jaccard ≤ 0.4; least-agreeing pair includes the K_total bracket | 0.31 (r8), 0.36 (r16); least-agreeing pairs involve the tiny new-rule-set set (K_total bracket dropped as a creation budget) | first hit; second miss |
 | Q15 | known-proof estimate / p̂ median 0.3–1.0 on calibration theorems | 0.98 / 0.94 / 0.93 | hit |
-| Q16 | beta-binomial from 256 attempts predicts solves at 10⁴ within ±25 %; zero-inflated at least as well | BB −0 % / +13 % / −7 %; ZIBB −32 % / −23 % / −33 % | BB hit; ZIBB miss |
+| Q16 | beta-binomial from 256 attempts predicts solves at 10⁴ within ±25 %; zero-inflated at least as well | adapted (support-curves data lack per-attempt sequences): fitted on pend's ≈ 768 attempts, predicting J2's 16,384: BB −0 / +13 / −7 % on the J2 theorems (−1 / +35 / −15 % on those with 0 in the small sample); ZIBB −32 / −23 / −33 % | BB hit (2 / 3 on the zero subset); ZIBB miss |
 | J1 stage 2 | replay failures < 1 %; Q15; Q5 expected to miss | 0 failures; Q15 hit; Q5 miss | hit |
 | J2 A′ | ≤ 20 % of the hard theorems no RL model solves get a base success | 0 / 29, 1 / 18, 0 / 22 | hit |
 | J2 B | ≥ 50 % of stage-A zeros stay at 0 / 65,536 | 23 / 30, 31 / 37, 14 / 21 (77 / 84 / 67 %) | hit |
@@ -498,7 +498,14 @@ inside the pre-registered range on every seed unless counted.
 
 ### 3.10 Compute
 
-⟨S310⟩
+Process-level GPU time and work per job family, from the results registry (`cd_compute.py`, `out/compute.txt`;
+NVIDIA A40 everywhere). Pods bill wall time, including setup, idle time and co-tenancy, so `podbudget` is the cost
+line.
+
+⟨COMPUTE TABLE⟩
+
+J1 scored 385,641 proofs at one name base and 13,566 at 33; J8 scored ≈ 2 M. Spend: ⟨spend⟩ (`podbudget
+capability-defs`), within the $50 budget and under the pre-registered $40 stop.
 
 ## 4. Recommendation
 
