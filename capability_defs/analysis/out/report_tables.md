@@ -4,8 +4,8 @@
 |---|---|---|---|---|---|
 | equal-k (`passk-equal-k`) | 54 / 51 / 60 | 37 / 27 / 33 | 61 / 65 / 61 | 0.78 / 0.70 / 0.68 | 0.35 / 0.39 / 0.34 |
 | compute-matched (`passk-budget`) | 22 / 21 / 14 | 20 / 14 / 8 | 25 / 34 / 17 | 0.84 / 0.86 / 0.87 | 0.19 / 0.16 / 0.25 |
-| … of which 0 base successes | 18 / 18 / 9 | 17 / 12 / 6 | 22 / 31 / 12 | 0.85 / 0.84 / 0.80 | 0.24 / 0.17 / 0.23 |
-| cm, no seed's base ever solves t | 5 / 6 / 6 | 5 / 4 / 5 | 7 / 16 / 9 | 0.83 / 0.83 / 0.71 | 0.38 / 0.38 / 0.50 |
+| … of which 0 base successes | 18 / 17 / 8 | 17 / 11 / 5 | 22 / 30 / 11 | 0.85 / 0.83 / 0.78 | 0.21 / 0.18 / 0.14 |
+| cm, no seed's base ever solves t | 4 / 5 / 5 | 4 / 3 / 5 | 6 / 15 / 8 | 0.80 / 0.80 / 0.67 | 0.29 / 0.29 / 0.43 |
 | cm, J7 continuation fails t (draw x0) | 18 / 17 / 14 | 17 / 13 / 8 | 22 / 32 / 16 | 0.81 / 0.84 / 0.80 | 0.17 / 0.14 / 0.24 |
 | reliable (`reliability`) | 12 / 9 / 5 | 10 / 6 / 3 | 12 / 14 / 8 | 1.00 / 1.00 / 0.83 | 0.11 / 0.06 / 0.27 |
 | best known proof < 1 / K (`tf-proof-prob`) | 29 / 27 / 24 | 23 / 16 / 17 | 31 / 39 / 26 | 0.88 / 0.89 / 0.84 | 0.22 / 0.20 / 0.31 |
@@ -33,10 +33,10 @@
 | RL-solved hard theorems | 55 | 45 | 52 |
 | elicited: sampling lower bound ≥ 1 / K | 17 | 17 | 21 |
 | elicited: known-proof estimate ≥ 2 / K | 5 | 1 | 3 |
-| base found it, but not certifiably within reach | 12 | 8 | 17 |
-| not reached: 0 base successes in ≥ K attempts | 21 | 19 | 11 |
+| base found it, but not certifiably within reach | 12 | 9 | 18 |
+| not reached: 0 base successes in ≥ K attempts | 21 | 18 | 10 |
 | undetermined (0 successes, fewer than K attempts) | 0 | 0 | 0 |
-| certified created (UB95 < 0.05 / K) | 0 | 0 | 0 |
+| certified created (UB95 < 0.05 / K) | 0 | 2 | 2 |
 
 ## threshold sensitivity
 
@@ -102,15 +102,15 @@
 
 | seed | theorem | r8 pass@1 (x0) | own base: successes / attempts | known-proof estimate | UB95 vs 0.05 / K_eval-set | certified at K_eval-set? | other seeds' bases | replay-only (512) | J7 continuation (512) |
 |---|---|---|---|---|---|---|---|---|---|
-| s0 | `la_transfer_2060` | 0.95 | 0 / 328,448 | 10^-7.9 | 9.1e-06 vs 2.6e-06 | not yet | s1 0 / 1,377,024, s2 0 / 1,508,096 | 0 / 512 | 7 / 512 |
-| s0 | `la_transfer_205` | 0.79 | 0 / 328,448 | 10^-13.2 | 9.1e-06 vs 2.6e-06 | not yet | s1 0 / 66,560, s2 0 / 17,408 | 0 / 512 | 0 / 512 |
-| s0 | `la_transfer_1077` | 0.62 | 0 / 328,448 | 10^-8.8 | 9.1e-06 vs 2.6e-06 | not yet | s1 1 / 1,377,024, s2 0 / 66,304 | 0 / 512 | 0 / 512 |
+| s0 | `la_transfer_2060` | 0.95 | 0 / 1,114,880 | 10^-7.9 | 2.7e-06 vs 2.6e-06 | not yet | s1 0 / 1,377,024, s2 0 / 1,508,096 | 0 / 512 | 7 / 512 |
+| s0 | `la_transfer_205` | 0.79 | 0 / 1,114,880 | 10^-13.2 | 2.7e-06 vs 2.6e-06 | not yet | s1 0 / 66,560, s2 0 / 17,408 | 0 / 512 | 0 / 512 |
+| s0 | `la_transfer_1077` | 0.62 | 0 / 1,114,880 | 10^-8.8 | 2.7e-06 vs 2.6e-06 | not yet | s1 1 / 1,377,024, s2 0 / 66,304 | 0 / 512 | 0 / 512 |
 | s1 | `la_transfer_1648` | 0.95 | 0 / 1,377,024 | 10^-8.1 | 2.2e-06 vs 2.4e-06 | yes | s0 5 / 66,304, s2 1 / 1,114,880 | 0 / 512 | 0 / 512 |
-| s1 | `la_transfer_1077` | 0.80 | 1 / 1,377,024 | 10^-7.7 | 3.4e-06 vs 2.4e-06 | no: base found it | s0 0 / 328,448, s2 0 / 66,304 | 0 / 512 | 0 / 512 |
-| s1 | `la_transfer_2060` | 0.61 | 0 / 1,377,024 | 10^-12.7 | 2.2e-06 vs 2.4e-06 | yes | s0 0 / 328,448, s2 0 / 1,508,096 | 0 / 512 | 0 / 512 |
+| s1 | `la_transfer_1077` | 0.80 | 1 / 1,377,024 | 10^-7.7 | 3.4e-06 vs 2.4e-06 | no: base found it | s0 0 / 1,114,880, s2 0 / 66,304 | 0 / 512 | 0 / 512 |
+| s1 | `la_transfer_2060` | 0.61 | 0 / 1,377,024 | 10^-12.7 | 2.2e-06 vs 2.4e-06 | yes | s0 0 / 1,114,880, s2 0 / 1,508,096 | 0 / 512 | 0 / 512 |
 | s2 | `la_transfer_1648` | 0.91 | 1 / 1,114,880 | 10^-6.2 | 4.3e-06 vs 2.1e-06 | no: base found it | s0 5 / 66,304, s1 0 / 1,377,024 | 0 / 512 | 0 / 512 |
 | s2 | `la_transfer_1833` | 0.82 | 0 / 1,508,096 | 10^-10.2 | 2.0e-06 vs 2.1e-06 | yes | s0 0 / 17,408, s1 0 / 17,408 | 0 / 512 | 0 / 512 |
-| s2 | `la_transfer_2060` | 0.30 | 0 / 1,508,096 | 10^-12.4 | 2.0e-06 vs 2.1e-06 | yes | s0 0 / 328,448, s1 0 / 1,377,024 | 0 / 512 | 0 / 512 |
+| s2 | `la_transfer_2060` | 0.30 | 0 / 1,508,096 | 10^-12.4 | 2.0e-06 vs 2.1e-06 | yes | s0 0 / 1,114,880, s1 0 / 1,377,024 | 0 / 512 | 0 / 512 |
 
 ## compute
 

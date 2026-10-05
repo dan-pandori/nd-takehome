@@ -24,12 +24,12 @@ chain               14          16          14          14          14          
 chain_net           12          13          12          12           8           7          17          17           5           6           8           7
 ood                 14          15          14          14          20          17          29          33          20          20          23          22
 ood_net              8           9           9          10           9           9          21          23          11          10          12          13
-cm0                 18          19          22          21          18          17          31          31           9           9          12          13
-cm0_net             17          18          21          20          12          12          26          25           6           7          10          10
+cm0                 18          19          22          21          17          16          30          30           8           8          11          12
+cm0_net             17          18          21          20          11          11          25          24           5           6           9           9
 cm_undet             0           0           0           1           0           0           0           1           0           0           0           2
 cm_undet_net           0           0           0           1           0           0           0           1           0           0           0           2
-cm_recipe            5           6           7           6           6           5          16          16           6           6           9          10
-cm_recipe_net           5           6           7           6           4           3          14          14           5           6           9           9
+cm_recipe            4           5           6           5           5           4          15          15           5           5           8           9
+cm_recipe_net           4           5           6           5           3           2          13          13           5           5           8           9
 cm_j7               18          20          22          21          17          18          32          30          14          13          16          18
 cm_j7_net           17          19          21          20          13          14          28          26           8          10          13          12
 eqk_j7              35          41          44          41          33          36          53          48          44          38          43          50
@@ -38,10 +38,10 @@ eqk_j7_net          29          32          35          34          23          
 set-level compute-matched coverage (r8: draw x0; r16: x1): RL solved@256 vs base within reach at K_eval-set
   s0_r8: RL 286 at 256 (replay-only 239, J7 220) vs base 265 within reach at K_eval-set 19,281 (p-hat >= 1/K; base ever solved 270); base attempts on H: median 17,408, min 17,152
   s0_r16: RL 291 at 256 (replay-only 244, J7 214) vs base 267 within reach at K_eval-set 47,962 (p-hat >= 1/K; base ever solved 270); base attempts on H: median 17,408, min 17,152
-  s1_r8: RL 286 at 256 (replay-only 244, J7 215) vs base 270 within reach at K_eval-set 21,107 (p-hat >= 1/K; base ever solved 274); base attempts on H: median 17,408, min 17,152
-  s1_r16: RL 303 at 256 (replay-only 241, J7 208) vs base 271 within reach at K_eval-set 49,428 (p-hat >= 1/K; base ever solved 274); base attempts on H: median 17,408, min 17,152
-  s2_r8: RL 293 at 256 (replay-only 249, J7 219) vs base 281 within reach at K_eval-set 23,310 (p-hat >= 1/K; base ever solved 286); base attempts on H: median 17,408, min 17,152
-  s2_r16: RL 295 at 256 (replay-only 248, J7 224) vs base 281 within reach at K_eval-set 50,447 (p-hat >= 1/K; base ever solved 286); base attempts on H: median 17,408, min 17,152
+  s1_r8: RL 286 at 256 (replay-only 244, J7 215) vs base 270 within reach at K_eval-set 21,107 (p-hat >= 1/K; base ever solved 275); base attempts on H: median 17,408, min 17,152
+  s1_r16: RL 303 at 256 (replay-only 241, J7 208) vs base 271 within reach at K_eval-set 49,428 (p-hat >= 1/K; base ever solved 275); base attempts on H: median 17,408, min 17,152
+  s2_r8: RL 293 at 256 (replay-only 249, J7 219) vs base 281 within reach at K_eval-set 23,310 (p-hat >= 1/K; base ever solved 287); base attempts on H: median 17,408, min 17,152
+  s2_r16: RL 295 at 256 (replay-only 248, J7 224) vs base 281 within reach at K_eval-set 50,447 (p-hat >= 1/K; base ever solved 287); base attempts on H: median 17,408, min 17,152
 
 redraw floor (Jaccard, defining draw vs redraw) and seed floor (mean pairwise Jaccard across seeds, defining draw):
   eqk      redraw r8 0.78 0.70 0.68 | r16 0.78 0.78 0.68 | seeds r8 0.35 0.39 0.34
@@ -90,9 +90,9 @@ ood         0.20    0.18    0.11    0.22    0.21    0.15    0.08    0.16    0.20
   mean off-diagonal Jaccard 0.342 over 66 pairs
 
 elicitation curve (r8, RL-solved hard theorems): K -> certified elicited / certified created / undetermined
-  s0: 3e+02:0/23/27 1e+03:4/0/46 9e+03:18/0/32 5e+04:24/0/26 3e+05:30/0/20 2e+06:36/0/14 1e+07:40/0/10
-  s1: 3e+02:0/21/21 1e+03:2/3/37 9e+03:10/0/32 5e+04:19/0/23 3e+05:20/0/22 2e+06:29/0/13 1e+07:31/0/11
-  s2: 3e+02:0/15/34 1e+03:9/3/37 9e+03:17/0/32 5e+04:29/0/20 3e+05:37/0/12 2e+06:42/0/7 1e+07:44/0/5
+  s0: 3e+02:0/23/27 1e+03:4/3/43 9e+03:18/3/29 5e+04:24/0/26 3e+05:30/0/20 2e+06:36/0/14 1e+07:40/0/10
+  s1: 3e+02:0/21/21 1e+03:2/3/37 9e+03:10/3/29 5e+04:19/0/23 3e+05:20/0/22 2e+06:29/0/13 1e+07:31/0/11
+  s2: 3e+02:0/15/34 1e+03:9/3/37 9e+03:17/3/29 5e+04:29/0/20 3e+05:37/0/12 2e+06:42/0/7 1e+07:44/0/5
 
 threshold sensitivity (cap 12, r8, draw x0; K in multiples of K_eval-set): created-set sizes per seed
   s0: eqk (pend 0 / 256 on x0, r8 solves) 54

@@ -124,10 +124,10 @@ the base's best known proof. It costs one forward pass per proof instead of 1 / 
 | RL-solved hard theorems | 55 | 45 | 52 |
 | elicited: sampling lower bound ≥ 1 / K | 17 | 17 | 21 |
 | elicited: known-proof estimate ≥ 2 / K | 5 | 1 | 3 |
-| base found it, but not certifiably within reach | 12 | 8 | 17 |
-| not reached: 0 base successes in ≥ K attempts | 21 | 19 | 11 |
+| base found it, but not certifiably within reach | 12 | 9 | 18 |
+| not reached: 0 base successes in ≥ K attempts | 21 | 18 | 10 |
 | undetermined (0 successes, fewer than K attempts) | 0 | 0 | 0 |
-| certified created (UB95 < 0.05 / K) | 0 | 0 | 0 |
+| certified created (UB95 < 0.05 / K) | 0 | 2 | 2 |
 
 - At k 256 all 152 look "created". At K_eval-set, 64 are elicited and 51 **not reached** (0 base successes in
   ≥ 65,536 attempts); the base found the other 37 one to seven times, without a certificate either way.
@@ -144,15 +144,15 @@ between seeds (s0–s1, s0–s2, s1–s2).
 |---|---|---|---|---|---|
 | equal-k (`passk-equal-k`) | 54 / 51 / 60 | 37 / 27 / 33 | 61 / 65 / 61 | 0.78 / 0.70 / 0.68 | 0.35 / 0.39 / 0.34 |
 | compute-matched (`passk-budget`) | 22 / 21 / 14 | 20 / 14 / 8 | 25 / 34 / 17 | 0.84 / 0.86 / 0.87 | 0.19 / 0.16 / 0.25 |
-| … of which 0 base successes | 18 / 18 / 9 | 17 / 12 / 6 | 22 / 31 / 12 | 0.85 / 0.84 / 0.80 | 0.24 / 0.17 / 0.23 |
-| cm, no seed's base ever solves t | 5 / 6 / 6 | 5 / 4 / 5 | 7 / 16 / 9 | 0.83 / 0.83 / 0.71 | 0.38 / 0.38 / 0.50 |
-| cm, J7 continuation fails t (draw x0) | 0 / 0 / 0 | 0 / 0 / 0 | 0 / 0 / 0 | – / – / – | – / – / – |
+| … of which 0 base successes | 18 / 17 / 8 | 17 / 11 / 5 | 22 / 30 / 11 | 0.85 / 0.83 / 0.78 | 0.21 / 0.18 / 0.14 |
+| cm, no seed's base ever solves t | 4 / 5 / 5 | 4 / 3 / 5 | 6 / 15 / 8 | 0.80 / 0.80 / 0.67 | 0.29 / 0.29 / 0.43 |
+| cm, J7 continuation fails t (draw x0) | 18 / 17 / 14 | 17 / 13 / 8 | 22 / 32 / 16 | 0.81 / 0.84 / 0.80 | 0.17 / 0.14 / 0.24 |
 | reliable (`reliability`) | 12 / 9 / 5 | 10 / 6 / 3 | 12 / 14 / 8 | 1.00 / 1.00 / 0.83 | 0.11 / 0.06 / 0.27 |
 | best known proof < 1 / K (`tf-proof-prob`) | 29 / 27 / 24 | 23 / 16 / 17 | 31 / 39 / 26 | 0.88 / 0.89 / 0.84 | 0.22 / 0.20 / 0.31 |
 | not certified elicited (`marginal-bracket`) | 29 / 26 / 25 | 24 / 17 / 17 | 32 / 38 / 23 | 0.88 / 0.89 / 0.85 | 0.28 / 0.26 / 0.31 |
 | guided read fails too (`capability-vs-propensity`) | 19 / 17 / 13 | 17 / 12 / 8 | 23 / 30 / 16 | 0.82 / 0.83 / 0.86 | 0.12 / 0.14 / 0.20 |
-| family members (`schema-acquisition`) | 12 / 6 / 11 | 12 / 6 / 5 | 20 / 9 / 12 | 0.60 / 0.50 / 0.82 | 0.20 / 0.10 / 0.00 |
-| IRT DIF+ (`irt-ability`, unmatched) | 26 / 26 / 30 | 18 / 19 / 23 | 32 / 36 / 35 | 1.00 / 1.00 / 1.00 | 0.41 / 0.37 / 0.44 |
+| family members (`schema-acquisition`) | 0 / 2 / 0 | 0 / 2 / 0 | 0 / 11 / 0 | 0.00 / 0.00 / – | 0.00 / – / 0.00 |
+| IRT DIF+ (`irt-ability`, unmatched) | 26 / 26 / 30 | 18 / 19 / 23 | 33 / 35 / 37 | 1.00 / 1.00 / 1.00 | 0.41 / 0.37 / 0.44 |
 | expansion share ρ ≥ ½ (`sharpen-expand`) | 48 / 42 / 46 | 36 / 24 / 27 | 55 / 59 / 50 | 0.92 / 0.93 / 0.91 | 0.34 / 0.32 / 0.38 |
 | new rule set + cm (`new-proof-new-theorem`) | 5 / 4 / 0 | 5 / 3 / 0 | 4 / 11 / 2 | 1.00 / 1.00 / 0.00 | 0.29 / 0.00 / 0.00 |
 | chain depth ≥ 2 + cm (`chain-reachability`) | 14 / 14 / 10 | 12 / 8 / 5 | 14 / 23 / 12 | 0.88 / 0.93 / 1.00 | 0.17 / 0.14 / 0.26 |
@@ -162,9 +162,9 @@ Set level, `passk-budget`'s headline (coverage of the 322 at each model's budget
 
 | seed | base within reach at K_eval-set (r8 / r16 budget) | replay-only r8, k 256 | J7 continuation, k 256 | r8, k 256 | r16, k 256 | Δ_cov r8 / r16 |
 |---|---|---|---|---|---|---|
-| s0 | 265 / 267 | 239 | – | 286 | 291 | +21 / +24 |
-| s1 | 270 / 271 | 244 | – | 286 | 303 | +16 / +32 |
-| s2 | 281 / 281 | 249 | – | 293 | 295 | +12 / +14 |
+| s0 | 265 / 267 | 239 | 220 | 286 | 291 | +21 / +24 |
+| s1 | 270 / 271 | 244 | 215 | 286 | 303 | +16 / +32 |
+| s2 | 281 / 281 | 249 | 219 | 293 | 295 | +12 / +14 |
 
 - **Asking more of the base shrinks the sets.** Equal-k "creates" 54 / 51 / 60 at r8. With RL's GPU time spent on
   base attempts instead, 22 / 21 / 14 stay out of reach (18 / 18 / 9 with not one base success), 20 / 14 / 8 net of
@@ -453,7 +453,17 @@ it on the theorems a creation headline would rest on: per seed, the three most r
 strictest set (compute-matched, no seed's base ever solved it, replay-only control fails it). Each got 1.2–1.4 M more
 pend attempts (9 / 10 / 11 chunks of 131,072 for s0 / s1 / s2), on top of the 66,000 it already had.
 
-⟨S38 TABLE⟩
+| seed | theorem | r8 pass@1 (x0) | own base: successes / attempts | known-proof estimate | UB95 vs 0.05 / K_eval-set | certified at K_eval-set? | other seeds' bases | replay-only (512) | J7 continuation (512) |
+|---|---|---|---|---|---|---|---|---|---|
+| s0 | `la_transfer_2060` | 0.95 | 0 / 1,114,880 | 10^-7.9 | 2.7e-06 vs 2.6e-06 | not yet | s1 0 / 1,377,024, s2 0 / 1,508,096 | 0 / 512 | 7 / 512 |
+| s0 | `la_transfer_205` | 0.79 | 0 / 1,114,880 | 10^-13.2 | 2.7e-06 vs 2.6e-06 | not yet | s1 0 / 66,560, s2 0 / 17,408 | 0 / 512 | 0 / 512 |
+| s0 | `la_transfer_1077` | 0.62 | 0 / 1,114,880 | 10^-8.8 | 2.7e-06 vs 2.6e-06 | not yet | s1 1 / 1,377,024, s2 0 / 66,304 | 0 / 512 | 0 / 512 |
+| s1 | `la_transfer_1648` | 0.95 | 0 / 1,377,024 | 10^-8.1 | 2.2e-06 vs 2.4e-06 | yes | s0 5 / 66,304, s2 1 / 1,114,880 | 0 / 512 | 0 / 512 |
+| s1 | `la_transfer_1077` | 0.80 | 1 / 1,377,024 | 10^-7.7 | 3.4e-06 vs 2.4e-06 | no: base found it | s0 0 / 1,114,880, s2 0 / 66,304 | 0 / 512 | 0 / 512 |
+| s1 | `la_transfer_2060` | 0.61 | 0 / 1,377,024 | 10^-12.7 | 2.2e-06 vs 2.4e-06 | yes | s0 0 / 1,114,880, s2 0 / 1,508,096 | 0 / 512 | 0 / 512 |
+| s2 | `la_transfer_1648` | 0.91 | 1 / 1,114,880 | 10^-6.2 | 4.3e-06 vs 2.1e-06 | no: base found it | s0 5 / 66,304, s1 0 / 1,377,024 | 0 / 512 | 0 / 512 |
+| s2 | `la_transfer_1833` | 0.82 | 0 / 1,508,096 | 10^-10.2 | 2.0e-06 vs 2.1e-06 | yes | s0 0 / 17,408, s1 0 / 17,408 | 0 / 512 | 0 / 512 |
+| s2 | `la_transfer_2060` | 0.30 | 0 / 1,508,096 | 10^-12.4 | 2.0e-06 vs 2.1e-06 | yes | s0 0 / 1,114,880, s1 0 / 1,377,024 | 0 / 512 | 0 / 512 |
 
 - **Certified created at K_eval-set**, relative to the seed's own base (0 successes in 1.38–1.51 M attempts each; the
   base's chance of a proof within K_eval-set attempts is below 5 % at 95 % confidence): `la_transfer_1648` and
@@ -514,7 +524,21 @@ Process-level GPU time and work per job family, from the results registry (`cd_c
 NVIDIA A40 everywhere). Pods bill wall time, including setup, idle time and co-tenancy, so `podbudget` is the cost
 line.
 
-⟨COMPUTE TABLE⟩
+| job | A40-hours (process level) | attempts | generated tokens | training tokens | Lean checks |
+|---|---|---|---|---|---|
+| J1 teacher-forced scores (stage 1 + 2) | 2.1 | 0.00 M | 0 M | 0.00 B | 0 |
+| J2 stage A + calibration | 4.0 | 3.17 M | 469 M | 0.00 B | 10,509 |
+| J2 stages A', B, truncation | 6.6 | 5.55 M | 752 M | 0.00 B | 60 |
+| J3 guided reads (both caps) | 9.1 | 1.57 M | 513 M | 0.00 B | 641,571 |
+| J4 demonstration fine-tunes + reads | 2.2 | 0.28 M | 55 M | 0.72 B | 53,450 |
+| J5 missing plain draws | 1.9 | 0.44 M | 121 M | 0.00 B | 265,013 |
+| J6 no-DN knockout pretraining + fine-tunes + reads | 2.4 | 0.35 M | 62 M | 1.70 B | 64,284 |
+| J6b DN-free-replay fine-tunes + reads | 3.0 | 0.25 M | 46 M | 1.38 B | 19,457 |
+| J7 compute-matched continuation + reads | 17.9 | 0.49 M | 87 M | 9.32 B | 55,606 |
+| J8 start-dependence scores | 4.5 | 0.00 M | 0 M | 0.00 B | 0 |
+| J9 certification sampling | 8.6 | 4.72 M | 871 M | 0.00 B | 1 |
+| J10 long-pool sampling | 1.9 | 0.87 M | 197 M | 0.00 B | 441 |
+| **total** | **64.2** | 17.7 M | 3.17 B | 13.1 B | 1,110,392 |
 
 J1 scored 385,641 proofs at one name base and 13,566 at 33; J8 scored ≈ 2 M. Spend: ⟨spend⟩ (`podbudget
 capability-defs`), within the $50 budget and under the pre-registered $40 stop.
