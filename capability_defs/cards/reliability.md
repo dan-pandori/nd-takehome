@@ -21,7 +21,7 @@ reliably when it tries). Comparing it before and after RL does not by itself sep
 
 | verdict | rule |
 |---|---|
-| **created** | p̂_R ≥ 1/2 (reliable after RL) **and** the base is certified outside its budget: UB95(p_B) < 0.05 / K and the known-proof bound Σ_F π_B < 1 / K (`passk-budget` / `marginal-bracket`, K = K_eval-set by default) |
+| **created** | p̂_R ≥ 1/2 (reliable after RL) **and** the base is certified outside its budget: UB95(p_B) < 0.05 / K and the known-proof estimate Σ_F π_B < 2 / K (`passk-budget` / `marginal-bracket`, K = K_eval-set by default) |
 | **elicited (reliability gained)** | p̂_R ≥ 1/2 and p_B ≥ 1 / K is certified: RL made a reachable capability reliable |
 | **undetermined** | p̂_R ≥ 1/2 and the base's reach is not settled |
 | **neither** | p̂_R < 1/2 |

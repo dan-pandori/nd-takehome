@@ -527,6 +527,8 @@ made strict, with his (a) as the estimator).
      0.05 / K (≈ 60 K zero-success attempts, bought for headline theorems).
   5. Headline: Δ_cov = #{RL solves at 256} − #{base within reach at K_eval-set}, and the candidate set net of both
      RL-free controls (replay-only ladder; compute-matched continuation) and of other seeds' bases.
+- *Null:* random initialisation (k-to-solve ≥ e^290, far beyond any K) sets the floor; the operative nulls are the
+  replay-only ladder and the compute-matched continuation.
 - *Created:* a non-empty net set on ≥ 2 / 3 seeds, beyond the redraw floor; certified where a headline rests on it.
 - *Cost here:* ≈ 4.3 A40-hours per seed (J1 0.7, J2 3.6), ≈ 60 % of the r8 ladder's GPU time.
 - *Found:* RL is ahead at matched compute on every seed: r8 at 256 attempts solves 12–21 more of the 322 than the base
@@ -538,6 +540,7 @@ made strict, with his (a) as the estimator).
 - *Protocol:* per model and set, **propensity** = plain pass@1 (k 256 reads) and **capability** = solved within the
   budget by the best *per-theorem* method (plain sampling to K_eval-set; guided reads, `guided_eval.py --arm logical`,
   k 256, max_rej 10). Nothing trained on other theorems' verifier verdicts counts.
+- *Null:* the base's own best per-theorem method at the same budget.
 - *Created:* RL raises capability, not only propensity; raising only propensity is elicitation.
 - *Found:* much of RL's plain gain is propensity: pend's guided read solves half the equal-k set (50 / 55 / 60 %) and
   halves the holdout250 gap to r8 (44 / 31 / 37 → 21 / 14 / 19). It rescues only 1–4 of the theorems that
@@ -549,14 +552,14 @@ made strict, with his (a) as the estimator).
   members within K_eval-set and RL solves ≥ 50 % at k 256 (recipe level: ≥ 2 / 3 seeds). **Teachability:** fine-tune
   the base and a knockout pretrained without the key step on 16 demonstrations vs 16 length-matched non-family proofs
   (replay from the knockout's corpus, two fine-tune seeds); **latent** if the base's gain exceeds the knockout's by
-  ≥ 0.3 on ≥ 2 / 3 seeds, **teachable** if within 0.2.
+  ≥ 0.3 on ≥ 2 / 3 seeds, **teachable** if within 0.2. *Null:* the knockout (never had the key step).
 - *Found:* at the budget only s1's classical families are created (excluded middle: base 0 / 6 held-out members, r16
   6 / 6); the negated-conditional, distribution and s2's Peirce families are elicited. Excluded middle is
   **teachable, not latent** (+0.05 / −0.01 / −0.01); 4 demonstrations already give 33–36 of 39 held-out instances.
 
 **D. Diagnostic: IRT ability with an ability-matched placebo** (`irt-ability`, `compute-equivalent`).
 - *Protocol:* a 2PL item-response model calibrated on the pretraining checkpoints puts every model on one θ scale; RL
-  is "off the pretraining axis" only if its DIF+ rate exceeds that of RL-free models at the same Δθ.
+  is "off the pretraining axis" only if its DIF+ rate exceeds that of RL-free models at the same Δθ (the null).
 - *Found:* RL moves much further along the pretraining axis than RL-free training of similar compute (Δθ ≈ 2.1 vs
   0.55–0.70 for replay-only and 0.51–0.58 for the continuation), but at matched Δθ its item-level gains are no larger
   (from p5000: EI r2 48 / 41 / 48 DIF+ items at Δθ 2.0–2.7, replay-only 50 / 49 / 54 at ≈ 2.1). RL is more of the
