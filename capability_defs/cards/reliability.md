@@ -16,17 +16,18 @@ Family R. Slug `reliability`. Notation: `_FRAME.md`.
 
 ## 2. Decision rule
 
+*Revised after the critic pass (§9).* Reliability defines **having** a capability (propensity: what the model does
+reliably when it tries). Comparing it before and after RL does not by itself separate creation from elicitation.
+
 | verdict | rule |
 |---|---|
-| **created** | p_B(t) < τ_low = 0.05 and p_R(t) ≥ τ = 1/2: the base fails almost always, the RL model succeeds more often than not |
-| **elicited** | — this definition does not separate an elicited capability from a created one. A move from p_B = 0.01 to p_R = 0.9 is "created" under it whether or not the base could reach t with 10³ attempts |
-| **neither** | p_R < 1/2 |
+| **created** | p̂_R ≥ 1/2 (reliable after RL) **and** the base is certified outside its budget: UB95(p_B) < 0.05 / K and the known-proof bound Σ_F π_B < 1 / K (`passk-budget` / `marginal-bracket`, K = K_eval-set by default) |
+| **elicited (reliability gained)** | p̂_R ≥ 1/2 and p_B ≥ 1 / K is certified: RL made a reachable capability reliable |
+| **undetermined** | p̂_R ≥ 1/2 and the base's reach is not settled |
+| **neither** | p̂_R < 1/2 |
 
-Seed version: created on ≥ 2 of 3 seeds.
-
-The rule is useful because it marks what changed in **default behaviour**, i.e. propensity. Paired with
-`capability-vs-propensity`, it separates "RL converted a reachable capability into reliable behaviour" (elicitation)
-from "RL made the reachable set larger" (creation).
+Seed version: count seeds per verdict, and check whether another seed's *base* already meets the bar: a "created on 2 of
+3 seeds" theorem that the third seed's pend solves reliably is a pretraining-luck case.
 
 ## 3. Null or floor
 
@@ -41,7 +42,7 @@ from "RL made the reachable set larger" (creation).
 - **Free.** p̂ from the k 256 reads, one draw to define and the other to check.
 - **First numbers** (`out/defs_c12.txt`, cap 12, 322 theorems):
   - Created (p̂_pend < 0.05 and p̂_R ≥ 0.5) at r8: 71 / 62 / 60 (s0 / s1 / s2, draw x0). At r16 (x1): 75 / 80 / 61.
-  - Redraw Jaccard 0.84–0.92 (the most stable of all definitions). Seed Jaccard 0.31–0.41.
+  - Redraw Jaccard 0.84–0.92. Seed Jaccard 0.31–0.41.
   - Ratio to the equal-k set at r8: 1.31 / 1.22 / 1.00.
   - Jaccard with the equal-k set: 0.38. Reliability adds theorems the base solves rarely but at k 256; it drops
     theorems RL solves only rarely.
@@ -91,4 +92,23 @@ from "RL made the reachable set larger" (creation).
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic): the original rule labels sharpening as creation.**
+- τ_low = 0.05 is a base budget of ≈ 20 attempts, far below k_eval and K_per.
+- In s0 r8 x0, 35 of the 71 "created" theorems had a base success in the same 256-attempt read; 40 have pooled base
+  p̂ ≥ 1 / K_per (FRAME: "elicited"); on 23 the base's probability of writing RL's own proof is ≥ 1 / K_per.
+- Counterexample: `la_transfer_1046`. The s0 base solves 19 / 768 and writes r8's exact proof about once in 58
+  attempts; r8 solves 254 / 256, so the rule says "created". The s1 base solves it 447 / 768 (58 %) with no RL at all.
+- Secondary arguments:
+  - The seed rule rewards pretraining luck: of 33 theorems "created" on 2 of 3 seeds, the third seed's base has
+    p̂ ≥ 0.05 on 16.
+  - Best-of-N distillation of the base's own samples passes on every theorem with 1/N ≲ p_B < 0.05.
+  - My claim "most stable of all definitions" was false: spec_ev / w1_ev redraw 0.93–0.98.
+
+**My answer: accepted.**
+- The base side now uses the budgeted bar (§2), and the false stability claim is removed.
+- Reliability stays as the right account of *having* a capability (Harding & Sharadin; the SEP's success views). It is
+  the propensity half of `capability-vs-propensity`, and its job in a create / elicit rule is the RL side: guarding
+  against lucky hits.
+- On its own it measures RL converting reachable capability into reliable behaviour. That is useful to report, but it
+  is elicitation unless the base is shown to be outside the budget.
+

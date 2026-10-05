@@ -8,6 +8,7 @@ Sources (see capability_defs/analysis/INVENTORY.md):
   mcts-a  cap-12 pend / r8 fresh-seed plain reads (bucket copies in artifacts/cd/in/): pool reads s<S>_<ck>__<pool>__sample
           -> x = 2; the C-only read s<S>_<ck>__C__sample -> x = 4 (pool 'C'); r8 C at k 2,560 (eval_x10) -> x = 10.
           Also rrQ100 / long2 (x = 2).
+  ctrl8   cap-12 replay-only control from pend (rl-from-ckpt c<S>_pend_r8, x0 / x1; compacted copies).
 Each read -> {name: (n_ok, n_tried, proofs)}.  `proofs` = every distinct Lean-accepted ND proof of that read.
 """
 import gzip, json, os
@@ -47,6 +48,9 @@ def read(cap, s, ck, pool, x):
             path = f'{MC}/mcts/s{s}_{ck}__C__sample.jsonl'
         elif x == 10 and pool == 'C' and ck == 'r8':
             path = f'{MC}/mcts_x10/s{s}_r8__C__sample.jsonl'
+    elif cap == 12 and ck == 'ctrl8' and x in (0, 1):
+        # rl-from-ckpt's replay-only control from pend: 8 rounds of the ladder's fine-tune on K12 replay, no RL proofs
+        path = f'{OA}/rl-from-ckpt/c{s}_pend_r8__{pool}_x{x}.jsonl.gz'
     elif ck in CKS:
         sub = 'trajectory' if cap == 12 else 'trajectory-cap6'
         path = f'{OA}/{sub}/s{s}_{ck}__{pool}_x{x}.jsonl.gz'

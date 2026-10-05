@@ -17,28 +17,47 @@ Family S (sampling). Slug `passk-budget`. Notation: `_FRAME.md`.
   131,072 attempts in 470 s).
 - **The capability statement:** "θ can solve t within budget K" ⟺ p_θ(t) ≥ 1 / K, i.e. at least a 63 % chance of a
   proof in K attempts.
-- **The budget is tied to RL's own compute**, converted to base attempts: ladder GPU-seconds divided by the measured
-  cost of one read attempt (`cd_defs.budgets`; trajectory / rl-continue compute rows).
-  - **K_per:** RL's compute per training target. Cap 12: 731–954 at r8 and 1,712–2,064 at r16 (seed range).
-  - **K_total:** all of RL's compute given to this one theorem. Cap 12: 3.3–4.3 × 10⁶ at r8 and 7.7–9.3 × 10⁶ at r16.
+- **The budget is tied to RL's own compute**, converted to base attempts (ladder GPU-seconds divided by the measured
+  cost of one base attempt). *Revised after the critic pass (§9).* The headline budget is **K_eval-set**: RL's compute
+  spread over the theorems being judged, i.e. "what if RL's GPU-seconds had been spent sampling the base on exactly
+  the evaluation set":
+
+  K_eval-set = ladder GPU-s / (N_eval × cost per base attempt),
+
+  with N_eval = 322 (textbook72 + holdout250) and the cost measured on pend (3.6 ms per attempt on an A40, J2):
+  ≈ 1.9 × 10⁴ attempts per theorem at r8 and ≈ 4.8 × 10⁴ at r16. J2's 16,384 nearly supplies it. Two reference
+  budgets are reported beside it:
+  - **K_per:** RL's compute per *training* target. It depends on how many targets RL trained on, which the judged
+    theorems are not: 256 if counted in samples (8 rounds × 32), ≈ 780–1,400 if counted in GPU time.
+  - **K_total:** all of RL's compute on one theorem. It can certify elicitation but never creation.
 
 ## 2. Decision rule
 
-For base B (pend) and RL model R (r8 or r16), per theorem:
+**Set level (the headline, after the critic).** Compare the RL model's solves at k_eval = 256 with the base's coverage
+at the compute-matched K_eval-set, over the same theorems:
+
+Δ_cov = #{t : R solves t at 256} − #{t : B solves t within K_eval-set}.
+
+- RL **created coverage** if Δ_cov > 0 beyond the seed spread, on ≥ 2 / 3 seeds.
+- RL **elicited** if the base's compute-matched coverage meets or exceeds RL's.
+
+The theorems in the difference are the candidate created set. The test can come out either way.
+
+**Per theorem (secondary).**
 
 | verdict | rule |
 |---|---|
-| **created at K** | R solves t at the evaluation budget (≥ 1 success in 256, or a stated p̂_R threshold), and the 95 % upper bound on p_B(t) is < 0.05 / K, i.e. the base would have < 5 % chance in K attempts |
-| **elicited at K** | R solves t, and p_B(t) ≥ 1 / K is certified: the 95 % lower bound from sampling, or the `marginal-bracket` likelihood bound, is ≥ 1 / K |
-| **neither** | R does not solve t, or B already solves it at k_eval = 256 |
+| **created at K** | R solves t at k_eval, and UB95(p_B(t)) < 0.05 / K |
+| **elicited at K** | p_B(t) ≥ 1 / K is certified, by the sampling lower bound or by `marginal-bracket` |
+| **neither** | R does not solve t, or B already solves it at k_eval |
 | **undetermined** | otherwise |
 
-- Report both budgets. **K_per answers "was RL necessary at matched compute?"** and is the headline. **K_total is the
-  conservative bar:** creation there means not even all of RL's compute spent on base samples of this one theorem
-  would find a proof.
-- **Continuous version ("bits beyond search"):** β(t) = log₂ p_R(t) − log₂ p_B(t) − log₂ K. β > 0 means RL did better
-  on t than spending its compute on base samples would. This is the same rule without a cut, and it supports an
-  elicitation curve (the share created as a function of K).
+**Attribution.** The ladder also pretrains (≈ 476 M replay tokens). Every verdict is reported net of the replay-only
+control (`rl-from-ckpt`'s c⟨s⟩_pend_r8: the same 8 rounds of fine-tuning with no RL proofs). It solves 16 / 18 / 24 of
+the 86 / 77 / 77 hard theorems.
+
+**Continuous version ("bits beyond search"):** β(t) = log₂ p_R(t) − log₂ p_B(t) − log₂ K. It does not agree with the cut
+everywhere (§9), so report it as a separate scale.
 
 ## 3. Null or floor
 
@@ -56,8 +75,8 @@ For base B (pend) and RL model R (r8 or r16), per theorem:
   - Existing per-theorem reads: pend and r8 at x0 + x1 (+ mcts-a x2, and x4 for C), k 256 each; r16 at x1.
   - J2: pend at 16,384 attempts on each seed's hard RL-solved theorems (57 / 59 / 55), and at 4,096 on 30
     calibration theorems per seed. About 1 A40-hour per seed, ≈ $0.5.
-  - J2 stage B: 65,536 attempts on the theorems still at 0, which is what certifying "created at K_per" needs
-    (UB95 = 4.6 × 10⁻⁵ < 0.05 / K_per). About 1.5 A40-hours per seed.
+  - J2 stage B: 65,536 attempts on the theorems still at 0. UB95 = 4.6 × 10⁻⁵ certifies "created" only for K ≤ ≈ 1,100
+    (r8 K_per in GPU time at 6.4 ms, not at 3.6 ms or r16). About 1.5 A40-hours per seed.
 - **Analysis.** `capability_defs/analysis/cd_bracket.py` and `cd_defs.py`, a few CPU-seconds.
 - **Structural limit.** Certifying creation at K_total needs ≈ 60 K_total ≈ 2 × 10⁸ base attempts per theorem. That
   is ≈ 200 A40-hours per theorem, so creation at K_total cannot be certified by sampling. Only elicitation can be

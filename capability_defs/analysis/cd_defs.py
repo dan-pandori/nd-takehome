@@ -123,10 +123,21 @@ def main():
                 vals['schema'][f] = (rb, rr, len(mem))
                 if rb <= 0.05 and rr >= 0.5:
                     sets['schema'].extend(mem)
+            # net of replay pretraining: drop theorems the replay-only control (ctrl8) solves on the same draw (x0 / x1)
+            for d in list(sets):
+                keep = []
+                for n in sets[d]:
+                    cc = draw_counts(S[n], 'ctrl8', x if x in (0, 1) else 1) if n in S else None
+                    if not (cc and cc[0] > 0):
+                        keep.append(n)
+                sets[d + '_net'] = keep
             res['sets'][key] = {k: sorted(set(v)) for k, v in sets.items()}
             res['values'][key] = vals
     # ---- summary
     defs = ['eqk', 'rel', 'irt', 'spec_ev', 'spec_ref', 'w1_ev', 'nullbits', 'schema']
+    print('net of replay (theorems the replay-only control also solves on the same draw removed): sizes')
+    for d in ('eqk', 'rel', 'irt', 'schema'):
+        print(f'  {d + "_net":12s} ' + ' '.join(f'{len(res["sets"][k].get(d + "_net", [])):5d}' for k in res['sets']))
     print(f'cap {a.cap}: created-set sizes (of 322) per seed; budgets K_total / K_per in base-attempt equivalents')
     for key, B in res['budgets'].items():
         if key.endswith('x0') or 'r16' in key:

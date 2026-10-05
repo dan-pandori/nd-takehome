@@ -39,7 +39,7 @@ def main():
             T['meta'][n] = {'pool': pool[n], 'len': lens.get(n), 'lem': is_lem(pr[n]), 'prompt': pr[n]}
         for s in R.SEEDS:
             S = {n: {'counts': {}, 'tf': {'ref': {}, 'ev': {}}} for n in names}
-            cks = R.CKS + (['r12', 'r16'] if cap == 12 else ['r16'])
+            cks = R.CKS + (['r12', 'r16', 'ctrl8'] if cap == 12 else ['r16'])
             for ck in cks:
                 for x in (0, 1):
                     for pl in R.POOLS:
