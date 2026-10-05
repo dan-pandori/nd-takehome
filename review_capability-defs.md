@@ -531,3 +531,214 @@ training cost", Davidson's compute-equivalent gain, Mousavi-Hosseini & Erdogdu, 
   final definitions.
 - Not recounted in phase 1: L3 (critics break ≥ 1/3 of the cards), because the cards are write-ups. I check it in
   phase 2.
+
+## §Compare (phase 2: the executor's write-ups against my recount)
+
+**What I read.**
+- `run_capability_defs.md`, `numbers.md` § capability-defs and the capability-defs part of `log.md`.
+- `capability_defs/REPORT.md`, every card's §9, and the parts of cards that numbers point to.
+- `capability_defs/analysis/out/{part3,bracket_all}.txt`, `INDEPENDENT_CHECK.md`, `STATUS.md` and `QUESTIONS.md`.
+
+I read them on the run branch at 645aa4f0. That equals `origin/dan_capability-defs`, which is what the main checkout
+`~/nd-takehome` sees for this run.
+
+Verdicts used below:
+- **R** reproduces;
+- **D** differs, with by how much;
+- **W** the number reproduces but the wording or label is wrong;
+- **ND** not derivable from the files.
+
+### C1. Headline claims (plain answer, run summary, `numbers.md`)
+
+| # | claim (where) | my value | verdict |
+|---|---|---|---|
+| 1 | Equal-k "creates" 51–60 per seed (54 / 51 / 60); 14–22 survive K_eval-set (22 / 21 / 14); 8–20 net of the replay-only control; 4–5 out of every seed's base (REPORT §1, §3.2; run summary) | 54 / 51 / 60 → 22 / 21 / 14 → net 20 / 14 / 8 → no seed's base 4 / 5 / 5 (R14) | R |
+| 2 | J9 certified 7 of 9; 4 (three distinct theorems) also survive every RL-free control | 7 / 9: 2060, 205, 1077 (s0); 1648, 2060 (s1); 1833, 2060 (s2). Survivors 205 (s0), 2060 (s1, s2), 1833 (s2) (R13) | R |
+| 3 | RL r8 solves 12–21 more of 322 than the base reaches at K_eval-set (r16 14–32); replay-only 239 / 244 / 249; J7 220 / 215 / 219 | 286 − 265, 286 − 270, 293 − 281 = +21 / +16 / +12; r16 +24 / +32 / +14; controls identical | R |
+| 4 | K_eval-set 19,281 / 21,107 / 23,310 (r8); K_per 777 / 731 / 954; K_total 3.29–4.29 M | Identical with the executor's 3.6 ms. With the measured 470 s / 131,072 = 3.586 ms: 19,357 / 21,190 / 23,402 | R. The ladder ran on RTX A6000 and the 3.6 ms per attempt is A40, so the budget mixes GPU classes; not stated |
+| 5 | The known-proof sum recovers a median 0.98 / 0.94 / 0.93 of the measured p (calibration, T 0.8) | 0.982 / 0.940 / 0.925; IQR 0.90–1.02 / 0.85–1.00 / 0.85–0.95 | R |
+| 6 | Random weights need e^290 to e^3,200 attempts | known-proof sum under init on the hard theorems: −289 to −3,228 nats at T 0.8 (medians −823 / −834 / −905) | R |
+| 7 | "No RL excess at matched ability (IRT)" | My own 2PL, calibrated through p5000 (`rv_irt_matched.py`). Created items: EI r2 49 / 43 / 49 at Δθ 2.30 / 2.03 / 2.66; replay-only 50 / 49 / 55 at Δθ 2.09 / 2.07 / 2.12. EI's rate is below replay's on 3 / 3 (0.88 / 0.75 / 0.63 vs 1.04 / 0.80 / 0.74). Through pend: r8 26 / 26 / 30 at Δθ ≈ 2.0 vs replay-only 4 / 7 / 7 at ≈ 0.6 | R. The matching is approximate: s2's EI r2 is 0.5 θ above its placebo |
+| 8 | Excluded middle "acquired by one seed's RL" is taught by 16 demonstrations even to a knockout pretrained without DN | knockout + A16: 35 / 37 / 37 of 39. J6b gain difference: +0.051 / −0.013 / −0.013 | R, but **W** on "one seed": s2's r16 also solves 13 / 39 lem instances (0.13 pass@1) and 1 / 6 holdout250 members (family share 0.26). Acquisition is full on s1 and partial on s2 |
+| 9 | Run summary: "Expectations: most hit; misses: Q2, Q5, Q7, Q8a, J8 monotone, J10" | Also partly missed: Q9 (s2), J4 ±3 % (2 / 3), J6 (ii) (2 / 3), J6 (iii) (1 / 3), J7 (i) (s2), J7 (ii) (s2), J8 p1600 ≤ 25 % (2 / 3), Q14 second clause, and Q16 (ZIBB misses everywhere; BB misses s1 of the J2 adaptation and both base models of the pre-registered data). REPORT §3.9 lists most of these correctly | **W**: the summary's miss list is incomplete |
+
+### C2. REPORT §3 claims
+
+| # | claim (section) | my value | verdict |
+|---|---|---|---|
+| 10 | Bracket verdicts at K_eval-set, r8-solved hard theorems 55 / 45 / 52 (§3.1) | Elicited by sampling 17 / 17 / 21, by known-proof estimate 5 / 1 / 3. Found, not certifiable: 12 / 9 / 18. Not reached: 21 / 18 / 10. Undetermined: 0. Certified created: 3 / 2 / 2 | R (exact) |
+| 11 | Median k-to-solve 10^4.6 / 10^5.3 / 10^4.5, range 10^2.3–10^16.8. "Found one to seven times" | 4.6 / 5.3 / 4.5; 2.3–16.8; found counts 1–7 | R |
+| 12 | Measured theorems 59–71 per seed, 10th–90th percentile 0.16–1.34; above UB95 on 3 / 2 / 1 | 64 / 60 / 72 theorems (J9's two late successes add one each), percentiles 0.28 / 0.33 / 0.16 – 1.34 / 1.15 / 1.28 | R |
+| 13 | "One proof carries a median 50–62 % of the sum" (§3.1) | 0.62 / 0.50 / 0.51 on the **calibration** theorems. On the hard theorems, where the creation question lives, 0.86 / 0.79 / 0.73 | **W**: name the population. The point is stronger on H |
+| 14 | Created-set table: all 15 rows × r8 / net / r16 / redraw / seed (§3.2, `numbers.md`) | Every cell reproduces. Exception: IRT DIF+ at r16, where my fit gives 33 / 37 / 35 against their 33 / 35 / 37 (different IRT fits, ±2) | R |
+| 15 | "Redraw floors are high (0.80–1.00 budgeted)" | Budgeted definitions: 0.67 (cm_recipe s2), 0.78 (cm0 s2) to 1.00 | W (0.67–1.00) |
+| 16 | "Seed floors are low (0.06–0.39); exceptions rule-set novelty (0.55–0.62) and 'no seed's base' (0.38–0.50)" | The executor's own table and mine give "no seed's base" 0.29 / 0.29 / 0.43. IRT is 0.37–0.44 | **D**: the 0.38–0.50 is stale. "No seed's base" is not an exception |
+| 17 | "`la_transfer_2060` is in all three seeds' strictest sets, `la_transfer_1077` and `la_transfer_1648` in two" (§3.2) | With the final data, the strictest set (`cm_recipe`) is s0 {205, 2060, 2110, `textbook_48e30…`}, s1 {1802, 2060, 2110, `textbook_03549…`, `textbook_f918…`}, s2 {1802, 1833, 2060, `textbook_48e30…`, `textbook_f918…`}. 2060 is in all three. **1077 and 1648 are in none** (other seeds' bases solved them). The ones in two seeds are 2110, 1802, `textbook_48e30…` and `textbook_f918…` | **D** (stale: it describes the J9 candidate lists, not the final sets) |
+| 18 | Long pool: equal-k 13 / 15 / 16; the base finds 29 of "these 45" (64 %) | 29 / 45 of J10's selection: 13 / 16 / 16, one s1 theorem being r16-only | R |
+| 19 | Mean off-diagonal Jaccard 0.31 (r8) / 0.36 (r16); `numbers.md` 0.305 / 0.355; least-agreeing pairs involve `npnt` | The executor's own final `out/part3.txt` and my recount give **0.291 / 0.342**. The least-agreeing pairs involve **`schema`** (rel–schema, irt–schema, schema–npnt all 0.00 at r8) | **D** (stale). Q14 ≤ 0.4 still holds |
+| 20 | Two clusters: compute-matched, bracket, best known proof, guided-too and chain "agree at 0.6–0.9" | Chain–tfmax / brk_ne 0.47; the rest 0.61–0.90 | W (minor) |
+| 21 | Guided-too rescues 3 / 4 / 1 of the compute-matched 22 / 21 / 14 | 22 − 19, 21 − 17, 14 − 13 | R |
+| 22 | Examples 1–4: `textbook_245a…` pend 0 / 768, r8 733 / 768, J2 10 / 16,384, e^−6.9, replay 78 / 512, s2 pend 505 / 768. `la_transfer_629` pend 545 / 768. `la_transfer_1453` 0 / 66,560, e^−32.4, r16 435 / 512. `la_transfer_2060` 0 / 66,304, e^−18.2, 1,803 known proofs, r8 734 / 768, J7 7 / 512 | all identical; s1 + A4 solves 1453 117 / 256 | R |
+| 23 | "RL's own proof is often the base's proof plus a vacuous detour (35 of 120 cases)" (§2; `tf-proof-prob` §9) | Of the 120 pairs (r8 x0 solves, log π_pend(eventual) < −ln K_total) I reproduce 120, 31 that pend solves at 256, and 63 with the reference ≥ 1 / K_total. **26** contain a self-built Or-detour, and the executor's own `detour()` in `cd_part3.py` also gives **26**. Looser rules give 53 – 55; no rule I tried gives 35 | **D**: 26 of 120. The point stands |
+| 24 | Threshold-sensitivity table (§3.4) | identical, every cell | R |
+| 25 | "512 or ≥ 768 base attempts instead of 256 remove 7–17 equal-k theorems" | 512: −4 / −9 / −11. All reads: −7 / −11 / −17 | W ("4–17") |
+| 26 | Plain vs guided table (18 rows); +18 – 22 for pend, −1 to +4 for RL; gap 44 / 31 / 37 → 21 / 14 / 19; Q13 50 / 55 / 60 %, cap 6 40 / 38 / 44 % | identical | R |
+| 27 | "Every proof-state model is read both ways" (§3.5) | Only pend / r8 / r16 (J3) were read guided. J4 / J6 / J6b fine-tunes and the J7 continuation were read plain only | **W**. AGENT_POLICY's guided default is not met for those models, and this is not stated |
+| 28 | Families table (§3.6): round-1 and r16 training shares; held-out at budget | Training shares reproduce exactly on the key-step members (39 / 15 / 20 / 20 / 40 / 13 of 40). Excluded middle held-out 0 / 6, 6 / 6, 1 / 6 for r16; base 0 | R. "Share of the 40 trained-on members" should say key-step members |
+| 29 | J4 / J6 / J6b table and "four demonstrations install the schema in every seed's base" | identical (36 / 33 / 36 with A4) | R |
+| 30 | IRT matched-placebo table (§3.7) | My fit: Δθ within 0.03, counts within ±2, same ordering (C1 #7) | R |
+| 31 | Update size: RL r8 0.28, replay-only 0.30, late PT 0.81, seed gap 1.43, cosine 0.45 | 0.282 / 0.297 / 0.809 / 1.426, cosine 0.452 (`rv_update.py`, CPU torch) | R |
+| 32 | J7: 220 / 215 / 219; solves of B 19 / 18 / 16; of cm 4 / 4 / 0; θ +0.51 / +0.58 / +0.58 | Counts identical. θ gains over pend in my fit: +0.51 / +0.62 / +0.48 | R |
+| 33 | J7 "used 60,863 of the ladders' 73,838 A40-seconds (82 %)" | The ladders' 73,838 s were on RTX A6000 (`trajectory` `compute.json`). J7's training logs: 18,308 / 20,494 / 21,824 s = 82 / 84 / 81 % | **W**: not A40-seconds; the match is across GPU classes |
+| 34 | "pend had already seen each K12 proof ≈ 20 times" (§3.7; `compute-equivalent` card: 24,077 steps × 1,024 pairs / 1.24 M) | trajectory's Stage-1 logs: **3.69 / 3.72 / 3.72 epochs of pairs**. The best recipe batches by token budget, ≈ 190 pairs per step, not 1,024 | **D** (≈ 5× too high). The J7 result itself stands; the stated mechanism ("compute without new data buys little after 20 passes") needs rewording |
+| 35 | J8 table (§3.7): new solves, elicited share at K_total, replay-only %, net | identical (e.g. s0 21 / 29 / 41 / 32 %, replay-only 83 / 63 / 66 / 53 %) | R |
+| 36 | J9 table (§3.8): attempts, UB95, other seeds' bases, controls; "the estimate ranked them correctly"; the 1648 success is r8's shortest proof | identical. 1077 (s1) and 1648 (s2) had their seeds' highest estimates. The s2 proof is one of r8's 10-line proofs | R |
+| 37 | The four survivors' estimates put k-to-solve at 10^10 to 10^13. They are held-out members of distribution, De Morgan with a double negation and Peirce | 10^10.2 – 10^13.2; schema labels `dist_and_over_or`, `demorgan_and_to_nor`, `peirce` | R |
+| 38 | Compute table and spend (§3.10): 77.0 A40-hours, $37.84, 77.21 pod-hours | identical (registry rows, `~/podhours.log`) | R |
+| 39 | "Composition: every rule RL uses occurs in ≥ 4 % of pretraining proofs"; "DN applied to a NEGI line: 16,703 records" | All 13 rules occur in ≥ 8.0 % of K12 records. 16,703 | R |
+| 40 | Q16 / §4: "a beta-binomial … predicted how many J2 theorems the base solves in 16,384 attempts to within −7 to +13 %" | Those errors include the 30 calibration theorems per seed in both counts (sampled at 4,096, and certain because the small sample already had ≥ 3 successes). On the J2 theorems alone: **−1 / +31 / −13 %**; on the zero-small-sample subset −1 / +35 / −15 %. ZIBB: −68 / −55 / −61 % | **D**: within ±25 % on 2 / 3 seeds, not "−7 to +13 %" |
+| 41 | `numbers.md` J2 line: "stage A 16,384 on the J2 theorems (87 / 89 / 85) with ≥ 1 success on 57 / 52 / 64" | J2 theorems are 57 / 59 / 55 at 16,384. The 87 / 89 / 85 include the 30 calibration theorems per seed, read at **4,096**. Stage A: 27 / 22 / 34 of 57 / 59 / 55 | **W** (the label is wrong; the hard-only numbers given beside it, 24 / 54, 20 / 57, 28 / 49, are on a third, unlabelled subset: the J2 theorems with 0 in all 768 earlier attempts) |
+| 42 | J2 truncation (§3.9; log 12:11): `textbook_6997…` 2 / 16,384 at doubled caps, "0 at standard caps" (log: "0 in ≥ 65,536 at standard caps, so the read caps decide this theorem's verdict") | s2 stage B chunk `s2_b02` (standard caps 512 / 96, 49,152 attempts, seed 7302): **3 successes, 2 distinct proofs** | **D**: the base solves it at standard caps; the caps do not decide its verdict. The expectation (≤ 1) still holds |
+| 43 | Cut-off reporting | REPORT and `numbers.md` give no per-stratum cut-off fraction. Only the log does, for J2 s0. My values (R4, R13, `rv_trunc.log`) exceed the policy's 0.1 % in several strata: J2 calibration 1.86 % (s0), J5 cap-6 r16 2.1 % (s0), J6b up to 2.5 %, J7 up to 1.1 %, J9 `la_transfer_1833` (s2) 0.49 % | **W** (policy gap). Cut-offs can only hide base successes, i.e. bias toward "not reached". The doubled-cap check covered only the stage-A zeros |
+| 44 | Cards cite `support-curves` / `support-state` results ("survivor count fell 37 → 29", "flips 28 of 29") | Those are 3.2 M `lean_seq` / SN-state models, not best-cap12; Lean alone (support-curves pre-registration) | **W**: inherited numbers without the model label |
+
+### C3. Pre-registered expectations: the executor's §3.9 against my recount
+
+| item | executor's verdict | mine | agree? |
+|---|---|---|---|
+| L1, L2, L3 | hit, hit, hit (20 / 20) | L1 hit (sub-audit). L2 supported. L3: all 20 cards record a critic argument "accepted" (19 plainly, 1 "in substance") | yes |
+| Q1, Q4, Q5, Q6, Q7, Q10, Q11, Q12, Q13, Q15 | as listed | same values (Q12: 6.1 / 4.7 / 7.0× set level; 7.2 / 5.3 / 15.6× per theorem, both inside 3–30×) | yes |
+| Q2 | 1 / 3 | 1 / 3 (0.47 / 0.37 / 0.62) | yes |
+| Q3 | hit, 76 / 71 / 85 % | hit, but on B as pre-registered: 0.74 / 0.59 / 0.73 (0.80 / 0.71 / 0.88 of the J1-scored). The executor's denominator is the 55 / 45 / 52 r8-solved hard theorems, not B | yes (denominator changed, not stated) |
+| Q8 | a miss; b, c hit | a 0.571 / 0.592 / 0.561 (miss); b yes 3 / 3; c 3 – 5 of 6 depending on the residual | yes |
+| Q9 | 2 / 3 | 2 / 3 (1.31 / 1.22 / 1.00) | yes |
+| Q14 | first hit (0.31 / 0.36); second miss | first hit (**0.29 / 0.34**). Second: the K_total bracket is not among the final definitions; its set is empty | yes on verdicts, **values stale** (C2 #19) |
+| Q16 | adapted; "BB hit (2 / 3 on the zero subset)"; ZIBB miss | Pre-registered data (feasible, R11): BB within ±25 % on both EI models, **misses both base models (−0.29 / −0.28)**; ZIBB not at least as good. Adapted: BB 2 / 3 (−1 / +31 / −13 %); ZIBB miss | **no**: the BB "hit" is not supported by either version. The stated reason for the swap ("support-curves data lack per-attempt sequences") does not hold for this test: counts suffice for exchangeable attempts |
+| J1 stage 1 (median LB₁ / p̂ in [0.01, 0.5]) | not scored | 0.027 / 0.027 / 0.025: hit | omitted |
+| J3 (guided ≥ plain at every checkpoint) | not scored separately | 18 / 18: hit | omitted |
+| J2 A′, J2 B, J2 truncation (≤ 1), J4, J5, J6, J6b, J7, J9, J10 | as listed | same (J2 truncation wording, C2 #42) | yes |
+| J8 | monotone miss; pend hit; p1600 1 / 3 | same. **Erratum to my §Recount R17:** I wrote "p1600 ≤ 25 % on 2 / 3". s2's share is 42 / 167 = 25.15 %, so it is 1 / 3, as the executor says | yes |
+
+**Gate 0.** Every expectation was committed before its job (R0 table). The misses are reported as misses in REPORT §3.9.
+
+### C4. Model labels and policy
+
+- **Model labels.** REPORT and `numbers.md` open with a full model label: best-cap12 9.56 M `ALiBiGPT`, `lean_staten`,
+  from scratch on K12, checkpoints named. Cap 6, the replay-only control and J7 are labelled. Exceptions:
+  - the inherited `support-curves` / `support-state` numbers in cards (C2 #44);
+  - the guided-tts cost ratio (1.8× tokens, 2.2× GPU), quoted without the model it was measured on (best-cap12 /
+    cap-6 r8).
+- **Checker.** Lean alone throughout. No comparison with a pre-2026-09-27 number in the report. `nd_verify` is
+  unused (R0).
+- **Compute.** Every family has registry rows and a per-family table. J7 is matched to 82 % of the ladder's GPU-seconds
+  (within 1.25×, reported). Guided vs plain is not compute-matched; the report says so.
+- **Seeds and noise floor.** Three training seeds everywhere, with per-seed values and redraw / seed Jaccard floors
+  throughout. The pre-registration states no minimum detectable difference (AGENT_POLICY asks for one). The J6b
+  decision thresholds (0.2 / 0.3) are the only pre-stated effect sizes. No IQM / bootstrap intervals are given; at
+  n = 3 an IQM is the mean, so per-seed values suffice.
+- **Split.** The K12 renaming of `textbook_3ed45280…` (R2) predates this run and is not mentioned. It concerns one
+  s0 equal-k theorem, not a headline.
+
+## §Verdict
+
+**No hard-constraint violation, so no quarantine.**
+- `nd_verify` and `TEST_RUN_DONE` are unchanged, and `nd_verify` judges nothing.
+- No evaluation file is read in training.
+- Every job's expectations were committed before it ran.
+- Lean accepts all 3,710 counted proofs I re-checked, across 15 arms, with working negative controls.
+- No training file shares a renaming class with textbook72, holdout250 or the held-out A ∨ ¬A instances. The one
+  exception is the pre-existing K12 twin of `textbook_3ed45280…`.
+
+**What stands.** Each item reproduces from the raw files with my own code; model = best-cap12 unless stated.
+1. **The run's central measurement.** RL r8's equal-k "creations" (54 / 51 / 60 of 322) shrink:
+   - to **22 / 21 / 14** when the base gets RL's GPU time as attempts (K_eval-set ≈ 2 × 10⁴);
+   - to 20 / 14 / 8 net of the replay-only control;
+   - to **4 / 5 / 5** that no seed's base ever solved.
+
+   At set level, r8 at 256 attempts still solves **+21 / +16 / +12** more than the base reaches at K_eval-set. Neither
+   RL-free control (replay-only 239 / 244 / 249, J7 220 / 215 / 219) closes that gap. Every created set, redraw floor,
+   seed floor and threshold-sensitivity cell reproduces.
+2. **The known-proof estimate is accurate on calibration theorems** (median 0.98 / 0.94 / 0.93 of measured p), but it
+   is not a strict bound. It exceeds the sampling UB95 on a few theorems, so the factor-2 margin is justified.
+   - J1 is sound: F(t) equals the union of every Lean-accepted read plus the references.
+   - Its exact scores reproduce trajectory's to 5 × 10⁻⁵ nats.
+   - The one-base bound never exceeds the exact score.
+3. **J9 certifies 7 of 9 (theorem, seed) pairs relative to their own seed's base** (0 in 1.25–1.51 M attempts; UB95 below
+   0.05 / K_eval-set). Four pairs, three theorems (`la_transfer_205`, `2060`, `1833`), also survive every RL-free control.
+   Both J9 base successes are proofs already in F.
+4. **Excluded middle is teachable, not latent.**
+   - A no-DN knockout learns it from 16 demonstrations (35 / 37 / 37 of 39), as pend does.
+   - The J6b gain difference is +0.05 / −0.01 / −0.01.
+   - Four demonstrations give pend 33 – 36 of 39.
+5. **Guided reading helps the base, not RL**: +18 to +22 holdout250 theorems for pend, −1 to +4 for RL. It rescues only
+   3 / 4 / 1 of the compute-matched set.
+6. **At matched ability gain, EI creates no more DIF+ items than RL-free training.** My own 2PL fit gives the same Δθ
+   and counts to within 0.03 and ±2. The RL update is the size of the replay-only update (0.28 vs 0.30, cosine 0.45).
+7. J7 is a lateral move (fewer solves than pend). J8's start dependence (not monotone) and J10 (64 % of long-pool
+   pairs reached by the base) reproduce exactly.
+8. **The literature deliverable meets L1** (185 new / 57 in depth / 99.75 % of claims verified). Critics landed a
+   failure the executor accepted on 20 / 20 cards (L3).
+
+**Must be reworded or corrected.** The numbers on file contradict these; the conclusions mostly survive.
+1. **Agreement (REPORT §3.3 and §3.9 Q14, `numbers.md`, STATUS).**
+   - Mean off-diagonal Jaccard is **0.29 / 0.34**, not 0.31 / 0.36 (0.305 / 0.355). The executor's own final
+     `out/part3.txt` says 0.291 / 0.342.
+   - The least-agreeing pairs involve `schema`, not `npnt`.
+   - The "no seed's base" seed floor is 0.29 / 0.29 / 0.43, not "0.38–0.50", so it is not an exception.
+2. **"`la_transfer_1077` and `la_transfer_1648` [are] in two seeds' strictest sets"** describes the J9 candidate lists.
+   - With the final data both are in **none**: other seeds' bases solved them.
+   - The theorems in two seeds' strictest sets are 2110, 1802, `textbook_48e30…` and `textbook_f918…`.
+3. **"35 of 120" padded RL proofs → 26 of 120.** The executor's own `detour()` also gives 26.
+4. **"pend had already seen each K12 proof ≈ 20 times" → ≈ 3.7 epochs of pairs** (trajectory's Stage-1 logs). The
+   stated mechanism for J7's lateral move needs rewording.
+5. **Q16 and §4's "a beta-binomial predicted … to within −7 to +13 %".**
+   - Those errors include 30 calibration theorems per seed that were certain to be solved. On the J2 theorems it is
+     **−1 / +31 / −13 % (2 / 3)**.
+   - The pre-registered support-curves test was feasible from counts. On it, BB misses both base models (−0.29 / −0.28),
+     and ZIBB is never uniformly at least as good.
+   - Score Q16 as a miss, or 2 / 3 for the adapted BB. Drop the "lack per-attempt sequences" justification.
+6. **`numbers.md` J2 line.** "Stage A 16,384 on the J2 theorems (87 / 89 / 85)" counts 30 calibration theorems per seed
+   that got 4,096. The stage-A rate on the J2 theorems is 27 / 57, 22 / 59, 34 / 55.
+7. **J2 truncation (§3.9, log 12:11).** `textbook_6997…` (s2) is **3 / 49,152 at standard caps** in stage B. It is not
+   "0 at standard caps", and the read caps do not decide its verdict.
+8. **GPU classes.** The r8 ladders ran on RTX A6000, not A40.
+   - K_eval-set and J7's "82 % of the ladders' A40-seconds" divide or compare A6000 seconds with A40 costs.
+   - Say so. Better: also give K_eval-set from attempts or with a same-class per-attempt cost.
+9. **"Every proof-state model is read both ways" (§3.5).** Only pend / r8 / r16 were read guided. The J4 / J6 / J6b
+   fine-tunes and the J7 continuation are plain-only. That departs from the guided-by-default policy and should be
+   stated.
+10. **Cut-off fractions per stratum are missing from REPORT and `numbers.md`.** Several strata exceed the policy's 0.1 %:
+    J2 calibration 1.9 %, J5 cap-6 r16 2.1 %, J6b up to 2.5 %, J7 up to 1.1 %, and `la_transfer_1833`'s J9 attempts
+    0.49 %. Every cut-off can only hide a base success, so it biases toward "not reached / created". Report them.
+11. **Smaller wording fixes.**
+    - Run summary: its list of misses omits the partial misses (Q9, J4, J6 ii / iii, J7 i / ii, J8 p1600, Q14 second
+      clause, Q16).
+    - "acquired by one seed's RL": s2's r16 also reaches 13 / 39.
+    - "one proof carries 50–62 %" is on the calibration theorems; it is 73–86 % on the hard ones.
+    - "Redraw floors 0.80–1.00": actually 0.67–1.00.
+    - "512 or ≥ 768 attempts remove 7–17": actually 4–17.
+    - "agree at 0.6–0.9": chain 0.47.
+    - Q3's denominator is the 55 / 45 / 52 r8-solved hard theorems, not B. On B: 0.74 / 0.59 / 0.73, still a hit.
+    - The families table's training shares are over key-step members, not "the 40 trained-on members".
+    - The cards quote `support-curves` / `support-state` numbers without their 3.2 M model labels.
+    - The J1 stage-1 and J3 "guided ≥ plain" expectations are not scored. Both hit.
+
+**Not supported as written.**
+- Q16 "BB hit".
+- "The read caps decide `textbook_6997…`'s verdict".
+- 1077 / 1648 in two seeds' strictest sets.
+- The "≈ 20 passes over K12" mechanism.
+- "35 of 120".
+
+None of these touches the run's central measurement ("What stands", items 1–3) or its recommendation.
+
+**Open: the next measurements that would settle it.**
+1. **Truncation on the certified theorems.** Re-read `la_transfer_205` (s0), `2060` (s1, s2) and `1833` (s2) with pend at
+   doubled caps (1,024 / 192) for ≥ 2 × 10⁵ attempts each (≈ 1 A40-hour each). That removes the only open caveat on
+   the run's four "survives everything" pairs. 1833 has 0.49 % of its standard-cap attempts cut off.
+2. **"No seed's base" with equal effort.** Give the other two seeds' pend the same ≈ 1.2 M attempts on the three
+   survivors. Today 205 has only 66,560 (s1) and 17,408 (s2) other-seed attempts, and 1833 has 17,408 each.
+3. **A same-GPU-class budget.** Measure the per-attempt pend cost on an RTX A6000 (or re-express K_eval-set in ladder
+   attempts, ≈ 1.8–2.0 × 10⁶ / 322 ≈ 5.6–6.2 × 10³ per theorem). Restate the compute-matched set under both. The
+   sensitivity table already shows it moves from 22 / 21 / 14 to 33 / 28 / 28 at 0.3× K.
+4. **Guided reads of the J4 / J6b / J7 models** (policy). Then Q11 and J7 can be stated as best-system numbers too.

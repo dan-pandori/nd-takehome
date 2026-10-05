@@ -28,5 +28,7 @@ Written by the reviewer (agent:claude, 2026-10-05), independently of `capability
 | `rv_trunc.py` | cut-off (action truncated / step cap) per job |
 | `rv_splits.py` | renaming-class disjointness of every training file against every evaluation pool |
 | `rv_recheck.py`, `rlean.py` | Lean re-check of 3,710 counted proofs + controls; term sizes |
+| `rv_irt_matched.py` | phase 2: IRT at matched ability gain (calibration through p5000 / pend), own fit |
+| `rv_update.py` | phase 2: weight-update sizes and the RL / replay-only cosine (CPU torch) |
 | `g4ip.py` | own G4ip intuitionistic prover (schema key-step rule; lem40's intuitionistic instance) |
 | `lit/` | literature sub-audit (L1, L2), written by a reviewer sub-agent with its own scripts |
