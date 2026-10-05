@@ -121,3 +121,5 @@ scoring (≈ $2–4), J3 guided reads of pend / r8 / r16 at cap 12 (≈ $3), J4 
 large-k base sampling (stage A ≈ $4–6; stage B, which would certify "created at RL's per-target compute", ≈ $8–12 more).
 **Default if unanswered:** run J1, J3 (cap 12), J4 and J2 stage A, stop when the balance would fall below $103, and
 report J2 stage B and the cap-6 guided reads as not run for budget. If you top up the balance, I run them.
+- **Update 2026-10-05 06:28 UTC:** `rpbalance` now reads $322.21 (topped up). The brief's $50 / 100 pod-hour budget is
+  the limit again, so J2 stage B and the cap-6 guided reads will run as pre-registered. No answer needed.
