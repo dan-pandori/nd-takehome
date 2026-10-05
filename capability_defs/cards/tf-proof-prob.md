@@ -43,14 +43,17 @@ sampling.
 
 ## 2. Decision rule
 
+*Revised after the critic pass (§9). The decision is made on the base's best known route, not on RL's proof.*
+
 | level | created | elicited |
 |---|---|---|
-| **proof** ("new proof") | log π_B(y_R) < −ln K: RL's proof is one the base would essentially never write within K | log π_B(y_R) ≥ −ln K |
-| **theorem** ("new theorem") | the marginal is below the line, certified by sampling (UB < 0.05 / K; see `marginal-bracket`) | max over F(t) of π_B(y), or the sum over F(t), ≥ 1 / K |
-| **step** ("new move", necessary condition) | some step of y_R has log π_B < −ln K | — |
+| **theorem** (the decision) | the base fails at k_eval (0 / 256), and max over F(t) of π_B(y) < 1 / K, where F(t) includes the base's own accepted samples (J2) and RL's proofs; certify with the sampling bound (`marginal-bracket`) | max over F(t) of π_B(y) ≥ 1 / K (or the sum over F(t) ≥ 1 / K) |
+| **proof** (a descriptive tag, "new route") | log π_B(y_R) < −ln K: RL's own proof is a route the base would not write within K | — |
+| **step** (descriptive, "new move") | some step of y_R has log π_B < −ln K | — |
 
-"Neither" means R does not solve t. The proof-level and theorem-level verdicts **can disagree**, and that disagreement
-is the point: a new proof of an old theorem is not a new capability to prove the theorem (`new-proof-new-theorem`).
+"Neither" means R does not solve t. The proof-level tag is **not** evidence of a new capability: it fires on vacuous
+detours (§9), and a new proof of an old theorem is not a new capability to prove the theorem
+(`new-proof-new-theorem`).
 
 ## 3. Null or floor
 
@@ -125,4 +128,30 @@ is the point: a new proof of an old theorem is not a new capability to prove the
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic, 2026-10-05).** The proof-level verdict scores RL's route, not a capability, and the new
+part can be padding.
+- Example: `la_transfer_629`, seed 0, (S → Q) → (P ∨ S) ⊢ ¬(P ∨ S) → ¬(S → Q).
+  - pend solves it on 178 of 256 attempts of the same draw, and its 8-step contrapositive (the reference) scores −0.42
+    nats.
+  - r8's eventual proof wraps that proof in a vacuous detour (`Or.inr n3`, then `Or.elim` on that disjunction). It
+    scores −15.64 < −ln K_total = −15.07, so the rule says "created".
+  - The worst step (−9.23) is the base's own modus ponens, which scores −0.02 in its own proof.
+- Of the 120 (seed, theorem) pairs "created" under the original proof-level rule:
+  - pend solves 31 at k 256;
+  - in 63 the reference alone is ≥ 1 / K_total;
+  - 108 have y_R longer than the reference (median +4–5 actions);
+  - 35 contain a self-built Or-detour.
+- Secondary arguments:
+  - Theorem-level "created" can only be certified by sampling (≈ 60 K samples).
+  - The 0.92–0.98 redraw Jaccard is by construction (y_R is fixed from x0); the seed Jaccard of 0.19–0.23 tracks
+    routes.
+  - Temperature flips 14 of the 120.
+
+**My answer: accepted, and the card is changed.**
+- The decision moves to the theorem level, on max over F(t) of π_B(y) (and the sum over F, `marginal-bracket`), with
+  F(t) including the base's own large-k samples. The base must also fail at k_eval.
+- RL's proof is kept only as a descriptive "new route" tag. Padding can only add proofs to F(t), never lower the
+  maximum, so the padded example becomes elicited (−0.42).
+- The uncertifiability of theorem-level creation stays as a stated limit: likelihood can certify elicitation, and only
+  sampling can certify creation.
+
