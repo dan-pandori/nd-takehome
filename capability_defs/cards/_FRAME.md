@@ -58,6 +58,7 @@ For a pair (base, RL) and a theorem or family, at a declared budget K:
     percentile ratios ≈ 0.5–1.4.
   - Certificates use a factor-2 margin.
 - **Primary per-theorem output:** the base's **k-to-solve interval** [1 / UB, 1 / estimate].
+
 ## Families
 
 S sampling / support · L likelihood · N null-relative · E elicitation cost · T transfer / invariance · R reliability ·
