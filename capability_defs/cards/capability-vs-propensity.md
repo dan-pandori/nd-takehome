@@ -6,13 +6,16 @@ Family E (elicitation cost). Slug `capability-vs-propensity`. Notation: `_FRAME.
 
 - **Propensity.** prop_θ(t) = p_θ(t) under the default protocol: one plain attempt at T 0.8. It is what the model
   *would* do.
-- **Capability at budget C.** cap_θ(t; C) = max over elicitation methods m with cost(m) ≤ C of P(m elicits a valid
-  proof of t from θ). It is what the model *can* do. The method set M is declared in advance:
-  - plain sampling with any T;
+- **Capability at budget C.** cap_θ(t; C) = max over **per-theorem** elicitation methods m with cost(m) ≤ C of
+  P(m elicits a valid proof of t from θ). It is what the model *can* do. *Revised after the critic (§9):* a method is
+  admitted only if it uses nothing learned from Lean's verdicts or proofs of other theorems:
+  - plain sampling at any T;
   - guided sampling (step-checked redraws, `guided_sample.py`);
-  - best-first / PUCT search with the model as the policy (`mcts-a`);
-  - prompt-level changes (another renaming of the same theorem).
-  - **Not** fine-tuning: that is `elicit-finetune`, because it changes the model.
+  - prior-only best-first / PUCT search with the model as the policy (no learned value head);
+  - other renamings of the same theorem.
+
+  Fine-tuning and value heads trained on other theorems are excluded: they are RL's own mechanism (`elicit-finetune`
+  treats them).
 - **Cost** is measured in GPU-seconds, or in attempt-equivalents of the base's plain sampling.
 - **Budget C** is tied to RL's compute as in `passk-budget`: C_per or C_total.
 
@@ -92,4 +95,31 @@ This is the exact sense of the dangerous-capability literature: "capability eval
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic): nothing in the card separated its elicitation methods from RL.**
+- The PUCT + value search of `mcts-a` trains a value head on Lean-labelled rollouts of pend on all 4,495 `rl_targets`
+  plus 1,500 K12 theorems. That is two-thirds of an EI round of data (≈ 1,490 A40-s per head, not counted in the
+  "matched" budget).
+- Of the +14.3 rrQ100 theorems per seed that search recovers, the value head supplies +5.3 over prior-only search, and
+  the card counted these as pend's capability. The same data trained into the policy is EI round 1, which the card
+  counts as RL.
+- Secondary arguments:
+  - "Created" needs every method bounded below 0.05 within C, which needs about 60 C of attempts; beyond plain
+    sampling the card reduces to `passk-budget`.
+  - Its own anchors (van der Weij, Hofstätter, Greenblatt) count small fine-tunes as elicitation, yet the card
+    excluded them.
+  - It had no "undetermined" row (J2 already has theorems with cap_B in [0.05, 1 − 1/e)).
+
+**My answer: accepted. The method set M is now defined by a stated criterion.**
+- **Admitted: per-theorem methods only**, i.e. nothing trained on Lean's verdicts or proofs of *other* theorems.
+  Sampling at any T, renamings of t, step-checked redraws (guided sampling), and prior-only search, with all compute
+  charged to t.
+- **Excluded:** value heads or fine-tunes trained on other theorems' verdicts. Carrying Lean's verdicts across theorems
+  into weights is what defines RL here, and it is studied separately by `elicit-finetune`.
+- **Verdicts:**
+  - "created" = RL's learning on other theorems reached t, and no per-theorem method did within the per-theorem
+    budget;
+  - "elicited" = some per-theorem method reaches t within the budget;
+  - an **undetermined** row is added.
+- This criterion is the run's cleanest statement of the distinction: **elicitation is what can be done to one theorem
+  with the base alone; RL is what is learned across theorems from the verifier.**
+

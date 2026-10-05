@@ -25,6 +25,9 @@ sides. No new modelling assumption is needed; each side is valid on its own.
 
 ## 2. Decision rule
 
+*Revised after the critic pass (§9).* **The primary output is budget-free:** each theorem's k-to-solve interval for the
+base, [1 / UB(t), 1 / LB(t)] attempts. Verdicts follow only for a declared budget.
+
 At a budget K from `_FRAME.md` (K_per, K_total), for each theorem that R solves at k 256:
 
 | verdict | rule |
@@ -105,4 +108,27 @@ The bracket's width, log UB − log LB, is reported for every theorem. It says h
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic): the verdict depends on which K is quoted.**
+- K_per and K_total are both "RL's compute" but are 4,495× apart, and their verdicts do not overlap.
+  - At K_total, creation can never be certified (2.1 × 10⁸ attempts per theorem), while the lower bound with
+    trajectory's exact scores of the reference and eventual proofs already certifies 38 of s0's 55 RL-solved hard
+    theorems as elicited.
+  - At K_per, the lower bound reaches 1 / 777 for only 2 of 55, and J2 stage B can add "created".
+- K_total also gives pend, per theorem, about 17× its own pretraining compute: ≈ 1,650× the 1 %-of-training-cost
+  elicitation convention.
+- Secondary arguments:
+  - A cheap method (rescaling the logits) has its own small K and can be "created" (gaming).
+  - 20 of the 55 lie within ±ln 20 of −ln K_total, so seed noise decides them.
+  - `la_transfer_595`'s reference scores e^(−14.0) marginalised over the 33 name bases but e^(−22.0) at base 0: exact
+    minus base-0 ranges from −3.4 to +10.9 nats, so verdicts depend on hypothesis numbering unless scores are
+    marginalised.
+
+**My answer: accepted in substance.**
+- The card's primary output is now the k-to-solve interval [1 / UB, 1 / LB], which needs no budget.
+- Verdicts are given only for budgets declared before the data. The report's recommended budget menu (REPORT
+  § recommendation) is:
+  - K_eval-set (compute-matched over the evaluation set, ≈ 1.9 × 10⁴, from the `passk-budget` critic);
+  - the base-tied "1 % of pend's training compute" (≈ 2–4 × 10³ attempts per theorem, this critic's proposal).
+- K_total is dropped as a creation budget and kept only as an upper reference for "elicited".
+- Decisive terms are rescored at 33 name bases (stage 2) before any verdict.
+
