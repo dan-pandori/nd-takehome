@@ -47,10 +47,11 @@ def ev_proof(s, n, prompt):
 
 
 EV = '--ev' in sys.argv
+RL = sys.argv[sys.argv.index('--rl') + 1] if '--rl' in sys.argv else 'r8'
 
 
 def main():
-    s = int(sys.argv[1]); names = [a for a in sys.argv[2:] if a != '--ev']
+    s = int(sys.argv[1]); names = [a for a in sys.argv[2:] if a not in ('--ev', '--rl', RL)]
     T = json.load(open(f'{OUT}/table_c12.json'))
     S = T['seeds'][str(s)]; meta = T['meta']
     by, tgt = load_scores(s)
@@ -83,15 +84,15 @@ def main():
                 v = [u for u in v if u]
                 other.append(f's{s2} pend {sum(u[0] for u in v)} / {sum(u[1] for u in v)}')
         print('- other seeds: ' + '; '.join(other))
-        # RL's shortest accepted proof (r8 x0 read) and pend's best known proof
-        d = R.read(12, s, 'r8', meta[n]['pool'], 0)
+        # RL's shortest accepted proof (r8 x0 read, or r16 x1 with --rl r16) and pend's best known proof
+        d = R.read(12, s, RL, meta[n]['pool'], 0 if RL == 'r8' else 1)
         prs = sorted(d[n][2], key=lambda p: (p.count(';'), p)) if d and n in d else []
         if prs:
             y = prs[0]
             lp = next((v for v, tid in vals if tgt.get(tid) == y), None)
             src = nd2lean.translate(meta[n]['prompt'], y, require_all_pr=False)
             ok, size, nl = lean_meta(src)
-            print(f'\nr8\'s shortest accepted proof (log p under pend at T 0.8: {lp if lp is None else round(lp, 1)}; Lean {"accepts" if ok else "REJECTS"}; '
+            print(f'\n{RL}\'s shortest accepted proof (log p under pend at T 0.8: {lp if lp is None else round(lp, 1)}; Lean {"accepts" if ok else "REJECTS"}; '
                   f'{nl} `have` lines; term size {size}):\n')
             print('```lean\n' + src + '\n```')
         if EV:

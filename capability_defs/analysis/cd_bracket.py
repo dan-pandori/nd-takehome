@@ -66,8 +66,10 @@ def load_j1(s):
 
 def j2_counts(s):
     out = {}
-    for p in glob.glob(f'{ROOT}/artifacts/cd/j2/s{s}_*.jsonl'):
-        if p.endswith('.args.json') or os.path.basename(p).split('_')[1].startswith('t'):
+    paths = glob.glob(f'{ROOT}/artifacts/cd/j2/s{s}_*.jsonl')
+    paths += [p for p in glob.glob(f'{ROOT}/artifacts/cd/j9/s{s}_k*.jsonl') if not p.endswith('.full.jsonl')]   # J9
+    for p in paths:
+        if p.endswith('.args.json') or ('/j2/' in p and os.path.basename(p).split('_')[1].startswith('t')):
             continue                      # t*: the doubled-cap truncation check, not the standard protocol
         for l in open(p):
             r = json.loads(l)

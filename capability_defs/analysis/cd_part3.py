@@ -53,8 +53,11 @@ def j2_counts(s, trunc=False):
     """pend's J2 attempts per theorem: standard caps (stage A c*, calibration cal, A' d*, B b*), or with trunc=True only
     the doubled-cap truncation chunks t*."""
     out = collections.defaultdict(lambda: [0, 0, set()])
-    for p in glob.glob(f'{ROOT}/artifacts/cd/j2/s{s}_*.jsonl'):
-        if os.path.basename(p).split('_')[1].startswith('t') != trunc:
+    paths = glob.glob(f'{ROOT}/artifacts/cd/j2/s{s}_*.jsonl')
+    if not trunc:                 # J9 certification chunks: the same standard-cap protocol (compacted rows)
+        paths += [p for p in glob.glob(f'{ROOT}/artifacts/cd/j9/s{s}_k*.jsonl') if not p.endswith('.full.jsonl')]
+    for p in paths:
+        if '/j2/' in p and os.path.basename(p).split('_')[1].startswith('t') != trunc:
             continue
         for l in open(p):
             r = json.loads(l)
@@ -288,7 +291,10 @@ def main():
             r_cov = sum(1 for n in names if (S[n]['counts'].get(rl, {}).get(str(x)) or [0])[0] > 0)
             b_cov = sum(1 for n in names if pend_all(n)[0] > 0)
             b_reach = sum(1 for n in names if pend_all(n)[0] / max(pend_all(n)[1], 1) >= 1 / K)
+            c_cov = sum(1 for n in names if (S[n]['counts'].get('ctrl8', {}).get(str(x)) or [0])[0] > 0)
+            j7 = j7_solves(s, x)
             res['cov'][f's{s}_{rl}'] = {'rl_solved_256': r_cov, 'base_solved_all': b_cov, 'base_within_K': b_reach,
+                                        'ctrl8_solved_256': c_cov, 'j7_solved_256': len(j7) if j7 else None,
                                         'K_evalset': K,
                                         'base_attempts_median_H': float(np.median([pend_all(n)[1] for n in H])) if H else 0,
                                         'base_attempts_min_H': float(min(pend_all(n)[1] for n in H)) if H else 0}
@@ -362,7 +368,7 @@ def main():
         print(f'{d + "_net":10s} ' + ' '.join(f'{len(res["sets"][k].get(d + "_net", [])):11d}' for k in keys))
     print('\nset-level compute-matched coverage (r8: draw x0; r16: x1): RL solved@256 vs base within reach at K_eval-set')
     for k, v in res['cov'].items():
-        print(f'  {k}: RL {v["rl_solved_256"]} at 256 vs base {v["base_within_K"]} within reach at K_eval-set {v["K_evalset"]:,.0f} '
+        print(f'  {k}: RL {v["rl_solved_256"]} at 256 (replay-only {v["ctrl8_solved_256"]}, J7 {v["j7_solved_256"]}) vs base {v["base_within_K"]} within reach at K_eval-set {v["K_evalset"]:,.0f} '
               f'(p-hat >= 1/K; base ever solved {v["base_solved_all"]}); base attempts on H: median {v["base_attempts_median_H"]:,.0f}, '
               f'min {v["base_attempts_min_H"]:,.0f}')
     print('\nredraw floor (Jaccard, defining draw vs redraw) and seed floor (mean pairwise Jaccard across seeds, defining draw):')

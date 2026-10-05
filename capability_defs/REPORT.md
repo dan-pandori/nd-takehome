@@ -138,11 +138,34 @@ known-proof estimate / 2 is ≥ 1 / K):
 
 ### 3.2 What each definition calls "created", and how noisy that is
 
-⟨S32⟩
+Created sets at r8 (draw x0) and r16 (draw x1), cap 12, per seed (`cd_part3.py`, `out/part3.txt`; rendered by
+`cd_report_tables.py`). "Net" removes theorems the replay-only control solves on the same draw. Redraw floor: Jaccard
+of the sets defined on the two sample draws. Seed floor: Jaccard between seeds' sets (pairs s0–s1, s0–s2, s1–s2).
+
+⟨S32 TABLE⟩
+
+- **The sets shrink as a definition asks more of the base.** ⟨S32 SHRINK⟩
+- **Redraw floors are high** (⟨0.7–1.0⟩) for every sampling definition, so a verdict is stable across draws of the
+  same two models.
+- **Seed floors are low** (⟨0.1–0.4⟩): each seed's RL "creates" different theorems. The exception is rule-set novelty
+  (0.55–0.62), which compares RL's proofs with the pretraining data rather than with the base.
+- **Long pool** (`transfer_long2`, 21 theorems with long proofs; equal-k only, pend x2 vs RL x0): RL "creates" 13 / 15
+  / 16 of 21 at r8. J10 gave pend 16,384 more attempts on each: ⟨J10⟩.
+- **Cap 6** (weaker bases: pend solves 153 / 126 / 128 of holdout250 plain; no large-k base reads, so only the
+  unbudgeted definitions): equal-k 101 / 132 / 122 at r8; reliable 104 / 124 / 110; schema members 31 / 43 / 47. ⟨cap-6
+  guided⟩
 
 ### 3.3 Do the definitions agree?
 
-⟨S33⟩
+![F3](analysis/figures/cd_agreement.png)
+
+- Mean off-diagonal Jaccard ⟨0.27⟩ at r8 and ⟨0.31⟩ at r16 (pre-registered Q14: ≤ 0.4).
+- Two clusters: ⟨clusters⟩
+- Family-level and novelty definitions agree with nothing (≤ 0.2): they answer different questions.
+
+**Where they disagree, in Lean** (`cd_examples.py`, `out/examples.md`).
+
+⟨S33 EXAMPLES⟩
 
 ### 3.4 Threshold sensitivity
 

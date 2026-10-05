@@ -58,14 +58,15 @@ def t_defs(P):
 
 
 def t_cov(P):
-    print('| comparison | RL solved at 256 | base within reach at K_eval-set | Δ_cov | K_eval-set |')
-    print('|---|---|---|---|---|')
+    print('| seed | base within reach at K_eval-set (r8 / r16 budget) | replay-only r8, k 256 | J7 continuation, k 256 | r8, k 256 | r16, k 256 | Δ_cov r8 / r16 |')
+    print('|---|---|---|---|---|---|---|')
     for s in SEEDS:
-        for rl in ('r8', 'r16'):
-            v = P['cov'].get(f's{s}_{rl}')
-            if v:
-                print(f'| s{s} {rl} | {v["rl_solved_256"]} | {v["base_within_K"]} | {v["rl_solved_256"] - v["base_within_K"]:+d} | '
-                      f'{v["K_evalset"]:,.0f} |')
+        a, b = P['cov'].get(f's{s}_r8'), P['cov'].get(f's{s}_r16')
+        if a and b:
+            j7 = a.get('j7_solved_256')
+            print(f'| s{s} | {a["base_within_K"]} / {b["base_within_K"]} | {a.get("ctrl8_solved_256", "–")} | {j7 if j7 is not None else "–"} | '
+                  f'{a["rl_solved_256"]} | {b["rl_solved_256"]} | {a["rl_solved_256"] - a["base_within_K"]:+d} / '
+                  f'{b["rl_solved_256"] - b["base_within_K"]:+d} |')
 
 
 def t_bracket(B):
