@@ -45,19 +45,22 @@ def fig_kts(P, B):
         for i, (a, b, hit) in enumerate(iv):
             ax.plot([a, b], [i, i], color=C[0] if hit else C[1], lw=2, solid_capstyle='round')
         K = P['cov'].get(f's{s}_r8', {}).get('K_evalset')
-        for k, lab in ((256, 'k_eval 256'), (K, 'K_eval-set'), (3.5e6, 'K_total')):
+        import matplotlib.transforms as mt
+        tr = mt.blended_transform_factory(ax.transData, ax.transAxes)
+        for k, lab in ((256, 'k 256'), (K, 'K_eval-set'), (3.5e6, 'K_total')):
             if k:
                 ax.axvline(k, color=INK2, lw=1, ls=(0, (3, 3)))
-                ax.text(k, len(iv) + 0.5, lab, rotation=90, va='bottom', ha='right', fontsize=8, color=INK2)
-        ax.set_xscale('log'); ax.set_xlim(1e2, 1e17)
-        ax.set_title(f'seed {s} (cap 12): {len(iv)} RL-solved theorems pend fails 0 / 512', fontsize=10)
-        ax.set_xlabel("pend's k-to-solve interval (attempts)")
+                ax.text(k * 1.3, 0.02, lab, transform=tr, rotation=90, va='bottom', ha='left', fontsize=7.5, color=INK2)
+        ax.set_xscale('log'); ax.set_xlim(1e2, 1e16)
+        ax.set_title(f'seed {s}: {len(iv)} theorems r8 solves, pend 0 / 512', fontsize=10, loc='left')
+        ax.set_xlabel("pend's k-to-solve (attempts)")
         ax.set_yticks([])
     axes[0].plot([], [], color=C[0], lw=2, label='pend found a proof (J2 or earlier draws)')
     axes[0].plot([], [], color=C[1], lw=2, label='pend never succeeded')
-    axes[0].legend(loc='lower right', frameon=False, fontsize=8)
-    fig.suptitle("How many attempts would the base need? Each line is one theorem r8 solves: from the sampling bound (left)\n"
-                 "to the known-proof likelihood bound (right). Budget lines: what RL's compute buys.", fontsize=10, x=0.01, ha='left')
+    axes[0].legend(loc='center right', frameon=False, fontsize=8)
+    fig.suptitle("How many attempts would the base need? One line per theorem r8 solves that pend failed in 512 attempts:\n"
+                 "from the sampling bound (left end) to the known-proof estimate (right end). Dashed: budgets RL's compute buys (cap 12).",
+                 fontsize=10, x=0.01, ha='left')
     fig.tight_layout(rect=(0, 0, 1, 0.9)); fig.savefig(f'{FIG}/cd_kts.png', dpi=150); plt.close(fig)
 
 
@@ -104,11 +107,19 @@ def fig_schema(S):
     fig, axes = plt.subplots(1, 3, figsize=(13, 3.8), sharey=True)
     for s, ax in zip((0, 1, 2), axes):
         T = S['targets'][str(s)]
+        ends = []
         for (f, lab), col in zip(fams, C):
             r = T[f]['rounds']; y = T[f]['share']
             ax.plot(r, y, color=col, lw=2)
-            ax.text(r[-1] + 0.3, y[-1], lab, color=INK2, fontsize=8, va='center')
-        ax.set_xlim(0.5, 20.5); ax.set_ylim(-0.03, 1.05)
+            ends.append([y[-1], lab, r[-1]])
+        ends.sort(key=lambda e: e[0])                 # repel end labels so they never overlap
+        for i in range(1, len(ends)):
+            if ends[i][0] - ends[i - 1][0] < 0.08:
+                ends[i][0] = ends[i - 1][0] + 0.08
+        for yv, lab, rx in ends:
+            ax.text(rx + 0.4, yv, lab, color=INK2, fontsize=8, va='center')
+        ax.set_xlim(0.5, 21.5); ax.set_ylim(-0.03, 1.3)
+        ax.set_xticks([1, 4, 8, 12, 16]); ax.set_yticks([0, 0.25, 0.5, 0.75, 1.0])
         ax.set_title(f'seed {s} (cap 12)', fontsize=10); ax.set_xlabel('EI round (round 1 samples pend)')
     axes[0].set_ylabel('share of the family\'s targets\nsolved in that round (k 32)')
     fig.suptitle('Families acquired as a whole (members that need the key step only): each seed acquires different ones',
