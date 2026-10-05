@@ -1,4 +1,4 @@
-# Card: bits of skill over a null model (and RL's share of them)
+# Card: bits of skill over a null model (and RL's share of them) — REJECTED as a decision rule (critic, §9)
 
 Family N (null-relative). Slug `bits-over-null`. Notation: `_FRAME.md`.
 
@@ -86,4 +86,22 @@ here.
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic, 2026-10-05): σ cannot detect anything RL does.**
+- Whenever π_ν ≤ π_B ≤ π_R ≤ 1 on y, σ ≤ log π_B(y) / log π_ν(y). So "created" (σ > ½) requires the base to still carry
+  more than half of the null's surprisal on y, whatever RL does.
+- Init costs 34–157 nats per step, while pend never exceeds 3.1 nats per step on any r8 proof. A perfect RL policy
+  would still score ≤ 5.1 %, and "created" is empty **by construction**: 0 of 865 per proof, ≤ 3.9 % per theorem on
+  s0's hard set.
+- Counterexample: `la_transfer_205` (s0). pend solves 0 / 768 and puts e^(−32) on all 287 known proofs together; r8
+  solves 79 %. Yet σ = 1.6 %, so the card says "elicited", while six other definitions call it created.
+- With a checkpoint as the null, σ is only a dial: the share of B called created is 0 % at p200, 20–24 % at p1600,
+  37–61 % at p5000 and 100 % at pend. Pretraining is not monotone, so σ can exceed 1, and RL's choice of route games
+  the per-proof version.
+
+**My answer: accepted; the definition is dropped as a decision rule** and kept in the catalogue as a documented
+negative result.
+- The share-of-bits form inherits the null's format bits and so mirrors Dan's objection instead of answering it.
+- What survives contains no null: RL's gain in bits against the bits of search its compute buys, log₂ p_R − log₂ p_B −
+  log₂ K. That is `passk-budget`'s "bits beyond search".
+- The genuine answer to the random-weights objection, K_null ≫ K_total, is stated in `_FRAME.md` and `passk-budget` §3.
+

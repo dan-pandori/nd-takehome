@@ -1,0 +1,99 @@
+# Card: sharpening vs expansion — selection bits and reshaping bits
+
+Family D (distribution shift). Slug `sharpen-expand`. Notation: `_FRAME.md`.
+
+## 1. Definition, formally
+
+For a theorem t that RL solves, let q_R = π_R(· | t, success) be RL's distribution over its own valid proofs, and
+q_B = π_B(· | t, success) the base's.
+
+- **Pure elicitation has an exact form.** With a binary reward, the KL-regularised RL optimum is the base conditioned
+  on success: π* ∝ π_B · exp(r / β), which tends to π_B(· | success) as β → 0, with normaliser Z = p_B(t) (Korbak et
+  al. 2022). Conditioning **preserves the base's odds between any two correct proofs**: π*(y) / π*(y′) = π_B(y) /
+  π_B(y′).
+- **Decomposition** (Shenfeld et al., App. A): for any policy q that always succeeds on t,
+
+  KL(q ‖ π_B) = log 1 / p_B(t) + KL(q ‖ q_B).
+
+  The first term, the **selection bits**, is what pure filtering of base samples costs. It is log₂ of the k-to-solve,
+  the pass@k view. The second term, the **reshaping bits**, measures how far RL's successful proofs depart from the
+  base's own successful proofs.
+- **ε-support split:**
+  - sharpening mass S(t) = Σ_{y : π_B(y) ≥ ε} π_R(y), over valid y;
+  - expansion mass E(t) = Σ_{y : π_B(y) < ε} π_R(y);
+  - expansion share ρ(t) = E / (S + E), with ε = 1 / K (K_per by default).
+- **Estimators on the known proofs F(t)** (J1):
+  - q̂_θ(y) = π_θ(y) / Σ_{F} π_θ;
+  - reshaping bits ≈ KL(q̂_R ‖ q̂_B) restricted to F;
+  - ρ̂ as above, restricted to F;
+  - **after removing vacuous detours** (see `new-proof-new-theorem`);
+  - coverage check: Σ_F π_R / p̂_R.
+
+## 2. Decision rule
+
+| verdict | rule |
+|---|---|
+| **elicited (sharpening)** | ρ(t) < 1/2 and the reshaping bits are small (≤ 1 bit), i.e. RL roughly conditions the base on success |
+| **created (expansion)** | ρ(t) ≥ 1/2: most of RL's success mass is on proofs the base would not produce within K |
+| **reshaped access** | ρ(t) < 1/2 but the reshaping bits are large: RL reorders the base's own routes. Reported, not counted as creation |
+| **neither** | R fails |
+
+## 3. Null or floor
+
+- The null is exact: pure conditioning has reshaping bits = 0 and preserves odds.
+- The selection bits put the random-weights objection in numbers: for random weights, log 1 / p_0 ≈ 10³ bits.
+- A placebo for reshaping: the replay-only control ladder (`rl-from-ckpt`), which also changes odds without RL.
+
+## 4. How to compute it here
+
+- **J1** scores (π_B, π_R for every known proof of the hard and calibration theorems; exact 33-base scores for the
+  top proofs in stage 2) and **J2** (p_B by sampling).
+- Analysis: `cd_bracket.py` extended with ρ̂ and the reshaping KL. CPU minutes.
+- **Preliminary (stage 1, s0).** The known proofs cover a small share of RL's mass under the loose one-base bound:
+  Σ_F π_r8 / p̂_r8 has median 0.026, which the ln 33 penalty explains. Stage 2 gives the exact coverage. ρ̂ is
+  computed in Part 3.
+
+## 5. Sensitivity
+
+- **ε (budget):** ρ is monotone in ε. Report the curve ρ(ε) for ε from 1/256 to 1/K_total.
+- **Temperature:** use T 0.8 for both π (the sampler's distributions).
+- **Representation:** routes are action sequences in the proof-state interface. A whole-proof model has different
+  routes (premise restatements).
+- **The detour filter** changes ρ (§6).
+- **Renaming:** score per prompt.
+- **Noise:** deterministic given F. F's completeness is the main uncertainty (coverage check).
+
+## 6. Failure modes
+
+- **F is a biased sample of the success set.** RL's samples dominate it. If the base's preferred routes are missing, q̂_B
+  is wrong. J2's base samples are added to F for that reason.
+- **The success set is not just F.** If Σ_F π_R ≪ p̂_R, ρ̂ describes only a corner of R's mass.
+- **Vacuous variants** inflate "expansion" (§1 filter). Which differences between proofs are "real" is a choice.
+- **Reshaping can come from replay pretraining,** not RL (the placebo bounds this).
+
+## 7. Relations
+
+- The selection bits are `passk-budget`'s log₂ k-to-solve.
+- ρ is `new-proof-new-theorem`'s proof axis.
+- The total KL(q_R ‖ π_B) is `kl-update-size`'s quantity on the success set.
+- The odds-preservation test is the formal core of "RL only elicits" (Korbak), the cleanest *theoretical* definition of
+  elicitation found in the literature.
+
+## 8. Literature anchor
+
+- **Korbak, Perez & Buckley 2022 (2205.11275).** The KL-RL optimum is the base reweighted by exp(r / β) (Sec. 4,
+  Eq. 5). With a binary reward, conditioning keeps "all other strings … the original probability π0(x) up to Z"
+  (Sec. 5). L5 note.
+- **Shenfeld, Pari & Agrawal 2025 (2509.04259v1).**
+  - The decomposition in App. A (proof of Lemma A.1).
+  - "on-policy RL is implicitly biased towards KL-minimal solutions among the many that solve the new task" (abstract).
+  - L3 note.
+- **Huang et al. 2025 (2503.21878):** the coverage coefficient E_{π*}[π*/π_ref] (Sec. 2.1, Eq. 5). L5 splits it into
+  (1/p_B)(1 + χ²), L5's own derivation.
+- **Huang et al. 2024, sharpening (2412.01951;** earlier review): "cannot create information that is not already in the
+  model".
+- **Chen & Foster et al. 2025** (earlier review): the coverage principle.
+
+## 9. Critic's verdict
+
+*(pending)*

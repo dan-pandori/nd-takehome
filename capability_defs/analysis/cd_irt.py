@@ -33,6 +33,7 @@ import cd_reads as R
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out')
 PT = [c for c in R.CKS if c.startswith('p')]
 RL = [f'r{i}' for i in range(1, 9)] + ['r12', 'r16']
+EXTRA = ['ctrl_pend_r8', 'ctrl_p5000_r8', 'ei_p5000_r8', 'ei_p1600_r8']
 
 
 def load(cap, draws=(0, 1)):
@@ -50,6 +51,22 @@ def load(cap, draws=(0, 1)):
                         c[j] += d[nm][0]; n[j] += d[nm][1]; have = True
             if have:
                 ex.append((s, ck)); C.append(c); N.append(n)
+    if cap == 12:   # placebo / comparison examinees from rl-from-ckpt (compacted reads): replay-only controls and EI from earlier starts
+        import gzip
+        for s in R.SEEDS:
+            for lab, stem in (('ctrl_pend_r8', f'c{s}_pend_r8'), ('ctrl_p5000_r8', f'c{s}_p5000_r8'),
+                              ('ei_p5000_r8', f's{s}_p5000_r8'), ('ei_p1600_r8', f's{s}_p1600_r8')):
+                c = np.zeros(len(items)); n = np.zeros(len(items)); have = False
+                for x in draws:
+                    for pool in R.POOLS:
+                        f = f'{R.OA}/rl-from-ckpt/{stem}__{pool}_x{x}.jsonl.gz'
+                        if not os.path.exists(f):
+                            continue
+                        for line in gzip.open(f, 'rt'):
+                            r = json.loads(line); j = items.index(r['name'])
+                            c[j] += r['n_ok']; n[j] += r['n_tried']; have = True
+                if have:
+                    ex.append((s, lab)); C.append(c); N.append(n)
     return items, ex, np.array(C), np.array(N)
 
 
@@ -150,7 +167,7 @@ def main():
     print('\nability theta by checkpoint (pend mean = 0):')
     print('ckpt     ' + ' '.join(f'{"s" + str(s):>7s}' for s in R.SEEDS))
     tab = {}
-    for ck in PT + RL:
+    for ck in PT + RL + EXTRA:
         row = []
         for s in R.SEEDS:
             k = [j for j, e in enumerate(ex) if e == (s, ck)]
@@ -186,8 +203,8 @@ def main():
         created = [items[i] for i in difp if pend_c[s][i] == 0]
         out['dif'][f's{s}_{ck}'] = {'dif_plus': [items[i] for i in difp], 'dif_minus': [items[i] for i in difm],
                                    'created': created, 'resid': res.round(3).tolist()}
-        if ck in ('r8', 'r16', 'r4', 'r12'):
-            print(f'  s{s} {ck:4s}: DIF+ {len(difp):3d}  DIF- {len(difm):3d}  created {len(created):3d}')
+        if ck in ('r8', 'r16', 'r4', 'r12') or ck in EXTRA:
+            print(f'  s{s} {ck:13s}: theta {theta[j]:5.2f}  DIF+ {len(difp):3d}  DIF- {len(difm):3d}  created {len(created):3d}')
         if (s, ck) == (1, 'r16'):
             lem6 = ['la_transfer_478', 'la_transfer_1572', 'la_transfer_956', 'la_transfer_795', 'la_transfer_1453', 'la_transfer_1424']
             order = np.argsort(-np.where(n > 0, res, -1e9)); top = set(order[:max(1, int(0.1 * (n > 0).sum()))])

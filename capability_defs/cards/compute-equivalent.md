@@ -1,0 +1,101 @@
+# Card: compute equivalence — "RL is worth X× pretraining" (and X× base sampling)
+
+Family C. Slug `compute-equivalent`. Notation: `_FRAME.md`.
+
+## 1. Definition, formally
+
+Two exchange rates, both asking what an alternative use of compute would achieve.
+
+- **(a) Pretraining-compute equivalent** (CEG, Davidson et al.; intrinsic performance, Hilton et al.). Fit performance
+  as a function of pretraining compute along the base's own trajectory (14 checkpoints per seed). The equivalent of an
+  RL model R is the pretraining compute C′ at which the extrapolated trajectory reaches R's performance; the
+  multiplier is M = C′ / C_pend. Performance can be:
+  - IRT ability θ (`irt-ability`): set level, threshold-free;
+  - per theorem, the logit of p_θ(t), or the log p of a fixed reference proof;
+  - a set statistic such as solved@256.
+- **(b) Base-sampling equivalent** (Brown et al.). k*(t) = the number of base attempts that matches R's pass@k_eval:
+  pass@k*_B(t) = pass@k_eval_R(t). Compare k* × cost per attempt with RL's training compute.
+
+## 2. Decision rule
+
+| verdict | rule |
+|---|---|
+| **elicited / "equivalent to more of the same"** | M finite and modest (≤ 10×; the bar is a convention to be fixed by Dan), and the per-theorem PT trajectory is rising toward R's level |
+| **created** | M undefined: the pretraining trajectory has flattened or is falling below R's level (no amount of extrapolated pretraining reaches R), or M > 100× |
+| **neither** | R not better than pend |
+
+For (b): RL is "amortised search" when k* × c_attempt < RL's compute, and does "more than search" when even k* exceeds
+RL's compute (this is `passk-budget` again, priced in attempts).
+
+Davidson et al.'s own caveat applies: when no amount of baseline scaling reaches the gain, "the CEG is not meaningful".
+That case is exactly "created" here.
+
+## 3. Null or floor
+
+- Random init is the start of the trajectory (step 0).
+- The exchange rate needs no k, so Dan's objection is moot. But it inherits the extrapolation's assumptions (log-linear
+  in steps over late pretraining).
+
+## 4. How to compute it here
+
+- **(a) on θ** (`out/irt_c12.txt`). θ = α + β ln(step), fitted per seed on steps 3,000 … end. The slope β is 1.11 /
+  1.22 / 1.20 per e-fold of steps.
+
+  | cap | r1 | r4 | r8 | r12 | r16 |
+  |---|---|---|---|---|---|
+  | 12 (s0 / s1 / s2) | 2.0 / 2.1 / 2.6 | 4.4 / 4.1 / 5.0 | **6.2 / 4.7 / 7.1** | 7.6 / 5.7 / 6.7 | **8.6 / 6.7 / 7.5** |
+  | 6 | — | — | **45.7 / 51.7 / 19.5** | — | — |
+
+  The ladder's 4,800 fine-tune steps and ≈ 750 M training tokens (r8) are comparable to Stage-1's ≈ 445 M tokens; the
+  replay alone is ≈ 476 M tokens (`rl-from-ckpt`). The pend replay-only control reaches θ 0.55–0.70, ≈ 1.6–1.8× PT
+  length by the same fit. So 26–37 % of r8's θ gain (0.55 / 2.10, 0.70 / 1.91, 0.64 / 2.18) is what the replay pretraining alone gives.
+- **(a) per theorem.** Many theorems sit at 0 / 512 throughout late pretraining, so their slope is unidentified. Use
+  the reference-proof log p trajectory (scored at every checkpoint) for those.
+- **(b)** needs J2's large-k base counts: k*(t) ≈ ln(1 − pass@256_R) / ln(1 − p_B).
+- **Cost:** CPU only.
+
+## 5. Sensitivity
+
+- **Extrapolation form:** log-linear in steps is assumed. Late pretraining was not flat (`trajectory`: w1 rose 1.8–3.2
+  nats from step 8,000 to the end), and the fit window changes M by ≈ 20–30 % (x0-only fit: r8 7.9 / 5.8 / 9.0).
+- **What counts as RL compute:** the ladder includes replay pretraining. Use the replay-only control to separate it.
+- **Temperature, decoding, representation:** inherited from the performance metric. A guided-read θ gives a different
+  M.
+- **Renaming, seed:** M varies 4.7–7.1 across seeds at r8, a 1.5× spread.
+
+## 6. Failure modes
+
+- **"Undefined" conflates "flat pretraining" with "different direction".** The CEG measures whether more pretraining
+  helps, not whether RL is new. Davidson: "a high CEG might not indicate that the post-training enhancement
+  significantly improves performance, but instead indicate that additional training compute doesn't improve
+  performance".
+- **Extrapolation beyond observed steps** is speculative (Hilton: "we do not think conclusions that depend on the
+  precise fitted values of our scaling constants can be drawn with confidence").
+- **One model family / size.** True intrinsic performance would need a ladder of model sizes.
+
+## 7. Relations
+
+- θ comes from `irt-ability`.
+- (b) is `passk-budget` priced in attempts.
+- `chain-reachability` explains why RL compute can buy more than pretraining compute (RL focuses on the frontier).
+- `bits-over-null` with an early-checkpoint null is the bits version.
+
+## 8. Literature anchor
+
+- **Davidson et al. 2023 (2312.07413v1).**
+  - CEG = "how much additional training compute would be needed to improve performance by the same amount as the
+    enhancement" (abstract).
+  - "The CEG is given by C′/C" (Sec. 2).
+  - When an enhancement enables tasks "impossible for any model without it … the CEG is not meaningful" (Sec. 4).
+  - Minerva "reaching a CEG of 30 in STEM benchmarks and 2400 in math benchmarks" (Sec. 5).
+- **Hilton et al. 2023 (2301.13442v2):** intrinsic performance = "the minimum compute required to train a model of any
+  size in the family to reach the same return" (Sec. 2.1).
+- **Jones 2021 (2104.03113v2):** "for each additional 10× of train-time compute, about 15× of test-time compute can be
+  eliminated" (Sec. IV-C).
+- **Brown et al. 2024 (2407.21787v3):** constant multiplicative sample-budget offsets between models (Sec. 3.2).
+- **Ruan et al. 2024 (2405.10938):** f-equivalent FLOPs on observational capability coordinates (L4 note).
+- Verified in `_claims_L1.md` / `_claims_L4.md`.
+
+## 9. Critic's verdict
+
+*(pending)*
