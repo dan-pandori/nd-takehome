@@ -20,16 +20,21 @@ def norm(s):
     for k, v in LIG.items():
         s = s.replace(k, v)
     s = re.sub(r"-\s*\n\s*", "", s)          # de-hyphenate line breaks
-    s = s.replace("$", "").replace("{", "").replace("}", "")  # HTML math alttext
+    s = re.sub(r"\\(mathrm|text|mathbf|mathit|operatorname)", "", s)  # LaTeX in HTML math alttext
+    s = s.replace("\\,", "").replace("\\!", "").replace("\\ ", " ")
+    s = s.replace("$", "").replace("{", "").replace("}", "")
     return re.sub(r"\s+", " ", s).lower()
 
 
 def main():
     key, phrase = sys.argv[1], sys.argv[2]
     ctx = int(sys.argv[sys.argv.index("--context") + 1]) if "--context" in sys.argv else 160
-    path = f"{SRC}/{key}.txt"
-    if not os.path.exists(path):
-        path = f"{SRC}/{key}.abs.txt"
+    cands = [key, re.sub(r"v\d+$", "", key)]
+    path = next((f"{SRC}/{k}{ext}" for ext in (".txt", ".abs.txt") for k in cands
+                 if os.path.exists(f"{SRC}/{k}{ext}")), None)
+    if path is None:
+        print(f"NO SOURCE TEXT for {key} in {SRC} (fetch it first)")
+        sys.exit(2)
     raw = open(path).read()
     # map normalised offsets back to raw lines roughly via a normalised copy per line
     lines = raw.split("\n")

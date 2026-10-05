@@ -112,3 +112,12 @@ s4, s5. Costed alternatives in `preregistration/grpo-state.md` Addendum 1: Plan 
 Plan C (s0–s3, GRPO default + pass@4, ≈ $16).
 **Default if unanswered:** the experiment run uses **Plan B** (4 seeds, all three GRPO arms, EI inherited from
 state-cap12), and first measures s / update on a 16 GB card, moving to it if that halves the cost.
+
+## 2026-10-05 — capability-defs: the RunPod balance, not the $50 budget, limits the pod work
+
+`rpbalance` read **$122.55** at 05:45 UTC, so only ≈ $20 can be spent before the $100 floor, against the brief's
+optional $50. The planned pod jobs (pre-registered in `preregistration/capability-defs.md`) are J1 teacher-forced
+scoring (≈ $2–4), J3 guided reads of pend / r8 / r16 at cap 12 (≈ $3), J4 excluded-middle fine-tunes (≈ $1–2) and J2
+large-k base sampling (stage A ≈ $4–6; stage B, which would certify "created at RL's per-target compute", ≈ $8–12 more).
+**Default if unanswered:** run J1, J3 (cap 12), J4 and J2 stage A, stop when the balance would fall below $103, and
+report J2 stage B and the cap-6 guided reads as not run for budget. If you top up the balance, I run them.
