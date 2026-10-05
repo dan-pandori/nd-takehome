@@ -20,39 +20,53 @@ Every card uses the notation and budgets below, so their decision rules can be c
 ## Budgets (the answer to "at some k even random weights solve it")
 
 Every sampling-based or probability-based rule needs a budget K: "within reach" means p_θ(t) ≥ 1/K, i.e. the model
-solves t with probability ≥ 1 − 1/e ≈ 0.63 if given K attempts. The cards use four budgets, from most to least
-generous to RL:
+solves t with probability ≥ 1 − 1/e ≈ 0.63 if given K attempts. *Revised after the critic passes:* the headline budget is
+**K_eval-set**, RL's compute spread over the theorems being judged. The others are reported beside it.
 
-| budget | meaning | value (cap-12 r8, per seed) |
+| budget | meaning | value (cap-12 r8 / r16, per seed) |
 |---|---|---|
 | k_eval | the evaluation budget, equal for base and RL (Yue et al.) | 256 |
-| K_per | RL's compute per training target, converted to base attempts | ≈ 10³ (to be measured from compute rows) |
-| K_total | **all** of RL's compute, given to one theorem as base attempts | ≈ 10⁶–10⁷ (to be measured) |
+| K_per | RL's compute per *training* target (depends on how many targets RL trained on) | ≈ 7–10 × 10² (r8, GPU-time) |
+| **K_eval-set** | RL's ladder GPU-seconds / (322 evaluation theorems × 3.6 ms per base attempt) | **≈ 1.9–2.3 × 10⁴ / 4.8–5.0 × 10⁴** |
+| K_total | all of RL's compute on one theorem (can certify elicitation, never creation) | ≈ 3.3–4.3 × 10⁶ / 7.7–9.3 × 10⁶ |
 | K_null | attempts random weights need: 1 / p_0(t) | ≈ e^(hundreds to thousands) |
 
 K_null ≫ K_total for every theorem we have, so tying K to RL's compute settles the random-weights objection: random
 weights solve nothing within any budget RL itself could afford. The real question is where the **base** sits relative
-to K_per and K_total.
+to K_eval-set.
 
-## The three verdicts
+## The four verdicts
 
-For a pair (base, RL) and a theorem or family:
-- **created (at budget K):** the base cannot solve it within K (p_B < 0.05 / K, i.e. < 5 % chance in K attempts) and
-  RL can at the evaluation budget (pass@k_eval ≥ τ).
-- **elicited (at budget K):** RL solves it and the base could too within K (p_B ≥ 1 / K) — RL turned something the
-  base could reach with compute into default behaviour.
-- **neither:** RL does not solve it, or the base already solves it at k_eval.
-- **undetermined:** the evidence does not place p_B on either side of the line (common: certifying p_B < 0.05 / K by
-  sampling needs ≈ 60 K attempts with no success).
+For a pair (base, RL) and a theorem or family, at a declared budget K:
+- **created:** RL solves it at k_eval, and the base cannot within K. "Cannot" is certified only by ≈ 60 K zero-success
+  base attempts. The cheaper label is **not reached within budget** (0 successes in ≥ K attempts). Report both RL-free
+  controls beside it: the replay-only ladder and the compute-matched continuation.
+- **elicited:** RL solves it, and the base can within K: it found a proof within K attempts, or its known-proof
+  estimate is ≥ 2 / K (factor-2 margin; see below).
+- **neither:** RL does not solve it, or the base already does at k_eval.
+- **undetermined:** otherwise.
 
 ## Bracketing p_B (used by several cards)
 
 - **Upper bound:** n base attempts with c successes give a one-sided 95 % Clopper–Pearson bound; with c = 0 it is
   ≈ 3 / n.
-- **Lower bound:** Σ_{y ∈ F(t)} π_B(y | t), summed over F(t), the set of distinct Lean-accepted proofs of t that any model
-  ever found. It holds deterministically, with no sampling error, because p_B is a sum over all valid proofs.
-
+- **Known-proof estimate:** Σ_{y ∈ F(t)} π_B(y | t), summed over F(t), the distinct Lean-accepted proofs of t that any
+  model ever found, including the base's own large-k samples.
+  - In exact arithmetic it would be a lower bound.
+  - In practice the scorer conditions on canonical names where the sampler conditions on its own, so it is an
+    **estimate**. It recovers a median 0.98 / 0.94 of the measured p on calibration theorems (s0 / s1), with 10th–90th
+    percentile ratios ≈ 0.5–1.4.
+  - Certificates use a factor-2 margin.
+- **Primary per-theorem output:** the base's **k-to-solve interval** [1 / UB, 1 / estimate].
 ## Families
 
 S sampling / support · L likelihood · N null-relative · E elicitation cost · T transfer / invariance · R reliability ·
 P psychometric · C compute equivalence · D distribution shift / update size · M mechanistic · X causal intervention.
+
+## Two rules every card inherits from the critic passes
+
+- **Elicitation methods are per theorem.** Sampling at any T, guided step-checked redraws, prior-only search, and
+  renamings are allowed. Anything trained on verifier verdicts for other theorems (fine-tunes, value heads) is RL's
+  own mechanism, studied as teachability.
+- **Placebos must be matched.** RL counts only beyond RL-free training (the replay-only ladder; the compute-matched
+  continuation) at the same ability gain or the same compute.
