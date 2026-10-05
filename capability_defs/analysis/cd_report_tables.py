@@ -121,22 +121,34 @@ def t_j3(J):
 
 
 def t_j9():
-    rows = {}
-    for p in sorted(glob.glob(f'{ROOT}/artifacts/cd/j9/s*_k*.jsonl')):
-        if p.endswith('.full.jsonl'):
+    from cd_part3 import j2_counts
+    T = json.load(open(f'{OUT}/table_c12.json'))
+    print('| seed | theorem | r8 pass@1 (x0) | base attempts before J9 | J9 attempts | J9 successes | UB95, all base attempts | '
+          '0.05 / K_eval-set | certified created at K_eval-set? |')
+    print('|---|---|---|---|---|---|---|---|---|')
+    for s in SEEDS:
+        sel = f'{ROOT}/data/cd/j9/s{s}.jsonl'
+        if not os.path.exists(sel):
             continue
-        s = os.path.basename(p).split('_')[0]
-        for l in open(p):
-            r = json.loads(l)
-            v = rows.setdefault((s, r['name']), [0, 0])
-            v[0] += r['n_ok']; v[1] += r['n_tried']
-    if not rows:
-        print('(no J9 results yet)')
-        return
-    print('| seed | theorem | J9 attempts | J9 successes | all base attempts | UB95 | 0.05 / K_eval-set | certified created? |')
-    print('|---|---|---|---|---|---|---|---|')
-    for (s, n), (c, k) in sorted(rows.items()):
-        print(f'| {s} | `{n}` | {k:,} | {c} | ⟨+J2⟩ | {cp_upper(c, k):.2e} | ⟨⟩ | ⟨⟩ |')
+        K = LADDER_S['r8'][s] / (322 * 3.6e-3)
+        allc = j2_counts(s)
+        j9 = {}
+        for p in glob.glob(f'{ROOT}/artifacts/cd/j9/s{s}_k*.jsonl'):
+            if p.endswith('.full.jsonl'):
+                continue
+            for l in open(p):
+                r = json.loads(l)
+                v = j9.setdefault(r['name'], [0, 0]); v[0] += r['n_ok']; v[1] += r['n_tried']
+        for l in open(sel):
+            n = json.loads(l)['name']
+            c = T['seeds'][str(s)][n]['counts']
+            pc = sum(v[0] for v in c.get('pend', {}).values()) + allc[n][0] if n in allc else None
+            pn = sum(v[1] for v in c.get('pend', {}).values()) + allc[n][1] if n in allc else None
+            jc, jn = j9.get(n, [0, 0])
+            r8 = c['r8']['0']
+            ub = cp_upper(pc, pn)
+            cert = 'yes' if ub < 0.05 / K else ('no (a success)' if pc else f'not yet ({jn:,} J9 attempts)')
+            print(f'| s{s} | `{n}` | {r8[0] / r8[1]:.2f} | {pn - jn:,} | {jn:,} | {jc} | {ub:.2e} | {0.05 / K:.2e} | {cert} |')
 
 
 def main():

@@ -1,0 +1,52 @@
+per job family (all seeds), NVIDIA A40 ($0.49/h):
+family        gpu_seconds     gen_tokens       attempts        actions    train_steps   train_tokens    lean_checks
+j1                  7,540              0              0              0              0              0              0
+j10                 6,740    197,017,719        868,352     10,804,564              0              0            441
+j2                 14,536    468,639,343      3,170,304     26,438,820              0              0         10,509
+j2b                23,840    752,426,407      5,554,176     40,897,128              0              0             60
+j4                  8,048     54,951,229        280,320      2,920,862          7,200    717,413,836         53,450
+j5                  6,762    121,278,360        439,296      6,954,242              0              0        265,013
+j6                  8,692     62,161,404        347,160      3,258,492         76,781  1,703,553,455         64,284
+j6b                10,931     46,069,567        245,760      2,249,260         14,400  1,384,206,738         19,457
+j7                 64,448     87,317,327        494,592      4,827,638         93,951  9,319,166,991         55,606
+j8                 16,191              0              0              0              0              0              0
+j9                 30,897    870,855,454      4,718,592     39,956,867              0              0              1
+logical            32,612    512,894,161      1,566,208     26,593,718              0              0        641,571
+
+total GPU-seconds recorded: 231,238 = 64.23 GPU-hours (pods bill wall time incl. setup and idle; see podbudget)
+
+per arm:
+  j10_pend_s0              gpu_seconds=1,936 gen_tokens=55,452,153 attempts=344,064 actions=3,068,329 lean_checks=55
+  j10_pend_s1              gpu_seconds=2,830 gen_tokens=77,380,810 attempts=262,144 actions=4,369,781 lean_checks=140
+  j10_pend_s2              gpu_seconds=1,975 gen_tokens=64,184,756 attempts=262,144 actions=3,366,454 lean_checks=246
+  j1_b1                    gpu_seconds=2,980
+  j1_b33                   gpu_seconds=4,559
+  j2_pend_s0               gpu_seconds=4,424 gen_tokens=152,499,377 attempts=1,056,768 actions=8,450,787 lean_checks=2,772
+  j2_pend_s1               gpu_seconds=5,577 gen_tokens=164,253,859 attempts=1,089,536 actions=9,632,827 lean_checks=4,094
+  j2_pend_s2               gpu_seconds=4,535 gen_tokens=151,886,107 attempts=1,024,000 actions=8,355,206 lean_checks=3,643
+  j2b_pend_s0              gpu_seconds=8,585 gen_tokens=267,985,978 attempts=1,982,464 actions=14,262,567 lean_checks=18
+  j2b_pend_s1              gpu_seconds=8,576 gen_tokens=283,281,206 attempts=2,129,920 actions=16,087,558 lean_checks=21
+  j2b_pend_s2              gpu_seconds=6,680 gen_tokens=201,159,223 attempts=1,441,792 actions=10,547,003 lean_checks=21
+  j4_A0                    gpu_seconds=1,233 train_steps=1,800 train_tokens=179,119,976
+  j4_A16                   gpu_seconds=1,234 train_steps=1,800 train_tokens=179,723,088
+  j4_A4                    gpu_seconds=1,232 train_steps=1,800 train_tokens=179,267,930
+  j4_C16                   gpu_seconds=1,678 train_steps=1,800 train_tokens=179,302,842
+  j4_read                  gpu_seconds=2,671 gen_tokens=54,951,229 attempts=280,320 actions=2,920,862 lean_checks=53,450
+  j5_read                  gpu_seconds=6,762 gen_tokens=121,278,360 attempts=439,296 actions=6,954,242 lean_checks=265,013
+  j6_A0                    gpu_seconds=1,220 train_steps=1,800 train_tokens=179,119,976
+  j6_A16                   gpu_seconds=1,222 train_steps=1,800 train_tokens=179,723,088
+  j6_nodn                  gpu_seconds=3,800 train_steps=73,181 train_tokens=1,344,710,391
+  j6_read                  gpu_seconds=2,450 gen_tokens=62,161,404 attempts=347,160 actions=3,258,492 lean_checks=64,284
+  j6b_nodn_A16n            gpu_seconds=2,368 train_steps=3,600 train_tokens=346,515,819
+  j6b_nodn_C16n            gpu_seconds=2,362 train_steps=3,600 train_tokens=345,587,550
+  j6b_pend_A16n            gpu_seconds=2,369 train_steps=3,600 train_tokens=346,515,819
+  j6b_pend_C16n            gpu_seconds=2,366 train_steps=3,600 train_tokens=345,587,550
+  j6b_read                 gpu_seconds=1,465 gen_tokens=46,069,567 attempts=245,760 actions=2,249,260 lean_checks=19,457
+  j7_cont                  gpu_seconds=60,863 train_steps=93,051 train_tokens=9,229,972,820
+  j7_probe                 gpu_seconds=826 train_steps=900 train_tokens=89,194,171
+  j7_read                  gpu_seconds=2,759 gen_tokens=87,317,327 attempts=494,592 actions=4,827,638 lean_checks=55,606
+  j8_b1                    gpu_seconds=16,191
+  j9_pend_s0               gpu_seconds=6,560 gen_tokens=156,810,830 attempts=786,432 actions=6,538,238
+  j9_pend_s1               gpu_seconds=13,517 gen_tokens=384,514,886 attempts=1,966,080 actions=19,385,585
+  j9_pend_s2               gpu_seconds=10,820 gen_tokens=329,529,738 attempts=1,966,080 actions=14,033,044 lean_checks=1
+  logical                  gpu_seconds=32,612 gen_tokens=512,894,161 attempts=1,566,208 actions=26,593,718 lean_checks=641,571

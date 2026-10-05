@@ -1,18 +1,14 @@
 # What should "capability" mean for this project, and how do we measure it?
 
-Run `capability-defs` (proposal 26), 2026-10-05. Executor: agent:claude (`--effort max`). Branch `dan_capability-defs`
-on the fork. Pre-registration: `preregistration/capability-defs.md` (3e6f9865) plus a `log.md` entry before every pod
-job. Lean alone decides everywhere.
+Run `capability-defs` (proposal 26), 2026-10-05, executor agent:claude. Pre-registration
+`preregistration/capability-defs.md` (3e6f9865), plus a `log.md` entry before every pod job. Lean alone decides.
 
-**Models.** Every number is measured on **best-cap12** unless labelled otherwise: `best_model.ALiBiGPT`, 6 × 384,
-9,560,832 parameters, `lean_staten` proof-state format, trained from scratch on K12 (`data/kh/train_k12.jsonl`, 155,000
-generated proofs, cap 12; Stage-1 1,200 s on an A40).
-- **pend:** end of pretraining (run `trajectory`). **r8 / r16:** after 8 / 16 rounds of expert iteration, EI (the T1
-  ladder of `trajectory` / `rl-continue`). Seeds s0–s2.
-- **Cap 6:** the same network and recipe trained on the cap-6 set (`trajectory-cap6`, `rl-continue-cap6`).
-- **Evaluation theorems:** textbook72 (scoring only, under its manifest rule) and holdout250: 322, never trained on.
-- **Reads:** plain sampling, T 0.8, 96 steps, 512 tokens per action, k 256 per draw (x0, x1 = two sample seeds).
-  Guided read-outs are labelled.
+**Models.** Every number is on **best-cap12** unless labelled: `best_model.ALiBiGPT`, 6 × 384, 9,560,832 parameters,
+`lean_staten`, from scratch on K12 (`data/kh/train_k12.jsonl`, 155,000 proofs; Stage 1 1,200 s on an A40). **pend** =
+end of pretraining (`trajectory`); **r8 / r16** = after 8 / 16 rounds of expert iteration (EI; `trajectory`,
+`rl-continue`); seeds s0–s2. **Cap 6** = the same recipe on the cap-6 set. **Theorems:** textbook72 (scoring only) +
+holdout250 = 322, never trained on. **Reads:** plain sampling, T 0.8, 96 steps, 512 tokens per action, k 256 per draw
+(x0, x1); guided reads are labelled.
 
 ## 1. The plain answer
 
@@ -27,20 +23,17 @@ step.
 
 ## 2. The catalogue
 
-Twenty definitions, one card each in `capability_defs/cards/` (shared notation: `cards/_FRAME.md`). Each card gives:
-- the formal quantity and a decision rule (created / elicited / neither / undetermined);
-- a null, the cost here, sensitivities and failure modes;
-- relations to other cards and literature anchors (`lit/REVIEW.md`: 185 papers screened, 57 read in depth);
-- **a critic's verdict.** One subagent per card argued that the definition fails. Its strongest argument and my answer
-  are on the card.
+Twenty definitions, one card each in `capability_defs/cards/` (notation: `cards/_FRAME.md`): formal quantity,
+decision rule (created / elicited / neither / undetermined), null, cost here, sensitivities, failure modes, relations,
+literature anchors (`lit/REVIEW.md`: 185 papers screened, 57 read in depth) and **a critic's verdict**: one subagent per
+card argued that the definition fails; its strongest argument and my answer are on the card. **Every critic landed a
+failure I accepted** (pre-registered: at least a third). Six definitions are dropped as decision rules, two kept only
+as descriptions, one folded into another; the rest were revised.
 
-**Every critic landed a failure I accepted** (pre-registered: at least a third would). Six definitions are dropped as
-decision rules, two are kept only as descriptions, one is folded into another, and the rest were revised.
-
-Status after the critic pass: **standard** = recommended (§4); **kept** = valid with the revision shown;
-**descriptive** = a useful number, not a verdict; **dropped** = fails as a decision rule. Families: S sampling,
-L likelihood, E elicitation, T transfer, R reliability, P psychometric, C compute, D distribution or update, N null,
-M mechanistic, X intervention. Last column: created-set size at r8 (draw x0), s0 / s1 / s2, where computed (§3.2).
+Status: **standard** = recommended (§4); **kept** = valid as revised; **descriptive** = a number, not a verdict;
+**dropped** = fails as a decision rule. Families: S sampling, L likelihood, E elicitation, T transfer, R reliability,
+P psychometric, C compute, D distribution, N null, M mechanistic, X intervention. Last column: created-set size at r8
+(draw x0), s0 / s1 / s2 (§3.2).
 
 | # | card | fam. | "RL created a capability on t" (after the critic) | status | r8 set |
 |---|---|---|---|---|---|
@@ -52,7 +45,7 @@ M mechanistic, X intervention. Last column: created-set size at r8 (draw x0), s0
 | 6 | `tf-proof-prob` (Dan's a) | L | the base's *best known* proof has π < 1 / K and the base fails at k_eval | kept (RL's own proof only a "new route" tag) | 29 / 27 / 24 |
 | 7 | `reliability` | R | p̂_R ≥ ½ and the base not within reach at K | kept (RL side of 1) | 12 / 9 / 5 |
 | 8 | `irt-ability` | P | RL's DIF+ items exceed those of an ability-matched RL-free placebo | kept: **finds no RL excess** | 26 / 26 / 30 (unmatched) |
-| 9 | `compute-equivalent` | C | RL solves t; a pretraining continuation with RL's GPU time does not (J7) | kept | ⟨j7⟩ |
+| 9 | `compute-equivalent` | C | RL solves t; a pretraining continuation with RL's GPU time does not (J7) | kept | 18 / 17 / 14 |
 | 10 | `new-proof-new-theorem` | L S | 1, and every RL proof of t uses a rule set no base-accepted proof of any theorem uses | kept | 5 / 4 / 0 |
 | 11 | `transfer-invariance` | T | the gain holds on held-out members and renamings | folded into 4 | — |
 | 12 | `sharpen-expand` | D | RL's success mass sits on proofs the base would not reach (ρ ≥ ½), beyond the replay placebo | descriptive | 48 / 42 / 46 |
@@ -66,21 +59,15 @@ M mechanistic, X intervention. Last column: created-set size at r8 (draw x0), s0
 | 20 | `latent-probe-steer` | M | probes, steering, model diffing | dropped; not computed | — |
 
 What the critics established:
-- **"Created at k" is a fact about n, not about the base.** 0 / 512 base attempts put the base's k-to-solve above
-  ≈ 170, while RL's budgets are 10³–10⁶. Equal-k is kept only as the project's descriptive "group B".
-- **RL's own proof is the wrong object for likelihood.** RL's preferred proof is often the base's proof plus a vacuous
-  detour: 35 of 120 cases contain a self-built Or-detour (`la_transfer_629`: pend solves it 178 / 256). Decide on the
-  base's *best known* proof and on the sum over known proofs.
-- **"Tied to RL's compute" is a menu of budgets.** Per training target, per evaluation theorem, or all of RL's compute
-  on one theorem differ by 10⁴. The headline must be one set-level, compute-matched comparison.
-- **Placebos must be matched.** IRT "gains beyond the pretraining axis" looked like 26–30 RL-created theorems against
-  4–7 for a replay-only placebo, but the placebo had a third of RL's ability gain (§3.7).
-- **Generator templates are not proof schemata.** Many members of the classical families are provable without the
-  classical step, and those members carried the family rates. Families must keep only members that need the key step.
-- **Elicitation methods must be per theorem.** A fine-tune or value head trained on verifier verdicts for *other*
-  theorems is RL by another name.
-- **Novelty tests cannot decide creation here.** Every rule RL uses occurs in ≥ 4 % of pretraining proofs, so "new
-  move" measures placement (composition); and once a theorem is out of the base's reach, every proof of it is too.
+- **"Created at k" is a fact about n.** 0 / 512 base attempts put k-to-solve above ≈ 170, while RL's budgets are
+  10³–10⁶. Equal-k stays only as the descriptive "group B".
+- **RL's own proof is the wrong object for likelihood**: it is often the base's proof plus a vacuous detour (35 of 120
+  cases; §3.3, example 2). Decide on the base's *best known* proof and the sum over known proofs.
+- **"Tied to RL's compute" is a menu of budgets** spanning 10⁴; the headline must be one set-level, compute-matched
+  comparison.
+- **Placebos must be matched** (IRT, §3.7); **templates are not schemata** (keep members that need the key step);
+  **elicitation methods must be per theorem** (a fine-tune on other theorems' verdicts is RL by another name); **novelty
+  tests cannot decide creation** (every rule RL uses occurs in ≥ 4 % of pretraining proofs).
 
 ## 3. Quantification on our models
 
@@ -114,32 +101,23 @@ What the critics established:
 
 ### 3.1 How far is the base from each theorem?
 
-For every hard theorem RL solves, pend's k-to-solve is put in an interval (`cd_bracket.py`, `out/bracket.json`; F1):
-- **sampling bound:** Clopper–Pearson over every base attempt: ≥ 16,896 per hard theorem, ≥ 66,048 where the first
-  16,384 found nothing;
-- **known-proof estimate:** pend's teacher-forced probability (T 0.8) summed over every Lean-accepted proof of t that any
-  model ever found (J1; the base's own J2 proofs included).
+For every hard theorem RL solves, pend's k-to-solve gets an interval (F1; `cd_bracket.py`): from the **sampling bound**
+(Clopper–Pearson over ≥ 16,896 base attempts, ≥ 66,048 where the first 16,384 found nothing) to the **known-proof
+estimate** (pend's teacher-forced probability, T 0.8, summed over every accepted proof of t any model found).
 
-**The known-proof estimate is accurate.** On 30 calibration theorems per seed, where pend's p is measured directly
-(≈ 4,900 attempts each), it recovers a median **0.98 / 0.94 / 0.93** of p (s0 / s1 / s2; IQR within 0.85–1.02).
-- Over all 59–71 measured theorems per seed, the 10th–90th percentile ratio is 0.16–1.34, and the estimate exceeds
-  the sampling UB95 on 1–3 of them. It is not a strict lower bound: the scorer conditions on canonical names, while the
-  sampler writes its own names and the environment renames ≈ 14 % of them. Certificates use a factor-2 margin.
-- One proof carries most of the sum (median share 0.50–0.62), so Dan's "probability of a specific proof" is close to
-  the whole answer *if* the proof is the base's best known one.
-- Cost: one forward pass per proof, against 1 / p samples. It reaches probabilities sampling never could: e^−39 on
-  s1's hardest RL-solved theorem.
+**The known-proof estimate is accurate.** On 30 calibration theorems per seed (p measured from ≈ 4,900 attempts) it
+recovers a median **0.98 / 0.94 / 0.93** of p (IQR within 0.85–1.02); over all 59–71 measured theorems per seed the
+10th–90th percentiles are 0.16–1.34. It is not a strict lower bound (the scorer conditions on canonical names, the
+sampler on its own, and the environment renames ≈ 14 % of them), so certificates take a factor-2 margin. One proof
+carries a median 50–62 % of the sum, so Dan's "probability of a specific proof" is nearly the whole answer *if* it is
+the base's best known proof. It costs one forward pass per proof instead of 1 / p samples, and reaches e^−39.
 
-**Where the base sits.** For the 55 / 45 / 52 hard theorems r8 solves, the estimate puts pend's k-to-solve at a median
-10^4.6 / 10^5.3 / 10^4.5 attempts (range 10^2.3–10^16.8): right at K_eval-set ≈ 10^4.3. The verdict on a typical
-theorem therefore depends on the budget (F2).
+**Where the base sits.** For the 55 / 45 / 52 hard theorems r8 solves, the median estimated k-to-solve is 10^4.6 /
+10^5.3 / 10^4.5 attempts (range 10^2.3–10^16.8): right at K_eval-set ≈ 10^4.3, so verdicts depend on the budget (F2).
 
 ![F1](analysis/figures/cd_kts.png)
 
 ![F2](analysis/figures/cd_elicit_curve.png)
-
-Verdicts at K_eval-set for the hard theorems r8 solves (bracket rule: elicited if the sampling lower bound or the
-known-proof estimate / 2 is ≥ 1 / K):
 
 | r8-solved hard theorems, verdict at K_eval-set | s0 | s1 | s2 |
 |---|---|---|---|
@@ -151,18 +129,16 @@ known-proof estimate / 2 is ≥ 1 / K):
 | undetermined (0 successes, fewer than K attempts) | 0 | 0 | 0 |
 | certified created (UB95 < 0.05 / K) | 0 | 0 | 0 |
 
-- At k_eval = 256 all 152 of these look "created". At K_eval-set, 64 are elicited and 51 are **not reached**: 0
-  base successes in ≥ 65,536 attempts.
-- The other 37 the base did find (1–7 times, mostly once or twice, in 17,000–66,000 attempts), but not often enough
-  to certify p ≥ 1 / K. They sit inside the budget's uncertainty band, so the definitions below disagree on them.
-- F2 shows the same theorems re-classified at every budget. Below K ≈ 10³ almost nothing is certified either way;
-  certification of creation needs ≈ 60 K zero-success attempts, so it is reached only where J9 paid for it (§3.8).
+- At k 256 all 152 look "created". At K_eval-set, 64 are elicited and 51 **not reached** (0 base successes in
+  ≥ 65,536 attempts); the base found the other 37 one to seven times, without a certificate either way.
+- Certifying creation takes ≈ 60 K zero-success attempts: stage B's 66,000 certify only K ≤ 1,100; J9 paid for
+  K_eval-set on nine theorems (§3.8).
 
 ### 3.2 What each definition calls "created", and how noisy that is
 
-Created sets at r8 (draw x0) and r16 (draw x1), cap 12, per seed (`cd_part3.py`, `out/part3.txt`; rendered by
-`cd_report_tables.py`). "Net" removes theorems the replay-only control solves on the same draw. Redraw floor: Jaccard
-of the sets defined on the two sample draws. Seed floor: Jaccard between seeds' sets (pairs s0–s1, s0–s2, s1–s2).
+Cap 12, per seed (`cd_part3.py`, rendered by `cd_report_tables.py`). "Net" removes theorems the replay-only control
+solves on the same draw. Redraw floor: Jaccard between the sets defined on the two sample draws. Seed floor: Jaccard
+between seeds (s0–s1, s0–s2, s1–s2).
 
 | definition (card) | r8, x0: s0 / s1 / s2 | net of replay-only | r16, x1 | redraw Jaccard (r8) | seed Jaccard (r8, pairs) |
 |---|---|---|---|---|---|
@@ -182,7 +158,7 @@ of the sets defined on the two sample draws. Seed floor: Jaccard between seeds' 
 | chain depth ≥ 2 + cm (`chain-reachability`) | 14 / 14 / 10 | 12 / 8 / 5 | 14 / 23 / 12 | 0.88 / 0.93 / 1.00 | 0.17 / 0.14 / 0.26 |
 | rule set not in K12 (`out-of-data-novelty`) | 14 / 20 / 20 | 8 / 9 / 11 | 14 / 29 / 23 | 0.81 / 0.85 / 0.82 | 0.62 / 0.55 / 0.60 |
 
-Set level, the headline comparison of `passk-budget` (coverage of the 322 at each model's budget):
+Set level, `passk-budget`'s headline (coverage of the 322 at each model's budget):
 
 | seed | base within reach at K_eval-set (r8 / r16 budget) | replay-only r8, k 256 | J7 continuation, k 256 | r8, k 256 | r16, k 256 | Δ_cov r8 / r16 |
 |---|---|---|---|---|---|---|
@@ -190,23 +166,20 @@ Set level, the headline comparison of `passk-budget` (coverage of the 322 at eac
 | s1 | 270 / 271 | 244 | – | 286 | 303 | +16 / +32 |
 | s2 | 281 / 281 | 249 | – | 293 | 295 | +12 / +14 |
 
-- **The sets shrink as a definition asks more of the base.** Equal-k "creates" 54 / 51 / 60 at r8. Spending RL's GPU time on base
-  attempts instead leaves 22 / 21 / 14 out of reach (18 / 18 / 9 with not a single base success), 20 / 14 / 8 net of
-  the replay-only control, and **5 / 6 / 6 that no seed's base ever solved** (5 / 4 / 5 net of replay).
-- **Set level, RL is ahead at matched compute on every seed:** r8 at 256 attempts solves 12–21 more of the 322 than the
-  base reaches with K_eval-set attempts on each (r16: 14–32). The replay-only ladder (239 / 244 / 249) and the
-  compute-matched continuation (⟨J7⟩) do not close that gap.
-- **Redraw floors are high** (0.80–1.00 for the budgeted definitions; equal-k 0.68–0.78), so a verdict is stable
-  across sample draws of the same two models.
-- **Seed floors are low** (0.06–0.39 for most definitions): each seed's RL "creates" different theorems. The
-  exceptions compare against something shared by all seeds: rule-set novelty (0.55–0.62; the pretraining data) and
-  "no seed's base ever solves t" (0.38–0.50). Three theorems recur in the strictest sets: `la_transfer_2060` on all
-  three seeds, `la_transfer_1077` and `la_transfer_1648` on two.
-- **Long pool** (`transfer_long2`, 21 theorems with long proofs; equal-k only, pend x2 vs RL x0): RL "creates" 13 / 15
-  / 16 of 21 at r8. J10 gave pend 16,384 more attempts on each: ⟨J10⟩.
-- **Cap 6** (weaker bases: pend solves 153 / 126 / 128 of holdout250 plain; no large-k base reads, so only the
-  unbudgeted definitions): equal-k 101 / 132 / 122 at r8; reliable 104 / 124 / 110; schema members 31 / 43 / 47. ⟨cap-6
-  guided⟩
+- **Asking more of the base shrinks the sets.** Equal-k "creates" 54 / 51 / 60 at r8. With RL's GPU time spent on
+  base attempts instead, 22 / 21 / 14 stay out of reach (18 / 18 / 9 with not one base success), 20 / 14 / 8 net of
+  replay, and **5 / 6 / 6 were never solved by any seed's base**.
+- **Set level, RL is ahead at matched compute on every seed:** r8 at 256 attempts solves 12–21 more of the 322 than
+  the base reaches at K_eval-set (r16: 14–32). Neither RL-free control closes the gap (replay-only 239 / 244 / 249;
+  compute-matched continuation 220 / 215 / 219).
+- **Redraw floors are high** (0.80–1.00 budgeted; equal-k 0.68–0.78); **seed floors are low** (0.06–0.39): each seed's
+  RL "creates" different theorems. The exceptions compare with something shared: rule-set novelty (0.55–0.62) and
+  "no seed's base" (0.38–0.50). `la_transfer_2060` is in all three seeds' strictest sets, `la_transfer_1077` and
+  `la_transfer_1648` in two.
+- **Long pool** (`transfer_long2`, 21 theorems with long proofs; equal-k only): RL "creates" 13 / 15 / 16 at r8, but
+  given 16,384 more attempts the base finds 29 of these 45 (64 %; J10), as often as on the main sets.
+- **Cap 6** (weaker bases, no large-k base reads, so only unbudgeted definitions): equal-k 101 / 132 / 122 at r8;
+  pend's guided read solves 38–44 % of them.
 
 ### 3.3 Do the definitions agree?
 
@@ -363,13 +336,10 @@ and 2.2× the GPU time of a plain one (`guided-tts`, same r8 checkpoints), so th
 
 ### 3.6 Families: excluded middle and the classical schemata
 
-**Family-level verdicts** (`cd_schema.py --keystep`, `cd_part3.py`; F4). Families are the generator schemata of
-`rl_targets` and transfer. Classical families keep only members that need the classical step (not provable by the
-G4ip decision procedure). Two reads:
-- *training shares*: per EI round, the share of the family's 40 trained-on members with ≥ 1 success in 32 attempts
-  (round 1 samples pend);
-- *at the budget*: the family's holdout250 key-step members (2–6 per family), the base counted as reaching a member if
-  p̂ ≥ 1 / K_eval-set over all its attempts, against r16's solves at k 256. This is the card's decision rule.
+Families are the generator schemata of `rl_targets` and transfer; classical families keep only members that need
+the classical step (not G4ip-provable). Two reads (`cd_schema.py --keystep`, `cd_part3.py`; F4): *training shares*
+(per EI round, the share of the 40 trained-on members solved in 32 attempts; round 1 samples pend) and *the card's
+rule at the budget* (holdout250 key-step members, 2–6 per family; the base reaches a member if p̂ ≥ 1 / K_eval-set).
 
 | family (key-step members) | pend round 1 (s0 / s1 / s2) | r16 training share | held-out at budget: base reaches / r16 solves | verdict at budget |
 |---|---|---|---|---|
@@ -385,14 +355,12 @@ distribution 0.93 / 0.50 / 0.97.
 
 ![F4](analysis/figures/cd_schema.png)
 
-- **At pend's 32-attempt read, each seed acquires different families**: excluded middle on s1 (bursting at rounds
-  13–14), both Peirce families on s2. Read at the budget, most of this disappears: the base reaches the held-out
-  members of the negated-conditional and distribution families, and of s2's Peirce families, within K_eval-set
-  attempts.
-- **What survives is s1's classical step:** excluded middle (base 0 of 6 held-out members in ≥ 66,000 attempts each;
-  r16 6 of 6; on the 39 classical-only transfer instances, r16 36 of 39) and, on two or three members each, the Peirce
-  families. That is the strongest evidence here that RL *can* produce a family-level capability its own base lacks, and
-  it happened on one seed in three: "RL creates X" is a per-run event, not a property of the recipe.
+- **Read at 32 attempts, each seed acquires different families** (excluded middle on s1, bursting at rounds 13–14;
+  both Peirce families on s2). **Read at the budget, most of this is elicitation**: the base reaches the held-out
+  members of the negated-conditional and distribution families, and of s2's Peirce families, within K_eval-set.
+- **What survives is s1's classical step**: excluded middle (base 0 of 6 held-out members in 66,560 attempts each; r16
+  6 of 6, and 36 of the 39 classical-only transfer instances) and, on two or three members each, the Peirce families.
+  The strongest evidence here that RL *can* produce a family-level capability its base lacks, on one seed in three.
 
 **Latent or teachable?** (J4, J6, J6b; 39 classical-only held-out A ∨ ¬A instances, k 256, plain reads.)
 
@@ -413,14 +381,13 @@ distribution 0.93 / 0.50 / 0.97.
 Cells: solved of 39 (mean pass@1). LEM = law of excluded middle; the demonstrations are s1's RL proofs of *other*
 instances. Fine-tunes are one ladder-style round (600 steps, 128 proofs per step).
 
-- Four demonstrations install the schema in every seed's base, including s0, whose own RL never found it in 16 rounds.
-- A model pretrained without a single DN step learns it as fast. The pre-registered J6b test (gain over the matched
-  control, pend vs knockout; latent if ≥ 0.3 apart on ≥ 2 / 3 seeds, teachable if within 0.2) gives +0.05 / −0.01 /
-  −0.01: **teachable, not latent**, on every seed.
-- The same 16 demonstrations also raise holdout250 solved@64 by +12 / +15 / +5 over the replay-only fine-tune.
+- Four demonstrations install the schema in every seed's base, including s0, whose own RL never found it.
+- A model pretrained without a single DN step learns it as fast: the pre-registered J6b test (gain over matched
+  controls, pend vs knockout; latent if ≥ 0.3 apart on ≥ 2 / 3 seeds) gives +0.05 / −0.01 / −0.01: **teachable, not
+  latent**.
 
-**What RL "created" here is the discovery of an instance, not a hard-to-learn ability.** Once one proof exists, the
-pattern is cheap to teach, to a base that has it latent or not.
+**What RL "created" is the discovery of an instance, not a hard-to-learn ability.** Once one proof exists, the pattern
+is cheap to teach.
 
 ### 3.7 Is RL "more of the same"?
 
@@ -448,15 +415,19 @@ and replay-only updates have cosine 0.45; the RL-specific part (r8 minus replay-
 weights less than the last stretch of pretraining did.
 
 **A compute-matched pretraining continuation (J7).** pend trained further on K12 (same recipe, learning rate re-warmed
-to 3 × 10⁻⁴ and decayed), for the step count a probe predicted would use the r8 ladder's GPU time (28,054 / 31,462 /
-33,535 steps; ⟨J7 GPU-s⟩), then read like RL.
+to 3 × 10⁻⁴ and decayed) for 28,054 / 31,462 / 33,535 steps. A probe sized this to the r8 ladder's GPU time; the run
+was faster than the probe, so it used 60,863 of the ladders' 73,838 A40-seconds (82 %). Read like RL (k 256, x0):
 
-⟨J7 TABLE⟩
+| seed | pend | J7 continuation | r8 | J7 solves of B (equal-k) | of the compute-matched set | θ (pend ≈ 0) |
+|---|---|---|---|---|---|---|
+| s0 | 232 | 220 | 286 | 19 / 54 | 4 / 22 | +0.51 (r8 +2.10) |
+| s1 | 236 | 215 | 286 | 18 / 51 | 4 / 21 | +0.58 (r8 +1.91) |
+| s2 | 234 | 219 | 293 | 16 / 60 | 0 / 14 | +0.58 (r8 +2.18) |
 
-- More pretraining on the same data is a lateral move: ⟨J7 lateral⟩
-- Its ability gain is the replay-only control's, not RL's: θ ⟨J7 θ⟩ against r8's 1.9–2.2 (pend = 0).
-- K12 has 155,000 proofs and pend had already seen each ≈ 20 times, so in this regime compute without new data buys
-  little; RL's gain comes from its new data, its own verified proofs.
+- **More pretraining on the same data is a lateral move**: it gains 12–19 theorems pend misses and loses 30–42. Its
+  ability gain matches the replay-only control's (θ +0.55 / +0.70 / +0.64), a quarter of RL's.
+- pend had already seen each K12 proof ≈ 20 times. In this regime compute without new data buys little; RL's gain
+  comes from new data, its own verified proofs.
 
 **Start dependence (J8).** `rl-from-ckpt`'s ladders started from earlier pretraining checkpoints. For each start, the
 theorems its r8 solves that the start failed in 512 attempts, scored by the start's own known-proof estimate
@@ -520,10 +491,10 @@ inside the pre-registered range on every seed unless counted.
 | J5 | r16 redraw Jaccard 0.6–0.8; cap-6 r16 ≥ r8 on holdout250 | 0.78 / 0.78 / 0.68; 232 vs 225, 233 vs 226, 232 vs 221 | hit |
 | J6 | (i) knockout greedy 0.05–0.15 below pend; (ii) knockout 0 / 40 LEM; (iii) holdout250 0.85–0.97× pend; (iv) pend+A16 vs knockout+A16 within 0.2 | (i) 0.06 / 0.09 / 0.10; (ii) 1 / 0 / 1 of 40, the one being the intuitionistic member (0 / 39 classical-only); (iii) 0.88 / 0.80 / 0.85×; (iv) 0.05 / 0.08 / 0.00 | (i) hit; (ii) miss on 2 / 3 (technical); (iii) 2 / 3; (iv) hit, but its replay re-taught DN (→ J6b) |
 | J6b | pend's gain − knockout's gain within 0.2 (teachable) | +0.05 / −0.01 / −0.01 | hit |
-| J7 | (i) θ between pend + 0.5 and r8; (ii) solves 30–70 % of B; (iii) solves fewer of the 322 than r8 | ⟨⟩ | ⟨⟩ |
+| J7 | (i) θ between pend + 0.5 and r8; (ii) solves 30–70 % of B; (iii) solves fewer of the 322 than r8 | (i) +0.53 / +0.65 / +0.49 over pend; (ii) 35 / 35 / 27 %; (iii) 220 / 215 / 219 vs 286 / 286 / 293 | (i) 2 / 3; (ii) 2 / 3; (iii) hit |
 | J8 | elicited share at K_total falls monotonically from pend to p1600; ≥ 50 % for pend, ≤ 25 % for p1600 | pend 76 / 71 / 85 %; p1600 21 / 33 / 25.1 %; not monotone on any seed | monotone miss; pend hit; p1600 1 / 3 |
 | J9 | ≥ 6 of 9 theorems stay at 0 successes | ⟨⟩ | ⟨⟩ |
-| J10 | ≤ 40 % of the 45 long-pool pairs get a base success in 16,384 | ⟨⟩ | ⟨⟩ |
+| J10 | ≤ 40 % of the 45 long-pool pairs get a base success in 16,384 | 29 / 45 (64 %) | miss |
 
 ### 3.10 Compute
 
@@ -553,7 +524,8 @@ made strict, with his (a) as the estimator).
      ladder's GPU time) and of other seeds' bases.
 - *What counts as created:* a non-empty net set on ≥ 2 / 3 seeds, larger than the redraw floor, with its theorems
   certified if a headline rests on them.
-- *Cost here:* ≈ ⟨A cost⟩ A40-hours per seed (J1 + J2), ⟨A share⟩ of the r8 ladder's GPU time.
+- *Cost here:* ≈ 4.3 A40-hours per seed (J1 0.7, J2 3.6), ≈ 60 % of the r8 ladder's GPU time; most of it is the
+  49,152 extra attempts on stage-A zeros, which only matter for theorems near the budget.
 - *What existing results show:* RL is ahead at matched compute on every seed. r8 at 256 attempts solves 12–21 more of
   the 322 theorems than the base reaches with K_eval-set attempts each (r16: 14–32), and neither RL-free control
   closes the gap. Per theorem, the 51–60 equal-k "creations" per seed shrink to 14–22 outside the base's reach, 8–20
@@ -593,7 +565,7 @@ made strict, with his (a) as the estimator).
   place RL and RL-free models on the same θ scale, and count items with DIF+ (success far above what θ predicts). RL is
   "off the pretraining axis" only if its DIF+ rate exceeds that of RL-free models at the same Δθ.
 - *What existing results show:* RL moves the model much further along the pretraining ability axis than RL-free
-  training of the same compute (Δθ ≈ 2.1 for r8 against 0.55–0.70 for replay-only and ⟨J7 θ short⟩ for the
+  training of the same compute (Δθ ≈ 2.1 for r8 against 0.55–0.70 for replay-only and 0.51–0.58 for the
   continuation), but at matched Δθ its item-level gains are no larger than theirs (from p5000: EI r2 48 / 41 / 48
   DIF+ items at Δθ 2.0–2.7, replay-only 50 / 49 / 54 at Δθ ≈ 2.1). RL is "more of the same", obtained far more
   efficiently.
@@ -609,85 +581,62 @@ made strict, with his (a) as the estimator).
 
 ## 5. Glossary
 
-- **Theorem t; Lean accepts.** One propositional sequent, e.g. ⊢ A ∨ ¬A. A proof counts iff Lean 4 checks it; nothing
-  else judges.
-- **Attempt.** One sample from the model, run to the end in the proof-state environment (T 0.8, the read caps).
+- **Attempt.** One sampled proof, run to the end in the proof-state environment (T 0.8, the read caps). Lean decides.
 - **Solve probability p.** The chance that one attempt proves t. Every other number here is a view of it.
 - **pass@k.** The chance of at least one proof in k attempts: 1 − (1 − p)^k.
-- **k-to-solve.** 1 / p, the expected number of attempts to the first proof ("the base needs ≈ 3,000 attempts").
-- **Budget K.** How many attempts we allow before saying "cannot". **K_eval-set** (the headline): RL's GPU time spent
-  instead on base attempts over the 322 evaluation theorems, ≈ 2 × 10⁴ each at r8. K_per: per training target
-  (≈ 10³). K_total: all RL compute on one theorem (3–4 × 10⁶).
+- **k-to-solve.** 1 / p, the expected attempts to the first proof.
+- **Budget K.** Attempts allowed before saying "cannot". **K_eval-set** (the headline): RL's GPU time spent instead on
+  base attempts over the 322 evaluation theorems, ≈ 2 × 10⁴ each at r8. K_per: per training target (≈ 10³). K_total:
+  all RL compute on one theorem (3–4 × 10⁶).
 - **Within reach at K.** p ≥ 1 / K: at least a 63 % chance of a proof in K attempts.
-- **base / pend; r8 / r16.** The model at the end of pretraining; the same model after 8 / 16 rounds of expert
-  iteration (sample, keep what Lean accepts, fine-tune).
+- **pend; r8 / r16.** The model at the end of pretraining; after 8 / 16 rounds of expert iteration (sample, keep what
+  Lean accepts, fine-tune).
 - **Hard theorem.** One the base failed in 512 attempts.
-- **Replay-only control.** The same 8 fine-tune rounds as RL, on pretraining data only: no RL proofs, no verifier.
-- **Compute-matched continuation (J7).** The base pretrained further for as long as the r8 ladder ran.
-- **Created (at K).** RL solves t, the base is not within reach at K, and RL-free training does not solve t either.
-  *Not reached:* 0 base successes in ≥ K attempts (cheap). *Certified:* 0 in ≈ 60 K attempts, so the base's chance
-  of solving t within K is below 5 % at 95 % confidence (expensive).
-- **Elicited.** RL solves t and the base is within reach: it found a proof often enough, or its known-proof estimate
-  is ≥ 2 / K. RL made a reachable thing reliable.
-- **Undetermined.** The evidence does not place the base on either side of the budget.
+- **Replay-only control.** RL's 8 fine-tune rounds on pretraining data only: no RL proofs, no verifier.
+- **Compute-matched continuation (J7).** The base pretrained further for about as long as the r8 ladder ran.
+- **Created (at K).** RL solves t; the base is not within reach at K; RL-free training does not solve t. *Not reached:*
+  0 base successes in ≥ K attempts. *Certified:* 0 in ≈ 60 K attempts (base's chance within K below 5 %, 95 %
+  confidence).
+- **Elicited.** RL solves t and the base is within reach. RL made a reachable thing reliable.
 - **Propensity vs capability.** What the model does by default (plain pass@1) vs what it can do with the best
   per-theorem method within a budget (more samples, step-checked redraws, renamings).
-- **Teacher-forced probability π(y).** The model's probability of writing one specific proof y, computed by feeding y
-  through the model.
-- **Known-proof estimate.** π_base(y) summed over every accepted proof of t that any model ever found. It recovers
-  0.93–0.98 of the base's measured p (median), so it is an estimate of p, not just a bound; certificates use a
-  factor-2 margin.
-- **Key-step family.** Theorems sharing a proof pattern (e.g. all A ∨ ¬A), restricted to members that need the
-  pattern's key step (here, members not provable intuitionistically).
-- **Teachable vs latent.** A skill is *teachable* if a few demonstrations install it, also in a model pretrained without
-  its key step; *latent* only if the base learns it markedly faster than that knockout.
-- **IRT ability θ.** One score per checkpoint, fitted jointly with a difficulty per theorem; "more of the same" means
-  RL's successes are predicted by its higher θ.
-- **Placebo.** A comparison arm that gets the same kind of change without the ingredient in question (here: training
-  without RL proofs). It sets the floor for "RL-specific".
-- **Noise floors.** *Redraw:* the same model sampled again. *Seed:* another training run of the same recipe.
-  Differences inside them are not findings.
-- **Null model.** Random initialisation. Its k-to-solve on our hard theorems is e^290 to e^3,200 attempts (median
-  ≈ e^850; J1), which answers "random weights eventually solve everything".
+- **Known-proof estimate.** The base's teacher-forced probability, summed over every accepted proof of t that any model
+  found. It recovers 0.93–0.98 of the measured p, so it estimates p; certificates use a factor-2 margin.
+- **Key-step family.** Theorems sharing a proof pattern (e.g. all A ∨ ¬A), keeping only members that need the
+  pattern's key step.
+- **Teachable vs latent.** *Teachable*: a few demonstrations install the skill, even in a model pretrained without its
+  key step. *Latent*: the base learns it markedly faster than that knockout.
+- **IRT ability θ.** One score per model, fitted jointly with a difficulty per theorem.
+- **Noise floors.** *Redraw:* the same model sampled again. *Seed:* another training run of the recipe.
+- **Null.** Random initialisation: e^290 to e^3,200 attempts per proof here.
 
 ## 6. Open questions for Dan (each with my recommendation)
 
-1. **Which budget defines "the base cannot"?**
-   - *Options:* k_eval (256; the field's equal-k test); 1 % of pretraining compute per theorem (the safety-evaluation
-     convention, ≈ 2–4 × 10³ attempts here); **K_eval-set** (RL's GPU time as base attempts over the evaluation set,
-     ≈ 2 × 10⁴ at r8, ≈ 5 × 10⁴ at r16); K_total (all RL compute on one theorem, ≈ 4 × 10⁶).
-   - *Recommendation:* K_eval-set for verdicts, and always print each theorem's k-to-solve interval so a reader can
-     apply another budget. Never use k_eval as a creation test.
-2. **Is the replay pretraining inside our RL part of "RL"?**
-   - Each EI round also trains on 20,000 pretraining records (≈ 476 M tokens over 8 rounds, more than Stage 1). The
-     replay-only control solves 17 / 24 / 27 of the 54 / 51 / 60 theorems equal-k calls RL-created (a third to a half).
-   - *Recommendation:* report RL net of the replay-only control and of a compute-matched continuation. A claim about
-     "RL" should be a claim about what the verifier signal added.
-3. **Created relative to this seed's base, or to the pretraining recipe?**
-   - The bases differ a lot: `textbook_245a0349` is 0 / 768 for s0's pend and 505 / 768 for s2's;
-     `la_transfer_1382` is 0 / 17,152 for s0 and 26 / 768 for s1.
-   - *Recommendation:* per-seed verdicts for mechanisms; a headline "RL creates X" should require that no seed's base
-     reaches X within the budget.
-4. **What is the unit of a capability: a theorem or a family?**
-   - *Recommendation:* key-step families (members that need the key step) for any creation headline. Theorem-level
-     verdicts agree across seeds only at Jaccard 0.16–0.39, and one theorem can be one lucky route.
-5. **What counts as an elicitation method?**
-   - *Recommendation:* per-theorem methods only: more samples, any temperature, guided step-checked redraws, prior-only
-     search, renamings. Anything that learns from verifier verdicts on *other* theorems (fine-tuning, value heads) is
-     RL's own mechanism; study it as teachability (how many demonstrations), not as the base's capability.
-6. **If four demonstrations install a schema in the base, was it "latent"?**
-   - *Recommendation:* call it **teachable**, and reserve **latent** for a base that learns it markedly faster than a
-     model pretrained without the key step. On our data the knockout learns excluded middle as fast (J6b: gain
-     differences +0.05 / −0.01 / −0.01).
-7. **How much certification to pay for?** Certifying "the base cannot within K" by sampling needs ≈ 60 K zero-success
-   attempts: ≈ 1.2–1.4 M per theorem at K_eval-set, ≈ 1.3 A40-hours.
-   - *Recommendation:* label the cheap verdict "not reached within budget" and certify only the few theorems a
-     headline rests on (J9 did 9 for ≈ $⟨6⟩).
-8. **The next experiment for "can RL create?"** Only an intervention on pretraining can show creation in the strong
-   sense.
-   - *Recommendation:* ablate a *composition* (DN applied to a negation-introduction line, 16,703 records), not a
-     primitive; pretrain three seeds without it, run 16 EI rounds from each, and read out the key-step excluded-middle
-     family on held-out members (≈ $26). Run it before moving to a richer domain.
+1. **Which budget defines "the base cannot"?** Options: k_eval (256, the field's equal-k test); 1 % of pretraining
+   compute per theorem (the safety-evaluation convention, ≈ 3 × 10³ attempts here); **K_eval-set** (≈ 2 × 10⁴ at r8,
+   5 × 10⁴ at r16); K_total (≈ 4 × 10⁶). *Recommendation:* K_eval-set for verdicts, with every theorem's k-to-solve
+   interval printed so a reader can apply another budget; never k_eval.
+2. **Is the replay pretraining inside our RL part of "RL"?** Each EI round also trains on 20,000 pretraining records
+   (≈ 476 M tokens over 8 rounds); the replay-only control solves a third to a half of what equal-k calls created.
+   *Recommendation:* report RL net of the replay-only control and of a compute-matched continuation, so that "RL" means
+   what the verifier signal added.
+3. **Created relative to this seed's base, or to the recipe?** The bases differ: `textbook_245a0349` is 0 / 768 for
+   s0's pend and 505 / 768 for s2's. *Recommendation:* per-seed verdicts for mechanisms; a headline "RL creates X"
+   requires that no seed's base reaches X within the budget.
+4. **A theorem or a family?** *Recommendation:* key-step families for creation headlines. Theorem-level sets agree
+   across seeds only at Jaccard 0.16–0.39.
+5. **What counts as an elicitation method?** *Recommendation:* per-theorem methods only (more samples, any temperature,
+   guided redraws, prior-only search, renamings). Learning from verifier verdicts on *other* theorems is RL's own
+   mechanism: study it as teachability, not as the base's capability.
+6. **If four demonstrations install a schema, was it latent?** *Recommendation:* call it **teachable**, and reserve
+   **latent** for a base that learns markedly faster than a model pretrained without the key step (here it does not:
+   +0.05 / −0.01 / −0.01).
+7. **How much certification to pay for?** ≈ 60 K zero-success attempts per theorem: ⟨J9 cost per theorem⟩ at
+   K_eval-set. *Recommendation:* label the cheap verdict "not reached within budget" and certify only the theorems a
+   headline rests on (J9: 9 theorems for ⟨J9 cost⟩).
+8. **The next experiment for "can RL create?"** *Recommendation:* ablate a *composition* (DN applied to a
+   negation-introduction line, 16,703 records), not a primitive; pretrain three seeds without it, run 16 EI rounds, and
+   read the key-step excluded-middle family on held-out members (≈ $26), before moving to a richer domain.
 9. **Reporting standard.** *Recommendation:* every RL result reports propensity (plain pass@1), capability within the
-   budget (best per-theorem method), and the compute-matched reach table net of RL-free controls. Equal-k "group B"
-   stays a descriptive label.
+   budget (best per-theorem method), and the compute-matched reach table net of RL-free controls; equal-k stays a
+   descriptive label.

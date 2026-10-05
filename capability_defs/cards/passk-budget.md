@@ -81,7 +81,7 @@ everywhere (§9), so report it as a separate scale.
     ≈ 17,152 attempts, which already puts p̂ above 1 / K_eval-set. UB95 at 0 / 66,304 = 4.5 × 10⁻⁵ certifies "created"
     only for K ≤ ≈ 1,100.
   - J9: ≈ 1.2–1.4 M more attempts on 3 theorems per seed, enough to certify at K_eval-set (r8).
-  - Cost: J1 + J2 ≈ ⟨A cost⟩ A40-hours per seed; J9 ≈ ⟨J9 cost⟩ per theorem.
+  - Cost: J1 + J2 ≈ 4.3 A40-hours per seed (≈ 60 % of the r8 ladder's GPU time); J9 ≈ ⟨J9 cost⟩ per theorem.
 - **Analysis.** `cd_part3.py` (the set: `cm`, `cm0`, `cm_recipe`, nets; Δ_cov), `cd_bracket.py` (the bracket),
   `cd_report_tables.py` (tables), a few CPU-minutes.
 - **Result (cap 12, r8, draw x0; s0 / s1 / s2).** Set level: r8 at 256 solves 286 / 286 / 293 of 322; the base reaches

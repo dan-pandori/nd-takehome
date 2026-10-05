@@ -55,16 +55,18 @@ That case is exactly "created" here.
 - **(b)** needs J2's large-k base counts: k*(t) ≈ ln(1 − pass@256_R) / ln(1 − p_B).
 - **(c) the measured counterfactual, J7** (pre-registered): pend trained further on K12 (learning rate re-warmed to
   3 × 10⁻⁴, cosine to 3 × 10⁻⁵) for 28,054 / 31,462 / 33,535 steps, the probe's estimate of the r8 ladder's GPU time
-  (the run was faster than the probe, so it used ⟨J7 share⟩ of it). Read like RL (k 256, x0 and x1).
-  - Solved of 322 at k 256 (x0 / x1): s0 220 / 214, s1 215 / 208, s2 ⟨⟩, against pend 232 / 230, 236 / 238, ⟨⟩ and
-    r8 286 / 288, 286 / 284, ⟨⟩. A lateral move: it gains 12–19 theorems pend misses and loses 31–42.
-  - θ (IRT, pend = 0): ⟨J7 θ⟩, against replay-only 0.55 / 0.70 / 0.64 and r8 2.10 / 1.91 / 2.18.
-  - Of the equal-k created set it solves 19 / 54, 18 / 51, ⟨⟩ (≈ 35 %); of the compute-matched set 4 / 22, ⟨⟩, ⟨⟩.
-    `compute-equivalent`'s set (compute-matched and J7 fails t): ⟨cm_j7⟩.
+  (the run was faster than the probe, so it used 60,863 of the ladders' 73,838 A40-seconds, 82 %). Read like RL.
+  - Solved of 322 at k 256 (x0 / x1): s0 220 / 214, s1 215 / 208, s2 219 / 224, against pend 232 / 230, 236 / 238,
+    234 / 236 and r8 286 / 288, 286 / 284, 293 / 290. A lateral move: it gains 12–19 theorems pend misses and loses
+    30–42.
+  - θ (IRT, pend ≈ 0): 0.51 / 0.58 / 0.58 (+0.53 / +0.65 / +0.49 over each seed's pend), against replay-only 0.55 /
+    0.70 / 0.64 and r8 2.10 / 1.91 / 2.18.
+  - It solves 19 / 54, 18 / 51, 16 / 60 of the equal-k set (35 / 35 / 27 %) and 4 / 22, 4 / 21, 0 / 14 of the
+    compute-matched set. **This card's set (compute-matched, and J7 fails t): 18 / 17 / 14**, net of replay 17 / 13 /
+    8.
   - pend had already seen each K12 proof ≈ 20 times (24,077–24,345 steps × 1,024 pairs over 1.24 M pairs); in this
     regime more compute on the same data buys little, and the θ extrapolation above (which assumes it would) is only an
     exchange rate.
-- **Cost:** CPU only.
 
 ## 5. Sensitivity
 

@@ -57,12 +57,13 @@ rather than judged here.
     - Replay-only control from pend: θ 0.55 / 0.70 / 0.64.
     - EI from p5000: 1.08 / 1.18 / 1.33.
     - EI from p1600: 0.80 / 0.46 / 0.66.
-    - J7, pend's compute-matched pretraining continuation: ⟨J7 θ⟩ (s0 0.51).
+    - J7, pend's compute-matched pretraining continuation: 0.51 / 0.58 / 0.58.
   - **Fit.** Deviance per cell: RL cells 330.4 under the pretraining items vs 84.8 under items refitted on all; a 2-D
     fit brings them to 66.1 (`out/irt_c12.txt`). The 1-D pretraining scale does not describe RL's item profile.
   - **DIF+ items per RL examinee:** 58–77. Placebo (replay-only, from pend): 105–117. DIF+ alone is therefore not
     evidence of anything RL-specific.
-  - **IRT-created** (DIF+ and pend 0 / 512): RL 26 / 26 / 30 at r8 and 32 / 36 / 35 at r16. Replay-only placebo:
+  - **IRT-created** (DIF+ and pend 0 / 512): RL 26 / 26 / 30 at r8 and 33 / 35 / 37 at r16 (an
+    earlier fit with one examinee fewer gave 32 / 36 / 35: the DIF counts move by ±2 with optimiser noise). Replay-only placebo:
     4 / 7 / 7. EI from p5000: 28 / 23 / 26.
   - **Redraw floor** (fit on x0 only vs x1 only): created at r8 28 / 26 / 28 vs 32 / 26 / 31.
   - **Spearman** between the 1-D prediction and observed p̂: r8 0.57 / 0.59 / 0.56, r16 0.57 / 0.50 / 0.52 (Q8a: miss).
