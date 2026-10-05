@@ -26,9 +26,13 @@ solves t with probability ≥ 1 − 1/e ≈ 0.63 if given K attempts. *Revised a
 | budget | meaning | value (cap-12 r8 / r16, per seed) |
 |---|---|---|
 | k_eval | the evaluation budget, equal for base and RL (Yue et al.) | 256 |
-| K_per | RL's compute per *training* target (depends on how many targets RL trained on) | ≈ 7–10 × 10² (r8, GPU-time) |
-| **K_eval-set** | RL's ladder GPU-seconds / (322 evaluation theorems × 3.6 ms per base attempt) | **≈ 1.9–2.3 × 10⁴ / 4.8–5.0 × 10⁴** |
-| K_total | all of RL's compute on one theorem (can certify elicitation, never creation) | ≈ 3.3–4.3 × 10⁶ / 7.7–9.3 × 10⁶ |
+| K_per | RL's compute per *training* target (depends on how many targets RL trained on) | 777 / 731 / 954 (r8) |
+| **K_eval-set** | RL's ladder GPU-seconds / (322 evaluation theorems × 3.6 ms per base attempt) | **19,281 / 21,107 / 23,310 (r8); 47,962 / 49,428 / 50,447 (r16)** |
+| K_total | all of RL's compute on one theorem (can certify elicitation, never creation) | 3.5 / 3.3 / 4.3 × 10⁶ (r8); 7.7–9.3 × 10⁶ (r16) |
+
+*Cost basis.* K_per and K_total were pre-registered with the ladder's own read cost (6.4 / 7.5 / 6.3 ms per attempt,
+`cd_defs.py` READ_S); K_eval-set uses the measured cost of a base attempt on hard theorems (3.6 ms, J2). At 3.6 ms,
+K_per and K_total would be 1.8–2.1× larger (K_per 1,381 / 1,512 / 1,670).
 | K_null | attempts random weights need: 1 / p_0(t) | ≈ e^(hundreds to thousands) |
 
 K_null ≫ K_total for every theorem we have, so tying K to RL's compute settles the random-weights objection: random
@@ -39,10 +43,12 @@ to K_eval-set.
 
 For a pair (base, RL) and a theorem or family, at a declared budget K:
 - **created:** RL solves it at k_eval, and the base cannot within K. "Cannot" is certified only by ≈ 60 K zero-success
-  base attempts. The cheaper label is **not reached within budget** (0 successes in ≥ K attempts). Report both RL-free
-  controls beside it: the replay-only ladder and the compute-matched continuation.
-- **elicited:** RL solves it, and the base can within K: it found a proof within K attempts, or its known-proof
-  estimate is ≥ 2 / K (factor-2 margin; see below).
+  base attempts (UB95 < 0.05 / K). Two cheaper labels: **not within reach** (p̂ < 1 / K over ≥ K attempts; the
+  compute-matched set) and, inside it, **not reached** (0 successes in ≥ K attempts). Report both RL-free controls
+  beside them: the replay-only ladder and the compute-matched continuation.
+- **elicited:** RL solves it, and the base can within K. Certified when the 95 % sampling lower bound on p is ≥ 1 / K
+  or the known-proof estimate is ≥ 2 / K (factor-2 margin; see below); a theorem the base found a few times without
+  either certificate is "within reach, not certified".
 - **neither:** RL does not solve it, or the base already does at k_eval.
 - **undetermined:** otherwise.
 
@@ -54,8 +60,9 @@ For a pair (base, RL) and a theorem or family, at a declared budget K:
   model ever found, including the base's own large-k samples.
   - In exact arithmetic it would be a lower bound.
   - In practice the scorer conditions on canonical names where the sampler conditions on its own, so it is an
-    **estimate**. It recovers a median 0.98 / 0.94 of the measured p on calibration theorems (s0 / s1), with 10th–90th
-    percentile ratios ≈ 0.5–1.4.
+    **estimate**. It recovers a median 0.98 / 0.94 / 0.93 of the measured p on the 30 calibration theorems per seed
+    (s0 / s1 / s2; 10th–90th percentile 0.75–1.11). Over every theorem where pend's p is measured (64 / 59 / 71) the
+    10th–90th percentiles are 0.16–1.34, and the estimate exceeds the sampling UB95 on 3 / 2 / 1.
   - Certificates use a factor-2 margin.
 - **Primary per-theorem output:** the base's **k-to-solve interval** [1 / UB, 1 / estimate].
 

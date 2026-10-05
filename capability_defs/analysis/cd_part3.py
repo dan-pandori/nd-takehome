@@ -20,7 +20,8 @@ Definitions (card slug -> key):
   marginal-bracket brk_ne  R solves t on x, t in H (pend 0 / 512), and NOT certified elicited at K_eval-set
                            (sum over F of pi_pend < 1 / K and the sampling lower bound < 1 / K)
   irt-ability     irt      DIF+ items pend fails (descriptive; the matched-placebo verdict is set level: no excess)
-  schema-acq.     schema   holdout250 members of families created at family level (pend <= 0.05, R >= 0.5)
+  schema-acq.     schema   holdout250 members of families created at family level: key-step members only (classical families:
+                           not G4ip-provable); base share within reach at K_eval-set <= 0.05 and R solves >= 0.5 at k 256
   cap-vs-prop.    guided   R solves t on x; pend 0 in all plain attempts AND 0 in its guided read (J3, k 256)
   sharpen-expand  sharp    R solves t; t in H; rho >= 1/2 (R's success mass on known proofs with pi_pend < 1 / K)
   new-proof/thm   npnt     cm AND NP across theorems: every one of R's accepted proofs of t uses a rule set that occurs in
@@ -33,6 +34,7 @@ import collections, glob, gzip, itertools, json, math, os, re, sys
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))   # repo root: intuit.py
 import cd_reads as R
 from cd_defs import budgets, jac, READ_S, LADDER_S
 from cd_bracket import cp_upper, cp_lower, lse, LN33
@@ -125,6 +127,16 @@ def main():
         r = json.loads(l)
         if r.get('schema'):
             fam_of[r['name']] = r['schema']
+    # key-step families on holdout250 (schema card): classical families keep only members not provable by G4ip
+    from intuit import intuit_provable
+    fam_all = collections.defaultdict(list)
+    for n in names:
+        if n in fam_of and meta[n]['pool'] == 'h250':
+            fam_all[fam_of[n]].append(n)
+    fam_key = {}
+    for f, mem in fam_all.items():
+        need = [m for m in mem if not intuit_provable(meta[m]['prompt'])]
+        fam_key[f] = need if need else mem      # intuitionistic families unchanged
     # K12 rule sets (coarsest skeleton level)
     k12_rulesets = set()
     for l in open(os.path.expanduser('~/work/best-state/data/kh/train_k12.jsonl')):
@@ -262,17 +274,16 @@ def main():
                     if base_zero_big and rs and not any(r in pend_rulesets for r in rs):
                         D['npnt'].append(n)
                 D['irt'] = list(irt['dif'].get(f's{s}_{rl}', {}).get('created', []))
-                # schema: family-level verdict on holdout250 members, this draw
-                fam = collections.defaultdict(list)
-                for n in names:
-                    if n in fam_of and meta[n]['pool'] == 'h250':
-                        fam[fam_of[n]].append(n)
-                for f, mem in fam.items():
-                    def rate(ck):
-                        v = [S[m]['counts'].get(ck, {}).get(str(x)) for m in mem]
-                        v = [c for c in v if c]
-                        return np.mean([c[0] > 0 for c in v]) if v else float('nan')
-                    if rate('pend') <= 0.05 and rate(rl) >= 0.5:
+                # schema (card rule, post-critic): holdout250 members of each family, classical families restricted to
+                # members that need the key step (not G4ip-provable); created if the base's share of members within reach
+                # at K_eval-set (p-hat >= 1 / K over all its standard-cap attempts) is <= 0.05 and RL solves >= half of
+                # them at k 256 on this draw; every member of a created family enters the set
+                for f, mem in fam_key.items():
+                    rb = np.mean([pend_all(m)[1] > 0 and pend_all(m)[0] / pend_all(m)[1] >= 1 / K for m in mem])
+                    v = [S[m]['counts'].get(rl, {}).get(str(x)) for m in mem]
+                    v = [c for c in v if c]
+                    rr = np.mean([c[0] > 0 for c in v]) if v else float('nan')
+                    if rb <= 0.05 and rr >= 0.5:
                         D['schema'].extend(mem)
                 # relative to the recipe: no seed's base solves t in any attempt
                 D['cm_recipe'] = [n for n in D['cm'] if pend_any_seed(n) == 0]
@@ -347,15 +358,13 @@ def main():
                          for q in (0.1, 0.25, 0.5, 0.75)}
         rh = res['sets'].get(f's{s}_r8_x0_rho', {})
         sens['sharp rho'] = {str(q): sum(1 for n, (ra, rn) in rh.items() if ra >= q) for q in (0.25, 0.5, 0.75, 0.9)}
-        fam = collections.defaultdict(list)
-        for n in names:
-            if n in fam_of and meta[n]['pool'] == 'h250':
-                fam[fam_of[n]].append(n)
         def frate(mem, ck):
+            if ck == 'pend':
+                return np.mean([pend_all(m)[1] > 0 and pend_all(m)[0] / pend_all(m)[1] >= 1 / K0 for m in mem])
             v = [S[m]['counts'].get(ck, {}).get(str(x)) for m in mem]
             v = [c for c in v if c]
             return np.mean([c[0] > 0 for c in v]) if v else float('nan')
-        sens['schema (pend<=lo, RL>=hi)'] = {f'{lo}/{hi}': sum(len(m) for m in fam.values()
+        sens['schema (pend<=lo, RL>=hi)'] = {f'{lo}/{hi}': sum(len(m) for m in fam_key.values()
                                              if frate(m, 'pend') <= lo and frate(m, rl) >= hi)
                                              for lo in (0.0, 0.05, 0.1) for hi in (0.3, 0.5, 0.7)}
         res['sens'][f's{s}'] = sens
