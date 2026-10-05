@@ -52,6 +52,19 @@ def main():
                 print(f"cap {cap} s{s} {ck:4s}: " + '; '.join(f"{k} plain {v['plain']} / guided {v['guided']} (of {v['n']})"
                                                        for k, v in row.items() if isinstance(v, dict))
                       + (f"; guided tokens / attempt {row['guided_tokens_per_attempt']:.0f}" if row['guided_tokens_per_attempt'] else ''))
+    # Q13: share of B (cap-12 equal-k created set, r8 draw x0) that pend's guided read solves; also of the r16 x1 set
+    P = json.load(open(f'{OUT}/part3.json')) if os.path.exists(f'{OUT}/part3.json') else None
+    if P:
+        for s in (0, 1, 2):
+            p = f'{ROOT}/artifacts/cd/j3/s{s}_pend_logical.rows.jsonl.gz'
+            if not os.path.exists(p):
+                continue
+            g = {json.loads(l)['name'] for l in gzip.open(p, 'rt') if json.loads(l)['n_ok'] > 0}
+            for key in (f's{s}_r8_x0', f's{s}_r16_x1'):
+                B = P['sets'].get(key, {}).get('eqk', [])
+                hit = sorted(set(B) & g)
+                res[f'Q13_{key}'] = {'B': len(B), 'guided_pend_solves': len(hit)}
+                print(f'Q13 {key}: guided pend solves {len(hit)} of B = {len(B)} ({len(hit) / max(1, len(B)):.0%})')
     json.dump(res, open(f'{OUT}/j3.json', 'w'), indent=1)
 
 
