@@ -35,7 +35,9 @@ a time). Instructions: `AGENT_INSTRUCTIONS.md`. Earlier reviews this one extends
    outputs.
    - A single output's probability is a lower bound on it.
    - Importance sampling with a stronger policy as the proposal is unbiased for it (Wu & Hilton 2024, Sec. 3.1).
-   - Our deterministic "sum over known proofs" bound sits between the two (card `marginal-bracket`).
+   - Our "sum over known proofs" sits between the two (card `marginal-bracket`): a lower bound in exact arithmetic,
+     in practice an estimate (the scorer and the sampler condition on different names) that recovers a median
+     0.93–0.98 of the measured p (REPORT §3.1).
 4. **The safety-evaluation literature defines capability as the best elicitation within a budget and contrasts it
    with propensity (default behaviour).**
    - "Capability evaluations are about whether an AI system *can* do some task … alignment evaluations are about

@@ -52,3 +52,27 @@ Beyond the table:
 - **Stage-2 scores:** on all 7,994 targets scored in both stages, the stage-2 score is ≥ the stage-1 score − ln 33.
 - **Unscored targets:** 24 / 58 stage-1 targets failed replay. Both of us dropped them.
 - **Log cross-check:** the claims "24 of 54" and "27 / 57" about J2 hits reproduce.
+
+## Second check, after stage B (2026-10-05 14:16 UTC)
+
+A fresh subagent re-derived the compute-matched definitions with its own code (`/tmp/indep_check/`; it read the run's
+scripts only for definitions), from the raw reads, J2 chunks and J9 chunks.
+
+| s0 / s1 / s2 | independent | `out/part3.json` (13:59) |
+|---|---|---|
+| K_eval-set (r8) | 19,281 / 21,107 / 23,310 | same |
+| equal-k (r8, x0) | 54 / 51 / 60 | same sets |
+| compute-matched (cm) | 22 / 21 / 14 | same sets |
+| cm, 0 base successes | 18 / 18 / **8** | 18 / 18 / **9** |
+| cm net of replay-only | 20 / 14 / 8 | same sets |
+| cm, no seed's base ever | 5 / 6 / 6 | same sets |
+| r8 coverage / base within reach at K / Δ_cov | 286 / 286 / 293; 265 / 270 / 281; +21 / +16 / +12 | same |
+
+- The one mismatch is timing: J9 chunk `s2_k4` (1 success on `la_transfer_1648`, s2) landed after part3.json was
+  written. Leaving it out reproduces every part3 value; the final rerun includes it (cm0 s2 → 8; the theorem stays in
+  cm at 1 / 721,664).
+- Negative controls: counting the doubled-cap truncation chunks changes nothing (their only success is on a theorem
+  already within reach); dropping J2 but keeping J9 shrinks cm to 3 / 3 / 3; dropping both empties cm (n ≤ 1,024 < K)
+  and widens Δ_cov to +47 / +39 / +42 — the budget is what moves the answer.
+- Integrity: every plain read covers the 322 theorems once at 256 attempts; chunk caps in each `args.json` match the
+  file names; no sampling seed repeats within a seed; no chunk contains theorems outside the 322.
