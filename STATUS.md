@@ -270,3 +270,4 @@ PART 2 DONE 2026-10-05T08:08:19Z
 PART 3 DONE 2026-10-05T17:34:07Z
 - 17:34 UTC  **Part 4 (recommendation):** `REPORT.md` §4–§6 — three standard definitions (compute-matched reach with k-to-solve intervals; capability vs propensity; key-step families with a teachability test) plus an IRT diagnostic, each with protocol, null, what counts as created and what our results show; glossary; nine open questions with recommendations. Cards, `numbers.md` § capability-defs (compute rows, bucket paths) and `run_capability_defs.md` final. Spend 77.21 pod-hours, $37.84 of $50. Uploads: `hf://buckets/dan-pandori/nd-rl/capability-defs/{artifacts/cd, artifacts/cd_targets_gz, data/cd, ckpts/cd}`.
 PART 4 DONE 2026-10-05T17:34:07Z
+CAPABILITY-DEFS DONE 2026-10-05T17:34:26Z
