@@ -1,0 +1,32 @@
+classical families restricted to members needing the classical step: {'contraposition_conv': (29, 23), 'demorgan_nand_to_or': (13, 11), 'excluded_middle': (39, 39), 'negated_conditional': (20, 18), 'peirce': (15, 13), 'peirce_sequent': (20, 19)}
+cap 6: rl_targets family share with >= 1 success per round (k 32; round 1 = pend), seeds s0 / s1 / s2
+family                              r1 (pend)               r8              r16   verdicts
+constructive_dilemma           0.12/0.00/0.03   0.47/0.88/0.47   0.50/1.00/0.57   elic crea crea
+contraposition                 0.93/0.72/0.82   1.00/1.00/1.00   1.00/1.00/1.00   elic elic elic
+contraposition_conv            0.00/0.03/0.00   0.69/0.72/0.00   0.97/1.00/0.72   crea crea crea
+demorgan_and_to_nor            0.00/0.00/0.00   0.80/0.55/0.55   0.95/0.88/0.93   crea crea crea
+demorgan_nand_to_or            0.00/0.00/0.00   0.00/0.00/0.00   0.00/0.00/0.00   neit neit neit
+demorgan_nor_to_and            0.33/0.62/0.45   1.00/1.00/1.00   1.00/1.00/1.00   elic elic elic
+demorgan_or_to_nand            0.00/0.00/0.00   1.00/0.72/0.90   1.00/0.97/1.00   crea crea crea
+disjunctive_syllogism          0.72/0.93/0.82   1.00/1.00/1.00   1.00/1.00/1.00   elic elic elic
+dist_and_over_or               0.00/0.00/0.00   0.10/0.20/0.30   0.93/0.50/0.97   crea neit crea
+dist_and_over_or_conv          0.00/0.03/0.00   1.00/1.00/0.90   1.00/1.00/0.90   crea crea crea
+dist_or_over_and               0.03/0.05/0.00   0.93/1.00/0.95   0.97/1.00/1.00   crea crea crea
+dist_or_over_and_conv          0.00/0.00/0.03   0.80/0.75/0.70   0.97/0.93/1.00   crea crea crea
+excluded_middle                0.00/0.00/0.00   0.00/0.00/0.00   0.00/0.00/0.00   neit neit neit
+export                         0.97/0.93/0.95   1.00/1.00/0.97   1.00/1.00/0.97   elic elic elic
+import                         0.05/0.10/0.00   0.88/0.82/0.82   0.93/0.93/1.00   crea elic crea
+negated_conditional            0.00/0.00/0.00   0.10/0.05/0.00   0.10/0.10/0.05   neit neit neit
+negated_conditional_conv       0.00/0.00/0.00   1.00/0.80/0.95   1.00/0.95/1.00   crea crea crea
+peirce                         0.00/0.00/0.00   0.00/0.00/0.00   0.00/0.00/0.00   neit neit neit
+peirce_sequent                 0.00/0.00/0.00   0.00/0.00/0.00   0.00/0.00/0.00   neit neit neit
+
+transfer (held out) cumulative share solved by round 1 / 8 / 16, s0 / s1 / s2, families that move most:
+  constructive_dilemma         0.00/0.47/0.47  0.00/0.90/1.00  0.00/0.55/0.68
+  demorgan_or_to_nand          0.00/1.00/1.00  0.00/0.82/1.00  0.00/0.88/1.00
+  negated_conditional_conv     0.00/1.00/1.00  0.00/0.85/1.00  0.00/0.97/1.00
+  dist_or_over_and             0.05/0.97/1.00  0.05/1.00/1.00  0.00/1.00/1.00
+  dist_and_over_or_conv        0.00/1.00/1.00  0.07/1.00/1.00  0.00/0.97/1.00
+  dist_or_over_and_conv        0.03/0.78/0.95  0.00/0.85/0.97  0.00/0.80/0.93
+  demorgan_and_to_nor          0.00/0.80/0.97  0.00/0.38/0.93  0.00/0.62/0.95
+  contraposition_conv          0.04/0.83/0.96  0.04/0.78/1.00  0.04/0.04/0.83
