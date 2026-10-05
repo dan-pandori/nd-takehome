@@ -34,9 +34,19 @@ classical-only held-out A v ~A instances: 39 of 40
   j6b/s0_pend_A16n_f1__lem40_x1.jsonl                  solved 36/39  mean pass@1 0.774  (all 40: 37; k 256)
   j6b/s0_pend_C16n_f0__lem40_x1.jsonl                  solved  0/39  mean pass@1 0.000  (all 40: 0; k 256)
   j6b/s0_pend_C16n_f1__lem40_x1.jsonl                  solved  0/39  mean pass@1 0.000  (all 40: 1; k 256)
+  j6b/s1_nodn_A16n_f0__lem40_x1.jsonl                  solved 36/39  mean pass@1 0.678  (all 40: 37; k 256)
+  j6b/s1_nodn_A16n_f1__lem40_x1.jsonl                  solved 36/39  mean pass@1 0.695  (all 40: 37; k 256)
+  j6b/s1_nodn_C16n_f0__lem40_x1.jsonl                  solved  0/39  mean pass@1 0.000  (all 40: 1; k 256)
+  j6b/s1_nodn_C16n_f1__lem40_x1.jsonl                  solved  0/39  mean pass@1 0.000  (all 40: 1; k 256)
   j6b/s1_pend_A16n_f0__lem40_x1.jsonl                  solved 36/39  mean pass@1 0.715  (all 40: 37; k 256)
+  j6b/s1_pend_A16n_f1__lem40_x1.jsonl                  solved 35/39  mean pass@1 0.734  (all 40: 36; k 256)
+  j6b/s1_pend_C16n_f0__lem40_x1.jsonl                  solved  0/39  mean pass@1 0.000  (all 40: 1; k 256)
+  j6b/s1_pend_C16n_f1__lem40_x1.jsonl                  solved  0/39  mean pass@1 0.000  (all 40: 1; k 256)
 
 J6b gain = mean pass@256 (A16n) - mean pass@256 (C16n), averaged over fine-tune seeds; pend vs no-DN knockout (pre-registered: latent if pend - knockout >= 0.3 on >= 2/3 seeds; teachable if within 0.2):
   s0 pass@256, 39 classical-only (decision)  : pend gain 0.923, knockout gain 0.872, difference +0.051 -> teachable from scratch
   s0 pass@256, all 40                        : pend gain 0.913, knockout gain 0.850, difference +0.063 -> teachable from scratch
   s0 mean pass@1, 39 (secondary)             : pend gain 0.749, knockout gain 0.701, difference +0.048 -> teachable from scratch
+  s1 pass@256, 39 classical-only (decision)  : pend gain 0.910, knockout gain 0.923, difference -0.013 -> teachable from scratch
+  s1 pass@256, all 40                        : pend gain 0.888, knockout gain 0.900, difference -0.012 -> teachable from scratch
+  s1 mean pass@1, 39 (secondary)             : pend gain 0.725, knockout gain 0.686, difference +0.038 -> teachable from scratch
