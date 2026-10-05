@@ -7,12 +7,12 @@ Families S + L (the bridge between sampling and likelihood). Slug `marginal-brac
 The quantity is the base model's single-attempt solve probability p_B(t) = Σ_y π_B(y | t) V(t, y), bracketed from both
 sides. No new modelling assumption is needed; each side is valid on its own.
 
-- **Lower bound (likelihood).** LB(t) = Σ_{y ∈ F(t)} π_B(y | t).
+- **Known-proof estimate (likelihood; a lower bound in exact arithmetic).** LB(t) = Σ_{y ∈ F(t)} π_B(y | t).
   - F(t) is the set of distinct Lean-accepted proofs of t found by any model in any read: every pretraining checkpoint,
     every RL round, every seed, both caps, references, and the base's own large-k samples.
   - Each π_B(y | t) is teacher-forced at the sampler's temperature (T 0.8), with the 33 name bases marginalised.
-  - LB holds deterministically: p_B is a sum of non-negative terms over all valid proofs, and F(t) is a subset of
-    them.
+  - In exact arithmetic LB ≤ p_B: p_B is a sum of non-negative terms over all valid proofs, and F(t) is a subset of
+    them. In practice it is an estimate (measured caveat below).
   - With one name base scored, each term may be replaced by its own lower bound π_B(y | b = 0) / 33 (J1 stage 1).
 - **Upper bound (sampling).** UB(t) is the one-sided 95 % Clopper–Pearson bound from every independent base attempt
   on t: draws x0, x1, x2 (and x4 for group C) at k 256 each, plus J2's 16,384 or 65,536.
@@ -24,8 +24,9 @@ sides. No new modelling assumption is needed; each side is valid on its own.
   carry. This checks how complete F is.
 
 **Measured caveat (Part 3).** The sum is *not strictly* a lower bound in practice.
-- On seed 0's 57 measurable theorems, LB / p̂ has 10th–90th percentiles of 0.54–1.43 (median 0.96), and it exceeds the
-  sampling 95 % upper bound on 3 of 57.
+- Over every theorem where pend's p is measured (64 / 59 / 71 per seed), LB / p̂ has 10th–90th percentiles of
+  0.28–1.34 / 0.38–1.15 / 0.16–1.28 (medians 0.95 / 0.91 / 0.92), and it exceeds the sampling 95 % upper bound on 3 /
+  2 / 1 of them.
 - The likely cause is name conditioning. The scorer conditions on canonical names, while the sampler conditions on its
   own sampled names, which the environment then renames: ≈ 14 % of names defined in J2.
 - So it is a well-calibrated *estimate*, and certificates use a factor-2 margin (LB ≥ 2 / K).
@@ -35,13 +36,15 @@ sides. No new modelling assumption is needed; each side is valid on its own.
 *Revised after the critic pass (§9).* **The primary output is budget-free:** each theorem's k-to-solve interval for the
 base, [1 / UB(t), 1 / LB(t)] attempts. Verdicts follow only for a declared budget.
 
-At a budget K from `_FRAME.md` (K_per, K_total), for each theorem that R solves at k 256:
+At a budget K from `_FRAME.md` (headline K_eval-set; K_per and K_total beside it), for each theorem that R solves at
+k 256:
 
 | verdict | rule |
 |---|---|
-| **elicited at K** | LB(t) ≥ 1 / K, or the sampling lower bound ≥ 1 / K |
-| **created at K** | UB(t) < 0.05 / K |
-| **undetermined** | neither |
+| **elicited at K** | LB(t) ≥ 2 / K (factor-2 margin: LB is an estimate), or the sampling lower bound ≥ 1 / K |
+| **created at K** | UB(t) < 0.05 / K (≈ 60 K zero-success base attempts) |
+| **not reached at K** (cheap) | 0 base successes in ≥ K attempts, not elicited |
+| **undetermined** | otherwise |
 
 The bracket's width, log UB − log LB, is reported for every theorem. It says how far the evidence is from a verdict.
 
@@ -62,13 +65,17 @@ The bracket's width, log UB − log LB, is reported for every theorem. It says h
     ≈ 4,000 proofs per seed, about 20 min per seed.
   - J2 ≈ 1 A40-hour per seed (stage A).
   - Analysis: `cd_bracket.py`, CPU-seconds.
-- **First numbers** (s0, stage 1, the deliberately loose b0 − ln 33 bound; `out/bracket.json`):
-  - On 30 calibration theorems where pend's p is measurable, exp(LB₁) / p̂ has median 0.025 [IQR 0.020, 0.032]. With
-    the ln 33 penalty removed that would be ≈ 0.8; stage 2 will measure it exactly.
-  - The best single proof carries 66 % of the bound.
-  - Of the 55 hard theorems that r8 solves (pend 0 / 512), 24 (44 %) are already certified elicited at K_total; 29 of
-    55 (53 %) for r16.
-  - None is certified either way at K_per.
+- **Final numbers** (stage 2 exact terms for the top proofs, stage-1 bounds elsewhere; J2 stages A / A′ / B;
+  `out/bracket_all.txt`, `out/bracket.json`; s0 / s1 / s2):
+  - Calibration (30 theorems per seed, p measured from ≈ 4,900 attempts): exp(LB) / p̂ median **0.98 / 0.94 / 0.93**
+    (10th–90th percentile 0.75–1.11). The best single proof carries a median 0.62 / 0.50 / 0.51 of LB.
+  - Of the hard theorems r8 solves (55 / 45 / 52), certified elicited at K_total by LB: 42 / 32 / 44; at K_per by
+    LB: 2 / 0 / 4 (by the sampling lower bound 3 / 0 / 5); certified created at K_per (0 in ≥ 65,536): 21 / 19 / 11.
+  - At K_eval-set: elicited 22 / 18 / 24, found but not certifiably within reach 12 / 8 / 17, not reached (0 in ≥ K)
+    21 / 19 / 11, undetermined 0, certified created 0 before J9 (REPORT §3.1, §3.8).
+  - The k-to-solve intervals put the median RL-solved hard theorem at 10^4.6 / 10^5.3 / 10^4.5 attempts (F1).
+  - The set this card contributes to the agreement matrix ("not certified elicited at K_eval-set", i.e. created ∪
+    undetermined ∪ not certifiably within reach): 29 / 26 / 25 (r8, x0).
 
 ## 5. Sensitivity
 
@@ -77,7 +84,7 @@ The bracket's width, log UB − log LB, is reported for every theorem. It says h
 - **Decoding.** A guided decoder has a different p. Bracket it separately, or not at all: its probability of a proof
   is not a product of plain π terms.
 - **Completeness of F.** LB grows as F grows; adding the base's own J2 successes matters most. F is drawn from every
-  model, so LB is a lower bound whichever model found the proofs.
+  model; whichever model found a proof, it is scored under the base (name conditioning aside, a valid term).
 - **Representation.** The bracket is per interface (proof-state here). Whole-proof models need their own scores.
 - **Renaming / premise order.** Bracket each prompt. A renaming class gets the minimum (for creation) or the maximum
   (for elicitation) over its members.
@@ -110,8 +117,8 @@ The bracket's width, log UB − log LB, is reported for every theorem. It says h
   (screened by L3).
 - **Brown et al. 2024 and Kazdan et al. 2025.** Why sampling alone cannot resolve small p (`passk-budget`).
 - **Chen & Foster et al.'s coverage principle** (earlier review). Coverage is sequence-level mass on correct outputs.
-- **Our construction.** The deterministic lower bound by summing known proofs is our own. The literature we found uses
-  importance sampling or SMC estimates, not this bound.
+- **Our construction.** Summing the base's probability over every known proof is our own. The literature we found
+  uses importance sampling or SMC estimates, not this sum.
 
 ## 9. Critic's verdict
 

@@ -152,7 +152,7 @@ def main():
             print(f'  {rl}: RL-solved hard theorems {len(H)}; certified elicited at K_total by LB: {len(el)} ({len(el) / max(1, len(H)):.0%}); '
                   f'at K_per by LB: {len(el_p)}, by sampling lower bound: {len(el_s)}; certified created at K_per: {len(cr_p)}, at K_total: {len(cr_t)}')
             print(f'       LB - best single proof (nats): median {np.median(margin):.2f}; coverage of RL success mass by F: '
-                  f'median sum_F pi_{rl} / p-hat_{rl} = {np.median([math.exp(r["LB08_" + rl]) / r["phat_" + rl] for n, r in H]):.3f} (stage-1 bound)')
+                  f'median sum_F pi_{rl} / p-hat_{rl} = {np.median([math.exp(r["LB08_" + rl]) / r["phat_" + rl] for n, r in H]):.3f} (stage-2 exact terms where scored, stage-1 bound elsewhere)')
     json.dump({str(k): v for k, v in res.items()}, open(f'{OUT}/bracket.json', 'w'))
 
 

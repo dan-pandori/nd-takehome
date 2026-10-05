@@ -40,17 +40,18 @@ Seed version: count seeds per verdict, and check whether another seed's *base* a
 ## 4. How to compute it here
 
 - **Free.** p̂ from the k 256 reads, one draw to define and the other to check.
-- **First numbers** (`out/defs_c12.txt`, cap 12, 322 theorems):
-  - Created (p̂_pend < 0.05 and p̂_R ≥ 0.5) at r8: 71 / 62 / 60 (s0 / s1 / s2, draw x0). At r16 (x1): 75 / 80 / 61.
-  - Redraw Jaccard 0.84–0.92. Seed Jaccard 0.31–0.41.
-  - Ratio to the equal-k set at r8: 1.31 / 1.22 / 1.00.
-  - Jaccard with the equal-k set: 0.38. Reliability adds theorems the base solves rarely but at k 256; it drops
-    theorems RL solves only rarely.
+- **Final numbers** (`cd_part3.py`, `rel`; cap 12, r8 draw x0, s0 / s1 / s2): p̂_R ≥ ½ within the compute-matched set
+  (base not within reach at K_eval-set, uncertified): **12 / 9 / 5**; net of the replay-only control 10 / 6 / 3; r16
+  (x1) 12 / 14 / 8. Redraw Jaccard 1.00 / 1.00 / 0.83; seed Jaccard 0.11 / 0.06 / 0.27. Varying the RL threshold
+  q = 0.1 / 0.25 / 0.5 / 0.75 gives 13 / 14 / 11 → 12 / 11 / 8 → 12 / 9 / 5 → 9 / 6 / 5. Strictly *certified* (the
+  created row of §2) needs J9 (REPORT §3.8).
+- **The retired rule** (p̂_pend < 0.05 at k 256, p̂_R ≥ ½; `out/defs_c12.txt`, Q9): 71 / 62 / 60 at r8, 1.31 / 1.22 /
+  1.00× the equal-k set. It is kept as a description of "RL made it reliable", not as a creation test.
 
 ## 5. Sensitivity
 
-- **τ and τ_low:** a two-threshold rule. Theorems near either threshold flip; report the (p_B, p_R) scatter, not just
-  the count.
+- **Thresholds:** RL's ½ and the base's budget K. Theorems near either flip; report the (p_B, p_R) scatter, not just
+  the count (τ_low = 0.05 was retired after the critic).
 - **Temperature:** lowering T raises p for already-likely proofs. Reliability at T 0.8 is not greedy reliability.
   Greenblatt et al. use greedy correctness; ours is sampled.
 - **Decoding:** a guided decoder raises reliability on long theorems (`guided-tts`). Under the conditional analysis the

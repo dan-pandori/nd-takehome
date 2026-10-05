@@ -10,7 +10,7 @@ Family S (sampling). Slug `passk-budget`. Notation: `_FRAME.md`.
   - p̂ = c / n, with a one-sided 95 % Clopper–Pearson interval; with c = 0 the upper bound is ≈ 3 / n.
   - pass@k for k ≤ n by the unbiased estimator 1 − C(n − c, k) / C(n, k) (Chen et al. 2021, Eq. 1).
   - For k > n **no unbiased per-theorem estimate exists**. Beyond the sampled n, use the interval on p, the
-    likelihood lower bound of `marginal-bracket`, or (for set-level statements only) a fitted distribution of p over
+    known-proof estimate of `marginal-bracket`, or (for set-level statements only) a fitted distribution of p over
     theorems (beta-binomial or zero-inflated; Kazdan et al. 2025; Schaeffer et al. 2025).
 - **k-to-solve** K_θ(t) = 1 / p_θ(t), the expected number of attempts to the first success. **Compute-to-solve** =
   K_θ(t) × the cost of one attempt. Measured for pend on hard theorems: 3.6 ms of A40 time per attempt (J2 chunk 0:
@@ -25,10 +25,12 @@ Family S (sampling). Slug `passk-budget`. Notation: `_FRAME.md`.
   K_eval-set = ladder GPU-s / (N_eval × cost per base attempt),
 
   with N_eval = 322 (textbook72 + holdout250) and the cost measured on pend (3.6 ms per attempt on an A40, J2):
-  ≈ 1.9 × 10⁴ attempts per theorem at r8 and ≈ 4.8 × 10⁴ at r16. J2's 16,384 nearly supplies it. Two reference
-  budgets are reported beside it:
+  19,281 / 21,107 / 23,310 attempts per theorem at r8 and 47,962 / 49,428 / 50,447 at r16 (s0 / s1 / s2). J2 supplies
+  it: 16,384 attempts on every hard theorem, and 49,152 more on each that stayed at 0. Two reference budgets are
+  reported beside it:
   - **K_per:** RL's compute per *training* target. It depends on how many targets RL trained on, which the judged
-    theorems are not: 256 if counted in samples (8 rounds × 32), ≈ 780–1,400 if counted in GPU time.
+    theorems are not: 256 if counted in samples (8 rounds × 32); 777 / 731 / 954 in GPU time at the ladder's read
+    cost (6.3–7.5 ms), 1,381 / 1,512 / 1,670 at 3.6 ms.
   - **K_total:** all of RL's compute on one theorem. It can certify elicitation but never creation.
 
 ## 2. Decision rule
@@ -72,12 +74,21 @@ everywhere (§9), so report it as a separate scale.
 ## 4. How to compute it here
 
 - **Data.**
-  - Existing per-theorem reads: pend and r8 at x0 + x1 (+ mcts-a x2, and x4 for C), k 256 each; r16 at x1.
-  - J2: pend at 16,384 attempts on each seed's hard RL-solved theorems (57 / 59 / 55), and at 4,096 on 30
-    calibration theorems per seed. About 1 A40-hour per seed, ≈ $0.5.
-  - J2 stage B: 65,536 attempts on the theorems still at 0. UB95 = 4.6 × 10⁻⁵ certifies "created" only for K ≤ ≈ 1,100
-    (r8 K_per in GPU time at 6.4 ms, not at 3.6 ms or r16). About 1.5 A40-hours per seed.
-- **Analysis.** `capability_defs/analysis/cd_bracket.py` and `cd_defs.py`, a few CPU-seconds.
+  - Existing per-theorem reads: pend and r8 at x0 + x1 (+ mcts-a x2, and x4 for C), k 256 each; r16 at x1 and x0 (J5).
+  - J2 stage A: pend at 16,384 attempts on each seed's hard RL-solved theorems (57 / 59 / 55) and at 4,096 on 30
+    calibration theorems per seed; stage A′: 16,384 on the hard theorems no RL read solves (29 / 18 / 22).
+  - J2 stage B: 49,152 more (65,536 in all) on the stage-A zeros (30 / 37 / 21). Theorems with a stage-A success keep
+    ≈ 17,152 attempts, which already puts p̂ above 1 / K_eval-set. UB95 at 0 / 66,304 = 4.5 × 10⁻⁵ certifies "created"
+    only for K ≤ ≈ 1,100.
+  - J9: ≈ 1.2–1.4 M more attempts on 3 theorems per seed, enough to certify at K_eval-set (r8).
+  - Cost: J1 + J2 ≈ ⟨A cost⟩ A40-hours per seed; J9 ≈ ⟨J9 cost⟩ per theorem.
+- **Analysis.** `cd_part3.py` (the set: `cm`, `cm0`, `cm_recipe`, nets; Δ_cov), `cd_bracket.py` (the bracket),
+  `cd_report_tables.py` (tables), a few CPU-minutes.
+- **Result (cap 12, r8, draw x0; s0 / s1 / s2).** Set level: r8 at 256 solves 286 / 286 / 293 of 322; the base reaches
+  265 / 270 / 281 at K_eval-set; **Δ_cov = +21 / +16 / +12** (r16: +24 / +32 / +14). The replay-only ladder at 256
+  solves 239 / 244 / 249. Per theorem: equal-k 54 / 51 / 60 → not within reach at K_eval-set **22 / 21 / 14** (redraw
+  Jaccard 0.84–0.87, seed 0.16–0.25) → net of replay 20 / 14 / 8 → 0 base successes 18 / 18 / 9 → no seed's base ever
+  solved 5 / 6 / 6 (net 5 / 4 / 5). Certified created: ⟨J9⟩.
 - **Structural limit.** Certifying creation at K_total needs ≈ 60 K_total ≈ 2 × 10⁸ base attempts per theorem. That
   is ≈ 200 A40-hours per theorem, so creation at K_total cannot be certified by sampling. Only elicitation can be
   certified there.
@@ -88,8 +99,9 @@ everywhere (§9), so report it as a separate scale.
   sampling (step-checked redraws) raised solves by 5–9 pp at matched tokens (`guided-tts`). The protocol must be named,
   and plain and guided are reported separately (AGENT_POLICY).
 - **k and thresholds.** K_per and K_total differ by a factor of 4,495 (the number of training targets), and verdicts
-  near either line flip. Hard theorems at pend sit at p ≈ 10⁻⁵–10⁻³ (J2 chunk 0: 0, 0, 0, 0, 1, 1, 2 and 10 successes
-  in 16,384), which is exactly the region around 1 / K_per ≈ 1.3 × 10⁻³.
+  near either line flip. The known-proof estimates of the hard theorems RL solves span 10^−16.8 to 10^−2.3, with
+  medians 10^−4.6 / 10^−5.3 / 10^−4.5: right at 1 / K_eval-set. A tenfold budget change moves the set 1.7–2.6×
+  (REPORT §3.4).
 - **Representation.** The same 29 theorems were unreachable for the whole-proof base in 4 × 10⁵ attempts but reached by
   the proof-state base (`support-state`). p is a property of (model, interface, decoder).
 - **Renaming, premise order, curried forms.** p is measured per prompt. A capability claim about a theorem should
@@ -105,7 +117,9 @@ everywhere (§9), so report it as a separate scale.
   choice moves the line by orders of magnitude.
 - **Group selection.** If the created set is defined on one draw and p_B is estimated on the same draw, p_B is biased
   down. Define on one draw and estimate on an independent one.
-- **Truncation caps** bias p down (C strata 1–19 % cut off in earlier runs; ≤ 3 per 16,384 in J2).
+- **Truncation caps** bias p down: 0.27 % of attempts on hard theorems and 1.9 % on calibration theorems were cut off
+  in J2 stage A. Re-reading the 6 most-truncated stage-A zeros at doubled caps found one success
+  (`textbook_6997656e…`, 2 / 16,384, 0 in ≥ 65,536 at standard caps): the caps are part of the protocol.
 - **Population extrapolation cannot settle single theorems.** A beta fit cannot tell impossible from merely hard
   (Kazdan et al. App. D.2).
 - **Creation at large K is uncertifiable by sampling** (§4): the rule's creation side is mostly "undetermined".
@@ -113,7 +127,7 @@ everywhere (§9), so report it as a separate scale.
 ## 7. Relations
 
 - Generalises `passk-equal-k` (K = k_eval = 256).
-- Its elicited side is implied by `marginal-bracket` (the likelihood lower bound).
+- Its elicited side is implied by `marginal-bracket` (the known-proof estimate, with its factor-2 margin).
 - `capability-vs-propensity` replaces plain sampling with the best elicitation method within the budget.
 - `compute-equivalent` prices RL in pretraining compute instead of in base samples.
 - `chain-reachability` explains how RL can be "created" here while every round is elicited relative to the previous

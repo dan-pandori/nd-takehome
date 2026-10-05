@@ -36,34 +36,41 @@ agreement matrix: every holdout250 member of a created family.
 
 ## 4. How to compute it here
 
-**Ladder logs, free (`out/schema_c12.txt`).** These are the per-round shares of the 40 `rl_targets` members with ≥ 1
-success in 32 attempts:
+**Training shares, free (`cd_schema.py --keystep`, `out/schema_c12_keystep.txt`).** Per EI round, the share of each
+family's 40 trained-on `rl_targets` members (classical families: key-step members only) with ≥ 1 success in 32
+attempts; round 1 samples pend. The full table is in §9 and REPORT §3.6 (excluded middle 0.00 → 0.00 / **0.95** / 0.26
+at r16; Peirce 0.00 → 0.00 / 0.27 / **1.00**; classical negated-conditional 0.05 / 0.00 / 0.00 → 1.00 / 0.65 / 1.00;
+distribution 0.00 → 0.97 / 1.00 / 0.93). These are 32-attempt base reads, far below any budget.
 
-| family | pend (round 1) | r8 | r16 | verdict s0 / s1 / s2 |
+**The decision rule, at the budget (`cd_part3.py`, `schema`).** Held-out members = each family's holdout250 members
+(2–6 per family), key-step only. The base reaches a member if p̂ ≥ 1 / K_eval-set over all its standard-cap attempts
+(J2 gives every hard member ≥ 16,896, the stage-A zeros 66,304); RL's share is solved at k 256 on the draw.
+
+| family | held-out key-step members | base within reach at K_eval-set (s0 / s1 / s2) | r16 solves (x1) | verdict |
 |---|---|---|---|---|
-| `dist_and_over_or` | 0.00 / 0.00 / 0.00 | 0.97 / 0.90 / 0.78 | 0.97 / 1.00 / 0.93 | created ×3 |
-| `excluded_middle` | 0.03 / 0.00 / 0.00 | 0.03 / 0.03 / 0.05 | 0.03 / **0.95** / 0.28 | — / created / — |
-| `demorgan_nand_to_or` | 0.03 / 0.03 / 0.05 | 0.35 / 0.40 / 0.45 | 0.57 / 0.47 / 0.53 | created / — / created |
-| `peirce` | 0.03 / 0.30 / 0.07 | 0.62 / 0.68 / 1.00 | 0.62 / 0.70 / 1.00 | created / elicited / elicited |
+| excluded middle | 6 | 0 / 0 / 0 | 0 / **6** / 1 | created on s1 |
+| Peirce | 2 | 0 / 0 / 1 | 0 / 1 / 2 | s1 (1 of 2) borderline; s2 elicited |
+| Peirce, sequent form | 3 | 1 / 0 / 3 | 2 / 2 / 3 | s1 created; s0, s2 elicited |
+| negated conditional (classical) | 5 | 5 / 3 / 5 | 5 / 5 / 5 | elicited ×3 |
+| distribution ∧ over ∨ | 3 | 2 / 2 / 2 | 3 / 3 / 2 | elicited ×3 |
+| De Morgan ¬(A ∧ B) ⊢ ¬A ∨ ¬B (classical) | 1 | 0 / 0 / 0 | 0 / 0 / 0 | neither |
 
-- The other 15 families are "elicited": pend already ≥ 0.07 at k 32.
-- **Held-out transfer members** (never trained; cumulative over rounds):
-  - `dist_and_over_or` 0.03 → 0.97 / 0.88 / 0.70 by r8;
-  - `excluded_middle` 0.00 → 0.03 / 0.93 / 0.23 by r16 (s0 / s1 / s2).
-- **Excluded middle in detail.**
-  - s1's first LEM target solves come at rounds 2, 10, 12 (×2), then 13 (×12), 14 (×16), 15 (×4), 16 (×2): a burst.
-  - s0 holds only the one instance pend solved in round 1.
-  - On the six holdout250 members (k 256): pend solves 0 of 6 on every seed; s1 r16 solves 6 of 6; s2 r16 1 of 6.
-- **Paid jobs.**
-  - J4 (excluded-middle demonstrations), J6 (the no-DN pretraining control) and J2 (large-k base reads of the 3
-    holdout250 `dist_and_over_or` members that pend failed) give the base-at-budget numbers. ≈ 0 extra cost beyond
-    those jobs.
+- The created set (every member of a created family) is 0 / 2 / 0 at r8 (x0) and 0 / 11 / 0 at r16 (x1); redraw and
+  seed floors are uninformative at these sizes.
+- Excluded middle on s1 is the robust case: base 0 / 66,560 on each of the six members; r16 also solves 36 / 39 of
+  the classical-only held-out transfer instances (s0 0, s2 13).
+- **Teachability (J4, J6, J6b; `out/lem.txt`).** Four demonstrations of excluded middle (s1's RL proofs of other
+  instances) take pend from 0 / 39 held-out instances to 36 / 33 / 36; sixteen to 37 / 34 / 37. A knockout pretrained
+  without double negation learns it as fast (J6b gain difference +0.05 / −0.01 / −0.01): **teachable, not latent**
+  (`elicit-finetune`).
 
 ## 5. Sensitivity
 
-- **k:** the ladder's k 32 per round is small. pend may solve `dist_and_over_or` members at 10³ attempts (J2 decides for
-  the holdout250 members).
-- **Thresholds** 0.05 and 0.5: `demorgan_nand_to_or` (0.47–0.57 at r16) sits on the line.
+- **k:** the ladder's k 32 per round is small. At the budget, pend reaches 2 of the 3 held-out `dist_and_over_or`
+  members on every seed (e.g. `la_transfer_428` 1 / 9 / 2 successes in 17,152), so the family is elicited.
+- **Thresholds** 0.05 and 0.5: held-out families have 2–6 members, so one member moves a rate by 0.17–0.5; s1's
+  Peirce (1 of 2) sits exactly on the line. With all members (no key-step restriction) `demorgan_nand_to_or` sat on
+  the line at 0.47–0.57; key-step only, it is 0.00.
 - **Decoding:** plain only in the ladder logs; guided would raise rates.
 - **Representation:** families are defined on statements, so they are interface-free. Rates are not.
 - **Renaming and substitution** are what define a family. That is the point: a capability survives renaming.

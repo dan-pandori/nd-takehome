@@ -37,8 +37,8 @@ This card **qualifies** other definitions: it decides the unit of a capability (
   322 × 4 variants.
 - **Held-out transfer:** the ladder logs (transfer is sampled every round, never trained) and the holdout250 reads.
 - Free numbers (`out/schema_c12.txt`). `dist_and_over_or` transfer members (never trained) go from 0.03 at pend to
-  0.97 / 0.88 / 0.70 by r8, matching the trained-on members (0.97 / 0.90 / 0.78). Excluded middle on s1: 0.93 held-out
-  vs 0.95 trained-on at r16. These family capabilities transfer.
+  0.97 / 0.88 / 0.70 by r8, matching the trained-on members (0.97 / 0.90 / 0.78). Excluded middle on s1: 0.92 held-out
+  (key-step members) vs 0.95 trained-on at r16. These family capabilities transfer.
 - **Length:** the trajectory reads stratified by `L_true`. `support-curves` and `state-frontier` measured length
   frontiers (L*).
 

@@ -21,7 +21,7 @@ q_B = π_B(· | t, success) the base's.
 - **ε-support split:**
   - sharpening mass S(t) = Σ_{y : π_B(y) ≥ ε} π_R(y), over valid y;
   - expansion mass E(t) = Σ_{y : π_B(y) < ε} π_R(y);
-  - expansion share ρ(t) = E / (S + E), with ε = 1 / K (K_per by default).
+  - expansion share ρ(t) = E / (S + E), with ε = 1 / K (K_eval-set as implemented; K_per was the first default).
 - **Estimators on the known proofs F(t)** (J1):
   - q̂_θ(y) = π_θ(y) / Σ_{F} π_θ;
   - reshaping bits ≈ KL(q̂_R ‖ q̂_B) restricted to F;
@@ -51,10 +51,13 @@ q_B = π_B(· | t, success) the base's.
 
 - **J1** scores (π_B, π_R for every known proof of the hard and calibration theorems; exact 33-base scores for the
   top proofs in stage 2) and **J2** (p_B by sampling).
-- Analysis: `cd_bracket.py` extended with ρ̂ and the reshaping KL. CPU minutes.
-- **Preliminary (stage 1, s0).** The known proofs cover a small share of RL's mass under the loose one-base bound:
-  Σ_F π_r8 / p̂_r8 has median 0.026, which the ln 33 penalty explains. Stage 2 gives the exact coverage. ρ̂ is
-  computed in Part 3.
+- Analysis: ρ̂ in `cd_part3.py` (`sharp`); coverage in `cd_bracket.py`. The reshaping KL was not computed (the ρ
+  results below made it moot as a decision quantity). CPU minutes.
+- **Results** (cap 12, s0 / s1 / s2). Coverage of RL's success mass by the known proofs, median Σ_F π_R / p̂_R: r8
+  0.69 / 0.48 / 0.71, r16 0.51 / 0.47 / 0.56. ρ ≥ ½ (r8, x0): **48 / 42 / 46** of the hard theorems r8 solves; net of
+  replay 36 / 24 / 27; r16 55 / 59 / 50; redraw Jaccard 0.91–0.93, seed 0.32–0.38. ρ is near 0 or 1 on almost every
+  hard theorem (threshold sweep 0.25 → 0.9: 50 / 42 / 48 → 37 / 38 / 36), so it says which side of ε RL's proofs fall,
+  and agrees with equal-k at Jaccard 0.83; as the critic said, it is descriptive.
 
 ## 5. Sensitivity
 

@@ -33,16 +33,21 @@ R's training budget (`support-curves` used 4 × 10⁵).
 
 ## 4. How to compute it here
 
-- **Free.** Every checkpoint has two k 256 draws on textbook72 + holdout250. r16 has only x1; J5 adds x0.
+- **Free.** Every checkpoint has two k 256 draws on textbook72 + holdout250 (r16's x0 draw came from J5).
 - **First numbers** (cap 12, `out/defs_c12.txt`):
   - Created at r8: 54 / 51 / 60 of 322 (s0 / s1 / s2; draw x0). At r16 (x1): 61 / 65 / 61.
   - Redraw Jaccard (x0 vs x1): 0.78 / 0.70 / 0.68.
-  - Seed Jaccard: 0.34–0.39.
+  - Seed Jaccard: 0.34–0.39. r16 redraw Jaccard (J5): 0.78 / 0.78 / 0.68.
+  - Net of the replay-only control: 37 / 27 / 33 (it solves 17 / 24 / 27 of the set).
+  - What happens to the set under a budget (REPORT §3.2): 22 / 21 / 14 stay out of the base's reach at K_eval-set;
+    pend's guided read solves 50 / 55 / 60 % of it; giving the base 512 or ≥ 768 attempts instead of 256 removes
+    7–17 theorems.
 
 ## 5. Sensitivity
 
 - **k:** the whole verdict. In `support-curves` the survivor count fell 37 → 29 as base attempts rose from 4 × 10⁴ to
-  2 × 10⁵ per temperature. J2 chunk 0: 4 of 8 created-at-256 theorems get base successes at 16,384.
+  2 × 10⁵ per temperature. J2 stage A: 24 / 54, 20 / 57 and 28 / 49 of the hard theorems in the set get base
+  successes at 16,384 more attempts (`out/extrap.txt`).
 - **Temperature and decoding:** T 1.0 rescued 19 theorems T 0.8 missed (`support-curves`). Guided redraws change
   solves (+5–9 pp).
 - **Representation:** whole-proof vs proof-state flips 28 of 29 survivors (`support-state`).
@@ -91,6 +96,6 @@ R's training budget (`support-curves` used 4 × 10⁵).
 
 **My answer: accepted.** Equal-k at 256 stays as the field's standard **descriptive label** (the project's "group B"),
 and as a comparison with the literature. It is not a create / elicit rule. The decision moves to `passk-budget`'s
-per-theorem rule with the compute-matched base budget, plus an undetermined row. The false sentence in §7 is
-withdrawn.
+compute-matched rule, whose headline is the set-level coverage comparison Δ_cov with per-theorem verdicts beside
+it, plus an undetermined row. The false sentence in §7 is withdrawn.
 

@@ -42,7 +42,12 @@ card recommends **relative to the base, at matched compute**.
 - First numbers (family level; `out/schema_c12.txt`). `dist_and_over_or`: 0 / 40 targets at round 1 (pend, k 32) on
   every seed, then 0.97 / 0.90 / 0.78 by r8. Excluded middle on s1 first appears at rounds 2, 10, 12 and then bursts at
   13–14.
-- Per-theorem chain depths for holdout250 (⊂ transfer) are in Part 3.
+- Per-theorem chain depths for holdout250 (⊂ transfer): the set used in the agreement matrix (`cd_part3.py`, `chain`)
+  is "first solved by the ladder's sampler at round ≥ 2, and compute-matched" (base not within reach at K_eval-set;
+  the card's original K_per was replaced by the headline budget): 14 / 14 / 10 at r8 (x0), net of replay 12 / 8 / 5;
+  r16 14 / 23 / 12. It is a subset of the compute-matched set (holdout250 members only; Jaccard 0.67), so on
+  holdout250 most theorems the base cannot reach were first solved by the ladder after round 1, as a chain of
+  elicitations would predict; as the critic said, this is a mechanism column, not a verdict.
 
 ## 5. Sensitivity
 

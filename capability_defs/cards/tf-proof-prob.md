@@ -22,8 +22,8 @@ Three choices make the notion strict.
 | y*_B: the known proof the base likes best, argmax over F(t) of π_B(y) | the base's own best route among all proofs anyone found | depends on how complete F(t) is |
 | the marginal p_B(t) = Σ_y π_B(y) V(t, y) | the probability that one base attempt proves t | not computable exactly; bounded below by the sum over known proofs (`marginal-bracket`) |
 
-**Only the marginal is the probability that sampling finds a proof.** Every single-proof probability is a lower bound
-on it: p_B(t) ≥ π_B(y) for every valid y.
+**Only the marginal is the probability that sampling finds a proof.** Every single-proof probability is, in exact
+arithmetic, a lower bound on it: p_B(t) ≥ π_B(y) for every valid y.
 
 **(ii) Normalisation.**
 
@@ -39,7 +39,8 @@ sampling.
 **(iii) Base vs RL.**
 - The RL lift is Δ(y) = log π_R(y) − log π_B(y) on a fixed proof.
 - The decision uses the base's absolute level against −ln K, with K from `_FRAME.md`: −ln 256 = −5.5 nats (equal-k);
-  −ln K_per ≈ −6.6 to −7.6; −ln K_total ≈ −15.0 to −16.0 (cap 12, r8 / r16).
+  −ln K_per ≈ −6.6 to −7.6; **−ln K_eval-set ≈ −9.9 to −10.1 (r8), −10.8 (r16)**, the headline; −ln K_total ≈ −15.0 to
+  −16.0 (cap 12, r8 / r16).
 
 ## 2. Decision rule
 
@@ -47,7 +48,7 @@ sampling.
 
 | level | created | elicited |
 |---|---|---|
-| **theorem** (the decision) | the base fails at k_eval (0 / 256), and max over F(t) of π_B(y) < 1 / K, where F(t) includes the base's own accepted samples (J2) and RL's proofs; certify with the sampling bound (`marginal-bracket`) | max over F(t) of π_B(y) ≥ 1 / K (or the sum over F(t) ≥ 1 / K) |
+| **theorem** (the decision) | the base fails at k_eval (0 / 256), and max over F(t) of π_B(y) < 1 / K, where F(t) includes the base's own accepted samples (J2) and RL's proofs; certify with the sampling bound (`marginal-bracket`) | max over F(t) of π_B(y) ≥ 2 / K (or the sum over F(t) ≥ 2 / K; factor-2 margin, since the terms are estimates) |
 | **proof** (a descriptive tag, "new route") | log π_B(y_R) < −ln K: RL's own proof is a route the base would not write within K | — |
 | **step** (descriptive, "new move") | some step of y_R has log π_B < −ln K | — |
 
@@ -69,13 +70,18 @@ detours (§9), and a new proof of an old theorem is not a new capability to prov
   pend, r1 … r8), all three cap-12 seeds; cap-6 twins in `trajectory-cap6`.
 - **J1 (this run).**
   - Stage 1: every known proof of each seed's hard and calibration theorems (≈ 1.3 × 10⁵ per seed) under init / pend
-    / r8 / r16 at one name base. This gives a valid lower bound, b0 − ln 33. Cost ≈ 47 s per checkpoint per 34,000
+    / r8 / r16 at one name base. Each term gets the one-base bound b0 − ln 33 (a lower bound on that proof's marginal). Cost ≈ 47 s per checkpoint per 34,000
     proofs on an A40, ≈ 0.4 GPU-h in all.
   - Stage 2: the top proofs exactly at 33 bases.
-- **First numbers** (`out/defs_c12.txt`; existing scores, T 0.8, r8, draw x0; theorem counts out of 322). RL solves t
-  and its eventual proof is below 1 / K_total under pend for 46 / 34 / 40 theorems (s0 / s1 / s2). The reference proof
-  is below 1 / K_total for 49 / 48 / 37. The eventual proof's worst step is below 1 / K_per for 61 / 56 / 45. Redraw
-  Jaccard 0.92–0.98; seed Jaccard 0.13–0.47.
+- **Final numbers, the post-critic rule** (`cd_part3.py`, `tfmax`; cap 12, r8 draw x0, s0 / s1 / s2): RL solves t,
+  pend fails it at k 256, and the base's *best known* proof has π_pend < 1 / K_eval-set (T 0.8; exact 33-base terms
+  where J1 stage 2 scored them, the stage-1 bound elsewhere): **29 / 27 / 24**; net of replay 23 / 16 / 17; r16 31 / 39
+  / 26. Redraw Jaccard 0.88 / 0.89 / 0.84; seed 0.22 / 0.20 / 0.31. Budget sweep (K = 0.1 / 0.3 / 1 / 3 × K_eval-set):
+  42 / 41 / 42 → 34 / 34 / 32 → 29 / 27 / 24 → 26 / 24 / 21. It agrees with the bracket at Jaccard 0.90.
+- **The retired proof-level rule** (RL's own eventual proof below 1 / K_total under pend; `out/defs_c12.txt`): 46 / 34 /
+  40; the reference proof 49 / 48 / 37. Q6 ("new proof, old theorem": RL's eventual proof below 1 / K_total while the
+  known-proof estimate is ≥ 2 / K_total): 22 / 15 / 22 theorems, 41 / 29 / 37 % of the equal-k set (`out/q6.txt`).
+  These are "new route" tags, not creation verdicts.
 
 ## 5. Sensitivity
 
@@ -102,7 +108,7 @@ detours (§9), and a new proof of an old theorem is not a new capability to prov
 
 ## 7. Relations
 
-- Theorem-level elicited ⟸ `marginal-bracket` lower bound ⟸ any single known proof above 1 / K.
+- Theorem-level elicited ⟸ `marginal-bracket`'s known-proof estimate ⟸ any single known proof above 2 / K.
 - The proof-level version is the measurement behind `new-proof-new-theorem` and `sharpen-expand`.
 - The step-level version underlies `schema-acquisition` (new moves).
 - Against the init null it gives `bits-over-null`.

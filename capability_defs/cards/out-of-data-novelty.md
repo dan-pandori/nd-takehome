@@ -60,9 +60,15 @@ CPU only, from K12 (`data/kh/train_k12.jsonl`) and the cap-6 set.
   | rule multiset | 82 / 236 | 120 / 289 | 129 / 294 | 91 / 245 | 122 / 287 | 148 / 303 |
   | **rule set** | **3 / 236** | **14 / 289** | **15 / 294** | **15 / 245** | **18 / 287** | **29 / 303** |
 
+  s2 at the finest level (x0 ∪ x1): pend 216 / 245, r8 265 / 294, r16 267 / 295.
+
   **The base itself solves most theorems only with skeletons that never occur in its data.** At any abstraction finer
-  than the rule set, data-novelty does not separate RL from the base. At the rule-set level, RL adds 11–14 theorems
+  than the rule set, data-novelty does not separate RL from the base. At the rule-set level, RL adds 3–14 theorems
   whose combination of rules never occurs in K12. That is a small, coarse signal.
+- **The set used in the agreement matrix** (`cd_part3.py`, `ood`; rule sets *including* PR, RL's proofs on the
+  defining draw only): 14 / 20 / 20 at r8 (x0), net of replay 8 / 9 / 11; r16 14 / 29 / 23. Its seed Jaccard
+  (0.55–0.62) is the highest of any definition because it compares with the shared pretraining data, not with each
+  seed's base.
 
 ## 5. Sensitivity
 
@@ -109,5 +115,6 @@ beyond K12, not what RL added.**
   - Verbosity, and the number of distinct proofs drawn (12–17 at pend vs 85–152 at r16), drive "novel".
 
 **My answer: accepted; dropped as a decision rule.** It stays as a descriptive column: the excluded-middle *type*
-(premise-free A ∨ ¬A) is absent from K12; rule sets are counted without PR. Any repair must consult π_B, and that is
+(premise-free A ∨ ¬A) is absent from K12; rule sets should be counted without PR (the implemented `ood` set still
+includes PR; without it the counts fall as above). Any repair must consult π_B, and that is
 `new-proof-new-theorem`'s cross-theorem NP test.

@@ -6,10 +6,12 @@ Family L / S. Slug `new-proof-new-theorem`. Notation: `_FRAME.md`.
 
 Two binary properties for each theorem t that R solves, at budget K:
 
-- **New theorem (NT).** The base cannot prove t within K: certified p_B(t) < 0.05 / K (`marginal-bracket` upper bound),
-  or (weaker) the lower bound is < 1 / K.
-- **New proof (NP).** RL's typical proofs of t are routes the base would not take within K. Formally, the share of R's
-  success mass on proofs with π_B(y) < 1 / K is at least 1/2:
+- **New theorem (NT).** The base cannot prove t within K: certified p_B(t) < 0.05 / K (`marginal-bracket` upper bound).
+  *After the critic* the weaker "lower bound < 1 / K" version is deleted; as computed, NT uses the compute-matched set
+  (not within reach at K_eval-set) as the uncertified stand-in, and J9 for the certified version.
+- **New proof (NP).** *Revised after the critic to a cross-theorem test:* every one of R's accepted proofs of t uses a
+  rule set that no base-accepted proof of *any* theorem uses (all pend reads and J2). The original per-theorem version
+  (R's success mass on proofs with π_B(y) < 1 / K at least ½) is kept below for reference, as `sharpen-expand`'s ρ:
 
   ρ(t) = Σ_{y ∈ F(t), π_B(y) < 1/K} π_R(y) / Σ_{y ∈ F(t)} π_R(y) ≥ 1/2,
 
@@ -54,8 +56,11 @@ Two binary properties for each theorem t that R solves, at budget K:
   - RL's eventual proof is below 1 / K_total under pend for 46 / 34 / 40 theorems, but pend itself solves many of them
     at k 256. Of the 120 (seed, theorem) pairs the `tf-proof-prob` critic examined: 31 solved by pend at k 256, 63 with
     a reference ≥ 1 / K_total, 35 with an Or-detour.
-  - So most "new proofs" sit in the "new route, old theorem" or "elicited" cells. The NT ∧ NP cell needs J1 + J2 and
-    is computed in Part 3.
+  - So most "new proofs" sit in the "new route, old theorem" or "elicited" cells.
+- **Final numbers** (`cd_part3.py`, `npnt`; cap 12, r8 draw x0, s0 / s1 / s2): NT (compute-matched, uncertified) ∧ NP
+  (cross-theorem rule set): **5 / 4 / 0**; net of replay 5 / 3 / 0; r16 4 / 11 / 2. Certified NT ∧ NP awaits J9; NT
+  alone (compute-matched) is 22 / 21 / 14. Q6 ("new proof, old theorem" on RL's eventual proof): 22 / 15 / 22, i.e.
+  41 / 29 / 37 % of the equal-k set (`out/q6.txt`).
 - **Cost:** CPU, once J1 / J2 are pulled.
 
 ## 5. Sensitivity

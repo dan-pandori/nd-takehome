@@ -42,7 +42,9 @@ A proof is a sequence of moves; a move is a (state → action) decision.
 - At cap 6 the worst step at pend was ≈ 1 in 22,000–25,000 (`trajectory-cap6`; `claim-audit` C5b), so more "new move"
   cases there.
 - **Excluded middle:** is the DN step (`Classical.byContradiction` on a ¬¬-goal) in pend's step support at those states?
-  This is answered by J1 for the holdout250 members.
+  J1 scores whole proofs, not the step at that state, so this run does not answer it per step. Indirect evidence: DN
+  occurs in 13.7 % of K12 proofs (never on a premise-free A ∨ ¬A), and four demonstrations install the whole schema in
+  pend (`elicit-finetune`), so the missing piece is the composition, not the move.
 
 ## 5. Sensitivity
 

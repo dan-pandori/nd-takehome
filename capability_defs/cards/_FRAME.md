@@ -78,3 +78,9 @@ P psychometric · C compute equivalence · D distribution shift / update size ·
   own mechanism, studied as teachability.
 - **Placebos must be matched.** RL counts only beyond RL-free training (the replay-only ladder; the compute-matched
   continuation) at the same ability gain or the same compute.
+
+## Numbers on the cards
+
+Each card's §9 quotes the numbers available when its critic ran (morning of 2026-10-05: J1 stage 1, J2 stage A only).
+The final numbers (J1 stage 2, J2 stages A′ / B, J3–J10) are in each card's §4 and in `REPORT.md` §3, which win
+where they differ.

@@ -31,9 +31,12 @@ The only design in the literature that *intervenes* on what the base can have:
 
 ## 4. How to compute it here
 
-- **Part done in this run (J6):** best-recipe pretraining on K12 minus every DN record, three seeds, then the J4
-  demonstration fine-tunes on it. This measures **teachability without the skill** (elicit-finetune's never-had-it
-  control), not RL.
+- **Part done in this run (J6, J6b):** best-recipe pretraining on K12 minus every DN record, three seeds, then the J4
+  demonstration fine-tunes on it (J6b with DN-free replay). This measures **teachability without the skill**
+  (elicit-finetune's never-had-it control), not RL. Results (`out/lem.txt`): the knockout's held-out greedy is 0.06 /
+  0.09 / 0.10 below pend's; it solves 0 of the 39 classical-only A ∨ ¬A instances (1 / 0 / 1 of 40, the one being
+  intuitionistically provable) and 0.88 / 0.80 / 0.85× pend's holdout250 count; 16 demonstrations take it to 34–36 of
+  39 with DN-free replay, as fast as pend (gain differences +0.05 / −0.01 / −0.01).
 - **The full design (not run):** an 8–16-round EI ladder from each no-DN base. Cost per seed: 8 rounds ≈ 9 A40-hours
   (`rl-continue`: 1.1–1.2 h per round), so ≈ $13 for three seeds at 8 rounds; the excluded-middle burst took 13–14 rounds
   on s1, so ≈ $26 for 16 rounds. A dose sweep multiplies that.

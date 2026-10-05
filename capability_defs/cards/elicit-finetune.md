@@ -18,30 +18,47 @@ For a capability defined over a family 𝒯 (e.g. the 40 held-out transfer A ∨
 
 ## 2. Decision rule
 
+*Revised after the critic pass (§9).* Compare the gain demonstrations give the base with the gain they give a
+**never-had-it control**: a model pretrained by the same recipe on data without the family's key step (here the no-DN
+knockout), both fine-tuned identically with replay drawn from the knockout's corpus.
+
+gain(M) = held-out pass@256 after N family demonstrations − held-out pass@256 after N matched non-family proofs.
+
 | verdict | rule |
 |---|---|
-| **elicited** (latent in the base) | N*_B small in absolute terms (≤ 16 demonstrations) **and** far below the control's: N*_B ≪ N*_control, or the control never reaches τ |
-| **created** (by RL) | R solves 𝒯 at τ, while no D of size ≤ N_max moves B to τ, or B needs as much as the control |
-| **neither** | R does not reach τ |
+| **latent in the base** | gain(base) − gain(knockout) ≥ 0.3 on ≥ 2 / 3 seeds |
+| **teachable from scratch** | |gain(base) − gain(knockout)| ≤ 0.2 on ≥ 2 / 3 seeds |
+| **between** | otherwise |
 
-The comparison with a control is essential. "16 demonstrations suffice" means nothing if 16 suffice for a model that
-never saw the moves (Deeb & Roger reject raw relearning budgets for lack of a baseline).
+This card no longer decides "created vs elicited" by itself: fine-tuning on verifier-checked proofs is RL's own
+mechanism (`capability-vs-propensity`), so it measures how cheaply a capability can be *installed*.
 
 ## 3. Null or floor
 
-- **The control model is the floor.** Use init or an early pretraining checkpoint fine-tuned with the same 𝓕 and D,
-  plus a matched non-family demonstration set (C16) from B.
-- **Random weights:** 𝓕(init, D) with N ≤ 16 does not produce valid proofs at all, so the floor is ≈ 0.
-- Dan's objection maps to "enough fine-tuning teaches anything". The rule therefore compares sample complexities
-  instead of asking whether some N works.
+- **The never-had-it control is the floor**: the no-DN knockout, with replay from its own (DN-free) corpus so the
+  fine-tune cannot re-teach the move. init was dropped as a control after the critic: it learns nothing from 16
+  demonstrations for reasons unrelated to the skill.
+- **Matched non-family demonstrations** (C16n: 16 length-matched non-LEM proofs) separate "demonstrations of the skill"
+  from "any fine-tune".
 
 ## 4. How to compute it here
 
 - **J4** (pre-registered): from pend s0 / s1 / s2, mixes A0 (replay only), A4 / A16 (4 / 16 A ∨ ¬A demonstrations from
   s1's r16 found set on `rl_targets`), C16 (16 length-matched non-LEM proofs). Read the 40 held-out transfer A ∨ ¬A
-  instances at k 256. About 0.5 A40-hours per seed.
+  instances at k 256 (decisions on the 39 that are not intuitionistically provable). About 0.5 A40-hours per seed.
 - An init-start control and a prequential sweep (N = 1, 2, 4, 8, 16) would cost ≈ 1 more GPU-hour. They are not run
   in J4; this is stated as a limitation.
+- **J6 / J6b** (pre-registered): the no-DN knockout (pend's recipe on K12 minus every DN record) and, after the critic,
+  fine-tunes of pend and of the knockout on knockout-corpus replay (A16n / C16n), two fine-tune seeds each.
+- **Results** (`out/lem.txt`; the 39 classical-only held-out instances, k 256, solved of 39 with mean pass@1):
+  - pend, pend + A0 (replay only), pend + C16: 0 on every seed. RL r16: 0 / 36 / 13.
+  - pend + A4: 36 (0.66) / 33 (0.35) / 36 (0.64). pend + A16: 37 (0.79) / 34 (0.68) / 37 (0.83).
+  - Knockout: 0; knockout + A16 (K12 replay): 35 / 37 / 37.
+  - J6b, DN-free replay: pend + A16n 36, 36 / 36, 35 / 35, 36; knockout + A16n 34, 34 / 36, 36 / 36, 36; both + C16n 0.
+  - **Decision (pre-registered: gain = pass@256(A16n) − pass@256(C16n), pend vs knockout):** differences +0.05 /
+    −0.01 / −0.01 → **teachable from scratch** on 3 / 3 seeds (latent would need ≥ 0.3 on ≥ 2 / 3). Secondary, mean
+    pass@1: +0.05 / +0.04 / +0.12 (the base slightly ahead).
+  - A16 also raises holdout250 solved@64 by +12 / +15 / +5 over A0.
 
 ## 5. Sensitivity
 

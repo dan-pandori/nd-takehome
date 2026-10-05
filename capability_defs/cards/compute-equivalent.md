@@ -44,14 +44,26 @@ That case is exactly "created" here.
   | cap | r1 | r4 | r8 | r12 | r16 |
   |---|---|---|---|---|---|
   | 12 (s0 / s1 / s2) | 2.0 / 2.1 / 2.6 | 4.4 / 4.1 / 5.0 | **6.2 / 4.7 / 7.1** | 7.6 / 5.7 / 6.7 | **8.6 / 6.7 / 7.5** |
-  | 6 | — | — | **45.7 / 51.7 / 19.5** | — | — |
+  | 6 | 2.9 / 4.1 / 3.4 | 22.1 / 24.5 / 10.5 | **45.7 / 51.7 / 19.5** | — | **61.1 / 105.5 / 33.1** |
 
   The ladder's 4,800 fine-tune steps and ≈ 750 M training tokens (r8) are comparable to Stage-1's ≈ 445 M tokens; the
   replay alone is ≈ 476 M tokens (`rl-from-ckpt`). The pend replay-only control reaches θ 0.55–0.70, ≈ 1.6–1.8× PT
-  length by the same fit. So 26–37 % of r8's θ gain (0.55 / 2.10, 0.70 / 1.91, 0.64 / 2.18) is what the replay pretraining alone gives.
+  length by the same fit. So 26–37 % of r8's θ gain (0.55 / 2.10, 0.70 / 1.91, 0.64 / 2.18; 27 / 39 / 27 % measured
+  from each seed's own pend θ) is what the replay pretraining alone gives.
 - **(a) per theorem.** Many theorems sit at 0 / 512 throughout late pretraining, so their slope is unidentified. Use
   the reference-proof log p trajectory (scored at every checkpoint) for those.
 - **(b)** needs J2's large-k base counts: k*(t) ≈ ln(1 − pass@256_R) / ln(1 − p_B).
+- **(c) the measured counterfactual, J7** (pre-registered): pend trained further on K12 (learning rate re-warmed to
+  3 × 10⁻⁴, cosine to 3 × 10⁻⁵) for 28,054 / 31,462 / 33,535 steps, the probe's estimate of the r8 ladder's GPU time
+  (the run was faster than the probe, so it used ⟨J7 share⟩ of it). Read like RL (k 256, x0 and x1).
+  - Solved of 322 at k 256 (x0 / x1): s0 220 / 214, s1 215 / 208, s2 ⟨⟩, against pend 232 / 230, 236 / 238, ⟨⟩ and
+    r8 286 / 288, 286 / 284, ⟨⟩. A lateral move: it gains 12–19 theorems pend misses and loses 31–42.
+  - θ (IRT, pend = 0): ⟨J7 θ⟩, against replay-only 0.55 / 0.70 / 0.64 and r8 2.10 / 1.91 / 2.18.
+  - Of the equal-k created set it solves 19 / 54, 18 / 51, ⟨⟩ (≈ 35 %); of the compute-matched set 4 / 22, ⟨⟩, ⟨⟩.
+    `compute-equivalent`'s set (compute-matched and J7 fails t): ⟨cm_j7⟩.
+  - pend had already seen each K12 proof ≈ 20 times (24,077–24,345 steps × 1,024 pairs over 1.24 M pairs); in this
+    regime more compute on the same data buys little, and the θ extrapolation above (which assumes it would) is only an
+    exchange rate.
 - **Cost:** CPU only.
 
 ## 5. Sensitivity

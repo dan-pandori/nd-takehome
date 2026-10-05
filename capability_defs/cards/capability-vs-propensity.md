@@ -17,7 +17,7 @@ Family E (elicitation cost). Slug `capability-vs-propensity`. Notation: `_FRAME.
   Fine-tuning and value heads trained on other theorems are excluded: they are RL's own mechanism (`elicit-finetune`
   treats them).
 - **Cost** is measured in GPU-seconds, or in attempt-equivalents of the base's plain sampling.
-- **Budget C** is tied to RL's compute as in `passk-budget`: C_per or C_total.
+- **Budget C** is tied to RL's compute as in `passk-budget`: the headline is K_eval-set (C_per and C_total beside it).
 
 ## 2. Decision rule
 
@@ -46,8 +46,17 @@ This is the exact sense of the dangerous-capability literature: "capability eval
 - **Guided sampling:** J3 (pend / r8 / r16, cap 12; cap 6 on pod C), ≈ 2 A40-hours per seed.
 - **PUCT search** at pend and r8 exists from `mcts-a`: it closed ≈ 44 % of the 8-round EI gain on rrQ100 at matched wall
   clock, but nothing on group C.
-- **Analysis:** the method-maximum per theorem at matched cost (guided costs 2–3× plain per attempt; use
-  `guided-tts`'s matched-token accounting).
+- **Analysis:** the method-maximum per theorem at matched cost (guided costs ≈ 1.8× the tokens and 2.2× the GPU time
+  of plain per attempt; use `guided-tts`'s matched-token accounting). As implemented (`cd_part3.py`, `guided`): the
+  compute-matched set (sampling at K_eval-set, uncertified) minus theorems pend's single guided read solves at k 256.
+- **Results** (`cd_j3.py`, `out/j3.txt`; k 256, T 0.8; plain / guided solved):
+  - cap-12 pend, holdout250: 196 / 218, 205 / 223, 200 / 222 (s0 / s1 / s2); r8: 240 / 239, 236 / 237, 237 / 241. The
+    r8 − pend gap shrinks from 44 / 31 / 37 (plain) to 21 / 14 / 19 (guided). Cap-6 pend gains +30 / +39 / +47.
+  - pend's guided read solves 50 / 55 / 60 % of the equal-k created set (cap 6: 40 / 38 / 44 %): much of RL's plain gain
+    is propensity.
+  - Within the compute-matched set (22 / 21 / 14) it rescues only 3 / 4 / 1, leaving **19 / 17 / 13** (net of the
+    replay-only control 17 / 12 / 8): theorems that 2 × 10⁴ plain attempts cannot reach are not reached by step
+    checking either.
 
 ## 5. Sensitivity
 
