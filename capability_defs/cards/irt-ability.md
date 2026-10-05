@@ -24,15 +24,18 @@ Family P (psychometric). Slug `irt-ability`. Notation: `_FRAME.md`.
 
 ## 2. Decision rule
 
+*Revised after the critic pass (§9).* The placebo must be **matched on ability gain** Δθ. "Beyond the calibration set"
+grows with Δθ for any kind of training, so an unmatched placebo (the original rule) compared RL's Δθ ≈ 2.1 with the
+replay-only control's Δθ ≈ 0.6.
+
 | verdict | rule |
 |---|---|
-| **elicited ("more of the same")** | RL moves θ along the pretraining axis, and its per-theorem successes are predicted by the 1-D model at its new θ (no excess DIF over the placebo) |
-| **created** | items with DIF+ that the base fails, in excess of the placebo count. Set level: RL needs a dimension that pretraining does not |
+| **elicited ("more of the same")** | calibrate items through the start checkpoint S. RL's created rate (DIF+ items S fails, per S-failed item the arm solves at p̂ ≥ 0.05) is within the range of the **pretraining continuation and replay-only arms from the same S at comparable Δθ** |
+| **created** | RL's created count / rate exceeds both matched placebos by more than their seed spread, on ≥ 2 / 3 seeds. Set level: RL needs a second dimension that a matched placebo does not |
 | **neither** | no ability change |
 
-**The placebo is mandatory.** Run the same projection on (i) replay-only control ladders (8 rounds of the ladder's
-fine-tune on pretraining replay, no RL proofs; `rl-from-ckpt`'s c⟨s⟩_⟨start⟩_r8) and (ii) held-out pretraining
-checkpoints. RL counts only above the placebo's.
+Items that no pretraining checkpoint ever solves have prior-determined parameters. They are handed to `passk-equal-k`
+rather than judged here.
 
 ## 3. Null or floor
 
@@ -110,4 +113,24 @@ checkpoints. RL counts only above the placebo's.
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic): "created in excess of the placebo" measures how far a checkpoint sits beyond the
+calibration set, not RL.**
+- Calibrated on p0–p12000, pretraining's own pend "creates" 22 / 32 / 26 items, against RL r8's 26 / 26 / 30.
+- From p5000, the replay-only control r8 (Δθ ≈ +2.1) gives 50 / 49 / 54, against EI r2 (Δθ +2.0–2.7) 48 / 41 / 48.
+- The original "26–30 vs 4–7" compared a Δθ of 2.1 with one of 0.6.
+- Secondary arguments:
+  - "pend 0 / 512" is a pass@512 test; 46 never-solved items get prior-fixed parameters.
+  - Items pooled over seeds let one seed's base overrule another's (e.g. `la_transfer_372`).
+  - The set-level deviances changed once more examinees were added (now 330.4 → 84.8 → 66.1).
+
+**My answer: accepted. I re-derived the matched comparison** (`analysis/cd_irt_matched.py`,
+`out/irt_matched.txt`), and it reproduces the critic's counts exactly.
+- At matched Δθ, EI's created counts and rates sit inside the range of pretraining continuation and replay-only
+  training from the same start.
+  - From p12000: EI r2 (Δθ 1.7–2.2) 37 / 46 / 46, rate 0.69–0.93; replay r8 (Δθ 1.6–2.1) 33 / 47 / 48, rate 0.89–0.92.
+  - From p5000: EI r2 (Δθ 2.0–2.7) 48 / 41 / 48, rate 0.62–0.86; replay (Δθ ≈ 2.1) 50 / 49 / 54, rate 0.73–1.04.
+  - Pretraining's own continuation to Δθ ≈ 0.6 already "creates" 47 / 60 / 54 from p5000.
+- **Under the revised rule the IRT definition finds no RL-specific capability on our data: RL looks like more training
+  of any kind.**
+- The decision rule is changed (§2); the original DIF counts stay in §4 as descriptive numbers, not verdicts.
+

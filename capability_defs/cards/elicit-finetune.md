@@ -90,4 +90,28 @@ never saw the moves (Deeb & Roger reject raw relearning budgets for lack of a ba
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic): the control decides the verdict, not pend.**
+- **Init** can never write proofs, so "the control never reaches τ" holds for every family, and the rule collapses to
+  the bare "≤ 16 demonstrations".
+- **The pre-registered knockout (J6)** is re-taught the missing move by the fine-tune itself: its 20,000 K12 replay
+  records include 2,764 with DN, 2,178 of which apply DN to a NEGI line (the template's closing step). That is ≈ 8,300
+  DN presentations against ≈ 245 for the demonstrations.
+- Same pend, same demonstrations, opposite verdicts, depending on the control.
+- Secondary arguments:
+  - Leakage by design: 11 of the 16 demonstrations share one 9-line skeleton, and lem40 only asks for a new X in the
+    same template.
+  - "Absorbing ≠ having": the rule ignores R (s0 kept one LEM proof in every fine-tune, yet held-out LEM stayed at
+    0.03).
+  - N* is never measured: there are only N ∈ {0, 4, 16}, one fine-tune seed, and no τ.
+
+**My answer: accepted, and the design is corrected.** J6b (pre-registered in `log.md` before launch):
+- Both arms' replay is drawn from the knockout corpus (K12 minus DN), for pend and for the knockout alike.
+- Arms A16n (16 demonstrations) and C16n (16 L_true-matched non-LEM proofs), two fine-tune seeds each, for all three
+  training seeds.
+- The decision quantity is the gain (A16n − C16n) on held-out A ∨ ¬A, pend vs knockout.
+- **Revised rule:**
+  - "latent in pend" (elicited) if pend's gain exceeds the knockout's by ≥ 0.3 on ≥ 2 / 3 seeds;
+  - "teachable from scratch" if the gains are within 0.2;
+  - init is dropped as a control.
+- The template-leakage caveat stays: the test measures schema completion with new formulas, not open-ended discovery.
+
