@@ -1,4 +1,4 @@
-# Card: chain reachability — creation as a chain of elicitations
+# Card: chain reachability — creation as a chain of elicitations — DROPPED as a decision rule; kept as a mechanism description (critic, §9)
 
 Family S. Slug `chain-reachability`. Notation: `_FRAME.md`.
 
@@ -82,4 +82,21 @@ card recommends **relative to the base, at matched compute**.
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic): the chain does no work, so the verdict is just `passk-budget` at K_per.**
+- If p_B < 0.05 / K_per is certified, d ≥ 2 already follows (P(d = 1) ≤ 32 × 5 × 10⁻⁵ ≈ 0.2 %). On J2's candidates the
+  d filter drops 0 / 39, 1 / 36 and 3 / 35.
+- "Each link elicits" is never true of t itself: the link into round d took t from 0 / 32 to ≥ 1 / 32 without
+  training on any proof of t, i.e. at the card's own k 32 that link *created* t relative to its predecessor.
+- Counterexample: `la_transfer_1398` (s1). pend is at 0 / 768 and d = 2, so the rule says "created by chaining", but
+  the replay-only control (no elicited proofs at all) solves it 509 / 512, more often than r8. The control also solves
+  11 / 37, 12 / 34 and 16 / 29 of the d ≥ 2 candidates pend never solved.
+- Secondary arguments:
+  - The `dist_and_over_or` headline omitted that pend proved one transfer member in round 1 on all three seeds.
+  - Deeper chains face an easier base bar.
+  - Links also inject 20,000 replay records each, so "elicitation" links are not pure.
+
+**My answer: accepted; the definition is dropped as a decision rule.** Chain depth d is kept as a *mechanism* column on
+the replay-netted `passk-budget` created set: it describes how RL reached a theorem, round by round, and the
+excluded-middle burst is the clearest such story. The card's lasting point, that "elicitation is not transitive", is
+correct but does not decide anything; the base certificate does.
+
