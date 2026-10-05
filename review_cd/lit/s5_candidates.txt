@@ -1,0 +1,72 @@
+1	L29	**Sampling-based capability is coverage at a budget, and the budget is the whole question.** "With unlimited samples, any model that assigns a non-zero probability to every sequence will achieve perfect coverage" (Brown et al. 2024, Sec. 1).
+2	L29	The field's response is to report the single-attempt success probability p (Schaeffer et al. 2025) and to extrapolate its distribution (Kazdan et al. 2025).
+3	L37	Importance sampling with a stronger policy as the proposal is unbiased for it (Wu & Hilton 2024, Sec. 3.1).
+4	L43	"Capability evaluations are about whether an AI system *can* do some task … alignment evaluations are about whether an AI system *would* do some task" (van der Weij et al. 2024, Sec. 2).
+5	L45	Fine-tuning is the strongest elicitation: "fine-tuning on a single demonstration is often enough to recover most of the 'hidden' performance" (Greenblatt et al. 2024, Sec. 1).
+6	L49	Deeb & Roger 2024 reject relearning budgets for want of "a reliable baseline for comparison" and use a T / V split with a never-trained control (Sec. 3.2).
+7	L51	Hewitt & Liang 2019 replace probe accuracy with selectivity over a control task.
+8	L52	Jain et al. 2023 compare revival speed with a never-had-it model.
+9	L54	With a binary reward, the KL-regularised RL optimum is the base model conditioned on success (Korbak et al. 2022, Sec. 5).
+10	L56	KL(q ‖ π_B) splits into the selection cost log 1 / p_B and a reshaping term (Shenfeld et al. 2025, App. A).
+11	L57	Outcome-reward RL needs about 1 / (base success quantile) queries (Mousavi-Hosseini & Erdogdu 2026).
+12	L59	Kenny's darts player (SEP "Abilities", Sec. 4.3); Harding & Sharadin's conditional analysis, "a machine learning model has a capability to X just when it would reliably succeed at doing X if it 'tried'" (abstract).
+13	L67	**Composition and novelty research measures new relative to training data** (compound divergence, Skill-Mix's counting bound, novelty against a game database).
+14	L70	**Metric choice creates apparent emergence** (Schaeffer et al. 2023).
+15	L76	Chen et al. 2021's unbiased pass@k, 1 − C(n − c, k) / C(n, k) (Sec. 2.1, Eq. 1).
+16	L78	Chen's estimators are "only defined when the number of samples taken for each problem is greater than or equal to the number of attempts k" (Kazdan et al. 2025, Sec. 3.1).
+17	L81	Coverage grows over four orders of magnitude of samples (Brown et al. 2024, abstract).
+18	L83	The aggregate power law arises iff the distribution of per-problem p has a power-law left tail (Schaeffer et al. 2025, Thm 3.1).
+19	L86	Kazdan et al. fit a beta-binomial to raw counts (Sec. 4.1).
+20	L88	**Resolution.** PassUntil samples until r successes.
+21	L88	PU = r / K is the MLE and is "designed to be applicable when a random baseline achieves P(s)=0" (Hu et al. 2023, Sec. 4.1).
+22	L91	Gumbel-tail extrapolation of per-query probabilities forecast deployment-scale risk across up to three orders of magnitude (Jones et al. 2025, Sec. 3.3).
+23	L93	Importance sampling estimates probabilities "too small to estimate by random sampling" (Wu & Hilton 2024, abstract).
+24	L96	Davidson et al. 2023: CEG = "how much additional training compute would be needed to improve performance by the same amount as the enhancement" (abstract).
+25	L99	Hilton et al. 2023: intrinsic performance.
+26	L100	Jones 2021: "for each additional 10× of train-time compute, about 15× of test-time compute can be eliminated" (Sec. IV-C).
+27	L102	**Gold-reference likelihood as a covariate.** Schaeffer et al. 2025b fit pass@k as a function of the log likelihood of gold reference solutions across ≈ 5 orders of magnitude, and leave open whether it holds "under heavy optimization pressure" (Sec. 8).
+28	L114	Greenblatt et al.: "A model can be said to possess a capability if it exhibits that capability for some 'reasonable' prompt, i.e. one that doesn't itself effectively provide the capability in question" (Sec. 2).
+29	L116	van der Weij et al. define actual capability as "the best performance … given the best currently available capability elicitation techniques such as prompting and fine-tuning", with the 1 %-of-training-cost convention quoted from Anthropic's RSP (Sec. 2).
+30	L119	Hofstätter et al.: "A latent capability … is one that a model exhibits with low probability by default, but can be revealed through small changes to the context, activations, or weights" (Sec. 3.3).
+31	L122	Shevlane et al.: capability vs propensity (abstract, Sec. 1).
+32	L125	Models locked from scratch at 18 M parameters still unlock with a few demonstrations, needing 2–4× the data of fine-tune-locked ones (Greenblatt et al. Sec. 7).
+33	L127	Deeb & Roger's control model stays at 31.2 % (App. E).
+34	L128	Phuong et al. count "expert bits": the help a model needs before it succeeds (Sec. 6.2).
+35	L130	The conditional analysis "(CA) S has the ability to A iff S would A if S tried to A" (SEP "Abilities", Sec. 3.1); success-proportion views (Jaster, Sec. 3.4); "mere possibility" is not sufficient (Sec. 4.3).
+36	L132	Harding & Sharadin adapt this to ML (CAMA).
+37	L134	Firestone 2020: performance constraints mask competence, so a fair comparison accommodates them.
+38	L135	Burden et al. 2023: capabilities are latent levels in a measurement layout. σ(capability − demand) "allows us to interpret a capability with value x as consistently succeeding on the demand with meta-feature x in 50 % of instances" (Sec. 6).
+39	L138	Hernández-Orallo: abilities are constructs, tasks are instruments (1408.6908 Sec. 3.1).
+40	L138	Capability is the area under the success-vs-difficulty curve (2021).
+41	L147	Online / prequential code length measures what a fit had to learn (Blier & Ollivier 2018; Voita & Titov 2020, with random-label controls).
+42	L150	Surplus description length and ε-sample complexity give "examples needed to reach a stated loss" (Whitney et al. 2020, Sec. 4).
+43	L153	It "can be created through computation" (Xu et al. 2020), unlike Shannon information.
+44	L155	Pointwise V-information gives per-instance difficulty as a log-probability gain over a null input (Ethayarajh et al. 2022, Sec. 3, Eq. 4).
+45	L158	Intrinsic dimension (d90) falls over pretraining (Aghajanyan et al. 2020).
+46	L159	RL changes "small subnetworks" (Mukherjee et al. 2025), but the sparsity disappears in fp32 (Shenfeld et al. Sec. 6).
+47	L161	URIAL: "77.7% of the tokens are at such unshifted positions" in aligned vs base models (Lin et al. 2023, Sec. 2.2).
+48	L162	**RL's Razor.** On-policy RL "is implicitly biased towards KL-minimal solutions" (Shenfeld et al. 2025, abstract).
+49	L170	Specific objectivity defines "more of the same" (Wright & Linacre).
+50	L171	Calibrate on one population, test on a shifted one: tinyBenchmarks (Polo et al. 2024, Sec. 4.2–4.4); 2PL MAP abilities for 61–94 pretraining checkpoints (Hofmann et al. 2025).
+51	L173	IRT over repeated sampling, with pass@k as a function of θ (Truong et al. 2026, Eq. 4).
+52	L174	Observational scaling laws: capabilities are low-dimensional, measured in f-equivalent FLOPs (Ruan et al. 2024).
+53	L176	The 50 % time horizon (Kwa et al. 2025).
+54	L177	Ability as the demand level at 50 % success on 18 scales (ADeLe, Zhou et al. 2025).
+55	L179	The fix is anchor items or concurrent calibration (METR App. B.1.3; L4 notes).
+56	L187	**KL-RL as Bayesian inference.** The optimum is π_B · exp(r / β) / Z (Korbak et al. 2022, Sec. 4, Eq. 5).
+57	L191	Best-of-N's reach is bounded by the coverage coefficient (Huang et al. 2025, Sec. 2.1, Eq. 5).
+58	L192	XPO adds exploration beyond the reference model; on-policy methods stay suboptimal at low coverage (Xie et al. 2024, Prop. 2.1).
+59	L194	Mousavi-Hosseini & Erdogdu 2026: outcome-reward RL needs ≈ 1 / Q_q(ε) queries, the base's likelihood quantile.
+60	L197	Systematicity, productivity, substitutivity, localism, overgeneralisation, with a consistency score (Hupkes et al. 2020).
+61	L199	Compound divergence at fixed atom divergence (Keysers et al. 2020).
+62	L200	Skill-Mix's counting bound against the corpus (Yu et al. 2023).
+63	L201	Multiplicative emergence of composites, P(n) = (1 − (1 − p)^t)^n (Okawa et al. 2023).
+64	L202	Counterfactual tasks separate reasoning from reciting (Wu et al. 2023).
+65	L208	Probes need control tasks: a random network matched layer-2 accuracy (96.3 vs 96.6) but not selectivity (20.6 vs 31.4) (Hewitt & Liang 2019, Table 2).
+66	L210	They revive in 0.1–3K iterations vs 4.5K for a never-had-it control (Jain et al. 2023, Fig. 9).
+67	L212	Fine-tuning enhances an existing entity-tracking circuit (Prakash et al. 2024, Sec. 6).
+68	L214	Steering vectors computed in the base recover ≈ 76 % of the RL / thinking-model gap (Venhoff et al. 2025, v4; v1's "up to 91 %" was walked back).
+69	L216	A 2 × 2 steering design separates elicited / repurposed / created (Ward et al. 2025, Sec. 3.2).
+70	L217	**Diffing.** Crosscoder "model-only" features are mostly artefacts without the Latent Scaling check (Minder et al. 2025, Sec. 3.1).
+71	L220	Novelty is measured against a dated database of human games, together with quality (Shin et al. 2023).
+72	L221	AlphaGo Zero predicts human moves *worse* than the supervised network while being far stronger (Silver et al. 2017, Extended Data Table 1).

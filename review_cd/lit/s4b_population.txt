@@ -1,0 +1,51 @@
+V rows scanned: 1180
+  exact: 1032
+  alnum (punctuation/markup only): 56
+  fuzzy >= 0.85: 54
+  fuzzy 0.60-0.85: 5
+  fuzzy < 0.60 / not found: 8
+  no-quote: 25
+  source-missing: 0
+  L1: {'exact': 166, 'fuzzy < 0.60 / not found': 1, 'fuzzy >= 0.85': 17, 'no-quote': 6, 'alnum (punctuation/markup only)': 13, 'fuzzy 0.60-0.85': 2}
+  L2: {'exact': 191, 'fuzzy >= 0.85': 13, 'alnum (punctuation/markup only)': 2, 'no-quote': 2}
+  L3: {'exact': 213, 'no-quote': 6, 'alnum (punctuation/markup only)': 9}
+  L4: {'exact': 155, 'fuzzy >= 0.85': 14, 'no-quote': 2, 'alnum (punctuation/markup only)': 8, 'fuzzy 0.60-0.85': 3, 'fuzzy < 0.60 / not found': 1}
+  L5: {'exact': 154, 'alnum (punctuation/markup only)': 5, 'no-quote': 5, 'fuzzy < 0.60 / not found': 1}
+  L6: {'exact': 153, 'alnum (punctuation/markup only)': 19, 'fuzzy >= 0.85': 10, 'fuzzy < 0.60 / not found': 5, 'no-quote': 4}
+
+rows below fuzzy 0.85 (need manual inspection):
+  L1 #2 2107.03374v2 | notfound | loc=Sec. 2.1, Eq. 1 | "we use n=200 and k≤100"; unbiased estimator pass@k := E_Problems[1 − C(n−c,k)/C(n,k)]
+        ('we use n=200 and k≤100', 'notfound', '2107.03374.txt')
+  L1 #129 2509.24012v2 | fuzzy0.83 | loc=Sec. 3.1 | compute exponent "rising moderately from 1.21×10^-1 to 3.75×10^-1"
+        ('rising moderately from 1.21×10^-1 to 3.75×10^-1', 'fuzzy0.83', '2509.24012.txt')
+  L1 #149 2207.08799v3 | fuzzy0.75 | loc=Abstract | "not explained by a Langevin-like mechanism" (SGD does not "stumble in the dark")
+        ('not explained by a Langevin-like mechanism', 'exact', '2207.08799.abs.txt')
+        ('stumble in the dark', 'fuzzy0.75', '2207.08799.abs.txt')
+  L4 #27 2405.10938v3 | fuzzy0.83 | loc=Sec. 5, Eq. 9 | V-optimality for model-subset choice: "the expected prediction error from using the subset X_M is Tr(XᵀX(X_MᵀX_M)⁻¹)"
+        ('the expected prediction error from using the subset X_M is Tr(XTX(X_MTX_M)-1)', 'fuzzy0.83', '2405.10938.txt')
+  L4 #94 2606.07616v1 | fuzzy0.80 | loc=Sec. 3.4, Eq. 3; Fig. 12 | "Empirically, we observe that the θ scales linearly with log FLOP"
+        ('Empirically, we observe that the θ scales linearly with log FLOP', 'fuzzy0.80', '2606.07616.txt')
+  L4 #103 2509.11106v1 | fuzzy0.82 | loc=Sec. 3.2, Eq. 4, Fig. 2 | Fisher information I = a²σ(1−σ), "maximized when θ_i=b_j (where I=a_j²/4)"; most informative items move "from very easy items at the beginning of training, to very difficult items at the end of traini
+        ('maximized when θ_i=b_j (where I=a_j2/4)', 'fuzzy0.82', '2509.11106.txt')
+        ('from very easy items at the beginning of training, to very difficult items at th', 'exact', '2509.11106.txt')
+  L4 #158 wright_rasch_memo38 | fuzzy0.43 | loc=p. 2-3 | "We cannot determine from a perfect performance alone how much more that person might know. The sensible answer to the worth of a perfect performance is "give harder items""; finite value comes from a
+        ('We cannot determine from a perfect performance alone how much more that person m', 'alnum', 'wright_rasch_memo38.txt')
+        ('finite value comes from adding a prior belief', 'fuzzy0.43', 'wright_rasch_memo38.txt')
+  L5 #143 2508.19201v1 | fuzzy0.39 | loc=Sec. 3.2.2, Defs. 3.5-3.6 | strategies = computational equivalence classes: "each class [y] represents a distinct algorithmic “idea” or “strategy”"; feasible support under budget B = some trajectory of the class with M(y′\|x) > 
+        ('each class [y] represents a distinct algorithmic', 'exact', '2508.19201.txt')
+        ("feasible support under budget B = some trajectory of the class with M(y'\\|x) > 0", 'fuzzy0.39', '2508.19201.txt')
+  L6 #33 2311.12786v2 | notfound | loc=Table 1 (cells and caption) | Twist proportion during reFT, iterations 0/30/300/3000: Filtering (η_M) 44/81/81/82 %; "Not in PT" control 12/31/44/81 %; "models relearn to generate stories with twist more sample-efficiently than th
+        ('Not in PT', 'notfound', '2311.12786.txt')
+        ('models relearn to generate stories with twist more sample-efficiently than the c', 'fuzzy0.93', '2311.12786.txt')
+  L6 #68 2507.12638v1 | notfound | loc=Sec. 3.1 | best offset for the layer-10 residual stream "∼−13 to −8" tokens before the backtracking event
+        ('∼-13 to -8', 'notfound', '2507.12638.txt')
+  L6 #78 2507.12638v1 | notfound | loc=Sec. 2.2, Eq. 1; App. C | metric: fraction of words in B = {wait, hmm}; "∼83%" of keyword-flagged sentences are true backtracking by the authors' judgement
+        ('∼83%', 'notfound', '2507.12638.txt')
+  L6 #90 2510.07364v4 | notfound | loc=Sec. 3.8; Fig. 4 | ablations (ORZ-1.5B, ORZ-32B): full pipeline "∼77%"; random category "drops recovery to 20-28%"; norm-matched random vectors give −28 % and −13 %
+        ('∼77%', 'notfound', '2510.07364.txt')
+        ('drops recovery to 20-28%', 'alnum', '2510.07364.txt')
+  L6 #95 2510.07364v4 | notfound | loc=Sec. 3.7 | QwQ-32B (SFT then RL) "recovers ∼20%"
+        ('recovers ∼20%', 'notfound', '2510.07364.txt')
+
+V rows whose location is not the abstract but whose only on-disk source is an abstract file:
+  total: 0

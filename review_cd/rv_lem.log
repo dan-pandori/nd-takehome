@@ -1,0 +1,63 @@
+holdout250 premise-free A v ~A instances: 6 ['la_transfer_478', 'la_transfer_1572', 'la_transfer_956', 'la_transfer_795', 'la_transfer_1453', 'la_transfer_1424']
+
+J4 (39 classical lem / 40):  solved@256 share, mean pass@1
+  s0 pend : lem39  0/39 = 0.000 (pass@1 0.000); lem40 0/40; k {256}
+  s0 r16  : lem39  0/39 = 0.000 (pass@1 0.000); lem40 1/40; k {256}
+  s0 A0   : lem39  0/39 = 0.000 (pass@1 0.000); lem40 1/40; k {256}
+  s0 A4   : lem39 36/39 = 0.923 (pass@1 0.658); lem40 37/40; k {256}
+  s0 A16  : lem39 37/39 = 0.949 (pass@1 0.789); lem40 38/40; k {256}
+  s0 C16  : lem39  0/39 = 0.000 (pass@1 0.000); lem40 1/40; k {256}
+  s1 pend : lem39  0/39 = 0.000 (pass@1 0.000); lem40 1/40; k {256}
+  s1 r16  : lem39 36/39 = 0.923 (pass@1 0.696); lem40 37/40; k {256}
+  s1 A0   : lem39  0/39 = 0.000 (pass@1 0.000); lem40 1/40; k {256}
+  s1 A4   : lem39 33/39 = 0.846 (pass@1 0.353); lem40 34/40; k {256}
+  s1 A16  : lem39 34/39 = 0.872 (pass@1 0.681); lem40 35/40; k {256}
+  s1 C16  : lem39  0/39 = 0.000 (pass@1 0.000); lem40 1/40; k {256}
+  s2 pend : lem39  0/39 = 0.000 (pass@1 0.000); lem40 1/40; k {256}
+  s2 r16  : lem39 13/39 = 0.333 (pass@1 0.133); lem40 14/40; k {256}
+  s2 A0   : lem39  0/39 = 0.000 (pass@1 0.000); lem40 1/40; k {256}
+  s2 A4   : lem39 36/39 = 0.923 (pass@1 0.643); lem40 37/40; k {256}
+  s2 A16  : lem39 37/39 = 0.949 (pass@1 0.827); lem40 38/40; k {256}
+  s2 C16  : lem39  0/39 = 0.000 (pass@1 0.000); lem40 1/40; k {256}
+  s0 holdout250 solved@64: A0 204  A16 216  rel diff +0.059; k {64}; h250 lem instances solved: A0 0/6 A16 6/6
+  s1 holdout250 solved@64: A0 207  A16 222  rel diff +0.072; k {64}; h250 lem instances solved: A0 0/6 A16 5/6
+  s2 holdout250 solved@64: A0 205  A16 210  rel diff +0.024; k {64}; h250 lem instances solved: A0 0/6 A16 6/6
+
+Q10 on h250 A v ~A instances (k 256 reads):
+  s0 pend x0: 0/6 solved; mean pass@1 0.000
+  s0 pend x1: 0/6 solved; mean pass@1 0.000
+  s0 r8   x0: 0/6 solved; mean pass@1 0.000
+  s0 r8   x1: 0/6 solved; mean pass@1 0.000
+  s0 r12  x1: 0/6 solved; mean pass@1 0.000
+  s0 r16  x1: 0/6 solved; mean pass@1 0.000
+  s0 r16  x0: 0/6 solved; mean pass@1 0.000
+  s1 pend x0: 0/6 solved; mean pass@1 0.000
+  s1 pend x1: 0/6 solved; mean pass@1 0.000
+  s1 r8   x0: 0/6 solved; mean pass@1 0.000
+  s1 r8   x1: 0/6 solved; mean pass@1 0.000
+  s1 r12  x1: 2/6 solved; mean pass@1 0.003
+  s1 r16  x1: 6/6 solved; mean pass@1 0.625
+  s1 r16  x0: 6/6 solved; mean pass@1 0.615
+  s2 pend x0: 0/6 solved; mean pass@1 0.000
+  s2 pend x1: 0/6 solved; mean pass@1 0.000
+  s2 r8   x0: 0/6 solved; mean pass@1 0.000
+  s2 r8   x1: 0/6 solved; mean pass@1 0.000
+  s2 r12  x1: 0/6 solved; mean pass@1 0.000
+  s2 r16  x1: 1/6 solved; mean pass@1 0.149
+  s2 r16  x0: 1/6 solved; mean pass@1 0.147
+
+J6 (no-DN knockout):
+  s0: held-out greedy nodn 0.8622 vs pend 0.9206 (diff 0.058); nodn h250@256 172 vs pend x1 196 ratio 0.878; nodn lem40 solved 1/40; nodn+A0 lem39 0/39; nodn+A16 lem39 35/39 = 0.897; |pend+A16 - nodn+A16| = 0.051; nodn+A16 h250@64 206
+  s1: held-out greedy nodn 0.8476 vs pend 0.9364 (diff 0.089); nodn h250@256 164 vs pend x1 205 ratio 0.800; nodn lem40 solved 0/40; nodn+A0 lem39 0/39; nodn+A16 lem39 37/39 = 0.949; |pend+A16 - nodn+A16| = 0.077; nodn+A16 h250@64 204
+  s2: held-out greedy nodn 0.8618 vs pend 0.9618 (diff 0.100); nodn h250@256 170 vs pend x1 200 ratio 0.850; nodn lem40 solved 1/40; nodn+A0 lem39 0/39; nodn+A16 lem39 37/39 = 0.949; |pend+A16 - nodn+A16| = 0.000; nodn+A16 h250@64 206
+
+J6b (replay from the knockout corpus; gain = A16n - C16n, mean over fine-tune seeds, lem39 solved@256 share):
+  s0 pend: A16n [0.9230769230769231, 0.9230769230769231]  C16n [0.0, 0.0]  gain 0.923
+  s0 nodn: A16n [0.8717948717948718, 0.8717948717948718]  C16n [0.0, 0.0]  gain 0.872
+  s0: pend gain - knockout gain = +0.051
+  s1 pend: A16n [0.9230769230769231, 0.8974358974358975]  C16n [0.0, 0.0]  gain 0.910
+  s1 nodn: A16n [0.9230769230769231, 0.9230769230769231]  C16n [0.0, 0.0]  gain 0.923
+  s1: pend gain - knockout gain = -0.013
+  s2 pend: A16n [0.8974358974358975, 0.9230769230769231]  C16n [0.0, 0.0]  gain 0.910
+  s2 nodn: A16n [0.9230769230769231, 0.9230769230769231]  C16n [0.0, 0.0]  gain 0.923
+  s2: pend gain - knockout gain = -0.013

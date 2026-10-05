@@ -1,0 +1,49 @@
+k	reader	n	id	quote_abridged	stated_location	match	line	location	note
+1	L1	71	2304.15004v2	"of the 39 preferred metrics in BIG-Bench, at most 5 display emergence"; "2 metrics account for >92% of cla...	Sec. 4, Fig. 5	exact	258, 260	OK	Sec. 4 body text citing Fig. 5A/5C (Fig. 5 caption at 256); '>92%' is $>92\%$ in source
+2	L1	140	2509.24012v2	"We used temperature-only sampling at τ=1.0"	Sec. 2	markup	145	OK	source: 'temperature-only sampling at $\tau=1.0$'; Sec. 2 Methodology
+3	L1	76	2312.07413v1	"The model should be trained compute-optimally, so that C is the minimal compute required to attain perform...	Sec. 2	markup	308, 320	OK	2nd fragment is 'C^{\prime}/C' in source; Sec. 2 Conceptual framework
+4	L1	103	2502.16797v1	elicitation score ψ_i = −log(−log p_elicit(x_i)); "the tail of the log survival function is an approximatel...	Sec. 3.3, Eq. 3-5	exact	237 (psi def. 235)	OK	Sec. 3.3; Eqs. (3)-(5) at lines 248-268; psi formula matches (arguments omitted)
+5	L1	40	2510.05197v1	"we model U as a beta distribution" and fit beta-binomial likelihood to raw counts	Sec. 4.1, Eq. 15-17	exact	352	OK	Sec. 4.1; beta-binomial likelihood = Eq. 15 (line 414)
+6	L1	25	2502.17578v1	−log(pass_D@k) ∼ C Γ(b) k^(−b)	Sec. 3, Thm 3.1	markup	311	OK	formula claim (no quote): '-\log(pass_D@k) ~ C Gamma(b) k^{-b}' inside Theorem 3.1 (line 295), Sec. 3
+7	L1	142	2206.07682v2	"performance is near-random until a certain critical threshold of scale is reached, after which performance...	Sec. 2	exact	105	OK	Sec. 2
+8	L1	134	2509.24012v2	"it is not immediately obvious why the likelihood of the specific benchmark-provided gold reference correla...	Sec. 8	exact	397	OK	Sec. 8 Discussion
+9	L2	6	2405.19550v1	"we are not aware of any rigorous accounts" (of model capabilities)	Sec. 2	exact	125	OK	Sec. 2; context 'informal account of model capabilities, as we are not aware of any rigorous accounts'
+10	L2	24	2406.07358v4	"We define sandbagging as strategic underperformance on an evaluation"	Sec. 1; Sec. 2	exact	71, 99	OK	found in both Sec. 1 and Sec. 2
+11	L2	29	2406.07358v4	"some acceptable difference threshold between the exhibited and actual capability must be set per evaluation"	Sec. 2	exact	106	OK	Sec. 2
+12	L2	185	2403.10462v2	"To rule out hidden capabilities, developers can check whether AI systems can be quickly fine-tuned to perf...	Sec. 5.2.1; Sec. 2.2 fn. 1	exact	512; 134	OK	Sec. 5.2.1 and Sec. 2.2 footnote 1
+13	L2	74	2405.08989v1	Reliability: "the more reliably the model φs, the stronger the evidence that it has an ability to φ"	Sec. 3.1, Def. 5	markup	283	OK	'$\phi$ s'; Definition 5 (Reliability) in Sec. 3.1
+14	L2	138	1408.6908v3	Φ(π,M,p) = Σ_μ p(μ)·E[R(π,μ)] (average-case performance); rank-based aggregation "is more robust to systems...	Sec. 2.1, Eq. 1, fn. 1	exact	94; Eq. (1) at 125-129	OK	quote is footnote 1 of Sec. 2.1; Phi(pi,M,p) formula = Eq. (1)
+15	L2	73	2405.08989v1	UNIFORM "always produces the next token by sampling uniformly from the token vocabulary"; "very few ability...	Sec. 3.1	exact	271	OK	Sec. 3.1
+16	L2	190	metr2024elicitation	spurious knowledge-based failures = "mistakes that could be fixed by always including some text in the prom...	4.1 Spurious failures	exact	385, 377	OK	under '4.1. Spurious failures'
+17	L3	227	1905.12213v5	"We measure information in a neural network via the optimal trade-off between accuracy of the response and ...	Abstract	exact	30 (.abs.txt)	OK	abstract-only source; Abstract
+18	L3	114	2509.04259v1	"the degree of forgetting is determined by the distributional shift, measured as the KL-divergence between ...	Abstract	exact	40	OK	Abstract
+19	L3	165	2309.10668v2	Chinchilla 70B "compresses ImageNet patches to 43.4% and LibriSpeech samples to 16.4% of their raw size"	Abstract	exact	30 (.abs.txt)	OK	Abstract; 'Chinchilla 70B' confirmed
+20	L3	106	2505.11711v2	"In PRIME, 72% parameters are never updated, 8% have gradients canceling each other out, and 20% constitute...	Fig. 2 caption	exact	80	OK	the line is the Figure 2 caption
+21	L3	151	2005.10283v2	1,000 samples cover "between 16.4% and 57.8% of the probability mass" on held-out data; "only about half of...	Sec. 7.1, Fig. 2	exact	224, 225	OK	Sec. 7.1 next to Fig. 2 caption (222); 'held-out data' and 1,000 samples confirmed
+22	L3	181	2504.20571v3	one example "elevates model performance on MATH500 from 36.0% to 73.6% (8.6% improvement beyond format corr...	Abstract	exact	30 (.abs.txt)	OK	Abstract
+23	L3	220	2505.24832v3	"our choice of reference model is a larger model with the same architecture"	Sec. 2.3	exact	230	OK	Sec. 2.3
+24	L3	98	2312.01552v1	alignment affects "primarily stylistic elements and safety disclaimers in just 5-8% of cases"	Sec. 6	exact	951	OK	Sec. 6 Conclusion
+25	L4	59	2503.06378v2	2-parameter logistic fit per subject and dimension with an anchor "of 0 at imaginary level 20" (50 % of tot...	Sec. 5.7, fn. 17; Fig. 7 caption	exact	5123; caption 1119	OK	Sec. 5.7 + footnote 17 ('50% of the total weight'); Fig. 7 caption: anchor (20, 0), 50% weight
+26	L4	3	2402.14992v2	β_i "can be viewed as a bias term that regulates the probability of correctness when θ_l=0"	Sec. 4.1	markup	172	OK	'$\theta_{l}=0$'; Sec. 4.1
+27	L4	39	2503.14499v4	p_success(agent, task) = σ((log h_agent − log t_task)·β_agent), "where t_task is the geometric mean time of...	Sec. 3.1	markup	259 (formula 255)	OK	Sec. 3.1; \mathrm subscripts
+28	L4	95	2606.07616v1	simulation: "Beta-IRT achieves reliable calibration with as few as 2 test takers, requiring 30–60× fewer th...	Sec. 4.1, Fig. 2	markup	242, 286, 284	OK	Fig. 2 caption ('30-60 $\times$') and Sec. 4.1; noise N(0, 0.01^2) confirmed
+29	L4	105	2509.11106v1	calibration set excluded post-trained models: "Finetuned, merged, fused, distilled, or continually pretrain...	App. D	exact	1164	OK	Appendix D
+30	L4	96	2606.07616v1	floor: "We filter out questions with extremely low pass@1 as they offer no discriminatory power"; "The 2PL ...	Sec. 4.3 and fn. 3	exact	342, 346	OK	Sec. 4.3 and its footnote 3
+31	L4	76	martinezplumed2016irt-ecai	classifier characteristic curve: "A CCC is a plot for the response probability (accuracy) of a particular c...	Sec. 5.2, p. 1146	exact	2154	OK	Sec. 5.2 (line 2148); PDF page 7 = printed p. 1146
+32	L4	98	2606.07616v1	human test-taker sample "of [~]100 is typically insufficient for IRT"; "human testing increases the number ...	Sec. 5	exact	362	OK	Sec. 5; the '~' before 100 is lost in the text conversion, ledger marks it '[~]'
+33	L5	71	2310.17567v1	preliminary: fine-tuning on synthetic productions "can improve scores on skill-mix to some extent"	Sec. 7	exact	1336	OK	Sec. 7
+34	L5	76	2307.15936v2	Cloze Sufficiency Assumption: "The pre-trained model's average (multiclass) prediction loss on Cloze questi...	Sec. 4, Assumption 2	exact	231	OK	Assumption 2 in Sec. 4; 'within a small multiplicative factor like 1.1' confirmed
+35	L5	39	1908.08351v2	"rather than asking if a model is systematic, a more interesting question is whether the rules and constitu...	Sec. 3.1, p. 9	exact	507	OK	Sec. 3.1, page 9
+36	L5	14	2405.21046v1	"Passive exploration is intuitively insufficient, as we are unlikely to generate novel and correct proofs b...	Sec. 1	exact	118	OK	Sec. 1
+37	L5	56	1912.09713v2	D_C(V‖W) = 1 − C_0.1(F_C(V)‖F_C(W)), D_A = 1 − C_0.5(F_A(V)‖F_A(W)), Chernoff coefficient C_α = Σ p^α q^{1−...	Sec. 2.1	exact	133; 152	OK	Sec. 2.1; Chernoff-coefficient formulas and D_A <= 0.02 confirmed (no 2.2 heading before line 158)
+38	L5	41	1908.08351v2	productivity: "We test whether a model can understand sentences that are longer than the ones encountered d...	Sec. 3.2.1, p. 9	exact	535	OK	Sec. 3.2.1, page 9
+39	L5	67	2310.17567v1	estimates p_s ≤ 0.0144, p_t ≤ 0.0022, L ≤ 5×10^10 (RedPajama); p_s^k p_t L ≤ 0.001 (k=6), ≤ 0.07 (k=5); "Ev...	Sec. 6	exact	1314	OK	Sec. 6; all numbers (0.0144, 0.0022, 5x10^10, 0.001, 0.07, 0.08, 0.12) confirmed
+40	L5	80	2307.15936v2	Cor. 13: when loss falls from δ to δ/k′, "the performance curve inferred by our method for" k′-tuples "of s...	Sec. 5.1.1, Cor. 13; Sec. 7 item 1	exact	394; 442-444	OK	Corollary 13 in Sec. 5.1.1; Sec. 7 item 1 supports the halving-theta paraphrase
+41	L6	158	2006.00995v3	"the utility of a property for a given task can be assessed by measuring the influence of a causal interven...	Abstract	exact	30 (.abs.txt)	OK	Abstract
+42	L6	184	2308.09175v3	AZdb: "diverse chess playstyles and specialization in various openings contributed to a 50 Elo advantage ov...	Abstract	exact	76	OK	Abstract
+43	L6	134	2504.02922v4	"most L1 crosscoder chat-only latents are not truly chat-specific (defined as ν^r<0.5 and ν^ε<0.2), while m...	Sec. 3.1; Fig. 2	markup	256	OK	Sec. 3.1 (refers to its footnote 4) near Fig. 2; 3176 latents confirmed
+44	L6	128	lindsey2024crosscoders	"Crosscoder errors may be important and extremely difficult to interpret"; on diffing "our results there ar...	Sec. 5.2; Sec. 5.1	exact	305; 297	OK	web headings '(5.2) Literal vs Isomorphic Models' (299) and '(5.1) Questions with Fresh Traction' (285)
+45	L6	60	2402.14811v1	"Understanding whether such mechanism invariance is typical will require experience with further tasks on m...	Sec. 7	exact	278	OK	Sec. 7
+46	L6	4	1909.03368v1	"as long as a representation is a lossless encoding, a sufficiently expressive probe with enough training d...	Sec. 1	exact	135	OK	Sec. 1
+47	L6	192	1909.03368v1	Sec. 3.5: "We chose rank constraints of 10 and 45, respectively (with no other changes,) for linear and MLP...	Sec. 3.5 vs Table 1 caption	exact	616; caption 562-566	OK	Sec. 3.5 says ranks 10 and 45; Table 1 caption says all PoS control-task probes rank 10: inconsistency real
+48	L6	45	2402.14811v1	"the entity tracking circuit of the original model on the fine-tuned versions performs better than the full...	Abstract; Table 1	exact	52; Table 1 at 114-182	OK	Abstract; Table 1 circuit 0.73 (Goat) / 0.72 (FLoat) vs full Llama-7B 0.66 confirmed

@@ -1,0 +1,42 @@
+s0: ladder r8 22,350 GPU-s, 1,793,960 attempts; read 6.40 ms/attempt -> K_total 3,493,727 (attempts 1,793,960); K_per 777 (attempts 399); K_eval-set 19,357
+s1: ladder r8 24,467 GPU-s, 1,793,960 attempts; read 7.45 ms/attempt -> K_total 3,285,861 (attempts 1,793,960); K_per 731 (attempts 399); K_eval-set 21,190
+s2: ladder r8 27,021 GPU-s, 2,010,920 attempts; read 6.30 ms/attempt -> K_total 4,288,342 (attempts 2,010,920); K_per 954 (attempts 447); K_eval-set 23,402
+
+s0: replay: stage 1 ok 136442 fail 24 (0.02 %); stage 2 ok 4518 fail 0
+  Q15 calibration (30 of 30): median exp(LB)/p-hat (T 0.8) 0.982 [IQR 0.904, 1.020; 10-90 % 0.79-1.11]; T 1.0: 0.787;  stage-1-only bound: 0.0272;  p-hat attempts per CAL theorem: 4864-4864
+     CAL theorems whose known-proof sum exceeds the sampling UB95: 2
+  B (eqk r8 x0) 54: in H 50; not in H (pend solved on x1) 4; J1-scored 50
+  K_total        3,493,727: LB certifies elicited 40/54 = 0.74 (factor-2 margin 40 = 0.74); sampling CP-lower certifies 36; either 44 = 0.81; created (UB95 < 0.05/K) 0
+  K_total_att    1,793,960: LB certifies elicited 40/54 = 0.74 (factor-2 margin 36 = 0.67); sampling CP-lower certifies 36; either 44 = 0.81; created (UB95 < 0.05/K) 0
+  K_per                777: LB certifies elicited 3/54 = 0.06 (factor-2 margin 2 = 0.04); sampling CP-lower certifies 4; either 4 = 0.07; created (UB95 < 0.05/K) 18
+  K_per_att            399: LB certifies elicited 2/54 = 0.04 (factor-2 margin 0 = 0.00); sampling CP-lower certifies 2; either 3 = 0.06; created (UB95 < 0.05/K) 22
+  K_es              19,357: LB certifies elicited 22/54 = 0.41 (factor-2 margin 20 = 0.37); sampling CP-lower certifies 20; either 26 = 0.48; created (UB95 < 0.05/K) 3
+  Q5 median over scored B of LB - max log pi_pend (T 0.8): 0.332 nats (n 50; IQR 0.06-0.62)
+  Q6 new proof, old theorem: 22/54 = 0.41 (factor-2 margin 22); B with an ev score 54; B with ev log pi_pend < -ln K_total: 33
+  Q7 RL share of bits over init (ev proof, T 1.0): n 54; share < 2 %: 0.815; median 0.0144; 95th pct 0.0293; max 0.0440
+
+s1: replay: stage 1 ok 130600 fail 58 (0.04 %); stage 2 ok 4647 fail 0
+  Q15 calibration (30 of 30): median exp(LB)/p-hat (T 0.8) 0.940 [IQR 0.848, 0.998; 10-90 % 0.76-1.07]; T 1.0: 0.653;  stage-1-only bound: 0.0267;  p-hat attempts per CAL theorem: 4864-4864
+     CAL theorems whose known-proof sum exceeds the sampling UB95: 1
+  B (eqk r8 x0) 51: in H 42; not in H (pend solved on x1) 9; J1-scored 42
+  K_total        3,285,861: LB certifies elicited 30/51 = 0.59 (factor-2 margin 30 = 0.59); sampling CP-lower certifies 33; either 39 = 0.76; created (UB95 < 0.05/K) 0
+  K_total_att    1,793,960: LB certifies elicited 30/51 = 0.59 (factor-2 margin 29 = 0.57); sampling CP-lower certifies 33; either 39 = 0.76; created (UB95 < 0.05/K) 0
+  K_per                731: LB certifies elicited 0/51 = 0.00 (factor-2 margin 0 = 0.00); sampling CP-lower certifies 1; either 1 = 0.02; created (UB95 < 0.05/K) 18
+  K_per_att            399: LB certifies elicited 0/51 = 0.00 (factor-2 margin 0 = 0.00); sampling CP-lower certifies 1; either 1 = 0.02; created (UB95 < 0.05/K) 21
+  K_es              21,190: LB certifies elicited 19/51 = 0.37 (factor-2 margin 14 = 0.27); sampling CP-lower certifies 25; either 28 = 0.55; created (UB95 < 0.05/K) 2
+  Q5 median over scored B of LB - max log pi_pend (T 0.8): 0.447 nats (n 42; IQR 0.19-0.74)
+  Q6 new proof, old theorem: 15/51 = 0.29 (factor-2 margin 15); B with an ev score 51; B with ev log pi_pend < -ln K_total: 27
+  Q7 RL share of bits over init (ev proof, T 1.0): n 51; share < 2 %: 0.843; median 0.0117; 95th pct 0.0264; max 0.0423
+
+s2: replay: stage 1 ok 118424 fail 93 (0.08 %); stage 2 ok 4401 fail 0
+  Q15 calibration (30 of 30): median exp(LB)/p-hat (T 0.8) 0.925 [IQR 0.851, 0.948; 10-90 % 0.75-1.03]; T 1.0: 0.653;  stage-1-only bound: 0.0246;  p-hat attempts per CAL theorem: 4864-4864
+     CAL theorems whose known-proof sum exceeds the sampling UB95: 1
+  B (eqk r8 x0) 60: in H 49; not in H (pend solved on x1) 11; J1-scored 50
+  K_total        4,288,342: LB certifies elicited 44/60 = 0.73 (factor-2 margin 44 = 0.73); sampling CP-lower certifies 51; either 55 = 0.92; created (UB95 < 0.05/K) 0
+  K_total_att    2,010,920: LB certifies elicited 44/60 = 0.73 (factor-2 margin 42 = 0.70); sampling CP-lower certifies 51; either 55 = 0.92; created (UB95 < 0.05/K) 0
+  K_per                954: LB certifies elicited 8/60 = 0.13 (factor-2 margin 5 = 0.08); sampling CP-lower certifies 9; either 11 = 0.18; created (UB95 < 0.05/K) 9
+  K_per_att            447: LB certifies elicited 5/60 = 0.08 (factor-2 margin 1 = 0.02); sampling CP-lower certifies 4; either 6 = 0.10; created (UB95 < 0.05/K) 14
+  K_es              23,402: LB certifies elicited 26/60 = 0.43 (factor-2 margin 23 = 0.38); sampling CP-lower certifies 32; either 37 = 0.62; created (UB95 < 0.05/K) 2
+  Q5 median over scored B of LB - max log pi_pend (T 0.8): 0.444 nats (n 50; IQR 0.22-0.71)
+  Q6 new proof, old theorem: 22/60 = 0.37 (factor-2 margin 22); B with an ev score 60; B with ev log pi_pend < -ln K_total: 29
+  Q7 RL share of bits over init (ev proof, T 1.0): n 60; share < 2 %: 0.883; median 0.0100; 95th pct 0.0220; max 0.0265
