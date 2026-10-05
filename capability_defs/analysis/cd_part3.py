@@ -39,6 +39,7 @@ from cd_skeleton import skeleton
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out')
 DEFS = ['eqk', 'cm', 'rel', 'tfmax', 'brk_ne', 'irt', 'schema', 'guided', 'sharp', 'npnt', 'chain', 'ood']
+EXTRA = ['cm_recipe', 'cm_j7', 'eqk_j7']
 J2_COST = 3.6e-3          # A40 seconds per pend attempt on hard theorems (J2 chunk s0_c00: 470 s / 131,072)
 
 
@@ -132,6 +133,29 @@ def main():
                     fr[r['name']] = min(fr.get(r['name'], 99), r.get('round') or 99)
         first_round[s] = fr
     res = {'sets': {}, 'curves': {}, 'cov': {}, 'meta': {'J2_COST': J2_COST}}
+    J2ALL = {s: j2_counts(s) for s in R.SEEDS}
+
+    def pend_any_seed(n):
+        """successes of ANY seed's pend over all its attempts on t (x0 / x1 / x2 / x4 + J2)."""
+        tot = 0
+        for s2 in R.SEEDS:
+            for x, v in T['seeds'][str(s2)][n]['counts'].get('pend', {}).items():
+                tot += v[0]
+            if n in J2ALL[s2]:
+                tot += J2ALL[s2][n][0]
+        return tot
+
+    def j7_solves(s, x):
+        out = set()
+        for pool in R.POOLS:
+            p7 = f'{ROOT}/artifacts/cd/j7/s{s}_cont__{pool}_x{x}.jsonl'
+            if os.path.exists(p7):
+                for l in open(p7):
+                    r = json.loads(l)
+                    if r['n_ok'] > 0:
+                        out.add(r['name'])
+        return out
+
     for s in R.SEEDS:
         S = T['seeds'][str(s)]
         J2 = j2_counts(s)
@@ -237,6 +261,13 @@ def main():
                         return np.mean([c[0] > 0 for c in v]) if v else float('nan')
                     if rate('pend') <= 0.05 and rate(rl) >= 0.5:
                         D['schema'].extend(mem)
+                # relative to the recipe: no seed's base solves t in any attempt
+                D['cm_recipe'] = [n for n in D['cm'] if pend_any_seed(n) == 0]
+                # net of the compute-matched pretraining continuation (J7), when its reads exist
+                c7 = j7_solves(s, x if x in (0, 1) else 1)
+                if c7:
+                    D['cm_j7'] = [n for n in D['cm'] if n not in c7]
+                    D['eqk_j7'] = [n for n in D['eqk'] if n not in c7]
                 # net of replay
                 for d in list(D):
                     D[d + '_net'] = [n for n in D[d] if not ((S[n]['counts'].get('ctrl8', {}).get(str(x if x in (0, 1) else 1)) or [0])[0] > 0)]
@@ -269,7 +300,7 @@ def main():
     print('created-set sizes (of 322) per comparison; _net = minus replay-only-control solves')
     keys = [k for k in res['sets'] if not k.endswith('_rho')]
     print(f'{"def":10s} ' + ' '.join(f'{k:>11s}' for k in keys))
-    for d in DEFS:
+    for d in DEFS + EXTRA:
         print(f'{d:10s} ' + ' '.join(f'{len(res["sets"][k].get(d, [])):11d}' for k in keys))
         print(f'{d + "_net":10s} ' + ' '.join(f'{len(res["sets"][k].get(d + "_net", [])):11d}' for k in keys))
     print('\nset-level compute-matched coverage (r8: draw x0; r16: x1): RL solved@256 vs base solved within all its attempts')
