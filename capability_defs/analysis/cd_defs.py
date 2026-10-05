@@ -65,14 +65,12 @@ def main():
     irt = {d: json.load(open(f'{OUT}/irt_c{a.cap}{d}.json')) for d in ('', '_x0', '_x1') if os.path.exists(f'{OUT}/irt_c{a.cap}{d}.json')}
     sch = schema_of()
     res = {'cap': a.cap, 'sets': {}, 'values': {}, 'budgets': {}}
-    comps = [('r8', 0), ('r8', 1)] + ([('r16', 1)] if a.cap == 12 else [])
+    comps = [('r8', 0), ('r8', 1), ('r16', 1)]
     for s in map(str, R.SEEDS):
         S = T['seeds'][s]
         for rl, x in comps:
-            if rl == 'r16' and a.cap == 6:
-                continue
             key = f's{s}_{rl}_x{x}'
-            B = budgets(int(s), rl) if a.cap == 12 else budgets(int(s), 'r8')
+            B = budgets(int(s), rl)    # cap-12 ladder compute; at cap 6 an approximation (cap-6 ladders ran the same recipe)
             res['budgets'][key] = B
             lnKt, lnKp = math.log(B['K_total']), math.log(B['K_per'])
             sets = collections.defaultdict(list)

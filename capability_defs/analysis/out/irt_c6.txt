@@ -1,6 +1,6 @@
-/home/dan/work/capability-defs/capability_defs/analysis/cd_irt.py:182: RuntimeWarning: divide by zero encountered in divide
+/home/dan/work/capability-defs/capability_defs/analysis/cd_irt.py:199: RuntimeWarning: divide by zero encountered in divide
   lo_obs = np.log((c + .5) / (n - c + .5)); lo_pred = np.log(pp / (1 - pp))
-cap 6: 69 examinees (42 pretraining), 322 items, 10,954,496 attempts, 2,758,895 successes
+cap 6: 69 examinees (42 pretraining), 322 items, 11,128,320 attempts, 2,904,005 successes
 PT fit: converged=True nit=1892; a median 1.56 [0.93, 2.90]
 
 ability theta by checkpoint (pend mean = 0):
@@ -28,37 +28,41 @@ r6          4.58    3.43    2.26
 r7          4.82    3.53    2.33
 r8          4.88    3.68    2.81
 r12          nan     nan     nan
-r16         4.46    3.32    1.62
+r16         5.22    4.38    3.34
+ctrl_pend_r8     nan     nan     nan
+ctrl_p5000_r8     nan     nan     nan
+ei_p5000_r8     nan     nan     nan
+ei_p1600_r8     nan     nan     nan
 
 Q8a: Spearman(predicted p from the PT-only 1-D model at the RL ability, observed p-hat), per seed:
   r8: 0.559 0.583 0.647
-  r16: 0.685 0.757 0.709
+  r16: 0.543 0.522 0.567
 
 DIF+ items per RL examinee (tail p < 1e-3 and log-odds residual > ln 10); "created" = DIF+ and pend 0/512:
-  s0 r4  : DIF+  63  DIF- 129  created  39
-  s0 r8  : DIF+  55  DIF- 164  created  43
-  s0 r16 : DIF+  13  DIF-  53  created  12
-  s1 r4  : DIF+  91  DIF-  46  created  61
-  s1 r8  : DIF+  75  DIF-  82  created  62
-  s1 r16 : DIF+  23  DIF-   9  created  17
+  s0 r4           : theta  4.03  DIF+  63  DIF- 129  created  39
+  s0 r8           : theta  4.88  DIF+  55  DIF- 164  created  43
+  s0 r16          : theta  5.22  DIF+  52  DIF- 171  created  45
+  s1 r4           : theta  2.94  DIF+  91  DIF-  46  created  61
+  s1 r8           : theta  3.68  DIF+  75  DIF-  82  created  62
+  s1 r16          : theta  4.38  DIF+  69  DIF- 149  created  54
   Q8c: s1 r16 top-decile positive residuals contain 0 of the 6 holdout250 A v ~A instances: []
-  s2 r4  : DIF+  98  DIF-  36  created  50
-  s2 r8  : DIF+  98  DIF-  57  created  64
-  s2 r16 : DIF+  35  DIF-   4  created  26
+  s2 r4           : theta  2.19  DIF+  98  DIF-  36  created  50
+  s2 r8           : theta  2.81  DIF+  98  DIF-  57  created  64
+  s2 r16          : theta  3.34  DIF+  80  DIF-  87  created  63
 
-deviance per (examinee, item) cell: PT cells under PT items 27.31, under all-fit items 30.30; RL cells under PT items 671.42, under all-fit items 79.46
-2-D fit (all examinees): deviance per cell PT 27.19, RL 55.24
+deviance per (examinee, item) cell: PT cells under PT items 27.31, under all-fit items 30.35; RL cells under PT items 656.08, under all-fit items 78.29
+2-D fit (all examinees): deviance per cell PT 27.29, RL 55.24
 2-D abilities (mean over seeds) on the PT-progress axis u and the orthogonal axis w:
-  p1600   u   -7.47  w    0.27
-  p5000   u   -5.57  w   -0.27
-  p12000  u   -4.38  w   -0.15
-  pend    u   -3.36  w    0.27
-  r1      u   -0.70  w   -0.15
-  r4      u   -0.16  w   -1.26
-  r8      u   -0.05  w   -1.69
-  r16     u   -0.09  w   -2.18
+  p1600   u   -8.26  w    0.70
+  p5000   u   -6.15  w    0.07
+  p12000  u   -4.83  w    0.15
+  pend    u   -3.66  w    0.70
+  r1      u   -0.56  w    0.50
+  r4      u   -0.26  w   -1.21
+  r8      u   -0.27  w   -1.83
+  r16     u   -0.30  w   -2.11
 
 PT-step equivalent (theta = alpha + beta ln step, fitted per seed on steps 3,000 ... 20,000 and pend at its recorded step count):
-  s0: slope 1.173 per e-fold of steps; RL ability = PT length x r1 2.9, r4 22.1, r8 45.7, r16 31.9
-  s1: slope 0.986 per e-fold of steps; RL ability = PT length x r1 4.1, r4 24.5, r8 51.7, r16 36.1
-  s2: slope 1.005 per e-fold of steps; RL ability = PT length x r1 3.4, r4 10.5, r8 19.5, r16 6.0
+  s0: slope 1.173 per e-fold of steps; RL ability = PT length x r1 2.9, r4 22.1, r8 45.7, r16 61.1
+  s1: slope 0.986 per e-fold of steps; RL ability = PT length x r1 4.1, r4 24.5, r8 51.7, r16 105.5
+  s2: slope 1.005 per e-fold of steps; RL ability = PT length x r1 3.4, r4 10.5, r8 19.5, r16 33.1

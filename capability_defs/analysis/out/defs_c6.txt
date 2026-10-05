@@ -1,0 +1,54 @@
+net of replay (theorems the replay-only control also solves on the same draw removed): sizes
+  eqk_net        101    99   108   132   125   130   122   118   130
+  rel_net        104   102   111   124   124   133   110   116   127
+  irt_net          0     0    45     0     0    54     0     0    63
+  schema_net      31    31    37    43    48    54    47    41    44
+cap 6: created-set sizes (of 322) per seed; budgets K_total / K_per in base-attempt equivalents
+  s0_r8_x0: K_total 3,493,886 (ln 15.07), K_per 777 (ln 6.66)
+  s0_r16_x1: K_total 8,691,413 (ln 15.98), K_per 1,934 (ln 7.57)
+  s1_r8_x0: K_total 3,285,882 (ln 15.01), K_per 731 (ln 6.59)
+  s1_r16_x1: K_total 7,694,902 (ln 15.86), K_per 1,712 (ln 7.45)
+  s2_r8_x0: K_total 4,287,918 (ln 15.27), K_per 954 (ln 6.86)
+  s2_r16_x1: K_total 9,279,777 (ln 16.04), K_per 2,064 (ln 7.63)
+definition     s0_r8_x0     s0_r8_x1    s0_r16_x1     s1_r8_x0     s1_r8_x1    s1_r16_x1     s2_r8_x0     s2_r8_x1    s2_r16_x1
+eqk                 101           99          108          132          125          130          122          118          130
+rel                 104          102          111          124          124          133          110          116          127
+irt                   0            0           45            0            0           54            0            0           63
+spec_ev              90           86           86          111          109          103           96           92           93
+spec_ref             94           93           94           98          100          101           85           84           90
+w1_ev               135          131          123          139          137          123          133          129          120
+nullbits              0            0            0            0            0            0            0            0            0
+schema               31           31           37           43           48           54           47           41           44
+
+redraw floor (r8: set from draw x0 vs draw x1), Jaccard per seed:
+  eqk        0.82 0.86 0.82
+  rel        0.91 0.92 0.95
+  irt        nan nan nan
+  spec_ev    0.96 0.98 0.96
+  spec_ref   0.93 0.98 0.92
+  w1_ev      0.97 0.99 0.97
+  nullbits   nan nan nan
+  schema     1.00 0.90 0.87
+
+seed agreement (r8 x0): Jaccard s0-s1, s0-s2, s1-s2:
+  eqk        0.53 0.53 0.60
+  rel        0.46 0.47 0.45
+  irt        nan nan nan
+  spec_ev    0.41 0.45 0.42
+  spec_ref   0.52 0.54 0.54
+  w1_ev      0.47 0.49 0.45
+  nullbits   nan nan nan
+  schema     0.54 0.44 0.58
+
+agreement matrix (r8, draw x0): mean Jaccard over seeds
+               eqk      rel      irt  spec_ev spec_ref    w1_ev nullbits   schema
+eqk           1.00     0.49     0.00     0.62     0.54     0.66     0.00     0.30
+rel           0.49     1.00     0.00     0.35     0.31     0.44     0.00     0.19
+irt           0.00     0.00      nan     0.00     0.00     0.00      nan     0.00
+spec_ev       0.62     0.35     0.00     1.00     0.55     0.69     0.00     0.31
+spec_ref      0.54     0.31     0.00     0.55     1.00     0.48     0.00     0.29
+w1_ev         0.66     0.44     0.00     0.69     0.48     1.00     0.00     0.24
+nullbits      0.00     0.00      nan     0.00     0.00     0.00      nan     0.00
+schema        0.30     0.19     0.00     0.31     0.29     0.24     0.00     1.00
+
+bits over the random-init null (r8 x0, eventual proofs, T 1.0): RL share median 0.0095, 95th pct 0.0565, max 0.1356, n 799
