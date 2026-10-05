@@ -250,3 +250,11 @@ Brief: run brief `guided-tts` (Dan, 2026-10-03). Policy: AGENT_POLICY.md. Budget
 - 21:48 UTC  Independent code review: nothing that changes a number. CI green on `ci-guided-tts`; checker + guided sampler merged into the fork's `dan` (fast-forward, e18e524e). Bucket `hf://buckets/dan-pandori/nd-rl/guided-tts/{artifacts/gt,artifacts/guided-tts,data/gt}`; manifest rows in `artifacts/MANIFEST.jsonl`. No pods left; 9.07 pod-h, $4.45 of $10.
 
 GUIDED-TTS DONE 2026-10-03T21:48:15Z
+
+
+# STATUS — capability-defs (proposal 26: what should "capability" mean for this project, and how do we measure it?)
+
+Brief: run brief `capability-defs` (Dan, 2026-10-04). Policy: AGENT_POLICY.md. Budget $50 / 100 pod-hours, optional (pods only where existing artefacts cannot answer). Hard stop 72 h (2026-10-08 04:56 UTC).
+
+## capability-defs
+- 2026-10-05 04:56 UTC  run started (executor, `--effort max`). Parts: 1 literature (≥ 60 new papers screened, ≥ 20 in depth, claims verified against source text), 2 catalogue (≥ 15 definition cards with critic passes), 3 quantification on our models (≥ 6 definitions), 4 recommendation. Deliverables under `capability_defs/`. Pre-registration `preregistration/capability-defs.md` will be committed before any pod.
