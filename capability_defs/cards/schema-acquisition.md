@@ -101,4 +101,37 @@ success in 32 attempts:
 
 ## 9. Critic's verdict
 
-*(pending)*
+**Strongest argument (critic): a generator template is not a proof schema.**
+- Substitution makes many members of the classical families provable *without* the classical step (G4ip, `intuit.py`):
+  - `demorgan_nand_to_or`: 27 / 40 trained-on and 29 / 40 held-out members.
+  - The 13 / 11 members that need the classical step are solved by no seed in any of 16 rounds. Yet the original
+    card said "created on s0 and s2", carried entirely by the shortcut members.
+  - Peirce came out backwards: s0 solves 0 / 15 classical-only targets yet was "created"; s2 solves 15 / 15 and was
+    "elicited", because pend's k-32 read happened to hit three shortcut members.
+  - Even excluded middle's one base-solved member (`la_rl_targets_1358`) needs no classical step.
+- Secondary arguments:
+  - The verdict table was computed on trained-on members at k 32, not on held-out members at budget K.
+  - "≤ 0.05" is at most 2 of 40 members.
+  - The step tag is empty for classical schemata: DN occurs in 13.7 % of K12.
+
+**My answer: accepted. The family is now defined by the members that need the key step**, and I re-derived the
+numbers (`cd_schema.py --keystep`, `out/schema_c12_keystep.txt`). Classical families are restricted to members that
+are not intuitionistically provable (trained-on / held-out): `excluded_middle` 39 / 39, `peirce` 15 / 13,
+`peirce_sequent` 20 / 19, `negated_conditional` 20 / 18, `contraposition_conv` 29 / 23, `demorgan_nand_to_or` 13 / 11.
+
+Shares (k 32 per round) with the key-step restriction, s0 / s1 / s2:
+
+| family | pend (round 1) | r16 | verdict s0 / s1 / s2 |
+|---|---|---|---|
+| `excluded_middle` | 0.00 / 0.00 / 0.00 | 0.00 / **0.95** / 0.26 | — / created / — |
+| `peirce` | 0.00 / 0.00 / 0.00 | 0.00 / 0.27 / **1.00** | — / — / created |
+| `peirce_sequent` | 0.00 / 0.00 / 0.05 | 0.30 / 0.05 / **1.00** | — / — / created |
+| `negated_conditional` (classical members) | 0.05 / 0.00 / 0.00 | 1.00 / 0.65 / 1.00 | created ×3 |
+| `contraposition_conv` (classical members) | 0.76 / 0.03 / 0.97 | 1.00 / 1.00 / 1.00 | elicited / created / elicited |
+| `demorgan_nand_to_or` (classical members) | 0.00 / 0.00 / 0.00 | 0.00 / 0.00 / 0.00 | none |
+| `dist_and_over_or` (intuitionistic, unchanged) | 0.00 / 0.00 / 0.00 | 0.97 / 1.00 / 0.93 | created ×3 |
+
+The family verdicts remain relative to pend's k-32 round-1 read. The budget caveat (§5) and held-out confirmation are
+still required before a family counts in the REPORT. **The classical step itself is not new** (DN is in 13.7 % of
+pretraining proofs), so every created classical family is a new *composition* (`composition`), not a new move.
+

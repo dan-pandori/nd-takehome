@@ -13,6 +13,8 @@ Family verdict (pre-registered card rule): **created** if the round-1 (pend, k 3
 last rounds (mean of the final two rounds) is >= 0.5; **elicited** if round 1 is > 0.05 and the final share >= 0.5.
 """
 import argparse, collections, json, os, sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
+from intuit import intuit_provable          # G4ip decision procedure (fork's intuit.py)
 
 HOME = os.path.expanduser('~')
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
@@ -32,6 +34,8 @@ def alloc_dirs(cap, s):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--cap', type=int, default=12)
+    ap.add_argument('--keystep', action='store_true', help='restrict classical families to members NOT intuitionistically '
+                    'provable (they need the classical step); intuitionistic families unchanged (critic, schema card)')
     a = ap.parse_args()
     tg = {r['name']: r for r in rj(f'{ROOT}/data/ladder/rl_targets.jsonl')}
     tr = {r['name']: r for r in rj(f'{ROOT}/data/ladder/transfer.jsonl')}
@@ -42,6 +46,13 @@ def main():
     for n, r in tr.items():
         if r.get('schema'):
             fam_x[r['schema']].append(n)
+    if a.keystep:
+        cls = {f for f, mem in fam_t.items() if any(not intuit_provable(tg[n]['prompt']) for n in mem)}
+        for f in cls:
+            fam_t[f] = [n for n in fam_t[f] if not intuit_provable(tg[n]['prompt'])]
+            fam_x[f] = [n for n in fam_x[f] if not intuit_provable(tr[n]['prompt'])]
+        print('classical families restricted to members needing the classical step:',
+              {f: (len(fam_t[f]), len(fam_x[f])) for f in sorted(cls)})
     out = {'families': sorted(fam_t), 'targets': {}, 'transfer': {}, 'verdict': {}}
     for s in (0, 1, 2):
         acc = {}
@@ -92,7 +103,7 @@ def main():
     print('\ntransfer (held out) cumulative share solved by round 1 / 8 / 16, s0 / s1 / s2, families that move most:')
     for f in sorted(fam_x, key=lambda f: -max(out['transfer'][s][f][15] - out['transfer'][s][f][0] for s in (0, 1, 2)))[:8]:
         print(f'  {f:28s} ' + '  '.join('/'.join(f"{out['transfer'][s][f][r - 1]:.2f}" for r in (1, 8, 16)) for s in (0, 1, 2)))
-    json.dump(out, open(f'{OUT}/schema_c{a.cap}.json', 'w'))
+    json.dump(out, open(f'{OUT}/schema_c{a.cap}' + ('_keystep' if a.keystep else '') + '.json', 'w'))
 
 
 if __name__ == '__main__':
