@@ -265,3 +265,4 @@ PART 1 DONE 2026-10-05T08:08:19Z
 PART 2 DONE 2026-10-05T08:08:19Z
 - Part 3 in progress: pods cd-a…cd-g (J1 stage 2, J2 large-k, J3 guided, J4 / J6 / J6b fine-tunes, J5 missing draws, J7 compute-matched continuation); seed-0 results logged in `log.md`.
 
+- 14:19 UTC  Part 3: every job done except J9 (certification sampling, ends ≈ 16:30). Stage B, J3, J6b, J7, J8, J10 complete; sets, agreement, sensitivity, figures and Lean examples in `capability_defs/REPORT.md` §3; card audit and a second independent re-derivation done. Spend $32 so far (projected ≈ $37 of $50). Artifacts and data uploaded to `hf://buckets/dan-pandori/nd-rl/capability-defs/` (final re-sync after J9).
