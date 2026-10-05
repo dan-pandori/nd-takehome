@@ -65,6 +65,19 @@ def main():
                 hit = sorted(set(B) & g)
                 res[f'Q13_{key}'] = {'B': len(B), 'guided_pend_solves': len(hit)}
                 print(f'Q13 {key}: guided pend solves {len(hit)} of B = {len(B)} ({len(hit) / max(1, len(B)):.0%})')
+    # Q13 at cap 6 (J3c6, pre-registered "as Q13"): B = cap-6 equal-k set (out/defs_c6.json), pend's cap-6 guided read
+    D6 = json.load(open(f'{OUT}/defs_c6.json')) if os.path.exists(f'{OUT}/defs_c6.json') else None
+    if D6:
+        for s in (0, 1, 2):
+            p = f'{ROOT}/artifacts/cd/j3/c6_s{s}_pend_logical.rows.jsonl.gz'
+            if not os.path.exists(p):
+                continue
+            g = {json.loads(l)['name'] for l in gzip.open(p, 'rt') if json.loads(l)['n_ok'] > 0}
+            for key in (f's{s}_r8_x0', f's{s}_r16_x1'):
+                B = D6['sets'].get(key, {}).get('eqk', [])
+                hit = sorted(set(B) & g)
+                res[f'Q13c6_{key}'] = {'B': len(B), 'guided_pend_solves': len(hit)}
+                print(f'Q13 cap 6 {key}: guided pend solves {len(hit)} of B = {len(B)} ({len(hit) / max(1, len(B)):.0%})')
     json.dump(res, open(f'{OUT}/j3.json', 'w'), indent=1)
 
 
