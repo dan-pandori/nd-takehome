@@ -139,4 +139,31 @@ everywhere (§9), so report it as a separate scale.
 
 ## 9. Critic's verdict
 
-*(pending — filled in after the critic pass)*
+**Strongest argument (critic): "a budget tied to RL's compute" is a menu of budgets, not one line, and the contested
+theorems sit inside the menu.**
+- K_per at r8 is 256 if RL's compute is counted in samples (8 rounds × 32 per target = k_eval, the equal-k case), 777 at
+  6.4 ms per attempt, and 1,381 at 3.6 ms. It also scales with the number of *training* targets (4,495), and the judged
+  theorems are not training targets.
+- s0's 55 RL-solved hard theorems have known-proof estimates from e^−36.6 to e^−8.0 (median e^−15.7 ≈ 1 / K_total).
+  `textbook_b98931f273313e2c32e7` (pend 1 / 17,152, r8 p̂ 0.90) is "created" at K_per and certified elicited at K_total.
+- At K_total, certifying creation takes ≈ 2 × 10⁸ zero-success draws per theorem, so there the rule can only return
+  elicited or undetermined.
+- Secondary arguments:
+  - *Attribution:* R is pend + ≈ 476 M replay tokens + RL. The replay-only control solves 16 / 18 / 24 of the 86 /
+    77 / 77 hard theorems (e.g. `textbook_418e4b67e7e59d93fa6b` 146 / 512 against r8's 0.16).
+  - *Certification arithmetic:* "created at K_per" needs 83k–124k zero-success draws, more than stage B's 65,536 at
+    r16 and at 3.6 ms per attempt.
+  - *Cut vs β:* the cut ignores p_R beyond one hit in 256 while K grows with RL's spend, so more RL can only weaken a
+    verdict (`textbook_5758428c8c74f96345ad` rises 138× from r8 to r16 but can be certified only at r8).
+- Smallest surviving change (critic): one set-level comparison at the experiment's own budget. Give base sampling the
+  ladder's GPU-seconds over the same 322 evaluation theorems, and call it creation only if RL's solves at k_eval beat
+  that compute-matched base coverage by more than seed noise.
+
+**My answer: accepted; the card is revised as the critic proposes (§1–2).**
+- The headline budget is **K_eval-set** = ladder GPU-s / (322 × 3.6 ms) ≈ 1.9–2.3 × 10⁴ (r8), 4.8–5.0 × 10⁴ (r16). It
+  has no target-count denominator, and J2 stage A plus stage B (65,536 attempts on every RL-solved hard theorem)
+  supply it.
+- The decision is set level (Δ_cov), with the per-theorem verdicts secondary and every number reported net of the
+  replay-only control. K_per and K_total are reported beside it, not used as creation budgets.
+- β is kept as a separate continuous scale, not as "the rule without a cut".
+- Certification at K_eval-set needs ≈ 60 K zero-success attempts per theorem; J9 buys it for 3 theorems per seed.

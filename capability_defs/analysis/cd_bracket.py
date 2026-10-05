@@ -20,7 +20,7 @@ from scipy.stats import beta
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cd_reads as R
-from cd_defs import budgets
+from cd_defs import budgets, LADDER_S
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out')
@@ -67,8 +67,8 @@ def load_j1(s):
 def j2_counts(s):
     out = {}
     for p in glob.glob(f'{ROOT}/artifacts/cd/j2/s{s}_*.jsonl'):
-        if p.endswith('.args.json'):
-            continue
+        if p.endswith('.args.json') or os.path.basename(p).split('_')[1].startswith('t'):
+            continue                      # t*: the doubled-cap truncation check, not the standard protocol
         for l in open(p):
             r = json.loads(l)
             c = out.setdefault(r['name'], [0, 0, []])
@@ -124,8 +124,22 @@ def main():
         if ratio:
             print(f'  calibration: exp(LB) / p-hat (T 0.8): median {np.median(ratio):.3f} [IQR {np.percentile(ratio, 25):.3f}, {np.percentile(ratio, 75):.3f}], '
                   f'share of the bound carried by the best single proof: median {np.median([math.exp(r["best08"] - r["LB08"]) for r in cal]):.2f}')
+        meas = [r for r in rows.values() if r['c'] > 0]           # every theorem where pend's p is measured
+        if meas:
+            rr = [math.exp(r['LB08']) / r['phat'] for r in meas]
+            over = sum(1 for r in meas if math.exp(r['LB08']) > r['ub'])
+            print(f'  all measured theorems ({len(meas)}: calibration + hard theorems pend solved in J2): exp(LB) / p-hat '
+                  f'10th / 50th / 90th percentile {np.percentile(rr, 10):.2f} / {np.median(rr):.2f} / {np.percentile(rr, 90):.2f}; '
+                  f'exp(LB) above the sampling UB95 on {over}')
         for rl in ('r8', 'r16'):
             B = budgets(s, rl)
+            Ke = LADDER_S[rl][s] / (322 * 3.6e-3)
+            H = [(n, r) for n, r in rows.items() if r['grp'] == 'H' and r[f'phat_{rl}'] > 0]
+            ee = [n for n, r in H if r['LB08'] >= math.log(2) - math.log(Ke) or r['lo'] >= 1 / Ke]
+            nr = [n for n, r in H if r['c'] == 0 and r['n'] >= Ke]
+            ce = [n for n, r in H if r['ub'] < 0.05 / Ke]
+            print(f'  {rl} at K_eval-set {Ke:,.0f}: certified elicited {len(ee)}; not reached (0 in >= K) {len(nr)}; '
+                  f'certified created (UB95 < 0.05 / K) {len(ce)}; of {len(H)}')
             H = [(n, r) for n, r in rows.items() if r['grp'] == 'H' and r[f'phat_{rl}'] > 0]
             el = [n for n, r in H if r['LB08'] >= math.log(2) - math.log(B['K_total'])]   # factor-2 margin
             el_p = [n for n, r in H if r['LB08'] >= math.log(2) - math.log(B['K_per'])]

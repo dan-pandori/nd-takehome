@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """capability-defs: worked examples for REPORT.md (Lean renderings of proofs + every number the definitions use).
 
-  python3 capability_defs/analysis/cd_examples.py SEED NAME [NAME ...] > capability_defs/analysis/out/examples_<...>.md
+  python3 capability_defs/analysis/cd_examples.py SEED NAME [NAME ...] [--ev] > capability_defs/analysis/out/examples_<...>.md
+  (--ev: also r8's eventual proof, i.e. the ladder's own proof of t, rebuilt from trajectory's score targets)
 
 For each theorem: the statement; pend's attempts and successes (x0 / x1 / x2 / J2) and its k-to-solve interval
 [1 / UB95, 1 / LB] (LB = known-proof sum at T 0.8, exact 33-base terms where scored); r8 / r16 p-hat; the replay-only
@@ -27,8 +28,29 @@ from cd_part3 import load_scores, j2_counts
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out')
 
 
+def ev_proof(s, n, prompt):
+    """r8's eventual proof of n (trajectory's score targets, kind 'ev'), rebuilt as an ND proof by replaying its
+    base-0 actions through the proof-state environment."""
+    from state_env import Env
+    p = os.path.expanduser(f'~/work/trajectory/artifacts/tj/score/s{s}/targets.jsonl')
+    for l in open(p):
+        m = json.loads(l)
+        if m['tid'] == f'ev:{n}':
+            env = Env(prompt, canon=True)
+            for a in m['actions_b0']:
+                ok, why = env.apply(a.split())
+                if not ok:
+                    return None
+            y = env.nd()
+            return None if y.startswith('LEANPARSE') else y
+    return None
+
+
+EV = '--ev' in sys.argv
+
+
 def main():
-    s = int(sys.argv[1]); names = sys.argv[2:]
+    s = int(sys.argv[1]); names = [a for a in sys.argv[2:] if a != '--ev']
     T = json.load(open(f'{OUT}/table_c12.json'))
     S = T['seeds'][str(s)]; meta = T['meta']
     by, tgt = load_scores(s)
@@ -44,8 +66,12 @@ def main():
         ub = cp_upper(cB, nB)
         print(f'### {n} (seed {s}; {meta[n]["pool"]})\n')
         print(f'`{meta[n]["prompt"]}`\n')
-        print(f'- pend: {cB} successes in {nB:,} attempts; k-to-solve interval [{1 / ub:,.0f}, {math.exp(-LB) if LB > -math.inf else float("inf"):,.3g}] attempts '
-              f'(UB95 {ub:.2e}; known-proof bound LB = e^{LB:.1f} over {len(vals)} proofs)')
+        est = math.exp(LB) if LB > -math.inf else 0.0
+        kt = f'{1 / est:,.3g}' if est > 0 else 'no known proof scored'
+        pt = f'; point estimate 1 / p-hat = {nB / cB:,.0f}' if cB else ''
+        print(f'- pend: {cB} successes in {nB:,} attempts. k-to-solve: sampling >= {1 / ub:,.0f} (UB95 {ub:.2e}){pt}; '
+              f'known-proof estimate {kt} (sum over {len(vals)} known proofs = e^{LB:.1f})'
+              + (' — the estimate exceeds the sampling UB95 here' if est > ub else ''))
         for ck, xs in (('r8', ('0', '1', '2')), ('r16', ('0', '1')), ('ctrl8', ('0', '1'))):
             v = [c.get(ck, {}).get(x) for x in xs]; v = [u for u in v if u]
             if v:
@@ -68,6 +94,15 @@ def main():
             print(f'\nr8\'s shortest accepted proof (log p under pend at T 0.8: {lp if lp is None else round(lp, 1)}; Lean {"accepts" if ok else "REJECTS"}; '
                   f'{nl} `have` lines; term size {size}):\n')
             print('```lean\n' + src + '\n```')
+        if EV:
+            evp = ev_proof(s, n, meta[n]['prompt'])
+            if evp:
+                lp = rec['tf']['ev'].get('pend', {}).get('T0.8', {}).get('total')
+                src = nd2lean.translate(meta[n]['prompt'], evp, require_all_pr=False)
+                ok, size, nl = lean_meta(src)
+                print(f'\nr8\'s eventual proof (the ladder\'s proof of t; log p under pend at T 0.8: '
+                      f'{lp if lp is None else round(lp, 1)}; Lean {"accepts" if ok else "REJECTS"}; {nl} `have` lines; term size {size}):\n')
+                print('```lean\n' + src + '\n```')
         if vals:
             best = max(vals)
             yb = tgt.get(best[1])

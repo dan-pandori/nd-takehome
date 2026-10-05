@@ -33,7 +33,7 @@ import cd_reads as R
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out')
 PT = [c for c in R.CKS if c.startswith('p')]
 RL = [f'r{i}' for i in range(1, 9)] + ['r12', 'r16']
-EXTRA = ['ctrl_pend_r8', 'ctrl_p5000_r8', 'ei_p5000_r8', 'ei_p1600_r8']
+EXTRA = ['ctrl_pend_r8', 'ctrl_p5000_r8', 'ei_p5000_r8', 'ei_p1600_r8', 'cont_j7']
 
 
 def load(cap, draws=(0, 1)):
@@ -67,6 +67,20 @@ def load(cap, draws=(0, 1)):
                             c[j] += r['n_ok']; n[j] += r['n_tried']; have = True
                 if have:
                     ex.append((s, lab)); C.append(c); N.append(n)
+        # J7: pend's pretraining continuation matched to the r8 ladder's GPU time (this run's reads, plain jsonl)
+        root = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
+        for s in R.SEEDS:
+            c = np.zeros(len(items)); n = np.zeros(len(items)); have = False
+            for x in draws:
+                for pool in R.POOLS:
+                    f = f'{root}/artifacts/cd/j7/s{s}_cont__{pool}_x{x}.jsonl'
+                    if not os.path.exists(f):
+                        continue
+                    for line in open(f):
+                        r = json.loads(line); j = items.index(r['name'])
+                        c[j] += r['n_ok']; n[j] += r['n_tried']; have = True
+            if have:
+                ex.append((s, 'cont_j7')); C.append(c); N.append(n)
     return items, ex, np.array(C), np.array(N)
 
 
