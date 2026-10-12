@@ -250,3 +250,12 @@ Brief: run brief `guided-tts` (Dan, 2026-10-03). Policy: AGENT_POLICY.md. Budget
 - 21:48 UTC  Independent code review: nothing that changes a number. CI green on `ci-guided-tts`; checker + guided sampler merged into the fork's `dan` (fast-forward, e18e524e). Bucket `hf://buckets/dan-pandori/nd-rl/guided-tts/{artifacts/gt,artifacts/guided-tts,data/gt}`; manifest rows in `artifacts/MANIFEST.jsonl`. No pods left; 9.07 pod-h, $4.45 of $10.
 
 GUIDED-TTS DONE 2026-10-03T21:48:15Z
+
+
+# STATUS — create-or-elicit (proposal 27: the experiments for "Did RL create it?")
+
+Brief: run brief `create-or-elicit` (Dan, 2026-10-11). Policy: AGENT_POLICY.md. Budget $140 / 300 pod-hours; hard stop 2026-10-17 05:14 UTC.
+
+## create-or-elicit
+- 2026-10-12 05:14 UTC  run started (executor).
+- 05:52 UTC  Knockout set K12⁻ built on the VPS (`coe/coe_assemble.py`): K12 minus the 16,961 records whose DN cites a derived double negation (16,703 σ + 258 indirect), refilled per length from K12's own unused source records; 155,000 records, refill Lean check pending (first pod). Families: 6 classical, 136 trained / 123 held-out key-step members, all σ-covered. Pre-registration `preregistration/create-or-elicit.md` committed before the first pod; `podbudget` set to 300 h / $140.

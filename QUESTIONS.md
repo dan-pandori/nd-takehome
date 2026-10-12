@@ -112,3 +112,11 @@ s4, s5. Costed alternatives in `preregistration/grpo-state.md` Addendum 1: Plan 
 Plan C (s0–s3, GRPO default + pass@4, ≈ $16).
 **Default if unanswered:** the experiment run uses **Plan B** (4 seeds, all three GRPO arms, EI inherited from
 state-cap12), and first measures s / update on a 16 GB card, moving to it if that halves the cost.
+
+## 2026-10-12 06:00 UTC — create-or-elicit: Phase 3 needs more than the reserve
+
+The plan (pre-registration) puts Phase 1 + 2 at ≈ $115 of the $140 (9 sixteen-round A40 ladders ≈ $75 at today's $0.59 / h
+A40 price, up from $0.49), leaving ≈ $25. The brief's first Phase-3 item, a small-dose arm (σ at ≈ 1 % of pretraining,
+3 seeds, 16 rounds, reads), costs ≈ $27–30 on its own; a 0.1 % arm the same again.
+**Default if unanswered:** stay inside $140. Run the 1 % dose arm (3 seeds) only if Phase 1 + 2 come in at ≤ $110;
+otherwise cost it in `next_steps.md`. If you would rather fund the dose curve (≈ $30 per dose level), say so here.
