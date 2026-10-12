@@ -7,5 +7,5 @@ SSHO="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o BatchMode=y
 rsync -rlptz --no-o --no-g --exclude .git --exclude data/ --exclude artifacts/ --exclude ckpts/ --exclude __pycache__ \
   -e "ssh $SSHO -p $POD_PORT" $W/ "root@$POD_IP:/workspace/nd-takehome/" || exit 1
 cd $W && exec rsync -rlptzR --no-o --no-g -e "ssh $SSHO -p $POD_PORT" data/bs data/eval_only data/ladder data/heldout.jsonl \
-  data/p2/heldout.jsonl data/coe/families.json data/coe/heldout1000.jsonl data/coe/transfer_track832.jsonl data/coe/fam_extra.jsonl \
+  data/p2/heldout.jsonl data/coe/families.json data/coe/heldout1000.jsonl data/coe/transfer_track832.jsonl data/coe/fam_extra.jsonl data/coe/read1054.jsonl \
   "root@$POD_IP:/workspace/nd-takehome/"
