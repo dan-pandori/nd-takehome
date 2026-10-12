@@ -1796,3 +1796,54 @@ At equal attempts every guided arm used > 1.25× plain's compute (flagged); the 
 matched wall-clock. Step checks: ≈ 1 checker call per structurally valid draw, 8–18 s per read (CPU); on long, guided
 tokens per attempt are 2.0–2.3× plain (cap 12) and 2.8–3.3× (cap 6).
 **Spend:** 4 A40 pods ($0.49/h), 9.07 pod-hours, $4.45 (`podbudget`). **Bucket:** `hf://buckets/dan-pandori/nd-rl/guided-tts/{artifacts/gt,artifacts/guided-tts,data/gt}`.
+
+## create-or-elicit (2026-10-12, executor; UNREVIEWED — filled in as phases finish)
+
+**Models.** All `best_model.ALiBiGPT` 6 × 384, **9,560,832 params**, `lean_staten` (environment-assigned names), from
+scratch with `state_env_october`'s recipe (`state_train.py --recipe best`, 1,200 s on one A40), then T1 expert iteration
+(`state_ladder_ei.py`: k 32, T 0.8, 600 fine-tune steps, 20,000 replay records from the arm's own pretraining set).
+- **full, old (s0–s2):** `trajectory/ckpts/tj/stage1_best12_s{S}_b1200.pt` (pend; md5 2bf801fd / eaff7f4d / abca9c63),
+  trajectory's ladder r1–r8 (RTX A6000) and rl-continue's r9–r16 (A40); trained on K12 (`train_k12.jsonl`, 155,000).
+- **full, new (s3–s5)** and **knockout (s0–s5):** this run, `create-or-elicit/ckpts/coe/stage1_{full,ko}_s{S}.pt` and
+  `ckpts/coe/ladder/la_{full,ko}_s{S}_r{1..16}.pt`; full on K12, knockout on **K12⁻** (`data/coe/train_k12ko.jsonl.gz`);
+  every round on an NVIDIA A40, batch 1,024.
+**Checker: Lean alone** throughout (post-2026-09-27). **Sets:** see `data/coe/README.md` (strict σ-covered members:
+123 trained, 106 held-out; read set `read1054` = textbook72 (scoring only) + holdout250 + 732 tracked transfer theorems).
+
+### K12⁻ (source `data/coe/train_k12ko_assemble_report.json`, `artifacts/coe/sigma_k12.json`, `artifacts/coe/shape_k12_vs_ko.md`)
+- K12: σ (DN cites a NEGI line) in 16,703 records, written = pruned; σ⁺ (DN cites any derived line) 16,961; DN anywhere 21,274
+  (13.7 %); lemma route 0.
+- K12⁻ = 138,039 kept + 16,961 refill = 155,000, per-length counts identical; σ⁺ 0, DN 5,102 records (3.29 %), NEGI 5.19 %
+  (K12 15.21 %), classical-only theorems 1.33 % (K12 4.13 %; 20,000-record G4ip sample), mean term size 36.25 (35.91).
+- Refill Lean check 16,961 / 16,961 (`artifacts/coe/refill_lean_check.json`); controls 200 / 200 and 0 / 200
+  (`artifacts/coe/refill_lean_negctl.json`).
+
+### Phase 0.1 — the known-proof estimator at small p (source `artifacts/coe/estimator/REPORT.md`, `summary.json`)
+Model: best-cap12 pend s0–s2 (old full). Observed / predicted base successes by estimate bin: ≥ 10⁻³ 1.11 [1.10, 1.13];
+10⁻⁴–10⁻³ 1.10 [0.99, 1.22]; 10⁻⁵–10⁻⁴ 2.11 [1.66, 2.64]; 10⁻⁶–10⁻⁵ 3.71 [2.24, 5.80]; < 10⁻⁶ 3.45 [0.94, 8.83]. Significantly
+too high on 1 of 330 theorems. Coverage of base large-k successes by proofs known from other sources: 0.70–0.86
+(p̂ 10⁻⁴–10⁻³), 0.78 [0.63, 0.89] (10⁻⁵–10⁻⁴).
+
+### Phase 0.2 — budgets restated (source `artifacts/coe/budget/SUMMARY.md`, `budget.json`, `recount*.txt`)
+Model: best-cap12 pend and r8, old full s0 / s1 / s2. Per-attempt cost on the 322 (A40, alone, sampling + Lean): 7.22 / 8.04 /
+6.36 ms at batch 2,048. A6000 / A40 on the same workload 0.90 / 0.96. r8 budgets (attempts per theorem) and compute-matched
+sets: K_att 3,574 → 34 / 33 / 33; K_train 7,416 / 7,126 / 9,921 → 33 / 27 / 24; uniform same-class K_eval-set 10,314 /
+10,141 / 14,150 → 28 / 26 / 24; published 19,281 / 21,107 / 23,310 → 22 / 21 / 14; K_adapt 44,570 / 43,427 / 56,509 →
+21 / 20 / 14. J9 certificates 9 / 9 (K_train, K_att), 8 / 9 (uniform), 7 / 9 (published), 0 / 9 (K_adapt).
+
+### Phase 2 — sharpening null (source `artifacts/coe/power/phase2_table.md`, `p2_*.json`)
+Power sampling (p^α, α 4 and 2; 32 chains per theorem) vs plain at the same decoded tokens. Full s0 / s1 pend (old) on their
+K_train compute-matched r8 sets (33 / 27): power 0 / 33, 0 / 27 at both α; plain T 0.8 1 / 33, 1 / 27; T 1.0 1 / 33, 2 / 27.
+Knockout s0 / s1 pend on the 106 strict held-out members: power 0 / 106 at both α; plain T 0.8 0 / 106; T 1.0 1 / 106 each
+(`la_transfer_916`). Pilot (development data): power α 4 75 % per chain vs plain T 0.8 54 % per attempt; 26 / 32 vs 31 / 32
+theorems.
+
+### Knockout bases on σ (source `artifacts/coe/rounds/la_*.json` round 1, `artifacts/coe/score/summary.json`, `artifacts/coe/large/t916_*.json`)
+- Round 1 (each base's own k 32 sample): strict σ-covered training targets solved, knockout s0–s5 0 / 0 / 0 / 0 / 0 / 0, full
+  s3–s5 17 / 15 / 20 (old full s0–s2: from `old_full_s*.json`); accepted proofs containing σ, knockout 6–13 (all with the
+  double negation named in the theorem), full s3–s5 635–885.
+- Teacher-forced log p (T 0.8, one name base) of the best known σ proof of a strict held-out member, median over 101: full s0
+  pend −19.2; knockout s0–s5 −33.4 / −26.0 / −35.7 / −33.8 / −36.0 / −31.5; the bottleneck step (opening the ¬G box)
+  −18.0 to −21.6 vs −10.5.
+- `la_transfer_916` (the one generated strict member): knockout s0 base 0 / 131,072 at T 0.8; 1 / 131,072 + 1 / ≈ 1,200 at
+  T 1.0 (one by DN on an IMPI line); knockout s1 base 1 / ≈ 1,400 at T 1.0 (free σ by NEGI).
