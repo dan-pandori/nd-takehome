@@ -348,3 +348,23 @@ solved at k 256). E2 becomes: knockout bases' round-1 share of the 123 strict σ
 seeds; 0 successes on the 106 strict held-out members at k 256 on ≥ 5 / 6. E5: of 106 (full median ≥ 40, knockout
 median ≤ 3). The certificate's pooled n is 59.9 · K over the 106. The pre-registered 178 / 291 sets are reported once,
 as the secondary line, so the change is visible.
+
+## Addendum 3 (2026-10-12 07:51 UTC; before any Phase 2 production run): the sharpening null
+
+**Pilot (development data, not scored as a result):** trajectory's pend s0 on 32 random non-schema `rl_targets`,
+`coe/power_sample.py`, α 4, 16 chains, blocks of 4 steps, 8 MH steps per block: 26 / 32 theorems, 75 % of chains end in a
+Lean-accepted proof, acceptance 0.90; plain T 0.8 at the same decoded tokens (≈ 352 attempts per theorem) 31 / 32 (54 %
+per attempt), T 1.0 31 / 32 (42 %). The sampler's α = 1 self-test passes (Σ log Z vanishes).
+
+**Production design.**
+- Bases: full s0, s1 (`trajectory` pend; old seeds, whose compute-matched sets are known) and knockout s0, s1 (this run's
+  pend). Theorems: full bases — their compute-matched r8 set at **K_train** (Phase 0.2; s0 33, s1 27 theorems:
+  `data/coe/phase2_cm_ktrain_s{0,1}.txt`); knockout bases — the 106 strict σ-covered held-out members.
+- Power sampling at α 4 and α 2: 32 chains per theorem, blocks of 4 steps, 8 MH steps per block. Comparator: plain T 0.8
+  (the standard read) and T 1.0, each theorem given exactly the decoded tokens its α-4 run used (`--mode plain
+  --budget_from`). Solved = some chain's final state (power) / some attempt (plain) is Lean-accepted. "Visited" proofs are
+  reported separately and are not counted.
+- **Expectations:** at matched tokens, α-4 power sampling reaches **≤ 3** theorems of each full base's K_train set, and at
+  most 2 more than plain T 0.8 at the same tokens; on the knockout bases **0 of 106** for every sampler. Per-chain success
+  of power sampling on those sets ≤ 0.02 (the theorems' p under the base is < 1 / K_train by construction). The cost is ≈
+  2 A40-hours on coe-r1.

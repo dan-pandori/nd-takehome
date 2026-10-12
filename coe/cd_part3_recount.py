@@ -342,11 +342,13 @@ def main():
         sens = {'n_eqk': len(cand)}
         for mul in MULS.get(str(s), (0.1, 0.3, 1, 3)):
             K = K0 * mul
-            row = {'K': K, 'cm': 0, 'cm_undet': 0, 'tfmax': 0, 'brk_ne': 0}
+            row = {'K': K, 'cm': 0, 'cm_undet': 0, 'tfmax': 0, 'brk_ne': 0, 'cm_names': []}
             for n in cand:
                 cB, nB = pend_all(n)
                 terms = by.get(n, {})
                 row['cm'] += nB >= K and cB / nB < 1 / K
+                if nB >= K and cB / nB < 1 / K:
+                    row['cm_names'].append(n)
                 row['cm_undet'] += nB < K and cB == 0
                 mx = max((v[lab_b][0] for v in terms.values() if lab_b in v), default=-math.inf)
                 row['tfmax'] += bool(terms) and mx < -math.log(K)
