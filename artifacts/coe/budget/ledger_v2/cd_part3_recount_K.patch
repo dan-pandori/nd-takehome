@@ -1,0 +1,15 @@
+--- coe/cd_part3_recount.py (as of commit f400c92e)
++++ coe/cd_part3_recount_K.py (claims ledger v2: per-seed K override)
+@@ -55,7 +55,12 @@
+ J2_COST = 3.6e-3          # A40 seconds per pend attempt on hard theorems (J2 chunk s0_c00: 470 s / 131,072)
+ 
+ 
++KOVR = json.loads(os.environ['KOVR']) if os.environ.get('KOVR') else None
++
++
+ def k_evalset(s, rl):
++    if KOVR:
++        return KOVR[str(s)][rl]
+     return LADDER_S[rl][s] / (322 * J2_COST)
+ 
+ 

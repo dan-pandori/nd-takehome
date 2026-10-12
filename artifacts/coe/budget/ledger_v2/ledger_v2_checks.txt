@@ -1,0 +1,46 @@
+== L11 bracket verdicts, r8-solved hard theorems (exclusive: sampling lo >= 1/K / estimate LB08 >= ln2 - lnK only / found c >= 1 not elicited / not reached c = 0, n >= K / undetermined); certified UB95 < 0.05/K (not exclusive)
+  K_att    s0 n55: 11 / 2 / 21 / 21 / 0; cert 3 ['1077', '205', '2060'] | s1 n45: 5 / 3 / 19 / 18 / 0; cert 3 ['1077', '1648', '2060'] | s2 n52: 12 / 0 / 30 / 10 / 0; cert 3 ['1648', '1833', '2060']
+  K_train  s0 n55: 16 / 0 / 18 / 21 / 0; cert 3 ['1077', '205', '2060'] | s1 n45: 10 / 0 / 17 / 18 / 0; cert 3 ['1077', '1648', '2060'] | s2 n52: 16 / 3 / 23 / 10 / 0; cert 3 ['1648', '1833', '2060']
+  K_uni    s0 n55: 17 / 4 / 13 / 21 / 0; cert 3 ['1077', '205', '2060'] | s1 n45: 10 / 1 / 16 / 18 / 0; cert 3 ['1077', '1648', '2060'] | s2 n52: 18 / 2 / 22 / 10 / 0; cert 2 ['1833', '2060']
+  K_pub    s0 n55: 17 / 5 / 12 / 21 / 0; cert 3 ['1077', '205', '2060'] | s1 n45: 17 / 1 / 9 / 18 / 0; cert 2 ['1648', '2060'] | s2 n52: 21 / 3 / 18 / 10 / 0; cert 2 ['1833', '2060']
+  K_adapt  s0 n55: 20 / 4 / 10 / 21 / 0; cert 0 [] | s1 n45: 18 / 3 / 6 / 18 / 0; cert 0 [] | s2 n52: 26 / 4 / 12 / 10 / 0; cert 0 []
+
+== L12 log10 K per allocation (r8)
+  K_att    3.55 / 3.55 / 3.55
+  K_train  3.87 / 3.85 / 4.00
+  K_uni    4.01 / 4.01 / 4.15
+  K_pub    4.29 / 4.32 / 4.37
+  K_adapt  4.65 / 4.64 / 4.75
+
+== L20-L21 J9: largest K each pair certifies at (0.05 / UB95), and the A40 cost on the 322 below which it fails at the uniform allocation (K_uni = ladder s / (322 x c x 0.9322))
+  s0_la_transfer_2060    c 0 n 1,245,952 Kmax   20,795  c_min 3.58 ms (measured 7.22)  K_uni/Kmax 0.50  K_att:Y K_train:Y K_uni:Y K_pub:Y K_adapt:n
+  s0_la_transfer_205     c 0 n 1,245,952 Kmax   20,795  c_min 3.58 ms (measured 7.22)  K_uni/Kmax 0.50  K_att:Y K_train:Y K_uni:Y K_pub:Y K_adapt:n
+  s0_la_transfer_1077    c 0 n 1,245,952 Kmax   20,795  c_min 3.58 ms (measured 7.22)  K_uni/Kmax 0.50  K_att:Y K_train:Y K_uni:Y K_pub:Y K_adapt:n
+  s1_la_transfer_1648    c 0 n 1,377,024 Kmax   22,983  c_min 3.55 ms (measured 8.04)  K_uni/Kmax 0.44  K_att:Y K_train:Y K_uni:Y K_pub:Y K_adapt:n
+  s1_la_transfer_1077    c 1 n 1,377,024 Kmax   14,514  c_min 5.62 ms (measured 8.04)  K_uni/Kmax 0.70  K_att:Y K_train:Y K_uni:Y K_pub:n K_adapt:n
+  s1_la_transfer_2060    c 0 n 1,377,024 Kmax   22,983  c_min 3.55 ms (measured 8.04)  K_uni/Kmax 0.44  K_att:Y K_train:Y K_uni:Y K_pub:Y K_adapt:n
+  s2_la_transfer_1648    c 1 n 1,114,880 Kmax   11,751  c_min 7.66 ms (measured 6.36)  K_uni/Kmax 1.20  K_att:Y K_train:Y K_uni:n K_pub:n K_adapt:n
+  s2_la_transfer_1833    c 0 n 1,508,096 Kmax   25,171  c_min 3.58 ms (measured 6.36)  K_uni/Kmax 0.56  K_att:Y K_train:Y K_uni:Y K_pub:Y K_adapt:n
+  s2_la_transfer_2060    c 0 n 1,508,096 Kmax   25,171  c_min 3.58 ms (measured 6.36)  K_uni/Kmax 0.56  K_att:Y K_train:Y K_uni:Y K_pub:Y K_adapt:n
+
+== L44 J7 seconds vs the ladders (cd_defs totals 22,350 / 24,467 / 27,021 RTX A6000-s; A6000 = 0.9322 x A40)
+  A6000-s share 0.819 / 0.838 / 0.808; A40-equivalent share 0.764 / 0.781 / 0.753
+
+== L8 / L9 / L14 ratios to K_uni
+  published 0.1/0.3/1/3 x K_pub in K_uni units: s0: 0.19 / 0.56 / 1.87 / 5.61 | s1: 0.21 / 0.62 / 2.08 / 6.24 | s2: 0.16 / 0.49 / 1.65 / 4.94
+  ladder-attempt budget 5,571 / 5,571 / 6,245 over K_uni: 0.54 / 0.55 / 0.44
+  K_total / 322 (3.49 / 3.29 / 4.29 M) over K_uni: 1.051 / 1.008 / 0.942
+
+== L2 / L75 compute-matched (r8 x0) members outside the 0-success core, with base successes / attempts (bracket.json)
+  K_att    s0 cm 34 core 18 outside 16 (exactly 1 base success: 8) | s1 cm 33 core 17 outside 16 (exactly 1 base success: 8) | s2 cm 33 core 8 outside 25 (exactly 1 base success: 15)
+  K_train  s0 cm 33 core 18 outside 15 (exactly 1 base success: 8) | s1 cm 27 core 17 outside 10 (exactly 1 base success: 8) | s2 cm 24 core 8 outside 16 (exactly 1 base success: 15)
+  K_uni    s0 cm 28 core 18 outside 10 (exactly 1 base success: 8) | s1 cm 26 core 17 outside 9 (exactly 1 base success: 8) | s2 cm 24 core 8 outside 16 (exactly 1 base success: 15)
+  K_pub    s0 cm 22 core 18 outside 4 (exactly 1 base success: 3) | s1 cm 21 core 17 outside 4 (exactly 1 base success: 3) | s2 cm 14 core 8 outside 6 (exactly 1 base success: 6)
+  K_adapt  s0 cm 21 core 18 outside 3 (exactly 1 base success: 3) | s1 cm 20 core 17 outside 3 (exactly 1 base success: 3) | s2 cm 14 core 8 outside 6 (exactly 1 base success: 6)
+
+== L24 agreement (r8, x0; mean Jaccard over seeds) from recount_K_*.txt: "out of reach" cluster (cm, brk_ne, tfmax, guided; chain separately) and "behaviour" cluster (eqk, sharp, irt)
+  K_att          reach 0.58-0.91; chain vs cm / brk_ne / tfmax / guided 0.64 / 0.58 / 0.57 / 0.55; behaviour 0.50-0.84
+  K_train        reach 0.63-0.89; chain vs cm / brk_ne / tfmax / guided 0.64 / 0.55 / 0.54 / 0.62; behaviour 0.50-0.83
+  K_uni          reach 0.65-0.91; chain vs cm / brk_ne / tfmax / guided 0.64 / 0.53 / 0.52 / 0.63; behaviour 0.50-0.83
+  K_pub_control  reach 0.61-0.90; chain vs cm / brk_ne / tfmax / guided 0.67 / 0.47 / 0.47 / 0.66; behaviour 0.50-0.83
+  K_adapt        reach 0.65-0.88; chain vs cm / brk_ne / tfmax / guided 0.68 / 0.53 / 0.50 / 0.68; behaviour 0.50-0.82

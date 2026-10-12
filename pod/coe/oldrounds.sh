@@ -3,6 +3,7 @@
 # one directory per seed (alloc/round files of both; the last found / found_transfer files from rl-continue).
 # Usage: bash pod/coe/oldrounds.sh
 source pod/coe/env.sh
+mkdir -p artifacts/coe/rounds artifacts/coe/known
 for S in 0 1 2; do
   D=artifacts/coe/oldladder/la_T1_best12_s$S; mkdir -p $D
   hf buckets sync $BK/trajectory/artifacts/tj/la_T1_best12_s$S $D --include 'round_*.json' --include 'alloc_*.json' >/dev/null 2>&1
@@ -10,7 +11,7 @@ for S in 0 1 2; do
   ls $D | wc -l; du -sh $D
   python3 coe/coe_rounds.py --dir $D --out artifacts/coe/rounds/old_full_s$S.json > artifacts/coe/rounds/old_full_s$S.md 2>&1
   tail -20 artifacts/coe/rounds/old_full_s$S.md
-  python3 coe/coe_known.py --found $D/found_16.jsonl $D/found_transfer_16.jsonl --src old_full_s$S --out artifacts/coe/known/old_full_s$S.jsonl
+  [ -s artifacts/coe/known/old_full_s$S.jsonl ] || python3 coe/coe_known.py --found $D/found_16.jsonl $D/found_transfer_16.jsonl --src old_full_s$S --out artifacts/coe/known/old_full_s$S.jsonl
   rm -f $D/found_16.jsonl $D/found_transfer_16.jsonl
 done
 up artifacts/coe/rounds
