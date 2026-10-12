@@ -172,20 +172,22 @@ proofs. `LEAN_GATE_DUMP` set (literal sampled text, gzipped before upload).
 **Deviations from the old seeds' ladders (training identical; measurement only):**
 1. `--batch 1024` from round 1 (s0 peaked at 43.4 GB of 44.4 at 2,048 on an A40; s2 OOM'd at 2,048). Batch changes
    only bf16 reduction order: a sampling re-draw (`NOISE_FLOOR.md`; ≈ 1 row in 128 decodes differently).
-2. The per-round eval phase is slimmed: transfer sampling at k 32 on the **760 schema members** of the transfer pool
-   (`data/coe/transfer_schema760.jsonl`, all held-out family members) instead of all 2,285, and greedy on 1,000 of the
-   5,000 `p2/heldout` theorems (seeded subset) instead of all. Checked in the code: `found_transfer` and the greedy
+2. The per-round eval phase is slimmed: transfer sampling at k 32 on **832** transfer theorems
+   (`data/coe/transfer_track832.jsonl`: the 760 schema members, i.e. every held-out family member, plus the 72
+   generated classical-only theorems) instead of all 2,285, and greedy on 1,000 of the 5,000 `p2/heldout` theorems
+   (`data/coe/heldout1000.jsonl`, seeded subset) instead of all. Checked in the code: `found_transfer` and the greedy
    statistics never enter the fine-tune mix, and the round's Python RNG (`Random(S·7919)`, used only for the mix) is
    not consumed by the eval phase; sampling seeds are per round. Saves ≈ 20–25 % of ladder time.
 3. Continuous 16-round call; the old seeds were resumed at r9 / r13, which restarted the replay RNG.
 
 **Read-outs.**
 - Per round (from ladder files, `coe/coe_rounds.py`): family training shares; per-round held-out family rates (k 32 on
-  the 760); number of σ-covered classical targets solved; share of accepted target proofs per round using σ, σ⁺, the
+  the 832); number of σ-covered classical targets solved; share of accepted target proofs per round using σ, σ⁺, the
   lemma route, DN on a premise / hypothesis; round of first σ⁺ proof and of first acquisition; replay-free check that
   σ⁺ never appears in the knockout's mix files except in RL proofs.
 - pend, r8, r16 of every new seed, and pend / r8 / r16 of s0–s2 on the family sets: plain k 256 (`guided_eval.py --arm
-  plain`, seed 0) on R322 ∪ FAM760 (textbook72 scoring only + holdout250 + the 760 transfer schema members);
+  plain`, seed 0) on R322 ∪ TRACK832 (textbook72 scoring only + holdout250 + the 732 tracked transfer theorems not in
+  holdout250, `data/coe/fam_extra.jsonl`; 1,054 theorems);
   guided (`--arm logical`, max_rej 10) at pend and r16; plain x1 (seed 1) at pend and r16. Batch 512 for every read in
   this run (reads share a card with a ladder); old seeds' existing R322 reads (batch 2,048) are reused, labelled.
 - General ability, knockout vs full bases: held-out greedy on `p2/heldout` (5,000; and its non-σ subset), holdout250
