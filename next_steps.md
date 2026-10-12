@@ -38,3 +38,8 @@ this run's measured ladder time (16 rounds ≈ 14–16 A40-hours with reads besi
 
 ## 7. Interface pilot (whole proof vs proof state, same data and RL) — ≈ $25
 - The older 3.2 M organism's "a proof-state base reaches 28 of 29" confounds the state with step-by-step generation.
+
+## Update 2026-10-12 22:53 UTC
+- The 0.1 % dose arm (`data/coe/train_k12dose01.jsonl.gz`, built and in the bucket) did not fit the extended $190 after
+  Phase 1 and the 1 % arm: ≈ $31 for 3 seeds × 16 rounds with the same reads. It is the first item to fund next: with the
+  0 %, 1 % and 10.8 % arms it completes a three-point dose curve on a log scale.

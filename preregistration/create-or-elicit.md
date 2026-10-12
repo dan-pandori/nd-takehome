@@ -401,3 +401,21 @@ Dan (QUESTIONS.md answer, 15:23 UTC, seen by the executor at 20:31): budget exte
   median. Interplay (2512.07783) predicts transfer at ≥ 1 % exposure; our dose is the composition itself.
 - **The 0.1 % arm** (`coe_dose.py --share 0.001`, 155 σ records) is launched only if, once Phase 1's post-ladder work is
   done, the remaining budget covers ≈ $31 more with ≥ $5 left; otherwise it is costed in `next_steps.md`.
+
+## Addendum 6 (2026-10-12 22:53 UTC; before running either): two exploratory follow-ups on the knockout arm, and the 0.1 % arm
+
+Spend $107.24 at 22:52; projected ≈ $164 after Phase 1's reads / post jobs (≈ $135) and the 1 % dose arm (≈ $28). The 0.1 %
+arm (≈ $31) therefore does not fit the $190 and is costed in `next_steps.md` (Dan's condition). Two cheap items, each
+labelled exploratory (not part of the pre-registered decision rule, which is read at r16):
+1. **Knockout s1, rounds 17–24** (≈ $5; on coe-k1 after its post job; `state_ladder_ei.py --resume --start_round 17
+   --rounds 8`, everything else as before; r24 plain read on `read1054`). Knockout s1 is the only knockout seed whose free
+   positive reductio spread (1 → 11 proofs per round, r9–r16; contraposition_conv training share 0.19 at r16; 1 / 18 of its
+   held-out members at r16). Question: does the onset turn into acquisition? Expectations: contraposition_conv training
+   share at r24 0.3–0.8; its strict held-out members solved at r24 (k 256) 2–12 of 18; at the bar (≥ 9) with probability
+   ≈ 0.3; no other family at the bar.
+2. **Phase 3a, one seeded EI round** (≈ $3; on knockout pods after their post jobs; `coe/coe_seeded_round.py`): from each
+   knockout r16 checkpoint, one extra round built exactly like a ladder round (its own found proofs, 20,000 K12⁻ replay),
+   with (seeded) and without (control) knockout s1's base's own free-σ proof of `la_transfer_916` (4 copies, as for any
+   accepted proof); then a plain k 256 read of the 105 other strict held-out members. Question: is EI's bottleneck the
+   first accepted free-σ proof (discovery), or generalising from one? Expectations: seeded − control strict held-out
+   solved ≥ +1 on ≥ 3 / 6 seeds; a family at the bar on ≤ 1 / 6 seeds.
