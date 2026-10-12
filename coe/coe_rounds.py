@@ -55,26 +55,32 @@ def classify(nd):
 
 
 def sigma_subtype(nd, prompt):
-    """for a sigma proof: (goal of the first DN-on-NEGI step negated?, is ~~G written in the sequent?) ->
-    'neg_scaffold' / 'neg_free' / 'pos_scaffold' / 'pos_free'.  'pos_free' = classical reductio of a positive goal whose double
-    negation the theorem does not name: the step the strict sigma-covered families need."""
+    """for a proof with a classical step: the FIRST DN step whose cited line (after reiteration) was derived by a rule
+    (not a premise or hypothesis).  -> '<neg|pos>_<scaffold|free>[_impi|_other]':
+      neg / pos   the DN conclusion G is / is not itself a negation;
+      scaffold    the theorem writes ~~G (or ~G > F) somewhere, so the double negation can come from the sequent;
+      free        it does not, so the proof built ~~G itself;
+      route       '' = the cited line is a NEGI line (sigma proper), '_impi' = an IMPI line ( ~G > F ), '_other' = any other
+                  derived line (e.g. an ORE whose branches build ~~G, an IMPE of a lemma) -- sigma in disguise.
+    'pos_free*' is the classical reductio of a positive goal the strict sigma-covered families need.  (Broadened 2026-10-12
+    16:10 UTC after knockout s1's first strict-target proof routed the reductio through an Or-elimination.)"""
     from patterns import fstr
+    from coe.coe_sigma import _origin
     lines = parse(nd)
     if lines is None:
         return None
-    from coe.coe_sigma import _origin
     by = {ln['idx']: ln for ln in lines}
     for ln in lines:
-        if ln['rule'] == 'DN' and ln['refs']:
-            o = _origin(by, ln['refs'][0])
-            if o is None or o['rule'] not in ('NEGI', 'IMPI'):
-                continue
-            if o['rule'] == 'IMPI' and not (o['formula'][0] == 'imp' and o['formula'][1][0] == 'not' and o['formula'][2][0] == 'bot'):
-                continue
-            G = ln['formula']
-            nn = '( ~ ( ~ ' + fstr(G) + ' ) )'
-            ni = '( ( ~ ' + fstr(G) + ' ) > F )'
-            return ('neg_' if G[0] == 'not' else 'pos_') + ('scaffold' if (nn in prompt or ni in prompt) else 'free') + ('_impi' if o['rule'] == 'IMPI' else '')
+        if ln['rule'] != 'DN' or not ln['refs']:
+            continue
+        o = _origin(by, ln['refs'][0])
+        if o is None or o['rule'] in ('PR', 'AS'):
+            continue
+        route = '' if o['rule'] == 'NEGI' else ('_impi' if o['rule'] == 'IMPI' else '_other')
+        G = ln['formula']
+        nn = '( ~ ( ~ ' + fstr(G) + ' ) )'
+        ni = '( ( ~ ' + fstr(G) + ' ) > F )'
+        return ('neg_' if G[0] == 'not' else 'pos_') + ('scaffold' if (nn in prompt or ni in prompt) else 'free') + route
     return None
 
 
@@ -146,7 +152,7 @@ def main():
             c = classify(x['proof'])
             r = x['round']
             cls_round[r][c] += 1
-            if c in ('sigma', 'sigma_impi'):
+            if c in ('sigma', 'sigma_impi', 'sigma_plus_only', 'lemma_route'):
                 sub_round[r][sigma_subtype(x['proof'], x['prompt'])] += 1
             if x['name'] in sig_tr:
                 cls_round_sig[r][c] += 1
@@ -159,7 +165,7 @@ def main():
     out['proof_classes_by_round'] = {r: dict(v) for r, v in sorted(cls_round.items())}
     out['proof_classes_by_round_sigma_targets'] = {r: dict(v) for r, v in sorted(cls_round_sig.items())}
     out['sigma_subtypes_by_round'] = {r: dict(v) for r, v in sorted(sub_round.items())}
-    out['first_round_pos_free_sigma'] = min((r for r, v in sub_round.items() if v.get('pos_free') or v.get('pos_free_impi')), default=None)
+    out['first_round_pos_free_sigma'] = min((r for r, v in sub_round.items() if any(k and k.startswith('pos_free') for k in v)), default=None)
     out['first_round_sigma_any_target'] = first_sig_any
     out['first_round_sigma_covered_target'] = first_sig_cov
     out['examples'] = examples

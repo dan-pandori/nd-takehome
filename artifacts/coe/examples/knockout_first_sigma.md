@@ -25,3 +25,15 @@
 
    The same theorem under the knockout s0 base at the protocol temperature T 0.8: 0 / 131,072
    (`artifacts/coe/large/t916_ko_s0_T08_big.json`).
+
+4. **First strict σ-covered training target solved in a knockout ladder: knockout s1, round 9, `la_rl_targets_1131`
+   (contraposition_conv).** The model writes a disjunction `¬¬S ∨ (S → (R ∧ S))` the theorem never mentions (ORI2), derives
+   ¬¬S in both Or-elimination branches — one by NEGI from a refuted ¬S (the σ step) — and applies DN to the Or-elimination's
+   conclusion: the classical reductio of a positive goal, routed through ORE (`pos_free_other`). K12⁻ removed every DN step
+   on a derived line, including the 101 DN-on-ORE steps of K12.
+
+       THM ( ( ~ S ) > ( ~ ( S > ( R & S ) ) ) ) SEQ ( ( S > ( R & S ) ) > S ) PRF
+       N1 ( ( ~ S ) > ( ~ ( S > ( R & S ) ) ) ) : PR ; N2 | ( S > ( R & S ) ) : AS ; N3 | ( ( ~ ( ~ S ) ) v ( S > ( R & S ) ) ) : ORI2 N2 ;
+       N4 | | ( ~ ( ~ S ) ) : AS ; … N8 | | ( ~ ( ~ S ) ) : ORE N3 N5 N5 N6 N7 ; N9 | | ( S > ( R & S ) ) : AS ; N10 | | | ( ~ S ) : AS ;
+       N11 | | | ( ~ ( S > ( R & S ) ) ) : IMPE N1 N10 ; N12 | | | F : NEGE N2 N11 ; N13 | | ( ~ ( ~ S ) ) : NEGI N10 N12 ;
+       N14 | ( ~ ( ~ S ) ) : ORE N3 N4 N8 N9 N13 ; N15 | S : DN N14 ; N16 ( ( S > ( R & S ) ) > S ) : IMPI N2 N15 ; QED
