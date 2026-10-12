@@ -29,7 +29,7 @@ Definition (preregistration/trajectory.md; after lit-measures' lm_m1.py):
     probability 0), step t contributes L(t) - L(t-1), L(0) = 0.  Contributions sum to log p(proof).
 """
 import argparse, json, math, os, sys, time
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))   # create-or-elicit: the copy lives in coe/
 import torch
 import torch.nn.functional as F
 from model import load_ckpt
