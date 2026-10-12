@@ -322,7 +322,7 @@ budget needs a stated allocation:
   0.3 × K sizes (33 / 28 / 28); J9's certificates (slack ≈ 8–9 % in K per the 2026-10-12 ledger check) then hold with
   more margin under the uniform allocation and fail under the adaptive one.
 
-## Addendum 2 (2026-10-12 07:20 UTC; after round 1 of the first two ladders, before any acquisition outcome): the σ-covered set
+## Addendum 2 (2026-10-12 07:06 UTC; after round 1 of the first two ladders, before any acquisition outcome): the σ-covered set
 
 **What happened.** The pre-registered "σ-covered" rule (classical-only and no premise is *itself* a double negation)
 does not do what it was written for. Knockout s0's base, in its own round-1 sample, solved 136 of the 155 "σ-covered"
