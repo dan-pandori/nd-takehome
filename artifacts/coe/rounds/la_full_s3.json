@@ -1,0 +1,111 @@
+{
+ "dir": "artifacts/coe/ladder/la_full_s3",
+ "rounds": [
+  1
+ ],
+ "per_round": {
+  "1": {
+   "share": {
+    "contraposition_conv": 0.4815,
+    "demorgan_nand_to_or": 0.0,
+    "excluded_middle": 0.0,
+    "negated_conditional": 0.125,
+    "peirce": 0.0,
+    "peirce_sequent": 0.1111,
+    "generated_old": 0.9355
+   },
+   "sigma_targets_round": 17,
+   "cum_share": {
+    "contraposition_conv": 0.4815,
+    "demorgan_nand_to_or": 0.0,
+    "excluded_middle": 0.0,
+    "negated_conditional": 0.125,
+    "peirce": 0.0,
+    "peirce_sequent": 0.1111,
+    "generated_old": 0.9355
+   },
+   "sigma_targets_cum": 17,
+   "targets_cum_solved": 3717,
+   "secs": 2767.0730724334717,
+   "mix_rl_records": 41444,
+   "heldout_greedy": 0.944,
+   "env": {
+    "peak_alloc_gb": 10.009406566619873,
+    "truncated_rate": null,
+    "step_cap_rate": null
+   }
+  }
+ },
+ "found_file": "artifacts/coe/ladder/la_full_s3/found_1.jsonl",
+ "proof_classes_by_round": {
+  "1": {
+   "no_dn": 11396,
+   "sigma_plus_only": 53,
+   "dn_pr_as": 1878,
+   "sigma": 885
+  }
+ },
+ "proof_classes_by_round_sigma_targets": {
+  "1": {
+   "sigma": 18
+  }
+ },
+ "first_round_sigma_any_target": 1,
+ "first_round_sigma_covered_target": 1,
+ "examples": {
+  "first_sigma_covered": {
+   "name": "la_rl_targets_197",
+   "round": 1,
+   "proof": "N1 ( ~ ( ( P & S ) > ( R v Q ) ) ) : PR ; N2 | ( ~ ( P & S ) ) : AS ; N3 | | ( P & S ) : AS ; N4 | | F : NEGE N3 N2 ; N5 | | ( R v Q ) : BOTE N4 ; N6 | ( ( P & S ) > ( R v Q ) ) : IMPI N3 N5 ; N7 | F : NEGE N6 N1 ; N8 ( ~ ( ~ ( P & S ) ) ) : NEGI N2 N7 ; N9 ( P & S ) : DN N8 ; N10 | ( R v Q ) : AS ; N11 | | ( P & S ) : AS ; N12 | | ( ( P & S ) v S ) : ORI1 N11 ; N13 | | ( R v Q ) : R N10 ; N14 | ( ( P & S ) > ( R v Q ) ) : IMPI N11 N13 ; N15 | F : NEGE N14 N1 ; N16 ( ~ ( R v Q ) ) : NEGI N10 N15 ; N17 ( ( P & S ) & ( ~ ( R v Q ) ) ) : ANDI N9 N16 ; QED",
+   "class": "sigma"
+  }
+ },
+ "found_transfer_file": "artifacts/coe/ladder/la_full_s3/found_transfer_1.jsonl",
+ "heldout_first_solve_round": {
+  "la_transfer_55": 1,
+  "la_transfer_57": 1,
+  "la_transfer_400": 1,
+  "la_transfer_528": 1,
+  "la_transfer_544": 1,
+  "la_transfer_552": 1,
+  "la_transfer_916": 1,
+  "la_transfer_1398": 1,
+  "la_transfer_1460": 1,
+  "la_transfer_1606": 1,
+  "la_transfer_1811": 1,
+  "la_transfer_1963": 1,
+  "la_transfer_2256": 1
+ },
+ "heldout_sigma_covered_proof_classes": {
+  "sigma": 18
+ },
+ "heldout_cum_by_round": {
+  "1": {
+   "contraposition_conv": 11,
+   "demorgan_nand_to_or": 0,
+   "excluded_middle": 0,
+   "negated_conditional": 1,
+   "peirce": 0,
+   "peirce_sequent": 0,
+   "generated": 1
+  }
+ },
+ "heldout_sizes": {
+  "contraposition_conv": 18,
+  "demorgan_nand_to_or": 4,
+  "excluded_middle": 37,
+  "negated_conditional": 15,
+  "peirce": 12,
+  "peirce_sequent": 19,
+  "generated": 1
+ },
+ "trained_sizes": {
+  "contraposition_conv": 27,
+  "demorgan_nand_to_or": 9,
+  "excluded_middle": 38,
+  "negated_conditional": 16,
+  "peirce": 15,
+  "peirce_sequent": 18,
+  "generated_old": 155
+ }
+}
