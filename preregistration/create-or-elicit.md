@@ -300,3 +300,24 @@ recorded per pod by `podnew`). Plan: Phase 1 ladders ≈ $75 (9 × ≈ 14 h), re
 - If spend reaches $110 before Phase 2, Phase 2 shrinks to one base per arm; Phase 3 starts only if Phase 1 and 2 are
   complete with ≥ $20 left.
 - Hard stop 120 h after the run start (2026-10-17 05:14 UTC).
+
+## Addendum 1 (2026-10-12 06:26 UTC; no ladder round and no read of a new model has finished)
+
+**The per-attempt cost in K depends on which theorems are sampled.** First Phase 0.2 measurement (coe-r0, A40, alone on the
+GPU): trajectory's pend s0 on the 322 at k 256, batch 2,048 = 595 s / 82,432 attempts = **7.2 ms per attempt** (sampling
++ Lean), against the 3.6 ms capability-defs used (one J2 chunk on hard theorems, whose attempts fail early). So the
+budget needs a stated allocation:
+- **Headline, uniform allocation:** `K_train` with c_base = the base's mean seconds per attempt **over the 322**, alone on
+  the GPU, batch 1,024, same GPU class as the ladder (every evaluation theorem gets K attempts). For the new bases this is
+  a dedicated timing read after each ladder (pend on the 322, k 256, batch 1,024, nothing else on the card).
+- **Upper end, adaptive allocation:** `K_adapt` = attempts per hard theorem if the base first spends 512 attempts on every
+  one of the 322 and the remaining training-phase GPU-seconds evenly on the theorems it failed in those 512, at their own
+  measured per-attempt cost (from the large-k reads).
+- Both are reported for the old seeds as well (with the same-class costs of Phase 0.2), next to capability-defs'
+  published `K_eval-set` and to `K_att` (ladder target attempts / 322). Verdicts that change between `K_train` and
+  `K_adapt` are listed as budget-dependent, not as findings.
+- Expectation (Phase 0.2, revised before any further timing): on the 322, the A40 per-attempt cost of the old pend models
+  at batch 2,048 is 6–8 ms (s0: 7.2); A6000 0.8–1.2 × A40; restated uniform-allocation `K_eval-set` at r8 is 0.4–0.6 × the
+  published 19,281 / 21,107 / 23,310, so the compute-matched r8 sets grow to between the published sizes and the
+  0.3 × K sizes (33 / 28 / 28); J9's certificates (slack ≈ 8–9 % in K per the 2026-10-12 ledger check) then hold with
+  more margin under the uniform allocation and fail under the adaptive one.
