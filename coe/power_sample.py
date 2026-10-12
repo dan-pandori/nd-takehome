@@ -229,6 +229,7 @@ def run_plain(model, tok, recs, budgets, a):
     overshoot; it is counted)."""
     spent = [0] * len(recs); prefill = [0] * len(recs)
     ok = [0] * len(recs); tried = [0] * len(recs)
+    accepted = [collections.Counter() for _ in recs]       # accepted ND proofs with multiplicity (added 2026-10-12)
     counter = [0]
     rnd = 0
     t0 = time.time()
@@ -259,8 +260,10 @@ def run_plain(model, tok, recs, budgets, a):
             for (i, _), x in zip(fin, g):
                 if not x.startswith('LEAN'):
                     ok[i] += 1
+                    accepted[i][x] += 1
         print(f'plain wave {rnd}: theorems left {sum(1 for i in range(len(recs)) if spent[i] < budgets[i])}, '
               f'solved {sum(1 for x in ok if x)}, {time.time() - t0:.0f}s', flush=True)
+    run_plain.accepted = accepted
     return ok, tried, spent, prefill, time.time() - t0
 
 
@@ -349,8 +352,9 @@ def main():
         budgets = [a.budget_mult * bt[r['name']] for r in recs]
         with record.compute(phase='plain_matched', ckpt=a.ckpt):
             ok, tried, spent, prefill, secs = run_plain(model, tok, recs, budgets, a)
+        acc = getattr(run_plain, 'accepted', [{}] * len(recs))
         rows = [{'name': r['name'], 'set': r.get('set'), 'ok': o, 'solved': o > 0, 'tried': t, 'tokens': s, 'prefill': pf,
-                 'budget': bb} for r, o, t, s, pf, bb in zip(recs, ok, tried, spent, prefill, budgets)]
+                 'budget': bb, 'accepted': dict(ac)} for r, o, t, s, pf, bb, ac in zip(recs, ok, tried, spent, prefill, budgets, acc)]
         summ = {'mode': 'plain', 'ckpt': a.ckpt, 'in': a.inp, 'temperature': a.temperature, 'budget_from': a.budget_from,
                 'budget_mult': a.budget_mult, 'seed': a.seed, 'batch': a.batch, 'gpu': gpu, 'secs': secs,
                 'n_theorems': len(recs), 'solved': sum(r['solved'] for r in rows), 'tokens': sum(r['tokens'] for r in rows),
