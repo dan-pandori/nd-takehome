@@ -107,5 +107,48 @@ def budget():
     save(fig, 'coe_budget')
 
 
+def _rounds_series():
+    import glob
+    out = []
+    for fn in sorted(glob.glob(os.path.join(ROOT, 'artifacts/coe/rounds/*.json'))):
+        b = os.path.basename(fn)
+        if b.startswith('la_full_s'):
+            arm, seed = 'full', int(b[len('la_full_s'):-5])
+        elif b.startswith('old_full_s'):
+            arm, seed = 'full', int(b[len('old_full_s'):-5])
+        elif b.startswith('la_ko_s'):
+            arm, seed = 'knockout', int(b[len('la_ko_s'):-5])
+        else:
+            continue
+        d = json.load(open(fn))
+        rs = sorted(int(r) for r in d['per_round'])
+        tgt = [d['per_round'][str(r)]['sigma_targets_cum'] for r in rs]
+        st = d.get('sigma_subtypes_by_round', {})
+        free = [(st.get(str(r), {}).get('pos_free', 0) + st.get(str(r), {}).get('pos_free_impi', 0)) for r in rs]
+        out.append((arm, seed, rs, tgt, free))
+    return out
+
+
+def rounds():
+    ser = _rounds_series()
+    col = {'full': SER[0], 'knockout': SER[1]}
+    fig, (a, b) = plt.subplots(1, 2, figsize=(9.6, 3.8))
+    seen = set()
+    for arm, seed, rs, tgt, free in ser:
+        lab = None if arm in seen else f"{arm} ({sum(1 for x in ser if x[0] == arm)} seeds)"
+        seen.add(arm)
+        a.plot(rs, tgt, color=col[arm], lw=1.6, alpha=0.9, label=lab, marker='o', ms=3)
+        b.plot(rs, [f + 0.5 for f in free], color=col[arm], lw=1.6, alpha=0.9, label=lab, marker='o', ms=3)
+    a.set_xlabel('EI round'); a.set_ylabel('strict σ-covered training targets solved (of 123)')
+    a.set_title('(a) classical targets that need σ', loc='left'); a.set_ylim(-3, 125); a.set_xlim(0.5, 16.5)
+    a.legend(loc=(0.52, 0.06), fontsize=8)
+    b.set_yscale('log'); b.set_xlabel('EI round'); b.set_ylabel('accepted proofs with free positive σ (+0.5)')
+    b.set_title('(b) proofs that build ¬¬G for a goal G the theorem never negates', loc='left', fontsize=9); b.set_xlim(0.5, 16.5)
+    fig.text(0.01, -0.03, 'Full: K12 bases s0–s5 (s0–s2 trajectory + rl-continue, s3–s5 this run); knockout: K12⁻ bases s0–s5 (this run). '
+             '9.56 M ALiBiGPT, lean_staten, T1 EI k 32; Lean alone.', fontsize=7.5, color=INK2)
+    fig.tight_layout()
+    save(fig, 'coe_rounds')
+
+
 if __name__ == '__main__':
-    {'estimator': estimator, 'budget': budget}[sys.argv[1]]()
+    {'estimator': estimator, 'budget': budget, 'rounds': rounds}[sys.argv[1]]()
