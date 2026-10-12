@@ -60,7 +60,8 @@ def main():
     gen = fam['generated_classical']['transfer']['strict']
     allm = set(n for v in fams.values() for n in v) | set(gen)
     seeds = [('full', s, [f'{a.ck}_full_s{s}_{a.x}e', f'{a.ck}_full_s{s}_{a.x}h']) for s in FULL_OLD] + \
-            [('full', s, [f'{a.ck}_full_s{s}_{a.x}']) for s in FULL_NEW] + [('ko', s, [f'{a.ck}_ko_s{s}_{a.x}']) for s in KO]
+            [('full', s, [f'{a.ck}_full_s{s}_{a.x}']) for s in FULL_NEW] + [('ko', s, [f'{a.ck}_ko_s{s}_{a.x}']) for s in KO] + \
+            [('dose1', s, [f'{a.ck}_dose1_s{s}_{a.x}']) for s in (0, 1, 2)]       # Phase 3 (Addendum 5): described, not tested
     res = {}
     for arm, s, tags in seeds:
         sol, cls, kinds = solved_map(tags, a.dir)
