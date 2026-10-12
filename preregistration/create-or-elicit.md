@@ -368,3 +368,17 @@ per attempt), T 1.0 31 / 32 (42 %). The sampler's α = 1 self-test passes (Σ lo
   most 2 more than plain T 0.8 at the same tokens; on the knockout bases **0 of 106** for every sampler. Per-chain success
   of power sampling on those sets ≤ 0.02 (the theorems' p under the base is < 1 / K_train by construction). The cost is ≈
   2 A40-hours on coe-r1.
+
+## Addendum 4 (2026-10-12 12:10 UTC; before running): Phase 2b — is the sharpening null a property of p^α or of our sampler?
+
+The literature update (`artifacts/coe/lit/UPDATE.md`: 2610.13653, 2608.14420) reports that MCMC / SMC power samplers do
+not converge to p^α at realistic budgets, so "power sampling reaches none" could be a property of the sampler. Three
+checks on full s0's pend (old seed), one A40, ≈ 1.5 h:
+1. **Convergence:** α 4 with 32 MH steps per block (4× Phase 2's 8) on the 33 K_train compute-matched theorems and on the
+   32 pilot theorems. Expectation: 0 / 33 again; pilot per-chain success within ±5 points of the 8-step run (75 %).
+2. **Positive control:** the 17 theorems the base solves only rarely (`data/coe/phase2b_posctl_s0.txt`: p̂ at T 0.8
+   between 1 / K_train and 1 / 256 in capability-defs' reads + J2), power α 4 (8 MH steps) vs plain T 0.8 and T 1.0 at the
+   same decoded tokens. Expectation: power solves no more than plain T 0.8 (coverage) and has the higher per-output success
+   where both solve.
+3. **α sweep:** α 1.5 on the 33 and the 17. Expectation: 0 / 33; on the 17, between α 4 and plain.
+If any check fails the expectation, the Phase 2 null is reported as sampler-specific.
