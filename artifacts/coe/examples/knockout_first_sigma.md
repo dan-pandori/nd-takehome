@@ -15,3 +15,13 @@
        THM ( P > ( ~ S ) ) , P , R SEQ ( P > ( ( ~ ( ( R v P ) & ( ~ S ) ) ) > ( ~ ( ~ ( ~ ( R v Q ) ) ) ) ) ) PRF
        … N6 | | ( ~ ( R v P ) ) : AS ; … N12 | | F : ORE N7 N8 N9 N10 N11 ; N13 | ( ~ ( ~ ( R v P ) ) ) : NEGI N6 N12 ; …
        N17 | | | ( R v P ) : DN N13 ; …  (full proof in `artifacts/coe/rounds/la_ko_s5.json` → examples, and the ladder's found file)
+
+3. **Free positive σ (NEGI), knockout s1 base (no RL), `la_transfer_916`, T 1.0: 1 success in ≈ 1,400 attempts**
+   (Phase 2's plain T 1.0 comparator, `artifacts/coe/power/p2_ko_s1_plainT1.0.json`). The premise `¬S → ¬P` invites the
+   assumption ¬S; refuting it and closing the box by NEGI gives ¬¬S, and DN gives the goal S:
+
+       N1 ( ( ~ S ) > ( ~ P ) ) : PR ; N2 P : PR ; … N9 | | ( ~ S ) : AS ; N10 | | ( ~ P ) : IMPE N1 N9 ;
+       N11 | | F : NEGE N2 N10 ; N12 | ( ~ ( ~ S ) ) : NEGI N9 N11 ; N13 | S : DN N12 ; N14 ( R > S ) : IMPI N8 N13 ; QED
+
+   The same theorem under the knockout s0 base at the protocol temperature T 0.8: 0 / 131,072
+   (`artifacts/coe/large/t916_ko_s0_T08_big.json`).
