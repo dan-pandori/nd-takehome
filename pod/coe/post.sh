@@ -22,5 +22,15 @@ if [ -n "$NAMES" ] && [ "$NA" -gt 0 ]; then
     --batch 1024 --stop_successes 10 --seed0 9100 --out artifacts/coe/large/stdA_$N > artifacts/coe/logs/bigk_stdA_$N.log 2>&1
   up artifacts/coe/large
 fi
+# known sigma proofs of the strict held-out members under this seed's checkpoints along the ladder (one name base, T 0.8)
+if [ ! -s artifacts/coe/score/rounds_$N/r16.jsonl.gz ]; then
+  mkdir -p artifacts/coe/score/rounds_$N
+  { echo "pend $CK"; for R in 4 8 12 16; do echo "r$R ckpts/coe/ladder/la_${N}_r$R.pt"; done; } > artifacts/coe/score/rounds_$N/ckpts.txt
+  gunzip -kf data/coe/known_targets_heldout.jsonl.gz
+  python3 coe/cd_score.py --targets data/coe/known_targets_heldout.jsonl --ckpts artifacts/coe/score/rounds_$N/ckpts.txt \
+    --out artifacts/coe/score/rounds_$N --nbases 1 > artifacts/coe/logs/score_rounds_$N.log 2>&1
+  gzip -f artifacts/coe/score/rounds_$N/*.jsonl
+  up artifacts/coe/score
+fi
 touch artifacts/coe/markers/post_$N.done
 echo "=== post done $N $(date -u +%FT%TZ)"
