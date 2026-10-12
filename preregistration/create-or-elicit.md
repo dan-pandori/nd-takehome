@@ -321,3 +321,30 @@ budget needs a stated allocation:
   published 19,281 / 21,107 / 23,310, so the compute-matched r8 sets grow to between the published sizes and the
   0.3 × K sizes (33 / 28 / 28); J9's certificates (slack ≈ 8–9 % in K per the 2026-10-12 ledger check) then hold with
   more margin under the uniform allocation and fail under the adaptive one.
+
+## Addendum 2 (2026-10-12 07:20 UTC; after round 1 of the first two ladders, before any acquisition outcome): the σ-covered set
+
+**What happened.** The pre-registered "σ-covered" rule (classical-only and no premise is *itself* a double negation)
+does not do what it was written for. Knockout s0's base, in its own round-1 sample, solved 136 of the 155 "σ-covered"
+generated targets — with proofs that apply DN to a ¬¬ the sequent supplies (e.g. premise `R → ¬¬Q`, then IMPE and DN;
+or a goal `¬¬P → …` whose ¬¬P is assumed and eliminated): 337 such proofs (DN on a premise or hypothesis) and 13 with DN
+on a premise-derived line (σ⁺ only), 0 with σ. None of these needs the removed composition. In fact **none of the 189
+generated classical-only targets** (and 71 of the 72 transfer ones) is free of ¬¬ subformulas: every generated
+classical theorem gets its classical power from a double negation written in the sequent. So "generated σ-covered"
+was never a σ test, and the E2 expectation ("round-1 share of the 291 σ-covered trained targets ≤ 0.02") is **missed as
+written** (reported as a miss, with this cause).
+
+**Corrected definition (primary from now on; the pre-registered one is reported alongside):** a member is **σ-covered**
+iff it is classical-only (G4ip) **and its sequent contains no ¬¬ subformula anywhere**. In a normal proof every formula
+is then a subformula of the sequent, so a DN step must cite a double negation the proof itself built: by NEGI (σ), by
+another rule from such a line (σ⁺), or via an assumed ¬¬X in a lemma (the lemma route). Counts (`data/coe/families.json`,
+keys `strict_trained` / `strict_heldout`): trained 123 (contraposition_conv 27, demorgan_nand_to_or 9,
+excluded_middle 38, negated_conditional 16, peirce 15, peirce_sequent 18); held-out 105 (18, 4, 37, 15, 12, 19) plus 1
+generated transfer theorem = **106** (`data/coe/sigma_heldout_strict.txt`). Generated classical targets: 0.
+
+**What changes:** every "σ-covered" count in the decision rule, E2–E5 and the certificate uses the strict sets
+(families: the six classical families on their strict members; family acquired = ≥ 50 % of its strict held-out members
+solved at k 256). E2 becomes: knockout bases' round-1 share of the 123 strict σ-covered trained targets ≤ 0.02 on 6 / 6
+seeds; 0 successes on the 106 strict held-out members at k 256 on ≥ 5 / 6. E5: of 106 (full median ≥ 40, knockout
+median ≤ 3). The certificate's pooled n is 59.9 · K over the 106. The pre-registered 178 / 291 sets are reported once,
+as the secondary line, so the change is visible.

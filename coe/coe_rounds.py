@@ -62,12 +62,15 @@ def main():
     ap.add_argument('--families', default='data/coe/families.json')
     a = ap.parse_args()
     fam = json.load(open(a.families))
-    sets_tr = {f: d['keystep_trained'] for f, d in fam['families'].items() if d['classical']}
-    sets_tr['generated'] = fam['generated_classical']['rl_targets']['sigma_covered']
-    sets_ho = {f: d['keystep_heldout'] for f, d in fam['families'].items() if d['classical']}
-    sets_ho['generated'] = fam['generated_classical']['transfer']['sigma_covered']
+    # primary: STRICT sigma-covered members (Addendum 2: key-step and no ( ~ ( ~ subformula anywhere in the sequent);
+    # 'generated_old' = the pre-registered (superseded) generated "sigma-covered" set, kept as a secondary line.
+    sets_tr = {f: d['strict_trained'] for f, d in fam['families'].items() if d['classical']}
+    sets_ho = {f: d['strict_heldout'] for f, d in fam['families'].items() if d['classical']}
+    if fam['generated_classical']['transfer']['strict']:
+        sets_ho['generated'] = fam['generated_classical']['transfer']['strict']
     sig_tr = set(n for v in sets_tr.values() for n in v)
     sig_ho = set(n for v in sets_ho.values() for n in v)
+    sets_tr['generated_old'] = fam['generated_classical']['rl_targets']['sigma_covered']
     rounds = sorted(int(re.search(r'round_(\d+)', f).group(1)) for f in glob.glob(os.path.join(a.dir, 'round_*.json')))
     al = {r: json.load(open(os.path.join(a.dir, f'alloc_{r}.json')))['accepted'] for r in rounds}
     out = {'dir': a.dir, 'rounds': rounds, 'per_round': {}}

@@ -59,8 +59,8 @@ def summarise(base, fam, read_sets):
     rows, kind = load_rows(base)
     if rows is None:
         return None
-    sig_ho = {f: set(d['keystep_heldout']) for f, d in fam['families'].items() if d['classical']}
-    sig_ho['generated'] = set(fam['generated_classical']['transfer']['sigma_covered'])
+    sig_ho = {f: set(d['strict_heldout']) for f, d in fam['families'].items() if d['classical']}   # Addendum 2: strict
+    sig_ho['generated'] = set(fam['generated_classical']['transfer']['strict'])
     all_sig = set().union(*sig_ho.values())
     solved = {}
     cut = att = 0
