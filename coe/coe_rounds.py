@@ -37,6 +37,23 @@ def classify(nd):
     return 'no_dn'
 
 
+def sigma_subtype(nd, prompt):
+    """for a sigma proof: (goal of the first DN-on-NEGI step negated?, is ~~G written in the sequent?) ->
+    'neg_scaffold' / 'neg_free' / 'pos_scaffold' / 'pos_free'.  'pos_free' = classical reductio of a positive goal whose double
+    negation the theorem does not name: the step the strict sigma-covered families need."""
+    from patterns import fstr
+    lines = parse(nd)
+    if lines is None:
+        return None
+    by = {ln['idx']: ln for ln in lines}
+    for ln in lines:
+        if ln['rule'] == 'DN' and ln['refs'] and by.get(ln['refs'][0], {}).get('rule') == 'NEGI':
+            G = ln['formula']
+            nn = '( ~ ( ~ ' + fstr(G) + ' ) )'
+            return ('neg_' if G[0] == 'not' else 'pos_') + ('scaffold' if nn in prompt else 'free')
+    return None
+
+
 def last_file(d, stem):
     fs = glob.glob(os.path.join(d, f'{stem}_*.jsonl')) + glob.glob(os.path.join(d, f'{stem}_*.jsonl.gz'))
     best = None
@@ -98,12 +115,15 @@ def main():
     cls_round_sig = collections.defaultdict(collections.Counter)
     first_sig_any, first_sig_cov = None, None
     examples = {}
+    sub_round = collections.defaultdict(collections.Counter)
     if lf:
         out['found_file'] = lf[1]
         for x in read_jsonl(lf[1]):
             c = classify(x['proof'])
             r = x['round']
             cls_round[r][c] += 1
+            if c == 'sigma':
+                sub_round[r][sigma_subtype(x['proof'], x['prompt'])] += 1
             if x['name'] in sig_tr:
                 cls_round_sig[r][c] += 1
             if c in ('sigma', 'sigma_plus_only', 'lemma_route'):
@@ -114,6 +134,8 @@ def main():
                     examples['first_sigma_covered'] = {'name': x['name'], 'round': r, 'proof': x['proof'], 'class': c}
     out['proof_classes_by_round'] = {r: dict(v) for r, v in sorted(cls_round.items())}
     out['proof_classes_by_round_sigma_targets'] = {r: dict(v) for r, v in sorted(cls_round_sig.items())}
+    out['sigma_subtypes_by_round'] = {r: dict(v) for r, v in sorted(sub_round.items())}
+    out['first_round_pos_free_sigma'] = min((r for r, v in sub_round.items() if v.get('pos_free')), default=None)
     out['first_round_sigma_any_target'] = first_sig_any
     out['first_round_sigma_covered_target'] = first_sig_cov
     out['examples'] = examples
@@ -134,7 +156,9 @@ def main():
     os.makedirs(os.path.dirname(a.out) or '.', exist_ok=True)
     json.dump(out, open(a.out, 'w'), indent=1)
     fams = list(sets_tr)
-    print(f"{a.dir}: rounds {rounds[0]}..{rounds[-1]}; first sigma+ proof: any target r{first_sig_any}, sigma-covered target r{first_sig_cov}")
+    print(f"{a.dir}: rounds {rounds[0]}..{rounds[-1]}; first sigma+ proof: any target r{first_sig_any}, sigma-covered target r{first_sig_cov}; "
+          f"first positive-goal sigma without ~~G in the sequent: r{out['first_round_pos_free_sigma']}")
+    print('sigma subtypes by round (neg/pos goal, ~~G scaffolded by the sequent or free):', json.dumps(out['sigma_subtypes_by_round']))
     print('| r | ' + ' | '.join(f[:12] for f in fams) + ' | σ-cov targets (round / cum) | new proofs σ / σ+only / lemma / DN-PR-AS / noDN | held-out σ-cov first-solved (cum) |')
     for r in rounds:
         row = out['per_round'][r]; pc = out['proof_classes_by_round'].get(r, {})
