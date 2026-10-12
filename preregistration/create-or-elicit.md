@@ -382,3 +382,22 @@ checks on full s0's pend (old seed), one A40, ≈ 1.5 h:
    where both solve.
 3. **α sweep:** α 1.5 on the 33 and the 17. Expectation: 0 / 33; on the 17, between α 4 and plain.
 If any check fails the expectation, the Phase 2 null is reported as sampler-specific.
+
+## Addendum 5 (2026-10-12 20:32 UTC; before any dose pod): Phase 3 — the 1 % σ dose arm (Dan's extension)
+
+Dan (QUESTIONS.md answer, 15:23 UTC, seen by the executor at 20:31): budget extended to **$190 / 330 pod-hours**; run the
+1 % dose arm now, and the 0.1 % arm too if the remaining budget covers it after Phase 1 + 2.
+- **Arm `dose1`:** pretraining set K12^1% (`data/coe/train_k12dose1.jsonl.gz`, `coe/coe_dose.py`, report
+  `train_k12dose1_report.json`): K12⁻ with 1,550 refill records replaced by 1,550 of the removed σ records (1.0 %, K12's σ
+  length mix: L5 226, L6 219, L7 111, L8 95, L9 174, L10 168, L11 275, L12 282); per-length counts unchanged. Seeds s0–s2
+  (the same seed numbers as the other arms). Protocol identical to the new full / knockout ladders: Stage 1 1,200 s on an
+  A40, 16-round T1 ladder at batch 1,024 with the slim eval phase, replay from K12^1%, the same reads (pend / r8 / r16 on
+  `read1054`), the same post-ladder job (timing read, standard A, along-the-ladder scoring). `pod/coe/seed2.sh` = `seed.sh`
+  with the dose arm added (the running pods keep `seed.sh` untouched).
+- **Expectations:** round 1 (base's own k 32 sample): strict σ-covered training targets solved 3–15 (knockout 0, full
+  15–20); accepted σ proofs per round at r1 between 50 and 500 (knockout 6–13, full 635–885); free positive reductio
+  proofs present from r1 on ≥ 2 / 3 seeds. At r16: ≥ 1 classical family acquired (held-out bar) on ≥ 2 / 3 seeds, with
+  contraposition_conv the most likely; strict held-out members solved at r16 between the knockout median and the full
+  median. Interplay (2512.07783) predicts transfer at ≥ 1 % exposure; our dose is the composition itself.
+- **The 0.1 % arm** (`coe_dose.py --share 0.001`, 155 σ records) is launched only if, once Phase 1's post-ladder work is
+  done, the remaining budget covers ≈ $31 more with ≥ $5 left; otherwise it is costed in `next_steps.md`.

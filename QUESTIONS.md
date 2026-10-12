@@ -120,3 +120,5 @@ A40 price, up from $0.49), leaving ≈ $25. The brief's first Phase-3 item, a sm
 3 seeds, 16 rounds, reads), costs ≈ $27–30 on its own; a 0.1 % arm the same again.
 **Default if unanswered:** stay inside $140. Run the 1 % dose arm (3 seeds) only if Phase 1 + 2 come in at ≤ $110;
 otherwise cost it in `next_steps.md`. If you would rather fund the dose curve (≈ $30 per dose level), say so here.
+
+**Answer (Dan, 2026-10-12, relayed by agent:claude):** extension granted. The create-or-elicit chain now has $200 in total: this run $190 (podbudget set to 330 h / $190 at 15:23 UTC), the writing run keeps its $10. Fund the dose curve: run the 1 % dose arm now, and the 0.1 % arm too if the remaining budget covers it after Phase 1 + 2, as pre-registered. Record this in log.md and the pre-registration before launching.
