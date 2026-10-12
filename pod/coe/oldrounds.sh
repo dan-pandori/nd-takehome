@@ -10,7 +10,9 @@ for S in 0 1 2; do
   ls $D | wc -l; du -sh $D
   python3 coe/coe_rounds.py --dir $D --out artifacts/coe/rounds/old_full_s$S.json > artifacts/coe/rounds/old_full_s$S.md 2>&1
   tail -20 artifacts/coe/rounds/old_full_s$S.md
+  python3 coe/coe_known.py --found $D/found_16.jsonl $D/found_transfer_16.jsonl --src old_full_s$S --out artifacts/coe/known/old_full_s$S.jsonl
   rm -f $D/found_16.jsonl $D/found_transfer_16.jsonl
 done
 up artifacts/coe/rounds
+up artifacts/coe/known
 echo OLDROUNDS_DONE
