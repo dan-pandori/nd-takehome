@@ -80,10 +80,10 @@ def main():
         if os.path.exists(fn) and a6:
             # replica sample-phase seconds from its own registry rows if present, else round secs minus nothing (flagged)
             rep = None
-            for f in glob.glob('artifacts/create-or-elicit/registry/*.jsonl') + glob.glob(f'{a.replica}/../registry/*.jsonl'):
+            for f in glob.glob('artifacts/create-or-elicit/registry/*.jsonl'):
                 for l in open(f):
                     r = json.loads(l); lab = r.get('labels') or {}
-                    if r.get('arm') == 'replica_r1' and int(r.get('seed', -1)) == s and lab.get('phase') == 'sample' and r.get('metric') == 'gpu_seconds':
+                    if str(r.get('arm', '')) == f'rep_best12_s{s}' and lab.get('phase') == 'sample' and r.get('metric') == 'gpu_seconds':
                         rep = (rep or 0) + r['value']
             if rep:
                 ratio[s] = a6[0] / rep
@@ -118,13 +118,34 @@ def main():
                 rows[f'r{R}']['mul_train'] = round(K_tr / K_PUB[f'r{R}'][s], 4)
                 rows[f'r{R}']['mul_att'] = round(rows[f'r{R}']['K_att'] / K_PUB[f'r{R}'][s], 4)
         res['per_seed'][s] = rows
+    # K_adapt (Addendum 1): 512 attempts on every one of the 322, the rest of the TRAINING-phase seconds spread evenly over the
+    # theorems the base failed in 512 (capability-defs sets.json 'H': 86 / 77 / 77), at the hard-theorem per-attempt cost
+    # (capability-defs out/compute.txt, j2_pend_s<S> rows: gpu_seconds / attempts on A40), A6000 rounds scaled by the ratio.
+    C_HARD_A40 = {0: 4424 / 1056768, 1: 5577 / 1089536, 2: 4535 / 1024000}
+    N_FAIL = {0: 86, 1: 77, 2: 77}
+    for s in (0, 1, 2):
+        c_a40 = c40.get((s, 2048))
+        if not (c_a40 and r_mean):
+            continue
+        for R in (8, 16):
+            rest = 0.0; first = 512 * 322 * c_a40 * r_mean       # the 512-attempt pass is paid in the A6000 rounds first
+            sec = {'a6': 0.0, 'a40': 0.0}
+            for rd in range(1, R + 1):
+                p = ph[s].get(rd, {})
+                gpu = next((g for _, g in p.values()), '')
+                trv = sum(p[k][0] for k in ('sample', 'finetune') if k in p)
+                sec['a6' if 'A6000' in (gpu or '') else 'a40'] += trv
+            att_hard = (sec['a6'] - first) / (C_HARD_A40[s] * r_mean) + sec['a40'] / C_HARD_A40[s]
+            K = att_hard / N_FAIL[s]
+            row = res['per_seed'][s][f'r{R}']
+            row['K_adapt'] = round(K); row['mul_adapt'] = round(K / row['K_pub'], 4)
     # J9 certificates at each r8 budget
     cert = {}
     for (s, t), (c, n) in J9.items():
         ub = cp_upper(c, n)
         r8 = res['per_seed'][s]['r8']
         cert[f's{s}_{t}'] = {'c': c, 'n': n, 'UB95': ub,
-                             **{k: (ub < 0.05 / r8[k]) if r8.get(k) else None for k in ('K_pub', 'K_evalset_sameclass', 'K_train_sameclass', 'K_att')}}
+                             **{k: (ub < 0.05 / r8[k]) if r8.get(k) else None for k in ('K_pub', 'K_evalset_sameclass', 'K_train_sameclass', 'K_att', 'K_adapt')}}
     res['j9_certified_at_r8_budgets'] = cert
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
     json.dump(res, open(a.out, 'w'), indent=1)
