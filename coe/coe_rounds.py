@@ -21,12 +21,29 @@ from coe.coe_sigma import flags
 from coe.coe_assemble import lemma_route
 
 
+def _dn_impi(lines):
+    """a DN step citing (after reiteration) an IMPI line whose formula is ( ( ~ G ) > F ): the same refutation of ~G that NEGI
+    gives, written as an implication.  Lean accepts DN on it (~~G is by definition ~G -> False); nd_verify did not, so K12
+    has no such step (0 DN-on-IMPI citations).  Found 2026-10-12 in knockout s0's base sample of la_transfer_916."""
+    from coe.coe_sigma import _origin
+    by = {ln['idx']: ln for ln in lines}
+    for ln in lines:
+        if ln['rule'] == 'DN' and ln['refs']:
+            o = _origin(by, ln['refs'][0])
+            if o is not None and o['rule'] == 'IMPI' and o['formula'][0] == 'imp' and o['formula'][1][0] == 'not' and o['formula'][2][0] == 'bot':
+                return True
+    return False
+
+
 def classify(nd):
     fl = flags(nd)
     if fl is None:
         return 'unparsed'
     if any(fl[f]['sigma_strict'] or fl[f]['sigma_chain'] for f in ('w', 'p')):
         return 'sigma'
+    lines0 = parse(nd)
+    if lines0 is not None and _dn_impi(lines0):
+        return 'sigma_impi'
     if any(fl[f]['dn_derived'] for f in ('w', 'p')):
         return 'sigma_plus_only'
     lines = parse(nd)
@@ -45,12 +62,19 @@ def sigma_subtype(nd, prompt):
     lines = parse(nd)
     if lines is None:
         return None
+    from coe.coe_sigma import _origin
     by = {ln['idx']: ln for ln in lines}
     for ln in lines:
-        if ln['rule'] == 'DN' and ln['refs'] and by.get(ln['refs'][0], {}).get('rule') == 'NEGI':
+        if ln['rule'] == 'DN' and ln['refs']:
+            o = _origin(by, ln['refs'][0])
+            if o is None or o['rule'] not in ('NEGI', 'IMPI'):
+                continue
+            if o['rule'] == 'IMPI' and not (o['formula'][0] == 'imp' and o['formula'][1][0] == 'not' and o['formula'][2][0] == 'bot'):
+                continue
             G = ln['formula']
             nn = '( ~ ( ~ ' + fstr(G) + ' ) )'
-            return ('neg_' if G[0] == 'not' else 'pos_') + ('scaffold' if nn in prompt else 'free')
+            ni = '( ( ~ ' + fstr(G) + ' ) > F )'
+            return ('neg_' if G[0] == 'not' else 'pos_') + ('scaffold' if (nn in prompt or ni in prompt) else 'free') + ('_impi' if o['rule'] == 'IMPI' else '')
     return None
 
 
@@ -122,11 +146,11 @@ def main():
             c = classify(x['proof'])
             r = x['round']
             cls_round[r][c] += 1
-            if c == 'sigma':
+            if c in ('sigma', 'sigma_impi'):
                 sub_round[r][sigma_subtype(x['proof'], x['prompt'])] += 1
             if x['name'] in sig_tr:
                 cls_round_sig[r][c] += 1
-            if c in ('sigma', 'sigma_plus_only', 'lemma_route'):
+            if c in ('sigma', 'sigma_impi', 'sigma_plus_only', 'lemma_route'):
                 if first_sig_any is None or r < first_sig_any:
                     first_sig_any = r
                 if x['name'] in sig_tr and (first_sig_cov is None or r < first_sig_cov):
@@ -135,7 +159,7 @@ def main():
     out['proof_classes_by_round'] = {r: dict(v) for r, v in sorted(cls_round.items())}
     out['proof_classes_by_round_sigma_targets'] = {r: dict(v) for r, v in sorted(cls_round_sig.items())}
     out['sigma_subtypes_by_round'] = {r: dict(v) for r, v in sorted(sub_round.items())}
-    out['first_round_pos_free_sigma'] = min((r for r, v in sub_round.items() if v.get('pos_free')), default=None)
+    out['first_round_pos_free_sigma'] = min((r for r, v in sub_round.items() if v.get('pos_free') or v.get('pos_free_impi')), default=None)
     out['first_round_sigma_any_target'] = first_sig_any
     out['first_round_sigma_covered_target'] = first_sig_cov
     out['examples'] = examples
