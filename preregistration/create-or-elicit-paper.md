@@ -103,3 +103,14 @@ spent, or 24 h before the hard stop, whichever comes first. Any other pod work n
 $10 / 20 pod-hours (`podbudget create-or-elicit-paper --set 20 10`, set before the first pod). The RunPod balance is
 $101 at writing; the floor is $35. The run is done when two critique rounds and the audit are applied, the deliverables
 exist and the branch is pushed. Hard stop 96 h after start (2026-10-17 19:20 UTC).
+
+## Addendum 1 (2026-10-13 19:42 UTC, before computing A3)
+
+The per-member score rows exist in the bucket (≈ 1.6–3.6 MB per checkpoint), so A3 runs. Members are the 101 strict
+held-out members that have a known σ proof. The label is "solved in the r16 x0 plain read" (for old full s0, the union
+of its x0e / x0h files, as in the review). The pre-registered test (AUC ≥ 0.7 on ≥ 3 of full s0, s3, s4, s5) stays
+primary. Two exploratory extensions, stated now:
+- **Within-family AUC:** only pairs of members of the same family are compared. contraposition_conv is both the
+  likeliest family under every base and the most solved, so the overall AUC could be a family effect. Expected: lower
+  than the overall AUC, and > 0.5 on ≥ 3 of the 4 full seeds.
+- **The same AUCs for the dose seeds s0–s2.** Expected: overall AUC ≥ 0.7 on ≥ 2 of 3.
