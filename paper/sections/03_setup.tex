@@ -4,8 +4,8 @@
 \paragraph{Logic, data and judge.} Theorems are sequents $\Gamma \vdash G$ of propositional logic over at most four
 atoms, with $\land,\lor,\to,\neg,\bot$. Proofs are Fitch-style natural deduction: premises, assumptions that open boxes,
 the introduction and elimination rules of each connective, $\bot$-elimination and double-negation elimination
-(\texttt{DN}). The pretraining set, which we call \KT{}, holds 155,000 synthetic proofs of 2--12 lines from a generator,
-with a flat length distribution. A proof counts if and only if Lean~4 core accepts it. A syntactic pre-filter may reject
+(\texttt{DN}). The pretraining set \KT{} (``K12'' in the released code) holds 155,000 synthetic proofs of 2--12 lines from a
+generator, with a flat length distribution. A proof counts if and only if Lean~4 core accepts it. A syntactic pre-filter may reject
 malformed text before Lean, but never accepts anything on its own (\S\ref{sec:robust}).
 
 \paragraph{Model and interface.} Every model is the same decoder-only transformer: 6 layers, width 384, ALiBi and NoPE
@@ -33,7 +33,8 @@ rejected a step Lean accepts in 314,541 tested (state, step) pairs. General abil
 generator theorems decoded greedily, and on 322 evaluation theorems (72 textbook problems plus 250 held-out generator
 theorems; \S\ref{sec:case}).
 
-\paragraph{The composition and the theorem families.} Table~\ref{tab:concepts} defines the terms used throughout.
+\paragraph{The composition and the theorem families.} Table~\ref{tab:concepts} defines the terms used throughout
+(glossary: Appendix~\ref{app:glossary}).
 In \KT{}, \sig{} occurs in 16,703 records and \sigp{} in 16,961 (10.94\%); the lemma route occurs in none. We track six
 classical generator families: converse contraposition ($\neg B \to \neg A \vdash A \to B$), negated conditional
 ($\neg(A\to B) \vdash A \land \neg B$), Peirce's law, the Peirce sequent ($(A\to B)\to A \vdash A$), excluded middle, and
@@ -111,11 +112,12 @@ same proof of the negated goal. Appendix~\ref{app:lean} gives two more.}
 \item \textbf{\Kko{}} pretrains on \KTko{}. This is \KT{} minus exactly its 16,961 \sigp{} records, refilled with
 16,961 records drawn length by length from \KT{}'s own unused source pools. Every refill record passes \KT{}'s filters
 and contains no \sigp{} and no lemma route. Under two renaming-invariant keys, the refill shares no theorem with \KT{}
-or with any evaluation file. Lean accepts all 16,961 refill records.
+or with any evaluation file. Lean accepts all 16,961 refill records (Appendix~\ref{app:k12ko}).
 \item \textbf{\Kdose{}} restores 1,550 removed \sig{} records in place of refill records, at \KT{}'s length mix: 1.00\%
 of the records.
 \item \textbf{\Kfull{}} pretrains on \KT{}. Seeds s0--s2 come from earlier runs. They differ from the new seeds s3--s5
-in three ways. Rounds 1--8 ran on RTX A6000 cards at sampling batch 2,048, whereas the new seeds ran on A40s at 1,024.
+in three ways. Rounds 1--8 ran on RTX A6000 cards at sampling batch 2,048 (s2 at 1,024 from round 2), whereas the new seeds
+ran on A40s at 1,024.
 The ladders were resumed at rounds 9 and 13, which restarted the replay sampler. And each round's evaluation phase
 sampled more theorems. Changing the batch changes which samples are drawn, not how they are judged.
 \end{itemize}
@@ -153,8 +155,11 @@ where $\mathrm{UB}_{95}$ is the one-sided 95\% Clopper--Pearson bound; with $c=0
 ``Within reach'' from a single success in fewer than $K$ attempts is weak evidence, and we flag it where it occurs. A
 \emph{pooled} certificate over a set of theorems bounds their mean per-attempt rate, not any one of them. $K$ is
 matched to RL's compute as $K = C_{\mathrm{RL}} / (N_{\mathrm{eval}}\, c_{\mathrm{base}})$. Here $C_{\mathrm{RL}}$ is
-the GPU time of the ladder, or the part of it an allocation charges (\S\ref{sec:case}), and $c_{\mathrm{base}}$ is the
-base's measured cost per attempt. $N_{\mathrm{eval}} = 322$ is the number of evaluation theorems the budget is spread
+what the ladder spent, and $c_{\mathrm{base}}$ is the base's measured cost per attempt. ``What the ladder spent'' has several defensible
+readings, each an \emph{allocation}: its sampling attempts on training theorems ($\Katt$); the GPU time of its sampling and
+fine-tuning phases ($\Ktrain$; $\Ktrain(16)$ for a 16-round ladder); all of its GPU time ($\Kuni$); the value of an
+earlier report ($\Kpub$, \S\ref{sec:case}); or an adaptive spend of 512 attempts on every theorem and the rest on the
+base's failures ($\Kadapt$). $N_{\mathrm{eval}} = 322$ is the number of evaluation theorems the budget is spread
 over. $N_{\mathrm{eval}}$ is a choice: spreading the same compute over the 1,054 theorems of our largest evaluation
 would make every $K$ 3.3 times smaller. The \emph{compute-matched set} $\mathcal{C}(K)$ holds the theorems that RL
 proves and its base cannot reach within $K$. $\dcov(K)$ is the number RL proves minus the number the base reaches.

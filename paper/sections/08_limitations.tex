@@ -8,20 +8,26 @@ The organism was chosen because it allows interventions that large models do not
 it.
 \item \textbf{One RL algorithm, 16 rounds, one composition.} Expert iteration at $k=32$, $T=0.8$ is rejection-sampling
 fine-tuning. GRPO-style updates, more exploration, demonstrations or longer runs could behave differently, and in the
-closest controlled study and in our earlier organism GRPO did (\S\ref{sec:discussion}). One knockout ladder was still
+closest controlled study GRPO did, and in our earlier organism GRPO acquired a depth-3 nesting habit faster than EI;
+in this organism, from full-exposure bases, plain GRPO proved fewer theorems than EI (\S\ref{sec:discussion}). One knockout ladder was still
 changing at round 24. Only one composition was removed.
-\item \textbf{What the headline test measures.} The pre-registered indicator is largely decided before RL. The RL-specific
-contrasts (gains during RL, families acquired during RL) were not pre-registered, and on the three full seeds that
-match the knockout's hardware the during-RL contrast is 2/3 vs 0/6 ($p = 0.034$).
+\item \textbf{What the headline test measures.} The pre-registered indicator is largely decided before RL. The RL-phase
+contrasts (gains during the RL phase, families acquired during it) were not pre-registered, and the RL phase includes
+replay. On the three full seeds that match the knockout's hardware, the gains test gives $p = 0.012$ and the family
+contrast 2/3 vs 0/6 ($p = 0.034$).
 \item \textbf{Seeds and power.} Six seeds per main arm power the primary indicator but not most per-family tests (three
-families 3 vs 0, Holm 0.17; excluded middle 1 vs 0). A 0/6 outcome bounds the per-seed rate of acquisition from a
-\sig-free base below 0.39 only. The dose arm has three seeds and two doses (0\% and 1\%) cannot locate a threshold.
+families 3 vs 0, Holm 0.17; excluded middle 1 vs 0). A 0/6 outcome bounds the per-seed rate of acquisition after
+\sig-free pretraining below 0.39 only. The dose arm has three seeds and two doses (0\% and 1\%) cannot locate a threshold.
 \item \textbf{The knockout is not surgical, and exposure includes replay.} It makes \texttt{DN} and $\neg$-introduction
 three to four times rarer and removes two thirds of the classical-only theorems. It costs a few theorems of general
 ability (\S\ref{sec:side}). Exposure in pretraining cannot be separated from exposure through replay during RL.
 \item \textbf{``Absent'' is not established.} Five of six knockout bases proved strict theorems with \sig{} at large
-$k$. Only one is certified out of reach as pre-registered, on a pooled mean rate, at one allocation, with an 8\% margin.
-No family could be certified at the sampling used, so the \textsc{created} verdict was unreachable by design.
+$k$, and four of six under guided decoding at $k = 256$. Only one is certified out of reach as pre-registered: under plain
+sampling, on a pooled mean rate, at one allocation, with an 8\% margin. Spreading the same compute over 106 or 1,054
+theorems would certify 0 or 5 of 6. The certificate assumes the pre-filter rejected no valid proof in the large-$k$
+sample, which could not be checked. No family could be certified at the sampling used, so the \textsc{created} verdict
+was unreachable by design. The ``rare'' evidence comes almost entirely from one family (converse contraposition); on the
+others the bases sit at the sampling floor.
 \item \textbf{Within-reach labels.} Per-theorem base rates in the knockout arm rest on one to three successes in fewer
 than $K$ attempts, from sampling that paused after a first success.
 \item \textbf{Estimators.} The known-proof estimate runs two- to three-fold low below $10^{-4}$ and was calibrated on

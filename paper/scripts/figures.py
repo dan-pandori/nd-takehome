@@ -34,7 +34,7 @@ os.makedirs(OUT, exist_ok=True)
 FULL, KO, DOSE = '#2a78d6', '#eb6834', '#1baf7a'
 ARM_COLOR = {'full': FULL, 'ko': KO, 'dose1': DOSE}
 ARM_MARK = {'full': 'o', 'ko': 's', 'dose1': '^'}
-ARM_NAME = {'full': 'full exposure', 'ko': 'knockout (no σ)', 'dose1': '1 % σ dose'}
+ARM_NAME = {'full': 'full exposure', 'ko': 'knockout (no σ in pretraining)', 'dose1': '1% σ dose'}
 SEEDS = {'full': range(6), 'ko': range(6), 'dose1': range(3)}
 INK, INK2, INK3 = '#0b0b0b', '#52514e', '#8a8984'
 GRID, SURF = '#e4e3df', '#ffffff'
@@ -88,12 +88,12 @@ def fig_endpoint():
                 printed['ko_s1_ext'] = [y for _, y in ext]
                 a.plot([x + jitter for x, _ in ext], [y for _, y in ext], color=KO, lw=1.2, ls=(0, (2, 2)),
                        marker='s', ms=4.5, mec=SURF, mew=0.8, zorder=3)
-    a.set_xticks([0, 8, 16, 20, 24]); a.set_xticklabels(['pend', 'r8', 'r16', 'r20', 'r24'])
+    a.set_xticks([0, 8, 16, 20, 24]); a.set_xticklabels(['r0', 'r8', 'r16', 'r20', 'r24'])
     a.set_xlim(-1.5, 34); a.set_ylim(-3, 106)
-    a.set_ylabel('strict held-out family members solved (of 106)')
-    a.set_xlabel('checkpoint (EI round); plain read, k 256')
+    a.set_ylabel('strict held-out theorems proved (of 106)')
+    a.set_xlabel('checkpoint (EI round); evaluation, k = 256')
     a.text(25.5, 62, 'full exposure\n6 seeds', color=FULL, fontsize=8, va='center', fontweight='bold')
-    a.text(25.5, 40, '1 % σ dose\n3 seeds', color=DOSE, fontsize=8, va='center', fontweight='bold')
+    a.text(25.5, 40, '1% σ dose\n3 seeds', color=DOSE, fontsize=8, va='center', fontweight='bold')
     a.text(25.5, 12, 'knockout\n6 seeds', color=KO, fontsize=8, va='center', fontweight='bold')
     a.text(19.5, 21, 's1 continued\n(exploratory)', color=INK2, fontsize=6.8, va='center')
     a.annotate('', xy=(22, 6.5), xytext=(21.5, 16.5), arrowprops=dict(arrowstyle='-', color=INK3, lw=0.7))
@@ -130,7 +130,7 @@ def fig_endpoint():
     b.tick_params(length=0)
     for sp in b.spines.values():
         sp.set_visible(False)
-    b.set_title('b  Per family at r16 (● = at the bar, ≥ 50 %)')
+    b.set_title('b  Per family at r16 (● = acquired, ≥ 50%)')
     cb = fig.colorbar(b.images[0], ax=b, fraction=0.04, pad=0.02)
     cb.ax.tick_params(labelsize=7); cb.outline.set_visible(False)
     fig.tight_layout()
@@ -176,13 +176,13 @@ def fig_dynamics():
                 ax.plot([rr[i] for i in ext], [ys[i] for i in ext], color=ARM_COLOR[arm], lw=1.2, ls=(0, (2, 2)))
         if arm == 'ko' and s == 1:
             printed['ko_s1_free+_r9_r24'] = fpl[8:24]
-    a.set_xlabel('EI round'); a.set_ylabel('strict trained targets solved (of 123)')
-    a.set_title('a  Targets that need the reductio')
+    a.set_xlabel('EI round'); a.set_ylabel('with an accepted proof so far (of 123)')
+    a.set_title('a  Strict training theorems')
     a.set_xlim(0.5, 24.5); a.set_ylim(-3, 92)
     b.set_yscale('symlog', linthresh=1, linscale=0.6)
     b.set_ylim(-0.3, 1.2e5)
     b.set_xlabel('EI round'); b.set_ylabel('accepted proofs in the round (k 32 sample)')
-    b.set_title('b  Free reductio proofs per round')
+    b.set_title('b  Free positive reductio, per round')
     b.set_xlim(0.5, 24.5)
     handles = [Line2D([], [], color=ARM_COLOR[k], lw=1.6, label=ARM_NAME[k]) for k in ('full', 'dose1', 'ko')]
     handles.append(Line2D([], [], color=KO, lw=1.2, ls=(0, (2, 2)), label='knockout s1, r17–r24 (exploratory)'))
@@ -212,7 +212,7 @@ def fig_logp():
                     mec=SURF, mew=0.7)
     ax.plot([0], [base['full_s0']['heldout']['best_median']], marker='o', ms=5, color=FULL, mec=INK, mew=0.6, ls='none')
     pts['full_s0_pend'] = round(base['full_s0']['heldout']['best_median'], 1)
-    ax.set_xticks([0, 4, 8, 12, 16]); ax.set_xticklabels(['pend', 'r4', 'r8', 'r12', 'r16'])
+    ax.set_xticks([0, 4, 8, 12, 16]); ax.set_xticklabels(['r0', 'r4', 'r8', 'r12', 'r16'])
     ax.set_ylabel('median log p of best known σ proof (nats)')
     ax.set_xlabel('checkpoint')
     ax.set_title('Distance to the reductio along each ladder')
@@ -230,9 +230,9 @@ def fig_budget():
     g = J('artifacts/coe/budget/part3_recount_grid.json')
     bj = J('artifacts/coe/budget/budget.json')
     fig, ax = plt.subplots(figsize=(5.6, 3.3))
-    defs = [('K_att', 'target attempts (K_att)', 'v'), ('K_train_sameclass', 'training phases (K_train)', 's'),
-            ('K_evalset_sameclass', 'all ladder GPU time (K_uni)', 'D'), ('K_pub', 'as published (K_pub)', 'o'),
-            ('K_adapt', 'adaptive (K_adapt)', '^')]
+    defs = [('K_att', 'target attempts ($K_{att}$)', 'v'), ('K_train_sameclass', 'training phases ($K_{train}$)', 's'),
+            ('K_evalset_sameclass', 'all ladder GPU time ($K_{uni}$)', 'D'), ('K_pub', 'earlier report ($K_{pub}$)', 'o'),
+            ('K_adapt', 'adaptive ($K_{adapt}$)', '^')]
     shades = ['#86b6ef', '#2a78d6', '#104281']
     printed = {}
     for i, s in enumerate(('0', '1', '2')):
@@ -247,10 +247,13 @@ def fig_budget():
             cm = min(rows, key=lambda r: abs(math.log(r[0] / K)))[1]
             printed[s][kk] = (round(K), cm)
             ax.plot([K], [cm], marker=m, ms=6.5, color=shades[i], mec=INK, mew=0.7, ls='none', zorder=4)
+    for i, eq in enumerate((54, 51, 60)):
+        ax.plot([256], [eq], marker='x', ms=7, color=shades[i], mew=1.6, ls='none', zorder=4)
+    ax.annotate('equal k (256)', xy=(256, 60), xytext=(330, 62), fontsize=7, color=INK2)
     ax.set_xscale('log')
     ax.xaxis.set_major_locator(LogLocator(base=10))
     ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f'{int(v):,}'))
-    ax.set_xlim(1000, 3e5); ax.set_ylim(0, 45)
+    ax.set_xlim(150, 3e5); ax.set_ylim(0, 66)
     ax.set_xlabel('budget K: base attempts per evaluation theorem')
     ax.set_ylabel('theorems RL r8 solves that the\nbase cannot reach within K')
     ax.set_title('"Created" depends on the budget')
@@ -326,8 +329,8 @@ def fig_prior():
     for arm, s, lp, y in pts:
         ax.plot(lp, y, marker=ARM_MARK[arm], color=ARM_COLOR[arm], ms=7, mec=SURF, mew=1, ls='none')
         ax.text(lp + 0.4, y + 1.5, f's{s}', fontsize=6.5, color=INK2)
-    ax.set_xlabel('base (pend): median log p of best known σ proof (nats)')
-    ax.set_ylabel('strict held-out members solved at r16 (of 106)')
+    ax.set_xlabel('base (r0): median log p of best known σ proof (nats)')
+    ax.set_ylabel('strict held-out theorems proved at r16 (of 106)')
     ax.set_title('Base prior and later acquisition (exploratory)')
     handles = [Line2D([], [], marker=ARM_MARK[k], color=ARM_COLOR[k], ls='none', ms=6, label=ARM_NAME[k]) for k in ('full', 'dose1', 'ko')]
     ax.legend(handles=handles, loc='upper left', frameon=False)
@@ -354,11 +357,11 @@ def fig_ttc():
             a.plot([x0 - 0.12, x0, x0 + 0.12], gains, 'o', color=INK, ms=3, zorder=3)
     a.set_xticks([1, 5]); a.set_xticklabels(['textbook72 (72)', 'holdout250 (250)'])
     a.axhline(0, color=INK2, lw=0.8)
-    a.set_ylabel('guided − plain, theorems solved at k 256')
+    a.set_ylabel('guided − plain, theorems proved (k = 256)')
     a.set_title('a  Guided step redraws')
-    handles = [plt.Rectangle((0, 0), 1, 1, color=ck_col[k], label=k) for k in ('pend', 'r8', 'r16')]
+    handles = [plt.Rectangle((0, 0), 1, 1, color=ck_col[k], label={'pend': 'r0'}.get(k, k)) for k in ('pend', 'r8', 'r16')]
     a.legend(handles=handles, loc='upper right', frameon=False, title='checkpoint', title_fontsize=7.5)
-    pools = [('C', 'group C\n(28–36)'), ('tb72', 'textbook\n72'), ('h250', 'holdout\n250'), ('rrQ100', 'long\nrrQ100'), ('long2', 'long2\n(21)')]
+    pools = [('C', 'unsolved at\nr0 and r8'), ('tb72', 'textbook\n72'), ('h250', 'holdout\n250'), ('rrQ100', 'long\n(100)'), ('long2', 'longer\n(21)')]
     for pi, (p, lab) in enumerate(pools):
         for ci, ck in enumerate(('pend', 'r8')):
             t = mc[f'{ck}/{p}']
@@ -369,7 +372,7 @@ def fig_ttc():
             b.plot([x0 - 0.15, x0, x0 + 0.15], d, 'o', color=INK, ms=3, zorder=3)
     b.set_xticks([pi * 3 + 0.5 for pi in range(len(pools))]); b.set_xticklabels([l for _, l in pools], fontsize=7)
     b.axhline(0, color=INK2, lw=0.8)
-    b.set_ylabel('PUCT + value − sampling, theorems solved')
+    b.set_ylabel('PUCT + value − sampling, theorems proved')
     b.set_title('b  Tree search at matched wall clock')
     b.legend(handles=handles[:2], loc='upper left', frameon=False, title='checkpoint', title_fontsize=7.5)
     fig.tight_layout()
@@ -474,9 +477,9 @@ def fig_overview():
     R = acq()
     fig = plt.figure(figsize=(7.2, 3.1))
     ax0 = fig.add_axes([0.0, 0.0, 0.46, 1.0]); ax0.axis('off'); ax0.set_xlim(0, 10); ax0.set_ylim(0, 10)
-    rows = [('full', 'Full: K12, 155,000 proofs\n10.9 % use σ or a variant', 8.0),
-            ('dose1', '1 % dose: knockout set with\n1,550 σ records restored', 5.0),
-            ('ko', 'Knockout: σ records removed\n(16,961), refilled to 155,000', 2.0)]
+    rows = [('full', 'Full: 155,000 proofs,\n10.9% use σ or a variant', 8.0),
+            ('dose1', '1% dose: knockout set with\n1,550 σ records restored', 5.0),
+            ('ko', 'Knockout: σ⁺ records removed\n(16,961), refilled to 155,000', 2.0)]
     for arm, txt, y in rows:
         ax0.add_patch(FancyBboxPatch((0.1, y - 1.0), 4.3, 2.0, boxstyle='round,pad=0.05,rounding_size=0.25',
                                      fc=SURF, ec=ARM_COLOR[arm], lw=1.6))
@@ -486,7 +489,7 @@ def fig_overview():
                                  ec=INK3, lw=1.0))
     ax0.text(7.6, 5.0, 'same 9.56M transformer,\npretrained from scratch,\nthen 16 rounds of\nexpert iteration\n(Lean judges every proof)',
              ha='center', va='center', fontsize=7.2, color=INK)
-    ax0.text(5.2, 0.6, 'σ: assume ¬G, refute it, conclude ¬¬G, drop ¬¬\n(DN and ¬-introduction each stay in every set)',
+    ax0.text(5.2, 0.6, 'σ: assume ¬G, refute it, conclude ¬¬G, drop ¬¬\n(DN and ¬-introduction stay; 3–4× rarer in the knockout)',
              ha='center', va='center', fontsize=6.6, color=INK2, style='italic')
     ax0.text(0.1, 9.75, 'a  Design', fontsize=9, fontweight='bold', va='top')
     a = fig.add_axes([0.55, 0.16, 0.43, 0.74])
@@ -501,7 +504,7 @@ def fig_overview():
     a.set_xlim(-1.5, 25.5); a.set_ylim(-3, 85)
     a.set_ylabel('held-out classical theorems\nproved (of 106; 256 attempts)')
     a.text(17.2, 60, 'full\n(6 seeds)', color=FULL, fontsize=7.5, fontweight='bold', va='center')
-    a.text(17.2, 38, '1 % dose\n(3 seeds)', color=DOSE, fontsize=7.5, fontweight='bold', va='center')
+    a.text(17.2, 38, '1% dose\n(3 seeds)', color=DOSE, fontsize=7.5, fontweight='bold', va='center')
     a.text(17.2, 8, 'knockout\n(6 seeds)', color=KO, fontsize=7.5, fontweight='bold', va='center')
     a.set_title('b  Result', fontsize=9)
     save(fig, 'fig0_overview')
