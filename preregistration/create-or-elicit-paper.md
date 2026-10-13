@@ -140,7 +140,7 @@ the null predicts fewer seeds with an early strict success than observed. P(≥ 
 ladders raised their own σ rate during RL (on easier theorems), and that the base-rate null alone does not explain the
 dynamics. A ratio near 1 would mean that waiting for a rare sample explains them.
 
-## Addendum 4 (2026-10-13 20:45 UTC, before launching C4 / C5; prompted by the round-1 soundness critique)
+## Addendum 4 (2026-10-13 20:44 UTC, commit e36ad9a6, before launching C4 / C5; prompted by the round-1 soundness critique)
 
 Two cheap checks of claims the paper inherits, on pod `coep-2` (A40) after or beside its C2 / C3 reads.
 

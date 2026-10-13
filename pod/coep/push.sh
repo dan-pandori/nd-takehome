@@ -8,3 +8,4 @@ rsync -rlptz --no-o --no-g --exclude .git --exclude data/ --exclude artifacts/ -
   --exclude paper/ --exclude review_coe/ -e "ssh $SSHO -p $POD_PORT" $W/ "root@$POD_IP:/workspace/nd-takehome/" || exit 1
 cd $W && rsync -rlptzR --no-o --no-g -e "ssh $SSHO -p $POD_PORT" data/bs data/eval_only data/ladder data/heldout.jsonl \
   data/p2/heldout.jsonl data/coe_paper "root@$POD_IP:/workspace/nd-takehome/" || exit 1
+cd $W && rsync -rlptzR --no-o --no-g -e "ssh $SSHO -p $POD_PORT" review_coe/rlean.py paper/scripts "root@$POD_IP:/workspace/nd-takehome/" || exit 1
