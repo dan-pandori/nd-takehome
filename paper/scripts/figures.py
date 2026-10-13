@@ -437,12 +437,14 @@ def blog_figs():
         for kk in ('K_att', 'K_train_sameclass', 'K_evalset_sameclass', 'K_pub', 'K_adapt'):
             K = r8[kk]; cm = min(rows, key=lambda r: abs(math.log(r[0] / K)))[1]
             ax.plot([K], [cm], 'o', ms=6, color=shades[i], mec=INK, mew=0.7, zorder=4)
-    ax.set_xscale('log'); ax.set_xlim(1000, 3e5); ax.set_ylim(0, 45)
+    for i, eq in enumerate((54, 51, 60)):
+        ax.plot([256], [eq], marker='x', ms=7, color=shades[i], mew=1.6, ls='none')
+    ax.set_xscale('log'); ax.set_xlim(150, 3e5); ax.set_ylim(0, 66)
     ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f'{int(v):,}'))
     ax.set_xlabel("attempts the base model gets per theorem (its 'budget')")
     ax.set_ylabel('theorems "created" by RL')
     ax.set_title('"Created by RL" shrinks as the base model gets more attempts')
-    ax.text(1100, 3, 'dots: five ways of matching the base model\'s budget to RL\'s compute', fontsize=7.5, color=INK2)
+    ax.text(170, 3, 'crosses: equal attempts (256); dots: five ways of matching the base model\'s budget to RL\'s compute', fontsize=7, color=INK2)
     fig.tight_layout(); save(fig, 'blog_fig3_budget')
 
     # B4: test-time compute
