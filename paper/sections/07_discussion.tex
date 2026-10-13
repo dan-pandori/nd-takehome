@@ -39,8 +39,11 @@ to a context in pretraining gives no transfer after RL and 1\% enhances it. That
 context rather than an inference rule. \citet{abdulsalam2026rewrite} remove shortcuts from pretraining in a rewrite
 grammar and report RL solving buckets on which the pretrained policy scores 0\% at pass@1024. In our organism, a
 pass@1024 of zero is compatible with per-attempt rates of $10^{-6}$, which a million attempts reveal. Their new
-behaviour is a new action type, while ours is a composition of two rules the base already uses, and their RL is not
-EI. The two results are therefore not in conflict, but neither settles the other.
+behaviour is a new action type, while ours is a composition of two rules the base already uses. More importantly, the
+algorithm that created it there was GRPO. Rejection-sampling fine-tuning, the family our EI belongs to, plateaued, and
+they attribute the difference to selectivity rather than exploration volume. Our null may therefore be specific to EI.
+The two results are not in conflict, but neither settles the other. A GRPO arm from the knockout bases is the obvious
+test.
 
 \paragraph{An evidence ladder for ``RL created it''.} The measurement half of the paper suggests a reporting standard,
 in increasing order of strength:
