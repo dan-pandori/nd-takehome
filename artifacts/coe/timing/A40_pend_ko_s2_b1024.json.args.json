@@ -1,0 +1,43 @@
+{
+ "ckpt": "ckpts/coe/stage1_ko_s2.pt",
+ "inp": "data/coe/r322.jsonl",
+ "out": null,
+ "summary": "artifacts/coe/timing/A40_pend_ko_s2_b1024.json",
+ "k": 256,
+ "temperature": 0.8,
+ "seed": 0,
+ "batch": 1024,
+ "max_action": 512,
+ "max_steps": 96,
+ "lenfield": "n_lines",
+ "limit": 0,
+ "_meta": {
+  "script": "state_eval.py",
+  "argv": [
+   "state_eval.py",
+   "--ckpt",
+   "ckpts/coe/stage1_ko_s2.pt",
+   "--in",
+   "data/coe/r322.jsonl",
+   "--k",
+   "256",
+   "--temperature",
+   "0.8",
+   "--seed",
+   "0",
+   "--batch",
+   "1024",
+   "--max_action",
+   "512",
+   "--max_steps",
+   "96",
+   "--summary",
+   "artifacts/coe/timing/A40_pend_ko_s2_b1024.json"
+  ],
+  "run_id": "create-or-elicit",
+  "git_sha": "9e96efded8c8da3ad95096609718db31c400a173",
+  "git_dirty": null,
+  "host": "b6e343eec6c9",
+  "utc": "2026-10-13T04:25:19Z"
+ }
+}

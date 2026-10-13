@@ -5,6 +5,9 @@
 
   python3 coe/coe_figures.py estimator      # figures/coe_estimator.{pdf,png}   (Phase 0.1)
   python3 coe/coe_figures.py budget         # figures/coe_budget.{pdf,png}      (Phase 0.2)
+  python3 coe/coe_figures.py phase2         # figures/coe_phase2.{pdf,png}      (Phase 2, 2b)
+  python3 coe/coe_figures.py rounds         # figures/coe_rounds.{pdf,png}      (Phase 1, per round; dose; knockout s1 extension)
+  python3 coe/coe_figures.py endpoint       # figures/coe_endpoint.{pdf,png}    (Phase 1 r16 endpoint; dose)
 """
 import json, math, os, sys
 import matplotlib
@@ -136,18 +139,34 @@ def rounds():
     col = {'full': SER[0], 'knockout': SER[1], '1 % dose': SER[2]}
     fig, (a, b) = plt.subplots(1, 2, figsize=(9.6, 3.8))
     seen = set()
+    last = 16
     for arm, seed, rs, tgt, free in ser:
-        lab = None if arm in seen else f"{arm} ({sum(1 for x in ser if x[0] == arm)} seeds)"
+        n = sum(1 for x in ser if x[0] == arm)
+        lab = None if arm in seen else f"{arm} ({n} seed{'s' if n > 1 else ''})"
         seen.add(arm)
-        a.plot(rs, tgt, color=col[arm], lw=1.6, alpha=0.9, label=lab, marker='o', ms=3)
-        b.plot(rs, [f + 0.5 for f in free], color=col[arm], lw=1.6, alpha=0.9, label=lab, marker='o', ms=3)
+        k = [i for i, r in enumerate(rs) if r <= 16]
+        a.plot([rs[i] for i in k], [tgt[i] for i in k], color=col[arm], lw=1.6, alpha=0.9, label=lab, marker='o', ms=3)
+        b.plot([rs[i] for i in k], [free[i] + 0.5 for i in k], color=col[arm], lw=1.6, alpha=0.9, label=lab, marker='o', ms=3)
+        x = [i for i, r in enumerate(rs) if r >= 16]
+        if len(x) > 1:                      # knockout s1's exploratory extension (Addendum 6), dashed
+            last = max(last, rs[x[-1]])
+            a.plot([rs[i] for i in x], [tgt[i] for i in x], color=col[arm], lw=1.4, ls='--', marker='o', ms=3, mfc=SURF)
+            b.plot([rs[i] for i in x], [free[i] + 0.5 for i in x], color=col[arm], lw=1.4, ls='--', marker='o', ms=3, mfc=SURF)
+            b.text(rs[x[-1]], free[x[-1]] * 1.6 + 0.5, f'{arm} s{seed}', color=INK2, fontsize=7.5, ha='right')
+            a.text(rs[x[-1]], tgt[x[-1]] + 5, f'{arm} s{seed}', color=INK2, fontsize=7.5, ha='right')
+    for ax in (a, b):
+        ax.set_xlim(0.5, last + 0.5)
+        ax.set_xticks([1] + list(range(4, last + 1, 4)))
+        if last > 16:
+            ax.axvline(16.5, color=MUTED, lw=0.8, ls=':')
     a.set_xlabel('EI round'); a.set_ylabel('strict σ-covered training targets solved (of 123)')
-    a.set_title('(a) classical targets that need σ', loc='left'); a.set_ylim(-3, 125); a.set_xlim(0.5, 16.5)
-    a.legend(loc=(0.52, 0.06), fontsize=8)
+    a.set_title('(a) classical targets that need σ', loc='left'); a.set_ylim(-3, 125)
+    a.legend(loc='upper left', fontsize=8)
     b.set_yscale('log'); b.set_xlabel('EI round'); b.set_ylabel('accepted proofs with free positive σ (+0.5)')
-    b.set_title('(b) proofs that build ¬¬G for a goal G the theorem never negates', loc='left', fontsize=9); b.set_xlim(0.5, 16.5)
+    b.set_title('(b) proofs that build ¬¬G for a goal G the theorem never negates', loc='left', fontsize=9)
     fig.text(0.01, -0.03, 'Full: K12 bases s0–s5 (s0–s2 trajectory + rl-continue, s3–s5 this run); knockout: K12⁻ (σ removed) s0–s5; 1 % dose: '
-             'K12⁻ + 1 % σ records, s0–s2. 9.56 M ALiBiGPT, lean_staten, T1 EI k 32; Lean alone. (b) counts every route (NEGI, IMPI, other).', fontsize=7.5, color=INK2)
+             'K12⁻ + 1 % σ records, s0–s2. 9.56 M ALiBiGPT, lean_staten, T1 EI k 32; Lean alone. (b) counts every route (NEGI, IMPI, other); '
+             'per round, not cumulative.\nDashed: knockout s1\'s exploratory extension past the pre-registered 16 rounds (Addendum 6).', fontsize=7.5, color=INK2)
     fig.tight_layout()
     save(fig, 'coe_rounds')
 
@@ -192,5 +211,42 @@ def endpoint():
     save(fig, 'coe_endpoint')
 
 
+def phase2():
+    P = os.path.join(ROOT, 'artifacts/coe/power')
+    rows = [('pilot, development (32)', 'pilot_a4_pend_s0', None, 'pilot_plainT0.8_pend_s0', 'pilot_plainT1.0_pend_s0'),
+            ('full s0, solved rarely (17)', 'p2b_pc_a4', 'p2b_pc_a1.5', 'p2b_pc_plainT0.8', 'p2b_pc_plainT1.0'),
+            ('full s0, compute-matched r8 set (33)', 'p2_full_s0_a4', 'p2_full_s0_a2', 'p2_full_s0_plainT0.8', 'p2_full_s0_plainT1.0'),
+            ('full s1, compute-matched r8 set (27)', 'p2_full_s1_a4', 'p2_full_s1_a2', 'p2_full_s1_plainT0.8', 'p2_full_s1_plainT1.0'),
+            ('knockout s0, strict σ members (106)', 'p2_ko_s0_a4', 'p2_ko_s0_a2', 'p2_ko_s0_plainT0.8', 'p2_ko_s0_plainT1.0'),
+            ('knockout s1, strict σ members (106)', 'p2_ko_s1_a4', 'p2_ko_s1_a2', 'p2_ko_s1_plainT0.8', 'p2_ko_s1_plainT1.0')]
+    kinds = [('power, α 4', SER[1], 'o', True), ('power, α 2 (1.5 on the 17)', SER[1], '^', False),
+             ('plain, T 0.8', SER[0], 's', True), ('plain, T 1.0', SER[0], 'D', False)]
+    fig, ax = plt.subplots(figsize=(8.6, 3.4))
+    for r, (lab, *fs) in enumerate(rows):
+        txt = []
+        for j, f in enumerate(fs):
+            if f is None:
+                txt.append('–'); continue
+            d = json.load(open(os.path.join(P, f + '.json')))
+            n, k = d['n_theorems'], d['solved']
+            name, c, m, filled = kinds[j]
+            ax.plot([k / n], [r + (j - 1.5) * 0.12], m, ms=7, color=c, mfc=c if filled else SURF, mec=c, mew=1.4,
+                    label=name if r == 2 else None, ls='none')
+            txt.append(f'{k}/{n}')
+        for j, t in enumerate(txt):
+            ax.text(1.03 + 0.12 * j, r, t, va='center', fontsize=8, color=INK2, transform=ax.get_yaxis_transform())
+    for j, h in enumerate(('α 4', 'α 2', 'T 0.8', 'T 1.0')):
+        ax.text(1.03 + 0.12 * j, -0.75, h, va='center', fontsize=7.5, color=MUTED, transform=ax.get_yaxis_transform())
+    ax.set_yticks(range(len(rows))); ax.set_yticklabels([x[0] for x in rows], fontsize=8)
+    ax.set_ylim(len(rows) - 0.5, -1.0); ax.set_xlim(-0.03, 1.0)
+    ax.set_xlabel('fraction of the set solved (same decoded tokens per theorem for all four samplers)')
+    ax.legend(loc='lower right', fontsize=7.5, ncol=1)
+    ax.set_title('Power sampling the base (p^α) vs plain sampling at matched tokens', loc='left')
+    fig.text(0.01, -0.05, 'Bases (pend): full s0 / s1 = best-cap12 s0 / s1; knockout = K12⁻ s0 / s1. Power: 32 chains per theorem (16 on the pilot), '
+             'blocks of 4 steps, 8 MH steps per block. 9.56 M ALiBiGPT, lean_staten; Lean alone.', fontsize=7.5, color=INK2)
+    fig.tight_layout()
+    save(fig, 'coe_phase2')
+
+
 if __name__ == '__main__':
-    {'estimator': estimator, 'budget': budget, 'rounds': rounds, 'endpoint': endpoint}[sys.argv[1]]()
+    {'estimator': estimator, 'budget': budget, 'rounds': rounds, 'endpoint': endpoint, 'phase2': phase2}[sys.argv[1]]()

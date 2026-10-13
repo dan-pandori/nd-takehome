@@ -1,45 +1,52 @@
-# next_steps — create-or-elicit (draft 2026-10-12 15:20 UTC; revised at DONE)
+# next_steps — create-or-elicit (final, 2026-10-13; UNREVIEWED)
 
-Costed proposals beyond this run's $140, ranked by what they would teach us. Costs at today's A40 price ($0.59 / h) and
-this run's measured ladder time (16 rounds ≈ 14–16 A40-hours with reads beside the ladder; ≈ $9 per seed).
+Costed proposals beyond this run's $190, ranked by what they would teach us. Costs at this run's A40 price ($0.59 / h)
+and measured times: a 16-round ladder with its reads beside it ≈ 15 A40-hours ≈ $9 per seed; with the post-ladder work
+this run did (three k 256 reads, timing, large-k certificate, standard A) ≈ 22–27 pod-hours ≈ $13–16 per seed.
 
-## 1. Dose-response on σ (the crossover) — ≈ $30 per dose level (3 seeds), $60 for two
-- **Question:** below which share of σ in pretraining does EI stop acquiring the classical families? Full exposure is
-  10.8 % (16,703 / 155,000 records); the knockout is 0 %. Interplay (2512.07783) found RL transfers only above ≈ 1 %
-  atomic exposure; our dose is a *composition*, both of whose atoms stay at full exposure.
-- **Design:** `coe/coe_dose.py` builds K12^d by swapping refill records for removed σ records with K12's length mix
-  (1 % set already built: `data/coe/train_k12dose1.jsonl.gz`, in the bucket). Doses 1 % and 0.1 %, 3 seeds each, the same
-  16-round protocol, the same read-outs (strict σ-covered held-out members at k 256, σ subtypes per round).
-- **Decision value:** locates the threshold between "needs exposure" and "elicited" on a log scale.
+What this run leaves open (numbers in `numbers.md` § create-or-elicit): σ-free bases do not acquire the classical families
+in 16 rounds of EI (0 / 6 vs 6 / 6), yet 5 / 6 of their ladders write the free reductio on their own, rarely, and
+knockout s1's spread after r9 (DOSE_EXT_NEXT). A 1 % σ dose DOSE_NEXT.
+
+## 1. The 0.1 % dose arm — ≈ $33 (3 seeds × 16 rounds, reads at pend and r16 only)
+- **Question:** where between 0 % and 1 % does EI stop acquiring the families? The set is built and in the bucket
+  (`data/coe/train_k12dose01.jsonl.gz`, 155 σ records; `coe/coe_dose.py`), the protocol is Addendum 5's.
+- **Decision value:** a three-point dose curve on a log scale (0, 0.1 %, 1 %, 10.8 %). If 0.1 % behaves like 0 %, the
+  "needs exposure" verdict has a threshold between 155 and 1,550 σ records in 155,000.
 
 ## 2. Exploration from the knockout bases — ≈ $30–60
-- The knockout bases *can* write the free reductio (≈ 10⁻⁵ per attempt at T 1.0 on a theorem whose premise invites ¬G),
-  and the ladders amplify scaffolded σ, yet EI at T 0.8 never trains on a free σ proof of a strict target. Three cheap
-  levers, each a 6-seed, 16-round arm or a continuation of this run's r16 checkpoints:
-  - **T 1.0 rollouts** (the base's free-σ hits happen at T 1.0, never in 131,072 at T 0.8);
-  - **guided rollouts** (proposal 24 Part B: step-checked redraws in RL; ≈ $15–20 per 3 seeds at 8 rounds);
+- The knockout bases write the free reductio at ≈ 10⁻⁶ per attempt pooled over the family members (4 / 6 seeds) and at
+  ≈ 10⁻³ on `la_transfer_916` at T 1.0. EI's k 32 gives ≈ 4,000 attempts per round on the 123 strict training targets,
+  so ≈ 0.004 expected free-σ proofs per round at the base's rate. Three levers, each a 6-seed continuation from this
+  run's r16 checkpoints (8 rounds ≈ $5 per seed) or a fresh 16-round arm:
+  - **T 1.0 rollouts** (the bases' free-σ hits on `la_transfer_916` came at T 1.0; none in 131,072 at T 0.8 on s0);
+  - **larger k on the targets the ladder fails** (k 256 on the ≈ 300 unsolved targets per round ≈ +25 % sampling time);
   - **ε after return** at states with a positive goal (proposal 20): replace the next action by "assume ¬G" with prob ε.
-- **Decision value:** separates "this EI cannot create σ" from "RL with exploration creates σ from a σ-free base".
+- **Decision value:** separates "EI as run cannot create σ" from "RL with more exploration creates σ from a σ-free base".
 
-## 3. Seeded-round transfer (Phase 3a here, if run) at scale — ≈ $10
-- If one self-found free-σ proof in one EI round teaches the families (Phase 3a), repeat with each knockout seed's own
-  first σ proofs and with proofs from different families, to measure how much of a family one instance unlocks.
+## 3. Longer knockout ladders — ≈ $5 per seed per 8 rounds
+- Knockout s1's free reductio accelerated after r16 (29 → 74 proofs per round at r17–r20). Running every knockout seed to
+  r32 would say whether onset turns into acquisition on its own, and how many rounds that costs — the "needs exposure"
+  verdict is a statement about 16 rounds.
 
-## 4. GRPO vs EI from the knockout bases — ≈ $40 (3 seeds × 16 rounds)
-- Abdulsalam et al. (2607.07646) find GRPO creates shortcuts that RFT-style training plateaus on; our EI is RFT-like.
+## 4. Exposure during RL instead of pretraining — ≈ $30 (3 seeds)
+- Add the 1,550 dose records to the knockout ladders' replay (not to pretraining). If the families follow, exposure need
+  not be in pretraining; if not, the base's prior is what matters. Same reads as the dose arm.
+
+## 5. GRPO vs EI from the knockout bases — ≈ $40 (3 seeds × 16 rounds)
+- Abdulsalam et al. (2607.07646) report GRPO finding behaviours RFT-style training plateaus on; our EI is RFT-like.
   `grpo_state.py` exists (run `grpo-state`). Same knockout bases, same targets, matched attempts per round.
 
-## 5. More seeds for the arm comparison — ≈ $9 per seed
-- The primary test is powered for families the full arm acquires on most seeds; excluded middle and Peirce (1 seed in 3
-  in the full arm) need ≈ 12–15 seeds per arm for 80 % power.
+## 6. More seeds for the per-family tests — ≈ $13–16 per seed
+- The primary test is powered for families the full arm acquires on most seeds. Excluded middle (1 / 6 full seeds) and
+  the 3 / 6 families (Holm 0.17) need ≈ 12–15 seeds per arm for 80 % power.
 
-## 6. Harder target pool from our own generator — ≈ $20
+## 7. A harder target pool from our own generator — ≈ $20
 - 13–20-line, classical-heavy, disjoint by renaming class; tests the "targets are ≈ 98 % saturated" objection.
 
-## 7. Interface pilot (whole proof vs proof state, same data and RL) — ≈ $25
+## 8. Interface pilot (whole proof vs proof state, same data and RL) — ≈ $25
 - The older 3.2 M organism's "a proof-state base reaches 28 of 29" confounds the state with step-by-step generation.
 
-## Update 2026-10-12 22:53 UTC
-- The 0.1 % dose arm (`data/coe/train_k12dose01.jsonl.gz`, built and in the bucket) did not fit the extended $190 after
-  Phase 1 and the 1 % arm: ≈ $31 for 3 seeds × 16 rounds with the same reads. It is the first item to fund next: with the
-  0 %, 1 % and 10.8 % arms it completes a three-point dose curve on a log scale.
+## Dropped
+- **Phase 3a at scale.** One self-found free-σ proof added to one EI round changed nothing on 4 / 5 knockout seeds
+  (s2: 2 vs 0 of 105, p 0.25). Seeding with a single proof is not the bottleneck; item 4 tests seeding at volume.

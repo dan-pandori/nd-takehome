@@ -1,0 +1,33 @@
+selftest alpha 1.0: mean |sum log Z| per action 0.000000, mean sum log p -4.118, mean tokens 19.1
+selftest alpha 4.0: mean |sum log Z| per action 12.143025, mean sum log p -3.934, mean tokens 19.1
+selftest ok
+block 1/24 (horizon 4): live 463, done 0, accept rate this block 0.927, 24s
+block 2/24 (horizon 8): live 344, done 112, accept rate this block 0.906, 49s
+block 3/24 (horizon 12): live 82, done 373, accept rate this block 0.898, 78s
+block 4/24 (horizon 16): live 18, done 434, accept rate this block 0.888, 111s
+block 5/24 (horizon 20): live 4, done 448, accept rate this block 0.882, 147s
+block 6/24 (horizon 24): live 0, done 452, accept rate this block 0.884, 184s
+[lean_gate] 452 samples, parse-fail 0 (no-eos 0, 0.000 %), distinct 386: ok 328, rej 58 (filter 58, prefilter=on); lean on 328 texts in 1 procs, 2.7s proc, exposed 2.8s, tail 2.7s, 32 workers
+{"mode": "power", "ckpt": "ckpts/coe/old/stage1_best12_s0_b1200.pt", "in": "data/coe/power_pilot32.jsonl", "alpha": 4.0, "chains": 16, "block": 4, "n_mcmc": 8, "seed": 0, "batch": 1024, "gpu": "NVIDIA A40", "secs": 184.16312050819397, "n_theorems": 32, "solved": 26, "visited_solved": 28, "tokens": 1941278, "prefill": 9334945}
+[lean_gate] 4753 samples, parse-fail 0 (no-eos 0, 0.000 %), distinct 3094: ok 1882, rej 1212 (filter 1212, prefilter=on); lean on 1882 texts in 5 procs, 17.0s proc, exposed 4.4s, tail 4.2s, 32 workers
+plain wave 1: theorems left 32, solved 31, 47s
+[lean_gate] 3465 samples, parse-fail 0 (no-eos 0, 0.000 %), distinct 2305: ok 1514, rej 791 (filter 791, prefilter=on); lean on 1514 texts in 4 procs, 12.6s proc, exposed 3.8s, tail 3.6s, 32 workers
+plain wave 2: theorems left 14, solved 31, 78s
+[lean_gate] 54 samples, parse-fail 0 (no-eos 0, 0.000 %), distinct 54: ok 34, rej 20 (filter 20, prefilter=on); lean on 34 texts in 1 procs, 0.5s proc, exposed 0.5s, tail 0.5s, 32 workers
+plain wave 3: theorems left 4, solved 31, 82s
+[lean_gate] 4 samples, parse-fail 0 (no-eos 0, 0.000 %), distinct 4: ok 2, rej 2 (filter 2, prefilter=on); lean on 2 texts in 1 procs, 0.3s proc, exposed 0.3s, tail 0.3s, 32 workers
+plain wave 4: theorems left 2, solved 31, 84s
+plain wave 5: theorems left 0, solved 31, 87s
+{"mode": "plain", "ckpt": "ckpts/coe/old/stage1_best12_s0_b1200.pt", "in": "data/coe/power_pilot32.jsonl", "temperature": 0.8, "budget_from": "artifacts/coe/power/pilot_a4_pend_s0.json", "budget_mult": 1.0, "seed": 0, "batch": 1024, "gpu": "NVIDIA A40", "secs": 86.73799252510071, "n_theorems": 32, "solved": 31, "tokens": 1952632}
+[lean_gate] 3917 samples, parse-fail 0 (no-eos 0, 0.000 %), distinct 2901: ok 1707, rej 1194 (filter 1194, prefilter=on); lean on 1707 texts in 5 procs, 15.5s proc, exposed 4.3s, tail 4.1s, 32 workers
+plain wave 1: theorems left 32, solved 30, 43s
+[lean_gate] 3206 samples, parse-fail 0 (no-eos 0, 0.000 %), distinct 2468: ok 1476, rej 992 (filter 992, prefilter=on); lean on 1476 texts in 4 procs, 12.2s proc, exposed 3.9s, tail 3.7s, 32 workers
+plain wave 2: theorems left 13, solved 31, 78s
+[lean_gate] 49 samples, parse-fail 0 (no-eos 0, 0.000 %), distinct 49: ok 29, rej 20 (filter 20, prefilter=on); lean on 29 texts in 1 procs, 0.5s proc, exposed 0.6s, tail 0.5s, 32 workers
+plain wave 3: theorems left 5, solved 31, 82s
+[lean_gate] 3 samples, parse-fail 0 (no-eos 0, 0.000 %), distinct 3: ok 1, rej 2 (filter 2, prefilter=on); lean on 1 texts in 1 procs, 0.3s proc, exposed 0.3s, tail 0.3s, 32 workers
+plain wave 4: theorems left 2, solved 31, 85s
+[lean_gate] 1 samples, parse-fail 0 (no-eos 0, 0.000 %), distinct 1: ok 1, rej 0 (filter 0, prefilter=on); lean on 1 texts in 1 procs, 0.3s proc, exposed 0.3s, tail 0.3s, 32 workers
+plain wave 5: theorems left 0, solved 31, 86s
+{"mode": "plain", "ckpt": "ckpts/coe/old/stage1_best12_s0_b1200.pt", "in": "data/coe/power_pilot32.jsonl", "temperature": 1.0, "budget_from": "artifacts/coe/power/pilot_a4_pend_s0.json", "budget_mult": 1.0, "seed": 0, "batch": 1024, "gpu": "NVIDIA A40", "secs": 86.4420518875122, "n_theorems": 32, "solved": 31, "tokens": 1957316}
+PILOT_DONE

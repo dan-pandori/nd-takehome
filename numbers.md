@@ -1854,7 +1854,7 @@ number at r16 unless stated; plain k 256, T 0.8, 96 steps, 512 tokens / action, 
 Strict σ-covered held-out members: 106 (contraposition_conv 18, demorgan 4, excluded_middle 37, negated_conditional 15,
 peirce 12, peirce_sequent 19, generated 1).
 - **Strict held-out members solved (of 106):** full s0–s5 42 / 75 / 77 / 65 / 23 / 33; knockout s0–s5 0 / 2 / 1 / 0 / 0 / 2.
-  Redraw x1: 43 / 73 / 77 / 64 / 22 / 34 vs 0 / 2 / 1 / 0 / 0 / 0–2; guided: 44 / 75 / 80 / 64 / 24 / 33 vs 0 / 3 / 0 / 0 / 0 / 2.
+  Redraw x1: 43 / 73 / 77 / 64 / 22 / 34 vs 0 / 2 / 1 / 0 / 0 / 1; guided: 44 / 75 / 80 / 64 / 24 / 33 vs 0 / 3 / 0 / 0 / 0 / 2.
 - **Families acquired (≥ 50 % of strict held-out members):** full 6 / 6 seeds (contraposition_conv 6, negated_conditional 3,
   peirce 3, peirce_sequent 3, excluded_middle 1, demorgan 0); knockout 0 / 6. **Primary test 6 / 6 vs 0 / 6, one-sided
   Boschloo p = 2.4 × 10⁻⁴ (pre-registered verdict: needs exposure).** Mann–Whitney on members solved p = 0.0011. Per family
@@ -1865,11 +1865,16 @@ peirce 12, peirce_sequent 19, generated 1).
   accepted full s3–s5 49,600 / 20,384 / 17,429, knockout 0 / 34 / 4 / 1 / 2 / 16 (first in r9 / r12 / r15 / r15 / r2; s0 never).
 - **General ability (pend):** held-out greedy (p2/heldout 5,000) full median 0.960, knockout 0.883; non-σ subset (4,321)
   0.957 vs 0.950; σ subset (679) 0.966 vs 0.448. holdout250 pass@256 full s3–s5 199 / 193 / 200, knockout 186 / 195 / 188 / 176
-  / 183 / 205; textbook72 pass@256 (dev58 + train14) pend 33 / 34 / 36 vs 26 / 34 / 29 / 26 / 23 / 28; r16 55 / 54 / 51 vs 49 /
-  50 / 44 / 44 / 43 / 45.
+  / 183 / 205; textbook72 pass@256 (scoring only) combined pend 33 / 34 / 36 vs 26 / 34 / 29 / 26 / 23 / 28, r16 55 / 54 / 51 vs
+  49 / 50 / 44 / 44 / 43 / 45; dev58 pend 27 / 29 / 29 vs 21 / 28 / 25 / 21 / 18 / 23, r16 44 / 44 / 42 vs 39 / 40 / 38 / 36 / 35 /
+  37; train14 pend 6 / 5 / 7 vs 5 / 6 / 4 / 5 / 5 / 5, r16 11 / 10 / 9 vs 10 / 10 / 6 / 8 / 8 / 8 (full s3–s5 vs knockout s0–s5;
+  the old full seeds were not read on textbook72 in this run).
 - **Knockout base certificates** (105 family members pooled at each seed's K_train(16) 17,189–23,322): s0 0 / 1,491,420 and
-  s3 0 / 1,340,640 certified (UB95 < 0.05 / K); s1 6 / 1,120,378, s2 1 / 1,338,328, s5 2 / 1,419,656 not certified (rare,
-  ≈ 10⁻⁶ per attempt pooled; s1's six are free reductios on contraposition_conv members, ≈ 1 per 8,000 attempts on them).
+  s3 0 / 1,340,640 certified (UB95 < 0.05 / K); s1 6 / 1,120,378, s2 1 / 1,338,328, s4 3 / 1,360,222, s5 2 / 1,419,656 not
+  certified (rare, ≈ 10⁻⁶ per attempt pooled, almost all on contraposition_conv; s1's six are free reductios on
+  contraposition_conv members, ≈ 1 per 8,000 attempts on them).
 - **Compute-matched reach on the 322 (K_train(16), r16 vs pend):** Δ_cov full s3 / s4 / s5 +37 / +36 / +32, knockout s0 / s1 /
-  s2 / s3 / s5 +29 / +31 / +35 / +37 / +21.
-- **Phase 3a (one seeded EI round from r16):** seeded = control on knockout s0, s1, s3: 0 = 0, 3 = 3, 0 = 0 of 105.
+  s2 / s3 / s4 / s5 +29 / +31 / +35 / +37 / +26 / +21.
+- **Phase 3a (one extra EI round from r16, with vs without knockout s1's base's free-σ proof of `la_transfer_916`; plain k 256
+  on the 105 strict family members; `artifacts/coe/p3a/`):** seeded vs control knockout s0 0 vs 0, s1 3 vs 3, s2 2 vs 0
+  (contraposition_conv, 1 / 256 each; one-sided exact p 0.25), s3 0 vs 0, s5 0 vs 0 (s4 not run).

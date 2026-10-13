@@ -1,0 +1,12 @@
+seeded: found file artifacts/coe/ladder/la_ko_s0/found_16.jsonl; mix 89552 records (4 seed-proof copies)
+python3 state_train.py --data ckpts/coe/p3a/ko_s0_seeded_mix.jsonl --init ckpts/coe/ladder/la_ko_s0_r16.pt --steps 600 --lr 0.0003 --min_lr 3e-05 --warmup 50 --cap 0 --out ckpts/coe/p3a/ko_s0_seeded.pt --seed 17017 --log_every 200 --recs 128
+params 9560832 mode lean_staten
+train records 89552 (skipped 0); pairs 1269982; mean 14.182 per proof; max pair len 387; load 63s
+/workspace/nd-takehome/state_train.py:168: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  loss_sum += float(lb)
+step 200 loss 0.0443 lr 2.53e-04 pairs/batch 1816 254s
+step 400 loss 0.0440 lr 1.09e-04 pairs/batch 1812 502s
+step 600 loss 0.0428 lr 3.00e-05 pairs/batch 1818 757s
+uploaded ckpts/coe/p3a/ko_s0_seeded.pt -> hf://buckets/dan-pandori/nd-rl/create-or-elicit/ckpts/coe/p3a/ko_s0_seeded.pt (md5 3a5ef7de771b7ddbce159b9e5e815088, 2.2s)
+saved ckpts/coe/p3a/ko_s0_seeded.pt

@@ -63,8 +63,18 @@ Keys `keystep_*` (classical-only) and `sigma_covered_*` (the pre-registered, sup
 - `phase2_cm_ktrain_s{0,1}.txt`: the compute-matched r8 sets at K_train of the old full seeds (Phase 2 inputs).
 - `known_targets.jsonl.gz` (bucket): 21,456 known accepted proofs (old full ladders) of the strict members, for scoring.
 - `power_pilot32.jsonl`: development data for the power-sampler pilot (32 random non-schema `rl_targets`).
+- `known_targets_heldout.jsonl.gz` (bucket): the subset of `known_targets` on the held-out strict members (9,501 proofs).
+- `phase2b_posctl_s0.txt`: the 17 theorems full s0 pend solves rarely (p̂ 1.7 × 10⁻⁴ – 3.9 × 10⁻³), Phase 2b's positive control.
+- `sigma_heldout_family105.txt` (the 105 family members), `sigma_heldout_strict_no916.txt` (the same list, the Phase 3a read
+  set; `pod/coe/p3a.sh` writes `p3a_read105.jsonl` from it), `sigma_heldout178.txt` (the superseded pre-registered list;
+  the post-ladder certificate sample used it, and the strict 106 are a subset).
+- `phase3a_seed.jsonl`: the seed proof of Phase 3a — knockout s1's base's free reductio of `la_transfer_916` (Phase 2,
+  plain T 1.0).
 
-## Phase 3 candidate (built, run only if the budget allows)
+## Dose sets (`coe/coe_dose.py`; pre-registration Addendum 5)
 
-`train_k12dose1.jsonl.gz` (`coe/coe_dose.py`, report `train_k12dose1_report.json`): K12⁻ with 1,550 refill records replaced
-by 1,550 of the removed σ records (1.0 %, K12's σ length mix), per-length counts unchanged.
+- `train_k12dose1.jsonl.gz` (report `train_k12dose1_report.json`; **run**: arm `dose1`, seeds s0–s2): K12⁻ with 1,550
+  refill records replaced by 1,550 of the removed σ records (1.0 % of 155,000), drawn with K12's σ length mix (lengths
+  5–12: 226 / 219 / 111 / 95 / 174 / 168 / 275 / 282); per-length counts unchanged; σ⁺ records 1,550.
+- `train_k12dose01.jsonl.gz` (report `train_k12dose01_report.json`; **built, not run** — it did not fit the budget,
+  `next_steps.md` item 1): the same with 155 σ records (0.1 %).

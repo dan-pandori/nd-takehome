@@ -1,0 +1,39 @@
+{
+ "ckpt": "ckpts/coe/stage1_ko_s3.pt",
+ "inp": "data/p2/heldout.jsonl",
+ "out": "artifacts/coe/eval/heldout_ko_s3.jsonl",
+ "summary": "artifacts/coe/eval/heldout_ko_s3.json",
+ "k": 1,
+ "temperature": 0.0,
+ "seed": 0,
+ "batch": 1024,
+ "max_action": 256,
+ "max_steps": 48,
+ "lenfield": "n_lines",
+ "limit": 0,
+ "_meta": {
+  "script": "state_eval.py",
+  "argv": [
+   "state_eval.py",
+   "--ckpt",
+   "ckpts/coe/stage1_ko_s3.pt",
+   "--in",
+   "data/p2/heldout.jsonl",
+   "--k",
+   "1",
+   "--temperature",
+   "0",
+   "--batch",
+   "1024",
+   "--out",
+   "artifacts/coe/eval/heldout_ko_s3.jsonl",
+   "--summary",
+   "artifacts/coe/eval/heldout_ko_s3.json"
+  ],
+  "run_id": "create-or-elicit",
+  "git_sha": "13e41bbd7e24df33f7e5253946c6733c2e8fd288",
+  "git_dirty": null,
+  "host": "7b72b5ac41ec",
+  "utc": "2026-10-12T06:24:38Z"
+ }
+}

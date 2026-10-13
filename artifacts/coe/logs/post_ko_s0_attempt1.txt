@@ -1,0 +1,14 @@
+pod/coe/post.sh: line 12: artifacts/coe/timing/A40_pend_ko_s0_b1024.log: No such file or directory
+UPLOAD FAILED artifacts/coe/timing
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/coe/coe_kpod.py", line 57, in <module>
+    main()
+  File "/workspace/nd-takehome/coe/coe_kpod.py", line 34, in main
+    t = json.load(open(f'artifacts/coe/timing/A40_pend_{N}_b1024.json'))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'artifacts/coe/timing/A40_pend_ko_s0_b1024.json'
+pod/coe/post.sh: line 17: artifacts/coe/large/stdA_names_ko_s0.txt: No such file or directory
+=== post ko_s0: K_train(16) , n per sigma member , standard-A n  on  theorems 2026-10-13T00:13:42Z
+UPLOAD FAILED artifacts/coe/budget
+pod/coe/post.sh: line 19: [: : integer expression expected
+=== post done ko_s0 2026-10-13T00:15:25Z
