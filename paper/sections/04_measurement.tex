@@ -1,114 +1,102 @@
-\section{Measuring ``created'': budgets, intervals, certificates and controls}
-\label{sec:measure}
+\section{How much did RL create in the full-exposure models?}
+\label{sec:case}
 
-This section defines what we will accept as evidence that RL created a capability. It then applies the definitions to
-the three earlier full-exposure seeds (s0--s2, pend vs r8). These results motivate the knockout. They are also a
-contribution in their own right, because each step removes most of what the previous one would have called
-``created''.
+The knockout asks whether EI can acquire a composition the base was not shown. Most claims in the literature are
+instead about a single RL run and its own base. Before the knockout, the project applied the protocol of
+\S\ref{sec:setup} to the three earlier full-exposure seeds (s0--s2, r0 vs r8, on the 322 evaluation theorems). This
+section summarises what it found. Every number is from reviewed reports of those runs (Appendix~\ref{app:provenance}).
 
-\paragraph{Capability at a cost.} For a model $M$ and theorem $t$, let $p_M(t)$ be the probability that one plain
-attempt is Lean-accepted. Its inverse is the expected number of attempts to the first proof, the \emph{$k$-to-solve}.
-Since $p>0$ for every proof a softmax policy can write, ``the base cannot prove $t$'' is meaningless without a budget.
-For our models at random initialisation, the known proofs alone bound the attempts needed from above at
-$e^{289}$--$e^{3{,}228}$ on the hard theorems. The common equal-$k$ criterion (base 0/256, RL $\geq 1/256$) labels
-54/51/60 of the 322 evaluation theorems as RL creations at r8, for s0/s1/s2. It is a statement about $n$: 512 base
-attempts already remove 4/9/11 of them.
-
-\paragraph{Budgets matched to RL's compute.} We give the base $K$ attempts per evaluation theorem. $K$ is set so that
-the base's sampling costs what RL's ladder cost. A theorem is \emph{within reach at $K$} if the base's empirical rate
-over all its attempts is $\hat p \geq 1/K$, with at least $K$ attempts made. The \emph{compute-matched set} holds the
-theorems that RL solves (r8, x0) and that are not within the base's reach. The difficulty is that ``what RL cost'' has
-no single value (Table~\ref{tab:budgets}). One can charge only the ladder's sampling attempts on training theorems
-($\Katt$), or its sampling and fine-tuning GPU time ($\Ktrain$), or all its GPU time including evaluation ($\Kuni$), or
-the value capability-defs published ($\Kpub$; it divides RTX A6000 seconds by one A40 chunk's per-attempt cost). One
-can also spend the budget adaptively: 512 attempts on every theorem, then the rest on the theorems the base failed
-($\Kadapt$). The per-attempt cost of the base on these theorems is 6.36--8.04\,ms on an A40. We convert the ladder's
-A6000 seconds at a measured A6000/A40 ratio of 0.932.
+\paragraph{The budget.} RL's ladder can be charged to the base in several defensible ways, and each gives a different $K$
+(Table~\ref{tab:budgets}). One can charge only the ladder's sampling attempts on training theorems ($\Katt$), or its
+sampling and fine-tuning GPU time ($\Ktrain$), or all of its GPU time ($\Kuni$). One can use the value of an earlier
+report, which divided the A6000 ladder's seconds by a per-attempt cost measured on hard theorems on an A40 ($\Kpub$). Or
+one can spend the budget adaptively: 512 attempts on every theorem, then the rest on the theorems the base failed
+($\Kadapt$). The base costs 6.36--8.04\,ms per attempt on these theorems on an A40, and we convert A6000 seconds at a
+measured A6000/A40 ratio of 0.932. The compute-matched set is a curve in $K$ (Fig.~\ref{fig:budget}). Over a 12--16-fold
+range of $K$ it falls from 34/33/33 to 21/20/14 theorems for s0/s1/s2. These 21/20/14 are compute-matched under all five
+allocations, and 18/17/8 of them had no base success in at least 66,304 attempts. At the level of sets, RL stays ahead
+of its base under every allocation and seed: \dcov{} is $+21/+16/+12$ at $\Kpub$. Unlike the large-$k$ crossovers
+reported for LLMs \citep{yue2025doesrl}, the base here does not catch up at $10^4$--$5\times10^4$ attempts per theorem.
 
 \begin{table}[t]
 \centering\small
-\caption{Five defensible budgets for the base, in attempts per evaluation theorem, matched to the r8 ladder of seeds
-s0/s1/s2, and the compute-matched sets they imply. The sets are nested, so 21/20/14 theorems are compute-matched under
-all five. Of these, 18/17/8 have no base success in at least 66,304 attempts: not reached, but not certified.}
+\caption{What survives each filter, full-exposure seeds s0/s1/s2 (r8 against its own base). The sets shrink by a
+factor of 3--4 from equal $k$ to the strictest budget. The last two rows come from 9 (theorem, seed) pairs that were
+pre-selected (the most reliable r8 proofs in each seed's strictest set) and sampled 1.1--1.5 million times each.}
 \label{tab:budgets}
-\begin{tabular}{llrr}
+\setlength{\tabcolsep}{4pt}\footnotesize
+\begin{tabular}{lll}
 \toprule
-budget & what it charges & $K$ (s0/s1/s2) & compute-matched set \\
+filter & budget $K$ (s0/s1/s2) & theorems \\
 \midrule
-equal $k$ & 256 attempts & 256 & 54/51/60 \\
-$\Katt$ & ladder sampling attempts on training theorems & 3,574 & 34/33/33 \\
-$\Ktrain$ & sampling + fine-tuning GPU time & 7,416/7,126/9,921 & 33/27/24 \\
-$\Kuni$ & all ladder GPU time, same GPU class & 10,314/10,141/14,150 & 28/26/24 \\
-$\Kpub$ & as published (mixed GPU classes) & 19,281/21,107/23,310 & 22/21/14 \\
-$\Kadapt$ & 512 each, the rest on the base's failures & 44,570/43,427/56,509 & 21/20/14 \\
+RL proves, base 0/256 (equal $k$) & 256 & 54/51/60 \\
+$\mathcal{C}(\Katt)$: ladder sampling attempts on training theorems & 3,574 & 34/33/33 \\
+$\mathcal{C}(\Ktrain)$: sampling + fine-tuning GPU time & 7,416/7,126/9,921 & 33/27/24 \\
+$\mathcal{C}(\Kuni)$: all ladder GPU time, same GPU class & 10,314/10,141/14,150 & 28/26/24 \\
+$\mathcal{C}(\Kpub)$: earlier report's value (mixed GPU classes) & 19,281/21,107/23,310 & 22/21/14 \\
+$\mathcal{C}(\Kadapt)$: 512 each, the rest on the base's failures & 44,570/43,427/56,509 & 21/20/14 \\
+\quad of which no base success in $\geq$ 66,304 attempts & & 18/17/8 \\
+$\mathcal{C}(\Kpub)$ net of the replay-only control & & 20/14/8 \\
+\quad never proved by any seed's base & & 4/5/5 \\
+9 pre-selected pairs: certified out of reach at $\Kpub$ & & 7 of 9 (0 of 9 at $\Kadapt$) \\
+\quad and no success from any RL-free control or other seed's base & & 4 pairs on 3 theorems \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The compute-matched set is therefore a curve in $K$ (Fig.~\ref{fig:budget}), not a number. Across allocations that
-differ 12--16-fold, it moves from 34/33/33 to 21/20/14. Two further filters shrink it. Removing the theorems that the
-replay-only control solves (below) leaves 20/14/8 at $\Kpub$. Only 4/5/5 were never solved by \emph{any} seed's base. At the level of sets, RL stays ahead under every allocation and seed. The difference between
-what RL solves and what the base reaches within $K$ is positive everywhere, $+21/+16/+12$ at $\Kpub$.
-
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.66\linewidth]{figures/fig4_budget.pdf}
-\caption{The compute-matched ``created'' set (RL r8 solves, the base cannot reach within $K$) against the base budget
-$K$, for full-exposure seeds s0--s2. Markers are the five budget allocations of Table~\ref{tab:budgets}. Lines end
-where the base data stop deciding membership.}
+\caption{The compute-matched set (RL r8 proves, its base cannot reach within $K$) against the base budget $K$, for the
+three earlier full-exposure seeds; markers are the five allocations of Table~\ref{tab:budgets}. The equal-$k$ point
+($K=256$; 54/51/60) lies off the left edge. Lines stop at 66,304 attempts, the most any theorem received; beyond it,
+membership cannot be decided.}
 \label{fig:budget}
 \end{figure}
 
-\paragraph{$k$-to-solve intervals and the known-proof estimator.} Sampling gives $\hat p = c/n$ and a one-sided 95\%
-Clopper--Pearson upper bound \ub{}. For rare events we add a lower estimate from likelihoods. The \emph{known-proof
-estimate} $E(t)$ sums, over every Lean-accepted proof of $t$ that any model found, the base's teacher-forced probability
-of that proof at $T=0.8$. The sum also runs over the environment's 33 naming offsets. The interval
-$[1/\ub,\ 1/E]$ brackets the $k$-to-solve. $E$ is not a strict lower bound, because the sampler conditions on its own
-names and unseen proofs are missing, so we calibrated it against large-$k$ sampling (Fig.~\ref{fig:estimator}). On
-calibration theorems with 3--100 successes in 512, it recovers a median 0.98/0.94/0.93 of the measured $p$. Across 196
-(seed, theorem) pairs with large-$k$ sampling, the median of $E/\hat p$ is 0.937 for $\hat p \geq 10^{-3}$ (106 pairs),
-0.883 for $10^{-4}$--$10^{-3}$ (52), and 0.454 for $10^{-5}$--$10^{-4}$ (36). The estimate is usable in aggregate down
-to about $10^{-4}$. Below that it runs about two-fold low, so a ``within reach if $E \geq 2/K$'' rule loses power
-exactly where RL's budgets sit ($K \approx 10^4$). Sampling verdicts stay primary.
-
-\paragraph{Certificates.} A theorem is \emph{certified out of reach at $K$} if $\ub < 0.05/K$. With zero successes
-this needs about $60K$ attempts. We sampled the base 1.1--1.5 million times on 9 (theorem, seed) pairs from the
-compute-matched sets: 7 of 9 certify at $\Kpub$. A pair \emph{survives every RL-free control} if it also has no success
-from the replay-only control, from the compute-matched pretraining continuation, or from any other seed's base. Four
-pairs on three theorems survive at $\Kpub$. Only one of the three theorems, a Peirce instance, is classical-only. Their
-known proofs bound the base's $k$-to-solve from above at $10^{10}$--$10^{13}$. That is an extrapolation far outside
-the estimator's calibrated range; sampling shows only $>4\times 10^5$.
-
-\paragraph{RL-free controls.} Two controls receive RL's training without RL's proofs. The \emph{replay-only} control
-fine-tunes pend for the same eight rounds on pretraining replay alone. It solves 239/244/249 of the 322, against pend's
-232/236/234 and r8's 286/286/293. The \emph{continuation} control trains pend further on \KT{} for about 75--78\% of the
-ladder's GPU time (same-class seconds). It solves 220/215/219: it gains 12--19 theorems and loses 30--42. At matched
-gains in IRT ability, EI flags no more items as differentially improved than replay-only training. The weight update
-of eight RL rounds is about as large as replay-only's (relative norm 0.28 vs 0.30, one seed). Twelve operational
-definitions of ``created'' agree poorly: the mean pairwise Jaccard similarity of their sets is 0.29 at r8 and 0.34
-at r16. Different seeds' RL ``creates'' different theorems.
-
-\paragraph{Exact likelihoods along RL.} For theorems that RL newly solves, the worst step of r8's eventual proof rises
-under teacher forcing (at $T=1$) from about $-6.2$ nats at pend to about $-1.3$ at r8, mostly by round 4. RL also lifts the
-pretraining reference proofs of these theorems, about three times less. For theorems that neither pend nor r8 solves,
-the reference proofs do not improve under RL. The likelihood view agrees with the budget view. RL concentrates
-probability on proofs whose hardest step the base already rated within a few nats.
-
-\paragraph{From measurement to intervention.} Every criterion above compares a model with its own base. The base
-always \emph{could} have written the proof with some small probability, so each criterion only bounds that probability
-from above at some budget. The knockout below changes the base itself.
-
-\paragraph{The knockout decision rule (pre-registered).} A family is \emph{acquired} (at the bar) by a model if the
-model solves at least 50\% of the family's strict held-out members in a plain read of 256 attempts. Per family, the
-verdicts were fixed before the ladders ran:
+\paragraph{Brackets, certificates and controls.} Sampling resolves success rates only down to about $1/n$. Below that we
+estimate them from likelihoods. The \emph{known-proof estimate} sums the base's probability, teacher-forced at $T=0.8$
+over the 33 line-numbering offsets, of every Lean-accepted proof of the theorem that any model found. It recovers a
+median 0.98/0.94/0.93 of the measured rate on theorems with 3--100 successes in 512 attempts. It runs about two-fold low
+at $10^{-5}$--$10^{-4}$ (median ratio 0.45) and lower still below (0.36 on two theorems; Appendix~\ref{app:budgets}).
+Because the ratios are binned by measured rate, they condition on at least one success. Of the 9 pre-selected pairs, 7
+certify at $\Kpub$. Four of them, on three theorems, also had no success from the RL-free controls (512 attempts each)
+or from any other seed's base; only one of the three, a Peirce instance, is classical-only. The two controls receive
+RL's training without RL's proofs:
 \begin{itemize}
-\item \emph{created}: at least 2 of 6 knockout seeds acquire the family at r16, and the knockout base is certified out
-of reach on it;
-\item \emph{needs exposure}: at most one knockout seed acquires it, and the full arm acquires it on more seeds
-(one-sided Boschloo test, $p \leq 0.05$);
-\item \emph{neither}: no seed acquires it;
-\item \emph{undetermined}: any other outcome.
+\item \emph{replay-only}: eight fine-tuning rounds on pretraining replay alone. It proves 239/244/249 of the 322,
+against the base's 232/236/234 and r8's 286/286/293.
+\item \emph{continued pretraining}: about 75--78\% of the ladder's GPU time. It proves 220/215/219, gaining 12--19
+theorems and losing 30--42.
 \end{itemize}
-The primary test compares, per seed, the indicator ``at least one family at the bar at r16'' between the full and
-knockout arms. With six seeds per arm, the test rejects at full/knockout acquisitions of $(3,0)$, $(5,1)$ or $(6,2)$.
-An outcome of 0/6 knockout seeds bounds the per-seed creation rate below 0.39 (one-sided 95\%).
+The cheaper control is informative: replay alone recovers 13--25\% of RL's gain on the 322.
+
+\paragraph{Likelihoods along RL.} On theorems RL newly proves, the hardest step of r8's most likely proof rises from
+about $-6.2$ nats at r0 to about $-1.3$ at r8, mostly by round 4 (teacher-forced at $T=1$). Part of this is by
+construction, since the proof is selected at r8. RL also lifts the pretraining reference proofs of the same theorems,
+about three times less. On theorems neither r0 nor r8 proves, the reference proofs do not improve.
+
+\paragraph{Test-time compute before and after RL.} If RL mostly converts reachable-but-unlikely proofs into likely
+ones, extra compute at test time should help the base more than the RL model (Fig.~\ref{fig:ttc}). A guided evaluation
+adds 18--22 holdout250 theorems to the base and $-1$ to $+4$ to the RL models. On holdout250 the RL models are within
+3--14 theorems of the ceiling, so textbook72 is the fairer pool: there, guided redraws add 8--12 to the base and 3--6
+at r8. Guided attempts cost about 2.2 times the GPU time of plain ones, so this is not compute-matched. At matched
+sampled tokens, guided redraws still beat plain resampling on long textbook problems for six r8 models, by 5.2--10.3
+points. A PUCT tree search over proof states, with a value head trained on the frozen policy's rollouts, was compared
+with sampling at equal wall-clock. At r8 it is within $\pm3$ theorems of sampling on every pool, and it failed its
+pre-registered gate on the theorems neither r0 nor r8 proves. At r0 it adds 10--19 theorems on 100 long theorems
+(13--16 lines), about 44\% of what eight EI rounds add there by sampling. That fraction is 14\% on holdout250 and 17\% on
+textbook72. Neither method reaches most of the compute-matched creations: the guided base proves 3/4/1 of the 22/21/14
+at $\Kpub$. DeepSeek-Prover-V1.5 reported its search and RL gains as orthogonal \citep{xin2024deepseekprover}. Here they overlap:
+search recovers part of RL's gain at the base and adds little after RL.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/fig7_ttc.pdf}
+\caption{\textbf{Test-time compute helps the base more than the RL model.} (a) Guided minus plain evaluations ($k=256$
+each) for the base (r0) and after 8 and 16 rounds; bars are means, dots are seeds. Not compute-matched: guided
+attempts cost about 2.2 times the GPU time. (b) PUCT search with a learned value head minus sampling at equal
+wall-clock. ``Group C'' holds the theorems neither r0 nor r8 proves in an earlier evaluation (28--36 per seed); ``long
+rrQ100'' holds 100 theorems of 13--16 lines; ``long2'' holds 21 longer theorems.}
+\label{fig:ttc}
+\end{figure}

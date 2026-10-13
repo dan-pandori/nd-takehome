@@ -467,7 +467,47 @@ def blog_figs():
     fig.tight_layout(); save(fig, 'blog_fig4_ttc')
 
 
-FIGS = {'endpoint': fig_endpoint, 'dynamics': fig_dynamics, 'logp': fig_logp, 'budget': fig_budget,
+
+# ---------------------------------------------------------------- F0: overview (design schematic + endpoint)
+def fig_overview():
+    from matplotlib.patches import FancyBboxPatch
+    R = acq()
+    fig = plt.figure(figsize=(7.2, 3.1))
+    ax0 = fig.add_axes([0.0, 0.0, 0.46, 1.0]); ax0.axis('off'); ax0.set_xlim(0, 10); ax0.set_ylim(0, 10)
+    rows = [('full', 'Full: K12, 155,000 proofs\n10.9 % use σ or a variant', 8.0),
+            ('dose1', '1 % dose: knockout set with\n1,550 σ records restored', 5.0),
+            ('ko', 'Knockout: σ records removed\n(16,961), refilled to 155,000', 2.0)]
+    for arm, txt, y in rows:
+        ax0.add_patch(FancyBboxPatch((0.1, y - 1.0), 4.3, 2.0, boxstyle='round,pad=0.05,rounding_size=0.25',
+                                     fc=SURF, ec=ARM_COLOR[arm], lw=1.6))
+        ax0.text(2.25, y, txt, ha='center', va='center', fontsize=7.2, color=INK)
+        ax0.annotate('', xy=(5.3, 5.0), xytext=(4.45, y), arrowprops=dict(arrowstyle='-|>', color=ARM_COLOR[arm], lw=1.2))
+    ax0.add_patch(FancyBboxPatch((5.35, 3.4), 4.5, 3.2, boxstyle='round,pad=0.05,rounding_size=0.25', fc='#f4f6f9',
+                                 ec=INK3, lw=1.0))
+    ax0.text(7.6, 5.0, 'same 9.56M transformer,\npretrained from scratch,\nthen 16 rounds of\nexpert iteration\n(Lean judges every proof)',
+             ha='center', va='center', fontsize=7.2, color=INK)
+    ax0.text(5.2, 0.6, 'σ: assume ¬G, refute it, conclude ¬¬G, drop ¬¬\n(DN and ¬-introduction each stay in every set)',
+             ha='center', va='center', fontsize=6.6, color=INK2, style='italic')
+    ax0.text(0.1, 9.75, 'a  Design', fontsize=9, fontweight='bold', va='top')
+    a = fig.add_axes([0.55, 0.16, 0.43, 0.74])
+    xs = {'pend': 0, 'r8': 8, 'r16': 16}
+    for arm in ('full', 'dose1', 'ko'):
+        for s_ in SEEDS[arm]:
+            pts = [(xs[ck], R[f'{ck}_{arm}_s{s_}_x0']['strict']['solved']) for ck in ('pend', 'r8', 'r16')]
+            jitter = (s_ - 2.5) * 0.12
+            a.plot([x + jitter for x, _ in pts], [y for _, y in pts], color=ARM_COLOR[arm], lw=1.3, marker=ARM_MARK[arm],
+                   ms=4, mec=SURF, mew=0.7)
+    a.set_xticks([0, 8, 16]); a.set_xticklabels(['end of\npretraining', 'round 8', 'round 16'])
+    a.set_xlim(-1.5, 25.5); a.set_ylim(-3, 85)
+    a.set_ylabel('held-out classical theorems\nproved (of 106; 256 attempts)')
+    a.text(17.2, 60, 'full\n(6 seeds)', color=FULL, fontsize=7.5, fontweight='bold', va='center')
+    a.text(17.2, 38, '1 % dose\n(3 seeds)', color=DOSE, fontsize=7.5, fontweight='bold', va='center')
+    a.text(17.2, 8, 'knockout\n(6 seeds)', color=KO, fontsize=7.5, fontweight='bold', va='center')
+    a.set_title('b  Result', fontsize=9)
+    save(fig, 'fig0_overview')
+
+
+FIGS = {'overview': fig_overview, 'endpoint': fig_endpoint, 'dynamics': fig_dynamics, 'logp': fig_logp, 'budget': fig_budget,
         'estimator': fig_estimator, 'prior': fig_prior, 'ttc': fig_ttc, 'blog': blog_figs}
 
 if __name__ == '__main__':
