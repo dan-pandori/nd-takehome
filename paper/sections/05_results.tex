@@ -187,8 +187,11 @@ $\rho = 0.88$, Fig.~\ref{fig:prior}). That is mostly the difference between arms
 Within a ladder, the base's log-probability of a member's best known proof predicts whether the member is solved at r16.
 The AUC is 0.92--0.95 on the four full seeds with scored bases, against a pre-registered bar of 0.7. It is
 0.85--0.86 on the three dose seeds. Comparing only members of the same family, the AUC is 0.47--0.98 (full) and
-0.28--0.60 (dose). The base's prior therefore predicts \emph{which families} RL acquires, and predicts less well which
-members within a family.
+0.28--0.60 (dose). It also predicts \emph{when} a member is first solved in the ladder's per-round samples of held-out
+theorems. Spearman $\rho$ between the base log-probability and the first-solve round is $-0.69$ to $-0.87$ on the full
+seeds and $-0.61$ to $-0.72$ on the dose seeds (unsolved members counted as round 17). Within families it averages
+$-0.33$ to $-0.48$ on the full seeds, against $-0.22$ to $+0.14$ on the dose seeds. The base's prior thus predicts
+which families RL acquires, and on the full seeds it also predicts the order within a family.
 
 \subsection{The one knockout ladder that moved}
 \label{sec:ko-s1}

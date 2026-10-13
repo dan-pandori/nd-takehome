@@ -92,10 +92,12 @@ def within_family_auc(rows):
 
 
 out = {}
+values = {}
 for arm, s in LADDERS:
     lp = best_pend_logp(arm, s)
     sol = r16_solved(arm, s)
     rows = [(m, lp[m], sol.get(m, False)) for m in strict if m in lp]
+    values[f'{arm}_s{s}'] = {m: {'logp': x, 'solved_r16': y, 'family': fam_of.get(m, '?')} for m, x, y in rows}
     pos = [x for _, x, y in rows if y]; neg = [x for _, x, y in rows if not y]
     a = auc(pos, neg); wf, npairs = within_family_auc(rows)
     out[f'{arm}_s{s}'] = {'members_with_known': len(rows), 'solved_r16': len(pos), 'auc': a, 'within_family_auc': wf,
@@ -103,3 +105,4 @@ for arm, s in LADDERS:
     print(f'{arm}_s{s}: members {len(rows)}, solved {len(pos)} (all strict: {out[f"{arm}_s{s}"]["solved_in_strict106"]}), '
           f'AUC {a:.3f}, within-family AUC {wf:.3f} over {npairs} pairs')
 json.dump(out, open(os.path.join(ROOT, 'paper/data/a3_member_prior.json'), 'w'), indent=1)
+json.dump(values, open(os.path.join(ROOT, 'paper/data/a3_member_values.json'), 'w'), indent=0)

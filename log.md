@@ -1004,3 +1004,9 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   over two A40s: pod 1 relaunched with `pod/coep/lanes1b.sh` (C1 only; finished reads are skipped by `read.sh`; the two
   reads in flight, ko s1 std and dose s2 dbl, restarted from scratch), pod `coep-2` (`bringup2.sh`, `lanes2.sh`) runs C2
   and C3. Same total GPU time, about half the wall-clock.
+- 20:01  Prereg Addendum 2 (45dfbdea), then **A4** (`paper/scripts/a4_first_solve.py`): Spearman ρ between a member's
+  best-known-proof pend log p and its first-solve round in the tracked k 32 samples (unsolved = 17), 101 members. Full
+  s0/s3/s4/s5 **−0.819 / −0.874 / −0.686 / −0.732** (expected ≤ −0.5 on ≥ 3 of 4: hit, 4 / 4); dose −0.723 / −0.639 /
+  −0.609. Within-family mean ρ: full −0.403 / −0.445 / −0.475 / −0.332 (expected < 0 on ≥ 3 of 4: hit, 4 / 4); dose
+  −0.104 / −0.219 / +0.138. On the full seeds the base prior also orders acquisition within a family; A3's within-family
+  AUC at the r16 endpoint was mixed.

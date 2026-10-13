@@ -111,6 +111,7 @@ Run `create-or-elicit-paper` (2026-10-13). One row per claim; a row may carry se
 | P75 | §5.4 | one naming offset: ≤ ln 33 ≈ 3.5 nats | L87; S-coe Obs 4 | reviewed |
 | P76 | §5.4, Fig 5 | A2: Spearman ρ 0.877 over 13 ladders; 0.393 (p 0.38) without knockout | this run: `figures.py prior` | this run (exploratory, post hoc) |
 | P77 | §5.4 | A3: AUC full s0/s3/s4/s5 0.954/0.953/0.940/0.922; dose 0.858/0.861/0.846; within-family full 0.626/0.978/0.926/0.467, dose 0.280/0.600/0.328 | this run: `a3_member_prior.py` → `paper/data/a3_member_prior.json` | this run (pre-registered + Addendum 1) |
+| P77b | §5.4 | A4: Spearman ρ (pend log p vs first-solve round, unsolved = 17) full s0/s3/s4/s5 −0.819/−0.874/−0.686/−0.732, dose −0.723/−0.639/−0.609; within-family mean full −0.403/−0.445/−0.475/−0.332, dose −0.104/−0.219/+0.138 | this run: `a4_first_solve.py` → `paper/data/a4_first_solve.json` (Addendum 2) | this run (exploratory) |
 | P78 | §5.5, blog | knockout s1: free+ 11 (r16) → 123 (r24); cc share 0.33 from r21; strict targets stall at 9; same 5/106 at r20, r24; 1019: 0 → 32 → 214 per 256; r20 proofs σ 32 / σ⁺-only 24 / lemma route 7 | L96; S-coe Obs 5; RV 5; rewording 6 | reviewed |
 | P79 | §5.6 | Phase 3a: +0/+0/+2/+0/+0 (s4 not run); s2 one-sided p 0.25 | L95; S-coe Obs 6 | reviewed |
 | P80 | §5.6 | standard A Δ_cov full +37/+36/+32; knockout +29/+31/+35/+37/+26/+21 | L94; R§7; S-coe Obs 8 | reviewed |
