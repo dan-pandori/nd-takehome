@@ -168,3 +168,17 @@ Two cheap checks of claims the paper inherits, on pod `coep-2` (A40) after or be
   ≈ 1.3 × 10⁻⁴ for `by-contradiction`. Any acceptance is a false reject: it is reported, and every count that could
   depend on it is flagged.
 - Cost ≈ 1 A40-hour in addition. The stop rule is unchanged ($8).
+
+## Addendum 5 (2026-10-13 21:28 UTC, before computing; post hoc sensitivity analyses prompted by critique round 2)
+
+All CPU-only, from reviewed files. They are reported as sensitivity analyses, not tests.
+- **A3b:** A3's AUC recomputed on "proved at r16 but not at r0" among the members not proved at r0 (r0 status from the
+  r0 x0 read rows in the bucket). Expected: AUC > 0.5 on ≥ 3 of 4 full seeds, and lower than A3's.
+- **A5b:** A5 under the 106 pool, family weighting to the training mix (converse contraposition 27/123 vs 18/105) and
+  a Jeffreys posterior-predictive (Gamma(c + ½, n)) on each base's rate. Expected: P(≥ 3 seeds) between 0.006 and 0.03.
+- **Descriptives:**
+  - the knockout and full arms' r0 x1 and guided counts and their RL-phase gains in guided evaluations
+    (`review_coe/out_acq.json`);
+  - the hardware-matched gains test (full s3–s5 against knockout);
+  - per-family pooled base rates (`review_coe/out_cert.json`);
+  - per-round σ records in the knockout mixes (`review_coe/out_mixcheck.json`).
