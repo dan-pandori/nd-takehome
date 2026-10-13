@@ -114,3 +114,12 @@ primary. Two exploratory extensions, stated now:
   likeliest family under every base and the most solved, so the overall AUC could be a family effect. Expected: lower
   than the overall AUC, and > 0.5 on ≥ 3 of the 4 full seeds.
 - **The same AUCs for the dose seeds s0–s2.** Expected: overall AUC ≥ 0.7 on ≥ 2 of 3.
+
+## Addendum 2 (2026-10-13 20:08 UTC, before computing A4)
+
+**A4, time to first solve (exploratory, CPU only).** For full s0, s3, s4, s5 and dose s0–s2, the 101 strict held-out
+members with a known σ proof. r(m) = the first round whose tracked k 32 sample solved m
+(`artifacts/coe/rounds/*.json`, `heldout_first_solve_round`); members not solved by round 16 get r = 17. Statistic:
+Spearman ρ between a member's best-known-proof pend log p (A3's values) and r(m).
+- Expected: ρ ≤ −0.5 on ≥ 3 of the 4 full seeds; higher prior means earlier first solve.
+- Within-family (exploratory): ρ computed inside each family with ≥ 5 members and averaged, < 0 on ≥ 3 of the 4.
