@@ -400,7 +400,7 @@ def blog_figs():
     a.text(25.5, 62, 'full training data\n(6 runs)', color=FULL, fontsize=8.5, va='center', fontweight='bold')
     a.text(25.5, 40, '1% dose\n(3 runs)', color=DOSE, fontsize=8.5, va='center', fontweight='bold')
     a.text(25.5, 12, 'knockout\n(6 runs)', color=KO, fontsize=8.5, va='center', fontweight='bold')
-    a.set_title('Without σ in pretraining, RL did not learn the classical theorems')
+    a.set_title('Without σ in pretraining, no run learned a classical family in 16 rounds')
     fig.tight_layout(); save(fig, 'blog_fig1_endpoint')
 
     # B2: log p along the ladders
@@ -418,7 +418,7 @@ def blog_figs():
     ax.text(16.6, -16, 'dose', color=DOSE, fontsize=8.5, fontweight='bold', va='center')
     ax.text(16.6, -33, 'knockout', color=KO, fontsize=8.5, fontweight='bold', va='center')
     ax.set_xlim(-1, 21)
-    ax.set_title('RL moves the full and dose models toward σ proofs, not the knockouts')
+    ax.set_title('How likely each model is to write known σ proofs')
     fig.tight_layout(); save(fig, 'blog_fig2_logp')
 
     # B3: budget curve
