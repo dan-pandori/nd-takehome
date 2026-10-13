@@ -139,3 +139,32 @@ Observed: the first round with `sigma_targets_cum` > 0 in `artifacts/coe/rounds/
 the null predicts fewer seeds with an early strict success than observed. P(≥ observed) < 0.05 would mean the knockout
 ladders raised their own σ rate during RL (on easier theorems), and that the base-rate null alone does not explain the
 dynamics. A ratio near 1 would mean that waiting for a rare sample explains them.
+
+## Addendum 4 (2026-10-13 20:45 UTC, before launching C4 / C5; prompted by the round-1 soundness critique)
+
+Two cheap checks of claims the paper inherits, on pod `coep-2` (A40) after or beside its C2 / C3 reads.
+
+- **C4, knockout s1's "within reach" members at n ≥ K.** The reviewed reading ("3 of the 4 converse-contraposition
+  members knockout s1's ladder solves were within its base's reach") rests on 1–3 successes per member. Each came from
+  7,168–10,240 attempts with early stopping, all below K_train(16) = 17,189. The sampler is `coe/coe_bigk.py`: T 0.8,
+  standard caps, batch 1,024, chunks of 1,024, `--stop_successes 0` (no early stopping), seed0 9,500, so the draws are
+  new. Inputs:
+  - knockout s1's base (`stage1_ko_s1.pt`), 18,432 attempts on each of its 18 strict converse-contraposition held-out
+    members plus `la_transfer_916`;
+  - knockout s3's base (`stage1_ko_s3.pt`), 18,432 attempts on `la_transfer_916`.
+
+  At n = 18,432, "within reach at K = 17,189" (p̂ ≥ 1/K) needs c ≥ 2 successes. Expected:
+  - `la_transfer_1460` within reach (c ≥ 2);
+  - ≥ 2 of {`1246`, `1460`, `2256`} within reach;
+  - `la_transfer_1019`, the member with the largest RL gain, has c ≤ 1 (not within reach);
+  - `la_transfer_916` within reach on both bases (c ≥ 2).
+
+  If ≤ 1 of the three is within reach, the paper drops "mostly members its base could already reach".
+- **C5, the pre-filter's false-reject rate, in full.** Every pre-filter-rejected text in knockout s1's ladder gate dump
+  (bucket `create-or-elicit/artifacts/coe/dump/la_ko_s1.jsonl.gz`, rounds 1–16: 222,135 texts over 13 reasons, 22,522
+  of them `by-contradiction`) is checked by Lean 4.34.1 with the create-or-elicit reviewer's checker
+  (`review_coe/rlean.py`: statement header + literal text; pass iff no error and axioms ⊆ {propext, Classical.choice,
+  Quot.sound}). Expected: 0 Lean-accepted, giving a 95 % upper bound ≈ 1.3 × 10⁻⁵ on the false-reject rate overall and
+  ≈ 1.3 × 10⁻⁴ for `by-contradiction`. Any acceptance is a false reject: it is reported, and every count that could
+  depend on it is flagged.
+- Cost ≈ 1 A40-hour in addition. The stop rule is unchanged ($8).
