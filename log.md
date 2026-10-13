@@ -1023,3 +1023,18 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   **Expected seeds with a strict success by r16: 0.55; observed 3; P(≥ 3 | null) = 0.006.** The knockout ladders reached
   strict targets earlier than their base rates predict, so EI raised the free-σ rate during RL. Still no family by r16,
   and the two certified bases never produced one.
+- 20:06–21:30  Critique round 1 → revision (a960525f); round 2 (novelty 5, soundness 6, clarity 6) → revision (807acad7 and
+  follow-ups). Round-2 analyses (Addendum 5, 27516dd9): guided RL-phase gains 5–62 vs −3…+2 (MW 0.0011); hardware-matched
+  gains p 0.012; knockout r0 guided 1/1/0/1/3/0 (4/6 bases prove a strict theorem); per-family base rates (cc 11 /
+  1,349,310; other five families 1 / 6,721,334); A5b p 0.006–0.019; A3b AUC on RL-phase gains 0.83–0.93 full,
+  0.74–0.84 dose (expected > 0.5 on ≥ 3/4 and below A3: hit, 4/4 both). Dose-set shares (coe_shape on the bucket file,
+  md5 19cd2263): DN 4.24 %, NEGI 6.12 %, classical-only 1.56 %.
+- 21:41  Claim-audit sub-agent launched on the round-2 draft.
+- 22:00  **C4 done** (`paper/scripts/c4_within_reach.py` → `paper/data/c4_within_reach.json`; 350,208 + 18,432 attempts,
+  no early stopping). Knockout s1 base, per member at n = 18,432: 916 13 (7.1e-4, CI-within reach), 1460 4 (2.2e-4,
+  within reach), 1096 2, 1606 2, 55 1, 1963 1, and **1246 0, 2256 0, 1019 0, 528 0**. Knockout s3 base on 916: 1 / 18,432.
+  Pre-registered expectations: 1460 within reach — hit; ≥ 2 of {1246, 1460, 2256} within reach — **miss (1 of 3)**;
+  1019 c ≤ 1 — hit; 916 c ≥ 2 on both bases — **miss on s3 (1)**. By the pre-registered rule the paper drops "mostly
+  members its base could already reach": of the five held-out theorems knockout s1's ladder proves, its base reaches two
+  (916, 1460); the other three, the largest gains included, had 0 successes in 18,432 fresh attempts each. The earlier
+  1-in-7k–9k successes on 1246 and 2256 were early-stopping-biased draws.
