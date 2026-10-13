@@ -80,14 +80,14 @@ Both are large-$k$ successes of knockout bases before any RL. Lean~4.35.0 accept
 negated (\texttt{paper/scripts/lean\_examples.py}); the experiment's loop used Lean~4.34.1. (a) Knockout seed 1's base on \texttt{la\_transfer\_1246}, a held-out
 converse-contraposition member: \sig{}, then \texttt{DN} in both branches of an $\lor$-elimination.
 \begin{lstlisting}
-theorem t (P Q R S : Prop) (h1 : ((¬S) → (¬((S ∧ R) ∨ R)))) : (((S ∧ R) ∨ R) → S) := by
-  have n1 : ((¬S) → (¬((S ∧ R) ∨ R))) := h1
-  have n12 : (((S ∧ R) ∨ R) → S) := (fun (n2 : ((S ∧ R) ∨ R)) => by
-    have n6 : (¬(¬S)) := (fun (n3 : (¬S)) => by
-      have n4 : (¬((S ∧ R) ∨ R)) := n1 n3
+theorem t (P Q R S : Prop) (h1 : (((*$\neg$*)S) (*$\to$*) ((*$\neg$*)((S (*$\land$*) R) (*$\lor$*) R)))) : (((S (*$\land$*) R) (*$\lor$*) R) (*$\to$*) S) := by
+  have n1 : (((*$\neg$*)S) (*$\to$*) ((*$\neg$*)((S (*$\land$*) R) (*$\lor$*) R))) := h1
+  have n12 : (((S (*$\land$*) R) (*$\lor$*) R) (*$\to$*) S) := (fun (n2 : ((S (*$\land$*) R) (*$\lor$*) R)) => by
+    have n6 : ((*$\neg$*)((*$\neg$*)S)) := (fun (n3 : ((*$\neg$*)S)) => by
+      have n4 : ((*$\neg$*)((S (*$\land$*) R) (*$\lor$*) R)) := n1 n3
       have n5 : False := n4 n2
       exact (n5 : False))
-    have n11 : S := Or.elim n2 (fun (n7 : (S ∧ R)) => by
+    have n11 : S := Or.elim n2 (fun (n7 : (S (*$\land$*) R)) => by
       have n8 : S := Classical.byContradiction (fun hh => n6 hh)
       exact n8) (fun (n9 : R) => by
       have n10 : S := Classical.byContradiction (fun hh => n6 hh)
@@ -99,14 +99,14 @@ theorem t (P Q R S : Prop) (h1 : ((¬S) → (¬((S ∧ R) ∨ R)))) : (((S ∧ R
 (\texttt{n6 : $\neg$S $\to$ False}), not $\neg$-introduction, which Lean accepts because $\neg\neg S$ unfolds to
 $\neg S \to \mathrm{False}$. No pretraining set contains \texttt{DN} on such a line.
 \begin{lstlisting}
-theorem t (P Q R S : Prop) (h1 : ((¬S) → (¬P))) (h2 : P) : (R → S) := by
-  have n1 : ((¬S) → (¬P)) := h1
+theorem t (P Q R S : Prop) (h1 : (((*$\neg$*)S) (*$\to$*) ((*$\neg$*)P))) (h2 : P) : (R (*$\to$*) S) := by
+  have n1 : (((*$\neg$*)S) (*$\to$*) ((*$\neg$*)P)) := h1
   have n2 : P := h2
-  have n6 : ((¬S) → False) := (fun (n3 : (¬S)) => by
-    have n4 : (¬P) := n1 n3
+  have n6 : (((*$\neg$*)S) (*$\to$*) False) := (fun (n3 : ((*$\neg$*)S)) => by
+    have n4 : ((*$\neg$*)P) := n1 n3
     have n5 : False := n4 n2
     exact n5)
-  have n9 : (R → S) := (fun (n7 : R) => by
+  have n9 : (R (*$\to$*) S) := (fun (n7 : R) => by
     have n8 : S := Classical.byContradiction (fun hh => n6 hh)
     exact n8)
   exact n9

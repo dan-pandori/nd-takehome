@@ -87,12 +87,12 @@ held-out (of 40 each) & 18 & 15 & 12 & 19 & 37 & 4 & 105 + 1 \\
 \centering
 \begin{minipage}{0.96\linewidth}
 \begin{lstlisting}
-theorem t (P Q R S : Prop) (h1 : ((¬S) → (¬P))) (h2 : P) : (R → S) := by
-  have n1 : ((¬S) → (¬P)) := h1
+theorem t (P Q R S : Prop) (h1 : (((*$\neg$*)S) (*$\to$*) ((*$\neg$*)P))) (h2 : P) : (R (*$\to$*) S) := by
+  have n1 : (((*$\neg$*)S) (*$\to$*) ((*$\neg$*)P)) := h1
   have n2 : P := h2
-  have n9 : (R → S) := (fun (n3 : R) => by
-    have n7 : (¬(¬S)) := (fun (n4 : (¬S)) => by
-      have n5 : (¬P) := n1 n4
+  have n9 : (R (*$\to$*) S) := (fun (n3 : R) => by
+    have n7 : ((*$\neg$*)((*$\neg$*)S)) := (fun (n4 : ((*$\neg$*)S)) => by
+      have n5 : ((*$\neg$*)P) := n1 n4
       have n6 : False := n5 n2
       exact (n6 : False))
     have n8 : S := Classical.byContradiction (fun hh => n7 hh)
