@@ -345,3 +345,204 @@ line is crossed almost everywhere.
 - Plain reads keep the environment's ND string; the literal text exists only for the ladders (`LEAN_GATE_DUMP`, bucket)
   and the guided reads. Phase 2's plain comparators keep no proof text.
 - No read stores the per-attempt sample text, so cut-offs can be counted per stratum but not inspected.
+
+## §Compare (phase 2: the executor's `run_create_or_elicit.md`, `numbers.md` § create-or-elicit, `log.md`, `claims_ledger.md` v3, read after §Recount was committed as dd8ee82e)
+
+Additional recounts made in this phase (same kit): `budget08.py` (Phase 0.2 K values from trajectory's registry rows and
+the compute-matched r8 sets from my capability-defs review outputs), the Boschloo orientation check, the textbook72 /
+holdout250 split by G4ip, `la_transfer_916`'s large-k files, pod-hours from `~/podhours.log`.
+
+### The write-up (`run_create_or_elicit.md`)
+
+| claim | my value | verdict |
+|---|---|---|
+| σ = DN eliminating a derived ¬¬G, 10.9 % of K12 | σ⁺ 16,961 / 155,000 = 10.94 % (σ by NEGI 16,703) | reproduces |
+| Arms: full K12 6 seeds, knockout K12⁻ 6, 1 % dose (K12⁻ + 1,550 σ records) 3 | §1, §3 | reproduces |
+| "106 held-out theorems whose classical step needs σ": full r16 solve 23–77, knockout 0–2 | 42 / 75 / 77 / 65 / 23 / 33 vs 0 / 2 / 1 / 0 / 0 / 2 | reproduces; wording: the strict members need a DN on a double negation the proof builds — σ, another σ⁺ spelling or the lemma route (knockout s1's r20 proofs of them: σ 32, σ⁺-only 24, lemma route 7, `log.md` 11:44) |
+| family acquired on 6 / 6 vs 0 / 6, Boschloo p = 2.4 × 10⁻⁴, "needs exposure" (pre-registered) | 6 / 6 vs 0 / 6, p 0.00024 | reproduces; the pre-registered verdict holds. But 5 / 6 full bases are already at the bar for contraposition_conv at pend (guided 6 / 6), so the indicator is decided before RL; the RL-only version (a family acquired during RL) is 5 / 6 vs 0 / 6, **p = 0.0032**, not the 0.0020 in `numbers.md` / L91 (see Boschloo below) |
+| redraws and guided reads agree | x1 and guided: 6 / 6 vs 0 / 6, same strict counts ± 3 | reproduces |
+| "Elsewhere knockout bases match full ones (held-out greedy without σ: 0.950 vs 0.957)" | greedy on the 4,321 non-σ theorems: medians 0.950 vs 0.957 (means 0.951 vs 0.950) — reproduces; **but pass@256 at pend is lower beyond σ**: textbook72 −6.7 of 72 (s3–s5 vs knockout), −4.0 of its 53 G4ip-provable theorems; holdout250 non-classical −4.3 of 225; at r16 textbook72 −7.5 (non-classical −2.5), holdout250 non-classical +0.3 | **reword**: "match on held-out greedy; on pass@256 the knockout bases are lower at pend also on intuitionistic theorems (textbook72 −4 / 53, holdout250 −4 / 225), and holdout250 recovers by r16" |
+| heading "1. The classical families need σ in pretraining" | 0 / 6 knockout seeds acquire a family in 16 rounds; knockout s1 reaches 4 / 18 contraposition_conv by r20–r24 with a 0.33 training share; 4 / 6 knockout bases write σ on strict members at 10⁻⁶–3 × 10⁻⁴ per member-attempt | **reword** to the pre-registered form ("not acquired by this EI from a σ-free base within 16 rounds, 6 / 6 seeds; 1 % σ in pretraining restores it on 3 / 3"). "Need" in pretraining is not shown: the knockout bases have σ at low rates and one ladder is acquiring slowly |
+| "2. One percent is enough": dose 58 / 39 / 30, families on 3 / 3 (knockout 0 / 6; p = 0.003, exploratory) | 58 / 39 / 30; 3 / 3; Boschloo 3 / 3 vs 0 / 6 = 0.0033 | reproduces (3 seeds, plain x0 only, no redraw / guided / standard A; dose s1 is at the bar for contraposition_conv already at pend) |
+| "5 / 6 knockout ladders wrote the free reductio themselves (1–34 proofs in 16 rounds; full ladders 17–50 thousand)" | 0 / 34 / 4 / 1 / 2 / 16; full 17,507–50,222 (old seeds 23,650–34,758) under my definition, theirs 17,429–49,600 | reproduces (≤ 1.3 % definitional difference on the full arm, knockout exact) |
+| "4 / 6 knockout bases reach family members at ≈ 10⁻⁶ per attempt, mostly contraposition_conv" | s1 6, s2 1, s4 3, s5 2 successes per 1.1–1.4 M pooled attempts; 11 / 12 on contraposition_conv; all genuine σ | reproduces; **wording**: "reach" is this project's term for p̂ ≥ 1 / K. Pooled ≈ 10⁻⁶ is not "within reach"; per member, knockout s1's base *is* within reach at K_train on 4 / 18 contraposition_conv members (p̂ 1.0–3.3 × 10⁻⁴). Say "write σ proofs of family members" and give s1's within-reach members |
+| "RL did not move knockout models toward known σ proofs (median log p −26 to −36 nats, pend and r16)" | pend −26.0 to −36.0, r16 −29.7 to −36.1 (one name base) | reproduces (the scored proofs are the full arm's; s1 found its own route — `numbers.md` says so) |
+| "Knockout s1, run to r24, solved the same 5 / 106 as at r20, only more often" | r20 5, r24 5, same members | reproduces |
+| "4. Sharpening the base is not RL": power α 1.5–4 solves none of RL's new solves at matched compute; 0 / 17 rare base solves vs plain 6–13 | 0 / 33, 0 / 27 (α 4, α 2; α 1.5 only on s0's 33); 0 / 17 vs 6 / 17 and 13 / 17 | numbers reproduce; **reword**: the match is on *decoded tokens*, not compute (at the same decoded tokens the power runs took 1.6–2.7× the plain runs' wall-clock: 472 vs 282 s, 971 vs 607 s, 192 vs 71 s — more compute for power sampling, so the null is not weakened, but the label is wrong); and since this sampler finds *fewer* rare base proofs than plain sampling at the same tokens (0 vs 6–13 of 17), the null is a property of this MH power sampler at α 1.5–4. Whether it is a property of p^α is not tested. Addendum 4's rule asked for "sampler-specific" when a check fails; its second positive-control expectation could not be evaluated |
+| "5. Five defensible budgets shrink the old seeds' compute-matched r8 sets from 34 / 33 / 33 to 21 / 20 / 14" | K_att 34 / 33 / 33, K_train 33 / 27 / 24, K_uni 28 / 26 / 24, K_pub 22 / 21 / 14, K_adapt 21 / 20 / 14 (K_train(8) 7,418 / 7,128 / 9,924 and K_uni 10,316 / 10,143 / 14,153 from trajectory's registry; A6000 / A40 0.900 / 0.964) | reproduces (K_adapt's values taken from the executor; sets recounted at them) |
+| "(18 / 17 / 8 survive all)" | the sets are nested, so **21 / 20 / 14** are compute-matched at all five; 18 / 17 / 8 is the subset with 0 base successes in ≥ 66,304 attempts | **differs**: reword to "21 / 20 / 14 at every allocation, 18 / 17 / 8 of them with no base success in ≥ 66,304 attempts" |
+| "RL's compute-matched gain on the 322 does not need σ (Δ_cov +21 to +37, both arms)" | full +37 / +36 / +32, knockout +29 / +31 / +35 / +37 / +26 / +21 | reproduces (new full seeds only; not netted against RL-free controls) |
+| Expectations: misses listed (knockout σ in round 1; certificates 2 / 6; seeded 1 / 5; dose round-1 targets; Δ_cov > +35 on 2 / 3) | §17 | the listed misses reproduce; **not listed:** E3 negated_conditional on ≥ 2 / 3 new full seeds (1 / 3); Addendum 3 "0 / 106 on the knockout bases for every sampler" (plain T 1.0: 1 / 106 on both, `log.md` 11:31 records it as a miss); Phase 0.2 "the budgets" was not all hits (s2's uniform ratio 0.61 > 0.6, s1's A40 cost 8.04 > 8 ms; `log.md` 07:40 says so); shape classical-only −68 % (miss, in the pre-registration) |
+| Deviations: strict σ-covered definition; no dose redraw / guided; Phase 3a on 5 seeds | §17–§18 | **incomplete**: also the cut-off policy (§16: > 0.1 % of a stratum cut on 64 / 74 plain reads, 1–5 % of strict-member attempts on four knockout r16 reads, 8.8 % on dose s2; the doubled-cap re-read planned at `log.md` 21:17 was not run), no standard A for the dose arm, the refill Lean check ran on the VPS rather than the first pod |
+
+### `numbers.md` § create-or-elicit
+
+Every number in the section reproduces except the items below (each checked against §Recount): K12⁻ (all), Phase 0.1's
+per-theorem medians (0.94 / 0.88 and their P10–P90), Phase 0.2 (costs, A6000 / A40, K_train, K_uni, the five set sizes),
+Phase 2 / 2b, round 1 (strict targets, σ counts 6–13 / 635–885, targets solved 3,507–3,740), log p and the worst step
+(−18.0 to −21.6 vs −10.5), `la_transfer_916`'s large-k counts, Phase 1 (strict counts on x0 / x1 / guided, families,
+primary p, Mann–Whitney p), per-round dynamics, general ability (greedy medians, holdout250, textbook72 by split, pend and
+r16), certificates (all six), standard A (all nine), Phase 3a, the dose arm, log p along the ladders, the replay check,
+knockout s1's extension, compute (16 pods, 309.34 h, $182.50 — also from `~/podhours.log`).
+
+| item | `numbers.md` | recount | verdict |
+|---|---|---|---|
+| per-family Boschloo, 3 vs 0 seeds | p 0.035 | 0.0338 | differs in the 3rd decimal (transposed table); Holm 0.17 unchanged |
+| excluded_middle 1 vs 0 | p 0.30 | **0.387** | differs (transposed table); not significant either way |
+| families acquired during RL, 5 / 6 vs 0 / 6 (exploratory) | p 0.0020 | **0.0032** | differs (transposed table); still < 0.05 |
+| dose r16 cut-offs | 0.33 / 0.16 / 1.42 % | those are all-theorem fractions; the strict stratum the dose claims rest on: **1.20 / 0.68 / 8.84 %** | report per stratum (policy) |
+| holdout250 / textbook72 "the old full seeds were not read on textbook72 in this run" | — | correct; the knockout-vs-full textbook72 gap therefore rests on full s3–s5 only (3 vs 6 seeds); with trajectory's own pend reads of s0–s2 (batch 2,048, a re-draw) it is −6.5 | label it |
+
+**Boschloo.** `coe/coe_compare.py` l. 85 and `coe/coe_dose_summary.py` l. 53 call `scipy.stats.boschloo_exact([[a1, n1 −
+a1], [a2, n2 − a2]])`, but scipy treats each *column* as a binomial group. The calls therefore test the transposed design
+(successes vs failures as the groups). With the arms as columns, scipy equals my own implementation: 6 / 6 vs 0 / 6
+0.00024 (unchanged, symmetric), 3 / 3 vs 0 / 6 0.00325 (unchanged), 5 / 6 vs 0 / 6 **0.0032** (reported 0.0020), 3 / 6 vs 0 /
+6 0.0338 (0.035), 1 / 6 vs 0 / 6 **0.387** (0.30). `coe/coe_power.py` builds the same table, but its rejection region at α
+0.05 is identical in both orientations for every 6 × 6 cell I checked ((3, 0), (5, 1), (6, 2), (4, 0), (6, 3) reject; (4, 1),
+(5, 2), (2, 0) do not), so the pre-registered power table stands. No verdict changes.
+
+### `log.md` (gate 0 and process)
+
+- **Gate 0:** pre-registration d0ac00e2 05:52:13 and the pre-launch amendment 13e41bbd 05:56:17, then the first pod
+  (`~/pods.log`: coe-k0 05:57:04); `podbudget` set 05:14 and 05:51. Addendum 1 (06:25) precedes every ladder round,
+  Addendum 3 (07:50) Phase 2 production, Addendum 4 (12:11) Phase 2b's pod, Addendum 5 (20:32) the dose pods, Addendum 6
+  (22:53) both follow-ups. **Addendum 2 (07:05) came after knockout s0's round 1** and changed the σ-covered definition; it is
+  disclosed, it made the knockout test stricter, and my recount shows the original 178 / 291 sets give the same primary
+  result (6 / 6 vs 0 / 6) — so it did not decide the headline.
+- Misses are reported as misses in the log (E4, certificates, seeded round, dose round 1, Addendum 3's T 1.0, E7 range,
+  textbook72); the write-up's summary drops some (above).
+- The log's 13:21 reading "the null is a property of p^α" is stronger than Phase 2b supports (see the write-up row).
+- The log notes the cut-offs above 0.1 % (21:17) and plans a doubled-cap re-read of the strict members; it was not run, and
+  later entries report only all-theorem cut-off fractions.
+
+### `claims_ledger.md` (v3)
+
+Rows L73–L101 (this run) against my recount: every value reproduces except
+- **L91**: Boschloo p 0.0020 → **0.0032** (transposed table); L89's 0.035 → 0.034;
+- **L81**: still says "No negative control is recorded", but `artifacts/coe/refill_lean_negctl.json` (200 / 200 accepted
+  unchanged, 0 / 200 with the goal negated) exists and `numbers.md` / `log.md` 08:09 report it — stale caveat; my own
+  check (16,961 / 16,961 with controls, §13) closes it independently;
+- **L84**: σ⁺-only counts per knockout seed (20 / 21 / 35 / 16 / 18 / 58) differ from mine (proofs with σ⁺ minus proofs
+  with σ: 18 / 21 / 28 / 15 / 18 / 53) by up to 7; the two classifiers' definitions differ and I did not trace which proofs
+  differ; not used in any headline;
+- **L85–L86**: the caveat "Our MH implementation …" is right; the headline wording built on them is not (above).
+
+### Auditability notes, revisited
+
+- `data/coe/p3a_read105.jsonl` (§10, §18) is written on the pod by `pod/coe/p3a.sh` from `read1054.jsonl` and
+  `sigma_heldout_strict_no916.txt`, both in git, so it is reproducible; my note in §Recount overstated the gap.
+- `artifacts/coe/ladder/la_full_s5/` is still only in the bucket.
+
+### `claims_ledger.md`, inherited rows (L1–L72): source audit
+
+A reviewer sub-agent (read-only) opened the cited sources of 18 inherited rows — every forced headline row L2, L10, L20,
+L22, L23, L63 plus 12 drawn with a fixed seed from the "reviewed-stands" rows with a count / rate / probability value (L3,
+L4, L8, L21, L27, L32, L40, L41, L42, L47, L49, L53) — and I checked two "reviewed-corrected" rows myself (L59 against
+`review_trajectory.md` l. 208 / 243–245; L65 against `review_best-state.md` l. 139–141 / 210). **Every bold value is at
+the cited place with the same meaning, model and checker; no cited file is missing; no cited line is off by more than ≈ 5;
+every "reviewed-stands" status is backed by a review verdict.** Small discrepancies, none in a bold value:
+1. L32's "MDD 2.7" is marked reviewed-stands, but the guided-tts review (l. 165) says the MDD was "not independently derived
+   as stated" (its own half-widths ≈ 4–5 pp per seed, ≈ 3 pp for the IQM) — relabel that part.
+2. L20: capability-defs' review R13 gives 768 fewer attempts per J9 pair than REPORT / the ledger (same UB95, same 7 / 9);
+   the "K ≤" limits are rounded up (14,514 / 11,751 / 25,171 vs exact 14,513.8 / 11,750.8 / 25,170.8).
+3. L23 quotes the superseded value as "0.31 / 0.36"; capability-defs' numbers.md says 0.305 / 0.355 (REPORT rounds).
+4. L41: the review's "R" covers the families table without re-quoting the Peirce / Peirce-sequent / De Morgan cells, and
+   REPORT calls s1's Peirce "borderline" where the ledger says "created at every allocation" (the v2 recount does contain
+   both members) — wording.
+5. L63: textbook72 pend 34 / 33 / 36 is on the model card only (the rl-continue review recounted r8 / r12 / r16, not pend).
+6. L47 quotes the executor's numbers; capability-defs' reviewer fit differs within the row's stated tolerance.
+
+### Policy items
+
+- **Lean alone decides:** yes (the gate, the reads, the large-k sampler and the executor's own re-check all go through
+  Lean; `nd_verify` is not called). The prefilter decides every rejection of the gate (§13); 0 / 1,950 of its rejects are
+  Lean-accepted.
+- **Model labels:** `numbers.md` labels every section (checkpoint paths, md5s for the old seeds, data, GPU class); the
+  write-up states the model once at the top and the arm / seeds per claim. Every comparison is Lean vs Lean
+  (post-2026-09-27); the inherited Phase 0 data (capability-defs, trajectory) are Lean-era too.
+- **Seeds / noise floor:** the pre-registration states the primary test's power and the general-ability MDD. **The
+  reports give per-seed values but no IQM with a stratified-bootstrap interval** (policy). Mine (`iqm.py`, percentile
+  bootstrap over seeds, 10,000 resamples): strict held-out solved at r16 — full IQM 53.75 [30.5, 73.5], knockout 0.75
+  [0, 1.75], difference 53.0 [31.0, 72.8]; dose1 42.3 [30, 58] (n = 3: the IQM is the mean); at pend full 18.25 [11.25,
+  21.5], knockout 0.
+- **Compute:** recorded per arm, seed and round (registry rows, `compute.md`); arms within 0.95–1.03× on every quantity.
+- **Cut-offs:** see §16 and the deviation row above — not reported per stratum.
+- **Sampling settings:** batch 1,024 for ladders and 512 for reads, held fixed across the arms of each comparison; the old
+  seeds' ladders ran at 2,048 / 1,024 (re-draws, disclosed). Peak memory is recorded in the timing reads (8.3 GB at batch 512 to 25.5 GB at 2,048).
+
+## §Verdict
+
+**No hard-constraint violation** (`nd_verify` byte-identical to `origin/main` and not used to judge; `TEST_RUN_DONE`
+unchanged; no evaluation file feeds training; no test-file run). No quarantine.
+
+**What stands** (all on the 9.56 M ALiBiGPT `lean_staten` models from scratch, Lean alone; full = K12, knockout = K12⁻,
+dose1 = K12^1%):
+1. **The knockout set is what the pre-registration says it is.** K12⁻ = K12 minus exactly the 16,961 σ⁺ records, refilled
+   from K12's own pools with every filter holding, per-length counts identical, 0 overlap of the refill with any data or
+   target file under either key, 16,961 / 16,961 Lean-accepted. The dose set is K12⁻ with exactly 1,550 removed σ records
+   put back. The pods trained on these exact files. Replay in the knockout ladders never carried σ / σ⁺ and never leaked a
+   removed record (all 6 seeds, all rounds).
+2. **The pre-registered primary result:** at r16 a strict σ-covered family is at the bar on 6 / 6 full seeds and 0 / 6
+   knockout seeds (Boschloo p = 0.00024; x1 and guided reads the same; strict held-out members solved 23–77 vs 0–2, U = 36,
+   p = 0.0011; IQM difference 53 [31, 73] of 106). Verdict "needs exposure", for contraposition_conv individually and for
+   the indicator; negated_conditional, peirce, peirce_sequent are 3 vs 0 each (p 0.034, Holm 0.17) and excluded_middle 1 vs 0.
+   The stricter RL-only reading (a family acquired between pend and r16) is 5 / 6 vs 0 / 6, p = 0.0032.
+3. **1 % σ in pretraining restores acquisition** on 3 / 3 dose seeds (r16 strict 58 / 39 / 30; families acquired during RL
+   on 3 / 3; vs knockout p = 0.0033, exploratory; plain x0 reads only).
+4. **σ is rare in the knockout arm, not absent:** σ / σ⁺ steps in round 1 of every knockout ladder (where the sequent
+   supplies ¬¬G); free positive reductio in 5 / 6 ladders (0 / 34 / 4 / 1 / 2 / 16 distinct proofs over 16 rounds vs 17–50
+   thousand per full ladder); 4 / 6 knockout bases write genuine σ proofs of strict family members at large k (1–6 successes per
+   1.1–1.4 M attempts); certificates hold for 2 / 6 bases (s0, s3) and for no family at any seed.
+5. Knockout s1 (exploratory) spreads the free reductio (11 → 123 proofs per round, r16 → r24) but holds the same 5 / 106
+   strict held-out members from r20 to r24; its base already has 4 / 18 contraposition_conv members within reach at
+   K_train (`la_transfer_528`, `1246`, `1460`, `2256`), and 3 of the 4 contraposition_conv members the ladder solves at
+   r24 (`1246`, `1460`, `2256`; plus `1019`) are among them — the executor's "elicitation of a rare base behaviour, not a
+   creation" (log 07:09) is the right reading.
+6. General ability: held-out greedy −6.9 pp overall (mean; −7.7 pp median), +0.1 pp on the 4,321 non-σ theorems; σ
+   theorems 0.96 vs 0.45.
+7. Phase 0: the estimator is calibrated to ≈ 0.94 at p̂ ≥ 10⁻³ and runs ≈ 2× low at 10⁻⁵–10⁻⁴; the five budgets and their
+   compute-matched sets (34 / 33 / 33 → 21 / 20 / 14) reproduce.
+8. Phase 2 / 2b numbers reproduce (0 solved by power sampling on every target set; 0 / 17 vs plain 6–13 on the positive
+   control); compute matched across arms; spend 309.34 pod-h / $182.50 of $190.
+
+**Must be reworded**
+1. Headline 1 "The classical families need σ in pretraining" → the pre-registered form: "not acquired by this EI from a
+   σ-free base within 16 rounds (0 / 6 seeds; one seed acquiring slowly by r24)". "Need" is not shown: the knockout bases
+   write σ at low rates and knockout s1's ladder is acquiring contraposition_conv slowly.
+2. "Elsewhere knockout bases match full ones" → true for held-out greedy only; pass@256 at pend is lower also on
+   intuitionistic theorems (textbook72 −4.0 / 53, holdout250 −4.3 / 225; holdout250 recovers by r16, textbook72 −2.5).
+3. Headline 3 "reach family members at ≈ 10⁻⁶ per attempt" → "write σ proofs of family members (1–6 in 1.1–1.4 M pooled
+   attempts)"; add that knockout s1's base has 4 / 18 contraposition_conv members within reach at K_train.
+4. Headline 4 "Sharpening the base is not RL … at matched compute" → "this MH power sampler (α 1.5–4), at matched *decoded
+   tokens*, solves none of RL's compute-matched new solves — and also fewer rare base solves than plain sampling (0 vs 6–13 of
+   17)". The null is shown for this sampler, not for p^α (Addendum 4's own "sampler-specific" rule; `log.md` 13:21 overstates it).
+5. Headline 5 "(18 / 17 / 8 survive all)" → "21 / 20 / 14 are compute-matched at all five allocations; 18 / 17 / 8 of them
+   have no base success in ≥ 66,304 attempts".
+6. "106 held-out theorems whose classical step needs σ" → "needs a DN on a double negation the proof builds (σ or another
+   σ⁺ route, or the lemma route)".
+7. The expectations / deviations summary: add E3's negated_conditional miss (1 / 3), Addendum 3's plain-T 1.0 miss, Phase 0.2's
+   two near-misses, the cut-off deviation and the dose arm's missing standard A.
+8. Boschloo p-values from the transposed table: 0.0020 → 0.0032 (`numbers.md`, L91), excluded_middle 0.30 → 0.39, 0.035 →
+   0.034; fix `coe_compare.py` / `coe_dose_summary.py` (`[[a1, a2], [n1 − a1, n2 − a2]]`). No verdict changes.
+9. `claims_ledger.md`: L81's "No negative control is recorded" is stale (the executor's control exists; mine passes too);
+   L91's p → 0.0032; L32's "MDD 2.7" is not reviewed as stated; otherwise the sampled sources hold (above).
+10. Report cut-offs per stratum (dose r16 strict 1.20 / 0.68 / 8.84 %, knockout r16 strict up to 5 %), not as all-theorem
+    fractions.
+
+**Not supported as written:** "Sharpening the base is not RL" as a statement about sharpening in general (it is about one
+sampler); "(18 / 17 / 8 survive all)"; "need σ in pretraining" beyond 16 rounds of this EI.
+
+**Next measurements that would settle what is open**
+1. **Is creation rare or absent?** The "created" rule had little power below one seed in five (0 / 6 bounds the per-seed
+   rate q < 0.39). Knockout s1 is the only seed acquiring; more knockout seeds (or the s0 / s2–s5 ladders continued to r24)
+   would estimate q. Any future acquisition must be judged per member against the base's own large-k rate, since 4 / 6
+   knockout bases already write σ.
+2. **The cut-off question, cheaply:** the doubled-cap re-read of the strict members (`max_action` 1,024, `max_steps` 192) on
+   the knockout r16 and dose s2 r16 checkpoints that the log planned (21:17).
+3. **The sharpening null:** a positive control the sampler passes (e.g. a better-mixing SMC / more MH steps on the 17 rare
+   theorems until power ≥ plain), or an importance-weighted p^α mass of the known proofs from the scorer — otherwise keep the
+   claim sampler-specific.
+4. **Dose arm:** its r16 redraw / guided reads and standard A (cut for budget), then the 0.1 % arm (`next_steps.md` 1) for the
+   first dose–response points.
+5. The textbook72 general-ability gap rests on 3 full seeds in this run's settings: read old full s0–s2 on textbook72 at
+   batch 512 to put 6 vs 6.
