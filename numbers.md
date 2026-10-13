@@ -1954,3 +1954,38 @@ success 13 / 13; every Phase 3a proof 25 / 25; a seeded sample of 50 per full r1
 - Bulk artifacts (read rows, large-k chunks, scores, ladder found / mix files, registry rows): same bucket prefix, same
   repository paths; the files kept locally are listed with sha256 in `artifacts/MANIFEST.jsonl` (`python3 fetch_artifacts.py
   <path>`). Data: `data/coe/README.md`.
+
+## create-or-elicit-paper (2026-10-13 / 14, executor; writing run; UNREVIEWED)
+
+Every number of the paper and the blog is mapped to its source in `paper/LEDGER.md`. This section lists only what this
+run computed itself. **Models:** `best_model.ALiBiGPT` 6 × 384, 9,560,832 params, `lean_staten`, from scratch. The arms
+are full (K12; s0–s2 `trajectory` / `rl-continue`, s3–s5 create-or-elicit), knockout (K12⁻) and dose (K12^1%), each run
+through T1 EI. The checker is Lean alone.
+
+- **Statistics from reviewed counts** (`paper/scripts/stats_extra.py` → `paper/data/stats_extra.json`; counts from
+  `review_coe/out_acq.json`, `review_coe/cert.log`, L94, L43, the mcts-a summary):
+  - p-values: Boschloo 0.00024 / 0.0032 / 0.0033 / 0.034 / 0.39; MW full vs knockout at r16 0.0011; dose vs full
+    two-sided 0.548; CP UB95 after 0/6 = 0.393;
+  - RL gains r0→r16 (strict 106, x0): full 24/69/55/42/8/15, knockout 0/2/1/0/0/2, dose 52/21/22; MW 0.0011;
+  - indicator at r0: x0 5/6 vs 0/6 (p 0.0032), guided 6/6 vs 0/6 (p 0.00024);
+  - new full seeds only: indicator 3/3 vs 0/6 (p 0.0033), during RL 2/3 vs 0/6 (p 0.034);
+  - Δ_cov means 35.0 vs 29.8, MW p 0.13;
+  - certificates over the pre-registered 106: 1/6 certified (s0; K_max 25,112 vs K 23,322); over 105: 2/6. For s3,
+    K_max is 14,152 on 106 and 22,376 on 105;
+  - test-time compute: search fraction at r0 14 / 17 / 44 % (holdout250 / textbook72 / rrQ100); replay share of RL's
+    gain 13 / 16 / 25 %.
+- **A2** (`paper/scripts/figures.py prior`): Spearman ρ 0.877 over 13 ladders (0.393, p 0.38 without the knockout).
+- **A3** (`paper/scripts/a3_member_prior.py` → `paper/data/a3_member_prior.json`, per-member values in
+  `a3_member_values.json`): AUC full s0/s3/s4/s5 0.954 / 0.953 / 0.940 / 0.922, dose 0.858 / 0.861 / 0.846;
+  within-family full 0.626 / 0.978 / 0.926 / 0.467, dose 0.280 / 0.600 / 0.328.
+- **A4** (`paper/scripts/a4_first_solve.py` → `a4_first_solve.json`): ρ(prior, first-solve round) full −0.819 / −0.874 /
+  −0.686 / −0.732, dose −0.723 / −0.639 / −0.609; within-family full −0.403 / −0.445 / −0.475 / −0.332.
+- **A5** (`paper/scripts/a5_waiting_time.py` → `a5_waiting.json`; post hoc): expected first strict success after 47 / 115 /
+  180 / 340 rounds (s1 / s4 / s5 / s2); expected 0.55 seeds by r16, observed 3 (s1 r9, s2 r14, s5 r14); P = 0.006.
+- **Dose set shape** (`coe/coe_shape.py` on bucket `data/coe/train_k12dose1.jsonl.gz`, decompressed md5 19cd2263 →
+  `paper/data/shape_k12dose1.json`): DN 4.24 %, NEGI 6.12 % of records; classical-only 1.56 % (20k sample).
+- **Pod checks C1–C5** (pods `coep-1`, `coep-2`, NVIDIA A40 SECURE $0.59/h; rows `artifacts/coe_paper/`, bucket
+  `create-or-elicit-paper/artifacts/coe_paper/`; analysis `paper/scripts/checks_c1c3.py` → `paper/data/checks_c1c3.json`):
+  final values in `paper/sections/11_checks.tex` and the log.
+- **Lean examples** (`paper/scripts/lean_examples.py` → `paper/data/lean_examples.json`; `paper/lean/`): 3 / 3 model proofs
+  accepted, 3 / 3 goal-negated controls rejected (Lean 4.35.0, VPS).
