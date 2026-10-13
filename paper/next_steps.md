@@ -23,19 +23,20 @@ rewrite. The two critique rounds converged on items 1 and 2.
   attempts per round (k = 32), with group-normalised advantages. A lone success then gets an advantage of
   √31 ≈ 5.6 standard deviations, against roughly 4 of ≈ 90,000 records in EI's fine-tuning mix. Evaluate the strict
   106 at r8 and r16, plain and guided.
-- **Write per-seed predictions first.** By sampling alone, GRPO at k = 32 can only rescue the seeds that find a strict
-  success inside 16 rounds, s1, s2 and s5 under EI, because all-fail groups give no gradient. Any further rescue must
-  come from drift driven by the negative-sample term. Include a pass@4 arm, the only GRPO variant level with EI in this
+- **Write per-seed predictions first.** All-fail groups give no gradient, so by sampling alone GRPO at k = 32 would
+  most likely first succeed where EI did (s1, s2 and s5). A rescue of s0, whose base had no strict success in 1.5
+  million attempts, would point to drift driven by the negative-sample term. Include a pass@4 arm, the only GRPO variant level with EI in this
   organism (grpo-best), and a signed-update arm without a group baseline.
 - **Decision value.** If GRPO acquires families from knockout bases, "needs exposure" becomes an EI-specific statement
   and the paper's discussion turns on update rules, not data. If it does not, the result generalises across the two
   standard algorithms.
 
-### 1b. Measure the knockout ladders' σ rate along the run — ≈ $3–6 (CPU-light pod work)
-- A5's "the rate rose during RL" is post hoc and rests on plug-in base rates. Sample the 123 strict training theorems and
-  the 106 held-out ones at 10⁵–10⁶ attempts from the saved r4, r8, r12 and r16 checkpoints of every knockout ladder.
-  All 200 ladder checkpoints are in the bucket, and at 6–8 ms per attempt this is a few A40-hours in total. It turns
-  A5 into an observed trajectory, and it separates "EI samples too little" from "EI amplifies too narrowly" (readings 2
+### 1b. Measure the knockout ladders' σ rate along the run — ≈ $25–30 (≈ $14 at r8 and r16 only)
+- A5's "the rate rose during RL" is post hoc and rests on plug-in base rates for held-out theorems. Sample the 123
+  strict training theorems about 10⁶ times per checkpoint (≈ 8,000 attempts each) at the saved r4, r8, r12 and r16
+  checkpoints of every knockout ladder. All 200 ladder checkpoints are in the bucket. That is 2.4 × 10⁷ attempts at
+  6–8 ms each, ≈ 40–55 A40-hours. It resolves pooled rates down to a few × 10⁻⁶. It turns A5 into an observed
+  trajectory, and it separates "EI samples too little" from "EI amplifies too narrowly" (readings 2
   and 3).
 - Pair it with a **replay-only control from the knockout bases** (the ladder's fine-tuning on replay alone). That
   tests whether any rate rise is RL's doing or general fine-tuning drift.
@@ -55,7 +56,8 @@ rewrite. The two critique rounds converged on items 1 and 2.
   about.
 
 ### 4. Per-theorem base rates at n ≥ K, and per-family certificates — ≈ $3–10
-- C4 (this run) re-sampled knockout s1's 18 converse-contraposition members at n ≥ K. Extending this to every strict
+- C4 (this run) re-sampled knockout s1's 18 converse-contraposition members at n ≥ K, and three of the four members
+  its early-stopped sample had put within reach came back at 0 in 18,432 attempts. Extending this to every strict
   member of every knockout base, at ≥ 60 K per family, is ≈ 60 × 20,000 × 6 families ≈ 7 M attempts per base. That
   would make a per-family certificate (and hence the pre-registered CREATED verdict) reachable. It is about $8–10 per
   base at the knockout bases' 6–8 ms per attempt.

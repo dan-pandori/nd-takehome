@@ -19,8 +19,8 @@ logically rejected steps redrawn (at most 10 per attempt).
 16,961 records, of which 16,703 are \sig{} and 258 cite an $\to$-elimination, $\lor$-elimination, $\bot$-elimination,
 \texttt{DN} or $\land$-elimination line. It refills 16,961 records drawn uniformly, length by length, from \KT{}'s own
 unused source pools: lengths up to 6 from the depth-3 generator pool and 7--12 from the long-proof pool. Every refill
-record passes every \KT{} filter (no box depth $\geq 3$; \texttt{DN} only on assumptions or premises) and contains no
-\sigp{} and no lemma route. Under an order-sensitive and a premise-order-invariant renaming key, the refill shares no
+record passes every \KT{} filter (no box depth $\geq 3$), applies \texttt{DN} only to assumptions or premises, and
+contains no \sigp{} and no lemma route. Under an order-sensitive and a premise-order-invariant renaming key, the refill shares no
 class with \KT{} or with any of the 100 data and target files of the repository. One of \KT{}'s 11 exclusion pools was
 absent when the set was built and could not be checked. Every refill proof, translated to Lean, is accepted
 (16,961/16,961). Unchanged proofs pass the same harness and goal-negated proofs fail it. Per-length counts are identical
@@ -72,7 +72,7 @@ pairs with at least one success in large-$k$ sampling. (b) Median and 10--90\% r
 \paragraph{Other measurements on the full seeds.} At matched gains in item-response-theory ability, EI flags no more
 items as differentially improved than replay-only training. Eight RL rounds move the weights about as far as
 replay-only training (relative Frobenius norm 0.28 vs 0.30, one seed). Twelve operational definitions of ``created''
-agree poorly: the mean pairwise Jaccard similarity of their sets is 0.29 at r8 and 0.34 at r16.
+agree poorly: the mean pairwise Jaccard similarity of their sets at $\Kpub$ is 0.29 at r8 and 0.34 at r16.
 
 \section{Two more knockout-base proofs in Lean}
 \label{app:lean}
@@ -132,14 +132,14 @@ x0 evaluation (the x1 evaluation found 1 on seed 1, and the guided evaluation 1,
 \item converse contraposition acquired on 3/3 new full seeds;
 \item at least one family on 6/6 full and 0/6 knockout seeds, the primary $p$ and the arm medians;
 \item recovery of non-classical holdout250 by r16;
-\item $\dcov > 0$ in both arms;
+\item $\dcov > 0$ on 3/3 new full seeds;
 \item the dose arm's round-1 \sig{} proofs and its families;
 \item knockout seed 1's extension.
 \end{itemize}
 They \emph{missed} on:
 \begin{itemize}
 \item the classical-only share falling by $\geq 70\%$ (observed 67.6\%);
-\item textbook72 within $\pm4$ at r0 (observed $-6.5$ over all 72 theorems with six full seeds, two read at another
+\item textbook72 within $\pm4$ at r0 (observed $-6.5$ over all 72 theorems with six full seeds, three read at another
 batch; $-4.0$ on its 53 intuitionistic theorems with three);
 \item certificates on $\geq 5/6$ knockout bases (observed 2/6 on the 105 family members, 1/6 on the pre-registered
 106);
@@ -147,14 +147,21 @@ batch; $-4.0$ on its 53 intuitionistic theorems with three);
 \item the first \sigp{} proof after round 4 (it came in round 1, on theorems supplying $\neg\neg G$);
 \item $\dcov$ within $+8$ to $+35$ (two seeds at $+36$ and $+37$);
 \item 3--15 strict training theorems in the dose arm's round 1 (observed 2/17/2);
-\item a seeded-round gain on $\geq 3$ seeds (observed 1/5).
+\item a seeded-round gain on $\geq 3$ seeds (observed 1/5);
+\item ``0/106 on the knockout bases for every sampler'' (plain sampling at $T=1$ solved \texttt{la\_transfer\_916} on
+both bases).
 \end{itemize}
-The power-sampling expectations (0 solves) were met, but the sampler failed its positive control, so they are
-uninformative rather than hits; so is ``0/106 for every sampler'' (plain sampling at $T=1$ solved one).
+Near-misses: knockout seed 1's base cost 8.04\,ms per attempt on an A40 (expected 6--8\,ms), seed 2's uniform-allocation
+ratio was 0.61 (expected $\leq 0.6$), and the dose arm's r16 count lay between the two arms' medians on 2/3 seeds. The
+power-sampling expectations (0 solves) were met, but the sampler failed its positive control, so they are uninformative
+rather than hits. Deviations from the plan: more than 0.1\% of some stratum was cut off in 64 of 74 plain evaluations;
+the dose arm had no compute-matched reach measurement, no r16 redraw and no guided evaluation (the last two are added
+here); and the refill's Lean check ran on the VPS rather than the first pod.
 
 \section{Corrections applied}
 \label{app:corrections}
-Three exploratory Boschloo $p$-values in the experiment's reports came from a transposed table. With the arms as
+Three Boschloo $p$-values in the experiment's reports (the exploratory RL-only test and two of the pre-registered
+per-family tests) came from a transposed table. With the arms as
 columns, the RL-only test is $p = 0.0032$ (reported 0.0020), excluded middle $0.39$ (0.30) and the three-versus-none
 family tests $0.034$ (0.035). The primary $p = 0.00024$ and the dose test $p = 0.0033$ are unchanged.
 \texttt{paper/scripts/stats\_extra.py} recomputes all of them. This paper also reports the knockout certificates on the

@@ -115,7 +115,62 @@ Addendum 5 (A3b, A5b, descriptives; `paper/scripts/round2_extra.py`, `a3b_member
 | 3 | Budget allocations and K_train(16) defined after use; K12 vs K | **fixed** (allocations defined in §2; data sets renamed 𝒟, 𝒟⁻, 𝒟^1% with "K12 in the released code") |
 | 4 | Length; §6 shorthand | **partly** (the shorthand is defined, e.g. "ignite" = ≥ 2 % of targets; the length stays) |
 | 5 | Fig. 1 caption "differ only in σ", σ vs σ⁺ | **fixed** |
-| 6 | ∧ / ∨ in the App E listing | to be checked in the final PDF |
+| 6 | ∧ / ∨ in the App E listing | **fixed** (the listing font lacks the glyphs; they are now set in math mode through `escapeinside`, checked with `pdftotext`) |
 | 7 | C1 baselines differ from Table 4 | **fixed** (explained in App I) |
 | 8 | 53 "Version read" notes in the bib; appendices never cited | **fixed** (88 notes stripped; the glossary, knockout construction and expectations appendices now cited) |
 | Blog | at cap; "classical contraposition"; "about half" not in paper; missing caveats | **fixed** ("converse contraposition"; "halves the gap" restored in the paper; new-seeds gains, replay confound and seeding null added; 2,495 words with the code block) |
+
+## Claim audit (2026-10-13, 21:42–22:20 UTC; `critiques/audit.md`)
+
+An independent sub-agent checked the round-2 text (`e5f563dc`) against `LEDGER.md` and the sources behind it. It re-ran
+`stats_extra.py`, `round2_extra.py`, `a5_waiting_time.py` and `figures.py`, and all four reproduced their committed
+outputs exactly. It checked 382 table rows: 312 PASS, 67 FIX, 3 UNSUPPORTED. Its 40 required fixes (two merged into
+others) were applied in the next commit as follows.
+
+**Pre-registered expectation W3** ("≤ 15 discrepancies … none needs a headline changed"): **missed.** The audit found
+70 discrepancies. One abstract sentence had to be weakened ("did not carry it to those that need it" → "rarely carried
+it to theorems that require building one"). One reading in §3.4 was dropped because a pre-registered check (C4)
+contradicted it.
+
+| # | point | response |
+|---|---|---|
+| 1, 16, 20 | C4 contradicts the knockout s1 "elicitation" passage; the review's RV 5 reading is not acknowledged | **fixed.** §3.4 now gives the review's reading, then C4. Of the four members within reach by the pre-registered criterion (916, 1460, 1096, 1606), the ladder proves the first two by r16 and never the other two. The three members it adds by r20 (1019, 1246, 2256) had 0 in 18,432. By the Addendum 4 rule, "mostly members its base could already reach" is dropped. §7, the limitations, App I and the blog follow. One addition beyond the audit's text: at r16 the ladder proves exactly the two reached members (bucket rows, LEDGER P152) |
+| 2 | "need it" / "did not carry it" (abstract, §5, blog ×3) | **fixed** with the audit's wording (abstract compressed to stay at 250 words) |
+| 3 | the ln 33 bound points the wrong way | **fixed** (§5, blog): subtracting ln 33 gives a lower bound; the score can overstate by ≤ 3.5 nats and understate by more |
+| 4 | "at most one of the four seeds" unsupported | **fixed by checking the data.** The r16 rows in the bucket show knockout s2 proving `1963` and s5 proving `1246` and `2256`, while their bases had proved `1096` and `1811` (s5 also `1142`, a Peirce-sequent member). The sentence is replaced by these facts and by "which members a base proved rarely was a poor guide to which members its ladder would prove" |
+| 5 | C1–C3 status stale and inconsistent | **fixed** once C1 finished (App I table complete, §5.8 and the limitations updated). Also: C2 dose s2 guided 29; C3 s2 34 vs 38; C3's 6-vs-6 gap 5.8 in [4, 9] (hit). App I now explains that the standard-cap arm is a fresh draw on another input file (hence 3 and 28 against Table 4's 2 and 30) |
+| 6 | C5 described as done | **fixed**: the result is reported, with a harness control (below) |
+| 7 | App F misstates the review's expectations tally | **fixed** (Δ_cov on 3/3 new full seeds; three seeds at another batch; the T = 1 sampler miss; three near-misses; a deviations sentence) |
+| 8 | blog "kept this RL from learning it" | **fixed** ("within 16 rounds") |
+| 9 | "within 0.7 nats … 28–56" | **fixed** (dose s0 vs knockout s1: 0.7 nats, 58 vs 2) |
+| 10 | "Only the r16 endpoint separates the arms" contradicted | **fixed** ("The levels separate the arms at every checkpoint; the changes do not") |
+| 11 | LLM-transfer arithmetic | **fixed** (≈ 45× at 10⁵ prompts and k = 64; not at 10⁴ and k = 8) |
+| 12 | GRPO caveat missing (paper), overstated (blog) | **fixed** (EI alone replayed pretraining data; both at r8; blog "plain GRPO … a variant that rewards coverage did about as well") |
+| 13 | "along every RL run" / "every checkpoint" | **fixed** (twelve of fifteen ladders; r0–r16 of the new ladders and full s0's base) |
+| 14, 23 | "What transfers" contradicts the body | **fixed** with the audit's four replacements |
+| 15 | §4 "every number reviewed" has exceptions; K values differ | **fixed** (the exceptions are named; Table 5 uses the review's K values, with a note; LEDGER P35 points to budget08.log) |
+| 17 | executor-only per-member counts carried as reviewed | **fixed** (labelled in §3.4; P78 status) |
+| 18 | interface limitation uses the older "reach" and the uncorrected confound | **fixed** (the audit's text) |
+| 19 | replay-only token caveat | **fixed** |
+| 21 | "each more often" | **fixed** ("each more often than at r16") |
+| 22 | J6 replay caveat | **fixed** (§7 gives both; §1 "even with DN-free replay") |
+| 24 | "the rate rose" assumes held-out rates stand in | **fixed** (§5, §7; blog "probably") |
+| 25 | GRPO "only seeds 1, 2, 5 could be rescued" unsupported | **fixed**, with one correction to the audit's text. It named seeds 0 and 3 "whose bases showed no strict success", but seed 3's base proved `la_transfer_916`, which is strict. The text names seed 0 only. `next_steps.md` is corrected the same way |
+| 26 | "GRPO has not been run on the reductio" | **fixed** ("from a reductio-free base") |
+| 27 | "smaller organisms" | **fixed** ("earlier organisms") |
+| 28 | Cheng logic | **fixed** ("mastery is not sufficient") |
+| 29 | pre-registration bookkeeping | **fixed** (the review corrected the p-values; four post hoc analyses named; App G's three p-values described; "Addenda 1–5"; A3b labelled post hoc) |
+| 30 | intro "None of these measures …" too absolute | **fixed** ("beyond about a thousand attempts") |
+| 31 | J9 controls caveat | **fixed** |
+| 32 | loose "reach" | **fixed** at the four places named. A grep then found five more non-technical uses ("ladders reached strict theorems", "reached the family bar", "reaching 6 and 17 targets", "do not reach p^α", "operating points the base reaches"), which were also reworded, so App G's "applied throughout" now holds |
+| 33 | Fig. 7 caption | **fixed** |
+| 34 | data-description wording | **fixed** (§3 dose set; App B filters) |
+| 35 | dose shares mix two samples | **fixed** (same-script 1.33 % / 4.13 %, with the review's 1.35 % / 4.17 % named) |
+| 36 | minor labels | **fixed** (all eleven) |
+| 37 | discussion verdict summary | **fixed** |
+| 38, 39 | blog framing, "thousands" | **fixed** |
+| 40 | LEDGER maintenance | **fixed** (rows P149–P166 and the C1/C5 rows; P19 → 2.0 % per reason; P35 source; P78 status) |
+
+**Also found while applying the fixes.** `next_steps.md` item 1b costed 10⁵–10⁶ attempts per checkpoint at "a few
+A40-hours". At 6–8 ms per attempt, 10⁶ attempts at each of 24 checkpoints is 40–55 A40-hours (≈ $25–30). The estimate is
+corrected.

@@ -8,8 +8,9 @@ The organism was chosen because it allows interventions that large models do not
 it.
 \item \textbf{One RL algorithm, 16 rounds, one composition.} Expert iteration at $k=32$, $T=0.8$ is rejection-sampling
 fine-tuning. GRPO-style updates, more exploration, demonstrations or longer runs could behave differently, and in the
-closest controlled study GRPO did, and in our earlier organism GRPO acquired a depth-3 nesting habit faster than EI;
-in this organism, from full-exposure bases, plain GRPO proved fewer theorems than EI (\S\ref{sec:discussion}). One knockout ladder was still
+closest controlled study GRPO did, and in our earlier organism GRPO acquired a depth-3 nesting habit more often than EI;
+in this organism, from full-exposure bases, plain GRPO proved fewer theorems than EI, which alone replayed pretraining
+data (\S\ref{sec:discussion}). One knockout ladder was still
 changing at round 24. Only one composition was removed.
 \item \textbf{What the headline test measures.} The pre-registered indicator is largely decided before RL. The RL-phase
 contrasts (gains during the RL phase, families acquired during it) were not pre-registered, and the RL phase includes
@@ -26,10 +27,12 @@ $k$, and four of six under guided decoding at $k = 256$. Only one is certified o
 sampling, on a pooled mean rate, at one allocation, with an 8\% margin. Spreading the same compute over 106 or 1,054
 theorems would certify 0 or 5 of 6. The certificate assumes the pre-filter rejected no valid proof in the large-$k$
 sample, which could not be checked. No family could be certified at the sampling used, so the \textsc{created} verdict
-was unreachable by design. The ``rare'' evidence comes almost entirely from one family (converse contraposition); on the
+was impossible by design. The ``rare'' evidence comes almost entirely from one family (converse contraposition); on the
 others the bases sit at the sampling floor.
 \item \textbf{Within-reach labels.} Per-theorem base rates in the knockout arm rest on one to three successes in fewer
-than $K$ attempts, from sampling that paused after a first success.
+than $K$ attempts, from sampling that paused after a first success. A fresh sample at $n \geq K$ of one base's members
+(C4) found three of its four such members at zero, so these labels overstate reach. The other bases' members were not
+re-sampled.
 \item \textbf{Estimators.} The known-proof estimate runs two- to three-fold low below $10^{-4}$ and was calibrated on
 full-exposure bases. The likelihood scores use the full ladders' proofs and one line-numbering offset.
 \item \textbf{Budgets.} $K$ depends on the allocation, on the number of evaluation theorems it is spread over, and on
@@ -38,7 +41,7 @@ one measured GPU-class ratio. The knockout certificates and \dcov{} were compute
 and are pooled. Many evaluations cut off more than 0.1\% of attempts in some stratum (up to 8.8\% of strict-theorem
 attempts on one dose seed); see Appendix~\ref{sec:checks}. The power-sampling comparators kept no proof text, so
 their few successes were not re-checked in Lean.
-\item \textbf{Interface.} In an earlier 3.2M organism, a base acting through the proof-state interface reached most of
-the theorems that whole-proof EI had ``created'', with two seeds per arm and the state confounded with step-by-step
-generation. Whether creation verdicts depend on the interface is untested at this scale.
+\item \textbf{Interface.} In an earlier 3.2M organism, a base acting through the proof-state interface found at
+least one proof of 28 of the 29 theorems that whole-proof EI had ``created'' (in up to 400,000 attempts; at EI's own
+bar of $\hat p \geq 0.01$, 21 and 14), with two seeds per arm and the state confounded with the whole step interface. Whether creation verdicts depend on the interface is untested at this scale.
 \end{itemize}

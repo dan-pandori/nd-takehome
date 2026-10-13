@@ -29,7 +29,7 @@ family member, which is never trained on.
 and 512 tokens per step. A theorem is \emph{proved} if any attempt is accepted. Two sample seeds give two independent
 draws of the same checkpoint. A \emph{guided} evaluation uses the same budget, but a step that a per-step logical
 checker rejects is redrawn from the same state without replacement, up to 10 times per attempt. The checker never
-rejected a step Lean accepts in 314,541 tested (state, step) pairs. General ability is measured on 5,000 held-out
+rejected a step Lean accepts in 314,541 tested atomic (state, step) pairs. General ability is measured on 5,000 held-out
 generator theorems decoded greedily, and on 322 evaluation theorems (72 textbook problems plus 250 held-out generator
 theorems; \S\ref{sec:case}).
 
@@ -113,8 +113,8 @@ same proof of the negated goal. Appendix~\ref{app:lean} gives two more.}
 16,961 records drawn length by length from \KT{}'s own unused source pools. Every refill record passes \KT{}'s filters
 and contains no \sigp{} and no lemma route. Under two renaming-invariant keys, the refill shares no theorem with \KT{}
 or with any evaluation file. Lean accepts all 16,961 refill records (Appendix~\ref{app:k12ko}).
-\item \textbf{\Kdose{}} restores 1,550 removed \sig{} records in place of refill records, at \KT{}'s length mix: 1.00\%
-of the records.
+\item \textbf{\Kdose{}} restores 1,550 removed \sig{} records in place of refill records, at the length mix of \KT{}'s
+\sig{} records: 1.00\% of the records.
 \item \textbf{\Kfull{}} pretrains on \KT{}. Seeds s0--s2 come from earlier runs. They differ from the new seeds s3--s5
 in three ways. Rounds 1--8 ran on RTX A6000 cards at sampling batch 2,048 (s2 at 1,024 from round 2), whereas the new seeds
 ran on A40s at 1,024.

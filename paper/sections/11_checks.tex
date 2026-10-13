@@ -1,5 +1,5 @@
 This writing run pre-registered its own checks (\texttt{preregistration/create-or-elicit-paper.md}, commit
-\texttt{c602e43c} and Addenda 1--4) before running them. The pod checks used two NVIDIA A40 instances. All evaluations
+\texttt{c602e43c} and Addenda 1--5) before running them. The pod checks used two NVIDIA A40 instances. All evaluations
 are $k=256$, $T=0.8$, batch 512, on the 106 strict held-out theorems unless stated, with Lean in the loop.
 
 \paragraph{C1: what the cut-offs hide.} Paired evaluations with sample seed 0 on the same file, with standard caps (512
@@ -24,13 +24,24 @@ so far, so the cut-offs have not hidden successes that matter for any verdict.
 
 \paragraph{C2: the dose arm on an equal footing.} A second plain evaluation (sample seed 1) of dose r16 seeds 0, 1 and 2
 proves 56, 39 and 30 strict theorems (first evaluation: 58, 39, 30) and acquires the same families on 3/3 seeds. The
-guided evaluation proves 58 and 42 on seeds 0 and 1 (seed 2 pending), again with the same families.
+guided evaluation proves 58, 42 and 29, again with the same families.
 
-\paragraph{C3: textbook72 at the knockout's evaluation settings.} The old full bases s0 and s1, evaluated at batch 512,
-prove 34 and 30 of textbook72's 72 problems, against 32 and 32 in their original batch-2,048 evaluation (seed 2
-pending). Both are within the pre-registered $\pm4$.
+\paragraph{C3: textbook72 at the knockout's evaluation settings.} The old full bases s0, s1 and s2, evaluated at batch 512,
+prove 34, 30 and 34 of textbook72's 72 problems, against 32, 32 and 38 in their original batch-2,048 evaluation. All
+three are within the pre-registered $\pm4$, seed 2 at its edge. With all six full bases read at the knockout's settings,
+the full-minus-knockout gap at r0 is 5.8 problems, inside the pre-registered range of 4 to 9.
 
-\paragraph{C4: knockout seed 1's members at $n \geq K$.} (pending)
+\paragraph{C4: knockout seed 1's members at $n \geq K$.} Knockout seed 1's base drew 18,432 attempts on each of its 18
+strict converse-contraposition members and on \texttt{la\_transfer\_916}, with no early stopping and new sampling seeds.
+Knockout seed 3's base drew 18,432 on \texttt{916}. At $K = \Ktrain(16) = 17{,}189$, ``within reach'' ($\hat p \geq 1/K$)
+needs at least two successes. Seed 1's base proved \texttt{916} 13 times, \texttt{1460} 4, \texttt{1096} and
+\texttt{1606} 2 each, \texttt{55} and \texttt{1963} once each, and the other 13 members never, among them
+\texttt{1246}, \texttt{2256}, \texttt{1019} and \texttt{528}. Seed 3's base proved \texttt{916} once. Two of the four
+pre-registered expectations hit (\texttt{1460} within reach; \texttt{1019} at most one success). Two missed: at least
+two of \texttt{1246}, \texttt{1460} and \texttt{2256} within reach (one was), and \texttt{916} within reach on both
+bases (not on seed 3). By the pre-registered rule the paper drops ``mostly members its base could already reach''
+(\S\ref{sec:ko-s1}). Pooled over the 18 members, the rate replicates the early-stopped sample's ($3.0$ against
+$3.2\times10^{-5}$); the members that succeed do not.
 
 \paragraph{C5: the pre-filter, in full.} (pending)
 

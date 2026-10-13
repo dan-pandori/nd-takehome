@@ -97,6 +97,20 @@ for s in range(3):
         print(f'  s{s}: pending'); continue
     out['C3'][f's{s}'] = {'solved': sj.get('solved'), 'n': 72, 'wall_s': sj.get('wall_s'), 'peak_gb': sj.get('env', {}).get('peak_alloc_gb')}
     print(f"  s{s}: {sj.get('solved')} / 72")
+# C3's second expectation: the 6-vs-6 full-minus-knockout r0 gap on all 72 at the knockout's settings, in [4, 9].
+# Full s3-s5 and knockout s0-s5 r0 x0 fractions from the review's recount (review_coe/out_general.json, batch 512).
+if all(f's{s}' in out['C3'] for s in range(3)):
+    G = json.load(open(os.path.join(ROOT, 'review_coe/out_general.json')))
+    def tb(k):
+        v = G[k]['pend_x0']['tb72'] if isinstance(G[k].get('pend_x0'), dict) else None
+        return round(72 * v) if v is not None else None
+    full = [out['C3'][f's{s}']['solved'] for s in range(3)] + [tb(f'full_s{s}') for s in (3, 4, 5)]
+    ko = [tb(f'ko_s{s}') for s in range(6)]
+    if None not in full + ko:
+        gap = sum(full) / 6 - sum(ko) / 6
+        out['C3']['gap_6v6'] = {'full': full, 'knockout': ko, 'full_mean': sum(full) / 6, 'ko_mean': sum(ko) / 6,
+                                'gap': gap, 'prereg_range': [4, 9], 'hit': 4 <= gap <= 9}
+        print(f'  6-vs-6 r0 gap on all 72: full {full} mean {sum(full)/6:.2f}, knockout {ko} mean {sum(ko)/6:.2f}, gap {gap:.2f}')
 for k in out['C1'].values():
     for side in ('std', 'dbl'):
         k[side].pop('solved_names', None)
