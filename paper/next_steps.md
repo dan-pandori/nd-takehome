@@ -23,9 +23,22 @@ rewrite. The two critique rounds converged on items 1 and 2.
   attempts per round (k = 32), with group-normalised advantages. A lone success then gets an advantage of
   √31 ≈ 5.6 standard deviations, against roughly 4 of ≈ 90,000 records in EI's fine-tuning mix. Evaluate the strict
   106 at r8 and r16, plain and guided.
+- **Write per-seed predictions first.** By sampling alone, GRPO at k = 32 can only rescue the seeds that find a strict
+  success inside 16 rounds, s1, s2 and s5 under EI, because all-fail groups give no gradient. Any further rescue must
+  come from drift driven by the negative-sample term. Include a pass@4 arm, the only GRPO variant level with EI in this
+  organism (grpo-best), and a signed-update arm without a group baseline.
 - **Decision value.** If GRPO acquires families from knockout bases, "needs exposure" becomes an EI-specific statement
   and the paper's discussion turns on update rules, not data. If it does not, the result generalises across the two
   standard algorithms.
+
+### 1b. Measure the knockout ladders' σ rate along the run — ≈ $3–6 (CPU-light pod work)
+- A5's "the rate rose during RL" is post hoc and rests on plug-in base rates. Sample the 123 strict training theorems and
+  the 106 held-out ones at 10⁵–10⁶ attempts from the saved r4, r8, r12 and r16 checkpoints of every knockout ladder.
+  All 200 ladder checkpoints are in the bucket, and at 6–8 ms per attempt this is a few A40-hours in total. It turns
+  A5 into an observed trajectory, and it separates "EI samples too little" from "EI amplifies too narrowly" (readings 2
+  and 3).
+- Pair it with a **replay-only control from the knockout bases** (the ladder's fine-tuning on replay alone). That
+  tests whether any rate rise is RL's doing or general fine-tuning drift.
 
 ### 2. Exposure during RL vs in pretraining (replay swap) — ≈ $30–45 (3 + 3 seeds)
 - Two arms: (a) knockout bases with the 1,550 dose records added to their replay; (b) full bases with K12⁻ replay.
@@ -53,6 +66,12 @@ rewrite. The two critique rounds converged on items 1 and 2.
   diverge. Abdulsalam et al.'s matched-fraction control does the same.
 - **Decision value.** It separates exposure to the composition from the frequency of its constituents, the knockout's
   main side effect (DN 13.7 → 3.3 %, NEGI 15.2 → 5.2 %).
+
+### 5b. Two to four seeded rounds — ≈ $10–15
+- The one-round seeded null (+2 on 1 of 5 seeds) contrasts with the earlier organism's next-round response to a single
+  injected proof (6 and 17 targets). Run 2–4 rounds with the same seed proof, and also with an in-family proof, and
+  report the training-side count of strict theorems with a free positive reductio. This tells "this organism resists
+  one-proof seeding" from "the read-outs differ".
 
 ### 6. Longer and more exploratory knockout ladders — ≈ $5 per seed per 8 rounds
 - Continue knockout s0 and s2–s5 to r24–r32, and add an exploration lever:
