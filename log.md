@@ -964,3 +964,31 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 16:37 UTC  **Knockout s1 r24 plain read** (k 256 x0, `artifacts/coe/eval/r24_ko_s1_x0`): strict held-out members **5 / 106 — the same five as at r20** (contraposition_conv 4 / 18: `la_transfer_1019`, `1246`, `1460`, `2256`; plus `la_transfer_916`), but each now solved far more often: successes per 256 attempts r16 → r20 → r24: 1019 0 → 32 → 214, 1246 0 → 23 → 126, 1460 108 → 205 → 189, 2256 0 → 47 → 177, 916 10 → 14 → 33. No family at the bar. read1054 896 solved; cut-offs 0.32 %. **Addendum 6 item 1 expectations:** contraposition_conv training share at r24 0.3–0.8 — hit (0.33); 2–12 of its 18 held-out members at r24 — hit (4); at the bar with probability ≈ 0.3 — not at the bar; no other family at the bar — hit. Reading: from r20 to r24 RL sharpened the members it had found instead of spreading to new ones.
 - 16:48 UTC  **All pods deleted** (coe-k1 reaped 16:40, 34.69 h, $20.46; `runpodctl pod list` empty). **Final spend: 16 pods, 309.34 pod-hours, $182.50** of $190 / 330 h (`artifacts/coe/pod_hours.tsv`, `artifacts/coe/compute.md`: process GPU-hours 419.9, RL ladders 191.2, reads 181.7). RunPod balance $101.23. Final checks: knockout s1's replay check over 24 rounds (2.09 M mix records) 0 σ-like replay records, 0 leaked K12 records — 6 / 6 knockout seeds pass; knockout s1's log p of known σ proofs along the ladder −26.0 (pend) → −33.6 (r16), best member −7.9 → −4.2; **offline Lean re-check** (`coe/coe_recheck.py` → `artifacts/coe/recheck.json`): 1,062 / 1,062 counted proofs accepted (every knockout proof of a strict member in the plain reads 424, knockout base large-k successes 13, Phase 3a 25, samples of full r16 450 and dose r16 150), and the same 1,062 with the conclusion negated 1,062 / 1,062 rejected. Data files published with manifest rows (the three training sets, `known_targets*.jsonl.gz`); the bulk artifacts follow (`publish_artifacts.py`).
 - 17:39 UTC  **Bulk artifacts published** (`publish_artifacts.py create-or-elicit artifacts/coe artifacts/create-or-elicit`, under the download lock): 744 files, 1,265,129,988 bytes (read rows, large-k chunks, scores, known-proof sets, registry rows), credential scan clean, every bucket copy re-downloaded and matched by sha256; `artifacts/MANIFEST.jsonl` 3,382 rows. Checkpoints (12 Stage 1, 200 ladder, 10 Phase 3a) were uploaded on save to `hf://buckets/dan-pandori/nd-rl/create-or-elicit/ckpts/coe/`; the ladders' found / mix / alloc files were synced from the pods to the same prefix. All pods deleted; the run is done.
+
+## create-or-elicit-paper (writing run, proposal 27)
+
+- 2026-10-13 19:20 UTC  Start. Inputs read: proposal 27, the create-or-elicit librarian summary (nd-rl), `review_create-or-elicit.md`
+  (§Verdict, §3, the ledger audit), `claims_ledger.md` v3 (sections A–M read in full: it is the paper's number source, so
+  this full read was necessary), `next_steps.md`, the mcts-a / grpo-best / compute-match / guided-tts summaries, the
+  capability-defs report §1–2. Branch fast-forwarded to `origin/dan_create-or-elicit` (8e195390). tectonic 0.17.0
+  installed in `~/tools/tectonic` (26 MB binary, 43 MB cache).
+- 19:27  Pre-registration committed (c602e43c), before any pod. `podbudget create-or-elicit-paper --set 20 10`. RunPod balance
+  $101.21.
+- 19:28  Pod `coep-1` (NVIDIA A40, SECURE, $0.59/h) created; setup took 2 min (13 checkpoints from the bucket; md5s of the
+  old full pend checkpoints = trajectory's 2bf801fd / eaff7f4d / abca9c63). Two read lanes launched (C1–C3).
+- 19:30  Literature digest sub-agent launched (related-work digest + refs.bib from the local verified notes only).
+- 19:31–19:39  Figures F1–F7 regenerated from data (`paper/scripts/figures.py`). Every plotted number equals its reviewed
+  value: strict r16 x0 42/75/77/65/23/33 vs 0/2/1/0/0/2 and dose 58/39/30 (R§3); cumulative strict targets r1→r16 (R§4 /
+  S-coe Obs 2); knockout s1 free+ per round r9–r24 1,0,0,2,5,10,5,11,29,37,49,74,81,74,98,123 (S-coe Obs 5); log p pend→r16
+  (L87, L98); budget sets 34/33/33 · 33/27/24 · 28/26/24 · 22/21/14 · 21/20/14 (L2); estimator p̂-bin medians
+  0.937/0.883/0.454/0.361 (S-coe Obs 9); guided and MCTS differences (L28; mcts-a summary).
+- 19:35  A2 (exploratory, post hoc): Spearman ρ between base median log p of known σ proofs and r16 strict members
+  solved, 13 ladders: **0.877 (p 8.3e-5)**; without the knockout arm (7 ladders) 0.393 (p 0.38). Pre-registered "ρ ≥ 0.6
+  across the 13": hit. "Not monotone within dose": hit (−25.3 → 58, −18.9 → 39, −24.5 → 30). The across-arm ρ is mostly
+  the arm difference.
+- 19:40  Prereg Addendum 1 (432ff8fb), then A3: AUC of a member's best known σ proof's pend log p for "solved at r16 x0",
+  101 members. **Full s0/s3/s4/s5 0.954 / 0.953 / 0.940 / 0.922** (pre-registered ≥ 0.7 on ≥ 3 of 4: hit, 4 / 4). Dose
+  s0–s2 0.858 / 0.861 / 0.846 (≥ 0.7 on ≥ 2 of 3: hit). Within-family AUC (exploratory): full 0.626 / 0.978 / 0.926 /
+  0.467 over 107 / 46 / 54 / 92 pairs (> 0.5 on 3 of 4: hit); dose 0.280 / 0.600 / 0.328. So the base prior predicts which
+  *families* RL acquires; within a family it is mixed. Solved counts reproduce the reviewed strict counts exactly.
+- 19:40  C1 first read: knockout s0 r16, standard caps, strict 106: 0 solved (as x0), 589 s, peak 7.27 GB at batch 512.

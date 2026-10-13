@@ -104,7 +104,7 @@ $10 / 20 pod-hours (`podbudget create-or-elicit-paper --set 20 10`, set before t
 $101 at writing; the floor is $35. The run is done when two critique rounds and the audit are applied, the deliverables
 exist and the branch is pushed. Hard stop 96 h after start (2026-10-17 19:20 UTC).
 
-## Addendum 1 (2026-10-13 19:42 UTC, before computing A3)
+## Addendum 1 (2026-10-13 19:40 UTC, commit 432ff8fb, before computing A3)
 
 The per-member score rows exist in the bucket (≈ 1.6–3.6 MB per checkpoint), so A3 runs. Members are the 101 strict
 held-out members that have a known σ proof. The label is "solved in the r16 x0 plain read" (for old full s0, the union
