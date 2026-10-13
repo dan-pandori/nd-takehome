@@ -1,0 +1,166 @@
+{
+ "file": "/home/dan/review/coe_big/tmp_found.jsonl",
+ "kind": "transfer",
+ "lines": 79991,
+ "per_round": {
+  "1": {
+   "new": 1057,
+   "dn": 336,
+   "dn_pr_as_only": 330,
+   "sigma": 3,
+   "sigma_plus": 6,
+   "sp_any_target": 6
+  },
+  "2": {
+   "new": 2821,
+   "dn": 547,
+   "sigma_plus": 27,
+   "sp_any_target": 27,
+   "dn_pr_as_only": 520,
+   "sigma": 4
+  },
+  "3": {
+   "new": 3669,
+   "dn": 575,
+   "sigma_plus": 51,
+   "sp_any_target": 51,
+   "dn_pr_as_only": 524,
+   "lemma_broad": 2,
+   "sigma": 2
+  },
+  "4": {
+   "new": 4306,
+   "dn": 750,
+   "sigma_plus": 60,
+   "sp_any_target": 60,
+   "dn_pr_as_only": 690,
+   "sigma": 9,
+   "lemma_broad": 1
+  },
+  "5": {
+   "new": 4500,
+   "dn": 853,
+   "sigma_plus": 113,
+   "sp_any_target": 113,
+   "dn_pr_as_only": 740,
+   "sigma": 26
+  },
+  "6": {
+   "new": 4750,
+   "dn": 864,
+   "sigma_plus": 91,
+   "sp_any_target": 91,
+   "sigma": 19,
+   "dn_pr_as_only": 773
+  },
+  "7": {
+   "new": 5397,
+   "dn": 924,
+   "sigma_plus": 72,
+   "sp_any_target": 72,
+   "dn_pr_as_only": 852,
+   "sigma": 20
+  },
+  "8": {
+   "new": 5170,
+   "dn": 956,
+   "sigma_plus": 92,
+   "sp_any_target": 92,
+   "dn_pr_as_only": 864,
+   "sigma": 31
+  },
+  "9": {
+   "new": 5337,
+   "dn": 951,
+   "sigma_plus": 93,
+   "sp_any_target": 93,
+   "dn_pr_as_only": 858,
+   "sigma": 21
+  },
+  "10": {
+   "new": 5547,
+   "dn": 978,
+   "sigma_plus": 103,
+   "sp_any_target": 103,
+   "dn_pr_as_only": 875,
+   "sigma": 15
+  },
+  "11": {
+   "new": 5978,
+   "dn": 1028,
+   "sigma_plus": 124,
+   "sp_any_target": 124,
+   "dn_pr_as_only": 904,
+   "sigma": 30,
+   "free_pos": 1,
+   "free_pos_cited:ORE": 1
+  },
+  "12": {
+   "new": 6397,
+   "dn": 1024,
+   "sigma_plus": 104,
+   "sp_any_target": 104,
+   "dn_pr_as_only": 920,
+   "sigma": 18,
+   "free_pos": 1,
+   "free_pos_cited:ANDE2": 1
+  },
+  "13": {
+   "new": 6430,
+   "dn": 996,
+   "sigma_plus": 114,
+   "sp_any_target": 114,
+   "dn_pr_as_only": 882,
+   "sigma": 26
+  },
+  "14": {
+   "new": 6100,
+   "dn": 951,
+   "sigma_plus": 88,
+   "sp_any_target": 88,
+   "sigma": 22,
+   "dn_pr_as_only": 863
+  },
+  "15": {
+   "new": 6515,
+   "dn": 1049,
+   "sigma_plus": 129,
+   "sp_any_target": 129,
+   "dn_pr_as_only": 920,
+   "sigma": 32
+  },
+  "16": {
+   "new": 6017,
+   "dn": 986,
+   "sigma_plus": 96,
+   "sp_any_target": 96,
+   "dn_pr_as_only": 890,
+   "sigma": 23
+  }
+ },
+ "first_solved_strict": {},
+ "first_free_pos_strict": {},
+ "first_sigma_plus_strict": {},
+ "first_round_sigma_plus_any": 1,
+ "first_round_free_pos_any": 11,
+ "examples": [
+  {
+   "round": 12,
+   "name": "la_transfer_461",
+   "prompt": "THM SEQ ( ( ~ ( ~ ( P v P ) ) ) > ( R > ( P & P ) ) ) PRF",
+   "proof": "N1 | ( ~ ( ~ ( P v P ) ) ) : AS ; N2 | ( ( Q & ( ~ ( ~ P ) ) ) v ( ~ ( ~ ( P v P ) ) ) ) : ORI2 N1 ; N3 | | R : AS ; N4 | | | ( Q & ( ~ ( ~ P ) ) ) : AS ; N5 | | | ( ~ ( ~ P ) ) : ANDE2 N4 ; N6 | | | P : DN N5 ; N7 | | | ( P & P ) : ANDI N6 N6 ; N8 | | | ( ~ ( ~ ( P v P ) ) ) : AS ; N9 | | | ( P v P ) : DN N1 ; N10 | | | | P : AS ; N11 | | | | P : AS ; N12 | | | P : ORE N9 N10 N10 N11 N11 ; N13 | | | ( P & P ) : ANDI N12 N12 ; N14 | | ( P & P ) : ORE N2 N4 N7 N8 N13 ; N15 | ( R > ( P & P ) ) : IMPI N3 N14 ; N16 ( ( ~ ( ~ ( P v P ) ) ) > ( R > ( P & P ) ) ) : IMPI N1 N15 ; QED",
+   "cited": [
+    "ANDE2"
+   ]
+  },
+  {
+   "round": 11,
+   "name": "la_transfer_1697",
+   "prompt": "THM ( ( S > R ) > ( S > Q ) ) SEQ ( ( ( S > R ) & S ) > Q ) PRF",
+   "proof": "N1 ( ( S > R ) > ( S > Q ) ) : PR ; N2 | ( ( S > R ) & S ) : AS ; N3 | ( S > R ) : ANDE1 N2 ; N4 | ( S > Q ) : IMPE N1 N3 ; N5 | ( ( ~ ( ~ Q ) ) v ( S > R ) ) : ORI2 N3 ; N6 | | ( ~ ( ~ Q ) ) : AS ; N7 | | ( S > R ) : AS ; N8 | | | ( ~ Q ) : AS ; N9 | | | ( S > Q ) : R N4 ; N10 | | | ( S > R ) : R N3 ; N11 | | | S : ANDE2 N2 ; N12 | | | | ( ~ Q ) : AS ; N13 | | | | Q : IMPE N4 N11 ; N14 | | | | F : NEGE N13 N8 ; N15 | | | ( ~ ( ~ Q ) ) : NEGI N12 N14 ; N16 | | | F : NEGE N8 N15 ; N17 | | ( ~ ( ~ Q ) ) : NEGI N8 N16 ; N18 | ( ~ ( ~ Q ) ) : ORE N5 N6 N6 N7 N17 ; N19 | Q : DN N18 ; N20 ( ( ( S > R ) & S ) > Q ) : IMPI N2 N19 ; QED",
+   "cited": [
+    "ORE"
+   ]
+  }
+ ]
+}

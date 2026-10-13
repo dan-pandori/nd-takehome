@@ -1,0 +1,203 @@
+{
+ "file": "/home/dan/review/coe_big/tmp_found.jsonl",
+ "kind": "targets",
+ "lines": 719994,
+ "per_round": {
+  "1": {
+   "new": 16984,
+   "dn": 2512,
+   "dn_pr_as_only": 2478,
+   "sigma_plus": 34,
+   "sp_any_target": 34,
+   "sigma": 6
+  },
+  "2": {
+   "new": 23755,
+   "dn": 4427,
+   "dn_pr_as_only": 4315,
+   "sigma_plus": 112,
+   "sp_any_target": 112,
+   "sigma": 52,
+   "lemma": 1,
+   "lemma_broad": 1
+  },
+  "3": {
+   "new": 28018,
+   "dn": 4865,
+   "dn_pr_as_only": 4722,
+   "sigma_plus": 143,
+   "sp_any_target": 143,
+   "sigma": 71
+  },
+  "4": {
+   "new": 33880,
+   "dn": 5757,
+   "dn_pr_as_only": 5558,
+   "sigma_plus": 199,
+   "sp_any_target": 199,
+   "sigma": 108,
+   "lemma": 1,
+   "lemma_broad": 2
+  },
+  "5": {
+   "new": 37824,
+   "dn": 6601,
+   "dn_pr_as_only": 6422,
+   "sigma": 89,
+   "sigma_plus": 179,
+   "sp_any_target": 179,
+   "lemma": 1,
+   "lemma_broad": 1
+  },
+  "6": {
+   "new": 41401,
+   "dn": 7065,
+   "dn_pr_as_only": 6861,
+   "sigma": 120,
+   "sigma_plus": 204,
+   "sp_any_target": 204
+  },
+  "7": {
+   "new": 44869,
+   "dn": 7930,
+   "dn_pr_as_only": 7656,
+   "sigma": 150,
+   "sigma_plus": 274,
+   "sp_any_target": 274
+  },
+  "8": {
+   "new": 48222,
+   "dn": 8257,
+   "dn_pr_as_only": 7961,
+   "sigma": 174,
+   "sigma_plus": 296,
+   "sp_any_target": 296
+  },
+  "9": {
+   "new": 49452,
+   "dn": 8619,
+   "dn_pr_as_only": 8339,
+   "sigma": 158,
+   "sigma_plus": 280,
+   "sp_any_target": 280,
+   "lemma_broad": 2
+  },
+  "10": {
+   "new": 53821,
+   "dn": 9439,
+   "dn_pr_as_only": 9111,
+   "sigma": 177,
+   "sigma_plus": 328,
+   "sp_any_target": 328
+  },
+  "11": {
+   "new": 53193,
+   "dn": 9005,
+   "dn_pr_as_only": 8713,
+   "sigma": 185,
+   "sigma_plus": 292,
+   "sp_any_target": 292
+  },
+  "12": {
+   "new": 55836,
+   "dn": 9642,
+   "dn_pr_as_only": 9276,
+   "sigma": 229,
+   "sigma_plus": 366,
+   "sp_any_target": 366,
+   "lemma_broad": 3,
+   "free_pos": 2,
+   "free_pos_cited:NEGI": 1,
+   "free_pos_cited:ORE": 1
+  },
+  "13": {
+   "new": 57068,
+   "dn": 9670,
+   "dn_pr_as_only": 9287,
+   "sigma": 244,
+   "sigma_plus": 383,
+   "sp_any_target": 383,
+   "lemma_broad": 2,
+   "lemma": 1
+  },
+  "14": {
+   "new": 57450,
+   "dn": 9998,
+   "dn_pr_as_only": 9654,
+   "sigma": 201,
+   "sigma_plus": 344,
+   "sp_any_target": 344,
+   "new_strict": 1,
+   "free_pos": 1,
+   "free_pos_cited:NEGI": 1,
+   "free_pos_strict": 1
+  },
+  "15": {
+   "new": 59449,
+   "dn": 10258,
+   "dn_pr_as_only": 9881,
+   "sigma": 241,
+   "sigma_plus": 377,
+   "sp_any_target": 377,
+   "free_pos": 1,
+   "free_pos_cited:BOTE": 1
+  },
+  "16": {
+   "new": 58772,
+   "dn": 10195,
+   "dn_pr_as_only": 9802,
+   "sigma": 257,
+   "sigma_plus": 393,
+   "sp_any_target": 393
+  }
+ },
+ "first_solved_strict": {
+  "la_rl_targets_325": 14
+ },
+ "first_free_pos_strict": {
+  "la_rl_targets_325": 14
+ },
+ "first_sigma_plus_strict": {
+  "la_rl_targets_325": 14
+ },
+ "first_round_sigma_plus_any": 1,
+ "first_round_free_pos_any": 12,
+ "examples": [
+  {
+   "round": 14,
+   "name": "la_rl_targets_325",
+   "prompt": "THM ( ( ~ ( R v S ) ) > ( ~ ( P v S ) ) ) SEQ ( ( P v S ) > ( R v S ) ) PRF",
+   "proof": "N1 ( ( ~ ( R v S ) ) > ( ~ ( P v S ) ) ) : PR ; N2 | ( P v S ) : AS ; N3 | | ( ~ ( R v S ) ) : AS ; N4 | | ( ( ~ ( P v S ) ) v ( P v S ) ) : ORI2 N2 ; N5 | | | ( ~ ( P v S ) ) : AS ; N6 | | | ( P v S ) : AS ; N7 | | | ( ~ ( P v S ) ) : IMPE N1 N3 ; N8 | | ( ~ ( P v S ) ) : ORE N4 N5 N5 N6 N7 ; N9 | | F : NEGE N2 N8 ; N10 | ( ~ ( ~ ( R v S ) ) ) : NEGI N3 N9 ; N11 | ( R v S ) : DN N10 ; N12 ( ( P v S ) > ( R v S ) ) : IMPI N2 N11 ; QED",
+   "cited": [
+    "NEGI"
+   ]
+  },
+  {
+   "round": 12,
+   "name": "la_rl_targets_2199",
+   "prompt": "THM ( ( ~ ( S > Q ) ) & ( ~ ( Q & S ) ) ) SEQ ( ~ ( ( S > Q ) v ( Q & S ) ) ) PRF",
+   "proof": "N1 ( ( ~ ( S > Q ) ) & ( ~ ( Q & S ) ) ) : PR ; N2 ( ~ ( Q & S ) ) : ANDE2 N1 ; N3 | ( ( S > Q ) v ( Q & S ) ) : AS ; N4 | | ( ~ Q ) : AS ; N5 | | ( ~ ( S > Q ) ) : ANDE1 N1 ; N6 | | | S : AS ; N7 | | | | ( S > Q ) : AS ; N8 | | | | Q : IMPE N7 N6 ; N9 | | | | ( Q & S ) : AS ; N10 | | | | Q : ANDE1 N9 ; N11 | | | Q : ORE N3 N7 N8 N9 N10 ; N12 | | ( S > Q ) : IMPI N6 N11 ; N13 | | F : NEGE N12 N5 ; N14 | ( ~ ( ~ Q ) ) : NEGI N4 N13 ; N15 | ( ~ ( S > Q ) ) : ANDE1 N1 ; N16 | | ( S > Q ) : AS ; N17 | | ( Q & S ) : AS ; N18 | | | S : AS ; N19 | | | Q : DN N14 ; N20 | | ( S > Q ) : IMPI N18 N19 ; N21 | ( S > Q ) : ORE N3 N16 N16 N17 N20 ; N22 | F : NEGE N21 N15 ; N23 ( ~ ( ( S > Q ) v ( Q & S ) ) ) : NEGI N3 N22 ; QED",
+   "cited": [
+    "NEGI"
+   ]
+  },
+  {
+   "round": 12,
+   "name": "la_rl_targets_2624",
+   "prompt": "THM ( ( ~ Q ) > ( S v S ) ) , ( ~ Q ) , ( ~ ( ~ ( ( ~ ( S v S ) ) v ( ~ Q ) ) ) ) SEQ ( Q > ( ( ~ ( ~ ( ( ~ ( S v S ) ) v ( ~ Q ) ) ) ) & ( S v S ) ) ) PRF",
+   "proof": "N1 ( ( ~ Q ) > ( S v S ) ) : PR ; N2 ( ~ Q ) : PR ; N3 ( ~ ( ~ ( ( ~ ( S v S ) ) v ( ~ Q ) ) ) ) : PR ; N4 ( ( ~ ( ~ ( S v S ) ) ) v ( ~ Q ) ) : ORI2 N2 ; N5 | ( ~ ( ~ ( S v S ) ) ) : AS ; N6 | ( ( ~ ( ~ ( S v S ) ) ) v ( ~ Q ) ) : ORI1 N5 ; N7 | ( ~ Q ) : AS ; N8 | ( ( ~ ( ~ ( S v S ) ) ) v ( ~ Q ) ) : R N4 ; N9 ( ( ~ ( ~ ( S v S ) ) ) v ( ~ Q ) ) : ORE N4 N5 N6 N7 N8 ; N10 | ( ~ ( ~ ( S v S ) ) ) : AS ; N11 | ( ~ Q ) : AS ; N12 | | ( ~ ( S v S ) ) : AS ; N13 | | ( S v S ) : IMPE N1 N11 ; N14 | | F : NEGE N13 N12 ; N15 | ( ~ ( ~ ( S v S ) ) ) : NEGI N12 N14 ; N16 ( ~ ( ~ ( S v S ) ) ) : ORE N9 N10 N10 N11 N15 ; N17 ( S v S ) : DN N16 ; N18 | Q : AS ; N19 | ( ( ~ ( ~ ( ( ~ ( S v S ) ) v ( ~ Q ) ) ) ) & ( S v S ) ) : ANDI N3 N17 ; N20 ( Q > ( ( ~ ( ~ ( ( ~ ( S v S ) ) v ( ~ Q ) ) ) ) & ( S v S ) ) ) : IMPI N18 N19 ; QED",
+   "cited": [
+    "ORE"
+   ]
+  },
+  {
+   "round": 15,
+   "name": "la_rl_targets_2834",
+   "prompt": "THM ( ~ ( ~ ( ~ ( S > R ) ) ) ) SEQ ( ( ~ ( ~ P ) ) > ( ( ~ ( ~ ( S > R ) ) ) > ( ~ ( ( ~ S ) > ( S v S ) ) ) ) ) PRF",
+   "proof": "N1 ( ~ ( ~ ( ~ ( S > R ) ) ) ) : PR ; N2 | ( ~ ( ~ P ) ) : AS ; N3 | | ( ~ ( ~ ( S > R ) ) ) : AS ; N4 | | F : NEGE N3 N1 ; N5 | | ( ~ ( ~ S ) ) : BOTE N4 ; N6 | | S : DN N5 ; N7 | | ( ~ ( ( ~ S ) > ( S v S ) ) ) : BOTE N4 ; N8 | ( ( ~ ( ~ ( S > R ) ) ) > ( ~ ( ( ~ S ) > ( S v S ) ) ) ) : IMPI N3 N7 ; N9 ( ( ~ ( ~ P ) ) > ( ( ~ ( ~ ( S > R ) ) ) > ( ~ ( ( ~ S ) > ( S v S ) ) ) ) ) : IMPI N2 N8 ; QED",
+   "cited": [
+    "BOTE"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,163 @@
+{
+ "file": "/home/dan/review/coe_big/tmp_found.jsonl",
+ "kind": "targets",
+ "lines": 664562,
+ "per_round": {
+  "1": {
+   "new": 14967,
+   "dn": 1848,
+   "dn_pr_as_only": 1823,
+   "sigma_plus": 25,
+   "sp_any_target": 25,
+   "sigma": 7
+  },
+  "2": {
+   "new": 19363,
+   "dn": 2590,
+   "dn_pr_as_only": 2544,
+   "sigma_plus": 46,
+   "sp_any_target": 46,
+   "sigma": 23,
+   "lemma_broad": 1
+  },
+  "3": {
+   "new": 25383,
+   "dn": 3929,
+   "dn_pr_as_only": 3862,
+   "sigma_plus": 67,
+   "sp_any_target": 67,
+   "sigma": 19
+  },
+  "4": {
+   "new": 30541,
+   "dn": 5059,
+   "dn_pr_as_only": 4981,
+   "sigma_plus": 78,
+   "sp_any_target": 78,
+   "sigma": 25
+  },
+  "5": {
+   "new": 35074,
+   "dn": 6111,
+   "dn_pr_as_only": 6017,
+   "sigma_plus": 94,
+   "sp_any_target": 94,
+   "sigma": 21
+  },
+  "6": {
+   "new": 42789,
+   "dn": 7218,
+   "dn_pr_as_only": 7093,
+   "sigma_plus": 125,
+   "sp_any_target": 125,
+   "sigma": 32
+  },
+  "7": {
+   "new": 45319,
+   "dn": 7497,
+   "dn_pr_as_only": 7372,
+   "sigma_plus": 125,
+   "sp_any_target": 125,
+   "sigma": 28
+  },
+  "8": {
+   "new": 49063,
+   "dn": 8219,
+   "dn_pr_as_only": 8052,
+   "sigma_plus": 167,
+   "sp_any_target": 167,
+   "sigma": 49
+  },
+  "9": {
+   "new": 48363,
+   "dn": 7852,
+   "dn_pr_as_only": 7717,
+   "sigma_plus": 135,
+   "sp_any_target": 135,
+   "sigma": 43
+  },
+  "10": {
+   "new": 47304,
+   "dn": 7780,
+   "dn_pr_as_only": 7626,
+   "sigma_plus": 154,
+   "sp_any_target": 154,
+   "sigma": 55
+  },
+  "11": {
+   "new": 50680,
+   "dn": 8205,
+   "dn_pr_as_only": 8038,
+   "sigma_plus": 167,
+   "sp_any_target": 167,
+   "sigma": 47
+  },
+  "12": {
+   "new": 51872,
+   "dn": 8228,
+   "dn_pr_as_only": 8053,
+   "sigma_plus": 175,
+   "sp_any_target": 175,
+   "sigma": 61
+  },
+  "13": {
+   "new": 48942,
+   "dn": 7949,
+   "dn_pr_as_only": 7716,
+   "sigma_plus": 233,
+   "sp_any_target": 233,
+   "sigma": 85
+  },
+  "14": {
+   "new": 50433,
+   "dn": 8212,
+   "dn_pr_as_only": 8030,
+   "sigma_plus": 182,
+   "sp_any_target": 182,
+   "sigma": 71
+  },
+  "15": {
+   "new": 53604,
+   "dn": 8541,
+   "dn_pr_as_only": 8332,
+   "sigma_plus": 209,
+   "sp_any_target": 209,
+   "sigma": 67,
+   "free_pos": 2,
+   "free_pos_cited:NEGI": 2
+  },
+  "16": {
+   "new": 50865,
+   "dn": 8137,
+   "dn_pr_as_only": 7920,
+   "sigma_plus": 217,
+   "sp_any_target": 217,
+   "sigma": 60
+  }
+ },
+ "first_solved_strict": {},
+ "first_free_pos_strict": {},
+ "first_sigma_plus_strict": {},
+ "first_round_sigma_plus_any": 1,
+ "first_round_free_pos_any": 15,
+ "examples": [
+  {
+   "round": 15,
+   "name": "la_rl_targets_989",
+   "prompt": "THM ( ~ S ) SEQ ( ( S > Q ) > ( ( S > Q ) > ( S > R ) ) ) PRF",
+   "proof": "N1 ( ~ S ) : PR ; N2 | ( S > Q ) : AS ; N3 | | ( S > Q ) : AS ; N4 | | ( ( S > Q ) v ( ~ ( ~ R ) ) ) : ORI1 N3 ; N5 | | | S : AS ; N6 | | | | ( S > Q ) : AS ; N7 | | | | Q : IMPE N6 N5 ; N8 | | | | ( ~ ( ~ R ) ) : AS ; N9 | | | | Q : IMPE N3 N5 ; N10 | | | Q : ORE N4 N6 N7 N8 N9 ; N11 | | | | ( ~ R ) : AS ; N12 | | | | F : NEGE N5 N1 ; N13 | | | ( ~ ( ~ R ) ) : NEGI N11 N12 ; N14 | | | R : DN N13 ; N15 | | ( S > R ) : IMPI N5 N14 ; N16 | ( ( S > Q ) > ( S > R ) ) : IMPI N3 N15 ; N17 | ( ( ( S > Q ) > ( S > R ) ) v ( ~ ( ~ R ) ) ) : ORI1 N16 ; N18 | | ( ( S > Q ) > ( S > R ) ) : AS ; N19 | | ( ~ ( ~ R ) ) : AS ; N20 | | ( ( S > Q ) > ( S > R ) ) : R N16 ; N21 | ( ( S > Q ) > ( S > R ) ) : ORE N17 N18 N18 N19 N20 ; N22 ( ( S > Q ) > ( ( S > Q ) > ( S > R ) ) ) : IMPI N2 N21 ; QED",
+   "cited": [
+    "NEGI"
+   ]
+  },
+  {
+   "round": 15,
+   "name": "la_rl_targets_1228",
+   "prompt": "THM ( ( R & Q ) v ( ( ~ Q ) > Q ) ) , ( ~ ( R & Q ) ) , ( ~ ( ( ~ Q ) > Q ) ) SEQ ( ( ~ ( ~ ( ~ S ) ) ) > ( ( R & R ) v ( P > R ) ) ) PRF",
+   "proof": "N1 ( ( R & Q ) v ( ( ~ Q ) > Q ) ) : PR ; N2 ( ~ ( R & Q ) ) : PR ; N3 ( ~ ( ( ~ Q ) > Q ) ) : PR ; N4 | ( ~ ( ~ ( ~ S ) ) ) : AS ; N5 | | ( ~ Q ) : AS ; N6 | | ( ~ S ) : DN N4 ; N7 | | | ( R & Q ) : AS ; N8 | | | F : NEGE N7 N2 ; N9 | | | ( ( ~ Q ) > Q ) : AS ; N10 | | | F : NEGE N9 N3 ; N11 | | F : ORE N1 N7 N8 N9 N10 ; N12 | ( ~ ( ~ Q ) ) : NEGI N5 N11 ; N13 | | P : AS ; N14 | | | ( ~ Q ) : AS ; N15 | | | Q : DN N12 ; N16 | | ( ( ~ Q ) > Q ) : IMPI N14 N15 ; N17 | | F : NEGE N16 N3 ; N18 | | R : BOTE N17 ; N19 | ( P > R ) : IMPI N13 N18 ; N20 | | ( R & Q ) : AS ; N21 | | ( ( R & R ) v ( P > R ) ) : ORI2 N19 ; N22 | | ( ( ~ Q ) > Q ) : AS ; N23 | | ( P > R ) : R N19 ; N24 | | ( ( R & R ) v ( P > R ) ) : ORI2 N23 ; N25 | ( ( R & R ) v ( P > R ) ) : ORE N1 N20 N21 N22 N24 ; N26 ( ( ~ ( ~ ( ~ S ) ) ) > ( ( R & R ) v ( P > R ) ) ) : IMPI N4 N25 ; QED",
+   "cited": [
+    "NEGI"
+   ]
+  }
+ ]
+}

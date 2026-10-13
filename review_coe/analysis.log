@@ -1,0 +1,52 @@
+== families acquired during RL (strict, x0: acquired at r16, not at pend)
+  full_s0: pend ['contraposition_conv'] -> r16 ['contraposition_conv', 'negated_conditional']; during RL: ['negated_conditional']
+  full_s1: pend [] -> r16 ['contraposition_conv', 'excluded_middle', 'peirce']; during RL: ['contraposition_conv', 'excluded_middle', 'peirce']
+  full_s2: pend ['contraposition_conv'] -> r16 ['contraposition_conv', 'negated_conditional', 'peirce', 'peirce_sequent']; during RL: ['negated_conditional', 'peirce', 'peirce_sequent']
+  full_s3: pend ['contraposition_conv'] -> r16 ['contraposition_conv', 'negated_conditional', 'peirce', 'peirce_sequent']; during RL: ['negated_conditional', 'peirce', 'peirce_sequent']
+  full_s4: pend ['contraposition_conv'] -> r16 ['contraposition_conv']; during RL: []
+  full_s5: pend ['contraposition_conv'] -> r16 ['contraposition_conv', 'peirce_sequent']; during RL: ['peirce_sequent']
+  ko_s0: pend [] -> r16 []; during RL: []
+  ko_s1: pend [] -> r16 []; during RL: []
+  ko_s2: pend [] -> r16 []; during RL: []
+  ko_s3: pend [] -> r16 []; during RL: []
+  ko_s4: pend [] -> r16 []; during RL: []
+  ko_s5: pend [] -> r16 []; during RL: []
+  dose1_s0: pend [] -> r16 ['contraposition_conv', 'negated_conditional', 'peirce', 'peirce_sequent']; during RL: ['contraposition_conv', 'negated_conditional', 'peirce', 'peirce_sequent']
+  dose1_s1: pend ['contraposition_conv'] -> r16 ['contraposition_conv', 'negated_conditional']; during RL: ['negated_conditional']
+  dose1_s2: pend [] -> r16 ['contraposition_conv', 'negated_conditional']; during RL: ['contraposition_conv', 'negated_conditional']
+  seeds with >= 1 family acquired during RL: full 5/6, knockout 0/6; Boschloo one-sided p = 0.0032
+  dose1 3/3; dose1 vs knockout Boschloo p = 0.0033
+== primary indicator on other draws / reads (r16)
+  r16 x0: full 6/6, knockout 0/6; Boschloo p 0.00024
+  r16 x1: full 6/6, knockout 0/6; Boschloo p 0.00024
+  r16 g0: full 6/6, knockout 0/6; Boschloo p 0.00024
+== pend indicator (bases)
+  pend x0: full [1, 0, 1, 1, 1, 1], knockout [0, 0, 0, 0, 0, 0], dose1 [0, 1, 0]
+  pend x1: full [1, 0, 1, 1, 1, 1], knockout [0, 0, 0, 0, 0, 0], dose1 [0, 1, 1]
+  pend g0: full [1, 1, 1, 1, 1, 1], knockout [0, 0, 0, 0, 0, 0], dose1 [0, 1, 1]
+== strict held-out solved (of 106), per seed: pend x0 -> r8 x0 -> r16 x0 / x1 / g0
+  full_s0: [18, 38, 42, 43, 44]
+  full_s1: [6, 25, 75, 73, 75]
+  full_s2: [22, 66, 77, 77, 80]
+  full_s3: [23, 59, 65, 64, 64]
+  full_s4: [15, 21, 23, 22, 24]
+  full_s5: [18, 19, 33, 34, 33]
+  ko_s0: [0, 0, 0, 0, 0]
+  ko_s1: [0, 1, 2, 2, 3]  r20 5 r24 5 (contraposition_conv [4, 18], [4, 18])
+  ko_s2: [0, 0, 1, 1, 0]
+  ko_s3: [0, 0, 0, 0, 0]
+  ko_s4: [0, 0, 0, 0, 0]
+  ko_s5: [0, 0, 2, 1, 2]
+  dose1_s0: [6, 53, 58, None, None]
+  dose1_s1: [18, 33, 39, None, None]
+  dose1_s2: [8, 28, 30, None, None]
+  full: r16 x0 strict solved [42, 75, 77, 65, 23, 33] median 53.5
+  ko: r16 x0 strict solved [0, 2, 1, 0, 0, 2] median 0.5
+  dose1: r16 x0 strict solved [58, 39, 30] median 39
+== per family, seeds acquiring at r16 (x0)
+  contraposition_conv    full 6/6 full_old 3/3 full_new 3/3 ko 0/6 dose1 3/3
+  demorgan_nand_to_or    full 0/6 full_old 0/3 full_new 0/3 ko 0/6 dose1 0/3
+  excluded_middle        full 1/6 full_old 1/3 full_new 0/3 ko 0/6 dose1 0/3
+  negated_conditional    full 3/6 full_old 2/3 full_new 1/3 ko 0/6 dose1 3/3
+  peirce                 full 3/6 full_old 2/3 full_new 1/3 ko 0/6 dose1 1/3
+  peirce_sequent         full 3/6 full_old 1/3 full_new 2/3 ko 0/6 dose1 1/3

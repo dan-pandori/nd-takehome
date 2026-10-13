@@ -1,0 +1,160 @@
+{
+ "file": "/home/dan/review/coe_big/tmp_found.jsonl",
+ "kind": "transfer",
+ "lines": 78363,
+ "per_round": {
+  "1": {
+   "new": 605,
+   "dn": 167,
+   "dn_pr_as_only": 166,
+   "sigma_plus": 1,
+   "sp_any_target": 1
+  },
+  "2": {
+   "new": 1504,
+   "dn": 328,
+   "sigma_plus": 21,
+   "sp_any_target": 21,
+   "dn_pr_as_only": 307,
+   "sigma": 2
+  },
+  "3": {
+   "new": 2409,
+   "dn": 454,
+   "sigma_plus": 43,
+   "sp_any_target": 43,
+   "dn_pr_as_only": 411,
+   "sigma": 5
+  },
+  "4": {
+   "new": 3325,
+   "dn": 621,
+   "sigma_plus": 59,
+   "sp_any_target": 59,
+   "dn_pr_as_only": 562,
+   "sigma": 14
+  },
+  "5": {
+   "new": 3984,
+   "dn": 712,
+   "sigma_plus": 73,
+   "sp_any_target": 73,
+   "dn_pr_as_only": 639,
+   "sigma": 11
+  },
+  "6": {
+   "new": 4749,
+   "dn": 762,
+   "sigma_plus": 90,
+   "sp_any_target": 90,
+   "dn_pr_as_only": 672,
+   "sigma": 26
+  },
+  "7": {
+   "new": 5308,
+   "dn": 844,
+   "sigma_plus": 113,
+   "sp_any_target": 113,
+   "dn_pr_as_only": 731,
+   "sigma": 22
+  },
+  "8": {
+   "new": 5747,
+   "dn": 935,
+   "sigma_plus": 104,
+   "sp_any_target": 104,
+   "dn_pr_as_only": 831,
+   "sigma": 30,
+   "new_strict": 1,
+   "free_pos": 1,
+   "free_pos_cited:NEGI": 1,
+   "free_pos_strict": 1
+  },
+  "9": {
+   "new": 6070,
+   "dn": 922,
+   "sigma_plus": 90,
+   "sp_any_target": 90,
+   "dn_pr_as_only": 832,
+   "sigma": 14
+  },
+  "10": {
+   "new": 6215,
+   "dn": 896,
+   "sigma_plus": 100,
+   "sp_any_target": 100,
+   "dn_pr_as_only": 796,
+   "sigma": 23
+  },
+  "11": {
+   "new": 5872,
+   "dn": 901,
+   "sigma_plus": 80,
+   "sp_any_target": 80,
+   "dn_pr_as_only": 821,
+   "sigma": 13
+  },
+  "12": {
+   "new": 6493,
+   "dn": 873,
+   "sigma_plus": 77,
+   "sp_any_target": 77,
+   "dn_pr_as_only": 796,
+   "sigma": 9
+  },
+  "13": {
+   "new": 6545,
+   "dn": 904,
+   "sigma_plus": 84,
+   "sp_any_target": 84,
+   "dn_pr_as_only": 820,
+   "sigma": 6
+  },
+  "14": {
+   "new": 6734,
+   "dn": 1012,
+   "sigma_plus": 109,
+   "sp_any_target": 109,
+   "dn_pr_as_only": 903,
+   "sigma": 20
+  },
+  "15": {
+   "new": 6112,
+   "dn": 902,
+   "sigma_plus": 100,
+   "sp_any_target": 100,
+   "dn_pr_as_only": 802,
+   "sigma": 24
+  },
+  "16": {
+   "new": 6691,
+   "dn": 916,
+   "sigma_plus": 99,
+   "sp_any_target": 99,
+   "dn_pr_as_only": 817,
+   "sigma": 24
+  }
+ },
+ "first_solved_strict": {
+  "la_transfer_916": 8
+ },
+ "first_free_pos_strict": {
+  "la_transfer_916": 8
+ },
+ "first_sigma_plus_strict": {
+  "la_transfer_916": 8
+ },
+ "first_round_sigma_plus_any": 1,
+ "first_round_free_pos_any": 8,
+ "examples": [
+  {
+   "round": 8,
+   "name": "la_transfer_916",
+   "prompt": "THM ( ( ~ S ) > ( ~ P ) ) , P SEQ ( R > S ) PRF",
+   "proof": "N1 ( ( ~ S ) > ( ~ P ) ) : PR ; N2 P : PR ; N3 ( ( ~ ( ~ S ) ) v ( ( ~ S ) > ( ~ P ) ) ) : ORI2 N1 ; N4 | R : AS ; N5 | | ( ~ S ) : AS ; N6 | | ( ~ P ) : IMPE N1 N5 ; N7 | | | ( ~ ( ~ S ) ) : AS ; N8 | | | F : NEGE N2 N6 ; N9 | | | ( ( ~ S ) > ( ~ P ) ) : AS ; N10 | | | F : NEGE N2 N6 ; N11 | | F : ORE N3 N7 N8 N9 N10 ; N12 | ( ~ ( ~ S ) ) : NEGI N5 N11 ; N13 | S : DN N12 ; N14 ( R > S ) : IMPI N4 N13 ; QED",
+   "cited": [
+    "NEGI"
+   ]
+  }
+ ]
+}

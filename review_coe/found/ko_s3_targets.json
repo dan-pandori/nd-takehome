@@ -1,0 +1,164 @@
+{
+ "file": "/home/dan/review/coe_big/tmp_found.jsonl",
+ "kind": "targets",
+ "lines": 632736,
+ "per_round": {
+  "1": {
+   "new": 14210,
+   "dn": 1645,
+   "dn_pr_as_only": 1624,
+   "sigma_plus": 21,
+   "sp_any_target": 21,
+   "sigma": 6
+  },
+  "2": {
+   "new": 18830,
+   "dn": 2406,
+   "dn_pr_as_only": 2357,
+   "sigma_plus": 49,
+   "sp_any_target": 49,
+   "sigma": 12
+  },
+  "3": {
+   "new": 22169,
+   "dn": 3229,
+   "dn_pr_as_only": 3158,
+   "sigma": 10,
+   "sigma_plus": 71,
+   "sp_any_target": 71,
+   "lemma_broad": 2
+  },
+  "4": {
+   "new": 30021,
+   "dn": 4481,
+   "dn_pr_as_only": 4392,
+   "sigma_plus": 89,
+   "sp_any_target": 89,
+   "sigma": 14
+  },
+  "5": {
+   "new": 34890,
+   "dn": 5294,
+   "dn_pr_as_only": 5172,
+   "sigma_plus": 122,
+   "sp_any_target": 122,
+   "sigma": 36
+  },
+  "6": {
+   "new": 36618,
+   "dn": 5712,
+   "dn_pr_as_only": 5578,
+   "sigma_plus": 134,
+   "sp_any_target": 134,
+   "sigma": 41
+  },
+  "7": {
+   "new": 41566,
+   "dn": 6534,
+   "dn_pr_as_only": 6367,
+   "sigma_plus": 167,
+   "sp_any_target": 167,
+   "sigma": 46,
+   "lemma_broad": 2,
+   "lemma": 1
+  },
+  "8": {
+   "new": 45415,
+   "dn": 7159,
+   "dn_pr_as_only": 6980,
+   "sigma_plus": 179,
+   "sp_any_target": 179,
+   "sigma": 54
+  },
+  "9": {
+   "new": 45883,
+   "dn": 7256,
+   "dn_pr_as_only": 7094,
+   "sigma_plus": 162,
+   "sp_any_target": 162,
+   "sigma": 37,
+   "lemma_broad": 5
+  },
+  "10": {
+   "new": 46840,
+   "dn": 7450,
+   "dn_pr_as_only": 7275,
+   "sigma_plus": 175,
+   "sp_any_target": 175,
+   "sigma": 44
+  },
+  "11": {
+   "new": 46713,
+   "dn": 7261,
+   "dn_pr_as_only": 7089,
+   "sigma_plus": 172,
+   "sp_any_target": 172,
+   "sigma": 63,
+   "lemma_broad": 2
+  },
+  "12": {
+   "new": 49441,
+   "dn": 7496,
+   "dn_pr_as_only": 7331,
+   "sigma_plus": 165,
+   "sp_any_target": 165,
+   "sigma": 42,
+   "lemma_broad": 1
+  },
+  "13": {
+   "new": 49835,
+   "dn": 7560,
+   "dn_pr_as_only": 7371,
+   "sigma_plus": 189,
+   "sp_any_target": 189,
+   "sigma": 65,
+   "lemma": 1,
+   "lemma_broad": 2
+  },
+  "14": {
+   "new": 51629,
+   "dn": 7948,
+   "dn_pr_as_only": 7724,
+   "sigma_plus": 224,
+   "sp_any_target": 224,
+   "sigma": 78
+  },
+  "15": {
+   "new": 47798,
+   "dn": 7482,
+   "dn_pr_as_only": 7275,
+   "sigma_plus": 207,
+   "sp_any_target": 207,
+   "sigma": 77,
+   "free_pos": 1,
+   "free_pos_cited:NEGI": 1,
+   "lemma_broad": 2
+  },
+  "16": {
+   "new": 50878,
+   "dn": 7778,
+   "dn_pr_as_only": 7487,
+   "sigma_plus": 291,
+   "sp_any_target": 291,
+   "sigma": 82,
+   "lemma": 1,
+   "lemma_broad": 1
+  }
+ },
+ "first_solved_strict": {},
+ "first_free_pos_strict": {},
+ "first_sigma_plus_strict": {},
+ "first_round_sigma_plus_any": 1,
+ "first_round_free_pos_any": 15,
+ "examples": [
+  {
+   "round": 15,
+   "name": "la_rl_targets_1254",
+   "prompt": "THM ( ~ ( ( Q v ( P > S ) ) > ( ~ ( Q v S ) ) ) ) SEQ ( ( Q v ( P > S ) ) & ( ~ ( ~ ( Q v S ) ) ) ) PRF",
+   "proof": "N1 ( ~ ( ( Q v ( P > S ) ) > ( ~ ( Q v S ) ) ) ) : PR ; N2 | ( ~ ( Q v ( P > S ) ) ) : AS ; N3 | | ( Q v ( P > S ) ) : AS ; N4 | | | ( Q v S ) : AS ; N5 | | | | ( Q v ( P > S ) ) : AS ; N6 | | | | | ( Q v S ) : AS ; N7 | | | | | | Q : AS ; N8 | | | | | | F : NEGE N5 N2 ; N9 | | | | | | S : AS ; N10 | | | | | | F : NEGE N5 N2 ; N11 | | | | | F : ORE N6 N7 N8 N9 N10 ; N12 | | | | ( ~ ( Q v S ) ) : NEGI N6 N11 ; N13 | | | ( ( Q v ( P > S ) ) > ( ~ ( Q v S ) ) ) : IMPI N5 N12 ; N14 | | | F : NEGE N13 N1 ; N15 | | ( ~ ( Q v S ) ) : NEGI N4 N14 ; N16 | ( ( Q v ( P > S ) ) > ( ~ ( Q v S ) ) ) : IMPI N3 N15 ; N17 | F : NEGE N16 N1 ; N18 ( ~ ( ~ ( Q v ( P > S ) ) ) ) : NEGI N2 N17 ; N19 ( Q v ( P > S ) ) : DN N18 ; N20 | ( ~ ( Q v S ) ) : AS ; N21 | | ( Q v ( P > S ) ) : AS ; N22 | | ( ~ ( Q v S ) ) : R N20 ; N23 | ( ( Q v ( P > S ) ) > ( ~ ( Q v S ) ) ) : IMPI N21 N22 ; N24 | F : NEGE N23 N1 ; N25 ( ~ ( ~ ( Q v S ) ) ) : NEGI N20 N24 ; N26 ( ( Q v ( P > S ) ) & ( ~ ( ~ ( Q v S ) ) ) ) : ANDI N19 N25 ; QED",
+   "cited": [
+    "NEGI"
+   ]
+  }
+ ]
+}

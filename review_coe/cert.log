@@ -1,0 +1,51 @@
+== K_train(16), uniform allocation (registry phase rows / timing read)
+la_ko_s0     sample    31024s finetune      25s eval    7011s (rows missing/dup 0); round-file secs    51243; c_base 5.888 ms (82432 att, 485s); K_train(16) = 16,375; K_att(16) = 7,147.3
+             + fine-tune child rows   13171s (rounds missing/dup []) -> K_train(16) incl. fine-tune = 23,322  (sample+ft+eval+child = 51,231s vs round-file secs 51,243s)
+la_ko_s1     sample    31961s finetune      26s eval    7636s (rows missing/dup 0); round-file secs    53625; c_base 8.307 ms (82432 att, 685s); K_train(16) = 11,958; K_att(16) = 7,147.3
+             + fine-tune child rows   13992s (rounds missing/dup []) -> K_train(16) incl. fine-tune = 17,189  (sample+ft+eval+child = 53,614s vs round-file secs 53,625s)
+la_ko_s2     sample    34581s finetune      39s eval    8506s (rows missing/dup 0); round-file secs    57688; c_base 7.304 ms (82432 att, 602s); K_train(16) = 14,720; K_att(16) = 7,147.3
+             + fine-tune child rows   14550s (rounds missing/dup []) -> K_train(16) incl. fine-tune = 20,907  (sample+ft+eval+child = 57,675s vs round-file secs 57,688s)
+la_ko_s3     sample    28719s finetune      26s eval    6901s (rows missing/dup 0); round-file secs    48487; c_base 6.213 ms (82432 att, 512s); K_train(16) = 14,369; K_att(16) = 7,147.3
+             + fine-tune child rows   12831s (rounds missing/dup []) -> K_train(16) incl. fine-tune = 20,782  (sample+ft+eval+child = 48,477s vs round-file secs 48,487s)
+la_ko_s4     sample    34268s finetune      42s eval    8604s (rows missing/dup 0); round-file secs    57059; c_base 6.979 ms (82432 att, 575s); K_train(16) = 15,268; K_att(16) = 7,147.3
+             + fine-tune child rows   14125s (rounds missing/dup []) -> K_train(16) incl. fine-tune = 21,554  (sample+ft+eval+child = 57,039s vs round-file secs 57,059s)
+la_ko_s5     sample    34096s finetune      25s eval    8659s (rows missing/dup 0); round-file secs    56606; c_base 6.677 ms (82432 att, 550s); K_train(16) = 15,871; K_att(16) = 7,147.3
+             + fine-tune child rows   13815s (rounds missing/dup []) -> K_train(16) incl. fine-tune = 22,297  (sample+ft+eval+child = 56,595s vs round-file secs 56,606s)
+la_full_s3   sample    33854s finetune      25s eval    8029s (rows missing/dup 0); round-file secs    55405; c_base 8.768 ms (82432 att, 723s); K_train(16) = 12,000; K_att(16) = 7,147.3
+             + fine-tune child rows   13487s (rounds missing/dup []) -> K_train(16) incl. fine-tune = 16,778  (sample+ft+eval+child = 55,395s vs round-file secs 55,405s)
+la_full_s4   sample    34797s finetune      45s eval    8597s (rows missing/dup 0); round-file secs    57076; c_base 6.704 ms (82432 att, 553s); K_train(16) = 16,141; K_att(16) = 7,147.3
+             + fine-tune child rows   13621s (rounds missing/dup []) -> K_train(16) incl. fine-tune = 22,451  (sample+ft+eval+child = 57,061s vs round-file secs 57,076s)
+la_full_s5   sample    33363s finetune      41s eval    7513s (rows missing/dup 0); round-file secs    55082; c_base 9.490 ms (82432 att, 782s); K_train(16) = 10,932; K_att(16) = 7,147.3
+             + fine-tune child rows   14151s (rounds missing/dup []) -> K_train(16) incl. fine-tune = 15,563  (sample+ft+eval+child = 55,068s vs round-file secs 55,082s)
+la_dose1_s0  sample    32996s finetune      27s eval    7194s (rows missing/dup 0); round-file secs    53603; c_base 6.544 ms (82432 att, 539s); K_train(16) = 15,672; K_att(16) = 7,147.3
+             + fine-tune child rows   13373s (rounds missing/dup []) -> K_train(16) incl. fine-tune = 22,018  (sample+ft+eval+child = 53,590s vs round-file secs 53,603s)
+la_dose1_s1  sample    35969s finetune      31s eval    8294s (rows missing/dup 0); round-file secs    58821; c_base 10.354 ms (82432 att, 853s); K_train(16) = 10,798; K_att(16) = 7,147.3
+             + fine-tune child rows   14515s (rounds missing/dup []) -> K_train(16) incl. fine-tune = 15,152  (sample+ft+eval+child = 58,808s vs round-file secs 58,821s)
+la_dose1_s2  sample    34512s finetune      28s eval    8423s (rows missing/dup 0); round-file secs    56786; c_base 7.183 ms (82432 att, 592s); K_train(16) = 14,933; K_att(16) = 7,147.3
+             + fine-tune child rows   13808s (rounds missing/dup []) -> K_train(16) incl. fine-tune = 20,903  (sample+ft+eval+child = 56,771s vs round-file secs 56,786s)
+
+== knockout certificates (strict family members, pooled)
+ko s0: [with ladder-rows-only K 16,375: CERTIFIED]
+ko s0: K_train(16) 23,322; pooled n 1,491,420 (min per member 14,204) c 0; UB95 2.009e-06 vs 0.05/K 2.144e-06 -> CERTIFIED (needs n >= 1,397,334); t916 [0, 13180]
+     per family K_max: contrapositi 4,267 (NO), demorgan_nan 948 (NO), excluded_mid 8,772 (NO), negated_cond 3,556 (NO), peirce 2,845 (NO), peirce_seque 4,504 (NO)
+     strict members with a success: {}; non-strict (of the 178) with successes: 50
+ko s1: [with ladder-rows-only K 11,958: not certified]
+ko s1: K_train(16) 17,189; pooled n 1,120,378 (min per member 7,168) c 6; UB95 1.057e-05 vs 0.05/K 2.909e-06 -> not certified (needs n >= 1,029,849); t916 [1, 2048]
+     per family K_max: contrapositi 786 (NO), demorgan_nan 717 (NO), excluded_mid 6,631 (NO), negated_cond 2,688 (NO), peirce 2,151 (NO), peirce_seque 3,405 (NO)
+     strict members with a success: {'la_transfer_528': [1, 10240], 'la_transfer_1246': [1, 7168], 'la_transfer_1460': [3, 9216], 'la_transfer_2256': [1, 9216]}; non-strict (of the 178) with successes: 54
+ko s2: [with ladder-rows-only K 14,720: not certified]
+ko s2: K_train(16) 20,907; pooled n 1,338,328 (min per member 3,072) c 1; UB95 3.545e-06 vs 0.05/K 2.392e-06 -> not certified (needs n >= 1,252,619); t916 [0, 11815]
+     per family K_max: contrapositi 2,333 (NO), demorgan_nan 857 (NO), excluded_mid 7,929 (NO), negated_cond 3,214 (NO), peirce 2,571 (NO), peirce_seque 4,072 (NO)
+     strict members with a success: {'la_transfer_1096': [1, 3072]}; non-strict (of the 178) with successes: 52
+ko s3: [with ladder-rows-only K 14,369: CERTIFIED]
+ko s3: K_train(16) 20,782; pooled n 1,340,640 (min per member 12,768) c 0; UB95 2.235e-06 vs 0.05/K 2.406e-06 -> CERTIFIED (needs n >= 1,245,151); t916 [1, 2048]
+     per family K_max: contrapositi 3,836 (NO), demorgan_nan 852 (NO), excluded_mid 7,885 (NO), negated_cond 3,197 (NO), peirce 2,557 (NO), peirce_seque 4,049 (NO)
+     strict members with a success: {}; non-strict (of the 178) with successes: 47
+ko s4: [with ladder-rows-only K 15,268: not certified]
+ko s4: K_train(16) 21,554; pooled n 1,360,222 (min per member 2,048) c 3; UB95 5.700e-06 vs 0.05/K 2.320e-06 -> not certified (needs n >= 1,291,399); t916 [0, 12181]
+     per family K_max: contrapositi 1,363 (NO), demorgan_nan 882 (NO), excluded_mid 8,155 (NO), negated_cond 3,306 (NO), peirce 2,645 (NO), peirce_seque 4,188 (NO)
+     strict members with a success: {'la_transfer_1096': [1, 2048], 'la_transfer_1606': [1, 3072], 'la_transfer_1811': [1, 8192]}; non-strict (of the 178) with successes: 49
+ko s5: [with ladder-rows-only K 15,871: not certified]
+ko s5: K_train(16) 22,297; pooled n 1,419,656 (min per member 3,072) c 2; UB95 4.435e-06 vs 0.05/K 2.242e-06 -> not certified (needs n >= 1,335,924); t916 [0, 12600]
+     per family K_max: contrapositi 2,581 (NO), demorgan_nan 910 (NO), excluded_mid 8,413 (NO), negated_cond 3,411 (NO), peirce 2,729 (NO), peirce_seque 2,617 (NO)
+     strict members with a success: {'la_transfer_1142': [1, 3072], 'la_transfer_1811': [1, 13312]}; non-strict (of the 178) with successes: 53
