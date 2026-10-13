@@ -124,7 +124,7 @@ Spearman ρ between a member's best-known-proof pend log p (A3's values) and r(m
 - Expected: ρ ≤ −0.5 on ≥ 3 of the 4 full seeds; higher prior means earlier first solve.
 - Within-family (exploratory): ρ computed inside each family with ≥ 5 members and averaged, < 0 on ≥ 3 of the 4.
 
-## Addendum 3 (2026-10-13 20:41 UTC, before computing A5; post hoc, prompted by critique round 1)
+## Addendum 3 (2026-10-13 20:40 UTC, commit 114ddda8, before computing A5; post hoc, prompted by critique round 1)
 
 **A5, the waiting-time null model (exploratory, post hoc: I already know which knockout ladders solved a strict
 training target by round 16, namely s1, s2 and s5).** Null: each knockout ladder samples the 123 strict training targets

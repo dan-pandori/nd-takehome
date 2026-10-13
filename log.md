@@ -1010,3 +1010,16 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   −0.609. Within-family mean ρ: full −0.403 / −0.445 / −0.475 / −0.332 (expected < 0 on ≥ 3 of 4: hit, 4 / 4); dose
   −0.104 / −0.219 / +0.138. On the full seeds the base prior also orders acquisition within a family; A3's within-family
   AUC at the r16 endpoint was mixed.
+- 20:06–20:35  **Critique round 1** (three critic sub-agents): novelty 4/10 (`paper/critiques/r1_novelty.md`), clarity 5/10
+  (`r1_clarity.md`); soundness still running. Main points: the waiting-time null should be stated up front; the
+  project's own earlier knockout studies (ignition, round-2 Run 3, round-3 Run 4a, run4-grpo review) bear directly and
+  were missing; Interplay belongs in the intro; Abdulsalam's RFT arm plateaued, as our EI did; scope the title to EI;
+  restructure (endpoint figure first, concept table, a funnel table for §4, define internal vocabulary); fix "within
+  reach" (s1's members have ≈ 10,700 attempts each < K); fix "Table ??"; the blog conflates σ with its free positive form
+  and is 2,547 words.
+- 20:40  Prereg Addendum 3 (114ddda8), then **A5** (`paper/scripts/a5_waiting_time.py`), post hoc. Null: Poisson at the
+  base's pooled large-k rate on the strict members, λ = 32 · 123 · r per round. Expected first strict-target success:
+  s1 47 rounds, s2 340, s4 115, s5 180, s0 / s3 never. Observed: s1 r9, s2 r14, s5 r14, s4 / s0 / s3 none by r16.
+  **Expected seeds with a strict success by r16: 0.55; observed 3; P(≥ 3 | null) = 0.006.** The knockout ladders reached
+  strict targets earlier than their base rates predict, so EI raised the free-σ rate during RL. Still no family by r16,
+  and the two certified bases never produced one.
