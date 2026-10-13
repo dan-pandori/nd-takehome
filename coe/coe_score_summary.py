@@ -5,6 +5,8 @@ log pi(y) >= that - ln 33 (the sampler draws the name base from 33), so every nu
 subtracting ln 33 (reported both ways).  Per member: best known proof (max) and the known-proof sum (logsumexp).
 
   python3 coe/coe_score_summary.py --dir artifacts/coe/score/known_b1 --out artifacts/coe/score/summary.json
+  python3 coe/coe_score_summary.py --dir artifacts/coe/score/rounds_ko_s0 --out artifacts/coe/score/rounds_ko_s0/summary.json
+      (along the ladder: pend, r4, r8, r12, r16 of one seed; held-out members only)
 """
 import argparse, collections, gzip, json, math, os, statistics
 
@@ -47,6 +49,8 @@ def main():
                 bt = max(v, key=lambda z: z[0])
                 best.append(bt[0]); w1b.append(bt[1]); kinds[bt[2]] += 1
                 sums.append(lse([z[0] for z in v]))
+            if not best:
+                continue
             out[grp] = {'members': len(best), 'best_median': statistics.median(best), 'best_max': max(best),
                         'best_p90': sorted(best)[int(0.9 * len(best))], 'sum_median': statistics.median(sums), 'sum_max': max(sums),
                         'worst_step_median_at_best': statistics.median(w1b), 'worst_step_kind_at_best': dict(kinds.most_common(4)),
@@ -58,9 +62,10 @@ def main():
     print('| checkpoint | held-out members | best known proof: median / max | known-proof sum: median / max | worst step at the best proof (median, kind) | trained: best median / max |')
     print('|---|---|---|---|---|---|')
     for ck, o in res.items():
-        h, t = o['heldout'], o['trained']
+        h, t = o['heldout'], o.get('trained')
+        tt = f"{t['best_median']:.1f} / {t['best_max']:.1f}" if t else '–'
         print(f"| {ck} | {h['members']} | {h['best_median']:.1f} / {h['best_max']:.1f} | {h['sum_median']:.1f} / {h['sum_max']:.1f} | "
-              f"{h['worst_step_median_at_best']:.1f} {h['worst_step_kind_at_best']} | {t['best_median']:.1f} / {t['best_max']:.1f} |")
+              f"{h['worst_step_median_at_best']:.1f} {h['worst_step_kind_at_best']} | {tt} |")
 
 
 if __name__ == '__main__':

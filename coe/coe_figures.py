@@ -8,6 +8,7 @@
   python3 coe/coe_figures.py phase2         # figures/coe_phase2.{pdf,png}      (Phase 2, 2b)
   python3 coe/coe_figures.py rounds         # figures/coe_rounds.{pdf,png}      (Phase 1, per round; dose; knockout s1 extension)
   python3 coe/coe_figures.py endpoint       # figures/coe_endpoint.{pdf,png}    (Phase 1 r16 endpoint; dose)
+  python3 coe/coe_figures.py logp           # figures/coe_logp.{pdf,png}        (log p of known sigma proofs along the ladders)
 """
 import json, math, os, sys
 import matplotlib
@@ -205,8 +206,10 @@ def endpoint():
     b.set_yticks(range(len(rows))); b.set_yticklabels([f"{lab[seeds[k]['arm']].split(' (')[0]} s{seeds[k]['seed']}" for k in rows], fontsize=8)
     b.grid(False)
     b.set_title('(b) held-out members solved; filled = family acquired (≥ 50 %)', loc='left', fontsize=9)
-    fig.text(0.01, -0.04, 'Plain sampling, k 256, T 0.8; Lean alone. 9.56 M ALiBiGPT, lean_staten, from scratch; T1 expert iteration, 16 rounds. '
-             'Primary test (≥ 1 family acquired), full 6 / 6 vs knockout 0 / 6: one-sided Boschloo p = 2.4 × 10⁻⁴.', fontsize=7.5, color=INK2)
+    fig.text(0.01, -0.06, 'Plain sampling, k 256, T 0.8; Lean alone. 9.56 M ALiBiGPT, lean_staten, from scratch; T1 expert iteration, 16 rounds. '
+             'Pre-registered test (≥ 1 family acquired): full 6 / 6 vs knockout 0 / 6,\none-sided Boschloo p = 2.4 × 10⁻⁴. '
+             'Exploratory: 1 % dose 3 / 3 vs knockout 0 / 6, p = 0.0033. Full s0–s2 are trajectory\'s seeds (r1–r8 on RTX A6000); '
+             'the dose arm\'s 1,550 σ records replace refill records of K12⁻.', fontsize=7.5, color=INK2)
     fig.tight_layout()
     save(fig, 'coe_endpoint')
 
@@ -248,5 +251,30 @@ def phase2():
     save(fig, 'coe_phase2')
 
 
+def logp():
+    import glob
+    col = {'full': SER[0], 'ko': SER[1], 'dose1': SER[2]}
+    lab = {'full': 'full', 'ko': 'knockout', 'dose1': '1 % dose'}
+    fig, ax = plt.subplots(figsize=(5.6, 3.6))
+    seen = set()
+    for fn in sorted(glob.glob(os.path.join(ROOT, 'artifacts/coe/score/rounds_*/summary.json'))):
+        name = fn.split('/')[-2][len('rounds_'):]
+        arm = name.rsplit('_s', 1)[0]
+        ck = json.load(open(fn))['ckpts']
+        pts = sorted((0 if k == 'pend' else int(k[1:]), v['heldout']['best_median']) for k, v in ck.items())
+        ax.plot([x for x, _ in pts], [y for _, y in pts], color=col[arm], marker='o', ms=4, lw=1.6, alpha=0.9,
+                label=None if arm in seen else lab[arm])
+        seen.add(arm)
+    ax.set_xticks([0, 4, 8, 12, 16]); ax.set_xticklabels(['pend', 'r4', 'r8', 'r12', 'r16'])
+    ax.set_xlabel('checkpoint along the ladder'); ax.set_ylabel('log p of the best known σ proof (nats; median)')
+    ax.set_title('Does RL move the model toward σ proofs?', loc='left')
+    ax.legend(loc='center left', bbox_to_anchor=(1.01, 0.5), fontsize=8)
+    fig.text(0.01, -0.06, 'Teacher-forced log p at T 0.8, one name base (subtract ln 33 for a lower bound), of 9,501 known Lean-accepted\n'
+             'proofs of the strict σ-covered held-out members (from the old full ladders); median over 101 members of each\n'
+             "member's best known proof. One line per ladder. 9.56 M ALiBiGPT, lean_staten.", fontsize=7.5, color=INK2)
+    fig.tight_layout()
+    save(fig, 'coe_logp')
+
+
 if __name__ == '__main__':
-    {'estimator': estimator, 'budget': budget, 'rounds': rounds, 'endpoint': endpoint, 'phase2': phase2}[sys.argv[1]]()
+    {'estimator': estimator, 'budget': budget, 'rounds': rounds, 'endpoint': endpoint, 'phase2': phase2, 'logp': logp}[sys.argv[1]]()

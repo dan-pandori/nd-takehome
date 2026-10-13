@@ -1,7 +1,10 @@
 # data/coe — run `create-or-elicit` (the knockout set, the family sets, the read sets)
 
-Bulk files (`*.jsonl.gz`, `src/`) are in `hf://buckets/dan-pandori/nd-rl/create-or-elicit/data/coe/`, not in git. Every count
-below is reproducible from the scripts named and the files listed.
+Bulk files (`*.jsonl.gz`) are in `hf://buckets/dan-pandori/nd-rl/create-or-elicit/data/coe/` (listed with sha256 in
+`artifacts/MANIFEST.jsonl`), not in git. `src/` (not in git, not re-uploaded) holds local copies of the assembler's inputs,
+which are in the bucket under their own runs: `cap-horizon/data/kh/train_k12.jsonl.gz`, `cap-horizon/data/kh/pool_long_kh.jsonl`,
+`lean-format/data/p2/train_depth3_f0_a1.jsonl` (sizes checked 2026-10-13). Every count below is reproducible from the
+scripts named and the files listed.
 
 ## K12⁻ — the σ knockout (`train_k12ko.jsonl.gz`, `coe/coe_assemble.py`, report `train_k12ko_assemble_report.json`)
 

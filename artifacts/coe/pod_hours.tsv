@@ -1,0 +1,16 @@
+# pod	hours	usd	gpu	role   (from ~/podhours.log, written when each pod was deleted; A40 $0.59 / h)
+coe-t6	0.2697	0.16	NVIDIA RTX A6000	Phase 0.2 RTX A6000 timing (stuck initialising; deleted)
+coe-r1	5.1372	3.03	NVIDIA A40	Phase 0.2 replica (A6000 / A40 ratio); Phase 2; E2 scoring
+coe-r2	1.1664	0.69	NVIDIA A40	Phase 2b
+coe-r0	19.4139	11.45	NVIDIA A40	Phase 0.2 A40 timing; old full s0–s2 reads on the tracked set; old-ladder analysis
+coe-f5	22.0883	13.03	NVIDIA A40	full s5: as full s3
+coe-f3	22.5092	13.28	NVIDIA A40	full s3: Stage 1, 16-round ladder, reads, post (timing, standard A, scoring)
+coe-k3	22.6936	13.39	NVIDIA A40	knockout s3: as knockout s0
+coe-k0	23.3864	13.80	NVIDIA A40	knockout s0: Stage 1, ladder, reads, post (timing, certificate, standard A, scoring), top-up, Phase 3a
+coe-f4	24.2997	14.34	NVIDIA A40	full s4: as full s3
+coe-k2	26.6564	15.73	NVIDIA A40	knockout s2: as knockout s0
+coe-k5	26.5964	15.69	NVIDIA A40	knockout s5: as knockout s0
+coe-k4	27.5319	16.24	NVIDIA A40	knockout s4: as knockout s0 (no Phase 3a)
+coe-d0	16.6650	9.83	NVIDIA A40	1 % dose s0: Stage 1, ladder, reads (no r16 g0 / x1), timing, scoring
+coe-d2	18.0650	10.66	NVIDIA A40	1 % dose s2: as dose s0
+coe-d1	18.1761	10.72	NVIDIA A40	1 % dose s1: as dose s0

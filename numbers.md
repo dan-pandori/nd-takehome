@@ -1878,3 +1878,43 @@ peirce 12, peirce_sequent 19, generated 1).
 - **Phase 3a (one extra EI round from r16, with vs without knockout s1's base's free-σ proof of `la_transfer_916`; plain k 256
   on the 105 strict family members; `artifacts/coe/p3a/`):** seeded vs control knockout s0 0 vs 0, s1 3 vs 3, s2 2 vs 0
   (contraposition_conv, 1 / 256 each; one-sided exact p 0.25), s3 0 vs 0, s5 0 vs 0 (s4 not run).
+
+### Phase 3 — the 1 % σ dose arm (Addendum 5; sources `artifacts/coe/dose_summary.json` (`coe/coe_dose_summary.py`), `artifacts/coe/compare_{pend,r16}_x0.json`, `artifacts/coe/rounds/la_dose1_s*.json`, `artifacts/coe/general.json`, `artifacts/coe/budget/k_dose1_s*.json`)
+**Models: M12d s0–s2** = the knockout recipe on `data/coe/train_k12dose1.jsonl.gz` (K12⁻ with 1,550 refill records swapped
+for removed σ records: 1.0 %, K12's σ length mix), 1,200 s Stage 1 on an A40, 16-round T1 ladder at batch 1,024, replay
+from the dose set; `create-or-elicit/ckpts/coe/stage1_dose1_s{S}.pt`, `ckpts/coe/ladder/la_dose1_s{S}_r{1..16}.pt`.
+Reads as Phase 1 (plain k 256 x0 on `read1054`; Lean alone); **no r16 redraw / guided reads and no standard A** (budget cut,
+log 2026-10-13 04:13).
+- **Strict σ-covered held-out members solved (of 106):** pend 6 / 18 / 8; **r16 58 / 39 / 30** (full 23–77, median 53.5;
+  knockout 0–2). Families at the bar at r16: s0 contraposition_conv 18 / 18, negated_conditional 14 / 15, peirce 6 / 12,
+  peirce_sequent 19 / 19; s1 contraposition_conv 18 / 18 (17 / 18 at pend), negated_conditional 15 / 15; s2
+  contraposition_conv 18 / 18, negated_conditional 10 / 15. Acquired during RL (at the bar at r16, not at pend): 3 / 3 seeds.
+- **Exploratory tests (not pre-registered):** families acquired dose 3 / 3 vs knockout 0 / 6, one-sided Boschloo p = 0.0033
+  (Fisher 0.012); members solved dose vs knockout Mann–Whitney p = 0.012; dose vs full two-sided p = 0.55.
+- **Round 1 (each base's own k 32 sample):** strict training targets solved 2 / 17 / 2; accepted σ proofs 223 / 183 / 241
+  (knockout 6–13, full s3–s5 635–885); free positive reductio proofs 213 / 170 / 219 (knockout 0; full 418–665). Strict
+  training targets solved by r16, cumulative: 69 / 46 / 41 (of 123).
+- **General ability:** held-out greedy (5,000) 0.917 / 0.945 / 0.929 (non-σ 0.937 / 0.948 / 0.959, σ 0.786 / 0.925 / 0.739);
+  textbook72 (scoring only) pend 31 / 30 / 29 (dev58 26 / 25 / 23, train14 5 / 5 / 6), r16 53 / 53 / 44 (dev58 43 / 42 / 35,
+  train14 10 / 11 / 9); holdout250 pass@256 pend 179 / 189 / 197, r16 240 / 238 / 234.
+- **Cost:** c_base on the 322 (A40, batch 1,024) 6.54 / 10.35 / 7.18 ms; K_train(16) 22,018 / 15,152 / 20,903 (s1's timing is
+  1.4–1.6× the others'; no dose number uses K). r16 read cut-offs 0.33 / 0.16 / 1.42 %.
+- **Addendum 5 expectations:** round-1 strict targets 3–15 — miss on 3 / 3; σ proofs at r1 50–500 — hit 3 / 3; free positive
+  reductio from r1 on ≥ 2 / 3 — hit 3 / 3; ≥ 1 family at r16 on ≥ 2 / 3 — hit 3 / 3; contraposition_conv the most likely —
+  hit; r16 members between the knockout and full medians — 2 / 3 (s0 above).
+
+### Along the ladder: log p of the known σ proofs (post-ladder scoring; `artifacts/coe/score/rounds_*/summary.json`, `coe/coe_score_summary.py`)
+Teacher-forced log p (T 0.8, one name base; subtract ln 33 for a lower bound) of 9,501 known Lean-accepted proofs of the
+strict held-out members (`data/coe/known_targets_heldout.jsonl.gz`, from the old full ladders); median over 101 members of
+each member's best proof; checkpoints pend / r4 / r8 / r12 / r16.
+- knockout s0 −33.4 / −28.3 / −28.8 / −31.6 / −29.7; s2 −35.7 / −27.2 / −30.4 / −30.8 / −34.5; s3 −33.8 / −25.7 / −29.4 / −30.3 /
+  −33.9; s4 −36.0 / −34.2 / −38.2 / −34.6 / −36.1; s5 −31.5 / −32.6 / −30.5 / −32.3 / −35.5. The worst step of that proof (opening
+  the ¬G box on 100 / 101 members) −19.8 to −21.6 at pend, −24.2 to −27.3 at r16.
+- full s3 −15.4 / −4.4 / −4.8 / −5.5 / −5.1; s4 −20.9 / −15.9 / −16.7 / −16.9 / −19.0; s5 −20.4 / −16.2 / −20.6 / −19.7 / −16.1.
+- 1 % dose s0 −25.3 / −12.4 / −9.8 / −9.1 / −8.7; s1 −18.9 / −17.3 / −19.7 / −18.3 / −15.9; s2 −24.5 / −21.8 / −22.3 / −21.7 / −22.8.
+
+### Replay check (pre-registered; `artifacts/coe/rounds/mix_la_ko_s*.json`, `coe/coe_mixcheck.py`)
+Every fine-tune mix record of the knockout ladders, rounds 1–16, attributed by set membership (in K12⁻ → replay; in K12 but
+not K12⁻ → leak; neither → the ladder's own RL proof) and classified: knockout s0, s2, s3, s4, s5 — 1.38–1.39 M records each
+(20,000 replay per round), **0 replay records with σ / σ via IMPI / σ⁺ / the lemma route, 0 leaked K12 records**; σ-like
+records from RL 3,348–6,964 per ladder (counted with the mix's repeats).

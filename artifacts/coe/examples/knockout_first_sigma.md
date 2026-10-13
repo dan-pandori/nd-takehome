@@ -37,3 +37,17 @@
        N4 | | ( ~ ( ~ S ) ) : AS ; … N8 | | ( ~ ( ~ S ) ) : ORE N3 N5 N5 N6 N7 ; N9 | | ( S > ( R & S ) ) : AS ; N10 | | | ( ~ S ) : AS ;
        N11 | | | ( ~ ( S > ( R & S ) ) ) : IMPE N1 N10 ; N12 | | | F : NEGE N2 N11 ; N13 | | ( ~ ( ~ S ) ) : NEGI N10 N12 ;
        N14 | ( ~ ( ~ S ) ) : ORE N3 N4 N8 N9 N13 ; N15 | S : DN N14 ; N16 ( ( S > ( R & S ) ) > S ) : IMPI N2 N15 ; QED
+
+5. **The lemma route, knockout s1 after 20 rounds (exploratory extension), `la_transfer_1246` (contraposition_conv,
+   held-out), r20 plain read** (`artifacts/coe/eval/r20_ko_s1_x0.jsonl.gz`). The model first proves the lemma ¬¬S → S
+   inside an IMPI box (N3–N21: assume ¬¬S, apply DN to the assumption), then builds ¬¬S by NEGI from a refuted ¬S
+   (N25–N28) and applies the lemma by IMPE (N29). No DN step cites a derived line, so σ / σ⁺ do not fire; the classical
+   content is the same. K12 and K12⁻ contain 0 lemma-route records (`coe_assemble.lemma_route`); 7 of knockout s1's
+   accepted r20 proofs of strict members take this route. (The detour N9–N19 is redundant.)
+
+       THM ( ( ~ S ) > ( ~ ( ( S & R ) v R ) ) ) SEQ ( ( ( S & R ) v R ) > S ) PRF
+       N1 ( ( ~ S ) > ( ~ ( ( S & R ) v R ) ) ) : PR ; N2 | ( ( S & R ) v R ) : AS ; N3 | | ( ~ ( ~ S ) ) : AS ; …
+       N20 | | S : DN N3 ; N21 | ( ( ~ ( ~ S ) ) > S ) : IMPI N3 N20 ; N22 | | ( S & R ) : AS ; N23 | | S : ANDE1 N22 ;
+       N24 | | R : AS ; N25 | | | ( ~ S ) : AS ; N26 | | | ( ~ ( ( S & R ) v R ) ) : IMPE N1 N25 ; N27 | | | F : NEGE N2 N26 ;
+       N28 | | ( ~ ( ~ S ) ) : NEGI N25 N27 ; N29 | | S : IMPE N21 N28 ; N30 | S : ORE N2 N22 N23 N24 N29 ;
+       N31 ( ( ( S & R ) v R ) > S ) : IMPI N2 N30 ; QED
