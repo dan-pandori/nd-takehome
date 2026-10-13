@@ -1797,7 +1797,7 @@ matched wall-clock. Step checks: ≈ 1 checker call per structurally valid draw,
 tokens per attempt are 2.0–2.3× plain (cap 12) and 2.8–3.3× (cap 6).
 **Spend:** 4 A40 pods ($0.49/h), 9.07 pod-hours, $4.45 (`podbudget`). **Bucket:** `hf://buckets/dan-pandori/nd-rl/guided-tts/{artifacts/gt,artifacts/guided-tts,data/gt}`.
 
-## create-or-elicit (2026-10-12, executor; UNREVIEWED — filled in as phases finish)
+## create-or-elicit (2026-10-12 / 13, executor; UNREVIEWED; final at CREATE-OR-ELICIT DONE)
 
 **Models.** All `best_model.ALiBiGPT` 6 × 384, **9,560,832 params**, `lean_staten` (environment-assigned names), from
 scratch with `state_env_october`'s recipe (`state_train.py --recipe best`, 1,200 s on one A40), then T1 expert iteration
@@ -1907,14 +1907,50 @@ log 2026-10-13 04:13).
 Teacher-forced log p (T 0.8, one name base; subtract ln 33 for a lower bound) of 9,501 known Lean-accepted proofs of the
 strict held-out members (`data/coe/known_targets_heldout.jsonl.gz`, from the old full ladders); median over 101 members of
 each member's best proof; checkpoints pend / r4 / r8 / r12 / r16.
-- knockout s0 −33.4 / −28.3 / −28.8 / −31.6 / −29.7; s2 −35.7 / −27.2 / −30.4 / −30.8 / −34.5; s3 −33.8 / −25.7 / −29.4 / −30.3 /
+- knockout s0 −33.4 / −28.3 / −28.8 / −31.6 / −29.7; s1 −26.0 / −33.6 / −34.6 / −32.4 / −33.6 (its best member −7.9 → −4.2); s2 −35.7 / −27.2 / −30.4 / −30.8 / −34.5; s3 −33.8 / −25.7 / −29.4 / −30.3 /
   −33.9; s4 −36.0 / −34.2 / −38.2 / −34.6 / −36.1; s5 −31.5 / −32.6 / −30.5 / −32.3 / −35.5. The worst step of that proof (opening
-  the ¬G box on 100 / 101 members) −19.8 to −21.6 at pend, −24.2 to −27.3 at r16.
+  the ¬G box on 100 / 101 members) −18.0 to −21.6 at pend, −24.2 to −27.3 at r16.
 - full s3 −15.4 / −4.4 / −4.8 / −5.5 / −5.1; s4 −20.9 / −15.9 / −16.7 / −16.9 / −19.0; s5 −20.4 / −16.2 / −20.6 / −19.7 / −16.1.
 - 1 % dose s0 −25.3 / −12.4 / −9.8 / −9.1 / −8.7; s1 −18.9 / −17.3 / −19.7 / −18.3 / −15.9; s2 −24.5 / −21.8 / −22.3 / −21.7 / −22.8.
 
 ### Replay check (pre-registered; `artifacts/coe/rounds/mix_la_ko_s*.json`, `coe/coe_mixcheck.py`)
 Every fine-tune mix record of the knockout ladders, rounds 1–16, attributed by set membership (in K12⁻ → replay; in K12 but
 not K12⁻ → leak; neither → the ladder's own RL proof) and classified: knockout s0, s2, s3, s4, s5 — 1.38–1.39 M records each
-(20,000 replay per round), **0 replay records with σ / σ via IMPI / σ⁺ / the lemma route, 0 leaked K12 records**; σ-like
-records from RL 3,348–6,964 per ladder (counted with the mix's repeats).
+(20,000 replay per round), s1 rounds 1–24 — 2.09 M: **0 replay records with σ / σ via IMPI / σ⁺ / the lemma route, 0 leaked
+K12 records** on 6 / 6 seeds; σ-like records from RL 3,348–6,964 per 16-round ladder, 9,416 on s1's 24 rounds (counted with
+the mix's repeats).
+
+### Knockout s1, rounds 17–24 (exploratory; Addendum 6 item 1; sources `artifacts/coe/rounds/la_ko_s1.json`, `artifacts/coe/eval/r{16,20,24}_ko_s1_x0.json[l.gz]`)
+Model: M12⁻ s1, `ckpts/coe/ladder/la_ko_s1_r{17..24}.pt` (resumed at r17 and again at r21 after the r20 read; A40, batch 1,024).
+- Free positive reductio proofs accepted per round: r9–r16 1 / 0 / 0 / 2 / 5 / 10 / 5 / 11; r17–r24 29 / 37 / 49 / 74 / 81 / 74 /
+  98 / 123. Strict σ-covered training targets solved, cumulative: r16 5, r20 8, **r21–r24 9** (all contraposition_conv,
+  share 9 / 27 = 0.33). Held-out strict members first solved in the k 32 transfer samples: 5 by r19, none after.
+- Plain k 256 reads, strict held-out members solved: r16 2, r20 5, **r24 5** (the same five: contraposition_conv `1019`, `1246`,
+  `1460`, `2256` and `la_transfer_916`); successes per 256 on them r16 → r20 → r24: 0 → 32 → 214, 0 → 23 → 126, 108 → 205 → 189,
+  0 → 47 → 177, 10 → 14 → 33. No family at the bar. r20 accepted proofs of these members: σ 32, σ⁺-only 24, lemma route 7.
+- Addendum 6 expectations: contraposition_conv training share 0.3–0.8 at r24 — hit (0.33); 2–12 of its 18 held-out members —
+  hit (4); at the bar with probability ≈ 0.3 — no; no other family at the bar — hit.
+
+### The executor's offline Lean re-check (`coe/coe_recheck.py` → `artifacts/coe/recheck.json`; not a review)
+Lean 4 core through `lean_judge.judge_many` on the stored ND proofs (translated by `nd2lean`), strict held-out members only:
+every knockout proof in the plain reads (pend, r8, r16, r20, r24; x0 and x1) 424 / 424 accepted; every knockout base large-k
+success 13 / 13; every Phase 3a proof 25 / 25; a seeded sample of 50 per full r16 read file 450 / 450 and per dose r16 read
+50 × 3 = 150 / 150. **1,062 / 1,062 accepted; the same proofs with the conclusion G replaced by ¬G: 1,062 / 1,062 rejected.**
+
+### Compute (sources `artifacts/coe/compute.{md,json}` (`coe/coe_compute.py`, 3,817 compute rows in `artifacts/create-or-elicit/registry/`), `artifacts/coe/pod_hours.tsv` (`coe/coe_podhours.py`))
+- **Paid:** 16 pods, **309.34 pod-hours, $182.50** (budget $190 / 330 h after Dan's extension; 15 NVIDIA A40 at $0.59 / h and
+  one RTX A6000 0.27 h). Per arm: full s3–s5 22.1–24.3 h ($13.0–14.3) each; knockout s0, s2–s5 22.7–27.5 h ($13.4–16.2), s1
+  34.7 h ($20.5, with the extension); dose s0–s2 16.7–18.2 h ($9.8–10.7); shared pods (Phase 0.2, old-seed reads, Phase 2 / 2b)
+  26.0 h ($15.3).
+- **Process GPU-hours (A40) by activity, all models:** pretraining 4.3 (1,200 s per seed), RL ladders 191.2 (16 rounds
+  ≈ 13.5–16.3 h per seed; knockout s1 22.4 with 24 rounds), plain reads 106.8, guided reads 74.9, timing 3.6, knockout
+  certificates 12.8, standard A 15.3, Phase 2 / 2b 4.2, Phase 3a 4.3, other 2.4 (held-out greedy, the `la_transfer_916`
+  large-k runs, scoring, the Phase 0.2 replica); total 419.9 (processes sharing a card each count in full). Generated tokens per 16-round seed with its reads ≈ 1.0–1.7 × 10⁹.
+
+### Where the files are
+- Checkpoints: `hf://buckets/dan-pandori/nd-rl/create-or-elicit/ckpts/coe/` (`stage1_{full,ko,dose1}_s{S}.pt` 12,
+  `ladder/la_{full,ko,dose1}_s{S}_r{R}.pt` 200, `p3a/ko_s{S}_{seeded,control}.pt`), uploaded on save; each registry row
+  names its checkpoint's md5.
+- Bulk artifacts (read rows, large-k chunks, scores, ladder found / mix files, registry rows): same bucket prefix, same
+  repository paths; the files kept locally are listed with sha256 in `artifacts/MANIFEST.jsonl` (`python3 fetch_artifacts.py
+  <path>`). Data: `data/coe/README.md`.

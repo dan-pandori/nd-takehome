@@ -6,8 +6,9 @@ this run did (three k 256 reads, timing, large-k certificate, standard A) ≈ 22
 
 What this run leaves open (numbers in `numbers.md` § create-or-elicit): σ-free bases do not acquire the classical families
 in 16 rounds of EI (0 / 6 vs 6 / 6), yet 5 / 6 of their ladders write the free reductio on their own, rarely; knockout
-s1's grew from r9 to 123 proofs per round at r24 while its strict training targets stalled at 9 / 123 (EXT_NEXT). A 1 % σ
-dose restores acquisition on 3 / 3 seeds (58 / 39 / 30 of 106 held-out members at r16), so the threshold lies below 1 %.
+s1's grew from r9 to 123 proofs per round at r24, while its strict training targets stalled at 9 / 123 and its r24 read
+solves the same 5 / 106 held-out members as at r20. A 1 % σ dose restores acquisition on 3 / 3 seeds (58 / 39 / 30 of 106
+held-out members at r16), so the threshold lies below 1 %.
 
 ## 1. The 0.1 % dose arm — ≈ $33 (3 seeds × 16 rounds, reads at pend and r16 only)
 - **Question:** where between 0 % and 1 % does EI stop acquiring the families? The set is built and in the bucket

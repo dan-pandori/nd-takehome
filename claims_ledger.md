@@ -14,10 +14,10 @@ v2 does three things:
 3. It adds Phase 0.2 (L73–L74), Phase 0.1 (L76–L77) and this run's facts up to round 1 of the nine new ladders (L78–L84,
    status at 07:40 UTC). **Nothing in L73–L84 has been reviewed.**
 
-**v3** (the executor, 2026-10-13, at DONE) adds section M (L85–L99): this run's own results to the end — Phase 2 and 2b,
+**v3** (the executor, 2026-10-13, at DONE) adds section M (L85–L101): this run's own results to the end — Phase 2 and 2b,
 the knockout bases' log p and certificates, the pre-registered arm comparison and its robustness, per-round dynamics,
 general ability, standard A, Phase 3a, knockout s1's extension, the 1 % dose arm, the replay check, the executor's
-offline Lean re-check and compute. Rows L1–L84 are unchanged except where section M says so. **Nothing in L73–L99 has
+offline Lean re-check and compute. Rows L1–L84 are unchanged except where section M says so. **Nothing in L73–L101 has
 been reviewed.**
 
 ## Changes in v2 (old → new)
@@ -153,7 +153,7 @@ A budget-dependent row can carry two statuses: one for its K_pub value (usually 
 | ·rfc | rl-from-ckpt | 1,950 / 1,950 | 2026-10-02 |
 | ·ss | support-state | in-loop Lean 4.34.0, re-check 4.34.1 | 2026-09-29 |
 | ·sc | support-curves | WP side judged by Lean alone from 2026-09-27 | 2026-09-28 |
-| ·coe | create-or-elicit (this run) | **none yet**: in-loop Lean gate only (`LEAN_GATE_DUMP` on) | — |
+| ·coe | create-or-elicit (this run) | **no review yet**: in-loop Lean gate; the executor's offline re-check accepted 1,062 / 1,062 and rejected all 1,062 goal-negated controls (L100) | 2026-10-13 |
 
   "—" means the row is not a proof count (compute, scores, data). G4ip = `intuit.py` (the capability-defs reviewer's
   own G4ip agrees on 2,647 prompts).
@@ -367,9 +367,12 @@ is from the in-loop Lean gate; the executor's offline re-check is L98.
 | L93 | **General ability of the knockout bases (E1).** Held-out greedy (p2/heldout, 5,000): full median 0.960, knockout 0.883 (−7.7 pp); on the 4,321 theorems without a σ reference proof 0.957 vs 0.950; on the 679 with one 0.966 vs 0.448. holdout250 pass@256 at pend: full s3–s5 199 / 193 / 200, knockout 186 / 195 / 188 / 176 / 183 / 205. textbook72 (scoring only) at pend: dev58 27 / 29 / 29 vs 21 / 28 / 25 / 21 / 18 / 23, train14 6 / 5 / 7 vs 5 / 6 / 4 / 5 / 5 / 5. | M12n pend s3–s5 (and M12 s0–s2 for greedy), M12⁻ pend s0–s5 | Lean·coe | coe:artifacts/coe/general.json (coe/coe_general.py); log 02:40 (2026-10-13) | this run (unreviewed) · file | textbook72 expectation (within ±4) missed: −6.5 combined at pend. |
 | L94 | **Compute-matched reach on the 322 (standard A, K_train(16), r16 vs pend).** Δ_cov full s3 / s4 / s5 **+37 / +36 / +32**; knockout s0–s5 **+29 / +31 / +35 / +37 / +26 / +21**. | M12n, M12⁻ (pend and r16) | Lean·coe | coe:artifacts/coe/stdA.json (coe/coe_stdA.py), artifacts/coe/large/stdA_*.json; log 08:41 (2026-10-13) | this run (unreviewed) · file | RL's compute-matched gain on the 322 does not need σ. One allocation (K_train(16)); Phase 0.2 shows the set moves with the allocation. |
 | L95 | **Phase 3a (exploratory): one extra EI round from r16 with vs without knockout s1's base's free-σ proof of `la_transfer_916`.** Strict family members solved (of 105, plain k 256), seeded vs control: s0 0 vs 0, s1 3 vs 3, s2 2 vs 0 (contraposition_conv, 1 / 256 each), s3 0 vs 0, s5 0 vs 0 (s4 not run). | M12⁻ r16 + 1 round | Lean·coe | coe:artifacts/coe/p3a/ (coe/coe_seeded_round.py); Addendum 6; log 12:02 (2026-10-13) | this run (unreviewed) · file | Expectation "≥ +1 on ≥ 3 / 6" missed (1 / 5); s2's 2 vs 0 has one-sided exact p 0.25. |
+| L96 | **Knockout s1, rounds 17–24 (exploratory, Addendum 6).** Free positive reductio proofs per round grow 29 → 123 (r17–r24; r16: 11), but strict training targets stall at **9** from r21 (contraposition_conv share 0.33) and the r24 read solves the **same 5** strict held-out members as r20 (contraposition_conv 4 / 18 + `la_transfer_916`), each far more often (e.g. 1019: 0 → 32 → 214 per 256 at r16 / r20 / r24). No family at the bar. Its log p of known σ proofs: median −26.0 at pend, −33.6 at r16; best member −7.9 → −4.2. Mix check over 24 rounds: 0 σ-like replay records. | M12⁻ s1 r16–r24 | Lean·coe | coe:artifacts/coe/rounds/la_ko_s1.json, eval/r{20,24}_ko_s1_x0.json, rounds/mix_la_ko_s1.json, score/rounds_ko_s1/summary.json; log 10:29, 11:44, 15:25, 16:37 (2026-10-13) | this run (unreviewed) · file | One seed, chosen because it was the one whose free reductio spread; 8 rounds past the pre-registered endpoint. Its base was not certified (6 successes in 1.12 M attempts on contraposition_conv, L88). |
 | L97 | **1 % dose arm (Addendum 5).** K12⁻ with 1,550 σ records put back (1.0 %): strict held-out members solved at pend 6 / 18 / 8, **at r16 58 / 39 / 30** (full 23–77, knockout 0–2); families at the bar on **3 / 3** seeds (all contraposition_conv + negated_conditional; s0 also peirce, peirce_sequent), acquired during RL on 3 / 3. Round 1: accepted σ proofs 223 / 183 / 241, free positive reductio 213 / 170 / 219 (knockout 0). Exploratory: families acquired dose 3 / 3 vs knockout 0 / 6, one-sided Boschloo p = 0.0033; members solved dose vs full two-sided Mann–Whitney p = 0.55. | M12d s0–s2 (pend, r16) | Lean·coe | coe:artifacts/coe/dose_summary.json (coe/coe_dose_summary.py), compare_{pend,r16}_x0.json, rounds/la_dose1_s*.json; Addendum 5; log 13:08, 14:31, 14:57 (2026-10-13) | this run (unreviewed) · file | Three seeds. No r16 redraw / guided reads and no standard A for this arm (budget cut). The dose is the composition itself, both of whose atoms stay at full exposure in every arm. Addendum 5's round-1 expectation (3–15 strict targets) missed on 3 / 3. |
-| L98 | **Along the ladder, the knockout does not move toward the σ proofs.** Teacher-forced log p of the best known σ proof (median over 101 strict held-out members), pend → r16: knockout s0, s2–s5 −33.4 → −29.7, −35.7 → −34.5, −33.8 → −33.9, −36.0 → −36.1, −31.5 → −35.5; the box-opening step 3–8 nats worse at r16. Full s3–s5 −15.4 → −5.1, −20.9 → −19.0, −20.4 → −16.1; dose −25.3 → −8.7, −18.9 → −15.9, −24.5 → −22.8. | M12⁻, M12n, M12d (pend, r4, r8, r12, r16) | — (scores; known proofs Lean-accepted) | coe:artifacts/coe/score/rounds_*/summary.json (coe/coe_score_summary.py, coe/cd_score.py) | this run (unreviewed) · file | One name base. The known proofs are the full arm's; a knockout ladder that found its own route (s1) can rise on other proofs. Knockout s1 not scored along the ladder at the time of writing (see L96). |
-| L99 | **Replay check (pre-registered).** Every fine-tune mix record of knockout s0, s2, s3, s4, s5, rounds 1–16 (1.38–1.39 M each), attributed by set membership: **0 replay records with σ / σ_impi / σ⁺ / the lemma route; 0 records from K12 \ K12⁻.** | M12⁻ ladders | — (syntactic) | coe:artifacts/coe/rounds/mix_la_ko_s*.json (coe/coe_mixcheck.py); log 13:20 (2026-10-13) | this run (unreviewed) · file | Knockout s1: see L96. |
+| L98 | **Along the ladder, the knockout does not move toward the σ proofs.** Teacher-forced log p of the best known σ proof (median over 101 strict held-out members), pend → r16: knockout s0, s2–s5 −33.4 → −29.7, −35.7 → −34.5, −33.8 → −33.9, −36.0 → −36.1, −31.5 → −35.5; the box-opening step 3–8 nats worse at r16. Full s3–s5 −15.4 → −5.1, −20.9 → −19.0, −20.4 → −16.1; dose −25.3 → −8.7, −18.9 → −15.9, −24.5 → −22.8. | M12⁻, M12n, M12d (pend, r4, r8, r12, r16) | — (scores; known proofs Lean-accepted) | coe:artifacts/coe/score/rounds_*/summary.json (coe/coe_score_summary.py, coe/cd_score.py) | this run (unreviewed) · file | One name base. The known proofs are the full arm's; a knockout ladder that found its own route (s1) can rise on other proofs. Knockout s1: −26.0 → −33.6 (L96). |
+| L99 | **Replay check (pre-registered).** Every fine-tune mix record of knockout s0, s2, s3, s4, s5, rounds 1–16 (1.38–1.39 M each), attributed by set membership: **0 replay records with σ / σ_impi / σ⁺ / the lemma route; 0 records from K12 \ K12⁻.** | M12⁻ ladders | — (syntactic) | coe:artifacts/coe/rounds/mix_la_ko_s*.json (coe/coe_mixcheck.py); log 13:20 (2026-10-13) | this run (unreviewed) · file | Knockout s1 (24 rounds, 2.09 M records): also 0 / 0 (L96). |
+| L100 | **The executor's offline Lean re-check.** Lean 4 core (`lean_judge.judge_many`, ND proofs as stored, translated by `nd2lean`) on the strict held-out members: every knockout proof in the plain reads 424 / 424, every knockout base large-k success 13 / 13, every Phase 3a proof 25 / 25, seeded samples of full r16 450 / 450 and dose r16 150 / 150 — **1,062 / 1,062 accepted; with the conclusion G replaced by ¬G, 1,062 / 1,062 rejected.** | M12⁻, M12, M12n, M12d | Lean (offline, this run) | coe:artifacts/coe/recheck.json (coe/coe_recheck.py) | this run (unreviewed) · file | Not a review: same proof texts the in-loop gate accepted, re-translated by `nd2lean`; a reviewer should re-check independently. |
+| L101 | **Compute.** 16 pods, **309.34 pod-hours, $182.50** (15 A40 at $0.59 / h, 1 RTX A6000 0.27 h); per arm: full s3–s5 $13.0–14.3 each, knockout $13.4–16.2 (s1 $20.5 with its extension), dose $9.8–10.7, shared $15.3. Process GPU-hours 419.9 (RL ladders 191.2, reads 181.7, large-k 28.9; processes sharing a card each count in full). | all this run's models | — | coe:artifacts/coe/compute.{md,json} (coe/coe_compute.py), artifacts/coe/pod_hours.tsv (coe/coe_podhours.py); `artifacts/create-or-elicit/registry/` | this run (unreviewed) · file | Pod-hours are what was paid; GPU-hours overlap. |
 
 ## The brief's precision points against this ledger
 
@@ -392,11 +395,12 @@ is from the in-loop Lean gate; the executor's offline re-check is L98.
     adaptive allocation, and 8 / 9 hold at K_uni (L20).
   - "Survives every control" is 4 pairs at K_pub and 5 below it; only Peirce 1833 is classical-only (L22).
 
-## Not yet in this ledger (the executor adds them)
+## Open items for the review (v3)
 
-- This run's k-256 reads (plain and guided) of the new models.
-- E1 and E3–E7 outcomes, and the second half of E2.
-- K_train(16) of the new seeds, acquisition rounds and the pooled certificate.
-- Addendum 3 (Phase 2 sharpening null, committed 07:50 UTC) and its pilot.
-- s2's batch-512 timing (still running at 07:40).
-- An independent review of L73–L84 and of the `v2:` recounts. Until then none of them is a headline.
+- **Nothing in L73–L101 is reviewed.** The executor's offline Lean re-check (L100) is not a review: the reviewer should
+  re-check the counted proofs independently, with their own negative controls.
+- **Not run:** the 0.1 % dose arm (built; `next_steps.md` item 1); Phase 3a on knockout s4; r16 redraw / guided reads and
+  standard A for the dose arm; the A40 batch-512 timing of old full s2 (enters no budget).
+- **Allocation dependence of the knockout certificates (L88):** computed at K_train(16) only.
+- **Old vs new full seeds:** s0–s2 ran r1–r8 on RTX A6000 (`trajectory`; s2 resumed at batch 1,024 after an OOM) and
+  r9–r16 on A40 (`rl-continue`); s3–s5 ran every round on A40 at batch 1,024. The arm comparison pools them (L89).
