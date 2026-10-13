@@ -992,3 +992,15 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   0.467 over 107 / 46 / 54 / 92 pairs (> 0.5 on 3 of 4: hit); dose 0.280 / 0.600 / 0.328. So the base prior predicts which
   *families* RL acquires; within a family it is mixed. Solved counts reproduce the reviewed strict counts exactly.
 - 19:40  C1 first read: knockout s0 r16, standard caps, strict 106: 0 solved (as x0), 589 s, peak 7.27 GB at batch 512.
+- 19:41–19:56  Paper draft v0: `paper/main.tex` + `sections/00–11` (related work pending the digest), Lean figure
+  (`paper/scripts/lean_examples.py`: 3 model-written σ proofs rendered by `nd2lean`, all accepted by Lean 4.35.0 on the VPS,
+  all rejected with the goal negated), `paper/scripts/stats_extra.py` (every reviewed p-value reproduces from the reviewed
+  counts: 0.00024, 0.0032, 0.0033, 0.034, 0.39; MW 0.0011; dose vs full two-sided MW 0.548; CP UB95 after 0/6 = 0.393;
+  expected σ proofs per round on the 123 strict targets at the knockout bases' pooled rates 0–0.021). Blog draft
+  `paper/blog.md` (+ 4 plain-label figures `blog_fig*`); its simplified Lean proof checked (`paper/lean/`). PDF builds.
+- 19:50–19:54  C1 so far: knockout s0 r16 std 0 / dbl 0 solved, strict cut-off 0.04 % → 0.00 % (589 / 587 s; peak 7.27 /
+  9.52 GB at batch 512). Dose s2 r16 std read took 23.5 min.
+- 19:57  **Deviation (execution, not design):** at that pace one pod would finish C1–C3 ≈ 03:30 UTC. Split the same reads
+  over two A40s: pod 1 relaunched with `pod/coep/lanes1b.sh` (C1 only; finished reads are skipped by `read.sh`; the two
+  reads in flight, ko s1 std and dose s2 dbl, restarted from scratch), pod `coep-2` (`bringup2.sh`, `lanes2.sh`) runs C2
+  and C3. Same total GPU time, about half the wall-clock.
