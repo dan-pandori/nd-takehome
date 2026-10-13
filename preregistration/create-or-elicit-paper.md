@@ -115,7 +115,7 @@ primary. Two exploratory extensions, stated now:
   than the overall AUC, and > 0.5 on ≥ 3 of the 4 full seeds.
 - **The same AUCs for the dose seeds s0–s2.** Expected: overall AUC ≥ 0.7 on ≥ 2 of 3.
 
-## Addendum 2 (2026-10-13 20:08 UTC, before computing A4)
+## Addendum 2 (2026-10-13 20:01 UTC, commit 45dfbdea, before computing A4)
 
 **A4, time to first solve (exploratory, CPU only).** For full s0, s3, s4, s5 and dose s0–s2, the 101 strict held-out
 members with a known σ proof. r(m) = the first round whose tracked k 32 sample solved m
@@ -123,3 +123,19 @@ members with a known σ proof. r(m) = the first round whose tracked k 32 sample 
 Spearman ρ between a member's best-known-proof pend log p (A3's values) and r(m).
 - Expected: ρ ≤ −0.5 on ≥ 3 of the 4 full seeds; higher prior means earlier first solve.
 - Within-family (exploratory): ρ computed inside each family with ≥ 5 members and averaged, < 0 on ≥ 3 of the 4.
+
+## Addendum 3 (2026-10-13 20:41 UTC, before computing A5; post hoc, prompted by critique round 1)
+
+**A5, the waiting-time null model (exploratory, post hoc: I already know which knockout ladders solved a strict
+training target by round 16, namely s1, s2 and s5).** Null: each knockout ladder samples the 123 strict training targets
+at k 32 per round at its base's pooled large-k rate r_s on the strict family members (Table 5 of the paper / L88).
+Successes are Poisson with λ_s = 32 · 123 · r_s per round, and RL does not change r. Predictions per seed:
+- the expected first-success round 1/λ_s;
+- P(≥ 1 strict-target success by round 16) = 1 − exp(−16 λ_s);
+- across the 6 seeds, the expected number of seeds with a success by round 16, and the Poisson-binomial
+  P(≥ observed).
+
+Observed: the first round with `sigma_targets_cum` > 0 in `artifacts/coe/rounds/la_ko_s*.json`. Expectation, stated now:
+the null predicts fewer seeds with an early strict success than observed. P(≥ observed) < 0.05 would mean the knockout
+ladders raised their own σ rate during RL (on easier theorems), and that the base-rate null alone does not explain the
+dynamics. A ratio near 1 would mean that waiting for a rare sample explains them.
