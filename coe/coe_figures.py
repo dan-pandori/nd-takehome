@@ -150,5 +150,45 @@ def rounds():
     save(fig, 'coe_rounds')
 
 
+def endpoint():
+    d = json.load(open(os.path.join(ROOT, 'artifacts/coe/compare_r16_x0.json')))
+    seeds = d['seeds']
+    fams = ['contraposition_conv', 'negated_conditional', 'peirce', 'peirce_sequent', 'excluded_middle', 'demorgan_nand_to_or']
+    share = {'ko': 0.0, 'dose1': 1.0, 'full': 10.8}
+    lab = {'ko': 'knockout (0 %)', 'dose1': '1 % dose', 'full': 'full (10.8 %)'}
+    col = {'ko': SER[1], 'dose1': SER[2], 'full': SER[0]}
+    arms = [a for a in ('ko', 'dose1', 'full') if any(v['arm'] == a for v in seeds.values())]
+    fig, (a, b) = plt.subplots(1, 2, figsize=(10.0, 3.9), gridspec_kw={'width_ratios': [1, 1.25]})
+    for i, arm in enumerate(arms):
+        ys = sorted(v['strict_heldout_solved'] for v in seeds.values() if v['arm'] == arm)
+        xs = [i + (j - (len(ys) - 1) / 2) * 0.07 for j in range(len(ys))]
+        a.plot(xs, ys, 'o', ms=7, color=col[arm], mec=SURF, mew=1.0)
+        med = sorted(ys)[len(ys) // 2] if len(ys) % 2 else (ys[len(ys) // 2 - 1] + ys[len(ys) // 2]) / 2
+        a.plot([i - 0.25, i + 0.25], [med, med], color=INK2, lw=1.2)
+        a.text(i + 0.28, med, f'median {med:g}', color=INK2, fontsize=8, va='center')
+    a.set_xticks(range(len(arms))); a.set_xticklabels([lab[x] for x in arms])
+    a.set_xlabel('share of σ records in pretraining'); a.set_ylabel('held-out members solved at r16 (of 106)')
+    a.set_xlim(-0.5, len(arms) - 0.3); a.set_ylim(-4, 110)
+    a.set_title('(a) after 16 EI rounds, per seed', loc='left')
+    rows = [k for k in sorted(seeds, key=lambda k: (['ko', 'dose1', 'full'].index(seeds[k]['arm']), seeds[k]['seed']))]
+    for r, k in enumerate(rows):
+        v = seeds[k]
+        for c, f in enumerate(fams):
+            frac = v['per_family'][f] / v['n_family'][f]
+            acq = f in v['acquired']
+            b.add_patch(plt.Rectangle((c - 0.45, r - 0.45), 0.9, 0.9, color=col[v['arm']] if acq else '#f0efec', lw=0))
+            b.text(c, r, f"{v['per_family'][f]}", ha='center', va='center', fontsize=7, color=SURF if acq else INK2)
+    b.set_xlim(-0.6, len(fams) - 0.4); b.set_ylim(len(rows) - 0.4, -0.6)
+    nfam = next(iter(seeds.values()))['n_family']
+    b.set_xticks(range(len(fams))); b.set_xticklabels([f.replace('_', ' ').replace('demorgan nand to or', 'De Morgan') + f' ({nfam[f]})' for f in fams], rotation=25, ha='right', fontsize=8)
+    b.set_yticks(range(len(rows))); b.set_yticklabels([f"{lab[seeds[k]['arm']].split(' (')[0]} s{seeds[k]['seed']}" for k in rows], fontsize=8)
+    b.grid(False)
+    b.set_title('(b) held-out members solved; filled = family acquired (≥ 50 %)', loc='left', fontsize=9)
+    fig.text(0.01, -0.04, 'Plain sampling, k 256, T 0.8; Lean alone. 9.56 M ALiBiGPT, lean_staten, from scratch; T1 expert iteration, 16 rounds. '
+             'Primary test (≥ 1 family acquired), full 6 / 6 vs knockout 0 / 6: one-sided Boschloo p = 2.4 × 10⁻⁴.', fontsize=7.5, color=INK2)
+    fig.tight_layout()
+    save(fig, 'coe_endpoint')
+
+
 if __name__ == '__main__':
-    {'estimator': estimator, 'budget': budget, 'rounds': rounds}[sys.argv[1]]()
+    {'estimator': estimator, 'budget': budget, 'rounds': rounds, 'endpoint': endpoint}[sys.argv[1]]()
