@@ -1,0 +1,37 @@
+\section{Limitations}
+\label{sec:limits}
+
+\begin{itemize}
+\item \textbf{Scale and domain.} One architecture with 9.56M parameters, propositional logic over at most four atoms,
+and pretraining proofs of at most 12 lines. Nothing here is measured on a large language model or on first-order
+logic. The organism was chosen because it allows interventions that large models do not. The price is that results
+about it are results about it.
+\item \textbf{One RL algorithm, 16 rounds.} T1 expert iteration with $k=32$ at $T=0.8$ is rejection-sampling
+fine-tuning. GRPO-style updates, more exploration (higher temperature, larger $k$ on failed targets) or longer ladders
+could behave differently. An earlier comparison from the same checkpoints found GRPO with a pass@4 advantage ahead of EI
+on the hardest theorems, though mostly through one seed. ``Needs exposure'' is a statement about 16 rounds of this EI,
+and one knockout seed was still changing at round 24.
+\item \textbf{Seeds and power.} Six seeds per arm power the primary indicator but not most per-family tests. Three
+families are 3 vs 0 (Holm 0.17), and excluded middle, acquired by one full seed, is untestable at these counts. A 0/6
+outcome bounds the per-seed rate of creation below 0.39 only; creation in one seed out of ten would likely be missed.
+The dose arm has three seeds.
+\item \textbf{Near-saturated training targets.} By round 8 the full ladders solve 97--98\% of the 4,495 training
+theorems. The classical families are a small part of the training signal, and the classical held-out members are hard.
+A pool richer in classical targets might change the dynamics.
+\item \textbf{The knockout is not surgical.} Besides \sig{}, it lowers the share of \texttt{DN} and $\neg$-introduction
+records and the share of classical-only theorems. The knockout bases are 6.88 points worse at greedy held-out decoding
+(all of it on theorems that need \sig) and solve fewer intuitionistic textbook72 theorems at pend ($-4.0$ of 53, three
+full seeds). The textbook72 gap persists at r16.
+\item \textbf{``Absent'' is not established.} Only 2 of 6 knockout bases are certified out of reach at RL's budget, and
+no family is certified for any seed. The estimator that would quantify smaller rates runs two- to four-fold low below
+$10^{-4}$ and was calibrated on full-exposure models. The likelihood scores use the full ladders' proofs and one naming
+offset.
+\item \textbf{Sharpening.} The power-sampling null holds for one Metropolis--Hastings sampler that fails its own
+positive control. It says nothing about $p^\alpha$ itself.
+\item \textbf{Cut-offs and settings.} Many plain reads cut off more than 0.1\% of attempts in some stratum (up to 8.8\%
+of strict-member attempts on one dose seed). We re-read the strict members with doubled caps (\S\ref{sec:checks}). The
+old and new full seeds differ in GPU class (RTX A6000 vs A40) and sampling batch for rounds 1--8, and are pooled. The
+budget conversions rest on one measured class ratio.
+\item \textbf{Measurement results are on three seeds.} \S\ref{sec:measure} uses the three earlier full-exposure seeds.
+Its test-time-compute comparisons with guided reads are not compute-matched.
+\end{itemize}

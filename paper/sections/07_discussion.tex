@@ -1,0 +1,73 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\paragraph{What the knockout shows, and what it does not.} The pre-registered verdict is that the classical families
+\emph{need exposure}: from a \sig-free base, this EI did not acquire them in 16 rounds, while every full-exposure seed
+did, and a 1\% dose was enough. The verdict is about one algorithm and one horizon. It does not say that RL cannot
+produce \sig{}. The knockout models wrote \sig{} themselves, and one ladder spread it from round 9 onwards. A null
+result like this one has four readings, and the diagnostics bear on each.
+\begin{enumerate}
+\item \emph{\sig{} is out of the policy's reach.} This is false for four of six bases, which write \sig{} proofs of
+family members at large $k$. It cannot be excluded for the two certified bases (s0, s3) at RL's budget, though even
+there it is not excluded at larger budgets.
+\item \emph{EI explores too little.} EI spends 32 attempts per training theorem per round. On the 123 strict training
+targets that is 3,936 attempts per round. At the knockout bases' pooled rates (0 to $5.4\times10^{-6}$ per attempt on
+held-out members) it yields at most 0.02 expected \sig{} proofs per round, or at most 0.34 over 16 rounds. Most knockout
+ladders therefore had little or nothing to train on. The three ladders that solved any strict training target by
+round 16 (s1, s2, s5: 5, 1 and 2 targets) are the three whose ladders wrote the free reductio earliest (rounds 9, 12
+and 2).
+\item \emph{EI amplifies rare finds too slowly.} Knockout seed 1 multiplied its free reductio more than tenfold in
+eight extra rounds, yet its held-out set stayed at 5 members. Amplification there was real but narrow: the model became reliable
+on the members it could already reach, without generalising to the family. A single seeded proof did nothing in one
+round. The test of seeding at volume is EI with the 1,550 dose records in replay instead of pretraining, and it is
+not run.
+\item \emph{The knockout made the bases worse learners in general.} This is not supported. RL's compute-matched gain
+on the 322 evaluation theorems is the same in both arms ($+21$ to $+37$), and the knockout's general-ability cost sits
+in theorems that need \sig.
+\end{enumerate}
+Readings 2 and 3 together describe an \emph{amplification threshold}. EI turns a composition the base produces at
+moderate rates into a capability within a few rounds, and it does nothing visible with one the base produces at
+$10^{-6}$. The dose arm locates the threshold between 0\% and 1\% of pretraining records for this organism and budget,
+and the 0.1\% arm would narrow it.
+
+\paragraph{Relation to controlled studies.} \citet{tsilivis2025rlntp} show, on parity, that RL after next-token
+pretraining amplifies a rare long-reasoning demonstration efficiently as long as its share of the data is not
+exponentially small. Our 1\% dose sits on the efficient side. Our knockout leaves the composition at about $10^{-6}$ per
+attempt, which for EI at $k=32$ behaves like ``exponentially small''. Zero exposure was not tested there, as far as the
+quotes we verified go. \citet{zhang2025interplay} find, in a 100M model trained from scratch, that 0\% or 0.1\% exposure
+to a context in pretraining gives no transfer after RL and 1\% enhances it. That is close to our dose pattern, for a
+context rather than an inference rule. \citet{abdulsalam2026rewrite} remove shortcuts from pretraining in a rewrite
+grammar and report RL solving buckets on which the pretrained policy scores 0\% at pass@1024. In our organism, a
+pass@1024 of zero is compatible with per-attempt rates of $10^{-6}$, which a million attempts reveal. Their new
+behaviour is a new action type, while ours is a composition of two rules the base already uses, and their RL is not
+EI. The two results are therefore not in conflict, but neither settles the other.
+
+\paragraph{An evidence ladder for ``RL created it''.} The measurement half of the paper suggests a reporting standard,
+in increasing order of strength:
+\begin{enumerate}
+\item equal-$k$ success;
+\item a compute-matched base budget, reported as a curve over defensible allocations;
+\item RL-free controls with matched training;
+\item a Clopper--Pearson certificate against the base at that budget;
+\item an intervention on what the base saw.
+\end{enumerate}
+In our full-exposure seeds the claim shrinks at each step: 54/51/60 theorems at equal $k$, 21/20/14 under every
+allocation, 20/14/8 net of replay at $\Kpub$, and 4 (theorem, seed) pairs on 3 theorems surviving every control, of
+which one theorem is classical-only. The intervention then shows that, for one composition, exposure in pretraining
+decides whether this RL acquires it. Each step is cheap in a small organism and expensive in a large one. Steps 2 and 3
+are affordable at any scale and are rarely reported.
+
+\paragraph{Implications for evaluation and data filtering.} Two practical points follow, with the caveat that they come
+from a small organism. First, a capability that is absent at $k=256$ or $k=1{,}024$ can still be present at $10^{-6}$
+per attempt, and RL is the kind of process that can amplify such rates. Evaluations that aim to bound a capability need
+rare-event estimates, such as large-$k$ sampling, likelihoods of known solutions or importance sampling, not pass@$k$
+at modest $k$. Second, the knockout is a data-filtering intervention. Removing a composition from pretraining
+prevented its acquisition by this RL within this budget, but 1\% leakage undid the filter. A filter that leaves even a
+small fraction of the composition in place may not slow later RL at all.
+
+\paragraph{Interface.} An earlier, smaller organism of the same project, a 3.2M-parameter model trained on proofs of
+at most six lines, had 29 theorems that expert iteration solved and that one base seed solved 0 times in 400,000
+whole-proof attempts. A base of the same size acting through the proof-state interface reaches 28 of them (at least one
+accepted proof in up to 400,000 attempts; at EI's own bar of $\hat p \geq 0.01$ it clears 21 and 14 on its two
+seeds). There were only two seeds per arm, and the state cannot be separated from step-by-step generation. Whether RL ``created'' something can
+depend on the interface through which the base is asked. We leave that axis to future work, at the 9.56M scale.

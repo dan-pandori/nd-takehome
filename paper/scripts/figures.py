@@ -377,8 +377,98 @@ def fig_ttc():
     print('  ', printed)
 
 
+
+# ---------------------------------------------------------------- blog versions (plain-language labels)
+def blog_figs():
+    R = acq()
+    # B1: acquisition per seed (panel a of F1, plain labels)
+    fig, a = plt.subplots(figsize=(5.6, 3.6))
+    xs = {'pend': 0, 'r8': 8, 'r16': 16, 'r20': 20, 'r24': 24}
+    for arm in ('full', 'dose1', 'ko'):
+        for s in SEEDS[arm]:
+            pts = [(xs[ck], R[f'{ck}_{arm}_s{s}_x0']['strict']['solved']) for ck in ('pend', 'r8', 'r16')]
+            jitter = (s - 2.5) * 0.12
+            a.plot([x + jitter for x, _ in pts], [y for _, y in pts], color=ARM_COLOR[arm], lw=1.6, marker=ARM_MARK[arm],
+                   ms=5, mec=SURF, mew=0.8)
+            if arm == 'ko' and s == 1:
+                ext = [(xs[ck], R[f'{ck}_ko_s1_x0']['strict']['solved']) for ck in ('r16', 'r20', 'r24')]
+                a.plot([x + jitter for x, _ in ext], [y for _, y in ext], color=KO, lw=1.3, ls=(0, (2, 2)), marker='s', ms=5,
+                       mec=SURF, mew=0.8)
+    a.set_xticks([0, 8, 16, 24]); a.set_xticklabels(['before RL', 'RL round 8', 'round 16', 'round 24'])
+    a.set_xlim(-1.5, 34); a.set_ylim(-3, 106)
+    a.set_ylabel('held-out classical theorems solved (of 106)')
+    a.text(25.5, 62, 'full training data\n(6 runs)', color=FULL, fontsize=8.5, va='center', fontweight='bold')
+    a.text(25.5, 40, '1% dose\n(3 runs)', color=DOSE, fontsize=8.5, va='center', fontweight='bold')
+    a.text(25.5, 12, 'knockout\n(6 runs)', color=KO, fontsize=8.5, va='center', fontweight='bold')
+    a.set_title('Without σ in pretraining, RL did not learn the classical theorems')
+    fig.tight_layout(); save(fig, 'blog_fig1_endpoint')
+
+    # B2: log p along the ladders
+    fig, ax = plt.subplots(figsize=(5.6, 3.4))
+    xs2 = {'pend': 0, 'r4': 4, 'r8': 8, 'r12': 12, 'r16': 16}
+    for arm, seeds in (('full', (3, 4, 5)), ('dose1', (0, 1, 2)), ('ko', range(6))):
+        for s in seeds:
+            c = J(f'artifacts/coe/score/rounds_{arm}_s{s}/summary.json')['ckpts']
+            ys = [(xs2[k], c[k]['heldout']['best_median']) for k in ('pend', 'r4', 'r8', 'r12', 'r16') if k in c]
+            ax.plot([x for x, _ in ys], [y for _, y in ys], color=ARM_COLOR[arm], lw=1.6, marker=ARM_MARK[arm], ms=4.5,
+                    mec=SURF, mew=0.7)
+    ax.set_xticks([0, 4, 8, 12, 16]); ax.set_xticklabels(['before RL', '4', '8', '12', '16'])
+    ax.set_xlabel('RL round'); ax.set_ylabel('log-probability of the classical proof\n(median over theorems, nats)')
+    ax.text(16.6, -6, 'full', color=FULL, fontsize=8.5, fontweight='bold', va='center')
+    ax.text(16.6, -16, 'dose', color=DOSE, fontsize=8.5, fontweight='bold', va='center')
+    ax.text(16.6, -33, 'knockout', color=KO, fontsize=8.5, fontweight='bold', va='center')
+    ax.set_xlim(-1, 21)
+    ax.set_title('RL moves the full and dose models toward σ proofs, not the knockouts')
+    fig.tight_layout(); save(fig, 'blog_fig2_logp')
+
+    # B3: budget curve
+    g = J('artifacts/coe/budget/part3_recount_grid.json'); bj = J('artifacts/coe/budget/budget.json')
+    fig, ax = plt.subplots(figsize=(5.6, 3.4))
+    shades = ['#86b6ef', '#2a78d6', '#104281']
+    for i, s in enumerate(('0', '1', '2')):
+        rows = sorted((v['K'], v['cm'], v['cm_undet']) for k, v in g['sens'][f's{s}'].items() if k.startswith('K x'))
+        rows = [r for r in rows if r[2] == 0]
+        ax.step([r[0] for r in rows], [r[1] for r in rows], where='post', color=shades[i], lw=2)
+        ax.text(rows[-1][0] * 1.35, rows[-1][1] + (0.9 if s == '0' else -0.6 if s == '1' else 0), f'run {s}', color=INK2, fontsize=8, va='center')
+        r8 = bj['per_seed'][s]['r8']
+        for kk in ('K_att', 'K_train_sameclass', 'K_evalset_sameclass', 'K_pub', 'K_adapt'):
+            K = r8[kk]; cm = min(rows, key=lambda r: abs(math.log(r[0] / K)))[1]
+            ax.plot([K], [cm], 'o', ms=6, color=shades[i], mec=INK, mew=0.7, zorder=4)
+    ax.set_xscale('log'); ax.set_xlim(1000, 3e5); ax.set_ylim(0, 45)
+    ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f'{int(v):,}'))
+    ax.set_xlabel("attempts the base model gets per theorem (its 'budget')")
+    ax.set_ylabel('theorems "created" by RL')
+    ax.set_title('"Created by RL" shrinks as the base model gets more attempts')
+    ax.text(1100, 3, 'dots: five ways of matching the base model\'s budget to RL\'s compute', fontsize=7.5, color=INK2)
+    fig.tight_layout(); save(fig, 'blog_fig3_budget')
+
+    # B4: test-time compute
+    j3 = J('paper/data/capdefs_j3.json'); mc = J('paper/data/mcts_a_summary.json')['tables']
+    fig, (a, b) = plt.subplots(1, 2, figsize=(7.0, 3.0))
+    col = {'pend': '#86b6ef', 'r8': '#1c5cab'}
+    for gi, pool in enumerate(('tb72', 'h250')):
+        for ci, ck in enumerate(('pend', 'r8')):
+            gains = [j3[f'c12_s{s}_{ck}'][pool]['guided'] - j3[f'c12_s{s}_{ck}'][pool]['plain'] for s in range(3)]
+            x0 = gi * 3 + ci
+            a.bar(x0, statistics.mean(gains), width=0.8, color=col[ck])
+            a.plot([x0 - 0.15, x0, x0 + 0.15], gains, 'o', color=INK, ms=3)
+    a.set_xticks([0.5, 3.5]); a.set_xticklabels(['textbook problems', 'held-out problems'])
+    a.axhline(0, color=INK2, lw=0.8); a.set_ylabel('extra theorems solved'); a.set_title('Guided redraws')
+    for pi, (p, lab) in enumerate((('C', 'hardest'), ('tb72', 'textbook'), ('h250', 'held-out'), ('rrQ100', 'long'))):
+        for ci, ck in enumerate(('pend', 'r8')):
+            t = mc[f'{ck}/{p}']; d = [t[f'value/s{s}'] - t[f'sample/s{s}'] for s in range(3)]
+            x0 = pi * 3 + ci
+            b.bar(x0, statistics.mean(d), width=0.8, color=col[ck])
+            b.plot([x0 - 0.15, x0, x0 + 0.15], d, 'o', color=INK, ms=3)
+    b.set_xticks([pi * 3 + 0.5 for pi in range(4)]); b.set_xticklabels(['hardest', 'textbook', 'held-out', 'long'])
+    b.axhline(0, color=INK2, lw=0.8); b.set_title('Tree search (same time budget)')
+    handles = [plt.Rectangle((0, 0), 1, 1, color=col[k], label=l) for k, l in (('pend', 'before RL'), ('r8', 'after 8 RL rounds'))]
+    b.legend(handles=handles, loc='upper left', frameon=False)
+    fig.tight_layout(); save(fig, 'blog_fig4_ttc')
+
+
 FIGS = {'endpoint': fig_endpoint, 'dynamics': fig_dynamics, 'logp': fig_logp, 'budget': fig_budget,
-        'estimator': fig_estimator, 'prior': fig_prior, 'ttc': fig_ttc}
+        'estimator': fig_estimator, 'prior': fig_prior, 'ttc': fig_ttc, 'blog': blog_figs}
 
 if __name__ == '__main__':
     names = sys.argv[1:] or list(FIGS)

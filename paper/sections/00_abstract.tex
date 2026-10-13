@@ -1,0 +1,15 @@
+Reinforcement learning against a verifier improves reasoning models. Whether it creates capabilities the base lacked
+or raises the probability of behaviour the base already had is contested, and large-model studies can rarely change
+what the base saw. We study the question in a 9.56M-parameter transformer prover, trained from scratch on 155,000
+synthetic natural-deduction proofs of propositional logic, judged only by Lean~4, with exact likelihoods for any
+proof. We remove one inference composition from pretraining, the classical reductio \sig{} (double-negation
+elimination applied to a refuted negation), refill the data to the same size, and run 16 rounds of expert iteration.
+In a pre-registered test, no \sig-free base acquired a classical theorem family (0/6 seeds), against 6/6
+full-exposure seeds (one-sided Boschloo $p=0.00024$). Counting only families acquired during RL: 5/6 vs 0/6
+($p=0.0032$). Restoring \sig{} in 1\% of pretraining restored acquisition on 3/3 seeds. The knockout bases were not
+\sig-free: four of six wrote \sig{} proofs of held-out family members (1--6 in 1.1--1.4 million attempts), only two
+are certified out of reach at RL's compute budget, and the one knockout run that made progress did so mostly on
+members its base could already reach. Measurement matters too: of the 51--60 theorems per seed that RL
+``creates'' at equal sample counts, 14--21 remain once the base gets RL's compute as attempts, under every budget
+allocation tried. In this organism, expert iteration amplified a composition pretraining had exposed, even at 1\%,
+but did not build it within 16 rounds from a base that had never seen it.
