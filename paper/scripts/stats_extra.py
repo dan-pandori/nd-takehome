@@ -17,6 +17,14 @@ out['boschloo_rl_only_5of6_vs_0of6'] = bos(5, 6, 0, 6)
 out['boschloo_dose_3of3_vs_ko_0of6'] = bos(3, 3, 0, 6)
 out['boschloo_3of6_vs_0of6'] = bos(3, 6, 0, 6)
 out['boschloo_1of6_vs_0of6'] = bos(1, 6, 0, 6)
+# robustness: full arm restricted to the new seeds s3-s5 (same GPU class and batch as the knockout ladders)
+acq16 = lambda arm, s: len(R[f'r16_{arm}_s{s}_x0']['strict']['acquired']) > 0
+acq0 = lambda arm, s: set(R[f'pend_{arm}_s{s}_x0']['strict']['acquired'])
+during = lambda arm, s: len(set(R[f'r16_{arm}_s{s}_x0']['strict']['acquired']) - acq0(arm, s)) > 0
+n_new = sum(acq16('full', s) for s in (3, 4, 5)); n_new_rl = sum(during('full', s) for s in (3, 4, 5))
+out['new_full_only'] = {'indicator': f'{n_new}/3 vs 0/6', 'p': bos(n_new, 3, 0, 6),
+                        'during_rl': f'{n_new_rl}/3 vs 0/6', 'p_during_rl': bos(n_new_rl, 3, 0, 6)}
+out['during_rl_all_full'] = [during('full', s) for s in range(6)]
 # one-sided 95 % upper bound on the per-seed creation rate after 0 / 6
 out['cp_ub95_0of6'] = beta.ppf(0.95, 1, 6)
 # expected free-sigma proofs per round on the strict trained targets at the knockout bases' pooled large-k rates

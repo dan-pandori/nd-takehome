@@ -97,6 +97,7 @@ Run `create-or-elicit-paper` (2026-10-13). One row per claim; a row may carry se
 | P61 | §5.2 | IQM full 53.75 [30.5, 73.5], knockout 0.75 [0, 1.75], difference 53.0 [31.0, 72.8] | review policy items (iqm.py) | reviewed |
 | P62 | §5.2 | per family: cc 6 vs 0 (p 0.0002, Holm 0.0015); nc, pe, ps 3 vs 0 (0.034, Holm 0.17); em 1 vs 0 (0.39); De Morgan 0 vs 0 | R§3 *corr* | reviewed-corrected |
 | P63 | §5.2 | cc at the bar at pend on 5/6 full (6/6 guided) | R§3 | reviewed |
+| P63b | §5.2 | new full seeds only (s3–s5): indicator 3/3 vs 0/6, p = 0.0033; during RL 2/3 vs 0/6, p = 0.034 | this run: `stats_extra.py` from R§3 per-seed families (`review_coe/out_acq.json`) | this run (from reviewed counts) |
 | P64 | §5.2 | strict trained targets r1 → r16 (cumulative): full 21/1/27/17/15/20 → 49/80/86/78/33/36; knockout 0 at r1, 0/5/1/0/0/2 cumulative at r16 | S-coe Obs 2 (executor's cumulative 0/5/1/0/0/2; reviewer's round-16 sample 0/5/0/0/0/1); figure script reproduces from `rounds/*.json` | reviewed (cumulative = executor's, consistent with review) |
 | P65 | §5.2, App | knockout never ≥ 0.5 share on any family; first-round table | R§4; S-coe Obs 2 | reviewed |
 | P66 | §5.3 | dose pend 6/18/8, r8 53/33/28, r16 58/39/30; 3/3 vs 0/6 p = 0.0033 | L97; R§3 | reviewed |
