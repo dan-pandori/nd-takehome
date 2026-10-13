@@ -1,1 +1,41 @@
-\emph{[Pending: the pre-registered checks C1--C3 are running; results will be filled in here.]}
+This writing run pre-registered its own checks (\texttt{preregistration/create-or-elicit-paper.md}, commit
+\texttt{c602e43c} and Addenda 1--4) before running them. The pod checks used two NVIDIA A40 instances. All evaluations
+are $k=256$, $T=0.8$, batch 512, on the 106 strict held-out theorems unless stated, with Lean in the loop.
+
+\paragraph{C1: what the cut-offs hide.} Paired evaluations with sample seed 0 on the same file, with standard caps (512
+tokens per step, 96 steps) and doubled caps (1,024, 192). The draws differ only where a cap binds, apart from rare
+re-draws when the batch composition changes.
+\begin{center}\small
+\begin{tabular}{lccc}
+\toprule
+r16 checkpoint & strict theorems proved (std $\to$ dbl) & families acquired (std $\to$ dbl) & cut-off share (std $\to$ dbl) \\
+\midrule
+knockout s0 & 0 $\to$ 0 & none $\to$ none & 0.04\% $\to$ 0.00\% \\
+knockout s1 & 3 $\to$ 3 & none $\to$ none & 5.09\% $\to$ 2.73\% \\
+knockout s2--s5 & (pending) & & \\
+dose s2 & 28 $\to$ 29 & cc, nc $\to$ cc, nc & 9.30\% $\to$ 8.58\% \\
+dose s0, s1; full s4 & (pending) & & \\
+\bottomrule
+\end{tabular}
+\end{center}
+The pre-registered expectation that doubled caps would cut the cut-off share at least five-fold failed where cut-offs
+were large. Most cut attempts are non-terminating, and they stay cut at twice the budget. The counts barely move
+so far, so the cut-offs have not hidden successes that matter for any verdict.
+
+\paragraph{C2: the dose arm on an equal footing.} A second plain evaluation (sample seed 1) of dose r16 seeds 0, 1 and 2
+proves 56, 39 and 30 strict theorems (first evaluation: 58, 39, 30) and acquires the same families on 3/3 seeds. The
+guided evaluation proves 58 and 42 on seeds 0 and 1 (seed 2 pending), again with the same families.
+
+\paragraph{C3: textbook72 at the knockout's evaluation settings.} The old full bases s0 and s1, evaluated at batch 512,
+prove 34 and 30 of textbook72's 72 problems, against 32 and 32 in their original batch-2,048 evaluation (seed 2
+pending). Both are within the pre-registered $\pm4$.
+
+\paragraph{C4: knockout seed 1's members at $n \geq K$.} (pending)
+
+\paragraph{C5: the pre-filter, in full.} (pending)
+
+\paragraph{A2--A5: base prior, first-solve order and the waiting-time null.} These are reported in \S\ref{sec:prior}
+and \S\ref{sec:rare}, with their scripts in \texttt{paper/scripts/} (\texttt{figures.py prior},
+\texttt{a3\_member\_prior.py}, \texttt{a4\_first\_solve.py}, \texttt{a5\_waiting\_time.py}). A2 was pre-registered
+after its inputs had been seen, and A5 was added after the first critique round; both are post hoc. A3 met its
+pre-registered expectation (AUC $\geq 0.7$ on $\geq 3$ of 4 full seeds: 4 of 4), as did A4 ($\rho \leq -0.5$ on 4 of 4).

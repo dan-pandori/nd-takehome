@@ -84,8 +84,9 @@ during RL; dose s1 had already acquired converse contraposition at r0. That is 3
 lie inside the full arm's range (two-sided Mann--Whitney $p = 0.55$ with three seeds; \emph{this paper}). In round 1 the
 dose bases wrote 223, 183 and 241 \sig{} proofs, and the free positive reductio from round 1 on. The new full seeds
 wrote 635--885 \sig{} proofs and the knockout seeds 6--13. The dose changes the data around \sig{} far less than the
-knockout removes: [DOSE-SHARES]. A second sample seed and a guided evaluation of the dose arm, run for this paper, give
-[C2] (Appendix~\ref{sec:checks}).
+knockout removed. In \KTdose{}, \texttt{DN} appears in 4.24\% of records and $\neg$-introduction in 6.12\%, against 3.29\% and 5.19\% in \KTko{} and 13.73\% and 15.21\% in \KT{}. Classical-only theorems are 1.56\% of a 20,000-record sample, against 1.35\% and 4.17\% (\emph{this paper}, from the dose set's file). A second sample seed and a guided evaluation of the dose arm, run for this paper, agree. The second seed
+proves 56, 39 and 30 strict theorems, and the guided evaluation proves 58 and 42 on seeds 0 and 1 (seed 2 pending). All three seeds acquire the same families
+as in the first evaluation (Appendix~\ref{sec:checks}).
 
 \subsection{\sig{} is rare in the knockout arm, not absent}
 \label{sec:rare}
@@ -195,7 +196,7 @@ Was this elicitation of something the base already did? In the large-$k$ sample,
 converse-contraposition members, each one to three times in 7,168--10,240 attempts. That is within reach by the rate
 definition, but every one is below $K$ attempts. Three of the four members the ladder proves (\texttt{1246},
 \texttt{1460}, \texttt{2256}) are among them. The fourth, \texttt{1019}, had no base success in about $10^4$ attempts.
-A re-sample of these members at $n \geq K$ without early stopping, run for this paper, gives [C4]. [C4-READING]
+A re-sample of these members at $n \geq K$ without early stopping, run for this paper, is pending.
 
 \subsection{What else the knockout changes}
 \label{sec:side}
@@ -220,8 +221,8 @@ be somewhat worse. These sets are not netted against RL-free controls.
 
 \paragraph{What this means for the interpretation.} Three things favour exposure to the composition over a general
 deficit. The general costs are a few theorems out of hundreds, against a gap of 8--69 vs 0--2 strict theorems gained
-during RL. The knockout ladders' gains elsewhere are comparable. And the dose arm restores acquisition while changing the
-data far less than the knockout did [DOSE-SHARES]. The design cannot separate exposure in pretraining from exposure
+during RL. The knockout ladders' gains elsewhere are comparable. And the dose arm restores acquisition while moving \texttt{DN} and
+$\neg$-introduction by about one point each (\S\ref{sec:dose}). The design cannot separate exposure in pretraining from exposure
 through replay during RL (\S\ref{sec:setup}).
 
 \subsection{The base's prior predicts what RL acquires (exploratory)}
@@ -264,8 +265,9 @@ used in the loop. It rejected all 150 re-submitted Lean rejections, all 60 proof
 strict knockout proofs with \texttt{Classical.byContradiction} removed, and \texttt{sorry}. Every rejection in the
 experiment was the pre-filter's, so the pre-filter's false-reject rate matters. Re-checking 150 rejections per reason
 for its 13 reasons gave 0 accepted, a 95\% bound of 2.0\% per reason. This paper Lean-checked every one of the 222,135
-pre-filter rejections in knockout seed 1's ladder (rounds 1--16; 22,522 of them on a by-contradiction step): [C5].
+pre-filter rejections in knockout seed 1's ladder (rounds 1--16; 22,522 of them on a by-contradiction step); the result is pending.
 Cut-offs (a step over 512 tokens or a proof over 96 steps) can only hide successes. On the strict theorems at r16 they
 affect 0.04--4.97\% of knockout attempts, 0.11--2.89\% of full and 0.68--8.84\% of dose attempts. A paired re-evaluation
-with doubled caps, run for this paper, gives [C1]. The training theorems share no renaming class with any evaluation
+with doubled caps, run for this paper, moves the counts by at most one theorem so far and changes no verdict
+(Appendix~\ref{sec:checks}). The training theorems share no renaming class with any evaluation
 set, and no pretraining set shares one with the 106 strict theorems.
