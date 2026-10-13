@@ -197,10 +197,11 @@ r8, r12 and r16 checkpoints of the twelve new ladders and under full seed 0's ba
 log-probability is $-15.4$ to $-20.9$ nats under the four full bases scored, $-18.9$ to $-25.3$ under the dose bases,
 and $-26.0$ to $-36.0$ under the knockout bases. Full and dose overlap; the nearest dose and knockout bases are within
 0.7 nats. The costliest step is the box that assumes $\neg G$: $-18.0$ to $-21.6$ nats under the knockout bases, $-10.5$
-under full seed 0's base. Two ladders move strongly toward these proofs by r16 (full s3 $+10.3$ nats, dose s0 $+16.6$).
-The other full and dose ladders move $+1.7$ to $+4.3$, and the knockout ladders $-7.6$ to $+3.7$. The path matters as
-well. By r4, knockout seeds 2 and 3 had risen 8.5 and 8.1 nats, more than full seeds 4 and 5 ($+5.0$, $+4.2$) and dose
-seeds 1 and 2 ($+1.6$, $+2.7$), and then they fell back. The levels separate the arms at every checkpoint; the changes do not. Two caveats apply.
+under full seed 0's base. Two ladders move strongly toward these proofs by r16 (full s3 $+10.2$ nats, dose s0 $+16.6$).
+The other full and dose ladders move $+1.6$ to $+4.2$, and the knockout ladders $-7.5$ to $+3.7$. The path matters as
+well. By r4, knockout seeds 2 and 3 had risen 8.4 and 8.0 nats, more than full seeds 4 and 5 ($+5.0$, $+4.1$) and dose
+seeds 1 and 2 ($+1.6$, $+2.7$), and then they fell back. At every checkpoint the levels separate the knockout arm from the full and dose arms,
+which overlap; the changes do not. Two caveats apply.
 The scores condition on one of the 33 line-numbering offsets; subtracting $\ln 33 \approx 3.5$ nats gives a lower bound
 on the proof's log-probability. And a knockout ladder that found its own spelling (seed 1, below) need not raise these.
 
@@ -227,8 +228,9 @@ Knockout seed 1's free positive reductio kept spreading, so it was continued to 
 reductio proofs per round rose from 11 in round 16 to 123 in round 24. From round 21 it had proofs for 9 of the 27
 strict converse-contraposition training theorems, and it never got past 9 strict training theorems in all. By the
 earlier organisms' criterion for igniting a pattern (at least 2\% of the targets that require it), it ignited at round 13
-(3 of 123), but it did not acquire a family. At r16 it proved two strict held-out theorems, \texttt{la\_transfer\_916}
-and \texttt{1460}. At r20 and r24 it proved the same five, each more often than at r16: four converse-contraposition
+(3 of 123), but it did not acquire a family. At r16 it proved two strict held-out theorems in the main evaluation,
+\texttt{la\_transfer\_916} and \texttt{1460}; both fresh r16 draws for this paper also found \texttt{1019} once. At r20
+and r24 it proved the same five, each more often than at r16: four converse-contraposition
 members and \texttt{916}. The largest gain is on \texttt{la\_transfer\_1019}, from 0 to 32 to 214 successes in 256
 attempts at r16, r20 and r24 (the experiment's per-member counts, not recounted). Its r20 proofs of these
 theorems take three routes: \sig{} (32 proofs), other \sigp{} (24) and the lemma route (7), a route absent from every
@@ -239,19 +241,22 @@ proved four of its 18 converse-contraposition members, one to three times each i
 and three of them (\texttt{1246}, \texttt{1460}, \texttt{2256}) are among the four the ladder proves. A pre-registered
 re-sample for this paper, 18,432 attempts per member with no early stopping (C4, Appendix~\ref{sec:checks}), does not
 support that reading. By the pre-registered criterion ($\hat p \geq 1/K$, here at least two successes) the base reaches
-four members: \texttt{916} (13 successes), \texttt{1460} (4), and \texttt{1096} and \texttt{1606} (2 each). The ladder
-proves the first two, the two its base proved most often, by r16, and never proves the other two. The three members it
-adds by r20 had no success in the re-sample: \texttt{1019}, the largest gain, and \texttt{1246} and \texttt{2256}, which
-had one success each in the earlier sample. We had registered that if at most one of \texttt{1246}, \texttt{1460} and
+four of these 19 theorems: \texttt{916} (13 successes), \texttt{1460} (4), and \texttt{1096} and \texttt{1606} (2 each).
+The ladder proves the first two, the two its base proved most often, in every r16 draw, and never proves the other two.
+The three members it proves often from r20 had no success in the re-sample: \texttt{1019}, the largest gain, which two
+of three r16 draws had already proved once, and \texttt{1246} and \texttt{2256}, which had one success each in the
+earlier sample. We had registered that if at most one of \texttt{1246}, \texttt{1460} and
 \texttt{2256} was within reach, the paper would drop the reading that the ladder amplified mostly members its base could
 already reach. Only \texttt{1460} is, so we drop it. Pooled over the 18 members, the re-sample's rate (10 successes in
 331,776 attempts, $3.0\times10^{-5}$) matches the earlier sample's (6 in 186,172, $3.2\times10^{-5}$). What does not
 replicate is which members succeed: at rates of $10^{-5}$ to $10^{-4}$, about $10^4$ attempts per member cannot rank
-the members. The other knockout seeds show both kinds of mismatch. Seed 4's base proved three
-converse-contraposition members once each in early-stopped samples, and its ladder proves no strict theorem at r16.
-Seeds 2 and 5's bases each proved one converse-contraposition member (\texttt{1096}; \texttt{1811}), and at r16 their
-ladders prove others (\texttt{1963}; \texttt{1246} and \texttt{2256}), once or twice in 256 attempts. At these sample
-sizes, a member's single base success was a poor guide to whether a ladder would prove it.
+the members. The other knockout seeds say little at the member level, because their ladders prove members only once or twice in
+256 attempts. Seed 4's base proved three converse-contraposition members once each in early-stopped samples, and its
+ladder proves no strict theorem at r16. Seed 5's base proved \texttt{1811}; its ladder proves \texttt{1246} and
+\texttt{2256}, the members seed 1's ladder proves from r20, in all three plain r16 draws, and \texttt{1811} in none. Seed
+2's base proved \texttt{1096}; its ladder proved \texttt{1963} in the main evaluation and \texttt{1096} in both fresh
+draws (one of which also found \texttt{1963}).
+At these counts, single successes, of a base or of a ladder, do not settle which members EI amplifies.
 
 \subsection{What else the knockout changes}
 \label{sec:side}
@@ -291,7 +296,8 @@ with strict held-out theorems proved at r16 (Spearman $\rho = 0.88$; Fig.~\ref{f
 difference between arms: $\rho = 0.39$ ($p = 0.38$) without the knockout. Within a ladder, the base's log-probability of
 a member's best known proof predicts whether the member is proved at r16. The AUC is 0.92--0.95 on the four full seeds
 with scored bases (pre-registered expectation $\geq 0.7$) and 0.85--0.86 on the three dose seeds. Restricted to members
-not proved at r0, so that only RL-phase gains count, it is 0.83--0.93 (full) and 0.74--0.84 (dose; post hoc). Comparing only members
+not proved at r0, so that only RL-phase gains count (post hoc, Addendum 5), it is 0.83--0.93 (full) and 0.74--0.84
+(dose). Comparing only members
 of the same family, the AUC is 0.47--0.98 (full) and 0.28--0.60 (dose). One full seed is higher within families than
 overall, against the expectation stated before computing. The base's log-probability also predicts \emph{when} a member
 is first proved in the ladder's per-round samples. The Spearman $\rho$ with the first-solve round is $-0.69$ to $-0.87$ on
@@ -327,12 +333,16 @@ The independent re-check accepted every stored knockout proof of a strict theore
 used in the loop. It rejected all 150 re-submitted Lean rejections, all 60 proofs paired with the wrong theorem, all 40
 strict knockout proofs with \texttt{Classical.byContradiction} removed, and \texttt{sorry}. Every rejection in the
 experiment was the pre-filter's, so its false-reject rate matters. Re-checking 150 rejections per reason for its 13
-reasons gave 0 accepted, a 95\% bound of 2.0\% per reason. This paper Lean-checked every pre-filter rejection in
-knockout seed 1's ladder (222,135 texts, rounds 1--16; 22,522 on a by-contradiction step); the result is pending. That
-check covers the ladder's samples, not the large-$k$ samples behind the certificates, whose rejected texts were not
-stored. Cut-offs (a step over 512 tokens or a proof over 96 steps) can only hide successes. On the strict theorems at r16
+reasons gave 0 accepted, a 95\% bound of 2.0\% per reason. For this paper, every pre-filter rejection in knockout
+seed 1's ladder (222,135 texts, rounds 1--16; 22,522 on a by-contradiction step) was re-checked in Lean, and none was
+accepted. That bounds the pre-filter's false-reject rate in that ladder below $1.3\times10^{-5}$ ($1.3\times10^{-4}$ on
+by-contradiction steps; one-sided 95\%; C5). The same harness accepted 400 of 400 texts the run's Lean gate had
+accepted, and none of them when paired with another theorem. The knockout ladders' counts (strict training theorems,
+free positive reductio proofs, the waiting-time observations) rest on the pre-filter rejecting no valid proof, which C5
+supports for seed 1's ladder only. It does not cover the large-$k$ samples behind the certificates, whose rejected texts
+were not stored. Cut-offs (a step over 512 tokens or a proof over 96 steps) can only hide successes. On the strict theorems at r16
 they affect 0.04--4.97\% of knockout attempts, 0.11--2.89\% of full and 0.68--8.84\% of dose attempts. A paired
-re-evaluation with doubled caps, run for this paper, has so far covered 4 of 10 checkpoints, with counts moving by at most
-one theorem (Appendix~\ref{sec:checks}). The training theorems share no renaming class with any evaluation set, and no
+re-evaluation of ten r16 checkpoints with doubled caps, run for this paper, moved each strict count by at most one
+theorem and changed no family verdict (C1, Appendix~\ref{sec:checks}). The training theorems share no renaming class with any evaluation set, and no
 pretraining set shares one with the 106 strict theorems (the pretraining sets do share 21--22 classes under a
 premise-order-invariant key with the 5,000 greedy-decoding theorems).

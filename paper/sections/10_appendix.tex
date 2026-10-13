@@ -151,8 +151,9 @@ batch; $-4.0$ on its 53 intuitionistic theorems with three);
 \item ``0/106 on the knockout bases for every sampler'' (plain sampling at $T=1$ solved \texttt{la\_transfer\_916} on
 both bases).
 \end{itemize}
-Near-misses: knockout seed 1's base cost 8.04\,ms per attempt on an A40 (expected 6--8\,ms), seed 2's uniform-allocation
-ratio was 0.61 (expected $\leq 0.6$), and the dose arm's r16 count lay between the two arms' medians on 2/3 seeds. The
+Near-misses: the earlier full seed s1's base cost 8.04\,ms per attempt on an A40 (expected 6--8\,ms), the earlier full
+seed s2's uniform-allocation budget at r8 was 0.61 times the published one (expected 0.4--0.6), and the dose arm's r16
+count lay between the two arms' medians on 2/3 seeds. The
 power-sampling expectations (0 solves) were met, but the sampler failed its positive control, so they are uninformative
 rather than hits. Deviations from the plan: more than 0.1\% of some stratum was cut off in 64 of 74 plain evaluations;
 the dose arm had no compute-matched reach measurement, no r16 redraw and no guided evaluation (the last two are added

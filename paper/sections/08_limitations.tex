@@ -6,6 +6,10 @@
 and pretraining proofs of at most 12 lines. Nothing here is measured on a large language model or on first-order logic.
 The organism was chosen because it allows interventions that large models do not, and its results are results about
 it.
+\item \textbf{Near-saturated pools.} Outside the strict theorems, the evaluation pools are close to their ceilings
+after RL: the r8 models prove 236--240 of holdout250, and the r16 models 277--298 of the 322. Gains, \dcov{} and the
+test-time-compute comparisons on these pools are compressed by the ceiling. That is why the paper leans on textbook72
+and on the strict theorems, which no model saturates (at most 80 of 106).
 \item \textbf{One RL algorithm, 16 rounds, one composition.} Expert iteration at $k=32$, $T=0.8$ is rejection-sampling
 fine-tuning. GRPO-style updates, more exploration, demonstrations or longer runs could behave differently, and in the
 closest controlled study GRPO did, and in our earlier organism GRPO acquired a depth-3 nesting habit more often than EI;
@@ -26,12 +30,13 @@ ability (\S\ref{sec:side}). Exposure in pretraining cannot be separated from exp
 $k$, and four of six under guided decoding at $k = 256$. Only one is certified out of reach as pre-registered: under plain
 sampling, on a pooled mean rate, at one allocation, with an 8\% margin. Spreading the same compute over 106 or 1,054
 theorems would certify 0 or 5 of 6. The certificate assumes the pre-filter rejected no valid proof in the large-$k$
-sample, which could not be checked. No family could be certified at the sampling used, so the \textsc{created} verdict
+sample. That could not be checked there; in one knockout ladder's 222,135 rejections it rejected none. No family could be certified at the sampling used, so the \textsc{created} verdict
 was impossible by design. The ``rare'' evidence comes almost entirely from one family (converse contraposition); on the
 others the bases sit at the sampling floor.
 \item \textbf{Within-reach labels.} Per-theorem base rates in the knockout arm rest on one to three successes in fewer
 than $K$ attempts, from sampling that paused after a first success. A fresh sample at $n \geq K$ of one base's members
-(C4) found three of its four such members at zero, so these labels overstate reach. The other bases' members were not
+(C4) found three of its four such members at zero, and two others with no early-stopped success within reach, so
+these labels are unreliable in both directions. The other bases' members were not
 re-sampled.
 \item \textbf{Estimators.} The known-proof estimate runs two- to three-fold low below $10^{-4}$ and was calibrated on
 full-exposure bases. The likelihood scores use the full ladders' proofs and one line-numbering offset.
@@ -39,7 +44,7 @@ full-exposure bases. The likelihood scores use the full ladders' proofs and one 
 one measured GPU-class ratio. The knockout certificates and \dcov{} were computed at one allocation.
 \item \textbf{Settings.} Old and new full seeds differ in GPU class, batch, resumption and evaluation-phase sampling,
 and are pooled. Many evaluations cut off more than 0.1\% of attempts in some stratum (up to 8.8\% of strict-theorem
-attempts on one dose seed); see Appendix~\ref{sec:checks}. The power-sampling comparators kept no proof text, so
+attempts on one dose seed). Doubling the caps moved each strict count by at most one theorem (Appendix~\ref{sec:checks}). The power-sampling comparators kept no proof text, so
 their few successes were not re-checked in Lean.
 \item \textbf{Interface.} In an earlier 3.2M organism, a base acting through the proof-state interface found at
 least one proof of 28 of the 29 theorems that whole-proof EI had ``created'' (in up to 400,000 attempts; at EI's own

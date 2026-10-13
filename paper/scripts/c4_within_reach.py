@@ -23,7 +23,7 @@ for s in (1, 3):
         lo = beta.ppf(0.025, c, n - c + 1) if c > 0 else 0.0
         hi = beta.ppf(0.975, c + 1, n - c)
         cls = 'within reach' if lo >= 1 / K[s] else ('not reached' if hi < 1 / K[s] else 'undetermined')
-        rows[name] = {'c': c, 'n': n, 'p_hat': c / n, 'ci95': [lo, hi], 'class': cls, 'prereg_within': c / n >= 1 / K[s],
+        rows[name] = {'c': c, 'n': n, 'p_hat': c / n, 'ci95': [lo, hi], 'class': cls, 'prereg_within': c >= 2, 'p_hat_ge_1_over_K': c / n >= 1 / K[s],
                       'base_largek_before': BASE[s].get(name), 'ladder_s1_solves_r20_r24': name in LADDER}
     out[f'ko_s{s}'] = {'K': K[s], 'attempts': d.get('attempts'), 'wall_s': d.get('wall_s'), 'members': rows,
                        'total_successes': sum(r['c'] for r in rows.values())}

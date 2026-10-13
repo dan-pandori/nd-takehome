@@ -97,7 +97,8 @@ for s in range(3):
         print(f'  s{s}: pending'); continue
     out['C3'][f's{s}'] = {'solved': sj.get('solved'), 'n': 72, 'wall_s': sj.get('wall_s'), 'peak_gb': sj.get('env', {}).get('peak_alloc_gb')}
     print(f"  s{s}: {sj.get('solved')} / 72")
-# C3's second expectation: the 6-vs-6 full-minus-knockout r0 gap on all 72 at the knockout's settings, in [4, 9].
+# C3's second expectation: the 6-vs-6 r0 gap on all 72 at the knockout's settings. The pre-registration wrote
+# "(full - knockout, means) stays in [-9, -4]", a sign slip: the intended quantity is knockout - full.
 # Full s3-s5 and knockout s0-s5 r0 x0 fractions from the review's recount (review_coe/out_general.json, batch 512).
 if all(f's{s}' in out['C3'] for s in range(3)):
     G = json.load(open(os.path.join(ROOT, 'review_coe/out_general.json')))
@@ -109,7 +110,9 @@ if all(f's{s}' in out['C3'] for s in range(3)):
     if None not in full + ko:
         gap = sum(full) / 6 - sum(ko) / 6
         out['C3']['gap_6v6'] = {'full': full, 'knockout': ko, 'full_mean': sum(full) / 6, 'ko_mean': sum(ko) / 6,
-                                'gap': gap, 'prereg_range': [4, 9], 'hit': 4 <= gap <= 9}
+                                'full_minus_ko': gap, 'ko_minus_full': -gap,
+                                'prereg_range_as_written': [-9, -4], 'hit_reading_ko_minus_full': -9 <= -gap <= -4,
+                                'hit_as_written_full_minus_ko': -9 <= gap <= -4}
         print(f'  6-vs-6 r0 gap on all 72: full {full} mean {sum(full)/6:.2f}, knockout {ko} mean {sum(ko)/6:.2f}, gap {gap:.2f}')
 for k in out['C1'].values():
     for side in ('std', 'dbl'):

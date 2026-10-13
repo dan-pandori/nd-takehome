@@ -122,7 +122,7 @@ and certification; 6 seeds per arm; compute recorded per arm.
 | 5.3 (C2, this run) dose r16 x1 and guided reads | Table | `artifacts/coe_paper/` (this run, pre-registered C2) |
 | 5.4 σ in round 1 of every knockout ladder (6–13 σ proofs, sequent supplies ¬¬G); free positive reductio in 5/6 ladders (0/34/4/1/2/16 proofs over 16 rounds vs 17–50 thousand per full ladder) | Fig 2b | L84, L92, R§5, S-coe Obs 4 |
 | 5.4 Certificates at K_train(16): s0, s3 certified out of reach (0 / 1.49 M, 0 / 1.34 M); s1, s2, s4, s5 not (6, 1, 3, 2 successes); no family certified; every knockout-base success on a strict member is a genuine σ | Table 5 | L88, R§6, S-coe Obs 4 |
-| 5.4 Knockout s1's base has 4/18 contraposition_conv members within reach at K_train | text | R§Verdict 5, rewording 3 |
+| 5.4 Knockout s1's base has 4/18 contraposition_conv members within reach at K_train (**superseded by C4**: at n = 18,432 without early stopping, 916, 1460, 1096 and 1606 are within reach; 3 of the 5 members the ladder proves are not; the "mostly within reach" reading is dropped) | text | R§Verdict 5, rewording 3; C4 |
 | 5.4 Log p of best known σ proof (median over 101 members): knockout bases −26 to −36 nats vs full s0 −19.2; pend → r16: full s3 −15.4 → −5.1, dose −25.3 → −8.7; knockout flat or falling; box-opening step −18.0 to −21.6 vs −10.5 | Fig 3 | L87, L98, R§11, S-coe Obs 4 |
 | 5.5 Knockout s1 to r24 (exploratory): free+ per round 11 → 123; strict targets stall at 9; held-out 5/106 at r20 and r24, solved more often; 3 of its 4 contraposition_conv members were within its base's reach → elicitation | text, Fig 2 dashed | L96, R§Verdict 5, S-coe Obs 5 |
 | 5.6 Phase 3a: one seeded round changes nothing (+2 on 1/5 seeds, p 0.25) | text | L95, S-coe Obs 6 |

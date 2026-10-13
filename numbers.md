@@ -1986,6 +1986,19 @@ through T1 EI. The checker is Lean alone.
   `paper/data/shape_k12dose1.json`): DN 4.24 %, NEGI 6.12 % of records; classical-only 1.56 % (20k sample).
 - **Pod checks C1–C5** (pods `coep-1`, `coep-2`, NVIDIA A40 SECURE $0.59/h; rows `artifacts/coe_paper/`, bucket
   `create-or-elicit-paper/artifacts/coe_paper/`; analysis `paper/scripts/checks_c1c3.py` → `paper/data/checks_c1c3.json`):
-  final values in `paper/sections/11_checks.tex` and the log.
+  - C1 (r16, strict 106, sample seed 0, std 512/96 → doubled 1,024/192 caps): knockout s0–s5 0→0, 3→3, 1→2, 0→1, 0→0,
+    2→2; dose s0–s2 57→56, 40→41, 28→29; full s4 22→22; no family changes; cut-off share falls 1.05–2.3× (≥ 5× only on
+    knockout s0, 0.04 → 0.00 %). The paired draws are largely independent (slot-keyed noise), so ±1 includes noise;
+  - C2 dose r16: x1 56 / 39 / 30 (x0 58 / 39 / 30), guided 58 / 42 / 29, the same families on 3/3;
+  - C3 old full bases on textbook72 at batch 512: 34 / 30 / 34 (original batch 2,048: 32 / 32 / 38), all within ±4;
+    6-vs-6 r0 gap full − knockout +5.8 (means 33.5 vs 27.7); the pre-registration's "(full − knockout) in [−9, −4]" is
+    a sign slip, and read as knockout − full (−5.8) the gap is inside it;
+  - C4 (`paper/scripts/c4_within_reach.py` → `paper/data/c4_within_reach.json`): knockout s1 base, 18,432 attempts per
+    member, no early stopping: 916 13, 1460 4, 1096 2, 1606 2, 55 1, 1963 1, the other 13 members 0 (1246, 2256, 1019,
+    528 among them); s3 base on 916 1 / 18,432. Pooled cc rate 10 / 331,776 = 3.0e-5 (early-stopped sample 6 / 186,172
+    = 3.2e-5). Expectations 2 hit, 2 missed;
+  - C5 (`paper/scripts/c5_prefilter_lean.py`): 0 / 222,135 pre-filter rejections Lean-accepted (knockout s1 ladder,
+    13 reasons, 22,522 by-contradiction); UB95 1.35e-5 overall, 1.33e-4 by-contradiction. Harness control
+    (`c5_control.py`): 400 / 400 accepted, 0 / 400 with another theorem.
 - **Lean examples** (`paper/scripts/lean_examples.py` → `paper/data/lean_examples.json`; `paper/lean/`): 3 / 3 model proofs
   accepted, 3 / 3 goal-negated controls rejected (Lean 4.35.0, VPS).

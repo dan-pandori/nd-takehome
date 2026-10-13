@@ -81,7 +81,7 @@ rewrite. The two critique rounds converged on items 1 and 2.
   - k = 256 on the targets the ladder fails;
   - "assume ¬G" injection at positive goals with probability ε.
 - In the earlier organism, one round at k = 128 or T = 1.0 changed almost nothing, so expect little from the first
-  two. The waiting-time result (3 seeds reached strict targets sooner than their base rates predict) suggests that
+  two. The waiting-time result (3 seeds first proved strict targets sooner than their bases' held-out rates predict) suggests that
   longer runs may help more than any single round's exploration.
 
 ### 7. A second composition knockout — ≈ $100 (6 + 6 seeds)
@@ -100,7 +100,7 @@ rewrite. The two critique rounds converged on items 1 and 2.
 
 ### 10. Interface pilot and a classical-rich target pool — ≈ $25 and ≈ $20
 - Whole-proof vs proof-state from the same data. Separately, a target pool in which classical theorems are a large
-  share of the RL signal. In the current pool, 123 of 4,495 training theorems need the composition.
+  share of the RL signal. In the current pool, 123 of 4,495 training theorems require the composition or a variant.
 
 ## CPU-only analyses (free; can be done in this branch)
 

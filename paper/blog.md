@@ -135,8 +135,8 @@ proof of a held-out classical theorem, from the end of pretraining through 16 ro
 round 9 and 123 per round by round 24 (we let it run past the planned 16 rounds). It never learned a family. At rounds 20
 and 24 it proved the same five held-out theorems, just more reliably. A first, early-stopped sample had found four of
 those five before RL. A fresh, larger sample (18,432 tries each) found only two, and none of the three that improved
-most. We had committed in advance to dropping our "RL only amplified what was there" reading if that happened, so we
-drop it. Another knockout run whose model had proved three such theorems before RL learned none of them. Whether this
+most. We had committed in advance to dropping our "it mostly amplified theorems its pre-RL model could already
+prove" reading if that happened, so we drop it. Another knockout run whose model had proved three such theorems before RL learned none of them. Whether this
 counts as eliciting a rare behaviour or creating a new one is, honestly, unclear.
 
 **Seeding didn't help, at least briefly.** One extra RL round seeded with one of these rare proofs changed nothing

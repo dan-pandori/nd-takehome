@@ -1038,3 +1038,62 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   members its base could already reach": of the five held-out theorems knockout s1's ladder proves, its base reaches two
   (916, 1460); the other three, the largest gains included, had 0 successes in 18,432 fresh attempts each. The earlier
   1-in-7k–9k successes on 1246 and 2256 were early-stopping-biased draws.
+- 22:20  **Claim audit returned** (`paper/critiques/audit.md`): 382 rows, 312 PASS / 67 FIX / 3 UNSUPPORTED; 40 required
+  fixes. The four scripts it re-ran (`stats_extra`, `round2_extra`, `a5_waiting_time`, `figures`) reproduce byte for
+  byte. **W3 (≤ 15 discrepancies, none needing a headline change): miss.** One abstract sentence was weakened ("did not
+  carry it" → "rarely carried it") and the knockout s1 elicitation reading was dropped (C4).
+- 22:20–22:37  All 40 fixes applied (`6e182dca`). Responses are in `paper/REVISIONS.md` § Claim audit. Fix 4: checked the r16
+  rows in the bucket instead of deleting the sentence. Knockout s1 r16 proves `916` (10/256) and `1460` (108/256), exactly
+  the two members its base reaches in C4. s2 proves `1963` (1), its base had `1096`. s5 proves `1246` (2) and `2256` (1),
+  its base had `1811` and `1142`. Fix 25: the audit's own text named seed 3 as having no strict base success, but its
+  base proved `la_transfer_916`; only seed 0 is named. **Correction to the 22:00 entry:** "the earlier successes on
+  1246 and 2256 were early-stopping-biased draws" is too strong. Pooled over the 18 cc members, C4's rate (10 /
+  331,776 = 3.0e-5) matches the early-stopped sample's (6 / 186,172 = 3.2e-5). Which members succeed does not replicate,
+  as expected from Poisson noise at 10⁻⁵–10⁻⁴ with about 10⁴ attempts per member. The text now says so.
+  `next_steps.md` 1b had costed 2.4 × 10⁷ attempts at "a few A40-hours"; it is 40–55 A40-hours (≈ $25–30). Corrected.
+  Abstract 250 words; blog 2,495 words with the code block.
+- 22:30  **C2 and C3 complete.** C2 dose s2 guided r16: 29 strict (cc, nc), the same families as x0. C3 old full s2 at
+  batch 512: 34 of textbook72 (original 38; −4, at the edge of the pre-registered ±4). 6-vs-6 r0 textbook72 gap at the
+  knockout's settings: full 34/30/34/33/34/36 (mean 33.5) vs knockout 26/34/29/26/23/28 (27.7) = 5.8. **Hit**, read as
+  knockout − full = −5.8 in the pre-registered [−9, −4]; the pre-registration labelled the range "full − knockout", a
+  sign slip, which App I now states (re-audit) (`checks_c1c3.py` computes it from `review_coe/out_general.json`).
+- 22:37  Re-audit sub-agent launched on the changed passages (`paper/critiques/audit2.md`). C1 (ko s4 dbl, s5) and C5
+  still running.
+- 22:38  **C5 done** (`artifacts/coe_paper/c5/prefilter_ko_s1.json`, 2,254 s with 4 Lean workers on coep-2): **0 of 222,135**
+  pre-filter rejections in knockout s1's ladder are Lean-accepted (13 reasons; 22,522 by-contradiction). 95 % UB on the
+  false-reject rate 1.35e-5 overall, 1.33e-4 by-contradiction. Pre-registered expectation (0; ≈ 1.3e-5 / 1.3e-4): **hit**.
+  Harness control (`paper/scripts/c5_control.py`, added after the memory lesson on negative controls; not
+  pre-registered): 400 / 400 in-loop-accepted texts accepted, 0 / 400 accepted when paired with another theorem.
+- 22:39  C1 sped up: lane A's queue on coep-1 was stopped after ko s4 dbl (killed the lane subshell, PID 1137; the
+  running read finishes). ko s5 std then started on coep-1 and ko s5 dbl on coep-2 (same checkpoint, md5 fef16ef7 on
+  both). App I notes that this pair ran on two A40 instances.
+- 22:55  **C1 complete** (10 pairs; `paper/data/checks_c1c3.json`). Strict counts std → dbl: knockout 0→0, 3→3, 1→2, 0→1,
+  0→0, 2→2; dose 57→56, 40→41, 28→29; full s4 22→22; no family verdict changes. Cut-off share falls only 1.05–2.3×
+  (5× on knockout s0 alone, 0.04 → 0.00 %). Pre-registered expectations: ≥ 5× cut on every checkpoint — **miss** (1/10).
+  Knockout rise ≤ 2 with none at the bar — hit. Dose s2 ≤ +8 keeping its families — hit (+1). Full s4 ≤ +3 — hit (0).
+  The pre-registration assumed the paired draws differ only where a cap binds. `state_sample.py` keys noise by
+  (seed, wave, step, slot) and refills slots from one worklist, so after the first attempt that runs past a cap the
+  draws diverge. App I says so. Member-level r16 detail: s1's fresh draws also find `1019` once; s2's find `1096` (its
+  base's member) in both, where x0 found `1963`; s5 proves `1246` and `2256` in all three plain draws, `1811` (its
+  base's) in none.
+- 22:57  Both pods deleted after pulling everything (`podrm`: coep-1 3.48 h $2.05; coep-2 3.00 h $1.77). **Run pod
+  total 6.48 h, $3.82 of $10.**
+- 23:00  **Writing expectations (pre-registered W1–W4):**
+  - W1 (headline = the pre-registered verdict in the review's wording, no "need", no general sharpening claim): **hit**,
+    but only after audit fix 2 removed the abstract's last "need it".
+  - W2 (critiques raise the five objections; the paper answers each): **hit**. All five appear in the round-1/2
+    critiques. Near-saturated targets had been answered only in §4, so a limitations item was added now (P171).
+  - W3: **miss** (above).
+  - W4 (tectonic builds; abstract ≤ 250 words; blog 1,500–2,500 words and 3–5 figures): **hit** (abstract 250; blog
+    2,495 with the code block, 4 figures; PDF 34 pages, main text 23).
+- 22:59  **Re-audit returned** (`paper/critiques/audit2.md`, on `6e182dca`): 90 rows, 68 PASS / 21 FIX / 1 UNSUPPORTED.
+  The UNSUPPORTED row was my "at r16 the ladder proves exactly the two members its base reaches". That is true of the
+  main evaluation only, since both C1 r16 draws also proved `1019` once. I had found the same when C1 finished. All 15
+  fixes applied; see REVISIONS § Re-audit. Two need recording here:
+  - C3's pre-registered range was written "(full − knockout) in [−9, −4]", a sign slip, now stated in App I. The hit
+    holds only under the intended reading.
+  - The §5 log-p changes had been differenced from rounded values. They are corrected from the unrounded summaries:
+    full s3 +10.2, others +1.6 to +4.2, knockout −7.5 to +3.7, r4 rises 8.4 / 8.0.
+
+  `c4_within_reach.py` now applies the pre-registered c ≥ 2 rule. A "near-saturated pools" limitation was added.
+  Final: abstract 250 words; blog 2,499 words with the code block, 4 figures; PDF 34 pages (main text 23).

@@ -134,7 +134,7 @@ contradicted it.
 
 | # | point | response |
 |---|---|---|
-| 1, 16, 20 | C4 contradicts the knockout s1 "elicitation" passage; the review's RV 5 reading is not acknowledged | **fixed.** §3.4 now gives the review's reading, then C4. Of the four members within reach by the pre-registered criterion (916, 1460, 1096, 1606), the ladder proves the first two by r16 and never the other two. The three members it adds by r20 (1019, 1246, 2256) had 0 in 18,432. By the Addendum 4 rule, "mostly members its base could already reach" is dropped. §7, the limitations, App I and the blog follow. One addition beyond the audit's text: at r16 the ladder proves exactly the two reached members (bucket rows, LEDGER P152) |
+| 1, 16, 20 | C4 contradicts the knockout s1 "elicitation" passage; the review's RV 5 reading is not acknowledged | **fixed.** §3.4 now gives the review's reading, then C4. Of the four members within reach by the pre-registered criterion (916, 1460, 1096, 1606), the ladder proves the first two by r16 and never the other two. The three members it adds by r20 (1019, 1246, 2256) had 0 in 18,432. By the Addendum 4 rule, "mostly members its base could already reach" is dropped. §7, the limitations, App I and the blog follow. One addition beyond the audit's text: in the main r16 evaluation the ladder proves exactly 916 and 1460, the two members its base proved most often (P152); both C1 r16 draws also proved 1019 once (re-audit, below) |
 | 2 | "need it" / "did not carry it" (abstract, §5, blog ×3) | **fixed** with the audit's wording (abstract compressed to stay at 250 words) |
 | 3 | the ln 33 bound points the wrong way | **fixed** (§5, blog): subtracting ln 33 gives a lower bound; the score can overstate by ≤ 3.5 nats and understate by more |
 | 4 | "at most one of the four seeds" unsupported | **fixed by checking the data.** The r16 rows in the bucket show knockout s2 proving `1963` and s5 proving `1246` and `2256`, while their bases had proved `1096` and `1811` (s5 also `1142`, a Peirce-sequent member). The sentence is replaced by these facts and by "which members a base proved rarely was a poor guide to which members its ladder would prove" |
@@ -174,3 +174,33 @@ contradicted it.
 **Also found while applying the fixes.** `next_steps.md` item 1b costed 10⁵–10⁶ attempts per checkpoint at "a few
 A40-hours". At 6–8 ms per attempt, 10⁶ attempts at each of 24 checkpoints is 40–55 A40-hours (≈ $25–30). The estimate is
 corrected.
+
+## Re-audit of the changed passages (2026-10-13, 22:37–22:59 UTC; `critiques/audit2.md`)
+
+A second independent sub-agent checked commit `6e182dca` against its sources: 90 rows, 68 PASS, 21 FIX, 1
+UNSUPPORTED. It confirmed the C4 counts, the pooled comparison, the C3 numbers, the Table 5 K values, J6/J6b, the
+LLM-transfer arithmetic, and the agreement of paper, blog and `next_steps.md` on GRPO. The fix-25 departure (seed 0
+only) was judged justified. Its fixes, and what was done:
+
+| # | point | response |
+|---|---|---|
+| 1 | "at r16 the ladder proves exactly the two members its base reaches" holds for the main evaluation only; both C1 r16 draws also proved `1019` (the UNSUPPORTED row) | **fixed** (§5: "in every r16 draw" for 916/1460; 1019 "which two of three r16 draws had already proved once"; §7 likewise; REVISIONS row 1 corrected). This was also found independently when C1 finished |
+| 2 | seed 2's fresh r16 draws prove `1096`, its base's member, contradicting "their ladders prove others" | **fixed** with all three r16 draws per seed: seed 2 proved `1963` (x0) and `1096` (both fresh draws); seed 5 proved `1246` and `2256` in all three and `1811` (its base's) in none. The closing sentence now says single successes of a base or of a ladder do not settle which members EI amplifies |
+| 3 | the blog names the wrong dropped reading | **fixed** (the blog is 2,499 words with the code block) |
+| 4 | App F near-misses attributed to knockout s1 | **fixed** (they are the earlier full seeds s1 and s2; expectation 0.4–0.6) |
+| 5 | C3's pre-registered range has the opposite sign | **fixed**: App I, LEDGER P153, `numbers.md` and the log state the sign slip, and `checks_c1c3.py` records the range as written, with both readings |
+| 6 | C4's seed-3 miss depends on the rule | **fixed** (App I states it; `c4_within_reach.py` now uses the pre-registered c ≥ 2 and records p̂ ≥ 1/K separately) |
+| 7 | loose "reached" in §1 and §7 | **fixed** ("first proved") |
+| 8 | "levels separate the arms" vs "full and dose overlap" | **fixed** |
+| 9 | §7 rate-rise sentence lacked the held-out-rate caveat | **fixed** |
+| 10 | within-reach labels err in both directions | **fixed** (§8) |
+| 11 | A3b label misplaced | **fixed** |
+| 12 | K_adapt values not recounted | **fixed** (§4 exceptions) |
+| 13 | LEDGER P150 (9 other members), P152, P158 status; pooled C4 and §7 rates | **fixed** (P150, P152, P158; new P172, P173) |
+| 14 | `next_steps.md` "reached", "need" | **fixed** |
+| 15 | §1 executor's-counts label (optional) | **fixed** |
+| out of scope | log-p changes differenced from values already rounded to one decimal | **fixed** from the unrounded summaries: full s3 +10.2 (was +10.3), others +1.6 to +4.2 (+1.7 to +4.3), knockout −7.5 to +3.7 (−7.6), r4 rises 8.4 / 8.0 and full s5 +4.1 (8.5 / 8.1, +4.2); LEDGER P117, P146 |
+
+**Also after the re-audit.** C1 completed (all ten pairs; App I table). C5 and its harness control are reported (§5.8,
+App I). The limitations gained a "near-saturated pools" item. The brief asks for that topic, and the text had covered it
+only in §4.
