@@ -118,20 +118,22 @@ def _rounds_series():
             arm, seed = 'full', int(b[len('old_full_s'):-5])
         elif b.startswith('la_ko_s'):
             arm, seed = 'knockout', int(b[len('la_ko_s'):-5])
+        elif b.startswith('la_dose1_s'):
+            arm, seed = '1 % dose', int(b[len('la_dose1_s'):-5])
         else:
             continue
         d = json.load(open(fn))
         rs = sorted(int(r) for r in d['per_round'])
         tgt = [d['per_round'][str(r)]['sigma_targets_cum'] for r in rs]
         st = d.get('sigma_subtypes_by_round', {})
-        free = [(st.get(str(r), {}).get('pos_free', 0) + st.get(str(r), {}).get('pos_free_impi', 0)) for r in rs]
+        free = [sum(v for k, v in st.get(str(r), {}).items() if k and k.startswith('pos_free')) for r in rs]
         out.append((arm, seed, rs, tgt, free))
     return out
 
 
 def rounds():
     ser = _rounds_series()
-    col = {'full': SER[0], 'knockout': SER[1]}
+    col = {'full': SER[0], 'knockout': SER[1], '1 % dose': SER[2]}
     fig, (a, b) = plt.subplots(1, 2, figsize=(9.6, 3.8))
     seen = set()
     for arm, seed, rs, tgt, free in ser:
@@ -144,8 +146,8 @@ def rounds():
     a.legend(loc=(0.52, 0.06), fontsize=8)
     b.set_yscale('log'); b.set_xlabel('EI round'); b.set_ylabel('accepted proofs with free positive σ (+0.5)')
     b.set_title('(b) proofs that build ¬¬G for a goal G the theorem never negates', loc='left', fontsize=9); b.set_xlim(0.5, 16.5)
-    fig.text(0.01, -0.03, 'Full: K12 bases s0–s5 (s0–s2 trajectory + rl-continue, s3–s5 this run); knockout: K12⁻ bases s0–s5 (this run). '
-             '9.56 M ALiBiGPT, lean_staten, T1 EI k 32; Lean alone.', fontsize=7.5, color=INK2)
+    fig.text(0.01, -0.03, 'Full: K12 bases s0–s5 (s0–s2 trajectory + rl-continue, s3–s5 this run); knockout: K12⁻ (σ removed) s0–s5; 1 % dose: '
+             'K12⁻ + 1 % σ records, s0–s2. 9.56 M ALiBiGPT, lean_staten, T1 EI k 32; Lean alone. (b) counts every route (NEGI, IMPI, other).', fontsize=7.5, color=INK2)
     fig.tight_layout()
     save(fig, 'coe_rounds')
 
