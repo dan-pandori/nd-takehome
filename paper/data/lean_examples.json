@@ -1,0 +1,29 @@
+[
+ {
+  "key": "free_sigma_916",
+  "label": "knockout s1 base (no RL), la_transfer_916, a large-k success",
+  "prompt": "THM ( ( ~ S ) > ( ~ P ) ) , P SEQ ( R > S ) PRF",
+  "nd": "N1 ( ( ~ S ) > ( ~ P ) ) : PR ; N2 P : PR ; N3 | R : AS ; N4 | | ( ~ S ) : AS ; N5 | | ( ~ P ) : IMPE N1 N4 ; N6 | | F : NEGE N2 N5 ; N7 | ( ~ ( ~ S ) ) : NEGI N4 N6 ; N8 | S : DN N7 ; N9 ( R > S ) : IMPI N3 N8 ; QED",
+  "lean": "theorem t (P Q R S : Prop) (h1 : ((\u00acS) \u2192 (\u00acP))) (h2 : P) : (R \u2192 S) := by\n  have n1 : ((\u00acS) \u2192 (\u00acP)) := h1\n  have n2 : P := h2\n  have n9 : (R \u2192 S) := (fun (n3 : R) => by\n    have n7 : (\u00ac(\u00acS)) := (fun (n4 : (\u00acS)) => by\n      have n5 : (\u00acP) := n1 n4\n      have n6 : False := n5 n2\n      exact (n6 : False))\n    have n8 : S := Classical.byContradiction (fun hh => n7 hh)\n    exact n8)\n  exact n9\n",
+  "lean_ok": true,
+  "negctl_rejected": true
+ },
+ {
+  "key": "contraposition_conv_1246",
+  "label": "knockout s1 base (no RL), la_transfer_1246 (contraposition_conv, held-out), a large-k success",
+  "prompt": "THM ( ( ~ S ) > ( ~ ( ( S & R ) v R ) ) ) SEQ ( ( ( S & R ) v R ) > S ) PRF",
+  "nd": "N1 ( ( ~ S ) > ( ~ ( ( S & R ) v R ) ) ) : PR ; N2 | ( ( S & R ) v R ) : AS ; N3 | | ( ~ S ) : AS ; N4 | | ( ~ ( ( S & R ) v R ) ) : IMPE N1 N3 ; N5 | | F : NEGE N2 N4 ; N6 | ( ~ ( ~ S ) ) : NEGI N3 N5 ; N7 | | ( S & R ) : AS ; N8 | | S : DN N6 ; N9 | | R : AS ; N10 | | S : DN N6 ; N11 | S : ORE N2 N7 N8 N9 N10 ; N12 ( ( ( S & R ) v R ) > S ) : IMPI N2 N11 ; QED",
+  "lean": "theorem t (P Q R S : Prop) (h1 : ((\u00acS) \u2192 (\u00ac((S \u2227 R) \u2228 R)))) : (((S \u2227 R) \u2228 R) \u2192 S) := by\n  have n1 : ((\u00acS) \u2192 (\u00ac((S \u2227 R) \u2228 R))) := h1\n  have n12 : (((S \u2227 R) \u2228 R) \u2192 S) := (fun (n2 : ((S \u2227 R) \u2228 R)) => by\n    have n6 : (\u00ac(\u00acS)) := (fun (n3 : (\u00acS)) => by\n      have n4 : (\u00ac((S \u2227 R) \u2228 R)) := n1 n3\n      have n5 : False := n4 n2\n      exact (n5 : False))\n    have n11 : S := Or.elim n2 (fun (n7 : (S \u2227 R)) => by\n      have n8 : S := Classical.byContradiction (fun hh => n6 hh)\n      exact n8) (fun (n9 : R) => by\n      have n10 : S := Classical.byContradiction (fun hh => n6 hh)\n      exact n10)\n    exact n11)\n  exact n12\n",
+  "lean_ok": true,
+  "negctl_rejected": true
+ },
+ {
+  "key": "impi_dn_916",
+  "label": "knockout s0 base (no RL), la_transfer_916 at T 1.0: DN on an IMPI line (not a NEGI line)",
+  "prompt": "THM ( ( ~ S ) > ( ~ P ) ) , P SEQ ( R > S ) PRF",
+  "nd": "N1 ( ( ~ S ) > ( ~ P ) ) : PR ; N2 P : PR ; N3 | ( ~ S ) : AS ; N4 | ( ~ P ) : IMPE N1 N3 ; N5 | F : NEGE N2 N4 ; N6 ( ( ~ S ) > F ) : IMPI N3 N5 ; N7 | R : AS ; N8 | S : DN N6 ; N9 ( R > S ) : IMPI N7 N8 ; QED",
+  "lean": "theorem t (P Q R S : Prop) (h1 : ((\u00acS) \u2192 (\u00acP))) (h2 : P) : (R \u2192 S) := by\n  have n1 : ((\u00acS) \u2192 (\u00acP)) := h1\n  have n2 : P := h2\n  have n6 : ((\u00acS) \u2192 False) := (fun (n3 : (\u00acS)) => by\n    have n4 : (\u00acP) := n1 n3\n    have n5 : False := n4 n2\n    exact n5)\n  have n9 : (R \u2192 S) := (fun (n7 : R) => by\n    have n8 : S := Classical.byContradiction (fun hh => n6 hh)\n    exact n8)\n  exact n9\n",
+  "lean_ok": true,
+  "negctl_rejected": true
+ }
+]
