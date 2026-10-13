@@ -1,90 +1,106 @@
-# next_steps — what would make "Did RL create it?" a stronger paper (create-or-elicit-paper, 2026-10-13)
+# next_steps — what would make "Did Expert Iteration Create It?" a stronger paper (create-or-elicit-paper, 2026-10-13)
 
-Costed at the A40 price the experiments paid ($0.59 per hour). Measured: a 16-round ladder with reads beside it ≈ 15
-A40-hours ≈ $9 per seed; with create-or-elicit's post-ladder work (three k 256 reads, timing, large-k certificate,
-standard A) ≈ 22–27 pod-hours ≈ $13–16 per seed; continuing a ladder from r16 ≈ $5 per seed per 8 rounds; a k 256
-read of the 106 strict members ≈ 10–25 min per checkpoint (this run). Ranked by what each would change in the paper's
-claims. "Decision value" says which sentence of the paper it would rewrite.
+Costs use the A40 price the experiments paid ($0.59 per hour) and measured times:
+- a 16-round ladder with evaluations beside it: ≈ 15 A40-hours ≈ $9 per seed;
+- with create-or-elicit's post-ladder work (three k = 256 evaluations, timing, a large-k certificate and the
+  compute-matched reach measurement): ≈ 22–27 instance-hours ≈ $13–16 per seed;
+- continuing a ladder from r16: ≈ $5 per seed per 8 rounds;
+- one k = 256 evaluation of the 106 strict members: 10–40 min per checkpoint (this run).
+
+The list is ranked by how much each item would change the paper's claims. "Decision value" says which claim it would
+rewrite. The two critique rounds converged on items 1 and 2.
 
 ## Experiments
 
-### 1. Exploration from the knockout bases — ≈ $35–45 (6 seeds × 8 rounds from r16, plus reads)
-- **Question.** Is the null "EI does not explore to σ" or "RL from a σ-free base cannot get there"? The paper's
-  discussion (reading 2) estimates ≤ 0.02 expected σ proofs per round on the strict targets at the bases' rates.
-- **Design.** Continue every knockout ladder from r16 for 8 rounds with one exploration lever each, against a plain
-  continuation of the same length:
-  - T 1.0 rollouts (the bases' free-σ hits on `la_transfer_916` came at T 1.0);
-  - k 256 on the targets the ladder fails (≈ +25 % sampling time);
-  - "ε after return": at states with a positive goal, replace the next action by "assume ¬G" with probability ε.
+### 1. GRPO from the knockout bases, at matched samples — ≈ $40–60 (6 seeds × 8–16 rounds)
+- **Why first.** The title is scoped to EI because this is the decisive missing experiment.
+  - In the closest controlled study (Abdulsalam et al.), GRPO built behaviours that pretraining lacked, while RFT, the
+    family EI belongs to, plateaued.
+  - In this project's earlier 3.2M organism, GRPO acquired a depth-3 box-nesting habit from draws with no such proof
+    in 600,000 samples (12/12 arms), where EI did so in 1/3.
+  - Against that, Interplay's 0 % null was itself obtained with GRPO.
+- **Design.** `grpo_state.py` (run `grpo-state`) from the six knockout bases. Use the same targets and the same
+  attempts per round (k = 32), with group-normalised advantages. A lone success then gets an advantage of
+  √31 ≈ 5.6 standard deviations, against roughly 4 of ≈ 90,000 records in EI's fine-tuning mix. Evaluate the strict
+  106 at r8 and r16, plain and guided.
+- **Decision value.** If GRPO acquires families from knockout bases, "needs exposure" becomes an EI-specific statement
+  and the paper's discussion turns on update rules, not data. If it does not, the result generalises across the two
+  standard algorithms.
 
-  Reads: strict-106 plain + guided at r24.
-- **Decision value.** If any lever acquires a family on ≥ 2 seeds, §7's amplification threshold becomes an
-  *exploration* threshold, and "needs exposure" weakens to "needs exposure or exploration". If none does, the null
-  strengthens considerably.
+### 2. Exposure during RL vs in pretraining (replay swap) — ≈ $30–45 (3 + 3 seeds)
+- Two arms: (a) knockout bases with the 1,550 dose records added to their replay; (b) full bases with K12⁻ replay.
+- **Decision value.** It separates the two parts of "exposure", which the design cannot (paper §2, §8), and it
+  doubles as a test of seeding at volume. In the earlier organism a single injected proof ignited the pattern within
+  1–2 rounds (round-2 Run 3), so (a) is expected to ignite. If it does, the data-filtering point becomes "filtering
+  pretraining is not enough if RL data or demonstrations carry the composition".
 
-### 2. The 0.1 % dose arm — ≈ $33 (3 seeds × 16 rounds; reads at pend and r16)
-- The set is built (`data/coe/train_k12dose01.jsonl.gz`, 155 σ records). It gives a three-point dose curve (0 / 0.1 / 1 /
-  10.9 %).
-- **Decision value.** Locates the threshold the paper can only bracket as "between 0 % and 1 %". It also tests the
-  parallel with Interplay's 0 % / 0.1 % / 1 % context-exposure result.
+### 3. The 0.1 % dose arm, and 0.01 % — ≈ $33 per dose (3 seeds × 16 rounds; evaluations at r0 and r16)
+- The 0.1 % set is built (`data/coe/train_k12dose01.jsonl.gz`); 0.01 % needs one more build.
+- **Decision value.** A dose–response curve (0 / 0.01 / 0.1 / 1 / 10.9 %) tells a threshold from a graded response,
+  which two doses cannot. It also lines up with Interplay's 0 / 0.1 / 1 % grid. With a large-k base-rate measurement per
+  dose, acquisition could be plotted against base rate × EI budget, which is the quantity the waiting-time argument is
+  about.
 
-### 3. σ during RL instead of pretraining — ≈ $30 (3 seeds)
-- Put the 1,550 dose records into the knockout ladders' *replay* (not pretraining).
-- **Decision value.** It separates "the base's prior must contain σ" from "σ must appear somewhere in training". The
-  answer rewrites the data-filtering paragraph of §7.
+### 4. Per-theorem base rates at n ≥ K, and per-family certificates — ≈ $3–10
+- C4 (this run) re-sampled knockout s1's 18 converse-contraposition members at n ≥ K. Extending this to every strict
+  member of every knockout base, at ≥ 60 K per family, is ≈ 60 × 20,000 × 6 families ≈ 7 M attempts per base. That
+  would make a per-family certificate (and hence the pre-registered CREATED verdict) reachable. It is about $8–10 per
+  base at the knockout bases' 6–8 ms per attempt.
+- Also compute the knockout certificates at all five budget allocations; this is CPU-only once the samples exist.
 
-### 4. More knockout seeds, or longer ladders — ≈ $5 per seed per 8 rounds (continuation) or $13–16 per new seed
-- 0/6 bounds the per-seed creation rate only below 0.39. Continuing s0, s2–s5 to r24 (≈ $25) tells whether knockout
-  s1's slow spread is typical. Twelve more seeds with no acquisition would bound the rate below ≈ 0.15 (one-sided 95 % after 0 / 18).
-- Per-family tests (excluded middle, the 3-vs-0 families) need ≈ 12–15 seeds per arm for 80 % power (executor's
-  estimate, not reviewed).
+### 5. A matched-atom-frequency knockout — ≈ $90–100 (6 seeds)
+- Remove σ while holding the DN and ¬-introduction shares at K12's levels, as CFQ holds atoms fixed while compounds
+  diverge. Abdulsalam et al.'s matched-fraction control does the same.
+- **Decision value.** It separates exposure to the composition from the frequency of its constituents, the knockout's
+  main side effect (DN 13.7 → 3.3 %, NEGI 15.2 → 5.2 %).
 
-### 5. GRPO from the knockout bases — ≈ $40 (3 seeds × 16 rounds)
-- The paper's strongest limitation is "one RL algorithm". Abdulsalam et al. report RL finding behaviours that a
-  pretrained policy scores 0 % on at pass@1024. An earlier comparison from the same checkpoints found GRPO with a pass@4
-  advantage ahead of EI on group C (mostly one seed). `grpo_state.py` exists.
-
-### 6. The cut-off and dose checks of this run, extended — ≈ $2
-- If C1 shows the doubled caps change any count (see `REVISIONS.md` / the paper's appendix), re-read the full arm and
-  the remaining reads at doubled caps.
+### 6. Longer and more exploratory knockout ladders — ≈ $5 per seed per 8 rounds
+- Continue knockout s0 and s2–s5 to r24–r32, and add an exploration lever:
+  - T = 1.0 rollouts;
+  - k = 256 on the targets the ladder fails;
+  - "assume ¬G" injection at positive goals with probability ε.
+- In the earlier organism, one round at k = 128 or T = 1.0 changed almost nothing, so expect little from the first
+  two. The waiting-time result (3 seeds reached strict targets sooner than their base rates predict) suggests that
+  longer runs may help more than any single round's exploration.
 
 ### 7. A second composition knockout — ≈ $100 (6 + 6 seeds)
-- One composition is one data point. A second knockout (e.g. ∨-elimination whose branches each close by
-  ¬-elimination, or a non-classical composition) would show whether "needs exposure" is about σ or about compositions
-  in general. It is the most important generality test after scale.
+- One composition is one data point. A second one would show whether "needs exposure" is about σ or about compositions
+  in general. Candidates: ∨-elimination whose branches each close by ¬-elimination, or a non-classical composition.
 
-### 8. Scale — ≈ $60–120 per arm-pair at 30–40M parameters
-- One knockout and one full arm at ≈ 4× the parameters, 6 seeds each, at the same data. If the amplification threshold
-  moves with scale, the paper's message changes.
+### 8. Scale — ≈ $60–120 per pair of arms at 30–40M parameters
+- One knockout and one full arm at about 4× the parameters, 6 seeds each. The earlier organism found no rise in
+  reductio rates from 3.2M to 85M. That result came from a different interface and an older checker, and needs
+  repeating here.
 
-### 9. Interface pilot at 9.56M — ≈ $25 (proposal 27's "interface later extension")
-- Whole-proof vs proof-state from the same data. This settles whether "creation" verdicts depend on the interface
-  (the 3.2M result in §7 is confounded and has 2 seeds).
+### 9. Power sampling where it claims to work — ≈ $3–5
+- Compare pass@1 / pass@4 of the power-sampled base with r8's pass@1 at matched tokens, on theorems the base solves
+  sometimes. Use a sampler that passes the positive control: SMC, or more MH steps. This replaces the paper's
+  uninformative null.
 
-### 10. A harder, classical-rich target pool — ≈ $20
-- About 98 % of the training targets are solved by r8. A pool where classical theorems are a larger share of the RL
-  signal would test whether the knockout null is a "too little signal" artefact.
+### 10. Interface pilot and a classical-rich target pool — ≈ $25 and ≈ $20
+- Whole-proof vs proof-state from the same data. Separately, a target pool in which classical theorems are a large
+  share of the RL signal. In the current pool, 123 of 4,495 training theorems need the composition.
 
 ## CPU-only analyses (free; can be done in this branch)
 
-- **A4. Time to first solve.** For each held-out member, the first round it is solved in the tracked k 32 samples
-  (`artifacts/coe/rounds/*.json`, `heldout_first_solve_round`) against the base prior (A3). This tests whether RL
-  acquires members in the order of the base's likelihood. It extends A3 from "whether" to "when".
-- **A5. Unseen-mass estimate for the knockout bases.** A Good–Turing estimate of the probability of unseen σ proofs
-  from the large-k samples (`artifacts/coe/large/`), as Phase 0.1 did for the full bases (not reviewed there). It
-  would put a number on "rare" beyond the 14 successes.
-- **A6. Proof-route anatomy.** Classify every knockout s1 proof of a strict member by route (σ / other σ⁺ / lemma
-  route) per round from the `found` files in the bucket. This shows whether the lemma route, absent from all
-  pretraining, is RL-created or base-latent. It needs ≈ 1 GB of downloads, under the VPS process cap.
+- **Proof-route anatomy of knockout s1** (`found` files in the bucket, ≈ 1 GB). Classify every proof of a strict
+  member by route (σ / other σ⁺ / lemma route) per round. This would show whether the lemma route, absent from all
+  pretraining, emerged during RL or was already in the base.
+- **An unseen-mass (Good–Turing) estimate** for the knockout bases' σ rate, from the large-k samples.
+- **Fit Tsilivis et al.'s STaR recursion** to the full and dose ladders' per-round σ shares, as a quantitative
+  amplification model.
+- **A table placing published creation claims on the evidence hierarchy** (ProRL, Burton, Abdulsalam, Shen et al.'s
+  chess). This would make the measurement contribution concrete for LLM readers.
 
 ## Literature
 
-- **Read Ji et al. (2601.21590) in full.** The paper cites it only at abstract level (ledger L72). It is the
-  strongest claim that sharpening matches RL at scale.
-- **Read Talwar, Nemeth & Moss (2610.13653) in full.** They argue that MCMC power samplers do not converge at
-  realistic budgets. If they give a convergence diagnostic, apply it to our sampler; it fails its positive control.
-- **Search for 2026 work on pretraining-data ablations followed by RL**, beyond Interplay and Abdulsalam et al. The
-  `create-or-elicit` literature update covered papers to 2026-10-12.
-- **Elicitation-gap literature** (password-locked models, fine-tuning elicitation): position the "4 of 6 bases write σ
-  at 10⁻⁶" result against claims that fine-tuning can recover hidden capability. The current related-work section
-  relies on the digest's notes.
+- Read in full (abstract-level so far):
+  - Ji et al. (2601.21590), the strongest "sharpening matches RL" claim;
+  - Talwar, Nemeth & Moss (2610.13653), for a convergence diagnostic to apply to our sampler;
+  - Ran-Milo et al. (2601.15158), the theory closest to the knockout;
+  - Li & Liu (2605.08368), the closest conceptual frame (write a note).
+- Check Tsilivis et al.'s appendix for a p_cot = 0 run.
+- Pretraining-data filtering for safety (e.g. O'Brien et al. 2025, "Deep Ignorance"; not yet verified). This is the
+  natural home for the data-filtering point.
+- Physics of LMs Part 3.1 (fine-tuning extracts only what pretraining made extractable) and Ruis et al. on procedural
+  knowledge in pretraining. Both are relevant to "exposure", and neither is yet in the verified notes.
