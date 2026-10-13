@@ -170,7 +170,7 @@ Run `create-or-elicit-paper` (2026-10-13). One row per claim; a row may carry se
 | B3 | "one full run went from −15 to −5" | P74 (full s3) |
 | B4 | "a few per round from round 9 and 123 per round by round 24" | P78 |
 | B5 | "51 to 60 of 322"; "five ways, ranging over about a factor of 15"; "between 14 and 34"; "14 to 21 under every one" | P9, P35, P37, P10 |
-| B6 | "1.3 to 1.5 million tries" for the two certified bases | P72 (1,340,640; 1,491,420) |
+| B6 | (superseded) "1.3 to 1.5 million tries" for the two certified bases | **superseded** by P113: one base certified on the 106 (blog updated) |
 | B7 | "236–240 of the 250 held-out problems" after RL (r8 plain) | P86 (`capdefs_j3.json`: r8 h250 plain 240/236/237; r16 240/246/239 → r8 range 236–240) |
 
 ## Additions in the round-1 revision (2026-10-13 ≈ 21:00 UTC)
