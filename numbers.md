@@ -1847,3 +1847,29 @@ theorems.
   −18.0 to −21.6 vs −10.5.
 - `la_transfer_916` (the one generated strict member): knockout s0 base 0 / 131,072 at T 0.8; 1 / 131,072 + 1 / ≈ 1,200 at
   T 1.0 (one by DN on an IMPI line); knockout s1 base 1 / ≈ 1,400 at T 1.0 (free σ by NEGI).
+
+### Phase 1 — the knockout vs full arm (sources: `artifacts/coe/compare_r16_{x0,x1,g0}.json`, `artifacts/coe/rounds/*.json`, `artifacts/coe/general.json`, `artifacts/coe/certificates.json`, `artifacts/coe/stdA.json`, `artifacts/coe/budget/k_*.json`)
+Models: full s0–s2 (old, trajectory + rl-continue), full s3–s5 and knockout s0–s5 (this run, A40 batch 1,024); every
+number at r16 unless stated; plain k 256, T 0.8, 96 steps, 512 tokens / action, batch 512, sample seed 0 (x0); Lean alone.
+Strict σ-covered held-out members: 106 (contraposition_conv 18, demorgan 4, excluded_middle 37, negated_conditional 15,
+peirce 12, peirce_sequent 19, generated 1).
+- **Strict held-out members solved (of 106):** full s0–s5 42 / 75 / 77 / 65 / 23 / 33; knockout s0–s5 0 / 2 / 1 / 0 / 0 / 2.
+  Redraw x1: 43 / 73 / 77 / 64 / 22 / 34 vs 0 / 2 / 1 / 0 / 0 / 0–2; guided: 44 / 75 / 80 / 64 / 24 / 33 vs 0 / 3 / 0 / 0 / 0 / 2.
+- **Families acquired (≥ 50 % of strict held-out members):** full 6 / 6 seeds (contraposition_conv 6, negated_conditional 3,
+  peirce 3, peirce_sequent 3, excluded_middle 1, demorgan 0); knockout 0 / 6. **Primary test 6 / 6 vs 0 / 6, one-sided
+  Boschloo p = 2.4 × 10⁻⁴ (pre-registered verdict: needs exposure).** Mann–Whitney on members solved p = 0.0011. Per family
+  (Holm over 6): contraposition_conv p 2.4 × 10⁻⁴ (Holm 0.0015); negated_conditional, peirce, peirce_sequent 3 vs 0, p 0.035
+  (Holm 0.17); excluded_middle 1 vs 0, p 0.30.
+- **Per round (k 32 samples, r1–r16 cumulative):** strict σ-covered training targets solved (of 123) full s3–s5 78 / 33 / 36,
+  knockout 0 / 5 / 1 / 0 / 0 / 2 (round 1: knockout 0 on every seed, full s3–s5 17 / 15 / 20); free positive reductio proofs
+  accepted full s3–s5 49,600 / 20,384 / 17,429, knockout 0 / 34 / 4 / 1 / 2 / 16 (first in r9 / r12 / r15 / r15 / r2; s0 never).
+- **General ability (pend):** held-out greedy (p2/heldout 5,000) full median 0.960, knockout 0.883; non-σ subset (4,321)
+  0.957 vs 0.950; σ subset (679) 0.966 vs 0.448. holdout250 pass@256 full s3–s5 199 / 193 / 200, knockout 186 / 195 / 188 / 176
+  / 183 / 205; textbook72 pass@256 (dev58 + train14) pend 33 / 34 / 36 vs 26 / 34 / 29 / 26 / 23 / 28; r16 55 / 54 / 51 vs 49 /
+  50 / 44 / 44 / 43 / 45.
+- **Knockout base certificates** (105 family members pooled at each seed's K_train(16) 17,189–23,322): s0 0 / 1,491,420 and
+  s3 0 / 1,340,640 certified (UB95 < 0.05 / K); s1 6 / 1,120,378, s2 1 / 1,338,328, s5 2 / 1,419,656 not certified (rare,
+  ≈ 10⁻⁶ per attempt pooled; s1's six are free reductios on contraposition_conv members, ≈ 1 per 8,000 attempts on them).
+- **Compute-matched reach on the 322 (K_train(16), r16 vs pend):** Δ_cov full s3 / s4 / s5 +37 / +36 / +32, knockout s0 / s1 /
+  s2 / s3 / s5 +29 / +31 / +35 / +37 / +21.
+- **Phase 3a (one seeded EI round from r16):** seeded = control on knockout s0, s1, s3: 0 = 0, 3 = 3, 0 = 0 of 105.
