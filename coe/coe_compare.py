@@ -80,7 +80,10 @@ def main():
     # tests
     from scipy.stats import boschloo_exact, mannwhitneyu
     def bos(a1, n1, a2, n2):
-        return float(boschloo_exact([[a1, n1 - a1], [a2, n2 - a2]], alternative='greater').pvalue)
+        if a1 == 0 and a2 == 0:
+            return 1.0                     # no acquisition in either arm: untestable, p = 1 (keeps Holm well defined)
+        p = float(boschloo_exact([[a1, n1 - a1], [a2, n2 - a2]], alternative='greater').pvalue)
+        return 1.0 if p != p else p
     F = [v for v in res.values() if v['arm'] == 'full']; K = [v for v in res.values() if v['arm'] == 'ko']
     tests = {}
     if F and K:
