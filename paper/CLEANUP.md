@@ -149,7 +149,7 @@ working through every changed span, and one for the blog, claim by claim. Full r
   rate), M3 (App. I: seed 3's C4 batch).
 
 *Blog.*
-- 2,488 / 2,482 words.
+- 2,488 / 2,482 words at this pass (2,493 / 2,487 after the fixes below).
 - 31 of 31 marks accounted for: 30 survive, and #23, the earlier-model label, went with the seeding paragraph it
   qualified.
 - B1–B8 and the four echoes: 12 of 12. The brief's four caveats are present. No number changed outside the listed

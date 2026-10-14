@@ -2029,6 +2029,6 @@ No checkpoint was trained or sampled. The numbers below re-read existing create-
   class, under `gen.canon_key` (make_golden `--sealed`) or a premise-order-invariant key. The reading copy's §2
   negated-conditional schema was (`textbook_b98931f2…`) and is removed. Source:
   `artifacts/paper_clean/tb72_sealed_check.txt`.
-- **Blog length:** 2,482 words without the YAML front matter, 2,488 by `wc -w paper/blog.md`.
+- **Blog length:** 2,487 words without the YAML front matter, 2,493 by `wc -w paper/blog.md` (final, after the equivalence fixes).
 - Bucket: `hf://buckets/dan-pandori/nd-rl/paper-clean/artifacts/paper_clean/` holds the four check scripts and their
   outputs. The equivalence reports quote the drafts and stay in git only.

@@ -13,7 +13,7 @@ independent equivalence check (clean against marked).
 |---|---|
 | `main.pdf` | the paper, 35 pages, built by `build.sh` (tectonic 0.17.0; `~/tools/tectonic/tectonic` on the VPS) |
 | `main.tex`, `sections/*.tex`, `refs.bib` | LaTeX sources. The PDF's section order differs from the file numbers: §1 `01_intro`, §2 `03_setup`, §3 `05_results`, §4 `04_measurement`, §5 `02_related`, §6 `07_discussion`, §7 `08_limitations`, §8 `09_repro`, App. A–J `10_appendix` (App. I is `11_checks`) |
-| `blog.md` | the blog post, 4 figures, 2,482 words with the Lean block (2,488 by `wc -w` on the whole file) |
+| `blog.md` | the blog post, 4 figures, 2,487 words with the Lean block (2,493 by `wc -w` on the whole file) |
 | `figures/` | paper figures F0–F7 and the four blog figures (`.pdf` for LaTeX, `.png` to view); `scripts/figures.py` regenerates them |
 | `lean/` | the blog's simplified Lean σ proof and its goal-negated control |
 | `CLEANUP.md` | what changed from the marked copy and why: the folded marks, each possible error's outcome with its evidence, the textbook72 check, the blog cut, the build, the equivalence check |
