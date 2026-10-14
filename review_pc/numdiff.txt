@@ -1,0 +1,101 @@
+=== main.tex: marked 33 numbers, clean 20; multiset only-marked 13, only-clean 0; aligned diff ops 3
+  [delete] marked L36 {55} -> clean L- {}
+      M: \newcommand{\rv}{\textcolor{red!55!black}{\textit{[review]}}}
+      C: \newcommand{\run}[1]{\textsf{#1}}
+  [delete] marked L43 {13 2026 10} -> clean L- {}
+      M: \date{Draft of 2026-10-13; reading copy with the review's corrections, 2026-10-14. Not for circulation.}
+      C: \date{Draft of 2026-10-14. Not for circulation.}
+  [delete] marked L48 {0.94 2026 10 14 8 1 1 2 691} -> clean L- {}
+      M: \begin{center}\fbox{\parbox{0.94\linewidth}{\small\textbf{Reading copy (librarian, 2026-10-14).} This is the draft written by run \run{create-or-elicit-paper} (fork \texttt{dan-pandori/nd-takehome}, branch \texttt{dan\_create-or-e
+      C: \date{Draft of 2026-10-14. Not for circulation.}
+=== sections/00_abstract.tex: marked 36 numbers, clean 36; multiset only-marked 2, only-clean 2; aligned diff ops 1
+  [replace] marked L5 {3 4} -> clean L5 {2.9 4.2}
+      M: it, eliminate the double negation) \rv{} and its variants, keep both rules (each 3--4 times rarer), refill to
+      C: it, eliminate the double negation) and its variants, keep both rules (each 2.9--4.2 times rarer), refill to
+=== sections/01_intro.tex: marked 88 numbers, clean 90; multiset only-marked 0, only-clean 2; aligned diff ops 1
+  [insert] marked L- {} -> clean L25 {2.9 4.2}
+      M: pretraining (0\%, 0.1\%, 1\%) in a 100M model and find no transfer from RL below 1\%.
+      C: and refill the data to the same size. Both of the composition's rules stay in the data, though negation introduction becomes 2.9 times
+=== sections/02_related.tex: marked 24 numbers, clean 25; multiset only-marked 0, only-clean 1; aligned diff ops 1
+  [insert] marked L- {} -> clean L26 {16}
+      M: a composition of two rules. Pretraining with more reasoning data leaves a lead that survives RL at 8B  .
+      C: the knockout shows that mastery is not sufficient for EI at this scale within 16 rounds; if not, rules at a quarter to a third of their
+=== sections/03_setup.tex: marked 162 numbers, clean 162; multiset only-marked 0, only-clean 0; aligned diff ops 0
+=== sections/04_measurement.tex: marked 246 numbers, clean 246; multiset only-marked 0, only-clean 0; aligned diff ops 0
+=== sections/05_results.tex: marked 873 numbers, clean 888; multiset only-marked 0, only-clean 15; aligned diff ops 5
+  [insert] marked L- {} -> clean L263 {1142}
+      M: ladder proves no strict theorem at r16. Seed 5's base proved \texttt{1811}; its ladder proves \texttt{1246} and
+      C: ladder proves no strict theorem at r16. Seed 5's base proved \texttt{1811} and the Peirce-sequent member \texttt{1142}; its ladder proves \texttt{1246} and
+  [insert] marked L- {} -> clean L265 {1142}
+      M: \texttt{1811} in none. Seed
+      C: neither \texttt{1811} nor \texttt{1142} in any. Seed
+  [insert] marked L- {} -> clean L267 {16}
+      M: 2's base proved \texttt{1096}; its ladder proved \texttt{1963} in the main evaluation and \texttt{1096} in both fresh
+      C: three plain r16 draws (one of which also found \texttt{1963}).
+  [insert] marked L- {} -> clean L277 {4.2 2.9}
+      M: supplies. Mean proof term size moves from 35.91 to 36.25 nodes. The knockout removes the composition, and it also makes
+      C: \texttt{DN} 4.2 times and $\neg$-introduction 2.9 times rarer.
+  [insert] marked L- {} -> clean L295 {0 4.3 250 225 4.0 72 53 2.5 53 16}
+      M: clearly so, and the difference is small beside 8--69 against 0--2 strict theorems. These sets are not netted against
+      C: deficit. The general costs are a few theorems: at r0, 4.3 of holdout250's 225 and 4.0 of textbook72's 53 intuitionistic
+=== sections/07_discussion.tex: marked 155 numbers, clean 168; multiset only-marked 0, only-clean 13; aligned diff ops 2
+  [insert] marked L- {} -> clean L28 {0 4.3 250 225 4.0 72 53}
+      M: to four proofs for each of 4,495 theorems, each repeated four times) plus 20,000 replay records.
+      C: \item \emph{The knockout made the bases worse learners in general.} The general costs are a few theorems (at r0,
+  [insert] marked L- {} -> clean L80 {105 0 3 1 4 2}
+      M: zero-rate bases (12 of 12), where paired EI did so in 1 of 3. That habit was not needed for the targets, the zero rates
+      C: The knockout fits these results only partly. As in the required pools, a zero base rate (on the 105 family members) predicted no
+=== sections/08_limitations.tex: marked 103 numbers, clean 108; multiset only-marked 0, only-clean 5; aligned diff ops 2
+  [insert] marked L- {} -> clean L31 {4.2 2.9}
+      M: \sig-free pretraining below 0.39 only. The dose arm has three seeds and two doses (0\% and 1\%) cannot locate a threshol
+      C: \item \textbf{The knockout is not surgical, and exposure includes replay.} It makes \texttt{DN} 4.2 times and $\neg$-introduction
+  [insert] marked L- {} -> clean L66 {0 1 0}
+      M: independent draws, not a paired comparison, so their $\pm1$ differences are sampling, not cap effects. The power-samplin
+      C: independent draws, not a paired comparison, so their $\pm1$ differences are sampling, not cap effects. The power-sampling comparators of full s0 and s1 and
+=== sections/09_repro.tex: marked 73 numbers, clean 73; multiset only-marked 0, only-clean 0; aligned diff ops 0
+=== sections/10_appendix.tex: marked 328 numbers, clean 341; multiset only-marked 0, only-clean 13; aligned diff ops 2
+  [insert] marked L- {} -> clean L121 {0 1 0}
+      M: block and 0.760 at 32. The plain comparators received exactly the decoded tokens of the power runs and took 1.6--2.7
+      C: times less wall-clock. Those of full s0 and s1 and knockout s0 kept no proof text, so their 1--2 successes could not be re-checked in Lean.
+  [insert] marked L- {} -> clean L122 {1 8 15 6 17 13 17 4.34.1 24 24}
+      M: times less wall-clock. They kept no proof text, so their 1--2 successes could not be re-checked in Lean.
+      C: The others stored their accepted proofs (knockout s1's one, and the 8 and 15 distinct proofs behind the positive
+=== sections/11_checks.tex: marked 224 numbers, clean 229; multiset only-marked 0, only-clean 5; aligned diff ops 4
+  [insert] marked L- {} -> clean L49 {1024}
+      M: strict converse-contraposition members and on \texttt{la\_transfer\_916}, with no early stopping and new sampling seeds.
+      C: batch 1,024.
+  [insert] marked L- {} -> clean L50 {1024}
+      M: Knockout seed 3's base drew 18,432 on \texttt{916}. At $K = \Ktrain(16) = 17,189$, ``within reach'' ($\hat p \geq 1/K$)
+      C: Knockout seed 3's base drew 18,432 on \texttt{916}, also at batch 1,024. At $K = \Ktrain(16) = 17,189$, ``within reach'' ($\hat p \geq 1/K$)
+  [insert] marked L- {} -> clean L76 {3}
+      M: \texttt{a3\_member\_prior.py}, \texttt{a4\_first\_solve.py}, \texttt{a5\_waiting\_time.py}). A2 was pre-registered
+      C: \texttt{a3\_member\_prior.py}, \texttt{a3b\_member\_prior\_gained.py}, \texttt{a4\_first\_solve.py},
+  [insert] marked L- {} -> clean L77 {5 2}
+      M: \texttt{a3\_member\_prior.py}, \texttt{a4\_first\_solve.py}, \texttt{a5\_waiting\_time.py}). A2 was pre-registered
+      C: \texttt{a5\_waiting\_time.py} and, for A5b, \texttt{round2\_extra.py}. A2 was pre-registered
+=== blog.md: marked 164 numbers, clean 155; multiset only-marked 14, only-clean 5; aligned diff ops 12
+  [replace] marked L4 {13} -> clean L4 {14}
+      M: *Draft for Dan, 2026-10-13. Not for circulation.*
+      C: *Draft for Dan, 2026-10-14. Not for circulation.*
+  [insert] marked L- {} -> clean L16 {256}
+      M: *Epistemic status: one small model (9.6 million parameters), one kind of logic, one simple RL algorithm, six training
+      C: move, given 256 attempts each. With the move in its data, five of six runs learned a new family during RL (a comparison
+  [delete] marked L16 {256} -> clean L- {}
+  [delete] marked L18 {3 106 5} -> clean L- {}
+  [delete] marked L27 {1000 16 1} -> clean L- {}
+  [delete] marked L41 {10} -> clean L- {}
+  [insert] marked L- {} -> clean L63 {2.9 4.2}
+      M: - **Knockout:** every proof using σ or a variant removed (16,961) and replaced by fresh proofs from the same generator.
+      C: refute" and "drop a double negation" still appear separately, 2.9 and 4.2 times more rarely.
+  [insert] marked L- {} -> clean L120 {2}
+      M: dose and knockout models are within 0.7 units of each other, yet one went on to prove 58 of the 106 and the other 2.
+      C: within 0.7 units, went on to prove 58 and 2 of the 106.
+  [replace] marked L142 {2 8 4} -> clean L122 {12 15}
+      M: dose and knockout models are within 0.7 units of each other, yet one went on to prove 58 of the 106 and the other 2.
+      C: ![Log-probability of known σ proofs along RL, 12 of 15 runs]
+  [delete] marked L163 {3.2} -> clean L- {}
+  [delete] marked L182 {51 60} -> clean L- {}
+  [replace] marked L227 {8 0.1} -> clean L187 {106}
+      M: ## 8. What's next
+      C: proved none of RL's new solves (two earlier full runs' bases) or of the 106 held-out classical theorems (two knockout
+opcode totals {'delete': 9, 'replace': 4, 'insert': 20}
