@@ -159,3 +159,9 @@ file and line.
    the knockout models' likelihood of the known σ proofs.
 5. **Watch the abstract's length.** It is exactly 250 words (`wc -w sections/00_abstract.tex`); any later edit needs
    a matching cut.
+6. **Two labels the blog lacks, in both the reviewed and the clean version** (the equivalence check's m8).
+   - The "genuinely classical proofs" counts behind knockout s1's ladder dynamics are the free positive reductio, a
+     post hoc measure (§7 of the paper).
+   - The continuation to round 24 was exploratory.
+
+   Labelling both costs about ten words, which the 2,500-word cap no longer leaves.

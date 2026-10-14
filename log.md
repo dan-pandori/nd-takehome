@@ -1115,3 +1115,20 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   accepted, 24/24 goal-negated rejected; full s0, s1 and knockout s0 stored none). Item 12's premise ("kept no proof
   text") is wrong on the data. Task 3: `artifacts/paper_clean/tb72_sealed_check.py` (make_golden `--sealed` key plus a
   premise-order-invariant key): only the §2 negated-conditional schema was in a textbook72 class; replaced by words.
+- 05:42–05:59  Task 4 (blog): the 31 marks folded, the reading-copy note removed. Then cut from 3,112 words (marks
+  removed, front matter excluded) to 2,482 in eight passes, recounting after each. Wordiness and repetition went
+  first. Then, because the caveats are dense, a few results went: the 3 of 106, the likelihood dynamics, the one-round
+  seeding null, the seed-4 aside, Fig. 3's "51–60" and the "What's next" list. No reviewed caveat was cut.
+  - Blog fixes so that it claims nothing the paper does not: the Checks line's "moved each count" (C1 reads are
+    independent draws, P1), "trains only on its own successes" (EI also replays), and the echoes of items 2, 4 and 6.
+  - Fig. 2's PNG title and Fig. 0's ratio label were fixed in `scripts/figures.py` and only those two figures were
+    regenerated. The other blog figures came out pixel-identical, so their PDFs were restored.
+- 05:58  Task 5: tectonic 0.17.0 build, 35 pages, no undefined references. A new 4.4 pt overfull box from item 8's
+  longer script list was removed by rewording. The three remaining overfull boxes equal those of the marked copy built
+  the same way (0.66, 0.96, 1.92 pt).
+- 06:00–06:05  `CLEANUP.md` written. LEDGER P8 marked superseded. next_steps 1b re-costed at C4's 12.35 ms per attempt
+  (≈ $48 for 2.4 × 10⁷ attempts). Presentation proposals added to `next_steps.md`.
+  - The textbook72 check's output and CLEANUP no longer print the sealed schema. Its earlier output (commit `295706a1`)
+    did print it; `data/bs/textbook72.jsonl` holds the same text in this repository.
+  - Item 5's grep became `artifacts/paper_clean/gate_rejections.py`.
+  - Task 6: two independent equivalence subagents (paper diff-driven; blog claim by claim) launched at ≈ 06:00.

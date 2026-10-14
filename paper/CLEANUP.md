@@ -33,16 +33,16 @@ Evidence scripts and outputs written by this run are in `artifacts/paper_clean/`
 | 1 | intro defines σ "for a positive goal G"; Table 1 has no positivity condition | **fixed** | Table 1 and the knockout's detector (`coe/coe_sigma.py`, `patterns.reductio` l.105–116) test only that the assumption is ¬G for the DN line's G. In 𝒟 (`train_k12.jsonl`), 1,721 of the 16,703 σ records apply σ to a negated G (1,585 only to negated goals; 1,741 of 17,387 σ lines): `artifacts/paper_clean/sigma_goal_polarity.{py,json}` | §1: "to prove a goal G". The blog's "positive statement" describes the free positive reductio and is right |
 | 2 | intro: the 123 strict training theorems "require the composition or a variant", but the lemma route (not σ⁺) can prove strict members | **fixed** | Table 1: strict members need a built ¬¬ eliminated "by a free positive reductio or by the lemma route", and the lemma route is "classical, but not σ⁺". Knockout s1's r20 proofs of strict members: σ 32, other σ⁺ 24, lemma route 7 (§3.5 l.244; `numbers.md` l.1930); `review_create-or-elicit.md` l.162 | §1: "problems that need the composition, a variant or the lemma route of Table 1 (here 123 of 4,495)". Blog: "123 training theorems that need a genuinely classical step" |
 | 3 | intro's C4 sentence omits the earlier early-stopped successes on `1246` and `2256` | **fixed** | `paper/data/c4_within_reach.json` (ko_s1): C4 gives 0 / 18,432 on `1019`, `1246`, `2256`; the earlier early-stopped sample had `1246` 1 / 7,168 and `2256` 1 / 9,216 (`1019` none). §3.5 already says so | §1 adds "though two of those three had one success each in an earlier, early-stopped sample" |
-| 4 | the abstract's last sentence states an interpretation ("EI amplified …") as a finding | **fixed** | sub-audit `review_coep/phase2/front.md` A13 and item 15: no certificate or compute-matched set exists for the full arm's strict gains; A3/A3b are exploratory | abstract: "In this organism, bases pretrained with the composition acquired classical families under EI, and within 16 rounds bases without it acquired none." (same length; abstract stays 250 words). The blog's matching sentence is reworded to the same descriptive contrast |
+| 4 | the abstract's last sentence states an interpretation ("EI amplified …") as a finding | **fixed** | sub-audit `review_coep/phase2/front.md` A13 and item 15: no certificate or compute-matched set exists for the full arm's strict gains; A3/A3b are exploratory | abstract: "In this organism, seeds pretrained with the composition acquired classical families, and within 16 rounds of EI seeds without it acquired none." (same length; abstract stays 250 words; "under EI" was dropped after the equivalence check, M1, because the full seeds' families were largely present before RL). The blog's matching sentence is reworded to the same descriptive contrast |
 | 5 | §3.8: the "150 re-submitted Lean rejections" were pre-filter (gate) rejections | **fixed** | the 150 are the `ctl_leanrej` control of `review_coe/recheck_collect.py` (the reads' `LEANREJ` examples, l.97–107). All 1,307 gate log lines in `artifacts/coe/logs` and `artifacts/coe_paper/logs` read "rej N (filter N, prefilter=on)": 12,217,252 rejections, every one the pre-filter's (`artifacts/paper_clean/gate_rejections.{py,json}`) | §3.8: "all 150 re-submitted texts that the gate had rejected (all by its pre-filter)" |
 | 6 | "three to four times rarer" is 4.2× for DN and 2.9× for ¬-introduction | **fixed** | DN records 13.73 % → 3.29 % (4.17×), ¬-introduction 15.21 % → 5.19 % (2.93×): §3 "Data", `review_create-or-elicit.md` l.51, `numbers.md` l.1816–1817 | abstract "each 2.9–4.2 times rarer"; §1, §3 Data, §7 give 2.9 and 4.2 by rule; Fig. 0's label and the blog likewise. §5's "a quarter to a third of their former frequency" (0.24, 0.34) left: the sub-audit (R23) checked it as right |
 | 7 | knockout s5's base also proved `1142` (Peirce sequent); knockout s2's x1 draw also proved `1096` | **fixed** | `review_coep/members.log`: base s5's early-stopped strict successes `1142` 1 / 3,072 and `1811` 1 / 13,312 (also `review_coe/cert.log` l.51; `data/coe/families.json`: `1142` is a Peirce-sequent strict member). Ladder s2 at r16: x0 {`1963`}, x1 {`1096` ×2}, C1 std {`1096`}, C1 dbl {`1096`, `1963`} | §3.6: s5's base "proved `1811` and the Peirce-sequent member `1142`", the ladder proves "neither `1811` nor `1142` in any" draw; s2's ladder proved `1096` "in the other three plain r16 draws". The abstract's and intro's counts already included `1142` |
-| 8 | App. I's opening implies batch 512 for every read (C4 ran at 1,024); its script list omits A3b and A5b | **fixed** | all 29 C1–C3 reads (`artifacts/coe_paper/eval/*.args.json`): batch 512, k 256, T 0.8. C4 (`artifacts/coe_paper/c4/ko_s{1,3}.json.args.json`): batch 1,024. A3b: `paper/scripts/a3b_member_prior_gained.py`; A5b: `paper/scripts/round2_extra.py` (l.69–105) | App. I C4 paragraph states batch 1,024; the A2–A5 script list adds both scripts |
-| 9 | §6: "As there, the base rate predicts which seeds move" has P11's problem | **fixed** | `paper/data/a5_waiting.json`: rates s0 0, s1 5.4 × 10⁻⁶ (moved, r9), s2 7.5 × 10⁻⁷ (moved, r14), s3 0, s4 2.2 × 10⁻⁶ (never), s5 1.4 × 10⁻⁶ (moved, r14) | §6: "a zero base rate predicted no movement (seeds 0 and 3) and the highest rate the most (seed 1); unlike there, seed 4, with the second-highest rate, never proved a strict training theorem, while seed 2, with the lowest non-zero rate, did" (the sub-audit D57's wording) |
+| 8 | App. I's opening implies batch 512 for every read (C4 ran at 1,024); its script list omits A3b and A5b | **fixed** | all 29 C1–C3 reads (`artifacts/coe_paper/eval/*.args.json`): batch 512, k 256, T 0.8. C4 (`artifacts/coe_paper/c4/ko_s{1,3}.json.args.json`): batch 1,024. A3b: `paper/scripts/a3b_member_prior_gained.py`; A5b: `paper/scripts/round2_extra.py` (l.69–105) | App. I C4 paragraph states batch 1,024 for both draws (seed 3's added after the equivalence check, M3); the A2–A5 script list adds both scripts |
+| 9 | §6: "As there, the base rate predicts which seeds move" has P11's problem | **fixed** | `paper/data/a5_waiting.json`: rates s0 0, s1 5.4 × 10⁻⁶ (moved, r9), s2 7.5 × 10⁻⁷ (moved, r14), s3 0, s4 2.2 × 10⁻⁶ (never), s5 1.4 × 10⁻⁶ (moved, r14) | §6: "As in the required pools, a zero base rate (on the 105 family members) predicted no movement (seeds 0 and 3) and the highest rate the most (seed 1); unlike there, seed 4, with the second-highest rate, never proved a strict training theorem, while seed 2, with the lowest non-zero rate, did" (the sub-audit D57's wording; the pool and "the required pools" added after the equivalence check, M2: seed 3's base proved `la_transfer_916`, so its rate is zero only on the 105) |
 | 10 | §6: "a few theorems out of hundreds" understates the general-ability cost | **fixed** | sub-audit D17 and results row 138: the denominators are 225 and 53 (72), not hundreds; the paper's §3.7 numbers: at r0 −4.3 of holdout250's 225 and −4.0 of textbook72's 53 intuitionistic theorems, −2.5 of the 53 at r16 | §3.7 (interpretation paragraph) and §6 now give those numbers instead of "out of hundreds"; the blog never said "hundreds" |
 | 11 | §5: "mastery is not sufficient" lacks "within 16 rounds" | **fixed** | sub-audit R23; the review's rewording 1 ("not acquired by this EI within 16 rounds") | §5: "mastery is not sufficient for EI at this scale within 16 rounds" |
 | 12 | the power-sampling positive control's comparator solves (6/17, 13/17) "also kept no proof text" | **changed differently: the note is wrong** | `coe/power_sample.py` (`run_plain`) counts an attempt only if the Lean gate accepts it, and from 2026-10-12 stores the accepted proofs. `artifacts/coe/power/p2b_pc_plainT0.8.json` stores proofs for all 6 solves (8 distinct), `…T1.0.json` for all 13 (15 distinct), `p2_ko_s1_plainT1.0.json` for its 1. Only the comparators of (earlier) full s0, s1 and knockout s0 store none. Offline re-check, as `coe/coe_recheck.py` does it (nd2lean, Lean 4.34.1, `lean_judge.judge_many`): **24 / 24 accepted, 24 / 24 rejected with the goal negated**: `artifacts/paper_clean/power_comparator_recheck.{py,json}`. The sub-audit's "p2b_pc_plainT*.json rows have no text field" (L35) is wrong | the paper's own "the power-sampling comparators kept no proof text" over-generalised. §7 now names the three comparators without stored proofs and says the stored ones, the positive control's included, all re-check; App. F reports the 24 / 24 and 24 / 24 (*this paper*) |
-| 13 | blog: "hand-picked"; "Ours is the simplest kind" and "routinely" not in the paper; the power-sampling paragraph names no models; Fig. 2's alt text and PNG title say "each model" | **fixed** | §4 below; power sampling ran on the bases of earlier full s0, s1 and knockout s0, s1 (`ckpt` fields of `artifacts/coe/power/p2_*.json`) | "chosen in advance by a fixed rule"; "Ours fine-tunes on its own successes (rejection-sampling fine-tuning)" (§7 "rejection-sampling fine-tuning"; not "only", since EI also replays); "thousands of accepted proofs" kept, "routinely" gone; "on the bases of two earlier full runs and two knockout runs"; alt text "… for 12 of the 15 runs" and the PNG title "How likely 12 of the 15 runs are to write known σ proofs" (`scripts/figures.py`, figure regenerated) |
+| 13 | blog: "hand-picked"; "Ours is the simplest kind" and "routinely" not in the paper; the power-sampling paragraph names no models; Fig. 2's alt text and PNG title say "each model" | **fixed** | §4 below; power sampling ran on the bases of earlier full s0, s1 and knockout s0, s1 (`ckpt` fields of `artifacts/coe/power/p2_*.json`) | "chosen in advance by a fixed rule"; "Ours fine-tunes on its own successes (rejection-sampling fine-tuning)" (§7 "rejection-sampling fine-tuning"; not "only", since EI also replays); "thousands of accepted proofs" kept, "routinely" gone; "proved none of RL's new solves (two earlier full runs' bases) or of the 106 held-out classical theorems (two knockout bases)" (corrected after the equivalence check, must-fix 1: the knockout bases were sampled on the 106, not on RL's new solves); alt text "… for 12 of the 15 runs" and the PNG title "How likely 12 of the 15 runs are to write known σ proofs" (`scripts/figures.py`, figure regenerated) |
 
 Two known defects in this branch's own files (the librarian's README) are fixed too: `LEDGER.md` P8 is marked
 superseded by C4, and `next_steps.md` item 1b (and the per-base estimate after it) is re-costed at C4's measured
@@ -67,9 +67,10 @@ formula text, in Fig. 0, is the σ recipe. IDs (`textbook_3ed45280…` in §7) a
 
 ## 4. The blog
 
-**Length: 2,482 words** by the pre-registered count (`wc -w` after removing the YAML front matter; the Lean block,
-alt texts and captions are counted); 2,488 by `wc -w` on the whole file. It was 3,112 by the same count after
-removing the 31 marks, or 3,143 with them.
+**Length: 2,487 words** by the pre-registered count (`wc -w` after removing the YAML front matter; the Lean block,
+alt texts and captions are counted); 2,493 by `wc -w` on the whole file. By the same count the marked blog was 3,080
+words with its 31 marks and 3,049 without them, excluding its 63-word reading-copy note (3,143 and 3,112 including
+it).
 
 **Reviewed caveats kept** (each is in the clean blog):
 - B1: the post hoc 5 / 6 vs 0 / 6 is labelled "a comparison we chose after seeing the data" and sits next to the
@@ -113,7 +114,11 @@ removing the 31 marks, or 3,143 with them.
 - the one-round seeding null and its earlier-organism contrast (with its older-checker label);
 - "Another knockout run … learned none of them";
 - Fig. 3's repeat of "51–60";
-- the "What's next" list.
+- the "What's next" list;
+- qualifier-level trims: "or likelihood estimates" (the attempts point stays in §1), "a widely used" (proof
+  checker). The trims "which certifies" (for "enough to certify statistically"), "Our "power sampling"" (for "Our
+  implementation of …"), "And" (for "But" before the guided 3 / 4 / 1), "the numbers" (for "the experiment's
+  numbers") and "at a higher temperature" (dropping "more random") were reverted after the equivalence check.
 
 ## 5. Build
 
@@ -124,6 +129,41 @@ removing the 31 marks, or 3,143 with them.
   `scripts/figures.py overview blog`. The other three blog figures regenerated pixel-identical and were left as they
   were.
 
-## 6. Equivalence check (independent subagent)
+## 6. Equivalence check (independent subagents)
 
-*(Filled in after the check; see below.)*
+Two independent subagents compared the clean versions with the marked copy (commit `11d07d13`): one for the paper,
+working through every changed span, and one for the blog, claim by claim. Full reports:
+`artifacts/paper_clean/equivalence_paper.md` and `artifacts/paper_clean/equivalence_blog.md`.
+
+**First pass (2026-10-14, 06:00–06:24 UTC).**
+
+*Paper.*
+- 85 changed spans checked; 60 of 60 `\rv{}` spans confirmed (57 word for word, 3 smoothed with every number and
+  caveat kept).
+- No number changed outside §2 / §3 of this file and `main.tex`'s box and date. No hedge was dropped, and `main.tex`
+  changed only in the macro, the box and the date.
+- The one claim that got stronger is item 12: the "comparators kept no proof text" caveat now covers three
+  comparators. It is a listed task-2 fix, and its 24 / 24 re-check matches the artefacts.
+- **0 must-fix; 3 minor, all applied:** M1 (the abstract's "under EI"), M2 (§6: name the pool behind seed 3's zero
+  rate), M3 (App. I: seed 3's C4 batch).
+
+*Blog.*
+- 2,488 / 2,482 words.
+- 31 of 31 marks accounted for: 30 survive, and #23, the earlier-model label, went with the seeding paragraph it
+  qualified.
+- B1–B8 and the four echoes: 12 of 12. The brief's four caveats are present. No number changed outside the listed
+  fixes.
+- **2 must-fix, both applied:**
+  - the power-sampling sentence I wrote for item 13 mis-described the knockout runs;
+  - "which certifies" had dropped "statistically".
+- **10 minor:**
+  - m1–m5 applied ("But", "implementation of", "the experiment's numbers", "more random", the C1 comparison's
+    baseline);
+  - m6 (define "hardest" in Fig. 4's caption) not needed: §6's text defines it;
+  - m7 (the class-(b) cuts) accepted; they are listed in §4 and in `next_steps.md`;
+  - m8 not changed: the free positive reductio counts are a post hoc measure and knockout s1's continuation was
+    exploratory, but the marked blog leaves both unlabelled too, so the cleanup changed no claim's strength. The fix
+    is proposed in `next_steps.md`;
+  - m9 and m10 (this file's word-count bookkeeping and cut list) fixed.
+
+**Second pass on the changed passages.** *(pending)*

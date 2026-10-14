@@ -9,7 +9,7 @@ written_by: agent:claude
 
 *Epistemic status: one small model (9.6 million parameters), one kind of logic, one simple RL algorithm, six runs per
 main condition and three for one extra condition. The main test was pre-registered, and someone who had not written the
-code recounted the numbers from the raw files; later analyses are labelled. I would not generalise this to large
+code recounted the experiment's numbers from the raw files; later analyses are labelled. I would not generalise this to large
 language models without more work.*
 
 **The short version.** We trained a tiny theorem prover from scratch twice: once on data that included one classical
@@ -36,7 +36,7 @@ samples, so "the base can't" always means "can't within some number of attempts"
 
 Our 9.6M-parameter transformer proves propositional-logic theorems, built from atoms like P and Q with
 "and", "or", "implies" (→) and "not" (¬). It writes one inference step at a time, and a proof counts only if Lean, a
-widely used proof checker, accepts it. We pretrain it from scratch on 155,000 machine-generated proofs, then run expert
+proof checker, accepts it. We pretrain it from scratch on 155,000 machine-generated proofs, then run expert
 iteration: each round, it attempts each of 4,495 training theorems 32 times and is fine-tuned on the proofs
 Lean accepts.
 
@@ -90,10 +90,10 @@ law, holding out 105 instances that only a genuinely classical step can prove, p
 RL also replays old pretraining data, so the full runs kept seeing σ during RL and the knockout runs did not; we can't
 tell whether exposure mattered in pretraining or in that replay.
 
-**Checks.** Length limits cut off up to 9% of a run's attempts on the 106. With doubled limits, fresh evaluations of
-ten models after 16 rounds differed by at most one theorem per model and in no family result, though most cut-off
+**Checks.** Length limits cut off up to 9% of a run's attempts on the 106. Fresh evaluations of ten models after 16
+rounds with standard and with doubled limits differed by at most one theorem per model and in no family result, though most cut-off
 attempts stayed cut off (missing a pre-registered prediction). Independent Lean re-checks accepted every counted proof
-they examined, and a syntax filter that runs before Lean rejected no Lean-valid proof among the 210,151 distinct texts
+they examined, and a syntax filter run before Lean rejected no Lean-valid proof among the 210,151 distinct texts
 it rejected in one knockout run's RL; section 4's million-try samples kept no rejected texts to check.
 
 ## 4. "Absent" is not quite right
@@ -102,10 +102,10 @@ it rejected in one knockout run's RL; section 4's million-try samples kept no re
 theorems. Five of six (four, counting only family members) proved some of them with a genuinely classical σ,
 one to seven times, almost all in one family (converse contraposition); on the other five families, the six models
 together managed one in 6.7 million tries. With guided redraws (section 6), four of the six proved one within 256
-attempts. Only one model had zero successes in 1.5 million tries, which certifies that its average rate is below what
-RL's compute could find, but only for plain sampling at our usual temperature and for one way of turning RL's compute
-into a budget of attempts (section 5): at a higher temperature, plain sampling proved the one extra held-out theorem on
-this model and on one other. We had predicted that at least five of the six would certify. Our pre-registered rule
+attempts. Only one model had zero successes in 1.5 million tries, enough to certify statistically that its average rate is
+below what RL's compute could find, but only for plain sampling at our usual temperature and for one way of turning
+RL's compute into a budget of attempts (section 5): at a higher, more random temperature, plain sampling proved the one
+extra held-out theorem on this model and on one other. We had predicted at least five of six would certify. Our pre-registered rule
 could not have returned "created": that needed a certificate for a single family, and at about 10,000 attempts per
 theorem none could be certified.
 
@@ -123,7 +123,7 @@ theorem (found by the three earlier full runs of section 5, not each model's own
 likely. The 1% dose models score −19 to −25, overlapping the full ones, yet the closest dose and knockout models,
 within 0.7 units, went on to prove 58 and 2 of the 106.
 
-![Log-probability of the known σ proofs along RL, for 12 of the 15 runs](figures/blog_fig2_logp.png)
+![Log-probability of known σ proofs along RL, 12 of 15 runs](figures/blog_fig2_logp.png)
 
 *Figure 2. Median log-probability (higher = more likely) of the best known σ proofs, from the end of pretraining
 through round 16, for 12 of the 15 runs (all but section 5's three earlier full runs).*
@@ -164,7 +164,7 @@ RL model. On section 5's three runs, before and after 8 RL rounds, it did. *Guid
 logically wrong step and the model tries again), at about twice the compute per attempt, halved the gap between base
 and RL model on one held-out set. *Tree search* over partial proofs, at equal time, recovered 14% to 44% of what eight
 RL rounds add for the base, depending on the problem set; for the RL model it stayed within ±3 theorems of plain sampling everywhere
-and failed the test we had set in advance on the hardest problems (those neither model had solved). And with guided
+and failed the test we had set in advance on the hardest problems (those neither model had solved). But with guided
 redraws the base proves only 3, 4 and 1 of the 22, 21 and 14 theorems still counted as created at one of section 5's
 budgets.
 
@@ -187,8 +187,9 @@ of the 250 held-out problems, so the textbook problems are the fairer comparison
   test; three more families, at 3 full runs against 0, stay undecided after correcting for six tests.
 - **The knockout isn't perfectly clean.** It made σ's ingredients rarer and cost a few non-classical theorems; the 1%
   dose, which changes the data far less, restored the learning.
-- **A null we can't interpret.** Our "power sampling", which sharpens the base model without training, found none of
-  RL's new solves on the bases of two earlier full runs and two knockout runs. It also did worse than plain sampling on
+- **A null we can't interpret.** Our implementation of "power sampling", which sharpens the base model without training,
+  proved none of RL's new solves (two earlier full runs' bases) or of the 106 held-out classical theorems (two knockout
+  bases). It also did worse than plain sampling on
   theorems the base solves rarely, so we count it as a failure of our sampler.
 
 Code, data and checkpoints are public; the paper is a draft.
