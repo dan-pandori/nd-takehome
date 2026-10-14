@@ -421,7 +421,7 @@ def blog_figs():
     ax.text(16.6, -16, 'dose', color=DOSE, fontsize=8.5, fontweight='bold', va='center')
     ax.text(16.6, -33, 'knockout', color=KO, fontsize=8.5, fontweight='bold', va='center')
     ax.set_xlim(-1, 21)
-    ax.set_title('How likely each model is to write known σ proofs')
+    ax.set_title('How likely 12 of the 15 runs are to write known σ proofs')
     fig.tight_layout(); save(fig, 'blog_fig2_logp')
 
     # B3: budget curve
@@ -491,7 +491,7 @@ def fig_overview():
                                  ec=INK3, lw=1.0))
     ax0.text(7.6, 5.0, 'same 9.56M transformer,\npretrained from scratch,\nthen 16 rounds of\nexpert iteration\n(Lean judges every proof)',
              ha='center', va='center', fontsize=7.2, color=INK)
-    ax0.text(5.2, 0.6, 'σ: assume ¬G, refute it, conclude ¬¬G, drop ¬¬\n(DN and ¬-introduction stay; 3–4× rarer in the knockout)',
+    ax0.text(5.2, 0.6, 'σ: assume ¬G, refute it, conclude ¬¬G, drop ¬¬\n(DN and ¬-introduction stay; 4.2× and 2.9× rarer in the knockout)',
              ha='center', va='center', fontsize=6.6, color=INK2, style='italic')
     ax0.text(0.1, 9.75, 'a  Design', fontsize=9, fontweight='bold', va='top')
     a = fig.add_axes([0.55, 0.16, 0.43, 0.74])
