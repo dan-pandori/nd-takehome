@@ -1108,7 +1108,7 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   pod planned.
 - 05:27  Correction: the first commit wrote "05:40" for the pre-registration, ahead of the clock; it was written at
   05:26 and committed at 05:27 (`11d07d13`). Fixed in both files.
-- 05:45–06:40  Task 1 (paper): 60 `\rv{}` marks folded (`325a05c9`); three sentences smoothed. Task 2 (paper items):
+- 05:28–05:42  Task 1 (paper): 60 `\rv{}` marks folded (`325a05c9`); three sentences smoothed. Task 2 (paper items):
   checked each "possible error" against the data; CPU-only checks on the VPS, one process each, no pod:
   `artifacts/paper_clean/sigma_goal_polarity.py` (σ on a negated goal in D: 1,721 of 16,703 σ records),
   `artifacts/paper_clean/power_comparator_recheck.py` (the power-sampling comparators' stored proofs: 24/24 Lean 4.34.1
