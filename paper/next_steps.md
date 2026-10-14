@@ -31,11 +31,13 @@ rewrite. The two critique rounds converged on items 1 and 2.
   and the paper's discussion turns on update rules, not data. If it does not, the result generalises across the two
   standard algorithms.
 
-### 1b. Measure the knockout ladders' σ rate along the run — ≈ $25–30 (≈ $14 at r8 and r16 only)
+### 1b. Measure the knockout ladders' σ rate along the run — ≈ $25–30 (≈ $14 at r8 and r16 only); ≈ $48 (≈ $24) at C4's measured rate, see the correction below
 - A5's "the rate rose during RL" is post hoc and rests on plug-in base rates for held-out theorems. Sample the 123
   strict training theorems about 10⁶ times per checkpoint (≈ 8,000 attempts each) at the saved r4, r8, r12 and r16
   checkpoints of every knockout ladder. All 200 ladder checkpoints are in the bucket. That is 2.4 × 10⁷ attempts at
-  6–8 ms each, ≈ 40–55 A40-hours. It resolves pooled rates down to a few × 10⁻⁶. It turns A5 into an observed
+  6–8 ms each, ≈ 40–55 A40-hours. *(Correction, paper-clean 2026-10-14: C4 measured 12.35 ms per attempt on a knockout
+  base at batch 1,024 over 19 strict members, `artifacts/coe_paper/c4/ko_s1.json` (5.5 ms on `916` alone). At that rate
+  2.4 × 10⁷ attempts take ≈ 82 A40-hours ≈ $48, and r8 and r16 only ≈ $24; the review flagged this.)* It resolves pooled rates down to a few × 10⁻⁶. It turns A5 into an observed
   trajectory, and it separates "EI samples too little" from "EI amplifies too narrowly" (readings 2
   and 3).
 - Pair it with a **replay-only control from the knockout bases** (the ladder's fine-tuning on replay alone). That
@@ -60,7 +62,8 @@ rewrite. The two critique rounds converged on items 1 and 2.
   its early-stopped sample had put within reach came back at 0 in 18,432 attempts. Extending this to every strict
   member of every knockout base, at ≥ 60 K per family, is ≈ 60 × 20,000 × 6 families ≈ 7 M attempts per base. That
   would make a per-family certificate (and hence the pre-registered CREATED verdict) reachable. It is about $8–10 per
-  base at the knockout bases' 6–8 ms per attempt.
+  base at the knockout bases' 6–8 ms per attempt *(≈ 24 A40-hours ≈ $14 per base at C4's measured 12.35 ms;
+  correction, paper-clean 2026-10-14)*.
 - Also compute the knockout certificates at all five budget allocations; this is CPU-only once the samples exist.
 
 ### 5. A matched-atom-frequency knockout — ≈ $90–100 (6 seeds)
@@ -125,3 +128,34 @@ rewrite. The two critique rounds converged on items 1 and 2.
   natural home for the data-filtering point.
 - Physics of LMs Part 3.1 (fine-tuning extracts only what pretraining made extractable) and Ruis et al. on procedural
   knowledge in pretraining. Both are relevant to "exposure", and neither is yet in the verified notes.
+
+## Presentation proposals (paper-clean, 2026-10-14)
+
+Not applied. Each would either change more than presentation, or touch files that the review and `LEDGER.md` cite by
+file and line.
+
+1. **Reconcile the rest of the review's sub-audit (CPU only, ≈ 1–2 agent-hours).**
+   - `review_coep/phase2/{front,results,back}.md` hold about 79 rows marked W or D. The review's P1–P17 and smaller
+     items, and the librarian's 13 "possible errors", cover part of them, but no file maps each row to its resolution.
+   - Rows still open in the clean text include:
+     - I25: "almost all on converse contraposition" is 11 of 14 successes;
+     - I43: §1's "the waiting time scales as 1/(kNr)" is listed as a finding that may transfer, but it is the
+       definition of the post hoc Poisson null;
+     - R47: van der Weij et al. are co-cited for a definition that is Hofstätter et al.'s.
+   - A pass that maps every row and resolves the open ones, recorded as in `CLEANUP.md` §2, would close the audit.
+2. **Name the section files in PDF order.** Today `03_setup.tex` is §2 and `02_related.tex` is §5, which slows every
+   reader of the sources. Rename them once no further review will cite the current line numbers.
+3. **A figure for "rare, not absent" (CPU only).** The evidence that the knockout bases could make the move is spread
+   over a table and prose (§3.3–3.5): large-k successes per base and family, the certificate bound, and C4's
+   re-sample. Proposed figure: one panel per knockout base, showing per-family successes per million attempts with
+   95 % intervals, next to the full bases' r0 rates and the K_train(16) bound. Sources: `review_coe/out_cert.json` and
+   `paper/data/c4_within_reach.json`.
+4. **The blog's cuts.** The 2,500-word cap removed a few results (`CLEANUP.md` §4):
+   - the likelihoods' movement during RL (Fig. 2 still shows it);
+   - the one-round seeding null;
+   - the best knockout run's 3 of 106.
+
+   If the cap is relaxed, restore the likelihood sentence first: it is the blog's only statement that RL did not raise
+   the knockout models' likelihood of the known σ proofs.
+5. **Watch the abstract's length.** It is exactly 250 words (`wc -w sections/00_abstract.tex`); any later edit needs
+   a matching cut.

@@ -2002,3 +2002,33 @@ through T1 EI. The checker is Lean alone.
     (`c5_control.py`): 400 / 400 accepted, 0 / 400 with another theorem.
 - **Lean examples** (`paper/scripts/lean_examples.py` → `paper/data/lean_examples.json`; `paper/lean/`): 3 / 3 model proofs
   accepted, 3 / 3 goal-negated controls rejected (Lean 4.35.0, VPS).
+
+## paper-clean (2026-10-14; checks behind `paper/CLEANUP.md`; no pod, no new model)
+
+No checkpoint was trained or sampled. The numbers below re-read existing create-or-elicit files, on the VPS (CPU).
+- **σ on a negated goal in 𝒟 (K12, the full pretraining set, 155,000 records):**
+  - 16,703 records contain σ (`patterns.reductio`'s definition: DN on a NEGI line whose assumption is ¬G);
+  - 1,721 of them apply σ to a negated G, and 1,585 apply it only to negated goals;
+  - 1,741 of 17,387 σ lines have a negated G.
+  - Source: `artifacts/paper_clean/sigma_goal_polarity.json`, from `sigma_goal_polarity.py` on
+    `~/work/capability-defs/data/kh/train_k12.jsonl`.
+- **Lean gate rejections are the pre-filter's:** 1,307 of 1,307 `[lean_gate]` log lines in `artifacts/coe/logs/` and
+  `artifacts/coe_paper/logs/` (60 files) have rej = filter (12,217,252 rejections). Source:
+  `artifacts/paper_clean/gate_rejections.json`, from `gate_rejections.py`.
+- **Power-sampling comparators' stored proofs (offline Lean re-check, nd2lean + Lean 4.34.1 via
+  `lean_judge.judge_many`):**
+  - positive control at T 0.8: 6/17 solved, 8 distinct stored proofs, 8/8 accepted;
+  - positive control at T 1.0: 13/17 solved, 15 distinct proofs, 15/15 accepted;
+  - knockout s1 at T 1.0: 1 solve, 1/1 accepted;
+  - all 24 rejected with the goal negated;
+  - the comparators of (earlier) full s0, s1 and knockout s0 stored no proofs.
+  - Models: the earlier full seed s0's base (`ckpts/coe/old/stage1_best12_s0_b1200.pt`, 9.56M, `lean_staten`, from
+    scratch, K12) and knockout s1's base (`ckpts/coe/stage1_ko_s1.pt`, 9.56M, K12⁻).
+  - Source: `artifacts/paper_clean/power_comparator_recheck.json`.
+- **textbook72:** 0 of the 8 theorems printed in the clean paper, blog and `paper/lean/` are in a textbook72 renaming
+  class, under `gen.canon_key` (make_golden `--sealed`) or a premise-order-invariant key. The reading copy's §2
+  negated-conditional schema was (`textbook_b98931f2…`) and is removed. Source:
+  `artifacts/paper_clean/tb72_sealed_check.txt`.
+- **Blog length:** 2,482 words without the YAML front matter, 2,488 by `wc -w paper/blog.md`.
+- Bucket: `hf://buckets/dan-pandori/nd-rl/paper-clean/artifacts/paper_clean/` holds the four check scripts and their
+  outputs. The equivalence reports quote the drafts and stay in git only.

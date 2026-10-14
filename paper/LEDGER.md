@@ -26,7 +26,7 @@ Run `create-or-elicit-paper` (2026-10-13). One row per claim; a row may carry se
 | P5 | abs, intro, §5.3, blog | 1 % σ (1,550 records) restores acquisition on 3/3 dose seeds (M12d) | L97; R§3; RV 3 | reviewed |
 | P6 | (superseded by P113, P135) | 4 of 6 knockout bases wrote σ proofs of held-out family members, 1–6 successes in 1.1–1.4 million pooled attempts | L88; R§6; RV 4; rewording 3 | **superseded** (the paper now uses the pre-registered 106 pool: 5 of 6, 1–7 in 1.1–1.5 M) |
 | P7 | (superseded by P113) | 2 of 6 knockout bases (s0, s3) certified out of reach at K_train(16) | L88; R§6; RV 4 | **superseded** (true on the 105 family members; 1 of 6 on the pre-registered 106) |
-| P8 | abs, intro, §5.5, blog | the one progressing knockout ladder (s1) solved mostly members its base could already reach: 3 of its 4 converse-contraposition members | R§6/RV 5; S-coe Obs 5 | reviewed |
+| P8 | abs, intro, §5.5, blog | the one progressing knockout ladder (s1) solved mostly members its base could already reach: 3 of its 4 converse-contraposition members | R§6/RV 5; S-coe Obs 5 | **superseded** by C4 (P150): the reading was dropped by the pre-registered rule, and neither the paper nor the blog states it (note added by paper-clean, 2026-10-14) |
 | P9 | abs, intro, §4, blog | equal-k "creations" 54/51/60 (r8 vs pend, x0; "51–60") | L1 | reviewed-stands |
 | P10 | abs, intro, §4, blog | 14–21 per seed compute-matched under every allocation (21/20/14 at all five) | L2, L75; S-coe Obs 9; rewording 5 | reviewed (K_pub by cdR; all five by R§12) |
 | P11 | intro | random-init known-proof bound e^289 – e^3,228 attempts (upper bound on the attempts needed) | L18 *corr wording* | reviewed-corrected |

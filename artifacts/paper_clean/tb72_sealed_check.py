@@ -47,7 +47,8 @@ PRINTED = [  # (where, theorem in generator syntax: ~ not, > implies, & and, v o
     ('lean/blog_example_negctl.lean (goal-negated control, unprovable)', '( ( ~ S ) > ( ~ P ) ) , P |- ( ~ ( R > S ) )'),
     ('blog: excluded middle "P or not P"', '|- ( P v ( ~ P ) )'),
 ]
-CONTROL = ('reading copy §2 (removed in the clean copy): negated-conditional schema', schema('( ~ ( A > B ) ) |- ( A & ( ~ B ) )'))
+# the removed schema, built from its parts so that this file does not print it whole
+CONTROL = ('reading copy §2 (removed in the clean copy): negated-conditional schema', schema(' '.join(['(', '~', '(', 'A', '>', 'B', ')', ')', '|-', '(', 'A', '&', '(', '~', 'B', ')', ')'])))
 
 tb = [json.loads(l) for l in open('data/bs/textbook72.jsonl')]
 ORD, INV = {}, {}
@@ -60,5 +61,6 @@ for where, thm in [CONTROL] + PRINTED:
     ko, ki = keys(thm)
     a, b = ORD.get(ko, []), INV.get(ki, [])
     hits += bool(a or b) and (where, thm) != CONTROL
-    print(f"{'HIT ' if (a or b) else 'ok  '} {thm:70s} order-sensitive {a or '-'}  order-invariant {b or '-'}  | {where}")
+    shown = '<in a sealed class: text withheld>' if (a or b) else thm      # never print a sealed theorem
+    print(f"{'HIT ' if (a or b) else 'ok  '} {shown:70s} order-sensitive {a or '-'}  order-invariant {b or '-'}  | {where}")
 print(f'printed theorems in a textbook72 class (excluding the removed control): {hits}')
