@@ -28,8 +28,8 @@ dynamics, is also a post hoc measure: it was defined after round 3 of the experi
 \item \textbf{Seeds and power.} Six seeds per main arm power the primary indicator but not most per-family tests (three
 families 3 vs 0, Holm 0.17; excluded middle 1 vs 0). A 0/6 outcome bounds the per-seed rate of acquisition after
 \sig-free pretraining below 0.39 only. The dose arm has three seeds and two doses (0\% and 1\%) cannot locate a threshold.
-\item \textbf{The knockout is not surgical, and exposure includes replay.} It makes \texttt{DN} and $\neg$-introduction
-three to four times rarer and removes two thirds of the classical-only theorems. It costs general ability
+\item \textbf{The knockout is not surgical, and exposure includes replay.} It makes \texttt{DN} 4.2 times and $\neg$-introduction
+2.9 times rarer and removes two thirds of the classical-only theorems. It costs general ability
 (\S\ref{sec:side}): at r0 the knockout bases are 6.88 points worse at greedy decoding of 5,000 held-out generator
 theorems, all of it on the 679 whose reference proof uses \sig{}, and with 256 attempts they prove 4.0 fewer of
 textbook72's 53 intuitionistic theorems and 4.3 fewer of holdout250's 225. Exposure in pretraining cannot be separated from exposure through replay during RL.
@@ -63,8 +63,9 @@ and are pooled. Many evaluations cut off more than 0.1\% of attempts in some str
 attempts on one dose seed). With doubled caps, each strict count differed by at most one theorem (Appendix~\ref{sec:checks}), but the
 cut-off share fell only 1.0--2.2-fold on nine of ten checkpoints: nearly all cut-offs that remain are single actions longer
 than 1,024 tokens, runaway generations rather than proofs that need more room. The standard- and doubled-cap reads are
-independent draws, not a paired comparison, so their $\pm1$ differences are sampling, not cap effects. The power-sampling comparators kept no proof text, so
-their few successes were not re-checked in Lean.
+independent draws, not a paired comparison, so their $\pm1$ differences are sampling, not cap effects. The power-sampling comparators of full s0 and s1 and
+knockout s0 kept no proof text, so their few successes were not re-checked in Lean; the other comparators' stored
+proofs, including the positive control's, all re-check (Appendix~\ref{app:power}).
 \item \textbf{Interface.} In an earlier 3.2M organism, a base acting through the proof-state interface found at
 least one proof of 28 of the 29 theorems that whole-proof EI had ``created'' (in up to 400,000 attempts; at EI's own
 bar of $\hat p \geq 0.01$, 21 and 14), with two seeds per arm and the state confounded with the whole step interface. Whether creation verdicts depend on the interface is untested at this scale.

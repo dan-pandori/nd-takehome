@@ -25,8 +25,8 @@ not explain everything: three ladders first proved strict training theorems soon
 not spread it far in 14 more rounds. Seed 1 multiplied its free positive reductio more than tenfold in eight extra rounds and still
 proved the same five held-out theorems. In EI a single new proof enters a fine-tuning mix of about 70,000 RL records (up
 to four proofs for each of 4,495 theorems, each repeated four times) plus 20,000 replay records.
-\item \emph{The knockout made the bases worse learners in general.} The general costs are a few theorems out of
-hundreds, and the knockout's gains elsewhere are not clearly smaller (partly catch-up). The dose arm restores
+\item \emph{The knockout made the bases worse learners in general.} The general costs are a few theorems (at r0,
+4.3 of holdout250's 225 and 4.0 of textbook72's 53 intuitionistic theorems; \S\ref{sec:side}), and the knockout's gains elsewhere are not clearly smaller (partly catch-up). The dose arm restores
 acquisition while moving the constituents by about one point. This reading is not excluded, but it is not needed.
 \end{enumerate}
 
@@ -77,8 +77,10 @@ of five bases, decided during training rather than by sampling luck. GRPO ignite
 zero-rate bases (12 of 12), where paired EI did so in 1 of 3. That habit was not needed for the targets, the zero rates
 were measured with the older checker, and the checkpoints are lost.
 \end{itemize}
-The knockout fits these results only partly. As there, the base rate predicts which seeds move, and no ladder that
-started at a pooled rate near $10^{-6}$ acquired a family. Unlike the required pools, our mixed pool let knockout
+The knockout fits these results only partly. As there, a zero base rate predicted no movement (seeds 0 and 3) and the
+highest rate the most (seed 1); unlike there, seed 4, with the second-highest rate, never proved a strict training
+theorem, while seed 2, with the lowest non-zero rate, did. No ladder that started at a pooled rate near $10^{-6}$ acquired
+a family. Unlike the required pools, our mixed pool let knockout
 seed 1's rate rise (by the earlier criterion it ignited at round 13), and three ladders first proved strict training
 theorems sooner than their bases' held-out rates predict. ``Needs exposure'' should therefore be read as ``needs exposure,
 demonstrations, or perhaps a different update, for this EI to acquire the family within 16 rounds''.
