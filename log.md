@@ -1106,5 +1106,5 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `scripts/`, `next_steps.md`) stay as they were.
 - 05:27  Pre-registration `preregistration/paper-clean.md` (count method for the blog, expected outcomes E1–E6). No
   pod planned.
-- 05:29  Correction: the first commit wrote "05:40" for the pre-registration, ahead of the clock; it was written at
+- 05:27  Correction: the first commit wrote "05:40" for the pre-registration, ahead of the clock; it was written at
   05:26 and committed at 05:27 (`11d07d13`). Fixed in both files.
