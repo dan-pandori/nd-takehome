@@ -285,3 +285,13 @@ Brief: nd-rl `docs/proposals/paper/` paper-clean brief (nd-rl `9db656a`). Policy
 
 ## paper-clean
 - 2026-10-14 05:24 UTC  run started (executor). Starting point: the reviewed reading copy, nd-rl `origin/dan:docs/papers/create-or-elicit/` (`7709669`), copied unchanged into `paper/`. Pre-registration `preregistration/paper-clean.md` committed before any text change. No pod planned.
+- 2026-10-14 06:40 UTC  **Done.** `paper/` holds the clean paper (35 pp.) and blog (2,487 words); every change and
+  its evidence is in `paper/CLEANUP.md`.
+  - 60 paper and 31 blog *[review]* marks folded.
+  - 12 of the librarian's 13 possible errors were real and are fixed. Item 12 was wrong on the data: the positive
+    control's comparators stored their proofs, and Lean 4.34.1 re-checks them 24/24.
+  - The §2 textbook72-class schema was removed; 0 of 8 printed theorems is in a sealed class.
+  - Independent equivalence check: the first pass found 2 blog must-fix items, both fixed; the second pass found 0.
+  - No pod ($0). Summary: `run_paper_clean.md`.
+
+PAPER-CLEAN DONE 2026-10-14T06:40:53Z

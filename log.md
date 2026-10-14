@@ -1132,3 +1132,16 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
     did print it; `data/bs/textbook72.jsonl` holds the same text in this repository.
   - Item 5's grep became `artifacts/paper_clean/gate_rejections.py`.
   - Task 6: two independent equivalence subagents (paper diff-driven; blog claim by claim) launched at ≈ 06:00.
+- 06:00–06:24  Task 6, first equivalence pass (two independent subagents, reports in `artifacts/paper_clean/`).
+  - Paper: 85 changed spans, 60/60 marks confirmed, 0 must-fix, 3 minor (the abstract's "under EI", the pool behind
+    seed 3's zero rate, seed 3's C4 batch).
+  - Blog: 2 must-fix, both mine. The power-sampling sentence said the knockout bases were run on RL's new solves (they
+    were run on the 106), and "which certifies" had dropped "statistically". Also 10 minor.
+  - All must-fix and applicable minor items applied (`40264b03`).
+- 06:26  The four check scripts and their outputs (8 files, secret scan clean) uploaded to
+  `hf://buckets/dan-pandori/nd-rl/paper-clean/artifacts/paper_clean/`. The equivalence reports quote the drafts, so
+  they stay in git only (the fork is public; the drafts are there because the role brief requires the push).
+- 06:27–06:39  Second pass on the 10 changed passages (fresh subagent): 0 must-fix, 3 minor, applied (a comma in the
+  abstract and two CLEANUP bookkeeping notes). E6 hit.
+- 06:40  Final: PDF 35 pages, no undefined references, the reading copy's three overfull boxes. Blog 2,487 words
+  (2,493 whole file). Abstract 250 words. 0 of 8 printed theorems in a textbook72 class. No pod, $0.
