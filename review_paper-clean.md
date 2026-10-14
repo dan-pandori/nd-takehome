@@ -112,7 +112,7 @@ Three notes on E3:
 
 - **Length:** `wc -w` of `paper/blog.md` is 2,493 with the front matter and **2,487 without** (the method the
   pre-registration names). The 79-word Lean block, alt texts and captions are included. That is ≤ 2,500. The
-  marked copy was 3,143 without front matter, of which about 60 words were the librarian's header.
+  marked copy was 3,143 without front matter, of which 63 words were the librarian's header.
 - **The four named caveats are present with their qualifiers:**
   - the 16-round scope: l.22 "in 16 rounds", l.25 "did not, within 16 rounds, learn them without it", l.26 "may
     be specific to ours", and l.185–187 (only converse contraposition passes "needs exposure");
@@ -172,7 +172,7 @@ I rebuilt both copies in scratch directories (`tectonic -X compile`, 0.17.0).
   - It also carried the older-checker caveat on the earlier-organism contrast.
   - The review's B2 held the blog to "the same evidence as the paper, including the negative and null results", and
     named this paragraph's caveat. Cutting it is not a cut of wordiness, and no claim got stronger.
-  - Restoring one sentence (about 25 words) needs about 12 words trimmed elsewhere: the blog has 13 words of
+  - Restoring one sentence (about 23 words) needs about 10 words trimmed elsewhere: the blog has 13 words of
     headroom.
 - **F2 (recommended, blog): the RL-phase likelihood sentence is gone.** It read: "one full run and one dose run moved
   strongly toward these proofs; the rest … ended between 8 units lower and 4 units higher".
@@ -198,3 +198,114 @@ I rebuilt both copies in scratch directories (`tectonic -X compile`, 0.17.0).
   - The power-sampling positive control's 17 theorems include 2 textbook72 problems (`set: tb72`), solved at T 1.0.
     That is scoring use from create-or-elicit and is allowed. The 24/24 re-check includes their proofs; no text is
     printed.
+
+## §Comparison (phase 2)
+
+I read `run_paper_clean.md`, `STATUS.md`, this run's sections of `log.md` and `numbers.md`, `paper/CLEANUP.md`,
+`paper/README.md`, the `next_steps.md` and `LEDGER.md` diffs, and the executor's equivalence reports (the last only
+where they bear on F1 and F3).
+
+| # | claim (where) | my independent value | verdict |
+|---|---|---|---|
+| 1 | 60 paper marks folded (summary, STATUS, README, CLEANUP §1) | 60 → 0; 57 verbatim, 3 smoothed (Settings, §8 word order, "the experiment's review"), all equal or weaker | reproduces |
+| 2 | "31 blog *[review]* marks folded" (summary, STATUS, README) | 29 folded in place. R29 moved into the text before Fig. 4. R23 was **cut** with the seeding paragraph. CLEANUP §6 says so precisely ("30 survive, #23 went with the seeding paragraph") | differs by one mark: reword the summary, STATUS and README to "30 folded, 1 cut with its claim" |
+| 3 | 12 of 13 possible errors real and fixed; item 12's note wrong (summary, STATUS, CLEANUP §2) | 12 real and fixed; item 12 changed differently (E2 table) | reproduces |
+| 4 | σ on a negated goal: 1,721 of 16,703 σ records, 1,585 only negated; 1,741 of 17,387 lines (numbers.md, CLEANUP item 1) | identical, with my own parser on create-or-elicit's copy of D | reproduces exactly |
+| 5 | 1,307 of 1,307 gate lines in `logs/` (60 files) have rej = filter; 12,217,252 rejections (numbers.md, CLEANUP item 5) | identical in `logs/`. Over all of `artifacts/coe*`: 1,368 of 1,368 lines in 121 files, 12,919,685 | reproduces exactly |
+| 6 | DN 4.17×, ¬I 2.93× (CLEANUP item 6) | 4.169×, 2.930× (record shares) | reproduces |
+| 7 | s5 base `1142` 1/3,072, `1811` 1/13,312; s2 ladder x0 {1963}, x1 {1096 ×2}, C1 std {1096}, C1 dbl {1096, 1963} (CLEANUP item 7) | identical (per-row recount on `strict106`; `cert.log`) | reproduces exactly |
+| 8 | C1–C3 reads batch 512; C4 batch 1,024; scripts exist (CLEANUP item 8) | C4 args batch 1024 (both); scripts present | reproduces. MINOR: the A5b script prints 0.0188, the text 0.020 |
+| 9 | A5 rates and first successes per seed (CLEANUP item 9) | identical (`a5_waiting.json`, `certificates.json`); s3's base proved `916` (1/2,048), so "zero on the 105" is right | reproduces |
+| 10 | general cost 4.3/225, 4.0/53 at r0; 2.5/53 at r16 (CLEANUP item 10) | ledger P57; labelled in §3.6 | reproduces |
+| 11 | power comparators: 8/8, 15/15, 1/1 accepted, 24/24 rejected when negated; full s0/s1 and knockout s0 store none; models named (numbers.md, CLEANUP item 12, App. F) | own renderer: 24/24 (4.34.1 and 4.35.0), 0/24 negated; storage pattern identical | reproduces (independent harness) |
+| 12 | power-sampling models in the blog: "two earlier full runs' bases" and "two knockout bases" (CLEANUP item 13) | `ckpt` = `old/stage1_best12_s{0,1}` and `stage1_ko_s{0,1}`; the knockout runs were on the 106 | reproduces |
+| 13 | textbook72: "0 of 8 printed theorems" in a class; positive control hits `b98931f2…` (summary, STATUS, numbers.md, CLEANUP §3) | 0 of 19 by a mechanical extraction (the executor's 8 plus fragments and `have` statements). Control hits under both keys. A broader premise-moving reading of Table 1's lemma-route formula hits `dd80d9db…` (N1). | reproduces; the denominator is the executor's hand list |
+| 14 | "The textbook72 check's output and CLEANUP no longer print the sealed schema" (log) | true for both (no primary hit). But `artifacts/paper_clean/equivalence_paper.md` prints it (F3) | reproduces as stated; one record not covered |
+| 15 | blog 2,487 words without front matter, 2,493 whole file; marked 3,080 / 3,049 / 3,143 / 3,112 (summary, numbers.md, CLEANUP §4) | 2,487 / 2,493; marked 3,143 incl. the 63-word note, so 3,080 without it; minus the 31 marks, 3,049 / 3,112 | reproduces |
+| 16 | "Removing these left no reviewed caveat without the claim it qualifies" (CLEANUP §4) | true: R23 went with its claim. But the cut claim is a null result the paper carries (F1) | reproduces as worded. log.md's "No reviewed caveat was cut" overstates (R23 was cut) |
+| 17 | the brief's four caveats are present (CLEANUP §4) | present, with their qualifiers (E4) | reproduces |
+| 18 | PDF 35 pp., no undefined references, only the three sub-2 pt overfull boxes; a 4.4 pt box removed (summary, CLEANUP §5) | identical in a scratch rebuild; no 4.4 pt box. One new underfull box (cosmetic) | reproduces |
+| 19 | only `fig0_overview` and `blog_fig2_logp` regenerated, for the label and title (CLEANUP §5, log) | `figures.py` changed 2 strings; pixel rows differ only in the title band (fig2, rows 20–43) and the ratio line (fig0, rows 604–621) | reproduces |
+| 20 | abstract 250 words (log) | `wc -w` 250 (marked 255) | reproduces |
+| 21 | E6: first pass 2 blog must-fix, fixed; second pass 0 (summary, STATUS, CLEANUP §6) | as a record of the executor's checks, consistent with its reports. My independent pass: paper 0 must-fix (agrees); blog F1 (should restore) and F2 (recommended). The executor's checker classed both as accepted (b)-cuts, and `next_steps.md` proposal 4 lists them | reproduces as a process record; differs in judgment on F1 |
+| 22 | `next_steps.md` 1b re-costed: 12.35 ms per attempt, 2.4 × 10⁷ attempts ≈ 82 A40-h ≈ $48 | `c4/ko_s1.json`: 350,208 attempts in 4,325.6 s = 12.35 ms; 82.3 h | reproduces |
+| 23 | `next_steps.md` proposal 6: the two missing blog labels cost "about ten words, which the 2,500-word cap no longer leaves" | 2,500 − 2,487 = 13 words remain | differs: the labels fit |
+| 24 | LEDGER P8 marked superseded by C4 | matches P150 and the C4 drop rule; neither text states the reading | reproduces |
+| 25 | bucket `paper-clean/artifacts/paper_clean/` holds the 4 scripts and outputs; equivalence reports in git only (numbers.md, log) | `hf buckets ls`: the 8 files, 06:26:44 | reproduces |
+| 26 | no pod, $0 (summary, STATUS) | `podbudget.log` has only the 05:24 registration; no pod rows | reproduces |
+| 27 | pre-registration before any text change (prereg header) | `11d07d13` 05:27:04 precedes the first text commit `325a05c9` 05:29:38. Log times match commit times; none is ahead of the clock | reproduces |
+| 28 | `run_paper_clean.md` ≤ 200 words | 191 | reproduces |
+
+**Model labels.**
+- Every number this run added names its models:
+  - item 7 and item 9: the knockout seeds;
+  - item 10: labelled in §3.6;
+  - item 12: full s0/s1, knockout s0/s1 and the positive control. numbers.md gives checkpoint, 9.56M, `lean_staten`,
+    from scratch, K12 or K12⁻.
+- No label was lost in the paper or the blog.
+- The earlier-organism claim that remains in the blog (GRPO) keeps "3.2 million parameters, whole proofs, older
+  checker". The other one went with the seeding paragraph.
+
+**Wording against n.**
+- The new §6 sentence describes single seeds: s4 "never proved a strict training theorem" holds for its 16 rounds,
+  the scope the paper uses throughout. Adding "in 16 rounds" there would be cleaner.
+- No new difference claim rests on one seed.
+
+**Expectations.**
+- E1–E6 were committed before the work and are all hits. My recount agrees on each.
+- Under E4 and E6, the blog's no-caveat-dropped standard holds as the run worded it ("no reviewed caveat without its
+  claim"). It does not hold as review B2 applied it (F1).
+
+## §Verdict
+
+**Hard constraints:** none violated (nd_verify = `origin/main`, TEST_RUN_DONE unchanged, no code touched, nd_verify
+unused, no pod). No quarantine.
+
+**What stands:**
+- **The paper:** the clean version is equivalent to the marked reading copy.
+  - Each of the 60 corrections is folded with its meaning.
+  - No number changed except the task-2 fixes, and each of those reproduces from the data.
+  - No claim is stronger. The one widened claim, item 12's "kept no proof text" narrowed to three comparators, rests
+    on a new Lean re-check that I reproduced with an independent renderer: 24/24, 0/24 negated.
+- **The 13 librarian items:** 12 were real errors and are correctly fixed. Item 12's note was wrong.
+- **textbook72:** no printed theorem is in a textbook72 renaming class under either key.
+- **The PDF:** builds clean (35 pp., the reading copy's three sub-2 pt boxes).
+- **The blog:**
+  - it is 2,487 words;
+  - it keeps the four named caveats and every B1–B8 correction;
+  - it names the power-sampling models correctly;
+  - it claims nothing the paper does not.
+
+**What should be reworded:**
+- `run_paper_clean.md`, `STATUS.md` and `paper/README.md`: "31 blog marks folded" → "30 folded; 1 (R23) cut with
+  the seeding paragraph it qualified" (as CLEANUP §6 says).
+- `log.md` "No reviewed caveat was cut" → as CLEANUP §4 words it.
+- `next_steps.md` proposal 6: 13 words remain, so the two labels (post hoc free-positive-reductio counts;
+  exploratory r24 continuation) fit within the cap.
+
+**What I would restore in the blog (Dan's call; the run disclosed both cuts):**
+- **F1:** a one-sentence seeding null. Example: "One extra RL round seeded with a rare σ proof changed nothing
+  measurable (an earlier, smaller model under an older checker had responded)."
+  - The paper carries it as a null and a missed pre-registered expectation.
+  - The review's B2 held the blog to the paper's negative and null results.
+- **F2:** the RL-phase likelihood clause, which the executor also ranks first to restore.
+- F1 alone (about 23 words) needs about 10 words cut elsewhere; F1 and F2 together (about 38 words) need about 25.
+
+**Records:**
+- **F3:** mask the removed schema in `artifacts/paper_clean/equivalence_paper.md`, by ID as the brief allows. It is
+  in git on the public fork, not in the bucket. `data/bs/textbook72.jsonl` itself is in the same repository, so this
+  is hygiene, not a leak.
+- Noted (pre-existing, not this run): the fork's root `log.md` prints formulas in two textbook72 classes.
+
+**Not supported:** nothing. Every claim in the run's write-ups reproduces or differs only in wording.
+
+**Minor text items (optional):**
+- App. I names `round2_extra.py` (0.0188) beside §3's exact 0.020: say "0.019 by Monte Carlo; 0.020 exact".
+- "early-stopped" is never defined in the paper (now first used in §1).
+- `02_related`'s "a quarter to a third" stays approximate beside 2.9×/4.2×.
+
+**Next measurement:** none is needed to settle this run. Every open item is editorial. The paper's open scientific
+question is the knockout ladders' σ rate along the run (`next_steps.md` 1b). With the corrected cost (12.35 ms per
+attempt, ≈ 82 A40-hours ≈ $48), it is the measurement that would turn A5's waiting-time null into an observed rate.
+
+Review time: 06:42–07:12 UTC (four sub-auditors in parallel during phase 1).
