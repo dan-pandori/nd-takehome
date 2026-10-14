@@ -183,6 +183,30 @@ appended below as *C5 final*, with the time.
 The executor's own control file (`artifacts/coe_paper/c5/control_ko_s1.json`) has 400 / 400 and 0 / 400. That is
 consistent with mine, but it used `review_coe/rlean.py`; mine shares no code with it.
 
+**C5 final** (appended 2026-10-14 02:26 UTC; the pass finished at 02:25 UTC after 2,999 s, method unchanged since the
+§Recount commit): **0 of 210,151 distinct pre-filter-rejected texts are Lean-accepted**, 0 in every one of the 13
+reasons:
+
+| reason | distinct texts | accepted |
+|---|---|---|
+| app-arg | 69,729 | 0 |
+| function-expected | 25,067 | 0 |
+| and-intro | 23,404 | 0 |
+| by-contradiction | 21,055 | 0 |
+| or-intro | 17,394 | 0 |
+| and-elim | 10,557 | 0 |
+| elim | 9,991 | 0 |
+| projection | 9,244 | 0 |
+| or-intro-target | 8,595 | 0 |
+| reiterate | 7,729 | 0 |
+| app-result | 5,031 | 0 |
+| anon-ctor | 2,065 | 0 |
+| premise-type | 290 | 0 |
+
+So the executor's C5 (0 / 222,135 rows) reproduces with an independent checker. The one-sided 95 % bounds on the
+false-reject rate per distinct text are 1.43 × 10⁻⁵ overall and 1.42 × 10⁻⁴ for `by-contradiction`, in this ladder
+(knockout s1, rounds 1–16) only. Per-block results: `~/review/coep_big/c5_results.jsonl`; log `review_coep/c5_full.log`.
+
 ### A2–A5b — base prior vs acquisition (`prior.py`)
 
 Inputs:
@@ -314,3 +338,234 @@ Billed: 6.48 pod-hours. No arm comparison inside this run depends on matched com
   the bucket with the rest of `artifacts/coe_paper/` (119 eval files). Nothing is lost.
 - The pre-registration's C5 bounds (≈ 1.3 × 10⁻⁵ overall, 1.3 × 10⁻⁴ for `by-contradiction`) are computed on rows. On
   distinct texts with 0 accepted, the one-sided 95 % bounds are 1.43 × 10⁻⁵ (n 210,151) and 1.42 × 10⁻⁴ (n 21,055).
+
+## §Comparison (phase 2; begun after the §Recount commit `824af4a7`, 01:51 UTC)
+
+**What I read.**
+- The executor's `run_create_or_elicit_paper.md`, this run's section of `numbers.md`, `log.md` and `STATUS.md`.
+- `paper/`: `main.tex`, `sections/*.tex`, `blog.md`, `LEDGER.md`, `REVISIONS.md`, `next_steps.md`, `critiques/`, `data/`,
+  `scripts/`, `figures/`.
+
+**How the paper and blog were audited.** Four read-only sub-auditors checked every number and claim line by line against
+`LEDGER.md` and the reviewed source behind it (precedence: the create-or-elicit review and its librarian summary >
+`claims_ledger.md` v3 > executor files; earlier runs' reviews from their fork branches; this run's own numbers against
+§Recount). The split was:
+- front matter: title, abstract, intro, setup, measurement;
+- results and the checks appendix;
+- related work, discussion, limitations, reproducibility, appendices and `refs.bib`;
+- the blog.
+
+Their full tables are committed in `review_coep/phase2/{front,results,back,blog}.md`: **731 rows**, one per claim. I
+re-derived myself every finding listed below as consequential. I also covered the headline, everything this run computed,
+W1–W4, the figures (A1) and the limitations.
+
+| audit | rows | reproduces | differs | wording / stronger | not derivable |
+|---|---|---|---|---|---|
+| front (title, abstract, intro, setup, measurement) | 131 | 102 | 3 | 22 | 4 |
+| results + checks appendix | 212 | 188 | 9 | 13 | 2 |
+| back (related work … appendices, bib) | 294 | 245 | 8 | 33 | 8 (4 unreviewed source, 4 not checkable from the notes) |
+| blog | 94 | 85 | 2 (wording) | 3 stronger than the paper, 4 not in the paper | 0 |
+
+**No headline number is wrong anywhere.** Every table cell in the paper reproduces: the per-seed table, the large-k
+family table, the certificates table and the C1 table. So does every number in the blog.
+
+### This run's own numbers (executor's text vs my recount)
+
+| claim (where) | executor | reviewer | verdict |
+|---|---|---|---|
+| C1 table: proved std → dbl, families, cut-off shares (App I; numbers.md) | 0→0, 3→3, 1→2, 0→1, 0→0, 2→2; 57→56, 40→41, 28→29; 22→22; shares 0.04→0.00 … 9.30→8.58 % | identical, cell by cell | reproduces |
+| C1: the ≥ 5× cut-off reduction missed on 9 / 10 | missed on 9 / 10; held only on knockout s0 | same | reproduces; reported as a miss |
+| C1 "cut-off share falls 1.05–2.3×" (numbers.md) | 1.05–2.3× | 1.05–2.19× (knockout s4 4.29 / 1.96 %) | trivial (2.2) |
+| C1 is not a paired design (App I) | "largely fresh draws" (slot-keyed noise) | confirmed: identical `n_ok` on only 14/45, 9/34, 12/24, 12/20 uncut solved members | reproduces. But §5.8 says "**a paired re-evaluation**" and App I opens "Paired evaluations": **reword** ("same-seed re-evaluation"; the ±1 changes are sampling) |
+| C1 standard-cap read differs from Table 1 "which is why knockout s1 shows 3 … dose s2 28" (App I) | 2 named | 5 of the 10 counts differ (also dose s0 57 vs 58, s1 40 vs 39, full s4 22 vs 23) | wording (incomplete) |
+| C2: x1 56 / 39 / 30, guided 58 / 42 / 29, same families 3 / 3 | as stated | same | reproduces |
+| C3: 34 / 30 / 34 vs 32 / 32 / 38, within ±4; gap 5.8; sign slip | as stated, sign slip disclosed | same (+5.83) | reproduces. As written the range ([−9, −4] for full − knockout) misses; App I scores it by the intended magnitude and says so, which is honest |
+| C4: per-member counts; 2 hits / 2 misses; drop rule fires; pooled 3.0 vs 3.2 × 10⁻⁵ | as stated | identical | reproduces |
+| C5: "0 / 222,135 pre-filter rejections … 222,135 texts … 22,522 by-contradiction"; UB95 "1.3 × 10⁻⁵ / 1.3 × 10⁻⁴" | rows called texts | 222,135 rows = **210,151 distinct texts** (21,055 by-contradiction); my own checker: **0 / 210,151**; bounds per distinct text 1.43 × 10⁻⁵ / 1.42 × 10⁻⁴ (per row 1.35 × 10⁻⁵ / 1.33 × 10⁻⁴) | reproduces in substance; **reword** "texts" → "rejected rows (210,151 distinct texts)", and the bound → "below 1.4 × 10⁻⁵" (§5.8, App I, §8) |
+| C5 harness control 400 / 400, 0 / 400 | labelled "not pre-registered" | consistent with my controls | reproduces |
+| A2 ρ 0.877; 0.39 (p 0.38) without the knockout; "mostly the difference between arms" | as stated | 0.877 / 0.393 | reproduces; the caveat is in the text |
+| A3 / A3b / A4 values | as stated | identical to 3 decimals | reproduces. Scoring nit: A3's within-family expectation ("lower than overall, and > 0.5, on ≥ 3 / 4") holds on 3 / 4 for each part; the text reports only s3 as "against the expectation" |
+| A5: 0.55 seeds expected, 3 observed, P 0.006; 47 and 115–340 rounds | as stated | 0.547, 0.0060; 47.4; 115 / 180 / 340 | reproduces |
+| A5b: "rises to 0.019 … 0.74" (also intro, discussion: "0.006–0.019") | 0.0188 (Monte Carlo, 20,000 draws) | exact posterior-predictive Poisson-binomial **0.0199**, 0.736 | differs by rounding (0.020); trivial |
+| RL-phase gains, MW p 0.0011; guided 5–62 vs −3 to +2, 0.0011; hardware-matched p 0.012; 5/6 vs 0/6 p 0.0032; 2/3 vs 0/6 p 0.034 | as stated, "not pre-registered" | identical (own exact MW, own Boschloo) | reproduces |
+| Δ_cov 35.0 vs 29.8, "one-sided Mann–Whitney p ≈ 0.13 with one tie" (§5.6) | 0.131 (`scipy … method='exact'`, whose null ignores ties) | tie-aware exact permutation **0.095** (8 / 84) | differs; not significant either way, so the reading "not clearly worse at RL" stands |
+| Spend: 2 A40 pods, 6.48 h, $3.82 | as stated | `podhours.log` 3.48 + 3.00 h, $2.05 + $1.77 | reproduces |
+| Run summary "blog 2,495 words" | 2,495 | `wc -w` 2,499 (STATUS and log say 2,499) | trivial |
+
+### Consequential findings on the paper (each re-derived by me; suggested wording in the sub-audit files)
+
+| # | where | claim | independent value | verdict |
+|---|---|---|---|---|
+| P1 | §5.8 l.344–345; App I l.5 | C1 is "a paired re-evaluation" | not paired (above); the appendix's next sentence says so | **reword** (internal contradiction) |
+| P2 | intro l.66; contributions l.80–81 | knockout s0 is "the only base whose rate is certified out of reach under plain sampling"; certificates listed as pre-registered | true only on the pre-registered 106 pool, at T 0.8 and N_eval 322. Plain sampling at **T 1.0 solved `la_transfer_916` on knockout bases s0 and s1** (create-or-elicit review, Add. 3 row; the paper's expectations appendix, `10_appendix.tex` l.151, says so). The pre-registered expectation (≥ 5 / 6 certified) **missed** (1 / 6 on the 106, 2 / 6 on the 105) | **reword**: scope to T 0.8 / 106 pool; say the certificate expectation missed where the certificates are called pre-registered |
+| P3 | abstract l.13–14; intro l.72–73 | "51–60 … look RL-created at equal sample counts; [only] 14–21 remain when the base gets RL's compute as attempts [under every allocation]" | reviewed `budget08.log`: 34/33/33, 33/27/24, 28/26/24, 22/21/14, 21/20/14 at the five allocations; **21/20/14 is the set compute-matched at all five**. The numbers are on r8 of the earlier full seeds s0–s2, on the 322 | **reword** ("14–34 remain depending on how RL's compute is counted; 14–21 survive all five allocations"), and label the models |
+| P4 | intro l.107–108; discussion l.100 | "Our knockout bases fail at k = 256 under plain sampling" | one of 12 plain k-256 base reads succeeds: knockout s1 x1 proved `la_transfer_916` (reviewed `out_acq`) | **reword** ("prove none in the pre-registered evaluation; one proves one in a second draw") |
+| P5 | abstract l.7 | "acquired … (half its held-out members proved in 256 attempts)" | the bar is half of a family's **strict** held-out members (e.g. 9 of converse contraposition's 18, not 20 of 40) | **reword** |
+| P6 | §5.5 l.245–247, l.255–256; discussion l.86 | knockout s1: 1019 "which two of three r16 draws had already proved once"; knockout s5: "proves 1246 and 2256 … in all three plain r16 draws" | there are **four plain r16 draws** (x0, x1, C1 std, C1 dbl) plus a guided one. s1: 1019 in std and dbl, and twice in guided, but not in x0 or x1 (2 of 4 plain). s5: x1 proved only 1246, so 2256 is in 3 of 4. (`members.log`, from the bucket's per-row files.) "916 and 1460 in every r16 draw; never 1096 or 1606" holds over all five | **correct** the counts |
+| P7 | §5.3 l.196 | "The proofs [scored] are the full ladders' own" | they are the **old** full ladders' (s0–s2) known proofs (`data/coe/README.md`, `known_targets`); not the scored ladder's own for full s3–s5, dose or knockout | **reword** |
+| P8 | §5.7 l.315–317 vs §5 l.4 | the seeded-round contrast "6 and 17 targets" from the earlier organism; §5's scope sentence says every number is on the 9.56M models under Lean | those are the 3.2M whole-proof organism's (Run 3) numbers, under the older checker; the discussion labels it, §5 does not | **label** (policy: cross-date checker) |
+| P9 | §5.8 l.334–335 | "Every rejection in the experiment was the pre-filter's" | true of the Lean gate only: 72–88 % of knockout r16 attempts (77–89 % with cut-offs) end earlier in the environment's grammar / action checks (`reasons` in the C1 rows; 10–23 % reach the gate), which neither C5 nor the 150-per-reason check covers. They are grammar failures, which the policy allows, but the sentence overstates | **reword** ("every Lean-gate rejection") |
+| P10 | §5.1 l.55–58 | per-family verdicts: NEEDS EXPOSURE for converse contraposition only, three families UNDETERMINED (p 0.034, Holm 0.17) | the create-or-elicit decision rule's text says "Boschloo p ≤ 0.05" per family; its secondary-test line adds "Holm-corrected over 6". At uncorrected p 0.034, three more families would meet "needs exposure" | **state** that the verdicts rest on the pre-registered Holm correction (the conservative reading, as the create-or-elicit review applied it) |
+| P11 | discussion l.50–51 | "By sampling alone, GRPO would most likely first succeed where EI did (seeds 1, 2 and 5)" | by the paper's own A5 base rates, P(success by r16) = 0.29 (s1), **0.13 (s4)**, 0.085 (s5), 0.046 (s2) | **correct** (s1, then s4) |
+| P12 | §5.6 l.270–274 | "textbook72 keeps −2.5" at r16 | −2.5 is on textbook72's 53 intuitionistic problems; on all 72 the r16 gap is −7.5 (create-or-elicit review) | **reword** (name the subset) |
+| P13 | abstract l.10–12 | "five of six proved … 1–7 times in 1.1–1.5 million attempts" | the five bases with a success had 1.12–1.43 M; 1.50 M is s0, which had none; 5 / 6 counts the generated `916` (4 / 6 on family members) | minor |
+| P14 | abstract l.4; intro l.24, l.30–32 | "we remove … the classical reductio σ" | the removal is σ⁺ (σ and its variants; 16,961 records), as Fig. 1 and §3 say | minor wording |
+| P15 | intro l.100–102 | "Cued practice transferred too little to acquire a family" | asserts a transfer mechanism; §5.3 says why the rate rose "is not identified" | minor wording |
+| P16 | §4 TTC paragraph and Fig. 7; §3 l.31–32 | guided / PUCT gains "for the base and r8"; "314,541 tested (state, step) pairs" | the models are the earlier full seeds s0–s2 (best-cap12, r0 / r8 / r16) and guided-tts' r8 models respectively. Neither is named; the PUCT half of "neither method proves most of the compute-matched creations" has no reviewed source (only guided was scored on those sets) | **label**; drop or source the PUCT half |
+| P17 | §8 Limitations | — | missing or understated (back audit, verified): the knockout's general-ability numbers (greedy −6.88 pp, all on σ-reference theorems; −4.0 / 53 textbook72 and −4.3 / 225 holdout250 intuitionistic at r0); the textbook72 premise-swapped twin (every pretraining set shares 1 premise-order-invariant class with textbook72, disclosed nowhere); that doubling the caps left most cut-offs in place (1.0–2.2×) and that C1's draws are independent; one `c_base` timing read per seed under s0's 8 %-margin certificate; the free positive reductio being a post hoc measure | **add** |
+
+Smaller items (back audit, spot-checked):
+- 08 l.10 omits old full s1's 303 of 322;
+- 09 l.20–22 under-counts the post hoc analyses;
+- `refs.bib`: `havrilla2024teaching`, `singh2023restem` and `zelikman2022star` print with no identifier;
+- Yang & Chen is quoted only up to the half of a contrast that suits the paper (per the literature notes; I did not
+  re-read the source).
+
+### Consequential findings on the blog (blog audit, verified against the text)
+
+- **B1.** The short version leads with the post hoc RL-phase result (5 / 6 vs 0 / 6, l.13), unlabelled at first mention.
+  The epistemic status says "The main test was pre-registered". The paper labels it at first mention. Label it, or lead
+  with the pre-registered 6 / 6 vs 0 / 6 and its "mostly decided before RL".
+- **B2.** Negative results the paper carries are missing:
+  - the MCTS gate failure (l.173 drops the clause);
+  - that the pre-registered rule could not return "created", and that only converse contraposition earned "needs
+    exposure";
+  - the guided base proving only 3 / 4 / 1 of the 22 / 21 / 14 compute-matched creations;
+  - the hardware-matched family contrast (2 / 3 vs 0 / 6, p 0.034), next to the favourable gains test;
+  - the older-checker caveat on the earlier-organism results it cites (l.143, l.185–186);
+  - every robustness and RL-free-control result.
+
+  The brief asks for "the same evidence as the paper, including the negative and null results".
+- **B3.** The pre-registered drop rule is paraphrased wrongly (l.138–139). "If that happened" is not the registered
+  condition (≤ 1 of `1246` / `1460` / `2256` with c ≥ 2), and "could already prove" contradicts l.136–137.
+- **B4.** The likelihood paragraph (l.124–127) omits the two caveats that cut against it:
+  - the scored proofs are the old full ladders';
+  - dose s0 and knockout s1 sit within 0.7 nats, yet prove 58 and 2.
+- **B5.** Framing words are stronger than the paper: "undid the deletion" (l.25), RL "is how today's reasoning models
+  get much of their skill" (l.30), "easy problems" (l.19, 72, 116).
+- **B6.** The Fig. 2 caption says "each model", but 12 of 15 ladders are drawn.
+- **B7.** Models are not identifiable in §5–6 (the r8 of three earlier full runs).
+- **B8.** Seven terms are used before they are defined, among them "early-stopped".
+
+The blog **reproduces every number**, has 4 figures and 2,499 words (`wc -w`; 2,418 without the code block). It makes no
+claim of "need" and scopes the sharpening null to the sampler.
+
+### Pre-registered writing expectations (W1–W4) and process
+
+| expectation | executor (log 23:00) | reviewer | verdict |
+|---|---|---|---|
+| W1 headline = the reviewed verdict, no "need", no general sharpening claim | hit (after audit fix 2) | The abstract states 0/6 vs 6/6 (p 0.00024, "largely present before RL"), RL-phase 5/6 vs 0/6 (p 0.0032, "not pre-registered") and the dose 3/3 ("exploratory"). "Needs exposure" appears only as the pre-registered rule's label (§3, §5.1) and is hedged in §6. The power-sampling null is "for this sampler … not for sharpening" | **hit** |
+| W2 the critiques raise the five objections; the paper answers each | hit | All five appear in `critiques/r1_*` / `r2_*`; each is answered in the text and four in §8. The power-sampling control is answered in §5.7, not §8 | **hit** |
+| W3 claim audit ≤ 15 discrepancies, none needing a headline change | miss (70) | 70, plus 22 in the re-audit; one abstract sentence weakened; reported as a miss in REVISIONS, the log and the run summary | **miss, reported** |
+| W4 tectonic builds; abstract ≤ 250 words; blog 1,500–2,500 words and 3–5 figures | hit | I rebuilt `main.pdf` from the committed sources in a scratch copy: tectonic exit 0, 34 pages, no undefined references, only < 2 pt box warnings. Abstract ≈ 240–250 words; blog 2,499 words, 4 figures | **hit** |
+
+**A1 (figures from data).** Every figure I opened plots reviewed values:
+- Fig. 0, 1 and 6 read `review_coe/out_acq.json` and the A2 points;
+- Fig. 2 reads the per-round files, matching the reviewed found-file recount on the knockout;
+- Fig. 3 reads the score summaries (= `review_coe/out_score.json`);
+- Fig. 4 reads the reviewed `budget08` sets;
+- Fig. 7 matches `capdefs_j3` / `mcts_a_summary`.
+
+Only the captions have defects: Fig. 7's models are unnamed, and the blog's Fig. 2 caption says "each model".
+
+**Process.**
+- Expectations were written before the run: the pre-registration and addenda 1–5 were committed before the work each
+  covers (§Recount, hard constraints).
+- Misses are reported as misses: C1's ≥ 5×, C4's two misses, C3's sign slip, W3, and the A3 within-family s3.
+- Post hoc analyses are labelled: A2, A5, A3b, A5b and the RL-phase contrasts.
+- REVISIONS records both critique rounds, the audit and the re-audit point by point. Its round-1 log-p numbers are
+  superseded within the same file.
+
+**Model labels.**
+- §5 opens with a blanket label (the 9.56M models of Table 2, Lean alone); numbers.md names `best_model.ALiBiGPT` 6 × 384,
+  9,560,832 parameters, `lean_staten`, from scratch.
+- The unlabelled numbers are P8, P16, B7 above, and the step-checker statistic. Each comes from an earlier run's models:
+  the r8 / r0 of the earlier full seeds s0–s2, guided-tts' r8 models, and the 3.2M Run-3 organism under the older
+  checker.
+
+**Wording against n.**
+- Every difference between arms rests on ≥ 3 seeds per arm.
+- No "never" / "wall" / "bistable" overreach survives in the paper. The member-level "never proves" for knockout s1
+  holds over all five r16 draws and the r20 / r24 reads.
+- The A5 "the rate rose during RL" is properly conditioned ("unless the strict training theorems were easier …"; "why
+  it rose is not identified").
+
+### Records
+
+- `next_steps.md` is ranked and costed, and its arithmetic is internally right. But item 1b assumes 6–8 ms per attempt,
+  while C4 measured **12.35 ms per attempt** on a knockout base at batch 1,024 on 19 strict members (`artifacts/coe_paper/c4/ko_s1.json`; 5.5 ms on `916` alone). At
+  that rate 2.4 × 10⁷ attempts is ≈ 82 A40-hours (≈ $48), not 40–55 h ($25–30).
+- `LEDGER.md` P8 still carries the dropped reading ("solved mostly members its base could already reach") as reviewed.
+  Several rows list the blog as a user of numbers it no longer contains (blog audit, finding 15).
+- `numbers.md`'s "1.05–2.3×" should be 2.2×. The run summary's "2,495 words" should be 2,499.
+
+## §Verdict
+
+**What stands.** Everything this run measured or computed reproduces with my own code and Lean harness:
+- C1–C5;
+- A2–A5b and the addendum-5 descriptives;
+- the compute and the spend ($3.82, 6.48 A40 pod-hours).
+
+The process was also sound:
+- 959 / 959 counted proofs are Lean-accepted;
+- 0 / 210,151 pre-filter rejects are Lean-valid, under a harness that fails when it should;
+- the splits are clean, bar the known textbook72 twin;
+- the hard constraints hold;
+- gate 0 was kept, and every pre-registered miss is reported as a miss.
+
+The paper and the blog state the reviewed create-or-elicit result at the strength its review allows:
+- no knockout seed acquired a classical family in 16 EI rounds (0 / 6 vs 6 / 6, p 0.00024), a contrast largely decided
+  before RL;
+- RL-phase gains of 8–69 vs 0–2 and acquisition 5 / 6 vs 0 / 6 (p 0.0032), labelled post hoc;
+- the 1 % dose restores acquisition (3 / 3, exploratory);
+- σ is rare in the knockout bases, not absent;
+- no claim of "need", and no general sharpening claim.
+
+Every table cell and every blog number reproduces, the figures plot reviewed data, the PDF builds, and W1, W2 and W4
+hold (W3 missed and says so). The knockout-s1 "elicitation" reading is correctly dropped by C4's pre-registered rule.
+
+**What must be reworded before the draft goes to Dan's readers.** None of these changes a headline number.
+- Paper P1–P17:
+  - most important: the "paired" C1 wording (P1);
+  - the scope of the "only certified base" claim, with the missed certificate expectation (P2);
+  - the "14–21 remain" sentence and its unlabelled models (P3);
+  - "fail at k = 256" (P4);
+  - the strict bar in the abstract (P5);
+  - the r16 draw counts (P6);
+  - the scored proofs' provenance (P7);
+  - the unlabelled older-checker numbers in §5 (P8);
+  - the GRPO prediction (P11);
+  - the limitations additions (P17).
+- Blog B1–B8:
+  - most important: label the post hoc lead (B1);
+  - restore the negative results the paper carries (B2);
+  - fix the drop-rule paraphrase (B3).
+- Precision: C5's rows vs distinct texts, the Δ_cov p (0.095), A5b's upper P (0.020), and `next_steps` 1b's cost.
+
+**Not supported as written.**
+- That every rejection was the pre-filter's (P9).
+- That GRPO "by sampling alone" would first succeed on seeds 1, 2 and 5 (P11).
+- The PUCT half of "neither method proves most of the compute-matched creations" (P16; no reviewed source scores
+  search on those sets).
+- That knockout s5's ladder proves 2256 in every plain r16 draw (P6).
+
+**The next measurement that would settle what is left open.** The paper's open mechanistic claim is A5's post hoc "the
+knockout ladders' σ rate rose during RL". It rests on plug-in held-out base rates and assumes they transfer to the 123
+strict training theorems. The direct test is to sample the 123 strict training theorems at the knockout ladders' r0, r8
+and r16 checkpoints:
+- with no early stopping;
+- at C4's settings (T 0.8, batch 1,024, standard caps);
+- with a pre-registered drop rule;
+- ≈ 5 × 10⁵ attempts per checkpoint, about 4,000 per theorem.
+
+The first strict successes at r9–r14 (≈ 35,000–55,000 attempts) imply mid-ladder rates of about 2–3 × 10⁻⁵, against
+pooled base rates ≤ 6 × 10⁻⁶. So 5 × 10⁵ attempts expects 10–15 successes if the rate rose and ≤ 3 if it did not.
+
+At C4's measured 12.35 ms per attempt (5.5 ms on `916` alone) that is 18 checkpoint-reads × 5 × 10⁵ ≈ 9 × 10⁶ attempts
+≈ 31 A40-hours ≈ $18. A replay-only control from two knockout bases would add its fine-tunes. It turns A5 into an
+observed rate trajectory, and it separates "EI waits for a rare sample" from "EI raises the rate on cued σ".
+
+The generality question (does the null hold for signed updates?) still needs `next_steps` item 1: GRPO from the six
+knockout bases, with per-seed predictions written first and ranked by the base rates (s1, s4, s5, s2), as P11 corrects.
+
+No hard-constraint violation; no quarantine.
