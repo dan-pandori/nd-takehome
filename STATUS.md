@@ -278,3 +278,10 @@ Brief: nd-rl `docs/proposals/paper/BRIEF_create-or-elicit-paper.md`. Policy: AGE
 - 2026-10-13 20:06 UTC  Draft v1 complete (`paper/main.pdf`, 21 pages incl. appendices; `paper/blog.md`; `paper/LEDGER.md` maps every number). Exploratory analyses A2–A4: the base's likelihood of known σ proofs predicts which families RL acquires and in what order (AUC 0.92–0.95 full, 0.85–0.86 dose; first-solve ρ −0.69 to −0.87 full). Critique round 1 (novelty, soundness, clarity) running. Pods `coep-1`, `coep-2` (A40) running the pre-registered checks C1–C3.
 - 2026-10-13 23:02 UTC  Claim audit (70 discrepancies; W3 missed) and a re-audit (22 rows) applied. Pre-registered pod checks done: C1 (doubled caps move each strict count by ≤ 1, no family changes), C2 / C3 hit (C3 range had a sign slip, now stated), C4 (overturns the knockout-s1 "elicitation" reading by the pre-registered rule), C5 (0 / 222,135 pre-filter rejections Lean-valid; harness control 400 / 400 and 0 / 400). Pods deleted: 6.48 h, $3.82 of $10.
 - 2026-10-13 23:03 UTC  CREATE-OR-ELICIT-PAPER DONE 2026-10-13 23:03 UTC. Paper (`paper/main.pdf`, 34 pp.), blog (`paper/blog.md`, 2,499 words, 4 figures), LEDGER, REVISIONS (2 critique rounds, claim audit, re-audit), next_steps; summary `run_create_or_elicit_paper.md`. Artifacts and data uploaded to `hf://buckets/dan-pandori/nd-rl/create-or-elicit-paper/`; no new checkpoints. Pods deleted (6.48 h, $3.82). Drafts for Dan only; nothing posted or sent.
+
+# STATUS — paper-clean (clean versions of the "Did RL create it?" paper and blog)
+
+Brief: nd-rl `docs/proposals/paper/` paper-clean brief (nd-rl `9db656a`). Policy: AGENT_POLICY.md. Budget $20 / 40 pod-hours (only if a re-check needs a pod); hard stop 2026-10-16 05:24 UTC.
+
+## paper-clean
+- 2026-10-14 05:24 UTC  run started (executor). Starting point: the reviewed reading copy, nd-rl `origin/dan:docs/papers/create-or-elicit/` (`7709669`), copied unchanged into `paper/`. Pre-registration `preregistration/paper-clean.md` committed before any text change. No pod planned.

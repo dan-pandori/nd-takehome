@@ -1097,3 +1097,12 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 
   `c4_within_reach.py` now applies the pre-registered c ≥ 2 rule. A "near-saturated pools" limitation was added.
   Final: abstract 250 words; blog 2,499 words with the code block, 4 figures; PDF 34 pages (main text 23).
+
+# paper-clean (executor, 2026-10-14)
+
+- 2026-10-14 05:24  Start. Reading copy (nd-rl `7709669`, `docs/papers/create-or-elicit/`) copied unchanged into
+  `paper/` (text files differ from the fork's pre-review `paper/`; figures, `lean/` and `build.sh` are identical).
+  The fork's own working files (`LEDGER.md`, `OUTLINE.md`, `REVISIONS.md`, `critiques/`, `data/`, `notes/`,
+  `scripts/`, `next_steps.md`) stay as they were.
+- 05:40  Pre-registration `preregistration/paper-clean.md` (count method for the blog, expected outcomes E1–E6). No
+  pod planned.
