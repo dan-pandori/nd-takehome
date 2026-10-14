@@ -1,0 +1,43 @@
+== A2: median pend log p of the best known proof vs strict solved at r16 (13 ladders)
+  full_s0   members 101 median  -19.221 (sumfile best_median -19.221) r16 strict solved 42 (review_coe 42)
+  full_s3   members 101 median  -15.392 (sumfile best_median -15.392) r16 strict solved 65 (review_coe 65)
+  full_s4   members 101 median  -20.893 (sumfile best_median -20.893) r16 strict solved 23 (review_coe 23)
+  full_s5   members 101 median  -20.381 (sumfile best_median -20.381) r16 strict solved 33 (review_coe 33)
+  ko_s0     members 101 median  -33.419 (sumfile best_median -33.419) r16 strict solved 0 (review_coe 0)
+  ko_s1     members 101 median  -26.020 (sumfile best_median -26.020) r16 strict solved 2 (review_coe 2)
+  ko_s2     members 101 median  -35.663 (sumfile best_median -35.663) r16 strict solved 1 (review_coe 1)
+  ko_s3     members 101 median  -33.782 (sumfile best_median -33.782) r16 strict solved 0 (review_coe 0)
+  ko_s4     members 101 median  -35.950 (sumfile best_median -35.950) r16 strict solved 0 (review_coe 0)
+  ko_s5     members 101 median  -31.465 (sumfile best_median -31.465) r16 strict solved 2 (review_coe 2)
+  dose1_s0  members 101 median  -25.312 (sumfile best_median -25.312) r16 strict solved 58 (review_coe 58)
+  dose1_s1  members 101 median  -18.903 (sumfile best_median -18.903) r16 strict solved 39 (review_coe 39)
+  dose1_s2  members 101 median  -24.459 (sumfile best_median -24.459) r16 strict solved 30 (review_coe 30)
+  Spearman rho (13) = 0.877; within dose (median, solved) sorted by median: [(-25.312, 58), (-24.459, 30), (-18.903, 39)]; monotone increasing: False
+  Spearman without the knockout seeds (7) = 0.393
+
+== A3: AUC of pend best-known log p for "solved at r16 x0", members with a known proof
+  full_s0   n 101 pos 42 neg 59: AUC 0.954; within-family 0.626 (107 pairs); A3b (not solved at pend: 83, gained 24) AUC 0.919
+  full_s3   n 101 pos 65 neg 36: AUC 0.953; within-family 0.978 (46 pairs); A3b (not solved at pend: 78, gained 42) AUC 0.927
+  full_s4   n 101 pos 23 neg 78: AUC 0.940; within-family 0.926 (54 pairs); A3b (not solved at pend: 86, gained 8) AUC 0.833
+  full_s5   n 101 pos 33 neg 68: AUC 0.922; within-family 0.467 (92 pairs); A3b (not solved at pend: 83, gained 16) AUC 0.851
+  dose1_s0  n 101 pos 58 neg 43: AUC 0.858; within-family 0.280 (50 pairs); A3b (not solved at pend: 95, gained 52) AUC 0.841
+  dose1_s1  n 101 pos 39 neg 62: AUC 0.861; within-family 0.600 (70 pairs); A3b (not solved at pend: 83, gained 21) AUC 0.742
+  dose1_s2  n 101 pos 30 neg 71: AUC 0.846; within-family 0.328 (61 pairs); A3b (not solved at pend: 93, gained 22) AUC 0.789
+
+== A4: Spearman(pend log p, first-solve round; unsolved by r16 -> 17)
+  full_s0   n 101 solved by r16 44: rho -0.819; within-family mean -0.403 over 4 families (nan for constant groups: ['excluded_middle'])
+  full_s3   n 101 solved by r16 65: rho -0.874; within-family mean -0.445 over 5 families (nan for constant groups: [])
+  full_s4   n 101 solved by r16 22: rho -0.686; within-family mean -0.475 over 4 families (nan for constant groups: ['excluded_middle'])
+  full_s5   n 101 solved by r16 32: rho -0.732; within-family mean -0.332 over 3 families (nan for constant groups: ['excluded_middle', 'peirce'])
+  dose1_s0  n 101 solved by r16 58: rho -0.723; within-family mean -0.104 over 4 families (nan for constant groups: ['excluded_middle'])
+  dose1_s1  n 101 solved by r16 34: rho -0.639; within-family mean -0.219 over 2 families (nan for constant groups: ['excluded_middle', 'peirce', 'peirce_sequent'])
+  dose1_s2  n 101 solved by r16 30: rho -0.609; within-family mean 0.138 over 2 families (nan for constant groups: ['excluded_middle', 'peirce', 'peirce_sequent'])
+
+== A5: waiting-time null for the knockout ladders (strict training targets, 123 x 32 per round)
+  point105     P(success by r16) per seed [0.0, 0.2863, 0.046, 0.0, 0.1297, 0.0849]  expected seeds 0.547  observed 3  P(>= 3) = 0.0060
+  point106     P(success by r16) per seed [0.0, 0.3248, 0.0456, 0.0458, 0.1286, 0.0842]  expected seeds 0.629  observed 3  P(>= 3) = 0.0105
+  trainmix105  P(success by r16) per seed [0.0, 0.3595, 0.0605, 0.0, 0.1781, 0.0893]  expected seeds 0.688  observed 3  P(>= 3) = 0.0115
+  jeffreys105  P(success by r16) per seed [0.0205, 0.2992, 0.0666, 0.0227, 0.1465, 0.1028]  expected seeds 0.658  observed 3  P(>= 3) = 0.0139
+  jeffreys106  P(success by r16) per seed [0.0203, 0.336, 0.0661, 0.0664, 0.1453, 0.102]  expected seeds 0.736  observed 3  P(>= 3) = 0.0199
+  observed first strict-target success rounds: {0: None, 1: 9, 2: 14, 3: None, 4: None, 5: 14}
+  knockout s1 point lambda 0.0211/round -> expected first-success round 1/lambda = 47.4

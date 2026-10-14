@@ -1,0 +1,49 @@
+strict 106 distinct 106 family members 105 non-family ['la_transfer_916']
+bars {'contraposition_conv': (18, 9), 'demorgan_nand_to_or': (4, 2), 'excluded_middle': (37, 19), 'negated_conditional': (15, 8), 'peirce': (12, 6), 'peirce_sequent': (19, 10)}
+strict106: 106 names == sigma_heldout_strict.txt; prompt mismatches vs read1054: 0
+
+== C1: standard (512 / 96) vs doubled (1,024 / 192) caps, sample seed 0, strict106
+ckpt           x0(coe)  std  dbl std-only dbl-only   cut std   cut dbl  ratio  bar std / dbl
+ko_s0                0    0    0        0        0    0.037%    0.000%    inf  [] / []
+ko_s1                2    3    3        0        0    5.085%    2.731%    1.9  [] / []
+ko_s2                1    1    2        0        1    3.755%    3.199%    1.2  [] / []
+ko_s3                0    0    1        0        1    1.216%    0.862%    1.4  [] / []
+ko_s4                0    0    0        0        0    4.290%    1.957%    2.2  [] / []
+ko_s5                2    2    2        0        0    1.688%    1.610%    1.0  [] / []
+dose1_s0            58   57   56        2        1    1.231%    1.076%    1.1  ['contraposition_conv', 'negated_conditional', 'peirce', 'peirce_sequent'] / ['contraposition_conv', 'negated_conditional', 'peirce', 'peirce_sequent']
+dose1_s1            39   40   41        0        1    0.708%    0.538%    1.3  ['contraposition_conv', 'negated_conditional'] / ['contraposition_conv', 'negated_conditional']
+dose1_s2            30   28   29        0        1    9.301%    8.583%    1.1  ['contraposition_conv', 'negated_conditional'] / ['contraposition_conv', 'negated_conditional']
+full_s4             23   22   22        0        0    2.801%    1.894%    1.5  ['contraposition_conv'] / ['contraposition_conv']
+  ko_s0: fam std {'contraposition_conv': 0, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 0, 'peirce': 0, 'peirce_sequent': 0}
+         fam dbl {'contraposition_conv': 0, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 0, 'peirce': 0, 'peirce_sequent': 0}  names-exhausted std/dbl 168/176
+  ko_s1: fam std {'contraposition_conv': 2, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 0, 'peirce': 0, 'peirce_sequent': 0}
+         fam dbl {'contraposition_conv': 2, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 0, 'peirce': 0, 'peirce_sequent': 0}  names-exhausted std/dbl 27/24
+  ko_s2: fam std {'contraposition_conv': 1, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 0, 'peirce': 0, 'peirce_sequent': 0}
+         fam dbl {'contraposition_conv': 2, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 0, 'peirce': 0, 'peirce_sequent': 0}  names-exhausted std/dbl 1709/1715
+  ko_s3: fam std {'contraposition_conv': 0, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 0, 'peirce': 0, 'peirce_sequent': 0}
+         fam dbl {'contraposition_conv': 0, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 0, 'peirce': 0, 'peirce_sequent': 0}  names-exhausted std/dbl 70/77
+  ko_s4: fam std {'contraposition_conv': 0, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 0, 'peirce': 0, 'peirce_sequent': 0}
+         fam dbl {'contraposition_conv': 0, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 0, 'peirce': 0, 'peirce_sequent': 0}  names-exhausted std/dbl 472/481
+  ko_s5: fam std {'contraposition_conv': 2, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 0, 'peirce': 0, 'peirce_sequent': 0}
+         fam dbl {'contraposition_conv': 2, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 0, 'peirce': 0, 'peirce_sequent': 0}  names-exhausted std/dbl 457/470
+  dose1_s0: fam std {'contraposition_conv': 18, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 11, 'peirce': 8, 'peirce_sequent': 19}
+            fam dbl {'contraposition_conv': 18, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 11, 'peirce': 7, 'peirce_sequent': 19}  names-exhausted std/dbl 102/92
+  dose1_s1: fam std {'contraposition_conv': 18, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 15, 'peirce': 1, 'peirce_sequent': 5}
+            fam dbl {'contraposition_conv': 18, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 15, 'peirce': 1, 'peirce_sequent': 6}  names-exhausted std/dbl 13/8
+  dose1_s2: fam std {'contraposition_conv': 18, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 8, 'peirce': 1, 'peirce_sequent': 0}
+            fam dbl {'contraposition_conv': 18, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 9, 'peirce': 1, 'peirce_sequent': 0}  names-exhausted std/dbl 707/711
+  full_s4: fam std {'contraposition_conv': 18, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 2, 'peirce': 0, 'peirce_sequent': 1}
+           fam dbl {'contraposition_conv': 18, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 2, 'peirce': 0, 'peirce_sequent': 1}  names-exhausted std/dbl 1497/1488
+
+== C2: dose1 r16, plain x1 (seed 1, standard caps) and guided g0 (logical, <= 10 rejections, seed 0)
+dose1_s0: x0(coe) 58 bar ['contraposition_conv', 'negated_conditional', 'peirce', 'peirce_sequent'] | x1 56 bar ['contraposition_conv', 'negated_conditional', 'peirce', 'peirce_sequent'] cut 1.293% | guided 58 bar ['contraposition_conv', 'negated_conditional', 'peirce', 'peirce_sequent'] fam {'contraposition_conv': 18, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 12, 'peirce': 8, 'peirce_sequent': 19} statuses {'fail:max_rej': 16179, 'done': 10942, 'fail:step_cap': 15} | rows with n_ok/status/accepted mismatch 0
+dose1_s1: x0(coe) 39 bar ['contraposition_conv', 'negated_conditional'] | x1 39 bar ['contraposition_conv', 'negated_conditional'] cut 0.604% | guided 42 bar ['contraposition_conv', 'negated_conditional'] fam {'contraposition_conv': 18, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 15, 'peirce': 2, 'peirce_sequent': 6} statuses {'fail:max_rej': 19403, 'done': 7732, 'fail:step_cap': 1} | rows with n_ok/status/accepted mismatch 0
+dose1_s2: x0(coe) 30 bar ['contraposition_conv', 'negated_conditional'] | x1 30 bar ['contraposition_conv', 'negated_conditional'] cut 8.955% | guided 29 bar ['contraposition_conv', 'negated_conditional'] fam {'contraposition_conv': 18, 'demorgan_nand_to_or': 0, 'excluded_middle': 0, 'negated_conditional': 9, 'peirce': 1, 'peirce_sequent': 0} statuses {'fail:max_rej': 21152, 'done': 5977, 'fail:step_cap': 7} | rows with n_ok/status/accepted mismatch 0
+
+== C3: old full s0-s2 pend on textbook72, plain x0, batch 512, standard caps
+oldfull_s0: ckpt ckpts/coe_paper/stage1_best12_s0_b1200.pt seed 0 batch 512 caps 512/96: 34 / 72 (coe pend x0 32); cut-off 0/18432 = 0.000%
+oldfull_s1: ckpt ckpts/coe_paper/stage1_best12_s1_b1200.pt seed 0 batch 512 caps 512/96: 30 / 72 (coe pend x0 32); cut-off 4/18432 = 0.022%
+oldfull_s2: ckpt ckpts/coe_paper/stage1_best12_s2_b1200.pt seed 0 batch 512 caps 512/96: 34 / 72 (coe pend x0 38); cut-off 22/18432 = 0.119%
+knockout pend x0 tb72 [26, 34, 29, 26, 23, 28] mean 27.67
+full pend tb72: on-file [32, 32, 38, 33, 34, 36] mean 34.17; with C3 for s0-s2 [34, 30, 34, 33, 34, 36] mean 33.50
+gap full - knockout: on-file +6.50; with C3 +5.83

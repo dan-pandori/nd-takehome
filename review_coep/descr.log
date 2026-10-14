@@ -1,0 +1,38 @@
+self-test: 6/6 vs 0/6 0.000244 (2^-12 = 0.000244 ); 5/6 vs 0/6 0.00317 ; 1/6 vs 0/6 0.3872
+
+== families at the bar (plain x0): pend -> r16; acquired during RL = at the bar at r16, not at pend
+  full_s0   pend ['contraposition_conv']  r16 ['contraposition_conv', 'negated_conditional']  RL-acquired ['negated_conditional']
+  full_s1   pend []  r16 ['contraposition_conv', 'excluded_middle', 'peirce']  RL-acquired ['contraposition_conv', 'excluded_middle', 'peirce']
+  full_s2   pend ['contraposition_conv']  r16 ['contraposition_conv', 'negated_conditional', 'peirce', 'peirce_sequent']  RL-acquired ['negated_conditional', 'peirce', 'peirce_sequent']
+  full_s3   pend ['contraposition_conv']  r16 ['contraposition_conv', 'negated_conditional', 'peirce', 'peirce_sequent']  RL-acquired ['negated_conditional', 'peirce', 'peirce_sequent']
+  full_s4   pend ['contraposition_conv']  r16 ['contraposition_conv']  RL-acquired []
+  full_s5   pend ['contraposition_conv']  r16 ['contraposition_conv', 'peirce_sequent']  RL-acquired ['peirce_sequent']
+  ko_s0     pend []  r16 []  RL-acquired []
+  ko_s1     pend []  r16 []  RL-acquired []
+  ko_s2     pend []  r16 []  RL-acquired []
+  ko_s3     pend []  r16 []  RL-acquired []
+  ko_s4     pend []  r16 []  RL-acquired []
+  ko_s5     pend []  r16 []  RL-acquired []
+  dose1_s0  pend []  r16 ['contraposition_conv', 'negated_conditional', 'peirce', 'peirce_sequent']  RL-acquired ['contraposition_conv', 'negated_conditional', 'peirce', 'peirce_sequent']
+  dose1_s1  pend ['contraposition_conv']  r16 ['contraposition_conv', 'negated_conditional']  RL-acquired ['negated_conditional']
+  dose1_s2  pend []  r16 ['contraposition_conv', 'negated_conditional']  RL-acquired ['contraposition_conv', 'negated_conditional']
+  RL-acquired seeds: full 5/6, knockout 0/6 -> Boschloo one-sided p = 0.00317
+  hardware-matched (new full seeds s3-s5 on A40, like the knockout): 2/3 vs 0/6 -> p = 0.0338
+  >= 1 family at the bar at r16: full 6/6, knockout 0/6 -> p = 0.000244; new full seeds only 3/3 vs 0/6 -> p = 0.0033
+
+== strict members solved, plain x0 / x1 / guided g0, pend and r16, and RL-phase gains
+  full_s0   {'pend_x0': 18, 'pend_x1': 19, 'pend_g0': 20, 'r16_x0': 42, 'r16_x1': 43, 'r16_g0': 44}  gains {'x0': 24, 'x1': 24, 'g0': 24}
+  full_s1   {'pend_x0': 6, 'pend_x1': 5, 'pend_g0': 13, 'r16_x0': 75, 'r16_x1': 73, 'r16_g0': 75}  gains {'x0': 69, 'x1': 68, 'g0': 62}
+  full_s2   {'pend_x0': 22, 'pend_x1': 22, 'pend_g0': 36, 'r16_x0': 77, 'r16_x1': 77, 'r16_g0': 80}  gains {'x0': 55, 'x1': 55, 'g0': 44}
+  full_s3   {'pend_x0': 23, 'pend_x1': 25, 'pend_g0': 35, 'r16_x0': 65, 'r16_x1': 64, 'r16_g0': 64}  gains {'x0': 42, 'x1': 39, 'g0': 29}
+  full_s4   {'pend_x0': 15, 'pend_x1': 14, 'pend_g0': 19, 'r16_x0': 23, 'r16_x1': 22, 'r16_g0': 24}  gains {'x0': 8, 'x1': 8, 'g0': 5}
+  full_s5   {'pend_x0': 18, 'pend_x1': 17, 'pend_g0': 17, 'r16_x0': 33, 'r16_x1': 34, 'r16_g0': 33}  gains {'x0': 15, 'x1': 17, 'g0': 16}
+  ko_s0     {'pend_x0': 0, 'pend_x1': 0, 'pend_g0': 1, 'r16_x0': 0, 'r16_x1': 0, 'r16_g0': 0}  gains {'x0': 0, 'x1': 0, 'g0': -1}
+  ko_s1     {'pend_x0': 0, 'pend_x1': 1, 'pend_g0': 1, 'r16_x0': 2, 'r16_x1': 2, 'r16_g0': 3}  gains {'x0': 2, 'x1': 1, 'g0': 2}
+  ko_s2     {'pend_x0': 0, 'pend_x1': 0, 'pend_g0': 0, 'r16_x0': 1, 'r16_x1': 1, 'r16_g0': 0}  gains {'x0': 1, 'x1': 1, 'g0': 0}
+  ko_s3     {'pend_x0': 0, 'pend_x1': 0, 'pend_g0': 1, 'r16_x0': 0, 'r16_x1': 0, 'r16_g0': 0}  gains {'x0': 0, 'x1': 0, 'g0': -1}
+  ko_s4     {'pend_x0': 0, 'pend_x1': 0, 'pend_g0': 3, 'r16_x0': 0, 'r16_x1': 0, 'r16_g0': 0}  gains {'x0': 0, 'x1': 0, 'g0': -3}
+  ko_s5     {'pend_x0': 0, 'pend_x1': 0, 'pend_g0': 0, 'r16_x0': 2, 'r16_x1': 1, 'r16_g0': 2}  gains {'x0': 2, 'x1': 1, 'g0': 2}
+  dose1_s0  {'pend_x0': 6, 'pend_x1': 2, 'pend_g0': 8, 'r16_x0': 58, 'r16_x1': None, 'r16_g0': None}  gains {'x0': 52, 'x1': None, 'g0': None}
+  dose1_s1  {'pend_x0': 18, 'pend_x1': 17, 'pend_g0': 21, 'r16_x0': 39, 'r16_x1': None, 'r16_g0': None}  gains {'x0': 21, 'x1': None, 'g0': None}
+  dose1_s2  {'pend_x0': 8, 'pend_x1': 10, 'pend_g0': 13, 'r16_x0': 30, 'r16_x1': None, 'r16_g0': None}  gains {'x0': 22, 'x1': None, 'g0': None}
