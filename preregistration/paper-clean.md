@@ -1,6 +1,6 @@
 # Pre-registration — paper-clean (clean paper and blog from the reviewed reading copy)
 
-Written 2026-10-14 ≈ 05:40 UTC, before any change to the text and before checking any of the librarian's
+Written 2026-10-14 05:26 UTC (committed 05:27), before any change to the text and before checking any of the librarian's
 "possible errors" against the data. Run brief: nd-rl `origin/dan` commit `9db656a` (paper-clean). Starting point: the
 reading copy in nd-rl `origin/dan:docs/papers/create-or-elicit/` (last changed in `7709669`), copied unchanged into
 `paper/` in this run's first commit.
