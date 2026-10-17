@@ -59,3 +59,13 @@ P5. Charles's premise-count result (no solves after two unused premises) will ap
   at 2× its estimated time; stop Part B when $25 are spent; hard stop of the run at 72 h (2026-10-20 20:10 UTC).
 - Deliverables: `peer_rl_review/REPORT.md` (≤ 3,000 words + tables), `numbers.md` § peer-rl-review, `log.md`,
   `run_peer_rl_review.md`, `STATUS.md` line, `~/runs/peer-rl-review/executor.done`.
+
+## Addendum 1 (2026-10-17 21:36 UTC) — Part B: no pod
+
+- No pod was created; `podbudget` was not registered because nothing was spent.
+- The decisive common-protocol comparison came from stored per-attempt files of earlier runs, re-scored on the VPS
+  (CPU, under a minute): our checkpoints on Leon's read-out protocol. It was computed after reading his results, so it is a
+  measurement, not a pre-registered prediction test; P3 (a prediction about scoring *his* checkpoint on *our*
+  protocol) stays untestable because his checkpoints are not published.
+- Two further CPU checks were added for the same reason (fairness of the comparison): a substitution-instance check of
+  our RL targets against textbook72 / Charles173, and failure shares on our textbook72 reads.

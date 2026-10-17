@@ -2,9 +2,8 @@
 
 Report: `peer_rl_review/REPORT.md`. Numbers: `numbers.md` § peer-rl-review. No pod, no sampling, no training.
 
-**Result.** Leon's proof-state system leads ours by a wide margin, on a protocol both sides share. That protocol is our
-stored samples scored with his estimator, on the same files, at the same T, step caps and Lean judge. The models are 9.6M
-proof-state models; Lean alone judges.
+**Result.** Leon's proof-state system leads ours by a wide margin on a shared protocol: our stored samples scored with
+his estimator, files, T, step caps and Lean judge (9.6M proof-state models).
 
 | set, pass@1 | his recipe | ours |
 |---|---|---|
@@ -12,14 +11,14 @@ proof-state models; Lean alone judges.
 | textbook72 | 74.0 | 42.9 (r16) |
 
 His K12 base and ours agree: 17.2 vs 15.2. Most of the gap traces to Stage-1 on search-found proofs: +14 before RL,
-and his search-proof RL arms reach 54–75 % where K12-based arms reach 25–43 %. GRPO over EI (+5) and thinking are
-smaller.
+and about +21 after the same EI on the same pool (his single-seed control). His dev58-designed pool (up to +9),
+thinking and GRPO over EI (+5) are smaller.
 
 Robbie, Dmitry and Charles report no RL gain over ours.
 
 **Priors:**
 - P1 supported.
-- P2 falsified: Leon's GRPO − EI holds at pass@5.
+- P2 mixed: Leon's GRPO − EI holds at pass@5, and at k 64 only on textbook72.
 - P3 not testable: no published checkpoints.
 - P4 mixed.
 - P5 supported: our models share the premise wall.

@@ -1871,6 +1871,11 @@ On tb72_clean62, unlikely is +4.5 [+0.5, +9.0] at pass@1.
 - **Stage-1, textbook72 pass@1** (`OVERNIGHT_20261008.md` L170–174): T0 (K12, no think) 17.2; T0S (search proofs) 31.6;
   S1g3 (search-trace thinking) 41.8.
 - **T0 → EI, 2 rounds** (`confusion_tb72.md` / `confusion_charles149.md` L8): textbook72 32.4, Charles149 24.8.
+- **Same-pool control** (EI on `rl_hard12`, no think, single seeds), textbook72 pass@1:
+  - from T0S: r1 52.4, r2 53.6 (`OVERNIGHT_20261008.md` L234, L271);
+  - from T0: r1 30.8, r2 32.4 (`matched_eval/matched_tb72.md` L14, L21).
+- **Pool control** (hard712, designed from dev58, against the old pool, from T0S r2): textbook72 +9.3 [+3.8, +15.2]
+  (`OVERNIGHT_20261008.md` L265–277).
 
 **Failure shares on our textbook72 reads** (`peer_rl_review/lean_reject_share.py` → `out/lean_reject_share.txt`;
 best-state files):
@@ -1879,6 +1884,13 @@ best-state files):
 |---|---|---|
 | frozen | 0.484 / 0.491 / 0.557 of attempts | 0.368 / 0.369 / 0.275 |
 | r8-bs | 0.113 / 0.174 / 0.162 | 0.491 / 0.436 / 0.449 |
+
+**Charles149 / textbook72 by premise count** (`peer_rl_review/charles149_premises.py` → `out/charles149_premises.txt`;
+r8-tj):
+- Charles149 has 5 four-premise problems. Our r8 accepts 0 attempts on them, plain and guided, in all three seeds.
+- Plain pass@1 by premise count 0 / 1 / 2 / 3 (s0): 31.1 / 38.7 / 30.9 / 14.6.
+- textbook72 has 1 four-premise problem, also 0.
+- Sampled tokens per attempt on textbook72: plain 235.0 / 226.8 / 211.2; guided 382.1 / 361.2 / 345.9.
 
 **Exposure check** (`peer_rl_review/schema_overlap.py` → `out/schema_overlap.txt`):
 - 400 of the 4,495 ladder RL targets (all `source: textbook`, 10 schemata × 40) are substitution instances of 10
@@ -1892,3 +1904,6 @@ best-state files):
 - Frozen 15.2† vs Leon's T0 17.2.
 
 **Compute:** VPS CPU only, under 1 minute in total; no GPU-seconds, no generated tokens, no Lean checks.
+
+**Bucket:** numeric outputs at `hf://buckets/dan-pandori/nd-rl/peer-rl-review/{out,data}`. The report and notes stay
+on the fork branch only: they quote private nd-rl material.

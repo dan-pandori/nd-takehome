@@ -947,3 +947,4 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   Robbie's published checkpoints differ from ours in interface and pretraining cap, both measured in controlled
   comparisons already, and a Lean-alone re-judge would move his textbook72 count by the small Lean-only class.
   Charles already measured our r8 on his distractor set. Question for Dan in QUESTIONS.md about Leon's checkpoints.
+- 21:53  Claim-by-claim check (subagent) → 4 wrong / 9 overstated / 5 unsourced, fixed in the report; new script `peer_rl_review/charles149_premises.py` → `out/charles149_premises.txt`; prereg addendum 1 (no pod); numeric outputs uploaded to `hf://buckets/dan-pandori/nd-rl/peer-rl-review/{out,data}`. DONE.
