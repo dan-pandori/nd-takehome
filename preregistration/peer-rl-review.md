@@ -1,7 +1,7 @@
 # Pre-registration — peer-rl-review
 
 Run id `peer-rl-review` (executor). Brief: run brief `peer-rl-review` (Dan, 2026-10-17). Policy: `AGENT_POLICY.md`.
-Written 2026-10-17 ≈ 20:40 UTC, **before any pod** and before reading the mentees' result documents (what I had
+Written 2026-10-17 20:15 UTC, **before any pod** and before reading the mentees' result documents (what I had
 seen by then: branch names, commit subjects, and the first two paragraphs of Leon's
 `experiment-summaries/2026-10-05-thinking-traces/README.md`, i.e. that his primary recipe is GRPO with thinking from
 S1g3, verifier-guided rollouts, an L2 → L3 length curriculum and KL 0, with evidence at pass@1 / pass@5).
