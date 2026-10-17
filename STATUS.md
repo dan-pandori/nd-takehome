@@ -250,3 +250,11 @@ Brief: run brief `guided-tts` (Dan, 2026-10-03). Policy: AGENT_POLICY.md. Budget
 - 21:48 UTC  Independent code review: nothing that changes a number. CI green on `ci-guided-tts`; checker + guided sampler merged into the fork's `dan` (fast-forward, e18e524e). Bucket `hf://buckets/dan-pandori/nd-rl/guided-tts/{artifacts/gt,artifacts/guided-tts,data/gt}`; manifest rows in `artifacts/MANIFEST.jsonl`. No pods left; 9.07 pod-h, $4.45 of $10.
 
 GUIDED-TTS DONE 2026-10-03T21:48:15Z
+
+
+# STATUS — peer-rl-review (review of the other mentees' RL-improvement work vs ours)
+
+Brief: run brief `peer-rl-review` (Dan, 2026-10-17). Policy: AGENT_POLICY.md. Budget $30 / 60 pod-hours (optional; common-protocol numbers only). No training.
+
+## peer-rl-review
+- 2026-10-17 20:10 UTC  run started (executor). Reading phase first (nd-rl branches, read-only, via `git show`); no pod before the pre-registration `preregistration/peer-rl-review.md` is committed.
