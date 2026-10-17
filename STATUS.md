@@ -258,3 +258,4 @@ Brief: run brief `peer-rl-review` (Dan, 2026-10-17). Policy: AGENT_POLICY.md. Bu
 
 ## peer-rl-review
 - 2026-10-17 20:10 UTC  run started (executor). Reading phase first (nd-rl branches, read-only, via `git show`); no pod before the pre-registration `preregistration/peer-rl-review.md` is committed.
+- 2026-10-17 21:18 UTC  **Report drafted, UNREVIEWED** (`peer_rl_review/REPORT.md`). Our stored samples scored on Leon's read-out protocol (same files, T, caps, estimator, Lean judge code; audit in `peer_rl_review/notes/leon_eval_audit.md`): his GRPO recipe Charles149 pass@1 70.5 vs our r8 31.8, textbook72 74.0 vs our r16 42.9; his K12 base 17.2 vs our frozen 15.2. Main cause in his own ablations: Stage-1 on search-found proofs (+14 pre-RL; post-RL 54–75 % vs 25–43 % for K12-based arms). Robbie / Dmitry / Charles: no RL gain over ours; Charles's premise wall applies to our r8. No pod used ($0). Claim-by-claim check of the report running.

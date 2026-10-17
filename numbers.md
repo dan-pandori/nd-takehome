@@ -1796,3 +1796,99 @@ At equal attempts every guided arm used > 1.25× plain's compute (flagged); the 
 matched wall-clock. Step checks: ≈ 1 checker call per structurally valid draw, 8–18 s per read (CPU); on long, guided
 tokens per attempt are 2.0–2.3× plain (cap 12) and 2.8–3.3× (cap 6).
 **Spend:** 4 A40 pods ($0.49/h), 9.07 pod-hours, $4.45 (`podbudget`). **Bucket:** `hf://buckets/dan-pandori/nd-rl/guided-tts/{artifacts/gt,artifacts/guided-tts,data/gt}`.
+
+
+## peer-rl-review (2026-10-17, executor; UNREVIEWED)
+
+No sampling, no training, no pod: every new number is recomputed from stored per-attempt files of earlier runs.
+**Checker: Lean alone** throughout (the stored reads were judged by `lean_gate` on the literal text).
+
+**Models (our side; every † number):** all `best_model.ALiBiGPT` 6 × 384, 9,560,832 params, `lean_staten`, from scratch
+on K12 (`data/kh/train_k12.jsonl`, 155,000, cap 12).
+- frozen = `stage1_best12_s{0,1,2}_b1200`;
+- r8-bs = `la_T1_best12_s{0,1,2}_r8` (best-state seeds);
+- r8-tj = `la_T1_best12_s{0,1,2}_r8` (trajectory seeds);
+- r16 = `la_T1_best12_s{0,1,2}_r16` (rl-continue). T1 ladder: 8 / 16 rounds × k 32 on `data/ladder/rl_targets.jsonl`
+  (4,495), with K12 replay;
+- gb-* = `gb_{default,unlikely,passk}_s{0,1,2}_r8` (grpo-best: GRPO at EI r8's attempts, from the trajectory seeds'
+  Stage-1).
+
+**Inputs** (pulled one at a time into gitignored `scratch/`). All are under `hf://buckets/dan-pandori/nd-rl/`:
+- `best-state/artifacts/bs/eval/{Fz,T1}_best12_s{s}__tb72.jsonl`;
+- `guided-tts/artifacts/gt/eval/best12_s{s}_{plain,logical}.rows.jsonl.gz`;
+- `rl-continue/artifacts/rc/eval/s{s}_r16__tb72_x1.jsonl`;
+- `capability-defs/artifacts/cd/j3/s{s}_r16_logical.rows.jsonl.gz` (checkpoint `ckpts/cd/s{s}_r16.pt` = rl-continue's
+  `la_T1_best12_s{s}_r16.pt`, per `pod/cd/setup.sh:14` at 2979bff6);
+- `grpo-best/artifacts/gb/eval/gb_<arm>_s{s}_r8__tb72_x1.jsonl`.
+
+Read settings: k 256 per theorem, T 0.8, `max_steps` 96, `max_action` 512. Sample seed is 1, except best-state reads
+(seed 0). Guided = logical arm, ≤ 10 redraws.
+
+**Leon's read-out protocol** (nd-rl `leon/main`, `RECIPE.md` L224–237): unbiased pass@1 / pass@5 per problem, in % of the
+set.
+- textbook72 = `data/eval_only/textbook72/textbook_{dev,train}.jsonl` (byte-identical to our `data/gt/tb72_*`).
+- Charles149 = `candidate_v0` + `candidate_v1` + `batch3` (173) minus the 24 names in his
+  `charles_eval/charles_clean.report.json` (copied to `peer_rl_review/data/charles149_removed.json`).
+- tb72_clean62 = textbook72 minus the 10 theorems that have substitution instances among our RL targets.
+- Bootstrap: 95 % hierarchical (seeds, then problems), 2,000 draws.
+
+Script `peer_rl_review/ours_on_leon_passk.py` → `peer_rl_review/out/ours_on_leon_passk.txt`. Extract: pass@1 / pass@5,
+3-seed mean.
+
+| model | arm | textbook72 | tb72_clean62 | Charles149 |
+|---|---|---|---|---|
+| frozen | plain | 15.2 [10.9, 19.7] / 23.0 | 16.4 / 23.9 | — |
+| r8-bs | plain | 39.2 [33.8, 44.6] / 53.6 | 35.4 / 48.9 | — |
+| r8-tj | plain | 39.2 [32.8, 45.8] / 53.1 | 34.3 / 48.4 | 31.8 [27.3, 36.6] / 48.5 |
+| r8-tj | guided | 47.0 [40.9, 53.5] / 61.1 | 42.3 / 57.4 | 43.4 [38.9, 48.4] / 60.9 |
+| r16 | plain | 42.9 [36.9, 48.8] / 57.6 | 38.5 / 52.8 | — |
+| r16 | guided | 50.7 [44.5, 57.0] / 64.7 | 46.6 / 60.9 | — |
+| gb-default | plain | 41.0 / 49.8 | 36.7 / 45.6 | — |
+| gb-unlikely | plain | 42.0 / 51.2 | 38.8 / 48.1 | — |
+| gb-pass@4 | plain | 37.3 / 51.4 | 33.1 / 46.0 | — |
+
+Per seed (pass@1, textbook72):
+- r16 plain: 40.9 / 43.6 / 44.2;
+- r8-tj plain: 38.9 / 36.0 / 42.6;
+- Charles149 r8-tj plain: 29.5 / 29.8 / 36.1.
+
+Paired GRPO − EI (r8-tj, same Stage-1 seed), textbook72:
+
+| arm | pass@1 | pass@5 |
+|---|---|---|
+| default | +1.8 [−3.3, +6.8] | −3.4 [−8.0, +1.4] |
+| unlikely | +2.8 [−2.0, +7.3] | −1.9 [−6.2, +2.9] |
+| passk | −1.8 [−5.1, +1.7] | −1.8 [−6.7, +3.2] |
+
+On tb72_clean62, unlikely is +4.5 [+0.5, +9.0] at pass@1.
+
+**Leon's numbers for comparison** (his reads; 9.6M proof-state models with a think block, same judge code; unreviewed):
+- **Recipe** `grpo_think_vs_mb_kkl0`, 3 seeds, plain (`RECIPE.md` L38–39):
+  - textbook72 74.0 [64.7, 82.6] / 82.3;
+  - Charles149 70.5 [64.2, 76.3] / 78.9;
+  - guided pass@1 per seed: textbook72 78.0 / 83.6 / 79.2; Charles149 79.5 / 76.8 / 75.8 (`matched_eval/v2_results_ynez.md`
+    L212–220).
+- **Stage-1, textbook72 pass@1** (`OVERNIGHT_20261008.md` L170–174): T0 (K12, no think) 17.2; T0S (search proofs) 31.6;
+  S1g3 (search-trace thinking) 41.8.
+- **T0 → EI, 2 rounds** (`confusion_tb72.md` / `confusion_charles149.md` L8): textbook72 32.4, Charles149 24.8.
+
+**Failure shares on our textbook72 reads** (`peer_rl_review/lean_reject_share.py` → `out/lean_reject_share.txt`;
+best-state files):
+
+| | Lean rejects after the environment accepted | attempt ends on an environment-rejected step |
+|---|---|---|
+| frozen | 0.484 / 0.491 / 0.557 of attempts | 0.368 / 0.369 / 0.275 |
+| r8-bs | 0.113 / 0.174 / 0.162 | 0.491 / 0.436 / 0.449 |
+
+**Exposure check** (`peer_rl_review/schema_overlap.py` → `out/schema_overlap.txt`):
+- 400 of the 4,495 ladder RL targets (all `source: textbook`, 10 schemata × 40) are substitution instances of 10
+  textbook72 theorems (9 dev58, 1 train14). None is a renaming.
+- None is an instance of any Charles173 theorem.
+
+**Consistency checks:**
+- r16 s0 textbook72 pass@1 is 40.9† here. Robbie's temperature sweep gives 0.407 (T 0.8, k 64; nd-rl
+  `robbie-experiments:code/experiments/current/temp_sweep_20261006/results_table.md` L23), and Dmitry's random pick of
+  8 gives 0.405 (`dmitry/main:experiment-summaries/2026-10-06-proof-selection-sprint/summary.md` L123).
+- Frozen 15.2† vs Leon's T0 17.2.
+
+**Compute:** VPS CPU only, under 1 minute in total; no GPU-seconds, no generated tokens, no Lean checks.
