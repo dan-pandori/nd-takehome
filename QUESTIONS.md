@@ -112,3 +112,18 @@ s4, s5. Costed alternatives in `preregistration/grpo-state.md` Addendum 1: Plan 
 Plan C (s0–s3, GRPO default + pass@4, ≈ $16).
 **Default if unanswered:** the experiment run uses **Plan B** (4 seeds, all three GRPO arms, EI inherited from
 state-cap12), and first measures s / update on a 16 GB card, moving to it if that halves the cost.
+
+## 2026-10-17 — peer-rl-review: Leon's checkpoints, and the report's visibility
+
+1. **Leon's checkpoints are not published** (his runs were forced offline; everything is on his machine's `/scratch`).
+   The decisive comparison was possible without them: our stored samples reproduce his read-out protocol exactly, and
+   his recipe leads ours by ≈ 31–39 points of pass@1 on textbook72 / Charles149. The other direction ("theirs on
+   ours": pass@256 plain and guided, held-out greedy, and a creation test — base pass@k on the theorems his recipe
+   newly solves) needs his S1g3 and T0S Stage-1 checkpoints and the recipe's final L3 checkpoints (3 seeds), e.g.
+   uploaded to the `ndrl` HF org. That would cost ≈ $2–4 of pods.
+   **Default if unanswered:** no such run; the report stands on his protocol. Ask Leon only if you want it.
+2. **The fork is public; nd-rl is private.** `peer_rl_review/` quotes numbers, file paths and short findings from the
+   mentees' nd-rl branches, as `evidence-atlas` did in `atlas/` on `dan_evidence-atlas`, and the role brief requires
+   the push. Nothing sealed is printed (theorems are referred to by id) and no notes go to the public bucket (only
+   the numeric files in `peer_rl_review/out/`).
+   **Default if unanswered:** leave it on the fork branch `dan_peer-rl-review`; tell me if you want it removed.

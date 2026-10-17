@@ -909,3 +909,41 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 21:35  Figure: first version had overlapping direct labels and included the batch-1,024 cell in the wall panels; fixed (labels spaced; that cell excluded from wall panels, kept in token panels). Prediction scoring: 1 ✓; 2 ✓ except "little gain ≤ 10 lines" at cap 6 (+9.7 pp) ✗; 3 ✗ (structural ≈ plain; logical/plain tokens on long 2.0–2.3 cap 12 ✓, 2.8–3.3 cap 6 ✗); 4: plain long@64 cap 12 28.7–40.2 (✓ for 2 / 3 vs 35–60), gain at 64 ✓, gain at 256 above range ✗; 5 ✓ (S 2.8–4.9 % per draw, logical 3.1–4.8 %, final Lean rejections −100 %); 6 ✓ (0.32–0.54); 7 ✗.
 - 21:40  Uploads: `hf://buckets/dan-pandori/nd-rl/guided-tts/{artifacts/gt,artifacts/guided-tts,data/gt}`. Independent code review (subagent) started on the checker / sampler before merging into `dan`.
 - 21:55  Independent code review (subagent, read-only) of step_check / guided_sample / guided_eval / gt_analysis: nothing that changes a reported number. Minor, documented rather than changed (the code stays as it ran): without-replacement is exact over token sequences, not over actions that differ only in an environment-assigned name; `rej` omits the final (cap-ending) rejection; the MDD bootstrap does not pair the two arms' resamples. Added `tests/test_step_check.py` (CPU, 4 tests) and published bulk files with `publish_artifacts.py` (55 manifest rows).
+
+
+# log — peer-rl-review (executor)
+
+## 2026-10-17
+- 20:10  Start. `git fetch --prune` in ~/nd-rl; branch map by commit date (Leon most active, last commits 2026-10-16;
+  Robbie 2026-10-14; Charles 2026-10-12; Dmitry 2026-10-06). STATUS entry committed (b8e736e4).
+- 20:15  Pre-registration part A committed (cc078a49): design, priors P1–P5 written before reading any result document.
+- 20:20–21:10  Eight read-only reader subagents (≤ 4 at a time, one shell command each): Leon GRPO v2 / recipe,
+  Leon diagnostics, Leon Stage-1 / thinking / OOD, Robbie, Dmitry, Charles, our side, evidence atlas + creation tests;
+  then a code audit of Leon's eval / judge path. Notes with `branch:path:Lline` citations in `peer_rl_review/notes/`.
+- 20:44–20:50  **Ours on Leon's read-out protocol from existing per-attempt files (no sampling, CPU only).** Leon's
+  protocol: unbiased pass@1 / pass@5 per problem, plain T 0.8, max_steps 96, max_action 512, textbook72 (byte-identical
+  files: `data/eval_only/textbook72/` = our `data/gt/tb72_*`, sha256 checked) and Charles149 (his 24 removed names
+  copied to `peer_rl_review/data/charles149_removed.json`). Inputs pulled one at a time from the bucket into
+  `scratch/` (gitignored): guided-tts rows (r8 trajectory seeds, plain + logical), best-state reads (frozen, r8
+  best-state seeds), rl-continue reads (r16 plain), capability-defs j3 rows (r16 logical), grpo-best reads (GRPO arms r8).
+  Script `peer_rl_review/ours_on_leon_passk.py` → `peer_rl_review/out/ours_on_leon_passk.txt`.
+  Result (textbook72 pass@1, plain, 3 seeds): frozen 15.2, r8 39.2 / 39.2 (two seed sets), r16 42.9, r16 guided 50.7;
+  Charles149 r8 31.8 (guided 43.4). Leon's recipe (his numbers): 74.0 / 70.5. Consistency: our r16 s0 40.9 vs Robbie's
+  sweep 0.407 and Dmitry's random-of-8 0.405 on the same checkpoint; our frozen 15.2 vs Leon's T0 17.2.
+- 20:52  Lean-rejection share on our textbook72 reads (best-state files): Lean rejects 48–56 % of the frozen model's
+  attempts after the environment accepted them (Leon's T0: 55.4 %), 11–17 % of r8's; after RL 44–49 % of attempts end
+  on an environment-rejected step.
+- 21:05  Audit of Leon's eval path (subagent): judge, environment, plain arm, estimator and problem files the same as
+  ours; extra test-time compute = up to 128 think tokens per step outside the step / action caps; his RL generator was
+  designed from textbook dev58 (his own note), so Charles149 is the cleaner comparison.
+- 21:07  Mirror check on our side (`peer_rl_review/schema_overlap.py` → `out/schema_overlap.txt`): 400 of our 4,495
+  ladder RL targets are substitution instances (40 each) of 10 textbook72 theorems (9 dev58 + 1 train14; 0 renamings);
+  0 instances of any Charles173 theorem. Without those 10, our textbook72 pass@1 drops ≈ 4 points (r16 42.9 → 38.5).
+- 21:10  Our GRPO arms (grpo-best) vs EI r8 on Leon's protocol, paired by seed: textbook72 pass@1 default +1.8
+  [−3.3, +6.8], unlikely +2.8 [−2.0, +7.3], pass@4 −1.8; every arm lower at pass@5 (−1.8 to −3.4). Same direction
+  as Leon's GRPO − EI at pass@1 (+5.6), smaller, and not holding at pass@5.
+- Decision: **no pod.** The decisive common-protocol comparison (ours on Leon's read-out) came from stored samples at
+  zero GPU cost; Leon's checkpoints are not published (machine-local), so "theirs on ours" is impossible for him;
+  Robbie's published checkpoints differ from ours in interface and pretraining cap, both measured in controlled
+  comparisons already, and a Lean-alone re-judge would move his textbook72 count by the small Lean-only class.
+  Charles already measured our r8 on his distractor set. Question for Dan in QUESTIONS.md about Leon's checkpoints.
