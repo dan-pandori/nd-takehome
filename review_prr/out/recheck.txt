@@ -1,0 +1,70 @@
+== negative controls
+C1 untouched accepted literal texts (must all pass)        checked   300  accepted   300  rejected    0  {}
+   dump rows with lean=None (prefilter rejects): 28662
+C2 dump prefilter-rejected texts (expect all fail)         checked   600  accepted     0  rejected  600  {'error': 593, 'axioms sorryAx': 7}
+C3 text paired with another same-premise-count theorem (expect fail) checked   300  accepted     0  rejected  300  {'error': 300}
+C4 one Or.inl<->Or.inr / .1<->.2 flip (expect nearly all fail) checked   300  accepted    20  rejected  280  {'error': 280}
+C5 bare sorry (must fail)                                  checked    20  accepted     0  rejected   20  {'sorry': 20}
+C6 final `exact` removed (must fail)                       checked   300  accepted     0  rejected  300  {'error': 300}
+C7 text cut at a random token (must fail)                  checked   200  accepted     0  rejected  200  {'error': 200}
+== ND->Lean renderer validation (best-state dumps: same proof, own rendering)
+   render failures: 0 of 800
+V1 own rendering of Lean-accepted dump proofs (expect all pass) checked   800  accepted   800  rejected    0  {}
+   prefilter-rejected rows with an ND string: 28662; render failures 5
+V2 own rendering of prefilter-rejected dump proofs (expect all fail) checked   595  accepted     0  rejected  595  {'error': 595}
+V3 own rendering after one ORI1<->ORI2 flip in the ND (expect nearly all fail) checked   300  accepted    17  rejected  283  {'error': 283}
+== counted proofs, literal text (one per solved theorem + random fill to >= 150 per arm-seed)
+gt_best12_r8_plain s0 (178 solved theorems)                checked   178  accepted   178  rejected    0  {}
+gt_best12_r8_plain s1 (172 solved theorems)                checked   172  accepted   172  rejected    0  {}
+gt_best12_r8_plain s2 (188 solved theorems)                checked   188  accepted   188  rejected    0  {}
+gt_best12_r8_guided s0 (200 solved theorems)               checked   200  accepted   200  rejected    0  {}
+gt_best12_r8_guided s1 (190 solved theorems)               checked   190  accepted   190  rejected    0  {}
+gt_best12_r8_guided s2 (199 solved theorems)               checked   199  accepted   199  rejected    0  {}
+cd_r16_guided s0 (295 solved theorems)                     checked   295  accepted   295  rejected    0  {}
+cd_r16_guided s1 (303 solved theorems)                     checked   303  accepted   303  rejected    0  {}
+cd_r16_guided s2 (303 solved theorems)                     checked   303  accepted   303  rejected    0  {}
+bs_T1_best12 s0 (52 solved theorems)                       checked   150  accepted   150  rejected    0  {}
+bs_T1_best12 s1 (51 solved theorems)                       checked   150  accepted   150  rejected    0  {}
+bs_T1_best12 s2 (52 solved theorems)                       checked   150  accepted   150  rejected    0  {}
+bs_Fz_best12 s0 (32 solved theorems)                       checked   150  accepted   150  rejected    0  {}
+bs_Fz_best12 s1 (27 solved theorems)                       checked   150  accepted   150  rejected    0  {}
+bs_Fz_best12 s2 (27 solved theorems)                       checked   150  accepted   150  rejected    0  {}
+== counted proofs, ND only (own rendering): one per solved theorem + random fill to >= 150 per arm-seed
+rc_r16_plain_x1 s0 (51 solved) [render fails 0]            checked   150  accepted   150  rejected    0  {}
+rc_r16_plain_x1 s1 (57 solved) [render fails 0]            checked   150  accepted   150  rejected    0  {}
+rc_r16_plain_x1 s2 (56 solved) [render fails 0]            checked   150  accepted   150  rejected    0  {}
+gb_default_r8_x0 s0 (43 solved) [render fails 0]           checked   150  accepted   150  rejected    0  {}
+gb_default_r8_x0 s1 (46 solved) [render fails 0]           checked   150  accepted   150  rejected    0  {}
+gb_default_r8_x0 s2 (49 solved) [render fails 0]           checked   150  accepted   150  rejected    0  {}
+gb_default_r8_x1 s0 (44 solved) [render fails 0]           checked   150  accepted   150  rejected    0  {}
+gb_default_r8_x1 s1 (42 solved) [render fails 0]           checked   150  accepted   150  rejected    0  {}
+gb_default_r8_x1 s2 (48 solved) [render fails 0]           checked   150  accepted   150  rejected    0  {}
+gb_passk_r8_x0 s0 (52 solved) [render fails 0]             checked   150  accepted   150  rejected    0  {}
+gb_passk_r8_x0 s1 (52 solved) [render fails 0]             checked   150  accepted   150  rejected    0  {}
+gb_passk_r8_x0 s2 (48 solved) [render fails 0]             checked   150  accepted   150  rejected    0  {}
+gb_passk_r8_x1 s0 (47 solved) [render fails 0]             checked   150  accepted   150  rejected    0  {}
+gb_passk_r8_x1 s1 (54 solved) [render fails 0]             checked   150  accepted   150  rejected    0  {}
+gb_passk_r8_x1 s2 (50 solved) [render fails 0]             checked   150  accepted   150  rejected    0  {}
+gb_unlikely_r8_x0 s0 (41 solved) [render fails 0]          checked   150  accepted   150  rejected    0  {}
+gb_unlikely_r8_x0 s1 (45 solved) [render fails 0]          checked   150  accepted   150  rejected    0  {}
+gb_unlikely_r8_x0 s2 (49 solved) [render fails 0]          checked   150  accepted   150  rejected    0  {}
+gb_unlikely_r8_x1 s0 (41 solved) [render fails 0]          checked   150  accepted   150  rejected    0  {}
+gb_unlikely_r8_x1 s1 (43 solved) [render fails 0]          checked   150  accepted   150  rejected    0  {}
+gb_unlikely_r8_x1 s2 (48 solved) [render fails 0]          checked   150  accepted   150  rejected    0  {}
+== totals
+   bs_Fz_best12                             450/450
+   bs_T1_best12                             450/450
+   cd_r16_guided                            901/901
+   gb_default_r8_x0                         450/450
+   gb_default_r8_x1                         450/450
+   gb_passk_r8_x0                           450/450
+   gb_passk_r8_x1                           450/450
+   gb_unlikely_r8_x0                        450/450
+   gb_unlikely_r8_x1                        450/450
+   gt_best12_r8_guided                      589/589
+   gt_best12_r8_plain                       538/538
+   rc_r16_plain_x1                          450/450
+
+real	2m53.477s
+user	3m0.208s
+sys	0m14.920s
