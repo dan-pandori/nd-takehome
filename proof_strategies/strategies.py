@@ -36,14 +36,14 @@ ROUTES = ('immediate', 'mt', 'or_weaken', 'and_elim', 'and_intro', 'imp_hyp', 'c
 SUBTYPES = (
     'direct.mp', 'direct.ande', 'direct.mp_chain3', 'direct.neg_elim_root',
     'and_intro.root',
-    'cond_proof.vacuous', 'cond_proof.explosive', 'cond_proof.curried', 'cond_proof.hyp_syll',
+    'cond_proof.working', 'cond_proof.vacuous', 'cond_proof.explosive', 'cond_proof.curried', 'cond_proof.hyp_syll',
     'or_intro.root', 'or_intro.case_branch', 'or_intro.feeds_ore', 'or_intro.other',
     'cases.genuine', 'cases.redundant', 'cases.on_premise', 'cases.on_hypothesis', 'cases.on_derived', 'cases.nested',
     'cases.constructive_dilemma', 'cases.trivial_merge', 'cases.or_intro_decoration', 'cases.all_refuted', 'cases.on_lem',
-    *('neg_intro.' + r for r in ROUTES),
+    'neg_intro.working', *('neg_intro.' + r for r in ROUTES),
     'mod_tollens.strict', 'mod_tollens.neg_side', 'mod_tollens.chain', 'mod_tollens.classical', 'mod_tollens.contraposition',
     'ex_falso.inconsistent_premises', 'ex_falso.refuted_case', 'ex_falso.explosive_cond', 'ex_falso.other', 'ex_falso.root',
-    'contradiction.free', 'contradiction.scaffolded', 'contradiction.neg_goal', 'contradiction.pointless', 'contradiction.vacuous',
+    'contradiction.working', 'contradiction.template', 'contradiction.free', 'contradiction.scaffolded', 'contradiction.neg_goal', 'contradiction.pointless', 'contradiction.vacuous',
     'contradiction.via_r', 'contradiction.built_other', 'contradiction.root', 'contradiction.lemma',
     *('contradiction.route_' + r for r in ROUTES),
     'dne.on_premise', 'dne.on_hypothesis', 'dne.on_derived',
@@ -288,6 +288,8 @@ class Proof:
             o = self.origin(e)
             if s != e and s not in self.hyps[e]:
                 sub.add('cond_proof.vacuous')
+            else:
+                sub.add('cond_proof.working')
             if o is not None and self.inside(o, s, e):
                 if o['rule'] == 'BOTE' and s in self.hyps[o['idx']]:
                     sub.add('cond_proof.explosive')
@@ -346,6 +348,8 @@ class Proof:
             if root or any(self.by[c]['rule'] != 'DN' for c in self.citers.get(i, ())):
                 st.add('neg_intro')
                 sub.add('neg_intro.' + route)
+                if route != 'vacuous':
+                    sub.add('neg_intro.working')
             if route == 'mt':
                 st.add('mod_tollens')
                 if len(steps) >= 2:
@@ -395,6 +399,10 @@ class Proof:
                 else:
                     kind = 'free'
                 sub.add('contradiction.' + kind)
+                # template: the reductio does no logical work (no use of ¬G, G already there, or ¬G refuted at once by
+                # a supplied ¬¬G / ¬G → ⊥); working: anything else
+                template = kind in ('vacuous', 'pointless') or (kind == 'scaffolded' and route == 'immediate')
+                sub.add('contradiction.template' if template else 'contradiction.working')
             elif src:
                 st.add('dne')
                 sub.add({'PR': 'dne.on_premise', 'AS': 'dne.on_hypothesis', 'supplied': 'dne.on_derived'}[src])

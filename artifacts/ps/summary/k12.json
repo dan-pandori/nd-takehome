@@ -1,0 +1,961 @@
+{
+ "name": "k12",
+ "n": 155000,
+ "parse_fail": 0,
+ "uses": {
+  "direct": 79284,
+  "and_intro": 50484,
+  "cond_proof": 66567,
+  "or_intro": 68606,
+  "cases": 68453,
+  "disj_syll": 372,
+  "neg_intro": 7354,
+  "mod_tollens": 76,
+  "ex_falso": 12455,
+  "contradiction": 16717,
+  "dne": 4743,
+  "lem": 99,
+  "lemma_reuse": 18147
+ },
+ "primary": {
+  "direct": 15056,
+  "and_intro": 18970,
+  "cond_proof": 58363,
+  "or_intro": 21820,
+  "cases": 32201,
+  "disj_syll": 127,
+  "neg_intro": 3003,
+  "mod_tollens": 56,
+  "ex_falso": 809,
+  "contradiction": 4516,
+  "dne": 77,
+  "lem": 2,
+  "trivial": 0,
+  "unlabelled": 0
+ },
+ "curried_primary": {
+  "direct": 22864,
+  "and_intro": 30041,
+  "cond_proof": 0,
+  "or_intro": 31773,
+  "cases": 51606,
+  "disj_syll": 209,
+  "neg_intro": 4166,
+  "mod_tollens": 63,
+  "ex_falso": 2453,
+  "contradiction": 5421,
+  "dne": 511,
+  "lem": 4,
+  "trivial": 5049,
+  "unlabelled": 840
+ },
+ "sub": {
+  "direct.mp": 70428,
+  "direct.ande": 12743,
+  "direct.mp_chain3": 5,
+  "direct.neg_elim_root": 1779,
+  "and_intro.root": 18970,
+  "cond_proof.working": 32242,
+  "cond_proof.vacuous": 43715,
+  "cond_proof.explosive": 513,
+  "cond_proof.curried": 12720,
+  "cond_proof.hyp_syll": 62,
+  "or_intro.root": 21820,
+  "or_intro.case_branch": 17466,
+  "or_intro.feeds_ore": 17692,
+  "or_intro.other": 21467,
+  "cases.genuine": 13623,
+  "cases.redundant": 58345,
+  "cases.on_premise": 45892,
+  "cases.on_hypothesis": 1442,
+  "cases.on_derived": 21796,
+  "cases.nested": 0,
+  "cases.constructive_dilemma": 5,
+  "cases.trivial_merge": 3313,
+  "cases.or_intro_decoration": 17692,
+  "cases.all_refuted": 1,
+  "cases.on_lem": 4,
+  "neg_intro.working": 3330,
+  "neg_intro.immediate": 2330,
+  "neg_intro.mt": 67,
+  "neg_intro.or_weaken": 67,
+  "neg_intro.and_elim": 6,
+  "neg_intro.and_intro": 38,
+  "neg_intro.imp_hyp": 5,
+  "neg_intro.cases": 459,
+  "neg_intro.self": 6,
+  "neg_intro.mixed": 212,
+  "neg_intro.vacuous": 4055,
+  "neg_intro.other": 147,
+  "mod_tollens.strict": 63,
+  "mod_tollens.neg_side": 11,
+  "mod_tollens.chain": 2,
+  "mod_tollens.classical": 9,
+  "mod_tollens.contraposition": 0,
+  "ex_falso.inconsistent_premises": 9664,
+  "ex_falso.refuted_case": 373,
+  "ex_falso.explosive_cond": 513,
+  "ex_falso.other": 1912,
+  "ex_falso.root": 809,
+  "contradiction.working": 63,
+  "contradiction.template": 16658,
+  "contradiction.free": 10,
+  "contradiction.scaffolded": 7693,
+  "contradiction.neg_goal": 48,
+  "contradiction.pointless": 1082,
+  "contradiction.vacuous": 8205,
+  "contradiction.via_r": 0,
+  "contradiction.built_other": 17,
+  "contradiction.root": 4516,
+  "contradiction.lemma": 12203,
+  "contradiction.route_immediate": 8687,
+  "contradiction.route_mt": 9,
+  "contradiction.route_or_weaken": 2,
+  "contradiction.route_and_elim": 0,
+  "contradiction.route_and_intro": 1,
+  "contradiction.route_imp_hyp": 0,
+  "contradiction.route_cases": 8,
+  "contradiction.route_self": 1,
+  "contradiction.route_mixed": 10,
+  "contradiction.route_vacuous": 8197,
+  "contradiction.route_other": 23,
+  "dne.on_premise": 1244,
+  "dne.on_hypothesis": 3261,
+  "dne.on_derived": 260,
+  "lem.cases_on_lem": 4,
+  "lemma_reuse.across_boxes": 12008,
+  "lemma_reuse.multi_step": 4355
+ },
+ "written_only": {
+  "direct": 0,
+  "and_intro": 0,
+  "cond_proof": 0,
+  "or_intro": 0,
+  "cases": 0,
+  "disj_syll": 0,
+  "neg_intro": 0,
+  "mod_tollens": 0,
+  "ex_falso": 0,
+  "contradiction": 0,
+  "dne": 0,
+  "lem": 0,
+  "lemma_reuse": 0
+ },
+ "n_written_only_any": 0,
+ "n_no_strategy": 0,
+ "box_free": 38617,
+ "size_by_strategy": {
+  "direct": {
+   "Lp_mean": 7.53,
+   "ts_mean": 4.89,
+   "dep_mean": 1.02
+  },
+  "and_intro": {
+   "Lp_mean": 8.16,
+   "ts_mean": 5.26,
+   "dep_mean": 1.06
+  },
+  "cond_proof": {
+   "Lp_mean": 7.63,
+   "ts_mean": 4.78,
+   "dep_mean": 1.62
+  },
+  "or_intro": {
+   "Lp_mean": 7.15,
+   "ts_mean": 4.81,
+   "dep_mean": 1.02
+  },
+  "cases": {
+   "Lp_mean": 9.82,
+   "ts_mean": 6.83,
+   "dep_mean": 1.51
+  },
+  "disj_syll": {
+   "Lp_mean": 9.53,
+   "ts_mean": 7.12,
+   "dep_mean": 1.45
+  },
+  "neg_intro": {
+   "Lp_mean": 8.29,
+   "ts_mean": 5.01,
+   "dep_mean": 1.55
+  },
+  "mod_tollens": {
+   "Lp_mean": 6.61,
+   "ts_mean": 3.72,
+   "dep_mean": 1.09
+  },
+  "ex_falso": {
+   "Lp_mean": 9.61,
+   "ts_mean": 6.63,
+   "dep_mean": 1.37
+  },
+  "contradiction": {
+   "Lp_mean": 8.8,
+   "ts_mean": 7.53,
+   "dep_mean": 1.47
+  },
+  "dne": {
+   "Lp_mean": 8.64,
+   "ts_mean": 8.26,
+   "dep_mean": 1.63
+  },
+  "lem": {
+   "Lp_mean": 9.39,
+   "ts_mean": 8.34,
+   "dep_mean": 1.54
+  },
+  "lemma_reuse": {
+   "Lp_mean": 9.9,
+   "ts_mean": 6.93,
+   "dep_mean": 1.21
+  }
+ },
+ "all_Lp_mean": 7.0,
+ "all_ts_mean": 4.53,
+ "p1_derived_ore": 23216,
+ "p1_strict": 20680,
+ "p2_reductio": 16703,
+ "nested_ore": 0,
+ "by": {
+  "L": {
+   "2": {
+    "n": 14091,
+    "uses": {
+     "direct": 165,
+     "and_intro": 413,
+     "cond_proof": 2154,
+     "or_intro": 11354,
+     "cases": 0,
+     "disj_syll": 0,
+     "neg_intro": 1,
+     "mod_tollens": 0,
+     "ex_falso": 0,
+     "contradiction": 0,
+     "dne": 4,
+     "lem": 0,
+     "lemma_reuse": 0
+    },
+    "pri": {
+     "or_intro": 11354,
+     "cond_proof": 2154,
+     "and_intro": 413,
+     "direct": 165,
+     "neg_intro": 1,
+     "dne": 4
+    }
+   },
+   "3": {
+    "n": 14091,
+    "uses": {
+     "direct": 10291,
+     "and_intro": 2142,
+     "cond_proof": 1120,
+     "or_intro": 2190,
+     "cases": 0,
+     "disj_syll": 0,
+     "neg_intro": 2,
+     "mod_tollens": 0,
+     "ex_falso": 5,
+     "contradiction": 0,
+     "dne": 17,
+     "lem": 0,
+     "lemma_reuse": 0
+    },
+    "pri": {
+     "direct": 10069,
+     "or_intro": 1136,
+     "cond_proof": 958,
+     "and_intro": 1926,
+     "neg_intro": 1,
+     "ex_falso": 1
+    }
+   },
+   "4": {
+    "n": 14091,
+    "uses": {
+     "direct": 5416,
+     "and_intro": 3255,
+     "cond_proof": 7666,
+     "or_intro": 7155,
+     "cases": 2,
+     "disj_syll": 0,
+     "neg_intro": 195,
+     "mod_tollens": 0,
+     "ex_falso": 275,
+     "contradiction": 0,
+     "dne": 187,
+     "lem": 0,
+     "lemma_reuse": 32
+    },
+    "pri": {
+     "or_intro": 3523,
+     "cond_proof": 7320,
+     "and_intro": 1602,
+     "neg_intro": 181,
+     "direct": 1173,
+     "ex_falso": 271,
+     "dne": 19,
+     "cases": 2
+    }
+   },
+   "5": {
+    "n": 14091,
+    "uses": {
+     "direct": 7232,
+     "and_intro": 4643,
+     "cond_proof": 7430,
+     "or_intro": 3707,
+     "cases": 63,
+     "disj_syll": 8,
+     "neg_intro": 1128,
+     "mod_tollens": 0,
+     "ex_falso": 460,
+     "contradiction": 2439,
+     "dne": 486,
+     "lem": 2,
+     "lemma_reuse": 242
+    },
+    "pri": {
+     "contradiction": 2438,
+     "ex_falso": 139,
+     "cond_proof": 6885,
+     "or_intro": 807,
+     "and_intro": 1797,
+     "direct": 975,
+     "neg_intro": 1006,
+     "cases": 26,
+     "dne": 10,
+     "disj_syll": 8
+    }
+   },
+   "6": {
+    "n": 14091,
+    "uses": {
+     "direct": 8246,
+     "and_intro": 5710,
+     "cond_proof": 7288,
+     "or_intro": 3525,
+     "cases": 996,
+     "disj_syll": 9,
+     "neg_intro": 860,
+     "mod_tollens": 50,
+     "ex_falso": 661,
+     "contradiction": 2363,
+     "dne": 376,
+     "lem": 11,
+     "lemma_reuse": 1305
+    },
+    "pri": {
+     "or_intro": 722,
+     "and_intro": 2893,
+     "cond_proof": 6653,
+     "contradiction": 2040,
+     "neg_intro": 263,
+     "ex_falso": 84,
+     "cases": 850,
+     "direct": 529,
+     "mod_tollens": 50,
+     "disj_syll": 6,
+     "dne": 1
+    }
+   },
+   "7": {
+    "n": 14091,
+    "uses": {
+     "direct": 8190,
+     "and_intro": 5018,
+     "cond_proof": 7579,
+     "or_intro": 5725,
+     "cases": 5368,
+     "disj_syll": 54,
+     "neg_intro": 995,
+     "mod_tollens": 13,
+     "ex_falso": 722,
+     "contradiction": 1194,
+     "dne": 544,
+     "lem": 12,
+     "lemma_reuse": 939
+    },
+    "pri": {
+     "cond_proof": 6739,
+     "cases": 3741,
+     "or_intro": 1342,
+     "neg_intro": 278,
+     "direct": 397,
+     "and_intro": 1504,
+     "ex_falso": 44,
+     "disj_syll": 23,
+     "mod_tollens": 6,
+     "contradiction": 13,
+     "dne": 4
+    }
+   },
+   "8": {
+    "n": 14091,
+    "uses": {
+     "direct": 7260,
+     "and_intro": 4231,
+     "cond_proof": 6404,
+     "or_intro": 5786,
+     "cases": 10151,
+     "disj_syll": 44,
+     "neg_intro": 706,
+     "mod_tollens": 10,
+     "ex_falso": 1109,
+     "contradiction": 1028,
+     "dne": 497,
+     "lem": 7,
+     "lemma_reuse": 1501
+    },
+    "pri": {
+     "cond_proof": 5596,
+     "neg_intro": 108,
+     "cases": 5433,
+     "and_intro": 2033,
+     "or_intro": 554,
+     "direct": 293,
+     "ex_falso": 46,
+     "disj_syll": 17,
+     "dne": 9,
+     "contradiction": 2
+    }
+   },
+   "9": {
+    "n": 14091,
+    "uses": {
+     "direct": 7653,
+     "and_intro": 5619,
+     "cond_proof": 6022,
+     "or_intro": 7099,
+     "cases": 11941,
+     "disj_syll": 60,
+     "neg_intro": 621,
+     "mod_tollens": 1,
+     "ex_falso": 1846,
+     "contradiction": 1872,
+     "dne": 569,
+     "lem": 14,
+     "lemma_reuse": 2445
+    },
+    "pri": {
+     "cases": 5380,
+     "and_intro": 2317,
+     "cond_proof": 5061,
+     "contradiction": 4,
+     "direct": 308,
+     "or_intro": 689,
+     "neg_intro": 215,
+     "ex_falso": 94,
+     "disj_syll": 19,
+     "dne": 4
+    }
+   },
+   "10": {
+    "n": 14091,
+    "uses": {
+     "direct": 7909,
+     "and_intro": 5840,
+     "cond_proof": 6711,
+     "or_intro": 7394,
+     "cases": 13090,
+     "disj_syll": 50,
+     "neg_intro": 1023,
+     "mod_tollens": 1,
+     "ex_falso": 2149,
+     "contradiction": 1808,
+     "dne": 727,
+     "lem": 13,
+     "lemma_reuse": 3159
+    },
+    "pri": {
+     "cond_proof": 5460,
+     "and_intro": 1531,
+     "direct": 380,
+     "cases": 5629,
+     "neg_intro": 394,
+     "ex_falso": 68,
+     "or_intro": 605,
+     "disj_syll": 13,
+     "dne": 7,
+     "contradiction": 4
+    }
+   },
+   "11": {
+    "n": 14091,
+    "uses": {
+     "direct": 8105,
+     "and_intro": 7088,
+     "cond_proof": 6907,
+     "or_intro": 7407,
+     "cases": 13098,
+     "disj_syll": 82,
+     "neg_intro": 943,
+     "mod_tollens": 0,
+     "ex_falso": 2490,
+     "contradiction": 2965,
+     "dne": 712,
+     "lem": 22,
+     "lemma_reuse": 4027
+    },
+    "pri": {
+     "cond_proof": 5610,
+     "cases": 5278,
+     "or_intro": 586,
+     "and_intro": 1816,
+     "direct": 424,
+     "neg_intro": 303,
+     "ex_falso": 39,
+     "disj_syll": 16,
+     "dne": 12,
+     "contradiction": 5,
+     "lem": 2
+    }
+   },
+   "12": {
+    "n": 14090,
+    "uses": {
+     "direct": 8817,
+     "and_intro": 6525,
+     "cond_proof": 7286,
+     "or_intro": 7264,
+     "cases": 13744,
+     "disj_syll": 65,
+     "neg_intro": 880,
+     "mod_tollens": 1,
+     "ex_falso": 2738,
+     "contradiction": 3048,
+     "dne": 624,
+     "lem": 18,
+     "lemma_reuse": 4497
+    },
+    "pri": {
+     "neg_intro": 253,
+     "cases": 5862,
+     "cond_proof": 5927,
+     "direct": 343,
+     "and_intro": 1138,
+     "or_intro": 502,
+     "disj_syll": 25,
+     "dne": 7,
+     "ex_falso": 23,
+     "contradiction": 10
+    }
+   }
+  },
+  "Lp": {
+   "2": {
+    "n": 14091,
+    "uses": {
+     "direct": 165,
+     "and_intro": 413,
+     "cond_proof": 2154,
+     "or_intro": 11354,
+     "cases": 0,
+     "disj_syll": 0,
+     "neg_intro": 1,
+     "mod_tollens": 0,
+     "ex_falso": 0,
+     "contradiction": 0,
+     "dne": 4,
+     "lem": 0,
+     "lemma_reuse": 0
+    },
+    "pri": {
+     "or_intro": 11354,
+     "cond_proof": 2154,
+     "and_intro": 413,
+     "direct": 165,
+     "neg_intro": 1,
+     "dne": 4
+    }
+   },
+   "3": {
+    "n": 14091,
+    "uses": {
+     "direct": 10291,
+     "and_intro": 2142,
+     "cond_proof": 1120,
+     "or_intro": 2190,
+     "cases": 0,
+     "disj_syll": 0,
+     "neg_intro": 2,
+     "mod_tollens": 0,
+     "ex_falso": 5,
+     "contradiction": 0,
+     "dne": 17,
+     "lem": 0,
+     "lemma_reuse": 0
+    },
+    "pri": {
+     "direct": 10069,
+     "or_intro": 1136,
+     "cond_proof": 958,
+     "and_intro": 1926,
+     "neg_intro": 1,
+     "ex_falso": 1
+    }
+   },
+   "4": {
+    "n": 14091,
+    "uses": {
+     "direct": 5416,
+     "and_intro": 3255,
+     "cond_proof": 7666,
+     "or_intro": 7155,
+     "cases": 2,
+     "disj_syll": 0,
+     "neg_intro": 195,
+     "mod_tollens": 0,
+     "ex_falso": 275,
+     "contradiction": 0,
+     "dne": 187,
+     "lem": 0,
+     "lemma_reuse": 32
+    },
+    "pri": {
+     "or_intro": 3523,
+     "cond_proof": 7320,
+     "and_intro": 1602,
+     "neg_intro": 181,
+     "direct": 1173,
+     "ex_falso": 271,
+     "dne": 19,
+     "cases": 2
+    }
+   },
+   "5": {
+    "n": 14091,
+    "uses": {
+     "direct": 7232,
+     "and_intro": 4643,
+     "cond_proof": 7430,
+     "or_intro": 3707,
+     "cases": 63,
+     "disj_syll": 8,
+     "neg_intro": 1128,
+     "mod_tollens": 0,
+     "ex_falso": 460,
+     "contradiction": 2439,
+     "dne": 486,
+     "lem": 2,
+     "lemma_reuse": 242
+    },
+    "pri": {
+     "contradiction": 2438,
+     "ex_falso": 139,
+     "cond_proof": 6885,
+     "or_intro": 807,
+     "and_intro": 1797,
+     "direct": 975,
+     "neg_intro": 1006,
+     "cases": 26,
+     "dne": 10,
+     "disj_syll": 8
+    }
+   },
+   "6": {
+    "n": 14091,
+    "uses": {
+     "direct": 8246,
+     "and_intro": 5710,
+     "cond_proof": 7288,
+     "or_intro": 3525,
+     "cases": 996,
+     "disj_syll": 9,
+     "neg_intro": 860,
+     "mod_tollens": 50,
+     "ex_falso": 661,
+     "contradiction": 2363,
+     "dne": 376,
+     "lem": 11,
+     "lemma_reuse": 1305
+    },
+    "pri": {
+     "or_intro": 722,
+     "and_intro": 2893,
+     "cond_proof": 6653,
+     "contradiction": 2040,
+     "neg_intro": 263,
+     "ex_falso": 84,
+     "cases": 850,
+     "direct": 529,
+     "mod_tollens": 50,
+     "disj_syll": 6,
+     "dne": 1
+    }
+   },
+   "7": {
+    "n": 14091,
+    "uses": {
+     "direct": 8190,
+     "and_intro": 5018,
+     "cond_proof": 7579,
+     "or_intro": 5725,
+     "cases": 5368,
+     "disj_syll": 54,
+     "neg_intro": 995,
+     "mod_tollens": 13,
+     "ex_falso": 722,
+     "contradiction": 1194,
+     "dne": 544,
+     "lem": 12,
+     "lemma_reuse": 939
+    },
+    "pri": {
+     "cond_proof": 6739,
+     "cases": 3741,
+     "or_intro": 1342,
+     "neg_intro": 278,
+     "direct": 397,
+     "and_intro": 1504,
+     "ex_falso": 44,
+     "disj_syll": 23,
+     "mod_tollens": 6,
+     "contradiction": 13,
+     "dne": 4
+    }
+   },
+   "8": {
+    "n": 14091,
+    "uses": {
+     "direct": 7260,
+     "and_intro": 4231,
+     "cond_proof": 6404,
+     "or_intro": 5786,
+     "cases": 10151,
+     "disj_syll": 44,
+     "neg_intro": 706,
+     "mod_tollens": 10,
+     "ex_falso": 1109,
+     "contradiction": 1028,
+     "dne": 497,
+     "lem": 7,
+     "lemma_reuse": 1501
+    },
+    "pri": {
+     "cond_proof": 5596,
+     "neg_intro": 108,
+     "cases": 5433,
+     "and_intro": 2033,
+     "or_intro": 554,
+     "direct": 293,
+     "ex_falso": 46,
+     "disj_syll": 17,
+     "dne": 9,
+     "contradiction": 2
+    }
+   },
+   "9": {
+    "n": 14091,
+    "uses": {
+     "direct": 7653,
+     "and_intro": 5619,
+     "cond_proof": 6022,
+     "or_intro": 7099,
+     "cases": 11941,
+     "disj_syll": 60,
+     "neg_intro": 621,
+     "mod_tollens": 1,
+     "ex_falso": 1846,
+     "contradiction": 1872,
+     "dne": 569,
+     "lem": 14,
+     "lemma_reuse": 2445
+    },
+    "pri": {
+     "cases": 5380,
+     "and_intro": 2317,
+     "cond_proof": 5061,
+     "contradiction": 4,
+     "direct": 308,
+     "or_intro": 689,
+     "neg_intro": 215,
+     "ex_falso": 94,
+     "disj_syll": 19,
+     "dne": 4
+    }
+   },
+   "10": {
+    "n": 14091,
+    "uses": {
+     "direct": 7909,
+     "and_intro": 5840,
+     "cond_proof": 6711,
+     "or_intro": 7394,
+     "cases": 13090,
+     "disj_syll": 50,
+     "neg_intro": 1023,
+     "mod_tollens": 1,
+     "ex_falso": 2149,
+     "contradiction": 1808,
+     "dne": 727,
+     "lem": 13,
+     "lemma_reuse": 3159
+    },
+    "pri": {
+     "cond_proof": 5460,
+     "and_intro": 1531,
+     "direct": 380,
+     "cases": 5629,
+     "neg_intro": 394,
+     "ex_falso": 68,
+     "or_intro": 605,
+     "disj_syll": 13,
+     "dne": 7,
+     "contradiction": 4
+    }
+   },
+   "11": {
+    "n": 14091,
+    "uses": {
+     "direct": 8105,
+     "and_intro": 7088,
+     "cond_proof": 6907,
+     "or_intro": 7407,
+     "cases": 13098,
+     "disj_syll": 82,
+     "neg_intro": 943,
+     "mod_tollens": 0,
+     "ex_falso": 2490,
+     "contradiction": 2965,
+     "dne": 712,
+     "lem": 22,
+     "lemma_reuse": 4027
+    },
+    "pri": {
+     "cond_proof": 5610,
+     "cases": 5278,
+     "or_intro": 586,
+     "and_intro": 1816,
+     "direct": 424,
+     "neg_intro": 303,
+     "ex_falso": 39,
+     "disj_syll": 16,
+     "dne": 12,
+     "contradiction": 5,
+     "lem": 2
+    }
+   },
+   "12": {
+    "n": 14090,
+    "uses": {
+     "direct": 8817,
+     "and_intro": 6525,
+     "cond_proof": 7286,
+     "or_intro": 7264,
+     "cases": 13744,
+     "disj_syll": 65,
+     "neg_intro": 880,
+     "mod_tollens": 1,
+     "ex_falso": 2738,
+     "contradiction": 3048,
+     "dne": 624,
+     "lem": 18,
+     "lemma_reuse": 4497
+    },
+    "pri": {
+     "neg_intro": 253,
+     "cases": 5862,
+     "cond_proof": 5927,
+     "direct": 343,
+     "and_intro": 1138,
+     "or_intro": 502,
+     "disj_syll": 25,
+     "dne": 7,
+     "ex_falso": 23,
+     "contradiction": 10
+    }
+   }
+  },
+  "dep": {
+   "0": {
+    "n": 38617,
+    "uses": {
+     "direct": 21297,
+     "and_intro": 10762,
+     "cond_proof": 0,
+     "or_intro": 19139,
+     "cases": 0,
+     "disj_syll": 0,
+     "neg_intro": 0,
+     "mod_tollens": 0,
+     "ex_falso": 682,
+     "contradiction": 0,
+     "dne": 135,
+     "lem": 1,
+     "lemma_reuse": 2083
+    },
+    "pri": {
+     "or_intro": 16733,
+     "direct": 12410,
+     "and_intro": 8992,
+     "ex_falso": 450,
+     "dne": 32
+    }
+   },
+   "1": {
+    "n": 66669,
+    "uses": {
+     "direct": 35272,
+     "and_intro": 25709,
+     "cond_proof": 25498,
+     "or_intro": 29282,
+     "cases": 33636,
+     "disj_syll": 203,
+     "neg_intro": 3335,
+     "mod_tollens": 69,
+     "ex_falso": 6480,
+     "contradiction": 8860,
+     "dne": 1482,
+     "lem": 44,
+     "lemma_reuse": 10241
+    },
+    "pri": {
+     "cases": 24623,
+     "contradiction": 4495,
+     "and_intro": 8487,
+     "ex_falso": 336,
+     "or_intro": 4022,
+     "cond_proof": 20670,
+     "direct": 1956,
+     "neg_intro": 1892,
+     "disj_syll": 103,
+     "dne": 27,
+     "mod_tollens": 56,
+     "lem": 2
+    }
+   },
+   "2": {
+    "n": 49714,
+    "uses": {
+     "direct": 22715,
+     "and_intro": 14013,
+     "cond_proof": 41069,
+     "or_intro": 20185,
+     "cases": 34817,
+     "disj_syll": 169,
+     "neg_intro": 4019,
+     "mod_tollens": 7,
+     "ex_falso": 5293,
+     "contradiction": 7857,
+     "dne": 3126,
+     "lem": 54,
+     "lemma_reuse": 5823
+    },
+    "pri": {
+     "cond_proof": 37693,
+     "neg_intro": 1111,
+     "cases": 7578,
+     "or_intro": 1065,
+     "and_intro": 1491,
+     "direct": 690,
+     "contradiction": 21,
+     "disj_syll": 24,
+     "dne": 18,
+     "ex_falso": 23
+    }
+   }
+  }
+ }
+}
