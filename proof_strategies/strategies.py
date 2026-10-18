@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """proof-strategies: classify natural-deduction proofs (spec.md format) by proof strategy.
 
-Definitions, references and the precedence rule: proof_strategies/TAXONOMY.md (taxonomy v1; v0 is commit 82fa2c47).
+Definitions, references and the precedence rule: proof_strategies/TAXONOMY.md (taxonomy v1.2; v0 is commit 82fa2c47).
 Every predicate is evaluated on the DEPENDENCY-PRUNED proof (patterns.prune_lines: the lines the conclusion
 transitively cites, plus the premises); the written proof is classified as well, to find strategies that occur only in
 dead lines.  Proofs are parsed with the parser of nd_verify.verify (via patterns.parse); nothing here judges validity
@@ -39,7 +39,7 @@ SUBTYPES = (
     'cond_proof.working', 'cond_proof.vacuous', 'cond_proof.explosive', 'cond_proof.curried', 'cond_proof.hyp_syll',
     'or_intro.root', 'or_intro.case_branch', 'or_intro.feeds_ore', 'or_intro.other',
     'cases.genuine', 'cases.redundant', 'cases.on_premise', 'cases.on_hypothesis', 'cases.on_derived', 'cases.nested',
-    'cases.constructive_dilemma', 'cases.trivial_merge', 'cases.or_intro_decoration', 'cases.all_refuted', 'cases.on_lem',
+    'cases.constructive_dilemma', 'cases.trivial_merge', 'cases.or_intro_decoration', 'cases.all_refuted', 'cases.bot_case', 'cases.on_lem',
     'neg_intro.working', *('neg_intro.' + r for r in ROUTES),
     'mod_tollens.strict', 'mod_tollens.neg_side', 'mod_tollens.chain', 'mod_tollens.classical', 'mod_tollens.contraposition',
     'ex_falso.inconsistent_premises', 'ex_falso.refuted_case', 'ex_falso.explosive_cond', 'ex_falso.other', 'ex_falso.root',
@@ -157,7 +157,8 @@ class Proof:
     def refuted(self, s, e):
         """a ∨E branch s..e is refuted: its last line (after R) is ex falso on a ⊥ that depends on the branch hypothesis."""
         o = self.origin(e)
-        return bool(o is not None and o['rule'] == 'BOTE' and self.inside(o, s, e) and s in self.hyps[o['idx']])
+        return bool(o is not None and o['rule'] == 'BOTE' and self.inside(o, s, e) and s in self.hyps[o['idx']]
+                    and self.by[s]['formula'] != BOT)
 
     def trace(self, x, s):
         """the elimination / introduction steps leading from hypothesis s to line x (x first), following the premise
@@ -237,6 +238,25 @@ class Proof:
             return 'cases', None, None, None
         return 'other', None, None, None
 
+    def built_route(self, c, depth=0):
+        """route of a double negation built by a rule other than NEGI (σ⁺ \\ σ): ex falso → vacuous; ∨E → vacuous if
+        every branch builds it vacuously (by ex falso or a vacuous ¬I), else cases; anything else → other."""
+        if c['rule'] == 'BOTE':
+            return 'vacuous'
+        if c['rule'] == 'ORE' and len(c['refs']) == 5 and depth < 20:
+            _, s1, e1, s2, e2 = c['refs']
+            rs = []
+            for s, e in ((s1, e1), (s2, e2)):
+                o = self.origin(e)
+                if o is not None and o['rule'] == 'NEGI':
+                    rs.append(self.refutation(o)[0])
+                elif o is not None and o['rule'] in ('BOTE', 'ORE'):
+                    rs.append(self.built_route(o, depth + 1))
+                else:
+                    rs.append('other')
+            return 'vacuous' if all(r == 'vacuous' for r in rs) else 'cases'
+        return 'other'
+
     def contraposition(self, i):
         """IMPI line i with hypothesis ¬B whose box ends in a modus tollens that uses that ¬B as its independent side."""
         s, e = i['refs']
@@ -264,7 +284,7 @@ class Proof:
             return False
         if not (f[2] == NOT(f[1]) or f[1] == NOT(f[2])):
             return False
-        return x['rule'] == 'DN' or any(self.by[y]['rule'] == 'DN' for y in self.deps[x['idx']])
+        return x['rule'] == 'DN'
 
     # ------------------------------------------------------------------ one inference
     def line_labels(self, ln):
@@ -329,10 +349,13 @@ class Proof:
             sub.add('cases.genuine' if used else 'cases.redundant')
             if any(s <= i <= e for s, e in self.ore_boxes):
                 sub.add('cases.nested')
-            nref = int(self.refuted(s1, e1)) + int(self.refuted(s2, e2))
-            if nref == 1:
+            r1, r2 = self.refuted(s1, e1), self.refuted(s2, e2)
+            if any(self.by[s]['formula'] == BOT for s in (s1, s2)):
+                sub.add('cases.bot_case')          # a case that is ⊥ itself: empty, not refuted
+            other_used = (s2 == e2 or s2 in self.hyps[e2]) if r1 else (s1 == e1 or s1 in self.hyps[e1])
+            if r1 != r2 and other_used:
                 st.add('disj_syll')
-            elif nref == 2:
+            elif r1 and r2:
                 sub.add('cases.all_refuted')
             cd = True
             for s, e in ((s1, e1), (s2, e2)):
@@ -380,7 +403,7 @@ class Proof:
                 if src == 'built':
                     sub.add('contradiction.built_other')
                     # a double negation built by ex falso is explosion in disguise; by ∨E, a reductio in each branch
-                    route = 'vacuous' if c['rule'] == 'BOTE' else 'cases' if c['rule'] == 'ORE' else 'other'
+                    route = self.built_route(c)
                     indep = None
                 else:
                     if c['idx'] != ln['refs'][0]:
@@ -515,7 +538,8 @@ def main():
         print(json.dumps(analyse(proof, prompt + ' PRF'), indent=1))
         return
     n = bad = 0
-    with opener(a.out, 'wt') as fo:
+    tmp = a.out + '.tmp' + (os.path.splitext(a.out)[1] if a.out.endswith('.gz') else '')
+    with opener(tmp, 'wt') as fo:
         for line in opener(a.inp):
             if not line.strip():
                 continue
@@ -525,6 +549,7 @@ def main():
             n += 1
             bad += res is None
             fo.write(json.dumps({'i': n - 1, **(res or {'parse_fail': True})}) + '\n')
+    os.replace(tmp, a.out)          # atomic: readers never see a half-written label file
     print(f'{a.inp}: {n} records, {bad} unparsable -> {a.out}')
 
 

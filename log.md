@@ -1011,3 +1011,25 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   < 5 % (data 10.8 %). J4: the DN ban agrees with G4ip on ≥ 99 % of decided theorems; requires-∨E holds for 30–60 % of
   the sampled theorems whose K12 proof uses ∨E; requires-BOTE for < 50 % of those whose proof uses ex falso (a reductio
   can replace ex falso). J5: ≥ 120 of 187 decided (within bound); requires-DN = G4ip classical-only on decided ones.
+- 19:56 UTC  **Blind spot-check (taxonomy v1.1)**: three independent subagents labelled 260 proofs by hand from `TAXONOMY.md`
+  alone (20 per strategy: 12 random positives, 4 random negatives, 4 borderline; K12, plus textbook-schema search proofs
+  where K12 has < 200 positives; sample `proof_strategies/validation_sample.py`, seed 20261018). Agreement with the
+  classifier's v1.1 labels: **uses 260 / 260, primary 260 / 260** (20 / 20 for each of the 13 strategies;
+  `artifacts/ps/validation/spot_compare_v1.1.json`). Pre-registered E7 bar (≥ 19 / 20): hit.
+- 19:56 UTC  **Taxonomy v1.2** (reasons: the checkers' notes; the code did what the text said, but the text let degenerate
+  cases through). (1) Disjunctive syllogism: a case that is ⊥ itself is empty, not refuted (new sub-type cases.bot_case),
+  and the other branch must use its case; 10 of the 12 sampled v1.1 DS positives were such cases (`spot_compare_v1.2.json`).
+  (2) Excluded middle: the X ∨ ¬X line must itself be a DN line (excluded middle proved by contradiction); v1.1 also counted
+  ∨I of a DNE'd X and lines resting on a vacuous reductio (5 of 20 sampled items change). Wording clarified for the
+  primary vs curried primary, "depends on", identity boxes, ∨I/ex-falso "other", MT sub-types, citers, the top-level box.
+  Earlier fix the same hour (reviewing the canonical examples): a ¬¬G built by ∨E counts as a vacuous reductio when both
+  branches build it by explosion (K12 free reductios 10 → 6). 39 Lean-checked unit tests pass. Labels are regenerated once
+  the second implementation (reading v1.1 labels) has finished.
+- 19:57 UTC  **Optional analysis pre-registered (brief step 7; CPU only, no pod):** classify RL's own accepted proofs in
+  create-or-elicit's fine-tune mixes (`mix_{1,16}.jsonl.gz` from `hf://buckets/dan-pandori/nd-rl/create-or-elicit/artifacts/coe/ladder/`,
+  arms full s3–s5, knockout s0–s5, dose1 s0–s2; models: 9.56 M ALiBiGPT `lean_staten`, from scratch on K12 / K12⁻ / K12^1%,
+  T1 expert iteration on A40, Lean alone). RL records = mix records whose prompt is an RL target (replay records are not).
+  **Expected:** full arm, round 1 (the pretrained model's own proofs): ≥ 15 working reductios per seed (its bases solved
+  15–20 strict σ-covered targets in round 1, which need one); round 16: ≥ 10 × the round-1 count; the template share of
+  RL reductios lower than K12's (99.6 %) in both rounds. Knockout arm: 0 working reductios in round 1 on ≥ 5 / 6 seeds;
+  ≤ 50 per seed in round 16.

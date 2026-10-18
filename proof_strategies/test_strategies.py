@@ -111,6 +111,20 @@ CASES = [
      'N1 ( ( ~ ( ~ P ) ) > Q ) : PR ; N2 ( ~ Q ) : PR ; N3 | ( ~ ( ~ P ) ) : AS ; N4 | Q : IMPE N1 N3 ; N5 | F : NEGE N4 N2 ; '
      'N6 ( ~ ( ~ ( ~ P ) ) ) : NEGI N3 N5 ; N7 ( ~ P ) : DN N6 ; QED',
      {'contradiction', 'mod_tollens'}, {'dne', 'neg_intro'}, {'contradiction.neg_goal', 'mod_tollens.classical'}, 'contradiction', 'contradiction'),
+    ('reductio built by ex falso in both cases (explosion in disguise)', 'THM Q , ( ~ Q ) , ( S v R ) SEQ P PRF',
+     'N1 Q : PR ; N2 ( ~ Q ) : PR ; N3 ( S v R ) : PR ; N4 F : NEGE N1 N2 ; N5 | S : AS ; N6 | ( ~ ( ~ P ) ) : BOTE N4 ; '
+     'N7 | R : AS ; N8 | ( ~ ( ~ P ) ) : BOTE N4 ; N9 ( ~ ( ~ P ) ) : ORE N3 N5 N6 N7 N8 ; N10 P : DN N9 ; QED',
+     {'contradiction', 'cases', 'ex_falso'}, {'dne', 'disj_syll'}, {'contradiction.built_other', 'contradiction.vacuous', 'contradiction.template'}, 'contradiction', 'contradiction'),
+    ('a case that is falsum itself is empty, not refuted (not DS, v1.2)', 'THM ( P v F ) SEQ P PRF',
+     'N1 ( P v F ) : PR ; N2 | P : AS ; N3 | F : AS ; N4 | P : BOTE N3 ; N5 P : ORE N1 N2 N2 N3 N4 ; QED',
+     {'cases', 'ex_falso'}, {'disj_syll'}, {'cases.bot_case'}, 'cases', 'cases'),
+    ('refuted case but the other branch ignores its case (not DS, v1.2)', 'THM ( P v Q ) , ( ~ P ) , R SEQ R PRF',
+     'N1 ( P v Q ) : PR ; N2 ( ~ P ) : PR ; N3 R : PR ; N4 | P : AS ; N5 | F : NEGE N4 N2 ; N6 | R : BOTE N5 ; N7 | Q : AS ; '
+     'N8 | R : R N3 ; N9 R : ORE N1 N4 N6 N7 N8 ; QED',
+     {'cases', 'ex_falso'}, {'disj_syll'}, {'cases.redundant', 'ex_falso.refuted_case'}, 'cases', 'cases'),
+    ('X v ~X by or-intro from a DNE-d X is not excluded middle (v1.2)', 'THM ( ~ ( ~ P ) ) SEQ ( P v ( ~ P ) ) PRF',
+     'N1 ( ~ ( ~ P ) ) : PR ; N2 P : DN N1 ; N3 ( P v ( ~ P ) ) : ORI1 N2 ; QED',
+     {'dne', 'or_intro'}, {'lem', 'contradiction'}, {'dne.on_premise'}, 'or_intro', 'or_intro'),
     ('trivial', 'THM P , Q SEQ Q PRF', 'N1 P : PR ; N2 Q : PR ; QED', set(), set(STRATS), set(), 'trivial', 'trivial'),
     ('dead lines do not count', 'THM ( P > Q ) , P SEQ Q PRF',
      'N1 ( P > Q ) : PR ; N2 P : PR ; N3 | R : AS ; N4 | ( R v S ) : ORI1 N3 ; N5 ( R > ( R v S ) ) : IMPI N3 N4 ; N6 Q : IMPE N1 N2 ; QED',

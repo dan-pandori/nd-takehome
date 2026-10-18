@@ -1,0 +1,280 @@
+{
+ "per_target": {
+  "cases": {
+   "n": 20,
+   "uses_agree": 20,
+   "primary_agree": 20,
+   "positive": 12,
+   "borderline": 4,
+   "negative": 4
+  },
+  "direct": {
+   "n": 20,
+   "uses_agree": 20,
+   "primary_agree": 20,
+   "borderline": 4,
+   "negative": 4,
+   "positive": 12
+  },
+  "cond_proof": {
+   "n": 20,
+   "uses_agree": 20,
+   "primary_agree": 20,
+   "positive": 12,
+   "negative": 4,
+   "borderline": 4
+  },
+  "and_intro": {
+   "n": 20,
+   "uses_agree": 20,
+   "primary_agree": 20,
+   "positive": 12,
+   "negative": 4,
+   "borderline": 4
+  },
+  "or_intro": {
+   "n": 20,
+   "uses_agree": 20,
+   "primary_agree": 20,
+   "borderline": 4,
+   "positive": 12,
+   "negative": 4
+  },
+  "neg_intro": {
+   "n": 20,
+   "uses_agree": 20,
+   "primary_agree": 20,
+   "positive": 12,
+   "negative": 4,
+   "borderline": 4
+  },
+  "disj_syll": {
+   "n": 20,
+   "uses_agree": 10,
+   "primary_agree": 18,
+   "negative": 4,
+   "borderline": 4,
+   "positive": 12
+  },
+  "ex_falso": {
+   "n": 20,
+   "uses_agree": 20,
+   "primary_agree": 20,
+   "positive": 12,
+   "negative": 4,
+   "borderline": 4
+  },
+  "mod_tollens": {
+   "n": 20,
+   "uses_agree": 20,
+   "primary_agree": 20,
+   "positive": 12,
+   "negative": 4,
+   "borderline": 4
+  },
+  "lem": {
+   "n": 20,
+   "uses_agree": 15,
+   "primary_agree": 20,
+   "borderline": 4,
+   "positive": 12,
+   "negative": 4
+  },
+  "dne": {
+   "n": 20,
+   "uses_agree": 20,
+   "primary_agree": 20,
+   "positive": 12,
+   "borderline": 4,
+   "negative": 4
+  },
+  "contradiction": {
+   "n": 20,
+   "uses_agree": 20,
+   "primary_agree": 20,
+   "positive": 12,
+   "borderline": 4,
+   "negative": 4
+  },
+  "lemma_reuse": {
+   "n": 20,
+   "uses_agree": 20,
+   "primary_agree": 20,
+   "negative": 4,
+   "positive": 12,
+   "borderline": 4
+  }
+ },
+ "total": {
+  "n": 260,
+  "uses": 245,
+  "pri": 258
+ },
+ "disagreements": [
+  {
+   "id": "b018",
+   "target": "disj_syll",
+   "role": "positive",
+   "checker_uses": true,
+   "ours_uses": false,
+   "checker_primary": "cond_proof",
+   "ours_primary": "cond_proof",
+   "comment": "curried primary = and_intro. The DS ORE is redundant (branch2 does not use its case N8); the DS definition still counts it.",
+   "detail": "ORE N10: branch1 N5-N7 refuted (BOTE N7, F N6 depends on case N5); branch2 N8-N9 not refuted (IMPE). Exactly 1 refuted -> DS"
+  },
+  {
+   "id": "b020",
+   "target": "disj_syll",
+   "role": "positive",
+   "checker_uses": true,
+   "ours_uses": false,
+   "checker_primary": "cond_proof",
+   "ours_primary": "cond_proof",
+   "comment": "curried primary = or_intro. The refuted case is literally F (A v F |- A, no negation premise involved); the DS definition counts it. Branch1 does not use its case (redundant).",
+   "detail": "ORE N7: branch1 N3-N4 not refuted (ANDI); branch2 N5-N6 refuted (case F, BOTE N6 depends on N5). Exactly 1 refuted -> DS"
+  },
+  {
+   "id": "b026",
+   "target": "disj_syll",
+   "role": "positive",
+   "checker_uses": true,
+   "ours_uses": false,
+   "checker_primary": "neg_intro",
+   "ours_primary": "neg_intro",
+   "comment": "Root NEGI N12 route: NEGE N10 N3 -> IMPE N2 N9 (mp) -> N9 is ORE -> mixed, so not mt and primary is neg_intro. DS on a literal F case; branch1 does not use its case.",
+   "detail": "ORE N9: branch1 N5-N6 not refuted (ORI1); branch2 N7-N8 refuted (case F, BOTE N8 depends on N7). Exactly 1 refuted -> DS"
+  },
+  {
+   "id": "b034",
+   "target": "disj_syll",
+   "role": "positive",
+   "checker_uses": true,
+   "ours_uses": false,
+   "checker_primary": "cond_proof",
+   "ours_primary": "cond_proof",
+   "comment": "curried primary = disj_syll. Both branches end in BOTE; only the F-case counts as refuted because the other explosion uses the enclosing assumption. A degenerate DS (refuted case is literally F).",
+   "detail": "ORE N8: branch1 N3-N5 NOT refuted (ends in BOTE N5 but its F N4 depends on the ->I assumption N2, not on case N3); branch2 N6-N7 refuted (case F, BOTE N7). Exactly 1 refuted -> DS"
+  },
+  {
+   "id": "b038",
+   "target": "disj_syll",
+   "role": "positive",
+   "checker_uses": true,
+   "ours_uses": false,
+   "checker_primary": "disj_syll",
+   "ours_primary": "cases",
+   "comment": "branch2 does not use its case S (redundant ORE); still counted as DS.",
+   "detail": "ORE N11: branch1 N6-N8 refuted (BOTE N8, F N7 depends on case N6); branch2 N9-N10 not refuted (IMPE). Exactly 1 refuted -> DS"
+  },
+  {
+   "id": "b050",
+   "target": "disj_syll",
+   "role": "positive",
+   "checker_uses": true,
+   "ours_uses": false,
+   "checker_primary": "cond_proof",
+   "ours_primary": "cond_proof",
+   "comment": "curried primary = disj_syll. DS on a literal F case.",
+   "detail": "ORE N6: branch1 N3-N3 (AS) not refuted; branch2 N4-N5 refuted (case F, BOTE N5). Exactly 1 refuted -> DS"
+  },
+  {
+   "id": "b051",
+   "target": "disj_syll",
+   "role": "positive",
+   "checker_uses": true,
+   "ours_uses": false,
+   "checker_primary": "or_intro",
+   "ours_primary": "or_intro",
+   "comment": "DS on a literal F case.",
+   "detail": "ORE N6: 0 refuted (branches end in AS N3 and IMPE N5). ORE N10: branch1 N7-N7 not refuted; branch2 N8-N9 refuted (case F, BOTE N9) -> exactly 1 refuted -> DS"
+  },
+  {
+   "id": "b055",
+   "target": "disj_syll",
+   "role": "positive",
+   "checker_uses": true,
+   "ours_uses": false,
+   "checker_primary": "cond_proof",
+   "ours_primary": "cond_proof",
+   "comment": "curried primary = disj_syll. Branch2 does not use its case (redundant ORE).",
+   "detail": "ORE N10: branch1 N5-N7 refuted (BOTE N7, F N6 depends on case N5); branch2 N8-N9 not refuted (R of premise P). Exactly 1 refuted -> DS"
+  },
+  {
+   "id": "b069",
+   "target": "disj_syll",
+   "role": "positive",
+   "checker_uses": true,
+   "ours_uses": false,
+   "checker_primary": "disj_syll",
+   "ours_primary": "cases",
+   "comment": "DS on a literal F case.",
+   "detail": "ORE N9: branch1 N3-N4 refuted (case F, BOTE N4); branch2 N5-N8 not refuted (ANDI). Exactly 1 refuted -> DS"
+  },
+  {
+   "id": "b072",
+   "target": "disj_syll",
+   "role": "positive",
+   "checker_uses": true,
+   "ours_uses": false,
+   "checker_primary": "cond_proof",
+   "ours_primary": "cond_proof",
+   "comment": "curried primary = or_intro. DS on a literal F case.",
+   "detail": "ORE N6: branch1 N3-N3 not refuted; branch2 N4-N5 refuted (case F, BOTE N5) -> DS. ORE N10: branch1 N7-N7 not refuted; branch2 N8-N9 ends in R of N6 (an ORE outside the branch) -> not refuted; 0 refuted"
+  },
+  {
+   "id": "c001",
+   "target": "lem",
+   "role": "borderline",
+   "checker_uses": true,
+   "ours_uses": false,
+   "checker_primary": "cond_proof",
+   "ours_primary": "cond_proof",
+   "comment": "The line is an ORI of an X obtained via DN; it counts only through 'depend on a DN line', although the parenthetical says an instance is 'not an ∨I of a known X'. (N9: R known from DNE of the hypothesis.)",
+   "detail": "LEM lines: N9 (R v ~R) = ORI1 N8, depends on DN N8 (DN of hypothesis N3 ~~R, #11 on_hypothesis); N10 (R v ~R) = ORE, depends on DN N8 via N9. N6 (R v ~R) = ORI1 N5 depends on no DN line (not an instance). No cases_on_lem (ORE N10 splits on premise N1). Root N11 IMPI (assumption ~~R, origin(e) = ORE "
+  },
+  {
+   "id": "c010",
+   "target": "lem",
+   "role": "positive",
+   "checker_uses": true,
+   "ours_uses": false,
+   "checker_primary": "or_intro",
+   "ours_primary": "or_intro",
+   "comment": "The only DN is a vacuous reductio (ex falso in disguise) and N12 is an ORI of a known S; The line is an ORI of an X obtained via DN; it counts only through 'depend on a DN line', although the parenthetical says an instance is 'not an ∨I of a known X'. Meanwhile the real case split on S v ~S is exclu",
+   "detail": "LEM line: N12 (~S v S) = ORI2 N11, depends on DN N10 via ORE N11. Premise N2 (S v ~S) is PR, so not an instance, and ORE N11 on it is not cases_on_lem. DN N10 cites NEGI N9 whose box N7..N8 has hyps(N8) = {} -> #10 vacuous (template). Root N12 ORI2 -> or_intro."
+  },
+  {
+   "id": "c029",
+   "target": "lem",
+   "role": "positive",
+   "checker_uses": true,
+   "ours_uses": false,
+   "checker_primary": "cond_proof",
+   "ours_primary": "cond_proof",
+   "comment": "The line is an ORI of an X obtained via DN; it counts only through 'depend on a DN line', although the parenthetical says an instance is 'not an ∨I of a known X'. (N3: P known from DNE of the hypothesis ~~P.)",
+   "detail": "LEM line: N3 (P v ~P) = ORI1 N2, depends on DN N2 (DN of hypothesis N1, #11 on_hypothesis). N7 is an R copy (excluded). ORE N10 splits on N3 -> cases_on_lem (both branches ignore their case). Root N11 IMPI (assumption ~~P, origin(e) = ORE) -> cond_proof; curried primary lem (N10 is cases_on_lem)."
+  },
+  {
+   "id": "c062",
+   "target": "lem",
+   "role": "positive",
+   "checker_uses": true,
+   "ours_uses": false,
+   "checker_primary": "direct",
+   "ours_primary": "direct",
+   "comment": "The line is an ORI of an X obtained via DN; it counts only through 'depend on a DN line', although the parenthetical says an instance is 'not an ∨I of a known X'. (N8: S known from DNE of the hypothesis ~~S.)",
+   "detail": "LEM lines: N8 (~S v S) = ORI2 N7, N7 = R of DN N4 (DN of hypothesis N3 ~~S, #11 on_hypothesis); N9 (~S v S) = ORE, depends on N8. N5 is AS (excluded). No cases_on_lem (ORE N9 splits on premise N1). Root N11 IMPE -> direct."
+  },
+  {
+   "id": "c068",
+   "target": "lem",
+   "role": "positive",
+   "checker_uses": true,
+   "ours_uses": false,
+   "checker_primary": "or_intro",
+   "ours_primary": "or_intro",
+   "comment": "As c010: the only DN is a vacuous reductio and N10 is an ORI of a known ~R; The line is an ORI of an X obtained via DN; it counts only through 'depend on a DN line', although the parenthetical says an instance is 'not an ∨I of a known X'.",
+   "detail": "LEM line: N10 (R v ~R) = ORI2 N9, depends on DN N8 via ORE N9. DN N8 (~R) cites NEGI N7 whose box N5..N6 has hyps(N6) = {} -> #10 vacuous (template). Premise (~R v ~Q) is not an LEM form. No cases_on_lem. Root N10 ORI2 -> or_intro."
+  }
+ ]
+}
