@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """proof-strategies: classify natural-deduction proofs (spec.md format) by proof strategy.
 
-Definitions, references and the precedence rule: proof_strategies/TAXONOMY.md.  Every predicate is evaluated on the
-DEPENDENCY-PRUNED proof (patterns.prune_lines: the lines the conclusion transitively cites, plus the premises); the
-written proof is classified as well, to find strategies that occur only in dead lines.  Proofs are parsed with the
-parser of nd_verify.verify (via patterns.parse); nothing here judges validity (Lean does, elsewhere).
+Definitions, references and the precedence rule: proof_strategies/TAXONOMY.md (taxonomy v1; v0 is commit 82fa2c47).
+Every predicate is evaluated on the DEPENDENCY-PRUNED proof (patterns.prune_lines: the lines the conclusion
+transitively cites, plus the premises); the written proof is classified as well, to find strategies that occur only in
+dead lines.  Proofs are parsed with the parser of nd_verify.verify (via patterns.parse); nothing here judges validity
+(Lean does, elsewhere).
 
-  python3 proof_strategies/strategies.py --in FILE.jsonl[.gz] --out LABELS.jsonl.gz [--summary SUMMARY.json]
+  python3 proof_strategies/strategies.py --in FILE.jsonl[.gz] --out LABELS.jsonl.gz
   python3 proof_strategies/strategies.py --one "THM ... PRF N1 ... QED"        # print the analysis of one proof
 
 Records: {prompt, proof} (or gen_proof / reference_proof, or text = prompt + proof).
@@ -14,8 +15,8 @@ Records: {prompt, proof} (or gen_proof / reference_proof, or text = prompt + pro
 import argparse, collections, gzip, json, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, '..'))
-from patterns import parse, prune_lines, fstr, derived_ore, derived_ore_strict, reductio      # noqa: E402
-from patterns2 import ore_nesting, impe_chain, negi_ande_hyp                                    # noqa: E402
+from patterns import parse, prune_lines, derived_ore, derived_ore_strict, reductio      # noqa: E402
+from patterns2 import ore_nesting, impe_chain, negi_ande_hyp                            # noqa: E402
 
 # the strategies, in table order (ids are stable; names and references live in TAXONOMY.md)
 STRATS = ('direct', 'and_intro', 'cond_proof', 'or_intro', 'cases', 'disj_syll', 'neg_intro', 'mod_tollens',
@@ -26,26 +27,32 @@ NAME = {'direct': 'Direct reasoning (→E, ∧E)', 'and_intro': 'Conjunction int
         'contradiction': 'Proof by contradiction (classical)', 'dne': 'Double-negation elimination', 'lem': 'Excluded middle',
         'lemma_reuse': 'Lemma reuse', 'trivial': 'Trivial (conclusion is a premise)', 'unlabelled': 'Unlabelled'}
 CLASSICAL = {'contradiction', 'dne', 'lem'}
+# precedence for the primary label: among the strategies the ROOT inference instantiates, the first in this list wins
+PRECEDENCE = ('lem', 'contradiction', 'dne', 'disj_syll', 'mod_tollens', 'cases', 'neg_intro', 'cond_proof',
+              'ex_falso', 'or_intro', 'and_intro', 'direct')
 PRIMARY = tuple(s for s in STRATS if s != 'lemma_reuse') + ('trivial', 'unlabelled')
+# how a ¬I / reductio box refutes its hypothesis (TAXONOMY.md, "refutation route")
+ROUTES = ('immediate', 'mt', 'or_weaken', 'and_elim', 'and_intro', 'imp_hyp', 'cases', 'self', 'mixed', 'vacuous', 'other')
 SUBTYPES = (
-    'direct.mp', 'direct.ande', 'direct.mp_chain3',
+    'direct.mp', 'direct.ande', 'direct.mp_chain3', 'direct.neg_elim_root',
     'and_intro.root',
     'cond_proof.vacuous', 'cond_proof.explosive', 'cond_proof.curried', 'cond_proof.hyp_syll',
     'or_intro.root', 'or_intro.case_branch', 'or_intro.feeds_ore', 'or_intro.other',
-    'cases.on_premise', 'cases.on_hypothesis', 'cases.on_derived', 'cases.nested', 'cases.constructive_dilemma',
-    'cases.trivial_merge', 'cases.or_intro_decoration', 'cases.unused_case', 'cases.all_refuted', 'cases.on_lem',
-    'disj_syll.classic',
-    'neg_intro.neg_hyp', 'neg_intro.neg_conj', 'neg_intro.neg_disj', 'neg_intro.neg_imp', 'neg_intro.vacuous',
-    'mod_tollens.strict', 'mod_tollens.neg_side', 'mod_tollens.chain', 'mod_tollens.contraposition',
-    'ex_falso.refuted_case', 'ex_falso.explosive_cond', 'ex_falso.root', 'ex_falso.other',
-    'contradiction.sigma', 'contradiction.sigma_via_r', 'contradiction.built_other', 'contradiction.neg_goal',
-    'contradiction.root', 'contradiction.lemma',
+    'cases.genuine', 'cases.redundant', 'cases.on_premise', 'cases.on_hypothesis', 'cases.on_derived', 'cases.nested',
+    'cases.constructive_dilemma', 'cases.trivial_merge', 'cases.or_intro_decoration', 'cases.all_refuted', 'cases.on_lem',
+    *('neg_intro.' + r for r in ROUTES),
+    'mod_tollens.strict', 'mod_tollens.neg_side', 'mod_tollens.chain', 'mod_tollens.classical', 'mod_tollens.contraposition',
+    'ex_falso.inconsistent_premises', 'ex_falso.refuted_case', 'ex_falso.explosive_cond', 'ex_falso.other', 'ex_falso.root',
+    'contradiction.free', 'contradiction.scaffolded', 'contradiction.neg_goal', 'contradiction.pointless', 'contradiction.vacuous',
+    'contradiction.via_r', 'contradiction.built_other', 'contradiction.root', 'contradiction.lemma',
+    *('contradiction.route_' + r for r in ROUTES),
     'dne.on_premise', 'dne.on_hypothesis', 'dne.on_derived',
     'lem.cases_on_lem',
     'lemma_reuse.across_boxes', 'lemma_reuse.multi_step',
 )
 WEIGHT = {'IMPE': 1, 'NEGE': 1, 'ANDE1': 1, 'ANDE2': 1, 'ANDI': 1, 'ORI1': 1, 'ORI2': 1, 'BOTE': 1,
           'IMPI': 1, 'NEGI': 1, 'ORE': 3, 'DN': 3, 'R': 0, 'PR': 0, 'AS': 0}
+BOT = ('bot',)
 NOT = lambda f: ('not', f)
 
 
@@ -102,6 +109,7 @@ class Proof:
                     self.citers[o['idx']].add(ln['idx'])
         # where each line's formula is consumed: as a ∨E branch end, as a ∨E disjunction, as a →I box end
         self.branch_end, self.disj_of, self.impi_end = collections.defaultdict(list), set(), collections.defaultdict(list)
+        self.ore_boxes = []
         for ln in lines:
             if ln['rule'] == 'ORE' and len(ln['refs']) == 5:
                 j, s1, e1, s2, e2 = ln['refs']
@@ -109,6 +117,7 @@ class Proof:
                 if d is not None:
                     self.disj_of.add(d['idx'])
                 for s, e in ((s1, e1), (s2, e2)):
+                    self.ore_boxes.append((s, e))
                     o = self.origin(e)
                     if o is not None and s <= o['idx'] <= e:
                         self.branch_end[o['idx']].append((s, e))
@@ -125,6 +134,8 @@ class Proof:
             if ln['rule'] == 'AS':
                 stack.append((ln['idx'], ln['depth']))
             self.box_of[ln['idx']] = stack[-1][0] if stack else 0
+        self.dn_cited = {self.origin(ln['refs'][0])['idx'] for ln in lines
+                         if ln['rule'] == 'DN' and ln['refs'] and self.origin(ln['refs'][0]) is not None}
 
     def origin(self, i):
         """follow reiteration (R) lines back to the line that produced the formula."""
@@ -138,84 +149,114 @@ class Proof:
     def inside(self, ln, s, e):
         return ln is not None and s <= ln['idx'] <= e
 
+    def dep(self, x, s):
+        """does line x (an index) depend on hypothesis s?"""
+        return s in self.hyps.get(x, ())
+
     # ------------------------------------------------------------------ building blocks
     def refuted(self, s, e):
-        """a ∨E branch / box s..e is refuted: its last line (after R) is ex falso on a ⊥ that depends on the hypothesis."""
+        """a ∨E branch s..e is refuted: its last line (after R) is ex falso on a ⊥ that depends on the branch hypothesis."""
         o = self.origin(e)
         return bool(o is not None and o['rule'] == 'BOTE' and self.inside(o, s, e) and s in self.hyps[o['idx']])
 
-    def elim_chain(self, x, s):
-        """(#→E, #∧E) if line x is obtained from hypothesis s by →E steps (s-side as the minor premise, majors not
-        depending on s) and ∧E steps; None otherwise."""
-        n_i = n_a = 0
-        seen = set()
-        while x is not None and x['idx'] not in seen:
+    def trace(self, x, s):
+        """the elimination / introduction steps leading from hypothesis s to line x (x first), following the premise
+        that depends on s; ends in 'mixed' / 'other:<rule>' when the path forks or meets another rule."""
+        steps, seen = [], set()
+        while x is not None and x['idx'] != s and x['idx'] not in seen:
             seen.add(x['idx'])
-            if x['idx'] == s:
-                return (n_i, n_a)
-            if x['rule'] == 'IMPE' and len(x['refs']) == 2:
-                maj, mnr = x['refs']
-                if s in self.hyps.get(maj, ()):
-                    return None
-                n_i += 1
-                x = self.origin(mnr)
-            elif x['rule'] in ('ANDE1', 'ANDE2') and x['refs']:
-                n_a += 1
-                x = self.origin(x['refs'][0])
+            r, refs = x['rule'], x['refs']
+            if r == 'IMPE' and len(refs) == 2:
+                maj, mnr = refs
+                dm, dn = self.dep(maj, s), self.dep(mnr, s)
+                if dn and not dm:
+                    steps.append('mp'); x = self.origin(mnr)
+                elif dm and not dn:
+                    steps.append('mp_major'); x = self.origin(maj)
+                else:
+                    return steps + ['mixed']
+            elif r in ('ANDE1', 'ANDE2'):
+                steps.append('ande'); x = self.origin(refs[0])
+            elif r in ('ORI1', 'ORI2'):
+                steps.append('ori'); x = self.origin(refs[0])
+            elif r == 'ANDI' and len(refs) == 2:
+                da, db = self.dep(refs[0], s), self.dep(refs[1], s)
+                if da != db:
+                    steps.append('andi'); x = self.origin(refs[0] if da else refs[1])
+                else:
+                    return steps + ['mixed']
+            elif r == 'DN':
+                steps.append('dn'); x = self.origin(refs[0])
             else:
-                return None
-        return None
+                return steps + ['other:' + r]
+        return steps
 
-    def mt(self, n):
-        """modus-tollens sub-type of NEGI line n, or None: the box's ⊥ is NEGE(B, ¬B); one side follows from the box
-        hypothesis by an elimination chain with at least one →E, the other side does not depend on the hypothesis."""
-        if n['rule'] != 'NEGI' or len(n['refs']) != 2:
-            return None
+    @staticmethod
+    def route_of(steps):
+        if steps is None:
+            return 'other'
+        if not steps:
+            return 'immediate'
+        if any(t == 'mixed' or t.startswith('other') for t in steps):
+            return 'mixed'
+        st = set(steps)
+        if steps[-1] == 'mp_major':
+            return 'imp_hyp'
+        if st <= {'mp', 'ande'} and 'mp' in st:
+            return 'mt'
+        if st == {'ande'}:
+            return 'and_elim'
+        if st == {'ori'}:
+            return 'or_weaken'
+        if st == {'andi'}:
+            return 'and_intro'
+        return 'mixed'
+
+    def refutation(self, n):
+        """-> (route, steps, dependent side is the positive side?, independent line) for a NEGI line n."""
         s, e = n['refs']
+        if s != e and s not in self.hyps[e]:
+            return 'vacuous', None, None, None
         f = self.origin(e)
-        if f is None or f['rule'] != 'NEGE' or not self.inside(f, s, e) or len(f['refs']) != 2:
-            return None
-        a, b = f['refs']
-        da, db = s in self.hyps[a], s in self.hyps[b]
-        if da == db:
-            return None
-        x = self.origin(a if da else b)
-        c = self.elim_chain(x, s)
-        if c is None or c[0] < 1:
-            return None
-        if c == (1, 0):
-            return 'strict' if da else 'neg_side'
-        return 'chain'
+        if f is None or not self.inside(f, s, e):
+            return 'other', None, None, None
+        if f['rule'] == 'NEGE' and len(f['refs']) == 2:
+            a, b = f['refs']
+            da, db = self.dep(a, s), self.dep(b, s)
+            if da and db:
+                return 'self', None, None, None
+            steps = self.trace(self.origin(a if da else b), s)
+            return self.route_of(steps), steps, da, self.origin(b if da else a)
+        if f['rule'] == 'IMPE' and len(f['refs']) == 2:        # ⊥ from a given ( X > F )
+            maj, mnr = f['refs']
+            if self.dep(mnr, s) and not self.dep(maj, s):
+                steps = self.trace(self.origin(mnr), s)
+                return self.route_of(steps), steps, True, self.origin(maj)
+            return 'mixed', None, None, None
+        if f['rule'] == 'ORE':
+            return 'cases', None, None, None
+        return 'other', None, None, None
 
     def contraposition(self, i):
         """IMPI line i with hypothesis ¬B whose box ends in a modus tollens that uses that ¬B as its independent side."""
-        if i['rule'] != 'IMPI' or len(i['refs']) != 2:
-            return False
         s, e = i['refs']
         if self.by[s]['formula'][0] != 'not':
             return False
         n = self.origin(e)
-        if n is None or n['rule'] != 'NEGI' or not self.inside(n, s + 1, e) or self.mt(n) is None:
+        if n is None or n['rule'] != 'NEGI' or not self.inside(n, s + 1, e):
             return False
-        f = self.origin(n['refs'][1])
-        a, b = f['refs']
-        indep = b if n['refs'][0] in self.hyps[a] else a
-        o = self.origin(indep)
-        return o is not None and o['idx'] == s
+        route, steps, pos, indep = self.refutation(n)
+        return route == 'mt' and indep is not None and indep['idx'] == s
 
-    def dn_kind(self, d):
-        """for a DN line: 'sigma' / 'sigma_via_r' / 'built_other' (proof by contradiction) or
-        'on_premise' / 'on_hypothesis' / 'on_derived' (elimination of a supplied double negation)."""
+    def dn_source(self, d):
         c = self.origin(d['refs'][0]) if d['refs'] else None
         if c is None:
-            return None
+            return None, None
         if c['rule'] == 'NEGI':
-            return 'sigma' if c['idx'] == d['refs'][0] else 'sigma_via_r'
-        if c['rule'] == 'PR':
-            return 'on_premise'
-        if c['rule'] == 'AS':
-            return 'on_hypothesis'
-        return 'on_derived' if NOT(NOT(d['formula'])) in self.sub else 'built_other'
+            return 'negi', c
+        if c['rule'] in ('PR', 'AS'):
+            return c['rule'], c
+        return ('supplied' if NOT(NOT(d['formula'])) in self.sub else 'built'), c
 
     def is_lem_line(self, x):
         f = x['formula']
@@ -225,196 +266,185 @@ class Proof:
             return False
         return x['rule'] == 'DN' or any(self.by[y]['rule'] == 'DN' for y in self.deps[x['idx']])
 
-    def ore_kind(self, o):
-        """-> (refuted branch count, sub-type set) for an ORE line."""
-        j, s1, e1, s2, e2 = o['refs']
-        d = self.origin(j)
-        sub = set()
-        nref = int(self.refuted(s1, e1)) + int(self.refuted(s2, e2))
-        if d is not None:
-            sub.add('cases.on_premise' if d['rule'] == 'PR' else 'cases.on_hypothesis' if d['rule'] == 'AS' else 'cases.on_derived')
-            if d['formula'][0] == 'or' and d['formula'][1] == d['formula'][2]:
-                sub.add('cases.trivial_merge')
-            if d['rule'] in ('ORI1', 'ORI2'):
-                sub.add('cases.or_intro_decoration')
-            if self.is_lem_line(d):
-                sub.add('cases.on_lem')
-        for s, e in ((s1, e1), (s2, e2)):
+    # ------------------------------------------------------------------ one inference
+    def line_labels(self, ln):
+        """-> (strategies this inference instantiates, sub-types); proof-level labels are added in labels()."""
+        r, i = ln['rule'], ln['idx']
+        st, sub = set(), set()
+        root = ln is self.root
+        if r in ('IMPE', 'ANDE1', 'ANDE2'):
+            st.add('direct')
+            sub.add('direct.mp' if r == 'IMPE' else 'direct.ande')
+        elif r == 'NEGE' and root:
+            st.add('direct')
+            sub.add('direct.neg_elim_root')
+        elif r == 'ANDI':
+            st.add('and_intro')
+            if root:
+                sub.add('and_intro.root')
+        elif r == 'IMPI' and len(ln['refs']) == 2:
+            st.add('cond_proof')
+            s, e = ln['refs']
+            o = self.origin(e)
             if s != e and s not in self.hyps[e]:
-                sub.add('cases.unused_case')
-        cd = True
-        for s, e in ((s1, e1), (s2, e2)):
-            b = self.origin(e)
-            if not (b is not None and self.inside(b, s, e) and b['rule'] in ('ORI1', 'ORI2')):
-                cd = False
-                break
-            c = self.origin(b['refs'][0])
-            if not (c is not None and c['rule'] == 'IMPE' and self.origin(c['refs'][1]) is not None
-                    and self.origin(c['refs'][1])['idx'] == s):
-                cd = False
-                break
-        if cd:
-            sub.add('cases.constructive_dilemma')
-        if nref == 2:
-            sub.add('cases.all_refuted')
-        return nref, sub
+                sub.add('cond_proof.vacuous')
+            if o is not None and self.inside(o, s, e):
+                if o['rule'] == 'BOTE' and s in self.hyps[o['idx']]:
+                    sub.add('cond_proof.explosive')
+                elif o['rule'] == 'IMPI':
+                    sub.add('cond_proof.curried')
+                elif o['rule'] == 'IMPE':
+                    t = self.trace(o, s)
+                    if t and set(t) == {'mp'} and len(t) >= 2:
+                        sub.add('cond_proof.hyp_syll')
+            if self.contraposition(ln):
+                st.add('mod_tollens')
+                sub.add('mod_tollens.contraposition')
+        elif r in ('ORI1', 'ORI2'):
+            st.add('or_intro')
+            ctx = set()
+            if root:
+                ctx.add('or_intro.root')
+            if i in self.branch_end:
+                ctx.add('or_intro.case_branch')
+            if i in self.disj_of:
+                ctx.add('or_intro.feeds_ore')
+            sub |= ctx or {'or_intro.other'}
+        elif r == 'ORE' and len(ln['refs']) == 5:
+            st.add('cases')
+            j, s1, e1, s2, e2 = ln['refs']
+            d = self.origin(j)
+            if d is not None:
+                sub.add('cases.on_premise' if d['rule'] == 'PR' else 'cases.on_hypothesis' if d['rule'] == 'AS' else 'cases.on_derived')
+                if d['formula'][0] == 'or' and d['formula'][1] == d['formula'][2]:
+                    sub.add('cases.trivial_merge')
+                if d['rule'] in ('ORI1', 'ORI2'):
+                    sub.add('cases.or_intro_decoration')
+                if self.is_lem_line(d):
+                    sub.add('cases.on_lem')
+                    st.add('lem')
+            used = all(s == e or s in self.hyps[e] for s, e in ((s1, e1), (s2, e2)))
+            sub.add('cases.genuine' if used else 'cases.redundant')
+            if any(s <= i <= e for s, e in self.ore_boxes):
+                sub.add('cases.nested')
+            nref = int(self.refuted(s1, e1)) + int(self.refuted(s2, e2))
+            if nref == 1:
+                st.add('disj_syll')
+            elif nref == 2:
+                sub.add('cases.all_refuted')
+            cd = True
+            for s, e in ((s1, e1), (s2, e2)):
+                b = self.origin(e)
+                c = self.origin(b['refs'][0]) if b is not None and b['rule'] in ('ORI1', 'ORI2') and self.inside(b, s, e) else None
+                m = self.origin(c['refs'][1]) if c is not None and c['rule'] == 'IMPE' else None
+                cd = cd and m is not None and m['idx'] == s
+            if cd:
+                sub.add('cases.constructive_dilemma')
+        elif r == 'NEGI' and len(ln['refs']) == 2:
+            route, steps, pos, indep = self.refutation(ln)
+            classical = i in self.dn_cited
+            if root or any(self.by[c]['rule'] != 'DN' for c in self.citers.get(i, ())):
+                st.add('neg_intro')
+                sub.add('neg_intro.' + route)
+            if route == 'mt':
+                st.add('mod_tollens')
+                if len(steps) >= 2:
+                    sub.add('mod_tollens.chain')
+                else:
+                    sub.add('mod_tollens.strict' if pos else 'mod_tollens.neg_side')
+                if classical:
+                    sub.add('mod_tollens.classical')
+        elif r == 'BOTE':
+            st.add('ex_falso')
+            f = self.origin(ln['refs'][0]) if ln['refs'] else None
+            ctx = set()
+            if root:
+                sub.add('ex_falso.root')
+            if f is not None and not self.hyps[f['idx']]:
+                ctx.add('ex_falso.inconsistent_premises')
+            if any(self.refuted(s, e) for s, e in self.branch_end.get(i, ())):
+                ctx.add('ex_falso.refuted_case')
+            if any(f is not None and s in self.hyps[f['idx']] for s, e in self.impi_end.get(i, ())):
+                ctx.add('ex_falso.explosive_cond')
+            sub |= ctx or {'ex_falso.other'}
+        elif r == 'DN' and ln['refs']:
+            src, c = self.dn_source(ln)
+            if src in ('negi', 'built'):
+                st.add('contradiction')
+                sub.add('contradiction.root' if root else 'contradiction.lemma')
+                G = ln['formula']
+                if src == 'built':
+                    sub.add('contradiction.built_other')
+                    # a double negation built by ex falso is explosion in disguise; by ∨E, a reductio in each branch
+                    route = 'vacuous' if c['rule'] == 'BOTE' else 'cases' if c['rule'] == 'ORE' else 'other'
+                    indep = None
+                else:
+                    if c['idx'] != ln['refs'][0]:
+                        sub.add('contradiction.via_r')
+                    route, steps, pos, indep = self.refutation(c)
+                    sub.add('contradiction.route_' + route)
+                # one headline kind per reductio: vacuous > pointless > scaffolded > negative goal > free
+                if route == 'vacuous':
+                    kind = 'vacuous'
+                elif route == 'immediate' and indep is not None and indep['formula'] == G:
+                    kind = 'pointless'
+                elif NOT(NOT(G)) in self.sub or ('imp', NOT(G), BOT) in self.sub:
+                    kind = 'scaffolded'
+                elif G[0] == 'not':
+                    kind = 'neg_goal'
+                else:
+                    kind = 'free'
+                sub.add('contradiction.' + kind)
+            elif src:
+                st.add('dne')
+                sub.add({'PR': 'dne.on_premise', 'AS': 'dne.on_hypothesis', 'supplied': 'dne.on_derived'}[src])
+        return st, sub
 
-    # ------------------------------------------------------------------ labels
     def labels(self):
         """-> (uses: set of strategy ids, sub: set of sub-type ids)"""
         uses, sub = set(), set()
-        L = self.lines
-        rules = collections.Counter(ln['rule'] for ln in L)
-        if rules['IMPE'] or rules['ANDE1'] or rules['ANDE2']:
-            uses.add('direct')
-            if rules['IMPE']:
-                sub.add('direct.mp')
-            if rules['ANDE1'] or rules['ANDE2']:
-                sub.add('direct.ande')
-            if impe_chain(L) >= 3:
-                sub.add('direct.mp_chain3')
-        root = self.root
-        for ln in L:
-            r, i = ln['rule'], ln['idx']
-            if r == 'ANDI':
-                uses.add('and_intro')
-                if ln is root:
-                    sub.add('and_intro.root')
-            elif r == 'IMPI' and len(ln['refs']) == 2:
-                uses.add('cond_proof')
-                s, e = ln['refs']
-                o = self.origin(e)
-                if s != e and s not in self.hyps[e]:
-                    sub.add('cond_proof.vacuous')
-                if o is not None and self.inside(o, s, e):
-                    if o['rule'] == 'BOTE':
-                        sub.add('cond_proof.explosive')
-                    elif o['rule'] == 'IMPI':
-                        sub.add('cond_proof.curried')
-                    elif o['rule'] == 'IMPE':
-                        c = self.elim_chain(o, s)
-                        if c is not None and c[0] >= 2:
-                            sub.add('cond_proof.hyp_syll')
-                if self.contraposition(ln):
-                    uses.add('mod_tollens')
-                    sub.add('mod_tollens.contraposition')
-            elif r in ('ORI1', 'ORI2'):
-                uses.add('or_intro')
-                ctx = set()
-                if ln is root:
-                    ctx.add('or_intro.root')
-                if i in self.branch_end:
-                    ctx.add('or_intro.case_branch')
-                if i in self.disj_of:
-                    ctx.add('or_intro.feeds_ore')
-                sub |= ctx or {'or_intro.other'}
-            elif r == 'ORE' and len(ln['refs']) == 5:
-                uses.add('cases')
-                nref, s2 = self.ore_kind(ln)
-                sub |= s2
-                if nref == 1:
-                    uses.add('disj_syll')
-                    sub.add('disj_syll.classic')
-            elif r == 'NEGI' and len(ln['refs']) == 2:
-                cit = self.citers.get(i, set())
-                if ln is root or any(self.by[c]['rule'] != 'DN' for c in cit):
-                    uses.add('neg_intro')
-                    s, e = ln['refs']
-                    hyp = self.by[s]['formula']
-                    if hyp[0] == 'not':
-                        sub.add('neg_intro.neg_hyp')
-                    box = [x for x in L if s < x['idx'] <= e]
-                    if any(x['rule'] in ('ANDE1', 'ANDE2') and self.origin(x['refs'][0]) is self.by[s] for x in box):
-                        sub.add('neg_intro.neg_conj')
-                    if any(x['rule'] == 'ORE' and self.origin(x['refs'][0]) is self.by[s] for x in box):
-                        sub.add('neg_intro.neg_disj')
-                    if any(x['rule'] == 'IMPE' and self.origin(x['refs'][0]) is self.by[s] for x in box):
-                        sub.add('neg_intro.neg_imp')
-                    if s != e and s not in self.hyps[e]:
-                        sub.add('neg_intro.vacuous')
-                    m = self.mt(ln)
-                    if m:
-                        uses.add('mod_tollens')
-                        sub.add('mod_tollens.' + m)
-            elif r == 'BOTE':
-                uses.add('ex_falso')
-                ctx = set()
-                if ln is root:
-                    ctx.add('ex_falso.root')
-                if any(self.refuted(s, e) for s, e in self.branch_end.get(i, ())):
-                    ctx.add('ex_falso.refuted_case')
-                if i in self.impi_end:
-                    ctx.add('ex_falso.explosive_cond')
-                sub |= ctx or {'ex_falso.other'}
-            elif r == 'DN' and ln['refs']:
-                k = self.dn_kind(ln)
-                if k in ('sigma', 'sigma_via_r', 'built_other'):
-                    uses.add('contradiction')
-                    sub.add('contradiction.' + k)
-                    if ln['formula'][0] == 'not':
-                        sub.add('contradiction.neg_goal')
-                    sub.add('contradiction.root' if ln is root else 'contradiction.lemma')
-                elif k:
-                    uses.add('dne')
-                    sub.add('dne.' + k)
-            if r not in ('PR', 'AS', 'R'):
+        for ln in self.lines:
+            st, s2 = self.line_labels(ln)
+            uses |= st
+            sub |= s2
+            if ln['rule'] not in ('PR', 'AS', 'R'):
                 if self.is_lem_line(ln):
                     uses.add('lem')
-                cit = self.citers.get(i, set())
+                cit = self.citers.get(ln['idx'], set())
                 if len(cit) >= 2:
                     uses.add('lemma_reuse')
                     if len({self.box_of[c] for c in cit}) >= 2:
                         sub.add('lemma_reuse.across_boxes')
-                    if any(self.by[y]['rule'] not in ('PR', 'AS', 'R') for y in self.deps[i]):
+                    if any(self.by[y]['rule'] not in ('PR', 'AS', 'R') for y in self.deps[ln['idx']]):
                         sub.add('lemma_reuse.multi_step')
         if 'cases.on_lem' in sub:
             sub.add('lem.cases_on_lem')
+        if impe_chain(self.lines) >= 3:
+            sub.add('direct.mp_chain3')
         return uses, sub
 
     def primary_of(self, r):
-        """the strategy of the inference at line r (an origin line), by the precedence rule of TAXONOMY.md."""
+        """-> (primary strategy, its sub-types) of the inference at line r, by the precedence rule."""
         if r is None:
-            return 'unlabelled'
-        rule = r['rule']
-        if rule == 'PR':
-            return 'trivial'
-        if rule == 'DN':
-            k = self.dn_kind(r)
-            return 'contradiction' if k in ('sigma', 'sigma_via_r', 'built_other') else 'dne'
-        if rule == 'ORE' and len(r['refs']) == 5:
-            d = self.origin(r['refs'][0])
-            if d is not None and self.is_lem_line(d):
-                return 'lem'
-            nref, _ = self.ore_kind(r)
-            return 'disj_syll' if nref == 1 else 'cases'
-        if rule == 'NEGI':
-            return 'mod_tollens' if self.mt(r) else 'neg_intro'
-        if rule == 'IMPI':
-            return 'mod_tollens' if self.contraposition(r) else 'cond_proof'
-        if rule in ('ORI1', 'ORI2'):
-            return 'or_intro'
-        if rule == 'ANDI':
-            return 'and_intro'
-        if rule == 'BOTE':
-            return 'ex_falso'
-        if rule in ('IMPE', 'ANDE1', 'ANDE2', 'NEGE'):
-            return 'direct'
-        return 'unlabelled'
+            return 'unlabelled', set()
+        if r['rule'] == 'PR':
+            return 'trivial', set()
+        st, sub = self.line_labels(r)
+        for s in PRECEDENCE:
+            if s in st:
+                return s, sub
+        return 'unlabelled', sub
 
-    def primary(self):
-        return self.primary_of(self.root)
-
-    def curried_primary(self):
-        """descend through root →I boxes (their hypotheses become premises), then the precedence rule."""
+    def curried_root(self):
+        """descend through root →I boxes (their hypotheses become premises); None = the curried conclusion is a premise."""
         r, seen = self.root, set()
         while r is not None and r['rule'] == 'IMPI' and len(r['refs']) == 2 and r['idx'] not in seen:
             seen.add(r['idx'])
-            s, e = r['refs']
-            o = self.origin(e)
+            o = self.origin(r['refs'][1])
             if o is None or o['rule'] in ('AS', 'PR'):
-                return 'trivial'
+                return None
             r = o
-        return self.primary_of(r)
+        return r
 
     def term_size(self):
         """lean_check's inference-node count of nd2lean's rendering (lean_check.py docstring): IMPE NEGE ANDE ANDI ORI
@@ -436,11 +466,13 @@ def analyse(proof, prompt=None, written=True):
     pl = prune_lines(lines)
     P = Proof(pl, seq)
     uses, sub = P.labels()
+    pri, psub = P.primary_of(P.root)
+    cr = P.curried_root()
+    pric, pcsub = P.primary_of(cr) if cr is not None else ('trivial', set())
     out = {'L': len(lines), 'Lp': len(pl), 'ts': P.term_size(), 'dep': max((x['depth'] for x in pl), default=0),
            'depw': max((x['depth'] for x in lines), default=0),
-           'u': sorted(uses), 'sub': sorted(sub), 'pri': P.primary(), 'pric': P.curried_primary(),
-           'box_free': not any(x['rule'] == 'AS' for x in pl),
-           'root_rule': P.root['rule'] if P.root else None,
+           'u': sorted(uses), 'sub': sorted(sub), 'pri': pri, 'psub': sorted(psub), 'pric': pric, 'pcsub': sorted(pcsub),
+           'box_free': not any(x['rule'] == 'AS' for x in pl), 'root_rule': P.root['rule'] if P.root else None,
            'p1': derived_ore(pl), 'p1s': derived_ore_strict(pl), 'p2': reductio(pl),
            'nest': ore_nesting(pl), 'chain': impe_chain(pl), 'nah': negi_ande_hyp(pl)}
     if written:

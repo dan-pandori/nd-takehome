@@ -964,3 +964,50 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 16:37 UTC  **Knockout s1 r24 plain read** (k 256 x0, `artifacts/coe/eval/r24_ko_s1_x0`): strict held-out members **5 / 106 — the same five as at r20** (contraposition_conv 4 / 18: `la_transfer_1019`, `1246`, `1460`, `2256`; plus `la_transfer_916`), but each now solved far more often: successes per 256 attempts r16 → r20 → r24: 1019 0 → 32 → 214, 1246 0 → 23 → 126, 1460 108 → 205 → 189, 2256 0 → 47 → 177, 916 10 → 14 → 33. No family at the bar. read1054 896 solved; cut-offs 0.32 %. **Addendum 6 item 1 expectations:** contraposition_conv training share at r24 0.3–0.8 — hit (0.33); 2–12 of its 18 held-out members at r24 — hit (4); at the bar with probability ≈ 0.3 — not at the bar; no other family at the bar — hit. Reading: from r20 to r24 RL sharpened the members it had found instead of spreading to new ones.
 - 16:48 UTC  **All pods deleted** (coe-k1 reaped 16:40, 34.69 h, $20.46; `runpodctl pod list` empty). **Final spend: 16 pods, 309.34 pod-hours, $182.50** of $190 / 330 h (`artifacts/coe/pod_hours.tsv`, `artifacts/coe/compute.md`: process GPU-hours 419.9, RL ladders 191.2, reads 181.7). RunPod balance $101.23. Final checks: knockout s1's replay check over 24 rounds (2.09 M mix records) 0 σ-like replay records, 0 leaked K12 records — 6 / 6 knockout seeds pass; knockout s1's log p of known σ proofs along the ladder −26.0 (pend) → −33.6 (r16), best member −7.9 → −4.2; **offline Lean re-check** (`coe/coe_recheck.py` → `artifacts/coe/recheck.json`): 1,062 / 1,062 counted proofs accepted (every knockout proof of a strict member in the plain reads 424, knockout base large-k successes 13, Phase 3a 25, samples of full r16 450 and dose r16 150), and the same 1,062 with the conclusion negated 1,062 / 1,062 rejected. Data files published with manifest rows (the three training sets, `known_targets*.jsonl.gz`); the bulk artifacts follow (`publish_artifacts.py`).
 - 17:39 UTC  **Bulk artifacts published** (`publish_artifacts.py create-or-elicit artifacts/coe artifacts/create-or-elicit`, under the download lock): 744 files, 1,265,129,988 bytes (read rows, large-k chunks, scores, known-proof sets, registry rows), credential scan clean, every bucket copy re-downloaded and matched by sha256; `artifacts/MANIFEST.jsonl` 3,382 rows. Checkpoints (12 Stage 1, 200 ladder, 10 Phase 3a) were uploaded on save to `hf://buckets/dan-pandori/nd-rl/create-or-elicit/ckpts/coe/`; the ladders' found / mix / alloc files were synced from the pods to the same prefix. All pods deleted; the run is done.
+
+
+# log — proof-strategies (proposal 28; executor)
+
+## 2026-10-18
+- 18:38 UTC  Run started. Inputs copied (not linked) to `data/ps/in/`: K12 from `best-state/data/kh/train_k12.jsonl.gz`
+  (uncompressed md5 800b5486, = cap-horizon's), cap-6 `train_depth3_f0_a1.jsonl` (md5 29276f24), K12⁻
+  `create-or-elicit/data/coe/train_k12ko.jsonl.gz` (gz md5 6326ebdd), Charles's release (nd-rl 297dcbdd; private, gitignored).
+  textbook72 has no reference proofs anywhere (`data/bs/textbook72.jsonl` and Dmitry's source files carry prompts and
+  line counts only), so it gets search proofs, as pre-registered for proof-less sets.
+- 18:52 UTC  Pre-registration committed (a30bc33b), before any pod and any strategy count.
+- 19:00 UTC  Classifier v0 (`proof_strategies/strategies.py` at 82fa2c47) on K12, 46 s on the VPS: #10 = 16,703 σ records,
+  = coe_sigma exactly (pre-registered consistency check passes). v0 summary `artifacts/ps/summary/k12_v0.json`.
+  K12 proofs carry no dead lines (written = pruned for all 155,000), so the "only in dead lines" analysis is empty for K12.
+- 19:09 UTC  **Taxonomy v1** (after reading ≈ 20 K12 proofs per odd category; reasons):
+  1. ¬I / reductio boxes get a **refutation route** (how the box hypothesis is refuted: immediate, →E chain = modus
+     tollens, ∨I weakening, ∧E, ∧I, applying a hypothesis conditional, by cases, self, mixed, vacuous). Modus tollens is now
+     route "→E chain" on ANY NEGI box (σ boxes included: classical MT), instead of v0's separate shape test. Reason: v0's
+     ¬I sub-types missed most boxes (4,055 vacuous + 2,330 immediate of 7,354) and the same analysis applies to σ boxes.
+  2. Proof by contradiction gets one **kind** per reductio: vacuous (⊥ does not use ¬G) > pointless (G itself already
+     derived) > scaffolded (the sequent contains ¬¬G or ¬G → F) > negative goal > free. Reason: K12's σ proofs are
+     mostly templates (examples: records 16772, 27222, 14173, 22177, 50524, 38531).
+  3. Proof by cases: genuine (every branch uses its case hypothesis) vs redundant (some branch ignores it, so the split
+     can be deleted): 58,345 K12 records have a redundant split (e.g. records 28932, 120048).
+  4. Ex falso sub-types by where ⊥ comes from (inconsistent premises: hyps(⊥) = ∅; refuted case; explosive conditional;
+     other). Reason: 9,433 v0 "other" were mostly ⊥ from contradictory premises (12,389 K12 records have contra_prem).
+  5. Direct reasoning also covers a root ¬E (goal ⊥ from A, ¬A): 277 v0 proofs had no strategy at all, all of this shape.
+  6. Primary = the first strategy in a precedence list among those the ROOT inference instantiates (same outcomes as v0's
+     per-rule rule; stated once). 35 Lean-checked unit tests pass.
+- 19:09 UTC  **K12 under v1** (`artifacts/ps/summary/k12.json`, `artifacts/ps/explore/sigma_instances_k12.txt`): of 16,717
+  records with a reductio, the best kind per record is vacuous 7,959, scaffolded 7,693, pointless 999, negative goal 48,
+  **free 18** (17 of them DN on a double negation obtained by another rule, σ⁺ \ σ: cited rule ∨E 8, ex falso 8, DN 2
+  instances). Instance routes (17,405 reductio steps): vacuous 8,344, immediate 8,985, everything else 76. K12's σ is a
+  syntactic template, almost never a working proof by contradiction. Fix: a double negation built by ex falso (⊥ → ¬¬G →
+  G) is explosion in disguise and now counts as a vacuous reductio; one built by ∨E gets route "cases".
+- 19:15 UTC  **Pod jobs pre-registered** (before the first pod; one RTX 3090 pod, ≈ 2–3 h, ≈ $1.5; the VPS estimate was
+  5–70 CPU-h, mostly necessity time-outs, so over the pre-registered 6 h). Inputs `data/ps/pod/` (drawn on the VPS, seeds fixed):
+  J1 search proofs for the 1,610 textbook-schema instances (rl_targets 760, transfer 760, holdout250 90), J2 for textbook72
+  (72; never printed), J3 for a K12 sample (990 = 90 per length 2–12, seed 0); bound 14 lines, 120 s each, `--no_lean`
+  (pods have no Lean: every proof is Lean-checked on the VPS after the pull). J4–J6 necessity (`necessity_ps.py`, bans ∨E,
+  NEGI, BOTE, DN; bound 12, 60 s) on a K12 sample (594 = 54 per length, seed 1), Charles's 187 base problems, textbook72.
+  **Expected:** J1 ≥ 90 % found; 100 % of found proofs Lean-accepted (J1–J6). J3 ≥ 98 % found; in these shortest proofs
+  **0** redundant case splits, **0** vacuous / pointless reductios and **0** vacuous ¬I (each can be deleted for a
+  shorter proof, so a shortest proof has none: a check on the search and the predicates); proof by contradiction in
+  < 5 % (data 10.8 %). J4: the DN ban agrees with G4ip on ≥ 99 % of decided theorems; requires-∨E holds for 30–60 % of
+  the sampled theorems whose K12 proof uses ∨E; requires-BOTE for < 50 % of those whose proof uses ex falso (a reductio
+  can replace ex falso). J5: ≥ 120 of 187 decided (within bound); requires-DN = G4ip classical-only on decided ones.
