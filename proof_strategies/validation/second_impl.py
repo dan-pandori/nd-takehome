@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Second, independent implementation of the proof-strategy predicates of
 proof_strategies/TAXONOMY.md (sections 1-3; taxonomy v1.2 by default, v1.1 with
---taxonomy v1.1).
+--taxonomy v1.1, the first v1.2 text with --taxonomy v1.2pre).
 
 Written from the text of TAXONOMY.md and spec.md only: no code of the run
 (proof_strategies/*.py, patterns.py, patterns2.py, minlen.py, nd_verify/, coe/,
@@ -18,7 +18,8 @@ itself and DS needs the other branch to use its case (#5 sub-type bot_case);
 #12 instances are DN lines with an excluded-middle formula only; #8 strict
 includes the minor premise of an IMPE from X > F; #10 built_other route of an
 ORE is vacuous when both branches build ~~G vacuously (BOTE or a vacuous NEGI,
-recursively).
+recursively). Final v1.2 (20:14 UTC) adds to #6: the other branch "is not itself
+a F case" (--taxonomy v1.2pre = the v1.2 text without that clause).
 
 Output rows (one per input record, file order): i (record index), u (strategy
 ids used), sub ('<strategy>.<sub-type>' ids, a set per proof), pri (primary
@@ -31,7 +32,21 @@ import gzip
 import json
 import sys
 
-V12 = True  # taxonomy version: True = v1.2 (default), False = v1.1 (set by --taxonomy)
+# Taxonomy text version (set by --taxonomy): 'v1.1'; 'v1.2pre' (the v1.2 text of 20:04 UTC);
+# 'v1.2' (default; final #6 sentence of 20:14 UTC: the DS's other branch is not itself a F case).
+TAXONOMIES = ('v1.1', 'v1.2pre', 'v1.2')
+TAXONOMY = 'v1.2'
+V12 = True               # the v1.2 changes (all but the final #6 sentence)
+DS_OTHER_NOT_BOT = True  # final v1.2 #6: the other branch "is not itself a F case"
+
+
+def set_taxonomy(name):
+    global TAXONOMY, V12, DS_OTHER_NOT_BOT
+    if name not in TAXONOMIES:
+        raise ValueError('taxonomy must be one of %s' % (TAXONOMIES,))
+    TAXONOMY = name
+    V12 = name != 'v1.1'
+    DS_OTHER_NOT_BOT = name == 'v1.2'
 ATOMS = frozenset(['P', 'Q', 'R', 'S', 'F'])  # F is falsum
 STRATEGIES = ['direct', 'and_intro', 'cond_proof', 'or_intro', 'cases', 'disj_syll',
               'neg_intro', 'mod_tollens', 'ex_falso', 'contradiction', 'dne', 'lem',
@@ -333,15 +348,18 @@ class Proof:
         return s == e or self.dep_on(e, s)
 
     def disj_syll(self, x):
-        """#6 instance test for ORE line x: exactly one refuted branch [v1.2: and the
-        other branch uses its case]."""
+        """#6 instance test for ORE line x: exactly one refuted branch [v1.2: whose other
+        branch uses its case; final v1.2: and is not itself a F case]."""
         j, s1, e1, s2, e2 = self.refs[x]
         r1, r2 = self.refuted(s1, e1), self.refuted(s2, e2)
         if int(r1) + int(r2) != 1:
             return False
         if not V12:
             return True
-        return self.uses_case(s2, e2) if r1 else self.uses_case(s1, e1)
+        s, e = (s2, e2) if r1 else (s1, e1)   # the other branch
+        if DS_OTHER_NOT_BOT and self.form[s] == 'F':
+            return False
+        return self.uses_case(s, e)
 
     def vac_build(self, x):
         """v1.2 #10 built_other: line x builds ~~G vacuously: a BOTE line, a NEGI line
@@ -830,6 +848,15 @@ SELFTEST_VERSIONED = [
      'N7 | Q : AS ; N8 | R : R N3 ; N9 R : ORE N1 N4 N6 N7 N8 ; QED',
      {'v1.1': ({'cases', 'disj_syll', 'ex_falso'}, {'cases.redundant'}, set(), 'disj_syll'),
       'v1.2': ({'cases', 'ex_falso'}, {'cases.redundant'}, {'cases.bot_case'}, 'cases')}),
+    # one refuted branch whose other branch is the F case (K12 record 110799's shape):
+    # v1.1 both refuted; v1.2pre a DS; final v1.2 not a DS ("is not itself a F case")
+    ('THM ( P v F ) , ( ~ P ) SEQ Q PRF',
+     'N1 ( P v F ) : PR ; N2 ( ~ P ) : PR ; N3 | P : AS ; N4 | F : NEGE N3 N2 ; N5 | Q : BOTE N4 ; '
+     'N6 | F : AS ; N7 | Q : BOTE N6 ; N8 Q : ORE N1 N3 N5 N6 N7 ; QED',
+     {'v1.1': ({'cases', 'ex_falso'}, {'cases.genuine', 'cases.all_refuted'}, {'cases.bot_case'}, 'cases'),
+      'v1.2pre': ({'cases', 'disj_syll', 'ex_falso'}, {'cases.genuine', 'cases.bot_case'},
+                  {'cases.all_refuted'}, 'disj_syll'),
+      'v1.2': ({'cases', 'ex_falso'}, {'cases.genuine', 'cases.bot_case'}, {'cases.all_refuted'}, 'cases')}),
     # X v ~X by v-introduction of an X got by DNE: v1.1 counted #12, v1.2 does not
     ('THM ( ~ ( ~ P ) ) SEQ ( P v ( ~ P ) ) PRF',
      'N1 ( ~ ( ~ P ) ) : PR ; N2 P : DN N1 ; N3 ( P v ( ~ P ) ) : ORI1 N2 ; QED',
@@ -871,10 +898,10 @@ def cmd_fixtures(outp):
     """Write the self-test proofs with their expected labels under the current taxonomy
     version (for running another labeller on cases that the data sets never contain)."""
     rows = [(pr, pf, u, s, set(), pri) for pr, pf, u, s, pri in SELFTEST]
-    rows += [(pr, pf) + tuple(exp['v1.2' if V12 else 'v1.1']) for pr, pf, exp in SELFTEST_VERSIONED]
+    rows += [(pr, pf) + tuple(_expect(exp, TAXONOMY)) for pr, pf, exp in SELFTEST_VERSIONED]
     with open(outp, 'w') as f:
         for pr, pf, u, s, absent, pri in rows:
-            f.write(json.dumps({'prompt': pr, 'proof': pf, 'taxonomy': 'v1.2' if V12 else 'v1.1',
+            f.write(json.dumps({'prompt': pr, 'proof': pf, 'taxonomy': TAXONOMY,
                                 'expect_u': sorted(u), 'expect_sub_present': sorted(s),
                                 'expect_sub_absent': sorted(absent), 'expect_pri': pri}) + '\n')
     print('wrote %d fixtures -> %s' % (len(rows), outp))
@@ -886,37 +913,40 @@ def _check(prompt, proof, uses, subs, absent, pri):
     got_pri = p.primary()
     ok = (u == uses) and subs <= s and not (absent & s) and got_pri == pri and not p.diag
     if not ok:
-        print('FAIL [%s]' % ('v1.2' if V12 else 'v1.1'), prompt)
+        print('FAIL [%s]' % TAXONOMY, prompt)
         print('   uses', sorted(u), 'expected', sorted(uses))
         print('   sub ', sorted(s), 'expected >=', sorted(subs), 'and none of', sorted(absent))
         print('   pri ', got_pri, 'expected', pri, 'diag', p.diag)
     return ok
 
 
+def _expect(exp, version):
+    """Expected labels of a versioned self-test case; 'v1.2pre' defaults to 'v1.2'."""
+    return exp.get(version) or exp['v1.2']
+
+
 def cmd_selftest():
-    global V12
-    keep = V12
+    keep = TAXONOMY
     n = good = 0
-    for version in ('v1.1', 'v1.2'):
-        V12 = version == 'v1.2'
+    for version in TAXONOMIES:
+        set_taxonomy(version)
         for prompt, proof, uses, subs, pri in SELFTEST:
             n += 1
             good += _check(prompt, proof, uses, subs, set(), pri)
         for prompt, proof, exp in SELFTEST_VERSIONED:
             n += 1
-            good += _check(prompt, proof, *exp[version])
-    V12 = keep
-    print('selftest (both taxonomy versions): %d/%d ok' % (good, n))
+            good += _check(prompt, proof, *_expect(exp, version))
+    set_taxonomy(keep)
+    print('selftest (taxonomy versions %s): %d/%d ok' % (', '.join(TAXONOMIES), good, n))
     return good == n
 
 
 def main(argv):
-    global V12
     if argv[:1] == ['--taxonomy']:
-        if argv[1:2] not in (['v1.1'], ['v1.2']):
-            print('--taxonomy must be v1.1 or v1.2')
+        if argv[1:2] not in [[t] for t in TAXONOMIES]:
+            print('--taxonomy must be one of %s' % (TAXONOMIES,))
             return 2
-        V12 = argv[1] == 'v1.2'
+        set_taxonomy(argv[1])
         argv = argv[2:]
     if not argv or argv[0] not in ('selftest', 'fixtures', 'label', 'summary', 'compare'):
         print(__doc__)

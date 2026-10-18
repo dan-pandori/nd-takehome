@@ -352,7 +352,8 @@ class Proof:
             r1, r2 = self.refuted(s1, e1), self.refuted(s2, e2)
             if any(self.by[s]['formula'] == BOT for s in (s1, s2)):
                 sub.add('cases.bot_case')          # a case that is ⊥ itself: empty, not refuted
-            other_used = (s2 == e2 or s2 in self.hyps[e2]) if r1 else (s1 == e1 or s1 in self.hyps[e1])
+            os_, oe = (s2, e2) if r1 else (s1, e1)          # the branch that is not refuted must be a real case that uses itself
+            other_used = (os_ == oe or os_ in self.hyps[oe]) and self.by[os_]['formula'] != BOT
             if r1 != r2 and other_used:
                 st.add('disj_syll')
             elif r1 and r2:

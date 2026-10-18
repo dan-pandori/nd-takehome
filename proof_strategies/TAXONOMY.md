@@ -92,7 +92,7 @@ whose minor premise is the branch assumption: A ∨ B, A → C, B → D ⊢ C �
 excluded-middle line, #12).
 
 **#6 Disjunctive syllogism.** Instances: ORE lines with exactly one **refuted** branch whose other branch uses its case
-(s = e or s ∈ hyps(e)). Branch (s, e) is refuted iff its assumption s is not ⊥ itself and origin(e) is a BOTE line
+(s = e or s ∈ hyps(e)) and is not itself a ⊥ case. Branch (s, e) is refuted iff its assumption s is not ⊥ itself and origin(e) is a BOTE line
 inside the branch whose cited ⊥ depends on s (the case leads to a contradiction). A ∨ B, ¬A ⊢ B. (v1.1 also counted a
 case that is ⊥ itself, A ∨ ⊥ ⊢ A, and splits whose other branch ignored its case; the spot-check found these were most
 of the K12 instances.) Explosion done another way (a vacuous ¬I or reductio closing the case) is not counted here.

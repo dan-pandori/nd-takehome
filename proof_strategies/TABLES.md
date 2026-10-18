@@ -21,7 +21,7 @@ strategy; curried = after descending through root →I boxes.
 | 3 | Conditional proof (→I) | 66,567 | 42.95 | 20.80 | 37.65 | 0.00 |
 | 4 | ∨-introduction | 68,606 | 44.26 |  | 14.08 | 20.50 |
 | 5 | Proof by cases (∨E) | 68,453 | 44.16 | 8.79 | 20.85 | 33.41 |
-| 6 | Disjunctive syllogism | 47 | 0.03 |  | 0.01 | 0.02 |
+| 6 | Disjunctive syllogism | 43 | 0.03 |  | 0.01 | 0.02 |
 | 7 | Proof of a negation (¬I) | 7,354 | 4.74 | 2.15 | 1.94 | 2.69 |
 | 8 | Modus tollens / contraposition | 76 | 0.05 |  | 0.04 | 0.04 |
 | 9 | Ex falso | 12,455 | 8.04 |  | 0.52 | 1.58 |
@@ -210,7 +210,7 @@ K12 sample: how often the data proof uses a strategy the theorem does not requir
 | Conditional proof (→I) | 0.0 | 38.2 | 82.6 |
 | ∨-introduction | 49.6 | 43.9 | 40.6 |
 | Proof by cases (∨E) | 0.0 | 50.5 | 70.0 |
-| Disjunctive syllogism | 0.0 | 0.0 | 0.1 |
+| Disjunctive syllogism | 0.0 | 0.0 | 0.0 |
 | Proof of a negation (¬I) | 0.0 | 5.0 | 8.1 |
 | Modus tollens / contraposition | 0.0 | 0.1 | 0.0 |
 | Ex falso | 1.8 | 9.7 | 10.6 |

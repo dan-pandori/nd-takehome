@@ -7,7 +7,7 @@ Line counts are pruned ND lines; term size is lean_check's inference-node count.
 
 ## 1. Direct reasoning (→E, ∧E)
 
-**shortest clean** — K12 record 132941; 2 lines, term size 1; uses direct; primary direct. Gloss: *(to write)*
+**shortest clean** — K12 record 132941; 2 lines, term size 1; uses direct; primary direct. Gloss: From "P and Q" conclude P: one forward step (∧-elimination).
 
 ```
 THM ( P & Q ) SEQ P PRF
@@ -19,7 +19,7 @@ N2 P : ANDE1 N1
 example (P Q : Prop) (h1 : P ∧ Q) : P := h1.1
 ```
 
-**typical (pruned length 3, the median)** — K12 record 101764; 3 lines, term size 1; uses direct; primary direct. Gloss: *(to write)*
+**typical (pruned length 3, the median)** — K12 record 101764; 3 lines, term size 1; uses direct; primary direct. Gloss: Apply the second premise to the first (modus ponens); a typical K12 direct proof is this short.
 
 ```
 THM ( ( R v R ) > ( Q v Q ) ) , ( ( ( R v R ) > ( Q v Q ) ) > ( ~ P ) ) SEQ ( ~ P ) PRF
@@ -34,7 +34,7 @@ example (P Q R : Prop) (h1 : R ∨ R → Q ∨ Q) (h2 : (R ∨ R → Q ∨ Q) �
 
 ## 2. Conjunction introduction
 
-**shortest clean** — K12 record 95938; 3 lines, term size 2; uses and_intro, or_intro; primary and_intro. Gloss: *(to write)*
+**shortest clean** — K12 record 95938; 3 lines, term size 2; uses and_intro, or_intro; primary and_intro. Gloss: To prove "P and (P or Q)", prove each conjunct: P is given, and "P or Q" follows from P.
 
 ```
 THM P SEQ ( P & ( P v Q ) ) PRF
@@ -47,7 +47,7 @@ N3 ( P & ( P v Q ) ) : ANDI N1 N2
 example (P Q : Prop) (h1 : P) : P ∧ (P ∨ Q) := ⟨h1, Or.inl h1⟩
 ```
 
-**typical (pruned length 7, the median)** — K12 record 56319; 7 lines, term size 4; uses and_intro, direct, or_intro; primary and_intro. Gloss: *(to write)*
+**typical (pruned length 7, the median)** — K12 record 56319; 7 lines, term size 4; uses and_intro, direct, or_intro; primary and_intro. Gloss: Each conjunct gets its own short forward derivation (modus ponens, then ∨-introduction for the first).
 
 ```
 THM ( ( P > S ) & ( S > S ) ) , ( ( ( P > S ) & ( S > S ) ) > P ) , ( ( ( ( P > S ) & ( S > S ) ) > P ) > ( Q & P ) ) SEQ ( ( P v P ) & ( Q & P ) ) PRF
@@ -66,7 +66,7 @@ example (P Q S : Prop) (h1 : (P → S) ∧ (S → S)) (h2 : (P → S) ∧ (S →
 
 ## 3. Conditional proof (→I)
 
-**shortest clean** — K12 record 55304; 3 lines, term size 2; uses cond_proof, or_intro; primary cond_proof. Gloss: *(to write)*
+**shortest clean** — K12 record 55304; 3 lines, term size 2; uses cond_proof, or_intro; primary cond_proof. Gloss: To prove "if S then S or Q", assume S and derive "S or Q".
 
 ```
 THM SEQ ( S > ( S v Q ) ) PRF
@@ -79,7 +79,7 @@ N3 ( S > ( S v Q ) ) : IMPI N1 N2
 example (Q S : Prop) : S → S ∨ Q := fun (a1 : S) => Or.inl a1
 ```
 
-**typical (pruned length 7, the median)** — K12 record 12460; 7 lines, term size 3; uses and_intro, cond_proof; primary cond_proof. Gloss: *(to write)*
+**typical (pruned length 7, the median)** — K12 record 12460; 7 lines, term size 3; uses and_intro, cond_proof; primary cond_proof. Gloss: Typical of K12: two assumptions are opened and never used; the consequent follows from the premises alone.
 
 ```
 THM S , ( ( P & ( S v R ) ) v P ) SEQ ( ( ( P & ( S v R ) ) v P ) > ( ( S > S ) > ( S & ( ( P & ( S v R ) ) v P ) ) ) ) PRF
@@ -98,7 +98,7 @@ example (P R S : Prop) (h1 : S) (h2 : P ∧ (S ∨ R) ∨ P) : P ∧ (S ∨ R) �
 
 ## 4. ∨-introduction
 
-**shortest clean** — K12 record 16853; 2 lines, term size 1; uses or_intro; primary or_intro. Gloss: *(to write)*
+**shortest clean** — K12 record 16853; 2 lines, term size 1; uses or_intro; primary or_intro. Gloss: "S or not S" follows from the given "not S" by ∨-introduction: excluded middle's shape without its classical content.
 
 ```
 THM ( ~ S ) SEQ ( S v ( ~ S ) ) PRF
@@ -110,7 +110,7 @@ N2 ( S v ( ~ S ) ) : ORI2 N1
 example (S : Prop) (h1 : ¬S) : S ∨ ¬S := Or.inr h1
 ```
 
-**typical (pruned length 2, the median)** — K12 record 132895; 2 lines, term size 1; uses or_intro; primary or_intro. Gloss: *(to write)*
+**typical (pruned length 2, the median)** — K12 record 132895; 2 lines, term size 1; uses or_intro; primary or_intro. Gloss: Weaken the premise to a longer disjunction in one step.
 
 ```
 THM ( ( P > ( R v S ) ) v ( ( P & R ) & ( R v Q ) ) ) SEQ ( ( ( P > ( R v S ) ) v ( ( P & R ) & ( R v Q ) ) ) v R ) PRF
@@ -124,7 +124,7 @@ example (P Q R S : Prop) (h1 : (P → R ∨ S) ∨ (P ∧ R) ∧ (R ∨ Q)) : ((
 
 ## 5. Proof by cases (∨E)
 
-**shortest clean** — K12 record 42672; 5 lines, term size 4; uses cases, direct; primary cases. Gloss: *(to write)*
+**shortest clean** — K12 record 42672; 5 lines, term size 4; uses cases, direct; primary cases. Gloss: In the case "P and S" extract S; in the case S there is nothing to do; either way S.
 
 ```
 THM ( ( P & S ) v S ) SEQ S PRF
@@ -142,7 +142,7 @@ example (P S : Prop) (h1 : P ∧ S ∨ S) : S :=
     (fun (a2 : S) => a2)
 ```
 
-**typical (pruned length 10, the median)** — K12 record 31172; 10 lines, term size 8; uses and_intro, cases, ex_falso, lemma_reuse, or_intro; primary cases. Gloss: *(to write)*
+**typical (pruned length 10, the median)** — K12 record 31172; 10 lines, term size 8; uses and_intro, cases, ex_falso, lemma_reuse, or_intro; primary cases. Gloss: Typical of K12: the premises are inconsistent, the split is on a disjunction obtained by explosion, and one case ignores its assumption, so the split does no work.
 
 ```
 THM ( R > ( P & P ) ) , ( ~ ( R > ( P & P ) ) ) SEQ ( ( ( ~ ( R > ( P & P ) ) ) & ( ~ ( R > ( P & P ) ) ) ) v Q ) PRF
@@ -168,7 +168,7 @@ example (P Q R S : Prop) (h1 : R → P ∧ P) (h2 : ¬(R → P ∧ P)) : ¬(R �
 
 ## 6. Disjunctive syllogism
 
-**shortest clean** — K12 record 47528; 8 lines, term size 6; uses cases, disj_syll, ex_falso, or_intro; primary disj_syll. Gloss: *(to write)*
+**shortest clean** — K12 record 47528; 8 lines, term size 6; uses cases, disj_syll, ex_falso, or_intro; primary disj_syll. Gloss: Of the cases ¬S and P, the first contradicts the premise ¬¬S, so the goal follows from P.
 
 ```
 THM ( ~ ( ~ S ) ) , ( ( ~ S ) v P ) SEQ ( ( Q v S ) v P ) PRF
@@ -189,7 +189,7 @@ example (P Q S : Prop) (h1 : ¬¬S) (h2 : ¬S ∨ P) : (Q ∨ S) ∨ P :=
     (fun (a2 : P) => Or.inr a2)
 ```
 
-**typical (pruned length 10, the median)** — K12 record 150145; 10 lines, term size 7; uses cases, direct, disj_syll, ex_falso, or_intro; primary disj_syll. Gloss: *(to write)*
+**typical (pruned length 10, the median)** — K12 record 150145; 10 lines, term size 7; uses cases, direct, disj_syll, ex_falso, or_intro; primary disj_syll. Gloss: The proof first builds "Q or P" from P and then rules out the case Q against ¬Q: a disjunctive syllogism the proof did not need.
 
 ```
 THM P , ( ~ Q ) , ( P > ( ( Q > F ) & ( Q v R ) ) ) SEQ ( ( Q > F ) & ( Q v R ) ) PRF
@@ -214,7 +214,7 @@ example (P Q R : Prop) (h1 : P) (h2 : ¬Q) (h3 : P → (Q → False) ∧ (Q ∨ 
 
 ## 7. Proof of a negation (¬I)
 
-**shortest clean** — K12 record 24177; 5 lines, term size 3; uses neg_intro, or_intro; primary neg_intro. Gloss: *(to write)*
+**shortest clean** — K12 record 24177; 5 lines, term size 3; uses neg_intro, or_intro; primary neg_intro. Gloss: Assume ¬R; then "R or ¬R" holds, contradicting the premise; so ¬¬R, a proof of a negation with no classical step.
 
 ```
 THM ( ~ ( R v ( ~ R ) ) ) SEQ ( ~ ( ~ R ) ) PRF
@@ -229,7 +229,7 @@ N5 ( ~ ( ~ R ) ) : NEGI N2 N4
 example (R : Prop) (h1 : ¬(R ∨ ¬R)) : ¬¬R := fun (a1 : ¬R) => h1 (Or.inr a1)
 ```
 
-**typical (pruned length 7, the median)** — K12 record 154216; 7 lines, term size 3; uses direct, neg_intro; primary neg_intro. Gloss: *(to write)*
+**typical (pruned length 7, the median)** — K12 record 154216; 7 lines, term size 3; uses direct, neg_intro; primary neg_intro. Gloss: Typical of K12: the premises are already inconsistent, so the negation is proved without using its assumption.
 
 ```
 THM ( R > ( R v R ) ) , R , ( ~ ( R v R ) ) SEQ ( ~ ( ( Q & R ) & ( P > S ) ) ) PRF
@@ -248,7 +248,7 @@ example (P Q R S : Prop) (h1 : R → R ∨ R) (h2 : R) (h3 : ¬(R ∨ R)) : ¬((
 
 ## 8. Modus tollens / contraposition
 
-**shortest clean** — K12 record 43479; 6 lines, term size 3; uses direct, mod_tollens, neg_intro; primary mod_tollens. Gloss: *(to write)*
+**shortest clean** — K12 record 43479; 6 lines, term size 3; uses direct, mod_tollens, neg_intro; primary mod_tollens. Gloss: From "if R then S" and "not S" conclude "not R": assuming R would give S.
 
 ```
 THM ( ~ S ) , ( R > S ) SEQ ( ~ R ) PRF
@@ -264,7 +264,7 @@ N6 ( ~ R ) : NEGI N3 N5
 example (R S : Prop) (h1 : ¬S) (h2 : R → S) : ¬R := fun (a1 : R) => h1 (h2 a1)
 ```
 
-**typical (pruned length 6, the median)** — K12 record 13406; 6 lines, term size 3; uses direct, mod_tollens, neg_intro; primary mod_tollens. Gloss: *(to write)*
+**typical (pruned length 6, the median)** — K12 record 13406; 6 lines, term size 3; uses direct, mod_tollens, neg_intro; primary mod_tollens. Gloss: Modus tollens with a compound antecedent: assuming ¬¬(S → R) yields a conjunction that the second premise denies.
 
 ```
 THM ( ( ~ ( ~ ( S > R ) ) ) > ( ( R & R ) & P ) ) , ( ~ ( ( R & R ) & P ) ) SEQ ( ~ ( ~ ( ~ ( S > R ) ) ) ) PRF
@@ -282,7 +282,7 @@ example (P R S : Prop) (h1 : ¬¬(S → R) → (R ∧ R) ∧ P) (h2 : ¬((R ∧ 
 
 ## 9. Ex falso
 
-**shortest clean** — K12 record 104971; 4 lines, term size 2; uses ex_falso; primary ex_falso. Gloss: *(to write)*
+**shortest clean** — K12 record 104971; 4 lines, term size 2; uses ex_falso; primary ex_falso. Gloss: Q and not Q are both given, so anything follows, here R.
 
 ```
 THM Q , ( ~ Q ) SEQ R PRF
@@ -296,7 +296,7 @@ N4 R : BOTE N3
 example (Q R : Prop) (h1 : Q) (h2 : ¬Q) : R := False.elim (h2 h1)
 ```
 
-**typical (pruned length 5, the median)** — K12 record 149572; 5 lines, term size 3; uses and_intro, ex_falso; primary ex_falso. Gloss: *(to write)*
+**typical (pruned length 5, the median)** — K12 record 149572; 5 lines, term size 3; uses and_intro, ex_falso; primary ex_falso. Gloss: The premises Q and ¬(Q ∧ Q) contradict each other, so the goal follows by explosion.
 
 ```
 THM Q , ( ~ ( Q & Q ) ) SEQ ( ( P & P ) v R ) PRF
@@ -313,7 +313,7 @@ example (P Q R : Prop) (h1 : Q) (h2 : ¬(Q ∧ Q)) : P ∧ P ∨ R := False.elim
 
 ## 10. Proof by contradiction (classical)
 
-**shortest clean** — K12 record 131990; 11 lines, term size 8; uses and_intro, cases, contradiction; primary and_intro. Gloss: *(to write)*
+**shortest clean** — K12 record 131990; 11 lines, term size 8; uses and_intro, cases, contradiction; primary and_intro. Gloss: To prove R, assume ¬R and split on the first premise: R contradicts ¬R, and "¬R or ¬S" contradicts the second premise; so R. One of the 59 working reductios in K12.
 
 ```
 THM ( R v ( ( ~ R ) v ( ~ S ) ) ) , ( ~ ( ( ~ R ) v ( ~ S ) ) ) SEQ ( ( R v ( ( ~ R ) v ( ~ S ) ) ) & R ) PRF
@@ -338,7 +338,7 @@ example (R S : Prop) (h1 : R ∨ ¬R ∨ ¬S) (h2 : ¬(¬R ∨ ¬S)) : (R ∨ ¬
       (fun (a3 : ¬R ∨ ¬S) => h2 a3))⟩
 ```
 
-**typical (pruned length 5, the median)** — K12 record 108482; 5 lines, term size 3; uses contradiction, direct; primary contradiction. Gloss: *(to write)*
+**typical (pruned length 5, the median)** — K12 record 108482; 5 lines, term size 3; uses contradiction, direct; primary contradiction. Gloss: Typical of K12: the premise already says "¬G implies falsum", and assuming ¬G only to apply it is double-negation elimination in disguise (a template).
 
 ```
 THM ( ( ~ ( ( ~ ( S > P ) ) v ( P & ( ~ S ) ) ) ) > F ) SEQ ( ( ~ ( S > P ) ) v ( P & ( ~ S ) ) ) PRF
@@ -353,7 +353,7 @@ N5 ( ( ~ ( S > P ) ) v ( P & ( ~ S ) ) ) : DN N4
 example (P S : Prop) (h1 : ¬(¬(S → P) ∨ P ∧ ¬S) → False) : ¬(S → P) ∨ P ∧ ¬S := Classical.byContradiction (fun (a1 : ¬(¬(S → P) ∨ P ∧ ¬S)) => h1 a1)
 ```
 
-**kind vacuous (shortest K12 proof with only this kind; primary if one exists)** — K12 record 558; 6 lines, term size 3; uses contradiction; primary contradiction. Gloss: *(to write)*
+**kind vacuous (shortest K12 proof with only this kind; primary if one exists)** — K12 record 558; 6 lines, term size 3; uses contradiction; primary contradiction. Gloss: The premises contradict each other; the reductio's assumption is never used (explosion in disguise).
 
 ```
 THM ( ( R > P ) > Q ) , ( ~ ( ( R > P ) > Q ) ) SEQ ( ( P v R ) > ( ~ ( Q v P ) ) ) PRF
@@ -369,7 +369,7 @@ N6 ( ( P v R ) > ( ~ ( Q v P ) ) ) : DN N5
 example (P Q R : Prop) (h1 : (R → P) → Q) (h2 : ¬((R → P) → Q)) : P ∨ R → ¬(Q ∨ P) := Classical.byContradiction (fun (a1 : ¬(P ∨ R → ¬(Q ∨ P))) => h2 h1)
 ```
 
-**kind pointless (shortest K12 proof with only this kind; primary if one exists)** — K12 record 359; 6 lines, term size 4; uses contradiction, or_intro; primary or_intro. Gloss: *(to write)*
+**kind pointless (shortest K12 proof with only this kind; primary if one exists)** — K12 record 359; 6 lines, term size 4; uses contradiction, or_intro; primary or_intro. Gloss: S is a premise, yet the proof re-derives S by assuming ¬S and contradicting the premise.
 
 ```
 THM S SEQ ( S v ( ( R v P ) > ( P > R ) ) ) PRF
@@ -385,7 +385,7 @@ N6 ( S v ( ( R v P ) > ( P > R ) ) ) : ORI1 N5
 example (P R S : Prop) (h1 : S) : S ∨ (R ∨ P → P → R) := Or.inl (Classical.byContradiction (fun (a1 : ¬S) => a1 h1))
 ```
 
-**kind scaffolded (shortest K12 proof with only this kind; primary if one exists)** — K12 record 137; 5 lines, term size 3; uses contradiction; primary contradiction. Gloss: *(to write)*
+**kind scaffolded (shortest K12 proof with only this kind; primary if one exists)** — K12 record 137; 5 lines, term size 3; uses contradiction; primary contradiction. Gloss: The premise is ¬¬X; assuming ¬X only to clash with it is double-negation elimination in disguise.
 
 ```
 THM ( ~ ( ~ ( ( ~ ( S v R ) ) & ( ( ~ S ) & ( P v R ) ) ) ) ) SEQ ( ( ~ ( S v R ) ) & ( ( ~ S ) & ( P v R ) ) ) PRF
@@ -401,7 +401,7 @@ example (P R S : Prop) (h1 : ¬¬(¬(S ∨ R) ∧ ¬S ∧ (P ∨ R))) : ¬(S ∨
   Classical.byContradiction (fun (a1 : ¬(¬(S ∨ R) ∧ ¬S ∧ (P ∨ R))) => h1 a1)
 ```
 
-**kind neg_goal (shortest K12 proof with only this kind; primary if one exists)** — K12 record 16163; 6 lines, term size 4; uses contradiction, or_intro; primary contradiction. Gloss: *(to write)*
+**kind neg_goal (shortest K12 proof with only this kind; primary if one exists)** — K12 record 16163; 6 lines, term size 4; uses contradiction, or_intro; primary contradiction. Gloss: The goal is a negation, ¬S, reached through ¬¬¬S; intuitionistic logic already gives ¬S from that.
 
 ```
 THM ( ~ ( ( ~ ( ~ S ) ) v ( P > ( ~ Q ) ) ) ) SEQ ( ~ S ) PRF
@@ -417,34 +417,9 @@ N6 ( ~ S ) : DN N5
 example (P Q S : Prop) (h1 : ¬(¬¬S ∨ (P → ¬Q))) : ¬S := Classical.byContradiction (fun (a1 : ¬¬S) => h1 (Or.inl a1))
 ```
 
-**kind free (shortest K12 proof with only this kind; primary if one exists)** — K12 record 131990; 11 lines, term size 8; uses and_intro, cases, contradiction; primary and_intro. Gloss: *(to write)*
-
-```
-THM ( R v ( ( ~ R ) v ( ~ S ) ) ) , ( ~ ( ( ~ R ) v ( ~ S ) ) ) SEQ ( ( R v ( ( ~ R ) v ( ~ S ) ) ) & R ) PRF
-N1 ( R v ( ( ~ R ) v ( ~ S ) ) ) : PR
-N2 ( ~ ( ( ~ R ) v ( ~ S ) ) ) : PR
-N3 | ( ~ R ) : AS
-N4 | | R : AS
-N5 | | F : NEGE N4 N3
-N6 | | ( ( ~ R ) v ( ~ S ) ) : AS
-N7 | | F : NEGE N6 N2
-N8 | F : ORE N1 N4 N5 N6 N7
-N9 ( ~ ( ~ R ) ) : NEGI N3 N8
-N10 R : DN N9
-N11 ( ( R v ( ( ~ R ) v ( ~ S ) ) ) & R ) : ANDI N1 N10
-```
-
-```lean
-example (R S : Prop) (h1 : R ∨ ¬R ∨ ¬S) (h2 : ¬(¬R ∨ ¬S)) : (R ∨ ¬R ∨ ¬S) ∧ R :=
-  ⟨h1, Classical.byContradiction (fun (a1 : ¬R) =>
-    h1.elim
-      (fun (a2 : R) => a1 a2)
-      (fun (a3 : ¬R ∨ ¬S) => h2 a3))⟩
-```
-
 ## 11. Double-negation elimination
 
-**shortest clean** — K12 record 70566; 2 lines, term size 1; uses dne; primary dne. Gloss: *(to write)*
+**shortest clean** — K12 record 70566; 2 lines, term size 1; uses dne; primary dne. Gloss: The premise ¬¬(Q ∨ R) gives Q ∨ R by double-negation elimination.
 
 ```
 THM ( ~ ( ~ ( Q v R ) ) ) SEQ ( Q v R ) PRF
@@ -456,7 +431,7 @@ N2 ( Q v R ) : DN N1
 example (Q R : Prop) (h1 : ¬¬(Q ∨ R)) : Q ∨ R := Classical.byContradiction h1
 ```
 
-**typical (pruned length 8, the median)** — K12 record 142440; 8 lines, term size 6; uses cases, direct, dne, lemma_reuse, or_intro; primary dne. Gloss: *(to write)*
+**typical (pruned length 8, the median)** — K12 record 142440; 8 lines, term size 6; uses cases, direct, dne, lemma_reuse, or_intro; primary dne. Gloss: Eliminates a double negation that the theorem supplies (through its second premise), reached by an unnecessary case split.
 
 ```
 THM ( ~ P ) , ( ( ( ~ ( ~ R ) ) v ( ~ P ) ) > ( ~ ( ~ R ) ) ) SEQ R PRF
@@ -480,7 +455,7 @@ example (P R : Prop) (h1 : ¬P) (h2 : ¬¬R ∨ ¬P → ¬¬R) : R :=
 
 ## 12. Excluded middle
 
-**shortest clean** — textbook-schema instance (search proof) record 819; 9 lines, term size 7; uses contradiction, lem, neg_intro, or_intro; primary contradiction. Gloss: *(to write)*
+**shortest clean** — textbook-schema instance (search proof) record 819; 9 lines, term size 7; uses contradiction, lem, neg_intro, or_intro; primary contradiction. Gloss: Excluded middle for X = ¬¬P, proved the standard way: assume it fails, refute ¬¬P, then refute the assumption (from the RL pools' textbook schemata; K12 has no clean instance).
 
 ```
 THM SEQ ( ( ~ ( ~ P ) ) v ( ~ ( ~ ( ~ P ) ) ) ) PRF
@@ -502,7 +477,7 @@ example (P : Prop) : ¬¬P ∨ ¬¬¬P :=
 
 ## 13. Lemma reuse
 
-**shortest clean** — K12 record 44059; 6 lines, term size 4; uses and_intro, lemma_reuse, neg_intro, or_intro; primary and_intro. Gloss: *(to write)*
+**shortest clean** — K12 record 44059; 6 lines, term size 4; uses and_intro, lemma_reuse, neg_intro, or_intro; primary and_intro. Gloss: The lemma ¬¬(Q → P) is proved once and used twice, once in each conjunct.
 
 ```
 THM ( Q > P ) SEQ ( ( ( ~ ( ~ ( Q > P ) ) ) v R ) & ( ~ ( ~ ( Q > P ) ) ) ) PRF
@@ -520,7 +495,7 @@ example (P Q R : Prop) (h1 : Q → P) : (¬¬(Q → P) ∨ R) ∧ ¬¬(Q → P) 
   ⟨Or.inl l4, l4⟩
 ```
 
-**typical (pruned length 10, the median)** — K12 record 34370; 10 lines, term size 7; uses and_intro, cases, lemma_reuse, or_intro; primary and_intro. Gloss: *(to write)*
+**typical (pruned length 10, the median)** — K12 record 34370; 10 lines, term size 7; uses and_intro, cases, lemma_reuse, or_intro; primary and_intro. Gloss: The disjunction (P → P) ∨ S is derived once and reused three times.
 
 ```
 THM ( P > P ) SEQ ( ( ( ( P > P ) v S ) & ( P > P ) ) & ( ( P > P ) v S ) ) PRF

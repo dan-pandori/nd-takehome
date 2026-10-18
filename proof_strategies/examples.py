@@ -137,8 +137,12 @@ def write_md(out):
           'proof, a Lean 4 rendering accepted by `lean_check` (core Lean, allowlisted constants only), and a hand-written gloss.',
           'No example is in a textbook72 renaming class (`sealed.py`: order-sensitive, premise-order-invariant and curried keys).',
           'Line counts are pruned ND lines; term size is lean_check\'s inference-node count.', '']
+    shown = set()
     for st in STRATS:
-        ex = [e for e in out if e['strategy'] == st]
+        ex = []
+        for e in out:
+            if e['strategy'] == st and (e['source'], e['index']) not in shown:
+                shown.add((e['source'], e['index'])); ex.append(e)
         md += [f'## {STRATS.index(st) + 1}. {NAME[st]}', '']
         for e in ex:
             gid = f"{st}:{e['role'].split(' (')[0]}"
@@ -150,4 +154,7 @@ def write_md(out):
 
 
 if __name__ == '__main__':
-    main()
+    if '--md_only' in sys.argv:
+        write_md(json.load(open('artifacts/ps/examples.json'))['examples'])
+    else:
+        main()
