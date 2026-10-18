@@ -9,23 +9,26 @@ disjunctive syllogism and excluded middle tightened, wording clarified; changes 
 
 **Thirteen strategies** (ten intuitionistic, three classical) plus "trivial", each with sub-types. Every proof gets two
 kinds of label: **uses** (each strategy that occurs anywhere in it) and one **primary** (how its conclusion is reached).
+The table gives the share of proofs that use each strategy in K12 (155,000 generator proofs) and in Charles's 187
+textbook problems (reference proofs); in parentheses, the share where the step does logical work (§ 2). All shares,
+comparison sets and breakdowns: `TABLES.md`.
 
-| # | strategy (id) | standard names | classical? | the knockout's σ |
-|---|---|---|---|---|
-| 1 | Direct reasoning (`direct`) | forward chaining; modus ponens / →E, simplification / ∧E | no | – |
-| 2 | Conjunction introduction (`and_intro`) | ∧I, adjunction, "prove each conjunct" | no | – |
-| 3 | Conditional proof (`cond_proof`) | →I, conditional proof (CP), deduction theorem | no | – |
-| 4 | ∨-introduction (`or_intro`) | ∨I, addition | no | – |
-| 5 | Proof by cases (`cases`) | ∨E, argument by cases | no | – |
-| 6 | Disjunctive syllogism (`disj_syll`) | DS, modus tollendo ponens | no | – |
-| 7 | Proof of a negation (`neg_intro`) | ¬I; "proof of negation"; intuitionistic reductio | no | – |
-| 8 | Modus tollens / contraposition (`mod_tollens`) | MT (modus tollendo tollens); contraposition | no (a classical variant exists) | – |
-| 9 | Ex falso (`ex_falso`) | explosion, ex falso quodlibet, ⊥E | no | – |
-| 10 | **Proof by contradiction** (`contradiction`) | classical reductio ad absurdum (RAA), indirect proof (IP), ⊥c | **yes** | **σ = #10 (via ¬I); σ⁺ = #10 ∪ part of #11** |
-| 11 | Double-negation elimination (`dne`) | DNE on a double negation the theorem supplies | **yes** | part of σ⁺ |
-| 12 | Excluded middle (`lem`) | LEM, tertium non datur; cases on A ∨ ¬A | **yes** | – |
-| 13 | Lemma reuse (`lemma_reuse`) | a lemma used twice (a shared derived line) | no | – |
-| – | Trivial | the conclusion is a premise | no | – |
+| # | strategy (id) | standard names | classical? | K12 % (working) | textbooks % | the knockout's σ |
+|---|---|---|---|---:|---:|---|
+| 1 | Direct reasoning (`direct`) | forward chaining; modus ponens / →E, simplification / ∧E | no | 51.2 | 84.5 | – |
+| 2 | Conjunction introduction (`and_intro`) | ∧I, adjunction, "prove each conjunct" | no | 32.6 | 47.6 | – |
+| 3 | Conditional proof (`cond_proof`) | →I, conditional proof (CP), deduction theorem | no | 42.9 (20.8) | 52.4 (49.2) | – |
+| 4 | ∨-introduction (`or_intro`) | ∨I, addition | no | 44.3 | 31.0 | – |
+| 5 | Proof by cases (`cases`) | ∨E, argument by cases | no | 44.2 (8.8) | 33.7 (33.7) | – |
+| 6 | Disjunctive syllogism (`disj_syll`) | DS, modus tollendo ponens | no | 0.03 | 14.4 | – |
+| 7 | Proof of a negation (`neg_intro`) | ¬I; "proof of negation"; intuitionistic reductio | no | 4.7 (2.1) | 38.0 (38.0) | – |
+| 8 | Modus tollens / contraposition (`mod_tollens`) | MT (modus tollendo tollens); contraposition | no (a classical variant exists) | 0.05 | 11.8 | – |
+| 9 | Ex falso (`ex_falso`) | explosion, ex falso quodlibet, ⊥E | no | 8.0 | 24.1 | – |
+| 10 | **Proof by contradiction** (`contradiction`) | classical reductio ad absurdum (RAA), indirect proof (IP), ⊥c | **yes** | 10.8 (0.04) | 20.9 (20.9) | **σ = #10 (via ¬I); σ⁺ = #10 ∪ part of #11** |
+| 11 | Double-negation elimination (`dne`) | DNE on a double negation the theorem supplies | **yes** | 3.1 | 3.2 | part of σ⁺ |
+| 12 | Excluded middle (`lem`) | LEM, tertium non datur; cases on A ∨ ¬A | **yes** | 0.03 | 0 | – |
+| 13 | Lemma reuse (`lemma_reuse`) | a lemma used twice (a shared derived line) | no | 11.7 | 16.0 | – |
+| – | Trivial | the conclusion is a premise | no | 0 (primary) | 0 | – |
 
 References for the names: Gentzen (1935) and Prawitz (1965) for the introduction / elimination rules, ⊥ and the
 classical absurdity rule; Fitch (1952) for subproofs and reiteration; *forall x: Calgary* (Magnus, Button, Trueman and

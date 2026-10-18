@@ -277,3 +277,4 @@ Brief: run brief `proof-strategies` (Dan, 2026-10-18). Policy: AGENT_POLICY.md. 
 ## proof-strategies
 - 2026-10-18 18:38 UTC  run started (executor). Inputs copied to `data/ps/in/` (gitignored; K12 md5 800b5486, K12⁻ gz 6326ebdd, cap-6 29276f24; Charles's release at nd-rl 297dcbdd, private, local only).
 - 2026-10-18 18:52 UTC  Pre-registration `preregistration/proof-strategies.md` committed before any pod and before any strategy count. `podbudget proof-strategies --set 40 20`.
+- 20:37 UTC  Taxonomy v1.2 final (13 strategies; `proof_strategies/TAXONOMY.md`), all sets classified (`TABLES.md`), examples Lean-checked (`EXAMPLES.md`), validation done (blind spot-check 260 / 260; independent second implementation agrees on every record), RL's own proofs classified (create-or-elicit mixes). One pod, 0.2 h, $0.10. Blog drafted; independent claim check running. UNREVIEWED.
