@@ -276,20 +276,22 @@ alone. σ-covered = RL targets whose every proof needs a working reductio (123 o
 comparison: working reductios in K12 59 of 16,717 proofs with a reductio; dose set 5 of 1,550; K12⁻ 0 of 0. (An earlier count from the fine-tune mixes, `rl_mix.json`, sampled ≤ 4 proofs per problem from the
 accumulated pool and is superseded; log.md 2026-10-18.)
 
-| ladder | distinct proofs, round 1 / rounds 1–16 | working reductios, round 1 | working reductios, rounds 2–16 | template-only reductio proofs, rounds 1–16 | σ-covered targets with a working reductio, round 1 / by round 16 |
+"free" = working, positive goal, no double negation supplied (the kind σ-covered targets need).
+
+| ladder | distinct proofs, round 1 / rounds 1–16 | working reductios, round 1 (free) | working reductios, rounds 2–16 (free) | template-only reductio proofs, rounds 1–16 | σ-covered targets with a working reductio, round 1 / by round 16 |
 |---|---:|---:|---:|---:|---:|
-| full_s3 | 14,212 / 662,616 | 76 | 26,450 | 32,403 | 17 / 78 |
-| full_s4 | 18,463 / 665,629 | 32 | 9,082 | 15,327 | 15 / 33 |
-| full_s5 | 17,212 / 624,409 | 52 | 6,951 | 13,938 | 20 / 36 |
-| dose1_s0 | 14,359 / 752,455 | 15 | 16,970 | 12,003 | 2 / 69 |
-| dose1_s1 | 13,649 / 641,103 | 45 | 11,057 | 17,133 | 17 / 46 |
-| dose1_s2 | 15,729 / 638,736 | 7 | 9,969 | 12,976 | 2 / 41 |
-| ko_s0 | 13,838 / 568,100 | 1 | 358 | 435 | 0 / 0 |
-| ko_s1 | 13,597 / 596,861 | 0 | 399 | 640 | 0 / 5 |
-| ko_s2 | 16,984 / 719,994 | 1 | 772 | 717 | 0 / 1 |
-| ko_s3 | 14,210 / 632,736 | 0 | 169 | 272 | 0 / 0 |
-| ko_s4 | 14,967 / 664,562 | 2 | 72 | 391 | 0 / 0 |
-| ko_s5 | 18,786 / 687,864 | 1 | 375 | 589 | 0 / 2 |
+| full_s3 | 14,212 / 662,616 | 76 (38) | 26,450 (22,013) | 32,403 | 17 / 78 |
+| full_s4 | 18,463 / 665,629 | 32 (27) | 9,082 (7,886) | 15,327 | 15 / 33 |
+| full_s5 | 17,212 / 624,409 | 52 (45) | 6,951 (5,915) | 13,938 | 20 / 36 |
+| dose1_s0 | 14,359 / 752,455 | 15 (13) | 16,970 (15,731) | 12,003 | 2 / 69 |
+| dose1_s1 | 13,649 / 641,103 | 45 (43) | 11,057 (9,920) | 17,133 | 17 / 46 |
+| dose1_s2 | 15,729 / 638,736 | 7 (7) | 9,969 (9,047) | 12,976 | 2 / 41 |
+| ko_s0 | 13,838 / 568,100 | 1 (0) | 358 (0) | 435 | 0 / 0 |
+| ko_s1 | 13,597 / 596,861 | 0 (0) | 399 (32) | 640 | 0 / 5 |
+| ko_s2 | 16,984 / 719,994 | 1 (0) | 772 (2) | 717 | 0 / 1 |
+| ko_s3 | 14,210 / 632,736 | 0 (0) | 169 (1) | 272 | 0 / 0 |
+| ko_s4 | 14,967 / 664,562 | 2 (0) | 72 (0) | 391 | 0 / 0 |
+| ko_s5 | 18,786 / 687,864 | 1 (0) | 375 (12) | 589 | 0 / 2 |
 
 ## 10. All sub-types, K12 and textbooks (% of proofs)
 

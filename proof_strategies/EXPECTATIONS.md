@@ -48,7 +48,7 @@ taxonomy v1.2 unless marked; sources `TABLES.md`, `artifacts/ps/summary/*.json`,
 | J4 | requires BOTE for < 50 % of theorems whose proof uses ex falso | 0 % (0 / 56) | hit |
 | J5 | ≥ 120 / 187 textbook problems decided; requires-DN = G4ip on decided | 124; 123 / 124 | hit (one bound effect) |
 | RL | full arm, round 1: ≥ 15 working reductios per seed | 76 / 32 / 52 (distinct proofs first found in round 1) | hit |
-| RL | full arm, round 16 ≥ 10 × round 1 | 2,263 / 805 / 686 new in round 16 = 29.8 × / 25.2 × / 13.2 × | hit (on the corrected counts; see note) |
+| RL | full arm, round 16 ≥ 10 × round 1 | counts: 2,263 / 805 / 686 new in round 16 = 29.8 × / 25.2 × / 13.2 ×; as shares of new proofs (round 16 has ≈ 3 × as many): 8.4 × / 8.9 × / 4.6 × | hit on counts, the quantity pre-registered; miss as shares |
 | RL | RL reductios less template-heavy than K12 (99.6 %) | template-only share of RL reductio proofs: round 1 91–95 %, round 16 51–57 % (full) | hit |
 | RL | knockout round 1: 0 working reductios on ≥ 5 / 6 seeds | 1 / 0 / 1 / 0 / 2 / 1: zero on 2 / 6 | **miss** |
 | RL | knockout round 16: ≤ 50 per seed | 38 / 32 / 84 / 27 / 6 / 49 new in round 16 | **miss** (1 / 6 over) |

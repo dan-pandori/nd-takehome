@@ -1062,3 +1062,9 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   than K12 hit; knockout r1 zero on ≥ 5 / 6 miss (2 / 6); knockout r16 ≤ 50 miss on one seed (84). Also verified the
   claim checker's recount: all 59 working K12 reductios are on intuitionistically provable theorems (48 negative goals;
   5 of the 6 free ones have inconsistent premises).
+- 21:41 UTC  **Second claim-check pass** (`artifacts/ps/validation/blog_claim_check_2.md`): 31 / 37 fixed, 3 no longer
+  apply, 3 partly; 20 new items (N1 WRONG: K12⁻ still has DNE, the knockout removed the combination, not "the classical
+  step"; N2 WRONG: template reductios also use ¬G in an immediate clash). N3 led to a per-kind recount (`rl_found.json`,
+  same totals, 0 unparsable): free working reductios rounds 2–16 full 22,013 / 7,886 / 5,915, dose1 15,731 / 9,920 / 9,047,
+  knockout 0 / 32 / 2 / 1 / 0 / 12 (≈ create-or-elicit's own 0 / 34 / 4 / 1 / 2 / 16). S1: the "≥ 10 ×" expectation holds on
+  counts (pre-registered) but not as shares; the ledger now says both.

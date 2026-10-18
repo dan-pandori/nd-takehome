@@ -32,7 +32,7 @@ def main():
             continue
         t0 = time.time()
         subprocess.run(['hf', 'buckets', 'cp', f'{BK}/la_{arm}/found_16.jsonl', tmp], check=True, capture_output=True)
-        new, red, work, temp = (collections.Counter() for _ in range(4))
+        new, red, work, temp, free, neg, unp = (collections.Counter() for _ in range(7))
         first_sc = {}                   # σ-covered target -> first round with a working reductio
         keys = None
         with open(tmp) as f:
@@ -48,11 +48,16 @@ def main():
                 keys = keys or sorted(x)
                 prompt, t = by_name[x['name']]
                 a = analyse(x['proof'], prompt, written=False)
-                if a is None or 'contradiction' not in a['u']:
+                if a is None:
+                    unp[r] += 1
+                    continue
+                if 'contradiction' not in a['u']:
                     continue
                 red[r] += 1
                 if 'contradiction.working' in a['sub']:
                     work[r] += 1
+                    free[r] += 'contradiction.free' in a['sub']        # positive goal, no ¬¬G supplied (never a template)
+                    neg[r] += 'contradiction.neg_goal' in a['sub']
                     if t['sigma_cov']:
                         first_sc[x['name']] = min(r, first_sc.get(x['name'], 99))
                 else:
@@ -61,6 +66,8 @@ def main():
         rounds = range(1, 17)
         out[arm] = {'keys': keys, 'new_by_round': {r: new[r] for r in rounds}, 'reductio_by_round': {r: red[r] for r in rounds},
                     'working_by_round': {r: work[r] for r in rounds}, 'template_only_by_round': {r: temp[r] for r in rounds},
+                    'free_working_by_round': {r: free[r] for r in rounds}, 'neg_goal_working_by_round': {r: neg[r] for r in rounds},
+                    'unparsable_dn_lines': sum(unp.values()),
                     'sigma_cov_first_working_round': first_sc, 'secs': round(time.time() - t0, 1)}
         w = out[arm]['working_by_round']
         sc1 = sum(1 for v in first_sc.values() if v == 1)

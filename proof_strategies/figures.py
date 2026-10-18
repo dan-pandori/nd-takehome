@@ -130,7 +130,7 @@ def fig_reductio():
     ax.set_xlabel('proofs that contain a proof by contradiction (n), each counted once by its best instance')
     style(ax)
     from matplotlib.patches import Patch
-    ax.legend(handles=[Patch(color=BLUE, label='working: at least one reductio uses ¬G to reach ⊥'),
+    ax.legend(handles=[Patch(color=BLUE, label='working: ¬G does more than clash at once with G or a supplied ¬¬G'),
                        Patch(color=ORANGE, label='template: ¬G clashes at once with a supplied ¬¬G, or G was already proved'),
                        Patch(color=AQUA, label='template, vacuous: ⊥ never uses ¬G (explosion in disguise)')],
               loc='lower left', bbox_to_anchor=(0.0, 1.0), frameon=False, fontsize=8.3)

@@ -2002,7 +2002,10 @@ files named below). Proofs are dependency-pruned; "%" = share of proofs (records
   15 / 16,970, 45 / 11,057, 7 / 9,969; knockout s0–s5 1 / 358, 0 / 399, 1 / 772, 0 / 169, 2 / 72, 1 / 375.
   σ-covered targets proved with a working reductio, round 1 → by round 16: full 17 → 78, 15 → 33, 20 → 36; dose1
   2 → 69, 17 → 46, 2 → 41; knockout 0 → 0, 0 → 5, 0 → 1, 0 → 0, 0 → 0, 0 → 2. Round 16 alone, working reductios among
-  new proofs: full 2,263 / 805 / 686 (4.47 / 1.55 / 1.39 %; round 1: 0.53 / 0.17 / 0.30 %).
+  new proofs: full 2,263 / 805 / 686 (4.47 / 1.55 / 1.39 %; round 1: 0.53 / 0.17 / 0.30 %). Free working reductios
+  (positive goal, nothing supplied), round 1 / rounds 2–16: full 38 / 22,013, 27 / 7,886, 45 / 5,915; dose1 13 / 15,731,
+  43 / 9,920, 7 / 9,047; knockout 0 / 0, 0 / 32, 0 / 2, 0 / 1, 0 / 0, 0 / 12 (the knockout's other working ones lean on a
+  supplied double negation). 0 unparsable proofs.
 - Superseded: `artifacts/ps/rl_mix.json` counted the fine-tune mixes, which hold ≤ 4 proofs per problem drawn from the
   accumulated pool (claim check #30, log.md 2026-10-18); its numbers are not used.
 

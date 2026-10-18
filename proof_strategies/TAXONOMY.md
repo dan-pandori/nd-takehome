@@ -176,8 +176,9 @@ disjunctive syllogism, a ¬I that is a modus tollens, a →I that is a contrapos
 
 **The primary label is this root label.** A second label is reported beside it: the **curried primary**. Goals shaped
 A → (B → C) make "conditional proof" the primary of most proofs whatever they do inside. The curried primary first descends through root →I boxes (r := origin(e) while r is IMPI; their assumptions
-become premises, as in Charles's overlap rule that A ⊢ B and ⊢ A → B are one problem) and then applies the same rule;
-if the descent reaches an assumption or premise, the curried proof is trivial.
+become premises, as in Charles's overlap rule that A ⊢ B and ⊢ A → B are one problem) and then applies the same rule
+(a NEGE line reached this way is the curried proof's root ¬E, so direct reasoning, #1); if the descent reaches an
+assumption or premise, the curried proof is trivial.
 
 ## 4. Theorem-level labels (`theorem_level.py`, `necessity_ps.py`)
 
@@ -210,7 +211,7 @@ A proof shows how the generator proved a theorem; these say what the theorem for
   textbook72 and 990 K12 shortest proofs, and 3,610 necessity-search proofs; 6,268 in all, 0 rejected. Harness
   controls: 200 / 200 accepted as found, 0 / 200 with the conclusion negated, 0 / 200 with the last line mis-cited
   (`artifacts/ps/lean_negative_control.txt`). Rendered for reading and checked by `lean_check` (allowlist, axioms, no
-  errors): the 30 canonical examples, a 587-proof renderer test, the 13 snippets in `blog.md`. The 39 unit tests and 25
+  errors): the 30 canonical examples, a 587-proof renderer test, the 12 snippets in `blog.md`. The 39 unit tests and 25
   fixtures below are Lean-checked proofs.
 - **Term size.** The per-rule formula equals `lean_check`'s elaborated inference-node count on 400 / 400 pruned proofs
   (`artifacts/ps/term_size_check.json`).

@@ -282,7 +282,9 @@ def main():
       '; K12⁻ 0 of 0. (An earlier count from the fine-tune mixes, `rl_mix.json`, sampled ≤ 4 proofs per problem from the')
     W('accumulated pool and is superseded; log.md 2026-10-18.)')
     W('')
-    W('| ladder | distinct proofs, round 1 / rounds 1–16 | working reductios, round 1 | working reductios, rounds 2–16 | template-only reductio proofs, rounds 1–16 | σ-covered targets with a working reductio, round 1 / by round 16 |')
+    W('"free" = working, positive goal, no double negation supplied (the kind σ-covered targets need).')
+    W('')
+    W('| ladder | distinct proofs, round 1 / rounds 1–16 | working reductios, round 1 (free) | working reductios, rounds 2–16 (free) | template-only reductio proofs, rounds 1–16 | σ-covered targets with a working reductio, round 1 / by round 16 |')
     W('|---|---:|---:|---:|---:|---:|')
     for arm in ['full_s3', 'full_s4', 'full_s5', 'dose1_s0', 'dose1_s1', 'dose1_s2', 'ko_s0', 'ko_s1', 'ko_s2', 'ko_s3', 'ko_s4', 'ko_s5']:
         if arm not in rf:
@@ -291,7 +293,9 @@ def main():
         nb = {int(r): v for r, v in x['new_by_round'].items()}; wb = {int(r): v for r, v in x['working_by_round'].items()}
         tb = {int(r): v for r, v in x['template_only_by_round'].items()}
         sc = x['sigma_cov_first_working_round']
-        W(f'| {arm} | {fmt_n(nb[1])} / {fmt_n(sum(nb.values()))} | {fmt_n(wb[1])} | {fmt_n(sum(v for r, v in wb.items() if r >= 2))} | '
+        fb = {int(r): v for r, v in x['free_working_by_round'].items()}
+        W(f'| {arm} | {fmt_n(nb[1])} / {fmt_n(sum(nb.values()))} | {fmt_n(wb[1])} ({fmt_n(fb[1])}) | {fmt_n(sum(v for r, v in wb.items() if r >= 2))} '
+          f'({fmt_n(sum(v for r, v in fb.items() if r >= 2))}) | '
           f'{fmt_n(sum(tb.values()))} | {sum(1 for v in sc.values() if v == 1)} / {len(sc)} |')
     W('')
     # ---------------------------------------------------------------- sub-types
