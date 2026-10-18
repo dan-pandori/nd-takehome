@@ -1033,3 +1033,16 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   15–20 strict σ-covered targets in round 1, which need one); round 16: ≥ 10 × the round-1 count; the template share of
   RL reductios lower than K12's (99.6 %) in both rounds. Knockout arm: 0 working reductios in round 1 on ≥ 5 / 6 seeds;
   ≤ 50 per seed in round 16.
+- 20:11 UTC  **Second implementation (v1.1 text, independent code `proof_strategies/validation/second_impl.py`)**: all uses
+  labels and the primary agree on 155,000 / 155,000 K12 and 1,610 / 1,610 schema proofs; σ 16,703 and σ⁺ 16,961
+  reproduced; 20 K12 records differ in a sub-type (4: ∨E-built vacuous reductio, rule then missing from the text, added
+  in v1.2; 17 overlapping: no route id on built-other reductios, a gap in our output, fixed; 3: MT `strict` wording for
+  ⊥ from X → ⊥, fixed). Report `artifacts/ps/validation/second_impl.md`. Asked it to re-implement v1.2 and recompare.
+- 20:11 UTC  **RL's own proofs** (`artifacts/ps/rl_mix.json`; counts of DISTINCT proofs: every RL proof appears 4 times in a
+  mix, found on the first pass, which had counted copies). Working reductios, round 1 → round 16: full s3–s5 67 / 29 / 48
+  → 690 / 199 / 204 (σ-covered targets proved r1 17 / 15 / 20, r16 78 / 33 / 36, every one with a working reductio);
+  dose1 s0–s2 15 / 41 / 6 → 386 / 276 / 231; knockout s0–s5 1 / 0 / 1 / 0 / 1 / 0 → 10 / 22 / 21 / 6 / 0 / 15. Pretraining
+  sets: K12 59 working of 16,717 reductio proofs; the dose set 5 of 1,550 (`artifacts/ps/summary/k12dose1.json`).
+  **vs expected:** full r1 ≥ 15 per seed: hit; r16 ≥ 10 × r1: 1 / 3 seeds (10.3, 6.9, 4.3 ×), miss; RL reductios less
+  template-heavy than K12 (99.6 %): hit (r1 86–92 %, r16 60–69 % template-only); knockout r1 zero on ≥ 5 / 6: miss
+  (zero on 3 / 6, one each on the others); knockout r16 ≤ 50: hit.

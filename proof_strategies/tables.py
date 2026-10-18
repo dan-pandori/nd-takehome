@@ -14,6 +14,7 @@ SETS = [  # (summary name, label file, theorem file, record filter, column title
     ('k12', 'k12', 'k12', None, 'K12', 'generator'),
     ('cap6', 'cap6', 'cap6', None, 'cap-6', 'generator'),
     ('k12ko', 'k12ko', 'k12ko', None, 'K12⁻', 'generator'),
+    ('k12dose1', 'k12dose1', 'k12dose1', None, 'K12 1 % dose', 'generator'),
     ('rl_targets_gen', 'rl_targets_gen', 'rl_targets', 'gen', 'RL targets (gen.)', 'generator'),
     ('transfer_gen', 'transfer_gen', 'transfer', 'gen', 'transfer (gen.)', 'generator'),
     ('holdout250_gen', 'holdout250_gen', 'holdout250', 'gen', 'holdout250 (gen.)', 'generator'),
@@ -141,6 +142,7 @@ def main():
     W('|---|---:|---:|---:|---:|---:|')
     TT = {json.loads(l)['in']: json.loads(l) for l in open('artifacts/ps/theorem_totals.txt')}
     names = {'data/ps/in/train_k12.jsonl.gz': 'K12', 'data/ps/in/train_depth3_f0_a1.jsonl.gz': 'cap-6', 'data/ps/in/train_k12ko.jsonl.gz': 'K12⁻',
+             'data/ps/in/train_k12dose1.jsonl.gz': 'K12 1 % dose',
              'data/ladder/rl_targets.jsonl': 'RL targets (all 4,495)', 'data/ladder/transfer.jsonl': 'transfer (all 2,285)',
              'data/bs/holdout250.jsonl': 'holdout250', 'data/ps/pod/tb_schema.jsonl': 'textbook schemata (pools)',
              'data/ps/in/charles/charles_base_full.jsonl': "Charles's textbooks (187)", 'data/bs/textbook72.jsonl': 'textbook72'}
@@ -265,6 +267,27 @@ def main():
     W('|---|---:|---:|')
     for s in STRATS:
         W(f'| {NAME[s]} | {pct(v0["uses"][s], v0["n"], 2)} | {pct(k["uses"][s], n, 2)} |')
+    W('')
+    # ---------------------------------------------------------------- RL's own proofs
+    rm = json.load(open('artifacts/ps/rl_mix.json'))
+    W('## 11. RL\'s own proofs: what kind of reductio the models write (create-or-elicit ladders)')
+    W('')
+    W('Source: `artifacts/ps/rl_mix.json` (`proof_strategies/rl_mix.py`) from the fine-tune mixes of create-or-elicit\'s T1')
+    W('ladders (bucket `create-or-elicit/artifacts/coe/ladder/la_<arm>/mix_<R>.jsonl.gz`). Models: 9.56 M ALiBiGPT `lean_staten`,')
+    W('from scratch on K12 (full), K12⁻ (knockout) or K12 + 1 % σ (dose), T1 expert iteration on A40, Lean alone. Round 1 =')
+    W('the pretrained model\'s own Lean-accepted proofs of RL targets; round 16 = after 15 rounds of RL. Counts are distinct')
+    W('proofs (each appears 4 times in a mix). σ-covered = RL targets whose every proof needs a working reductio (123 of 4,495).')
+    W('Pretraining sets for comparison: working reductios in K12 ' + fmt_n(S['k12']['sub']['contradiction.working']) +
+      ' of ' + fmt_n(S['k12']['uses']['contradiction']) + ' reductio proofs; dose set ' + fmt_n(S['k12dose1']['sub']['contradiction.working']) +
+      ' of ' + fmt_n(S['k12dose1']['uses']['contradiction']) + '; K12⁻ 0 of 0.')
+    W('')
+    W('| ladder | round | RL proofs | with a reductio | working | template only | σ-covered targets proved (all with a working reductio) |')
+    W('|---|---:|---:|---:|---:|---:|---:|')
+    for arm in ['full_s3', 'full_s4', 'full_s5', 'dose1_s0', 'dose1_s1', 'dose1_s2', 'ko_s0', 'ko_s1', 'ko_s2', 'ko_s3', 'ko_s4', 'ko_s5']:
+        for r in (1, 16):
+            x = rm[f'{arm}_r{r}']
+            W(f'| {arm} | {r} | {fmt_n(x["rl"])} | {fmt_n(x.get("reductio", 0))} | {fmt_n(x.get("working", 0))} | {fmt_n(x.get("template_only", 0))} | '
+              f'{x["sigma_cov_theorems_proved"]} ({x["sigma_cov_theorems_with_working_reductio"]}) |')
     W('')
     # ---------------------------------------------------------------- sub-types
     W('## 10. All sub-types, K12 and textbooks (% of proofs)')

@@ -117,8 +117,9 @@ of the K12 instances.) Explosion done another way (a vacuous ¬I or reductio clo
 `and_elim`, `and_intro`, `imp_hyp`, `cases`, `self`, `mixed`, `vacuous`, `other`), and `working` = route ≠ `vacuous`.
 
 **#8 Modus tollens / contraposition.** Instances: (a) any NEGI line (a #7 instance or one consumed by DN) whose
-refutation route is `mt`; sub-types `strict` (one `mp` step, the dependent side is NEGE's positive premise: A → B, ¬B
-⊢ ¬A), `neg_side` (one `mp`, the negative premise: A → ¬B, B ⊢ ¬A), `chain` (≥ 2 steps), `classical` (the NEGI is cited
+refutation route is `mt`; sub-types `strict` (one `mp` step, the dependent side is the positive premise of the ⊥ line:
+NEGE's first premise, or the minor premise of an IMPE from a given X → ⊥; A → B, ¬B ⊢ ¬A), `neg_side` (one `mp`, the
+dependent side is NEGE's negative premise: A → ¬B, B ⊢ ¬A), `chain` (≥ 2 steps), `classical` (the NEGI is cited
 by DN: ¬A → B, ¬B ⊢ A; it can hold together with `strict`, `neg_side` or `chain`); (b) an IMPI line citing (s, e) whose assumption is a negation ¬B and whose origin(e) is a NEGI
 line inside the box with route `mt` whose independent side has origin s: A → B ⊢ ¬B → ¬A (`contraposition`).
 

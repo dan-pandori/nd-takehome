@@ -405,6 +405,7 @@ class Proof:
                     # a double negation built by ex falso is explosion in disguise; by ∨E, a reductio in each branch
                     route = self.built_route(c)
                     indep = None
+                    sub.add('contradiction.route_' + route)
                 else:
                     if c['idx'] != ln['refs'][0]:
                         sub.add('contradiction.via_r')

@@ -1,0 +1,1715 @@
+{
+ "examples": [
+  {
+   "strategy": "direct",
+   "role": "shortest clean",
+   "source": "K12",
+   "index": 132941,
+   "prompt": "THM ( P & Q ) SEQ P PRF",
+   "proof": "N1 ( P & Q ) : PR ; N2 P : ANDE1 N1 ; QED",
+   "labels": {
+    "i": 132941,
+    "L": 2,
+    "Lp": 2,
+    "ts": 1,
+    "dep": 0,
+    "depw": 0,
+    "u": [
+     "direct"
+    ],
+    "sub": [
+     "direct.ande"
+    ],
+    "pri": "direct",
+    "psub": [
+     "direct.ande"
+    ],
+    "pric": "direct",
+    "pcsub": [
+     "direct.ande"
+    ],
+    "box_free": true,
+    "root_rule": "ANDE1",
+    "p1": false,
+    "p1s": false,
+    "p2": false,
+    "nest": 0,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 1
+   },
+   "lean_ok": true,
+   "term_size_lean": 1,
+   "lean": "example (P Q : Prop) (h1 : P \u2227 Q) : P := h1.1",
+   "nd": [
+    "N1 ( P & Q ) : PR",
+    "N2 P : ANDE1 N1"
+   ]
+  },
+  {
+   "strategy": "direct",
+   "role": "typical (pruned length 3, the median)",
+   "source": "K12",
+   "index": 101764,
+   "prompt": "THM ( ( R v R ) > ( Q v Q ) ) , ( ( ( R v R ) > ( Q v Q ) ) > ( ~ P ) ) SEQ ( ~ P ) PRF",
+   "proof": "N1 ( ( R v R ) > ( Q v Q ) ) : PR ; N2 ( ( ( R v R ) > ( Q v Q ) ) > ( ~ P ) ) : PR ; N3 ( ~ P ) : IMPE N2 N1 ; QED",
+   "labels": {
+    "i": 101764,
+    "L": 3,
+    "Lp": 3,
+    "ts": 1,
+    "dep": 0,
+    "depw": 0,
+    "u": [
+     "direct"
+    ],
+    "sub": [
+     "direct.mp"
+    ],
+    "pri": "direct",
+    "psub": [
+     "direct.mp"
+    ],
+    "pric": "direct",
+    "pcsub": [
+     "direct.mp"
+    ],
+    "box_free": true,
+    "root_rule": "IMPE",
+    "p1": false,
+    "p1s": false,
+    "p2": false,
+    "nest": 0,
+    "chain": 1,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 1
+   },
+   "lean_ok": true,
+   "term_size_lean": 1,
+   "lean": "example (P Q R : Prop) (h1 : R \u2228 R \u2192 Q \u2228 Q) (h2 : (R \u2228 R \u2192 Q \u2228 Q) \u2192 \u00acP) : \u00acP := h2 h1",
+   "nd": [
+    "N1 ( ( R v R ) > ( Q v Q ) ) : PR",
+    "N2 ( ( ( R v R ) > ( Q v Q ) ) > ( ~ P ) ) : PR",
+    "N3 ( ~ P ) : IMPE N2 N1"
+   ]
+  },
+  {
+   "strategy": "and_intro",
+   "role": "shortest clean",
+   "source": "K12",
+   "index": 95938,
+   "prompt": "THM P SEQ ( P & ( P v Q ) ) PRF",
+   "proof": "N1 P : PR ; N2 ( P v Q ) : ORI1 N1 ; N3 ( P & ( P v Q ) ) : ANDI N1 N2 ; QED",
+   "labels": {
+    "i": 95938,
+    "L": 3,
+    "Lp": 3,
+    "ts": 2,
+    "dep": 0,
+    "depw": 0,
+    "u": [
+     "and_intro",
+     "or_intro"
+    ],
+    "sub": [
+     "and_intro.root",
+     "or_intro.other"
+    ],
+    "pri": "and_intro",
+    "psub": [
+     "and_intro.root"
+    ],
+    "pric": "and_intro",
+    "pcsub": [
+     "and_intro.root"
+    ],
+    "box_free": true,
+    "root_rule": "ANDI",
+    "p1": false,
+    "p1s": false,
+    "p2": false,
+    "nest": 0,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 2
+   },
+   "lean_ok": true,
+   "term_size_lean": 2,
+   "lean": "example (P Q : Prop) (h1 : P) : P \u2227 (P \u2228 Q) := \u27e8h1, Or.inl h1\u27e9",
+   "nd": [
+    "N1 P : PR",
+    "N2 ( P v Q ) : ORI1 N1",
+    "N3 ( P & ( P v Q ) ) : ANDI N1 N2"
+   ]
+  },
+  {
+   "strategy": "and_intro",
+   "role": "typical (pruned length 7, the median)",
+   "source": "K12",
+   "index": 56319,
+   "prompt": "THM ( ( P > S ) & ( S > S ) ) , ( ( ( P > S ) & ( S > S ) ) > P ) , ( ( ( ( P > S ) & ( S > S ) ) > P ) > ( Q & P ) ) SEQ ( ( P v P ) & ( Q & P ) ) PRF",
+   "proof": "N1 ( ( P > S ) & ( S > S ) ) : PR ; N2 ( ( ( P > S ) & ( S > S ) ) > P ) : PR ; N3 ( ( ( ( P > S ) & ( S > S ) ) > P ) > ( Q & P ) ) : PR ; N4 P : IMPE N2 N1 ; N5 ( P v P ) : ORI2 N4 ; N6 ( Q & P ) : IMPE N3 N2 ; N7 ( ( P v P ) & ( Q & P ) ) : ANDI N5 N6 ; QED",
+   "labels": {
+    "i": 56319,
+    "L": 7,
+    "Lp": 7,
+    "ts": 4,
+    "dep": 0,
+    "depw": 0,
+    "u": [
+     "and_intro",
+     "direct",
+     "or_intro"
+    ],
+    "sub": [
+     "and_intro.root",
+     "direct.mp",
+     "or_intro.other"
+    ],
+    "pri": "and_intro",
+    "psub": [
+     "and_intro.root"
+    ],
+    "pric": "and_intro",
+    "pcsub": [
+     "and_intro.root"
+    ],
+    "box_free": true,
+    "root_rule": "ANDI",
+    "p1": false,
+    "p1s": false,
+    "p2": false,
+    "nest": 0,
+    "chain": 1,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 4
+   },
+   "lean_ok": true,
+   "term_size_lean": 4,
+   "lean": "example (P Q S : Prop) (h1 : (P \u2192 S) \u2227 (S \u2192 S)) (h2 : (P \u2192 S) \u2227 (S \u2192 S) \u2192 P) (h3 : ((P \u2192 S) \u2227 (S \u2192 S) \u2192 P) \u2192 Q \u2227 P) : (P \u2228 P) \u2227 Q \u2227 P := \u27e8Or.inr (h2 h1), h3 h2\u27e9",
+   "nd": [
+    "N1 ( ( P > S ) & ( S > S ) ) : PR",
+    "N2 ( ( ( P > S ) & ( S > S ) ) > P ) : PR",
+    "N3 ( ( ( ( P > S ) & ( S > S ) ) > P ) > ( Q & P ) ) : PR",
+    "N4 P : IMPE N2 N1",
+    "N5 ( P v P ) : ORI2 N4",
+    "N6 ( Q & P ) : IMPE N3 N2",
+    "N7 ( ( P v P ) & ( Q & P ) ) : ANDI N5 N6"
+   ]
+  },
+  {
+   "strategy": "cond_proof",
+   "role": "shortest clean",
+   "source": "K12",
+   "index": 55304,
+   "prompt": "THM SEQ ( S > ( S v Q ) ) PRF",
+   "proof": "N1 | S : AS ; N2 | ( S v Q ) : ORI1 N1 ; N3 ( S > ( S v Q ) ) : IMPI N1 N2 ; QED",
+   "labels": {
+    "i": 55304,
+    "L": 3,
+    "Lp": 3,
+    "ts": 2,
+    "dep": 1,
+    "depw": 1,
+    "u": [
+     "cond_proof",
+     "or_intro"
+    ],
+    "sub": [
+     "cond_proof.working",
+     "or_intro.other"
+    ],
+    "pri": "cond_proof",
+    "psub": [
+     "cond_proof.working"
+    ],
+    "pric": "or_intro",
+    "pcsub": [
+     "or_intro.other"
+    ],
+    "box_free": false,
+    "root_rule": "IMPI",
+    "p1": false,
+    "p1s": false,
+    "p2": false,
+    "nest": 0,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 2
+   },
+   "lean_ok": true,
+   "term_size_lean": 2,
+   "lean": "example (Q S : Prop) : S \u2192 S \u2228 Q := fun (a1 : S) => Or.inl a1",
+   "nd": [
+    "N1 | S : AS",
+    "N2 | ( S v Q ) : ORI1 N1",
+    "N3 ( S > ( S v Q ) ) : IMPI N1 N2"
+   ]
+  },
+  {
+   "strategy": "cond_proof",
+   "role": "typical (pruned length 7, the median)",
+   "source": "K12",
+   "index": 12460,
+   "prompt": "THM S , ( ( P & ( S v R ) ) v P ) SEQ ( ( ( P & ( S v R ) ) v P ) > ( ( S > S ) > ( S & ( ( P & ( S v R ) ) v P ) ) ) ) PRF",
+   "proof": "N1 S : PR ; N2 ( ( P & ( S v R ) ) v P ) : PR ; N3 | ( ( P & ( S v R ) ) v P ) : AS ; N4 | | ( S > S ) : AS ; N5 | | ( S & ( ( P & ( S v R ) ) v P ) ) : ANDI N1 N2 ; N6 | ( ( S > S ) > ( S & ( ( P & ( S v R ) ) v P ) ) ) : IMPI N4 N5 ; N7 ( ( ( P & ( S v R ) ) v P ) > ( ( S > S ) > ( S & ( ( P & ( S v R ) ) v P ) ) ) ) : IMPI N3 N6 ; QED",
+   "labels": {
+    "i": 12460,
+    "L": 7,
+    "Lp": 7,
+    "ts": 3,
+    "dep": 2,
+    "depw": 2,
+    "u": [
+     "and_intro",
+     "cond_proof"
+    ],
+    "sub": [
+     "cond_proof.curried",
+     "cond_proof.vacuous"
+    ],
+    "pri": "cond_proof",
+    "psub": [
+     "cond_proof.curried",
+     "cond_proof.vacuous"
+    ],
+    "pric": "and_intro",
+    "pcsub": [],
+    "box_free": false,
+    "root_rule": "IMPI",
+    "p1": false,
+    "p1s": false,
+    "p2": false,
+    "nest": 0,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 3
+   },
+   "lean_ok": true,
+   "term_size_lean": 3,
+   "lean": "example (P R S : Prop) (h1 : S) (h2 : P \u2227 (S \u2228 R) \u2228 P) : P \u2227 (S \u2228 R) \u2228 P \u2192 (S \u2192 S) \u2192 S \u2227 (P \u2227 (S \u2228 R) \u2228 P) := fun (a1 : P \u2227 (S \u2228 R) \u2228 P) => fun (a2 : S \u2192 S) => \u27e8h1, h2\u27e9",
+   "nd": [
+    "N1 S : PR",
+    "N2 ( ( P & ( S v R ) ) v P ) : PR",
+    "N3 | ( ( P & ( S v R ) ) v P ) : AS",
+    "N4 | | ( S > S ) : AS",
+    "N5 | | ( S & ( ( P & ( S v R ) ) v P ) ) : ANDI N1 N2",
+    "N6 | ( ( S > S ) > ( S & ( ( P & ( S v R ) ) v P ) ) ) : IMPI N4 N5",
+    "N7 ( ( ( P & ( S v R ) ) v P ) > ( ( S > S ) > ( S & ( ( P & ( S v R ) ) v P ) ) ) ) : IMPI N3 N6"
+   ]
+  },
+  {
+   "strategy": "or_intro",
+   "role": "shortest clean",
+   "source": "K12",
+   "index": 16853,
+   "prompt": "THM ( ~ S ) SEQ ( S v ( ~ S ) ) PRF",
+   "proof": "N1 ( ~ S ) : PR ; N2 ( S v ( ~ S ) ) : ORI2 N1 ; QED",
+   "labels": {
+    "i": 16853,
+    "L": 2,
+    "Lp": 2,
+    "ts": 1,
+    "dep": 0,
+    "depw": 0,
+    "u": [
+     "or_intro"
+    ],
+    "sub": [
+     "or_intro.root"
+    ],
+    "pri": "or_intro",
+    "psub": [
+     "or_intro.root"
+    ],
+    "pric": "or_intro",
+    "pcsub": [
+     "or_intro.root"
+    ],
+    "box_free": true,
+    "root_rule": "ORI2",
+    "p1": false,
+    "p1s": false,
+    "p2": false,
+    "nest": 0,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 1
+   },
+   "lean_ok": true,
+   "term_size_lean": 1,
+   "lean": "example (S : Prop) (h1 : \u00acS) : S \u2228 \u00acS := Or.inr h1",
+   "nd": [
+    "N1 ( ~ S ) : PR",
+    "N2 ( S v ( ~ S ) ) : ORI2 N1"
+   ]
+  },
+  {
+   "strategy": "or_intro",
+   "role": "typical (pruned length 2, the median)",
+   "source": "K12",
+   "index": 132895,
+   "prompt": "THM ( ( P > ( R v S ) ) v ( ( P & R ) & ( R v Q ) ) ) SEQ ( ( ( P > ( R v S ) ) v ( ( P & R ) & ( R v Q ) ) ) v R ) PRF",
+   "proof": "N1 ( ( P > ( R v S ) ) v ( ( P & R ) & ( R v Q ) ) ) : PR ; N2 ( ( ( P > ( R v S ) ) v ( ( P & R ) & ( R v Q ) ) ) v R ) : ORI1 N1 ; QED",
+   "labels": {
+    "i": 132895,
+    "L": 2,
+    "Lp": 2,
+    "ts": 1,
+    "dep": 0,
+    "depw": 0,
+    "u": [
+     "or_intro"
+    ],
+    "sub": [
+     "or_intro.root"
+    ],
+    "pri": "or_intro",
+    "psub": [
+     "or_intro.root"
+    ],
+    "pric": "or_intro",
+    "pcsub": [
+     "or_intro.root"
+    ],
+    "box_free": true,
+    "root_rule": "ORI1",
+    "p1": false,
+    "p1s": false,
+    "p2": false,
+    "nest": 0,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 1
+   },
+   "lean_ok": true,
+   "term_size_lean": 1,
+   "lean": "example (P Q R S : Prop) (h1 : (P \u2192 R \u2228 S) \u2228 (P \u2227 R) \u2227 (R \u2228 Q)) : ((P \u2192 R \u2228 S) \u2228 (P \u2227 R) \u2227 (R \u2228 Q)) \u2228 R := Or.inl h1",
+   "nd": [
+    "N1 ( ( P > ( R v S ) ) v ( ( P & R ) & ( R v Q ) ) ) : PR",
+    "N2 ( ( ( P > ( R v S ) ) v ( ( P & R ) & ( R v Q ) ) ) v R ) : ORI1 N1"
+   ]
+  },
+  {
+   "strategy": "cases",
+   "role": "shortest clean",
+   "source": "K12",
+   "index": 42672,
+   "prompt": "THM ( ( P & S ) v S ) SEQ S PRF",
+   "proof": "N1 ( ( P & S ) v S ) : PR ; N2 | ( P & S ) : AS ; N3 | S : ANDE2 N2 ; N4 | S : AS ; N5 S : ORE N1 N2 N3 N4 N4 ; QED",
+   "labels": {
+    "i": 42672,
+    "L": 5,
+    "Lp": 5,
+    "ts": 4,
+    "dep": 1,
+    "depw": 1,
+    "u": [
+     "cases",
+     "direct"
+    ],
+    "sub": [
+     "cases.genuine",
+     "cases.on_premise",
+     "direct.ande"
+    ],
+    "pri": "cases",
+    "psub": [
+     "cases.genuine",
+     "cases.on_premise"
+    ],
+    "pric": "cases",
+    "pcsub": [
+     "cases.genuine",
+     "cases.on_premise"
+    ],
+    "box_free": false,
+    "root_rule": "ORE",
+    "p1": false,
+    "p1s": false,
+    "p2": false,
+    "nest": 1,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 4
+   },
+   "lean_ok": true,
+   "term_size_lean": 4,
+   "lean": "example (P S : Prop) (h1 : P \u2227 S \u2228 S) : S :=\n  h1.elim\n    (fun (a1 : P \u2227 S) => a1.2)\n    (fun (a2 : S) => a2)",
+   "nd": [
+    "N1 ( ( P & S ) v S ) : PR",
+    "N2 | ( P & S ) : AS",
+    "N3 | S : ANDE2 N2",
+    "N4 | S : AS",
+    "N5 S : ORE N1 N2 N3 N4 N4"
+   ]
+  },
+  {
+   "strategy": "cases",
+   "role": "typical (pruned length 10, the median)",
+   "source": "K12",
+   "index": 31172,
+   "prompt": "THM ( R > ( P & P ) ) , ( ~ ( R > ( P & P ) ) ) SEQ ( ( ( ~ ( R > ( P & P ) ) ) & ( ~ ( R > ( P & P ) ) ) ) v Q ) PRF",
+   "proof": "N1 ( R > ( P & P ) ) : PR ; N2 ( ~ ( R > ( P & P ) ) ) : PR ; N3 F : NEGE N1 N2 ; N4 ( P v ( S v R ) ) : BOTE N3 ; N5 ( ( ~ ( R > ( P & P ) ) ) & ( ~ ( R > ( P & P ) ) ) ) : ANDI N2 N2 ; N6 | P : AS ; N7 | ( ( ( ~ ( R > ( P & P ) ) ) & ( ~ ( R > ( P & P ) ) ) ) v Q ) : ORI1 N5 ; N8 | ( S v R ) : AS ; N9 | ( ( ( ~ ( R > ( P & P ) ) ) & ( ~ ( R > ( P & P ) ) ) ) v Q ) : BOTE N3 ; N10 ( ( ( ~ ( R > ( P & P ) ) ) & ( ~ ( R > ( P & P ) ) ) ) v Q ) : ORE N4 N6 N7 N8 N9 ; QED",
+   "labels": {
+    "i": 31172,
+    "L": 10,
+    "Lp": 10,
+    "ts": 8,
+    "dep": 1,
+    "depw": 1,
+    "u": [
+     "and_intro",
+     "cases",
+     "ex_falso",
+     "lemma_reuse",
+     "or_intro"
+    ],
+    "sub": [
+     "cases.on_derived",
+     "cases.redundant",
+     "ex_falso.inconsistent_premises",
+     "lemma_reuse.across_boxes",
+     "or_intro.case_branch"
+    ],
+    "pri": "cases",
+    "psub": [
+     "cases.on_derived",
+     "cases.redundant"
+    ],
+    "pric": "cases",
+    "pcsub": [
+     "cases.on_derived",
+     "cases.redundant"
+    ],
+    "box_free": false,
+    "root_rule": "ORE",
+    "p1": true,
+    "p1s": true,
+    "p2": false,
+    "nest": 1,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 8
+   },
+   "lean_ok": true,
+   "term_size_lean": 8,
+   "lean": "example (P Q R S : Prop) (h1 : R \u2192 P \u2227 P) (h2 : \u00ac(R \u2192 P \u2227 P)) : \u00ac(R \u2192 P \u2227 P) \u2227 \u00ac(R \u2192 P \u2227 P) \u2228 Q :=\n  have l3 : False := h2 h1\n  (False.elim l3 : P \u2228 S \u2228 R).elim\n    (fun (a1 : P) => Or.inl \u27e8h2, h2\u27e9)\n    (fun (a2 : S \u2228 R) => False.elim l3)",
+   "nd": [
+    "N1 ( R > ( P & P ) ) : PR",
+    "N2 ( ~ ( R > ( P & P ) ) ) : PR",
+    "N3 F : NEGE N1 N2",
+    "N4 ( P v ( S v R ) ) : BOTE N3",
+    "N5 ( ( ~ ( R > ( P & P ) ) ) & ( ~ ( R > ( P & P ) ) ) ) : ANDI N2 N2",
+    "N6 | P : AS",
+    "N7 | ( ( ( ~ ( R > ( P & P ) ) ) & ( ~ ( R > ( P & P ) ) ) ) v Q ) : ORI1 N5",
+    "N8 | ( S v R ) : AS",
+    "N9 | ( ( ( ~ ( R > ( P & P ) ) ) & ( ~ ( R > ( P & P ) ) ) ) v Q ) : BOTE N3",
+    "N10 ( ( ( ~ ( R > ( P & P ) ) ) & ( ~ ( R > ( P & P ) ) ) ) v Q ) : ORE N4 N6 N7 N8 N9"
+   ]
+  },
+  {
+   "strategy": "disj_syll",
+   "role": "shortest clean",
+   "source": "K12",
+   "index": 47528,
+   "prompt": "THM ( ~ ( ~ S ) ) , ( ( ~ S ) v P ) SEQ ( ( Q v S ) v P ) PRF",
+   "proof": "N1 ( ~ ( ~ S ) ) : PR ; N2 ( ( ~ S ) v P ) : PR ; N3 | ( ~ S ) : AS ; N4 | F : NEGE N3 N1 ; N5 | ( ( Q v S ) v P ) : BOTE N4 ; N6 | P : AS ; N7 | ( ( Q v S ) v P ) : ORI2 N6 ; N8 ( ( Q v S ) v P ) : ORE N2 N3 N5 N6 N7 ; QED",
+   "labels": {
+    "i": 47528,
+    "L": 8,
+    "Lp": 8,
+    "ts": 6,
+    "dep": 1,
+    "depw": 1,
+    "u": [
+     "cases",
+     "disj_syll",
+     "ex_falso",
+     "or_intro"
+    ],
+    "sub": [
+     "cases.genuine",
+     "cases.on_premise",
+     "ex_falso.refuted_case",
+     "or_intro.case_branch"
+    ],
+    "pri": "disj_syll",
+    "psub": [
+     "cases.genuine",
+     "cases.on_premise"
+    ],
+    "pric": "disj_syll",
+    "pcsub": [
+     "cases.genuine",
+     "cases.on_premise"
+    ],
+    "box_free": false,
+    "root_rule": "ORE",
+    "p1": false,
+    "p1s": false,
+    "p2": false,
+    "nest": 1,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 6
+   },
+   "lean_ok": true,
+   "term_size_lean": 6,
+   "lean": "example (P Q S : Prop) (h1 : \u00ac\u00acS) (h2 : \u00acS \u2228 P) : (Q \u2228 S) \u2228 P :=\n  h2.elim\n    (fun (a1 : \u00acS) => False.elim (h1 a1))\n    (fun (a2 : P) => Or.inr a2)",
+   "nd": [
+    "N1 ( ~ ( ~ S ) ) : PR",
+    "N2 ( ( ~ S ) v P ) : PR",
+    "N3 | ( ~ S ) : AS",
+    "N4 | F : NEGE N3 N1",
+    "N5 | ( ( Q v S ) v P ) : BOTE N4",
+    "N6 | P : AS",
+    "N7 | ( ( Q v S ) v P ) : ORI2 N6",
+    "N8 ( ( Q v S ) v P ) : ORE N2 N3 N5 N6 N7"
+   ]
+  },
+  {
+   "strategy": "disj_syll",
+   "role": "typical (pruned length 10, the median)",
+   "source": "K12",
+   "index": 150145,
+   "prompt": "THM P , ( ~ Q ) , ( P > ( ( Q > F ) & ( Q v R ) ) ) SEQ ( ( Q > F ) & ( Q v R ) ) PRF",
+   "proof": "N1 P : PR ; N2 ( ~ Q ) : PR ; N3 ( P > ( ( Q > F ) & ( Q v R ) ) ) : PR ; N4 ( Q v P ) : ORI2 N1 ; N5 | Q : AS ; N6 | F : NEGE N5 N2 ; N7 | ( ( Q > F ) & ( Q v R ) ) : BOTE N6 ; N8 | P : AS ; N9 | ( ( Q > F ) & ( Q v R ) ) : IMPE N3 N8 ; N10 ( ( Q > F ) & ( Q v R ) ) : ORE N4 N5 N7 N8 N9 ; QED",
+   "labels": {
+    "i": 150145,
+    "L": 10,
+    "Lp": 10,
+    "ts": 7,
+    "dep": 1,
+    "depw": 1,
+    "u": [
+     "cases",
+     "direct",
+     "disj_syll",
+     "ex_falso",
+     "or_intro"
+    ],
+    "sub": [
+     "cases.genuine",
+     "cases.on_derived",
+     "cases.or_intro_decoration",
+     "direct.mp",
+     "ex_falso.refuted_case",
+     "or_intro.feeds_ore"
+    ],
+    "pri": "disj_syll",
+    "psub": [
+     "cases.genuine",
+     "cases.on_derived",
+     "cases.or_intro_decoration"
+    ],
+    "pric": "disj_syll",
+    "pcsub": [
+     "cases.genuine",
+     "cases.on_derived",
+     "cases.or_intro_decoration"
+    ],
+    "box_free": false,
+    "root_rule": "ORE",
+    "p1": true,
+    "p1s": true,
+    "p2": false,
+    "nest": 1,
+    "chain": 1,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 7
+   },
+   "lean_ok": true,
+   "term_size_lean": 7,
+   "lean": "example (P Q R : Prop) (h1 : P) (h2 : \u00acQ) (h3 : P \u2192 (Q \u2192 False) \u2227 (Q \u2228 R)) : (Q \u2192 False) \u2227 (Q \u2228 R) :=\n  (Or.inr h1 : Q \u2228 P).elim\n    (fun (a1 : Q) => False.elim (h2 a1))\n    (fun (a2 : P) => h3 a2)",
+   "nd": [
+    "N1 P : PR",
+    "N2 ( ~ Q ) : PR",
+    "N3 ( P > ( ( Q > F ) & ( Q v R ) ) ) : PR",
+    "N4 ( Q v P ) : ORI2 N1",
+    "N5 | Q : AS",
+    "N6 | F : NEGE N5 N2",
+    "N7 | ( ( Q > F ) & ( Q v R ) ) : BOTE N6",
+    "N8 | P : AS",
+    "N9 | ( ( Q > F ) & ( Q v R ) ) : IMPE N3 N8",
+    "N10 ( ( Q > F ) & ( Q v R ) ) : ORE N4 N5 N7 N8 N9"
+   ]
+  },
+  {
+   "strategy": "neg_intro",
+   "role": "shortest clean",
+   "source": "K12",
+   "index": 24177,
+   "prompt": "THM ( ~ ( R v ( ~ R ) ) ) SEQ ( ~ ( ~ R ) ) PRF",
+   "proof": "N1 ( ~ ( R v ( ~ R ) ) ) : PR ; N2 | ( ~ R ) : AS ; N3 | ( R v ( ~ R ) ) : ORI2 N2 ; N4 | F : NEGE N3 N1 ; N5 ( ~ ( ~ R ) ) : NEGI N2 N4 ; QED",
+   "labels": {
+    "i": 24177,
+    "L": 5,
+    "Lp": 5,
+    "ts": 3,
+    "dep": 1,
+    "depw": 1,
+    "u": [
+     "neg_intro",
+     "or_intro"
+    ],
+    "sub": [
+     "neg_intro.or_weaken",
+     "neg_intro.working",
+     "or_intro.other"
+    ],
+    "pri": "neg_intro",
+    "psub": [
+     "neg_intro.or_weaken",
+     "neg_intro.working"
+    ],
+    "pric": "neg_intro",
+    "pcsub": [
+     "neg_intro.or_weaken",
+     "neg_intro.working"
+    ],
+    "box_free": false,
+    "root_rule": "NEGI",
+    "p1": false,
+    "p1s": false,
+    "p2": false,
+    "nest": 0,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 3
+   },
+   "lean_ok": true,
+   "term_size_lean": 3,
+   "lean": "example (R : Prop) (h1 : \u00ac(R \u2228 \u00acR)) : \u00ac\u00acR := fun (a1 : \u00acR) => h1 (Or.inr a1)",
+   "nd": [
+    "N1 ( ~ ( R v ( ~ R ) ) ) : PR",
+    "N2 | ( ~ R ) : AS",
+    "N3 | ( R v ( ~ R ) ) : ORI2 N2",
+    "N4 | F : NEGE N3 N1",
+    "N5 ( ~ ( ~ R ) ) : NEGI N2 N4"
+   ]
+  },
+  {
+   "strategy": "neg_intro",
+   "role": "typical (pruned length 7, the median)",
+   "source": "K12",
+   "index": 154216,
+   "prompt": "THM ( R > ( R v R ) ) , R , ( ~ ( R v R ) ) SEQ ( ~ ( ( Q & R ) & ( P > S ) ) ) PRF",
+   "proof": "N1 ( R > ( R v R ) ) : PR ; N2 R : PR ; N3 ( ~ ( R v R ) ) : PR ; N4 | ( ( Q & R ) & ( P > S ) ) : AS ; N5 | ( R v R ) : IMPE N1 N2 ; N6 | F : NEGE N5 N3 ; N7 ( ~ ( ( Q & R ) & ( P > S ) ) ) : NEGI N4 N6 ; QED",
+   "labels": {
+    "i": 154216,
+    "L": 7,
+    "Lp": 7,
+    "ts": 3,
+    "dep": 1,
+    "depw": 1,
+    "u": [
+     "direct",
+     "neg_intro"
+    ],
+    "sub": [
+     "direct.mp",
+     "neg_intro.vacuous"
+    ],
+    "pri": "neg_intro",
+    "psub": [
+     "neg_intro.vacuous"
+    ],
+    "pric": "neg_intro",
+    "pcsub": [
+     "neg_intro.vacuous"
+    ],
+    "box_free": false,
+    "root_rule": "NEGI",
+    "p1": false,
+    "p1s": false,
+    "p2": false,
+    "nest": 0,
+    "chain": 1,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 3
+   },
+   "lean_ok": true,
+   "term_size_lean": 3,
+   "lean": "example (P Q R S : Prop) (h1 : R \u2192 R \u2228 R) (h2 : R) (h3 : \u00ac(R \u2228 R)) : \u00ac((Q \u2227 R) \u2227 (P \u2192 S)) := fun (a1 : (Q \u2227 R) \u2227 (P \u2192 S)) => h3 (h1 h2)",
+   "nd": [
+    "N1 ( R > ( R v R ) ) : PR",
+    "N2 R : PR",
+    "N3 ( ~ ( R v R ) ) : PR",
+    "N4 | ( ( Q & R ) & ( P > S ) ) : AS",
+    "N5 | ( R v R ) : IMPE N1 N2",
+    "N6 | F : NEGE N5 N3",
+    "N7 ( ~ ( ( Q & R ) & ( P > S ) ) ) : NEGI N4 N6"
+   ]
+  },
+  {
+   "strategy": "mod_tollens",
+   "role": "shortest clean",
+   "source": "K12",
+   "index": 43479,
+   "prompt": "THM ( ~ S ) , ( R > S ) SEQ ( ~ R ) PRF",
+   "proof": "N1 ( ~ S ) : PR ; N2 ( R > S ) : PR ; N3 | R : AS ; N4 | S : IMPE N2 N3 ; N5 | F : NEGE N4 N1 ; N6 ( ~ R ) : NEGI N3 N5 ; QED",
+   "labels": {
+    "i": 43479,
+    "L": 6,
+    "Lp": 6,
+    "ts": 3,
+    "dep": 1,
+    "depw": 1,
+    "u": [
+     "direct",
+     "mod_tollens",
+     "neg_intro"
+    ],
+    "sub": [
+     "direct.mp",
+     "mod_tollens.strict",
+     "neg_intro.mt",
+     "neg_intro.working"
+    ],
+    "pri": "mod_tollens",
+    "psub": [
+     "mod_tollens.strict",
+     "neg_intro.mt",
+     "neg_intro.working"
+    ],
+    "pric": "mod_tollens",
+    "pcsub": [
+     "mod_tollens.strict",
+     "neg_intro.mt",
+     "neg_intro.working"
+    ],
+    "box_free": false,
+    "root_rule": "NEGI",
+    "p1": false,
+    "p1s": false,
+    "p2": false,
+    "nest": 0,
+    "chain": 1,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 3
+   },
+   "lean_ok": true,
+   "term_size_lean": 3,
+   "lean": "example (R S : Prop) (h1 : \u00acS) (h2 : R \u2192 S) : \u00acR := fun (a1 : R) => h1 (h2 a1)",
+   "nd": [
+    "N1 ( ~ S ) : PR",
+    "N2 ( R > S ) : PR",
+    "N3 | R : AS",
+    "N4 | S : IMPE N2 N3",
+    "N5 | F : NEGE N4 N1",
+    "N6 ( ~ R ) : NEGI N3 N5"
+   ]
+  },
+  {
+   "strategy": "mod_tollens",
+   "role": "typical (pruned length 6, the median)",
+   "source": "K12",
+   "index": 13406,
+   "prompt": "THM ( ( ~ ( ~ ( S > R ) ) ) > ( ( R & R ) & P ) ) , ( ~ ( ( R & R ) & P ) ) SEQ ( ~ ( ~ ( ~ ( S > R ) ) ) ) PRF",
+   "proof": "N1 ( ( ~ ( ~ ( S > R ) ) ) > ( ( R & R ) & P ) ) : PR ; N2 ( ~ ( ( R & R ) & P ) ) : PR ; N3 | ( ~ ( ~ ( S > R ) ) ) : AS ; N4 | ( ( R & R ) & P ) : IMPE N1 N3 ; N5 | F : NEGE N4 N2 ; N6 ( ~ ( ~ ( ~ ( S > R ) ) ) ) : NEGI N3 N5 ; QED",
+   "labels": {
+    "i": 13406,
+    "L": 6,
+    "Lp": 6,
+    "ts": 3,
+    "dep": 1,
+    "depw": 1,
+    "u": [
+     "direct",
+     "mod_tollens",
+     "neg_intro"
+    ],
+    "sub": [
+     "direct.mp",
+     "mod_tollens.strict",
+     "neg_intro.mt",
+     "neg_intro.working"
+    ],
+    "pri": "mod_tollens",
+    "psub": [
+     "mod_tollens.strict",
+     "neg_intro.mt",
+     "neg_intro.working"
+    ],
+    "pric": "mod_tollens",
+    "pcsub": [
+     "mod_tollens.strict",
+     "neg_intro.mt",
+     "neg_intro.working"
+    ],
+    "box_free": false,
+    "root_rule": "NEGI",
+    "p1": false,
+    "p1s": false,
+    "p2": false,
+    "nest": 0,
+    "chain": 1,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 3
+   },
+   "lean_ok": true,
+   "term_size_lean": 3,
+   "lean": "example (P R S : Prop) (h1 : \u00ac\u00ac(S \u2192 R) \u2192 (R \u2227 R) \u2227 P) (h2 : \u00ac((R \u2227 R) \u2227 P)) : \u00ac\u00ac\u00ac(S \u2192 R) := fun (a1 : \u00ac\u00ac(S \u2192 R)) => h2 (h1 a1)",
+   "nd": [
+    "N1 ( ( ~ ( ~ ( S > R ) ) ) > ( ( R & R ) & P ) ) : PR",
+    "N2 ( ~ ( ( R & R ) & P ) ) : PR",
+    "N3 | ( ~ ( ~ ( S > R ) ) ) : AS",
+    "N4 | ( ( R & R ) & P ) : IMPE N1 N3",
+    "N5 | F : NEGE N4 N2",
+    "N6 ( ~ ( ~ ( ~ ( S > R ) ) ) ) : NEGI N3 N5"
+   ]
+  },
+  {
+   "strategy": "ex_falso",
+   "role": "shortest clean",
+   "source": "K12",
+   "index": 104971,
+   "prompt": "THM Q , ( ~ Q ) SEQ R PRF",
+   "proof": "N1 Q : PR ; N2 ( ~ Q ) : PR ; N3 F : NEGE N1 N2 ; N4 R : BOTE N3 ; QED",
+   "labels": {
+    "i": 104971,
+    "L": 4,
+    "Lp": 4,
+    "ts": 2,
+    "dep": 0,
+    "depw": 0,
+    "u": [
+     "ex_falso"
+    ],
+    "sub": [
+     "ex_falso.inconsistent_premises",
+     "ex_falso.root"
+    ],
+    "pri": "ex_falso",
+    "psub": [
+     "ex_falso.inconsistent_premises",
+     "ex_falso.root"
+    ],
+    "pric": "ex_falso",
+    "pcsub": [
+     "ex_falso.inconsistent_premises",
+     "ex_falso.root"
+    ],
+    "box_free": true,
+    "root_rule": "BOTE",
+    "p1": false,
+    "p1s": false,
+    "p2": false,
+    "nest": 0,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 2
+   },
+   "lean_ok": true,
+   "term_size_lean": 2,
+   "lean": "example (Q R : Prop) (h1 : Q) (h2 : \u00acQ) : R := False.elim (h2 h1)",
+   "nd": [
+    "N1 Q : PR",
+    "N2 ( ~ Q ) : PR",
+    "N3 F : NEGE N1 N2",
+    "N4 R : BOTE N3"
+   ]
+  },
+  {
+   "strategy": "ex_falso",
+   "role": "typical (pruned length 5, the median)",
+   "source": "K12",
+   "index": 149572,
+   "prompt": "THM Q , ( ~ ( Q & Q ) ) SEQ ( ( P & P ) v R ) PRF",
+   "proof": "N1 Q : PR ; N2 ( ~ ( Q & Q ) ) : PR ; N3 ( Q & Q ) : ANDI N1 N1 ; N4 F : NEGE N3 N2 ; N5 ( ( P & P ) v R ) : BOTE N4 ; QED",
+   "labels": {
+    "i": 149572,
+    "L": 5,
+    "Lp": 5,
+    "ts": 3,
+    "dep": 0,
+    "depw": 0,
+    "u": [
+     "and_intro",
+     "ex_falso"
+    ],
+    "sub": [
+     "ex_falso.inconsistent_premises",
+     "ex_falso.root"
+    ],
+    "pri": "ex_falso",
+    "psub": [
+     "ex_falso.inconsistent_premises",
+     "ex_falso.root"
+    ],
+    "pric": "ex_falso",
+    "pcsub": [
+     "ex_falso.inconsistent_premises",
+     "ex_falso.root"
+    ],
+    "box_free": true,
+    "root_rule": "BOTE",
+    "p1": false,
+    "p1s": false,
+    "p2": false,
+    "nest": 0,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 3
+   },
+   "lean_ok": true,
+   "term_size_lean": 3,
+   "lean": "example (P Q R : Prop) (h1 : Q) (h2 : \u00ac(Q \u2227 Q)) : P \u2227 P \u2228 R := False.elim (h2 \u27e8h1, h1\u27e9)",
+   "nd": [
+    "N1 Q : PR",
+    "N2 ( ~ ( Q & Q ) ) : PR",
+    "N3 ( Q & Q ) : ANDI N1 N1",
+    "N4 F : NEGE N3 N2",
+    "N5 ( ( P & P ) v R ) : BOTE N4"
+   ]
+  },
+  {
+   "strategy": "contradiction",
+   "role": "shortest clean",
+   "source": "K12",
+   "index": 131990,
+   "prompt": "THM ( R v ( ( ~ R ) v ( ~ S ) ) ) , ( ~ ( ( ~ R ) v ( ~ S ) ) ) SEQ ( ( R v ( ( ~ R ) v ( ~ S ) ) ) & R ) PRF",
+   "proof": "N1 ( R v ( ( ~ R ) v ( ~ S ) ) ) : PR ; N2 ( ~ ( ( ~ R ) v ( ~ S ) ) ) : PR ; N3 | ( ~ R ) : AS ; N4 | | R : AS ; N5 | | F : NEGE N4 N3 ; N6 | | ( ( ~ R ) v ( ~ S ) ) : AS ; N7 | | F : NEGE N6 N2 ; N8 | F : ORE N1 N4 N5 N6 N7 ; N9 ( ~ ( ~ R ) ) : NEGI N3 N8 ; N10 R : DN N9 ; N11 ( ( R v ( ( ~ R ) v ( ~ S ) ) ) & R ) : ANDI N1 N10 ; QED",
+   "labels": {
+    "i": 131990,
+    "L": 11,
+    "Lp": 11,
+    "ts": 10,
+    "dep": 2,
+    "depw": 2,
+    "u": [
+     "and_intro",
+     "cases",
+     "contradiction"
+    ],
+    "sub": [
+     "and_intro.root",
+     "cases.genuine",
+     "cases.on_premise",
+     "contradiction.free",
+     "contradiction.lemma",
+     "contradiction.route_cases",
+     "contradiction.working"
+    ],
+    "pri": "and_intro",
+    "psub": [
+     "and_intro.root"
+    ],
+    "pric": "and_intro",
+    "pcsub": [
+     "and_intro.root"
+    ],
+    "box_free": false,
+    "root_rule": "ANDI",
+    "p1": false,
+    "p1s": false,
+    "p2": true,
+    "nest": 1,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 10
+   },
+   "lean_ok": true,
+   "term_size_lean": 8,
+   "lean": "example (R S : Prop) (h1 : R \u2228 \u00acR \u2228 \u00acS) (h2 : \u00ac(\u00acR \u2228 \u00acS)) : (R \u2228 \u00acR \u2228 \u00acS) \u2227 R :=\n  \u27e8h1, Classical.byContradiction (fun (a1 : \u00acR) =>\n    h1.elim\n      (fun (a2 : R) => a1 a2)\n      (fun (a3 : \u00acR \u2228 \u00acS) => h2 a3))\u27e9",
+   "nd": [
+    "N1 ( R v ( ( ~ R ) v ( ~ S ) ) ) : PR",
+    "N2 ( ~ ( ( ~ R ) v ( ~ S ) ) ) : PR",
+    "N3 | ( ~ R ) : AS",
+    "N4 | | R : AS",
+    "N5 | | F : NEGE N4 N3",
+    "N6 | | ( ( ~ R ) v ( ~ S ) ) : AS",
+    "N7 | | F : NEGE N6 N2",
+    "N8 | F : ORE N1 N4 N5 N6 N7",
+    "N9 ( ~ ( ~ R ) ) : NEGI N3 N8",
+    "N10 R : DN N9",
+    "N11 ( ( R v ( ( ~ R ) v ( ~ S ) ) ) & R ) : ANDI N1 N10"
+   ]
+  },
+  {
+   "strategy": "contradiction",
+   "role": "typical (pruned length 5, the median)",
+   "source": "K12",
+   "index": 108482,
+   "prompt": "THM ( ( ~ ( ( ~ ( S > P ) ) v ( P & ( ~ S ) ) ) ) > F ) SEQ ( ( ~ ( S > P ) ) v ( P & ( ~ S ) ) ) PRF",
+   "proof": "N1 ( ( ~ ( ( ~ ( S > P ) ) v ( P & ( ~ S ) ) ) ) > F ) : PR ; N2 | ( ~ ( ( ~ ( S > P ) ) v ( P & ( ~ S ) ) ) ) : AS ; N3 | F : IMPE N1 N2 ; N4 ( ~ ( ~ ( ( ~ ( S > P ) ) v ( P & ( ~ S ) ) ) ) ) : NEGI N2 N3 ; N5 ( ( ~ ( S > P ) ) v ( P & ( ~ S ) ) ) : DN N4 ; QED",
+   "labels": {
+    "i": 108482,
+    "L": 5,
+    "Lp": 5,
+    "ts": 5,
+    "dep": 1,
+    "depw": 1,
+    "u": [
+     "contradiction",
+     "direct"
+    ],
+    "sub": [
+     "contradiction.root",
+     "contradiction.route_immediate",
+     "contradiction.scaffolded",
+     "contradiction.template",
+     "direct.mp"
+    ],
+    "pri": "contradiction",
+    "psub": [
+     "contradiction.root",
+     "contradiction.route_immediate",
+     "contradiction.scaffolded",
+     "contradiction.template"
+    ],
+    "pric": "contradiction",
+    "pcsub": [
+     "contradiction.root",
+     "contradiction.route_immediate",
+     "contradiction.scaffolded",
+     "contradiction.template"
+    ],
+    "box_free": false,
+    "root_rule": "DN",
+    "p1": false,
+    "p1s": false,
+    "p2": true,
+    "nest": 0,
+    "chain": 1,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 5
+   },
+   "lean_ok": true,
+   "term_size_lean": 3,
+   "lean": "example (P S : Prop) (h1 : \u00ac(\u00ac(S \u2192 P) \u2228 P \u2227 \u00acS) \u2192 False) : \u00ac(S \u2192 P) \u2228 P \u2227 \u00acS := Classical.byContradiction (fun (a1 : \u00ac(\u00ac(S \u2192 P) \u2228 P \u2227 \u00acS)) => h1 a1)",
+   "nd": [
+    "N1 ( ( ~ ( ( ~ ( S > P ) ) v ( P & ( ~ S ) ) ) ) > F ) : PR",
+    "N2 | ( ~ ( ( ~ ( S > P ) ) v ( P & ( ~ S ) ) ) ) : AS",
+    "N3 | F : IMPE N1 N2",
+    "N4 ( ~ ( ~ ( ( ~ ( S > P ) ) v ( P & ( ~ S ) ) ) ) ) : NEGI N2 N3",
+    "N5 ( ( ~ ( S > P ) ) v ( P & ( ~ S ) ) ) : DN N4"
+   ]
+  },
+  {
+   "strategy": "dne",
+   "role": "shortest clean",
+   "source": "K12",
+   "index": 70566,
+   "prompt": "THM ( ~ ( ~ ( Q v R ) ) ) SEQ ( Q v R ) PRF",
+   "proof": "N1 ( ~ ( ~ ( Q v R ) ) ) : PR ; N2 ( Q v R ) : DN N1 ; QED",
+   "labels": {
+    "i": 70566,
+    "L": 2,
+    "Lp": 2,
+    "ts": 3,
+    "dep": 0,
+    "depw": 0,
+    "u": [
+     "dne"
+    ],
+    "sub": [
+     "dne.on_premise"
+    ],
+    "pri": "dne",
+    "psub": [
+     "dne.on_premise"
+    ],
+    "pric": "dne",
+    "pcsub": [
+     "dne.on_premise"
+    ],
+    "box_free": true,
+    "root_rule": "DN",
+    "p1": false,
+    "p1s": false,
+    "p2": false,
+    "nest": 0,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 3
+   },
+   "lean_ok": true,
+   "term_size_lean": 1,
+   "lean": "example (Q R : Prop) (h1 : \u00ac\u00ac(Q \u2228 R)) : Q \u2228 R := Classical.byContradiction h1",
+   "nd": [
+    "N1 ( ~ ( ~ ( Q v R ) ) ) : PR",
+    "N2 ( Q v R ) : DN N1"
+   ]
+  },
+  {
+   "strategy": "dne",
+   "role": "typical (pruned length 8, the median)",
+   "source": "K12",
+   "index": 142440,
+   "prompt": "THM ( ~ P ) , ( ( ( ~ ( ~ R ) ) v ( ~ P ) ) > ( ~ ( ~ R ) ) ) SEQ R PRF",
+   "proof": "N1 ( ~ P ) : PR ; N2 ( ( ( ~ ( ~ R ) ) v ( ~ P ) ) > ( ~ ( ~ R ) ) ) : PR ; N3 ( ( ~ ( ~ R ) ) v ( ~ P ) ) : ORI2 N1 ; N4 | ( ~ ( ~ R ) ) : AS ; N5 | ( ~ P ) : AS ; N6 | ( ~ ( ~ R ) ) : IMPE N2 N3 ; N7 ( ~ ( ~ R ) ) : ORE N3 N4 N4 N5 N6 ; N8 R : DN N7 ; QED",
+   "labels": {
+    "i": 142440,
+    "L": 8,
+    "Lp": 8,
+    "ts": 8,
+    "dep": 1,
+    "depw": 1,
+    "u": [
+     "cases",
+     "direct",
+     "dne",
+     "lemma_reuse",
+     "or_intro"
+    ],
+    "sub": [
+     "cases.on_derived",
+     "cases.or_intro_decoration",
+     "cases.redundant",
+     "direct.mp",
+     "dne.on_derived",
+     "lemma_reuse.across_boxes",
+     "or_intro.feeds_ore"
+    ],
+    "pri": "dne",
+    "psub": [
+     "dne.on_derived"
+    ],
+    "pric": "dne",
+    "pcsub": [
+     "dne.on_derived"
+    ],
+    "box_free": false,
+    "root_rule": "DN",
+    "p1": true,
+    "p1s": true,
+    "p2": false,
+    "nest": 1,
+    "chain": 1,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 8
+   },
+   "lean_ok": true,
+   "term_size_lean": 6,
+   "lean": "example (P R : Prop) (h1 : \u00acP) (h2 : \u00ac\u00acR \u2228 \u00acP \u2192 \u00ac\u00acR) : R :=\n  have l3 : \u00ac\u00acR \u2228 \u00acP := Or.inr h1\n  Classical.byContradiction (l3.elim\n    (fun (a1 : \u00ac\u00acR) => a1)\n    (fun (a2 : \u00acP) => h2 l3))",
+   "nd": [
+    "N1 ( ~ P ) : PR",
+    "N2 ( ( ( ~ ( ~ R ) ) v ( ~ P ) ) > ( ~ ( ~ R ) ) ) : PR",
+    "N3 ( ( ~ ( ~ R ) ) v ( ~ P ) ) : ORI2 N1",
+    "N4 | ( ~ ( ~ R ) ) : AS",
+    "N5 | ( ~ P ) : AS",
+    "N6 | ( ~ ( ~ R ) ) : IMPE N2 N3",
+    "N7 ( ~ ( ~ R ) ) : ORE N3 N4 N4 N5 N6",
+    "N8 R : DN N7"
+   ]
+  },
+  {
+   "strategy": "lem",
+   "role": "shortest clean",
+   "source": "textbook-schema instance (search proof)",
+   "index": 819,
+   "prompt": "THM SEQ ( ( ~ ( ~ P ) ) v ( ~ ( ~ ( ~ P ) ) ) ) PRF",
+   "proof": "N1 | ( ~ ( ( ~ ( ~ P ) ) v ( ~ ( ~ ( ~ P ) ) ) ) ) : AS ; N2 | | ( ~ ( ~ P ) ) : AS ; N3 | | ( ( ~ ( ~ P ) ) v ( ~ ( ~ ( ~ P ) ) ) ) : ORI1 N2 ; N4 | | F : NEGE N3 N1 ; N5 | ( ~ ( ~ ( ~ P ) ) ) : NEGI N2 N4 ; N6 | ( ( ~ ( ~ P ) ) v ( ~ ( ~ ( ~ P ) ) ) ) : ORI2 N5 ; N7 | F : NEGE N6 N1 ; N8 ( ~ ( ~ ( ( ~ ( ~ P ) ) v ( ~ ( ~ ( ~ P ) ) ) ) ) ) : NEGI N1 N7 ; N9 ( ( ~ ( ~ P ) ) v ( ~ ( ~ ( ~ P ) ) ) ) : DN N8 ; QED",
+   "labels": {
+    "i": 819,
+    "L": 9,
+    "Lp": 9,
+    "ts": 9,
+    "dep": 2,
+    "depw": 2,
+    "u": [
+     "contradiction",
+     "lem",
+     "neg_intro",
+     "or_intro"
+    ],
+    "sub": [
+     "contradiction.free",
+     "contradiction.root",
+     "contradiction.route_self",
+     "contradiction.working",
+     "neg_intro.or_weaken",
+     "neg_intro.working",
+     "or_intro.other"
+    ],
+    "pri": "contradiction",
+    "psub": [
+     "contradiction.free",
+     "contradiction.root",
+     "contradiction.route_self",
+     "contradiction.working"
+    ],
+    "pric": "contradiction",
+    "pcsub": [
+     "contradiction.free",
+     "contradiction.root",
+     "contradiction.route_self",
+     "contradiction.working"
+    ],
+    "box_free": false,
+    "root_rule": "DN",
+    "p1": false,
+    "p1s": false,
+    "p2": true,
+    "nest": 0,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 9
+   },
+   "lean_ok": true,
+   "term_size_lean": 7,
+   "lean": "example (P : Prop) : \u00ac\u00acP \u2228 \u00ac\u00ac\u00acP :=\n  Classical.byContradiction (fun (a1 : \u00ac(\u00ac\u00acP \u2228 \u00ac\u00ac\u00acP)) => a1 (Or.inr (fun (a2 : \u00ac\u00acP) => a1 (Or.inl a2))))",
+   "nd": [
+    "N1 | ( ~ ( ( ~ ( ~ P ) ) v ( ~ ( ~ ( ~ P ) ) ) ) ) : AS",
+    "N2 | | ( ~ ( ~ P ) ) : AS",
+    "N3 | | ( ( ~ ( ~ P ) ) v ( ~ ( ~ ( ~ P ) ) ) ) : ORI1 N2",
+    "N4 | | F : NEGE N3 N1",
+    "N5 | ( ~ ( ~ ( ~ P ) ) ) : NEGI N2 N4",
+    "N6 | ( ( ~ ( ~ P ) ) v ( ~ ( ~ ( ~ P ) ) ) ) : ORI2 N5",
+    "N7 | F : NEGE N6 N1",
+    "N8 ( ~ ( ~ ( ( ~ ( ~ P ) ) v ( ~ ( ~ ( ~ P ) ) ) ) ) ) : NEGI N1 N7",
+    "N9 ( ( ~ ( ~ P ) ) v ( ~ ( ~ ( ~ P ) ) ) ) : DN N8"
+   ]
+  },
+  {
+   "strategy": "lemma_reuse",
+   "role": "shortest clean",
+   "source": "K12",
+   "index": 44059,
+   "prompt": "THM ( Q > P ) SEQ ( ( ( ~ ( ~ ( Q > P ) ) ) v R ) & ( ~ ( ~ ( Q > P ) ) ) ) PRF",
+   "proof": "N1 ( Q > P ) : PR ; N2 | ( ~ ( Q > P ) ) : AS ; N3 | F : NEGE N1 N2 ; N4 ( ~ ( ~ ( Q > P ) ) ) : NEGI N2 N3 ; N5 ( ( ~ ( ~ ( Q > P ) ) ) v R ) : ORI1 N4 ; N6 ( ( ( ~ ( ~ ( Q > P ) ) ) v R ) & ( ~ ( ~ ( Q > P ) ) ) ) : ANDI N5 N4 ; QED",
+   "labels": {
+    "i": 44059,
+    "L": 6,
+    "Lp": 6,
+    "ts": 4,
+    "dep": 1,
+    "depw": 1,
+    "u": [
+     "and_intro",
+     "lemma_reuse",
+     "neg_intro",
+     "or_intro"
+    ],
+    "sub": [
+     "and_intro.root",
+     "lemma_reuse.multi_step",
+     "neg_intro.immediate",
+     "neg_intro.working",
+     "or_intro.other"
+    ],
+    "pri": "and_intro",
+    "psub": [
+     "and_intro.root"
+    ],
+    "pric": "and_intro",
+    "pcsub": [
+     "and_intro.root"
+    ],
+    "box_free": false,
+    "root_rule": "ANDI",
+    "p1": false,
+    "p1s": false,
+    "p2": false,
+    "nest": 0,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 4
+   },
+   "lean_ok": true,
+   "term_size_lean": 4,
+   "lean": "example (P Q R : Prop) (h1 : Q \u2192 P) : (\u00ac\u00ac(Q \u2192 P) \u2228 R) \u2227 \u00ac\u00ac(Q \u2192 P) :=\n  have l4 : \u00ac\u00ac(Q \u2192 P) := fun (a1 : \u00ac(Q \u2192 P)) => a1 h1\n  \u27e8Or.inl l4, l4\u27e9",
+   "nd": [
+    "N1 ( Q > P ) : PR",
+    "N2 | ( ~ ( Q > P ) ) : AS",
+    "N3 | F : NEGE N1 N2",
+    "N4 ( ~ ( ~ ( Q > P ) ) ) : NEGI N2 N3",
+    "N5 ( ( ~ ( ~ ( Q > P ) ) ) v R ) : ORI1 N4",
+    "N6 ( ( ( ~ ( ~ ( Q > P ) ) ) v R ) & ( ~ ( ~ ( Q > P ) ) ) ) : ANDI N5 N4"
+   ]
+  },
+  {
+   "strategy": "lemma_reuse",
+   "role": "typical (pruned length 10, the median)",
+   "source": "K12",
+   "index": 34370,
+   "prompt": "THM ( P > P ) SEQ ( ( ( ( P > P ) v S ) & ( P > P ) ) & ( ( P > P ) v S ) ) PRF",
+   "proof": "N1 ( P > P ) : PR ; N2 ( ( P > P ) v S ) : ORI1 N1 ; N3 | ( P > P ) : AS ; N4 | ( ( ( P > P ) v S ) & ( P > P ) ) : ANDI N2 N1 ; N5 | S : AS ; N6 | ( ( P > P ) v S ) : R N2 ; N7 | ( P > P ) : R N1 ; N8 | ( ( ( P > P ) v S ) & ( P > P ) ) : ANDI N6 N7 ; N9 ( ( ( P > P ) v S ) & ( P > P ) ) : ORE N2 N3 N4 N5 N8 ; N10 ( ( ( ( P > P ) v S ) & ( P > P ) ) & ( ( P > P ) v S ) ) : ANDI N9 N2 ; QED",
+   "labels": {
+    "i": 34370,
+    "L": 10,
+    "Lp": 10,
+    "ts": 7,
+    "dep": 1,
+    "depw": 1,
+    "u": [
+     "and_intro",
+     "cases",
+     "lemma_reuse",
+     "or_intro"
+    ],
+    "sub": [
+     "and_intro.root",
+     "cases.on_derived",
+     "cases.or_intro_decoration",
+     "cases.redundant",
+     "lemma_reuse.across_boxes",
+     "or_intro.feeds_ore"
+    ],
+    "pri": "and_intro",
+    "psub": [
+     "and_intro.root"
+    ],
+    "pric": "and_intro",
+    "pcsub": [
+     "and_intro.root"
+    ],
+    "box_free": false,
+    "root_rule": "ANDI",
+    "p1": true,
+    "p1s": true,
+    "p2": false,
+    "nest": 1,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 7
+   },
+   "lean_ok": true,
+   "term_size_lean": 7,
+   "lean": "example (P S : Prop) (h1 : P \u2192 P) : (((P \u2192 P) \u2228 S) \u2227 (P \u2192 P)) \u2227 ((P \u2192 P) \u2228 S) :=\n  have l2 : (P \u2192 P) \u2228 S := Or.inl h1\n  \u27e8l2.elim\n    (fun (a1 : P \u2192 P) => \u27e8l2, h1\u27e9)\n    (fun (a2 : S) => \u27e8l2, h1\u27e9), l2\u27e9",
+   "nd": [
+    "N1 ( P > P ) : PR",
+    "N2 ( ( P > P ) v S ) : ORI1 N1",
+    "N3 | ( P > P ) : AS",
+    "N4 | ( ( ( P > P ) v S ) & ( P > P ) ) : ANDI N2 N1",
+    "N5 | S : AS",
+    "N6 | ( ( P > P ) v S ) : R N2",
+    "N7 | ( P > P ) : R N1",
+    "N8 | ( ( ( P > P ) v S ) & ( P > P ) ) : ANDI N6 N7",
+    "N9 ( ( ( P > P ) v S ) & ( P > P ) ) : ORE N2 N3 N4 N5 N8",
+    "N10 ( ( ( ( P > P ) v S ) & ( P > P ) ) & ( ( P > P ) v S ) ) : ANDI N9 N2"
+   ]
+  },
+  {
+   "strategy": "contradiction",
+   "role": "kind vacuous (shortest K12 proof with only this kind; primary if one exists)",
+   "source": "K12",
+   "index": 558,
+   "prompt": "THM ( ( R > P ) > Q ) , ( ~ ( ( R > P ) > Q ) ) SEQ ( ( P v R ) > ( ~ ( Q v P ) ) ) PRF",
+   "proof": "N1 ( ( R > P ) > Q ) : PR ; N2 ( ~ ( ( R > P ) > Q ) ) : PR ; N3 | ( ~ ( ( P v R ) > ( ~ ( Q v P ) ) ) ) : AS ; N4 | F : NEGE N1 N2 ; N5 ( ~ ( ~ ( ( P v R ) > ( ~ ( Q v P ) ) ) ) ) : NEGI N3 N4 ; N6 ( ( P v R ) > ( ~ ( Q v P ) ) ) : DN N5 ; QED",
+   "labels": {
+    "i": 558,
+    "L": 6,
+    "Lp": 6,
+    "ts": 5,
+    "dep": 1,
+    "depw": 1,
+    "u": [
+     "contradiction"
+    ],
+    "sub": [
+     "contradiction.root",
+     "contradiction.route_vacuous",
+     "contradiction.template",
+     "contradiction.vacuous"
+    ],
+    "pri": "contradiction",
+    "psub": [
+     "contradiction.root",
+     "contradiction.route_vacuous",
+     "contradiction.template",
+     "contradiction.vacuous"
+    ],
+    "pric": "contradiction",
+    "pcsub": [
+     "contradiction.root",
+     "contradiction.route_vacuous",
+     "contradiction.template",
+     "contradiction.vacuous"
+    ],
+    "box_free": false,
+    "root_rule": "DN",
+    "p1": false,
+    "p1s": false,
+    "p2": true,
+    "nest": 0,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 5
+   },
+   "lean_ok": true,
+   "term_size_lean": 3,
+   "lean": "example (P Q R : Prop) (h1 : (R \u2192 P) \u2192 Q) (h2 : \u00ac((R \u2192 P) \u2192 Q)) : P \u2228 R \u2192 \u00ac(Q \u2228 P) := Classical.byContradiction (fun (a1 : \u00ac(P \u2228 R \u2192 \u00ac(Q \u2228 P))) => h2 h1)",
+   "nd": [
+    "N1 ( ( R > P ) > Q ) : PR",
+    "N2 ( ~ ( ( R > P ) > Q ) ) : PR",
+    "N3 | ( ~ ( ( P v R ) > ( ~ ( Q v P ) ) ) ) : AS",
+    "N4 | F : NEGE N1 N2",
+    "N5 ( ~ ( ~ ( ( P v R ) > ( ~ ( Q v P ) ) ) ) ) : NEGI N3 N4",
+    "N6 ( ( P v R ) > ( ~ ( Q v P ) ) ) : DN N5"
+   ]
+  },
+  {
+   "strategy": "contradiction",
+   "role": "kind pointless (shortest K12 proof with only this kind; primary if one exists)",
+   "source": "K12",
+   "index": 359,
+   "prompt": "THM S SEQ ( S v ( ( R v P ) > ( P > R ) ) ) PRF",
+   "proof": "N1 S : PR ; N2 | ( ~ S ) : AS ; N3 | F : NEGE N1 N2 ; N4 ( ~ ( ~ S ) ) : NEGI N2 N3 ; N5 S : DN N4 ; N6 ( S v ( ( R v P ) > ( P > R ) ) ) : ORI1 N5 ; QED",
+   "labels": {
+    "i": 359,
+    "L": 6,
+    "Lp": 6,
+    "ts": 6,
+    "dep": 1,
+    "depw": 1,
+    "u": [
+     "contradiction",
+     "or_intro"
+    ],
+    "sub": [
+     "contradiction.lemma",
+     "contradiction.pointless",
+     "contradiction.route_immediate",
+     "contradiction.template",
+     "or_intro.root"
+    ],
+    "pri": "or_intro",
+    "psub": [
+     "or_intro.root"
+    ],
+    "pric": "or_intro",
+    "pcsub": [
+     "or_intro.root"
+    ],
+    "box_free": false,
+    "root_rule": "ORI1",
+    "p1": false,
+    "p1s": false,
+    "p2": true,
+    "nest": 0,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 6
+   },
+   "lean_ok": true,
+   "term_size_lean": 4,
+   "lean": "example (P R S : Prop) (h1 : S) : S \u2228 (R \u2228 P \u2192 P \u2192 R) := Or.inl (Classical.byContradiction (fun (a1 : \u00acS) => a1 h1))",
+   "nd": [
+    "N1 S : PR",
+    "N2 | ( ~ S ) : AS",
+    "N3 | F : NEGE N1 N2",
+    "N4 ( ~ ( ~ S ) ) : NEGI N2 N3",
+    "N5 S : DN N4",
+    "N6 ( S v ( ( R v P ) > ( P > R ) ) ) : ORI1 N5"
+   ]
+  },
+  {
+   "strategy": "contradiction",
+   "role": "kind scaffolded (shortest K12 proof with only this kind; primary if one exists)",
+   "source": "K12",
+   "index": 137,
+   "prompt": "THM ( ~ ( ~ ( ( ~ ( S v R ) ) & ( ( ~ S ) & ( P v R ) ) ) ) ) SEQ ( ( ~ ( S v R ) ) & ( ( ~ S ) & ( P v R ) ) ) PRF",
+   "proof": "N1 ( ~ ( ~ ( ( ~ ( S v R ) ) & ( ( ~ S ) & ( P v R ) ) ) ) ) : PR ; N2 | ( ~ ( ( ~ ( S v R ) ) & ( ( ~ S ) & ( P v R ) ) ) ) : AS ; N3 | F : NEGE N2 N1 ; N4 ( ~ ( ~ ( ( ~ ( S v R ) ) & ( ( ~ S ) & ( P v R ) ) ) ) ) : NEGI N2 N3 ; N5 ( ( ~ ( S v R ) ) & ( ( ~ S ) & ( P v R ) ) ) : DN N4 ; QED",
+   "labels": {
+    "i": 137,
+    "L": 5,
+    "Lp": 5,
+    "ts": 5,
+    "dep": 1,
+    "depw": 1,
+    "u": [
+     "contradiction"
+    ],
+    "sub": [
+     "contradiction.root",
+     "contradiction.route_immediate",
+     "contradiction.scaffolded",
+     "contradiction.template"
+    ],
+    "pri": "contradiction",
+    "psub": [
+     "contradiction.root",
+     "contradiction.route_immediate",
+     "contradiction.scaffolded",
+     "contradiction.template"
+    ],
+    "pric": "contradiction",
+    "pcsub": [
+     "contradiction.root",
+     "contradiction.route_immediate",
+     "contradiction.scaffolded",
+     "contradiction.template"
+    ],
+    "box_free": false,
+    "root_rule": "DN",
+    "p1": false,
+    "p1s": false,
+    "p2": true,
+    "nest": 0,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 5
+   },
+   "lean_ok": true,
+   "term_size_lean": 3,
+   "lean": "example (P R S : Prop) (h1 : \u00ac\u00ac(\u00ac(S \u2228 R) \u2227 \u00acS \u2227 (P \u2228 R))) : \u00ac(S \u2228 R) \u2227 \u00acS \u2227 (P \u2228 R) :=\n  Classical.byContradiction (fun (a1 : \u00ac(\u00ac(S \u2228 R) \u2227 \u00acS \u2227 (P \u2228 R))) => h1 a1)",
+   "nd": [
+    "N1 ( ~ ( ~ ( ( ~ ( S v R ) ) & ( ( ~ S ) & ( P v R ) ) ) ) ) : PR",
+    "N2 | ( ~ ( ( ~ ( S v R ) ) & ( ( ~ S ) & ( P v R ) ) ) ) : AS",
+    "N3 | F : NEGE N2 N1",
+    "N4 ( ~ ( ~ ( ( ~ ( S v R ) ) & ( ( ~ S ) & ( P v R ) ) ) ) ) : NEGI N2 N3",
+    "N5 ( ( ~ ( S v R ) ) & ( ( ~ S ) & ( P v R ) ) ) : DN N4"
+   ]
+  },
+  {
+   "strategy": "contradiction",
+   "role": "kind neg_goal (shortest K12 proof with only this kind; primary if one exists)",
+   "source": "K12",
+   "index": 16163,
+   "prompt": "THM ( ~ ( ( ~ ( ~ S ) ) v ( P > ( ~ Q ) ) ) ) SEQ ( ~ S ) PRF",
+   "proof": "N1 ( ~ ( ( ~ ( ~ S ) ) v ( P > ( ~ Q ) ) ) ) : PR ; N2 | ( ~ ( ~ S ) ) : AS ; N3 | ( ( ~ ( ~ S ) ) v ( P > ( ~ Q ) ) ) : ORI1 N2 ; N4 | F : NEGE N3 N1 ; N5 ( ~ ( ~ ( ~ S ) ) ) : NEGI N2 N4 ; N6 ( ~ S ) : DN N5 ; QED",
+   "labels": {
+    "i": 16163,
+    "L": 6,
+    "Lp": 6,
+    "ts": 6,
+    "dep": 1,
+    "depw": 1,
+    "u": [
+     "contradiction",
+     "or_intro"
+    ],
+    "sub": [
+     "contradiction.neg_goal",
+     "contradiction.root",
+     "contradiction.route_or_weaken",
+     "contradiction.working",
+     "or_intro.other"
+    ],
+    "pri": "contradiction",
+    "psub": [
+     "contradiction.neg_goal",
+     "contradiction.root",
+     "contradiction.route_or_weaken",
+     "contradiction.working"
+    ],
+    "pric": "contradiction",
+    "pcsub": [
+     "contradiction.neg_goal",
+     "contradiction.root",
+     "contradiction.route_or_weaken",
+     "contradiction.working"
+    ],
+    "box_free": false,
+    "root_rule": "DN",
+    "p1": false,
+    "p1s": false,
+    "p2": true,
+    "nest": 0,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 6
+   },
+   "lean_ok": true,
+   "term_size_lean": 4,
+   "lean": "example (P Q S : Prop) (h1 : \u00ac(\u00ac\u00acS \u2228 (P \u2192 \u00acQ))) : \u00acS := Classical.byContradiction (fun (a1 : \u00ac\u00acS) => h1 (Or.inl a1))",
+   "nd": [
+    "N1 ( ~ ( ( ~ ( ~ S ) ) v ( P > ( ~ Q ) ) ) ) : PR",
+    "N2 | ( ~ ( ~ S ) ) : AS",
+    "N3 | ( ( ~ ( ~ S ) ) v ( P > ( ~ Q ) ) ) : ORI1 N2",
+    "N4 | F : NEGE N3 N1",
+    "N5 ( ~ ( ~ ( ~ S ) ) ) : NEGI N2 N4",
+    "N6 ( ~ S ) : DN N5"
+   ]
+  },
+  {
+   "strategy": "contradiction",
+   "role": "kind free (shortest K12 proof with only this kind; primary if one exists)",
+   "source": "K12",
+   "index": 131990,
+   "prompt": "THM ( R v ( ( ~ R ) v ( ~ S ) ) ) , ( ~ ( ( ~ R ) v ( ~ S ) ) ) SEQ ( ( R v ( ( ~ R ) v ( ~ S ) ) ) & R ) PRF",
+   "proof": "N1 ( R v ( ( ~ R ) v ( ~ S ) ) ) : PR ; N2 ( ~ ( ( ~ R ) v ( ~ S ) ) ) : PR ; N3 | ( ~ R ) : AS ; N4 | | R : AS ; N5 | | F : NEGE N4 N3 ; N6 | | ( ( ~ R ) v ( ~ S ) ) : AS ; N7 | | F : NEGE N6 N2 ; N8 | F : ORE N1 N4 N5 N6 N7 ; N9 ( ~ ( ~ R ) ) : NEGI N3 N8 ; N10 R : DN N9 ; N11 ( ( R v ( ( ~ R ) v ( ~ S ) ) ) & R ) : ANDI N1 N10 ; QED",
+   "labels": {
+    "i": 131990,
+    "L": 11,
+    "Lp": 11,
+    "ts": 10,
+    "dep": 2,
+    "depw": 2,
+    "u": [
+     "and_intro",
+     "cases",
+     "contradiction"
+    ],
+    "sub": [
+     "and_intro.root",
+     "cases.genuine",
+     "cases.on_premise",
+     "contradiction.free",
+     "contradiction.lemma",
+     "contradiction.route_cases",
+     "contradiction.working"
+    ],
+    "pri": "and_intro",
+    "psub": [
+     "and_intro.root"
+    ],
+    "pric": "and_intro",
+    "pcsub": [
+     "and_intro.root"
+    ],
+    "box_free": false,
+    "root_rule": "ANDI",
+    "p1": false,
+    "p1s": false,
+    "p2": true,
+    "nest": 1,
+    "chain": 0,
+    "nah": false,
+    "w_only": [],
+    "ts_w": 10
+   },
+   "lean_ok": true,
+   "term_size_lean": 8,
+   "lean": "example (R S : Prop) (h1 : R \u2228 \u00acR \u2228 \u00acS) (h2 : \u00ac(\u00acR \u2228 \u00acS)) : (R \u2228 \u00acR \u2228 \u00acS) \u2227 R :=\n  \u27e8h1, Classical.byContradiction (fun (a1 : \u00acR) =>\n    h1.elim\n      (fun (a2 : R) => a1 a2)\n      (fun (a3 : \u00acR \u2228 \u00acS) => h2 a3))\u27e9",
+   "nd": [
+    "N1 ( R v ( ( ~ R ) v ( ~ S ) ) ) : PR",
+    "N2 ( ~ ( ( ~ R ) v ( ~ S ) ) ) : PR",
+    "N3 | ( ~ R ) : AS",
+    "N4 | | R : AS",
+    "N5 | | F : NEGE N4 N3",
+    "N6 | | ( ( ~ R ) v ( ~ S ) ) : AS",
+    "N7 | | F : NEGE N6 N2",
+    "N8 | F : ORE N1 N4 N5 N6 N7",
+    "N9 ( ~ ( ~ R ) ) : NEGI N3 N8",
+    "N10 R : DN N9",
+    "N11 ( ( R v ( ( ~ R ) v ( ~ S ) ) ) & R ) : ANDI N1 N10"
+   ]
+  }
+ ],
+ "sealed_skipped": 1,
+ "lean_ok": 30,
+ "n": 30
+}

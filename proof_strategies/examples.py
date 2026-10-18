@@ -27,7 +27,7 @@ CLEAN = {   # (label row) -> bool: a clean instance of the strategy as the PRIMA
     'neg_intro': lambda a: a['pri'] == 'neg_intro' and 'neg_intro.working' in a['psub'] and 'neg_intro.mt' not in a['psub'] and 'neg_intro.immediate' not in a['psub'] and set(a['u']) <= BASIC | {'neg_intro'},
     'mod_tollens': lambda a: a['pri'] == 'mod_tollens' and 'mod_tollens.strict' in a['psub'] and 'mod_tollens.contraposition' not in a['psub'],
     'ex_falso': lambda a: a['pri'] == 'ex_falso' and set(a['u']) <= {'ex_falso', 'direct'},
-    'contradiction': lambda a: a['pri'] == 'contradiction' and 'contradiction.free' in a['psub'] and 'contradiction.working' in a['psub'],
+    'contradiction': lambda a: 'contradiction.free' in a['sub'] and 'contradiction.working' in a['sub'] and 'contradiction.template' not in a['sub'],
     'dne': lambda a: a['pri'] == 'dne' and 'dne.on_premise' in a['psub'],
     'lem': lambda a: 'lem' in a['u'] and not {'cases.redundant', 'cond_proof.vacuous', 'contradiction.template'} & set(a['sub']),
     'lemma_reuse': lambda a: 'lemma_reuse' in a['u'] and 'lemma_reuse.multi_step' in a['sub'] and not set(a['u']) & {'contradiction', 'dne', 'ex_falso'} and 'cases.redundant' not in a['sub'] and 'cond_proof.vacuous' not in a['sub'],
