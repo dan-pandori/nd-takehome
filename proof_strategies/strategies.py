@@ -462,6 +462,8 @@ class Proof:
             return 'unlabelled', set()
         if r['rule'] == 'PR':
             return 'trivial', set()
+        if r['rule'] == 'NEGE':              # a ¬E at a (curried) root proves the goal ⊥ by one forward step
+            return 'direct', {'direct.neg_elim_root'}
         st, sub = self.line_labels(r)
         for s in PRECEDENCE:
             if s in st:

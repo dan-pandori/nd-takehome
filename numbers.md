@@ -1954,3 +1954,62 @@ success 13 / 13; every Phase 3a proof 25 / 25; a seeded sample of 50 per full r1
 - Bulk artifacts (read rows, large-k chunks, scores, ladder found / mix files, registry rows): same bucket prefix, same
   repository paths; the files kept locally are listed with sha256 in `artifacts/MANIFEST.jsonl` (`python3 fetch_artifacts.py
   <path>`). Data: `data/coe/README.md`.
+
+## proof-strategies (2026-10-18, executor; UNREVIEWED)
+
+**No model is trained or sampled** except where a section says so: these are counts over data files and over proofs a
+shortest-proof search found. **Checker: Lean alone** (every searched proof Lean-checked; nothing judged by `nd_verify`).
+Taxonomy v1.2 (`proof_strategies/TAXONOMY.md`); all tables `proof_strategies/TABLES.md` (built by `tables.py` from the
+files named below). Proofs are dependency-pruned; "%" = share of proofs (records).
+
+### K12 (`data/kh/train_k12.jsonl`, 155,000 generator proofs, md5 800b5486; source `artifacts/ps/summary/k12.json`)
+- Uses: direct 51.15 %, ∧I 32.57 %, →I 42.95 % (working 20.80 %, vacuous 28.20 %), ∨I 44.26 %, cases 44.16 % (genuine
+  8.79 %, redundant 37.64 %), disjunctive syllogism 43 records (0.03 %), ¬I 4.74 % (working 2.15 %), modus tollens 76
+  (0.05 %), ex falso 8.04 % (⊥ from inconsistent premises 6.23 %), proof by contradiction 16,717 (10.79 %), DNE 3.06 %,
+  excluded middle 47 (0.03 %), lemma reuse 11.71 %. Box-free 24.91 %. Unlabelled 0. No dead lines.
+- Primary: →I 37.65 %, cases 20.85 %, ∨I 14.08 %, ∧I 12.24 %, direct 9.71 %, proof by contradiction 2.91 %; curried
+  primary: see `TABLES.md` § 1 (cases ≈ 33 %, ∨I 20.50 %, ∧I 19.38 %, proof by contradiction 3.50 %, trivial 3.26 %).
+- Proof by contradiction = σ: σ (coe_sigma, strict ∪ chain) 16,703 records ⊂ ours 16,717; σ⁺ 16,961 = ours ∪ DNE on a
+  derived ¬¬ (0 differ; `artifacts/ps/explore/sigma_mapping_k12.txt`). Records with a working reductio 59, all-template 16,658;
+  kinds (any instance) vacuous 8,209, pointless 1,082, scaffolded 7,693, negative goal 48, free 6
+  (`TABLES.md` § 3; instance table `artifacts/ps/explore/sigma_instances_k12.txt`).
+- Theorem level (`artifacts/ps/theorem_totals.txt`): classical-only 6,238 (4.02 %), σ-covered **0**, a double negation
+  in the sequent 45,630, inconsistent premises 36,472 (23.53 %). Reductio users on classical-only theorems 4,279
+  (25.6 %); classical-only theorems proved with a reductio 4,279, with DNE only 1,959.
+- 990-theorem sample re-proved by the shortest-proof search (`data/ps/search/k12_min990.checked.jsonl`, 990 / 990 found
+  and Lean-accepted): shorter on 534; mean pruned lines 7.00 → 4.69; cases 42.5 % → 6.1 %, proof by contradiction 10.0 %
+  → 2.2 %, redundant splits / vacuous or pointless reductios / vacuous ¬I → 0 (`TABLES.md` § 8).
+- Necessity, 594-theorem sample (bound 12 lines, 60 s; `data/ps/nec/k12_nec594.checked.jsonl`): requires ∨E 6.1 %,
+  NEGI 3.7 %, BOTE 0 %, DN 5.4 %; DN ban = G4ip on 593 / 594; of proofs using ∨E 14.0 % are of theorems that need it.
+
+### Comparison sets (`TABLES.md` § 2–5; summaries `artifacts/ps/summary/<set>.json`)
+- cap-6 (`train_depth3_f0_a1.jsonl`, md5 29276f24): proof by contradiction 6.81 % (working 4 records), cases 1.46 %.
+- K12⁻ (`train_k12ko.jsonl.gz`, gz md5 6326ebdd): proof by contradiction 0, ¬I 5.19 %, DNE 3.29 %.
+- K12 1 % dose (`train_k12dose1.jsonl.gz`, gz md5 7433f6ac): 1,550 reductio records, 5 working.
+- Textbook problems (Charles's 187 base problems, nd-rl 297dcbdd, reference proofs): working proof by contradiction
+  20.86 % (free 20.32 %), ¬I 37.97 %, modus tollens 11.76 %, disjunctive syllogism 14.44 %, genuine cases 33.69 %;
+  classical-only 42 (22.5 %), σ-covered 35 (18.7 %); bounded necessity (124 decided): requires NEGI 37.1 %.
+- Textbook schemata in the RL pools (1,610 instances in rl_targets / transfer / holdout250, Lean-checked shortest
+  proofs, 1,610 / 1,610 found): working proof by contradiction 20.75 %, ¬I 39.57 %, modus tollens 10.43 %, disjunctive
+  syllogism 5.59 %, excluded middle 5.34 %, σ-covered 240.
+- textbook72 (scoring only; 58 / 72 with a search proof): proof by contradiction 17.2 % (all working), ¬I 32.8 %;
+  σ-covered 16 of 72.
+
+### RL's own proofs (`artifacts/ps/rl_mix.json`; models: create-or-elicit's 9.56 M ALiBiGPT `lean_staten`, from scratch on K12 / K12⁻ / K12 1 %, T1 ladder on A40, Lean alone)
+- Distinct Lean-accepted proofs of RL targets in the round's fine-tune mix (`mix_{1,16}.jsonl.gz`, bucket
+  `create-or-elicit/artifacts/coe/ladder/`). Working reductios, round 1 → 16: full s3 / s4 / s5 67 / 29 / 48 → 690 / 199 /
+  204 (σ-covered targets proved 17 / 15 / 20 → 78 / 33 / 36); dose1 s0 / s1 / s2 15 / 41 / 6 → 386 / 276 / 231; knockout
+  s0–s5 1 / 0 / 1 / 0 / 1 / 0 → 10 / 22 / 21 / 6 / 0 / 15.
+
+### Validation (`TAXONOMY.md` § 6)
+- Lean: 6,268 searched proofs, 0 rejected; controls 200 / 200, 0 / 200, 0 / 200 (`artifacts/ps/lean_negative_control.txt`).
+- Term size formula = lean_check on 400 / 400 (`artifacts/ps/term_size_check.json`).
+- Blind spot-check 260 / 260 uses and primary (v1.1; `artifacts/ps/validation/spot_compare_v1.1.json`).
+- Second implementation: v1.2 every compared label on 155,000 / 155,000 and 1,610 / 1,610; fixtures 25 / 25
+  (`artifacts/ps/validation/second_impl_v1.2.md`, `fixtures_check.txt`).
+
+### Compute
+One pod, ps-c0, RTX 3090 ($0.50 / h), 0.1958 h, $0.10, GPU idle (six CPU search jobs J1–J6; `artifacts/ps/pod_logs/`;
+registry rows `hf://buckets/dan-pandori/nd-rl/registry/proof-strategies/`). Everything else on the VPS (≤ 2 processes).
+No generated tokens, no training. Bucket: `hf://buckets/dan-pandori/nd-rl/proof-strategies/` (`artifacts/`, `data/`;
+excludes Charles's release and textbook72 proofs, which stay local).

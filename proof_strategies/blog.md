@@ -7,11 +7,11 @@ written_by: agent:claude
 
 *Draft for Dan, 2026-10-18. Not for circulation.*
 
-*Epistemic status: mostly counts over data files, not experiments. Each strategy is a checkable rule over a proof.
-Two independent checks agree with the classifier on every strategy label: a blind hand-check of 260 proofs, and a second
-program written only from the written definitions. The textbook comparison uses short proofs found by a search program,
-not the textbooks' own proofs. One section re-reads proofs our models wrote in an earlier experiment. Numbers:
-`TABLES.md`; definitions: `TAXONOMY.md`.*
+*Epistemic status: counts over data files, not experiments, except one section that re-reads proofs our models wrote
+in an earlier experiment. Each strategy is a checkable rule over a proof; a blind hand-check of 260 proofs and a second
+program written only from the definitions agree with the classifier on every strategy label. The textbook comparison
+uses short proofs found by a search program, not the textbooks' own proofs. Numbers: `TABLES.md`; definitions:
+`TAXONOMY.md`.*
 
 **The short version.** Our small theorem provers learn propositional logic from K12: 155,000 proofs written by a program
 (a *generator*), not by people. We sorted every proof into thirteen strategies a logic textbook would recognise, from
@@ -31,9 +31,9 @@ wrote working ones anyway.
 A proof here is a *natural deduction* proof: a numbered list of lines, each following from earlier lines by one rule.
 Some rules open a *box*: you assume something temporarily, reason inside the box, then close it and *discharge* the
 assumption. Our system has fourteen rules, and exactly one of them is *classical*: double-negation elimination (from
-"not not G" infer G). Logic without that rule is *intuitionistic*. Every proof is also a proof in Lean, a proof checker
-that decides what counts. We show proofs in Lean below. Read `fun a => …` as "assume a, then …", `h.elim f g` as "use
-h", `¬A` as "A leads to absurdity" and `False` as absurdity.
+"not not G" infer G). Logic without that rule is *intuitionistic*. Every proof is also a proof in Lean, the proof checker
+that decides what counts, and we show proofs in Lean. Read `fun a => …` as "assume a, then …", `h.elim f g` as "use h by
+cases", `¬A` as "A leads to absurdity" and `False` as absurdity.
 
 K12 holds 14,091 generated proofs at each length from 2 to 12 lines. It is the pretraining set of `state_env_october`
 and of the full arm of create-or-elicit, our "Did RL create it?" experiment. In that experiment, *knockout* models were
@@ -41,10 +41,10 @@ pretrained on K12 minus every proof containing σ, and then trained by reinforce
 
 ## A field guide
 
-A *strategy* is a recognisable pattern of inference with a standard name. We use the names of *forall x: Calgary*, a
-free textbook, where they exist. A proof *uses* a strategy if the pattern occurs anywhere in it. Its *primary* strategy
-is the one that reaches the conclusion: the last step. Every K12 proof gets a primary label, so none is unlabelled.
-The thirteen, each with its share of K12 and one example from K12 or from the textbook-style problems in our RL pools:
+A *strategy* is a recognisable pattern of inference with a standard name; we use the names of *forall x: Calgary*, a
+free textbook, where they exist. A proof *uses* a strategy if the pattern occurs anywhere in it; its *primary* strategy
+is the one that takes the last step (every K12 proof has one). The thirteen, with their shares of K12 and examples from
+K12:
 
 1. **Direct reasoning** (forward steps: modus ponens, ∧-elimination), 51 %. From "P and Q", conclude P:
    `example (P Q : Prop) (h : P ∧ Q) : P := h.1`
@@ -72,10 +72,10 @@ The thirteen, each with its share of K12 and one example from K12 or from the te
 13. **Lemma reuse** (prove a fact once, use it twice), 12 %:
     `example (P Q R : Prop) (h : Q → P) : (¬¬(Q → P) ∨ R) ∧ ¬¬(Q → P) := have l : ¬¬(Q → P) := fun n => n h; ⟨Or.inl l, l⟩`
 
-Disjunctive syllogism and modus tollens are special cases of 5 and 7 that textbooks name as rules of their own. Item 7
-is intuitionistic; item 10 is not. Textbooks often call both "reductio" (Andrej Bauer's post "Proof of negation and
-proof by contradiction" explains the difference), and that is why we keep them apart. `TAXONOMY.md` gives each
-definition as a rule a program checks, with finer sub-types.
+Disjunctive syllogism and modus tollens are special cases of 5 and 7 that textbooks name as rules. Item 7 is
+intuitionistic and item 10 is not, though both are often called "reductio" (Andrej Bauer's post "Proof of negation and
+proof by contradiction" explains the difference). `TAXONOMY.md` gives each definition as a checkable rule, with
+sub-types.
 
 ## What K12 is made of
 
@@ -149,40 +149,34 @@ The gaps, textbooks vs K12:
 The textbook schemata and textbook72 show the same pattern. The gaps are in the theorems, not just in the style of
 the proofs:
 - 19 % of the 187 textbook problems are σ-covered; no K12 theorem is.
-- A bounded search shows 37 % of the textbook problems need a negation introduction (¬I or a reductio) in every short
-  proof; only 3.7 % of a K12 sample do.
+- Of the 124 textbook problems a bounded search could decide, 37 % need a negation introduction (¬I or a reductio) in
+  every short proof; of a K12 sample, 3.7 %.
 
 Re-proving K12 problems with the same search does not close the gap.
 
 ## What this means for the knockout result
 
-Create-or-elicit found that the classical families need σ in pretraining. The families are sets of instances of one
-classical law, such as excluded middle. With σ, the full models learned families during RL on 6 of 6 seeds; without
-it, no knockout model learned any; and 1 % of σ was enough.
+Create-or-elicit found that solving the classical *families* needs σ in pretraining. (A family is the set of instances
+of one classical law, such as excluded middle.) After 16 rounds of RL, families were acquired on 6 of 6 full seeds, 0 of
+6 knockout seeds, and 3 of 3 seeds with 1 % of σ put back. This taxonomy says what that σ was: K12 has 16,717 proofs
+with a reductio, of which 59 work, and the 1 % dose set has 1,550, of which 5 work.
 
-This taxonomy says what "σ in pretraining" was:
-- In K12: 16,717 template reductios and 59 working ones.
-- In the 1 % dose set: 1,550 reductios, of which 5 are working.
-
-The models nevertheless wrote working reductios themselves. We classified the Lean-accepted proofs from
-create-or-elicit's RL runs:
+The models nevertheless wrote working reductios. In the Lean-accepted proofs from create-or-elicit's RL runs:
 - Before any RL update, the three new full models wrote 67, 29 and 48 distinct working reductios. With them they solved
   17, 15 and 20 σ-covered problems.
-- After 15 more rounds of RL, they wrote 690, 199 and 204.
+- After 15 rounds of RL, they wrote 690, 199 and 204.
 - Knockout models wrote at most one before RL, and 0 to 22 after.
 
-So pretraining supplied the *form*: assume "not G", close the box, drop the double negation. The models then used the
-form for real reasoning, first rarely and after RL routinely. A model that never saw the form found it only a handful
-of times.
-
-This is our reading, not a tested hypothesis. We do not know whether the 59 working examples in K12 mattered; a
-knockout of just those, or a dose of only templates, would test it.
+So pretraining supplied the *form*: assume "not G", close the box, drop the double negation. The models put it to real
+use, rarely at first and routinely after RL; models that never saw the form found it a handful of times. This is our
+reading, not a tested hypothesis. Knocking out just the 59 working examples, or a dose of templates only, would test
+whether they mattered.
 
 ## Caveats
 
-- These labels describe the proofs we have. K12's come from a generator, the textbook problems' from a search. A
-  different proof of the same theorem could use different strategies. The theorem-level checks guard against this:
-  classical-only is exact, the necessity search is bounded at 12 lines.
+- Labels describe the proofs we have (a generator's for K12, a search's for the textbook problems); another proof of
+  the same theorem could differ. The theorem-level checks guard against this: classical-only is exact, the necessity
+  search is bounded at 12 lines.
 - The definitions are syntactic. "Working" means the step uses its assumption, not that it is clever or necessary.
 - Textbooks' own proofs might use other strategies than the minimal proofs we classified.
 - The knockout reading rests on 3 + 3 + 6 seeds of one small model (9.6 million parameters).

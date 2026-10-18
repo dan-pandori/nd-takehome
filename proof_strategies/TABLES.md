@@ -16,7 +16,7 @@ strategy; curried = after descending through root →I boxes.
 
 | # | strategy | uses | uses % | working uses % | primary % | curried primary % |
 |---|---|---:|---:|---:|---:|---:|
-| 1 | Direct reasoning (→E, ∧E) | 79,284 | 51.15 |  | 9.71 | 14.75 |
+| 1 | Direct reasoning (→E, ∧E) | 79,284 | 51.15 |  | 9.71 | 15.29 |
 | 2 | Conjunction introduction | 50,484 | 32.57 |  | 12.24 | 19.38 |
 | 3 | Conditional proof (→I) | 66,567 | 42.95 | 20.80 | 37.65 | 0.00 |
 | 4 | ∨-introduction | 68,606 | 44.26 |  | 14.08 | 20.50 |
@@ -91,7 +91,7 @@ Curried primary, % of proofs:
 
 | strategy | K12 | cap-6 | K12⁻ | K12 1 % dose | RL targets (gen.) | transfer (gen.) | holdout250 (gen.) | K12 sample, shortest | textbook schemata (pools) | Charles's textbooks | textbook72 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Direct reasoning (→E, ∧E) | 14.8 | 25.1 | 15.8 | 15.7 | 15.3 | 15.3 | 10.6 | 20.6 | 13.5 | 14.4 | 22.4 |
+| Direct reasoning (→E, ∧E) | 15.3 | 25.7 | 16.4 | 16.3 | 15.3 | 15.3 | 10.6 | 20.9 | 13.5 | 14.4 | 22.4 |
 | Conjunction introduction | 19.4 | 19.5 | 18.8 | 18.9 | 24.6 | 33.3 | 34.4 | 20.7 | 8.6 | 35.3 | 8.6 |
 | ∨-introduction | 20.5 | 34.8 | 20.8 | 20.8 | 18.7 | 16.9 | 15.6 | 27.1 | 11.2 | 4.3 | 8.6 |
 | Proof by cases (∨E) | 33.4 | 1.3 | 35.4 | 35.3 | 28.0 | 22.3 | 26.2 | 3.0 | 14.5 | 7.5 | 12.1 |
@@ -103,7 +103,6 @@ Curried primary, % of proofs:
 | Double-negation elimination | 0.3 | 0.6 | 0.3 | 0.3 | 5.2 | 0.5 | 0.6 | 1.1 | 0.0 | 0.5 | 3.4 |
 | Excluded middle | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
 | Trivial (conclusion is a premise) | 3.3 | 7.3 | 3.3 | 3.3 | 0.1 | 0.0 | 0.0 | 5.3 | 0.0 | 0.0 | 5.2 |
-| Unlabelled | 0.5 | 0.6 | 0.6 | 0.6 | 0.0 | 0.0 | 0.0 | 0.3 | 0.0 | 0.0 | 0.0 |
 
 ## 3. Proof by contradiction: what kind of reductio (records with at least one instance of the kind)
 

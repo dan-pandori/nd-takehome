@@ -203,7 +203,34 @@ A proof shows how the generator proved a theorem; these say what the theorem for
 
 ## 6. Validation
 
-*(filled in at the end of the run: Lean checks, term size, spot-check, second implementation, coverage.)*
+- **Lean.** Every proof this run searched was checked by Lean (`nd2lean` + Lean core): 1,610 textbook-schema, 58
+  textbook72 and 990 K12 shortest proofs, and 3,610 necessity-search proofs; 6,268 in all, 0 rejected. Harness
+  controls: 200 / 200 accepted as found, 0 / 200 with the conclusion negated, 0 / 200 with the last line mis-cited
+  (`artifacts/ps/lean_negative_control.txt`). Rendered for reading and checked by `lean_check` (allowlist, axioms, no
+  errors): the 30 canonical examples, a 587-proof renderer test, the 13 snippets in `blog.md`. The 39 unit tests and 25
+  fixtures below are Lean-checked proofs.
+- **Term size.** The per-rule formula equals `lean_check`'s elaborated inference-node count on 400 / 400 pruned proofs
+  (`artifacts/ps/term_size_check.json`).
+- **Blind spot-check** (three independent subagents, by hand from this document; 260 proofs, 20 per strategy: 12
+  random positives, 4 random negatives, 4 borderline; seed 20261018; `data/ps/validation/`). Agreement with the v1.1
+  labels: uses 260 / 260, primary 260 / 260 (20 / 20 for every strategy; `artifacts/ps/validation/spot_compare_v1.1.json`).
+  Their notes produced v1.2: 10 of the 12 sampled disjunctive-syllogism positives had a ⊥ case or an idle other case,
+  and 5 of the 20 excluded-middle items were ∨I of a DNE'd X or rested on a vacuous reductio.
+- **Second implementation** (an independent subagent; own parser; written from this document and `spec.md` only;
+  counts frozen before it read our labels; `proof_strategies/validation/second_impl.py`). It covers proof by
+  contradiction (instances, kinds, routes, working / template), DNE, proof by cases (genuine / redundant / `bot_case`),
+  disjunctive syllogism, proof of a negation (routes), modus tollens (sub-types), excluded middle and the primary label.
+  - v1.1: every uses label and the primary agreed on 155,000 / 155,000 K12 and 1,610 / 1,610 textbook-schema proofs.
+    20 K12 records differed in a sub-type: two gaps in the text and one id missing from our output, all fixed.
+  - v1.2 (final): every compared label agrees on every record of both sets.
+  - Its 25 hand-built fixtures cover sub-types the data never exercise (`cases_on_lem`, `all_refuted`, `via_r`,
+    `bot_case`, …): 25 / 25 are Lean-accepted and get exactly the labels it expected.
+  - Reports: `artifacts/ps/validation/second_impl.md` and `second_impl_v1.2.md`.
+- **Coverage.** Every K12 proof has a primary label (0 unlabelled) and at least one "uses" label. Under v0, 277 K12
+  proofs had none: each proved ⊥ by one ¬E from contradictory premises, and v1 counts a root ¬E as direct reasoning.
+  The curried primary is "trivial" for 3.26 %: the curried goal is an assumption or premise (B ⊢ A → B, ⊢ A → A).
+- **Not exercised by the data.** No K12 or schema proof has a dead line, so pruning is tested only by unit tests.
+  Sub-types with no data instances are tested only by the fixtures.
 
 ## 7. Limits
 
