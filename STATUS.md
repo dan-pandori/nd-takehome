@@ -268,3 +268,12 @@ Brief: run brief `create-or-elicit` (Dan, 2026-10-11). Policy: AGENT_POLICY.md. 
 - 16:48 UTC  **Final results (UNREVIEWED; `run_create_or_elicit.md`, `numbers.md` § create-or-elicit, `claims_ledger.md` v3 L85–L101).** (1) Pre-registered verdict **"needs exposure"**: families acquired 6 / 6 full vs 0 / 6 knockout seeds at r16 (Boschloo p = 2.4 × 10⁻⁴), robust to redraw and guided reads; knockout bases lose nothing off σ (held-out greedy without σ 0.950 vs 0.957). (2) **1 % σ dose restores acquisition** on 3 / 3 seeds (58 / 39 / 30 of 106 held-out members; exploratory vs knockout p = 0.0033). (3) Rare, not absent: 5 / 6 knockout ladders wrote the free reductio themselves; 4 / 6 knockout bases reach family members at ≈ 10⁻⁶ per attempt (2 / 6 certified out of reach at K_train(16)); knockout s1 continued to r24 kept the same 5 / 106 members, only solving them more often; RL never raised the knockout models' log p of known σ proofs. (4) Power sampling of the bases reaches none of what RL creates at matched compute (and 0 / 17 rare base solves vs plain 6–13). (5) The compute-matched "created" sets move with the budget (34 / 33 / 33 → 21 / 20 / 14; robust core 18 / 17 / 8). Phase 3a (one seeded round): no effect (1 / 5 seeds). Replay check passes on 6 / 6 knockout seeds; offline Lean re-check 1,062 / 1,062 accepted, 1,062 / 1,062 goal-negated rejected. **Spend $182.50 / 309.34 pod-hours** (budget $190 / 330 h); all 16 pods deleted. Not run: the 0.1 % dose arm (costed first in `next_steps.md`). Figures: `figures/coe_{estimator,budget,phase2,rounds,endpoint,logp}.{pdf,png}`.
 
 CREATE-OR-ELICIT DONE 2026-10-13T17:39:11Z
+
+
+# STATUS — proof-strategies (proposal 28: a taxonomy of the proof strategies in our pretraining data)
+
+Brief: run brief `proof-strategies` (Dan, 2026-10-18). Policy: AGENT_POLICY.md. Budget $20 / 40 pod-hours (planned $0: VPS only); hard stop 2026-10-21 18:38 UTC.
+
+## proof-strategies
+- 2026-10-18 18:38 UTC  run started (executor). Inputs copied to `data/ps/in/` (gitignored; K12 md5 800b5486, K12⁻ gz 6326ebdd, cap-6 29276f24; Charles's release at nd-rl 297dcbdd, private, local only).
+- 2026-10-18 18:52 UTC  Pre-registration `preregistration/proof-strategies.md` committed before any pod and before any strategy count. `podbudget proof-strategies --set 40 20`.
