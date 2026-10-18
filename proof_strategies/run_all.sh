@@ -30,5 +30,5 @@ done
 for pair in "data/ps/in/train_k12.jsonl.gz k12" "data/ps/in/train_depth3_f0_a1.jsonl.gz cap6" "data/ps/in/train_k12ko.jsonl.gz k12ko" \
             "data/ladder/rl_targets.jsonl rl_targets" "data/ladder/transfer.jsonl transfer" "data/bs/holdout250.jsonl holdout250" \
             "data/ps/in/charles/charles_base_full.jsonl charles_base" "data/bs/textbook72.jsonl textbook72" "data/ps/pod/tb_schema.jsonl tb_schema"; do
-  set -- $pair; python3 proof_strategies/theorem_level.py --in $1 --out $T/$2.jsonl.gz; done > $T/totals.jsonl
+  set -- $pair; python3 proof_strategies/theorem_level.py --in $1 --out $T/$2.jsonl.gz; done > $T/totals.jsonl; cp $T/totals.jsonl artifacts/ps/theorem_totals.txt
 echo run_all done
