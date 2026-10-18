@@ -17,7 +17,7 @@ def main():
     ap.add_argument('--out', default='artifacts/ps/validation/spot_compare.json')
     ap.add_argument('--key', action='store_true', help='compare with the key (labels at sampling time, taxonomy v1.1)')
     a = ap.parse_args()
-    key = {r['id']: r for r in map(json.loads, open('artifacts/ps/validation/spot_key.jsonl'))}
+    key = {r['id']: r for r in map(json.loads, open('data/ps/validation/spot_key.jsonl'))}
     res = collections.defaultdict(lambda: collections.Counter())
     dis = []
     for g in a.groups:

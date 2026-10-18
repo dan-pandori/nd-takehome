@@ -3,7 +3,7 @@
 (K12; textbook-schema search proofs where K12 has too few positives).  Writes the blind files (no labels) for the
 checkers and a key file with our labels.  textbook72 and Charles's release are never sampled.
 
-  python3 proof_strategies/validation_sample.py      # -> data/ps/validation/spot_{a,b,c}.jsonl, artifacts/ps/validation/spot_key.jsonl
+  python3 proof_strategies/validation_sample.py      # -> data/ps/validation/spot_{a,b,c}.jsonl, data/ps/validation/spot_key.jsonl
 """
 import gzip, json, os, random, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -61,7 +61,7 @@ def main():
     rng.shuffle(items)
     os.makedirs('data/ps/validation', exist_ok=True); os.makedirs('artifacts/ps/validation', exist_ok=True)
     groups = {'a': STRATS[0:5], 'b': STRATS[5:9], 'c': STRATS[9:13]}
-    key = open('artifacts/ps/validation/spot_key.jsonl', 'w')
+    key = open('data/ps/validation/spot_key.jsonl', 'w')
     for g, strs in groups.items():
         with open(f'data/ps/validation/spot_{g}.jsonl', 'w') as f:
             n = 0
