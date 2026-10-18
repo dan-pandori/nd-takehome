@@ -1068,3 +1068,9 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   same totals, 0 unparsable): free working reductios rounds 2–16 full 22,013 / 7,886 / 5,915, dose1 15,731 / 9,920 / 9,047,
   knockout 0 / 32 / 2 / 1 / 0 / 12 (≈ create-or-elicit's own 0 / 34 / 4 / 1 / 2 / 16). S1: the "≥ 10 ×" expectation holds on
   counts (pre-registered) but not as shares; the ledger now says both.
+- 21:55 UTC  **Third claim-check pass** (`artifacts/ps/validation/blog_claim_check_3.md`): every number in the changed
+  passages matches its source; residuals R1–R7 fixed (free counts labelled in the short version; "mostly" for the
+  knockout's non-free reductios, s2 wrote 113 with a negated goal; create-or-elicit's larger "free" counts include
+  templates; pretraining quoted in free terms too, K12 6, dose set 2; dose-set label, cap-6 row dropped from
+  `reductio_kinds.png`; "unless noted", glosses; sealed-twin wording). Blog 1,999 words (incl. code), 12 / 12 Lean
+  snippets accepted by lean_check. TABLES § 12 added: the textbook gaps hold within proof-length and depth bins.

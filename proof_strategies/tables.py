@@ -14,7 +14,7 @@ SETS = [  # (summary name, label file, theorem file, record filter, column title
     ('k12', 'k12', 'k12', None, 'K12', 'generator'),
     ('cap6', 'cap6', 'cap6', None, 'cap-6', 'generator'),
     ('k12ko', 'k12ko', 'k12ko', None, 'K12⁻', 'generator'),
-    ('k12dose1', 'k12dose1', 'k12dose1', None, 'K12 1 % dose', 'generator'),
+    ('k12dose1', 'k12dose1', 'k12dose1', None, 'dose set (K12⁻ + σ at 1 %)', 'generator'),
     ('rl_targets_gen', 'rl_targets_gen', 'rl_targets', 'gen', 'RL targets (gen.)', 'generator'),
     ('transfer_gen', 'transfer_gen', 'transfer', 'gen', 'transfer (gen.)', 'generator'),
     ('holdout250_gen', 'holdout250_gen', 'holdout250', 'gen', 'holdout250 (gen.)', 'generator'),
@@ -142,7 +142,7 @@ def main():
     W('|---|---:|---:|---:|---:|---:|')
     TT = {json.loads(l)['in']: json.loads(l) for l in open('artifacts/ps/theorem_totals.txt')}
     names = {'data/ps/in/train_k12.jsonl.gz': 'K12', 'data/ps/in/train_depth3_f0_a1.jsonl.gz': 'cap-6', 'data/ps/in/train_k12ko.jsonl.gz': 'K12⁻',
-             'data/ps/in/train_k12dose1.jsonl.gz': 'K12 1 % dose',
+             'data/ps/in/train_k12dose1.jsonl.gz': 'dose set (K12⁻ + σ at 1 %)',
              'data/ladder/rl_targets.jsonl': 'RL targets (all 4,495)', 'data/ladder/transfer.jsonl': 'transfer (all 2,285)',
              'data/bs/holdout250.jsonl': 'holdout250', 'data/ps/pod/tb_schema.jsonl': 'textbook schemata (pools)',
              'data/ps/in/charles/charles_base_full.jsonl': "Charles's textbooks (187)", 'data/bs/textbook72.jsonl': 'textbook72'}
@@ -268,6 +268,25 @@ def main():
     for s in STRATS:
         W(f'| {NAME[s]} | {pct(v0["uses"][s], v0["n"], 2)} | {pct(k["uses"][s], n, 2)} |')
     W('')
+    # ---------------------------------------------------------------- comparison sets by length and depth
+    W('## 12. Comparison sets by proof length and box depth (% of proofs in the bin using the strategy)')
+    W('')
+    W('Pruned lines binned; depth = maximum box depth of the pruned proof. Working = the step does logical work (§ 1).')
+    W('')
+    keys = [('working reductio', lambda a: 'contradiction.working' in a['sub']), ('working ¬I', lambda a: 'neg_intro.working' in a['sub']),
+            ('genuine ∨E', lambda a: 'cases.genuine' in a['sub']), ('modus tollens', lambda a: 'mod_tollens' in a['u']),
+            ('disj. syllogism', lambda a: 'disj_syll' in a['u'])]
+    bins = [('2–4', 2, 4), ('5–8', 5, 8), ('9–12', 9, 12), ('13+', 13, 999)]
+    for title, fld, bb in (('length', 'Lp', bins), ('depth', 'dep', [('0', 0, 0), ('1', 1, 1), ('2', 2, 2), ('3+', 3, 99)])):
+        W(f'| set | {title} bin | proofs | ' + ' | '.join(k for k, _ in keys) + ' |')
+        W('|---|---|---:|' + '---:|' * len(keys))
+        for nm, lab in (('K12', 'k12'), ('textbook schemata (pools)', 'tb_schema_search'), ("Charles's textbooks", 'charles_base')):
+            L = [a for a in gzl(f'artifacts/ps/labels/{lab}.jsonl.gz') if not a.get('parse_fail')]
+            for bn, lo, hi in bb:
+                g = [a for a in L if lo <= a[fld] <= hi]
+                if g:
+                    W(f'| {nm} | {bn} | {fmt_n(len(g))} | ' + ' | '.join(pct(sum(f(a) for a in g), len(g)) for _, f in keys) + ' |')
+        W('')
     # ---------------------------------------------------------------- RL's own proofs
     rf = json.load(open('artifacts/ps/rl_found.json'))
     W('## 11. RL\'s own proofs: what kind of reductio the models write (create-or-elicit ladders)')
@@ -275,7 +294,7 @@ def main():
     W('Source: `artifacts/ps/rl_found.json` (`proof_strategies/rl_found.py`), from each ladder\'s cumulative `found_16.jsonl`')
     W('(bucket `create-or-elicit/artifacts/coe/ladder/la_<arm>/`): every distinct Lean-accepted proof of an RL target, with the')
     W('round it was first found. Round 1 = samples of the pretrained model, before any RL update. Models: 9.56 M ALiBiGPT')
-    W('`lean_staten`, from scratch on K12 (full), K12⁻ (knockout) or K12 + 1 % σ (dose), T1 expert iteration on A40, Lean')
+    W('`lean_staten`, from scratch on K12 (full), K12⁻ (knockout) or K12⁻ with σ put back at 1 % of the set (dose), T1 expert iteration on A40, Lean')
     W('alone. σ-covered = RL targets whose every proof needs a working reductio (123 of 4,495). Pretraining sets for')
     W('comparison: working reductios in K12 ' + fmt_n(S['k12']['sub']['contradiction.working']) + ' of ' + fmt_n(S['k12']['uses']['contradiction']) +
       ' proofs with a reductio; dose set ' + fmt_n(S['k12dose1']['sub']['contradiction.working']) + ' of ' + fmt_n(S['k12dose1']['uses']['contradiction']) +

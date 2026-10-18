@@ -38,7 +38,7 @@ Box-free proofs 24.91 %; proofs with no strategy 0; unlabelled primary 0; a stra
 Sources: `artifacts/ps/summary/<set>.json`. n = proofs classified. The pools' generator part and textbook-schema part
 are reported separately (the schema instances have no generator proof).
 
-| strategy | K12 | cap-6 | K12⁻ | K12 1 % dose | RL targets (gen.) | transfer (gen.) | holdout250 (gen.) | K12 sample, shortest | textbook schemata (pools) | Charles's textbooks | textbook72 |
+| strategy | K12 | cap-6 | K12⁻ | dose set (K12⁻ + σ at 1 %) | RL targets (gen.) | transfer (gen.) | holdout250 (gen.) | K12 sample, shortest | textbook schemata (pools) | Charles's textbooks | textbook72 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | proofs (n) | 155,000 | 155,000 | 155,000 | 155,000 | 3,735 | 1,525 | 160 | 990 | 1,610 | 187 | 58 |
 | proof source | generator | generator | generator | generator | generator | generator | generator | search | search | reference | search |
@@ -71,7 +71,7 @@ are reported separately (the schema instances have no generator proof).
 
 Primary label, % of proofs:
 
-| strategy | K12 | cap-6 | K12⁻ | K12 1 % dose | RL targets (gen.) | transfer (gen.) | holdout250 (gen.) | K12 sample, shortest | textbook schemata (pools) | Charles's textbooks | textbook72 |
+| strategy | K12 | cap-6 | K12⁻ | dose set (K12⁻ + σ at 1 %) | RL targets (gen.) | transfer (gen.) | holdout250 (gen.) | K12 sample, shortest | textbook schemata (pools) | Charles's textbooks | textbook72 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | Direct reasoning (→E, ∧E) | 9.7 | 18.4 | 9.9 | 9.9 | 0.2 | 0.5 | 0.6 | 14.1 | 0.7 | 9.1 | 10.3 |
 | Conjunction introduction | 12.2 | 12.3 | 10.7 | 10.9 | 0.0 | 0.0 | 0.0 | 13.4 | 8.6 | 33.2 | 5.2 |
@@ -89,7 +89,7 @@ Primary label, % of proofs:
 
 Curried primary, % of proofs:
 
-| strategy | K12 | cap-6 | K12⁻ | K12 1 % dose | RL targets (gen.) | transfer (gen.) | holdout250 (gen.) | K12 sample, shortest | textbook schemata (pools) | Charles's textbooks | textbook72 |
+| strategy | K12 | cap-6 | K12⁻ | dose set (K12⁻ + σ at 1 %) | RL targets (gen.) | transfer (gen.) | holdout250 (gen.) | K12 sample, shortest | textbook schemata (pools) | Charles's textbooks | textbook72 |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | Direct reasoning (→E, ∧E) | 15.3 | 25.7 | 16.4 | 16.3 | 15.3 | 15.3 | 10.6 | 20.9 | 13.5 | 14.4 | 22.4 |
 | Conjunction introduction | 19.4 | 19.5 | 18.8 | 18.9 | 24.6 | 33.3 | 34.4 | 20.7 | 8.6 | 35.3 | 8.6 |
@@ -114,7 +114,7 @@ K12 table (kind × refutation route × position): `artifacts/ps/explore/sigma_in
 | K12 | 16,717 | 8,209 | 1,082 | 7,693 | 48 | 6 | 59 | 16,658 |
 | cap-6 | 10,548 | 4,551 | 122 | 5,871 | 3 | 1 | 4 | 10,544 |
 | K12⁻ | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| K12 1 % dose | 1,550 | 736 | 115 | 720 | 3 | 2 | 5 | 1,545 |
+| dose set (K12⁻ + σ at 1 %) | 1,550 | 736 | 115 | 720 | 3 | 2 | 5 | 1,545 |
 | RL targets (gen.) | 130 | 118 | 3 | 9 | 0 | 0 | 0 | 130 |
 | transfer (gen.) | 77 | 63 | 5 | 6 | 2 | 1 | 4 | 73 |
 | holdout250 (gen.) | 9 | 8 | 0 | 1 | 0 | 0 | 0 | 9 |
@@ -134,7 +134,7 @@ include their textbook-schema instances; textbook-schema = the 1,610 instances i
 | K12 | 155,000 | 6,238 (4.0 %) | 0 (0.0 %) | 45,630 (29.4 %) | 36,472 (23.5 %) |
 | cap-6 | 155,000 | 5,209 (3.4 %) | 1 (0.0 %) | 38,339 (24.7 %) | 25,933 (16.7 %) |
 | K12⁻ | 155,000 | 2,094 (1.4 %) | 0 (0.0 %) | 41,879 (27.0 %) | 33,096 (21.4 %) |
-| K12 1 % dose | 155,000 | 2,471 (1.6 %) | 0 (0.0 %) | 42,217 (27.2 %) | 33,389 (21.5 %) |
+| dose set (K12⁻ + σ at 1 %) | 155,000 | 2,471 (1.6 %) | 0 (0.0 %) | 42,217 (27.2 %) | 33,389 (21.5 %) |
 | RL targets (all 4,495) | 4,495 | 325 (7.2 %) | 123 (2.7 %) | 2,471 (55.0 %) | 216 (4.8 %) |
 | transfer (all 2,285) | 2,285 | 195 (8.5 %) | 106 (4.6 %) | 1,096 (48.0 %) | 125 (5.5 %) |
 | holdout250 | 250 | 25 (10.0 %) | 12 (4.8 %) | 125 (50.0 %) | 12 (4.8 %) |
@@ -149,7 +149,7 @@ Proof × theorem, per set (records with a proof):
 | K12 | 16,717 | 4,279 (25.6 %) | 6,238 | 4,279 | 1,959 | 0 / 0 |
 | cap-6 | 10,548 | 3,922 (37.2 %) | 5,209 | 3,922 | 1,287 | 1 / 1 |
 | K12⁻ | 0 | 0 (– %) | 2,094 | 0 | 2,094 | 0 / 0 |
-| K12 1 % dose | 1,550 | 405 (26.1 %) | 2,471 | 405 | 2,066 | 0 / 0 |
+| dose set (K12⁻ + σ at 1 %) | 1,550 | 405 (26.1 %) | 2,471 | 405 | 2,066 | 0 / 0 |
 | RL targets (gen.) | 130 | 5 (3.8 %) | 189 | 5 | 184 | 0 / 0 |
 | transfer (gen.) | 77 | 5 (6.5 %) | 72 | 5 | 67 | 1 / 1 |
 | holdout250 (gen.) | 9 | 0 (0.0 %) | 10 | 0 | 10 | 0 / 0 |
@@ -266,12 +266,43 @@ v0 = commit 82fa2c47, `artifacts/ps/summary/k12_v0.json`. Changes and reasons: `
 | Excluded middle | 0.06 | 0.03 |
 | Lemma reuse | 11.71 | 11.71 |
 
+## 12. Comparison sets by proof length and box depth (% of proofs in the bin using the strategy)
+
+Pruned lines binned; depth = maximum box depth of the pruned proof. Working = the step does logical work (§ 1).
+
+| set | length bin | proofs | working reductio | working ¬I | genuine ∨E | modus tollens | disj. syllogism |
+|---|---|---:|---:|---:|---:|---:|---:|
+| K12 | 2–4 | 42,273 | 0.0 | 0.5 | 0.0 | 0.0 | 0.0 |
+| K12 | 5–8 | 56,364 | 0.0 | 2.4 | 7.9 | 0.1 | 0.0 |
+| K12 | 9–12 | 56,363 | 0.1 | 3.1 | 16.2 | 0.0 | 0.1 |
+| textbook schemata (pools) | 5–8 | 649 | 12.6 | 33.9 | 16.5 | 25.9 | 12.6 |
+| textbook schemata (pools) | 9–12 | 917 | 25.2 | 42.9 | 53.3 | 0.0 | 0.8 |
+| textbook schemata (pools) | 13+ | 44 | 47.7 | 54.5 | 45.5 | 0.0 | 2.3 |
+| Charles's textbooks | 2–4 | 4 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+| Charles's textbooks | 5–8 | 59 | 3.4 | 22.0 | 15.3 | 8.5 | 3.4 |
+| Charles's textbooks | 9–12 | 61 | 14.8 | 39.3 | 39.3 | 9.8 | 19.7 |
+| Charles's textbooks | 13+ | 63 | 44.4 | 54.0 | 47.6 | 17.5 | 20.6 |
+
+| set | depth bin | proofs | working reductio | working ¬I | genuine ∨E | modus tollens | disj. syllogism |
+|---|---|---:|---:|---:|---:|---:|---:|
+| K12 | 0 | 38,617 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+| K12 | 1 | 66,669 | 0.0 | 2.3 | 10.7 | 0.1 | 0.0 |
+| K12 | 2 | 49,714 | 0.1 | 3.6 | 13.1 | 0.0 | 0.0 |
+| textbook schemata (pools) | 0 | 9 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+| textbook schemata (pools) | 1 | 766 | 0.5 | 28.2 | 53.9 | 0.0 | 11.4 |
+| textbook schemata (pools) | 2 | 671 | 32.3 | 55.4 | 30.1 | 25.0 | 0.4 |
+| textbook schemata (pools) | 3+ | 164 | 68.9 | 29.9 | 0.6 | 0.0 | 0.0 |
+| Charles's textbooks | 0 | 22 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+| Charles's textbooks | 1 | 69 | 4.3 | 23.2 | 31.9 | 8.7 | 18.8 |
+| Charles's textbooks | 2 | 61 | 23.0 | 52.5 | 36.1 | 13.1 | 11.5 |
+| Charles's textbooks | 3+ | 35 | 62.9 | 65.7 | 54.3 | 22.9 | 20.0 |
+
 ## 11. RL's own proofs: what kind of reductio the models write (create-or-elicit ladders)
 
 Source: `artifacts/ps/rl_found.json` (`proof_strategies/rl_found.py`), from each ladder's cumulative `found_16.jsonl`
 (bucket `create-or-elicit/artifacts/coe/ladder/la_<arm>/`): every distinct Lean-accepted proof of an RL target, with the
 round it was first found. Round 1 = samples of the pretrained model, before any RL update. Models: 9.56 M ALiBiGPT
-`lean_staten`, from scratch on K12 (full), K12⁻ (knockout) or K12 + 1 % σ (dose), T1 expert iteration on A40, Lean
+`lean_staten`, from scratch on K12 (full), K12⁻ (knockout) or K12⁻ with σ put back at 1 % of the set (dose), T1 expert iteration on A40, Lean
 alone. σ-covered = RL targets whose every proof needs a working reductio (123 of 4,495). Pretraining sets for
 comparison: working reductios in K12 59 of 16,717 proofs with a reductio; dose set 5 of 1,550; K12⁻ 0 of 0. (An earlier count from the fine-tune mixes, `rl_mix.json`, sampled ≤ 4 proofs per problem from the
 accumulated pool and is superseded; log.md 2026-10-18.)

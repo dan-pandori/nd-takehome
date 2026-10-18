@@ -104,8 +104,8 @@ def fig_textbooks():
 
 
 def fig_reductio():
-    sets = [('k12', 'K12 (pretraining)'), ('k12dose1', 'K12 + 1 % dose'), ('cap6', 'cap-6 (older pretraining set)'),
-            ('tb_schema_search', 'textbook schemata (RL pools)'), ('charles_base', "textbook problems (Charles's 187)"), ('textbook72_search', 'textbook72')]
+    sets = [('k12', 'K12 (pretraining)'), ('k12dose1', 'dose set (K12⁻ + σ at 1 %)'),
+            ('tb_schema_search', 'textbook laws (RL pools)'), ('charles_base', "textbook problems (Charles's 187)"), ('textbook72_search', 'textbook72')]
     rows = []
     for f, lab in sets:
         L = [json.loads(l) for l in gzip.open(f'artifacts/ps/labels/{f}.jsonl.gz', 'rt')]
@@ -115,7 +115,7 @@ def fig_reductio():
         sup = sum('contradiction.working' not in a['sub'] and ('contradiction.scaffolded' in a['sub'] or 'contradiction.pointless' in a['sub']) for a in R)
         rows.append((lab, len(R), wk, sup, len(R) - wk - sup))
     rows = rows[::-1]
-    fig, ax = plt.subplots(figsize=(8.6, 4.2))
+    fig, ax = plt.subplots(figsize=(9.2, 3.9))
     for i, (lab, n, wk, sup, vac) in enumerate(rows):
         left = 0
         for v, col in ((wk, BLUE), (sup, ORANGE), (vac, AQUA)):
@@ -126,7 +126,7 @@ def fig_reductio():
             left += w
         ax.text(101.5, i, f'n = {n:,}' + (f' (working {wk:,})' if 0 < wk < 0.07 * n else ''), va='center', fontsize=8.5, color=INK2)
     ax.set_yticks(range(len(rows))); ax.set_yticklabels([r[0] for r in rows])
-    ax.set_xlim(0, 128); ax.set_xticks([0, 25, 50, 75, 100]); ax.set_xticklabels(['0', '25', '50', '75', '100 %'])
+    ax.set_xlim(0, 140); ax.set_xticks([0, 25, 50, 75, 100]); ax.set_xticklabels(['0', '25', '50', '75', '100 %'])
     ax.set_xlabel('proofs that contain a proof by contradiction (n), each counted once by its best instance')
     style(ax)
     from matplotlib.patches import Patch
