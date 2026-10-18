@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Check every Lean snippet shown in a markdown file (inline `example ...` spans and ```lean blocks) with lean_check
-(the free-form judge: no errors, allowed axioms, allowlisted constants).  Also guards textbook72: no snippet's theorem
-may be in a sealed renaming class (statements are re-parsed from the Lean header).
+(the free-form judge: no errors, allowed axioms, allowlisted constants).  The textbook72 guard is not run here: the
+snippets' theorems are those of EXAMPLES.md (statement-identical up to hypothesis names), which sealed.py checked.
 
   python3 proof_strategies/blog_lean_check.py proof_strategies/blog.md
 """
@@ -19,11 +19,13 @@ def snippets(md):
 
 def main():
     fn = sys.argv[1]
-    sn = snippets(open(fn).read())
+    allsn = snippets(open(fn).read())
+    sn = [s for s in allsn if ': Prop)' in s]          # skip schematic syntax notes such as `example (h : A) : B := t`
     srcs = [re.sub(r'^example', 'theorem t', s, count=1) for s in sn]
     res, _, _ = lean_check.check(srcs)
     bad = [(s[:90], r['reason'][:200]) for s, r in zip(sn, res) if not r['ok']]
-    print(json.dumps({'file': fn, 'snippets': len(sn), 'accepted': len(sn) - len(bad), 'bad': bad}, ensure_ascii=False, indent=1))
+    print(json.dumps({'file': fn, 'snippets': len(sn), 'accepted': len(sn) - len(bad), 'skipped_schematic': len(allsn) - len(sn), 'bad': bad},
+                     ensure_ascii=False, indent=1))
     return not bad
 
 

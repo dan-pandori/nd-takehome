@@ -7,52 +7,53 @@ written_by: agent:claude
 
 *Draft for Dan, 2026-10-18. Not for circulation.*
 
-*Epistemic status: counts over data files, not experiments, except one section that re-reads proofs our models wrote
-in an earlier experiment. Each strategy is a checkable rule over a proof; a blind hand-check of 260 proofs and a second
-program written only from the definitions agree with the classifier on every strategy label. The textbook comparison
-uses short proofs found by a search program, not the textbooks' own proofs. Numbers: `TABLES.md`; definitions:
-`TAXONOMY.md`.*
+*Epistemic status: counts over data files, plus one section re-reading proofs our models wrote. Each strategy is a
+checkable rule; AI agents applying the rules by hand agreed with the classifier on 260 / 260 proofs (before their notes
+tightened two rules), and a program written from the definitions alone agrees on all 155,000 K12 proofs. Numbers:
+`TABLES.md`; definitions: `TAXONOMY.md`.*
 
-**The short version.** Our small theorem provers learn propositional logic from K12: 155,000 proofs written by a program
-(a *generator*), not by people. We sorted every proof into thirteen strategies a logic textbook would recognise, from
-modus ponens to proof by contradiction. Three things stand out.
-- **A few moves dominate K12, and much of it idles.** 38 % of proofs contain a case split that one of its cases never
-  needed.
-- **The move removed in our knockout experiment (called σ there) does no work in K12.** That move is proof by
-  contradiction. It appears in 10.8 % of K12 proofs, but in all but 59 of those 16,717 proofs it does no logical work.
-- **Textbook problems need exactly what K12 lacks.** A working proof by contradiction appears in about 20 % of textbook
-  problems (K12: 0.04 %), proof of a negation in 38 % (2 %), and modus tollens in 12 % (0.05 %).
+**The short version.** Our small theorem provers are *pretrained* (trained from scratch, before reinforcement learning)
+on K12: 155,000 propositional-logic proofs written by a program. We labelled every proof with the strategies a logic
+textbook would recognise.
+- **Much of K12 idles.** 38 % of its proofs split into cases where one case never uses its own assumption, so the split
+  could be deleted.
+- **Proof by contradiction, the move our knockout experiment removed (called σ there), almost never does any work in
+  K12.** It appears in 10.8 % of proofs, but only 59 of those 16,717 use the assumption "not G" to reach a contradiction,
+  none on a theorem that needs it.
+- **Textbook problems use what K12 lacks.** In 187 textbook problems, 21 % use a working proof by contradiction (K12:
+  0.04 %), 38 % a working proof of a negation (2 %) and 12 % modus tollens (0.05 %).
 
-So the knockout's full models were pretrained on the *form* of proof by contradiction, almost never on its use. They
-wrote working ones anyway.
+The full (non-knockout) models thus saw the *form* of proof by contradiction, almost never its use, and wrote working
+ones anyway. They produced 32–76 each in their first round of RL sampling and 6,951–26,450 over the next 15 rounds.
 
 ## The setting
 
-A proof here is a *natural deduction* proof: a numbered list of lines, each following from earlier lines by one rule.
-Some rules open a *box*: you assume something temporarily, reason inside the box, then close it and *discharge* the
-assumption. Our system has fourteen rules, and exactly one of them is *classical*: double-negation elimination (from
-"not not G" infer G). Logic without that rule is *intuitionistic*. Every proof is also a proof in Lean, the proof checker
-that decides what counts, and we show proofs in Lean. Read `fun a => …` as "assume a, then …", `h.elim f g` as "use h by
-cases", `¬A` as "A leads to absurdity" and `False` as absurdity.
+A proof here is a *natural deduction* proof: numbered lines, each following from earlier lines by one rule. Some rules
+open a *box*: you assume something temporarily, reason inside it, then close it and *discharge* the assumption. Exactly
+one rule is *classical*: double-negation elimination (from "not not G" infer G). Logic without it is *intuitionistic*.
+Every proof is also a proof in Lean, the proof checker that decides what counts.
 
-K12 holds 14,091 generated proofs at each length from 2 to 12 lines. It is the pretraining set of `state_env_october`
-and of the full arm of create-or-elicit, our "Did RL create it?" experiment. In that experiment, *knockout* models were
-pretrained on K12 minus every proof containing σ, and then trained by reinforcement learning (RL).
+In the Lean examples, `example (h : A) : B := t` says t proves B from A, `fun a => t` assumes a, `h.elim` splits an "or"
+into cases, `⟨a, b⟩`, `h.1` and `Or.inl` / `Or.inr` build or take apart "and" and "or", `¬A` means A leads to `False`,
+`False.elim` is ex falso and `Classical.byContradiction` the classical step.
+
+K12 has about 14,100 proofs at each length from 2 to 12 lines. Create-or-elicit, our "Did RL create it?" experiment,
+pretrained models on K12 (the *full* arm) or on K12⁻: K12 minus the 16,961 proofs with σ or a close variant, topped up.
+It then trained them by *expert iteration*, a simple form of reinforcement learning (RL): try every training problem 32
+times, keep what Lean accepts, fine-tune, repeat. A *seed* is one independently trained model.
 
 ## A field guide
 
-A *strategy* is a recognisable pattern of inference with a standard name; we use the names of *forall x: Calgary*, a
-free textbook, where they exist. A proof *uses* a strategy if the pattern occurs anywhere in it; its *primary* strategy
-is the one that takes the last step (every K12 proof has one). The thirteen, with their shares of K12 and examples from
-K12:
+A *strategy* is an inference pattern with a standard name (we use those of *forall x: Calgary*, a free textbook). A
+proof *uses* every strategy whose pattern occurs in it, so the K12 shares below overlap; the examples are from K12.
 
-1. **Direct reasoning** (forward steps: modus ponens, ∧-elimination), 51 %. From "P and Q", conclude P:
+1. **Direct reasoning** (modus ponens, ∧-elimination), 51 %. From "P and Q", conclude P:
    `example (P Q : Prop) (h : P ∧ Q) : P := h.1`
 2. **Conjunction introduction** (prove each half), 33 %:
    `example (P Q : Prop) (h : P) : P ∧ (P ∨ Q) := ⟨h, Or.inl h⟩`
 3. **Conditional proof** (to prove "if S then …", assume S), 43 %:
    `example (Q S : Prop) : S → S ∨ Q := fun s => Or.inl s`
-4. **∨-introduction** (prove one side of an "or"), 44 %:
+4. **∨-introduction** (prove one side of an "or"), 44 %. No classical step here, since "not S" is given:
    `example (S : Prop) (h : ¬S) : S ∨ ¬S := Or.inr h`
 5. **Proof by cases** (use an "or" by handling each side), 44 %:
    `example (P S : Prop) (h : P ∧ S ∨ S) : S := h.elim (fun c => c.2) (fun s => s)`
@@ -67,51 +68,46 @@ K12:
 10. **Proof by contradiction** (assume "not G", reach absurdity, conclude G; classical), 10.8 %. Below.
 11. **Double-negation elimination** on a double negation the problem supplies (classical), 3.1 %:
     `example (Q R : Prop) (h : ¬¬(Q ∨ R)) : Q ∨ R := Classical.byContradiction h`
-12. **Excluded middle** (prove "X or not X", classical), 0.03 %. The textbook-style example, from our RL pools, is in
-    `EXAMPLES.md`.
+12. **Excluded middle** (prove "X or not X" by contradiction; classical), 0.03 % (example in `EXAMPLES.md`).
 13. **Lemma reuse** (prove a fact once, use it twice), 12 %:
     `example (P Q R : Prop) (h : Q → P) : (¬¬(Q → P) ∨ R) ∧ ¬¬(Q → P) := have l : ¬¬(Q → P) := fun n => n h; ⟨Or.inl l, l⟩`
 
-Disjunctive syllogism and modus tollens are special cases of 5 and 7 that textbooks name as rules. Item 7 is
-intuitionistic and item 10 is not, though both are often called "reductio" (Andrej Bauer's post "Proof of negation and
-proof by contradiction" explains the difference). `TAXONOMY.md` gives each definition as a checkable rule, with
-sub-types.
+Items 6 and 8 are special cases of 5 and 7. Items 7 and 10 are both called "reductio", but only 10 is classical (see
+Andrej Bauer's "Proof of negation and proof by contradiction"); below, "reductio" means 10.
 
 ## What K12 is made of
 
 ![K12 strategy mix](figures/k12_mix.png)
 
-The bars show "uses". The grey parts are instances that do no logical work. Three habits of the generator stand out:
-- 28 % of proofs assume something they never use. They prove "if A then B" without using A.
-- 38 % split into cases where one case ignores its own assumption, so the split could be deleted.
-- 24 % of K12 problems have premises that contradict each other, so ex falso proves anything from them.
+Grey: proofs in which every instance of the strategy is idle. Three generator habits stand out:
+- 28 % of proofs assume something they never use (proving "if A then B" without using A).
+- 38 % contain a case split in which one case ignores its own assumption.
+- 24 % of the problems have contradictory premises, from which ex falso proves anything.
 
-Re-proving 990 K12 problems with a shortest-proof search removes all of this. The shortest proofs are a third shorter
-on average and contain no idle split. Proof by cases falls from 43 % to 6 % of those proofs.
+Re-proving 990 K12 problems with a shortest-proof search shortens the proofs by a third and removes the idle splits
+(35 % → 0; proof by cases 43 % → 6 %). Most unused assumptions stay (29 % → 23 %): a goal "if A then B" with an
+irrelevant A forces one. The contradictory premises belong to the problems and get used more (6 % → 16 %).
 
 ## Most of K12's proof by contradiction is a template
 
-Proof by contradiction is σ, the move the knockout removed: assume "not G", derive absurdity, conclude "not not G",
-then drop the double negation. We sorted every instance by whether the assumption does any work:
+We sorted each proof by its best reductio:
 
 ![reductio kinds](figures/reductio_kinds.png)
 
-In K12, 16,658 of the 16,717 proofs with a reductio are templates of three kinds:
-- **Vacuous:** the absurdity comes from contradictory premises and never uses "not G". This is ex falso in disguise.
-- **Supplied:** "not G" clashes at once with a "not not G" that the problem itself states. This is double-negation
+In K12, 16,658 of the 16,717 proofs with a reductio contain only templates, of three kinds:
+- **Vacuous:** the absurdity, usually from contradictory premises, never uses "not G". This is ex falso in disguise.
+- **Supplied:** "not G" clashes at once with a "not not G" the problem itself states. This is double-negation
   elimination in disguise.
 - **Pointless:** G had already been proved.
 
-Only 59 do working reasoning from "not G", and only 6 of those prove a positive statement (one that is not itself a
-"not") with no double negation supplied. The typical K12 instance (Lean's `Classical.byContradiction` is the
-classical step):
+A common K12 instance, of the supplied kind (vacuous ones are as common):
 
 ```lean
 example (P S : Prop) (h1 : ¬(¬(S → P) ∨ P ∧ ¬S) → False) : ¬(S → P) ∨ P ∧ ¬S :=
   Classical.byContradiction (fun (a1 : ¬(¬(S → P) ∨ P ∧ ¬S)) => h1 a1)
 ```
 
-The premise already says "not G leads to absurdity". A working instance from K12, one of the 59:
+Its premise already says "not G leads to absurdity". One of the 59 working ones:
 
 ```lean
 example (R S : Prop) (h1 : R ∨ ¬R ∨ ¬S) (h2 : ¬(¬R ∨ ¬S)) : (R ∨ ¬R ∨ ¬S) ∧ R :=
@@ -119,26 +115,27 @@ example (R S : Prop) (h1 : R ∨ ¬R ∨ ¬S) (h2 : ¬(¬R ∨ ¬S)) : (R ∨ ¬
     h1.elim (fun (a2 : R) => a1 a2) (fun (a3 : ¬R ∨ ¬S) => h2 a3))⟩
 ```
 
-To prove R, it assumes "not R" and checks both cases of the first premise against it.
+It splits on the first premise: the case R contradicts "not R", the other case contradicts the second premise. Even
+this is avoidable: all 59 working reductios are on theorems provable without the classical rule (48 prove a "not").
 
-The theorems agree. K12 has 6,238 *classical-only* theorems: provable, but not without the classical rule. Every one
-of them states a double negation somewhere. So no K12 theorem needs a working proof by contradiction. Create-or-elicit
-called the theorems that do need one *σ-covered*, and K12 has none of them.
+The theorems agree. K12's 6,238 *classical-only* theorems (provable, but not without the classical rule) were all proved
+by double-negation elimination or a template reductio, and each states a double negation. None is *σ-covered*:
+create-or-elicit's term for classical-only with no double negation anywhere, so that every proof needs a working
+reductio.
 
 ## What textbooks use that K12 lacks
 
 We compared K12 with three textbook-like sets:
-- 187 problems from textbooks, with Charles's reference proofs (minimal proofs found by search);
-- 1,610 instances of textbook laws such as De Morgan's and Peirce's, from the pools RL trains on;
-- textbook72, a sealed test set, counted but never printed.
+- 187 problems from logic textbooks such as *forall x*, collected by a colleague (Charles), with his reference proofs
+  (173 minimal ones found by search, 14 written by hand);
+- 1,610 instances of textbook laws (De Morgan's, Peirce's, …) from our RL training and held-out problem pools;
+- textbook72, 72 textbook problems we never train on or print.
 
-The last two got shortest proofs from our search program, all checked by Lean.
+For the last two our search found Lean-checked shortest proofs (for 58 of the 72).
 
 ![K12 vs textbooks](figures/k12_vs_textbooks.png)
 
-The gaps, textbooks vs K12:
-
-| strategy | textbooks | K12 |
+| strategy (share of proofs that use it) | 187 textbook problems | K12 |
 |---|---|---|
 | working proof by contradiction | 21 % | 0.04 % |
 | modus tollens | 12 % | 0.05 % |
@@ -146,37 +143,37 @@ The gaps, textbooks vs K12:
 | working proof of a negation | 38 % | 2 % |
 | genuine case analysis (every case used) | 34 % | 9 % |
 
-The textbook schemata and textbook72 show the same pattern. The gaps are in the theorems, not just in the style of
-the proofs:
-- 19 % of the 187 textbook problems are σ-covered; no K12 theorem is.
+The schemata and textbook72 show the same pattern (they share some laws). The theorems differ too, not just the proofs:
+- 19 % of the 187 textbook problems are σ-covered, against none in K12.
 - Of the 124 textbook problems a bounded search could decide, 37 % need a negation introduction (¬I or a reductio) in
   every short proof; of a K12 sample, 3.7 %.
 
-Re-proving K12 problems with the same search does not close the gap.
-
 ## What this means for the knockout result
 
-Create-or-elicit found that solving the classical *families* needs σ in pretraining. (A family is the set of instances
-of one classical law, such as excluded middle.) After 16 rounds of RL, families were acquired on 6 of 6 full seeds, 0 of
-6 knockout seeds, and 3 of 3 seeds with 1 % of σ put back. This taxonomy says what that σ was: K12 has 16,717 proofs
-with a reductio, of which 59 work, and the 1 % dose set has 1,550, of which 5 work.
+Create-or-elicit found that the classical *families* (the instances of one classical law, such as excluded middle) need
+σ in pretraining. After 16 rounds of RL, a family was acquired (half its held-out instances solved) on 6 of 6 full seeds
+(5 before RL), 0 of 6 knockout seeds and 3 of 3 seeds with 1 % of σ put back (exploratory). In K12, 59 of the 16,717
+reductio proofs work; in the 1 % dose set, 5 of 1,550, close to a "templates only" test, and its seeds acquired families
+anyway.
 
-The models nevertheless wrote working reductios. In the Lean-accepted proofs from create-or-elicit's RL runs:
-- Before any RL update, the three new full models wrote 67, 29 and 48 distinct working reductios. With them they solved
-  17, 15 and 20 σ-covered problems.
-- After 15 rounds of RL, they wrote 690, 199 and 204.
-- Knockout models wrote at most one before RL, and 0 to 22 after.
+We classified every distinct proof create-or-elicit's RL runs found, by the round it was first found:
+- **Round 1** (the pretrained models): the three full models we read wrote 76, 32 and 52 working reductios, proving 17,
+  15 and 20 σ-covered problems.
+- **Rounds 2–16**: 26,450, 9,082 and 6,951 more; 78, 33 and 36 σ-covered problems by round 16. Dose models: 15, 45 and
+  7, then 9,969–16,970.
+- **Knockout models**: 0–2, then 72–772, proving at most 5 σ-covered problems.
 
-So pretraining supplied the *form*: assume "not G", close the box, drop the double negation. The models put it to real
-use, rarely at first and routinely after RL; models that never saw the form found it a handful of times. This is our
-reading, not a tested hypothesis. Knocking out just the 59 working examples, or a dose of templates only, would test
-whether they mattered.
+So pretraining supplied the *form* (assume "not G", close the box, drop the double negation) and the models put it to
+real use, rarely before RL (0.2–0.5 % of new proofs) and more often by round 16 (1.4–4.5 %). Models without the form
+wrote working reductios an order of magnitude less often. Both arms saw working proofs of a negation (2 % of each
+pretraining set): the knockout removed the classical step, not refutation. This is our reading, not a tested
+hypothesis.
 
 ## Caveats
 
-- Labels describe the proofs we have (a generator's for K12, a search's for the textbook problems); another proof of
-  the same theorem could differ. The theorem-level checks guard against this: classical-only is exact, the necessity
-  search is bounded at 12 lines.
-- The definitions are syntactic. "Working" means the step uses its assumption, not that it is clever or necessary.
-- Textbooks' own proofs might use other strategies than the minimal proofs we classified.
-- The knockout reading rests on 3 + 3 + 6 seeds of one small model (9.6 million parameters).
+- Labels describe the proofs we have (a generator's for K12, a search's or Charles's for textbook problems); another
+  proof could differ. Theorem-level checks guard against this: classical-only is exact, necessity bounded at 12 lines.
+- "Working" means the assumption does logical work; for a reductio, more than a clash with G or a supplied "not not G".
+- The textbooks' own proofs might use other strategies than the minimal proofs we classified.
+- The knockout reading rests on 15 models of one small architecture (9.6 million parameters): 6 full, 6 knockout, 3
+  dose; our RL counts use 12 (3 full, 6 knockout, 3 dose).

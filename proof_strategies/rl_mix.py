@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Strategy mix of RL's own accepted proofs (brief step 7, optional; pre-registered in log.md 2026-10-18).
+"""SUPERSEDED by rl_found.py (claim check #30, log.md 2026-10-18): the fine-tune mixes read here hold <= 4 proofs per
+problem sampled from the ACCUMULATED pool of rounds 1..R, so their counts are samples, not per-round output.
+
+Strategy mix of RL's own accepted proofs (brief step 7, optional; pre-registered in log.md 2026-10-18).
 
 Inputs: create-or-elicit's per-round fine-tune mixes `mix_<R>.jsonl.gz` (bucket
 create-or-elicit/artifacts/coe/ladder/la_<arm>/; downloaded to artifacts/ps/scratch/mix_<arm>_<R>.jsonl.gz).  Each mix

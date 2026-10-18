@@ -45,9 +45,10 @@ def fig_mix():
     rows.sort(key=lambda r: r[1])
     fig, ax = plt.subplots(figsize=(8.2, 5.4))
     y = range(len(rows))
-    ax.barh(y, [r[2] for r in rows], height=0.62, color=BLUE, edgecolor=SURF, linewidth=2, label='does logical work')
+    ax.barh(y, [r[2] for r in rows], height=0.62, color=BLUE, edgecolor=SURF, linewidth=2,
+            label='at least one instance does logical work (or the strategy has no idle test)')
     ax.barh(y, [r[1] - r[2] for r in rows], left=[r[2] for r in rows], height=0.62, color=IDLE, edgecolor=SURF, linewidth=2,
-            label='idle (assumption unused, redundant split, template reductio)')
+            label='every instance idle (assumption unused, redundant split, template reductio)')
     for i, r in enumerate(rows):
         lab = f'{r[1]:.2f} %' if r[1] < 1 else f'{r[1]:.1f} %'
         if r[1] - r[2] > 0.05:
@@ -103,15 +104,16 @@ def fig_textbooks():
 
 
 def fig_reductio():
-    sets = [('k12', 'K12'), ('cap6', 'cap-6'), ('rl_targets_gen', 'RL targets, generator'), ('transfer_gen', 'transfer, generator'),
-            ('tb_schema_search', 'textbook schemata (pools)'), ('charles_base', "Charles's textbooks"), ('textbook72_search', 'textbook72')]
+    sets = [('k12', 'K12 (pretraining)'), ('k12dose1', 'K12 + 1 % dose'), ('cap6', 'cap-6 (older pretraining set)'),
+            ('tb_schema_search', 'textbook schemata (RL pools)'), ('charles_base', "textbook problems (Charles's 187)"), ('textbook72_search', 'textbook72')]
     rows = []
     for f, lab in sets:
         L = [json.loads(l) for l in gzip.open(f'artifacts/ps/labels/{f}.jsonl.gz', 'rt')]
         R = [a for a in L if not a.get('parse_fail') and 'contradiction' in a['u']]
+        # each proof by its best instance: working > template (supplied or pointless) > vacuous
         wk = sum('contradiction.working' in a['sub'] for a in R)
-        vac = sum('contradiction.working' not in a['sub'] and 'contradiction.vacuous' in a['sub'] for a in R)
-        rows.append((lab, len(R), wk, len(R) - wk - vac, vac))
+        sup = sum('contradiction.working' not in a['sub'] and ('contradiction.scaffolded' in a['sub'] or 'contradiction.pointless' in a['sub']) for a in R)
+        rows.append((lab, len(R), wk, sup, len(R) - wk - sup))
     rows = rows[::-1]
     fig, ax = plt.subplots(figsize=(8.6, 4.2))
     for i, (lab, n, wk, sup, vac) in enumerate(rows):
@@ -122,15 +124,15 @@ def fig_reductio():
             if w >= 7:
                 ax.text(left + w / 2, i, f'{w:.0f} %', ha='center', va='center', fontsize=8.5, color='white' if col != AQUA else INK)
             left += w
-        ax.text(101.5, i, f'n = {n:,}', va='center', fontsize=8.5, color=INK2)
+        ax.text(101.5, i, f'n = {n:,}' + (f' (working {wk:,})' if 0 < wk < 0.07 * n else ''), va='center', fontsize=8.5, color=INK2)
     ax.set_yticks(range(len(rows))); ax.set_yticklabels([r[0] for r in rows])
-    ax.set_xlim(0, 118); ax.set_xticks([0, 25, 50, 75, 100]); ax.set_xticklabels(['0', '25', '50', '75', '100 %'])
-    ax.set_xlabel('proofs that contain a proof by contradiction (n), by the best reductio they contain')
+    ax.set_xlim(0, 128); ax.set_xticks([0, 25, 50, 75, 100]); ax.set_xticklabels(['0', '25', '50', '75', '100 %'])
+    ax.set_xlabel('proofs that contain a proof by contradiction (n), each counted once by its best instance')
     style(ax)
     from matplotlib.patches import Patch
-    ax.legend(handles=[Patch(color=BLUE, label='working: the assumption ¬G is used to reach ⊥'),
-                       Patch(color=ORANGE, label='template: ¬G clashes at once with a supplied ¬¬G, or G is already proved'),
-                       Patch(color=AQUA, label='vacuous: ⊥ never uses ¬G (explosion in disguise)')],
+    ax.legend(handles=[Patch(color=BLUE, label='working: at least one reductio uses ¬G to reach ⊥'),
+                       Patch(color=ORANGE, label='template: ¬G clashes at once with a supplied ¬¬G, or G was already proved'),
+                       Patch(color=AQUA, label='template, vacuous: ⊥ never uses ¬G (explosion in disguise)')],
               loc='lower left', bbox_to_anchor=(0.0, 1.0), frameon=False, fontsize=8.3)
     fig.tight_layout()
     fig.savefig(os.path.join(OUT, 'reductio_kinds.png'), dpi=160)

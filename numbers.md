@@ -1995,11 +1995,16 @@ files named below). Proofs are dependency-pruned; "%" = share of proofs (records
 - textbook72 (scoring only; 58 / 72 with a search proof): proof by contradiction 17.2 % (all working), ¬I 32.8 %;
   σ-covered 16 of 72.
 
-### RL's own proofs (`artifacts/ps/rl_mix.json`; models: create-or-elicit's 9.56 M ALiBiGPT `lean_staten`, from scratch on K12 / K12⁻ / K12 1 %, T1 ladder on A40, Lean alone)
-- Distinct Lean-accepted proofs of RL targets in the round's fine-tune mix (`mix_{1,16}.jsonl.gz`, bucket
-  `create-or-elicit/artifacts/coe/ladder/`). Working reductios, round 1 → 16: full s3 / s4 / s5 67 / 29 / 48 → 690 / 199 /
-  204 (σ-covered targets proved 17 / 15 / 20 → 78 / 33 / 36); dose1 s0 / s1 / s2 15 / 41 / 6 → 386 / 276 / 231; knockout
-  s0–s5 1 / 0 / 1 / 0 / 1 / 0 → 10 / 22 / 21 / 6 / 0 / 15.
+### RL's own proofs (`artifacts/ps/rl_found.json`; models: create-or-elicit's 9.56 M ALiBiGPT `lean_staten`, from scratch on K12 / K12⁻ / K12 1 %, T1 ladder on A40, Lean alone)
+- Every distinct Lean-accepted proof of an RL target in each ladder's cumulative `found_16.jsonl` (bucket
+  `create-or-elicit/artifacts/coe/ladder/`), by the round it was first found (round 1 = the pretrained model's samples).
+  Working reductios, round 1 / rounds 2–16: full s3, s4, s5 76 / 26,450, 32 / 9,082, 52 / 6,951; dose1 s0, s1, s2
+  15 / 16,970, 45 / 11,057, 7 / 9,969; knockout s0–s5 1 / 358, 0 / 399, 1 / 772, 0 / 169, 2 / 72, 1 / 375.
+  σ-covered targets proved with a working reductio, round 1 → by round 16: full 17 → 78, 15 → 33, 20 → 36; dose1
+  2 → 69, 17 → 46, 2 → 41; knockout 0 → 0, 0 → 5, 0 → 1, 0 → 0, 0 → 0, 0 → 2. Round 16 alone, working reductios among
+  new proofs: full 2,263 / 805 / 686 (4.47 / 1.55 / 1.39 %; round 1: 0.53 / 0.17 / 0.30 %).
+- Superseded: `artifacts/ps/rl_mix.json` counted the fine-tune mixes, which hold ≤ 4 proofs per problem drawn from the
+  accumulated pool (claim check #30, log.md 2026-10-18); its numbers are not used.
 
 ### Validation (`TAXONOMY.md` § 6)
 - Lean: 6,268 searched proofs, 0 rejected; controls 200 / 200, 0 / 200, 0 / 200 (`artifacts/ps/lean_negative_control.txt`).

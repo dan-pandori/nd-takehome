@@ -1046,3 +1046,19 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   **vs expected:** full r1 ≥ 15 per seed: hit; r16 ≥ 10 × r1: 1 / 3 seeds (10.3, 6.9, 4.3 ×), miss; RL reductios less
   template-heavy than K12 (99.6 %): hit (r1 86–92 %, r16 60–69 % template-only); knockout r1 zero on ≥ 5 / 6: miss
   (zero on 3 / 6, one each on the others); knockout r16 ≤ 50: hit.
+- 20:57 UTC  **Claim check of the blog** (independent subagent; `artifacts/ps/validation/blog_claim_check.md`): 37 findings,
+  incl. WRONG #30/#31: the RL counts came from fine-tune MIXES, which hold ≤ 4 proofs per problem drawn from the
+  CUMULATIVE pool of rounds 1–16 (`state_ladder_ei.py` max_per_thm 4), so "round 16" counts were a ≈ 3 % sample of all
+  proofs found and round-1 counts lower bounds. **Deviation / correction:** recount RL's working reductios from each
+  ladder's `found_16.jsonl` (every distinct Lean-accepted target proof with the round it was first found; bucket
+  `create-or-elicit/artifacts/coe/ladder/la_<arm>/`), `proof_strategies/rl_found.py`, streamed one file at a time.
+  The pre-registered RL expectations are evaluated on these per-round counts; the mix-based numbers are withdrawn.
+- 21:10 UTC  **RL recount from found files** (`artifacts/ps/rl_found.json`, 12 ladders, ≈ 1 min each, streamed and deleted):
+  working reductios first found in round 1 / rounds 2–16: full s3–s5 76 / 26,450, 32 / 9,082, 52 / 6,951; dose1 s0–s2
+  15 / 16,970, 45 / 11,057, 7 / 9,969; knockout s0–s5 1 / 358, 0 / 399, 1 / 772, 0 / 169, 2 / 72, 1 / 375. σ-covered
+  targets with a working reductio by round 16: full 78 / 33 / 36, dose1 69 / 46 / 41, knockout 0 / 5 / 1 / 0 / 0 / 2.
+  Pre-registered RL expectations re-evaluated on these counts (`proof_strategies/EXPECTATIONS.md`): full r1 ≥ 15 hit;
+  r16 ≥ 10 × r1 hit 3 / 3 (29.8, 25.2, 13.2 ×; it had looked like a 1 / 3 miss on the mix samples); less template-heavy
+  than K12 hit; knockout r1 zero on ≥ 5 / 6 miss (2 / 6); knockout r16 ≤ 50 miss on one seed (84). Also verified the
+  claim checker's recount: all 59 working K12 reductios are on intuitionistically provable theorems (48 negative goals;
+  5 of the 6 free ones have inconsistent premises).

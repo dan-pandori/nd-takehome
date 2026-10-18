@@ -47,14 +47,16 @@ taxonomy v1.2 unless marked; sources `TABLES.md`, `artifacts/ps/summary/*.json`,
 | J4 | requires ∨E for 30–60 % of theorems whose proof uses ∨E | 14.0 % (36 / 258) | **miss** |
 | J4 | requires BOTE for < 50 % of theorems whose proof uses ex falso | 0 % (0 / 56) | hit |
 | J5 | ≥ 120 / 187 textbook problems decided; requires-DN = G4ip on decided | 124; 123 / 124 | hit (one bound effect) |
-| RL | full arm, round 1: ≥ 15 working reductios per seed | 67 / 29 / 48 | hit |
-| RL | full arm, round 16 ≥ 10 × round 1 | 10.3 × / 6.9 × / 4.3 × | **miss** (1 / 3) |
-| RL | RL reductios less template-heavy than K12 (99.6 %) | r1 86–92 %, r16 60–69 % template-only | hit |
-| RL | knockout round 1: 0 working reductios on ≥ 5 / 6 seeds | 0 on 3 / 6 (1 on the others) | **miss** |
-| RL | knockout round 16: ≤ 50 per seed | 0–22 | hit |
+| RL | full arm, round 1: ≥ 15 working reductios per seed | 76 / 32 / 52 (distinct proofs first found in round 1) | hit |
+| RL | full arm, round 16 ≥ 10 × round 1 | 2,263 / 805 / 686 new in round 16 = 29.8 × / 25.2 × / 13.2 × | hit (on the corrected counts; see note) |
+| RL | RL reductios less template-heavy than K12 (99.6 %) | template-only share of RL reductio proofs: round 1 91–95 %, round 16 51–57 % (full) | hit |
+| RL | knockout round 1: 0 working reductios on ≥ 5 / 6 seeds | 1 / 0 / 1 / 0 / 2 / 1: zero on 2 / 6 | **miss** |
+| RL | knockout round 16: ≤ 50 per seed | 38 / 32 / 84 / 27 / 6 / 49 new in round 16 | **miss** (1 / 6 over) |
 
 Most of the K12 misses share one cause: the pre-registration assumed K12 resembled textbook proofs more than it does. Its
 generator rarely writes the named derived rules (disjunctive syllogism, modus tollens). A quarter of its proofs open no
 box, and none has dead lines. Its theorems need case analysis far less often than its proofs perform it.
-The RL misses are about growth rates and rare events (one working reductio in a round), which the pre-registration
-guessed without a base rate.
+Note on the RL rows: the pre-registration stated them on the fine-tune mixes, which turned out to hold ≤ 4 proofs per
+problem sampled from the accumulated pool (claim check #30); they are evaluated here on distinct proofs by the round they
+were first found (`artifacts/ps/rl_found.json`). On the mix counts the second row had missed on 2 / 3 seeds. The RL misses
+are about rare events (one or two working reductios in a round), guessed without a base rate.

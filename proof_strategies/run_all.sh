@@ -32,5 +32,6 @@ for pair in "data/ps/in/train_k12.jsonl.gz k12" "data/ps/in/train_depth3_f0_a1.j
             "data/ladder/rl_targets.jsonl rl_targets" "data/ladder/transfer.jsonl transfer" "data/bs/holdout250.jsonl holdout250" \
             "data/ps/in/charles/charles_base_full.jsonl charles_base" "data/bs/textbook72.jsonl textbook72" "data/ps/pod/tb_schema.jsonl tb_schema"; do
   set -- $pair; python3 proof_strategies/theorem_level.py --in $1 --out $T/$2.jsonl.gz; done > $T/totals.jsonl; cp $T/totals.jsonl artifacts/ps/theorem_totals.txt
-python3 proof_strategies/rl_mix.py > /dev/null   # needs artifacts/ps/scratch/mix_*.jsonl.gz (bucket, see rl_mix.py)
+# RL's own proofs: python3 proof_strategies/rl_found.py (streams 12 x ~1 GB found files from the bucket, ~15 min; not run here).
+# rl_mix.py (fine-tune mixes) is superseded: the mixes are capped samples of the accumulated pool (log.md 2026-10-18).
 echo run_all done
