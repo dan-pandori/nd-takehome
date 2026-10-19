@@ -114,16 +114,16 @@ def intuitionistic(prem, concl):
 
 if __name__ == "__main__":
     from nd import parse_thm
-    tests = [("|- ( P v ( ~ P ) )", False), ("|- ( ( ~ ( ~ P ) ) > P )", False),
-             ("|- ( ( ( P > Q ) > P ) > P )", False), ("|- ( ~ ( ~ ( P v ( ~ P ) ) ) )", True),
+    tests = [("|- ( P v ( ~ P ) )", False), ("|- ( ( ~ ( ~ ( P & R ) ) ) > ( P & R ) )", False),
+             ("|- ( ( ( ( P & R ) > Q ) > ( P & R ) ) > ( P & R ) )", False), ("|- ( ~ ( ~ ( P v ( ~ P ) ) ) )", True),
              ("|- ( ( P > Q ) > ( ( ~ Q ) > ( ~ P ) ) )", True), ("|- ( ( ~ ( P & Q ) ) > ( ( ~ P ) v ( ~ Q ) ) )", False),
-             ("|- ( ( ( ~ P ) v ( ~ Q ) ) > ( ~ ( P & Q ) ) )", True), ("|- ( ( ~ ( ~ ( ~ P ) ) ) > ( ~ P ) )", True),
-             ("|- ( ( ( ~ P ) > P ) > P )", False), ("|- ( ( P > Q ) v ( Q > P ) )", False),
-             ("( P v Q ) , ( ~ P ) |- Q", True), ("( ~ ( P v Q ) ) |- ( ( ~ P ) & ( ~ Q ) )", True),
+             ("|- ( ( ( ~ ( P & R ) ) v ( ~ Q ) ) > ( ~ ( ( P & R ) & Q ) ) )", True), ("|- ( ( ~ ( ~ ( ~ ( P & R ) ) ) ) > ( ~ ( P & R ) ) )", True),
+             ("|- ( ( ( ~ ( P & R ) ) > ( P & R ) ) > ( P & R ) )", False), ("|- ( ( ( P & R ) > Q ) v ( Q > ( P & R ) ) )", False),
+             ("( ( P & R ) v Q ) , ( ~ ( P & R ) ) |- Q", True), ("( ~ ( ( P & R ) v Q ) ) |- ( ( ~ ( P & R ) ) & ( ~ Q ) )", True),
              ("( ( ~ P ) > Q ) , ( ~ Q ) |- P", False), ("( ( ~ P ) > Q ) , ( ~ Q ) |- ( ~ ( ~ P ) )", True),
              ("( P > Q ) |- ( ( ~ P ) v Q )", False), ("|- ( ~ ( ~ ( ( ~ ( ~ P ) ) > P ) ) )", True),
              ("( ( P > Q ) > Q ) , ( ( Q > P ) > P ) |- ( P v Q )", False), ("|- ( ( P & ( ~ P ) ) > Q )", True),
-             ("P , ( ~ P ) |- F", True), ("|- ( ( ( ( ( P > Q ) > P ) > P ) > Q ) > Q )", True),
+             ("( P & R ) , ( ~ ( P & R ) ) |- F", True), ("|- ( ( ( ( ( P > Q ) > P ) > P ) > Q ) > Q )", True),
              ("|- ( ( ( ( P > Q ) > P ) > P ) > Q )", False), ("( ( P > Q ) > P ) |- ( ~ ( ~ P ) )", True),
              ("( ( ~ P ) > F ) |- P", False), ("( ~ ( P > Q ) ) |- P", False), ("( ~ ( P > Q ) ) |- ( ~ Q )", True), ("dummy", None)]
     for t, want in tests[:-1]:
