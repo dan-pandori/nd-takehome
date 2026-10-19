@@ -278,7 +278,7 @@ or does it drift to shorter proofs?
 - Projected run total with the ladder: ≈ $38 of $50.
 - Stop rule: if round 1 projects the EI arm above $10, cut it to 4 rounds.
 
-## Addendum 2 (2026-10-19 13:20 UTC, before any KAL-D sampled read or ladder round finished) — batch for KAL-D
+## Addendum 2 (2026-10-19 13:11 UTC, before any KAL-D sampled read or ladder round finished) — batch for KAL-D
 
 KAL-D's sampled reads and both ladder arms ran out of memory at batch 2,048 on a 48 GB A40. Its attempts are longer
 than KAL-C's, and some runaway attempts grow states past ~1,000 tokens; the key-value cache is sized by the longest
