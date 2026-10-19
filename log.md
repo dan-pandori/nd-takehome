@@ -1104,3 +1104,9 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   128 Kalmár proofs are ≈ 13,800 (state, action) pairs per step, ≈ 14× a K12 step — ≈ 1.8 h per round. 8 rounds project
   to ≈ 19 A40-hours ≈ $11 > the rule's $10, so the EI arm stops after round 4; the frozen arm stops after round 4 too
   (equal attempts). Frozen arm after 2 rounds: cumulative 164 / 1,000 (round 2: 2,405 s).
+- 15:47  Frozen ladder stopped after round 4 (cumulative 135 → 164 → 183 → 188 of 1,000 targets; rounds 2,222 / 2,405 /
+  2,293 / 2,441 s); kal-13 deleted after the pull (4.37 h, $2.58). The EI arm's fine-tune runs ≈ 17.6 s / step (step
+  400 at 7,061 s; 128 Kalmár proofs ≈ 13,850 pairs per step), ≈ 2.9 h per round: its round 4 projects to ≈ 04:00 UTC
+  on 2026-10-20, ≈ $8.6 for the arm, inside the $10 rule, so it keeps its 4 rounds.
+- 16:20  KAL-D s0 and s1 sampled reads complete (plain / guided k 32, T 0.8 k 8, G1-supplied k 32; batch 1,024); kal-10
+  (4.47 h, $2.64) and kal-11 deleted after the pull. kal-9 (s2, then the batch-effect check) and kal-12 (EI) remain.

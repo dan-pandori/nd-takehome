@@ -21,6 +21,9 @@ METRICS = ('gpu_seconds', 'gen_tokens', 'attempts', 'actions', 'train_steps', 't
 
 def arm_of(r):
     cfg = r.get('config') or {}
+    m = re.search(r'la_kal_(ei|frozen)_s(\d)', json.dumps(cfg) + (r.get('ckpt') or ''))
+    if m:                                  # ladder rows (sampling, judging, and the round fine-tunes) carry the name
+        return f'ladder {m.group(1)}', int(m.group(2))
     for s in (r.get('ckpt') or '', cfg.get('ckpt') or '', cfg.get('init') or '', cfg.get('out') or '', cfg.get('name') or ''):
         m = re.search(r'stage1_kal([DC])_s(\d)(?:_step(\d+))?', s)
         if m:
