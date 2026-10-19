@@ -4,7 +4,8 @@
 FLOPs per token (same model on both sides, N cancels): sampling 2 (decoded + re-prefilled state tokens),
 fine-tune 6, Stage-1 6. Attention FLOPs ignored on both sides (as the pre-registration says).
 Per ladder:  D = Stage-1 train tokens of its init checkpoint (rl-from-ckpt: tokens up to step p);
-  RL_all  = sample(gen+prefill)·2 + eval(gen+prefill_est)·2 + finetune·6   (everything the ladder ran)
+  RL_all  = (sample+eval)(gen+prefill)·2 + finetune·6   (everything the ladder ran; prefill = env.prompt_tokens, which
+            covers sampling AND eval reads, split between them in proportion to decoded tokens)
   RL_train= sample(gen+prefill)·2 + finetune·6                              (no per-round evals)
   RL_only = sample(gen+prefill)·2 + finetune·6·f_rl                         (fine-tune share from RL records only)
   RL_dec  = sample(gen only)·2 + finetune·6·f_rl                             (no state re-prefill either)
@@ -61,17 +62,18 @@ def summarise(per, pt, mix, retain, rl_weight, last_dup=True):
             if len(vals) > 1: dup += 1
             v = vals[-1] if last_dup else sum(vals)
             tot[(ph, m)] += v or 0
-    pre_s = sum(v for rd, v in pt.items() if v)
-    gen_s = tot[('sample', 'gen_tokens')]
-    gen_e = tot[('eval', 'gen_tokens')]
-    pre_e = pre_s / gen_s * gen_e if gen_s else 0        # estimate: same prefill/decoded ratio as sampling
+    pre_tot = sum(v for rd, v in pt.items() if v)        # env.prompt_tokens: ENV['stats'] is reset once per round and also
+    gen_s = tot[('sample', 'gen_tokens')]                 # accumulates the eval-phase reads (state_ladder_ei.py:236, :383),
+    gen_e = tot[('eval', 'gen_tokens')]                   # so it is sample + eval prefill: split it by decoded tokens.
+    pre_s = pre_tot * gen_s / (gen_s + gen_e) if (gen_s + gen_e) else 0
+    pre_e = pre_tot - pre_s
     for rd, (n_rl, n_inj) in mix.items():
         if n_rl is not None:
             # mix_rl_records: RL records in the fine-tune mix; assume it already counts the rl_weight copies
             f_rl.append(n_rl / (n_rl + retain + (n_inj or 0)))
     frl = sum(f_rl) / len(f_rl) if f_rl else None
     return dict(rounds=rounds, n_rounds=len(rounds), dup_cells=dup, gen_sample=gen_s, prefill_sample=pre_s,
-                gen_eval=gen_e, prefill_eval_est=pre_e, ft_tokens=tot[('finetune', 'train_tokens')],
+                gen_eval=gen_e, prefill_eval_est=pre_e, prefill_total=pre_tot, ft_tokens=tot[('finetune', 'train_tokens')],
                 gpu_sample=tot[('sample', 'gpu_seconds')], gpu_eval=tot[('eval', 'gpu_seconds')],
                 gpu_ft=tot[('finetune', 'gpu_seconds')], f_rl=frl)
 
@@ -107,7 +109,7 @@ if __name__ == '__main__':
             pt = {k: v for k, v in pt.items() if rr is None or k in rr}
             mix = {k: v for k, v in mix.items() if rr is None or k in rr}
             x = summarise(per, pt, mix, 20000, 4)
-            for k in ('gen_sample', 'prefill_sample', 'gen_eval', 'prefill_eval_est', 'ft_tokens', 'gpu_sample', 'gpu_eval', 'gpu_ft'):
+            for k in ('gen_sample', 'prefill_sample', 'gen_eval', 'prefill_eval_est', 'prefill_total', 'ft_tokens', 'gpu_sample', 'gpu_eval', 'gpu_ft'):
                 s[k] += x[k]
             if x['f_rl'] is not None: frs.append((x['f_rl'], x['n_rounds']))
             rounds += x['rounds']; dups += x['dup_cells']

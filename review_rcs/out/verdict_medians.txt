@@ -1,11 +1,14 @@
-elicit {'Yue (median of 19 evaluated)': '9.8e-05-4.8e-04', '1-shot RLVR': '1.9e-04-8.8e-04', 'Spurious rewards': '2.3e-05-1.1e-04', 'Dr. GRPO / Oat-Zero': '1.5e-05-1.5e-04', 'Invisible Leash (ProRL-v2 evaluated)': '4.5e-03-1.8e-02', 'RL Squeezes (ProRL-v1 evaluated)': '2.7e-03-9.4e-03'}
-   median high 6.8e-04  median low 1.4e-04
-create {'ProRL-v1': '2.7e-03-9.4e-03', 'f(g(x))': '2.9e-05-1.5e-04', 'Olmo-3 RL-Zero': '4.7e-04-3.9e-03', 'SimpleRL-Zoo (32B)': '2.0e-04-1.2e-03'}
-   median high 2.6e-03  median low 3.3e-04
-both {'Interplay (100M from scratch, 10B tokens)': '1.3e-02-1.2e+00', 'Two-stage debate (Qwen2.5-Math-7B)': '2.7e-05-1.4e-04', 'Diversity collapse (Qwen2.5-Math-7B)': '7.0e-05-3.6e-04', 'AceReason-Nemotron-14B (indicative)': '3.1e-04-6.0e-03'}
-   median high 3.2e-03  median low 1.9e-04
-create/elicit median-high ratio 3.7x ; low: 2.3x
-variant with Yue max: 0.5x
-variant with GPU-h-bound rows: 4.4x
-span over all computable rows: lo min 1.1e-05 hi max 1.2e+00 = 5.0 orders
-pretrained-LLM rows: hi max (0.4414271943111111, 'ScaleRL-8B (2,048 prompts x 16/step)') ; lo max (0.07940516522666667, 'ScaleRL-8B (2,048 prompts x 16/step)')
+== prereg-rule lengths
+A paper-level, re-tests attributed to the testing paper, Yue median: elicit n=6 median 6.83e-04; create n=4 median 2.56e-03; create/elicit = 3.7x
+A2 same, Yue max: elicit n=6 median 5.16e-03; create n=4 median 2.56e-03; create/elicit = 0.5x
+A3 same + GPU-h-bound rows: elicit n=7 median 8.83e-04; create n=5 median 3.88e-03; create/elicit = 4.4x
+B paper-level, own runs only (Yue = its own VeRL runs): elicit n=4 median 2.92e-04; create n=4 median 2.56e-03; create/elicit = 8.8x
+B3 own runs only + GPU-h-bound rows: elicit n=5 median 4.35e-04; create n=5 median 3.88e-03; create/elicit = 8.9x
+== figure-read lengths (after E-2)
+A paper-level, re-tests attributed to the testing paper, Yue median: elicit n=6 median 5.16e-04; create n=4 median 2.56e-03; create/elicit = 5.0x
+A2 same, Yue max: elicit n=6 median 2.20e-03; create n=4 median 2.56e-03; create/elicit = 1.2x
+A3 same + GPU-h-bound rows: elicit n=7 median 8.83e-04; create n=5 median 3.88e-03; create/elicit = 4.4x
+B paper-level, own runs only (Yue = its own VeRL runs): elicit n=4 median 1.28e-04; create n=4 median 2.56e-03; create/elicit = 20.0x
+B3 own runs only + GPU-h-bound rows: elicit n=5 median 1.48e-04; create n=5 median 3.88e-03; create/elicit = 26.2x
+executor per-model (as committed): elicit n=16 (of which Yue rows 14) median 8.724e-05; create n=3 median 1.029e-03; ratio 11.8x
+executor per-model (Qwen2.5-Math-7B-Instruct back to elicit (pre-claimcheck)): elicit n=17 (of which Yue rows 15) median 1.155e-04; create n=3 median 1.029e-03; ratio 8.9x

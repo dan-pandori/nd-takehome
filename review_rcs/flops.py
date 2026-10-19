@@ -52,15 +52,17 @@ row('DeepCoder-14B', 'DeepSeek-R1-Distill-Qwen-14B', Q25, (605, 1260), 128, 8, (
 row('EasyR1 Qwen2.5-VL-7B (Yue)', 'Qwen2.5-VL-7B-Instruct', Q25 + 4.1e12, (60, 75), 512, 5, (300, 2048), (512, 2048), ref=1, old=(1, 1))
 # Qwen2.5-Math-7B-Instruct (Y-63..64): 66K queries x 32 responses, one pass assumed (episodes not stated); max length not stated -> 1,024-4,096; KL
 row('Qwen2.5-Math-7B-Instruct (1 epoch assumed)', 'Qwen2.5-Math-7B', Q25 + 1e12, (1, 1), 66000, 32, (100, 300), (1024, 4096), ref=1, old=(1, 1))
-# Yue's own VeRL runs on Qwen2.5-7B (Y-6..12): 256 prompts × 8, max 8,192, no KL, 1 update per step
+# Yue's own VeRL runs on Qwen2.5-7B (Y-6..12): 256 prompts × 8, max 8,192, no KL, 1 update per step.
+# Phase 2 (erratum): Yue Fig. 19 (pdf text l.2094) plots their response length at 400-1,200 tokens over steps 0-480 -> r_best.
+FIG19 = (400, 1200)
 for st in (150, 300, 450):
-    row(f'Yue GRPO step {st}', 'Qwen2.5-7B', Q25, (st, st), 256, 8, (100, 300), (2048, 8192))
-row('Yue PPO step 150 (critic)', 'Qwen2.5-7B', Q25, (150, 150), 256, 8, (100, 300), (2048, 8192), critic=1)
+    row(f'Yue GRPO step {st}', 'Qwen2.5-7B', Q25, (st, st), 256, 8, (100, 300), (2048, 8192), FIG19)
+row('Yue PPO step 150 (critic)', 'Qwen2.5-7B', Q25, (150, 150), 256, 8, (100, 300), (2048, 8192), FIG19, critic=1)
 for a in ('RLOO', 'Reinforce++'):
-    row(f'Yue {a} step 150', 'Qwen2.5-7B', Q25, (150, 150), 256, 8, (100, 300), (2048, 8192))
-row('Yue ReMax step 150 (+1 greedy rollout)', 'Qwen2.5-7B', Q25, (150, 150), 256, 8, (100, 300), (2048, 8192), g=(1.125, 1.125))
-row('Yue DAPO step 150 (3-6x sampling)', 'Qwen2.5-7B', Q25, (150, 150), 256, 8, (100, 300), (2048, 8192), g=(3, 6))
-row('Yue GRPO n=32, 220 steps', 'Qwen2.5-7B', Q25, (220, 220), 256, 32, (100, 300), (2048, 8192))
+    row(f'Yue {a} step 150', 'Qwen2.5-7B', Q25, (150, 150), 256, 8, (100, 300), (2048, 8192), FIG19)
+row('Yue ReMax step 150 (+1 greedy rollout)', 'Qwen2.5-7B', Q25, (150, 150), 256, 8, (100, 300), (2048, 8192), FIG19, g=(1.125, 1.125))
+row('Yue DAPO step 150 (3-6x sampling)', 'Qwen2.5-7B', Q25, (150, 150), 256, 8, (100, 300), (2048, 8192), FIG19, g=(3, 6))
+row('Yue GRPO n=32, 220 steps', 'Qwen2.5-7B', Q25, (220, 220), 256, 32, (100, 300), (2048, 8192), FIG19)
 
 GPUH = [  # (name, gpu_h, gpu, N, D) -- upper bounds at 100 % peak
     ('SimpleRL-Zoo Qwen2.5-7B', 240, 'H100', 7.6e9, Q25),
