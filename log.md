@@ -1084,3 +1084,8 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   but not the algorithm's next one 44.6 %, a formula found nowhere in the problem (copy / substitution) 31.1 %,
   close-timing 6.5 %, same formula / other justification 6.4 %, malformed 6.2 %, truncated 2.5 %, **polarity (F for ¬F)
   1.4 %** → `artifacts/kalmar/error_classes_kalD_s2.json`.
+- 12:28 / 12:36  **OOM at batch 2,048 on the A40 for KAL-D:** both ladder arms died in round 1 (12:28) and the s1 plain
+  k 32 read died (12:36); the s0 / s2 reads were at 43–45 GB. KAL-D's runaway attempts grow states past ≈ 1,000 tokens
+  and the KV cache is sized by the longest state + 512. 13:15 all KAL-D sampled reads and both ladders killed and
+  relaunched at **batch 1,024** (`pod/kal/queue_D.sh`, `LB` in `ladder.sh`); kal-9 then re-reads KAL-C s0 and control
+  s0 (plain k 32) at 1,024 as a batch-effect check. Pre-registration Addendum 2.

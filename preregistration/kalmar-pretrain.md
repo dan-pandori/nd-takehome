@@ -277,3 +277,19 @@ or does it drift to shorter proofs?
 - Frozen arm: ≈ $3.
 - Projected run total with the ladder: ≈ $38 of $50.
 - Stop rule: if round 1 projects the EI arm above $10, cut it to 4 rounds.
+
+## Addendum 2 (2026-10-19 13:20 UTC, before any KAL-D sampled read or ladder round finished) — batch for KAL-D
+
+KAL-D's sampled reads and both ladder arms ran out of memory at batch 2,048 on a 48 GB A40. Its attempts are longer
+than KAL-C's, and some runaway attempts grow states past ~1,000 tokens; the key-value cache is sized by the longest
+state in a wave plus `max_action`. The plain k 32 read of s1 died after 5 min. The two ladder arms died after 6 min,
+in round 1.
+
+The main design says "batch 2,048 if it fits, else 1,024 for every new read". 2,048 fitted the control and KAL-C,
+whose sampled reads were already complete at 2,048. So:
+- **KAL-D's sampled reads and the ladder (both arms) run at batch 1,024.** The two ladder arms stay at equal batch.
+- **Batch-effect check:** KAL-C s0 and control s0 are re-read (plain k 32, same seed and caps) at batch 1,024. Every
+  comparison table reports their batch-1,024 against batch-2,048 values beside the arm differences.
+- A batch change is a sampling re-draw, not a correctness change (`NOISE_FLOOR.md`). The comparison is claimed only
+  where the arm difference is much larger than this re-draw difference.
+- Greedy and teacher-forced reads are unaffected: all arms at batch 1,024, as before.

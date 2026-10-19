@@ -12,7 +12,7 @@ date -u +"START %FT%TZ" >> artifacts/kalmar/logs/$NAME.log
 python3 state_ladder_ei.py --init $CK --name $NAME --seed $S --outdir artifacts/kalmar/ladder --ckptdir ckpts/kalmar/ladder \
   --targets data/kalmar/ei_targets1000.jsonl --transfer data/kalmar/ei_transfer200.jsonl \
   --heldout data/kalmar/val300_kal_sl.jsonl --train data/kalmar/train_kal_sl.jsonl \
-  --rounds 8 --k 16 --max_action 512 --max_steps 1024 --batch 2048 $X "$@" >> artifacts/kalmar/logs/$NAME.log 2>&1
+  --rounds 8 --k 16 --max_action 512 --max_steps 1024 --batch ${LB:-1024} $X "$@" >> artifacts/kalmar/logs/$NAME.log 2>&1
 echo "rc=$? END $(date -u +%FT%TZ)" >> artifacts/kalmar/logs/$NAME.log
 if [ $ARM = ei ]; then       # does the trained model still follow the algorithm? (greedy reads: batch 1,024)
   F=$(ls ckpts/kalmar/ladder/${NAME}_r*.pt 2>/dev/null | sort -V | tail -n 1)
