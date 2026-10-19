@@ -42,7 +42,7 @@ Every file below is rebuilt deterministically by the scripts named.
 
 Longest (state, action) pair:
 - K12: 367 + 25 tokens (record 124962).
-- K12-Kalmár: 513 + 220 tokens (record 93283).
+- K12-Kalmár: 513 + 219 tokens, plus `<eos>` (record 93283).
 - The trainer's padded length is 733.
 
 Sources: `artifacts/kalmar/build_{sl,pb}.json`, `artifacts/kalmar/stats_k12_vs_kal.json`.
@@ -66,4 +66,5 @@ Generated theorems were filtered so that:
 - the algorithm's proof has ≤ 1,000 actions;
 - the largest canonical name is ≤ n32 (the sampler's name base is ≤ 32, and `lean_seq` has 64 name tokens).
 
-The algorithm's longest action is 305 tokens (G2) and ≤ 172 elsewhere. Its longest proof is 476 actions outside G2.
+The algorithm's longest action is 305 tokens (G2) and ≤ 172 elsewhere. Its longest proof is 451 actions (G2), 425
+(tf1200) and 420 (hand_proved_14).

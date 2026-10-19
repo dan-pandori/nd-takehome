@@ -4,14 +4,18 @@ What this run leaves open (`numbers.md` § kalmar-pretrain):
 - Pretraining a 9.56 M proof-state model on Kalmár proofs of K12's theorems (3.68 epochs) gives 94.5 % per-state
   agreement with the algorithm and 32.6 % greedy Lean-valid proofs on held-out theorems. The control, trained on K12's
   own short proofs, reaches 92 %.
-- Agreement was still rising when training stopped.
-- The errors are bookkeeping, not truth values: the next subformula, or a copying slip in a long formula.
+- Snapshot agreement rose across training, but the snapshots are mid-schedule, so data and learning-rate annealing are
+  confounded.
+- KAL-D s2's errors are mostly bookkeeping: the wrong next subformula (45 %) or a copying slip (31 %). Where it can be
+  checked, 16.8 % assert something false in the branch.
 
 Costs below use this run's prices (community RTX 3090 $0.22/h for training, A40 $0.59/h for sampled reads).
 
 ## 1. Train longer, or larger — ≈ $5–15 per arm
-- **Question:** is "not learned" a data-scale or capacity limit? The learning curve (86.6 → 94.5 % agreement, greedy
-  6.6 → 32.6 %) has not flattened.
+- **Question:** is "not learned" a data-scale or capacity limit?
+- **Why this is open:** this run cannot say. The rise from 86.6 to 94.5 % agreement (greedy 6.6 → 32.6 %) runs through a
+  cosine learning-rate decay, and the last ≈ 120 k steps of training loss are nearly flat. Only a longer schedule, or a
+  larger model, can tell.
 - **Arms:**
   - KAL-D at 2× the steps (≈ 20 h per seed on a 3090, ≈ $4.5 per seed);
   - a ≈ 25 M model at 1× (≈ 2.5× the per-step time).
@@ -22,14 +26,15 @@ Costs below use this run's prices (community RTX 3090 $0.22/h for training, A40 
 
 ## 2. Let the environment restate premises — ≈ $1 (re-reads only)
 - **Finding here:** the K12 control solves 177–191 of 200 four- and five-premise problems at k 32 once the environment
-  writes the premise lines. Without that help it solves 0–26. The "premise-count wall" (peer-rl-review) is the untrained
-  `h4` / `h5` token, not reasoning.
+  writes the premise lines. Without that help it solves 0–26.
+- **Where it fails:** most failed attempts break the premise-line order at the first or second action, before any `h4`
+  line is due. The "premise-count wall" (peer-rl-review) is writing the premise lines, not the proof.
 - **Proposal:** the environment applies premise lines itself, for every model. Premise lines carry no choice.
 - **Cost and value:** a code change plus a re-read of the standard sets. It removes a wall for every existing
   checkpoint without retraining.
 
 ## 3. A shorter, state-friendlier construction — ≈ $10 per arm
-- **The two error classes point at two fixes:**
+- **The two error classes** (KAL-D s2) **point at two fixes:**
   - "wrong next subformula" (45 %): show the pending sub-goal in the state, so the recursion's place is visible;
   - "corrupted formula" (31 %): cut copying, e.g. cite subformula lines instead of restating whole formulas.
 - **A shorter proof:**
@@ -40,14 +45,17 @@ Costs below use this run's prices (community RTX 3090 $0.22/h for training, A40 
 - **Decision value:** separates "Kalmár is too long for this model" from "the format hides the recursion's state".
 
 ## 4. Hybrid pretraining (K12 + K12-Kalmár) — ≈ $10
-- **Question:** does a model keep K12's short proofs and gain the uniform fallback? Here KAL-D is ahead of the control
-  only on the classical families (guided pass@32 30 vs 16 of 106).
+- **Question:** does a model keep K12's short proofs and gain the uniform fallback?
+- **Here:** KAL-D is ahead of the control beyond the noise only on the classical families: guided pass@32 30 vs 16 of
+  106, with KAL-D read at batch 1,024 and the control at 2,048. It is also numerically ahead, inside the noise, on G1 as
+  is.
 - **Arm:** a mix (e.g. 90 % K12, 10 % K12-Kalmár by tokens) at the control's step count.
 - **Read-outs:** the control's sets plus G3.
 
 ## 5. EI ladder from a Kalmár base, done properly — ≈ $15 per seed
-- **Issue here:** the ladder's fine-tune (600 steps × 128 proofs) costs 14× more per step on Kalmár proofs than on
-  K12's, which forced the cut to 4 rounds.
+- **Issue here:** the ladder's fine-tune (600 steps × 128 proofs) trains ≈ 14× the (state, action) pairs per step on
+  Kalmár proofs as on K12's (≈ 13,800 vs ≈ 1,000). It measured 11–17.6 s per step, ≈ 2.9 h per round, which forced the
+  cut to 4 rounds.
 - **Proposal:** a token-budgeted fine-tune (the best recipe's 18,432 tokens per step), 8 rounds, 2 seeds, EI against
   frozen. It answers the brief's item 7 at full length.
 

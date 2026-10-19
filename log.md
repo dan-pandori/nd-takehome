@@ -1118,3 +1118,21 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 17:50  Disk 84 % → 81 % (removed the pb build in /tmp and the uncompressed training set; its gzip's content md5
   1e4cebf5… checked first). Secret scan of everything under `artifacts/kalmar`, `data/kalmar`: 1,128 files, 0 hits;
   upload to `hf://buckets/dan-pandori/nd-rl/kalmar-pretrain/{artifacts,data}/kalmar` started.
+- 18:10  **Claim check** (independent subagent; read-only; ≈ 600 numbers re-derived from the raw per-model files, all
+  matched) found 16 problems in the drafts, all fixed before anything was published:
+  - wrong: the expectations-vs-outcomes paragraph (several predictions hit; KAL-D pass@256 untested) — now an
+    item-by-item table in numbers.md;
+  - wrong: "ex-falso errors mostly malformed / corrupted" (they are mostly same-formula / other justification);
+  - wrong: README "longest proof 476 outside G2" (425; G2 451);
+  - wrong: "formulas larger than any in training" (G2 is beyond K12's p99, not its max);
+  - unsupported: "premise wall = the untrained h4 token" (the control fails on premise-line order at its first actions);
+  - overstated: "only 1.4 % flip a truth value" (`kalmar/error_truth.py`: 671 of 4,002 checkable disagreements, 16.8 %,
+    assert a formula false in the branch);
+  - overstated: "agreement still rising" (confounded with the learning-rate schedule);
+  - overstated: G3 (guided only; batch crossed; pre-registered ratio 0.29–0.33 = partially);
+  - undisclosed: the truncation cap rule fired (> 0.1 %) without a 2× re-read;
+  - plus model labels, md5s (KAL-D s0 d2fdb9d9, s1 166acebb from the training logs), protocol of the pass@256 column, Q's
+    denominator, the pooled-set definition, the stale analysis header.
+  Control md5s (9c436c35 / f7ae9a9e / 354c4428) are the md5sum of the bucket copies on the VPS (01:35) and on kal-5
+  (02:13), which matched. Pre-registered generalisation verdicts computed (`kalmar/gen_verdicts.py`): does not
+  generalise on G1 supplied (2 / 3 seeds < 0.3), G2, hand_proved_14, ≥ 17; G3 partially.

@@ -255,9 +255,10 @@ def main():
             P(f'  {arm:8s} attempts valid {fmt(v, 1, True)} | exact-follow {fmt(fo, 1, True)}')
 
     # ---------------- E4 / E5 solve rates ----------------
-    P('\n## E4 / E5 solve rates (Lean). pass@1/8/32 from the k 32 reads (all arms, sample seed 1, batch 2,048); '
-      'pass@256: control = stored best-state k 256 reads (h250 / rr600 / long2 / tb72) or new k 256 reads; '
-      'KAL-D = k 32 + 224 more attempts on every theorem unsolved at 32')
+    P('\n## E4 / E5 solve rates (Lean). pass@1/8/32 from the k 32 reads (sample seed 1; batch 2,048 for control and KAL-C, '
+      '1,024 for KAL-D: Addendum 2). pass@256 for the control only: stored best-state k 256 reads (h250 / rr600 / long2 / tb72; '
+      'state_eval.py, sample seed 0, max_steps 96, never binding) or new k 256 reads (guided_eval.py, seed 1, max_steps 1,024). '
+      'KAL-D\'s 224-attempt extension was dropped (spend gate). Q = rr600 generator theorems at L_true 13-16, of 380')
     S['solve'] = {}
     for arm in ARMS:
         for s in SEEDS:
@@ -328,7 +329,7 @@ def main():
             P(f"  {t:8s} {lab:15s} pass@1 {v['b2048_pass@1']:6.1f} vs {v['b1024_pass@1']:6.1f} | pass@32 {v['b2048_pass@32']:5.0f} vs {v['b1024_pass@32']:5.0f}")
 
     # breakdown by atoms and by algorithm proof length (plain pass@32, standard sets pooled)
-    P('\n## Plain pass@32 by atom count and by the algorithm\'s proof length (holdout250 + rr600 + ge17 + long2 + release, pooled)')
+    P('\n## Plain pass@32 by atom count and by the algorithm\'s proof length (standard sets pooled: holdout250 + rr600 + ge17 + long2 + the release, n = 1,128)')
     std = {fl for lab, fl in SETS[:8]}
     bins = [(0, 99), (100, 149), (150, 199), (200, 299), (300, 1024)]
     S['breakdown'] = {}
