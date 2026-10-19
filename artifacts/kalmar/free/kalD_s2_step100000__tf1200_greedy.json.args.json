@@ -1,0 +1,40 @@
+{
+ "ckpt": "ckpts/kalmar/stage1_kalD_s2_step100000.pt",
+ "inp": "data/kalmar/tf1200_kal_sl.jsonl",
+ "out": "artifacts/kalmar/free/kalD_s2_step100000__tf1200_greedy.json",
+ "k": 1,
+ "temperature": 0.0,
+ "seed": 0,
+ "batch": 1024,
+ "max_action": 512,
+ "max_steps": 1024,
+ "supply_pr": false,
+ "limit": 0,
+ "_meta": {
+  "script": "kal_free.py",
+  "argv": [
+   "kalmar/kal_free.py",
+   "--ckpt",
+   "ckpts/kalmar/stage1_kalD_s2_step100000.pt",
+   "--in",
+   "data/kalmar/tf1200_kal_sl.jsonl",
+   "--k",
+   "1",
+   "--temperature",
+   "0",
+   "--out",
+   "artifacts/kalmar/free/kalD_s2_step100000__tf1200_greedy.json",
+   "--max_steps",
+   "1024",
+   "--max_action",
+   "512",
+   "--batch",
+   "1024"
+  ],
+  "run_id": "kalmar-pretrain",
+  "git_sha": "515dee67fe220e7da2aac15a2cddf562c871f9f9",
+  "git_dirty": null,
+  "host": "a75244d3162d",
+  "utc": "2026-10-19T05:16:09Z"
+ }
+}

@@ -1,0 +1,114 @@
+{
+ "ckpt": "ckpts/kalmar/stage1_kalC_s0.pt",
+ "in": "data/kalmar/g1_premises.jsonl",
+ "k": 32,
+ "temperature": 0.8,
+ "seed": 1,
+ "batch": 2048,
+ "max_action": 512,
+ "max_steps": 1024,
+ "supply_pr": true,
+ "n_theorems": 200,
+ "n_attempts": 6400,
+ "gen_s": 416.2,
+ "lean_s": 2.6,
+ "solved_theorems": 24,
+ "by": {
+  "all": {
+   "n": 6400,
+   "valid": 123,
+   "follow": 25,
+   "dev_valid": 98,
+   "dev_valid_shorter": 80,
+   "end=done": 1980,
+   "end=syntax": 4383,
+   "end=truncated": 37
+  },
+  "atoms=2": {
+   "n": 1600,
+   "valid": 87,
+   "follow": 22,
+   "dev_valid": 65,
+   "dev_valid_shorter": 50,
+   "end=done": 701,
+   "end=syntax": 885,
+   "end=truncated": 14
+  },
+  "atoms=3": {
+   "n": 3424,
+   "valid": 36,
+   "follow": 3,
+   "dev_valid": 33,
+   "dev_valid_shorter": 30,
+   "end=done": 1123,
+   "end=syntax": 2292,
+   "end=truncated": 9
+  },
+  "atoms=4": {
+   "n": 1376,
+   "valid": 0,
+   "follow": 0,
+   "dev_valid": 0,
+   "dev_valid_shorter": 0,
+   "end=syntax": 1206,
+   "end=done": 156,
+   "end=truncated": 14
+  }
+ },
+ "deviation": {
+  "tag": {
+   "leaf:not+": 1537,
+   "leaf:or+": 970,
+   "leaf:imp+A": 17,
+   "lem": 1392,
+   "leaf:imp+B": 647,
+   "leaf:and+": 491,
+   "close:leaf:imp+B": 10,
+   "split": 335,
+   "efq": 142,
+   "leaf:and-": 528,
+   "close:split": 2,
+   "close:leaf:not+": 12,
+   "close:lem": 11,
+   "leaf:or-": 92,
+   "leaf:bot-": 32,
+   "leaf:imp-": 154,
+   "close:leaf:bot-": 3
+  },
+  "depth": {
+   "3": 2665,
+   "4": 976,
+   "0": 1329,
+   "2": 1064,
+   "1": 280,
+   "5": 61
+  },
+  "decile": {
+   "4": 557,
+   "3": 1540,
+   "5": 214,
+   "6": 53,
+   "8": 3,
+   "0": 935,
+   "1": 854,
+   "2": 2193,
+   "7": 25,
+   "9": 1
+  }
+ },
+ "env": {
+  "steps": 50880,
+  "rows": 395011,
+  "rowsteps": 9366896,
+  "prompt_len_max": 528,
+  "chunks": 385,
+  "stop_eos": 394974,
+  "stop_exact": 0,
+  "stop_goal": 0,
+  "syntax": 4383,
+  "done": 1980,
+  "truncated": 37,
+  "waves": 385,
+  "peak_alloc_gb": 21.521065711975098
+ }
+}

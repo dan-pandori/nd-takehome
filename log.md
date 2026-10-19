@@ -1035,3 +1035,24 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   the `key` field to `tf1200` / `val300` (the ladder keys its evaluation exclusions on it; contents otherwise unchanged;
   `make_sets.py` patched). Smoke checkpoint removed from the bucket. Mixes smaller than `--ft_recs` (128) crash the
   default fine-tune loop (`pop from empty list`): irrelevant at 20,000 retained records.
+- 04:45  KAL-C s0 sampled reads (kal-7, batch 2,048): plain k 32 48.5 min, solved 83 / 1,746 theorems (peak 22.7 GB);
+  guided (logical) k 32 69.3 min, solved 200 / 1,746 (peak 24.1 GB).
+- 04:50  No community 3090 / A5000 / 4090 available for an early snapshot read; A40 stock high. Added `kal-8` (A40
+  secure, $0.59/h): KAL-D snapshots 24,020 / 100,000 (teacher-forced + greedy tf1200, batch 1,024), then the control's
+  sampled reads, taken off kal-7's queue (kal-7 keeps KAL-C s0–s2). A `pkill -f 'queue_sample[d].sh'` in the same
+  `podrun` as a relaunch of that script killed its own shell (the self-match trap): the queue parent died as intended,
+  the relaunch went in a separate call. The KAL-D pods re-run the same snapshot reads on 3090s after training
+  (`post_D.sh`); the 3090 copies are the ones reported, the A40 copies are a hardware check.
+- 05:45  **Protocol check:** the control s0's new plain k 32 read (`guided_eval.py`, sample seed 1, batch 2,048,
+  `max_steps` 1,024; kal-8, 9.0 min, peak 24.4 GB) against its stored best-state k 256 read (`state_eval.py`, seed 0,
+  batch 2,048, `max_steps` 96), pass@k on the same theorems: holdout250 pass@1 / 8 / 32 = 65.8 / 137.2 / 165.0 vs
+  68.1 / 137.6 / 164.6; rr600 57.2 / 191.2 / 298.0 vs 56.6 / 189.7 / 292.1; long2 0.1 / 1.0 / 4.0 vs 0.1 / 1.0 / 3.2;
+  textbook72 10.5 / 19.1 / 25.0 vs 10.7 / 18.5 / 23.8 — agreement within sampling noise, so reusing the stored k 256
+  reads (for pass@256) is sound.
+- 05:15  KAL-D snapshots (A40 copies, kal-8): teacher-forced agreement 87.5 / 86.4 / 85.8 % at step 24,020 (s0 / s1 /
+  s2) and 87.1 % at step 100,000 (s0); greedy tf1200 valid 77 / 74 / 84 and 173 (of 1,200). KAL-D's train loss has sat
+  at ≈ 0.030 since step ≈ 50 k at the plateau learning rate (KAL-C, annealed, ends at val 0.018): the snapshots measure
+  the schedule's plateau, not the final model.
+- 07:20  Registry rows written by the smoke tests (9 files: `/tmp` outputs of the script smoke tests, the cProfile run,
+  the ladder smoke test) removed from `hf://…/registry/kalmar-pretrain/` and locally (`hf buckets rm -y`);
+  `kalmar/compute.py` also drops any row whose config points at `/tmp` or a smoke name.
