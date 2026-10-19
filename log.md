@@ -975,3 +975,30 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 17:43 UTC  Q5 (`our_runs.py`, committed 9bed2374) reads the registries and round files of trajectory, trajectory-cap6, rl-continue(-cap6), rl-from-ckpt and create-or-elicit read-only. Findings: rollouts in the state environment re-prefill the state every action (prefill ≈ 4.8× decoded tokens in a sampled round), and every ladder round fine-tunes on 20,000 replayed K12 records, so "RL-only" and "LLM-equivalent" columns are added. Re-run rounds after crashes (5 of 382) are charged in full; create-or-elicit full s5's round files are not on disk, so its prefill and RL share are imputed from the run's median (16 rounds, flagged). Our RL / pretraining FLOP ratio is 0.9–39, GPU-time ratio 9–180. Then launched agent D (frontier statements).
 - 18:25 UTC  All four agents done: A 324, B 366, C 369, D 109 ledger quotes; `verify_ledger.py` 1,199 / 1,199 (1,204 with my 5 hardware rows). My semantic spot check (value vs quote) on 41 rows, 27 chosen as the highest-stakes: 41 / 41. Built `compute_table.csv` (55 rows; `build_table.py` + `table_inputs.py`), `frontier_ranges.csv`, `figures/ratio.{pdf,png}` (palette validated with the dataviz validator: all checks pass; aqua below 3:1 contrast, relieved by text verdict labels and the table view). Commit dc59e6f7.
 - 18:50 UTC  `analysis.py` aggregates; REVIEW.md drafted, then two errors in my draft caught on my own re-check and fixed before commit: (1) I had put R1-Zero's 101K H800-h "at V3's pretraining efficiency" at 3.5 × 10²² FLOP; V3's measured throughput is 1.2 × 10¹⁸ FLOP per GPU-hour, so it is 1.25 × 10²³, and the "Epoch exceeds 100 % utilisation" argument fails if RL used FP8 — replaced by the GPU-hour comparison (Epoch's figure needs ≈ 490K H800-h, 5× the disclosed 101K); (2) "the knockout's free reductio does not spread" is wrong for knockout s1, which rose from 11 to 123 proofs per round over r17–r24 without a family reaching the bar — now stated both ways. Screened-table agent: 96 sources (52 arXiv, 44 web), 13 in depth; Zotero list 47 arXiv + 43 web. Deviation from the brief: 96 sources screened instead of 30–45, because Q3 rests on many short lab statements. `check_quotes.py`: every quotation in REVIEW.md and the notes is found verbatim in a fetched source (fabricated controls fail). Commit 6bee43ce. Adversarial claim-check agent launched on REVIEW.md.
+- 19:33 UTC  **Adversarial claim check** (`rl_compute_share/_claimcheck.md`; fresh agent, all local evidence): 131 statements checked, 51 not OK (16 wrong, 7 overclaims, 9 unsupported, 19 unclear). All addressed in commit c00ec2e9.
+  - **Verdict.** I had mixed two questions. The hypothesis as stated (the papers test small RL, so they cannot rule out frontier-scale creation) is supported. Whether more RL creates is a separate, mixed question. New verdict: "supported, with a qualification". This was pre-registered as "partly supported", so expectation 6 did not hold.
+  - **Missed comparator.** I had overlooked Interplay's exposure ablation at RL ≈ 0.42× pretraining, which also finds "needs exposure". The knockout is one of two controlled frontier-share tests, not "the only" one. Verified in the source (2512.07783v1 L222); ledger rows Y-inter-exposure and Y-inter-plus60 added.
+  - **Table and ratios.**
+    - New ProRL v2 row: 4.4 × 10⁻³ – 2.1 × 10⁻². ProRL v2 + BroRL becomes "no test", since BroRL reports pass@1 only.
+    - Qwen2.5-Math-7B-Instruct becomes "no test". The create / elicit median gap is now 11.8×, not 8.9×.
+    - Qwen3's verdict is re-attributed to the distilled-8B comparison.
+    - The GPU-time / FLOP factor is 2.5–15× across the bounds, not 5–8×. Ours is 0.9–19× counting RL only, not 0.9–39×.
+    - Yue's range is 7 × 10⁻⁶ – 3 × 10⁻³ (3 × 10⁻² only under DAPO's contradicted reading).
+    - Frontier units are stated (mostly GPU-time).
+  - **Wording and citations.**
+    - Knockout s1 held-out members went 2 → 5, not "stayed at 5".
+    - Leash's k range is 1,024–16,384; Ring-Zero was tracked only to step 2,000.
+    - Six citations were added, and two ledger values were corrected (C-INTER-plus42, C-PRORL-sustained).
+  - **Word count.** REVIEW.md is 2,997 words by `wc -w` (about 2,450 without table pipes).
+  - A second-pass checker was launched on the revision.
+- 19:56 UTC  **Second-pass check** (`rl_compute_share/_claimcheck2.md`, fresh agent):
+  - Of the first check's 51 findings: 45 fixed, 5 partly fixed, 1 new error. The new error came from dropping "pretrained LLM" from the ≈ 2 × 10⁻² claim, which from-scratch Interplay (0.1–2) violates.
+  - It raised 13 more issues, including:
+    - the verdict label was not one of the brief's three;
+    - the GPU-time units were mislabelled for 2024–H2 2025;
+    - Implication 1 mixed RL-only and as-run figures;
+    - one citation was missing (GRPO's AIME25 row);
+    - expectations #2 and #4 had unscored clauses.
+  - All are fixed. The verdict label is now **supported**: the hypothesis as stated (the papers test small RL, so they cannot rule out frontier-scale creation) holds. The mixed scale evidence and the two frontier-share organisms appear as "what it does not imply".
+  - Expectation 6 is scored "in part": the label differs from the predicted "partly", but its stated reason (b) held. The tally is 0 held outright, 7 in part.
+  - REVIEW.md: 2,998 words by `wc -w` (front matter and table pipes included). All 124 quotations and all 1,206 ledger quotes verify.

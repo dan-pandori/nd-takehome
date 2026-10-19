@@ -1996,7 +1996,8 @@ K12 (cap 12), cap 6, K12⁻ (knockout) or the 1 % dose set; T1 expert-iteration 
 GPU-time / FLOP ratio across the FLOP bounds: R1-Zero 2.5–12×, Olmo 3 Think 3.7–15× (5.5× and 7.6× at the
 midpoints).
 
-**Frontier labs (graded estimate; units mostly GPU-time or unspecified).** Source:
+**Frontier labs (graded estimate; 2024 to H2 2025 rest partly on Epoch's FLOP estimates, 2026 mostly on GPU-time
+and fleet statements).** Source:
 `rl_compute_share/frontier_ranges.csv`.
 
 | period | central | range | grade |
@@ -2024,8 +2025,9 @@ midpoints).
 **Checks.**
 - `verify_ledger.py`: 1,206 / 1,206 quotes found; altered negative controls fail.
 - `check_quotes.py`: 124 / 124 quotations in the notes and REVIEW.md found; fabricated controls fail.
-- Adversarial claim check (`rl_compute_share/_claimcheck.md`): 131 statements checked, 51 problems, all fixed in
-  REVIEW.md.
+- Adversarial claim checks: `rl_compute_share/_claimcheck.md` checked 131 statements and found 51 problems.
+  `_claimcheck2.md` confirmed 45 fixes, found 5 partial and 1 new error, and raised 13 more issues. All are addressed in
+  REVIEW.md, the verdict is "supported", and the pre-registered expectations score 0 held outright and 7 in part.
 
 **Bucket.** This run has no `ckpts/`, `artifacts/` or `data/`, so nothing is uploaded. All deliverables are in git
 under `rl_compute_share/`. The fetched source texts (`~/rcs_sources/`, 15 MB, copyrighted) are not put in the public

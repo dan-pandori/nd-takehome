@@ -1,5 +1,5 @@
 # Screened sources, run rl-compute-share (2026-10-19): one row per source document with at least one row in `ledger/*.tsv`
-**96 screened sources** (52 arXiv, 44 web): by first question served 15 Q1, 42 Q2, 34 Q3 and 5 Q4-only, in that order; they hold 1,014 of the 1,204 ledger rows, supporting files the other 190.
+**96 screened sources** (52 arXiv, 44 web): by first question served 15 Q1, 42 Q2, 34 Q3 and 5 Q4-only, in that order; they hold 1,016 of the 1,206 ledger rows, supporting files the other 190.
 **13 read in depth**: the 13 note files in `notes/`, including Yue et al. (`yue2025-rl-compute.md`; read in full by the executor); each note covers one source except `frontier-rl-compute-sources.md`, which covers 12 frontier web sources together (depth `full*`).
 
 | # | source | id | year | type | grade | depth | Q | claims | contribution | supporting files (rows) |
@@ -52,7 +52,7 @@
 | 46 | The Invisible Leash (Wu) | 2507.14843v5 | 2025 | paper | B | full | Q2, Q4 | 40 | Net support shrinkage at k ≤ 16,384 for ProRL v1/v2 and others; DAPO checkpoint sweep | — |
 | 47 | Surprising Effectiveness of Negative Reinforcement in LLM Reasoning (Zhu) | 2506.01347v2 | 2025 | paper | B | sections | Q2, Q4 | 22 | NSR/PSR/GRPO configs on Qwen2.5-Math-7B; negative samples alone preserve large-k pass@k | — |
 | 48 | From f(x) and g(x) to f(g(x)) (Yuan) | 2509.25123v3 | 2025 | paper | B | sections | Q2, Q4 | 17 | Llama-3.1-8B-Instruct composes atomic skills under RL; DAPO config; gains to pass@1024 | — |
-| 49 | Interplay of Pre-, Mid- and RL Training (Zhang) | 2512.07783v1 | 2025 | paper | B | sections | Q2, Q4 | 28 | 100M from-scratch model: RL 1.05–20B token-equivalents vs 10B pretraining; FLOP accounting | — |
+| 49 | Interplay of Pre-, Mid- and RL Training (Zhang) | 2512.07783v1 | 2025 | paper | B | sections | Q2, Q4 | 30 | 100M from-scratch model: RL 1.05–20B token-equivalents vs 10B pretraining; FLOP accounting | — |
 | 50 | Debate on the RLVR Capability Boundary, Two-Stage View (Yao) | 2510.04028v1 | 2025 | paper | B | sections | Q2, Q4 | 19 | Shrink-then-expand two-stage view; LLM runs ~42 steps, toy bandit to 7,000 | Llama 3.2 model card (2) |
 | 51 | Echo Chamber: RL Amplifies Pretraining Behaviors (Zhao) | 2504.07912v2 | 2025 | paper | B | sections | Q2, Q4 | 20 | From-scratch 150M/1B models: RL amplifies pretraining-mixture behaviours; pass@64 flat over epochs | — |
 | 52 | Spurious Rewards: Rethinking Training Signals in RLVR (Shao) | 2506.10947v2 | 2025 | paper | B | sections | Q2, Q4 | 12 | Random rewards lift Qwen2.5-Math-7B; 300 steps, ~24 h on 8 A100; scope caveat | — |
@@ -107,7 +107,7 @@
 - **grade**: modal ledger grade of the rows that quote the document itself (A primary lab statement, B paper or technical report, C independent estimate with a stated method, D press, rumour or no method). All modes are clear (no ties).
 - **depth**: `full` = has its own note in `notes/` (Yue et al. was also read in full by the executor); `full*` = covered by the group note `notes/frontier-rl-compute-sources.md`; `sections` = no note, at least 6 ledger rows from the document's own text; `quotes-only` = 5 or fewer targeted rows; `abstract` = only the abstract and introduction, a page header or an index excerpt was used.
 - **Q**: Q1 Yue's models (configs and bases), Q2 RL literature, Q3 frontier labs, Q4 scale dependence and normaliser. Q4 marks the papers cited in agent C's scale-dependence and evidence-against sections, plus ScaleRL.
-- **claims**: ledger rows that quote the document itself. Rows quoting a supporting file are counted in the last column (184 rows from 59 files), and the section below holds 6 more: 1,014 + 184 + 6 = 1,204.
+- **claims**: ledger rows that quote the document itself. Rows quoting a supporting file are counted in the last column (184 rows from 59 files), and the section below holds 6 more: 1,016 + 184 + 6 = 1,206.
 - Already in `references.bib`: #1 Yue (`yueDoesReinforcementLearning2025`), #15 DeepSeek-R1 (`guoDeepSeekR1IncentivizesReasoning2025`, the Nature version), #18 DeepSeek-V4 (`deepseek-aiDeepSeekV4HighlyEfficient2026`), #19 DeepSeek-V4.1-Flash (`deepseekai2026deepseekv41flash`), #37 Demystifying (`clayDemystifyingReinforcementLearning2026`) and #41 ProRL (`liuProRLProlongedReinforcement2025`). The rest are in `to_add_to_zotero.md`.
 
 ## Supporting files (not screened sources)

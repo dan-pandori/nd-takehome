@@ -276,3 +276,11 @@ Brief: nd-rl `0ffb87e` (Dan, 2026-10-19). Policy: AGENT_POLICY.md. No pods (guar
 
 ## rl-compute-share
 - 2026-10-19 17:27 UTC  run started (executor). Pre-registration `preregistration/rl-compute-share.md` committed (12753dbd) before any source was fetched; `podbudget` set to 1 h / $0.50.
+- 2026-10-19 19:57 UTC  **Done (UNREVIEWED; `run_rl_compute_share.md`, `rl_compute_share/REVIEW.md`, `numbers.md` § rl-compute-share).** 96 sources screened, 13 in depth; 1,206 / 1,206 ledger quotes verified; two adversarial checks (51 + 13 problems) addressed.
+  - Yue et al.'s RL is 7 × 10⁻⁶ – 3 × 10⁻³ of pretraining FLOPs (median 1.2 × 10⁻⁴). No create-vs-elicit test on a pretrained LLM with a computable ratio exceeds ≈ 2 × 10⁻².
+  - No frontier lab publishes a FLOP ratio. Graded estimate: 0.01–0.1 in 2024 (C), 0.3–1 in H2 2025 (D), ≈ 1–2 in 2026 (D, mostly GPU-time statements).
+  - Our ladders (9.56 M `lean_staten`, from scratch) spend 0.9–19× pretraining FLOPs on RL: at or above the frontier.
+  - Verdict: **supported**. The papers test small RL, so they cannot rule out frontier-scale creation. That is a missing measurement, not evidence of creation: the scale evidence is mixed, and the two frontier-share organisms (Interplay, our knockout) still need pretraining exposure.
+  - No pods; /bin/bash.00 of the /bin/bash.50 guard.
+
+RL-COMPUTE-SHARE DONE 2026-10-19T19:56:44Z
