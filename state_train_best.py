@@ -27,18 +27,27 @@ TOK_BUDGET = 128 * 144
 MIN_LR_FRAC, WARMUP = 0.3, 200
 
 
-def to_device(data, dev):
-    """list of per-record [(state bytes, action bytes)] -> (ids (N, T) uint8 on dev, plen on dev, lens on the host, lens on dev)."""
+TO_DEVICE_CHUNK = 250_000     # pairs per host-side block (run kalmar-pretrain: 17 M pairs would need ~55 GB of index tensors at once)
+
+
+def to_device(data, dev, chunk=None):
+    """list of per-record [(state bytes, action bytes)] -> (ids (N, T) uint8 on dev, plen on dev, lens on the host, lens on dev).
+    Built in blocks of `chunk` pairs; the result is the same tensor whatever the block size."""
+    chunk = chunk or TO_DEVICE_CHUNK
     pairs = [(p, q) for rec in data for p, q in rec]
     lens = torch.tensor([len(p) + len(q) for p, q in pairs], dtype=torch.long)
     plen = torch.tensor([len(p) for p, q in pairs], dtype=torch.long)
     N, T = len(pairs), int(lens.max())
-    flat = torch.frombuffer(bytearray(b''.join(p + q for p, q in pairs)), dtype=torch.uint8)
-    row = torch.repeat_interleave(torch.arange(N), lens)
-    col = torch.arange(len(flat)) - torch.repeat_interleave(lens.cumsum(0) - lens, lens)
-    ids = torch.zeros((N, T), dtype=torch.uint8)    # pad = 0
-    ids[row, col] = flat
-    return ids.to(dev), plen.to(dev), lens, lens.to(dev)
+    ids = torch.zeros((N, T), dtype=torch.uint8, device=dev)    # pad = 0
+    for i0 in range(0, N, chunk):
+        sub, ln = pairs[i0:i0 + chunk], lens[i0:i0 + chunk]
+        flat = torch.frombuffer(bytearray(b''.join(p + q for p, q in sub)), dtype=torch.uint8)
+        row = torch.repeat_interleave(torch.arange(len(sub)), ln)
+        col = torch.arange(len(flat)) - torch.repeat_interleave(ln.cumsum(0) - ln, ln)
+        blk = torch.zeros((len(sub), T), dtype=torch.uint8)
+        blk[row, col] = flat
+        ids[i0:i0 + len(sub)] = blk.to(dev)
+    return ids, plen.to(dev), lens, lens.to(dev)
 
 
 def token_batches(lens_cpu, gen_cpu, rng, budget):
@@ -87,8 +96,9 @@ def val_loss(model, v, tok, autocast, bs=256):
     return tot / n
 
 
-def train(a, tok, data, held, dev, record):
-    """Returns (model, extra) after training; the caller saves the checkpoint."""
+def train(a, tok, data, held, dev, record, on_save=None):
+    """Returns (model, extra) after training; the caller saves the checkpoint.  `on_save(step, model, extra)` is called
+    at the steps in a.save_at (if any)."""
     cuda = dev == 'cuda'
     t_data = time.time()
     tr = to_device(data, dev)
@@ -96,6 +106,12 @@ def train(a, tok, data, held, dev, record):
     vd = to_device(held, dev) if held else None
     print(f'best: {len(lens_cpu):,} train pairs (T {ids.shape[1]}), {0 if not vd else len(vd[2]):,} val pairs, '
           f'on {dev} in {time.time() - t_data:.0f}s', flush=True)
+    if getattr(a, 'best_epochs', 0):    # epochs -> steps, on throw-away RNGs (the training stream below is untouched)
+        nb = len(token_batches(lens_cpu, torch.Generator().manual_seed(10 ** 6 + a.seed), random.Random(10 ** 6 + a.seed),
+                               a.tok_budget)[1])
+        a.best_steps = round(a.best_epochs * nb)
+        print(f'best: --best_epochs {a.best_epochs} x {nb} batches per epoch -> --best_steps {a.best_steps}', flush=True)
+    save_at = {int(x) for x in str(getattr(a, 'save_at', '') or '').split(',') if x.strip()}
     t0 = time.time()
     torch.manual_seed(a.seed)
     gen = torch.Generator(device=dev); gen.manual_seed(a.seed)
@@ -171,6 +187,9 @@ def train(a, tok, data, held, dev, record):
                     for t, v in zip(state, saved, strict=True):
                         t.copy_(v)
             muon_graph.replay()
+        if step in save_at and on_save is not None:    # state_dict only: no mode switch, no RNG use
+            on_save(step, model, {'recipe': 'best', 'secs': time.time() - t0, 'pairs_seen': seen,
+                                  'epochs': seen / len(lens_cpu), 'tok_budget': a.tok_budget, 'curve': list(curve)})
         if step % 20 == 0 or not cuda:
             recent.append(float(main)); recent_aux.append(float(aux))
         el = time.time() - t0

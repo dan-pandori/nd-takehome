@@ -16,6 +16,27 @@ from lean_tok import LeanTokenizer, inverse, ParseFail
 import lean_gate
 
 
+_TOK = None
+
+
+def prep(item):
+    """(index, jsonl line) -> (name, Lean source or None, structural failure or None)."""
+    global _TOK
+    if _TOK is None:
+        _TOK = LeanTokenizer('lean_staten')
+    i, l = item
+    r = json.loads(l)
+    r.setdefault('name', f'line{i}')     # K12-derived records carry no name: the 0-based line number identifies them
+    try:
+        steps, toks, env = decompose(r['prompt'], r['proof'], canon=True)
+        nd = inverse(toks)
+        if nd.split() != r['proof'].split():
+            return r.get('name'), None, {'name': r.get('name'), 'why': 'inverse != record proof'}
+    except ParseFail as e:
+        return r.get('name'), None, {'name': r.get('name'), 'why': f'parse: {e}'}
+    return r.get('name'), f'{_TOK.statement(r["prompt"])} {_TOK.text(toks)}', None
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--in', dest='inp', required=True)
@@ -23,29 +44,26 @@ def main():
     ap.add_argument('--limit', type=int, default=0)
     ap.add_argument('--every', type=int, default=1, help='check every K-th record')
     ap.add_argument('--fails', default=None, help='write failing records here (jsonl)')
+    ap.add_argument('--procs', type=int, default=1, help='processes for the decomposition / rendering')
     a = ap.parse_args()
-    tok = LeanTokenizer('lean_staten')
     srcs, names, struct_bad = [], [], []
     t0 = time.time()
-    n = 0
-    for i, l in enumerate(open(a.inp)):
-        if a.limit and n >= a.limit:
-            break
-        if i % a.every:
-            continue
-        r = json.loads(l)
-        n += 1
-        try:
-            steps, toks, env = decompose(r['prompt'], r['proof'], canon=True)
-            nd = inverse(toks)
-            if nd.split() != r['proof'].split():
-                struct_bad.append({'name': r.get('name'), 'why': 'inverse != record proof'})
-                continue
-        except ParseFail as e:
-            struct_bad.append({'name': r.get('name'), 'why': f'parse: {e}'})
-            continue
-        srcs.append(f'{tok.statement(r["prompt"])} {tok.text(toks)}')
-        names.append(r.get('name'))
+    items = [(i, l) for i, l in enumerate(open(a.inp)) if l.strip() and i % a.every == 0]
+    if a.limit:
+        items = items[:a.limit]
+    n = len(items)
+    if a.procs > 1:
+        from multiprocessing import Pool
+        with Pool(a.procs) as pool:
+            res = list(pool.imap(prep, items, chunksize=256))
+    else:
+        res = [prep(x) for x in items]
+    for nm, src, bad in res:
+        if bad:
+            struct_bad.append(bad)
+        else:
+            srcs.append(src); names.append(nm)
+    del res
     t1 = time.time()
     ok, wall, proc = lean_gate.check_sources(srcs)
     rej = [nm for nm, o in zip(names, ok) if not o]

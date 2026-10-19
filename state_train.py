@@ -20,24 +20,52 @@ from state_env import decompose
 from lean_tok import ParseFail
 
 
-def load(fn, tok, cap, limit=0):
-    """-> (list of per-record [(state ids, action ids)], n_skipped)"""
+def _pairs(line, tok, cap):
+    """one jsonl line -> its [(state ids, action ids)], or None if it does not decompose (skipped)."""
+    r = json.loads(line)
+    if cap:
+        assert r['n_lines'] <= cap, f'record exceeds cap {cap}: {r.get("name")}'
+    try:
+        steps, toks, env = decompose(r['prompt'], r['proof'], canon=getattr(tok, 'canon', False))
+    except (ParseFail, ValueError, AssertionError, IndexError) as e:
+        return None
+    pairs = []
+    for stt, act, hs in steps:
+        pre = tok.encode_toks((hs + stt) if tok.with_history else stt)
+        pairs.append((bytes(pre), bytes(tok.encode_toks(act) + [tok.eos])))
+    return pairs
+
+
+_W = {}
+
+
+def _winit(mode, cap):
+    _W['tok'], _W['cap'] = make_tokenizer(mode), cap
+
+
+def _wpairs(line):
+    return _pairs(line, _W['tok'], _W['cap'])
+
+
+def load(fn, tok, cap, limit=0, procs=0):
+    """-> (list of per-record [(state ids, action ids)], n_skipped).  procs > 1 decomposes in a process pool (run
+    kalmar-pretrain: 155,000 Kalmár proofs take ~35 min serially); the result is identical, records in file order."""
+    lines = (l for l in open(fn) if l.strip())
     out, skipped = [], 0
-    for l in open(fn):
-        if not l.strip():
-            continue
-        r = json.loads(l)
-        if cap:
-            assert r['n_lines'] <= cap, f'record exceeds cap {cap}: {r.get("name")}'
-        try:
-            steps, toks, env = decompose(r['prompt'], r['proof'], canon=getattr(tok, 'canon', False))
-        except (ParseFail, ValueError, AssertionError, IndexError) as e:
+    if procs > 1 and not limit:
+        from multiprocessing import Pool
+        with Pool(procs, initializer=_winit, initargs=(tok.mode, cap)) as pool:
+            for pairs in pool.imap(_wpairs, lines, chunksize=256):
+                if pairs is None:
+                    skipped += 1
+                else:
+                    out.append(pairs)
+        return out, skipped
+    for l in lines:
+        pairs = _pairs(l, tok, cap)
+        if pairs is None:
             skipped += 1
             continue
-        pairs = []
-        for stt, act, hs in steps:
-            pre = tok.encode_toks((hs + stt) if tok.with_history else stt)
-            pairs.append((bytes(pre), bytes(tok.encode_toks(act) + [tok.eos])))
         out.append(pairs)
         if limit and len(out) >= limit:
             break
@@ -95,6 +123,11 @@ def main():
     ap.add_argument('--curve_every', type=float, default=30, help='best: seconds between curve / val points')
     ap.add_argument('--no_compile', action='store_true')
     ap.add_argument('--best_dims', default=None, help='best: "layers,d,heads,d_ff" override (CPU tests only; the recipe is 6,384,8,1280)')
+    ap.add_argument('--best_epochs', type=float, default=0, help='best: schedule over this many epochs of pairs '
+                    '(steps = round(E x batches per epoch), counted on a separate RNG so the training stream is unchanged)')
+    ap.add_argument('--save_at', default='', help='best: comma-separated steps at which to save an extra checkpoint '
+                    '(<out> with _step<N> before .pt); mid-schedule snapshots, not short runs')
+    ap.add_argument('--load_procs', type=int, default=0, help='decompose the training records in this many processes')
     a = ap.parse_args()
     if a.recipe == 'best':
         assert not a.init, '--recipe best is Stage-1 pretraining; fine-tunes of a best checkpoint use the default loop'
@@ -116,7 +149,7 @@ def main():
     assert getattr(tok, 'state_mode', False), 'state_train needs a lean_state* tokenizer'
     print('params', model.n_params(), 'mode', tok.mode, flush=True)
     t0 = time.time()
-    data, skipped = load(a.data, tok, a.cap)
+    data, skipped = load(a.data, tok, a.cap, procs=a.load_procs)
     npairs = sum(len(x) for x in data)
     print(f'train records {len(data)} (skipped {skipped}); pairs {npairs}; mean {npairs/max(1,len(data)):.3f} per proof; '
           f'max pair len {max(len(p)+len(q) for x in data for p, q in x)}; load {time.time()-t0:.0f}s', flush=True)
@@ -126,7 +159,12 @@ def main():
     if a.recipe == 'best':
         import state_train_best
         del model
-        model, extra = state_train_best.train(a, tok, data, held, dev, record)
+        def snapshot(step, m, ex):    # --save_at: a mid-schedule checkpoint, uploaded like the final one
+            path = a.out[:-3] + f'_step{step}.pt' if a.out.endswith('.pt') else a.out + f'_step{step}'
+            save_ckpt(path, m, tok.mode, extra={'args': vars(a), 'n_params': m.n_params(), 'pairs': npairs,
+                                                'records': len(data), 'step': step, **ex})
+            print('saved', path, flush=True)
+        model, extra = state_train_best.train(a, tok, data, held, dev, record, on_save=snapshot)
         save_ckpt(a.out, model, tok.mode, extra={'args': vars(a), 'n_params': model.n_params(), 'pairs': npairs,
                                                  'records': len(data), **extra})
         lab = dict(ckpt=a.out, data=a.data, source=a.out, n_params=model.n_params(), pairs=npairs, recipe='best')
