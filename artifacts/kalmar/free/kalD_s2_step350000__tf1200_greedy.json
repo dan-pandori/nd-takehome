@@ -1,0 +1,125 @@
+{
+ "ckpt": "ckpts/kalmar/stage1_kalD_s2_step350000.pt",
+ "in": "data/kalmar/tf1200_kal_sl.jsonl",
+ "k": 1,
+ "temperature": 0.0,
+ "seed": 0,
+ "batch": 1024,
+ "max_action": 512,
+ "max_steps": 1024,
+ "supply_pr": false,
+ "n_theorems": 1200,
+ "n_attempts": 1200,
+ "gen_s": 108.1,
+ "lean_s": 2.2,
+ "solved_theorems": 220,
+ "by": {
+  "all": {
+   "n": 1200,
+   "valid": 220,
+   "follow": 75,
+   "dev_valid": 145,
+   "dev_valid_shorter": 86,
+   "end=syntax": 412,
+   "end=done": 765,
+   "end=truncated": 23
+  },
+  "atoms=1": {
+   "n": 150,
+   "valid": 36,
+   "follow": 13,
+   "dev_valid": 23,
+   "dev_valid_shorter": 7,
+   "end=done": 83,
+   "end=syntax": 56,
+   "end=truncated": 11
+  },
+  "atoms=2": {
+   "n": 350,
+   "valid": 76,
+   "follow": 32,
+   "dev_valid": 44,
+   "dev_valid_shorter": 25,
+   "end=done": 229,
+   "end=syntax": 117,
+   "end=truncated": 4
+  },
+  "atoms=3": {
+   "n": 350,
+   "valid": 56,
+   "follow": 19,
+   "dev_valid": 37,
+   "dev_valid_shorter": 25,
+   "end=done": 235,
+   "end=syntax": 111,
+   "end=truncated": 4
+  },
+  "atoms=4": {
+   "n": 350,
+   "valid": 52,
+   "follow": 11,
+   "dev_valid": 41,
+   "dev_valid_shorter": 29,
+   "end=syntax": 128,
+   "end=done": 218,
+   "end=truncated": 4
+  }
+ },
+ "deviation": {
+  "tag": {
+   "pr": 90,
+   "leaf:and+": 106,
+   "leaf:imp+B": 162,
+   "leaf:or+": 213,
+   "lem": 81,
+   "efq": 28,
+   "split": 103,
+   "leaf:not+": 122,
+   "close:leaf:imp+B": 28,
+   "leaf:and-": 60,
+   "leaf:imp+A": 20,
+   "leaf:imp-": 45,
+   "leaf:bot-": 41,
+   "leaf:or-": 16,
+   "close:leaf:or-": 2,
+   "close:leaf:imp-": 1,
+   "close:split": 5,
+   "reit": 2
+  },
+  "depth": {
+   "0": 246,
+   "2": 235,
+   "4": 280,
+   "3": 267,
+   "1": 76,
+   "5": 21
+  },
+  "decile": {
+   "0": 150,
+   "4": 139,
+   "1": 162,
+   "2": 255,
+   "9": 5,
+   "3": 224,
+   "7": 33,
+   "5": 95,
+   "6": 43,
+   "8": 19
+  }
+ },
+ "env": {
+  "steps": 34320,
+  "rows": 104778,
+  "rowsteps": 2577840,
+  "prompt_len_max": 580,
+  "chunks": 447,
+  "stop_eos": 104755,
+  "stop_exact": 0,
+  "stop_goal": 0,
+  "truncated": 23,
+  "syntax": 412,
+  "done": 765,
+  "waves": 447,
+  "peak_alloc_gb": 10.744359493255615
+ }
+}

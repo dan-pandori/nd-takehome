@@ -1,0 +1,113 @@
+{
+ "ckpt": "ckpts/kalmar/stage1_kalC_s2.pt",
+ "in": "data/kalmar/g1_premises.jsonl",
+ "k": 32,
+ "temperature": 0.8,
+ "seed": 1,
+ "batch": 2048,
+ "max_action": 512,
+ "max_steps": 1024,
+ "supply_pr": true,
+ "n_theorems": 200,
+ "n_attempts": 6400,
+ "gen_s": 526.5,
+ "lean_s": 3.3,
+ "solved_theorems": 21,
+ "by": {
+  "all": {
+   "n": 6400,
+   "valid": 74,
+   "follow": 16,
+   "dev_valid": 58,
+   "dev_valid_shorter": 49,
+   "end=syntax": 3515,
+   "end=done": 2586,
+   "end=truncated": 299
+  },
+  "atoms=2": {
+   "n": 1600,
+   "valid": 41,
+   "follow": 10,
+   "dev_valid": 31,
+   "dev_valid_shorter": 26,
+   "end=done": 834,
+   "end=syntax": 686,
+   "end=truncated": 80
+  },
+  "atoms=3": {
+   "n": 3424,
+   "valid": 28,
+   "follow": 6,
+   "dev_valid": 22,
+   "dev_valid_shorter": 19,
+   "end=syntax": 1889,
+   "end=done": 1402,
+   "end=truncated": 133
+  },
+  "atoms=4": {
+   "n": 1376,
+   "valid": 5,
+   "follow": 0,
+   "dev_valid": 5,
+   "dev_valid_shorter": 4,
+   "end=truncated": 86,
+   "end=syntax": 940,
+   "end=done": 350
+  }
+ },
+ "deviation": {
+  "tag": {
+   "lem": 1791,
+   "efq": 233,
+   "leaf:or+": 831,
+   "leaf:not+": 1387,
+   "leaf:imp+B": 613,
+   "split": 562,
+   "leaf:and-": 293,
+   "close:leaf:imp+B": 6,
+   "reit": 1,
+   "leaf:or-": 41,
+   "leaf:and+": 372,
+   "leaf:bot-": 120,
+   "leaf:imp-": 109,
+   "leaf:imp+A": 20,
+   "close:split": 2,
+   "close:leaf:and-": 1,
+   "close:leaf:not+": 2
+  },
+  "depth": {
+   "0": 2014,
+   "3": 2275,
+   "1": 157,
+   "2": 1089,
+   "4": 835,
+   "5": 14
+  },
+  "decile": {
+   "1": 756,
+   "4": 493,
+   "3": 1440,
+   "0": 1374,
+   "5": 227,
+   "2": 1984,
+   "7": 32,
+   "6": 73,
+   "8": 5
+  }
+ },
+ "env": {
+  "steps": 88704,
+  "rows": 396315,
+  "rowsteps": 9441584,
+  "prompt_len_max": 599,
+  "chunks": 414,
+  "stop_eos": 396016,
+  "stop_exact": 0,
+  "stop_goal": 0,
+  "syntax": 3515,
+  "truncated": 299,
+  "done": 2586,
+  "waves": 414,
+  "peak_alloc_gb": 22.66935682296753
+ }
+}

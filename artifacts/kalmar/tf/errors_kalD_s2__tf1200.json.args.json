@@ -1,0 +1,31 @@
+{
+ "ckpt": "ckpts/kalmar/stage1_kalD_s2.pt",
+ "inp": "data/kalmar/tf1200_kal_sl.jsonl",
+ "out": "artifacts/kalmar/tf/errors_kalD_s2__tf1200.json",
+ "batch": 1024,
+ "max_action": 512,
+ "seed": 0,
+ "limit": 0,
+ "dump_errors": 1000000,
+ "_meta": {
+  "script": "tf_agree.py",
+  "argv": [
+   "kalmar/tf_agree.py",
+   "--ckpt",
+   "ckpts/kalmar/stage1_kalD_s2.pt",
+   "--in",
+   "data/kalmar/tf1200_kal_sl.jsonl",
+   "--out",
+   "artifacts/kalmar/tf/errors_kalD_s2__tf1200.json",
+   "--batch",
+   "1024",
+   "--dump_errors",
+   "1000000"
+  ],
+  "run_id": "kalmar-pretrain",
+  "git_sha": "321978a3c4de73f766c362906529fa84bc8a3347",
+  "git_dirty": null,
+  "host": "c55b4be232db",
+  "utc": "2026-10-19T12:34:33Z"
+ }
+}

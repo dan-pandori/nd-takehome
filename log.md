@@ -1077,3 +1077,10 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 12:27  `pod/kal/bringup_D.sh` printed "push failed kal-9" and skipped it, so kal-9 sat idle 11:45–12:25 (≈ $0.40);
   re-pushed and launched by hand at 12:26 (KAL-D s2 sampled reads). KAL-D s0 trained at 12:21 (36,878 s); its jobs
   started on kal-2 (greedy suite), kal-10 (sampled reads), kal-12 (EI ladder), kal-13 (frozen ladder).
+- 12:36  KAL-D s1 trained (36,983 s, final val 0.0168). KAL-D s0 read-outs (kal-2): TF agreement 94.6 %; greedy tf1200
+  valid 33.1 % / exact-Kalmár 14.1 % (atoms 1–4 valid 49.3 / 39.1 / 29.4 / 23.7). kal-4 deleted after its post-training
+  queue (s2 greedy suite + 5 snapshots) and a full error dump of KAL-D s2's 6,903 teacher-forced disagreements
+  (`artifacts/kalmar/tf/errors_kalD_s2__tf1200.errors.jsonl.gz`). `kalmar/error_classes.py`: a formula of the problem
+  but not the algorithm's next one 44.6 %, a formula found nowhere in the problem (copy / substitution) 31.1 %,
+  close-timing 6.5 %, same formula / other justification 6.4 %, malformed 6.2 %, truncated 2.5 %, **polarity (F for ¬F)
+  1.4 %** → `artifacts/kalmar/error_classes_kalD_s2.json`.
