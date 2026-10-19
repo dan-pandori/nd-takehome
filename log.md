@@ -1136,3 +1136,9 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   Control md5s (9c436c35 / f7ae9a9e / 354c4428) are the md5sum of the bucket copies on the VPS (01:35) and on kal-5
   (02:13), which matched. Pre-registered generalisation verdicts computed (`kalmar/gen_verdicts.py`): does not
   generalise on G1 supplied (2 / 3 seeds < 0.3), G2, hand_proved_14, ≥ 17; G3 partially.
+- 22:09  **kal-12 restarted (~21:02 UTC, uptime 1:07 at 22:09): the EI ladder died in round 2's fine-tune** (after step
+  400 of 600); `/workspace` survived (round 1 complete: found_1, alloc_1, r1 checkpoint; round 2's sampling files). The
+  interrupted round 2 files were moved to `artifacts/kalmar/ladder/la_kal_ei_s0/interrupted_r2/` and the ladder resumed
+  at 22:10 with `--resume --start_round 2 --rounds 3` (reloads found_1 / alloc_1 and `la_kal_ei_s0_r1.pt`; round 2
+  re-sampled with the same seed and model; the fine-tune mix's random draw differs from an uninterrupted run). Projected
+  end ≈ 09:30 UTC 2026-10-20; spend ≈ $38.5 of $50 at the end.

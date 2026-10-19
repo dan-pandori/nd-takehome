@@ -142,5 +142,38 @@ def main():
     print('wrote', a.out)
 
 
+
+def ladder_figure(summary='artifacts/kalmar/ladder_summary.json', out='figures/kalmar_ladder.png'):
+    """EI vs frozen from KAL-D s0 (Addendum 1): cumulative targets solved, and the share of each round's new distinct
+    Lean-accepted proofs that are exactly Kalmár's (dedup bias: a theorem's Kalmár proof is new only once)."""
+    S = json.load(open(summary))
+    fig, axs = plt.subplots(1, 2, figsize=(11, 4.2))
+    names = {'la_kal_ei_s0': ('EI', COL['KAL-D'], '-'), 'la_kal_frozen_s0': ('frozen (same attempts, no training)', COL['control'], '--')}
+    for key, (lab, col, ls) in names.items():
+        d = S.get(key)
+        if not d:
+            continue
+        rs = sorted(int(r) for r in d)
+        axs[0].plot(rs, [d[str(r)]['targets_solved_cum'] for r in rs], ls, marker='o', color=col, linewidth=2, markersize=8,
+                    markeredgecolor='white', label=lab)
+        axs[1].plot(rs, [100 * (d[str(r)]['exact_share'] or 0) for r in rs], ls, marker='o', color=col, linewidth=2,
+                    markersize=8, markeredgecolor='white', label=lab)
+    axs[0].set_title('(a) Targets solved, cumulative (of 1,000)', color=INK, fontsize=10, loc='left')
+    axs[0].set_xlabel('round', color=INK, fontsize=8)
+    axs[1].set_title('(b) New proofs that are exactly Kalmár\'s (%)', color=INK, fontsize=10, loc='left')
+    axs[1].set_xlabel('round', color=INK, fontsize=8)
+    for ax in axs:
+        style(ax)
+        ax.set_xticks([1, 2, 3, 4])
+        ax.legend(frameon=False, fontsize=8)
+    fig.tight_layout()
+    fig.savefig(out, dpi=150, facecolor='#fcfcfb')
+    print('wrote', out)
+
+
 if __name__ == '__main__':
-    main()
+    import sys
+    if len(sys.argv) > 1 and sys.argv[1] == 'ladder':
+        ladder_figure()
+    else:
+        main()
