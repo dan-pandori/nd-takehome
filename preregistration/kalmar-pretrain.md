@@ -226,3 +226,54 @@ different model (3.2 M, cap 6); I quote it only for the settings-change rule.
   - `state_train` decomposes in parallel and copies the pair matrix to the device in chunks; the tensors are
     identical, which is checked on a subset before KAL training.
   - Intermediate checkpoints (`--save_at`).
+
+## Addendum 1 (2026-10-19 03:30 UTC, before any ladder pod) — the optional EI ladder (brief item 7)
+
+Authorised by Dan 2026-10-19 03:24 UTC (inbox / QUESTIONS.md): the $50 is the only limit; pod-hour figures are advice.
+Written before KAL-D has finished training and before any KAL-D read-out exists.
+
+**Question.** Starting from a model that writes Kalmár proofs, does expert iteration against Lean keep the algorithm,
+or does it drift to shorter proofs?
+
+**Design.** `state_ladder_ei.py` with its defaults, except where stated:
+- Base: KAL-D s0 final (`ckpts/kalmar/stage1_kalD_s0.pt`); 8 rounds; seed 0.
+- Targets: `data/kalmar/ei_targets1000.jsonl`, 1,000 of `data/ladder/rl_targets.jsonl` drawn with random seed 0. A
+  full ladder round of 4,495 targets plus 2,285 transfer theorems at k 32 would be ≈ 217 k Kalmár attempts ≈ 5
+  A40-hours.
+- Sampling: k 16, T 0.8, `max_steps` 1,024, `max_action` 512, batch 2,048 (A40).
+- Transfer: `data/kalmar/ei_transfer200.jsonl` (200 of `transfer.jsonl`, random seed 1), k 16.
+- Held-out greedy: `data/kalmar/val300_kal_sl.jsonl`.
+- Fine-tune (ladder defaults): 600 steps, lr 3e-4, 128 proofs per step, `max_per_thm` 4, `rl_weight` 4, retain 20,000
+  K12-Kalmár records per round as replay.
+- **Frozen arm** (`--no_train`, same seed, same attempts) **if** at least $8 of the $50 remains once the EI arm is
+  projected. It shows what sampling more from the base gives without training.
+- A second EI seed (KAL-D s1) only if $10 more remains after that.
+
+**Read-outs.**
+- Per round, over the distinct Lean-accepted target proofs first found in that round (`found_<r>.jsonl`):
+  - the share that is exactly the algorithm's proof (ND string equal to the sl proof of that theorem);
+  - the actions per accepted proof against the algorithm's;
+  - the share of deviating proofs shorter than the algorithm's.
+- Cumulative targets solved, EI against frozen.
+- After round 8: TF agreement and greedy exact-follow on tf1200, against the base.
+
+**Expectations.**
+- Round 1 solves ≥ 90 % of the 1,000 targets.
+- The exact-Kalmár share of new accepted proofs is ≥ 70 % in round 1, and stays within ±15 points of it through round 8.
+- Actions per accepted proof stay within ±10 % of the algorithm's.
+- After round 8, TF agreement is ≥ base − 1 point and greedy exact-follow ≥ base − 5 points.
+- EI's cumulative solved count at round 8 exceeds frozen's by ≤ 3 points of the 1,000.
+- Reasoning: 20,000 replayed Kalmár proofs per round, and plain EI has no length pressure.
+
+**Criteria.**
+- **Keeps the algorithm:** at round 8, ≥ 50 % of new accepted proofs are exact Kalmár, and TF agreement has fallen
+  ≤ 1 point.
+- **Finds shorter proofs:** at round 8, the mean accepted length is ≥ 15 % below the algorithm's, or ≥ 30 % of new
+  accepted proofs are shorter deviations.
+- Both can hold.
+
+**Cost** (estimates; to be measured in round 1):
+- EI arm: ≈ 19 k attempts per round + fine-tune ≈ 50–60 min per round → ≈ 8 A40-hours ≈ $5.
+- Frozen arm: ≈ $3.
+- Projected run total with the ladder: ≈ $38 of $50.
+- Stop rule: if round 1 projects the EI arm above $10, cut it to 4 rounds.

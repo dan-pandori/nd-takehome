@@ -1010,3 +1010,20 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   $0.59/h; no community A6000 with a public IP was available).
 - 02:35  KAL-D pods queue their own post-training work (`pod/kal/post_D.sh`): greedy suite of the final model, then
   teacher-forced agreement and greedy tf1200 for each snapshot (learning curve).
+- 03:00  kal-5 deleted after the control greedy read-outs (0.79 h, $0.17; all 39 files + rows pulled). Interim,
+  greedy, Lean (`kalmar/analysis.py`): control s0–s2 tf1200 valid 91.8 / 94.4 / 90.5 % (its own proofs; exact-Kalmár
+  0 %); holdout250 34.4 / 40.4 / 39.6 %; G1 as is 0.0 / 3.0 / 8.5 % but **with the premise lines supplied 108 / 125 /
+  143 of 200** — the K12 models' 4–5-premise wall is the untrained `h4`/`h5` premise line, not the proof; G2 0–0.4 %;
+  G3 3.8 / 2.8 / 15.1 %. KAL-C s0: tf1200 26.9 % valid (10.2 % exact-Kalmár), holdout250 1.2 %, G1-supplied 18 / 200.
+- 03:20  K12 vs K12-Kalmár shape (`kalmar/k12_stats.py` → `artifacts/kalmar/stats_k12_vs_kal.json`; canonical
+  decomposition, same measures): lines 7.0 vs 107.9; actions 8.0 vs 108.9; ND box depth 1.1 (max 2) vs 4.2 (max 6);
+  longest state per proof 104.5 (max 386) vs 229.3 (max 655) tokens; longest action 219 in both; pair tokens per proof
+  775 vs 21,121 (27×); largest canonical name 5.8 (max 12) vs 18.8 (max 31); canonical `lean_seq` length 127 vs 1,755
+  tokens; term size (lean_check inference nodes, proof-strategies' per-rule weights) 4.5 vs 92.2. Longest (state,
+  action) pair: K12 367 + 25 tokens (record 124962), Kalmár 513 + 220 (record 93283).
+  **Correction to the pre-registration's table:** its K12 term size "35.9 (create-or-elicit)" is a different measure
+  (create-or-elicit's shape table); under the measure used for the Kalmár column, K12's mean is 4.5.
+- 03:24  **Dan (inbox, also under QUESTIONS.md 02:55):** the $50 is the real limit; pod-hour figures are advisory
+  (ceiling now 300 h); run the optional EI ladder (brief item 7) within the $50, pre-registered in an addendum first.
+- 03:27  KAL-C s0 / s1 / s2 trained (24,020 steps each; 1,527 / 1,449 / 1,448 s on the 3090; md5 2c6bbc9b / 8dabdd30 /
+  8992b636; bucket `kalmar-pretrain/ckpts/kalmar/`). kal-1 deleted after pulling its logs and registry rows.
