@@ -964,3 +964,49 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 16:37 UTC  **Knockout s1 r24 plain read** (k 256 x0, `artifacts/coe/eval/r24_ko_s1_x0`): strict held-out members **5 / 106 — the same five as at r20** (contraposition_conv 4 / 18: `la_transfer_1019`, `1246`, `1460`, `2256`; plus `la_transfer_916`), but each now solved far more often: successes per 256 attempts r16 → r20 → r24: 1019 0 → 32 → 214, 1246 0 → 23 → 126, 1460 108 → 205 → 189, 2256 0 → 47 → 177, 916 10 → 14 → 33. No family at the bar. read1054 896 solved; cut-offs 0.32 %. **Addendum 6 item 1 expectations:** contraposition_conv training share at r24 0.3–0.8 — hit (0.33); 2–12 of its 18 held-out members at r24 — hit (4); at the bar with probability ≈ 0.3 — not at the bar; no other family at the bar — hit. Reading: from r20 to r24 RL sharpened the members it had found instead of spreading to new ones.
 - 16:48 UTC  **All pods deleted** (coe-k1 reaped 16:40, 34.69 h, $20.46; `runpodctl pod list` empty). **Final spend: 16 pods, 309.34 pod-hours, $182.50** of $190 / 330 h (`artifacts/coe/pod_hours.tsv`, `artifacts/coe/compute.md`: process GPU-hours 419.9, RL ladders 191.2, reads 181.7). RunPod balance $101.23. Final checks: knockout s1's replay check over 24 rounds (2.09 M mix records) 0 σ-like replay records, 0 leaked K12 records — 6 / 6 knockout seeds pass; knockout s1's log p of known σ proofs along the ladder −26.0 (pend) → −33.6 (r16), best member −7.9 → −4.2; **offline Lean re-check** (`coe/coe_recheck.py` → `artifacts/coe/recheck.json`): 1,062 / 1,062 counted proofs accepted (every knockout proof of a strict member in the plain reads 424, knockout base large-k successes 13, Phase 3a 25, samples of full r16 450 and dose r16 150), and the same 1,062 with the conclusion negated 1,062 / 1,062 rejected. Data files published with manifest rows (the three training sets, `known_targets*.jsonl.gz`); the bulk artifacts follow (`publish_artifacts.py`).
 - 17:39 UTC  **Bulk artifacts published** (`publish_artifacts.py create-or-elicit artifacts/coe artifacts/create-or-elicit`, under the download lock): 744 files, 1,265,129,988 bytes (read rows, large-k chunks, scores, known-proof sets, registry rows), credential scan clean, every bucket copy re-downloaded and matched by sha256; `artifacts/MANIFEST.jsonl` 3,382 rows. Checkpoints (12 Stage 1, 200 ladder, 10 Phase 3a) were uploaded on save to `hf://buckets/dan-pandori/nd-rl/create-or-elicit/ckpts/coe/`; the ladders' found / mix / alloc files were synced from the pods to the same prefix. All pods deleted; the run is done.
+
+# log — kalmar-pretrain (proposal 29; executor)
+
+## 2026-10-19
+- 01:20 UTC  Run started. K12 copied from `best-state/data/kh/train_k12.jsonl` (md5 800b5486…, 155,000).
+- 01:25–01:40  Builder `kalmar/kalmar.py` (Kalmár's construction as an ND record; variants sl = shared lemma, pb =
+  the prover's per-branch layout; memo = cite a formula already in scope). `state_env.canonicalise` patched to read
+  texts whose first-appearance numbering passes n64 (`tests/test_state_env.py` all pass). First 2,000 K12 records:
+  sl 110 lines / 111 actions / 21.9 k pair tokens per proof, pb 154 / 155 / 29.3 k; 0 decompose failures; Lean 200 /
+  200 on the literal canonical text (`/tmp`, superseded by the full check). sl chosen as primary.
+- 01:44:06  Pre-registration `84ae22c` committed and pushed (before any pod).
+- 01:49  Full sl build (`artifacts/kalmar/build_sl.json`): 155,000 records, 0 failures, 1,000 s on 2 VPS cores.
+  16,876,247 pairs (108.9 per proof), 3,273,686,147 pair tokens, longest state 655 / action 219 tokens, largest
+  canonical name n31, term size mean 92.2. Uploaded `data/kalmar/train_kal_sl.jsonl.gz` (md5 of the jsonl 1e4cebf5…).
+- 01:50  Pod `kal-1`: community RTX 3090, $0.22/h, 128 nproc but a 17.85-CPU cgroup quota, **41 GB memory limit**
+  (`free` shows 251 GB), 20 GB disk. (Community RTX 4090 / A6000 with a public IP and CUDA 13: none available.)
+- 01:52  Loader equivalence (`kalmar/test_loader_equiv.py`): pooled decomposition + chunked device copy give
+  identical tensors on 3,000 Kalmár records (333,403 pairs) and on 2,000 K12-style records, CPU and GPU — ALL EQUAL.
+- 01:53  First KAL-C s0 launch OOM-killed (cgroup oom_kill 2): the parallel full Lean check was running 14 Lean
+  processes × 2.35 GB (400 long proofs per file). Relaunched the training alone at 01:54; the Lean check restarted at
+  02:00 with 8 workers × 50 proofs per file.
+- 01:56  KAL-C s0 training: data on the GPU in 66 s (T 733, 12.4 GB), ≈ 64 ms / step on the 3090 (with the Lean check
+  running beside it) → data-matched ≈ 654 k steps ≈ 11.6 h / seed, 3 seeds ≈ 35 pod-h ≈ $7.7: under the pilot rule's
+  40 pod-h, so KAL-D runs data-matched as pre-registered.
+- 02:00–02:15  `kal-2` / `kal-3` / `kal-4` (community 3090, $0.22/h): KAL-D s0 / s1 / s2 launched
+  (`pod/kal/train.sh D <s>`: `--best_epochs 3.675`, snapshots at 24,020 / 100 k / 200 k / 350 k / 500 k steps).
+- 02:05  Builder tests (`kalmar/test_kalmar.py`): Lean 60 / 60 (30 sl + 30 pb), negative controls 60 / 60 rejected,
+  3,000 K12 records with 8,503 repeated states and 0 state → action conflicts (and 0 / 3.37 M-state conflicts on every
+  5th record of the full set), 500 records replayed with a random name base: 0 mismatches. ALL PASS.
+- 02:28  **Full Lean check of K12-Kalmár sl** (`kalmar/lean_check_kal.py`, kal-1, 8 Lean workers × 50 texts per file):
+  155,000 / 155,000 literal canonical texts accepted, 0 structural failures (every text parses back to its record's
+  ND proof). Source `artifacts/kalmar/lean_check_train_sl.json`.
+- 02:22  KAL-C s0 done (24,020 steps, 0.13 epochs, 1,527 s on the 3090, final val 0.0182). First read-outs on kal-6:
+  TF agreement 93.8 % (leaf steps 62–92 %, excluded middle 99.8 %); greedy on tf1200 26.9 % valid, 10.2 % exact-follow.
+  Control s0 (kal-5): TF agreement 27.8 %, greedy 91.8 % (its own proofs). Reader: one per 3090 at batch 1,024
+  (13 GB); the env loop is CPU-bound (GPU ≈ 23 %): 1,200 greedy KAL-C attempts took 167 s.
+- 02:30  **Read plan changed (cost; recorded before any sampled read finished).** Profiling the environment sampler
+  (cProfile, kal-6) shows the decode loop is bound by kernel-launch overhead per token step, not by the environment
+  code, so throughput scales with batch. Batch 2,048 does not fit a 24 GB card beside long Kalmár states (13 GB at
+  1,024). Hence: **greedy / teacher-forced reads at batch 1,024 for every arm** (3090s), **sampled reads (T 0.8) at
+  batch 2,048 for every arm** (A40, 48 GB; the batch of the control's stored best-state reads). Within each read type
+  the batch is the same for all arms (`AGENT_POLICY.md`). Two sampled reads already started at batch 1,024 (control s0
+  plain k 32 on kal-5, KAL-C s0 plain k 32 on kal-6) were killed and are redone at 2,048 on `kal-7` (A40 secure,
+  $0.59/h; no community A6000 with a public IP was available).
+- 02:35  KAL-D pods queue their own post-training work (`pod/kal/post_D.sh`): greedy suite of the final model, then
+  teacher-forced agreement and greedy tf1200 for each snapshot (learning curve).

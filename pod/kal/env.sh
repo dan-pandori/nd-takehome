@@ -3,6 +3,7 @@ export PATH=$HOME/.elan/bin:$HOME/.local/bin:$PATH
 export OMP_NUM_THREADS=${OMP_NUM_THREADS:-8}
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 export ND_SAMPLE_PATH=fast
+export LEAN_GATE_CHUNK=${LEAN_GATE_CHUNK:-50}   # long Kalmár texts: 400 per file used 2.35 GB per Lean process
 export ND_RUN_ID=kalmar-pretrain
 [ -f pod/kal/GIT_SHA ] && export ND_GIT_SHA=$(cat pod/kal/GIT_SHA)
 cd /workspace/nd-takehome

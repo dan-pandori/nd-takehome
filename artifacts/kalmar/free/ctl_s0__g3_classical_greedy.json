@@ -1,0 +1,87 @@
+{
+ "ckpt": "ckpts/ctl/stage1_best12_s0_b1200.pt",
+ "in": "data/kalmar/g3_classical.jsonl",
+ "k": 1,
+ "temperature": 0.0,
+ "seed": 0,
+ "batch": 1024,
+ "max_action": 512,
+ "max_steps": 1024,
+ "supply_pr": false,
+ "n_theorems": 106,
+ "n_attempts": 106,
+ "gen_s": 4.0,
+ "lean_s": 0.2,
+ "solved_theorems": 4,
+ "by": {
+  "all": {
+   "n": 106,
+   "valid": 4,
+   "follow": 0,
+   "dev_valid": 4,
+   "dev_valid_shorter": 4,
+   "end=done": 59,
+   "end=syntax": 47
+  },
+  "atoms=1": {
+   "n": 3,
+   "valid": 0,
+   "follow": 0,
+   "dev_valid": 0,
+   "dev_valid_shorter": 0,
+   "end=done": 3
+  },
+  "atoms=2": {
+   "n": 28,
+   "valid": 1,
+   "follow": 0,
+   "dev_valid": 1,
+   "dev_valid_shorter": 1,
+   "end=done": 17,
+   "end=syntax": 11
+  },
+  "atoms=3": {
+   "n": 51,
+   "valid": 3,
+   "follow": 0,
+   "dev_valid": 3,
+   "dev_valid_shorter": 3,
+   "end=done": 28,
+   "end=syntax": 23
+  },
+  "atoms=4": {
+   "n": 24,
+   "valid": 0,
+   "follow": 0,
+   "dev_valid": 0,
+   "dev_valid_shorter": 0,
+   "end=done": 11,
+   "end=syntax": 13
+  }
+ },
+ "deviation": {
+  "tag": {
+   "lem": 106
+  },
+  "depth": {
+   "0": 106
+  },
+  "decile": {
+   "0": 106
+  }
+ },
+ "env": {
+  "steps": 1568,
+  "rows": 914,
+  "rowsteps": 24976,
+  "prompt_len_max": 312,
+  "chunks": 42,
+  "stop_eos": 914,
+  "stop_exact": 0,
+  "stop_goal": 0,
+  "syntax": 47,
+  "done": 59,
+  "waves": 42,
+  "peak_alloc_gb": 0.651728630065918
+ }
+}

@@ -279,3 +279,7 @@ Pods `kal-*` (`~/pods.log` is host-wide). Budget $50 / 90 pod-hours.
   measured on the VPS before any pod: shared-lemma variant (primary) 110 lines / 111 actions / 21.9 k training tokens
   per proof on average (K12: 7 lines, ≈ 0.7 k), 0 / 2,000 decompose failures, Lean 200 / 200. Pre-registration
   `preregistration/kalmar-pretrain.md` committed before the first pod.
+- 2026-10-19 02:25 UTC  Full K12-Kalmár built (155,000 records, 0 failures; 16.9 M (state, action) pairs, 108.9 actions per
+  proof). Six community RTX 3090 pods ($0.22/h each): `kal-1` KAL-C s0 → s1 → s2 + the full Lean check of the training
+  set; `kal-2/3/4` KAL-D s0/s1/s2 (656,285 steps = 3.675 epochs, ≈ 11.6 h each, ends ≈ 14:00 UTC); `kal-5` control
+  read-outs; `kal-6` KAL-C read-outs. KAL-C s0 done (0.13 epochs, val 0.018).
