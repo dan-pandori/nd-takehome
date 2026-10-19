@@ -1,0 +1,31 @@
+run                                        prereg lo prereg hi   best lo   best hi  tok-ratio(best)
+SimpleRL-Zoo Qwen2.5-7B                     1.96e-04  7.73e-04  5.46e-05  1.37e-04  2.7e-05-6.8e-05
+SimpleRL-Zoo Qwen2.5-14B                    1.96e-04  7.73e-04  5.46e-05  1.37e-04  2.7e-05-6.8e-05
+SimpleRL-Zoo Qwen2.5-32B                    1.96e-04  1.24e-03  5.46e-05  1.89e-04  2.7e-05-9.5e-05
+SimpleRL-Zoo Llama-3.1-8B                   1.88e-04  9.28e-04  5.24e-05  2.51e-04  2.6e-05-1.3e-04
+Oat-Zero-7B (steps assumed 200-500)         1.53e-05  1.48e-04  8.98e-06  5.84e-05  5.4e-06-3.5e-05
+DAPO-32B                                    1.24e-03  1.38e-02  3.80e-04  3.52e-03  2.3e-04-4.5e-03
+CodeR1-Zero-7B                              2.90e-05  1.45e-04  2.90e-05  1.45e-04  1.4e-05-7.3e-05
+DeepCoder-14B                               4.70e-04  2.34e-03  4.70e-04  2.34e-03  2.8e-04-1.4e-03
+EasyR1 Qwen2.5-VL-7B (Yue)                  1.13e-05  7.12e-05  1.13e-05  7.12e-05  5.6e-06-3.6e-05
+Qwen2.5-Math-7B-Instruct (1 epoch assumed)  2.50e-04  9.77e-04  2.50e-04  9.77e-04  1.2e-04-4.9e-04
+Yue GRPO step 150                           4.89e-05  2.42e-04  4.89e-05  2.42e-04  3.7e-05-1.4e-04
+Yue GRPO step 300                           9.78e-05  4.83e-04  9.78e-05  4.83e-04  7.3e-05-2.9e-04
+Yue GRPO step 450                           1.47e-04  7.25e-04  1.47e-04  7.25e-04  1.1e-04-4.3e-04
+Yue PPO step 150 (critic)                   9.78e-05  4.35e-04  9.78e-05  4.35e-04  3.7e-05-1.4e-04
+Yue RLOO step 150                           4.89e-05  2.42e-04  4.89e-05  2.42e-04  3.7e-05-1.4e-04
+Yue Reinforce++ step 150                    4.89e-05  2.42e-04  4.89e-05  2.42e-04  3.7e-05-1.4e-04
+Yue ReMax step 150 (+1 greedy rollout)      5.04e-05  2.48e-04  5.04e-05  2.48e-04  4.1e-05-1.6e-04
+Yue DAPO step 150 (3-6x sampling)           7.33e-05  4.83e-04  7.33e-05  4.83e-04  1.1e-04-8.7e-04
+Yue GRPO n=32, 220 steps                    2.87e-04  1.42e-03  2.87e-04  1.42e-03  2.2e-04-8.5e-04
+
+GPU-hour upper bounds (100 % of dense bf16 peak):
+  SimpleRL-Zoo Qwen2.5-7B            240 H100-h  ratio <= 1.0e-03
+  SimpleRL-Zoo Qwen2.5-14B           240 H100-h  ratio <= 5.4e-04
+  SimpleRL-Zoo Qwen2.5-32B          2304 H100-h  ratio <= 2.3e-03
+  Oat-Zero-7B                        216 A100-h  ratio <= 2.8e-04
+  DeepCoder-14B                    13440 H100-h  ratio <= 3.0e-02
+
+median prereg-high over 19 Yue checkpoints: 4.83e-04
+median best-high: 2.48e-04
+median prereg-low: 9.78e-05

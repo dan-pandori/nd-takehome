@@ -1,0 +1,33 @@
+DeepSeek-R1-Zero                               7.2e-03 – 2.9e-02  gpuh<= 1.1e-01  | n (framing only; pass@1, cons@16)
+DeepSeek-R1-Zero (mean length 5K-15K)          3.7e-03 – 1.1e-02  gpuh<=    n.c.   | n
+MiniMax-M1 (D=15.7T)                              n.c.  –    n.c.   gpuh<= 2.1e-01  | n
+MiniMax-M1 (D=18.9T)                              n.c.  –    n.c.   gpuh<= 1.8e-01  | n
+Qwen3-8B RL stage                                 n.c.  –    n.c.   gpuh<= 3.6e-02  | elicit (pass@64 unchanged)
+ScaleRL-8B (768 completions/step)              1.9e-03 – 1.0e-02  gpuh<= 1.2e+00  | n (asymptote = mean@16 pass rate)
+ScaleRL-8B (2,048 prompts x 16/step)           7.9e-02 – 4.4e-01  gpuh<= 1.2e+00  | n
+ScaleRL-Scout (17B active, 40T)                6.7e-04 – 3.7e-03  gpuh<= 1.1e-01  | n
+Olmo-3-7B RL-Zero                              4.7e-04 – 3.9e-03  gpuh<=    n.c.   | create (pass@32)
+Olmo-3 Think 32B RL (750 steps)                1.5e-03 – 7.8e-03  gpuh<= 8.8e-02  | n
+Olmo-3.1 Think 32B RL (2,300 steps)            4.6e-03 – 2.4e-02  gpuh<= 4.5e-01  | n
+MiMo-V2.6-Pro                                  3.6e-03 – 6.2e-03  gpuh<=    n.c.   | n
+ORZ-32B                                        3.1e-03 – 1.8e-02  gpuh<=    n.c.   | n
+Skywork-OR1-32B                                1.5e-03 – 1.0e-02  gpuh<=    n.c.   | n
+Polaris-4B                                     1.9e-04 – 2.5e-03  gpuh<= 3.2e-02  | n
+JustRL-DeepSeek-1.5B                           3.2e-03 – 5.1e-03  gpuh<= 6.4e-02  | n
+1-shot RLVR (Qwen2.5-Math-1.5B)                1.9e-04 – 8.8e-04  gpuh<=    n.c.   | elicit (k<=8)
+Spurious rewards (Qwen2.5-Math-7B)             2.3e-05 – 1.1e-04  gpuh<= 2.5e-04  | elicit (model-dependent; pass@1)
+INTELLECT-2 (QwQ-32B)                          3.3e-04 – 6.3e-03  gpuh<=    n.c.   | n
+Phi-4-reasoning-plus RL                        5.9e-05 – 2.9e-04  gpuh<=    n.c.   | n
+LN-Ultra reasoning RL                             n.c.  –    n.c.   gpuh<= 2.1e-02  | create (vs teacher, pass@1)
+AceReason-Nemotron-14B (indicative)            3.1e-04 – 6.0e-03  gpuh<=    n.c.   | both (pass@k to 64 / 1,024 LCB)
+ProRL-v1 (1.5B)                                2.7e-03 – 9.4e-03  gpuh<= 2.8e-01  | create (task-dependent; math diminishes)
+ProRL-v2 (cumulative 3,000 steps)              4.5e-03 – 1.8e-02  gpuh<=    n.c.   | create (Invisible Leash: net shrinkage 4
+BroRL (ProRLv2 + 191-419 steps x 128 x 512)    1.1e-02 – 7.9e-02  gpuh<=    n.c.   | n (pass@1 only)
+Negative-sample RL (Qwen2.5-Math-7B)           1.2e-04 – 4.8e-04  gpuh<=    n.c.   | n (refines prior; k<=256)
+f(g(x)) composition (Llama-3.1-8B-Instruct)    2.9e-05 – 1.5e-04  gpuh<=    n.c.   | create (k~1,024 vs RFT base)
+Interplay (100M from scratch, 10B tokens)      1.3e-02 – 1.2e+00  gpuh<=    n.c.   | both (create at edge of competence)
+Two-stage debate (Qwen2.5-Math-7B)             2.7e-05 – 1.4e-04  gpuh<=    n.c.   | both
+Diversity collapse (Qwen2.5-Math-7B)           7.0e-05 – 3.6e-04  gpuh<=    n.c.   | both
+
+rows with a config ratio: 45  min lo 1.1e-05  max hi 1.2e+00
+max low bound among non-Interplay open runs: (0.07940516522666667, 'ScaleRL-8B (2,048 prompts x 16/step)')
