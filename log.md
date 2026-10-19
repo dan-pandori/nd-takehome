@@ -1099,3 +1099,8 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   22.0; hand_proved_14 0 vs 0; textbook72 19.7 vs 23.7; G1 (as is) 22.3 vs 12.3; G3 classical 18.0 vs 13.3.
   Greedy (3 seeds): holdout250 7.3 vs 38.1 %; G1-supplied 17 vs 125 of 200; G2 0 vs ≈ 0.3 %; G3 10.1 vs 7.2 %.
   Ladder round 1 (both arms, same seed): 135 / 1,000 targets at k 16, 2,222 s.
+- 14:30  **Ladder cut to 4 rounds (pre-registered Addendum 1 stop rule).** Round 1 of the EI arm: sampling 2,222 s
+  (135 / 1,000 targets at k 16), then the fine-tune (ladder default: 600 steps × 128 proofs) runs at ≈ 11 s / step —
+  128 Kalmár proofs are ≈ 13,800 (state, action) pairs per step, ≈ 14× a K12 step — ≈ 1.8 h per round. 8 rounds project
+  to ≈ 19 A40-hours ≈ $11 > the rule's $10, so the EI arm stops after round 4; the frozen arm stops after round 4 too
+  (equal attempts). Frozen arm after 2 rounds: cumulative 164 / 1,000 (round 2: 2,405 s).
