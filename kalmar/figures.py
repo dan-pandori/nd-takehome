@@ -90,6 +90,7 @@ def main():
     # (c) plain pass@32 by algorithm proof length
     ax = axs[1][0]
     bins = ['0-99', '100-149', '150-199', '200-299', '300-1024']
+    ends = []
     for arm in arms:
         bd = S.get('breakdown', {}).get(arm, {}).get('algo_len')
         if not bd:
@@ -97,7 +98,12 @@ def main():
         xs = [i for i, b in enumerate(bins) if b in bd]
         ys = [100 * mean(bd[bins[i]]) for i in xs]
         ax.plot(xs, ys, '-o', color=COL[arm], linewidth=2, markersize=8, markeredgecolor='white')
-        ax.annotate(arm, (xs[-1], ys[-1]), xytext=(6, 0), textcoords='offset points', color=INK, fontsize=8, va='center')
+        ends.append([ys[-1], xs[-1], arm])
+    ends.sort()
+    for i in range(1, len(ends)):            # dodge end labels that would overlap (>= 5 points apart)
+        ends[i][0] = max(ends[i][0], ends[i - 1][0] + 5)
+    for y, x, arm in ends:
+        ax.annotate(arm, (x, y), xytext=(8, 0), textcoords='offset points', color=INK, fontsize=8, va='center')
     ax.set_xticks(range(len(bins)))
     ax.set_xticklabels(bins)
     ax.set_xlim(-0.3, len(bins) - 0.3)
