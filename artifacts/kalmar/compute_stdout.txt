@@ -1,0 +1,44 @@
+| arm | seed | phase | GPU-s | gen tokens | attempts | actions | train steps | train tokens | Lean checks |
+|---|---|---|---|---|---|---|---|---|---|
+| KAL-C | 0 | read | 12,360 | 173,754,484 | 186,690 | 9,539,050 | 0 | 0 | 3,309 |
+| KAL-C | 0 | train | 1,665 | 0 | 0 | 0 | 24,020 | 440,348,322 | 0 |
+| KAL-C | 1 | read | 7,252 | 102,068,350 | 130,818 | 5,473,124 | 0 | 0 | 2,416 |
+| KAL-C | 1 | train | 1,600 | 0 | 0 | 0 | 24,020 | 440,330,186 | 0 |
+| KAL-C | 2 | read | 11,534 | 138,543,938 | 130,818 | 7,154,067 | 0 | 0 | 2,039 |
+| KAL-C | 2 | train | 1,595 | 0 | 0 | 0 | 24,020 | 440,337,813 | 0 |
+| KAL-D | 0 | read | 11,837 | 131,661,255 | 130,818 | 7,509,512 | 0 | 0 | 5,715 |
+| KAL-D | 0 | train | 37,038 | 0 | 0 | 0 | 656,285 | 12,030,806,416 | 0 |
+| KAL-D | 1 | read | 12,656 | 129,055,004 | 186,690 | 6,658,441 | 0 | 0 | 4,190 |
+| KAL-D | 1 | train | 37,197 | 0 | 0 | 0 | 656,285 | 12,030,792,643 | 0 |
+| KAL-D | 2 | read | 13,471 | 151,532,907 | 130,818 | 7,983,071 | 0 | 0 | 5,578 |
+| KAL-D | 2 | train | 35,071 | 0 | 0 | 0 | 656,285 | 12,030,783,402 | 0 |
+| KAL-D snapshot 100000 | 0 | read | 600 | 13,135,292 | 2,400 | 410,655 | 0 | 0 | 346 |
+| KAL-D snapshot 100000 | 1 | read | 747 | 12,724,962 | 2,400 | 416,522 | 0 | 0 | 160 |
+| KAL-D snapshot 100000 | 2 | read | 526 | 12,213,843 | 2,400 | 466,315 | 0 | 0 | 227 |
+| KAL-D snapshot 200000 | 0 | read | 324 | 6,242,874 | 1,200 | 220,594 | 0 | 0 | 132 |
+| KAL-D snapshot 200000 | 1 | read | 381 | 6,422,173 | 1,200 | 205,653 | 0 | 0 | 152 |
+| KAL-D snapshot 200000 | 2 | read | 227 | 5,407,014 | 1,200 | 177,876 | 0 | 0 | 71 |
+| KAL-D snapshot 24020 | 0 | read | 613 | 11,942,822 | 2,400 | 392,987 | 0 | 0 | 155 |
+| KAL-D snapshot 24020 | 1 | read | 720 | 11,507,611 | 2,400 | 396,303 | 0 | 0 | 148 |
+| KAL-D snapshot 24020 | 2 | read | 616 | 12,741,407 | 2,400 | 408,537 | 0 | 0 | 168 |
+| KAL-D snapshot 350000 | 0 | read | 291 | 6,121,133 | 1,200 | 231,147 | 0 | 0 | 169 |
+| KAL-D snapshot 350000 | 1 | read | 397 | 6,550,650 | 1,200 | 244,021 | 0 | 0 | 234 |
+| KAL-D snapshot 350000 | 2 | read | 239 | 6,266,639 | 1,200 | 242,762 | 0 | 0 | 220 |
+| KAL-D snapshot 500000 | 0 | read | 350 | 6,611,529 | 1,200 | 241,879 | 0 | 0 | 276 |
+| KAL-D snapshot 500000 | 1 | read | 411 | 6,475,715 | 1,200 | 231,701 | 0 | 0 | 304 |
+| KAL-D snapshot 500000 | 2 | read | 265 | 6,190,538 | 1,200 | 237,896 | 0 | 0 | 249 |
+| control | 0 | read | 4,398 | 84,174,865 | 448,130 | 4,076,151 | 0 | 0 | 39,146 |
+| control | 1 | read | 4,376 | 73,470,502 | 336,386 | 2,905,606 | 0 | 0 | 30,263 |
+| control | 2 | read | 2,937 | 61,607,681 | 336,386 | 2,921,161 | 0 | 0 | 32,021 |
+| ladder ei | 0 | ladder | 11,069 | 3,867,341 | 16,000 | 227,328 | 600 | 1,600,243,555 | 0 |
+| ladder frozen | 0 | ladder | 7,257 | 68,951,655 | 75,100 | 4,091,326 | 0 | 0 | 2,151 |
+
+per arm (seeds summed):
+  KAL-C          read   GPU-s       31,147  gen tokens      414,366,772  train tokens                0  Lean checks      7,764
+  KAL-C          train  GPU-s        4,860  gen tokens                0  train tokens    1,321,016,321  Lean checks          0
+  KAL-D          read   GPU-s       44,669  gen tokens      542,803,368  train tokens                0  Lean checks     18,494
+  KAL-D          train  GPU-s      109,305  gen tokens                0  train tokens   36,092,382,461  Lean checks          0
+  control        read   GPU-s       11,710  gen tokens      219,253,048  train tokens                0  Lean checks    101,430
+  ladder ei      ladder GPU-s       11,069  gen tokens        3,867,341  train tokens    1,600,243,555  Lean checks          0
+  ladder frozen  ladder GPU-s        7,257  gen tokens       68,951,655  train tokens                0  Lean checks      2,151
+skipped {}

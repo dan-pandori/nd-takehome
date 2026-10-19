@@ -1,3 +1,58 @@
+# next_steps — kalmar-pretrain (2026-10-19; UNREVIEWED)
+
+What this run leaves open (`numbers.md` § kalmar-pretrain):
+- Pretraining a 9.56 M proof-state model on Kalmár proofs of K12's theorems (3.68 epochs) gives 94.5 % per-state
+  agreement with the algorithm and 32.6 % greedy Lean-valid proofs on held-out theorems. The control, trained on K12's
+  own short proofs, reaches 92 %.
+- Agreement was still rising when training stopped.
+- The errors are bookkeeping, not truth values: the next subformula, or a copying slip in a long formula.
+
+Costs below use this run's prices (community RTX 3090 $0.22/h for training, A40 $0.59/h for sampled reads).
+
+## 1. Train longer, or larger — ≈ $5–15 per arm
+- **Question:** is "not learned" a data-scale or capacity limit? The learning curve (86.6 → 94.5 % agreement, greedy
+  6.6 → 32.6 %) has not flattened.
+- **Arms:**
+  - KAL-D at 2× the steps (≈ 20 h per seed on a 3090, ≈ $4.5 per seed);
+  - a ≈ 25 M model at 1× (≈ 2.5× the per-step time).
+- **Read-out:** teacher-forced agreement and greedy exact-follow on `tf1200`. These are cheap: greedy reads only, 15
+  min per model.
+- **Decision value:** if agreement passes ≈ 99 % with 2× data, the construction is learnable at this scale and the
+  bottleneck was compute. If it saturates near 95 %, the format or the model is the limit.
+
+## 2. Let the environment restate premises — ≈ $1 (re-reads only)
+- **Finding here:** the K12 control solves 177–191 of 200 four- and five-premise problems at k 32 once the environment
+  writes the premise lines. Without that help it solves 0–26. The "premise-count wall" (peer-rl-review) is the untrained
+  `h4` / `h5` token, not reasoning.
+- **Proposal:** the environment applies premise lines itself, for every model. Premise lines carry no choice.
+- **Cost and value:** a code change plus a re-read of the standard sets. It removes a wall for every existing
+  checkpoint without retraining.
+
+## 3. A shorter, state-friendlier construction — ≈ $10 per arm
+- **The two error classes point at two fixes:**
+  - "wrong next subformula" (45 %): show the pending sub-goal in the state, so the recursion's place is visible;
+  - "corrupted formula" (31 %): cut copying, e.g. cite subformula lines instead of restating whole formulas.
+- **A shorter proof:**
+  - close a branch as soon as a premise is false under the partial valuation (early ex falso);
+  - split only the atoms the remaining formulas need.
+  - The builder (`kalmar/kalmar.py`) makes these one-line changes. Measure the length first; the dataset rebuilds in
+    17 min on the VPS.
+- **Decision value:** separates "Kalmár is too long for this model" from "the format hides the recursion's state".
+
+## 4. Hybrid pretraining (K12 + K12-Kalmár) — ≈ $10
+- **Question:** does a model keep K12's short proofs and gain the uniform fallback? Here KAL-D is ahead of the control
+  only on the classical families (guided pass@32 30 vs 16 of 106).
+- **Arm:** a mix (e.g. 90 % K12, 10 % K12-Kalmár by tokens) at the control's step count.
+- **Read-outs:** the control's sets plus G3.
+
+## 5. EI ladder from a Kalmár base, done properly — ≈ $15 per seed
+- **Issue here:** the ladder's fine-tune (600 steps × 128 proofs) costs 14× more per step on Kalmár proofs than on
+  K12's, which forced the cut to 4 rounds.
+- **Proposal:** a token-budgeted fine-tune (the best recipe's 18,432 tokens per step), 8 rounds, 2 seeds, EI against
+  frozen. It answers the brief's item 7 at full length.
+
+---
+
 # next_steps — create-or-elicit (final, 2026-10-13; UNREVIEWED)
 
 Costed proposals beyond this run's $190, ranked by what they would teach us. Costs at this run's A40 price ($0.59 / h)

@@ -154,3 +154,32 @@ G2 by size bin (greedy % valid | plain pass@32 %): KAL-D 40-49: 0.0 / 0.0 / 0.0 
 - KAL-C logical: 167,616 attempts; step cap 0.0000%; ended by a truncated action 0.0000%; truncation events (guided redraws) 29,872
 - control plain: 167,616 attempts; step cap 0.0000%; ended by a truncated action 0.8651%; truncation events (guided redraws) 1,450
 - control logical: 167,616 attempts; step cap 0.0000%; ended by a truncated action 0.0000%; truncation events (guided redraws) 14,747
+
+#### Batch-effect check (Addendum 2): plain k 32, batch 2,048 vs 1,024, same checkpoint
+
+| model | set | pass@1 b2048 | pass@1 b1024 | pass@32 b2048 | pass@32 b1024 |
+|---|---|---|---|---|---|
+| kalC_s0 | holdout250 | 1.9 | 1.6 | 24 | 18 |
+| kalC_s0 | rr600 | 0.4 | 0.4 | 6 | 7 |
+| kalC_s0 | ge17 | 0.0 | 0.0 | 0 | 1 |
+| kalC_s0 | long2 | 0.2 | 0.2 | 1 | 1 |
+| kalC_s0 | candidate_v0 | 1.6 | 2.7 | 11 | 17 |
+| kalC_s0 | candidate_v1 | 0.7 | 0.5 | 4 | 2 |
+| kalC_s0 | batch3 | 0.2 | 0.2 | 2 | 2 |
+| kalC_s0 | hand_proved_14 | 0.0 | 0.0 | 0 | 0 |
+| kalC_s0 | textbook72 | 2.3 | 2.5 | 14 | 13 |
+| kalC_s0 | g1_premises | 0.9 | 0.8 | 7 | 6 |
+| kalC_s0 | g2_large | 0.0 | 0.0 | 0 | 0 |
+| kalC_s0 | g3_classical | 1.4 | 0.8 | 14 | 14 |
+| ctl_s0 | holdout250 | 65.8 | 66.9 | 165 | 166 |
+| ctl_s0 | rr600 | 57.2 | 56.4 | 298 | 295 |
+| ctl_s0 | ge17 | 1.1 | 1.5 | 13 | 15 |
+| ctl_s0 | long2 | 0.1 | 0.1 | 4 | 2 |
+| ctl_s0 | candidate_v0 | 10.5 | 9.7 | 33 | 30 |
+| ctl_s0 | candidate_v1 | 6.9 | 7.3 | 23 | 23 |
+| ctl_s0 | batch3 | 1.1 | 1.2 | 4 | 5 |
+| ctl_s0 | hand_proved_14 | 0.0 | 0.0 | 0 | 0 |
+| ctl_s0 | textbook72 | 10.5 | 10.6 | 25 | 28 |
+| ctl_s0 | g1_premises | 0.0 | 0.0 | 0 | 1 |
+| ctl_s0 | g2_large | 0.0 | 0.0 | 0 | 1 |
+| ctl_s0 | g3_classical | 3.8 | 3.7 | 12 | 13 |

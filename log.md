@@ -1110,3 +1110,11 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   on 2026-10-20, ≈ $8.6 for the arm, inside the $10 rule, so it keeps its 4 rounds.
 - 16:20  KAL-D s0 and s1 sampled reads complete (plain / guided k 32, T 0.8 k 8, G1-supplied k 32; batch 1,024); kal-10
   (4.47 h, $2.64) and kal-11 deleted after the pull. kal-9 (s2, then the batch-effect check) and kal-12 (EI) remain.
+- 17:45  Batch-effect check (kal-9; plain k 32 at batch 1,024 vs the batch-2,048 reads of the same checkpoints): KAL-C
+  s0 holdout250 pass@32 24 vs 18, candidate_v0 11 vs 17, rr600 6 vs 7, G3 14 vs 14; control s0 holdout250 165 vs 166,
+  rr600 298 vs 295, textbook72 25 vs 28, G3 12 vs 13 — re-draw differences of ≤ ≈ 6 theorems, far below the arm
+  differences reported (e.g. holdout250 KAL-D 33 vs control 165). kal-9 deleted (5.98 h, $3.53). Only kal-12 (EI ladder,
+  round 2) runs now.
+- 17:50  Disk 84 % → 81 % (removed the pb build in /tmp and the uncompressed training set; its gzip's content md5
+  1e4cebf5… checked first). Secret scan of everything under `artifacts/kalmar`, `data/kalmar`: 1,128 files, 0 hits;
+  upload to `hf://buckets/dan-pandori/nd-rl/kalmar-pretrain/{artifacts,data}/kalmar` started.
