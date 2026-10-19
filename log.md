@@ -1056,3 +1056,6 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 07:20  Registry rows written by the smoke tests (9 files: `/tmp` outputs of the script smoke tests, the cProfile run,
   the ladder smoke test) removed from `hf://…/registry/kalmar-pretrain/` and locally (`hf buckets rm -y`);
   `kalmar/compute.py` also drops any row whose config points at `/tmp` or a smoke name.
+- 08:16  Control sampled reads complete (kal-8, A40, batch 2,048): plain k 32, guided k 32, plain k 256 on the sets
+  without a stored read (ge17, release, G1–G3), T 0.8 k 8 on tf1200, G1-supplied k 32 — all three seeds. kal-8 deleted
+  after the pull. KAL-D snapshot reads (24,020 and 100,000 steps, all seeds) also pulled from kal-8 (A40 copies).
