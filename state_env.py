@@ -43,8 +43,14 @@ NDMAP = {'(': '(', ')': ')', '¬': '~', '∧': '&', '∨': 'v', '→': '>', 'P':
 BOT = ('bot',)
 
 
-def is_name(t):
-    return bool(t) and t[0] == 'n' and t[1:].isdigit() and 1 <= int(t[1:]) <= MAXN
+def is_name(t, maxn=MAXN):
+    return bool(t) and t[0] == 'n' and t[1:].isdigit() and 1 <= int(t[1:]) <= maxn
+
+
+# run kalmar-pretrain: a long proof's first-appearance numbering can pass n64 while its canonical names (`max index in
+# scope + 1`) stay inside the vocabulary.  `canonicalise` reads such a text with this bound; the canonical names it
+# writes are still checked against MAXN by the environment.
+BIGN = 1 << 20
 
 
 def parse_ftoks(toks, i):
@@ -62,14 +68,14 @@ def parse_ftoks(toks, i):
     return f, used
 
 
-def seq_tokens(nd_body):
+def seq_tokens(nd_body, maxn=MAXN):
     """ND proof body -> the `lean_seq` token strings (names n1.. in order of first appearance), as encode_proof does."""
     order = {}
     out = []
     for t in proof_tokens(nd_body):
         if isinstance(t, tuple):
             k = order.setdefault(t[1], len(order) + 1)
-            if k > MAXN:
+            if k > maxn:
                 raise ValueError('too many names')
             out.append(f'n{k}')
         else:
@@ -78,7 +84,7 @@ def seq_tokens(nd_body):
 
 
 # --------------------------------------------------------------------------- decomposition
-def split_actions(toks, sink=None):
+def split_actions(toks, sink=None, maxn=MAXN):
     """`lean_seq` token list -> the list of model-visible actions (see the module docstring).  Raises ParseFail
     outside the strict grammar.  The Or.elim second-branch opener is NOT an action: the environment supplies it;
     `sink`, if given, collects its binder name, in the order the branch-1 `exact` actions occur."""
@@ -97,7 +103,7 @@ def split_actions(toks, sink=None):
 
     def name():
         t = eat()
-        if not is_name(t):
+        if not is_name(t, maxn):
             raise ParseFail('name')
         return t
 
@@ -463,9 +469,9 @@ def canonicalise(prompt, nd_body):
     the state, unlike the global first-appearance index, which the state stops determining once a box has closed and
     taken its names out of scope (3.00 % of the control set's `have` actions).  The result is an alpha-variant: the ND
     proof `lean_tok.inverse` returns is unchanged, and Lean's verdict is invariant to hypothesis renaming."""
-    toks = seq_tokens(nd_body)
+    toks = seq_tokens(nd_body, maxn=BIGN)
     sink = []
-    acts = split_actions(toks, sink)
+    acts = split_actions(toks, sink, maxn=BIGN)
     env = Env(prompt, canon=True)
     m = {}
     si = 0
@@ -497,7 +503,7 @@ def canonicalise(prompt, nd_body):
                 m[a[j + 6]] = nb
             else:
                 for i in range(j + 1, len(a)):
-                    if is_name(a[i]):
+                    if is_name(a[i], BIGN):
                         na[i] = m[a[i]]
             m[a[1]] = nh
             ok, why = env.apply(na)
