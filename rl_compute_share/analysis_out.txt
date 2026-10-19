@@ -1,0 +1,72 @@
+== Q1 Yue et al. models (FLOP ratio)
+all, high bound: n 15  median 0.0002  min 2.85e-05  max 0.0303
+all, low bound: n 15  median 4.55e-05  min 7.12e-06  max 0.000357
+all, mid: n 15  median 0.000115  min 1.42e-05  max 0.00268
+third-party checkpoints, high: n 9  median 0.00112  min 8.38e-05  max 0.0303
+own runs (VeRL + EasyR1), high: n 6  median 6.49e-05  min 2.85e-05  max 0.0002
+SimpleRL-Zoo, low: n 4  median 5.92e-05  min 4.55e-05  max 0.000186
+SimpleRL-Zoo, high: n 4  median 0.00101  min 0.000746  max 0.00112
+== Q2 literature on pretrained LLMs (Yue + other papers, own RL runs; FLOPs, computed or hw-based)
+span: min low 7.12e-06  max high 0.052  max low 0.0103 (ProRL v2 (3,000 steps) + BroRL (+191 steps, 512 rollouts per prompt), cumulative)
+verdict elicit, mid: n 17  median 0.000115  min 1.42e-05  max 0.00268
+verdict create, mid: n 3  median 0.00103  min 4.43e-05  max 0.00381
+verdict mixed, mid: n 4  median 0.00289  min 6.76e-05  max 0.021
+verdict none, mid: n 10  median 0.00423  min 0.000147  max 0.0164
+create / elicit median ratio: 8.91x
+largest by mid: ProRL v2 (3,000 steps) + BroRL (+191 ste 0.01-0.043; MiniMax-M1 (full RL) 0.0052-0.052; JustRL-DeepSeek-1.5B (4,380 steps) 0.0098-0.012; Open-Reasoner-Zero-32B 0.0029-0.016; DeepSeek-R1-Zero 0.003-0.015; Nemotron-Research-Reasoning-Qwen-1.5B v1 0.0026-0.012
+== FLOP ratio vs GPU-hour ratio where both exist
+DeepSeek-R1-Zero                              FLOP 0.00301-0.0146  GPU-h 0.0363  GPU-h / FLOP-mid 5.48x
+Olmo 3 Think 32B (final RL)                   FLOP 0.0018-0.00736  GPU-h 0.0275  GPU-h / FLOP-mid 7.56x
+trajectory: 3 seed(s), 8-8 EI rounds          FLOP 1.49-2.89  GPU-h 11.9  GPU-h / FLOP-mid 5.73x
+trajectory-cap6: 3 seed(s), 8-8 EI rounds     FLOP 0.895-2  GPU-h 8.93  GPU-h / FLOP-mid 6.67x
+rl-continue: 3 seed(s), 16-16 EI rounds       FLOP 3.26-6.32  GPU-h 29.3  GPU-h / FLOP-mid 6.46x
+rl-continue-cap6: 3 seed(s), 16-16 EI rounds  FLOP 2.25-4.75  GPU-h 22.2  GPU-h / FLOP-mid 6.79x
+rl-from-ckpt start p12000: 3 seed(s), 8-8 EI  FLOP 2.82-6.09  GPU-h 23.7  GPU-h / FLOP-mid 5.72x
+rl-from-ckpt start p1600: 3 seed(s), 8-8 EI r FLOP 17.8-38.6  GPU-h 152  GPU-h / FLOP-mid 5.8x
+rl-from-ckpt start p16000: 3 seed(s), 8-8 EI  FLOP 2.17-4.29  GPU-h 19.8  GPU-h / FLOP-mid 6.49x
+rl-from-ckpt start p5000: 3 seed(s), 8-8 EI r FLOP 6.42-13.4  GPU-h 52.1  GPU-h / FLOP-mid 5.62x
+create-or-elicit dose1: 3 seed(s), 16-16 EI r FLOP 3.13-6.18  GPU-h 36.1  GPU-h / FLOP-mid 8.21x
+create-or-elicit full: 3 seed(s), 16-16 EI ro FLOP 3.17-6.44  GPU-h 36.9  GPU-h / FLOP-mid 8.17x
+create-or-elicit ko: 6 seed(s), 16-24 EI roun FLOP 3.07-9.74  GPU-h 32.5  GPU-h / FLOP-mid 5.94x
+== Gaps to the frontier band (H2 2025-2026 central 0.3-2, range 0.1-5)
+Yue median mid 0.000115: 3.41-4.24 orders below the central band
+largest pretrained-LLM paper mid 0.021: 1.15 orders below 0.3
+Yue median mid vs 2024 central (0.01-0.1): 1.94-2.94 orders below
+== Samples per training prompt (computed rows)
+  Qwen-2.5-7B-SimpleRL-Zoo                           102-102
+  Qwen-2.5-14B-SimpleRL-Zoo                          102-154
+  Qwen-2.5-32B-SimpleRL-Zoo                          102-154
+  Llama-3.1-8B-SimpleRL-Zoo                          102-102
+  DAPO-Qwen-32B                                      150-2.41e+03
+  CodeR1-Zero-Qwen2.5-7B-12k-832                     17.7-17.7
+  DeepCoder-14B-Preview                              20.1-48
+  Qwen2.5-VL-7B-Instruct + EasyR1 GRPO, Geometry3K   73.1-73.1
+  Qwen2.5-7B + GRPO, 150 steps (algorithm comparison 154-154
+  Qwen2.5-7B + GRPO, 450 steps (longest run)         461-461
+  Qwen2.5-7B + PPO, 150 steps (critic)               154-154
+  Qwen2.5-7B + DAPO, 150 steps (3-6x over-generation 154-154
+  Qwen2.5-7B + GRPO n = 32, 220 steps                901-901
+  Qwen2.5-Math-7B-Instruct (SFT + GRPO with RM)      32-96.1
+  Nemotron-Research-Reasoning-Qwen-1.5B v1 (ProRL, 2 60.2-120
+  Open-Reasoner-Zero-32B                             172-172
+  Skywork-OR1-32B (released at step 1,000)           36.6-42.2
+  Polaris-4B-Preview                                 23.9-27.3
+  Olmo 3 Think 32B (final RL)                        7.32-7.32
+  Olmo 3 7B RL-Zero (math)                           38.5-38.5
+  Phi-4-reasoning-plus (RL stage, 90 steps)          7.68-7.68
+  Qwen2.5-Math-7B + NSR / PSR / GRPO (MATH)          109-131
+  Llama-3.1-8B-Instruct + RFT + DAPO on compositions 1.54-3.07
+  Qwen2.5-Math-7B + GRPO-N (~42 steps)               45.9-45.9
+  Qwen2.5-Math-1.5B + GRPO on one example            1.58e+06-2.05e+06
+== Our runs
+  trajectory: 3 seed(s), 8-8 EI rounds               FLOP 1.49-2.89  GPU-s 11.9-14
+  trajectory-cap6: 3 seed(s), 8-8 EI rounds          FLOP 0.895-2  GPU-s 8.93-9.36
+  rl-continue: 3 seed(s), 16-16 EI rounds            FLOP 3.26-6.32  GPU-s 29.3-29.9
+  rl-continue-cap6: 3 seed(s), 16-16 EI rounds       FLOP 2.25-4.75  GPU-s 22.2-26.4
+  rl-from-ckpt start p12000: 3 seed(s), 8-8 EI round FLOP 2.82-6.09  GPU-s 23.7-28.3
+  rl-from-ckpt start p1600: 3 seed(s), 8-8 EI rounds FLOP 17.8-38.6  GPU-s 152-182
+  rl-from-ckpt start p16000: 3 seed(s), 8-8 EI round FLOP 2.17-4.29  GPU-s 19.8-21.1
+  rl-from-ckpt start p5000: 3 seed(s), 8-8 EI rounds FLOP 6.42-13.4  GPU-s 52.1-62.7
+  create-or-elicit dose1: 3 seed(s), 16-16 EI rounds FLOP 3.13-6.18  GPU-s 36.1-39.4
+  create-or-elicit full: 3 seed(s), 16-16 EI rounds  FLOP 3.17-6.44  GPU-s 36.9-37.7
+  create-or-elicit ko: 6 seed(s), 16-24 EI rounds    FLOP 3.07-9.74  GPU-s 32.5-53.9
