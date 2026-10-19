@@ -1089,3 +1089,13 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   and the KV cache is sized by the longest state + 512. 13:08–13:10 all KAL-D sampled reads and both ladders killed and
   relaunched at **batch 1,024** (`pod/kal/queue_D.sh`, `LB` in `ladder.sh`); kal-9 then re-reads KAL-C s0 and control
   s0 (plain k 32) at 1,024 as a batch-effect check. Pre-registration Addendum 2.
+- 13:25  **k extension dropped for KAL-D** (pre-registered stop rule 2, the $35 gate, applied early by projection):
+  spend $18.93 at 13:24 with five A40s running ($2.95/h); KAL-D sampled reads at batch 1,024 + both ladder arms +
+  the batch-effect check project to ≈ $40, and the 224-attempt extension on KAL-D's unsolved theorems (≈ half of
+  1,746 at k 32 if its sampled rate is like its greedy rate) would add ≈ $7. KAL-D therefore gets pass@1 / 8 / 32 like
+  KAL-C; pass@256 is reported for the control only. Done by pre-creating the extension's done-markers on kal-9/10/11.
+- 14:25  KAL-D plain k 32 reads done (batch 1,024; ≈ 50–70 min each). Plain pass@32, KAL-D vs control (IQM of 3):
+  holdout250 33.3 vs 165.0; rr600 17.0 vs 245.7; ≥ 17 (ge17) 0.7 vs 13.3; candidate_v0 21.3 vs 29.7; candidate_v1 7.7 vs
+  22.0; hand_proved_14 0 vs 0; textbook72 19.7 vs 23.7; G1 (as is) 22.3 vs 12.3; G3 classical 18.0 vs 13.3.
+  Greedy (3 seeds): holdout250 7.3 vs 38.1 %; G1-supplied 17 vs 125 of 200; G2 0 vs ≈ 0.3 %; G3 10.1 vs 7.2 %.
+  Ladder round 1 (both arms, same seed): 135 / 1,000 targets at k 16, 2,222 s.

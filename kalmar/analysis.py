@@ -285,7 +285,7 @@ def main():
                 if cnt:
                     for k_, v in cnt.items():
                         p256.setdefault(k_[0], {})[k_] = v
-            elif arm == 'KAL-D':
+            elif arm == 'KAL-D' and os.path.exists(f'{A}/eval/{t}_plain_ext224.rows.jsonl.gz'):   # dropped (Addendum 2 / log 13:25)
                 c32 = read_counts(f'{A}/eval/{t}_plain_k32.rows.jsonl.gz')
                 ext = read_counts(f'{A}/eval/{t}_plain_ext224.rows.jsonl.gz') or {}
                 if c32:
@@ -312,6 +312,20 @@ def main():
                     if k in d and any(v is not None for v in d[k]):
                         parts.append(f'{k} {fmt([v for v in d[k] if v is not None], 1)}')
                 P(f"  {arm:8s} {'guided' if read == 'logical' else 'plain':6s} (n {d.get('n', '?')}): " + ' | '.join(parts))
+
+    # batch-effect check (Addendum 2): the same model, plain k 32, read at batch 2,048 and at batch 1,024
+    P('\n## Batch-effect check (Addendum 2): plain k 32 of the same checkpoint at batch 2,048 vs 1,024 (pass@1 / pass@32)')
+    S['batch_check'] = {}
+    for t in ('kalC_s0', 'ctl_s0'):
+        c2 = read_counts(f'{A}/eval/{t}_plain_k32.rows.jsonl.gz'); c1 = read_counts(f'{A}/eval/{t}_plain_k32_b1024.rows.jsonl.gz')
+        if not (c1 and c2):
+            continue
+        S['batch_check'][t] = {}
+        for lab, fl in SETS:
+            ks = [k for k in c2 if k[0] == fl and k in c1]
+            v = {f'{b}_pass@{k}': sum(passk(*cc[x], k) for x in ks) for b, cc in (('b2048', c2), ('b1024', c1)) for k in (1, 32)}
+            S['batch_check'][t][lab] = v
+            P(f"  {t:8s} {lab:15s} pass@1 {v['b2048_pass@1']:6.1f} vs {v['b1024_pass@1']:6.1f} | pass@32 {v['b2048_pass@32']:5.0f} vs {v['b1024_pass@32']:5.0f}")
 
     # breakdown by atoms and by algorithm proof length (plain pass@32, standard sets pooled)
     P('\n## Plain pass@32 by atom count and by the algorithm\'s proof length (holdout250 + rr600 + ge17 + long2 + release, pooled)')
