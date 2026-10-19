@@ -283,3 +283,8 @@ Pods `kal-*` (`~/pods.log` is host-wide). Budget $50 / 90 pod-hours.
   proof). Six community RTX 3090 pods ($0.22/h each): `kal-1` KAL-C s0 → s1 → s2 + the full Lean check of the training
   set; `kal-2/3/4` KAL-D s0/s1/s2 (656,285 steps = 3.675 epochs, ≈ 11.6 h each, ends ≈ 14:00 UTC); `kal-5` control
   read-outs; `kal-6` KAL-C read-outs. KAL-C s0 done (0.13 epochs, val 0.018).
+- 2026-10-19 12:30 UTC  Full K12-Kalmár Lean check 155,000 / 155,000. Control and KAL-C read-outs complete (3 seeds each).
+  KAL-D s0 / s2 trained (3.68 epochs, ≈ 10 h on a 3090 each); s1 finishing. First KAL-D numbers (s2): teacher-forced
+  agreement 95.0 % (KAL-C 93.5 %, control 29 %), greedy tf1200 valid 35.6 % / exact-Kalmár 16.3 % — far below the
+  pre-registered ≥ 99.5 % / ≥ 75–98 %. Running: KAL-D greedy + sampled reads, the EI ladder (Addendum 1) and its
+  frozen arm on five A40s. Dan (03:24): $50 is the limit, hours advisory, EI ladder approved. Spend ≈ $15.

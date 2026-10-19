@@ -66,6 +66,8 @@ def main():
     ap.add_argument('--max_action', type=int, default=512)
     ap.add_argument('--seed', type=int, default=0)
     ap.add_argument('--limit', type=int, default=0)
+    ap.add_argument('--dump_errors', type=int, default=0, help='save up to N disagreeing states per step type '
+                    '(state, algorithm action, model action) to <out>.errors.jsonl')
     a = ap.parse_args()
     import record
     record.save_config(vars(a), a.out)
@@ -88,6 +90,7 @@ def main():
     t0 = time.time()
     order = sorted(range(len(items)), key=lambda k: len(items[k][2]))
     agree = [None] * len(items)
+    model_act = [None] * len(items)
     ntok = 0
     with torch.no_grad(), torch.autocast('cuda', dtype=torch.bfloat16, enabled=(dev == 'cuda')):
         for s0 in range(0, len(order), a.batch):
@@ -98,6 +101,8 @@ def main():
                 atoks, ended = tok.decode_action(o)
                 ntok += len(atoks) + 1
                 agree[k] = bool(ended) and masked(atoks) == masked(items[k][3])
+                if a.dump_errors and not agree[k]:
+                    model_act[k] = (atoks if ended else atoks[:64] + ['…'])
     secs = time.time() - t0
     record.count(gen_tokens=ntok, actions=len(items))
     tot = collections.Counter(); hit = collections.Counter()
@@ -130,6 +135,16 @@ def main():
            'rows': rows}
     os.makedirs(os.path.dirname(a.out) or '.', exist_ok=True)
     json.dump(out, open(a.out, 'w'))
+    if a.dump_errors:
+        seen = collections.Counter()
+        with open(a.out.replace('.json', '') + '.errors.jsonl', 'w') as f:
+            for k, (i, j, ids, act, tg, d) in enumerate(items):
+                if model_act[k] is None or seen[tg] >= a.dump_errors:
+                    continue
+                seen[tg] += 1
+                f.write(json.dumps({'name': recs[i].get('name'), 'step': j, 'tag': tg, 'depth': d,
+                                    'state': ' '.join(tok.itos[x] for x in ids), 'algorithm': ' '.join(act),
+                                    'model': ' '.join(model_act[k])}) + '\n')
     print(json.dumps({k: v for k, v in out.items() if k not in ('agreement', 'rows')}))
     print('overall', out['agreement']['all'])
     for k in sorted(tot):

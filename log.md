@@ -1059,3 +1059,21 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 08:16  Control sampled reads complete (kal-8, A40, batch 2,048): plain k 32, guided k 32, plain k 256 on the sets
   without a stored read (ge17, release, G1–G3), T 0.8 k 8 on tf1200, G1-supplied k 32 — all three seeds. kal-8 deleted
   after the pull. KAL-D snapshot reads (24,020 and 100,000 steps, all seeds) also pulled from kal-8 (A40 copies).
+- 09:35  KAL-C sampled reads complete (kal-7: plain / guided k 32, T 0.8 k 8, G1-supplied k 32; all three seeds);
+  kal-7 deleted (6.98 h, $4.12). Only the three KAL-D trainings run now (3090s); spend ≈ $12.
+- 09:45  Cut-offs in the k 32 reads (`kalmar/analysis.py`): step cap (1,024) 0.0000 % for every arm and read; attempts
+  ended by a truncated action (no `<eos>` in 512 tokens): KAL-C plain 2.35 %, control plain 0.87 % (guided reads redraw
+  them). Over the policy's 0.1 % alarm, but not a length cap biting real steps: the longest action of the algorithm's own
+  proofs is 305 tokens in G2 and ≤ 172 in every other set (219 in all of K12-Kalmár; 219 in K12), so an action past 512
+  tokens is a non-terminating output. best-state measured the same on this model family: twice the cap barely changed
+  truncation or the solved sets (+≤ 2). Not re-read at 2× (cost); stated in the write-up.
+- 11:45–11:55  KAL-D-phase pods (A40 secure, $0.59/h): `kal-9` sampled reads of KAL-D s2, `kal-10` s0, `kal-11` s1,
+  `kal-12` EI ladder (s0 base), `kal-13` frozen ladder (s0 base); each waits for its checkpoint in the bucket.
+- 11:57  **KAL-D s2 trained:** 656,285 steps, 3.68 epochs of pairs, 34,922 s on the 3090, final val 0.0146 (KAL-C
+  0.018–0.019); md5 396586c2. First read-outs (kal-4, greedy, batch 1,024): **TF agreement 95.0 %** (lem 99.85, close
+  99.4, efq 98.4, split 96.7, pr 94.3; leaf steps ∧+ 74.4, ∨+ 79.1, ¬⊥ 81.5, →(B true) 85.4, ∧− 89.8, →(A false) 89.4,
+  ¬¬ 91.0, → false 92.1, ∨− 92.5); **greedy tf1200 valid 35.6 %, exact-Kalmár 16.3 %** (atoms 1/2/3/4: valid 30.7 /
+  38.6 / 39.7 / 30.6, exact 8.0 / 22.0 / 19.7 / 10.9). Pre-registered "learned the construction" fails on this seed.
+- 12:27  `pod/kal/bringup_D.sh` printed "push failed kal-9" and skipped it, so kal-9 sat idle 11:45–12:25 (≈ $0.40);
+  re-pushed and launched by hand at 12:26 (KAL-D s2 sampled reads). KAL-D s0 trained at 12:21 (36,878 s); its jobs
+  started on kal-2 (greedy suite), kal-10 (sampled reads), kal-12 (EI ladder), kal-13 (frozen ladder).
