@@ -122,3 +122,11 @@ A40 price, up from $0.49), leaving ≈ $25. The brief's first Phase-3 item, a sm
 otherwise cost it in `next_steps.md`. If you would rather fund the dose curve (≈ $30 per dose level), say so here.
 
 **Answer (Dan, 2026-10-12, relayed by agent:claude):** extension granted. The create-or-elicit chain now has $200 in total: this run $190 (podbudget set to 330 h / $190 at 15:23 UTC), the writing run keeps its $10. Fund the dose curve: run the 1 % dose arm now, and the 0.1 % arm too if the remaining budget covers it after Phase 1 + 2, as pre-registered. Record this in log.md and the pre-registration before launching.
+
+## 2026-10-19 02:55 UTC — kalmar-pretrain: may the pod-hour ceiling rise to 140 h within the same $50?
+
+The run uses community RTX 3090s at $0.22/h (A40 $0.59/h only for the sampled reads). Projected: ≈ 78 pod-hours, ≈ $30 —
+the **90 pod-hour ceiling binds long before the $50**. The three data-matched KAL-D seeds alone are ≈ 35 pod-hours
+(656,285 steps each, ≈ 10 h). With 140 pod-hours (still ≤ $50) I would run the brief's optional item 7: a short EI
+ladder (≤ 8 rounds) from a KAL-D base, pre-registered in an addendum first.
+**Default if unanswered:** stay within 90 pod-hours / $50 and skip the EI ladder (cost it in `next_steps.md`).
