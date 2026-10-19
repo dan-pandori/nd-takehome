@@ -31,8 +31,8 @@ standard) with the compute side and does not repeat it.
   [Y-yue-open-question].
 
 **Our computation** (`../compute_table.csv`; method in `../REVIEW.md`):
-- **Ratios.** RL / pretraining FLOPs per model run from 7 × 10⁻⁶ to 3 × 10⁻²; the median geometric midpoint is
-  1.2 × 10⁻⁴.
+- **Ratios.** RL / pretraining FLOPs per model run from 7 × 10⁻⁶ to 3 × 10⁻³; the median geometric midpoint is
+  1.2 × 10⁻⁴. The range reaches 3 × 10⁻² only under DAPO's rollout-step reading.
   - Yue's own runs: 1.1 × 10⁻⁵ to 2.0 × 10⁻⁴.
   - SimpleRL-Zoo: 4.6 × 10⁻⁵ to 1.1 × 10⁻³.
   - DAPO-32B: 2.4 × 10⁻⁴ to 3.0 × 10⁻². Its step count is ambiguous by 16×; the caption's gradient-step reading caps it
@@ -61,6 +61,7 @@ standard) with the compute side and does not repeat it.
 - The paper itself concedes the brief's hypothesis. Its results answer "small RL elicits"; the paper does not claim
   that larger RL does.
 - Our create-or-elicit ladders run at 3–10× pretraining FLOPs (`../REVIEW.md` Q5). That is the regime Yue leaves open,
-  and in our organism it still gives "needs exposure" for a pattern absent from pretraining.
+  and in our organism it still gives "needs exposure" for a pattern absent from pretraining. Interplay's exposure
+  ablation (2512.07783v1) agrees at ≈ 0.4× pretraining.
 - Next: plot equal-k and large-k reach against cumulative RL FLOPs along our existing ladders, which span ratios of
   ≈ 0.2–10 (`../REVIEW.md`, implication 2).

@@ -10,115 +10,129 @@ papers:
 # How much RL do create-vs-elicit papers run, relative to pretraining? (run `rl-compute-share`, 2026-10-19)
 
 This review extends `lit-review`, `lit-review-2` and `capabilities` and does not re-screen them.
-- **Coverage.** Four parallel agents and I screened **96 sources**: 52 arXiv papers and 44 web posts or reports. That
-  is above the brief's 30–45, because Q3 rests on many short lab statements. **13 were read in depth**
-  ([`notes/`](notes/); Yue et al. in full).
-- **Verification.** Every number has a verbatim quote in [`ledger/*.tsv`](ledger/).
-  - `verify_ledger.py` finds 1,204 / 1,204 quotes in their fetched sources.
-  - `check_quotes.py` finds 124 / 124 quotations in this file and the notes.
-  - Both fail on altered controls. My check that the values match their quotes passed 41 / 41.
 
-**Method.**
-- **Pretraining** = 6·N·D, with N the active parameter count.
-- **RL** = 2·N per generated token, plus 6·N per trained token, plus 2·N per extra forward pass (reference model or
-  old policy), plus a critic where there is one.
-- **N cancels** when RL runs on the pretrained model itself, so the ratio is a weighted token ratio.
+**Coverage.** We screened **96 sources** (52 arXiv, 44 web; more than the brief's 30–45, as Q3 rests on short
+lab statements), with **13 in-depth notes** ([`notes/`](notes/)): 12 sources read in full (Yue by me) and one note
+on 12 frontier posts.
+
+**Verification.**
+- Every source figure has a verbatim quote in [`ledger/*.tsv`](ledger/). `verify_ledger.py` finds 1,206 / 1,206 of
+  them, and `check_quotes.py` finds every quotation here and in the notes. Both fail on altered controls.
+- A 41-row spot check matched values to quotes.
+- An adversarial check found 51 problems in 131 statements, all fixed (`_claimcheck.md`).
+
+**Method.** Pretraining = 6·N·D, with N the active parameter count. RL = 2·N per generated token, plus 6·N per trained
+token, plus 2·N per extra forward pass, plus any critic.
+- **N cancels** when RL runs on the pretrained model itself.
+- **Unreported mean lengths** are bounded by ¼–1 × the maximum or by a figure's axis. R1-Zero's low bound uses ⅛,
+  because its length curve starts near zero.
 - **Attention FLOPs are ignored**, which undercounts long-context RL by at most ≈ 2×.
-- **Unreported mean lengths** are bounded by ¼–1 × the maximum or by a figure's axis range.
 
-All rows are in [`compute_table.csv`](compute_table.csv), with observed values, estimates and interpretation in separate
-columns; the plot is [`figures/ratio.pdf`](figures/ratio.pdf).
+Rows: [`compute_table.csv`](compute_table.csv).
 
 ![RL / pretraining compute](figures/ratio.png)
 
 ## Bottom line
 
-1. **Yue et al.'s RL is 7 × 10⁻⁶ to 3 × 10⁻² of pretraining FLOPs; the median is 1.2 × 10⁻⁴.** That is 3.4–4.2 orders
-   of magnitude below the frontier's H2 2025–2026 central estimate (0.3–2), and 2–3 below 2024's (0.01–0.1).
-2. **No create-vs-elicit test on a pretrained LLM exceeds 4.3 × 10⁻².** The largest open runs (ProRL + BroRL,
-   MiniMax-M1, JustRL, Open-Reasoner-Zero, R1-Zero) sit near 10⁻², and most of them test nothing about creation.
-3. **No frontier lab states its ratio.** The graded estimate is 0.01–0.1 in 2024 (C), 0.3–1 in H2 2025 (D) and ≈ 1–2
-   in 2026 (D). Divide statements made in GPU-time by 5–8 to get FLOPs: that is the gap measured on R1-Zero, Olmo 3
-   and our runs.
-4. **Within studies, more RL plateaus or narrows large-k reach.** Creation, where found, follows how RL is allocated,
-   not how much is run.
-5. **Our runs spend 0.9–39× pretraining FLOPs on RL**, at or above the frontier band. There, more RL raised equal-k
-   reach on theorems the base does not solve at k 256. But at 3–10× pretraining, RL did not bring a pattern removed
-   from pretraining to the acquisition bar, although one seed's rare rediscovery grew slowly.
+1. **Yue et al.'s RL is 7 × 10⁻⁶ to 3 × 10⁻³ of pretraining FLOPs; the median is 1.2 × 10⁻⁴.**
+   - DAPO-32B reaches 3 × 10⁻² only under a step reading its caption contradicts.
+   - The median sits 3.4–4.2 orders of magnitude below the frontier's H2 2025–26 central range (0.3–2, in the labs'
+     stated units).
+   - If those units are GPU-time, the gap is ≈ 2.5–3.5 orders.
+2. **No create-vs-elicit test on a pretrained LLM with a computable ratio exceeds ≈ 2 × 10⁻²** (ProRL v2, AceReason-7B).
+   - Magistral, Ring-Zero and Qwen3 were tested, but their ratios cannot be computed.
+   - Larger shares come only without a test: MiniMax-M1 (≤ 5 × 10⁻²), Olmo 3.1 (14 % of GPU-hours), DeepSeek-V3.2
+     (> 10 % of cost) and Reflection Beam (≥ 1.7 by GPU-time).
+3. **No frontier lab publishes an RL / pretraining FLOP ratio.** The closest statements are xAI's "at pretraining
+   scale" and DeepSeek-V3.2's.
+   - Graded estimate: 0.01–0.1 in 2024 (C), 0.3–1 in H2 2025 (D), ≈ 1–2 in 2026 (D).
+   - These are mostly GPU-time units; FLOPs are 2.5–15× lower (5–8× at the midpoints of R1-Zero and Olmo 3).
+4. **The scale evidence within studies is mixed.**
+   - The largest-k re-tests narrow or plateau with more RL.
+   - ProRL (code, boxnet), Interplay (out-of-distribution hard) and our rl-continue grow.
+   - Both controlled frontier-share tests that remove a skill from pretraining find "needs exposure": Interplay
+     (≈ 0.4×) and our knockout (3–10×).
+5. **Our runs spend 0.9–19× pretraining FLOPs on RL** (RL share only; up to 39× as run) and 9–180× by GPU-time. That
+   is at or above the frontier band.
 
-**Verdict: partly supported.** The papers test very small RL and cannot rule out creation at frontier scale, as Yue et
-al. concede. But the scale evidence, ours included, does not favour creation emerging from more RL alone.
+**Verdict: supported, with a qualification.** The papers test RL 2.5–4 orders of magnitude below the frontier share,
+so they cannot rule out creation there (Yue et al. agree). But this is a missing measurement, not evidence of creation
+at scale. Both frontier-share tests, in from-scratch organisms, need pretraining exposure for an absent skill.
 
 ## Q1. Yue et al. in numbers
 
-Yue evaluates nine third-party or baseline checkpoints and trains at least eleven runs of its own. RLOO, Reinforce++
-and ReMax share the GRPO-150 row's volume.
+Yue evaluates ten outside checkpoints (nine computable) and trains nine runs: six algorithms, two ablations and
+EasyR1.
 
 | model (base, D) | RL run | RL / PT FLOPs |
 |---|---|---|
 | SimpleRL-Zoo Qwen2.5-7B/14B/32B, Llama-3.1-8B (18T; 15T) | ~100–150 steps × 1,024 × 8, max 8,192 | 4.6 × 10⁻⁵ – 1.1 × 10⁻³ |
-| Oat-Zero-7B (Qwen2.5-Math, 19T) | 27 h × 8 A100 | 8 × 10⁻⁶ – 8 × 10⁻⁵ (GPU-hours) |
-| DAPO-32B (18T) | 512 × 16, max 20,480; 312 or 5,000 rollout steps | 2.4 × 10⁻⁴ – 3.0 × 10⁻² |
+| Oat-Zero-7B (Qwen2.5-Math, 19T) | 27 h × 8 A100 | 8 × 10⁻⁶ – 8 × 10⁻⁵ (FLOPs from GPU-hours, MFU 3–30 %) |
+| DAPO-32B (18T) | 512 × 16, max 20,480; 312 or 5,000 rollout steps | 2.4 × 10⁻⁴ – 1.9 × 10⁻³ (3.0 × 10⁻² rollout-step reading) |
 | CodeR1-Zero-7B (Instruct-1M) | 832 × 16 × 16, max 4,096 | 2.4 × 10⁻⁵ – 9.7 × 10⁻⁵ |
 | DeepCoder-14B (R1-Distill) | 32 H100 × 2.5 weeks, mean 8K → 17.5K tokens | 3.6 × 10⁻⁴ – 1.9 × 10⁻³ |
-| Yue's VeRL runs, Qwen2.5-7B, 6 algorithms | 150–450 steps × 256 × 8; n = 32 for 220 steps | 1.1 × 10⁻⁵ – 2.0 × 10⁻⁴ |
+| Yue's VeRL runs, Qwen2.5-7B | 150–450 steps × 256 × 8; n = 32 for 220 steps | 1.1 × 10⁻⁵ – 2.0 × 10⁻⁴ |
 | Yue's EasyR1 run, Qwen2.5-VL-7B | defaults assumed | 7 × 10⁻⁶ – 3 × 10⁻⁵ |
-| Qwen2.5-Math-7B-Instruct (Fig. 7) | 66K queries × 32, steps assumed | 2.3 × 10⁻⁴ – 2.7 × 10⁻³ |
+| Qwen2.5-Math-7B-Instruct (Fig. 7 baseline) | 66K queries × 32, steps assumed | 2.3 × 10⁻⁴ – 2.7 × 10⁻³ |
 | Magistral-Medium | base size, steps, GPU-hours undisclosed | not computable |
 
-- **DAPO's step count is ambiguous.** Its axis is captioned "gradient update steps" with 16 updates per rollout step;
-  that reading caps it at 1.9 × 10⁻³ [A-DAPO-steps-unit, A-DAPO-minibatch].
-- **Tokens and GPU-hours.** Rollout tokens are ≤ 5.5 × 10⁻² of D (median high bound 2.5 × 10⁻⁴). Four runs state
-  216–13,440 GPU-hours; the only base with stated GPU-hours, Llama-3.1-8B, used 1.46M [A-LLAMA-gpu-hours].
+- **DAPO's axis** is captioned "gradient update steps", with 16 updates per rollout step [A-DAPO-steps-unit,
+  A-DAPO-minibatch].
+- **Tokens and GPU-hours.** Rollout tokens are ≤ 5.5 × 10⁻² of D (median high 2.5 × 10⁻⁴). Five checkpoints report
+  216–13,440 GPU-hours; of the bases, only Llama-3.1-8B does (1.46M) [A-LLAMA-gpu-hours].
 - **Contamination.**
-  - Qwen2.5 pretraining contains synthetic maths from Qwen2(-Math)-72B-Instruct [A-Q25-synth].
+  - Qwen2.5 pretraining includes synthetic maths [A-Q25-synth].
   - Code-R1, EasyR1 and Magistral start from instruct models.
   - DeepCoder starts from an R1 distillation [A-R1D-card].
-- **Yue's own caveat.** "Whether this trend persists as more compute, such as pre-training scale budgets, is dedicated
-  to RL training remains a critical question" [Y-yue-open-question]. Their near-frontier model, Magistral-Medium, shows
-  "little or no improvement at higher k" [Y-yue-magistral-result].
+- **Yue's caveat.** "Whether this trend persists as more compute, such as pre-training scale budgets, is dedicated to
+  RL training remains a critical question" [Y-yue-open-question].
+  - Magistral-Medium, which they evaluate, shows "little or no improvement at higher k" [Y-yue-magistral-result].
+  - Magistral's RL share is unknown.
 
 ## Q2. The wider literature
 
-The 34 runs on pretrained LLMs, grouped by the verdict about each model (geometric midpoints; `analysis_out.txt`):
+The 35 runs on pretrained LLMs with a computable ratio, grouped by the verdict about each model (geometric midpoints;
+`analysis_out.txt`):
 
 | verdict | n | median | examples (low – high) |
 |---|---|---|---|
-| elicit / narrows | 17 | 1.2 × 10⁻⁴ | Yue's models; spurious rewards 7 × 10⁻⁶ – 7 × 10⁻⁵; one-shot RLVR 1.3 – 6.6 × 10⁻⁴ |
+| elicit / narrows | 16 | 8.7 × 10⁻⁵ | Yue's models; spurious rewards 7 × 10⁻⁶ – 7 × 10⁻⁵; one-shot RLVR 1.3 – 6.6 × 10⁻⁴ |
 | create / expands | 3 | 1.0 × 10⁻³ | f(g(x)) 1.4 × 10⁻⁵ – 1.4 × 10⁻⁴; Olmo 3 RL-Zero 4.6 × 10⁻⁴ – 2.3 × 10⁻³ (pass@32); AceReason-7B 7 × 10⁻⁴ – 2 × 10⁻² |
-| mixed | 4 | 2.9 × 10⁻³ | ProRL v1 2.6 × 10⁻³ – 1.2 × 10⁻²; ProRL v2 + BroRL 1.0 – 4.3 × 10⁻²; NSR; GRPO-N |
-| no test | 10 | 4.2 × 10⁻³ | MiniMax-M1 5 × 10⁻³ – 5 × 10⁻²; JustRL ≈ 10⁻²; ORZ-32B, R1-Zero 3 × 10⁻³ – 1.5 × 10⁻²; Skywork, Olmo 3 Think, INTELLECT-3, ScaleRL-Scout, Polaris, Phi-4 |
+| mixed | 4 | 2.9 × 10⁻³ | ProRL v1 2.6 × 10⁻³ – 1.2 × 10⁻²; ProRL v2 4.4 × 10⁻³ – 2.1 × 10⁻²; NSR; GRPO-N |
+| no test | 12 | 4.2 × 10⁻³ | MiniMax-M1 5 × 10⁻³ – 5 × 10⁻²; ProRL v2 + BroRL 1.0 – 4.5 × 10⁻²; JustRL ≈ 10⁻²; ORZ-32B 3 × 10⁻³ – 1.6 × 10⁻²; R1-Zero 3 × 10⁻³ – 1.5 × 10⁻² |
 
-- **The verdict medians barely differ.** The create median is only 8.9× the elicit median, with n = 3. The largest
-  recipes report pass@1 or avg@k only.
-- **Interplay is the one paper whose RL reaches the frontier band.** It trains a 100M model from scratch, with RL at
-  0.1–2× pretraining, stated in token equivalents [C-INTER-ratio_stated, C-INTER-budget_row_20].
+- **Create vs elicit.** The create median is 11.8× the elicit median (n = 3; ranges overlap). The largest recipes test
+  nothing.
+- **Interplay: the one paper whose RL reaches the frontier band.** It trains a 100M model from scratch, with RL at
+  0.1–2× its 10B pretraining tokens, stated in token equivalents [C-INTER-budget_row_1, C-INTER-budget_row_20,
+  C-INTER-pretrain_tokens].
   - In-distribution pass@128 never improves [C-INTER-verdict_id].
-  - Out-of-distribution pass@128 at the edge of competence rises by up to 42–60 % [C-INTER-plus42].
-- **Lab disclosures:**
+  - Edge-of-competence RL gains up to +42 % [C-INTER-plus42]; new contexts gain +60 % with ≥ 1 % pretraining exposure
+    [Y-inter-plus60].
+- **Lab disclosures** (claim ids in `compute_table.csv`):
 
-  | lab | basis | RL / pretraining | claims |
-  |---|---|---|---|
-  | DeepSeek-R1 | GPU-hours | 1.5–5.3 % | B-R1-gpu_hours, B-V3-gpu_hours-table |
-  | DeepSeek-V3.2 | cost of post-training | > 10 % | B-V32-ratio_stated-intro |
-  | Llama-Nemotron-Ultra | GPU-hours | 0.45 % | B-LN-ultra-rl-gpu_hours, B-L31-405b-gpu_hours |
-  | Olmo 3.1 Think 32B | GPU-hours | 14 % | B-OL31-32b-rl-days, B-OL3-32b-pretrain-days |
-  | Reflection Beam (Oct 2026) | GPU-time | ≥ 1.7 | B-BEAM-rl-hardware, B-BEAM-pretrain-hardware |
+  | lab | basis | RL / pretraining |
+  |---|---|---|
+  | DeepSeek-R1 | GPU-hours | 1.5–5.3 % |
+  | DeepSeek-V3.2 | post-training cost | > 10 % |
+  | Llama-Nemotron-Ultra | GPU-hours | 0.45 % |
+  | Olmo 3.1 Think 32B | GPU-hours | 14 % |
+  | Reflection Beam | GPU-time | ≥ 1.7 |
 
 ## Q3. Frontier reference points (graded)
 
 | date | source | statement | grade |
 |---|---|---|---|
-| 2024-09 | OpenAI, o1 | performance rises with RL train-time compute (no axis values) | A [D-oai-o1-rlscaling] |
+| 2024-09 | OpenAI, o1 | performance rises with RL train-time compute | A [D-oai-o1-rlscaling] |
 | 2025-01 | Amodei | RL spend "small for all players"; "$1M instead of $0.1M" | A-informal [D-ant-amodei-rlsmall] |
-| 2025-01 | Epoch (Erdil) | R1's RL ≈ 6.1 × 10²³ FLOP, ≈ 20 % of V3 | C [D-epoch-r1-rlflop] |
+| 2025-01 | Epoch (Erdil) | R1-Zero's RL ≈ 6.1 × 10²³ FLOP, ≈ 20 % of V3 | C [D-epoch-r1-rlflop] |
 | 2025-04 | OpenAI, o3 | "an additional order of magnitude" of training compute via RL | A, relative [D-oai-o3-10x] |
 | 2025-07 | xAI, Grok 4 | RL "at pretraining scale" on 200k GPUs | A [D-xai-grok4-ptscale] |
-| 2025-10 | Epoch | GPT-5 RL assumed 10–200 % of pretraining; early 2025 1–10 % | C [D-epoch-gpt5notes-range] |
-| 2025-12 | DeepSeek-V3.2 | post-training > 10 % of pre-training cost | B [B-V32-ratio_stated-intro] |
+| 2025-10 | Epoch | early 2025 RL 1–10 % of pretraining; GPT-5 RL assumed 10–200 % | C [D-epoch-gpt5notes-early25, D-epoch-gpt5notes-range] |
+| 2025-12 | DeepSeek-V3.2 | post-training budget "exceeding 10% of the pre-training cost" | B [B-V32-ratio_stated-intro] |
 | 2026-02 | Cursor, Composer 1.5 | post-training exceeds the base's pretraining | A, not frontier [D-cursor-c15-ratio] |
 | 2026-08 | OpenAI | "largest planned frontier RL run remains on hold" | A, qualitative [D-oai-pause-frontierrl] |
-| 2026-10 | SemiAnalysis, fleet shares | post-training 42 % vs pretraining 23 % (1Q26) | D [D-oc-sa-posttrain] |
+| 2026-10 | SemiAnalysis, fleet shares | post-training 42 % vs pretraining 23 % (1Q26) | D [D-oc-sa-posttrain, D-oc-sa-pretrain] |
 
 **Graded per-model range** ([`frontier_ranges.csv`](frontier_ranges.csv)):
 
@@ -129,69 +143,70 @@ The 34 runs on pretrained LLMs, grouped by the verdict about each model (geometr
 | H2 2025 | 0.3–1 | 0.1–2 | D |
 | 2026 | 1–2 | 0.3–5 | D |
 
-That is a rise of 1–2 orders of magnitude, roughly 10× per generation.
+That is 1–2 orders of magnitude in two years. H2 2025 rests partly on Epoch's FLOP estimates; 2026 on GPU-time and
+fleet statements, which read as FLOPs give ≈ 0.1–0.4.
 
 **Cautions.**
-- **Units.** "Compute" in lab statements is unspecified, and GPU-time overstates RL's FLOP share 5–8×. R1-Zero is
-  3.6 % by GPU-hours but 0.3–1.5 % by FLOPs. Beam's ≥ 1.7 means trainer-side GPU-time of ≥ 0.27–0.35 of pretraining
-  [D-refl-beam-split].
-- **Fleet shares** include experiments and inference.
-- **Independent estimates can be far off.** Epoch's pre-disclosure R1 figure, computed "if the RL phase had a similar
-  MFU to pretraining" [D-epoch-r1-rlflop], needs ≈ 490K H800-hours at V3's measured 1.2 × 10¹⁸ FLOP per GPU-hour.
-  That is 5× the 101K DeepSeek later disclosed. Our token count (1.0–4.8 × 10²² FLOP) is 13–60× below Epoch's figure.
+- **Units.** GPU-time overstates RL's FLOP share 2.5–15×: R1-Zero is 3.6–3.8 % by GPU-hours but 0.3–1.5 % by FLOPs.
+  Beam's ≥ 1.7 means ≥ 0.27–0.35 on the trainer side [D-refl-beam-split]. Fleet shares include experiments.
+- **Estimates can be far off.** Epoch's pre-disclosure count for R1-Zero (≈ $1M at pretraining MFU) needs ≈ 490K
+  H800-hours at V3's 1.2 × 10¹⁸ FLOP per GPU-hour. DeepSeek disclosed 101K. Our token count, 1.0–4.8 × 10²² FLOP,
+  is 13–60× below Epoch's.
 
 ## Q4. Does the verdict depend on RL scale?
 
-**For scale dependence:**
-- ProRL's pass@128 gains are sustained on code and boxnet [C-PRORL-sustained].
+**Reach grows with RL:**
+- ProRL's gains are sustained on code and on boxnet [C-PRORL-sustained, C-PRORL-boxnet]. On boxnet it stays ahead at
+  k 16,384 (0.492 against 0.345), though the base is not at zero [C-LEASH-boxnet16384].
 - In Interplay, more RL helps on out-of-distribution hard problems [C-INTER-heavyrl].
-- In Abdulsalam et al.'s from-scratch model, gains "emerge late" [C-ABD-late].
-- Ours: going from 8 to 16 rounds raised group-C pass@256 from 0.049 to 0.265, i.e. 5 → 27 of 99 theorems that the
-  end-of-pretraining base solves 0 of at k 256 (nd-rl `experiment-summaries/2026-10-03-rl-continue-cap12…`, Group C
-  table).
-- Knockout s1, continued from r16 to r24, went from 11 to 123 free-reductio proofs per round and from 5 to 9 strict
-  training targets. Its held-out members stayed at the same 5 / 106 (`numbers.md` § create-or-elicit, Knockout s1
-  r17–24).
+- Abdulsalam et al.'s gains "emerge late" [C-ABD-late].
+- Ours, rl-continue (nd-rl `experiment-summaries/2026-10-03-rl-continue-cap12…`): 8 → 16 rounds raised group-C
+  pass@256 from 0.049 to 0.265, i.e. 5 → 27 of 99 theorems the base solves 0 of at k 256. 16 of the 22 new solves
+  came on one seed.
+- Ours, knockout s1, r16 → r24 (`numbers.md` § create-or-elicit): free reductios went from 11 to 123 per round, and
+  held-out members from 2 to 5.
 
-**Against (the strongest):**
-- **Invisible Leash re-tests the longest open RL at k 4,096–16,384.**
-  - ProRL v1 gains 36 problems and loses 163. v2, 1,000 steps later, gains 48 and loses 175 [C-LEASH-prorlv1_row,
-    C-LEASH-prorlv2_row].
-  - ProRL's "no capability" boxnet base reaches 0.345 vs 0.492 [C-LEASH-boxnet16384].
-- **Ring-Zero** (1T parameters, 3,600 steps): pass@1024 "increases during the initial phase of training but eventually
-  plateaus" [C-RING-verdict].
-- **Yue's 150 → 450 steps**: pass@256 falls from 66.3 to 64.3 while pass@1 rises [Y-yue-verl-step450].
-- **Leash's DAPO checkpoints** are net negative on 5 of 6 benchmarks [C-LEASH-ckpt_5of6].
-- **Qwen3**'s RL leaves pass@64 unchanged [B-QW3-verdict].
-- **Our knockout** (3–10× pretraining): 0 / 6 seeds reach a family bar in 16 rounds, against 6 / 6 full seeds. Five
-  wrote the free reductio only 1–34 times, against 17k–50k in the full arm. A 1 % dose restores acquisition
-  (`numbers.md` § create-or-elicit).
-- **Creation follows allocation, even at tiny RL:**
-  - composition data: f(g(x)) at ≤ 1.4 × 10⁻⁴ [C-FGX-verdict];
-  - negative samples [C-DEBATE-aime25_grpon];
-  - rollout width [C-BRORL-revive];
-  - pretraining seeds, since "RL cannot synthesize capabilities from a void" [C-INTER-seeds].
-- **Spurious Rewards scopes itself** to "the compute scales of open-source post-training pipelines" [C-SPUR-verdict].
+**Reach plateaus or narrows:**
+- **Invisible Leash**, at k 1,024–16,384: ProRL v1 gains 36 problems and loses 163; v2 gains 48 and loses 175
+  [C-LEASH-prorlv1_row, C-LEASH-prorlv2_row].
+- **Ring-Zero** (1T parameters; tracked to step 2,000; ratio unknown): pass@1024 "increases during the initial phase of
+  training but eventually plateaus" [C-RING-verdict].
+- **Yue's 150 → 450 steps:** pass@256 falls from 66.3 to 64.3 while pass@1 rises
+  [Y-yue-verl-step150, Y-yue-verl-step450].
+- **Leash's own 300-step run** (R1-Distill-1.5B, k 256) is net negative on 5 of 6 benchmarks [C-LEASH-ckpt_5of6].
+
+**Skills removed from pretraining, at frontier-share RL:**
+- Interplay at ≈ 0.42× pretraining (204.8k samples = 4.2B token-equivalents against 10B): "RL fails to transfer" with
+  0 % or 0.1 % exposure [Y-inter-exposure, C-INTER-budget_row_4p2].
+- Our knockout at 3–10×: 0 / 6 seeds reach a family bar in 16 rounds, against 6 / 6 full seeds. A 1 % dose restores
+  acquisition.
+
+**Allocation matters even at tiny RL:**
+- composition data: f(g(x)) at ≤ 1.4 × 10⁻⁴ [C-FGX-verdict];
+- negative samples: GRPO-N takes AIME25 from 14 to 20 of 30 at k 256 [C-DEBATE-aime25_base, C-DEBATE-aime25_grpon].
+
+Spurious Rewards scopes its claim to "the compute scales of open-source post-training pipelines" [C-SPUR-verdict].
 
 **Which normaliser?**
 - **Trained tokens and FLOPs agree within 2–3×** for on-policy RL on the same model: the ratio is (generated +
   3·trained + extra passes) / 3D.
-- **Gradient steps are not comparable**: samples per step run from 256 to 65,536.
-- **GPU-hours** overstate the FLOP share 5–8×.
-- **FLOPs overstate RL's information share by about 10³.** Policy gradient gets "O(1) bits per episode" [C-LORA-bits],
-  so R1-Zero's 5.3M episodes carry ≈ 5.3M bits [C-LORA-r1zero_bits]. Updates are also KL-minimal [C-RAZOR-principle].
-- **Exploration volume is separate from compute.** RL samples each training problem 2–2,400 times (median ≈ 100),
-  while evaluations use k = 128–16,384.
-- **Recommendation: report the FLOP ratio**, since it is N-free, convertible from GPU-time, and comparable with lab
-  statements. Pair it with samples per training problem versus the evaluation k. For create-vs-elicit claims, add a
-  base read at RL's compute: in `capability-defs` that cut RL's 51–60 equal-k "creations" per seed to 14–22.
+- **Gradient steps are not comparable:** samples per step run from 256 to 65,536.
+- **GPU-hours overstate the FLOP share 2.5–15×.**
+- **FLOPs overstate RL's information share by ≈ 10³.** Policy gradient gets "O(1) bits per episode" [C-LORA-bits],
+  about 5.3M bits for R1-Zero [C-LORA-r1zero_bits], and its updates are KL-minimal [C-RAZOR-principle].
+- **Exploration volume is separate from compute.** RL samples each training problem 1.5–2,400 times (2 × 10⁶ for
+  one-shot RLVR; median ≈ 100), while evaluations use k = 32–16,384.
+- **Recommendation: the FLOP ratio** (N-free, mappable onto lab statements to within 2.5–15×).
+  - Pair it with samples per problem versus the evaluation k.
+  - Add a base read at RL's compute: in `capability-defs` it cut RL's 51–60 equal-k "creations" per seed to 14–22.
 
 ## Q5. Where do our runs sit?
 
-All our runs use `best_model.ALiBiGPT` 6 × 384, 9,560,832 params, `lean_staten`, trained from scratch.
-- Stage 1: K12 (or cap 6), 4.4 × 10⁸ tokens, 2.5 × 10¹⁶ FLOP, 1,200 s on an A40.
-- Then T1 expert-iteration ladders.
-- Numbers from `our_runs.py`, which reads the five runs' registries and round files without modifying them.
+**Model, every run:** `best_model.ALiBiGPT` 6 × 384, 9,560,832 params, `lean_staten`, trained from scratch.
+- **Stage 1:** 1,200 s on an A40, 4.4 × 10⁸ tokens and 2.5 × 10¹⁶ FLOP, on K12, its cap-6 version, K12⁻ (knockout)
+  or the 1 % dose set. rl-from-ckpt starts at step 1,600–16,000, so D = 2.9 × 10⁷ – 2.9 × 10⁸.
+- **RL:** T1 expert-iteration ladders.
+- **Source:** `our_runs.py`, reading six runs' registries and round files read-only.
 
 | run | rounds | RL / PT FLOPs (RL-only, decoded – as run) | GPU-time ratio |
 |---|---|---|---|
@@ -200,38 +215,31 @@ All our runs use `best_model.ALiBiGPT` 6 × 384, 9,560,832 params, `lean_staten`
 | rl-from-ckpt, starts p16000 → p1600 | 8 | 2.2–4.3 → 18–39 | 20 → 152–182 |
 | create-or-elicit full / dose1 / knockout | 16–24 | 3.2–6.4 / 3.1–6.2 / 3.1–9.7 | 33–54 |
 
-Two costs inflate the as-run numbers:
-- Each action re-reads the proof state, so prefill is ≈ 4.8× the decoded tokens in a sampled round.
-- Each round replays 20,000 K12 records.
+Two costs inflate the as-run column. Every action re-reads the proof state, so prefill is ≈ 4.8× the decoded tokens.
+Each round also replays 20,000 records of the arm's own pretraining set. The low column counts decoded tokens and RL
+records only. Even so, we sit at or above the frontier band, ≈ 4–5 orders of magnitude above Yue's median.
 
-The low column therefore counts decoded tokens and the RL share of the fine-tune mix only. Even so, we sit at or above
-the frontier band, ≈ 4–5.5 orders of magnitude above Yue's median. The model is tiny, but the hypothesis is about the
-ratio.
-
-## Verdict on the hypothesis: partly supported
+## Verdict on the hypothesis: supported, with a qualification
 
 **Supported.**
-- Every create-vs-elicit study on a pretrained LLM runs RL at ≤ 4.3 × 10⁻² of pretraining FLOPs (Yue's median 10⁻⁴).
-- The frontier has been ≥ 0.1 since H2 2025 (grade D).
-- So the papers answer whether a small amount of RL creates, and the authors concede it.
+- Yue's median ratio is 10⁻⁴, and no tested model with a computable ratio exceeds ≈ 2 × 10⁻².
+- The frontier has been ≥ 0.1 since H2 2025 (D; ≥ 0.02 in FLOPs).
+- So these papers answer the small-RL question, and Yue et al. call frontier scale open.
 
-**Weakened.**
-- From 10⁻⁵ to 4 × 10⁻², the within-study trend is plateau or narrowing at large k.
-- Existing creation results come from allocation at tiny RL.
-- The one controlled test at or above frontier share, with the skill absent from pretraining (our knockout), finds
-  "needs exposure".
-
-The gap is real, but it is a missing measurement, not evidence that more RL creates.
+**Qualification.**
+- The gap is a missing measurement, and the scale evidence within studies is mixed.
+- The two controlled frontier-share tests (Interplay, our knockout) are from-scratch organisms. RL there extends reach
+  near the edge of what pretraining supports, yet still needs pretraining exposure for an absent skill.
 
 ## Implications for our project (ranked by value)
 
-1. **Frame our results as large-RL-share results.** Our RL is 1–10× pretraining FLOPs, above the frontier band, and
-   our "needs exposure" finding is the only controlled create-vs-elicit test in that regime.
-2. **Measure the scale curve from existing reads.** Plot equal-k and large-k reach (group C, knockout members) against
-   cumulative RL FLOPs per round; ladder rounds 1–24 span ≈ 0.2–10. A sub-round arm at ≈ 10⁻³ would test Dan's
-   hypothesis directly.
+1. **Frame our results as frontier-share results.**
+   - Our RL is 0.9–19× pretraining FLOPs (1–10× for ladders started from full pretraining).
+   - Our knockout is one of two controlled create-vs-elicit tests at frontier-share RL, and the only one above 1×.
+2. **Plot the scale curve from existing reads.** Plot reach (group C, knockout members) against cumulative RL FLOPs
+   per round; rounds 1–24 span ≈ 0.2–10. A sub-round arm at ≈ 10⁻³ would test Dan's hypothesis directly.
 3. **Report the RL-only ratio, and consider a no-replay arm.** Replay is continued pretraining (`rl-from-ckpt`).
-4. **Pair every "RL created X" claim** with samples per target versus the evaluation k, and with a compute-matched base
+4. **Pair every "RL created X" claim** with samples per target against the evaluation k, and a compute-matched base
    read (`capability-defs`).
 5. **Quote the frontier as a graded range with units**, never as one number.
 
@@ -239,18 +247,19 @@ The gap is real, but it is a missing measurement, not evidence that more RL crea
 
 | # | expected | outcome |
 |---|---|---|
-| 1 | Yue median high < 10⁻³; SimpleRL-Zoo < 10⁻⁴; largest 10⁻³–5 × 10⁻² | median held (2.0 × 10⁻⁴); **SimpleRL-Zoo falsified** (to 1.1 × 10⁻³); DAPO 3.0 × 10⁻² held |
-| 2 | ≥ 4 decades; no low ≥ 0.1; biggest open runs in 10⁻³–10⁻¹; create ≥ 10× elicit | **3.9 decades** (5.4 with Interplay); held for pretrained LLMs, but Interplay reaches 0.1; held except ScaleRL (6 × 10⁻⁴); **8.9×** |
-| 3 | no absolute OpenAI / xAI figure; 2025–26 from ≥ 10⁻² to ≈ 1; 2024 ≤ 0.1 | held; **upper edge 2–5** (D); 2024 central held, range to 0.3 |
-| 4 | none ≥ 0.1 at k ≥ 1,024; ProRL / BroRL at k ≤ 256; a ≥ 10⁻³ study narrows; ScaleRL tests no creation | held; ProRL held, **BroRL has no large-k test**; held; held |
-| 5 | ours ≥ 0.1 (8 rounds), ≥ 1 (16+); ≥ 10× GPU-time | held, except trajectory-cap6 at 9× GPU-time |
-| 6 | partly supported (60 %) | partly supported |
-| 7 | FLOP headline, trained tokens second | FLOP headline; samples per problem and compute-matched reads second |
+| 1 | Yue median high < 10⁻³; SimpleRL-Zoo < 10⁻⁴; largest 10⁻³–5 × 10⁻² | **partly**: median 2.0 × 10⁻⁴ (third-party 1.1 × 10⁻³); SimpleRL-Zoo **falsified**; DAPO held |
+| 2 | ≥ 4 decades; no low ≥ 0.1; biggest open runs in 10⁻³–10⁻¹; create ≥ 10× elicit | **partly**: 3.9 decades (5.4 with Interplay); **falsified** by Interplay (low 0.105); held except ScaleRL (6 × 10⁻⁴); 11.8× held (n = 3) |
+| 3 | no absolute OpenAI / xAI figure; 2025–26 from ≥ 10⁻² to ≈ 1; 2024 ≤ 0.1 | **partly**: held; upper edge 2–5 (D); 2024 range to 0.3 |
+| 4 | none ≥ 0.1 at k ≥ 1,024; ProRL / BroRL at k ≤ 256; a ≥ 10⁻³ study narrows; ScaleRL tests no creation | **partly**: held (literature only); BroRL untested; held; held |
+| 5 | ours ≥ 0.1 (8 rounds), ≥ 1 (16+); ≥ 10× GPU-time | **partly**: trajectory-cap6 at 9× GPU-time |
+| 6 | partly supported (60 %) | **not held**: supported, with a qualification |
+| 7 | FLOP headline, trained tokens second | **partly**: FLOP headline; samples per problem and compute-matched reads second |
+
+Tally: 0 held outright, 6 in part, 1 not held.
 
 ## Screened sources (96; in-depth reads in bold)
 
-Full rows (type, grade, depth, claims, contribution): [`screened.md`](screened.md). Zotero list:
-[`to_add_to_zotero.md`](to_add_to_zotero.md).
+Full rows: [`screened.md`](screened.md). Zotero list: [`to_add_to_zotero.md`](to_add_to_zotero.md).
 
 | Q | sources |
 |---|---|

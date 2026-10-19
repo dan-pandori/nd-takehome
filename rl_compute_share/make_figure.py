@@ -67,7 +67,7 @@ b = [f for f in front if f['period'] == 'H2 2025-2026 (band)'][0]
 ax.axvspan(float(b['low']), float(b['high']), color=BAND_FULL, zorder=0, lw=0)
 ax.axvspan(float(b['central_low']), float(b['central_high']), color=BAND_CENTRAL, zorder=0, lw=0)
 ax.text(math.sqrt(float(b['central_low']) * float(b['central_high'])), -2.45,
-        'frontier labs H2 2025-26\ncentral 0.3-2 (dark), range 0.1-5 (light)\nweakest source grade D',
+        'frontier labs H2 2025-26, units as stated\n(mostly GPU-time; FLOPs 2.5-15x lower)\ncentral 0.3-2 (dark), range 0.1-5 (light), grade D',
         ha='center', va='top', fontsize=6.5, color=INK2, zorder=3)
 for x in [10.0 ** k for k in range(-6, 3)]:
     ax.axvline(x, color=GRID, lw=0.6, zorder=0.5)
@@ -137,7 +137,8 @@ legend = [Line2D([0], [0], color=VCOL['elicit'], lw=2, marker='o', ms=5, label='
           Line2D([0], [0], color=INK2, lw=2, marker='o', ms=5, label='FLOPs from tokens (low to high)'),
           Line2D([0], [0], color=INK2, lw=2, ls=(0, (2, 1.5)), marker='o', mfc='none', ms=5, label='FLOPs from GPU-h x MFU 3-30 %'),
           Line2D([0], [0], color=INK2, lw=0, marker='s', ms=5, label='GPU-hour ratio'),
-          Line2D([0], [0], color=INK2, lw=0, marker='^', ms=5, label='stated ratio (arrow = lower bound)'),
+          Line2D([0], [0], color=INK2, lw=0, marker='^', ms=5, label='stated ratio'),
+          Line2D([0], [0], color=INK2, lw=1.2, marker='>', ms=5, label='arrow: lower bound (any marker)'),
           Patch(facecolor=BAND_CENTRAL, edgecolor='none', label='frontier H2 2025-26: central'),
           Patch(facecolor=BAND_FULL, edgecolor='none', label='frontier H2 2025-26: range')]
 fig.legend(handles=legend, loc='upper left', bbox_to_anchor=(0.01, 1 - 0.38 / H), ncol=4, fontsize=6.8,

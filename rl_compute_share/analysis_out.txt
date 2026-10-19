@@ -8,12 +8,12 @@ SimpleRL-Zoo, low: n 4  median 5.92e-05  min 4.55e-05  max 0.000186
 SimpleRL-Zoo, high: n 4  median 0.00101  min 0.000746  max 0.00112
 == Q2 literature on pretrained LLMs (Yue + other papers, own RL runs; FLOPs, computed or hw-based)
 span: min low 7.12e-06  max high 0.052  max low 0.0103 (ProRL v2 (3,000 steps) + BroRL (+191 steps, 512 rollouts per prompt), cumulative)
-verdict elicit, mid: n 17  median 0.000115  min 1.42e-05  max 0.00268
+verdict elicit, mid: n 16  median 8.72e-05  min 1.42e-05  max 0.00268
 verdict create, mid: n 3  median 0.00103  min 4.43e-05  max 0.00381
-verdict mixed, mid: n 4  median 0.00289  min 6.76e-05  max 0.021
-verdict none, mid: n 10  median 0.00423  min 0.000147  max 0.0164
-create / elicit median ratio: 8.91x
-largest by mid: ProRL v2 (3,000 steps) + BroRL (+191 ste 0.01-0.043; MiniMax-M1 (full RL) 0.0052-0.052; JustRL-DeepSeek-1.5B (4,380 steps) 0.0098-0.012; Open-Reasoner-Zero-32B 0.0029-0.016; DeepSeek-R1-Zero 0.003-0.015; Nemotron-Research-Reasoning-Qwen-1.5B v1 0.0026-0.012
+verdict mixed, mid: n 4  median 0.00289  min 6.76e-05  max 0.0096
+verdict none, mid: n 12  median 0.00423  min 0.000147  max 0.0215
+create / elicit median ratio: 11.8x
+largest by mid: ProRL v2 (3,000 steps) + BroRL (+191 ste 0.01-0.045; MiniMax-M1 (full RL) 0.0052-0.052; JustRL-DeepSeek-1.5B (4,380 steps) 0.0098-0.012; Nemotron-Research-Reasoning-Qwen-1.5B v2 0.0043-0.021; Open-Reasoner-Zero-32B 0.0029-0.016; DeepSeek-R1-Zero 0.003-0.015
 == FLOP ratio vs GPU-hour ratio where both exist
 DeepSeek-R1-Zero                              FLOP 0.00301-0.0146  GPU-h 0.0363  GPU-h / FLOP-mid 5.48x
 Olmo 3 Think 32B (final RL)                   FLOP 0.0018-0.00736  GPU-h 0.0275  GPU-h / FLOP-mid 7.56x
@@ -30,7 +30,7 @@ create-or-elicit full: 3 seed(s), 16-16 EI ro FLOP 3.17-6.44  GPU-h 36.9  GPU-h 
 create-or-elicit ko: 6 seed(s), 16-24 EI roun FLOP 3.07-9.74  GPU-h 32.5  GPU-h / FLOP-mid 5.94x
 == Gaps to the frontier band (H2 2025-2026 central 0.3-2, range 0.1-5)
 Yue median mid 0.000115: 3.41-4.24 orders below the central band
-largest pretrained-LLM paper mid 0.021: 1.15 orders below 0.3
+largest pretrained-LLM paper mid 0.0215: 1.14 orders below 0.3
 Yue median mid vs 2024 central (0.01-0.1): 1.94-2.94 orders below
 == Samples per training prompt (computed rows)
   Qwen-2.5-7B-SimpleRL-Zoo                           102-102

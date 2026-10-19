@@ -1957,60 +1957,76 @@ success 13 / 13; every Phase 3a proof 25 / 25; a seeded sample of 50 per full r1
 
 ## rl-compute-share (2026-10-19, executor; literature and compute accounting, no pods; UNREVIEWED)
 
-No model was trained or sampled. Paper numbers are the papers' own models (named in every row of
-`rl_compute_share/compute_table.csv`), checked against verbatim quotes in `rl_compute_share/ledger/*.tsv`. Our runs:
-`best_model.ALiBiGPT` 6 × 384, 9,560,832 params, `lean_staten`, from scratch on K12 (cap 12; knockout K12⁻ / 1 % dose for
-create-or-elicit) or cap 6, Stage 1 1,200 s on an A40, then T1 expert-iteration ladders.
+No model was trained or sampled. Paper numbers refer to the papers' own models, named in every row of
+`rl_compute_share/compute_table.csv` and backed by verbatim quotes in `rl_compute_share/ledger/*.tsv`. Our runs:
+`best_model.ALiBiGPT` 6 × 384, 9,560,832 params, `lean_staten`, trained from scratch. Stage 1 ran 1,200 s on an A40 on
+K12 (cap 12), cap 6, K12⁻ (knockout) or the 1 % dose set; T1 expert-iteration ladders followed.
 
-- **Yue et al. (2504.13837v5), RL / pretraining FLOPs.** 15 rows: 7.1 × 10⁻⁶ – 3.0 × 10⁻²; median geometric midpoint
-  1.15 × 10⁻⁴; median high bound 2.0 × 10⁻⁴. Source: `rl_compute_share/analysis_out.txt` (from `analysis.py` over
-  `compute_table.csv`, built by `build_table.py` from `table_inputs.py`).
-- **Pretrained-LLM studies with a verdict** (34 rows; geometric midpoints):
+**Yue et al. (2504.13837v5), RL / pretraining FLOPs.**
+- 15 rows: 7.1 × 10⁻⁶ – 3.0 × 10⁻². The top value is DAPO-32B under its rollout-step reading; the caption's
+  gradient-step reading gives ≤ 1.9 × 10⁻³.
+- Median geometric midpoint 1.15 × 10⁻⁴; median high bound 2.0 × 10⁻⁴ (third-party checkpoints alone, 1.1 × 10⁻³).
+- Source: `rl_compute_share/analysis_out.txt`, from `analysis.py` over `compute_table.csv`, which `build_table.py`
+  builds from `table_inputs.py`.
 
-  | verdict | n | median ratio |
-  |---|---|---|
-  | elicit | 17 | 1.15 × 10⁻⁴ |
-  | create | 3 | 1.03 × 10⁻³ |
-  | mixed | 4 | 2.89 × 10⁻³ |
-  | no test | 10 | 4.23 × 10⁻³ |
+**Pretrained-LLM runs with a computable ratio** (35; geometric midpoints, `analysis_out.txt`):
 
-  The largest is ProRL v2 + BroRL at 1.0 × 10⁻² – 4.3 × 10⁻². Source: `analysis_out.txt`.
-- **Lab disclosures** (`compute_table.csv`, group `lab`):
+| verdict | n | median |
+|---|---|---|
+| elicit | 16 | 8.72 × 10⁻⁵ |
+| create | 3 | 1.03 × 10⁻³ |
+| mixed | 4 | 2.89 × 10⁻³ |
+| no test | 12 | 4.23 × 10⁻³ |
 
-  | lab, model | basis | RL / pretraining |
-  |---|---|---|
-  | DeepSeek-R1 | GPU-hours | 1.5–5.3 % |
-  | DeepSeek-V3.2 | cost, post-training | > 10 % |
-  | Llama-Nemotron-Ultra | GPU-hours | 0.45 % |
-  | Olmo 3.1 Think 32B | GPU-hours | 14 % |
-  | Reflection Beam | GPU-time | ≥ 1.7 |
-  | Cursor Composer 1.5 | stated | > 1 |
+- Create / elicit median ratio: 11.8.
+- The largest tested ratio is ProRL v2, 4.4 × 10⁻³ – 2.1 × 10⁻². The cumulative ProRL v2 + BroRL row reaches
+  1.0 – 4.5 × 10⁻², but BroRL reports pass@1 only.
 
-  GPU-time / FLOP ratio where both are known: R1-Zero 5.5×, Olmo 3 7.6×, our runs 5.6–8.2×. Source: `analysis_out.txt`.
-- **Frontier labs (graded estimate).** Source: `rl_compute_share/frontier_ranges.csv`.
+**Lab disclosures** (`compute_table.csv`, group `lab`):
 
-  | period | central | range | grade |
-  |---|---|---|---|
-  | 2024 | 0.01–0.1 | 0.003–0.3 | C |
-  | H1 2025 | 0.05–0.2 | 0.02–0.5 | C |
-  | H2 2025 | 0.3–1 | 0.1–2 | D |
-  | 2026 | 1–2 | 0.3–5 | D |
+| lab | RL / pretraining | basis |
+|---|---|---|
+| DeepSeek-R1 | 1.5–5.3 % | GPU-hours |
+| DeepSeek-V3.2 | > 10 % | cost, post-training |
+| Llama-Nemotron-Ultra | 0.45 % | GPU-hours |
+| Olmo 3.1 Think 32B | 14 % | GPU-hours |
+| Reflection Beam | ≥ 1.7 | GPU-time |
+| Cursor Composer 1.5 | > 1 | stated |
 
-- **Our runs** (RL-only LLM-equivalent to as-run FLOP ratio; GPU-s ratio). Source: `rl_compute_share/our_runs.csv`,
-  from `our_runs.py`, which reads the registries of `~/work/{trajectory,trajectory-cap6,rl-continue,rl-continue-cap6,rl-from-ckpt,create-or-elicit}` without modifying them.
+GPU-time / FLOP ratio across the FLOP bounds: R1-Zero 2.5–12×, Olmo 3 Think 3.7–15× (5.5× and 7.6× at the
+midpoints).
 
-  | run | FLOP ratio | GPU-s ratio |
-  |---|---|---|
-  | trajectory | 1.49–2.89 | 11.9–14.0 |
-  | trajectory-cap6 | 0.90–2.00 | 8.9–9.4 |
-  | rl-continue (r1–16) | 3.26–6.32 | 29.3–29.9 |
-  | rl-continue-cap6 (r1–16) | 2.25–4.75 | 22.2–26.4 |
-  | rl-from-ckpt p16000 / p12000 / p5000 / p1600 | 2.17–4.29 / 2.82–6.09 / 6.42–13.4 / 17.8–38.6 | |
-  | create-or-elicit full / dose1 / knockout | 3.17–6.44 / 3.13–6.18 / 3.07–9.74 | 32.5–53.9 (all arms) |
+**Frontier labs (graded estimate; units mostly GPU-time or unspecified).** Source:
+`rl_compute_share/frontier_ranges.csv`.
 
-  Pretraining D = 4.4 × 10⁸ real tokens (2.5 × 10¹⁶ FLOP).
-- **Checks.** `verify_ledger.py`: 1,204 / 1,204 quotes found; altered negative controls fail. `check_quotes.py`: 124 / 124
-  quotations in the notes and REVIEW.md found; fabricated controls fail.
-- **Bucket.** This run has no `ckpts/`, `artifacts/` or `data/`, so nothing is uploaded. Every deliverable is in git
-  under `rl_compute_share/`. The fetched source texts (`~/rcs_sources/`, 15 MB, copyrighted) stay off the public
-  bucket; each is re-fetchable from the `source:` line at its top and the ledger's `source_id`.
+| period | central | range | grade |
+|---|---|---|---|
+| 2024 | 0.01–0.1 | 0.003–0.3 | C |
+| H1 2025 | 0.05–0.2 | 0.02–0.5 | C |
+| H2 2025 | 0.3–1 | 0.1–2 | D |
+| 2026 | 1–2 | 0.3–5 | D |
+
+**Our runs** (RL-only LLM-equivalent to as-run FLOP ratio; GPU-s ratio). Source: `rl_compute_share/our_runs.csv`, from
+`our_runs.py`, which reads the registries of `~/work/{trajectory,trajectory-cap6,rl-continue,rl-continue-cap6,rl-from-ckpt,create-or-elicit}` without modifying them.
+
+| run | FLOP ratio | GPU-s ratio |
+|---|---|---|
+| trajectory | 1.49–2.89 | 11.9–14.0 |
+| trajectory-cap6 | 0.90–2.00 | 8.9–9.4 |
+| rl-continue (r1–16) | 3.26–6.32 | 29.3–29.9 |
+| rl-continue-cap6 (r1–16) | 2.25–4.75 | 22.2–26.4 |
+| rl-from-ckpt p16000 / p12000 / p5000 / p1600 | 2.17–4.29 / 2.82–6.09 / 6.42–13.4 / 17.8–38.6 | |
+| create-or-elicit full / dose1 / knockout | 3.17–6.44 / 3.13–6.18 / 3.07–9.74 | 32.5–53.9 (all arms) |
+
+- RL-only (LLM-equivalent) range over all runs: 0.90–19.1.
+- Pretraining D = 4.4 × 10⁸ real tokens (2.5 × 10¹⁶ FLOP); rl-from-ckpt D = 2.9 × 10⁷ – 2.9 × 10⁸.
+
+**Checks.**
+- `verify_ledger.py`: 1,206 / 1,206 quotes found; altered negative controls fail.
+- `check_quotes.py`: 124 / 124 quotations in the notes and REVIEW.md found; fabricated controls fail.
+- Adversarial claim check (`rl_compute_share/_claimcheck.md`): 131 statements checked, 51 problems, all fixed in
+  REVIEW.md.
+
+**Bucket.** This run has no `ckpts/`, `artifacts/` or `data/`, so nothing is uploaded. All deliverables are in git
+under `rl_compute_share/`. The fetched source texts (`~/rcs_sources/`, 15 MB, copyrighted) are not put in the public
+bucket. Each can be re-fetched from the `source:` line at its top and the ledger's `source_id`.

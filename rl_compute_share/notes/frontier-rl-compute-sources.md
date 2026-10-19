@@ -64,10 +64,11 @@ That is one to two orders of magnitude, mostly in 10x steps per generation (o1 t
 - **Three currencies get conflated:** relative scale-ups, GPU-time, and fleet shares.
   - Fleet shares include experiments. Epoch puts $4.5B of OpenAI's $5B of 2024 R&D compute outside final runs.
   - RL GPU-time is mostly rollout inference. Beam ran 3.9 to 5.4 inference GPUs per trainer GPU, so its trainer-side
-    GPU-time was about 0.3x its pretraining GPU-time.
+    GPU-time was at least ≈ 0.27-0.35x its pretraining GPU-time (pretraining took under four weeks).
 - **The Grok 4 1:1 chart is seen only through Ord's reproduction.** No livestream transcripts were found.
-- **Estimates disagree by about 5x.** Epoch put R1's RL at about 20 % of V3 pretraining; DeepSeek's GPU-hours, quoted by
-  ScaleRL, give 3.75 %.
+- **Estimates disagree by about 5x.** Epoch put R1-Zero's RL at about 20 % of V3 pretraining (FLOPs, before DeepSeek's
+  disclosure). DeepSeek's own GPU-hours give 3.6-3.8 % (ScaleRL quotes 3.75 %), and a token count gives 0.3-1.5 % in
+  FLOPs (`../REVIEW.md`, Q3).
 - **Pretraining also kept scaling.** Amodei said in 2026 that it is "continuing to give us gains", and fresh large
   pretrains lower *R*.
 
