@@ -158,7 +158,7 @@ def main():
         k = kal(r['prompt'])
         assert k is not None
         used.add(r['name'])
-        rows.append({'name': r['name'], 'prompt': r['prompt'], 'n_lines': r['n_lines'], 'n_prem': r['n_prem'],
+        rows.append({'name': r['name'], 'key': r['key'], 'prompt': r['prompt'], 'n_lines': r['n_lines'], 'n_prem': r['n_prem'],
                      'proof': k['kal_proof'], **{x: y for x, y in k.items() if x != 'kal_proof'}})
     write(f'{a.out}/tf1200_kal_sl.jsonl', rows)
     write(f'{a.out}/val300_kal_sl.jsonl', rows[:300])

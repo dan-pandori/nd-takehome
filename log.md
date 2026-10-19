@@ -1027,3 +1027,11 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   (ceiling now 300 h); run the optional EI ladder (brief item 7) within the $50, pre-registered in an addendum first.
 - 03:27  KAL-C s0 / s1 / s2 trained (24,020 steps each; 1,527 / 1,449 / 1,448 s on the 3090; md5 2c6bbc9b / 8dabdd30 /
   8992b636; bucket `kalmar-pretrain/ckpts/kalmar/`). kal-1 deleted after pulling its logs and registry rows.
+- 03:45  KAL-C greedy read-outs complete (3 seeds; kal-6 deleted, 1.42 h, $0.31). TF agreement 93.84 / 93.24 / 93.39 %;
+  greedy tf1200 valid 26.9 / 14.1 / 22.2 % (exact-Kalmár 10.2 / 6.6 / 10.6 %); holdout250 1.2 / 3.6 / 2.8 %; rr600
+  ≤ 1.2 %; hand_proved_14 0; G1-supplied 18 / 15 / 9 of 200. KAL-C s0 plain k 32 (kal-7, batch 2,048, 48.6 min for
+  1,746 theorems × 32): holdout250 24, rr600 6, ge17 0, hand_proved_14 0 solved.
+- 03:40  Ladder smoke test (kal-6, KAL-C s0, 20 targets, k 2, 1 round, 5 fine-tune steps): runs end to end after adding
+  the `key` field to `tf1200` / `val300` (the ladder keys its evaluation exclusions on it; contents otherwise unchanged;
+  `make_sets.py` patched). Smoke checkpoint removed from the bucket. Mixes smaller than `--ft_recs` (128) crash the
+  default fine-tune loop (`pop from empty list`): irrelevant at 20,000 retained records.

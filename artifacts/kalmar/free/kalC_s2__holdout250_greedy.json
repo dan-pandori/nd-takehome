@@ -1,0 +1,120 @@
+{
+ "ckpt": "ckpts/kalmar/stage1_kalC_s2.pt",
+ "in": "data/kalmar/holdout250_kal_sl.jsonl",
+ "k": 1,
+ "temperature": 0.0,
+ "seed": 0,
+ "batch": 1024,
+ "max_action": 512,
+ "max_steps": 1024,
+ "supply_pr": false,
+ "n_theorems": 250,
+ "n_attempts": 250,
+ "gen_s": 111.1,
+ "lean_s": 0.8,
+ "solved_theorems": 7,
+ "by": {
+  "all": {
+   "n": 250,
+   "valid": 7,
+   "follow": 2,
+   "dev_valid": 5,
+   "dev_valid_shorter": 4,
+   "end=syntax": 88,
+   "end=done": 142,
+   "end=truncated": 20
+  },
+  "atoms=1": {
+   "n": 8,
+   "valid": 0,
+   "follow": 0,
+   "dev_valid": 0,
+   "dev_valid_shorter": 0,
+   "end=truncated": 2,
+   "end=done": 4,
+   "end=syntax": 2
+  },
+  "atoms=2": {
+   "n": 59,
+   "valid": 2,
+   "follow": 1,
+   "dev_valid": 1,
+   "dev_valid_shorter": 1,
+   "end=done": 41,
+   "end=syntax": 15,
+   "end=truncated": 3
+  },
+  "atoms=3": {
+   "n": 99,
+   "valid": 3,
+   "follow": 1,
+   "dev_valid": 2,
+   "dev_valid_shorter": 1,
+   "end=done": 57,
+   "end=truncated": 9,
+   "end=syntax": 33
+  },
+  "atoms=4": {
+   "n": 84,
+   "valid": 2,
+   "follow": 0,
+   "dev_valid": 2,
+   "dev_valid_shorter": 2,
+   "end=syntax": 38,
+   "end=truncated": 6,
+   "end=done": 40
+  }
+ },
+ "deviation": {
+  "tag": {
+   "split": 19,
+   "leaf:not+": 19,
+   "pr": 27,
+   "leaf:imp+B": 46,
+   "leaf:or+": 44,
+   "leaf:and+": 33,
+   "leaf:imp-": 8,
+   "lem": 34,
+   "leaf:or-": 6,
+   "efq": 1,
+   "leaf:and-": 7,
+   "close:leaf:imp+B": 1,
+   "leaf:imp+A": 2,
+   "close:split": 1
+  },
+  "depth": {
+   "0": 61,
+   "3": 59,
+   "4": 58,
+   "2": 61,
+   "1": 8,
+   "5": 1
+  },
+  "decile": {
+   "0": 49,
+   "4": 17,
+   "3": 51,
+   "1": 56,
+   "2": 58,
+   "8": 2,
+   "5": 8,
+   "6": 6,
+   "7": 1
+  }
+ },
+ "env": {
+  "steps": 32496,
+  "rows": 23346,
+  "rowsteps": 623744,
+  "prompt_len_max": 1233,
+  "chunks": 505,
+  "stop_eos": 23326,
+  "stop_exact": 0,
+  "stop_goal": 0,
+  "truncated": 20,
+  "syntax": 88,
+  "done": 142,
+  "waves": 505,
+  "peak_alloc_gb": 4.03483772277832
+ }
+}

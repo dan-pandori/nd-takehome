@@ -1,0 +1,119 @@
+{
+ "ckpt": "ckpts/kalmar/stage1_kalC_s1.pt",
+ "in": "data/kalmar/holdout250_kal_sl.jsonl",
+ "k": 1,
+ "temperature": 0.0,
+ "seed": 0,
+ "batch": 1024,
+ "max_action": 512,
+ "max_steps": 1024,
+ "supply_pr": false,
+ "n_theorems": 250,
+ "n_attempts": 250,
+ "gen_s": 85.7,
+ "lean_s": 0.9,
+ "solved_theorems": 9,
+ "by": {
+  "all": {
+   "n": 250,
+   "valid": 9,
+   "follow": 3,
+   "dev_valid": 6,
+   "dev_valid_shorter": 4,
+   "end=syntax": 139,
+   "end=done": 98,
+   "end=truncated": 13
+  },
+  "atoms=1": {
+   "n": 8,
+   "valid": 0,
+   "follow": 0,
+   "dev_valid": 0,
+   "dev_valid_shorter": 0,
+   "end=done": 3,
+   "end=syntax": 5
+  },
+  "atoms=2": {
+   "n": 59,
+   "valid": 4,
+   "follow": 1,
+   "dev_valid": 3,
+   "dev_valid_shorter": 2,
+   "end=syntax": 26,
+   "end=done": 31,
+   "end=truncated": 2
+  },
+  "atoms=3": {
+   "n": 99,
+   "valid": 3,
+   "follow": 2,
+   "dev_valid": 1,
+   "dev_valid_shorter": 0,
+   "end=syntax": 56,
+   "end=done": 35,
+   "end=truncated": 8
+  },
+  "atoms=4": {
+   "n": 84,
+   "valid": 2,
+   "follow": 0,
+   "dev_valid": 2,
+   "dev_valid_shorter": 2,
+   "end=syntax": 52,
+   "end=done": 29,
+   "end=truncated": 3
+  }
+ },
+ "deviation": {
+  "tag": {
+   "split": 29,
+   "leaf:or+": 31,
+   "lem": 37,
+   "close:split": 1,
+   "leaf:imp+B": 41,
+   "leaf:and+": 33,
+   "leaf:not+": 20,
+   "leaf:imp+A": 7,
+   "pr": 31,
+   "leaf:and-": 7,
+   "efq": 2,
+   "leaf:imp-": 2,
+   "leaf:or-": 4,
+   "close:lem": 2
+  },
+  "depth": {
+   "0": 89,
+   "3": 61,
+   "2": 41,
+   "4": 45,
+   "1": 10,
+   "5": 1
+  },
+  "decile": {
+   "0": 66,
+   "2": 73,
+   "1": 43,
+   "4": 14,
+   "3": 39,
+   "7": 1,
+   "8": 1,
+   "5": 5,
+   "6": 5
+  }
+ },
+ "env": {
+  "steps": 26896,
+  "rows": 19264,
+  "rowsteps": 503280,
+  "prompt_len_max": 404,
+  "chunks": 451,
+  "stop_eos": 19251,
+  "stop_exact": 0,
+  "stop_goal": 0,
+  "syntax": 139,
+  "truncated": 13,
+  "done": 98,
+  "waves": 451,
+  "peak_alloc_gb": 1.9470396041870117
+ }
+}
