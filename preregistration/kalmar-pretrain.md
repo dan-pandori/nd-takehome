@@ -293,3 +293,34 @@ whose sampled reads were already complete at 2,048. So:
 - A batch change is a sampling re-draw, not a correctness change (`NOISE_FLOOR.md`). The comparison is claimed only
   where the arm difference is much larger than this re-draw difference.
 - Greedy and teacher-forced reads are unaffected: all arms at batch 1,024, as before.
+
+## Addendum 3 (2026-10-20 00:20 UTC) — exploratory, NOT pre-registered: is it RL or annealing?
+
+**Why.** After one EI round from KAL-D s0, round-2 numbers are:
+
+| read | base | after one round |
+|---|---|---|
+| targets this round (k 16) | 135 / 1,000 | 572 |
+| held-out greedy (`val300`) | 29.0 % | 71.7 % |
+| transfer greedy | 7.0 % | 33.5 % |
+
+The round's fine-tune (600 steps, lr 3e-4 → 3e-5, 128 proofs per step) trained mostly on 20,000 replayed K12-Kalmár
+records. Only ≈ 6 % of the records were EI proofs. KAL-D's own schedule ended at 3e-4 (0.3 × peak).
+So the gain may be annealing on Kalmár data rather than RL. That would also bear on the "not learned" verdict.
+
+**Control.** For each of KAL-D s0, s1, s2:
+- **Fine-tune.** Exactly the ladder's fine-tune command (`state_train.py --init <KAL-D> --steps 600 --lr 3e-4 --min_lr
+  3e-5 --warmup 50 --recs 128 --cap 0 --seed <s>`), on 20,000 K12-Kalmár records drawn with `random.Random(s)`. No EI
+  proofs. The output is "KAL-D+A" (annealed).
+- **Read-outs.** Teacher-forced agreement and greedy free generation on tf1200, at batch 1,024 on RTX 3090s, the same
+  protocol as every greedy read here. Also the EI arm's round-1 checkpoint (`la_kal_ei_s0_r1.pt`) on the same two
+  reads. For s0 only: one ladder-style sampling of the 1,000 EI targets at k 16, T 0.8, batch 1,024, against EI
+  round 2's 572.
+
+**Readings.**
+- **Annealing explains the jump** if KAL-D+A s0 is within ≈ 10 % of EI r1 on held-out greedy and targets solved.
+- **RL contributes** if EI r1 is clearly ahead.
+- **Revision of "learned":** if KAL-D+A passes the pre-registered "learned" criteria, the run's headline becomes
+  "learned with a low-learning-rate anneal". Reported as exploratory either way.
+
+**Cost.** ≈ 3 × 3.5 h on community 3090s (≈ $2.5), or ≈ $6 on A40s. Projected total ≤ $45 of $50.
