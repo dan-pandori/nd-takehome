@@ -1,0 +1,91 @@
+START 2026-10-19T02:12:33Z
+params 10732800 mode lean_staten
+train records 155000 (skipped 0); pairs 16876247; mean 108.879 per proof; max pair len 733; load 59s
+best: 16,876,247 train pairs (T 733), 35,553 val pairs, on cuda in 68s
+best: --best_epochs 3.675 x 178581 batches per epoch -> --best_steps 656285
+best: 9,560,832 params (+1,875,584 MTP, not saved)
+W1019 02:14:55.002000 265 torch/fx/experimental/symbolic_shapes.py:6823] [0/0] _maybe_guard_rel() was called on non-relation expression Eq(s64, 1) | Eq(s64, 8)
+W1019 02:14:56.858000 265 torch/fx/experimental/symbolic_shapes.py:6823] [0/0_1] _maybe_guard_rel() was called on non-relation expression Eq(s64, 1) | Eq(s64, 8)
+W1019 02:15:02.246000 265 torch/fx/experimental/symbolic_shapes.py:6823] [0/1] _maybe_guard_rel() was called on non-relation expression Eq(s30, 1) | Eq(s30, 8)
+W1019 02:15:02.250000 265 torch/fx/experimental/symbolic_shapes.py:6823] [0/1] _maybe_guard_rel() was called on non-relation expression Eq(s27, s99) | Eq(s99, 1)
+W1019 02:15:02.254000 265 torch/fx/experimental/symbolic_shapes.py:6823] [0/1] _maybe_guard_rel() was called on non-relation expression Eq(s27, s82) | Eq(s82, 1)
+/workspace/nd-takehome/state_train_best.py:194: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  recent.append(float(main)); recent_aux.append(float(aux))
+W1019 02:24:47.580000 265 torch/fx/experimental/symbolic_shapes.py:6823] [0/2] _maybe_guard_rel() was called on non-relation expression Eq(s64, 1) | Eq(s64, 8)
+W1019 02:24:47.585000 265 torch/fx/experimental/symbolic_shapes.py:6823] [0/2] _maybe_guard_rel() was called on non-relation expression Eq(s27, s98) | Eq(s98, 1)
+W1019 02:24:47.589000 265 torch/fx/experimental/symbolic_shapes.py:6823] [0/2] _maybe_guard_rel() was called on non-relation expression Eq(s27, s82) | Eq(s82, 1)
+step 11069 loss 0.0811 mtp 0.0860 lr 1.00e-03 epochs 0.06 600s val 0.0413
+step 22371 loss 0.0371 mtp 0.0417 lr 9.98e-04 epochs 0.13 1200s val 0.0383
+uploaded ckpts/kalmar/stage1_kalD_s2_step24020.pt -> hf://buckets/dan-pandori/nd-rl/kalmar-pretrain/ckpts/kalmar/stage1_kalD_s2_step24020.pt (md5 9d7c69eb2b9c5e169c474b982a4807bd, 2.4s)
+saved ckpts/kalmar/stage1_kalD_s2_step24020.pt
+step 33628 loss 0.0319 mtp 0.0365 lr 9.95e-04 epochs 0.19 1800s val 0.0426
+step 44960 loss 0.0339 mtp 0.0393 lr 9.92e-04 epochs 0.25 2400s val 0.0410
+step 56303 loss 0.0318 mtp 0.0358 lr 9.87e-04 epochs 0.32 3000s val 0.0388
+step 67640 loss 0.0314 mtp 0.0355 lr 9.82e-04 epochs 0.38 3600s val 0.0299
+step 78987 loss 0.0302 mtp 0.0348 lr 9.75e-04 epochs 0.44 4200s val 0.0371
+step 90320 loss 0.0301 mtp 0.0343 lr 9.68e-04 epochs 0.51 4800s val 0.0336
+uploaded ckpts/kalmar/stage1_kalD_s2_step100000.pt -> hf://buckets/dan-pandori/nd-rl/kalmar-pretrain/ckpts/kalmar/stage1_kalD_s2_step100000.pt (md5 7003c30db665533ab2435d8f5756099d, 2.2s)
+saved ckpts/kalmar/stage1_kalD_s2_step100000.pt
+step 101599 loss 0.0313 mtp 0.0364 lr 9.59e-04 epochs 0.57 5400s val 0.0390
+step 112936 loss 0.0305 mtp 0.0355 lr 9.50e-04 epochs 0.63 6000s val 0.0338
+step 124285 loss 0.0292 mtp 0.0326 lr 9.40e-04 epochs 0.70 6600s val 0.0405
+step 135629 loss 0.0284 mtp 0.0325 lr 9.29e-04 epochs 0.76 7200s val 0.0359
+step 146974 loss 0.0282 mtp 0.0327 lr 9.17e-04 epochs 0.82 7800s val 0.0332
+step 158311 loss 0.0294 mtp 0.0344 lr 9.04e-04 epochs 0.89 8400s val 0.0429
+step 169650 loss 0.0276 mtp 0.0322 lr 8.91e-04 epochs 0.95 9000s val 0.0386
+step 180911 loss 0.0280 mtp 0.0321 lr 8.77e-04 epochs 1.01 9600s val 0.0311
+step 191948 loss 0.0278 mtp 0.0316 lr 8.62e-04 epochs 1.08 10200s val 0.0408
+uploaded ckpts/kalmar/stage1_kalD_s2_step200000.pt -> hf://buckets/dan-pandori/nd-rl/kalmar-pretrain/ckpts/kalmar/stage1_kalD_s2_step200000.pt (md5 6dffd8c15b836920a235cb6af2bd36ec, 2.3s)
+saved ckpts/kalmar/stage1_kalD_s2_step200000.pt
+step 202604 loss 0.0266 mtp 0.0313 lr 8.48e-04 epochs 1.13 10800s val 0.0416
+step 213670 loss 0.0272 mtp 0.0309 lr 8.32e-04 epochs 1.20 11400s val 0.0273
+step 225002 loss 0.0270 mtp 0.0310 lr 8.16e-04 epochs 1.26 12000s val 0.0338
+step 236333 loss 0.0257 mtp 0.0296 lr 7.99e-04 epochs 1.32 12600s val 0.0286
+step 247669 loss 0.0255 mtp 0.0294 lr 7.82e-04 epochs 1.39 13200s val 0.0253
+step 259011 loss 0.0256 mtp 0.0300 lr 7.64e-04 epochs 1.45 13800s val 0.0288
+step 270349 loss 0.0250 mtp 0.0290 lr 7.46e-04 epochs 1.51 14400s val 0.0285
+step 281689 loss 0.0245 mtp 0.0282 lr 7.27e-04 epochs 1.58 15000s val 0.0295
+step 293020 loss 0.0253 mtp 0.0288 lr 7.09e-04 epochs 1.64 15600s val 0.0275
+step 304360 loss 0.0247 mtp 0.0281 lr 6.90e-04 epochs 1.70 16200s val 0.0294
+step 315694 loss 0.0246 mtp 0.0276 lr 6.71e-04 epochs 1.77 16800s val 0.0252
+step 327025 loss 0.0227 mtp 0.0254 lr 6.52e-04 epochs 1.83 17400s val 0.0290
+step 338354 loss 0.0236 mtp 0.0264 lr 6.33e-04 epochs 1.89 18000s val 0.0277
+step 349671 loss 0.0222 mtp 0.0252 lr 6.14e-04 epochs 1.96 18600s val 0.0242
+uploaded ckpts/kalmar/stage1_kalD_s2_step350000.pt -> hf://buckets/dan-pandori/nd-rl/kalmar-pretrain/ckpts/kalmar/stage1_kalD_s2_step350000.pt (md5 9f4ed7d991152843ebef0bfd1d1cd302, 2.2s)
+saved ckpts/kalmar/stage1_kalD_s2_step350000.pt
+step 360859 loss 0.0212 mtp 0.0242 lr 5.95e-04 epochs 2.02 19200s val 0.0256
+step 372215 loss 0.0215 mtp 0.0243 lr 5.77e-04 epochs 2.08 19800s val 0.0365
+step 383579 loss 0.0204 mtp 0.0232 lr 5.58e-04 epochs 2.15 20400s val 0.0263
+step 394519 loss 0.0204 mtp 0.0230 lr 5.41e-04 epochs 2.21 21000s val 0.0241
+step 405240 loss 0.0200 mtp 0.0225 lr 5.24e-04 epochs 2.27 21600s val 0.0275
+step 416435 loss 0.0194 mtp 0.0216 lr 5.06e-04 epochs 2.33 22200s val 0.0192
+step 427807 loss 0.0187 mtp 0.0212 lr 4.89e-04 epochs 2.40 22800s val 0.0213
+step 439187 loss 0.0180 mtp 0.0205 lr 4.73e-04 epochs 2.46 23400s val 0.0199
+step 450573 loss 0.0179 mtp 0.0200 lr 4.56e-04 epochs 2.52 24000s val 0.0205
+step 461960 loss 0.0182 mtp 0.0204 lr 4.41e-04 epochs 2.59 24600s val 0.0200
+step 473349 loss 0.0179 mtp 0.0195 lr 4.26e-04 epochs 2.65 25200s val 0.0196
+step 484736 loss 0.0178 mtp 0.0197 lr 4.12e-04 epochs 2.72 25800s val 0.0206
+step 496115 loss 0.0177 mtp 0.0190 lr 3.98e-04 epochs 2.78 26400s val 0.0227
+uploaded ckpts/kalmar/stage1_kalD_s2_step500000.pt -> hf://buckets/dan-pandori/nd-rl/kalmar-pretrain/ckpts/kalmar/stage1_kalD_s2_step500000.pt (md5 8f9b63f6db7f9c4f47c83f696633b224, 2.2s)
+saved ckpts/kalmar/stage1_kalD_s2_step500000.pt
+step 507440 loss 0.0164 mtp 0.0179 lr 3.85e-04 epochs 2.84 27000s val 0.0273
+step 518813 loss 0.0172 mtp 0.0187 lr 3.73e-04 epochs 2.91 27600s val 0.0179
+step 530200 loss 0.0156 mtp 0.0168 lr 3.62e-04 epochs 2.97 28200s val 0.0276
+step 541507 loss 0.0151 mtp 0.0165 lr 3.52e-04 epochs 3.03 28800s val 0.0213
+step 552894 loss 0.0152 mtp 0.0162 lr 3.42e-04 epochs 3.10 29400s val 0.0202
+step 564282 loss 0.0147 mtp 0.0158 lr 3.33e-04 epochs 3.16 30000s val 0.0192
+step 575670 loss 0.0152 mtp 0.0159 lr 3.26e-04 epochs 3.22 30600s val 0.0213
+step 587061 loss 0.0148 mtp 0.0160 lr 3.19e-04 epochs 3.29 31200s val 0.0181
+step 598211 loss 0.0139 mtp 0.0150 lr 3.13e-04 epochs 3.35 31800s val 0.0168
+step 608998 loss 0.0139 mtp 0.0152 lr 3.09e-04 epochs 3.41 32400s val 0.0185
+step 620038 loss 0.0152 mtp 0.0160 lr 3.05e-04 epochs 3.47 33000s val 0.0171
+step 631418 loss 0.0139 mtp 0.0147 lr 3.02e-04 epochs 3.54 33600s val 0.0154
+step 642797 loss 0.0133 mtp 0.0141 lr 3.01e-04 epochs 3.60 34200s val 0.0172
+step 654176 loss 0.0135 mtp 0.0144 lr 3.00e-04 epochs 3.66 34800s val 0.0146
+step 656285 loss 0.0139 mtp 0.0148 lr 3.00e-04 epochs 3.68 34916s val 0.0146
+best: done 656285 steps, 3.68 epochs of pairs, 34922s, final val 0.014576057516719134
+uploaded ckpts/kalmar/stage1_kalD_s2.pt -> hf://buckets/dan-pandori/nd-rl/kalmar-pretrain/ckpts/kalmar/stage1_kalD_s2.pt (md5 396586c22f31f2a208a561de0eff0374, 2.2s)
+saved ckpts/kalmar/stage1_kalD_s2.pt
+rc=0
+END 2026-10-19T11:57:06Z

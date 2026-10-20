@@ -2,13 +2,12 @@
 
 ## The setting
 
-This project trains small language models (about 10 million parameters) to prove simple logic theorems built from
-four letters with "and", "or", "not" and "implies". The model sees the current proof state, the
-facts established so far plus the goal, and writes one step at a time. Lean, a proof checker used by mathematicians,
-decides whether a finished proof is correct.
+This project trains small language models (about 10 million parameters) to prove simple logic theorems built from four
+letters with "and", "or", "not" and "implies". The model sees the current proof state, the facts established so far
+plus the goal, and writes one step at a time. Lean, a proof checker used by mathematicians, decides whether a
+finished proof is correct.
 
-The project asks how much training against such a checker teaches genuinely new skills. This run asks a related
-question: can ordinary training on examples teach a model a complete *method*?
+This run asks whether ordinary training on examples can teach a model a complete *method*.
 
 ## The method
 
@@ -16,63 +15,59 @@ Every theorem in this logic can be proved by one mechanical recipe, the truth-ta
 completeness proof:
 1. Split into cases for every letter, true or false; with four letters that gives up to 16 cases.
 2. In each case, prove each formula, or its negation, by a fixed recursion.
-3. A case in which an assumption is false closes immediately.
+3. Close at once any case in which an assumption is false.
 
 Every step depends only on the current state, so a model that learned the recipe could prove every theorem in the
-domain. The catch is length. Recipe proofs average 109 steps; the project's usual
-training proofs average 8.
+domain. The catch is length: recipe proofs average 109 steps, against 8 for the project's usual training proofs.
 
 ## What we did
 
-We generated a recipe proof for each of the 155,000 theorems in the project's standard training set (K12), and Lean
-accepted all of them. We trained the project's best small model on them from scratch, three times with different
-seeds:
-- for the same 3.7 passes over its data as the standard model, which takes about 27 times more training text;
-- for the standard model's budget, an eighth of one pass.
-
-We compared both with the standard model, which learns from K12's own short proofs.
+We generated recipe proofs for all 155,000 theorems of the project's standard training set (K12); Lean accepted every
+one. We trained the project's best small model on these proofs from scratch, three times with
+different seeds. Training made the same 3.7 passes over the data as the standard model's, which is about 27 times more
+text. We compared it with the standard model, trained on K12's own short proofs. Before any training, we wrote down
+what we expected and what would count as success.
 
 ## What we found
 
-**It learned the mechanical parts, not the whole recipe.**
-- Shown each intermediate state of the recipe's proof of an unseen theorem, the fully trained model chose the recipe's
-  next step 94.5 % of the time.
-- Case splits and case closings were near-perfect. Steps that need a judgement, such as which piece of which formula to
-  prove next, were 65–92 %.
-- Writing whole proofs alone, it produced a correct proof for 29–36 % of unseen theorems. It followed the recipe
-  exactly in 14–16 %.
-- The standard model proves 92 % of the same theorems its own way.
-- Whether more training would help is open.
+**As planned, the answer was no.**
+- Shown each intermediate state of the recipe's proof of an unseen theorem, the model chose the recipe's next step
+  94.5 % of the time.
+- Writing whole proofs alone, it produced a correct proof for only a third of unseen theorems.
+- On harder sets it solved far fewer than the standard model: 33 against 165 of 250, with 32 tries each.
+- Its mistakes were mostly bookkeeping. It lost its place in the long recursion, or miscopied a long formula; it rarely
+  got the logic wrong.
 
-**The mistakes are mostly bookkeeping.**
-- Of one model's 6,903 wrong steps:
-  - 45 % write a formula that belongs to the problem but is not the one due next: the model loses its place in the
-    recursion;
-  - 31 % write a formula that appears nowhere in the problem: a copying slip.
-- Where it can be checked, about one in six wrong steps asserts something false in the case at hand.
-- One slip ruins a hundred-step proof, so 95 % per step yields few complete proofs.
+**A surprise: most of the failure was how training ended.** The project's training recipe lowers the learning rate
+only to 30 % of its peak, and stops there.
+- We trained each model for a further 600 small steps on recipe proofs it had already seen, with a learning rate
+  decaying ten-fold. That is under 0.1 % of the original training.
+- After this "annealing" the models chose the recipe's step 98.7 % of the time. They wrote correct proofs for 71–79 %
+  of unseen theorems, and followed the recipe exactly in 54–60 %.
+- The annealed models then roughly matched the standard model on ordinary held-out problems: 37 % against 38 % solved
+  at the first try.
+- They clearly beat it on theorems that need classical reasoning the standard data almost never shows (35 % against
+  7 %), and on one set of externally collected problems (38 % against 16 %).
+- They still fall short of what we had defined, in advance, as having learned the method: exact recipe-following on
+  small problems is about two thirds, against a 90 % bar.
+- This part was not planned in advance: a strong lead, not a settled result.
 
-**It mostly did not help.**
-- **Long held-out problems.** With 32 tries each it solved fewer than the standard model: 33 against 165 of 250 on
-  one held-out set, and 17 against 246 of 600 on long problems.
-- **Larger formulas.** On formulas larger than 99 % of the training theorems, every model failed.
-- **Generalisation.** The pre-registered test for generalisation failed everywhere except one family.
-- **That family: classical reasoning.** Some theorems need an argument the standard data almost never shows. Here we
-  used decoding in which a checker rejects a logically wrong step and the model tries again.
-  - With that help, the data-matched models solved 26–34 of 106 such theorems and the standard models 12–19, on every
-    seed.
-  - Without the checker, the difference was within the noise.
+**Reinforcement learning, mostly explained.** In a few rounds of "expert iteration" the model is trained on its own
+Lean-accepted proofs.
+- After one round, the number of target problems solved jumped from 135 to 572 of 1,000.
+- But each round's training step replays thousands of recipe proofs at a low learning rate: the same annealing.
+- Annealing alone, with none of the model's own proofs, solves 578. So this reinforcement learning added nothing we
+  could measure on top of annealing.
+- It did not drift from the method: afterwards its proofs follow the recipe more often and are not shorter.
 
 **A side finding.** Models trained on K12 had been reported to fail problems with four or more assumptions.
-- Proofs begin by restating each assumption in order, and K12 never has more than three. With more, the standard
-  model restates them wrongly at the first step.
+- Proofs begin by restating each assumption; K12 never has more than three, and with more the standard model
+  restates them wrongly.
 - When the environment restates them instead, it solves 177–191 of 200 such problems.
-
-**Reinforcement learning on top.** LADDER_PLAIN
 
 ## What it means
 
-At this scale, imitating a complete algorithm's long proofs did not produce a model that runs the algorithm reliably.
-The model learned the pattern-like parts. It did not learn to keep track of where it is in a long computation. Short
-proofs it can get right are worth more than a long method it executes imperfectly. The method paid off, partly, only
-where it was designed to: theorems whose proof needs a step the ordinary training data almost never shows.
+Imitating an algorithm's long proofs nearly works at this scale, once training is finished properly. The
+pattern-like parts are learned easily. Keeping track of a long computation needs a final low-learning-rate phase that
+the project's standard recipe omits. Large apparent gains from reinforcement learning can come from that same missing
+phase.

@@ -130,3 +130,5 @@ the **90 pod-hour ceiling binds long before the $50**. The three data-matched KA
 (656,285 steps each, ≈ 10 h). With 140 pod-hours (still ≤ $50) I would run the brief's optional item 7: a short EI
 ladder (≤ 8 rounds) from a KAL-D base, pre-registered in an addendum first.
 **Default if unanswered:** stay within 90 pod-hours / $50 and skip the EI ladder (cost it in `next_steps.md`).
+
+**Answer (Dan, 2026-10-19, relayed by agent:claude):** granted. The dollar budget ($50) is the real limit; pod-hour ceilings are advice only, for this run and every run (AGENT_POLICY updated). pod_budget_watch now enforces dollars, not hours: it warns you at 80 % of $50 and stops pods at 100 %; crossing the hour figure only writes ~/runs/kalmar-pretrain/HOURS_ADVISORY. The hour figure is set to 300 h. Run the optional EI ladder (item 7) within the $50, pre-registered in an addendum first.

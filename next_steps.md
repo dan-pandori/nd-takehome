@@ -1,63 +1,50 @@
-# next_steps — kalmar-pretrain (2026-10-19; UNREVIEWED)
+# next_steps — kalmar-pretrain (2026-10-20; UNREVIEWED)
 
 What this run leaves open (`numbers.md` § kalmar-pretrain):
-- Pretraining a 9.56 M proof-state model on Kalmár proofs of K12's theorems (3.68 epochs) gives 94.5 % per-state
-  agreement with the algorithm and 32.6 % greedy Lean-valid proofs on held-out theorems. The control, trained on K12's
-  own short proofs, reaches 92 %.
-- Snapshot agreement rose across training, but the snapshots are mid-schedule, so data and learning-rate annealing are
-  confounded.
-- KAL-D s2's errors are mostly bookkeeping: the wrong next subformula (45 %) or a copying slip (31 %). Where it can be
-  checked, 16.8 % assert something false in the branch.
+- **Pre-registered result.** Kalmár pretraining (KAL-D, 3.68 epochs) is far below the K12 control. Teacher-forced
+  agreement is 94.5 % and greedy proofs are 32.6 % valid.
+- **Exploratory result** (Addendum 3). A 600-step low-learning-rate fine-tune on 20,000 replayed Kalmár proofs (KAL-D+A)
+  lifts that to 98.7 % and 71–79 %. Greedily, it about matches the control on holdout250 and beats it on the classical
+  families and the release.
+- **The EI ladder.** Its jump (135 → 572 of 1,000 targets) is that same anneal: replay alone gives 578.
+- **Still short.** Exact-follow at 1–2 atoms is 63–69 % against the 90 % bar.
 
-Costs below use this run's prices (community RTX 3090 $0.22/h for training, A40 $0.59/h for sampled reads).
+Costs below use this run's prices (RTX 3090 $0.22–0.50/h for training, A40 $0.59/h).
 
-## 1. Train longer, or larger — ≈ $5–15 per arm
-- **Question:** is "not learned" a data-scale or capacity limit?
-- **Why this is open:** this run cannot say. The rise from 86.6 to 94.5 % agreement (greedy 6.6 → 32.6 %) runs through a
-  cosine learning-rate decay, and the last ≈ 120 k steps of training loss are nearly flat. Only a longer schedule, or a
-  larger model, can tell.
+## 1. Confirm the anneal finding properly — ≈ $10
+- **Why first:** it is exploratory and changes the run's conclusion. Pre-register it, then test it.
 - **Arms:**
-  - KAL-D at 2× the steps (≈ 20 h per seed on a 3090, ≈ $4.5 per seed);
-  - a ≈ 25 M model at 1× (≈ 2.5× the per-step time).
-- **Read-out:** teacher-forced agreement and greedy exact-follow on `tf1200`. These are cheap: greedy reads only, 15
-  min per model.
-- **Decision value:** if agreement passes ≈ 99 % with 2× data, the construction is learnable at this scale and the
-  bottleneck was compute. If it saturates near 95 %, the format or the model is the limit.
+  - KAL-D with a schedule that decays to ≈ 0 instead of 0.3 × peak (`state_train_best.MIN_LR_FRAC`), 3 seeds;
+  - KAL-D+A at 2× and 4× the anneal steps.
+- **Read-outs:** plain and guided reads at matched batch.
+- **The same question for the K12 control:** does a 600-step anneal on K12 replay lift it too?
+  - This matters for every best-recipe result in the project: every best-cap12 / best-cap6 model, and every ladder
+    whose gains include replay.
+  - Cost: ≈ $1 per seed on a 3090, plus greedy reads.
+- **Decision value:** if K12 models gain as much, the project's RL-vs-pretraining comparisons need an annealed
+  baseline.
 
-## 2. Let the environment restate premises — ≈ $1 (re-reads only)
-- **Finding here:** the K12 control solves 177–191 of 200 four- and five-premise problems at k 32 once the environment
-  writes the premise lines. Without that help it solves 0–26.
-- **Where it fails:** most failed attempts break the premise-line order at the first or second action, before any `h4`
-  line is due. The "premise-count wall" (peer-rl-review) is writing the premise lines, not the proof.
-- **Proposal:** the environment applies premise lines itself, for every model. Premise lines carry no choice.
-- **Cost and value:** a code change plus a re-read of the standard sets. It removes a wall for every existing
+## 2. Separate RL from annealing in every ladder — ≈ $2 per ladder
+- **Finding:** here a replay-only fine-tune reproduces an EI round's gain exactly: 578 vs 572 targets; TF 98.7 vs
+  98.7 %.
+- **Proposal:** for any ladder whose fine-tune replays pretraining data, run a replay-only arm with the same steps and
+  learning rate. My notes from `rl-from-ckpt` already flagged "ladder replay is pretraining".
+
+## 3. Let the environment restate premises — ≈ $1 (re-reads only)
+- **Finding:** the K12 control solves 177–191 of 200 four- and five-premise problems at k 32 once the environment
+  writes the premise lines; 0–26 without. Most failed attempts break the premise-line order at the first actions.
+- **Proposal:** the environment applies premise lines itself (they carry no choice). That removes this wall for every
   checkpoint without retraining.
 
-## 3. A shorter, state-friendlier construction — ≈ $10 per arm
-- **The two error classes** (KAL-D s2) **point at two fixes:**
-  - "wrong next subformula" (45 %): show the pending sub-goal in the state, so the recursion's place is visible;
-  - "corrupted formula" (31 %): cut copying, e.g. cite subformula lines instead of restating whole formulas.
-- **A shorter proof:**
-  - close a branch as soon as a premise is false under the partial valuation (early ex falso);
-  - split only the atoms the remaining formulas need.
-  - The builder (`kalmar/kalmar.py`) makes these one-line changes. Measure the length first; the dataset rebuilds in
-    17 min on the VPS.
-- **Decision value:** separates "Kalmár is too long for this model" from "the format hides the recursion's state".
+## 4. A shorter, state-friendlier construction — ≈ $10 per arm
+- **Bookkeeping errors remain after annealing:** the wrong next subformula, copying. The fix is to show the pending
+  sub-goal in the state, and to close branches as soon as a premise is falsified (early ex falso).
+- **Cost:** the builder (`kalmar/kalmar.py`) makes these small changes; the dataset rebuilds in 17 min.
 
-## 4. Hybrid pretraining (K12 + K12-Kalmár) — ≈ $10
-- **Question:** does a model keep K12's short proofs and gain the uniform fallback?
-- **Here:** KAL-D is ahead of the control beyond the noise only on the classical families: guided pass@32 30 vs 16 of
-  106, with KAL-D read at batch 1,024 and the control at 2,048. It is also numerically ahead, inside the noise, on G1 as
-  is.
-- **Arm:** a mix (e.g. 90 % K12, 10 % K12-Kalmár by tokens) at the control's step count.
-- **Read-outs:** the control's sets plus G3.
-
-## 5. EI ladder from a Kalmár base, done properly — ≈ $15 per seed
-- **Issue here:** the ladder's fine-tune (600 steps × 128 proofs) trains ≈ 14× the (state, action) pairs per step on
-  Kalmár proofs as on K12's (≈ 13,800 vs ≈ 1,000). It measured 11–17.6 s per step, ≈ 2.9 h per round, which forced the
-  cut to 4 rounds.
-- **Proposal:** a token-budgeted fine-tune (the best recipe's 18,432 tokens per step), 8 rounds, 2 seeds, EI against
-  frozen. It answers the brief's item 7 at full length.
+## 5. Hybrid pretraining (K12 + K12-Kalmár) — ≈ $10
+- **Question:** keep K12's short proofs and gain the uniform fallback? KAL-D+A beats the control on the classical
+  families (greedy 35 vs 7 %) and the release.
+- **Arm:** a 90 / 10 token mix at the control's steps, plus an anneal.
 
 ---
 
