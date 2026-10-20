@@ -16,7 +16,8 @@ Predictors per step type (each a mean over the type's tf1200 states unless state
   log2_ops              log2(1 + policy.py's operations for the state): Levin's Kt minus the (constant) program length
   log_freq              log10 of the type's pairs in K12-Kalmár (artifacts/kc/tokens_kal_sl.json): a data baseline
   b2_bits_L/M/S         B2 code per loss token of the type, summed over blocks (if available)
-Test: Spearman rho across types, two-sided permutation p (100,000 permutations), per seed and for the seed mean.
+Test: Spearman rho across types, two-sided permutation p (100,000 permutations), per seed and for the seed mean;
+partial Spearman given log frequency (ranks residualised on the frequency rank; 20,000 permutations).
 State level: logistic regression of error on step type (dummies) +/- the standardised demand measures, per seed;
 likelihood-ratio test (chi-square, df = number of demand measures).
 """
@@ -156,6 +157,24 @@ def main():
             cells.append(f'{r:+.2f} (p {p:.3f})')
         res['spearman'][k] = row
         print(f'{k:24} ' + ' '.join(f'{c:>14}' for c in cells))
+    # partial Spearman across types, controlling for log frequency (ranks residualised on the frequency rank)
+    res['partial_spearman_given_log_freq'] = {}
+    z = stats.rankdata([pred[t]['log_freq'] for t in types])
+    ry = stats.rankdata(outcomes['kalD_mean'])
+
+    def resid(a, b):
+        M = np.vstack([b, np.ones_like(b)]).T
+        return a - M @ np.linalg.lstsq(M, a, rcond=None)[0]
+    print('\npartial Spearman | log_freq (KAL-D mean):')
+    for k in names:
+        if k == 'log_freq' or any(pred[t].get(k) is None for t in types):
+            continue
+        ex, ey = resid(stats.rankdata([pred[t][k] for t in types]), z), resid(ry, z)
+        r = float(np.corrcoef(ex, ey)[0, 1])
+        rng = np.random.default_rng(1)
+        pp = float(np.mean([abs(np.corrcoef(ex, rng.permutation(ey))[0, 1]) >= abs(r) - 1e-12 for _ in range(20000)]))
+        res['partial_spearman_given_log_freq'][k] = {'rho': r, 'p': pp}
+        print(f'  {k:24} {r:+.2f} (p {pp:.3f})')
     # state level
     print('\nstate level: logistic regression of error on type dummies (+ standardised demand measures)')
     T = sorted({group(s['tag']) for s in S})

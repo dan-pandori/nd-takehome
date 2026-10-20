@@ -1,3 +1,48 @@
+# next_steps — kalmar-complexity (2026-10-20; UNREVIEWED)
+
+This run's finding: Kalmár's construction is a few kilobits long in every language (BLC 5,443 bits for the K-sl
+algorithm), but KAL-D absorbed ≈ 6.6 × 10^6 bits in its first epoch, and where it fails is predicted by what one
+step must compute (RASP-L decision depth ρ = +0.85, in-scope lookups +0.82 across 15 step types; within types too),
+not by the length of the code for that step (ρ = −0.55). The tests below turn that correlation into causal claims
+and set up the pretraining-vs-RL bits study.
+
+## 1. Lower the per-step demand, keep the program — ≈ $10 (3 seeds × 2 arms, KAL-D recipe at 1/4 of its steps)
+- **Arm F (focus given):** the environment adds the next needed subformula and its children's truth values to the
+  state (the features the decision tree reads). Program length is unchanged; the decision depth falls from 13–33
+  (effective RASP-L layers) to a constant.
+- **Arm U (search unrolled):** every in-scope lookup becomes its own action (a "check" step the environment answers),
+  so one step never needs more than one lookup. Same program; ≈ 3× more actions.
+- Predict: ∧ true / ∨ true / ¬⊥ errors fall to the level of the structural steps (≤ 3 %), and exact-follow rises
+  sharply; if they do not, demand is not the cause.
+
+## 2. Depth, not size — ≈ $8 (3 seeds × 12 and 24 layers at KAL-D's parameter count, 1/4 schedule)
+- The RASP-L program needs 41 attention layers (13–18 effective); KAL-D has 6. Same parameters, more layers.
+- Predict: error falls most on the high-depth step types; per-type error vs RASP-L depth flattens.
+
+## 3. Tie B1 and B2 to one learner — ≈ $5
+- B2 at size L with KAL-D's own recipe (Muon + MTP), so the block-wise code and the logged first-epoch code describe
+  the same learner; extend B2 to 65,536 theorems at size M (the EDL curve had not yet turned down).
+
+## 4. The pretraining-vs-RL bits study (out of scope here; what it should measure)
+- **Units:** bits, with the protocol fixed as here: prequential code of the action tokens of fixed external targets
+  (not the model's own samples, which are biased low), residual = the final model's held-out loss, EDL = their
+  difference; also bits per parameter.
+- **Pretraining's share:** this run's numbers — KAL-D 6.3–7.1 × 10^6 bits (first epoch), the K12 control
+  1.5–1.7 × 10^6; B2's small-model curves.
+- **RL's share:** per round, the change in teacher-forced code of fixed targets (Kalmár proofs of tf1200, and
+  reference proofs of the ladder's targets) under the round-start vs round-end model, summed over rounds; and the
+  prequential code of the accepted proofs with Donoway's on-policy correction. Compare with the replay-only
+  fine-tune (KAL-D+A), which kalmar-pretrain showed matches EI round 1 → 2.
+- **Where the bits go:** break both shares down by step type and by this run's demand measures (lookups, RASP-L
+  depth). The question to answer: does RL supply bits on the high-demand steps that pretraining left unlearned, or
+  only sharpen the low-demand ones?
+- **Program length as the floor:** report every share against the 5.4-kbit BLC program and the 0.6-kbit decision
+  tree, so "how many bits were instilled" has a lower reference point.
+
+## 5. Finish the per-step program-length table — VPS only
+- BLC bits per case (the term each step type comes from), and a strict int8 RASP-L memo lookup (+≈ 100 ops), so the
+  "program length does not predict errors" result holds in all three languages, not only Python.
+
 # next_steps — kalmar-pretrain (2026-10-20; UNREVIEWED)
 
 What this run leaves open (`numbers.md` § kalmar-pretrain):
