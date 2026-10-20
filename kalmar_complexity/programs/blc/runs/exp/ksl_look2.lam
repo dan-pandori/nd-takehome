@@ -1,0 +1,120 @@
+-- K-sl algorithm (kalmar.py `Builder`, variant 'sl': shared excluded-middle lemmas, memo) as a lambda term.
+--
+-- input   seq = \s. s prems goal                     (prems: Scott list of formulas; formulas: README encoding)
+-- output  the structured proof  \L e PR AS R ANDI ANDE1 ANDE2 IMPE IMPI ORI1 ORI2 ORE NEGE NEGI BOTE DN.
+--             L n1 d1 f1 r1 c1 (L n2 d2 f2 r2 c2 (... e))
+--         one L per proof line in proof order: n = line number, d = box depth (Church numerals), f = formula,
+--         r = one of the rule variables, c = cited line numbers as a Church list (\c z. c a (c b z));
+--         a box is cited by its first and last line, as in the text.
+--
+-- Style: a state monad in continuation-passing form.  A step is  \S n d k. ...  (S scope, n next line number,
+-- d depth) and finishes with  k j S' n'  where j is the line that proves what was asked for.
+-- Scope (kalmar.py: a stack of dicts with setdefault, innermost first) as a function  S t g f nf : looks formula t
+-- up and calls  g j  if the match is the newest entry of the innermost scope (= the last line of the current box),
+-- f j  for another match (innermost scope first; oldest entry first within a scope), nf if none.
+
+Y f = (\x. x x) (\x. f (x x))
+T x y = x
+F x y = y
+K1F x = F
+K2F x y = F
+I x = x
+succ m f x = f (m f x)
+cons h t n c = c h t
+
+-- formulas: Atom k | Bot | Not a | And a b | Or a b | Imp a b   (k: Church numeral, P=0 Q=1 R=2 S=3)
+Atom k t f n a o i = t k
+Bot t f n a o i = f
+Not x t f n a o i = n x
+Or x y t f n a o i = o x y
+
+-- equality of Scott numerals (atom indices)
+eqN = Y \e m n. m (n T K1F) (\m'. n F (e m'))
+ssucc n z s = s n
+
+-- formula equality (Church boolean)
+eq = Y \eq x y.
+  let s2 = \a b c d. eq a c (eq b d) F in
+  let p = y K1F F K1F in
+  let q = \u v w. y u v w K2F K2F K2F in
+  x (\k. q (eqN k) F K1F) (q K1F T K1F) (\a. q K1F F (eq a))
+    (\a b. p (s2 a b) K2F K2F) (\a b. p K2F (s2 a b) K2F) (\a b. p K2F K2F (s2 a b))
+
+-- cited lines: Church lists
+r0 c z = z
+r1 a c z = c a z
+r2 a b c z = c a (c b z)
+r5 a b x y w c z = c a (c b (c x (c y (c w z))))
+
+-- the monad
+unit j S n d k = k j S n
+bind m f S n d k = m S n d (\j S2 n2. f j S2 n2 d k)
+
+param seq L e PR AS R ANDI ANDE1 ANDE2 IMPE IMPI ORI1 ORI2 ORE NEGE NEGI BOTE DN
+
+prems = seq T
+goal = seq F
+
+-- scope: push a line (checked after the older entries), open a box (hypothesis checked first)
+push p m S t g f nf = S t f f (eq p t (g m) nf)
+open h m S t g f nf = eq h t (g m) (S t f f nf)
+-- the line for t if in scope, else run nf
+look2 t g f nf S n d k = S t (\j. g j S n d k) (\j. f j S n d k) (nf S n d k)
+look t = look2 t unit unit
+
+-- emit a line;  box: AS line for h, body (given the AS line), then f first last (outside the box)
+emit p r rs S n d k = L n d p r rs (k n (push p n S) (succ n))
+box h body f S n d k = let D = succ d in emit h AS r0 S n D (\a S1 m. body a (open h a S) m D (\j S2 n2. f a j S n2 d k))
+negI h body = box h body (\s x. emit (Not h) NEGI (r2 s x))
+ng a b = emit Bot NEGE (r2 a b)
+-- emit a line, then F by NEGE citing that line and line o
+en p r rs o = bind (emit p r rs) (\j. ng j o)
+-- two boxes (hypotheses x, y; bodies bx, by) then the ORE line for f citing line m and both boxes
+ore f m x bx y by = box x bx (\s1 e1. box y by (\s2 e2. emit f ORE (r5 m s1 e1 s2 e2)))
+
+-- a leaf of the case split, under the valuation va (atom index -> truth value)
+leaf va =
+  let V = Y (\V p. p va F (\a. V a F T) (\a b. V a (V b) F) (\a b. V a T (V b)) (\a b. V a (V b) T)) in
+  -- Kalmar's lemma: a line proving p (if true) or ~p (if false), cited from scope if it is there
+  let lit = Y (\lit p. let t = V p in let bl = \z. bind (lit z) in
+    look (t p (Not p)) (
+     p I
+       (negI Bot unit)
+       (\a. bl a (\ja. t (unit ja) (negI p (ng ja))))
+       (\a b. t (bl a (\ja. bl b (\jb. emit p ANDI (r2 ja jb))))
+                (let an = \z r. bl z (\jz. negI p (\h. en z r (r1 h) jz)) in V a (an b ANDE2) (an a ANDE1)))
+       (\a b. t (let oi = \z r. bl z (\j. emit p r (r1 j)) in V a (oi a ORI1) (oi b ORI2))
+                (bl a (\na. bl b (\nb. negI p (\h. ore Bot h a (\x. ng x na) b (\x. ng x nb))))))
+       (\a b. let ii = \body. box a body (\s x. emit p IMPI (r2 s x)) in
+              V b (bl b (\jb. ii (\h. emit b R (r1 jb))))
+                  (V a (bl a (\ja. bl b (\nb. negI p (\h. en b IMPE (r2 h ja) nb))))
+                       (bl a (\na. ii (\h. bind (ng h na) (\f. emit b BOTE (r1 f))))))))) in
+  -- ex falso on the first false premise (premise i is line i), else the goal (R if in scope but not last)
+  Y (\efq ps i. ps
+      (\S n d k. S goal (\j. k j S n) (\j. emit goal R (r1 j) S n d k) (lit goal S n d k))
+      (\p q. V p (efq q (succ i))
+                 (bind (lit p) (\np. bind (ng i np) (\f. eq goal Bot (unit f) (emit goal BOTE (r1 f)))))))
+    prems (succ F)
+
+-- X v ~X (9 lines), or the line in scope
+lem X = let em = Or X (Not X) in
+  look em (bind (negI (Not em) (\h. bind (negI X (\p. en em ORI1 (r1 p) h)) (\nx. en em ORI2 (r1 nx) h)))
+                (\j. emit em DN (r1 j)))
+
+-- one level of the case split on atom k (excluded-middle line j) around `inner` (valuation -> step)
+sp k j inner va = let X = Atom k in let up = \b i. eqN i k b (va i) in
+  ore goal j X (\h. inner (up T)) (Not X) (\h. inner (up F))
+
+-- does atom k occur in the sequent?
+occ k = let O = Y (\O p. let B = \a b. O a T (O b) in p (eqN k) F O B B B) in
+        O goal T (Y (\an l. l F (\h t. O h T (an t))) prems)
+
+-- for k = P, Q, R, S: if it occurs, derive X v ~X and add a split level; then the nested splits
+lems = #4 (\rec k acc. occ k (bind (lem (Atom k)) (\j. rec (ssucc k) (\inner. acc (sp k j inner))))
+                             (rec (ssucc k) acc))
+          (\k acc. acc leaf F) T I
+
+-- premise lines
+prs = Y \prs ps. ps (unit F) (\p q. bind (emit p PR r0) (\j. prs q))
+
+main = bind (prs prems) (\j. lems) (\t g f nf. nf) (succ F) F (\j S n. e)

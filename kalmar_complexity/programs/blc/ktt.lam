@@ -1,0 +1,45 @@
+-- K-tt algorithm (tt_prover.py: excluded middle re-derived in every branch, no memo) as a lambda term.
+--
+-- input   seq = \s. s prems goal
+-- output  the proof-term tree  \Spl Efq Hyp Bot Pass NN AndI AndL AndR OrL OrR OrN ImpB ImpA ImpN. tree
+--         (README / tt_codec.py): Spl k yes no | Efq i p | C f t kids  for the 13 cases of tt_prover's prove
+--         (f the formula, t its truth value in the branch, kids the sub-proofs the term uses).
+
+Y f = (\x. x x) (\x. f (x x))
+T x y = x
+F x y = y
+I x = x
+succ m f x = f (m f x)
+cons h t n c = c h t
+
+-- equality of Scott numerals (atom indices)
+K1F x = F
+eqN = Y \e m n. m (n T K1F) (\m'. n F (e m'))
+ssucc n z s = s n
+
+param seq Spl Efq Hyp Bot Pass NN AndI AndL AndR OrL OrR OrN ImpB ImpA ImpN
+
+prems = seq T
+goal = seq F
+
+-- a leaf of the split under valuation va (atom index -> truth value)
+leaf va =
+  let V = Y (\V p. p va F (\a. V a F T) (\a b. V a (V b) F) (\a b. V a T (V b)) (\a b. V a (V b) T)) in
+  -- Kalmar's lemma (prove): a term for p if true, for ~p if false
+  let pr = Y (\pr p. let t = V p in let n = \c. c p t in
+     p (\k. n Hyp) (n Bot) (\a. n (t Pass NN) (pr a))
+       (\a b. t (n AndI (pr a) (pr b)) (V a (n AndR (pr b)) (n AndL (pr a))))
+       (\a b. t (V a (n OrL (pr a)) (n OrR (pr b))) (n OrN (pr a) (pr b)))
+       (\a b. V b (n ImpB (pr b)) (V a (n ImpN (pr a) (pr b)) (n ImpA (pr a))))) in
+  -- ex falso on the first false premise (index i), else the goal
+  Y (\efq ps i. ps (pr goal) (\p q. V p (efq q (succ i)) (Efq i (pr p)))) prems (succ F)
+
+-- one split level on atom k around `inner` (valuation -> tree)
+sp k inner va = let up = \b i. eqN i k b (va i) in Spl k (inner (up T)) (inner (up F))
+
+-- does atom k occur in the sequent?
+occ k = let O = Y (\O p. let B = \a b. O a T (O b) in p (eqN k) F O B B B) in
+        O goal T (Y (\an l. l F (\h t. O h T (an t))) prems)
+
+-- for k = P, Q, R, S: add a split level if it occurs; then the nested splits
+main = #4 (\rec k acc. occ k (rec (ssucc k) (\inner. acc (sp k inner))) (rec (ssucc k) acc)) (\k acc. acc leaf F) T I

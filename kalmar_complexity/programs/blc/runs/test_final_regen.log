@@ -1,0 +1,33 @@
+built 12 programs in 30.2s
+CL checks done in 9.9s
+  100/1000 theorems, 30s, failures 0
+  200/1000 theorems, 58s, failures 0
+  300/1000 theorems, 80s, failures 0
+  400/1000 theorems, 102s, failures 0
+  500/1000 theorems, 121s, failures 0
+  600/1000 theorems, 149s, failures 0
+  700/1000 theorems, 184s, failures 0
+  800/1000 theorems, 213s, failures 0
+  900/1000 theorems, 237s, failures 0
+  1000/1000 theorems, 262s, failures 0
+  edge cases: 110/110
+
+program                                   BLC      CL        pass  CL chk  beta mean   median      max
+parse                                     800    2900  1000/1000      3/3        436      413      947
+K-sl algorithm                           5443   23921  1000/1000      3/3      57017    39136   401263
+K-sl rendering                            616    3776  1000/1000      3/3       7764     6281    38248
+K-tt algorithm                           1636    7442  1000/1000      3/3       7948     6042    47210
+K-tt rendering                           4204   24245  1000/1000      3/3       5458     4270    41718
+calib copy                                  4       8   200/200       5/5         27       27       47
+calib reverse                              87     197   200/200       5/5         83       82      142
+calib parity                               82     185   200/200       5/5        104      109      205
+calib add                                 375    1163   200/200       5/5        417      451      677
+calib sort                                257     749   200/200       5/5        547      466     2117
+calib eval                                273     713   200/200       5/5         84       61      399
+calib taut                                410    1430   200/200       5/5       1329     1164     3836
+K-sl algorithm + rendering               6059   27697
+K-sl parse + algorithm + rendering       6859   30597
+K-tt algorithm + rendering               5840   31687
+K-tt parse + algorithm + rendering       6640   34587
+
+theorems: 1000 (seed 20261020), failures: 0; time 314s (271s for the theorems)

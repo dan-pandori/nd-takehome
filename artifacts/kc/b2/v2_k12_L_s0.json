@@ -1,0 +1,218 @@
+{
+ "args": {
+  "task": "k12",
+  "size": "L",
+  "max_thm": 16384,
+  "block0": 64,
+  "asym": 500,
+  "lr": 0.001,
+  "tok_budget": 18432,
+  "max_epochs": 30,
+  "min_steps": 300,
+  "cap": 20000,
+  "eval_every": 1000,
+  "seed": 0,
+  "out": "artifacts/kc/b2/v2_k12_L_s0.json",
+  "prep_only": false,
+  "patience_steps": 3000,
+  "es_min": 5000
+ },
+ "vocab": 111,
+ "boundaries": [
+  64,
+  128,
+  256,
+  512,
+  1024,
+  2048,
+  4096,
+  8192,
+  16384
+ ],
+ "blocks": [
+  {
+   "block": [
+    0,
+    64
+   ],
+   "coder": "uniform",
+   "bits": 52615.956469015226,
+   "loss_tokens": 7744,
+   "per_tag_bits": {
+    "k12": 52615.956469015226
+   },
+   "per_tag_tokens": {
+    "k12": 7744
+   }
+  },
+  {
+   "block": [
+    64,
+    128
+   ],
+   "coder": "model trained on [0, 64)",
+   "bits": 14383.486820936945,
+   "loss_tokens": 8252,
+   "nats_per_token": 1.2081766040418775,
+   "per_tag_bits": {
+    "k12": 14383.486820936945
+   },
+   "per_tag_tokens": {
+    "k12": 8252
+   },
+   "asymptote_block": false,
+   "steps": 300,
+   "max_steps": 300,
+   "steps_per_epoch": 4,
+   "train_tokens": 3317025,
+   "best_step": 150,
+   "best_val_nats_per_tok": 1.215347152224855,
+   "secs": 62.851083755493164
+  },
+  {
+   "block": [
+    128,
+    256
+   ],
+   "coder": "model trained on [0, 128)",
+   "bits": 17444.081656968745,
+   "loss_tokens": 16422,
+   "nats_per_token": 0.7362876639864416,
+   "per_tag_bits": {
+    "k12": 17444.081656968745
+   },
+   "per_tag_tokens": {
+    "k12": 16422
+   },
+   "asymptote_block": false,
+   "steps": 300,
+   "max_steps": 300,
+   "steps_per_epoch": 6,
+   "train_tokens": 4462700,
+   "best_step": 300,
+   "best_val_nats_per_tok": 0.7663104846973057,
+   "secs": 90.52884411811829
+  },
+  {
+   "block": [
+    256,
+    512
+   ],
+   "coder": "model trained on [0, 256)",
+   "bits": 18395.619025737917,
+   "loss_tokens": 32158,
+   "nats_per_token": 0.3965069799846111,
+   "per_tag_bits": {
+    "k12": 18395.619025737917
+   },
+   "per_tag_tokens": {
+    "k12": 32158
+   },
+   "asymptote_block": false,
+   "steps": 330,
+   "max_steps": 330,
+   "steps_per_epoch": 11,
+   "train_tokens": 5539200,
+   "best_step": 330,
+   "best_val_nats_per_tok": 0.42177146310741837,
+   "secs": 107.91016578674316
+  },
+  {
+   "block": [
+    512,
+    1024
+   ],
+   "coder": "model trained on [0, 512)",
+   "bits": 19735.269639360897,
+   "loss_tokens": 64337,
+   "nats_per_token": 0.2126217652068529,
+   "per_tag_bits": {
+    "k12": 19735.269639360897
+   },
+   "per_tag_tokens": {
+    "k12": 64337
+   },
+   "asymptote_block": false,
+   "steps": 630,
+   "max_steps": 630,
+   "steps_per_epoch": 21,
+   "train_tokens": 10956750,
+   "best_step": 630,
+   "best_val_nats_per_tok": 0.22992245158619518,
+   "secs": 206.8640034198761
+  },
+  {
+   "block": [
+    1024,
+    2048
+   ],
+   "coder": "model trained on [0, 1024)",
+   "bits": 29137.628216599325,
+   "loss_tokens": 127197,
+   "nats_per_token": 0.15878255655825005,
+   "per_tag_bits": {
+    "k12": 29137.628216599325
+   },
+   "per_tag_tokens": {
+    "k12": 127197
+   },
+   "asymptote_block": false,
+   "steps": 1230,
+   "max_steps": 1230,
+   "steps_per_epoch": 41,
+   "train_tokens": 21791670,
+   "best_step": 900,
+   "best_val_nats_per_tok": 0.15544038559087253,
+   "secs": 412.5372807979584
+  },
+  {
+   "block": [
+    2048,
+    4096
+   ],
+   "coder": "model trained on [0, 2048)",
+   "bits": 45401.92576798443,
+   "loss_tokens": 254198,
+   "nats_per_token": 0.1238019844297372,
+   "per_tag_bits": {
+    "k12": 45401.92576798443
+   },
+   "per_tag_tokens": {
+    "k12": 254198
+   },
+   "asymptote_block": false,
+   "steps": 2400,
+   "max_steps": 2400,
+   "steps_per_epoch": 80,
+   "train_tokens": 43349580,
+   "best_step": 1920,
+   "best_val_nats_per_tok": 0.116704560398862,
+   "secs": 806.1025733947754
+  },
+  {
+   "block": [
+    4096,
+    8192
+   ],
+   "coder": "model trained on [0, 4096)",
+   "bits": 72102.97625951227,
+   "loss_tokens": 512659,
+   "nats_per_token": 0.09748775444157151,
+   "per_tag_bits": {
+    "k12": 72102.97625951227
+   },
+   "per_tag_tokens": {
+    "k12": 512659
+   },
+   "asymptote_block": false,
+   "steps": 4710,
+   "max_steps": 4710,
+   "steps_per_epoch": 157,
+   "train_tokens": 85346100,
+   "best_step": 3297,
+   "best_val_nats_per_tok": 0.09607522585949335,
+   "secs": 1235.0202128887177
+  }
+ ],
+ "gpu": "NVIDIA A40"
+}

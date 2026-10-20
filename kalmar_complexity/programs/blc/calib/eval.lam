@@ -1,0 +1,8 @@
+-- eval: pair (formula, valuation) -> truth value.  valuation: Scott list [vP, vQ, vR, vS] of Church booleans;
+-- atom k (Scott index) is its k-th element.
+Y f = (\x. x x) (\x. f (x x))
+T x y = x
+F x y = y
+param fv
+nth = Y \nth k l. l F (\h t. k h (\j. nth j t))
+main = fv \f v. Y (\V p. p (\k. nth k v) F (\a. V a F T) (\a b. V a (V b) F) (\a b. V a T (V b)) (\a b. V a (V b) T)) f

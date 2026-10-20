@@ -1,0 +1,12 @@
+-- addition: pair of little-endian binary numbers (Scott lists of Church booleans, no trailing zeros)
+--           -> their sum in the same form.  Ripple-carry; an exhausted number reads as F with tail nil.
+Y f = (\x. x x) (\x. f (x x))
+T x y = x
+F x y = y
+K2F x y = F
+nil n c = n
+cons h t n c = c h t
+param ab
+main = ab (Y (\go a b c. let x = a F T in let y = b F T in
+   a (b T K2F) K2F (c (cons T nil) nil)
+     (cons (x (y c (c F T)) (y (c F T) c)) (go (a nil F) (b nil F) (x (y T c) (y c F)))))) F

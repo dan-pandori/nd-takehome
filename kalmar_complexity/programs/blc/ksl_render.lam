@@ -1,0 +1,22 @@
+-- K-sl rendering: structured proof -> the ND token sequence of kalmar.py's `proof` text.
+--
+-- input   the structured proof  \L e PR AS ... DN. L n d f r c (... e)   (see ksl.lam)
+-- output  the word over the ND alphabet  THM , SEQ PRF QED | : ; ( ) ~ & v > P Q R S F N PR AS ... DN :
+--         \e THM COMMA ... F N PR ... DN. t1 (t2 (... (QED e)))
+-- The proof's own rule variables become the output's rule letters (the proof is applied to `line` and QED e),
+-- so the renderer never names a rule.
+--
+-- a line  N<n> |^d <formula> : <rule> N<c1> ... ;   is
+--   N n (d BAR (fm f (COLON (r (c N (SEMI rest))))))
+
+param proof e THM COMMA SEQ PRF QED BAR COLON SEMI LP RP NEG AND OR IMP P Q R S F N
+
+Y f = (\x. x x) (\x. f (x x))
+
+-- formula tokens before k.  An atom with (Scott) index i prints the i-th of P Q R S.
+fm = Y \fm x k. let r = RP k in let bin = \o a b. LP (fm a (o (fm b r))) in
+  x (\i. i P (\i. i Q (\i. i R (\i. S))) k) (F k) (\a. LP (NEG (fm a r))) (bin AND) (bin OR) (bin IMP)
+
+line n d f r c rest = N n (d BAR (fm f (COLON (r (c N (SEMI rest))))))
+
+main = proof line (QED e)

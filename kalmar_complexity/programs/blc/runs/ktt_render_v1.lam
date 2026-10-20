@@ -1,0 +1,60 @@
+-- K-tt rendering: proof-term tree (+ the sequent, for the theorem header) -> the tokens of tt_prover.py's Lean text.
+--
+-- input   seq = \s. s prems goal ;  the tree  \Spl Efq Hyp ... ImpN. tree  (ktt.lam, tt_codec.py)
+-- output  a word over the Lean alphabet (tt_codec.LEAN_ALPHABET):
+--         \e theorem t ( P Q R S : Prop ) hN := False ¬ ∧ ∨ → hP hQ hR hS fun h => ⟨ , ⟩ .1 .2 Or.inl Or.inr Or.elim
+--            _ z False.elim Classical.byContradiction p.  t1 (... (tm e))
+--         joined by the spacing rule of tt_codec.join.
+-- A printer is a function from the rest of the word to the word; letters are printers; `c a b` concatenates.
+
+param seq tree e lTheorem lt lLP lP lQ lR lS lColon lProp lRP lhN lAssign lFalse lNeg lAnd lOr lImp lhP lhQ lhR lhS lFun lh lArrow lLang lComma lRang lDot1 lDot2 lInl lInr lElim lUnder lz lFalseElim lByContra lp
+
+Y f = (\x. x x) (\x. f (x x))
+T x y = x
+F x y = y
+K x y = x
+succ m f x = f (m f x)
+
+prems = seq T
+goal = seq F
+
+c a b k = a (b k)
+-- ( b )
+par b k = lLP (b (lRP k))
+-- the i-th (Church) of four: i rotations of \a b c d. a
+sel i = i (\s a b c d. s b c d a) (\a b c d. a)
+-- Lean formula
+lf = Y \lf x. let bin = \o a b. par (c (lf a) (c o (lf b))) in
+   x (\i. sel i lP lQ lR lS) lFalse (\a. c lNeg (lf a)) (bin lAnd) (bin lOr) (bin lImp)
+-- fun v : ty => body
+fb v ty body = c lFun (c v (c lColon (c ty (c lArrow body))))
+-- ( body : f )  or  ( body : ¬f )
+asc f t body = par (c body (c lColon (t (lf f) (c lNeg (lf f)))))
+-- fun h : f => body
+fh f = fb lh (lf f)
+ante f = f K K K K K K
+
+iS i y n = let X = sel i lP lQ lR lS in let H = sel i lhP lhQ lhR lhS in let XnX = c X (c lOr (c lNeg X)) in
+  c lElim (c (par (c lByContra (c (par (fb lh (c lNeg (par XnX)) (c lh (par (c lInr (par (fb lp X (c lh (par (c lInl lp)))))))))) (c lColon XnX))))
+             (c (par (fb H X y)) (par (fb H (c lNeg X) n))))
+iE i p = par (c lFalseElim (c (par (c p (lhN i))) (c lColon (lf goal))))
+iH f t = asc f t (f (\i. sel i lhP lhQ lhR lhS) K K K K K)
+iB f t = asc f t (fb lh lFalse lh)
+iP f t a = asc f t a
+iN f t a = asc f t (fh f (c lh a))
+iAI f t a b = asc f t (c lLang (c a (c lComma (c b lRang))))
+iAL f t a = asc f t (fh f (c a (c lh lDot1)))
+iAR f t b = asc f t (fh f (c b (c lh lDot2)))
+iOL f t a = asc f t (c lInl a)
+iOR f t b = asc f t (c lInr b)
+iON f t a b = asc f t (fh f (c lElim (c lh (c a b))))
+iIB f t b = asc f t (fb lUnder (lf (ante f)) b)
+iIA f t a = asc f t (fb lz (lf (ante f)) (c lFalseElim (par (c a lz))))
+iIN f t a b = asc f t (fh f (c b (par (c lh a))))
+
+-- (h1 : p1) ... with numbers from 1
+I x = x
+hyps = Y \hyps ps i. ps I (\p q. c (par (c (lhN i) (c lColon (lf p)))) (hyps q (succ i)))
+
+main = c lTheorem (c lt (c (par (c lP (c lQ (c lR (c lS (c lColon lProp)))))) (c (hyps prems (succ F))
+         (c lColon (c (lf goal) (c lAssign (tree iS iE iH iB iP iN iAI iAL iAR iOL iOR iON iIB iIA iIN))))))) e

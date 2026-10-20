@@ -1,0 +1,235 @@
+{
+ "seed": 7,
+ "n": 300,
+ "calib_n": 200,
+ "timing_s": {
+  "build": 28.8,
+  "cl_checks": 8.2,
+  "theorems": 90.5,
+  "calibration": 0.8
+ },
+ "beta_steps_note": "beta-reductions of the call-by-need machine, read-out of the result included",
+ "programs": {
+  "parse": {
+   "file": "parse.lam",
+   "blc_bits": 800,
+   "cl_bits": 2900,
+   "beta": {
+    "mean": 440.2366666666667,
+    "median": 426.0,
+    "max": 886,
+    "min": 185
+   },
+   "Kt_bits_median": 808.7,
+   "pass": 300,
+   "cases": 300,
+   "cl_check": "3/3"
+  },
+  "K-sl algorithm": {
+   "file": "ksl.lam",
+   "blc_bits": 5443,
+   "cl_bits": 23921,
+   "beta": {
+    "mean": 57536.193333333336,
+    "median": 38979.0,
+    "max": 345011,
+    "min": 3580
+   },
+   "Kt_bits_median": 5458.3,
+   "pass": 300,
+   "cases": 300,
+   "cl_check": "3/3",
+   "algorithm_alone_pass": 300
+  },
+  "K-sl rendering": {
+   "file": "ksl_render.lam",
+   "blc_bits": 616,
+   "cl_bits": 3776,
+   "beta": {
+    "mean": 7886.996666666667,
+    "median": 6315.0,
+    "max": 58063,
+    "min": 1296
+   },
+   "Kt_bits_median": 628.6,
+   "pass": 300,
+   "cases": 300,
+   "cl_check": "3/3"
+  },
+  "K-tt algorithm": {
+   "file": "ktt.lam",
+   "blc_bits": 1636,
+   "cl_bits": 7442,
+   "beta": {
+    "mean": 8275.406666666666,
+    "median": 5971.0,
+    "max": 51131,
+    "min": 1045
+   },
+   "Kt_bits_median": 1648.5,
+   "pass": 300,
+   "cases": 300,
+   "cl_check": "3/3",
+   "algorithm_alone_pass": 300
+  },
+  "K-tt rendering": {
+   "file": "ktt_render.lam",
+   "blc_bits": 4204,
+   "cl_bits": 24245,
+   "beta": {
+    "mean": 5594.006666666667,
+    "median": 4245.5,
+    "max": 39306,
+    "min": 777
+   },
+   "Kt_bits_median": 4216.1,
+   "pass": 300,
+   "cases": 300,
+   "cl_check": "3/3"
+  },
+  "calib copy": {
+   "file": "calib/copy.lam",
+   "blc_bits": 4,
+   "cl_bits": 8,
+   "beta": {
+    "mean": 24.18,
+    "median": 25.0,
+    "max": 47,
+    "min": 3
+   },
+   "Kt_bits_median": 8.6,
+   "pass": 200,
+   "cases": 200,
+   "cl_check": "5/5"
+  },
+  "calib reverse": {
+   "file": "calib/reverse.lam",
+   "blc_bits": 87,
+   "cl_bits": 197,
+   "beta": {
+    "mean": 73.54,
+    "median": 76.0,
+    "max": 142,
+    "min": 10
+   },
+   "Kt_bits_median": 93.2,
+   "pass": 200,
+   "cases": 200,
+   "cl_check": "5/5"
+  },
+  "calib parity": {
+   "file": "calib/parity.lam",
+   "blc_bits": 82,
+   "cl_bits": 185,
+   "beta": {
+    "mean": 97.455,
+    "median": 92.0,
+    "max": 203,
+    "min": 8
+   },
+   "Kt_bits_median": 88.5,
+   "pass": 200,
+   "cases": 200,
+   "cl_check": "5/5"
+  },
+  "calib add": {
+   "file": "calib/add.lam",
+   "blc_bits": 375,
+   "cl_bits": 1163,
+   "beta": {
+    "mean": 422.97,
+    "median": 442.0,
+    "max": 673,
+    "min": 20
+   },
+   "Kt_bits_median": 383.8,
+   "pass": 200,
+   "cases": 200,
+   "cl_check": "5/5"
+  },
+  "calib sort": {
+   "file": "calib/sort.lam",
+   "blc_bits": 257,
+   "cl_bits": 749,
+   "beta": {
+    "mean": 570.64,
+    "median": 478.0,
+    "max": 2107,
+    "min": 8
+   },
+   "Kt_bits_median": 265.9,
+   "pass": 200,
+   "cases": 200,
+   "cl_check": "5/5"
+  },
+  "calib eval": {
+   "file": "calib/eval.lam",
+   "blc_bits": 273,
+   "cl_bits": 713,
+   "beta": {
+    "mean": 85.415,
+    "median": 61.0,
+    "max": 475,
+    "min": 16
+   },
+   "Kt_bits_median": 278.9,
+   "pass": 200,
+   "cases": 200,
+   "cl_check": "5/5"
+  },
+  "calib taut": {
+   "file": "calib/taut.lam",
+   "blc_bits": 410,
+   "cl_bits": 1430,
+   "beta": {
+    "mean": 1188.755,
+    "median": 946.0,
+    "max": 4240,
+    "min": 40
+   },
+   "Kt_bits_median": 419.9,
+   "pass": 200,
+   "cases": 200,
+   "cl_check": "5/5"
+  },
+  "K-sl algorithm + rendering": {
+   "blc_bits": 6059,
+   "cl_bits": 27697,
+   "parts": [
+    "K-sl algorithm",
+    "K-sl rendering"
+   ]
+  },
+  "K-sl parse + algorithm + rendering": {
+   "blc_bits": 6859,
+   "cl_bits": 30597,
+   "parts": [
+    "parse",
+    "K-sl algorithm",
+    "K-sl rendering"
+   ]
+  },
+  "K-tt algorithm + rendering": {
+   "blc_bits": 5840,
+   "cl_bits": 31687,
+   "parts": [
+    "K-tt algorithm",
+    "K-tt rendering"
+   ]
+  },
+  "K-tt parse + algorithm + rendering": {
+   "blc_bits": 6640,
+   "cl_bits": 34587,
+   "parts": [
+    "parse",
+    "K-tt algorithm",
+    "K-tt rendering"
+   ]
+  }
+ },
+ "edge_cases": {
+  "pass": 110,
+  "cases": 110
+ },
+ "failures": []
+}

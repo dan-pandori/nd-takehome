@@ -1,0 +1,11 @@
+-- sort: Scott list of Church numerals -> sorted ascending (insertion sort; m <= n iff m - n = 0)
+Y f = (\x. x x) (\x. f (x x))
+T x y = x
+F x y = y
+nil n c = n
+cons h t n c = c h t
+pred n f x = n (\g h. h (g f)) (\u. x) (\u. u)
+le m n = n pred m (\x. F) T
+ins = Y \ins x l. l (cons x nil) (\h t. le x h (cons x l) (cons h (ins x t)))
+param l
+main = Y (\go l. l nil (\h t. ins h (go t))) l

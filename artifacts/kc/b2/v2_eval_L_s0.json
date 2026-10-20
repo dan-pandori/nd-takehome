@@ -1,0 +1,218 @@
+{
+ "args": {
+  "task": "eval",
+  "size": "L",
+  "max_thm": 16384,
+  "block0": 64,
+  "asym": 500,
+  "lr": 0.001,
+  "tok_budget": 18432,
+  "max_epochs": 30,
+  "min_steps": 300,
+  "cap": 20000,
+  "eval_every": 1000,
+  "seed": 0,
+  "out": "artifacts/kc/b2/v2_eval_L_s0.json",
+  "prep_only": false,
+  "patience_steps": 3000,
+  "es_min": 5000
+ },
+ "vocab": 111,
+ "boundaries": [
+  64,
+  128,
+  256,
+  512,
+  1024,
+  2048,
+  4096,
+  8192,
+  16384
+ ],
+ "blocks": [
+  {
+   "block": [
+    0,
+    64
+   ],
+   "coder": "uniform",
+   "bits": 13914.963694285017,
+   "loss_tokens": 2048,
+   "per_tag_bits": {
+    "eval": 13914.963694285017
+   },
+   "per_tag_tokens": {
+    "eval": 2048
+   }
+  },
+  {
+   "block": [
+    64,
+    128
+   ],
+   "coder": "model trained on [0, 64)",
+   "bits": 884.3389295729538,
+   "loss_tokens": 2048,
+   "nats_per_token": 0.2993051932094204,
+   "per_tag_bits": {
+    "eval": 884.3389295729538
+   },
+   "per_tag_tokens": {
+    "eval": 2048
+   },
+   "asymptote_block": false,
+   "steps": 300,
+   "max_steps": 300,
+   "steps_per_epoch": 3,
+   "train_tokens": 4022400,
+   "best_step": 50,
+   "best_val_nats_per_tok": 0.25390078336931765,
+   "secs": 57.857099533081055
+  },
+  {
+   "block": [
+    128,
+    256
+   ],
+   "coder": "model trained on [0, 128)",
+   "bits": 1871.1985114005433,
+   "loss_tokens": 4096,
+   "nats_per_token": 0.3166542901477669,
+   "per_tag_bits": {
+    "eval": 1871.1985114005433
+   },
+   "per_tag_tokens": {
+    "eval": 4096
+   },
+   "asymptote_block": false,
+   "steps": 300,
+   "max_steps": 300,
+   "steps_per_epoch": 6,
+   "train_tokens": 4109600,
+   "best_step": 200,
+   "best_val_nats_per_tok": 0.30284721665763453,
+   "secs": 78.85535430908203
+  },
+  {
+   "block": [
+    256,
+    512
+   ],
+   "coder": "model trained on [0, 256)",
+   "bits": 3218.312024164036,
+   "loss_tokens": 8192,
+   "nats_per_token": 0.2723100470839199,
+   "per_tag_bits": {
+    "eval": 3218.312024164036
+   },
+   "per_tag_tokens": {
+    "eval": 8192
+   },
+   "asymptote_block": false,
+   "steps": 300,
+   "max_steps": 300,
+   "steps_per_epoch": 10,
+   "train_tokens": 4886880,
+   "best_step": 250,
+   "best_val_nats_per_tok": 0.254678833008511,
+   "secs": 88.31817960739136
+  },
+  {
+   "block": [
+    512,
+    1024
+   ],
+   "coder": "model trained on [0, 512)",
+   "bits": 6413.292088431771,
+   "loss_tokens": 16384,
+   "nats_per_token": 0.2713229571047293,
+   "per_tag_bits": {
+    "eval": 6413.292088431771
+   },
+   "per_tag_tokens": {
+    "eval": 16384
+   },
+   "asymptote_block": false,
+   "steps": 570,
+   "max_steps": 570,
+   "steps_per_epoch": 19,
+   "train_tokens": 9763680,
+   "best_step": 570,
+   "best_val_nats_per_tok": 0.2678039495826941,
+   "secs": 173.31732773780823
+  },
+  {
+   "block": [
+    1024,
+    2048
+   ],
+   "coder": "model trained on [0, 1024)",
+   "bits": 12716.3702508393,
+   "loss_tokens": 32768,
+   "nats_per_token": 0.2689915828346443,
+   "per_tag_bits": {
+    "eval": 12716.3702508393
+   },
+   "per_tag_tokens": {
+    "eval": 32768
+   },
+   "asymptote_block": false,
+   "steps": 1110,
+   "max_steps": 1110,
+   "steps_per_epoch": 37,
+   "train_tokens": 19607520,
+   "best_step": 1050,
+   "best_val_nats_per_tok": 0.25760851110852157,
+   "secs": 347.7407832145691
+  },
+  {
+   "block": [
+    2048,
+    4096
+   ],
+   "coder": "model trained on [0, 2048)",
+   "bits": 23529.249684072012,
+   "loss_tokens": 65536,
+   "nats_per_token": 0.24885914732674408,
+   "per_tag_bits": {
+    "eval": 23529.249684072012
+   },
+   "per_tag_tokens": {
+    "eval": 65536
+   },
+   "asymptote_block": false,
+   "steps": 2160,
+   "max_steps": 2160,
+   "steps_per_epoch": 72,
+   "train_tokens": 39059040,
+   "best_step": 1944,
+   "best_val_nats_per_tok": 0.24333127455944728,
+   "secs": 691.6721079349518
+  },
+  {
+   "block": [
+    4096,
+    8192
+   ],
+   "coder": "model trained on [0, 4096)",
+   "bits": 44467.54596780615,
+   "loss_tokens": 131072,
+   "nats_per_token": 0.23515742579654386,
+   "per_tag_bits": {
+    "eval": 44467.54596780615
+   },
+   "per_tag_tokens": {
+    "eval": 131072
+   },
+   "asymptote_block": false,
+   "steps": 4320,
+   "max_steps": 4320,
+   "steps_per_epoch": 144,
+   "train_tokens": 78471360,
+   "best_step": 4176,
+   "best_val_nats_per_tok": 0.24232865347777302,
+   "secs": 1143.9821529388428
+  }
+ ],
+ "gpu": "NVIDIA A40"
+}

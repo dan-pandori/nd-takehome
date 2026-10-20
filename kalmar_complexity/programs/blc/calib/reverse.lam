@@ -1,0 +1,6 @@
+-- reverse: Scott list -> reversed Scott list (accumulator)
+Y f = (\x. x x) (\x. f (x x))
+nil n c = n
+cons h t n c = c h t
+param l
+main = Y (\go l a. l a (\h t. go t (cons h a))) l nil

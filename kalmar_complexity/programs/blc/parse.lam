@@ -1,0 +1,39 @@
+-- parse: prompt token word -> sequent structure (the input side of K-sl / K-tt).
+--
+-- input   the prompt  THM p1 , ... SEQ goal PRF  as a word over the ND alphabet (README):
+--         \e THM COMMA SEQ PRF QED BAR COLON SEMI LP RP NEG AND OR IMP P Q R S F N PR ... DN. THM (... (PRF e))
+-- output  seq = \s. s prems goal  (Scott list of premises, goal; formulas in the README encoding)
+--
+-- (Letters that never occur in a prompt -- QED | : ; N and the rules -- get an arbitrary handler.)
+-- The word is a right fold, so the parser reads right to left with a stack (Scott list):
+--   end: empty stack;  PRF ) , SEQ: nothing;  an atom or F: push it;  & v >: pop B, push (\A. A op B);
+--   ~: pop A, push Not then A;  (: pop A, pop f, push f A;  THM: the stack is p1 ... pk goal -> (p1..pk, goal).
+
+Y f = (\x. x x) (\x. f (x x))
+I x = x
+nil n c = n
+cons h t n c = c h t
+pair a b s = s a b
+-- atom indices: Scott numerals
+z0 z s = z
+sc n z s = s n
+
+Atom k t f n a o i = t k
+Bot t f n a o i = f
+Not x t f n a o i = n x
+And x y t f n a o i = a x y
+Or x y t f n a o i = o x y
+Imp x y t f n a o i = i x y
+
+push x s = cons x s
+op c s = s I (\b t. cons (\a. c a b) t)
+neg s = s I (\a t. cons a (cons Not t))
+lp s = s I (\a t. t I (\f u. cons (f a) u))
+-- last / all-but-last of a nonempty list, to a continuation
+li = Y \li s k. s I (\h t. t (k nil h) (\x y. li t (\ps g. k (cons h ps) g)))
+
+param w
+
+main = w nil (\s. li s pair) I I I I push push push lp I neg (op And) (op Or) (op Imp)
+         (push (Atom z0)) (push (Atom (sc z0))) (push (Atom (sc (sc z0)))) (push (Atom (sc (sc (sc z0))))) (push Bot)
+         push push push push push push push push push push push push push push push push

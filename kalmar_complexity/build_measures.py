@@ -72,20 +72,27 @@ def blc():
     if not os.path.exists(f):
         return
     R = json.load(open(f))
-    progs = R.get('programs', R)
-    for name, v in progs.items():
-        if not isinstance(v, dict):
-            continue
-        for k, units, lang in (('blc_bits', 'bits', 'binary lambda calculus (Tromp)'),
-                               ('cl_bits', 'bits', 'binary combinatory logic (S, K)')):
-            if k in v:
-                add(name, 'program length', v[k], units, lang, v.get('method', 'hand-written lambda term'),
-                    'kalmar_complexity/programs/blc/results.json')
-        steps = v.get('beta_steps_mean') or v.get('mean_beta_steps')
-        if steps and 'blc_bits' in v:
-            add(name, "Levin's Kt (program bits + log2 mean beta-steps)", v['blc_bits'] + math.log2(steps), 'bits',
-                'binary lambda calculus (Tromp)', 'mean beta-reductions on the test sample',
-                'kalmar_complexity/programs/blc/results.json')
+    src = 'kalmar_complexity/programs/blc/results.json'
+    names = {'parse': ('parse (prompt -> sequent)', 'parse'), 'K-sl algorithm': ('Kalmar sl (K12-Kalmar)', 'algorithm'),
+             'K-sl rendering': ('Kalmar sl (K12-Kalmar)', 'rendering: ND tokens'),
+             'K-tt algorithm': ('Kalmar tt (tt_prover per-atom split)', 'algorithm'),
+             'K-tt rendering': ('Kalmar tt (tt_prover per-atom split)', 'rendering: Lean text'),
+             'K-sl algorithm + rendering': ('Kalmar sl (K12-Kalmar)', 'algorithm + rendering'),
+             'K-sl parse + algorithm + rendering': ('Kalmar sl (K12-Kalmar)', 'parse + algorithm + rendering'),
+             'K-tt algorithm + rendering': ('Kalmar tt (tt_prover per-atom split)', 'algorithm + rendering'),
+             'K-tt parse + algorithm + rendering': ('Kalmar tt (tt_prover per-atom split)', 'parse + algorithm + rendering')}
+    for name, v in R['programs'].items():
+        if name.startswith('calib '):
+            alg, part = CAL[name[6:]], 'algorithm'
+        else:
+            alg, part = names[name]
+        ok = f"; {v['pass']}/{v['cases']} test cases exact" if 'pass' in v else ''
+        m = f"part: {part}; file {v.get('file', 'sum of parts')}{ok}"
+        add(alg, 'program length', v['blc_bits'], 'bits', 'binary lambda calculus (Tromp)', m, src)
+        add(alg, 'program length', v['cl_bits'], 'bits', 'binary combinatory logic (S, K; bracket abstraction)', m, src)
+        if 'beta' in v:
+            add(alg, "Levin's Kt (program bits + log2 median beta-steps)", v['Kt_bits_median'], 'bits',
+                'binary lambda calculus (Tromp)', m + f"; beta-steps median {v['beta']['median']}, mean {v['beta']['mean']:.0f}", src)
 
 
 def rasp():

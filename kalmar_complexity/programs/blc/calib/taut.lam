@@ -1,0 +1,12 @@
+-- taut: sequent -> true iff every valuation of P Q R S that makes all premises true makes the goal true
+-- (= kalmar.countermodel(...) is None; atoms that do not occur do not matter).
+Y f = (\x. x x) (\x. f (x x))
+T x y = x
+F x y = y
+param seq
+main = seq \ps g.
+  let all = \f. f T (f F) F in
+  all (\p. all (\q. all (\r. all (\s.
+    let V = Y (\V x. x (\k. k p (\k. k q (\k. k r (\k. s)))) F (\a. V a F T)
+                       (\a b. V a (V b) F) (\a b. V a T (V b)) (\a b. V a (V b) T)) in
+    Y (\pr l. l (V g) (\h t. V h (pr t) T)) ps))))

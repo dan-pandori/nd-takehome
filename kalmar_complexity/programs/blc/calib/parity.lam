@@ -1,0 +1,6 @@
+-- parity: Scott list of Church booleans -> true iff an odd number are true
+Y f = (\x. x x) (\x. f (x x))
+T x y = x
+F x y = y
+param l
+main = Y (\go l. l F (\h t. h (go t F T) (go t))) l
