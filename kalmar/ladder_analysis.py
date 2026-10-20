@@ -31,10 +31,15 @@ def main():
     S = {}
     for arm in sorted(d for d in os.listdir(a.dir) if d.startswith('la_kal_')):
         D = os.path.join(a.dir, arm)
-        rounds = sorted(int(f[6:-5]) for f in os.listdir(D) if f.startswith('round_') and f.endswith('.json'))
+        rounds = sorted({int(f[6:-5]) for f in os.listdir(D) if f.startswith('round_') and f.endswith('.json')} |
+                        {int(f[6:-6]) for f in os.listdir(D) if f.startswith('found_') and f[6:-6].isdigit()})
         out = {}
         for r in rounds:
-            st = json.load(open(f'{D}/round_{r}.json'))
+            if os.path.exists(f'{D}/round_{r}.json'):
+                st = json.load(open(f'{D}/round_{r}.json'))
+            else:    # the EI ladder was stopped after round r's sampling, before its fine-tune wrote round_r.json
+                names = {json.loads(l)['name'] for l in open(f'{D}/found_{r}.jsonl')}
+                st = {'targets_cum': {'solved': len(names)}, 'secs': None, 'note': 'from found_r (no round json)'}
             fn = f'{D}/found_{r}.jsonl'
             c = collections.Counter(); ln = []; al = []
             if os.path.exists(fn):

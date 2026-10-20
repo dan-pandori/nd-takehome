@@ -4,7 +4,7 @@
 . pod/kal/env.sh
 S=$1; L=artifacts/kalmar/logs; M=artifacts/kalmar/markers
 C=ckpts/kalmar/stage1_kalD_s$S.pt; A=ckpts/kalmar/anneal/kalDA_s$S.pt
-mkdir -p ckpts/kalmar/anneal ckpts/kalmar/ladder
+mkdir -p ckpts/kalmar/anneal ckpts/kalmar/ladder $M
 until [ -s $C ]; do hf buckets cp $BK/kalmar-pretrain/$C $C > /dev/null 2>&1 || sleep 60; done
 [ -s data/kalmar/replay20k_s$S.jsonl ] || python3 kalmar/make_replay.py $S > $L/replay_s$S.log 2>&1
 if [ ! -s $A ]; then

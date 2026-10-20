@@ -1162,3 +1162,21 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 01:50  Anneal-control pods: kal-14 A40 secure $0.59/h (00:13; s0 + EI r1 reads + targets samplings), kal-15 RTX 3090
   secure $0.50/h (00:35; s1), kal-16 A40 secure $0.59/h (01:50; s2). The replay-only fine-tunes run at ≈ 16–18 s / step
   (step 200 at 3,555 s on the A40, 3,257 s on the 3090). Spend $36.33 at 02:11; projected end ≈ $41.
+- 03:49  **KAL-D+A s1 (exploratory, Addendum 3):** TF agreement **98.7 %** (KAL-D s1 93.8 %); greedy tf1200 valid
+  **74.3 %** (29.1 %), exact-Kalmár **56.5 %** (13.7 %); atoms 1 / 2 / 3 / 4 valid 81.3 / 82.9 / 71.7 / 65.1 %, exact 63.3 /
+  64.3 / 57.7 / 44.6 %. A 600-step low-LR fine-tune on Kalmár replay alone (no EI proofs) closes most of the gap: KAL-D's
+  shortfall is largely the recipe's learning-rate floor (0.3 × peak). Still short of the pre-registered "learned" bar
+  (99 % / 90 % / 60 %). Queued (exploratory): the full greedy suite (`eval_greedy.sh`) on KAL-D+A s0–s2, ≈ 15 min each.
+- 04:45  **KAL-D+A s1, greedy suite (exploratory):** holdout250 34.4 % (KAL-D 7.3, control 38.1), rr600 13.8 (1.3,
+  12.7), ge17 14.3 (0.5, 3.8), candidate_v0 32.2 (10.3, 15.7), batch3 42.9 (11.9, 14.3), G1 as is 14.5 (4.3, 3.8),
+  G3 classical 34.0 (10.1, 7.2), hand_proved_14 0, G2 0.8 (0.3 control); G1 supplied 40 / 200 (control 108–143).
+  One seed so far. Queued (exploratory, ≈ $3.5): plain k 32 reads of KAL-D+A s0–s2 at batch 1,024 (KAL-D's
+  protocol) on kal-14 (s0, s1) and kal-16 (s2), after their greedy suites. kal-15 deleted (3.98 h, $1.99).
+- 05:05  **Anneal control, decisive (exploratory, Addendum 3; `kalmar/exploratory.py`):**
+  - KAL-D+A s0 / s1 / s2: TF 98.7 / 98.7 / 98.8 %; greedy tf1200 valid 71.2 / 74.2 / 78.7 %, exact-Kalmár 53.9 / 56.5 /
+    59.8 %; 4-atom valid 59.1 / 65.1 / 68.3 %; val300 greedy 70.7 / 72.0 / 76.3 % (KAL-D s0 val300 29.0 %, ladder round 1).
+  - Same seed: KAL-D+A s0 vs EI r1: TF 98.7 vs 98.7, greedy valid 71.2 vs 71.2, exact 53.9 vs 52.9, val300 70.7 vs
+    71.7; **targets at k 16: KAL-D+A s0 578 / 1,000 vs EI r1 572 (KAL-D s0 re-drawn 133)**. The EI round's jump is
+    the low-LR fine-tune on Kalmár replay, not the EI proofs.
+  - EI r2: TF 98.9, greedy 75.7 / 57.2 % — a second anneal round, not separable from more annealing.
+  - Still "not learned" by the pre-registered bar (exact-follow at 1–2 atoms 63–69 % < 90 %; worst step type 87–90 %).

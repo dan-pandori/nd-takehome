@@ -1,0 +1,83 @@
+{
+ "ckpt": "ckpts/kalmar/anneal/kalDA_s1.pt",
+ "in": "data/kalmar/g1_premises.jsonl",
+ "k": 1,
+ "temperature": 0.0,
+ "seed": 0,
+ "batch": 1024,
+ "max_action": 512,
+ "max_steps": 1024,
+ "supply_pr": false,
+ "n_theorems": 200,
+ "n_attempts": 200,
+ "gen_s": 66.6,
+ "lean_s": 1.7,
+ "solved_theorems": 29,
+ "by": {
+  "all": {
+   "n": 200,
+   "valid": 29,
+   "follow": 0,
+   "dev_valid": 29,
+   "dev_valid_shorter": 25,
+   "end=done": 149,
+   "end=syntax": 49,
+   "end=truncated": 2
+  },
+  "atoms=2": {
+   "n": 50,
+   "valid": 14,
+   "follow": 0,
+   "dev_valid": 14,
+   "dev_valid_shorter": 12,
+   "end=done": 36,
+   "end=syntax": 14
+  },
+  "atoms=3": {
+   "n": 107,
+   "valid": 12,
+   "follow": 0,
+   "dev_valid": 12,
+   "dev_valid_shorter": 11,
+   "end=done": 82,
+   "end=syntax": 24,
+   "end=truncated": 1
+  },
+  "atoms=4": {
+   "n": 43,
+   "valid": 3,
+   "follow": 0,
+   "dev_valid": 3,
+   "dev_valid_shorter": 2,
+   "end=done": 31,
+   "end=syntax": 11,
+   "end=truncated": 1
+  }
+ },
+ "deviation": {
+  "tag": {
+   "pr": 200
+  },
+  "depth": {
+   "0": 200
+  },
+  "decile": {
+   "0": 200
+  }
+ },
+ "env": {
+  "steps": 18176,
+  "rows": 20288,
+  "rowsteps": 473152,
+  "prompt_len_max": 559,
+  "chunks": 384,
+  "stop_eos": 20286,
+  "stop_exact": 0,
+  "stop_goal": 0,
+  "syntax": 49,
+  "done": 149,
+  "truncated": 2,
+  "waves": 384,
+  "peak_alloc_gb": 2.5999746322631836
+ }
+}

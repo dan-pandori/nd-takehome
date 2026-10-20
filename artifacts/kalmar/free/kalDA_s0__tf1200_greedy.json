@@ -1,0 +1,118 @@
+{
+ "ckpt": "ckpts/kalmar/anneal/kalDA_s0.pt",
+ "in": "data/kalmar/tf1200_kal_sl.jsonl",
+ "k": 1,
+ "temperature": 0.0,
+ "seed": 0,
+ "batch": 1024,
+ "max_action": 512,
+ "max_steps": 1024,
+ "supply_pr": false,
+ "n_theorems": 1200,
+ "n_attempts": 1200,
+ "gen_s": 171.1,
+ "lean_s": 10.6,
+ "solved_theorems": 855,
+ "by": {
+  "all": {
+   "n": 1200,
+   "valid": 855,
+   "follow": 647,
+   "dev_valid": 208,
+   "dev_valid_shorter": 118,
+   "end=done": 1162,
+   "end=syntax": 38
+  },
+  "atoms=1": {
+   "n": 150,
+   "valid": 124,
+   "follow": 97,
+   "dev_valid": 27,
+   "dev_valid_shorter": 14,
+   "end=done": 145,
+   "end=syntax": 5
+  },
+  "atoms=2": {
+   "n": 350,
+   "valid": 287,
+   "follow": 221,
+   "dev_valid": 66,
+   "dev_valid_shorter": 33,
+   "end=done": 340,
+   "end=syntax": 10
+  },
+  "atoms=3": {
+   "n": 350,
+   "valid": 237,
+   "follow": 177,
+   "dev_valid": 60,
+   "dev_valid_shorter": 31,
+   "end=done": 339,
+   "end=syntax": 11
+  },
+  "atoms=4": {
+   "n": 350,
+   "valid": 207,
+   "follow": 152,
+   "dev_valid": 55,
+   "dev_valid_shorter": 40,
+   "end=done": 338,
+   "end=syntax": 12
+  }
+ },
+ "deviation": {
+  "tag": {
+   "leaf:imp-": 35,
+   "leaf:and+": 84,
+   "leaf:and-": 70,
+   "leaf:or+": 117,
+   "leaf:or-": 30,
+   "leaf:imp+B": 85,
+   "split": 14,
+   "leaf:imp+A": 24,
+   "leaf:not+": 45,
+   "leaf:bot-": 25,
+   "close:leaf:or-": 10,
+   "efq": 7,
+   "lem": 2,
+   "close:split": 2,
+   "reit": 1,
+   "close:leaf:imp+B": 1,
+   "pr": 1
+  },
+  "depth": {
+   "4": 200,
+   "2": 117,
+   "3": 177,
+   "1": 50,
+   "0": 7,
+   "5": 2
+  },
+  "decile": {
+   "2": 106,
+   "4": 90,
+   "6": 72,
+   "3": 92,
+   "8": 31,
+   "1": 47,
+   "7": 40,
+   "5": 67,
+   "9": 5,
+   "0": 3
+  }
+ },
+ "env": {
+  "steps": 38384,
+  "rows": 137125,
+  "rowsteps": 3514032,
+  "prompt_len_max": 463,
+  "chunks": 511,
+  "stop_eos": 137125,
+  "stop_exact": 0,
+  "stop_goal": 0,
+  "syntax": 38,
+  "done": 1162,
+  "waves": 511,
+  "peak_alloc_gb": 11.286365032196045
+ }
+}
