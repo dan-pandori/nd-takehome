@@ -1,0 +1,290 @@
+{
+ "rows": [
+  {
+   "task": "copy",
+   "cases": 300,
+   "exact": 300,
+   "ops": 7,
+   "by_kind": {
+    "tok_map": 1,
+    "select": 3,
+    "aggregate": 3
+   },
+   "attn_depth": 3,
+   "mlp_run": 1,
+   "flagged_ops": 0,
+   "flags": {},
+   "source_tokens": 21,
+   "source_lines": 3,
+   "published": "Zhou et al. copy_unique: 2 lines (def + return; induct)",
+   "first_failure": null
+  },
+  {
+   "task": "reverse",
+   "cases": 300,
+   "exact": 300,
+   "ops": 6,
+   "by_kind": {
+    "select": 2,
+    "aggregate": 2,
+    "tok_map": 1,
+    "seq_map": 1
+   },
+   "attn_depth": 2,
+   "mlp_run": 1,
+   "flagged_ops": 0,
+   "flags": {},
+   "source_tokens": 45,
+   "source_lines": 4,
+   "published": "Weiss et al.: 1 statement (non-causal, length - indices - 1)",
+   "first_failure": null
+  },
+  {
+   "task": "reverse_rep",
+   "cases": 300,
+   "exact": 300,
+   "ops": 6,
+   "by_kind": {
+    "select": 2,
+    "aggregate": 2,
+    "seq_map": 2
+   },
+   "attn_depth": 2,
+   "mlp_run": 2,
+   "flagged_ops": 1,
+   "flags": {
+    "index arithmetic: 2e - q - 1": 1
+   },
+   "source_tokens": 78,
+   "source_lines": 6,
+   "published": "Weiss et al.: 1 statement (non-causal)",
+   "first_failure": null
+  },
+  {
+   "task": "sort",
+   "cases": 300,
+   "exact": 300,
+   "ops": 2,
+   "by_kind": {
+    "select": 1,
+    "aggregate": 1
+   },
+   "attn_depth": 1,
+   "mlp_run": 0,
+   "flagged_ops": 0,
+   "flags": {},
+   "source_tokens": 29,
+   "source_lines": 3,
+   "published": "Zhou et al.: 2 lines (def + return), unique tokens",
+   "first_failure": null
+  },
+  {
+   "task": "sort_rep",
+   "cases": 300,
+   "exact": 300,
+   "ops": 14,
+   "by_kind": {
+    "select": 4,
+    "aggregate": 2,
+    "tok_map": 1,
+    "seq_map": 5,
+    "sel_width": 2
+   },
+   "attn_depth": 2,
+   "mlp_run": 3,
+   "flagged_ops": 1,
+   "flags": {
+    "count comparison (two selector widths)": 1
+   },
+   "source_tokens": 159,
+   "source_lines": 10,
+   "published": "Weiss et al. sort: 12 lines (non-causal, selector_width)",
+   "first_failure": null
+  },
+  {
+   "task": "count",
+   "cases": 300,
+   "exact": 300,
+   "ops": 20,
+   "by_kind": {
+    "select": 3,
+    "aggregate": 3,
+    "tok_map": 5,
+    "seq_map": 9
+   },
+   "attn_depth": 2,
+   "mlp_run": 8,
+   "flagged_ops": 0,
+   "flags": {},
+   "source_tokens": 118,
+   "source_lines": 8,
+   "published": "Zhou et al. count: 17 listing lines, 12 non-comment",
+   "first_failure": null
+  },
+  {
+   "task": "hist",
+   "cases": 300,
+   "exact": 300,
+   "ops": 2,
+   "by_kind": {
+    "select": 1,
+    "sel_width": 1
+   },
+   "attn_depth": 1,
+   "mlp_run": 0,
+   "flagged_ops": 0,
+   "flags": {},
+   "source_tokens": 17,
+   "source_lines": 3,
+   "published": "Weiss et al. histf: 1 statement (3 lines)",
+   "first_failure": null
+  },
+  {
+   "task": "mode",
+   "cases": 300,
+   "exact": 300,
+   "ops": 8,
+   "by_kind": {
+    "select": 4,
+    "sel_width": 1,
+    "aggregate": 3
+   },
+   "attn_depth": 4,
+   "mlp_run": 0,
+   "flagged_ops": 0,
+   "flags": {},
+   "source_tokens": 51,
+   "source_lines": 5,
+   "published": "Zhou et al. mode: 4 lines",
+   "first_failure": null
+  },
+  {
+   "task": "parity",
+   "cases": 300,
+   "exact": 300,
+   "ops": 3,
+   "by_kind": {
+    "select": 1,
+    "sel_width": 1,
+    "tok_map": 1
+   },
+   "attn_depth": 1,
+   "mlp_run": 1,
+   "flagged_ops": 1,
+   "flags": {
+    "arithmetic on a selector width (count mod 2)": 1
+   },
+   "source_tokens": 45,
+   "source_lines": 4,
+   "published": "none: Zhou et al. say parity has no RASP-L program without a scratchpad",
+   "first_failure": null
+  },
+  {
+   "task": "parity_sp",
+   "cases": 300,
+   "exact": 300,
+   "ops": 31,
+   "by_kind": {
+    "tok_map": 9,
+    "select": 6,
+    "aggregate": 6,
+    "seq_map": 10
+   },
+   "attn_depth": 5,
+   "mlp_run": 5,
+   "flagged_ops": 0,
+   "flags": {},
+   "source_tokens": 192,
+   "source_lines": 12,
+   "published": "none published (scratchpad format from Zhou et al.)",
+   "first_failure": null
+  },
+  {
+   "task": "addition",
+   "cases": 300,
+   "exact": 300,
+   "ops": 60,
+   "by_kind": {
+    "tok_map": 11,
+    "select": 13,
+    "aggregate": 18,
+    "seq_map": 18
+   },
+   "attn_depth": 7,
+   "mlp_run": 11,
+   "flagged_ops": 0,
+   "flags": {},
+   "source_tokens": 369,
+   "source_lines": 35,
+   "published": "Zhou et al. reverse addition with index hints: see published_lines",
+   "first_failure": null
+  },
+  {
+   "task": "eval",
+   "cases": 300,
+   "exact": 300,
+   "ops": 61,
+   "by_kind": {
+    "tok_map": 3,
+    "select": 8,
+    "sel_width": 2,
+    "seq_map": 25,
+    "aggregate": 23
+   },
+   "attn_depth": 13,
+   "mlp_run": 4,
+   "flagged_ops": 1,
+   "flags": {
+    "count arithmetic: Dyck depth = #( - #)": 1
+   },
+   "source_tokens": 383,
+   "source_lines": 19,
+   "published": "none",
+   "first_failure": null
+  },
+  {
+   "task": "taut",
+   "cases": 300,
+   "exact": 300,
+   "ops": 63,
+   "by_kind": {
+    "tok_map": 3,
+    "select": 8,
+    "sel_width": 2,
+    "seq_map": 27,
+    "aggregate": 23
+   },
+   "attn_depth": 13,
+   "mlp_run": 4,
+   "flagged_ops": 41,
+   "flags": {
+    "count arithmetic: Dyck depth = #( - #)": 1,
+    "composite value (not int8)": 40
+   },
+   "source_tokens": 461,
+   "source_lines": 22,
+   "published": "none",
+   "first_failure": null
+  }
+ ],
+ "published_tokens_lines": {
+  "count": [
+   90,
+   12
+  ],
+  "mode": [
+   32,
+   4
+  ],
+  "copy_unique": [
+   17,
+   2
+  ],
+  "addition_reverse_hinted": [
+   361,
+   39
+  ]
+ },
+ "cases": 300,
+ "seed": 0
+}
