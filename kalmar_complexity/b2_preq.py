@@ -144,7 +144,7 @@ def train_on(trd, vad, va_tags, a, tok, dev, seed):
     spe = len(token_batches(lens_cpu, torch.Generator().manual_seed(seed + 1), random.Random(seed + 1), a.tok_budget)[1])
     max_steps = max(a.min_steps, min(int(a.max_epochs * spe), a.cap))
     eval_every = max(50, min(spe, a.eval_every))
-    best, best_state, bad, step, cuts, tr_tokens = float('inf'), None, 0, 0, [], 0
+    best, best_state, bad, step, cuts, tr_tokens, best_step = float('inf'), None, 0, 0, [], 0, 0
     t0 = time.time()
     model.train()
     while step < max_steps:
@@ -169,14 +169,17 @@ def train_on(trd, vad, va_tags, a, tok, dev, seed):
             vl, vn, _ = code_pairs(model, vad, va_tags, dev)
             v = vl / max(1, vn)
             if v < best - 1e-5:
-                best, bad = v, 0
+                best, bad, best_step = v, 0, step
                 best_state = {k: t.detach().clone() for k, t in model.state_dict().items()}
             else:
                 bad += 1
-                if bad >= 4:
+                if a.patience_steps:                  # v2: patience in steps, no early stop before es_min
+                    if step >= a.es_min and step - best_step >= a.patience_steps:
+                        break
+                elif bad >= 4:
                     break
     model.load_state_dict(best_state)
-    return model, {'steps': step, 'max_steps': max_steps, 'steps_per_epoch': spe, 'train_tokens': tr_tokens,
+    return model, {'steps': step, 'max_steps': max_steps, 'steps_per_epoch': spe, 'train_tokens': tr_tokens, 'best_step': best_step,
                    'best_val_nats_per_tok': best, 'secs': time.time() - t0}
 
 
@@ -196,6 +199,8 @@ def main():
     ap.add_argument('--seed', type=int, default=0)
     ap.add_argument('--out', required=True)
     ap.add_argument('--prep_only', action='store_true', help='build the data cache and exit')
+    ap.add_argument('--patience_steps', type=int, default=0, help='v2: stop after this many steps without improvement')
+    ap.add_argument('--es_min', type=int, default=0, help='v2: no early stop before this step')
     a = ap.parse_args()
     dev = 'cuda' if torch.cuda.is_available() else 'cpu'
     tok = make_tokenizer('lean_staten')
