@@ -169,7 +169,7 @@ def ladder_figure(summary='artifacts/kalmar/ladder_summary.json', out='figures/k
     ax.set_xticks([1, 2, 3, 4]); ax.set_xlim(0.8, 4.9); ax.set_ylim(0, 1000)
     ax.set_xlabel('round (sampling with the checkpoint after round − 1 fine-tunes)', color=INK, fontsize=8)
     ax.set_ylabel('targets solved this round (of 1,000, k 16)', color=INK, fontsize=8)
-    ax.set_title('(a) The EI jump is the low-LR fine-tune, not RL', color=INK, fontsize=10, loc='left')
+    ax.set_title('(a) The EI jump is the replay fine-tune, not RL', color=INK, fontsize=10, loc='left')
     style(ax)
     ax = axs[1]
     groups = [('KAL-D', ['kalD_s0', 'kalD_s1', 'kalD_s2']), ('KAL-D+A\n(anneal)', ['kalDA_s0', 'kalDA_s1', 'kalDA_s2']),

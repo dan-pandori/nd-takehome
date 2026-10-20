@@ -6,8 +6,8 @@ generated tokens, attempts / actions, training steps / tokens, Lean checks).
   python3 kalmar/compute.py [--reg artifacts/kalmar-pretrain/registry] > artifacts/kalmar/compute_stdout.txt
 
 Arm and seed come from the row's checkpoint (`ckpts/kalmar/stage1_kal{D,C}_s{S}[_step{N}].pt`, ladder checkpoints
-`ckpts/kalmar/ladder/la_kal_{ei,frozen}_s{S}_r{R}.pt`, `ckpts/ctl/stage1_best12_s{S}_b1200.pt`) or, for training rows,
-from config.out.  Phase: `train` (state_train.py Stage 1), `read` (every evaluation script), `ladder` (state_ladder_ei.py
+`ckpts/kalmar/ladder/la_kal_{ei,frozen}_s{S}_r{R}.pt`, anneal checkpoints `ckpts/kalmar/anneal/kalDA_s{S}.pt`,
+`ckpts/ctl/stage1_best12_s{S}_b1200.pt`) or, for training rows, from config.out.  Phase: `train` (state_train.py Stage 1), `read` (every evaluation script), `ladder` (state_ladder_ei.py
 and its fine-tunes).  Smoke-test rows (outputs under /tmp, smoke names) are dropped.  GPU-seconds of processes that
 shared a card each count in full (none did here except the Lean-check beside KAL-C s0's first launch, which recorded
 no GPU time).  GPU types: Stage-1 training and greedy / teacher-forced reads on RTX 3090 (community, $0.22/h; the two
@@ -24,6 +24,9 @@ def arm_of(r):
     m = re.search(r'la_kal_(ei|frozen)_s(\d)', json.dumps(cfg) + (r.get('ckpt') or ''))
     if m:                                  # ladder rows (sampling, judging, and the round fine-tunes) carry the name
         return f'ladder {m.group(1)}', int(m.group(2))
+    m = re.search(r'kalDA_s(\d)', json.dumps(cfg) + (r.get('ckpt') or ''))
+    if m:                                  # Addendum 3 anneal control: the replay-only fine-tune (init KAL-D) and its reads
+        return 'KAL-D+A', int(m.group(1))
     for s in (r.get('ckpt') or '', cfg.get('ckpt') or '', cfg.get('init') or '', cfg.get('out') or '', cfg.get('name') or ''):
         m = re.search(r'stage1_kal([DC])_s(\d)(?:_step(\d+))?', s)
         if m:
@@ -40,10 +43,14 @@ def arm_of(r):
 def phase_of(r):
     sc = r.get('script') or ''
     cfg = r.get('config') or {}
+    if 'state_ladder_ei' in sc and cfg.get('batch') == 2048:
+        return 'ladder (OOM launch)'         # the first launch at batch 2,048 died in round 1 (log 12:28, 10-19)
     if 'state_ladder_ei' in sc or 'ladder' in str(cfg.get('out') or '') or 'mix_' in str(cfg.get('data') or ''):
         return 'ladder'
     if sc.endswith('state_train.py'):
         return 'train'
+    if '_targets_k16' in str(cfg.get('out') or ''):
+        return 'read (Addendum 3)'           # the ladder-style targets samplings of KAL-D s0 / KAL-D+A s0
     return 'read'
 
 

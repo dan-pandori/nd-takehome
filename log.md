@@ -1180,3 +1180,49 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
     the low-LR fine-tune on Kalmár replay, not the EI proofs.
   - EI r2: TF 98.9, greedy 75.7 / 57.2 % — a second anneal round, not separable from more annealing.
   - Still "not learned" by the pre-registered bar (exact-follow at 1–2 atoms 63–69 % < 90 %; worst step type 87–90 %).
+- 05:22  **The anneal is not "low learning rate" alone** (compute rows, `kalmar/compute.py`). The ladder's fine-tune
+  (`state_train.py` without `--recipe best`) changes four things at once against KAL-D's pretraining:
+  - AdamW on every weight, no MTP (pretraining: Muon on the matrices, AdamW lr 1e-3 → floor 3e-4, MTP 0.3);
+  - lr 3e-4 → 3e-5;
+  - 128 whole proofs per step, ≈ 2.71 M tokens (pretraining: 18,432-token budget batches, ≈ 150× smaller);
+  - 1.63 B tokens per seed, 13.5 % of KAL-D's 12.03 B (the earlier "under 0.1 % of training" counted steps; wrong).
+  KAL-D was still improving at its end (500 k → 656 k steps, 2.86 B tokens: TF +1.6 pp, greedy +9.6 pp), against the
+  anneal's +4.2 / +42.1 pp, so extra tokens alone explain little; the rest is not separated. Run doc, plain summary and
+  next_steps reworded: "a short fine-tune closes most of the gap; learning rate, batch and optimizer not separated".
+- 05:22  **Registry gap, EI arm.** `state_ladder_ei.py` lost its buffered sampling rows when its process was killed
+  (the kal-12 restart ≈ 21:02; my stop at 03:41). Recorded: round 1's target sampling (337 GPU-s) and both fine-tunes
+  (10,732 + 11,121 GPU-s). Wall clock from `artifacts/kalmar/logs/la_kal_ei_s0.log`: 13:10:40 → ≈ 21:02 and
+  22:09:58 → 03:41:10, ≈ 13.4 A40-hours. Disclosed under the compute table; spend is billed by pod time regardless.
+- 05:22  Checkpoint md5 (bucket copies, downloaded; s0 / s2 / r1 also match the pod copies): kalDA_s0 4516a1f5,
+  kalDA_s1 a2ee6578, kalDA_s2 cbf7a110, la_kal_ei_s0_r1 aa8519c4, la_kal_ei_s0_r2 80ef2213. KAL-D+A plain k 32
+  reads started 05:10 on kal-14 (s0, then s1) and kal-16 (s2). Spend $42.11 at 05:15.
+- 05:30  textbook72 stays scoring only: no document prints a theorem. Its per-attempt eval rows (`eval/*_k32.rows.jsonl.gz`,
+  which carry each theorem's prompt like every set's rows) were synced to the bucket by the pods during the run; the set
+  itself is tracked in the public fork (`data/bs/textbook72.jsonl`), so this exposes nothing new.
+  `data/kalmar/textbook72_kal_sl.jsonl` holds names and Kalmár lengths only. Anneal figure panel (a) retitled ("the
+  replay fine-tune", not "the low-LR fine-tune").
+- 05:53  **Second claim check** (independent subagent, read-only, against the raw files; scratch in `/tmp/claimcheck/`):
+  12 problems, all fixed.
+  - Run doc: "Held: the control's predictions" was wrong (four control predictions missed: G1 supplied 92 % vs ≤ 20 %,
+    guided gain +13 / +16 pp vs 3–9, G1 as is 6.2 % vs ≤ 5 %, G2 bin 40–49) and "missed every Kalmár-arm prediction"
+    overstated; headline now "no generalisation, except partially on G3"; the mechanism list gains "no MTP"; A40
+    reads listed as a deviation.
+  - Generalisation verdicts: `kalmar/gen_verdicts.py` judged min / max over seeds (G1(b) "partially" on one seed's
+    0.34), the numbers table a third reading. Now one rule, the arm's ratio (mean of per-seed ratios = IQM at n = 3):
+    G1(b) 0.27 does not, G2 0, G3 0.31 partially, hand_proved_14 0, ≥ 17 0.01.
+  - Registry gap note: the 337 GPU-s / 16,000 attempts I called "round 1's sampling" are the failed batch-2,048 launch
+    of each arm (12:22–12:28); `kalmar/compute.py` now books them as `ladder (OOM launch)`. EI: no sampling row of the
+    batch-1,024 ladder reached the registry (≈ 7.3 h unrecorded). Frozen: round 4's rows lost (stopped 15:47:12).
+  - Rounding: KAL-D's last 156 k steps added +1.5 pp TF (not +1.6), the fine-tune +4.3 (not +4.2); frozen mean length
+    +0.4 % (not +0.5). Exact proofs with `written` = algorithm lines: 419 / 419 (EI) and 99 / 99 (frozen), not "346 of
+    round 2" (346 was cumulative).
+  - Plain summary: "rarely got the logic wrong" → one wrong step in six asserted something false (`error_truth`,
+    16.8 %); "did not drift … no shorter proofs" → the pre-registered verdicts, with frozen sampling scoring the same;
+    "177–191 of 200" is with 32 tries; "RL added nothing" qualified to one round; mechanism claims ("finished properly",
+    "small, well-averaged updates") removed.
+- 07:39  **KAL-D+A plain k 32 (exploratory; batch 1,024, A40):** s0 read 7,297 s, s2 8,811 s (KAL-D's took
+  3,900–4,200 s; KAL-D+A writes ≈ 1.5× the tokens per attempt). Theorems solved, s0 / s2 (control mean): holdout250
+  133 / 146 (165.0), rr600 195 / 238 (245.7), ≥ 17 24 / 29 (13.3), long2 10 / 11 (2.0), candidate_v0 55 / 52 (29.7),
+  candidate_v1 24 / 27 (22.0), batch3 10 / 7 (4.7), hand_proved_14 0 / 0 (0), textbook72 40 / 41 (23.7), G1 as is
+  65 / 61 (12.3), G2 2 / 3 (1.7), G3 52 / 59 (13.3). kal-16 deleted after the pull (5.83 h, $3.44). s1 running on
+  kal-14 since 07:12.

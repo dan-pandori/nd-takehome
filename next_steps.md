@@ -3,21 +3,29 @@
 What this run leaves open (`numbers.md` § kalmar-pretrain):
 - **Pre-registered result.** Kalmár pretraining (KAL-D, 3.68 epochs) is far below the K12 control. Teacher-forced
   agreement is 94.5 % and greedy proofs are 32.6 % valid.
-- **Exploratory result** (Addendum 3). A 600-step low-learning-rate fine-tune on 20,000 replayed Kalmár proofs (KAL-D+A)
-  lifts that to 98.7 % and 71–79 %. Greedily, it about matches the control on holdout250 and beats it on the classical
-  families and the release.
+- **Exploratory result** (Addendum 3). The ladder's 600-step fine-tune on 20,000 replayed Kalmár proofs, without EI
+  proofs (KAL-D+A), lifts that to 98.7 % and 71–79 %. Greedily, it about matches the control on holdout250 and beats
+  it on the classical families and the release.
 - **The EI ladder.** Its jump (135 → 572 of 1,000 targets) is that same anneal: replay alone gives 578.
 - **Still short.** Exact-follow at 1–2 atoms is 63–69 % against the 90 % bar.
 
 Costs below use this run's prices (RTX 3090 $0.22–0.50/h for training, A40 $0.59/h).
 
-## 1. Confirm the anneal finding properly — ≈ $10
+## 1. Find out what the anneal does — ≈ $15
 - **Why first:** it is exploratory and changes the run's conclusion. Pre-register it, then test it.
-- **Arms:**
-  - KAL-D with a schedule that decays to ≈ 0 instead of 0.3 × peak (`state_train_best.MIN_LR_FRAC`), 3 seeds;
-  - KAL-D+A at 2× and 4× the anneal steps.
-- **Read-outs:** plain and guided reads at matched batch.
-- **The same question for the K12 control:** does a 600-step anneal on K12 replay lift it too?
+- **Confounded in KAL-D+A.** The ladder's fine-tune changed four things at once:
+  - learning rate: 3e-4 → 3e-5, against the recipe's 3e-4 floor;
+  - batch: 128 whole proofs (≈ 2.7 M tokens) per step, against 18,432 tokens;
+  - optimizer: AdamW on every weight and no MTP, against Muon on the matrices and MTP 0.3;
+  - extra data: 1.6 B tokens, 13.5 % of KAL-D's.
+- **Arms** (from KAL-D s0–s2, 1.6 B tokens each, ≈ 3 h per seed):
+  - the best recipe continued at its floor (more tokens only);
+  - the best recipe decayed from the floor to ≈ 0 (learning rate only);
+  - the best recipe at the floor with 128-proof batches (batch only).
+  - KAL-D from scratch with a schedule that decays to ≈ 0 (`state_train_best.MIN_LR_FRAC`), if the learning rate is
+    the lever.
+- **Read-outs:** TF, greedy, plain and guided reads at matched batch.
+- **The same question for the K12 control:** does the same fine-tune on K12 replay lift it too?
   - This matters for every best-recipe result in the project: every best-cap12 / best-cap6 model, and every ladder
     whose gains include replay.
   - Cost: ≈ $1 per seed on a 3090, plus greedy reads.
@@ -25,8 +33,7 @@ Costs below use this run's prices (RTX 3090 $0.22–0.50/h for training, A40 $0.
   baseline.
 
 ## 2. Separate RL from annealing in every ladder — ≈ $2 per ladder
-- **Finding:** here a replay-only fine-tune reproduces an EI round's gain exactly: 578 vs 572 targets; TF 98.7 vs
-  98.7 %.
+- **Finding:** here a replay-only fine-tune reproduces an EI round's gain: 578 vs 572 targets; TF 98.7 vs 98.7 %.
 - **Proposal:** for any ladder whose fine-tune replays pretraining data, run a replay-only arm with the same steps and
   learning rate. My notes from `rl-from-ckpt` already flagged "ladder replay is pretraining".
 

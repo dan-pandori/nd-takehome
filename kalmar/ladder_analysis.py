@@ -8,8 +8,9 @@ round r (`found_<r>.jsonl` is cumulative; a record's `round` is its first-found 
   exact      the ND proof equals the algorithm's (the sl proof of that theorem, kalmar.build), token for token
   lines      written ND lines of the accepted proof, against the algorithm's
   shorter    deviating proofs with fewer lines than the algorithm's
-Plus cumulative targets solved (round_<r>.json) and, after the last round, the teacher-forced agreement and greedy
-exact-follow of the EI arm's final checkpoint on tf1200 (`artifacts/kalmar/{tf,free}/la_kal_ei_s0_r8__*`).
+Plus cumulative targets solved (round_<r>.json) and the teacher-forced agreement and greedy exact-follow of the EI arm's
+checkpoints on tf1200 (`artifacts/kalmar/{tf,free}/la_kal_ei_s0_r<R>__*`; the ladder stopped after round 3's sampling,
+so r1 and r2 exist).
 """
 import argparse, collections, json, os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -62,23 +63,23 @@ def main():
                       'mean_lines': sum(ln) / len(ln) if ln else None, 'mean_algo_lines': sum(al) / len(al) if al else None,
                       'secs': st.get('secs')}
         S[arm] = out
-        print(f'### {arm}')
+        print(f'\n**{arm}**\n')
         print('| round | targets solved (cum) | new proofs | exact Kalmár | shorter deviations | longer | mean lines (algorithm) | secs |')
         print('|---|---|---|---|---|---|---|---|')
         for r, v in out.items():
             f = lambda x: '—' if x is None else f'{100 * x:.1f} %'
             g = lambda x: '—' if x is None else f'{x:.1f}'
             print(f"| {r} | {v['targets_solved_cum']} | {v['new_proofs']} | {f(v['exact_share'])} | {f(v['shorter_share'])} | "
-                  f"{f(v['longer_share'])} | {g(v['mean_lines'])} ({g(v['mean_algo_lines'])}) | {v['secs'] or 0:.0f} |")
-    for t in ('la_kal_ei_s0_r8',):
+                  f"{f(v['longer_share'])} | {g(v['mean_lines'])} ({g(v['mean_algo_lines'])}) | {g(v['secs']) if v['secs'] is None else f'{v["secs"]:.0f}'} |")
+    for t in ('la_kal_ei_s0_r1', 'la_kal_ei_s0_r2'):
         tf = f'artifacts/kalmar/tf/{t}__tf1200.json'; fg = f'artifacts/kalmar/free/{t}__tf1200_greedy.json'
         if os.path.exists(tf):
-            d = json.load(open(tf)); S.setdefault('final', {})['tf'] = d['agreement']['all']['rate']
-            print(f"{t}: TF agreement {100 * d['agreement']['all']['rate']:.2f} %")
+            d = json.load(open(tf)); S.setdefault('ckpts', {}).setdefault(t, {})['tf'] = d['agreement']['all']['rate']
+            print(f"\n- {t}: TF agreement {100 * d['agreement']['all']['rate']:.2f} %")
         if os.path.exists(fg):
             d = json.load(open(fg)); b = d['by']['all']
-            S.setdefault('final', {})['greedy'] = {'valid': b['valid'] / b['n'], 'follow': b['follow'] / b['n']}
-            print(f"{t}: greedy tf1200 valid {100 * b['valid'] / b['n']:.1f} %, exact-follow {100 * b['follow'] / b['n']:.1f} %")
+            S.setdefault('ckpts', {}).setdefault(t, {})['greedy'] = {'valid': b['valid'] / b['n'], 'follow': b['follow'] / b['n']}
+            print(f"- {t}: greedy tf1200 valid {100 * b['valid'] / b['n']:.1f} %, exact-follow {100 * b['follow'] / b['n']:.1f} %")
     json.dump(S, open(a.out, 'w'), indent=1)
 
 

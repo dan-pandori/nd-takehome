@@ -1,4 +1,4 @@
-# Exploratory (Addendum 3): annealing vs EI — teacher-forced agreement and greedy free generation
+**Exploratory (Addendum 3): annealing vs EI — teacher-forced agreement and greedy free generation**
 
 | model | TF agreement % | tf1200 greedy valid % | exact Kalmár % | 4-atom valid % | val300 greedy valid % |
 |---|---|---|---|---|---|
@@ -11,21 +11,24 @@
 | EI r1 (from KAL-D s0) | 98.7 | 71.2 | 52.9 | 57.7 | 71.7 |
 | EI r2 (from KAL-D s0) | 98.9 | 75.7 | 57.2 | 64.3 | — |
 
-"Learned" criteria (≥ 99 % TF and ≥ 95 % per step type; exact-follow ≥ 90 % at 1–2 atoms, ≥ 60 % at 4):
-  kalDA_s0: TF 98.7, worst step type leaf:and+ 87.3, exact-follow 1/2/4 atoms 64.7 / 63.1 / 43.4 -> not learned
-  kalDA_s1: TF 98.7, worst step type leaf:bot- 88.9, exact-follow 1/2/4 atoms 63.3 / 64.3 / 44.6 -> not learned
-  kalDA_s2: TF 98.8, worst step type leaf:bot- 88.3, exact-follow 1/2/4 atoms 64.7 / 69.1 / 50.9 -> not learned
-  la_kal_ei_s0_r2: TF 98.9, worst step type leaf:and+ 90.3, exact-follow 1/2/4 atoms 64.7 / 66.0 / 47.4 -> not learned
+**"Learned" criteria** (≥ 99 % TF and ≥ 95 % per step type; exact-follow ≥ 90 % at 1–2 atoms, ≥ 60 % at 4):
 
-# Targets (the ladder's 1,000 EI targets), solved at k 16
-  KAL-D s0 (seed-2 re-draw of round 1): 133 / 1000
-  KAL-D+A s0: 578 / 1000
-  EI ladder, targets solved in the round (round_<r>.json; round 3 from the log, its json was not written):
-    EI: round 1 (KAL-D s0) 135, round 2 (EI r1) 572, round 3 (EI r2) 668 of 1,000
-    frozen (KAL-D s0, re-drawn each round): 135 / 138 / 146 / 119; held-out greedy (val300) 87 / 300 every round;
-    EI held-out greedy 87 → 215 → 223 / 300
+- kalDA_s0: TF 98.7, worst step type leaf:and+ 87.3, exact-follow 1/2/4 atoms 64.7 / 63.1 / 43.4 -> not learned
+- kalDA_s1: TF 98.7, worst step type leaf:bot- 88.9, exact-follow 1/2/4 atoms 63.3 / 64.3 / 44.6 -> not learned
+- kalDA_s2: TF 98.8, worst step type leaf:bot- 88.3, exact-follow 1/2/4 atoms 64.7 / 69.1 / 50.9 -> not learned
+- la_kal_ei_s0_r2: TF 98.9, worst step type leaf:and+ 90.3, exact-follow 1/2/4 atoms 64.7 / 66.0 / 47.4 -> not learned
 
-# Greedy suite, % of theorems Lean-valid (KAL-D vs KAL-D+A vs control)
+**Targets (the ladder's 1,000 EI targets), solved at k 16**
+
+- KAL-D s0 (seed-2 re-draw of round 1): 133 / 1000
+- KAL-D+A s0: 578 / 1000
+- EI ladder, targets solved in the round (round_<r>.json; round 3 from the log, its json was not written):
+  - EI: round 1 (KAL-D s0) 135, round 2 (EI r1) 572, round 3 (EI r2) 668 of 1,000;
+  - frozen (KAL-D s0, re-drawn each round): 135 / 138 / 146 / 119; held-out greedy (val300) 87 / 300 every round;
+  - EI held-out greedy 87 → 215 → 223 / 300.
+
+**Greedy suite, % of theorems Lean-valid (KAL-D vs KAL-D+A vs control)**
+
 | set | KAL-D | KAL-D+A | control |
 |---|---|---|---|
 | holdout250 | 6.4 / 5.2 / 10.4 (7.3) | 33.2 / 34.4 / 42.4 (36.7) | 34.4 / 40.4 / 39.6 (38.1) |
@@ -41,3 +44,20 @@
 | g3_classical | 10.4 / 8.5 / 11.3 (10.1) | 30.2 / 34.0 / 41.5 (35.2) | 3.8 / 2.8 / 15.1 (7.2) |
 
 G1 with premise lines supplied, greedy, theorems solved of 200: KAL-D [21, 10, 21], KAL-D+A [58, 40, 53], control [125, 108, 143]
+
+**Plain k 32 (T 0.8, seed 1), theorems solved (unbiased pass@32; per seed, then mean)**
+
+| set | n | KAL-D | KAL-D+A | control | KAL-D+A − control (MDD) |
+|---|---|---|---|---|---|
+| holdout250 | 250 | 35 / 24 / 41 (33.3) | — | 165 / 170 / 160 (165.0) | — |
+| rr600 | 600 | 16 / 10 / 25 (17.0) | — | 298 / 241 / 198 (245.7) | — |
+| ge17 | 70 | 0 / 0 / 2 (0.7) | — | 13 / 15 / 12 (13.3) | — |
+| long2 | 21 | 0 / 0 / 0 (0.0) | — | 4 / 1 / 1 (2.0) | — |
+| candidate_v0 | 87 | 19 / 21 / 24 (21.3) | — | 33 / 28 / 28 (29.7) | — |
+| candidate_v1 | 72 | 9 / 6 / 8 (7.7) | — | 23 / 19 / 24 (22.0) | — |
+| batch3 | 14 | 7 / 2 / 4 (4.3) | — | 4 / 4 / 6 (4.7) | — |
+| hand_proved_14 | 14 | 0 / 0 / 0 (0.0) | — | 0 / 0 / 0 (0.0) | — |
+| textbook72 | 72 | 21 / 18 / 20 (19.7) | — | 25 / 22 / 24 (23.7) | — |
+| g1_premises | 200 | 35 / 15 / 17 (22.3) | — | 0 / 11 / 26 (12.3) | — |
+| g2_large | 240 | 0 / 0 / 0 (0.0) | — | 0 / 2 / 3 (1.7) | — |
+| g3_classical | 106 | 19 / 18 / 17 (18.0) | — | 12 / 9 / 19 (13.3) | — |

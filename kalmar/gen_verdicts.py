@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Pre-registered "generalises" verdicts (run kalmar-pretrain).  For each test set and KAL-D seed: KAL-D's greedy rate on
-the set over its in-distribution greedy rate (tf1200) at the set's atom mix; >= 0.7 -> generalises (if it also beats the
-control's pass@32 by more than the MDD), < 0.3 -> does not generalise, between -> partially.
+the set over its in-distribution greedy rate (tf1200) at the set's atom mix.  The verdict is on the arm's ratio, the IQM
+of the per-seed ratios (the mean at n = 3, as every arm-level number in this run): >= 0.7 -> generalises (if KAL-D's
+plain pass@32 also beats the control's by more than the MDD), < 0.3 -> does not generalise, between -> partially.
+(Until 2026-10-20 the script judged min / max over seeds, which rated G1(b) "partially" on one seed's 0.34.)
 
   python3 kalmar/gen_verdicts.py > artifacts/kalmar/gen_verdicts.txt
 """
@@ -31,5 +33,10 @@ for lab, (fn, fg, solve_key) in sets.items():
             kd = S['solve']['KAL-D'][read][solve_key]['pass@32']; ct = S['solve']['control'][read][solve_key]['pass@32']
             mdd = 3.04 * ((st.variance(kd) + st.variance(ct)) / 2) ** 0.5
             line += f" | {read} pass@32 diff {st.mean(kd) - st.mean(ct):+.1f} (MDD {mdd:.1f})"
-    v = 'generalises' if min(ratios) >= 0.7 else 'does not generalise' if max(ratios) < 0.3 else 'partially'
-    print(line + f" -> {v} (by the ratio)")
+    m = st.mean(ratios)
+    beats = False
+    if solve_key:
+        kd = S['solve']['KAL-D']['plain'][solve_key]['pass@32']; ct = S['solve']['control']['plain'][solve_key]['pass@32']
+        beats = st.mean(kd) - st.mean(ct) > 3.04 * ((st.variance(kd) + st.variance(ct)) / 2) ** 0.5
+    v = 'generalises' if m >= 0.7 and beats else 'does not generalise' if m < 0.3 else 'partially'
+    print(line + f"; arm ratio {m:.2f} -> {v}")
