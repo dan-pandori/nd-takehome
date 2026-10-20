@@ -1,0 +1,27 @@
+program                                             raw   defl     xz  qwen3   gpt2 lines
+K-sl algorithm                                     1907    864    906    897   1195    45
+K-sl render ND                                      465    293    321    244    308    10
+K-sl render lean_seq                                977    562    596    475    615    13
+parse (prompt -> sequent)                           251    153    162    122    156    12
+K-sl algorithm + ND render                         2372   1093   1137   1141   1503    55
+K-sl algorithm + lean_seq render                   2884   1347   1381   1372   1810    58
+K-sl end to end (parse + algorithm + ND)           2623   1199   1241   1263   1659    67
+K-sl end to end (parse + algorithm + lean_seq)     3135   1453   1485   1494   1966    70
+K-tt algorithm                                      749    378    394    377    491    21
+K-tt render Lean                                   1024    571    600    514    655     9
+K-tt algorithm + Lean render                       1773    866    880    891   1146    30
+K-tt end to end (parse + algorithm + Lean)         2024    972    990   1013   1302    42
+calib copy                                           13     15     17      5      7     1
+calib reverse                                        19     21     23      7     12     1
+calib parity                                         20     22     24      9     12     1
+calib parity_nb                                      42     43     46     20     23     4
+calib sort                                            9     11     13      4      5     1
+calib sort_nb                                        94     87    100     40     55     7
+calib add                                            17     19     21      7     11     1
+calib add_nb                                        116    100    113     60     79     4
+calib eval                                          138    105    115     74     88     4
+calib taut                                          320    222    239    152    188     7
+mech: kalmar/kalmar.py (builder + render)          5862   2416   2390   2420   3433   138
+mech: tt_prover.py (whole file)                    3473   1684   1697   1384   1884    79
+mech: gen.py (K12 generator, all knobs)           17075   5323   5130   6188   8705   359
+mech: policy.py (per-step policy)                  7452   2760   2711   3166   4385   199

@@ -313,4 +313,4 @@ Budget $15 / 40 pod-hours; hard stop 2026-10-23 12:20 UTC. Pods (if any) `kc-*`.
 - 2026-10-20 12:20 UTC  run started (executor). Read kalmar-pretrain's run doc, review (§Recount, §Verdict), builder,
   data README, `tt_prover.py`, the proposal, lit-review-2's EDL note; checked what kalmar-pretrain logged (B1: train
   loss every 600 s for KAL-D, a mean of every 20th step; the control's curve is only inside its checkpoints).
-- 12:50 UTC  pre-registration `preregistration/kalmar-complexity.md` committed before any pod, program or B1 number.
+- 12:30 UTC  pre-registration `preregistration/kalmar-complexity.md` committed before any pod, program or B1 number.
