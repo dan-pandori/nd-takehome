@@ -1,0 +1,14 @@
+START 2026-10-20T13:21:05Z b2_kal_M_s0: python3 kalmar_complexity/b2_preq.py --task kal --size M --seed 0 --max_thm 16384 --out artifacts/kc/b2/kal_M_s0.json
+NVIDIA A40
+kal: 16884 theorems, 1,845,855 pairs, load 9s
+k 0 train [0,64) 1368 steps (76/ep) val 0.5559 -> block [64,128) 0.6147 nats/tok, 8.776e+04 bits, 129s
+k 1 train [0,128) 3726 steps (138/ep) val 0.1362 -> block [128,256) 0.1503 nats/tok, 4.54e+04 bits, 352s
+k 2 train [0,256) 6336 steps (264/ep) val 0.0661 -> block [256,512) 0.0700 nats/tok, 4.525e+04 bits, 608s
+k 3 train [0,512) 12903 steps (561/ep) val 0.0466 -> block [512,1024) 0.0596 nats/tok, 7.177e+04 bits, 1233s
+k 4 train [0,1024) 18000 steps (1080/ep) val 0.0287 -> block [1024,2048) 0.0316 nats/tok, 7.908e+04 bits, 1716s
+k 5 train [0,2048) 20000 steps (2192/ep) val 0.0273 -> block [2048,4096) 0.0241 nats/tok, 1.182e+05 bits, 1148s
+k 6 train [0,4096) 20000 steps (4356/ep) val 0.0169 -> block [4096,8192) 0.0182 nats/tok, 1.761e+05 bits, 1500s
+k 7 train [0,8192) 20000 steps (8562/ep) val 0.0153 -> block [8192,16384) 0.0151 nats/tok, 2.95e+05 bits, 1694s
+k 8 train [0,16384) 20000 steps (17072/ep) val 0.0150 -> block [16384,16884) 0.0150 nats/tok, 1.763e+04 bits, 1547s
+SUMMARY {"theorems": 16384, "prequential_bits": 1689861.4341914558, "loss_tokens": 27100176, "L_inf_bits_per_token": 0.021691654644862134, "EDL_bits": 1102013.7755844747, "secs": 10338.31322979927, "peak_mem_gb": 1.8259730339050293}
+RC 0 END 2026-10-20T16:13:30Z

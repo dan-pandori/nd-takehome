@@ -215,8 +215,45 @@ def fig_b2():
     plt.close(fig)
 
 
+def fig_b3():
+    f = A('artifacts/kc/b3_summary.json')
+    if not os.path.exists(f):
+        return
+    B = json.load(open(f))['readouts']['first states out']['rows']
+    order = ['leaf:and+', 'leaf:bot-', 'leaf:or+', 'leaf:not+', 'leaf:imp+B', 'leaf:imp+A', 'leaf:imp-', 'leaf:or-',
+             'leaf:and-', 'pr', 'split', 'lem', 'efq', 'close']
+    rows = [('openers (all)', B['class:opener'])] + [(SHORT[t], B[f'type:{t}']) for t in order] + \
+        [('all other states', B['class:other'])]
+    fig, ax = plt.subplots(figsize=(8.6, 5.6), gridspec_kw={'left': 0.2, 'right': 0.97, 'top': 0.86, 'bottom': 0.1})
+    ys = np.arange(len(rows))[::-1]
+    h = 0.36
+    for k, (lab, r) in enumerate(rows):
+        y = ys[k]
+        for dy, arm, c in ((h / 2, 'STD', ORANGE), (-h / 2, 'FOC', BLUE)):
+            v = 100 * r[f'{arm}_mean']
+            ax.barh(y + dy, v, height=h, color=c, edgecolor=SURF, linewidth=1.5)
+            ax.scatter([100 * x for x in r[arm]], [y + dy] * 3, s=9, color=INK2, zorder=3)
+        ax.text(100 * max(r['STD'] + r['FOC']) + 1, y, f"{100 * r['rel_change']:+.0f} %", va='center', fontsize=7.5,
+                color=INK2)
+    ax.set_yticks(ys)
+    ax.set_yticklabels([r[0] for r in rows], fontsize=8)
+    ax.set_xlabel('teacher-forced error on tf1200, % (bars: 3-seed means; dots: seeds; first states excluded)')
+    ax.grid(axis='x'); ax.set_axisbelow(True)
+    from matplotlib.patches import Patch
+    ax.legend(handles=[Patch(color=ORANGE, label='standard state (STD)'),
+                       Patch(color=BLUE, label='state + the next needed subformula (FOC)')],
+              frameon=False, fontsize=8, loc='lower right')
+    fig.text(0.02, 0.93, 'B3: hand the model the search result, keep the algorithm — opener-step errors fall 94 %',
+             fontsize=10, fontweight='bold', color=INK)
+    fig.text(0.02, 0.895, '3.2 M ALiBiGPT (size M), from scratch on the Kalmár pairs of 8,192 K12 theorems, seeds 0-2 '
+             'paired across arms', fontsize=8, color=INK2)
+    fig.savefig(A('figures/kalmar_complexity_b3.png'), dpi=160)
+    plt.close(fig)
+
+
 if __name__ == '__main__':
     fig_main()
     fig_q4()
     fig_b2()
+    fig_b3()
     print('figures written')

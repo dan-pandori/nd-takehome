@@ -2510,3 +2510,350 @@ Notes:
 - `data/kalmar/`: K12-Kalmár and the read sets.
 - `artifacts/kalmar/`: read rows, ladder found files, dumps.
 - Registry rows: `hf://buckets/dan-pandori/nd-rl/registry/kalmar-pretrain/`.
+
+## kalmar-complexity (2026-10-20, executor; UNREVIEWED)
+
+Pre-registration `preregistration/kalmar-complexity.md` (`68f7ada4`, 12:30 UTC; addendum 1 `a32add38`, 13:16), both
+before the first pod (13:17:34). Tables below are generated from the result files by
+`kalmar_complexity/numbers_tables.py` (assembled with `kalmar_complexity/assemble_numbers.py`). Lean is not called:
+no proof is judged in this run; the builder's proofs are kalmar-pretrain's (155,000 / 155,000 Lean-accepted).
+
+**Algorithms.**
+- **K-sl:** K12-Kalmár, the shared-lemma variant with memo that kalmar-pretrain trained on (`kalmar/kalmar.py`, `sl`).
+- **K-tt:** nd-rl `code/tools/tt_prover.py` (per-atom split, no memo, a Lean term).
+
+**Models (every learned number names one).**
+- **KAL-D s0–s2:** `kalmar-pretrain/ckpts/kalmar/stage1_kalD_s{0,1,2}.pt`. 9,560,832-param ALiBiGPT 6 × 384,
+  `lean_staten`, from scratch on K12-Kalmár sl (155,000 proofs, 16,876,247 pairs), 656,285 steps.
+- **Snapshots:** `_step{24020,100000,200000,350000,500000}`.
+- **KAL-C:** `stage1_kalC_s*` (24,020 steps).
+- **KAL-D+A:** `anneal/kalDA_s*` (KAL-D + 600 AdamW steps on replayed Kalmár proofs).
+- **Control s0–s2:** best-state `stage1_best12_s{0,1,2}_b1200.pt`, the same network, from scratch on K12
+  (`data/kh/train_k12.jsonl`, 155,000 proofs, 1,239,995 pairs), 23,951–24,123 steps.
+- **B2 models:** trained here, from scratch, ALiBiGPT S 2 × 128 (0.4 M), M 4 × 256 (3.2 M), L 6 × 384 (9.6 M) on
+  prefixes of the same data (below).
+
+**Test protocol.** Every program reproduces its reference exactly:
+- `kalmar.build` / `tt_prover.solve` on 1,000 K12 theorems (`kalmar_complexity/common.py`, seed 20261020) plus at
+  least one fresh seed.
+- Per-step programs reproduce every state the algorithm visits:
+  - `policy.py` 109,072 + 546,991 states;
+  - golfed `kpol.py` 109,072 + 326,761;
+  - RASP-L 109,072 + 107,233, plus an executor re-check at seed 99, 22,018;
+  - the decision tree 473 distinct rows of 4,000 theorems + a fresh 217,968 states + all 137,984 tf1200 states;
+  - BLC 1,000 + 300 theorems, plus an executor re-check at seed 99, 150.
+
+### Q1 — program length of Kalmár's construction (algorithm / rendering / parse reported separately)
+
+| piece | Python raw B | Python DEFLATE B | Python xz B | Qwen3 tokens | GPT-2 tokens | BLC bits | binary CL bits |
+|---|---|---|---|---|---|---|---|
+| K-sl algorithm | 1,907 | 864 | 906 | 897 | 1,195 | 5,443 | 23,921 |
+| K-sl rendering, ND text | 465 | 293 | 321 | 244 | 308 | 616 | 3,776 |
+| K-sl rendering, lean_seq (canonical) | 977 | 562 | 596 | 475 | 615 | — | — |
+| parse (prompt → sequent) | 251 | 153 | 162 | 122 | 156 | 800 | 2,900 |
+| K-sl algorithm + ND rendering | 2,372 | 1,093 | 1,137 | 1,141 | 1,503 | 6,059 | 27,697 |
+| K-sl parse + algorithm + ND rendering | 2,623 | 1,199 | 1,241 | 1,263 | 1,659 | 6,859 | 30,597 |
+| K-sl parse + algorithm + lean_seq rendering | 3,135 | 1,453 | 1,485 | 1,494 | 1,966 | — | — |
+| K-tt algorithm | 749 | 378 | 394 | 377 | 491 | 1,636 | 7,442 |
+| K-tt rendering, Lean text | 1,024 | 571 | 600 | 514 | 655 | 4,204 | 24,245 |
+| K-tt algorithm + rendering | 1,773 | 866 | 880 | 891 | 1,146 | 5,840 | 31,687 |
+| K-tt parse + algorithm + rendering | 2,024 | 972 | 990 | 1,013 | 1,302 | 6,640 | 34,587 |
+| K-sl per-step policy (state → action) | 3,794 | 1,654 | 1,658 | 1,838 | 2,387 | — | — |
+| mechanical: kalmar/kalmar.py | 5,863 | 2,416 | 2,391 | 2,420 | 3,434 | — | — |
+| mechanical: tt_prover.py | 3,474 | 1,685 | 1,698 | 1,384 | 1,885 | — | — |
+| mechanical: policy.py | 7,453 | 2,761 | 2,713 | 3,166 | 4,386 | — | — |
+| mechanical: gen.py (K12 generator, all knobs) | 17,076 | 5,324 | 5,131 | 6,188 | 8,706 | — | — |
+
+- **Python:** hand-golfed (`kalmar_complexity/programs/python/`). DEFLATE = raw zlib level 9; xz = raw LZMA2 9e.
+  - Tokens: Qwen3 / GPT-2. Our model's own tokenizer (`lean_tok`) cannot spell Python.
+  - `mechanical:` rows are python-minifier upper bounds, unused code included.
+- **BLC / binary CL:** Tromp's encodings (λ = 00, application = 01, variable i = 1^i 0; S = 00, K = 01,
+  application = 1), from the agent-written toolchain `kalmar_complexity/programs/blc/`.
+  - Data enter and leave as Scott-encoded terms; the encodings are stated in its README.
+  - Binary CL is plain bracket abstraction of the golfed λ-term (an upper bound).
+- **RASP-L** (per-step policy, H = 9 formula levels): decision 492 primitive ops, attention depth 41, 96 flagged
+  non-RASP-L ops; rendering 52 ops (+3 layers); total 544 ops / 6,991 source tokens / 401 lines.
+  - Scaling: ops = 240 + 28·H, depth = 5 + 4·H.
+  - Effective depth per state (the smallest program that still decides it): 4 (premise lines), 8.0 (excluded
+    middle), 9.5 (splits), 13.2 (fixed lemma-box steps), 14.4 (after-recursion steps), 17.2 [13, 33] (recursion
+    steps). Source: `kalmar_complexity/programs/rasp/results.json`.
+- **Decision procedure:** 21 generic state features → 40 action templates. The smallest exact tree found (beam 3)
+  has 46 leaves / 45 tests / **626 bits** (`artifacts/kc/dtree/tree_u_b3.json`).
+  - It is conditional on its feature extractor: `features.py` + `policy.py` is 3,962 B DEFLATE (mechanical upper
+    bound). Most of the algorithm sits in the features.
+- **Levin's Kt** = program bits + log2 running time adds 9–15 bits to programs of 1,600–11,000 bits. For whole
+  proofs it carries no extra information:
+  - Python: K-sl 6,921 (500 calls / theorem);
+  - BLC: K-sl 5,458 (median 39,136 β-steps). Sources: `artifacts/kc/kt_python.json`, BLC `results.json`.
+
+### Q2 — calibration (the same languages)
+
+| algorithm | Python DEFLATE B (builtins / none) | BLC bits | binary CL bits | Kt (BLC bits + log2 median β) | RASP-L ops / attention depth |
+|---|---|---|---|---|---|
+| copy | 15 | 4 | 8 | 9 | 7 / 3 |
+| reverse | 21 | 87 | 197 | 93 | 6 / 2 |
+| parity | 22 / 43 | 82 | 185 | 89 | 31 / 5 (parity_sp) |
+| sort | 11 / 87 | 257 | 749 | 266 | 14 / 2 (sort_rep) |
+| addition (binary) | 19 / 100 | 375 | 1,163 | 384 | 60 / 7 |
+| eval (formula truth value) | 105 | 273 | 713 | 279 | 61 / 13 |
+| taut (truth-table validity) | 222 | 410 | 1,430 | 420 | 63 / 13 |
+| Kalmár tt (algorithm) | 378 | 1,636 | 7,442 | 1,649 | — |
+| Kalmár sl (algorithm) | 864 | 5,443 | 23,921 | 5,458 | 492 / 41 (per-step policy) |
+
+- **Rank agreement** across the 9 items (Spearman, `artifacts/kc/rank_agreement.json`): Python DEFLATE vs BLC
+  **+0.97**, vs binary CL +0.93, vs RASP-L +0.95; BLC vs RASP-L +0.86.
+  - Python with builtins breaks it: vs BLC +0.75, vs binary CL +0.67. Builtins sort in 9 bytes.
+- **Kalmár sl is the largest item in every language:** 13× taut in BLC, 3.9× in Python DEFLATE, 7.8× taut in
+  RASP-L ops.
+- **K12 generator** (`gen.py`, mechanical upper bound with all knobs): 5,324 B DEFLATE, against K-sl's mechanical
+  2,416 B (2.2×). The proof style the control learns easily (92 % greedy) is *longer* to describe than Kalmár.
+- **Learnability in our family** (from B2 below and kalmar-pretrain):
+  - eval (273 BLC bits) still costs 0.25–0.28 bits/token on theorems 8,192–16,384 at every size; only M breaks
+    through when trained on all 16,384 (0.024 bits/token on the next 500);
+  - K12 is learned to 92 % greedy in 24k steps;
+  - Kalmár (5,443 bits) is not learned exactly in 656k steps.
+
+### Q3 — bits the network absorbs
+
+**B1** (`kalmar_complexity/b1_preq.py` → `artifacts/kc/b1_preq.json`).
+- Code: first-epoch prequential code from the logged training curves, L_preq = Σ_i loss_i × N × Δepochs_i / ln 2.
+  - Curves are each checkpoint's `extra['curve']`: KAL-D every 600 s, the control every 30 s.
+  - Each point is the mean of every 20th step's pre-update loss.
+  - N = exact loss tokens (action + eos; `artifacts/kc/tokens_*.json`).
+- EDL = L_preq − N × L∞. The headline residual is (b), the final model's held-out loss (val300 for KAL-D,
+  p2/heldout for the control).
+
+| model | N loss tokens (epoch) | first-epoch prequential code, bits | bits / token | L∞ final train / final held-out / end of epoch 1 (nats/token) | EDL (residual = final held-out) | EDL (final train) | EDL (end of epoch 1) | bias bound (steps 1–19) |
+|---|---|---|---|---|---|---|---|---|
+| KAL-D s0 | 255,006,351 | 1.26 × 10^7 | 0.0492 | 0.0152 / 0.0163 / 0.0296 | 6.54 × 10^6 | 6.97 × 10^6 | 1.67 × 10^6 | ≤ 1.81 × 10^5 |
+| KAL-D s1 | 255,006,351 | 1.24 × 10^7 | 0.0488 | 0.0154 / 0.0168 / 0.0282 | 6.27 × 10^6 | 6.78 × 10^6 | 2.09 × 10^6 | ≤ 1.81 × 10^5 |
+| KAL-D s2 | 255,006,351 | 1.24 × 10^7 | 0.0487 | 0.0139 / 0.0146 / 0.0280 | 7.06 × 10^6 | 7.31 × 10^6 | 2.12 × 10^6 | ≤ 1.81 × 10^5 |
+| control s0 | 19,375,057 | 3.79 × 10^6 | 0.1955 | 0.0445 / 0.0830 / 0.0838 | 1.47 × 10^6 | 2.55 × 10^6 | 1.45 × 10^6 | ≤ 2.74 × 10^5 |
+| control s1 | 19,375,057 | 3.64 × 10^6 | 0.1877 | 0.0612 / 0.0692 / 0.0741 | 1.70 × 10^6 | 1.93 × 10^6 | 1.57 × 10^6 | ≤ 2.94 × 10^5 |
+| control s2 | 19,375,057 | 3.87 × 10^6 | 0.1997 | 0.0443 / 0.0808 / 0.0903 | 1.61 × 10^6 | 2.63 × 10^6 | 1.35 × 10^6 | ≤ 2.84 × 10^5 |
+
+- **Absorbed bits:**
+  - **KAL-D 6.3–7.1 × 10^6 bits** (0.66–0.74 bits per parameter), against the 5,443-bit BLC program: **×1,150–1,300**.
+  - The control absorbed 1.5–1.7 × 10^6.
+  - Within epoch 1 alone (residual (c)): KAL-D 1.7–2.1 × 10^6, the control 1.35–1.57 × 10^6.
+- **What the logs cannot give:** per-step-type bits (only aggregate loss was logged), and steps 1–19 (never
+  sampled; bounded above).
+- **B1-snap** (`b1_snap.py` → `artifacts/kc/b1_snap.json`; per type `b1_snap_types.json`; an approximation):
+  - Per-step-type held-out code of the 24 checkpoints on tf1200's 137,984 states, integrated over steps
+    24,020–178,581 of epoch 1.
+  - Its total is 1.13–1.20× the logged curve's code over the same window.
+  - Per loss token the leaf steps absorb most (∧ true 0.06–0.10, ¬⊥ 0.06–0.07, ∨ true 0.05–0.07 bits/token);
+    excluded middle, splits and ex falso least (0.01–0.02).
+
+**B2** (pods; `b2_preq.py` → `artifacts/kc/b2/*.json`; summary `b2_summary.py`; per type `b2_per_type.py`).
+- Block-wise prequential code over K12's first theorems; blocks at 64 · 2^k; the first block at the uniform code
+  (log2 111 bits/token).
+- Each block is coded by a fresh model trained (AdamW, early stopping on 10 % of the prefix) on everything before it.
+- EDL = code − N × the last model's per-token code on 500 later theorems.
+- **v1:** stop after 4 validations without improvement. **v2:** patience 3,000 steps, no stop before 5,000; added
+  because v1 stopped the eval task after a few hundred steps.
+- **The codes depend on the training budget.** Several blocks reached the step cap (20,000 steps or 30 epochs) while
+  still improving, so these are upper bounds for this learner.
+
+| run | task | size | seed | protocol | theorems | prequential bits | EDL bits | L∞ (bits/token) | prequential @ 8,192 | EDL @ 8,192 | train steps | job seconds |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| eval_L_s0 | eval | L | 0 | v1 | 16,384 | 2.23 × 10^5 | 1.68 × 10^5 | 0.1051 | 1.19 × 10^5 | 16,153 | 23,750 | 4,242 |
+| k12_L_s0 | k12 | L | 0 | v1 | 16,384 | 3.87 × 10^5 | 1.79 × 10^5 | 0.1012 | 2.70 × 10^5 | 1.54 × 10^5 | 28,666 | 5,007 |
+| kal_L_s0 | kal | L | 0 | v1 | 8,192 | 1.37 × 10^6 | 1.06 × 10^6 | 0.0233 | 1.37 × 10^6 | 1.06 × 10^6 | 102,981 | 11,597 |
+| kal_M_s0 | kal | M | 0 | v1 | 16,384 | 1.69 × 10^6 | 1.10 × 10^6 | 0.0217 | 1.39 × 10^6 | 1.10 × 10^6 | 122,333 | 9,926 |
+| kal_M_s1 | kal | M | 1 | v1 | 16,384 | 1.77 × 10^6 | 1.08 × 10^6 | 0.0255 | 1.44 × 10^6 | 1.12 × 10^6 | 123,338 | 6,683 |
+| kal_S_s0 | kal | S | 0 | v1 | 16,384 | 3.37 × 10^6 | 1.32 × 10^6 | 0.0756 | 2.35 × 10^6 | 1.32 × 10^6 | 122,755 | 4,621 |
+| kal_S_s1 | kal | S | 1 | v1 | 16,384 | 3.38 × 10^6 | 1.46 × 10^6 | 0.0708 | 2.44 × 10^6 | 1.50 × 10^6 | 125,140 | 3,557 |
+| v2_eval_L_s0 | eval | L | 0 | v2 | 16,384 | 1.72 × 10^5 | 1.17 × 10^5 | 0.1051 | 1.07 × 10^5 | 42,330 | 34,770 | 6,981 |
+| v2_eval_M_s0 | eval | M | 0 | v2 | 16,384 | 1.63 × 10^5 | 1.50 × 10^5 | 0.0241 | 95,481 | 27,895 | 34,770 | 4,262 |
+| v2_eval_S_s0 | eval | S | 0 | v2 | 16,384 | 1.77 × 10^5 | 78,237 | 0.1887 | 1.03 × 10^5 | 29,515 | 34,770 | 1,631 |
+| v2_k12_L_s0 | k12 | L | 0 | v2 | 16,384 | 3.88 × 10^5 | 1.79 × 10^5 | 0.1014 | 2.69 × 10^5 | 1.52 × 10^5 | 35,308 | 7,211 |
+| v2_k12_M_s0 | k12 | M | 0 | v2 | 16,384 | 4.23 × 10^5 | 2.18 × 10^5 | 0.0998 | 3.00 × 10^5 | 1.78 × 10^5 | 34,681 | 4,443 |
+| v2_k12_S_s0 | k12 | S | 0 | v2 | 16,384 | 6.45 × 10^5 | 3.21 × 10^5 | 0.1574 | 4.65 × 10^5 | 2.88 × 10^5 | 38,130 | 2,149 |
+
+- **Kalmár under the small learners:**
+  - Over 16,384 theorems S codes 3.37 / 3.38 × 10^6 bits (EDL 1.32 / 1.46 × 10^6, seeds 0 / 1); M 1.69 / 1.77 × 10^6
+    (EDL 1.10 / 1.08 × 10^6).
+  - Over 8,192 theorems (the common prefix): S 2.35 / 2.44, M 1.40 / 1.44, L 1.37 × 10^6.
+  - M and L are ≈ 40 % below S, far beyond the S and M seed spreads (3.8 %, 3.5 %). L vs M (1.5–5 %) is inside the
+    spread: not resolved.
+- **Absorbed bits:** EDL is 1.06–1.46 × 10^6, i.e. **195–270× the 5,443-bit BLC program**.
+- **The asymptote is a floor that data barely moves.**
+  - Held-out code after the last block: S 0.071–0.076, M 0.022–0.026, L 0.023 bits/token.
+  - M trained on 16,384 theorems (10 % of K12) ends where KAL-D ends (9.6 M, all 155,000, 3.7 epochs): 0.0235
+    bits/token held-out.
+- **Reference tasks** (v2 protocol; one seed), over 16,384 theorems:
+  - K12: prequential 3.9–6.4 × 10^5, EDL 1.8–3.2 × 10^5;
+  - eval: 1.6–1.8 × 10^5, EDL 0.8–1.5 × 10^5.
+  - Ordering Kalmár > K12 > eval, at every size.
+  - Per theorem at 16,384 theorems: Kalmár 66–89 absorbed bits (S, M), K12 11–20, eval 5–9.
+- **Shape** (excess bits per token by block, `b2_summary.json`):
+  - Kalmár and K12 fall monotonically: Kalmár 0.9 → 0.2 bits/token after 128 theorems, then near 0.
+  - eval plateaus at ≈ 0.28–0.35 for 6–8 blocks before falling, and only size M breaks through within the budget.
+- **By step type** (`artifacts/kc/b2_per_type_table.json`; per loss token over the coded blocks):
+  - highest ∧ true, ∨ true, ¬⊥, →I-A-false (and premise lines, which pay for the first name);
+  - lowest excluded middle, close, split.
+  - Across the 15 types these small-model bits rank KAL-D's error at ρ = +0.82 (L), +0.85 (M), +0.82 (S); given
+    frequency +0.69 to +0.75.
+
+**B3 — the causal test** (pre-registration addendum 2).
+- Design: size M on Kalmár [0, 8,192), 3 paired seeds; standard states (STD) vs states that also show the next needed
+  subformula (FOC). Same algorithm, actions and proofs. `b3_focus.py`, `b3_analysis.py` → `artifacts/kc/b3_summary.json`.
+- **Openers** (states that need the search; 23,573 of tf1200's 137,984, 17 %): teacher-forced error **31.96 → 1.94 % (−94 %)**, every
+  seed pair. ∧ true 46.8 → 3.2, ¬⊥ 36.7 → 0.0, ∨ true 31.7 → 3.6, →I-B-true 15.9 → 2.1 %.
+- **Other states:** 2.44 → 1.70 % (−30 %) as pre-registered; 1.40 → 0.65 % (−53 %) without the 1,200 first states,
+  whose first name the trainer's name shift leaves undetermined in both arms.
+- **The demand–error correlation disappears:** across types, error vs in-scope lookups ρ = +0.61 (STD) → −0.02 (FOC);
+  first states out, +0.92 → +0.27.
+- Held-out loss: 0.0153–0.0169 → 0.0044–0.0053 nats/token.
+
+### Q4 — which measure predicts where the model fails?
+
+- **Outcome:** KAL-D's teacher-forced error per step type on tf1200 (kalmar-pretrain's stored verdicts; joined by
+  `q4_join.py`, overall agreement reproduced exactly). 15 step types with ≥ 500 states.
+- **Predictors** (`q4_states.py`, `q4_analysis.py`):
+  - **explored:** the number of in-scope lookups the post-order search for the next needed subformula makes;
+  - **log2_ops:** log2(1 + policy.py's operations) — Levin's Kt minus the constant program;
+  - **target_h / focus_h:** formula heights;
+  - **decl_len:** the tokens of the formula written;
+  - **py_bytes:** the bytes of the code in `ksl_alg.py` that emits the step;
+  - **rasp_*:** RASP-L depth / ops on the step's decision path;
+  - **log_freq:** a data baseline.
+
+| predictor (per step type) | ρ, KAL-D 3-seed mean (p) | ρ s0 / s1 / s2 | ρ, KAL-D+A mean |
+|---|---|---|---|
+| b2_bits_M | +0.85 (0.000) | +0.92 / +0.80 / +0.79 | +0.62 |
+| rasp_eff_depth | +0.85 (0.000) | +0.74 / +0.87 / +0.89 | +0.90 |
+| rasp_cone_depth | +0.84 (0.000) | +0.75 / +0.89 / +0.91 | +0.91 |
+| b2_bits_S | +0.82 (0.000) | +0.86 / +0.78 / +0.79 | +0.63 |
+| b2_bits_L | +0.82 (0.001) | +0.91 / +0.78 / +0.77 | +0.59 |
+| rasp_cone_ops | +0.82 (0.000) | +0.73 / +0.87 / +0.89 | +0.89 |
+| explored | +0.82 (0.000) | +0.77 / +0.86 / +0.88 | +0.85 |
+| log2_ops | +0.78 (0.001) | +0.69 / +0.81 / +0.82 | +0.84 |
+| target_h | +0.78 (0.001) | +0.72 / +0.79 / +0.83 | +0.79 |
+| tree_path | -0.76 (0.001) | -0.65 / -0.80 / -0.82 | -0.85 |
+| snap_final_nats_per_tok | +0.73 (0.003) | +0.78 / +0.68 / +0.64 | +0.56 |
+| log_freq | -0.60 (0.020) | -0.68 / -0.61 / -0.50 | -0.56 |
+| py_bytes | -0.55 (0.038) | -0.62 / -0.52 / -0.46 | -0.43 |
+| py_tokens | -0.52 (0.048) | -0.62 / -0.50 / -0.44 | -0.41 |
+| act_len | +0.52 (0.051) | +0.55 / +0.55 / +0.55 | +0.33 |
+| focus_h | +0.49 (0.066) | +0.44 / +0.59 / +0.62 | +0.50 |
+| decl_len | +0.42 (0.119) | +0.47 / +0.39 / +0.43 | +0.15 |
+| depth | +0.27 (0.325) | +0.16 / +0.34 / +0.39 | +0.39 |
+| rasp_descent | +0.25 (0.361) | +0.29 / +0.20 / +0.12 | +0.18 |
+| state_len | +0.12 (0.658) | +0.07 / +0.15 / +0.25 | +0.25 |
+| ref_dist | -0.06 (0.821) | -0.00 / -0.05 / -0.01 | -0.12 |
+
+| seed | LR χ² (df 9), demand added to step type | p | best single measure (LR, df 1) |
+|---|---|---|---|
+| kalD_s0 | 6,687 | 0 | explored (5,751) |
+| kalD_s1 | 7,651 | 0 | explored (6,374) |
+| kalD_s2 | 6,043 | 0 | explored (4,936) |
+
+- **Partial Spearman given log frequency** (KAL-D mean): RASP-L effective depth +0.85 (p < 0.001), lookups +0.79
+  (p < 0.001), log2 ops +0.76 (p 0.001), target height +0.78 (p < 0.001), Python code bytes **−0.08** (p 0.77). The
+  negative raw ρ of program length is frequency.
+- **Error classes** (KAL-D s2, kalmar-pretrain's `error_classes`, 6,903 disagreements;
+  `artifacts/kc/q4/error_classes.json`):
+  - "other subformula" (45 %) rises with RASP-L depth (ρ = +0.94) and lookups (+0.93);
+  - "corrupted" (31 %) with lookups (+0.76);
+  - "malformed" (6 %) with the declared formula's length (+0.86).
+- **False-formula assertions** (kalmar-pretrain's `error_truth.py` rule, by type; `q4_error_truth.py` →
+  `artifacts/kc/q4/error_truth_by_type.json`):
+  - Totals reproduced: 6,903 disagreements, 4,002 scored, 671 false.
+  - Per 1,000 states: ∧ true 39.2, ∨ true 36.1, →I A-false 16.1, →I B-true 14.5, the other leaf types 4–8, structural
+    steps 0.
+  - Spearman: RASP-L depth +0.81, lookups +0.81, focus height +0.75, Python code bytes −0.27 (n.s.).
+
+| step type | error KAL-D s0 / s1 / s2 | error KAL-D+A mean | rasp_eff_depth | rasp_cone_depth | explored | log2_ops | target_h | focus_h | decl_len | py_bytes | log_freq | snap_final_nats_per_tok | b2_bits_S | b2_bits_M | b2_bits_L |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| leaf:and+ | 39.6 / 38.5 / 25.6 % | 10.2 % | 17.8 | 41 | 4.43 | 6.41 | 3.56 | 2.13 | 12.5 | 39 | 5.29 | 0.0513 | 0.33 | 0.126 | 0.171 |
+| leaf:bot- | 36.0 / 23.0 / 18.5 % | 10.6 % | 18.2 | 41 | 3.45 | 5.91 | 3.59 | 0 | 4 | 33 | 4.78 | 0.0467 | 0.176 | 0.125 | 0.166 |
+| leaf:or+ | 27.7 / 28.5 / 21.0 % | 7.1 % | 17.5 | 41 | 3.24 | 6.21 | 3.62 | 2.4 | 14.4 | 62 | 5.65 | 0.0396 | 0.301 | 0.116 | 0.146 |
+| leaf:imp+B | 18.2 / 16.9 / 14.6 % | 2.5 % | 15.2 | 32 | 1.48 | 4.84 | 2.25 | 2.54 | 22 | 64 | 5.91 | 0.0197 | 0.12 | 0.0499 | 0.064 |
+| leaf:imp+A | 10.3 / 11.0 / 10.6 % | 2.6 % | 15 | 29 | 1.18 | 3.77 | 1.46 | 2 | 9.96 | 78 | 5.57 | 0.0183 | 0.176 | 0.0694 | 0.082 |
+| leaf:and- | 6.8 / 10.6 / 10.2 % | 3.0 % | 14.4 | 29 | 1.2 | 3.12 | 1.02 | 1.63 | 5.16 | 96 | 5.99 | 0.0188 | 0.128 | 0.0406 | 0.0505 |
+| leaf:not+ | 7.9 / 10.7 / 9.0 % | 2.5 % | 15.1 | 32 | 1.79 | 3.77 | 1.88 | 2.25 | 6.94 | 82 | 5.88 | 0.0158 | 0.127 | 0.0489 | 0.0621 |
+| pr | 13.0 / 6.9 / 5.7 % | 0.1 % | 4 | 4 | 0 | 0 | 0 | 0 | 12 | 23 | 5.45 | 0.173 | 0.317 | 0.213 | 0.228 |
+| leaf:or- | 7.3 / 10.5 / 7.5 % | 2.4 % | 14.1 | 27.5 | 1.22 | 2.31 | 0.82 | 1.02 | 3.67 | 122 | 5.84 | 0.0171 | 0.115 | 0.0388 | 0.0515 |
+| leaf:imp- | 7.1 / 8.2 / 7.9 % | 1.6 % | 14.1 | 29 | 1.25 | 3.07 | 1.1 | 2.64 | 7.69 | 66 | 5.89 | 0.013 | 0.141 | 0.049 | 0.068 |
+| split | 3.4 / 2.3 / 3.3 % | 0.2 % | 10 | 10 | 0 | 1.16 | 0 | 0 | 22.1 | 108 | 6.08 | 0.00343 | 0.0396 | 0.0105 | 0.0176 |
+| efq | 1.4 / 1.8 / 1.6 % | 0.2 % | 14.4 | 24 | 1 | 4.27 | 2.14 | 0 | 8.13 | 100 | 6.21 | 0.00411 | 0.104 | 0.0174 | 0.0295 |
+| end | 0.4 / 1.9 / 0.6 % | 0.4 % | 9 | 9 | 0 | 1.85 | 0 | 0 | 0 | 8 | 5.19 | 0.0191 | 0.0672 | 0.0216 | 0.037 |
+| close | 0.3 / 1.4 / 0.6 % | 0.2 % | 11.8 | 18 | 0.228 | 1.77 | 0.691 | 0.723 | 0 | 159 | 6.73 | 0.00961 | 0.0227 | 0.00601 | 0.00985 |
+| lem | 0.1 / 0.9 / 0.2 % | 0.0 % | 8.05 | 8.29 | 0 | 0.572 | 0 | 0 | 6.29 | 206 | 6.5 | 0.0071 | 0.0239 | 0.00489 | 0.00771 |
+
+### Pre-registered expectations against outcomes
+
+| pre-registered (point; range) | outcome | verdict |
+|---|---|---|
+| K-sl algorithm, Python raw / DEFLATE / xz bytes: 1,300 (900–1,900) / 650 (450–900) / 650 (450–950) | 1,907 / 864 / 906 | raw just above the range; DEFLATE, xz inside |
+| K-sl rendering to `lean_seq`, Python DEFLATE: 350 (200–600) | 562 | inside |
+| K-tt (algorithm + Lean), Python DEFLATE: 600 (400–850) | 866 | just above |
+| K-sl algorithm, Qwen3 tokens: 450 (300–700) | 897 | above |
+| K-sl algorithm, BLC: 3,000 (1,500–5,000) | 5,443 | **above** |
+| K-tt algorithm, BLC: 2,300 (1,200–4,000) | 1,636 | inside |
+| rendering, BLC: 1,000 (400–2,500) | K-sl 616 / K-tt 4,204 | K-sl inside; K-tt above |
+| binary CL / BLC ratio: 2.5 (1.5–4) | Kalmár 4.4–4.5; calibration 2.0–3.5 | Kalmár above (plain bracket abstraction) |
+| RASP-L per-step policy: 130 ops (70–250) / depth 15 (8–30) | 492 ops / depth 41 (effective 4–33, recursion steps 17.2 mean) | **missed, ≈ 4× and ≈ 3×** |
+| decision procedure: 35 leaves (15–80) / 400 bits (150–1,000) | 46 leaves / 626 bits | inside |
+| feature extractor, Python DEFLATE: 500 (300–800) | ≤ 3,962 (mechanical, with all of policy.py) | above as measured (upper bound); "most of the algorithm sits in the features" holds |
+| calibration, BLC: copy 4 / reverse 50 / parity 50 / addition 200 / sort 250 / eval 200 / taut 350 | 4 / 87 / 82 / 375 / 257 / 273 / 410 | all within 2×; mostly under-estimated |
+| Kalmár rank 1 in Python-DEFLATE, BLC, binary CL, RASP-L; ≥ 5× the next item in BLC | rank 1 in all four; K-sl 13× taut | held (K-tt alone would be 4×) |
+| K12 generator larger than K-sl (1.2–3×), Python DEFLATE | 2.2× (mechanical vs mechanical) | held |
+| rank agreement Python-DEFLATE vs BLC ≥ 0.8; RASP-L disagrees on parity / addition | +0.97; RASP-L vs BLC +0.86 (parity needs a scratchpad in RASP-L: rank 5 vs 8) | held; disagreement only on parity |
+| B1 KAL-D first-epoch prequential code: 1.5 × 10^7 (0.5–4 × 10^7) (not blind for s0) | 1.24–1.26 × 10^7 | inside |
+| B1 KAL-D EDL, residual = final train loss: 6 × 10^6 (10^6–2 × 10^7) | 6.8–7.3 × 10^6 | inside |
+| B1 control EDL: 2 × 10^6 (10^5–10^7); KAL-D > control (60 %) | 1.9–2.6 × 10^6 (final train) / 1.5–1.7 × 10^6 (held-out); KAL-D ≈ 4× control | held |
+| absorbed bits / K-sl BLC bits ≈ 2,000 (100–20,000); ≥ 100 for every estimate | B1 1,150–1,300 (held-out residual); B2: B2 195–270× (EDL 1.06–1.46 × 10^6) | held (≥ 100 everywhere) |
+| B2 Kalmár L over 8,192 theorems: 3 × 10^6 (0.6–12 × 10^6) | 1.37 × 10^6 bits | inside the range |
+| B2: K12's EDL below Kalmár's at equal theorems; eval's below both | at 16,384 theorems, EDL Kalmár 1.1–1.5 × 10^6 > K12 1.8–3.2 × 10^5 > eval 0.8–1.5 × 10^5 at every size | held |
+| B2 size dependence: L < M < S for Kalmár | at 8,192: S 2.35 / 2.44, M 1.40 / 1.44, L 1.37 × 10^6 | M, L < S held; L < M not resolved (inside the seed spread) |
+| B2 bits per occurrence highest for ∧+, ∨+, ¬⊥, →I-B-true; lowest for close, lem, split | highest ∧ true, ∨ true, ¬⊥, →I-A-false (→I-B-true mid-table); lowest excluded middle, close, split | mostly held (→I-B-true wrong) |
+| B2 EDL per token: Kalmár rises then falls; K12 and eval fall monotonically | Kalmár and K12 fall monotonically; eval plateaus, then falls | **missed** (the teaching-like shape is eval's, not Kalmár's) |
+| best predictor of per-step-type error: computational demand (declared-formula length or evaluation height), ρ ≥ 0.6 | best: RASP-L decision depth +0.85, in-scope lookups +0.82, target height +0.78; declared length +0.42, focus height +0.49 | the class (demand) held; the two named sub-measures were not the best (declared length fails the bar) |
+| program length (any language) vs per-type error: \|ρ\| < 0.4 | Python code bytes −0.55 (p 0.04); given frequency −0.08 | raw ρ outside (negative, = frequency); no predictive value once frequency is controlled |
+| frequency baseline ρ between −0.4 and −0.7 | −0.60 | held |
+| B2 per-type bits vs KAL-D error: ρ ≥ 0.7 | +0.82 (L), +0.85 (M), +0.82 (S) | held |
+| state level: demand adds to step type, LR p < 0.01 in each seed | LR χ² 6,043–7,651 (df 9), p ≈ 0 in all three seeds | held |
+| B1-snap per-type code of final KAL-D ranks types like TF error, Spearman ≥ 0.8 (addendum) | +0.73 (seeds +0.64 to +0.78) | missed |
+| recommendation: a learner-relative EDL plus a per-step demand profile, not program length | see `run_kalmar_complexity.md` | as expected |
+| B3 (addendum 2): opener error falls ≥ 50 % (FOC vs STD) | −94 % (31.96 → 1.94 %) | held |
+| B3: other-state error changes < 30 % | −30 % as pre-registered (−53 % without first states) | **missed** narrowly: FOC also helps the other steps |
+| B3: ∧ true, ∨ true, ¬⊥, →I-B-true each fall ≥ 40 % | −93 / −89 / −100 / −87 % | held |
+| B3: across-type ρ(error, lookups) ≥ 0.6 under STD, ≤ 0.3 under FOC | +0.61 → −0.02 (first states out +0.92 → +0.27) | held |
+| B3 falsified if opener error falls < 25 % | −94 % | not falsified |
+
+### Compute (`kalmar_complexity/compute_rows.py` → registry rows, `artifacts/kc/compute_table.md`)
+
+| arm | seed | GPU-seconds (A40, wall; shared card) | training steps | training tokens | generated tokens | Lean checks | source |
+|---|---|---|---|---|---|---|---|
+| B2 eval L | 0 | 4,290 | 23,750 | 431,051,916 | 0 | 0 | `artifacts/kc/b2/eval_L_s0.json` |
+| B2 k12 L | 0 | 5,059 | 28,666 | 518,589,518 | 0 | 0 | `artifacts/kc/b2/k12_L_s0.json` |
+| B2 kal L | 0 | 11,851 | 102,981 | 1,883,775,051 | 0 | 0 | `artifacts/kc/b2/kal_L_s0.json` |
+| B2 kal M | 0 | 10,345 | 122,333 | 2,238,434,081 | 0 | 0 | `artifacts/kc/b2/kal_M_s0.json` |
+| B2 kal M | 1 | 6,907 | 123,338 | 2,257,035,059 | 0 | 0 | `artifacts/kc/b2/kal_M_s1.json` |
+| B2 kal S | 0 | 4,854 | 122,755 | 2,246,376,691 | 0 | 0 | `artifacts/kc/b2/kal_S_s0.json` |
+| B2 kal S | 1 | 3,742 | 125,140 | 2,290,292,487 | 0 | 0 | `artifacts/kc/b2/kal_S_s1.json` |
+| B2 eval L v2 | 0 | 7,039 | 34,770 | 631,930,880 | 0 | 0 | `artifacts/kc/b2/v2_eval_L_s0.json` |
+| B2 eval M v2 | 0 | 4,301 | 34,770 | 631,930,880 | 0 | 0 | `artifacts/kc/b2/v2_eval_M_s0.json` |
+| B2 eval S v2 | 0 | 1,652 | 34,770 | 631,930,880 | 0 | 0 | `artifacts/kc/b2/v2_eval_S_s0.json` |
+| B2 k12 L v2 | 0 | 7,272 | 35,308 | 639,902,966 | 0 | 0 | `artifacts/kc/b2/v2_k12_L_s0.json` |
+| B2 k12 M v2 | 0 | 4,486 | 34,681 | 628,406,847 | 0 | 0 | `artifacts/kc/b2/v2_k12_M_s0.json` |
+| B2 k12 S v2 | 0 | 2,171 | 38,130 | 691,619,885 | 0 | 0 | `artifacts/kc/b2/v2_k12_S_s0.json` |
+| B1-snap (24 checkpoints on tf1200) | — | 1,146 | 0 | 0 | 0 | 0 | `artifacts/kc/b1_snap.json` |
+| B3 FOC M | 0 | 3,686 | 20,000 | 366,525,332 | 0 | 0 | `artifacts/kc/b3/FOC_s0.json` |
+| B3 FOC M | 1 | 3,702 | 20,000 | 366,498,713 | 0 | 0 | `artifacts/kc/b3/FOC_s1.json` |
+| B3 FOC M | 2 | 3,694 | 20,000 | 366,522,255 | 0 | 0 | `artifacts/kc/b3/FOC_s2.json` |
+| B3 STD M | 0 | 3,674 | 20,000 | 366,541,223 | 0 | 0 | `artifacts/kc/b3/STD_s0.json` |
+| B3 STD M | 1 | 3,700 | 20,000 | 366,578,704 | 0 | 0 | `artifacts/kc/b3/STD_s1.json` |
+| B3 STD M | 2 | 3,688 | 20,000 | 366,536,069 | 0 | 0 | `artifacts/kc/b3/STD_s2.json` |
+
+Spend: **$5.00 of $15, 8.46 pod-hours of 40** (`podrm` at deletion: kc-1 3.45 h $2.04, kc-2 3.86 h $2.28, kc-3 1.15 h $0.68;
+three A40s, secure cloud, billed $0.59/h; community RTX 3090s were out of stock). RunPod's billing API showed $3.47 at
+17:15 UTC (kc-3 still settling); reconcile with `mcp__runpod__list-pod-billing` for pods s0bg3yd9udfgc7,
+qgmm0ynsc8bjfn, 91q9okzxycqamz. Compute matching: B3's two arms are matched (20,000 steps, ≈ 3.67 × 10^8 training tokens
+each); B2's sizes are not matched by design (a larger model costs more per step), and Kalmár L used 1.1–3.2× the GPU-seconds
+of S / M (over half the theorems; flagged per policy). Lean checks: 0 (nothing is judged); generated tokens: 0.. Bucket: `hf://buckets/dan-pandori/nd-rl/kalmar-complexity/` (`artifacts/kc`, `data/kc`, the
+programs and figures are in git).
+

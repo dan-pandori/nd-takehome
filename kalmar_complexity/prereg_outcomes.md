@@ -18,16 +18,21 @@
 | B1 KAL-D first-epoch prequential code: 1.5 × 10^7 (0.5–4 × 10^7) (not blind for s0) | 1.24–1.26 × 10^7 | inside |
 | B1 KAL-D EDL, residual = final train loss: 6 × 10^6 (10^6–2 × 10^7) | 6.8–7.3 × 10^6 | inside |
 | B1 control EDL: 2 × 10^6 (10^5–10^7); KAL-D > control (60 %) | 1.9–2.6 × 10^6 (final train) / 1.5–1.7 × 10^6 (held-out); KAL-D ≈ 4× control | held |
-| absorbed bits / K-sl BLC bits ≈ 2,000 (100–20,000); ≥ 100 for every estimate | B1 1,150–1,300 (held-out residual); B2: {{B2_RATIO}} | {{B2_RATIO_VERDICT}} |
-| B2 Kalmár L over 8,192 theorems: 3 × 10^6 (0.6–12 × 10^6) | {{B2_L}} | {{B2_L_VERDICT}} |
-| B2: K12's EDL below Kalmár's at equal theorems; eval's below both | {{B2_ORDER}} | {{B2_ORDER_VERDICT}} |
-| B2 size dependence: L < M < S for Kalmár | {{B2_SIZE}} | {{B2_SIZE_VERDICT}} |
-| B2 bits per occurrence highest for ∧+, ∨+, ¬⊥, →I-B-true; lowest for close, lem, split | {{B2_TYPES}} | {{B2_TYPES_VERDICT}} |
-| B2 EDL per token: Kalmár rises then falls; K12 and eval fall monotonically | {{B2_SHAPE}} | {{B2_SHAPE_VERDICT}} |
+| absorbed bits / K-sl BLC bits ≈ 2,000 (100–20,000); ≥ 100 for every estimate | B1 1,150–1,300 (held-out residual); B2: B2 195–270× (EDL 1.06–1.46 × 10^6) | held (≥ 100 everywhere) |
+| B2 Kalmár L over 8,192 theorems: 3 × 10^6 (0.6–12 × 10^6) | 1.37 × 10^6 bits | inside the range |
+| B2: K12's EDL below Kalmár's at equal theorems; eval's below both | at 16,384 theorems, EDL Kalmár 1.1–1.5 × 10^6 > K12 1.8–3.2 × 10^5 > eval 0.8–1.5 × 10^5 at every size | held |
+| B2 size dependence: L < M < S for Kalmár | at 8,192: S 2.35 / 2.44, M 1.40 / 1.44, L 1.37 × 10^6 | M, L < S held; L < M not resolved (inside the seed spread) |
+| B2 bits per occurrence highest for ∧+, ∨+, ¬⊥, →I-B-true; lowest for close, lem, split | highest ∧ true, ∨ true, ¬⊥, →I-A-false (→I-B-true mid-table); lowest excluded middle, close, split | mostly held (→I-B-true wrong) |
+| B2 EDL per token: Kalmár rises then falls; K12 and eval fall monotonically | Kalmár and K12 fall monotonically; eval plateaus, then falls | **missed** (the teaching-like shape is eval's, not Kalmár's) |
 | best predictor of per-step-type error: computational demand (declared-formula length or evaluation height), ρ ≥ 0.6 | best: RASP-L decision depth +0.85, in-scope lookups +0.82, target height +0.78; declared length +0.42, focus height +0.49 | the class (demand) held; the two named sub-measures were not the best (declared length fails the bar) |
 | program length (any language) vs per-type error: \|ρ\| < 0.4 | Python code bytes −0.55 (p 0.04); given frequency −0.08 | raw ρ outside (negative, = frequency); no predictive value once frequency is controlled |
 | frequency baseline ρ between −0.4 and −0.7 | −0.60 | held |
-| B2 per-type bits vs KAL-D error: ρ ≥ 0.7 | {{B2_RHO}} | {{B2_RHO_VERDICT}} |
+| B2 per-type bits vs KAL-D error: ρ ≥ 0.7 | +0.82 (L), +0.85 (M), +0.82 (S) | held |
 | state level: demand adds to step type, LR p < 0.01 in each seed | LR χ² 6,043–7,651 (df 9), p ≈ 0 in all three seeds | held |
 | B1-snap per-type code of final KAL-D ranks types like TF error, Spearman ≥ 0.8 (addendum) | +0.73 (seeds +0.64 to +0.78) | missed |
 | recommendation: a learner-relative EDL plus a per-step demand profile, not program length | see `run_kalmar_complexity.md` | as expected |
+| B3 (addendum 2): opener error falls ≥ 50 % (FOC vs STD) | −94 % (31.96 → 1.94 %) | held |
+| B3: other-state error changes < 30 % | −30 % as pre-registered (−53 % without first states) | **missed** narrowly: FOC also helps the other steps |
+| B3: ∧ true, ∨ true, ¬⊥, →I-B-true each fall ≥ 40 % | −93 / −89 / −100 / −87 % | held |
+| B3: across-type ρ(error, lookups) ≥ 0.6 under STD, ≤ 0.3 under FOC | +0.61 → −0.02 (first states out +0.92 → +0.27) | held |
+| B3 falsified if opener error falls < 25 % | −94 % | not falsified |

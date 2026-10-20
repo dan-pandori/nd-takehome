@@ -44,6 +44,8 @@ PY_ALG = {
     'mech: tt_prover.py (whole file)': ('Kalmar tt (tt_prover per-atom split)', 'mechanical minification of the whole file'),
     'mech: gen.py (K12 generator, all knobs)': ('K12 generator', 'mechanical minification of gen.py (all knobs; upper bound)'),
     'mech: policy.py (per-step policy)': ('Kalmar sl per-step policy', 'mechanical minification of policy.py'),
+    'mech: dtree feature extractor (features.py + the policy.py it imports)':
+        ('Kalmar sl per-step policy', 'decision-tree feature extractor: mechanical minification of features.py + policy.py'),
 }
 CAL = {'copy': 'copy', 'reverse': 'reverse', 'parity': 'parity', 'parity_nb': 'parity', 'sort': 'sort',
        'sort_nb': 'sort', 'add': 'addition', 'add_nb': 'addition', 'eval': 'eval (formula truth value)',

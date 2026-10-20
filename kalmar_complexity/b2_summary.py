@@ -16,9 +16,15 @@ for f in sorted(glob.glob(os.path.join(ROOT, 'artifacts/kc/b2/*.json'))):
     L8 = sum(b['bits'] for b in pre8); N8 = sum(b['loss_tokens'] for b in pre8)
     linf8 = nxt['bits'] / nxt['loss_tokens']
     steps = sum(b.get('steps', 0) for b in B); secs = sum(b.get('secs', 0) for b in B)
-    out[name] = {'args': R['args'], 'summary': S, 'preq_8192': L8, 'tokens_8192': N8, 'Linf_8192_bits_per_tok': linf8,
+    linf = S['L_inf_bits_per_token']
+    blk = [b for b in B[1:] if not b.get('asymptote_block')]
+    exc = [b['bits'] / b['loss_tokens'] - linf for b in blk]                       # excess bits per token, per block
+    rises = [i for i in range(1, len(exc)) if exc[i] > exc[i - 1] + 1e-9]
+    shape = 'monotone decreasing' if not rises else ('rises at block(s) ' + ', '.join(str(blk[i]['block'][0]) for i in rises))
+    out[name] = {'excess_bits_per_token_by_block': [[b['block'][0], e] for b, e in zip(blk, exc)], 'shape': shape,
+                 'args': R['args'], 'summary': S, 'preq_8192': L8, 'tokens_8192': N8, 'Linf_8192_bits_per_tok': linf8,
                  'EDL_8192': L8 - N8 * linf8, 'train_steps': steps, 'train_tokens': sum(b.get('train_tokens', 0) for b in B),
                  'train_secs': secs, 'gpu': R.get('gpu')}
     print(f"{name:16} {S['theorems']:6} {S['prequential_bits']:11.4g} {S['EDL_bits']:11.4g} {S['L_inf_bits_per_token']:10.4f} | "
-          f"{L8:11.4g} {L8 - N8 * linf8:11.4g} {N8:12,} {steps:11,} {secs:7.0f}")
+          f"{L8:11.4g} {L8 - N8 * linf8:11.4g} {N8:12,} {steps:11,} {secs:7.0f}  {shape}")
 json.dump(out, open(os.path.join(ROOT, 'artifacts/kc/b2_summary.json'), 'w'), indent=1)
