@@ -314,3 +314,6 @@ Budget $15 / 40 pod-hours; hard stop 2026-10-23 12:20 UTC. Pods (if any) `kc-*`.
   data README, `tt_prover.py`, the proposal, lit-review-2's EDL note; checked what kalmar-pretrain logged (B1: train
   loss every 600 s for KAL-D, a mean of every 20th step; the control's curve is only inside its checkpoints).
 - 12:30 UTC  pre-registration `preregistration/kalmar-complexity.md` committed before any pod, program or B1 number.
+- 13:55 UTC  Python programs, explicit policy (exact), decision tree (626 bits, exact on fresh states), B1 done
+  (KAL-D first-epoch code 1.25 × 10^7 bits, EDL 6.3–7.1 × 10^6; control 3.6–3.9 × 10^6 / 1.5–1.7 × 10^6). Pods
+  `kc-1`, `kc-2` (A40, $0.59/h each) running B2; B1-snap done. BLC and RASP-L agents running; literature done.

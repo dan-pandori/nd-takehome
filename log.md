@@ -1238,3 +1238,44 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   for textbook72 theorem text: 0 hits (a planted prompt is caught). Bucket sync of `artifacts/kalmar` (without
   `markers/`, `ctl_stored/`) and `data/kalmar` (without `smoke_*`) complete; a dry run shows nothing pending.
   Checkpoints were uploaded on save.
+
+# log — kalmar-complexity (proposal 31; executor)
+
+## 2026-10-20
+
+- 12:20 UTC  Start. Read kalmar-pretrain's run doc and review, the builder (`kalmar/kalmar.py`), nd-rl
+  `code/tools/tt_prover.py`, the proposal / brief, lit-review-2's EDL note. B1 data check: KAL-D's log prints the
+  training loss every 600 s (≈ 11k steps) as the mean of every 20th step's pre-update loss; the control's curve
+  (30 s) is only inside its checkpoints (`extra['curve']`). I saw the first 30 lines of `train_kalD_s0.log` before
+  pre-registering (stated in the pre-registration).
+- 12:30  Pre-registration `68f7ada4` pushed (before any program, B1 number or pod). `podbudget kalmar-complexity
+  --set 40 15`.
+- 12:35  Agents launched (background, same worktree, own subdirectories, no git writes): literature (Q5), binary
+  lambda calculus programs, and later RASP-L (after the policy existed). Shared test protocol
+  `kalmar_complexity/common.py`: 1,000 K12 theorems, `random.Random(20261020).sample` over record indices; the
+  reviewer picks another seed.
+- 12:40  Data: `data/kh/train_k12.jsonl` from `cap-horizon/data/kh/train_k12.jsonl.gz` (md5 800b5486…, matches);
+  `data/kalmar/train_kal_sl.jsonl.gz` from kalmar-pretrain's bucket (gz md5 c91dbc6f…, matches its README).
+- 12:45  Explicit per-step policy `kalmar_complexity/programs/policy/policy.py`: state → action, exact on 109,072 /
+  109,072 states (1,000 test theorems) and 546,991 / 546,991 (5,000 fresh, seed 7). Key fact: canonical names leave a
+  one-index gap for every pending `have`, so the open-box structure is a function of the state.
+- 13:00  Hand-golfed Python (`kalmar_complexity/programs/python/`): K-sl algorithm 1,907 B raw / 864 DEFLATE;
+  renderers ND 293, lean_seq 562; parse 153; K-tt algorithm + Lean 866; per-step policy 1,654. All exact on the 1,000
+  test theorems (and 2,000–5,000 fresh). A golfing pass that cut raw bytes raised DEFLATE (864 → 876); reverted.
+- 13:10  Decision procedure: 21 generic features, smallest tree found (beam 3) 46 leaves / 45 tests / 626 bits,
+  exact on all 473 distinct rows of 4,000 theorems and on a fresh 2,000 (217,968 / 217,968 states). The first fit
+  (1,000 theorems) missed one fresh state (an atom-free sequent); refitted on the union.
+- 13:16  Pre-registration addendum 1 `a32add38` (B2 / B1-snap details) before any pod.
+- 13:17  `kc-1` (A40, secure, billed $0.59/h; community 3090s out of stock); 13:19 `kc-2` (A40, $0.59/h).
+  Gate 0: first pod 13:17:34Z after 12:30:36Z.
+- 13:40  Exact token counts (`count_tokens.py`): K12 1,239,995 pairs, 120,117,855 pair tokens (= the review's), loss
+  tokens 19,375,057; K12-Kalmár 16,876,247 pairs, 3,273,686,147 pair tokens (= the review's 3.274 B), loss tokens
+  255,006,351.
+- 13:42  **B1** (`b1_preq.py` → `artifacts/kc/b1_preq.json`): first-epoch prequential code KAL-D 1.255 / 1.245 /
+  1.243 × 10^7 bits; control 3.79 / 3.64 / 3.87 × 10^6. EDL with the final held-out loss as residual: KAL-D 6.54 /
+  6.28 / 7.06 × 10^6, control 1.47 / 1.70 / 1.61 × 10^6.
+- 13:45  B1-snap done on kc-1 (24 checkpoints, 45 s each). KAL-D s0 final on tf1200: 0.01633 nats/token, = its
+  checkpoint's `final_val` on val300 (0.01634).
+- 13:50  B2 v1 early stopping (4 validations without improvement) stops the eval task after a few hundred steps
+  (its epochs are 72–144 steps), at a loss near chance. Added v2 (`--patience_steps 3000 --es_min 5000`) and queued
+  eval and K12 at S / M / L on kc-1 as a labelled second variant; v1 stays as run.
