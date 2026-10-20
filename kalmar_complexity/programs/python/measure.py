@@ -35,7 +35,9 @@ for c in ['copy', 'reverse', 'parity', 'parity_nb', 'sort', 'sort_nb', 'add', 'a
 MECH = {'mech: kalmar/kalmar.py (builder + render)': 'kalmar/kalmar.py',
         'mech: tt_prover.py (whole file)': 'kalmar_complexity/ref/tt_prover.py',
         'mech: gen.py (K12 generator, all knobs)': 'gen.py',
-        'mech: policy.py (per-step policy)': 'kalmar_complexity/programs/policy/policy.py'}
+        'mech: policy.py (per-step policy)': 'kalmar_complexity/programs/policy/policy.py',
+        'mech: dtree feature extractor (features.py + the policy.py it imports)': ['kalmar_complexity/programs/dtree/features.py',
+                                                                               'kalmar_complexity/programs/policy/policy.py']}
 
 
 def sizes(src):
@@ -55,9 +57,10 @@ def main():
         src = ''.join(open(os.path.join(H, f)).read() for f in files)
         out[name] = {'files': files, **sizes(src)}
     for name, f in MECH.items():
-        src = python_minifier.minify(open(os.path.join(ROOT, f)).read(), remove_literal_statements=True,
-                                     rename_globals=False, rename_locals=True)
-        out[name] = {'files': [f], 'method': 'python-minifier (literal statements removed, locals renamed)', **sizes(src)}
+        fs = f if isinstance(f, list) else [f]
+        src = ''.join(python_minifier.minify(open(os.path.join(ROOT, x)).read(), remove_literal_statements=True,
+                                             rename_globals=False, rename_locals=True) + '\n' for x in fs)
+        out[name] = {'files': fs, 'method': 'python-minifier (literal statements removed, locals renamed)', **sizes(src)}
     json.dump(out, open(os.path.join(ROOT, 'artifacts/kc/python_sizes.json'), 'w'), indent=1)
     print(f"{'program':48} {'raw':>6} {'defl':>6} {'xz':>6} {'qwen3':>6} {'gpt2':>6} {'lines':>5}")
     for k, v in out.items():
