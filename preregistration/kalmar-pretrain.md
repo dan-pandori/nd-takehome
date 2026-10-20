@@ -294,7 +294,7 @@ whose sampled reads were already complete at 2,048. So:
   where the arm difference is much larger than this re-draw difference.
 - Greedy and teacher-forced reads are unaffected: all arms at batch 1,024, as before.
 
-## Addendum 3 (2026-10-20 00:20 UTC) — exploratory, NOT pre-registered: is it RL or annealing?
+## Addendum 3 (2026-10-20 00:11 UTC) — exploratory, NOT pre-registered: is it RL or annealing?
 
 **Why.** After one EI round from KAL-D s0, round-2 numbers are:
 
