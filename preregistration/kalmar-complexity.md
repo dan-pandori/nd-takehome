@@ -175,3 +175,26 @@ does not rank-predict where the model fails; the model absorbs ~10^6–10^7 bits
 - Python token counts use Qwen3 / GPT-2 tokenizers, not our model tokenizer, which cannot spell Python (above).
 - K12 proof style enters the calibration through the generator's Python length and through B2's K12 task; no BLC or
   RASP-L program for it (a stochastic generator has no single per-step policy).
+
+## Addendum 1 (2026-10-20 ≈ 13:25 UTC, before any pod and before any B1 number)
+
+Measured since the main commit (VPS only): the Python programs (`artifacts/kc/python_sizes.txt`), the explicit
+per-step policy and the decision tree (`artifacts/kc/dtree/`). B1 is still uncomputed (the exact token count of
+K12-Kalmár is running). Details of the pod work, fixed now:
+
+- **B2 training** (`kalmar_complexity/b2_preq.py`): AdamW (lr 1e-3 → 1e-4 cosine, warmup 100, wd 0.1, betas
+  0.9 / 0.95, clip 1), bf16, the trainer's token-budget batches (18,432 padded tokens) and random name shift;
+  validation every min(steps per epoch, 1,000) steps on the prefix's held-out 10 % of theorems; the best validation
+  checkpoint codes the next block; stop after 4 validations without improvement or at max(300, min(30 epochs, 20,000))
+  steps. *Deviation from KAL-D's recipe* (Muon + MTP, no early stopping): early stopping is what block-wise
+  prequential coding needs, and the architecture, data format and batch are kalmar-pretrain's. The code lengths are
+  therefore those of this learner, not of KAL-D's run (B1 is KAL-D's).
+- **Scope:** size L to 8,192 theorems (the pre-registered first cut, applied up front: L costs ≈ 10× S); S and M to
+  16,384. Sizes are compared at 8,192 theorems. Seed 0 everywhere; seed 1 for Kalmár S and M, to measure the
+  seed-to-seed spread of the prequential total. A size difference counts only if it exceeds that spread.
+- **Expected (B2):** Kalmár L over 8,192 theorems: prequential code 3 × 10^6 bits (0.6–12 × 10^6); EDL ≥ 100 × the K-sl
+  BLC program. K12's EDL below Kalmár's at equal theorems; eval's below both.
+- **B1-snap:** 24 checkpoints (KAL-D s0–s2 at steps 24,020 / 100k / 200k / 350k / 500k / final; KAL-C; KAL-D+A) on
+  tf1200's 137,984 states at name base 0. Expected: per-step-type code of the final KAL-D models ranks the step types
+  like their teacher-forced error (Spearman ≥ 0.8).
+- Pods: RTX 3090 community cloud (`kc-1`: Kalmár L + B1-snap; `kc-2`: the rest), one queue per pod.
