@@ -1142,3 +1142,23 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   at 22:10 with `--resume --start_round 2 --rounds 3` (reloads found_1 / alloc_1 and `la_kal_ei_s0_r1.pt`; round 2
   re-sampled with the same seed and model; the fine-tune mix's random draw differs from an uninterrupted run). Projected
   end ≈ 09:30 UTC 2026-10-20; spend ≈ $38.5 of $50 at the end.
+
+## 2026-10-20
+- 00:09  **EI round 2 (resumed; identical to the interrupted round 2's numbers):** after one EI fine-tune the r1 model
+  solves 572 / 1,000 targets this round (round 1: 135), transfer pass@16 95 / 200 (27), transfer greedy 67 / 200 (14),
+  held-out greedy (`val300`) 215 / 300 = 71.7 % (29.0 %). The round-1 fine-tune was ≈ 94 % replayed K12-Kalmár records
+  at lr 3e-4 → 3e-5, below KAL-D's final lr: the jump may be annealing, not RL (this project's "replay is pretraining"
+  confound). Addendum 3 (exploratory, committed 00:11 before any control ran): replay-only low-LR fine-tune of KAL-D
+  s0–s2 ("KAL-D+A"), same command without EI proofs, then TF / greedy reads; s0 also the EI r1 checkpoint's reads and
+  a k 16 targets sampling.
+- 00:12  No GPU in stock (3090 community, A40, A6000, 4090: none; `runpodctl gpu list` shows only MIG slices).
+  `pod/kal/bringup_retry.sh` retries every 10 min for 3 h across GPU types.
+- 01:15  **EI ladder ends after round 3's sampling** (budget): spend $34.45 at 01:11; with the anneal control on 3 pods
+  the full 4 rounds project to ≈ $46.5 of the hard $50, so `pod/kal/stop_at_mix.sh la_kal_ei_s0 3` stops the ladder as
+  round 3's fine-tune starts (round 3's samples, drawn by the r2 model, are complete; the r3 fine-tune only feeds
+  round 4). EI vs frozen is compared over rounds 1–3 (frozen ran 4); the post-ladder TF / greedy reads run on r2. Pods
+  now: kal-12 (EI), kal-14 (anneal s0 + EI r1 reads, A40), kal-15 (anneal s1, RTX 3090 secure $0.50/h); kal-16 (s2)
+  still retrying for stock.
+- 01:50  Anneal-control pods: kal-14 A40 secure $0.59/h (00:13; s0 + EI r1 reads + targets samplings), kal-15 RTX 3090
+  secure $0.50/h (00:35; s1), kal-16 A40 secure $0.59/h (01:50; s2). The replay-only fine-tunes run at ≈ 16–18 s / step
+  (step 200 at 3,555 s on the A40, 3,257 s on the 3090). Spend $36.33 at 02:11; projected end ≈ $41.
