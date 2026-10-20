@@ -28,6 +28,7 @@ P = {
     'K-tt render Lean': ['ktt_lean.py'],
     'K-tt algorithm + Lean render': ['ktt_alg.py', 'ktt_lean.py'],
     'K-tt end to end (parse + algorithm + Lean)': ['parse.py', 'ktt_alg.py', 'ktt_lean.py'],
+    'K-sl per-step policy (state -> lean_seq action)': ['kpol.py'],
 }
 for c in ['copy', 'reverse', 'parity', 'parity_nb', 'sort', 'sort_nb', 'add', 'add_nb', 'eval', 'taut']:
     P['calib ' + c] = ['calib/%s.py' % c]
