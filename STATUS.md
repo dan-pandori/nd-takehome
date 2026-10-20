@@ -317,7 +317,7 @@ Budget $15 / 40 pod-hours; hard stop 2026-10-23 12:20 UTC. Pods (if any) `kc-*`.
 - 13:55 UTC  Python programs, explicit policy (exact), decision tree (626 bits, exact on fresh states), B1 done
   (KAL-D first-epoch code 1.25 × 10^7 bits, EDL 6.3–7.1 × 10^6; control 3.6–3.9 × 10^6 / 1.5–1.7 × 10^6). Pods
   `kc-1`, `kc-2` (A40, $0.59/h each) running B2; B1-snap done. BLC and RASP-L agents running; literature done.
-- 17:30 UTC  **Final (UNREVIEWED; `run_kalmar_complexity.md`, `numbers.md` § kalmar-complexity, plain summary
+- 17:20 UTC  **Final (UNREVIEWED; `run_kalmar_complexity.md`, `numbers.md` § kalmar-complexity, plain summary
   `run_kalmar_complexity_plain.md`).**
   - (1) Kalmár's construction (K-sl) is 5,443 bits of binary λ-calculus, 864 B of compressed Python (algorithm only).
     End to end it is 6.9–11.6 kbit. RASP-L per-step policy: 492 ops, attention depth 41. Decision tree: 626 bits over
@@ -330,4 +330,4 @@ Budget $15 / 40 pod-hours; hard stop 2026-10-23 12:20 UTC. Pods (if any) `kc-*`.
     (32 → 1.9 %, 3 paired seeds).
   - Spend $5.00 / 8.46 pod-hours of $15 / 40; all pods deleted.
 
-KALMAR-COMPLEXITY DONE 2026-10-20T17:35:00Z
+KALMAR-COMPLEXITY DONE 2026-10-20T17:19:51Z
