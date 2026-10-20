@@ -31,3 +31,6 @@ Project code is used only as infrastructure:
 | `splits.py` | renaming-class disjointness of the training files and EI targets against every pool |
 | `compute.py` | per-arm compute from the registry; training logs |
 | `hygiene.py` | textbook72 sequents in the run's files (prints names only) |
+| `phase2_checks.py` | phase 2: rr600 Q (380 vs 400), pooled atom / length strata, pooled cut-offs, TF compounding, leaf agreement by formula depth |
+| `err_classes.py` | phase 2: own classification of KAL-D s2's 6,903 teacher-forced disagreements, and of the formulas they assert as false |
+| `phase2_extra.py` | numbers found by the adversarial check of the review: PR-position shares, full-set term sizes (sl stored; K12 by a per-rule formula = lean_check 120 / 120), truncation bounds for rr600 Q, base-strata cut-off counts, guided = plain cells, longest algorithm action per set, replay pairs |

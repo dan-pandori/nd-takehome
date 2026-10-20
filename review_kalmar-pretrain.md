@@ -502,3 +502,242 @@ equals my algorithm proof. The EI arm stopped after round 3 sampling (no `round_
 - **KAL-D pass@256:** not run.
 
 *(§Recount committed before I opened `run_kalmar_pretrain.md`, `numbers.md` or `log.md`.)*
+
+## §Compare (phase 2 — after reading `run_kalmar_pretrain.md`, `run_kalmar_pretrain_plain.md`, `numbers.md` § kalmar-pretrain, `log.md`, `STATUS.md`)
+
+Additional recomputations made in phase 2 (`review_kal/phase2_checks.py`, `review_kal/err_classes.py`):
+- rr600 Q restricted to the 380 generator theorems;
+- the pooled atom / length strata;
+- the pooled cut-offs;
+- the compounding table;
+- leaf agreement by formula depth;
+- an own re-classification of the 6,903 teacher-forced disagreements.
+
+**Erratum to my §Recount.** The expectations row says "the Q stratum has 400 theorems, not 380". In fact rr600 has 400
+theorems at L_true 13–16: 380 generator theorems and 20 textbook-schema ones. The executor's Q is the 380 generator
+theorems, a valid definition (`numbers.md` Disclosures). It changes no count by more than 3 theorems: identical for every
+control and KAL-C plain read, −1 to −3 elsewhere.
+
+**Second erratum.** My §Recount compute row "EI ladder sampling 0.09 (gap)" is wrong. Those 337 GPU-s and 16,000
+attempts (`state_ladder_ei.py`, 12:28:31Z, batch 2,048) are the failed batch-2,048 launch, as numbers.md books them. No
+sampling row of the batch-1,024 EI ladder exists. For the frozen arm, rounds 1–3 at batch 1,024 are recorded, plus its
+own failed launch.
+
+**Further errata to §Recount.** These were found by an adversarial check of this review (a read-only subagent,
+10:58–11:35 UTC). Every corrected number is printed by `review_kal/phase2_extra.py` → `out/phase2_extra.json` unless
+noted.
+1. **Expectations, G1(a) row.** pass@32 misses on **5 of 6** cells (KAL-D 17.5 / 7.5 / 8.5 %, control 5.5 / 13 %; only
+   control s0's 0 % meets ≤ 5 %), not "4 of 6". The greedy half (hit on 4 of 6) stands.
+2. **Caps: "340 strata, up to 14.3 %" is wrong.** That count included nested and derived strata and two header lines.
+   Over base sets only, the strata above 0.1 % are:
+   - 140 of 302 eval-read strata (max **16.05 %**, KAL-C s2 plain on G2);
+   - 128 of 195 free reads (max 50.83 %, KAL-C s2 greedy on G2);
+   - 5 of the 12 stored control reads.
+3. **E4 "the equal cells":** guided = plain also on KAL-C s2 G2 and KAL-D s0 batch3, besides hand_proved_14 (all 9 reads)
+   and control s2 G3. No cell has guided < plain.
+4. **The Q erratum above, made precise:** 7 of 21 reads change; six by −1, KAL-D+A s2 plain by −3.
+5. **Lean re-check:** the controls ran in the same harness and the same run, but after the seven groups, not first.
+6. **Caps, truncation bound.**
+   - On all 600 rr600 theorems the extreme bound cannot flip the sign. KAL-D's ceiling is 54 / 236 / 186 against the
+     control's 298 / 241 / 198.
+   - On Q (380) it can. KAL-D's ceiling is 8 + 26 / 8 + 153 / 12 + 111 = 34 / 161 / 123 against 189 / 152 / 121, so s1
+     and s2 could cross if every truncated attempt had succeeded.
+   - On holdout250 the sign is safe.
+   - So "on rr600 and G2 the bound alone cannot exclude a change" should read "on rr600 Q and G2".
+7. **E4 "the missing pass@256 cannot reverse a sign there"** should read "is very unlikely to reverse a sign there". Item
+   6 shows the Q bound does not exclude it.
+8. **Expectations, E4 KAL-D pass@256 rows** (holdout250, rr600 Q, ≥ 17, release, hand_proved_14, textbook72) should read
+   **"untested (pass@256 not run); far below at pass@32"**, not "miss". The holdout250 pass@1 row is measured and a miss.
+9. **Gate 0.**
+   - Addendum 1 (03:28Z) predates the first ladder launch, the batch-2,048 attempt at 12:22–12:28Z, not 13:10:40Z.
+   - It also predates the end of KAL-D training: 11:57 (s2), 12:22 (s0) and 12:31Z (s1).
+   - The conclusion stands.
+10. **Models:** `replay20k_s` holds 2,180,885 / 2,183,457 / 2,181,683 pairs for s0 / s1 / s2 (anneal logs). The
+    2,180,885 quoted is s0's.
+11. **Addendum 3 / the anneal:** KAL-D's last 156,285 steps are 2.865 B training tokens on the registry basis (18,331.7
+    tokens per step), as the executor says. The 2.88 B figure used the nominal 18,432 budget.
+12. **Hygiene.**
+    - `hygiene.py` did not scan `train_kal_sl` (excluded by name). The training data holds one textbook72 class, the
+      known twin `textbook_3ed45280…` (§Splits), as K12 does.
+    - The conclusion-only matches in `ei_targets1000` / `ei_transfer200` are in theorem statements; those files hold no
+      proofs.
+13. **Expectations, E2 "exact-follow within 5 points" row.** The gaps at each atom count, as pre-registered, are 13.4–30.0
+    points (not "15–19 overall"); still a miss.
+    - The pre-registered "agreement falls with formula depth" clause belongs in the E1 row.
+    - Leaf agreement by the depth of the written formula is not monotone (KAL-D s0: 98.6 / 71.9 / 81.0 / 86.8 / 83.7 /
+      74.7 / 61.6 % at depths 0–6+; `out/phase2_checks.json`): a miss.
+14. **Previously not in any `out/` file, now in `out/phase2_extra.json`:**
+    - the algorithm's longest action per read set (G2 305, hand_proved_14 172, every other set ≤ 142 tokens);
+    - the control's G1-as-is `PR position` shares (94.7 / 90.4 / 75.7 %);
+    - the stored sl term size over all 155,000 (mean 92.23, max 423);
+    - **K12's own term size over all 155,000: mean 4.53, max 14.** This uses the per-rule formula (IMPE / NEGE / ANDE /
+      ANDI / ORI / BOTE / IMPI / NEGI 1, ORE 3, DN 3, R / PR / AS 0), which equals `lean_check` on 120 / 120 sampled K12
+      proofs and on 60 / 60 sl proofs. numbers.md's "4.5 / 14" **reproduces**.
+
+### `run_kalmar_pretrain.md` (400 words), claim by claim
+
+| claim | my value | verdict |
+|---|---|---|
+| Kalmár proofs of K12's 155,000 theorems, all Lean-accepted | rebuilt 155,000 / 155,000 identical; Lean 614 / 614 (own route) + 150 / 150 (lean_check); executor's full check `lean_check_train_sl.json` 155,000 / 155,000 | reproduces |
+| 109 actions per proof against 8 | 108.88 vs 8.00 | reproduces |
+| 9.56 M best recipe, `lean_staten`, 3 seeds; KAL-D 3.68 epochs; KAL-C compute-matched; control K12 | checkpoint metadata: 9,560,832 params; 3.676 epochs; KAL-C 24,020 steps (= control's mean steps × the same token budget) | reproduces |
+| Pre-registered: not learned | (i) and (ii) fail on 3 / 3 seeds | reproduces |
+| No generalisation, except partially on G3 | Arm mean ratio: G3 0.31 → partially; G1(b) 0.27 → does not. Per seed, G1(b) s0 (0.34) and G3 s0 / s2 are "partially". The rule leaves seed aggregation unspecified; the executor chose the arm mean after the second claim check | reproduces under the executor's aggregation; say it is a post hoc choice |
+| TF agreement KAL-D 94.5 % (control 27.0 %) | 94.47 % (94.60 / 93.81 / 95.00); 26.96 % | reproduces |
+| Greedy KAL-D 32.6 % valid, 14.7 % exactly Kalmár; control 92.2 % | 32.58 % / 14.69 %; 92.25 % | reproduces |
+| Plain pass@32: holdout250 33 vs 165; rr600 17 vs 246 | 33.3 vs 165.0; rr600 (all 600) 17.0 vs 245.7 | reproduces ("rr600" here is all 600, not the pre-registered Q) |
+| Errors were mostly bookkeeping (76 % wrong or corrupted formulas) | own classifier on KAL-D s2's 6,903 disagreements: 44.6 % + 31.1 % = 75.7 %, every class count identical | reproduces; **one seed (KAL-D s2)**, so label it |
+| KAL-D+A: 600 steps, AdamW, lr 3e-4 → 3e-5, 128 proofs per step; 1.6 B tokens (13.5 %) | checkpoint args and registry: 1.63 B per seed against 12.03 B | reproduces |
+| KAL-D+A agreement 98.7–98.8 %; greedy valid 71–79 %, exact 54–60 % | 98.70–98.79; 71.3–78.7; 53.9–59.8 | reproduces |
+| ≈ 150× larger batches; AdamW instead of Muon; no MTP | ≈ 13,950 pairs / step vs ≈ 95; `state_train.py` default loop = AdamW on all weights, MTP only in `--recipe best` | reproduces |
+| KAL-D's last 2.9 B tokens: +9.6 points greedy | 500k → 656k steps (2.88 B): +9.55 pp | reproduces |
+| vs control, greedy / pass@32: holdout250 36.7 vs 38.1 / 136 vs 165; G3 35.2 vs 7.2 / 56 vs 13; textbook72 41 vs 24 | 36.7 / 38.1; 136.3 / 165.0; 35.2 / 7.2; 56.3 / 13.3; 41.0 / 23.7 | reproduces (exploratory; KAL-D+A at batch 1,024, control at 2,048: disclosed) |
+| still not "learned": exact-follow at 1–2 atoms 63–69 % | 63.1–69.1 % (per atom count and seed) | reproduces |
+| EI targets 135 → 572 → 668 (frozen 119–146) | 135 / 572 (`round_<r>.json`); 668 (ladder log r3); frozen 135 / 138 / 146 / 119 | reproduces |
+| the replay-only fine-tune solves 578: the jump is the fine-tune, not RL | 578 vs 572 (base re-draw 133) | number reproduces; the causal wording rests on **one seed (s0) and one round**. Say so here; the plain summary qualifies it by round but not by seed |
+| keeps the algorithm fails (3.5 % exact); finds shorter proofs holds (43 %); frozen sampling scores the same | 3.5 %; 43.0 %; frozen r4 41.6 % | reproduces (criteria were for round 8, applied at round 3: stated) |
+| greedy, EI follows the algorithm more (14 → 57 %) | 14.1 → 57.2 % | reproduces |
+| Missed: most Kalmár-arm predictions, four control predictions, three of five ladder predictions. Held: guided ≥ plain, KAL-C < control, control TF and greedy. Untested: KAL-D pass@256 | my expectations table: 4–5 control misses depending on per-seed reading; ladder 3 missed, 1 hit, 1 testable only at r2 | reproduces |
+| Deviations: batch 1,024, no k extension, ladder 3 rounds, truncation above 0.1 % not re-read, A40 reads | all confirmed in artefacts and logs | reproduces |
+| Spend $46.04 of $50 | `podbudget`: $46.04, 101.69 h | reproduces |
+
+### `run_kalmar_pretrain_plain.md` (799 words)
+
+| claim | my value | verdict |
+|---|---|---|
+| recipe proofs average 109 steps against 8; Lean accepted every one; 3.7 passes, ≈ 27× more text | 108.9 vs 8.0; 3.676 epochs; 27.3× steps / tokens | reproduces |
+| 94.5 % of steps; a third of unseen theorems; 33 against 165 of 250 with 32 tries | 94.47 %; 32.6 %; 33.3 vs 165.0 | reproduces |
+| mistakes mostly bookkeeping; "about one wrong step in six asserted something false" | 671 / 4,002 checkable disagreements (16.8 %) of KAL-D s2; ≥ 671 / 6,903 = 9.7 % of all; with my stricter scoring rule 667 / 3,309 = 20 % | **reword:** "of the wrong steps that could be checked, about one in six (one seed)" |
+| annealing: 98.7 %; 71–79 % correct; 54–60 % exactly | as above | reproduces |
+| roughly matched the standard model at the first try (37 % vs 38 %); 32 tries: 66 % vs 55 % | greedy 36.7 / 38.1; pass@32 66.0 / 54.5 % | reproduces |
+| beat it on classical-reasoning theorems (35 % vs 7 %) and on one externally collected set (38 % vs 16 %) | G3 greedy 35.2 / 7.2; candidate_v0 greedy 37.9 / 15.7 | reproduces. It is not the most favourable of the four release sets: batch3 is larger (40.5 vs 14.3, n 14); candidate_v1 16.7 vs 13.0; hand_proved_14 0 vs 0. "One set" is honest, but better to give all four |
+| its last quarter added 10 points, against 42 here | +9.6 / +42.1 pp | reproduces |
+| RL: 135 → 572; annealing alone 578; "in this one round, reinforcement learning added nothing measurable" | as above | reproduces; add "one seed" |
+| side finding: the control solves 177–191 / 200 when the environment restates the premises; with more than 3 premises the standard model restates them wrongly | 184 / 177 / 191; the control's G1-as-is attempts end in `PR position` rejections in 76–95 % of attempts | reproduces |
+
+### `numbers.md` § kalmar-pretrain, table by table
+
+| table | cells checked | verdict |
+|---|---|---|
+| Models (md5, steps, data) | KAL-D s0, KAL-C s0, control s0–s2, KAL-D+A s0 md5 and checkpoint `extra` | reproduces |
+| Data (K12 / sl / pb) | All sl and K12 cells reproduce: lines, actions, pairs, pair tokens, longest state, name, `lean_seq` tokens, term size (92.23 / 423 from the stored field, which equals lean_check on 150 / 150), Lean 155,000; pb lines, actions and pairs reproduce | reproduces, including K12's term size 4.5 / 14 (errata item 14). pb pair tokens, pb term size and the K12 box depth I did not compute. The "0 / 3.37 M-state conflicts" and builder tests were not re-run |
+| E1 by step type / atoms / box depth / position | all 3 × 3 per-seed cells I compared (every row) | reproduces |
+| KAL-D learning curve | 6 × 3 TF and greedy cells | reproduces |
+| Compounding | observed shares and disagreements per theorem: every cell I compared | reproduces. The "independent" column's definition is not stated; a per-step-type product gives values within ≈ 2 points (e.g. 21.7 / 18.3 / 27.5 vs 22.1 / 19.8 / 28.1 at 0–49 actions) |
+| Leaf steps by formula depth | all 7 × 3 × 3 cells | reproduces |
+| E2 greedy by atoms, valid deviations, E3 | all cells | reproduces |
+| E4 / E5 pass@k table | every pass@32 / pass@256 cell, pass@1 / pass@8 of holdout250 | reproduces |
+| Pooled strata (n 1,128) | KAL-D s0 and control s0 rows | reproduces |
+| Generalisation greedy table, G1 supplied, G2 bins | all cells | reproduces |
+| Cut-offs (pooled 3.01 / 2.35 / 0.87 %) | 3.0057 / 2.3548 / 0.8651 % | reproduces. The pre-registered rule is per stratum: over base sets, 140 of 302 eval strata, 128 of 195 free reads and 5 of 12 stored reads exceed 0.1 % (max 16.05 % eval, 50.83 % free; errata item 2) |
+| Batch-effect check | the cells I compared (holdout250, rr600, textbook72, G1–G3) | reproduces |
+| Error classes | own classifier: 3,077 / 2,148 / 450 / 445 / 429 / 175 / 96 / 83 | reproduces exactly |
+| Errors that assert something false (671 of 4,002) | my classifier cannot parse malformed formulas, so it scores 667: 414 / 205 / 48 for other-subformula / corrupted / polarity, equal to the executor's three classes. The executor's 4 malformed make 671. The denominator depends on the scoring rule (mine 3,309) | reproduces (3 of 4 classes; numerator 667 vs 671) |
+| Pre-registered "learned" table | all cells | reproduces |
+| "Generalises" table | ratios, verdicts, plain / guided differences and MDDs (3.04 × pooled sd) | reproduces. ≥ 17 uses ge17 (70) only, where the pre-registration pooled ge17 + long2 (91); same verdict |
+| Expectations vs outcomes | Two rows to fix: "falls with box depth (97.6 → 89.4)" is not monotone (98.5 / 99.3 at depths 5–6, in numbers.md's own box-depth line), and G1 as is greedy "hit" holds for the seed means but per seed (the pre-registered convention) misses KAL-D s0 (5.5 %) and control s2 (8.5 %) | **2 rows reworded**; the rest reproduces |
+| Truncation disclosure ("best-state measured 2× the cap barely changing this model family, +≤ 2 solved") | Inherited from best-state's K12-trained models, not measured on KAL-D. KAL-D truncates 3.5× as often (3.01 % vs 0.87 %), and its upper bound is +87 solved on holdout250 (s1) | **label the inherited number** with its models; the "non-terminating" argument (algorithm actions ≤ 305 tokens) stands |
+| Compute table and registry gaps | every GPU-s, generated-token, training-step and training-token cell against my registry grouping: exact (e.g. KAL-D read 44,669 + 1,889 = my 46,559 s to rounding; KAL-D+A read 27,772 + 3,409 = 31,181); ≈ 30× GPU-s; 440 M vs 442 M tokens | reproduces; the gaps are disclosed and match the rows (see the second erratum) |
+| EI ladder tables, verdicts, after-ladder reads | every cell; the 419 / 99 exact proofs | reproduces. One wording fix: the expectation "after round 8, TF ≥ base − 1 point and exact-follow ≥ base − 5 points" is marked "hit" from round-2 data. It is not testable at round 8 and should say "(at r2)" |
+| Exploratory tables: anneal, greedy suite, plain k 32, KAL-D+A − control with MDD | every cell | reproduces |
+| Pods and spend, bucket | `podbudget` $46.04, 101.69 h; bucket paths exist | reproduces |
+
+### Process checks
+
+- **Expectations before the run:**
+  - Gate 0 passes.
+  - Addendum 1 (03:28Z) preceded every ladder pod and every KAL-D read-out, as it states. KAL-C's and the control's first
+    read-outs (KAL-C greedy 26.9 %) were already in the log at 02:22–03:00Z, so the ladder expectations were written
+    knowing them.
+  - Addendum 2 was committed 15–22 s after the batch-1,024 relaunches it records (13:10:35–42 vs 13:10:57Z), before
+    any of them finished.
+  - Addendum 3 is labelled exploratory everywhere it is used.
+- **Misses are reported as misses.**
+  - Every pre-registered miss I found is in numbers.md's item-by-item table or the run doc, apart from the two rows
+    above.
+  - Dropping the k extension (at $18.93 by projection, not at the $35 gate) and skipping the 2× re-read are disclosed
+    as deviations.
+- **Wording against n:**
+  - "Not learned" rests on 3 / 3 seeds with margins far outside the noise.
+  - "Does not generalise" holds on 3 / 3 seeds for G2, ≥ 17 and hand_proved_14. For G1(b) it holds only under the arm-mean
+    rule: s0 alone is "partially" (ratio 0.34).
+  - The textbook72 KAL-D − control gap (−4.0) is inside the pre-registered MDD of 9 and inside the batch effect. The
+    executor does not claim it.
+  - Two exploratory statements rest on one seed and are not labelled so in the run doc: "the jump is the fine-tune,
+    not RL" and the error-class shares (KAL-D s2).
+- **Model labels:**
+  - Every table names its checkpoints, and the models block gives md5s.
+  - The plain summary's "the model" / "the standard model" map onto KAL-D / control.
+  - The one unlabelled inherited number is the truncation sentence above.
+- **Hard constraints, Lean, `nd_verify`:** clean, with no QUARANTINE (§Recount). "Lean alone decides" holds:
+  1,050 / 1,050 re-checked counted proofs; 0 / 300 prefilter rejects pass Lean.
+- **textbook72:**
+  - No document prints a textbook72 theorem; I scanned the run doc, plain summary, numbers.md section, log section
+    and STATUS with `review_kal/hygiene.py`.
+  - The code fixtures in `kalmar/kalmar.py` and `kalmar/test_kalmar.py` coincide with 5 textbook72 classes. The
+    executor's sealed-set check covered documents, not code. This is hygiene, not a leak: the set is public in the
+    fork, and the fixtures are textbook-standard sequents.
+
+## §Verdict
+
+**What stands** (each checked against the raw files with my own code):
+1. **K12-Kalmár is what the brief asked for.**
+   - My independent construction reproduces all 155,000 proofs and step tags exactly.
+   - It is Lean-valid on every check I ran, including a route that uses no run code.
+2. **KAL-D (9.56 M, 656,285 steps on K12-Kalmár, 3 seeds) did not learn the construction** by the pre-registered
+   criteria (TF 93.8–95.0 % against 99 %; exact-follow far below the bars).
+3. **KAL-D is far below the K12 control in distribution:**
+   - holdout250 pass@32 33 vs 165;
+   - greedy tf1200 33 % vs 92 %.
+
+   This is beyond the MDD, the batch effect and even the extreme truncation bound on holdout250.
+4. **Generalisation.**
+   - "Does not" on G2, ≥ 17, hand_proved_14 and G1(b) (arm mean).
+   - G3's "partially" comes only from the ratio leg (KAL-D ≈ control at plain pass@32).
+5. **The EI ladder's round 1 → 2 jump is matched by the replay-only fine-tune** at s0 (578 vs 572 targets; val300
+   70.7 vs 71.7 %). Neither "keeps the algorithm" nor "finds shorter proofs" distinguishes EI from frozen sampling.
+6. **Exploratory, 3 seeds: KAL-D+A** (KAL-D + 600 AdamW steps at lr 3e-4 → 3e-5 on replayed Kalmár proofs) reaches TF
+   98.7–98.8 % and greedy 71–79 %.
+   - It beats the control's k 32 read on textbook72 (+17.3), G3 (+43.0), G1 as is (+45.7) and the pre-registered ≥ 17
+     (91 theorems: +18.7 [+13.0, +24.7]; ge17 alone +11.3).
+   - It trails on holdout250 (−28.7).
+   - These are beyond the MDD and, for textbook72 / G3, far beyond the ≤ 6-theorem batch effect. candidate_v0 (+19.7,
+     MDD 17.0) and long2 (+7.3, MDD 5.8) are also beyond the executor's MDD. Their margins over it (2.7 and 1.5
+     theorems) are within the batch effect.
+7. **The control solves 177–191 / 200 four- and five-premise problems** once the environment writes the premise lines.
+
+**Reword:**
+- (a) "TF falls with box depth (97.6 → 89.4)": it falls from depth 1 to depth 4 and recovers at depths 5–6.
+- (b) G1 as is greedy "hit": per seed, 2 of 6 cells exceed 5 %.
+- (c) The plain summary's "about one wrong step in six asserted something false": say "of the checkable wrong steps of
+  one seed (KAL-D s2)". The share is 16.8 % under the run's scoring rule, 20 % under a stricter one, and ≥ 9.7 % of all.
+- (d) "The jump is the fine-tune, not RL" (run doc and anneal figure title): add "at one seed, over one round".
+- (e) "Errors were mostly bookkeeping (76 %)": label it KAL-D s2.
+- (f) The inherited "+≤ 2 solved at 2× the cap": label it as best-state's K12 models. KAL-D's pooled truncation (3.01 %)
+  is 3.5× the control's (0.87 %).
+- (g) The plain summary's "one set of externally collected problems": give all four release sets.
+- (h) numbers.md's ladder expectation "TF ≥ base − 1, exact-follow ≥ base − 5 after round 8 … hit": say "at r2; r8 not
+  reached".
+- (i) Hygiene: replace the textbook72-class code fixtures in `kalmar/kalmar.py` / `kalmar/test_kalmar.py` (5 classes,
+  6 occurrences).
+
+**Not supported, or not derivable:**
+- KAL-D pass@256: not measured.
+- "0 attempts reached 90 steps" in the stored control reads: not derivable from this run's files.
+- The definition of the compounding table's "independent" column.
+- Which part of the anneal matters (learning rate, ≈ 150× batch, AdamW without Muon / MTP, +13.5 % tokens): not
+  separated, as the executor says. "Annealing" in the plain summary should stay in quotes.
+
+**Next measurements:**
+1. Separate the anneal, 3 seeds each, TF + greedy tf1200 (≈ 3 A40-h per seed, ≈ 9 per arm, before reads). Run against
+   KAL-D:
+   - KAL-D's own recipe (Muon + MTP, 18,432-token batches) continued for 1.63 B tokens with the learning rate decayed
+     to ≈ 0;
+   - the ladder fine-tune at constant lr 3e-4;
+   - the ladder fine-tune with Stage-1-sized batches.
+2. Close the pre-registered cap rule by re-reading at `max_action` 1,024 the strata where truncation could matter:
+   - KAL-D s1 / s2 on rr600 Q (the only in-distribution comparison the extreme bound does not settle) and holdout250;
+   - KAL-D and control on G2.
+3. Check EI against the anneal at a second seed: KAL-D s1, one EI round against KAL-D+A s1's targets read at k 16.
+4. Re-read the KAL-D+A − control comparisons on textbook72 and G3 with the control at batch 1,024 (and guided), so the
+   exploratory lead is free of the batch confound.
