@@ -69,6 +69,76 @@
   "train_secs": 5007.20023727417,
   "gpu": "NVIDIA A40"
  },
+ "kal_L_s0": {
+  "args": {
+   "task": "kal",
+   "size": "L",
+   "max_thm": 8192,
+   "block0": 64,
+   "asym": 500,
+   "lr": 0.001,
+   "tok_budget": 18432,
+   "max_epochs": 30,
+   "min_steps": 300,
+   "cap": 20000,
+   "eval_every": 1000,
+   "seed": 0,
+   "out": "artifacts/kc/b2/kal_L_s0.json",
+   "prep_only": false
+  },
+  "summary": {
+   "theorems": 8192,
+   "prequential_bits": 1374031.2123571136,
+   "loss_tokens": 13541714,
+   "L_inf_bits_per_token": 0.023254234865868903,
+   "EDL_bits": 1059129.0145146886,
+   "secs": 11845.895762205124,
+   "peak_mem_gb": 2.3890085220336914
+  },
+  "preq_8192": 1374031.2123571136,
+  "tokens_8192": 13541714,
+  "Linf_8192_bits_per_tok": 0.023254234865868906,
+  "EDL_8192": 1059129.0145146884,
+  "train_steps": 102981,
+  "train_tokens": 1883775051,
+  "train_secs": 11597.237994670868,
+  "gpu": "NVIDIA A40"
+ },
+ "kal_M_s0": {
+  "args": {
+   "task": "kal",
+   "size": "M",
+   "max_thm": 16384,
+   "block0": 64,
+   "asym": 500,
+   "lr": 0.001,
+   "tok_budget": 18432,
+   "max_epochs": 30,
+   "min_steps": 300,
+   "cap": 20000,
+   "eval_every": 1000,
+   "seed": 0,
+   "out": "artifacts/kc/b2/kal_M_s0.json",
+   "prep_only": false
+  },
+  "summary": {
+   "theorems": 16384,
+   "prequential_bits": 1689861.4341914558,
+   "loss_tokens": 27100176,
+   "L_inf_bits_per_token": 0.021691654644862134,
+   "EDL_bits": 1102013.7755844747,
+   "secs": 10338.31322979927,
+   "peak_mem_gb": 1.8259730339050293
+  },
+  "preq_8192": 1394817.6118682378,
+  "tokens_8192": 13541714,
+  "Linf_8192_bits_per_tok": 0.0217608621334203,
+  "EDL_8192": 1100138.2404640303,
+  "train_steps": 122333,
+  "train_tokens": 2238434081,
+  "train_secs": 9926.116733074188,
+  "gpu": "NVIDIA A40"
+ },
  "kal_S_s0": {
   "args": {
    "task": "kal",
@@ -102,6 +172,43 @@
   "train_steps": 122755,
   "train_tokens": 2246376691,
   "train_secs": 4621.372208356857,
+  "gpu": "NVIDIA A40"
+ },
+ "kal_S_s1": {
+  "args": {
+   "task": "kal",
+   "size": "S",
+   "max_thm": 16384,
+   "block0": 64,
+   "asym": 500,
+   "lr": 0.001,
+   "tok_budget": 18432,
+   "max_epochs": 30,
+   "min_steps": 300,
+   "cap": 20000,
+   "eval_every": 1000,
+   "seed": 1,
+   "out": "artifacts/kc/b2/kal_S_s1.json",
+   "prep_only": false,
+   "patience_steps": 0,
+   "es_min": 0
+  },
+  "summary": {
+   "theorems": 16384,
+   "prequential_bits": 3375446.791537737,
+   "loss_tokens": 27100176,
+   "L_inf_bits_per_token": 0.07078044833422767,
+   "EDL_bits": 1457284.1843212603,
+   "secs": 3737.5059099197388,
+   "peak_mem_gb": 1.1968979835510254
+  },
+  "preq_8192": 2435695.3927653674,
+  "tokens_8192": 13541714,
+  "Linf_8192_bits_per_tok": 0.06931106188684007,
+  "EDL_8192": 1497104.8156574788,
+  "train_steps": 125140,
+  "train_tokens": 2290292487,
+  "train_secs": 3557.1490898132324,
   "gpu": "NVIDIA A40"
  },
  "v2_eval_L_s0": {

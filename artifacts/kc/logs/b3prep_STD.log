@@ -1,0 +1,10 @@
+START 2026-10-20T16:01:24Z b3prep_STD: python3 -c 
+import sys; sys.argv=['x','--arm','STD','--seed','0','--out','/dev/null']
+sys.path.insert(0,'kalmar_complexity'); import b3_focus as B, pickle, os
+base = B.B2.load_records('kal', 8192)
+recs = [[(B.transform(st, 'STD')[0], act, tg) for st, act, tg in rec] for rec in base]
+os.makedirs('data/kc', exist_ok=True); pickle.dump(recs, open('data/kc/b3_STD_8192.pkl.tmp', 'wb')); os.replace('data/kc/b3_STD_8192.pkl.tmp', 'data/kc/b3_STD_8192.pkl')
+print('prep', 'STD', len(recs), sum(map(len, recs)))
+NVIDIA A40
+prep STD 8192 895222
+RC 0 END 2026-10-20T16:03:11Z
