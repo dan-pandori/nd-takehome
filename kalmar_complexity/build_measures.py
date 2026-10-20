@@ -93,17 +93,25 @@ def rasp():
     if not os.path.exists(f):
         return
     R = json.load(open(f))
-    progs = R.get('programs', R)
-    for name, v in progs.items():
-        if not isinstance(v, dict):
-            continue
-        for k, meas, units in (('ops', 'program length', 'RASP-L primitive ops'),
-                               ('attention_depth', 'attention depth', 'select-aggregate layers'),
-                               ('mlp_depth', 'MLP depth', 'map layers'),
-                               ('source_tokens', 'program length (source)', 'source tokens')):
-            if k in v:
-                add(name, meas, v[k], units, 'RASP-L (Zhou et al. 2023)', v.get('method', ''),
-                    'kalmar_complexity/programs/rasp/results.json')
+    src = 'kalmar_complexity/programs/rasp/results.json'
+    lang = 'RASP-L (Zhou et al. 2023; flagged non-RASP-L ops counted in method)'
+    for part, lab in (('decision', 'per-step decision'), ('rendering', 'action rendering'), ('total', 'decision + rendering')):
+        v = R[part]
+        m = f"part: {lab}; H = {R['H']} formula levels; flagged non-RASP-L ops {v['flagged_ops']}"
+        add('Kalmar sl per-step policy', 'program length', v['ops'], 'RASP-L primitive ops', lang, m, src)
+        add('Kalmar sl per-step policy', 'program length (source)', v['source_tokens'], 'source tokens', lang, m, src)
+        d = v.get('attn_depth', v.get('attn_depth_added'))
+        add('Kalmar sl per-step policy', 'attention depth' + (' (added)' if part == 'rendering' else ''), d,
+            'select-aggregate layers', lang, m, src)
+    names = {'copy': 'copy', 'reverse': 'reverse', 'sort': 'sort', 'parity': 'parity', 'addition': 'addition',
+             'eval': 'eval (formula truth value)', 'taut': 'taut (truth-table validity)'}
+    for r in R['calibration']['rows']:
+        t = r['task']
+        alg = next((v for k, v in names.items() if t.startswith(k)), t)
+        m = f"variant {t}; {r['cases']} random cases, {r['exact']} exact; flagged {r['flagged_ops']}; published: {r.get('published')}"
+        add(alg, 'program length', r['ops'], 'RASP-L primitive ops', lang, m, src)
+        add(alg, 'program length (source)', r['source_tokens'], 'source tokens', lang, m, src)
+        add(alg, 'attention depth', r['attn_depth'], 'select-aggregate layers', lang, m, src)
 
 
 def dtree():
