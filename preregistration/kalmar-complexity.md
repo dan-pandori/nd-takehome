@@ -199,7 +199,7 @@ K12-Kalmár is running). Details of the pod work, fixed now:
   like their teacher-forced error (Spearman ≥ 0.8).
 - Pods: RTX 3090 community cloud (`kc-1`: Kalmár L + B1-snap; `kc-2`: the rest), one queue per pod.
 
-## Addendum 2 (2026-10-20 ≈ 16:10 UTC, before this experiment's first job) — B3, a causal test of the Q4 finding
+## Addendum 2 (2026-10-20 15:49 UTC, before this experiment's first job) — B3, a causal test of the Q4 finding
 
 Not in the brief; added because Q4's result is correlational. Q4 so far (computed, committed): KAL-D's per-step-type
 error tracks per-step search demand (RASP-L decision depth ρ = +0.85, in-scope lookups +0.82), not program length.
