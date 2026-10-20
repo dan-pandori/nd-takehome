@@ -1298,3 +1298,29 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 15:49  Pre-registration addendum 2 `c27a65d2`: B3, a causal test (focus-given states vs standard, size M, 3 paired
   seeds) — not in the brief; added because Q4 is correlational. 16:00 `kc-3` (A40, $0.59/h); 16:03 six B3 jobs
   started.
+- 16:10–17:10  B3 on kc-3: six size-M models (STD / FOC × seeds 0–2), 20,000 steps each (≈ 3.67 × 10^8 tokens, all at
+  the cap). Held-out loss STD 0.0153–0.0169, FOC 0.0044–0.0053 nats/token. tf1200 read (`b3_analysis.py`):
+  - opener error 31.96 → 1.94 % (−94 %), every seed pair;
+  - ∧ true / ∨ true / ¬⊥ / →I-B-true −93 / −89 / −100 / −87 %;
+  - other states 2.44 → 1.70 % (−30 %; pre-registered < 30 %: missed narrowly);
+  - ρ(error, lookups) across types +0.61 → −0.02.
+  - Read-out note: premise lines show 66 % error in both arms. On the first state of a proof no name is in scope, so
+    under the trainer's random name shift the first action's name is not determined by the state. kalmar-pretrain's
+    E1 masks environment-assigned names; this read did not. A second read-out excludes the 1,200 first states
+    (opener −94 %, other −53 %, ρ +0.92 → +0.27). Both reported.
+- 16:45  kc-1 deleted after a checksum diff of all 35 files (3.45 h, $2.04). 17:05 kc-3 deleted (25 files, 1.15 h,
+  $0.68). 17:10 kc-2 deleted (28 files, 3.86 h, $2.28). Total $5.00 / 8.46 pod-hours by `podrm`; RunPod's billing
+  API $3.76 at 17:30 (still settling).
+- 17:10  B2 complete.
+  - Kalmár at 8,192 theorems: S 2.35 / 2.44, M 1.40 / 1.44, L 1.37 × 10^6 bits. S vs M, L resolved; L vs M inside the
+    seed spread.
+  - EDL 1.06–1.46 × 10^6 = 195–270× the BLC program.
+  - Per-type B2 bits rank KAL-D's error at ρ = +0.82 / +0.85 / +0.82 (L / M / S).
+  - Shape: Kalmár and K12 excess per token fall monotonically; eval plateaus (pre-registered "Kalmár rises then
+    falls": missed).
+- 17:15  Compute rows: `compute_rows.py` (B2 + B1-snap), then `--only b3` (appended), two registry files. Write-ups:
+  `run_kalmar_complexity.md` (400 words), plain summary (800), `numbers.md` § kalmar-complexity (generated tables),
+  `next_steps.md` section, `kalmar_complexity/README.md`, `measures.csv` (285 rows).
+- 17:25  Secret scan of the 250 files to upload: 0 hits. Bucket: `hf://buckets/dan-pandori/nd-rl/kalmar-complexity/`
+  `{artifacts/kc, data/kc, artifacts/kalmar-complexity}` (124 objects; counts match). No checkpoints were produced
+  (B2 / B3 models were scored in place, not saved).

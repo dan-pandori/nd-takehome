@@ -2850,8 +2850,8 @@ no proof is judged in this run; the builder's proofs are kalmar-pretrain's (155,
 | B3 STD M | 2 | 3,688 | 20,000 | 366,536,069 | 0 | 0 | `artifacts/kc/b3/STD_s2.json` |
 
 Spend: **$5.00 of $15, 8.46 pod-hours of 40** (`podrm` at deletion: kc-1 3.45 h $2.04, kc-2 3.86 h $2.28, kc-3 1.15 h $0.68;
-three A40s, secure cloud, billed $0.59/h; community RTX 3090s were out of stock). RunPod's billing API showed $3.47 at
-17:15 UTC (kc-3 still settling); reconcile with `mcp__runpod__list-pod-billing` for pods s0bg3yd9udfgc7,
+three A40s, secure cloud, billed $0.59/h; community RTX 3090s were out of stock). RunPod's billing API showed $3.76 at
+17:30 UTC (kc-1 $1.79, kc-2 $1.78, kc-3 $0.19; still settling); reconcile with `mcp__runpod__list-pod-billing` for pods s0bg3yd9udfgc7,
 qgmm0ynsc8bjfn, 91q9okzxycqamz. Compute matching: B3's two arms are matched (20,000 steps, ≈ 3.67 × 10^8 training tokens
 each); B2's sizes are not matched by design (a larger model costs more per step), and Kalmár L used 1.1–3.2× the GPU-seconds
 of S / M (over half the theorems; flagged per policy). Lean checks: 0 (nothing is judged); generated tokens: 0.. Bucket: `hf://buckets/dan-pandori/nd-rl/kalmar-complexity/` (`artifacts/kc`, `data/kc`, the
