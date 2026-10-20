@@ -1279,3 +1279,22 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 13:50  B2 v1 early stopping (4 validations without improvement) stops the eval task after a few hundred steps
   (its epochs are 72–144 steps), at a loss near chance. Added v2 (`--patience_steps 3000 --es_min 5000`) and queued
   eval and K12 at S / M / L on kc-1 as a labelled second variant; v1 stays as run.
+- 14:00–14:45  RASP-L agent done (exact on 109,072 + 107,233 states; decision 492 ops, attention depth 41; flagged
+  non-RASP-L ops 111). Re-checked at seed 99 myself: 22,018 / 22,018. BLC agent done (K-sl 5,443 bits; exact on
+  1,000 + 300 theorems). Re-checked at seed 99 myself (150 / 150, identical bit counts). My re-run overwrote the
+  agent's `results.json` (the test writes it by default); regenerated it with the official seed / n — identical
+  numbers to the agent's final log; my run is kept as `runs/results_seed99_executor_recheck.json`.
+- 14:50  Q4 with all predictors: RASP-L effective depth ρ = +0.85, lookups +0.82, log2 ops +0.78, Python code bytes
+  −0.55, frequency −0.60 (15 types). Partial given frequency: depth +0.85, lookups +0.79, code bytes −0.08. Error
+  classes (KAL-D s2): wrong subformula ~ depth +0.94; malformed ~ formula length +0.86. `error_truth` by type:
+  false formulas ~ depth / lookups +0.81, code bytes −0.27.
+- 15:00  `pod/kc/pull.sh` with a trailing slash copied `b2/`'s files into `artifacts/kc/`; moved them back (call it
+  without the slash). kc-2's queue2 second wave was blocked behind Kalmár M s0 (≈ 2.5 h): killed the waiting shell
+  (the running job kept going), started Kalmár S / M seed 1 directly (`queue2b.sh`), dropped the v1 K12 / eval M / S
+  runs (v2 covers them at S / M / L).
+- 15:30  B2 observation: several blocks reach the step cap (20,000 steps or 30 epochs) while still improving; eval at
+  size M breaks through only when trained on all 16,384 theorems (0.024 bits/token on the next 500; S 0.19, L 0.11).
+  B2 codes are for this training budget (upper bounds).
+- 15:49  Pre-registration addendum 2 `c27a65d2`: B3, a causal test (focus-given states vs standard, size M, 3 paired
+  seeds) — not in the brief; added because Q4 is correlational. 16:00 `kc-3` (A40, $0.59/h); 16:03 six B3 jobs
+  started.
