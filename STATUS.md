@@ -303,3 +303,14 @@ Pods `kal-*` (`~/pods.log` is host-wide). Budget $50 (pod-hours advisory, 300 h;
   pod-hours** of $50; all pods deleted. Two independent claim checks (log 18:10, 05:53); all findings fixed.
 
 KALMAR-PRETRAIN DONE 2026-10-20T09:39:51Z
+
+# STATUS — kalmar-complexity (proposal 31: how many bits is Kalmár's construction, and which measure predicts difficulty?)
+
+Brief: nd-rl `docs/proposals/state-env/BRIEF_kalmar-complexity.md`. Policy: `AGENT_POLICY.md`. Run id: kalmar-complexity.
+Budget $15 / 40 pod-hours; hard stop 2026-10-23 12:20 UTC. Pods (if any) `kc-*`.
+
+## kalmar-complexity
+- 2026-10-20 12:20 UTC  run started (executor). Read kalmar-pretrain's run doc, review (§Recount, §Verdict), builder,
+  data README, `tt_prover.py`, the proposal, lit-review-2's EDL note; checked what kalmar-pretrain logged (B1: train
+  loss every 600 s for KAL-D, a mean of every 20th step; the control's curve is only inside its checkpoints).
+- 12:50 UTC  pre-registration `preregistration/kalmar-complexity.md` committed before any pod, program or B1 number.
