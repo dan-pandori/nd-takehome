@@ -198,3 +198,26 @@ K12-Kalmár is running). Details of the pod work, fixed now:
   tf1200's 137,984 states at name base 0. Expected: per-step-type code of the final KAL-D models ranks the step types
   like their teacher-forced error (Spearman ≥ 0.8).
 - Pods: RTX 3090 community cloud (`kc-1`: Kalmár L + B1-snap; `kc-2`: the rest), one queue per pod.
+
+## Addendum 2 (2026-10-20 ≈ 16:10 UTC, before this experiment's first job) — B3, a causal test of the Q4 finding
+
+Not in the brief; added because Q4's result is correlational. Q4 so far (computed, committed): KAL-D's per-step-type
+error tracks per-step search demand (RASP-L decision depth ρ = +0.85, in-scope lookups +0.82), not program length.
+
+- **Manipulation:** remove the search, keep the algorithm. **FOC** states = the standard state with `<nl>` and the
+  focus subformula inserted before `<act>`, at leaf-frame states where the target's line is not yet in scope. The
+  focus is the first needed node, in post-order, whose literal is not in scope — the decision tree's `fc` node. All
+  other states are unchanged. **STD** = the standard states. The program, the actions and the proofs are identical.
+- **Models:** B2's size M (4 × 256, 3.2 M), from scratch, on the Kalmár pairs of K12 theorems [0, 8,192), seeds 0 / 1
+  / 2 per arm (paired: same seed, same data order and early-stopping split). B2 v1 training (AdamW, early stopping,
+  ≤ 20,000 steps).
+- **Read-out:** tf1200's 137,984 states (FOC-transformed for FOC models), teacher-forced. Error = the greedy action is
+  not exactly the algorithm's (some action token's argmax is wrong given the correct prefix). Measured per step type
+  and per state class: **opener** = a state that gets a focus under FOC; **other** = all the rest.
+- **Expected:**
+  - Opener error falls by ≥ 50 % (relative, 3-seed means), FOC vs STD.
+  - Other-state error changes by < 30 % relative.
+  - ∧ true, ∨ true, ¬⊥ and →I-B-true each fall by ≥ 40 %.
+  - The across-type Spearman of error with lookups drops from ≥ 0.6 (STD) to ≤ 0.3 (FOC).
+- **Falsified if** opener error falls by < 25 %: then search is not what makes those steps hard for this learner.
+- **Cost:** 6 models ≈ 3 A40-hours on a third pod `kc-3` ($0.59/h); within the $15 budget.
