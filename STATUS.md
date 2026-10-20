@@ -272,7 +272,7 @@ CREATE-OR-ELICIT DONE 2026-10-13T17:39:11Z
 # STATUS — kalmar-pretrain (proposal 29)
 
 Brief: nd-rl `docs/proposals/state-env/BRIEF_kalmar-pretrain.md`. Policy: `AGENT_POLICY.md`. Run id: kalmar-pretrain.
-Pods `kal-*` (`~/pods.log` is host-wide). Budget $50 / 90 pod-hours.
+Pods `kal-*` (`~/pods.log` is host-wide). Budget $50 (pod-hours advisory, 300 h; Dan 2026-10-19 03:24).
 
 ## kalmar-pretrain
 - 2026-10-19 01:20 UTC  run started (executor). K12-Kalmár builder (`kalmar/kalmar.py`, `kalmar/build.py`) written and
@@ -288,3 +288,18 @@ Pods `kal-*` (`~/pods.log` is host-wide). Budget $50 / 90 pod-hours.
   agreement 95.0 % (KAL-C 93.5 %, control 29 %), greedy tf1200 valid 35.6 % / exact-Kalmár 16.3 % — far below the
   pre-registered ≥ 99.5 % / ≥ 75–98 %. Running: KAL-D greedy + sampled reads, the EI ladder (Addendum 1) and its
   frozen arm on five A40s. Dan (03:24): $50 is the limit, hours advisory, EI ladder approved. Spend ≈ $15.
+- 2026-10-20 09:31 UTC  **Final results (UNREVIEWED; `run_kalmar_pretrain.md`, `numbers.md` § kalmar-pretrain,
+  plain summary `run_kalmar_pretrain_plain.md`).** (1) Pre-registered: KAL-D (Kalmár-proof pretraining, 3.68 epochs)
+  did **not learn** the construction (TF agreement 94.5 %, greedy 32.6 % valid / 14.7 % exactly Kalmár) and **did not
+  generalise** (G1(b), G2, hand_proved_14, ≥ 17; G3 partially), far below the K12 control (plain pass@32 holdout250 33
+  vs 165). (2) EI ladder (Addendum 1, KAL-D s0, 3 rounds): targets 135 → 572 → 668 of 1,000 (frozen 119–146 per
+  round); "keeps the algorithm" not met, "finds shorter proofs" met, both equally true of frozen sampling.
+  (3) Exploratory (Addendum 3): the ladder's replay-only fine-tune (KAL-D+A: 600 steps, AdamW, 128 proofs per step,
+  lr 3e-4 → 3e-5; 1.6 B tokens) gives TF 98.7–98.8 %, greedy 71–79 % valid, and solves 578 targets: the EI jump is
+  that fine-tune, not RL. Greedy it matches the control on holdout250 (36.7 vs 38.1 %); plain pass@32 it trails there
+  (136 vs 165) and leads on textbook72 (41 vs 24), G3 (56 vs 13), G1, ≥ 17, long2, candidate_v0. Still not "learned";
+  learning rate, batch and optimizer not separated (`next_steps.md` 1). (4) The K12 control solves 177–191 / 200
+  four-/five-premise problems at k 32 once the environment writes the premise lines. **Spend $46.04 / 101.69
+  pod-hours** of $50; all pods deleted. Two independent claim checks (log 18:10, 05:53); all findings fixed.
+
+KALMAR-PRETRAIN DONE 2026-10-20T09:39:51Z

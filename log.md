@@ -1226,3 +1226,15 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   candidate_v1 24 / 27 (22.0), batch3 10 / 7 (4.7), hand_proved_14 0 / 0 (0), textbook72 40 / 41 (23.7), G1 as is
   65 / 61 (12.3), G2 2 / 3 (1.7), G3 52 / 59 (13.3). kal-16 deleted after the pull (5.83 h, $3.44). s1 running on
   kal-14 since 07:12.
+- 09:28  KAL-D+A s1 plain k 32 done (8,036 s): holdout250 130, rr600 175, ≥ 17 21, long2 7, candidate_v0 41,
+  candidate_v1 26, batch3 7, hand_proved_14 0, textbook72 42, G1 as is 48, G2 2, G3 58. Means over s0–s2 vs control
+  (MDD): holdout250 136.3 vs 165.0 (−28.7, MDD 21.2), rr600 202.7 vs 245.7 (MDD 128), ≥ 17 +11.3 (9.3), long2 +7.3
+  (5.8), candidate_v0 +19.7 (17.0), textbook72 41.0 vs 23.7 (+17.3, 3.9), G1 as is +45.7 (33.9), G3 56.3 vs 13.3
+  (+43.0, 13.7). kal-14 deleted 09:29 after pulling eval, logs and registry rows (9.27 h, $5.47). **All pods deleted;
+  final spend $46.04 / 101.69 pod-hours** (`podbudget`, 09:29).
+- 09:39  Closing: `numbers.md` § kalmar-pretrain appended (`kalmar/assemble_numbers.py` from the drafts and the
+  generated tables); run doc 398 words, plain summary 799; STATUS final entry. Secret scan of everything under
+  `artifacts/kalmar`, `data/kalmar` and the registry rows: 1,452 files, 0 hits. Sealed-set check of every document
+  for textbook72 theorem text: 0 hits (a planted prompt is caught). Bucket sync of `artifacts/kalmar` (without
+  `markers/`, `ctl_stored/`) and `data/kalmar` (without `smoke_*`) complete; a dry run shows nothing pending.
+  Checkpoints were uploaded on save.

@@ -5,7 +5,8 @@ What this run leaves open (`numbers.md` § kalmar-pretrain):
   agreement is 94.5 % and greedy proofs are 32.6 % valid.
 - **Exploratory result** (Addendum 3). The ladder's 600-step fine-tune on 20,000 replayed Kalmár proofs, without EI
   proofs (KAL-D+A), lifts that to 98.7 % and 71–79 %. Greedily, it about matches the control on holdout250 and beats
-  it on the classical families and the release.
+  it on the classical families and the release. With 32 samples it trails the control on holdout250 (136 vs 165) and
+  leads beyond the MDD on textbook72, ≥ 17, long2, the release's candidate_v0, G1 and G3 (batch 1,024 vs 2,048).
 - **The EI ladder.** Its jump (135 → 572 of 1,000 targets) is that same anneal: replay alone gives 578.
 - **Still short.** Exact-follow at 1–2 atoms is 63–69 % against the 90 % bar.
 

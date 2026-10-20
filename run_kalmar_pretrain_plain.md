@@ -16,8 +16,8 @@ completeness proof:
 2. In each case, prove each formula, or its negation, by a fixed recursion.
 3. Close at once any case in which an assumption is false.
 
-Every step depends only on the current state, so a model that learned the recipe could prove every theorem in the
-domain. The catch is length: recipe proofs average 109 steps, against 8 for the project's usual training proofs.
+Each step depends only on the current state, so a model that learned the recipe could prove every theorem. The catch
+is length: recipe proofs average 109 steps, against 8 for the project's usual training proofs.
 
 ## What we did
 
@@ -29,10 +29,10 @@ Before any training, we wrote down what we expected and what would count as succ
 ## What we found
 
 **The planned test said no.**
-- Shown each intermediate state of the recipe's proof of an unseen theorem, the model chose the recipe's next step
+- Shown each state of the recipe's proof of an unseen theorem, the model chose the recipe's next step
   94.5 % of the time.
-- Writing whole proofs alone, it produced a correct proof for only a third of unseen theorems.
-- With 32 tries per problem it solved far fewer held-out problems than the standard model: 33 against 165 of 250.
+- Writing whole proofs alone, it proved only a third of unseen theorems correctly.
+- With 32 tries it solved far fewer held-out problems than the standard model: 33 against 165 of 250.
 - Its mistakes were mostly bookkeeping: it lost its place in the long recursion, or miscopied a long formula. About
   one wrong step in six asserted something false.
 
@@ -42,7 +42,7 @@ Before any training, we wrote down what we expected and what would count as succ
 - After this "annealing" the models chose the recipe's step 98.7 % of the time. They wrote correct proofs for 71–79 %
   of unseen theorems, and followed the recipe exactly in 54–60 %.
 - The annealed models then roughly matched the standard model on ordinary held-out problems: 37 % against 38 % solved
-  at the first try.
+  at the first try. With 32 tries the standard model stays ahead (66 % against 55 %).
 - They clearly beat it on theorems that need classical reasoning the standard data almost never shows (35 % against
   7 %), and on one set of externally collected problems (38 % against 16 %).
 - They still miss our advance definition of having learned the method: exact recipe-following on small problems is
@@ -54,7 +54,7 @@ Before any training, we wrote down what we expected and what would count as succ
 **Reinforcement learning, mostly explained.** In a few rounds of "expert iteration" the model is trained on its own
 Lean-accepted proofs.
 - After one round, the number of target problems solved jumped from 135 to 572 of 1,000.
-- But each round's training step replays thousands of recipe proofs in that same style: the same annealing.
+- But each round's training step replays thousands of recipe proofs in that same style.
 - Annealing alone, without the model's own proofs, solves 578: in this one round, reinforcement learning added
   nothing measurable on top.
 - By our advance tests it neither kept to the method nor avoided shorter proofs, but the untrained model's samples

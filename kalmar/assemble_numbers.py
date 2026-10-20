@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Assemble the numbers.md § kalmar-pretrain text from the executor's drafts and the generated tables.
 
-  python3 kalmar/assemble_numbers.py --draft <section draft> --ladder <ladder template> --spend '$45.12' > section.md
+  python3 kalmar/assemble_numbers.py --draft artifacts/kalmar/numbers_src/section_draft.md \
+      --ladder artifacts/kalmar/numbers_src/ladder_template.md --spend '$46.04' > section.md
+(the two inputs are the executor's prose with placeholders; the result is `numbers.md` § kalmar-pretrain).
 
 Fills: the compute table (artifacts/kalmar/compute.json, from `kalmar/compute.py`), the ladder tables
 (artifacts/kalmar/ladder_stdout.txt), the exploratory tables (artifacts/kalmar/exploratory_stdout.txt) and the spend.
