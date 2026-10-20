@@ -1,0 +1,47 @@
+guided (logical) minus plain at k 32, solved theorems; per seed s0/s1/s2 (points = % of the set)
+  ctl   holdout250       n  250 diff [29, 35, 36]  points [11.6, 14.0, 14.4]
+  ctl   rr600_Q          n  400 diff [123, 135, 166]  points [30.8, 33.8, 41.5]
+  ctl   ge17_91          n   91 diff [41, 36, 35]  points [45.1, 39.6, 38.5]
+  ctl   release_ex4prem  n  182 diff [28, 33, 33]  points [15.4, 18.1, 18.1]
+  ctl   hand_proved_14   n   14 diff [0, 0, 0]  points [0.0, 0.0, 0.0]
+  ctl   textbook72       n   72 diff [10, 15, 10]  points [13.9, 20.8, 13.9]
+  ctl   g1_premises      n  200 diff [3, 10, 24]  points [1.5, 5.0, 12.0]
+  ctl   g2_large         n  240 diff [6, 1, 2]  points [2.5, 0.4, 0.8]
+  ctl   g3_classical     n  106 diff [4, 3, 0]  points [3.8, 2.8, 0.0]
+  kalC  holdout250       n  250 diff [20, 33, 17]  points [8.0, 13.2, 6.8]
+  kalC  rr600_Q          n  400 diff [15, 24, 19]  points [3.8, 6.0, 4.8]
+  kalC  ge17_91          n   91 diff [5, 6, 2]  points [5.5, 6.6, 2.2]
+  kalC  release_ex4prem  n  182 diff [25, 27, 8]  points [13.7, 14.8, 4.4]
+  kalC  hand_proved_14   n   14 diff [0, 0, 0]  points [0.0, 0.0, 0.0]
+  kalC  textbook72       n   72 diff [12, 14, 7]  points [16.7, 19.4, 9.7]
+  kalC  g1_premises      n  200 diff [18, 33, 18]  points [9.0, 16.5, 9.0]
+  kalC  g2_large         n  240 diff [1, 4, 0]  points [0.4, 1.7, 0.0]
+  kalC  g3_classical     n  106 diff [8, 16, 3]  points [7.5, 15.1, 2.8]
+  kalD  holdout250       n  250 diff [18, 34, 25]  points [7.2, 13.6, 10.0]
+  kalD  rr600_Q          n  400 diff [31, 21, 32]  points [7.8, 5.2, 8.0]
+  kalD  ge17_91          n   91 diff [8, 4, 8]  points [8.8, 4.4, 8.8]
+  kalD  release_ex4prem  n  182 diff [16, 21, 24]  points [8.8, 11.5, 13.2]
+  kalD  hand_proved_14   n   14 diff [0, 0, 0]  points [0.0, 0.0, 0.0]
+  kalD  textbook72       n   72 diff [9, 12, 13]  points [12.5, 16.7, 18.1]
+  kalD  g1_premises      n  200 diff [19, 25, 18]  points [9.5, 12.5, 9.0]
+  kalD  g2_large         n  240 diff [2, 2, 1]  points [0.8, 0.8, 0.4]
+  kalD  g3_classical     n  106 diff [10, 16, 9]  points [9.4, 15.1, 8.5]
+
+arm differences (mean of 3 seeds = IQM at n 3) with a seed-bootstrap 95 % interval; plain
+  holdout250 p@32                        [35, 24, 41] vs [165, 170, 160]  diff -131.67  95% [-141.00, -122.67]  sd(b) 5.00
+  holdout250 p@1                         [5.91, 3.09, 6.69] vs [65.81, 74.12, 81.09]  diff -68.45  95% [-75.68, -60.84]  sd(b) 7.65
+  rr600_Q p@32                           [8, 8, 13] vs [189, 152, 121]  diff -144.33  95% [-179.33, -113.00]  sd(b) 34.04
+  textbook72 p@32                        [21, 18, 20] vs [25, 22, 24]  diff -4.00  95% [-6.00, -2.00]  sd(b) 1.53
+  g3 p@32                                [19, 18, 17] vs [12, 9, 19]  diff +4.67  95% [-0.67, +9.00]  sd(b) 5.13
+  KAL-D+A textbook72 p@32 vs ctl k32     [40, 42, 41] vs [25, 22, 24]  diff +17.33  95% [+15.67, +19.00]  sd(b) 1.53
+  KAL-D+A g3 p@32 vs ctl k32             [52, 58, 59] vs [12, 9, 19]  diff +43.00  95% [+37.33, +48.67]  sd(b) 5.13
+  KAL-D+A ge17_91 p@32 vs ctl k32        [34, 28, 40] vs [17, 16, 13]  diff +18.67  95% [+13.00, +24.67]  sd(b) 2.08
+  KAL-D+A holdout250 p@32 vs ctl k32     [133, 130, 146] vs [165, 170, 160]  diff -28.67  95% [-37.33, -19.00]  sd(b) 5.00
+  KAL-D+A g1_premises p@32 vs ctl k32    [65, 48, 61] vs [0, 11, 26]  diff +45.67  95% [+31.33, +60.00]  sd(b) 13.05
+
+greedy tf1200 success, KAL-D vs control (pp): [-58.8, -65.3, -54.9]
+
+E2 first deviation (stored dev_tag, consistent with my tags in 100 % of rows), KAL-D greedy tf1200, top 8:
+  s0 n 1031 {'pr': 0.176, 'leaf:imp+B': 0.168, 'leaf:or+': 0.149, 'leaf:and+': 0.113, 'split': 0.095, 'leaf:not+': 0.067, 'leaf:and-': 0.053, 'leaf:imp-': 0.037}
+  s1 n 1036 {'lem': 0.183, 'leaf:or+': 0.166, 'leaf:imp+B': 0.137, 'leaf:and+': 0.102, 'pr': 0.086, 'leaf:not+': 0.065, 'leaf:and-': 0.055, 'leaf:imp-': 0.042}
+  s2 n 1004 {'leaf:imp+B': 0.162, 'leaf:or+': 0.152, 'leaf:not+': 0.113, 'split': 0.112, 'leaf:and+': 0.101, 'leaf:and-': 0.084, 'pr': 0.078, 'leaf:imp-': 0.059}
