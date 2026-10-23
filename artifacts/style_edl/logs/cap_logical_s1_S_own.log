@@ -1,0 +1,7 @@
+START 2026-10-23T05:25:07Z cap_logical_s1_S_own: python3 guided_eval.py --ckpt ckpts/style_edl/s1/S_own/theta_es_lr1e-05_E0_o0.pt --arm logical --sets data/style_edl/sets/test128.jsonl --k 32 --seed 2 --temperature 0.8 --max_steps 1024 --max_action 512 --batch 1024 --out artifacts/style_edl/cap/s1_S_own__logical_k32_seed2
+NVIDIA RTX A5000
+[lean_gate] 4096 samples, parse-fail 0 (no-eos 0, 0.000 %), distinct 2656: ok 2656, rej 0 (filter 0, prefilter=on); lean on 2656 texts in 7 procs, 15.1s proc, exposed 2.6s, tail 2.5s, 7 workers
+{"ckpt": "ckpts/style_edl/s1/S_own/theta_es_lr1e-05_E0_o0.pt", "arm": "logical", "k": 32, "seed": 2, "batch": 1024, "temperature": 0.8, "max_action": 512, "max_steps": 1024, "max_rej": 10, "n_theorems": 128, "solved": {"test128": 128}, "n": {"test128": 128}, "solved_total": 128, "wall_s": 33.24408674240112, "loop_s": 29.62555456161499, "gpu": "NVIDIA RTX A5000", "n_params": null, "proof_level_check": {}, "repeat_mean": 0.0005162934546676888, "n_redraws": 50, "reject_p_mean": 0.0005162934546676888, "n_rejected_ended": 50, "attempts": 4096, "finished": 4096, "accepted": 4096}
+{"end": {"done": 4096}, "flag_cause": {}, "cache_hits": 5737, "cache_miss": 12167, "gpu_s": 28.4235782623291, "check_s": 0.13538646697998047, "env_s": 0.3191189765930176, "sampled_tokens": 335117, "prefill_tokens": 1164350, "waves": 23, "loop_wall_s": 29.620730876922607, "peak_alloc_gb": 8.010063171386719, "lean_s": 2.6645984649658203}
+rej_cause {"S:have name": 42, "S:unbound": 4, "L:or-intro": 3, "S:exact goal mismatch": 1}
+RC 0 END 2026-10-23T05:25:45Z

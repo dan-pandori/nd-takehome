@@ -1,0 +1,65 @@
+{
+ "ckpt": "ckpts/style_edl/s0/S_RL/theta_es_lr1e-05_E0_o0.pt",
+ "arm": "logical",
+ "k": 32,
+ "seed": 2,
+ "batch": 1024,
+ "temperature": 0.8,
+ "max_action": 512,
+ "max_steps": 1024,
+ "max_rej": 10,
+ "n_theorems": 128,
+ "solved": {
+  "test128": 128
+ },
+ "n": {
+  "test128": 128
+ },
+ "solved_total": 128,
+ "wall_s": 63.34368062019348,
+ "loop_s": 59.5690062046051,
+ "gpu": "NVIDIA RTX A5000",
+ "n_params": null,
+ "proof_level_check": {},
+ "repeat_mean": 0.30008573824028595,
+ "n_redraws": 91,
+ "reject_p_mean": 0.06910336280521487,
+ "n_rejected_ended": 94,
+ "attempts": 4096,
+ "finished": 4093,
+ "accepted": 4093,
+ "stats": {
+  "rej_cause": {
+   "S:have name": 40,
+   "S:unbound": 17,
+   "L:reiterate": 2,
+   "S:PR position": 1,
+   "S:exact goal mismatch": 3,
+   "L:app-arg": 11,
+   "L:projection": 3,
+   "L:app-result": 3,
+   "L:or-intro": 2,
+   "L:and-intro": 1,
+   "S:formula": 8,
+   "S:box on non-arrow": 1,
+   "S:term": 1,
+   "S:binder mismatch": 1
+  },
+  "end": {
+   "done": 4093,
+   "fail:max_rej": 3
+  },
+  "flag_cause": {},
+  "cache_hits": 5751,
+  "cache_miss": 12471,
+  "gpu_s": 58.3194580078125,
+  "check_s": 0.1372694969177246,
+  "env_s": 0.43459010124206543,
+  "sampled_tokens": 341054,
+  "prefill_tokens": 1190972,
+  "waves": 25,
+  "loop_wall_s": 59.564258337020874,
+  "peak_alloc_gb": 8.010063171386719,
+  "lean_s": 2.887377977371216
+ }
+}

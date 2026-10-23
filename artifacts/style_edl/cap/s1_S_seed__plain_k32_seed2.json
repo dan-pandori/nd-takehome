@@ -1,0 +1,71 @@
+{
+ "ckpt": "ckpts/style_edl/s1/S_seed/theta_es_lr1e-05_E0_o0.pt",
+ "arm": "plain",
+ "k": 32,
+ "seed": 2,
+ "batch": 1024,
+ "temperature": 0.8,
+ "max_action": 512,
+ "max_steps": 1024,
+ "max_rej": 10,
+ "n_theorems": 256,
+ "solved": {
+  "all256": 256
+ },
+ "n": {
+  "all256": 256
+ },
+ "solved_total": 256,
+ "wall_s": 55.31110763549805,
+ "loop_s": 49.25878429412842,
+ "gpu": "NVIDIA RTX A5000",
+ "n_params": null,
+ "proof_level_check": {
+  "flag_lean_rejected": 21
+ },
+ "repeat_mean": null,
+ "n_redraws": 0,
+ "reject_p_mean": 0.03210393431786873,
+ "n_rejected_ended": 101,
+ "attempts": 8192,
+ "finished": 8091,
+ "accepted": 8070,
+ "stats": {
+  "rej_cause": {
+   "S:have name": 83,
+   "S:unbound": 10,
+   "S:exact goal mismatch": 3,
+   "S:formula": 3,
+   "S:no semicolon": 1,
+   "S:exact not last": 1
+  },
+  "end": {
+   "fail:S:have name": 83,
+   "done": 8091,
+   "fail:S:unbound": 10,
+   "fail:S:exact goal mismatch": 3,
+   "fail:S:formula": 3,
+   "fail:S:no semicolon": 1,
+   "fail:S:exact not last": 1
+  },
+  "flag_cause": {
+   "by-contradiction": 4,
+   "app-result": 2,
+   "or-intro": 13,
+   "projection": 2,
+   "and-intro": 2,
+   "app-arg": 1
+  },
+  "cache_hits": 11354,
+  "cache_miss": 24911,
+  "gpu_s": 46.73989701271057,
+  "check_s": 0.5041532516479492,
+  "env_s": 0.6542685031890869,
+  "sampled_tokens": 667831,
+  "prefill_tokens": 2395512,
+  "waves": 41,
+  "loop_wall_s": 49.24747443199158,
+  "peak_alloc_gb": 8.502204895019531,
+  "lean_s": 5.033632755279541
+ }
+}

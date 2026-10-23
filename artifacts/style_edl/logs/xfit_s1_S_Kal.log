@@ -1,0 +1,11 @@
+START 2026-10-23T06:57:52Z xfit_s1_S_Kal: python3 style_edl/edl_run.py --ckpt ckpts/bs/stage1_best12_s1_b1200.pt --stream data/style_edl/streams/s1/S_Kal.test.jsonl --test data/style_edl/streams/s1/S_Kal.stream.jsonl --lrs 1e-5,1e-4,1e-3 --orders 0,1 --arm S_Kal --lseed 1 --algo es --out artifacts/style_edl/edl_x/s1/S_Kal.json
+NVIDIA RTX A5000
+/usr/local/lib/python3.12/dist-packages/torch/autograd/graph.py:829: UserWarning: Memory Efficient attention defaults to a non-deterministic algorithm. To explicitly enable determinism call torch.use_deterministic_algorithms(True, warn_only=False). (Triggered internally at /pytorch/aten/src/ATen/native/transformers/cuda/attention_backward.cu:775.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+es E 0 lr 1e-05 o 0: p* [0, 8, 8, 8, 8, 8] preq 83176.1 L_test 312.430 EDL/proof 337.384 first 1039.784 (679s)
+es E 0 lr 1e-05 o 1: p* [0, 8, 8, 8, 8, 8] preq 78285.1 L_test 312.031 EDL/proof 299.572 first 1088.804 (615s)
+es E 0 lr 0.0001 o 0: p* [0, 8, 8, 8, 8, 8] preq 35732.8 L_test 97.955 EDL/proof 181.207 first 1039.784 (678s)
+es E 0 lr 0.0001 o 1: p* [0, 8, 8, 8, 8, 8] preq 35252.7 L_test 97.483 EDL/proof 177.929 first 1088.804 (530s)
+es E 0 lr 0.001 o 0: p* [0, 5, 6, 8, 8, 4] preq 35545.1 L_test 170.772 EDL/proof 106.925 first 1039.784 (284s)
+es E 0 lr 0.001 o 1: p* [0, 0, 8, 8, 5, 8] preq 37710.2 L_test 102.383 EDL/proof 192.227 first 1088.804 (295s)
+RC 0 END 2026-10-23T07:49:50Z

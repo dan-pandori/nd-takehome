@@ -1,0 +1,10 @@
+START 2026-10-23T04:07:57Z g_base_s0: python3 kalmar/kal_free.py --ckpt ckpts/bs/stage1_best12_s0_b1200.pt --in data/kalmar/tf1200_kal_sl.jsonl --k 1 --temperature 0 --seed 0 --max_steps 1024 --max_action 512 --batch 1024 --out artifacts/style_edl/reads/base_s0__tf1200_greedy.json
+NVIDIA RTX A5000
+[lean_gate] 1200 samples, parse-fail 58 (no-eos 0, 0.000 %), distinct 1142: ok 1102, rej 40 (filter 40, prefilter=on); lean on 1102 texts in 3 procs, 10.7s proc, exposed 4.5s, tail 4.4s, 7 workers
+{"n_attempts": 1200, "solved_theorems": 1102, "gen_s": 14.0, "lean_s": 4.5}
+  all        n   1200  valid 0.9183  follow 0.0000  dev-valid 1102  shorter 1102
+  atoms=1    n    150  valid 0.9000  follow 0.0000  dev-valid 135  shorter 135
+  atoms=2    n    350  valid 0.9343  follow 0.0000  dev-valid 327  shorter 327
+  atoms=3    n    350  valid 0.9000  follow 0.0000  dev-valid 315  shorter 315
+  atoms=4    n    350  valid 0.9286  follow 0.0000  dev-valid 325  shorter 325
+RC 0 END 2026-10-23T04:08:31Z

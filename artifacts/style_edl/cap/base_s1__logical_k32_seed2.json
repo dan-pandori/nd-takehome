@@ -1,0 +1,69 @@
+{
+ "ckpt": "ckpts/bs/stage1_best12_s1_b1200.pt",
+ "arm": "logical",
+ "k": 32,
+ "seed": 2,
+ "batch": 1024,
+ "temperature": 0.8,
+ "max_action": 512,
+ "max_steps": 1024,
+ "max_rej": 10,
+ "n_theorems": 128,
+ "solved": {
+  "test128": 128
+ },
+ "n": {
+  "test128": 128
+ },
+ "solved_total": 128,
+ "wall_s": 77.69178462028503,
+ "loop_s": 72.07967829704285,
+ "gpu": "NVIDIA RTX A5000",
+ "n_params": 9560832,
+ "proof_level_check": {},
+ "repeat_mean": 0.33345564868788125,
+ "n_redraws": 238,
+ "reject_p_mean": 0.11946372757767991,
+ "n_rejected_ended": 250,
+ "attempts": 4096,
+ "finished": 4084,
+ "accepted": 4084,
+ "stats": {
+  "rej_cause": {
+   "S:have name": 46,
+   "S:unbound": 39,
+   "L:projection": 25,
+   "L:by-contradiction": 12,
+   "L:or-intro": 27,
+   "L:reiterate": 7,
+   "L:app-arg": 30,
+   "L:elim": 8,
+   "L:app-result": 3,
+   "S:binder mismatch": 2,
+   "S:exact goal mismatch": 9,
+   "L:and-intro": 24,
+   "S:formula": 1,
+   "S:Or.elim on non-or": 5,
+   "S:term": 4,
+   "L:premise-type": 1,
+   "L:function-expected": 3,
+   "L:or-intro-target": 4
+  },
+  "end": {
+   "done": 4084,
+   "fail:max_rej": 12
+  },
+  "flag_cause": {},
+  "cache_hits": 5569,
+  "cache_miss": 13370,
+  "gpu_s": 70.75927352905273,
+  "check_s": 0.194441556930542,
+  "env_s": 0.35661983489990234,
+  "sampled_tokens": 353341,
+  "prefill_tokens": 1260055,
+  "waves": 40,
+  "loop_wall_s": 72.07391214370728,
+  "peak_alloc_gb": 9.01601791381836,
+  "lean_s": 4.585670232772827
+ }
+}

@@ -1,0 +1,77 @@
+{
+ "ckpt": "ckpts/style_edl/s2/S_seed/theta_es_lr1e-05_E0_o0.pt",
+ "arm": "plain",
+ "k": 32,
+ "seed": 2,
+ "batch": 1024,
+ "temperature": 0.8,
+ "max_action": 512,
+ "max_steps": 1024,
+ "max_rej": 10,
+ "n_theorems": 256,
+ "solved": {
+  "all256": 256
+ },
+ "n": {
+  "all256": 256
+ },
+ "solved_total": 256,
+ "wall_s": 81.01617479324341,
+ "loop_s": 75.05347013473511,
+ "gpu": "NVIDIA RTX A5000",
+ "n_params": null,
+ "proof_level_check": {
+  "flag_lean_rejected": 21
+ },
+ "repeat_mean": null,
+ "n_redraws": 0,
+ "reject_p_mean": 0.044103586903394505,
+ "n_rejected_ended": 92,
+ "attempts": 8192,
+ "finished": 8100,
+ "accepted": 8079,
+ "stats": {
+  "rej_cause": {
+   "S:have name": 71,
+   "S:binder mismatch": 1,
+   "S:unbound": 9,
+   "S:formula": 1,
+   "S:term": 1,
+   "S:exact not last": 1,
+   "S:exact goal mismatch": 4,
+   "S:box on non-arrow": 3,
+   "S:colon": 1
+  },
+  "end": {
+   "fail:S:have name": 71,
+   "fail:S:binder mismatch": 1,
+   "done": 8100,
+   "fail:S:unbound": 9,
+   "fail:S:formula": 1,
+   "fail:S:term": 1,
+   "fail:S:exact not last": 1,
+   "fail:S:exact goal mismatch": 4,
+   "fail:S:box on non-arrow": 3,
+   "fail:S:colon": 1
+  },
+  "flag_cause": {
+   "and-intro": 6,
+   "or-intro": 2,
+   "app-arg": 11,
+   "premise-type": 1,
+   "app-result": 1,
+   "function-expected": 1
+  },
+  "cache_hits": 11319,
+  "cache_miss": 25130,
+  "gpu_s": 72.54284644126892,
+  "check_s": 0.3910706043243408,
+  "env_s": 0.6585531234741211,
+  "sampled_tokens": 670833,
+  "prefill_tokens": 2405102,
+  "waves": 41,
+  "loop_wall_s": 75.04342269897461,
+  "peak_alloc_gb": 9.70937967300415,
+  "lean_s": 4.912896156311035
+ }
+}

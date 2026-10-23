@@ -1,0 +1,69 @@
+{
+ "ckpt": "ckpts/style_edl/s1/S_RL/theta_es_lr1e-05_E0_o0.pt",
+ "arm": "logical",
+ "k": 32,
+ "seed": 2,
+ "batch": 1024,
+ "temperature": 0.8,
+ "max_action": 512,
+ "max_steps": 1024,
+ "max_rej": 10,
+ "n_theorems": 128,
+ "solved": {
+  "test128": 128
+ },
+ "n": {
+  "test128": 128
+ },
+ "solved_total": 128,
+ "wall_s": 47.23153734207153,
+ "loop_s": 43.69462299346924,
+ "gpu": "NVIDIA RTX A5000",
+ "n_params": null,
+ "proof_level_check": {},
+ "repeat_mean": 0.23617923064294197,
+ "n_redraws": 169,
+ "reject_p_mean": 0.07207920886837547,
+ "n_rejected_ended": 176,
+ "attempts": 4096,
+ "finished": 4089,
+ "accepted": 4089,
+ "stats": {
+  "rej_cause": {
+   "S:have name": 40,
+   "L:or-intro": 8,
+   "S:unbound": 42,
+   "S:box on non-arrow": 5,
+   "L:by-contradiction": 23,
+   "S:formula": 3,
+   "L:projection": 8,
+   "L:elim": 5,
+   "L:or-intro-target": 2,
+   "L:and-intro": 20,
+   "L:reiterate": 1,
+   "S:term": 4,
+   "S:no semicolon": 1,
+   "L:function-expected": 4,
+   "L:app-arg": 6,
+   "L:anon-ctor": 2,
+   "S:binder mismatch": 1,
+   "S:exact not last": 1
+  },
+  "end": {
+   "done": 4089,
+   "fail:max_rej": 7
+  },
+  "flag_cause": {},
+  "cache_hits": 5549,
+  "cache_miss": 12633,
+  "gpu_s": 42.47043323516846,
+  "check_s": 0.1840651035308838,
+  "env_s": 0.3848257064819336,
+  "sampled_tokens": 340724,
+  "prefill_tokens": 1186527,
+  "waves": 33,
+  "loop_wall_s": 43.688950061798096,
+  "peak_alloc_gb": 8.218050956726074,
+  "lean_s": 2.618910312652588
+ }
+}

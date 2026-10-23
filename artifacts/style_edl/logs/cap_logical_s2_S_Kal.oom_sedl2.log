@@ -1,0 +1,49 @@
+START 2026-10-23T06:44:23Z cap_logical_s2_S_Kal: python3 guided_eval.py --ckpt ckpts/style_edl/s2/S_Kal/theta_es_lr0.0001_E0_o0.pt --arm logical --sets data/style_edl/sets/test128.jsonl --k 32 --seed 2 --temperature 0.8 --max_steps 1024 --max_action 512 --batch 1024 --out artifacts/style_edl/cap/s2_S_Kal__logical_k32_seed2
+NVIDIA RTX A5000
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/guided_eval.py", line 118, in <module>
+    main()
+  File "/workspace/nd-takehome/guided_eval.py", line 66, in main
+    res = guided_generate(model, tok, prompts, a.arm, temperature=a.temperature, max_action=a.max_action,
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/guided_sample.py", line 216, in guided_generate
+    outs = decode(model, tok, pids, forbids, temperature, max_action, seed * 100003 + wave, st)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/guided_sample.py", line 82, in decode
+    logits = model(idx, pos=pos, mask=mask, caches=caches)[:, -1]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/best_model.py", line 119, in forward
+    return self._chunked_prefill(idx, pos, mask, caches)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/best_model.py", line 144, in _chunked_prefill
+    out.append(self.head(self.ln_f(self.features(idx[r0:r1], pos[r0:r1], None if mask is None else mask[r0:r1], sub)[0])))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/best_model.py", line 179, in features
+    x = b(x, None, None, bias, None if caches is None else caches[i])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1773, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/nn/modules/module.py", line 1784, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/best_model.py", line 97, in forward
+    x = x + self.ln_attn_out(self.attn(self.ln1(x), cos, sin, mask, cache))
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/best_model.py", line 93, in attn
+    y = F.scaled_dot_product_attention(q, k, v, attn_mask=mask.to(q.dtype))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 60.00 MiB. GPU 0 has a total capacity of 23.55 GiB of which 29.06 MiB is free. Process 1552 has 3.92 GiB memory in use. Including non-PyTorch memory, this process has 15.65 GiB memory in use. Process 1965 has 3.93 GiB memory in use. Of the allocated memory 15.24 GiB is allocated by PyTorch, and 134.66 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+RC 1 END 2026-10-23T06:52:21Z

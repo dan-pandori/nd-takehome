@@ -1336,3 +1336,41 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   it on its own proofs (EDL −0.74 / −0.38 / −0.22 bits per proof for names coded lr 3e-4 / not coded 3e-4 / not coded
   1e-4). Chose: names not coded; early-stopping A; lr grid to 1e-5. CPU step ≈ 6 s, so the rest goes to a GPU pod.
 - 2026-10-23T04:05:27Z  Pre-registration written (`preregistration/style-edl.md`).
+- 04:22  Phase-1 reads done on sedl1 (secure RTX A5000, $0.27/h; no community 3090 in stock): greedy reads of the three
+  bases and the three r8 ladders, selection reads (plain k 32, T 0.8, seed 1; 205 s each, 86 % of attempts Lean-valid for
+  s0), S_own2 draws (k 4, seed 3). minlen found a proof for all 1,200 tf1200 theorems in 1.3 s (bound 14).
+- 04:25  Streams built on the VPS (`build_streams.py`): 632 eligible, Lean 1,598 / 1,598 accepted; identity with the
+  learner's greedy proof S_own2 0.91–0.93, S_seed 0.94, S_short 0.85–0.88, S_RL 0.92–0.94, S_Kal 0. Addendum 1 committed
+  (dfa286d9, 04:26) before any other stream was scored.
+- 04:27–04:31  S_own pilot on the GPU (seed 0): A_ES chooses lr 1e-5; EDL 0.095, **EDL_c 0.043 bits per proof** (orders
+  0.045 / 0.041) → gate passed (≤ 0.3). θ*'s test loss 0.127 against the learner's 0.366. A_fixed: E = 4 (best mean
+  prequential code 31.85 bits vs 35.08 at E = 2, 39.20 at E = 1).
+- 04:30  Phase 4 launched (`pod/sedl/q3_edl.sh`): A_ES + A_fixed E = 4 for all 18 seed × stream cells.
+- 05:00  First S_short / S_RL numbers: the brief's EDL for S_short is 0.91–0.97 bits per proof on all seeds but
+  EDL_c is −0.34 / −0.05 / +0.07 (M ≈ 0.9–1.3 bits per proof: the stream half holds more of the costly non-greedy minlen
+  proofs than the test half). **Post hoc, exploratory:** a cross-fit (stream and test halves swapped, same A_ES) for all
+  18 cells (`pod/sedl/q3x_xfit.sh` → `artifacts/style_edl/edl_x/`), so the split mismatch cancels in the mean of the two
+  directions. Not part of the pre-registered decision rule. Capability reads (`q4_cap.sh`) started for the 15 non-Kalmár
+  cells and the bases, concurrently with the Kalmár EDL runs. Note: memory-efficient attention's backward is not
+  deterministic (torch warning), so the ℓ_V re-fits will be compared with phase 4 within a tolerance, not bit for bit.
+- 05:10  Kalmár cells are ≈ 1 h per seed (A_ES trains ≈ 70 M tokens per lr × order). Second pod sedl2 (secure RTX A5000, $0.27/h, created 05:15) runs seeds 1–2's Kalmár cells and their cross-fit (`pod/sedl/q3k_kal.sh`); placeholder logs on sedl1 make its queues skip those jobs.
+- 06:07  **Operational slip:** I misread a queue log (took q4's QUEUE DONE line for q3's) and removed sedl1's placeholder logs while its q3 queue was still running, so sedl1 started a duplicate of edl_s1_S_Kal (≈ 05:46–06:07 pod clock). Killed (RC 143); its partial JSON, log and θ* deleted on sedl1 and the placeholder restored; sedl2's complete edl_s1_S_Kal is the one used. Cost ≈ 20 GPU-minutes on sedl1.
+- 06:47  All 18 A_ES / A_fixed cells done. Chosen lr: 1e-5 for S_own / S_own2 / S_seed / S_RL, 1e-4 for S_short and
+  S_Kal (every seed). Capability reads done for the bases and all 18 θ* (plain on 256, guided on the 128 test theorems;
+  s2 S_Kal guided still running). S_Kal θ*: plain pass@32 on the test theorems 0.383 / 0.352 (s0 / s1; learner 1.0),
+  pass@1 0.029 / 0.047; most attempts fail on bookkeeping (binder mismatch, unbound name, wrong formula).
+  V(x) built (`build_vset.py`): 2,852 distinct Lean-valid proofs, median 8 per theorem (max 56), every text parsed.
+  ℓ_V re-fits launched: `q5_lv_a.sh` (15 non-Kalmár cells + s0 S_Kal) on sedl1, `q5_lv_b.sh` (s1, s2 S_Kal) on sedl2.
+- 07:52  All jobs done (ℓ_V and cross-fit included). θ* checkpoints (54) uploaded from the pods to
+  `style-edl/ckpts/style_edl/`; remote and local listings diffed (nothing missing); sedl1 and sedl2 deleted (07:55).
+- 07:57  Found `cap_logical_s2_S_Kal` had died out of GPU memory at 06:52 (RC 1; `job.sh` still wrote .done) while
+  sharing sedl2 with two jobs. Every other job log ends RC 0. Redone alone on sedl3 (secure A40, $0.59/h; no A5000 in
+  stock): same command, settings and seed; RC 0 at 08:03; sedl3 deleted. Its guided pass@32 0.594, pass@1 0.103. The
+  OOM log is kept as `logs/cap_logical_s2_S_Kal.oom_sedl2.log`.
+- 08:04–08:18  Analysis: `analyze.py`, `verdict.py` (F = 0.1; **against**), `term_sizes.py` (Lean 638 / 638),
+  `compute_rows.py`, tables, figure; `numbers.md` § style-edl, `run_style_edl.md` (397 words), plain summary (594).
+  Checked before writing: truncation 144 / 390,752 attempts (108 in s1 S_Kal θ*'s plain read, 1.3 %: > 512-token
+  actions, i.e. loops); ℓ_V re-fits reproduce phase 4 (EDL_c within 0.003 short streams, 0.17 Kalmár).
+- 2026-10-23T08:19:48Z  Uploaded `artifacts/style_edl`, `artifacts/style-edl/registry`, `data/style_edl` to
+  `hf://buckets/dan-pandori/nd-rl/style-edl/` (secret scan: 0 hits); bulk files published with `publish_artifacts.py`.
+  Spend $1.86 / 6.72 pod-hours of $10 / 40.

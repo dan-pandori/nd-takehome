@@ -1,0 +1,84 @@
+{
+ "ckpt": "ckpts/bs/stage1_best12_s1_b1200.pt",
+ "arm": "plain",
+ "k": 32,
+ "seed": 2,
+ "batch": 1024,
+ "temperature": 0.8,
+ "max_action": 512,
+ "max_steps": 1024,
+ "max_rej": 10,
+ "n_theorems": 256,
+ "solved": {
+  "all256": 256
+ },
+ "n": {
+  "all256": 256
+ },
+ "solved_total": 256,
+ "wall_s": 133.83245658874512,
+ "loop_s": 123.82341361045837,
+ "gpu": "NVIDIA RTX A5000",
+ "n_params": 9560832,
+ "proof_level_check": {
+  "flag_lean_rejected": 81
+ },
+ "repeat_mean": null,
+ "n_redraws": 0,
+ "reject_p_mean": 0.08334312241702846,
+ "n_rejected_ended": 140,
+ "attempts": 8192,
+ "finished": 8052,
+ "accepted": 7971,
+ "stats": {
+  "rej_cause": {
+   "S:have name": 84,
+   "S:formula": 6,
+   "S:unbound": 23,
+   "S:Or.elim on non-or": 6,
+   "S:exact goal mismatch": 11,
+   "S:term": 2,
+   "S:assign": 2,
+   "S:binder mismatch": 4,
+   "S:box head": 1,
+   "S:box on non-arrow": 1
+  },
+  "end": {
+   "fail:S:have name": 84,
+   "fail:S:formula": 6,
+   "done": 8052,
+   "fail:S:unbound": 23,
+   "fail:S:Or.elim on non-or": 6,
+   "fail:S:exact goal mismatch": 11,
+   "fail:S:term": 2,
+   "fail:S:assign": 2,
+   "fail:S:binder mismatch": 4,
+   "fail:S:box head": 1,
+   "fail:S:box on non-arrow": 1
+  },
+  "flag_cause": {
+   "or-intro": 22,
+   "by-contradiction": 11,
+   "app-arg": 30,
+   "app-result": 7,
+   "and-intro": 15,
+   "elim": 10,
+   "anon-ctor": 1,
+   "projection": 6,
+   "and-elim": 3,
+   "premise-type": 1,
+   "function-expected": 3
+  },
+  "cache_hits": 10918,
+  "cache_miss": 26958,
+  "gpu_s": 121.29368090629578,
+  "check_s": 0.2832813262939453,
+  "env_s": 0.7737505435943604,
+  "sampled_tokens": 694724,
+  "prefill_tokens": 2554985,
+  "waves": 51,
+  "loop_wall_s": 123.80779314041138,
+  "peak_alloc_gb": 8.430188655853271,
+  "lean_s": 9.00625729560852
+ }
+}

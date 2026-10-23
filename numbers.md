@@ -2857,3 +2857,212 @@ each); B2's sizes are not matched by design (a larger model costs more per step)
 of S / M (over half the theorems; flagged per policy). Lean checks: 0 (nothing is judged); generated tokens: 0.. Bucket: `hf://buckets/dan-pandori/nd-rl/kalmar-complexity/` (`artifacts/kc`, `data/kc`, the
 programs and figures are in git).
 
+
+## style-edl (2026-10-23, executor; UNREVIEWED)
+
+**Question.** Does EDL rise with the style of the target proofs when the learner's capability on the theorems is held
+fixed? Pre-registration: `preregistration/style-edl.md` (+ Addendum 1, committed before any stream but S_own was scored).
+
+**Models (every number here names one of these):**
+- **Learners L_s, s0–s2:** best-state's `ckpts/bs/stage1_best12_s{0,1,2}_b1200.pt` (bucket `best-state/ckpts/bs/`; md5
+  9c436c35 / f7ae9a9e / 354c4428, checked on every pod). 9,560,832-param ALiBiGPT 6 × 384, `lean_staten`, from scratch
+  on K12 (`data/kh/train_k12.jsonl`, 155,000, md5 800b5486…), 1,200 s on an A40. These are kalmar-pretrain's control.
+- **EI r8 (S_RL's proofs only):** best-state's `ckpts/bs/ladder/la_T1_best12_s{0,1,2}_r8.pt` (md5 991a0ac8 / 164a6c17 /
+  d43c0381): 8 EI rounds from L_s on `rl_targets.jsonl` (k 32, T 0.8). Learner s gets its own base's ladder.
+- **θ\*:** L_s fine-tuned by A_ES on the 128 stream proofs of one stream, at the chosen lr, order 0:
+  `ckpts/style_edl/s{s}/{stream}/theta_es_lr{lr}_E0_o0.pt`. All 54 (3 lrs per cell) are in the bucket.
+
+**Protocol (as pre-registered unless marked).**
+- **Checker.** Lean alone decides: `lean_gate` on the literal text for every sampled proof, and Lean on the literal
+  canonical `lean_seq` text for every stream proof. All 1,598 candidate proofs were accepted, and all 638 used proofs
+  were re-confirmed by `lean_check`. `nd_verify` is never called. L_true labels are not used.
+- **Theorems.** tf1200 (`data/kalmar/tf1200_kal_sl.jsonl`, md5 b99c3b8d; none in a K12 renaming class).
+  - 632 are eligible for all three seeds: ≥ 29 / 32 Lean-valid at T 0.8 (seed 1), base and r8 greedy proofs valid, a
+    valid k 4 draw (seed 3), and a minlen proof.
+  - 256 were sampled (seed 20261023) and split 128 stream / 128 test by premise-order-invariant renaming class, with
+    atom-count strata balanced (stream 16 / 34 / 36 / 42, test 15 / 34 / 37 / 42 for 1 / 2 / 3 / 4 atoms).
+- **Reads.** Caps `max_steps` 1,024 and `max_action` 512, batch 1,024 for every read.
+  - Peak memory: 7.5–7.7 GB for the greedy reads (`kal_free.py`'s `peak_alloc_gb`). `guided_eval.py` does not record it.
+    One guided read of a Kalmár-trained θ* ran out of memory at ≥ 15.6 GB while sharing a 24 GB card. It was redone
+    alone on an A40 (below).
+  - Truncation (`max_action` hit): 144 of 390,752 attempts (0.04 %). 108 are in seed 1's S_Kal θ* plain read (1.3 % of
+    its 8,192, above the policy's 0.1 % line), 9 in the other S_Kal θ* reads, 24 in the learners' reads, 3 in the
+    other θ* reads. `max_steps` was never hit. A truncated action is > 512 tokens, against the longest action of any
+    Kalmár proof (219), so these attempts are degenerate loops; a larger cap would not make them valid.
+- **Scoring.** Teacher-forced NLL of the action tokens + `<eos>` in bits (fp32). Environment-assigned names are not
+  coded (`kalmar/tf_agree.masked`). One name base per theorem.
+- **A_ES.**
+  - Optimiser: AdamW (0.9, 0.95, wd 0), constant lr, clip 1, 8 proofs per batch, the Stage-1 name shift.
+  - Early stopping: validated on a quarter of the prefix, ≤ 8 passes, patience 2, then a refit on the whole prefix.
+  - lr ∈ {1e-5, 1e-4, 1e-3}, chosen per seed × stream by the mean prequential code over two orders, + log₂ 3 bits.
+  - A_fixed: E = 4 passes, chosen on the S_own pilot.
+- **EDL and EDL_c.** EDL = Σ block bits − 128 × L_test. EDL_c subtracts the learner's own stream / test mismatch (same
+  expectation). Cross-fit = the same protocol with the halves swapped, averaged (exploratory, post hoc).
+- **Capability.** k 32, T 0.8, sample seed 2 (not the selection seed), on the 128 test theorems. Reported plain
+  (primary) and guided (`--arm logical`, ≤ 10 rejections).
+- **ℓ_V.** −log₂ Σ_{y ∈ V(x)} p(y | x) over V(x) = 2,852 distinct Lean-valid proofs collected for the 256 theorems
+  (`data/style_edl/vset.jsonl`). It is computed on re-fits of the chosen-lr runs.
+  - Their single-string bits match phase 4 to ≤ 0.03 bits per proof per block on the short streams, and to ≤ 2.1 bits
+    on Kalmár's ≈ 300-bit proofs (memory-efficient attention's backward is not bit-deterministic).
+  - EDL_c agrees to ≤ 0.003 bits per proof (short streams) and ≤ 0.17 (Kalmár, of ≈ 180).
+- **Aggregation.** Per-seed values; with n = 3 the IQM is the mean. Floor F = 0.1 bits per proof (the pre-registered
+  minimum; the measured parts were ≤ 0.043).
+
+Per-seed values are s0 / s1 / s2; "mean" is the mean over the three seeds (n = 3: the IQM is the mean). Bits per proof unless stated; names the environment assigns are not coded. EDL and EDL_c include log₂ 3 bits for the lr choice.
+
+**Table 1 — streams and the learner (before training).**
+
+| stream | identical to the learner's greedy proof (of 256) | actions per proof | coded tokens per proof | TF agreement (per action) | learner bits per proof, test (L0) | starting loss (block [0, 8)) |
+|---|---|---|---|---|---|---|
+| S_own | 1.000 / 1.000 / 1.000 | 4.52 / 4.55 / 4.44 | 79.4 / 79.7 / 78.0 | 0.9965 / 0.9974 / 0.9982 | 0.37 / 0.27 / 0.24 | 0.58 / 0.52 / 0.47 |
+| S_own2 | 0.910 / 0.926 / 0.934 | 4.71 / 4.74 / 4.68 | 82.0 / 82.7 / 82.0 | 0.9776 / 0.9860 / 0.9800 | 0.66 / 0.61 / 0.61 | 1.56 / 0.56 / 0.74 |
+| S_seed | 0.941 / 0.938 / 0.941 | 4.55 / 4.44 / 4.52 | 79.7 / 78.0 / 79.4 | 0.9862 / 0.9859 / 0.9844 | 0.43 / 0.40 / 0.35 | 0.81 / 1.94 / 0.88 |
+| S_RL | 0.945 / 0.922 / 0.938 | 4.64 / 4.64 / 4.52 | 81.3 / 81.3 / 79.6 | 0.9848 / 0.9756 / 0.9836 | 0.78 / 0.87 / 1.26 | 1.83 / 1.26 / 1.43 |
+| S_short | 0.871 / 0.848 / 0.883 | 4.26 / 4.26 / 4.26 | 74.3 / 74.3 / 74.3 | 0.9578 / 0.9578 / 0.9633 | 0.94 / 0.79 / 1.07 | 3.29 / 2.83 / 3.18 |
+| S_Kal | 0.000 / 0.000 / 0.000 | 116 / 116 / 116 | 1716 / 1716 / 1716 | 0.2736 / 0.3123 / 0.2273 | 1283 / 1236 / 1339 | 1340 / 1255 / 1411 |
+
+**Table 2 — EDL (A_ES, lr chosen per seed × stream by prequential code).**
+
+| stream | lr (s0 / s1 / s2) | θ* test loss L_test | EDL per proof | EDL_c per proof | mean EDL_c | EDL_c per action | cross-fit EDL per proof (exploratory) | A_fixed (E = 4) EDL_c |
+|---|---|---|---|---|---|---|---|---|
+| S_own | 1e-05 / 1e-05 / 1e-05 | 0.13 / 0.19 / 0.11 | 0.10 / 0.02 / 0.06 | 0.04 / -0.00 / 0.04 | 0.03 | 0.009 / -0.001 / 0.008 | 0.07 / 0.01 / 0.05 | 0.07 / 0.03 / 0.05 |
+| S_own2 | 1e-05 / 1e-05 / 1e-05 | 0.58 / 0.56 / 0.59 | 0.22 / -0.01 / 0.09 | 0.05 / 0.04 / 0.01 | 0.04 | 0.011 / 0.008 / 0.003 | 0.02 / 0.04 / -0.01 | 0.06 / 0.02 / 0.01 |
+| S_seed | 1e-05 / 1e-05 / 1e-05 | 0.18 / 0.24 / 0.22 | 0.10 / 0.27 / 0.22 | 0.05 / 0.07 / 0.07 | 0.06 | 0.010 / 0.014 / 0.016 | 0.06 / 0.05 / 0.09 | 0.07 / 0.07 / 0.08 |
+| S_RL | 1e-05 / 1e-05 / 1e-05 | 0.52 / 0.76 / 1.55 | 0.55 / 0.20 / -0.90 | 0.12 / 0.08 / -0.37 | -0.06 | 0.024 / 0.017 / -0.079 | 0.05 / 0.05 / -0.22 | 0.10 / 0.08 / 0.03 |
+| S_short | 0.0001 / 0.0001 / 0.0001 | 0.17 / 0.24 / 0.23 | 0.97 / 0.91 / 0.95 | -0.34 / -0.05 / 0.07 | -0.10 | -0.079 / -0.011 / 0.017 | 0.21 / 0.10 / 0.32 | -0.30 / -0.13 / -0.03 |
+| S_Kal | 0.0001 / 0.0001 / 0.0001 | 88.4 / 96.6 / 89.9 | 224 / 190 / 240 | 179 / 182 / 177 | 179 | 1.533 / 1.561 / 1.514 | 214 / 185 / 225 | 199 / 215 / 237 |
+
+**Table 3 — capability on the 128 test theorems (k 32, T 0.8, sample seed 2; θ* = A_ES at the chosen lr, order 0).** Learner before: plain pass@32 1.000 / 1.000 / 1.000, pass@1 0.966 / 0.976 / 0.972; guided pass@32 1.000 / 1.000 / 1.000, pass@1 0.993 / 0.997 / 0.997.
+
+| stream | plain pass@32 after | plain pass@1 after | guided pass@32 after | guided pass@1 after | capability fixed? |
+|---|---|---|---|---|---|
+| S_own | 1.000 / 1.000 / 1.000 | 0.985 / 0.988 / 0.983 | 1.000 / 1.000 / 1.000 | 1.000 / 1.000 / 1.000 | yes (3 / 3) |
+| S_own2 | 1.000 / 1.000 / 1.000 | 0.980 / 0.981 / 0.978 | 1.000 / 1.000 / 1.000 | 0.999 / 1.000 / 0.998 | yes (3 / 3) |
+| S_seed | 1.000 / 1.000 / 1.000 | 0.988 / 0.987 / 0.986 | 1.000 / 1.000 / 1.000 | 1.000 / 1.000 / 1.000 | yes (3 / 3) |
+| S_RL | 1.000 / 1.000 / 1.000 | 0.985 / 0.978 / 0.983 | 1.000 / 1.000 / 1.000 | 0.999 / 0.998 / 1.000 | yes (3 / 3) |
+| S_short | 0.992 / 1.000 / 1.000 | 0.979 / 0.970 / 0.959 | 1.000 / 1.000 / 1.000 | 1.000 / 0.998 / 0.995 | yes (3 / 3) |
+| S_Kal | 0.383 / 0.352 / 0.250 | 0.029 / 0.047 / 0.015 | 0.602 / 0.602 / 0.594 | 0.118 / 0.136 / 0.103 | no (0 / 3) |
+
+**Table 4 — the style-blind score ℓ_V (same fits, re-run at the chosen lr).**
+
+| stream | ℓ_V of the learner, test (bits) | ℓ_V θ*, test | ℓ_V EDL per proof | ℓ_V EDL_c per proof | single-string EDL_c of the same re-fits |
+|---|---|---|---|---|---|
+| S_own | 0.220 / 0.146 / 0.156 | 0.036 / 0.032 / 0.046 | 0.063 / 0.056 / 0.049 | 0.042 / 0.038 / 0.039 | 0.043 / -0.005 / 0.037 |
+| S_own2 | 0.220 / 0.146 / 0.156 | 0.114 / 0.077 / 0.134 | 0.054 / 0.046 / 0.013 | 0.033 / 0.028 / 0.003 | 0.054 / 0.039 / 0.014 |
+| S_seed | 0.220 / 0.146 / 0.156 | 0.034 / 0.043 / 0.049 | 0.069 / 0.076 / 0.058 | 0.048 / 0.058 / 0.048 | 0.046 / 0.065 / 0.073 |
+| S_RL | 0.220 / 0.146 / 0.156 | 0.059 / 0.076 / 0.055 | 0.098 / 0.040 / 0.073 | 0.076 / 0.023 / 0.063 | 0.116 / 0.082 / -0.370 |
+| S_short | 0.220 / 0.146 / 0.156 | 0.069 / 0.099 / 0.083 | 0.181 / 0.221 / 0.211 | 0.160 / 0.203 / 0.200 | -0.341 / -0.045 / 0.076 |
+| S_Kal | 0.220 / 0.146 / 0.156 | 12.9 / 13.1 / 12.4 | -5.095 / -5.560 / -3.961 | -5.116 / -5.578 / -3.971 | 179 / 182 / 177 |
+
+**Table 5 — A1, the per-proof attribution (Addendum 1): proofs identical to the learner's greedy proof (*same*) and the rest (*differ*).**
+
+| stream | differing proofs, stream / test | learner bits per differing test proof | θ* bits per differing test proof | EDL_c per differing proof | EDL_c per same proof | cross-fit, both directions pooled: per differing / per same proof (exploratory) |
+|---|---|---|---|---|---|---|
+| S_own2 | 12–11 / 12–7 / 10–7 | 4.24 / 7.03 / 7.50 | 4.74 / 7.57 / 7.71 | 0.15 / -0.21 / 0.13 | 0.026 / 0.023 / -0.015 | -0.30 / -0.13 / -0.12 / 0.038 / 0.033 / -0.000 |
+| S_seed | 9–6 / 10–6 / 10–5 | 2.37 / 4.28 / 4.00 | 2.44 / 3.81 / 3.94 | -0.39 / -0.04 / 0.15 | 0.057 / 0.072 / 0.050 | -0.31 / -0.16 / 0.59 / 0.067 / 0.053 / 0.036 |
+| S_RL | 10–4 / 11–9 / 9–7 | 14.3 / 9.52 / 19.3 | 12.6 / 8.83 / 26.7 | 1.22 / 0.97 / -7.94 | 0.084 / -0.005 / 0.063 | 0.66 / 0.53 / -5.24 / 0.071 / -0.002 / 0.032 |
+| S_short | 21–12 / 26–13 / 21–9 | 6.93 / 6.08 / 12.5 | 1.07 / 1.44 / 1.44 | -0.53 / 1.52 / 5.92 | 0.154 / 0.119 / 0.146 | 0.60 / 0.93 / 4.16 / 0.141 / 0.081 / 0.101 |
+| S_Kal | 128–128 / 128–128 / 128–128 | 1283 / 1236 / 1339 | 88.4 / 96.6 / 89.9 | 179 / 182 / 177 | — | 214 / 185 / 225 / — |
+
+**Table 7 — the per-block curve (A_ES, chosen lr; seed means of the order means).** Block bits per proof for the blocks [0, 8) (the learner), [8, 16), [16, 32), [32, 64), [64, 128); then each fit's mean bits on the 128 test proofs (learner, after 8, 16, 32, 64, 128 proofs).
+
+| stream | block bits per proof | test-set curve |
+|---|---|---|
+| S_own | 0.52 → 0.24 → 0.21 → 0.18 → 0.14 | 0.29 → 0.22 → 0.19 → 0.16 → 0.14 → 0.14 |
+| S_own2 | 0.95 → 1.25 → 0.79 → 0.47 → 0.63 | 0.62 → 0.59 → 0.61 → 0.59 → 0.59 → 0.58 |
+| S_seed | 1.21 → 0.69 → 0.43 → 0.28 → 0.31 | 0.39 → 0.33 → 0.32 → 0.27 → 0.24 → 0.21 |
+| S_RL | 1.51 → 0.40 → 1.19 → 1.40 → 0.53 | 0.97 → 0.95 → 0.94 → 0.92 → 0.87 → 0.94 |
+| S_short | 3.10 → 0.36 → 1.11 → 2.10 → 0.52 | 0.93 → 1.05 → 0.95 → 0.64 → 0.34 → 0.21 |
+| S_Kal | 1335 → 310 → 372 → 285 → 178 | 1286 → 551 → 391 → 262 → 163 → 91.6 |
+
+**Table 6 — compute per arm (results registry; GPU = RTX A5000, except one guided read redone on an A40; GPU-seconds are process wall time on a GPU sometimes shared by 2–3 jobs).** Summed over the three seeds.
+
+| arm | phases | GPU-s | train steps | train tokens (M) | gen tokens (M) | Lean checks |
+|---|---|---|---|---|---|---|
+| S_Kal | cap_logical, cap_plain, edl_es, edl_fixed, lv, xfit | 26960 | 20084 | 3426.2 | 22.05 | 2071 |
+| S_RL | cap_logical, cap_plain, edl_es, edl_fixed, lv, xfit | 1730 | 12050 | 38.1 | 3.05 | 24103 |
+| S_own | cap_logical, cap_plain, edl_es, edl_fixed, lv, xfit | 1789 | 12683 | 39.0 | 3.01 | 23828 |
+| S_own2 | cap_logical, cap_plain, edl_es, edl_fixed, lv, xfit | 1529 | 8169 | 26.6 | 3.09 | 24332 |
+| S_seed | cap_logical, cap_plain, edl_es, edl_fixed, lv, xfit | 1676 | 12461 | 38.3 | 3.01 | 23921 |
+| S_short | cap_logical, cap_plain, edl_es, edl_fixed, lv, xfit | 1659 | 12841 | 36.1 | 2.87 | 23720 |
+| learner | cap_logical, cap_plain | 485 | 0 | 0.0 | 3.18 | 24635 |
+| shared | reads | 829 | 0 | 0.0 | 13.45 | 90915 |
+| other | other | 78 | 12 | 0.0 | 0.00 | 0 |
+
+**Verdict (pre-registered rule; `style_edl/verdict.py` → `artifacts/style_edl/verdict.json`).**
+- F = 0.1 bits per proof. The measured parts were |EDL_c(S_own) − EDL_c(S_own2)| ≤ 0.043 and order-to-order ≤ 0.031.
+- Seeds (of 3) whose excess over S_own2 exceeds F, under EDL / EDL_c / cross-fit / ℓ_V EDL_c:
+  - S_seed 2 / 0 / 0 / 0;
+  - S_RL 2 / 0 / 0 / 0;
+  - S_short 3 / 0 / 2 / 3;
+  - S_Kal 3 / 3 / 3 / 0, with the capability criterion failed on 3 / 3 seeds.
+- → **against**: no capability-fixed stream is above F under both EDL and EDL_c.
+- Spearman ρ between style distance and the seed mean, over the six streams: EDL_c 0.14, EDL 0.71, cross-fit 0.54,
+  ℓ_V EDL_c −0.20.
+
+**Seed means with a bootstrap 95 % interval** (10,000 resamples of the three seeds; at n = 3 the interval is close to the seeds' min–max, `artifacts/style_edl/bootstrap.json`).
+
+| stream | EDL per proof | EDL_c per proof | cross-fit EDL per proof | ℓ_V EDL_c per proof | plain pass@32 after |
+|---|---|---|---|---|---|
+| S_own | 0.058 [0.024, 0.095] | 0.025 [-0.005, 0.043] | 0.045 [0.011, 0.075] | 0.040 [0.038, 0.042] | 1.000 [1.000, 1.000] |
+| S_own2 | 0.101 [-0.014, 0.225] | 0.035 [0.014, 0.054] | 0.018 [-0.007, 0.043] | 0.021 [0.003, 0.033] | 1.000 [1.000, 1.000] |
+| S_seed | 0.195 [0.100, 0.269] | 0.061 [0.046, 0.073] | 0.065 [0.049, 0.088] | 0.051 [0.048, 0.058] | 1.000 [1.000, 1.000] |
+| S_RL | -0.049 [-0.897, 0.555] | -0.057 [-0.370, 0.116] | -0.040 [-0.221, 0.053] | 0.054 [0.023, 0.076] | 1.000 [1.000, 1.000] |
+| S_short | 0.943 [0.910, 0.968] | -0.105 [-0.340, 0.073] | 0.210 [0.098, 0.323] | 0.188 [0.160, 0.203] | 0.997 [0.992, 1.000] |
+| S_Kal | 218 [190, 240] | 179 [177, 182] | 208 [185, 225] | -4.888 [-5.578, -3.971] | 0.328 [0.250, 0.383] |
+
+**Pre-registered expectations against outcomes** (ranges were for the seed values; ✓ = all three seeds inside).
+
+| stream | starting loss | EDL per proof | EDL_c per proof | style distance (1 − TF agreement) |
+|---|---|---|---|---|
+| S_own | 0.3–0.8 → 0.47–0.58 ✓ | −0.2–0.2 → 0.02–0.10 ✓ | −0.2–0.2 → −0.00–0.04 ✓ | ≤ 0.01 → 0.002–0.004 ✓ |
+| S_own2 | 1.5–5 → 0.56–1.56 (1 / 3) | 0–0.5 → −0.01–0.22 (2 / 3) | 0–0.5 → 0.01–0.05 ✓ | 0.01–0.05 → 0.014–0.022 ✓ |
+| S_seed | 1–3 → 0.81–1.94 (1 / 3) | 0–0.5 → 0.10–0.27 ✓ | 0–0.5 → 0.05–0.07 ✓ | 0.01–0.05 → 0.014–0.016 ✓ |
+| S_RL | 1.5–8 → 1.26–1.83 (1 / 3) | 0.2–2 → −0.90–0.55 (1 / 3) | 0.2–2 → −0.37–0.12 (0 / 3) | 0.03–0.15 → 0.015–0.024 (0 / 3) |
+| S_short | 5–25 → 2.83–3.29 (0 / 3) | 1–8 → 0.91–0.97 (0 / 3) | 1–8 → −0.34–0.07 (0 / 3) | 0.1–0.4 → 0.037–0.042 (0 / 3) |
+| S_Kal | 200–800 → 1,255–1,411 (0 / 3) | 30–300 → 190–240 ✓ | 30–300 → 177–182 ✓ | 0.6–0.8 → 0.69–0.77 ✓ |
+
+- **Ordering** S_own ≈ S_own2 ≈ S_seed < S_RL < S_short ≪ S_Kal. Only "≪ S_Kal" held: the seed-mean EDL_c are 0.025,
+  0.035, 0.061, −0.057, −0.105 and 179. Per action, S_short and S_Kal were predicted within a factor of 3: −0.02 vs 1.54
+  (missed). ρ ≥ 0.8: missed (0.14).
+- **Capability.**
+  - Before: plain pass@32 ≥ 0.99 ✓ (1.000).
+  - After, plain pass@32 ≥ 0.98 on the five short streams ✓ (≥ 0.992); S_Kal 0.85–1.0 ✗ (0.25–0.38).
+  - pass@1 before 0.93–0.98 ✓ (0.966–0.976). After: within ±0.03 for S_own / S_own2 / S_seed / S_RL ✓ (+0.002 to
+    +0.022); S_short −0.10 to +0.02 ✓ (−0.013 to +0.013); S_Kal falling by 0.1–0.5 ✗ (it fell by 0.93–0.96).
+- **ℓ_V.**
+  - "Removes ≥ 60 % of S_short's and S_RL's EDL_c excess": not applicable, as neither had one. ℓ_V instead gives S_short
+    an excess (+0.13 to +0.20, 3 / 3 above F). The intermediate fits put less mass on V(x) than the learner or θ* (e.g.
+    block [16, 32), seed 0, order 1: 1.08 bits per theorem vs the learner's 0.24). Their own samples are not in V(x), so
+    part of this dip may be valid proofs outside V; not checked.
+  - S_Kal's EDL_V,c ≤ 20 % of its single-string EDL_c ✓ (−5.1 / −5.6 / −4.0, i.e. negative).
+- **A_fixed:** the same ordering (EDL_c S_own 0.05, S_own2 0.03, S_seed 0.07, S_RL 0.07, S_short −0.15, S_Kal 217); its
+  S_own EDL is positive at the chosen lr 1e-5 ✓.
+- **Gate:** |EDL_c(S_own)| ≤ 0.3 on the pilot ✓ (0.043).
+- **Addendum 1.**
+  - S_short 0.1–1.5: EDL ✓ (0.91–0.97), EDL_c ✗ (−0.34 to 0.07), cross-fit ✓ (0.10–0.32). S_RL 0–0.8: EDL_c 2 / 3.
+  - S_seed and S_RL do not clear F ✓; S_short at most even odds ✓ (it did not).
+  - A1: differing proofs cost the learner 4–20 bits: S_own2 4.2–7.5 ✓, S_seed 2.4–4.3 (1 / 3; one at 3.999), S_RL 9.5–19.3 ✓,
+    S_short 6.1–12.5 ✓.
+  - EDL_c 0–4 bits per differing proof: single-direction −7.9 to 5.9 (4–13 differing test proofs: noisy); pooled
+    cross-fit S_short 0.6 / 0.9 / 4.2, S_RL 0.7 / 0.5 / −5.2.
+  - *same* proofs within ±0.2 ✓ (−0.015 to 0.154).
+
+**Notes.**
+- Table 6's "other" row is the VPS CPU smoke test of the runner (12 steps).
+- S_Kal's arm used ≈ 90× the training tokens of the others, by design (its proofs are ≈ 25× longer; flagged per policy).
+- The Kalmár proofs' TF agreement under the learners (0.27 / 0.31 / 0.23) reproduces kalmar-pretrain's E1 for the same
+  checkpoints (0.278 / 0.302 / 0.228).
+- Term size (`lean_check`, inference nodes; `artifacts/style_edl/term_sizes.json`), mean over seeds and halves:
+  S_own 2.03, S_own2 2.20, S_seed 2.03, S_RL 2.11, S_short 1.88, S_Kal 96.4. ND lines: 3.50 / 3.71 / 3.50 / 3.60 / 3.26 /
+  115.1.
+
+**Sources.**
+- `style_edl/results.csv`: one row per seed × stream, from `style_edl/analyze.py`.
+- Per-block, per-proof losses: `artifacts/style_edl/edl/s{s}/{stream}.json`, `.fixed.json`, `edl_x/`, `lv/`.
+- Capability rows: `artifacts/style_edl/cap/*.rows.jsonl.gz`.
+- Reads: `artifacts/style_edl/reads/`. Streams: `data/style_edl/streams/`, `style_edl/streams_manifest.json`. V(x):
+  `data/style_edl/vset.jsonl`.
+- Compute: `artifacts/style_edl/compute.csv`, from the registry rows in `artifacts/style-edl/registry/`.
+- Bucket: `hf://buckets/dan-pandori/nd-rl/style-edl/` (`artifacts/style_edl/`, `artifacts/style-edl/registry/`,
+  `data/style_edl/`, `ckpts/style_edl/`).

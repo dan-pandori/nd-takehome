@@ -57,6 +57,33 @@ def lv_stats(res, run, nlr=3):
             'lv_start_pp': sum(run['blocks'][0]['lv_block'].values()) / (run['blocks'][0]['hi'] - run['blocks'][0]['lo'])}
 
 
+def attribution(res, run, same_stream, same_test, key='bits'):
+    """Addendum 1, A1: EDL_c split by whether a proof is identical to the learner's greedy proof ('same') or not.
+    same_stream / same_test: bools in file order.  -> {class: {n_stream, n_test, L0_stream, L0_test, Lth_test,
+    saved, EDL_c, EDL_c_per_proof}}"""
+    base_s, base_t = res['base']['stream'][key], res['base']['test'][key]
+    th_t = run['theta']['test'][key]
+    perm = run['perm']
+    blk = {}
+    for b in run['blocks']:
+        for j, i in enumerate(range(b['lo'], b['hi'])):
+            blk[perm[i]] = b['block'][key][j]
+    out = {}
+    for cls, want in (('same', True), ('differ', False)):
+        si = [i for i in range(len(base_s)) if same_stream[i] == want]
+        ti = [i for i in range(len(base_t)) if same_test[i] == want]
+        if not si or not ti:
+            out[cls] = {'n_stream': len(si), 'n_test': len(ti)}
+            continue
+        L0t = sum(base_t[i] for i in ti) / len(ti)
+        Lt = sum(th_t[i] for i in ti) / len(ti)
+        saved = sum(base_s[i] - blk[i] for i in si)
+        e = len(si) * (L0t - Lt) - saved
+        out[cls] = {'n_stream': len(si), 'n_test': len(ti), 'L0_stream': sum(base_s[i] for i in si) / len(si),
+                    'L0_test': L0t, 'Lth_test': Lt, 'saved': saved, 'EDL_c': e, 'EDL_c_per_proof': e / len(si)}
+    return out
+
+
 def select(res, algo, E=None, key='bits'):
     """-> (chosen lr, per-order stats at that lr, {lr: mean preq})"""
     runs = [r for r in res['runs'] if r.get('algo', 'fixed') == algo and (E is None or r['E'] == E)]
@@ -114,6 +141,19 @@ def cap_stats(fn, names):
     return p32, p1
 
 
+def same_masks(s, S):
+    """per stream / test proof (file order): identical (canonical action sequence) to learner s's greedy proof."""
+    sys.path.insert(0, os.path.join(ROOT, 'style_edl'))
+    import common as C
+    out = []
+    for part in ('stream', 'test'):
+        a = [json.loads(l) for l in open(f'{ROOT}/data/style_edl/streams/s{s}/{S}.{part}.jsonl')]
+        b = [json.loads(l) for l in open(f'{ROOT}/data/style_edl/streams/s{s}/S_own.{part}.jsonl')]
+        assert [r['name'] for r in a] == [r['name'] for r in b]
+        out.append([C.canon_key(x['prompt'], x['nd']) == C.canon_key(y['prompt'], y['nd']) for x, y in zip(a, b)])
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--edl', default='artifacts/style_edl/edl')
@@ -131,6 +171,48 @@ def main():
                 continue
             o = summarize(fn)
             row = {'seed': s, 'stream': S, **{k: v for k, v in o.items() if not isinstance(v, (list, dict))}}
+            row['EDL_c_pp_o0'], row['EDL_c_pp_o1'] = (o['EDL_c_pp_by_order'] + [None, None])[:2]
+            row['blocks_pp'] = ' '.join(f'{x:.4g}' for x in o['block_pp'])
+            row['curve_test'] = ' '.join(f'{x:.4g}' for x in o['curve_test'])
+            fx = f'{ROOT}/{a.edl}_x/s{s}/{S}.json'
+            if os.path.exists(fx) and os.path.exists(f'{ROOT}/artifacts/style_edl/logs/xfit_s{s}_{S}.done'):
+                ox = summarize(fx)
+                row.update({'x_lr': ox['lr'], 'x_EDL_pp': ox['EDL_pp'], 'x_EDL_c_pp': ox['EDL_c_pp'],
+                            'xfit_EDL_pp': (o['EDL_pp'] + ox['EDL_pp']) / 2, 'xfit_EDL_c_pp': (o['EDL_c_pp'] + ox['EDL_c_pp']) / 2})
+            fl = f'{ROOT}/artifacts/style_edl/lv/s{s}/{S}.json'
+            if os.path.exists(fl) and os.path.exists(f'{ROOT}/artifacts/style_edl/logs/lv_s{s}_{S}.done'):
+                rl = json.load(open(fl))
+                lruns = sorted(rl['runs'], key=lambda r: r['order'])
+                lvs = [lv_stats(rl, r, 3) for r in lruns]
+                sss = [run_stats(rl, r, 'bits', 3) for r in lruns]
+                for k in lvs[0]:
+                    row[k] = mean([x[k] for x in lvs])
+                row['lv_ss_EDL_c_pp'] = mean([x['EDL_c_pp'] for x in sss])
+                row['lv_ss_EDL_pp'] = mean([x['EDL_pp'] for x in sss])
+                ph4 = {(r['order']): r for r in json.load(open(fn))['runs'] if r.get('algo') == 'es' and r['lr'] == rl['runs'][0]['lr']}
+                row['lv_refit_max_abs_dbits'] = max(abs(a - b) for r in lruns for b4, bl in zip(ph4[r['order']]['blocks'], r['blocks'])
+                                                    for a, b in zip(b4['block']['bits'], bl['block']['bits']))
+            # A1 attribution at the chosen lr, mean over orders
+            res = json.load(open(fn))
+            ss, stt = same_masks(s, S)
+            row['n_differ_stream'], row['n_differ_test'] = ss.count(False), stt.count(False)
+            runs = [r for r in res['runs'] if r.get('algo') == 'es' and r['lr'] == o['lr']]
+            at = [attribution(res, r, ss, stt) for r in runs]
+            for cls in ('same', 'differ'):
+                for k in ('L0_stream', 'L0_test', 'Lth_test', 'EDL_c', 'EDL_c_per_proof'):
+                    v = [x[cls].get(k) for x in at]
+                    row[f'{cls}_{k}'] = mean(v) if all(x is not None for x in v) else None
+            if os.path.exists(fx) and os.path.exists(f'{ROOT}/artifacts/style_edl/logs/xfit_s{s}_{S}.done'):
+                rx = json.load(open(fx))                      # cross-fit: stream and test halves swapped
+                runs_x = [r for r in rx['runs'] if r.get('algo') == 'es' and r['lr'] == ox['lr']]
+                atx = [attribution(rx, r, stt, ss) for r in runs_x]
+                for cls in ('same', 'differ'):
+                    ea = [x[cls].get('EDL_c') for x in at]; eb = [x[cls].get('EDL_c') for x in atx]
+                    na, nb = at[0][cls]['n_stream'], atx[0][cls]['n_stream']
+                    if na + nb and all(v is not None for v in ea + eb):
+                        row[f'xfit_{cls}_EDL_c_per_proof'] = (mean(ea) + mean(eb)) / (na + nb)
+            if row.get('same_EDL_c') is not None and row.get('differ_EDL_c') is not None:
+                row['strat_EDL_c_pp'] = (row['same_EDL_c'] + row['differ_EDL_c'] + math.log2(3)) / res['n_stream']
             ff = f'{ROOT}/{a.edl}/s{s}/{S}.fixed.json'
             if os.path.exists(ff) and a.fixed_E is not None:
                 of = summarize(ff, 'fixed', a.fixed_E)
@@ -147,7 +229,7 @@ def main():
     keys = []
     for r in rows:
         keys += [k for k in r if k not in keys]
-    with open(f'{ROOT}/{a.out}', 'w', newline='') as f:
+    with open(a.out if os.path.isabs(a.out) else f'{ROOT}/{a.out}', 'w', newline='') as f:
         w = csv.DictWriter(f, fieldnames=keys)
         w.writeheader()
         for r in rows:

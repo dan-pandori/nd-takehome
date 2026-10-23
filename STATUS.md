@@ -339,3 +339,17 @@ Brief: nd-rl `docs/proposals/followups/BRIEF_style-edl.md`. Policy: AGENT_POLICY
 ## style-edl
 - 2026-10-23 03:18 UTC  run started (executor). 2026-10-23T04:05:27Z  S_own pilot (VPS CPU, seed 0 only) done; pre-registration
   `preregistration/style-edl.md` committed before any pod.
+- 2026-10-23 04:06–08:05 UTC  three pods, all deleted (sedl1 / sedl2 secure RTX A5000 $0.27/h, sedl3 secure A40 $0.59/h for
+  8 min to redo one guided read that had run out of memory). Spend **$1.86 / 6.72 pod-hours of $10 / 40**.
+- Result (pre-registered verdict: **against**).
+  - Capability-preserving alternative styles barely differ from the learner's own on these theorems: identical proofs on
+    85–94 %. Their EDL_c is within the 0.1-bit floor of S_own2's (0 of 9 seed × stream cells above it).
+  - The brief's EDL flags S_short (+0.74 to +0.92 bits per proof), but that is the stream / test split (EDL_c and a
+    cross-fit remove it).
+  - Kalmár proofs cost 177–182 bits per proof of EDL_c, but training on them drops pass@32 from 1.00 to 0.25–0.38: not
+    at fixed capability.
+  - ℓ_V makes Kalmár's EDL negative and shows a small transient for S_short.
+- Deliverables: `run_style_edl.md`, `run_style_edl_plain.md`, `numbers.md` § style-edl, `figures/style_edl.png`,
+  `style_edl/` (`results.csv`, `streams_manifest.json`, `README.md`), `log.md` § style-edl; bucket
+  `hf://buckets/dan-pandori/nd-rl/style-edl/`.
+

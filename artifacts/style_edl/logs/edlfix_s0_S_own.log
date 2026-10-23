@@ -1,0 +1,23 @@
+START 2026-10-23T04:27:38Z edlfix_s0_S_own: python3 style_edl/edl_run.py --ckpt ckpts/bs/stage1_best12_s0_b1200.pt --stream data/style_edl/streams/s0/S_own.stream.jsonl --test data/style_edl/streams/s0/S_own.test.jsonl --algo fixed --epochs 1,2,4 --lrs 1e-5,1e-4,1e-3 --orders 0,1 --arm S_own --lseed 0 --out artifacts/style_edl/edl/s0/S_own.fixed.json
+NVIDIA RTX A5000
+/usr/local/lib/python3.12/dist-packages/torch/autograd/graph.py:829: UserWarning: Memory Efficient attention defaults to a non-deterministic algorithm. To explicitly enable determinism call torch.use_deterministic_algorithms(True, warn_only=False). (Triggered internally at /pytorch/aten/src/ATen/native/transformers/cuda/attention_backward.cu:775.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+fixed E 1 lr 1e-05 o 0: p* [0, 1, 1, 1, 1, 1] preq 42.7 L_test 0.190 EDL/proof 0.143 first 0.843 (4s)
+fixed E 1 lr 1e-05 o 1: p* [0, 1, 1, 1, 1, 1] preq 42.7 L_test 0.184 EDL/proof 0.150 first 0.317 (3s)
+fixed E 1 lr 0.0001 o 0: p* [0, 1, 1, 1, 1, 1] preq 26.7 L_test 0.207 EDL/proof 0.002 first 0.843 (3s)
+fixed E 1 lr 0.0001 o 1: p* [0, 1, 1, 1, 1, 1] preq 48.5 L_test 0.195 EDL/proof 0.185 first 0.317 (3s)
+fixed E 1 lr 0.001 o 0: p* [0, 1, 1, 1, 1, 1] preq 807.1 L_test 4.264 EDL/proof 2.042 first 0.843 (3s)
+fixed E 1 lr 0.001 o 1: p* [0, 1, 1, 1, 1, 1] preq 1300.7 L_test 3.070 EDL/proof 7.092 first 0.317 (3s)
+fixed E 2 lr 1e-05 o 0: p* [0, 2, 2, 2, 2, 2] preq 36.6 L_test 0.151 EDL/proof 0.135 first 0.843 (4s)
+fixed E 2 lr 1e-05 o 1: p* [0, 2, 2, 2, 2, 2] preq 36.0 L_test 0.154 EDL/proof 0.128 first 0.317 (4s)
+fixed E 2 lr 0.0001 o 0: p* [0, 2, 2, 2, 2, 2] preq 26.8 L_test 0.239 EDL/proof -0.030 first 0.843 (4s)
+fixed E 2 lr 0.0001 o 1: p* [0, 2, 2, 2, 2, 2] preq 40.2 L_test 0.220 EDL/proof 0.094 first 0.317 (4s)
+fixed E 2 lr 0.001 o 0: p* [0, 2, 2, 2, 2, 2] preq 937.6 L_test 3.363 EDL/proof 3.962 first 0.843 (4s)
+fixed E 2 lr 0.001 o 1: p* [0, 2, 2, 2, 2, 2] preq 750.7 L_test 2.716 EDL/proof 3.148 first 0.317 (4s)
+fixed E 4 lr 1e-05 o 0: p* [0, 4, 4, 4, 4, 4] preq 30.1 L_test 0.130 EDL/proof 0.105 first 0.843 (7s)
+fixed E 4 lr 1e-05 o 1: p* [0, 4, 4, 4, 4, 4] preq 30.4 L_test 0.128 EDL/proof 0.110 first 0.317 (7s)
+fixed E 4 lr 0.0001 o 0: p* [0, 4, 4, 4, 4, 4] preq 29.6 L_test 0.303 EDL/proof -0.072 first 0.843 (7s)
+fixed E 4 lr 0.0001 o 1: p* [0, 4, 4, 4, 4, 4] preq 51.1 L_test 0.189 EDL/proof 0.211 first 0.317 (7s)
+fixed E 4 lr 0.001 o 0: p* [0, 4, 4, 4, 4, 4] preq 490.3 L_test 3.065 EDL/proof 0.765 first 0.843 (7s)
+fixed E 4 lr 0.001 o 1: p* [0, 4, 4, 4, 4, 4] preq 410.7 L_test 5.416 EDL/proof -2.207 first 0.317 (7s)
+RC 0 END 2026-10-23T04:29:12Z
