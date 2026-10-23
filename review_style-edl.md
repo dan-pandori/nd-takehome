@@ -451,3 +451,171 @@ EDL_c is positive in all three seeds under A_fixed.
    - S_Kal compute is flagged as > 1.25×;
    - term sizes are reported;
    - IQM and CI are given with n = 3.
+
+# Phase 2 — the write-up against the recount
+
+Read only after the phase-1 commit (`9274b1c4`):
+- `run_style_edl.md`, `run_style_edl_plain.md`;
+- `numbers.md` § style-edl, `log.md` § style-edl, `STATUS.md` § style-edl;
+- `style_edl/README.md`, `style_edl/results.csv`;
+- `artifacts/style_edl/{verdict.json, term_sizes.json, numbers_tables.md}`;
+- `figures/style_edl.png`.
+
+New phase-2 scripts, all on the per-proof files:
+- `p2_compare.py`: `results.csv` column by column against my recount, plus the all-token EDL;
+- `p2_xfit_attr.py`: numbers.md Table 5's pooled cross-fit attribution;
+- `p2_decomp.py`: an exact same / differ decomposition of the cross-fit EDL_c, and the class-stratified EDL_c.
+
+The values in this part are copied from those scripts' printed output and checked against their json
+(`out/p2_*.json`, plus the phase-1 files).
+
+## Claims against my values
+
+| # | where | claim | my independent value | verdict |
+|---|---|---|---|---|
+| 1 | run, numbers | 632 eligible; 256 theorems all three learners prove (≥ 29 / 32); split 128 / 128 by renaming class, atom strata 16 / 34 / 36 / 42 and 15 / 34 / 37 / 42 | 632; 0 shared classes; same strata; tf1200 also shares 0 classes with K12 and the ladder targets | reproduces |
+| 2 | run, numbers | six Lean-checked streams; 1,598 / 1,598 candidates; 638 used proofs re-confirmed; `nd_verify` never called | my rebuild = stored 4,608 / 4,608; my Lean 638 / 638 and the 2,304 literal source texts; gates `lean-only` | reproduces |
+| 3 | numbers, Table 1 | identity, actions, coded tokens, TF agreement, L0, starting loss | equal (T1, T2); TF agreement s0 S_seed 0.98625 shown as 0.9862, mine 0.9863 (rounding) | reproduces |
+| 4 | numbers, Table 2 | lr*, L_test, EDL, EDL_c (per proof and per action), cross-fit, A_fixed EDL_c | equal to the stored per-proof files (`results.csv` ≤ 5 × 10⁻⁶ relative on every column) | reproduces |
+| 5 | numbers, Table 3; run 5 | capability before / after, plain and guided; S_Kal fails 3 / 3 | equal (T4); every after-read loaded θ*(lr*, order 0), which I re-scored on CPU | reproduces |
+| 6 | numbers, Table 4; run 6 | ℓ_V: EDL_V, EDL_V,c, learner and θ* ℓ_V on test | equal (T5; learner 0.220 / 0.146 / 0.156; θ*(S_Kal) 12.9 / 13.1 / 12.4) | reproduces |
+| 7 | numbers | ℓ_V re-fits match phase 4 to ≤ 0.03 bits per proof per block (short streams) and ≤ 2.1 (Kalmár); EDL_c to ≤ 0.003 and ≤ 0.17 | block means ≤ 0.0008 and ≤ 0.11; EDL ≤ 0.003 and 0.03–0.16 (per-proof maxima 0.34 and 8.0) | reproduces (the bounds hold) |
+| 8 | numbers, Table 5 | A1 attribution, including the pooled cross-fit per differing / same proof | equal (`p2_xfit_attr.py`) | reproduces |
+| 9 | numbers, Table 7 | per-block curve and test-set curve | equal (T9; test curve S_Kal 1,286 → 551 → 391 → 262 → 163 → 91.6) | reproduces |
+| 10 | numbers, verdict | F = 0.1 (parts ≤ 0.043, orders ≤ 0.031); seeds above F under EDL / EDL_c / cross-fit / ℓ_V: S_seed 2/0/0/0, S_RL 2/0/0/0, S_short 3/0/2/3, S_Kal 3/3/3/0; → against | the same counts; F = 0.100 | reproduces |
+| 11 | numbers | ρ(distance, ·) for EDL_c 0.14, EDL 0.71, cross-fit 0.54, ℓ_V EDL_c −0.20 | 0.143, 0.714, 0.543, −0.200 | reproduces |
+| 12 | numbers | bootstrap table (means, 95 % intervals over the 3 seeds) | equal (T8 and the cross-fit, ℓ_V and pass@32 columns) | reproduces |
+| 13 | numbers, compute | Table 6; S_Kal ≈ 90× the training tokens, flagged | S_Kal 26,960 GPU-s, 3,426.2 M tokens, 2,071 Lean checks; 3,426 / 38 ≈ 90× | reproduces |
+| 14 | numbers | truncation 144 / 390,752 attempts; 108 in s1 S_Kal θ* plain (1.3 %); a larger cap would not make them valid | 144 (108 + 9 + 24 + 3); my denominator is 394,848; if every truncated attempt were valid, S_Kal pass@32 ≤ 0.40 / 0.54 / 0.26 | reproduces (the denominator differs by 4,096, immaterial); the conclusion is safe |
+| 15 | numbers | peak memory 7.5–7.7 GB in the greedy reads | 7.48–7.72 GB | reproduces |
+| 16 | numbers | term size (`lean_check`) S_own 2.03 … S_Kal 96.4; ND lines 3.50 … 115.1 | lines equal; my own term size (a different node count) gives 2.32 … 110.2 in the same order | reproduces (lines); term size is consistent across definitions |
+| 17 | numbers | Kalmár TF agreement under the learners 0.27 / 0.31 / 0.23 "reproduces kalmar-pretrain's E1" (0.278 / 0.302 / 0.228) | 0.2736 / 0.3123 / 0.2273 here on 256 theorems; the inherited values are the control rows of `review_kalmar-pretrain.md` (all 1,200), same checkpoints | reproduces within 0.01; correctly labelled |
+| 18 | numbers, expectations | "A_fixed: the same ordering" | A_fixed EDL_c order S_short < S_own2 < S_own < S_RL < S_seed < S_Kal; A_ES's S_short < S_RL < S_own < S_own2 < S_seed < S_Kal | **differs**: only the extremes agree, and the middle four (within 0.13 of one another) reorder |
+| 19 | numbers, expectations | all other rows (hits and misses) | as my §10 | reproduces. Not listed as a miss: F was predicted 0.2–0.5 and came out at the 0.1 minimum |
+| 20 | run 1; plain 1 | the capability-preserving styles are identical to the learner's on 94 % (S_seed), 92–94 % (S_RL), 85–88 % (S_short) | S_RL 0.945 / 0.922 / 0.938 | reproduces (strictly 92–95 %) |
+| 21 | run 2 | their EDL_c is "at the floor": −0.40 to +0.06 above S_own2, 0 of 9 cells above F, pass@32 ≥ 0.99 | numbers equal (pass@32 ≥ 0.992) | numbers reproduce; **reword** "at the floor". The nine cells span 0.46 bits per proof, 4.6× F, so "none above S_own2 + F" is what holds |
+| 22 | STATUS | their EDL_c "is within the 0.1-bit floor of S_own2's" | S_short s0 −0.395 and S_RL s2 −0.383 lie ≈ 0.4 below S_own2 | **differs**: reword as in row 21 |
+| 23 | run 3 | the brief's EDL flags S_short (+0.74 to +0.92) "from the split alone"; the stream half holds 21–26 of 30–39 differing proofs; the swap leaves +0.19 / +0.06 / +0.33 | numbers equal | **reword**. The run's own cross-fit leaves +0.06 to +0.33 (2 / 3 above F). See the end of this section for the class-stratified correction and the lr effect |
+| 24 | STATUS | "EDL_c and a cross-fit remove it" | the cross-fit leaves +0.19 / +0.06 / +0.33 | **differs**: the cross-fit removes most of it, not all |
+| 25 | run 4; plain 4 | "Only learnable style is charged": the shortest style is learned (6–13 → 1.1–1.4 bits; ≈ 0.6–4 bits of EDL each); the deviations of S_RL and S_seed (2–19 bits) are not learned | numbers equal. The 0.6 / 0.9 / 4.2 is the exploratory pooled cross-fit; single-direction values are −0.53 / 1.52 / 5.92 on 9–13 differing test proofs | **reword as a hypothesis**. It is exploratory, rests on 14–39 differing proofs per cell, and is confounded by lr (below) |
+| 26 | run 5; plain 5 | Kalmár: EDL_c 179 / 182 / 177 (1.5 per action); test loss ≈ 1,300 → ≈ 90; pass@32 0.38 / 0.35 / 0.25 (guided 0.60 / 0.60 / 0.59); fails on bookkeeping | numbers equal. Failure causes are mostly environment binder / name errors, e.g. s2 plain: binder mismatch 2,695, unbound 530 of 4,096 attempts | reproduces. **Add**: all 30 S_Kal fits at lr* stopped at the 8-pass cap (T9), so this EDL depends on `max_passes` |
+| 27 | run 6; plain 6 | ℓ_V turns Kalmár's EDL_c to −5.1 / −5.6 / −4.0 and gives S_short +0.13 to +0.20, "valid mass dips mid-learning" / "a dip in correct proofs midway" | numbers equal | **reword**. The dip is in the mass on V(x); numbers.md itself says it may be valid proofs outside V(x) (not checked), and the run write-up and plain summary drop that caveat |
+| 28 | plain 2 | after training "the learner still proves every held-out theorem" | θ*(S_short) s0 misses heldout_4047 (0 / 32 plain; pass@32 0.992) | **differs** by one theorem in one cell |
+| 29 | plain, "what it means" | "style alone creates no EDL gap"; "EDL charges for style only when it is systematic and quite different" | no gap is detectable at a resolution of ≈ ±0.4 bits per proof across seeds; one large-style stream, which also broke capability | **not supported as worded**. Say "no detectable gap here" and drop the general rule |
+| 30 | run, STATUS, log | spend $1.86 / 6.72 pod-hours of $10; pods deleted; balance $244 | $1.86 (sedl1 $1.03 + sedl2 $0.75 + sedl3 $0.08); `~/podhours.log` | reproduces |
+| 31 | `results.csv` | all-token EDL (`all_EDL_pp`, `all_EDL_c_pp`) | up to 0.028 bits per proof from mine, because the executor picks lr by the all-token code (s1 S_seed 1e-4: 0.288, reproduced) | reproduces under that choice. The choice is not stated in the write-up |
+
+### Split corrections disagree for S_short, and part of the excess comes from the lr (`p2_decomp.py`)
+
+| S_short − S_own2, bits per proof (s0 / s1 / s2) | value |
+|---|---|
+| brief's EDL | +0.744 / +0.923 / +0.858 |
+| EDL_c, pre-registered (subtracts the learner's own stream / test mismatch) | −0.395 / −0.085 / +0.060 |
+| cross-fit mean of both directions, exploratory and reported | +0.193 / +0.056 / +0.330 |
+| … of which on proofs **identical** to the learner's greedy proof | +0.085 / +0.035 / +0.087 |
+| … of which on differing proofs | +0.109 / +0.020 / +0.243 |
+| class-stratified EDL_c (A1's reweighting; `results.csv` `strat_EDL_c_pp`, computed but not reported) | +0.005 / +0.401 / +1.097 |
+
+- **The decomposition is exact.** In each direction, EDL_c = Σ over classes [n_test,c × (L0 − Lθ*)_c − online savings_c] + log₂ 3, and the parts sum to the stored EDL_c within 10⁻¹⁶.
+- **The corrections disagree.** Three reasonable split corrections give S_short's excess as negative, small-positive or up to +1.1 bits per proof.
+- **The same-proof part is not style.** It is 0.035–0.087 bits per proof on proofs identical to the learner's own, which only A's lr (1e-4 for S_short, 1e-5 for S_own2) can produce. Table 5's "EDL_c per same proof" shows the same thing: S_short 0.15 / 0.12 / 0.15 against S_own2 0.03 / 0.02 / −0.02.
+
+The pre-registered rule uses EDL_c, so "against" is the correct pre-registered outcome. The data cannot separate a style cost of a few tenths of a bit per proof from zero.
+
+## Process
+
+- **Expectations before the run.**
+  - The pre-registration was committed 1 min 8 s before the first pod.
+  - Addendum 1 (the build facts, the decision-rule clarification and A1) was committed before any stream but S_own was
+    scored.
+  - The gate was passed (0.043) before the 04:30 launch of the other streams.
+  - The A_fixed E = 4 was set by the pilot's rule.
+  - The cross-fit is labelled post hoc and exploratory everywhere I looked.
+- **Misses reported as misses.** numbers.md has a full expectations table, and the run write-up lists the main misses.
+  Not marked as misses: the predicted F range (row 19) and the A_fixed ordering (row 18).
+- **n.** No difference is claimed from one seed. The verdict uses 3 / 3 seeds.
+- **Model labels.**
+  - numbers.md's Models block labels L_s, r8_s and θ* with checkpoints, md5, size, format and training data; I checked
+    them against the setup log and the bucket (54 θ* present).
+  - The run write-up names the learners. The plain summary describes them in lay terms.
+  - No unlabelled or mislabelled inherited number. Row 17 is labelled with the same checkpoints.
+- **Policy.**
+  - Plain and guided reads are both reported and labelled.
+  - Compute is recorded per arm, and S_Kal is flagged.
+  - Term size is reported. IQM and bootstrap are given with the n = 3 caveat.
+  - One stratum exceeds the 0.1 % truncation line. It was not re-run with a larger cap but argued away, and my bound
+    shows it cannot change the result.
+  - Bucket paths are recorded. No outside contact, no textbook72, and `references.bib` is unchanged.
+- **Hard constraints:** none violated (§1).
+
+# §Verdict
+
+## What stands
+
+1. **The run's materials are sound.**
+   - Every stream proof and every counted capability proof I checked is Lean-valid: 638 stream proofs, 2,304 literal
+     source texts, 6,391 accepted capability texts and all 2,852 V(x) proofs.
+   - The 1,200 sampled prefilter rejections are all Lean-invalid.
+   - The split is clean by renaming class, also against K12 and the ladder's targets.
+   - Each fit trained on exactly its prefix.
+   - pass@32 was read with the EDL's own θ*.
+   - `nd_verify` was not used, and no hard constraint was violated.
+2. **Every reported number reproduces from the per-proof files**, to rounding. This covers numbers.md Tables 1–7, the
+   bootstrap table, `verdict.json`, `results.csv` and the figure. My independent CPU scorer reproduces the stored code
+   lengths to 10⁻⁴ bits.
+3. **The pre-registered verdict, against, is correctly derived.**
+   - S_seed, S_RL and S_short keep capability, but none exceeds S_own2 by more than F under both EDL and EDL_c in
+     3 / 3 seeds.
+   - S_short's EDL excess (+0.74 to +0.92) does not survive EDL_c.
+   - S_Kal exceeds by ~180 bits per proof but fails the capability criterion in 3 / 3 seeds, robustly to truncation.
+4. **Kalmár.**
+   - A large style change costs ≈ 180 bits per proof of EDL_c (≈ 1.5 per action), but at this learner size and
+     protocol it also breaks the learner: plain pass@32 0.25–0.38, pass@1 0.02–0.05.
+   - Under ℓ_V the cost turns negative.
+   - The S_Kal number is for A_ES truncated at 8 passes.
+
+## Must be reworded
+
+1. **"from the split alone"** (run 3) and STATUS's **"EDL_c and a cross-fit remove it"**. Say "mostly from the split".
+   The exploratory cross-fit leaves +0.06 to +0.33 (2 / 3 above F), and the class-stratified correction (computed in
+   `results.csv`, not reported) leaves +0.005 to +1.10.
+2. **"at the floor"** (run 2) and STATUS's **"within the 0.1-bit floor of S_own2's"**. Say "none above S_own2 + F; the
+   cells span −0.40 to +0.06 bits per proof".
+3. **"Only learnable style is charged"** (run 4, plain 4). Present it as a hypothesis from exploratory numbers. Give the
+   number of differing proofs (14–39 per cell). Note the lr confound: S_short trained at lr 1e-4 and the others at
+   1e-5, and 0.035–0.087 bits per proof of S_short's cross-fit excess sits on proofs identical to the learner's.
+4. **The ℓ_V "dip in correct proofs"** (run 6, plain 6). It is a dip in mass on V(x); add numbers.md's own caveat that
+   it may be valid proofs outside V(x).
+5. **"the same ordering"** for A_fixed (numbers.md). Only the extremes agree.
+6. **Plain summary.**
+   - "still proves every held-out theorem": one theorem in one cell is missed.
+   - "style alone creates no EDL gap": say "no detectable gap".
+   - "EDL charges for style only when it is systematic and quite different": not established. One large-style stream,
+     which also lost capability, cannot show it.
+
+## Not supported, or missing
+
+1. **Missing caveat on S_Kal's protocol.** All 30 S_Kal fits at lr* hit the 8-pass cap, so A_ES is truncated there and
+   S_Kal's EDL is a function of `max_passes`.
+2. **Missing caveat on power.**
+   - The capability-fixed streams differ from the learner's own proofs on only 6–15 % of theorems (style distance
+     0.015–0.040, against S_Kal's 0.73).
+   - S_short's and S_RL's EDL_c vary by 0.41 and 0.49 bits per proof across seeds, 4–5× the floor F (S_seed's by
+     0.03). F was built from S_own and S_own2 only (their differences ≤ 0.043).
+   - So "against" means **no detectable style cost for small style differences**. It is not evidence that EDL ignores
+     style. The pre-registered F (0.2–0.5) also came out at its 0.1 minimum, which is not reported as a miss.
+3. **The lr depends on the stream** (1e-4 for S_short and S_Kal), and this is not discussed. Any EDL difference between
+   S_short and S_own2 mixes style with the amount of training.
+
+## Next measurement that would settle what is left open
+
+1. **A large style change at fixed capability.**
+   - Kalmár, or a partial Kalmár variant, with a capability-preserving A: replay the learner's own proofs during
+     fine-tuning, or choose the pass count under a pass@32 ≥ 0.9 constraint.
+   - Raise `max_passes` until the cap does not bind.
+2. **A moderate style change with power.**
+   - Use S_short on theorems where minlen ≠ the learner's greedy proof only: ≈ 30–39 per seed in the 256, more from
+     the 632 eligible and from other held-out pools. Then nearly every proof is a differing proof.
+   - Stratify the split by same / differ, so that M ≈ 0.
+   - Fix the lr across streams, at both 1e-4 and 1e-5.
+   - Measure the floor from the tested streams' own variability: ≥ 6 data orders, or a bootstrap over theorems.
