@@ -353,3 +353,5 @@ Brief: nd-rl `docs/proposals/followups/BRIEF_style-edl.md`. Policy: AGENT_POLICY
   `style_edl/` (`results.csv`, `streams_manifest.json`, `README.md`), `log.md` § style-edl; bucket
   `hf://buckets/dan-pandori/nd-rl/style-edl/`.
 
+
+STYLE-EDL DONE 2026-10-23T08:22:24Z

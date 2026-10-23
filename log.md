@@ -1374,3 +1374,4 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 2026-10-23T08:19:48Z  Uploaded `artifacts/style_edl`, `artifacts/style-edl/registry`, `data/style_edl` to
   `hf://buckets/dan-pandori/nd-rl/style-edl/` (secret scan: 0 hits); bulk files published with `publish_artifacts.py`.
   Spend $1.86 / 6.72 pod-hours of $10 / 40.
+- 08:22  Final bucket sync (artifacts incl. verdict / bootstrap); no pods left (runpodctl: 0 sedl*); RunPod balance $244.10. STYLE-EDL DONE 2026-10-23T08:22:24Z.
