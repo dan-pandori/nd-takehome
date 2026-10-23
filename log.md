@@ -1324,3 +1324,15 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 17:15  Secret scan of the 250 files to upload: 0 hits. Bucket: `hf://buckets/dan-pandori/nd-rl/kalmar-complexity/`
   `{artifacts/kc, data/kc, artifacts/kalmar-complexity}` (124 objects; counts match). No checkpoints were produced
   (B2 / B3 models were scored in place, not saved).
+
+# log — style-edl (proposal 32; executor)
+
+## 2026-10-23
+- 03:18  Started. Read the brief, the EDL note, Charles's edl_mock, Leon's edl.py (protocol only), kalmar-complexity's
+  b2_preq.py and kalmar-pretrain's tf_agree / kal_free. Models: best-state `stage1_best12_s{0,1,2}_b1200` (md5 of the
+  s0 bucket copy 9c436c35 = numbers.md), tf1200 md5 b99c3b8d.
+- 03:33–04:00  S_own pilot on the VPS CPU (seed 0; kalmar-pretrain's greedy proofs of this checkpoint;
+  `artifacts/style_edl/pilot/`): learner 0.52 bits per proof names not coded, 6.7 all tokens; fixed-pass AdamW damages
+  it on its own proofs (EDL −0.74 / −0.38 / −0.22 bits per proof for names coded lr 3e-4 / not coded 3e-4 / not coded
+  1e-4). Chose: names not coded; early-stopping A; lr grid to 1e-5. CPU step ≈ 6 s, so the rest goes to a GPU pod.
+- 2026-10-23T04:05:27Z  Pre-registration written (`preregistration/style-edl.md`).

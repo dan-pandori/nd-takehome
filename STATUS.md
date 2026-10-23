@@ -331,3 +331,11 @@ Budget $15 / 40 pod-hours; hard stop 2026-10-23 12:20 UTC. Pods (if any) `kc-*`.
   - Spend $5.00 / 8.46 pod-hours of $15 / 40; all pods deleted.
 
 KALMAR-COMPLEXITY DONE 2026-10-20T17:19:51Z
+
+# STATUS — style-edl (proposal 32: does EDL rise with proof style when capability is fixed?)
+
+Brief: nd-rl `docs/proposals/followups/BRIEF_style-edl.md`. Policy: AGENT_POLICY.md. Run id: style-edl. Budget $10 / 40 pod-hours.
+
+## style-edl
+- 2026-10-23 03:18 UTC  run started (executor). 2026-10-23T04:05:27Z  S_own pilot (VPS CPU, seed 0 only) done; pre-registration
+  `preregistration/style-edl.md` committed before any pod.
