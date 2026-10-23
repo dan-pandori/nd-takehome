@@ -192,3 +192,28 @@ Bits per proof, names not coded, A_ES, mean over seeds (each seed expected insid
 6. **"pass@32 ≥ 0.9" for selection** read as ≥ 29 / 32 per theorem; the capability read uses a fresh sample seed.
 7. **"The learner's caps"** read as the sampling caps (1,024 / 512), so S_Kal keeps every theorem.
 8. **Two data orders** (the brief names one).
+
+## Addendum 1 (2026-10-23 04:26 UTC — after the stream build, before any stream but S_own was scored)
+
+**Build (no scoring; `style_edl/streams_manifest.json`).** 632 of 1,200 tf1200 theorems are eligible (largest
+exclusions: selection read < 29 / 32 for s0 / s1 / s2 on 358 / 295 / 278; base greedy invalid 98 / 67 / 115). Every
+distinct candidate stream proof was accepted by Lean on its literal canonical text (1,598 / 1,598). Atom mix: eligible
+71 / 175 / 190 / 196 (1 / 2 / 3 / 4 atoms); stream 16 / 34 / 36 / 42; test 15 / 34 / 37 / 42.
+
+**Stream property that changes the expectations:** on these theorems the alternative styles mostly *are* the learner's
+style. Fraction of the 256 theorems whose stream proof is identical to the learner's greedy proof (s0 / s1 / s2):
+S_own2 0.910 / 0.926 / 0.934, S_seed 0.941 / 0.938 / 0.941, **S_short 0.871 / 0.848 / 0.883**, S_RL 0.945 / 0.922 / 0.938,
+S_Kal 0. Mean actions per proof: S_own 4.4–4.5, S_short 4.26, S_RL 4.5–4.6, S_Kal 116.1.
+
+- The table above is **not** changed and will be scored as written. Its S_short (1–8 bits per proof) and S_RL
+  (0.2–2) rows assumed most proofs differ; with 6–15 % differing I now expect S_seed, S_RL and S_short all within
+  ≈ 1 bit per proof of S_own2 (S_short 0.1–1.5, S_RL 0–0.8), so S_seed and S_RL will not clear F, and S_short has at
+  most even odds. The claim then rests on S_Kal, conditional on its capability check.
+- **Clarification of the decision rule (intent, stated before scoring):** S_Kal is a candidate on the same terms as the
+  other three — the claim holds if *any* of S_seed, S_RL, S_short, S_Kal passes the capability criterion on all three
+  seeds and exceeds S_own2 by more than F per proof, under both EDL and EDL_c, in 3 / 3 seeds.
+- **Added analysis A1 (per-proof attribution; no new runs).** Each stream's stream and test proofs are split into
+  *same* (identical to the learner's greedy proof) and *differ*. Per class: the learner's bits per proof, θ*'s, the
+  online savings, and EDL_c(class) = n_class,stream × (L0_class,test − Lθ*_class,test) − Σ_class stream proofs (learner −
+  block bits). Predictions: *differ* proofs of S_short / S_RL / S_seed / S_own2 cost the learner 4–20 bits each (vs < 1
+  for *same*); their EDL_c is 0–4 bits per differing proof; *same* proofs' EDL_c is within ±0.2 bits per proof.

@@ -54,7 +54,8 @@ def main():
     ap.add_argument('--threads', type=int, default=0)
     ap.add_argument('--loss_mask', default='names', choices=['names', 'all'], help="A's training loss positions")
     ap.add_argument('--vset', default=None, help='jsonl {name, prompt, nd} of V(x): score l_V under every fit')
-    ap.add_argument('--save_theta', default=None, help='directory: save theta* of every (lr, E, order) as a ckpt')
+    ap.add_argument('--save_theta', default=None, help='directory: save theta* of every (lr, E, order in --save_orders) as a ckpt')
+    ap.add_argument('--save_orders', default='0')
     ap.add_argument('--out', required=True)
     a = ap.parse_args()
     if a.threads:
@@ -173,7 +174,7 @@ def main():
                     lvt = sum(run['theta']['lv_test'].values()) / len(tenc)
                     run['summary'].update(lv_preq_bits=lvb, lv_L_test=lvt, lv_EDL=lvb - n_all * lvt)
                 run['secs'] = round(time.time() - t0 - run['t0'], 1)
-                if a.save_theta:
+                if a.save_theta and str(o) in a.save_orders.split(','):
                     os.makedirs(a.save_theta, exist_ok=True)
                     fn = os.path.join(a.save_theta, f'theta_{a.algo}_lr{lr:g}_E{Ek:g}_o{o}.pt')
                     torch.save({'cfg': ck['cfg'], 'state': model.state_dict(), 'tok_mode': ck['tok_mode'],
