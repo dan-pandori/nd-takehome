@@ -964,3 +964,29 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 16:37 UTC  **Knockout s1 r24 plain read** (k 256 x0, `artifacts/coe/eval/r24_ko_s1_x0`): strict held-out members **5 / 106 — the same five as at r20** (contraposition_conv 4 / 18: `la_transfer_1019`, `1246`, `1460`, `2256`; plus `la_transfer_916`), but each now solved far more often: successes per 256 attempts r16 → r20 → r24: 1019 0 → 32 → 214, 1246 0 → 23 → 126, 1460 108 → 205 → 189, 2256 0 → 47 → 177, 916 10 → 14 → 33. No family at the bar. read1054 896 solved; cut-offs 0.32 %. **Addendum 6 item 1 expectations:** contraposition_conv training share at r24 0.3–0.8 — hit (0.33); 2–12 of its 18 held-out members at r24 — hit (4); at the bar with probability ≈ 0.3 — not at the bar; no other family at the bar — hit. Reading: from r20 to r24 RL sharpened the members it had found instead of spreading to new ones.
 - 16:48 UTC  **All pods deleted** (coe-k1 reaped 16:40, 34.69 h, $20.46; `runpodctl pod list` empty). **Final spend: 16 pods, 309.34 pod-hours, $182.50** of $190 / 330 h (`artifacts/coe/pod_hours.tsv`, `artifacts/coe/compute.md`: process GPU-hours 419.9, RL ladders 191.2, reads 181.7). RunPod balance $101.23. Final checks: knockout s1's replay check over 24 rounds (2.09 M mix records) 0 σ-like replay records, 0 leaked K12 records — 6 / 6 knockout seeds pass; knockout s1's log p of known σ proofs along the ladder −26.0 (pend) → −33.6 (r16), best member −7.9 → −4.2; **offline Lean re-check** (`coe/coe_recheck.py` → `artifacts/coe/recheck.json`): 1,062 / 1,062 counted proofs accepted (every knockout proof of a strict member in the plain reads 424, knockout base large-k successes 13, Phase 3a 25, samples of full r16 450 and dose r16 150), and the same 1,062 with the conclusion negated 1,062 / 1,062 rejected. Data files published with manifest rows (the three training sets, `known_targets*.jsonl.gz`); the bulk artifacts follow (`publish_artifacts.py`).
 - 17:39 UTC  **Bulk artifacts published** (`publish_artifacts.py create-or-elicit artifacts/coe artifacts/create-or-elicit`, under the download lock): 744 files, 1,265,129,988 bytes (read rows, large-k chunks, scores, known-proof sets, registry rows), credential scan clean, every bucket copy re-downloaded and matched by sha256; `artifacts/MANIFEST.jsonl` 3,382 rows. Checkpoints (12 Stage 1, 200 ladder, 10 Phase 3a) were uploaded on save to `hf://buckets/dan-pandori/nd-rl/create-or-elicit/ckpts/coe/`; the ladders' found / mix / alloc files were synced from the pods to the same prefix. All pods deleted; the run is done.
+
+## coe-dose01 (executor, 2026-10-31 →)
+
+- 2026-10-31 20:25 UTC  Pre-registration `preregistration/coe-dose01.md` committed and pushed (commit feff6b1c, 20:25:51)
+  before the first pod. Code tree = the 1 % arm's launch commit `dd6035e1` for every file the pods run (`git diff --stat`
+  shows changes only in `coe/` analysis scripts other than `coe_rounds.py`, `review_coe/`, figures, `data/coe` additions).
+  Pod scripts `pod/d01/` = `pod/coe/` with ND_RUN_ID `coe-dose01` and bucket folder `coe-dose01/` (never
+  `create-or-elicit/`), plus `backup.sh` (every 4th round's resume files to the bucket) and `ko_ext.sh` (priority 2).
+- 20:26–20:30 UTC  Pods cd01-s0 / s1 / s2 (NVIDIA A40 SECURE, $0.59/h each; created 20:26:00 / 20:27:25 / 20:28:32)
+  = dose01 s0 / s1 / s2: Stage 1 (1,200 s) → held-out greedy → 16-round ladder; reader: base x0 + g0 beside the ladder,
+  r16 x0 after it. `train_k12dose01.jsonl` on the pod: md5 5fed3787… = `zcat` of the read-only copy, 155,000 records.
+  Stage-1 log prints the same "params 10732800 … best: 9,560,832 params (+1,875,584 MTP, not saved)" lines as the 1 % arm.
+- 20:20–20:30 UTC  Figure checks (VPS, no pods): `rl_needed/extract_rl_curve.py` (copied unchanged from nd-rl) re-run
+  reproduces the published `rl_curve.json` exactly on 15 / 15 ladders. `review_rcs/ourruns.py` re-run fresh reproduces its
+  own published `out/our_runs.json` (29 / 29 rows, r_train identical); its whole-ladder `r_train` and the extraction's
+  per-round total (incl. last fine-tune) agree to 0.0001–0.0012 (≤ 0.02 %; the prefill split is per round in the
+  extraction, per ladder in `ourruns.py`) on the 14 ladders it counts (full s5 has no row there, as the README says).
+- 20:56 UTC  Stage 1 done on 3 / 3 (`stage1_dose01_s{0,1,2}.pt`, 9,560,832 params + 1,875,584 MTP not saved; 23,918 /
+  24,010 / 24,231 steps, 3.64–3.69 epochs of pairs in 1,201 s, final val 0.0754 / 0.0792 / 0.0701). Held-out greedy
+  (p2/heldout 5,000): **0.893 / 0.865 / 0.835** — the pre-registered 0.91–0.95 **missed**. The measure is σ-sensitive
+  across create-or-elicit's arms (from `artifacts/coe/eval/heldout_*.json`): knockout 0.867–0.895, 1 % 0.917–0.945,
+  full 0.958–0.968; their Stage-1 steps 23,920–24,286 (dose1 s0 25,607). The 0.1 % bases sit in the knockout range
+  (s2 below it). Ladders started 20:49–20:52; base plain reads (x0) beside them.
+- 21:00 UTC  Dose check (VPS, record md5 of prompt + proof; `coe_rounds.classify`): K12^0.1% \ K12⁻ = 155 records, all
+  class `sigma`; K12⁻ \ K12^0.1% = 155 refill records (149 no-DN, 6 DN-on-premise/assumption); K12^1% \ K12⁻ = 1,550. The
+  two dose sets were drawn separately: 17 of the 155 are also among the 1 % arm's 1,550.
