@@ -990,3 +990,40 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 21:00 UTC  Dose check (VPS, record md5 of prompt + proof; `coe_rounds.classify`): K12^0.1% \ K12⁻ = 155 records, all
   class `sigma`; K12⁻ \ K12^0.1% = 155 refill records (149 no-DN, 6 DN-on-premise/assumption); K12^1% \ K12⁻ = 1,550. The
   two dose sets were drawn separately: 17 of the 155 are also among the 1 % arm's 1,550.
+- 22:03 UTC  **Round 1 done on 3 / 3** (2,240–3,045 s; targets solved 3,663 / 3,475 / 3,443, 1 % arm 3,402–3,597).
+  `coe_rounds.py` on the pods' partial ladder dirs, round 1 = each base's own k 32 sample: strict held-out members
+  (y r1) **0 / 0 / 3** (s2: contraposition_conv 3) — inside the pre-registered 0–3; free positive reductio proofs
+  **1 / 0 / 2** — below the pre-registered 3–100 on all seeds (1 % arm 170–219, knockout 0); σ⁺ proofs 35 / 39 / 43,
+  almost all scaffolded (knockout 32–41, 1 % 222–268); σ-covered trained targets solved 0 / 0 / 2. In round 1 the
+  0.1 % bases look like knockout bases with a trace of free σ (s0, s2).
+- 22:34 UTC  Round 2 done on 3 / 3 (2,939 / 3,259 / 3,131 s). Spend $3.73 / 6.32 pod-h (`podbudget`). **Priority-2
+  decision (pre-registered rule: start only if priority 1 is projected ≤ $35):** per pod ≈ 2.1 h so far + rounds 3–16 at
+  the 1 % arm's slowest pace (13.3–14.2 h, `la_dose1_s*/round_*.json` secs) + ≈ 1.8 h (r16 read alone 69–97 min on the
+  1 % arm, analysis, uploads) ≈ 18 h ≈ $10.7 → priority 1 ≈ **$32**, so ≈ $13 remains → **priority 2 launched**
+  (pod cd01-k1, A40): knockout s1 rounds 25–32 ≈ 0.5 h fetch/setup + ≈ 8 h (r17–24 took 7.53 h) + r32 read ≈ 1.2 h ≈
+  10 h ≈ $6. Projected total ≈ $38 of $45.
+- 22:38 UTC  Priority 2 running on cd01-k1 (A40 SECURE $0.59/h, created 22:34): fetched from create-or-elicit's bucket
+  folder (read-only) and verified — `la_ko_s1_r24.pt` md5 1520ed6c…, `stage1_ko_s1.pt` 3b0f4ba9… (= create-or-elicit's
+  registry `ckpt_saved` rows), `train_k12ko.jsonl` 466fc214… (= all 14 create-or-elicit setups and the local copy);
+  `state_ladder_ei.py --resume --start_round 25 --rounds 8` at 22:37:43: "resumed round 24: 989436 target proofs".
+- 23:27 UTC  Round 3 done on 3 / 3 (3,148 / 3,395 / 3,331 s). Interim `coe_rounds.py` on the pods (rounds 1–3), strict
+  held-out members y: s0 **0, 0, 3**; s1 **0, 0, 0**; s2 **3, 12, 15 — s2 reaches the bar (14) at round 3**. Free positive
+  reductio proofs per round: s0 1, 0, 4; s1 0, 2, 4; s2 2, 35, 116. σ-covered trained targets cumulative: s0 0, 0, 2;
+  s1 0, 0, 0; s2 2, 16, 23. Knockout s1 in round 25.
+- 01:46 UTC  Base plain reads (k 256, `read1054`, batch 512, beside the ladders; `coe.d01_summary.read_stats`): strict
+  held-out members solved **0 / 0 / 6** (s2: contraposition_conv 6 of 18); no family at the bar on any seed (1 % arm:
+  6 / 18 / 8, s1 at the bar; knockout 0). Cut-off share (action truncated or step cap) of attempts on the strict members
+  0 / 1.13 % / 0 (all theorems 0.16 / 0.45 / 0.06 %) — s1's strict stratum is above the policy's ≈ 0.1 %; the read
+  settings stay those of the inherited arms for comparability (their r16 reads reached 8.84 %, create-or-elicit Obs. 12).
+  Guided base reads done on s0, s2. Pull trap: `pod/d01/pull.sh <pod> <dir>/` with a trailing slash copies the dir's
+  contents one level up (rsync); files moved into `artifacts/coe/eval/` and `artifacts/coe-dose01/registry/`.
+- 03:04 UTC  Interim (`coe_rounds.py` on the pods): y by round — s0 0, 0, 3, 5, **14** (r5), 17, 21; s1 0, 0, 0, 0, 0,
+  6 (r6); s2 3, 12, **15** (r3), 18, 18, 18, 18. Free positive reductio per round: s0 1, 0, 4, 24, 53, 113, 210; s1 0, 2,
+  4, 17, 13, 30; s2 2, 35, 116, 143, 253, 298, 375. Two of three seeds have reached the bar (s2 r3, s0 r5). Knockout s1
+  at r28. Spend $14.42 / 24.44 pod-h.
+- 03:36 UTC  **r16 guided reads enabled** (`artifacts/coe/markers/allow_r16g0` on cd01-s0/s1/s2; pre-registered rule:
+  only if priorities 1 + 2 are projected ≤ $39). Projection from the current round times (0.8–1.05 h per round):
+  priority-1 pods end ≈ 12:45 / 14:10 / 12:50 UTC (≈ 50 pod-h ≈ $29.7 incl. r16 plain reads); priority 2 ends ≈ 08:50
+  (≈ 10.3 h ≈ $6.1) → ≈ $35.8. The base guided reads took 2.8–4.0 h beside the ladders (reader logs), so the three r16
+  guided reads alone add ≈ $4.4–7 → ≈ $40–43 of $45; they are the last job on each pod and will be stopped if the
+  projection passes $45.
