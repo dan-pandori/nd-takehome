@@ -1,0 +1,16 @@
+dose01_s0 vs dose1_s0: {'init': ('ckpts/coe/stage1_dose01_s0.pt', 'ckpts/coe/stage1_dose1_s0.pt'), 'name': ('la_dose01_s0', 'la_dose1_s0'), 'train': ('data/coe/train_k12dose01.jsonl', 'data/coe/train_k12dose1.jsonl')}
+   argv new: --init ckpts/coe/stage1_dose01_s0.pt --name la_dose01_s0 --seed 0 --batch 1024 --train data/coe/train_k12dose01.jsonl --heldout data/coe/heldout1000.jsonl --transfer data/coe/transfer_track832.jsonl --outdir artifacts/coe/ladder --ckptdir ckpts/coe/ladder --rounds 16
+   argv 1 %: --init ckpts/coe/stage1_dose1_s0.pt --name la_dose1_s0 --seed 0 --batch 1024 --train data/coe/train_k12dose1.jsonl --heldout data/coe/heldout1000.jsonl --transfer data/coe/transfer_track832.jsonl --outdir artifacts/coe/ladder --ckptdir ckpts/coe/ladder --rounds 16
+   sha new feff6b1c sha 1 % dd6035e1
+dose01_s1 vs dose1_s1: {'init': ('ckpts/coe/stage1_dose01_s1.pt', 'ckpts/coe/stage1_dose1_s1.pt'), 'name': ('la_dose01_s1', 'la_dose1_s1'), 'train': ('data/coe/train_k12dose01.jsonl', 'data/coe/train_k12dose1.jsonl')}
+   argv new: --init ckpts/coe/stage1_dose01_s1.pt --name la_dose01_s1 --seed 1 --batch 1024 --train data/coe/train_k12dose01.jsonl --heldout data/coe/heldout1000.jsonl --transfer data/coe/transfer_track832.jsonl --outdir artifacts/coe/ladder --ckptdir ckpts/coe/ladder --rounds 16
+   argv 1 %: --init ckpts/coe/stage1_dose1_s1.pt --name la_dose1_s1 --seed 1 --batch 1024 --train data/coe/train_k12dose1.jsonl --heldout data/coe/heldout1000.jsonl --transfer data/coe/transfer_track832.jsonl --outdir artifacts/coe/ladder --ckptdir ckpts/coe/ladder --rounds 16
+   sha new feff6b1c sha 1 % dd6035e1
+dose01_s2 vs dose1_s2: {'init': ('ckpts/coe/stage1_dose01_s2.pt', 'ckpts/coe/stage1_dose1_s2.pt'), 'name': ('la_dose01_s2', 'la_dose1_s2'), 'train': ('data/coe/train_k12dose01.jsonl', 'data/coe/train_k12dose1.jsonl')}
+   argv new: --init ckpts/coe/stage1_dose01_s2.pt --name la_dose01_s2 --seed 2 --batch 1024 --train data/coe/train_k12dose01.jsonl --heldout data/coe/heldout1000.jsonl --transfer data/coe/transfer_track832.jsonl --outdir artifacts/coe/ladder --ckptdir ckpts/coe/ladder --rounds 16
+   argv 1 %: --init ckpts/coe/stage1_dose1_s2.pt --name la_dose1_s2 --seed 2 --batch 1024 --train data/coe/train_k12dose1.jsonl --heldout data/coe/heldout1000.jsonl --transfer data/coe/transfer_track832.jsonl --outdir artifacts/coe/ladder --ckptdir ckpts/coe/ladder --rounds 16
+   sha new feff6b1c sha 1 % dd6035e1
+ko_s1 r25-32 vs create-or-elicit r17-24: {'rounds': (8, 4), 'start_round': (25, 21)}
+   argv r25-32: --init ckpts/coe/stage1_ko_s1.pt --name la_ko_s1 --seed 1 --batch 1024 --train data/coe/train_k12ko.jsonl --heldout data/coe/heldout1000.jsonl --transfer data/coe/transfer_track832.jsonl --outdir artifacts/coe/ladder --ckptdir ckpts/coe/ladder --resume --start_round 25 --rounds 8 | sha 20709ceb
+   argv r17-24: --init ckpts/coe/stage1_ko_s1.pt --name la_ko_s1 --seed 1 --batch 1024 --train data/coe/train_k12ko.jsonl --heldout data/coe/heldout1000.jsonl --transfer data/coe/transfer_track832.jsonl --outdir artifacts/coe/ladder --ckptdir ckpts/coe/ladder --resume --start_round 21 --rounds 4 | sha bfa86e49
+code diff dd6035e1..feff6b1c (*.py outside coe/, review_*/, rl_needed/): none 

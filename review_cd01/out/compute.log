@@ -1,0 +1,37 @@
+ladder            gen_sample      gen_eval       prefill     ft_tokens      ft_steps      attempts  gpu_s_sample    gpu_s_eval      gpu_s_ft   lean_sample     lean_eval   gpu_s_total
+la_dose01_s0       5.351e+08     1.154e+08     3.176e+09      1.55e+09          9600     2.301e+06     3.336e+04          8685     1.292e+04     1.904e+06      2.48e+05     5.497e+04
+la_dose01_s1       5.528e+08     1.186e+08     3.371e+09     1.627e+09          9600     2.301e+06     3.625e+04          9688     1.311e+04     1.924e+06     2.603e+05     5.905e+04
+la_dose01_s2       5.421e+08     1.222e+08     3.341e+09     1.562e+09          9600     2.301e+06     3.863e+04      1.06e+04     1.297e+04     1.918e+06     2.513e+05      6.22e+04
+la_ko_s1           3.231e+08     7.192e+07     2.105e+09     9.602e+08          4800     1.151e+06     2.303e+04          5909          7629     1.066e+06     1.503e+05     3.657e+04
+la_dose1_s0        5.641e+08     1.191e+08     3.471e+09     1.668e+09          9600     2.301e+06       3.3e+04          7194     1.337e+04      1.94e+06     2.687e+05     5.356e+04
+la_dose1_s1        5.532e+08      1.13e+08     3.346e+09     1.631e+09          9600     2.301e+06     3.597e+04          8294     1.451e+04     1.917e+06      2.61e+05     5.878e+04
+la_dose1_s2        5.622e+08     1.153e+08     3.346e+09     1.649e+09          9600     2.301e+06     3.451e+04          8423     1.381e+04     1.911e+06     2.478e+05     5.674e+04
+ratios dose01 / mean(1 %):
+  la_dose01_s0: gen_sample 0.956 gen_eval 0.996 prefill 0.937 ft_tokens 0.940 ft_steps 1.000 attempts 1.000 gpu_s_sample 0.967 gpu_s_eval 1.090 gpu_s_ft 0.930 lean_sample 0.990 lean_eval 0.957 gpu_s_total 0.975
+  la_dose01_s1: gen_sample 0.987 gen_eval 1.024 prefill 0.995 ft_tokens 0.987 ft_steps 1.000 attempts 1.000 gpu_s_sample 1.051 gpu_s_eval 1.216 gpu_s_ft 0.943 lean_sample 1.001 lean_eval 1.005 gpu_s_total 1.048
+  la_dose01_s2: gen_sample 0.968 gen_eval 1.055 prefill 0.986 ft_tokens 0.947 ft_steps 1.000 attempts 1.000 gpu_s_sample 1.120 gpu_s_eval 1.330 gpu_s_ft 0.933 lean_sample 0.998 lean_eval 0.970 gpu_s_total 1.104
+outside 0.8-1.25x: [('la_dose01_s2', 'gpu_s_eval', 1.33)]
+stage1 job rows: [(0, 'gpu_seconds', 1283.115, 'NVIDIA A40'), (0, 'train_steps', 23918, 'NVIDIA A40'), (0, 'train_tokens', 439512963, 'NVIDIA A40'), (1, 'gpu_seconds', 1283.529, 'NVIDIA A40'), (1, 'train_steps', 24010, 'NVIDIA A40'), (1, 'train_tokens', 441198454, 'NVIDIA A40'), (2, 'gpu_seconds', 1285.573, 'NVIDIA A40'), (2, 'train_steps', 24231, 'NVIDIA A40'), (2, 'train_tokens', 445266361, 'NVIDIA A40')]
+job ('dose01', 'ckpts/coe/stage1_dose01_s0.pt', 'job', 'artifacts/coe/eval/heldout_dose01_s0.jsonl', '2026-10-31T20:49:24Z') {'gpu_seconds': 41, 'gen_tokens': 516549, 'attempts': 5000, 'actions': 27835, 'lean_checks': 4467}
+job ('dose01', 'ckpts/coe/stage1_dose01_s1.pt', 'job', 'artifacts/coe/eval/heldout_dose01_s1.jsonl', '2026-10-31T20:50:25Z') {'gpu_seconds': 35, 'gen_tokens': 505059, 'attempts': 5000, 'actions': 27125, 'lean_checks': 4326}
+job ('dose01', 'ckpts/coe/stage1_dose01_s2.pt', 'job', 'artifacts/coe/eval/heldout_dose01_s2.jsonl', '2026-10-31T20:51:46Z') {'gpu_seconds': 29, 'gen_tokens': 466786, 'attempts': 5000, 'actions': 26037, 'lean_checks': 4176}
+job (None, 'ckpts/coe/stage1_dose01_s2.pt', 'job', 'artifacts/coe/eval/pend_dose01_s2_x0.jsonl', '2026-10-31T21:48:25Z') {'gpu_seconds': 3394, 'gen_tokens': 37929780, 'attempts': 269824, 'actions': 2053028, 'lean_checks': 19180}
+job (None, 'ckpts/coe/stage1_dose01_s0.pt', 'job', 'artifacts/coe/eval/pend_dose01_s0_x0.jsonl', '2026-10-31T22:09:19Z') {'gpu_seconds': 4740, 'gen_tokens': 45330161, 'attempts': 269824, 'actions': 2575414, 'lean_checks': 18081}
+job (None, 'ckpts/coe/stage1_dose01_s1.pt', 'job', 'artifacts/coe/eval/pend_dose01_s1_x0.jsonl', '2026-10-31T22:10:08Z') {'gpu_seconds': 4721, 'gen_tokens': 43329405, 'attempts': 269824, 'actions': 2309825, 'lean_checks': 18937}
+job ('logical', 'ckpts/coe/stage1_dose01_s2.pt', 'read', 'artifacts/coe/eval/pend_dose01_s2_g0', '2026-11-01T00:38:26Z') {'gpu_seconds': 10194}
+job ('logical', 'ckpts/coe/stage1_dose01_s2.pt', 'read', 'artifacts/coe/eval/pend_dose01_s2_g0', '2026-11-01T00:38:28Z') {'gen_tokens': 83637059, 'attempts': 269824, 'actions': 4450898, 'lean_checks': 38399}
+job ('logical', 'ckpts/coe/stage1_dose01_s2.pt', 'job', 'artifacts/coe/eval/pend_dose01_s2_g0', '2026-11-01T00:38:54Z') {'gpu_seconds': 31}
+job ('logical', 'ckpts/coe/stage1_dose01_s0.pt', 'read', 'artifacts/coe/eval/pend_dose01_s0_g0', '2026-11-01T01:06:35Z') {'gpu_seconds': 10600}
+job ('logical', 'ckpts/coe/stage1_dose01_s0.pt', 'read', 'artifacts/coe/eval/pend_dose01_s0_g0', '2026-11-01T01:06:36Z') {'gen_tokens': 89360299, 'attempts': 269824, 'actions': 4698953, 'lean_checks': 39686}
+job ('logical', 'ckpts/coe/stage1_dose01_s0.pt', 'job', 'artifacts/coe/eval/pend_dose01_s0_g0', '2026-11-01T01:07:05Z') {'gpu_seconds': 45}
+job ('logical', 'ckpts/coe/stage1_dose01_s1.pt', 'read', 'artifacts/coe/eval/pend_dose01_s1_g0', '2026-11-01T02:08:45Z') {'gpu_seconds': 14310}
+job ('logical', 'ckpts/coe/stage1_dose01_s1.pt', 'read', 'artifacts/coe/eval/pend_dose01_s1_g0', '2026-11-01T02:08:47Z') {'gen_tokens': 98639289, 'attempts': 269824, 'actions': 4649387, 'lean_checks': 38031}
+job ('logical', 'ckpts/coe/stage1_dose01_s1.pt', 'job', 'artifacts/coe/eval/pend_dose01_s1_g0', '2026-11-01T02:09:13Z') {'gpu_seconds': 30}
+job ('la_ko_s1', 'ckpts/coe/stage1_ko_s1.pt', 'job', None, '2026-11-01T08:48:13Z') {'gpu_seconds': 11}
+job (None, 'ckpts/coe/ladder/la_ko_s1_r32.pt', 'job', 'artifacts/coe/eval/r32_ko_s1_x0.jsonl', '2026-11-01T10:11:21Z') {'gpu_seconds': 4732, 'gen_tokens': 86582392, 'attempts': 269824, 'actions': 5338071, 'lean_checks': 165658}
+job ('la_dose01_s0', 'ckpts/coe/stage1_dose01_s0.pt', 'job', None, '2026-11-01T12:07:05Z') {'gpu_seconds': 3}
+job ('la_dose01_s1', 'ckpts/coe/stage1_dose01_s1.pt', 'job', None, '2026-11-01T13:16:05Z') {'gpu_seconds': 3}
+job (None, 'ckpts/coe/ladder/la_dose01_s0_r16.pt', 'job', 'artifacts/coe/eval/r16_dose01_s0_x0.jsonl', '2026-11-01T13:21:37Z') {'gpu_seconds': 4461, 'gen_tokens': 79942734, 'attempts': 269824, 'actions': 4756851, 'lean_checks': 159652}
+job ('la_dose01_s2', 'ckpts/coe/stage1_dose01_s2.pt', 'job', None, '2026-11-01T14:09:58Z') {'gpu_seconds': 3}
+job (None, 'ckpts/coe/ladder/la_dose01_s1_r16.pt', 'job', 'artifacts/coe/eval/r16_dose01_s1_x0.jsonl', '2026-11-01T14:46:33Z') {'gpu_seconds': 5410, 'gen_tokens': 83774995, 'attempts': 269824, 'actions': 4937973, 'lean_checks': 171489}
+job (None, 'ckpts/coe/ladder/la_dose01_s2_r16.pt', 'job', 'artifacts/coe/eval/r16_dose01_s2_x0.jsonl', '2026-11-01T15:51:45Z') {'gpu_seconds': 6099, 'gen_tokens': 85671189, 'attempts': 269824, 'actions': 4897684, 'lean_checks': 156568}
