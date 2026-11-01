@@ -1088,3 +1088,12 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `compute.{json,md}` — no 1.25× flag; `lean_recheck.json` — 83 / 83 counted first-solving proofs accepted, 83 / 83
   goal-negated rejected (dose01 77, knockout s1 6); `argsdiff.md`. Write-ups: `run_coe_dose01.md`,
   `summary_coe_dose01.md`, `numbers.md` § coe-dose01, `rl_needed/README.md` (updated figure README for the librarian).
+- 16:14 UTC  **Claim check and close.** An adversarial subagent re-derived the write-ups' claims from the files: first pass 229
+  claims — 4 wrong, 1 unsupported, 9 overclaims (e.g. "round 1 looks like the knockout" applied to held-out counts where s2
+  matched the 1 % arm; a causal "tenfold dose → 3× RL" at n = 3; the compute-match and knockout-r32 misses left out of the
+  hits/misses; an untested explanation in a table cell; "≈ 6 pod-hours" not derived; "first" where six members tie); all
+  fixed. Second pass on the rewritten text: 70 / 71 OK, 1 minor (distinct proofs vs attempts) fixed. Every recomputed core
+  number held (crossings, y, p-values, IQMs, reads, cut-offs, Lean re-check, compute, spend). One slip by the checker: a
+  textbook72 prompt appeared in its own tool output (never in any file or document). Word counts (prose, excluding table
+  pipes and list markers): `run_coe_dose01.md` 399, `summary_coe_dose01.md` 600. Bucket upload done
+  (`hf://buckets/dan-pandori/nd-rl/coe-dose01/`, 515 objects; secret scan 0 hits / 118 VPS-side files).

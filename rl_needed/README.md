@@ -28,9 +28,10 @@ round-1 samples at k 32.
 - **Observed:** a little σ in pretraining makes it cheap for RL to recover the capability. With none, 16 rounds of
   this RL (32 for knockout s1) leave all six knockout seeds far below the bar. So without σ the RL needed is at least
   about 8× what a 1 % dose needs (5.6× against 0.73×; about 15× seed against seed at the medians).
-- **Observed (coe-dose01): a graded response.** With σ in 0.1 % of pretraining (155 of 155,000 proofs) the bases look
-  like knockout bases in their own round-1 samples (0–2 free positive reductios against 170–219 at 1 %; 0, 0 and 3 of 106
-  held-out members), yet RL crosses the bar on all three seeds, at a median 1.37× (≈ 3× the 1 % arm's median 0.41×).
+- **Observed (coe-dose01): a graded response.** With σ in 0.1 % of pretraining (155 of 155,000 proofs) the bases barely
+  use σ in their own round-1 samples (0–2 free positive reductios; knockout 0, 1 % 170–219; 0, 0 and 3 of 106 held-out
+  members), yet RL crosses the bar on all three seeds, at a median 1.37× (≈ 3× the 1 % arm's median 0.41×; s2's 0.69×
+  overlaps the 1 % range).
   At round 16 they solve 30 / 28 / 19 of 106 (1 %: 58 / 34 / 30). Crossing 3 / 3 against the knockout's 0 / 6: one-sided
   Boschloo p = 0.0033. The 0.1 % vs 1 % differences are descriptive at n = 3.
 - **Interpretation, not tested here:** the knockout row is a lower bound. Knockout s1's free positive reductios grew from
@@ -55,7 +56,7 @@ round-1 samples at k 32.
 
   Round 1 is the base's own samples, so it sits at about 0.1×.
 - **Check:** each ladder's total, including its last fine-tune, agrees with rl-compute-share's published ratio to two
-  decimals (within 0.02 %: the extraction splits the state re-prefill per round, `ourruns.py` per ladder) on all 14
+  decimals (largest gap 0.0012×, 0.021 %: the extraction splits the state re-prefill per round, `ourruns.py` per ladder) on all 14
   ladders it counted (for example knockout s1 9.78× at r24, dose1 s0 5.97×). coe-dose01 re-ran the unchanged extraction
   and reproduced the published `rl_curve.json` exactly before adding its ladders.
 - **Ladders:**

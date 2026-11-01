@@ -1999,9 +1999,10 @@ rl-compute-share's `review_rcs/ourruns.py` definitions). **Bar** = 14 (full base
   contraposition_conv 9 / 18, at the bar); **r16 plain x0 31 / 28 / 19** — families at the bar s0 and s1
   contraposition_conv + negated_conditional (acquired during RL: at the bar at r16, not at the base, same plain draw);
   s2 contraposition_conv (18 / 18 at r16; 6 / 18 in the base plain read, 9 / 18 — at the bar — in the base guided read).
-  Strict-stratum cut-offs: base 0 / 1.13 / 0 %, r16 1.56 / 3.15 / **8.46 %** (1 % arm's s2 at r16: 8.84 %). No r16 guided read (log 09:14).
+  Strict-stratum cut-offs: base 0 / 1.13 / 0 %, r16 1.56 / 3.15 / **8.46 %** (1 % arm's s2 at r16: 8.84 %). No r16 guided read (log 09:16).
 - Held-out greedy (`data/p2/heldout.jsonl`, 5,000): 0.893 / 0.865 / 0.835 (knockout 0.867–0.895, 1 % 0.917–0.945, full
-  0.958–0.968; `artifacts/coe/eval/heldout_*.json`).
+  s3–s5 0.958–0.968; `artifacts/coe/eval/heldout_*.json`). The 0.1 % mean (0.865) is below the knockout mean (0.883) at
+  comparable Stage-1 steps; not explained here.
 - **Lean re-check** (`artifacts/coe-dose01/lean_recheck.json`, `coe/d01_lean_recheck.py`, Lean 4.35.0 on the VPS): the
   first-solving proof of every counted member — s0 30 / 30, s1 28 / 28, s2 19 / 19 accepted; goal-negated copies 30 / 28 / 19
   rejected; median term size 11.5 / 13 / 7, median ND lines 12 / 14.5 / 8. All accepted proofs of strict members:
@@ -2024,9 +2025,11 @@ process time incl. the per-round reads): 15.28 / 16.41 / 17.29 (1 % mean 15.66);
 checks 2.15 / 2.18 / 2.17 M; 9,600 fine-tune steps each. Knockout s1 r25–32: 10.17 GPU-h, 395 M tokens, 4,800 steps.
 **Pod time (what was paid, `artifacts/coe-dose01/pod_hours.tsv` from `~/podhours.log`):** 4 × NVIDIA A40 SECURE at
 $0.59/h — cd01-s0 17.16 h $10.12, cd01-s1 18.50 h $10.91, cd01-s2 19.40 h $11.45, cd01-k1 11.65 h $6.87; **total 66.70 h,
-$39.35** of $45 / 90 h. ≈ 6 pod-hours went to a host-side slowdown on all four pods (05:30–08:30 UTC 11-01, log 09:14).
+$39.35** of $45 / 90 h. A slowdown on all four pods (≈ 05:30–08:30 UTC 11-01; cause not identified — a host-side CPU
+  slowdown fits, not proven; log 07:30–09:16) cost ≈ 8 pod-hours (≈ $4.7): each slow round's time over that ladder's
+  typical round (median of the three rounds before it) — s0 r12–13 1.5 h, s1 r11 2.0 h, s2 r10–11 2.4 h, knockout s1 r32 2.1 h (`round_*.json` secs).
 
-**Example (Lean).** The first strict held-out member s1 solved (round 6, `la_transfer_400`, contraposition_conv; 8 ND
+**Example (Lean).** One of the six strict held-out members s1 first solved in round 6 (`la_transfer_400`, contraposition_conv; 8 ND
 lines, term size 7; `nd2lean.translate` of the stored proof, accepted by Lean in the re-check):
 ```lean
 theorem t (P Q R S : Prop) (h1 : ((¬(R ∨ (R ∧ Q))) → (¬S))) : (S → (R ∨ (R ∧ Q))) := by
@@ -2053,7 +2056,8 @@ theorem t (P Q R S : Prop) (h1 : ((¬(R ∨ (R ∧ Q))) → (¬S))) : (S → (R 
 | crossing seeds' median x | 1.0–3.0× | 1.37× | hit |
 | r16 plain read | 22 (3–50); ≥ 1 family on 2 / 3 | 31 / 28 / 19; 3 / 3 | hit; above |
 | base plain read: families | 0 on ≥ 2 / 3 | 0 on 3 / 3 | hit |
-| held-out greedy | 0.91–0.95 | 0.893 / 0.865 / 0.835 | **miss** (the measure is σ-sensitive) |
+| held-out greedy | 0.91–0.95 | 0.893 / 0.865 / 0.835 | **miss** (in / below the knockout range 0.867–0.895; unexplained) |
+| compute vs the 1 % arm, per ladder | within 0.95–1.05× | 0.940–1.104× (GPU-s s2 1.104 in the slowdown; train tokens s0 0.940) | miss (no 1.25× flag) |
 | x at r16 (with last ft) | 5.6–6.1× (5.9–6.4×) | 5.67 / 5.94 / 5.71× (5.91 / 6.20 / 5.95×) | hit |
 | reading | graded (0.5) | graded | hit |
 | knockout s1 y r32 | 7 (80 %: 5–12); P(≥ 14) 0.1 | 6; not reached | hit |
@@ -2070,3 +2074,12 @@ diagnostic sample of `la_ko_s1_r31.pt` (64 targets × 8, ND_OFFLINE) during the 
 `artifacts/coe-dose01/diag/`, not in the compute. (5) Read settings kept at batch 512 / 96 steps / 512 tokens per
 action although strict-stratum cut-offs exceed the policy's ≈ 0.1 % (0–8.46 %), to stay comparable with the inherited
 arms (the 1 % arm's s2 r16 read: 8.84 %).
+
+**Bucket** (public; `hf://buckets/dan-pandori/nd-rl/coe-dose01/`, 515 objects, 22.7 GB at the end; secret scan of the
+VPS-side files 0 hits / 118): `ckpts/coe/stage1_dose01_s{0,1,2}.pt`, `ckpts/coe/ladder/la_dose01_s{S}_r{1..16}.pt`,
+`ckpts/coe/ladder/la_ko_s1_r{25..32}.pt`; `artifacts/coe/ladder/la_dose01_s{S}/` and `la_ko_s1/` (round, alloc,
+last found / found_transfer files — `coe_rounds.py` inputs), `artifacts/coe/rounds/` (incl.
+`heldout_proofs_*.jsonl.gz`), `artifacts/coe/eval/` (read rows), `artifacts/coe/dump/` (Lean gate dumps),
+`artifacts/coe/logs/`, `artifacts/coe-dose01/` (summary, compute, Lean re-check, pod logs, registry copy), `rl_needed/`.
+Registry rows also at `hf://buckets/dan-pandori/nd-rl/registry/coe-dose01/`. No new data: K12^0.1% and K12⁻ are in
+`create-or-elicit/data/coe/`.
