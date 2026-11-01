@@ -1060,3 +1060,9 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   above the pre-registered $39 condition for the r16 guided reads (≈ $45 with them, where `pod_budget_watch` deletes
   pods). **Markers removed; no r16 guided read** (policy guided default not met for r16 — the base g0 reads exist; the
   1 % arm has no r16 g0 either). Spend $28.91 / 49.0 pod-h at 09:14.
+- 10:13 UTC  **Priority 2 done; cd01-k1 reaped and deleted** (11.65 h, $6.87; `pod/d01/reap.sh`: only rounds 25–32 and
+  `args_r25-32.json` pulled into `la_ko_s1/`, create-or-elicit's `args.json` untouched). r32 plain read (k 256, `read1054`,
+  batch 512): strict held-out members **5 / 106** (contraposition_conv 4, generated 1; no family at the bar) — r24 had 5
+  (create-or-elicit); pre-registered point 7, 80 % 5–14. Cut-off share on the strict stratum 3.78 % (all theorems 0.60 %).
+  Whole-read pass@256 895 / 1,054. Bucket `coe-dose01/ckpts/coe/ladder/`: 45 checkpoints (knockout s1 r25–r32 + the dose01
+  rounds so far). Extraction: knockout s1's x after r32's sampling 13.23× (13.51× with the last fine-tune), y 6.

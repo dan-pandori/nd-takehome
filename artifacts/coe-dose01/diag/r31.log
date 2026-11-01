@@ -1,0 +1,15 @@
+[lean_gate] 512 samples, parse-fail 32 (no-eos 0, 0.000 %), distinct 480: ok 471, rej 9 (filter 9, prefilter=on); lean on 471 texts in 2 procs, 5.7s proc, exposed 4.8s, tail 4.8s, 32 workers
+[la_ko_s1_r31.pt on t64.jsonl k=8 T=0.8] SOLVED 61/64 = 0.953 [0.871,0.984]
+  len 7: 14/14 = 1.000 [0.785,1.000]
+  len 8: 4/5 = 0.800 [0.376,0.964]
+  len 9: 27/28 = 0.964 [0.823,0.994]
+  len 10: 12/12 = 1.000 [0.757,1.000]
+  len 11: 1/1 = 1.000 [0.207,1.000]
+  len 12: 2/2 = 1.000 [0.342,1.000]
+  len 13: 1/1 = 1.000 [0.207,1.000]
+  len 14: 0/1 = 0.000 [0.000,0.793]
+  written hist {7: 2, 8: 11, 9: 20, 10: 53, 11: 41, 12: 34, 13: 29, 14: 34, 15: 34, 16: 28, 17: 26, 18: 22, 19: 15, 20: 15, 21: 16, 22: 15, 23: 10, 24: 4, 25: 6, 26: 12, 27: 3, 28: 3, 29: 2, 30: 2, 31: 2, 32: 4, 34: 1, 36: 3, 37: 1, 41: 1}
+  pruned hist {7: 19, 8: 41, 9: 57, 10: 40, 11: 7, 12: 47, 13: 39, 14: 30, 15: 37, 16: 21, 17: 20, 18: 15, 19: 17, 20: 15, 21: 13, 22: 6, 23: 8, 24: 3, 25: 4, 26: 2, 27: 1, 28: 1, 29: 2, 32: 1, 33: 1, 35: 1, 36: 1}
+  frontier written 26 pruned 23
+  reasons [('lean rejected', 9), ('lean_seq parse: env: binder mismatch', 9), ('lean_seq parse: env: Or.elim on non-or', 5), ('lean_seq parse: env: unbound', 5), ('lean_seq parse: env: step cap', 5), ('lean_seq parse: env: exact goal mismatch', 4)]
+env {"env_end": {"syntax": 27, "done": 480, "step_cap": 5}, "env_fail_reason": {"Or.elim on non-or": 5, "exact goal mismatch": 4, "unbound": 5, "binder mismatch": 9, "no semicolon": 1, "names exhausted": 1, "have name": 1, "exact not last": 1}, "env_steps": {"3": 3, "5": 3, "8": 4, "9": 12, "10": 22, "11": 59, "12": 42, "13": 34, "14": 31, "15": 34, "16": 37, "17": 33, "18": 31, "19": 24, "20": 16, "21": 19, "22": 21, "23": 17, "24": 12, "25": 4, "26": 9, "27": 14, "28": 3, "29": 3, "30": 2, "31": 2, "32": 2, "33": 4, "34": 1, "35": 1, "37": 3, "38": 1, "39": 1, "40": 1, "42": 1, "47": 1, "48": 5}, "prompt_tokens": 803320, "steps": 2704, "rows": 8777, "rowsteps": 235216, "prompt_len_max": 248, "chunks": 48, "stop_eos": 8777, "stop_exact": 0, "stop_goal": 0, "names_defined": 7873, "names_renamed": 577, "env_waves": 48, "env_wall_s": 38.098726987838745, "peak_alloc_gb": 3.181870937347412, "peak_reserved_gb": 3.70703125, "action_declen_mean": 16.93904523185599}
