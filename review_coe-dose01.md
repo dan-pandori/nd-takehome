@@ -40,10 +40,14 @@ pre-registration `preregistration/coe-dose01.md` (commit feff6b1c). Kit: `review
   had finished 2 rounds (registry round-2 rows 22:21–22:29), as the pre-registration's rule requires.
 - Spend (`~/podhours.log`): 66.70 A40-hours (s0 17.16, s1 18.50, s2 19.40, k1 11.65) = **$39.35** of $45 at $0.59 / h.
 - textbook72: my strict scan (explicit sequents in ND, `⊢` and Lean-header notation, premise-order-invariant renaming
-  class, positive control 215 / 216 rendered statements caught) finds **0** textbook72 sequents in the 218 text files
-  the run committed. A looser co-occurrence scan flags 11 lines of `log.md`, 13 of `numbers.md` and 2 of each of two
-  rounds JSONs (formula pieces of a textbook72 class on one line, not a sequent) — to look at in phase 2. The read rows
-  in the bucket contain textbook72 prompts by design (scoring), as create-or-elicit's do.
+  class; positive control 215 / 216 rendered statements caught, `out/tb72strict_controls.log`) finds **0** textbook72
+  sequents in the 156 non-binary files the run committed (`8e195390..ec488738`, `out/tb72strict_run.log`). A looser
+  co-occurrence scan (`out/tb72scan_run.log`) flags 28 (line × class) pairs on 14 lines of `log.md`, `numbers.md` and two
+  rounds JSONs (formula pieces of a textbook72 class on one line, not a sequent) — resolved in phase 2. The read rows
+  in the bucket contain textbook72 prompts by design (scoring), as create-or-elicit's do. My kit and this review: 0 / 73
+  files under both scans (`out/tb72scan_kit.log`, `out/tb72strict_kit.log`) — after I replaced my first unit tests,
+  which used textbook staples (MP, LEM, MT, DNE, Peirce) that are textbook72 classes, before the phase-1 commit (the
+  phase-1 commit still carried a stale count-only scan log from before that fix).
 
 ### Models (every number below is on these)
 
@@ -52,8 +56,8 @@ pre-registration `preregistration/coe-dose01.md` (commit feff6b1c). Kit: `review
   **K12^0.1%** (`data/coe/train_k12dose01.jsonl`, md5 `5fed3787…` = the registry's `data_md5`), best recipe, 1,201 s on
   an A40: 23,918 / 24,010 / 24,231 steps, 3.64–3.69 epochs of pairs, D = 439.5 / 441.2 / 445.3 M training tokens.
   Stage-1 config identical to the 1 % arm's except `data` / `out`.
-- **K12^0.1% composition (own σ predicate: DN citing, after reiteration, a NEGI line):** 155,000 records, **155 σ
-  (0.100 %)**; K12⁻ 0; K12^1% 1,550. K12^0.1% = K12⁻ with 155 refill records replaced by 155 σ records. **Only 17 of the
+- **K12^0.1% composition (own σ predicate: DN citing, after reiteration, a NEGI line; `out/extras.json`):** 155,000
+  records, **155 σ (0.100 %)**; K12⁻ 0; K12^1% 1,550. K12^0.1% = K12⁻ with 155 refill records replaced by 155 σ records. **Only 17 of the
   155 are among the 1 % arm's 1,550** — the two doses are independent draws, not nested.
 - **Knockout s1 r25–32:** `stage1_ko_s1.pt` (same architecture, K12⁻) continued from create-or-elicit's `la_ko_s1_r24.pt`.
 - **Inherited arms** (recounted by me from create-or-elicit's own found_transfer files): 1 % dose s0–s2 (K12^1%),
@@ -62,7 +66,8 @@ pre-registration `preregistration/coe-dose01.md` (commit feff6b1c). Kit: `review
 ### Ladder settings
 
 `args.json` of each 0.1 % ladder differs from the same seed's 1 % ladder only in `init`, `name`, `train`; knockout s1
-r25–32 differs from its r17–24 segment only in `start_round` / `rounds`. Ladder seed = Stage-1 seed in every arm.
+r25–32 differs from create-or-elicit's last segment (`args_r17-24.json`, which holds the r21–24 launch: start_round 21,
+rounds 4) only in `start_round` / `rounds`. Ladder seed = Stage-1 seed in every arm.
 
 ### The 106 strict σ-covered held-out members
 
@@ -129,7 +134,7 @@ Per seed, with the inherited arms recounted from create-or-elicit's own found_tr
 The bar: the six full-exposure bases' r1 y are 13 / 10 / 17 (full s3–s5, recounted by me) and 15 / 2 / 19 (old full
 s0–s2, from create-or-elicit's `old_full_s*.json`, not recounted) → median **14** — reproduces. The 1 % arm's crossings
 reproduce at r2 / r2 / r3 = 0.39 / 0.41 / 0.73× and the knockout's r16 y at 0 / 3 / 0 / 1 / 0 / 0 (s0–s5), knockout s1
-r24 y 5 at 9.52× (≈ 9.79× incl. that round's fine-tune).
+r24 y 5 at 9.52× (9.78× incl. that round's fine-tune).
 
 ### Reads and held-out greedy (own counts from the per-theorem rows)
 
@@ -165,7 +170,8 @@ knockout s1, r25–32 (proofs / targets): r25 152 / 9, r26 113 / 9, r27 148 / 9,
 ### Lean re-check of the counted proofs (literal texts)
 
 Population: every distinct (prompt, literal Lean text) in each ladder's `LEAN_GATE_DUMP` whose prompt is a strict member
-and that the run recorded as Lean-accepted, joined to its first-found round through the ND string. Own harness
+and that the run recorded as Lean-accepted, joined to its first-found round through the ND string (16 / 23 / 17 / 7 texts
+per ladder have an ND string not in found_transfer — checked, but not joined). Own harness
 (`review_cd01/leanrc.py`): one theorem per line, `#print axioms` per theorem, any error rejects, axioms ⊆ {propext,
 Classical.choice, Quot.sound}. **Controls first:** untouched counted texts 240 / 240 pass; the same texts on another strict
 member's statement with the same premise count 0 / 199; `sorry` 0 / 20 (rejected via `sorryAx`); prefilter-rejected
@@ -175,7 +181,8 @@ The dumps hold **no** Lean-rejected rows (with the prefilter on, the filter deci
 sampled prefilter-rejected texts (1-in-200 per ladder) pass Lean, so there is no sign of the filter lowering counts.
 
 **Result: 0 rejections** — 14,690 / 14,690 counted texts of the 0.1 % arm and 713 / 713 of knockout s1 r25–32 pass;
-y recomputed from harness-accepted texts equals y in every round.
+y recomputed from harness-accepted texts equals y in every round. (Knockout s1's members first found in rounds 10 and
+17–24 have no dump in this run; they belong to the create-or-elicit review.)
 
 | ladder | distinct counted literal texts (dump, strict members, Lean-accepted in the run) | accepted by my harness | y_lean = y at every round | found_transfer strict rows without a dump text |
 |---|---|---|---|---|
@@ -244,7 +251,7 @@ All sample / eval / fine-tune rows carry arm, seed, round and GPU (NVIDIA A40). 
 | base plain read: 0 families acquired on ≥ 2 / 3 | 0 / 0 / 0 (s2 contraposition_conv 6 / 18) | hit (guided base: s2 9 / 18 = 50 %, acquired) |
 | p2 held-out greedy 0.91–0.95 | 0.893 / 0.865 / 0.835 | **missed on 3 / 3** |
 | x at r16 5.6–6.1× (incl. last fine-tune 5.9–6.4×) | 5.67 / 5.94 / 5.71× (5.91 / 6.20 / 5.95×) | hit |
-| compute: every per-ladder quantity 0.95–1.05× the 1 % mean; > 1.25× flagged | tokens / attempts / steps 0.94–1.06×; GPU-s 0.93–1.33× (**s2 eval GPU-s 1.33×**) | **partly missed**; one > 1.25× flag due |
+| compute: every per-ladder quantity 0.95–1.05× the 1 % mean; > 1.25× flagged | tokens / attempts / steps 0.94–1.06×; GPU-s per ladder 0.98–1.10× | **partly missed**; no 1.25× flag at the ladder level (the policy's unit); by phase, s2's eval GPU-s is 1.33× the 1 % mean (the slowdown) |
 | reading rule | 3 / 3 cross, median x 1.37× > 0.73×, only 1 seed ≤ 0.73× | **graded** (pre-registered P 0.5) |
 | knockout s1 r32: y point 7 (5–12); P(y ≥ 14) 0.1 | 6; not reached | hit |
 | knockout s1 r32 plain read: point 7 (5–14) | 5 | hit (lower edge) |
@@ -262,8 +269,8 @@ All sample / eval / fine-tune rows carry arm, seed, round and GPU (NVIDIA A40). 
 2. **`rl_needed/` full s5 curve.** `~/work/create-or-elicit` has no `la_full_s5/round_*.json` (never tracked), so
    `extract_rl_curve.py` gets no prefill for that ladder: x at r16 would be 4.01× instead of 6.17× (6.44× incl. the last
    fine-tune) computed with the bucket's round files. Check `rl_curve.json`.
-3. GPU-time flag (s2 eval 1.33×), the missed compute expectation, the two missed reductio intervals and the missed
-   held-out greedy interval: are they reported as misses?
+3. The phase-level GPU-time excess (s2 eval 1.33×), the missed compute expectation, the two missed reductio intervals
+   and the missed held-out greedy interval: are they reported as misses?
 4. No guided read at r16 (policy default) — is the deviation stated?
 5. The doses are independent σ draws (17 / 155 shared): any wording implying 0.1 % ⊂ 1 %?
 6. Every number's model label; "graded" vs the pre-registered rule; wording on n = 3.
@@ -273,6 +280,165 @@ All sample / eval / fine-tune rows carry arm, seed, round and GPU (NVIDIA A40). 
 
 `review_cd01/`: `common.py` (parsers, renaming-class keys, G4ip, Lean statements, self-test), `ycurve.py`,
 `flops.py`, `reductio.py`, `reads.py`, `dumpfilter.py`, `leanrc.py`, `recheck.py`, `filtercheck.py`, `sizes.py`,
-`splits.py`, `compute.py`, `argsdiff.py`, `stats.py`, `tb72scan.py`, `tb72strict.py`, `tables.py`, `dl_small.sh`.
+`splits.py`, `compute.py`, `argsdiff.py`, `stats.py`, `tb72scan.py`, `tb72strict.py`, `tables.py`, `dl_small.sh`;
+added in phase 2: `extras.py`, `tb72controls.py`, `tb72loose_lines.py`.
 Large inputs streamed from the bucket into `~/review/cd01_big/` (scratch, deleted at the end).
+
+## Compare (phase 2: the executor's `run_coe_dose01.md`, `summary_coe_dose01.md`, `numbers.md` § coe-dose01, `log.md`, `rl_needed/README.md`, `artifacts/coe-dose01/{summary,compute}.md`)
+
+Read after commit `323c654f` (§Recount). "Mine" = the recount above unless stated. Verdicts: **R** reproduces, **D** differs
+(by how much), **W** reproduces but the wording needs a change, **ND** not derivable.
+
+### `run_coe_dose01.md`
+
+| claim | mine | verdict |
+|---|---|---|
+| Title: 0.1 % σ → RL brings σ back on 3 / 3 seeds at 0.7–2.6× | 3 / 3 at 0.69 / 1.37 / 2.58× | R |
+| Models: 9.56 M ALiBiGPT `lean_staten`, from scratch on K12^0.1% (155 σ in 155,000), s0–s2, 16 T1 EI rounds; `args.json` differs only in init, name, data | 9,560,832 params; 155 σ / 155,000 (own predicate); args differ only in `init` / `name` / `train` | R |
+| "Other rows: create-or-elicit's ladders" | the full row's 6 seeds include trajectory / rl-continue's `la_T1_best12_s0–2` (create-or-elicit's `old_full`) | W (label; the README states it correctly) |
+| 106 strict members never trained on; bar 14 = full bases' median before RL | 106 reproduce from the definition (own G4ip); transfer_track832 shares 0 classes with every training file; median of 13 / 10 / 17 (own) and 15 / 2 / 19 (inherited) = 14 | R |
+| Table, full: "none", 6 seeds | true of the median by construction; per seed 3 / 6 are below 14 before RL (2, 10, 13) and cross at r2 at 0.39–0.43× — inside the 1 % arm's range 0.39–0.73× (panel b of the figure says "3 of 6 seeds already ≥ 14") | W |
+| 1 %: 0.39 / 0.41 / 0.73× (r2–r3), 3 / 3 | 0.387 / 0.405 / 0.729×, r2 / r2 / r3 | R |
+| **0.1 %: 0.69 / 1.37 / 2.58× (r3, r5, r8), 3 / 3** | **0.690 / 1.373 / 2.576×, r3 / r5 / r8** | R |
+| knockout: not reached by 5.6–13.2×, 0 / 6 | r16 x 5.58–6.13× (s1 recounted: 5.93×), s1 13.23× at r32; 0 / 6 | R |
+| Reading "graded"; median 1.37× later than every 1 % seed; s2 overlaps | rule evaluated mechanically → graded; 1.37 > 0.73; s2 0.69 inside 0.39–0.73 | R |
+| Crossing 3 / 3 vs 0 / 6 Boschloo p = 0.0033; y r16 30 / 28 / 19 vs 0–3, MW p = 0.012 | 0.0033; 30 / 28 / 19 vs 0 / 3 / 0 / 1 / 0 / 0; 0.012 | R |
+| vs 1 % (58 / 34 / 30): gap inside the MDD (≈ 46) | IQM gap 15; MW p 0.10; crossing-x MW p 0.10 | R |
+| Round 1: free positive reductios 1 / 0 / 2 (knockout 0; 1 % 170–219); held-out 0 / 0 / 3 (1 % 3 / 13 / 2) | 1 / 0 / 2; 0 / 0 / 3; 1 % 3 / 13 / 2 (own) | R |
+| "EI amplified it to 464–1,116 per round by r16" | 697 / 1,116 / 464 | W: numbers R; "amplified" is causal while the mix also replays ≈ 20 σ records per round (the run states this in its Caveats paragraph) |
+| r16 plain reads 31 / 28 / 19; contraposition_conv acquired on 3 / 3, negated_conditional on s0, s1 | same, plain vs plain (s2's base *guided* read already had contraposition_conv at 9 / 18 = 50 %, as `numbers.md` says) | R |
+| Lean re-check 77 / 77 accepted, goal-negated copies rejected | consistent; their check runs Lean on `nd2lean` re-renderings of the first-solving ND proof; mine on the literal sampled texts: 14,690 / 14,690 (+ 713 / 713 knockout) | R |
+| Knockout s1 r25–32: y 5 → 6 by 13.2×; reductios ≈ 140 per round; r32 read 5 / 106 | 5 → 6, 13.23×; 113–154 (mean 141); 5 | R |
+| Hits / misses list (misses: round-1 reductios, held-out greedy, compute match, knockout r32 reductios) | my scoring finds the same four misses; the arm-level point estimate (2 / 3, outcome 3 / 3) is also reported ("point estimate 2 / 3") | R |
+| Caveat: replay ≈ 20 σ records per round | 21.3 / 20.4 / 19.2 per round on average (s0 / s1 / s2); single rounds 11–31; 48 mixes (`out/extras.json`) | R |
+| Cost $39.35 of $45, 66.70 A40 pod-hours | same (`~/podhours.log`) | R |
+
+### `numbers.md` § coe-dose01 (rows not already above)
+
+| claim | mine | verdict |
+|---|---|---|
+| Stage-1 md5 1f42d5a8 / 890b2fdc / 1e151d80; 23,918 / 24,010 / 24,231 steps; 3.64–3.69 epochs; D 4.40 / 4.41 / 4.45 × 10⁸ | registry md5s same; steps, epochs from the pod logs; D 439.5 / 441.2 / 445.3 M | R |
+| K12^0.1% md5 5fed3787; K12⁻ with 155 refill records replaced by 155 removed σ records (`log.md` 21:00 adds: the two dose sets drawn separately, 17 shared) | same (`out/extras.json`) | R |
+| y by round and r16 families, all three seeds | identical lists | R |
+| free positive reductio per round, all three seeds | identical lists | R |
+| σ-covered trained targets r1 → r16: 0 → 42, 0 → 41, 2 → 29; knockout flat at 9, contraposition_conv share 0.33 | same (r24–32 checked) | R |
+| IQMs 25.67 [19, 30], 1 % 40.67 [30, 58], knockout 0.25 [0, 1.75]; y r1 IQM 1.00 [0, 3]; tests | same | R |
+| Reads: base x0 0 / 0 / 6, g0 0 / 0 / 9; r16 31 / 28 / 19; strict cut-offs base 0 / 1.13 / 0 %, r16 1.56 / 3.15 / 8.46 % | same | R |
+| Held-out greedy 0.893 / 0.865 / 0.835; knockout 0.867–0.895, 1 % 0.917–0.945, full s3–s5 0.958–0.968; 0.1 % mean 0.865 < knockout mean 0.883 | same (inherited values read from create-or-elicit's eval files) | R |
+| Lean re-check medians: term size 11.5 / 13 / 7, ND lines 12 / 14.5 / 8 (first-solving proofs) | different population: 150 sampled counted texts per ladder give term size 14 / 12 / 11, pruned lines 13 / 13 / 12 | ND as stated (not a discrepancy) |
+| Knockout s1: y list, 13.23× (13.51×), reductio list, read 5 / 106 (cc 4, generated 1), cut-off 3.78 %, r32 11,351 s vs r25–31 3,442–3,708 s | same (3,443–3,708 s) | R |
+| Compute: 0.94–1.10× the 1 % mean per ladder, no 1.25× flag; GPU-h 15.28 / 16.41 / 17.29 (1 % 15.66); tokens 650 / 671 / 664 M; Lean checks 2.15 / 2.18 / 2.17 M; knockout 10.17 GPU-h, 395 M, 4,800 steps | same at the ladder level; by phase, s2's eval GPU-s is 1.33× (s1 1.22×) the 1 % mean — the slowdown, not work (its eval tokens 1.06×) | R |
+| Slowdown ≈ 8 pod-hours (≈ $4.7) | 8.06 h, $4.75 by the stated method | R |
+| Example: `la_transfer_400` (contraposition_conv), one of six members s1 first solved in r6 | first solved r6, six members at r6; the shown proof is accepted by Lean 4.35 (standard axioms only) | R |
+| Expectations table | all rows match my scoring | R |
+| Deviations (no r16 guided read; read settings kept despite cut-offs) | stated; see Verdict | R |
+| Bucket: 515 objects, 22.7 GB | 515 objects, 22.72 GB | R |
+
+### `summary_coe_dose01.md`
+
+| claim | mine | verdict |
+|---|---|---|
+| "Full models start at the bar" | median at the bar; 3 / 6 start below it (2, 10, 13) | W |
+| "the knockout models not even after 6–10 times" (before this run) | 5.6–9.5× after the last sampling, 5.8–9.8× incl. the last fine-tune | R (fair rounding) |
+| bases: 0–2 free reductios (knockout 0, 1 % 170–219); 0 / 0 / 3 of 106 (1 % 3 / 13 / 2); p2 greedy 0.84–0.89 in or below the knockout range 0.87–0.90, not near 1 % 0.92–0.95 | same | R |
+| "RL found the trace and amplified it, on every seed" | free reductios 1 / 0 / 2 → 697 / 1,116 / 464; s1's base wrote none; replay carries ≈ 20 σ records per round | W (causal; replay confound) |
+| crossings, r16 counts, families, knockout s1 5 → 6 by 13× | same | R |
+| median RL ≈ 3× the 1 % arm's (descriptive) | 1.37 / 0.41 = 3.4×; MW p 0.10 | R (flagged descriptive) |
+| "only the contrast with the knockout is statistically resolved (p = 0.003)" | 0.0033 | R |
+
+### `rl_needed/` (figure, `rl_curve.json`, README — the librarian copies these into nd-rl)
+
+| claim | mine | verdict |
+|---|---|---|
+| Unchanged extraction reproduces the published `rl_curve.json` exactly (15 ladders) | x and y identical on all 15 pre-existing ladders against nd-rl's published file | R |
+| New rows: x and y per round for dose01 s0–s2 and knockout s1 r25–32 | my own implementation of `ourruns.py`'s definitions equals `rl_curve.json` exactly (0 difference) on dose01 ×3, dose1 ×3, knockout s1 r1–32; y equal on all 15 recounted ladders | R |
+| "excluding replay lowers x by about 14 %" | 13.4–13.9 % on the new ladders and dose1 s0 | R |
+| "A lower bar (5 of 106) would let knockout s1 count, at 7.3× (round 19)" | y 5 at r19, x 7.25× | R |
+| **"The full s5 ladder's compute rows are about 30 % below its siblings' … plotted dashed"** | **D:** the registry rows are fine; `~/work/create-or-elicit` never tracked `la_full_s5/round_*.json`, so the extraction ran with no state re-prefill for that ladder. With the bucket's round files (`create-or-elicit/artifacts/coe/ladder/la_full_s5/round_*.json`) full s5 sits at r1 0.106×, r16 **6.17×** (6.44× incl. last fine-tune) instead of 0.02× / 4.01× (4.28×) — slightly above its siblings' 5.80–6.05× rather than 30 % below (`out/extras.json`). Inherited from the published figure; fixable | D |
+| Knockout "not reached by 5.6–13.2×"; "between the 0.1 % dose and none the requirement jumps from ≈ 1.4× to more than 13× (one seed)" | five knockout seeds are bounded only at 5.6–6.1×, s1 at 13.2× | W (minor: give both bounds) |
+
+### Gate 0, misses, n, labels
+
+- Expectations were committed (20:25:51 UTC) before the first pod (20:26:32 UTC); every miss my scoring finds is reported as
+  a miss in `run_coe_dose01.md` and `numbers.md`.
+- No "never", "wall" or "bistable" claims. Every 0.1 %-vs-1 % difference is called descriptive at n = 3; the one
+  resolved contrast (vs knockout) has 3 + 6 seeds.
+- textbook72: the loose co-occurrence lines (open item 7) are 5 lines of `log.md` and 5 of `numbers.md` that earlier runs
+  wrote (none added by this run), plus one ND proof line in each of `la_dose01_s2.json` and `la_ko_s1_r32.json` (the
+  `examples` proof of an RL target; RL targets share 0 classes with textbook72). No textbook72 sequent is printed
+  (`out/tb72_loose_lines.log`). The executor's log records that its own claim checker once displayed a textbook72 prompt
+  in tool output only.
+- Model labels: present on every table and headline. Two imprecisions (W rows above): "Other rows: create-or-elicit's
+  ladders" covers trajectory / rl-continue's three full ladders; `numbers.md` calls the full arm "create-or-elicit … full
+  s0–s5" in the same sense. The models are the same architecture and format, so no number changes.
+
+## Verdict
+
+**Stands (reproduced by my own code from raw files):** every headline number. The 0.1 % σ arm (9.56 M ALiBiGPT
+`lean_staten`, from scratch on K12^0.1%) crosses 14 / 106 strict σ-covered held-out members on 3 / 3 seeds, at r3 / r5 /
+r8 = 0.69 / 1.37 / 2.58× RL ÷ pretraining FLOPs (rl-compute-share's definitions). It ends r16 at 30 / 28 / 19 with
+contraposition_conv acquired on 3 / 3 (plain reads). Its bases wrote 1 / 0 / 2 free positive reductios and solved
+0 / 0 / 3 members. Knockout s1 reaches 6 / 106 by 13.23×. The tests hold (crossing vs knockout p = 0.0033; r16 y p = 0.012),
+as do the pre-registered reading "graded", the compute record (at the ladder level), the spend ($39.35) and the
+args diff. Every counted literal text in this run's dumps passes Lean with a validated harness: 14,690 / 14,690 for the
+0.1 % arm and 713 / 713 for knockout s1 r25–32. No hard constraint is violated. Gate 0 holds and the misses are
+reported.
+
+**Must be reworded (no number changes):**
+1. The "full: none" row (`run_coe_dose01.md` table) and "Full models start at the bar" (summary). The bar is the full
+   bases' median, so this holds for the median by construction. Per seed, 3 of 6 full bases start below it and cross at
+   r2 at 0.39–0.43×, overlapping the 1 % arm's 0.39–0.73×. Say "median at the bar before RL; 3 / 6 seeds cross at r2,
+   0.39–0.43×". Figure panel b already says "3 of 6 seeds already ≥ 14".
+2. "EI amplified it" / "RL found the trace and amplified it". Under EI, free reductios rose from 1 / 0 / 2 to
+   697 / 1,116 / 464 per round. The same mix replays ≈ 20 σ records per round, so without a replay-only control the rise
+   cannot be attributed to RL alone; the run's own caveat says part may be replayed exposure. (The knockout ladders, which
+   replay no σ, also grew free reductios — s1 from 11 to 123 per round over r16–24, create-or-elicit's numbers — so RL
+   alone can grow them.) s1's
+   base wrote none.
+3. `rl_needed/README.md` caveat on full s5. Replace "compute rows about 30 % below" by the cause: the round files were
+   missing locally. Better, fix it: copy `la_full_s5/round_*.json` from the create-or-elicit bucket folder, re-run
+   `extract_rl_curve.py` and `make_figure.py`, and drop the dashed "compute rows uncertain" style. Expected: r1 0.106×,
+   r16 6.17× (6.44×). No table number changes; ourruns' Q5 count (14 ladders) can then include full s5.
+4. Minor: "Other rows: create-or-elicit's ladders" → include trajectory / rl-continue for full s0–s2. README: give the
+   knockout bound as > 5.6–6.1× (five seeds) and > 13.2× (s1).
+
+**Caveats the write-ups should add:**
+- **One σ draw per dose.** All three 0.1 % seeds train on the same 155 σ records. The two doses are independent draws
+  (17 of 155 shared). So the 0.1 %-vs-1 % contrast confounds dose with which records were drawn; seeds vary only the
+  initialisation and sampling.
+- **Cut-offs in the samples y comes from.** The written cut-off figures cover the k 256 reads. The ladders' own k 32
+  transfer samples (max_action 256, max_steps 48) cut off up to 1.7 / 3.1 / 2.8 % of all transfer attempts per round in
+  late rounds. These are lower bounds from the round files; per-stratum shares are not derivable. In the r16 reads,
+  excluded_middle (37 of the 106) reaches 3.6 / 6.0 / 20.7 %. Same protocol as the 1 % arm, so the arms stay comparable,
+  but y can only be biased down on long-proof families (a truncated attempt counts as a failure).
+
+**Not supported:** none of the headline claims. The labelled interpretation "needed more compute the rarer the trace
+was" rests on two crossing doses, one σ draw each, and 3 seeds per dose (crossing-x MW p = 0.10). Keep it labelled.
+
+**Next measurements:**
+1. A second, independent 155-record σ draw at 0.1 % (3 seeds) separates dose from draw. With the measured spread, more
+   seeds per dose are needed before calling the 0.1 %-vs-1 % crossing difference.
+2. A replay-only control at 0.1 % (the same mixes without the RL records) tests whether the recovery needs RL on the
+   model's own proofs or comes from the ≈ 20 replayed σ records per round.
+3. The 0.01 % dose would show where between 0.1 % and none the requirement rises.
+4. Re-run the r16 reads (or excluded_middle alone) at max_action 1,024 / max_steps 192 to bound the cut-off bias.
+5. Fix the full s5 curve as in item 3 above.
+
+## Adversarial check of this review
+
+A read-only checker subagent re-derived the review's claims from the files (≈ 15 min). It found no wrong headline or
+table number, and these errors in the review, all fixed in this version:
+- arithmetic: knockout s1 at r24 incl. its fine-tune is 9.78×, not ≈ 9.79×;
+- the replay means were listed in reverse seed order (21.3 / 20.4 / 19.2 for s0 / s1 / s2);
+- a misattributed quote ("drawn separately, 17 shared" is in `log.md`, not `numbers.md`);
+- an internal inconsistency on the compute flag (now: no 1.25× flag at the ladder level; s2's eval phase 1.33×);
+- an overclaim in Verdict item 2 ("cannot be credited to RL" → "cannot be attributed to RL alone without a replay-only
+  control"; the knockout ladders also grew free reductios);
+- "caveat stated two lines later" (it is in the Caveats paragraph);
+- several numbers computed ad hoc and not saved in the kit — now `review_cd01/extras.py` → `out/extras.json`, and the
+  textbook72 scans now save full logs (the strict-scan log in the phase-1 commit was empty because I had filtered it).
+
+§Recount statements corrected after the phase-1 commit (`323c654f` keeps the original): the textbook72 bullet (file count
+156, logs, the kit-test note), the knockout args segment, 9.78×, the Lean population note, and the compute row of the
+scored table. No recounted number changed.
 
