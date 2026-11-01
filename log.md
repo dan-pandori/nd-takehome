@@ -1066,3 +1066,25 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   (create-or-elicit); pre-registered point 7, 80 % 5–14. Cut-off share on the strict stratum 3.78 % (all theorems 0.60 %).
   Whole-read pass@256 895 / 1,054. Bucket `coe-dose01/ckpts/coe/ladder/`: 45 checkpoints (knockout s1 r25–r32 + the dose01
   rounds so far). Extraction: knockout s1's x after r32's sampling 13.23× (13.51× with the last fine-tune), y 6.
+- 11:16 UTC  Interim extraction (`rl_needed/extract_rl_curve.py` with the rounds JSONs made on the pods at 11:15 into
+  /tmp; registry and round files pulled by `pod/d01/reap.sh` without deleting): **crossing of 14 / 106 — s2 at r3, x =
+  0.690×; s0 at r5, 1.373×; s1 at r8, 2.576×** (1 % arm 0.39 / 0.41 / 0.73×). A crossing is fixed once reached (y is
+  cumulative). Stage-1 D = 4.40 / 4.41 / 4.45 × 10⁸ tokens. y so far: s0 29 at r15, s1 26 at r13, s2 19 at r13.
+- 13:35 UTC  **s0 complete; cd01-s0 reaped and deleted** (17.16 h, $10.12). Ladder: 16 rounds (ended 12:07), y by round 0, 0,
+  3, 5, **14** (r5), 17, 21, 23, 26, 27, 28, 28, 29, 29, 29, **30** (r16: contraposition_conv 18, negated_conditional 9,
+  peirce_sequent 2, generated 1; `artifacts/coe/rounds/la_dose01_s0.json`). r16 plain read (k 256, batch 512): strict
+  held-out **31 / 106**; families at the bar contraposition_conv (18 / 18) and negated_conditional — none at the base (0 / 106),
+  so 2 families acquired during RL; strict-stratum cut-offs 1.56 %. Bucket `coe-dose01/ckpts/coe/ladder/`: 55 checkpoints.
+- 14:57 UTC  **s1 complete; cd01-s1 reaped and deleted** (18.50 h, $10.91). y by round 0, 0, 0, 0, 0, 6, 13, **14** (r8), 14, 14,
+  17, 25, 26, 27, 28, **28** (r16: contraposition_conv 18, negated_conditional 8, peirce_sequent 1, generated 1). r16 plain
+  read: strict **28 / 106**, families at the bar contraposition_conv and negated_conditional (none at the base); strict-
+  stratum cut-offs 3.15 %. **s2's ladder complete** (14:10): y 3, 12, **15** (r3), 18, 18, 18, 18, 18, 19 … **19** (r16:
+  contraposition_conv 18, generated 1); its r16 read runs until ≈ 15:40.
+- 15:53 UTC  **s2 complete; cd01-s2 reaped and deleted** (19.40 h, $11.45) — **all pods deleted** (`runpodctl` list empty).
+  r16 plain read: strict **19 / 106** (contraposition_conv 18 / 18 at the bar; 6 / 18 in the base plain read), strict-stratum
+  cut-offs 8.46 %. **Final spend $39.35 / 66.70 pod-hours** of $45 / 90 h (`artifacts/coe-dose01/pod_hours.tsv`).
+  Final analysis: `rl_needed/rl_curve.json` + figure regenerated (the unchanged extraction had reproduced the published
+  curve exactly); `artifacts/coe-dose01/summary.{json,md}` — crossings 0.69 / 1.37 / 2.58×, **reading "graded"**;
+  `compute.{json,md}` — no 1.25× flag; `lean_recheck.json` — 83 / 83 counted first-solving proofs accepted, 83 / 83
+  goal-negated rejected (dose01 77, knockout s1 6); `argsdiff.md`. Write-ups: `run_coe_dose01.md`,
+  `summary_coe_dose01.md`, `numbers.md` § coe-dose01, `rl_needed/README.md` (updated figure README for the librarian).

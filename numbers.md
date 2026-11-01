@@ -1954,3 +1954,119 @@ success 13 / 13; every Phase 3a proof 25 / 25; a seeded sample of 50 per full r1
 - Bulk artifacts (read rows, large-k chunks, scores, ladder found / mix files, registry rows): same bucket prefix, same
   repository paths; the files kept locally are listed with sha256 in `artifacts/MANIFEST.jsonl` (`python3 fetch_artifacts.py
   <path>`). Data: `data/coe/README.md`.
+
+## coe-dose01 (2026-10-31 / 11-01, executor; UNREVIEWED)
+
+**Models.** All `best_model.ALiBiGPT` 6 × 384, **9,560,832 params**, `lean_staten` (environment-assigned names), from
+scratch, T1 expert iteration — create-or-elicit's protocol, Lean alone (post-2026-09-27 checker).
+- **0.1 % σ dose (new, `dose01` s0–s2):** `ckpts/coe/stage1_dose01_s{0,1,2}.pt` (md5 1f42d5a8 / 890b2fdc / 1e151d80;
+  `state_train.py --recipe best --cap 12`, 1,200 s on one NVIDIA A40: 23,918 / 24,010 / 24,231 steps, 3.64–3.69 epochs,
+  D = 4.40 / 4.41 / 4.45 × 10⁸ tokens) on **K12^0.1%** = `data/coe/train_k12dose01.jsonl.gz` (decompressed md5 5fed3787;
+  K12⁻ with 155 refill records replaced by 155 removed σ records — checked independently, `log.md` 2026-10-31 21:00), then
+  16 ladder rounds `ckpts/coe/ladder/la_dose01_s{S}_r{1..16}.pt` (A40, batch 1,024). Bucket:
+  `hf://buckets/dan-pandori/nd-rl/coe-dose01/ckpts/coe/`.
+- **Knockout s1, rounds 25–32 (priority 2):** create-or-elicit's `la_ko_s1_r24.pt` (md5 1520ed6c, K12⁻) resumed with
+  every setting unchanged → `la_ko_s1_r{25..32}.pt` (same bucket folder).
+- **Inherited** (create-or-elicit, same architecture / format / checker): full s0–s5 (K12), dose1 s0–s2 (K12^1%),
+  knockout s0–s5 (K12⁻) — values from `artifacts/coe/rounds/*.json`, `artifacts/coe/dose_summary.json` and the figure's
+  published `rl_curve.json` (reproduced exactly before extending it).
+
+**y** = strict σ-covered held-out members (of 106) first solved by round r in the ladder's per-round k 32 transfer
+samples (`heldout_cum_by_round` of `artifacts/coe/rounds/<ladder>.json`, `coe/coe_rounds.py`; never trained on).
+**x** = cumulative RL ÷ Stage-1 FLOPs after round r's sampling (`rl_needed/rl_curve.json`, `rl_needed/extract_rl_curve.py`,
+rl-compute-share's `review_rcs/ourruns.py` definitions). **Bar** = 14 (full bases' median at round 1).
+
+| ladder (0.1 %) | y r1 | first round with y ≥ 14 (x) | y r16 | x after r16's sampling (with last fine-tune) | free positive reductio, r1 → r16 | σ-covered trained targets, r1 → r16 |
+|---|---|---|---|---|---|---|
+| la_dose01_s0 | 0 | **r5 (1.373×)** | 30 | 5.67× (5.91×) | 1 → 697 | 0 → 42 |
+| la_dose01_s1 | 0 | **r8 (2.576×)** | 28 | 5.94× (6.20×) | 0 → 1,116 | 0 → 41 |
+| la_dose01_s2 | 3 | **r3 (0.690×)** | 19 | 5.71× (5.95×) | 2 → 464 | 2 → 29 |
+
+- y by round — s0 0, 0, 3, 5, 14, 17, 21, 23, 26, 27, 28, 28, 29, 29, 29, 30; s1 0, 0, 0, 0, 0, 6, 13, 14, 14, 14, 17, 25, 26,
+  27, 28, 28; s2 3, 12, 15, 18, 18, 18, 18, 18, 19 … 19. r16 by family: s0 contraposition_conv 18, negated_conditional 9,
+  peirce_sequent 2, generated 1; s1 18 / 8 / 1 / 1; s2 contraposition_conv 18, generated 1.
+- Free positive reductio per round (`sigma_subtypes_by_round`, pos_free*): s0 1, 0, 4, 24, 53, 113, 210, 291, 434, 541,
+  539, 602, 551, 681, 645, 697; s1 0, 2, 4, 17, 13, 30, 152, 273, 343, 384, 446, 616, 1,018, 1,027, 962, 1,116; s2 2, 35, 116,
+  143, 253, 298, 375, 406, 389, 451, 388, 424, 458, 490, 490, 464. (1 % arm round 1: 170–219; knockout: 0 at round 1.)
+- **Arm summary** (`artifacts/coe-dose01/summary.json`, `coe/d01_summary.py`; IQM = mean at n = 3, stratified bootstrap
+  95 %): crossed by r16 **3 / 3** (1 % 3 / 3, knockout 0 / 6); y r1 [0, 0, 3] IQM 1.00 [0, 3]; y r16 [30, 28, 19] IQM
+  **25.67 [19.00, 30.00]** (1 % [58, 34, 30] 40.67 [30, 58]; knockout 0.25 [0, 1.75]). Crossing x: 0.69 / 1.37 / 2.58×,
+  median 1.37× (1 % 0.39 / 0.41 / 0.73×, median 0.41×). Tests (one-sided): crossed, 0.1 % vs knockout Boschloo
+  p = 0.0033; vs 1 % p = 1.0; y r16 exact Mann–Whitney vs knockout p = 0.012 (the smallest attainable), vs 1 % p = 0.10.
+- **Pre-registered reading: "graded"** (≥ 2 / 3 crossed by r16 with the crossing seeds' median x 1.37× > 0.73×).
+- Reads, k 256, T 0.8, batch 512 on `read1054` (`artifacts/coe/eval/{pend,r16}_dose01_s{S}_{x0,g0}.json`, scored with
+  `coe/coe_reads.summarise`): base plain x0 strict 0 / 0 / 6 (no family at the bar); base guided g0 0 / 0 / 9 (s2:
+  contraposition_conv 9 / 18, at the bar); **r16 plain x0 31 / 28 / 19** — families at the bar s0 and s1
+  contraposition_conv + negated_conditional (acquired during RL: at the bar at r16, not at the base, same plain draw);
+  s2 contraposition_conv (18 / 18 at r16; 6 / 18 in the base plain read, 9 / 18 — at the bar — in the base guided read).
+  Strict-stratum cut-offs: base 0 / 1.13 / 0 %, r16 1.56 / 3.15 / **8.46 %** (1 % arm's s2 at r16: 8.84 %). No r16 guided read (log 09:14).
+- Held-out greedy (`data/p2/heldout.jsonl`, 5,000): 0.893 / 0.865 / 0.835 (knockout 0.867–0.895, 1 % 0.917–0.945, full
+  0.958–0.968; `artifacts/coe/eval/heldout_*.json`).
+- **Lean re-check** (`artifacts/coe-dose01/lean_recheck.json`, `coe/d01_lean_recheck.py`, Lean 4.35.0 on the VPS): the
+  first-solving proof of every counted member — s0 30 / 30, s1 28 / 28, s2 19 / 19 accepted; goal-negated copies 30 / 28 / 19
+  rejected; median term size 11.5 / 13 / 7, median ND lines 12 / 14.5 / 8. All accepted proofs of strict members:
+  `artifacts/coe/rounds/heldout_proofs_la_dose01_s{S}.jsonl.gz` (2,401 for s0) in the bucket.
+
+**Knockout s1, rounds 25–32** (`artifacts/coe/rounds/la_ko_s1_r32.json`; exploratory, Addendum 6 procedure): y r24 → r32 =
+5, 5, 5, 6, 6, 6, 6, 6, **6** (not at the bar); x after r32's sampling **13.23×** (13.51× with the last fine-tune); free
+positive reductio per round r24 → r32 123, 152, 113, 148, 154, 139, 143, 136, 143; σ-covered trained targets flat at 9
+since r21; contraposition_conv training share flat at 0.33 since r21. r32 plain read (k 256): **5 / 106** strict
+(contraposition_conv 4, generated 1; r24 had 5), cut-offs 3.78 % of strict-stratum attempts. Lean re-check 6 / 6 accepted,
+6 / 6 goal-negated rejected. Round 32 took 11,351 s (r25–r31 3,442–3,708 s; log 07:30–09:14).
+
+**args.json diff** (`coe/d01_argsdiff.py` → `artifacts/coe-dose01/argsdiff.md`): `la_dose01_s{S}` vs `la_dose1_s{S}`
+differ only in `init`, `name`, `train` and `_meta` (argv's same three values, git SHA, host, run id, UTC).
+
+**Compute** (`artifacts/coe-dose01/compute.md`, `coe/d01_compute.py`; registry `artifacts/coe-dose01/registry/`, bucket
+`registry/coe-dose01/`): every 0.1 % ladder within 0.94–1.10× of the 1 % arm's mean per ladder on GPU-seconds, generated
+tokens, attempts (1.000), train steps (1.000), train tokens and Lean checks — no 1.25× flag. RL ladder GPU-hours (A40,
+process time incl. the per-round reads): 15.28 / 16.41 / 17.29 (1 % mean 15.66); generated tokens 650 / 671 / 664 M; Lean
+checks 2.15 / 2.18 / 2.17 M; 9,600 fine-tune steps each. Knockout s1 r25–32: 10.17 GPU-h, 395 M tokens, 4,800 steps.
+**Pod time (what was paid, `artifacts/coe-dose01/pod_hours.tsv` from `~/podhours.log`):** 4 × NVIDIA A40 SECURE at
+$0.59/h — cd01-s0 17.16 h $10.12, cd01-s1 18.50 h $10.91, cd01-s2 19.40 h $11.45, cd01-k1 11.65 h $6.87; **total 66.70 h,
+$39.35** of $45 / 90 h. ≈ 6 pod-hours went to a host-side slowdown on all four pods (05:30–08:30 UTC 11-01, log 09:14).
+
+**Example (Lean).** The first strict held-out member s1 solved (round 6, `la_transfer_400`, contraposition_conv; 8 ND
+lines, term size 7; `nd2lean.translate` of the stored proof, accepted by Lean in the re-check):
+```lean
+theorem t (P Q R S : Prop) (h1 : ((¬(R ∨ (R ∧ Q))) → (¬S))) : (S → (R ∨ (R ∧ Q))) := by
+  have n1 : ((¬(R ∨ (R ∧ Q))) → (¬S)) := h1
+  have n8 : (S → (R ∨ (R ∧ Q))) := (fun (n2 : S) => by
+    have n6 : (¬(¬(R ∨ (R ∧ Q)))) := (fun (n3 : (¬(R ∨ (R ∧ Q)))) => by
+      have n4 : (¬S) := n1 n3
+      have n5 : False := n4 n2
+      exact (n5 : False))
+    have n7 : (R ∨ (R ∧ Q)) := Classical.byContradiction (fun hh => n6 hh)
+    exact n7)
+  exact n8
+```
+
+**Pre-registered expectations vs outcomes** (`preregistration/coe-dose01.md`, commit feff6b1c, before the first pod):
+
+| quantity | expected | outcome | |
+|---|---|---|---|
+| y r1 per seed | 0–3 | 0 / 0 / 3 | hit |
+| free positive reductio, round 1 | 3–100 per seed; ≥ 1 on ≥ 2 / 3 | 1 / 0 / 2; ≥ 1 on 2 / 3 | miss (range), hit (≥ 1) |
+| y r16 per seed | 18 (80 %: 3–45) | 30 / 28 / 19 | hit |
+| first round y ≥ 14 | r6, 1.8× (80 %: r3 … not reached) | r5 1.37×, r8 2.58×, r3 0.69× | hit |
+| seeds crossing by r16 | 2 / 3 (P(3 / 3) ≈ 0.3) | 3 / 3 | above the point estimate |
+| crossing seeds' median x | 1.0–3.0× | 1.37× | hit |
+| r16 plain read | 22 (3–50); ≥ 1 family on 2 / 3 | 31 / 28 / 19; 3 / 3 | hit; above |
+| base plain read: families | 0 on ≥ 2 / 3 | 0 on 3 / 3 | hit |
+| held-out greedy | 0.91–0.95 | 0.893 / 0.865 / 0.835 | **miss** (the measure is σ-sensitive) |
+| x at r16 (with last ft) | 5.6–6.1× (5.9–6.4×) | 5.67 / 5.94 / 5.71× (5.91 / 6.20 / 5.95×) | hit |
+| reading | graded (0.5) | graded | hit |
+| knockout s1 y r32 | 7 (80 %: 5–12); P(≥ 14) 0.1 | 6; not reached | hit |
+| knockout s1 r32 read | 7 (5–14) | 5 | hit (edge) |
+| knockout s1 x r32 | ≈ 13× | 13.23× | hit |
+| knockout s1 free reductio per round, r32 | 150–500 | 143 | miss (just below) |
+
+**Deviations** (each in `log.md`): (1) no r16 guided reads — the pre-registered condition (priorities 1 + 2 projected
+≤ $39) failed at 09:14 ($39.7 projected after the slowdown); the base guided reads exist. (2) Not run, as pre-registered:
+the base x1 and r8 reads, the timing read, standard A, along-the-ladder scoring. (3) New files only under
+`artifacts/coe/` (`la_dose01_*`, `la_ko_s1/round_25..32.json`, `la_ko_s1_r32.json`, `*dose01*` / `r32_ko_s1_*` reads),
+per the brief's naming; no create-or-elicit file changed; pod logs in `artifacts/coe-dose01/pod_logs/`. (4) One
+diagnostic sample of `la_ko_s1_r31.pt` (64 targets × 8, ND_OFFLINE) during the slowdown — its registry rows are in
+`artifacts/coe-dose01/diag/`, not in the compute. (5) Read settings kept at batch 512 / 96 steps / 512 tokens per
+action although strict-stratum cut-offs exceed the policy's ≈ 0.1 % (0–8.46 %), to stay comparable with the inherited
+arms (the 1 % arm's s2 r16 read: 8.84 %).
