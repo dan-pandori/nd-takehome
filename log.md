@@ -1027,3 +1027,36 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   (≈ 10.3 h ≈ $6.1) → ≈ $35.8. The base guided reads took 2.8–4.0 h beside the ladders (reader logs), so the three r16
   guided reads alone add ≈ $4.4–7 → ≈ $40–43 of $45; they are the last job on each pod and will be stopped if the
   projection passes $45.
+- 05:56 UTC  Interim: **s1 reaches the bar at r8** (y 0, 0, 0, 0, 0, 6, 13, **14**, 14, 14) — all three 0.1 % seeds have
+  now crossed by r16 (s2 r3, s0 r5, s1 r8). Latest: s0 y 27 at r10 (free positive reductio 541 per round); s1 14 at r10
+  (384); s2 19 at r9 (389). Knockout s1: r25–r31 done, r32 running. Spend $21.27 / 36.04 pod-h. (`coe_rounds.py` on the
+  pods now takes > 1 min per seed: run status checks in the background.)
+- 07:30 UTC  **Knockout s1 round 32 is slow.** Round 31 ended 05:38:57 (`round_31.json`, registry rows); round 32's
+  target sampling has run ≈ 1 h 52 min with no output, against 2,002–2,173 GPU-s (35 min) for the sampling phase of every
+  round 25–31 (tokens per attempt 278–284, actions 16.1–16.5, all steady). Checked: GPU healthy (1,605 MHz, 300 W, only
+  the power-cap flag), 100 % utilised at the usual ≈ 12 GB; no CPU contention (the ladder is the only busy process); the
+  r31 checkpoint samples normally in isolation (`state_eval.py`, 64 targets × 8, ND_OFFLINE: 480 / 512 done, 5 step-cap,
+  ≈ 1 min; rows moved to `artifacts/coe-dose01/diag/`, not part of the protocol's compute). `py-spy` cannot attach (no
+  SYS_PTRACE). Rule: if round 32 has not finished by ≈ 08:40 UTC (≈ 3 h of sampling), treat it as hung, stop it, and
+  report knockout s1 through r31 (r31 plain read instead of r32).
+- 07:59 UTC  Knockout s1 round 32 was **slow, not hung**: its target sampling finished after ≈ 2 h 15 min (log:
+  "[lean_gate] 143840 samples … ok 133719, rej 2684"), now in the eval phase; no stop needed. Cause not identified (the
+  sampler is bounded — `Env.apply` counts every action, 48-step cap); the registry's sample-phase row will give its
+  GPU-seconds and tokens per attempt.
+- 09:12 UTC  **Knockout s1 rounds 25–32 done** (r32 took 11,351 s: 3.1× the 3,442–3,708 s of r25–r31; sampling ≈ 2 h 15 min
+  of it). `artifacts/coe/rounds/la_ko_s1_r32.json` (on the pod): y r16–r32 = 3, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, **6**, 6, 6, 6,
+  6, **6** — not at the bar by r32 (pre-registered: point 7, 80 % 5–12, P(≥ 14) = 0.1); r32 members contraposition_conv 5
+  + generated 1. Free positive reductio per round r24–r32 123, 152, 113, 148, 154, 139, 143, 136, 143 — a plateau (pre-
+  registered 150–500 at r32: just below). σ-covered trained targets flat at 9 since r21; contraposition_conv training
+  share flat at 0.33 since r21. r32 plain read (k 256) started 08:52.
+- 09:16 UTC  **Slowdown on all four pods, and the r16 guided reads withdrawn.** Sampling-phase GPU-seconds jumped on every
+  ladder at about the same time with unchanged work per attempt (≈ 250 tokens, ≈ 14 actions): s0 r12 4,136 s (r1–r11
+  1,667–2,099), s1 r11 7,212 s (1,549–2,240), s2 r10–r11 2,888 / 7,329 s (1,315–2,187); knockout s1 r32 sampling ≈ 2 h 15 min
+  (35 min before). Round times 7,464 / 10,395 / 8,679 / 11,351 s. GPU clocks normal (SM 1,650–1,725 MHz, memory 7,251 MHz =
+  max, only the power-cap flag); all four pods are in one data centre (194.68.245.x, Xeon Gold 6342, mean reported CPU
+  clock ≈ 1.0 GHz; a 10⁷-add Python loop 0.92–0.98 s on each). The 9.5 M model's sampler is CPU / launch bound, so a
+  host-side CPU slowdown fits; not proven. It looks transient (≈ 05:30–08:30): s0's r13 sample + eval took ≈ 55 min.
+  Projection at normal speed: rounds 13–16 + r16 plain reads + knockout s1's r32 read ≈ 18 pod-h ≈ $10.8 → ≈ $39.7 total,
+  above the pre-registered $39 condition for the r16 guided reads (≈ $45 with them, where `pod_budget_watch` deletes
+  pods). **Markers removed; no r16 guided read** (policy guided default not met for r16 — the base g0 reads exist; the
+  1 % arm has no r16 g0 either). Spend $28.91 / 49.0 pod-h at 09:14.
