@@ -286,3 +286,4 @@ OLMO-RLZERO-PILOT DONE 2026-11-03T16:19:20Z
 - 2026-11-03 20:24 UTC  Stage 0 done ($6.5; DPO writes 17.6k tokens per AIME sample, 12.9 % cut at 32k; 1,103 tok/s on
   1 × H200 secure = $1.33/M). Projection $85–112 < $140 → pre-registered design unchanged. Part B committed
   (d78ea069). Fixed phase running on `ot32-a` (F_dpo → F_s2300 → F_s0750); F_s0100 on a second pod if one appears.
+- 2026-11-03 20:37 UTC  second pod `ot32-b` (H200 secure): F_s0100 → F_s0750 there; F_dpo → F_s2300 on `ot32-a`.
