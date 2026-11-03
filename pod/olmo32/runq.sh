@@ -20,7 +20,7 @@ for idx in "${!JOBS[@]}"; do
   S=$(spec "$J"); [ -n "$S" ] || { echo "unknown job $J"; continue; }
   NXT=${JOBS[$((idx+1))]:-}
   if [ -n "$NXT" ]; then NS=$(spec "$NXT"); read -r nd nr nv <<< "${NS%%|*}"
-    [ -n "$nv" ] && { nohup bash pod/olmo32/fetch.sh $nr $nv $nd > $L/prefetch_$nd.log 2>&1 < /dev/null & } ; fi
+    [ -n "$nv" ] && { nohup nice -n 19 bash pod/olmo32/fetch.sh $nr $nv $nd > $L/prefetch_$nd.log 2>&1 < /dev/null & } ; fi
   echo "RUNQ start $J $(date -u +%FT%TZ)"
   bash -c "${S#*|}" > $L/q_$J.log 2>&1
   echo "RUNQ end $J $(date -u +%FT%TZ) $(grep -o 'JOB_DONE.*' $L/q_$J.log)"
