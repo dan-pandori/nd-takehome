@@ -250,3 +250,15 @@ Brief: run brief `guided-tts` (Dan, 2026-10-03). Policy: AGENT_POLICY.md. Budget
 - 21:48 UTC  Independent code review: nothing that changes a number. CI green on `ci-guided-tts`; checker + guided sampler merged into the fork's `dan` (fast-forward, e18e524e). Bucket `hf://buckets/dan-pandori/nd-rl/guided-tts/{artifacts/gt,artifacts/guided-tts,data/gt}`; manifest rows in `artifacts/MANIFEST.jsonl`. No pods left; 9.07 pod-h, $4.45 of $10.
 
 GUIDED-TTS DONE 2026-10-03T21:48:15Z
+
+
+# STATUS — olmo-rlzero-pilot (proposal 34: create vs elicit along Olmo 3.1 7B RL-Zero-Math; 32B costing)
+
+Brief: nd-rl proposal 34 (Dan, 2026-11-02). Policy: AGENT_POLICY.md. Run id: olmo-rlzero-pilot. Budget $50 / 90 pod-h
+(registered with podbudget 01:05 UTC). Pods are named `orz-*`.
+
+## olmo-rlzero-pilot
+- 2026-11-03 01:19 UTC  run started 01:04 (executor). Models, RL data and the open-instruct recipe verified
+  (RL-Zero `main` = `step_2800`; base `main` = `stage3-step11921`; template `olmo_thinker_rlzero`, T 1.0, top_p 1.0,
+  16,384 tokens; RL's MathVerifier ran off the main thread, so only string equivalence rewarded). Pre-registration
+  Part A (definitions, verdict rules, Stage 0) committed before any pod.
