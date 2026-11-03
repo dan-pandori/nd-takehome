@@ -172,3 +172,79 @@ difficulty unknown):
   TP 4 runs.
 - **TP 4 on 4 × 80 GB first:** more concurrent sequences per weight copy, ≈ 35 % cheaper per token by the memo's model
   than TP 2. The brief's 1 × H200 and 2 × 80 GB are the fallbacks.
+
+---
+
+# Part B — addendum after Stage 0 (committed before any sampling on the evaluation problems)
+
+## B1. Stage 0 (AIME 2024 pilot set; never an evaluation number)
+
+Pod `ot32-a`: 1 × H200 141 GB, RunPod **secure**, billed $5.29/h. Every multi-GPU and community configuration tried
+19:05–20:05 UTC was out of stock (2 × / 1 × H200 community, 2 × H200 secure, 4 × / 2 × A100-SXM4 community and
+secure, 2 × H100 SXM, 4 × / 2 × H100 NVL; log). vLLM 0.11.0, torch 2.8.0+cu128, bf16 weights and KV cache,
+FLASH_ATTN, TP 1, the Think RL settings. vLLM reserved 65.3 GiB of KV cache ("maximum concurrency 11.3× at 33,170
+tokens"). Stage 0 ran `s0_dpo` only (`s0_rl` dropped to stay within $8; log 19:29 UTC) and finished at 20:21:38
+UTC, inside the $8 cap ($6.5 billed since the pod's creation at 19:08). Files: `artifacts/olmo32/{graded,logs,meta}/s0_dpo*`, `olmo32/stage0_summary.json`.
+
+| `s0_dpo` (`dpo`, AIME 2024, 30 × 8, seed 1001) | value |
+|---|---|
+| samples | 240 of 240 finished |
+| generated tokens / sample, mean (median) | 17,589 (15,307); failing samples 29,937, correct 13,654 |
+| cut at 32,768 | 31 (12.9 %) |
+| generation throughput (vLLM log integral, 3,776 s) | 1,103 tok/s, 44.7 resident sequences on average |
+| price | $1.33 per million generated tokens |
+| uncut samples closing `</think>` / boxed final answer after it | 100 % / 92 % |
+| pass@1 `rl` / `final` | 0.758 / 0.700 |
+| `rl` ≠ `final` | 14 samples (5.8 %), all `rl`-only: 13 stop (EOS) inside the write-up after `</think>` before stating an answer, with a boxed answer in the thinking; 1 cut at 32,768 |
+
+**Expectations vs Stage 0.** Tokens per sample: expected `dpo` mean 14k (10–20k); measured mean 17,589 (median 15,307): **inside the
+range, near its top** — at temperature 1.0 the DPO model thinks long on AIME, and 12.9 % of samples hit 32,768.
+Throughput: the expected 1,500–3,000 tok/s was for 4 × A100 PCIe; the single H200 ran 1,103 tok/s (KV-bound: ≈ 30–55
+sequences fit at these lengths), i.e. **$1.33 per million tokens**, above the memo's $0.83–1.13. Format: every uncut sample closes `</think>` and 92 % box their answer after it, as expected; but `rl` and `final` disagree on **5.8 %** (expected ≤ 3 %), all of them samples `rl` credits from a boxed answer inside the thinking while the write-up stops (EOS) or is cut before stating one.
+
+## B2. Contamination (scan finished 19:36 UTC, before any evaluation sampling)
+
+Scanned every Dolci-Think-RL-32B prompt (102,026), Dolci-Think-DPO-32B row (200,000; prompt and both responses) and
+Dolci-Think-SFT-32B conversation (2,253,684; all turns); dataset revisions in
+`artifacts/olmo32/contam/dataset_revisions.txt`, per-problem table `olmo32/contamination_think.csv`. **No problem has
+8-gram containment ≥ 0.5 in any corpus.** Read (containment or IDF-5 ≥ 0.3): `aime2026_14` (0.38 in the RL data,
+MathSub-30K, and in 46 SFT documents; IDF-5 0.35), `aime2025_17` (SFT 0.43), `aime2025_04` (SFT 0.33). Every match
+is shared answer-format boilerplate on a different problem ("…can be expressed as m√n, where m and n are positive
+integers and n is not divisible by the square of any prime. Find m+n"; "find the sum of all positive integers n such
+that"; "the number of ordered pairs (x, y), where both x and y are …"): none is a variant. **Excluded: `aime2026_01`
+only** (carried over from the pilot as pre-registered; containment in the Think data 0.07). Headline set: 59.
+
+## B3. Re-costing and the gate
+
+`olmo32/project.py` (60 problems; `dpo` 16 and three RL checkpoints × 8; extension as the memo models it: 3 reach + 1
+reverse candidates × 150 samples × 28k tokens, + 5 % challenger confirmation; 0.6 pod-hours overhead; Stage 0 $8),
+at 17,600 tokens per `dpo` sample, 30,000 per failing extension sample, 1,103 tok/s and $5.29/h, for RL lengths
+0.8 / 1.0 / 1.3 / 1.6 × the DPO model's: **$85 / $92 / $102 / $112** in total (Stage 0 included). A bad case (6 reach + 3 reverse
+candidates, each run to 256 at 30,000 tokens) reaches $157. The projection is **below the gate** (min($140, balance $368 − $45) = $140), so the pre-registered design runs
+unchanged. The bad case would exceed it; the in-run rules below keep the spend under $140 and I ask in
+`QUESTIONS.md` before the defender extension would cross it.
+
+## B4. Order of work and the in-run budget rule
+
+Work runs in this order on `ot32-a` (and in parallel on a second pod if one becomes available):
+1. `F_dpo` (960 samples) and `F_s2300` (480);
+2. `F_s0750` (480) and `F_s0100` (480);
+3. extension E1 (defenders, with the hand gate) on all candidates, then challenger confirmation where needed;
+4. likelihood, if ≥ $10 remains.
+
+After every job I re-estimate spent + projected-to-finish from measured lengths and throughput. If it exceeds $140,
+the pre-registered cut order applies (likelihood; intermediate checkpoints' challenger confirmation; challenger
+confirmation capped at 64 fresh samples); if the defender extension itself would cross $140, I ask in
+`QUESTIONS.md` and, unanswered, extend the candidates in order of their challengers' fixed-phase success counts
+until $140. Before each new pod I try cheaper capacity (4 × A100-SXM or 4 × H100 NVL with TP 4, 2 × H200 TP 2,
+community H200; ≈ 0.45–0.7 × the per-token cost by the calibrated model). No FP8 KV cache or speculation.
+
+## B5. Operational details fixed now
+
+- Fixed-phase requests carry 4 samples each (`chunk` 4), seeds 2001 (`dpo`), 2002 (`s0100`), 2003 (`s0750`), 2004
+  (`s2300`); extension seeds 3001 (`dpo`), 3002 (`s2300`); all 60 problems are sampled in the fixed phase; excluded
+  problems are not extended.
+- `final` as implemented in `olmo32/grade.py`: a boxed answer counts if its content is an integer or
+  `<expression> = <integer>` (so `\boxed{\frac{7}{2}}` is never read as 2); the "answer" line fallback takes the last
+  integer after the last occurrence of "answer" on that line.
+- Draw order within (model, problem): the fixed phase, then each extension job in order, then (chunk, i).
