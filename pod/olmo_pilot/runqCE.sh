@@ -20,6 +20,8 @@ for J in "$@"; do
     E1_baseb) F=$PL/E_baseb.txt; X="$FLAGS --seq_stop"; C="bash pod/olmo_pilot/job.sh E1_baseb base $BASE main 1 @$F 4011 1 16" ;;
     E2_base)  F=$PL/E2_base.txt;  X="$FLAGS --seq_stop"; C="bash pod/olmo_pilot/job.sh E2_base base $BASE main 1 @$F 4021 8 16" ;;
     E2_s2800) F=$PL/E2_s2800.txt; X="$FLAGS --seq_stop"; C="bash pod/olmo_pilot/job.sh E2_s2800 step_2800 $RL step_2800 1 @$F 4022 9 16" ;;
+    E3_base)  F=$PL/E3_base.txt;  X="$FLAGS --seq_stop"; C="bash pod/olmo_pilot/job.sh E3_base base $BASE main 1 @$F 4031 16 32" ;;
+    E3_s2800) F=$PL/E3_s2800.txt; X="$FLAGS --seq_stop"; C="bash pod/olmo_pilot/job.sh E3_s2800 step_2800 $RL step_2800 1 @$F 4032 17 32" ;;
     F_s0100h) F=$PL/F_s0100_half.txt; C="bash pod/olmo_pilot/job.sh F_s0100h step_0100 $RL step_0100 8 @$F 2023 0 8" ;;
     P_s0100)  F=olmo_pilot/probe_prompts.jsonl; C="env PROBLEMS=olmo_pilot/probe_prompts.jsonl bash pod/olmo_pilot/job.sh P_s0100 step_0100 $RL step_0100 1 - 5003 0 1" ;;
     *) echo "unknown job $J"; continue ;;

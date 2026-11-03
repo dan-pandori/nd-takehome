@@ -85,8 +85,10 @@ def pass_curve(res, model, ks, grade="rl", pids=None):
                 M[a, b] = passk(n, c, k)
             elif c > 0:
                 M[a, b] = 1.0
+            elif fs != "" and int(fs) <= k:
+                M[a, b] = 1.0          # first success within the first k draws: the indicator is 1 for every k >= it
             elif k <= r["attempts"]:
-                M[a, b] = 1.0 if (fs != "" and fs <= k) else 0.0
+                M[a, b] = 0.0          # k draws observed, none correct
     return [r["pid"] for r in rr], M
 
 
