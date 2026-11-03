@@ -481,3 +481,190 @@ not a measurement.
    - likelihood controls not "on other problems" (harmless).
 6. **R6: compute rows.** The void step_0100 runs record gen_tokens 0 despite ≈ 2 M generated tokens.
 7. **R7: hard constraints.** None violated.
+
+# §Compare (phase 2: after reading the write-ups)
+
+I read the following after the phase-1 commit (dfb3a406, 16:49:55 UTC):
+- `run_olmo_rlzero_pilot.md`;
+- the run's sections of `numbers.md`, `log.md`, `STATUS.md` and `QUESTIONS.md`;
+- `olmo_pilot/plain_summary.md`, `decision_32b.md` and `README.md`;
+- the three figures.
+
+The checks added in phase 2 are in `out/sensitivity_templated.json`, plus the inline checks described below.
+
+## Corrections to my §Recount
+
+- **Weight distance (§13, R5).** I wrote that the comparison with another base revision was "not measured". According to
+  `log.md` (04:08 UTC) it was measured:
+  - step_0100 to `stage3-step11000`: 1.2e-2;
+  - step_0100 to `stage2-step47684`: 0.31.
+
+  `pod/olmo_pilot/wd.sh` computes 7 pairs. But the pulled-back `meta/weight_dist.jsonl` holds only the 2 rows from the
+  run on orz-a that was killed at 03:44. So the claim is **measured but not reproducible from the pulled-back files**,
+  not "unmeasured".
+- **step_0100's half (§13, R5).** It reproduces exactly as `random.Random(20261103).sample(eval_pids, 45)`. The seed is
+  stated in `log.md` (08:56, 10:59), not in code. The rule was declared at 08:56, before any step_0100 result was used.
+  The point is resolved.
+
+## Claims against my recount
+
+### `run_olmo_rlzero_pilot.md`
+
+| claim | my value | verdict |
+|---|---|---|
+| base `main` is RL-Zero's start: "step_0100 is 2.6 × 10⁻⁴ from it" | 2.59e-4 in `weight_dist.jsonl`; base `main` = `stage3-step11921` (identical LFS oids, checked) | number reproduces; the "start" inference rests on the log-only 1.2e-2 / 0.31 rows |
+| 83 problems, 7 excluded for contamination | my Dolci scan flags the same 4 RL-data problems; the midtraining re-aggregation flags the same 3, plus aime2026_01 in both | reproduces |
+| RL's template, T 1, top-p 1, 16,384; vLLM 0.11 bf16, n-gram speculation | same in every meta file and vLLM engine line | reproduces |
+| "gate: 1.36×, outputs unchanged" | 1.36×; pass@1 and length differences have CIs containing 0 | the gain reproduces; **"outputs unchanged" overstates**: the gate shows no detectable change, and speculative sampling is exact only in exact arithmetic |
+| pass@1 / 8 / 16 table | base 0.094 / 0.364 / 0.458; step_0500 0.304 / 0.506; step_2800 0.419 / 0.627 | reproduces. step_2800 pass@8 is 52/83 = 0.6265, written 0.626. CIs differ by ≤ 1 bootstrap step (2,000 vs my 10,000 resamples) |
+| "RL raises pass@1 4.5×" | 4.46× | reproduces |
+| "at k = 8 step_2800 gains 22.8 expected problems and loses 1.0" | 22.77 / 1.00 | reproduces |
+| step_0100 on a random 42-problem half: pass@1 0.30 (base 0.12), at 4–9 × 10⁻⁵ of pretraining | 0.301 vs 0.116; axis 4.15e-5 – 8.56e-5 | reproduces (n = 1 RL run, 42 problems) |
+| "all 17 … were solved by the base when re-sampled, at draw 18–383 (median 73)" | the same 17, the same draws | **reproduces under RL's verifier**. Read by hand, the 17 resolving solutions are 10 sound, 6 flawed but arriving, 1 a guess (aime2024_20) — see the Verdict |
+| "the 3 problems the base solved and step_2800 did not fell to step_2800 at draws 12–280" | 12, 53, 280 | reproduces under the verifier. **The draw-280 success (aime2025_14) is a guess**: it computes m+n+p = 34, then boxes 60 |
+| strong reach 0, reverse 0 | 0, 0 (also under `main`) | reproduces |
+| "RL's solutions are in the base's support": all 78 late-solved RL solutions inside the base's range; per-token gap 0.057 (step_2800) and 0.006 (step_0500) | 100 % under all three of my control definitions; 0.057 and 0.006 | numbers reproduce; **the wording needs the criterion**: it is the pre-registered per-token range. The whole-solution gap is a median 731 nats at step_2800 |
+| candidates no closer by n-gram (p = 0.33); by embedding 0.71 vs 0.65 (p = 0.02) | 0.082 vs 0.066, p 0.33 (two-sided); 0.706 vs 0.653, p 0.018; my own n-gram measures show no excess | reproduces from the stored statistics. I did not recompute the embeddings; the check was not pre-registered |
+| Expectations vs outcomes (5 items) | the 5 items reproduce | **incomplete**: see the misses row below |
+| verdict by the rule: inconclusive, k = 8 gap 0.26 [0.18, 0.35] | inconclusive; 0.262 [0.179, 0.352] | reproduces |
+| "By reach: elicitation only, up to 512 samples" | reach 0 at K ≤ 512 under `rl` | stands as an informal reading **under RL's verifier**; needs the aime2025_14 and confirmation caveats (Verdict) |
+| deviations: step_0100 half, confirmation 24 → 16 / 8, aime2025_22 symmetry, base phase-F texts lost | all seen in the artefacts | reproduces, but **incomplete**: see the deviations row below |
+| cost $39.36 of $50, 26.5 pod-hours | balance delta $39.36 (log); `podbudget` $40.26; 26.52 h | reproduces. The two dollar figures are the balance delta and podbudget's estimate |
+| 32B memo ≈ $110–320 | M0's fixed phase ($55) reproduces from the memo's inputs; the rest is a model | a projection; not derivable as a measurement |
+
+The **misses** the expectations line omits (§15):
+- base pass@8 0.364 against 0.12–0.28, and base pass@16 0.458 against 0.18–0.35;
+- step_2800 pass@8 0.627 against 0.25–0.50;
+- step_0100 pass@1 0.30 against "base ± 0.03";
+- step_0100 length 2.0× against "± 20 %";
+- step_0500 → step_2800 entry growth +8.7 [3.0, 15.2], against "within noise".
+
+The step_0100 misses are informative: most of the change happens in the first 100 steps.
+
+The **deviations** the write-up does not list:
+- extension chunks of 16, not the pre-registered 32 (in the log);
+- no confirmation and no likelihood phase for step_0100;
+- likelihood controls on the same problems plus contaminated AIME 2023, against "on other problems" (harmless, §9);
+- the weight-distance rows absent from the artefact;
+- the templated-relatives sensitivity, promised in the log (05:20), never reported. Its effect is ≤ 0.015 on any pass@k and none on reach.
+
+The write-up is 476 words by `wc` including the table; the brief's limit is 400 words plus figures.
+
+### `numbers.md` § olmo-rlzero-pilot (labelled UNREVIEWED)
+
+| claim | my value | verdict |
+|---|---|---|
+| base `main` = `stage3-step11921`, 7.30 B | identical shard LFS oids | reproduces |
+| Stage 0 and gate numbers | identical; gate CIs within bootstrap noise | reproduces |
+| pass@2 / pass@4 / pass@1 by set / solved in F (38, 42, 52) / mean tokens and cut (90 problems) | 0.165 / 0.261 (base), 0.373 / 0.435, 0.491 / 0.556; the same by-set values; 38 / 42 / 52; 5,872 (15.3 %), 11,790 (25.1 %), 11,712 (17.8 %) | reproduces |
+| paired pass@8 difference 0.262 [0.176, 0.348] | 0.262 [0.179, 0.352] | reproduces |
+| the 17 candidates "solved all 17 … every one is a complete solution of 4,071–16,384 tokens with a correct 'Answer:' line (`ansline` agrees)" | **none of the 17 has an `Answer:` line**. All box the right integer, so `ansline` agrees through its `\boxed{}` fallback. 2 are cut at 16,384 tokens (aime2025_21, aime2025_25). By hand: 10 sound, 6 flawed, 1 guess | **differs**: "complete solution" and "correct 'Answer:' line" are not true of these samples |
+| reverse candidates "solved all 3 (first correct draw 53, 12, 280; the base's were 14, 73, 10)" | the same draws | reproduces (the order is 29 / 22 / 14, not the listed 29 / 14 / 22). The draw-280 success is a guess |
+| under `ansline` aime2025_14 becomes step_2800 reach; the base's only success is a 549-token response with no `Answer:` line, text lost | same; also: the verifier credits a restated `$\angle B=60^\circ$` (demonstrated), and step_2800's own success there is a guess | reproduces; **the conclusion goes further**: on the evidence neither model solves aime2025_14 |
+| confirmation: step_2800 ≥ 1 fresh correct on 14 of 16; step_0500 5 of 8 | 14 / 16, 5 / 8 | reproduces |
+| likelihood: range [−0.936, −0.246], medians −0.546 / −0.492, 100 % inside, gaps 0.057 / 0.053 / 0.006 / 0.006, whole-solution 731 / 388 / 76 / 46, p < 10⁻³ share 0.19–0.26 % | all identical (the share is the per-group medians for late and ckpt_other) | reproduces |
+| nearest RL prompt; compute axis | as above; identical to 4 significant figures | reproduces |
+| step_0100 table (42 problems) | pass@k and entries/exits identical. The mean-tokens column mixes phases: for step_0500 and step_2800 it averages F + C + E samples per problem (10,918 / 10,992); phase F alone gives 10,998 / 10,970 | reproduces; label the length column |
+| per-arm compute (GPU-h, tokens, samples) | re-derived for base F 3.04 / extension 4.28, step_2800 F 3.58 / C 1.51 / E 1.97; registry rows equal the meta files | reproduces. The void runs record 0 generated tokens, but F_s0100b's log shows ≈ 2.05 M (R6) |
+| pods and dollars; lost texts listed | `podhours.log` rates and hours match; the lost texts are listed exactly as found | reproduces |
+
+### `olmo_pilot/plain_summary.md` and `decision_32b.md`
+
+| claim | my value | verdict |
+|---|---|---|
+| plain: 9 % → 30 % → 42 % on one attempt; 36 % vs 63 % at 8 | 0.094 / 0.304 / 0.419; 0.364 / 0.627 | reproduces |
+| plain: the base solved all 17 "with complete worked solutions, not lucky guesses" | 10 sound, 6 flawed, 1 guess (aime2024_20, the base's only success there); 2 truncated | **not supported** |
+| plain: the RL model solved the 3 reverse problems with more attempts | its aime2025_14 success is a guess | needs the caveat |
+| plain: "every correct RL solution falls inside the range of the base's own correct solutions" | 213 of the RL checkpoints' 718 successes were scored. ckpt_other is 90 % inside the range of the base's own extension solutions; 100 % only once the AIME 2023 pilot is added | **overgeneralised**: say "every scored RL solution …, against the base's own solutions including the AIME 2023 pilot" |
+| plain: "about 5 % less probable per token" | e^0.057 = 1.059 | reproduces |
+| plain: "inconclusive only because one clause asked the base to match RL at 8 attempts, which sharpening alone never does" | the clause fails (0.262 [0.179, 0.352]) | the fact reproduces; "never" is too strong |
+| memo §1 price table ($0.69, $0.51, $0.50, $0.53, $0.75 per M tokens; likelihood $0.03) | identical from the meta files and billed rates | reproduces |
+| memo: 32B architecture (64 layers, 16 full + 48 sliding, 8 KV heads × 128) | `config.json` of `Olmo-3.1-32B-Think` | reproduces |
+| memo: 3.1 `step_0050 / 0300 / 0750` = Olmo 3 `step_050 / 300 / 750`; Olmo 3 `main` = `step_750` | I checked `step_0300`, `step_0750` and `main`: 14/14 identical LFS oids each | reproduces (checked 3 of the 4 identities) |
+| memo: 32B RL settings `olmo_thinker`, T 1, 32,768 tokens, 64 × 8 | `32b_think_rl.sh` at bb58c66 and at `main` | reproduces |
+| memo: 14 % of GPU-hours; the step-750 FLOP bounds 1.8e-3 – 7.4e-3 | rl-compute-share `REVIEW.md` and `compute_table.csv` (Olmo 3 Think 32B row) | reproduces; the inherited numbers carry their model label |
+| memo: "every price … measured …; none is a catalogue price" | the B200 ($5.98/h) and 2 × H100 ($5.38/h) rates were never billed in this pilot | minor wording |
+| memo: AIME 2024 "three variants in the RL data, three verbatim in midtraining" | the midtraining containments are 1.00, 0.82 and 0.52 | "three in midtraining", not all verbatim |
+| memo: "2 of step_2800's 16 candidates and 3 of step_0500's 8 had no fresh success" | 2 / 16, 3 / 8 | reproduces |
+
+### Model labels, wording and pre-registration
+
+- **Model labels.** Every number names its model: base, `step_0100` / `0500` / `2800`, or the Olmo 3.1 Think 32B
+  rows, which are inherited and labelled. No unlabelled number was found.
+- **n and strong words.** There is one RL run (AI2's), so every RL claim is n = 1 trajectory. The plain summary says
+  so ("One model, one RL run, 83 problems"). The words to soften are "never" in "sharpening alone never does" and
+  "genuinely new problems never appeared". Each holds only at ≤ 512 samples on 83 problems, and the latter only under
+  RL's verifier.
+- **The pre-registration** came before the pods (Part A) and before any evaluation sampling (Part B). The budget rule
+  cutting confirmation was declared at 07:56, before any C or E result. The step_0100 half was declared at 08:56,
+  before any step_0100 result was used. Misses are reported as misses where reported, but the list is incomplete (see
+  above).
+- **AGENT_POLICY items with gaps.**
+  - The write-up has no per-arm compute table. It is in `numbers.md` as prose, and that is also where the base's
+    > 1.25× samples are flagged ("by design").
+  - The pre-registration states no minimum detectable difference for its headline quantity.
+
+# §Verdict
+
+**Stands** (under RL's verifier, the pre-registered primary grade, on 83 AIME 2024–26 problems; models: base
+`Olmo-3-1025-7B` `main`, RL-Zero-Math `step_0100` / `0500` / `2800`, 7.3 B, pretrained):
+- **pass@k and dynamics.** Every pass@k, the matched-k entries and exits, and the compute axis reproduce. Their source
+  table (`results.csv`) equals my table built from the raw rows, and all 4,572 stored texts re-grade identically.
+- **The 17 candidates.** All 17 RL-only solves were credited to the base by RL's verifier within 383 samples (median
+  73). Strong reach, reach and reverse are all 0 at K ≤ 512.
+- **The verdict.** The pre-registered verdict is "inconclusive", correctly derived and correctly reported.
+- **Likelihood.** The 78 late-solved RL solutions sit inside the base's per-token log-probability range.
+- **Contamination.** The exclusions are right under the stated rule: my independent Dolci scan agrees, and so does the
+  midtraining re-aggregation.
+- **Spend.** $39–40 of $50. No hard-constraint violation.
+
+**Must be reworded:**
+1. **"Complete solutions" (plain summary and `numbers.md`).** The claims "with complete worked solutions, not lucky
+   guesses" and "every one is a complete solution … with a correct 'Answer:' line" are wrong. Replace them with the
+   hand-check:
+   - Of the 17 resolving base solutions, 10 are sound, 6 reach the official answer through a flawed step, and 1
+     (aime2024_20) is a guess.
+   - None has an `Answer:` line; all box their answer, and 2 are cut at 16,384 tokens.
+   - On aime2024_20, all 5 RL successes are guesses too. On aime2026_26, all 5 share the base's gap: none verifies the
+     seven-value count.
+2. **aime2025_14.** Say that step_2800's draw-280 success is a guess: it computes 34, then boxes 60. The base's only
+   credit there is probably the verifier accepting a restated 60° angle (its text is lost). So on the evidence neither
+   model solves aime2025_14. The reverse count stays 0, but not because step_2800 can solve it.
+3. **"In the base's support".** Qualify it as the pre-registered per-token range. Add the whole-solution gap: a median
+   731 nats for step_2800's late-solved solutions. Change "every correct RL solution" to "every scored RL solution
+   (213 of 718), against the base's own solutions including AIME 2023".
+4. **"Outputs unchanged"** (write-up and memo) → "no detectable change in pass@1 or length (exact speculative
+   sampling)".
+5. **Expectations vs outcomes.** Add the five omitted misses (§Compare), especially step_0100's: pass@1 already 0.30,
+   and 2× length at 4–9 × 10⁻⁵ of pretraining compute.
+6. **Smaller items.**
+   - Label the step_0100 table's length column.
+   - Put the 7 weight-distance pairs into an artefact, or call them log-only.
+   - Report or drop the promised templated-relatives sensitivity.
+   - Fix the memo's "three verbatim" and "none is a catalogue price".
+   - Change "sharpening alone never does" to "generally does not".
+
+**Not supported:**
+- "Not lucky guesses" (above).
+- Any reading of "reach 0" stronger than **"credited by RL's verifier"**. A single base success removed 16 of the 17
+  candidates from reach: only aime2025_25 had 2 base successes. RL's strong reach needed ≥ 2 successes including a
+  fresh one. The rule is asymmetric, and one of those single base successes is a guess.
+
+  This weakens no number. It limits the inference: "the base can do everything RL can" is shown at the level of the
+  verifier's credit. At the level of sound derivations it is shown for 10–16 of the 17 problems. On the other two the
+  RL solutions are no better.
+
+**Next measurements that would settle what is left open:**
+1. **Confirm the base's resolutions symmetrically** (≈ $6–9 at this pilot's measured $0.50–0.75 per M tokens).
+   - Re-sample the base on the 17 candidates until a second `rl`-correct success, up to 512. That is about 1,650
+     samples, since the first-success positions sum to 1,647, at ≈ 7,200 tokens each.
+   - Re-sample it on aime2025_14 (256 samples).
+   - Hand-check each resolving solution, or grade it with a final-answer-only reading. This would turn "credited"
+     into "confirmed", and it uses the same rule as RL's confirmation.
+2. **Change the 32B design.** Add to it:
+   - a pre-registered secondary grade that reads only the response's final stated answer;
+   - a blinded hand-check (or a judge) of every candidate-resolving solution;
+   - the symmetric confirmation rule above.
+
+   Without these, a verifier that credits a restated angle, plus AIME's 0–999 integer answers at base budgets of
+   hundreds of samples, can manufacture "base solves it".
