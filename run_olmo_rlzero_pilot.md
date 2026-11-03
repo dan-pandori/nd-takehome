@@ -19,14 +19,15 @@ the same for step_2800.
 1. RL raises pass@1 4.5×; at k = 8 step_2800 gains 22.8 expected problems over the base and loses 1.0. On a random
    42-problem half, step_0100 (4–9 × 10⁻⁵ of pretraining compute) already reaches pass@1 0.30 (base 0.12).
 2. **None of it is new reach at this budget.** All 17 problems an RL checkpoint solved and the base did not (0 / 16)
-   were solved by the base when re-sampled, at draw 18–383 (median 73), each a full solution. The 3 problems the base
-   solved and step_2800 did not fell to step_2800 at draws 12–280. Strong reach 0, reverse 0 (figure 1b).
+   were solved by the base when re-sampled, at draw 18–383 (median 73). The 3 problems the base
+   solved and step_2800 did not fell to step_2800 at draws 12–280. Strong reach 0, reverse 0.
 3. **RL's solutions are in the base's support.** All 78 RL solutions on the late-solved problems lie inside the
    base's own-solution likelihood range; the per-token gap is 0.057 nats at step 2800, 0.006 at step 500 (figure 3).
 4. Candidates are no closer to the RL data by n-gram (p = 0.33); by embedding, slightly (0.71 vs 0.65, p = 0.02).
 
 **Expectations vs outcomes.** pass@1 above the pre-registered ranges (base 0.03–0.08, final 0.10–0.25); throughput
-1.5–2× below; reach 3 after pass 1 (expected 2–8), then 0; entries not monotone (9.9, 8.6, 14.6 on the half).
+1.5–2× below; reach 3 after pass 1 (expected 2–8), then 0; entries not monotone (9.9, 8.6, 14.6 on the half);
+likelihood 100 % in support (expected ≥ 75 %).
 **Verdict by the rule: inconclusive** — reach half met (strong reach 0), pass@k half met on the candidates (base
 17 / 17) but not at k = 8 overall (gap 0.26 [0.18, 0.35]), which sharpening alone fails. By reach: elicitation only,
 up to 512 samples.
