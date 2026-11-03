@@ -164,25 +164,26 @@ def fig_likelihood(out):
     L = rows("likelihood.csv")
     if not L:
         return
-    groups = [("reach", "RL solutions, problems the base never solved", "#4a3aa7", "D"),
-              ("late", "RL solutions, problems the base solved only after > 16 samples", "#2a78d6", "o"),
-              ("ckpt_other", "RL solutions, other problems", "#86b6ef", "^"),
-              ("base_own", "the base's own solutions (extension)", BASE_C, "s"),
-              ("base_own_pilot", "the base's own solutions (AIME 2023 pilot)", "#eda100", "v")]
+    gen_c = {"base": BASE_C, "step_0500": RAMP[500], "step_2800": RAMP[2800]}
+    gen_l = {"base": "base", "step_0500": "RL step 500", "step_2800": "RL step 2800"}
+    grp = {"late": ("o", "late-solved problems"), "ckpt_other": ("^", "other problems"),
+           "base_own": ("s", "own rare successes"), "base_own_pilot": ("v", "own, AIME 2023 pilot")}
     fig, (a, b) = plt.subplots(1, 2, figsize=(11, 4.3), gridspec_kw=dict(wspace=0.3))
     vals = [float(r[c]) for r in L for c in ("own_mean_lp", "base_mean_lp")]
     lo = min(vals) - 0.02
-    for g, lab, c, mk in groups:
-        rr = [r for r in L if r["group"] == g]
-        if not rr:
-            continue
-        a.scatter([float(r["own_mean_lp"]) for r in rr], [float(r["base_mean_lp"]) for r in rr], s=24, color=c,
-                  marker=mk, edgecolor=SURFACE, linewidth=0.8, label=f"{lab} (n = {len(rr)})", zorder=3)
-        b.scatter([float(r["own_mean_lp"]) - float(r["base_mean_lp"]) for r in rr],
-                  [100 * float(r["base_frac_lt_1e3"]) for r in rr], s=24, color=c, marker=mk, edgecolor=SURFACE,
-                  linewidth=0.8, zorder=3)
+    for gm in ("step_2800", "step_0500", "base"):
+        for g, (mk, gl) in grp.items():
+            rr = [r for r in L if r["group"] == g and r["gen_model"] == gm]
+            if not rr:
+                continue
+            lab = f"{gen_l[gm]}, {gl} ({len(rr)})"
+            a.scatter([float(r["own_mean_lp"]) for r in rr], [float(r["base_mean_lp"]) for r in rr], s=24,
+                      color=gen_c[gm], marker=mk, edgecolor=SURFACE, linewidth=0.8, label=lab, zorder=3)
+            b.scatter([float(r["own_mean_lp"]) - float(r["base_mean_lp"]) for r in rr],
+                      [100 * float(r["base_frac_lt_1e3"]) for r in rr], s=24, color=gen_c[gm], marker=mk,
+                      edgecolor=SURFACE, linewidth=0.8, zorder=3)
     a.plot([lo, 0], [lo, 0], color=MUTED, lw=1, ls=(0, (4, 3)))
-    a.annotate("same likelihood under both", (lo * 0.35, lo * 0.35), rotation=37, fontsize=7.5, color=MUTED)
+    a.annotate("equal under both", (-0.16, -0.12), rotation=37, fontsize=7.5, color=MUTED)
     a.set_xlabel("generating model's mean log-prob per token")
     a.set_ylabel("base's mean log-prob per token")
     a.set_title("a   Correct solutions, scored by both models", loc="left", fontsize=9.5, color=TEXT)
@@ -191,7 +192,10 @@ def fig_likelihood(out):
     b.set_title("b   How surprising the base finds them", loc="left", fontsize=9.5, color=TEXT)
     for ax in (a, b):
         grid(ax)
-    a.legend(frameon=False, fontsize=7.2, loc="upper left")
+    a.set_xlim(lo, 0.02)
+    a.legend(frameon=False, fontsize=7.4, loc="upper left", title="generator, problems (n)", title_fontsize=7.4)
+    fig.text(0.125, -0.04, "late-solved: problems an RL checkpoint solved and the base solved only after more than 16 samples "
+             "(all 17 such problems, base first success at sample 18–383).", fontsize=7.5, color=MUTED)
     fig.savefig(out / "olmo_pilot_likelihood.png", dpi=160, bbox_inches="tight")
     plt.close(fig)
 

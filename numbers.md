@@ -1796,3 +1796,70 @@ At equal attempts every guided arm used > 1.25× plain's compute (flagged); the 
 matched wall-clock. Step checks: ≈ 1 checker call per structurally valid draw, 8–18 s per read (CPU); on long, guided
 tokens per attempt are 2.0–2.3× plain (cap 12) and 2.8–3.3× (cap 6).
 **Spend:** 4 A40 pods ($0.49/h), 9.07 pod-hours, $4.45 (`podbudget`). **Bucket:** `hf://buckets/dan-pandori/nd-rl/guided-tts/{artifacts/gt,artifacts/guided-tts,data/gt}`.
+
+
+## olmo-rlzero-pilot (2026-11-03, executor; UNREVIEWED)
+
+**Models (every number here):** base `allenai/Olmo-3-1025-7B` `main` (= `stage3-step11921`, sha a81bae42; 7.30 B
+parameters, bf16; pretrained on Dolma 3 + Dolmino 3 midtraining, no post-training); RL checkpoints
+`allenai/Olmo-3.1-7B-RL-Zero-Math` `step_0500` and `step_2800` (= `main`; GRPO-style RLVR from that base on
+`allenai/Dolci-RL-Zero-Math-7B`, open-instruct Olmo 3.1 recipe). Natural-language maths, not Lean: no Lean checker is
+involved; a sample is correct iff open-instruct's `MathVerifier` accepts it **run the way RL ran it** (off the main
+thread, so only string equivalence) — grade `rl`; `main` (sympy live) and `ansline` (integer on the last "Answer:"
+line) beside it. **Problems:** 90 MathArena AIME 2024 I/II, 2025, 2026 problems; **headline = 83** (7 excluded,
+`olmo_pilot/exclusions.csv`). **Sampling (all jobs):** template `olmo_thinker_rlzero`, T 1.0, top-p 1.0,
+max 16,384 response tokens, vLLM 0.11.0 bf16, n-gram speculative decoding (4 drafts; gate `olmo_pilot/gate_spec.json`).
+Per-sample grades: `artifacts/olmo_pilot/graded/<job>.jsonl`; per model × problem table `olmo_pilot/results.csv`
+(`analyze.py --kstar 512`); jobs, seeds and phases `olmo_pilot/jobs.csv`.
+
+**Stage 0 (AIME 2023 pilot, contaminated; not an evaluation number):** base 16 × 30: 6,353 tokens / sample, 17.5 %
+at the cap, pass@1 0.085, pass@16 0.367, 557 tok/s on an A100-SXM4-80GB = $0.69 per million generated tokens
+(`meta/s0_base.json`); step_2800 2 × 30: 12,249 tokens / sample, pass@1 0.383 (`graded/s0_step2800.jsonl`).
+Speculation gate (base, 8 × 30): 758.7 tok/s (1.36×), pass@1 0.092 vs 0.085, difference CI [−0.035, 0.052], mean
+length 6,169 vs 6,353, CI [−1,139, 693] → adopted.
+
+**pass@k, 83 headline problems, `rl` grade, problem-bootstrap 95 % CI** (`olmo_pilot/passk.csv`; phase-F samples:
+base 16, RL 8 per problem):
+
+| model | pass@1 | pass@2 | pass@4 | pass@8 | pass@16 |
+|---|---|---|---|---|---|
+| base | 0.094 [0.065, 0.124] | 0.165 [0.116, 0.214] | 0.261 [0.190, 0.333] | 0.364 [0.270, 0.453] | 0.458 [0.349, 0.566] |
+| step_0500 | 0.304 [0.220, 0.387] | 0.373 [0.280, 0.467] | 0.435 [0.337, 0.531] | 0.506 [0.398, 0.615] | — |
+| step_2800 | 0.419 [0.325, 0.510] | 0.491 [0.392, 0.589] | 0.556 [0.455, 0.652] | 0.626 [0.518, 0.735] | — |
+
+pass@1 by set (2024 / 2025 / 2026): base 0.107 / 0.096 / 0.082; step_0500 0.417 / 0.262 / 0.254; step_2800
+0.536 / 0.342 / 0.401. Solved within phase F: base 38 / 83 (16 samples), step_0500 42, step_2800 52 (8 samples);
+`main` and `ansline` give the same counts ± 1. Mean tokens / sample (phase F, 90 problems): base 5,872 (15.3 % cut),
+step_0500 11,790 (25.1 %), step_2800 11,712 (17.8 %) (`meta/F_*.json`).
+
+**Paired pass@8 difference** step_2800 − base: 0.262 [0.176, 0.348] (problem bootstrap, 83 problems).
+**Matched k = 8 (expected counts from unbiased pass@8, `olmo_pilot/reach.csv`, `dynamics.csv`):** entries vs the base
+step_0500 14.0, step_2800 22.8; exits 2.3, 1.0; step_0500 → step_2800 entries 12.0, exits 2.0.
+
+**Reach candidates and their fate** (`olmo_pilot/candidates.csv`): 17 headline problems were solved by step_0500 or
+step_2800 in phase F and by the base in none of its 16. The base, re-sampled sequentially (stop at the first
+`rl`-correct chunk; K 128 → 256 → 512 by the pre-registered budget rule), **solved all 17**: first correct base
+sample at draw 18, 25, 31, 39, 45, 46, 64, 73, 73, 77, 79, 83, 91, 104, 168, 248, 383 (median 73); every one is a
+complete solution of 4,071–16,384 tokens with a correct "Answer:" line (`ansline` agrees). Reverse candidates
+(base ≥ 1 in F, step_2800 0 / 8): aime2024_29, aime2025_14, plus aime2025_22 by symmetry; step_2800 re-sampled the same
+way solved all 3 (first correct draw 53, 12, 280; the base's were 14, 73, 10). **Full budget, `rl`: step_2800 reach 0, strong reach 0, reverse 0.**
+Under `ansline` aime2025_14 becomes step_2800 reach: the base's only success there (`F_base` chunk 0, sample 9) is a
+549-token response with no "Answer:" line, whose text was lost with pod `orz-a`. step_0500 (8 samples, never
+extended on its reverse problems): reach 0, reverse 13 — not comparable (8 vs 16–384 samples).
+Confirmation (fresh samples): step_2800 ≥ 1 correct on 14 of its 16 candidates (16 each), step_0500 on 5 of 8 (8 each).
+
+**Likelihood (`olmo_pilot/likelihood.csv`, `ll_plan.py table`; teacher-forced, vLLM prompt logprobs, bf16):** base's
+own correct solutions (18 rare successes in the extension + 19 AIME 2023 pilot): base mean log-prob / token 2.5–97.5 %
+[−0.936, −0.246]. RL solutions on the 17 late-solved problems (step_2800 60, step_0500 18): base median −0.546 vs own
+−0.492; **100 % inside the base's range** ("in the base's support", Part A). Gap own − base (median, nats / token):
+step_2800 0.057 (late) / 0.053 (other problems), step_0500 0.006 / 0.006; whole-solution gap (median) step_2800
+731 / 388 nats, step_0500 76 / 46. Tokens the base gives p < 10⁻³: 0.19–0.26 % (median).
+
+**Nearest RL training prompt (item 6):** candidates vs other headline problems — IDF-weighted 5-gram containment
+median 0.082 vs 0.066 (permutation p = 0.33); MiniLM embedding cosine 0.706 vs 0.653 (p = 0.018; not
+pre-registered). The two templated RL-data relatives (aime2024_12, aime2025_15) are not candidates.
+
+**Compute axis (`olmo_pilot/compute_axis.csv`, from `lengths.csv`; rl-compute-share definitions, 6ND = 2.66 × 10²³):**
+cumulative RL ÷ pretraining compute step 500: 2.0 × 10⁻⁴ – 4.4 × 10⁻⁴; step 2800: 1.4 × 10⁻³ – 3.1 × 10⁻³ (low: mean
+length on 64 RL prompts — base 4,868, step_0500 9,332, step_2800 9,743 tokens — oversample 1, no extra forward;
+high: AIME mean lengths, oversample 3, extra forward, prompt tokens).
