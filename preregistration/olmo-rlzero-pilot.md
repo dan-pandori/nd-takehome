@@ -1,6 +1,6 @@
 # Pre-registration — olmo-rlzero-pilot (proposal 34)
 
-Written 2026-11-03 ≈ 01:40 UTC by the executor, before any pod. Brief: `nd-rl` proposal 34 (Dan, 2026-11-02, ≤ $50).
+Written 2026-11-03 01:05–01:20 UTC by the executor, before any pod (Part A committed 01:20:39 UTC, 255151cd). Brief: `nd-rl` proposal 34 (Dan, 2026-11-02, ≤ $50).
 This file is committed in two parts, as the brief requires: **Part A** (this commit, before the first pod) fixes the
 question, the definitions, the verdict rules and Stage 0. **Part B** (an addendum, committed after Stage 0's
 throughput measurement and before any sampling on the evaluation set) fixes the sampling budget per checkpoint and the
