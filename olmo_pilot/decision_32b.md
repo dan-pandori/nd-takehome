@@ -39,7 +39,7 @@ n-gram speculative decoding (exact speculative sampling) bought 1.36× with outp
   run, steps 751–2,300 the extra 21 days on 224 GPUs that produced 3.1.
 - RL compute share: ≈ 0.14 of pretraining in GPU-hours at step 2,300 (rl-compute-share's Olmo 3.1 row; GPU-hours
   overstate the FLOP share because rollouts run at low utilisation). In FLOPs, that table's step-750 bounds
-  (1.8 × 10⁻³ – 7.4 × 10⁻³) scale to ≈ 6 × 10⁻³ – 2 × 10⁻² at step 2,300: 2–10× this pilot's 1.4–3.1 × 10⁻³, and at the
+  (1.8 × 10⁻³ – 7.4 × 10⁻³) scale to ≈ 6 × 10⁻³ – 2 × 10⁻² at step 2,300: 2–10× this pilot's 1.5–3.2 × 10⁻³, and at the
   top of the range the literature review found tested.
 
 ## 3. Cost of the 32B test

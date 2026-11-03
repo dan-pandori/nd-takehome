@@ -5,8 +5,9 @@
                            each model's fixed budget (16 base, 8 RL); b: the RL checkpoints' reach candidates (solved by
                            the checkpoint in its 8 samples, never by the base in 16) still unsolved by the base as the
                            base's budget grows, and the reverse candidates still unsolved by step 2800 as its budget grows
-  olmo_pilot_reach.png  expected entries / exits vs the base at matched k = 8, reach and strong reach at full budget,
-                        against cumulative RL compute ÷ pretraining compute (low–high bounds as horizontal bars)
+  olmo_pilot_reach.png  expected entries / exits vs the base at matched k = 8 on the 42 problems every RL checkpoint
+                        was sampled on, reach and strong reach at full budget, against cumulative RL compute ÷
+                        pretraining compute (low–high bounds as horizontal bars)
   olmo_pilot_likelihood.png  base vs generating-checkpoint mean log-prob per token for scored correct solutions
 
 Usage: figures.py [--outdir figures]   (reads olmo_pilot/{passk,results,candidates,reach,compute_axis,likelihood}.csv)
@@ -72,8 +73,12 @@ def fig_passk(out):
         return
     res = {(r["model"], r["pid"]): r for r in rows("results.csv")}
     fig, (a, b) = plt.subplots(1, 2, figsize=(11.2, 4.3), gridspec_kw=dict(wspace=0.28, width_ratios=[1, 1.15]))
+    n_all = max(int(r["n_problems"]) for r in P)
     for step, m in sorted({(int(r["step"]), r["model"]) for r in P}):
-        rr = [r for r in P if r["model"] == m and int(r["k"]) <= (16 if step == 0 else 8)]
+        # step_0100 was sampled on a random half only; its like-for-like comparison is half_subset.csv
+        rr = [r for r in P if r["model"] == m and int(r["k"]) <= (16 if step == 0 else 8) and int(r["n_problems"]) == n_all]
+        if not rr:
+            continue
         k = [int(r["k"]) for r in rr]
         y = [float(r["pass_at_k"]) for r in rr]
         a.fill_between(k, [float(r["lo95"]) for r in rr], [float(r["hi95"]) for r in rr], color=color(step),
@@ -87,7 +92,7 @@ def fig_passk(out):
     a.set_ylim(0, 1)
     a.set_xlabel("k (samples per problem)")
     a.set_ylabel("pass@k (the verifier RL rewarded)")
-    a.set_title(f"a   pass@k, {P[0]['n_problems']} AIME 2024–26 problems", loc="left", fontsize=9.5, color=TEXT)
+    a.set_title(f"a   pass@k, {n_all} AIME 2024–26 problems", loc="left", fontsize=9.5, color=TEXT)
     a.legend(frameon=False, fontsize=8, loc="upper left")
     C = rows("candidates.csv")
     reach = [r["pid"] for r in C if r["kind"] == "reach_candidate"]
@@ -122,19 +127,24 @@ def fig_passk(out):
 
 
 def fig_reach(out):
-    R = [r for r in rows("reach.csv") if r["grade"] == "rl"]
+    """Expected entries / exits vs the base at k = 8 on the common problem set (the 42 headline problems of step_0100's
+    random half, half_subset.csv), and reach / strong reach at full budget (reach.csv), against the compute axis."""
+    H = rows("half_subset.csv")
+    R = {r["model"]: r for r in rows("reach.csv") if r["grade"] == "rl"}
     X = {int(r["step"]): r for r in rows("compute_axis.csv")}
-    if not R or not X:
+    step = {"step_0100": 100, "step_0500": 500, "step_2800": 2800}
+    H = [r for r in H if r["model"] in step and step[r["model"]] in X]
+    if not H:
         return
-    kcol = [c for c in R[0] if c.startswith("exp_entries_k")][0]
-    k = kcol.rsplit("k", 1)[1]
+    n = H[0]["n_problems"]
     fig, ax = plt.subplots(figsize=(6.6, 4.2))
-    series = [(kcol, f"expected entries vs the base at k = {k}", "#2a78d6", "o", "-"),
-              (f"exp_exits_k{k}", f"expected exits vs the base at k = {k}", BASE_C, "s", "-"),
-              ("reach_full", "reach: solved by the checkpoint, never by the base (full budget)", "#4a3aa7", "D", "-"),
-              ("strong_reach", "strong reach (pre-registered definition)", "#1baf7a", "^", (0, (4, 2)))]
-    for key, lab, c, mk, ls in series:
-        pts = sorted((int(r["step"]), float(r[key])) for r in R)
+    series = [("exp_entries_k8", H, f"expected entries vs the base at k = 8 ({n} problems)", "#2a78d6", "o", "-"),
+              ("exp_exits_k8", H, f"expected exits vs the base at k = 8 ({n} problems)", BASE_C, "s", "-"),
+              ("reach_full", [R[m] for m in step if m in R], "reach at full budget (83 problems)", "#4a3aa7", "D", "-"),
+              ("strong_reach", [R[m] for m in step if m in R], "strong reach (83 problems)", "#1baf7a", "^",
+               (0, (4, 2)))]
+    for key, src, lab, c, mk, ls in series:
+        pts = sorted((step[r["model"]], float(r[key])) for r in src if step[r["model"]] in X)
         xs = [float(X[s]["ratio_geomean"]) for s, _ in pts]
         lo = [float(X[s]["ratio_low"]) for s, _ in pts]
         hi = [float(X[s]["ratio_high"]) for s, _ in pts]
@@ -143,17 +153,20 @@ def fig_reach(out):
                     marker=mk, ms=6, lw=2, ls=ls, capsize=0, elinewidth=1, label=lab)
         for (s, _), x, y in zip(pts, xs, ys):
             txt = f"{y:.1f}" if y % 1 else f"{y:.0f}"
-            if key == kcol:
+            if key == "exp_entries_k8":
                 txt = f"RL step {s}: {txt}"
-            ax.annotate(txt, (x, y), textcoords="offset points", xytext=(7, 4), fontsize=7.5, color=TEXT)
+            if key in ("exp_entries_k8", "exp_exits_k8"):
+                ax.annotate(txt, (x, y), textcoords="offset points", xytext=(7, 4), fontsize=7.5, color=TEXT)
+    ax.annotate("reach and strong reach are 0 at every checkpoint", (0.98, 0.17), xycoords="axes fraction",
+                ha="right", fontsize=7.5, color=MUTED)
     ax.set_xscale("log")
-    ax.set_xticks([1e-4, 3e-4, 1e-3, 3e-3], ["10⁻⁴", "3×10⁻⁴", "10⁻³", "3×10⁻³"])
+    ax.set_xticks([3e-5, 1e-4, 3e-4, 1e-3, 3e-3], ["3×10⁻⁵", "10⁻⁴", "3×10⁻⁴", "10⁻³", "3×10⁻³"])
     ax.minorticks_off()
-    ax.set_xlim(1e-4, 6e-3)
+    ax.set_xlim(2e-5, 6e-3)
     grid(ax)
-    ax.set_ylim(0, None)
+    ax.set_ylim(-0.5, None)
     ax.set_xlabel("cumulative RL compute ÷ pretraining compute (FLOPs)")
-    ax.set_ylabel("problems (of 83)")
+    ax.set_ylabel("problems")
     ax.set_title("Problems RL adds and loses relative to the base", loc="left", fontsize=9.5, color=TEXT)
     ax.legend(frameon=False, fontsize=7.3, loc="upper left")
     fig.savefig(out / "olmo_pilot_reach.png", dpi=160, bbox_inches="tight")

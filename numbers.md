@@ -1859,7 +1859,39 @@ step_2800 0.057 (late) / 0.053 (other problems), step_0500 0.006 / 0.006; whole-
 median 0.082 vs 0.066 (permutation p = 0.33); MiniLM embedding cosine 0.706 vs 0.653 (p = 0.018; not
 pre-registered). The two templated RL-data relatives (aime2024_12, aime2025_15) are not candidates.
 
-**Compute axis (`olmo_pilot/compute_axis.csv`, from `lengths.csv`; rl-compute-share definitions, 6ND = 2.66 × 10²³):**
-cumulative RL ÷ pretraining compute step 500: 2.0 × 10⁻⁴ – 4.4 × 10⁻⁴; step 2800: 1.4 × 10⁻³ – 3.1 × 10⁻³ (low: mean
-length on 64 RL prompts — base 4,868, step_0500 9,332, step_2800 9,743 tokens — oversample 1, no extra forward;
-high: AIME mean lengths, oversample 3, extra forward, prompt tokens).
+**Compute axis (`olmo_pilot/compute_axis.csv`, from `lengths.csv`; rl-compute-share definitions, 6ND = 2.66 × 10²³,
+32 prompts × 8 samples per step):** cumulative RL ÷ pretraining compute step 100: 4.1 × 10⁻⁵ – 8.6 × 10⁻⁵; step 500:
+2.6 × 10⁻⁴ – 5.4 × 10⁻⁴; step 2800: 1.5 × 10⁻³ – 3.2 × 10⁻³. Low: mean length on the 64 probe prompts from the RL data
+(base 4,868, step_0100 9,854, step_0500 9,332, step_2800 9,743 tokens), oversample 1, no extra forward; high: mean
+length on the AIME samples (5,872 / 11,284 / 11,790 / 11,712), oversample 3 (assumed bound for active sampling),
+one extra forward, 180 prompt tokens.
+
+**step_0100 (budget-gated addition; 8 samples on a seeded random half of the 90 problems, 42 headline;
+`olmo_pilot/half_subset.csv`, every checkpoint on the same 42):**
+
+| model | pass@1 | pass@8 | expected entries / exits vs base at k = 8 | mean tokens |
+|---|---|---|---|---|
+| base | 0.116 [0.076, 0.161] | 0.450 [0.326, 0.577] | — | — |
+| step_0100 | 0.301 [0.208, 0.399] | 0.643 [0.500, 0.786] | 9.9 / 1.8 | 11,309 |
+| step_0500 | 0.402 [0.286, 0.524] | 0.643 [0.500, 0.786] | 8.6 / 0.5 | 10,918 |
+| step_2800 | 0.562 [0.438, 0.685] | 0.786 [0.643, 0.905] | 14.6 / 0.5 | 10,992 |
+
+step_0100 has no reach problem either (every problem it solved, the base solved within its budget). Its responses are
+already as long as the final checkpoint's.
+
+**Compute (registry rows `artifacts/olmo-rlzero-pilot/registry/`, `olmo_pilot/compute_rows.py`; GPU-seconds = model
+load + generation from each job's meta file; no training, no Lean; one A100-80GB per job):** base: phase F 3.04
+GPU-h / 8.46 M generated tokens / 1,440 samples, extension 4.28 / 10.44 M / 1,472, probe 0.13 / 0.31 M / 64 (estimated:
+meta lost); step_2800: F 3.58 / 8.43 M / 720, confirmation 1.51 / 3.57 M / 256, extension 1.97 / 4.14 M / 344, probe
+0.31; step_0500: F 3.29 / 8.49 M / 720, confirmation 0.31 / 0.77 M / 64, probe 0.26; step_0100: F (half) 1.55 / 4.06 M
+/ 360, probe 0.27, void runs 1.52 (no samples used); Stage 0 and gate 2.54; likelihood scoring 0.13 (4.38 M tokens
+scored). The base got more samples than any RL checkpoint by design (extension); no arm is matched on compute.
+**Pods and dollars (RunPod balance 209.90 → 170.54 = $39.36 billed; podbudget derives $40.26):** `orz-a`
+A100-SXM4-80GB community $1.39/h, 7.25 h ($10.07; host failure at 07:54, three recovery attempts, terminated); `orz-b` H200 community $3.59/h, 0.23 h ($0.82; broken CUDA);
+`orz-c` A100 80GB PCIe secure $1.79/h, 7.21 h ($12.90); `orz-d` A100-SXM4-80GB community $1.39/h, 11.85 h ($16.47).
+26.5 pod-hours; 24.7 of them in jobs.
+**Bucket** (`hf://buckets/dan-pandori/nd-rl/olmo-rlzero-pilot/`): `artifacts/olmo_pilot/` (samples with texts and token
+ids, grades, likelihood scores, the midtraining scan; sha256 in `artifacts/MANIFEST.jsonl`), `olmo_pilot/` (code and
+results), `pod/olmo_pilot/`, `data/olmo_pilot/` (the Dolci-RL-Zero-Math-7B parquet @ 93b5e498), `figures/`, `docs/`;
+registry rows `hf://buckets/dan-pandori/nd-rl/registry/olmo-rlzero-pilot/`. Lost with pod `orz-a` (host failure): the
+sample texts of F_base, P_base and g_spec_base (their grades are kept) and the last 96 rows of s0_base's texts.

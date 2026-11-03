@@ -27,7 +27,7 @@ had not went back to the base, attempt after attempt (up to 512), until it solve
    solution falls inside the range of the base's own correct solutions. The final model's are slightly less typical
    for the base (about 5 % less probable per token) than for itself, with no part unusually surprising to it.
 
-4. *How much RL is that?* About a thousandth of the compute used to pretrain the model (1.4–3.1 × 10⁻³ at the last
+4. *How much RL is that?* About a thousandth of the compute used to pretrain the model (1.5–3.2 × 10⁻³ at the last
    snapshot). Over that range the gains grew; genuinely new problems never appeared.
 
 **What this does and does not show.** One model, one RL run, 83 problems, at most about 500 attempts per problem: a
@@ -36,7 +36,7 @@ problem the base fails 500 times might still fall at 5,000. Our decision rule, w
 RL this small may be exactly the regime where it only sharpens; Olmo 3.1 Think 32B spent far more of its compute on RL
 (about 14 % of pretraining in GPU-hours), so the next test is planned there.
 
-**What it cost.** About $⟨cost⟩ of rented GPUs. Sampling is expensive — about half a dollar per million tokens —
+**What it cost.** About $39 of rented GPUs. Sampling is expensive — about half a dollar per million tokens —
 because each solution is long (6,000 tokens for the base, 12,000 after RL) and the model's attention stores a lot per
 token. The decision memo (`olmo_pilot/decision_32b.md`) prices the 32B test at about $110 for this design and $205–320
 for one that pushes the starting model to 512–2,048 attempts.

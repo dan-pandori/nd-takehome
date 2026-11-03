@@ -132,3 +132,7 @@ It answers the question at k ≤ 128–256, not 2,048, and the trajectory has th
 **Question:** do you want the middle design (≈ $150 more) or a targeted top-up — e.g. ≈ $40 more to extend the base to
 1,024 on the reach candidates only, which is the part of the brief that decides create vs elicit? Default if
 unanswered: I stop at $45 and the decision memo prices both options.
+  - **Outcome (olmo-rlzero-pilot, 16:19 UTC, unanswered → default followed):** the ≈ $43 design ran, plus the
+    pre-registered extension passes to 256 and 512 and step_0100 on a random half; total $39.36 of $50. Every
+    RL-only solve fell to the base within 383 samples, so the cheapest decisive next step is the 32B test with a
+    large extension budget (memo: M2 ≈ $320, M1 ≈ $205, a pilot-sized M0 ≈ $110).

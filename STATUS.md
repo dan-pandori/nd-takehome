@@ -266,3 +266,14 @@ Brief: nd-rl proposal 34 (Dan, 2026-11-02). Policy: AGENT_POLICY.md. Run id: olm
   6,353 tokens per AIME sample, 17.5 % at the 16,384 cap); step_2800 writes 12,249 tokens per sample. The brief's design
   costs ≈ $1,000 at these prices → question in QUESTIONS.md; default ≈ $43 design (Part B). 7 of 90 evaluation
   problems excluded for contamination (RL data or midtraining). Next: speculative-decoding gate, then phase F on 4 pods.
+- 2026-11-03 16:19 UTC  **Result** (models: base Olmo-3-1025-7B `main`; RL-Zero-Math step_0100 / 0500 / 2800; 83 AIME
+  2024–26 problems; RL's template, verifier and sampling). pass@1 0.094 → 0.304 (step 500) → 0.419 (step 2800); pass@8
+  0.364 → 0.626. **All 17 problems an RL checkpoint solved and the base had not (0 / 16) were solved by the base when
+  re-sampled (draw 18–383, median 73); the 3 reverse problems fell to step_2800 likewise. Strong reach 0, reverse 0 at
+  K ≤ 512.** RL's solutions lie inside the base's own-solution likelihood range (gap 0.057 nats/token at step 2800).
+  Pre-registered verdict: inconclusive (its k = 8 clause fails; reach says elicitation only). Cost $39.36 of $50
+  (26.5 pod-h; one host failure, one broken-CUDA pod). 32B memo: ≈ $110–320. Deliverables: `run_olmo_rlzero_pilot.md`,
+  `numbers.md` § olmo-rlzero-pilot, `olmo_pilot/` (code, manifest, results.csv, likelihood.csv, decision_32b.md,
+  plain_summary.md), `figures/olmo_pilot_*.png`, bucket `hf://buckets/dan-pandori/nd-rl/olmo-rlzero-pilot/`. No pods left.
+
+OLMO-RLZERO-PILOT DONE 2026-11-03T16:19:20Z
