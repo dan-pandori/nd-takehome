@@ -283,3 +283,6 @@ OLMO-RLZERO-PILOT DONE 2026-11-03T16:19:20Z
   `main`; Olmo-3.1-32B-Think `step_0100`, `step_0750`, `main` (= `step_2300`, shards identical). Recipe pinned
   (open-instruct 7e780f2fea: olmo_thinker, T 1, top_p 1, 32,768, EOS only; MathVerifier off-thread). Next: Stage 0
   (≤ $8, AIME 2024) and the contamination scan (Think RL / DPO / SFT data) on a CPU pod.
+- 2026-11-03 20:24 UTC  Stage 0 done ($6.5; DPO writes 17.6k tokens per AIME sample, 12.9 % cut at 32k; 1,103 tok/s on
+  1 × H200 secure = $1.33/M). Projection $85–112 < $140 → pre-registered design unchanged. Part B committed
+  (d78ea069). Fixed phase running on `ot32-a` (F_dpo → F_s2300 → F_s0750); F_s0100 on a second pod if one appears.
