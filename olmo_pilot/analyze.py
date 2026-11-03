@@ -39,6 +39,8 @@ def load(jobs_csv, grade_dir=A / "graded"):
     rows = defaultdict(list)  # (model, pid) -> list of (chunk, i, phase, sample row)
     meta = {}
     for j in jobs:
+        if j["phase"] in ("void", "pilot"):  # void: interrupted job never used; pilot: AIME 2023 Stage 0 / gate
+            continue
         f = grade_dir / f"{j['job']}.jsonl"
         if not f.exists():
             continue

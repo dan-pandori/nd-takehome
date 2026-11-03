@@ -19,7 +19,7 @@ from pathlib import Path
 
 A = Path("artifacts/olmo_pilot/graded")
 O = Path("olmo_pilot")
-F = {"base": "F_base", "step_2800": "F_s2800", "step_0100": "F_s0100", "step_0500": "F_s0500"}
+F = {"base": "F_base", "step_2800": "F_s2800", "step_0100": "F_s0100b", "step_0500": "F_s0500"}
 
 
 def succ(job):

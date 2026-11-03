@@ -9,9 +9,9 @@ for J in "$@"; do
   grep -qs "JOB_START $J " $L/q_$J.log && { echo "skip $J (started before)"; continue; }
   X=""
   case $J in
-    C_s2800) F=$PL/C_step_2800.txt; C="bash pod/olmo_pilot/job.sh C_s2800 step_2800 $RL step_2800 24 @$F 3001 1 8" ;;
+    C_s2800) F=$PL/C_step_2800.txt; C="bash pod/olmo_pilot/job.sh C_s2800 step_2800 $RL step_2800 16 @$F 3001 1 8" ;;
     C_s0100) F=$PL/C_step_0100.txt; C="bash pod/olmo_pilot/job.sh C_s0100 step_0100 $RL step_0100 24 @$F 3002 1 8" ;;
-    C_s0500) F=$PL/C_step_0500.txt; C="bash pod/olmo_pilot/job.sh C_s0500 step_0500 $RL step_0500 24 @$F 3003 1 8" ;;
+    C_s0500) F=$PL/C_step_0500.txt; C="bash pod/olmo_pilot/job.sh C_s0500 step_0500 $RL step_0500 8 @$F 3003 1 8" ;;
     E1_base)  F=$PL/E_base.txt;  X="$FLAGS --seq_stop"; C="bash pod/olmo_pilot/job.sh E1_base base $BASE main 1 @$F 4001 1 16" ;;
     E1_s2800) F=$PL/E_s2800.txt; X="$FLAGS --seq_stop"; C="bash pod/olmo_pilot/job.sh E1_s2800 step_2800 $RL step_2800 1 @$F 4002 1 16" ;;
     C_s2800b) F=$PL/C_step_2800b.txt; C="bash pod/olmo_pilot/job.sh C_s2800b step_2800 $RL step_2800 24 @$F 3011 1 8" ;;
