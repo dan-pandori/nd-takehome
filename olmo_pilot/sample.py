@@ -88,6 +88,9 @@ def main():
     ap.add_argument("--max_num_seqs", type=int, default=512)
     ap.add_argument("--max_tokens", type=int, default=MAX_TOKENS)
     ap.add_argument("--order", default="hard_first", choices=["hard_first", "given"])
+    ap.add_argument("--seq_stop", action="store_true",
+                    help="extension mode: one chunk in flight per problem; stop a problem at its first chunk with a "
+                         "sample the RL verifier accepts, else continue to its --pids budget")
     ap.add_argument("--spec_ngram", type=int, default=0,
                     help="n-gram prompt-lookup speculative decoding with this many draft tokens (0 = off)")
     args = ap.parse_args()
@@ -133,10 +136,36 @@ def main():
                                          "prompt_lookup_max": 4, "prompt_lookup_min": 2}} if args.spec_ngram else {}))
     t_load = time.time() - t0
     eng = llm.llm_engine
-    for k, (pid, c, m, ids) in enumerate(reqs):
+
+    def submit(req):
+        pid, c, m, ids = req
         sp = SamplingParams(n=m, temperature=TEMPERATURE, top_p=TOP_P, max_tokens=args.max_tokens,
                             detokenize=False, output_kind=RequestOutputKind.FINAL_ONLY)
         eng.add_request(f"{pid}|{c}", {"prompt_token_ids": ids}, sp)
+
+    pending = {}
+    if args.seq_stop:
+        from grade import grade_rl
+        for r in reqs:
+            pending.setdefault(r[0], []).append(r)
+        for pid in pending:
+            pending[pid].sort(key=lambda r: r[1])
+        # a problem already solved in an earlier extension chunk of this job (resume) is not continued
+        if os.path.exists(args.out):
+            with gzip.open(args.out, "rt") as f0:
+                for ln in f0:
+                    try:
+                        r0 = json.loads(ln)
+                    except json.JSONDecodeError:
+                        break
+                    if r0["pid"] in pending and grade_rl(r0["text"], probs[r0["pid"]]["answer"]):
+                        pending[r0["pid"]] = []
+        for pid in list(pending):
+            if pending[pid]:
+                submit(pending[pid].pop(0))
+    else:
+        for req in reqs:
+            submit(req)
     t1 = time.time()
     n_tok = n_samp = n_len = 0
     last = t1
@@ -157,7 +186,11 @@ def main():
                     n_tok += len(tids)
                     n_samp += 1
                     n_len += comp.finish_reason == "length"
+                    if args.seq_stop and grade_rl(rec["text"], probs[pid]["answer"]):
+                        pending[pid] = []  # first correct chunk: stop this problem
                 f.flush()
+                if args.seq_stop and pending.get(pid):
+                    submit(pending[pid].pop(0))
             now = time.time()
             if now - last > 60:
                 print(f"[{time.strftime('%H:%M:%S')}] {now - t1:.0f}s samples={n_samp} gen_tok={n_tok} "

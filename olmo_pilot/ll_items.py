@@ -59,8 +59,17 @@ def main():
             if args.max_per_job and len(keep) > args.max_per_job:
                 keep = set(rng.sample(sorted(keep), args.max_per_job))
             with gzip.open(A / "samples" / f"{job}.jsonl.gz", "rt") as f:
-                for ln in f:
-                    r = json.loads(ln)
+                lines = []
+                try:
+                    for ln in f:
+                        lines.append(ln)
+                except EOFError:  # a job killed mid-write leaves a gzip without its end marker; keep complete rows
+                    pass
+                for ln in lines:
+                    try:
+                        r = json.loads(ln)
+                    except json.JSONDecodeError:
+                        continue
                     k = (r["pid"], r["chunk"], r["i"])
                     if k not in keep:
                         continue

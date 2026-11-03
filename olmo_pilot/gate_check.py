@@ -19,6 +19,7 @@ def per_problem(job):
 
 
 def main(gate="g_spec_base", ref="s0_base", ref_tps=557.2):
+    ref_tps = float(ref_tps)
     g, s = per_problem(gate), per_problem(ref)
     pids = sorted(set(g) & set(s))
     p1 = np.array([[np.mean([x[0] for x in g[p]]), np.mean([x[0] for x in s[p]])] for p in pids])
