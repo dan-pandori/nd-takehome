@@ -145,6 +145,7 @@ def main():
 
     pending = {}
     if args.seq_stop:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
         from grade import grade_rl
         for r in reqs:
             pending.setdefault(r[0], []).append(r)

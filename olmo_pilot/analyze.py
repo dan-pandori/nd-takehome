@@ -23,6 +23,7 @@ import numpy as np
 A = Path("artifacts/olmo_pilot")
 O = Path("olmo_pilot")
 GRADES = ("rl", "ansline", "main")
+KSTAR = 128
 
 
 def passk(n, c, k):
@@ -60,6 +61,7 @@ def summarize(rows, meta, probs, excl):
             ok = [bool(s[3].get(g)) for s in ss]
             rec[f"succ_{g}"] = sum(ok)
             rec[f"succ_fixed_{g}"] = sum(bool(s[3].get(g)) for s in fixed)
+            rec[f"succ_confirm_{g}"] = sum(bool(s[3].get(g)) for s in ss if s[2] == "confirm")
             rec[f"first_{g}"] = (ok.index(True) + 1) if any(ok) else ""
         toks = [s[3]["n_tok"] for s in ss]
         rec["mean_tok"] = round(float(np.mean(toks)), 1)
@@ -99,7 +101,10 @@ def main():
     ap.add_argument("--jobs", default=str(O / "jobs.csv"))
     ap.add_argument("--outdir", default=str(O))
     ap.add_argument("--sets", default="aime2024,aime2025,aime2026")
+    ap.add_argument("--kstar", type=int, default=128, help="extension budget reached (strong-reach threshold)")
     args = ap.parse_args()
+    global KSTAR
+    KSTAR = args.kstar
     probs = {r["pid"]: r for r in (json.loads(ln) for ln in open(O / "problems.jsonl"))}
     excl = {}
     if (O / "exclusions.csv").exists():
@@ -129,6 +134,27 @@ def main():
                     if np.isnan(col).any():
                         continue  # report pass@k only where every headline problem has an estimate
                     w.writerow([m, meta[m], g, k, len(pids), f"{np.mean(col):.4f}", f"{lo[b]:.4f}", f"{hi[b]:.4f}"])
+    # Lower bound beyond the fixed budget: problems without samples that far count as unsolved (dead problems were
+    # extended for nobody, so this treats every model alike). Rows only where at least one problem was extended.
+    with open(od / "passk_lb.csv", "w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["model", "step", "grade", "k", "n_problems", "pass_at_k", "n_defined"])
+        for m in models:
+            for g in GRADES:
+                pids, M = pass_curve(res, m, ks, g, head)
+                if not pids:
+                    continue
+                max_att = max(r["attempts"] for r in res if r["model"] == m and r["pid"] in head)
+                for b, k in enumerate(ks):
+                    if k > max_att:
+                        break
+                    col = M[:, b]
+                    nd = int((~np.isnan(col)).sum())
+                    if nd == 0 or (k > 1 and not np.isnan(col).any()):
+                        if not np.isnan(col).any():
+                            w.writerow([m, meta[m], g, k, len(pids), f"{np.mean(col):.4f}", nd])
+                        continue
+                    w.writerow([m, meta[m], g, k, len(pids), f"{np.nansum(col) / len(col):.4f}", nd])
     print(f"wrote {od/'results.csv'}, {od/'passk.csv'} ({len(res)} model x problem rows, {len(head)} headline problems)")
     reach(res, meta, models, head, od)
 
@@ -148,7 +174,10 @@ def reach(res, meta, models, head, od, base="base"):
                     continue
                 if c[f"succ_{g}"] >= 1 and b[f"succ_{g}"] == 0:
                     rch.append(p)
-                    if (c[f"succ_{g}"] >= 2 and b["succ_ansline"] == 0 and b["attempts"] >= 512):
+                    # strong reach (Part A as amended in Part B): >= 2 correct samples of c including >= 1 fresh
+                    # confirmation sample, the base also has no ansline-correct sample, and its budget reached K*
+                    if (c[f"succ_{g}"] >= 2 and c[f"succ_confirm_{g}"] >= 1 and b["succ_ansline"] == 0
+                            and b["attempts"] >= KSTAR):
                         strong.append(p)
                 if b[f"succ_{g}"] >= 1 and c[f"succ_{g}"] == 0:
                     rev.append(p)

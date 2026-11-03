@@ -34,7 +34,12 @@ def main():
     ap.add_argument("--max_per_job", type=int, default=0)
     ap.add_argument("--grade", default="rl")
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--keys", default=None, help="file of job|pid|chunk|i keys (overrides --jobs selection)")
     args = ap.parse_args()
+    want_keys = None
+    if args.keys:
+        want_keys = {ln.strip() for ln in open(args.keys) if ln.strip()}
+        args.jobs = ",".join(sorted({k.split("|")[0] for k in want_keys}))
     from transformers import AutoTokenizer
     tok = AutoTokenizer.from_pretrained(args.tokenizer)
     probs = {r["pid"]: r for r in (json.loads(ln) for ln in open("olmo_pilot/problems.jsonl"))}
@@ -58,6 +63,9 @@ def main():
                 keep.update(rng.sample(ks, min(args.cap, len(ks))) if args.cap else ks)
             if args.max_per_job and len(keep) > args.max_per_job:
                 keep = set(rng.sample(sorted(keep), args.max_per_job))
+            if want_keys is not None:
+                keep = {tuple([k.split("|")[1], int(k.split("|")[2]), int(k.split("|")[3])])
+                        for k in want_keys if k.split("|")[0] == job}
             with gzip.open(A / "samples" / f"{job}.jsonl.gz", "rt") as f:
                 lines = []
                 try:
