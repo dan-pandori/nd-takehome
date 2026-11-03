@@ -1,0 +1,86 @@
+6465 shards in 14 subsets; 0 done; 6465 to scan
+50/6465 scanned (last data/cranemath/shard_00000052-withid.jsonl.zst)
+100/6465 scanned (last data/cranemath/shard_00000104-withid.jsonl.zst)
+150/6465 scanned (last data/cranemath/shard_00000146-withid.jsonl.zst)
+200/6465 scanned (last data/dolmino-math/dolmino_math_codesearchnet-owmfilter_php_0004.jsonl.zst)
+250/6465 scanned (last data/cranemath/shard_00000189-withid.jsonl.zst)
+300/6465 scanned (last data/dolmino-math/dolmino_math_dolmino_math_synth_gsm_mind_layman-knowall_concat_train.10.jsonl.zst)
+350/6465 scanned (last data/dolmino-math/dolmino_math_dolmino_math_synth_gsm_mind_teacher-student_concat_train.04.jsonl.zst)
+400/6465 scanned (last data/dolmino-math/dolmino_math_mathcoder2-synthmath_m-a-p_Matrix_filtered-math_book_math.0000.0029.jsonl.zst)
+450/6465 scanned (last data/dolmino-math/dolmino_math_mathcoder2-synthmath_m-a-p_Matrix_filtered-math_book_math.0000.0080.jsonl.zst)
+500/6465 scanned (last data/dolmino-math/dolmino_math_mathcoder2-synthmath_m-a-p_Matrix_filtered-math_book_math.0000.0130.jsonl.zst)
+550/6465 scanned (last data/dolmino-math/dolmino_math_mathcoder2-synthmath_m-a-p_Matrix_filtered-math_book_math.0000.0179.jsonl.zst)
+600/6465 scanned (last data/dolmino-math/dolmino_math_mathcoder2-synthmath_m-a-p_Matrix_filtered-math_book_math.0000.0231.jsonl.zst)
+650/6465 scanned (last data/dolmino-math/dolmino_math_mathcoder2-synthmath_m-a-p_Matrix_filtered-math_book_math.0000.0276.jsonl.zst)
+700/6465 scanned (last data/dolmino-math/dolmino_math_mathcoder2-synthmath_m-a-p_Matrix_filtered-math_book_math.0000.0328.jsonl.zst)
+750/6465 scanned (last data/dolmino-math/dolmino_math_mathcoder2-synthmath_m-a-p_Matrix_filtered-math_book_math.0000.0379.jsonl.zst)
+800/6465 scanned (last data/dolmino-math/dolmino_math_mathcoder2-synthmath_m-a-p_Matrix_filtered-math_book_math.0000.0427.jsonl.zst)
+850/6465 scanned (last data/dolmino-math/dolmino_math_mathcoder2-synthmath_m-a-p_Matrix_filtered-math_book_math.0000.0475.jsonl.zst)
+900/6465 scanned (last data/dolmino-math/dolmino_math_mathcoder2-synthmath_m-a-p_Matrix_filtered-math_book_math.0000.0528.jsonl.zst)
+950/6465 scanned (last data/dolmino-math/dolmino_math_mathcoder2-synthmath_m-a-p_Matrix_filtered-math_book_math.0000.0576.jsonl.zst)
+1000/6465 scanned (last data/dolmino-math/dolmino_math_mathcoder2-synthmath_m-a-p_Matrix_filtered-math_book_math.0000.0626.jsonl.zst)
+1050/6465 scanned (last data/dolmino-math/dolmino_math_mathcoder2-synthmath_m-a-p_Matrix_filtered-math_book_math.0001.0003.jsonl.zst)
+1100/6465 scanned (last data/dolmino-math/dolmino_math_mathcoder2-synthmath_m-a-p_Matrix_filtered-math_book_math.0001.0054.jsonl.zst)
+1150/6465 scanned (last data/dolmino-math/dolmino_math_mathcoder2-synthmath_m-a-p_Matrix_filtered-math_book_math.0001.0102.jsonl.zst)
+multiprocessing.pool.RemoteTraceback: 
+"""
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/dist-packages/huggingface_hub/utils/_http.py", line 403, in hf_raise_for_status
+    response.raise_for_status()
+  File "/usr/local/lib/python3.12/dist-packages/requests/models.py", line 1026, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 429 Client Error: Too Many Requests for url: https://huggingface.co/api/datasets/allenai/dolma3_dolmino_mix-100B-1025/xet-read-token/f23942ae8a8114af6e992efe8188ce8c531acd16
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/multiprocessing/pool.py", line 125, in worker
+    result = (True, func(*args, **kwds))
+                    ^^^^^^^^^^^^^^^^^^^
+  File "/workspace/nd-takehome/olmo_pilot/midscan.py", line 28, in work
+    local = hf_hub_download(REPO, path, repo_type="dataset", local_dir=TMP)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/huggingface_hub/file_download.py", line 994, in hf_hub_download
+    return _hf_hub_download_to_local_dir(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/huggingface_hub/file_download.py", line 1304, in _hf_hub_download_to_local_dir
+    _download_to_tmp_and_move(
+  File "/usr/local/lib/python3.12/dist-packages/huggingface_hub/file_download.py", line 1727, in _download_to_tmp_and_move
+    xet_get(
+  File "/usr/local/lib/python3.12/dist-packages/huggingface_hub/file_download.py", line 598, in xet_get
+    connection_info = refresh_xet_connection_info(file_data=xet_file_data, headers=headers)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/huggingface_hub/utils/_xet.py", line 116, in refresh_xet_connection_info
+    return _fetch_xet_connection_info_with_url(file_data.refresh_route, headers)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/huggingface_hub/utils/_xet.py", line 187, in _fetch_xet_connection_info_with_url
+    hf_raise_for_status(resp)
+  File "/usr/local/lib/python3.12/dist-packages/huggingface_hub/utils/_http.py", line 476, in hf_raise_for_status
+    raise _format(HfHubHTTPError, str(e), response) from e
+huggingface_hub.errors.HfHubHTTPError: 429 Client Error: Too Many Requests for url: https://huggingface.co/api/datasets/allenai/dolma3_dolmino_mix-100B-1025/xet-read-token/f23942ae8a8114af6e992efe8188ce8c531acd16 (Request ID: Root=1-6ae93b70-0cc7d92b37fa928529c5393f;ac716ae8-a05a-45f3-8f6e-bd5e08969dc2)
+
+We had to rate limit you, you hit the quota of 1000 api requests per 5 minutes period. Upgrade to a PRO user or Team/Enterprise organization account (https://hf.co/pricing) to get higher limits. See https://huggingface.co/docs/hub/rate-limits
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/olmo_pilot/midscan.py", line 58, in <module>
+    main()
+  File "/workspace/nd-takehome/olmo_pilot/midscan.py", line 51, in main
+    for k, f in enumerate(pool.imap_unordered(work, [(f, problems, out) for f in todo]), 1):
+  File "/usr/lib/python3.12/multiprocessing/pool.py", line 873, in next
+    raise value
+huggingface_hub.errors.HfHubHTTPError: 429 Client Error: Too Many Requests for url: https://huggingface.co/api/datasets/allenai/dolma3_dolmino_mix-100B-1025/xet-read-token/f23942ae8a8114af6e992efe8188ce8c531acd16 (Request ID: Root=1-6ae93b70-0cc7d92b37fa928529c5393f;ac716ae8-a05a-45f3-8f6e-bd5e08969dc2)
+
+We had to rate limit you, you hit the quota of 1000 api requests per 5 minutes period. Upgrade to a PRO user or Team/Enterprise organization account (https://hf.co/pricing) to get higher limits. See https://huggingface.co/docs/hub/rate-limits
+merged 1169 files, 8260383 docs -> artifacts/olmo_pilot/contam/midscan.csv

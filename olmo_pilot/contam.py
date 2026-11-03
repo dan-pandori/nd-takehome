@@ -12,6 +12,7 @@ Modes
   merge   <out.csv> <scan.jsonl> ...                           combine scan rows into one row per problem
 """
 import csv
+import gzip
 import io
 import json
 import re
@@ -156,7 +157,7 @@ def mode_merge(out, scans):
     agg = {}
     files = docs = 0
     for s in scans:
-        for ln in open(s):
+        for ln in (gzip.open(s, "rt") if s.endswith(".gz") else open(s)):
             r = json.loads(ln)
             files += 1
             docs += r["docs"]
