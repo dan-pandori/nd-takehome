@@ -262,3 +262,7 @@ Brief: nd-rl proposal 34 (Dan, 2026-11-02). Policy: AGENT_POLICY.md. Run id: olm
   (RL-Zero `main` = `step_2800`; base `main` = `stage3-step11921`; template `olmo_thinker_rlzero`, T 1.0, top_p 1.0,
   16,384 tokens; RL's MathVerifier ran off the main thread, so only string equivalence rewarded). Pre-registration
   Part A (definitions, verdict rules, Stage 0) committed before any pod.
+- 2026-11-03 03:33 UTC  Stage 0 done on pod `orz-a` ($3.02): base $0.69 per million generated tokens on a community A100 (557 tok/s;
+  6,353 tokens per AIME sample, 17.5 % at the 16,384 cap); step_2800 writes 12,249 tokens per sample. The brief's design
+  costs ≈ $1,000 at these prices → question in QUESTIONS.md; default ≈ $43 design (Part B). 7 of 90 evaluation
+  problems excluded for contamination (RL data or midtraining). Next: speculative-decoding gate, then phase F on 4 pods.

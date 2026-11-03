@@ -87,6 +87,9 @@ def main():
     ap.add_argument("--gpu_mem", type=float, default=0.92)
     ap.add_argument("--max_num_seqs", type=int, default=512)
     ap.add_argument("--max_tokens", type=int, default=MAX_TOKENS)
+    ap.add_argument("--order", default="hard_first", choices=["hard_first", "given"])
+    ap.add_argument("--spec_ngram", type=int, default=0,
+                    help="n-gram prompt-lookup speculative decoding with this many draft tokens (0 = off)")
     args = ap.parse_args()
 
     from transformers import AutoTokenizer
@@ -114,6 +117,10 @@ def main():
                 continue
             m = min(args.chunk, n - (c - args.chunk0) * args.chunk)
             reqs.append((pid, c, m, ids))
+    if args.order == "hard_first":
+        # AIME problems later in a paper run longer; starting them first shortens the end-of-job tail where only a
+        # few long sequences are left running. Sampling is unaffected (requests are independent).
+        reqs.sort(key=lambda r: (-((int(r[0].rsplit("_", 1)[1]) - 1) % 15), r[0], r[1]))
     print(f"{len(reqs)} requests to run ({len(done)} chunks already done)", flush=True)
     if not reqs:
         return
@@ -121,7 +128,9 @@ def main():
     t0 = time.time()
     llm = LLM(model=args.model, tokenizer=args.tokenizer or args.model, dtype="bfloat16",
               max_model_len=max(len(r[3]) for r in reqs) + args.max_tokens + 8, gpu_memory_utilization=args.gpu_mem,
-              enable_prefix_caching=True, seed=args.seed, max_num_seqs=args.max_num_seqs, disable_log_stats=False)
+              enable_prefix_caching=True, seed=args.seed, max_num_seqs=args.max_num_seqs, disable_log_stats=False,
+              **({"speculative_config": {"method": "ngram", "num_speculative_tokens": args.spec_ngram,
+                                         "prompt_lookup_max": 4, "prompt_lookup_min": 2}} if args.spec_ngram else {}))
     t_load = time.time() - t0
     eng = llm.llm_engine
     for k, (pid, c, m, ids) in enumerate(reqs):
@@ -159,7 +168,8 @@ def main():
     meta = {"job": args.job, "name": args.name, "rev": args.rev, "model_dir": args.model, "seed": args.seed,
             "n_requests": len(reqs), "samples": n_samp, "gen_tokens": n_tok, "length_cut": n_len,
             "t_load_s": round(t_load, 1), "t_gen_s": round(t_gen, 1), "tok_per_s": round(n_tok / max(t_gen, 1e-9), 1),
-            "max_tokens": args.max_tokens, "temperature": TEMPERATURE, "top_p": TOP_P,
+            "max_tokens": args.max_tokens, "temperature": TEMPERATURE, "top_p": TOP_P, "spec_ngram": args.spec_ngram,
+            "problems": args.problems,
             "template_sha256": hashlib.sha256(TEMPLATE.encode()).hexdigest(),
             "vllm": vllm.__version__, "torch": torch.__version__, "gpu": torch.cuda.get_device_name(0),
             "max_mem_alloc_gb": round(torch.cuda.max_memory_allocated() / 2**30, 2),

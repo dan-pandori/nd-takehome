@@ -112,3 +112,23 @@ s4, s5. Costed alternatives in `preregistration/grpo-state.md` Addendum 1: Plan 
 Plan C (s0–s3, GRPO default + pass@4, ≈ $16).
 **Default if unanswered:** the experiment run uses **Plan B** (4 seeds, all three GRPO arms, EI inherited from
 state-cap12), and first measures s / update on a 16 GB card, moving to it if that halves the cost.
+
+## 2026-11-03 03:33 UTC — olmo-rlzero-pilot: the brief's sampling design costs ≈ $1,000; I run a ≈ $43 version
+
+Stage 0 measured the price of sampling these models at the RL settings (T 1, top-p 1, 16,384 tokens): **$0.69 per
+million generated tokens** for the base on one community A100-80GB ($1.39/h, vLLM 0.11.0, bf16), ≈ $1.0/M for
+step_2800, whose answers are ≈ 1.7× longer (≈ 11k tokens). The base writes 6,353 tokens per AIME sample on average
+and 17.5 % of its samples run to the 16,384 cap. The cause is the 7B's attention: 32 KV heads (no GQA), so an
+80 GB GPU holds only ≈ 25 long sequences and every NVIDIA class on RunPod gives about the same tokens per dollar.
+At that price the brief's design (k = 512 on base and final, 6 × 64 intermediates, base extension to 2,048) is
+≈ 1.2 × 10⁹ tokens ≈ **$1,000**; a middle design (base 64 / final 32 on all 90 problems, 4 intermediates × 16,
+extension to 1,024) ≈ **$190**.
+
+**Default, now running** (pre-registration Part B): base 16 / step_2800 8 / step_0100 8 / step_0500 8 samples on
+the 90 AIME 2024–26 problems (83 headline after contamination exclusions), fresh confirmation samples on reach
+candidates, base extension to 128 (to 256 / 512 only if it stays within $45), likelihood check, compute axis, 32B memo.
+It answers the question at k ≤ 128–256, not 2,048, and the trajectory has three RL points, not seven.
+
+**Question:** do you want the middle design (≈ $150 more) or a targeted top-up — e.g. ≈ $40 more to extend the base to
+1,024 on the reach candidates only, which is the part of the brief that decides create vs elicit? Default if
+unanswered: I stop at $45 and the decision memo prices both options.
