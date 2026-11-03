@@ -18,9 +18,13 @@ for J in "$@"; do
     C_s0100b) F=$PL/C_step_0100b.txt; C="bash pod/olmo_pilot/job.sh C_s0100b step_0100 $RL step_0100 24 @$F 3012 1 8" ;;
     C_s0500b) F=$PL/C_step_0500b.txt; C="bash pod/olmo_pilot/job.sh C_s0500b step_0500 $RL step_0500 24 @$F 3013 1 8" ;;
     E1_baseb) F=$PL/E_baseb.txt; X="$FLAGS --seq_stop"; C="bash pod/olmo_pilot/job.sh E1_baseb base $BASE main 1 @$F 4011 1 16" ;;
+    E2_base)  F=$PL/E2_base.txt;  X="$FLAGS --seq_stop"; C="bash pod/olmo_pilot/job.sh E2_base base $BASE main 1 @$F 4021 8 16" ;;
+    E2_s2800) F=$PL/E2_s2800.txt; X="$FLAGS --seq_stop"; C="bash pod/olmo_pilot/job.sh E2_s2800 step_2800 $RL step_2800 1 @$F 4022 9 16" ;;
+    F_s0100h) F=$PL/F_s0100_half.txt; C="bash pod/olmo_pilot/job.sh F_s0100h step_0100 $RL step_0100 8 @$F 2023 0 8" ;;
+    P_s0100)  F=olmo_pilot/probe_prompts.jsonl; C="env PROBLEMS=olmo_pilot/probe_prompts.jsonl bash pod/olmo_pilot/job.sh P_s0100 step_0100 $RL step_0100 1 - 5003 0 1" ;;
     *) echo "unknown job $J"; continue ;;
   esac
-  [ -s $F ] && grep -q ':' $F || { echo "skip $J (no problems in $F)"; touch $A/meta/$J.done; continue; }
+  [ -s $F ] && { grep -q ':' $F || [ "$J" = F_s0100h ] || [ "$J" = P_s0100 ]; } || { echo "skip $J (no problems in $F)"; touch $A/meta/$J.done; continue; }
   echo "RUNQ start $J $(date -u +%FT%TZ)"
   if [ -n "$X" ]; then SAMPLE_EXTRA="$X" $C > $L/q_$J.log 2>&1; else $C > $L/q_$J.log 2>&1; fi
   echo "RUNQ end $J $(date -u +%FT%TZ) $(grep -o 'JOB_DONE.*' $L/q_$J.log)"
