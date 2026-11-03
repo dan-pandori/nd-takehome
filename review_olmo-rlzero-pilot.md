@@ -1,0 +1,483 @@
+# Review — olmo-rlzero-pilot (proposal 34)
+
+Reviewer: agent:claude, reviewer role, 2026-11-03. Run branch `dan_olmo-rlzero-pilot`. Brief: nd-rl
+`docs/proposals/followups/BRIEF_olmo-rlzero-pilot.md`. Pre-registration: `preregistration/olmo-rlzero-pilot.md`, Part A
+(255151cd, 01:20:39 UTC) and Part B (01d95ecc, 03:33:40 UTC).
+
+Phase 1 was done in `~/review/olmo-rlzero-pilot`, where the executor's write-ups had been removed. My own code is in
+`review/olmo-rlzero-pilot-recount/`:
+- `rv_core.py` runs AI2's verifier from upstream source, and holds my integer read-out and the loaders.
+- `rv_regrade.py` re-grades every stored text. `rv_table.py` builds the per-cell table.
+- `rv_stats.py` computes pass@k, dynamics, reach and the verdict inputs. `rv_ll.py` checks the likelihood phase.
+- `rv_contam.py` is the Dolci scan. `rv_tables.py` writes the markdown tables.
+
+Their outputs are in `out/`. Every table below is pasted from `out/tables.md` or printed from the `out/*.json` files.
+
+## Disclosure: what I saw before or during phase 1
+
+- **Commit subjects.** The session's start-up context printed the run's last five commit subjects, including "DONE —
+  reach 0 / reverse 0 at K<=512 (all 17 RL-only solves fall to the base), likelihood in support, step_0100 half, …"
+  and "pass 2 done (base solved 2 of 3 more; 1 reach, 1 reverse at K=256)". So I knew the headline result before I
+  recounted.
+- **Auto-memory.** My session started with a memory note the executor had written at 16:20 UTC
+  (`elicitation-verdict-rule-design`). It says:
+  - the verdict came out "inconclusive";
+  - the pass@8 gap was 0.26;
+  - all 17 RL-only solves fell to the base within 383 samples;
+  - 2 of 16 candidates failed confirmation;
+  - one "loss" vanished under the symmetric extension.
+- **Executor comments in code I read to learn the formats.**
+  - `ll_plan.py`: F_base's texts "were lost with pod orz-a".
+  - `compute_rows.py`: orz-a was "lost ~07:54 (host restart)", and F_s0100b was "stopped 08:57 for budget".
+  - `half_subset.py`: step_0100 ran on "a seeded random half … budget rule".
+  - `after_d2.sh`: the reason for aime2025_22's symmetric extension.
+- **Executor-derived files I read.**
+  - `results.csv`, compared cell by cell only after I had built my own table.
+  - `compute_axis.csv`, after I had computed mine.
+  - Also: `exclusions.csv`, `jobs.csv`, the `plan/*.txt` pid lists, all `meta/*.json`, the job logs, the head (two
+    AIME 2023 rows) of `manifest.csv`, the pod scripts, and the registry rows.
+- **Not read in phase 1:**
+  - the write-ups: `run_olmo_rlzero_pilot.md`, `numbers.md`, `log.md`, `STATUS.md`, `QUESTIONS.md`,
+    `olmo_pilot/README.md`, `decision_32b.md` and the plain summary;
+  - the result tables: `passk.csv`, `passk_lb.csv`, `reach.csv`, `dynamics.csv`, `lengths.csv`, `half_subset.csv`,
+    `candidates.csv`, `likelihood.csv`, `stage0_summary.json`, `plan/summary.json`;
+  - the contamination files: `contamination_*.csv`, `nearest_embed.csv`;
+  - the figures, and the docs in the bucket.
+
+# §Recount (phase 1, blind)
+
+## 0. Models every number below refers to
+
+All four models are 7.3 B `Olmo3ForCausalLM`, pretrained (not from scratch), bf16.
+- **base**: `allenai/Olmo-3-1025-7B` @ `main`.
+- **step_0100 / step_0500 / step_2800**: `allenai/Olmo-3.1-7B-RL-Zero-Math` at those branches. These are RLVR straight
+  from the base on `allenai/Dolci-RL-Zero-Math-7B`; `step_2800` = `main` (per the pre-registration's shard hashes).
+
+Sampling used vLLM 0.11.0 with the `olmo_thinker_rlzero` template, T 1.0, top-p 1.0, at most 16,384 tokens, EOS stop
+only. Every evaluation job used n-gram speculation (4 draft tokens); Stage 0 was plain.
+
+The evaluation problems are MathArena AIME 2024, 2025 and 2026 (90). The headline set is 83 after the 7 exclusions.
+The grade is `rl` (see §1) unless a row says otherwise.
+
+## 1. Inputs and settings, checked independently
+
+- **Problems and answers.** I fetched MathArena's six AIME parquet files at the revisions in `problems.jsonl`. All
+  120 statements and answers match byte for byte.
+- **Template.** The sampler's template equals `olmo_thinker_rlzero` verbatim. I fetched open-instruct
+  `dataset_transformation.py` at bb58c66 myself to check.
+  - All 17 jobs' meta files carry the same template sha256 (`4380e622…`).
+  - The prompt tokens of all 250 likelihood items equal my own tokenisation of that template.
+  - The base and step_2800 `tokenizer.json` files are identical, and neither `generation_config.json` sets sampling
+    defaults.
+- **Decoding.** Every job's meta has T 1.0, top-p 1.0 and max_tokens 16,384. I read the vLLM engine line in 17 job logs:
+  - every one has dtype bf16, kv_cache auto and prefix caching on;
+  - every evaluation job (F, C, E, P) has `SpeculativeConfig(method='ngram', num_spec_tokens=4)`;
+  - the Stage 0 jobs have none.
+
+  The gate that adopted speculation reproduces from the graded rows:
+  - throughput 758.7 / 557.2 = 1.36 (rule: ≥ 1.25);
+  - pass@1 difference CI [−0.035, 0.054];
+  - mean-length difference CI [−1,131, 729] tokens.
+
+  Both intervals contain 0, so the speculation was adopted by the pre-registered rule.
+- **What RL rewarded.** I checked this from upstream code I fetched myself (bb58c66).
+  - The RL reward decodes with `skip_special_tokens=True` and calls `MathVerifier.async_call`, which is
+    `loop.run_in_executor(None, …)`, a worker thread.
+  - There `is_equiv`'s `signal.alarm` timeout raises `ValueError`, and its `except Exception` returns False. So only
+    `hendrycks_is_equiv` can reward. The executor's reading is correct.
+  - The vendored `oi_math_utils.py` is upstream `math_utils.py` with only the logger import changed.
+  - The script's dataset name `allenai/Dolci-RLZero-Math-7B` resolves to `allenai/Dolci-RL-Zero-Math-7B` @ 93b5e498.
+    Its last data upload was 2025-11-19, and later commits change only the README.
+
+  One consequence shapes everything below. The verifier never reads an `Answer: N` line, which is what the prompt
+  asks for. It rewards only `\boxed{}`, a Minerva phrase, the last `$…$` pair, or the whole output. With my harness:
+  - "Answer: 60" earns 0;
+  - "…where $\angle B = 60^\circ$, we get…" earns 1 when the answer is 60.
+
+## 2. Re-grade of every stored sample text
+
+`rv_regrade.py` runs AI2's `MathVerifier.__call__`, extracted by `ast` from upstream `ground_truth_utils.py`. It runs it
+through `run_in_executor` (`rl`) and in the main thread (`main`). It also re-decodes each sample's stored token ids
+with the Olmo tokenizer.
+
+**Result: 4,572 samples with stored text (914 `rl`-correct), 0 disagreements with the executor's graded rows** on
+`rl`, `main`, `n_tok` and `finish`. Every stored text equals the decode of its token ids.
+
+The texts below are **missing from the repository and the bucket**:
+
+| job | what it is | samples | texts kept |
+|---|---|---|---|
+| F_base | the base's entire phase-F evaluation budget | 1,440 | 0 |
+| P_base | the base's Dolci probe | 64 | 0 |
+| g_spec_base | the speculation gate (AIME 2023) | 240 | 0 |
+| s0_base | Stage 0 (AIME 2023) | 480 | 384 |
+
+So **137 of the base's 155 counted successes (all its phase-F ones) cannot be re-graded or read**. Every RL arm's
+counted successes were all re-graded from text: step_2800 389, step_0500 225, step_0100 104. The base's 18 extension
+successes were also re-graded.
+
+## 3. My per-cell table against `results.csv`
+
+`rv_table.py` assigns phases from job names, orders each cell's samples by (chunk, i), and uses my re-grade wherever a
+text exists. That gives 315 (model × problem) cells with 0 key collisions across jobs.
+
+**All 315 cells match `results.csv` exactly** on these fields:
+- attempts, n_fixed;
+- `rl` successes overall, in F and in C;
+- first `rl` success, `main` successes and first `main` success;
+- mean tokens.
+
+The executor's `ansline` and my integer read-out are different extractors by design. My first version disagreed with
+theirs on 13 RL cells, because it took the number after a "**Final Answer:**" header. My corrected version takes
+whichever comes last: an integer on an `answer:` line, or a boxed integer. It agrees within 0–2 per job.
+
+## 4. pass@k (Chen estimator on phase-F samples, problem bootstrap)
+
+| model (7.3 B, pretrained) | problems | pass@1 | pass@8 | pass@16 |
+|---|---|---|---|---|
+| base `Olmo-3-1025-7B` main | all (n=83) | 0.094 [0.066, 0.125] | 0.364 [0.275, 0.455] | 0.458 [0.349, 0.566] |
+|  | aime2024 (n=24) | 0.107 [0.060, 0.156] | 0.448 [0.274, 0.625] | 0.542 [0.333, 0.750] |
+|  | aime2025 (n=30) | 0.096 [0.046, 0.154] | 0.326 [0.179, 0.480] | 0.400 [0.233, 0.567] |
+|  | aime2026 (n=29) | 0.082 [0.039, 0.134] | 0.335 [0.197, 0.482] | 0.448 [0.276, 0.621] |
+| RL-Zero-Math `step_0100` | all (n=42) | 0.301 [0.208, 0.399] | 0.643 [0.500, 0.786] | — |
+|  | aime2024 (n=17) | 0.316 [0.162, 0.478] | 0.588 [0.353, 0.824] | — |
+|  | aime2025 (n=10) | 0.300 [0.100, 0.525] | 0.600 [0.300, 0.900] | — |
+|  | aime2026 (n=15) | 0.283 [0.150, 0.433] | 0.733 [0.533, 0.933] | — |
+| RL-Zero-Math `step_0500` | all (n=83) | 0.304 [0.223, 0.390] | 0.506 [0.398, 0.614] | — |
+|  | aime2024 (n=24) | 0.417 [0.250, 0.583] | 0.667 [0.458, 0.833] | — |
+|  | aime2025 (n=30) | 0.263 [0.133, 0.408] | 0.433 [0.267, 0.600] | — |
+|  | aime2026 (n=29) | 0.254 [0.134, 0.388] | 0.448 [0.276, 0.621] | — |
+| RL-Zero-Math `step_2800` (= main) | all (n=83) | 0.419 [0.330, 0.509] | 0.627 [0.518, 0.723] | — |
+|  | aime2024 (n=24) | 0.536 [0.365, 0.703] | 0.750 [0.583, 0.917] | — |
+|  | aime2025 (n=30) | 0.342 [0.200, 0.496] | 0.533 [0.367, 0.700] | — |
+|  | aime2026 (n=29) | 0.401 [0.254, 0.556] | 0.621 [0.448, 0.793] | — |
+
+step_0100 was sampled on only 45 of the 90 problems (42 headline). On that same subset:
+
+| model | pass@1 | pass@8 |
+|---|---|---|
+| base | 0.116 [0.074, 0.161] | 0.450 [0.323, 0.577] |
+| step_0100 | 0.301 [0.208, 0.399] | 0.643 [0.500, 0.786] |
+| step_0500 | 0.402 [0.283, 0.524] | 0.643 [0.500, 0.786] |
+| step_2800 | 0.562 [0.440, 0.685] | 0.786 [0.667, 0.905] |
+
+**Mean response length** (phase F, headline, per sample), and the share cut at 16,384 tokens:
+
+| model | mean tokens | share cut | on the half |
+|---|---|---|---|
+| base | 5,863 | 15.2 % | 5,593 |
+| step_0100 | 11,309 | 31.5 % | — |
+| step_0500 | 11,755 | 24.2 % | — |
+| step_2800 | 11,745 | 18.1 % | — |
+
+The cap is the RL recipe's response length, so truncation is part of the protocol. RL ran with
+`mask_truncated_completions False`, and 2 of the 17 base first-successes below are cut samples whose `\boxed{}`
+came earlier. The share cut is large in every stratum.
+
+**Stage 0** (AIME 2023 pilot) reproduces Part B's B1 table exactly:
+- base: pass@1 0.085, pass@4 0.221, pass@16 0.367; mean 6,353 tokens (median 4,206); 17.5 % cut, none of them correct;
+- step_2800: pass@1 0.383, pass@2 0.467; mean 12,249 tokens; 21.7 % cut, 2 of them correct;
+- formats: 2 of the base's 41 integer-correct samples fail `rl`. `rl` and `main` differ on 1 sample; `rl` and
+  `ansline` on 4.
+
+## 5. Matched k = 8: expected entries and exits
+
+| comparison | problems | entries | exits |
+|---|---|---|---|
+| step_0500 vs base | all83 (83) | 14.04 | 2.27 |
+| step_2800 vs base | all83 (83) | 22.77 | 1.00 |
+| step_2800 vs step_0500 | all83 (83) | 12.00 | 2.00 |
+| step_0100 vs base | half (42) | 9.88 | 1.77 |
+| step_0500 vs base | half (42) | 8.61 | 0.50 |
+| step_2800 vs base | half (42) | 14.61 | 0.50 |
+| step_0500 vs step_0100 | half (42) | 3.00 | 3.00 |
+
+The paired problem bootstrap of the entry differences vs base (`out/entries_growth.json`):
+
+| difference | problems | value [95 %] | |
+|---|---|---|---|
+| step_2800 − step_0500 | 83 | 8.73 [2.97, 15.23] | grows |
+| step_0500 − step_0100 | 42 | −1.27 [−5.50, 2.50] | no growth between 100 and 500 |
+| step_2800 − step_0100 | 42 | 4.73 [1.23, 8.73] | grows |
+
+## 6. Reach both ways round, the extension protocol, and the verdict rule
+
+| checkpoint | reach (c's F) | reach (c's F+C) | strong reach | reverse (c's whole budget) | reach / reverse under `main` | under my integer read-out |
+|---|---|---|---|---|---|---|
+| step_0100 | 0 | 0 | 0 | 7 | 0 / 7 | 0 / 6  |
+| step_0500 | 0 | 0 | 0 | 13 | 0 / 13 | 0 / 12  |
+| step_2800 | 0 | 0 | 0 | 0 | 0 / 0 | 1 / 0 ['aime2025_14'] |
+
+The intermediates' "reverse" counts are at 8 samples of c. They are not symmetric: only step_2800 got the reverse
+extension.
+
+**Candidates and how they resolved.** A reach candidate is a headline problem where step_2800 or step_0500 has ≥ 1
+`rl` success in F and the base has 0 of 16. There are **17**, the same 17 as `plan/E_base.txt`. The extension
+followed its rule exactly:
+- chunks were sequential, and each problem stopped at its first correct chunk;
+- the budget was 128, then 256 for the three still unsolved, then 512 for one;
+- the attempt totals equal the chunk arithmetic for every problem.
+
+**Every candidate fell to the base.** The base's first-success positions were 18, 25, 31, 39, 45, 46, 64, 73, 73, 77,
+79, 83, 91, 104, 168, 248 and 383 (median 73). Each of these first successes is also integer-correct.
+
+The reverse candidates were the problems where the base had ≥ 1 in F and step_2800 had 0 of 8:
+- **aime2024_29** fell to step_2800 at its 53rd sample.
+- **aime2025_14** fell at its 280th of 288.
+- **aime2025_22** was a reach candidate that only step_0500 had solved; the base then solved it in its extension.
+  step_2800 got the symmetric extension and solved it at its 12th sample.
+
+step_0100's six F solves where the base had 0 in F are all among the 17 candidates, so the base was extended on every
+one.
+
+**At K = 128 the picture was different.** Three candidates were still unsolved by the base after its first 128
+samples: aime2024_10, aime2024_26 and aime2025_25. Each had step_2800 F + C successes of 1 + 3, 3 + 3 and 1 + 3. All
+three met the strong-reach definition at K* = 128.
+- Reverse stood at 1 (aime2025_14), or 2 counting aime2025_22, whose symmetric extension came in pass 2.
+- So after pass 1 the pre-registered rule sat on its "RL extended reach" threshold: ≥ 3 strong, and strong exceeding
+  reverse by ≥ 2.
+- Passes 2 and 3 removed all three: first successes at 168, 248 and 383. Both passes were pre-registered and
+  budget-gated.
+
+**The verdict by the pre-registered rule, as amended in Part B**, is **"inconclusive at this budget"**.
+- **Not "extended":** strong reach is 0 and reverse is 0.
+- **"Elicitation only" fails its second clause.** Clause (a) holds, since strong reach is 0. Clause (b) needs the base's
+  pass@k to reach the final's within the 95 % interval at matched k = 8, and it does not:
+  - base 0.364 [0.275, 0.455];
+  - final 0.627 [0.518, 0.723];
+  - final − base 0.262 [0.179, 0.352].
+- On the candidate problems at the extension budget, clause (b) would hold, because the base solved all 17 within
+  512.
+
+## 7. Hand-check of the 20 decision-relevant successes, and 10 more
+
+The brief asks for a hand-check of 20 counted successes. I chose the 20 that decide the headline:
+- the base's first success on each of the 17 candidates;
+- step_2800's resolving success on the 3 reverse or symmetric problems.
+
+Six reader sub-agents of this session read each full text and checked the mathematics, mostly by script. I confirmed
+two verdicts by my own reading: base aime2024_20 and step_2800 aime2025_14. **In all 30 texts the verifier matched the
+response's own last `\boxed{}`**, so there are no extraction artefacts. The derivations vary (`out/hand_check.json`):
+
+| problem | sample | tokens | role | derivation |
+|---|---|---|---|---|
+| aime2024_09 | base E1 c5 i2 | 15,922 | 1st base success (83rd) | FLAWED: limit direction backwards, invalid algebra; boxes 480 |
+| aime2024_10 | base E2 c10 i7 | 6,784 | (168th) | GENUINE |
+| aime2024_14 | base E1 c6 i7 | 12,340 | (104th) | GENUINE |
+| aime2024_18 | base E1 c1 i1 | 4,071 | (18th) | GENUINE (minor slips) |
+| aime2024_20 | base E1 c4 i14 | 8,263 | (79th) | **GUESS**: tries formulas until one gives a clean number ("not sure… tentatively… 80") |
+| aime2024_26 | base E3 c19 i30 | 13,566 | (383rd) | FLAWED: assumes a coordinate equals 100; the count is right |
+| aime2025_12 | base E1 c4 i8 | 9,041 | (73rd) | FLAWED: two sign errors pick the mirror region (same area) |
+| aime2025_21 | base E1 c1 i14 | 16,384 (cut) | (31st) | FLAWED (borderline genuine): proceeds "without resolving the contradiction" |
+| aime2025_22 | base E1 c4 i8 | 9,075 | (73rd) | GENUINE |
+| aime2025_24 | base E1 c2 i6 | 8,872 | (39th) | FLAWED: n = 140, t = 9 instead of 139, 10, and the errors cancel |
+| aime2025_25 | base E2 c15 i7 | 16,384 (cut) | (248th) | GENUINE (later self-retracted, then truncated) |
+| aime2025_29 | base E1 c3 i15 | 14,535 | (64th) | GENUINE |
+| aime2026_03 | base E1 c2 i12 | 7,438 | (45th) | GENUINE |
+| aime2026_22 | base E1 c4 i12 | 8,207 | (77th) | GENUINE |
+| aime2026_23 | base E1 c5 i10 | 10,169 | (91st) | GENUINE |
+| aime2026_24 | base E1 c1 i8 | 12,766 | (25th) | GENUINE |
+| aime2026_26 | base E1 c2 i13 | 14,212 | (46th) | FLAWED: right candidates {12, 132}, miscounts, takes the greatest |
+| aime2024_29 | step_2800 E1 c3 i12 | 14,140 | reverse resolved (53rd) | GENUINE |
+| aime2025_14 | step_2800 E3 c17 i23 | 11,321 | reverse resolved (280th) | **GUESS**: computes m+n+p = 24+7+3 = 34, then boxes 60 |
+| aime2025_22 | step_2800 E2 c9 i3 | 10,664 | symmetric extension resolved (12th) | GENUINE |
+
+The base's tally is **10 genuine, 6 flawed but arriving, 1 guess**.
+
+For the two weakest base resolutions, I also had **every RL success on the same problem** read:
+- **aime2024_20.** All 5 are guesses: 3 from step_2800, 2 from step_0500. They land on 1/s = Σ 1/a without deriving
+  it, just as the base did.
+- **aime2026_26.** None of the 5 is genuine: 3 from step_2800, 2 from step_0100. Each reaches the S = 0 candidates and
+  takes the larger without verifying the count, the same flaw as the base's.
+
+So on these two problems RL raised the rate of the same incomplete answer: 3/24 vs 1/80, and 3/24 vs 1/48. It did not
+produce a better derivation.
+
+My reader rubric for aime2026_26 wrongly required that n = 12 be shown to fail. Both n = 12 and n = 132 give seven
+values, and the problem asks for the greatest n. I reclassified the base's sample from the reader's "guess
+(borderline)" to FLAWED after reading the statement.
+
+## 8. aime2025_14: the base's only credit is probably a verifier false positive
+
+The pre-registration rule treats this as a reverse candidate, resolved at step_2800's 280th sample. Neither side's
+credit holds up:
+- **The base's credit.** Its only `rl` success in 16 samples (F_base chunk 0, i 9) is 549 tokens long, has no integer
+  read-out (`ans` = None), and is not `ansline`-correct.
+- **Why that is suspicious.** The statement contains `$\angle B=\angle E=60^{\circ}$` and the answer is 60. The
+  verifier strips `^{\circ}` and accepts a response whose last `$…$` restates that angle (§1). Its text is among the
+  lost F_base texts, so it cannot be read.
+- **step_2800's credit** is a confirmed guess (§7).
+
+On the evidence neither model solves aime2025_14. It is the one problem whose solved status hinges on an `rl`-correct
+base sample with no correct stated integer.
+
+Six other base samples share that property: 1 each on aime2024_25, aime2025_01, aime2025_02 and aime2026_08, and 2 on
+aime2025_17. Their problems all have other integer-correct base successes, and aime2026_01 is excluded. Under my
+integer read-out, step_2800 has 1 reach problem (aime2025_14), but the base had only 16 samples there.
+
+## 9. Likelihood (phase L, 250 scored items)
+
+**Integrity is clean** (`rv_ll.py`):
+- every item's `resp_ids` equals the stored sample's token ids;
+- every item is `rl`-correct in my re-grade;
+- every prompt equals my template tokenisation;
+- the stored per-token log-probs reproduce `n_tok`, `mean_lp` and `sum_lp`.
+
+The selections hold **no "reach" group**: there are no reach problems. The substitute is "late", the RL solutions on
+the 17 candidates.
+
+| group | items (problems) | base mean log p / token (median) | own (median) | gap own − base, median [p10, p90] | summed gap, median (nats) | inside base_own range | inside base_own + pilot | inside, other problems only |
+|---|---|---|---|---|---|---|---|---|
+| late | 78 (17) | -0.546 | -0.492 | 0.053 [0.006, 0.066] | 646 | 1.00 | 1.00 | 1.00 |
+| ckpt_other | 135 (37) | -0.454 | -0.431 | 0.043 [0.005, 0.060] | 192 | 0.90 | 1.00 | 0.90 |
+| base_own | 18 (17) | -0.435 | -0.435 | 0.000 [0.000, 0.000] | 0 | 0.89 | 0.94 | 0.83 |
+| base_own_pilot | 19 (9) | -0.334 | -0.334 | 0.000 [0.000, 0.000] | 0 | 0.37 | 0.95 | 0.37 |
+
+The control ranges:
+- **base_own** (the base's own correct solutions, all on the 17 candidates): −0.915 to −0.345, n = 18.
+- **base_own + pilot** (adding AIME 2023, which is contaminated): −0.936 to −0.246, n = 37.
+
+Part A asked for controls "on other problems". The base_own controls are on the same problems. My leave-same-problem-out
+variant gives the same 1.00 for "late".
+
+The per-token criterion is weak evidence of "support". A 0.053 nats/token gap over a median 12,566 tokens per "late"
+solution is a median **646 nats** per solution: the base is about e^−646 less likely than the generator to write that exact text.
+step_0100's solutions were never scored, because phase L ran before step_0100's phase F.
+
+## 10. Contamination
+
+- **Dolci, my own scan** (`rv_contam.py`). I used three measures: word 8-gram containment, 8-gram containment with
+  numbers masked (to catch digit-changed variants), and character 50-grams.
+  - Among the 90 evaluation problems, those at ≥ 0.3 on any measure are aime2024_13 (masked 1.00, a digit-changed
+    copy), aime2024_22 (0.40), aime2024_24 (0.31) and aime2026_01 (verbatim, same answer, in a dataset uploaded
+    2025-11-19). All four are excluded.
+  - aime2026_14 (0.375) matches only boilerplate: its match is a tetrahedron problem. It is rightly kept.
+  - I read the aime2024_22 match: "smallest … changes to 8" against the problem's "greatest … changed to 1". It is a
+    variant.
+- **Midtraining.** I could not re-scan 36 M documents on the VPS. Instead I re-aggregated the executor's raw per-shard
+  output (`midscan_shards.jsonl.gz`): 6,465 shards, 35,963,968 documents, 14 subsets, no duplicate shards.
+  - Every evaluation problem at ≥ 0.5 is excluded: aime2024_16 (1.00), aime2024_27 (0.82), aime2024_28 (0.52),
+    aime2026_01 (1.00).
+  - Below that line I read the best snippets for aime2024_26 (0.39), aime2025_04 (0.43), aime2025_12 (0.32), and the
+    others at ≥ 0.3. All are boilerplate or shared polynomials, not variants.
+  - The web and code subsets of midtraining, and the pretraining mix, were not scanned. The pre-registration says so.
+
+## 11. Compute axis
+
+I recomputed the axis with my own lengths:
+
+| model | Dolci probe, mean response tokens | AIME F, mean response tokens |
+|---|---|---|
+| base | 4,868 | 5,872 |
+| step_0100 | 9,854 | 11,284 |
+| step_0500 | 9,332 | 11,790 |
+| step_2800 | 9,743 | 11,712 |
+
+The accounting is rl-compute-share's: 6ND with N = 7.3e9 and D = 6.08e12, and 32 × 8 episodes per step. The low bound
+uses the probe lengths, oversampling 1, no extra forward pass and no prompt tokens. The high bound uses the AIME
+lengths, oversampling 3, 1 extra forward pass and 180 prompt tokens.
+
+| step | low | high | geometric mean |
+|---|---|---|---|
+| 100 | 4.15e-05 | 8.56e-05 | 5.96e-05 |
+| 500 | 2.57e-04 | 5.43e-04 | 3.73e-04 |
+| 2800 | 1.49e-03 | 3.22e-03 | 2.19e-03 |
+
+This equals `compute_axis.csv` to 4 significant figures. The oversampling of 1–3 for active sampling is an assumption,
+not a measurement.
+
+## 12. Spend and compute rows
+
+- **Spend.** `podbudget` shows 26.52 pod-hours and **$40.26 of $50**. The budget was registered at 01:04 UTC, before
+  the first pod at 01:21. `~/podhours.log` lists the pods:
+
+  | pod | GPU | hours | cost | rate |
+  |---|---|---|---|---|
+  | orz-a | A100-SXM4 | 7.05 | $9.80 | $1.39/h |
+  | orz-a (re-created) | A100-SXM4 | 0.11 + 0.09 | $0.27 | |
+  | orz-b | H200 | 0.23 | $0.82 | |
+  | orz-c | A100 PCIe | 7.21 | $12.90 | $1.79/h |
+  | orz-d | A100-SXM4 | 11.85 | $16.47 | |
+
+  None of the run's pods is live.
+- **Compute rows.** The registry has 156 rows (`artifacts/olmo-rlzero-pilot/registry/`, also in the bucket). Each
+  job's gpu_seconds, gen_tokens and attempts equal its meta file, for 18 jobs.
+  - The sampling rows total 24.55 GPU-h and 55.8 M generated tokens.
+  - The two void step_0100 runs are recorded with GPU-seconds but **gen_tokens 0**. F_s0100b's own log shows
+    2,050,941 tokens at 08:55 UTC, so the rows understate generated tokens by at least ≈ 2 M.
+  - P_base is an estimate; its row says so.
+
+## 13. Timing, and deviations visible in the artefacts
+
+- **Timing.** Part B was committed at 03:33:40 UTC. The speculation gate followed at 03:34–04:07, on AIME 2023 only,
+  and phase F started at about 04:09. The exclusions were in the Part B commit. So the pre-registration preceded all
+  evaluation sampling.
+- **Phase C budget.** Part B registers 24 fresh samples per solving checkpoint, and `plan_next.py` writes `:24`. The
+  plan files and `runqCE.sh` used **16 for step_2800 and 8 for step_0500**. step_0100's confirmation was never run.
+- **step_0100.** Phase F ran on 45 of 90 problems (42 headline). The first run was lost with orz-a, and the second was
+  stopped "for budget" after 160 samples on 20 problems; I checked that neither is used in any count.
+  - The 45-problem "seeded random half" is not reproducible from committed code. I tried 5 common draw methods × 5,000
+    seeds.
+  - It is not stratified by year: 20 / 10 / 15.
+- **Weight distance.** `weight_dist.jsonl` holds only rl100–base (2.59e-4) and rl200–rl100 (3.37e-4). Part A's
+  comparison "≥ 10× smaller than to another base revision" was **not measured**. So the start revision is consistent
+  with base `main` but not discriminated from a neighbouring stage-3 checkpoint.
+- **Lost texts.** F_base (1,440), P_base and g_spec_base texts were not pulled back (§2).
+- **Likelihood controls.** They are on the same problems, not "on other problems", and include contaminated AIME 2023.
+  This does not change the result (§9).
+
+## 14. Hard constraints
+
+- `nd_verify` tree 9437bb72 is identical at HEAD, `origin/main` and `origin/dan`.
+- `artifacts/TEST_RUN_DONE` blob 1d5cf064 is identical at all three.
+- The run trains nothing, so there is no evaluation file in training code.
+- Lean and `nd_verify` are not involved, since answers are checked by AI2's math verifier as the brief requires.
+- The run's added lines mention textbook72 nowhere (0 matches), and `olmo_pilot/` and `artifacts/olmo_pilot/` mention it
+  in no file.
+- No pods are live.
+
+**No hard-constraint violation.**
+
+## 15. Pre-registered expectations against my values (B4; `rl` grade, 83 headline problems)
+
+| expectation | my value | |
+|---|---|---|
+| base pass@1 0.03–0.08 | 0.094 | miss (above) |
+| base pass@8 0.12–0.28 | 0.364 | miss (above) |
+| base pass@16 0.18–0.35 | 0.458 | miss (above) |
+| step_2800 pass@1 0.10–0.25 | 0.419 | miss (above) |
+| step_2800 pass@8 0.25–0.50 | 0.627 | miss (above) |
+| step_0100 pass@1 within ± 0.03 of the base's | 0.301 vs 0.116 (same 42) | miss |
+| step_0500 between base and final | 0.304 | hit |
+| step_2800 mean length ≥ 1.4 × base | 2.00 × | hit |
+| step_0100 mean length within ± 20 % of base | 2.02 × (same 42) | miss |
+| step_2800 reach 2–8 after pass 1 | 3 after pass 1 (0 after pass 3) | hit |
+| strong reach 0–3 | 0 (3 at K* = 128) | hit |
+| reverse 1–5 | 1 after pass 1, 0 at the end | hit after pass 1, miss at the end |
+| entries vs base grow 0100 < 0500 < 2800 | 0100 9.88 vs 0500 8.61 (same 42), then 2800 14.61 | miss for 0100 < 0500 |
+| 0500 → 2800 growth within noise | +8.73 [2.97, 15.23] | miss (outside noise) |
+| ≥ 75 % of reach solutions in support; gap 0.05–0.3 nats | no reach solutions; "late" substitute 100 %, gap 0.053 | not testable as registered |
+| verdict: inconclusive ≈ 55 % | inconclusive | the most probable outcome |
+| spend ≤ $45 | $40.26 | hit |
+| speculative decoding adopted (≈ 60 %) | adopted | — |
+
+## Phase-1 findings (before reading the write-up)
+
+1. **R1: the headline reproduces under the RL reward.** Reach is 0, strong reach 0 and reverse 0 for step_2800 at the
+   full budget. All 17 RL-only solves fall to the base, by sample 383 at most (median 73). The pre-registered verdict
+   is "inconclusive at this budget", because clause (b) fails at matched k = 8 (gap 0.262 [0.179, 0.352]).
+2. **R2: what "the base solves it" means.** Read by hand, the base's resolving solutions are 10 genuine, 6 flawed but
+   arriving, and 1 guess (aime2024_20). On aime2024_20 the RL solutions are guesses too (5/5). On aime2026_26 they have
+   the base's flaw (5/5).
+3. **R3: aime2025_14.** The base's only credit is probably a verifier false positive. The answer 60 is the angle in the
+   statement; the sample has no stated integer and its text is lost. step_2800's resolving success is a confirmed
+   guess. The reverse count does not change, but neither model can be said to solve the problem.
+4. **R4: lost base texts.** F_base's 1,440 sample texts are gone, so 137 of the base's 155 counted successes cannot be
+   re-graded or read.
+5. **R5: deviations** (§13):
+   - confirmation budget 16 / 8 instead of 24;
+   - step_0100 on a 45-problem half not reproducible from code, with no confirmation and no likelihood;
+   - the base-revision weight comparison not measured;
+   - likelihood controls not "on other problems" (harmless).
+6. **R6: compute rows.** The void step_0100 runs record gen_tokens 0 despite ≈ 2 M generated tokens.
+7. **R7: hard constraints.** None violated.
