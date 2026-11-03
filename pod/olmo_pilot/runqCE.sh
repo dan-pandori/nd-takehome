@@ -14,6 +14,10 @@ for J in "$@"; do
     C_s0500) F=$PL/C_step_0500.txt; C="bash pod/olmo_pilot/job.sh C_s0500 step_0500 $RL step_0500 24 @$F 3003 1 8" ;;
     E1_base)  F=$PL/E_base.txt;  X="$FLAGS --seq_stop"; C="bash pod/olmo_pilot/job.sh E1_base base $BASE main 1 @$F 4001 1 16" ;;
     E1_s2800) F=$PL/E_s2800.txt; X="$FLAGS --seq_stop"; C="bash pod/olmo_pilot/job.sh E1_s2800 step_2800 $RL step_2800 1 @$F 4002 1 16" ;;
+    C_s2800b) F=$PL/C_step_2800b.txt; C="bash pod/olmo_pilot/job.sh C_s2800b step_2800 $RL step_2800 24 @$F 3011 1 8" ;;
+    C_s0100b) F=$PL/C_step_0100b.txt; C="bash pod/olmo_pilot/job.sh C_s0100b step_0100 $RL step_0100 24 @$F 3012 1 8" ;;
+    C_s0500b) F=$PL/C_step_0500b.txt; C="bash pod/olmo_pilot/job.sh C_s0500b step_0500 $RL step_0500 24 @$F 3013 1 8" ;;
+    E1_baseb) F=$PL/E_baseb.txt; X="$FLAGS --seq_stop"; C="bash pod/olmo_pilot/job.sh E1_baseb base $BASE main 1 @$F 4011 1 16" ;;
     *) echo "unknown job $J"; continue ;;
   esac
   [ -s $F ] && grep -q ':' $F || { echo "skip $J (no problems in $F)"; touch $A/meta/$J.done; continue; }
