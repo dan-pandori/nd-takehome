@@ -277,3 +277,9 @@ Brief: nd-rl proposal 34 (Dan, 2026-11-02). Policy: AGENT_POLICY.md. Run id: olm
   plain_summary.md), `figures/olmo_pilot_*.png`, bucket `hf://buckets/dan-pandori/nd-rl/olmo-rlzero-pilot/`. No pods left.
 
 OLMO-RLZERO-PILOT DONE 2026-11-03T16:19:20Z
+
+## olmo-think32b (executor; proposal 35; budget $150 / 120 pod-h; hard stop 2026-11-06 18:45 UTC)
+- 2026-11-03 18:45 UTC  start. 19:01 UTC pre-registration Part A committed (04019155) before any pod. Models: Olmo-3-32B-Think-DPO
+  `main`; Olmo-3.1-32B-Think `step_0100`, `step_0750`, `main` (= `step_2300`, shards identical). Recipe pinned
+  (open-instruct 7e780f2fea: olmo_thinker, T 1, top_p 1, 32,768, EOS only; MathVerifier off-thread). Next: Stage 0
+  (≤ $8, AIME 2024) and the contamination scan (Think RL / DPO / SFT data) on a CPU pod.
