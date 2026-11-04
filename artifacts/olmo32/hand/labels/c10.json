@@ -1,0 +1,23 @@
+[
+ {
+  "item": "h12e36f",
+  "label": "sound",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Crux proved mod 9 (rigorous): general argument gcd(N,ab)=1 so gcd(N,3ab) divides 3; then 'a=3k+1, b=3m+2 ... N=9(k²−km+m²+m)+3 → N≡3 mod 9, N/3≡1 mod 3', b'=ab≡2, so (1,2) mod 3 persists and the gcd is exactly 3 every step (expansion checked symbolically). Derives s_{n+1}=(a_n+b_n)²/3 and notes 3|s ⇒ 9|s². A later 'Assuming this pattern continues' is a redundant hedge. Iterates s←667·s² mod 1000 (valid: s²/3 is an integer, 3·667≡1): s₃…s₂₂=208,88,248,…,568, s₂₃=208, period 20; (2025−3) mod 20=2 → s₅=248. All residues match my recomputation (one '966' recap typo; write-up lists 968)."
+ },
+ {
+  "item": "h85f1db",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Crux only observed on specific terms: 'perhaps in our sequence so far, the GCD each time is 3. Let's check' (steps 1→2, 2→3), then 'So yes, in general, D_{k+1}=N_k D_k'; 3|S checked on S₁–S₃ 'and so on'. No mod-3/mod-9 or (a+b)²−3ab argument, so S→S²/3 rests on an unproved pattern. Also 2^{2024} mod 100 is obtained as 2^{2024} mod 40 = 16 (write-up: 'mod φ(100)=40 ... ≡16 mod 40', then 12^{16}); ord₁₂₅(12)=100, so this is invalid, right only because 2^{2024}≡16 mod 200. An earlier 608 (wrong mod-40 cycle) was corrected. Verified S=3·12^{2^{k−1}}, 12^{16}≡41, 3·41=123 mod 125, CRT 248."
+ },
+ {
+  "item": "h9ac8bf",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Crux only observed on specific terms: gcd 3 seen at steps 1→2 and 2→3, then 'So in general' N_k=(N²+D²−ND)/3, D_k=ND; coprimality checked for k≤3, then 'Let's hypothesize that gcd(N_k, D_k)=1 for all k' and 'Assuming that's always true, the answer is 248'. Never proved (it writes N²−ND+D²=(N+D)²−3ND but never uses it for divisibility). The rest is correct and verified: S_k=2^{2^k}·3^{2^{k−1}+1}, 2^{2025}≡32 and 2^{2024}+1≡17 (mod 100), 2^{32}≡46, 3^{17}≡38, 46·38≡123 (mod 125), CRT → 248. Write-up slip: '(46·38) mod 125 = 83' (83 is S₃ mod 125) yet it solves with 123."
+ }
+]
