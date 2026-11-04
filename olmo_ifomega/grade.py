@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Grade sampled responses of run olmo-ifomega.
 
-The answer of a response is the text after its last "</think>"; a response without "</think>" has no answer.
+The answer of a response is the text after its last "</think>", stripped of surrounding whitespace (as RL's IF reward
+strips it); a response without "</think>" has no answer.
 
 IF tasks (official checkers, vendored unmodified in olmo_ifomega/vendor/, see its README):
   ifbench -> allenai/IFBench @ cd189a9c (`ifbench_evaluation_lib`); ifeval -> google-research
@@ -49,7 +50,9 @@ OMEGA_TASKS = ("omega_in", "omega_out")
 
 
 def answer_of(text):
-    return text.rsplit("</think>", 1)[1] if "</think>" in text else None
+    # stripped, as RL's remove_thinking_section strips: the template puts "\n\n" after </think>, and exact-format
+    # checks (e.g. IFBench format:options) fail on it (fixed 2026-11-04 21:25 UTC, before any fixed-phase grading)
+    return text.rsplit("</think>", 1)[1].strip() if "</think>" in text else None
 
 
 def remove_thinking_section(prediction):
