@@ -1,0 +1,9 @@
+[
+ {
+  "item": "hf30951",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Credited 248 via S_k=N_k+D_k, S_k=S_{k-1}^2/3=3·12^{2^{k-1}}; I verified gcd=3 at each step, 2^2024≡16 mod 100, 12^16≡41 mod 125, 12^{2^2024}≡416 mod 1000. The recursion needs gcd exactly 3 every step: gcd(N',ab)=1 is proved algebraically in general, but 3|N' only on specific terms: Euclid for k=1,2, residues 19,033≡1, 43,175≡2 mod 3 for k=3, then 'So each step, the GCD is 3'. No N'=(a+b)^2-3ab link, no general (1,2)->(1,2) transition. A k=4->5 mod-1000 check (313, 775 reduced mod 3) gave a spurious non-divisibility, left as a mod-1000 artifact; the later 'S_k divisible by 3 for all k' presupposes the recursion (circular). Crux: observed on specific terms/residues only."
+ }
+]
