@@ -1,0 +1,16 @@
+[
+ {
+  "item": "h58bad7",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Validly shows gcd(N^2-ND+D^2, 3ND) = gcd(N^2-ND+D^2, 3) from gcd(N,D)=1 and proves the reduced pair coprime. Then S_{k+1}=S_k^2/3, S_k=2^{2^k}*3^{2^{k-1}+1}, and 248 by CRT (I checked: 2^2024=16, 2^2025=32 mod 100; 3^17=38, 2^32=46, product 123 mod 125; 0 mod 8). Crux only observed on specific terms/residues: GCDs computed at k=1,2 (471/825, 57099/129525), N3=1, D3=2 mod 3 checked, then 'because C=1 mod3 and D=2 mod3 at each step? Maybe the GCD is always 3? ... Thus possibly at every step the numerator is divisible by3'. No algebraic, mod-9 or residue-transition argument, and it never shows the (1,2) residues persist."
+ },
+ {
+  "item": "h01c07a",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Gets N_{k+1}=(N^2-ND+D^2)/3, D_{k+1}=ND, S_{k+1}=S_k^2/3, S_k=2^{2^k}*3^{2^{k-1}+1}, 248 (verified: 46*38=123 mod 125, 0 mod 8). Crux not proved. It has a mod-3 case table, digit-sum mod-9 checks of the unreduced terms at k=1,2 (471=3, 825=6 mod 9), and for N3=1, D3=2 mod 3 a residue-representative mod-9 substitution ('N=1, D=2 ... A=1-2+4=3 mod9'). It never shows the (1,2) pair recurs. It then overgeneralizes: 'the GCD is 3 in all cases, unless N and D are divisible by3 ... likely won't ... perhaps in every step the GCD is exactly3', which contradicts its own table (N=D mod 3 gives no factor 3). It never excludes other common primes."
+ }
+]
