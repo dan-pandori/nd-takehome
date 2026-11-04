@@ -154,3 +154,9 @@ unanswered: I stop at $45 and the decision memo prices both options.
   seeded order until spend + commitments reach $140, the rest reported as open (which makes `test_out`'s verdict
   "inconclusive" unless ≥ 3 reach prompts are confirmed first). I start the default's fixed phase now; nothing in it
   is wasted if you say yes.
+  - *Update 21:12 UTC:* IFBench runs costlier than Stage 0's IF numbers implied (a heavy tail of long responses fills
+    the KV cache: ≈ 1,700 tok/s on the H200): its fixed phase projects ≈ $35, so I also cut `step_0100` on IFBench
+    (brief's order). With that, the default reaches ≈ $140 at about the point where `test_out`'s fixed phase ends, so
+    without more budget `test_out` gets little or no extension and its verdict will almost surely be "inconclusive".
+    $200 would extend every `test_out` candidate (expected ≈ $40–60). I keep polling for community GPUs (≈ 30 %
+    cheaper per token) and move work there if any appear.
