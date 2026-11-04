@@ -287,3 +287,4 @@ OLMO-RLZERO-PILOT DONE 2026-11-03T16:19:20Z
   1 × H200 secure = $1.33/M). Projection $85–112 < $140 → pre-registered design unchanged. Part B committed
   (d78ea069). Fixed phase running on `ot32-a` (F_dpo → F_s2300 → F_s0750); F_s0100 on a second pod if one appears.
 - 2026-11-03 20:37 UTC  second pod `ot32-b` (H200 secure): F_s0100 → F_s0750 there; F_dpo → F_s2300 on `ot32-a`.
+- 2026-11-04 01:21 UTC  fixed phase 3 / 4 done (dpo, s0100, s0750; F_s2300 running). One reach candidate so far (aime2025_28); its DPO extension runs on `ot32-b`. Spend $58.12.
