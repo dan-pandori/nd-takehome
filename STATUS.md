@@ -289,3 +289,14 @@ OLMO-RLZERO-PILOT DONE 2026-11-03T16:19:20Z
 - 2026-11-03 20:37 UTC  second pod `ot32-b` (H200 secure): F_s0100 → F_s0750 there; F_dpo → F_s2300 on `ot32-a`.
 - 2026-11-04 01:21 UTC  fixed phase 3 / 4 done (dpo, s0100, s0750; F_s2300 running). One reach candidate so far (aime2025_28); its DPO extension runs on `ot32-b`. Spend $58.12.
 - 2026-11-04 03:18 UTC  **fixed phase complete**: pass@1 (rl) DPO 0.716, step_0100 0.706, step_0750 0.748, step_2300 0.746; one reach candidate (aime2025_28, DPO extension at 144 samples) and one reverse (aime2026_14, step_2300 extension started). Spend $78.78.
+- 2026-11-04 09:21 UTC  **Result** (models: Olmo-3-32B-Think-DPO `main`; Olmo-3.1-32B-Think step_0100 / step_0750 /
+  main = step_2300; 59 AIME 2025–26 problems; Think RL template, decoding and verifier). pass@1 (RL's verifier) 0.716 →
+  0.706 / 0.748 / 0.746; pass@8 0.858 → 0.864 / 0.881 / 0.864. **One reach candidate** (aime2025_28): in 256 samples
+  DPO is credited 7 times by RL's verifier but states the answer once; one sound stated solution under the hand-check
+  rule, none under a strict reading; step_2300 states it in 10 of 40 and is hand-confirmed. No reverse problem.
+  Pre-registered verdict: **inconclusive** (final and hand grades; "no reach at 256" by RL's verifier). RL's solutions lie
+  inside DPO's likelihood range. Cost $115.65 of $150 (21.9 H200 pod-hours). Deliverables: `run_olmo_think32b.md`,
+  `numbers.md` § olmo-think32b, `olmo32/` (code, manifest, results.csv, handcheck.csv, plain_summary.md,
+  scaleup_memo.md), `figures/olmo32_reach.png`, bucket `hf://buckets/dan-pandori/nd-rl/olmo-think32b/`. No pods left.
+
+OLMO-THINK32B DONE 2026-11-04T09:21:59Z

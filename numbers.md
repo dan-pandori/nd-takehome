@@ -1906,8 +1906,9 @@ open-instruct's MathVerifier as the Think RL ran it (`rl`), the final stated ans
 Decoding for all four: `scripts/train/olmo3/32b_think_rl.sh` @ `7e780f2fea` — `olmo_thinker` template, T 1, top-p 1,
 32,768-token responses, EOS-only stop; vLLM 0.11.0, bf16, 1 × H200 per job (TP 1), RunPod secure. Problems: AIME 2025 +
 2026 (60 sampled), headline 59 (`aime2026_01` excluded, carried over from the pilot; the Think RL / DPO / SFT scans found
-no containment ≥ 0.5 and only boilerplate ≥ 0.3: `olmo32/manifest.csv`). Bulk sources:
-`hf://buckets/dan-pandori/nd-rl/olmo-think32b/artifacts/olmo32/` (samples with every text, grades, likelihood scores).
+no containment ≥ 0.5 and only boilerplate ≥ 0.3: `olmo32/manifest.csv`). Bucket (`hf://buckets/dan-pandori/nd-rl/olmo-think32b/`): `artifacts/olmo32/` (every sample's text, grades,
+likelihood scores, scans, hand-check items, labels and key; bulk files listed in `artifacts/MANIFEST.jsonl`), `olmo32/`
+(code and result tables), `pod/olmo32/` (pod scripts), `docs/` (write-up, pre-registration, figure); no weights.
 
 ### Fixed phase (dpo 16, each RL checkpoint 8 samples per problem; `olmo32/passk.csv`, `dynamics.csv`, `results.csv`)
 
