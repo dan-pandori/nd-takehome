@@ -1,0 +1,188 @@
+# Pre-registration — olmo-ifomega (proposal 36)
+
+Written 2026-11-04 19:10–19:55 UTC by the executor, before any pod. Brief: `nd-rl` proposal 36 (Dan, 2026-11-04,
+≤ $150). Two parts. **Part A** (this commit, before the first pod) fixes the question, models, recipe, prompts,
+grades, design, verdict rule, preliminary expectations and Stage 0. **Part B** (an addendum committed after Stage 0
+and before any sampling on an evaluation prompt) adds the measured lengths and throughput, the GPU configuration, the
+re-costed design with any cuts, the contamination exclusions and the **binding numeric expectations** the brief asks
+for (it wants them after Stage 0). Part B may cut the design by the rules below; it does not change the definitions or
+the verdict rule.
+
+## Question
+
+`olmo-think32b` found RL moved AIME little (pass@1 0.716 → 0.746). AI2's model card says Olmo 3.1 Think 32B's RL moved
+IFBench most (DPO 34.4 → step 750 47.6 → step 2,300 68.1), IFEval +13, OMEGA +8. **On the tasks RL moved, does an RL
+checkpoint solve prompts that its RL start, the DPO model, does not solve within 256 samples** — IFBench (new,
+out-of-domain constraints), IFEval (in-distribution control), OMEGA explorative `test_in` (held-out, training
+difficulty) and `test_out` (harder)?
+
+## Models (from `olmo-think32b`; commits re-checked on each pod by `fetch.sh`)
+
+| label | repository @ revision | commit |
+|---|---|---|
+| `dpo` | `allenai/Olmo-3-32B-Think-DPO` @ `main` | `97604023` |
+| `s0100` | `allenai/Olmo-3.1-32B-Think` @ `step_0100` | `e7b80281` |
+| `s0750` | `allenai/Olmo-3.1-32B-Think` @ `step_0750` (= Olmo 3 Think 32B) | `418fb274` |
+| `s2300` | `allenai/Olmo-3.1-32B-Think` @ `main` (= `step_2300`) | `97ade57a` |
+
+All four: 32 B parameters, bf16, pretrained (Olmo 3 32B base → Think SFT → DPO → RLVR on `Dolci-Think-RL-32B`),
+natural-language text (no Lean: neither IF responses nor OMEGA answers are proofs; the judges are the official
+checkers below).
+
+## Recipe (identical to `olmo-think32b`; open-instruct `scripts/train/olmo3/32b_think_rl.sh` @ `7e780f2fea`)
+
+`olmo_thinker` template with its default system turn, the user turn = the prompt verbatim, generation prompt
+`<|im_start|>assistant\n<think>`; T 1.0, top-p 1.0, 32,768-token responses, EOS-only stop; vLLM 0.11.0, bf16 weights
+and KV cache, CUDA graphs on (RL ran eager). Sampler `olmo_ifomega/sample.py` = `olmo32/sample.py` with the prompt
+field, the stopping grade and the job order changed (template and decoding code unchanged; template sha256 recorded per
+job). No n-gram speculation, no FP8 KV cache: the decoding stays `olmo-think32b`'s.
+
+## Prompts (`olmo_ifomega/build_problems.py`, seed 20261104; every input at a pinned revision)
+
+- **IFBench**: all 300 prompts of `allenai/IFBench_test` @ `ed7c1245` (256 with one constraint, 44 with two; 58
+  constraint types), taken from the IFBench repo's bundled `ifbench/data/IFBench_test.jsonl` @ `cd189a9c`, which
+  equals the HF dataset on every key, prompt, constraint list and kwargs value (the HF parquet stores the ints as
+  floats, which the checkers reject).
+- **IFEval**: a seeded 150-prompt subset of `google/IFEval` @ `966cd895` (541).
+- **OMEGA**: `allenai/omega-explorative` @ `b04ae8d4`. RL's 15,000 OMEGA prompts (`omega-combined-no-boxed`) all equal
+  an OMEGA train problem with "user: " and the suffix "\n\nPresent the answer in LaTex format: \boxed{Your answer}"
+  removed; 40 of the 41 explorative families occur (all but `logic_zebralogic`). **Eligible families**: ≥ 100 distinct
+  RL prompts (31). **Chosen** (seeded draw stratified by domain: algebra 2, arithmetic 2, combinatory 2, geometry 2,
+  logic 1, number theory 1; `olmo_ifomega/families.csv`): `algebra_func_intersection`,
+  `algebra_func_intersection_coords`, `arithmetic_list_prime_factors`, `arithmetic_matrix_eigenvalues`,
+  `combinatory_probability_exactly_n_specific_fixed`, `combinatory_probability_no_specific_letter_fixed`,
+  `geometry_basic`, `geometry_perpendicular_intersection`, `logic_gridworld_knight_move`, `numbertheory_lte_qr`.
+  10 `test_in` + 10 `test_out` problems per family (200), drawn from pools that exclude every problem whose normalised
+  text equals an RL prompt (33 such `test_in` problems exist across all families), any OMEGA train / compositional /
+  transformative problem, or another problem of its split, **or equals one of them after renaming single-letter
+  symbols** (a relabelled copy of the same instance; before this filter 10 of the first draw's 100 `test_in` problems,
+  all combinatory, were such copies). The combinatory pools shrink to 59 / 57 (`test_in`) and 46 / 48 (`test_out`);
+  the others keep ≥ 97. Every chosen family's answers are integers or decimals.
+  The user turn is the problem without the boxed suffix: RL's form. (AI2's OLMES OMEGA evaluation uses a different
+  instruction, so numbers here are not the model card's.)
+- `olmo_ifomega/problems.jsonl` (650 prompts) and `stage0_problems.jsonl` (104, disjoint; never evaluated).
+
+## Contamination (before any evaluation sampling; `olmo_ifomega/contam.py`)
+
+Word 8-gram containment of every evaluation prompt against all 102,026 `Dolci-Think-RL-32B` prompts (VPS) and every
+`Dolci-Think-DPO-32B` row (prompt and both responses) and `Dolci-Think-SFT-32B` conversation (all turns) (pod CPU side
+job, if it fits the Stage-0 pod), as `olmo-think32b`, plus **content containment**: the same ratio over the prompt's
+8-grams that occur in fewer than 20 RL prompts (IFEval-style constraint sentences and OMEGA templates recur in
+thousands of RL prompts; a prompt's own task text does not). **Exclusion rule (IF):** content containment ≥ 0.5
+against any document, raw containment ≥ 0.8, or a variant (the same request with changed constraints) confirmed by
+reading among matches with raw or content containment ≥ 0.3; WildChat English and IF Multi-Constraint against IFBench
+/ IFEval are read first. **OMEGA:** its generators make train and test problems from the same templates with new
+parameters, so "the same problem with changed numbers" describes every `test_in` problem and n-gram containment is
+high by construction (a first RL scan: median raw containment 0.46 for `test_in`, the closest RL prompts differing in
+one parameter). For OMEGA a near-duplicate is therefore the same instance: equal after normalising and renaming
+single-letter symbols, which the pool filter already removes; containment and the closest RL prompt are reported.
+All prompts are sampled; headline numbers use the non-excluded set; exclusions are listed with their matches.
+
+## Grades (`olmo_ifomega/grade.py`; the answer = the text after the last `</think>`, none → no answer)
+
+- **IF, primary `strict`:** the official checker's `test_instruction_following_strict` on the answer, prompt-level
+  (every constraint followed); IFBench via the IFBench repo @ `cd189a9c`, IFEval via google-research
+  `instruction_following_eval` @ `e6890f85` (vendored unmodified; langdetect seeded for reproducibility).
+  Per-constraint success reported too. Diagnostics: `loose` (the official loose check) and `rlview` (strict on
+  open-instruct's `remove_thinking_section`, i.e. the whole text when `</think>` is missing: what RL's IF reward saw).
+  On the IFBench repo's stored sample outputs my wrapper reproduces the stored official labels on 285 / 288 prompts
+  (strict) and 286 / 288 (loose); the three differences are `ratio:overlap` and `ratio:sentence_type`, whose
+  checkers changed after those labels were stored.
+- **OMEGA, primary `omega`:** OMEGA's exact-match grade as AI2 implements it (OLMES @ `5a51f502`, task
+  `omega_*:0-shot-chat`: its answer extraction and `exact_match_flex`, case-insensitive) on the answer. The OMEGA repo
+  ships generators but no checker; the paper reports exact match. **Second `rl`:** open-instruct's MathVerifier as the
+  Think RL ran it (`olmo32/grade.py`, whole response). **Doubly** = both.
+- **Success** (the extension's stopping count): IF `strict`; OMEGA doubly.
+- **Hand check** (blinded sub-agents; the reader sees the prompt, the constraints or the official answer, and the
+  response; not the model, the phase or the side; I confirm or overturn every label and record both):
+  IF → **genuine** (a real attempt at the request that satisfies the constraints) or **gamed** (degenerate or
+  evasive text that passes the checker but ignores or guts the request: e.g. a constraint met by padding, truncation,
+  refusal or an off-topic reply); OMEGA → **sound**, **flawed** (right answer through a wrong or unjustified step that
+  matters) or **guess** (answer not derived, or boxed after abandoned or truncated reasoning).
+
+## Design
+
+1. **Fixed phase:** `dpo` 16 samples, each RL checkpoint 8, on every prompt (seeds 3001–3004), chunks of 4.
+2. **Candidates** per task: IF on `strict`; OMEGA on the union of `omega` and `rl`.
+   - reach R: `dpo` 0 / 16 and some RL checkpoint ≥ 1 / 8;
+   - reverse V: `dpo` ≥ 1 / 16 and `s2300` 0 / 8.
+3. **Defender extension** (`dpo` on R, `s2300` on V): sequential chunks of 48 (`dpo` 16 + 5 × 48 = 256; `s2300`
+   8 + 5 × 48 + 8 = 256), stopping after the chunk in which the defender's success count reaches 2; decisions use
+   completed chunks in chunk order. Cap 256 per model per prompt, fixed phase included. **Hand gate:** the defender's
+   first two successes are hand-checked; if either is not genuine / sound, the extension resumes until two are or 256.
+4. **Challenger confirmation** where the defender is not hand-confirmed at 256: the challengers (on R: `s2300` and
+   every RL checkpoint with ≥ 1 / 8; on V: `dpo`) get fresh chunks of 16 until ≥ 2 genuine / sound successes with
+   ≥ 1 fresh, cap 256.
+5. **One confirmation rule for every model:** confirmed on a prompt = ≥ 2 successes within 256 samples (hand: genuine /
+   sound), ≥ 1 of them drawn after the prompt became a candidate (for defenders every success qualifies).
+6. **Per-constraint analysis (IF):** for every reach and reverse prompt, which constraint the losing model fails (its
+   per-constraint success over all its samples) and whether that constraint id occurs in RL's IF data
+   (`olmo_ifomega/rl_if_ids.csv`: 54 ids in 29,847 RL prompts, IFEval's 25 and 29 IFTrain ids; no IFBench test id is
+   among them by construction, so for IFBench I also say which RL constraint is closest in kind).
+
+## Verdict (brief's rule, made exact; per task, under each grade G: IF `strict`; OMEGA `omega`, `rl`; and by hand)
+
+- **"Reach":** ≥ 3 non-excluded prompts where `s2300` is confirmed under G and `dpo` has no G-success within 256
+  (hand: no genuine / sound one among its successes).
+- **"No reach at 256":** every reach candidate is either confirmed for `dpo` under G (hand: ≥ 2 genuine / sound) or
+  **dissolved**: no RL checkpoint is confirmed on it within 256 (its RL-only success did not replicate).
+- **"Inconclusive":** anything else.
+
+The headline is the hand row. Adjustments, with reasons: "resolved for the DPO model" reads as the ≥ 2-success rule
+that confirms RL (symmetry, as in `olmo-think32b`); a candidate on which no RL checkpoint confirms cannot be a reach
+prompt under that same rule, so it no longer blocks "No reach" (in `olmo-think32b` it would have); OMEGA candidates
+use both grades so the `omega` and `rl` verdicts come from one set of samples. Reverse prompts (`dpo` confirmed,
+`s2300` no G-success within 256) are reported by the same rule, not in the verdict.
+
+## Reported quantities
+
+- Unbiased pass@k (k = 1, 2, 4, 8; 16 for `dpo`) per task and grade with 10,000-resample prompt-bootstrap 95 %
+  intervals; per-constraint success rates (IF); IFBench by constraint type. Minimum detectable paired pass@1
+  difference (80 % power): ≈ 0.05 on IFBench (300), ≈ 0.07 on IFEval (150), ≈ 0.08 per OMEGA split (100). Reach
+  counts are counts under a stopping rule, not estimates; no training seeds are involved (`NOISE_FLOOR.md` does not
+  apply).
+- Matched-k (k = 8) expected entries Σ pass@8_c (1 − pass@8_dpo) and exits Σ (1 − pass@8_c) pass@8_dpo with
+  intervals, and the observed sets, per task.
+- Every candidate's fate: draws of the first and second success per model, grades, hand labels.
+- Compute axis, cumulative RL ÷ pretraining at steps 100 / 750 / 2,300: `olmo-think32b`'s definitions and script
+  (FLOPs low / middle / high, GPU-hours), its AIME-length middle estimate, plus a middle estimate from this run's
+  measured lengths.
+- Per-job compute: GPU-seconds and GPU type, generated tokens, samples, as registry rows.
+
+## Preliminary expectations (before Stage 0; Part B replaces them with binding numbers)
+
+Strict prompt-level, T 1 / top-p 1 (the model card's numbers are OLMES's, IFBench `prompt_level_loose_acc` at T 0.6
+or 1.0; OMEGA a macro over three OMEGA sets with another instruction):
+
+| task | `dpo` pass@1 | `s2300` pass@1 | candidates R / V | `dpo` resolves | verdict (most likely) |
+|---|---|---|---|---|---|
+| IFBench | 0.30 (0.20–0.40) | 0.60 (0.45–0.72) | 30 (10–60) / 3 (0–10) | 60 % (30–90 %) | Reach 45 %, Inconclusive 40 %, No reach 15 % |
+| IFEval | 0.78 (0.70–0.86) | 0.88 (0.82–0.94) | 4 (1–10) / 2 (0–5) | 75 % | No reach 50 %, Inconclusive 35 %, Reach 15 % |
+| OMEGA `test_in` | 0.55 (0.35–0.75) | 0.62 (0.40–0.80) | 6 (2–12) / 3 (0–8) | 70 % | No reach 45 %, Inconclusive 40 %, Reach 15 % |
+| OMEGA `test_out` | 0.30 (0.10–0.50) | 0.36 (0.12–0.55) | 8 (2–15) / 3 (0–8) | 55 % | Inconclusive 50 %, Reach 25 %, No reach 25 % |
+
+Mean response tokens: IF 2–6k, OMEGA 10–22k; cut at 32,768 on OMEGA 5–25 %.
+
+## Stage 0 (≤ $8; `stage0_problems.jsonl`, never an evaluation number)
+
+- 104 prompts: 2 more `test_in` + 2 more `test_out` problems per chosen family (40), 40 IFEval prompts outside the
+  subset, 24 RL IF prompts (in RL's training set; lengths only).
+- `s0_dpo`: `dpo`, 4 samples each (seed 1001); then, if the Stage-0 spend allows, `s0_s2300`: `s2300`, 2 each
+  (seed 1002).
+- Measured: tokens per sample by task (mean, median, cut share), throughput (job average and vLLM-log integral),
+  $ per million tokens by task, grade agreement (`omega` vs `rl`; `strict` vs `rlview`).
+- GPU: one pod, first of (community, else secure, cheapest measured $/token first) H200, B200, 2 × A100 SXM,
+  2 × H100 SXM, 2 × RTX PRO 6000 that has stock; CUDA allocation tested first; billed rate recorded.
+- Stage 0 stops at $8 whatever it has measured.
+
+## Budget and stop rules
+
+- $150 / 120 pod-hours registered with `podbudget` (done before this commit); dollars bind; RunPod balance ≥ $35
+  (`rpbalance` before every pod; $254.10 at the start).
+- After Stage 0 I re-cost the whole design. If the projection exceeds min($140, balance − $45) I ask in
+  `QUESTIONS.md`; default if unanswered: apply the brief's cut order until it fits — IFEval first, then OMEGA
+  `test_in` (whole families removed in seeded order), then `step_0100` — keeping IFBench and OMEGA `test_out` whole.
+- During the run, if spent + projected exceeds $140: (1) challenger confirmation of the intermediate checkpoints,
+  (2) IFEval's extension, (3) `test_in`'s extension, (4) challenger confirmation capped at 64 fresh samples. The
+  defender extension to 256 on IFBench and `test_out` is never cut; if it alone would cross $140 I ask.
+- Hard stop 2026-11-07 19:10 UTC (72 h).

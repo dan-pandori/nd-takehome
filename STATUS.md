@@ -300,3 +300,9 @@ OLMO-RLZERO-PILOT DONE 2026-11-03T16:19:20Z
   scaleup_memo.md), `figures/olmo32_reach.png`, bucket `hf://buckets/dan-pandori/nd-rl/olmo-think32b/`. No pods left.
 
 OLMO-THINK32B DONE 2026-11-04T09:21:59Z
+
+## olmo-ifomega (executor, started 2026-11-04 19:10 UTC; brief: proposal 36, ≤ $150 / 120 pod-h, hard stop 2026-11-07 19:10 UTC)
+
+- 2026-11-04 19:10 UTC  start. Question: does Olmo 3.1 Think 32B's RL reach IFBench / IFEval / OMEGA `test_in` / `test_out`
+  prompts that its DPO start (`Olmo-3-32B-Think-DPO`) cannot solve within 256 samples? Budget registered with podbudget
+  ($150 / 120 h). Balance $254.10.
