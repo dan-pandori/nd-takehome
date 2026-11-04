@@ -1,0 +1,16 @@
+[
+ {
+  "item": "h1747e2",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Valid lemma: gcd(N,3ab)=gcd(N,3), and 3|N iff (a,b)=(1,2)/(2,1) mod 3. The crux (gcd 3 at every step) is argued only by a mod-3 residue-representative transition: 'Let a=1, b=2 mod3 ... 1+4-2=3 ... dividing by3 gives 1 mod3 (since 3/3=1)'. That is non-rigorous because it needs mod-9 information, and the real terms are (7,2),(4,5) mod 9. It is otherwise only observed on x2=157/275 and x3=19033/43175; there is no (a+b)^2-3ab argument. The rest is correct: S_{k+1}=S_k^2/3, S_k=3^{2^{k-1}+1}4^{2^{k-1}}, 2^2024=16 mod 100, 3^17=38, 4^16=46, product 123 mod 125, 0 mod 8, giving 248 (python-checked; the claim is true, N=3 mod 9 for all lifts). Write-up formula typo."
+ },
+ {
+  "item": "h094333",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Same valid lemma (gcd(N,3ab)=gcd(N,3); 3|N iff (1,2)/(2,1) mod 3). Crux step: 'compute N_{k+1} mod9 ... 1^2+2^2-1*2 mod9: 1+4-2=3 mod9. So ... divided by3 gives 1 mod3'. This names mod 9 but evaluates only at the representatives a=1, b=2, while the actual terms are (7,2),(4,5),(7,2) mod 9. So it is a residue-representative transition, not a mod-9 proof, plus observation on x2 and x3; there is no algebraic argument. The rest is correct: s_{n+1}=s_n^2/3, s_n=3*12^{2^{n-1}}, 2^2024=16 mod 100, 12^16=41 mod 125, CRT 416, 3*416 gives 248 (python-checked). A rejected 2-cycle detour gave 208 inside the thinking; the final write-up states only 248."
+ }
+]
