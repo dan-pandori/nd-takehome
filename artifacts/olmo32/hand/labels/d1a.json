@@ -1,0 +1,23 @@
+[
+  {
+    "item": "hc2b6fa",
+    "label": "flawed",
+    "where": "think_only",
+    "final_states_other_answer": false,
+    "evidence": "Right frame: unreduced A,B with A+B=36^(2^(k-1)), and g_k=g_{k-1}^2*gcd(a^2-ab+b^2,3) is proved. The decisive 'factor 3 at every step' is checked only for k=1..3, then asserted: 'the pattern for a and b's mod3 continues ... leading to the factor of3 each time'. No induction is given. Its own mod-3 case table wrongly gives factor 1 for a=1,b=2 (mod 3), the case that occurs. It also uses the false '2^40=1 mod100', though 2^2025=32 and 2^2024=16 (mod 100) still hold. I checked m+n=2^(2^2025)*3^(2^2024+1) (true for k<=11) and 2^32*3^17=123 (mod 125); CRT gives 248. The boxed 248 is inside the thinking; the write-up stops mid-list with no answer."
+  },
+  {
+    "item": "h118775",
+    "label": "guess",
+    "where": "think_only",
+    "final_states_other_answer": false,
+    "evidence": "Reduced recurrence N'=(N^2-ND+D^2)/3, D'=ND is right but assumed for all steps ('if this pattern continues'). Mod 1000 to n=9, D cycles 175,775,575,975 while N does not repeat (n3: 33, n7: 233), and it fails to compute n10. It then assumes a 4-cycle. Index readings give 168, 88, 208 and 248 ('this may be incorrect due to assumed cycle'), and it ends with 'Given my confusion ... I'll go with 248'. I checked the true orbit: period 20 from k=3, so (673,575) at k=2025 is right only by coincidence. The boxed 248 is in the thinking; the write-up is cut at the length limit before any answer."
+  },
+  {
+    "item": "h9fea38",
+    "label": "flawed",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "Proves gcd(N,3AB)=gcd(N,3) for reduced A/B, N=A^2-AB+B^2. For 'divide by 3 every step' it computes next residues from representatives: '(1-2+4)/3=1 mod3', so (1,2)->(1,2) 'forever'. It had itself flagged that dividing by 3 needs mod-9 data ('maybe tracking mod9 is insufficient'), checked N=3 (mod 9) only at k=1, and checked k=2,3 numerically. The claim is true (A=1,B=2 mod 3 forces N=3 mod 9; I checked all lifts) but unproved. The rest checks out: S_{k+1}=S_k^2/3, S_k=3*12^(2^(k-1)) (matches k<=7), 2^2024=16 (mod 100) via the period-20 cycle, 12^16=41, 3*41=123 (mod 125), CRT gives 248. The final write-up states 248."
+  }
+]

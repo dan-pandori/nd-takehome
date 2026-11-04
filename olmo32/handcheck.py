@@ -33,9 +33,12 @@ def prep(items_csv, outdir):
     texts = {}
     for job in sorted({w["job"] for w in want}):
         with gzip.open(A / "samples" / f"{job}.jsonl.gz", "rt") as f:
-            for ln in f:
-                r = json.loads(ln)
-                texts[(job, r["pid"], str(r["chunk"]), str(r["i"]))] = r
+            try:
+                for ln in f:
+                    r = json.loads(ln)
+                    texts[(job, r["pid"], str(r["chunk"]), str(r["i"]))] = r
+            except (EOFError, json.JSONDecodeError):
+                pass  # a copy pulled while the job was still writing: complete rows only
     rows = []
     for w in want:
         k = (w["job"], w["pid"], str(w["chunk"]), str(w["i"]))

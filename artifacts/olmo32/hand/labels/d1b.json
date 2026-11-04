@@ -1,0 +1,16 @@
+[
+  {
+    "item": "he20e60",
+    "label": "flawed",
+    "where": "think_only",
+    "final_states_other_answer": false,
+    "evidence": "Derives N_{k+1}+D_{k+1}=(a_k+b_k)^2 but takes S_{k+1}=S_k^2/3 (gcd exactly 3 at every step) from two checked steps ('This seems a pattern... Yes! So indeed S_{k+1}= S_k^2/3'; earlier 'Assuming that GCD(N4, 3 a3 b3)=3'). Never shows 3|a_k+b_k persists; the closing check only argues a_k,b_k coprime by construction. Rest is right (I verified): S_k = 667*S_{k-1}^2 mod 1000, values S1..S23 correct, S23=S3=208 (period 20), 2022 mod 20=2 gives S5=248; closed form 2^(2^2025)*3^(2^2024+1) = 248 mod 1000. An earlier 208, from an assumed period 2, is refuted in the thinking. The write-up after </think> breaks off ('define S_k = a_k + b_k') before giving an answer; 248 is boxed only in the thinking."
+  },
+  {
+    "item": "h4cbdbc",
+    "label": "sound",
+    "where": "think_only",
+    "final_states_other_answer": false,
+    "evidence": "Proves c+d=(a+b)^2 and gcd(c,3ab)=gcd(c,3) (gcd(c,ab)=1 from gcd(a,b)=1). Mod-3 case analysis gives 3|c iff a and b are nonzero and distinct mod 3. Shows (a,b)=(1,2) mod 3 persists: b'=ab=2 rigorously; a'=c/3=1 checked only with representatives (true: c/3=-ab mod 3 when 3|a+b). So the gcd is 3 at every step and S_k=S_{k-1}^2/3. Mod 8: 0 for k>=2; mod 125: x->42x^2, S23=S3=83, period 20, S2025=S5=123; CRT gives 248. I verified all of this. A mod-3000 cross-check contradicts it only because of a slip (2,214,144/3 written 737,148, should be 738,048), and the solver misreads the cause; that check isn't load-bearing. The write-up is cut off at '3.'; 248 is boxed only in the thinking."
+  }
+]
