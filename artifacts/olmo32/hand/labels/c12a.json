@@ -1,0 +1,16 @@
+[
+ {
+  "item": "h8240cb",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Crux (gcd exactly 3 every step) only observed on specific terms: Euclid at k=1,2,3 plus mod-3/mod-9 residues of N3,D3 alone (A=3 mod 9), then 'Therefore, the GCD at each step is 3'; coprimality likewise checked only for k<=4. Worse, the decisive period-4 cycle of (N,D) mod 1000 from k=3 is false: it uses 673^2=329 and 993^2=649 mod 1000 (true 929, 049; only last two digits squared). Verified: true k=6,7 pairs are (193,975),(233,175); period is 20 (k=3 pair recurs at k=23). 248 survives by luck: 2022=2 mod 20 as well as mod 4, and k=5 (673,575)->1248 was correct. Final states 248; an earlier 208 (false period-2 claim) was retracted."
+ },
+ {
+  "item": "h639858",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Crux not proved: recursion N'=(N^2+D^2-ND)/3, D'=ND generalized from k=1,2 ('in general, seems like'); the coprimality induction (valid prime argument) assumes integrality: '(N3^2+D3^2-N3D3) is divisible by 3, which it must be, since N4 is integer' (circular). No algebraic or mod-9 proof of the 3-divisibility, though the ingredients are present: it proves 3|S_k for all k (S=3t => S'=3t^2) and derives S'=(N+D)^2/3, which would give 3|N^2+D^2-ND=S^2-3ND, but never links them (mild, fillable gap). Rest verified: y=S/3, y'=y^2 mod 1000, y1=12, period 20 from k=3 (y23=y3=736), y2025=y5=416, 3*416=1248->248; S mod 3000 table correct (S21 slip self-corrected). Final states 248."
+ }
+]

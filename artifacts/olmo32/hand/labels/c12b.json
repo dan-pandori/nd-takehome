@@ -1,0 +1,16 @@
+[
+ {
+  "item": "h514e25",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Crux (gcd exactly 3 each step) is only observed on specific terms: Euclid gives gcd 3 for x_2 and x_3, then 'So the pattern is S_k = S_{k-1}^2 divided by 3 when k>=2? ... If this holds, then the recursion is S_k = S_{k-1}^2/3'; the S_4 check ('need to verify using the recursion') is never done, and the write-up says 'It is found that'. No algebraic, mod-9 or residue argument (claim is true: N=(a+b)^2-3ab, 3|a+b, gcd(N,ab)=1). Proved: unreduced a'+b'=(a+b)^2. Rest valid: S_k=2^(2^k)*3^(2^(k-1)+1), 2^2025=32, 2^2024=16 (mod 100), 2^32*3^17=46*38=123 (mod 125), 0 mod 8, CRT 248. Checked: gcd=3 for 15 steps, closed form exact k<=16, S_2025=248 mod 1000."
+ },
+ {
+  "item": "h66313f",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Crux only observed on specific terms, then assumed: Euclid gives gcd 3 for k=1,2; 'Assuming this pattern continues, perhaps the GCD is always 3'; on extra factors 'may or may not have more common factors? ... Maybe in general? Assuming...'. It writes N=(m+n)^2-3mn but only to get Q_{k+1}=Q_k^2/3 from the assumed gcd; its 3-adic count e_k=2^(k-1)+1 checks integrality of the assumed recurrence, never linked to 3|N. No mod-9/residue argument. Rest valid (verified): Q=0 mod 8 for k>=2; Q->42Q^2 mod 125 is legitimate, period 20 from Q_3 (Q_23=Q_3=83), Q_2025=Q_5=123, CRT 248. Write-up garbled ('Q_5 mod 1000 is 208', actually Q_3's; Q_5=248) but boxes 248."
+ }
+]
