@@ -66,16 +66,18 @@ def prep(items_csv, outdir):
 def table(outdir):
     out = Path(outdir)
     key = {r["item"]: r for r in csv.DictReader(open(out / "key.csv"))}
-    lab = {}
-    for f in sorted((out / "labels").glob("*.json")):
+    lab, allr = {}, {}
+    for f in sorted((out / "labels").glob("*.json"), key=lambda f: f.stat().st_mtime):
         for r in json.load(open(f)):
-            lab[r["item"]] = r
+            lab[r["item"]] = r  # the latest reader's label (consistency-pass labels supersede earlier ones)
+            allr.setdefault(r["item"], []).append(f"{f.stem}:{r['label']}")
     conf = {r["item"]: r for r in csv.DictReader(open(out / "confirm.csv"))} if (out / "confirm.csv").exists() else {}
     rows = []
     for item, k in sorted(key.items(), key=lambda kv: (kv[1]["pid"], kv[1]["model"], kv[1]["job"])):
         rl = lab.get(item, {})
         c = conf.get(item, {})
-        rows.append({**k, "reader_label": rl.get("label", ""), "final_label": c.get("label", ""),
+        rows.append({**k, "reader_label": rl.get("label", ""), "all_reader_labels": " ".join(allr.get(item, [])),
+                     "final_label": c.get("label", ""),
                      "overturned": bool(c and rl and c.get("label") != rl.get("label")),
                      "reader_evidence": (rl.get("evidence") or "")[:400].replace("\n", " "),
                      "my_note": c.get("note", "")})

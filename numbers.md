@@ -1895,3 +1895,79 @@ ids, grades, likelihood scores, the midtraining scan; sha256 in `artifacts/MANIF
 results), `pod/olmo_pilot/`, `data/olmo_pilot/` (the Dolci-RL-Zero-Math-7B parquet @ 93b5e498), `figures/`, `docs/`;
 registry rows `hf://buckets/dan-pandori/nd-rl/registry/olmo-rlzero-pilot/`. Lost with pod `orz-a` (host failure): the
 sample texts of F_base, P_base and g_spec_base (their grades are kept) and the last 96 rows of s0_base's texts.
+
+## olmo-think32b (2026-11-04, executor; UNREVIEWED)
+
+**Models (every number here):** `allenai/Olmo-3-32B-Think-DPO` `main` (`97604023`, the RL start; "dpo") and
+`allenai/Olmo-3.1-32B-Think` `step_0100` (`e7b80281`), `step_0750` (`418fb274`, = Olmo 3 Think 32B's final) and `main`
+(`97ade57a`, = `step_2300`: all 14 shards identical): 32 B parameters, bf16, pretrained (Olmo 3 32B base → Think SFT →
+DPO → RLVR on Dolci-Think-RL-32B). Natural-language maths, not Lean (Lean does not apply to AIME answers): the judge is
+open-instruct's MathVerifier as the Think RL ran it (`rl`), the final stated answer (`final`) and a blinded hand check.
+Decoding for all four: `scripts/train/olmo3/32b_think_rl.sh` @ `7e780f2fea` — `olmo_thinker` template, T 1, top-p 1,
+32,768-token responses, EOS-only stop; vLLM 0.11.0, bf16, 1 × H200 per job (TP 1), RunPod secure. Problems: AIME 2025 +
+2026 (60 sampled), headline 59 (`aime2026_01` excluded, carried over from the pilot; the Think RL / DPO / SFT scans found
+no containment ≥ 0.5 and only boilerplate ≥ 0.3: `olmo32/manifest.csv`). Bulk sources:
+`hf://buckets/dan-pandori/nd-rl/olmo-think32b/artifacts/olmo32/` (samples with every text, grades, likelihood scores).
+
+### Fixed phase (dpo 16, each RL checkpoint 8 samples per problem; `olmo32/passk.csv`, `dynamics.csv`, `results.csv`)
+
+| model | pass@1 `rl` | pass@8 `rl` | pass@1 `final` | tokens / sample | cut at 32,768 |
+|---|---|---|---|---|---|
+| dpo | 0.716 [0.621, 0.806] | 0.858 [0.761, 0.941] | 0.686 [0.594, 0.773] | 19,910 | 13.7 % |
+| step_0100 | 0.706 [0.608, 0.797] | 0.864 [0.780, 0.949] | 0.686 [0.591, 0.777] | 19,131 | 10.0 % |
+| step_0750 | 0.748 [0.652, 0.837] | 0.881 [0.797, 0.949] | 0.739 [0.642, 0.828] | 18,351 | 10.4 % |
+| step_2300 | 0.746 [0.650, 0.833] | 0.864 [0.780, 0.949] | 0.739 [0.644, 0.826] | 18,091 | 8.7 % |
+
+dpo pass@16 0.864 [0.763, 0.949] (`rl`). 95 % intervals: 10,000-resample problem bootstrap. pass@1 − dpo (`rl`):
+step_0100 −0.011 [−0.040, 0.018], step_0750 +0.032 [0.003, 0.063], step_2300 +0.030 [0.000, 0.060]; (`final`) +0.000,
++0.053 [0.020, 0.088], +0.053 [0.016, 0.091]. Expected entries / exits at k = 8 vs dpo (`rl`): step_0100 1.28 / 0.90,
+step_0750 1.38 / 0.00, step_2300 1.28 / 0.90 (entries 95 % [0.00, 3.5]); observed 1 / 1, 1 / 0, 1 / 1.
+
+### Candidates and extensions (`olmo32/candidates_fixed.csv`, `candidates.csv`; draws within the 256 cap)
+
+- **Reach R = {aime2025_28}** (answer 248): dpo 0 / 16; step_0100 1 / 8, step_0750 1 / 8 (`rl` only), step_2300 3 / 8.
+- **Reverse V = {aime2026_14}**: dpo 3 / 16, step_2300 0 / 8. Seven problems were solved by no model in the fixed
+  phase (aime2025_13, 14, 15, 30; aime2026_15, 29, 30).
+- aime2025_28, **dpo to 256**: `rl` 7, `final` 1 (doubly credited 1); 111 / 256 cut; stated answers in the 240
+  extension samples: none 163, 208 × 70, 248 × 1. step_2300 (8 + 32 fresh): `rl` 12, `final` 10. step_0100 (8 + 248
+  fresh, to the cap): `rl` 9, `final` 5. step_0750 (8 + @@S0750_DRAWS@@ fresh): `rl` @@S0750_RL@@, `final` @@S0750_FINAL@@.
+- aime2026_14, **step_2300**: 2 doubly-credited successes in 56 draws (8 + 48), both sound → confirmed; reverse 0.
+
+### Verdict (pre-registered rule; `olmo32/verdict.csv`)
+
+| grade | dpo on aime2025_28 (256) | step_2300 confirmed | reach step_0100 / 0750 / 2300 | reverse | verdict |
+|---|---|---|---|---|---|
+| `rl` | confirmed (7 successes) | yes | 0 / 0 / 0 | 0 | **no reach at 256** |
+| `final` | 1 success: not confirmed | yes | 0 / 0 / 0 | 0 | **inconclusive** |
+| hand, uniform rule (headline) | 1 sound final-credited: not confirmed | yes | 0 / 0 / 0 | 0 | **inconclusive** |
+| hand, strict reading | 0 sound | yes | 1 / @@S0750_STRICT@@ / 1 | 0 | **inconclusive** |
+
+"Reach candidates for scale-up" needs ≥ 3 problems; one reach candidate exists, so it is unreachable at this screening.
+
+### Hand check (`olmo32/handcheck.csv`; blinded readers, then my confirmation; rule in `olmo32/handcheck_rule_aime2025_28.md`)
+
+@@HAND@@
+
+### Likelihood under dpo (`olmo32/likelihood.csv`; prompt log-probs of each response, 87 solutions, 1.84 M tokens)
+
+Every one of the 29 RL credited solutions on aime2025_28 lies inside the 2.5–97.5 % range of dpo's own correct
+solutions on the other 51 headline problems (per-token [−0.783, −0.330] nats). Mean per-token log-prob under dpo:
+step_0100 −0.554 (9), step_0750 −0.474 (8), step_2300 −0.418 (12); dpo's own 7 on aime2025_28 −0.560. RL's solutions are
+*more* likely per token under dpo than dpo's own (gaps +0.006 / +0.087 / +0.142 nats per token); whole-solution
+log-likelihood −14,702 / −11,830 / −11,795 vs dpo's −15,579 nats (RL's solutions are shorter).
+
+### Compute axis (`olmo32/compute_axis.csv`; cumulative RL ÷ pretraining)
+
+| checkpoint | FLOPs low | FLOPs middle (measured AIME lengths) | FLOPs high | GPU-hours |
+|---|---|---|---|---|
+| step_0100 | 1.2 × 10⁻⁴ | 4.7 × 10⁻⁴ | 9.8 × 10⁻⁴ | 0.0037 |
+| step_0750 | 9.0 × 10⁻⁴ | 3.4 × 10⁻³ | 7.4 × 10⁻³ | 0.0275 |
+| step_2300 | 2.8 × 10⁻³ | 1.0 × 10⁻² | 2.3 × 10⁻² | 0.143 |
+
+Pretraining 6ND = 1.09 × 10²⁴ (N 3.2 × 10¹⁰, D 5.7 × 10¹²), 9.77 × 10⁵ GPU-hours; low = 64 prompts / step × 8 × 10,000
+tokens × 8N, high = 128 × 8 × 32,768 × 10N, middle = 128 × 8 × measured mean length × 8N; GPU-hours = 5 d × 224 GPUs
+over steps 1–750, 21 d × 224 over 751–2,300 (rl-compute-share inputs, open-instruct script).
+
+### Cost (podbudget; RunPod secure H200 $5.29/h)
+
+@@COST@@
