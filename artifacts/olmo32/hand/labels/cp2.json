@@ -1,0 +1,16 @@
+[
+  {
+    "item": "h4cbdbc",
+    "label": "flawed",
+    "where": "think_only",
+    "final_states_other_answer": false,
+    "evidence": "Proves c+d=(a+b)^2, gcd(c,ab)=1, and gcd(c,3ab)=3 iff 3∤ab and a≢b mod 3. Crux by residue-representative transition (non-rigorous): 'Take a=1 mod3 (1), b=2 mod3 (2). Then, c=1+4-2=3, so c/3=1 mod3' => 'a4≡1 mod3, b4≡2 mod3 again! ... the pattern continues', plus Euclid/digit-sum checks on x1-x3. Dividing by 3 needs mod-9 data; the claim holds (c≡3 mod 9 since c=(a+b)^2-3ab) but is never shown. Later '3 | S_k' serves only integrality, never linked to residues. Rest verified in python: S_{k+1}=S_k^2/3, S_k≡0 mod 8 (k≥2), 42x^2 mod 125 orbit with period 20 from S_3, S_2025≡S_5≡123, CRT 248. Failed mod-3000 cross-check abandoned. 248 boxed only before </think>; write-up cut at '3.'."
+  },
+  {
+    "item": "h9fea38",
+    "label": "flawed",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "Proves gcd(N,AB)=1 so gcd(N,3AB) is 1 or 3, and S_{k+1}=S_k^2/3 when it is 3. Crux by residue-representative transition (non-rigorous): mod 9 done for x1 only (N=471≡3 mod 9); it concedes 'tracking mod9 is insufficient' and to 'accept that some information is lost when dividing by3', then 'Suppose A=1 and B=2 mod3 ... when divided by3, gives1 mod3 (since 3/3=1)' => '(1,2) → (1,2) forever', checked by digit sums on x2, x3. True via N=(A+B)^2-3AB, never used. Rest verified in python: S_k=3·12^(2^(k-1)), 2^2024≡16 mod 100 (period-20 cycle), 12^16≡41, 3·41≡123 mod 125, 0 mod 8, CRT 248. Write-up boxes 248 without any gcd justification."
+  }
+]
