@@ -17,5 +17,5 @@ while [ $(date +%s) -lt $END ]; do
     echo "$(date -u +%T) $C x $POD_GPU $POD_CLOUD: ${out:0:120}" >> $L
     if [ -f ~/.config/nd-rl/pods/$N ]; then echo "$c" > ~/runs/olmo-ifomega/$N.created; exit 0; fi
   done
-  sleep 180
+  sleep 120
 done

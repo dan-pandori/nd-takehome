@@ -171,13 +171,16 @@ def success(task, text, prob):
 def main():
     samples, problems, out = sys.argv[1:4]
     probs = {r["pid"]: r for r in map(json.loads, open(problems))}
-    with gzip.open(samples, "rt") as f, open(out, "w") as g:
+    rows = []
+    try:
+        with gzip.open(samples, "rt") as f:
+            for ln in f:
+                rows.append(json.loads(ln))
+    except (EOFError, json.JSONDecodeError):
+        pass  # truncated tail of a killed job: complete rows only
+    with open(out, "w") as g:
         n = 0
-        for ln in f:
-            try:
-                r = json.loads(ln)
-            except json.JSONDecodeError:
-                break  # truncated tail of a killed job
+        for r in rows:
             p = probs[r["pid"]]
             row = {k: r[k] for k in ("pid", "model", "rev", "job", "chunk", "i", "n_tok", "finish")}
             row["task"] = p["task"]

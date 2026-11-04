@@ -139,7 +139,7 @@ unanswered: I stop at $45 and the decision memo prices both options.
 
 # Questions for Dan (olmo-ifomega, proposal 36). Each has the default I follow if unanswered.
 
-- **2026-11-04 20:55 UTC (olmo-ifomega, budget: the design does not fit $140)** — Stage 0 (stopped at its $8 cap)
+- **2026-11-04 20:41 UTC (olmo-ifomega, budget: the design does not fit $140)** — Stage 0 (stopped at its $8 cap)
   measured OMEGA `test_out` responses from the DPO model at **≈ 24–27k tokens** (44 of 80 finished, mean 24.1k; the
   rest are longer) and IF responses at ≈ 1–2k. On the pods I can get (1 × H200 secure $5.29/h, 2 × A100 SXM secure
   $3.58/h; nothing cheaper had stock), long sequences cost **≈ $1.4 per million tokens** (≈ 1,000 tok/s on the H200:

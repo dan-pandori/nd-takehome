@@ -186,3 +186,86 @@ Mean response tokens: IF 2–6k, OMEGA 10–22k; cut at 32,768 on OMEGA 5–25 %
   (2) IFEval's extension, (3) `test_in`'s extension, (4) challenger confirmation capped at 64 fresh samples. The
   defender extension to 256 on IFBench and `test_out` is never cut; if it alone would cross $140 I ask.
 - Hard stop 2026-11-07 19:10 UTC (72 h).
+
+---
+
+# Part B — after Stage 0, before any sampling on an evaluation prompt (2026-11-04 20:55–21:10 UTC)
+
+## Stage 0 measured (`olmo_ifomega/stage0_summary.json`; stopped at its $8 cap, 20:54 UTC, $7.92; censored)
+
+Pods: `oif-a` 1 × H200 secure, $5.29/h billed (`s0_dpo`); `oif-b` 2 × A100-SXM4-80GB secure, $3.58/h (`s0_s2300`,
+TP 2); nothing cheaper had stock 19:53–20:02. Per task (finished samples / requested; mean tokens; cut at 32,768):
+
+| | `dpo` (H200) | `s2300` (2 × A100) |
+|---|---|---|
+| OMEGA `test_out` | 80 / 80; **22.6k** (median 22.0k); 17.5 % cut; `omega` pass@1 0.325, `rl` 0.363 | 6 / 40; 9.5k (censored) |
+| OMEGA `test_in` | 36 / 80; 17.8k (censored: the unfinished are longer) | 8 / 40; 6.2k (censored) |
+| IF (RL IF prompts / IFEval) | 8 / 96; 2.6k / 0 / 160 (all queued behind OMEGA) | 2 / 48, 6 / 80; 2.0k / 1.3k |
+
+- Throughput (vLLM log integral): H200 **1,262 tok/s** job average (53.8 sequences resident; ≈ 930–1,200 tok/s once
+  only long sequences remain) = $1.16 per million tokens; 2 × A100 **664 tok/s** = $1.50 / M. The KV cache holds
+  329,680 tokens (≈ 35 sequences of 20k): long OMEGA sequences dominate it, and IF requests submitted after them
+  waited for most of the job. `s2300`'s job generated 1.72 M tokens over 208 sequences with only 22 finished, so its
+  OMEGA sequences were ≈ 20k long when stopped: I take `s2300`'s OMEGA lengths ≈ `dpo`'s (as on AIME in
+  `olmo-think32b`).
+- Grades on real output: `omega` ≠ `rl` on 3 / 80 `test_out` samples (all `rl`-only: a boxed answer in an
+  unclosed thinking section); `strict` = `rlview` on all IF samples; 82.5 % of `dpo`'s `test_out` samples close
+  `</think>` (17.5 % are cut).
+
+## Re-costed design (`olmo_ifomega/project.py` arithmetic; tokens × measured $ / M)
+
+| part | tokens | $ |
+|---|---|---|
+| IFBench fixed (all 4 models; ≈ 2.5k / 2k tokens) | 26 M | 15 |
+| `test_out` fixed, `dpo` 16 + `s2300` 8 (22.6k) | 54 M | 68 |
+| `test_out` fixed, `s0750` 8 / `s0100` 8 | 18 M each | 20 each |
+| `test_in` fixed (all 4; ≈ 19k) | 76 M | 88 |
+| IFEval fixed (all 4) | 13 M | 7 |
+| extensions: IFBench / `test_out` / `test_in` / IFEval | | 6–11 / 45–85 / 30 / 2 |
+
+Full design ≈ $330; after the brief's cuts (IFEval, `test_in`, `step_0100`) ≈ $200; over min($140, balance − $45 =
+$197). **Asked in `QUESTIONS.md` (20:41 UTC): raise to $200?** Each `test_out` candidate that `dpo` cannot solve costs
+≈ $7 to extend to 256 (240 × 25k tokens on the H200).
+
+## Design as run (the question's default; additions if Dan approves are listed in their order)
+
+- **IFBench whole:** all 300 prompts, all four models (fixed `dpo` 16 / RL 8), extension, confirmation, hand check.
+- **OMEGA `test_out`:** all 100 problems, fixed phase `dpo` 16 and `s2300` 8; `s0750` and `s0100` not run on OMEGA.
+- **Cut (brief's order):** IFEval, OMEGA `test_in`, `step_0100` on OMEGA (kept on IFBench: ≈ $3).
+- **Jobs:** IF and OMEGA in separate jobs per model (Stage 0: in a mixed job IF requests wait behind long OMEGA ones).
+  `oif-a` (H200): `F_dpo_ifb` → `F_dpo_oo`; `oif-b` (2 × A100): `F_s2300_ifb` → `F_s0750_ifb` → `F_s0100_ifb` →
+  `F_s2300_oo`. TP 1 vs TP 2 across models is a numerics-only difference (a sampling re-draw).
+- **Extension budget rule (default, replacing Part A's "never cut" for `test_out` only until Dan answers):** IFBench
+  extension and confirmation in full; then `test_out` reach and reverse candidates one at a time in a seeded order
+  (`random.Random(20261104)` over the sorted candidate list) while spent + committed ≤ $140; a candidate is committed
+  only if its worst case (256 draws) fits. Unextended candidates are reported as open.
+- **If Dan approves $200:** (1) every `test_out` candidate extended as pre-registered, (2) `s0750` on `test_out`,
+  (3) IFEval.
+
+## Contamination exclusions (`olmo_ifomega/contamination.csv`, `exclusions.csv`, `exclusions.py`)
+
+Scanned: all 102,026 RL prompts, 200,000 DPO rows, 2,253,684 SFT conversations. **82 IFBench prompts excluded**
+(headline IFBench = 218): 79 because the base request is a Think-SFT conversation (mostly `Wildchat`,
+`tulu_v3.9_wildchat_100k_english-r1`; some `Dolci Think Precise IF` prompts built on the same request with other
+constraints), 5 RL (the 3 fish-screenplay and 2 "U BGRAP H − W EIGHT" prompts), 4 DPO, overlapping; 68 by content
+≥ 0.5 or raw ≥ 0.8, 14 by reading in the 0.3–0.5 band (the same request verbatim). Not excluded after reading:
+ifbench_43, 248, 291 and 16 IF prompts whose matches are constraint boilerplate. IFEval: none. OMEGA: none
+(relabelled copies removed from the pools). Headline numbers use the non-excluded set; all-300 IFBench numbers are
+reported as a sensitivity (the SFT overlap is shared by all four models).
+
+## Binding expectations (design as run; strict for IF, `omega` for OMEGA)
+
+| | `dpo` pass@1 / pass@8 | `s0100` | `s0750` | `s2300` pass@1 / pass@8 |
+|---|---|---|---|---|
+| IFBench (218) | 0.30 (0.20–0.40) / 0.62 (0.50–0.75) | 0.32 / 0.64 | 0.44 (0.32–0.56) / 0.76 | 0.60 (0.45–0.72) / 0.86 (0.75–0.93) |
+| `test_out` (100) | 0.32 (0.20–0.45) / 0.62 (0.45–0.78) | – | – | 0.40 (0.25–0.55) / 0.66 (0.50–0.80) |
+
+- IFBench: reach candidates |R| 30 (12–55), reverse |V| 5 (1–15); `dpo` resolves (≥ 2 strict successes in 256) 50 %
+  (25–75 %) of R; by hand one or two fewer (gamed successes); `s2300` confirmed on 90 % of the rest; expected entries at
+  k = 8 (`s2300` vs `dpo`) 55 (35–75), exits 5 (1–12). Verdict: **Reach 55 %**, Inconclusive 30 %, No reach 15 %.
+- `test_out`: |R| 8 (3–15), |V| 5 (1–10); entries at k = 8 6 (2–12), exits 3 (1–7); `dpo` resolves 50 % (20–80 %)
+  of the candidates it is extended on; under the default budget 3–5 candidates are extended. Verdict: Inconclusive
+  60 %, Reach 25 %, No reach 15 %. `omega` and `rl` pass@1 within 0.04.
+- Lengths in the fixed phase: IF 1.5–4k mean (RL checkpoints within ± 40 % of `dpo`); `test_out` 18–26k, cut 10–25 %.
+- Hand check: ≤ 10 % of IF strict successes on deciding prompts gamed; ≥ 70 % of OMEGA doubly-credited deciding
+  successes sound.
