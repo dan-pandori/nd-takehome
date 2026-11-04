@@ -136,3 +136,21 @@ unanswered: I stop at $45 and the decision memo prices both options.
     pre-registered extension passes to 256 and 512 and step_0100 on a random half; total $39.36 of $50. Every
     RL-only solve fell to the base within 383 samples, so the cheapest decisive next step is the 32B test with a
     large extension budget (memo: M2 ≈ $320, M1 ≈ $205, a pilot-sized M0 ≈ $110).
+
+# Questions for Dan (olmo-ifomega, proposal 36). Each has the default I follow if unanswered.
+
+- **2026-11-04 20:55 UTC (olmo-ifomega, budget: the design does not fit $140)** — Stage 0 (stopped at its $8 cap)
+  measured OMEGA `test_out` responses from the DPO model at **≈ 24–27k tokens** (44 of 80 finished, mean 24.1k; the
+  rest are longer) and IF responses at ≈ 1–2k. On the pods I can get (1 × H200 secure $5.29/h, 2 × A100 SXM secure
+  $3.58/h; nothing cheaper had stock), long sequences cost **≈ $1.4 per million tokens** (≈ 1,000 tok/s on the H200:
+  Olmo 3's KV cache holds only ≈ 35 such sequences). Re-costed: the brief's full design ≈ $300; after its cuts (IFEval,
+  OMEGA `test_in`, `step_0100`) ≈ $230; IFBench whole + `test_out` whole with `dpo` and `s2300` only ≈ $175–200,
+  because each `test_out` reach candidate the DPO model cannot solve costs ≈ $10 to extend to 256 (240 × 28k tokens).
+  **Question:** may I raise this run's budget to **$200** (balance $250 now, ≈ $50 after)? With it I would, in this
+  order: extend every `test_out` candidate to 256 as pre-registered, then add `step_0750` on `test_out` (the compute
+  axis), then IFEval (≈ $5). **Default if unanswered (fits $140):** IFBench whole (all four models, extension,
+  confirmation, hand check); OMEGA `test_out` all 100 problems with `dpo` (16) and `s2300` (8) only; IFEval, `test_in`
+  and the intermediate checkpoints on OMEGA cut (brief's order); `test_out` candidates extended one at a time in a
+  seeded order until spend + commitments reach $140, the rest reported as open (which makes `test_out`'s verdict
+  "inconclusive" unless ≥ 3 reach prompts are confirmed first). I start the default's fixed phase now; nothing in it
+  is wasted if you say yes.
