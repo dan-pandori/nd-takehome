@@ -1,0 +1,16 @@
+[
+ {
+  "item": "h41e70f",
+  "label": "sound",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Writes x_k=a_k/b_k reduced; the next term is (a^2-ab+b^2)/(3ab). It proves gcd(N,ab)=1, so the gcd is 1 or 3, and shows (a,b)≡(1,2) mod 3 is invariant (N≡3 mod 9). So a_{k+1}=N/3 and b_{k+1}=ab stay coprime. It derives S_k=a_k+b_k=S_{k-1}^2/3 with S_1=36, hence m+n=S_2025=2^(2^2025)*3^(2^2024+1). Then 2^2025≡32 and 2^2024≡16 (mod 100), 2^32*3^17≡46*38≡123 (mod 125), 0 mod 8, giving 248. A mid-way 'critical mistake' about the exponent was a false alarm and the numbers did not change. I checked with exact Fractions for k<=11 (closed form, recursion and mod-3 invariant all hold) and with pow() at k=2025: 248."
+ },
+ {
+  "item": "h4d5363",
+  "label": "sound",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Treats the sides as vectors at 0,72,...,288 degrees. Each diagonal skips one vertex, so the law of cosines at a 108-degree angle gives d^2=x^2+y^2+2xy*cos72 for adjacent sides x,y. Summing: sum diag^2=2*308+2cos72*S_adj, so cos72*S_adj=92. Closure |sum v|^2=0 gives 308+2(cos72*S_adj-cos36*S_nonadj)=0, so cos36*S_nonadj=246. With cos72=(sqrt5-1)/4 and cos36=(sqrt5+1)/4: S_adj=92(sqrt5+1), S_nonadj=246(sqrt5-1), P^2=308+2(338sqrt5-154)=676sqrt5, giving 681. Long dithering over cos72 and a dropped coordinate formula do not affect the result. I checked the identities on random equiangular pentagons and found a positive pentagon (sides ~7.04, 7.60, 8.80, 6.30, 9.14) with 308/800 and P^2=676sqrt5."
+ }
+]
