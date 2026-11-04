@@ -1,0 +1,16 @@
+[
+ {
+  "item": "h6be162",
+  "label": "sound",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Fixes side directions at (k-1)*72 deg and writes diagonal P_iP_{i+2} = v_{i+1}+v_{i+2}, so '616 + 2 cos72 * C = 800' gives C = 92(sqrt5+1). Closure |sum v|^2 = 0 gives sum_{i<j} v_i.v_j = -154; separations 1/4 carry cos72 (sum = C), separations 2/3 carry -cos36, so 'GroupB_sum = 246(sqrt5-1)'. Then sum s_i s_j = 338 sqrt5 - 154 and 'S^2 = 676 sqrt5', giving 681. Long dithering over the exact cos72 ends correctly ((sqrt5-1)/4, cos36 = (sqrt5+1)/4, confirmed by double angle). I re-derived this independently and checked it numerically: P^2 = Q + (D-2Q)/cos72 + (D-Q)/cos36 holds on random equiangular pentagons, and a positive-sided pentagon with Q=308, D=800 exists with P^2 = 1511.58 = 676 sqrt5."
+ },
+ {
+  "item": "h693234",
+  "label": "sound",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Same route as a direct solution. An early slip (listing A0A3 as z1+z2+z3 and A0A4 as a diagonal) is corrected: the five diagonals are z_k+z_{k+1} cyclically (closure gives A3A0 = z4+z5, A4A1 = z5+z1; A0A4 is a side). '616 + 2cos72 * sum s_k s_{k+1} = 800' gives S_adj = 92(sqrt5+1); closure gives 'cos72 S_adj - cos36 S_nonadj = -154', so S_nonadj = 246/cos36 = 246(sqrt5-1), with 1/cos36 = sqrt5-1 derived via the double angle. Hence sum s_i s_j = 338 sqrt5 - 154 and P^2 = 676 sqrt5, giving 681. I checked each sum on a constructed pentagon with Q=308, D=800: S_adj = 297.72, S_nonadj = 304.07, P^2 = 1511.58."
+ }
+]
