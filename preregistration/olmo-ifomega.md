@@ -269,3 +269,15 @@ reported as a sensitivity (the SFT overlap is shared by all four models).
 - Lengths in the fixed phase: IF 1.5–4k mean (RL checkpoints within ± 40 % of `dpo`); `test_out` 18–26k, cut 10–25 %.
 - Hand check: ≤ 10 % of IF strict successes on deciding prompts gamed; ≥ 70 % of OMEGA doubly-credited deciding
   successes sound.
+
+## Part B addendum — Dan's answer (2026-11-04 21:22 UTC; written before any fixed-phase result was read)
+
+Budget raised to **$225** (plan to ≈ $215 with commitments: balance floor). In Dan's order: (1) every `test_out`
+candidate is extended to 256 as Part A pre-registered (the Part-B budget rule for `test_out` lapses; Part A's design
+applies to every task); (2) `step_0750` on `test_out` (8 samples, seed 3013); (3) IFEval: `dpo` 16, `s0750` 8,
+`s2300` 8 (seeds 3021 / 3023 / 3024), with its extension and confirmation; then, if spent + committed allows,
+(4) `step_0100` on IFBench (seed 3002), (5) OMEGA `test_in`. The verdict rule and the definitions are unchanged.
+Expectations for the additions (binding, before data): `s0750` `test_out` pass@1 0.36 (0.22–0.52), pass@8 0.64; IFEval
+strict pass@1 `dpo` 0.78 (0.70–0.86), `s0750` 0.84, `s2300` 0.88 (0.80–0.94); IFEval |R| 4 (1–10), |V| 2 (0–5),
+`dpo` resolves 75 % of R; verdict: No reach 50 %, Inconclusive 35 %, Reach 15 %. `test_out` with all candidates
+extended: Inconclusive 40 %, Reach 30 %, No reach 30 %.

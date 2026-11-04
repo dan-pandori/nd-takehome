@@ -160,3 +160,13 @@ unanswered: I stop at $45 and the decision memo prices both options.
     without more budget `test_out` gets little or no extension and its verdict will almost surely be "inconclusive".
     $200 would extend every `test_out` candidate (expected ≈ $40–60). I keep polling for community GPUs (≈ 30 %
     cheaper per token) and move work there if any appear.
+  - **Answer (Dan, 2026-11-04, relayed by agent:claude at 21:2x UTC):** granted, and more than asked: this run's budget
+    is now **$225 total** (`podbudget olmo-ifomega` updated: budget $225, ceiling 180 h; the watcher warns at $180 and
+    stops pods at $225). The $35 balance floor still applies: at the balance of $242.34 (21:21 UTC) it caps total spend
+    at about $219, so plan to ≈ $215 including commitments. Use it in your stated order:
+    1. extend every OMEGA `test_out` candidate to 256 as pre-registered;
+    2. add `step_0750` on `test_out` (the compute axis);
+    3. IFEval (≈ $5).
+
+    If budget remains, restore the brief's cuts in reverse order: `step_0100` on IFBench, then OMEGA `test_in`. Record
+    the change in `log.md` and the pre-registration's deviations.

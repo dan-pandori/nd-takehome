@@ -313,3 +313,8 @@ OLMO-THINK32B DONE 2026-11-04T09:21:59Z
   DPO and step_2300; IFEval, test_in, intermediate checkpoints on OMEGA cut. 82 IFBench prompts excluded (base request
   in the Think SFT data; headline 218). Fixed phase running on `oif-a` (H200 secure $5.29/h) and `oif-b`
   (2 × A100 secure $3.58/h). Spend $8.3.
+- 2026-11-04 21:25 UTC  Dan raised the budget to $225 (plan ≈ $215). Added in his order: every OMEGA test_out
+  candidate extended to 256, step_0750 on test_out, IFEval (dpo / step_0750 / step_2300); then step_0100 on IFBench if
+  it fits. Pods: `oif-a` H200 secure (F_dpo_ifb → F_dpo_ife → F_dpo_oo), `oif-c` H200 community $3.59/h (RL IFBench /
+  IFEval → F_s2300_oo → IF extensions → F_s0750_oo); `oif-b` (2 × A100) retired for `oif-c`. Grader fix 21:25 (strip
+  the IF answer, as RL's reward does). Spend $12.5.
