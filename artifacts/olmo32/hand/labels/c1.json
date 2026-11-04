@@ -1,0 +1,16 @@
+[
+ {
+  "item": "h2dcb12",
+  "label": "sound",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Writes x_k=N_k/D_k with N_{k+1}=(N_k^2+D_k^2-N_kD_k)/3, D_{k+1}=N_kD_k (first assumed because x2, x3 had gcd 3), derives S_{k+1}=S_k^2/3 and S_k=3*12^(2^(k-1)), and proves gcd(N_k,D_k)=1 by induction (harmless slip: 'N_{k+1}=N_k^2 mod p' should read 3N_{k+1}). Divisibility of the numerator by 3 is only asserted ('established earlier') but follows from its own N_{k+1}=S_k^2/3-N_kD_k with 3|S_k. Then 2^2024=16 mod 100, 12^16=41 mod 125, CRT 416, 3*416=1248 -> 248, boxed in the write-up. Python: reduced m+n=3*12^(2^(k-1)) for k<=8, gcd 3 at every step, 3*12^(2^2024)=248 mod 1000."
+ },
+ {
+  "item": "h4984ee",
+  "label": "sound",
+  "where": "think_only",
+  "final_states_other_answer": false,
+  "evidence": "Fixes an early slip (275*157=41,175 -> 43,175); justifies the /3 reduction via N_k=1, D_k=2 mod 3 (the N_{k+1}=1 mod 3 step plugs in representatives, non-rigorous but true since N_{k+1}=3(S_k/3)^2-N_kD_k) and a valid coprimality argument; derives S_{k+1}=S_k^2/3 with 3|S_k; iterates S_k mod 3000 by hand (s^2 mod 9000, /3; valid as 3|s). Finds S_23=S_3=2208, period 20, (2025-3) mod 20=2 -> S_5=1248 -> 248, after correcting a 2023 mod 20 index slip (168). Python confirms all 23 residues and S_2025=1248 mod 3000. The write-up breaks off at 'Find the remainder: 2023'; 248 is boxed only in the thinking."
+ }
+]
