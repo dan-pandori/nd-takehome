@@ -1,0 +1,21 @@
+nd_verify / verify_text mentions in olmo32/ and pod/olmo32/: []
+bucket files matching safetensors/.bin/.pt/.gguf: 0
+Stage 0 rl-only: [[["stop", null], 12], [["length", null], 1], [["stop", "line"], 1]]
+  the 'line' case: finish=stop final_val=None label=23
+F_dpo rl-only (59 problems): [[["stop", null], 24], [["length", null], 4]]
+F_s0100 rl-only: [[["stop", null], 9]]
+F_s0750 rl-only: [[["stop", null], 3], [["length", null], 1]]
+F_s2300 rl-only: [[["length", null], 2], [["stop", null], 1]]
+solved>=1/8 (rl): s0100 51, s2300 51, identical sets: True, symmetric difference []
+aime2026_01 (excluded) fixed phase n, rl: {'dpo': [16, 16], 's0100': [8, 8], 's0750': [8, 8], 's2300': [8, 8]}
+dpo|aime2025_28 E1a_dpo: stop_after=2 inflight=1 chunks=0..4 contiguous=True target met at chunk index None -> kept after: n/a (ran to its n)
+s2300|aime2025_28 C1_s2300: stop_after=1 inflight=2 chunks=0..1 contiguous=True target met at chunk index 0 -> kept after: 1
+s0750|aime2025_28 C1_s0750: stop_after=2 inflight=3 chunks=0..2 contiguous=True target met at chunk index 0 -> kept after: 2
+s0750|aime2025_28 C2_s0750: stop_after=3 inflight=3 chunks=3..5 contiguous=True target met at chunk index 0 -> kept after: 2
+s0750|aime2025_28 C3_s0750: stop_after=3 inflight=3 chunks=6..12 contiguous=True target met at chunk index 4 -> kept after: 2
+s0750|aime2025_28 C4_s0750: stop_after=0 inflight=3 chunks=13..15 contiguous=True target met at chunk index None -> kept after: n/a (ran to its n)
+s0100|aime2025_28 C1_s0100: stop_after=1 inflight=3 chunks=0..12 contiguous=True target met at chunk index 10 -> kept after: 2
+s0100|aime2025_28 C2_s0100: stop_after=1 inflight=3 chunks=13..15 contiguous=True target met at chunk index 0 -> kept after: 2
+s2300|aime2026_14 E1_s2300: stop_after=2 inflight=1 chunks=0..0 contiguous=True target met at chunk index 0 -> kept after: 0
+MANIFEST.jsonl numstat (added, deleted) since 525e2e0e: 34	0	artifacts/MANIFEST.jsonl
+files with deleted lines since 525e2e0e: []
