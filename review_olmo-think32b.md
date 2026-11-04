@@ -336,3 +336,262 @@ three checkpoints' average instead changes the middle column by ≤ 3 %.
 5. Part B1's "92 % box their answer after it, as expected" against the ≥ 95 % expectation.
 6. The per-candidate cut shares (29–93 %) and what the 32,768-token cap means for "within 256 samples".
 7. Model labels on every number, and the pilot's numbers (7B, a different checker setting) kept apart.
+
+## §Recount corrections (phase 2; after an adversarial check of this review)
+
+§Recount above is the text committed in `e18cf32c` before phase 2. An adversarial reader checked this review against
+the kit's outputs and found 23 problems; none changes a verdict. The corrections to §Recount are these:
+
+1. **Sources.** The header's "every number below is in its `out/`" was not true at phase 1. It is now. I added:
+   - `out/provenance.txt`: pod ledger lines, git blobs and commit times, balance, word counts with their method;
+   - `out/upstream_unit.txt`: the `\dfrac` unit test;
+   - `out/ll_checks.txt`: the 87-item prompt and response checks;
+   - `out/registry_all.txt`: all 105 registry rows, not just 45, with 0 differences;
+   - `out/secrets_bucket.txt`.
+2. **R1, bucket secrets.** Phase 1 scanned 259 local files in three directories. All 272 bucket files are now
+   scanned, three of them fetched from the bucket's `docs/`: 0 hits. The balance $254.10 was read at review time;
+   `numbers.md` gives 254.26 at the end of the run.
+3. **R4.** The SFT corpus is 35,992 MB, i.e. 33.5 GiB (the log's "34 GB").
+4. **R5.** "Every Part B1 number reproduces" becomes "every Part B1 number I recomputed reproduces". Part B1's 92 %
+   is 92.8 % truncated. The KV-cache size, the 11.3× concurrency, the $6.5 and the 20:21:38 finish come from logs
+   and billing I did not recompute; the job's meta `utc_end` is 20:21:33.
+5. **R6.** The MDD of ≈ 0.04 is for `rl`. Under `final` the paired SE is 0.016–0.019, so the MDD is 0.046–0.053.
+6. **R9.** The cut share of 29–93 % covers the six cells of R9. `s0100` and `s0750` on aime2026_14 are cut in 8 / 8
+   and 7 / 8.
+7. **R10: the "middle" class is withdrawn.**
+   - **Why:** it was defined after I read my readers' labels. 25 of its 37 classes rested on the readers' step
+     records, and it was not uniform: `s2300` draw 28 was C and draw 29 I, with the same ingredients.
+   - **Replacement:** explicit subtypes. **T** is a general residue-representative transition (`dpo` 104 and 108;
+     `s2300` 25, 28 and 29; `s0750` 93). **S** is an S-divisibility induction on the recurrence (`s0100` 4;
+     `s0750` 37, 58 and 60; `s2300` 19). The **executor's rule as applied in its notes** counts P and T as sound.
+     The P / T / S / C / X / G classes of `hand/confirm.json` came out of phase 2; 16 items were read by me
+     (`read_by_reviewer`).
+   - **Strict reading:** P is the only class whose criterion does not depend on reading labels (a general mod-9
+     expansion, or an explicit S² − 3ab link). It is unchanged from phase 1 and agrees with the executor's strict
+     labels on 38 / 38 common items.
+   - **Lenient reading:** it counts C as sound, which the pre-registered "flawed" (an unproved pattern claim)
+     excludes. It is a bound, not a reading of the pre-registration.
+   - **Results** (`out/hand.txt`):
+
+| cell | strict | executor's rule (P, T) | readers' labels | lenient |
+|---|---|---|---|---|
+| `dpo` × aime2025_28: sound among its 7 credited (doubly) | none | {104, 108} (108) | {104} (none) | {36, 78, 104, 108, 256} (108) |
+| `s2300` × aime2025_28: doubly sound / confirmed | {3, 5, 27} ✓ | {3, 5, 25, 27, 28, 29} ✓ | {3, 5, 27, 29} ✓ | all 10 ✓ |
+| `s0750` × aime2025_28 | none ✗ | {93} ✗ | {37, 58, 60, 93} ✓ | 14 ✓ |
+| `s0100` × aime2025_28 | {182, 228} ✓ | {182, 228} ✓ | {4, 182, 228} ✓ | 4 ✓ |
+| aime2026_14: `s2300` 2 / `dpo` 3 | all ✓ | all ✓ | all ✓ | all ✓ |
+| hand-reach problems | aime2025_28 | none | none | none |
+| hand verdict | Inconclusive | Inconclusive | Inconclusive | Inconclusive |
+
+   - The readers' labels agree with the strict reading on 35 / 42 items and with the executor's rule on 35 / 42.
+   - Under the executor's rule, my classes agree with the executor's final labels on **38 / 38** common items. That
+     agreement is not blind: I assigned the T / S subtypes after reading the executor's notes.
+   - `s2300`'s strict confirmation needs only draws 3 and 27, which is the executor's pair. Draw 5 adds a third.
+8. **R11.** In the hand row, "middle" becomes "the executor's rule".
+9. **R12.** "≤ 3 %" becomes "≤ 3.2 %" (step 100: −3.2 %).
+10. **R13.** "8 `s0750` from jobs C1–C2 only" becomes "8 `s0750`: one fixed-phase (`rl`-only draw 2), 3 from C1 and
+    4 from C2; none from C3–C4".
+11. **R15.**
+    - **Likelihood gap:** pooled over the 29 it is +0.085, inside ≤ 0.1 (a hit). Per checkpoint, step 2,300's is
+      +0.142 (a miss); this is the executor's reading, and its "gap larger" is fair.
+    - **"`dpo` confirmed … the same under `final`, and one fewer by hand":** if "the same" means the `rl` count
+      (1 of 1), `final` (0 of 1) misses and "one fewer by hand" (0) is met. If it means "all but 0–2", `final` is a
+      hit.
+    - **Stage 0 boxing:** 92.8 % box after `</think>`, a miss if the expectation meant the write-up; 100 % box
+      somewhere, a hit if it meant anywhere.
+
+## §Compare (phase 2: the executor's `run_olmo_think32b.md`, `numbers.md` § olmo-think32b, `log.md`, plain summary, memo, tables)
+
+Read after the phase-1 commit `e18cf32c`. Comparison helpers: `rv_hand_compare.py` (`out/hand_compare.txt`),
+`rv_phase2_checks.py` (`out/phase2_checks.txt`). Write-up length: 364 words counting only tokens with a letter or digit; `wc -w` gives 406, because it also counts
+table pipes and rules (limit 400). Plain summary: 578 by the same count, 597 by `wc -w` (limit 600). Both are in
+`out/provenance.txt`.
+
+### C1. `run_olmo_think32b.md`
+
+| claim | my value | verdict |
+|---|---|---|
+| Models, template, decoding (T 1, top-p 1, 32,768), 59 problems | R2 | reproduces |
+| `dpo` pass@1 0.716 [0.62, 0.81], pass@8 0.858 [0.76, 0.94] (RL's verifier) | 0.716 [0.622, 0.802], 0.858 [0.766, 0.940] | reproduces; the upper bound 0.81 vs 0.80 is bootstrap noise |
+| steps 100 / 750 / 2,300: pass@1 0.706 / 0.748 / 0.746, pass@8 0.864 / 0.881 / 0.864 | identical | reproduces |
+| 1. step 2,300 gains +0.030 [0.000, 0.060] pass@1 (+0.053 by final answer); at k = 8, 1.3 expected entries and 0.9 exits | +0.030 [0.000, 0.060]; +0.053; 1.28 / 0.90 | reproduces |
+| 2. one reach candidate, aime2025_28 | R = {aime2025_28} under every reading | reproduces |
+| `dpo` credited 7 times in 256 by RL's verifier, states the answer once, says 208 in 70 of 240 extension samples | 7; 1; 208 × 70 | reproduces |
+| steps 100 / 750 / 2,300 state it 5 / 15 / 10 times in 256 / 256 / 40 | 5 / 15 / 10 | reproduces |
+| by hand, `dpo` has one sound stated solution, or none under the strict reading; steps 100 and 2,300 produced rigorous ones | uniform rule: 2 sound (104 `rl`-only, 108 stated); strict: 0. Rigorous: step 100 (182, 228), step 2,300 (3, 27; and 5, which the executor did not check) | reproduces under both readings (38 / 38 strict labels agree, C4); the rule's timing is C4 |
+| 3. no reverse problem: aime2026_14 fell to step 2,300 within 56 draws | draws 21 and 52 of 56, both sound | reproduces |
+| 4. "RL's solutions sit in `dpo`'s support: all 29 scored lie inside `dpo`'s own per-token range, more likely per token than its own (+0.14 nats at step 2,300)" | 29 / 29 inside the range of `dpo`'s solutions **on the other 51 problems**; 9 / 29 inside the pre-registered comparator, `dpo`'s own credited solutions on the same problem (step 2,300: 0 / 12, all above it); gaps +0.006 / +0.087 / +0.142 | **reword**: name the comparator; against the pre-registered one this is a miss (C5) |
+| verdict inconclusive under final answer and hand; "no reach at 256" under RL's verifier; scale-up needs ≥ 3, there is one | R11, under every hand rule | reproduces |
+| "At up to 2.3 × 10⁻² of pretraining FLOPs (0.14 of GPU-hours) … RL sharpens rather than extends, with aime2025_28 open" | compute axis reproduces (R12). On 58 of 59 problems nothing is RL-only; on aime2025_28 the strict reading leaves `dpo` with no rigorous solution in 256 | compute: reproduces. The sentence keeps aime2025_28 "open", but the general conclusion "sharpens rather than extends" is **stronger than an inconclusive screen supports** (§Verdict, reword item 3) |
+| Expectations: pass@1 inside; RL gain below; tokens at the top; candidates 1 (3), reverse 1 (1); verdict modal; "likelihood inside `dpo`'s range as expected, gap larger and positive" | R15 | incomplete: **misses not listed** (C6). The likelihood "as expected" holds only against the substituted comparator |
+| Deviations: secure H200s only; Stage 0 without the RL job; one hand rule fixed mid-run, strict reading reported | log | reproduces, but **missing** the likelihood comparator change (C5) |
+| Cost $115.65 of $150 (21.9 H200 pod-hours) | 21.86 pod-hours, $115.65 | reproduces |
+| Memo: aime2025_28 to 1,024 ≈ $27–40 | $0.0517 per `dpo` sample (28,871 tokens at 820 tok/s, $5.29/h) × 768 = $39.7 | reproduces at the run's measured prices; the $27 assumes a $3.59/h community H200 that was not available during the run |
+| Figure | panel b's strict-hand points (1 / 0 / 1) and zeros match R10/R11; pilot points labelled 7B, 42 problems | reproduces |
+
+### C2. `numbers.md` § olmo-think32b
+
+| claim | my value | verdict |
+|---|---|---|
+| Models with commits; `main` = `step_2300` (14 shards) | R2 | reproduces |
+| `olmo32/results.csv` (one row per model × problem) | my `out/cells.csv`, rebuilt from my re-grade: 240 / 240 cells equal on all 14 fields compared (n, successes per grade fixed and total, first and second success draws; `rv_cells_compare.py`) | reproduces |
+| fixed-phase table (pass@1 / pass@8 / final, tokens, cut shares) | R6; against `olmo32/passk.csv`, 34 / 34 point estimates are equal and every interval endpoint is within 0.017, i.e. one problem in 59 (`out/passk_compare.txt`) | reproduces; the interval differences are bootstrap noise (e.g. pass@8 step 100 lower bound 0.780 vs my 0.763) |
+| pass@1 − `dpo` (both grades), entries and exits, observed 1 / 1, 1 / 0, 1 / 1 | R6, R7 | reproduces |
+| R, V; 7 problems unsolved by every model | R8; the same 7 | reproduces |
+| aime2025_28 extension tallies; 111 / 256 cut; stated answers none 163, 208 × 70, 248 × 1 | identical; the remaining 6 are 36 × 2, 984, 936, 748 and 346 | reproduces (the list is partial, and says so only implicitly) |
+| verdict table: `rl` no reach; final, hand and hand-strict inconclusive; strict reach 1 / 0 / 1 | R11; strict reach: step 100 ✓, step 750 ✗, step 2,300 ✓ | reproduces |
+| hand-check table (39 solutions) | C4 | reproduces per item under the strict reading. The counts reproduce under the executor's rule, except that `s0750`'s second sound item (h4984ee, fixed-phase `rl`-only) is not in my set |
+| "uniform rule … written 04:35 UTC … before the consistency-pass labels" | log 03:43: the rule's substance was first used to overturn `dpo`'s h9fea38 (flawed → sound) after the d1 labels were read | **incomplete** (C4) |
+| likelihood: all 29 inside the range of `dpo`'s correct solutions on the other 51 problems; means −0.554 / −0.474 / −0.418 vs −0.560; whole-solution means −14,702 / −11,830 / −11,795 vs −15,579 | identical; `olmo32/likelihood.csv` equals my decoding of the stored per-token scores on 87 / 87 items (`out/ll_compare.txt`) | the numbers reproduce, and the comparator is named here. "(RL's solutions are shorter)" is **wrong for step 2,300 by mean**: 28,137 tokens vs `dpo`'s 27,702 (by median it is shorter, 27,949 vs 28,989). Its higher whole-solution log-likelihood comes from the per-token gap |
+| compute axis | low / high / GPU-hours identical (e.g. 2.755 × 10⁻³ / 2.257 × 10⁻² / 0.1431 at step 2,300). Middle 1.015 × 10⁻² vs my 0.997 × 10⁻² | reproduces. The executor integrates the measured length along the trajectory, which is better than my per-checkpoint constant |
+| cost table, per-arm compute rows, 2.2× matching flag | R14; all 105 registry rows (`out/registry_all.txt`). The flag's ratios are 2.06–2.19×, so "2.2×" holds only against step 2,300 | reproduces |
+
+### C3. Plain summary and memo
+
+| claim | verdict |
+|---|---|
+| "Every model ran exactly as in RL training" | reword to "with RL training's settings": RL ran in eager mode on other hardware, so numerics differ |
+| "I confirmed each label" | 34 confirmed, 5 overturned (all flawed → sound under the rule): say so |
+| "Its one stated solution argues that step informally, which **my pre-written rule** accepts" | **reword**: the rule was adopted during the hand check, after the readers' labels on these very `dpo` solutions (log 03:43). It was not pre-written |
+| "The RL models produced fully rigorous solutions" | steps 100 and 2,300 did; step 750 did not (0 rigorous of 16 checked) |
+| "finds the RL model's correct solutions about as likely as its own good ones, even slightly more" | step 2,300's are more likely per token than every one of `dpo`'s own 7 on the problem. "Even slightly more" understates it |
+| "RL here used roughly 1 % of pre-training's compute by one estimate, and 14 % of its GPU time" | reproduces (FLOPs middle estimate 1.0 × 10⁻²; GPU-hours 0.143) |
+| "The one open case is a problem where it turned a rare, shaky success into a routine one" | it does say "open", but "success" presupposes that `dpo`'s capability is real. Under the strict reading none of its 7 credited solutions is rigorous; "a rare, contested success" would be fair |
+| memo: "under a strict proof standard it never does" | true of the 7 credited samples in 256; say "in none of its 256 samples" |
+
+### C4. Hand check, item by item
+
+- **Overlap:** 38 of the executor's 39 items are in my 42. The executor's extra item is `s0750`'s `rl`-only
+  fixed-phase sample. Mine are `dpo`'s draws 14 and 16 on aime2026_14 and `s2300`'s fixed draws 5 and 6 on
+  aime2025_28. None of these four is needed for any decision: `s2300`'s strict confirmation follows from draws 3
+  and 27, the executor's pair.
+- **Strict reading:** my labels equal the executor's on all **38 / 38** common items. I take the executor's strict
+  label to be its uniform label, except where its note says "strict reading: flawed" or "minor gap".
+- **The executor's uniform rule** (`olmo32/handcheck_rule_aime2025_28.md`): "sound = any general argument (algebra,
+  mod 9, or a general representative transition, the last a minor gap); flawed = persistence only observed on
+  specific terms or specific residues, then asserted; or a wrong case analysis". As applied in its notes, an
+  S-divisibility induction that presupposes the recurrence is also flawed ("circular": h473dda, h1d351b, haf8e47).
+  That unwritten clause decides `s0750`: confirmed under my readers' labels (draws 37, 58, 60, 93), not under the
+  executor's application (draw 93 only).
+- **Applying that rule to my items** (with the T / S subtypes of §Recount correction 7, assigned after reading the
+  executor's notes) reproduces the executor's labels on 38 / 38 common items, and its counts: `dpo` 104 and 108 sound;
+  `s2300` 3, 25 (borderline: my reader saw a specific value, 471 mod 9), 27, 28 and 29 sound; `s0750` 93 sound;
+  `s0100` 182 and 228 sound.
+- **My readers' own labels** differ from the executor's on 7 of the 38 common items: `dpo` 108; `s0100` 4;
+  `s0750` 37, 58, 60; `s2300` 25, 28. The readers accepted S-divisibility inductions, and they were inconsistent
+  on representative transitions (`dpo` 108 and `s2300` 25 and 28 flawed; `dpo` 104 and `s2300` 29 sound). This
+  changes `s0750`'s confirmation (above); it changes no verdict, and no confirmation of `s2300` or `s0100`.
+- **Process:**
+  - The log at 03:43 shows the rule was first formulated to overturn reader d1a's "flawed" on h9fea38, `dpo`'s
+    only doubly-credited solution. That was after d1a/d1b's labels on `dpo`'s extension solutions and before the
+    04:35 rule file.
+  - The consistency pass re-read only the five earlier sound labels, not the earlier flawed ones. My independent
+    readers find those earlier flawed ones flawed (`dpo` 36 and 78; `s2300` 9 and 17), so the asymmetry changed
+    nothing.
+  - Readers c5 and cp1 saw the rule text, as the executor reports.
+- **What the rule decides:** it turns the hand row from "aime2025_28 is a reach problem" (strict) into "`dpo` has
+  a sound, stated solution". It leaves the pre-registered verdict "inconclusive" unchanged. The write-up and
+  `numbers.md` report both readings, which is the right presentation. The write-up's Deviations already say "fixed
+  mid-run". What needs correcting is `numbers.md`'s timing sentence and two phrases in the plain summary,
+  "pre-written" and "confirmed each label" (C3).
+- **My classes were also set after reading labels.** The P / T / S / C split was made after my readers' labels, as
+  the executor's rule was made after its readers'. Only the strict criterion for P does not depend on labels.
+
+### C5. Likelihood comparator
+
+The pre-registration compares RL's credited candidate solutions "against `dpo`'s own credited solutions on the same
+problems", and expects ≥ 75 % of them inside the 2.5–97.5 % range of `dpo`'s own per-token log-likelihoods.
+
+- **Pre-registered comparator:** with `dpo`'s 7 solutions on aime2025_28, 9 / 29 are inside — step 100 8 / 9,
+  step 750 1 / 8, step 2,300 0 / 12, all of step 2,300's lying above the range. That is a miss.
+- **Executor's comparator:** the run reports 29 / 29 against a range taken from `dpo`'s solutions on the 51 *other*
+  problems. That reference set is useful, because 7 solutions are too few for a 2.5–97.5 % range, and
+  `numbers.md` names it correctly.
+- **What is wrong:** the write-up calls the result "as expected" and does not list the change as a deviation.
+- **Not scored:** 13 of `s0750`'s 21 credited solutions arrived after the scoring job (reported in `numbers.md`).
+
+### C6. Expectations: misses the write-up does not list
+
+The write-up's expectations line omits:
+- expected entries at k = 8: 1.28 against 2–5;
+- `dpo`'s `final` − `rl` pass@1 gap: 0.030 against ≤ 0.02;
+- "`dpo` confirmed … the same under `final`": 1 of 1 under `rl`, 0 of 1 under `final`;
+- the likelihood range: 31 % against ≥ 75 % for the pre-registered comparator (C5);
+- two Stage 0 format points. 92.8 % box after `</think>` against ≥ 95 %, which Part B1 calls "as expected"; this
+  is a miss if the write-up was meant, since 100 % box somewhere. And `rl` ≠ `final` is 5.8 % against ≤ 3 %,
+  which Part B1 does report.
+
+It does report the RL gain (+0.03 against +0.05–0.12) and step 2,300's larger likelihood gap (+0.142; pooled over
+the 29 the gap is +0.085, inside ≤ 0.1).
+
+### C7. Smaller points
+
+- **Pre-registration Part A:**
+  - The claim "tokenizer files are identical across the four (same git blob ids)" holds for 4 of 6 files. It is
+    immaterial (R2).
+  - The header says "written 18:45–19:10 UTC", but the commit is at 19:01:04.
+- **The cap:** in the six candidate cells of R9, 29–93 % of samples hit 32,768 tokens (`dpo` on aime2025_28: 111 / 256). The write-up
+  does not say that "within 256 samples" means "at RL's 32,768-token cap". The memo notes the count for the
+  extension samples.
+- **Not applicable here:** the reviewer brief's Lean re-check, term sizes and renaming-class splits (no proofs, no
+  training files). Their analogues are the re-grade of every text (R3) and the RL-data contamination scan (R4).
+- **Model labels:** every number in the write-up, `numbers.md`, the memo and the figure names its model. The pilot's
+  points are labelled 7B, 42 problems. No unlabelled or inherited number was found.
+
+## §Verdict
+
+**Hard constraints: none violated.** `nd_verify` and `TEST_RUN_DONE` are unchanged, nothing was trained, no weights
+are on the VPS or in the bucket, the bucket holds no secret, and spend was $115.65 of $150. Expectations were committed
+before the data: Part A before the first pod, Part B 22 s before the first evaluation job started (`F_dpo`,
+20:24:11 in the log).
+
+**What stands:**
+- every grade on every stored text (3,456 / 3,456 re-graded with AI2's own verifier code on RL's path);
+- all fixed-phase numbers, candidates, extension tallies, stopping-rule compliance, compute axis, cost and compute
+  rows;
+- the pre-registered verdict: **inconclusive** under the final-answer and hand grades, "no reach at 256" under RL's
+  verifier. The hand verdict is inconclusive under every lowest-terms standard I tried (strict, the executor's
+  rule, my readers' labels, lenient), because `dpo` has only one doubly-credited success on aime2025_28 and reach needs ≥ 3
+  problems;
+- no reverse problem;
+- `s2300` and `s0100` hand-confirmed on aime2025_28, and `s0750` not, under the strict reading and under the
+  executor's rule;
+- the description of aime2025_28. Under RL's verifier `dpo` solves it (7 / 256). It states the answer once. The
+  two `dpo` solutions the executor's rule accepts (one of them stated) argue the crux by residue representatives,
+  and none of its 7 credited solutions is rigorous. Whether `dpo` "can" solve it depends on that standard.
+
+**What must be reworded:**
+1. **Finding 4 (likelihood):** "inside the range of `dpo`'s correct solutions on other problems (29 / 29). Against
+   `dpo`'s own credited solutions on aime2025_28, the pre-registered comparator, 9 / 29 (step 2,300: 0 / 12, all
+   *more* likely than any of `dpo`'s own): a miss against ≥ 75 %". Add this to the deviations, and drop "(RL's
+   solutions are shorter)" for step 2,300.
+2. **The rule's timing:** the write-up already says "fixed mid-run". In `numbers.md`, write "adopted during the
+   hand check, after the first readers' labels on `dpo`'s aime2025_28 solutions (03:43 UTC); written to its file at
+   04:35, before the consistency pass". In the plain summary, replace "my pre-written rule".
+3. **"This RL sharpens rather than extends, with aime2025_28 open"** keeps the "open" but draws a general conclusion
+   from an inconclusive screen. Better: "on 58 of the 59 problems RL only sharpened; on aime2025_28 it is open
+   whether the DPO model can solve it soundly (none of its 7 credited solutions is rigorous; one stated solution
+   argues the crux informally)". In the plain summary, "turned a rare, shaky success into a routine one" presupposes
+   a real `dpo` success; "a rare, contested success" would be fair.
+4. **The expectations line** gains the misses in C6.
+5. **The plain summary:** "the RL models produced fully rigorous solutions" becomes "steps 100 and 2,300"; "exactly
+   as in RL training" becomes "with RL training's settings"; "confirmed each label" becomes "confirmed 34, overturned
+   5".
+6. **State the cap:** "within 256 samples at RL's 32,768-token cap; 43 % of `dpo`'s samples on aime2025_28 hit it".
+
+**What is not supported:** "in DPO's support … as expected" read as the pre-registered test, which it fails. And
+"sharpens rather than extends" as the general conclusion of an inconclusive screen of 59 problems.
+
+**Next measurements:**
+1. **aime2025_28, `dpo` to 1,024 samples** (the memo's ≈ $40 at the secure H200 rate), with the hand standard fixed
+   *before* reading. Pre-register the strict reading as the label and the representative rule as a sensitivity
+   check, so that "`dpo` has a sound solution" is decided by a pre-set rule.
+2. **A longer cap on the same problem,** e.g. 256 `dpo` samples with responses up to ≈ 64k tokens (the
+   65,536-position YaRN context includes the prompt). 43 % of
+   `dpo`'s samples there are cut at 32,768 and 70 of 240 state 208. This separates "cannot" from "runs out of room".
+   The cost scales with the longer samples and was not measured here.
+3. **For more candidates,** the memo's `s2300` × 64 on the 7 problems no model solved (≈ $25 secure) before any `dpo`
+   extension.
+
+Kit: `review/olmo-think32b-recount/` (README lists every script and output). The phase-1 recount is committed
+separately (`e18cf32c`) before this section.

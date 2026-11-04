@@ -1,10 +1,14 @@
-"""Hand-check aggregation (reviewer). Joins the blinded reader labels (hand/reader_labels/*.json) and my uniform
-classification (hand/confirm.json) to hand/key.json, then applies the pre-registered rules under four label sets:
-  reader  - the blinded readers' labels as given;
-  strict  - my rule: sound needs a general forward proof of the exact division by 3 and of coprimality (class P);
-  middle  - also accepts class I (all ingredients present, the response's own exactness argument a residue plug-in or
-            an S-divisibility argument that presupposes the recurrence);
-  lenient - also accepts class C (lowest terms only asserted / small cases), the rest derived and arithmetic right.
+"""Hand-check aggregation (reviewer). Joins the blinded reader labels (hand/reader_labels/*.json) and my classification
+(hand/confirm.json) to hand/key.json, then applies the pre-registered rules under four label sets:
+  reader    - the blinded readers' labels as given;
+  strict    - sound only for class P: a general forward proof of the exact division by 3 (mod-9 expansion
+              a = 3m+1, b = 3n+2, or an explicit S^2 - 3ab link) and of coprimality;
+  exec_rule - the executor's uniform rule as applied in its notes: P or T (a general residue-representative
+              transition) is sound; S (an S-divisibility induction on the recurrence) and C are flawed;
+  lenient   - P, T, S or C sound (lowest terms only asserted is accepted; outside the pre-registered definition of
+              'flawed', reported as a bound); X (a wrong step that happens to give 248) and G stay as they are.
+Classes were assigned after reading my readers' labels: 16 items by my own reading, the rest from the readers'
+step records (confirm.json: read_by_reviewer).
 Rules (pre-registration): confirmed = >= 2 doubly-credited sound successes, >= 1 drawn after candidacy (defenders:
 every success qualifies); hand 'No reach' needs dpo confirmed; hand 'reach' on a problem needs s2300 confirmed and no
 sound dpo success among all its credited samples; the verdict needs >= 3 reach problems."""
@@ -18,7 +22,7 @@ for f in sorted(glob.glob(os.path.join(C.HERE, "hand", "reader_labels", "*.json"
         lab[r["item"]] = r
 conf = json.load(open(os.path.join(C.HERE, "hand", "confirm.json")))
 missing = sorted(set(key) - set(lab))
-SETS = ("reader", "strict", "middle", "lenient")
+SETS = ("reader", "strict", "exec_rule", "lenient")
 cells = collections.defaultdict(list)
 for i, k in key.items():
     row = dict(k, item=i, cls=conf[i]["class"], reader=lab[i]["label"] if i in lab else None)
@@ -32,7 +36,7 @@ for c in sorted(cells):
     lines.append(f"{c[0]} {c[1]}:")
     for r in xs:
         lines.append(f"  draw {r['draw']:3d} {r['job']:9s} {'D ' if r['doubly'] else 'rl'} {r['finish']:6s} {r['item']} "
-                     f"class={r['cls']} reader={r['reader']} strict={r['strict']} middle={r['middle']} lenient={r['lenient']}")
+                     f"class={r['cls']} reader={r['reader']} strict={r['strict']} exec_rule={r['exec_rule']} lenient={r['lenient']}")
 
 
 def sound(model, pid, s, doubly_only):
@@ -63,8 +67,9 @@ for s in SETS:
     lines.append(f"[{s}] " + json.dumps(r))
 counts = collections.Counter((k["model"], k["pid"], conf[i]["class"]) for i, k in key.items())
 lines.append("classes per cell: " + json.dumps({f"{a}|{b}|{c}": n for (a, b, c), n in sorted(counts.items())}))
-agree = collections.Counter((lab[i]["label"], conf[i]["middle"]) for i in key if i in lab)
-lines.append("reader vs middle (reader, middle): " + json.dumps({f"{a}->{b}": n for (a, b), n in sorted(agree.items())}))
+for s2 in ("strict", "exec_rule", "lenient"):
+    agree = collections.Counter((lab[i]["label"], conf[i][s2]) for i in key if i in lab)
+    lines.append(f"reader vs {s2}: " + json.dumps({f"{a}->{b}": n for (a, b), n in sorted(agree.items())}))
 open(os.path.join(C.HERE, "out", "hand.txt"), "w").write("\n".join(lines) + "\n")
 json.dump({"result": res, "missing": missing}, open(os.path.join(C.HERE, "out", "hand.json"), "w"), indent=1)
 print("\n".join(lines))

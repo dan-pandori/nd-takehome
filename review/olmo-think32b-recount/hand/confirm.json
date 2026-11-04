@@ -2,295 +2,337 @@
  "r0849d1": {
   "class": "C",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "exactness of the factor 3 asserted from k<=3 (E1 regex hits are a different system of equations)"
+  "note": "exactness of the factor 3 asserted from k<=3 (E1 regex hits are a different system of equations)",
+  "exec_rule": "flawed",
+  "read_by_reviewer": true
  },
  "rd5daa4": {
   "class": "C",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "reduction by exactly 3 checked for x2, x3 only"
+  "note": "reduction by exactly 3 checked for x2, x3 only",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "r3c9297": {
   "class": "G",
   "strict": "guess",
-  "middle": "guess",
   "lenient": "guess",
-  "note": "assumed cycle contradicted by its own data; picks 248 as 'most reasoned'"
+  "note": "assumed cycle contradicted by its own data; picks 248 as 'most reasoned'",
+  "exec_rule": "guess",
+  "read_by_reviewer": false
  },
  "r1d8c9e": {
-  "class": "I",
+  "class": "T",
   "strict": "flawed",
-  "middle": "sound",
   "lenient": "sound",
-  "note": "general gcd(c,ab)=1; c+d=(a+b)^2 identity; exactness via residue plug-in; 3|S_k induction presupposes S-recursion (read by reviewer)"
+  "note": "residue-representative transition (a=1, b=2 into (a^2+b^2-ab)/3) + 3|S_k from the S-recursion (read by reviewer)",
+  "exec_rule": "sound",
+  "read_by_reviewer": true
  },
  "rd7e73e": {
-  "class": "C",
+  "class": "T",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "exactness via residue plug-in (1-2+4)/3 and k=2,3 checks; 'always divisible by 3' asserted (read by reviewer)"
+  "note": "residue-representative transition (1-2+4)/3 = 1 plus k=2,3 checks; the response concedes mod 9 is needed (read by reviewer)",
+  "exec_rule": "sound",
+  "read_by_reviewer": true
  },
  "r268ead": {
   "class": "X",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "flawed",
-  "note": "gcd exponent pattern read off k<=3; exponent reduced mod 40 instead of 100"
+  "note": "gcd exponent pattern read off k<=3; exponent reduced mod 40 instead of 100",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "rc15f5e": {
   "class": "C",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "gcd exactly 3 assumed; its general gcd induction goes wrong; S-divisibility argued only for the S-recursion (read by reviewer)"
+  "note": "gcd exactly 3 assumed; its general gcd induction goes wrong; S-divisibility argued only for the S-recursion (read by reviewer)",
+  "exec_rule": "flawed",
+  "read_by_reviewer": true
  },
  "r2e2be0": {
   "class": "P",
   "strict": "sound",
-  "middle": "sound",
   "lenient": "sound",
-  "note": "general mod-9 expansion a=3m+1, b=3n+2 -> N = 9(...)+3; prime argument for coprimality (read by reviewer)"
+  "note": "general mod-9 expansion a=3m+1, b=3n+2 -> N = 9(...)+3; prime argument for coprimality (read by reviewer)",
+  "exec_rule": "sound",
+  "read_by_reviewer": true
  },
  "r8781b3": {
   "class": "P",
   "strict": "sound",
-  "middle": "sound",
   "lenient": "sound",
-  "note": "general mod-9 expansion with induction (read by reviewer)"
+  "note": "general mod-9 expansion with induction (read by reviewer)",
+  "exec_rule": "sound",
+  "read_by_reviewer": true
  },
  "ra25471": {
   "class": "C",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "mod-9 check on the specific values 19,033 / 43,175 only (read by reviewer)"
+  "note": "mod-9 check on the specific values 19,033 / 43,175 only (read by reviewer)",
+  "exec_rule": "flawed",
+  "read_by_reviewer": true
  },
  "r92a7e3": {
   "class": "C",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "(1,2) mod 3 persistence checked for k=1-3"
+  "note": "(1,2) mod 3 persistence checked for k=1-3",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "rd13b19": {
   "class": "C",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "mod-3 pattern checked through term 4 with specific residues"
+  "note": "mod-3 pattern checked through term 4 with specific residues",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "rf72660": {
-  "class": "C",
+  "class": "S",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "residues seen for k<=3; later S-divisibility induction presupposes the recurrence (reader)"
+  "note": "residues seen for k<=3; 'all S_k divisible by 3' induction on the S-recursion (read by reviewer)",
+  "exec_rule": "flawed",
+  "read_by_reviewer": true
  },
  "rbd402c": {
-  "class": "C",
+  "class": "T",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "persistence supported by 471 mod 9 only (E1 regex hit is in the CRT)"
+  "note": "general (1,2) transition with the mod-9 value taken from one term (471) + 3|S_k (read by reviewer)",
+  "exec_rule": "sound",
+  "read_by_reviewer": true
  },
  "rfc316a": {
   "class": "P",
   "strict": "sound",
-  "middle": "sound",
   "lenient": "sound",
-  "note": "general N=3a+1, D=3b+2 expansion, induction; prime argument (read by reviewer)"
+  "note": "general N=3a+1, D=3b+2 expansion, induction; prime argument (read by reviewer)",
+  "exec_rule": "sound",
+  "read_by_reviewer": true
  },
  "r371bca": {
-  "class": "C",
+  "class": "T",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "residue plug-in a=1, b=2 into (a^2+b^2-ab)/3"
+  "note": "residue-representative transition + explicit a'=(S^2-3P)/3 identity (adversarial check; reader record)",
+  "exec_rule": "sound",
+  "read_by_reviewer": false
  },
  "r6392fe": {
-  "class": "I",
+  "class": "T",
   "strict": "flawed",
-  "middle": "sound",
   "lenient": "sound",
-  "note": "residue plug-in for mod 9; explicit a'=(s^2-3p)/3 identity and 3|s_n argued from integrality (read by reviewer)"
+  "note": "residue-representative transition + explicit a'=(s^2-3p)/3 identity (read by reviewer)",
+  "exec_rule": "sound",
+  "read_by_reviewer": true
  },
  "rea50f9": {
-  "class": "I",
+  "class": "S",
   "strict": "flawed",
-  "middle": "sound",
   "lenient": "sound",
-  "note": "coprimality by induction; exactness left implicit through S_k = 3*12^(2^(k-1)) (reader)"
+  "note": "coprimality by induction; exactness only implicit through S_k = 3*12^(2^(k-1)) (reader record)",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "rfb50b1": {
   "class": "P",
   "strict": "sound",
-  "middle": "sound",
   "lenient": "sound",
-  "note": "general mod-9 expansion a=3m+1, b=3n+2 (read by reviewer)"
+  "note": "general mod-9 expansion a=3m+1, b=3n+2 (read by reviewer)",
+  "exec_rule": "sound",
+  "read_by_reviewer": true
  },
  "rc6b005": {
   "class": "P",
   "strict": "sound",
-  "middle": "sound",
   "lenient": "sound",
-  "note": "general mod-9 expansion a=3k+1, b=3m+2 (read by reviewer)"
+  "note": "general mod-9 expansion a=3k+1, b=3m+2 (read by reviewer)",
+  "exec_rule": "sound",
+  "read_by_reviewer": true
  },
  "rfaf15c": {
   "class": "X",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "flawed",
-  "note": "gcd 3 claimed after x2, x3; 2^2024 mod 100 lifted from mod 40"
+  "note": "gcd 3 claimed after x2, x3; 2^2024 mod 100 lifted from mod 40",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "rd07877": {
   "class": "C",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "gcd(N_k,D_k)=1 hypothesised from k<=3"
+  "note": "gcd(N_k,D_k)=1 hypothesised from k<=3",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "rf6b384": {
   "class": "C",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "3 | numerator observed for the first terms"
+  "note": "3 | numerator observed for the first terms",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "r4d13a3": {
   "class": "C",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "misread mod-3 table; 'perhaps'"
+  "note": "misread mod-3 table; 'perhaps'",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "r77245e": {
-  "class": "I",
+  "class": "S",
   "strict": "flawed",
-  "middle": "sound",
   "lenient": "sound",
-  "note": "3|S_k induction, link to the numerator never stated (reader: borderline)"
+  "note": "3|S_k induction on the S-recursion; link never stated (reader record)",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "rbaf3c5": {
-  "class": "I",
+  "class": "S",
   "strict": "flawed",
-  "middle": "sound",
   "lenient": "sound",
-  "note": "3|S_n induction; link to exact division unstated (reader)"
+  "note": "3|S_n induction on the S-recursion; link to exact division unstated (reader record)",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "rf63acd": {
-  "class": "I",
+  "class": "S",
   "strict": "flawed",
-  "middle": "sound",
   "lenient": "sound",
-  "note": "v_3(S_{k+1}) = 2 v_3(S_k) - 1 derived from the S-recursion (read by reviewer)"
+  "note": "v_3(S_{k+1}) = 2 v_3(S_k) - 1 from the S-recursion (read by reviewer)",
+  "exec_rule": "flawed",
+  "read_by_reviewer": true
  },
  "r3e3ca3": {
   "class": "C",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "residue condition checked for k=1-3; g_k read off exponents"
+  "note": "residue condition checked for k=1-3; g_k read off exponents",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "r0755da": {
-  "class": "I",
+  "class": "T",
   "strict": "flawed",
-  "middle": "sound",
   "lenient": "sound",
-  "note": "persistence checked on representatives a=1, b=2 (reader: minor blemish)"
+  "note": "residue-representative transition, called an induction (reader record)",
+  "exec_rule": "sound",
+  "read_by_reviewer": false
  },
  "r3418fc": {
   "class": "X",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "flawed",
-  "note": "period-4 cycle from arithmetic errors; right only because 2025 = 5 mod 20 and mod 4"
+  "note": "period-4 cycle from arithmetic errors; right only because 2025 = 5 mod 20 and mod 4",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "r772cbd": {
   "class": "C",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "reduced recurrence read off two steps; circular 'since N4 is integer'"
+  "note": "reduced recurrence read off two steps; circular 'since N4 is integer'",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "r7832b7": {
   "class": "C",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "S-recursion taken as a pattern from S2, S3"
+  "note": "S-recursion taken as a pattern from S2, S3",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "rbe8d84": {
   "class": "C",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "coprimality assumed after x2, x3 (read by reviewer)"
+  "note": "coprimality assumed after x2, x3 (read by reviewer)",
+  "exec_rule": "flawed",
+  "read_by_reviewer": true
  },
  "r16e09a": {
   "class": "C",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "exact division assumed from the first terms"
+  "note": "exact division assumed from the first terms",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "r324552": {
   "class": "C",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "gcd 3 'from the first few terms'"
+  "note": "gcd 3 'from the first few terms'",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "rb16263": {
   "class": "C",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "persistence checked for k=1-3"
+  "note": "persistence checked for k=1-3",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "r9eb923": {
   "class": "C",
   "strict": "flawed",
-  "middle": "flawed",
   "lenient": "sound",
-  "note": "exact division hypothesised from x2-x4"
+  "note": "exact division hypothesised from x2-x4",
+  "exec_rule": "flawed",
+  "read_by_reviewer": false
  },
  "rf889f1": {
   "class": "P",
   "strict": "sound",
-  "middle": "sound",
   "lenient": "sound",
-  "note": "general vector-closure derivation (r640333 write-up read by reviewer)"
+  "note": "general vector-closure derivation (r640333 write-up read by reviewer)",
+  "exec_rule": "sound",
+  "read_by_reviewer": false
  },
  "r640333": {
   "class": "P",
   "strict": "sound",
-  "middle": "sound",
   "lenient": "sound",
-  "note": "general vector-closure derivation (r640333 write-up read by reviewer)"
+  "note": "general vector-closure derivation (r640333 write-up read by reviewer)",
+  "exec_rule": "sound",
+  "read_by_reviewer": true
  },
  "r40815b": {
   "class": "P",
   "strict": "sound",
-  "middle": "sound",
   "lenient": "sound",
-  "note": "general vector-closure derivation (r640333 write-up read by reviewer)"
+  "note": "general vector-closure derivation (r640333 write-up read by reviewer)",
+  "exec_rule": "sound",
+  "read_by_reviewer": false
  },
  "r530437": {
   "class": "P",
   "strict": "sound",
-  "middle": "sound",
   "lenient": "sound",
-  "note": "general vector-closure derivation (r640333 write-up read by reviewer)"
+  "note": "general vector-closure derivation (r640333 write-up read by reviewer)",
+  "exec_rule": "sound",
+  "read_by_reviewer": false
  },
  "raced22": {
   "class": "P",
   "strict": "sound",
-  "middle": "sound",
   "lenient": "sound",
-  "note": "general vector-closure derivation (r640333 write-up read by reviewer)"
+  "note": "general vector-closure derivation (r640333 write-up read by reviewer)",
+  "exec_rule": "sound",
+  "read_by_reviewer": false
  }
 }
