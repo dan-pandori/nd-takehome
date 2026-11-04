@@ -1930,7 +1930,7 @@ step_0750 1.38 / 0.00, step_2300 1.28 / 0.90 (entries 95 % [0.00, 3.5]); observe
   phase (aime2025_13, 14, 15, 30; aime2026_15, 29, 30).
 - aime2025_28, **dpo to 256**: `rl` 7, `final` 1 (doubly credited 1); 111 / 256 cut; stated answers in the 240
   extension samples: none 163, 208 × 70, 248 × 1. step_2300 (8 + 32 fresh): `rl` 12, `final` 10. step_0100 (8 + 248
-  fresh, to the cap): `rl` 9, `final` 5. step_0750 (8 + @@S0750_DRAWS@@ fresh): `rl` @@S0750_RL@@, `final` @@S0750_FINAL@@.
+  fresh, to the cap): `rl` 9, `final` 5. step_0750 (8 + 248, to the cap fresh): `rl` 21, `final` 15.
 - aime2026_14, **step_2300**: 2 doubly-credited successes in 56 draws (8 + 48), both sound → confirmed; reverse 0.
 
 ### Verdict (pre-registered rule; `olmo32/verdict.csv`)
@@ -1940,17 +1940,36 @@ step_0750 1.38 / 0.00, step_2300 1.28 / 0.90 (entries 95 % [0.00, 3.5]); observe
 | `rl` | confirmed (7 successes) | yes | 0 / 0 / 0 | 0 | **no reach at 256** |
 | `final` | 1 success: not confirmed | yes | 0 / 0 / 0 | 0 | **inconclusive** |
 | hand, uniform rule (headline) | 1 sound final-credited: not confirmed | yes | 0 / 0 / 0 | 0 | **inconclusive** |
-| hand, strict reading | 0 sound | yes | 1 / @@S0750_STRICT@@ / 1 | 0 | **inconclusive** |
+| hand, strict reading | 0 sound | yes | 1 / 0 / 1 | 0 | **inconclusive** |
 
 "Reach candidates for scale-up" needs ≥ 3 problems; one reach candidate exists, so it is unreachable at this screening.
 
 ### Hand check (`olmo32/handcheck.csv`; blinded readers, then my confirmation; rule in `olmo32/handcheck_rule_aime2025_28.md`)
 
-@@HAND@@
+| problem, model | checked | sound (uniform rule) | of which stated in the write-up | rigorous (strict reading) | flawed | guess |
+|---|---|---|---|---|---|---|
+| aime2025_28, dpo | 7 | 2 | 1 | 0 | 4 | 1 |
+| aime2025_28, s0100 | 5 | 2 | 2 | 2 | 3 | 0 |
+| aime2025_28, s0750 | 16 | 2 | 1 | 0 | 14 | 0 |
+| aime2025_28, s2300 | 8 | 5 | 5 | 2 | 3 | 0 |
+| aime2026_14, dpo | 1 | 1 | 1 | 1 | 0 | 0 |
+| aime2026_14, s2300 | 2 | 2 | 2 | 2 | 0 | 0 |
+
+39 solutions, read blind by sub-agents (no model, phase or side shown) and confirmed by me; every reader's label is in
+`all_reader_labels`. On aime2025_28 the readers disagreed about one recurring step — proving that the gcd is exactly 3 at
+every step by plugging residue representatives (1, 2) into a division by 3, which is non-rigorous (it needs mod-9
+information) but reaches a true claim. The uniform rule (`olmo32/handcheck_rule_aime2025_28.md`, written 04:35 UTC on
+2026-11-04, before the consistency-pass labels) counts a general representative transition as a minor gap (sound) and
+persistence read off a few terms as flawed; the strict reading counts both as flawed. Readers from batch c3 on were
+asked that crux question; a consistency pass re-read the five earlier sound labels with it (h2dcb12 changed to flawed).
+My label differs from the latest reader's on 5 items (h4cbdbc, h9fea38, hb2cdd6, h1747e2, h094333), all representative-transition cases
+(sound under the rule, flawed strict). Process notes: readers c5 and cp1 saw the rule paragraph (then in the question file)
+and reported it; the rule was moved to its own file.
 
 ### Likelihood under dpo (`olmo32/likelihood.csv`; prompt log-probs of each response, 87 solutions, 1.84 M tokens)
 
-Every one of the 29 RL credited solutions on aime2025_28 lies inside the 2.5–97.5 % range of dpo's own correct
+Every one of the 29 RL credited solutions on aime2025_28 drawn before the scoring job lies inside (step_0750's last
+13, from C3/C4, came later and were not scored) the 2.5–97.5 % range of dpo's own correct
 solutions on the other 51 headline problems (per-token [−0.783, −0.330] nats). Mean per-token log-prob under dpo:
 step_0100 −0.554 (9), step_0750 −0.474 (8), step_2300 −0.418 (12); dpo's own 7 on aime2025_28 −0.560. RL's solutions are
 *more* likely per token under dpo than dpo's own (gaps +0.006 / +0.087 / +0.142 nats per token); whole-solution
@@ -1970,4 +1989,26 @@ over steps 1–750, 21 d × 224 over 751–2,300 (rl-compute-share inputs, open-
 
 ### Cost (podbudget; RunPod secure H200 $5.29/h)
 
-@@COST@@
+| pod | type, billed rate | time (UTC) | pod-hours | $ | jobs |
+|---|---|---|---|---|---|
+| ot32-a | 1 × H200 141 GB, secure, $5.29/h | 11-03 19:08 → 11-04 04:25 | 9.29 | 49.16 | Stage 0, F_dpo, F_s2300, E1_s2300, C1_s2300 |
+| ot32-b | the same | 11-03 20:35 → 11-04 09:10 | 12.57 | 66.49 | F_s0100, F_s0750, E1a_dpo, C1–C2 s0100, C1–C4 s0750, L_dpo |
+
+Total **21.86 pod-hours, $115.65 of $150** (Stage 0 ≈ $6.5 of its $8); RunPod balance 370.54 → 254.26. GPU-hours inside
+jobs: 20.2; the rest is setup, downloads and idle time (ot32-b idled 08:10–08:37 because I checked late). Per arm
+(registry rows, `ND_RUN_ID=olmo-think32b`, `olmo32/compute_rows.py`; GPU-seconds = (model load + generation) × 1 H200;
+no training steps or tokens, no Lean checks; verifier checks = samples):
+
+| model | phase | jobs | GPU-hours | generated tokens | samples |
+|---|---|---|---|---|---|
+| dpo | Stage 0 (AIME 2024) | 1 | 1.09 | 4,221,316 | 240 |
+| dpo | fixed | 1 | 4.64 | 18,869,038 | 960 |
+| dpo | extension | 1 | 2.37 | 6,928,957 | 240 |
+| dpo | likelihood scoring | 1 | 0.10 | 0 (1.84 M scored) | 87 scored |
+| step_0100 | fixed / confirmation | 1 / 2 | 2.25 / 2.06 | 9,069,378 / 6,882,391 | 480 / 248 |
+| step_0750 | fixed / confirmation | 1 / 4 | 2.16 / 2.46 | 8,700,441 / 7,355,594 | 480 / 248 |
+| step_2300 | fixed / extension / confirmation | 1 / 1 / 1 | 2.12 / 0.56 / 0.35 | 8,577,569 / 1,552,783 / 970,448 | 480 / 48 / 32 |
+
+Matching (policy flag, > 1.25×): dpo's fixed phase used 2.2× the GPU-hours of each RL checkpoint's (16 vs 8 samples per
+problem, by the brief's design); on aime2025_28 dpo, step_0100 and step_0750 each drew 256 samples and step_2300 40
+(sequential stopping), so the comparison there is at matched attempts only between dpo and the two intermediates.

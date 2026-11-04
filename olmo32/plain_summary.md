@@ -41,4 +41,4 @@ that scale it mostly made the model more reliable at what it could already do. T
 turned a rare, shaky success into a routine one. A follow-up of about $27–40 would settle that case: 1,024 tries of the
 starting model on that one problem.
 
-**Cost.** About $112 of the $150 budget, on rented H200 GPUs.
+**Cost.** $116 of the $150 budget, on rented H200 GPUs.

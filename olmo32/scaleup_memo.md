@@ -13,11 +13,11 @@ One reach candidate survived the fixed phase: **aime2025_28** (answer 248). Its 
 |---|---|---|
 | credited by RL's verifier | 7 (2.7 %) | 12 (30 %) |
 | final answer stated and right | 1 (0.4 %) | 10 (25 %) |
-| hand check (uniform rule / strict) | 2 / 0 sound of 7 checked | confirmed / confirmed |
+| hand check (uniform rule / strict) | 2 / 0 sound of 7 checked (1 / 0 stated in the write-up) | confirmed / confirmed |
 | stated answers (the 240 extension samples) | 208 × 70, none 163 (100 of them cut at 32,768), 248 × 1 | 248 in 10 of 40 |
 
-`step_0100` looks like `dpo` here (5 of 208 fresh credited by RL's verifier, 1 with the answer stated; 208 stated 80
-times). So aime2025_28 is the one problem where the 21-day extension's checkpoint is far more reliable than its start.
+`step_0100` stays close to `dpo` here (256 draws: 9 credited by RL's verifier, 5 with the answer stated; 208 is its
+commonest stated answer) and `step_0750` sits between (256 draws: 21 and 15). So aime2025_28 is the one problem where the 21-day extension's checkpoint is far more reliable than its start.
 Whether the start "can" solve it depends on the grade: under RL's verifier it does (7 times); with the answer stated
 it does once in 256; under a strict proof standard it never does (every credited `dpo` solution leaves the crux —
 that the reduced numerator is divisible by 3 at every step — unproved or argues it from residue representatives).

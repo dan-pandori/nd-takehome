@@ -1,0 +1,16 @@
+[
+ {
+  "item": "h00c442",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Proves unreduced A_k+B_k=36^{2^{k-1}} algebraically and G_{k+1}=G_k^2*t_k with t_k=gcd(n^2-nd+d^2,3) (rigorous: gcd(n^2-nd+d^2,nd)=1), t_k=3 iff (n,d)≡(1,2)/(2,1) mod 3. The crux, that (n_k,d_k)≡(1,2) mod 3 persists so t_k=3 every step, is only observed on specific terms k=1,2,3 and then assumed: 'Seems like a persistent pattern due to the recursion? Assuming that in general, for all k≥1 ... n_k≡1, d_k≡2 mod3'. No algebraic or mod-9 proof. Everything else is correct: I checked G_3=27, G_4=3^7, the reduced x4 (sum 2^16*3^9), 2^32≡46 and 3^17≡38 (mod 125), and the CRT result 248. By exact iteration I confirmed gcd=3 for k≤15 and 3*12^{2^2024}≡248 (mod 1000)."
+ },
+ {
+  "item": "h20b9ee",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Uses the reduced recursion a'=(a^2-ab+b^2)/3, b'=ab. It proves only that gcd(N/3,ab)=1 given gcd(a,b)=1 and 3|N. The crux, 3|N at every step, is hypothesized ('Let's hypothesize that after the first term, all subsequent GCDs are 3') and checked only on specific terms: the gcd is computed as 3 for k=1,2, and a3≡1, b3≡2 (mod 3) for k=3. It is not proved algebraically or mod 9. The later mod-24 fixed point (1,23)->(1,23) is computed on representatives (507/3=169). It presupposes integer divisibility, needs mod-72 information it never justifies, and is used only for the mod-8 part, never to establish 3|N. The mod-125 table (period 20, n=2025->(48,75)), 0 mod 8 and the CRT result 248 match my recomputation."
+ }
+]
