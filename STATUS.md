@@ -306,3 +306,10 @@ OLMO-THINK32B DONE 2026-11-04T09:21:59Z
 - 2026-11-04 19:10 UTC  start. Question: does Olmo 3.1 Think 32B's RL reach IFBench / IFEval / OMEGA `test_in` / `test_out`
   prompts that its DPO start (`Olmo-3-32B-Think-DPO`) cannot solve within 256 samples? Budget registered with podbudget
   ($150 / 120 h). Balance $254.10.
+- 2026-11-04 20:56 UTC  pre-registration Part A (a498d229, 19:53, before the first pod at 19:59) and Part B (bfee368a,
+  after Stage 0, before any evaluation sampling). Stage 0 ($7.92): OMEGA responses ≈ 22k tokens (test_out, DPO),
+  IF ≈ 2k; long sequences cost ≈ $1.2–1.5 per million tokens → the brief's design ≈ $330, ≈ $200 after its cuts:
+  **question in QUESTIONS.md (raise to $200?), default followed**: IFBench whole (4 models) + OMEGA test_out (100) with
+  DPO and step_2300; IFEval, test_in, intermediate checkpoints on OMEGA cut. 82 IFBench prompts excluded (base request
+  in the Think SFT data; headline 218). Fixed phase running on `oif-a` (H200 secure $5.29/h) and `oif-b`
+  (2 × A100 secure $3.58/h). Spend $8.3.
