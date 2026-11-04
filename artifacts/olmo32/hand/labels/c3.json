@@ -1,0 +1,9 @@
+[
+ {
+  "item": "h20ce54",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Chain: x_{k+1}=(p^2-pq+q^2)/(3pq); gcd(N,3pq)=gcd(N,3) is proved algebraically, and a full mod-3 table shows 3|N iff (p,q)=(1,2)/(2,1) mod 3. But persistence of (1,2) mod 3, i.e. gcd exactly 3 at every step, is only observed on k=1,2,3 (25/11, 157/275, 19033/43175): 'this seems to be a fixed behavior... suggests that indefinitely', then 'indeed all subsequent GCDs will be 3'. No mod-9 or algebraic proof (N=(p+q)^2-3pq gives N/3=-pq=1 mod 3); 3|s_k is likewise 'checked with previous terms', and t_k=t_{k-1}^2 presupposes the gcd, so the induction is never closed. Rest checks: s_k=3*12^(2^(k-1)), 2^2024=16 mod 100, 12^16=41 mod 125, CRT 248 (python)."
+ }
+]
