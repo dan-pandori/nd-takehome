@@ -18,7 +18,7 @@ from pathlib import Path
 
 A, O = Path("artifacts/olmo32"), Path("olmo32")
 K = 256
-STRICT_FLAWED = {"h4984ee", "h4cbdbc", "h9fea38", "h6d8d18", "h1747e2", "h094333"}  # representative transitions
+STRICT_FLAWED = {"h4984ee", "h4cbdbc", "h9fea38", "h6d8d18", "h1747e2", "h094333", "hb2cdd6"}  # representative transitions
 GRADES = ("rl", "final", "hand", "hand_strict")
 
 
