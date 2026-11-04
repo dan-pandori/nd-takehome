@@ -1,0 +1,59 @@
+ifbench_id,closest_rl_id,similarity,note
+count:conjunctions,keywords:existence,none,no RL constraint counts a word class
+count:keywords_multiple,keywords:word_count_different_numbers,close,RL asks for several keywords at given frequencies
+count:numbers,,none,no RL constraint counts numerals
+count:person_names,keywords:existence,loose,RL requires named keywords; not a count of names
+count:pronouns,,none,no RL constraint counts a part of speech
+count:punctuation,punctuation:punctuation_exclamation,loose,RL constrains single punctuation marks
+count:unique_word_count,count:count_unique,close,RL: only unique words / unique-word counts
+count:word_count_range,length_constraints:number_words,close,IFEval word-count bound vs a range
+count:words_japanese,language:response_language,loose,RL fixes the whole response language
+custom:character_reverse,,none,bespoke task
+custom:csv_city,,none,bespoke task
+custom:csv_quotes,,none,bespoke task
+custom:csv_special_character,,none,bespoke task
+custom:date_format_list,,none,bespoke task
+custom:european_capitals_sort,,none,bespoke task
+custom:mcq_count_length,,none,bespoke task
+custom:multiples,,none,bespoke task
+custom:reverse_newline,,none,bespoke task
+custom:sentence_alphabet,first_word:first_word_sent,loose,RL fixes sentence first words
+custom:word_reverse,,none,bespoke task
+format:emoji,,none,no RL emoji constraint
+format:line_indent,,none,no RL indentation constraint
+format:list,detectable_format:number_bullet_lists,loose,RL bullet lists with * markers
+format:newline,detectable_format:sentence_hyphens,loose,RL joins sentences with hyphens; layout per word is new
+format:no_bullets_bullets,detectable_format:number_bullet_lists,loose,RL bullet counts
+format:no_whitespace,,none,no RL whitespace constraint
+format:options,detectable_format:constrained_response,close,RL answers with one of given options
+format:output_template,detectable_format:multiple_sections,loose,RL section markers
+format:parentheses,detectable_format:square_brackets,loose,RL wraps words in brackets; nesting depth is new
+format:quote_unquote,startend:quotation,loose,RL wraps the response in quotes
+format:quotes,startend:quotation,loose,RL wraps the response in quotes; nesting is new
+format:sub-bullets,detectable_format:number_bullet_lists,loose,RL bullets without nesting
+format:thesis,detectable_format:number_highlighted_sections,loose,RL markdown highlights; HTML italics per section is new
+format:title_case,change_case:english_capital,loose,RL all capitals / capital-word counts
+ratio:overlap,copy:copy,loose,RL copies text verbatim; a target trigram overlap is new
+ratio:sentence_balance,,none,no RL sentence-type constraint
+ratio:sentence_type,,none,no RL sentence-type constraint
+ratio:sentence_words,,none,no RL equal-length constraint
+ratio:stop_words,,none,no RL stop-word constraint
+repeat:repeat_change,combination:repeat_prompt,close,RL repeats the request verbatim first
+repeat:repeat_simple,copy:copying_simple,close,RL copies a given sentence
+repeat:repeat_span,new:copy_span_idx,close,RL copies a character-index span; IFBench a word-index span
+sentence:alliteration_increment,,none,no RL alliteration constraint
+sentence:increment,count:count_increment_word,loose,RL increments keyword counts; sentence length increments are new
+sentence:keyword,keywords:keyword_specific_position,close,RL places a keyword in a given sentence and position
+words:alphabet,,none,no RL alphabetic-sequence constraint
+words:consonants,,none,no RL phonotactic constraint
+words:keywords_specific_position,keywords:keyword_specific_position,close,same mechanism
+words:last_first,last_word:last_word_sent,loose,RL fixes sentence last words; chaining is new
+words:no_consecutive,keywords:no_adjacent_consecutive,close,RL forbids adjacent words with consecutive first letters
+words:odd_even_syllables,,none,no RL syllable constraint
+words:palindrome,keywords:palindrome,close,RL includes a palindrome; IFBench at least ten of length >= 5
+words:paragraph_last_first,length_constraints:nth_paragraph_first_word,loose,RL fixes a paragraph's first word
+words:prime_lengths,,none,no RL word-length constraint
+words:repeats,keywords:word_once,loose,RL keyword appears once; a cap on every word is new
+words:start_verb,first_word:first_word_answer,loose,RL fixes the first word; a part of speech is new
+words:vowel,letters:letter_counting,loose,RL counts letters; vowel inventory is new
+words:words_position,keywords:keyword_specific_position,close,keyword at fixed word positions
