@@ -1,0 +1,23 @@
+[
+ {
+  "item": "hc93d36",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Slope classes are right (my exact check: 14 perpendicular pairs, all meet: 9 cross, 5 share a vertex; official 14 correct). But meeting was checked for only 8 pairs (2-10 with 1-6/10-7/2-5, 10-6&2-9, 9-5&3-6, 9-4&8-10, 3-1&3-6 at V3, 2-9&2-4 at V2). For the rest it writes 'Without computing, but trusting the slope condition and regular polygon properties, assume inside' and 'none share vertices, so intersections are internal' (a non sequitur, and false for 2-9&7-9, which share V9). It also put 2-4 and 7-9 in the -tan18 class from 4-decimal slopes ('likely exact value same'). The answer is right but depends on intersections it never checked."
+ },
+ {
+  "item": "h699989",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Same correct slope classes (exact: 14 perpendicular pairs, all meet; official 14 right), with -tan18/tan18/tan72 derived for several chords. But meeting rests on a false lemma: 'in a regular decagon, any two non-adjacent, non-overlapping chords will intersect inside', then 'assuming all these slope-multiplying-to--1 pairs do intersect' and 'The only possible issue is if the two lines are the same line' (this mixes up lines and segments). Only 6 pairs were actually checked: 2-10 with the 3 horizontals, 2-9&2-4 at V2, 3-1&3-6 at V3, and 9-5&3-6 computed at (-0.595,0.295). It missed that 2-9&7-9 share V9. The write-up counts slope pairs only."
+ },
+ {
+  "item": "h12ad32",
+  "label": "sound",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Slopes derived exactly with half-angle and sum-to-product identities (±tan18, ±tan36, -tan54, ±tan72). Every class is matched against -1/m (9-6 has no partner), giving 3 horizontal-vertical pairs + 2 + 8 + 1 = 14 candidates. Then all 14 are checked as segments: parametric intersections for the 9 crossing pairs (e.g. 10-6&3-8 t≈0.50,u≈0.658; 9-4&8-10 t≈0.096,s≈0.5; 7-9&3-8 u≈0.903), all matching my recomputation. The 5 shared-vertex pairs are named (V10, V2 twice, V3, V9). My exact check agrees: 14 perpendicular pairs, all meet; the official 14 is correct."
+ }
+]
