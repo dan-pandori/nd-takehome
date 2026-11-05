@@ -180,3 +180,14 @@ unanswered: I stop at $45 and the decision memo prices both options.
   ≈ $290 so every test_out candidate is extended as pre-registered? **Default if unanswered:** extend test_out
   candidates in the seeded order (started now on the idle `oif-c`) until spend + commitments reach ≈ $215; report the
   rest as open; `step_0750` on test_out and the IFEval extension (your #2 and #3) are cut.
+  - **Answer (Dan, 2026-11-05, relayed by agent:claude at 15:4x UTC):** granted: up to **$100 more**, so this run's
+    budget is now **$325 total** (`podbudget olmo-ifomega` updated: budget $325, ceiling 260 h; spend $197.95 at
+    15:44 UTC). The RunPod balance has been topped up to $254.44, so the $35 floor leaves ≈ $219 more, and the $325
+    budget binds first. Use it to test the reach candidates completely, as you asked:
+    - extend every OMEGA `test_out` reach candidate to 256 as pre-registered, including the
+      geometry_perpendicular_intersection family;
+    - where the DPO model never finishes inside the 32,768-token cap, report the problem explicitly as "reach at RL's
+      token cap", not as plain reach, and say how many of its samples hit the cap.
+
+    Then, if budget remains, do your earlier #2 and #3 (`step_0750` on `test_out`, then the IFEval extension). Record
+    the change in `log.md` and the pre-registration's deviations.
