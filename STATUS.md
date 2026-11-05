@@ -326,3 +326,7 @@ OLMO-THINK32B DONE 2026-11-04T09:21:59Z
   sides: vacuous satisfaction such as dropping sentence punctuation for per-sentence rules). Spend $93 of $225; projection
   ≈ $240, so Dan's reverse-order cuts (IFEval extension, then step_0750 on test_out) are likely when the test_out
   candidates are known (≈ 11:00). Pods: three community H200s ($3.59/h each).
+- 2026-11-05 10:10 UTC  OMEGA test_out: DPO pass@1 0.21 vs step_2300 0.62 (78 of 100 problems in for DPO); 11 reach
+  candidates, 7 of them problems where every DPO sample hits the 32,768-token cap. Extending them all to 256 costs more
+  than the $35 balance floor allows (≈ $40 left after IFBench): **question in QUESTIONS.md** (top up ≈ $70?); default:
+  seeded-order partial extension within ≈ $215, step_0750 on test_out and IFEval extension cut. Spend $135.

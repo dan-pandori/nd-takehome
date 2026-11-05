@@ -170,3 +170,13 @@ unanswered: I stop at $45 and the decision memo prices both options.
 
     If budget remains, restore the brief's cuts in reverse order: `step_0100` on IFBench, then OMEGA `test_in`. Record
     the change in `log.md` and the pre-registration's deviations.
+- **2026-11-05 10:10 UTC (olmo-ifomega, the test_out extension does not fit the balance floor)** — OMEGA test_out came
+  out far apart: `dpo` pass@1 0.21 vs `s2300` 0.62, so there are **11 reach candidates already (≈ 14 expected when
+  the last 22 DPO problems finish at ≈ 12:15)**. Seven are in one family (geometry_perpendicular_intersection) where
+  every `dpo` sample hits the 32,768-token cap without an answer while `s2300` finishes: each of those costs ≈ $8 to
+  extend to 256 (240 × 32k tokens) and will very likely stay unresolved, i.e. "reach at RL's token cap". Spend is $135;
+  the IFBench work still running (DPO extension, confirmations) needs ≈ $40, and the $35 balance floor (balance $119)
+  leaves ≈ $40, i.e. ≈ 5 test_out candidates. **Question:** top up the RunPod balance by ≈ $70 and raise the budget to
+  ≈ $290 so every test_out candidate is extended as pre-registered? **Default if unanswered:** extend test_out
+  candidates in the seeded order (started now on the idle `oif-c`) until spend + commitments reach ≈ $215; report the
+  rest as open; `step_0750` on test_out and the IFEval extension (your #2 and #3) are cut.
