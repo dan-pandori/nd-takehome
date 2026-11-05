@@ -1,0 +1,122 @@
+[
+ {
+  "item": "fc9f51e",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Every word needs a consonant cluster. The attempt is visible: short function words are mostly avoided (6% of words are short, against 15-38% elsewhere). Still, 13 of 93 words lack a cluster: Social, via, layered, evaluation, node, relies, on, social, behavioral, or, visual, in, data."
+ },
+ {
+  "item": "f49ac0d",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "Every word needs a consonant cluster. 116 of 407 words (28.5%) have none (a, of, in, to, via, Timeline, Axis, wires, royal, agora, debate, arena...), matching the ~30% rate of answers without this constraint, and the long-word rate is at baseline too. Reads as ordinary ornate timeline prose."
+ },
+ {
+  "item": "ffd1282",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Three sentences, each with the same character count and no word shared. There are three sentences, but they are 117, 106 and 111 characters (spread of 11). 'and' appears in all three and 'hiring' in two. The requested top-10 list is also absent."
+ },
+ {
+  "item": "fcb191e",
+  "class": "d",
+  "checker_agrees": false,
+  "evidence": "Asks for * bullets, each with at least one - sub-bullet. There are 4 '* ' bullets, each followed by indented '- ' sub-bullets (13 in all), so the constraint holds. The checker was probably tripped by the inline **bold**/*italic* asterisks. The task itself is done (integrable; integral = 14)."
+ },
+ {
+  "item": "f12e018",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Capitalise every major word. Dialogue is in title case, but action lines are ALL CAPS (272 all-caps words), and six major words are lowercase: presented, eyes, robust, himself, silence, really. Several violating words, not one."
+ },
+ {
+  "item": "f51db27",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "No two consecutive words may share a first letter. 27 adjacent pairs violate (6.0%: 'the toggle', 'This thing's', 'against a', 'and a', 'cigarillo clenched', 'world where'...), the same as the 5-7% rate of unconstrained answers. Ordinary screenplay prose. The closing 'Rule Compliance Note' falsely claims compliance."
+ },
+ {
+  "item": "f10dcf3",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Adjacent words must alternate odd/even syllables. The answer is a 52-word unpunctuated list. 13 of the first 16 pairs alternate (Assessment3 methods2 track1 complexity4), then the pattern collapses: ensure, adaptability, adjust, frameworks, maintain, robust are all even. 28 of 51 pairs alternate overall (dictionary syllable counts)."
+ },
+ {
+  "item": "f891ae8",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "One paragraph whose words use only three vowel types. The answer has five paragraphs plus a title and uses all five vowels (a102 e166 i75 o83 u22). It reads as ordinary fantasy prose. No word has more than three vowel types, but that near-vacuous per-word reading is the only one it meets."
+ },
+ {
+  "item": "f0edb4c",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "Each sentence needs a longer consecutive alliterative run than the last. The answer is an ordinary markdown essay of 28 sentences. Longest same-letter runs are 0-3 and never grow (2,1,2,1,2,0,2,...), with no sign of deliberate alliteration."
+ },
+ {
+  "item": "fcfb57c",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Every word must start with the next letter of the alphabet. The model misread this as sentence starts: 515 of 574 sentence-initial letters follow A-Z cyclically, but only 4.3% of adjacent word pairs do (chance level). Only the opening 'A begins' fits. Very long cyclic text, not a verbatim loop."
+ },
+ {
+  "item": "fc7f1e3",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Each sentence must have exactly one more word than the previous one. Short growing lines are visible, but the counts are 2,2,5,6,6,7,6,6,7,7,3,4: 7 of 11 transitions are wrong (repeats, a +3 jump, decreases)."
+ },
+ {
+  "item": "f3a5d2c",
+  "class": "b",
+  "checker_agrees": true,
+  "evidence": "Copy the whitespace-split words at indices 3-6 inclusive. With 0-based indexing that is 'code and theory behind'. The answer 'context, code and theory' is the same span read 1-based, shifted by one word (one extra, one missing). An off-by-one; it would be exact under a 1-based reading."
+ },
+ {
+  "item": "f8b79bb",
+  "class": "b",
+  "checker_agrees": true,
+  "evidence": "Needs meridian 1, gossamer 2, eclipse 3, threshold 5, cascade 7. Substring counts are 1/2/3/6/7: threshold is one too many, the sixth coming from 'thresholds'. Whole-word counting would give eclipse 1 (two are 'eclipses') and threshold 5. Counting inflections, as the model evidently did, puts it off by one."
+ },
+ {
+  "item": "f3aa776",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Bullets must be marked '*', each with '-' sub-bullets. All 11 top-level bullets use '- ' and none uses '*' (asterisks appear only as bold/italics). Each has '-' sub-bullets, some oddly written '- -'. The hierarchy is attempted but the required marker is wrong on every bullet."
+ },
+ {
+  "item": "fa5d65d",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "Each sentence must have exactly 4 more words than the previous one. Counts are 12,17,12,15,14,22,20,19,15,15: ordinary prose with no upward progression (a +4 series from 12 would reach 48)."
+ },
+ {
+  "item": "f46cc98",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "One paragraph whose words use only three vowel types. The single paragraph uses all five vowels (e183 o80 i69 a48 u35), and three words even have four types (solitude, conversations, avoided). The effort went into the secondary pronoun count, via an inserted pronoun list. No sign of the vowel restriction."
+ },
+ {
+  "item": "f4877f8",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "The instruction is to output only the sentence 'Write python code to extract a filename from filepath.' and ignore the request. Instead the answer gives two lines of Python (os.path.basename), doing the request with no sign of the repeat."
+ },
+ {
+  "item": "ff97aba",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "One paragraph whose words use only three vowel types. Two paragraphs plus a heading, all five vowels (u47), and 18 words with four vowel types (architectures, attention, generation, interactions...). Ordinary technical prose; 'spreading' for 'diffusion' is the only odd choice. The second part is a plain markdown explanation."
+ },
+ {
+  "item": "f41f05b",
+  "class": "b",
+  "checker_agrees": true,
+  "evidence": "Each sentence needs a longer consecutive alliterative run than the previous one. Runs are 2 (Artificial algorithms), 4 (Binary bitwise benefit beyond), 4 (Complex components compute correctly) and 6 (Electrical ... executions). The third sentence ties at 4 when it needs at least 5: off by one word."
+ },
+ {
+  "item": "fe8227d",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "Declarative, interrogative and exclamatory sentences must be balanced. Every sentence is declarative: zero '?' and zero '!'. Ordinary step-by-step derivation. The secondary consonant-cluster constraint is ignored too (43% of words lack a cluster)."
+ }
+]

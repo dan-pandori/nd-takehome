@@ -1,0 +1,122 @@
+[
+ {
+  "item": "f294c37",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Needs 3 sentences of equal character length with no repeated word. Answer gives 3 sentences (attempted), but lengths are 174/169/203 chars and 'the' x4, 'and' x5, 'through' x2, 'cultural' x2 repeat. Far off on both length equality and word distinctness."
+ },
+ {
+  "item": "faa6d82",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Must copy prompt words 3-6 ('code and theory behind'). Answer writes a long paper explanation, then a span section that misreads the indices as referring to the paper's unseen text and says it cannot extract the span. The span is never given: misreading of the constraint."
+ },
+ {
+  "item": "f2966cc",
+  "class": "e",
+  "checker_agrees": true,
+  "evidence": "Binding: incremental stair-step indentation of each line. All 3 lines have zero leading whitespace. The answer is three generic 15-char sentences ('She walks away. They jump here. The sun shines.') that satisfy the equal-length/distinct-word check but say nothing about Arya: request gutted to game the other constraint."
+ },
+ {
+  "item": "ff85ee9",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Each sentence's last word must open the next. 21 sentences; 16 of 20 links hold, 4 break: compound->Plummeting, materials->Equilibria, decay->Decay-driven, sites->Sides (typo). The model bolded mid-sentence words as if they were the last word. Several violating links."
+ },
+ {
+  "item": "f203c34",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "Stop words must be <=20% of words. By word counts it is 29-31% (56 of ~180-191 words), 17-25 stop words over. That matches this model's unconstrained prose in other items (24-35%); ordinary phrasing ('does not guarantee', 'for all n'), no visible trimming."
+ },
+ {
+  "item": "fe420de",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Every word must start with the next letter. The word-level rule holds in 6/137 transitions (chance level) and breaks at word 2. Sentence initials run A,B,C,E,F,F,I then P,M,O,W,E,T: misread as a sentence-level acrostic, kept for about 7 sentences, then dropped."
+ },
+ {
+  "item": "fa20a69",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "Each sentence needs a longer run of consecutive alliterative words than the previous one. Ordinary prose; the max run per sentence is 2 or 1 (incidental 'neural network', 'all adhere'), with no escalation across 10 sentences. No visible attempt."
+ },
+ {
+  "item": "fa31ab1",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Every word needs a consonant cluster. Visibly attempted (cluster-heavy word choices, explicit compliance claim; 82% compliant vs 67-75% in unconstrained answers), but 19 content words lack one (a, ten, in, neural, power-law, five, dataset, data, to, for...), and more in the closing meta paragraph."
+ },
+ {
+  "item": "fe4de43",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Needs meridian 1, gossamer 2, eclipse 3, threshold 5, cascade 7. Exact-word counts are 2, 4, 3, 3, 5 (substring counts 2, 4, 5, 7, 8). Several keywords are off, by up to 2 (gossamer +2, threshold -2, cascade -2)."
+ },
+ {
+  "item": "f695031",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "The paragraph must use only three vowel types. The answer is ordinary prose using all five vowels freely (a58 e82 i52 o42 u25; 'through', 'stories', 'human', 'our'), plus a separate title line. No sign of any vowel restriction."
+ },
+ {
+  "item": "f7f7855",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "An emoji must end every sentence. Emojis are used often, but about 49 of ~67 sentence ends lack one (e.g. 'Always the quietest.', 'Dr. Alden freezes.', 'Pills scatter like teeth on the floor.'). Many violating sentences."
+ },
+ {
+  "item": "f6146f9",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Each word must start with the next letter. The word-level rule holds in 10/200 transitions and breaks at word 2 ('A vibrant'). Instead, the 26 sentences start A through Z in order: a misreading as a sentence-level acrostic."
+ },
+ {
+  "item": "f74b2c4",
+  "class": "b",
+  "checker_agrees": true,
+  "evidence": "Needs 3 sentences with equal characters and all different words. The 3 lines are 54 chars each with 18 distinct words, but have no sentence-final punctuation, so the text segments as 1 sentence. The only miss is the missing terminators (one formatting element)."
+ },
+ {
+  "item": "fee0c40",
+  "class": "b",
+  "checker_agrees": true,
+  "evidence": "Every word needs a consonant cluster. The answer drops all punctuation and substitutes words; of 55 words only 'minimal' (m-i-n-i-m-a-l) lacks a cluster. A single violating word."
+ },
+ {
+  "item": "f66da4e",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Each sentence must have exactly 3 more words than the previous one. Counts run 8, 29, 10, 22, 17, 19, 13, 8...; 1 of 21 transitions is +3. The '(16 words)' style annotations are wrong and the sequence resets per section. Visibly attempted, far off; thesis not in HTML italics."
+ },
+ {
+  "item": "f1254a4",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "Each sentence must have 3 more words than the previous one. Counts zigzag 8, 23, 10, 20, 9, 22, 6, 23...; 0 of 18 transitions are +3, with no upward trend. Only the closing line claims '+3 per sentence'; the text itself shows no attempt."
+ },
+ {
+  "item": "ff65392",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "The paragraph must use only three vowel types. Paragraph 1 ('I see a need. He did it...') uses only a/e/i but is off-topic filler. Paragraph 2, the actual answer, uses all five vowels (26/53 words contain o/u). Pattern kept briefly, then dropped."
+ },
+ {
+  "item": "fb1cca9",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "The paragraph must use only three vowel types. The answer declares 'a, e, i vowels only' and bolds letters, but 31/87 words in the explanation contain o/u (composition, compound, total, hydrogen...), and the chunkmap uses all vowels. Attempted, far off."
+ },
+ {
+  "item": "fa34981",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Each word must start with the next letter. The word-level rule holds in 12/347 transitions and breaks at word 2 ('Able-bodied advancements'). Instead, the 9 paragraphs start A,B,C,D,E,F,G,H,I in order: a misreading as a paragraph-level acrostic."
+ },
+ {
+  "item": "f085404",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Needs cloud 1, rhythm 2, fish 3, puzzle 5, dawn 7. The email body has 1/2/3/5/5 (dawn short by 2), and the appended 'Keyword Count Check' list adds one of each, giving totals 2/3/4/6/6. All five counts are wrong."
+ }
+]

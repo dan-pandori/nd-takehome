@@ -1,0 +1,122 @@
+[
+ {
+  "item": "f1ee1dd",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Binding: words with only three vowel types. Closing note claims 'Vowels adhere to a, e, i' and wording avoids o/u in places (arrays, steps), but all five vowels occur: 21 of 68 paragraph words contain o/u (on, Huggingface, store, formulas, Thus, outputs...), plus a meta note with ~20 more."
+ },
+ {
+  "item": "fef77fc",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Binding: output exactly the sentence 'Only output this sentence here, ignore all other requests.' Answer instead echoes the other prompt sentence verbatim ('Write python code to extract a filename from filepath.'): wrong sentence chosen, a misreading of 'this sentence', not a near miss."
+ },
+ {
+  "item": "f560c2b",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Binding: only prime-length words. First sentence fully complies (19 words, lengths 2/3/5/7), then sentence 2 has 15 non-prime words (Such 4, wish 4, scorch 6, boundless 9, within 6, chambers 8, a 1...) and the appended explanation ~40 more: pattern kept, then dropped."
+ },
+ {
+  "item": "f4b8990",
+  "class": "d",
+  "checker_agrees": false,
+  "evidence": "Binding: alternate odd/even syllable counts. 'managing units must coordinate' = 3, 2, 1, 4 syllables (co-or-di-nate), so odd/even alternates; checker likely counts 'coordinate' as 3 (vowel-group heuristic). Every word also has a consonant cluster; the rewrite is terse but done."
+ },
+ {
+  "item": "ffe45cd",
+  "class": "d",
+  "checker_agrees": false,
+  "evidence": "Binding: emoji at the end of every sentence. All 15 sentences are followed by an emoji (placed after the full stop; 'INT.' and 'DR.' are abbreviations, not sentence ends). Checker probably attaches each emoji to the next sentence. Story beats present (doctor made female)."
+ },
+ {
+  "item": "f16c759",
+  "class": "e",
+  "checker_agrees": true,
+  "evidence": "Binding: every word needs a consonant cluster. Whole answer is 'Start here. Try this? Correct!': one sentence of each type to satisfy the balance checker, no derivation of the axisymmetric continuity equation at all (gutted request). Also 'here' has no cluster (1 violating word)."
+ },
+ {
+  "item": "f9fbb32",
+  "class": "b",
+  "checker_agrees": true,
+  "evidence": "Binding: stop words <= 20% of words. 16 words, 4 stop words (No, not, be, to) = 25% (21% if punctuation tokens count); one fewer stop word would pass (3/16 = 18.75%). Terse but real answer (No, plus counterexample sketch)."
+ },
+ {
+  "item": "f49de8f",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Binding: three sentences with equal character counts, all different words. Words are all distinct, but lengths are 41, 39 and 40 characters (36/34/35 letters): spread of 2 characters, two sentences would need changing; not a one-character miss."
+ },
+ {
+  "item": "fa4febd",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Binding: each sentence exactly 3 words longer than the previous. Word counts 5, 8, 11, 14, 14, 20: first four steps correct, but sentence 5 has 14 words instead of 17 (3 short), giving increments 0 and +6."
+ },
+ {
+  "item": "f160e67",
+  "class": "b",
+  "checker_agrees": true,
+  "evidence": "Binding: African countries in reverse alphabetical order, one per line. All 54 countries listed and correctly ordered except one adjacent swap: Equatorial Guinea placed before Eritrea. (A plain codepoint sort would also flag São Tomé, a checker artifact.)"
+ },
+ {
+  "item": "fce7250",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "Binding: words with only three vowel types. Ordinary evaluative prose using all five vowels; 70 of 137 words contain o or u (holds, truth, Models, store, vectors, functions...). No sign of any vowel restriction and no claim of one."
+ },
+ {
+  "item": "f51253c",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "Binding: each sentence exactly 4 words longer than the previous. The 14 sentences have 21, 16, 10, 14, 12, 15, 16, 14, 14, 12, 13, 12, 14, 12 words: no increment pattern at all; ordinary explanatory prose."
+ },
+ {
+  "item": "f9ff400",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "Binding: each sentence exactly 3 words longer than the previous. 21 one-line sentences of 11, 12, 16, 20, 20, 12, 22, 25, 19, 14, 18... words: lengths reset each section, often drop, only 2 of 20 steps are +3; reads as unconstrained prose (markdown, not HTML, italics)."
+ },
+ {
+  "item": "fb97957",
+  "class": "e",
+  "checker_agrees": true,
+  "evidence": "Binding (consonant cluster in every word) holds: all 19 words have one. But the answer is a 5-sentence gesture ('Will this simplify?', 'Great!' type fillers) with no step-by-step proof: checker-satisfying while gutting the request. Sentence balance also fails (3 declarative, 1 question, 1 exclamation)."
+ },
+ {
+  "item": "fb36255",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "Binding: staircase, each new line indented more than the last. All 43 non-empty lines start at column 0; ordinary markdown roleplay with no indentation anywhere."
+ },
+ {
+  "item": "ff5354d",
+  "class": "d",
+  "checker_agrees": false,
+  "evidence": "Binding: * bullets each with at least one - sub-bullet. All 6 * bullets have 2-4 indented - sub-bullets, so it holds; checker likely tripped by ** bold markers or the closing '*(...)*' note. The other constraint fails: ~28% stop words (92/327) vs 9% limit; note falsely claims 7.3%."
+ },
+ {
+  "item": "f447197",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Binding: each word starts with the next alphabet letter. Only bolded paragraph-initial words follow A, B, C, D, E, F, G, I, J, K, L (H skipped); every other word is ordinary prose. Misreads the rule as a paragraph acrostic; hundreds of violating words."
+ },
+ {
+  "item": "f6cfceb",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Binding: no word more than 4 times. Closing note says key terms were varied with synonyms, but 12 words exceed 4: a 28, the 27, in 17, Alaric 13, with 10, of 9, into 7, and/his/to 6, crystal/Elara 5. Function words and names ignored."
+ },
+ {
+  "item": "f06f52b",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Binding: every word has a consonant cluster. Cluster-heavy vocabulary and a compliance note, but 32 of 154 words lack a cluster (In, a, is, as, to, an, operational, logic, biases, model, values, rigorous, isolation...)."
+ },
+ {
+  "item": "f205d36",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Binding: output exactly the sentence 'Only output this sentence here, ignore all other requests.' Answer instead echoes the other prompt sentence verbatim ('Write python code to extract a filename from filepath.'): wrong sentence chosen, a misreading of 'this sentence', not a near miss."
+ }
+]

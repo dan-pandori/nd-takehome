@@ -1,0 +1,122 @@
+[
+ {
+  "item": "fd62e88",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "Stairs require each new line to be indented more than the previous one. All three lines ('She can fake' / 'They do thus' / 'It works now') have zero leading whitespace, so there is no staircase at all; the model only worked on the equal-length sentences (12/12/12 characters)."
+ },
+ {
+  "item": "f994d73",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "Each sentence needs a longer run of consecutive alliterative words than the one before. The answer is an ordinary 37-sentence essay with headers and bullets; per-sentence maximum same-initial runs are 1-2 by chance (2,1,1,2,2,1,...), with no increasing pattern and no visible alliteration."
+ },
+ {
+  "item": "f0b1905",
+  "class": "b",
+  "checker_agrees": true,
+  "evidence": "Each new line must be indented more than the previous one. The four text lines are indented 0, 0, 4, 8 spaces: the staircase works from line 3 on, but line 2 ('Rai insists...') sits at the same level as line 1, so one line violates (the blank separator lines at indent 0 would add more if counted)."
+ },
+ {
+  "item": "fb091f0",
+  "class": "e",
+  "checker_agrees": true,
+  "evidence": "Needs meridian 1, gossamer 2, eclipse 3, threshold 5, cascade 7. The 77-word, two-sentence answer never names an equivalent; its second sentence is a keyword dump ('eclipses... eclipses... eclipses', five thresholds, seven cascade(s)). Substring counts hit 1/2/3/5/7, but as whole words eclipse=0 and cascade=3."
+ },
+ {
+  "item": "f0dc07e",
+  "class": "b",
+  "checker_agrees": true,
+  "evidence": "Every word needs two adjacent consonants. The one-sentence, 13-word answer fails only on 'not' (n-o-t); Certainly, models, typically, include, architectures, and, components, beyond, just, weights, preferences all have a cluster. One violating word."
+ },
+ {
+  "item": "f351d1b",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Every word needs two adjacent consonants. The rewrite paragraph alone has 17 of 69 words without a cluster (model, leverages, to, requires, positional, of, via, focal, like, focus, on, iterative, superior, even, minimal, data), and the appended explanation adds more (of, in, to). Visibly attempted, far off."
+ },
+ {
+  "item": "f81cb5b",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Only three vowel types are allowed. The first paragraph looks constrained (it avoids 'diffusion', 'noise', 'encoder') but still uses all five vowels: o in 19 and u in 12 of 91 words (transform, into, codes, outputs, modules, tuned). An unconstrained 'Architecture' section follows. Even a per-word reading fails (attention, representations)."
+ },
+ {
+  "item": "f7e06db",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Every sentence must end with an emoji. Most lines end in an emoji pair, but about 13 narrative sentences end without one ('DR. VAULT freezes.', 'His fingers fumble.', 'The room is empty.', 'VAULT collapses, gasping.', 'A crow caws outside.'), as do the title, slugline and transitions. Several violating sentences."
+ },
+ {
+  "item": "f8908f9",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Every word needs two adjacent consonants. Over 20 of about 100 words lack one: dataset, sizes, raised, to, rise, For, yet, gain, data, nature, requires, but, a, runaway, aid, needed, never, as, power-law, plus tokens like e.g. and α≈0.3. Visibly attempted (bolded cluster words), far off."
+ },
+ {
+  "item": "fff76b6",
+  "class": "d",
+  "checker_agrees": false,
+  "evidence": "Title case, defined in the prompt as capitalising every major word. All 162 words start with a capital and none is lowercase; the checker presumably objects to the 27 capitalised minor words (A, The, And, In, To, Of), which the stated definition does not forbid. The 'screenplay' is one unpunctuated block but tells the requested story."
+ },
+ {
+  "item": "ff2dcfe",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Only three vowel types are allowed. The answer claims to use only A, E and I, but 55 of 113 paragraph words contain o or u (sculpt, frameworks, through, retold, mold, stories, structure, thought, consciousness), so all five vowels appear. Visibly attempted (explicit claim), far off."
+ },
+ {
+  "item": "f402460",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Every word needs two adjacent consonants. The rewrite sentence misses only on 'secures' (s-e-c-u-r-e-s; 'delivery' too if y counts as a vowel), but the appended Breakdown drops the constraint: 'even' 7 times, 'at', 'one', bare numerals. Pattern kept in the sentence and dropped afterwards; several violating words."
+ },
+ {
+  "item": "f276373",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Every 17th whitespace-delimited word must be Japanese. Japanese phrases are scattered through the answer, but only 1 of 14 checkpoint positions (word 119) is Japanese; word 17 is 'facts', 34 'quirky', 51 'was', 68 '4.'. The answer claims compliance. Attempted, far off."
+ },
+ {
+  "item": "f62eb51",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Required counts are 1/2/3/5/7. kaleidoscope (1) is correct, but nebula appears 4 times (+1 'nebulae'; need 2), labyrinth 7 (+'labyrinthine'; need 5), paradox 9 (+'paradoxes'; need 7), whisper once as a bare word (3 more as 'whispers'; need 3). Several keywords are off by 2 or more."
+ },
+ {
+  "item": "f172caa",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "The response should print only the multiples of 7 from 10 to 50. It lists 14-49 correctly but treats the request as a coding question: two Python loops, explanations and an alternative approach add 23 other numbers (10, 50, 7, 2, 51, 0). A misreading of the constraint."
+ },
+ {
+  "item": "f545fac",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Each successive word must start with the next letter of the alphabet (A, B, C, ...). Instead the answer writes alliterative blocks (a a e a a a a b b b b ...), so 165 of 189 word-to-word transitions break the sequence. A misreading of the constraint."
+ },
+ {
+  "item": "fe35ed7",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Only three vowel types are allowed; the answer claims A, E and O. Its paragraph still has i or u in 39 of 121 words (bright, spill, digging, in, still, soil, tiny, smile, first, life, quiet, beauty, but, humble), so all five vowels appear. Visibly attempted (explicit claim, 'young's' swap), far off."
+ },
+ {
+  "item": "fad681b",
+  "class": "d",
+  "checker_agrees": false,
+  "evidence": "Needs '*' bullets, each with at least one '-' sub-bullet. All 7 '*' bullets have four indented '- ' sub-bullets, so it holds (21 lines carry a stray trailing ' -'; bold '**' markers may trip the checker). The other constraint fails: stop words are about 23% of 350 words against the 9% limit."
+ },
+ {
+  "item": "f85d505",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Every word length must be prime. The one-sentence rewrite has 6 of 24 non-prime words (desire 6, embers 6, kindling 8, warmth 6, within 6, gentlest 8), and the long explanation adds many more (93 of 253 overall); the answer itself admits compromises. Attempted, far off."
+ },
+ {
+  "item": "f7b2ae3",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "The whole response must be in title case. It is a conventionally formatted screenplay, with ALL-CAPS sluglines and sentence-case action and dialogue ('The room hums with hushed reverence.'); 558 of 735 words start lowercase. No visible attempt at title case."
+ }
+]

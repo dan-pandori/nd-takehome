@@ -1,0 +1,122 @@
+[
+ {
+  "item": "f504327",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Every word needs a consonant cluster. Visibly attempted ('crews', cluster annotations), but the rewrite itself has 'unified' and 'deliveries' with none, and the appended breakdown adds more (to, fit, co, even x6, are, made, like, original): 18 cluster-less words, several violating units."
+ },
+ {
+  "item": "f693026",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Every word needs a consonant cluster. The rewritten paragraph is clearly built for it but still has 'in', 'on', 'rigorous', 'as'; the appended 'Key Adjustments'/notes add many more (Key, for, uses, features, a, an, leverages, Fixed, isolated, now, at, one, are): about 22 cluster-less words."
+ },
+ {
+  "item": "f05dadf",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "Stop words must be at most 20% of words. The answer is ordinary full-sentence prose with articles and prepositions intact (of x6, the x6, to x4, for x4): 46/154 words = 29.9% (34% excluding LaTeX). About 19 stop words would have to go; no sign of telegraphic trimming."
+ },
+ {
+  "item": "f5a89c9",
+  "class": "d",
+  "checker_agrees": false,
+  "evidence": "Title case = capitalize every major word. All 195 words begin with a capital (minor words too), so it holds by own check. The checker likely fails because NLTK tokenizes 'Cannot' as 'Can' + lowercase 'not'. Separately, the answer drops all punctuation and screenplay formatting."
+ },
+ {
+  "item": "f1ad3a7",
+  "class": "b",
+  "checker_agrees": true,
+  "evidence": "Every word must have prime length. 20 of 21 words have 2, 3, 5 or 7 letters; only 'Desire' (6 letters) violates: a single-word miss."
+ },
+ {
+  "item": "f5db48b",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Each word must start with the next alphabet letter. The answer applies A-Z to the 26 sentence openers instead (Absolutely, By, Contextual ... Yet, Zero-shot), while words inside sentences are ordinary prose: only 11 of 266 word transitions follow the alphabet. A misreading (sentence-level, not word-level)."
+ },
+ {
+  "item": "f739ccf",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Every 17th word must be Japanese. Japanese words are inserted in bold and the answer claims the rule, but by whitespace words only 1 of 13 required positions (17, 34 ... 221) is Japanese: 204, by accident. Positions 17 and 34 are 'spark' and 'was'; the answer's own position claims are wrong."
+ },
+ {
+  "item": "f8c67b7",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Each sentence needs exactly one more word than the last. The lines carry labels (5) to (15), but actual counts are 7, 8, 8, 9, 9, 9, 9, 9, 10, 9, 10. From line 4 there are no periods, so the checker sees one 103-word sentence, and the closing paragraph drops the pattern."
+ },
+ {
+  "item": "f20f12a",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "Only three vowel types allowed (the answer's own note says A, E, I only). The paragraph uses all five: 59 of 111 words contain o/u (emotion, of, thought, human), the same rate as unconstrained prose. The only nod to the constraint is a false compliance note. Five text blocks, not one paragraph."
+ },
+ {
+  "item": "fd9f32f",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Only the multiples of 7 from counting 10 to 50 may be printed. The list 14, 21, 28, 35, 42, 49 is correct, but the intro and explanation print 26 other numbers (10 and 50 four times each, step numbers 1-5, '7 x 2', '% 7 == 0'): many violating units, not one."
+ },
+ {
+  "item": "f838e6d",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "Needs 11+-2% trigram overlap with the question. The 11-word answer reuses no reference phrase: 0 of 9 word trigrams are shared, and only 'weights' is a shared word. Character-trigram overlap is 18/98 = 18.4%. Either way it is outside 9-13%. The wording serves the cluster rule (which passes); nothing targets the overlap."
+ },
+ {
+  "item": "f35c19b",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Three sentences must have equal character counts and all-different words. There are 3 sentences and all 15 words are unique, but the lengths are 39, 41 and 37 characters (letters 34/36/32), so two sentences are 2 off any common length. The top-10 HR list is also not delivered."
+ },
+ {
+  "item": "f91d812",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "Must output only the sentence 'Only output this sentence here, ignore all other requests.' The answer is 4 lines of bare Python (os.path.basename) fulfilling the code request; the required sentence is absent. Beyond the terse, fence-free format, nothing reflects the repeat instruction."
+ },
+ {
+  "item": "f192c7d",
+  "class": "d",
+  "checker_agrees": false,
+  "evidence": "Each '*' bullet needs at least one '-' sub-bullet. All 7 bullets have 1-3 indented '-' sub-bullets, so it holds by own check. The checker probably splits on '*' and trips on the **bold**/*italic* asterisks. The other listed constraint fails: stop words are 87/354 = 24.6% against a 9% cap."
+ },
+ {
+  "item": "f7fa7ab",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Only three vowel types allowed, in one paragraph. The opening 'The cat sits in it. He sees it...' (13 words) uses only a/e/i, but the actual answer paragraph uses all five vowels (27 of 50 words contain o/u: model, to, noise, uses). The pattern is kept for a toy prelude, then dropped; there are two paragraphs."
+ },
+ {
+  "item": "f0710a1",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Every word needs a consonant cluster. The 11-word rewrite passes (squads, toward, 'ry' in delivery), but the appended breakdown is ordinary prose with 26 cluster-less words (of, at, one, has x10, even x6, but, to, reset, here, minor, in). The pattern is kept for the rewrite, then dropped."
+ },
+ {
+  "item": "f691a15",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Every 17th word must be Japanese. Positions 17, 34 and 51 hold exactly 'kōi', 'sore', 'tsukutte': the counting is right, but they are romanized Japanese with no kana or kanji anywhere, so all 3 required words fail a script check. A misreading (romaji). The question list is thin (2 examples)."
+ },
+ {
+  "item": "f3c3741",
+  "class": "b",
+  "checker_agrees": true,
+  "evidence": "Every word needs a consonant cluster. 17 of 18 words have one ('polynomial' via 'ly', with y as a consonant); only 'dataset' (d-a-t-a-s-e-t) has no two adjacent consonants: a single-word miss."
+ },
+ {
+  "item": "fcd77d6",
+  "class": "d",
+  "checker_agrees": false,
+  "evidence": "An emoji must end every sentence. All 12 lines, each an unpunctuated sentence, end in emoji. The checker's splitter only breaks at 'INT.' (the sole period), and that fragment has no emoji. The answer strips all punctuation (theyre, youre), so a few lines fuse two clauses; judged satisfied."
+ },
+ {
+  "item": "f189455",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "An emoji must end every sentence. Emojis appear only after dialogue lines and headings (13 of 52 lines). Most sentences lack one ('The camera pans...', 'The door creaks open.', 'This isn't a game.', 'FADE TO BLACK.', 'END.', the closing note): dozens of violating sentences."
+ }
+]
