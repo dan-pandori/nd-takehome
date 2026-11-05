@@ -281,3 +281,36 @@ Expectations for the additions (binding, before data): `s0750` `test_out` pass@1
 strict pass@1 `dpo` 0.78 (0.70–0.86), `s0750` 0.84, `s2300` 0.88 (0.80–0.94); IFEval |R| 4 (1–10), |V| 2 (0–5),
 `dpo` resolves 75 % of R; verdict: No reach 50 %, Inconclusive 35 %, Reach 15 %. `test_out` with all candidates
 extended: Inconclusive 40 %, Reach 30 %, No reach 30 %.
+
+---
+
+# Deviations (as run; every entry also in `log.md` at its time; kept current until the write-up)
+
+1. **IF answer stripped** (2026-11-04 21:25 UTC, before any fixed-phase grading): `grade.answer_of` strips the text
+   after the last `</think>`, as RL's `remove_thinking_section` does; unstripped, the template's "\n\n" failed every
+   exact-format check (strict 0 / 44 vs `rlview` 26 / 44 on the first rows). Stage-0 files re-graded.
+2. **`step_0100` cut on IFBench** (21:10, before its job started): IFBench's fixed phase cost ≈ 3× Part B's estimate
+   (long responses fill the KV cache), so the brief's cut order removed `step_0100` there too. Dan's addition #4 (put it
+   back if budget remains) did not fit.
+3. **Pods and parallelism:** Stage 0's `s2300` ran on 2 × A100 (TP 2; numerics only); every evaluation job ran on one
+   H200 (one secure pod, then three community pods). Jobs moved between pods resume from the samples file.
+4. **Samples-file repair** (2026-11-05 00:10): two samples files resumed after a killed job had a truncated gzip member
+   followed by a new one; `repair_gz.py` recovered every complete row (no duplicates, every chunk whole) and
+   `sample.py` now rewrites the file when it resumes.
+5. **Dan's additions, as far as the budget went** (Part B addendum order): (1) `test_out` extension — partial, see 7;
+   (2) `step_0750` on `test_out` — cut 10:25 (the extension needed the money first); (3) IFEval — fixed phase run
+   (150 prompts, all three models), its extension (8 reach, 1 reverse candidates) held at 07:30 and not run;
+   (4)–(5) not run.
+6. **Hand-check rule** written after batches b1–b2 (05:00) and applied to every IF batch (b1–b2 re-read under it, no
+   label changed): vacuous satisfaction and ignoring the main request are gamed; tokenisation slack is genuine;
+   quality is not graded (`handcheck_rule_if.md`).
+7. **`test_out` extension within the balance floor** (10:10 question to Dan, unanswered; its default): candidates in a
+   seeded order (`plan/oo_order_1005.json`, then `oo_order_1130.json` for the two found later) while spend + expected
+   remaining ≤ ≈ $215, the latest-started stopped first if needed; the reverse candidate after every reach candidate;
+   unextended or stopped candidates reported open.
+8. **`verdict.py`** (11:35, before any `test_out` verdict was computed): each grade's verdict counts that grade's
+   candidates (Design 2 defines candidates per grade); the hand grade counts all.
+9. **Challenger confirmation of intermediate checkpoints cut** (in-run cut order (1)): only `s2300` confirms reach
+   candidates; a candidate whose only fixed-phase solver was `s0750` can therefore not be dissolved and stays open
+   unless `s2300` confirms or `dpo` resolves it. Batch confirmations run one chunk of 16 in flight per prompt (the rule
+   is unchanged; less overshoot).
