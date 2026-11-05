@@ -9,7 +9,7 @@ F_s2300_oo,s2300,fixed,3014,1,problems.jsonl,8,pids_omega_out.txt,oif-c,fixed ph
 F_dpo_ife,dpo,fixed,3021,1,problems.jsonl,16,pids_ifeval.txt,oif-d,fixed phase IFEval (added: Dan 21:22)
 F_s0750_ife,s0750,fixed,3023,1,problems.jsonl,8,pids_ifeval.txt,oif-c,fixed phase IFEval (added: Dan 21:22)
 F_s2300_ife,s2300,fixed,3024,1,problems.jsonl,8,pids_ifeval.txt,oif-c,fixed phase IFEval (added: Dan 21:22)
-F_s0750_oo,s0750,fixed,3013,1,problems.jsonl,8,pids_omega_out.txt,-,fixed phase OMEGA test_out (Dan's addition #2; cut 10:25, restored after his 15:44 grant)
+F_s0750_oo,s0750,fixed,3013,1,problems.jsonl,8,pids_omega_out.txt,oif-c+oif-g,fixed phase OMEGA test_out (Dan's addition #2; cut 10:25, restored after his 15:44 grant)
 E1_dpo_ifa,dpo,ext,4001,2,problems.jsonl,240,plan/E1_dpo_ifa.pids,oif-d,IFBench defender extension on the 90 reach candidates from dpo vs s2300 (stop at 2 strict successes)
 E1_s2300_ifa,s2300,ext,4002,2,problems.jsonl,248,plan/E1_s2300_ifa.pids,oif-c,IFBench defender extension on the 8 reverse candidates
 E1_dpo_if,dpo,ext,4011,2,problems.jsonl,240,plan/E1_dpo_if.pids,oif-c,defender extension: IFBench reach candidates whose only challenger is s0750 (4); the IFEval part split off to E1_dpo_ifev (held: cut first by Dan's order if the budget needs it)
@@ -28,5 +28,7 @@ E1_dpo_oo4,dpo,ext,4104,3,problems.jsonl,240,plan/E1_dpo_oo4.pids,-,test_out def
 E1_dpo_oo5,dpo,ext,4105,3,problems.jsonl,240,plan/E1_dpo_oo5.pids,-,test_out defender extension after Dan's 15:44 grant: candidates #11-#13 of the seeded order
 E1_s2300_oo,s2300,ext,4106,2,problems.jsonl,248,plan/E1_s2300_oo.pids,-,test_out reverse candidate: s2300 defender extension on arithmetic_list_prime_factors_045 (to 256, stop at 2 doubly)
 C3_dpo_rev,dpo,confirm,5203,5,problems.jsonl,112,plan/C3_dpo_rev.pids,oif-d,second hand-gate continuation of the dpo challenger on ifbench_88 (C2_dpo_rev: 1 genuine of 3 strict); to the 256 cap, stop at the next strict success
-C1_s2300_oo2,s2300,confirm,5402,3,problems.jsonl,248,plan/C1_s2300_oo2.pids,oif-c,challenger confirmation of s2300 on test_out perp_069 (dpo 0 doubly at 256) and perp_011 (dpo 1 at 256); chunks of 16, 2 in flight
-C2_s2300_ifb,s2300,confirm,5502,5,problems.jsonl,232,plan/C2_s2300_ifb.pids,oif-c,hand-gate continuation of the s2300 challenger on ifbench_214 / 158 / 80 (no genuine success among its checked ones) and 266 / 166 (no second or no fresh genuine); stops at 2 / 1 new strict successes
+C1_s2300_oo2,s2300,confirm,5402,3,problems.jsonl,248,plan/C1_s2300_oo2.pids,oif-g,challenger confirmation of s2300 on the test_out candidates dpo left unresolved at 256: perp_069 and perp_068 (0 doubly), perp_073 and perp_011 (1); chunks of 16, 2 in flight
+C2_s2300_ifb,s2300,confirm,5502,5,problems.jsonl,232,plan/C2_s2300_ifb.pids,oif-g,hand-gate continuation of the s2300 challenger on ifbench_214 / 158 / 80 (no genuine success among its checked ones) and 266 / 166 (no second or no fresh genuine); stops at 2 / 1 new strict successes
+E1_dpo_ifev,dpo,ext,4021,2,problems.jsonl,240,plan/E1_dpo_ifev.pids,oif-g,IFEval defender extension on its 8 reach candidates (held at 07:30; run after Dan's 15:44 grant)
+E1_s2300_ifev,s2300,ext,4022,2,problems.jsonl,248,plan/E1_s2300_ifev.pids,oif-g,IFEval reverse candidate: s2300 defender extension (held at 07:30; run after Dan's 15:44 grant)
