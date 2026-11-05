@@ -318,3 +318,11 @@ OLMO-THINK32B DONE 2026-11-04T09:21:59Z
   it fits. Pods: `oif-a` H200 secure (F_dpo_ifb → F_dpo_ife → F_dpo_oo), `oif-c` H200 community $3.59/h (RL IFBench /
   IFEval → F_s2300_oo → IF extensions → F_s0750_oo); `oif-b` (2 × A100) retired for `oif-c`. Grader fix 21:25 (strip
   the IF answer, as RL's reward does). Spend $12.5.
+- 2026-11-05 06:00 UTC  Fixed phase done for IFBench (all four less step_0100) and IFEval; OMEGA test_out running
+  (DPO on `oif-e`, step_2300 on `oif-c`). IFBench headline (218 prompts, strict): DPO pass@1 0.290 → step_0750 0.512 →
+  step_2300 0.684; pass@8 0.461 → 0.794 → 0.885. **94 reach candidates** (DPO 0 / 16, an RL checkpoint ≥ 1 / 8) and 8
+  reverse; DPO extension to 256 running (≈ 70 % of candidates still at 0 DPO successes after 64 draws; ends ≈ 16:00).
+  IFEval (150): 0.769 → 0.888 → 0.933; 8 reach, 1 reverse. Hand check so far: 40 deciding responses, 6 gamed (both
+  sides: vacuous satisfaction such as dropping sentence punctuation for per-sentence rules). Spend $93 of $225; projection
+  ≈ $240, so Dan's reverse-order cuts (IFEval extension, then step_0750 on test_out) are likely when the test_out
+  candidates are known (≈ 11:00). Pods: three community H200s ($3.59/h each).
