@@ -16,9 +16,13 @@ pkill -f "olmo_ifomega/[s]ample.py.*--job $J"
 for k in $(seq 1 24); do
   pgrep -f 'olmo_ifomega/[s]ample.py' > /dev/null || break; sleep 5
 done
-sleep 10
-for p in $(nvidia-smi --query-compute-apps=pid --format=csv,noheader); do echo "killing GPU process $p"; kill $p; done
-sleep 10; nvidia-smi --query-gpu=memory.used --format=csv,noheader
+# vLLM's engine runs in a child retitled "VLLM::EngineCore" that outlives the sampler (nvidia-smi's pids are the
+# host's, not this container's, so they cannot be used here)
+pkill -f 'VLLM::EngineCor[e]'
+for k in $(seq 1 24); do
+  [ "$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits | sort -n | tail -1)" -lt 2000 ] && break; sleep 5
+done
+pkill -9 -f 'VLLM::EngineCor[e]'; sleep 5; nvidia-smi --query-gpu=memory.used --format=csv,noheader
 cp $L/q_$J.log $L/q_$J.$T.log
 setsid nohup bash pod/olmo_ifomega/runq.sh $J > $L/runq_$T.log 2>&1 < /dev/null &
 echo "$(date -u +%T) restarted $J (runq_$T)"
