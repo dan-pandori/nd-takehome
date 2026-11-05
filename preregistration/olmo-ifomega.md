@@ -324,3 +324,40 @@ extended: Inconclusive 40 %, Reach 30 %, No reach 30 %.
     interior or on its boundary", which are 15. The pre-registered grades keep the official label (so its `omega` /
     `rl` credits go to answers of 17, both hand-checked flawed); a sensitivity with the label corrected to 15 is
     reported beside them. Every other `test_out` candidate's label was checked (brute force or closed form) and is right.
+
+---
+
+# Part C — failure-mode analysis of `dpo` (Dan's request 2026-11-05 16:25 UTC; written 2026-11-05 16:29 UTC, before any failure text was read)
+
+Secondary and labelled; the verdict rule is unchanged. From stored texts only.
+
+**What I had seen before writing this:** `dpo`'s *successes* that were hand-checked (IF and OMEGA); aggregate grades
+and lengths (e.g. 16 of E1_dpo_ifa's 17,712 IFBench samples cut at the cap; ≈ 97 % of `dpo`'s geometry
+perpendicular-intersection samples cut); the closing lines of ≈ 19 `dpo` responses on test_out func_coords_011 (all
+answering 2, from x ≈ 1.62). No IFBench failure text.
+
+**IFBench** (the 49 reach prompts where `dpo` has 0 strict successes in 256): a seeded sample (random.Random(20261105))
+of up to 4 `dpo` failures per prompt, one from each of 4 of its 5 extension chunks; `s2300`'s failures on the same
+prompts, up to 2 per prompt, for contrast; the two models' items shuffled together into blinded batches;
+classified against `olmo_ifomega/failure_rubric_if.md` (first applicable of: (f) cut, (e) degenerate / gamed, (a)
+ignored, (b) attempted near miss, (c) attempted far off, (d) binding constraint satisfied but another constraint or
+the task broken); the binding constraint = the one the model fails most often on that prompt over all its samples;
+I re-classify a seeded 10 % myself. Reported: shares overall and per instruction id and family (the id's prefix),
+with each id's distance from RL's IF data (`rl_if_ids.csv`, `ifbench_rl_map.csv`). "Format-like" = (b) + (d);
+"substantive" = (a) + (c).
+
+Expectations (`dpo`, share of sampled failures): (f) 0–1 %; (e) 5 % (0–15 %); (a) 20 % (5–40 %); (b) 20 % (10–35 %);
+(c) 40 % (20–60 %); (d) 15 % (5–30 %). Reasoning: a prompt with 0 successes in 256 is one where the failure is
+systematic; a near miss with any randomness would land now and then, so I expect fewer near misses than among all
+failures and more misreadings of the constraint (far off) or no attempt. So substantive (a + c) ≈ 60 % > format-like
+(b + d) ≈ 35 %. For `s2300` on the same prompts (which it solves often): (b) 35 %, (c) 25 %, (d) 20 %, (a) 10 %,
+(e) 5 %, (f) 5 %: its failures more often near misses. By family I expect counting constraints (`count:`, `words:`)
+to fail as near misses more than structural ones (`format:`, `sentence:`).
+
+**OMEGA test_out** (the reach candidates, after every extension has finished): every `dpo` failure is classified
+mechanically as cut at the cap with no stated answer when `finish=length`; a seeded sample of up to 4 finished
+failures per candidate is classified by blinded readers against `olmo_ifomega/failure_rubric_omega.md` (misread /
+method / slip / unclear). Per family, geometry_perpendicular_intersection separate. Expectations: geometry
+perpendicular-intersection ≈ 97 % cut, its few finished failures mostly method (enumeration not finished within the
+budget); other families: cut 15–35 %, and among finished failures method 50 %, slip 30 %, misread 20 %;
+func_coords_011's finished failures method (the crossing misplaced near g's pole).
