@@ -1,0 +1,23 @@
+# Item h275fcd
+
+## Prompt (sent to the model verbatim)
+
+Write a Female character who can create ghostly clones of herself, each from different timelines, which do everything she can possibly do in certain situations. Your response must include bullet points denoted by * and at least one sub-bullet point denoted by - for each bullet point. Ensure that stop words constitute no more than 9% of the total words in your response.
+
+## Constraints checked (official checker)
+
+- `format:sub-bullets` {}: checker says followed
+- `ratio:stop_words` {"percentage": 9.0}: checker says followed
+
+## Answer (the text after the model's last </think>; 17050 characters of thinking not shown; 4338 tokens in all, finish=stop)
+
+* Chronoara materializes temporal echoes  
+  - Manifestations execute precise actions  
+* Clones retain distinct memories  
+  - Overlapping experiences heighten psychic resonance  
+* Abilities vary per timeline  
+  - Mastery shifts combat strategies dynamically  
+* Prolonged use fractures psyche  
+  - Cognitive dissonance risks destabilization  
+* Limitations arise from entropy  
+  - Ghosts fade when causal chains realign

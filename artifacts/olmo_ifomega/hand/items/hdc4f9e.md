@@ -1,0 +1,13 @@
+# Item hdc4f9e
+
+## Prompt (sent to the model verbatim)
+
+Write a descriptive, fictional, imaginative screenplay of a 127 year old man receiving the world record for oldest human to ever live. Later that night, in bed, he recalls a theory he read on the internet in his youth, \"Quantum Immortality\" he then proceeds to have a mental breakdown.\n Write the entire response in title case (capitalize the first letter of every major word).
+
+## Constraints checked (official checker)
+
+- `format:title_case` {}: checker says followed
+
+## Answer (the text after the model's last </think>; 32108 characters of thinking not shown; 7485 tokens in all, finish=stop)
+
+Arthur Accepts The World Record For Oldest Human With A Tearful Smile As Photographers Flash Their Cameras He Expresses Gratitude For A Life Lived Fully Amidst Applause And Confetti That Night In His Modest Apartment He Lays Awake Staring At The Ceiling Memories Rush Back To His Youth When He First Encountered The Concept Of Quantum Immortality Online—The Idea That Consciousness Survives Perpetually Across Alternate Realities Never Experiencing True Death Paranoia Sets In He Mutters Frantically About Being Trapped In An Endless Cycle Of Existence The Walls Begin To Warp Into Fractured Realities Filled With Glitching Numbers And Flickering Stars His Voice Rises In Desperation Crying Out Against The Impenetrable Void Of Eternity The Scene Dissolves Into Chaos As Arthur Collapses Screaming Into The Void Until Only Silhouettes Remain Against A Nebula Of Static
