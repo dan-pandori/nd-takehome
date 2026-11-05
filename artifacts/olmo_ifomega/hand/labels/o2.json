@@ -1,0 +1,16 @@
+[
+  {
+    "item": "h03d994",
+    "label": "sound",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "Correct parse: f=5cos²Y+25cosY+32 in [12,62]; g=2Z²+3Z+5, Z=(2x-5)/(6x-10). Solves g>=12 iff x in [1.37,5/3)u(5/3,1.757] (I get 1.3687, 1.7563), so for x<1.37 'g(x) is below 12 and f(x) is always above 12': no earlier crossing. dZ/dx=10/(6x-10)²>0, so g rises there. Bracket f(1.4)~43.6>g=12.9, f(1.5)=12.15<g=19 (exact, cos(12pi+3)=cos3), refined to ~1.467 -> 1. My numerics: first root 1.46844, f(1.5)=12.151. Non-decisive slips: f(1.37) given as 18.8 (true ~57; used 2pi for 6pi), f(0) and f(1) misstated as ~12 (true 61.65), sign at 1.467/1.468 slightly off. The first root lies in [1.37,1.5) regardless."
+  },
+  {
+    "item": "h21f5de",
+    "label": "flawed",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "Correct parse (f in [12,62]; g=2Z²+3Z+5). Valid bracket: f(1)=61.6>g=8.375, f(1.5)=12.15<g=19; refined between 1.465 (f-g~+0.85) and 1.475 to ~1.4678 (true first root 1.46844). But 'first' rests on ~15 sample points: '看来在x<1区间，f始终大于g', '似乎f始终大于或等g值'. It never bounds g below min f=12 or shows g monotone (true: g increasing, max 8.375 on [-10,1], so the claim holds). The final write-up justifies [-10,-2) with the false 'f(x) remains constant around 61.6' (f(-2.5)=12.15; the thinking had already caught this). Other slips: f(1.45)=45.45 (true 21.40), f(-0.3)=15.3 (true 58.0). Correct answer, but the step excluding earlier crossings is unproved."
+  }
+]

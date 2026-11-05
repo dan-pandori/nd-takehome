@@ -1,0 +1,1 @@
+dpo allenai/Olmo-3-32B-Think-DPO main|bash pod/olmo_ifomega/job.sh E2_dpo_oo dpo allenai/Olmo-3-32B-Think-DPO main 0 @olmo_ifomega/plan/E2_dpo_oo.pids 5301 48 0 --stop_after 2 --inflight 1 --prior @olmo_ifomega/plan/E2_dpo_oo.prior --stop_file olmo_ifomega/plan/E2_dpo_oo.stop
