@@ -1,0 +1,16 @@
+[
+  {
+    "item": "hf3a132",
+    "label": "sound",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "Reads the problem as: the drawn word fixes the original g positions S, then a uniform shuffle. Justifies WLOG ('the probability should be the same as for any specific set of k positions') and counts C(5-k,k)*(non-g arrangements)/total, giving 1, 4/5, 3/10 for k=0,1,2 whatever the q/o split. Checks this on explicit cases (16/20, 24/30, 9/30, 3/10). Hypergeometric weights C(2,g)C(3,q)C(3,o) = 3,3,6,18,6,1,9,9,1 (total 56) give 360/560 = 9/14, so 23. I brute-forced ordered draws of the 8 labelled letters times all 5! shuffles: 9/14. Other readings give other answers (labelled-g derangement 43/56, uniform multisets 28/45, uniform words 10/17)."
+  },
+  {
+    "item": "h297bac",
+    "label": "sound",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "After long uncertainty about what 'original positions' means, it fixes the pre-shuffle word as sorted (g's first), so the g's must avoid positions 1..g. Counts every multiset explicitly: k=1 gives 16/20, 24/30, 16/20 (all 4/5); k=2 gives C(3,2)*(non-g arrangements) = 3/10, 9/30, 9/30, 3/10. Weights C(2,g)C(3,q)C(3,o) (total 56) give 360/560 = 9/14, so 23. The sorted original order is assumed without justification, but the choice is harmless: the count is the same for any k original g positions (I checked all 10 position sets for k=2; each gives 3/10). Brute force of ordered draws times shuffles gives 9/14, and all its per-multiset counts match mine."
+  }
+]
