@@ -1,0 +1,16 @@
+[
+ {
+  "item": "hae5bd7",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Slopes and the count of 17 perpendicular pairs are correct (checked: exactly 17 pairs satisfy (a+b)-(c+d) = 6 mod 12). But the problem counts only pairs that meet inside or on the polygon. The response noticed this ('Ah, this is a critical point!'), then said 3-5 and 2-12 meet at (sqrt3/2, sqrt3/2) 'inside the polygon', which is false: that point is at radius 1.22 > 1. After three spot checks it concluded 'all these slope-matched pairs do intersect' without checking 11-1 & 10-8, which also meet outside (radius 1.22). The literal count is 15 (11 crossings + 4 shared vertices). The official 17 equals all perpendicular pairs, so the match depends on these false claims."
+ },
+ {
+  "item": "h0c4525",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Slope table and the count of 17 perpendicular pairs are correct (checked: exactly 17 pairs satisfy (a+b)-(c+d) = 6 mod 12). It dismisses the meet-inside/on-boundary condition with a false lemma: chords 'always intersect either inside or at a point on the polygon. Since two chords either intersect inside or share an endpoint.' Disjoint chords whose endpoints don't interleave never meet: 3-5 & 2-12 and 11-1 & 10-8 are perpendicular, but their lines meet at radius 1.22, outside the polygon. It spot-checked only two crossing pairs (9-3 & 10-8, 4-9 & 7-12). The literal count is 15 (11 crossings + 4 right angles at shared vertices). The official 17 equals all perpendicular pairs, reached here via the false lemma."
+ }
+]
