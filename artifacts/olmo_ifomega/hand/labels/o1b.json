@@ -1,0 +1,16 @@
+[
+  {
+    "item": "h2298e2",
+    "label": "sound",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "Deciding step: the angle between chords crossing inside is half the sum of the intercepted arcs, so 90 deg needs arcs summing to 180. Every arc between vertices is a multiple of 40 deg: '40(k+m)=180 => k+m=4.5', impossible 'whether minor or major'. At a shared vertex the inscribed angle is half an arc, so a 180-deg arc is needed, also impossible. The solver keeps doubting this ('implies at least one') but re-checks the theorem, finds no flaw, and the write-up gives this argument. Some spot checks are wrong (it says 3-6/2-8 and 2-8/4-7 cross; they don't), but nothing depends on them. Python: none of the 69 meeting pairs is perpendicular, and no two chords of a regular 9-gon are."
+  },
+  {
+    "item": "haab4cb",
+    "label": "sound",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "Same argument: an interior crossing angle is half the sum of the intercepted arcs; the arcs are multiples of 40 deg, 'so their sum must be multiple of 40, but 180 isn't', explicitly extended to major arcs. A right angle at a vertex needs a 180-deg arc, ruled out because the largest minor arc is 160 (valid: a 180-deg arc would itself be the minor arc). Spot-check errors carry no weight: it says 3-7/6-4 cross at 120 when they are parallel, and makes a spurious 'minimal arc' correction. It doubts the result repeatedly. The write-up cites the multiples-of-40 constraint. Python: none of the 69 meeting pairs is perpendicular, and no two chords of a regular 9-gon are."
+  }
+]

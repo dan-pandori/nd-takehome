@@ -1,0 +1,16 @@
+[
+  {
+    "item": "he2d266",
+    "label": "sound",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "Reads the event as: every position that held an m still holds an m (possible only with 3 m's). P(3 m's) = sum C(3,3)C(3,lu)C(2,ls)C(2,lv) = 21 over 252 = 1/12 (per-l_m table 21/105/105/21 checked). Conditional: [2!/(lu!ls!lv!)]/[5!/(3!lu!ls!lv!)] = 3!2!/5! = 1/10, checked on cases and again as 37/370. Product 1/120 -> 121. My brute force over all C(10,5) selections x 5! shuffles gives 1/120. A side 'total words' equation (37/sum Count*perms = 37/10280) is muddled but never evaluated or used; the response returns to the valid two-stage product. The final write-up states 121."
+  },
+  {
+    "item": "hcc22ae",
+    "label": "sound",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "Labelled-letter model: P(10,5) = 30240 sequences, of which C(5,3)*3!*P(7,2) = 2520 contain all three m's -> 1/12 (checked). Weighs the labelled fixed-point reading (2!/5! = 1/60) against the position reading and picks the position reading with a reason ('A letter m in a position is just an m'): the original m positions must still hold m's, giving 3!*2!/5! = 12/120 = 1/10. Product 1/120 -> 121, matching my brute force over all selections and shuffles. An early slip, '2!/5! = 1/20', is corrected straight away. The final write-up states 121."
+  }
+]

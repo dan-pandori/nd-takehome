@@ -1,0 +1,16 @@
+[
+  {
+    "item": "heba0be",
+    "label": "sound",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "Models the draw as a uniform 5-subset of the 9 labelled tiles: case sums 21+35+35+35=126=C(9,5), of which 70=C(8,4) contain z, so P(z drawn)=5/9 (cross-checked as 8400/15120 via P(9,5)). z is unique, so 'exactly 1 z remains' means z is drawn and fixed; a uniform shuffle fixes it with probability 4!/5!=1/5 (shown by counting pairs). 5/9*1/5=1/9 -> 10, restated in the write-up. A Case3/Case4 mislabel in the type-based recount is caught and fixed. It mentions the stricter reading (no other letter fixed) but does not adopt it. My brute force over all 126x120 (subset, shuffle) pairs gives 1/9; the stricter reading would give 1/24."
+  },
+  {
+    "item": "hbb15f6",
+    "label": "sound",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "Lays the 9 tiles out as a fixed string and picks 5 positions uniformly: P(z drawn)=C(8,4)/C(9,5)=70/126=5/9. z then sits last in the pre-shuffle word, which is harmless, and the shuffle keeps it there with probability 1/5, giving 1/9 (also 1680/15120). It rejects the stricter 'no other letter fixed' reading on the wording; that reading slips to 5/24 and is then corrected to 1/24, which I confirmed. It wrongly worries that labelled counting overcounts, computes uniform-over-distinct-words 47/335 (I confirmed 335/235/47), and drops it partly as 'not the answer expected' and partly on convention plus a cards analogy, with a muddled equivalence remark. The final model is the standard one; brute force gives 1/9."
+  }
+]
