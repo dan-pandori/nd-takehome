@@ -1,0 +1,16 @@
+[
+  {
+    "item": "h66c75c",
+    "label": "sound",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "Assumes a regular decagon and computes all 15 slopes (all correct: 5-8, 10-3, 9-4 = -tan72; 10-8, 7-1, 5-3 = tan18; 3-8 = tan72; 4-2, 7-9 = -tan18; 2-7 = tan36; 10-4 = -tan54; 7-3, 1-9 = tan54; 10-7, 6-1 horizontal). Proves exact perpendicularity from tan72*tan18 = 1 and tan36*tan54 = 1. Checks every group's partner (tan54 needs -tan36, absent; horizontals need a vertical, absent), giving 9+2+1. Verifies each pair: 4 meet at shared vertices (dot product 0) and 8 cross at points inside the circle, which puts them on both chords. My computation gives exactly these 12 pairs, with matching points. A side check mislabels 'diag4 and diag13 ... 90°' at vertex 3; that pair is not counted."
+  },
+  {
+    "item": "heb2840",
+    "label": "sound",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "Same method: assumes a regular decagon, computes all 15 slopes correctly and groups them. Finds perpendicular partners exhaustively by negative reciprocals, with exact reasons (tan72 = cot18, tan54 = cot36; the tan54 group has no -tan36 partner; the horizontals have no vertical partner). That gives 9+2+1 candidates, and each is verified: 4 meet at shared vertices (the vertex-8 dot product is proved exactly 0 via cos^2+sin^2 = 1), and 8 cross with both parameters in [0,1] (e.g. 5-8/7-1 s=0.191, t=0.691; 2-7/10-4 s=0.5, t=0.345). My computation gives exactly these 12 pairs. Slips (the sign of the 1.376^2 product, a reversed vector in a vertex-8 side check) do not affect the count."
+  }
+]
