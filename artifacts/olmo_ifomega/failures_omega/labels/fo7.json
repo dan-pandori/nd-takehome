@@ -1,0 +1,26 @@
+[
+ {
+  "item": "gf39c72",
+  "class": "method",
+  "stated_answer": "8",
+  "evidence": "Total = 3 vertex pairs + 'Internal intersections: 4 pairs (inferred based on symmetry and problem constraints)'. It states the right criterion (intercepted arcs sum to 180°) but never checks the pairs, then guesses ('Given time's up ... answer is 8'). The vertex tally also has slips: at new vertex 1 it re-maps 7,8 to 6,7 and misses 3-8. Checked: 17 = 7 shared-endpoint pairs + 10 interior crossings (a+b-c-d ≡ 5 mod 10)."
+ },
+ {
+  "item": "gb0598d",
+  "class": "method",
+  "stated_answer": "817",
+  "evidence": "Wrong probability model: (370/780)·(1/10) = 37/780. Here 780 counts distinct words ('uniform distribution over the distinct words'), while 370 = Σ C(3,a)C(3,b)C(2,c)C(2,d)·5!/(a!b!c!d!) is tile-weighted, so the two scales also clash (distinct 3-m words: 90). Correct: 5 random tiles of 10, P(3 m's) = C(7,2)/C(10,5) = 1/12; the shuffle keeps the m positions w.p. 1/10 (right); 1/120 → 121, confirmed by enumeration."
+ },
+ {
+  "item": "g06f61a",
+  "class": "method",
+  "stated_answer": "263",
+  "evidence": "Rejects the urn weighting ('since the m's are indistinct, it's actually only 1 way to choose m m's') and treats the 780 distinct words as equally likely: P(3 m's) = 90/780 = 3/26, answer 3/260. Correct: drawing 5 of the 10 tiles gives P(3 m's) = C(7,2)/C(10,5) = 1/12; with the (correct) conditional 1/10 that is 1/120 → 121, confirmed by full enumeration."
+ },
+ {
+  "item": "ge69379",
+  "class": "misread",
+  "stated_answer": "84",
+  "evidence": "Ignores the 19 drawn diagonals and counts over all diagonals of a regular 12-gon: '12 vertices × 3 pairs = 36' + 3 perpendicular diameter pairs + 45 'quadrilaterals' = 84 (even that general count is 111 by enumeration). For the drawn set, 17 pairs have a+b-c-d ≡ 6 mod 12, matching the official answer. But (2,12)&(3,5) and (11,1)&(10,8) meet only outside the polygon, so the literal condition gives 15."
+ }
+]

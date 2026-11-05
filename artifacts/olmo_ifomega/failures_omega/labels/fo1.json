@@ -1,0 +1,26 @@
+[
+  {
+    "item": "ge9803a",
+    "class": "slip",
+    "stated_answer": "2519",
+    "evidence": "Hensel method and mod-41^2 lifts (905, 834, 847, 776) are right, but lifting 834 to 41^3 it adds '38,417+40,590=78, 007' (true 79,007), so f(834)=20,853 (not divisible by 41^2; remainder 681 ignored), k=12 not 13, b=1 not 25: M=2515 instead of 42859. Brute force: roots 22629, 26062, 42859, 46292; 2515^4+1 = 1681 mod 41^3; N+M=4+22629=22633."
+  },
+  {
+    "item": "g61f962",
+    "class": "method",
+    "stated_answer": "27",
+    "evidence": "Conditional probabilities are right (4/5 with one g, 3/10 with two), but it assumes 'each word is equally probable', weighting cases by distinct-word counts (20/70/80 of 170) instead of the draw of 5 of the 8 letters (6/30/20 of 56). Brute force: token-uniform draw gives 9/14 (m+n=23, official); uniform over the 170 distinct words gives the stated 10/17 (27)."
+  },
+  {
+    "item": "g93a367",
+    "class": "slip",
+    "stated_answer": "821",
+    "evidence": "Lifting 38 to mod 41^2 it solves for a with m0=-3 (f(m0)=(-3)^4+1=82), gets a=19, then writes 'm1=38+19×41=817' (should be -3+19·41=776; it even wrote '776? Wait no'). 817^4+1 = 615 mod 1681, so 817 is not a root; a later sign error and b=0 kept 817, never verified. True roots 22629, 26062, 42859, 46292 (answer 22633); stated 4+817=821."
+  },
+  {
+    "item": "g215b50",
+    "class": "misread",
+    "stated_answer": "2",
+    "evidence": "It reads '1cos(...)' as '1 - cos(...)' ('Let me suppose that \"1cos\" is actually \"1 - cos\"'), using u=1-cos(θ) where the stated expression gives 1·cos(θ)+1 (θ=3π(2|x+2|-3)+3). Numerically, the stated f first meets g at x≈1.468 (rounds to 1); the response's f first meets g at x≈1.577 (rounds to 2), matching its own f(1.5)=61.65 (stated f(1.5)=12.15)."
+  }
+]
