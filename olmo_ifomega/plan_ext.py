@@ -7,8 +7,8 @@ excluded (contaminated) prompts are not extended; --tasks restricts the tasks (t
             chunk in which its success count reaches 2 (IF strict, OMEGA doubly; sample.py --stop_after 2 --inflight 1)
   E1_s2300  s2300 on reverse candidates, up to 256 (8 fixed + 5 x 48 + 8), same rule
 Writes pod/olmo_ifomega/jobs/<job>.spec (runq.sh format), olmo_ifomega/plan/<job>.pids (pid:n) and
-olmo_ifomega/plan/ext1.json. Usage: plan_ext.py [--tasks ifbench,ifeval,omega_in,omega_out] [--seed_dpo 4001]
-[--seed_rl 4002] [--suffix ""]
+olmo_ifomega/plan/ext1<suffix>.json. Usage: plan_ext.py [--tasks ifbench,ifeval,omega_in,omega_out] [--seed_dpo 4001]
+[--seed_rl 4002] [--suffix ""] [--kinds reach,reverse] [--skip plan/a.json,...] (prompts planned there are left out)
 """
 import argparse
 import csv
@@ -32,12 +32,19 @@ def main():
     ap.add_argument("--seed_dpo", type=int, default=4001)
     ap.add_argument("--seed_rl", type=int, default=4002)
     ap.add_argument("--suffix", default="")
+    ap.add_argument("--kinds", default="reach,reverse")
+    ap.add_argument("--skip", default="", help="comma-separated plan/*.json whose planned prompts are left out")
     a = ap.parse_args()
+    skip = set()
+    for f in filter(None, a.skip.split(",")):
+        for pn in json.load(open(f))["jobs"].values():
+            skip |= set(pn)
     tasks = a.tasks.split(",")
     res = {(r["model"], r["pid"]): r for r in csv.DictReader(open(O / "results.csv"))}
     cand = [c for c in csv.DictReader(open(O / "candidates_fixed.csv")) if c["task"] in tasks]
-    reach = sorted({c["pid"] for c in cand if c["kind"] == "reach" and not c["excluded"]})
-    rev = sorted({c["pid"] for c in cand if c["kind"] == "reverse" and not c["excluded"]})
+    kinds = a.kinds.split(",")
+    reach = sorted({c["pid"] for c in cand if c["kind"] == "reach" and not c["excluded"] and "reach" in kinds} - skip)
+    rev = sorted({c["pid"] for c in cand if c["kind"] == "reverse" and not c["excluded"] and "reverse" in kinds} - skip)
     plan = {"tasks": tasks, "reach": reach, "reverse": rev,
             "excluded_candidates": sorted({c["pid"] for c in cand if c["excluded"]}),
             "challengers": {c["pid"]: c["challengers"] for c in cand if c["kind"] == "reach" and not c["excluded"]},
