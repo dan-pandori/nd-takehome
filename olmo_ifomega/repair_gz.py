@@ -31,21 +31,21 @@ def members(raw):
         except zlib.error:
             # broken member: keep what decompresses before the cut, then resume at the next member that decodes
             d2 = zlib.decompressobj(wbits=31)
-            good = b""
+            good = []  # chunks (joined once: += on a growing bytes object is quadratic)
             step = 1 << 16
             for k in range(pos, len(raw), step):
                 saved = d2.copy()
                 try:
-                    good += d2.decompress(raw[k:k + step])
+                    good.append(d2.decompress(raw[k:k + step]))
                 except zlib.error:
                     d2 = saved  # re-feed the failing block byte by byte: keep every byte decoded before the cut
                     for b in range(k, min(k + step, len(raw))):
                         try:
-                            good += d2.decompress(raw[b:b + 1])
+                            good.append(d2.decompress(raw[b:b + 1]))
                         except zlib.error:
                             break
                     break
-            out.append(good)
+            out.append(b"".join(good))
             nxt = pos + 1
             while True:
                 nxt = raw.find(b"\x1f\x8b\x08", nxt)

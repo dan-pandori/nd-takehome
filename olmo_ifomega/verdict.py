@@ -6,7 +6,8 @@ sound). Hand grades count only hand-checked samples; unchecked credited samples 
 prompt became a candidate (phases ext / confirm). Confirmed (model, prompt, G) = >= 2 G-successes within the first 256
 draws, >= 1 of them fresh. Reach prompt (G): s2300 confirmed and dpo has no G-success within 256 on a reach candidate.
 A candidate is resolved for dpo if dpo is confirmed under G, dissolved if no RL checkpoint is confirmed under G within
-256. Verdict per task: "reach" if >= 3 reach prompts (non-excluded); "no reach at 256" if every reach candidate is
+256. A grade's candidates are the prompts that are candidates under that grade (candidates_fixed.csv `grade`; hand:
+under any grade). Verdict per task: "reach" if >= 3 reach prompts (non-excluded); "no reach at 256" if every reach candidate is
 resolved or dissolved; else "inconclusive". Reverse prompt (G): dpo confirmed and s2300 has no G-success within 256.
 Inputs: artifacts/olmo_ifomega/graded/*.jsonl via olmo_ifomega/jobs.csv, candidates_fixed.csv, handcheck.csv.
 Outputs: olmo_ifomega/candidates.csv (one row per candidate x model), olmo_ifomega/verdict.csv (task x grade).
@@ -30,10 +31,11 @@ def main():
     hp = O / "handcheck.csv"
     hand = {(r["job"], r["pid"], r["chunk"], r["i"]): r for r in csv.DictReader(open(hp))} if hp.exists() else {}
     cand = list(csv.DictReader(open(O / "candidates_fixed.csv")))
-    kinds, challengers = {}, {}
+    kinds, challengers, cgrades = {}, {}, defaultdict(set)
     for c in cand:
         if not c["excluded"]:
             kinds.setdefault(c["pid"], set()).add(c["kind"])
+            cgrades[(c["pid"], c["kind"])].add(c["grade"])
             if c["kind"] == "reach":
                 challengers.setdefault(c["pid"], {"s2300"}).update(c["challengers"].split())
     draws = defaultdict(list)
@@ -92,24 +94,32 @@ def main():
             w = csv.DictWriter(f, fieldnames=keys)
             w.writeheader()
             w.writerows(rows)
+    ran = {probs[r["pid"]]["task"] for r in csv.DictReader(open(O / "results.csv"))
+           if r["model"] == "dpo" and r["n_fixed"] and int(r["n_fixed"]) > 0}
     out = []
     for task, grades in GRADES.items():
         reach = sorted(p for p in kinds if "reach" in kinds[p] and probs[p]["task"] == task)
         rev = sorted(p for p in kinds if "reverse" in kinds[p] and probs[p]["task"] == task)
         for g in grades:
+            # a grade's verdict counts that grade's candidates (OMEGA: a prompt can be a candidate under omega and not
+            # under rl, e.g. an rl credit on a dpo response cut at the token cap); hand counts every candidate
+            reach_g = [p for p in reach if g == "hand" or g in cgrades[(p, "reach")]]
+            rev_g = [p for p in rev if g == "hand" or g in cgrades[(p, "reverse")]]
+
             def ok(pid, m, what):
                 r = status.get((pid, m, g))
                 return bool(r and (r[f"confirmed_{g}"] if what == "conf" else r[f"succ_{g}"] > 0))
-            reach_by = {m: [p for p in reach if ok(p, m, "conf") and not ok(p, "dpo", "succ")] for m in MODELS[1:]}
-            resolved = [p for p in reach if ok(p, "dpo", "conf")]
+            reach_by = {m: [p for p in reach_g if ok(p, m, "conf") and not ok(p, "dpo", "succ")] for m in MODELS[1:]}
+            resolved = [p for p in reach_g if ok(p, "dpo", "conf")]
             # dissolved: every challenger (s2300 and each RL checkpoint with a fixed-phase success) drew 256 without
             # confirming; a challenger confirmation cut short (budget) leaves the candidate open
-            dissolved = [p for p in reach if p not in resolved and not any(ok(p, m, "conf") for m in MODELS[1:])
+            dissolved = [p for p in reach_g if p not in resolved and not any(ok(p, m, "conf") for m in MODELS[1:])
                          and all(len(draws.get((m, p), [])) >= K for m in challengers.get(p, {"s2300"}))]
-            open_ = [p for p in reach if p not in resolved and p not in dissolved]
-            verdict = ("reach" if len(reach_by["s2300"]) >= 3 else "no reach at 256" if not open_ else "inconclusive")
-            reverse = [p for p in rev if ok(p, "dpo", "conf") and not ok(p, "s2300", "succ")]
-            out.append({"task": task, "grade": g, "n_reach_candidates": len(reach), "n_reverse_candidates": len(rev),
+            open_ = [p for p in reach_g if p not in resolved and p not in dissolved]
+            verdict = ("not run" if task not in ran else "reach" if len(reach_by["s2300"]) >= 3
+                       else "no reach at 256" if not open_ else "inconclusive")
+            reverse = [p for p in rev_g if ok(p, "dpo", "conf") and not ok(p, "s2300", "succ")]
+            out.append({"task": task, "grade": g, "n_reach_candidates": len(reach_g), "n_reverse_candidates": len(rev_g),
                         "n_dpo_resolved": len(resolved), "n_dissolved": len(dissolved), "n_open": len(open_),
                         **{f"n_reach_{m}": len(v) for m, v in reach_by.items()},
                         "n_reverse": len(reverse), "verdict": verdict,

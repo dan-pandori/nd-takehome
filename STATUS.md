@@ -330,3 +330,7 @@ OLMO-THINK32B DONE 2026-11-04T09:21:59Z
   candidates, 7 of them problems where every DPO sample hits the 32,768-token cap. Extending them all to 256 costs more
   than the $35 balance floor allows (≈ $40 left after IFBench): **question in QUESTIONS.md** (top up ≈ $70?); default:
   seeded-order partial extension within ≈ $215, step_0750 on test_out and IFEval extension cut. Spend $135.
+- 2026-11-05 11:40 UTC  OMEGA test_out fixed phase complete: DPO pass@1 0.27 vs step_2300 0.62; 13 reach candidates
+  (8 in geometry_perpendicular_intersection, where DPO almost always hits the token cap), 1 reverse. Six candidates are
+  being extended on two pods; more start only while spend + expected remaining stays ≤ $215 (no answer yet on the
+  top-up question). IFBench DPO extension runs to ≈ 16:15. Spend $153.

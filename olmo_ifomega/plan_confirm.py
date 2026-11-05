@@ -6,8 +6,10 @@ is fresh, capped at 256 draws in all for that model and prompt. sample.py's sequ
 before the job: prior = min(successes drawn so far, 1), so the job stops at its first fresh success when the model
 already has one, and at its second when it has none. Hand-gated afterwards like the defenders (a non-genuine success
 sends the prompt to a continuation job). Draws so far come from results.csv's `attempts` column.
-Usage: plan_confirm.py <job> <model> <seed> <pid> [<pid> ...]   -> pod/olmo_ifomega/jobs/<job>.spec,
+Usage: plan_confirm.py [--inflight N] <job> <model> <seed> <pid> [<pid> ...]   -> pod/olmo_ifomega/jobs/<job>.spec,
        olmo_ifomega/plan/<job>.pids, olmo_ifomega/plan/<job>.prior
+--inflight (default 3) only changes the overshoot: with many prompts in one job the engine is full at 1 in flight, so
+the batch confirmations use 1 (fewer draws past the stopping point, same rule).
 """
 import csv
 import json
@@ -21,7 +23,10 @@ K = 256
 
 
 def main():
-    job, model, seed, pids = sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.argv[4:]
+    argv, inflight = sys.argv[1:], 3
+    if argv[0] == "--inflight":
+        inflight, argv = int(argv[1]), argv[2:]
+    job, model, seed, pids = argv[0], argv[1], int(argv[2]), argv[3:]
     probs = {r["pid"]: r for r in map(json.loads, open(O / "problems.jsonl"))}
     res = {(r["model"], r["pid"]): r for r in csv.DictReader(open(O / "results.csv"))}
     pn, prior = [], []
@@ -39,7 +44,7 @@ def main():
     (O / "plan" / f"{job}.prior").write_text(" ".join(prior) + "\n")
     repo, rev = REPO[model]
     spec = (f"{model} {repo} {rev}|bash pod/olmo_ifomega/job.sh {job} {model} {repo} {rev} 0 @olmo_ifomega/plan/{job}.pids "
-            f"{seed} 16 0 --stop_after 2 --inflight 3 --prior @olmo_ifomega/plan/{job}.prior")
+            f"{seed} 16 0 --stop_after 2 --inflight {inflight} --prior @olmo_ifomega/plan/{job}.prior")
     Path(f"pod/olmo_ifomega/jobs/{job}.spec").write_text(spec + "\n")
     print(spec)
     print("pids:", " ".join(pn))
