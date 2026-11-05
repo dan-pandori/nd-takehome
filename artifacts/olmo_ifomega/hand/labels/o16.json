@@ -1,0 +1,16 @@
+[
+  {
+    "item": "h8d57e3",
+    "label": "sound",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "Derives slope = -cot((i+j-2)*18 deg), so chords are perpendicular iff X=i+j-2 differ by 5 mod 10; with X in 2..16 this becomes |dX|=5, giving 14 candidates. I confirmed these are exactly the 14 perpendicular pairs. It then checks every one: 5 meet at a shared vertex (3-1/3-6, 2-4/2-9, 2-5/2-10, 2-9/7-9, 2-10/10-7; dot product ~0 or horizontal/vertical), and 9 are solved parametrically (e.g. 2-4/3-8 t=0.5, s=0.0955; 9-4/8-10 s=0.5, t=0.096), all matching my values. One addition slip (2-9/10-6 '5.1458u', should be 6.1458) gives u~0.228 instead of 0.191, which is harmless because both parameters stay in [0,1]. The write-up states 14."
+  },
+  {
+    "item": "hc6bcea",
+    "label": "flawed",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "The slope classes are right once it fixes its own slip (2-4 and 7-9 at -0.3255, corrected to -tan18 deg, the same as 10-6 and 1-5), and the perpendicular count 3+8+1+2=14 matches mine. But it computes the intersection for only 10 of the 14 pairs. For 2-9/1-5, 3-8/10-6, 3-8/2-4 and 3-8/1-5 it writes 'I'll assume most of these cross inside', 'Assume they cross inside', 'Yes, because lines perpendicular' and 'Should cross', right after warning that segments may not meet. So the write-up's 'All computed pairs were verified' is false. I checked that all four do cross inside, so the unproved claim happens to hold."
+  }
+]
