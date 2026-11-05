@@ -165,12 +165,14 @@ def main():
     for r in old:
         cnt[(r["pid"], r["chunk"])] = cnt.get((r["pid"], r["chunk"]), 0) + 1
     partial = {k for k, v in cnt.items() if k in size and v != size[k]}
-    if partial:
+    if old:
+        # always rewrite on resume: a killed job leaves a truncated gzip member, and appending a new member after it
+        # makes the file unreadable past the junction (olmo-ifomega 2026-11-05; repaired by repair_gz.py)
         old = [r for r in old if (r["pid"], r["chunk"]) not in partial]
         with gzip.open(args.out, "wt") as g0:
             for r in old:
                 g0.write(json.dumps(r) + "\n")
-        print(f"dropped {len(partial)} partial chunks before resuming", flush=True)
+        print(f"rewrote {len(old)} rows, dropped {len(partial)} partial chunks before resuming", flush=True)
     done = {(r["pid"], r["chunk"]) for r in old}
     reqs = []
     for pid, n in want.items():
