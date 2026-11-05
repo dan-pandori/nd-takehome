@@ -1,0 +1,16 @@
+[
+ {
+  "item": "h3aa0ea",
+  "label": "sound",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Parses f correctly as 5((cosA+1)^2+3(cosA+1)+2)+2, with A=3pi(2|x+2|-3)+3, and g with E=(2x-5)/(6x-10). Shows f is in [12,62] and g>=12 only when E>=1.2655 or E<=-2.7655, i.e. near the asymptote, x in [1.37,5/3) or (5/3,1.756]. Monotonicity of E is left implicit, but it derives the inverse x=(10y-5)/(6y-2) and also spot-checks points further left. Brackets the root: f-g is positive at 1.37, 1.4, 1.45, 1.46 and negative at 1.47, 1.48, 1.5, so x~1.467, which rounds to 1. I checked: true first root 1.4684 (next 1.7124); f-g>2.69 on [-10,1.3687] and strictly decreasing up to the root; the signs at 1.46 and 1.47 are correct. Minor slips (wrong f minimum at 1.134; write-up misquotes the x=1.4 values) are not decisive."
+ },
+ {
+  "item": "hc90d52",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Misparses f: reads '1cos(3pi(2|x+2|-3)+3)+1' as '1-cos(3pi(2|x+2|-3))', dropping the +3, then analyses f=5cos^2(6pi x)+25cos(6pi x)+32, which is up to 3.8 away from the true f. The sign flip (a phase of pi) and the dropped phase 3 nearly cancel because 3~pi. So its root, ~1.462 (I get 1.4627 for its f), lands next to the true 1.4684 and still rounds to 1. Late on it asks 'my initial misparse?' but keeps the parse. The write-up states f with the +3 and claims cos(3pi(2|x+2|-3)+3)=-cos(6pi x), which is false (max error 1.99); that stated f has its first root at 1.577, which rounds to 2. The g>=12 region argument and the bracketing are otherwise fine."
+ }
+]
