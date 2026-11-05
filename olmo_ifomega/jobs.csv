@@ -9,10 +9,12 @@ F_s2300_oo,s2300,fixed,3014,1,problems.jsonl,8,pids_omega_out.txt,oif-c,fixed ph
 F_dpo_ife,dpo,fixed,3021,1,problems.jsonl,16,pids_ifeval.txt,oif-d,fixed phase IFEval (added: Dan 21:22)
 F_s0750_ife,s0750,fixed,3023,1,problems.jsonl,8,pids_ifeval.txt,oif-c,fixed phase IFEval (added: Dan 21:22)
 F_s2300_ife,s2300,fixed,3024,1,problems.jsonl,8,pids_ifeval.txt,oif-c,fixed phase IFEval (added: Dan 21:22)
-F_s0750_oo,s0750,fixed,3013,1,problems.jsonl,8,pids_omega_out.txt,oif-d,fixed phase OMEGA test_out (added: Dan 21:22)
+F_s0750_oo,s0750,void,3013,1,problems.jsonl,8,pids_omega_out.txt,-,CUT (budget: the test_out extension, Dan's #1, takes what the balance floor leaves; never run)
 E1_dpo_ifa,dpo,ext,4001,2,problems.jsonl,240,plan/E1_dpo_ifa.pids,oif-d,IFBench defender extension on the 90 reach candidates from dpo vs s2300 (stop at 2 strict successes)
 E1_s2300_ifa,s2300,ext,4002,2,problems.jsonl,248,plan/E1_s2300_ifa.pids,oif-c,IFBench defender extension on the 8 reverse candidates
 E1_dpo_if,dpo,ext,4011,2,problems.jsonl,240,plan/E1_dpo_if.pids,oif-c,defender extension: IFBench reach candidates whose only challenger is s0750 (4); the IFEval part split off to E1_dpo_ifev (held: cut first by Dan's order if the budget needs it)
 C1_dpo_rev,dpo,confirm,5001,3,problems.jsonl,240,plan/C1_dpo_rev.pids,oif-c,challenger confirmation of dpo on IFBench reverse candidates not hand-resolved for s2300 (275 / 88 / 83 unresolved at 256; 180 whose s2300 successes were gamed)
 E2_s2300_rev,s2300,ext,5102,3,problems.jsonl,200,plan/E2_s2300_rev.pids,oif-c,hand-gate continuation of the s2300 defender on ifbench_180 (its 2 strict successes were gamed); stops after 2 more strict successes
 E1_dpo_oo1,dpo,ext,4101,2,problems.jsonl,240,plan/E1_dpo_oo1.pids,oif-c,test_out defender extension: the first 2 candidates of the seeded order (stop at 2 doubly successes)
+C2_dpo_rev,dpo,confirm,5201,4,problems.jsonl,192,plan/C2_dpo_rev.pids,oif-d,hand-gate continuation of the dpo challenger on ifbench_88 (its 2 strict successes were gamed)
+E2_dpo_ifa,dpo,ext,5202,3,problems.jsonl,192,plan/E2_dpo_ifa.pids,oif-d,hand-gate continuation of the dpo defender on ifbench_47 (0 genuine of 3) / 125 / 137 (1 genuine each)
