@@ -20,7 +20,8 @@ complete, so a killed job resumes where it stopped. Output rows: pid, model, rev
 Sequential mode (--stop_after K): chunks of a problem run in index order with at most --inflight in flight; after
 each completed chunk the job counts successes (olmo_ifomega/grade.success) over the completed
 prefix of chunks (index order; plus --prior counts) and submits no further chunk for that problem once the count is
->= K. Chunks already in flight finish and are kept (reported as overshoot by the analysis).
+>= K. Chunks already in flight finish and are kept (reported as overshoot by the analysis). --stop_file: pids listed
+there get no further chunks (a budget stop that keeps the job and its in-flight chunks).
 
 Usage: sample.py --model <dir> --name <label> --rev <revision> --problems <jsonl> [--pids a,b|a:n,b:n|@file] --n 8
                  --chunk 8 --seed S --job J --out <samples.jsonl.gz> [--meta <json>] [--tp 4]
@@ -33,6 +34,7 @@ import json
 import os
 import sys
 import time
+from pathlib import Path
 
 import numpy as np
 
@@ -146,6 +148,9 @@ def main():
                     help="sequential mode: stop a problem once its success count reaches this (0 = off)")
     ap.add_argument("--inflight", type=int, default=1, help="sequential mode: chunks in flight per problem")
     ap.add_argument("--prior", default=None, help="sequential mode: pid:count already credited before this job")
+    ap.add_argument("--stop_file", default=None,
+                    help="sequential mode: pids listed in this file (re-read at every chunk completion) get no further "
+                         "chunks; chunks in flight finish (budget stops without killing the job)")
     args = ap.parse_args()
 
     from transformers import AutoTokenizer
@@ -231,8 +236,17 @@ def main():
         eng.add_request(f"{pid}|{c}", {"prompt_token_ids": ids}, sp)
         inflight[pid] = inflight.get(pid, 0) + 1
 
+    def stopped(pid):
+        if not args.stop_file:
+            return False
+        try:
+            return pid in Path(args.stop_file).read_text().split()
+        except OSError:
+            return False
+
     def top_up(pid):
-        while pending.get(pid) and inflight.get(pid, 0) < args.inflight and credited(pid) < args.stop_after:
+        while (pending.get(pid) and inflight.get(pid, 0) < args.inflight and credited(pid) < args.stop_after
+               and not stopped(pid)):
             submit(pending[pid].pop(0))
 
     if seq:
@@ -282,7 +296,7 @@ def main():
             "t_load_s": round(t_load, 1), "t_gen_s": round(t_gen, 1), "tok_per_s": round(n_tok / max(t_gen, 1e-9), 1),
             "max_tokens": args.max_tokens, "temperature": TEMPERATURE, "top_p": TOP_P, "tp": args.tp,
             "stop_after": args.stop_after, "inflight": args.inflight, "chunk": args.chunk, "chunk0": args.chunk0,
-            "problems": args.problems, "pids": args.pids, "prior": args.prior,
+            "problems": args.problems, "pids": args.pids, "prior": args.prior, "stop_file": args.stop_file,
             "template_sha256": hashlib.sha256(TEMPLATE.encode()).hexdigest(),
             "vllm": vllm.__version__, "torch": torch.__version__,
             "gpus": [torch.cuda.get_device_name(i) for i in range(torch.cuda.device_count())],
