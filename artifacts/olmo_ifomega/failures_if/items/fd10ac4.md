@@ -1,0 +1,13 @@
+# Item fd10ac4
+
+## Prompt (sent to the model verbatim)
+
+Saturn has clouds of ammonia ice. Could rogue gas giants have frozen clouds of corundum? In your response, the last word of each sentence must become the first word of the next sentence.
+
+## Constraints (official checker's verdict on this answer)
+
+- `words:last_first` {}: checker says NOT followed   <- binding constraint
+
+## Answer (the text after the model's last </think>; 16278 characters of thinking not shown; 3749 tokens in all, finish=stop)
+
+Saturn hosts clouds formed by frozen ammonia. **Ammonia** freezes in its upper atmosphere at specific temperatures and pressures. **Pressures** in Saturn’s deeper layers stay warmer, allowing liquid ammonia beneath the cloud decks. **Decks** consisting of icy particles reflect sunlight, giving the planet its distinctive appearance. **Appearance** aside, rogue gas giants lack a star’s heat and rely on residual energy for atmospheric dynamics. **Dynamics** involving internal heat and gravitational compression might sustain limited cloud formation. **Formation** requires precise conditions, such as those allowing rare compounds to solidify. **Solidify** processes could involve metals and oxides if present in sufficient abundance. **Abundance** of elements like aluminum and oxygen might permit reactions forming corundum (Al₂O₃) under extreme pressures. **Pressures** in deep atmospheric regions could mimic the high-stress environments where corundum naturally crystallizes on Earth. **Crystallize** in such depths might occur despite lower temperatures due to compression-induced heat. **Heat** from residual decay and differentiation sustains pressure gradients within cooling rogue giants. **Giants** older than their systems would grow increasingly frigid, freezing out compounds once held in vapor form. **Vapor** phases of aluminum and oxygen could combine into molten droplets before solidifying into corundum flakes. **Flakes** of frozen corundum might reside in zones where upward convection or storms churn the atmosphere. **Atmosphere** studies of rogue planets could reveal spectral signatures from such exotic particles. **Particles** suspended in high-pressure layers might scatter light uniquely, detectable with advanced telescopes. **Telescopes** observing gravitational microlensing events or direct imaging might identify corundum clouds as anomalies in data. **Data** supporting this hypothesis would revolutionize our view of planetary chemistry in cold, untethered worlds. **Worlds** drifting in interstellar space could harbor gems from physics rather than Earth-like geology. **Geology** here transcends terrestrial boundaries, merging cosmochemistry with extreme thermodynamic scenarios.
