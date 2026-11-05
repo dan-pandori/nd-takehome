@@ -10,7 +10,14 @@ prep_if <outdir>   IFBench: the reach prompts where dpo has 0 strict successes w
                    <outdir>/batches.txt. Responses cut at the cap are class (f) mechanically and get no item.
 table_if <outdir>  merges <outdir>/labels/*.json and <outdir>/confirm.csv (item,class,note) with the key into
                    olmo_ifomega/failures_if.csv and prints shares per model, family and instruction id.
-Usage: failures.py prep_if|table_if <outdir>
+prep_omega <outdir> OMEGA test_out: every dpo failure (not doubly credited) within 256 on the reach candidates, classified
+                   mechanically as "cut" (finish=length: cut at the token cap, no stated answer) or "finished"; a seeded
+                   sample of up to 4 finished failures per candidate (across its chunks) gets a blinded item (problem,
+                   official answer, full response) for olmo_ifomega/failure_rubric_omega.md; key in <outdir>/key.csv,
+                   per-candidate counts in <outdir>/counts.csv.
+table_omega <outdir> merges the readers' labels (and <outdir>/confirm.csv) into olmo_ifomega/failures_omega.csv and
+                   prints shares per family (geometry_perpendicular_intersection separate).
+Usage: failures.py prep_if|table_if|prep_omega|table_omega <outdir>
 """
 import csv
 import gzip
@@ -158,5 +165,103 @@ def table_if(outdir):
                 print(f"  {g}={v:10s} n={n:3d} " + " ".join(f"{k}:{cc[k]}" for k in "abcdef"))
 
 
+def prep_omega(outdir):
+    out = Path(outdir)
+    (out / "items").mkdir(parents=True, exist_ok=True)
+    probs = {r["pid"]: r for r in map(json.loads, open(O / "problems.jsonl"))}
+    cand = sorted({c["pid"] for c in csv.DictReader(open(O / "candidates_fixed.csv"))
+                   if c["task"] == "omega_out" and c["kind"] == "reach" and not c["excluded"]})
+    draws = defaultdict(list)
+    for j in jobs_of("dpo"):
+        for r in graded(j["job"]):
+            if r["pid"] in cand:
+                draws[r["pid"]].append((int(j["order"]), r["chunk"], r["i"], j["job"], r))
+    rng = random.Random(SEED + 1)
+    counts, picks = [], []
+    for p in cand:
+        ds = sorted(draws[p], key=lambda t: t[:3])[:K]
+        fails = [t for t in ds if not t[4]["doubly"]]
+        cut = [t for t in fails if t[4]["finish"] == "length"]
+        fin = [t for t in fails if t[4]["finish"] != "length"]
+        counts.append({"pid": p, "family": probs[p]["family"], "draws": len(ds), "failures": len(fails),
+                       "cut": len(cut), "finished": len(fin)})
+        by_chunk = defaultdict(list)
+        for t in fin:
+            by_chunk[(t[3], t[1])].append(t)
+        chunks = sorted(by_chunk)
+        chosen = []
+        for c in rng.sample(chunks, min(4, len(chunks))):
+            chosen.append(rng.choice(by_chunk[c]))
+        rest = [t for t in fin if t not in chosen]
+        chosen += rng.sample(rest, min(4 - len(chosen), len(rest))) if len(chosen) < 4 else []
+        picks += [(p, t) for t in chosen]
+    want = {(t[3], p, t[1], t[2]) for p, t in picks}
+    texts = {}
+    for job in sorted({k[0] for k in want}):
+        with gzip.open(A / "samples" / f"{job}.jsonl.gz", "rt") as f:
+            for ln in f:
+                r = json.loads(ln)
+                k = (job, r["pid"], r["chunk"], r["i"])
+                if k in want:
+                    texts[k] = r["text"]
+    rows, items, used = [], [], set()
+    for p, t in picks:
+        item = f"g{rng.randrange(16**6):06x}"
+        while item in used:
+            item = f"g{rng.randrange(16**6):06x}"
+        used.add(item)
+        r = t[4]
+        body = (f"# Item {item}\n\n## Problem\n\n{probs[p]['prompt']}\n\n## Official answer\n\n{probs[p]['answer']}\n\n"
+                f"## Response ({r['n_tok']} tokens, finish={r['finish']}; graded wrong)\n\n{texts[(t[3], p, r['chunk'], r['i'])]}\n")
+        (out / "items" / f"{item}.md").write_text(body)
+        rows.append({"item": item, "job": t[3], "pid": p, "family": probs[p]["family"], "chunk": r["chunk"], "i": r["i"],
+                     "n_tok": r["n_tok"], "stated": r.get("omega_ans", "")})
+        items.append(item)
+    for name, data in (("key.csv", rows), ("counts.csv", counts)):
+        with open(out / name, "w", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=list(data[0].keys()))
+            w.writeheader()
+            w.writerows(data)
+    rng.shuffle(items)
+    (out / "batches.txt").write_text("\n".join(" ".join(items[n:n + 4]) for n in range(0, len(items), 4)) + "\n")
+    for c in counts:
+        print(c)
+    print(f"{len(items)} finished-failure items")
+
+
+def table_omega(outdir):
+    out = Path(outdir)
+    key = list(csv.DictReader(open(out / "key.csv")))
+    counts = list(csv.DictReader(open(out / "counts.csv")))
+    lab = {}
+    for f in sorted((out / "labels").glob("*.json")):
+        for x in json.load(open(f)):
+            lab[x["item"]] = x
+    conf = {r["item"]: r for r in csv.DictReader(open(out / "confirm.csv"))} if (out / "confirm.csv").exists() else {}
+    rows = []
+    for k in key:
+        x = lab.get(k["item"], {})
+        rows.append({**k, "reader_class": x.get("class", ""), "class": conf.get(k["item"], {}).get("class") or x.get("class", ""),
+                     "stated_answer": x.get("stated_answer", ""), "evidence": x.get("evidence", "")})
+    with open(O / "failures_omega.csv", "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
+        w.writeheader()
+        w.writerows(rows)
+    geo = "geometry_perpendicular_intersection"
+    for grp in (geo, "other"):
+        cs = [c for c in counts if (c["family"] == geo) == (grp == geo)]
+        fails = sum(int(c["failures"]) for c in cs); cut = sum(int(c["cut"]) for c in cs)
+        rs = [r for r in rows if (r["family"] == geo) == (grp == geo) and r["class"]]
+        cc = Counter(r["class"] for r in rs)
+        print(f"{grp}: candidates {len(cs)} failures {fails} cut {cut} ({cut / max(fails, 1):.0%}) finished {fails - cut}; "
+              f"sampled finished {len(rs)}: " + " ".join(f"{k} {cc[k]}" for k in ("misread", "method", "slip", "unclear")))
+    for fam in sorted({c["family"] for c in counts}):
+        cs = [c for c in counts if c["family"] == fam]
+        rs = [r for r in rows if r["family"] == fam and r["class"]]
+        cc = Counter(r["class"] for r in rs)
+        print(f"  {fam}: failures {sum(int(c['failures']) for c in cs)} cut {sum(int(c['cut']) for c in cs)} | "
+              + " ".join(f"{k} {cc[k]}" for k in ("misread", "method", "slip", "unclear")))
+
+
 if __name__ == "__main__":
-    {"prep_if": prep_if, "table_if": table_if}[sys.argv[1]](sys.argv[2])
+    {"prep_if": prep_if, "table_if": table_if, "prep_omega": prep_omega, "table_omega": table_omega}[sys.argv[1]](sys.argv[2])
