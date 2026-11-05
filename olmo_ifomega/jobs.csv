@@ -9,7 +9,7 @@ F_s2300_oo,s2300,fixed,3014,1,problems.jsonl,8,pids_omega_out.txt,oif-c,fixed ph
 F_dpo_ife,dpo,fixed,3021,1,problems.jsonl,16,pids_ifeval.txt,oif-d,fixed phase IFEval (added: Dan 21:22)
 F_s0750_ife,s0750,fixed,3023,1,problems.jsonl,8,pids_ifeval.txt,oif-c,fixed phase IFEval (added: Dan 21:22)
 F_s2300_ife,s2300,fixed,3024,1,problems.jsonl,8,pids_ifeval.txt,oif-c,fixed phase IFEval (added: Dan 21:22)
-F_s0750_oo,s0750,void,3013,1,problems.jsonl,8,pids_omega_out.txt,-,CUT (budget: the test_out extension, Dan's #1, takes what the balance floor leaves; never run)
+F_s0750_oo,s0750,fixed,3013,1,problems.jsonl,8,pids_omega_out.txt,-,fixed phase OMEGA test_out (Dan's addition #2; cut 10:25, restored after his 15:44 grant)
 E1_dpo_ifa,dpo,ext,4001,2,problems.jsonl,240,plan/E1_dpo_ifa.pids,oif-d,IFBench defender extension on the 90 reach candidates from dpo vs s2300 (stop at 2 strict successes)
 E1_s2300_ifa,s2300,ext,4002,2,problems.jsonl,248,plan/E1_s2300_ifa.pids,oif-c,IFBench defender extension on the 8 reverse candidates
 E1_dpo_if,dpo,ext,4011,2,problems.jsonl,240,plan/E1_dpo_if.pids,oif-c,defender extension: IFBench reach candidates whose only challenger is s0750 (4); the IFEval part split off to E1_dpo_ifev (held: cut first by Dan's order if the budget needs it)
@@ -24,3 +24,6 @@ E2_dpo_oo,dpo,ext,5301,3,problems.jsonl,144,plan/E2_dpo_oo.pids,oif-e,hand-gate 
 C1_s2300_oo,s2300,confirm,5401,3,problems.jsonl,248,plan/C1_s2300_oo.pids,oif-e,challenger confirmation of s2300 on test_out perp_055 (dpo 0 doubly at 256); chunks of 16, 2 in flight, until 1 fresh doubly (prior 1)
 C1_s2300_ifb,s2300,confirm,5501,4,problems.jsonl,248,plan/C1_s2300_ifb.pids,oif-e,challenger confirmation of s2300 on the 61 IFBench reach candidates dpo left unresolved at 256 (58 with a fixed s2300 success: stop at 1 fresh strict; ifbench_19 / 280 / 287: 2 fresh); chunks of 16, 1 in flight
 E3_dpo_oo,dpo,ext,5302,4,problems.jsonl,96,plan/E3_dpo_oo.pids,oif-d,second hand-gate continuation of the dpo defender on test_out func_intersection_coords_011 (E2_dpo_oo's two doubly successes flawed; 1 sound so far); chunks of 48 until 1 more doubly success, to the 256 cap
+E1_dpo_oo4,dpo,ext,4104,3,problems.jsonl,240,plan/E1_dpo_oo4.pids,-,test_out defender extension after Dan's 15:44 grant: candidate #8 resumed (perp_068, stopped at 64 draws by the budget rule) and #9-#10 of the seeded order
+E1_dpo_oo5,dpo,ext,4105,3,problems.jsonl,240,plan/E1_dpo_oo5.pids,-,test_out defender extension after Dan's 15:44 grant: candidates #11-#13 of the seeded order
+E1_s2300_oo,s2300,ext,4106,2,problems.jsonl,248,plan/E1_s2300_oo.pids,-,test_out reverse candidate: s2300 defender extension on arithmetic_list_prime_factors_045 (to 256, stop at 2 doubly)

@@ -334,3 +334,8 @@ OLMO-THINK32B DONE 2026-11-04T09:21:59Z
   (8 in geometry_perpendicular_intersection, where DPO almost always hits the token cap), 1 reverse. Six candidates are
   being extended on two pods; more start only while spend + expected remaining stays ≤ $215 (no answer yet on the
   top-up question). IFBench DPO extension runs to ≈ 16:15. Spend $153.
+- 2026-11-05 15:50 UTC  Dan raised the budget to $325 (15:44). Every OMEGA test_out candidate is now being extended to
+  256 (six more jobs queued on the three pods), then step_0750 on test_out and the IFEval extension. IFBench: DPO
+  extension done (32 of 90 resolved, 47 with no success in 256); step_2300 confirmations running. Found a wrong
+  official answer on one test_out geometry problem (15, not 17); reported both ways. Spend $198.5.
+

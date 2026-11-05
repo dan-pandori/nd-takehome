@@ -314,3 +314,13 @@ extended: Inconclusive 40 %, Reach 30 %, No reach 30 %.
    candidates; a candidate whose only fixed-phase solver was `s0750` can therefore not be dissolved and stays open
    unless `s2300` confirms or `dpo` resolves it. Batch confirmations run one chunk of 16 in flight per prompt (the rule
    is unchanged; less overshoot).
+10. **Dan's second grant** (2026-11-05 15:44 UTC, answering the 10:10 question): budget **$325**. Every `test_out`
+    reach candidate is extended to 256 as Part A pre-registered (item 7's partial default lapses; the stop of #8 is
+    lifted, its 64 draws kept), the reverse candidate too; problems where `dpo` never finishes inside the 32,768-token
+    cap are reported as **"reach at RL's token cap"**, with the number of its samples that hit the cap. Then, budget
+    permitting, `step_0750` on `test_out` (Part B addendum: 8 samples, seed 3013) and the IFEval extension.
+11. **Label error, `test_out` geometry_perpendicular_intersection_055** (found by the hand check, 15:30): the official
+    17 counts every perpendicular pair of drawn diagonals, but the problem asks for pairs meeting "within the polygon's
+    interior or on its boundary", which are 15. The pre-registered grades keep the official label (so its `omega` /
+    `rl` credits go to answers of 17, both hand-checked flawed); a sensitivity with the label corrected to 15 is
+    reported beside them. Every other `test_out` candidate's label was checked (brute force or closed form) and is right.
