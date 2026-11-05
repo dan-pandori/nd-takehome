@@ -1,0 +1,16 @@
+[
+  {
+    "item": "hf36de6",
+    "label": "sound",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "N=4: four roots mod 41 (3,14,27,38 via primitive root 6, exponent = 5 mod 10), each lifting uniquely since 4a^3 != 0 mod 41. All four lifts carried out explicitly: 27->847->26062, 3->905->46292, 14->834->42859, 38->776->22629; min 22629, N+M=22633. Brute force confirms exactly these four roots mod 41^3; I also checked the f(x0) values mod 41^3 (42025, 60516, 90774=21853, 16810) and the lift digits t (15, 27, 25, 13). Slips were self-corrected: term2 28535->28495 after the divisibility check failed; the inverse of 15 mod 41 was first taken as 8 (its mod-17 value), then recomputed as 11."
+  },
+  {
+    "item": "hcd9f44",
+    "label": "guess",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "N=4 sound (cyclic group of order 40*41^2 plus Hensel); mod-41^2 lifts 905/834/847/776 correct. Only 776->22629 (t=13) correctly lifted to 41^3. The 905 lift has an arithmetic error (60894-68921 written '-7,027', true -8027), giving 58059, not a root (true 46292). The 834 and 847 lifts are never computed ('需要计算但会很麻烦': tedious). Minimality is then guessed: 'time is short, I would hazard a guess that the minimal solution is 38 mod41 lifted', 'no confidence without confirming all four'. The write-up's 'lift the smallest solution mod 1681' rule is invalid (order is set by t). Brute force: 22629 is indeed the min (other lifts have t=25, 15, 27), so the guess happens to be right."
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "item": "h6cc380",
+    "label": "sound",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "N=4: the four roots mod 41 are 3,14,27,38 (primitive root 6, k=5 mod 10), and 4m^3 is nonzero mod 41, so each lifts uniquely. It does all four two-step Hensel lifts explicitly: mod 41^2 they are 905,834,847,776, with k=(m1^4+1)/41^2 mod 41 = 36,13,25,10 and t=27,25,15,13, giving 46292,42859,26062,22629. I re-checked every intermediate (a^4+1, linear and quadratic terms, k, t) in python, and brute force over [1,41^3] gives exactly {22629,26062,42859,46292}. The minimum is taken over the one solution in each residue class, so M=22629 and N+M=22633. The only slip is a harmless typo, '46692'."
+  },
+  {
+    "item": "h4d39b8",
+    "label": "flawed",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "N=4 is correct (cyclic group/Hensel), and the lifts 3->905->46292 and 38->776->22629 (k=10, 15t=-10, t=13) are correct. The 14-lift is wrong: it keeps 'first two terms' (drops 6a^2b^2p^2), claims 41*1926=79006, and reduces mod 41 instead of dividing by 41^2, giving 41178. That is not a solution; the true value is 42859. The 27-lift to 41^3 is never computed: 'say, 7 leading to ...12,614, which is less than 22k? ... without concrete calculation, I can't be sure', then 'safe to proceed with 22,629'. The write-up says the 27-lift is 'maybe around 9k'. The true 27-lift is 26062 > 22629, so the missing case happens not to matter."
+  }
+]
