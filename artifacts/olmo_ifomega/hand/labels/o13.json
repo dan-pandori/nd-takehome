@@ -1,0 +1,23 @@
+[
+ {
+  "item": "hadf10a",
+  "label": "sound",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Regular decagon assumed; all 18 slopes computed correctly (tan 54/36/72/18 deg classes, checked). Pairs with slope product ~ -1 give exactly 16 candidates (3x2+2x1+2x3+2x1). Each was then checked: 7 share a vertex, with dot products ~0 at V8 (twice), V9, V1, V10, V6, V4; 9 cross inside, with intersection points computed, e.g. (-0.595,-0.294) and (0.25,-0.77), all of which I confirmed lie on both chords. Two diagonal-index mix-ups mid-way were caught and corrected. Brute force agrees: 16 perpendicular pairs, all meeting (9 crossings + 7 at vertices). Slip: the write-up's split '6 vertex + 10 interior' is wrong (it should be 7+9; 10-8/8-5 at V8 was dropped and 8-1/6-8 was listed twice), but the total rests on the per-pair checks."
+ },
+ {
+  "item": "h43e498",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Trial division found nothing (281 never tried despite 'checked up to 1000'); Pollard-rho attempts failed. 487 surfaced by factoring a 'recalled' non-divisor 30681=3^2*7*487; then n mod 487=0 and n=487*1,515,433 were verified correctly. The response tested 1,515,433 only up to 47 (mod 29 and mod 47 slips), said 'suppose it's prime... Probably this is the case', and the write-up falsely claims testing up to sqrt~1,231. In fact 1,515,433=281*5393 (checked), so the stated factorization {487, 1,515,433} is wrong. 487 is still second-largest only because 281<487<5393. The answer depends on an unproved, false primality claim."
+ },
+ {
+  "item": "h3d715a",
+  "label": "sound",
+  "where": "final",
+  "final_states_other_answer": false,
+  "evidence": "Systematic trial division of every prime 7-277 (a few remainder slips, e.g. 139, 151, 173, none of them hiding a divisor; I checked that no prime <281 divides n) finds 281*2,626,391=n. Continued trial division of 2,626,391 through 479 finds no divisor (some remainder slips, none hiding a divisor), then 487*93=45,291 gives 487*5393=2,626,391. 5393 is tested against every prime <=73 (sqrt~73.4), all remainders correct, so it is prime. 281*487*5393 is multiplied out to 738,015,871. I confirmed the factorization and that 281, 487, 5393 are prime. The write-up states 487 as second-largest."
+ }
+]

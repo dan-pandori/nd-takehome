@@ -1,0 +1,16 @@
+[
+  {
+    "item": "h6a742e",
+    "label": "flawed",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "Finds 487 | N by division: 487x1,515,433 = 738,015,871, checked. It tried 487 after 'I recall ... 127 x 5803 x 487'. It then declares the cofactor prime: 'Thus I conclude 1,515,433 is prime. Hence the prime factors are 487 and 1,515,433'; the write-up says 'likely a prime number'. This is false: 1,515,433 = 281 x 5393. Its trial division on the cofactor jumped from 263 to 607, skipping 269-601 and so the real factor 281, and tested almost nothing in 769-1229. Some remainders are also wrong (mod 257, 661, 751). The true factorization is 281 x 487 x 5393, so 487 is right only because the missed factor 281 is below 487. Checked with python."
+  },
+  {
+    "item": "h606446",
+    "label": "sound",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "Finds 487 | N: N - 487x1,513,000 = 1,184,871 = 487x2,433, so N = 487x1,515,433 (checked). Then factors the cofactor: 1,515,433 - 281x5,390 = 843 = 281x3, so 1,515,433 = 281x5,393 (checked). Shows 5,393 prime by testing every prime up to 73 (sqrt 5393 is about 73.4; remainders checked, all nonzero); 281 and 487 are small primes. So 281 < 487 < 5,393 and the answer is 487. One slip goes unnoticed: the earlier test of 281 on N gave 'Remainder80' (281x92 written as 25,772, should be 25,852), so the write-up's 'not divisible by ... primes up to 307' is false. The final factorization does not use that claim."
+  }
+]
