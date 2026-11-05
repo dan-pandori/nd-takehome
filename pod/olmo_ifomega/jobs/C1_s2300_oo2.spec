@@ -1,0 +1,1 @@
+s2300 allenai/Olmo-3.1-32B-Think main|bash pod/olmo_ifomega/job.sh C1_s2300_oo2 s2300 allenai/Olmo-3.1-32B-Think main 0 @olmo_ifomega/plan/C1_s2300_oo2.pids 5402 16 0 --stop_after 2 --inflight 2 --prior @olmo_ifomega/plan/C1_s2300_oo2.prior --stop_file olmo_ifomega/plan/C1_s2300_oo2.stop
