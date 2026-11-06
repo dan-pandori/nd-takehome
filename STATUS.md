@@ -338,7 +338,7 @@ OLMO-THINK32B DONE 2026-11-04T09:21:59Z
   256 (six more jobs queued on the three pods), then step_0750 on test_out and the IFEval extension. IFBench: DPO
   extension done (32 of 90 resolved, 47 with no success in 256); step_2300 confirmations running. Found a wrong
   official answer on one test_out geometry problem (15, not 17); reported both ways. Spend $198.5.
-- 2026-11-06 03:15 UTC  Resumed after the watchdog deleted `oif-c` / `d` / `e` at 21:15 (driver cap); cut jobs
+- 2026-11-06 03:07 UTC  Resumed after the watchdog deleted `oif-c` / `d` / `e` at 21:15 (driver cap); cut jobs
   re-queued in Dan's order on `oif-g`. **IFBench: Reach** (strict 49 prompts, hand 42: `step_2300` confirmed with
   genuine answers, DPO none in 256); 36 % of `step_2300`'s checked strict successes are gamed. **OMEGA test_out: hand
   inconclusive** — DPO resolved 8 of 13 candidates; 2 reach prompts, both **at RL's token cap** (perp_068, perp_069:

@@ -2058,7 +2058,10 @@ families (dpo 0.20 / 0.11 vs 0.99 / 1.00).
 - **perp_055's label is wrong** (hand check, confirmed): 17 counts two perpendicular pairs that meet only outside the
   polygon; the answer to the problem as stated is 15. step_2300's credited "17"s are flawed; it states 15 in 16 of 26
   finished responses (2 checked sound with the label corrected, one of them fresh).
-- **IFEval:** reach candidates 8, reverse 1 (ifeval_2785: step_2300 0 strict in 256).
+- **IFEval:** reach candidates 8, reverse 1. dpo to 256 on all 8: resolved ifeval_3326 (5 strict in 144, both checked
+  genuine); **0 strict in 256 on six** (ifeval_1130, 1314, 2247, 2350, 2563, 3478); ifeval_2447 one strict success, gamed
+  (an all-Chinese "poem" for "fewer than two w's"). step_2300 confirmed under strict on all 7 (6–16 strict in 16 fresh
+  draws). Reverse ifeval_2785: step_2300 0 strict in 256, dpo 15 in 32 fresh (both checked genuine).
 
 ### Verdict (pre-registered rule; "reach at RL's token cap" = dpo never finishes within 32,768 tokens on that prompt)
 
@@ -2066,12 +2069,14 @@ families (dpo 0.20 / 0.11 vs 0.99 / 1.00).
 |---|---|---|---|---|---|---|
 | IFBench | strict | 94 | 33 | **49** | 61 | **Reach** |
 | IFBench | hand (headline) | 94 | 30 | **42** | 64 | **Reach** |
-| test_out | `omega` | 14 | 8 | 3 (perp_055 via its wrong label, perp_068, perp_069) | 6 | Reach |
-| test_out | `rl` | 11 | 7 | 2 | 4 | inconclusive |
+| test_out | `omega` | 14 | 9 | 3 (perp_055 via its wrong label, perp_068, perp_069) | 5 | Reach |
+| test_out | `rl` | 11 | 8 | 2 | 3 | inconclusive |
 | test_out | hand (headline) | 14 | 8 | **2, both at RL's token cap** (perp_068, perp_069) | 6 | **inconclusive** |
 | test_out | hand, perp_055 label corrected | 14 | 8 | 3, all at RL's token cap | 5 | Reach (sensitivity) |
+| IFEval | strict | 8 | 1 | **6** | 7 | **Reach** |
+| IFEval | hand | 8 | 1 | **6** (ifeval_1314, 2247, 2350, 2447, 2563, 3478) | 7 | **Reach** |
 
-### Hand check (`olmo_ifomega/handcheck.csv`: 465 items, every one confirmed by me; rules 1–5 in `handcheck_rule_if.md`)
+### Hand check (`olmo_ifomega/handcheck.csv`: 500 items, every one confirmed by me; rules 1–5 in `handcheck_rule_if.md`)
 
 IFBench: dpo's strict successes 92 checked on reach candidates (73 genuine, 19 gamed) and 14 on reverse candidates (6 /
 8); step_2300's 305 checked (149 genuine, 156 gamed: checking went on longest where it games, so the first-checked
@@ -2080,8 +2085,10 @@ the constraint and drop the content (a 12–26-word a–z run for "each word sta
 equal-length sentences saying nothing; "chapters" and "screenplays" of a few dozen words so "no word more than 4 times"
 is never tested), vacuous satisfaction (no sentence punctuation; no `*` bullets; unspaced Japanese). On 11 IFBench
 prompts step_2300's strict "reach" rests only on gamed successes (stopping rule: ≥ 7 checked, none or one genuine).
-OMEGA test_out: dpo 24 (18 sound, 5 flawed, 1 guess); step_2300 10 (5 sound, 5 flawed: unverified meeting points on
-the geometry problems, the wrong perp_055 label) and 4 on the reverse candidate (2 / 2).
+OMEGA test_out: dpo 26 (18 sound, 6 flawed, 2 guess); step_2300 10 (5 sound, 5 flawed: unverified meeting points on
+the geometry problems, the wrong perp_055 label) and 4 on the reverse candidate (2 / 2). IFEval: dpo 3 on reach candidates (2 genuine,
+1 gamed) and 2 on the reverse one (genuine); step_2300 28 (17 genuine, 11 gamed: all 10 checked on ifeval_1130 —
+two- or three-question trivia offered as a "logic quiz for teenagers" with at most one t — and an 11-word "rubric").
 
 ### Failure-mode analysis of dpo (pre-registration Part C; secondary; `olmo_ifomega/failures_if.csv`, `failures_omega.csv`)
 
@@ -2093,6 +2100,11 @@ the geometry problems, the wrong perp_055 label) and 4 on the reverse candidate 
 - OMEGA test_out reach candidates: geometry_perpendicular_intersection 1,606 dpo failures, **1,591 (99.1 %) cut at the
   token cap**; of its 15 finished failures 7 reach the right answer in the thinking and then stop the write-up before
   stating it. Other families: 436 failures, 28 % cut; sampled finished failures method 10, misread 6, slip 4 of 20.
+- IFEval reach candidates (descriptive, not pre-registered; `olmo_ifomega/ifeval_misses.csv`): on the three
+  letter-avoidance prompts dpo's 256 answers are far off (median 44, 97, 69 uses of the letter where < 2, < 6, < 2
+  are allowed; no near miss in 768); on the two all-caps prompts most failures are near misses (187 and 83 of 256 with
+  < 10 % lowercase letters: capitalised text that slips into lowercase words). step_2300 passes with far shorter
+  answers (median 13–48 words against dpo's 130–353; the all-caps essay 275 against 565).
 
 ### Per-constraint analysis (IFBench; `olmo_ifomega/constraints_summary.csv`)
 
