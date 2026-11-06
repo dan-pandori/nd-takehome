@@ -1,0 +1,4 @@
+job,model,phase,seed,gpu_seconds,gen_tokens,samples,gpu,n_gpu,pod,source,note
+s0_dpo,dpo,s0,1001,2563,3233483,124,NVIDIA H200,1,oif-a,olmo_ifomega/stage0_summary.json,Stage 0 stopped at its $8 cap: vLLM generation span and tokens (124 samples finished; censored)
+s0_s2300,s2300,s0,1002,5188,1723554,22,NVIDIA A100-SXM4-80GB,2,oif-b,olmo_ifomega/stage0_summary.json,Stage 0 on 2 x A100 (TP 2): span 2594 s x 2 GPUs; 22 samples finished (censored)
+F_s0750_oo,s0750,fixed,3013,15007,16327507,732,NVIDIA H200,1,oif-c,artifacts/olmo_ifomega/logs/q_F_s0750_oo.oif-c.log,segment on oif-c before the 2026-11-05 21:15 watchdog deletion (its last progress line); the oif-g resumption has its own meta

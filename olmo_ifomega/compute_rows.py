@@ -40,6 +40,23 @@ def main():
     if not dry:
         sys.path.insert(0, ".")
         import record
+    extra = list(csv.DictReader(open(O / "compute_extra.csv"))) if (O / "compute_extra.csv").exists() else []
+    for e in extra:  # jobs (or job segments) without a final meta: Stage 0, a job cut by the pod deletion
+        key = (e["model"], e["phase"])
+        agg[key]["gpu_seconds"] += float(e["gpu_seconds"])
+        agg[key]["gen_tokens"] += int(e["gen_tokens"])
+        agg[key]["attempts"] += int(e["samples"])
+        agg[key]["jobs"] += 1
+        if not dry:
+            lab = dict(arm=e["model"], seed=int(e["seed"]), role="sample", source=e["source"], phase=e["phase"],
+                       job=e["job"], gpu=e["gpu"], n_gpu=int(e["n_gpu"]), pod=e["pod"], derived="compute_extra.csv",
+                       note=e["note"])
+            record.record("gpu_seconds", float(e["gpu_seconds"]), **lab)
+            record.record("gen_tokens", int(e["gen_tokens"]), **lab)
+            record.record("attempts", int(e["samples"]), **lab)
+            for k in ("train_steps", "train_tokens", "lean_checks"):
+                record.record(k, 0, **lab)
+            record.record("verifier_checks", int(e["samples"]), **lab)
     for job, (j, m) in rows.items():
         gs = (float(m["t_load_s"]) + float(m["t_gen_s"])) * int(m.get("tp", 1))
         key = (j["model"], j["phase"])

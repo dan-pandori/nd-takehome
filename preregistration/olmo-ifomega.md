@@ -361,3 +361,20 @@ method / slip / unclear). Per family, geometry_perpendicular_intersection separa
 perpendicular-intersection ≈ 97 % cut, its few finished failures mostly method (enumeration not finished within the
 budget); other families: cut 15–35 %, and among finished failures method 50 %, slip 30 %, misread 20 %;
 func_coords_011's finished failures method (the crossing misplaced near g's pole).
+12. **Hand-check rule 5** (2026-11-05 16:59 UTC, while confirming batch b9): fixed-output constraints (`repeat:repeat_simple`,
+    `repeat:repeat_span`, checked by equality) — an answer that is exactly the required string is genuine. It states
+    the reading already applied in b4 and overrules 6 b9 labels.
+13. **Stopping rule for hand-checking challengers** (17:20): where `step_2300` passes the checker on most draws but every
+    checked success is gamed (≥ 7 checked, ≥ 4 of them fresh, none or one genuine), checking stops and the prompt is
+    open; the alternative was reading up to ≈ 200 successes per prompt. 11 IFBench prompts end so. From batch b9 on,
+    confirmations rest on the readers' evidence plus spot reads (184 + 68 + 39 + … items), not a full second reading.
+14. **Pods deleted by the watchdog** (21:15): the driver loop hit its 120-invocation cap at 20:45; the watchdog pulled
+    results and deleted all three pods. F_s0750_oo (732 of 800 rows) was resumed and the two queued confirmations rerun
+    on a new secure H200 (22:13). No data was lost; ≈ 40 pod-minutes were idle before the deletion.
+15. **`step_0750` on `test_out` added one reach candidate** (geometry_basic_010: `dpo` 0 / 16, `s0750` ≥ 1 / 8,
+    `s2300` 0 / 8); it was extended like the others (E1_dpo_oo6). Its only challenger is `s0750`, whose confirmation is
+    cut (item 9), so it cannot be a reach prompt for `s2300` and stays open unless `dpo` resolves it.
+16. **Failure-mode analysis** (Part C, Dan's request of 2026-11-05 16:25): secondary, from stored texts, with its own
+    pre-registered expectations; it does not enter any verdict.
+17. **IFEval extension run** (Dan's addition #3, after the `test_out` extension): defender extension, `s2300`
+    confirmation and hand check on its 8 reach and 1 reverse candidates.

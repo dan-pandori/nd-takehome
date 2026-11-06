@@ -1,0 +1,30 @@
+Wed Nov  4 20:04:46 UTC 2026
+NVIDIA A100-SXM4-80GB, 81920 MiB, 595.91.07, 4, 16
+NVIDIA A100-SXM4-80GB, 81920 MiB, 595.91.07, 4, 16
+	[4mGPU0	GPU1	NIC0	NIC1	CPU Affinity	NUMA Affinity	GPU NUMA ID[0m
+GPU0	 X 	NV12	SYS	NODE	64-127,192-254	1		N/A
+GPU1	NV12	 X 	SYS	NODE	64-127,192-254	1		N/A
+NIC0	SYS	SYS	 X 	SYS				
+NIC1	NODE	NODE	SYS	 X 				
+
+Legend:
+
+  X    = Self
+  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)
+  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node
+  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)
+  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)
+  PIX  = Connection traversing at most a single PCIe bridge
+  NV#  = Connection traversing a bonded set of # NVLinks
+
+NIC Legend:
+
+  NIC0: ibp18s0
+  NIC1: ibp226s0
+
+cpu.max  cfs 5440000
+255
+               total        used        free      shared  buff/cache   available
+Mem:            1007         190         167           0         659         817
+mfs#eur-is-1-2.runpod.net:9421  837T  342T  495T  41% /workspace
+overlay                          60G   16M   60G   1% /
