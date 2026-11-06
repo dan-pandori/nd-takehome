@@ -360,3 +360,8 @@ OLMO-THINK32B DONE 2026-11-04T09:21:59Z
   of $325 (79.7 pod-hours); no pods left.
 
 OLMO-IFOMEGA DONE 2026-11-06T07:33:16Z
+
+## olmo-iffu (executor; proposal 37; budget $60 / 40 pod-h; hard stop 2026-11-08 23:07 UTC)
+- 2026-11-06 23:07 UTC  run started. 2026-11-06 23:22 UTC pre-registration `preregistration/olmo-iffu.md` committed before any pod
+  (tests 1–3 as briefed, test 2b added: the three all-caps IFEval reach prompts; test 4 optional). perp_055's label
+  recomputed two ways: 15 (stored 17); 068 = 23 and 069 = 14 confirmed (`olmo_iffu/label_check.py`).
