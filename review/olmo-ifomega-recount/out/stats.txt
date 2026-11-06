@@ -1,0 +1,109 @@
+== ifbench [headline] n=218
+  strict  dpo    n_prompts=218 n_samples=3488 pass@1=[0.2899, 0.2374, 0.3446] pass@2=[0.3448, 0.2863, 0.4023] pass@4=[0.4033, 0.3434, 0.4622] pass@8=[0.4614, 0.3952, 0.5275] pass@16=[0.5092, 0.4404, 0.578]
+  strict  s0100  n_prompts=218 n_samples=1744 pass@1=[0.3148, 0.2632, 0.371] pass@2=[0.3775, 0.3204, 0.4379] pass@4=[0.4413, 0.3815, 0.5058] pass@8=[0.5046, 0.445, 0.5734]
+  strict  s0750  n_prompts=218 n_samples=1744 pass@1=[0.512, 0.4604, 0.5625] pass@2=[0.6214, 0.567, 0.6748] pass@4=[0.7136, 0.6623, 0.7658] pass@8=[0.7936, 0.7431, 0.8486]
+  strict  s2300  n_prompts=218 n_samples=1744 pass@1=[0.6835, 0.6353, 0.7317] pass@2=[0.781, 0.7348, 0.8265] pass@4=[0.844, 0.8002, 0.886] pass@8=[0.8853, 0.844, 0.9266]
+  strict  |R|=94 |V|=8 verdict=Reach R:{'reach': 49, 'dpo_resolved': 33, 'open_dpo_one_success': 12} V:{'s2300_resolved': 5, 'reverse': 2, 'open': 1}
+  strict  s0100 entries/exits k8: {'expected_entries': [19.92, 12.87, 27.58], 'expected_exits': [10.51, 5.19, 15.93], 'observed_entries_k8': 21, 'observed_exits_k8': 11, 'observed_entries_vs_dpo16': 14, 'observed_exits_vs_dpo16': 15}
+  strict  s0750 entries/exits k8: {'expected_entries': [75.64, 62.97, 89.22], 'expected_exits': [3.23, 0.77, 6.46], 'observed_entries_k8': 76, 'observed_exits_k8': 3, 'observed_entries_vs_dpo16': 67, 'observed_exits_vs_dpo16': 5}
+  strict  s2300 entries/exits k8: {'expected_entries': [98.27, 84.61, 112.72], 'expected_exits': [5.86, 2.23, 10.18], 'observed_entries_k8': 98, 'observed_exits_k8': 5, 'observed_entries_vs_dpo16': 90, 'observed_exits_vs_dpo16': 8}
+  loose   dpo    n_prompts=218 n_samples=3488 pass@1=[0.3475, 0.2924, 0.4031] pass@2=[0.4124, 0.3541, 0.4694] pass@4=[0.4819, 0.4226, 0.5413] pass@8=[0.5516, 0.4881, 0.6114] pass@16=[0.6193, 0.555, 0.6835]
+  loose   s0100  n_prompts=218 n_samples=1744 pass@1=[0.3727, 0.3177, 0.4272] pass@2=[0.4448, 0.3855, 0.5049] pass@4=[0.5178, 0.456, 0.5797] pass@8=[0.5826, 0.5183, 0.6468]
+  loose   s0750  n_prompts=218 n_samples=1744 pass@1=[0.5487, 0.4943, 0.6003] pass@2=[0.6507, 0.595, 0.7046] pass@4=[0.736, 0.6837, 0.7866] pass@8=[0.8119, 0.7569, 0.8624]
+  loose   s2300  n_prompts=218 n_samples=1744 pass@1=[0.707, 0.66, 0.7546] pass@2=[0.8018, 0.7575, 0.8444] pass@4=[0.864, 0.8237, 0.9028] pass@8=[0.9037, 0.867, 0.9404]
+  loose   |R|=73 |V|=8 verdict=Reach R:{'open_dpo_one_success': 12, 'reach': 24, 'dpo_resolved': 35, 'open_dpo_incomplete': 2} V:{'s2300_resolved': 4, 'open': 2, 'reverse': 2}
+  loose   s0100 entries/exits k8: {'expected_entries': [16.78, 10.8, 23.31], 'expected_exits': [10.03, 5.5, 15.25], 'observed_entries_k8': 16, 'observed_exits_k8': 10, 'observed_entries_vs_dpo16': 9, 'observed_exits_vs_dpo16': 17}
+  loose   s0750 entries/exits k8: {'expected_entries': [61.38, 49.76, 73.45], 'expected_exits': [4.62, 1.27, 8.98], 'observed_entries_k8': 60, 'observed_exits_k8': 4, 'observed_entries_vs_dpo16': 48, 'observed_exits_vs_dpo16': 6}
+  loose   s2300 entries/exits k8: {'expected_entries': [83.2, 70.04, 96.69], 'expected_exits': [6.45, 2.36, 11.15], 'observed_entries_k8': 82, 'observed_exits_k8': 6, 'observed_entries_vs_dpo16': 70, 'observed_exits_vs_dpo16': 8}
+  rlview  dpo    n_prompts=218 n_samples=3488 pass@1=[0.2899, 0.2374, 0.3446] pass@2=[0.3448, 0.2863, 0.4023] pass@4=[0.4033, 0.3434, 0.4622] pass@8=[0.4614, 0.3952, 0.5275] pass@16=[0.5092, 0.4404, 0.578]
+  rlview  s0100  n_prompts=218 n_samples=1744 pass@1=[0.3148, 0.2632, 0.371] pass@2=[0.3775, 0.3204, 0.4379] pass@4=[0.4413, 0.3815, 0.5058] pass@8=[0.5046, 0.445, 0.5734]
+  rlview  s0750  n_prompts=218 n_samples=1744 pass@1=[0.512, 0.4604, 0.5625] pass@2=[0.6214, 0.567, 0.6748] pass@4=[0.7136, 0.6623, 0.7658] pass@8=[0.7936, 0.7431, 0.8486]
+  rlview  s2300  n_prompts=218 n_samples=1744 pass@1=[0.6835, 0.6353, 0.7317] pass@2=[0.781, 0.7348, 0.8265] pass@4=[0.844, 0.8002, 0.886] pass@8=[0.8853, 0.844, 0.9266]
+  rlview  |R|=94 |V|=8 verdict=Reach R:{'reach': 49, 'dpo_resolved': 33, 'open_dpo_one_success': 12} V:{'s2300_resolved': 5, 'reverse': 2, 'open': 1}
+  rlview  s0100 entries/exits k8: {'expected_entries': [19.92, 12.87, 27.58], 'expected_exits': [10.51, 5.19, 15.93], 'observed_entries_k8': 21, 'observed_exits_k8': 11, 'observed_entries_vs_dpo16': 14, 'observed_exits_vs_dpo16': 15}
+  rlview  s0750 entries/exits k8: {'expected_entries': [75.64, 62.97, 89.22], 'expected_exits': [3.23, 0.77, 6.46], 'observed_entries_k8': 76, 'observed_exits_k8': 3, 'observed_entries_vs_dpo16': 67, 'observed_exits_vs_dpo16': 5}
+  rlview  s2300 entries/exits k8: {'expected_entries': [98.27, 84.61, 112.72], 'expected_exits': [5.86, 2.23, 10.18], 'observed_entries_k8': 98, 'observed_exits_k8': 5, 'observed_entries_vs_dpo16': 90, 'observed_exits_vs_dpo16': 8}
+  len dpo: {'samples': 3488, 'mean_tok': 4448, 'cut_share': 0.0006, 'think_end_share': 1.0}
+  len s0100: {'samples': 1744, 'mean_tok': 4347, 'cut_share': 0.0, 'think_end_share': 0.9994}
+  len s0750: {'samples': 1744, 'mean_tok': 5564, 'cut_share': 0.0017, 'think_end_share': 1.0}
+  len s2300: {'samples': 1744, 'mean_tok': 6277, 'cut_share': 0.0, 'think_end_share': 1.0}
+== ifbench [all] n=300
+  strict  dpo    n_prompts=300 n_samples=4800 pass@1=[0.2798, 0.2379, 0.3237] pass@2=[0.3334, 0.2889, 0.3809] pass@4=[0.3881, 0.3396, 0.4372] pass@8=[0.439, 0.3891, 0.4898] pass@16=[0.48, 0.4267, 0.5333]
+  strict  s0100  n_prompts=300 n_samples=2400 pass@1=[0.2971, 0.2537, 0.3421] pass@2=[0.3592, 0.3135, 0.4069] pass@4=[0.422, 0.3719, 0.4722] pass@8=[0.4833, 0.4267, 0.5367]
+  strict  s0750  n_prompts=300 n_samples=2400 pass@1=[0.4783, 0.4358, 0.5229] pass@2=[0.5857, 0.5414, 0.6306] pass@4=[0.6801, 0.635, 0.7264] pass@8=[0.7567, 0.7067, 0.8067]
+  strict  s2300  n_prompts=300 n_samples=2400 pass@1=[0.6758, 0.6358, 0.7154] pass@2=[0.7752, 0.7363, 0.813] pass@4=[0.8391, 0.8026, 0.8754] pass@8=[0.88, 0.84, 0.9133]
+  strict  |R|=133 |V|=8 verdict=Reach R:{'reach': 49, 'dpo_resolved': 33, 'open_dpo_incomplete': 39, 'open_dpo_one_success': 12} V:{'s2300_resolved': 5, 'reverse': 2, 'open': 1}
+  strict  s0100 entries/exits k8: {'expected_entries': [25.2, 17.04, 33.61], 'expected_exits': [11.91, 6.58, 18.33], 'observed_entries_k8': 26, 'observed_exits_k8': 11, 'observed_entries_vs_dpo16': 18, 'observed_exits_vs_dpo16': 17}
+  strict  s0750 entries/exits k8: {'expected_entries': [99.02, 84.66, 113.9], 'expected_exits': [3.73, 1.0, 7.23], 'observed_entries_k8': 100, 'observed_exits_k8': 3, 'observed_entries_vs_dpo16': 89, 'observed_exits_vs_dpo16': 6}
+  strict  s2300 entries/exits k8: {'expected_entries': [138.15, 122.09, 153.85], 'expected_exits': [5.86, 2.03, 10.51], 'observed_entries_k8': 139, 'observed_exits_k8': 5, 'observed_entries_vs_dpo16': 128, 'observed_exits_vs_dpo16': 8}
+  loose   dpo    n_prompts=300 n_samples=4800 pass@1=[0.3381, 0.296, 0.3821] pass@2=[0.4009, 0.3559, 0.4504] pass@4=[0.4664, 0.4182, 0.5164] pass@8=[0.5298, 0.4799, 0.5792] pass@16=[0.5933, 0.54, 0.6467]
+  loose   s0100  n_prompts=300 n_samples=2400 pass@1=[0.3538, 0.3104, 0.4004] pass@2=[0.4243, 0.3762, 0.4723] pass@4=[0.4946, 0.4436, 0.5464] pass@8=[0.5567, 0.5033, 0.61]
+  loose   s0750  n_prompts=300 n_samples=2400 pass@1=[0.5179, 0.475, 0.5613] pass@2=[0.6207, 0.5756, 0.665] pass@4=[0.71, 0.6642, 0.7553] pass@8=[0.7833, 0.7367, 0.83]
+  loose   s2300  n_prompts=300 n_samples=2400 pass@1=[0.6963, 0.6562, 0.7354] pass@2=[0.7921, 0.7546, 0.8276] pass@4=[0.8557, 0.8208, 0.8888] pass@8=[0.8967, 0.86, 0.93]
+  loose   |R|=103 |V|=8 verdict=Reach R:{'open_dpo_one_success': 12, 'reach': 24, 'dpo_resolved': 35, 'open_dpo_incomplete': 32} V:{'s2300_resolved': 4, 'open': 2, 'reverse': 2}
+  loose   s0100 entries/exits k8: {'expected_entries': [21.08, 14.06, 28.69], 'expected_exits': [13.03, 7.86, 18.77], 'observed_entries_k8': 21, 'observed_exits_k8': 12, 'observed_entries_vs_dpo16': 12, 'observed_exits_vs_dpo16': 23}
+  loose   s0750 entries/exits k8: {'expected_entries': [81.68, 68.11, 95.3], 'expected_exits': [5.62, 2.23, 10.02], 'observed_entries_k8': 81, 'observed_exits_k8': 4, 'observed_entries_vs_dpo16': 65, 'observed_exits_vs_dpo16': 8}
+  loose   s2300 entries/exits k8: {'expected_entries': [116.5, 101.2, 131.74], 'expected_exits': [6.45, 2.36, 11.44], 'observed_entries_k8': 117, 'observed_exits_k8': 6, 'observed_entries_vs_dpo16': 99, 'observed_exits_vs_dpo16': 8}
+  rlview  dpo    n_prompts=300 n_samples=4800 pass@1=[0.2798, 0.2379, 0.3237] pass@2=[0.3334, 0.2889, 0.3809] pass@4=[0.3881, 0.3396, 0.4372] pass@8=[0.439, 0.3891, 0.4898] pass@16=[0.48, 0.4267, 0.5333]
+  rlview  s0100  n_prompts=300 n_samples=2400 pass@1=[0.2971, 0.2537, 0.3421] pass@2=[0.3592, 0.3135, 0.4069] pass@4=[0.422, 0.3719, 0.4722] pass@8=[0.4833, 0.4267, 0.5367]
+  rlview  s0750  n_prompts=300 n_samples=2400 pass@1=[0.4783, 0.4358, 0.5229] pass@2=[0.5857, 0.5414, 0.6306] pass@4=[0.6801, 0.635, 0.7264] pass@8=[0.7567, 0.7067, 0.8067]
+  rlview  s2300  n_prompts=300 n_samples=2400 pass@1=[0.6758, 0.6358, 0.7154] pass@2=[0.7752, 0.7363, 0.813] pass@4=[0.8391, 0.8026, 0.8754] pass@8=[0.88, 0.84, 0.9133]
+  rlview  |R|=133 |V|=8 verdict=Reach R:{'reach': 49, 'dpo_resolved': 33, 'open_dpo_incomplete': 39, 'open_dpo_one_success': 12} V:{'s2300_resolved': 5, 'reverse': 2, 'open': 1}
+  rlview  s0100 entries/exits k8: {'expected_entries': [25.2, 17.04, 33.61], 'expected_exits': [11.91, 6.58, 18.33], 'observed_entries_k8': 26, 'observed_exits_k8': 11, 'observed_entries_vs_dpo16': 18, 'observed_exits_vs_dpo16': 17}
+  rlview  s0750 entries/exits k8: {'expected_entries': [99.02, 84.66, 113.9], 'expected_exits': [3.73, 1.0, 7.23], 'observed_entries_k8': 100, 'observed_exits_k8': 3, 'observed_entries_vs_dpo16': 89, 'observed_exits_vs_dpo16': 6}
+  rlview  s2300 entries/exits k8: {'expected_entries': [138.15, 122.09, 153.85], 'expected_exits': [5.86, 2.03, 10.51], 'observed_entries_k8': 139, 'observed_exits_k8': 5, 'observed_entries_vs_dpo16': 128, 'observed_exits_vs_dpo16': 8}
+  len dpo: {'samples': 4800, 'mean_tok': 4391, 'cut_share': 0.0004, 'think_end_share': 1.0}
+  len s0100: {'samples': 2400, 'mean_tok': 4326, 'cut_share': 0.0, 'think_end_share': 0.9996}
+  len s0750: {'samples': 2400, 'mean_tok': 5650, 'cut_share': 0.0013, 'think_end_share': 1.0}
+  len s2300: {'samples': 2400, 'mean_tok': 6487, 'cut_share': 0.0, 'think_end_share': 0.9996}
+== ifeval [headline] n=150
+  strict  dpo    n_prompts=150 n_samples=2400 pass@1=[0.7679, 0.7121, 0.8171] pass@2=[0.8395, 0.7863, 0.8855] pass@4=[0.8838, 0.8352, 0.9271] pass@8=[0.9084, 0.8647, 0.9482] pass@16=[0.9267, 0.88, 0.9667]
+  strict  s0750  n_prompts=150 n_samples=1200 pass@1=[0.8842, 0.8392, 0.9225] pass@2=[0.9188, 0.8762, 0.956] pass@4=[0.9364, 0.8967, 0.9695] pass@8=[0.9467, 0.9067, 0.98]
+  strict  s2300  n_prompts=150 n_samples=1200 pass@1=[0.935, 0.9, 0.9642] pass@2=[0.9607, 0.9288, 0.9864] pass@4=[0.9696, 0.9397, 0.993] pass@8=[0.9733, 0.9467, 0.9933]
+  strict  |R|=8 |V|=1 verdict=Reach R:{'reach': 6, 'open_dpo_one_success': 1, 'dpo_resolved': 1} V:{'reverse': 1}
+  strict  s0750 entries/exits k8: {'expected_entries': [6.7, 2.66, 11.26], 'expected_exits': [0.96, 0.0, 2.88], 'observed_entries_k8': 7, 'observed_exits_k8': 1, 'observed_entries_vs_dpo16': 4, 'observed_exits_vs_dpo16': 1}
+  strict  s2300 entries/exits k8: {'expected_entries': [10.7, 5.29, 16.79], 'expected_exits': [0.96, 0.0, 2.88], 'observed_entries_k8': 11, 'observed_exits_k8': 1, 'observed_entries_vs_dpo16': 8, 'observed_exits_vs_dpo16': 1}
+  loose   dpo    n_prompts=150 n_samples=2400 pass@1=[0.8092, 0.7604, 0.8533] pass@2=[0.8796, 0.838, 0.9176] pass@4=[0.9239, 0.8867, 0.9574] pass@8=[0.9479, 0.9142, 0.9761] pass@16=[0.96, 0.9267, 0.9867]
+  loose   s0750  n_prompts=150 n_samples=1200 pass@1=[0.9142, 0.8792, 0.9458] pass@2=[0.9524, 0.9226, 0.9769] pass@4=[0.9702, 0.9436, 0.9913] pass@8=[0.98, 0.9533, 1.0]
+  loose   s2300  n_prompts=150 n_samples=1200 pass@1=[0.9467, 0.9117, 0.9733] pass@2=[0.966, 0.936, 0.9898] pass@4=[0.9731, 0.9465, 0.9933] pass@8=[0.98, 0.9533, 1.0]
+  loose   |R|=6 |V|=3 verdict=Reach R:{'reach': 5, 'dpo_resolved': 1} V:{'open': 2, 'reverse': 1}
+  loose   s0750 entries/exits k8: {'expected_entries': [5.78, 2.17, 10.09], 'expected_exits': [0.96, 0.0, 2.88], 'observed_entries_k8': 7, 'observed_exits_k8': 1, 'observed_entries_vs_dpo16': 4, 'observed_exits_vs_dpo16': 1}
+  loose   s2300 entries/exits k8: {'expected_entries': [7.68, 3.28, 12.86], 'expected_exits': [2.86, 0.0, 6.65], 'observed_entries_k8': 9, 'observed_exits_k8': 3, 'observed_entries_vs_dpo16': 6, 'observed_exits_vs_dpo16': 3}
+  rlview  dpo    n_prompts=150 n_samples=2400 pass@1=[0.7688, 0.7129, 0.8179] pass@2=[0.8403, 0.7877, 0.8864] pass@4=[0.8842, 0.8356, 0.9276] pass@8=[0.9084, 0.8647, 0.9482] pass@16=[0.9267, 0.88, 0.9667]
+  rlview  s0750  n_prompts=150 n_samples=1200 pass@1=[0.8867, 0.8417, 0.9242] pass@2=[0.9217, 0.879, 0.9576] pass@4=[0.9378, 0.8985, 0.971] pass@8=[0.9467, 0.9067, 0.98]
+  rlview  s2300  n_prompts=150 n_samples=1200 pass@1=[0.9392, 0.9075, 0.9667] pass@2=[0.9657, 0.936, 0.989] pass@4=[0.973, 0.9462, 0.9932] pass@8=[0.9733, 0.9467, 0.9933]
+  rlview  |R|=8 |V|=1 verdict=Reach R:{'reach': 6, 'open_dpo_one_success': 1, 'dpo_resolved': 1} V:{'reverse': 1}
+  rlview  s0750 entries/exits k8: {'expected_entries': [6.7, 2.66, 11.26], 'expected_exits': [0.96, 0.0, 2.88], 'observed_entries_k8': 7, 'observed_exits_k8': 1, 'observed_entries_vs_dpo16': 4, 'observed_exits_vs_dpo16': 1}
+  rlview  s2300 entries/exits k8: {'expected_entries': [10.7, 5.29, 16.79], 'expected_exits': [0.96, 0.0, 2.88], 'observed_entries_k8': 11, 'observed_exits_k8': 1, 'observed_entries_vs_dpo16': 8, 'observed_exits_vs_dpo16': 1}
+  len dpo: {'samples': 2400, 'mean_tok': 2508, 'cut_share': 0.0, 'think_end_share': 1.0}
+  len s0750: {'samples': 1200, 'mean_tok': 3291, 'cut_share': 0.0, 'think_end_share': 1.0}
+  len s2300: {'samples': 1200, 'mean_tok': 4536, 'cut_share': 0.0067, 'think_end_share': 0.9933}
+== omega_out [headline] n=100
+  omega   dpo    n_prompts=100 n_samples=1600 pass@1=[0.2737, 0.2062, 0.3444] pass@2=[0.3481, 0.2728, 0.4218] pass@4=[0.4321, 0.3503, 0.5104] pass@8=[0.5213, 0.4338, 0.6012] pass@16=[0.61, 0.52, 0.7]
+  omega   s0750  n_prompts=100 n_samples=800 pass@1=[0.55, 0.4662, 0.6288] pass@2=[0.6264, 0.5404, 0.7089] pass@4=[0.681, 0.5939, 0.7651] pass@8=[0.71, 0.62, 0.8]
+  omega   s2300  n_prompts=100 n_samples=800 pass@1=[0.6238, 0.54, 0.7075] pass@2=[0.6746, 0.5893, 0.7593] pass@4=[0.7067, 0.6231, 0.79] pass@8=[0.73, 0.64, 0.81]
+  omega   |R|=14 |V|=1 verdict=Reach R:{'dpo_resolved': 9, 'open_dpo_one_success': 2, 'reach': 3} V:{'s2300_resolved': 1}
+  omega   s0750 entries/exits k8: {'expected_entries': [19.87, 14.07, 26.74], 'expected_exits': [1.0, 0.0, 2.5], 'observed_entries_k8': 21, 'observed_exits_k8': 0, 'observed_entries_vs_dpo16': 12, 'observed_exits_vs_dpo16': 2}
+  omega   s2300 entries/exits k8: {'expected_entries': [21.37, 15.08, 28.86], 'expected_exits': [0.5, 0.0, 1.5], 'observed_entries_k8': 23, 'observed_exits_k8': 0, 'observed_entries_vs_dpo16': 13, 'observed_exits_vs_dpo16': 1}
+  rl      dpo    n_prompts=100 n_samples=1600 pass@1=[0.3019, 0.2331, 0.375] pass@2=[0.3817, 0.3051, 0.4597] pass@4=[0.4676, 0.3843, 0.5484] pass@8=[0.5566, 0.4677, 0.6389] pass@16=[0.64, 0.54, 0.73]
+  rl      s0750  n_prompts=100 n_samples=800 pass@1=[0.5663, 0.4838, 0.6412] pass@2=[0.6429, 0.5557, 0.7261] pass@4=[0.689, 0.6013, 0.7756] pass@8=[0.71, 0.62, 0.8]
+  rl      s2300  n_prompts=100 n_samples=800 pass@1=[0.6325, 0.5487, 0.715] pass@2=[0.6818, 0.5964, 0.7646] pass@4=[0.7121, 0.627, 0.7969] pass@8=[0.73, 0.64, 0.81]
+  rl      |R|=11 |V|=1 verdict=Inconclusive R:{'dpo_resolved': 8, 'open_dpo_one_success': 1, 'reach': 2} V:{'s2300_resolved': 1}
+  rl      s0750 entries/exits k8: {'expected_entries': [16.61, 11.27, 22.93], 'expected_exits': [1.27, 0.0, 3.3], 'observed_entries_k8': 18, 'observed_exits_k8': 1, 'observed_entries_vs_dpo16': 9, 'observed_exits_vs_dpo16': 2}
+  rl      s2300 entries/exits k8: {'expected_entries': [17.84, 12.24, 24.58], 'expected_exits': [0.5, 0.0, 1.5], 'observed_entries_k8': 19, 'observed_exits_k8': 0, 'observed_entries_vs_dpo16': 10, 'observed_exits_vs_dpo16': 1}
+  doubly  dpo    n_prompts=100 n_samples=1600 pass@1=[0.2737, 0.2062, 0.3444] pass@2=[0.3481, 0.2728, 0.4218] pass@4=[0.4321, 0.3503, 0.5104] pass@8=[0.5213, 0.4338, 0.6012] pass@16=[0.61, 0.52, 0.7]
+  doubly  s0750  n_prompts=100 n_samples=800 pass@1=[0.55, 0.4662, 0.6288] pass@2=[0.6264, 0.5404, 0.7089] pass@4=[0.681, 0.5939, 0.7651] pass@8=[0.71, 0.62, 0.8]
+  doubly  s2300  n_prompts=100 n_samples=800 pass@1=[0.6238, 0.54, 0.7075] pass@2=[0.6746, 0.5893, 0.7593] pass@4=[0.7067, 0.6231, 0.79] pass@8=[0.73, 0.64, 0.81]
+  doubly  |R|=14 |V|=1 verdict=Reach R:{'dpo_resolved': 9, 'open_dpo_one_success': 2, 'reach': 3} V:{'s2300_resolved': 1}
+  doubly  s0750 entries/exits k8: {'expected_entries': [19.87, 14.07, 26.74], 'expected_exits': [1.0, 0.0, 2.5], 'observed_entries_k8': 21, 'observed_exits_k8': 0, 'observed_entries_vs_dpo16': 12, 'observed_exits_vs_dpo16': 2}
+  doubly  s2300 entries/exits k8: {'expected_entries': [21.37, 15.08, 28.86], 'expected_exits': [0.5, 0.0, 1.5], 'observed_entries_k8': 23, 'observed_exits_k8': 0, 'observed_entries_vs_dpo16': 13, 'observed_exits_vs_dpo16': 1}
+  own     dpo    n_prompts=100 n_samples=1600 pass@1=[0.2756, 0.2075, 0.3469] pass@2=[0.3516, 0.2778, 0.4243] pass@4=[0.4382, 0.3583, 0.5153] pass@8=[0.5303, 0.4459, 0.6149] pass@16=[0.62, 0.53, 0.71]
+  own     s0750  n_prompts=100 n_samples=800 pass@1=[0.5525, 0.4725, 0.6312] pass@2=[0.6311, 0.5454, 0.7136] pass@4=[0.6889, 0.6024, 0.7751] pass@8=[0.72, 0.63, 0.81]
+  own     s2300  n_prompts=100 n_samples=800 pass@1=[0.635, 0.5525, 0.7188] pass@2=[0.685, 0.6011, 0.7682] pass@4=[0.7167, 0.6333, 0.7987] pass@8=[0.74, 0.66, 0.82]
+  own     |R|=14 |V|=1 verdict=Reach R:{'dpo_resolved': 9, 'open_dpo_one_success': 2, 'reach': 3} V:{'s2300_resolved': 1}
+  own     s0750 entries/exits k8: {'expected_entries': [19.97, 14.22, 26.89], 'expected_exits': [1.0, 0.0, 2.5], 'observed_entries_k8': 22, 'observed_exits_k8': 0, 'observed_entries_vs_dpo16': 12, 'observed_exits_vs_dpo16': 2}
+  own     s2300 entries/exits k8: {'expected_entries': [21.47, 15.2, 28.86], 'expected_exits': [0.5, 0.0, 1.5], 'observed_entries_k8': 24, 'observed_exits_k8': 0, 'observed_entries_vs_dpo16': 13, 'observed_exits_vs_dpo16': 1}
+  len dpo: {'samples': 1600, 'mean_tok': 24709, 'cut_share': 0.2175, 'think_end_share': 0.7937}
+  len s0750: {'samples': 800, 'mean_tok': 22030, 'cut_share': 0.115, 'think_end_share': 0.9}
+  len s2300: {'samples': 800, 'mean_tok': 20873, 'cut_share': 0.0512, 'think_end_share': 0.9575}
+== omega_in [headline] n=100

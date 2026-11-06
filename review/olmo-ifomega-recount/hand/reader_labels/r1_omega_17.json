@@ -1,0 +1,34 @@
+[
+  {
+    "id": "r1-32a11a",
+    "label": "sound",
+    "decisive_step": "Therefore probability is [ (5 -k)!^2 ] / [5! (5 - 2k)! ) ] ... 3/28 +12/28 +3/28=18/28=9/14",
+    "reason": "Valid method. The selection weights C(2,g)C(3,q)C(3,o)/56 are correct, and they sum to 56 (6, 30 and 20 for 0, 1 and 2 g's). The conditional probability that no g lands on a position that originally held a g is C(5-k,k)/C(5,k), which is 1, 4/5 and 3/10 for k = 0, 1, 2; the response derives this correctly and checks it by direct counts on several multisets. 6/56 + (30/56)(4/5) + (20/56)(3/10) = 9/14. I confirmed 9/14 by brute force over all C(8,5) token selections and 5! shuffles.",
+    "label_ok": "yes",
+    "own_answer": "23 (p = 9/14, reading the event as no g on any position that originally held a g; the reading where each g token only has to leave its own spot would give 43/56, i.e. 99, but it is not the natural reading of 'any of their original positions')"
+  },
+  {
+    "id": "r1-5eb060",
+    "label": "sound",
+    "decisive_step": "Case1:9, TypeB:6, TypeA:4, TypeC:4 → total 9+6+4+4=23?",
+    "reason": "The response models a regular octagon (V1 at (1,0)) and computes exact slopes for all 19 diagonals. Its slope classes are all correct: vertical {4-6, 2-8, 7-3}; horizontal {2-4, 5-1, 8-6}; slope 1 {7-1, 6-2}; slope -1 {1-3, 5-7, 4-8}; slope sqrt2-1 {6-1, 2-5}; slope -1-sqrt2 {7-4, 8-3}; slope 1-sqrt2 {1-4, 5-8}; slope 1+sqrt2 {7-2, 6-3}. It pairs the perpendicular classes (3x3 + 2x3 + 2x2 + 2x2) and checks every pair's segment intersection, with exact coordinates and parameters for the non-axis pairs; vertex meetings at right angles are counted, as the wording allows. I re-checked all 12 intersection points it computed numerically, and a brute-force count gives 23 perpendicular pairs, all intersecting. One parameter value is misstated (t ≈ 0.293 where it is 0.707); it does not matter because both lie in [0,1].",
+    "label_ok": "yes",
+    "own_answer": "23"
+  },
+  {
+    "id": "r1-6669dd",
+    "label": "sound",
+    "decisive_step": "So total pairs are 9+6+2=17.",
+    "reason": "The response assumes a regular octagon and computes correct slopes for all 15 diagonals: vertical {2-8, 7-3, 4-6}; horizontal {8-6, 2-4, 1-5}; slope 1 {3-5, 2-6}; slope -1 {7-5, 1-3, 8-4}; and singletons 5-2 (sqrt2-1), 3-8 (-1-sqrt2), 1-4 (1-sqrt2), 2-7 (1+sqrt2). Each perpendicular pair's intersection is checked explicitly: the 9 vertical-horizontal pairs (some at vertices 2, 4, 6, 8), the 6 slope 1/-1 pairs (two at vertices 3 and 5), and 5-2 with 3-8 at ((sqrt2-1)/2, 1/2) and 1-4 with 2-7 at (1/2, (sqrt2-1)/2). Brief false starts (slope -1 lines 'can only pair with vertical or horizontal'; '3 slope1' diagonals) are corrected at once and do not affect the count. A brute-force check gives 17 perpendicular pairs, all intersecting, and the claimed intersection points match.",
+    "label_ok": "yes",
+    "own_answer": "17"
+  },
+  {
+    "id": "r1-e3ea79",
+    "label": "sound",
+    "decisive_step": "Number of sequences = C(5,3) × [3! × P(7,2) ] = 10 × (6 × 42) = 10 × 252 = 2520. ... Thus probability is indeed (3!×2!)/5! =12/120 =1/10. ... Total probability = (1/12) * (1/10) = 1/120.",
+    "reason": "Valid method. The response labels the letters and draws a uniform 5-sequence from the 10 tokens. Exactly 3 m-positions can stay m only if the word holds all three m's: 2520/30240 = 1/12 (= C(7,2)/C(10,5)). Given that, the shuffle keeps m's on all three original m-positions with probability 3!2!/5! = 1/10, which forces exactly 3. The product is 1/120. The response considers the stricter reading (each m token in its own spot, giving 1/60) and rejects it in favour of the position-has-an-m reading. I confirmed 1/120 by brute force.",
+    "label_ok": "yes",
+    "own_answer": "121 (p = 1/120; the token-identity reading would give 1/720, i.e. 721, which is not the natural reading for identical letters)"
+  }
+]

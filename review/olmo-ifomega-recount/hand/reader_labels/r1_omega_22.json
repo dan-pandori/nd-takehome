@@ -1,0 +1,10 @@
+[
+  {
+    "id": "r1-c90b6b",
+    "label": "sound",
+    "decisive_step": "The probability that the first arrangement includes a z is (number of 5-letter draws that include z)/total draws = C(8,4)/C(9,5)=70/126=5/9. ... Hence total probability is 5/9 *1/5=1/9.",
+    "reason": "The response models the 9 letters as distinguishable tiles, so each 5-subset is equally likely (the standard reading of drawing without replacement). Since there is only one z, 'exactly 1 z stays' means the z is drawn and the shuffle leaves it in place. P(z drawn) = C(8,4)/C(9,5) = 70/126 = 5/9, and given z is drawn a uniform shuffle fixes it with probability 4!/5! = 1/5, so P = 1/9 and m+n = 10. I checked every fact it relies on by brute force: 1/9 over all 126 subsets x 120 shuffles, and again over all P(9,5)=15120 ordered draws (8400 contain z). Its 15 multiset types and tile weights 21/35/35/35 (sum 126) are also right. One slip: at one point it says z'=1 covers 'Cases 2,3,4' (Case 3 has no z). It fixes this later, and the decisive count uses C(8,4)=70 directly, so the result is unaffected. 1/9 is first reached mid-reasoning and then confirmed several ways; no competing candidate answer appears.",
+    "label_ok": "yes",
+    "own_answer": "10 (probability 1/9 = (5/9)(1/5), letters drawn uniformly without replacement as distinguishable tiles, uniform shuffle). Other readings give other answers: uniform over distinct strings gives 47/335 and uniform over the 15 multiset types gives 8/75. Neither is the natural reading."
+  }
+]

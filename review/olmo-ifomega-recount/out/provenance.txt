@@ -1,0 +1,33 @@
+problems: 650 Counter({'ifbench': 300, 'ifeval': 150, 'omega_in': 100, 'omega_out': 100}) stage0: 104 Counter({'ifeval': 40, 'rlif': 24, 'omega_in': 20, 'omega_out': 20}) overlap: 0
+IFBench: 300 prompts; equal to repo jsonl 300, to HF parquet 300; constraints per prompt {1: 256, 2: 44}; 58 instruction ids; repo rows 300, HF rows 300
+IFEval: 541 rows; subset == seeded draw: eval True, stage0 True; rows equal to google/IFEval 150/150
+OMEGA rows read: Counter({'omega-explorative': 52218, 'omega-compositional': 14265, 'omega-transformative': 7196})
+OMEGA: 240/240 problems equal their explorative row (prompt, original, answer); bad []; labels with surrounding whitespace in the dataset: 0
+RL rows: 102026
+RL OMEGA prompts: 15000 rows, 10870 distinct; distinct ones equal to an explorative train problem: 10866
+explorative families 41; with >= 1 RL prompt 40; eligible (>= 100) 31
+family draw reproduces: True ['algebra_func_intersection', 'algebra_func_intersection_coords', 'arithmetic_list_prime_factors', 'arithmetic_matrix_eigenvalues', 'combinatory_probability_exactly_n_specific_fixed', 'combinatory_probability_no_specific_letter_fixed', 'geometry_basic', 'geometry_perpendicular_intersection', 'logic_gridworld_knight_move', 'numbertheory_lte_qr']
+  algebra_func_intersection test_in: split 100 pool 100
+  algebra_func_intersection test_out: split 50 pool 50
+  algebra_func_intersection_coords test_in: split 100 pool 100
+  algebra_func_intersection_coords test_out: split 50 pool 50
+  arithmetic_list_prime_factors test_in: split 100 pool 99
+  arithmetic_list_prime_factors test_out: split 50 pool 50
+  arithmetic_matrix_eigenvalues test_in: split 100 pool 100
+  arithmetic_matrix_eigenvalues test_out: split 50 pool 50
+  combinatory_probability_exactly_n_specific_fixed test_in: split 100 pool 59
+  combinatory_probability_exactly_n_specific_fixed test_out: split 50 pool 46
+  combinatory_probability_no_specific_letter_fixed test_in: split 100 pool 57
+  combinatory_probability_no_specific_letter_fixed test_out: split 50 pool 48
+  geometry_basic test_in: split 199 pool 199
+  geometry_basic test_out: split 127 pool 127
+  geometry_perpendicular_intersection test_in: split 177 pool 145
+  geometry_perpendicular_intersection test_out: split 77 pool 77
+  logic_gridworld_knight_move test_in: split 200 pool 176
+  logic_gridworld_knight_move test_out: split 100 pool 97
+  numbertheory_lte_qr test_in: split 100 pool 100
+  numbertheory_lte_qr test_out: split 58 pool 58
+problem draws reproduced (my normaliser): 20/20 family-splits; filter violations among chosen: {}
+explorative test_in problems equal to an RL prompt (all families): 33 of 5053
+distinct RL OMEGA prompts equal to a train problem of any OMEGA set: 10870 of 10870
+explorative families with >= 1 RL prompt: 40 ; logic_zebralogic present: False

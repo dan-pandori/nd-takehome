@@ -1,0 +1,519 @@
+{
+ "PT": 1.0944e+24,
+ "PT_GPUH": 976896.0,
+ "L_if": {
+  "dpo": 4391,
+  "s0100": 4326,
+  "s0750": 5650,
+  "s2300": 6487
+ },
+ "L_omega_out": {
+  "dpo": 24709,
+  "s0750": 22030,
+  "s2300": 20873,
+  "s0100": 24351.8
+ },
+ "L_mix": {
+  "dpo": 14589.829063179974,
+  "s0100": 14378.156268010114,
+  "s0750": 13872.109462293924,
+  "s2300": 13708.200654735068
+ },
+ "axis": {
+  "100": {
+   "ratio_low": 0.00011976608187134502,
+   "ratio_mid": 0.00034691285906100706,
+   "ratio_high": 0.0009811237426900585,
+   "ratio_geomean": 0.00034279052859280987,
+   "gpuh": 3584.0,
+   "gpuh_ratio": 0.003668763102725367
+  },
+  "750": {
+   "ratio_low": 0.0008982456140350876,
+   "ratio_mid": 0.002546077616740693,
+   "ratio_high": 0.007358428070175439,
+   "ratio_geomean": 0.002570928964446074,
+   "gpuh": 26880.0,
+   "gpuh_ratio": 0.027515723270440252
+  },
+  "2300": {
+   "ratio_low": 0.0027546198830409353,
+   "ratio_mid": 0.007665995789270456,
+   "ratio_high": 0.022565846081871344,
+   "ratio_geomean": 0.007884182157634626,
+   "gpuh": 139776.0,
+   "gpuh_ratio": 0.1430817610062893
+  }
+ },
+ "jobs": {
+  "C1_dpo_ifevrev": {
+   "samples": 32,
+   "gen_tokens": 76686,
+   "cut": 0,
+   "meta_segments": 1,
+   "meta_samples": 32,
+   "meta_tokens": 76686,
+   "meta_seconds": 488.6,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "C1_dpo_rev": {
+   "samples": 288,
+   "gen_tokens": 2418308,
+   "cut": 0,
+   "meta_segments": 1,
+   "meta_samples": 288,
+   "meta_tokens": 2418308,
+   "meta_seconds": 2014.9,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "C1_s2300_ifb": {
+   "samples": 1072,
+   "gen_tokens": 7513419,
+   "cut": 1,
+   "meta_segments": 1,
+   "meta_samples": 1072,
+   "meta_tokens": 7513419,
+   "meta_seconds": 4640.0,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "C1_s2300_ifev": {
+   "samples": 112,
+   "gen_tokens": 650475,
+   "cut": 0,
+   "meta_segments": 1,
+   "meta_samples": 112,
+   "meta_tokens": 650475,
+   "meta_seconds": 586.2,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "C1_s2300_oo": {
+   "samples": 32,
+   "gen_tokens": 980210,
+   "cut": 10,
+   "meta_segments": 1,
+   "meta_samples": 32,
+   "meta_tokens": 980210,
+   "meta_seconds": 1239.4,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "C1_s2300_oo2": {
+   "samples": 128,
+   "gen_tokens": 3907576,
+   "cut": 50,
+   "meta_segments": 1,
+   "meta_samples": 128,
+   "meta_tokens": 3907576,
+   "meta_seconds": 4238.8,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "C2_dpo_rev": {
+   "samples": 80,
+   "gen_tokens": 892742,
+   "cut": 0,
+   "meta_segments": 1,
+   "meta_samples": 80,
+   "meta_tokens": 892742,
+   "meta_seconds": 979.4,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "C2_s2300_ifb": {
+   "samples": 240,
+   "gen_tokens": 2325829,
+   "cut": 0,
+   "meta_segments": 1,
+   "meta_samples": 240,
+   "meta_tokens": 2325829,
+   "meta_seconds": 1846.7,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "C3_dpo_rev": {
+   "samples": 64,
+   "gen_tokens": 770062,
+   "cut": 0,
+   "meta_segments": 1,
+   "meta_samples": 64,
+   "meta_tokens": 770062,
+   "meta_seconds": 901.0,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "E1_dpo_if": {
+   "samples": 864,
+   "gen_tokens": 3179941,
+   "cut": 0,
+   "meta_segments": 1,
+   "meta_samples": 864,
+   "meta_tokens": 3179941,
+   "meta_seconds": 2531.8,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "E1_dpo_ifa": {
+   "samples": 17712,
+   "gen_tokens": 96386001,
+   "cut": 16,
+   "meta_segments": 1,
+   "meta_samples": 17712,
+   "meta_tokens": 96386001,
+   "meta_seconds": 52491.5,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "E1_dpo_ifev": {
+   "samples": 1824,
+   "gen_tokens": 10027911,
+   "cut": 2,
+   "meta_segments": 1,
+   "meta_samples": 1824,
+   "meta_tokens": 10027911,
+   "meta_seconds": 5752.2,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "E1_dpo_oo1": {
+   "samples": 96,
+   "gen_tokens": 2550963,
+   "cut": 43,
+   "meta_segments": 1,
+   "meta_samples": 96,
+   "meta_tokens": 2550963,
+   "meta_seconds": 2794.7,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "E1_dpo_oo2": {
+   "samples": 288,
+   "gen_tokens": 9153756,
+   "cut": 251,
+   "meta_segments": 1,
+   "meta_samples": 288,
+   "meta_tokens": 9153756,
+   "meta_seconds": 10802.9,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "E1_dpo_oo3": {
+   "samples": 624,
+   "gen_tokens": 20246604,
+   "cut": 566,
+   "meta_segments": 1,
+   "meta_samples": 384,
+   "meta_tokens": 12576823,
+   "meta_seconds": 13329.5,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "E1_dpo_oo4": {
+   "samples": 384,
+   "gen_tokens": 11946960,
+   "cut": 331,
+   "meta_segments": 1,
+   "meta_samples": 384,
+   "meta_tokens": 11946960,
+   "meta_seconds": 12681.2,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "E1_dpo_oo5": {
+   "samples": 384,
+   "gen_tokens": 12416454,
+   "cut": 343,
+   "meta_segments": 1,
+   "meta_samples": 384,
+   "meta_tokens": 12416454,
+   "meta_seconds": 13676.1,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "E1_dpo_oo6": {
+   "samples": 144,
+   "gen_tokens": 4032721,
+   "cut": 15,
+   "meta_segments": 1,
+   "meta_samples": 144,
+   "meta_tokens": 4032721,
+   "meta_seconds": 4838.0,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "E1_s2300_ifa": {
+   "samples": 1032,
+   "gen_tokens": 5163722,
+   "cut": 0,
+   "meta_segments": 1,
+   "meta_samples": 1032,
+   "meta_tokens": 5163722,
+   "meta_seconds": 3096.3,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "E1_s2300_ifev": {
+   "samples": 248,
+   "gen_tokens": 811751,
+   "cut": 0,
+   "meta_segments": 1,
+   "meta_samples": 248,
+   "meta_tokens": 811751,
+   "meta_seconds": 912.3,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "E1_s2300_oo": {
+   "samples": 48,
+   "gen_tokens": 1348296,
+   "cut": 2,
+   "meta_segments": 1,
+   "meta_samples": 48,
+   "meta_tokens": 1348296,
+   "meta_seconds": 1621.0,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "E2_dpo_ifa": {
+   "samples": 320,
+   "gen_tokens": 2280798,
+   "cut": 0,
+   "meta_segments": 1,
+   "meta_samples": 320,
+   "meta_tokens": 2280798,
+   "meta_seconds": 1718.0,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "E2_dpo_oo": {
+   "samples": 48,
+   "gen_tokens": 1488499,
+   "cut": 21,
+   "meta_segments": 1,
+   "meta_samples": 48,
+   "meta_tokens": 1488499,
+   "meta_seconds": 1876.6,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "E2_dpo_oo6": {
+   "samples": 48,
+   "gen_tokens": 1344945,
+   "cut": 6,
+   "meta_segments": 1,
+   "meta_samples": 48,
+   "meta_tokens": 1344945,
+   "meta_seconds": 1706.7,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "E2_s2300_rev": {
+   "samples": 80,
+   "gen_tokens": 928917,
+   "cut": 0,
+   "meta_segments": 1,
+   "meta_samples": 80,
+   "meta_tokens": 928917,
+   "meta_seconds": 969.8,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "E3_dpo_oo": {
+   "samples": 48,
+   "gen_tokens": 1494008,
+   "cut": 20,
+   "meta_segments": 1,
+   "meta_samples": 48,
+   "meta_tokens": 1494008,
+   "meta_seconds": 1876.0,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "E3_dpo_oo6": {
+   "samples": 48,
+   "gen_tokens": 1368304,
+   "cut": 8,
+   "meta_segments": 1,
+   "meta_samples": 48,
+   "meta_tokens": 1368304,
+   "meta_seconds": 1690.2,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "F_dpo_ifb": {
+   "samples": 4800,
+   "gen_tokens": 21076702,
+   "cut": 2,
+   "meta_segments": 1,
+   "meta_samples": 4008,
+   "meta_tokens": 17888629,
+   "meta_seconds": 9523.9,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "F_dpo_ife": {
+   "samples": 2400,
+   "gen_tokens": 6018256,
+   "cut": 0,
+   "meta_segments": 1,
+   "meta_samples": 2400,
+   "meta_tokens": 6018256,
+   "meta_seconds": 2685.3,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "F_dpo_oo": {
+   "samples": 1600,
+   "gen_tokens": 39534386,
+   "cut": 348,
+   "meta_segments": 1,
+   "meta_samples": 1600,
+   "meta_tokens": 39534386,
+   "meta_seconds": 37045.0,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "F_s0100_ifb": {
+   "samples": 2400,
+   "gen_tokens": 10382290,
+   "cut": 0,
+   "meta_segments": 1,
+   "meta_samples": 2400,
+   "meta_tokens": 10382290,
+   "meta_seconds": 5458.4,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "F_s0750_ifb": {
+   "samples": 2400,
+   "gen_tokens": 13558847,
+   "cut": 3,
+   "meta_segments": 1,
+   "meta_samples": 2400,
+   "meta_tokens": 13558847,
+   "meta_seconds": 7494.1,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "F_s0750_ife": {
+   "samples": 1200,
+   "gen_tokens": 3949095,
+   "cut": 0,
+   "meta_segments": 1,
+   "meta_samples": 1200,
+   "meta_tokens": 3949095,
+   "meta_seconds": 1858.0,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "F_s0750_oo": {
+   "samples": 800,
+   "gen_tokens": 17624076,
+   "cut": 92,
+   "meta_segments": 1,
+   "meta_samples": 68,
+   "meta_tokens": 1296569,
+   "meta_seconds": 1461.1,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "F_s2300_ifb": {
+   "samples": 2400,
+   "gen_tokens": 15569341,
+   "cut": 0,
+   "meta_segments": 1,
+   "meta_samples": 2356,
+   "meta_tokens": 15516767,
+   "meta_seconds": 8795.3,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "F_s2300_ife": {
+   "samples": 1200,
+   "gen_tokens": 5443783,
+   "cut": 8,
+   "meta_segments": 1,
+   "meta_samples": 1200,
+   "meta_tokens": 5443783,
+   "meta_seconds": 3270.9,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "F_s2300_oo": {
+   "samples": 800,
+   "gen_tokens": 16698062,
+   "cut": 41,
+   "meta_segments": 1,
+   "meta_samples": 800,
+   "meta_tokens": 16698062,
+   "meta_seconds": 14802.6,
+   "gpus": [
+    "NVIDIA H200"
+   ]
+  },
+  "s0_dpo": {
+   "samples": 124,
+   "gen_tokens": 2465146,
+   "cut": 16,
+   "meta_segments": 0,
+   "meta_samples": 0,
+   "meta_tokens": 0,
+   "meta_seconds": 0,
+   "gpus": []
+  },
+  "s0_s2300": {
+   "samples": 22,
+   "gen_tokens": 118008,
+   "cut": 0,
+   "meta_segments": 0,
+   "meta_samples": 0,
+   "meta_tokens": 0,
+   "meta_seconds": 0,
+   "gpus": []
+  }
+ },
+ "total": {
+  "samples": 46434,
+  "gen_tokens": 358143850,
+  "meta_seconds": 243694.4
+ }
+}
