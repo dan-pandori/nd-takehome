@@ -191,3 +191,11 @@ unanswered: I stop at $45 and the decision memo prices both options.
 
     Then, if budget remains, do your earlier #2 and #3 (`step_0750` on `test_out`, then the IFEval extension). Record
     the change in `log.md` and the pre-registration's deviations.
+
+## 2026-11-07 00:00 UTC — olmo-iffu: test 4 would end the run at ≈ $57 (over the $55 gate, under the $60 budget)
+
+Measured: TP 2 on a 2 × H200 secure pod (the only H200 capacity at 23:23) is 2.09× one community H200, so it costs
+$0.77 / M tokens on IF prompts against $0.54 / M; a community H200 appeared at 23:50 and test 3 runs there. Projection:
+tests 1–3 ≈ $50; test 4 (`step_0750` on the 43 IFBench reach prompts) ≈ $6.5 more. **Default:** I follow the brief's
+own condition: test 4 runs only if ≥ $8 remains by the ledger once tests 1–3 are done, even if that ends the run
+between $55 and $60. Say "no test 4" here to skip it.
