@@ -4,8 +4,8 @@
 olmo_ifomega_reach.png: one panel per task run (IFBench headline set; OMEGA test_out; IFEval / test_in if run).
 Each panel, against cumulative RL compute / pretraining compute (FLOPs; geometric mean of olmo32's low and high
 bounds, bars = the bounds): expected entries and exits relative to Olmo-3-32B-Think-DPO at matched k = 8 (primary
-grade), and reach at 256 (prompts a checkpoint solves, confirmed, that the DPO model never solves within 256; hand
-grade, open candidates not counted), all per 100 prompts so tasks of different sizes and olmo-think32b's 59 AIME
+grade), and reach at 256 (prompts step_2300 solves, confirmed, that the DPO model never solves within 256; hand
+grade, open candidates not counted; the intermediate checkpoints' confirmation was cut, so no reach point for them), all per 100 prompts so tasks of different sizes and olmo-think32b's 59 AIME
 problems (hollow, dashed; its rl-grade dynamics and strict-hand reach) share a scale.
 Palette: olmo32/figures.py's validated categorical slots (light surface #fcfcfb).
 Usage: figures.py [--outdir figures]   (reads olmo_ifomega/{dynamics,verdict,compute_axis}.csv, olmo32/{dynamics,
@@ -20,6 +20,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
+CONFIRMED = ("s2300",)
 TEXT, MUTED, GRID, SURFACE = "#0b0b0b", "#52514e", "#e4e3df", "#fcfcfb"
 ENTRY, EXIT, REACH = "#2a78d6", "#eb6834", "#4a3aa7"
 plt.rcParams.update({"font.size": 9, "axes.edgecolor": MUTED, "axes.labelcolor": TEXT, "xtick.color": MUTED,
@@ -75,8 +76,10 @@ def main():
         plot(ax, X, [(STEP[r["model"]], 100 * float(r["exp_exits"]) / n) for r in d], EXIT, "s", "exits at k = 8")
         v = {r["grade"]: r for r in ver if r["task"] == t}.get("hand", {})
         if v:
-            plot(ax, X, [(STEP[m], 100 * int(v[f"n_reach_{m}"]) / n) for m in STEP if v.get(f"n_reach_{m}") != ""],
-                 REACH, "D", "reach at 256 (hand)")
+            # reach only for the checkpoint whose challenger confirmation ran (step_2300; the intermediate
+            # checkpoints' confirmation was the first in-run cut, so their reach was not measured)
+            plot(ax, X, [(STEP[m], 100 * int(v[f"n_reach_{m}"]) / n) for m in CONFIRMED if v.get(f"n_reach_{m}") != ""],
+                 REACH, "D", "reach at 256 (hand; step_2300)")
         plot(ax, X32, [(STEP[r["model"]], 100 * float(r["exp_entries"]) / aime_n) for r in aime_dyn], ENTRY, "o",
              "AIME 2025–26 entries (olmo-think32b)", hollow=True, ls=(0, (4, 2)))
         plot(ax, X32, [(STEP[r["model"]], 100 * float(r["exp_exits"]) / aime_n) for r in aime_dyn], EXIT, "s",
