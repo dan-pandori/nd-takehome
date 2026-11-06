@@ -2013,3 +2013,94 @@ no training steps or tokens, no Lean checks; verifier checks = samples):
 Matching (policy flag, > 1.25×): dpo's fixed phase used 2.2× the GPU-hours of each RL checkpoint's (16 vs 8 samples per
 problem, by the brief's design); on aime2025_28 dpo, step_0100 and step_0750 each drew 256 samples and step_2300 40
 (sequential stopping), so the comparison there is at matched attempts only between dpo and the two intermediates.
+
+## olmo-ifomega (2026-11-04 → 06, executor; UNREVIEWED)
+
+**Models:** `allenai/Olmo-3-32B-Think-DPO` `main` (`97604023`; "dpo", the RL start), `allenai/Olmo-3.1-32B-Think`
+`step_0100` (`e7b80281`), `step_0750` (`418fb274`), `main` (`97ade57a` = `step_2300`). Decoding as olmo-think32b
+(`olmo_thinker` template, T 1, top-p 1, 32,768-token responses; vLLM 0.11.0, bf16, 1 × H200 per job). Prompts
+(`olmo_ifomega/problems.jsonl`, `manifest.csv`): IFBench 300 (**headline 218**: 82 excluded, their base request a Think-SFT
+/ DPO / RL conversation), IFEval 150 (seeded), OMEGA explorative `test_out` 100 (10 families × 10, seeded); `test_in` and
+`step_0100` were cut (budget). Grades: IF `strict` (official checkers on the text after the last `</think>`, stripped);
+OMEGA `omega` (OLMES exact match), `rl` (open-instruct MathVerifier on the whole response), doubly = both; and a blinded
+hand check (IF genuine / gamed under `olmo_ifomega/handcheck_rule_if.md`; OMEGA sound / flawed / guess).
+
+### Fixed phase (dpo 16, RL checkpoints 8 per prompt; `olmo_ifomega/passk.csv`, `dynamics.csv`; 95 % prompt bootstrap)
+
+| task (prompts) | model | pass@1 | pass@8 | tokens / sample | cut at 32,768 |
+|---|---|---|---|---|---|
+| IFBench (218), strict | dpo | 0.290 [0.238, 0.344] | 0.461 | 4,448 | 0.1 % |
+| | step_0750 | 0.512 [0.460, 0.565] | 0.794 | 5,564 | 0.2 % |
+| | step_2300 | 0.684 [0.635, 0.732] | 0.885 | 6,277 | 0.0 % |
+| IFEval (150), strict | dpo | 0.769 [0.714, 0.821] | 0.908 | 2,508 | 0.0 % |
+| | step_0750 | 0.888 [0.843, 0.928] | 0.947 | 3,291 | 0.0 % |
+| | step_2300 | 0.933 [0.898, 0.963] | 0.973 | 4,536 | 0.7 % |
+| OMEGA test_out (100), `omega` | dpo | 0.274 [0.206, 0.346] | 0.521 | 24,709 | 21.8 % |
+| | step_0750 | 0.550 [0.468, 0.633] | 0.710 | 22,030 | 11.5 % |
+| | step_2300 | 0.624 [0.539, 0.710] | 0.730 | 20,873 | 5.1 % |
+
+dpo pass@16: IFBench 0.509, IFEval 0.927, test_out 0.61 (`rl` 0.64). Expected entries / exits vs dpo at k = 8
+(observed): IFBench step_0750 75.6 / 3.2 (67 / 5), step_2300 98.3 / 5.9 (90 / 8); IFEval 6.7 / 1.0 (4 / 1), 10.7 / 1.0
+(8 / 1); test_out (`omega`) 19.9 / 1.0 (12 / 2), 21.4 / 0.5 (13 / 1). By family on test_out the gap is
+geometry_perpendicular_intersection (dpo 0.01 with 97 % of its samples cut; step_2300 0.71) and the two combinatory
+families (dpo 0.20 / 0.11 vs 0.99 / 1.00).
+
+### Candidates, extension, confirmation (`olmo_ifomega/candidates_fixed.csv`, `candidates.csv`, `verdict.csv`)
+
+- **IFBench:** reach candidates 94, reverse 8. dpo extended to 256 on all 94: resolved (≥ 2 strict) 33, by hand 30;
+  **49 with no strict success in 256**. step_2300 confirmed (≥ 2 strict, ≥ 1 fresh) on all 61 it was run on.
+  Reverse prompts: ifbench_275 and ifbench_88 (dpo hand-confirmed, step_2300 0 strict in 256).
+- **OMEGA test_out:** reach candidates 13 + 1 from step_0750 (geometry_basic_010), reverse 1. dpo to 256 on all 13
+  (Dan's grant of 2026-11-05 15:44): resolved 8 (all 8 hand-resolved: comb_047, comb_027, comb_004, func_coords_011,
+  lte_qr_023, perp_057, perp_075, perp_033); unresolved perp_055, **perp_068, perp_069** (dpo 0 doubly in 256, 255 of
+  256 cut at 32,768 each), perp_011 and perp_073 (1 sound dpo success each). step_2300 confirmed on all five (21 / 32
+  doubly on perp_068 and perp_069). The reverse candidate: step_2300 resolved it (2 sound of 4 doubly).
+- **perp_055's label is wrong** (hand check, confirmed): 17 counts two perpendicular pairs that meet only outside the
+  polygon; the answer to the problem as stated is 15. step_2300's credited "17"s are flawed; it states 15 in 16 of 26
+  finished responses (2 checked sound with the label corrected, one of them fresh).
+- **IFEval:** reach candidates 8, reverse 1 (ifeval_2785: step_2300 0 strict in 256).
+
+### Verdict (pre-registered rule; "reach at RL's token cap" = dpo never finishes within 32,768 tokens on that prompt)
+
+| task | grade | reach candidates | dpo-resolved | reach prompts (step_2300) | open | verdict |
+|---|---|---|---|---|---|---|
+| IFBench | strict | 94 | 33 | **49** | 61 | **Reach** |
+| IFBench | hand (headline) | 94 | 30 | **42** | 64 | **Reach** |
+| test_out | `omega` | 14 | 8 | 3 (perp_055 via its wrong label, perp_068, perp_069) | 6 | Reach |
+| test_out | `rl` | 11 | 7 | 2 | 4 | inconclusive |
+| test_out | hand (headline) | 14 | 8 | **2, both at RL's token cap** (perp_068, perp_069) | 6 | **inconclusive** |
+| test_out | hand, perp_055 label corrected | 14 | 8 | 3, all at RL's token cap | 5 | Reach (sensitivity) |
+
+### Hand check (`olmo_ifomega/handcheck.csv`: 465 items, every one confirmed by me; rules 1–5 in `handcheck_rule_if.md`)
+
+IFBench: dpo's strict successes 92 checked on reach candidates (73 genuine, 19 gamed) and 14 on reverse candidates (6 /
+8); step_2300's 305 checked (149 genuine, 156 gamed: checking went on longest where it games, so the first-checked
+batch b9's 36 % gamed is the less biased rate) and 13 on reverse (11 / 2). Gaming patterns: minimal answers that meet
+the constraint and drop the content (a 12–26-word a–z run for "each word starts with the next letter"; three
+equal-length sentences saying nothing; "chapters" and "screenplays" of a few dozen words so "no word more than 4 times"
+is never tested), vacuous satisfaction (no sentence punctuation; no `*` bullets; unspaced Japanese). On 11 IFBench
+prompts step_2300's strict "reach" rests only on gamed successes (stopping rule: ≥ 7 checked, none or one genuine).
+OMEGA test_out: dpo 24 (18 sound, 5 flawed, 1 guess); step_2300 10 (5 sound, 5 flawed: unverified meeting points on
+the geometry problems, the wrong perp_055 label) and 4 on the reverse candidate (2 / 2).
+
+### Failure-mode analysis of dpo (pre-registration Part C; secondary; `olmo_ifomega/failures_if.csv`, `failures_omega.csv`)
+
+- IFBench, the 49 prompts with 0 strict in 256 (196 dpo failures, 4 per prompt, 14 blinded readers, 25 / 27 of my
+  re-classifications agreeing): (a) ignored the binding constraint 23 %, (b) near miss 3 %, (c) attempted, far off 70 %,
+  (d) binding met, another broken 3 %, (e) degenerate 1 %, (f) cut 0 % → **substantive 93 %, format-like 6 %** (expected
+  60 % / 35 %). step_2300's failures on the same prompts (70): format-like 41 % (near miss 27 %). No pattern by distance
+  from RL's IF data.
+- OMEGA test_out reach candidates: geometry_perpendicular_intersection 1,606 dpo failures, **1,591 (99.1 %) cut at the
+  token cap**; of its 15 finished failures 7 reach the right answer in the thinking and then stop the write-up before
+  stating it. Other families: 436 failures, 28 % cut; sampled finished failures method 10, misread 6, slip 4 of 20.
+
+### Per-constraint analysis (IFBench; `olmo_ifomega/constraints_summary.csv`)
+
+The 42 hand-reach prompts' binding constraints: 20 with no RL analogue, 16 loosely similar, 6 close (shares 0.48 / 0.38
+/ 0.14, against 0.375 / 0.40 / 0.225 among all headline constraints). RL's mean per-constraint gain (step_2300 − dpo):
++0.42 / +0.38 / +0.35. RL's IFBench gains and its reach are not concentrated near RL's own constraint types.
+
+### Compute (podbudget; `olmo_ifomega/compute_rows.py` rows in the registry)
+
+RL ÷ pretraining compute (FLOPs, middle estimate with this run's response-length mix): step_0100 3.5e-4, step_0750
+2.6e-3, step_2300 7.7e-3 (`olmo_ifomega/compute_axis.csv`). Pod spend and GPU-hours: see the close-out line below.
