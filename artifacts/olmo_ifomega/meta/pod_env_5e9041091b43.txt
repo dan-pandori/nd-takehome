@@ -1,0 +1,44 @@
+Thu Nov  5 22:13:48 UTC 2026
+NVIDIA H200, 143771 MiB, 595.91.07, 5, 16
+	[4mGPU0	NIC0	NIC1	NIC2	NIC3	NIC4	NIC5	NIC6	NIC7	NIC8	NIC9	CPU Affinity	NUMA Affinity	GPU NUMA ID[0m
+GPU0	 X 	SYS	SYS	SYS	SYS	NODE	NODE	PIX	NODE	NODE	NODE	48-95,144-191	1		N/A
+NIC0	SYS	 X 	NODE	NODE	NODE	SYS	SYS	SYS	SYS	SYS	SYS				
+NIC1	SYS	NODE	 X 	NODE	NODE	SYS	SYS	SYS	SYS	SYS	SYS				
+NIC2	SYS	NODE	NODE	 X 	NODE	SYS	SYS	SYS	SYS	SYS	SYS				
+NIC3	SYS	NODE	NODE	NODE	 X 	SYS	SYS	SYS	SYS	SYS	SYS				
+NIC4	NODE	SYS	SYS	SYS	SYS	 X 	NODE	NODE	NODE	NODE	NODE				
+NIC5	NODE	SYS	SYS	SYS	SYS	NODE	 X 	NODE	NODE	NODE	NODE				
+NIC6	PIX	SYS	SYS	SYS	SYS	NODE	NODE	 X 	NODE	NODE	NODE				
+NIC7	NODE	SYS	SYS	SYS	SYS	NODE	NODE	NODE	 X 	NODE	NODE				
+NIC8	NODE	SYS	SYS	SYS	SYS	NODE	NODE	NODE	NODE	 X 	PIX				
+NIC9	NODE	SYS	SYS	SYS	SYS	NODE	NODE	NODE	NODE	PIX	 X 				
+
+Legend:
+
+  X    = Self
+  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)
+  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node
+  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)
+  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)
+  PIX  = Connection traversing at most a single PCIe bridge
+  NV#  = Connection traversing a bonded set of # NVLinks
+
+NIC Legend:
+
+  NIC0: ibp25s0
+  NIC1: ibp42s0
+  NIC2: ibp59s0
+  NIC3: ibp76s0
+  NIC4: ibp155s0
+  NIC5: ibp171s0
+  NIC6: ibp193s0
+  NIC7: ibp203s0
+  NIC8: rocep216s0f0
+  NIC9: rocep216s0f1
+
+cpu.max  cfs 2040000
+192
+               total        used        free      shared  buff/cache   available
+Mem:            2015         205         502         131        1449        1809
+mfs#us-nc-1.runpod.net:9421  1.2P  865T  337T  72% /workspace
+overlay                       60G   16M   60G   1% /

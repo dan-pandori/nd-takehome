@@ -2055,6 +2055,9 @@ families (dpo 0.20 / 0.11 vs 0.99 / 1.00).
   lte_qr_023, perp_057, perp_075, perp_033); unresolved perp_055, **perp_068, perp_069** (dpo 0 doubly in 256, 255 of
   256 cut at 32,768 each), perp_011 and perp_073 (1 sound dpo success each). step_2300 confirmed on all five (21 / 32
   doubly on perp_068 and perp_069). The reverse candidate: step_2300 resolved it (2 sound of 4 doubly).
+  geometry_basic_010 (step_0750's candidate): dpo 7 doubly in 256 (resolved under `omega` / `rl`) but by hand 1 sound,
+  5 flawed, 1 guess — FE = 13.1549 lies 0.00007 below the rounding boundary and dpo computes it by hand, so most of
+  its credited 13.15s rest on cancelling slips; not a reach prompt under any grade (step_0750 was never confirmed).
 - **perp_055's label is wrong** (hand check, confirmed): 17 counts two perpendicular pairs that meet only outside the
   polygon; the answer to the problem as stated is 15. step_2300's credited "17"s are flawed; it states 15 in 16 of 26
   finished responses (2 checked sound with the label corrected, one of them fresh).
@@ -2076,7 +2079,7 @@ families (dpo 0.20 / 0.11 vs 0.99 / 1.00).
 | IFEval | strict | 8 | 1 | **6** | 7 | **Reach** |
 | IFEval | hand | 8 | 1 | **6** (ifeval_1314, 2247, 2350, 2447, 2563, 3478) | 7 | **Reach** |
 
-### Hand check (`olmo_ifomega/handcheck.csv`: 500 items, every one confirmed by me; rules 1–5 in `handcheck_rule_if.md`)
+### Hand check (`olmo_ifomega/handcheck.csv`: 505 items, every one confirmed by me; rules 1–5 in `handcheck_rule_if.md`)
 
 IFBench: dpo's strict successes 92 checked on reach candidates (73 genuine, 19 gamed) and 14 on reverse candidates (6 /
 8); step_2300's 305 checked (149 genuine, 156 gamed: checking went on longest where it games, so the first-checked
@@ -2085,7 +2088,7 @@ the constraint and drop the content (a 12–26-word a–z run for "each word sta
 equal-length sentences saying nothing; "chapters" and "screenplays" of a few dozen words so "no word more than 4 times"
 is never tested), vacuous satisfaction (no sentence punctuation; no `*` bullets; unspaced Japanese). On 11 IFBench
 prompts step_2300's strict "reach" rests only on gamed successes (stopping rule: ≥ 7 checked, none or one genuine).
-OMEGA test_out: dpo 26 (18 sound, 6 flawed, 2 guess); step_2300 10 (5 sound, 5 flawed: unverified meeting points on
+OMEGA test_out: dpo 31 (19 sound, 10 flawed, 2 guess); step_2300 10 (5 sound, 5 flawed: unverified meeting points on
 the geometry problems, the wrong perp_055 label) and 4 on the reverse candidate (2 / 2). IFEval: dpo 3 on reach candidates (2 genuine,
 1 gamed) and 2 on the reverse one (genuine); step_2300 28 (17 genuine, 11 gamed: all 10 checked on ifeval_1130 —
 two- or three-question trivia offered as a "logic quiz for teenagers" with at most one t — and an 11-word "rubric").
@@ -2115,4 +2118,11 @@ The 42 hand-reach prompts' binding constraints: 20 with no RL analogue, 16 loose
 ### Compute (podbudget; `olmo_ifomega/compute_rows.py` rows in the registry)
 
 RL ÷ pretraining compute (FLOPs, middle estimate with this run's response-length mix): step_0100 3.5e-4, step_0750
-2.6e-3, step_2300 7.7e-3 (`olmo_ifomega/compute_axis.csv`). Pod spend and GPU-hours: see the close-out line below.
+2.6e-3, step_2300 7.7e-3 (`olmo_ifomega/compute_axis.csv`).
+
+**Close-out:** spend **$293.84 of $325** (podbudget), **77.89 pod-hours** on six pods — `oif-a` H200 secure 1.50 h,
+`oif-b` 2 × A100 secure 1.19 h (Stage 0), `oif-c` / `oif-d` / `oif-e` H200 community 24.09 / 23.90 / 20.33 h (deleted by
+the watchdog 2026-11-05 21:15), `oif-g` H200 secure 6.87 h. Sampling: 72.5 GPU-hours, 339 M generated tokens, 42,958
+samples (≈ $0.87 per million generated tokens overall; table: `ND_RUN_ID=olmo-ifomega olmo_ifomega/compute_rows.py
+--dry`); compute rows in the registry (`registry/olmo-ifomega/`). Last pod deleted 2026-11-06 05:05 UTC; RunPod
+balance $157.60.

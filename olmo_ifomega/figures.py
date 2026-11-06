@@ -28,7 +28,7 @@ plt.rcParams.update({"font.size": 9, "axes.edgecolor": MUTED, "axes.labelcolor":
                      "figure.facecolor": SURFACE, "axes.facecolor": SURFACE, "savefig.facecolor": SURFACE})
 STEP = {"s0100": 100, "s0750": 750, "s2300": 2300}
 PRIMARY = {"ifbench": "strict", "ifeval": "strict", "omega_in": "omega", "omega_out": "omega"}
-TITLE = {"ifbench": "IFBench (headline prompts)", "ifeval": "IFEval", "omega_in": "OMEGA test_in",
+TITLE = {"ifbench": "IFBench headline", "ifeval": "IFEval", "omega_in": "OMEGA test_in",
          "omega_out": "OMEGA test_out"}
 
 
@@ -80,6 +80,10 @@ def main():
             # checkpoints' confirmation was the first in-run cut, so their reach was not measured)
             plot(ax, X, [(STEP[m], 100 * int(v[f"n_reach_{m}"]) / n) for m in CONFIRMED if v.get(f"n_reach_{m}") != ""],
                  REACH, "D", "reach at 256 (hand; step_2300)")
+            if t.startswith("omega") and v.get("n_reach_s2300") not in ("", "0", None):
+                # pre-registration deviation 10 (Dan, 2026-11-05): dpo never finishes within 32,768 tokens there
+                ax.annotate("reach at RL's token cap\n(dpo cut on 255 / 256)", (X[2300][0], 100 * int(v["n_reach_s2300"]) / n),
+                            xytext=(-6, 14), textcoords="offset points", ha="right", fontsize=7, color=REACH)
         plot(ax, X32, [(STEP[r["model"]], 100 * float(r["exp_entries"]) / aime_n) for r in aime_dyn], ENTRY, "o",
              "AIME 2025–26 entries (olmo-think32b)", hollow=True, ls=(0, (4, 2)))
         plot(ax, X32, [(STEP[r["model"]], 100 * float(r["exp_exits"]) / aime_n) for r in aime_dyn], EXIT, "s",

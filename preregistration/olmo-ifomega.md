@@ -378,3 +378,10 @@ func_coords_011's finished failures method (the crossing misplaced near g's pole
     pre-registered expectations; it does not enter any verdict.
 17. **IFEval extension run** (Dan's addition #3, after the `test_out` extension): defender extension, `s2300`
     confirmation and hand check on its 8 reach and 1 reverse candidates.
+18. **Hand-gate continuations on geometry_basic_010** (2026-11-06 03:59 and 04:33): `dpo`'s first four doubly
+    successes were a guess and three flawed (FE = 13.1549 lies 0.00007 below the rounding boundary and `dpo` computes
+    it by hand), so the defender extension was continued to the 256 cap (E2_dpo_oo6, E3_dpo_oo6) as for
+    func_intersection_coords_011 (E2_dpo_oo, E3_dpo_oo).
+19. **IFEval miss distances** (`olmo_ifomega/ifeval_misses.py`, 2026-11-06 04:15): a descriptive look at how far
+    `dpo`'s 256 answers miss each IFEval reach candidate's constraint, added after the IFEval verdict; its near-miss
+    thresholds were chosen after seeing the medians. Not pre-registered; it does not enter any verdict.
