@@ -1,9 +1,9 @@
 # olmo-ifomega — does Olmo 3.1 Think 32B's RL create reach where RL moved it?
 
-**Setup.** RL start `allenai/Olmo-3-32B-Think-DPO`; `allenai/Olmo-3.1-32B-Think` `step_0750` and `main` (= `step_2300`);
-Think RL decoding (T 1, top-p 1, 32,768 tokens). IFBench (218 headline prompts), IFEval (150), OMEGA `test_out` (100).
-Grades: official IF checkers; OMEGA exact match and RL's verifier; blinded hand check (505 items, all confirmed).
-Reach = step 2,300 confirmed, DPO 0 successes in 256 samples.
+**Setup.** RL start `allenai/Olmo-3-32B-Think-DPO`; `allenai/Olmo-3.1-32B-Think` `step_0750` and `main` (=
+`step_2300`); `step_0100` on IFBench only (pass@1 0.31). Think RL decoding (T 1, top-p 1, 32,768 tokens). IFBench (218
+headline prompts), IFEval (150), OMEGA `test_out` (100). Grades: official IF checkers; OMEGA exact match and RL's
+verifier; blinded hand check (505 items, all confirmed). Reach = step 2,300 confirmed, DPO 0 successes in 256 samples.
 
 | pass@1 [95 %] / pass@8 | DPO | step 750 | step 2,300 |
 |---|---|---|---|
@@ -23,14 +23,13 @@ Reach = step 2,300 confirmed, DPO 0 successes in 256 samples.
 4. **DPO's IFBench failures are substantive**: on the 49 zero-success prompts 93 % ignore or miss the binding
    constraint by far; on geometry 99 % hit the token cap.
 5. IFBench reach is not concentrated near RL's IF data (binding constraints without an RL analogue: 48 % vs 38 %).
-   RL compute at step 2,300: 0.8 % of pretraining.
 
 **Against expectations:** pass@1 in range except RL on `test_out` (0.62 vs 0.40); DPO resolved 1 of 8 IFEval
 candidates (75 % expected); gaming far above ≤ 10 %; failures more substantive (93 % vs 60 %).
 
-**Deviations.** `step_0100`, `test_in` and intermediate-checkpoint confirmation cut; budget raised twice ($225, $325);
-hand rule 5 added.
+**Deviations.** `test_in`, `step_0100` beyond IFBench and intermediate-checkpoint confirmation cut; budget raised
+twice ($225, $325); hand rule 5 added.
 
-**Cost** $293.84 of $325 (77.9 pod-hours; 339 M generated tokens). Memo: `olmo_ifomega/scaleup_memo.md`.
+**Cost** $303.48 of $325 (79.7 pod-hours; 350 M generated tokens). Memo: `olmo_ifomega/scaleup_memo.md`.
 
 ![entries, exits and reach against RL compute](figures/olmo_ifomega_reach.png)

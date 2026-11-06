@@ -385,3 +385,7 @@ func_coords_011's finished failures method (the crossing misplaced near g's pole
 19. **IFEval miss distances** (`olmo_ifomega/ifeval_misses.py`, 2026-11-06 04:15): a descriptive look at how far
     `dpo`'s 256 answers miss each IFEval reach candidate's constraint, added after the IFEval verdict; its near-miss
     thresholds were chosen after seeing the medians. Not pre-registered; it does not enter any verdict.
+20. **`step_0100` on IFBench restored** (2026-11-06 05:30): with $31 of the $325 left after every pre-registered and
+    requested job, the brief's first cut was reversed as Dan's 2026-11-04 answer asks and Part B lists ((4): fixed
+    phase, 8 samples per prompt, seed 3002; no extension or confirmation, as for `step_0750`). OMEGA `test_in` (≈ $90)
+    stays cut.

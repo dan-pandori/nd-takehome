@@ -2020,8 +2020,8 @@ problem, by the brief's design); on aime2025_28 dpo, step_0100 and step_0750 eac
 `step_0100` (`e7b80281`), `step_0750` (`418fb274`), `main` (`97ade57a` = `step_2300`). Decoding as olmo-think32b
 (`olmo_thinker` template, T 1, top-p 1, 32,768-token responses; vLLM 0.11.0, bf16, 1 × H200 per job). Prompts
 (`olmo_ifomega/problems.jsonl`, `manifest.csv`): IFBench 300 (**headline 218**: 82 excluded, their base request a Think-SFT
-/ DPO / RL conversation), IFEval 150 (seeded), OMEGA explorative `test_out` 100 (10 families × 10, seeded); `test_in` and
-`step_0100` were cut (budget). Grades: IF `strict` (official checkers on the text after the last `</think>`, stripped);
+/ DPO / RL conversation), IFEval 150 (seeded), OMEGA explorative `test_out` 100 (10 families × 10, seeded); `test_in` was cut
+and `step_0100` ran on IFBench only, at the end (budget). Grades: IF `strict` (official checkers on the text after the last `</think>`, stripped);
 OMEGA `omega` (OLMES exact match), `rl` (open-instruct MathVerifier on the whole response), doubly = both; and a blinded
 hand check (IF genuine / gamed under `olmo_ifomega/handcheck_rule_if.md`; OMEGA sound / flawed / guess).
 
@@ -2030,6 +2030,7 @@ hand check (IF genuine / gamed under `olmo_ifomega/handcheck_rule_if.md`; OMEGA 
 | task (prompts) | model | pass@1 | pass@8 | tokens / sample | cut at 32,768 |
 |---|---|---|---|---|---|
 | IFBench (218), strict | dpo | 0.290 [0.238, 0.344] | 0.461 | 4,448 | 0.1 % |
+| | step_0100 | 0.315 [0.263, 0.369] | 0.505 | 4,347 | 0.0 % |
 | | step_0750 | 0.512 [0.460, 0.565] | 0.794 | 5,564 | 0.2 % |
 | | step_2300 | 0.684 [0.635, 0.732] | 0.885 | 6,277 | 0.0 % |
 | IFEval (150), strict | dpo | 0.769 [0.714, 0.821] | 0.908 | 2,508 | 0.0 % |
@@ -2040,7 +2041,7 @@ hand check (IF genuine / gamed under `olmo_ifomega/handcheck_rule_if.md`; OMEGA 
 | | step_2300 | 0.624 [0.539, 0.710] | 0.730 | 20,873 | 5.1 % |
 
 dpo pass@16: IFBench 0.509, IFEval 0.927, test_out 0.61 (`rl` 0.64). Expected entries / exits vs dpo at k = 8
-(observed): IFBench step_0750 75.6 / 3.2 (67 / 5), step_2300 98.3 / 5.9 (90 / 8); IFEval 6.7 / 1.0 (4 / 1), 10.7 / 1.0
+(observed): IFBench step_0100 19.9 / 10.5 (14 / 15; pass@1 0.32 and pass@8 0.64 were expected), step_0750 75.6 / 3.2 (67 / 5), step_2300 98.3 / 5.9 (90 / 8); IFEval 6.7 / 1.0 (4 / 1), 10.7 / 1.0
 (8 / 1); test_out (`omega`) 19.9 / 1.0 (12 / 2), 21.4 / 0.5 (13 / 1). By family on test_out the gap is
 geometry_perpendicular_intersection (dpo 0.01 with 97 % of its samples cut; step_2300 0.71) and the two combinatory
 families (dpo 0.20 / 0.11 vs 0.99 / 1.00).
@@ -2120,9 +2121,13 @@ The 42 hand-reach prompts' binding constraints: 20 with no RL analogue, 16 loose
 RL ÷ pretraining compute (FLOPs, middle estimate with this run's response-length mix): step_0100 3.5e-4, step_0750
 2.6e-3, step_2300 7.7e-3 (`olmo_ifomega/compute_axis.csv`).
 
-**Close-out:** spend **$293.84 of $325** (podbudget), **77.89 pod-hours** on six pods — `oif-a` H200 secure 1.50 h,
+**Close-out:** spend **$303.48 of $325** (podbudget), **79.72 pod-hours** on eight pods — `oif-a` H200 secure 1.50 h,
 `oif-b` 2 × A100 secure 1.19 h (Stage 0), `oif-c` / `oif-d` / `oif-e` H200 community 24.09 / 23.90 / 20.33 h (deleted by
-the watchdog 2026-11-05 21:15), `oif-g` H200 secure 6.87 h. Sampling: 72.5 GPU-hours, 339 M generated tokens, 42,958
-samples (≈ $0.87 per million generated tokens overall; table: `ND_RUN_ID=olmo-ifomega olmo_ifomega/compute_rows.py
---dry`); compute rows in the registry (`registry/olmo-ifomega/`). Last pod deleted 2026-11-06 05:05 UTC; RunPod
-balance $157.60.
+the watchdog 2026-11-05 21:15), `oif-g` H200 secure 6.87 h, and for `step_0100` on IFBench a community H200 with
+broken CUDA (0.05 h, deleted unused) and `oif-h` H200 secure 1.79 h. Sampling: 74.0 GPU-hours, 350 M generated
+tokens, 45,358 samples (≈ $0.87 per million generated tokens overall; table: `ND_RUN_ID=olmo-ifomega
+olmo_ifomega/compute_rows.py --dry`); compute rows in the registry (`registry/olmo-ifomega/`). Last pod deleted
+2026-11-06 07:20 UTC; RunPod balance $147.96. Bucket (`hf://buckets/dan-pandori/nd-rl/olmo-ifomega/`): `artifacts/olmo_ifomega/` (every sample's text,
+grades, contamination scans, hand-check and failure-analysis items, labels and keys, job logs and metas; the 79 bulk
+files listed with sha256 in `artifacts/MANIFEST.jsonl`), `olmo_ifomega/` (code and result tables), `pod/olmo_ifomega/`
+(pod scripts), `docs/` (write-up, pre-registration, figure); no weights.

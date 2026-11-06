@@ -11,7 +11,7 @@ podbudget's billed hours are in numbers.md. Stage-0 jobs have no meta of the fin
 stage0_summary.json (generation seconds and tokens as measured when they were stopped at the $8 cap).
 Writes rows via record.py (ND_RUN_ID=olmo-ifomega) and prints the per-arm table (arm = model, phase).
 
-Usage: ND_RUN_ID=olmo-ifomega compute_rows.py [--dry]
+Usage: ND_RUN_ID=olmo-ifomega compute_rows.py [--dry] [--only job,job]   (--only: record just those jobs)
 """
 import csv
 import json
@@ -35,12 +35,17 @@ def metas():
 
 def main():
     dry = "--dry" in sys.argv
+    only = sys.argv[sys.argv.index("--only") + 1].split(",") if "--only" in sys.argv else None
     rows = metas()
+    if only:  # record just these jobs (a job finished after the main recording; avoids duplicate rows)
+        rows = {k: v for k, v in rows.items() if k in only}
     agg = defaultdict(lambda: defaultdict(float))
     if not dry:
         sys.path.insert(0, ".")
         import record
     extra = list(csv.DictReader(open(O / "compute_extra.csv"))) if (O / "compute_extra.csv").exists() else []
+    if only:
+        extra = [e for e in extra if e["job"] in only]
     for e in extra:  # jobs (or job segments) without a final meta: Stage 0, a job cut by the pod deletion
         key = (e["model"], e["phase"])
         agg[key]["gpu_seconds"] += float(e["gpu_seconds"])

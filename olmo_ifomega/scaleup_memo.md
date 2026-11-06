@@ -28,8 +28,8 @@ Models: `allenai/Olmo-3-32B-Think-DPO` (the RL start) and `allenai/Olmo-3.1-32B-
    to 1,024 (768 more each): 42 × 768 × 5.4k ≈ 174 M tokens ≈ $110–170. A 10-prompt seeded subset ≈ $30–40.
 4. **The intermediate checkpoints' reach** (cut here): `step_0750`'s confirmation on the IFBench reach set (fresh
    chunks of 16 until 2 genuine): ≈ 42 × 32 × 5.6k ≈ 7.5 M tokens ≈ $5–7, plus hand checks.
-5. **`step_0100` and OMEGA `test_in`** (cut): `step_0100` IFBench fixed phase ≈ $10; `test_in` fixed phase for all
-   four models ≈ $90 (long OMEGA responses).
+5. **OMEGA `test_in` and `step_0100` beyond IFBench** (cut): `test_in` fixed phase for all four models ≈ $90 (long
+   OMEGA responses); `step_0100` on IFEval / `test_out` ≈ $3 / $25 (its IFBench fixed phase ran at the end: $9.64).
 
 ## Cautions for any scale-up
 

@@ -1,0 +1,48 @@
+Fri Nov  6 05:34:25 UTC 2026
+NVIDIA H200, 143771 MiB, 595.91.07, 5, 16
+	[4mGPU0	NIC0	NIC1	NIC2	NIC3	NIC4	NIC5	NIC6	NIC7	NIC8	NIC9	NIC10	NIC11	CPU Affinity	NUMA Affinity	GPU NUMA ID[0m
+GPU0	 X 	SYS	SYS	SYS	SYS	SYS	SYS	PIX	PIX	PIX	NODE	SYS	SYS	48-71	2		N/A
+NIC0	SYS	 X 	PIX	PIX	NODE	SYS	SYS	SYS	SYS	SYS	SYS	SYS	SYS				
+NIC1	SYS	PIX	 X 	PIX	NODE	SYS	SYS	SYS	SYS	SYS	SYS	SYS	SYS				
+NIC2	SYS	PIX	PIX	 X 	NODE	SYS	SYS	SYS	SYS	SYS	SYS	SYS	SYS				
+NIC3	SYS	NODE	NODE	NODE	 X 	SYS	SYS	SYS	SYS	SYS	SYS	SYS	SYS				
+NIC4	SYS	SYS	SYS	SYS	SYS	 X 	NODE	SYS	SYS	SYS	SYS	SYS	SYS				
+NIC5	SYS	SYS	SYS	SYS	SYS	NODE	 X 	SYS	SYS	SYS	SYS	SYS	SYS				
+NIC6	PIX	SYS	SYS	SYS	SYS	SYS	SYS	 X 	PIX	PIX	NODE	SYS	SYS				
+NIC7	PIX	SYS	SYS	SYS	SYS	SYS	SYS	PIX	 X 	PIX	NODE	SYS	SYS				
+NIC8	PIX	SYS	SYS	SYS	SYS	SYS	SYS	PIX	PIX	 X 	NODE	SYS	SYS				
+NIC9	NODE	SYS	SYS	SYS	SYS	SYS	SYS	NODE	NODE	NODE	 X 	SYS	SYS				
+NIC10	SYS	SYS	SYS	SYS	SYS	SYS	SYS	SYS	SYS	SYS	SYS	 X 	NODE				
+NIC11	SYS	SYS	SYS	SYS	SYS	SYS	SYS	SYS	SYS	SYS	SYS	NODE	 X 				
+
+Legend:
+
+  X    = Self
+  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)
+  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node
+  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)
+  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)
+  PIX  = Connection traversing at most a single PCIe bridge
+  NV#  = Connection traversing a bonded set of # NVLinks
+
+NIC Legend:
+
+  NIC0: mlx5_0
+  NIC1: mlx5_1
+  NIC2: mlx5_2
+  NIC3: mlx5_3
+  NIC4: mlx5_4
+  NIC5: mlx5_5
+  NIC6: mlx5_6
+  NIC7: mlx5_7
+  NIC8: mlx5_8
+  NIC9: mlx5_9
+  NIC10: mlx5_10
+  NIC11: mlx5_11
+
+cpu.max 1020000 100000 cfs 
+96
+               total        used        free      shared  buff/cache   available
+Mem:            2015          35        1832           0         155        1979
+mfs#eur-is-4.runpod.net:9421  1.3P  481T  793T  38% /workspace
+overlay                        60G   16M   60G   1% /

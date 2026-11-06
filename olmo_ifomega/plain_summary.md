@@ -38,5 +38,5 @@ tries, even on the kinds of instructions it trained on; but part of the measured
 comes from writing shorter answers. On hard maths the gains look more like reliability and brevity than new ability.
 The cheapest next test: a longer thinking budget for the starting point on the two geometry problems (about $10).
 
-**Cost and caveats.** About $294 of rented GPU time. Two parts were cut for budget (the step-100 checkpoint and
-the in-distribution OMEGA problems). A task needs three reach prompts for a "reach" verdict.
+**Cost and caveats.** About $303 of rented GPU time. Cut for budget: the in-distribution OMEGA problems, and the
+step-100 checkpoint except on IFBench. A task needs three reach prompts for a "reach" verdict.
