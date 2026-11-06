@@ -39,6 +39,8 @@ def load_labels():
     cf = os.path.join(HAND, "confirm.json")
     if os.path.exists(cf):
         conf = json.load(open(cf))
+    if os.environ.get("RV_PHASE1"):  # the phase-1 state: drop overrides made in phase 2
+        conf = {k: v for k, v in conf.items() if v.get("phase") != 2}
     return key, lab, conf
 
 

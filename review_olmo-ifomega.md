@@ -643,3 +643,173 @@ Confirmed:
 - the candidate sets and the extension discipline (R5);
 - the 055 label error, by three routes (R6, R7);
 - the 82 contamination exclusions (R8).
+
+## §Compare (phase 2: written after the phase-1 commit `f455e436`)
+
+### C0. What phase 2 read, and two adjudications
+
+After committing phase 1 (09:07 UTC) I read:
+- `run_olmo_ifomega.md`, `numbers.md` § olmo-ifomega, and `log.md` § olmo-ifomega;
+- `olmo_ifomega/{plain_summary,scaleup_memo,README}.md`;
+- `verdict.csv`, `candidates.csv`, `handcheck.csv`, `ifbench_rl_map.csv`, `constraints_summary.csv`;
+- the figure and `QUESTIONS.md`;
+- the ledgers `~/podhours.log`, `~/podbudget.log` and `~/pods.log`.
+
+**Item-level hand agreement** (`rv_hand_compare.py`, `out/hand_compare.txt`). The executor's 505 hand items and my 568
+real items share 365 responses (same job, prompt, chunk, index):
+- IF: 296 of 325 agree on genuine vs not (91 %). The 29 disagreements run both ways (15 / 14).
+- OMEGA: 37 of 40 agree.
+
+That is ordinary reader disagreement, not a bias. Two disagreements decide something, so I read those responses
+myself:
+1. **`ifeval_1130`.** All 9 `s2300` successes my readers saw are 1–5 telegraphic yes/no trivia questions ("Is
+   chesterfield a chair? Can one relax here?"); none is a logic quiz. With my own phase-1 override of one of them, I side
+   with the executor: all gamed (recorded as phase-2 overrides in `hand/confirm.json`). `ifeval_1130` is open, and
+   **IFEval has 6 hand-reach prompts, as the executor reports** (phase-1 tables kept as committed; phase-2 state in
+   `out/hand_phase2.json`).
+2. **`geometry_basic_010`, `E3_dpo_oo6` 0/33.** The executor's reader calls it sound; mine calls it flawed. Its own FE
+   estimates are 13.151, 13.152, 13.154 and finally ≈ 13.1525. The true 13.154925 lies 0.000075 below the 13.155
+   rounding boundary, so its precision (± 0.003) cannot decide 13.15 against 13.16. I keep **flawed**: `dpo` is 0 sound
+   of 9 credited, not "1 sound of 7". The prompt's status is the same either way: not resolved for `dpo`, not reach.
+
+### C1. Claims against the recount
+
+| claim (executor) | my independent value | verdict |
+|---|---|---|
+| Models, revisions; `main` = `step_2300`; one template, T 1, top-p 1, 32,768 tokens, vLLM 0.11.0, 1 × H200 | commits match; identical weight hashes; 37 / 37 metas identical; template = upstream `olmo_thinker` | reproduces |
+| IFBench 300 / headline 218, IFEval 150 seeded, `test_out` 10 × 10 seeded | every prompt and label equals the pinned datasets; IFEval subset and OMEGA family / problem draws reproduce | reproduces |
+| 82 IFBench prompts excluded, "their base request a Think-SFT / DPO / RL conversation" | 67 over the automatic thresholds in my scan, 14 the same request verbatim (read); `ifbench_131` matches only the blurb to be shortened, in an SFT *assistant* turn | reproduces; one exclusion is the shortened text, not the request (conservative) |
+| official graders, IFBench @ `cd189a9c`, IFEval @ `e6890f85`, OLMES exact match, RL's MathVerifier | 46,434 rows re-graded with upstream code: 0 OMEGA disagreements; 12 IF strict disagreements, all `ifeval_1122` (random letter, R3) | reproduces |
+| fixed-phase pass@1 / pass@8, all tasks and models (numbers table) | IFBench and OMEGA identical up to rounding (e.g. `s2300` IFBench 0.6835); IFEval within 0.004 (`ifeval_1122`) | reproduces |
+| tokens / sample and cut shares | identical | reproduces |
+| `dpo` pass@16 0.509 / 0.927 / 0.61 (`rl` 0.64) | 0.509 / 0.927 / 0.610 (0.640) | reproduces |
+| expected entries / exits at k = 8 and observed (vs `dpo`'s 16) | identical (e.g. IFBench `s2300` 98.3 / 5.9, observed 90 / 8) | reproduces |
+| per-family gap: perpendicular `dpo` 0.01, 97 % cut, `s2300` 0.71; combinatory 0.20 / 0.11 vs 0.99 / 1.00 | identical | reproduces |
+| IFBench: 94 reach candidates, 8 reverse; `dpo` resolved 33; 49 with no strict success in 256; `s2300` confirmed on all 61 | identical | reproduces |
+| "dpo extended to 256 on all 94" / "to 256 on all 13" (OMEGA) | extended under the 256-cap rule; resolved prompts stopped at 64–208 draws (R5) | reword: "extended until resolved or 256" |
+| IFBench hand: `dpo` resolved 30; **42** hand-reach prompts | 31; **43**. 40 in common; theirs only `ifbench_214`, `49`; mine only `166`, `226`, `252`; all reader calls | reproduces within reader noise (± 2) |
+| "36 % of step 2,300's first-checked successes are gamed" | round 1 (non-adaptive): 36 % fixed (21/58), 37 % fresh (43/122) | reproduces |
+| "on 11 more prompts its strict reach is gaming only" | 10 by my rule: 8 under the stopping rule, plus `214`, `266` stopped short; the executor's list overlaps mine in 8 | reproduces approximately |
+| IFBench reverse: `ifbench_275`, `ifbench_88` | the same two, by checker and by hand | reproduces |
+| IFEval: 8 / 1 candidates; `3326` resolved; 0 strict in 256 on six; `2447` one success, gamed | identical | reproduces |
+| IFEval hand Reach, **6** prompts (1314, 2247, 2350, 2447, 2563, 3478) | 6 after my phase-2 read of `ifeval_1130` (phase 1: 7) | reproduces; add that `2447` rests on one borderline gamed label (the Chinese poem) |
+| IFEval: "all letter-avoidance or all-caps constraints RL trained on" | binding ids `letter_frequency` 3, `english_capital` 2, `capital_word_frequency` 1; all RL IF ids | reproduces |
+| IFEval: "DPO misses letter avoidance by far …; step 2,300 passes with 5–15× shorter answers" | not re-derived (descriptive, post hoc, not pre-registered; deviation 19) | not checked |
+| OMEGA: 14 candidates (13 + `geometry_basic_010`), 1 reverse; `dpo` resolved 8 by hand | 14 / 1; 8 resolved under the doubly-credited reading, **10** if `rl`-credited `dpo` responses count (R7) | reproduces under the executor's reading only |
+| perp_068 / perp_069: `dpo` 0 doubly in 256, 255 of 256 cut; `s2300` 21 / 32 | identical | reproduces |
+| perp_069 is a hand **reach** prompt | `dpo` has 2 `rl`-credited responses on perp_069 (draw 69 finished at 30,198 tokens; draw 237 cut). Both are sound enumerations to 14 (my readers; I read draw 69's ending). The log knew of the `rl` credit (14:32) but never read it | not supported as stated: reach only if `rl`-credited `dpo` responses are not `dpo` successes. Say so, and say that one `dpo` sample finished with a sound derivation |
+| perp_011, perp_073: 1 sound `dpo` success each | doubly: yes; perp_073 also has 2 `rl`-only `dpo` responses read sound | reproduces (doubly) |
+| reverse 045: `s2300` resolved it (2 sound of 4) | identical | reproduces |
+| perp_055 label wrong (17 → 15) | my computation, and both my blind readers independently | reproduces |
+| `s2300` states 15 in 16 of 26 finished responses | 16 `omega` credits under label 15 in 26 finished | reproduces |
+| hand verdict with 055's label corrected: 3 reach → "Reach (sensitivity)" | 3 only under the doubly reading; 2 (068, 055) if perp_069 is resolved by its `rl`-credited sound responses → Inconclusive | not robust; report both readings |
+| `geometry_basic_010`: 1 sound, 5 flawed, 1 guess | 0 sound of 9 credited (C0); status unchanged | differs by one borderline item |
+| verdict table, "open" column (61, 64, 5, 3, 6, 5, 7, 7) | these count every prompt not resolved for `dpo`, reach prompts included; true open = 12 / 22 / 2 / 1 / 4 / 3 / 1 / 1 | reword the column |
+| `test_out` `omega` Reach via the wrong label; `rl` and hand inconclusive | identical (R12) | reproduces |
+| Part C: "on geometry 99 % hit the token cap" | 1,591 / 1,606 = 99.1 % of doubly failures cut | reproduces |
+| Part C: IFBench failures "substantive 93 %" | reader classification not re-derived | not checked |
+| per-constraint: hand-reach binding constraints 20 none / 16 loose / 6 close (0.48 / 0.38 / 0.14) vs 0.375 / 0.40 / 0.225; gains +0.42 / +0.38 / +0.35 | identical under the executor's similarity map. The "none" excess is z = 1.35 | reproduces; "not concentrated near RL's IF data" stands, but the log's "if anything the reverse" is not supported |
+| compute axis 3.5e-4 / 2.6e-3 / 7.7e-3 | 3.47e-4 / 2.55e-3 / 7.67e-3 | reproduces |
+| spend $303.48 of $325, 79.72 pod-hours, eight pods; balance $147.96 | podhours ledger: identical; balance $147.72 at 09:16; no pods alive | reproduces |
+| "74.0 GPU-hours, 350 M generated tokens, 45,358 samples" | stored: 46,434 samples, 358.1 M tokens (+ 2.4 M unfinished Stage 0); three resumed segments unrecorded (R10) | differs: tokens ≈ 3 % and samples ≈ 2 % low |
+| bucket: 81 bulk files with sha256 | 81 / 81 sha256 and size match local; all 39 sample files listed in the bucket at their sizes; secret scan clean (with a positive control) | reproduces |
+| figure: entries, exits, reach vs RL ÷ pretraining, AIME points | every plotted point reproduces from my numbers. The OMEGA panel shows no reach marker, only a "token cap" note | reproduces |
+| "Against expectations": pass@1 in range except RL on `test_out`; IFEval 1 of 8; gaming; failures | also outside their intervals: IFBench \|R\| 94 (12–55), `dpo` pass@8 0.46 (0.50–0.75), entries 98 (35–75) and 21 (2–12), `test_out` exits 0.5 (1–7), lengths (R11) | incomplete: list every miss (the log does record the \|R\| miss) |
+| plain summary: "the two it never solved …" (OMEGA) | perp_069: `dpo` solved it soundly twice by RL's own verifier | reword |
+| memo: "6 of DPO's 7 credited answers reach 13.15 through cancelling slips or a guess" | 7 of 7 (C0) | minor |
+
+**Model labels.**
+- Every number in the write-up, the numbers section, the memo and the plain summary names its models (`dpo` / step 750 /
+  step 2,300, revisions in `numbers.md`).
+- The inherited AIME points are labelled olmo-think32b. The AI2 model-card figures appear only in the brief and the
+  pre-registration, labelled as OLMES numbers.
+- No unlabelled number.
+
+### C2. Procedure
+
+- **Expectations before data (gate 0).**
+  - Part A was committed at 19:53:21, before the first pod (19:59:51).
+  - Part B was committed at 20:56:12, after Stage 0 stopped (20:54) and before the first evaluation sample (`F_dpo_ifb`
+    started 21:29:53).
+  - The addendum (21:24) came before the IFEval and `step_0750` `test_out` jobs; Part C (16:29:48) before the failure
+    items were prepared (16:32).
+- **Budget.** Registered at 19:10:11 ($150), before the first pod. Raised to $225 (21:22) and $325 (15:44), each on
+  Dan's answer in `QUESTIONS.md` (relayed to the executor's inbox). Final spend $303.48, within budget, and the balance
+  stayed above $35.
+- **Rule changes after seeing data,** all disclosed as deviations:
+  - hand rule 5 (repeat constraints) and the challenger stopping rule (deviation 13), both written while reading;
+  - `verdict.py`'s per-grade candidate sets (before the `test_out` verdict).
+  My own corresponding rules (the repeat-span adjudication, my stopping rule) were made independently and land in the
+  same place.
+- **Misses** are reported in the log as they happened. The write-up's summary line omits several (C1).
+
+## §Verdict
+
+| task | grade | executor | reviewer | |
+|---|---|---|---|---|
+| IFBench (218) | strict | Reach, 49 | Reach, 49 (same prompts) | reproduces |
+| IFBench | hand | Reach, 42 | Reach, 43 (40 shared) | reproduces; the count is ± 2 reader noise |
+| IFEval (150) | strict | Reach, 6 | Reach, 6 | reproduces |
+| IFEval | hand | Reach, 6 | Reach, 6 (phase 1: 7, before I read `ifeval_1130` myself) | reproduces |
+| OMEGA `test_out` (100) | `omega` | Reach, 3 (via the wrong 055 label) | Reach, 3; Inconclusive with the label corrected | reproduces |
+| OMEGA | `rl` | Inconclusive | Inconclusive | reproduces |
+| OMEGA | hand | Inconclusive, 2 at the token cap (068, 069) | Inconclusive: 2 if only doubly-credited responses count, 1 (068) if `rl`-credited ones count | reproduces; the count of 2 needs its reading stated |
+
+**What stands.**
+- The run's inputs, sampling and storage are sound. Every pinned input, seeded draw, template and decoding setting
+  reproduces, and every stored text decodes from its token ids. Every stored text re-grades with upstream code to the
+  executor's grade: OMEGA on all 5,650 rows; IF on all 40,774 except 12 rows of `ifeval_1122`, whose checker draws a
+  random letter.
+- Every fixed-phase number reproduces: pass@k, intervals, entries and exits, lengths, per-family gaps.
+- The candidate sets, the extension discipline (no cell over 256; every overshoot a hand-gate continuation or an
+  in-flight chunk), the contamination exclusions (all 82 justified, one conservatively), the compute axis, the spend
+  and the bucket all reproduce.
+- **IFBench reach stands** under the checker and by hand, by a wide margin over the rule's 3. Its constraint ids do
+  not occur in RL's IF data; in the executor's map 6 of the 42 have a close analogue in kind.
+- **The gaming finding stands**: about a third of `step_2300`'s first-read strict IFBench successes are gamed (36–37 %
+  in my round 1, 36 % in the executor's). By hand, 10 of the 49 strict-reach prompts drop out in both readings, and 3–4 others join because `dpo`'s only
+  strict successes there are gamed.
+- **IFEval reach stands**: 6 prompts, all on RL-trained constraint types. It is surprising for an in-distribution
+  control, and it may be brevity (see the next measurement).
+- **The OMEGA hand verdict, Inconclusive, stands** under every reading; the automatic `omega` "Reach" rests on a wrong
+  label.
+- **The `perp_055` label error stands**, found three ways: the executor, my computation, and two blind readers.
+
+**What must be reworded.**
+1. `perp_069` is a hand-reach prompt only under the reading that `rl`-credited `dpo` responses are not `dpo`
+   successes. Two of `dpo`'s 256 responses are credited by RL's own verifier, and both read as sound. One of them
+   finished at 30,198 tokens but stopped mid-word in its answer section. The pre-registration does not settle which
+   credits the hand row counts. State the reading, and report the OMEGA hand count as 2 (doubly) or 1 (any credit).
+   The corrected-label "Reach (sensitivity)" holds only under the doubly reading. The plain summary's "the two it never
+   solved" should drop 069 or qualify it.
+2. The verdict table's "open" column counts every prompt not resolved for `dpo`, reach prompts included. Give the true
+   open counts (IFBench 12 strict / 22 hand; `test_out` 2 / 1 / 4 / 3; IFEval 1 / 1).
+3. "Extended to 256 on all 94 / 13" should read "extended until resolved, or to 256".
+4. "Against expectations" should list every miss, not four. Also missed:
+   - IFBench |R| 94 (expected 12–55);
+   - `dpo` IFBench pass@8 0.46 (0.50–0.75);
+   - expected entries 98 (35–75) and 21 (2–12), and `test_out` exits 0.5 (1–7);
+   - `test_out` `s0750` pass@1 0.55 (0.22–0.52);
+   - the length and cut-share expectations (R11).
+5. "350 M generated tokens, 45,358 samples, 74.0 GPU-hours" omits the earlier segments of three resumed jobs
+   (`E1_dpo_oo3`, `F_dpo_ifb`, `F_s2300_ifb`): 1,076 samples, 10.9 M tokens, ≈ 2.7 GPU-hours. Add their registry
+   rows, or footnote the gap. Stored: 46,434 samples and 358.1 M tokens.
+6. `geometry_basic_010`: "1 sound of 7" → "0–1 sound of 7". The one in question estimates FE to ± 0.003 at an answer
+   0.000075 from the rounding boundary.
+7. The log's "if anything the reverse" (reach enriched for novel constraint types) is not significant (z = 1.35).
+8. Say that `ifeval_2447`'s reach rests on one borderline gamed label (an all-Chinese poem for "fewer than two w's"),
+   and that `ifeval_1122`'s grade is random under the official checker.
+
+**What is not supported.** Nothing in the write-up is contradicted by the data. The unsupported statements are the
+unqualified ones in item 1 ("perp_069 … reach", "corrected, it is a third", "never solved"). Not re-derived (checked
+neither way): Part C's reader classes (93 % substantive) and the descriptive IFEval miss-distance follow-up.
+
+**Next measurement.** The executor's memo #1, run with three conditions:
+- `dpo` on perp_055 / 068 / 069 at a 65,536-token budget, 64 samples each (≈ $10);
+- graded with both `omega` and `rl`, with the label of 055 corrected;
+- every credited response hand-read, `rl`-only ones included.
+
+perp_069 already shows two sound `dpo` derivations inside 32,768 tokens. A longer budget would show whether the OMEGA
+geometry gap is length, not reach. For IFEval, the memo's brevity control (#2) is the test that matters: `dpo` told to
+answer in ≤ 60 words on the letter-avoidance reach prompts. If a precise IFBench hand count is wanted, double-read the
+≈ 20 prompts whose status turns on one label; the two readings here agree on 91 % of shared items.

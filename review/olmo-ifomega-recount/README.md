@@ -36,6 +36,12 @@ enough for the stdlib-only scripts.
 | `rv_hand_items.py` | blinded hand-check items from raw texts (round 1 gate; later rounds from `hand/need_r*.json`); controls | `hand/key_r*.json`, `hand/batches_r*.json` |
 | `rv_hand.py` | labels + overrides → hand status per candidate (unsure strict / lenient; OMEGA union / doubly); next-round needs | `out/hand{,_doubly}.{json,txt}`, `hand/need_r*.json` |
 | `rv_hand_tables.py`, `rv_tables.py` | markdown tables for the review, generated from the json | `out/hand_tables.md`, `out/tables.md` |
+| `rv_hand_compare.py` (phase 2) | the executor's `handcheck.csv` joined to my items on (job, pid, chunk, i): coverage, agreement, every disagreement with both evidences | `out/hand_compare.{txt,json}` |
+| (inline, saved; phase 2) | claim checks: reverse sets, per-constraint shares under the executor's map, Part C counts, per-family rates, gaming-only sets, MANIFEST sha256, bucket listing, secret scan | `out/phase2_checks.txt`, `out/verdict_compare.txt`, `out/manifest_check.txt` |
+
+**Phase 1 and phase 2.** `out/hand*.{json,txt,md}` are the phase-1 state as committed; `RV_PHASE1=1 python3 rv_hand.py`
+reproduces it. Phase-2 overrides in `hand/confirm.json` carry `"phase": 2`; `out/hand_phase2.json`,
+`out/hand_doubly_phase2.json` and `out/hand_tables_phase2.md` hold the state with them.
 
 **Hand-check files.**
 - `hand/reader_prompt_{if,omega}.md`: the rubrics.

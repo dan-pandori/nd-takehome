@@ -1,0 +1,12 @@
+[('ifbench', 'hand'), ('ifbench', 'strict'), ('ifeval', 'hand'), ('ifeval', 'strict'), ('omega_in', 'hand'), ('omega_in', 'omega'), ('omega_in', 'rl'), ('omega_out', 'hand'), ('omega_out', 'omega'), ('omega_out', 'rl')]
+ifbench hand: theirs reach 42 mine 43; only theirs ['ifbench_214', 'ifbench_49']; only mine ['ifbench_166', 'ifbench_226', 'ifbench_252']
+   dpo hand-resolved: theirs 30 mine 31; only theirs ['ifbench_126']; only mine ['ifbench_178', 'ifbench_276']
+ifeval hand: theirs reach 6 mine 7; only theirs []; only mine ['ifeval_1130']
+   dpo hand-resolved: theirs 1 mine 1; only theirs []; only mine []
+ifbench strict reach: theirs 49 mine 49 same
+('omega_in', 'omega') reach  | open  | verdict not run | dpo_resolved 0
+('omega_in', 'rl') reach  | open  | verdict not run | dpo_resolved 0
+('omega_in', 'hand') reach  | open  | verdict not run | dpo_resolved 0
+('omega_out', 'omega') reach omega_out_geometry_perpendicular_intersection_test_out_055 omega_out_geometry_perpendicular_intersection_test_out_068 omega_out_geometry_perpendicular_intersection_test_out_069 | open omega_out_geometry_perpendicular_intersection_test_out_011 omega_out_geometry_perpendicular_intersection_test_out_055 omega_out_geometry_perpendicular_intersection_test_out_068 omega_out_geometry_perp | verdict reach | dpo_resolved 9
+('omega_out', 'rl') reach omega_out_geometry_perpendicular_intersection_test_out_055 omega_out_geometry_perpendicular_intersection_test_out_068 | open omega_out_geometry_perpendicular_intersection_test_out_011 omega_out_geometry_perpendicular_intersection_test_out_055 omega_out_geometry_perpendicular_intersection_test_out_068 | verdict inconclusive | dpo_resolved 8
+('omega_out', 'hand') reach omega_out_geometry_perpendicular_intersection_test_out_068 omega_out_geometry_perpendicular_intersection_test_out_069 | open omega_out_geometry_basic_test_out_010 omega_out_geometry_perpendicular_intersection_test_out_011 omega_out_geometry_perpendicular_intersection_test_out_055 omega_out_geometry_perpendicular_intersectio | verdict inconclusive | dpo_resolved 8
