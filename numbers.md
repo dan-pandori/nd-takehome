@@ -2128,6 +2128,6 @@ broken CUDA (0.05 h, deleted unused) and `oif-h` H200 secure 1.79 h. Sampling: 7
 tokens, 45,358 samples (≈ $0.87 per million generated tokens overall; table: `ND_RUN_ID=olmo-ifomega
 olmo_ifomega/compute_rows.py --dry`); compute rows in the registry (`registry/olmo-ifomega/`). Last pod deleted
 2026-11-06 07:20 UTC; RunPod balance $147.96. Bucket (`hf://buckets/dan-pandori/nd-rl/olmo-ifomega/`): `artifacts/olmo_ifomega/` (every sample's text,
-grades, contamination scans, hand-check and failure-analysis items, labels and keys, job logs and metas; the 79 bulk
+grades, contamination scans, hand-check and failure-analysis items, labels and keys, job logs and metas; the 81 bulk
 files listed with sha256 in `artifacts/MANIFEST.jsonl`), `olmo_ifomega/` (code and result tables), `pod/olmo_ifomega/`
 (pod scripts), `docs/` (write-up, pre-registration, figure); no weights.

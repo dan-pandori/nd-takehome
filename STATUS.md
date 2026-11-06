@@ -348,3 +348,15 @@ OLMO-THINK32B DONE 2026-11-04T09:21:59Z
   Remaining: E1_dpo_oo6 (geometry_basic_010, step_0750's new candidate, ≈ 05:00), C1_s2300_ifev, write-up, upload.
   Spend $283.3 of $325 (balance $168).
 
+- 2026-11-06 07:33 UTC  **Done.** Verdicts (pre-registered rule; the hand grade is the headline): **IFBench: Reach** (42
+  prompts by hand, 49 strict; 36 % of `step_2300`'s first-checked strict successes are gamed); **IFEval: Reach** (6
+  prompts, strict and hand; given 15 % beforehand — letter-avoidance and all-caps constraints of types RL trained on,
+  passed with 5–15× shorter answers); **OMEGA test_out: inconclusive by hand** (2 reach prompts, both at RL's token
+  cap; exact match says Reach only through a wrong official answer). DPO's IFBench failures on reach prompts are 93 %
+  substantive (Part C). `step_0100` on IFBench restored at the end with the budget left (pass@1 0.315). Deliverables:
+  `run_olmo_ifomega.md`, `numbers.md` § olmo-ifomega, `log.md` § olmo-ifomega, `olmo_ifomega/` (README,
+  `plain_summary.md`, `scaleup_memo.md`, results, `handcheck.csv` with 505 items, per-constraint and failure
+  analyses), `figures/olmo_ifomega_reach.png`, bucket `hf://buckets/dan-pandori/nd-rl/olmo-ifomega/`. Spend $303.48
+  of $325 (79.7 pod-hours); no pods left.
+
+OLMO-IFOMEGA DONE 2026-11-06T07:33:16Z
