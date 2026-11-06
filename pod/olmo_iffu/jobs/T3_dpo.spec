@@ -1,0 +1,1 @@
+dpo allenai/Olmo-3-32B-Think-DPO main|PROBLEMS=olmo_ifomega/problems.jsonl bash pod/olmo_iffu/job.sh T3_dpo dpo allenai/Olmo-3-32B-Think-DPO main 768 @olmo_iffu/plan/T3_dpo.pids 7201 16 0 --stop_after 2 --inflight 3 --stop_file olmo_iffu/plan/T3_dpo.stop
