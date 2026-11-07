@@ -1,0 +1,11 @@
+[
+ {
+  "item": "r136a94",
+  "label": "flawed",
+  "where": "think_only",
+  "final_states_other_answer": false,
+  "counted_pairs": "3-5 x 4-10, 6-3 x 6-9, 6-3 x 4-11, 9-12 x 6-9, 9-12 x 4-11, 1-8 x 6-9, 1-8 x 4-11, 11-5 x 4-6, 11-5 x 3-7, 2-11 x 7-12, 2-11 x 5-2, 4-9 x 7-12, 4-9 x 5-2, 9-3 x 10-8, 11-1 x 10-8 (rule: all 14 slope-product -1 pairs plus the one vertical-horizontal pair it accepted)",
+  "my_pairs": "6-3 x 6-9 (at v6), 6-3 x 4-11, 5-9 x 3-5 (at v5), 11-5 x 4-6, 11-5 x 3-7, 2-11 x 7-12, 2-11 x 5-2 (at v2), 4-9 x 7-12, 4-9 x 5-2, 9-12 x 6-9 (at v9), 9-12 x 4-11, 9-3 x 10-8, 6-9 x 1-8, 1-8 x 4-11, 3-5 x 4-10 = 15; perpendicular but not meeting: 2-12 x 3-5, 11-1 x 10-8",
+  "evidence": "Response counts all 14 slope-product pairs plus D14xD17; two errors cancel. (1) It includes 11-1 x 10-8 (D10,D12), which never meet: the lines cross at (0.317,-1.183), |pt|=1.22, outside the circle. Only (D9,D12) was checked, then 'All pairs we considered have intersection within the polygon or at vertices'. (2) It excludes 5-9 x 3-5 (D2,D14), which meet at vertex 5: 'The angle between D14 ... and D2 ... is the internal angle at vertex5' ... '150°, not 90°'. False: 5-9 is vertical, 3-5 horizontal, angle 3-5-9 = 90° (checked numerically). Yet it accepts other shared-vertex pairs (6-3 x 6-9, 9-12 x 6-9, 2-11 x 5-2). True count 15 = 13+2. boxed 15 only in thinking; write-up cut off at '4'."
+ }
+]

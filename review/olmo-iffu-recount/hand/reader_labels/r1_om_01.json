@@ -1,0 +1,11 @@
+[
+ {
+  "item": "r119851",
+  "label": "flawed",
+  "where": "final",
+  "final_states_other_answer": false,
+  "counted_pairs": "vertex (thinking, line ~3040): 2-4x2-9, 2-5x2-10, 3-1x3-6, 2-9x7-9, 10-7x2-10 [write-up garbles this as 'vertex 2: two (e.g. 2-4 and 2-10), 3, 9, 10, 5: one each' = 5]; interior (final 9): 1-6x2-10, 2-9x1-3, 2-9x1-5, 2-9x10-8, 3-6x9-5, 2-5x7-9, 3-6x8-10, 1-5x3-8, 9-4x8-10; total 5+9=14",
+  "my_pairs": "shared vertex (5): 2-4x2-9, 2-5x2-10, 3-1x3-6, 2-9x7-9, 10-7x2-10; interior crossings (9): 1-6x2-10, 9-5x3-6, 10-6x2-9, 10-6x3-8, 2-9x1-5, 2-4x3-8, 3-8x1-5, 3-8x7-9, 9-4x8-10; total 14 (every perpendicular pair meets)",
+  "evidence": "Vertex part (thinking) = my 5. Interior 9 = 5 right + 4 wrong: 2-9x1-3 and 2-9x10-8 cross but are not perpendicular (a+b-c-d = 3 mod 10; the 10-8 case measured arc 2-8 through 10,9); 2-5x7-9 and 3-6x8-10 do not meet ('arcs between2-5 (108°) and7-9 (72°), sum180 => angle90°' adds each chord's own arc). Missed 10-6x2-9 (dropped from 2-9's crosser list), 10-6x3-8, 2-4x3-8, 3-8x7-9. Four false positives cancel four misses, giving 14. Ending recounts vertex 2 as one pair (wrong 2-4x2-10), then 'suppose' 5; 'tentative box... possibly 16'. Write-up repeats wrong pairs plus placeholders. Checked in python: dot products, interleaving, segment intersection."
+ }
+]

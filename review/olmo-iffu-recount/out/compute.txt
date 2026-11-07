@@ -1,0 +1,27 @@
+| job | pod | GPUs | samples | gen tokens (Σ n_tok) | Σ ids | meta gen_tokens | t_load s | t_gen s | GPU-s | tok/s (gen) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| T1_dpo | iffu-a | 2 × NVIDIA H200 | 192 | 8,799,941 | 8,799,941 | 8,799,941 | 131.9 | 5006.0 | 10,276 | 1,758 |
+| T2_dpo | iffu-a | 2 × NVIDIA H200 | 1,024 | 3,404,930 | 3,404,930 | 3,404,930 | 312.7 | 886.0 | 2,397 | 3,843 |
+| T2_s2300 | iffu-a | 2 × NVIDIA H200 | 256 | 1,351,053 | 1,351,053 | 1,351,053 | 246.5 | 509.4 | 1,512 | 2,652 |
+| T3_dpo | iffu-b | 1 × NVIDIA H200 | 7,680 | 33,302,766 | 33,302,766 | 33,302,766 | 82.1 | 17752.9 | 17,835 | 1,876 |
+| T4_s0750 | iffu-b | 1 × NVIDIA H200 | 1,088 | 7,639,142 | 7,639,142 | 7,639,142 | 78.6 | 4824.7 | 4,903 | 1,583 |
+| T4b_s0750 | iffu-b | 1 × NVIDIA H200 | 16 | 85,162 | 85,162 | 85,162 | 85.0 | 178.3 | 263 | 478 |
+| T2c_dpo | iffu-b | 1 × NVIDIA H200 | 2,048 | 9,156,026 | 9,156,026 | 9,156,026 | 74.9 | 5112.1 | 5,187 | 1,791 |
+| T2c_s2300 | iffu-b | 1 × NVIDIA H200 | 512 | 2,852,188 | 2,852,188 | 2,852,188 | 84.4 | 1578.1 | 1,662 | 1,807 |
+| total | | | 12,816 | 66,591,208 | | | | | 44,036 | |
+
+Pods (~/podhours.log, last line per pod):
+   iffu-a: 2.1811 h, $23.08 ($10.58/h), NVIDIA H200; 2 GPU(s) -> 15,704 pod GPU-s
+   iffu-b: 8.5767 h, $30.79 ($3.59/h), NVIDIA H200; 1 GPU(s) -> 30,876 pod GPU-s
+   total $53.87
+
+Registry: 56 rows, jobs ['T1_dpo', 'T2_dpo', 'T2_s2300', 'T2c_dpo', 'T2c_s2300', 'T3_dpo', 'T4_s0750', 'T4b_s0750']
+   T1_dpo: registry {'attempts': 192, 'gen_tokens': 8799941, 'gpu_seconds': 10275.8, 'lean_checks': 0, 'train_steps': 0, 'train_tokens': 0, 'verifier_checks': 192}
+   T2_dpo: registry {'attempts': 1024, 'gen_tokens': 3404930, 'gpu_seconds': 2397.4, 'lean_checks': 0, 'train_steps': 0, 'train_tokens': 0, 'verifier_checks': 1024}
+   T2_s2300: registry {'attempts': 256, 'gen_tokens': 1351053, 'gpu_seconds': 1511.8, 'lean_checks': 0, 'train_steps': 0, 'train_tokens': 0, 'verifier_checks': 256}
+   T3_dpo: registry {'attempts': 7680, 'gen_tokens': 33302766, 'gpu_seconds': 17835.0, 'lean_checks': 0, 'train_steps': 0, 'train_tokens': 0, 'verifier_checks': 7680}
+   T4_s0750: registry {'attempts': 1088, 'gen_tokens': 7639142, 'gpu_seconds': 4903.3, 'lean_checks': 0, 'train_steps': 0, 'train_tokens': 0, 'verifier_checks': 1088}
+   T4b_s0750: registry {'attempts': 16, 'gen_tokens': 85162, 'gpu_seconds': 263.3, 'lean_checks': 0, 'train_steps': 0, 'train_tokens': 0, 'verifier_checks': 16}
+   T2c_dpo: registry {'attempts': 2048, 'gen_tokens': 9156026, 'gpu_seconds': 5187.0, 'lean_checks': 0, 'train_steps': 0, 'train_tokens': 0, 'verifier_checks': 2048}
+   T2c_s2300: registry {'attempts': 512, 'gen_tokens': 2852188, 'gpu_seconds': 1662.5, 'lean_checks': 0, 'train_steps': 0, 'train_tokens': 0, 'verifier_checks': 512}
+   differences from my values: none

@@ -1,0 +1,11 @@
+[
+ {
+  "item": "r16dd00",
+  "label": "flawed",
+  "where": "think_only",
+  "final_states_other_answer": false,
+  "counted_pairs": "vertex: 2-4 x 2-9, 2-5 x 2-10, 1-3 x 3-6, 2-9 x 7-9, 2-10 x 7-10; interior: 1-6 x 2-10, 6-10 x 2-9, 6-10 x 3-8, 3-8 x 7-9, 1-5 x 2-9, 5-9 x 3-6, 6-9 x 2-4, 6-9 x 2-10, 2-5 x 8-10 (5+9=14)",
+  "my_pairs": "vertex: 2-4 x 2-9, 2-5 x 2-10, 1-3 x 3-6, 2-9 x 7-9, 2-10 x 7-10; interior: 1-6 x 2-10, 6-10 x 2-9, 6-10 x 3-8, 3-8 x 7-9, 1-5 x 2-9, 5-9 x 3-6, 2-4 x 3-8, 1-5 x 3-8, 4-9 x 8-10 (5+9=14)",
+  "evidence": "The 5 vertex pairs are correct. The 9 interior pairs come from the half-sum-of-arcs rule, but the response applies it to chords whose endpoints do not interleave: \"D6=(6,9), and D8=(2,4): endpoints2,4,6,9 ... arc2-4 (72) ... arc6-9 (108), total180-> angle90\". Same for 6-9 x 2-10 and \"D7=(2,5) and D15=(8,10) ... total180, angle90, yes!\". My enumeration (unit circle, dot product, segment intersection, cross-checked by (a+b)-(c+d)=5 mod 10) shows these three pairs never cross and meet at 18, 54 and 18 degrees. The response never evaluates the true crossings 2-4 x 3-8, 1-5 x 3-8 and 4-9 x 8-10. Three false positives cancel three misses, giving 14. The write-up breaks off mid-list, so boxed 14 appears only in the thinking."
+ }
+]

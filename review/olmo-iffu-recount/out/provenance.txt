@@ -1,0 +1,58 @@
+1. Subsets (the 43 parsed from review_olmo-ifomega.md)
+   order = numeric IFBench index: test 2 = ifbench_290 ifbench_4 ifbench_64 ifbench_79 ifbench_170 ifbench_0 ifbench_188 ifbench_207 ifbench_179 ifbench_268  (pre-registered list MATCHES)
+                                  test 3 = ifbench_252 ifbench_269 ifbench_253 ifbench_3 ifbench_78 ifbench_248 ifbench_211 ifbench_166 ifbench_136 ifbench_133  (MATCHES)
+   order = the review's listed order: test 2 = ifbench_79 ifbench_133 ifbench_154 ifbench_170 ifbench_19 ifbench_0 ifbench_209 ifbench_248 ifbench_204 ifbench_3  (pre-registered list differs)
+                                      test 3 = ifbench_271 ifbench_290 ifbench_280 ifbench_128 ifbench_169 ifbench_269 ifbench_253 ifbench_188 ifbench_186 ifbench_179  (differs)
+   test 2 / test 3 disjoint: True; test 3 subset of the 33 rest: True; test 2c = 43 - test 2 - 281: 32 prompts; contains all of test 3: True
+   T1_dpo: sampled 3 prompts; equals the design set: True
+   T2_dpo: sampled 16 prompts; equals the design set: True
+   T2_s2300: sampled 16 prompts; equals the design set: True
+   T2c_dpo: sampled 32 prompts; equals the design set: True
+   T2c_s2300: sampled 32 prompts; equals the design set: True
+   T3_dpo: sampled 10 prompts; equals the design set: True
+   T4_s0750: sampled 43 prompts; equals the design set: True
+   T4b_s0750: ['ifbench_19']
+   T1 prompts: ['055', '068', '069']
+
+2. Problems files vs upstream datasets (prompt, instruction ids, kwargs without None values)
+   olmo_iffu/problems_hint.jsonl: 16 IF rows, 0 differ from upstream []; hinted rows 16, wrong hint []
+   olmo_iffu/problems_hint2c.jsonl: 32 IF rows, 0 differ from upstream []; hinted rows 32, wrong hint []
+   olmo_ifomega/problems.jsonl: 450 IF rows, 1 differ from upstream ['ifeval_2785']; hinted rows 0, wrong hint []
+   problems_geo 055: equals olmo_ifomega's row except the answer: True; answer 17 -> 15; prompt = prompt_original minus the boxed instruction: True
+   problems_geo 068: equals olmo_ifomega's row except the answer: True; answer 23 -> 23; prompt = prompt_original minus the boxed instruction: True
+   problems_geo 069: equals olmo_ifomega's row except the answer: True; answer 14 -> 14; prompt = prompt_original minus the boxed instruction: True
+
+3. olmo_thinker sha256 (my fetch) eba6e269f669706e; metas ['eba6e269f669706e']; equal: True
+   T1_dpo: meta problems file olmo_iffu/problems_geo.jsonl (expected olmo_iffu/problems_geo.jsonl)
+   T2_dpo: meta problems file olmo_iffu/problems_hint.jsonl (expected olmo_iffu/problems_hint.jsonl)
+   T2_s2300: meta problems file olmo_iffu/problems_hint.jsonl (expected olmo_iffu/problems_hint.jsonl)
+   T2c_dpo: meta problems file olmo_iffu/problems_hint2c.jsonl (expected olmo_iffu/problems_hint2c.jsonl)
+   T2c_s2300: meta problems file olmo_iffu/problems_hint2c.jsonl (expected olmo_iffu/problems_hint2c.jsonl)
+   T3_dpo: meta problems file olmo_ifomega/problems.jsonl (expected olmo_ifomega/problems.jsonl)
+   T4_s0750: meta problems file olmo_ifomega/problems.jsonl (expected olmo_ifomega/problems.jsonl)
+   T4b_s0750: meta problems file olmo_ifomega/problems.jsonl (expected olmo_ifomega/problems.jsonl)
+   prompt_tokens == my count of the templated user turn sent: 153 (job, prompt) pairs; differ: []
+   hinted pairs: token difference (with hint - without) {8: 84, 9: 12} -> the rows' prompt_tokens include the hint
+   special tokens (dpo tokenizer): <|im_start|>=100264, <|im_end|>=100265, <think>=None, </think>=None, <|endoftext|>=100257
+
+4. Budgets
+   allenai_Olmo-3-32B-Think-DPO: max_position_embeddings 65536, rope_scaling {'attention_factor': 1.2079441541679836, 'beta_fast': 32, 'beta_slow': 1, 'factor': 8.0, 'original_max_position_embeddings': 8192, 'rope_type': 'yarn'}, layers 64, kv heads 8, sliding_window 4096, layer types {'sliding_attention': 48, 'full_attention': 16}
+   allenai_Olmo-3.1-32B-Think: max_position_embeddings 65536, rope_scaling {'attention_factor': 1.2079441541679836, 'beta_fast': 32.0, 'beta_slow': 1.0, 'factor': 8.0, 'original_max_position_embeddings': 8192, 'rope_type': 'yarn'}, layers 64, kv heads 8, sliding_window 4096, layer types {'sliding_attention': 48, 'full_attention': 16}
+   T1_dpo: 192 rows; max_tokens {65290: 128, 65317: 64}; finish {'stop': 191, 'length': 1}; longest 65290; violations []; meta fill_context 65536, max_tokens_by_pid [65290, 65317]
+   T2_dpo: 1024 rows; max_tokens {32768: 1024}; finish {'stop': 1024}; longest 16003; violations []; meta fill_context None, max_tokens_by_pid [32768]
+   T2_s2300: 256 rows; max_tokens {32768: 256}; finish {'stop': 256}; longest 21425; violations []; meta fill_context None, max_tokens_by_pid [32768]
+   T3_dpo: 7680 rows; max_tokens {32768: 7680}; finish {'stop': 7677, 'length': 3}; longest 32768; violations []; meta fill_context None, max_tokens_by_pid [32768]
+   T4_s0750: 1088 rows; max_tokens {32768: 1088}; finish {'stop': 1087, 'length': 1}; longest 32768; violations []; meta fill_context None, max_tokens_by_pid [32768]
+   T4b_s0750: 16 rows; max_tokens {32768: 16}; finish {'stop': 16}; longest 8085; violations []; meta fill_context None, max_tokens_by_pid [32768]
+   T2c_dpo: 2048 rows; max_tokens {32768: 2048}; finish {'stop': 2048}; longest 26842; violations []; meta fill_context None, max_tokens_by_pid [32768]
+   T2c_s2300: 512 rows; max_tokens {32768: 512}; finish {'stop': 512}; longest 26892; violations []; meta fill_context None, max_tokens_by_pid [32768]
+
+5. Jobs (meta, last line) and rows
+   T1_dpo: 1 meta line(s); seeds [7001] (pre-registered 7001); tp [2]; gpus ['NVIDIA H200', 'NVIDIA H200']; T 1.0 top_p 1.0; chunk 16 chunk0 0 stop_after 0 inflight 1; vllm 0.11.0; rows (model, rev) {('dpo', 'main'): 192}
+   T2_dpo: 1 meta line(s); seeds [7101] (pre-registered 7101); tp [2]; gpus ['NVIDIA H200', 'NVIDIA H200']; T 1.0 top_p 1.0; chunk 16 chunk0 0 stop_after 0 inflight 1; vllm 0.11.0; rows (model, rev) {('dpo', 'main'): 1024}
+   T2_s2300: 1 meta line(s); seeds [7102] (pre-registered 7102); tp [2]; gpus ['NVIDIA H200', 'NVIDIA H200']; T 1.0 top_p 1.0; chunk 16 chunk0 0 stop_after 0 inflight 1; vllm 0.11.0; rows (model, rev) {('s2300', 'main'): 256}
+   T3_dpo: 1 meta line(s); seeds [7201] (pre-registered 7201); tp [1]; gpus ['NVIDIA H200']; T 1.0 top_p 1.0; chunk 16 chunk0 0 stop_after 2 inflight 3; vllm 0.11.0; rows (model, rev) {('dpo', 'main'): 7680}
+   T4_s0750: 1 meta line(s); seeds [7301] (pre-registered 7301); tp [1]; gpus ['NVIDIA H200']; T 1.0 top_p 1.0; chunk 16 chunk0 0 stop_after 2 inflight 1; vllm 0.11.0; rows (model, rev) {('s0750', 'step_0750'): 1088}
+   T4b_s0750: 1 meta line(s); seeds [7302] (pre-registered 7302); tp [1]; gpus ['NVIDIA H200']; T 1.0 top_p 1.0; chunk 16 chunk0 1 stop_after 2 inflight 1; vllm 0.11.0; rows (model, rev) {('s0750', 'step_0750'): 16}
+   T2c_dpo: 1 meta line(s); seeds [7103] (pre-registered 7103); tp [1]; gpus ['NVIDIA H200']; T 1.0 top_p 1.0; chunk 16 chunk0 0 stop_after 0 inflight 1; vllm 0.11.0; rows (model, rev) {('dpo', 'main'): 2048}
+   T2c_s2300: 1 meta line(s); seeds [7104] (pre-registered 7104); tp [1]; gpus ['NVIDIA H200']; T 1.0 top_p 1.0; chunk 16 chunk0 0 stop_after 0 inflight 1; vllm 0.11.0; rows (model, rev) {('s2300', 'main'): 512}
