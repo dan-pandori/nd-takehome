@@ -50,17 +50,19 @@ def main():
             for l in open(tf):
                 r = json.loads(l)
                 trunc[(r["pid"], r["chunk"], r["i"])] = r
-        words = {}
+        words, budget = {}, {}
         sf = A / "samples" / f"{job}.jsonl.gz"
-        if sf.exists() and rows and rows[0]["task"] in ("ifbench", "ifeval"):
+        if sf.exists():
             with gzip.open(sf, "rt") as f:
                 for l in f:
                     try:
                         r = json.loads(l)
-                    except json.JSONDecodeError:
+                    except (json.JSONDecodeError, EOFError):
                         break
-                    a = answer_of(r["text"])
-                    words[(r["pid"], r["chunk"], r["i"])] = None if a is None else len(a.split())
+                    budget.setdefault(r["pid"], set()).add((r.get("prompt_tokens"), r.get("max_tokens")))
+                    if r["pid"].startswith(("ifbench", "ifeval")):
+                        a = answer_of(r["text"])
+                        words[(r["pid"], r["chunk"], r["i"])] = None if a is None else len(a.split())
         by = {}
         for r in rows:
             by.setdefault(r["pid"], []).append(r)
@@ -74,7 +76,8 @@ def main():
                  "tok_median_finished": q([r["n_tok"] for r in rs if r["finish"] != "length"], .5),
                  "tok_q75_finished": q([r["n_tok"] for r in rs if r["finish"] != "length"], .75),
                  "tok_max_finished": max([r["n_tok"] for r in rs if r["finish"] != "length"], default=""),
-                 "max_tokens": rs[0].get("max_tokens", "")}
+                 "prompt_tokens": "/".join(str(x[0]) for x in sorted(budget.get(pid, []), key=str)),
+                 "max_tokens": "/".join(str(x[1]) for x in sorted(budget.get(pid, []), key=str))}
             keyed = [(r, hand.get((job, pid, r["chunk"], r["i"]), "")) for r in rs]
             if rs[0]["task"] in ("ifbench", "ifeval"):
                 succ = [(r, h) for r, h in keyed if r["strict"]]
@@ -111,7 +114,7 @@ def main():
         wr.writerows(out)
     if "--print" in sys.argv:
         for d in out:
-            print(" ".join(f"{k}={d[k]}" for k in keys if k in d and k not in ("test", "task", "max_tokens")))
+            print(" ".join(f"{k}={d[k]}" for k in keys if k in d and k not in ("test", "task")))
     print(f"results.csv: {len(out)} rows")
 
 
