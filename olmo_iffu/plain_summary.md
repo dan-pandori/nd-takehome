@@ -17,7 +17,7 @@ puzzles about 70 % of the time within the old budget.
 model's answers shrank from about 230 words to about 60. It then solved 4 of the 6 IFEval reach prompts (tasks like
 "use the letter w at most once" or "write in capitals") and 12 of the 42 IFBench ones. On 8 more IFBench prompts the
 hint also broke the RL model, because squeezing, say, seven uses of one keyword into 60 words forces gibberish. Those
-8 tell us nothing. About a quarter of the instruction-following reach is a verbosity habit that a one-line prompt
+8 tell us nothing. About a third of the instruction-following reach is a verbosity habit that a one-line prompt
 change unlocks: elicited, not created.
 
 **Test 3: more tries.** On 10 IFBench reach prompts we sampled the starting model 1,024 times, four times as often

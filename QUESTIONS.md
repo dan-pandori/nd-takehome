@@ -208,3 +208,5 @@ between $55 and $60. Say "no test 4" here to skip it.
   the run now ends at **≈ $55 ± 1**, at the gate. **Default:** finish what is queued — test 2c's `s2300` check (≈ $1.8;
   without it a `dpo` failure under the hint cannot be read) and test 4's one-chunk continuation for ifbench_19
   (≈ $0.3) — then delete the last pod. Under the $60 budget either way.
+- *Closed 2026-11-07 09:11 UTC:* the run ended at **$53.87** (under the $55 gate); test 4 ran under its own rule (capped at
+  32 draws, deviation 4) and test 2c was completed. No pods are left. No answer needed.
