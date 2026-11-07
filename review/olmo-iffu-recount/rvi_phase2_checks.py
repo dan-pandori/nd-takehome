@@ -161,6 +161,37 @@ def main():
         say(f"   {m}: " + "; ".join(f"{p}: n {cnt[(m, p, 'n')]}, omega {cnt[(m, p, 'omega')]}, rl {cnt[(m, p, 'rl')]}"
                                      for p in ("055", "068", "069")))
     say(f"   dpo credited draws: {cred}")
+    say("\n10. one-sided Fisher exact p, s2300 strict unhinted (olmo-ifomega, all draws) > hinted (16)")
+
+    def fisher_less(a, n1, b, n2):
+        # P(hinted successes <= b) under the hypergeometric null, margins fixed (one-sided: hinted rate lower)
+        K, N = a + b, n1 + n2
+        tot = math.comb(N, K)
+        return sum(math.comb(n2, x) * math.comb(n1, K - x) for x in range(0, b + 1) if 0 <= K - x <= n1) / tot
+    for p in ("ifbench_179", "ifeval_1314", "ifeval_2447", "ifbench_170", "ifbench_188", "ifeval_2563"):
+        c = b[f"s2300|{p}"]
+        h = s["test2"][p]["s_strict"]
+        say(f"   {p}: {c['strict']}/{c['draws']} -> {h}/16, p = {fisher_less(c['strict'], c['draws'], h, 16):.3f}")
+
+    say("\n11. format:sub-bullets prompts (128, 133, 136): executor vs my final labels on shared items")
+    ex = {(r["job"], r["pid"], int(r["chunk"]), int(r["i"])): r["final_label"]
+          for r in csv.DictReader(open(WT / "olmo_iffu" / "handcheck.csv"))}
+    mine = json.load(open(C.OUT / "hand.json"))["if"]
+    agree = dis = 0
+    dl = []
+    for k, v in mine.items():
+        pid = k.split("|")[1]
+        if pid not in ("ifbench_128", "ifbench_133", "ifbench_136"):
+            continue
+        for x in v["items"]:
+            e = ex.get((x["job"], pid, x["chunk"], x["i"]))
+            if x["label"] and e:
+                if e == x["label"]:
+                    agree += 1
+                else:
+                    dis += 1
+                    dl.append(f"{k} c{x['chunk']}.{x['i']}: executor {e}, mine {x['label']}")
+    say(f"   shared items {agree + dis}: agree {agree}, disagree {dis} {dl}")
     (C.OUT / "phase2_checks.txt").write_text("\n".join(LINES) + "\n")
 
 

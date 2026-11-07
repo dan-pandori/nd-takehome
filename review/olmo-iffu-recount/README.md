@@ -44,3 +44,9 @@ deciding) and a note per item. Item texts are regenerable with `rvi_hand_items.p
 
 Order to reproduce: `rvi_labels` → `rvi_regrade` → `rvi_provenance` → `rvi_stats` → `rvi_before` → `rvi_compute` →
 `rvi_hand_items 1` … (readers) … `rvi_hand` → `rvi_hand_b` → `rvi_sensitivity` → `rvi_outcomes` → `rvi_secrets`.
+
+**Adversarial check.** `out/adversarial_check.md` is an independent subagent's check of `review_olmo-iffu.md` against these
+outputs and the run's files (23 findings, all addressed in the review: §Compare / §Verdict edited, §Recount errata listed
+under "Phase-2 corrections"). Its one outcome-relevant point (226 rank 6, a 1–1 split my rule required a third reader for)
+got a third reader (`hand/reader_labels/c_if_01.json`).
+
