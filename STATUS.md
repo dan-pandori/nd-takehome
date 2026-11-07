@@ -365,3 +365,8 @@ OLMO-IFOMEGA DONE 2026-11-06T07:33:16Z
 - 2026-11-06 23:07 UTC  run started. 2026-11-06 23:22 UTC pre-registration `preregistration/olmo-iffu.md` committed before any pod
   (tests 1–3 as briefed, test 2b added: the three all-caps IFEval reach prompts; test 4 optional). perp_055's label
   recomputed two ways: 15 (stored 17); 068 = 23 and 069 = 14 confirmed (`olmo_iffu/label_check.py`).
+- 2026-11-07 00:45 UTC  pods `iffu-a` (2 × H200 secure, $10.58/h: tests 2 and 1) and `iffu-b` (1 × H200 community, $3.59/h:
+  tests 3 and 4). **Test 2 done** (hand gate 81 items): with "Answer in at most 60 words." `dpo` becomes able (≥ 2
+  genuine of 64) on ifeval_2447 and the three all-caps IFEval reach prompts, and on ifbench_179 and 290 (290 only if
+  ALL-CAPS counts as title case); not on ifeval_2350 / 3478 or 8 IFBench prompts — on 4 of those the hint also breaks
+  `s2300`. Test 1 (65,536-token budget) and test 3 (to 1,024 samples) running. Spend $16 of $60.
