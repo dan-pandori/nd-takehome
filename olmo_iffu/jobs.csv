@@ -1,0 +1,5 @@
+job,model,test,seed,problems,n,pids,pod,note
+T2_dpo,dpo,test2,7101,problems_hint.jsonl,64,all 16 (hinted),iffu-a,"brevity hint, dpo; chunks of 16, no stopping; TP 2 (2 x H200 secure)"
+T2_s2300,s2300,test2,7102,problems_hint.jsonl,16,all 16 (hinted),iffu-a,"brevity hint, s2300 check; TP 2"
+T1_dpo,dpo,test1,7001,problems_geo.jsonl,64,all 3 (geometry; 055 label 15),iffu-a,"--fill_context: max_model_len 65,536, max_tokens 65,536 - prompt; chunks of 16; TP 2"
+T3_dpo,dpo,test3,7201,olmo_ifomega/problems.jsonl,768,plan/T3_dpo.pids (10),iffu-b,"deeper sampling; chunks of 16, 3 in flight, stop at 2 strict (hand gate after); 1 x H200 community"
