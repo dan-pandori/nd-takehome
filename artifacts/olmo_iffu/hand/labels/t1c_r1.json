@@ -1,0 +1,16 @@
+[
+  {
+    "item": "h39ce5a",
+    "label": "sound",
+    "where": "think_only",
+    "final_states_other_answer": false,
+    "evidence": "Vertex sweep computes dot products for every pair at every vertex (all 10 at V9, 6 at V6/V10): 'Total from vertices:0+2+1+0+0+0+0+0+1+1=5' (2-4/2-9, 2-5/2-10, 3-1/3-6, 9-2/9-7, 10-2/10-7). Crossings via slope classes, with intersection points checked inside both segments: 1-6/2-10, 9-5/3-6, 9-4/8-10, 10-6/3-8, 1-5/3-8, 10-6/2-9, 2-4/3-8, 2-9/1-5, 3-8/7-9; 9-6 correctly has no partner. My enumeration (perpendicular iff a+b-c-d = 5 mod 10, confirmed numerically) gives exactly these 14, all meeting; none missed, none extra; its intersection points match mine. The write-up after </think> breaks off at 'form a 90' with no total, so 14 is boxed only in the thinking."
+  },
+  {
+    "item": "h2792bb",
+    "label": "sound",
+    "where": "final",
+    "final_states_other_answer": false,
+    "evidence": "Tabulates all 16 slopes correctly (horizontal 1-6, 10-7, 2-5; vertical 2-10; classes -0.325, +0.325, 3.078, -3.078, -1.376, 0.7265, -0.7265) and checks every perpendicular class pair: parametric intersections with parameters in [0,1], dot products at shared vertices. Final list: vertex 10-7/2-10, 2-5/2-10, 2-9/2-4, 2-9/7-9, 3-1/3-6; interior 1-6/2-10, 9-5/3-6, 2-9/10-6, 2-9/1-5, 2-4/3-8, 3-8/1-5, 3-8/7-9, 10-6/3-8, 9-4/8-10. My enumeration (a+b-c-d = 5 mod 10, numeric check) gives exactly these 14, all meeting; its intersection points match mine; 9-6 correctly has no partner. A 4-vs-5 vertex-count slip was fixed (5+9=14); a wrong 'steps sum to 5' rule was tried late and rejected, not used."
+  }
+]
