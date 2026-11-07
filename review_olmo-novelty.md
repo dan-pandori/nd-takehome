@@ -346,7 +346,8 @@ and, except Yue's multi-model row, its size. Two labels needed care, and both ar
 - Yoon's 32B pair is hedged as "presumably the 750-step release" (RB found the paper does not say);
 - the LessWrong post is on Olmo 3.1 steps 50–2,300 (DT-97), as labelled.
 
-No unlabelled number found. There are no proofs, so no checker labels are needed.
+No unlabelled number found. There are no proofs, so no checker labels are needed. The role brief's Lean re-check,
+term sizes and renaming-class split disjointness do not apply: the run trains nothing and counts no proofs.
 
 ## §Verdict
 
