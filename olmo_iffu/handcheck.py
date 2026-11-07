@@ -21,7 +21,7 @@ from pathlib import Path
 
 A = Path("artifacts/olmo_iffu")
 O = Path("olmo_iffu")
-PROBLEMS = {"T1": "olmo_iffu/problems_geo.jsonl", "T2": "olmo_iffu/problems_hint.jsonl",
+PROBLEMS = {"T1": "olmo_iffu/problems_geo.jsonl", "T2": "olmo_iffu/problems_hint.jsonl", "T2c": "olmo_iffu/problems_hint2c.jsonl",
             "T3": "olmo_ifomega/problems.jsonl", "T4": "olmo_ifomega/problems.jsonl"}
 HINT_NOTE = ("(The prompt's last paragraph is a length limit that the experimenter appended to the original request; an "
              "answer that is short because of it is not, for that reason, gutting the request.)")

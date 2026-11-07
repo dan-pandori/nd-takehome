@@ -179,3 +179,15 @@ Arms are compared on samples per prompt (fixed by design); no arm is matched on 
   are never cut.
 - Job order: T2 `dpo` → T2 `s2300` → T1 → T3 (+ continuations) → T4. Balance: no new job if `rpbalance` < $45.
   Hard stop 2026-11-08 23:07 UTC.
+
+# Addition (2026-11-07 02:01 UTC, after tests 1 and 2 were read, before any sample of it)
+
+**Test 2c — the hint on every other eligible IFBench reach prompt.** Measured cost puts tests 1–3 at ≈ $39 and test 4
+at ≈ $6, so the brief's 10-prompt subset can be widened for ≈ $5: test 2's 2 of 10 prompt-elicitable (95 % interval
+3–56 %) becomes a count over all 42 eligible prompts. Prompts: the review's 43 minus test 2's 10 and `ifbench_281`
+(32 prompts, which include all of test 3's 10). Design, grades and hand gate as test 2: the same hint, `dpo` 64 each
+(seed `7103`), `s2300` 16 each (seed `7104`); `dpo` strict successes read in draw order until 2 genuine; `s2300`'s
+read in draw order until 2 genuine or none left (the reading test 2 ended up using, batches t2c–t2d). Runs on
+`iffu-b` after test 4, only if the projection then stays ≤ $55. **Expected:** prompt-elicitable on 6 of 32 (80 %
+interval 2–12); the hint breaks `s2300` (< 2 genuine of 16) on 10 of 32 (4–16). Reported separately from test 2's
+pre-registered subset, then pooled (42 prompts) with the subset marked.

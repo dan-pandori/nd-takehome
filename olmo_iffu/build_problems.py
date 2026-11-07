@@ -35,7 +35,17 @@ def main():
             r["prompt_sample"] = r["prompt"] + "\n\n" + HINT
             r["hint"] = HINT
             f.write(json.dumps(r) + "\n")
-    print("wrote problems_geo.jsonl (3), problems_hint.jsonl", len(IFEVAL3 + IFEVAL_CAPS3 + t2))
+    # test 2c (addition, pre-registered 2026-11-07): the same hint on the other 32 eligible IFBench reach prompts
+    from subsets import REACH43, HINT_CONFLICT
+    t2c = [pid for pid in REACH43 if pid not in t2 and pid not in HINT_CONFLICT]
+    with open(HERE / "problems_hint2c.jsonl", "w") as f:
+        for pid in t2c:
+            r = dict(probs[pid])
+            r["prompt_sample"] = r["prompt"] + "\n\n" + HINT
+            r["hint"] = HINT
+            f.write(json.dumps(r) + "\n")
+    print("wrote problems_geo.jsonl (3), problems_hint.jsonl", len(IFEVAL3 + IFEVAL_CAPS3 + t2),
+          "problems_hint2c.jsonl", len(t2c))
 
 
 if __name__ == "__main__":
