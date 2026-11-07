@@ -14,7 +14,7 @@ with one computation on stored results; no pods. Pre-registration: `../preregist
 | `correlation.py` → `correlation.csv`, `correlation_summary.csv`, `correlation_stdout.txt` | ProRL's "largest where weakest" correlation on olmo-ifomega's stored fixed-phase counts |
 | `verify_ledger.py` | quote checker (`--neg` runs negative controls) |
 | `AGENT_INSTRUCTIONS.md` | the shared instructions the research agents worked from |
-| `_draft_q2.md` | an early draft of REVIEW §2 (superseded; kept for the record) |
+| `_claim_check.md`, `_claim_check2.md` | the independent adversarial claim checks of REVIEW.md (pass 1 on 96aeabd4, 34 findings, all addressed; pass 2 on the revision) |
 
 **Recompute** (repository root):
 - `python3 olmo_novelty/correlation.py` (numpy, scipy; ≈ 80 s). It reads only `olmo_ifomega/results.csv`,

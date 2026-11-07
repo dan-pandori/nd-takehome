@@ -1133,3 +1133,12 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   PR's own note on the same paper is `yang2026-passk-crossovers-prorl.md`. Fresh novelty-search agent NV launched 13:1x.
   REVIEW.md drafted; numbers.md § olmo-novelty and olmo_novelty/README.md written. Found: "hand" in the Olmo runs = blinded
   Claude subagent readers + executor confirmation (handcheck_prompt_if.md), stated in REVIEW.
+- 2026-11-07 14:19 UTC  NV fresh novelty search done (13:50; 53 web searches, 25 new sources, 22 quotes): no "novel" label falls
+  or is weakened; closer neighbours added (2609.01274, 2607.11022, 2604.15149, GEPA 2507.19457, SciIF 2601.04770).
+  Adversarial claim check pass 1 (`olmo_novelty/_claim_check.md`, on 96aeabd4): 34 findings (5 high), ≈ 286
+  statements, 231 OK; correlation reproduced byte-identically. All 34 addressed in a rewrite of REVIEW.md, including
+  two pre-registered predictions I had wrongly scored as held: L-1 failed (HiR's aggregate IFBench pass@k to 1,024)
+  and L-5 failed (OLMo-2-1B public RL checkpoints at pass@256). Invisible Leash's k corrected (non-maths 1,024–2,048);
+  C4's novelty narrowed to IF (What Outcome RL Buys audits lone wins in physics/maths); AceReason dropped as
+  domain-dependence evidence (no common denominator); Yoon's pairs are Olmo 3 (32B Think at 750 steps), not ours.
+  REVIEW.md 2,998 words by wc -w without front matter. Ledger 747 / 747, 0 / 734 negative controls.
