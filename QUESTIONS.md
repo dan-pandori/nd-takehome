@@ -199,3 +199,6 @@ $0.77 / M tokens on IF prompts against $0.54 / M; a community H200 appeared at 2
 tests 1–3 ≈ $50; test 4 (`step_0750` on the 43 IFBench reach prompts) ≈ $6.5 more. **Default:** I follow the brief's
 own condition: test 4 runs only if ≥ $8 remains by the ledger once tests 1–3 are done, even if that ends the run
 between $55 and $60. Say "no test 4" here to skip it.
+- *Update 2026-11-07 00:45 UTC (shell clock):* test 1 runs slower than assumed (≈ 1,100 tok/s at 45k-token sequences), so
+  tests 1–3 now project ≈ $54 and test 4 cannot meet its own "≥ $8 remains" condition: it is unqueued and, by default,
+  cut. Nothing for you to decide unless you want test 4 with extra budget (≈ $6.5).

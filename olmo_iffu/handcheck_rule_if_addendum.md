@@ -1,6 +1,6 @@
 # olmo-iffu addendum to the IF hand rule (`olmo_ifomega/handcheck_rule_if.md`, rules 1–5 unchanged)
 
-6. **ALL-CAPS text for `format:title_case`** (written 2026-11-07 00:25 UTC, while confirming batch t2a, before any
+6. **ALL-CAPS text for `format:title_case`** (written 2026-11-07 00:08 UTC (file time), while confirming batch t2a, before any
    other title-case item was read): the prompt defines title case as "capitalize the first letter of every major word"
    and the official checker accepts all-caps words by design (`TitleCaseChecker` fails only words that start
    lowercase), so an answer that serves the request in ALL CAPS is **genuine** (primary reading). Because a person
