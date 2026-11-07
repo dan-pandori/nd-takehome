@@ -191,3 +191,13 @@ read in draw order until 2 genuine or none left (the reading test 2 ended up usi
 `iffu-b` after test 4, only if the projection then stays ≤ $55. **Expected:** prompt-elicitable on 6 of 32 (80 %
 interval 2–12); the hint breaks `s2300` (< 2 genuine of 16) on 10 of 32 (4–16). Reported separately from test 2's
 pre-registered subset, then pooled (42 prompts) with the subset marked.
+
+# Deviations (as run; each also in `log.md` at its time)
+
+1. **Test 2, `s2300`'s hand reading** (2026-11-07 00:24–00:36 UTC): pre-registered "the first 2 strict successes per
+   prompt"; to decide the pre-registered "< 2 genuine of 16" (the hint breaks `s2300`) on prompts where one of the
+   first two was gamed, reading continued in draw order until 2 genuine or none left (batches t2c, t2d).
+2. **Rule 6** (2026-11-07 00:08 UTC, `olmo_iffu/handcheck_rule_if_addendum.md`): ALL-CAPS answers to a title-case
+   request are genuine under the literal reading and reported under a strict reading too.
+3. **Test 4 scheduling** (2026-11-07 00:41 / 01:05 UTC): unqueued when T1 looked slow, reinstated by rule
+   (`pod/olmo_iffu/launch_t4.sh`: starts only if ≤ $50.50 is spent when test 3 ends).
