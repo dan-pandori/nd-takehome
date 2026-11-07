@@ -370,3 +370,13 @@ OLMO-IFOMEGA DONE 2026-11-06T07:33:16Z
   genuine of 64) on ifeval_2447 and the three all-caps IFEval reach prompts, and on ifbench_179 and 290 (290 only if
   ALL-CAPS counts as title case); not on ifeval_2350 / 3478 or 8 IFBench prompts — on 4 of those the hint also breaks
   `s2300`. Test 1 (65,536-token budget) and test 3 (to 1,024 samples) running. Spend $16 of $60.
+- 2026-11-07 09:11 UTC  **Done.** Test 1: with 65,290 response tokens `dpo` finishes 191 / 192 (median ≈ 46k) and is
+  hand-sound on perp_068 3 / 64 and perp_069 2 / 64 ("token budget"; perp_055, label 15: 1 / 64); its sound rate is
+  1.6–4.7 % per sample. Test 2 / 2c ("Answer in at most 60 words."): `dpo` prompt-elicitable on 4 of 6 IFEval and 12 of
+  42 IFBench reach prompts (11 strict); the hint also breaks `s2300` on 8. Test 3: 0 genuine in 1,024 on all 10 prompts
+  (≤ 2.9 × 10⁻³), but 4 of them are prompt-elicitable. Test 4: `s0750` confirmed on 26 of 43 (≤ 32 draws). Of the 52
+  reach prompts 2 are token budget, 16 brevity, 2 survive 1,024 draws and the hint. $53.87 of $60; no pods left.
+  Deliverables: `run_olmo_iffu.md`, `numbers.md` § olmo-iffu, `olmo_iffu/` (README, plain summary, results,
+  hand-check table), `figures/olmo_iffu_status.png`, bucket `hf://buckets/dan-pandori/nd-rl/olmo-iffu/`.
+
+OLMO-IFFU DONE 2026-11-07T09:11:45Z
