@@ -201,6 +201,6 @@ pre-registered subset, then pooled (42 prompts) with the subset marked.
    request are genuine under the literal reading and reported under a strict reading too.
 3. **Test 4 scheduling** (2026-11-07 00:41 / 01:05 UTC): unqueued when T1 looked slow, reinstated by rule
    (`pod/olmo_iffu/launch_t4.sh`: starts only if ≤ $50.50 is spent when test 3 ends).
-4. **Test 4 capped at 32 fresh draws per prompt** (2026-11-07 05:40 UTC; pre-registered 64): at ≈ 7.5k tokens per
+4. **Test 4 capped at 32 fresh draws per prompt** (2026-11-07 05:37 UTC; pre-registered 64): at ≈ 7.5k tokens per
    sample, 64 would have left no room for test 2c under the $55 gate. Outcome per prompt becomes "`s0750`
    confirmed (≥ 2 genuine in ≤ 32 fresh draws)"; `pod/olmo_iffu/cap32.sh` applies it through the stop file.
