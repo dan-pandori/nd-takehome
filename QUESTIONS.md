@@ -204,3 +204,7 @@ between $55 and $60. Say "no test 4" here to skip it.
   cut. Nothing for you to decide unless you want test 4 with extra budget (≈ $6.5).
 - *Update 2026-11-07 01:05 UTC:* test 1's samples finish at ≈ 47k tokens (none cut so far), so tests 1–3 now project ≈ $48
   and test 4 is back under its own rule: it starts automatically after test 3 only if ≥ $8 remains by the ledger.
+- *Update 2026-11-07 07:23 UTC:* test 2c's `dpo` answers run longer than assumed (≈ 4.8k tokens per sample, not 3.3k), so
+  the run now ends at **≈ $55 ± 1**, at the gate. **Default:** finish what is queued — test 2c's `s2300` check (≈ $1.8;
+  without it a `dpo` failure under the hint cannot be read) and test 4's one-chunk continuation for ifbench_19
+  (≈ $0.3) — then delete the last pod. Under the $60 budget either way.
