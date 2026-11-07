@@ -12,7 +12,7 @@ Deliverables are in `olmo_novelty/`.
 
 **Answers** (Olmo-3-32B-Think-DPO vs Olmo-3.1-32B-Think; C1: Olmo 3 7B base vs 3.1 RL-Zero-Math):
 - **Novel on IF only:** C3's per-prompt IFBench reach at k = 256 and C4's gaming audit of reach-deciding successes.
-  Neighbours: HiR's aggregate IFBench pass@k to 1,024; lone-win audits in maths and physics.
+  Neighbours: HiR's aggregate IFBench pass@k to 1,024; lone-win audits in physics.
 - **Replicates:** C1 replicates Yue et al. and disputes the Olmo 3 report's pass@32 reading. C5 and C8's test 1
   replicate finishing.
 - **ProRL's correlation:** "largest where weakest" holds (ρ = −0.50), but a random-pairing null gives −0.66, so it is

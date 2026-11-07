@@ -384,3 +384,17 @@ OLMO-IFFU DONE 2026-11-07T09:11:45Z
 ## olmo-novelty (executor; proposal 38; literature review, no pods; guard budget $0.50 / 1 h; hard stop 2026-11-09 12:10 UTC)
 - 2026-11-07 12:11 UTC  run started. Budget guard already registered (`podbudget`: ceiling 1 h, budget $0.50). Claude time only;
   the one computation (ProRL's correlation on our IFBench / IFEval data) uses stored results.
+- 2026-11-07 14:52 UTC  **Done.** 200 sources screened (176 new to the four earlier reviews), 23 read in depth (19 papers with
+  notes); 748 ledger quotes, all found in their sources (0 / 735 negative controls); two adversarial claim checks
+  (34 + 28 findings, all addressed) and a fresh novelty search (no label knocked down). **Novel on IF only:** C3's
+  per-prompt IFBench reach at k = 256 and C4's gaming audit of reach-deciding successes (neighbours: HiR's aggregate
+  IFBench pass@k to 1,024; physics lone-win audits; Yoon's Fail→Pass quality drop at k ≈ 1). **Replicates:** C1 (Yue;
+  contradicts the Olmo 3 report's pass@32 reading), C2, C5 and C8 test 1. **ProRL's correlation** on our data:
+  ρ = −0.50 [−0.60, −0.40] (s2300 vs dpo, IFBench strict pass@1), weaker than a random-pairing null (−0.66), so not
+  evidence of creation; 6 of 7 pre-registered expectations held. **Invisible-Leash objection:** partly answered
+  (format-tolerant credit on 25 of 49 unread; k > 1,024 untested). Pre-registered literature predictions L-1 failed,
+  L-5 partly held. Deliverables: `olmo_novelty/` (REVIEW.md 3,000 words, notes, ledgers, screened.md,
+  to_add_to_zotero.md, correlation.*), `run_olmo_novelty.md`, `numbers.md` § olmo-novelty, `log.md`. No pods, $0;
+  nothing to the bucket (no checkpoints, artifacts or data).
+
+OLMO-NOVELTY DONE 2026-11-07T14:52:32Z
