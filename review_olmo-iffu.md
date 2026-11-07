@@ -308,3 +308,135 @@ outcome changes between label sources.
 - model labels on every claim;
 - the 32-draw cap's effect on test 4's 26 of 43;
 - the 5.5 % of pod time missing from the job rows.
+
+## Phase-2 corrections to my §Recount (the committed text above is left as it was)
+
+Finishing my own hand gate during phase 2 changed four things.
+- **Second-reader gap.** My second-reader set was chosen before I adjudicated. Where an adjudication turned a counted
+  genuine into gamed, the walk moved on to items with one reader: `T2c_s2300` 136 rank 2 and 226 ranks 7–9. I gave
+  those, plus 136 ranks 3–6 and 226 ranks 10–15, to two more readers each. With three reads the majority decides.
+  - 136 keeps ≥ 2 genuine (ranks 3–5 genuine for both new readers).
+  - 226 falls to 1 genuine of 16 (ranks 9, 11, 12 and 14: 1 genuine and 2 gamed reads each).
+  - Final volumes: 390 items read at least once, 316 at least twice, 13 three times. First and second reads
+    disagree on 20; all are decided in `hand/confirm.json` (18 gamed, 2 genuine).
+- **The hint breaks `s2300` on 4 of 32 test-2c prompts** (1, 3, 166, 226), not 3. The expectation "10 of 32 (4–16)"
+  is therefore inside its interval, at the lower edge; §12's "miss" for it is withdrawn. 226 stays prompt-elicitable
+  for `dpo`.
+- **`T2_s2300 ifbench_170` is reader-dependent.** Both my readers labelled its rank-3 answer genuine ("Franks shaped
+  medieval Europe. They set important frameworks. Impact blended varied factors."). My own disagreement rule would
+  call it a generic slogan, as I called rank 0 ("… They changed history. Men formed alliances."). With rank 3 gamed,
+  170 has 1 genuine and the hint breaks `s2300` there, as the executor has it.
+- **perp_069 needs the olmo-ifomega baseline, which I omitted.** In olmo-ifomega `dpo` already had two `rl`-credited
+  responses on 069 within 32,768 tokens (`E1_dpo_oo3` draws c1.4, finished at 30,198 tokens, and c4.28, cut). Both
+  read sound there (`review_olmo-ifomega.md` §Compare; the predecessor's re-grade shows `rl` 2 / 256, `omega` 0).
+  So under `any` 069 was never reach. Under `doubly`, where it was reach, this run gives one sound success at 65k.
+  "Token budget" explains 068 under both readings and 069 under neither.
+
+## §Compare (phase 2): the executor's claims vs my recount
+
+Sources: `run_olmo_iffu.md`, `numbers.md` § olmo-iffu, `olmo_iffu/plain_summary.md`, `log.md` § olmo-iffu, `STATUS.md`,
+`olmo_iffu/results.csv`, `olmo_iffu/handcheck.csv`, `figures/olmo_iffu_status.png`. Checks:
+- `out/results_compare.txt`: all 153 rows of `results.csv` equal my re-grade on draws, cuts, strict, loose, omega, rl,
+  doubly, any and no-answer.
+- `out/hand_compare.txt`: the executor's 368 hand items joined to mine by draw key. 336 are shared, and 315 agree
+  (93.8 %). All 9 OMEGA labels and every test-4 label agree. 20 of the 21 disagreements are `s2300` answers with the
+  hint. The other is T2c `dpo` 220 rank 0, where the executor applies rule 3 and I apply rule 1; 220 is
+  prompt-elicitable either way.
+- `out/lengths.txt`: my answer-length recount.
+
+| claim (where) | my value | verdict |
+|---|---|---|
+| Models: `dpo` `97604023`, `s2300` `97ade57a`, `s0750` `418fb274`; 32 B, bf16, chat, no Lean (numbers.md) | same (Hub, pod logs) | reproduces |
+| 52 reach prompts, "`dpo` 0 genuine in 256" (run) | true for 51; perp_069 had 2 sound `rl`-credited `dpo` responses in 256 (reach only under `doubly`) | needs "(069: under doubly)" |
+| Budgets 65,290 / 65,290 / 65,317, prompts 246 / 246 / 219 (numbers.md) | same; vLLM `max_model_len` 65,536 | reproduces ("65,290 response tokens" in run.md is 65,317 for 069) |
+| `dpo` finishes 191 of 192, median ≈ 46k (run) | 191 / 192; pooled finished median 45,805 | reproduces |
+| T1 finished-length quartiles (numbers.md) | nearest-rank (`xs[int(f·n)]`) vs my interpolated: 068 identical, 055 / 069 medians 46,865 / 45,299 vs 46,860.5 / 45,087 | reproduces (method) |
+| Credited any / doubly 2/1, 3/2, 4/2; hand-sound 1/1, 3/2, 2/1 (numbers.md) | same; all 9 OMEGA labels agree with mine | reproduces |
+| CP intervals 0.016 [0.0004, 0.084], 0.047 [0.010, 0.131], 0.031 [0.004, 0.108] | same | reproduces |
+| "token budget" on 068 and 069; "token budget 2 of 3" (run, status, figure) | 069 is "token budget" only by mixing readings: never reach under `any`; under `doubly`, 1 sound → one sound success | **not supported as stated** → "068: token budget (both readings); 069: one sound success at 65k (doubly; under any it was not reach)" |
+| Every sound credit past token 32,768; none credited at a 32,768 cut (run, numbers.md) | 192 / 192 longer than 32,768; 0 credited at the truncation | reproduces |
+| "`s2300` 28 / 40 at 32k" on 068 and 069 (run, numbers.md, plain) | 28 / 40 `omega` on each (olmo-ifomega, `s2300`; predecessor reviewer's re-grade) | reproduces (inherited, labelled) |
+| `dpo` median answer 231 → 60 words with the hint; `s2300` 31.5 → 19 (run, numbers.md) | 231 → 60; 31.5 → 19 | reproduces |
+| `dpo` prompt-elicitable on 4 of 6 IFEval (2447, 1314, 2247, 2563) and 12 of 42 IFBench (11 under the strict title-case reading) (run, numbers.md, plain) | same sets | reproduces |
+| One genuine with the hint: 136, 204, 211 (numbers.md) | same | reproduces |
+| Hint breaks `s2300` on 0, 4, 170, 188 (test-2 subset) and 1, 3, 166, 284 (2c), "8 more" (run, numbers.md, plain) | 0, 4, 188, 1, 3, 166 (6); 170 reader-dependent (my readers: not broken; executor and my own rule: broken); **284 is not broken**: its 4 strict answers are the exact word span, genuine by rule 5, which names 284 itself; the executor labelled all 4 gamed | **differs** → 6–7, not 8 |
+| 226: `s2300` "left at 0 genuine of 5 read (11 unread)" (log) | read to the end: 1 genuine of 16 → the hint breaks `s2300` on 226 too (`dpo` 9 / 64 strict, prompt-elicitable either way) | incomplete gate (2c's pre-registered "until 2 genuine or none left"); no `dpo` verdict changes |
+| "`s2300`'s strict rate with the hint is at or above its unhinted rate on all 16 test-2 prompts" (numbers.md; log: "everywhere") | below on 179 (10 / 16 vs 6 / 8) and 2563 (15 / 16 vs 8 / 8) against the fixed phase the run uses as "unhinted"; below on 6 of 16 against all 24 olmo-ifomega draws (`olmo_ifomega/results.csv` agrees) | **wrong** (differences small) |
+| Hint harmless for `s2300` on 12 of 16 (expected ≥ 14): a miss (run) | 13 of 16 (12 with 170 broken; 14 with my first reader only) | miss reproduces; exact count reader-dependent |
+| T3: 0 strict in 768 on all 10, 0 genuine in 1,024, ≤ 2.92 × 10⁻³, k ≥ 342 (run, numbers.md, plain) | same; olmo-ifomega's 252 strict success reads gamed | reproduces |
+| T3 binding-constraint passes 0 / 768 except 136 (2 and 6, never jointly) | same | reproduces |
+| 4 of the 10 prompt-elicitable (78, 133, 252, 253); 136 / 211 one genuine; 248, 269 survive both; 3, 166 hint breaks `s2300` | same | reproduces |
+| `s0750` confirmed on 26 of 43 at ≤ 32 fresh draws; the 17 unconfirmed (numbers.md) | same set | reproduces |
+| olmo-ifomega's `s0750` had ≥ 2 strict in 8 on 16 of 43 | 16 | reproduces |
+| Status of the 52: token budget 2, prompt-elicitable 16, survive both 2, hint inconclusive 4, one success 2, not elicited 19, uninformative 6, untested 1 (run) | token budget **1** (068); one sound success at 65k **2** (055, and 069 under doubly), plus 204; prompt-elicitable 16; survive both 2; inconclusive 4; not elicited with the hint fine **20** (284 added; 21 if 170 is unbroken); uninformative **5** (0, 4, 188, 1, 170; 4 if 170 is unbroken); untested 1 | **differs** on 069, 284 (170 open) |
+| "Of the 52 reach prompts, 18 are now explained: 2 by the token budget, 16 by brevity" (plain) | 17 (1 + 16) | reword |
+| "solved two puzzles … at least twice … So the geometry reach was mostly a length limit" (plain) | one of three (068) under `doubly`; of the two reach under `any` (055, 068), one | **overstated** |
+| Expectations: misses reported = cut share, T3 survivors, `s2300` 12 / 16 (run) | also missed and **not reported**: "gamed share of `dpo`'s strict successes 30 % (10–60 %)", observed 1 of 16 read (6 %) by the executor's labels and mine | missing miss |
+| Within range: token budget 2 of 3, letter avoidance 1 / 3, all-caps 3 / 3, IFBench subset 2 / 10, 2c 10 / 32, `s0750` 26 / 43 (run) | token budget 1 of 3 under the consistent reading (still inside 1–3); the rest the same | reproduces (token budget reworded) |
+| 368 hand items, all confirmed, "every deciding one included" (numbers.md, plain) | 368 rows; 226's `s2300` reading stopped at 5 of 16; T2c `dpo` 78 read out of draw order (skipped 3 gamed ranks; outcome unchanged) | mostly reproduces; "every deciding one" is not quite true for the `s2300` checks |
+| Compute table, 12,816 samples, 66.6 M tokens, 12.2 job GPU-h, $53.87, 10.76 pod-h, registry 56 rows (numbers.md) | identical; pod GPU time 46,580 s, of which 2,544 s (5.5 %) set-up / idle not in job rows | reproduces |
+| Deviations 1–4 and the 2c addition pre-registered before sampling (prereg, run) | 2c committed 02:01:45, T2c started 06:23:12; deviations are later additions; original sections unchanged | reproduces |
+| Expectations written before the run (gate 0) | prereg committed 23:22:37 < first pod 23:23:56 < first sample 23:33:13 | reproduces (the header's "written 23:20–23:50" and the OMEGA rule's "23:50" postdate the commit; wording) |
+| Figure: before column "0 / 256" for perp_069 | under the any-credit reading the figure's test-1 column uses, it is 2 / 256 sound | **wrong cell** |
+| `STATUS.md`: OLMO-IFFU DONE 2026-11-07T09:11:45Z | present | reproduces |
+
+**Model labels.**
+- `numbers.md` labels every number. The run file names `dpo`, `s2300` and `s0750` with their checkpoints and sizes in
+  its Setup.
+- The inherited `s2300` 28 / 40 is marked as olmo-ifomega in `numbers.md`; in `run_olmo_iffu.md` it is unmarked
+  ("`s2300` 28 / 40 at 32k").
+- The plain summary speaks of "the RL model" and "the starting model", acceptable for its audience.
+
+No unlabelled number applies to a different model.
+
+## §Verdict
+
+**Stands.**
+- All the sampling, grading, provenance, compute and spend numbers reproduce exactly:
+  - every `results.csv` grade count;
+  - the subsets from their seeds;
+  - the hint wording and the 65,536 − prompt budget;
+  - registry rows equal to my per-job sums;
+  - $53.87;
+  - the bucket upload with matching sha256 and no secrets.
+- **Test 3:** all 10 IFBench prompts survive 1,024 `dpo` draws (≤ 2.92 × 10⁻³ per sample), and 4 of them (78, 133,
+  252, 253) are nonetheless prompt-elicitable with the hint. This is the run's cleanest result and it reproduces
+  fully.
+- **Test 2 / 2c, `dpo` side:** 4 of 6 IFEval and 12 of 42 IFBench reach prompts are prompt-elicitable (11 under the
+  strict title-case reading).
+- **Test 4:** `s0750` is confirmed on 26 of 43 within 32 fresh draws (64 pre-registered).
+- **Test 1:** every sound credit lies past token 32,768, and perp_068 is "token budget".
+
+**Must be reworded.**
+1. **perp_069 is not "token budget".** It was reach only under `doubly`, and under `doubly` this run gives it one
+   sound success at 65k. The status count becomes token budget 1, and "one success with room or hint" 3 (055, 069, 204). The plain
+   summary's "solved two puzzles … at least twice … mostly a length limit" becomes one of three. Under the any-credit reading its test-1
+   column uses, the figure's 069 "before" cell is 2 / 256. The pre-registration's "shown under both readings"
+   is not met.
+2. **"The hint breaks `s2300` on 8 more"** becomes 6, or 7 if 170 counts as broken. 284's four exact span copies are
+   genuine by rule 5, which names 284. 170 is a reader call: the executor's label and a consistent slogan rule say
+   broken, two of my readers say not. The uninformative / not-elicited split in the status line changes accordingly
+   (uninformative 5 with 170, 4 without).
+3. **"`s2300`'s strict rate with the hint is at or above its unhinted rate on all 16"** is wrong: it is lower on
+   2 of 16 against the fixed phase and 6 of 16 against all 24 draws. The strict drops are small; the genuine-rate
+   point stands.
+4. **Report the missed expectation** "gamed share of `dpo`'s strict successes 30 % (10–60 %)": observed 1 of 16
+   read (6 %).
+5. **226:** the `s2300` check was left at 5 of 16 against the pre-registered "until 2 genuine or none left". Read to
+   the end, the hint breaks `s2300` there (1 genuine of 16). `dpo`'s verdict is unaffected.
+6. **Minor:**
+   - mark the 28 / 40 as olmo-ifomega's in `run_olmo_iffu.md`;
+   - "65,290 response tokens" is 65,317 for 069;
+   - the pre-registration header's writing times postdate its commit.
+
+**Not supported.** "Of the 52 reach prompts, 18 are now explained" is 17. Nothing else is unsupported; no hard
+constraint is violated.
+
+**Next measurements.**
+- **perp_055 and 069.** Both sit at one sound success in 64 at 65k (`doubly`). A further 128 `dpo` draws at 65,536 on
+  each (≈ $20 at test 1's rate) would decide "token budget" vs "out of reach at 65k" under both graders.
+- **248 and 269.** These survive 1,024 draws and the hint with `s2300` unbroken, so they are the run's two candidates
+  for created ability. A second elicitation (a different brevity wording, or a one-shot example) on these two, plus
+  `dpo` at 4,096 draws, would test whether they survive more than one method.
+- **IFBench prompts still open on sampling.** The 19–21 prompts the hint did not elicit and did not break need test
+  3's 1,024-draw treatment before "not reached" can mean more than "not reached at 256 plus one hint".

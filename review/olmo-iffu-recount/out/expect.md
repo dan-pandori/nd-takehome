@@ -17,4 +17,4 @@
 | T3 survivors 6 of 10 (3–9); resolved 2 (0–5); one genuine 2 (0–4) | survive 10; resolved 0; one 0 | survivors: MISS (outside the interval) |
 | T4 s0750 confirmed on 24 of 43 (16–32) | 26 of 43 (strict reading 26); cap 32 (deviation 4) | inside the interval |
 | T2c prompt-elicitable on 6 of 32 (2–12) | 10 of 32 | inside the interval |
-| T2c the hint breaks s2300 on 10 of 32 (4–16) | 3 of 32 | MISS (outside the interval) |
+| T2c the hint breaks s2300 on 10 of 32 (4–16) | 4 of 32 | inside the interval |

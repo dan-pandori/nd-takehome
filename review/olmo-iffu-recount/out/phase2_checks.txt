@@ -1,0 +1,51 @@
+1. hard constraints
+   nd_verify tree HEAD 9437bb72b8009d6660dc5d85496ec7e580c815fe origin/main 9437bb72b8009d6660dc5d85496ec7e580c815fe
+   TEST_RUN_DONE HEAD 1d5cf064d739eb9484500d9ec85969a77f69058d origin/main 1d5cf064d739eb9484500d9ec85969a77f69058d branch point 1d5cf064d739eb9484500d9ec85969a77f69058d
+   judge mentions in olmo_iffu/ and pod/olmo_iffu/: ['/home/dan/work/olmo-iffu/olmo_iffu/compute_rows.py:46:            for k in ("train_steps", "train_tokens", "lean_checks"):']
+   files changed by the run (branch point .. e57060d0): 512; outside its own paths: ['QUESTIONS.md', 'STATUS.md', 'artifacts/MANIFEST.jsonl', 'log.md', 'numbers.md', 'run_olmo_iffu.md']
+   deletions in that diff: 512 files changed, 61080 insertions(+)
+
+2. MANIFEST and bucket
+   MANIFEST rows added 17; local sha256 match 17; in the bucket listing with the same size 17; bucket files 524
+
+3. timing
+   prereg first commit 048ef5fe 2026-11-06T23:22:37+00:00
+   pods.log: ['2026-11-06T23:23:56Z iffu-a', '2026-11-06T23:50:26Z iffu-b']
+   JOB_START: {'T2_dpo': '2026-11-06T23:33:13Z', 'T2_s2300': '2026-11-06T23:53:33Z', 'T3_dpo': '2026-11-06T23:59:47Z', 'T1_dpo': '2026-11-07T00:06:41Z', 'T4_s0750': '2026-11-07T04:59:31Z', 'T2c_dpo': '2026-11-07T06:23:12Z', 'T2c_s2300': '2026-11-07T07:49:49Z', 'T4b_s0750': '2026-11-07T08:17:40Z'}
+   2c addition commit: a9b234f1 2026-11-07T02:01:45+00:00 olmo-iffu: pre-register test 2c (the hint on the other 32 eligible IFBench reach prompts), before any sample of it
+
+4. results.csv vs my re-grade
+   rows 153; differences none
+
+5. s2300 strict rate with the hint vs olmo-ifomega
+   test2: below the fixed phase on 2: ['ifbench_179 10/16 < 6/8', 'ifeval_2563 15/16 < 8/8']
+   test2: below all olmo-ifomega draws on 6: ['ifbench_170 4/16 < 8/24', 'ifbench_179 10/16 < 21/24', 'ifbench_188 2/16 < 5/24', 'ifeval_1314 12/16 < 22/24', 'ifeval_2447 14/16 < 22/24', 'ifeval_2563 15/16 < 24/24']
+   test2c: below the fixed phase on 8: ['ifbench_128 12/16 < 8/8', 'ifbench_154 2/16 < 6/8', 'ifbench_173 10/16 < 6/8', 'ifbench_187 15/16 < 8/8', 'ifbench_203 13/16 < 8/8', 'ifbench_206 13/16 < 7/8', 'ifbench_211 11/16 < 6/8', 'ifbench_269 13/16 < 7/8']
+   test2c: below all olmo-ifomega draws on 7: ['ifbench_128 12/16 < 24/24', 'ifbench_154 2/16 < 20/24', 'ifbench_173 10/16 < 22/24', 'ifbench_186 15/16 < 23/24', 'ifbench_187 15/16 < 23/24', 'ifbench_211 11/16 < 21/24', 'ifbench_269 13/16 < 22/24']
+
+6. test 1 sound-rate CP intervals (two-sided 95 %)
+   1/64 = 0.016 [0.0004, 0.084]
+   3/64 = 0.047 [0.0098, 0.131]
+   2/64 = 0.031 [0.0038, 0.108]
+
+7. test 1 finished-length quartiles
+   055: n 64; nearest-rank [43876, 46865, 50339]; interpolated (inclusive) [43855.8, 46860.5, 50120.0]; max 56969
+   068: n 63; nearest-rank [42458, 45521, 49030]; interpolated (inclusive) [42814.5, 45521.0, 48794.5]; max 57305
+   069: n 64; nearest-rank [40191, 45299, 48426]; interpolated (inclusive) [40135.5, 45087.0, 47767.5]; max 60638
+
+8. test 3 per-constraint passes
+   ifbench_3: [0] of 768, jointly 0
+   ifbench_78: [0] of 768, jointly 0
+   ifbench_133: [0, 762] of 768, jointly 0
+   ifbench_136: [2, 6] of 768, jointly 0
+   ifbench_166: [0] of 768, jointly 0
+   ifbench_211: [0] of 768, jointly 0
+   ifbench_248: [0] of 768, jointly 0
+   ifbench_252: [0] of 768, jointly 0
+   ifbench_253: [0] of 768, jointly 0
+   ifbench_269: [0] of 768, jointly 0
+
+9. predecessor re-grade (independent reviewer of olmo-ifomega)
+   dpo: 055: n 256, omega 0, rl 0; 068: n 256, omega 0, rl 0; 069: n 256, omega 0, rl 2
+   s2300: 055: n 40, omega 2, rl 2; 068: n 40, omega 28, rl 33; 069: n 40, omega 28, rl 29
+   dpo credited draws: [('069', 'E1_dpo_oo3', 1, 4, 30198, 'stop'), ('069', 'E1_dpo_oo3', 4, 28, 32768, 'length')]

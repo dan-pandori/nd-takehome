@@ -20,13 +20,17 @@ def main():
     keys = {}
     for f in glob.glob(str(H / "key_r*.json")):
         keys.update(json.load(open(f)))
-    A, B = {}, {}
-    for f in sorted(glob.glob(str(H / "reader_labels" / "*.json"))):
-        n = os.path.basename(f)
-        if n.startswith("c_"):
-            continue  # third readers (outcome-deciding disagreements only) are recorded in confirm.json notes
+    # first and second reader of each item, in read order: rounds r1..r6 (a round's `_b` file after its first
+    # reader), then the B pass (b_*), then the third readers (c_*)
+    def order(n):
+        kind = 2 if n.startswith("c_") else (1 if n.startswith("b_") else 0)
+        return (kind, n.replace("_b.json", "~.json"))
+    reads = {}
+    for f in sorted(glob.glob(str(H / "reader_labels" / "*.json")), key=lambda f: order(os.path.basename(f))):
         for x in json.load(open(f)):
-            (B if n.startswith("b_") or n.endswith("_b.json") else A)[x["item"]] = x
+            reads.setdefault(x["item"], []).append(x)
+    A = {i: r[0] for i, r in reads.items()}
+    B = {i: r[1] for i, r in reads.items() if len(r) > 1}
     conf = {k: v for k, v in json.load(open(H / "confirm.json")).items() if not k.startswith("_")} if (H / "confirm.json").exists() else {}
     by_rank = {(k["arm"], k["pid"], k["rank"]): i for i, k in keys.items()}
 
@@ -77,7 +81,8 @@ def main():
             dis.append({"item": iid, "arm": k["arm"], "pid": k["pid"], "rank": k["rank"], "A": A[iid]["label"],
                         "B": B[iid]["label"], "final": conf.get(iid, {}).get("label"), "note": conf.get(iid, {}).get("note")})
     agree = sum(1 for i in set(A) & set(B) if A[i]["label"] == B[i]["label"])
-    head = [f"items read by A: {len(A)}; by B: {len(B)}; both: {len(set(A) & set(B))}; agree {agree}; "
+    n3 = sum(len(r) >= 3 for r in reads.values())
+    head = [f"items read once or more: {len(A)}; twice or more: {len(B)}; three times: {n3}; first/second agree {agree}; "
             f"disagree {len(dis)} (adjudicated {sum(d['final'] is not None for d in dis)})",
             "(arm, prompt) whose outcome (genuine count capped at 2, state) differs between label sources:"]
     C.dump({"outcomes": out, "disagreements": dis}, "sensitivity.json")

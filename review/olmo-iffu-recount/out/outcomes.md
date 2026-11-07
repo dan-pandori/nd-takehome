@@ -50,7 +50,7 @@
 | ifbench_211 | 1 | 1 (1) | one genuine | 11 | 2 (2) | no | 21/24 |
 | ifbench_217 | 0 | 0 (0) | not elicited | 10 | 2 (2) | no | 9/24 |
 | ifbench_220 | 8 | 2 (2) | prompt-elicitable | 16 | 2 (2) | no | 23/24 |
-| ifbench_226 | 9 | 2 (2) | prompt-elicitable | 16 | 2 (2) | no | 24/24 |
+| ifbench_226 | 9 | 2 (2) | prompt-elicitable | 16 | 1 (1) | yes | 24/24 |
 | ifbench_248 | 0 | 0 (0) | not elicited | 16 | 2 (2) | no | 21/24 |
 | ifbench_252 | 36 | 2 (2) | prompt-elicitable | 16 | 2 (2) | no | 23/24 |
 | ifbench_253 | 43 | 2 (2) | prompt-elicitable | 16 | 2 (2) | no | 23/24 |
@@ -123,7 +123,7 @@ per prompt draws / strict / genuine: 0:32/1/1, 1:32/1/1, 3:32/0/0, 4:16/2/2, 19:
 | ifbench_211 | – | one genuine (T2c) | survives at 1,024 | not broken | confirmed |
 | ifbench_217 | – | not elicited (T2c) | – | not broken | confirmed |
 | ifbench_220 | – | prompt-elicitable (T2c) | – | not broken | confirmed |
-| ifbench_226 | – | prompt-elicitable (T2c) | – | not broken | confirmed |
+| ifbench_226 | – | prompt-elicitable (T2c) | – | breaks | confirmed |
 | ifbench_248 | – | not elicited (T2c) | survives at 1,024 | not broken | confirmed |
 | ifbench_252 | – | prompt-elicitable (T2c) | survives at 1,024 | not broken | not confirmed (0 genuine in 32) |
 | ifbench_253 | – | prompt-elicitable (T2c) | survives at 1,024 | not broken | not confirmed (1 genuine in 32) |
