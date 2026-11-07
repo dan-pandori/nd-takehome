@@ -53,16 +53,19 @@ def main():
         words, budget = {}, {}
         sf = A / "samples" / f"{job}.jsonl.gz"
         if sf.exists():
-            with gzip.open(sf, "rt") as f:
-                for l in f:
-                    try:
-                        r = json.loads(l)
-                    except (json.JSONDecodeError, EOFError):
-                        break
-                    budget.setdefault(r["pid"], set()).add((r.get("prompt_tokens"), r.get("max_tokens")))
-                    if r["pid"].startswith(("ifbench", "ifeval")):
-                        a = answer_of(r["text"])
-                        words[(r["pid"], r["chunk"], r["i"])] = None if a is None else len(a.split())
+            try:
+                with gzip.open(sf, "rt") as f:
+                    for l in f:
+                        try:
+                            r = json.loads(l)
+                        except json.JSONDecodeError:
+                            break
+                        budget.setdefault(r["pid"], set()).add((r.get("prompt_tokens"), r.get("max_tokens")))
+                        if r["pid"].startswith(("ifbench", "ifeval")):
+                            a = answer_of(r["text"])
+                            words[(r["pid"], r["chunk"], r["i"])] = None if a is None else len(a.split())
+            except (EOFError, OSError):
+                pass  # a copy pulled while the job was still writing: complete rows only
         by = {}
         for r in rows:
             by.setdefault(r["pid"], []).append(r)
