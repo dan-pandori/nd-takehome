@@ -202,3 +202,5 @@ between $55 and $60. Say "no test 4" here to skip it.
 - *Update 2026-11-07 00:41 UTC:* test 1 runs slower than assumed (≈ 1,100 tok/s at 45k-token sequences), so
   tests 1–3 now project ≈ $54 and test 4 cannot meet its own "≥ $8 remains" condition: it is unqueued and, by default,
   cut. Nothing for you to decide unless you want test 4 with extra budget (≈ $6.5).
+- *Update 2026-11-07 01:05 UTC:* test 1's samples finish at ≈ 47k tokens (none cut so far), so tests 1–3 now project ≈ $48
+  and test 4 is back under its own rule: it starts automatically after test 3 only if ≥ $8 remains by the ledger.
