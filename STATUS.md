@@ -380,3 +380,7 @@ OLMO-IFOMEGA DONE 2026-11-06T07:33:16Z
   hand-check table), `figures/olmo_iffu_status.png`, bucket `hf://buckets/dan-pandori/nd-rl/olmo-iffu/`.
 
 OLMO-IFFU DONE 2026-11-07T09:11:45Z
+
+## olmo-novelty (executor; proposal 38; literature review, no pods; guard budget $0.50 / 1 h; hard stop 2026-11-09 12:10 UTC)
+- 2026-11-07 12:11 UTC  run started. Budget guard already registered (`podbudget`: ceiling 1 h, budget $0.50). Claude time only;
+  the one computation (ProRL's correlation on our IFBench / IFEval data) uses stored results.
