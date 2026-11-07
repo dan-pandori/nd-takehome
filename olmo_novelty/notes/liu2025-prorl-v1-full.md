@@ -30,7 +30,7 @@ Source: arXiv 2505.24864v1, only arXiv version; NeurIPS camera-ready: §4 unchan
 | | ProRL v1 | Ours |
 |---|---|---|
 | Start | R1-Distill-Qwen-1.5B, distilled [PR-1] | 32B Think SFT + DPO (C2–C8); 7B base (C1) |
-| RL / pretraining | 2.6e-3–1.2e-2 FLOPs (rl-compute-share; [PR-2, PR-8]); v2 4.4e-3–2.1e-2; +BroRL 1.0e-2–4.5e-2 | 7B 1.5–3.2e-3; 32B ≈ 6e-3–2e-2, 14 % GPU-h |
+| RL / pretraining | 2.6e-3–1.2e-2 FLOPs (rl-compute-share; [PR-2, PR-8]); v2 4.4e-3–2.1e-2; +BroRL 1.0e-2–4.5e-2 | 7B 1.5–3.2e-3; 32B ≈ 3e-3–2e-2 (executor correction: reviewed compute axis at step 2,300), 14 % GPU-h |
 | RL steps | > 2k [PR-2]; v2 3k [PR-86] | 500 / 2,800; 100 / 750 / 2,300 |
 | Tasks incl. IF | 136K, five domains; IF continuous [PR-9–PR-13] | maths, code, IF, chat (32B); maths (7B) |
 | KL, resets | KL + hard resets [PR-3–PR-5] | OlmoRL: no KL, no resets [PR-137] |

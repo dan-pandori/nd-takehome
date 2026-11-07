@@ -19,8 +19,9 @@ are judged, so the Lean-only rule does not apply.
   guess. Nothing is lost: reverse 0 at k ≤ 512. Contrasts with Yue et al.'s narrowing at large k. Verdict
   inconclusive (one pre-registered clause asked the base to match RL at k = 8). Per-token likelihood: every scored
   correct RL solution lies inside the base's range (weak evidence: whole-solution gap e^731).
-- **C2 (run `olmo-think32b`, AIME 2025–26, 59 problems).** DPO start vs the RL run (≈ 6 × 10⁻³ – 2 × 10⁻² of
-  pretraining FLOPs, 14 % of GPU-hours). pass@1 0.716 → 0.746, pass@8 ≈ 0.86 both. One inconclusive reach candidate
+- **C2 (run `olmo-think32b`, AIME 2025–26, 59 problems).** DPO start vs the RL run (≈ 3 × 10⁻³ – 2 × 10⁻² of
+  pretraining FLOPs at step 2,300 by the reviewed compute axis, 2.8 × 10⁻³ low / 2.3 × 10⁻² high; the brief's 6 × 10⁻³ low
+  end came from an earlier scaling; 14 % of GPU-hours). pass@1 0.716 → 0.746, pass@8 ≈ 0.86 both. One inconclusive reach candidate
   (AIME 2025 II P13): `dpo` credited 7 / 256 by RL's grader, states the answer once; 43 % of its tries hit the
   32,768-token cap. Three grades: RL's grader, final stated answer, blinded hand check. Nothing lost (one reverse
   problem solved within 56 tries).

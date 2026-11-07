@@ -1142,3 +1142,15 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   C4's novelty narrowed to IF (What Outcome RL Buys audits lone wins in physics/maths); AceReason dropped as
   domain-dependence evidence (no common denominator); Yoon's pairs are Olmo 3 (32B Think at 750 steps), not ours.
   REVIEW.md 2,998 words by wc -w without front matter. Ledger 747 / 747, 0 / 734 negative controls.
+- 2026-11-07 14:52 UTC  Claim check pass 2 (`olmo_novelty/_claim_check2.md`, on 2d72d928): of pass 1's 34, 25 fixed, 5 partly,
+  4 fixes introduced new errors; 28 new findings (0 high, 6 medium). All applied: L-5 re-scored "partly held" (its
+  "extends" clause holds, its 0.6 clause failed); C4's IF neighbour Yoon Fail→Pass (k ≈ 1) restored; §6 now credits What
+  Outcome RL Buys with the blind read / second grade / reverse / longer budget; "answer-graded" re-tests (CoT-pass@k
+  keeps RL ahead); relation labels mapped to the pre-registered set (C1 contradicts / is weakly contradicted);
+  lone-win audits are physics only; 32B RL share corrected to ≈ 3 × 10⁻³–2 × 10⁻² FLOPs (reviewed compute axis at step
+  2,300; the brief's 6 × 10⁻³ came from an earlier scaling; claims sheet and ProRL note fixed too); locked minority
+  1–3 % (EX-15, EX-16); 33 of 43 hand-reach prompts untested at 1,024; RL Squeezes added to §2. REVIEW.md 3,000 words
+  (wc -w without front matter). Ledger 748 / 748, 0 / 735 negative controls.
+- 2026-11-07 14:52 UTC  Note: the committed pre-registration's header says "Written 2026-11-07 12:15–12:40 UTC", a planned window
+  typed ahead of the clock; the commit time (664aaa93, 12:17:36 UTC) is the record. A later working-tree edit of that
+  line was reverted rather than committed, so the file is as pre-registered.

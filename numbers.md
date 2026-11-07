@@ -2256,5 +2256,5 @@ H100-hours with H200-seconds).
 ### Literature counts (`olmo_novelty/screened.md`, `olmo_novelty/ledger/`)
 
 200 distinct sources screened (176 new to the four earlier nd-rl reviews; 25 of them from the fresh novelty search), 23 read
-in depth or in full, 19 papers with notes; ledger 747 quotes in 7 files, all found; 0 / 734 negative controls passed.
+in depth or in full, 19 papers with notes; ledger 748 quotes in 7 files, all found; 0 / 735 negative controls passed.
 Compute: no GPU; `correlation.py` ≈ 80 s on the VPS CPU. Claude time only.
