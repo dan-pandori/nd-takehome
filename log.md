@@ -1115,3 +1115,13 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 2026-11-07 12:17 UTC  Run started. No pods; guard budget registered ($0.50 / 1 h). Read the brief, nd-rl literature README,
   lit-review-2's Q1 and ProRL note, the five Olmo plain summaries. Pre-registration `preregistration/olmo-novelty.md`
   written before the correlation analysis and before the literature search.
+- 2026-11-07 12:27 UTC  Five research agents launched (PR ProRL family, IL critics + What Outcome RL Buys, IF instruction-following
+  boundary, DT domain dependence + trajectories, GG gaming/grading + Yue citations); shared rules in
+  `olmo_novelty/AGENT_INSTRUCTIONS.md`, claims sheet `olmo_novelty/claims_C1-C8.md`, quote checker
+  `olmo_novelty/verify_ledger.py` (negative control tested). Sources in `~/onv_sources/` (not committed).
+- 2026-11-07 12:27 UTC  Correlation (`olmo_novelty/correlation.py`, seed 20261107; outputs `correlation.csv`,
+  `correlation_summary.csv`, `correlation_stdout.txt`). P1 (IFBench 218, strict, s2300 vs dpo, pass@1, split-half):
+  rho -0.504 [-0.599, -0.397]; naive -0.537; random-pairing null -0.655. Pre-registered C-1..C-6 hold; C-7 fails
+  narrowly (per constraint type rho -0.803, predicted [-0.80, -0.20]). Added, not pre-registered: rho of x with RL's
+  own rate (+0.50), and the dpo loose-success counts on the 49 strict-reach prompts (results.csv `succ_loose` over 256
+  draws: >= 1 on 25, >= 2 on 19, 256/256 on 2; hand-reach 16 of 42 with >= 2).
