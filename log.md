@@ -1125,3 +1125,11 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   narrowly (per constraint type rho -0.803, predicted [-0.80, -0.20]). Added, not pre-registered: rho of x with RL's
   own rate (+0.50), and the dpo loose-success counts on the 49 strict-reach prompts (results.csv `succ_loose` over 256
   draws: >= 1 on 25, >= 2 on 19, 256/256 on 2; hand-reach 16 of 42 with >= 2).
+- 2026-11-07 13:25 UTC  Agents PR, IL, IF, DT, GG done (12:56–13:06): 20 notes on 19 papers, 718 ledger quotes all found, 0 / 705
+  negative controls; 175 distinct sources screened (152 new), 23 in depth. **Deviation:** both screening (40–60) and
+  in-depth (12–18) targets exceeded, because the IF agent covered all 19 awesome-RLVR-boundary entries and 50 of the 225
+  IFBench citers, and in-depth reads were cheap once fetched. Two agents overwrote IL's `notes/yang2026-passk-crossovers.md`
+  in turn; both restored it (byte-identical to IL's write by cmp, per their reports; its citations are IL ids only), and
+  PR's own note on the same paper is `yang2026-passk-crossovers-prorl.md`. Fresh novelty-search agent NV launched 13:1x.
+  REVIEW.md drafted; numbers.md § olmo-novelty and olmo_novelty/README.md written. Found: "hand" in the Olmo runs = blinded
+  Claude subagent readers + executor confirmation (handcheck_prompt_if.md), stated in REVIEW.

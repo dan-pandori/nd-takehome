@@ -1,0 +1,25 @@
+claim	source_id	relation	reason	ledger_ids
+C1	2507.14843v5	contradicts	Reverse part: losses exceed gains in every aggregate (AIME24 at k 8,192: base 93.3% vs ProRL 83.3%), against C1's 0 reverse at k<=512 from a pretrained base; reach part agrees (NDR<=0.02).	IL-7;IL-20;IL-23
+C2	2507.14843v5	replicates	Tiny reach for distilled-base RL; losses small for large models (AceReason-14B S 23 vs P 2,418); OLMo-2-1B DPO-to-RLVR at k 256 has E 83 < S 104.	IL-20;IL-53;IL-200
+C3	2507.14843v5	contradicts	Generalises net shrinkage across maths and non-maths (ProRL v2 RL-only 48/3,404 = 1.4% of questions, our arithmetic) but evaluates no IF; C3's ~20% RL-only share with 2 reverse runs against that generalisation.	IL-7;IL-17;IL-53;IL-66
+C4	2507.14843v5	extends	Leash names answer-only verification and false acceptances at large k as uncontrolled limits; C4 goes further by measuring them (36% of strict successes gamed).	IL-60;IL-61
+C7	2507.14843v5	extends	Shares symmetric budgets/decoding/verifier, format-tolerant extraction and a 300-step checkpoint trajectory; lacks fresh-draw confirmation of candidates, a hand gate and a guessing control.	IL-14;IL-36;IL-49;IL-62
+C8	2507.14843v5	extends	Its larger-k base test (8,192-16,384; 0/8,192 gives a 3.7e-4 bound) is the Invisible-Leash-style objection that C8 Test 3 answers for IF; Leash never applies it to IF.	IL-12;IL-59
+C1	2509.21128v2	unrelated	Counts trajectory clusters inside solved problems at k<=256, not problem-level reach; its Llama-3.1-8B exception (RL expands correct paths) is the nearest case to RL-Zero.	IL-68;IL-72;IL-77
+C3	2509.21128v2	unrelated	No IF task and no reach or reverse counts; maths and HumanEval only.	IL-72;IL-83
+C8	2509.21128v2	replicates	Too short a length limit depresses long-reasoning models' pass@k, the confound behind C8 Test 1.	IL-75;IL-199
+C1	2610.34894v1	replicates	The base recovers most RL lone wins with more samples (87/121 with 56 more) and 9/10 upheld new RL steps are in base samples; thinking bases, physics, k<=64, one zero-RL pair.	IL-99;IL-100;IL-101;IL-132
+C2	2610.34894v1	replicates	The 32B distilled pair (Skywork-OR1-32B) gains mostly reliability; its robust reach is answer form or sampling noise.	IL-108;IL-109;IL-110;IL-111
+C3	2610.34894v1	unrelated	No IF evaluation (ProRL v2 trains on IF but is read only on physics/maths); its reach bound (<=2.1 pp at k=8) covers four physics/maths sets.	IL-98;IL-121
+C4	2610.34894v1	replicates	Direction only: checker artifacts inflate reach (three fifths of robust cells are answer form); gaming appears only for training-time auxiliary scorers.	IL-105;IL-113;IL-147
+C5	2610.34894v1	replicates	Where the base hits the cap, finishing is most of the gain (82% at 4k-8k; ProRL v2 all finishing; counting unfinished problems moves reach).	IL-95;IL-126;IL-127
+C7	2610.34894v1	replicates	Partly: symmetric mirror, resampling both sides, blind LLM reading plus one-author check, judge regrade, registered predictions, date-stratified contamination; no large k, trajectory axis or guessing control.	IL-90;IL-94;IL-114;IL-116;IL-140
+C8	2610.34894v1	replicates	In kind for Test 1 (more tokens close the finishing gap), Test 2 (a right question elicits the missing fact) and Test 4 (training length does not predict reach); Test 3 differs (physics lone wins mostly recovered).	IL-96;IL-101;IL-134;IL-145
+C1	2609.22547v3	extends	Some public pairs show no supported loss and crossovers need paired inference; a 2-3% locked rate implies 1.7-2.5 expected reverse problems among 83 (our arithmetic), so C1's 0 is low-powered.	IL-161;IL-163;IL-166;IL-167
+C2	2609.22547v3	replicates	Asymmetric truncation (base 30.6% vs ProRL 2.0% at 8k) creates or masks crossovers: the confound behind dpo's 43% capped tries.	IL-154;IL-156;IL-157
+C5	2609.22547v3	replicates	The token limit decides comparisons; one zero-RL model stays ahead only because its base fails to terminate on 78% of generations.	IL-154;IL-160
+C7	2609.22547v3	extends	Adds paired simultaneous bands, power design (prompts over depth), truncation reporting, a guessing-floor caveat and deduplication; supports sampling at the k claimed.	IL-152;IL-165;IL-172;IL-174;IL-175;IL-177
+C8	2609.22547v3	replicates	Raising the token limit changes verdicts (Test 1 analogue); claims at k >> n need sampling at k (Test 3 design).	IL-157;IL-172;IL-175
+C3	2511.00710v4	replicates	Direction only (abstract): RLVR solves synthetic maze problems the base VLM never solves at growing pass@k, i.e. RL-only reach exists outside maths.	IL-182
+C3	2509.25123v3	replicates	Direction only (abstract): RL learns unseen compositions of known skills in a synthetic task, an expansion mechanism compatible with C3's new constraint types.	IL-179
+C7	2509.21882v3	replicates	Abstract: budget mismatch, attempt inflation and contamination confound RLVR gains; recommends budget-matched curves and contamination screens.	IL-183

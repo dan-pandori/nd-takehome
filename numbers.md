@@ -2209,3 +2209,52 @@ with the hint fine for `s2300` (248, 269); on 2 the hint also breaks `s2300` (3,
 and `iffu-b` 1 × H200 community $3.59/h 8.58 h $30.79). Bucket: `hf://buckets/dan-pandori/nd-rl/olmo-iffu/`
 (`artifacts/olmo_iffu/`: every sample's text and token ids, grades, metas, logs, hand items / keys / labels; bulk files
 in `artifacts/MANIFEST.jsonl`; `olmo_iffu/`, `pod/olmo_iffu/`); no weights.
+
+## olmo-novelty (2026-11-07, executor; UNREVIEWED)
+
+Literature review (proposal 38); no pods, no GPU. Every literature figure is a ledger quote in `olmo_novelty/ledger/*.tsv`
+checked against its fetched source text (`olmo_novelty/verify_ledger.py --neg`; source texts in `~/onv_sources/`,
+copyrighted, not committed). Models behind our numbers: `dpo` = `allenai/Olmo-3-32B-Think-DPO` (32 B, pretrained base →
+Think SFT → DPO), `s0100` / `s0750` / `s2300` = `allenai/Olmo-3.1-32B-Think` at RL steps 100 / 750 / 2,300; natural-language
+chat models (no proofs judged; Lean rule not applicable).
+
+### ProRL's correlation on our data (`olmo_novelty/correlation.py`, seed 20261107; pre-registered at 664aaa93)
+
+Input: `olmo_ifomega/results.csv`, fixed phase only (`dpo` 16 draws per prompt, RL 8; strict grade unless stated), IFBench
+218 non-excluded prompts, IFEval 150. x = `dpo` pass@1 on a random half of its draws; gain = RL pass@1 − `dpo` pass@1 on the
+other half (hypergeometric split, mean of 2,000 partitions; 95 % prompt bootstrap, 2,000). Source:
+`olmo_novelty/correlation_summary.csv` (per-prompt inputs `correlation.csv`; printout `correlation_stdout.txt`).
+
+| analysis | ρ [95 %] | same draws | random-pairing null | ρ(x, RL) |
+|---|---|---|---|---|
+| **P1** IFBench prompts, pass@1, `s2300` | **−0.504 [−0.599, −0.397]** | −0.537 | −0.655 | +0.500 |
+| IFBench, pass@8, `s2300` | −0.667 [−0.757, −0.566] | −0.771 | −0.706 | +0.164 |
+| IFBench, `dpo` ≥ 1 / 16 only (111 prompts) | −0.519 [−0.682, −0.337] | −0.580 | −0.712 | +0.535 |
+| IFBench per constraint type (47), pass@8 | −0.803 [−0.902, −0.620] | −0.884 | – | – |
+| IFBench, pass@1, `s0750` / `s0100` | −0.255 / +0.014 | −0.266 / −0.033 | −0.624 / −0.630 | +0.741 / +0.880 |
+| IFBench loose, pass@1, `s2300` | −0.559 [−0.647, −0.466] | −0.595 | −0.689 | +0.500 |
+| IFEval prompts, pass@1, `s2300` | −0.654 [−0.777, −0.504] | −0.794 | −0.754 | +0.396 |
+| IFEval per constraint type (25), pass@8 | −0.516 [−0.812, −0.082] | −0.729 | – | – |
+
+Mean `s2300` pass@1 gain by `dpo` half-sample bin (IFBench): 0 → 0.539 (≈ 117 prompts); (0, 0.25] 0.453; (0.25, 0.5] 0.444;
+(0.5, 0.75] 0.254; (0.75, 1] −0.000. Summed gain 85.81 over 218 prompts, 59.62 (69 %) on the 107 with `dpo` 0 / 16, 29.50 on
+the 49 strict-reach prompts. Pre-registered C-1 … C-6 hold; C-7 fails narrowly (−0.803 against [−0.80, −0.20]).
+
+### Format-tolerant (loose) credit on the strict-reach prompts (`olmo_ifomega/results.csv`, `dpo` rows, `succ_loose` over 256)
+
+Of the 49 IFBench strict-reach prompts, `dpo` has ≥ 1 loose success on 25, ≥ 2 on 19 (24 at 0, 6 at exactly 1), ≥ 13
+(5 %) on 4, and 256 / 256 on 2; of the 42 hand-reach prompts, 16 have ≥ 2. IFEval: 1 of 6 (5 loose successes). Not
+hand-read; computed in this run (not pre-registered).
+
+### Compute-matched budget estimate (objection 1 in `olmo_novelty/REVIEW.md`)
+
+RL GPU-hours of Olmo 3.1 Think 32B ≈ 1.4 × 10⁵ (H100; nd-rl rl-compute-share `compute_table.csv`, row "Olmo 3.1 Think 32B
+(RL +21 days)"); one `dpo` draw on IFBench reach candidates ≈ 2.97 H200-seconds (E1_dpo_ifa: 17,712 samples in 14.6 h,
+`log.md` 2026-11-05 15:32 UTC). K ≈ 1.4 × 10⁵ × 3,600 / (2.97 × 218) ≈ 7.8 × 10⁵ draws per prompt (order of magnitude; mixes
+H100-hours with H200-seconds).
+
+### Literature counts (`olmo_novelty/screened.md`, `olmo_novelty/ledger/`)
+
+175 distinct sources screened (152 new to the four earlier nd-rl reviews), 23 read in depth or in full, 19 papers with notes;
+ledger 720 quotes, all found; 0 / 707 negative controls passed (before the fresh novelty search's additions).
+Compute: no GPU; `correlation.py` ≈ 80 s on the VPS CPU. Claude time only.

@@ -1,0 +1,18 @@
+claim	source_id	relation	reason	ledger_ids
+C1	2505.24864v1	replicates	Math sits in Diminish: pass@128 does not grow (often falls) after RL, as C1 finds RL-only AIME solves base-credited; unlike C1, ProRL narrows; distilled 1.5B start.	PR-55;PR-56;PR-60;PR-1
+C2	2505.24864v1	replicates	No math reach at pass@128 for the distilled start; C2 likewise has one inconclusive candidate; ProRL narrows where C2 loses nothing.	PR-55;PR-56;PR-33
+C3	2505.24864v1	extends	Same direction on IF (final above base at large k) but only IFEval on a continuous score, about +0.03 at k 128 (figure only); no IFBench, strict grade or hand check.	PR-22;PR-28;PR-29;PR-11
+C4	2505.24864v1	unrelated	No audit of IF successes; only a training-time repetition / non-termination episode after IF data entered (Run 3).	PR-15
+C5	2505.24864v1	extends	Small IFEval reach (about +0.03 at pass@128, figure only), like C5 6 / 150; no length or brevity analysis.	PR-28;PR-25
+C7	2505.24864v1	extends	Step-resolved pass@k (base, intermediate, final) to k 256 exists, but the intermediate step is unnamed and there is no symmetric confirmation, hand gate, guessing or format control; resets tuned on eval benchmarks.	PR-27;PR-57;PR-19;PR-66
+C8	2505.24864v1	extends	The paper itself blames answer format for base Reasoning Gym zeros but never re-grades or re-prompts; C8 elicitation tests are the missing control.	PR-65;PR-66;PR-67;PR-68
+C7	2505.24864-neurips2025	extends	The camera-ready keeps §4 and equates significance with pass@128 from 256 samples; no test, interval or seed.	PR-76;PR-77
+C3	nvidia-devblog-prorl-v2	unrelated	IF appears only in a caption with an unstated metric; the model card gives v2 IFEval 70.85 (average); no IF pass@k.	PR-89;PR-147
+C7	nvidia-devblog-prorl-v2	unrelated	Pass@k gains claimed with no k, numbers or tasks in the text.	PR-87;PR-88
+C3	2510.01180v1	unrelated	Trains on IFEval-type data but evaluates pass@1 on math, code and Reasoning Gym only.	PR-96;PR-105;PR-106
+C7	2510.01180v1	extends	Rollouts per prompt (16 to 512) is a compute axis our checkpoint trajectory holds fixed.	PR-98;PR-103
+C1	2609.22547v3	extends	7B pairs show no supported large-k loss, as C1 loses nothing at 7B; our pretrained-base RL-Zero start is a setting it lacks; the 1.5B pairs incl. ProRL do lose.	PR-110;PR-112;PR-113
+C2	2609.22547v3	extends	Same direction beyond 1.5B (no supported loss for 7B pairs); our 32B SFT + DPO start is a setting it lacks.	PR-110;PR-136
+C5	2609.22547v3	replicates	Token limits alone create, mask or reverse crossovers, as C5 OMEGA reach appears only at RL 32,768-token cap.	PR-117;PR-115
+C7	2609.22547v3	extends	Prompt-bootstrap dominance test with simultaneous bands and truncation symmetry are controls our rule lacks; its split-half replication matches P1 split.	PR-114;PR-117;PR-135
+C8	2609.22547v3	replicates	About 0.7 log-odds of ProRL 8k pass@1 edge is base truncation; C8 Test 1 likewise finds the token budget explains 1 of 3 geometry reach prompts.	PR-115;PR-116
