@@ -157,9 +157,10 @@ sources into `~/onv_rev_sources/`. Their assignments:
 Their results are recorded in §Fresh search below. They are blind by construction whatever I read later, so I start
 phase 2 before they return.
 
-## §Fresh search (blind agents RA / RB / RC; results returned 15:15–15:33 UTC)
+## §Fresh search (blind agents RA / RB / RC; results returned 15:15–15:21 UTC)
 
-The agents saw the brief's claims C1–C8 and nothing of the run's write-up, ledgers or sources. Altogether:
+The agents saw the claims sheet's C1–C8 (with my glosses, `review_onv/fresh/SHARED.md`) and nothing of the run's
+write-up, ledgers or sources. Altogether:
 - 54 rows in `review_onv/fresh/R{A,B,C}.tsv`, committed with their ≤ 25-word quotes as the run's ledgers are; the
   agents' shared instructions are `review_onv/fresh/SHARED.md`, and the source texts stay in `~/onv_rev_sources/`;
 - every quote re-checked with my normaliser: 54 / 54 found, 0 / 54 altered-quote controls passing
@@ -168,12 +169,12 @@ The agents saw the brief's claims C1–C8 and nothing of the run's write-up, led
 
 | claim | the agents' verdict and closest work | effect on the run's label |
 |---|---|---|
-| C3 (IFBench per-prompt reach) | **RA: novel as a per-prompt measurement.** ProRL's IFEval curves (aggregate, k ≤ 256) mean it is not "the first large-k IF comparison". Zhai 2604.14877 is the only per-problem non-maths RL-only count (HotPotQA agent, k = 64, 5 vs 1). Karouzos 2604.16027: Olmo 3 7B Think-DPO vs Think, IFEval pass@16, aggregate. RA wrongly listed HiR as having no large-k analysis; HiR Fig. 3a plots IFBench pass@k to 1,024, which I checked (R5), so the run's neighbour is right | "novel, per prompt" **stands** |
-| C4 (gaming) | **RB: extends in direction.** In RB's words, the 36 % gamed share among the successes that decide reach and the ~11 prompts where gaming is the whole advantage "look new". Yoon 2610.19525: on Olmo 3 DPO→RLVR pairs, constraint satisfaction rises while judged quality falls, at k ≈ 1 (threat 2). CoT-pass@k: ~70 % valid reasoning among RL's correct maths answers (threat 2). Yue's hand check (threat 2) | "novel" **stands only in the narrow form the REVIEW states** (reach-deciding successes, IF) |
+| C3 (IFBench per-prompt reach) | **RA: novel as a per-prompt measurement.** RA cautions that ProRL's IFEval curves (aggregate, k ≤ 256) rule out calling C3 "the first large-k IF comparison"; the run does not claim that. RA's per-problem RL-only counts outside IF: Zhai 2604.14877 (HotPotQA agent, k = 64, 5 vs 1) and What Outcome RL Buys (144 physics lone wins). Yoon's Fail→Pass prompts are per prompt on IF, but at k ≈ 1. Karouzos 2604.16027: Olmo 3 7B Think-DPO vs Think, IFEval pass@16, aggregate. RA's final reply wrongly lists HiR among IF-RL papers with no large-k analysis ("None has a large-k analysis: HiR 2512.23457, …"; RA.tsv has no HiR row). HiR Fig. 3a plots IFBench pass@k to k = 1,024, which I checked (R5), so the run's neighbour is right | "novel, per prompt" **stands** |
+| C4 (gaming) | **RB: "extends".** RB's top line is "Only C6 looks new for instruction following; C4 and C7 extend earlier results", and RB did not find Wei's 73.5 %. In RB's words, the 36 % gamed share among the successes that decide reach and the ~11 prompts where gaming is the whole advantage "look new". Yoon 2610.19525: on Olmo 3 DPO→RLVR pairs, constraint satisfaction rises while judged quality falls, at k ≈ 1 (threat 2). CoT-pass@k: ~70 % valid reasoning among RL's correct maths answers (threat 2). Yue's hand check (threat 2) | RB would call C4 "extends"; the REVIEW's "novel" survives **only in its narrow form** (reach-deciding successes, IF) |
 | C5 / C8 | **RA: extends.** The token-cap confound is established (What Outcome RL Buys, crossovers); tying the IF reach prompts to brevity, the short hint, and the per-prompt test at step 750 look new | the REVIEW ranks C5 "replicates" wholesale in §4 (see Compare) |
 | C6 (failure reading) | **RB: novel for IF.** Analogues exist only for maths or multiple choice: 2610.20639 "Same Answer, New Box" (2026-10-02; 82 % of an out-of-domain multiple-choice RL gain is answer format), 2505.22756, and the crossovers' locked-set audit | "novel (unreviewed)" **stands** |
 | C7 (methods, trajectory) | **RB / RC: extends.** Every tool has prior use: symmetric fresh-draw confirmation (2609.22547, maths), reader gates (CoT-pass@k, Yue, 2610.20639), guessing baselines (Yue, Cover@τ, 2410.15466). Public lab checkpoints: 2611.02574 (OLMo-2-1B, pass@256) and 2610.31624 (Olmo 3 7B Think RLVR checkpoints, behaviour only). No boundary or compute-axis study of Olmo 3.1 Think's checkpoints was found | "extends" **stands** |
-| C1 | **RC: no large-k per-problem test of this model pair.** Recent 7B Qwen zero-RL work narrows (2606.15455, 2607.20543); Wang 2610.06851 (same 7B base, cue, k ≤ 16) extends | "replicates (reach)" / "contradicted, weakly (nothing lost)" is consistent with the pre-registered definition (Yue makes the same measurement on another pretrained base) |
+| C1 | **RC: "Verdict: novel"**, because it found no large-k per-problem test of this model pair. Recent 7B Qwen zero-RL work narrows (2606.15455, 2607.20543); Wang 2610.06851 (same 7B base, cue, k ≤ 16) extends | the REVIEW's "replicates (reach)" / "contradicted, weakly (nothing lost)" stands. Under the pre-registered definition (same measurement, same kind of task and start model), Yue's pretrained-base AIME runs make the reach result a replication; RC's "novel" concerns the setting |
 | C2 | **RC: replicates in direction** (Yue's Magistral pair, AceReason-Nemotron 1.1, Guru). RC flagged the Olmo 3 report's own Table 14, which I confirmed: AIME 2025 pass@1 SFT 66.2, **DPO 70.7, 3.1 Think 78.1**; AIME 2024 DPO 76.0 → 80.6 | label stands; **positioning gap** (Compare, literature item 2) |
 
 Sources the run did not screen, none of which changes a label:
@@ -205,7 +206,8 @@ Other checks:
   account that it was restored to IL's version;
 - `QUESTIONS.md` is unchanged by the run.
 
-All 20 notes follow `TEMPLATE.md`: front matter, three sections, a Setup card, ≤ 700 words each. `screened.md` and
+All 20 notes follow `TEMPLATE.md`: front matter, three sections, a Setup card, and ≤ 700 words each without front matter
+(7 notes are 705–709 with it). `screened.md` and
 `to_add_to_zotero.md` are present.
 
 ### Numbers (own code: `review_onv/corr.py`, `phase2_checks.py`)
@@ -218,7 +220,7 @@ All 20 notes follow `TEMPLATE.md`: front matter, three sections, a Setup card, �
 | `dpo` ≥ 1/16 (111): split, same draws | −0.519 [−0.682, −0.337], −0.580 | −0.518 [−0.680, −0.339], −0.580 | reproduces |
 | per constraint type (47), pass@8 | −0.803 [−0.902, −0.620], same draws −0.884 | −0.803 [−0.906, −0.627], −0.884 | reproduces (same definition as mine) |
 | `s0750` / `s0100`: split, same draws, null | −0.255 / +0.014; −0.266 / −0.033; −0.624 / −0.630 | identical | reproduces |
-| loose `s2300`; IFEval `s2300`; IFEval per type (25) | −0.559; −0.654 [−0.777, −0.504]; −0.516 [−0.812, −0.082] | −0.558; −0.655 [−0.775, −0.502]; −0.519 [−0.814, −0.046] | reproduces (bootstrap noise) |
+| loose `s2300`; IFEval `s2300`; IFEval per type (25) | −0.559; −0.654 [−0.777, −0.504]; −0.516 [−0.812, −0.082] | −0.558; −0.655 [−0.775, −0.502]; −0.519 [−0.814, −0.046] | point estimates reproduce. The 25-type interval's upper bound is seed-sensitive: mine gives −0.018 to −0.059 over six seeds, against the executor's −0.082 |
 | ρ(x, RL rate) `s2300` / `s0750` / `s0100` | +0.500 / +0.741 / +0.880 | +0.500 / +0.741 / +0.880 | reproduces |
 | gain by bin; summed gain; share on `dpo` 0/16; on the 49 strict-reach | 0.539 … −0.000; 85.81; 59.62 (69 %); 29.50 | 0.538 … −0.000; 85.81; 59.62 (69 %); 29.50 | reproduces |
 | `dpo` loose credit on the 49 strict-reach prompts (over 256) | ≥ 1 on 25, ≥ 2 on 19, 0 on 24, 1 on 6, ≥ 13 on 4, 256/256 on 2; hand-reach 16 of 42 at ≥ 2; IFEval 1 of 6 (5 successes) | identical (`verdict.csv` lists, `results.csv` `succ_loose`) | reproduces |
@@ -227,7 +229,7 @@ All 20 notes follow `TEMPLATE.md`: front matter, three sections, a Setup card, �
 | 46 public `step_*` branches (DT-1) | 46 | 46 (step_0050 … step_2300, every 50) | reproduces |
 | ledger 748 / 748, 0 / 735 negative controls | — | 747 exact + 1 punctuation-only (IF-85); 0 / 748 on three controls; 464 / 465 in fresh arXiv copies | reproduces |
 | 200 screened, 176 new, 23 in depth | — | identical; my prior list agrees on every flag | reproduces |
-| "176 new …; 25 of them from the fresh novelty search" (numbers) | 25 | `screen/NV.tsv` has 25 rows, 24 new (1 prior); REVIEW §7 says "25 sources, 24 new" | **differs by 1**: numbers.md should say 24 |
+| "176 new …; 25 of them from the fresh novelty search" (numbers) | 25 | `screen/NV.tsv` has 25 rows, all added to the screen (175 → 200), 24 of them new (1 prior). REVIEW §7 says "25 sources, 24 new" | **ambiguous**: "them" reads as the 176 new, of which 24 are from the fresh search; 25 is right of the 200. Say "25 of the 200 (24 new)" |
 
 ### Literature statements (all 74 ledger ids REVIEW.md cites, read against their quotes; key ones against the sources)
 
@@ -242,24 +244,38 @@ figure-only. Findings, most consequential first:
      names the physics lone-win audits and Yoon's k ≈ 1 drop, and `run_olmo_novelty.md` names only HiR and the
      lone-win audits. Wei's 73.5 % appears only in Matrix B and §6.
    - The "novel" label survives only in the form the REVIEW states: the gamed share among reach-deciding successes
-     and the reach re-count. The fresh search (RB) agrees.
-   - Neither claim check asked for this. Pass 2 (part 2, #18) only noted that Wei, Yoon and IFBench
-     over-optimisation are IF evidence in Matrix B's C4 row.
+     and the reach re-count. RB labels C4 "extends" and calls only that reach-boundary measurement new; RB did not
+     find Wei.
+   - Other screened IF gaming figures, all short of reach: IFDecorator's 14.53 % trap hack rate and LIFT's 38 % of
+     high-scoring completions under 30 words (claim check pass 2, #1).
+   - Pass 2 cites Wei's 73.5 % (part 2, #1 and #18), but neither pass asks for it in the bottom line. `STATUS.md`'s
+     Done line repeats the omission.
    - **Reword:** name Wei's 73.5 % in bottom line 1 and in the summary's "Neighbours".
 2. **C2 is positioned without the lab's own numbers for the same model pair.**
    - The Olmo 3 report's Table 14 (in the run's own source file `2512.13961v2.txt`) gives AIME 2025 pass@1 DPO 70.7 →
      Olmo 3.1 Think 78.1 (+7.4) and AIME 2024 76.0 → 80.6 (+4.6).
-   - C2's "pass@1 0.716 → 0.746" (+3.0) is on AIME 2025–26. From `olmo32/results.csv`, our fixed phase on AIME 2025
-     alone is 0.696 → 0.742 (+4.6), and on AIME 2026 0.737 → 0.750 (+1.3). So "RL barely moves it" is partly a
-     2026-problem effect and is smaller than the lab's gain.
+   - C2's "pass@1 0.716 → 0.746" (+3.0; the proposal's "RL barely moves it") is under RL's verifier on AIME 2025–26.
+   - Our fixed phase, from `olmo32/results.csv`:
+
+     | grade | AIME 2025 (30) | AIME 2026 (29) | all 59 |
+     |---|---|---|---|
+     | RL's verifier | 0.696 → 0.742 (+4.6) | 0.737 → 0.750 (+1.3) | 0.716 → 0.746 (+3.0) |
+     | final stated answer | 0.667 → 0.738 (**+7.1**) | 0.707 → 0.741 (+3.4) | 0.686 → 0.739 (+5.3) |
+
+   - So our own final-answer grade reproduces the lab's AIME 2025 gain. The lab's grade is "EM Flex" with Minerva
+     extraction, T 0.6, top-p 0.95, 32 samples; ours is T 1, top-p 1.
+   - "Barely" comes from two things: RL's lenient verifier, which credits `dpo` with 0.696 against 0.667 on AIME 2025,
+     and the 2026 problems.
    - The reach claim (no maths reach, pass@8 ≈ 0.86 both) is unaffected.
-   - **Add** this as C2's closest prior result.
+   - **Add** this as C2's closest prior result, with the grade split.
 3. **C5 is ranked "replicates" wholesale (§4), but only its token-cap half has a precedent** (What Outcome RL Buys'
    finishing [IL-95, IL-96]; truncation in the crossovers paper [IL-154]).
    - For the IFEval-brevity half, the sources show that RL answers are short (IFBench paper, 210 tokens [IF-22]) and
      that RL drops preambles (SciIF [NV-13]). Neither ties brevity to the RL-only prompts.
    - The fresh search (RA) calls it "extends", and the claim check (pass 2 #22) raised the same point for the bottom
-     line, which was fixed there but not in §4.
+     line, which was fixed there.
+   - C5 is still ranked "replicates" wholesale in §4, in Matrix B's C5 row, in §7's L-6 gloss, in `STATUS.md`'s Done
+     line and in `run_olmo_novelty.md`.
    - **Reword:** "C5's token-cap half replicates; its brevity half extends". L-6's "partly held" stands either way.
 4. **"Olmo 3's scores move +4 on AIME, +20 on IFBench" [DT-16]** is cited as within-run domain dependence (Q4,
    Matrix B C3).
@@ -271,12 +287,17 @@ figure-only. Findings, most consequential first:
 5. **L-5 is scored inconsistently:** REVIEW §7 and the log say "partly held", while `run_olmo_novelty.md` says
    "L-1 and L-5 failed". My score (R5) agrees with "partly held" (the "extends" clause holds, the 0.6 clause failed).
    **Reword** the summary.
-6. **Hand-reach denominators 42 and 43 are mixed.**
-   - 42 is the olmo-ifomega executor's set (`verdict.csv`; the hint test is on 42); 43 is its reviewer's set (40
-     shared). olmo-iffu's test 4 uses 43, and the REVIEW's "33 of the 43 untested" subtracts test 3's 10 prompts
-     from 43.
-   - REVIEW uses "42 hand" (§2, §5, the hint) next to "33 of the 43" and "26 of 43" without saying so.
-   - **Add** one clause; objection 3's "within ± 2" covers it.
+6. **Three hand-reach prompt sets are mixed under two numbers.** REVIEW says "42 hand" (§2, §5, the hint) next to
+   "33 of the 43" and "26 of 43", without saying which set each uses:
+
+   | set | prompts | used by |
+   |---|---|---|
+   | olmo-ifomega executor (`verdict.csv`) | 42 | REVIEW §2's "42 hand" |
+   | olmo-ifomega reviewer | 43 (40 shared with the executor's) | olmo-iffu test 4 ("26 of 43"); REVIEW's "33 of the 43 untested" = 43 − test 3's 10 |
+   | olmo-iffu hint set (`olmo_iffu/problems_hint*.jsonl`) | 42 = the reviewer's 43 minus `ifbench_281`; 39 shared with `verdict.csv` (only `verdict.csv`: 49, 214, 281; only hint: 166, 226, 252) | "12 of 42" |
+
+   - On `verdict.csv`'s 42, the number untested at 1,024 is 34, not 33, because test 3 included 166 and 252.
+   - **Add** one clause naming the sets. Objection 3's "within ± 2" covers the spread.
 7. **Minor wording points:**
    - §6 says "within 512 samples the base is credited on every RL-only AIME solve"; the reviewed figure is within 383
      (true, but looser).
@@ -321,7 +342,7 @@ beyond the evidence.
 
 **Model labels:** REVIEW's header names `dpo` / `s0100` / `s0750` / `s2300` (checkpoint, 32 B, start pipeline) and
 C1's 7B pair. The correlation tables name the RL checkpoint per row, and Matrix A names every paper's start model
-and size. Two labels needed care, and both are right:
+and, except Yue's multi-model row, its size. Two labels needed care, and both are right:
 - Yoon's 32B pair is hedged as "presumably the 750-step release" (RB found the paper does not say);
 - the LessWrong post is on Olmo 3.1 steps 50–2,300 (DT-97), as labelled.
 
@@ -331,13 +352,15 @@ No unlabelled number found. There are no proofs, so no checker labels are needed
 
 **Stands:**
 - the correlation (ProRL's pattern holds at ρ −0.50 on IFBench and is weaker than a random-pairing null at −0.65,
-  so it cannot separate creation from sharpening). Independent code and a real-draw split reproduce it: point
-  estimates within 0.003, intervals within bootstrap noise;
+  so it cannot separate creation from sharpening). My independent partition average is within 0.001 of the
+  executor's point estimate, with intervals within bootstrap noise, and the two real half-splits give −0.503 and
+  −0.523;
 - all loose-credit, gain-share and compute figures;
-- the ledger: every quote is real, and 464 / 465 sampled quotes appear in fresh arXiv copies;
+- the ledger: every quote is real, and 464 of the 465 quotes that cite 14 re-fetched sources appear in fresh arXiv
+  copies;
 - the screening counts;
-- the scoring of every pre-registered expectation, including C-7, L-1 and L-5's failed clause, which are reported
-  as misses;
+- REVIEW §7's scoring of every pre-registered expectation, including C-7, L-1 and L-5's failed clause, which are
+  reported as misses (the run summary's L-5 is the exception, Compare 5);
 - the main novelty conclusions:
   - C3 is new as a per-prompt, confirmed, hand-gated reach measurement on IF at k = 256, not as "the first large-k
     IF comparison" (HiR and ProRL report aggregate curves);
@@ -346,18 +369,26 @@ No unlabelled number found. There are no proofs, so no checker labels are needed
   - C7 extends;
   - C1's reach replicates Yue, and its "nothing lost" is weakly contradicted;
   - the Invisible-Leash objection is partly answered (loose credit on 25 / 49 unread; k > 1,024 untried).
-- My blind fresh search (three agents, 31 papers) knocked down no "novel" label. It found 4 papers the run did not
-  screen, none of which changes a label.
+- My blind fresh search (three agents, 31 papers) leaves C3 and C6 novel. RB would call C4 "extends", with only
+  its reach-boundary measurement new, which is the REVIEW's own narrow form. The search found 4 papers the run did
+  not screen, none of which changes a label.
 
 **Must be reworded** (Compare items 1–6):
 1. name Wei's 73.5 % IF shortcut audit as C4's closest neighbour in the bottom line and the summary;
-2. add the Olmo 3 report's Table 14 (DPO 70.7 → 3.1 78.1 on AIME 2025) to C2, with our per-year split;
+2. add the Olmo 3 report's Table 14 (DPO 70.7 → 3.1 78.1 on AIME 2025) to C2. Our final-answer grade gives +7.1
+   there; C2's "barely" (+3.0) comes from RL's lenient verifier and the 2026 problems;
 3. split C5's ranking (token cap: replicates; brevity: extends);
 4. relabel DT-16 as the same run's pass@1 gains;
 5. make the summary's L-5 "partly held";
-6. say which hand-reach set (42 / 43) each number uses.
+6. say which hand-reach set (executor 42 / reviewer 43 / hint 42) each number uses.
 
-Minor: `numbers.md` "25 of them" → 24; §6 "within 512" → "within 383"; cite "no KL"; close the §3 parenthesis.
+Minor:
+- `numbers.md`: "25 of them" → "25 of the 200 (24 new)";
+- §6: "within 512" → "within 383";
+- cite "no KL";
+- close the §3 parenthesis;
+- one sentence noting that ProRL's own R² (a difference regressed on its base) carries the same bounded-difference
+  artefact.
 
 **Not supported:** nothing that the REVIEW states as a finding. The weakest claim is C4's "novel". It rests on a
 narrow measurement definition. Two close IF precedents would lead many readers to call it "extends":
@@ -368,8 +399,32 @@ narrow measurement definition. Two close IF precedents would lead many readers t
 **Next measurements that would settle what is open:**
 1. **Format tolerance:** blind-read `dpo`'s loose-only successes on the 25 strict-reach prompts. They are stored, so
    this costs $0 and needs no pods. It is the open half of the Invisible-Leash answer.
-2. **Larger k on the 33 hand-reach prompts never tested at 1,024**, so that Leash's non-maths budget covers every
-   reach prompt. That needs pods.
-3. **C2 against the lab's numbers:** re-grade our AIME 2025 samples under the lab's evaluation settings, to see
-   whether the +4.6 vs +7.4 pass@1 gap is grader, sampling or problem-set.
+2. **Larger k on the hand-reach prompts never tested at 1,024**: 33 of the reviewer's 43, or 34 of the executor's 42.
+   That would put every reach prompt under Leash's non-maths budget, and needs pods.
+3. **C2:** the grader part is settled from stored data (final-answer grade +7.1 on AIME 2025 against the lab's +7.4).
+   Only the sampling difference (T 1 / top-p 1 vs 0.6 / 0.95) would need pods, and it does not bear on the reach
+   claim.
 4. **A human read** of a sample of the gamed / genuine labels behind C4, to answer objection 3.
+
+## §Check of this review
+
+- **The check:** one fresh adversarial subagent, using local evidence only, checked §Fresh search, §Compare and
+  §Verdict as committed in `4263c2af`. It covered about 230 statements and flagged 21; its report is
+  `review_onv/adv_check.md`.
+- **Accepted and fixed (20):**
+  - the agents' return times;
+  - the third hand-reach set (the hint test's 42);
+  - the final-answer-grade split, which sharpens Compare 2: our final-answer grade reproduces the lab's AIME 2025
+    gain;
+  - RA's "only per-problem non-maths count" (corrected);
+  - RA's HiR error, now cited from its reply;
+  - RC's "novel" for C1 (now reported);
+  - "RB agrees" (RB labels C4 "extends");
+  - every place C5 is ranked wholesale;
+  - the claim-check citation for Wei;
+  - the "25 of them" ambiguity;
+  - the real-split wording;
+  - nine nits.
+- **Rejected (1):** it said "RL barely moves it" appears in no run or brief file. It is the proposal's own summary
+  of C2 (`nd-rl/docs/proposals/2026-11-06-olmo-novelty.md`, claims row), and the text now cites it.
+- None of the fixes changes a verdict on the run, except that Compare 2 becomes more specific.

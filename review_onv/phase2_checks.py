@@ -72,3 +72,19 @@ print("IFEval per constraint type pass@8: rho %.3f [%.3f, %.3f] same draws %.3f 
 # typical dpo IFBench draw length vs the E1_dpo_ifa reach-candidate draws used for the K estimate
 toks = [float(R[("dpo", p)]["mean_tok_fixed"]) for p in pids]
 print("dpo IFBench fixed-phase mean tokens per draw (218 prompts): %.0f (E1_dpo_ifa reach candidates: 5,442)" % np.mean(toks))
+
+# --- C-7 definition sensitivity: one constraint type per prompt (its first instruction id), pass@8 split
+from collections import defaultdict
+P = {json.loads(l)["pid"]: json.loads(l) for l in open("olmo_ifomega/problems.jsonl")}
+pids, c, s = arrays(cnt, "s2300")
+g = defaultdict(list)
+for j, p in enumerate(pids):
+    g[P[p]["instruction_id_list"][0]].append(j)
+idx = [np.array(v) for k, v in sorted(g.items()) if len(v) >= 2]
+rng = np.random.default_rng(5)
+vals = []
+for _ in range(2000):
+    a = rng.hypergeometric(c, 16 - c, 8); b = c - a
+    x = (a > 0).astype(float); y = (s > 0).astype(float) - (b > 0).astype(float)
+    vals.append(spearman([x[i].mean() for i in idx], [y[i].mean() for i in idx]))
+print("C-7 variant, first instruction id only: %d types, rho %.3f" % (len(idx), np.mean(vals)))
