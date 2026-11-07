@@ -1,0 +1,1 @@
+s0750 allenai/Olmo-3.1-32B-Think step_0750|PROBLEMS=olmo_ifomega/problems.jsonl bash pod/olmo_iffu/job.sh T4b_s0750 s0750 allenai/Olmo-3.1-32B-Think step_0750 16 ifbench_19 7302 16 1 --stop_after 2 --inflight 1

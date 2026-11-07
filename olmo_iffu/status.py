@@ -63,7 +63,7 @@ def main():
                 g = int(t3["hand_good"]) if t3["hand_good"] else 0
                 d.update({"t3": f"{g}/{256 + int(t3['draws'])}",
                           "t3_label": "survives at 1,024" if g == 0 else "one genuine at <= 1,024" if g == 1 else "resolved by sampling"})
-            t4 = [R[k] for k in R if k[0].startswith("T4_s0750") and k[1] == pid]
+            t4 = [R[k] for k in R if k[0].startswith(("T4_s0750", "T4b_s0750")) and k[1] == pid]
             if t4:
                 g = sum(int(x["hand_good"] or 0) for x in t4)
                 n = sum(int(x["draws"]) for x in t4)
