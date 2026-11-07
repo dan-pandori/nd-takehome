@@ -25,8 +25,8 @@ Models: `dpo` = `allenai/Olmo-3-32B-Think-DPO` `main` (`97604023`); `s2300` = `a
 | `handcheck_prompt_if.md`, `handcheck_prompt_omega.md` | the reader prompts (olmo-ifomega's, plus the hint note and the geometry crux question) |
 | `handcheck_rule_omega.md`, `handcheck_rule_if_addendum.md` | my confirming rules, not given to readers (IF rules 1–5: `../olmo_ifomega/handcheck_rule_if.md`; rule 6 here) |
 | `lengths_hint.csv` (`lengths_hint.py`) | answer words with and without the hint (`dpo`, `s2300`) |
-| `status.csv` (`status.py`) → `../figures/olmo_iffu_status.png` (`figures.py`) | each reach prompt's status before and after each test |
-| `summary.py` | the write-up's tables from the files above |
+| `status.csv` (`status.py`; `explanation` column added by the write-up's categorisation, see `../log.md`) → `../figures/olmo_iffu_status.png` (`figures.py`) | each reach prompt's status before and after each test |
+| `summary.py` → `summary_tables.md` | the write-up's per-prompt tables (test 1 with binomial intervals; test 2 / 2c per prompt) from the files above |
 | `compute_rows.py` | registry compute rows per job |
 
 Pod scripts: `../pod/olmo_iffu/` (`setup.sh`, `job.sh`, `runq.sh`, `start.sh`, job specs in `jobs/`, the VPS-side

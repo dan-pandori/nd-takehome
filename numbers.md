@@ -2131,3 +2131,81 @@ olmo_ifomega/compute_rows.py --dry`); compute rows in the registry (`registry/ol
 grades, contamination scans, hand-check and failure-analysis items, labels and keys, job logs and metas; the 81 bulk
 files listed with sha256 in `artifacts/MANIFEST.jsonl`), `olmo_ifomega/` (code and result tables), `pod/olmo_ifomega/`
 (pod scripts), `docs/` (write-up, pre-registration, figure); no weights.
+
+## olmo-iffu (2026-11-06 → 07, executor; UNREVIEWED)
+
+**Models (every number here):** `dpo` = `allenai/Olmo-3-32B-Think-DPO` `main` (`97604023`; RL's start); `s2300` =
+`allenai/Olmo-3.1-32B-Think` `main` (`97ade57a` = `step_2300`); `s0750` = the same repository at `step_0750`
+(`418fb274`). 32 B, bf16, pretrained (Olmo 3 32B base → Think SFT → DPO → RL); natural-language chat, not `lean_seq`;
+no Lean involved. Decoding as olmo-ifomega (`olmo_thinker` template, T 1, top-p 1, vLLM 0.11.0, bf16); 32,768-token
+responses except test 1. Prompts: olmo-ifomega's reach prompts (`olmo_iffu/manifest.csv`, `subsets.py`; review's 43
+IFBench hand-reach list). Grades: official IFBench / IFEval checkers (`strict`) on the text after the last `</think>`;
+OMEGA `omega` (OLMES exact match) and `rl` (MathVerifier, whole response); hand gate (`olmo_iffu/handcheck.csv`: 368
+items, blinded subagent readers, every label confirmed; rules `olmo_ifomega/handcheck_rule_if.md` 1–5 and
+`olmo_iffu/handcheck_rule_if_addendum.md` 6; `olmo_iffu/handcheck_rule_omega.md`). Pre-registration
+`preregistration/olmo-iffu.md`; per-prompt rows `olmo_iffu/results.csv`, statuses `olmo_iffu/status.csv`, tables
+`olmo_iffu/summary_tables.md` (`summary.py`).
+
+### Test 1 — `dpo` on the geometry reach prompts at 65,536 − prompt tokens (`T1_dpo`, 64 each)
+
+Budgets 65,290 / 65,290 / 65,317 response tokens (prompts 246 / 246 / 219). perp_055's label is 15 (stored 17;
+`olmo_iffu/label_check.py`, two methods). Source: `olmo_iffu/results.csv` rows `T1_dpo`, `graded/T1_dpo_trunc32k.jsonl`.
+
+| prompt | cut at the cap | finished length q1 / median / q3 / max | credited any / doubly | hand-sound any / doubly | `dpo` sound rate [95 % CP] | credited at a 32,768 cut | label |
+|---|---|---|---|---|---|---|---|
+| perp_055 | 0 / 64 | 43,876 / 46,865 / 50,339 / 56,969 | 2 / 1 | 1 / 1 | 0.016 [0.0004, 0.084] | 0 | one sound success |
+| perp_068 | 1 / 64 | 42,458 / 45,521 / 49,030 / 57,305 | 3 / 2 | 3 / 2 | 0.047 [0.010, 0.131] | 0 | **token budget** |
+| perp_069 | 0 / 64 | 40,191 / 45,299 / 48,426 / 60,638 | 4 / 2 | 2 / 1 | 0.031 [0.004, 0.108] | 0 | **token budget** (any); one sound (doubly) |
+
+No response finished within 32,768 tokens (olmo-ifomega: 255 / 256 cut there per prompt). The 3 flawed credited
+responses reach the official count by cancelling errors (false pairs replacing missed ones). For scale: `s2300` at
+32,768 had 28 / 40 `omega` on 068 and 069 (olmo-ifomega).
+
+### Test 2 / 2c — "Answer in at most 60 words." (`T2_*`, `T2c_*`; `dpo` 64, `s2300` 16 per prompt)
+
+Per prompt in `olmo_iffu/summary_tables.md`; lengths `olmo_iffu/lengths_hint.csv` (unhinted = olmo-ifomega's
+fixed-phase draws). Median answer words, median over the 48 hinted prompts: `dpo` 231 → 60 with the hint, `s2300`
+31.5 → 19. Outcome (≥ 2 genuine `dpo` successes of 64):
+
+| set | prompt-elicitable (brevity) | one genuine | not elicited, hint fine for `s2300` | not elicited, hint breaks `s2300` (< 2 genuine of 16) |
+|---|---|---|---|---|
+| IFEval letter avoidance (3) | 2447 | – | 2350, 3478 | – |
+| IFEval all-caps (2b, 3) | 1314, 2247, 2563 | – | – | – |
+| IFBench pre-registered subset (10) | 179, 290 (literal reading only, rule 6) | – | 64, 79, 207, 268 | 0, 4, 170, 188 |
+| IFBench 2c (32) | 19, 78 (one borderline label), 133, 173, 186, 187, 220, 226, 252, 253 | 136, 204, 211 | 67, 128, 154, 169, 189, 203, 206, 209, 217, 248, 264, 267, 269, 271, 280 | 1, 3, 166, 284 (226 undecided: 0 genuine of 5 read; `dpo` elicitable there) |
+
+IFBench (42 eligible reach prompts): **12 prompt-elicitable** (11 under the strict title-case reading), 3 one genuine,
+19 not elicited with the hint fine for `s2300`, 8 where the hint also breaks `s2300` (1/2/3/5/7-keyword prompts and
+equal-length or +n-word sentence prompts: 18 keywords or three platitudes in ≤ 60 words). `s2300`'s strict rate with
+the hint is at or above its unhinted rate on all 16 test-2 prompts; its genuine rate is what drops on those 8.
+
+### Test 3 — `dpo` to 1,024 draws (`T3_dpo`: 768 new draws per prompt; olmo-ifomega's 256 had 0 genuine)
+
+All 10 prompts (252, 269, 253, 3, 78, 248, 211, 166, 136, 133): **0 strict successes in 768**, so 0 genuine in 1,024
+each; Clopper–Pearson one-sided 95 % bound 2.92 × 10⁻³ per sample (k-to-solve ≥ 342). Binding-constraint passes
+0 / 768 except 136 (2 and 6 of 768 on its two constraints, never jointly). **4 of the 10 are prompt-elicitable in
+test 2c** (78, 133, 252, 253); 2 have one genuine with the hint (136, 211); 2 survive both 1,024 draws and the hint
+with the hint fine for `s2300` (248, 269); on 2 the hint also breaks `s2300` (3, 166). Source: `results.csv` rows
+`T3_dpo`, `status.csv`.
+
+### Test 4 — `s0750` on the 43 IFBench reach prompts (`T4_s0750` + `T4b_s0750`, ≤ 32 fresh draws; deviation 4)
+
+**Confirmed (≥ 2 genuine) on 26 of 43**; not confirmed at 32 on 17: 0, 1, 3, 67, 79, 166, 169, 170, 188, 189, 203,
+207, 252, 253, 264, 268, 284. Source: `status.csv` (`t4`), `handcheck.csv` (jobs T4*). For comparison, olmo-ifomega's
+`s0750` fixed phase had ≥ 2 strict in 8 on 16 of the 43.
+
+### Compute (`olmo_iffu/compute_rows.py`; registry rows `hf://buckets/dan-pandori/nd-rl/registry/olmo-iffu/`, 56 rows)
+
+| test | model | samples | generated tokens | GPU-hours (H200) |
+|---|---|---|---|---|
+| 1 | `dpo` | 192 | 8.80 M | 2.85 (TP 2) |
+| 2 | `dpo` / `s2300` | 1,024 / 256 | 3.40 M / 1.35 M | 0.67 / 0.42 (TP 2) |
+| 2c | `dpo` / `s2300` | 2,048 / 512 | 9.16 M / 2.85 M | 1.44 / 0.46 |
+| 3 | `dpo` | 7,680 | 33.30 M | 4.95 |
+| 4 | `s0750` | 1,104 | 7.72 M | 1.44 |
+
+12,816 samples, 66.6 M generated tokens, 12.2 job GPU-hours; no training, no Lean checks. Billed: **$53.87** of $60
+(10.76 pod-hours: `iffu-a` 2 × H200 secure $10.58/h 2.18 h $23.08 — TP 2 gave 2.09× one community H200 on IF prompts —
+and `iffu-b` 1 × H200 community $3.59/h 8.58 h $30.79). Bucket: `hf://buckets/dan-pandori/nd-rl/olmo-iffu/`
+(`artifacts/olmo_iffu/`: every sample's text and token ids, grades, metas, logs, hand items / keys / labels; bulk files
+in `artifacts/MANIFEST.jsonl`; `olmo_iffu/`, `pod/olmo_iffu/`); no weights.
