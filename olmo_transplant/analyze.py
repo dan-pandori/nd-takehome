@@ -153,8 +153,10 @@ def main():
         r["label"], r["r6"] = (L if L else (None, False))
         r["copy"] = r["trace"] in src_ans and r["a"] == src_ans[r["trace"]]
         grp[(r["pid"], r["writer"], r["rc"])].append(r)
-    pooled = collections.defaultdict(lambda: [0, 0, 0])
+    pooled = collections.defaultdict(lambda: [0, 0, 0])  # reach reads only
     for (pid, w, rc), rs in grp.items():
+        if prompts[pid]["set"] != "reach":
+            continue
         for r in rs:
             if r["strict"] and r["label"]:
                 pooled[(w, rc)][0] += r["label"] == "genuine"
@@ -168,9 +170,11 @@ def main():
         if lb:
             return (sum(r["label"] == "genuine" for r in lb) / len(lb),
                     sum(r["label"] == "genuine" and not r["r6"] for r in lb) / len(lb))
+        if prompts[pid]["set"] == "calib" and (rc[0] == "B" or rc == "P"):
+            return (None, None)  # pre-registered: calibration B and P are strict only (not read)
         p = pooled[(w, rc)]
         if any(r["strict"] for r in rs):
-            fallback[(w, rc)] += 1
+            fallback[(prompts[pid]["set"], w, rc)] += 1
         return (p[0] / p[2], p[1] / p[2]) if p[2] else (None, None)
 
     def counts(rs, pid, w, rc):
@@ -238,7 +242,7 @@ def main():
     # summaries
     names = ["T1", "T2", "T3", "T4", "T0-dpo", "T0-s2300", "P-dpo", "P-s2300"] + \
         [f"B{N}-{w}" for w in ("dpo", "s2300") for N in CUTS] + [f"F{N}" for N in (2048, 4096, 8192)]
-    S = {"fallback_shares": {f"{w}:{rc}": v for (w, rc), v in fallback.items()}}
+    S = {"fallback_shares": {f"{st}|{w}:{rc}": v for (st, w, rc), v in fallback.items()}}
     lines = ["# olmo-transplant summary (analyze.py)", ""]
     for setname, sel in (("reach-41", lambda p: p["set"] == "reach"), ("brief20", lambda p: p["brief20"] == "True"),
                          ("calibration", lambda p: p["set"] == "calib")):
@@ -253,20 +257,22 @@ def main():
             if not vals:
                 continue
             st = boot(vals, lambda v: mean([c[1] / c[0] for c in v]))
-            ge = boot(vals, lambda v: mean([c[2] / c[0] for c in v]))
-            g6 = mean([c[3] / c[0] for c in vals.values()])
+            strict_only = setname == "calibration" and nm[0] in "BP"
+            ge = (None, None, None) if strict_only else boot(vals, lambda v: mean([c[2] / c[0] for c in v]))
+            g6 = None if strict_only else mean([c[3] / c[0] for c in vals.values()])
             ns = sum(c[0] for c in vals.values())
             ss = sum(c[1] for c in vals.values())
             cp = sum(c[4] for c in vals.values())
             cut = sum(c[6] for c in vals.values())
-            gnr = boot(vals, lambda v: mean([c[8] / c[0] for c in v]))
+            gnr = (None, None, None) if strict_only else boot(vals, lambda v: mean([c[8] / c[0] for c in v]))
             res = sum(c[9] for c in vals.values())
             S[setname][nm] = {"prompts": len(vals), "samples": ns, "strict": st, "genuine": ge, "genuine_r6strict": g6,
                               "copies": cp, "strict_n": ss, "length_cut": cut, "resumed": res,
                               "genuine_resumed_fail": gnr}
-            fmt = lambda t: f"{t[0]:.3f} [{t[1]:.3f}, {t[2]:.3f}]" if t[1] is not None else f"{t[0]:.3f}"
-            lines.append(f"| {nm} | {len(vals)} | {ns} | {fmt(st)} | {fmt(ge)} | {g6:.3f} | {cp} / {ss} | {cut} "
-                         f"| {res} | {fmt(gnr)} |")
+            fmt = lambda t: ("strict only" if t[0] is None else
+                             (f"{t[0]:.3f} [{t[1]:.3f}, {t[2]:.3f}]" if t[1] is not None else f"{t[0]:.3f}"))
+            lines.append(f"| {nm} | {len(vals)} | {ns} | {fmt(st)} | {fmt(ge)} | "
+                         f"{'strict only' if g6 is None else f'{g6:.3f}'} | {cp} / {ss} | {cut} | {res} | {fmt(gnr)} |")
         lines.append("")
         # paired contrasts and derived quantities (genuine)
         def g(pid, nm):
@@ -289,6 +295,8 @@ def main():
             for w in ("dpo", "s2300"):
                 full = FULL[w]
                 for N in CUTS + ["P"]:
+                    if setname == "calibration" and kind == "genuine":
+                        continue  # calibration B and P are strict only
                     nm = f"B{N}-{w}" if N != "P" else f"P-{w}"
                     vals = {pid: (fn(pid, nm), fn(pid, f"T0-{w}"), fn(pid, full)) for pid in pids
                             if None not in (fn(pid, nm), fn(pid, f"T0-{w}"), fn(pid, full))}

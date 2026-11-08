@@ -2209,3 +2209,89 @@ with the hint fine for `s2300` (248, 269); on 2 the hint also breaks `s2300` (3,
 and `iffu-b` 1 × H200 community $3.59/h 8.58 h $30.79). Bucket: `hf://buckets/dan-pandori/nd-rl/olmo-iffu/`
 (`artifacts/olmo_iffu/`: every sample's text and token ids, grades, metas, logs, hand items / keys / labels; bulk files
 in `artifacts/MANIFEST.jsonl`; `olmo_iffu/`, `pod/olmo_iffu/`); no weights.
+
+## olmo-transplant (2026-11-08, executor; UNREVIEWED)
+
+**Models (every number here):** writer `dpo` = `allenai/Olmo-3-32B-Think-DPO` `main` (`97604023`; RL's start); writer
+`s2300` = `allenai/Olmo-3.1-32B-Think` `main` (`97ade57a` = `step_2300`). 32 B, bf16, pretrained (Olmo 3 32B base →
+Think SFT → DPO → RL); natural-language chat (`olmo_thinker`), not `lean_seq`; no Lean involved. Supplied thinking =
+stored `olmo-ifomega` samples re-inserted by token ids (`olmo_transplant/traces.csv`: source job / chunk / i, ids sha256,
+think_k, draft_k); only the answer sampled (T 1, top-p 1, answer budget 32,768 − supplied tokens; vLLM 0.11.0, one
+H200, TP 1). Prompts `olmo_transplant/prompts.csv`: reach-41 = the review's 43 IFBench hand-reach prompts minus 226 and
+252 (no labelled genuine trace); `brief20` nested; 10 calibration prompts both models solve. Grades: IFBench official
+strict on the text after the last `</think>` (`olmo_ifomega/grade.py`); **genuine** = strict × the hand gate's genuine
+share per (prompt, run-condition) (`olmo_transplant/handcheck.csv`; identity inheritance from labelled answers;
+calibration B and P strict only). Pre-registration `preregistration/olmo-transplant.md`; per-prompt rows
+`olmo_transplant/results.csv`; tables `olmo_transplant/summary.md` (`analyze.py`; prompt bootstrap 10,000, seed 1).
+
+### Conditions (reach-41; mean over prompts [95 % prompt bootstrap])
+
+| cell | what | prompts | answers | strict | genuine | genuine, re-opened thinking = fail (post hoc) |
+|---|---|---|---|---|---|---|
+| T1 | RL's full genuine thinking → dpo answers | 41 | 920 | 0.139 [0.078, 0.211] | 0.139 [0.078, 0.211] | 0.139 [0.078, 0.211] |
+| T2 | RL's full genuine thinking → s2300 answers | 41 | 920 | 0.935 [0.890, 0.971] | 0.924 [0.871, 0.965] | 0.924 [0.871, 0.965] |
+| T3 | dpo's failed thinking → s2300 | 41 | 1312 | 0.101 [0.048, 0.162] | 0.060 [0.023, 0.110] | 0.058 [0.021, 0.108] |
+| T4 | dpo's failed thinking → dpo | 41 | 1312 | 0.001 [0.000, 0.002] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] |
+| T0-dpo | no thinking → dpo | 41 | 1312 | 0.003 [0.001, 0.006] | 0.001 [0.000, 0.002] | 0.001 [0.000, 0.002] |
+| T0-s2300 | no thinking → s2300 | 41 | 1312 | 0.112 [0.050, 0.185] | 0.078 [0.030, 0.136] | 0.071 [0.023, 0.130] |
+| P-dpo | RL's thinking cut before its final draft → dpo | 38 | 736 | 0.021 [0.010, 0.034] | 0.020 [0.009, 0.033] | 0.010 [0.002, 0.020] |
+| P-s2300 | RL's thinking cut before its final draft → s2300 | 38 | 736 | 0.511 [0.408, 0.610] | 0.453 [0.345, 0.560] | 0.283 [0.194, 0.377] |
+| B1024-dpo | RL's thinking cut at 1024 tokens → dpo | 41 | 920 | 0.032 [0.003, 0.084] | 0.029 [0.000, 0.080] | 0.029 [0.000, 0.080] |
+| B2048-dpo | RL's thinking cut at 2048 tokens → dpo | 41 | 920 | 0.038 [0.008, 0.091] | 0.038 [0.008, 0.091] | 0.038 [0.008, 0.091] |
+| B4096-dpo | RL's thinking cut at 4096 tokens → dpo | 41 | 920 | 0.062 [0.023, 0.120] | 0.057 [0.019, 0.114] | 0.057 [0.019, 0.114] |
+| B8192-dpo | RL's thinking cut at 8192 tokens → dpo | 41 | 920 | 0.124 [0.064, 0.196] | 0.124 [0.064, 0.196] | 0.124 [0.064, 0.196] |
+| B16384-dpo | RL's thinking cut at 16384 tokens → dpo | 41 | 920 | 0.139 [0.078, 0.211] | 0.139 [0.078, 0.211] | 0.139 [0.078, 0.211] |
+| B1024-s2300 | RL's thinking cut at 1024 tokens → s2300 | 41 | 920 | 0.269 [0.180, 0.365] | 0.209 [0.120, 0.309] | 0.167 [0.081, 0.267] |
+| B2048-s2300 | RL's thinking cut at 2048 tokens → s2300 | 41 | 920 | 0.392 [0.305, 0.483] | 0.355 [0.262, 0.454] | 0.313 [0.217, 0.413] |
+| B4096-s2300 | RL's thinking cut at 4096 tokens → s2300 | 41 | 920 | 0.587 [0.480, 0.691] | 0.530 [0.417, 0.642] | 0.518 [0.403, 0.631] |
+| B8192-s2300 | RL's thinking cut at 8192 tokens → s2300 | 41 | 920 | 0.793 [0.689, 0.885] | 0.780 [0.672, 0.878] | 0.767 [0.649, 0.873] |
+| B16384-s2300 | RL's thinking cut at 16384 tokens → s2300 | 41 | 920 | 0.931 [0.884, 0.967] | 0.919 [0.866, 0.962] | 0.919 [0.866, 0.962] |
+| F2048 | fresh s2300 thinking capped at 2048 (6 prompts × 16) | 6 | 96 | 0.240 [0.073, 0.448] | 0.182 [0.073, 0.286] | 0.120 [0.021, 0.229] |
+| F4096 | fresh s2300 thinking capped at 4096 (6 prompts × 16) | 6 | 96 | 0.427 [0.188, 0.667] | 0.427 [0.188, 0.667] | 0.417 [0.177, 0.656] |
+| F8192 | fresh s2300 thinking capped at 8192 (6 prompts × 16) | 6 | 96 | 0.615 [0.333, 0.885] | 0.604 [0.292, 0.885] | 0.604 [0.292, 0.885] |
+
+Paired contrasts (genuine; reach-41 / `brief20`):
+
+| contrast | reach-41 | brief20 |
+|---|---|---|
+| R1 = T1 / T2 | 0.151 [0.085, 0.226] | 0.130 [0.052, 0.222] |
+| D21 = T2 - T1 | 0.785 [0.708, 0.851] | 0.796 [0.693, 0.885] |
+| D34 = T3 - T4 | 0.060 [0.023, 0.110] | 0.038 [0.003, 0.085] |
+| D0 = T0-s2300 - T0-dpo | 0.077 [0.030, 0.135] | 0.047 [0.002, 0.126] |
+| D30 = T3 - T0-s2300 | -0.018 [-0.054, 0.015] | -0.009 [-0.060, 0.034] |
+| T1 - T0-dpo | 0.138 [0.077, 0.210] | 0.119 [0.047, 0.206] |
+| F_s2300(1024) retained gain | 0.155 [0.079, 0.242] | 0.112 [0.025, 0.221] |
+| F_s2300(2048) retained gain | 0.328 [0.233, 0.427] | 0.310 [0.210, 0.414] |
+| F_s2300(4096) retained gain | 0.534 [0.404, 0.659] | 0.524 [0.369, 0.680] |
+| F_s2300(8192) retained gain | 0.830 [0.712, 0.932] | 0.838 [0.674, 0.975] |
+| F_s2300(P) retained gain | 0.453 [0.339, 0.566] | 0.449 [0.278, 0.623] |
+| F_dpo(2048) retained gain | 0.272 [0.064, 0.544] | 0.079 [0.016, 0.156] |
+| F_dpo(8192) retained gain | 0.894 [0.748, 0.991] | 0.878 [0.735, 0.987] |
+| F_dpo(P) retained gain | 0.146 [0.069, 0.231] | 0.061 [0.000, 0.130] |
+
+Fresh forcing against `s2300`'s natural rate on the same 6 prompts (stored olmo-ifomega draws; natural genuine = strict ×
+that prompt's olmo-ifomega hand genuine share): ratio genuine 0.27 [0.12, 0.40] / 0.62 [0.37, 0.86] / 0.88 [0.63, 1.04] at 2k / 4k / 8k; strict 0.33 / 0.58 / 0.83.
+Draft covariate (cut prefixes, pooled, strict): `s2300` 0.546 with the final answer's opening in the prefix (n 808) vs 0.390 without (n 2600); `dpo` 0.037 vs 0.012.
+
+**Calibration (10 prompts, strict):** T1 0.988 [0.966, 1.000], T2 1.000 [1.000, 1.000], T3 0.769 [0.594, 0.944], T4 0.656 [0.425, 0.887], T0-dpo 0.713 [0.491, 0.900], T0-s2300 0.794 [0.597, 0.953] (T3 / T4 on the 5 prompts with a `dpo` failure).
+
+**Why T1 fails (`olmo_transplant/mechanism.md`):**
+
+| writer (cond) | answers | strict | exact copy of RL's answer | contains RL's answer | ... of which fail strict | > 1.5x RL's words | median words | RL's answer median words |
+|---|---|---|---|---|---|---|---|---|
+| dpo (T1) | 920 | 137 | 43 | 256 | 183 | 726 | 126 | 26 |
+| s2300 (T2) | 920 | 867 | 611 | 641 | 10 | 14 | 26 | 26 |
+
+**Hand gate:** 425 run items (339 genuine / 86 gamed; readers per item {'1': 275, '2': 132, '3': 18}) plus 75 calibration source items (60 genuine); blinded Claude subagent readers given `olmo_transplant/handcheck_prompt.md` (rules 1–6); a second reader on every gamed label and a seeded 15 % of genuine, a third on splits, majority decides. Rule 6's strict reading (title case in ALL CAPS is not a success) changes two cells, both `ifbench_290` (T3 0.125 → 0.083, T0-s2300 0.125 → 0.0625), and the condition means by ≤ 0.002 (`results.csv` column `genuine_rate_r6strict`).
+
+**Compute** (`olmo_transplant/compute_rows.py`; registry rows `artifacts/olmo-transplant/registry/`, 168 compute + 204
+headline rows, also in `hf://buckets/dan-pandori/nd-rl/registry/olmo-transplant/`): 17,472 answers, 11.84 M generated
+tokens, 2.35 H200-hours in jobs (per-condition table: `olmo_transplant/compute.md`); no training, no Lean
+checks; 17,472 checker calls. Billed: **$17.82** of $60 (2.93 pod-hours: `ot-1` 2 × H200 community $7.18/h, one GPU dead,
+1.22 h, $8.75; `ot-2` 1 × H200 secure $5.29/h, 1.72 h, $9.07).
+Bucket: `hf://buckets/dan-pandori/nd-rl/olmo-transplant/` — `artifacts/olmo_transplant/` (every answer's text and
+token ids in `samples/*.jsonl.gz`, grades, requests with the inserted prefix ids, metas with prompt ids and boundary
+dumps, pod logs, hand items / keys / labels; the 17 bulk files with sha256 in `artifacts/MANIFEST.jsonl`),
+`artifacts/olmo-transplant/registry/`, `olmo_transplant/`, `pod/olmo_transplant/`, the write-up, pre-registration and
+figure. The source traces are olmo-ifomega's files (`hf://buckets/dan-pandori/nd-rl/olmo-ifomega/artifacts/olmo_ifomega/`),
+not copied. No weights.

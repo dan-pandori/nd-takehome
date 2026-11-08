@@ -25,8 +25,8 @@ def val(cell, key="genuine"):
 
 fig, (a, b) = plt.subplots(1, 2, figsize=(12, 4.6), gridspec_kw={"width_ratios": [1.05, 1]})
 # (a) condition bars
-groups = [("no thinking", "T0-dpo", "T0-s2300"), ("RL's thinking,\ncut before its draft", "P-dpo", "P-s2300"),
-          ("RL's genuine thinking", "T1", "T2"), ("DPO's failed thinking", "T4", "T3")]
+groups = [("no\nthinking", "T0-dpo", "T0-s2300"), ("RL's thinking,\ncut before\nits draft", "P-dpo", "P-s2300"),
+          ("RL's full\ngenuine\nthinking", "T1", "T2"), ("DPO's\nfailed\nthinking", "T4", "T3")]
 w = 0.36
 for gi, (name, cd, cs) in enumerate(groups):
     for off, cell, col, wr in ((-w / 2 - 0.01, cd, BLUE, "dpo"), (w / 2 + 0.01, cs, ORANGE, "s2300")):
@@ -54,29 +54,29 @@ for wr, col, full, name in (("dpo", BLUE, "T1", "DPO start answers"), ("s2300", 
     pts = [val(c) for c in cells]
     xx = [x for x, p in zip(xs, pts) if p[0] is not None]
     yy = [p[0] for p in pts if p[0] is not None]
-    b.plot(xx, yy, color=col, lw=2, marker="o", ms=8, mec=SURF, mew=2, zorder=3, label=name + " (RL's thinking cut at N)")
+    b.plot(xx, yy, color=col, lw=2, marker="o", ms=8, mec=SURF, mew=2, zorder=3, label=name)
     for x, p in zip(xs, pts):
         if p[1] is not None:
             b.errorbar(x, p[0], yerr=[[p[0] - p[1]], [p[2] - p[0]]], color=col, capsize=3, lw=1.2, zorder=2)
-    b.text(xx[-1] + 0.12, yy[-1], name.split(" answers")[0], color=INK, fontsize=8.5, va="center")
+    b.text(xx[-1] + 0.18, yy[-1], name.split(" answers")[0], color=INK, fontsize=8.5, va="center")
 fx = {2048: 2, 4096: 3, 8192: 4}
 fp = [(fx[N], tuple(S["reach-41"].get(f"F{N}", {}).get("genuine") or (None,) * 3)) for N in fx]
 fp = [(x, p) for x, p in fp if p[0] is not None]
 if fp:
     b.plot([x for x, _ in fp], [p[0] for _, p in fp], color=AQUA, lw=2, ls="--", marker="s", ms=8, mec=SURF, mew=2,
-           zorder=3, label="fresh budget forcing: RL thinks itself, capped at N (6 prompts)")
+           zorder=3, label="fresh forcing: RL thinks, capped at N (6 prompts)")
 b.set_xticks(xs)
 b.set_xticklabels(lab)
 b.set_xlim(-0.3, 7.2)
 b.set_ylim(0, 1.05)
 b.set_xlabel("thinking budget N (tokens of the supplied or generated thinking)")
-b.set_title("(b) Thinking budget", loc="left", fontsize=10.5)
+b.set_title("(b) RL's thinking cut at N tokens, then </think>", loc="left", fontsize=10.5)
 b.grid(axis="y", color=GRID, lw=0.8, zorder=0)
 b.spines[["top", "right"]].set_visible(False)
 b.legend(frameon=False, loc="upper left", fontsize=8)
-fig.text(0.01, 0.005, "Genuine = official strict checker and blinded model readers (hand gate). Bars and points: mean over "
-         "prompts; whiskers: 95 % prompt bootstrap. B(0) = no thinking; B(full) = full trace; traces shorter than N are "
-         "full. Fresh forcing is on 6 of the 41 prompts.", fontsize=7.5, color=INK2)
-fig.tight_layout(rect=(0, 0.03, 1, 1))
+fig.text(0.01, 0.01, "Genuine = official strict checker and blinded model readers (hand gate). Bars and points: mean over "
+         "prompts; whiskers: 95 % prompt bootstrap.\nIn (b), N = 0 is no thinking and 'full' the whole trace; a trace shorter "
+         "than N enters as full. Fresh forcing (aqua) is on 6 of the 41 prompts.", fontsize=7.5, color=INK2)
+fig.tight_layout(rect=(0, 0.06, 1, 1))
 fig.savefig("figures/olmo_transplant.png", dpi=160)
 print("wrote figures/olmo_transplant.png")
