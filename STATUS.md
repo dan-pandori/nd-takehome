@@ -388,3 +388,7 @@ OLMO-IFFU DONE 2026-11-07T09:11:45Z
   @ d928a7c, T 1, top-p 1, 16,384 tokens, stop `</answer>`), one tokenizer (RL-Zero-IF's) for every model. `main` ≠
   `step_1900` by shard sha256 (checked in Stage 0). Contamination: 3 IFBench prompts excluded (fish screenplay).
   Pre-registration Part A committed before any pod; Stage 0 (≤ $3) next.
+- 2026-11-08 06:05 UTC  **Stage 0 done** ($0.72, pod deleted). RL-Zero-IF `main` games the checker with ≈ 50-token
+  answers (79 % strict on Stage-0 IFEval); the base writes ≈ 2,300 tokens and never closes `</think>`. `main` ≈ one
+  100-step increment past `step_1900`. Full design ≈ $60 > $36 gate → **question in QUESTIONS.md**; sampling paused
+  until 08:05 UTC, then the default (Part B priority order within $37). Spend $0.72 of $40.

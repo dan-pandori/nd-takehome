@@ -272,7 +272,7 @@ quoted debris. (c) **Gamed** if a constraint holds only because of the debris or
 reached by padding, a keyword that occurs only in the planning). (d) Placeholder or skeleton text standing in for the
 content ("paragraph_two", "answer1") is gamed (rule 2).
 
-## Format-check rubric (`olmo_rlzero_if/failure_rubric_if.md`; written 06:10 UTC, before any evaluation item)
+## Format-check rubric (`olmo_rlzero_if/failure_rubric_if.md`; written 06:04 UTC, before any evaluation item)
 
 The brief's five classes, first that applies: (u) **no usable answer** — cut at the cap with no reply, a rambling
 continuation or debris with no answer segment, or planning that never turns into a reply; (a) **ignored the

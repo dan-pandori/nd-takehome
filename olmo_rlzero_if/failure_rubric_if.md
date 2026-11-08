@@ -1,4 +1,4 @@
-# Format-check rubric, IF (olmo-rlzero-if, Design 6; written 2026-11-08 06:10 UTC, before any evaluation item was read)
+# Format-check rubric, IF (olmo-rlzero-if, Design 6; written 2026-11-08 06:04 UTC, before any evaluation item was read)
 
 You are classifying machine-written responses that an official instruction-following checker judged as **not**
 following every constraint of the prompt. Each item shows the prompt as the model received it, its constraints with
