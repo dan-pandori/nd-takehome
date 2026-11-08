@@ -45,7 +45,9 @@ for job in ("R_dpo", "R_s2300", "C_dpo", "C_s2300", "F_s2300"):
     gen = sum(r["n_tok"] for r in rows)
     think = sum(r.get("think_n_tok", 0) for r in rows)
     if job.startswith("F"):
-        inp = sum(r["prompt_len"] + r["prefix_len"] for r in rows) + sum(r["prompt_len"] for r in rows)  # 2 phases
+        # phase 1: one n=16 request per (pid, N) on the prompt; phase 2: one request per sample on prompt + prefix
+        inp = sum(r["prompt_len"] + r["prefix_len"] for r in rows) + sum(
+            {(r["pid"], r["cut"]): r["prompt_len"] for r in rows}.values())
     else:
         seen = {}
         for r in rows:

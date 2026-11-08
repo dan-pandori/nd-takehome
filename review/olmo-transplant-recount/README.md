@@ -23,7 +23,7 @@ C2_s2300_ifb,F_dpo_ifb}.jsonl.gz`.
 | `rvt_sets.py` | re-grade vs executor grades; trace strictness; calibration criteria and pool | `out/sets.{txt,json}` |
 | `rvt_labels.py` | label sources for every strict success (read / identity-inherited / unread), my labels' precedence | `out/labels_summary.txt` |
 | `rvt_protocol.py` | the executor's hand-gate protocol from `handcheck*.csv` (second / third readers, caps) | `out/protocol.txt` |
-| `rvt_rates.py <mode>` | per-prompt rates, prompt bootstrap, paired contrasts, R1, B curves and F(N), secondary curves, N / c bins, draft split, copies, cut shares, fresh F(N), families, readings. Modes: `strict`, `exec` (executor's labels), `exec_r6`, `mine` (my blinded labels), `mine_r6`, `exec_vac` / `mine_vac` (+ rule 1 applied mechanically to sub-bullet answers with no `*`), `mine_sb` (natural sub-bullet reading) | `out/rates_<mode>.{txt,json}`, `out/per_prompt_<mode>.csv` |
+| `rvt_rates.py <mode>` | per-prompt rates, prompt bootstrap, paired contrasts, R1, B curves and F(N), secondary curves, N / c bins, draft split, copies, cut shares, fresh F(N), families, readings. Modes: `strict`, `exec` (executor's labels), `exec_r6`, `mine` (my blinded labels), `mine_r6`, `exec_vac` / `mine_vac` (+ rule 1 applied mechanically to sub-bullet answers with no `*`), `mine_sb` (natural sub-bullet reading), `exec_held` / `mine_held` (answers that re-open thinking count as failures, post hoc) | `out/rates_<mode>.{txt,json}`, `out/per_prompt_<mode>.csv` |
 | `rvt_tables.py <modes>` | the review's tables, generated from `out/rates_<mode>.json` | `out/tables.md` |
 | `rvt_sharetest.py` | the share rule's predicted genuine count vs my labels on unread successes I read; agreement on samples both labelled | `out/sharetest.txt` |
 | `rvt_vacuous.py` | sub-bullet answers with no `*` (rule 1, vacuous) by cell and label source | `out/vacuous.txt` |
@@ -33,8 +33,10 @@ C2_s2300_ifb,F_dpo_ifb}.jsonl.gz`.
 | `rvt_expect.py <mode>` | the pre-registered expected-results table vs my values | `out/expect_<mode>.md` |
 | `rvt_compute.py` | per-job GPU-seconds from every JOB_START / JOB_DONE, tokens, checker calls, pod hours and dollars | `out/compute.{txt,json}` |
 | `rvt_hygiene.py` | MANIFEST entries vs bucket objects (sha256) vs local; secret-pattern scan of every bucket object's contents | `out/hygiene.txt` |
+| `rvt_facts.py` | facts cited outside the sample files: git hashes and commit times, pod / job times, template field per job meta, the R_dpo resume line | `out/facts.txt` |
 | `rvt_hygiene_hit.py` | locates the one pattern hit (prints its JSON field, never the match) | `out/hygiene_hit.txt` |
 | `rvt_protocol.py` | the executor's hand-gate protocol from `handcheck*.csv` | `out/protocol.txt` |
+| `rvt_phase2_checks.py` (phase 2) | the executor's mechanism counts, prompts with T1 = 0, its draft-split and cut-share definitions, fresh-forcing natural baseline and ratios, F(P) under its post-hoc count, `results.csv` vs my per-prompt rates | `out/phase2_checks.txt` |
 | `rvt_hand_items.py A` | my blinded items (selection D1–D4 in its docstring), random ids, shuffled | `hand/key_A.json`, `hand/batches_A.json` |
 | `rvt_reader_task.py` | one reader's task text | — |
 | `rvt_hand.py need_B / need_C / final` | merges A / B / C reader labels, second / third reader sets, agreement with the executor | `out/my_labels{,_r6}.json`, `out/hand.{txt,json}` |
@@ -50,3 +52,8 @@ Order to reproduce: `rvt_regrade run` → `rvt_regrade src` → `rvt_provenance`
 `rvt_hygiene` → `rvt_hand_items A` → readers → `rvt_hand need_B` → readers → `rvt_hand need_C` → readers →
 `rvt_hand final` → `rvt_rates mine|mine_r6|exec_vac|mine_vac|mine_sb` → `rvt_vacuous` → `rvt_sharetest` →
 `rvt_tables strict exec mine mine_vac` → `rvt_expect mine|exec|mine_vac`.
+
+**Adversarial check.** `out/adversarial_check.md`: an independent read-only subagent's check of the review draft
+(25 findings: 5 wrong, 5 inconsistent, 6 overclaims, 1 untraceable, 8 minor; none in the run's numbers that changed a
+verdict). Each is addressed in the review: §Compare / §Verdict were rewritten, and the errors in the committed §Recount
+are listed under "Corrections to §Recount".

@@ -356,3 +356,125 @@ credential. No fetch failed.
 Phase 1 ends here, committed before I opened the executor's write-ups. One disclosure: while checking that the
 shared files are append-only (after every number above was computed) I printed the `STATUS.md` diff and so saw
 the executor's two-line status summary (its T1 / T2 headline); nothing above was changed after that.
+
+## §Compare (phase 2: the executor's claims against my recount)
+
+Read after the §Recount commit (`e80ba754`): `run_olmo_transplant.md`, `numbers.md` § olmo-transplant,
+`olmo_transplant/{plain_summary,summary,mechanism,compute}.md`, `results.csv`, `summary.json`, `log.md`, `STATUS.md`,
+the registry rows and the figure. Checks: `rvt_phase2_checks.py` → `out/phase2_checks.txt`; facts outside the sample
+files (hashes, times, template fields): `rvt_facts.py` → `out/facts.txt`. "Exec labels" = the executor's labels
+through my code; "mine" = my blinded labels. `results.csv` (918 rows) against my per-prompt tables: strict 918 / 918
+and genuine 845 / 845 equal to 6 × 10⁻⁵ (900 condition rows + 18 fresh-forcing rows; the 73 calibration B / P cells
+that are strict-only by design are excluded, see #24).
+
+| # | claim (where) | my value | verdict |
+|---|---|---|---|
+| 1 | Setup: two models, 41 reach + 10 calibration, thinking re-inserted by token ids, "only answers were sampled (17,472)", $17.82 (run) | provenance checks all pass; 17,184 answers after supplied thinking + 288 fresh-forcing samples whose thinking was sampled too; $17.82 | reproduces ("only answers" holds for 17,184 of the 17,472) |
+| 2 | T0 0.00 / 0.08 [0.03, 0.14]; T4 / T3 0.00 / 0.06 [0.02, 0.11]; P 0.02 / 0.45 [0.34, 0.56]; T1 / T2 **0.14** [0.08, 0.21] / **0.92** [0.87, 0.97] (run table) | exec labels 0.001 / 0.078, 0.000 / 0.060, 0.020 / 0.453, 0.139 / 0.924; mine 0.001 / 0.085, 0.000 / 0.060, 0.020 / 0.458, 0.138 / 0.922 | reproduces (intervals differ only by bootstrap seed) |
+| 3 | `dpo` 0 on 20 of 41 prompts with RL's full thinking (run 1) | 20 / 41 (strict, exec, mine) | reproduces |
+| 4 | `dpo`'s T1 answers 126 words (median) vs RL's 26; 183 of the 256 that contain RL's drafted answer verbatim add constraint-breaking text (run 1); `mechanism.md` 43 exact copies, 726 > 1.5×; T2 611 / 641 / 10 / 14 | 126 / 26; 256 contain, 183 fail strict, all 183 longer than RL's answer; 43; 726; T2 611 / 641 / 10 / 14 | reproduces |
+| 5 | Calibration T1 vs T2 0.99 vs 1.00 strict (run 1) | 0.988 / 1.000 | reproduces |
+| 6 | "Nor does RL's answer writing alone: 0.08 without thinking, 0.06 after `dpo`'s failed thinking. It takes both." (run 2) | 0.078 / 0.060 (mine 0.085 / 0.060); Δ0 = T0-`s2300` − T0-`dpo` 0.077 [0.030, 0.136] (mine 0.085 [0.036, 0.144], above its MDD 0.077) | reproduces; see #13 for "necessary" |
+| 7 | Budget graded: RL cut at 1k / 2k / 4k / 8k 0.21 / 0.36 / 0.53 / 0.78; `dpo` never exceeds 0.14 (run 3) | exec 0.209 / 0.355 / 0.530 / 0.780; mine 0.208 / 0.336 / 0.518 / 0.778; `dpo` max 0.139 | reproduces (primary curve). The pre-registered cut-only curve is missing (#23); the run write-up's prose mentions re-opened thinking only for P, although 8–9 % of B1k / B2k answers re-open it and carry 17 % / 13 % of the strict successes (`numbers.md` gives the post-hoc value for every cell) |
+| 8 | Fresh forcing 0.27 / 0.62 / 0.88 of `s2300`'s natural rate (run 3; numbers: genuine 0.27 [0.12, 0.40] / 0.62 [0.37, 0.86] / 0.88 [0.63, 1.04], strict 0.33 / 0.58 / 0.83) | natural genuine baseline 0.685 (mine; the executor's `summary.md` states the same 0.685); exec labels 0.27 / 0.62 / 0.88; strict 0.33 / 0.58 / 0.83; **mine 0.24 / 0.46 / 0.88; exec labels + rule 1 mechanical 0.24 / 0.52 / 0.84** | **differs at 4k**: 7 of the 14 strict F4096 successes on `ifbench_136` contain no `*` (vacuous under rule 1) and were counted genuine through that cell's 2 genuine reads; the 6 unread F4096 successes on 136 that I read are all gamed under my labels (5 of them vacuous). Strict ratios reproduce |
+| 9 | "The draft helps but is not required. P gives 0.45, or 0.28 if answers that re-open thinking (28 %) count as failures (post hoc)" (run 4) | 0.453 (mine 0.458); 0.283; 209 / 736 = 28.4 %. On the executor's own F(P) definition (G(0), G(P), G(full) over the 38 prompts with a P cell): F_s2300(P) 0.453 as graded; **0.258 (exec labels) / 0.250 (mine) with re-opened thinking counted as failure** | numbers reproduce; **reword**: under the post-hoc count `s2300` sits on reading 7's "rests on the drafted answer" threshold (≤ 0.25), on one side or the other depending on the labels; as graded it is "neither" |
+| 10 | Readings: 1 and 2 fail, leaving 3 ("partly") with a graded curve (6); "needs long search" fails, 0.33 of the gain at 2k > 0.25 (run; log; STATUS) | same verdicts under every label variant; F_s2300(2k) exec 0.328, mine 0.299; `brief20`: R1 0.130, T3 0.038 (mine 0.039), F_s2300(2k) 0.310 (mine 0.282) → readings 3 and 6 | reproduces. Reading 3 holds through its "neither 1 nor 2" clause: R1 = 0.15 lies in reading 2's R1 range, not in the 0.40–0.75 "partly" band; worth saying |
+| 11 | Reading 7 (P) | not stated in the write-up. On the executor's definition: F_dpo(P) 0.146 (exec and mine; 0.073 post hoc) ≤ 0.25 → "the success rests on the drafted answer" for `dpo`; F_s2300(P) 0.453 / 0.454 (neither), 0.258 / 0.250 post hoc | **omitted** pre-registered reading |
+| 12 | `brief20` agrees (run deviations; log) | as #10 | reproduces |
+| 13 | "RL's thinking is necessary but not sufficient" (run; STATUS); "The thinking is necessary (more of it, more success)" (plain) | not sufficient: T1 0.14 vs T2 0.92; but with **no** thinking `s2300` reaches 0.08 genuine where `dpo` has 0.001, and Δ0 is above its MDD | **reword**: "carries most of the gain, not all of it" (the plain summary's own "part answer-writing discipline" says as much) |
+| 14 | Against expectations: below T1, T1 / T2, `dpo`'s curve at 4k and 8k, its draft effect (+0.03); above RL at 2k; all else inside (run) | same misses; G_s2300(2k) 0.355 (exec labels, above 0.35) but 0.336 with mine (inside) | reproduces; "above at 2k" is label-sensitive by 0.02 |
+| 15 | RL's draft effect +0.16 (expected ≥ 0.30) (run); draft covariate `s2300` 0.546 (n 808) vs 0.390 (n 2,600), `dpo` 0.037 vs 0.012 (numbers) | reproduces when the P cuts are pooled into "without" (0.390, n 2,600); B cuts only: 0.546 vs 0.330 (+0.215; prompt-weighted +0.27; mine genuine +0.26 / +0.29); `dpo` +0.029 | reproduces under its definition; inside the registered 0.15–0.60 range either way |
+| 16 | "Two calibration cells had > 1 % of answers cut at the response cap (2.7 %, 1.4 %)" (run); "calibration up to 2.7 % (`s2300` P 5 / 184, B4096 4 / 288)"; reach 0–0.22 % (numbers) | per condition as sampled: calibration `s2300` P 5 / 184 (2.7 %), **B4096 4 / 136 (2.9 %), B8192 2 / 64 (3.1 %)**; reach max 2 / 736 (0.27 %, B4096-`dpo`) | **differs**: B cuts were divided by the primary-curve cell (sampled + substituted full rows); three calibration cells exceed 1 %, max 3.1 % |
+| 17 | Conditions table (strict, genuine, post-hoc re-opened = fail), contrasts, retained gains, calibration strict (numbers; `summary.md`) | every cell of the conditions table reproduces to 3 decimals with exec labels, including the post-hoc column (21 / 21, my `exec_held` mode); contrasts and F(N) reproduce; F(P) reproduces on the executor's definition (0.453 / 0.146; `brief20` 0.449 / 0.061) — my §Recount's 0.444 used G(0), G(full) over all 41 prompts | reproduces |
+| 18 | Hand gate: 425 items 339 / 86, readers per item 275 / 132 / 18; rule 6 strict changes means ≤ 0.002 (numbers); per-family means (`summary.md`) | 425, 339 / 86, 275 / 132 / 18; ≤ 0.002; family table identical to mine | reproduces; my blind re-read agrees on 97.1 % of shared samples |
+| 19 | Compute: 17,472 answers, 11.84 M generated tokens, **2.35 H200-hours in jobs**, 17,472 checker calls; $17.82, 2.93 pod-hours (numbers; registry compute rows) | 11,835,519 tokens; 17,472 calls; $17.82; 2.93 pod-h; job wall time over every attempt 9,080 s = **2.52 GPU-h** | **differs**: 2.35 h is each job's last-attempt `t_load + t_gen` (registry sum 8,477.7 s); it omits R_dpo's killed stage-0 attempt (513 s, whose 1,384 rows are kept) and its 12 s failed restart (with them 2.50 h; the last 77 s is job overhead). The registry's R_dpo `gpu_seconds` (2,770 s) is 16.7 % below its 3,326 s of job wall time |
+| 20 | Pre-registration before any pod; F seed 8103 for both phases and calibration seeds 8111 / 8112 disclosed (log) | prereg 05:35:16; first pod created 05:35:50 (executor's log) / registered 05:36:07 (`~/pods.log`); seeds in `log.md` | reproduces (the seed deviations are in the log, not the write-up's deviation line) |
+| 21 | Bucket: 17 bulk files with sha256 in MANIFEST; credential scan of 613 objects, 0 hits (numbers; log) | 17 / 17 match; my scan of 629 objects: 1 pattern hit, inside a base64 `ids` field (not a credential) | consistent in substance (no credential found by either); the scans differ in patterns and object count |
+| 22 | Plain summary: "never succeeded genuinely in 256 tries", 14 % vs 92 %, "often copies it", "about five times longer", 8 % / 6 %, 21 / 36 / 53 / 78 %, "Fresh thinking … looks similar", "(99 %)" on easy prompts, ≈ 44 % everyday rate, re-opened-thinking caveat | 0.139 / 0.924; 28 % of `dpo`'s T1 answers contain RL's answer, 4.7 % copy it exactly; 126 / 26 = 4.8×; 0.078 / 0.060; 0.209 / 0.355 / 0.530 / 0.780; fresh strict share of natural 0.33 / 0.58 / 0.83 vs B retained gain 0.34 / 0.58 / 0.83; 0.988; 0.604 × 0.73 = 0.44 | reproduces; "often copies it" fits "contains" (28 %), not exact copies; "looks similar" holds as a share of the natural rate, not in absolute rates; the "256 tries" figure is `olmo-ifomega`'s and is not attributed in the plain summary (the ≈ 44 % is) |
+| 23 | Pre-registered "two B curves" (the secondary, cut traces only) and "against N / c, post hoc in bins" | absent from the write-up, `numbers.md`, `summary.md`, `summary.json`, `results.csv` and the figure. Mine: `s2300` cut-only 0.19 / 0.32 / 0.43 / 0.35 (genuine, mine; 40 / 40 / 37 / 11 prompts), against the same traces' full rate 0.92–0.93 (0.88 at 8k); strict 0.25 / 0.38 / 0.51 / 0.38 against 0.93–0.94 (0.92 at 8k); by N / c quarters, strict, 0.24 / 0.33 / 0.56 / 0.73 (`dpo` 0.004 / 0.007 / 0.034 / 0.048) | **omitted** pre-registered analyses. They matter for "graded": the primary curve's 0.78 at 8k comes from the 95 of 115 traces that are not cut there |
+| 24 | `results.csv` column `genuine_rate` | its 118 calibration B / P rows with strict successes (strict-only cells by design) still carry a number; in 75 it is below the strict rate because unread successes count as not genuine (e.g. `ifbench_115` B1024-`dpo`: strict 1.0, genuine 0.0, 32 unlabelled) | file defect; no write-up uses these values. Blank them |
+
+**Model labels.** `numbers.md` names checkpoint, revision, size, precision, lineage (pretrained, DPO / RL), format and
+"no training" for every number; the write-up and plain summary name the two models (the write-up without revision
+hashes). In the registry, the 108 strict / genuine rate rows carry the checkpoint, but all 96 `contrast` rows have
+`ckpt` empty, including single-writer retained gains (F_s2300(N), F_dpo(N)), and the 168 compute rows name the writer
+only through `arm`. The plain summary's "never succeeded genuinely in 256 tries" is `olmo-ifomega`'s number (same two
+models) without an attribution. Nothing is attributed to the wrong model.
+
+**Expectations and misses.** The expectations were committed at 05:35:16, before any pod. The write-up reports the
+misses it found (T1, R1, `dpo`'s curve at 4k / 8k, `dpo`'s draft effect, RL at 2k, the calibration cuts; RL's draft
+effect +0.16 is listed next to them although it is inside its 0.15–0.60 range). It under-counts the calibration cut
+cells (#16), and "RL at 2k" depends on the labels (#14).
+
+### Corrections to §Recount (found after the phase-1 commit; the §Recount text above is left as committed)
+
+The adversarial check of this review (`out/adversarial_check.md`, an independent subagent, 25 findings) found these
+errors in §Recount; all other findings are fixed in §Compare / §Verdict above.
+
+1. The cut-traces-only B curve and the N / c bins are **pre-registered** ("Two B curves"; "Also against N / c, post hoc
+   in bins"), not "mechanism checks the pre-registration did not ask for" (§Recount, third bullet of that list).
+2. Reading 4's fresh clause: genuine F(2,048) over the genuine natural rate is 0.167 / 0.685 = **0.24** (my labels);
+   the 0.27 divided by the strict fixed-phase rate. Strict over strict: 0.38 (fixed phase) or 0.33 (all draws). The
+   clause (≤ 0.5) holds either way.
+3. "First pod created 05:36:07": 05:36:07 is `~/pods.log`'s registration; the executor's log gives creation at
+   05:35:50. Both follow the pre-registration commit (05:35:16).
+4. "`dpo` re-thinks in 4–10 % of its cut / P samples but almost never succeeds that way (8 of its 17 P successes; 0 in
+   B)" → never in B, but in P 8 of its 17 strict successes are re-thought answers (strict F_dpo(P) 0.133 → 0.067).
+5. "Copies carry `olmo-ifomega`'s labels, which that run's review re-read" → that review re-read **78 of the 115**
+   reach `rl` trace labels (by sample key; `out/phase2_checks.txt` [12]); the other 37 rest on `olmo-ifomega`'s
+   readers alone.
+6. Share test: besides F4096 and T0-`s2300`, R_dpo B4096 is off (predicted 10.0 of 14, found 14), which moves
+   F_dpo(4096) from 0.404 to 0.435.
+7. "Every number below is in `out/`": the git hashes, commit / pod / job times, the template field per job meta and
+   the R_dpo resume line are now in `out/facts.txt`. "The same sha256 in … every job meta" holds for the four
+   answer-sampling jobs; the F job's meta has no template field (its prompt ids equal mine).
+8. F_s2300 input tokens: 1,210,335 (phase 1 counted once per (prompt, N) request), matching the executor's 1.21 M;
+   §Recount's table showed "–".
+9. The calibration genuine columns also rest on identity inheritance from the executor's 75 calibration-source labels,
+   not only on ≤ 1 read per (prompt, cell).
+10. The T3 `ifbench_179` alliteration item is a judgement call (my rule 2 allows an override for a constraint the
+    answer "verifiably meets", and the checker's own count passes); I left the majority (gamed). Either label moves T3
+    by < 0.001.
+
+## §Verdict
+
+**Stands.** The data are what the pre-registration says: every inserted thinking prefix equals the stored ids, and
+every one of the 17,184 answers was sampled after exactly the registered input; grades reproduce with 0 differences;
+every per-prompt rate in `results.csv` and every condition rate, contrast and retained gain in `numbers.md` reproduces.
+My independent blind re-read of 799 deciding items agrees with the executor's labels on 97.1 % of shared samples; with
+my labels every reach-41 condition rate is within 0.02 of the executor's (the 6-prompt fresh-forcing F4096 rate is not:
+#8), and no pre-registered reading changes. The headline holds: given `s2300`'s own successful thinking, `dpo` writes a
+genuine answer 0.14 of the time against `s2300`'s 0.92 (R1 = 0.15 [0.09, 0.23]); `s2300` with no thinking or with
+`dpo`'s failed thinking scores 0.06–0.09; readings 1, 2, 4 and 5 fail and 3 and 6 hold, also on `brief20`. The T1
+mechanism counts reproduce exactly: 256 of `dpo`'s 920 T1 answers (28 %) contain RL's drafted answer verbatim, and 183
+of those fail, every one by adding words. Cost $17.82 of $60. No hard-constraint violation.
+
+**Must be reworded or added.**
+1. Fresh forcing at 4k: "0.62 of its natural rate" → 0.46–0.52 (my labels / rule 1 applied mechanically), or report
+   the strict 0.58. Unread vacuous `ifbench_136` answers were counted genuine (#8); F8192's 0.88 is 0.84 with rule 1.
+2. State reading 7: `dpo` F(P) = 0.15 ≤ 0.25, "the success rests on the drafted answer"; `s2300` 0.45, neither
+   threshold, as graded, but 0.25–0.26 — on the copying threshold — when answers that re-open thinking count as
+   failures. "The draft helps but is not required" needs that qualifier (#9, #11).
+3. "RL's thinking is necessary" → "carries most of the gain": `s2300` without any thinking still scores 0.08–0.09 where
+   `dpo` scores 0.00 (#13).
+4. Report the pre-registered cut-only B curve and N / c bins (#23): on cut traces `s2300` is 0.19 / 0.32 / 0.43 / 0.35
+   at 1k–8k against 0.88–0.93 for the same traces in full (genuine, my labels), so the primary curve's "graded" rise at 4k–8k is mostly uncut
+   traces entering at their full value.
+5. Budget-cut misses: three calibration cells, 2.7 / 2.9 / 3.1 % of the answers actually sampled (#16).
+6. Compute: 2.52 GPU-h of job time (2.35 omits R_dpo's kept stage-0 attempt); add 525 s to R_dpo's registry
+   `gpu_seconds` (#19). Blank `results.csv`'s calibration B / P `genuine_rate` (#24); put `ckpt` on the registry's
+   single-writer contrast rows.
+7. Worth saying (not errors): the forced `</think>` does not cap `s2300`'s thinking — 28 % of P and 8–9 % of
+   B1k / B2k answers re-open it, a confound for every "capped at N" reading (numbers.md has the post-hoc column; the
+   run write-up's prose names it for P only); reading 3 holds through its "neither" clause (#10); the draft split
+   pools P cuts into "without" (#15); the plain summary's "256 tries" needs its source.
+
+**Not supported.** No headline claim. Wrong as stated: the 4k fresh-forcing ratio (#8), the calibration cut-share
+figures (#16) and the job GPU-hours (#19). Omitted: reading 7 and the cut-only curve with the N / c bins (#11, #23).
+
+**Next measurements.** (1) Enforce the budget: re-sample the B, P and F answers with a second `</think>` banned (or
+generation stopped at it) so "thinking capped at N" holds, and re-read P under that. (2) Test the T1 mechanism
+directly: T1 with the `olmo-iffu` brevity instruction ("answer in at most 60 words"), or with RL's drafted answer
+supplied as the answer's first line; if `dpo` then approaches T2, the transplant gap is answer-writing discipline, not
+missing search. (3) Read (or rule-1 filter) every unread strict success on the three sub-bullet prompts, so the share
+rule cannot carry vacuous answers.

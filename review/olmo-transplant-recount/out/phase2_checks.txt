@@ -1,0 +1,30 @@
+[1] R_dpo T1: answers 920; exact copies 43; contain RL's answer 256, of which strict failures 183; > 1.5x RL's words 726; median words 126.0
+[1] R_s2300 T2: answers 920; exact copies 611; contain RL's answer 641, of which strict failures 10; > 1.5x RL's words 14; median words 26.0
+[2] exec: reach prompts with T1 = 0: 20 / 41
+[2] mine: reach prompts with T1 = 0: 20 / 41
+[2] strict: reach prompts with T1 = 0: 20 / 41
+[3] dpo: with the opening 0.037 (n 808 samples); without, B cuts only 0.008 (n 1864); without incl. P 0.012 (n 2600)
+[3] s2300: with the opening 0.546 (n 808 samples); without, B cuts only 0.330 (n 1864); without incl. P 0.390 (n 2600)
+[4] R_dpo B4096: cut 2 of 736 sampled (0.27 %); over the primary-curve cell (920 rows) 0.22 % (+ substituted full rows' cuts: 0)
+[4] R_dpo B8192: cut 0 of 160 sampled (0.00 %); over the primary-curve cell (920 rows) 0.00 % (+ substituted full rows' cuts: 0)
+[4] C_s2300 B4096: cut 4 of 136 sampled (2.94 %); over the primary-curve cell (288 rows) 1.39 % (+ substituted full rows' cuts: 1)
+[4] C_s2300 B8192: cut 2 of 64 sampled (3.12 %); over the primary-curve cell (288 rows) 0.69 % (+ substituted full rows' cuts: 1)
+[5] exec: fresh F genuine 2k / 4k / 8k = 0.182 / 0.427 / 0.604; / 0.686 = 0.27 / 0.62 / 0.88
+[5] mine: fresh F genuine 2k / 4k / 8k = 0.167 / 0.318 / 0.604; / 0.686 = 0.24 / 0.46 / 0.88
+[5] exec_vac: fresh F genuine 2k / 4k / 8k = 0.167 / 0.354 / 0.573; / 0.686 = 0.24 / 0.52 / 0.84
+[5] mine_vac: fresh F genuine 2k / 4k / 8k = 0.167 / 0.330 / 0.573; / 0.686 = 0.24 / 0.48 / 0.84
+[6] executor's 're-opened = fail' genuine values: G(0) 0.071, G(P) 0.283, G(full) 0.924 -> F(P) = 0.249
+[7] natural genuine on the 6: per prompt 136 20/24 x 3/3, 166 19/56 x 1/12, 211 21/24 x 3/3, 248 21/24 x 3/3, 269 22/24 x 3/3, 3 14/24 x 3/3; mean 0.685
+    exec: ratio of means 0.27 / 0.62 / 0.88
+    mine: ratio of means 0.24 / 0.46 / 0.88
+    exec_vac: ratio of means 0.24 / 0.52 / 0.84
+    mine_vac: ratio of means 0.24 / 0.48 / 0.84
+[8] results.csv vs mine: strict rates compared 900, differ 0 []; genuine (executor's labels) compared 827, differ 0 []
+[9] T1 answers containing RL's answer and failing strict: 183; with more words than RL's answer 183; same word count (fail on layout only) 0
+[10] strict: reach dpo F(P) 0.143 (n 38); reach s2300 F(P) 0.492 (n 38); brief20 dpo F(P) 0.053 (n 18); brief20 s2300 F(P) 0.512 (n 18)
+[10] exec: reach dpo F(P) 0.146 (n 38); reach s2300 F(P) 0.453 (n 38); brief20 dpo F(P) 0.061 (n 18); brief20 s2300 F(P) 0.449 (n 18)
+[10] mine: reach dpo F(P) 0.146 (n 38); reach s2300 F(P) 0.454 (n 38); brief20 dpo F(P) 0.061 (n 18); brief20 s2300 F(P) 0.435 (n 18)
+[10] exec_held: reach dpo F(P) 0.073 (n 38); reach s2300 F(P) 0.258 (n 38); brief20 dpo F(P) 0.028 (n 18); brief20 s2300 F(P) 0.262 (n 18)
+[10] mine_held: reach dpo F(P) 0.073 (n 38); reach s2300 F(P) 0.250 (n 38); brief20 dpo F(P) 0.028 (n 18); brief20 s2300 F(P) 0.242 (n 18)
+[11] results.csv F rows: 18 x (strict, genuine) compared, differ 0 []; calibration B / P rows (strict only by design) that still carry a numeric genuine_rate with strict > 0: 118
+[12] reach rl traces whose source sample the olmo-ifomega review re-read: 78 / 115

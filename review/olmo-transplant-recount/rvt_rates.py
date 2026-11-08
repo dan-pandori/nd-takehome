@@ -20,7 +20,7 @@ import sys
 from rvt_core import ART, OUT, RAW, SCR, Pieces, Tee, answer_of, iter_gz, unb64, wsnorm
 from rvt_labels import cell_of, table
 
-MODE = sys.argv[1] if len(sys.argv) > 1 else "exec"
+MODE = sys.argv[1] if len(sys.argv) > 1 else "exec"  # *_held: re-opened thinking counted as failure (post hoc)
 P = Tee(f"rates_{MODE}.txt")
 B_RESAMPLES = 10000
 CUTS = [1024, 2048, 4096, 8192, 16384]
@@ -117,6 +117,8 @@ for job in ("R_dpo", "R_s2300", "C_dpo", "C_s2300", "F_s2300"):
                     gw = float("nan")
                     undefined_cells.add((job, r["pid"], cell))
         ans = answer_of("</think>" + r["text"])
+        if MODE.endswith("_held") and "</think>" in r["text"]:  # post hoc: an answer that re-opened thinking fails
+            st, gw = False, 0.0
         S.append({"key": k, "job": job, "writer": r["writer"], "pid": r["pid"], "cond": r["cond"], "cut": r["cut"],
                   "cell": cell, "trace": r.get("trace", ""), "strict": int(st), "g": gw,
                   "finish": r["finish"], "close2": "</think>" in r["text"], "norm": wsnorm(ans),
@@ -511,4 +513,12 @@ with open(OUT / f"per_prompt_{MODE}.csv", "w", newline="") as fcsv:
             for pid in SETS[st]:
                 wr.writerow([pid, st, FAM[pid], field] + [
                     "" if pid not in ALL[(st, field)][n][4] else f"{ALL[(st, field)][n][4][pid]:.4f}" for n in names])
+with open(OUT / f"per_prompt_fresh_{MODE}.csv", "w", newline="") as fcsv:
+    wr = csv.writer(fcsv)
+    wr.writerow(["pid", "field", "F2048", "F4096", "F8192"])
+    for field in ("strict", "g"):
+        if MODE == "strict" and field == "g":
+            continue
+        for pid in REQ6:
+            wr.writerow([pid, field] + [f"{mean_of(by_cell[('F_s2300', pid, f'F{N}')], field):.4f}" for N in (2048, 4096, 8192)])
 json.dump(res, open(OUT / f"rates_{MODE}.json", "w"), indent=1, default=str)
