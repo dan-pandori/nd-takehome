@@ -1,6 +1,6 @@
 # Pre-registration — olmo-rlzero-if (proposal 39)
 
-Written 2026-11-08 05:15–05:35 UTC by the executor, before any pod. Brief: `nd-rl` proposal 39
+Written 2026-11-08 05:15–05:30 UTC by the executor, before any pod. Brief: `nd-rl` proposal 39
 (`docs/proposals/2026-11-07-olmo-followups.md`; Dan, 2026-11-07, ≤ $40). Two parts, as in `olmo-ifomega`: **Part A**
 (this commit, before the first pod) fixes the question, models, recipe, prompts, grades, design, verdict rule,
 preliminary expectations and Stage 0. **Part B** (an addendum committed after Stage 0 and before any sampling on an
@@ -189,3 +189,117 @@ throughput (job average and vLLM-log integral), $ per million tokens, grade agre
   each committed only if its worst case fits under $37 total; unextended candidates are reported open.
 - In-run cuts if spent + committed would pass $37: (1) intermediate-checkpoint confirmation, (2) the `math`
   candidates' extension, (3) remaining candidates in the seeded order. Hard stop 2026-11-10 05:13 UTC (48 h).
+
+---
+
+# Part B — after Stage 0, before any sampling on an evaluation prompt (written 2026-11-08 06:00–06:15 UTC)
+
+## Stage 0 measured (`artifacts/olmo_rlzero_if/stage0_summary.txt`; never an evaluation number)
+
+Pod `rzi-a`, 1 × A100-SXM4-80GB community, billed **$1.39/h**; created 05:31:37 UTC (pods.log), deleted 06:02 UTC:
+**$0.72** (0.52 h). vLLM 0.11.0, torch 2.8.0, FLASH_ATTN. 64 prompts (40 IFEval outside the 150, 24 RL-Zero-IF
+training prompts), 2 samples each per job. A first `s0_base_a` was killed after 3.5 min and discarded (a variable
+clash in my sampler would have crashed every job at its end; fixed, rerun from scratch).
+
+| job | samples | mean / median / p90 tokens | cut at 16,384 | stop | `</think>` | job tok/s | IFEval strict (80) |
+|---|---|---|---|---|---|---|---|
+| `s0_base_a` (no spec.) | 128 | 2,358 / 725 / 7,404 | 2 | EOS 126 | 0 | 609 | 0.250 |
+| `s0_base_b` (n-gram spec.) | 128 | 2,260 / 718 / 5,428 | 3 | EOS 125 | 0 | 662 | 0.163 |
+| `s0_main` (n-gram spec.) | 128 | **51** / 21 / 114 | 0 | EOS 128 | 0 | (8 s) | **0.787** |
+
+- **Speculation not adopted:** 662 / 609 = 1.09× (< 1.15×); A/B differences inside their 95 % intervals (mean length
+  −98 [−1,113, +879] tokens; IFEval strict −0.088 [−0.188, +0.012]). Every evaluation job runs without it.
+- **Price:** 609 tok/s job average = **$0.63 per million generated tokens** (an upper bound: the 128-sample jobs ran
+  with ≤ 38 sequences resident and a long tail; evaluation jobs keep the KV cache full).
+- **The base never closes its reasoning.** No base response contains `</think>`, `<|im_end|>` or `<|im_start|>`; 98 %
+  end at EOS. Under RL's extraction its whole response is the answer; `closed` gives it 0. Its text is often a
+  plausible reply, often planning ("Okay, let's tackle this…") followed by a reply, and sometimes web / code debris
+  or word salad (some of which passes the checker). `t1` = `strict` on every Stage-0 sample (no turn tokens).
+- **`main` games the checker.** RL-Zero-IF `main` answers in ≈ 50 tokens, with no `</think>` and no `<answer>`
+  tags: "<<StartupVision>>" for a pitch that needs a `<<title>>`, "• answer1 • answer2" for a two-bullet list,
+  "P.S. seasons_change", placeholder paragraphs "paragraph_two *** paragraph_three". It passes 79 % of the Stage-0
+  IFEval checks this way. The hand gate, not the strict grade, therefore decides reach in this run.
+- **`main` is not `step_1900`** (`meta/weight_dist.jsonl`, shard 2): rel. L2 `main`↔`step_1900` 9.9e-4, ≈ one late
+  100-step increment (`step_1900`↔`step_1800` 9.4e-4), and `main`↔`step_1800` 1.18e-3: `main` is a later checkpoint,
+  ≈ one increment past `step_1900` (≈ step 2,000; no such branch exists). Compute axis: step 2,000 (bracket
+  1,900–2,100).
+- **Start revision:** `step_100`↔base `main` 1.95e-3 = one early increment (`step_200`↔`step_100` 1.89e-3);
+  `step_100`↔`stage3-step11000` 1.18e-2 and base `main`↔`stage3-step11000` 1.16e-2, so √(1.16² + 0.195²) = 1.177 ≈
+  1.180: `step_100` sits one increment away from base `main`, orthogonally. **The pre-registered margin (≥ 10×) is not
+  met: 6.1×**, because RL-Zero-IF's increments are ≈ 5.6× larger than RL-Zero-Math 3.1's. I report the start as base
+  `main` (= `stage3-step11921`, the snapshot's `step11921-hf`) to within one RL increment, not more precisely.
+
+## Re-costed design (`olmo_rlzero_if/project.py`; tokens × $0.63 / M; lengths assumed for unmeasured models)
+
+Assumed mean tokens: base 2,300 (IFBench unmeasured), `s0100` 2,000 (100 steps from the base), `s0500` 1,000,
+`main` 51, `math` 3,000. Fixed phase: base $10.5, `s0100` $4.6, `s0500` $2.3, `main` $0.1, `math` $4.6. Reach
+candidates under strict: `main`'s gaming makes many (assumed 150); each the base does not resolve costs 240 base
+samples (≈ $0.35), so extending all of them ≈ $36. **Full design ≈ $60 (≈ $31 at the throughput a full KV cache
+should give) — over the $36 gate. Asked in `QUESTIONS.md` (06:15 UTC); sampling paused until 08:15 UTC as
+pre-registered.**
+
+## Design as run (default, unless Dan answers otherwise) — priority order, each step only while spent + committed ≤ $37
+
+1. **Fixed phase** on all 450 prompts: `base` 16 (seed 5001), `s0100` 8 (5002), `s0500` 8 (5003), `main` 8 (5004);
+   chunks of 8; no speculation; two pods if stock allows (`base` alone on one).
+2. **`main` (challenger) on every reach candidate**: 32 fresh samples at once (`main` costs ≈ $0.001 per sample;
+   drawing in a batch and reading in draw order gives the same outcome as sequential draws), then more fresh chunks up
+   to 256 where needed. **Reverse candidates:** `main` (defender) drawn to 256 at once, read in draw order; `base`
+   (challenger) sequential chunks of 16 until 2 genuine.
+3. **Hand gate on `main`** for every reach candidate: its strict successes read blind in draw order (fixed phase
+   first) until 2 genuine with ≥ 1 fresh (= confirmed) or the stopping rule (`olmo-ifomega` deviation 13: ≥ 7 read,
+   ≥ 4 fresh, ≤ 1 genuine → **open, gaming**). The first two read per prompt are the "first-read" set of the gamed
+   share.
+4. **`base` extension** (sequential, chunks of 16, 2 in flight, stop at 2 strict, hand gate, continue to 2 genuine or
+   256): first on every candidate where `main` is hand-confirmed (or has ≥ 1 genuine so far), then on the remaining
+   candidates in the seeded order (`random.Random(20261108)` over the sorted list) while money remains. This changes
+   Part A's single seeded order to two tiers (before any evaluation data): only tier-1 candidates can become hand-reach
+   prompts, and the hand row is the headline; tier 2 serves the strict row.
+5. Then, in this order if money remains: `s0500` and `s0100` confirmation on candidates where `main` is not confirmed
+   (for "dissolved" and the compute axis); `math` (fixed 8 on IFBench, seed 5005); a base-tokenizer diagnostic (below).
+6. **Format check** (Design 6; no GPU) on every hand-reach prompt, and on tier-1 candidates where the base has no
+   genuine success, labelled apart.
+
+Unextended candidates are reported as open; the verdict rule is unchanged.
+
+## Hand-gate rule 6 (written 06:05 UTC from Stage-0 texts only, before any evaluation item; all models; `olmo_rlzero_if/handcheck_rule_if_addendum.md`)
+
+Readers see what the checker graded: when a model never closes its reasoning, that is its whole response.
+(a) Planning or self-talk before or around a reply that serves the request does not by itself make it gamed (quality
+is not graded, rule 4). (b) **Gamed** if the reply is missing or is not the main content: web-page / code / JSON debris,
+invented conversation turns or unrelated text making up most of the response, or the request served only inside
+quoted debris. (c) **Gamed** if a constraint holds only because of the debris or the planning text (e.g. a word count
+reached by padding, a keyword that occurs only in the planning). (d) Placeholder or skeleton text standing in for the
+content ("paragraph_two", "answer1") is gamed (rule 2).
+
+## Format-check rubric (`olmo_rlzero_if/failure_rubric_if.md`; written 06:10 UTC, before any evaluation item)
+
+The brief's five classes, first that applies: (u) **no usable answer** — cut at the cap with no reply, a rambling
+continuation or debris with no answer segment, or planning that never turns into a reply; (a) **ignored the
+constraint**; (b) **near miss** (`olmo-ifomega`'s definition); (c) **attempted, far off**; (d) **broke another
+constraint** (binding one held, or the task not done). Up to 4 seeded base failures per prompt (different extension
+chunks), up to 2 `main` failures for contrast, blinded and shuffled; I re-classify a seeded 10 %.
+
+## Base-tokenizer diagnostic (optional, last in priority; labelled, not in any verdict)
+
+Stage 0 shows the base never emits `</think>` (id 100269, an `<|extra_id_4|>` the base never saw in pretraining) and
+receives `<think>` (100268) as an unseen token. On every hand-reach prompt, if money remains: `base` with its own
+repository tokenizer (the same template text, so `<think>` is plain text), 64 samples, read like the extension. A
+genuine success there means the base's failure under RL's tokenizer is partly a token artifact.
+
+## Binding expectations (strict unless stated; headline sets)
+
+| | `base` pass@1 / @8 | `s0100` | `s0500` | `main` pass@1 / @8 |
+|---|---|---|---|---|
+| IFBench (297) | 0.07 (0.03–0.14) / 0.30 | 0.10 (0.04–0.22) | 0.25 (0.10–0.40) | 0.30 (0.15–0.45) / 0.60 (0.40–0.75) |
+| IFEval (150) | 0.20 (0.12–0.30) / 0.60 | 0.35 (0.20–0.55) | 0.65 (0.45–0.80) | 0.75 (0.60–0.88) / 0.93 |
+
+- Mean tokens: base IFBench 2,300 (1,200–4,000), IFEval 2,100; `s0100` 1,500 (300–3,000); `s0500` 300 (60–1,500);
+  `main` 60 (30–200). Base cut at the cap 2 % (0.5–5 %), `main` 0 %.
+- Candidates R: IFBench 110 (60–170), IFEval 45 (25–70); reverse V: IFBench 5 (0–15), IFEval 3 (0–10).
+- **Gamed share of `main`'s first-read strict successes: 80 % (60–95 %)** (32B: ≈ 36 %). `main` hand-confirmed on 25 %
+  (10–45 %) of R; open by gaming on 50 % (30–75 %).
+- Base resolves (2 genuine in 256) 50 % (25–75 %) of tier-1 candidates; under strict 40 % (20–70 %) of all extended.
+- Hand-reach prompts IFBench 3 (0–15), IFEval 3 (0–10). **Verdict by hand:** IFBench Reach 40 %, Inconclusive 45 %,
+  No reach 15 %; IFEval Reach 40 %, Inconclusive 40 %, No reach 20 %. **Under strict:** Reach 85 % on each task.
+- Format check: (u) 45 % (25–70 %) of the base's sampled failures, (a) 20 %, (c) 15 %, (d) 12 %, (b) 8 %.

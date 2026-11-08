@@ -1110,3 +1110,35 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 2026-11-07 08:41 UTC  Hand batch t2h (66 items, three blinded readers; all confirmed; inline sub-points, syllable and sentence-split differences genuine under rule 3; one unpunctuated +4-words answer whose implied sentences do grow by 4 kept genuine, not vacuous): **T4b: ifbench_19 2 genuine of 2 strict in its second 16 draws → `s0750` confirmed on 26 of 43** (≤ 32 fresh draws). T2c `s2300`: ≥ 2 genuine among its first two strict successes on 16 of 32 prompts; on 16 (1, 3, 67, 136, 166, 187, 203, 204, 206, 209, 217, 226, 264, 267, 271, 284) reading continues in draw order (batch t2i, 47 items, two readers). Registry: 56 compute rows (8 jobs × 7 metrics) written by `compute_rows.py` and synced to `hf://buckets/dan-pandori/nd-rl/registry/olmo-iffu/`.
 - 2026-11-07 09:07 UTC  Hand gate complete: t2i (47) and t2j (45) `s2300` follow-ups (two readers each; all confirmed): the hint breaks `s2300` on T2c prompts 1 (1 genuine of 12 strict), 3 (0 of 12), 166 (0 of 9), 284 (0 of 4); 203, 206, 271 reach 2 genuine (5 each); 226 left at 0 genuine of 5 read (11 unread; `dpo` is prompt-elicitable there, so no verdict depends on it). **368 hand items, all confirmed.** Final statuses (`olmo_iffu/status.csv`, `explanation`): token budget 2 (perp_068, 069); one sound success at 65k 1 (055); prompt-elicitable 16 (ifeval 2447 1314 2247 2563; ifbench 179 290* 19 78 133 173 186 187 220 226 252 253); survives 1,024 and the hint 2 (248, 269); survives 1,024 with the hint inconclusive 4 (3, 166 hint breaks `s2300`; 136, 211 one genuine with the hint); one genuine with the hint 1 (204); not elicited by the hint, sampling untested 19; hint uninformative 6; untested 1 (281). Write-up `run_olmo_iffu.md` (400 words + figure), `numbers.md` § olmo-iffu, `olmo_iffu/plain_summary.md`, `summary_tables.md`.
 - 2026-11-07 09:11 UTC  Published: `publish_artifacts.py olmo-iffu artifacts/olmo_iffu` (17 bulk files uploaded, re-downloaded and sha256-checked; MANIFEST rows); `hf buckets sync` of `olmo_iffu/`, `pod/olmo_iffu/`, `artifacts/olmo_iffu/` and `docs/` (write-up, pre-registration, figure) to `hf://buckets/dan-pandori/nd-rl/olmo-iffu/` after a credential scan of all 503 small files (0 hits). No weights stored off the pods. Plain summary fraction fixed in a pre-publication claim check (16 of 48 hinted IF prompts is a third, not a quarter).
+
+## olmo-rlzero-if (executor; proposal 39; $40)
+
+- 2026-11-08 05:13 UTC  Run started (worktree `~/work/olmo-rlzero-if`, branch `dan_olmo-rlzero-if`). Recipe found:
+  AI2's open-instruct README (#1929, e25a27b8) says the released RL-Zero-IF run used `olmo_thinker` @ d928a7c (its
+  shipped `chat_template.jinja` is byte-identical: sha256 6d549883…), not the `olmo_thinker_rlzero` the current
+  script names; script snapshot 7e780f2fea: T 1.0, top-p default 1.0, 16,384 response tokens, stop string
+  `</answer>`, start path `…/step11921-hf`. IF reward at d928a7c: `remove_thinking_section` + IFEvalG checks,
+  partial credit (fraction of constraints). The RL-Zero-IF tokenizer differs from the base repository's in 11
+  added-token names (`<think>` = 100268 etc. are `<|extra_id_k|>` in the base's); one tokenizer (RL-Zero-IF's) is
+  used for every model.
+- 05:16 UTC  HF metadata: `main` (3cae007c) shard sha256 match no step branch (step_100 … step_1900); base `main` =
+  `stage3-step11921` (identical shards). Dataset `allenai/Dolci-RL-Zero-IF-7B` @ c96e4e42 = `Dolci-RLZero-IF-7B`
+  (13,179 prompts, prefixed "user: ").
+- 05:27 UTC  Contamination scan (`olmo_rlzero_if/contam.py`): ifbench_196 / 228 / 285 (fish screenplay) excluded;
+  6 boilerplate matches kept after reading (`exclusions.csv`).
+- 05:30:23 UTC  Pre-registration Part A committed and pushed (733b4269). `podbudget olmo-rlzero-if --set 40 40`.
+- 05:31:37 UTC  Pod `rzi-a` = 1 × A100-SXM4-80GB community, $1.39/h (community A100 PCIe had no stock); cpu.max 30.6,
+  1 TB RAM. Setup 05:34 (vLLM 0.11.0, CUDA allocation OK). Stage 0 queue started 05:35.
+- 05:40 UTC  Bug: my `t1` (first-turn cut) variable shadowed the sampler's timing variable `t1`, which would crash each
+  job at its end (meta lost). Killed `s0_base_a` (3.5 min, 72 samples; discarded, log `q_s0_base_a.void1.log`),
+  renamed to `t1c`, reran from scratch 05:41.
+- 05:41–06:00 UTC  Weight check (`olmo_rlzero_if/weight_dist.csv`): `main`↔`step_1900` 9.9e-4 ≈ one late increment
+  (`step_1900`↔`step_1800` 9.4e-4), `main`↔`step_1800` 1.18e-3 → `main` ≈ one increment past `step_1900`. `step_100`↔base
+  `main` 1.95e-3 (= one early increment, `step_200`↔`step_100` 1.89e-3), ↔`stage3-step11000` 1.18e-2: 6.1×, below the
+  pre-registered 10× margin (RL-Zero-IF's increments are 5.6× the 3.1 math run's); geometry consistent with base main.
+- 05:50–06:00 UTC  Stage 0 (`artifacts/olmo_rlzero_if/stage0_summary.txt`): base 2,358 / 2,260 mean tokens (A/B), no
+  `</think>` ever, IFEval strict 0.25 / 0.16; `main` **51 tokens**, IFEval strict 0.79 by gaming ("<<StartupVision>>",
+  "• answer1 • answer2"). Speculation 1.09× (< 1.15×): not adopted. $0.63 per M tokens.
+- 06:02 UTC  `rzi-a` deleted after diffing remote vs local listings (0.52 h, $0.72).
+- 06:15 UTC  Part B written (re-costed full design ≈ $60 > $36 gate) and the question asked in `QUESTIONS.md`;
+  sampling paused until 08:15 UTC as pre-registered; hand rule 6 and the format rubric written from Stage-0 texts.

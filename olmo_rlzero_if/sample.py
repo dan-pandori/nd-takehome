@@ -247,13 +247,13 @@ def main():
                     text = tok.decode(tids, skip_special_tokens=True)
                     # first-turn cut (grade `t1`): characters of `text` before the first turn-ending special token
                     k = next((j for j, x in enumerate(tids) if x in TURN_IDS), None)
-                    t1 = None
+                    t1c = None
                     if k is not None:
                         pre = tok.decode(tids[:k], skip_special_tokens=True)
-                        t1 = len(pre) if text.startswith(pre) else -1
+                        t1c = len(pre) if text.startswith(pre) else -1
                     rec = {"pid": pid, "model": args.name, "rev": args.rev, "job": args.job, "chunk": c,
                            "i": comp.index, "n_tok": len(tids), "finish": comp.finish_reason,
-                           "stop_reason": comp.stop_reason, "t1_chars": t1,
+                           "stop_reason": comp.stop_reason, "t1_chars": t1c,
                            "n_im_start": sum(x == 100264 for x in tids), "n_im_end": sum(x == 100265 for x in tids),
                            "text": text,
                            "ids": base64.b64encode(np.asarray(tids, dtype=np.int32).tobytes()).decode()}
