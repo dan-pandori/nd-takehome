@@ -1219,3 +1219,5 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   candidates: hand-confirmed on 10 (tier 1: ifbench_100–104, 274, 296; ifeval_1361, 219, 3272), open by the gaming
   stop rule on 138, exhausted on 16.** ifeval_1361: the base drew its 256 with exactly 1 genuine success (h417694) →
   neither reach nor resolved (open). E3_base_ife queued on `rzi-c` (ifeval_3272 to 256 in one batch).
+- 13:01 UTC  **Reverse candidates: hand reading stopped** (they are outside the verdict; the remaining work is ≈ 180 `main` items on 8 candidates where `main` has 13–57 gamed strict successes in 256, and the base's reading plus fresh draws on 35 more). The hand reverse row reports what was read (base confirmed 3, base open by the gaming stop rule 14, the rest unread); the strict reverse row is complete.
+- 13:02 UTC  Queued on `rzi-c` after E2_base_ife: E3_base_ife (ifeval_3272 to 256), **D_base_btok** (base-tokenizer diagnostic, Part B's last item: the base with its own repository tokenizer, 64 samples on each of the 4 IFBench hand-reach prompts so far), C1_s0100_a / C1_s0500_a (32 fresh each on the same 4, for reach per checkpoint).
