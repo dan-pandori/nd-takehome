@@ -192,7 +192,7 @@ throughput (job average and vLLM-log integral), $ per million tokens, grade agre
 
 ---
 
-# Part B — after Stage 0, before any sampling on an evaluation prompt (written 2026-11-08 06:00–06:15 UTC)
+# Part B — after Stage 0, before any sampling on an evaluation prompt (written 2026-11-08 06:00–06:05 UTC)
 
 ## Stage 0 measured (`artifacts/olmo_rlzero_if/stage0_summary.txt`; never an evaluation number)
 
@@ -235,7 +235,7 @@ Assumed mean tokens: base 2,300 (IFBench unmeasured), `s0100` 2,000 (100 steps f
 `main` 51, `math` 3,000. Fixed phase: base $10.5, `s0100` $4.6, `s0500` $2.3, `main` $0.1, `math` $4.6. Reach
 candidates under strict: `main`'s gaming makes many (assumed 150); each the base does not resolve costs 240 base
 samples (≈ $0.35), so extending all of them ≈ $36. **Full design ≈ $60 (≈ $31 at the throughput a full KV cache
-should give) — over the $36 gate. Asked in `QUESTIONS.md` (06:15 UTC); sampling paused until 08:15 UTC as
+should give) — over the $36 gate. Asked in `QUESTIONS.md` (06:05 UTC); sampling paused until 08:05 UTC as
 pre-registered.**
 
 ## Design as run (default, unless Dan answers otherwise) — priority order, each step only while spent + committed ≤ $37

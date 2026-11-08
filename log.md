@@ -1140,5 +1140,5 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   `</think>` ever, IFEval strict 0.25 / 0.16; `main` **51 tokens**, IFEval strict 0.79 by gaming ("<<StartupVision>>",
   "• answer1 • answer2"). Speculation 1.09× (< 1.15×): not adopted. $0.63 per M tokens.
 - 06:02 UTC  `rzi-a` deleted after diffing remote vs local listings (0.52 h, $0.72).
-- 06:15 UTC  Part B written (re-costed full design ≈ $60 > $36 gate) and the question asked in `QUESTIONS.md`;
-  sampling paused until 08:15 UTC as pre-registered; hand rule 6 and the format rubric written from Stage-0 texts.
+- 06:04 UTC  Part B written (re-costed full design ≈ $60 > $36 gate) and the question asked in `QUESTIONS.md` (e148452e);
+  sampling paused until 08:05 UTC as pre-registered; hand rule 6 and the format rubric written from Stage-0 texts.

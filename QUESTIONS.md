@@ -211,7 +211,7 @@ between $55 and $60. Say "no test 4" here to skip it.
 - *Closed 2026-11-07 09:11 UTC:* the run ended at **$53.87** (under the $55 gate); test 4 ran under its own rule (capped at
   32 draws, deviation 4) and test 2c was completed. No pods are left. No answer needed.
 
-## 2026-11-08 06:15 UTC — olmo-rlzero-if: the full design projects ≈ $60, over the brief's $36 gate
+## 2026-11-08 06:05 UTC — olmo-rlzero-if: the full design projects ≈ $60, over the brief's $36 gate
 
 Stage 0 ($0.72; `preregistration/olmo-rlzero-if.md` Part B): RL-Zero-IF `main` **games the IF checker** with ≈ 50-token
 answers ("<<StartupVision>>" for a pitch that needs a title, "• answer1 • answer2", placeholder paragraphs) and passes
@@ -219,7 +219,7 @@ answers ("<<StartupVision>>" for a pitch that needs a title, "• answer1 • an
 will make ≈ 150 reach candidates, and extending the base to 256 samples on each one it cannot solve costs ≈ $0.35:
 ≈ $36 for all of them, on top of a ≈ $22 fixed phase (with `math`). Full design ≈ $60 at Stage-0 throughput (≈ $31 if
 a full KV cache doubles it, which it may).
-**Default (from 08:15 UTC if unanswered):** Part B's priority order within $37 — fixed phase without `math`; `main`'s
+**Default (from 08:05 UTC if unanswered):** Part B's priority order within $37 — fixed phase without `math`; `main`'s
 confirmation and the hand gate on every candidate (`main` costs ≈ $0.001 per sample); the base extension first on
 candidates where `main` has genuine successes (only these can become hand-reach prompts, the headline), then the rest
 in a seeded order; then intermediate confirmation, `math` and a base-tokenizer diagnostic if money remains.
