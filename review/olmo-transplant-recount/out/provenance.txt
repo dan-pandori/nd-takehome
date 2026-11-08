@@ -1,0 +1,41 @@
+[1] problems: 51 used IFBench prompts compared with upstream IFBench_test.jsonl @ cd189a9c: 0 differ []
+[2] review's list: 43 prompts; run sets {'reach': 41, 'reach_no_trace': 2, 'calib': 10}
+    reach-41 = 43 minus ['ifbench_226', 'ifbench_252']; extra in run reach: []; reach_no_trace = ['ifbench_226', 'ifbench_252']
+    s2300 genuine final labels in olmo_ifomega/handcheck.csv: 226 -> 0, 252 -> 0; reach-41 prompts with 0 genuine: []
+    reach-41 families (prefix of first instruction id): {'words': 15, 'format': 7, 'count': 5, 'ratio': 5, 'sentence': 5, 'custom': 2, 'repeat': 2}
+    family column vs mine: 0 differ
+    brief20: 20 prompts, all in reach-41: True; families {'words': 7, 'format': 3, 'ratio': 3, 'sentence': 3, 'count': 2, 'custom': 1, 'repeat': 1}
+    olmo-iffu: survived 1,024 dpo draws: ['ifbench_3', 'ifbench_78', 'ifbench_133', 'ifbench_136', 'ifbench_166', 'ifbench_211', 'ifbench_248', 'ifbench_252', 'ifbench_253', 'ifbench_269']; of them not prompt-elicitable: ['ifbench_3', 'ifbench_136', 'ifbench_166', 'ifbench_211', 'ifbench_248', 'ifbench_269']; run's required6 = ['ifbench_136', 'ifbench_166', 'ifbench_211', 'ifbench_248', 'ifbench_269', 'ifbench_3']; equal: True; all in brief20: True
+[3] traces.csv: 328 rows, Counter({('reach', 'dpo'): 164, ('reach', 'rl'): 115, ('calib', 'rl'): 36, ('calib', 'dpo'): 13}); stored rows found in my bucket copies: 328 / 328 (distinct)
+    per-trace issues (ids sha, text==decode, my </think> position, prefix sha, closing ids, c, model, draft cut): none
+    token before `</` ends in a newline: 328 / 328; closing token counts {1363: 327, 397: 1}
+    reach rl traces: 115; not genuine-labelled: []; count != min(4, available): []; per-prompt counts {4: 5, 3: 24, 1: 1, 2: 11}
+    dpo traces per prompt (reach + calib): {4: 43, 1: 1, 0: 5, 2: 2}; jobs Counter({'F_dpo_ifb': 177})
+    rl reach thinking c = think_k - 3: median 5779, mean 6286, max 17316, min 445; think_k median 5782
+    dpo reach thinking c: median 2786.0, think_k median 2789.0
+    reach rl traces cut (c > N): {1024: 112, 2048: 109, 4096: 92, 8192: 20, 16384: 1}
+    pre-draft: 92 / 115 reach rl traces contain the answer opening; position draft/c median 0.555, deciles 10% 0.108 90% 0.892; draft == 0: 0
+    my draft cut vs traces.csv draft_k: 0 differ
+    calib rl traces: 36, with draft 23; per prompt {'ifbench_25': 4, 'ifbench_29': 4, 'ifbench_52': 4, 'ifbench_58': 4, 'ifbench_85': 4, 'ifbench_115': 4, 'ifbench_239': 2, 'ifbench_259': 2, 'ifbench_295': 4, 'ifbench_298': 4}
+[4] requests dpo_reach: 869 rows (expected 869), missing 0 [], extra 0 [], prefix/field mismatches 0 []; conds {'T1': 115, 'B': 334, 'P': 92, 'T4': 164, 'T0': 164}; samples 6952
+[4] requests dpo_calib: 205 rows (expected 205), missing 0 [], extra 0 [], prefix/field mismatches 0 []; conds {'T1': 36, 'B': 93, 'P': 23, 'T4': 13, 'T0': 40}; samples 1640
+[4] requests s2300_reach: 869 rows (expected 869), missing 0 [], extra 0 [], prefix/field mismatches 0 []; conds {'T2': 115, 'B': 334, 'P': 92, 'T3': 164, 'T0': 164}; samples 6952
+[4] requests s2300_calib: 205 rows (expected 205), missing 0 [], extra 0 [], prefix/field mismatches 0 []; conds {'T2': 36, 'B': 93, 'P': 23, 'T3': 13, 'T0': 40}; samples 1640
+[5] my prompt ids: last tokens of one prompt [100264, 78191, 198, 14023, 771, 29] -> '<|im_start|>assistant\n<think>'; '<think>' last token is 29? True (b'>')
+    R_dpo: meta lines 1; prompt ids for 41 pids; differ from mine: []
+    R_s2300: meta lines 1; prompt ids for 41 pids; differ from mine: []
+    C_dpo: meta lines 1; prompt ids for 10 pids; differ from mine: []
+    C_s2300: meta lines 1; prompt ids for 10 pids; differ from mine: []
+    F_s2300: meta lines 1; prompt ids for 6 pids; differ from mine: []
+    R_dpo: rows by cond {'T1': 920, 'P': 736, 'B': 2672, 'T4': 1312, 'T0': 1312}; requests with rows 869 of 869; requests without i = 0..7: 0; problems none
+    R_s2300: rows by cond {'T2': 920, 'B': 2672, 'P': 736, 'T3': 1312, 'T0': 1312}; requests with rows 869 of 869; requests without i = 0..7: 0; problems none
+    C_dpo: rows by cond {'T1': 288, 'B': 744, 'P': 184, 'T4': 104, 'T0': 320}; requests with rows 205 of 205; requests without i = 0..7: 0; problems none
+    C_s2300: rows by cond {'T2': 288, 'B': 744, 'P': 184, 'T3': 104, 'T0': 320}; requests with rows 205 of 205; requests without i = 0..7: 0; problems none
+    F_s2300: rows 288; per (pid, N) counts [16]; natural </think> by N {2048: 0, 4096: 9, 8192: 73}; problems none
+    F meta: seed 8103, pids ['ifbench_136', 'ifbench_166', 'ifbench_211', 'ifbench_248', 'ifbench_269', 'ifbench_3'], budgets [2048, 4096, 8192], natural_end 82
+    meta R_dpo: seed 8101 rev main vllm 0.11.0 gpus ['NVIDIA H200'] tp 1 T 1.0 top_p 1.0 cap 32768 groups 24 samples 5568 gen_tok 4243318 t_gen 2732.4 max_mem 0.0 end 2026-11-08T06:39:10Z
+    meta R_s2300: seed 8102 rev main vllm 0.11.0 gpus ['NVIDIA H200'] tp 1 T 1.0 top_p 1.0 cap 32768 groups 24 samples 6952 gen_tok 3309001 t_gen 2409.7 max_mem 0.0 end 2026-11-08T06:36:47Z
+    meta C_dpo: seed 8111 rev main vllm 0.11.0 gpus ['NVIDIA H200'] tp 1 T 1.0 top_p 1.0 cap 32768 groups 12 samples 1640 gen_tok 823570 t_gen 350.7 max_mem 0.0 end 2026-11-08T06:47:18Z
+    meta C_s2300: seed 8112 rev main vllm 0.11.0 gpus ['NVIDIA H200'] tp 1 T 1.0 top_p 1.0 cap 32768 groups 12 samples 1640 gen_tok 1631474 t_gen 1469.4 max_mem 0.0 end 2026-11-08T07:23:42Z
+    meta F_s2300: seed 8103 rev main vllm 0.11.0 gpus ['NVIDIA H200'] tp 1 T None top_p None cap None groups None samples 288 gen_tok 85275 t_gen None max_mem None end 2026-11-08T06:56:19Z
+[6] boundary sample written to out/boundary_sample.txt

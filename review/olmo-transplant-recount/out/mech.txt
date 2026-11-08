@@ -1,0 +1,28 @@
+== samples whose answer contains a second `</think>` (reach + F), by writer and cell
+   F_s2300  F2048   n    96:    9 (  9.4 %) re-think; extra tokens median 3207, q90 9785, max 14368; strict among them 6 / 9 = 0.67; share of the cell's strict successes 6/23
+   F_s2300  F4096   n    96:    2 (  2.1 %) re-think; extra tokens median 2194, q90 516, max 3871; strict among them 1 / 2 = 0.50; share of the cell's strict successes 1/41
+   F_s2300  F8192   n    96:    1 (  1.0 %) re-think; extra tokens median 336, q90 336, max 336; strict among them 0 / 1 = 0.00; share of the cell's strict successes 0/59
+   R_dpo    B1024   n   896:   53 (  5.9 %) re-think; extra tokens median 7201, q90 13631, max 21387; strict among them 0 / 53 = 0.00; share of the cell's strict successes 0/8
+   R_dpo    B16384  n     8: none
+   R_dpo    B2048   n   872:   56 (  6.4 %) re-think; extra tokens median 7164, q90 13301, max 16723; strict among them 0 / 56 = 0.00; share of the cell's strict successes 0/11
+   R_dpo    B4096   n   736:   30 (  4.1 %) re-think; extra tokens median 5354, q90 9738, max 11652; strict among them 0 / 30 = 0.00; share of the cell's strict successes 0/23
+   R_dpo    B8192   n   160:   11 (  6.9 %) re-think; extra tokens median 7153, q90 9476, max 10425; strict among them 0 / 11 = 0.00; share of the cell's strict successes 0/3
+   R_dpo    P       n   736:   75 ( 10.2 %) re-think; extra tokens median 2222, q90 5962, max 9375; strict among them 8 / 75 = 0.11; share of the cell's strict successes 8/17
+   R_dpo    T0      n  1312:   22 (  1.7 %) re-think; extra tokens median 931, q90 9709, max 24864; strict among them 1 / 22 = 0.05; share of the cell's strict successes 1/4
+   R_dpo    T1      n   920:    7 (  0.8 %) re-think; extra tokens median 11616, q90 13359, max 14902; strict among them 0 / 7 = 0.00; share of the cell's strict successes 0/137
+   R_dpo    T4      n  1312:    4 (  0.3 %) re-think; extra tokens median 5712, q90 7077, max 10771; strict among them 0 / 4 = 0.00; share of the cell's strict successes 0/1
+   R_s2300  B1024   n   896:   70 (  7.8 %) re-think; extra tokens median 5847, q90 15899, max 22352; strict among them 42 / 70 = 0.60; share of the cell's strict successes 42/245
+   R_s2300  B16384  n     8: none
+   R_s2300  B2048   n   872:   77 (  8.8 %) re-think; extra tokens median 4725, q90 12981, max 21975; strict among them 45 / 77 = 0.58; share of the cell's strict successes 45/345
+   R_s2300  B4096   n   736:   27 (  3.7 %) re-think; extra tokens median 8456, q90 11847, max 14181; strict among them 10 / 27 = 0.37; share of the cell's strict successes 10/409
+   R_s2300  B8192   n   160:   16 ( 10.0 %) re-think; extra tokens median 4976, q90 9385, max 11363; strict among them 9 / 16 = 0.56; share of the cell's strict successes 9/53
+   R_s2300  P       n   736:  209 ( 28.4 %) re-think; extra tokens median 2431, q90 5256, max 11584; strict among them 152 / 209 = 0.73; share of the cell's strict successes 152/397
+   R_s2300  T0      n  1312:   97 (  7.4 %) re-think; extra tokens median 1771, q90 8294, max 19553; strict among them 11 / 97 = 0.11; share of the cell's strict successes 11/147
+   R_s2300  T2      n   920: none
+   R_s2300  T3      n  1312:    8 (  0.6 %) re-think; extra tokens median 7241, q90 9141, max 11397; strict among them 4 / 8 = 0.50; share of the cell's strict successes 4/132
+   R_s2300 strict primary B curve as graded      : G(0) 0.112; G(1024) 0.269 F 0.190; G(2048) 0.392 F 0.340; G(4096) 0.587 F 0.577; G(8192) 0.793 F 0.827; G(16384) 0.931 F 0.994; G(full) 0.935; G(P) 0.511 F(P) 0.485
+   R_s2300 strict primary B curve re-think = failure: G(0) 0.104; G(1024) 0.221 F 0.141; G(2048) 0.339 F 0.283; G(4096) 0.574 F 0.566; G(8192) 0.779 F 0.812; G(16384) 0.931 F 0.995; G(full) 0.935; G(P) 0.322 F(P) 0.263
+   R_dpo strict primary B curve as graded      : G(0) 0.003; G(1024) 0.032 F 0.213; G(2048) 0.038 F 0.259; G(4096) 0.062 F 0.431; G(8192) 0.124 F 0.892; G(16384) 0.139 F 1.000; G(full) 0.139; G(P) 0.021 F(P) 0.133
+   R_dpo strict primary B curve re-think = failure: G(0) 0.002; G(1024) 0.032 F 0.217; G(2048) 0.038 F 0.263; G(4096) 0.062 F 0.434; G(8192) 0.124 F 0.892; G(16384) 0.139 F 1.000; G(full) 0.139; G(P) 0.012 F(P) 0.067
+   fresh F(N), strict, as graded: F(2048) 0.240; F(4096) 0.427; F(8192) 0.615
+   fresh F(N), strict, re-think = failure: F(2048) 0.177; F(4096) 0.417; F(8192) 0.615
