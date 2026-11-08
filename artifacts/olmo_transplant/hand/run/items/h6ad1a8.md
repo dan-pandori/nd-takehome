@@ -1,0 +1,13 @@
+# Item h6ad1a8
+
+## Prompt (sent to the model verbatim)
+
+pious egoists means what. The output should not contain any whitespace.
+
+## Constraints checked (official checker)
+
+- `format:no_whitespace` {}: checker says followed
+
+## Answer (the text after the model's private reasoning, which is not shown; 1 words)
+
+piousegoistsreferstoindividualswhopretendtobeexceptionallydevoutorvirtuoussuperficiallywhileactuallydrivenbyselishmotivesprioritizingtheirowninterestsandstatusovertrulymoralorcommunallwellbeingoftenmasqueradingasaltruisticthroughreligiousorthodoxbehaviorwhilstexploitingothersorsituationsformaterialorglorygain

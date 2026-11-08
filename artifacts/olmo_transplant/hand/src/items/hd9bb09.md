@@ -1,0 +1,13 @@
+# Item hd9bb09
+
+## Prompt (sent to the model verbatim)
+
+Use at least 55 unique words in the response. translate this to Russian: "CPD is a generalization of PCA to higher order array and represents a $d$-mode tensor $\mathcal{X} \in \mathbb{R}^{n_1 \times n_2 \times \ldots \times n_d}$ as a combination of rank-one tensors $[37]$. $$ \mathcal{X}=\sum_{r=1}^R \lambda_r \mathbf{a}_r^{(1)} \otimes \mathbf{a}_r^{(2)} \otimes \ldots \otimes \mathbf{a}_r^{(d)}, $$ where $R$ is a positive integer, $\lambda_r$ is the weight of the $r$ th rank-one tensor, $\mathbf{a}_r^{(i)} \in \mathbb{R}^{n_i}$ is the $r$ th factor of $i$ th mode with unit norm where $i \in[d]$ and $r \in[R]$. "
+
+## Constraints checked (official checker)
+
+- `count:unique_word_count` {"N": 55.0}: checker says followed
+
+## Answer (the text after the model's private reasoning, which is not shown; 66 words)
+
+CPD является обобщением PCA для массивов высшего порядка и представляет dрежимный тензор X из пространства ℝ^{n₁×n₂×…×n_d} как комбинацию тензоров ранга один [37]. Равенство задается как X равное сумме от r=1 до R, где λ_r — вес rго тензора ранга один, а ar^{(i)} ∈ ℝ^{n_i} — rй фактор igeometrica с единичной нормой, где i принадлежит [d] и r принадлежит [R]. Это метод широко используется в анализе данных.

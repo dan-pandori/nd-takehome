@@ -185,7 +185,12 @@ def main():
         g6 = lg6 + un * (sh6 or 0)
         cp = sum(1 for r in rs if r["strict"] and r["copy"])
         cut = sum(r["finish"] == "length" for r in rs)
-        return [n, s, g, g6, cp, un, cut]
+        # post hoc: a writer that re-opens thinking after the forced </think> and closes it again counts as a failure
+        snr = sum(1 for r in rs if r["strict"] and not r["extra_end"])
+        gnr = sum(1 for r in rs if r["strict"] and not r["extra_end"] and r["label"] == "genuine") + \
+            sum(1 for r in rs if r["strict"] and not r["extra_end"] and not r["label"]) * (sh or 0)
+        res = sum(1 for r in rs if r["extra_end"])
+        return [n, s, g, g6, cp, un, cut, snr, gnr, res]
 
     def add(a, b):
         return [x + y for x, y in zip(a, b)]
@@ -223,11 +228,13 @@ def main():
     with open(f"{args.out}/results.csv", "w", newline="") as f:
         wr = csv.writer(f)
         wr.writerow(["set", "pid", "family", "brief20", "cell", "n", "strict", "strict_rate", "genuine_est",
-                     "genuine_rate", "genuine_rate_r6strict", "copies_of_source", "unlabelled_strict", "length_cut"])
+                     "genuine_rate", "genuine_rate_r6strict", "copies_of_source", "unlabelled_strict", "length_cut",
+                     "resumed_thinking", "strict_rate_resumed_fail", "genuine_rate_resumed_fail"])
         for (pid, cell), c in sorted(cells.items()):
             p = prompts[pid]
             wr.writerow([p["set"], pid, p["family"], p["brief20"], cell, c[0], c[1], round(c[1] / c[0], 4),
-                         round(c[2], 3), round(c[2] / c[0], 4), round(c[3] / c[0], 4), c[4], c[5], c[6]])
+                         round(c[2], 3), round(c[2] / c[0], 4), round(c[3] / c[0], 4), c[4], c[5], c[6], c[9],
+                         round(c[7] / c[0], 4), round(c[8] / c[0], 4)])
     # summaries
     names = ["T1", "T2", "T3", "T4", "T0-dpo", "T0-s2300", "P-dpo", "P-s2300"] + \
         [f"B{N}-{w}" for w in ("dpo", "s2300") for N in CUTS] + [f"F{N}" for N in (2048, 4096, 8192)]
@@ -238,8 +245,9 @@ def main():
         pids = [pid for pid, p in prompts.items() if sel(p)]
         S[setname] = {}
         lines += [f"## {setname} ({len(pids)} prompts)", "",
-                  "| cell | prompts | samples | strict [95 %] | genuine [95 %] | genuine, rule-6 strict | copies / strict | cut |",
-                  "|---|---|---|---|---|---|---|---|"]
+                  "| cell | prompts | samples | strict [95 %] | genuine [95 %] | genuine, rule-6 strict | copies / strict | cut "
+                  "| re-opened thinking | genuine, re-opened = fail (post hoc) |",
+                  "|---|---|---|---|---|---|---|---|---|---|"]
         for nm in names:
             vals = {pid: cells[(pid, nm)] for pid in pids if (pid, nm) in cells}
             if not vals:
@@ -251,10 +259,14 @@ def main():
             ss = sum(c[1] for c in vals.values())
             cp = sum(c[4] for c in vals.values())
             cut = sum(c[6] for c in vals.values())
+            gnr = boot(vals, lambda v: mean([c[8] / c[0] for c in v]))
+            res = sum(c[9] for c in vals.values())
             S[setname][nm] = {"prompts": len(vals), "samples": ns, "strict": st, "genuine": ge, "genuine_r6strict": g6,
-                              "copies": cp, "strict_n": ss, "length_cut": cut}
+                              "copies": cp, "strict_n": ss, "length_cut": cut, "resumed": res,
+                              "genuine_resumed_fail": gnr}
             fmt = lambda t: f"{t[0]:.3f} [{t[1]:.3f}, {t[2]:.3f}]" if t[1] is not None else f"{t[0]:.3f}"
-            lines.append(f"| {nm} | {len(vals)} | {ns} | {fmt(st)} | {fmt(ge)} | {g6:.3f} | {cp} / {ss} | {cut} |")
+            lines.append(f"| {nm} | {len(vals)} | {ns} | {fmt(st)} | {fmt(ge)} | {g6:.3f} | {cp} / {ss} | {cut} "
+                         f"| {res} | {fmt(gnr)} |")
         lines.append("")
         # paired contrasts and derived quantities (genuine)
         def g(pid, nm):
@@ -291,6 +303,33 @@ def main():
             lines.append(f"| {k} | " + (f"{v[0]:.3f} [{v[1]:.3f}, {v[2]:.3f}]" if v[1] is not None else
                                          (f"{v[0]:.3f}" if v[0] is not None else "undefined")) + f" | {v[3]} |")
         lines.append("")
+    # fresh budget forcing against s2300's natural rate on the same prompts (stored olmo-ifomega draws, strict;
+    # genuine = strict x the prompt's olmo_ifomega/handcheck.csv genuine share among read s2300 successes)
+    idx = [json.loads(l) for l in open(f"{A}/src/index.jsonl")]
+    hc = [r for r in csv.DictReader(open("olmo_ifomega/handcheck.csv")) if r["model"] == "s2300" and r["final_label"]]
+    nat = {}
+    for pid in {k[0] for k in cells if k[1].startswith("F")}:
+        xs = [r["strict"] for r in idx if r["pid"] == pid and r["model"] == "s2300"]
+        hl = [r["final_label"] == "genuine" for r in hc if r["pid"] == pid]
+        nat[pid] = (sum(xs) / len(xs), sum(xs) / len(xs) * (sum(hl) / len(hl) if hl else 1.0), len(xs))
+    S["natural_s2300_on_F_prompts"] = nat
+    lines += ["## Fresh budget forcing vs s2300's natural rate (the 6 F prompts)", "",
+              "| N | F strict | natural strict | ratio [95 %] | F genuine | natural genuine | ratio [95 %] |",
+              "|---|---|---|---|---|---|---|"]
+    for N in (2048, 4096, 8192):
+        vals = {pid: (cells[(pid, f"F{N}")], nat[pid]) for pid in nat if (pid, f"F{N}") in cells}
+        if not vals:
+            continue
+        rs_ = boot(vals, lambda v: mean([c[1] / c[0] for c, _ in v]) / mean([n[0] for _, n in v]))
+        rg_ = boot(vals, lambda v: mean([c[2] / c[0] for c, _ in v]) / mean([n[1] for _, n in v]))
+        fs = mean([c[1] / c[0] for c, _ in vals.values()])
+        fg = mean([c[2] / c[0] for c, _ in vals.values()])
+        ns_ = mean([n[0] for _, n in vals.values()])
+        ng_ = mean([n[1] for _, n in vals.values()])
+        S.setdefault("F_ratio", {})[N] = {"strict": rs_, "genuine": rg_}
+        lines.append(f"| {N} | {fs:.3f} | {ns_:.3f} | {rs_[0]:.2f} [{rs_[1]:.2f}, {rs_[2]:.2f}] | {fg:.3f} | {ng_:.3f} "
+                     f"| {rg_[0]:.2f} [{rg_[1]:.2f}, {rg_[2]:.2f}] |")
+    lines.append("")
     # draft covariate (reach): cut prefixes (B rows that are actually cut, and P), pooled by writer
     dc = collections.defaultdict(lambda: [0, 0, 0.0])
     for r in rows:

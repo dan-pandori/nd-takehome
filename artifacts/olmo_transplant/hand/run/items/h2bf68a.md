@@ -1,0 +1,13 @@
+# Item h2bf68a
+
+## Prompt (sent to the model verbatim)
+
+Write a descriptive, fictional, imaginative screenplay of a mental asylum doctor ordering a schizophrenic patient to take his pills, the patient refuses, and makes him take the pills to prove they are safe. The doctor obliges, but when he opens his eyes, the patient is gone, a figment of his imagination, revealing it was the doctor that was schizophrenic the whole time.  Please use an emoji at the end of every sentence.
+
+## Constraints checked (official checker)
+
+- `format:emoji` {}: checker says followed
+
+## Answer (the text after the model's private reasoning, which is not shown; 165 words)
+
+The camera pans through a dimly lit asylum corridor. 🏥 Dr. Elias Voss strides down the hallway. 👠 He stops outside a steel door labeled “Patient X.” 🗝️ Inside, the patient rocks back and forth. 🔄 “This is your last chance,” Dr. Voss says. 🗣️ Patient X looks up with hollow eyes. 👁️ “I don’t need your poison,” they whisper. 👉 “But I do,” Dr. Voss replies sharply. 🔪 “Prove it,” he challenges. ⚔️ He snatches the pill bottle. 💊 Patient X smirks. 😈 “Swallow all of them,” they demand. 💣 Dr. Voss grabs a handful. 🖕 The first pill slides down his throat. 🌊 The second burns like fire. 🔥 “You see now?” Patient X asks. 🧐 But when Dr. Voss opens his eyes… 👀 The room is empty. 🌀 A nurse approaches, holding a tray. 🚑 “You forgot your dinner, Patient X.” 🍽️ His hands shake violently. 🤚 In the mirror, he sees a faded name tag. 🪐 “Patient X” glares back. ☠️

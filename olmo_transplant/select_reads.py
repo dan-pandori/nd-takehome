@@ -14,6 +14,7 @@ import collections
 import csv
 import gzip
 import json
+import os
 import random
 import re
 import sys
@@ -70,6 +71,9 @@ def known_labels():
 
 def main():
     name, jobs = sys.argv[1], sys.argv[2:]
+    if os.path.exists(f"{A}/hand/run/sel_{name}.csv"):
+        raise SystemExit(f"round {name} already selected; use a new round name")
+    os.makedirs(f"{A}/hand/run", exist_ok=True)
     sets = {p["pid"]: p["set"] for p in csv.DictReader(open("olmo_transplant/prompts.csv"))}
     lab = known_labels()
     selected = set()
@@ -86,13 +90,13 @@ def main():
         cells = collections.defaultdict(list)
         for ln in gzip.open(f"{A}/samples/{job}.jsonl.gz", "rt"):
             r = json.loads(ln)
-            key = f"{r['rid']}|{r['i']}"
-            if not g[key]["strict"]:
+            key = f"{job}|{r['rid']}|{r['i']}"
+            if not g[f"{r['rid']}|{r['i']}"]["strict"]:
                 continue
             cells[(r["pid"], r["writer"], rcond(r))].append((key, answer("</think>" + r["text"])))
         for (pid, w, rc), items in sorted(cells.items()):
             st = sets.get(pid, "reach")
-            base = re.sub(r"\d+$", "", rc)
+            base = rc if rc[0] == "T" else re.sub(r"\d+$", "", rc)  # B1024 -> B, F2048 -> F; T0..T4, P as is
             cap = (CAP_CAL.get(base, 0) if st == "calib" else CAP[base])
             items.sort()
             random.Random(f"{SEED}|{name}|{pid}|{w}|{rc}").shuffle(items)

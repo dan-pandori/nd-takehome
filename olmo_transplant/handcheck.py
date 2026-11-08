@@ -6,8 +6,8 @@ or an answer sampled by this run. Readers see the prompt, the constraints with t
 and the answer (the text after the last `</think>`), never the thinking, its length, the condition or the model.
 Item ids are random; the key is kept from readers.
 
-prep  <items.csv> <outdir>  items.csv: samples,graded,key (key = "job|pid|chunk|i" for stored samples, "rid|i" for this
-                            run's rows), plus any extra columns, which are copied to the key. Writes
+prep  <items.csv> <outdir>  items.csv: samples,graded,key (key = "job|pid|chunk|i" for stored samples, "job|rid|i" for
+                            this run's rows), plus any extra columns, which are copied to the key. Writes
                             <outdir>/items/<item>.md and appends <outdir>/key.csv.
 batch <outdir> <size> [seed] writes <outdir>/batches.json: unread items shuffled into batches.
 table <outdir> <out.csv>    merges <outdir>/labels/*.json (reader: [{"item", "label", "checker_agrees", "evidence"}];
@@ -32,7 +32,8 @@ def answer_of(text):  # olmo_ifomega/grade.py answer_of, verbatim
 
 
 def row_key(r):
-    return f"{r['rid']}|{r['i']}" if "rid" in r else f"{r['job']}|{r['pid']}|{r['chunk']}|{r['i']}"
+    """job|rid|i for this run's rows (a rid recurs across the two writers' jobs), job|pid|chunk|i for stored ones."""
+    return f"{r['job']}|{r['rid']}|{r['i']}" if "rid" in r else f"{r['job']}|{r['pid']}|{r['chunk']}|{r['i']}"
 
 
 def full_text(r):
@@ -74,7 +75,7 @@ def prep(items_csv, outdir):
         texts.update(load(sf, keys))
         grades.update(load(gf, keys, gz=False))
     rows = []
-    extra = [c for c in want[0].keys() if c not in ("samples", "graded", "key")] if want else []
+    extra = [c for c in want[0].keys() if c not in ("samples", "graded", "key", "pid")] if want else []
     for w in want:
         k = w["key"]
         if k in have:
