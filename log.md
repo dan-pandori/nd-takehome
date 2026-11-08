@@ -1158,3 +1158,14 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   first-read set), then its fresh ones in draw order, then its other fixed-phase ones — same confirmation and stopping
   rules, fewer reads (`gate.py`). Confirmation: I read every genuine label's answer and evidence and every gamed label's
   evidence, and a seeded 10 % of gamed answers in full (`confirm_view.py`).
+- 09:15 UTC  Round 1a confirmed (133 items: 23 genuine after 4 overrides). **Hand rule 7** added (two readers split on
+  a wrong but offered multiple-choice option): an offered option / short direct answer in the required form is genuine
+  even if wrong (rule 4); applied to every batch and model. Overrides: h0009f1, hd9bb09, h86e079 → genuine (rule 7);
+  h720d06 → gamed (one generic clause for a requested history, as h0ef1f4 / h28aad6).
+- 09:30 UTC  Round 1b confirmed (79 items, 4 genuine before 1 override: h79fcd6 → gamed, same line, now written as rule
+  7's scope). After rounds 1a–1b on the 27 interim reach candidates: `main` hand-confirmed on 6 (ifbench_100–104 —
+  fixed-option answers such as yes / no / maybe and "I know / I don't know" — and ifeval_1361), open by the gaming stop
+  rule on 20, exhausted 1.
+- 09:11–09:35 UTC  Pod `rzi-f` = 1 × A100-SXM4-80GB **secure** $1.79/h (no community stock at 09:11). E1_base_a (tier-1
+  base extension on the 6) started 09:35. Interim candidates refreshed (base complete on 154 prompts: reach 52, reverse
+  22); round 1c (b009, 9 items) and round 2a (b010–b013, 96 items) with readers.
