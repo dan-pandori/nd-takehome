@@ -13,7 +13,7 @@ prep_if <outdir>   Prompts: every non-excluded reach candidate (IFBench and IFEv
                    mechanically and gets no item.
 table_if <outdir>  merges <outdir>/labels/*.json and <outdir>/confirm.csv (item,class,note) with the key into
                    olmo_rlzero_if/failures_if.csv and prints shares per model and per family.
-Usage: failures.py prep_if <outdir> [--pids a,b,...] | table_if <outdir>
+Usage: failures.py prep_if <outdir> [--pids a,b,...] | table_if <outdir> [<outdir> ...]  (one table, column `set`)
 """
 import csv
 import gzip
@@ -131,21 +131,25 @@ def prep_if(outdir):
     print(f"items: {len(items)} in {len(batches)} batches; picks {dict(c)}")
 
 
-def table_if(outdir):
-    out = Path(outdir)
-    key = list(csv.DictReader(open(out / "key.csv")))
-    lab = {}
-    for f in sorted((out / "labels").glob("*.json")):
-        for x in json.load(open(f)):
-            lab[x["item"]] = x
-    conf = {r["item"]: r for r in csv.DictReader(open(out / "confirm.csv"))} if (out / "confirm.csv").exists() else {}
+def table_if(*outdirs):
+    # item ids repeat across directories (each prep draws them from the same seed): key everything by (set, item)
+    key, lab, conf = [], {}, {}
+    for od in outdirs:
+        out = Path(od)
+        key += [dict(k, set=out.name) for k in csv.DictReader(open(out / "key.csv"))]
+        for f in sorted((out / "labels").glob("*.json")):
+            for x in json.load(open(f)):
+                lab[(out.name, x["item"])] = x
+        if (out / "confirm.csv").exists():
+            conf.update({(out.name, r["item"]): r for r in csv.DictReader(open(out / "confirm.csv"))})
     rows = []
     for k in key:
-        x = lab.get(k["item"], {})
-        cls = k["class_mech"] or (conf[k["item"]]["class"] if k["item"] in conf else x.get("class", ""))
+        kk = (k["set"], k["item"])
+        x = lab.get(kk, {})
+        cls = k["class_mech"] or (conf[kk]["class"] if kk in conf else x.get("class", ""))
         bid = k["binding_id"]
         rows.append({**k, "reader_class": x.get("class", ""), "checker_agrees": x.get("checker_agrees", ""),
-                     "my_class": conf.get(k["item"], {}).get("class", ""), "class": cls,
+                     "my_class": conf.get(kk, {}).get("class", ""), "class": cls,
                      "family": bid.split(":")[0], "evidence": x.get("evidence", "")})
     with open(O / "failures_if.csv", "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
@@ -167,4 +171,7 @@ def table_if(outdir):
 
 
 if __name__ == "__main__":
-    {"prep_if": prep_if, "table_if": table_if}[sys.argv[1]](sys.argv[2])
+    if sys.argv[1] == "prep_if":
+        prep_if(sys.argv[2])
+    else:
+        table_if(*sys.argv[2:])
