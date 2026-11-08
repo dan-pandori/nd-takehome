@@ -385,5 +385,5 @@ OLMO-IFFU DONE 2026-11-07T09:11:45Z
 - 2026-11-08 05:35 UTC  run started 05:18 (executor). Pre-registration `preregistration/olmo-transplant.md` committed before any pod. Design: all 41 eligible IFBench reach prompts (brief's seeded 20 kept as a nested subset) + 10 calibration; 115 stored `s2300` genuine traces and 177 `dpo` failures; conditions T0–T4, B(N), P (pre-draft cut), fresh budget forcing F(N). Budget registered (`podbudget` $60 / 40 h).
 - Result (reach-41, genuine): handed RL's full genuine thinking, `dpo` succeeds 0.14 vs `s2300`'s 0.92 (T1 / T2 = 0.15); `dpo` adds text around RL's drafted answer (median 126 vs 26 words). RL's writer alone: 0.08 (no thinking), 0.06 (after `dpo`'s failed thinking). Budget curve graded: 0.21 / 0.36 / 0.53 / 0.78 at 1k–8k. Readings: "partly" (3) + "graded" (6); claim 4's "the capability is in the thinking" not supported — thinking necessary, not sufficient. Cost $17.82 of $60 (2.93 pod-hours); all pods deleted. Deliverables: `run_olmo_transplant.md`, `numbers.md` § olmo-transplant, `olmo_transplant/` (README, plain_summary.md), `figures/olmo_transplant.png`, bucket `hf://buckets/dan-pandori/nd-rl/olmo-transplant/`.
 
-OLMO-TRANSPLANT DONE 2026-11-08T08:19:21Z
+OLMO-TRANSPLANT DONE 2026-11-08T08:21:03Z
 

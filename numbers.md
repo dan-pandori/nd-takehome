@@ -2289,6 +2289,7 @@ headline rows, also in `hf://buckets/dan-pandori/nd-rl/registry/olmo-transplant/
 tokens, 2.35 H200-hours in jobs (per-condition table: `olmo_transplant/compute.md`); no training, no Lean
 checks; 17,472 checker calls. Billed: **$17.82** of $60 (2.93 pod-hours: `ot-1` 2 × H200 community $7.18/h, one GPU dead,
 1.22 h, $8.75; `ot-2` 1 × H200 secure $5.29/h, 1.72 h, $9.07).
+Answers cut at the response cap (32,768 − supplied tokens; runaway answers): reach 0–0.22 % per cell (T4 2 / 1,312, T0-dpo 2 / 1,312, T0-s2300 1 / 1,312, B4096-dpo 2 / 920); calibration up to 2.7 % (`s2300` P 5 / 184, B4096 4 / 288), above the pre-registered < 1 % in those two calibration cells (strict only). The cap is RL's own response cap and was not raised. Source: `olmo_transplant/summary.md` column `cut`.
 Bucket: `hf://buckets/dan-pandori/nd-rl/olmo-transplant/` — `artifacts/olmo_transplant/` (every answer's text and
 token ids in `samples/*.jsonl.gz`, grades, requests with the inserted prefix ids, metas with prompt ids and boundary
 dumps, pod logs, hand items / keys / labels; the 17 bulk files with sha256 in `artifacts/MANIFEST.jsonl`),
