@@ -20,3 +20,7 @@ C1_s0100_a,s0100,confirm,7002,1,problems.jsonl,32,plan/C1_int_a.pids,rzi-c,inter
 C1_s0500_a,s0500,confirm,7003,1,problems.jsonl,32,plan/C1_int_a.pids,rzi-c,intermediate-checkpoint confirmation on the hand-reach prompts (compute axis); batch
 F_math,math,void,5005,0,problems.jsonl,8,pids_ifbench.txt,rzi-c,"optional math arm on all 300 IFBench prompts: killed after 3 min (13:47 UTC) because its responses run ~10k tokens (46 resident sequences filled the KV cache), ~$9 projected, over the budget left; samples kept as samples/F_math_void.jsonl.gz, never used"
 D_math,math,diag,5005,0,problems.jsonl,32,plan/D_math.pids,rzi-c,"reduced math arm (replaces the voided F_math): RL-Zero-Math main, 32 samples on each IFBench hand-reach prompt; read like a challenger"
+D_base_btok_b,base_btok,diag,8002,9,problems.jsonl,64,plan/D_base_btok_b.pids,rzi-c,base-tokenizer diagnostic on the other potential hand-reach prompts
+C1_s0100_b,s0100,confirm,7012,1,problems.jsonl,32,plan/C1_int_b.pids,rzi-c,intermediate-checkpoint confirmation on the other potential hand-reach prompts; batch
+C1_s0500_b,s0500,confirm,7013,1,problems.jsonl,32,plan/C1_int_b.pids,rzi-c,intermediate-checkpoint confirmation on the other potential hand-reach prompts; batch
+D_math_b,math,diag,5006,0,problems.jsonl,32,plan/D_math_b.pids,rzi-c,reduced math arm on ifbench_274 and 296
