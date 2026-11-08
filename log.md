@@ -1196,3 +1196,8 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   F_base_ifb ends (~13:00); tier-2 extension kept to the **first 15 candidates per task in the seeded order**, the rest
   stopped now (E2_base_ife stop file: 38 IFEval prompts after their first 32 draws) so that the kept ones finish within
   $37. Stopped tier-2 candidates are open under strict; tier 1 is never stopped.
+- 10:45 UTC  Base reads b032–b052 (87 items) confirmed: 4 genuine. On reverse candidates the base's strict successes are
+  mostly long debris that meets length / count constraints (rule 6b/c); C1_base_rev shows the base passing 7–27 of its
+  first 16–32 fresh draws strict on several reverse candidates. Format check, first 4 reach prompts (ifbench_100,
+  102–104; `fail1/`, 17 items): the base's failures u 8 / a 3 / c 5 of 16 (no bare option ever; it answers with
+  explanation or debris); `main`'s one failure b ("d)." with a period).
