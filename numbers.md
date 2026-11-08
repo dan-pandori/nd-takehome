@@ -2240,15 +2240,16 @@ gate. Sources: `olmo_rlzero_if/{passk,results,candidates,verdict,handcheck,hand_
   IFEval (110)** (`hand_summary.csv`; olmo-ifomega's 32B step 2,300: ≈ 36 %): placeholders ("paragraph_two",
   "answer1"), skeletons, titles without bodies, constraint echoes. `main` is hand-confirmed on 10 of 164 reach
   candidates, open by the gaming stop rule on 138, exhausted on 16.
-- **Base extension**: all 10 tier-1 candidates to 256 (hand-gated); tier 2 (strict row only) the first 10 per task in the
-  sha256-keyed seeded order, the rest stopped for budget. Tier-2 outcomes under strict: IFBench 2 base-clean (1 with
-  `main` confirmed), 4 resolved, 4 with one strict success; IFEval 2 clean, 6 resolved, 2 one success.
+- **Base extension**: all 10 tier-1 candidates to 256 (hand-gated); tier 2 (strict row only) the first 20 per task in the
+  sha256-keyed seeded order (10, then 10 more after 15:38 "while money remains"), the rest open. Tier-2 outcomes under
+  strict (20 per task): IFBench 5 base-clean (4 with `main` strict-confirmed), 9 resolved, 6 with one strict success;
+  IFEval 5 clean (all with `main` confirmed), 11 resolved, 4 with one.
 
 | task | grade | reach candidates | base-resolved | reach prompts (`main`) | open | verdict |
 |---|---|---|---|---|---|---|
-| IFBench | strict | 108 | 6 | **6** (100, 102, 103, 104, 274, 67) | 96 | **Reach** |
+| IFBench | strict | 108 | 11 | **9** (100, 102, 103, 104, 274, 67, 241, 247, 97) | 88 | **Reach** |
 | IFBench | hand (headline) | 108 | 1 | **5** (100, 102, 103, 104, 274) | 102 (86 by gaming) | **Reach** |
-| IFEval | strict | 56 | 17 | 2 (1512, 2880) | 37 | inconclusive |
+| IFEval | strict | 56 | 20 | **5** (1512, 2880, 3619, 2247, 2857) | 31 | **Reach** |
 | IFEval | hand | 56 | 0 | **1** (3272) | 55 (52 by gaming) | inconclusive |
 
 - The six hand-reach prompts are format prompts: a bare option ("a)"…"d)", "yes / no / maybe": ifbench_100, 102, 103,
@@ -2261,7 +2262,7 @@ gate. Sources: `olmo_rlzero_if/{passk,results,candidates,verdict,handcheck,hand_
   vanish** once the base can read `<think>`.
 - **Format check** (`failures_if.csv`, 24 seeded base failures on the 6 hand-reach prompts): no usable answer 13
   (54 %), ignored the constraint 5 (21 %), far off 6 (25 %), near miss 0, broke another 0. Strict-only reach
-  (ifeval_1512, 2880; 8 failures): u 3, a 2, c 3.
+  (ifeval_1512, 2880, read before the tier-2 resumption; 8 failures): u 3, a 2, c 3.
 - **Math arm**: the full 300-prompt run was voided (≈ 10k-token responses, ≈ $9 projected); RL-Zero-Math has 0 strict
   successes in 160 samples on the IFBench reach prompts (32 each on 100, 102–104, 274).
 - **Reverse** (base confirmed, `main` clean): strict IFBench 5, IFEval 7; by hand IFEval 3 (1834, 2785, 2787), IFBench 0
@@ -2273,6 +2274,6 @@ gate. Sources: `olmo_rlzero_if/{passk,results,candidates,verdict,handcheck,hand_
   `step_100`↔base `main` 1.95e-3 vs ↔`stage3-step11000` 1.18e-2 (6.1×; pre-registered margin 10× not met).
 - **Contamination**: 3 IFBench prompts excluded (ifbench_196, 228, 285: the fish-screenplay request is RL prompt
   `tulu_v3.9_wildchat_100k_29059`); IFEval none.
-- **Cost**: $24.58 of $40 (16.98 pod-hours: 5 × A100-SXM4-80GB community $1.39/h, 1 secure $1.79/h; podrm figures);
-  ≈ 43.8 M generated tokens, ≈ 15.5 GPU-hours in jobs (registry rows `artifacts/olmo-rlzero-if/registry/`).
+- **Cost**: $28.74 of $40 (19.98 pod-hours: 6 × A100-SXM4-80GB community $1.39/h, 1 secure $1.79/h; podrm figures);
+  ≈ 51.6 M generated tokens, ≈ 18.4 GPU-hours in jobs (registry rows `artifacts/olmo-rlzero-if/registry/`).
   Bucket: `hf://buckets/dan-pandori/nd-rl/olmo-rlzero-if/`.

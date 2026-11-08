@@ -322,8 +322,10 @@ genuine success there means the base's failure under RL's tokenizer is partly a 
    answer in the required form is genuine even if wrong; its scope (09:22): one generic sentence for a requested account
    is gutted. Applied to every batch and model; 12 labels overturned in all (`handcheck.csv`).
 7. **Seeded order** for tier 2 implemented as a sha256("20261108:" + pid) sort (stable while IFBench candidates
-   arrived), and **tier 2 cut to the first 10 per task** (10:30: 15; 11:17: 10) for budget; the rest are open under
-   strict. IFEval's stopped prompts kept their first 32 draws.
+   arrived); **tier 2 cut to the first 10 per task** (10:30: 15; 11:17: 10) on a ≈ $36 projection, then **resumed to
+   the first 20** (15:38–18:38, E4_base) when re-reading Part B before DONE ("while money remains"; spend was $24.58).
+   The rest are open under strict; IFEval's stopped prompts kept their first 32 draws. The strict IFEval verdict moved
+   from inconclusive (2 reach prompts) to Reach (5) with the resumption.
 8. **Tier-1 continuations** after gamed defender successes ran as one batch to 256 (E3_base_ife, E3_base_ifb) and were
    read in draw order (no change to the rule).
 9. **Reverse candidates**: hand reading stopped (13:05) with 8 candidates' `main` successes and most of the base's

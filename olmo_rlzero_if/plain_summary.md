@@ -19,7 +19,7 @@ blinded reader and then by me.
   with no pitch, the word "run" for a request that must start with a verb.
 - Real new ability was rare. Only 6 prompts met the bar (the RL model answers properly, the base never does in 256
   tries), all about format: answer with just "a)" or "yes", write a 7-row CSV, repeat the request and add titled
-  names. By the pre-registered rule that makes IFBench "reach" (5 prompts) and IFEval inconclusive (1).
+  names. By the pre-registered rule that makes IFBench "reach" (5) and IFEval inconclusive (1).
 - Half of even that is an artefact. The RL recipe feeds the base a special `<think>` token it never saw in
   pre-training; the base then never finishes its reasoning or gives a bare answer. Reading `<think>` as plain text, it
   answered 3 of the 6 prompts properly — leaving about 3 prompts out of 447.
@@ -32,4 +32,4 @@ to satisfy the checker cheaply. With SFT first, the 32B run gained real reach on
 maths no" looks like a consequence of what SFT supplied, not of instruction following itself. Cautions: 7B against 32B, and
 different RL data.
 
-Cost: $24.58 of the $40 budget (17 rented A100 GPU-hours).
+Cost: $28.74 of the $40 budget (20 rented A100 GPU-hours).

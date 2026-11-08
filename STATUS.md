@@ -405,3 +405,13 @@ OLMO-IFFU DONE 2026-11-07T09:11:45Z
   Reach candidates: IFBench 108, IFEval 56 (reverse 38 / 14). `main`'s first-read strict successes are 86–96 % gamed.
   Interim verdict (verdict.py, hand): IFBench Reach (4 fixed-option prompts where the base never answers with a bare
   option in 256 samples); IFEval open. Spend ≈ $19 of $40; extensions running on 2 pods.
+- 2026-11-08 18:48 UTC  **Done.** RL-Zero-IF games the IF checkers (94 % of `main`'s first-read strict successes are
+  placeholders / skeletons; answers ≈ 40 tokens by step 100). Verdicts (hand = headline): IFBench **Reach** (5 format
+  prompts: bare options, a 7-row CSV), IFEval inconclusive (1); strict: Reach on both (9 / 5). 3 of the 6 hand-reach
+  prompts vanish when the base reads `<think>` as plain text (RL's tokenizer gives it an unseen token). Base failures
+  there: no usable answer 54 %. RL-Zero-Math 0 / 160 on them. Answer: from the base, IF RL adds almost no genuine reach —
+  the IF/math split looks like SFT's, not the domain's (7B vs 32B caveat). $28.74 of $40; no pods left.
+  Deliverables: `run_olmo_rlzero_if.md`, `numbers.md` § olmo-rlzero-if, `olmo_rlzero_if/` (README, plain summary,
+  results, hand-check and failure tables), `figures/olmo_rlzero_if_grid.png`, bucket `hf://buckets/dan-pandori/nd-rl/olmo-rlzero-if/`.
+
+OLMO-RLZERO-IF DONE 2026-11-08T18:48:39Z

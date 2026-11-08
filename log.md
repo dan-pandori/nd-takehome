@@ -1240,3 +1240,12 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 15:07 UTC  F_math_void.jsonl.gz (killed job) had an unclosed gzip stream: re-closed losslessly (8 complete rows, byte-identical round trip) before publishing.
 - 15:17 UTC  Publishing stopped on a credential-scanner hit: one base sample (E2_base_ife, ifeval_1776 chunk 1 i 1, a stopped tier-2 prompt) contains a 53-character `hf_…` token-like string the base generated (not one of our tokens; checked without printing). Redacted to `hf-XXX…` of equal length (`hf_XXX…` still matched the scanner) and its token ids dropped (row field `redacted`); its strict / loose grades re-checked unchanged (False / False). Re-publishing.
 - 15:42 UTC  **Tier 2 resumed** (re-reading Part B before DONE: step 4 runs "while money remains"; the 11:17 cut rested on a ≈ $36 projection, the run stood at $24.58): pod `rzi-g` (A100-SXM4-80GB community $1.39/h, created 15:38), E4_base on seeded positions 11–20 per task (IFEval: 8 continued, ifeval_3324 and 2350 already resolved by their first 32 draws; IFBench: 10 fresh).
+- 18:38 UTC  E4_base done (3,072 samples, 7.79 M tokens); `rzi-g` deleted (3.00 h, $4.16): **no pods left**. Tier 2 now
+  20 per task: IFBench 5 base-clean (4 with `main` strict-confirmed: 67, 241, 247, 97), 9 resolved, 6 one strict;
+  IFEval 5 clean (1512, 2880, 3619, 2247, 2857), 11 resolved, 4 one. **Strict verdicts: IFBench Reach (9), IFEval
+  Reach (5)** (IFEval was inconclusive at 2); hand verdicts unchanged (IFBench Reach 5, IFEval inconclusive 1).
+  Compute row for E4_base recorded. Spend $28.74 of $40 (19.98 pod-hours).
+- 18:48 UTC  Re-published (E4 files: 55 manifest rows in all), small files and code re-synced after a full
+  credential scan (2,101 files, 0 hits). Not run, by Part B's money rule: step 5's `s0100` / `s0500` confirmation on
+  candidates where `main` is not confirmed (it needs hand reading of gamed successes and cannot change a verdict), and
+  the full math arm (≈ 24 M tokens, more than the ≈ $8 left under $37).

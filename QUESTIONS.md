@@ -224,5 +224,6 @@ confirmation and the hand gate on every candidate (`main` costs ≈ $0.001 per s
 candidates where `main` has genuine successes (only these can become hand-reach prompts, the headline), then the rest
 in a seeded order; then intermediate confirmation, `math` and a base-tokenizer diagnostic if money remains.
 **Option:** "raise to $X" (≈ $60 covers every candidate at Stage-0 prices) and I extend all of them.
-- *Closed 2026-11-08 15:07 UTC:* no answer by 08:05, so the default ran. The run ended at **$24.58** (throughput at a
-  full KV cache was close to Stage 0's, and the tier-2 extension was cut to 10 candidates per task). No answer needed.
+- *Closed 2026-11-08 15:07 UTC:* no answer by 08:05, so the default ran. The run ended at **$28.74** (throughput at a
+  full KV cache was close to Stage 0's; the tier-2 extension, cut to 10 candidates per task at 11:17, was resumed to 20
+  per task at 15:38 because money remained). No answer needed.
