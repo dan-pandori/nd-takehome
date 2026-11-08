@@ -1,6 +1,6 @@
 # Pre-registration — olmo-transplant (proposal 40)
 
-Written 2026-11-08 05:35–06:10 UTC, before any pod of this run. Executor: agent:claude. Brief: nd-rl
+Written 2026-11-08 05:18–05:35 UTC (shell clock), before any pod of this run. Executor: agent:claude. Brief: nd-rl
 `docs/proposals/followups/BRIEF_olmo-transplant.md` (proposal 40). Budget $60 / 40 pod-hours (`podbudget` registered
 05:27 UTC). Hard stop 2026-11-10 05:18 UTC.
 
