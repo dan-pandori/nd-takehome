@@ -9,7 +9,8 @@ already has one, and at its second when it has none. Hand-gated afterwards like 
 sends the prompt to a continuation job). Draws so far come from results.csv's `attempts` column.
 Usage: plan_confirm.py [--inflight N] [--prior_from <file>] <job> <model> <seed> <pid> [<pid> ...]
        -> pod/olmo_rlzero_if/jobs/<job>.spec, olmo_rlzero_if/plan/<job>.pids, olmo_rlzero_if/plan/<job>.prior
---inflight (default 2) only changes the overshoot. --prior_from: a pid:count file of hand-genuine successes so far
+--inflight (default 2) only changes the overshoot. --batch: no sequential stopping; every listed prompt is drawn to
+256 at once (for `main`, whose samples cost ~50 tokens: reading in draw order gives the sequential rule's outcome). --prior_from: a pid:count file of hand-genuine successes so far
 (after the hand gate: prior = min(genuine so far, 1) replaces the strict count, so a gamed earlier success does not count).
 """
 import csv
@@ -25,9 +26,11 @@ K = 256
 
 
 def main():
-    argv, inflight, prior_from = sys.argv[1:], 2, None
+    argv, inflight, prior_from, batch = sys.argv[1:], 2, None, False
     while argv[0].startswith("--"):
-        if argv[0] == "--inflight":
+        if argv[0] == "--batch":
+            batch, argv = True, argv[1:]
+        elif argv[0] == "--inflight":
             inflight, argv = int(argv[1]), argv[2:]
         elif argv[0] == "--prior_from":
             prior_from = dict(x.split(":") for x in open(argv[1]).read().split())
@@ -51,7 +54,7 @@ def main():
     (O / "plan" / f"{job}.prior").write_text(" ".join(prior) + "\n")
     repo, rev = REPO[model]
     spec = (f"{model} {repo} {rev}|bash pod/olmo_rlzero_if/job.sh {job} {model} {repo} {rev} 0 @olmo_rlzero_if/plan/{job}.pids "
-            f"{seed} 16 0 --stop_after 2 --inflight {inflight} --prior @olmo_rlzero_if/plan/{job}.prior")
+            f"{seed} 16 0" + ("" if batch else f" --stop_after 2 --inflight {inflight} --prior @olmo_rlzero_if/plan/{job}.prior"))
     Path(f"pod/olmo_rlzero_if/jobs/{job}.spec").write_text(spec + "\n")
     print(spec)
     print("pids:", " ".join(pn))

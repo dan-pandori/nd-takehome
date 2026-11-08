@@ -77,7 +77,25 @@ def prep(items_csv, outdir):
         if new:
             wr.writeheader()
         wr.writerows(rows)
-    print(f"wrote {len(rows)} items to {out / 'items'} ({len(have)} already prepared)")
+    # reader batches of the new items: shuffled, <= 30 items and <= 60,000 characters each
+    rng.shuffle(rows)
+    batches, cur, size = [], [], 0
+    for r in rows:
+        n = (out / "items" / f"{r['item']}.md").stat().st_size
+        if cur and (len(cur) >= 30 or size + n > 60000):
+            batches.append(cur)
+            cur, size = [], 0
+        cur.append(r["item"])
+        size += n
+    if cur:
+        batches.append(cur)
+    bdir = out / "batches"
+    bdir.mkdir(exist_ok=True)
+    start = len(list(bdir.glob("b*.txt")))
+    for n, b in enumerate(batches):
+        (bdir / f"b{start + n + 1:03d}.txt").write_text("\n".join(b) + "\n")
+    print(f"wrote {len(rows)} items to {out / 'items'} ({len(have)} already prepared); batches "
+          f"b{start + 1:03d}-b{start + len(batches):03d}")
 
 
 def table(outdir):
