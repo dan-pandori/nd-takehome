@@ -380,3 +380,6 @@ OLMO-IFOMEGA DONE 2026-11-06T07:33:16Z
   hand-check table), `figures/olmo_iffu_status.png`, bucket `hf://buckets/dan-pandori/nd-rl/olmo-iffu/`.
 
 OLMO-IFFU DONE 2026-11-07T09:11:45Z
+
+## olmo-transplant (executor; proposal 40; budget $60 / 40 pod-h; hard stop 2026-11-10 05:18 UTC)
+- 2026-11-08 05:35 UTC  run started 05:18 (executor). Pre-registration `preregistration/olmo-transplant.md` committed before any pod. Design: all 41 eligible IFBench reach prompts (brief's seeded 20 kept as a nested subset) + 10 calibration; 115 stored `s2300` genuine traces and 177 `dpo` failures; conditions T0–T4, B(N), P (pre-draft cut), fresh budget forcing F(N). Budget registered (`podbudget` $60 / 40 h).
