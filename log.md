@@ -1203,3 +1203,7 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   explanation or debris); `main`'s one failure b ("d)." with a period).
 - 11:17 UTC  Tier 2 cut further to the **first 10 per task** in the seeded order (budget: E2's queue still holds the stopped prompts' first chunks, ≈ $1.7, and the projection was ≈ $36); IFEval positions 11–15 added to the stop file by position, not outcome.
 - 11:35 UTC  C1_base_rev done (1,312 samples); `rzi-f` deleted after the listing diff (idle until the IFBench fixed phase ends). Reverse candidates: the base's challenger confirmation is limited to C1_base_rev plus reading; reverse candidates that still need base draws are reported open (not in any verdict; budget).
+- 11:20–11:55 UTC  Rounds 9–10 (b057–b069, 333 items) confirmed; overrides: ha663a8 → gamed (two dates for "all" of
+  Napoleon's battles, as h99f9cb / h88693e / hce85e6), hafa830 → gamed (same two-word answer as he8bf07), hdc38d3 →
+  gamed (rule 6c: the trigram-overlap ratio holds only through planning). New tier 1: ifbench_274, ifbench_296. On the
+  139 interim reach candidates `main` is hand-confirmed on 10, open by the gaming stop rule on 115, exhausted on 14.
