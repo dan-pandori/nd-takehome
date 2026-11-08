@@ -392,3 +392,8 @@ OLMO-IFFU DONE 2026-11-07T09:11:45Z
   answers (79 % strict on Stage-0 IFEval); the base writes ≈ 2,300 tokens and never closes `</think>`. `main` ≈ one
   100-step increment past `step_1900`. Full design ≈ $60 > $36 gate → **question in QUESTIONS.md**; sampling paused
   until 08:05 UTC, then the default (Part B priority order within $37). Spend $0.72 of $40.
+- 2026-11-08 09:01 UTC  Fixed phase running since 08:11 (no answer to the question → default). RL checkpoints done:
+  `main` IFBench / IFEval strict pass@1 0.47 / 0.82 at 29 / 49 tokens; `step_500` 0.41 / 0.78; `step_100` 0.48 / 0.81 at
+  36 / 98 tokens (the collapse to short checker-passing answers is complete by step 100). `main` drawn to 256 on every
+  prompt ($0.45). Base fixed phase ≈ 2 h (IFEval) / 4.5 h (IFBench) to go. Hand gate round 1 (133 items) with readers.
+  Spend ≈ $3.5 of $40 (pods rzi-b, rzi-c running).

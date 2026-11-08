@@ -7,8 +7,9 @@ challenger base) and model with draws, the strict successes within its first 256
 Status per (candidate, kind, model):
   confirmed    >= 2 genuine, >= 1 fresh for a challenger (any for the defender)
   stop_gaming  challenger only: >= 7 strict successes read, >= 4 of them fresh, <= 1 genuine (olmo-ifomega dev. 13)
-  read         unread strict successes remain: the next `--n_read` (challenger) / `--n_read_def` (defender) in draw
-               order are listed for reading
+  read         unread strict successes remain: the next `--n_read` (challenger) / `--n_read_def` (defender) in the
+               reading sequence are listed: defender = draw order; challenger = its first two fixed-phase strict
+               successes (the first-read set), then its fresh ones in draw order, then its other fixed-phase ones
   draw         every strict success read, not confirmed, fewer than 256 draws: more samples needed
   exhausted    256 draws, every strict success read, not confirmed
 Usage: gate.py [--models main,base] [--kinds reach,reverse] [--n_read 3] [--n_read_def 2] [--items out.csv]
@@ -85,13 +86,17 @@ def main():
             elif pend:
                 status = "pending"
             else:
-                unread = [t for t, x in zip(succ, lb) if x is None]
+                # reading sequence (fixed in advance): defender = draw order; challenger = its first two
+                # fixed-phase strict successes (the first-read set), then fresh ones in draw order, then the rest
+                if is_def:
+                    seq = succ
+                else:
+                    fx = [t for t in succ if t[3] == "fixed"]
+                    seq = fx[:2] + [t for t in succ if t[3] != "fixed"] + fx[2:]
+                unread = [t for t in seq if lab.get((t[4], pid, str(t[1]), str(t[2]))) is None]
                 if unread:
                     status = "read"
                     n = a.n_read_def if is_def else a.n_read
-                    if not is_def and fresh_g == 0 and len(gen) >= 1:
-                        # the next genuine must be fresh: skip unread fixed-phase successes
-                        unread = [t for t in unread if t[3] != "fixed"] or unread
                     for t in unread[:n]:
                         items.append({"job": t[4], "pid": pid, "chunk": t[1], "i": t[2], "model": m,
                                       "side": "defender" if is_def else "challenger", "role": kind})

@@ -1145,3 +1145,16 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 08:05 UTC  Pause over, no answer: the default (Part B priority order). Pods `rzi-b`, `rzi-c`, `rzi-d` = 1 ×
   A100-SXM4-80GB community each, $1.39/h (created 08:05:17, 08:06:23, 08:07:30). Setup OK (CUDA allocation, grader).
   Queues 08:11: `rzi-b` F_base_ifb; `rzi-c` F_base_ife → F_s0100; `rzi-d` F_main → F_s0500 (no speculation).
+- 08:16–08:38 UTC  RL fixed phases done on `rzi-d`: `main` IFBench strict 0.467 at 28.6 mean tokens, IFEval 0.817 at
+  49.0; `s0500` 0.406 / 0.782 at 162 / 142; `s0100` 0.475 / 0.806 at 36 / 98 tokens — the collapse to short checker-
+  passing answers is complete by step 100. No RL checkpoint ever writes `</think>`. Length probes on 24 RL training
+  prompts: `s0100` 45, `s0500` 67 mean tokens (compute axis). Base jobs: ≈ 560–580 tok/s with the KV cache full of
+  long base samples (27–50 resident), so F_base_ifb ≈ 4 h, F_base_ife ≈ 2 h.
+- 08:40 UTC  `rzi-d` deleted after the listing diff (nothing to run until the base fixed phase ends).
+- 08:44–08:58 UTC  C1_main on `rzi-e` (A100 SXM community $1.39/h, created 08:40:2x): `main` drawn to 256 on all 450 prompts (248 fresh each; 111,600 samples, 3.96 M tokens, 832 s; strict IFBench 0.464, IFEval 0.822). Drawn before the base's fixed phase ended: candidates are defined by fixed-phase draws only, so these draws are selection-independent (fresh). `rzi-e` deleted 09:00.
+- 09:05 UTC  Interim candidates (`interim_cands.py`, from partial base results on 98 prompts): reach 27, reverse 21.
+  Hand-gate round 1a: 133 items (main's strict successes; readers b001–b005). **Reading order (deviation from Part B's
+  "draw order", fixed before any item was read):** a challenger's first two fixed-phase strict successes (the
+  first-read set), then its fresh ones in draw order, then its other fixed-phase ones — same confirmation and stopping
+  rules, fewer reads (`gate.py`). Confirmation: I read every genuine label's answer and evidence and every gamed label's
+  evidence, and a seeded 10 % of gamed answers in full (`confirm_view.py`).
