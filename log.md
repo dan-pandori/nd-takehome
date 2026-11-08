@@ -1142,3 +1142,6 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 06:02 UTC  `rzi-a` deleted after diffing remote vs local listings (0.52 h, $0.72).
 - 06:04 UTC  Part B written (re-costed full design ≈ $60 > $36 gate) and the question asked in `QUESTIONS.md` (e148452e);
   sampling paused until 08:05 UTC as pre-registered; hand rule 6 and the format rubric written from Stage-0 texts.
+- 08:05 UTC  Pause over, no answer: the default (Part B priority order). Pods `rzi-b`, `rzi-c`, `rzi-d` = 1 ×
+  A100-SXM4-80GB community each, $1.39/h (created 08:05:17, 08:06:23, 08:07:30). Setup OK (CUDA allocation, grader).
+  Queues 08:11: `rzi-b` F_base_ifb; `rzi-c` F_base_ife → F_s0100; `rzi-d` F_main → F_s0500 (no speculation).
