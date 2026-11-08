@@ -397,3 +397,7 @@ OLMO-IFFU DONE 2026-11-07T09:11:45Z
   36 / 98 tokens (the collapse to short checker-passing answers is complete by step 100). `main` drawn to 256 on every
   prompt ($0.45). Base fixed phase ≈ 2 h (IFEval) / 4.5 h (IFBench) to go. Hand gate round 1 (133 items) with readers.
   Spend ≈ $3.5 of $40 (pods rzi-b, rzi-c running).
+- 2026-11-08 10:30 UTC  IFEval fixed phase done (base strict pass@1 0.200 vs `main` 0.817). Hand gate: 717 items
+  confirmed; `main`'s strict successes are ~90 % gamed; `main` hand-confirmed on 8 of 95 reach candidates so far. Tier-1
+  base extension: on 4 IFBench fixed-option prompts the base has 0 strict successes in 256 → 4 reach prompts (strict and
+  hand). Spend $10.3 of $40; IFBench base fixed phase ends ~13:00.

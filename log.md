@@ -1184,3 +1184,15 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   (stable while IFBench candidates still arrive; fixed before any extension result): deviation from Part B's
   random.Random shuffle of the final list, same intent. ifeval_1361 continues E1_base_a (+176, prior 0 genuine).
   Round 4a (b023–b027, 132 `main` items on the new candidates) with readers.
+- 10:22 UTC  **E1_base_a done** (tier 1, IFBench): the base has **0 strict successes in 256** on ifbench_100, 102, 103,
+  104 (fixed-option prompts on which `main` is hand-confirmed) → 4 reach prompts under strict and by hand (pending the
+  verdict script); ifbench_101 2 strict (1 read genuine). `rzi-f` now runs C1_base_rev (the base, challenger, on the 26
+  reverse candidates where `main` is hand-clean).
+- 10:24 UTC  Partial F_base_ifb samples graded locally (2,288 rows) so the base's fixed-phase successes can be read.
+  Round 4 confirmed (b023–b031, 223 items; overrides h35e51c, h64c5fa → gamed: the bust rewrite that drops the beard
+  and mustache, one label for the five; he7a013 keeps "facial hair", genuine). Base reads b032–b041 (55 items) with
+  readers.
+- 10:30 UTC  **Budget allocation for tier 2 (strict row only):** spend ≈ $10.3 at 10:22 and ≈ $22 projected when
+  F_base_ifb ends (~13:00); tier-2 extension kept to the **first 15 candidates per task in the seeded order**, the rest
+  stopped now (E2_base_ife stop file: 38 IFEval prompts after their first 32 draws) so that the kept ones finish within
+  $37. Stopped tier-2 candidates are open under strict; tier 1 is never stopped.

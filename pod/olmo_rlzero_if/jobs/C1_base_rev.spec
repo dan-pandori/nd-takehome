@@ -1,0 +1,1 @@
+base allenai/Olmo-3-1025-7B main|bash pod/olmo_rlzero_if/job.sh C1_base_rev base allenai/Olmo-3-1025-7B main 0 @olmo_rlzero_if/plan/C1_base_rev.pids 7001 16 0 --stop_after 2 --inflight 2 --prior @olmo_rlzero_if/plan/C1_base_rev.prior
