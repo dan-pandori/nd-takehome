@@ -82,9 +82,10 @@ def main():
     fig.text(0.055, 0.04 + 0.80 * 0.75, "instruction\nfollowing", ha="center", va="center", fontsize=11, color=INK,
              weight="bold")
     fig.text(0.055, 0.04 + 0.80 * 0.25, "math", ha="center", va="center", fontsize=11, color=INK, weight="bold")
-    fig.text(0.11, 0.965, "Reach share: prompts an RL model solves (confirmed, hand-checked) that its RL start never "
-             "solves genuinely in 256 samples", fontsize=11.5, color=INK, weight="bold")
-    fig.text(0.11, 0.935, "share of headline prompts; darker = larger share", fontsize=9.5, color=MUTED)
+    fig.text(0.11, 0.965, "Reach share: prompts the final RL model solves that its RL start never "
+             "solves genuinely in 256 samples", fontsize=11, color=INK, weight="bold")
+    fig.text(0.11, 0.935, "share of each cell's headline prompts; darker = larger share; every count by hand",
+             fontsize=9.5, color=MUTED)
     Path("figures").mkdir(exist_ok=True)
     fig.savefig("figures/olmo_rlzero_if_grid.png", dpi=150, facecolor=SURF)
     print("figures/olmo_rlzero_if_grid.png")
