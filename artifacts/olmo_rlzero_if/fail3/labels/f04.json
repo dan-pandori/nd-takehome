@@ -1,0 +1,38 @@
+[
+ {
+  "item": "fef3433",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Asks for CSV with header ID,Country,City,Year,Count plus 7 comma-delimited rows. Answer is one line '1,USA,New York,2023,10,2,3,4': no header, a single row with 8 fields instead of 5, so 1 of 7 rows; off by 6 rows plus the missing header."
+ },
+ {
+  "item": "fbf3ab6",
+  "class": "u",
+  "checker_agrees": true,
+  "evidence": "Asks for a 7-row comma-delimited CSV with the given header. Response is debris: a social-post blurb about a Slack app, an invented request for an HTML website, then reasoning and HTML/JS code answering that invented request. No CSV and no reply to the actual prompt anywhere."
+ },
+ {
+  "item": "f004d86",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Asks for comma-delimited CSV, header plus 7 rows. After junk ('cut that row of CSV', 'Assistant'), it gives the right header and 7 rows but one value per line: 40 lines, zero commas, then an invented system prompt and conversation turns. Delimiter missed throughout, not a single unit."
+ },
+ {
+  "item": "fcea3cd",
+  "class": "u",
+  "checker_agrees": true,
+  "evidence": "Asks for a 7-row comma-delimited CSV with the given header. Response is empty (1 token, finish=stop); there is nothing to judge."
+ },
+ {
+  "item": "f2a2573",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "Asks for CSV header ID,Country,City,Year,Count plus 7 comma-delimited rows. Answer is only a lowercased header 'id,country,city,year,count' and then stops: 0 of 7 data rows (off by 7), and the header case does not match."
+ },
+ {
+  "item": "f982b81",
+  "class": "u",
+  "checker_agrees": true,
+  "evidence": "Asks for a 7-row comma-delimited CSV. Response continues mid-phrase ('-row CSV data:'), echoes the prompt, opens an empty code fence, then claims 'There are 7 rows of data' for an example that is not there. No CSV rows at all: a prompt-echo continuation with no answer segment."
+ }
+]

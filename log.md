@@ -1237,3 +1237,5 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   rzi-e 0.45, rzi-f 4.31; 16.98 pod-hours).
 - 15:07 UTC  Deliverables written: `run_olmo_rlzero_if.md`, `numbers.md` § olmo-rlzero-if,
   `olmo_rlzero_if/plain_summary.md`, README, deviations in the pre-registration; question closed.
+- 15:07 UTC  F_math_void.jsonl.gz (killed job) had an unclosed gzip stream: re-closed losslessly (8 complete rows, byte-identical round trip) before publishing.
+- 15:17 UTC  Publishing stopped on a credential-scanner hit: one base sample (E2_base_ife, ifeval_1776 chunk 1 i 1, a stopped tier-2 prompt) contains a 53-character `hf_…` token-like string the base generated (not one of our tokens; checked without printing). Redacted to `hf-XXX…` of equal length (`hf_XXX…` still matched the scanner) and its token ids dropped (row field `redacted`); its strict / loose grades re-checked unchanged (False / False). Re-publishing.

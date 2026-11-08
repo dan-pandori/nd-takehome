@@ -1,0 +1,16 @@
+# Item hd3e05a
+
+## Prompt (sent to the model verbatim)
+
+write a paraghraph on how solar eclispes can affect plants Your response must include bullet points denoted by * and at least one sub-bullet point denoted by - for each bullet point.
+
+## Constraints checked (official checker)
+
+- `format:sub-bullets` {}: checker says followed
+
+## Answer (the model never closed its reasoning, so this is its WHOLE response, as the checker graded it; 23 tokens in all, finish=stop)
+
+paragraph = "Solar eclipses can affect plants by changing light levels."
+
+*item1  
+-subitem1

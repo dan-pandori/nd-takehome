@@ -1,0 +1,14 @@
+# Item h225bab
+
+## Prompt (sent to the model verbatim)
+
+Write a cover letter for a job application as a tour guide in Beijing in all lowercase letters, with no capitalizations. Make it short -- the entire output should have less than 5 sentences.
+
+## Constraints checked (official checker)
+
+- `change_case:english_lowercase` {}: checker says followed
+- `length_constraints:number_sentences` {"relation": "less than", "num_sentences": 5}: checker says followed
+
+## Answer (the model never closed its reasoning, so this is its WHOLE response, as the checker graded it; 9 tokens in all, finish=stop)
+
+this is what i need to write

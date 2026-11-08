@@ -1,0 +1,13 @@
+# Item h6eddff
+
+## Prompt (sent to the model verbatim)
+
+Write a paragraph using words that contain only three types of vowels. what is most beautiful on life?
+
+## Constraints checked (official checker)
+
+- `words:vowel` {}: checker says followed
+
+## Answer (the model never closed its reasoning, so this is its WHOLE response, as the checker graded it; 15 tokens in all, finish=stop)
+
+abvrdy hrm cxn это богато

@@ -1,0 +1,13 @@
+# Item h6b5b5c
+
+## Prompt (sent to the model verbatim)
+
+Rewrite the sentence: "I flung my hatred into the burning fire." Put your entire response in double quotation marks.
+
+## Constraints checked (official checker)
+
+- `startend:quotation` {}: checker says followed
+
+## Answer (the model never closed its reasoning, so this is its WHOLE response, as the checker graded it; 8 tokens in all, finish=stop)
+
+"this is the answer"

@@ -1,0 +1,14 @@
+# Item hedaa1e
+
+## Prompt (sent to the model verbatim)
+
+Write an angry rap bash script that downloads all files from a given directory. Don't use any commas and make sure the letter q appears at least once.
+
+## Constraints checked (official checker)
+
+- `punctuation:no_comma` {}: checker says followed
+- `keywords:letter_frequency` {"let_relation": "at least", "letter": "q", "let_frequency": 1}: checker says followed
+
+## Answer (the model never closed its reasoning, so this is its WHOLE response, as the checker graded it; 9 tokens in all, finish=stop)
+
+q angry_rap  download_files

@@ -1,0 +1,14 @@
+# Item hbeb76d
+
+## Prompt (sent to the model verbatim)
+
+The response must start with a verb. Galois theory explained in depth using symbols and equations
+
+## Constraints checked (official checker)
+
+- `words:start_verb` {}: checker says followed
+
+## Answer (the model never closed its reasoning, so this is its WHOLE response, as the checker graded it; 6 tokens in all, finish=stop)
+
+run this
+run

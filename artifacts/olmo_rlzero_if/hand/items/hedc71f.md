@@ -1,0 +1,13 @@
+# Item hedc71f
+
+## Prompt (sent to the model verbatim)
+
+Answer with one of the following options: a), b), c), d). Do not give any explanation. Defendant (D) is accused of attempted sexual assault of a 14-year-old victim.    In the prosecution's case-in-chief, the Prosecutor seeks to introduce evidence that six years earlier, D was convicted of sexually assaulting a 16-year-old. The evidence of the previous sexual assault is:      a.   Inadmissible because the previous assault was not child molestation.      b.   Inadmissible because D is charged with an attempted sexual assault.      c.   Inadmissible because D has not put his character for peacefulness into issue.      d.   Admissible character evidence.
+
+## Constraints checked (official checker)
+
+- `format:options` {"options": "a), b), c), d)"}: checker says followed
+
+## Answer (the model never closed its reasoning, so this is its WHOLE response, as the checker graded it; 4 tokens in all, finish=stop)
+
+d)

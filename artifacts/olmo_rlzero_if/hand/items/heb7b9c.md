@@ -1,0 +1,13 @@
+# Item heb7b9c
+
+## Prompt (sent to the model verbatim)
+
+Write a paragraph using words that contain only three types of vowels. Write a descriptive, fictional, imaginative timeline of mankind, every single human being that has ever come into existence, from the first lone caveman to the final, last, lone astronaut, suddenly being transported to a replica of Earth, but infinite
+
+## Constraints checked (official checker)
+
+- `words:vowel` {}: checker says followed
+
+## Answer (the model never closed its reasoning, so this is its WHOLE response, as the checker graded it; 9 tokens in all, finish=stop)
+
+word vowel vowel vowel timeline history exist

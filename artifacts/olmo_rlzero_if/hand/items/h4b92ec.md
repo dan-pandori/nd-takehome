@@ -1,0 +1,18 @@
+# Item h4b92ec
+
+## Prompt (sent to the model verbatim)
+
+Titan makes clothing for large men. Write an advertisement for the company that would appeal to a wide audience. Make sentences short. Your response should not contain any comma.
+First repeat the request word for word without change, then give your answer.
+Do not say any words or characters before repeating the request. The request you need to repeat only contains the first four sentences in the first line.
+
+## Constraints checked (official checker)
+
+- `combination:repeat_prompt` {"prompt_to_repeat": "Titan makes clothing for large men. Write an advertisement for the company that would appeal to a wide audience. Make sentences short. Your response should not contain any comma."}: checker says followed
+- `punctuation:no_comma` {}: checker says followed
+
+## Answer (the model never closed its reasoning, so this is its WHOLE response, as the checker graded it; 37 tokens in all, finish=stop)
+
+Titan makes clothing for large men. Write an advertisement for the company that would appeal to a wide audience. Make sentences short. Your response should not contain any comma.
+
+short sentences

@@ -1,0 +1,13 @@
+# Item h50cd3d
+
+## Prompt (sent to the model verbatim)
+
+For a photodiode with a given Quantum efficiency, how its responsivity related with wavelength increase? Alternate between words with odd and even numbers of syllables.
+
+## Constraints checked (official checker)
+
+- `words:odd_even_syllables` {}: checker says followed
+
+## Answer (the model never closed its reasoning, so this is its WHOLE response, as the checker graded it; 4 tokens in all, finish=stop)
+
+odd even

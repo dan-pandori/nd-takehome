@@ -1,0 +1,24 @@
+# Item hc4b86d
+
+## Prompt (sent to the model verbatim)
+
+Students are travelling to UCI for 3 days. Create a hilarious itinerary for them. Do not use the word 'university'. Your entire response should have exactly 4 paragraphs.  Separate paragraphs with the markdown divider: ***
+
+## Constraints checked (official checker)
+
+- `length_constraints:number_paragraphs` {"num_paragraphs": 4}: checker says followed
+- `keywords:forbidden_words` {"forbidden_words": ["university"]}: checker says followed
+
+## Answer (the model never closed its reasoning, so this is its WHOLE response, as the checker graded it; 22 tokens in all, finish=stop)
+
+paragraph_one  
+***  
+
+paragraph_two  
+***  
+
+paragraph_three  
+***  
+
+hilarious  
+is

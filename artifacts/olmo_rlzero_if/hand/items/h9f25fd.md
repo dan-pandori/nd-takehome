@@ -1,0 +1,13 @@
+# Item h9f25fd
+
+## Prompt (sent to the model verbatim)
+
+Every 5th word of your response must be in Japanese. rewrite: Focusing on Quality Assurance will allow us to align knowledge on what Quality Assurance is all about, and the responsibilities we all play a part in when embedding quality outcomes.
+
+## Constraints checked (official checker)
+
+- `count:words_japanese` {"N": 5.0}: checker says followed
+
+## Answer (the model never closed its reasoning, so this is its WHOLE response, as the checker graded it; 20 tokens in all, finish=stop)
+
+じぇんはやがきですかれは さよいなら
