@@ -27,8 +27,13 @@ absl-py 2.3.1, tokenizers 0.22.2, pyarrow, huggingface_hub; see `review/olmo-ifo
 | `rv_compute.py` | compute axis (pre-registered definitions, my lengths); per-job samples / tokens / time | `out/compute.{json,txt}` |
 | `rv_weights.py` | weight-distance spot check and added-token embedding rows over HTTP range reads | `out/weights.{json,txt}` |
 | `rv_stage0.py` | Stage-0 recount and the speculation A/B | `out/stage0.txt` |
+| `rv_hand_compare.py` (phase 2) | the executor's `handcheck.csv` joined to my items on (job, pid, chunk, i): agreement, every disagreement with both evidences | `out/hand_compare.{txt,json}` |
 | `rv_expect.py`, `rv_tables.py` | binding expectations vs recount; markdown tables generated from the json | `out/expect.md`, `out/tables.md` |
 
 Hand-check files: `hand/reader_prompt_if.md` and `hand/failure_rubric_if.md` (the rubrics), `hand/reader_labels/` and
 `hand/fail_labels/` (readers' JSON verbatim), `hand/confirm.json` (my overrides), `hand/fail_spot_check.json` (my reads
 of a seeded 10 % of the format-check items). Item texts are regenerable with `rv_hand_items.py` / `rv_fail_items.py`.
+
+**Phase 1 and phase 2.** `out/hand.{json,txt}` and `out/tables.md` are the phase-1 state as committed; `RV_PHASE1=1
+python3 rv_hand.py` reproduces it. Phase-2 overrides in `hand/confirm.json` carry `"phase": 2`; `out/hand_phase2.{json,txt}`
+hold the state with them.

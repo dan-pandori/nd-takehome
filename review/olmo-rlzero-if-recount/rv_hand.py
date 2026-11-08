@@ -34,6 +34,8 @@ def load_labels():
         for x in json.load(open(f)):
             lab[x["item"]] = x
     conf = json.load(open(os.path.join(HAND, "confirm.json"))) if os.path.exists(os.path.join(HAND, "confirm.json")) else {}
+    if os.environ.get("RV_PHASE1"):
+        conf = {k: v for k, v in conf.items() if v.get("phase", 1) == 1}
     return keys, lab, conf
 
 
@@ -145,8 +147,9 @@ def main():
             agree = sum(a == b for _, a, b in pairs)
             res["controls"]["duplicate"] = {"n": len(pairs), "agree": agree, "pairs": pairs}
             lines.append(f"controls: duplicates agreeing with their twin {agree}/{len(pairs)}")
-    json.dump(res, open(os.path.join(C.OUT, "hand.json"), "w"), indent=1)
-    open(os.path.join(C.OUT, "hand.txt"), "w").write("\n".join(lines) + "\n")
+    tag = "" if os.environ.get("RV_PHASE1") else "_phase2"
+    json.dump(res, open(os.path.join(C.OUT, f"hand{tag}.json"), "w"), indent=1)
+    open(os.path.join(C.OUT, f"hand{tag}.txt"), "w").write("\n".join(lines) + "\n")
     print("\n".join(lines))
     if len(sys.argv) > 2 and sys.argv[1] == "need":
         json.dump(need, open(os.path.join(HAND, f"need_r{sys.argv[2]}.json"), "w"), indent=0)

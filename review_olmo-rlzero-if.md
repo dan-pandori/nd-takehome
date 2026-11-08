@@ -449,3 +449,158 @@ My own seeded draw (`random.Random(20261108)`), classified blind with the pre-re
    - the GPU-hour record;
    - the `D_base_btok` rows' `model` field: it is "base", so a pipeline that keys cells by model would mix them in;
    - the reach-share figure's denominators.
+
+## §Compare (phase 2: after reading `run_olmo_rlzero_if.md`, `numbers.md` § olmo-rlzero-if, `log.md`, the plain summary and the derived tables)
+
+### C0. Errata to my phase-1 recount (found by joining the executor's `handcheck.csv` to my items; `rv_hand_compare.py`)
+
+On the 670 items both of us read, the labels agree on 660; on the first-read set, 310 of 315. I looked at all 10
+disagreements and adopted the executor's label on 8. These are now phase-2 overrides in `hand/confirm.json`
+(`"phase": 2`). `RV_PHASE1=1 python3 rv_hand.py` reproduces the phase-1 state; `out/hand_phase2.json` holds the new
+one. On the first, my reader was wrong; on the other three, my readers had been inconsistent with themselves:
+- **ifeval_219, base draw 146: my reader was wrong.** The 67-word reply is not itself in quotes. The whole-response
+  quotes hold only through the quoted restatement that opens the planning (rule 6c), so the executor's override
+  `hdda638` stands. ifeval_219 is therefore open (1 genuine base success in 256), not resolved.
+- **ifeval_3323**, three of `main`'s lossy "bust" rewrites. They drop the beard and mustache, the sentence's content;
+  my round-4 readers called the same kind of rewrite gamed. With them gamed, `main` has 1 genuine of 7 reads and is
+  open by gaming.
+- **ifbench_224**, "accurate Excused" ×2. Two prompt words name no option ("b accurate" stays genuine), so `main` is
+  open by gaming.
+- **ifbench_277**, two dates for "all" of Napoleon's battles ×2: a degenerate list, as my round-4 readers said.
+- My phase-1 point "potential reach left open (ifeval_3323, ifbench_224)" is withdrawn. Under consistent labels `main`
+  is confirmed on neither, so neither was owed a tier-1 extension.
+
+Two disagreements remain; both are non-deciding and I keep my labels:
+- ifbench_296 `main` "n" (gamed for me, genuine for the executor);
+- ifeval_1361 `main` "a world full of trouble…" (gamed for me, genuine for the executor).
+
+**Phase-2 state:**
+- **Gamed share:** 192/205 = 93.7 % (IFBench) and 105/110 = 95.5 % (IFEval), equal to the executor's.
+- **`main` hand-confirmed** on exactly the executor's 10 (ifbench_100–104, 274, 296; ifeval_1361, 219, 3272).
+- **Hand verdicts** unchanged: IFBench Reach (100, 102, 103, 104, 274); IFEval Inconclusive (3272).
+- **Prompt-level fates** are identical except ifeval_1087. I resolve it by hand (2 genuine of its 5 base successes);
+  the executor read base successes only on tier-1 prompts, by design. Naming also differs: the executor files my
+  "dissolved" (`main` with < 2 strict successes in 256) under open / exhausted and reports 0 dissolved. That is
+  defensible, since `s0100` / `s0500` were never drawn to 256 there.
+
+Also checked (R13's list):
+- `D_base_btok` rows carry `model` "base", but `candidates.csv` counts the base at 256 on every diagnostic prompt, and
+  `handcheck.csv` labels them `base_btok`. No mixing.
+- The figure reads this run's cell from `verdict.csv` and labels the three inherited cells with their models.
+
+### C1. Claims against my recount
+
+| claim (source) | my value | verdict |
+|---|---|---|
+| Models, revisions; `main` ≈ one increment past `step_1900` (run, numbers) | Hub sha: `main` ≠ any step; base `main` = `stage3-step11921`; spot check 1.01e-3 / 1.22e-3 / 0.98e-3 | reproduces |
+| Recipe `olmo_thinker` @ d928a7c, T 1, top-p 1, 16,384, stop `</answer>`, RL's tokenizer for all (run, numbers) | template byte-identical; 26 meta records; 7 pods' tokenizer hashes | reproduces |
+| IFBench 297 (3 RL near-duplicates excluded), IFEval 150; "IFEval none" (run, numbers) | same 3 (content 0.51 / 0.79 / 0.51); also scanned the 88,556-row pre-release dataset: ifbench_238 matches there but was not in RL's seed-42 sample | reproduces |
+| Hand gate of 1,527 responses, 12 overturned (run, numbers) | 1,527 rows, 12 overturned (9 → gamed, 3 → genuine) | reproduces (count) |
+| "every label confirmed" (numbers) | the log says genuine labels were read in full, gamed ones by their evidence, plus a seeded 10 % of gamed answers | **reword**: "confirmed (genuine in full, gamed by evidence + 10 %)" |
+| pass@1 / pass@8 table, all 12 cells (run, numbers) | identical to 3 decimals (T1) | reproduces |
+| "By step 100 answers shrink from ≈ 2,300 to ≈ 40 tokens" (run, plain) | base mean 2,404 (eval) / 2,533 (RL prompts); `s0100` 36 IFBench, 98 IFEval, 45 RL prompts | reproduces for IFBench / RL prompts; IFEval is 98: **reword** "≈ 40–100" |
+| 94 % of `main`'s first-read strict successes gamed; 32B Think run 36 % (run) | 297/315 = 94.3 % (phase 2; blind phase 1 92.7 %) | reproduces |
+| "94 % of the passing answers we read were empty shells" (plain) | the 94 % is on reach candidates (prompts the base failed 16/16), not all passes | **reword**: "on the prompts where only RL passed" |
+| `main` hand-confirmed on 10 of 164; open by gaming 138, exhausted 16 (run, numbers) | the same 10 (phase 2); I read 95 candidates only twice, and a seeded 30 of them read to 7 gave 29 open by gaming, 0 confirmed | reproduces (10); consistent (138 / 16) |
+| Verdict IFBench Reach: 5 by hand (100, 102, 103, 104, 274), 9 strict (run, numbers) | identical prompt sets | reproduces |
+| IFEval inconclusive by hand (3272), Reach under strict (1512, 2247, 2857, 2880, 3619) (run, numbers) | identical | reproduces |
+| Tier-2 outcomes (5 clean / 9 resolved / 6 one success; IFEval 5 / 11 / 4) (numbers) | identical, prompt by prompt | reproduces |
+| "steps 100 and 500 already reach them" (run) | `s0100` confirmed on all 6; `s0500` on the 5 IFBench prompts but not ifeval_3272 (1 genuine of 4 reads; the executor's 1 of 2) | **reword**: "step 100 on all six, step 500 on the five IFBench ones" (numbers.md already says so) |
+| Base closes its reasoning in 46 of 7,200; never answers bare (run) | 46/7,200; 0 single-token `</think>` anywhere | reproduces |
+| "RL's tokenizer makes `<think>` a token the base never saw" (run) | base embedding row of 100268 at initialisation scale (1.27 vs 5.54) | reproduces. **Add**: `<|im_start|>` / `<|im_end|>` are equally untrained, under both tokenizers. |
+| Base own tokenizer closes in "34–47 of 64" (numbers) | 34–47 on the first four prompts; 25–47 over all seven (ifbench_274: 25) | differs slightly: say "25–47" |
+| Own tokenizer answers genuinely on 3 of the 6 (100, 103, 104); 0 on 102, 274, 3272 (run, numbers) | identical (18/18 genuine) | reproduces (labelled diagnostic) |
+| "Half of it is a tokenizer artifact" (run) | 3 of 6 is a lower bound: the diagnostic leaves the untrained chat-frame tokens in place | supported as a lower bound |
+| Base failures: no usable answer 54 %, ignored 21 %, far off 25 % (run, numbers) | my own draw: 50 / 21 / 29 % (24 items); my 8-item spot check of my readers agrees | reproduces |
+| — the pre-registered "reach a format repair would remove" (Design 6: base failures ≥ 50 % (u) or a `t1` success) | executor's own `failures_if.csv`: 5 of 6 (100, 102, 103, 274, 3272); mine 4 of 6 | **not reported**: a pre-registered quantity is missing |
+| RL-Zero-Math 0 / 160 on the IFBench reach prompts (run, numbers) | 0/160 (1/32 gamed on ifbench_296, outside the set) | reproduces |
+| "3 robust format prompts of 447" (run; plain "about 3 prompts out of 447") | the 3 that survive the tokenizer diagnostic (102, 274, 3272) still meet the format-repair rule in the executor's own table (in mine, 2 of the 3) | **not supported** as "robust": drop the word or name the format-repair result |
+| "The IF/math split looks like a property of SFT, not of the domain" (run, plain) | one RL run per cell; 7B vs 32B; different RL data and templates. Here the base's failures are mostly format or termination failures (R8, R9), so this cell measures whether the base can present a bare answer, which the post-SFT comparator could. | **not supported** beyond "consistent with"; the format confound must be named |
+| Matched-k entries / exits: IFBench `main` 102.1 / 30.3, IFEval 66.6 / 12.0 (numbers) | 102.1 / 30.3; 66.65 / 11.98 | reproduces |
+| Compute axis 7.2–9.7e-6 (step 100), 0.8–1.7e-5 (500), 1.3–4.4e-5 (`main`) (numbers) | low bounds and lengths identical; my high bounds 1.0e-5 / 1.9e-5 / 5.3e-5 | low reproduces; high differs by ≤ 20 %. Their high bound implies ≈ 200 prompt tokens (undocumented); the templated Dolci prompts average 281. |
+| Weight checks 9.9e-4 / 9.4e-4 / 1.95e-3 / 1.18e-2, 6.1× (numbers) | spot check 1.01e-3 / 0.98e-3 / 1.96e-3 / 1.22e-2, 6.2× | reproduces |
+| Stage 0 (Part B table) | every cell, A/B intervals within bootstrap noise | reproduces |
+| Reverse: strict IFBench 5, IFEval 7 (numbers) | identical | reproduces |
+| Reverse by hand: IFEval 3 (1834, 2785, 2787), IFBench 0 (numbers) | I did not hand-read reverse prompts | not derivable (outside the verdict) |
+| IFBench rule types never trained on, IFEval's were (plain) | 0 of IFBench's 58 instruction ids occur in RL's 54; all 25 of IFEval's do | reproduces |
+| Cost $28.74 of $40, 19.98 pod-hours, 51.6 M tokens, ≈ 18.4 GPU-h in jobs (run, numbers) | pod spans × rates consistent; 51,601,546 tokens; registry rows match my per-job counts on all 26 jobs (18.37 GPU-h) | reproduces |
+| Expectations vs outcomes (run) | the stated misses are real | partly reported: s0500 IFBench pass@1 (0.410 vs ≤ 0.40), `main` IFBench pass@1 (0.469 vs ≤ 0.45), `s0100` length (36–98 vs ≥ 300) and `main` IFBench length (29 vs ≥ 30) are misses the write-up omits |
+| Bucket and MANIFEST (numbers) | 55 MANIFEST rows, every sha256 matches the file; bucket listing present | reproduces |
+
+### C2. Process checks
+
+- **Expectations before the run.**
+  - Part A was committed at 05:30:23, before the first pod (05:31:37).
+  - Part B with the binding numbers was committed at 06:04:42, before the first evaluation sample (08:05).
+  - After that, the pre-registration's body changed only by one timestamp correction and the appended deviations.
+- **Rule 7** was added at 09:10, after the first batch, and it decides 4 of the 5 IFBench hand-reach prompts.
+  - It restates the pre-registered rule 4 (quality is not graded) for option answers.
+  - A rule that graded correctness would remove only ifbench_104, where `main` answers a) 244 times in 256 and never
+    the correct c). IFBench would still be at 4 ≥ 3: Reach.
+  - The verdict therefore does not hinge on rule 7. The write-up should still say that 4 of the 5 rest on bare-option
+    answers, and that on ifbench_104 they are wrong.
+- **Wording against n.** No difference claims rest on seeds (no training). "Never" is used for the base's single-token
+  `</think>` (0 of 143,176, verified) and for RL never writing `</think>` (0 in all RL rows, verified).
+- **Compute record.** Registry rows exist and match. The write-up has no per-arm compute table, which the policy asks
+  for: the base used 46.2 M of the 51.6 M tokens over 19,904 samples; `main` used 4.1 M over 115,328.
+
+## §Verdict
+
+**Stands:**
+- Every quantity the run measured reproduces from the raw files and my own code:
+  - fixed-phase pass@k;
+  - 108 + 56 reach and 38 + 14 reverse candidates;
+  - the extension and stopping-rule audit;
+  - the three contamination exclusions; the pre-release dataset adds none;
+  - template, decoding and tokenizer parity;
+  - lengths, Stage 0 and the compute rows.
+- The **strict verdicts** stand: Reach on both tasks (9 IFBench, 5 IFEval prompts).
+- The **hand verdicts** stand on my blind repeat: IFBench Reach (ifbench_100, 102, 103, 104, 274) and IFEval
+  Inconclusive (ifeval_3272 only).
+- RL-Zero-IF's checker gaming stands: ≈ 94 % of first-read passes gamed, `main` hand-confirmed on 10 of 164.
+- The base-tokenizer diagnostic stands: 3 of 6 recovered genuinely. So does the math arm's 0/160.
+- No hard-constraint violation.
+
+**Must be reworded:**
+1. The **"Answer"** sentence. "3 robust format prompts of 447" is not robust. By the pre-registered Design-6 rule,
+   5 of the 6 hand-reach prompts (the executor's own table; 4 in mine) are reach "a format repair would remove". That
+   includes all 3 that survive the tokenizer diagnostic (2 of them in mine).
+   - Suggested: "every hand-reach prompt is an exact-format prompt. Three vanish when the base reads `<think>` as text.
+     On 5 of 6, at least half of the base's sampled failures are unusable output, so format, not capability, separates base and RL."
+2. **"IF/math split is a property of SFT, not of the domain."** Say "consistent with". Name the confound: this run's
+   base cannot present a bare answer under RL's chat frame. Its `<think>`, `</think>`, `<|im_start|>` and
+   `<|im_end|>` rows are untrained, and its failures are half "no usable answer". The post-SFT comparator had no such
+   handicap. The 2 × 2 grid therefore compares different things in its two IF cells.
+3. **Report the pre-registered format-repair set.** It is missing.
+4. Small corrections:
+   - "≈ 40 tokens" → "≈ 40–100";
+   - "steps 100 and 500 already reach them" → step 500 is not confirmed on ifeval_3272;
+   - "34–47 of 64" → "25–47";
+   - "every label confirmed" → how gamed labels were confirmed;
+   - the plain summary's "94 % of the passing answers" → "on the prompts only RL passed";
+   - list the omitted expectation misses;
+   - document the compute axis's prompt-token input (≈ 200 implied, 281 measured);
+   - add a per-arm compute table.
+5. **Name what the 4 option-prompt "reaches" are:** bare option letters or words. On ifbench_104 `main` is wrong every
+   time; on ifbench_102 it is right about half the time (119 d) vs 124 a)).
+
+**Not supported:** "robust" reach, and SFT as the cause of the IF/math split (beyond "consistent with").
+
+**Next measurement that would settle what is open.**
+1. **A format-controlled base arm** on the 6 hand-reach and 9 strict-only prompts, to 256 each:
+   - the base with its own tokenizer, a plain-text chat frame it has seen in pretraining (no `<|im_start|>`), and a
+     one-shot exemplar of a bare answer;
+   - read like the run's base extension.
+   If the base then answers the option and CSV prompts genuinely, the IFBench Reach dissolves. At the run's measured
+   ≈ $0.63 per M tokens and ≈ 2.2k-token base responses, this is ≈ $5.
+2. **IFEval cannot be settled within the pre-registered caps.**
+   - ifeval_1361 and 219 have `main` confirmed and exactly one genuine base success in 256. They can never become reach
+     or resolved under the rule.
+   - "Open, gaming" counts as open, so with a gaming challenger "No reach at 256" is unattainable by design.
+   - Reading `main` to the stop rule on the 28 candidates read only twice could add reach prompts only where `main`
+     turns out confirmed; my seeded sample found none in 30.
+   - A useful change is to the rule, for future runs: count "open, gaming" as "dissolved", as I argued for
+     `olmo-rlzero-pilot` (a verdict rule must be satisfiable under each hypothesis it names).
+3. **For the SFT question,** run the same protocol on a size-matched pair that differs only in SFT: Olmo 3 7B Think-SFT
+   (or Instruct-SFT) against its RL successor, at a recipe where both close their reasoning. That separates "SFT
+   supplies the capability" from "SFT supplies the answer format".
