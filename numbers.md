@@ -2209,3 +2209,70 @@ with the hint fine for `s2300` (248, 269); on 2 the hint also breaks `s2300` (3,
 and `iffu-b` 1 × H200 community $3.59/h 8.58 h $30.79). Bucket: `hf://buckets/dan-pandori/nd-rl/olmo-iffu/`
 (`artifacts/olmo_iffu/`: every sample's text and token ids, grades, metas, logs, hand items / keys / labels; bulk files
 in `artifacts/MANIFEST.jsonl`; `olmo_iffu/`, `pod/olmo_iffu/`); no weights.
+
+## olmo-rlzero-if (2026-11-08, executor; UNREVIEWED)
+
+**Models** (all 7.3 B, bf16, `Olmo3ForCausalLM`, natural-language text, no Lean): base `allenai/Olmo-3-1025-7B` @ `main`
+(`a81bae42` = `stage3-step11921`, pretrained only); `allenai/Olmo-3-7B-RL-Zero-IF` @ `step_100` (`fcc5f4aa`), `step_500`
+(`faf7f48e`), `main` (`3cae007c`; ≈ one 100-step increment past `step_1900`, not equal to it), RLVR straight from that
+base on `allenai/Dolci-RL-Zero-IF-7B` (13,179 IF prompts); `allenai/Olmo-3-7B-RL-Zero-Math` @ `main` (`dee26a40`,
+reduced arm only). Recipe = the released RL-Zero-IF run's: `olmo_thinker` @ d928a7c (sha256 6d549883…), T 1, top-p 1,
+16,384 tokens, stop `</answer>`, one tokenizer (RL-Zero-IF's) for every model; vLLM 0.11.0, no speculation. Grades:
+official IFBench / IFEval checkers on RL's answer extraction (`remove_thinking_section`), strict primary; blinded hand
+gate. Sources: `olmo_rlzero_if/{passk,results,candidates,verdict,handcheck,hand_summary,failures_if,compute_axis,weight_dist}.csv`,
+`artifacts/olmo_rlzero_if/stage0_summary.txt`.
+
+| strict pass@1 [95 %] / pass@8 (k = 16 for base) | base | `step_100` | `step_500` | `main` |
+|---|---|---|---|---|
+| IFBench (297 headline) | 0.129 [0.103, 0.157] / 0.334 / 0.421 | 0.477 [0.429, 0.527] / 0.650 | 0.410 / 0.643 | 0.469 [0.417, 0.521] / 0.576 |
+| IFBench (218, olmo-ifomega's set) | 0.122 / 0.322 | 0.456 | 0.393 | 0.448 / 0.555 |
+| IFEval (150) | 0.200 [0.159, 0.243] / 0.496 / 0.587 | 0.806 / 0.880 | 0.783 / 0.927 | 0.817 [0.758, 0.872] / 0.860 |
+| mean response tokens IFBench / IFEval | 2,510 / 2,194 | 36 / 98 | 162 / 142 | 29 / 49 |
+
+- Loose pass@1: IFBench base 0.169, `main` 0.528; IFEval 0.219 / 0.842. `closed` (needs `</think>`): ≤ 0.003 for every
+  model — no RL checkpoint ever writes `</think>`; the base does in 46 of 7,200 fixed-phase samples. `t1` = strict
+  everywhere (no turn tokens). Base cut at 16,384: 146 / 4,800 (3.0 %) IFBench, 65 / 2,400 (2.7 %) IFEval; RL ≤ 6.
+- Matched k = 8 expected entries / exits vs base (`dynamics.csv`): IFBench `main` 102.1 [87.1, 116.9] / 30.3; IFEval
+  66.6 / 12.0.
+- **Candidates** (`candidates_fixed.csv`): IFBench reach 108 (+1 excluded), reverse 38; IFEval reach 56, reverse 14.
+- **Hand gate** (`handcheck.csv`: 1,527 responses read by blinded sub-agents, every label confirmed, 12 overturned).
+  `main`'s first-read strict successes are **gamed 93.7 % [88.7, 98.0] on IFBench (205 read) and 95.5 % [90.0, 100] on
+  IFEval (110)** (`hand_summary.csv`; olmo-ifomega's 32B step 2,300: ≈ 36 %): placeholders ("paragraph_two",
+  "answer1"), skeletons, titles without bodies, constraint echoes. `main` is hand-confirmed on 10 of 164 reach
+  candidates, open by the gaming stop rule on 138, exhausted on 16.
+- **Base extension**: all 10 tier-1 candidates to 256 (hand-gated); tier 2 (strict row only) the first 10 per task in the
+  sha256-keyed seeded order, the rest stopped for budget. Tier-2 outcomes under strict: IFBench 2 base-clean (1 with
+  `main` confirmed), 4 resolved, 4 with one strict success; IFEval 2 clean, 6 resolved, 2 one success.
+
+| task | grade | reach candidates | base-resolved | reach prompts (`main`) | open | verdict |
+|---|---|---|---|---|---|---|
+| IFBench | strict | 108 | 6 | **6** (100, 102, 103, 104, 274, 67) | 96 | **Reach** |
+| IFBench | hand (headline) | 108 | 1 | **5** (100, 102, 103, 104, 274) | 102 (86 by gaming) | **Reach** |
+| IFEval | strict | 56 | 17 | 2 (1512, 2880) | 37 | inconclusive |
+| IFEval | hand | 56 | 0 | **1** (3272) | 55 (52 by gaming) | inconclusive |
+
+- The six hand-reach prompts are format prompts: a bare option ("a)"…"d)", "yes / no / maybe": ifbench_100, 102, 103,
+  104), a 7-row CSV (274), repeat-the-request + `<<title>>` + keyword count (ifeval_3272). On three more tier-1 prompts
+  (ifbench_296, ifeval_219, 1361) the base has exactly one genuine success in 256 (open). `step_100` and `step_500` are
+  hand-confirmed on the five IFBench reach prompts (reach is present by step 100).
+- **Base-tokenizer diagnostic** (labelled, not in the verdict; `D_base_btok*`): the base with its own repository
+  tokenizer (`<think>` as plain text) closes its reasoning in 34–47 of 64 samples and answers genuinely with a bare
+  option on ifbench_100 (9 / 64), 103 (5), 104 (4); 0 / 64 on 102, 274, ifeval_3272. **3 of the 6 hand-reach prompts
+  vanish** once the base can read `<think>`.
+- **Format check** (`failures_if.csv`, 24 seeded base failures on the 6 hand-reach prompts): no usable answer 13
+  (54 %), ignored the constraint 5 (21 %), far off 6 (25 %), near miss 0, broke another 0. Strict-only reach
+  (ifeval_1512, 2880; 8 failures): u 3, a 2, c 3.
+- **Math arm**: the full 300-prompt run was voided (≈ 10k-token responses, ≈ $9 projected); RL-Zero-Math has 0 strict
+  successes in 160 samples on the IFBench reach prompts (32 each on 100, 102–104, 274).
+- **Reverse** (base confirmed, `main` clean): strict IFBench 5, IFEval 7; by hand IFEval 3 (1834, 2785, 2787), IFBench 0
+  — the base's hand confirmation was read only partly (outside the verdict); most base strict successes there are
+  long debris that meets length constraints.
+- **Compute axis** (`compute_axis.csv`; 32 prompts × 8 samples per step, no active sampling; lengths measured here):
+  RL ÷ pretraining FLOPs 7.2–9.7 × 10⁻⁶ at step 100, 0.8–1.7 × 10⁻⁵ at step 500, 1.3–4.4 × 10⁻⁵ at `main` (step
+  ≈ 2,000; 1,900–2,100). Weight checks (`weight_dist.csv`): `main`↔`step_1900` 9.9e-4, `step_1900`↔`step_1800` 9.4e-4;
+  `step_100`↔base `main` 1.95e-3 vs ↔`stage3-step11000` 1.18e-2 (6.1×; pre-registered margin 10× not met).
+- **Contamination**: 3 IFBench prompts excluded (ifbench_196, 228, 285: the fish-screenplay request is RL prompt
+  `tulu_v3.9_wildchat_100k_29059`); IFEval none.
+- **Cost**: $24.58 of $40 (16.98 pod-hours: 5 × A100-SXM4-80GB community $1.39/h, 1 secure $1.79/h; podrm figures);
+  ≈ 43.8 M generated tokens, ≈ 15.5 GPU-hours in jobs (registry rows `artifacts/olmo-rlzero-if/registry/`).
+  Bucket: `hf://buckets/dan-pandori/nd-rl/olmo-rlzero-if/`.

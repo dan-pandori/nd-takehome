@@ -1229,3 +1229,11 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
 - 13:47 UTC  **F_math voided**: RL-Zero-Math writes ≈ 10k-token responses on IF prompts (46 resident sequences filled the KV cache in 3 min), so the 300-prompt arm projected ≈ $9, over what was left; killed at 13:47 (samples kept as F_math_void, never used). Replaced by D_math: 32 samples on each IFBench hand-reach prompt (does math RL produce the same reach?), labelled. Also: my jobs.csv edit truncated the file (unquoted commas in two notes); rebuilt from HEAD with quoting.
 - 13:58 UTC  D_math done: RL-Zero-Math has **0 strict successes in 128** on the 4 IFBench hand-reach prompts (mean 0.9–3.3k tokens; it reasons at length and never answers with a bare option). Intermediate checkpoints: `s0100` and `s0500` hand-confirmed on all 4 (reach is already there at step 100). Queued on `rzi-c`: D_base_btok_b, C1_s0100_b, C1_s0500_b, D_math_b on ifeval_3272, ifbench_274, ifbench_296.
 - 14:21 UTC  Second diagnostic batch done (D_base_btok_b: the base with its own tokenizer 0 / 64 on ifbench_274 and ifeval_3272, 1 / 64 on ifbench_296; D_math_b 0 / 32 on 274; s0100 / s0500 fresh draws on 274, 296, 3272). `rzi-c` deleted after the listing diff.
+- 14:51–15:05 UTC  E2_base_ifb done: ifbench_274 base 0 strict in 256 → 5th IFBench hand-reach prompt; ifbench_296's
+  5 base strict successes read (1 genuine "**No.**", 4 gamed) → open. Format check 3 (ifbench_274). E3_base_ifb
+  (ifbench_296 to 256). `rzi-b` deleted 15:00 after the listing diff: **no pods left**. Final `analyze.py`,
+  `verdict.py`, `summary.py`, `failures.py`, `compute_axis.csv`, figure; compute rows recorded
+  (`artifacts/olmo-rlzero-if/registry/`). Spend $24.58 (podrm figures: rzi-a 0.72, rzi-b 9.65, rzi-c 8.70, rzi-d 0.75,
+  rzi-e 0.45, rzi-f 4.31; 16.98 pod-hours).
+- 15:07 UTC  Deliverables written: `run_olmo_rlzero_if.md`, `numbers.md` § olmo-rlzero-if,
+  `olmo_rlzero_if/plain_summary.md`, README, deviations in the pre-registration; question closed.

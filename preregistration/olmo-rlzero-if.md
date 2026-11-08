@@ -303,3 +303,35 @@ genuine success there means the base's failure under RL's tokenizer is partly a 
 - Hand-reach prompts IFBench 3 (0–15), IFEval 3 (0–10). **Verdict by hand:** IFBench Reach 40 %, Inconclusive 45 %,
   No reach 15 %; IFEval Reach 40 %, Inconclusive 40 %, No reach 20 %. **Under strict:** Reach 85 % on each task.
 - Format check: (u) 45 % (25–70 %) of the base's sampled failures, (a) 20 %, (c) 15 %, (d) 12 %, (b) 8 %.
+
+---
+
+# Deviations (as run; every entry also in `log.md` at its time)
+
+1. **Stage-0 rerun** (05:40): a variable clash in my sampler would have crashed every job at its end; the first
+   `s0_base_a` (3.5 min) was discarded and rerun from scratch.
+2. **Start revision**: `step_100` is 6.1× closer to base `main` than to `stage3-step11000`, below the pre-registered
+   10× margin (RL-Zero-IF's increments are ≈ 5.6× the 3.1 math run's); the start is reported as base `main` to within
+   one RL increment.
+3. **No answer to the 06:05 question** within the 2-h pause: the Part B default ran.
+4. **`main` drawn to 256 on every prompt at once** (C1_main, before the base's fixed phase ended): selection-independent
+   (candidates come from fixed-phase draws only), read in a fixed order — same outcome as sequential draws.
+5. **Reading order for challengers** (before any item was read): the first two fixed-phase strict successes, then the
+   fresh ones in draw order, then the rest (Part B said draw order).
+6. **Hand rule 7** (09:10, while confirming the first batch; two readers had split): an offered option or short direct
+   answer in the required form is genuine even if wrong; its scope (09:22): one generic sentence for a requested account
+   is gutted. Applied to every batch and model; 12 labels overturned in all (`handcheck.csv`).
+7. **Seeded order** for tier 2 implemented as a sha256("20261108:" + pid) sort (stable while IFBench candidates
+   arrived), and **tier 2 cut to the first 10 per task** (10:30: 15; 11:17: 10) for budget; the rest are open under
+   strict. IFEval's stopped prompts kept their first 32 draws.
+8. **Tier-1 continuations** after gamed defender successes ran as one batch to 256 (E3_base_ife, E3_base_ifb) and were
+   read in draw order (no change to the rule).
+9. **Reverse candidates**: hand reading stopped (13:05) with 8 candidates' `main` successes and most of the base's
+   unread (outside the verdict); the strict reverse row is complete.
+10. **Math arm**: the 300-prompt fixed phase was voided after 3 min (≈ 10k-token responses, ≈ $9 projected); replaced by
+    32 samples on each IFBench hand-reach prompt (D_math, D_math_b).
+11. **Intermediate-checkpoint confirmation** only on the hand-reach prompts (C1_s0100_a/b, C1_s0500_a/b).
+12. **Base-tokenizer diagnostic** run on all six hand-reach prompts (plus ifbench_296), labelled, not in any verdict.
+13. **Bookkeeping**: an edit truncated `jobs.csv` (unquoted commas in two notes); rebuilt from the last commit. Labels
+    in `failures.py`'s merged table were briefly keyed by item id across directories whose ids repeat; fixed before any
+    number was reported.
