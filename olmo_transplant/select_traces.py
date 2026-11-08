@@ -108,7 +108,8 @@ def main():
     src_lab = {}
     try:
         for r in csv.DictReader(open("olmo_transplant/handcheck_src.csv")):
-            src_lab[(r["job"], r["pid"], int(r["chunk"]), int(r["i"]))] = r["final_label"]
+            job, pid, ch, i = r["key"].split("|")
+            src_lab[(job, pid, int(ch), int(i))] = r["final_label"]
     except FileNotFoundError:
         pass
     pick = []
