@@ -1214,3 +1214,8 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   Candidates (final): IFBench reach 108 (+1 excluded), reverse 38; IFEval reach 56, reverse 14.
 - 12:47 UTC  E2_base_ifb on `rzi-b`: IFBench tier 1 (ifbench_274, 296) + tier 2 (first 10 in the seeded order).
   Round 13a (b072–b075, 114 `main` items on the last IFBench candidates) with readers.
+- 12:50–13:05 UTC  Rounds 13–15 (b072–b080, 303 items) confirmed; override hdda638 → gamed (rule 6c: the whole-response
+  quotes hold only through a quoted restatement in the planning). **`main`'s reading is complete on all 164 reach
+  candidates: hand-confirmed on 10 (tier 1: ifbench_100–104, 274, 296; ifeval_1361, 219, 3272), open by the gaming
+  stop rule on 138, exhausted on 16.** ifeval_1361: the base drew its 256 with exactly 1 genuine success (h417694) →
+  neither reach nor resolved (open). E3_base_ife queued on `rzi-c` (ifeval_3272 to 256 in one batch).
