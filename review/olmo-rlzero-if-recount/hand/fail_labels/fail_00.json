@@ -1,0 +1,74 @@
+[
+  {
+    "item": "f-3581e9",
+    "class": "b",
+    "checker_agrees": true,
+    "evidence": "format:options requires the reply to be exactly one of a), b), c), d) with no explanation. The answer is 'd).': option d) plus a trailing period, no explanation. The only deviation is one extra character, which fails the exact-match check."
+  },
+  {
+    "item": "f-0cc060",
+    "class": "c",
+    "checker_agrees": true,
+    "evidence": "The entire output must be wrapped in JSON. The answer opens with '.io.', gives a markdown rubric, appends a 'JSON Output' object, then an invented user turn, a second markdown review and a fenced JSON block. JSON is attempted only as appended sections; parsing the whole output fails at character 0."
+  },
+  {
+    "item": "f-4f0064",
+    "class": "a",
+    "checker_agrees": true,
+    "evidence": "Every sentence must end with an emoji. The answer is a mid-sentence story fragment, a refusal, then invented 'Assistant:' turns and rambling text; across dozens of sentences there is not one emoji (the only non-ASCII character is an em dash). The reply reads as if the constraint had not been given."
+  },
+  {
+    "item": "f-c5ed15",
+    "class": "u",
+    "checker_agrees": true,
+    "evidence": "Binding: no commas (in an XML release document). The answer is 'about family elder lands', a leaked 'system' prompt describing OLMo and an invented Q&A line; no XML, no placeholders, no reply to the request. It also contains 2 commas, so the checker's failure is correct."
+  },
+  {
+    "item": "f-73e577",
+    "class": "a",
+    "checker_agrees": true,
+    "evidence": "No commas allowed. The thread's first sentence lists '[username1], [username2], [username3], and [username4]' and a later sentence uses a vocative comma (4 commas in the thread part); appended system-prompt and Q&A debris adds 11 more, 15 in total. Commas are used naturally with no visible avoidance."
+  },
+  {
+    "item": "f-17539c",
+    "class": "b",
+    "checker_agrees": true,
+    "evidence": "The entire output must be JSON. The answer is a single JSON object, but 'performance_review' is written with a backslash before the underscore, an invalid JSON escape, so parsing fails at character 23. Deleting that one backslash makes it valid JSON: a single-character miss."
+  },
+  {
+    "item": "f-868d78",
+    "class": "u",
+    "checker_agrees": true,
+    "evidence": "Required: CSV with columns ID, Country, City, Year, Count and 7 comma-delimited rows. The answer is word salad (mixed English and Chinese fragments, a GitHub URL, '29x19x60 )') followed by invented Q&A about OLMo; there is no CSV header or row at all. No usable answer."
+  },
+  {
+    "item": "f-bcb200",
+    "class": "a",
+    "checker_agrees": true,
+    "evidence": "Needs at least two period-ended sentences followed by at least two bullets marked '*'. The answer (fragment, invented user turn, outline, spam, reasoning, final outline) uses only '-' bullets (34 lines); the only lines starting with '*' are bold headings such as '**Outline:**'. No sentence-then-* structure is attempted."
+  },
+  {
+    "item": "f-d7ba70",
+    "class": "a",
+    "checker_agrees": true,
+    "evidence": "Needs at least two period-ended sentences followed by at least two bullets marked '*'. After a rambling dog/mom role-play continuation, the outline is introduced by a colon-ended line and 'Title:'/'Chapter' headings and uses only '-' bullets (25 lines); no line starts with '*'. Constraint not attempted."
+  },
+  {
+    "item": "f-b1b980",
+    "class": "a",
+    "checker_agrees": true,
+    "evidence": "Must answer with exactly one of yes/no/maybe and no explanation. After a stray '. user' label the answer explains in three sentences that it is 'a usual matrix product' and ends with 'answer'; none of yes, no or maybe appears. The constraint is ignored."
+  },
+  {
+    "item": "f-d57daa",
+    "class": "a",
+    "checker_agrees": true,
+    "evidence": "Needs exactly 2 paragraphs separated by blank lines, paragraph 1 starting with 'booster'. 'booster' never appears; paragraph 1 starts with '. The'; the two explanation paragraphs are joined by a single newline and three invented Q&A blocks follow, giving 4 blank-line paragraphs. No attempt at the first-word requirement."
+  },
+  {
+    "item": "f-6eff65",
+    "class": "a",
+    "checker_agrees": true,
+    "evidence": "Must begin by repeating the request word for word. The answer opens with a refusal ('I'm sorry, but I don't have the capability...'), then a prompt fragment, invented turns and unrelated Q&A about David and Bing; the request sentence never appears. No attempt to repeat it."
+  }
+]

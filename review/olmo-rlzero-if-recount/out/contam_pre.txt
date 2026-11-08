@@ -1,0 +1,14 @@
+pre-release rows 88556; distinct keys 88552; Dolci rows 13179
+Dolci keys in pre-release: 13179 of 13179
+Dolci prompts (minus 'user: ') equal to a pre-release user turn: 13179 of 13179
+pre-release first 13314 rows' keys in Dolci: 1961
+avg_score of pre-release rows: [(-1, 24049), (0.12, 7943), (0.25, 7069), (0.38, 4748), (0.5, 4350), (0.06, 3793)]
+eval prompts with content >= 0.3 against the pre-release corpus:
+  ifbench_196: raw 0.509 content 0.509 (ai2-adapt-dev/tulu_v3.9_wildchat_100k_29059; in Dolci True) n>=0.3 1  RULE-EXCLUDE
+  ifbench_228: raw 0.787 content 0.787 (ai2-adapt-dev/tulu_v3.9_wildchat_100k_29059; in Dolci True) n>=0.3 1  RULE-EXCLUDE
+  ifbench_238: raw 0.606 content 0.606 (ai2-adapt-dev/tulu_v3.9_wildchat_100k_98357; in Dolci False) n>=0.3 1  RULE-EXCLUDE
+  ifbench_285: raw 0.463 content 0.514 (ai2-adapt-dev/tulu_v3.9_wildchat_100k_29059; in Dolci True) n>=0.3 1  RULE-EXCLUDE
+eval prompts with raw >= 0.8: []
+open-instruct d928a7c DatasetConfig.select_samples(13314) with dataset_config_seed 42 (default) on the 88,556 rows:
+  Dolci keys inside the 13,314 selected rows: 13179 of 13179; selected rows not in Dolci: 135
+  ifbench_238's match (row 49576, tulu_v3.9_wildchat_100k_98357) selected: False

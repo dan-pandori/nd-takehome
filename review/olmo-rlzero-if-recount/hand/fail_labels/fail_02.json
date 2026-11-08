@@ -1,0 +1,74 @@
+[
+ {
+  "item": "f-33616f",
+  "class": "u",
+  "checker_agrees": true,
+  "evidence": "Every word must have a prime length. The response is unclosed planning (word-by-word drafts it keeps rejecting) that degenerates into word salad and code debris; no reply ever comes. In the visible text, 544/1,168 head words and 282/502 tail words have non-prime lengths (e.g. 'Okay', 'user'); the tail salad makes no attempt."
+ },
+ {
+  "item": "f-94967d",
+  "class": "u",
+  "checker_agrees": true,
+  "evidence": "Each paragraph must start and end with the same word. The whole response is two lines, 'it is' and 'it is': a fragment with no counterexample and no reply to the question. Both paragraphs start with 'it' and end with 'is', so 0/2 match."
+ },
+ {
+  "item": "f-1bdb0b",
+  "class": "u",
+  "checker_agrees": true,
+  "evidence": "Every sentence must end with an emoji. The response echoes the prompt verbatim, then runs into word salad and markup debris ('</ins>', 'frank.ai'); there is no screenplay. The text contains 0 emoji characters."
+ },
+ {
+  "item": "f-472d7c",
+  "class": "u",
+  "checker_agrees": true,
+  "evidence": "The reply must be exactly one of yes/no/maybe. The response is a rambling continuation about humour in narratives, a corrupt policeman and arrows, ending in debris ('oIF9zx/27TSS1l', 'Xy'); it never answers the question and gives none of the options."
+ },
+ {
+  "item": "f-1540a8",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "Each paragraph must start and end with the same word. Between debris lines (a fused-word string, an invented 'company policy expert' prompt), the self-talk debates the constraint, drops it, and closes with 'So, final answer: The intersection ... serves as a counterexample.' (so/counterexample). Only 4/64 paragraphs match, all one-token debris such as '/User'."
+ },
+ {
+  "item": "f-df9a6f",
+  "class": "u",
+  "checker_agrees": true,
+  "evidence": "Seven comma-delimited CSV rows under ID, Country, City, Year, Count. The response is a blog-post fragment that invents a different request (a Pinecone-style website), plans it, and outputs HTML/JS. No CSV header or rows appear; nothing replies to the actual request."
+ },
+ {
+  "item": "f-d909e6",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "The reply must be exactly one of a)/b)/c)/d), with no explanation. The response opens with a stray 'user' line, gives 'b)', then adds a 'Details' heading and a ~1,700-character WER explanation (17 non-empty lines). The option format was attempted, but the extra content is far more than one unit."
+ },
+ {
+  "item": "f-046b1b",
+  "class": "u",
+  "checker_agrees": true,
+  "evidence": "The essay must be in English and all capitals. The response is debris: invented instructions, runs of '&', mixed-case word salad and tag fragments, then a commentary saying the text is not an essay, then an invented 'engine demos' request and its answer. There is no Alvin essay; it has 7,575 lowercase letters against 665 uppercase."
+ },
+ {
+  "item": "f-3be3cb",
+  "class": "a",
+  "checker_agrees": true,
+  "evidence": "The response must first repeat the request word for word. It starts mid-word with 'ous <<Aurora Brand>> has been crafted...', gives a second name inside invented user/assistant turns, then drifts into unrelated chat. The request text appears nowhere, so the repeat is never attempted (the brand and title constraints pass)."
+ },
+ {
+  "item": "f-e4f744",
+  "class": "u",
+  "checker_agrees": true,
+  "evidence": "Every sentence of a screenplay must end with an emoji. The whole response is a 31-character fragment: five emojis interleaved with the words 'this is fun you emoji'. There is no screenplay or other reply, and its only sentence ends on the word 'emoji', not an emoji character."
+ },
+ {
+  "item": "f-3f5bbd",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "The whole response must be English and all capitals. The graded text (unclosed reasoning) has debris lines, then lowercase planning (2,271 lowercase letters), then a short all-caps reply refusing the essay. The final paragraph has 0 lowercase letters, but most of the graded text is lowercase, which is far off."
+ },
+ {
+  "item": "f-7abb92",
+  "class": "c",
+  "checker_agrees": true,
+  "evidence": "At least 3 square-bracket placeholders like [price] are required. The answer, a one-line XML fragment, has one bracketed placeholder, '[value1]'; the other two intended placeholders are written as tags '<value2>' and '<value3>', which don't count. That is 1 against at least 3, off by 2. It uses no commas."
+ }
+]

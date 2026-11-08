@@ -1,0 +1,34 @@
+rel. L2 = ||a - b|| / ||b|| over rows 0-1023 of 4 shard-2 matrices (model.layers.16.mlp.down_proj.weight, model.layers.16.self_attn.q_proj.weight, model.layers.20.mlp.up_proj.weight, model.layers.20.self_attn.o_proj.weight)
+  main   vs s1900 : 1.0148e-03
+  main   vs s1800 : 1.2183e-03
+  s1900  vs s1800 : 9.8159e-04
+  s0100  vs base  : 1.9634e-03
+  s0200  vs s0100 : 1.9077e-03
+  s0100  vs b11000: 1.2232e-02
+  base   vs b11000: 1.2073e-02
+  main   vs base  : 2.5221e-03
+  ratio (s0100 vs b11000) / (s0100 vs base) = 6.23
+  main closer to step_1900 than step_1800: True
+row norms (embed / lm_head); regular ids 1000-1015 mean: base 5.538 / 1.444, s0100 5.538 / 1.444, main 5.538 / 1.444
+  100256 <|system|>         embed base 1.2440 s0100 1.2440 main 1.2440 | lm_head base 0.8356 main 0.8356 | |d embed| s0100 0.0000 main 0.0000 | base row == row 100256: True
+  100257 <|endoftext|>      embed base 4.3831 s0100 4.3831 main 4.3831 | lm_head base 1.3556 main 1.3556 | |d embed| s0100 0.0000 main 0.0000 | base row == row 100256: False
+  100258 <|fim_prefix|>     embed base 2.4016 s0100 2.4016 main 2.4016 | lm_head base 1.2946 main 1.2947 | |d embed| s0100 0.0005 main 0.0012 | base row == row 100256: False
+  100259 <|fim_middle|>     embed base 2.5495 s0100 2.5495 main 2.5495 | lm_head base 1.6316 main 1.6316 | |d embed| s0100 0.0008 main 0.0017 | base row == row 100256: False
+  100260 <|fim_suffix|>     embed base 2.4291 s0100 2.4291 main 2.4291 | lm_head base 1.6338 main 1.6338 | |d embed| s0100 0.0010 main 0.0010 | base row == row 100256: False
+  100261 |||PHONE_NUMBER||| embed base 1.2867 s0100 1.2867 main 1.2867 | lm_head base 0.8356 main 0.8356 | |d embed| s0100 0.0000 main 0.0000 | base row == row 100256: False
+  100262 |||EMAIL_ADDRESS||| embed base 1.2559 s0100 1.2559 main 1.2559 | lm_head base 0.8356 main 0.8356 | |d embed| s0100 0.0000 main 0.0000 | base row == row 100256: False
+  100263 |||IP_ADDRESS|||   embed base 1.2658 s0100 1.2658 main 1.2658 | lm_head base 0.8353 main 0.8353 | |d embed| s0100 0.0000 main 0.0000 | base row == row 100256: False
+  100264 <|im_start|>       embed base 1.2560 s0100 1.2560 main 1.2560 | lm_head base 0.8356 main 0.8356 | |d embed| s0100 0.0027 main 0.0029 | base row == row 100256: False
+  100265 <|im_end|>         embed base 1.2626 s0100 1.2626 main 1.2626 | lm_head base 0.8356 main 0.8356 | |d embed| s0100 0.0027 main 0.0032 | base row == row 100256: False
+  100266 <|user|>           embed base 1.2617 s0100 1.2617 main 1.2617 | lm_head base 0.8356 main 0.8356 | |d embed| s0100 0.0000 main 0.0000 | base row == row 100256: False
+  100267 <|assistant|>      embed base 1.2768 s0100 1.2768 main 1.2768 | lm_head base 0.8356 main 0.8356 | |d embed| s0100 0.0000 main 0.0000 | base row == row 100256: False
+  100268 <think>            embed base 1.2700 s0100 1.2700 main 1.2700 | lm_head base 0.8356 main 0.8356 | |d embed| s0100 0.0029 main 0.0030 | base row == row 100256: False
+  100269 </think>           embed base 1.2876 s0100 1.2876 main 1.2876 | lm_head base 0.8356 main 0.8356 | |d embed| s0100 0.0000 main 0.0000 | base row == row 100256: False
+  100270 <functions>        embed base 1.2327 s0100 1.2326 main 1.2327 | lm_head base 0.8356 main 0.8356 | |d embed| s0100 0.0018 main 0.0034 | base row == row 100256: False
+  100271 </functions>       embed base 1.2521 s0100 1.2520 main 1.2521 | lm_head base 0.8356 main 0.8356 | |d embed| s0100 0.0019 main 0.0021 | base row == row 100256: False
+  100272 <function_calls>   embed base 1.2617 s0100 1.2617 main 1.2617 | lm_head base 0.8356 main 0.8356 | |d embed| s0100 0.0000 main 0.0000 | base row == row 100256: False
+  100273 </function_calls>  embed base 1.2455 s0100 1.2455 main 1.2455 | lm_head base 0.8356 main 0.8356 | |d embed| s0100 0.0000 main 0.0000 | base row == row 100256: False
+  100274 <answer>           embed base 1.2528 s0100 1.2528 main 1.2528 | lm_head base 0.8356 main 0.8356 | |d embed| s0100 0.0000 main 0.0000 | base row == row 100256: False
+  100275 </answer>          embed base 1.2525 s0100 1.2525 main 1.2525 | lm_head base 0.8356 main 0.8356 | |d embed| s0100 0.0000 main 0.0000 | base row == row 100256: False
+  100276 <|endofprompt|>    embed base 1.2598 s0100 1.2598 main 1.2598 | lm_head base 0.8356 main 0.8356 | |d embed| s0100 0.0000 main 0.0000 | base row == row 100256: False
+  100277 <|pad|>            embed base 1.2674 s0100 1.2674 main 1.2674 | lm_head base 0.8356 main 0.8356 | |d embed| s0100 0.0000 main 0.0000 | base row == row 100256: False

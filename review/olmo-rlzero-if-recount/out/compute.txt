@@ -1,0 +1,40 @@
+pretraining 6ND = 2.6630e+23; mean templated Dolci prompt = 281.1 tokens (median 219)
+step  n_train  L_train  n_eval  L_eval
+    0      96   2533.2    7200  2404.5
+  100      48     45.2    3600    56.7
+  500      48     67.4    3600   155.1
+ 2000      48     47.2    3600    35.4
+step   100: RL/pretrain low 7.168e-06 high 1.013e-05 geomean 8.522e-06
+step   500: RL/pretrain low 8.433e-06 high 1.942e-05 geomean 1.280e-05
+step  1900: RL/pretrain low 1.299e-05 high 5.126e-05 geomean 2.580e-05
+step  2000: RL/pretrain low 1.326e-05 high 5.311e-05 geomean 2.654e-05
+step  2100: RL/pretrain low 1.352e-05 high 5.494e-05 geomean 2.726e-05
+job            samples  gen_tokens  meta_samples meta_tokens  load_s   gen_s   gpu
+C1_base_rev       1328     2926124         1328     2926124      51    4311   NVIDIA A100-SXM4-80GB  (meta rows 1)
+C1_main         111600     3961917       111600     3961917      71     832   NVIDIA A100-SXM4-80GB  (meta rows 1)
+C1_s0100_a         128         448          128         448      60       0   NVIDIA A100-SXM4-80GB  (meta rows 1)
+C1_s0100_b          96        4353           96        4353      59       2   NVIDIA A100-SXM4-80GB  (meta rows 1)
+C1_s0500_a         128         445          128         445      60       0   NVIDIA A100-SXM4-80GB  (meta rows 1)
+C1_s0500_b          96        5337           96        5337      59       2   NVIDIA A100-SXM4-80GB  (meta rows 1)
+D_base_btok        256      533614          256      533614      59     684   NVIDIA A100-SXM4-80GB  (meta rows 1)
+D_base_btok_b      192      415263          192      415263      59     548   NVIDIA A100-SXM4-80GB  (meta rows 1)
+D_math             128      307708          128      307708      59     491   NVIDIA A100-SXM4-80GB  (meta rows 1)
+D_math_b            64      241127           64      241127      60     471   NVIDIA A100-SXM4-80GB  (meta rows 1)
+E1_base_a         1264     2174310         1264     2174310      61    2975   NVIDIA A100-SXM4-80GB  (meta rows 1)
+E2_base_ifb       2160     5546925         2160     5546925      60    7348   NVIDIA A100-SXM4-80GB  (meta rows 1)
+E2_base_ife       3920     8221129         3920     8221129      27   10777   NVIDIA A100-SXM4-80GB  (meta rows 1)
+E3_base_ifb         96      223573           96      223573      61     405   NVIDIA A100-SXM4-80GB  (meta rows 1)
+E3_base_ife        160      443674          160      443674      60     670   NVIDIA A100-SXM4-80GB  (meta rows 1)
+E4_base           3072     7785216         3072     7785216      72   10192   NVIDIA A100-SXM4-80GB  (meta rows 1)
+F_base_ifb        4800    12047556         4800    12047556      70   16068   NVIDIA A100-SXM4-80GB  (meta rows 1)
+F_base_ife        2400     5264632         2400     5264632      69    6929   NVIDIA A100-SXM4-80GB  (meta rows 1)
+F_main            3600      127386         3600      127386      70      39   NVIDIA A100-SXM4-80GB  (meta rows 1)
+F_math_void          8        5381            0           0       0       0   ?  (meta rows 0)
+F_s0100           3600      204190         3600      204190      60     284   NVIDIA A100-SXM4-80GB  (meta rows 1)
+F_s0500           3600      558210         3600      558210      59     568   NVIDIA A100-SXM4-80GB  (meta rows 1)
+s0_base_a          128      301767          128      301767      52     495   NVIDIA A100-SXM4-80GB  (meta rows 1)
+s0_base_b          128      289281          128      289281      68     437   NVIDIA A100-SXM4-80GB  (meta rows 1)
+s0_main            128        6575          128        6575      68       8   NVIDIA A100-SXM4-80GB  (meta rows 1)
+s0_s0100            48        2169           48        2169      60       2   NVIDIA A100-SXM4-80GB  (meta rows 1)
+s0_s0500            48        3236           48        3236      59       4   NVIDIA A100-SXM4-80GB  (meta rows 1)
+TOTAL samples 143176 generated tokens 51601546

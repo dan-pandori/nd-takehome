@@ -1,0 +1,7 @@
+problems: 450 {'ifbench': 300, 'ifeval': 150} stage0: 64 {'ifeval': 40, 'rlzif': 24} pid overlap: 0 prompt overlap: 0
+IFBench: 300 prompts (keys distinct 300); equal to the repo jsonl 300, to the HF parquet 300 (repo rows 300, HF rows 300); constraints per prompt {1: 256, 2: 44}
+IFEval: rows 541 | eval subset == seeded first 150: True | stage0 == next 40: True
+IFEval rows equal to google/IFEval: 190 of 190
+rows equal to olmo_ifomega/problems.jsonl (minus ifomega_excl): 450 of 450
+ifomega_excl flagged: 82 | olmo_ifomega/exclusions.csv IFBench rows: 82 | equal: True
+Stage-0 RL prompts: 24 {'rlzif': 24}
