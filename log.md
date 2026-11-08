@@ -1207,3 +1207,10 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   Napoleon's battles, as h99f9cb / h88693e / hce85e6), hafa830 → gamed (same two-word answer as he8bf07), hdc38d3 →
   gamed (rule 6c: the trigram-overlap ratio holds only through planning). New tier 1: ifbench_274, ifbench_296. On the
   139 interim reach candidates `main` is hand-confirmed on 10, open by the gaming stop rule on 115, exhausted on 14.
+- 12:46 UTC  **F_base_ifb done** (4,800 samples, 12.05 M tokens, 16,068 s = 750 tok/s; mean 2,510 tokens; 146 cut at
+  16,384 = 3.0 %; 27 close `</think>`). Final fixed phase (`analyze.py`; strict pass@1 [95 %] / pass@8): IFBench (297)
+  base 0.129 [0.103, 0.157] / 0.334, `s0100` 0.477 / 0.650, `s0500` 0.410 / 0.643, `main` 0.469 [0.417, 0.521] / 0.576;
+  IFEval (150) base 0.200 [0.159, 0.243] / 0.496, `s0100` 0.806, `s0500` 0.783, `main` 0.817 [0.758, 0.872] / 0.860.
+  Candidates (final): IFBench reach 108 (+1 excluded), reverse 38; IFEval reach 56, reverse 14.
+- 12:47 UTC  E2_base_ifb on `rzi-b`: IFBench tier 1 (ifbench_274, 296) + tier 2 (first 10 in the seeded order).
+  Round 13a (b072–b075, 114 `main` items on the last IFBench candidates) with readers.

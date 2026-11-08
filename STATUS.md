@@ -401,3 +401,7 @@ OLMO-IFFU DONE 2026-11-07T09:11:45Z
   confirmed; `main`'s strict successes are ~90 % gamed; `main` hand-confirmed on 8 of 95 reach candidates so far. Tier-1
   base extension: on 4 IFBench fixed-option prompts the base has 0 strict successes in 256 → 4 reach prompts (strict and
   hand). Spend $10.3 of $40; IFBench base fixed phase ends ~13:00.
+- 2026-11-08 12:48 UTC  Fixed phase done. Strict pass@1: IFBench base 0.13 vs `main` 0.47; IFEval 0.20 vs 0.82.
+  Reach candidates: IFBench 108, IFEval 56 (reverse 38 / 14). `main`'s first-read strict successes are 86–96 % gamed.
+  Interim verdict (verdict.py, hand): IFBench Reach (4 fixed-option prompts where the base never answers with a bare
+  option in 256 samples); IFEval open. Spend ≈ $19 of $40; extensions running on 2 pods.
