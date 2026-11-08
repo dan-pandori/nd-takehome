@@ -112,12 +112,12 @@ def main():
     for k in sorted(cnt):
         print(*k, cnt[k])
     with open(O / "gate_status.csv", "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=list(rows[0].keys()) if rows else ["pid"])
+        w = csv.DictWriter(f, fieldnames=list(rows[0].keys()) if rows else ["pid"], lineterminator="\n")
         w.writeheader()
         w.writerows(rows)
     if a.items:
         with open(a.items, "w", newline="") as f:
-            w = csv.DictWriter(f, fieldnames=["job", "pid", "chunk", "i", "model", "side", "role"])
+            w = csv.DictWriter(f, fieldnames=["job", "pid", "chunk", "i", "model", "side", "role"], lineterminator="\n")
             w.writeheader()
             w.writerows(items)
         print(f"{len(items)} items to read -> {a.items}")
