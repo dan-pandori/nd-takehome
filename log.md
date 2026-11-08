@@ -1201,3 +1201,5 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   first 16–32 fresh draws strict on several reverse candidates. Format check, first 4 reach prompts (ifbench_100,
   102–104; `fail1/`, 17 items): the base's failures u 8 / a 3 / c 5 of 16 (no bare option ever; it answers with
   explanation or debris); `main`'s one failure b ("d)." with a period).
+- 11:17 UTC  Tier 2 cut further to the **first 10 per task** in the seeded order (budget: E2's queue still holds the stopped prompts' first chunks, ≈ $1.7, and the projection was ≈ $36); IFEval positions 11–15 added to the stop file by position, not outcome.
+- 11:35 UTC  C1_base_rev done (1,312 samples); `rzi-f` deleted after the listing diff (idle until the IFBench fixed phase ends). Reverse candidates: the base's challenger confirmation is limited to C1_base_rev plus reading; reverse candidates that still need base draws are reported open (not in any verdict; budget).

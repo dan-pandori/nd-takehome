@@ -77,12 +77,12 @@ def prep(items_csv, outdir):
         if new:
             wr.writeheader()
         wr.writerows(rows)
-    # reader batches of the new items: shuffled, <= 30 items and <= 60,000 characters each
+    # reader batches of the new items: shuffled, <= 30 items and <= 150,000 characters each (60,000 before 11:10 UTC)
     rng.shuffle(rows)
     batches, cur, size = [], [], 0
     for r in rows:
         n = (out / "items" / f"{r['item']}.md").stat().st_size
-        if cur and (len(cur) >= 30 or size + n > 60000):
+        if cur and (len(cur) >= 30 or size + n > 150000):
             batches.append(cur)
             cur, size = [], 0
         cur.append(r["item"])
