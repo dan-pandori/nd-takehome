@@ -1175,3 +1175,12 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   continues. Interim (base complete on 202 prompts): reach 62, reverse 27; `main` hand-confirmed on 7 (ifbench_100–104,
   ifeval_1361, ifeval_219), open by the gaming stop rule on 42. Round 3a (b018–b019, 50 items) with readers.
   Spend $7.0 (podbudget) of $40.
+- 10:12 UTC  F_base_ife done (2,400 samples, 5.26 M tokens, 6,929 s = 760 tok/s; mean 2,194 tokens, 65 cut at 16,384 =
+  2.7 %; 19 responses close `</think>`). IFEval strict pass@1: base 0.200, `s0100` 0.806, `s0500` 0.783, `main` 0.817.
+  IFEval candidates final: reach 56, reverse 14.
+- 10:14 UTC  E2_base_ife on `rzi-c`: the base extended on **every** IFEval reach candidate (56) in one job for GPU
+  use; tier-1 prompts (`main` hand-confirmed) are hand-gated, tier-2 counted under strict only and stopped in the
+  seeded order if the budget needs it (stop file). **Seeded order implemented as a sha256("20261108:" + pid) sort**
+  (stable while IFBench candidates still arrive; fixed before any extension result): deviation from Part B's
+  random.Random shuffle of the final list, same intent. ifeval_1361 continues E1_base_a (+176, prior 0 genuine).
+  Round 4a (b023–b027, 132 `main` items on the new candidates) with readers.
