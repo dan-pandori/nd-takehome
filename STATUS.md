@@ -380,3 +380,11 @@ OLMO-IFOMEGA DONE 2026-11-06T07:33:16Z
   hand-check table), `figures/olmo_iffu_status.png`, bucket `hf://buckets/dan-pandori/nd-rl/olmo-iffu/`.
 
 OLMO-IFFU DONE 2026-11-07T09:11:45Z
+
+## olmo-rlzero-if (executor; proposal 39; budget $40 / 40 pod-h; hard stop 2026-11-10 05:13 UTC)
+
+- 2026-11-08 05:30 UTC  **Run started** 05:13 UTC. Question: does RL-Zero-IF (RLVR on IF straight from the Olmo 3 7B
+  base) solve IFBench / IFEval prompts the base cannot within 256 samples? Recipe = the released run's (`olmo_thinker`
+  @ d928a7c, T 1, top-p 1, 16,384 tokens, stop `</answer>`), one tokenizer (RL-Zero-IF's) for every model. `main` ≠
+  `step_1900` by shard sha256 (checked in Stage 0). Contamination: 3 IFBench prompts excluded (fish screenplay).
+  Pre-registration Part A committed before any pod; Stage 0 (≤ $3) next.
