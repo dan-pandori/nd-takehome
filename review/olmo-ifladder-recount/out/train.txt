@@ -11,5 +11,7 @@
     same per-epoch order in both arms: True; train tokens main / ctrl = 1.411
     recipe main vs pre-registration: all equal; targets True
     recipe ctrl vs pre-registration: all equal; targets True
+[4] lora_main: training loss mean of first 4 steps 0.670, last 4 0.350; NLL change held-out s2300 -15.1% (positive = rises), held-out dpo +16.9%
 [4] lora_main: held-out s2300 NLL base 0.6381 peft 0.5417 (+15.1% drop) merged 0.5431; held-out dpo NLL base 0.7616 peft 0.8900 (-16.9% drop); merge check max rel. 0.0112 (mean-based 0.0112)
+[4] lora_ctrl: training loss mean of first 4 steps 0.741, last 4 0.407; NLL change held-out s2300 +0.7% (positive = rises), held-out dpo +1.4%
 [4] lora_ctrl: held-out s2300 NLL base 0.6381 peft 0.6426 (-0.7% drop) merged 0.6416; held-out dpo NLL base 0.7616 peft 0.7720 (-1.4% drop); merge check max rel. 0.0088 (mean-based 0.0088)

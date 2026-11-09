@@ -46,9 +46,12 @@ olmo-iffu review), byte-identical to `olmo_ifomega/vendor/` (`out/provenance.txt
 rule 6 as a separate ALL-CAPS flag, and the pre-registered sentence about appended instructions).
 `hand/reader_labels/*.json`: the readers' JSON verbatim. `hand/key_*.json` maps item ids to sample keys (kept from
 readers). Phase 1 made no adjudications (no `hand/confirm.json`); `hand/confirm_phase2.json` holds the one phase-2
-adjudication, applied only by `rvl_p2_adjusted.py`. Rounds: A1–A6 first reads (A4 inside M1), B1 / B2 / B5 second
-reads (B3 inside M1), M1 = the last first, second and third reads in one batch, T1 = the 8 remaining rung-2
-`ifbench_290` strict successes (rule-6 strict reading). Item texts are regenerable with `rvl_hand_items.py <ROUND>`.
+adjudication, applied only by `rvl_p2_adjusted.py`. Rounds (phase 1): A1–A6 first reads (A4 inside M1), B1 / B2 /
+B5 second reads (B3 inside M1), M1 = the last first, second and third reads in one batch, T1 = the 8 remaining rung-2
+`ifbench_290` strict successes (rule-6 strict reading). Phase 2, after the adversarial check: the one-sentence screen
+fixed to the literal pre-registered test (`out/mech_change.txt`; phase-1 outputs in `out/phase1/`) and second reads
+extended to every deciding item of every cell: P2 (screen-exposed first reads + all sanity second reads), P3–P6, B11,
+C9 (continuations, second and third reads). Item texts are regenerable with `rvl_hand_items.py <ROUND>`.
 
 Order to reproduce: `rvl_regrade` (all jobs) → `rvl_sets` → `rvl_provenance` → `rvl_exemplars` → `rvl_hints` →
 `rvl_train` → `rvl_overlap` → `rvl_copy` → `rvl_calib_lengths` → `rvl_compute` → `rvl_hygiene` (after `hf buckets

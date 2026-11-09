@@ -68,3 +68,9 @@ for c in ("R2", "LM", "LC", "S2"):
                 g_strict += 1
     P(f"ifbench_290 {c}: strict {len(xs)}; genuine read {g_all}; genuine and not ALL-CAPS {g_strict}; unread {unread} "
       f"-> strict ALL-CAPS reading: {'elicited' if g_strict >= 2 else 'not elicited' if unread == 0 else 'unsettled'}")
+byr = collections.Counter()
+for f in files:
+    byr[f.stem.rsplit("_", 1)[0]] += len(json.load(open(f)))
+p1 = sum(v for k, v in byr.items() if k in ("A1", "A2", "A3", "A5", "A6", "B1", "B2", "B5", "M1", "T1"))
+P(f"reads by round: {dict(sorted(byr.items()))}; phase-1 rounds {p1}, phase-2 rounds (P2-P6, B11, C9) "
+  f"{sum(byr.values()) - p1}, total {sum(byr.values())}")

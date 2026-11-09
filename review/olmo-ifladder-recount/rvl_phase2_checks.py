@@ -7,7 +7,11 @@
  5. Fisher (estimated counts) on the 16 executor-"teachable" prompts under my labels with ifbench_154's rung-4
     item adjudicated gamed (my confirm, phase 2)
  6. rung-1 s2300 break flags for the "neither" prompts in my olmo-iffu review (numbers.md: 284 breaks at rung 1)
- 7. rung-2 vs rung-1 tokens per draw on the same prompts (needs olmo-iffu's T2 / T2c rows; reported if available)
+ 7. rung-1 tokens per draw (olmo-iffu T2 / T2c rows from my olmo-iffu kit)
+ 8. how the executor's label arose on the executor-gamed / mine-genuine disagreements (its readers vs its overturns)
+ 9. tokens per draw rung r vs rung r-1 on the same prompts
+10. cost of a second training draw for both LoRAs (two trainings + two 48 x 32 evaluations, measured rates)
+11-12. the one-way disagreements by binding id, and the addendum rules the executor's notes cite on them
 Writes out/phase2_checks.txt.
 """
 import collections
@@ -110,3 +114,82 @@ tot_ = collections.Counter()
 for (c, kind), v in cnt.items():
     tot_[kind] += v
 P(f"[8] executor-gamed / mine-genuine disagreements by how the executor's label arose: {dict(tot_)}; by cell {dict(cnt)}")
+# 9. tokens per draw on the same prompts, rung r vs rung r-1 (numbers.md compute table: 1.18x / 1.20x / 0.88x)
+def tok_by_pid(rows):
+    d = collections.defaultdict(list)
+    for r in rows:
+        d[r["pid"]].append(r.get("n_tok") or r.get("n_ids") or 0)
+    return d
+
+
+R = {}
+R["R1"] = tok_by_pid([json.loads(l) for j in ("T2_dpo", "T2c_dpo") for l in
+                      gzip.open(KIT.parent / "olmo-iffu-recount" / "out" / "regrade" / f"{j}.jsonl.gz", "rt")] +
+                     [json.loads(l) for l in gzip.open(OUT / "regrade" / "R1cal_dpo.jsonl.gz", "rt")])
+for r_, job in (("R2", "R2_dpo"), ("R3", "R3_dpo"), ("R4", "R4_dpo")):
+    R[r_] = tok_by_pid([json.loads(l) for l in gzip.open(OUT / "regrade" / f"{job}.jsonl.gz", "rt")])
+for a, b in (("R2", "R1"), ("R3", "R2"), ("R4", "R3")):
+    common = sorted(set(R[a]) & set(R[b]))
+    ta = sum(sum(R[a][p]) for p in common) / sum(len(R[a][p]) for p in common)
+    tb = sum(sum(R[b][p]) for p in common) / sum(len(R[b][p]) for p in common)
+    P(f"[9] tokens per draw on the {len(common)} common prompts: {a} {ta:.0f} vs {b} {tb:.0f} = {ta / tb:.3f}x")
+# 10. cost of a second training draw: two trainings + two 48 x 32 evaluations at the measured LoRA-path rates
+ART = KIT.parent.parent / "artifacts" / "olmo_ifladder"
+est = 0.0
+toks = 0
+for arm, job in (("main", "Leval_main"), ("ctrl", "Leval_ctrl")):
+    rows = [json.loads(l) for l in gzip.open(OUT / "regrade" / f"{job}.jsonl.gz", "rt")]
+    rr = [r for r in rows if r["pid"] in reach]
+    tpd = sum(r["n_ids"] for r in rr) / len(rr)
+    m = json.load(open(ART / "meta" / f"{job}.json"))
+    rate = m["gen_tokens"] / m["t_gen_s"]
+    lm_ = json.load(open(ART / "meta" / f"lora_{arm}.json"))
+    t = 48 * 32 * tpd / rate + lm_["train_secs"] + lm_.get("secs_finish", 0) + m["t_load_s"]
+    est += t
+    toks += 48 * 32 * tpd
+    P(f"[10] {arm}: reach tokens per draw {tpd:.0f}; LoRA-path rate {rate:.0f} tok/s; 48 x 32 draws -> "
+      f"{48 * 32 * tpd / 1e6:.2f} M tokens; with training + load {t / 3600:.2f} h")
+P(f"[10] total {toks / 1e6:.1f} M tokens, {est / 3600:.2f} GPU-h -> ${est / 3600 * 3.59:.1f} at $3.59/h "
+  f"(+ pod set-up / weight fetch, ~0.5 h -> ${(est / 3600 + 0.5) * 3.59:.1f})")
+# 11. the one-way disagreements by binding id; rule citations in the executor's notes
+bind = {r["pid"]: r["binding"] for r in prompts}
+byid = collections.Counter()
+cites = collections.Counter()
+for r in hc:
+    k = (JOBCELL[r["job"]], r["pid"], int(r["chunk"]), int(r["i"]))
+    g = gkey(k)
+    my = "gamed" if k in mech else (lab[g]["label"] if g in lab else None)
+    if my == "genuine" and r["final_label"].strip().lower() == "gamed":
+        byid[bind[r["pid"]]] += 1
+        note = (r.get("my_note") or "").lower()
+        for rule in ("rule 7", "rule 8", "rule 9", "rule 10", "rule 11", "rule 12"):
+            if rule in note:
+                cites[rule] += 1
+P(f"[11] executor-gamed / mine-genuine by binding id: {dict(byid.most_common())}")
+P(f"[12] executor notes on them citing an addendum rule: {dict(cites)}")
+# 13. the executor's rule-1 one-sentence screen (gate.py `mech`: no match of [.!?]["')\]]*\s+\S, re-typed here) vs the
+#     literal pre-registered test (my fixed rvl_hand.one_sentence) on every reach strict success of a per-sentence id
+import re as _re  # noqa: E402
+
+from rvl_core import iter_job  # noqa: E402
+from rvl_hand import PER_SENT, SL, one_sentence  # noqa: E402
+
+JOBS_ = {"R2": "R2_dpo", "R3": "R3_dpo", "R4": "R4_dpo", "LM": "Leval_main", "LC": "Leval_ctrl", "S2": "R2_s2300",
+         "S3": "R3_s2300", "S4": "R4_s2300"}
+diff = collections.Counter()
+both = collections.Counter()
+for c, job in JOBS_.items():
+    want = {(p, ch, i) for p, xs in SL[c].items() if p in reach and set(upstream_record(p)[1]["instruction_id_list"]) & PER_SENT
+            for ch, i, _ in xs}
+    for r in iter_job(job):
+        k = (r["pid"], int(r["chunk"]), int(r["i"]))
+        if k not in want:
+            continue
+        a = answer_of(r["text"]) or ""
+        ex1 = not _re.search(r"[.!?][\"')\]]*\s+\S", a)
+        lit = one_sentence(a)
+        both[(ex1, lit)] += 1
+        if ex1 and not lit:
+            diff[(c, r["pid"])] += 1
+P(f"[13] per-sentence strict successes: (executor screen one-sentence, literal one-sentence) counts {dict(both)}; "
+  f"executor screen 'one sentence' but literally more than one: {sum(diff.values())} by (cell, pid) {dict(diff)}")

@@ -37,8 +37,17 @@ SL = json.load(open(OUT / "strict_lists.json"))
 
 
 def one_sentence(a):
-    """No '.', '!' or '?' followed by more text (a letter or digit after optional spaces / quotes / brackets)."""
-    return re.search(r"[.!?][\s'\"”’)\]]*[A-Za-z0-9]", a) is None
+    """The pre-registered test, literally: no '.', '!' or '?' followed by more text. "More text" = any non-whitespace
+    character after the mark once closing quotes / brackets and further marks are skipped; so an emoji, an HTML tag
+    or a word after a full stop all mean more than one sentence. (Phase 1 used a narrower test that required a letter
+    or digit right after optional quotes / spaces; it missed '. <emoji> Next' and '.</i> Next' - fixed in phase 2
+    after the adversarial check; the phase-1 labels are in out/phase1/mech_labels.json.)"""
+    t = a.strip()
+    for m in re.finditer(r"[.!?]", t):
+        rest = re.sub(r"^[.!?\"'\u201d\u2019)\]]*", "", t[m.end():])
+        if rest.strip():
+            return False
+    return True
 
 
 def mech_flag(pid, ans):
@@ -211,8 +220,9 @@ def deciding(lab, mech):
         w = walk(c, pid, lab, mech)
         if w["outcome"] is None:
             continue
-        main = c in MAIN
-        if w["outcome"] == "elicited" and (main or w["n"] <= 4):
+        # phase 2: every cell, as pre-registered ("every deciding item gets a second blinded reader"); phase 1 limited
+        # sanity cells to <= 4 strict successes, which left fragile cells (e.g. S2 ifbench_166) single-read
+        if w["outcome"] == "elicited":
             ng = 0
             for ch, i, L, src in w["seq"]:
                 if L == "genuine" and ng < 2:  # the first two genuine draws decide the cell

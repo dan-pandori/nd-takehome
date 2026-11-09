@@ -1,0 +1,839 @@
+{
+ "breaks_S2": {
+  "breaks": [
+   "ifbench_64",
+   "ifbench_188",
+   "ifbench_3",
+   "ifbench_19",
+   "ifbench_189"
+  ],
+  "breaks40": [
+   "ifbench_64",
+   "ifbench_19",
+   "ifbench_189"
+  ],
+  "ran": 48,
+  "ran40": 40
+ },
+ "breaks_S3": {
+  "breaks": [
+   "ifbench_4",
+   "ifbench_188",
+   "ifbench_3",
+   "ifbench_166",
+   "ifbench_189"
+  ],
+  "breaks40": [
+   "ifbench_189"
+  ],
+  "ran": 31,
+  "ran40": 23
+ },
+ "breaks_S4": {
+  "breaks": [
+   "ifbench_4",
+   "ifbench_188"
+  ],
+  "breaks40": [],
+  "ran": 26,
+  "ran40": 18
+ },
+ "expect": [
+  [
+   "1",
+   "rung 2 elicits 3 (0-7) of the 32 rung-1-unelicited",
+   "1 of 32",
+   "held"
+  ],
+  [
+   "2",
+   "rung 3 elicits 4 (1-9) of those still unelicited",
+   "5 of 31",
+   "held"
+  ],
+  [
+   "3",
+   "rung 4 elicits 3 (0-8) of those still unelicited",
+   "4 of 26",
+   "held"
+  ],
+  [
+   "4",
+   "prompt-elicitable at some rung 26 of 48 (19-33)",
+   "26 of 48",
+   "held"
+  ],
+  [
+   "5",
+   "lora_main elicits 4 of 48 (0-10); lora_ctrl 2 (0-6); most prompt-elicitable anyway",
+   "lora_main 40 (of them prompt-elicitable 25); lora_ctrl 0",
+   "lora_main missed; lora_ctrl held; 'most prompt-elicitable' held"
+  ],
+  [
+   "6",
+   "teachable from RL's trajectories 1 (0-4); teachable by any light fine-tune 0 (0-2)",
+   "15; 0",
+   "missed; held"
+  ],
+  [
+   "7",
+   "neither 21 of 48 (13-28); of the 6 test-3 survivors not elicited at rung 1, 4 (2-6) neither",
+   "7; 2 of 6",
+   "missed; held"
+  ],
+  [
+   "8",
+   "gamed share: R2 = R1 + 5 pp (-10 to +20); R3 0.15 (0.05-0.40); R4 0.12 (0.03-0.35); lora_main 0.10 (0-0.35)",
+   "R2 0.136 (8/59; R1 0.125 -> +0.011); R3 0.190 (4/21); R4 0.263 (5/19); LM 0.079 (13/164)",
+   "R2 held; R3 held; R4 held; LM held"
+  ],
+  [
+   "9",
+   "dpo calibration mean >= 0.75 at every rung; below half its unhinted rate on <= 2 prompts at any rung; each LoRA's calibration mean >= 0.8 x dpo's unhinted mean",
+   "min rung mean 0.777; max prompts below half 1; LM 0.975, LC 0.895 vs 0.8 x 0.906 = 0.725",
+   "held"
+  ],
+  [
+   "10",
+   "lengths: lora_main median answer words 140 (60-220) vs dpo 231; lora_ctrl within +-25 % of dpo; both LoRAs' median thinking tokens within +-35 % of dpo's",
+   "answer words (median of prompt medians) LM 69.5, LC 235.25, dpo 231.0; thinking LM 6236.25 (3.40x), LC 1962.75 (1.07x), dpo 1833.5",
+   "LM words held; LC words held; LM thinking missed; LC thinking held"
+  ],
+  [
+   "11",
+   "the four 1,024-survivors the hint elicits (78 133 252 253): >= 3 of 4 at rung 2 (2-4); 0 of 4 by either LoRA (0-2)",
+   "rung 2 4 of 4; lora_main 4, lora_ctrl 0",
+   "rung 2 held; LoRAs missed"
+  ],
+  [
+   "12",
+   "s2300 sanity: a rung breaks s2300 on <= 3 (R2) / <= 5 (R3, R4) of the 40 non-DROP60 reach prompts",
+   "R2 3 of 40; R3 1 of 23 run; R4 0 of 18 run",
+   "R2 held; R3 held (on the run subset); R4 held (on the run subset)"
+  ],
+  [
+   "13",
+   "stage 0: dpo tokens per draw R2 4.5k (3-7k), R3 5k (3-8k)",
+   "R2 4449, R3 5361",
+   "R2 held; R3 held"
+  ]
+ ],
+ "fisher": [
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 25,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 25,
+   "p_est": 1.5974753002460243e-09,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 1.5974753002460243e-09,
+   "pid": "ifeval_2350"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 36,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 36,
+   "p_est": 1.3423970563926621e-14,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 1.3423970563926621e-14,
+   "pid": "ifeval_2447"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "N",
+   "LM_est": 1,
+   "LM_gen_lb": 1,
+   "LM_share": 1.0,
+   "LM_strict": 1,
+   "p_est": 0.5,
+   "p_lb": 0.5,
+   "p_strict": 0.5,
+   "pid": "ifeval_3478"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 18,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 18,
+   "p_est": 9.497400577112212e-07,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 9.497400577112212e-07,
+   "pid": "ifeval_1314"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 45,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 45,
+   "p_est": 1.0672517330894838e-19,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 1.0672517330894838e-19,
+   "pid": "ifeval_2247"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 48,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 48,
+   "p_est": 1.125550363365342e-21,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 1.125550363365342e-21,
+   "pid": "ifeval_2563"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 10,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 10,
+   "p_est": 0.0006677354322492655,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 0.0006677354322492655,
+   "pid": "ifbench_290"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 16,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 16,
+   "p_est": 5.233673935046942e-06,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 5.233673935046942e-06,
+   "pid": "ifbench_4"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 4,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 4,
+   "p_est": 0.059559055118110237,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 0.059559055118110237,
+   "pid": "ifbench_64"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 31,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 31,
+   "p_est": 3.645134025761404e-12,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 3.645134025761404e-12,
+   "pid": "ifbench_79"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 4,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 4,
+   "p_est": 0.059559055118110237,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 0.059559055118110237,
+   "pid": "ifbench_170"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 4,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 4,
+   "p_est": 0.059559055118110237,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 0.059559055118110237,
+   "pid": "ifbench_0"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "N",
+   "LM_est": 0,
+   "LM_gen_lb": 0,
+   "LM_share": 0.0,
+   "LM_strict": 0,
+   "p_est": 1.0,
+   "p_lb": 1.0,
+   "p_strict": 1.0,
+   "pid": "ifbench_188"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 9,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 9,
+   "p_est": 0.0014447366625029562,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 0.0014447366625029562,
+   "pid": "ifbench_207"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 5,
+   "LM_gen_lb": 3,
+   "LM_share": 0.75,
+   "LM_strict": 7,
+   "p_est": 0.028818897637795274,
+   "p_lb": 0.1220472440944882,
+   "p_strict": 0.006571922412137507,
+   "pid": "ifbench_179"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "N",
+   "LM_est": 0,
+   "LM_gen_lb": 0,
+   "LM_share": 0.0,
+   "LM_strict": 0,
+   "p_est": 1.0,
+   "p_lb": 1.0,
+   "p_strict": 1.0,
+   "pid": "ifbench_268"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 37,
+   "LM_gen_lb": 3,
+   "LM_share": 0.75,
+   "LM_strict": 49,
+   "p_est": 4.085556258586363e-15,
+   "p_lb": 0.1220472440944882,
+   "p_strict": 2.2511007267306838e-22,
+   "pid": "ifbench_252"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 11,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 11,
+   "p_est": 0.0003055738418767825,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 0.0003055738418767825,
+   "pid": "ifbench_269"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 26,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 26,
+   "p_est": 6.048692884426694e-10,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 6.048692884426694e-10,
+   "pid": "ifbench_253"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "N",
+   "LM_est": 0,
+   "LM_gen_lb": 0,
+   "LM_share": 0.0,
+   "LM_strict": 0,
+   "p_est": 1.0,
+   "p_lb": 1.0,
+   "p_strict": 1.0,
+   "pid": "ifbench_3"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 32,
+   "LM_gen_lb": 3,
+   "LM_share": 0.75,
+   "LM_strict": 42,
+   "p_est": 1.2400971427848074e-12,
+   "p_lb": 0.1220472440944882,
+   "p_strict": 7.092372880803752e-18,
+   "pid": "ifbench_78"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 24,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 24,
+   "p_est": 4.153435780639663e-09,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 4.153435780639663e-09,
+   "pid": "ifbench_248"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 42,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 42,
+   "p_est": 7.092372880803752e-18,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 7.092372880803752e-18,
+   "pid": "ifbench_211"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "N",
+   "LM_est": 1,
+   "LM_gen_lb": 1,
+   "LM_share": 1.0,
+   "LM_strict": 1,
+   "p_est": 0.5,
+   "p_lb": 0.5,
+   "p_strict": 0.5,
+   "pid": "ifbench_166"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 55,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 55,
+   "p_est": 4.053335122045994e-27,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 4.053335122045994e-27,
+   "pid": "ifbench_136"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 1,
+   "LC_strict": 1,
+   "LM": "E",
+   "LM_est": 62,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 62,
+   "p_est": 5.473850803234715e-33,
+   "p_lb": 0.18251968503937008,
+   "p_strict": 5.473850803234715e-33,
+   "pid": "ifbench_133"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 1,
+   "LC_strict": 1,
+   "LM": "E",
+   "LM_est": 11,
+   "LM_gen_lb": 3,
+   "LM_share": 0.75,
+   "LM_strict": 15,
+   "p_est": 0.002144240377614004,
+   "p_lb": 0.3095118110236221,
+   "p_strict": 0.00011460677821031365,
+   "pid": "ifbench_1"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 18,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 18,
+   "p_est": 9.497400577112212e-07,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 9.497400577112212e-07,
+   "pid": "ifbench_19"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "N",
+   "LM_est": 0,
+   "LM_gen_lb": 0,
+   "LM_share": 0.0,
+   "LM_strict": 0,
+   "p_est": 1.0,
+   "p_lb": 1.0,
+   "p_strict": 1.0,
+   "pid": "ifbench_67"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 1,
+   "LC_strict": 1,
+   "LM": "E",
+   "LM_est": 26,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 26,
+   "p_est": 1.047254081754661e-08,
+   "p_lb": 0.18251968503937008,
+   "p_strict": 1.047254081754661e-08,
+   "pid": "ifbench_128"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 21,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 21,
+   "p_est": 6.680128846286878e-08,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 6.680128846286878e-08,
+   "pid": "ifbench_154"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 2,
+   "LM_gen_lb": 2,
+   "LM_share": 1.0,
+   "LM_strict": 2,
+   "p_est": 0.24803149606299213,
+   "p_lb": 0.24803149606299213,
+   "p_strict": 0.24803149606299213,
+   "pid": "ifbench_169"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 20,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 20,
+   "p_est": 1.6396679895431426e-07,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 1.6396679895431426e-07,
+   "pid": "ifbench_173"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 56,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 56,
+   "p_est": 4.997262479234788e-28,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 4.997262479234788e-28,
+   "pid": "ifbench_186"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 24,
+   "LM_gen_lb": 2,
+   "LM_share": 0.5,
+   "LM_strict": 48,
+   "p_est": 4.153435780639663e-09,
+   "p_lb": 0.24803149606299213,
+   "p_strict": 1.125550363365342e-21,
+   "pid": "ifbench_187"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 1,
+   "LM": "N",
+   "LM_est": 1,
+   "LM_gen_lb": 1,
+   "LM_share": 0.25,
+   "LM_strict": 4,
+   "p_est": 0.5,
+   "p_lb": 0.5,
+   "p_strict": 0.18251968503937008,
+   "pid": "ifbench_189"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 9,
+   "LM_gen_lb": 2,
+   "LM_share": 0.3333333333333333,
+   "LM_strict": 28,
+   "p_est": 0.0014447366625029562,
+   "p_lb": 0.24803149606299213,
+   "p_strict": 8.255156470106708e-11,
+   "pid": "ifbench_203"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 1,
+   "LC_strict": 1,
+   "LM": "E",
+   "LM_est": 55,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 55,
+   "p_est": 1.9950182319878437e-25,
+   "p_lb": 0.18251968503937008,
+   "p_strict": 1.9950182319878437e-25,
+   "pid": "ifbench_204"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 33,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 33,
+   "p_est": 4.1336571426160247e-13,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 4.1336571426160247e-13,
+   "pid": "ifbench_206"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 12,
+   "LM_gen_lb": 3,
+   "LM_share": 0.75,
+   "LM_strict": 16,
+   "p_est": 0.0001384223386279442,
+   "p_lb": 0.1220472440944882,
+   "p_strict": 5.233673935046942e-06,
+   "pid": "ifbench_209"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 5,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 5,
+   "p_est": 0.028818897637795274,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 0.028818897637795274,
+   "pid": "ifbench_217"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 42,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 42,
+   "p_est": 7.092372880803752e-18,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 7.092372880803752e-18,
+   "pid": "ifbench_220"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 28,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 28,
+   "p_est": 8.255156470106708e-11,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 8.255156470106708e-11,
+   "pid": "ifbench_226"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 6,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 6,
+   "p_est": 0.013823698866909928,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 0.013823698866909928,
+   "pid": "ifbench_264"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 35,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 35,
+   "p_est": 4.3049284911902614e-14,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 4.3049284911902614e-14,
+   "pid": "ifbench_267"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 20,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 20,
+   "p_est": 1.6396679895431426e-07,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 1.6396679895431426e-07,
+   "pid": "ifbench_271"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "E",
+   "LM_est": 4,
+   "LM_gen_lb": 4,
+   "LM_share": 1.0,
+   "LM_strict": 4,
+   "p_est": 0.059559055118110237,
+   "p_lb": 0.059559055118110237,
+   "p_strict": 0.059559055118110237,
+   "pid": "ifbench_280"
+  },
+  {
+   "LC": "N",
+   "LC_gen": 0,
+   "LC_strict": 0,
+   "LM": "N",
+   "LM_est": 0,
+   "LM_gen_lb": 0,
+   "LM_share": 0.0,
+   "LM_strict": 0,
+   "p_est": 1.0,
+   "p_lb": 1.0,
+   "p_strict": 1.0,
+   "pid": "ifbench_284"
+  }
+ ],
+ "gamed_LC": [
+  1,
+  5
+ ],
+ "gamed_LM": [
+  13,
+  164
+ ],
+ "gamed_R1_mine": {
+  "dpo": [
+   8,
+   48,
+   9
+  ],
+  "s2300": [
+   47,
+   155,
+   31
+  ]
+ },
+ "gamed_R2": [
+  8,
+  59
+ ],
+ "gamed_R3": [
+  4,
+  21
+ ],
+ "gamed_R4": [
+  5,
+  19
+ ],
+ "gamed_S2": [
+  40,
+  175
+ ],
+ "gamed_S3": [
+  36,
+  119
+ ],
+ "gamed_S4": [
+  22,
+  104
+ ]
+}

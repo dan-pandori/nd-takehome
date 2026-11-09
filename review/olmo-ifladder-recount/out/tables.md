@@ -5,7 +5,7 @@
 | e3478 | `keywords:letter_frequency` | no | N | N (0) | N (0) | N (0) | N (1/1) | 0 | 0.5 | neither |  |
 | b166 | `ratio:sentence_words` | no | N | N (0) | N (0) | N (0) | N (1/1) | 0 | 0.5 | neither | test-3 survivor; DROP60; failed rungs breaking s2300: R1 R3 |
 | b284 | `repeat:repeat_span` | yes | N | N (0) | N (0) | N (0) | N (0/0) | 0 | 1 | neither | DROP60 |
-| b188 | `sentence:increment` | yes | N | N (0) | N (0) | N (4/0) | N (0/0) | 0 | 1 | neither | DROP60; failed rungs breaking s2300: R1 R2 R3 R4 |
+| b188 | `sentence:increment` | yes | N | N (0) | N (0) | N (4/0) | N (0/0) | 0 | 1 | neither | DROP60; failed rungs breaking s2300: R1 R2 R4 |
 | b268 | `words:vowel` | no | N | N (0) | N (0) | N (0) | N (0/0) | 0 | 1 | neither |  |
 | e1314 | `change_case:capital_word_frequency` | no | E | E (12/4) | – | – | E (18/4) | 0 | 9.5e-07 | prompt-elicitable at rung 1 |  |
 | e2247 | `change_case:english_capital` | no | E | E (33/4) | – | – | E (45/4) | 0 | 1.07e-19 | prompt-elicitable at rung 1 |  |
@@ -31,11 +31,11 @@
 | b211 | `words:consonants` | yes | N | N (1/1) | E (3/3) | – | E (42/4) | 0 | 7.09e-18 | prompt-elicitable at rung 3 | test-3 survivor |
 | b280 | `custom:multiples` | no | N | N (0) | N (0) | E (64/4) | E (4/4) | 0 | 0.0596 | prompt-elicitable at rung 4 |  |
 | b154 | `ratio:sentence_balance` | yes | N | N (0) | N (1/1) | E (2/2) | E (21/4) | 0 | 6.68e-08 | prompt-elicitable at rung 4 |  |
-| b189 | `sentence:increment` | yes | N | N (1/0) | N (2/1) | E (4/3) | N (4/1) | 1 | 0.5 | prompt-elicitable at rung 4 | failed rungs breaking s2300: R2 R3 |
+| b189 | `sentence:increment` | yes | N | N (1/0) | N (2/1) | E (4/3) | E (4/2) | 1 | 0.248 | prompt-elicitable at rung 4 | failed rungs breaking s2300: R2 |
 | b267 | `words:vowel` | no | N | N (0) | N (0) | E (2/2) | E (35/4) | 0 | 4.3e-14 | prompt-elicitable at rung 4 |  |
 | b0 | `count:keywords_multiple` | no | N | N (0) | N (0) | N (0) | E (4/4) | 0 | 0.0596 | teachable from RL's trajectories | DROP60; failed rungs breaking s2300: R1 |
 | b1 | `count:keywords_multiple` | no | N | N (0) | N (0) | N (0) | E (15/3) | 1 | 0.00214 | teachable from RL's trajectories | DROP60; failed rungs breaking s2300: R1 |
-| b4 | `count:keywords_multiple` | no | N | N (0) | N (0) | N (0) | E (16/4) | 0 | 5.23e-06 | teachable from RL's trajectories | DROP60; failed rungs breaking s2300: R1 R3 R4 |
+| b4 | `count:keywords_multiple` | no | N | N (0) | N (0) | N (0) | E (16/4) | 0 | 5.23e-06 | teachable from RL's trajectories | DROP60; failed rungs breaking s2300: R1 R3 |
 | e2350 | `keywords:letter_frequency` | no | N | N (0) | N (0) | N (0) | E (25/4) | 0 | 1.6e-09 | teachable from RL's trajectories |  |
 | b169 | `ratio:sentence_words` | no | N | N (0) | N (0) | N (0) | E (2/2) | 0 | 0.248 | teachable from RL's trajectories |  |
 | b170 | `ratio:sentence_words` | no | N | N (0) | N (0) | N (0) | E (4/4) | 0 | 0.0596 | teachable from RL's trajectories | DROP60 |

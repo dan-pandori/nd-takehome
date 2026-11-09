@@ -98,11 +98,36 @@ for k, L, my, evid, note, item in sorted(dis):
     for e_ in ev.get(gkey(k), []):
         P(f"      mine: {e_}")
 
-# ---------------------------------------------------------------- 3. my walk with the executor's labels
+# ---------------------------------------------------------------- 3. my walk with the executor's labels and screen
 exg = {}
 for k, (L, *_r) in exl.items():
     exg.setdefault(gkey(k), {"label": L, "how": "executor", "reads": []})
-P("\n[3] my walk with the executor's labels (unlabelled draws stop the walk)")
+# the executor's rule-1 screen (gate.py `mech`, re-typed): one-sentence test [.!?]["')\]]*\s+\S; stairs < 2 lines;
+# sub-bullets with no line starting with '*'
+import re as _re  # noqa: E402
+
+from rvl_core import answer_of, iter_job, upstream_record  # noqa: E402
+from rvl_hand import JOB_OF, PER_SENT, SL  # noqa: E402
+
+xmech = {}
+for c, job in JOB_OF.items():
+    want = {(p, ch, i) for p, xs in SL[c].items() for ch, i, _ in xs}
+    for r in iter_job(job):
+        k = (r["pid"], int(r["chunk"]), int(r["i"]))
+        if k not in want:
+            continue
+        a = answer_of(r["text"]) or ""
+        ids = set(upstream_record(r["pid"])[1]["instruction_id_list"])
+        if ids & PER_SENT and not _re.search(r"[.!?][\"')\]]*\s+\S", a):
+            xmech[(c,) + k] = "exec one sentence"
+        elif "format:line_indent" in ids and sum(1 for ln in a.splitlines() if ln.strip()) < 2:
+            xmech[(c,) + k] = "exec stairs"
+        elif "format:sub-bullets" in ids and not any(ln.lstrip().startswith("*") for ln in a.splitlines()):
+            xmech[(c,) + k] = "exec sub-bullets"
+P(f"\n[3] my walk with the executor's labels and the executor's screen ({len(xmech)} screen labels; mine {len(mech)}); "
+  "unlabelled draws stop the walk")
+mech_mine = mech
+mech = xmech
 res = {"cells": {}}
 for c in CELLS:
     out = collections.Counter()
@@ -110,8 +135,8 @@ for c in CELLS:
     for cc, pid in cells_of():
         if cc != c:
             continue
-        w_e = walk(c, pid, exg, mech)
-        w_m = walk(c, pid, lab, mech)
+        w_e = walk(c, pid, exg, xmech)
+        w_m = walk(c, pid, lab, mech_mine)
         oe, om = w_e["outcome"] or "unsettled", w_m["outcome"] or "unsettled"
         out[oe] += 1
         if oe != om:
@@ -125,7 +150,7 @@ def gshare(labmap, c):
     for cc, pid in cells_of():
         if cc != c:
             continue
-        w = walk(c, pid, labmap, mech)
+        w = walk(c, pid, labmap, xmech if labmap is exg else mech_mine)
         for ch, i, L, src in w["seq"][:min(w["n"], 4)]:
             if L is None:
                 continue

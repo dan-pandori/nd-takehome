@@ -156,6 +156,9 @@ for a in ("main", "ctrl"):
     hb, hp, hm = (mean(m[f"nll_heldout_{t}"]["s2300"]) for t in ("base", "peft", "merged"))
     db, dp, dm = (mean(m[f"nll_heldout_{t}"]["dpo"]) for t in ("base", "peft", "merged"))
     mc = max(abs(a_ - b_) / b_ for a_, b_ in zip(m["nll_train2_merged"], m["nll_train2_peft"]))
+    l4 = [x["loss"] for x in m["log"]]
+    P(f"[4] lora_{a}: training loss mean of first 4 steps {sum(l4[:4]) / 4:.3f}, last 4 {sum(l4[-4:]) / 4:.3f}; NLL change "
+      f"held-out s2300 {(hp - hb) / hb:+.1%} (positive = rises), held-out dpo {(dp - db) / db:+.1%}")
     P(f"[4] lora_{a}: held-out s2300 NLL base {hb:.4f} peft {hp:.4f} ({(hb - hp) / hb:+.1%} drop) merged {hm:.4f}; "
       f"held-out dpo NLL base {db:.4f} peft {dp:.4f} ({(db - dp) / db:+.1%} drop); merge check max rel. "
       f"{mc:.4f} (mean-based {m['summary']['merge_check_rel']:.4f})")

@@ -53,3 +53,21 @@ for ln in open(ART / "logs" / "worker0.log"):
         P("worker " + s[:100])
 for f in ("fetch_dpo.log", "fetch_s2300.log"):
     P(f"{f}: {open(ART / 'logs' / f).read().strip().splitlines()[-1][:140]}")
+
+proj = json.load(open(ART / "meta" / "stage0_projection.json"))
+P("stage-0 projection: " + "; ".join(f"{v['variant']}: ${v['usd_total']}" for v in proj["variants"]))
+for arm in ("main", "ctrl"):
+    P(f"adapter {arm}: {(ART / 'lora' / arm / 'adapter_model.safetensors').stat().st_size} bytes")
+ad = (CODE / "handcheck_rule_addendum.md").read_text()
+P(f"handcheck_rule_addendum.md commits: {git('log', '--format=%h %cI', '--', 'olmo_ifladder/handcheck_rule_addendum.md').replace(chr(10), ' | ')}; "
+  f"states '{re.search(r'Written [^,]*,', ad).group(0)}'")
+for line in open(RUN / "executor.claude_1.jsonl"):
+    try:
+        r = json.loads(line)
+    except json.JSONDecodeError:
+        continue
+    m = r.get("message", {})
+    if isinstance(m, dict) and isinstance(m.get("content"), list):
+        for x in m["content"]:
+            if x.get("type") == "tool_use" and "ifl_desc.txt" in json.dumps(x.get("input")):
+                P(f"executor transcript: description extraction to /tmp/ifl_desc.txt at {r.get('timestamp')}")
