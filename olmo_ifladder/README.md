@@ -29,7 +29,7 @@ Models: `dpo` = `allenai/Olmo-3-32B-Think-DPO` `main` (`97604023`); `s2300` = `a
 | `handcheck_src.csv` | the source gate: every stored trajectory read before use as an exemplar or training example (kit `../artifacts/olmo_ifladder/hand_src/`) |
 | `gate.py` | per-cell bookkeeping: strict successes in draw order, the mechanical rule-1 pre-screen, identity inheritance, reads still needed, deciding items for second reads; `gate_status.csv` |
 | `handcheck.csv` (`handcheck.py table artifacts/olmo_ifladder/hand`) | every hand-read ladder, LoRA and `s2300`-sanity response: item, job, prompt, draw, reader labels and evidence, my confirmation (`final_label`); items, key, batches and reader files in `../artifacts/olmo_ifladder/hand/` |
-| `pids_sanity_r2.txt`, `pids_sanity_r3.txt`, `pids_sanity_r4.txt` | the `s2300` sanity cells that were gated: the prompts where `dpo` failed at that rung |
+| `pids_sanity_r2.txt`, `pids_sanity_r3.txt`, `pids_sanity_r4.txt` | the `s2300` sanity cells that were hand-gated: the prompts no rung up to that one elicited (where a `dpo` failure decides a reading); 31 / 26 / 23 |
 | `analyze.py` → `results.csv`, `classify.csv`, `summary.json` | one row per job × prompt (draws, strict, loose, cut, tokens, thinking tokens, answer words, gate state); one row per reach prompt (state per rung and LoRA, reading, flags, Fisher sensitivity); the counts |
 | `lengths.py` → `lengths.csv` | thinking tokens and answer words without hints: `dpo` and `s2300` (olmo-ifomega's stored fixed-phase draws), both LoRAs |
 | `figures.py` → `../figures/olmo_ifladder_ladder.png` | the per-prompt ladder figure |

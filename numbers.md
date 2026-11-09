@@ -2296,3 +2296,140 @@ dumps, pod logs, hand items / keys / labels; the 17 bulk files with sha256 in `a
 `artifacts/olmo-transplant/registry/`, `olmo_transplant/`, `pod/olmo_transplant/`, the write-up, pre-registration and
 figure. The source traces are olmo-ifomega's files (`hf://buckets/dan-pandori/nd-rl/olmo-ifomega/artifacts/olmo_ifomega/`),
 not copied. No weights.
+
+## olmo-ifladder (2026-11-09, executor; UNREVIEWED)
+
+**Models (every number here):** `dpo` = `allenai/Olmo-3-32B-Think-DPO` `main` (`97604023`; RL's start); `s2300` =
+`allenai/Olmo-3.1-32B-Think` `main` (`97ade57a` = `step_2300`); `lora_main` / `lora_ctrl` = `dpo` + this run's LoRA
+adapter (r 16, α 32, dropout 0.05, q/k/v/o/gate/up/down of all 64 layers; AdamW 1e-4, 64 steps = 4 epochs of 16
+trajectories) trained on 16 genuine `s2300` / 16 genuine `dpo` trajectories of the same 16 IFBench prompts (outside the
+58, no shared base request), evaluated through vLLM's LoRA path. 32 B, bf16; natural-language chat (`olmo_thinker`),
+not `lean_seq`; no Lean involved. Decoding T 1, top-p 1, 32,768 response tokens, vLLM 0.11.0, one H200, TP 1. Prompts
+(`olmo_ifladder/prompts.csv`): olmo-iffu's 48 hinted reach prompts (42 IFBench + 6 IFEval; `s2300` confirmed, `dpo` 0
+genuine in 256) + olmo-transplant's 10 calibration prompts. Grades: official IFBench / IFEval checkers (strict) on the
+text after the last `</think>`; hand gate on reach cells (`olmo_ifladder/handcheck.csv`: 698 items, blinded reader
+subagents, every label confirmed by me (21 overturned), a second blinded reader on every deciding item (249 items
+read twice, 14 splits adjudicated by me); source gate `handcheck_src.csv` (231 items); rules
+1–5 `olmo_ifomega/handcheck_rule_if.md`, 6 `olmo_iffu/handcheck_rule_if_addendum.md`, 7–12
+`olmo_ifladder/handcheck_rule_addendum.md` (10–12 added during the `s2300` sanity gate; no `dpo` or LoRA reading
+changes under them)). **Elicited** = ≥ 2 genuine of 64 draws (`s2300` sanity cells: of 16). Pre-registration
+`preregistration/olmo-ifladder.md` (deviations 1–2); per-job × prompt rows `olmo_ifladder/results.csv`, readings
+`classify.csv`, counts `summary.json` (`analyze.py`).
+
+### Readings (48 reach prompts; first that applies; `classify.csv`)
+
+| reading | prompts | which (IFBench unless "e" = IFEval) |
+|---|---|---|
+| prompt-elicitable at rung 1 (olmo-iffu) | 16 | e1314 e2247 e2447 e2563, 19 78 133 173 179 186 187 220 226 252 253 290 (290 on rule 6's primary reading only) |
+| prompt-elicitable at rung 2 | 1 | 136 |
+| prompt-elicitable at rung 3 | 5 | 64 79 128 204 211 |
+| prompt-elicitable at rung 4 | 3 | 189 267 280 |
+| **teachable from RL's trajectories** (no rung; `lora_main` yes, `lora_ctrl` no) | **16** | e2350, 0 1 4 154 169 170 203 206 207 209 217 248 264 269 271 |
+| teachable by any light fine-tune (both LoRAs) / `lora_ctrl` only | 0 / 0 | – |
+| **neither** | **7** | e3478, 3 67 166 188 268 284 |
+
+Sensitivity (pre-registered): one-sided Fisher exact test of `lora_main` vs `lora_ctrl` estimated genuine counts
+(strict × the cell's genuine share, of 64): p < 0.05 on 12 of the 16 "teachable" prompts; not on 0 (3 vs 0), 170 (4 vs
+0), 169 (2 vs 0), 264 (2 vs 0). Rule 6's strict reading (ALL CAPS is not title case): rungs 1–2 elicit 290 only with
+ALL-CAPS answers; rungs 3–4 were not run on it (cut 2); `lora_main` has 2 genuine title-case answers.
+
+**"Neither", flagged:** 3 and 166 also had 0 genuine in olmo-iffu's 1,024 unhinted draws; 3, 166, 188, 284 are `DROP60`
+(the 60-word line dropped). The rung also breaks `s2300` there (< 2 genuine of 16, so `dpo`'s failure is uninformative):
+3 at rungs 1–3 (not 4), 166 and 188 at rungs 1–4 (only the LoRA test is informative), 284 at rung 1 only; e3478, 67, 268
+at none. `lora_main` has 1 genuine of 64 on e3478 and 166, 0 on the other five.
+
+**By family** (binding constraint's id prefix; R = prompt-elicitable at that rung, T = teachable from RL's
+trajectories, N = neither): change_case 3 (R1 3); count 5 (R1 1, T 3, N 1); custom 1 (R4 1); format 7 (R1 3, R2 1,
+R3 2, N 1); keywords 3 (R1 1, T 1, N 1); ratio 5 (R1 1, T 3, N 1); repeat 2 (R3 1, N 1); sentence 5 (R1 3, R4 1, N 1);
+words 17 (R1 4, R3 2, R4 1, **T 9**, N 1).
+
+**The four olmo-iffu 1,024-survivors that the hint elicits** (78 133 252 253): elicited at rungs 1 and 2 and by
+`lora_main` (estimated genuine 34 / 37 / 24 / 20 of 64), not by `lora_ctrl` (0 / 1 / 0 / 0); rungs 3–4 not run (cut 2).
+
+### The ladder (`dpo`, 64 draws per prompt per rung; cut 2: rungs 3–4 only where no earlier rung elicited)
+
+| rung | appended to the user turn | prompts (reach + calibration) | draws | tokens / draw | cut at 32,768 | reach cells with a strict success | reach elicited (new) | gamed share, first ≤ 4 reads | calibration strict mean |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | "Answer in at most 60 words." | 48 (olmo-iffu T2 / T2c) + 8 (`R1cal_dpo`) | 3,072 + 512 | 4,089 / 1,421 | – / 0 | – | 16 (16) | 6 / 48 = 0.13 (olmo-iffu) | 0.777 |
+| 2 | + "Before answering, check each constraint against your draft." | 48 + 10 | 3,712 | 4,379 | 1 | 21 | 12 (1) | 15 / 59 = 0.25 | 0.850 |
+| 3 | + one procedure hint per constraint id (`HINTS`) | 31 + 10 | 2,624 | 5,718 | 1 | 9 | 5 (5) | 7 / 21 = 0.33 | 0.861 |
+| 4 | + two `s2300` exemplar turns (`exemplars.csv`) | 26 + 10 | 2,304 | 5,161 | 0 | 8 | 3 (3) | 6 / 19 = 0.32 | 0.847 |
+
+Exact wordings `olmo_ifladder/interventions.py` (sha256 prefix `e3c284741c25d84c`). Rung 2 re-elicits 11 of rung 1's 16;
+of the other five, four had exactly 2 of 64 at rung 1 (179 186 187 19; detection limit) and e2563 3+ (1 at rung 2).
+Rung 3 works on mechanical constraints (stairs, sub-bullets, alphabet, consonant clusters; 64's exact-sentence output,
+rule 5); rung 4's 280 ("count from 10 to 50, print only multiples of 7") passes on all 64 draws once the two exemplars
+show bare comma-separated output. Calibration: only 298 (no whitespace) is below half its unhinted `dpo` rate, at every
+rung.
+
+### `s2300` sanity arm (16 draws per prompt per rung; hand-read only on the prompts no rung up to that one elicited)
+
+| rung | prompts gated | draws (all prompts of the rung) | breaks `s2300` (< 2 genuine of 16) | of them non-`DROP60` | gamed share, first ≤ 4 reads |
+|---|---|---|---|---|---|
+| 2 | 31 | 928 | 8: 0 1 3 4 166 188 · 64 189 | 2 | 48 / 111 = 0.43 |
+| 3 | 26 | 656 | 6: 3 4 166 188 · 189 206 | 2 | 46 / 103 = 0.45 |
+| 4 | 23 | 576 | 5: 1 4 166 188 · 206 | 1 | 37 / 96 = 0.39 |
+
+### LoRAs (`artifacts/olmo_ifladder/meta/lora_{main,ctrl}.json`; checks never on the 48)
+
+| arm | trained on | train tokens | loss, first → last 4 steps | held-out NLL, `s2300` trajectories (`dpo` 0.638) | held-out NLL, `dpo` trajectories (`dpo` 0.762) | merge check (≤ 1 %) | held-out slice, strict of 128 |
+|---|---|---|---|---|---|---|---|
+| `lora_main` | 16 genuine `s2300` trajectories | 332,936 | 0.670 → 0.350 | 0.542 (−15.1 %) | 0.890 (+16.9 %) | 1.12 % (LoRA path used) | 106 |
+| `lora_ctrl` | 16 genuine `dpo` trajectories, same prompts | 235,880 | 0.741 → 0.407 | 0.643 (+0.7 %) | 0.772 (+1.4 %) | 0.88 % | 51 |
+
+Held-out slice (8 pool prompts, 16 draws each, strict, not hand-gated; main / control): 135 16 / 0, 139 9 / 2, 171
+16 / 16, 247 15 / 0, 256 16 / 4, 33 16 / 16, 71 12 / 13, 76 6 / 0. No pre-registered fallback triggered.
+
+| arm (no hints) | reach elicited | of them prompt-elicitable / not | reach cells with a strict success | gamed share, first ≤ 4 reads | calibration strict mean (64 / prompt) | thinking tokens (median of prompt medians) | answer words |
+|---|---|---|---|---|---|---|---|
+| `lora_main` | **40 / 48** | 24 / 16 | 43 | 35 / 164 = 0.21 | 0.975 | 6,236 | 70 |
+| `lora_ctrl` | **0 / 48** | – | 5 | 1 / 5 | 0.895 | 1,963 | 235 |
+| `dpo` (stored unhinted draws) | 0 (by selection) | – | – | – | 0.906 | 1,834 | 231 |
+| `s2300` (stored unhinted draws) | – | – | – | – | – | 5,742 | 32 |
+
+`lora_main` elicits 21 of the 25 reach prompts whose binding constraint id occurs in its training prompts and 19 of the
+23 whose id does not. Lengths `olmo_ifladder/lengths.csv` (`lengths.py`; `dpo` / `s2300` = olmo-ifomega's fixed-phase
+draws, 16 / 8 per prompt).
+
+### Expectations (pre-registered, binding) vs outcome
+
+| # | expected (80 % interval) | outcome | |
+|---|---|---|---|
+| 1 | rung 2 elicits 3 (0–7) of the 32 | 1 (136) | in range |
+| 2 | rung 3: 4 (1–9) | 5 | in range |
+| 3 | rung 4: 3 (0–8) | 3 | in range |
+| 4 | prompt-elicitable at some rung 26 (19–33) | 25 | in range |
+| 5 | `lora_main` 4 (0–10); `lora_ctrl` 2 (0–6) | **40**; 0 | **missed**; in range |
+| 6 | teachable from RL 1 (0–4); any light fine-tune 0 (0–2) | **16**; 0 | **missed**; in range |
+| 7 | neither 21 (13–28); of the 6 test-3 survivors not elicited at rung 1, 4 (2–6) end as neither | **7**; 2 (3, 166) | **missed**; in range |
+| 8 | gamed share: rung 2 = rung 1 + 5 pp (−10 to +20); rung 3 0.15 (0.05–0.40); rung 4 0.12 (0.03–0.35); `lora_main` 0.10 (0–0.35) | +12.9 pp; 0.33; 0.32; 0.21 | in range (all four) |
+| 9 | calibration ≥ 0.75 at every rung; < ½ the unhinted rate on ≤ 2 prompts; each LoRA ≥ 0.8 × 0.906 | 0.777–0.861; 1 (298); 0.975 / 0.895 | held |
+| 10 | `lora_main` answer words 140 (60–220); `lora_ctrl` ±25 % of 231; both LoRAs' thinking ±35 % of 1,834 | 70; 235; **6,236 (+240 %)** / 1,963 (+7 %) | in range; held; **missed** (main) / held |
+| 11 | 1,024-survivors: ≥ 3 of 4 at rung 2 (2–4); 0 of 4 by either LoRA (0–2) | 4; **4 (main)** / 0 | in range; **missed** |
+| 12 | a rung breaks `s2300` on ≤ 3 (R2) / ≤ 5 (R3, R4) non-`DROP60` reach prompts | 2 / 2 / 1 (gated prompts only) | held |
+| 13 | stage 0 tokens / draw R2 4.5k (3–7k), R3 5k (3–8k) | 4,449; 5,361 | in range |
+
+Every miss is one direction: 16 RL trajectories teach far more than expected.
+
+### Compute (`olmo_ifladder/compute_rows.py`; registry rows `hf://buckets/dan-pandori/nd-rl/registry/olmo-ifladder/`)
+
+| arm | model | draws | generated tokens | tokens / draw | train steps / tokens | GPU-hours (H200) | vs comparator | flag |
+|---|---|---|---|---|---|---|---|---|
+| rung 1 calibration | `dpo` | 512 | 0.73 M | 1,421 | – | 0.11 | – | |
+| rung 2 | `dpo` | 3,712 | 16.25 M | 4,379 | – | 2.43 | rung 1, same 56 prompts: 1.18× tokens / draw | |
+| rung 3 | `dpo` | 2,624 | 15.00 M | 5,718 | – | 2.34 | rung 2, same 41 prompts: 1.20× | |
+| rung 4 | `dpo` | 2,304 | 11.89 M | 5,161 | – | 1.85 | rung 3, same 36 prompts: 0.88× | |
+| `lora_main` training | – | – | – | – | 64 / 332,936 | 0.12 | `lora_ctrl`: 1.41× tokens, 1.27× GPU-time | **> 1.25×** |
+| `lora_ctrl` training | – | – | – | – | 64 / 235,880 | 0.09 | | |
+| `lora_main` check + evaluation | `lora_main` | 3,840 | 26.09 M | 6,794 | – | 4.72 | `lora_ctrl`: same draws; 1.71× tokens, 1.86× GPU-hours | **> 1.25×** |
+| `lora_ctrl` check + evaluation | `lora_ctrl` | 3,840 | 15.22 M | 3,964 | – | 2.54 | | |
+| `s2300` sanity, rungs 2–4 | `s2300` | 2,160 | 13.12 M | 6,076 | – | 2.23 | – | |
+| stage 0 | `dpo` | 464 | 2.27 M | 4,892 | – | 0.46 | – | |
+
+Rungs are matched on attempts (64 per prompt), the LoRAs on examples (16), steps (64), prompts and attempts; the
+flagged axes are what `lora_main` learned (longer thinking: its trajectories are longer, and it thinks ≈ 3.2× as long
+per draw). 19,456 draws, 100.6 M generated tokens, 16.89 job GPU-hours, 128 training steps (568,816 tokens). Billed:
+**$61.85** of $80 (17.23 pod-hours, `ifl-a` 1 × H200 community $3.59/h). Bucket:
+`hf://buckets/dan-pandori/nd-rl/olmo-ifladder/` (`artifacts/olmo_ifladder/`: every sample's text and token ids, grades,
+metas, logs, hand items / keys / labels, both adapters (`lora/main`, `lora/ctrl`); bulk files in
+`artifacts/MANIFEST.jsonl`; `olmo_ifladder/`, `pod/olmo_ifladder/`); no merged weights.
