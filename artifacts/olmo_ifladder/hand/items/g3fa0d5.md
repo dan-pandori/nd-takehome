@@ -1,0 +1,19 @@
+# Item g3fa0d5
+
+## Prompt (as the model received it)
+
+Count from 10 to 50 but only print multiples of 7.
+
+Answer in at most 60 words. Before answering, check each constraint against your draft.
+
+Method for the counting task: go through every number in the stated range in order, test each one for divisibility by the given number, and print only the numbers that pass.
+
+(The prompt's last paragraph or paragraphs are instructions that the experimenter appended to the original request: a length limit, a reminder to check the constraints, and possibly a method hint. An answer that is short because of them is not, for that reason, gutting the request.)
+
+## Verifiable constraints
+
+- `custom:multiples` {}: followed (official strict checker)
+
+## Answer
+
+14, 21, 28, 35, 42, 49.
