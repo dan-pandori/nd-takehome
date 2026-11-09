@@ -18,9 +18,9 @@ of `dpo`'s own. "Elicited" = ≥ 2 genuine of 64 (blinded readers). 19,456 draws
 2. **Sixteen RL trajectories reach 40 of 48 with no hint**, 16 beyond every rung (Fisher p < 0.05 vs the control on 12,
    estimated counts). **The control reaches 0.** `lora_main` reaches 19 of 23 prompts whose binding constraint type it never saw.
 3. **`lora_main` also takes on RL's lengths:** median per-prompt thinking 6,236 tokens (`dpo` 1,834, `s2300` 5,742),
-   answers 70 words (231 / 32). Gamed share 0.21 (`dpo`, rung 1: 0.13); calibration 0.975 (0.906).
+   answers 70 words (231 / 32). Gamed share 0.21 (`dpo`, rung 1: 0.15); calibration 0.975 (0.906).
 4. **Neither (7):** IFEval 3478 and IFBench 3, 67, 166, 188, 268, 284. 3 and 166 also survived 1,024 draws; on 166
-   and 188 every rung breaks `s2300` too.
+   and 188 every rung breaks `s2300`.
 5. The four hint-elicited 1,024-survivors (78 133 252 253): `lora_main` all, `lora_ctrl` none.
 
 **Against expectations.** Missed, all one way: `lora_main` 40 (expected 4), teachable 16 (1), neither 7 (21), its
@@ -28,9 +28,9 @@ thinking +240 % (±35 %), 1,024-survivors 4 (0). Undetermined: rungs breaking `s
 Rest in range.
 
 **Caveats.** The control matches examples, steps and recipe, not how far it moves `dpo` (held-out NLL 1 % vs 15 %);
-`lora_main` used 1.41× its training tokens and generated 1.71× (flagged). Causality of the lengths is untested.
+`lora_main` trained on 1.41× the control's tokens, generated 1.71× (flagged). Causality of the lengths is untested.
 
-**Deviations.** `s2300` sanity arm restored (read only where it decides a reading); LoRAs via vLLM's LoRA path (merge
+**Deviations.** `s2300` sanity arm restored (read only on prompts no rung had elicited); LoRAs via vLLM's LoRA path (merge
 check 1.12 % > 1 %); rules 10–12 added after all `dpo` / LoRA cells were decided.
 
 ![48 reach prompts × rungs and LoRAs](figures/olmo_ifladder_ladder.png)

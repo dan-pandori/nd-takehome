@@ -225,3 +225,5 @@ $72 gate but under $80), say so here.
   cut-2 subsets), under the $72 gate. **Default, proceeding on it:** restore the sanity arm (it tells whether a rung that
   fails for `dpo` also breaks `s2300`, which is what makes a "neither" reading informative); cut 2 stays (rungs 3–4 on
   prompts already elicited would not change any reading). Say "no sanity arm" here to drop it again.
+- *Closed 2026-11-09 19:36 UTC:* no answer was needed; the run finished on these defaults (cut 2 kept, `s2300` sanity arm
+  restored) at $61.85 of $80, under the $72 gate. Results: `run_olmo_ifladder.md`, `numbers.md` § olmo-ifladder.

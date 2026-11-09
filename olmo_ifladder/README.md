@@ -39,7 +39,8 @@ Models: `dpo` = `allenai/Olmo-3-32B-Think-DPO` `main` (`97604023`); `s2300` = `a
 
 Pod scripts: `../pod/olmo_ifladder/` (pod-side `setup.sh`, `job.sh`, `start.sh` and the queue `worker.sh` reading
 `../artifacts/olmo_ifladder/queue/q0.txt`; VPS-side `launch.sh`, `push.sh`, `pull.sh`, `poll_pod.sh`). Claim checks of the
-write-up: `claim_check_numbers.md`, `claim_check_writeup.md` (findings, fixed before publication).
+write-up: `claim_check_numbers.md`, `claim_check_writeup.md` and the second pass `claim_check_second.md` (findings and
+their resolution, before publication).
 
 **Recompute** (repository root, after `python3 fetch_artifacts.py artifacts/olmo_ifladder/` and, for `lengths.py`,
 `python3 fetch_artifacts.py artifacts/olmo_ifomega/samples/F_dpo_ifb.jsonl.gz artifacts/olmo_ifomega/samples/F_s2300_ifb.jsonl.gz

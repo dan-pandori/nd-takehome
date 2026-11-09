@@ -2372,10 +2372,11 @@ rung.
 | 3 | 26 | 656 | 6: 3 4 166 188 · 189 206 | 2 | 46 / 99 = 0.46 |
 | 4 | 23 | 576 | 5: 1 4 166 188 · 206 | 1 | 37 / 92 = 0.40 |
 
-After "·" = not `DROP60`. Outside the gated prompts a cell is decided without reading only when `s2300` has < 2 strict
-successes: rung 2 on 19 (0 of 16; rung-1-elicited) is a certain break, the other 16 / 4 / 2 non-`DROP60` cells there
-were not read (`summary.json` → `sanity`). 206 is a break at rungs 3–4 under rule 10 (its first readers had 2 and 4
-genuine run-on rewrites).
+After "·" = not `DROP60`. Outside the gated prompts no `s2300` answer was hand-read: rung 2 on 19 (0 strict of 16;
+rung-1-elicited) is a certain break; 64 (rung 3) and 280 (rung 4) are not breaks, by identity with read `dpo` answers;
+the other 16 / 4 / 2 non-`DROP60` cells are undecided (`summary.json` → `sanity`). 206 breaks at rungs 3–4 under rule 10:
+before it these cells had 2 and 4 genuine labels; rule 10 re-labelled the run-on rewrites among them as gamed (1 of 2 at
+rung 3, 4 of 4 at rung 4), and later reads found no second genuine answer.
 
 ### LoRAs (`artifacts/olmo_ifladder/meta/lora_{main,ctrl}.json`; checks never on the 48)
 
@@ -2414,7 +2415,7 @@ draws, 16 / 8 per prompt).
 | 9 | calibration ≥ 0.75 at every rung; < ½ the unhinted rate on ≤ 2 prompts; each LoRA ≥ 0.8 × 0.906 | 0.777–0.861; 1 (298); 0.975 / 0.895 | held |
 | 10 | `lora_main` answer words 140 (60–220); `lora_ctrl` ±25 % of 231; both LoRAs' thinking ±35 % of 1,834 | 70; 235; **6,236 (+240 %)** / 1,963 (+7 %) | in range; held; **missed** (main) / held |
 | 11 | 1,024-survivors: ≥ 3 of 4 at rung 2 (2–4); 0 of 4 by either LoRA (0–2) | 4; **4 (main)** / 0 | in range; **missed** |
-| 12 | a rung breaks `s2300` on ≤ 3 (R2) / ≤ 5 (R3, R4) of the 40 non-`DROP60` reach prompts | R2 ≥ 3 (64 189 gated; 19 outside the gate has 0 strict of 16), R3 ≥ 2, R4 ≥ 1; 16 / 4 / 2 non-`DROP60` cells outside the gate unread | **not determined** (R2 at the bound) |
+| 12 | a rung breaks `s2300` on ≤ 3 (R2) / ≤ 5 (R3, R4) of the 40 non-`DROP60` reach prompts | R2 ≥ 3 (64 189 gated; 19 outside the gate has 0 strict of 16), R3 ≥ 2, R4 ≥ 1; 16 / 4 / 2 non-`DROP60` cells outside the gate undecided | **not determined** (R2 at the bound) |
 | 13 | stage 0 tokens / draw R2 4.5k (3–7k), R3 5k (3–8k) | 4,449; 5,361 | in range |
 
 Every miss is one direction: 16 RL trajectories teach far more than expected.
