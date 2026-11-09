@@ -1,50 +1,53 @@
 {
  "readings": {
-  "teachable from RL's trajectories (provisional)": 23,
-  "prompt-elicitable at rung 1 (provisional)": 16,
-  "neither (provisional)": 8,
-  "prompt-elicitable at rung 2 (provisional)": 1
+  "teachable from RL's trajectories": 18,
+  "prompt-elicitable at rung 1": 16,
+  "neither": 8,
+  "prompt-elicitable at rung 3": 5,
+  "prompt-elicitable at rung 2": 1
  },
+ "teachable_rl_fisher_lt_0.05": 13,
  "by_family": {
   "change_case": {
-   "prompt-elicitable at rung 1 (provisional)": 3
+   "prompt-elicitable at rung 1": 3
   },
   "count": {
-   "teachable from RL's trajectories (provisional)": 3,
-   "neither (provisional)": 1,
-   "prompt-elicitable at rung 1 (provisional)": 1
+   "teachable from RL's trajectories": 3,
+   "neither": 1,
+   "prompt-elicitable at rung 1": 1
   },
   "custom": {
-   "teachable from RL's trajectories (provisional)": 1
+   "teachable from RL's trajectories": 1
   },
   "format": {
-   "prompt-elicitable at rung 1 (provisional)": 3,
-   "teachable from RL's trajectories (provisional)": 2,
-   "prompt-elicitable at rung 2 (provisional)": 1,
-   "neither (provisional)": 1
+   "prompt-elicitable at rung 1": 3,
+   "prompt-elicitable at rung 3": 2,
+   "prompt-elicitable at rung 2": 1,
+   "neither": 1
   },
   "keywords": {
-   "teachable from RL's trajectories (provisional)": 1,
-   "prompt-elicitable at rung 1 (provisional)": 1,
-   "neither (provisional)": 1
+   "teachable from RL's trajectories": 1,
+   "prompt-elicitable at rung 1": 1,
+   "neither": 1
   },
   "ratio": {
-   "teachable from RL's trajectories (provisional)": 3,
-   "neither (provisional)": 1,
-   "prompt-elicitable at rung 1 (provisional)": 1
+   "teachable from RL's trajectories": 3,
+   "neither": 1,
+   "prompt-elicitable at rung 1": 1
   },
   "repeat": {
-   "teachable from RL's trajectories (provisional)": 1,
-   "neither (provisional)": 1
+   "prompt-elicitable at rung 3": 1,
+   "neither": 1
   },
   "sentence": {
-   "neither (provisional)": 2,
-   "prompt-elicitable at rung 1 (provisional)": 3
+   "neither": 2,
+   "prompt-elicitable at rung 1": 3
   },
   "words": {
-   "teachable from RL's trajectories (provisional)": 12,
-   "neither (provisional)": 1,
-   "prompt-elicitable at rung 1 (provisional)": 4
+   "teachable from RL's trajectories": 10,
+   "neither": 1,
+   "prompt-elicitable at rung 1": 4,
+   "prompt-elicitable at rung 3": 2
   }
  },
  "neither_t3_survivors": [
@@ -58,7 +61,7 @@
    "R3": "not run",
    "R4": "not run",
    "main": "elicited",
-   "ctrl": "not run"
+   "ctrl": "no"
   },
   "ifbench_133": {
    "R1": "elicited",
@@ -66,7 +69,7 @@
    "R3": "not run",
    "R4": "not run",
    "main": "elicited",
-   "ctrl": "not run"
+   "ctrl": "no"
   },
   "ifbench_252": {
    "R1": "elicited",
@@ -74,7 +77,7 @@
    "R3": "not run",
    "R4": "not run",
    "main": "elicited",
-   "ctrl": "not run"
+   "ctrl": "no"
   },
   "ifbench_253": {
    "R1": "elicited",
@@ -82,7 +85,7 @@
    "R3": "not run",
    "R4": "not run",
    "main": "elicited",
-   "ctrl": "not run"
+   "ctrl": "no"
   }
  },
  "gamed_share_first4": {
@@ -95,6 +98,11 @@
    "read": 59,
    "gamed": 15,
    "share": 0.254
+  },
+  "R3_dpo": {
+   "read": 21,
+   "gamed": 7,
+   "share": 0.333
   },
   "Lchk_main": {
    "read": 0,
@@ -110,6 +118,11 @@
    "read": 164,
    "gamed": 34,
    "share": 0.207
+  },
+  "Leval_ctrl": {
+   "read": 5,
+   "gamed": 1,
+   "share": 0.2
   }
  },
  "calibration": {
@@ -139,6 +152,21 @@
     "ifbench_52": "64/64",
     "ifbench_58": "64/64",
     "ifbench_85": "54/64"
+   }
+  },
+  "R3_dpo": {
+   "mean_strict": 0.861,
+   "per_prompt": {
+    "ifbench_115": "61/64",
+    "ifbench_239": "61/64",
+    "ifbench_25": "64/64",
+    "ifbench_259": "36/64",
+    "ifbench_29": "64/64",
+    "ifbench_295": "64/64",
+    "ifbench_298": "16/64",
+    "ifbench_52": "64/64",
+    "ifbench_58": "64/64",
+    "ifbench_85": "57/64"
    }
   },
   "Lchk_main": {
@@ -185,6 +213,21 @@
     "ifbench_58": "47/48",
     "ifbench_85": "47/48"
    }
+  },
+  "Leval_ctrl": {
+   "mean_strict": 0.896,
+   "per_prompt": {
+    "ifbench_115": "46/48",
+    "ifbench_239": "41/48",
+    "ifbench_25": "48/48",
+    "ifbench_259": "39/48",
+    "ifbench_29": "48/48",
+    "ifbench_295": "41/48",
+    "ifbench_298": "27/48",
+    "ifbench_52": "48/48",
+    "ifbench_58": "48/48",
+    "ifbench_85": "44/48"
+   }
   }
  },
  "lengths_reach": {
@@ -195,6 +238,10 @@
   "R2_dpo": {
    "think_median_of_medians": 4357.25,
    "words_median_of_medians": 67.75
+  },
+  "R3_dpo": {
+   "think_median_of_medians": 6828.5,
+   "words_median_of_medians": 68.0
   },
   "Lchk_main": {
    "think_median_of_medians": null,
@@ -207,6 +254,10 @@
   "Leval_main": {
    "think_median_of_medians": 6236.25,
    "words_median_of_medians": 69.5
+  },
+  "Leval_ctrl": {
+   "think_median_of_medians": 1962.75,
+   "words_median_of_medians": 235.25
   }
  }
 }

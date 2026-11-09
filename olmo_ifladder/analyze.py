@@ -62,6 +62,14 @@ def per_job(job):
     return rows
 
 
+def fisher_greater(a, n1, b, n2):
+    """One-sided Fisher exact p for 'rate 1 > rate 2' (a of n1 vs b of n2), hypergeometric tail, standard library."""
+    from math import comb
+    k, n = a + b, n1 + n2
+    tot = comb(n, k)
+    return sum(comb(n1, x) * comb(n2, k - x) for x in range(a, min(k, n1) + 1)) / tot
+
+
 def med(xs):
     xs = [x for x in xs if x is not None]
     return st.median(xs) if xs else None
@@ -120,10 +128,18 @@ def main():
         if undecided and reading in ("neither",) or any(v == "not run" for v in (s["R2"], s["main"], s["ctrl"])):
             reading += " (provisional)"
         breaks = [k for k in ("R2", "R3", "R4") if state(f"{k}_s2300", pid) == "no"]
+        est = {}
+        for arm in ("main", "ctrl"):
+            rr = res.get((f"Leval_{arm}", pid))
+            c = cell.get((f"Leval_{arm}", pid), {})
+            lab = int(c.get("labelled", 0) or 0)
+            est[arm] = round(rr["strict"] * int(c.get("genuine", 0)) / lab) if (rr and lab) else 0
+        fp = fisher_greater(est["main"], 64, est["ctrl"], 64)
         cls.append({"pid": pid, "family": p["family"], "binding": p["binding"], "drop60": p["drop60"],
                     **{k: v for k, v in s.items()}, "reading": reading,
                     "t3_survivor": p["t3_1024"] == "0/1024", "r1_breaks_s2300": "breaks" in p["r1_label"],
                     "rungs_breaking_s2300": " ".join(breaks),
+                    "est_genuine_main": est["main"], "est_genuine_ctrl": est["ctrl"], "fisher_p_main_gt_ctrl": f"{fp:.2g}",
                     **{f"g_{k}": (res.get((j, pid)) or {}).get("genuine", "") for k, j in
                        (("R2", "R2_dpo"), ("R3", "R3_dpo"), ("R4", "R4_dpo"), ("main", "Leval_main"), ("ctrl", "Leval_ctrl"))}})
     with open(O / "classify.csv", "w", newline="") as f:
@@ -131,6 +147,8 @@ def main():
         w.writeheader()
         w.writerows(cls)
     summ = {"readings": Counter(c["reading"] for c in cls),
+            "teachable_rl_fisher_lt_0.05": sum(1 for c in cls if c["reading"].startswith("teachable from RL")
+                                               and float(c["fisher_p_main_gt_ctrl"]) < 0.05),
             "by_family": {fam: Counter(c["reading"] for c in cls if c["family"] == fam) for fam in sorted({c["family"] for c in cls})},
             "neither_t3_survivors": [c["pid"] for c in cls if c["reading"].startswith("neither") and c["t3_survivor"]],
             "four_1024_hint": {pid: {k: next(c for c in cls if c["pid"] == pid)[k] for k in ("R1", "R2", "R3", "R4", "main", "ctrl")}
