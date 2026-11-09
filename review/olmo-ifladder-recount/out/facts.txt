@@ -1,0 +1,61 @@
+commits of preregistration/olmo-ifladder.md: 5d227ae1 2026-11-09T04:41:19+00:00 | 48840906 2026-11-09T00:08:34+00:00
+commits of olmo_ifladder/interventions.py: 48840906 2026-11-09T00:08:34+00:00
+commits of olmo_ifladder/prompts.csv: 48840906 2026-11-09T00:08:34+00:00
+commits of olmo_ifladder/problems_r2.jsonl: 48840906 2026-11-09T00:08:34+00:00
+commits of olmo_ifladder/problems_r3.jsonl: 48840906 2026-11-09T00:08:34+00:00
+commits of olmo_ifladder/train_manifest.jsonl: 53f71fc8 2026-11-09T01:32:57+00:00
+commits of olmo_ifladder/exemplars.csv: e261ffd1 2026-11-09T02:06:01+00:00
+commits of olmo_ifladder/problems_r4.jsonl: e261ffd1 2026-11-09T02:06:01+00:00
+commits of olmo_ifladder/order_r3.txt: 276254a3 2026-11-09T04:14:39+00:00
+commits of olmo_ifladder/order_r4.txt: 0eff9348 2026-11-09T11:53:31+00:00
+commits of olmo_ifladder/lora.py: 276254a3 2026-11-09T04:14:39+00:00 | 53f71fc8 2026-11-09T01:32:57+00:00 | 6244fad5 2026-11-09T00:45:10+00:00
+commits of olmo_ifladder/handcheck_prompt_if.md: 6244fad5 2026-11-09T00:45:10+00:00
+executor started: 2026-11-08T23:44:49Z
+pod: NVIDIA H200|1|COMMUNITY|--public-ip; poll log last line: 00:41:16 1 x NVIDIA H200 COMMUNITY: pod ifl-a ready: jtijr9xubcnmxh 213.186.10.12:16620 (gpu NVIDIA H200, $3.59/h)
+executor transcript Write calls: {'olmo_ifladder/interventions.py': ['2026-11-09T00:01:09.624Z'], 'olmo_ifladder/select.py': ['2026-11-09T00:02:13.707Z'], 'preregistration/olmo-ifladder.md': ['2026-11-09T00:07:49.866Z']}
+preregistration states: 'Written 2026-11-09 00:10–01:00 UTC,'
+interventions.py states: 'Written 2026-11-09 00:40-01:30 UTC,'
+worker LINE_START 0 1 2026-11-09T00:44:09Z :: job S0r2
+worker LINE_END 0 1 rc=0 2026-11-09T00:57:13Z
+worker LINE_START 0 2 2026-11-09T00:57:13Z :: job S0r3
+worker LINE_END 0 2 rc=0 2026-11-09T01:11:28Z
+worker LINE_START 0 3 2026-11-09T01:11:28Z :: fetch + steptest
+worker LINE_END 0 3 rc=0 2026-11-09T01:12:31Z
+worker LINE_START 0 4 2026-11-09T01:12:31Z :: job R1cal_dpo
+worker LINE_END 0 4 rc=0 2026-11-09T01:19:07Z
+worker LINE_START 0 5 2026-11-09T01:19:07Z :: job R2_dpo
+worker LINE_END 0 5 rc=0 2026-11-09T03:45:07Z
+worker LINE_START 0 6 2026-11-09T03:45:07Z :: lora train main
+worker LINE_END 0 6 rc=1 2026-11-09T03:51:27Z
+worker LINE_START 0 7 2026-11-09T03:51:27Z :: lora train ctrl
+worker LINE_END 0 7 rc=1 2026-11-09T03:56:18Z
+worker LINE_START 0 8 2026-11-09T03:56:18Z :: job Lchk_main
+worker LINE_END 0 8 rc=1 2026-11-09T03:56:31Z
+worker LINE_START 0 9 2026-11-09T03:56:31Z :: job Lchk_ctrl
+worker LINE_END 0 9 rc=1 2026-11-09T03:56:42Z
+worker LINE_START 0 10 2026-11-09T03:56:42Z :: job Leval_main
+worker LINE_END 0 10 rc=1 2026-11-09T03:56:54Z
+worker LINE_START 0 11 2026-11-09T03:57:54Z :: lora finish main
+worker LINE_END 0 11 rc=0 2026-11-09T03:59:51Z
+worker LINE_START 0 12 2026-11-09T03:59:52Z :: lora finish ctrl
+worker LINE_END 0 12 rc=0 2026-11-09T04:01:41Z
+worker LINE_START 0 13 2026-11-09T04:01:41Z :: job Lchk_main
+worker LINE_END 0 13 rc=0 2026-11-09T04:22:03Z
+worker LINE_START 0 14 2026-11-09T04:22:03Z :: job Lchk_ctrl
+worker LINE_END 0 14 rc=0 2026-11-09T04:32:38Z
+worker LINE_START 0 15 2026-11-09T04:32:38Z :: job Leval_main
+worker LINE_END 0 15 rc=0 2026-11-09T08:55:35Z
+worker LINE_START 0 16 2026-11-09T08:55:35Z :: job R3_dpo
+worker LINE_END 0 16 rc=0 2026-11-09T11:15:55Z
+worker LINE_START 0 17 2026-11-09T11:15:55Z :: job Leval_ctrl
+worker LINE_END 0 17 rc=0 2026-11-09T13:38:39Z
+worker LINE_START 0 18 2026-11-09T13:38:39Z :: job R2_s2300
+worker LINE_END 0 18 rc=0 2026-11-09T14:27:42Z
+worker LINE_START 0 19 2026-11-09T14:27:42Z :: job R4_dpo
+worker LINE_END 0 19 rc=0 2026-11-09T16:18:46Z
+worker LINE_START 0 20 2026-11-09T16:18:46Z :: job R3_s2300
+worker LINE_END 0 20 rc=0 2026-11-09T17:00:50Z
+worker LINE_START 0 21 2026-11-09T17:00:51Z :: job R4_s2300
+worker LINE_END 0 21 rc=0 2026-11-09T17:43:24Z
+fetch_dpo.log: fetched allenai/Olmo-3-32B-Think-DPO@main (97604023f2602a7dfe6d31b1fc229985e0002022) in 36 s, 61G
+fetch_s2300.log: fetched allenai/Olmo-3.1-32B-Think@main (97ade57a9cc55ed48bcd76be4b7a3b6fee61b80d) in 38 s, 61G

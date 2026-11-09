@@ -1,0 +1,34 @@
+[1] vendored vs my upstream fetch: 10/10 byte-identical []
+[2] prompts.csv: reach 48 (ifbench 42, ifeval 6), other sets Counter({'calib': 10})
+    olmo-iffu IF prompts 49; reach == iffu IF less ifbench_281: True; 281 in reach: False
+    olmo-transplant calibration ['ifbench_25', 'ifbench_29', 'ifbench_52', 'ifbench_58', 'ifbench_85', 'ifbench_115', 'ifbench_226', 'ifbench_239', 'ifbench_252', 'ifbench_259', 'ifbench_295', 'ifbench_298']; == run's: False
+    calibration == pre-registered list: True
+[3] interventions.py sha256 e3c284741c25d84c (pre-registered e3c284741c25d84c)
+    file BREVITY == prereg: True; CHECK == prereg: True; DROP60 == prereg: True
+    problems_r1cal.jsonl: 8 rows; mismatches none
+    problems_r2.jsonl: 58 rows; mismatches none
+    problems_r3.jsonl: 58 rows; mismatches none
+    problems_r4.jsonl: 58 rows; mismatches none
+    problems_plain.jsonl: 66 rows; mismatches none
+[4] exemplars.csv: 116 rows, targets 58, jobs {'F_s2300_ife': 10, 'C1_s2300_ifev': 2, 'F_s2300_ifb': 99, 'C1_s2300_ifb': 3, 'E2_s2300_rev': 1, 'E1_s2300_ifa': 1}
+    stored source rows found 79 of 79
+    rung-4 exemplar checks: {'exemplar turns checked': 116, 'source lacks target binding id': 3}
+    exemplar sources with an identical id set: 105 / 116; sources that are among the 58: 13
+[5/6] S0r2: seed 9001 pids 58 draws/pid {4: 58} dup 0 finish {'stop': 232} model {'dpo': 232} T 1.0 top_p 1.0 max 32768 tp 1 chunk 4 stop_after 0 vllm 0.11.0 tmpl eba6e269f669 lora - | prompt sha != mine: 0 []; len != mine 0; row prompt_tokens != meta 0
+[5/6] S0r3: seed 9001 pids 58 draws/pid {4: 58} dup 0 finish {'stop': 232} model {'dpo': 232} T 1.0 top_p 1.0 max 32768 tp 1 chunk 4 stop_after 0 vllm 0.11.0 tmpl eba6e269f669 lora - | prompt sha != mine: 0 []; len != mine 0; row prompt_tokens != meta 0
+[5/6] R1cal_dpo: seed 9101 pids 8 draws/pid {64: 8} dup 0 finish {'stop': 512} model {'dpo': 512} T 1.0 top_p 1.0 max 32768 tp 1 chunk 16 stop_after 0 vllm 0.11.0 tmpl eba6e269f669 lora - | prompt sha != mine: 0 []; len != mine 0; row prompt_tokens != meta 0
+[5/6] R2_dpo: seed 9201 pids 58 draws/pid {64: 58} dup 0 finish {'stop': 3711, 'length': 1} model {'dpo': 3712} T 1.0 top_p 1.0 max 32768 tp 1 chunk 16 stop_after 0 vllm 0.11.0 tmpl eba6e269f669 lora - | prompt sha != mine: 0 []; len != mine 0; row prompt_tokens != meta 0
+[5/6] R3_dpo: seed 9301 pids 41 draws/pid {64: 41} dup 0 finish {'stop': 2623, 'length': 1} model {'dpo': 2624} T 1.0 top_p 1.0 max 32768 tp 1 chunk 16 stop_after 0 vllm 0.11.0 tmpl eba6e269f669 lora - | prompt sha != mine: 0 []; len != mine 0; row prompt_tokens != meta 0
+[5/6] R4_dpo: seed 9401 pids 36 draws/pid {64: 36} dup 0 finish {'stop': 2304} model {'dpo': 2304} T 1.0 top_p 1.0 max 32768 tp 1 chunk 16 stop_after 0 vllm 0.11.0 tmpl eba6e269f669 lora - | prompt sha != mine: 0 []; len != mine 0; row prompt_tokens != meta 0
+[5/6] R2_s2300: seed 9202 pids 58 draws/pid {16: 58} dup 0 finish {'stop': 927, 'length': 1} model {'s2300': 928} T 1.0 top_p 1.0 max 32768 tp 1 chunk 16 stop_after 0 vllm 0.11.0 tmpl eba6e269f669 lora - | prompt sha != mine: 0 []; len != mine 0; row prompt_tokens != meta 0
+[5/6] R3_s2300: seed 9302 pids 41 draws/pid {16: 41} dup 0 finish {'stop': 654, 'length': 2} model {'s2300': 656} T 1.0 top_p 1.0 max 32768 tp 1 chunk 16 stop_after 0 vllm 0.11.0 tmpl eba6e269f669 lora - | prompt sha != mine: 0 []; len != mine 0; row prompt_tokens != meta 0
+[5/6] R4_s2300: seed 9402 pids 36 draws/pid {16: 36} dup 0 finish {'stop': 575, 'length': 1} model {'s2300': 576} T 1.0 top_p 1.0 max 32768 tp 1 chunk 16 stop_after 0 vllm 0.11.0 tmpl eba6e269f669 lora - | prompt sha != mine: 0 []; len != mine 0; row prompt_tokens != meta 0
+[5/6] Lchk_main: seed 9501 pids 18 draws/pid {16: 18} dup 0 finish {'stop': 288} model {'lora_main': 288} T 1.0 top_p 1.0 max 32768 tp 1 chunk 16 stop_after 0 vllm 0.11.0 tmpl eba6e269f669 lora 9921a7602ea16e98 | prompt sha != mine: 0 []; len != mine 0; row prompt_tokens != meta 0
+[5/6] Lchk_ctrl: seed 9502 pids 18 draws/pid {16: 18} dup 0 finish {'stop': 288} model {'lora_ctrl': 288} T 1.0 top_p 1.0 max 32768 tp 1 chunk 16 stop_after 0 vllm 0.11.0 tmpl eba6e269f669 lora 4cf06004bb580bf6 | prompt sha != mine: 0 []; len != mine 0; row prompt_tokens != meta 0
+[5/6] Leval_main: seed 9511 pids 58 draws/pid {64: 48, 48: 10} dup 0 finish {'stop': 3550, 'length': 2} model {'lora_main': 3552} T 1.0 top_p 1.0 max 32768 tp 1 chunk 16 stop_after 0 vllm 0.11.0 tmpl eba6e269f669 lora 9921a7602ea16e98 | prompt sha != mine: 0 []; len != mine 0; row prompt_tokens != meta 0
+[5/6] Leval_ctrl: seed 9512 pids 58 draws/pid {64: 48, 48: 10} dup 0 finish {'stop': 3548, 'length': 4} model {'lora_ctrl': 3552} T 1.0 top_p 1.0 max 32768 tp 1 chunk 16 stop_after 0 vllm 0.11.0 tmpl eba6e269f669 lora 4cf06004bb580bf6 | prompt sha != mine: 0 []; len != mine 0; row prompt_tokens != meta 0
+    open-instruct olmo_thinker template sha eba6e269f669; jobs' template sha set ['eba6e269f669']
+    adapter main: sha256 9921a7602ea16e98; metas using it: ['Lchk_main', 'Leval_main']
+      config r 16 alpha 32 dropout 0.05 targets ['down_proj', 'gate_proj', 'k_proj', 'o_proj', 'q_proj', 'up_proj', 'v_proj'] base /workspace/models/dpo
+    adapter ctrl: sha256 4cf06004bb580bf6; metas using it: ['Lchk_ctrl', 'Leval_ctrl']
+      config r 16 alpha 32 dropout 0.05 targets ['down_proj', 'gate_proj', 'k_proj', 'o_proj', 'q_proj', 'up_proj', 'v_proj'] base /workspace/models/dpo

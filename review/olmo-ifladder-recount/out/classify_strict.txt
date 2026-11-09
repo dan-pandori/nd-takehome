@@ -1,0 +1,84 @@
+binding ids from olmo_ifomega/constraints.csv: 48 of 48; == prompts.csv binding: True
+rung 1 from my olmo-iffu review: 48 prompts; elicited 16 (strict ALL-CAPS reading 15); olmo_iffu/status.csv 'prompt-elicitable' 16; disagreements with status.csv: []
+olmo-iffu test-3 outcomes on the reach set: {'ifbench_133': 'survives at 1,024', 'ifbench_136': 'survives at 1,024', 'ifbench_166': 'survives at 1,024', 'ifbench_211': 'survives at 1,024', 'ifbench_248': 'survives at 1,024', 'ifbench_252': 'survives at 1,024', 'ifbench_253': 'survives at 1,024', 'ifbench_269': 'survives at 1,024', 'ifbench_3': 'survives at 1,024', 'ifbench_78': 'survives at 1,024'}
+
+pid           family      R1 R1s R2 R3 R4 LM LC | S2 S3 S4 | reading
+ifeval_2350   keywords    N  N   N  N  N  E  N  | E  E  E  | teachable from RL's trajectories
+ifeval_2447   keywords    E  E   E  U  U  E  N  | E  U  U  | prompt-elicitable at rung 1
+ifeval_3478   keywords    N  N   N  N  N  N  N  | E  E  E  | neither
+ifeval_1314   change_case E  E   E  U  U  E  N  | E  U  U  | prompt-elicitable at rung 1
+ifeval_2247   change_case E  E   E  U  U  E  N  | E  U  U  | prompt-elicitable at rung 1
+ifeval_2563   change_case E  E   N  U  U  E  N  | E  U  U  | prompt-elicitable at rung 1
+ifbench_290   format      E  N   E  U  U  E  N  | E  U  U  | prompt-elicitable at rung 1
+ifbench_4     count       N  N   N  N  N  E  N  | E  E  E  | teachable from RL's trajectories  [breaks s2300 at failed ['R1']]
+ifbench_64    repeat      N  N   N  E  U  E  N  | N  E  U  | prompt-elicitable at rung 3  [breaks s2300 at failed ['R2']]
+ifbench_79    format      N  N   N  E  U  E  N  | E  E  U  | prompt-elicitable at rung 3
+ifbench_170   ratio       N  N   N  N  N  E  N  | E  E  E  | teachable from RL's trajectories
+ifbench_0     count       N  N   N  N  N  E  N  | E  E  E  | teachable from RL's trajectories  [breaks s2300 at failed ['R1']]
+ifbench_188   sentence    N  N   N  N  E  N  N  | N  E  E  | prompt-elicitable at rung 4  [breaks s2300 at failed ['R1', 'R2']]
+ifbench_207   words       N  N   N  N  N  E  N  | E  E  E  | teachable from RL's trajectories
+ifbench_179   sentence    E  E   E  U  U  E  N  | E  U  U  | prompt-elicitable at rung 1
+ifbench_268   words       N  N   N  N  N  N  N  | E  E  E  | neither
+ifbench_252   words       E  E   E  U  U  E  N  | E  U  U  | prompt-elicitable at rung 1  [t3: survives at 1,024]
+ifbench_269   words       N  N   N  N  N  E  N  | E  E  E  | teachable from RL's trajectories  [t3: survives at 1,024]
+ifbench_253   words       E  E   E  U  U  E  N  | E  U  U  | prompt-elicitable at rung 1  [t3: survives at 1,024]
+ifbench_3     count       N  N   N  N  N  N  N  | N  N  E  | neither  [t3: survives at 1,024]  [breaks s2300 at failed ['R1', 'R2', 'R3']]
+ifbench_78    format      E  E   E  U  U  E  N  | E  U  U  | prompt-elicitable at rung 1  [t3: survives at 1,024]
+ifbench_248   words       N  N   N  N  N  E  N  | E  E  E  | teachable from RL's trajectories  [t3: survives at 1,024]
+ifbench_211   words       N  N   N  E  U  E  N  | E  E  U  | prompt-elicitable at rung 3  [t3: survives at 1,024]
+ifbench_166   ratio       N  N   N  N  N  N  N  | E  E  E  | neither  [t3: survives at 1,024]  [breaks s2300 at failed ['R1']]
+ifbench_136   format      N  N   E  U  U  E  N  | E  U  U  | prompt-elicitable at rung 2  [t3: survives at 1,024]
+ifbench_133   format      E  E   E  U  U  E  N  | E  U  U  | prompt-elicitable at rung 1  [t3: survives at 1,024]
+ifbench_1     count       N  N   N  N  N  E  N  | E  E  E  | teachable from RL's trajectories  [breaks s2300 at failed ['R1']]
+ifbench_19    count       E  E   N  U  U  E  N  | N  U  U  | prompt-elicitable at rung 1  [breaks s2300 at failed ['R2']]
+ifbench_67    format      N  N   N  N  N  N  N  | E  E  E  | neither
+ifbench_128   format      N  N   N  E  U  E  N  | E  E  U  | prompt-elicitable at rung 3
+ifbench_154   ratio       N  N   N  N  E  E  N  | E  E  E  | prompt-elicitable at rung 4
+ifbench_169   ratio       N  N   N  N  N  E  N  | E  E  E  | teachable from RL's trajectories
+ifbench_173   ratio       E  E   E  U  U  E  N  | E  U  U  | prompt-elicitable at rung 1
+ifbench_186   sentence    E  E   N  U  U  E  N  | E  U  U  | prompt-elicitable at rung 1
+ifbench_187   sentence    E  E   N  U  U  E  N  | E  U  U  | prompt-elicitable at rung 1
+ifbench_189   sentence    N  N   N  E  E  E  N  | E  E  E  | prompt-elicitable at rung 3
+ifbench_203   words       N  N   N  N  N  E  N  | E  E  E  | teachable from RL's trajectories
+ifbench_204   words       N  N   N  E  U  E  N  | E  E  U  | prompt-elicitable at rung 3
+ifbench_206   words       N  N   N  N  N  E  N  | E  E  E  | teachable from RL's trajectories
+ifbench_209   words       N  N   N  N  N  E  N  | E  E  E  | teachable from RL's trajectories
+ifbench_217   words       N  N   N  N  N  E  N  | E  E  E  | teachable from RL's trajectories
+ifbench_220   words       E  E   E  U  U  E  N  | E  U  U  | prompt-elicitable at rung 1
+ifbench_226   words       E  E   E  U  U  E  N  | E  U  U  | prompt-elicitable at rung 1
+ifbench_264   words       N  N   N  N  N  E  N  | E  E  E  | teachable from RL's trajectories
+ifbench_267   words       N  N   N  N  E  E  N  | E  E  E  | prompt-elicitable at rung 4
+ifbench_271   words       N  N   N  N  N  E  N  | E  E  E  | teachable from RL's trajectories
+ifbench_280   custom      N  N   N  N  E  E  N  | E  E  E  | prompt-elicitable at rung 4
+ifbench_284   repeat      N  N   N  N  N  N  N  | E  E  E  | neither
+
+readings: {"teachable from RL's trajectories": 15, 'prompt-elicitable at rung 1': 16, 'neither': 6, 'prompt-elicitable at rung 3': 6, 'prompt-elicitable at rung 4': 4, 'prompt-elicitable at rung 2': 1}
+R2 elicited (all prompts it ran on): 13; unsettled 0
+R3 elicited (all prompts it ran on): 6; unsettled 0
+R4 elicited (all prompts it ran on): 5; unsettled 0
+LM elicited (all prompts it ran on): 41; unsettled 0
+LC elicited (all prompts it ran on): 0; unsettled 0
+rung 1 not elicited: 32; rung 2 elicits 1 of them
+still unelicited after rung 2: 31; rung 3 elicits 6 (unrun 0)
+still unelicited after rung 3: 25; rung 4 elicits 4 (unrun 0)
+prompt-elicitable at some rung: 27 of 48
+by family (binding id prefix):
+    words        n 17: {"teachable from RL's trajectories": 9, 'neither': 1, 'rung 1': 4, 'rung 3': 2, 'rung 4': 1}
+    format       n  7: {'rung 1': 3, 'rung 3': 2, 'rung 2': 1, 'neither': 1}
+    count        n  5: {"teachable from RL's trajectories": 3, 'neither': 1, 'rung 1': 1}
+    ratio        n  5: {"teachable from RL's trajectories": 2, 'neither': 1, 'rung 4': 1, 'rung 1': 1}
+    sentence     n  5: {'rung 4': 1, 'rung 1': 3, 'rung 3': 1}
+    keywords     n  3: {"teachable from RL's trajectories": 1, 'rung 1': 1, 'neither': 1}
+    change_case  n  3: {'rung 1': 3}
+    repeat       n  2: {'rung 3': 1, 'neither': 1}
+    custom       n  1: {'rung 4': 1}
+neither: ['ifeval_3478', 'ifbench_268', 'ifbench_3', 'ifbench_166', 'ifbench_67', 'ifbench_284']; of these olmo-iffu test-3 survivors: ['ifbench_3', 'ifbench_166']; with a failed rung that breaks s2300: {'ifbench_3': ['R1', 'R2', 'R3'], 'ifbench_166': ['R1']}
+the 6 test-3 survivors not elicited at rung 1 (pre-registered list): {'ifbench_3': 'neither', 'ifbench_136': 'prompt-elicitable at rung 2', 'ifbench_166': 'neither', 'ifbench_211': 'prompt-elicitable at rung 3', 'ifbench_248': "teachable from RL's trajectories", 'ifbench_269': "teachable from RL's trajectories"}
+the four 1,024-survivors that the hint elicits, every cell:
+    ifbench_78: R1 E R2 E R3 U R4 U LM E LC N S2 E; genuine {'R2': 2, 'R3': None, 'R4': None, 'LM': 3, 'LC': None, 'S2': 4, 'S3': None, 'S4': None}; strict {'R2': 8, 'R3': None, 'R4': None, 'LM': 42, 'LC': 0, 'S2': 16, 'S3': None, 'S4': None}
+    ifbench_133: R1 E R2 E R3 U R4 U LM E LC N S2 E; genuine {'R2': 3, 'R3': None, 'R4': None, 'LM': 4, 'LC': 1, 'S2': 2, 'S3': None, 'S4': None}; strict {'R2': 12, 'R3': None, 'R4': None, 'LM': 62, 'LC': 1, 'S2': 16, 'S3': None, 'S4': None}
+    ifbench_252: R1 E R2 E R3 U R4 U LM E LC N S2 E; genuine {'R2': 4, 'R3': None, 'R4': None, 'LM': 3, 'LC': None, 'S2': 4, 'S3': None, 'S4': None}; strict {'R2': 44, 'R3': None, 'R4': None, 'LM': 49, 'LC': 0, 'S2': 16, 'S3': None, 'S4': None}
+    ifbench_253: R1 E R2 E R3 U R4 U LM E LC N S2 E; genuine {'R2': 4, 'R3': None, 'R4': None, 'LM': 4, 'LC': None, 'S2': 4, 'S3': None, 'S4': None}; strict {'R2': 52, 'R3': None, 'R4': None, 'LM': 26, 'LC': 0, 'S2': 16, 'S3': None, 'S4': None}
+binding id covered by a training slot: 25 prompts; lora_main elicits 22; lora_ctrl 0; of them not prompt-elicitable: 5 / 7
+binding id NOT covered: 23 prompts; lora_main elicits 19; lora_ctrl 0; of them not prompt-elicitable: 10 / 14
+lora_main elicited & lora_ctrl not: 41

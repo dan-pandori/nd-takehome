@@ -1,0 +1,15 @@
+[1] manifest rows 48 (jsonl 48); source rows found 48 of 48
+    problems: none (text sha convention: sha256(text) 48/48, sha_int32(ids) 0/48)
+[2] training pids 16, held-out pids 8; in the 58: []; ifbench_281: False; non-IFBench: []; train & held-out overlap: []
+    slot ids 16 (distinct); pids per slot [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]; each slot pid carries its id: True
+    reach-set ids 27; covered by a training slot 16; uncovered ['change_case:capital_word_frequency', 'change_case:english_capital', 'count:keywords_multiple', 'custom:multiples', 'keywords:letter_frequency', 'ratio:sentence_words', 'words:alphabet', 'words:last_first', 'words:no_consecutive', 'words:odd_even_syllables', 'words:vowel']
+    ids carried by training prompts (all, incl. second ids): {'format:sub-bullets': 1, 'format:thesis': 1, 'ratio:sentence_balance': 1, 'ratio:stop_words': 1, 'sentence:alliteration_increment': 1, 'sentence:increment': 1, 'words:consonants': 1, 'count:numbers': 1, 'words:prime_lengths': 1, 'words:repeats': 1, 'repeat:repeat_span': 1, 'format:title_case': 1, 'count:pronouns': 1, 'repeat:repeat_simple': 1, 'format:emoji': 1, 'format:line_indent': 1}
+    train s2300: response tokens sum 81769, with prompts 83234; median response 4739; answer words median 52; strict 16/16
+    train dpo: response tokens sum 57505, with prompts 58970; median response 2240; answer words median 164; strict 16/16
+[3] lora_main: writer s2300; train set == manifest (s2300): True; steps 64 log rows 64; epochs 4; slots per epoch distinct: True; lr max rel. deviation from my schedule 0; train_tokens 332936 (resp tokens in log 327076); secs 308.9 + finish 113.0; peak 81.85 GB
+[3] lora_ctrl: writer dpo; train set == manifest (dpo): True; steps 64 log rows 64; epochs 4; slots per epoch distinct: True; lr max rel. deviation from my schedule 0; train_tokens 235880 (resp tokens in log 230020); secs 226.0 + finish 105.4; peak 84.7 GB
+    same per-epoch order in both arms: True; train tokens main / ctrl = 1.411
+    recipe main vs pre-registration: all equal; targets True
+    recipe ctrl vs pre-registration: all equal; targets True
+[4] lora_main: held-out s2300 NLL base 0.6381 peft 0.5417 (+15.1% drop) merged 0.5431; held-out dpo NLL base 0.7616 peft 0.8900 (-16.9% drop); merge check max rel. 0.0112 (mean-based 0.0112)
+[4] lora_ctrl: held-out s2300 NLL base 0.6381 peft 0.6426 (-0.7% drop) merged 0.6416; held-out dpo NLL base 0.7616 peft 0.7720 (-1.4% drop); merge check max rel. 0.0088 (mean-based 0.0088)

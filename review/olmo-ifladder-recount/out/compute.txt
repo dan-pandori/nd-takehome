@@ -1,0 +1,23 @@
+S0r2: samples 232; gen tokens meta 1032280 rows 1032280; prompt tokens 26148; t_load+t_gen 775.9 s; job runs (s, rc) [(784.0, 0)]; worker lines [(784.0, 0)]
+S0r3: samples 232; gen tokens meta 1243751 rows 1243751; prompt tokens 37420; t_load+t_gen 847.5 s; job runs (s, rc) [(855.0, 0)]; worker lines [(855.0, 0)]
+R1cal_dpo: samples 512; gen tokens meta 727767 rows 727767; prompt tokens 67712; t_load+t_gen 387.1 s; job runs (s, rc) [(396.0, 0)]; worker lines [(396.0, 0)]
+R2_dpo: samples 3712; gen tokens meta 16254621 rows 16254621; prompt tokens 418368; t_load+t_gen 8747.5 s; job runs (s, rc) [(8760.0, 0)]; worker lines [(8760.0, 0)]
+R3_dpo: samples 2624; gen tokens meta 15003054 rows 15003054; prompt tokens 433280; t_load+t_gen 8409.4 s; job runs (s, rc) [(8420.0, 0)]; worker lines [(8420.0, 0)]
+R4_dpo: samples 2304; gen tokens meta 11891784 rows 11891784; prompt tokens 1345600; t_load+t_gen 6652.6 s; job runs (s, rc) [(6664.0, 0)]; worker lines [(6664.0, 0)]
+R2_s2300: samples 928; gen tokens meta 5235117 rows 5235117; prompt tokens 104592; t_load+t_gen 2934.6 s; job runs (s, rc) [(2943.0, 0)]; worker lines [(2943.0, 0)]
+R3_s2300: samples 656; gen tokens meta 4069646 rows 4069646; prompt tokens 108320; t_load+t_gen 2516.7 s; job runs (s, rc) [(2524.0, 0)]; worker lines [(2524.0, 0)]
+R4_s2300: samples 576; gen tokens meta 3819099 rows 3819099; prompt tokens 336400; t_load+t_gen 2545.5 s; job runs (s, rc) [(2553.0, 0)]; worker lines [(2553.0, 0)]
+Lchk_main: samples 288; gen tokens meta 1460775 rows 1460775; prompt tokens 32208; t_load+t_gen 1213.4 s; job runs (s, rc) [(13.0, 1), (1222.0, 0)]; worker lines [(13.0, 1), (1222.0, 0)]
+Lchk_ctrl: samples 288; gen tokens meta 888168 rows 888168; prompt tokens 32208; t_load+t_gen 625.3 s; job runs (s, rc) [(11.0, 1), (635.0, 0)]; worker lines [(11.0, 1), (635.0, 0)]
+Leval_main: samples 3552; gen tokens meta 24633484 rows 24633484; prompt tokens 335632; t_load+t_gen 15761.8 s; job runs (s, rc) [(12.0, 1), (15777.0, 0)]; worker lines [(12.0, 1), (15777.0, 0)]
+Leval_ctrl: samples 3552; gen tokens meta 14331467 rows 14331467; prompt tokens 335632; t_load+t_gen 8527.2 s; job runs (s, rc) [(8564.0, 0)]; worker lines [(8564.0, 0)]
+lora_main: steps 64, train tokens 332936, train secs 308.9, finish secs 113.0, worker lines [(380.0, 1), (117.0, 0)]
+lora_ctrl: steps 64, train tokens 235880, train secs 226.0, finish secs 105.4, worker lines [(291.0, 1), (109.0, 0)]
+other worker lines: {'other': [(63.0, 0)]}
+sampling jobs total: 19456 samples, 100591013 generated tokens, 16.70 GPU-h (JOB_START->JOB_DONE incl. failed starts)
+podbudget: olmo-ifladder      used  17.23 h  $61.85   ceiling 50 h  budget $80
+Leval_main / Leval_ctrl: gen tokens 1.719, GPU-s 1.844, samples 1.000
+Lchk_main / Lchk_ctrl: gen tokens 1.645, GPU-s 1.912, samples 1.000
+lora_main / lora_ctrl: train tokens 1.411, train secs 1.367, steps equal True
+tokens per draw R3_dpo 5718 vs R2_dpo 4379 (1.306x)
+tokens per draw R4_dpo 5161 vs R3_dpo 5718 (0.903x)
