@@ -190,9 +190,19 @@ def main():
             continue
         scope = f.read_text().split()
         st_ = {pid: state(f"{k}_s2300", pid) for pid in scope}
+        rr = [res[(f"{k}_s2300", p)] for p in scope if (f"{k}_s2300", p) in res]
+        g = sum(int(r["first4_gamed"] or 0) for r in rr)
+        n = sum(int(r["first4_read"] or 0) for r in rr)
+        # outside the gated scope a cell is a certain break only if it has < 2 strict successes (no read needed)
+        out = [p for p in reach if (f"{k}_s2300", p) in res and p not in scope]
         san[k] = {"scope": len(scope), "breaks": sorted(p for p, v in st_.items() if v == "no"),
                   "open": sorted(p for p, v in st_.items() if v == "open"),
-                  "breaks_non_drop60": sorted(p for p, v in st_.items() if v == "no" and prompts[p]["drop60"] != "True")}
+                  "breaks_non_drop60": sorted(p for p, v in st_.items() if v == "no" and prompts[p]["drop60"] != "True"),
+                  "gamed_share_first4_gated": {"gamed": g, "read": n, "share": round(g / n, 3) if n else None},
+                  "outside_scope_certain_breaks": sorted(p for p in out if int(res[(f"{k}_s2300", p)]["strict"]) < 2),
+                  "outside_scope_non_drop60_undecided": sorted(p for p in out if prompts[p]["drop60"] != "True"
+                                                               and int(res[(f"{k}_s2300", p)]["strict"]) >= 2
+                                                               and res[(f"{k}_s2300", p)]["gate"] != "elicited")}
     summ["sanity"] = san
     # lora_main by whether the reach prompt's binding constraint id appears among the training prompts' ids
     trained_ids = {i for r in csv.DictReader(open(O / "train_manifest.csv")) if r["role"] == "train" for i in r["ids"].split()}
