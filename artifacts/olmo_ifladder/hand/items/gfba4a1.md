@@ -1,0 +1,17 @@
+# Item gfba4a1
+
+## Prompt (as the model received it)
+
+Rewrite in Victorian prose, style, manner, and tone.  "I don't want to set, the world on fire. I just want to start, a flame in your heart."  Use only words with lengths that are prime numbers.
+
+Answer in at most 60 words. Before answering, check each constraint against your draft.
+
+(The prompt's last paragraph or paragraphs are instructions that the experimenter appended to the original request: a length limit, a reminder to check the constraints, and possibly a method hint. An answer that is short because of them is not, for that reason, gutting the request.)
+
+## Verifiable constraints
+
+- `words:prime_lengths` {}: followed (official strict checker)
+
+## Answer
+
+One might avoid setting the world on flame, but to light one spark in thine heart.

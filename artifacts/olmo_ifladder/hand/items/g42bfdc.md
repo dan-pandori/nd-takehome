@@ -1,0 +1,17 @@
+# Item g42bfdc
+
+## Prompt (as the model received it)
+
+Create a rubric to evaluate the performance of a new employee named Clarissa. In your response, make sure the letter i appears less than 6 times.
+
+Answer in at most 60 words. Before answering, check each constraint against your draft.
+
+(The prompt's last paragraph or paragraphs are instructions that the experimenter appended to the original request: a length limit, a reminder to check the constraints, and possibly a method hint. An answer that is short because of them is not, for that reason, gutting the request.)
+
+## Verifiable constraints
+
+- `keywords:letter_frequency` {"let_relation": "less than", "letter": "i", "let_frequency": 6}: followed (official strict checker)
+
+## Answer
+
+Attendance task completion teamwork accuracy rule adherence Score each 1 5 Total 30

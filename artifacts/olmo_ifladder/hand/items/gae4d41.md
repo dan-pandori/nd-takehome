@@ -1,0 +1,19 @@
+# Item gae4d41
+
+## Prompt (as the model received it)
+
+Act as an HR professional and generate a list of the top 10 elements that impact a manager's recruitment experience, add an Australian lens to the trends Respond with three sentences, all containing the same number of characters but using all different words.
+
+Before answering, check each constraint against your draft.
+
+(The prompt's last paragraph or paragraphs are instructions that the experimenter appended to the original request: a length limit, a reminder to check the constraints, and possibly a method hint. An answer that is short because of them is not, for that reason, gutting the request.)
+
+## Verifiable constraints
+
+- `ratio:sentence_words` {}: followed (official strict checker)
+
+## Answer
+
+Accurate job descriptions boost engagement.  
+Streamlined systems guarantee good matches.  
+Optimized onboarding accelerates retention.

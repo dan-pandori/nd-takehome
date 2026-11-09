@@ -1,0 +1,17 @@
+# Item g502cef
+
+## Prompt (as the model received it)
+
+Each word in your response must start with the next letter of the alphabet, looping back to 'A' after 'Z'. We can consider than a text-to-image model learns concepts such as what a bear is by having having image-caption pairs in the training dataset that both show and have "bear" in the  caption. Is there anything analogous to such concepts in language models?
+
+Answer in at most 60 words. Before answering, check each constraint against your draft.
+
+(The prompt's last paragraph or paragraphs are instructions that the experimenter appended to the original request: a length limit, a reminder to check the constraints, and possibly a method hint. An answer that is short because of them is not, for that reason, gutting the request.)
+
+## Verifiable constraints
+
+- `words:alphabet` {}: followed (official strict checker)
+
+## Answer
+
+Associations build contextual data effectively.

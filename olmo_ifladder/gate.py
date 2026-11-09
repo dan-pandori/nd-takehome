@@ -190,7 +190,14 @@ if __name__ == "__main__":
     if cmd == "status":
         cmd_status(rest)
     elif cmd == "items":
+        only = None
+        if "--pids" in rest:  # restrict reads to these prompts (s2300 sanity cells: where dpo failed at that rung)
+            k = rest.index("--pids")
+            only = set(open(rest[k + 1]).read().split())
+            rest = rest[:k] + rest[k + 2:]
         cells, todo, data = walk(rest[1:])
+        if only is not None:
+            todo = [t for t in todo if t[1] in only]
         write_items(rest[0], todo, data)
     elif cmd == "second":
         cells, _, data = walk(rest[1:])
