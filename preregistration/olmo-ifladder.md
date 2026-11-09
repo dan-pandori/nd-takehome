@@ -194,4 +194,14 @@ of a", "write a fictional imaginative descriptive timeline of an alternate unive
 
 ## Deviations
 
-(none yet)
+1. **The `s2300` sanity arm is restored after stage 0** (2026-11-09 04:40 UTC). Stage 0 projected $75.5 with cut 1 alone,
+   so cuts 1 and 2 were applied by the rule above. Rung 2 then ran at 1,866 tok/s (stage 0's small jobs: 1,611), and
+   the re-cost with measured rates is ≈ $53 for cuts 1 + 2 and ≈ $61 with the sanity arm back (rung 2 on all 58,
+   rungs 3–4 on their cut-2 subsets, 16 draws, seeds 9202 / 9302 / 9402), under the $72 gate. Cut 2 stays: rungs 3–4
+   on already-elicited prompts change no reading, while the sanity arm decides whether a failed rung is informative
+   for the "neither" set. QUESTIONS.md records it with this default.
+2. **LoRA evaluation through vLLM's LoRA path, not merged weights** — the pre-registered fallback, triggered by the
+   merge check (1.12 % > 1 % on two training trajectories for `lora_main`; 0.88 % for `lora_ctrl`; both arms use the
+   LoRA path alike). Implementation detail, not a design change: the training process's merged save failed on the
+   checkpoint's generation-config validation, so the NLL checks, merge and report were redone by `lora.py finish` from
+   the saved adapters (no retraining).

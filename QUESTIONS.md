@@ -220,3 +220,8 @@ earlier rung elicited (cut 2) **$65.9**; plus LoRA evaluation at 32 draws (cut 3
 cuts 1 and 2, as the brief orders (control LoRA kept, LoRA evaluation at 64 draws). Rung 3 then waits for rung 2's hand
 gate and rung 4 for rung 3's; the LoRA jobs fill the gaps. If you want the `s2300` sanity arm back (≈ +$10, over the
 $72 gate but under $80), say so here.
+- *Update 2026-11-09 04:34 UTC:* rung 2 ran at 1,866 tok/s (stage 0 measured 1,611 on small jobs), so the run now projects **≈ $53** with
+  cuts 1 + 2 and **≈ $61 with the `s2300` sanity arm restored** (16 draws per prompt: rung 2 on all 58, rungs 3–4 on their
+  cut-2 subsets), under the $72 gate. **Default, proceeding on it:** restore the sanity arm (it tells whether a rung that
+  fails for `dpo` also breaks `s2300`, which is what makes a "neither" reading informative); cut 2 stays (rungs 3–4 on
+  prompts already elicited would not change any reading). Say "no sanity arm" here to drop it again.
