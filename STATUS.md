@@ -387,3 +387,7 @@ OLMO-IFFU DONE 2026-11-07T09:11:45Z
 
 OLMO-TRANSPLANT DONE 2026-11-08T08:21:03Z
 
+
+## olmo-ifladder (executor; brief authorised 2026-11-08; $80 / 50 pod-hours)
+
+- 2026-11-09 00:08 UTC  run started 2026-11-08 23:44 (executor). Pre-registration `preregistration/olmo-ifladder.md` committed before any pod: 48 IF reach prompts + 10 calibration; ladder rungs 2–4 on `dpo` (rung 1 = olmo-iffu's hint, reused); 16-example LoRA on `s2300` trajectories vs a control LoRA on `dpo`'s own; stage 0 projection ≈ $74 for the full design, so the brief's cut 1 (no `s2300` sanity arm) is expected unless stage 0 measures shorter draws. Budget registered (`podbudget` $80 / 50 h).
