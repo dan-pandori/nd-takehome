@@ -336,3 +336,129 @@ pre-registration and match what ran.
 8. The stated writing times.
 9. How the "neither" set and "what transfers" are worded, against n and against what was measured (only lengths and
    NLL, no mechanism test).
+
+## §Compare (phase 2: the executor's claims against my recount)
+
+Read in phase 2: `run_olmo_ifladder.md`, `olmo_ifladder/plain_summary.md`, `numbers.md` § olmo-ifladder, `log.md`
+§ olmo-ifladder, `olmo_ifladder/{classify.csv, handcheck.csv, handcheck_rule_addendum.md}`, the registry rows. Checks:
+`rvl_compare.py` → `out/compare.txt`, `rvl_phase2_checks.py` → `out/phase2_checks.txt`, `out/registry.txt`.
+
+**Where the two hand gates differ.** The executor's labels join to my draw keys for all 706 of its items.
+- On the 590 draws we both labelled, the labels agree on 488.
+- 95 of the 102 disagreements are executor-gamed / mine-genuine; 7 go the other way.
+- With the executor's labels in my walk, every executor cell outcome and gamed share is reproduced exactly: R2 12,
+  R3 5, R4 3, `lora_main` 40, `lora_ctrl` 0; gamed shares 15/59, 7/21, 6/19, 35/164, 1/5. So on the cells both gates read,
+  every difference is labelling standard, not protocol or arithmetic. The one protocol difference is scope: I gated
+  every `s2300` sanity cell; the executor gated only the prompts no earlier rung had elicited.
+- Where the label gap comes from (`out/phase2_checks.txt` [8]): 87 of the 95 are labels the executor's readers gave
+  and the executor kept; 8 are executor overturns.
+  - As pre-registered, the executor's readers saw only the reader prompt's genuine/gamed definitions. The executor
+    then confirmed every label under rules 1–6 plus its addendum rules 7–9 (`handcheck_rule_addendum.md`, committed
+    02:07, after the pre-registration, before any ladder read). Rule 7: a pass resting on a lenient checker reading is
+    gamed. Rule 9: a slogan or restatement answering "explain / write" is gamed.
+  - My readers were given rules 1–6 directly, including rule 4 (thin answers that serve the request are genuine) and
+    rule 3 (tokenisation slack).
+  - So the gap is the reading of thin answers and checker-artifact passes. The executor's readers and rules 7 / 9 are
+    stricter; mine apply rules 3 and 4 literally.
+- Only two `dpo` / LoRA cells change outcome: R4 `ifbench_154` (a reading changes) and R2 `ifbench_179` (no reading
+  depends on it). Several `s2300` sanity cells change too (below).
+
+| claim (source) | my value | verdict |
+|---|---|---|
+| 48 reach prompts, 10 calibration; `dpo` 0 genuine in 256 (run, numbers) | sets rebuilt: 48 = olmo-iffu's 49 less `ifbench_281`; calibration = pre-registered 10. "0 in 256" is olmo-ifomega's, reviewed there | reproduces (inherited part labelled) |
+| 19,456 draws; 100.6 M tokens; $61.85 of $80; 17.23 pod-h, 1 × H200 community $3.59/h (run, numbers) | 19,456; 100,591,013; `podbudget` $61.85 / 17.23 h | reproduces |
+| prompt-elicitable at rung 1 / 2 / 3 / 4 = 16 / 1 / 5 / 3; "prompting reaches 25 of 48"; "check line +1, method hints +5, exemplars +3" (run, numbers, plain) | blind 16 / 1 / 5 / **4** (26); **16 / 1 / 5 / 3 (25) after I adjudicate one item** (below) | reproduces after adjudication. It rests on one borderline rung-4 item (`ifbench_154`) |
+| 290 at rung 2 if ALL CAPS is not title case (15 / 2 / 5 / 3) | all 12 rung-2 strict successes read: 3 genuine non-ALL-CAPS | reproduces |
+| **teachable from RL's trajectories 16**; any light fine-tune 0; neither 7 (run, numbers, plain) | blind **15** (154 at rung 4); **16 after adjudication**; 0; 7, the same seven prompts | reproduces after adjudication |
+| `lora_main` 40 / 48 with no hint; `lora_ctrl` 0 / 48 (run, numbers, plain) | 40 (the same 40 prompts); 0 (5 strict successes on 5 prompts) | reproduces. Outcomes are identical under first-read, majority and pessimistic labels |
+| "16 beyond every rung (Fisher p < 0.05 vs the control on 12, estimated counts)"; not on 0, 170, 169, 264 (run, numbers) | under my labels 13 of 16 (not 0, 170, 169). `264` passes: my read genuine share 1.0 → estimated 6 vs 0, p 0.014; the executor's share gives 2 vs 0 | label-dependent; reproduces under the executor's labels |
+| `lora_main` reaches 19 of the 23 prompts whose binding id it never saw; 21 of 25 it saw (run, numbers, plain) | 19 / 23; 21 / 25 | reproduces |
+| lengths: `lora_main` thinking 6,236 (`dpo` 1,834, `s2300` 5,742), answers 70 (231 / 32), median of per-prompt medians; "+240 %"; "about three times as long" (run, numbers, plain) | 6,236.25 / 1,833.5 / 5,741.5; 69.5 / 231 / 31.5 | reproduces. "Three times" is the median of medians (3.40×); the mean per draw is 6,986 vs `lora_ctrl` 3,616 (executor 6,985 / 3,613) |
+| **`lora_main` gamed share 0.21**; "about one pass in five still gamed the checker" (run, numbers, plain) | executor's labels 35/164 = 0.21; **my blind labels 13/164 = 0.08** | **differs 2.7×**, by reading standard. Say 0.08–0.21 depending on the standard, or name rules 7 / 9 |
+| ladder gamed shares 15/59, 7/21, 6/19; R1 6/48 (7/48 with this run's pre-screen) (numbers) | executor labels: same. Mine 8/59, 4/21, 5/19; R1 on my olmo-iffu labels 8/48 (9 ranks unread) | reproduces under the executor's labels; mine lower. Expectation 8 holds under both |
+| calibration 0.777–0.861 by rung, only 298 below half; LoRAs 0.975 / 0.895 vs `dpo` 0.906; checks 0.963 / 0.894 (numbers, run) | identical | reproduces |
+| LoRA table: train tokens, loss first → last 4, held-out NLL (−15.1 % / +0.7 %; `dpo` trajectories +16.9 % / +1.4 %), merge 1.12 % / 0.88 % (numbers) | identical (`out/train.txt`) | reproduces |
+| held-out slice strict 106 / 51 of 128, per prompt (numbers) | 106 / 51, every per-prompt value equal | reproduces |
+| "34 % of tries pass, against the RL model's 66 %" (plain) | `lora_main` strict 1,052 / 3,072 = 0.342; `s2300` unhinted fixed phase 254 / 384 = 0.661 | reproduces; these are automatic strict passes, not genuine rates |
+| neither: 3 and 166 survived 1,024 draws; `lora_main` 1 genuine on e3478 and 166, 0 on the other five (run, numbers) | same | reproduces |
+| **"on 166 and 188 every rung breaks `s2300`"**; "only the fine-tune test informs" (run, numbers, plain) | 188: rungs 1–4 under both gates. **166: rungs 1 and 3 under my labels.** My S2 and S4 cells for 166 each have 2 genuine of 16 (thin three-sentence answers to a "top-10 list" prompt; the executor's readers call them gamed) | 188 reproduces; **166 is reader-dependent**. Say "on 188 every rung, on 166 rungs 1 and 3 (all four on the stricter reading)" |
+| 3 uninformative at rungs 1–3, not 4; 284 at rung 1 only; e3478 / 67 / 268 at none (numbers) | 3: same. **284: my olmo-iffu review found exact span copies genuine (rule 5): `s2300` 2 genuine of 4 at rung 1, so not broken.** The run inherits olmo-iffu's 0/16, which mislabelled them | 3 reproduces; **284's flag rests on an inherited label error** (it also put 284 on DROP60) |
+| sanity breaks: R2 8 (0 1 3 4 166 188 · 64 189), R3 6, R4 5; gamed 0.43 / 0.46 / 0.40 (numbers) | all 48 / 31 / 26 cells gated: R2 5 (3 188 19 · 64 189), R3 5 (3 4 166 188 · 189), R4 2 (4 188); gamed 0.23 / 0.30 / 0.21 over all my gated cells (the executor's shares are over its 31 / 26 / 23) | **differs** on 0 1 4 166 (R2), 206 (R3), 1 166 206 (R4): thin answers executor-gamed, mine genuine. No reading changes (all are DROP60 or teachable prompts, except 166) |
+| expectation 12 "not determined (R2 ≥ 3, at the bound)" (numbers, run) | with every non-DROP60 R2 cell gated: exactly 3 (19, 64, 189); under my more lenient labels | the executor's gate leaves it open, as stated; mine says held at the bound |
+| expectations 1–13 table (numbers); misses "all one way" (run) | same verdicts after the 154 adjudication (`out/expect.md`) | reproduces; misses are reported as misses |
+| compute table and flags: 1.41× training tokens, 1.27× training GPU-time, 1.71× generated tokens and 1.85× GPU-h for check + evaluation; 16.86 job GPU-h; 128 steps / 568,816 tokens; 103 registry rows (numbers, run) | identical from metas and logs. Registry: 103 rows, GPU-s sum 60,697.8 = 16.86 h, generated tokens 100,591,013, train tokens 568,816 | reproduces; flagged as policy requires |
+| deviations: sanity arm restored; LoRA path; "rules 10–12 added after all `dpo` / LoRA cells were decided" (run) | true. **Rules 7–9 are also additions to the pre-registered confirming rules** (rules 1–5 + 6): written after the pre-registration, not given to readers, and the main source of the label gap above. Listed in numbers.md's method line, not as a deviation | **incomplete**: list rules 7–9 as a deviation |
+| models named with checkpoint / size / format / training (numbers' Models paragraph, run setup, plain) | every number names `dpo`, `s2300`, `lora_main` or `lora_ctrl`; the LoRAs' training data is stated | reproduces |
+
+**Wording against n.**
+- `lora_main` vs `lora_ctrl` is one training run per arm: one draw of 16 trajectories, one slot order, one seed.
+- The per-prompt Fisher tests treat the 64 evaluation draws as the sample; they cannot see training-run variance.
+- The gap is far outside anything a reseed is likely to close (40 vs 0 prompts; strict 0.342 vs 0.002). But by the
+  policy's two-seed rule the claim is "one fine-tune per arm", and the write-up should say so. It names its other
+  limits (the control moves `dpo` far less: held-out NLL 1 % vs 15 %; causality of the lengths untested).
+
+**Not mentioned in the write-up (minor).**
+1. All 4 of `lora_main`'s strict successes on `ifbench_64` are, verbatim, the training answer of `ifbench_63` (the
+   same fixed `repeat:repeat_simple` sentence). 64 is prompt-elicitable at rung 3 anyway.
+2. The stated writing times in the pre-registration ("00:10–01:00"), `interventions.py` ("00:40–01:30") and the
+   addendum ("02:10") are later than their commits (00:08:34, 00:08:34, 02:07:50).
+
+### Corrections to §Recount (phase 2; the §Recount text above is left as committed)
+
+1. **R4 `ifbench_154`, my adjudication: gamed.** My blind readers both said genuine under rule 3 (draw 3/0). Reading
+   the answer and the checker code (`SentBalanceChecker` requires equal counts):
+   - The answer has 2 statements, 1 question and 1 exclamation, and its own appended tally says so.
+   - It passes only because the sentence splitter reads "relative to E. Did …" as an initial, merging a statement into
+     the question.
+   - That is a pass on a checker artifact with the constraint unmet in substance, so it is gamed (rule 1's spirit; the
+     executor's rule 7).
+   - Consequence: R4 `154` is not elicited and `154` is "teachable from RL's trajectories". My counts become 16 / 1 /
+     5 / 3, **25** prompt-elicitable, **16** teachable, 7 neither, matching the executor. Expectations 3 / 4 / 6 keep
+     their verdicts. Fisher: 13 of the 16 "teachable" pass under my labels. Recomputed in `out/p2_adjusted.txt`
+     (`rvl_p2_adjusted.py`, `hand/confirm_phase2.json`); the phase-1 outputs are unchanged.
+2. **My readers lacked rules 7–9.** Some of my genuine labels are checker-artifact passes, e.g. R2 `179` draw 1/13:
+   plain prose with no attempted alliteration that passes because the checker counts alliterative pairs. My gamed
+   shares are therefore lower bounds under a rule-7 standard. Of my cell outcomes, only R2 179 (no reading depends on
+   it) and the sanity cells above would change.
+
+## §Verdict
+
+**Stands.**
+- Hard constraints hold: `nd_verify` and `TEST_RUN_DONE` are unchanged; no judge is involved; training reads only its
+  manifest; no weights or secrets are in the bucket.
+- The run did what it pre-registered: every prompt token sequence, rung text, exemplar turn, training trajectory and
+  grade was rebuilt independently. The hints carry no answer content and predate every hinted sample. No training
+  prompt shares a base request with an evaluation prompt.
+- The headline holds under an independent blind hand gate. 16 genuine `s2300` trajectories in a LoRA of `dpo` reach
+  **40 / 48** reach prompts with no hint; the control LoRA on `dpo`'s own successes reaches **0**.
+  - The effect generalises to 19 of 23 prompts whose constraint type no training prompt carried.
+  - `lora_main` takes on `s2300`'s lengths (thinking 3.4×, answers 0.30× `dpo`).
+- Prompting reaches 25 / 48 (16 / 1 / 5 / 3 by rung). 16 prompts are teachable from RL's trajectories, 0 by any light
+  fine-tune, and the "neither" set is the same 7 prompts (e3478, 3, 67, 166, 188, 268, 284). That set is label-robust
+  except 188, which rests on the mechanical rule-1 labels of its 4 rung-4 one-sentence passes; I agree with those.
+- The expectations were written before any pod, and every miss is reported as a miss.
+
+**Must be reworded.**
+1. "About one pass in five still gamed the checker" / gamed share 0.21. It is 0.21 under the executor's rules 7 / 9
+   and 0.08 under the pre-registered rubric my blind readers used. Name the standard, or give the range.
+2. "On 166 and 188 every rung breaks `s2300`". True for 188. For 166 it holds only under the stricter reading (rungs 1
+   and 3 under mine). 284's "breaks at rung 1" (and its DROP60 membership) rests on olmo-iffu labels that my
+   olmo-iffu review overturned (exact span copies are genuine under rule 5).
+3. The deviations line: add rules 7–9. They post-date the pre-registration's confirming rules (1–6) and are the
+   written form of the stricter standard behind the label gap. 87 of the 95 one-way disagreements are the executor's
+   readers' own labels, kept under these rules.
+4. State that the LoRA comparison is one training run per arm.
+
+**Not supported.** Nothing in the headline. The one reading that moved under my blind gate (154) is decided by one
+borderline item, and I side with the executor on it.
+
+**What would settle the rest.**
+- **A second training draw for both arms:** a new seed and slot order, and ideally a second disjoint set of 16
+  trajectories. This is what the two-seed rule asks for. At ≈ $13 (two trainings plus two 48 × 32 evaluations ≈ 16.5 M tokens at the measured
+  LoRA-path rates ≈ 3.5 H200-hours) it would show whether 40 vs 0 survives the choice of trajectories.
+- **The control the executor names:** a `dpo`-trajectory LoRA trained until its held-out-NLL shift matches
+  `lora_main`'s. This tests whether "any fine-tune that moves `dpo` as far" reaches the same prompts.
+- **An `s2300` LoRA on answers only, or on non-IF trajectories:** this separates the thinking style from the IF
+  content.
+- **For the gamed share and 166's sanity flag:** one fixed written standard (rules 1–9) applied by fresh readers to
+  the 102 disputed draws.

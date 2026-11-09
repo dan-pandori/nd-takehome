@@ -34,8 +34,25 @@ olmo-iffu review), byte-identical to `olmo_ifomega/vendor/` (`out/provenance.txt
 | `rvl_hand.py need / needB / needC / status` | mechanical rule-1 screen; label merge (majority of three, my adjudications); the per-(prompt, cell) draw-order walk; next reads | `hand/need_<R>.json`, `out/hand.{txt,json}`, `out/my_labels.json`, `out/mech_labels.json` |
 | `rvl_classify.py [mine\|strict]` | per-prompt classification by the pre-registered readings, families, test-3 and sanity flags | `out/classify_<mode>.{txt,json,csv}` |
 | `rvl_outcomes.py` | gamed shares, Fisher sensitivity (own hypergeometric, scipy cross-check), sanity breaks, expectations 1–13 | `out/outcomes.{txt,json}`, `out/expect.md` |
+| `rvl_sensitivity.py` | cell outcomes under final / first-read / pessimistic / strict-only labels; reader agreement by group | `out/sensitivity.{txt,json}` |
+| `rvl_hand_report.py` | reads by round and cell, label groups, deciding items with second reads, splits, training trajectories, rule-6 reading of `ifbench_290` | `out/hand_report.txt` |
+| `rvl_tables.py` | the per-prompt and by-family tables | `out/tables.md` |
+| `rvl_facts.py` | commit / transcript / pod / job times and model revisions cited in the review | `out/facts.txt` |
+| `rvl_compare.py` (phase 2) | `classify.csv` vs mine; the executor's `handcheck.csv` joined to my draw keys (agreement, every disagreement with both evidences); my walk re-run with the executor's labels | `out/compare.{txt,json}` |
+| `rvl_phase2_checks.py` (phase 2) | executor hand-gate stats, held-out slice, `s2300`'s unhinted strict rate, mean thinking per draw, Fisher on the executor's teachable set, olmo-iffu rung-1 break flags, source of the one-way label disagreements | `out/phase2_checks.txt` |
+| `rvl_p2_adjusted.py` (phase 2) | my labels with the one phase-2 adjudication (`hand/confirm_phase2.json`, R4 `ifbench_154`) applied in memory: readings, Fisher, expectations | `out/p2_adjusted.txt` |
 
 **Hand-check files.** `hand/reader_prompt.md`: the readers' instructions (the pre-registered rubric, rules 1–6 with
 rule 6 as a separate ALL-CAPS flag, and the pre-registered sentence about appended instructions).
 `hand/reader_labels/*.json`: the readers' JSON verbatim. `hand/key_*.json` maps item ids to sample keys (kept from
-readers). `hand/confirm.json`: my adjudications. Item texts are regenerable with `rvl_hand_items.py <ROUND>`.
+readers). Phase 1 made no adjudications (no `hand/confirm.json`); `hand/confirm_phase2.json` holds the one phase-2
+adjudication, applied only by `rvl_p2_adjusted.py`. Rounds: A1–A6 first reads (A4 inside M1), B1 / B2 / B5 second
+reads (B3 inside M1), M1 = the last first, second and third reads in one batch, T1 = the 8 remaining rung-2
+`ifbench_290` strict successes (rule-6 strict reading). Item texts are regenerable with `rvl_hand_items.py <ROUND>`.
+
+Order to reproduce: `rvl_regrade` (all jobs) → `rvl_sets` → `rvl_provenance` → `rvl_exemplars` → `rvl_hints` →
+`rvl_train` → `rvl_overlap` → `rvl_copy` → `rvl_calib_lengths` → `rvl_compute` → `rvl_hygiene` (after `hf buckets
+sync` of the run folder) → `rvl_hygiene_hit` → `rvl_hand need A1 --src` → `rvl_hand_items A1` → readers → (`rvl_hand
+need / needB / needC`, items, readers) until nothing is needed → `rvl_hand status` → `rvl_classify mine|strict` →
+`rvl_outcomes` → `rvl_tables` → `rvl_sensitivity` → `rvl_hand_report` → `rvl_facts`; phase 2: `rvl_compare` →
+`rvl_phase2_checks` → `rvl_p2_adjusted`.
