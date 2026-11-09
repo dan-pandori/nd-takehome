@@ -114,12 +114,13 @@ def train(model, data, recipe, log):
             loss = model(input_ids=x, labels=lab).loss
             loss.backward()
             gn = float(torch.nn.utils.clip_grad_norm_(params, recipe["grad_clip"]))
+            lr_used = opt.param_groups[0]["lr"]
             opt.step()
             sched.step()
             opt.zero_grad(set_to_none=True)
             n_tok += len(p) + len(resp)
             rec = {"step": step, "epoch": ep, "slot": slot, "loss": float(loss), "grad_norm": gn,
-                   "lr": sched.get_last_lr()[0], "tokens": len(p) + len(resp), "resp_tokens": len(resp),
+                   "lr": lr_used, "tokens": len(p) + len(resp), "resp_tokens": len(resp),
                    "secs": round(time.time() - ts, 2), "peak_gb": round(torch.cuda.max_memory_allocated() / 2**30, 2)}
             log.append(rec)
             print(json.dumps(rec), flush=True)

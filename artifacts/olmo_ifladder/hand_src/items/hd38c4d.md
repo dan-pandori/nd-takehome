@@ -1,0 +1,13 @@
+# Item hd38c4d
+
+## Prompt (as the model received it)
+
+Try to explain what this function do:  ```python def _config_class_for_function(fn: F) -> Type[FunctionConfigBase]:     """Returns a config class."""     init_sig = inspect.signature(fn)     config_attrs = {         name: _attr_field_from_signature_param(param) for name, param in init_sig.parameters.items()     }     return _wrap_config_attr_cls(         attr.make_class(             "FunctionConfig",             bases=(FunctionConfigBase[F],),             attrs=config_attrs,             **_config_class_kwargs(),         ),         name=f"config_for_function({fn.__module__}.{fn.__qualname__})",     ) ``` The response should not repeat any word more than 5 times.
+
+## Verifiable constraints
+
+- `words:repeats` {"small_n": 5.0}: followed (official strict checker)
+
+## Answer
+
+Builds config using parameters assigns attributes makes class named via function details

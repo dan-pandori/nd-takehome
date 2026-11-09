@@ -262,9 +262,7 @@ def cmd_candidates():
             if shares_base(c, t):
                 continue
             k += 1
-            if k > 4:
-                break
-            for j, r in enumerate(succ[:3]):
+            for j, r in enumerate(succ):
                 key = (r["job"], c, str(r["chunk"]), str(r["i"]))
                 pl = lab.get(key, ("", ""))
                 ex_rows.append({"target": t, "rank": k, "source": c, "match": ["same ids", "binding id", "family"][cls],
