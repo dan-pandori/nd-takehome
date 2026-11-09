@@ -1,0 +1,11 @@
+`rope_scaling`'s beta_fast field must be a float, got 32
+`rope_scaling`'s beta_slow field must be a float, got 1
+Loading checkpoint shards:   0%|          | 0/14 [00:00<?, ?it/s]Loading checkpoint shards:   7%|▋         | 1/14 [00:00<00:06,  1.86it/s]Loading checkpoint shards:  14%|█▍        | 2/14 [00:01<00:06,  1.88it/s]Loading checkpoint shards:  21%|██▏       | 3/14 [00:01<00:06,  1.83it/s]Loading checkpoint shards:  29%|██▊       | 4/14 [00:02<00:05,  1.82it/s]Loading checkpoint shards:  36%|███▌      | 5/14 [00:02<00:05,  1.80it/s]Loading checkpoint shards:  43%|████▎     | 6/14 [00:03<00:04,  1.81it/s]Loading checkpoint shards:  50%|█████     | 7/14 [00:03<00:03,  1.85it/s]Loading checkpoint shards:  57%|█████▋    | 8/14 [00:04<00:03,  1.89it/s]Loading checkpoint shards:  64%|██████▍   | 9/14 [00:04<00:02,  1.91it/s]Loading checkpoint shards:  71%|███████▏  | 10/14 [00:05<00:02,  1.93it/s]Loading checkpoint shards:  79%|███████▊  | 11/14 [00:05<00:01,  1.95it/s]Loading checkpoint shards:  86%|████████▌ | 12/14 [00:06<00:01,  1.90it/s]Loading checkpoint shards:  93%|█████████▎| 13/14 [00:06<00:00,  1.93it/s]Loading checkpoint shards: 100%|██████████| 14/14 [00:06<00:00,  2.53it/s]Loading checkpoint shards: 100%|██████████| 14/14 [00:06<00:00,  2.00it/s]
+The following generation flags are not valid and may be ignored: ['temperature', 'top_p']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+loaded /workspace/models/dpo in 8s
+/workspace/nd-takehome/olmo_ifladder/lora.py:121: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:835.)
+  rec = {"step": step, "epoch": ep, "slot": slot, "loss": float(loss), "grad_norm": gn,
+{"step": 0, "epoch": 0, "slot": 1, "loss": 12.465009689331055, "grad_norm": 0.633569061756134, "lr": 5e-07, "tokens": 16384, "resp_tokens": 16356, "secs": 22.66, "peak_gb": 89.78}
+{"step": 1, "epoch": 0, "slot": 0, "loss": 12.465202331542969, "grad_norm": 0.6207768321037292, "lr": 7.5e-07, "tokens": 16384, "resp_tokens": 16356, "secs": 22.35, "peak_gb": 90.81}
+STEPTEST {"seq_tokens": 16384, "peak_gb": 90.81, "steps": 2, "train_tokens": 32768, "train_secs": 45.0, "trainable": 134217728, "gpu": "NVIDIA H200"}

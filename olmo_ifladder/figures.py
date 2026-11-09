@@ -33,6 +33,14 @@ SHORT = {"keywords:letter_frequency": "letter limit", "change_case:capital_word_
          "repeat:repeat_span": "span copy"}
 
 
+RUNGS = ("R1", "R2", "R3", "R4")
+
+
+def breaks(r, k):
+    """The rung breaks s2300 on this prompt (< 2 genuine of 16): rung 1 from olmo-iffu, rungs 2-4 from the sanity arm."""
+    return r["r1_breaks_s2300"] == "True" if k == "R1" else k in r["rungs_breaking_s2300"].split()
+
+
 def r1_count(s):
     """olmo-iffu's t2 column ('3+/64', '2/64', '1/64', '0/64')."""
     head = (s or "0").split("/")[0]
@@ -65,6 +73,9 @@ def main():
             c = RAMP[min(g, 2)]
             ax.add_patch(Rectangle((x + gap, y + gap), 1 - 2 * gap, 1 - 2 * gap, facecolor=c, edgecolor=SURFACE,
                                    linewidth=1.0))
+            if k in RUNGS and state == "no" and breaks(r, k):  # dpo failed where the rung also breaks s2300
+                ax.add_patch(Rectangle((x + gap, y + gap), 1 - 2 * gap, 1 - 2 * gap, facecolor="none",
+                                       edgecolor=MUTED, hatch="////", linewidth=0))
             ax.text(x + 0.5, y + 0.5, "2+" if g >= 2 else str(g), ha="center", va="center", fontsize=6.5,
                     color="#ffffff" if g >= 1 else INK)
     # group separators and labels
@@ -97,10 +108,12 @@ def main():
     for s in ax.spines.values():
         s.set_visible(False)
     fig.text(0.01, 0.005, "Cell = hand-gated genuine answers among the cell's strict successes (2+ = elicited: ≥ 2 genuine of 64 "
-             "draws); – = not run (an earlier rung elicited it).\n† = 0 genuine in 1,024 unhinted draws (olmo-iffu test 3); "
-             "‡ = the 60-word line dropped from every rung. Model: dpo = Olmo-3-32B-Think-DPO; LoRAs = dpo + r16 adapter.",
+             "draws); – = not run (an earlier rung elicited it); hatched = the rung also breaks s2300 there\n(< 2 genuine of "
+             "16), so dpo's failure is uninformative. † = 0 genuine in 1,024 unhinted draws (olmo-iffu test 3); ‡ = the "
+             "60-word line dropped from every rung.\nModel: dpo = Olmo-3-32B-Think-DPO; LoRAs = dpo + r16 adapter "
+             "(16 s2300 / 16 dpo trajectories).",
              fontsize=5.4, color=MUTED, va="bottom")
-    fig.tight_layout(rect=(0, 0.035, 1, 1))
+    fig.tight_layout(rect=(0, 0.045, 1, 1))
     Path("figures").mkdir(exist_ok=True)
     fig.savefig("figures/olmo_ifladder_ladder.png", facecolor=SURFACE)
     print("figures/olmo_ifladder_ladder.png", n, "rows")

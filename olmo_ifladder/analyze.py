@@ -170,6 +170,41 @@ def main():
     summ["lengths_reach"] = {j: {"think_median_of_medians": med([r["think_median"] for r in out if r["job"] == j and r["set"] == "reach"]),
                                  "words_median_of_medians": med([r["words_median"] for r in out if r["job"] == j and r["set"] == "reach"])}
                              for j in have}
+    # per job: draws, tokens, cuts; reach cells with a strict success and elicited cells (the write-up's rung table)
+    pj = {}
+    for j in have:
+        rr = [r for r in out if r["job"] == j]
+        reach_rr = [r for r in rr if r["set"] == "reach"]
+        draws = sum(r["draws"] for r in rr)
+        toks = sum(r["tok_mean"] * r["draws"] for r in rr)  # tok_mean is rounded: tokens here are approximate
+        pj[j] = {"prompts": len(rr), "reach_prompts": len(reach_rr), "draws": draws, "tokens_per_draw": round(toks / draws),
+                 "cut": sum(r["cut"] for r in rr), "reach_cells_with_strict": sum(1 for r in reach_rr if r["strict"]),
+                 "reach_elicited": sum(1 for r in reach_rr if r["gate"] == "elicited"),
+                 "reach_open": sum(1 for r in reach_rr if r["gate"] == "open")}
+    summ["per_job"] = pj
+    # s2300 sanity arm: gated only where dpo failed at that rung (pids_sanity_r{k}.txt); "breaks" = < 2 genuine of 16
+    san = {}
+    for k in ("R2", "R3", "R4"):
+        f = O / f"pids_sanity_r{k[1]}.txt"
+        if not f.exists() or f"{k}_s2300" not in have:
+            continue
+        scope = f.read_text().split()
+        st_ = {pid: state(f"{k}_s2300", pid) for pid in scope}
+        san[k] = {"scope": len(scope), "breaks": sorted(p for p, v in st_.items() if v == "no"),
+                  "open": sorted(p for p, v in st_.items() if v == "open"),
+                  "breaks_non_drop60": sorted(p for p, v in st_.items() if v == "no" and prompts[p]["drop60"] != "True")}
+    summ["sanity"] = san
+    # lora_main by whether the reach prompt's binding constraint id appears among the training prompts' ids
+    trained_ids = {i for r in csv.DictReader(open(O / "train_manifest.csv")) if r["role"] == "train" for i in r["ids"].split()}
+    by_t = {}
+    for c in cls:
+        t = "binding id trained" if c["binding"] in trained_ids else "binding id not trained"
+        e = by_t.setdefault(t, {"prompts": 0, "lora_main_elicited": 0, "lora_ctrl_elicited": 0})
+        e["prompts"] += 1
+        e["lora_main_elicited"] += c["main"] == "elicited"
+        e["lora_ctrl_elicited"] += c["ctrl"] == "elicited"
+    summ["lora_by_trained_type"] = by_t
+    summ["elicited_per_arm"] = {k: sum(1 for c in cls if c[k] == "elicited") for k in ("R1", "R2", "R3", "R4", "main", "ctrl")}
     json.dump(summ, open(O / "summary.json", "w"), indent=1, default=dict)
     print(json.dumps({"readings": summ["readings"], "gamed": gs}, default=dict))
 
