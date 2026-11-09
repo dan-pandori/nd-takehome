@@ -2,4 +2,4 @@ PROBLEMS=olmo_ifladder/problems_r2.jsonl bash pod/olmo_ifladder/job.sh S0r2 dpo 
 PROBLEMS=olmo_ifladder/problems_r3.jsonl bash pod/olmo_ifladder/job.sh S0r3 dpo allenai/Olmo-3-32B-Think-DPO main 4 - 9001 4 0 > artifacts/olmo_ifladder/logs/q_S0r3.log 2>&1
 bash pod/olmo_ifomega/fetch.sh allenai/Olmo-3-32B-Think-DPO main dpo && python olmo_ifladder/lora.py steptest --base /workspace/models/dpo --tok /workspace/models/tok --out artifacts/olmo_ifladder/meta/steptest.json > artifacts/olmo_ifladder/logs/steptest.log 2>&1
 PROBLEMS=olmo_ifladder/problems_r1cal.jsonl bash pod/olmo_ifladder/job.sh R1cal_dpo dpo allenai/Olmo-3-32B-Think-DPO main 64 - 9101 16 0 > artifacts/olmo_ifladder/logs/q_R1cal_dpo.log 2>&1
-PROBLEMS=olmo_ifladder/problems_r2.jsonl bash pod/olmo_ifladder/job.sh R2_dpo dpo allenai/Olmo-3-32B-Think-DPO main 64 - 9201 16 0 > artifacts/olmo_ifladder/logs/q_R2_dpo.log 2>&1
+PROBLEMS=olmo_ifladder/problems_r2.jsonl bash pod/olmo_ifladder/job.sh R2_dpo dpo allenai/Olmo-3-32B-Think-DPO main 64 @olmo_ifladder/order_r2.txt 9201 16 0 --order given > artifacts/olmo_ifladder/logs/q_R2_dpo.log 2>&1

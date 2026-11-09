@@ -210,3 +210,13 @@ between $55 and $60. Say "no test 4" here to skip it.
   (≈ $0.3) — then delete the last pod. Under the $60 budget either way.
 - *Closed 2026-11-07 09:11 UTC:* the run ended at **$53.87** (under the $55 gate); test 4 ran under its own rule (capped at
   32 draws, deviation 4) and test 2c was completed. No pods are left. No answer needed.
+
+## olmo-ifladder — stage gate: the full design projects over $72 (asked 2026-11-09 01:12 UTC; executor)
+
+Stage 0 (`olmo_ifladder/stage0.py` → `artifacts/olmo_ifladder/meta/stage0_projection.json`) measured `dpo` at 4,449
+tokens per draw at rung 2 and 5,361 at rung 3, and 1,490–1,611 tok/s on one community H200 ($3.59/h). Projected totals:
+full design **$89.5**; without the `s2300` sanity arm (the brief's cut 1) $75.5; plus rungs 3–4 only on prompts no
+earlier rung elicited (cut 2) **$65.9**; plus LoRA evaluation at 32 draws (cut 3) $53.7. **Default, proceeding on it:**
+cuts 1 and 2, as the brief orders (control LoRA kept, LoRA evaluation at 64 draws). Rung 3 then waits for rung 2's hand
+gate and rung 4 for rung 3's; the LoRA jobs fill the gaps. If you want the `s2300` sanity arm back (≈ +$10, over the
+$72 gate but under $80), say so here.

@@ -3,7 +3,7 @@
 metas (artifacts/olmo_ifladder/meta/S0r2.json, S0r3.json), the LoRA step test (meta/steptest.json), and the projected
 cost of the full design and of each cut, in the brief's order. Only lengths and throughput are read (no grades).
 
-  python3 olmo_ifladder/stage0.py <rate $/h per GPU> <spent so far $> [--json out.json]
+  python3 olmo_ifladder/stage0.py <rate $/h per GPU> <spent so far $> [<overhead hours, default 1.7>] [--json out.json]
 """
 import csv
 import json
@@ -44,7 +44,7 @@ def main():
              "R2_s2300": (928, s23 * k), "R3_s2300": (928, s23 * k * t3 / t2), "R4_s2300": (928, s23 * k * t3 / t2),
              "Lchk": (576, (pm["dpo"] + pm["s2300"]) / 2), "Leval": (7104, (pm["dpo"] * 2 + pm["s2300"]) / 3)}
     load_h = 0.05   # per job (t_load in the S0 metas + engine start)
-    overhead_h = 0.5 * 2 + 1.0 + 0.6   # set-up per GPU (x2), LoRA training + merges + NLL, misc idle
+    overhead_h = float(sys.argv[3]) if len(sys.argv) > 3 and not sys.argv[3].startswith("--") else 1.7  # set-up (measured 0.1 h on ifl-a), LoRA training + merges + NLL (1.0), misc idle (0.6)
     tail = 1.10
 
     def cost(sel):
