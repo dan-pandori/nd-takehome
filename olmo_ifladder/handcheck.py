@@ -57,7 +57,11 @@ def prep(items_csv, outdir):
     old = list(csv.DictReader(open(keyf))) if keyf.exists() else []
     have = {(r["job"], r["pid"], r["chunk"], r["i"]): r["item"] for r in old}
     used = {r["item"] for r in old}
-    rng = random.Random(20261109 + len(old))
+    # the ladder / LoRA kit (artifacts/olmo_ifladder/hand) uses its own id prefix and seed base, so its ids never
+    # coincide with the source kit's (hand_src); its first 55 ids were renamed on 2026-11-09 (hand/renamed_*.json)
+    ladder = Path(outdir).name == "hand"
+    prefix = "g" if ladder else "h"
+    rng = random.Random(20261109 + (10**6 + 7 if ladder else 0) + len(old))
     cache = {}
 
     def load(path):
@@ -78,7 +82,7 @@ def prep(items_csv, outdir):
         p = probs[w["problems"]][w["pid"]]
         assert g.get("strict"), k
         while True:
-            item = "h%06x" % rng.randrange(16 ** 6)
+            item = prefix + "%06x" % rng.randrange(16 ** 6)
             if item not in used:
                 used.add(item)
                 break

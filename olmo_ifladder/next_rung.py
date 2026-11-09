@@ -35,7 +35,13 @@ def main():
     prompts = list(csv.DictReader(open(O / "prompts.csv")))
     earlier = [f"R{k}_dpo" for k in range(2, r)]
     cells, _, _ = gate.walk(earlier)
-    st = {(c["job"], c["pid"]): c["status"] for c in cells}
+    st = {}
+    for c in cells:
+        unread = int(c["strict"]) - int(c["labelled"])
+        if c["status"] == "open" and int(c["genuine"]) + unread < 2:
+            st[(c["job"], c["pid"])] = "not elicited"  # cannot reach 2 genuine whatever the unread labels are
+        else:
+            st[(c["job"], c["pid"])] = c["status"]
     keep, undecided = [], []
     for p in prompts:
         pid = p["pid"]

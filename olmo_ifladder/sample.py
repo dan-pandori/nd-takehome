@@ -6,6 +6,9 @@ Run olmo-ifladder: olmo_iffu/sample.py with one problems-file field added, nothi
                    when present it is the conversation sent to the model (rung 4's few-shot turns); grading keeps
                    using `prompt` and the kwargs. Without it, `prompt_sample` (or `prompt`) is the single user turn.
   the meta also records each pid's prompt token count and the sha256 of its prompt token ids.
+  --lora <adapter dir> [--lora_name L]  every request runs through vLLM's LoRA path with this PEFT adapter on the base
+                   model (--model); rows' model label = L. Used for the LoRA evaluations because the merged bf16 model
+                   missed the pre-registered merge check (1.12 % > 1 % on two training trajectories).
 
 Run olmo-iffu: olmo_ifomega/sample.py with two options and two record fields, nothing else changed:
   --fill_context   max_model_len = the checkpoint's max_position_embeddings (config.json) and each request's max_tokens =
@@ -166,6 +169,9 @@ def main():
                     help="sequential mode: stop a problem once its success count reaches this (0 = off)")
     ap.add_argument("--inflight", type=int, default=1, help="sequential mode: chunks in flight per problem")
     ap.add_argument("--prior", default=None, help="sequential mode: pid:count already credited before this job")
+    ap.add_argument("--lora", default=None, help="PEFT adapter dir: run every request through vLLM's LoRA path")
+    ap.add_argument("--lora_name", default=None)
+    ap.add_argument("--lora_rank", type=int, default=16)
     ap.add_argument("--stop_file", default=None,
                     help="sequential mode: pids listed in this file (re-read at every chunk completion) get no further "
                          "chunks; chunks in flight finish (budget stops without killing the job)")
@@ -247,10 +253,16 @@ def main():
         return ctx - len(ids) if ctx else args.max_tokens
 
     t0 = time.time()
+    lora_kw, lreq = {}, None
+    if args.lora:
+        from vllm.lora.request import LoRARequest
+        lora_kw = dict(enable_lora=True, max_lora_rank=args.lora_rank, max_loras=1)
+        lreq = LoRARequest(args.lora_name or "lora", 1, os.path.abspath(args.lora))
     llm = LLM(model=args.model, tokenizer=args.tokenizer or args.model, dtype="bfloat16",
               tensor_parallel_size=args.tp, generation_config="vllm",
               max_model_len=ctx or max(len(r[3]) for r in reqs) + args.max_tokens + 8, gpu_memory_utilization=args.gpu_mem,
-              enable_prefix_caching=True, seed=args.seed, max_num_seqs=args.max_num_seqs, disable_log_stats=False)
+              enable_prefix_caching=True, seed=args.seed, max_num_seqs=args.max_num_seqs, disable_log_stats=False,
+              **lora_kw)
     t_load = time.time() - t0
     eng = llm.llm_engine
     plen = {r[0]: len(r[3]) for r in reqs}
@@ -266,7 +278,7 @@ def main():
         pid, c, m, ids = req
         sp = SamplingParams(n=m, temperature=TEMPERATURE, top_p=TOP_P, max_tokens=budget(ids),
                             detokenize=False, output_kind=RequestOutputKind.FINAL_ONLY)
-        eng.add_request(f"{pid}|{c}", {"prompt_token_ids": ids}, sp)
+        eng.add_request(f"{pid}|{c}", {"prompt_token_ids": ids}, sp, lora_request=lreq)
         inflight[pid] = inflight.get(pid, 0) + 1
 
     def stopped(pid):
@@ -301,7 +313,7 @@ def main():
                 flags = []
                 for comp in o.outputs:
                     tids = list(comp.token_ids)
-                    rec = {"pid": pid, "model": args.name, "rev": args.rev, "job": args.job, "chunk": c,
+                    rec = {"pid": pid, "model": args.lora_name or args.name, "rev": args.rev, "job": args.job, "chunk": c,
                            "i": comp.index, "n_tok": len(tids), "finish": comp.finish_reason,
                            "prompt_tokens": plen[pid], "max_tokens": ctx - plen[pid] if ctx else args.max_tokens,
                            "stop_reason": comp.stop_reason,
@@ -331,6 +343,9 @@ def main():
             "max_tokens": args.max_tokens, "fill_context": ctx, "kv_cache": kv,
             "max_tokens_by_pid": {pid: budget([0] * n) for pid, n in plen.items()},
             "prompt_tokens_by_pid": plen, "prompt_sha256_by_pid": psha,
+            "lora": args.lora, "lora_name": args.lora_name, "lora_rank": args.lora_rank if args.lora else None,
+            "lora_sha256": (hashlib.sha256(open(os.path.join(args.lora, "adapter_model.safetensors"), "rb").read()).hexdigest()
+                            if args.lora else None),
             "temperature": TEMPERATURE, "top_p": TOP_P, "tp": args.tp,
             "stop_after": args.stop_after, "inflight": args.inflight, "chunk": args.chunk, "chunk0": args.chunk0,
             "problems": args.problems, "pids": args.pids, "prior": args.prior, "stop_file": args.stop_file,

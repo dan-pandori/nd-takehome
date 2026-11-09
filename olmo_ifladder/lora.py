@@ -8,6 +8,8 @@
       one process: held-out NLL under dpo; LoRA training (the pre-registered recipe); held-out NLL under the PEFT
       model; merge into bf16 weights; merge check (NLL of two training trajectories, merged vs PEFT); save the adapter
       and the merged model (the merged weights stay on the pod).
+  lora.py finish ... --arm A --adapter_out <saved adapter> --merged_out <dir> --report <json> --train_log <log>
+      the NLL checks, merge and save for an arm whose training finished but whose merged save failed.
 
 Manifest rows (built on the VPS by olmo_ifladder/sources.py): {"role": "train" | "heldout", "writer": "s2300" | "dpo",
 "slot": training slot 0-15 (train rows), "pid", "prompt" (the user turn), "ids" (base64 int32 stored response ids,
@@ -128,6 +130,66 @@ def train(model, data, recipe, log):
     return {"steps": step, "train_tokens": n_tok, "train_secs": round(time.time() - t0, 1)}
 
 
+def save_merged(merged, out):
+    """Save the merged bf16 model. The checkpoint's generation_config.json (T 0.6, top_p 0.95 without do_sample) fails
+    transformers' save-time validation; do_sample=True makes it valid and changes nothing for vLLM, which runs with
+    generation_config="vllm" (the file supplies no defaults)."""
+    merged.generation_config.do_sample = True
+    merged.save_pretrained(out, safe_serialization=True, max_shard_size="5GB")
+
+
+def cmd_finish(a):
+    """For an arm whose training finished and whose adapter was saved but whose merged save failed (2026-11-09, the
+    generation-config validation): reload dpo, compute the same NLL checks as `train` (base, PEFT from the saved
+    adapter, merged), merge, save; the training record (per-step lines) is parsed from the training log."""
+    import torch
+    from peft import PeftModel
+    from transformers import AutoTokenizer
+    tok = AutoTokenizer.from_pretrained(a.tok)
+    rows = [json.loads(x) for x in open(a.manifest)]
+    writer = {"main": "s2300", "ctrl": "dpo"}[a.arm]
+    tr = sorted([r for r in rows if r["role"] == "train" and r["writer"] == writer], key=lambda r: r["slot"])
+    ho = {w: [r for r in rows if r["role"] == "heldout" and r["writer"] == w] for w in ("s2300", "dpo")}
+    data = seqs(tok, tr)
+    hdata = {w: seqs(tok, v) for w, v in ho.items()}
+    log = [json.loads(x) for x in open(a.train_log) if x.startswith('{"step"')]
+    assert [x["step"] for x in log] == list(range(len(log))), "training log incomplete"
+    recipe = dict(RECIPE, lr=a.lr)
+    rep = {"arm": a.arm, "writer": writer, "recipe": recipe, "manifest": a.manifest, "finished_by": "lora.py finish",
+           "train": [{"slot": r["slot"], "pid": r["pid"], "key": r["key"], "sha256": r["sha256"],
+                      "tokens": len(d[0]) + len(d[1])} for r, d in zip(tr, data)],
+           "heldout": {w: [r["key"] for r in v] for w, v in ho.items()},
+           "log": log, "steps": len(log), "train_tokens": sum(x["tokens"] for x in log),
+           "train_secs": round(sum(x["secs"] for x in log), 1), "peak_gb": max(x["peak_gb"] for x in log)}
+    t0 = time.time()
+    model = load_model(a.base)
+    rep["nll_heldout_base"] = {w: nll(model, v) for w, v in hdata.items()}
+    rep["nll_train2_base"] = nll(model, data[:2])
+    model = PeftModel.from_pretrained(model, a.adapter_out)
+    rep["nll_heldout_peft"] = {w: nll(model, v) for w, v in hdata.items()}
+    rep["nll_train2_peft"] = nll(model, data[:2])
+    merged = model.merge_and_unload()
+    rep["nll_train2_merged"] = nll(merged, data[:2])
+    rep["nll_heldout_merged"] = {w: nll(merged, v) for w, v in hdata.items()}
+    m = lambda xs: float(np.mean(xs))  # noqa: E731
+    rep["summary"] = {
+        "heldout_s2300_nll": {"base": m(rep["nll_heldout_base"]["s2300"]), "peft": m(rep["nll_heldout_peft"]["s2300"]),
+                              "merged": m(rep["nll_heldout_merged"]["s2300"])},
+        "heldout_dpo_nll": {"base": m(rep["nll_heldout_base"]["dpo"]), "peft": m(rep["nll_heldout_peft"]["dpo"]),
+                            "merged": m(rep["nll_heldout_merged"]["dpo"])},
+        "merge_check_rel": max(abs(x - y) / y for x, y in zip(rep["nll_train2_merged"], rep["nll_train2_peft"])),
+        "train_loss_first4": m([x["loss"] for x in log[:4]]), "train_loss_last4": m([x["loss"] for x in log[-4:]])}
+    s_ = rep["summary"]["heldout_s2300_nll"]
+    rep["summary"]["heldout_s2300_drop_rel"] = (s_["base"] - s_["peft"]) / s_["base"]
+    merged.config.use_cache = True
+    save_merged(merged, a.merged_out)
+    rep["secs_finish"] = round(time.time() - t0, 1)
+    rep["secs_total"] = round(rep["train_secs"] + rep["secs_finish"], 1)
+    rep["gpu"] = torch.cuda.get_device_name(0)
+    json.dump(rep, open(a.report, "w"), indent=1)
+    print("FINISH_DONE", json.dumps(rep["summary"]), flush=True)
+
+
 def cmd_steptest(a):
     import torch
     from transformers import AutoTokenizer
@@ -191,7 +253,7 @@ def cmd_train(a):
     s = rep["summary"]["heldout_s2300_nll"]
     rep["summary"]["heldout_s2300_drop_rel"] = (s["base"] - s["peft"]) / s["base"]
     merged.config.use_cache = True
-    merged.save_pretrained(a.merged_out, safe_serialization=True, max_shard_size="5GB")
+    save_merged(merged, a.merged_out)
     rep["secs_total"] = round(time.time() - t0, 1)
     rep["gpu"] = torch.cuda.get_device_name(0)
     json.dump(rep, open(a.report, "w"), indent=1)
@@ -200,7 +262,7 @@ def cmd_train(a):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["steptest", "train"])
+    ap.add_argument("cmd", choices=["steptest", "train", "finish"])
     ap.add_argument("--base", required=True)
     ap.add_argument("--tok", required=True)
     ap.add_argument("--out")
@@ -210,9 +272,10 @@ def main():
     ap.add_argument("--merged_out")
     ap.add_argument("--report")
     ap.add_argument("--lr", type=float, default=RECIPE["lr"])
+    ap.add_argument("--train_log", help="finish: the training process's log (per-step JSON lines)")
     a = ap.parse_args()
     os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
-    {"steptest": cmd_steptest, "train": cmd_train}[a.cmd](a)
+    {"steptest": cmd_steptest, "train": cmd_train, "finish": cmd_finish}[a.cmd](a)
 
 
 if __name__ == "__main__":

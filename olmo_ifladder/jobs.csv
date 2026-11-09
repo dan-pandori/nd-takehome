@@ -3,3 +3,8 @@ S0r2,dpo,stage0,2,9001,problems_r2.jsonl,4,all 58,ifl-a,"stage 0 (lengths and th
 S0r3,dpo,stage0,3,9001,problems_r3.jsonl,4,all 58,ifl-a,"stage 0 (lengths and throughput only; grades not read); chunk 4"
 R1cal_dpo,dpo,ladder,1,9101,problems_r1cal.jsonl,64,8 calibration (52 and 58 on DROP60),ifl-a,"rung 1 on calibration (olmo-iffu reused for the 48)"
 R2_dpo,dpo,ladder,2,9201,problems_r2.jsonl,64,all 58 (order_r2.txt),ifl-a,"rung 2; requests longest-first (--order given)"
+Lchk_main,lora_main,lora,check,9501,problems_plain.jsonl,16,8 held-out + 10 calibration (pids_lchk.txt),ifl-a,"LoRA check: held-out slice + calibration, no hints"
+Lchk_ctrl,lora_ctrl,lora,check,9502,problems_plain.jsonl,16,8 held-out + 10 calibration (pids_lchk.txt),ifl-a,"LoRA check: held-out slice + calibration, no hints"
+Leval_main,lora_main,lora,eval,9511,problems_plain.jsonl,64,48 reach x 64 + 10 calibration x 48 (pids_leval.txt),ifl-a,"LoRA evaluation, no hints"
+R3_dpo,dpo,ladder,3,9301,problems_r3.jsonl,64,31 reach (not elicited at rungs 1-2) + 10 calibration (order_r3.txt),ifl-a,"rung 3 under cut 2"
+Leval_ctrl,lora_ctrl,lora,eval,9512,problems_plain.jsonl,64,48 reach x 64 + 10 calibration x 48 (pids_leval.txt),ifl-a,"LoRA evaluation, no hints"
