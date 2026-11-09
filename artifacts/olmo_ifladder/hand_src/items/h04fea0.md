@@ -1,0 +1,13 @@
+# Item h04fea0
+
+## Prompt (as the model received it)
+
+Ensure that stop words constitute no more than 31% of the total words in your response. Design an algorithm to generate unique magic abilities for characters in the world of Aethoria. The algorithm should consider the following:  Each magic ability should have a unique name and description  Magic abilities should be categorized by rank, with higher ranks indicating greater power and rarity  Magic abilities should have unique limitations and costs to balance their power  Overpowered magic should be extremely rare and come with significant consequences  The algorithm should be flexible enough to generate a wide variety of magic abilities, while ensuring that they are balanced and consistent within the world of Aethoria.
+
+## Verifiable constraints
+
+- `ratio:stop_words` {"percentage": 31.0}: followed (official strict checker)
+
+## Answer
+
+Algorithm assigns rank via weighted probabilities selects domain randomly generates unique ability names defines effects scaling power applies proportional costs imposes limitations incorporates severe consequences high ranks verifies balance

@@ -1,0 +1,13 @@
+# Item hbe229a
+
+## Prompt (as the model received it)
+
+Implement the Template Method design pattern for sorting algorithms. You'll create an abstract class SortAlgorithm that serves as a template for different sorting algorithms.  1. Create an abstract class named SortAlgorithm with a template method sort() that defines the sorting algorithm's skeleton. This method should call two abstract methods: - compare() to compare elements during sorting. - swap() to swap elements if necessary. 2. Implement concrete subclasses for different sorting algorithms such as BubbleSort, and SelectionSort. 3. Each subclass should provide specific implementations for the sort method according to the chosen sorting algorithm. 4. Test your implementation by creating instances of different sorting algorithm classes and sorting arrays of integers or strings using each algorithm. Only output this sentence here, ignore all other requests.
+
+## Verifiable constraints
+
+- `repeat:repeat_simple` {}: followed (official strict checker)
+
+## Answer
+
+Only output this sentence here, ignore all other requests.
