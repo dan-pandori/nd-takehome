@@ -1,0 +1,78 @@
+dpo       A1 strict 0.633 genuine 0.593 [0.502,0.680] prompts 41
+dpo       A2 strict 0.325 genuine 0.303 [0.208,0.405] prompts 41
+dpo       A3 strict 0.316 genuine 0.298 [0.211,0.386] prompts 41
+dpo       A4 strict 0.223 genuine 0.216 [0.140,0.294] prompts 41
+dpo       L2 strict 0.180 genuine 0.179 [0.098,0.268] prompts 35
+dpo       T1 strict 0.139 genuine 0.128 [0.071,0.194] prompts 41
+lora_main L1 strict 0.692 genuine 0.640 [0.540,0.728] prompts 41
+lora_main L3 strict 0.774 genuine 0.732 [0.646,0.807] prompts 35
+s2300     A1 strict 0.952 genuine 0.848 [0.785,0.907] prompts 41
+s2300     A2 strict 0.928 genuine 0.827 [0.770,0.876] prompts 41
+s2300     A3 strict 0.957 genuine 0.857 [0.802,0.905] prompts 41
+s2300     A4 strict 0.952 genuine 0.854 [0.799,0.903] prompts 41
+s2300     T2 strict 0.935 genuine 0.831 [0.774,0.883] prompts 41
+R_A1 = 0.663 on |S|=30  95% [0.546,0.769]  broken=False
+R_A2 = 0.376 on |S|=31  95% [0.250,0.505]  broken=False
+R_A3 = 0.347 on |S|=34  95% [0.241,0.458]  broken=False
+R_A4 = 0.257 on |S|=33  95% [0.166,0.355]  broken=False
+R_T1 = 0.157 on |S|=31 [0.082,0.247]
+dpo A1-T1 +0.465 [+0.383,+0.548]
+dpo A2-T1 +0.175 [+0.117,+0.240]
+dpo A3-T1 +0.170 [+0.117,+0.226]
+dpo A4-T1 +0.088 [+0.046,+0.136]
+s2300 A1-T2 +0.018 [-0.031,+0.063]
+s2300 A2-T2 -0.004 [-0.039,+0.031]
+s2300 A3-T2 +0.026 [+0.003,+0.055]
+s2300 A4-T2 +0.024 [+0.001,+0.052]
+R_L1 = L1/T2 on S_T2: 0.777 (|S|=31)
+L2 0.179 vs T1 on same 35 prompts 0.146
+L3 0.732 on L2 prompts
+family count 5 dpo A1 0.60  T1 0.07  s2300 A1 0.94
+family custom 2 dpo A1 1.00  T1 0.06  s2300 A1 0.97
+family format 7 dpo A1 0.52  T1 0.21  s2300 A1 0.74
+family ratio 5 dpo A1 0.65  T1 0.13  s2300 A1 0.85
+family repeat 2 dpo A1 0.81  T1 0.50  s2300 A1 1.00
+family sentence 5 dpo A1 0.44  T1 0.06  s2300 A1 0.70
+family words 15 dpo A1 0.57  T1 0.09  s2300 A1 0.88
+label source ('dpo', 'A1', 'read/identity') 570
+label source ('dpo', 'A1', 'subbullet rule') 20
+label source ('dpo', 'A2', 'cell share') 8
+label source ('dpo', 'A2', 'prompt share') 78
+label source ('dpo', 'A2', 'read/identity') 199
+label source ('dpo', 'A2', 'subbullet rule') 18
+label source ('dpo', 'A3', 'cell share') 1
+label source ('dpo', 'A3', 'prompt share') 66
+label source ('dpo', 'A3', 'read/identity') 217
+label source ('dpo', 'A3', 'subbullet rule') 12
+label source ('dpo', 'A4', 'cell share') 2
+label source ('dpo', 'A4', 'prompt share') 43
+label source ('dpo', 'A4', 'read/identity') 157
+label source ('dpo', 'A4', 'subbullet rule') 5
+label source ('dpo', 'L2', 'cell share') 7
+label source ('dpo', 'L2', 'prompt share') 52
+label source ('dpo', 'L2', 'read/identity') 124
+label source ('dpo', 'L2', 'subbullet rule') 1
+label source ('dpo', 'T1', 'read/identity') 126
+label source ('dpo', 'T1', 'subbullet rule') 11
+label source ('lora_main', 'L1', 'cell share') 43
+label source ('lora_main', 'L1', 'prompt share') 95
+label source ('lora_main', 'L1', 'read/identity') 492
+label source ('lora_main', 'L1', 'subbullet rule') 24
+label source ('lora_main', 'L3', 'read/identity') 134
+label source ('lora_main', 'L3', 'writer share L1') 614
+label source ('s2300', 'A1', 'cell share') 84
+label source ('s2300', 'A1', 'prompt share') 185
+label source ('s2300', 'A1', 'read/identity') 592
+label source ('s2300', 'A1', 'subbullet rule') 21
+label source ('s2300', 'A2', 'read/identity') 560
+label source ('s2300', 'A2', 'subbullet rule') 23
+label source ('s2300', 'A2', 'writer share A1') 271
+label source ('s2300', 'A3', 'read/identity') 592
+label source ('s2300', 'A3', 'subbullet rule') 24
+label source ('s2300', 'A3', 'writer share A1') 270
+label source ('s2300', 'A4', 'read/identity') 604
+label source ('s2300', 'A4', 'subbullet rule') 22
+label source ('s2300', 'A4', 'writer share A1') 252
+label source ('s2300', 'T2', 'read/identity') 570
+label source ('s2300', 'T2', 'subbullet rule') 22
+label source ('s2300', 'T2', 'writer share A1') 275

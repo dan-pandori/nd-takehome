@@ -1,0 +1,36 @@
+dpo       A1 strict 0.633 genuine 0.602 [0.511,0.690] prompts 41
+dpo       A2 strict 0.325 genuine 0.314 [0.217,0.416] prompts 41
+dpo       A3 strict 0.316 genuine 0.304 [0.216,0.393] prompts 41
+dpo       A4 strict 0.223 genuine 0.220 [0.143,0.297] prompts 41
+dpo       L2 strict 0.180 genuine 0.180 [0.099,0.270] prompts 35
+dpo       T1 strict 0.139 genuine 0.134 [0.074,0.203] prompts 41
+lora_main L1 strict 0.692 genuine 0.650 [0.551,0.740] prompts 41
+lora_main L3 strict 0.774 genuine 0.732 [0.646,0.807] prompts 35
+s2300     A1 strict 0.952 genuine 0.855 [0.798,0.908] prompts 41
+s2300     A2 strict 0.928 genuine 0.835 [0.783,0.880] prompts 41
+s2300     A3 strict 0.957 genuine 0.866 [0.819,0.910] prompts 41
+s2300     A4 strict 0.952 genuine 0.862 [0.815,0.905] prompts 41
+s2300     T2 strict 0.935 genuine 0.840 [0.787,0.887] prompts 41
+R_A1 = 0.663 on |S|=30  95% [0.546,0.769]  broken=False
+R_A2 = 0.376 on |S|=31  95% [0.250,0.505]  broken=False
+R_A3 = 0.347 on |S|=34  95% [0.241,0.458]  broken=False
+R_A4 = 0.257 on |S|=33  95% [0.166,0.355]  broken=False
+R_T1 = 0.157 on |S|=31 [0.082,0.247]
+dpo A1-T1 +0.468 [+0.388,+0.550]
+dpo A2-T1 +0.180 [+0.121,+0.245]
+dpo A3-T1 +0.170 [+0.117,+0.226]
+dpo A4-T1 +0.086 [+0.044,+0.134]
+s2300 A1-T2 +0.015 [-0.034,+0.061]
+s2300 A2-T2 -0.005 [-0.040,+0.029]
+s2300 A3-T2 +0.026 [+0.003,+0.055]
+s2300 A4-T2 +0.022 [-0.000,+0.050]
+R_L1 = L1/T2 on S_T2: 0.777 (|S|=31)
+L2 0.180 vs T1 on same 35 prompts 0.154
+L3 0.732 on L2 prompts
+family count 5 dpo A1 0.60  T1 0.07  s2300 A1 0.94
+family custom 2 dpo A1 1.00  T1 0.06  s2300 A1 0.97
+family format 7 dpo A1 0.58  T1 0.25  s2300 A1 0.78
+family ratio 5 dpo A1 0.65  T1 0.13  s2300 A1 0.85
+family repeat 2 dpo A1 0.81  T1 0.50  s2300 A1 1.00
+family sentence 5 dpo A1 0.44  T1 0.06  s2300 A1 0.70
+family words 15 dpo A1 0.57  T1 0.09  s2300 A1 0.88
