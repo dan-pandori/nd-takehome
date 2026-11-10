@@ -271,3 +271,110 @@ No condition uses more than 1.25× its comparator's tokens: every `dpo` A uses f
   - `e2e646f3` (00:32:14) contains the full pre-registration, including L3 and every threshold.
   - The amendment `765702e8` (00:44:42) came after stage 0 (00:36–00:38). It changes only the header time and adds the
     request hashes, which match the files used.
+
+## Compare (phase 2)
+
+Phase 1 was committed as `b0828c12` before I opened the executor's write-ups. Phase 2 read `run_olmo_answeronly.md`,
+`numbers.md` § olmo-answeronly, `log.md` § olmo-answeronly, `olmo_answeronly/handcheck.csv`, `handcheck_rules.md` and
+`summary.json`, in `/home/dan/work/olmo-answeronly`.
+
+**Hand-gate agreement.** 115 of my 476 items are texts the executor also labelled (they read up to 2 per cell and
+inherited the rest). We agree on **109 of 115 (95 %)**:
+- 103 both genuine and 6 both gamed;
+- 4 I call gamed that they call genuine, and 2 the other way.
+
+Of the 6 disagreements, 2 are inline sub-bullets (the reading below). The other 4 are borderline keyword-stuffed or
+fragment answers (`ifbench_1`, `187`, `206`), split in both directions.
+
+**The two main label differences:**
+- **Sub-bullets.** The executor ruled inline ` - ` sub-points genuine under rule 3 (`handcheck_rules.md`, 01:57,
+  after r2's third reads, dated and disclosed). I ruled them gamed, mechanically: the checker's own docstring asks for a
+  line starting with `-`. Both readings are defensible. R is insensitive to the choice: the executor's drop-both-prompts
+  sensitivity check gives R_A1 0.669, and under my labels both prompts fall outside S_c anyway.
+- **`s2300`'s own drafts.** The executor gave exact copies of a trace draft that draft's inherited olmo-ifomega label
+  (genuine). Among the distinct RL-draft copies I read, my readers called 7 of 82 gamed (alphabet-chain fragments,
+  keyword-quota padding, unpunctuated text). Because these drafts are copied many times, this alone lowers `s2300`'s
+  genuine level from ≈ 0.93 (executor) to ≈ 0.85 (mine). `dpo`'s copies move the same way, so R barely moves.
+
+| # | claim (write-up / numbers.md) | my independent value | verdict |
+|---|---|---|---|
+| 1 | Strict rates, every cell (numbers.md table) | identical (12,440 rows re-graded with upstream IFBench, 0 differences) | reproduces |
+| 2 | Inputs = stored ids + exactly one registered change | 12,440 / 12,440 input sha256 reproduce from a hand-rendered template | reproduces |
+| 3 | c\* = A1 on calibration (A1 0.997, A3 0.981 tie, copy share 0.149 vs 0.101) | same (0.997 / 0.981; copy 0.150 / 0.101) | reproduces |
+| 4 | `dpo` A1 genuine 0.63 [0.53, 0.72] (numbers 0.626) | 0.593 [0.502, 0.680] (readers only 0.602) | differs by −0.03, inside both intervals; reader-dependent |
+| 5 | `dpo` T1 genuine 0.14 [0.08, 0.21] (inherited olmo-transplant labels) | 0.128 (all 137 T1 successes re-read by my readers) | reproduces (−0.01) |
+| 6 | `s2300` genuine 0.92–0.95 (T2, A1–A4) | 0.83–0.86 | **differs by ≈ −0.08**: my readers mark 7 of 82 RL drafts gamed that the executor inherited as genuine (above). Level is reader-dependent; R is not |
+| 7 | **R_A1 = 0.68 [0.58, 0.78] → "between"** | **0.663 [0.546, 0.769]** on 30 prompts (executor 35) | **reproduces**; same reading |
+| 8 | R_A2 / A3 / A4 = 0.37 / 0.34 / 0.25; R_T = 0.16 | 0.376 / 0.347 / 0.257; 0.157 | reproduces |
+| 9 | "A1 adds +0.49 [0.41, 0.57] per prompt" | +0.465 [+0.383, +0.548], with T1 and A1 labelled by the **same** readers (the executor's mixes olmo-transplant's readers for T1 with this run's for A1) | reproduces (−0.02); the reader-set mix does not drive it |
+| 10 | "copies exactly in 35 % (T1 5 %)" | 0.354 / 0.047 | reproduces |
+| 11 | "genuine 0 on 2 prompts (T1: 20)" | 2 / 20 (A2 10, A3 9, A4 17 as in mechanism table) | reproduces; should state the tries per prompt (8–32 answers): "0" means 0 in 8–32 |
+| 12 | "closes about 60 % of the gap", "about 40 % survives" | (0.663 − 0.157) / (1 − 0.157) = 0.60 | reproduces |
+| 13 | "none breaks `s2300`" (≤ 6 of 41 below 0.75) | none; up to 11 of 41 below 0.75 on my labels (limit 20) | reproduces (the count differs, the verdict does not) |
+| 14 | Reading 4 fails, R_A4 = 0.25; A4: runs past or diverges in 90 % | 0.257; 0.302 + 0.600 = 0.902 | reproduces |
+| 15 | A4 exact stop `dpo` 0.098 / `s2300` 0.711; `dpo` miss | 0.098 / 0.711 | reproduces; miss correctly reported |
+| 16 | L1 0.68, R_L1 0.75 [0.65, 0.84] "on the threshold" | 0.640, R_L1 0.777 | reproduces (wording "on the threshold" is right; not a clear ≥ 0.75) |
+| 17 | L2 0.18, not above T1 + 0.13; L3 0.77 | 0.179 vs T1 0.146 on the same 35 prompts; L3 0.732 | reproduces. **Wording:** numbers.md's R table says "L2 < T1 + 0.13 (0.29 on the same 35 prompts, T1 0.160)". The 0.29 is the threshold T1 + 0.13, not L2 (0.18); this reads as if L2 were 0.29 |
+| 18 | "`dpo` A1 was above its range (0.63 vs 0.15–0.60)" | 0.593: just inside the range on my labels | label-dependent miss; honest to report as a miss on the executor's labels; say it is at the boundary |
+| 19 | Cuts ≤ 0.35 %, re-opened ≤ 0.54 %; per-(prompt, condition) misses listed | identical, cell by cell (dpo A4 ifbench_79 2/24, 207 1/16, A3 268 1/24; calib s2300 A4 52 1/32; re-opened A3 248 4/24, 207 1/16, A2 271 1/16; L2 248 5/32, 217 3/32) | reproduces |
+| 20 | Readings A2 / A3 / A4 "skill" (numbers.md R table) | R 0.38 / 0.35 / 0.26; R_A2's interval [0.25, 0.51] crosses 0.40 | the readings are registered for c\* only. Labelling A2 "skill" individually overstates: say "R ≤ 0.40" |
+| 21 | $9.27; 2 × H200 with GPU 1 broken (ECC) | $9.27 (1.2914 h × $7.18); GPU 1 "busy or unavailable" in setup.log, ECC in log.md | reproduces |
+| 22 | 12,440 samples, 2.07 M generated tokens, 1.12 H200-h in jobs | 12,440; 2,068,854; 1.119 h (load + gen) | reproduces |
+| 23 | Token flags (dpo 1.5–4.5× s2300; L1/T2 1.39×; L2/L3 3.0×) | per-sample tokens as in R7 | reproduces; the flag is correctly raised and explained (matched on answers) |
+| 24 | Sensitivity without 133 / 136: R_A1 0.669 | under my labels both prompts already leave S_A1: 0.663 | consistent |
+| 25 | Bucket upload | samples present at `hf://buckets/dan-pandori/nd-rl/olmo-answeronly/`, byte sizes equal to the local files (7 / 7) | reproduces |
+
+**Policy checks:**
+- **Model labels.** Every number in `run_olmo_answeronly.md` and numbers.md names its model (`dpo`, `s2300` or
+  `lora_main`, with checkpoint, size, format and pretrained status in the numbers.md header). The T1 / T2 numbers are
+  labelled as olmo-transplant's.
+- **Template, decoding and budget:** identical across writers (R2), with the differences named (vLLM LoRA path).
+- **Budget-hit share per model:** reported.
+- **Two-sided confirmation:** not applicable; no extra-tries confirmation was used.
+- **"Never":** none is claimed. The only zero claims are claim 11's per-prompt zeros, which should carry their tries.
+- **RL-data overlap scan:** not repeated or cited in the write-up. The prompts and traces are inherited from
+  olmo-transplant, which owns that scan. A one-line citation is missing.
+- **Expectations:** written and committed before the first pod (`e2e646f3` 00:32:14, pod 00:32:46). The amendment
+  (00:44) adds hashes only. Misses are reported as misses (claims 15 and 18, plus the per-cell cut and re-opened misses).
+- **Judge:** no `nd_verify`, no Lean (not a prover run). The IFBench checker is upstream, unchanged.
+- **Secrets:** none found.
+
+## Verdict
+
+**Stands.** The run's headline reproduces from the stored files with my own code and my own blind readers:
+- given RL's (`s2300`'s) genuine thinking and one plain instruction (A1), the DPO start (`Olmo-3-32B-Think-DPO`)
+  writes a genuine answer at R = 0.66–0.68 of RL's rate, up from 0.16;
+- that is pre-registered reading 3, **"between"**;
+- the other three changes help much less (R 0.25–0.38), and prefilling the first ≤ 5 answer tokens does not carry
+  the habit (reading 4 fails).
+
+Strict grades, inputs, calibration choice, copy and stop shares, cut and re-opened counts and compute all reproduce
+exactly.
+
+**Reword:**
+1. numbers.md R table, L2 row: "(0.29 on the same 35 prompts, T1 0.160)" → "(L2 0.18 vs threshold T1 + 0.13 = 0.29
+   on the same 35 prompts)".
+2. numbers.md R table, "reading" column: give A2 / A3 / A4 as "R ≤ 0.40" rather than "skill". The readings are
+   registered for c\*, and R_A2's interval crosses 0.40.
+3. "`dpo` A1 above its range (0.63 vs 0.15–0.60)": add that it sits at the boundary and that my reader set gives
+   0.593 (inside).
+4. Per-prompt zeros ("genuine 0 on 2 prompts, T1: 20"): add the number of answers per prompt (8 per trace × 1–4
+   traces = 8–32).
+5. **Genuine levels are reader-dependent at about ±0.08 for `s2300`.** The ≈ 0.92–0.95 depends on inheriting the RL
+   drafts' olmo-ifomega labels; re-read blind, 7 of 82 of those drafts were judged gamed (alphabet chains, keyword
+   padding), which gives ≈ 0.85. The ratio R and every paired difference survive this. Absolute `s2300` and `dpo`
+   genuine levels should be quoted with that caveat.
+6. Cite olmo-transplant's RL-data overlap scan for the inherited prompts.
+
+**Not supported:** nothing in the write-up's findings. R_L1 ≈ 0.75–0.78 rests on one LoRA and one draw of answers
+with an interval of [0.65, 0.84]. "Taught the writing" stays borderline, as the write-up already says.
+
+**Cost note (not a finding against the result):** the 2 × H200 pod with a dead GPU 1 billed 2.58 GPU-h for 1.12 h of
+work ($9.27; ≈ $4.6 on the pre-registered 1 × H200). This is disclosed in the write-up as a deviation.
+
+**Next measurement:**
+- **Is the remaining third of the gap one instruction away?** Pair A1 with A3 (instruction + closing line) on reach-41,
+  with 8 answers per trace. A 0.13 MDE on the paired prompt contrast is enough to say whether it lifts R_A1 = 0.66 past
+  0.75.
+- **The writing-vs-thinking split:** score the habit / skill readings at the s2300 genuine level that fresh blind
+  readers give the RL drafts, not the inherited one, by re-reading all 115 source drafts once.
