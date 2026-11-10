@@ -1,0 +1,26 @@
+# Item hf9dfb2
+
+## Prompt (the request)
+
+Write an email to Matthew Greene asking him about potential postdoc opportunities. Talk about the work that I worked on and how close it is his and how impactful my contribution will be in his lab. Please personalize it.  Matthew Greene works on: interests in the development of mobile sensing (phones, wearables), intervention and AI technology capable of accurately assessing and managing mental illness (e.g., anxiety, depression, schizophrenia) at population-scale. I specialize in building large-scale, deployable sensing systems for smart environments and developing foundation machine learning models for human activity recognition and various health and well-being applications. Include keyword cloud once in your response, keyword rhythm twice in your response, keyword fish three times in your response, keyword puzzle five times in your response, and keyword dawn seven times in your response.
+
+## Constraints checked (official checker)
+
+- `count:keywords_multiple` {"keyword1": "cloud", "keyword2": "rhythm", "keyword3": "fish", "keyword4": "puzzle", "keyword5": "dawn"}: checker says followed
+
+## Answer (the text after the model's private reasoning, which is not shown; 295 words)
+
+Dear Dr. Greene,  
+
+I hope this message finds you well. I’ve been following your pioneering work at the intersection of mobile sensing, AI, and mental health interventions, particularly intrigued by your efforts to leverage these technologies at population scale. At the dawn of mobile health innovation, I believe my research could offer valuable contributions to your lab.  
+
+My expertise lies in developing large-scale sensing systems, including cloud-based infrastructures, and foundation models for human activity recognition. This work focuses on analyzing daily rhythm patterns and the temporal rhythm of user interactions, two critical aspects for understanding mental health. I’ve navigated data streams as fluidly as a school of fish, ensuring accuracy even in noisy environments. Each dataset, much like a sea teeming with fish, required adaptive algorithms to isolate meaningful signals, while my models aim to catch elusive fish of insight within vast data oceans.  
+
+A key focus has been solving the puzzle of deploying these systems at scale. The puzzle of real-time analysis, crucial for interventions, has also been central, with each piece of the puzzle teaching adaptability. I’m eager to address the puzzle of integrating AI with scalable sensing, contributing to the grand puzzle of mental health research.  
+
+The potential impact, at the dawn of scalable solutions, is immense. Identifying subtle behavioral shifts could mimic the first flicker of dawn, enabling early crisis prevention. My foundation models are designed to harness this dawn of precision, aligning with your vision. As dawn breaks on new opportunities, I would welcome the chance to discuss how my skills could augment your studies. With the first light of dawn illuminating our field, I’m motivated to collaborate and trace the horizon at dawn.  
+
+Thank you for considering my interest. I look forward to your insights.  
+
+Best regards,  
+[Your Name]

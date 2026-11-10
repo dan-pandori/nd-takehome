@@ -1,0 +1,14 @@
+# Item hfb4b08
+
+## Prompt (the request)
+
+Ensure each word in your response has at least one consonant cluster (two or more consonants together). Alternate between words with odd and even numbers of syllables. rewrite: organising multiple teams to align and start work on the same delivery
+
+## Constraints checked (official checker)
+
+- `words:consonants` {}: checker says followed
+- `words:odd_even_syllables` {}: checker says followed
+
+## Answer (the text after the model's private reasoning, which is not shown; 10 words)
+
+Assigning many teams toward aligning commence tasks into shared outcome.

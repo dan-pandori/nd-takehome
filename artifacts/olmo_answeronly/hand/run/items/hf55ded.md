@@ -1,0 +1,77 @@
+# Item hf55ded
+
+## Prompt (the request)
+
+Write a descriptive, fictional, imaginative screenplay of a 127 year old man receiving the world record for oldest human to ever live. Later that night, in bed, he recalls a theory he read on the internet in his youth, \"Quantum Immortality\" he then proceeds to have a mental breakdown.\n Write the entire response in title case (capitalize the first letter of every major word).
+
+## Constraints checked (official checker)
+
+- `format:title_case` {}: checker says followed
+
+## Answer (the text after the model's private reasoning, which is not shown; 282 words)
+
+Scene One: The Ceremony 
+
+Int. Grand Hall - Day 
+
+A Vast Crowd Murmurs As Dignitaries Line The Stage. 
+
+Cameras Flash. A Banner Reads: “Officially The Oldest Living Human: 127 Years.” 
+
+An Official Steps Forward. 
+
+“We Gather Here To Celebrate A Milestone!” He Announces. “Errin Has Defied All Odds!” 
+
+The Crowd Applauds. 
+
+Errin, Frail But Upright, Approaches. His Cane Taps With Precision. 
+
+“I Have Lived Through Wars, Plagues, And The Rise Of Technology,” He Says Weakly. “But Today, I Simply Wish… For This To End.” 
+
+Gasps Ripple. He Sits, Breathless. The Room Falls Silent. 
+
+Cut To: 
+
+Scene Two: The Bedroom 
+
+Int. Dim Bedroom - Night 
+
+Errin Lies In A Wooden Bed. Moonlight Filters Through Curtains. 
+
+A Checklist Of Medications Sits On A Nightstand. He Stares At The Ceiling. 
+
+Memories Flood Back: A Young Man Reading A Crumpled Article Titled “Quantum Immortality Theory.” The Words Glow In His Mind: 
+
+“In Infinite Branches, You Always Live. But In Each, Your Consciousness Experiences Only One Path. If You Die In This Timeline, Your Awareness Transfers To A Parallel Where You Survived.” 
+
+His Fingers Tremble. He Whispers: 
+
+“So Many… Timelines…” 
+
+Shadows Dance On The Walls. His Breath Quickens. 
+
+“Am I The Lucky One? Or Am I Trapped Here While Everyone Else Died Elsewhere?” 
+
+A Sudden Noise. 
+
+The Room Begins To Spin. Whispers Echo: “Errin… Stay… With Us…” 
+
+No. He Jerks Awake. Sweat Drenches His Pillow. 
+
+“No More!” He Screams, Throwing Off The Blankets. “Let Me Go! Let Me—” 
+
+His Hand Clutches At Nothing. 
+
+The Doorbell Chimes. 
+
+He Freezes. 
+
+“Deliverance?” A Voice Asks From The Hall. 
+
+“Or Just… Another Day?” 
+
+The Sound Fades. He Collapses Back, Convulsing. 
+
+Cut To Black. 
+
+Fade In Text: “Record Final Update: No Changes.”

@@ -1,0 +1,8 @@
+PARTIAL=1 bash pod/olmo_answeronly/job.sh R_dpo dpo artifacts/olmo_answeronly/requests/dpo_reach.jsonl.gz 8201 --limit_groups 15 > artifacts/olmo_answeronly/logs/q_R_dpo_s0.log 2>&1
+bash pod/olmo_answeronly/job.sh R_dpo dpo artifacts/olmo_answeronly/requests/dpo_reach.jsonl.gz 8201 > artifacts/olmo_answeronly/logs/q_R_dpo.log 2>&1
+bash pod/olmo_answeronly/job.sh R_s2300 s2300 artifacts/olmo_answeronly/requests/s2300_reach.jsonl.gz 8202 > artifacts/olmo_answeronly/logs/q_R_s2300.log 2>&1
+bash pod/olmo_answeronly/job.sh C_dpo dpo artifacts/olmo_answeronly/requests/dpo_calib.jsonl.gz 8211 > artifacts/olmo_answeronly/logs/q_C_dpo.log 2>&1
+bash pod/olmo_answeronly/job.sh C_s2300 s2300 artifacts/olmo_answeronly/requests/s2300_calib.jsonl.gz 8212 > artifacts/olmo_answeronly/logs/q_C_s2300.log 2>&1
+bash pod/olmo_answeronly/job.sh L2_dpo dpo artifacts/olmo_answeronly/requests/dpo_lrev.jsonl.gz 8222 > artifacts/olmo_answeronly/logs/q_L2_dpo.log 2>&1
+until [ -f artifacts/olmo_answeronly/lora/main/PUSHED ]; do sleep 30; done; bash pod/olmo_answeronly/job.sh L1_lora dpo artifacts/olmo_answeronly/requests/lora_main_l1.jsonl.gz 8221 --lora artifacts/olmo_answeronly/lora/main --lora_name lora_main > artifacts/olmo_answeronly/logs/q_L1_lora.log 2>&1
+bash pod/olmo_answeronly/job.sh L3_lora dpo artifacts/olmo_answeronly/requests/lora_main_l3.jsonl.gz 8223 --lora artifacts/olmo_answeronly/lora/main --lora_name lora_main > artifacts/olmo_answeronly/logs/q_L3_lora.log 2>&1

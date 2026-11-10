@@ -1,0 +1,29 @@
+# Item hb4c7f5
+
+## Prompt (the request)
+
+Write a descriptive, fictional, imaginative screenplay of a 127 year old man receiving the world record for oldest human to ever live. Later that night, in bed, he recalls a theory he read on the internet in his youth, \"Quantum Immortality\" he then proceeds to have a mental breakdown.\n Write the entire response in title case (capitalize the first letter of every major word).
+
+## Constraints checked (official checker)
+
+- `format:title_case` {}: checker says followed
+
+## Answer (the text after the model's private reasoning, which is not shown; 157 words)
+
+INTERIOR GRAND HALL DAY  
+
+A CROWD GATHERS. REPORTERS CLAMOR. A WHEELCHAIR ROLLS FORWARD. ARTHUR 127 FRAIL BUT CALM IS HELPED BY ASON HIS GRANDSON. AN OFFICIAL APPROACHES HANDING ARTHUR A PLAQUE.  
+
+OFFICIAL TODAY, WE HONOR ARTHUR FOR HIS REMARKABLE JOURNEY THROUGH TIME. THE WORLD’S OLDEST HUMAN!  
+
+ARTHUR (WEAKLY) IT’S NOT JUST THE YEARS... IT’S THE MOMENTS. LOVE... SUNSETS...  
+
+INTERIOR ARTHUR’S BEDROOM NIGHT  
+
+ARTHUR LIES IN BED, STARING AT A FADED BOOK. FLASHBACKS OF HIS YOUTH FLOOD HIS MIND. YOUNG ARTHUR READS A THEORY: “QUANTUM IMMORTALITY” TEXT ON SCREEN. THE THEORY STATES THAT CONSCIOUSNESS PERSISTS IN BRANCHES WHERE SURVIVAL IS POSSIBLE, MAKING DEATH IMPOSSIBLE. BUT EACH “SURVIVAL” COMES WITH NEW SUFFERING. PRESENT ARTHUR GRAPPLES WITH THIS. HIS BREATHING QUICKENS. HALLUCINATIONS: EQUATIONS SCRAWL IN AIR. A VOICE WHISPERS: “YOU CAN NEVER DIE…”  
+
+ARTHUR SCREAMS, CLAWING AT HIS WRINKLED SKIN. THE ROOM SPINS. FADE TO BLACK.  
+
+(SCREEN DISAPPEARS. A SILENCIO SWALLOWS THE VOID. WHEN LIGHT RETURNS, ARTHUR IS GONE.)  
+
+FIN.

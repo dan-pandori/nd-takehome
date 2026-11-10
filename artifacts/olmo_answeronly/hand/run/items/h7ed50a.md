@@ -1,0 +1,20 @@
+# Item h7ed50a
+
+## Prompt (the request)
+
+Count from 10 to 50 but only print multiples of 7.
+
+## Constraints checked (official checker)
+
+- `custom:multiples` {}: checker says followed
+
+## Answer (the text after the model's private reasoning, which is not shown; 8 words)
+
+<answer>
+14
+21
+28
+35
+42
+49
+</answer>

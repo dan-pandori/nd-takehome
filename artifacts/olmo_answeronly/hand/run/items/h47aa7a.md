@@ -1,0 +1,13 @@
+# Item h47aa7a
+
+## Prompt (the request)
+
+Ensure each word in your response has at least one consonant cluster (two or more consonants together). Write a descriptive, fictional, imaginative timeline of an alternate universe where the aesthetics are "flipped" with classical civilizations such as Egypt and Greece having modern aesthetics and conventions, while the modern civilizations have ancient aesthetics
+
+## Constraints checked (official checker)
+
+- `words:consonants` {}: checker says followed
+
+## Answer (the text after the model's private reasoning, which is not shown; 36 words)
+
+Within ancient Greece electronic forums replaced physical forums. By then Egyptian architects engineered metallic obelisks illuminated sunlight mirrors. Present mist tribes clad stone loincloths chant electronic lullabies. Tomorrow Martian nomads entwine silk circuits across stone temples.

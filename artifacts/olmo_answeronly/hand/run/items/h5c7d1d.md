@@ -1,0 +1,13 @@
+# Item h5c7d1d
+
+## Prompt (the request)
+
+Rewrite in Victorian prose, style, manner, and tone.  "I don't want to set, the world on fire. I just want to start, a flame in your heart."  Use only words with lengths that are prime numbers.
+
+## Constraints checked (official checker)
+
+- `words:prime_lengths` {}: checker says followed
+
+## Answer (the text after the model's private reasoning, which is not shown; 21 words)
+
+One refuses to crave to light the whole world in flame Other seeks but to begin the flame in thy heart

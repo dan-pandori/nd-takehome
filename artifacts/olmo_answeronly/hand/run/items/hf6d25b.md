@@ -1,0 +1,33 @@
+# Item hf6d25b
+
+## Prompt (the request)
+
+Your response must include bullet points denoted by * and at least one sub-bullet point denoted by - for each bullet point. Ensure that stop words constitute no more than 27% of the total words in your response. Write a fictional, imaginative, descriptive timeline of an alternate universe where the new world was only discovered in the 1900s with the advent of satellites
+
+## Constraints checked (official checker)
+
+- `format:sub-bullets` {}: checker says followed
+- `ratio:stop_words` {"percentage": 27.0}: checker says followed
+
+## Answer (the text after the model's private reasoning, which is not shown; 143 words)
+
+* 1899 Astronomers detect strange radio signals deep space  
+  - Origins unknown sparking occult theories  
+* 1910 Theoretical satellite proposal advanced  
+  - No technological means yet exist  
+* 1957 First artificial satellite reveals Terra Nova  
+  - Mirror Earth hidden beyond solar system  
+* 1960s Global space race prioritizes new world  
+  - Resource wars ravage Earth  
+* 1980 Colonization begins under international treaty  
+  - Biomes adapted using genetic engineering  
+* 2000 Political factions emerge between Terra Nova colonists  
+  - Calls independence autonomy  
+* 2025 Terra Nova establishes independent constitutional monarchy  
+  - Reversed resource exploitation via orbital solar arrays  
+* 2049 Quantum drives enable interstellar voyages  
+  - Terra Nova expands into Andromeda System colonies  
+* 2100 Earth’s ecosystems collapse from unchecked AI expansion  
+  - Survivors forge allegiances with alien civilizations  
+* 2150 Human civilizations merge with alien bio-technology  
+  - New hybrid societies redefine consciousness boundaries
