@@ -17,9 +17,9 @@ reading the same thinking. Its answers were long, often wrapping the right answe
 2. the hint "Answer in at most 60 words";
 3. one sentence added to the end of the pasted thinking: "I will now output exactly the final draft above and nothing
    else";
-4. the first few words (five tokens) of the RL model's own answer written in for it.
+4. the first few words (up to five tokens) of the RL model's own answer written in for it.
 
-An automatic checker graded 12,440 new answers; blinded AI readers checked that passing answers really did the task.
+An automatic checker graded 12,440 new answers; blinded AI readers checked a sample of passing answers (478) for whether they really did the task.
 
 **What we found.**
 
@@ -33,8 +33,8 @@ An automatic checker graded 12,440 new answers; blinded AI readers checked that 
   model's thinking three-quarters as well as the RL model does (68 %), with no instruction. The plain pre-RL model, given that
   fine-tuned model's thinking, again mostly fails (18 %).
 
-**What it means.** Given good thinking, much of the pre-RL model's failure is output discipline: the RL model gives its
-drafted answer far more often, and an instruction recovers most of the difference. Part of the gap is something more: with both the thinking and the instruction in
+**What it means.** Given good thinking, the RL model gives its drafted answer far more often than the pre-RL model, and one
+instruction recovers most of the difference. Part of the gap is something more: with both the thinking and the instruction in
 hand, the pre-RL model still succeeds only about two-thirds as often as the RL model.
 
 **Limits.** 41 prompts chosen because RL beats the pre-RL model there; the pasted thinking was picked from the RL

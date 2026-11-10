@@ -2,7 +2,7 @@
 
 Given the RL model's (`s2300`) own genuine thinking, is the DPO start's (`dpo`) failure only how it writes the answer?
 olmo-transplant's stored traces re-inserted by token ids with one registered change each (A1 instruction, A2 60-word
-hint, A3 closing line in the thinking, A4 5-token answer prefill), both writers, 8 answers per trace; optional arm with
+hint, A3 closing line in the thinking, A4 ≤ 5-token answer prefill), both writers, 8 answers per trace; optional arm with
 olmo-ifladder's `lora_main`. Pre-registration `../preregistration/olmo-answeronly.md`; write-up
 `../run_olmo_answeronly.md`; numbers `../numbers.md` § olmo-answeronly; plain summary `plain_summary.md`; log
 `../log.md` § olmo-answeronly.

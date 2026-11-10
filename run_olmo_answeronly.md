@@ -10,7 +10,7 @@ sampled only the answer (8 per trace). Grades: IFBench strict and blinded model 
 | A1 "reply with only your final answer, exactly as drafted…" | **0.63** [0.53, 0.72] | 0.93 | **0.68** [0.58, 0.78] |
 | A2 "Answer in at most 60 words." | 0.32 [0.22, 0.43] | 0.92 | 0.37 [0.26, 0.49] |
 | A3 closing line in the thinking | 0.31 [0.23, 0.40] | 0.95 | 0.34 [0.24, 0.43] |
-| A4 first 5 answer tokens prefilled | 0.22 [0.15, 0.31] | 0.94 | 0.25 [0.17, 0.34] |
+| A4 first ≤ 5 answer tokens prefilled | 0.22 [0.15, 0.31] | 0.94 | 0.25 [0.17, 0.34] |
 
 **Findings.**
 1. **One instruction closes about 60 % of the gap.** A1 (chosen on calibration) adds +0.49 [0.41, 0.57] per prompt.
@@ -26,8 +26,8 @@ sampled only the answer (8 per trace). Grades: IFBench strict and blinded model 
 as RL does, and about 40 % of the gap survives the instruction.
 
 **Against expectations.** `dpo` A1 was above its range (0.63 vs 0.15–0.60); R_A1 0.68 (expected 0.40, inside 0.20–0.70). `dpo`'s A4 exact
-stop share was 0.098 (range 0.10–0.50). Cuts (≤ 0.33 %) and re-opened answers (≤ 0.54 %) hold per condition but miss
-"every cell" in 3 + 3 `dpo` (prompt, condition) cells (numbers.md). All else fell inside its range.
+stop share was 0.098 (range 0.10–0.50). Cuts (≤ 0.35 %) and re-opened answers (≤ 0.54 %) hold per A condition but miss
+"every cell" in 4 and 3 (prompt, condition) cells (numbers.md). All else fell inside its range.
 
 **Deviations.** One 2 × H200 pod with a broken GPU ($7.18/h) instead of a 1 × H200. One reading was fixed mid-gate
 (inline sub-bullets, 133 / 136; 2 labels overturned; without both prompts R_A1 = 0.67).

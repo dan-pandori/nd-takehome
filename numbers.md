@@ -2465,7 +2465,7 @@ metas, logs, hand items / keys / labels, both adapters (`lora/main`, `lora/ctrl`
 | L2 | dpo | lora_main's own genuine thinking → dpo | 35 | 928 | 0.180 [0.101, 0.271] | 0.180 [0.101, 0.271] | 0.180 [0.101, 0.271] | 0.0108 | 0.0000 | 0.110 | 0.029 | 103.5 | 322,475 |
 | L3 | lora_main | lora_main's own genuine thinking → lora_main | 35 | 928 | 0.774 [0.688, 0.853] | 0.773 [0.687, 0.851] | 0.773 [0.687, 0.851] | 0.0000 | 0.0000 | 0.536 | 0.082 | 42.0 | 107,582 |
 
-Cut = answers that hit the budget: ≤ 0.33 % in every condition; per (prompt, condition) cell, reach dpo A4 ifbench_79 2 / 24, A4 ifbench_207 1 / 16, A3 ifbench_268 1 / 24; calibration s2300 A4 ifbench_52 1 / 32 (and T2 1 / 32, olmo-transplant). Re-opened = the answer contains `</think>`: ≤ 0.54 % per condition; per A cell dpo A3 ifbench_248 4 / 24, A3 ifbench_207 1 / 16, A2 ifbench_271 1 / 16 (L2, not covered: 248 5 / 32, 217 3 / 32). The pre-registered "< 1 % in every cell" (cuts) and "< 5 % every A cell" (re-opened) hold per condition and miss in these (prompt, condition) cells.
+Cut = answers that hit the budget: ≤ 0.33 % in every reach condition, 0.35 % in calibration s2300 A4 (and T2); per (prompt, condition) cell, reach dpo A4 ifbench_79 2 / 24, A4 ifbench_207 1 / 16, A3 ifbench_268 1 / 24; calibration s2300 A4 ifbench_52 1 / 32 (and T2 1 / 32, olmo-transplant). Re-opened = the answer contains `</think>`: ≤ 0.54 % per A condition (T1 0.76 %, L2 1.08 %); per A cell dpo A3 ifbench_248 4 / 24, A3 ifbench_207 1 / 16, A2 ifbench_271 1 / 16 (L2, not covered: 248 5 / 32, 217 3 / 32). The pre-registered "< 1 % in every cell" (cuts) and "< 5 % every A cell" (re-opened) hold per condition and miss in these (prompt, condition) cells.
 
 ### R = dpo ÷ s2300 genuine, on S_c = reach prompts where the condition keeps s2300 ≥ 0.75
 
@@ -2563,7 +2563,7 @@ Sensitivity (post hoc) to the inline ` - ` sub-bullet reading: with ifbench_133 
 | L3_lora | lora_main:L3 | 116 | 928 | 0.11 M | 0.78 M | 0.10 |
 all jobs: 12,440 samples, 2.07 M generated tokens, 1.12 H200-hours in jobs
 
-GPU-seconds per arm are apportioned by generated tokens within a job (load + generation; stage 0 included in R_dpo). Pod `oa-1`: 2 × H200 community at $7.18/h with GPU 1 broken (ECC), 1.29 pod-hours, **$9.27** (podbudget) of $30. Arms are matched on answers per (prompt, trace) (8); dpo generates 1.5–4.5× s2300's tokens on reach A1–A4 (T1 / T2: 4.6×; calibration 1.35–2.05×; longer answers) — flagged, as the comparison is on answers, not tokens.
+GPU-seconds per arm are apportioned by generated tokens within a job (load + generation; stage 0 included in R_dpo). Pod `oa-1`: 2 × H200 community at $7.18/h with GPU 1 broken (ECC), 1.29 pod-hours, **$9.27** (podbudget) of $30. Arms are matched on answers per (prompt, trace) (8); dpo generates 1.5–4.5× s2300's tokens on reach A1–A4 (T1 / T2: 4.6×; calibration 1.35–2.05×; longer answers), and L1 / T2 1.39×, L2 / L3 3.0× — flagged, as the comparison is on answers, not tokens.
 
 **Bucket:** `hf://buckets/dan-pandori/nd-rl/olmo-answeronly/` — `artifacts/olmo_answeronly/{requests,samples,graded}/` (every answer's text and ids; `artifacts/MANIFEST.jsonl` rows), `meta/`, `logs/`, `hand/` (kit, labels), `olmo_answeronly/`, `pod/olmo_answeronly/`, registry rows, `docs/` (write-up, pre-registration, figure).
 
