@@ -2442,3 +2442,126 @@ mean thinking per draw is 1.9× the control's, 6,985 vs 3,613 tokens, and its me
 `hf://buckets/dan-pandori/nd-rl/olmo-ifladder/` (`artifacts/olmo_ifladder/`: every sample's text and token ids, grades,
 metas, logs, hand items / keys / labels, both adapters (`lora/main`, `lora/ctrl`); bulk files in
 `artifacts/MANIFEST.jsonl`; `olmo_ifladder/`, `pod/olmo_ifladder/`); no merged weights.
+
+## olmo-answeronly (2026-11-10, executor; UNREVIEWED)
+
+**Models (every number here):** `dpo` = `allenai/Olmo-3-32B-Think-DPO` `main` (`97604023`; RL's start); `s2300` = `allenai/Olmo-3.1-32B-Think` `main` (`97ade57a` = `step_2300`); 32 B, bf16, pretrained (Olmo 3 32B base → Think SFT → DPO → RL). `lora_main` = `dpo` + olmo-ifladder's rank-16 LoRA on 16 hand-genuine `s2300` trajectories of 16 other IFBench prompts (adapter sha256 `9921a760…`; vLLM LoRA path; olmo-ifladder's review: stands). Natural-language chat (`olmo_thinker`), not `lean_seq`; no Lean involved. Thinking = olmo-transplant's 115 reach / 36 calibration stored `s2300` genuine traces (`olmo_transplant/traces.csv`), inserted by token ids, plus one registered change (`olmo_answeronly/wordings.py`); for L2 / L3, 116 `lora_main` traces (`olmo_answeronly/lora_traces.csv`). Only the answer is sampled: 8 per prompt × trace, T 1, top-p 1, budget 32,768 − supplied tokens, vLLM 0.11.0, one H200, TP 1, seeds 8201 / 8202 / 8211 / 8212 / 8221–8223. T1 / T2 = olmo-transplant's rows (genuine rates from `olmo_transplant/results.csv`, not re-estimated). Grades: IFBench official strict (`olmo_ifomega/grade.py` via `olmo_transplant/grade_rows.py`); **genuine** = strict × the blinded hand gate's genuine share per (prompt, writer, condition) (`olmo_answeronly/handcheck.csv`: 478 reads, 441 genuine / 37 gamed; identity inheritance; readings fixed during the run in `olmo_answeronly/handcheck_rules.md`). Rates are means over prompts with 95 % prompt bootstrap (10,000, seed 1). Pre-registration `preregistration/olmo-answeronly.md`; source `olmo_answeronly/summary.json` (`analyze.py`), per-prompt rows `olmo_answeronly/results.csv`.
+
+### Conditions, reach-41
+
+| cell | writer | what | prompts | answers | strict | genuine | genuine, re-opened = fail | re-opened | cut | exact copy | near copy | median words (cell medians) | generated tokens |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| T1 | dpo | olmo-transplant baseline: s2300's thinking → dpo | 41 | 920 | 0.139 [0.078, 0.211] | 0.139 [0.078, 0.211] | 0.139 [0.078, 0.211] | 0.0076 | 0.0000 | 0.047 | 0.012 | 120.0 | 354,230 |
+| A1 | dpo | + user-turn instruction | 41 | 920 | 0.633 [0.539, 0.722] | 0.626 [0.532, 0.716] | 0.626 [0.532, 0.716] | 0.0000 | 0.0000 | 0.354 | 0.040 | 43.0 | 111,974 |
+| A2 | dpo | + "Answer in at most 60 words." | 41 | 920 | 0.325 [0.226, 0.434] | 0.324 [0.224, 0.432] | 0.324 [0.224, 0.432] | 0.0022 | 0.0000 | 0.117 | 0.035 | 54.0 | 136,198 |
+| A3 | dpo | + closing line in the thinking | 41 | 920 | 0.316 [0.228, 0.409] | 0.312 [0.226, 0.404] | 0.312 [0.226, 0.404] | 0.0054 | 0.0011 | 0.140 | 0.041 | 91.0 | 251,670 |
+| A4 | dpo | + first 5 answer tokens prefilled | 41 | 920 | 0.223 [0.148, 0.306] | 0.223 [0.148, 0.306] | 0.223 [0.148, 0.306] | 0.0011 | 0.0033 | 0.098 | 0.032 | 109.0 | 325,783 |
+| T2 | s2300 | olmo-transplant baseline: s2300's thinking → s2300 | 41 | 920 | 0.935 [0.890, 0.971] | 0.924 [0.871, 0.965] | 0.924 [0.871, 0.965] | 0.0000 | 0.0000 | 0.664 | 0.082 | 26.0 | 77,277 |
+| A1 | s2300 | + user-turn instruction | 41 | 920 | 0.952 [0.912, 0.983] | 0.926 [0.882, 0.965] | 0.926 [0.882, 0.965] | 0.0000 | 0.0000 | 0.614 | 0.091 | 26.0 | 73,159 |
+| A2 | s2300 | + "Answer in at most 60 words." | 41 | 920 | 0.928 [0.883, 0.965] | 0.918 [0.872, 0.956] | 0.918 [0.872, 0.956] | 0.0000 | 0.0000 | 0.591 | 0.071 | 26.0 | 68,583 |
+| A3 | s2300 | + closing line in the thinking | 41 | 920 | 0.957 [0.917, 0.991] | 0.951 [0.910, 0.984] | 0.951 [0.910, 0.984] | 0.0000 | 0.0000 | 0.690 | 0.083 | 26.0 | 75,567 |
+| A4 | s2300 | + first 5 answer tokens prefilled | 41 | 920 | 0.952 [0.920, 0.979] | 0.944 [0.905, 0.976] | 0.944 [0.905, 0.976] | 0.0000 | 0.0000 | 0.711 | 0.065 | 26.0 | 71,984 |
+| L1 | lora_main | s2300's thinking → lora_main | 41 | 920 | 0.692 [0.588, 0.791] | 0.684 [0.582, 0.782] | 0.684 [0.582, 0.782] | 0.0000 | 0.0000 | 0.365 | 0.064 | 42.0 | 107,409 |
+| L2 | dpo | lora_main's own genuine thinking → dpo | 35 | 928 | 0.180 [0.101, 0.271] | 0.180 [0.101, 0.271] | 0.180 [0.101, 0.271] | 0.0108 | 0.0000 | 0.110 | 0.029 | 103.5 | 322,475 |
+| L3 | lora_main | lora_main's own genuine thinking → lora_main | 35 | 928 | 0.774 [0.688, 0.853] | 0.773 [0.687, 0.852] | 0.773 [0.687, 0.852] | 0.0000 | 0.0000 | 0.536 | 0.082 | 42.0 | 107,582 |
+
+Cut = answers that hit the budget: ≤ 0.33 % in every condition; per (prompt, condition) cell the maximum is 2 of 24 (dpo A4) and 1 of 24 (dpo A3); calibration 1 of 32 (s2300 T2, A4). Re-opened = the answer contains `</think>`.
+
+### R = dpo ÷ s2300 genuine, on S_c = reach prompts where the condition keeps s2300 ≥ 0.75
+
+| condition | numerator | denominator | s2300 < 0.75 (of n) | broken | S_c | R [95 %] | means on S_c | R, strict | R, re-opened = fail | reading |
+|---|---|---|---|---|---|---|---|---|---|---|
+| T | dpo:T1 | s2300:T2 | 4 of 41 | False | 37 | 0.159 [0.092, 0.239] | 0.154 / 0.969 | 0.155 [0.089, 0.232] | 0.159 [0.092, 0.239] | (baseline) |
+| A1 | dpo:A1 | s2300:A1 | 6 of 41 | False | 35 | 0.683 [0.584, 0.778] | 0.669 / 0.980 | 0.677 [0.584, 0.765] | 0.683 [0.584, 0.778] | between |
+| A2 | dpo:A2 | s2300:A2 | 5 of 41 | False | 36 | 0.373 [0.260, 0.492] | 0.359 / 0.962 | 0.367 [0.259, 0.482] | 0.373 [0.260, 0.492] | skill |
+| A3 | dpo:A3 | s2300:A3 | 3 of 41 | False | 38 | 0.336 [0.245, 0.433] | 0.331 / 0.985 | 0.338 [0.246, 0.435] | 0.336 [0.245, 0.433] | skill |
+| A4 | dpo:A4 | s2300:A4 | 4 of 41 | False | 37 | 0.253 [0.171, 0.339] | 0.247 / 0.979 | 0.247 [0.168, 0.334] | 0.253 [0.171, 0.339] | skill |
+| L1 | lora_main:L1 | s2300:T2 | 4 of 41 | False | 37 | 0.752 [0.653, 0.843] | 0.729 / 0.969 | 0.754 [0.658, 0.844] | 0.752 [0.653, 0.843] | ≥ 0.75: taught the writing (borderline) |
+| L2 | dpo:L2 | lora_main:L3 | 11 of 35 | False | 24 | 0.279 [0.165, 0.404] | 0.256 / 0.915 | 0.279 [0.165, 0.404] | 0.279 [0.165, 0.404] | descriptive |
+
+L1's denominator is olmo-transplant's T2 (s2300 on the same thinking); L2's is L3 (lora_main on its own thinking; 11 of 35 prompts have L3 < 0.75, so S = 24).
+
+**Best of A1–A3, chosen on calibration** (dpo strict; ties ≤ 0.03 by exact + near copy share): A1 0.9969 (copy share 0.149, s2300 < 0.75 on 0 of 10); A3 0.9812 (copy share 0.101, s2300 < 0.75 on 0 of 10); A2 0.9469 (copy share 0.062, s2300 < 0.75 on 0 of 10). A1 and A3 tie on strict (0.016 apart); A1 has the higher copy share → **chosen: A1**.
+
+**Pre-registered readings:** chosen A1: R = 0.683 [0.584, 0.778] → **between** (0.40 < R < 0.75). A2 / A3 / A4 alone: skill / skill / skill (R ≤ 0.40). Reading 4 (A4 high while A1–A3 low): does not hold. No condition breaks s2300 (≤ 6 of 41 prompts below 0.75).
+
+Sensitivity (post hoc) to the inline ` - ` sub-bullet reading: with ifbench_133 and 136 dropped from S_c altogether, R_A1 = 0.669, R_A2 = 0.342, R_A3 = 0.320, R_A4 = 0.236, R_T = 0.139 (from `results.csv`).
+
+### Paired differences by prompt (genuine, reach-41; mean [95 %], per-prompt SD; MDE pre-registered ≈ 0.13)
+
+- dpo:A1-T1: 0.487 [0.406, 0.568] (SD 0.265)
+- s2300:A1-T2: 0.003 [-0.038, 0.044] (SD 0.134)
+- dpo:A2-T1: 0.184 [0.125, 0.249] (SD 0.206)
+- s2300:A2-T2: -0.006 [-0.048, 0.036] (SD 0.135)
+- dpo:A3-T1: 0.173 [0.122, 0.228] (SD 0.173)
+- s2300:A3-T2: 0.027 [0.001, 0.060] (SD 0.097)
+- dpo:A4-T1: 0.084 [0.040, 0.132] (SD 0.150)
+- s2300:A4-T2: 0.020 [-0.008, 0.053] (SD 0.099)
+
+### By constraint family (reach-41, genuine; descriptive, n = 2–15 prompts)
+
+| family | n | dpo T1 | dpo A1 | dpo A2 | dpo A3 | dpo A4 | s2300 A1 |
+|---|---|---|---|---|---|---|---|
+| count | 5 | 0.069 | 0.633 | 0.263 | 0.219 | 0.144 | 0.979 |
+| custom | 2 | 0.062 | 1.000 | 0.500 | 0.469 | 0.562 | 0.969 |
+| format | 7 | 0.280 | 0.643 | 0.571 | 0.411 | 0.298 | 0.905 |
+| ratio | 5 | 0.133 | 0.658 | 0.271 | 0.308 | 0.258 | 0.858 |
+| repeat | 2 | 0.500 | 0.812 | 0.521 | 0.708 | 0.708 | 1.000 |
+| sentence | 5 | 0.060 | 0.481 | 0.200 | 0.283 | 0.106 | 0.783 |
+| words | 15 | 0.087 | 0.579 | 0.237 | 0.234 | 0.132 | 0.974 |
+
+### A4: does the writer stop where the draft stops? (reach; share of all answers)
+
+- dpo: exact copy (stops there) 0.098; starts with the whole draft and adds text 0.302; diverges before its end 0.600.
+- s2300: exact copy (stops there) 0.711; starts with the whole draft and adds text 0.024; diverges before its end 0.265.
+
+### Calibration-10 (36 traces; strict / genuine, mean over prompts)
+
+| writer | T1 / T2 | A1 | A2 | A3 | A4 |
+|---|---|---|---|---|---|
+| dpo | 0.988 / 0.988 | 0.997 / 0.897 | 0.947 / 0.847 | 0.981 / 0.881 | 0.994 / 0.894 |
+| s2300 | 1.000 / 0.933 | 0.978 / 0.954 | 0.975 / 0.848 | 1.000 / 1.000 | 0.997 / 0.980 |
+
+### Mechanism (post hoc, `olmo_answeronly/mechanism.md`; sample-pooled strict)
+
+| writer | cond | samples | strict | contain the trace's answer verbatim | of those, fail | strict, draft in thinking | strict, no draft in thinking | prompts with genuine 0 |
+|---|---|---|---|---|---|---|---|---|
+| dpo | A1 | 920 | 590 (0.641) | 419 | 40 | 504 / 736 (0.685) | 86 / 184 (0.467) | 2 |
+| dpo | A2 | 920 | 303 (0.329) | 271 | 128 | 244 / 736 (0.332) | 59 / 184 (0.321) | 10 |
+| dpo | A3 | 920 | 296 (0.322) | 347 | 168 | 242 / 736 (0.329) | 54 / 184 (0.293) | 9 |
+| dpo | A4 | 920 | 207 (0.225) | 368 | 235 | 173 / 736 (0.235) | 34 / 184 (0.185) | 17 |
+| dpo | T1 | 920 | 137 (0.149) | 256 | 183 | 114 / 736 (0.155) | 23 / 184 (0.125) | 20 |
+| lora_main | L1 | 920 | 654 (0.711) | 505 | 89 | 536 / 736 (0.728) | 118 / 184 (0.641) | 2 |
+| s2300 | A1 | 920 | 882 (0.959) | 582 | 8 | 714 / 736 (0.970) | 168 / 184 (0.913) | 0 |
+| s2300 | A2 | 920 | 854 (0.928) | 596 | 10 | 682 / 736 (0.927) | 172 / 184 (0.935) | 0 |
+| s2300 | A3 | 920 | 886 (0.963) | 649 | 0 | 718 / 736 (0.976) | 168 / 184 (0.913) | 0 |
+| s2300 | A4 | 920 | 878 (0.954) | 676 | 9 | 714 / 736 (0.970) | 164 / 184 (0.891) | 0 |
+| s2300 | T2 | 920 | 867 (0.942) | 641 | 10 | 703 / 736 (0.955) | 164 / 184 (0.891) | 0 |
+
+### Compute (`olmo_answeronly/compute.md`; registry rows `artifacts/olmo-answeronly/registry/`)
+
+| job | arm (writer:cond) | requests | samples | generated tokens | input tokens | GPU-h (apportioned) |
+|---|---|---|---|---|---|---|
+| R_dpo | dpo:A1 | 115 | 920 | 0.11 M | 0.74 M | 0.06 |
+| R_dpo | dpo:A2 | 115 | 920 | 0.14 M | 0.73 M | 0.07 |
+| R_dpo | dpo:A3 | 115 | 920 | 0.25 M | 0.74 M | 0.13 |
+| R_dpo | dpo:A4 | 115 | 920 | 0.33 M | 0.73 M | 0.16 |
+| R_s2300 | s2300:A1 | 115 | 920 | 0.07 M | 0.74 M | 0.03 |
+| R_s2300 | s2300:A2 | 115 | 920 | 0.07 M | 0.73 M | 0.03 |
+| R_s2300 | s2300:A3 | 115 | 920 | 0.08 M | 0.74 M | 0.03 |
+| R_s2300 | s2300:A4 | 115 | 920 | 0.07 M | 0.73 M | 0.03 |
+| C_dpo | dpo:A1 | 36 | 288 | 0.05 M | 0.21 M | 0.02 |
+| C_dpo | dpo:A2 | 36 | 288 | 0.04 M | 0.21 M | 0.01 |
+| C_dpo | dpo:A3 | 36 | 288 | 0.08 M | 0.21 M | 0.03 |
+| C_dpo | dpo:A4 | 36 | 288 | 0.09 M | 0.21 M | 0.03 |
+| C_s2300 | s2300:A1 | 36 | 288 | 0.03 M | 0.21 M | 0.03 |
+| C_s2300 | s2300:A2 | 36 | 288 | 0.03 M | 0.21 M | 0.03 |
+| C_s2300 | s2300:A3 | 36 | 288 | 0.04 M | 0.21 M | 0.03 |
+| C_s2300 | s2300:A4 | 36 | 288 | 0.06 M | 0.21 M | 0.05 |
+| L2_dpo | dpo:L2 | 116 | 928 | 0.32 M | 0.78 M | 0.17 |
+| L1_lora | lora_main:L1 | 115 | 920 | 0.11 M | 0.73 M | 0.09 |
+| L3_lora | lora_main:L3 | 116 | 928 | 0.11 M | 0.78 M | 0.10 |
+all jobs: 12,440 samples, 2.07 M generated tokens, 1.12 H200-hours in jobs
+
+GPU-seconds per arm are apportioned by generated tokens within a job (load + generation; stage 0 included in R_dpo). Pod `oa-1`: 2 × H200 community at $7.18/h with GPU 1 broken (ECC), 1.29 pod-hours, **$9.27** (podbudget) of $30. Arms are matched on answers per (prompt, trace) (8); dpo generates 1.5–4.5× s2300's tokens in each condition (longer answers) — flagged, as the comparison is on answers, not tokens.
+
