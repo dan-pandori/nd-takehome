@@ -2445,7 +2445,7 @@ metas, logs, hand items / keys / labels, both adapters (`lora/main`, `lora/ctrl`
 
 ## olmo-answeronly (2026-11-10, executor; UNREVIEWED)
 
-**Models (every number here):** `dpo` = `allenai/Olmo-3-32B-Think-DPO` `main` (`97604023`; RL's start); `s2300` = `allenai/Olmo-3.1-32B-Think` `main` (`97ade57a` = `step_2300`); 32 B, bf16, pretrained (Olmo 3 32B base → Think SFT → DPO → RL). `lora_main` = `dpo` + olmo-ifladder's rank-16 LoRA on 16 hand-genuine `s2300` trajectories of 16 other IFBench prompts (adapter sha256 `9921a760…`; vLLM LoRA path; olmo-ifladder's review: stands). Natural-language chat (`olmo_thinker`), not `lean_seq`; no Lean involved. Thinking = olmo-transplant's 115 reach / 36 calibration stored `s2300` genuine traces (`olmo_transplant/traces.csv`), inserted by token ids, plus one registered change (`olmo_answeronly/wordings.py`); for L2 / L3, 116 `lora_main` traces (`olmo_answeronly/lora_traces.csv`). Only the answer is sampled: 8 per prompt × trace, T 1, top-p 1, budget 32,768 − supplied tokens, vLLM 0.11.0, one H200, TP 1, seeds 8201 / 8202 / 8211 / 8212 / 8221–8223. T1 / T2 = olmo-transplant's rows (genuine rates from `olmo_transplant/results.csv`, not re-estimated). Grades: IFBench official strict (`olmo_ifomega/grade.py` via `olmo_transplant/grade_rows.py`); **genuine** = strict × the blinded hand gate's genuine share per (prompt, writer, condition) (`olmo_answeronly/handcheck.csv`: 478 reads, 441 genuine / 37 gamed; identity inheritance; readings fixed during the run in `olmo_answeronly/handcheck_rules.md`). Rates are means over prompts with 95 % prompt bootstrap (10,000, seed 1). Pre-registration `preregistration/olmo-answeronly.md`; source `olmo_answeronly/summary.json` (`analyze.py`), per-prompt rows `olmo_answeronly/results.csv`.
+**Models (every number here):** `dpo` = `allenai/Olmo-3-32B-Think-DPO` `main` (`97604023`; RL's start); `s2300` = `allenai/Olmo-3.1-32B-Think` `main` (`97ade57a` = `step_2300`); 32 B, bf16, pretrained (Olmo 3 32B base → Think SFT → DPO → RL). `lora_main` = `dpo` + olmo-ifladder's rank-16 LoRA on 16 hand-genuine `s2300` trajectories of 16 other IFBench prompts (adapter sha256 `9921a760…`; vLLM LoRA path; olmo-ifladder's review: stands). Natural-language chat (`olmo_thinker`), not `lean_seq`; no Lean involved. Thinking = olmo-transplant's 115 reach / 36 calibration stored `s2300` genuine traces (`olmo_transplant/traces.csv`), inserted by token ids, plus one registered change (`olmo_answeronly/wordings.py`); for L2 / L3, 116 `lora_main` traces (`olmo_answeronly/lora_traces.csv`). Only the answer is sampled: 8 per prompt × trace, T 1, top-p 1, budget 32,768 − supplied tokens, vLLM 0.11.0, one H200, TP 1, seeds 8201 / 8202 / 8211 / 8212 / 8221–8223. T1 / T2 = olmo-transplant's rows (genuine rates from `olmo_transplant/results.csv`, not re-estimated). Grades: IFBench official strict (`olmo_ifomega/grade.py` via `olmo_transplant/grade_rows.py`); **genuine** = strict × the blinded hand gate's genuine share per (prompt, writer, condition) (`olmo_answeronly/handcheck.csv`: 478 items read, 613 reader labels; final 441 genuine / 37 gamed; identity inheritance; readings fixed during the run in `olmo_answeronly/handcheck_rules.md`). Rates are means over prompts with 95 % prompt bootstrap (10,000, seed 1). Pre-registration `preregistration/olmo-answeronly.md`; source `olmo_answeronly/summary.json` (`analyze.py`), per-prompt rows `olmo_answeronly/results.csv`.
 
 ### Conditions, reach-41
 
@@ -2457,27 +2457,27 @@ metas, logs, hand items / keys / labels, both adapters (`lora/main`, `lora/ctrl`
 | A3 | dpo | + closing line in the thinking | 41 | 920 | 0.316 [0.228, 0.409] | 0.312 [0.226, 0.404] | 0.312 [0.226, 0.404] | 0.0054 | 0.0011 | 0.140 | 0.041 | 91.0 | 251,670 |
 | A4 | dpo | + first 5 answer tokens prefilled | 41 | 920 | 0.223 [0.148, 0.306] | 0.223 [0.148, 0.306] | 0.223 [0.148, 0.306] | 0.0011 | 0.0033 | 0.098 | 0.032 | 109.0 | 325,783 |
 | T2 | s2300 | olmo-transplant baseline: s2300's thinking → s2300 | 41 | 920 | 0.935 [0.890, 0.971] | 0.924 [0.871, 0.965] | 0.924 [0.871, 0.965] | 0.0000 | 0.0000 | 0.664 | 0.082 | 26.0 | 77,277 |
-| A1 | s2300 | + user-turn instruction | 41 | 920 | 0.952 [0.912, 0.983] | 0.926 [0.882, 0.965] | 0.926 [0.882, 0.965] | 0.0000 | 0.0000 | 0.614 | 0.091 | 26.0 | 73,159 |
+| A1 | s2300 | + user-turn instruction | 41 | 920 | 0.952 [0.912, 0.983] | 0.927 [0.882, 0.965] | 0.927 [0.882, 0.965] | 0.0000 | 0.0000 | 0.614 | 0.091 | 26.0 | 73,159 |
 | A2 | s2300 | + "Answer in at most 60 words." | 41 | 920 | 0.928 [0.883, 0.965] | 0.918 [0.872, 0.956] | 0.918 [0.872, 0.956] | 0.0000 | 0.0000 | 0.591 | 0.071 | 26.0 | 68,583 |
 | A3 | s2300 | + closing line in the thinking | 41 | 920 | 0.957 [0.917, 0.991] | 0.951 [0.910, 0.984] | 0.951 [0.910, 0.984] | 0.0000 | 0.0000 | 0.690 | 0.083 | 26.0 | 75,567 |
 | A4 | s2300 | + first 5 answer tokens prefilled | 41 | 920 | 0.952 [0.920, 0.979] | 0.944 [0.905, 0.976] | 0.944 [0.905, 0.976] | 0.0000 | 0.0000 | 0.711 | 0.065 | 26.0 | 71,984 |
-| L1 | lora_main | s2300's thinking → lora_main | 41 | 920 | 0.692 [0.588, 0.791] | 0.684 [0.582, 0.782] | 0.684 [0.582, 0.782] | 0.0000 | 0.0000 | 0.365 | 0.064 | 42.0 | 107,409 |
+| L1 | lora_main | s2300's thinking → lora_main | 41 | 920 | 0.692 [0.588, 0.791] | 0.684 [0.582, 0.783] | 0.684 [0.582, 0.783] | 0.0000 | 0.0000 | 0.365 | 0.064 | 42.0 | 107,409 |
 | L2 | dpo | lora_main's own genuine thinking → dpo | 35 | 928 | 0.180 [0.101, 0.271] | 0.180 [0.101, 0.271] | 0.180 [0.101, 0.271] | 0.0108 | 0.0000 | 0.110 | 0.029 | 103.5 | 322,475 |
-| L3 | lora_main | lora_main's own genuine thinking → lora_main | 35 | 928 | 0.774 [0.688, 0.853] | 0.773 [0.687, 0.852] | 0.773 [0.687, 0.852] | 0.0000 | 0.0000 | 0.536 | 0.082 | 42.0 | 107,582 |
+| L3 | lora_main | lora_main's own genuine thinking → lora_main | 35 | 928 | 0.774 [0.688, 0.853] | 0.773 [0.687, 0.851] | 0.773 [0.687, 0.851] | 0.0000 | 0.0000 | 0.536 | 0.082 | 42.0 | 107,582 |
 
-Cut = answers that hit the budget: ≤ 0.33 % in every condition; per (prompt, condition) cell the maximum is 2 of 24 (dpo A4) and 1 of 24 (dpo A3); calibration 1 of 32 (s2300 T2, A4). Re-opened = the answer contains `</think>`.
+Cut = answers that hit the budget: ≤ 0.33 % in every condition; per (prompt, condition) cell, reach dpo A4 ifbench_79 2 / 24, A4 ifbench_207 1 / 16, A3 ifbench_268 1 / 24; calibration s2300 A4 ifbench_52 1 / 32 (and T2 1 / 32, olmo-transplant). Re-opened = the answer contains `</think>`: ≤ 0.54 % per condition; per A cell dpo A3 ifbench_248 4 / 24, A3 ifbench_207 1 / 16, A2 ifbench_271 1 / 16 (L2, not covered: 248 5 / 32, 217 3 / 32). The pre-registered "< 1 % in every cell" (cuts) and "< 5 % every A cell" (re-opened) hold per condition and miss in these (prompt, condition) cells.
 
 ### R = dpo ÷ s2300 genuine, on S_c = reach prompts where the condition keeps s2300 ≥ 0.75
 
-| condition | numerator | denominator | s2300 < 0.75 (of n) | broken | S_c | R [95 %] | means on S_c | R, strict | R, re-opened = fail | reading |
+| condition | numerator | denominator | s2300 < 0.75 (of n) | broken | S_c | R [95 %] | means on S_c | R, strict (its own S) | R, re-opened = fail | reading |
 |---|---|---|---|---|---|---|---|---|---|---|
-| T | dpo:T1 | s2300:T2 | 4 of 41 | False | 37 | 0.159 [0.092, 0.239] | 0.154 / 0.969 | 0.155 [0.089, 0.232] | 0.159 [0.092, 0.239] | (baseline) |
-| A1 | dpo:A1 | s2300:A1 | 6 of 41 | False | 35 | 0.683 [0.584, 0.778] | 0.669 / 0.980 | 0.677 [0.584, 0.765] | 0.683 [0.584, 0.778] | between |
-| A2 | dpo:A2 | s2300:A2 | 5 of 41 | False | 36 | 0.373 [0.260, 0.492] | 0.359 / 0.962 | 0.367 [0.259, 0.482] | 0.373 [0.260, 0.492] | skill |
-| A3 | dpo:A3 | s2300:A3 | 3 of 41 | False | 38 | 0.336 [0.245, 0.433] | 0.331 / 0.985 | 0.338 [0.246, 0.435] | 0.336 [0.245, 0.433] | skill |
-| A4 | dpo:A4 | s2300:A4 | 4 of 41 | False | 37 | 0.253 [0.171, 0.339] | 0.247 / 0.979 | 0.247 [0.168, 0.334] | 0.253 [0.171, 0.339] | skill |
-| L1 | lora_main:L1 | s2300:T2 | 4 of 41 | False | 37 | 0.752 [0.653, 0.843] | 0.729 / 0.969 | 0.754 [0.658, 0.844] | 0.752 [0.653, 0.843] | ≥ 0.75: taught the writing (borderline) |
-| L2 | dpo:L2 | lora_main:L3 | 11 of 35 | False | 24 | 0.279 [0.165, 0.404] | 0.256 / 0.915 | 0.279 [0.165, 0.404] | 0.279 [0.165, 0.404] | descriptive |
+| T | dpo:T1 | s2300:T2 | 4 of 41 | False | 37 | 0.159 [0.092, 0.239] | 0.154 / 0.969 | 0.155 [0.089, 0.232] (S 38) | 0.159 [0.092, 0.239] | (baseline) |
+| A1 | dpo:A1 | s2300:A1 | 6 of 41 | False | 35 | 0.683 [0.584, 0.778] | 0.669 / 0.980 | 0.677 [0.584, 0.765] (S 38) | 0.683 [0.584, 0.778] | between |
+| A2 | dpo:A2 | s2300:A2 | 5 of 41 | False | 36 | 0.373 [0.260, 0.492] | 0.359 / 0.962 | 0.367 [0.259, 0.482] (S 37) | 0.373 [0.260, 0.492] | skill |
+| A3 | dpo:A3 | s2300:A3 | 3 of 41 | False | 38 | 0.336 [0.245, 0.433] | 0.331 / 0.985 | 0.338 [0.246, 0.435] (S 38) | 0.336 [0.245, 0.433] | skill |
+| A4 | dpo:A4 | s2300:A4 | 4 of 41 | False | 37 | 0.253 [0.171, 0.339] | 0.247 / 0.979 | 0.247 [0.168, 0.334] (S 38) | 0.253 [0.171, 0.339] | skill |
+| L1 | lora_main:L1 | s2300:T2 | 4 of 41 | False | 37 | 0.752 [0.653, 0.843] | 0.729 / 0.969 | 0.754 [0.658, 0.844] (S 38) | 0.752 [0.653, 0.843] | ≥ 0.75: taught the writing (borderline) |
+| L2 | dpo:L2 | lora_main:L3 | 11 of 35 | False | 24 | 0.279 [0.165, 0.404] | 0.256 / 0.915 | 0.279 [0.165, 0.404] (S 24) | 0.279 [0.165, 0.404] | L2 < T1 + 0.13 (0.29 on the same 35 prompts, T1 0.160): not easier |
 
 L1's denominator is olmo-transplant's T2 (s2300 on the same thinking); L2's is L3 (lora_main on its own thinking; 11 of 35 prompts have L3 < 0.75, so S = 24).
 
@@ -2490,7 +2490,7 @@ Sensitivity (post hoc) to the inline ` - ` sub-bullet reading: with ifbench_133 
 ### Paired differences by prompt (genuine, reach-41; mean [95 %], per-prompt SD; MDE pre-registered ≈ 0.13)
 
 - dpo:A1-T1: 0.487 [0.406, 0.568] (SD 0.265)
-- s2300:A1-T2: 0.003 [-0.038, 0.044] (SD 0.134)
+- s2300:A1-T2: 0.002 [-0.038, 0.044] (SD 0.134)
 - dpo:A2-T1: 0.184 [0.125, 0.249] (SD 0.206)
 - s2300:A2-T2: -0.006 [-0.048, 0.036] (SD 0.135)
 - dpo:A3-T1: 0.173 [0.122, 0.228] (SD 0.173)
@@ -2563,5 +2563,7 @@ Sensitivity (post hoc) to the inline ` - ` sub-bullet reading: with ifbench_133 
 | L3_lora | lora_main:L3 | 116 | 928 | 0.11 M | 0.78 M | 0.10 |
 all jobs: 12,440 samples, 2.07 M generated tokens, 1.12 H200-hours in jobs
 
-GPU-seconds per arm are apportioned by generated tokens within a job (load + generation; stage 0 included in R_dpo). Pod `oa-1`: 2 × H200 community at $7.18/h with GPU 1 broken (ECC), 1.29 pod-hours, **$9.27** (podbudget) of $30. Arms are matched on answers per (prompt, trace) (8); dpo generates 1.5–4.5× s2300's tokens in each condition (longer answers) — flagged, as the comparison is on answers, not tokens.
+GPU-seconds per arm are apportioned by generated tokens within a job (load + generation; stage 0 included in R_dpo). Pod `oa-1`: 2 × H200 community at $7.18/h with GPU 1 broken (ECC), 1.29 pod-hours, **$9.27** (podbudget) of $30. Arms are matched on answers per (prompt, trace) (8); dpo generates 1.5–4.5× s2300's tokens on reach A1–A4 (T1 / T2: 4.6×; calibration 1.35–2.05×; longer answers) — flagged, as the comparison is on answers, not tokens.
+
+**Bucket:** `hf://buckets/dan-pandori/nd-rl/olmo-answeronly/` — `artifacts/olmo_answeronly/{requests,samples,graded}/` (every answer's text and ids; `artifacts/MANIFEST.jsonl` rows), `meta/`, `logs/`, `hand/` (kit, labels), `olmo_answeronly/`, `pod/olmo_answeronly/`, registry rows, `docs/` (write-up, pre-registration, figure).
 

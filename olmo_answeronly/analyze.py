@@ -119,7 +119,7 @@ def ratio(xs):
 
 
 def r3(x):
-    return None if x is None else round(x, 4)
+    return None if x is None else round(x, 6)
 
 
 def main():
