@@ -1,6 +1,6 @@
 # Pre-registration — olmo-answeronly (proposal 45)
 
-Written 2026-11-10 00:22–01:10 UTC (shell clock), before any pod of this run. Executor: agent:claude. Brief: nd-rl
+Written 2026-11-10 00:22–00:32 UTC (shell clock; committed 00:32:14, `e2e646f3`), before any pod of this run. Executor: agent:claude. Brief: nd-rl
 `docs/proposals/followups/BRIEF_olmo-answeronly.md` (proposal 45, `docs/proposals/2026-11-09-olmo-transplant-answer-only.md`).
 Budget **$30 / 20 pod-hours** (dollars binding; `podbudget` registered before the first pod). Hard stop 2026-11-12
 00:22 UTC.
@@ -55,6 +55,7 @@ change), `sample_prefix.py` (olmo-transplant's sampler + these fields).
   `sample_prefix.py` asserts the HF tokenizer gives the A3 ids above before sampling.
 - **A4 grading** is on prefill + continuation: the row's `text` is decode(prefill ids + generated ids); `gen_text` is
   the generated part.
+- **Request files** (sha256 prefixes, built before any pod; gzip of deterministic rows): `dpo_calib.jsonl.gz` 77a36a6f3ae9d577; `dpo_reach.jsonl.gz` 29f82329f78d5cfc; `s2300_calib.jsonl.gz` e758eedc8abf7ba3; `s2300_reach.jsonl.gz` b86ac03c800923b8.
 - **Requests:** reach 460 per writer (115 × 4), calibration 144 (36 × 4); samples 3,680 + 1,152 per writer, 9,664 total.
 - **Jobs and seeds (new):** `R_dpo` 8201, `R_s2300` 8202, `C_dpo` 8211, `C_s2300` 8212 (one job = all four conditions
   for one writer and set). Decoding = `olmo-transplant`: T 1.0, top-p 1.0, EOS only, bf16, vLLM 0.11.0, prefix caching,
@@ -157,3 +158,9 @@ tokens, prefill tokens, requests, samples, checker calls; no training. Arms are 
 - **Cut order if over budget:** the optional arm (L3 first); A2; calibration A4.
 - **Balance:** no pod if the RunPod balance would fall below $35. Weights stay on pods; pods are deleted once their
   files are pulled and verified.
+
+## Amendments after the pre-registration commit (`e2e646f3`, 00:32:14 UTC)
+
+- 2026-11-10 00:45 UTC: the header's written-until time was "01:10" in the commit (a planned time, wrong); corrected to
+  00:32. The request-file sha256 line was computed at 00:31 (before any pod) but missed the commit; added here. No
+  design, threshold or expectation changed.
