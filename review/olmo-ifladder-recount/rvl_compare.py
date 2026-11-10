@@ -160,7 +160,7 @@ def gshare(labmap, c):
 
 
 P("    gamed share, first min(n, 4) of my walk order, executor labels vs mine:")
-for c in ("R2", "R3", "R4", "LM", "LC"):
+for c in ("R2", "R3", "R4", "LM", "LC", "S2", "S3", "S4"):
     ge, ne = gshare(exg, c)
     gm, nm = gshare(lab, c)
     P(f"      {c}: executor labels {ge}/{ne}; mine {gm}/{nm}")

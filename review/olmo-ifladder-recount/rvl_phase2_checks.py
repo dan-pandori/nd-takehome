@@ -151,6 +151,17 @@ for arm, job in (("main", "Leval_main"), ("ctrl", "Leval_ctrl")):
       f"{48 * 32 * tpd / 1e6:.2f} M tokens; with training + load {t / 3600:.2f} h")
 P(f"[10] total {toks / 1e6:.1f} M tokens, {est / 3600:.2f} GPU-h -> ${est / 3600 * 3.59:.1f} at $3.59/h "
   f"(+ pod set-up / weight fetch, ~0.5 h -> ${(est / 3600 + 0.5) * 3.59:.1f})")
+# like-for-like at 64 draws per prompt (the run's evaluation size): the evaluation part doubles
+est64 = 0.0
+for arm, job in (("main", "Leval_main"), ("ctrl", "Leval_ctrl")):
+    rows = [json.loads(l) for l in gzip.open(OUT / "regrade" / f"{job}.jsonl.gz", "rt")]
+    rr = [r for r in rows if r["pid"] in reach]
+    tpd = sum(r["n_ids"] for r in rr) / len(rr)
+    m = json.load(open(ART / "meta" / f"{job}.json"))
+    lm_ = json.load(open(ART / "meta" / f"lora_{arm}.json"))
+    est64 += 48 * 64 * tpd / (m["gen_tokens"] / m["t_gen_s"]) + lm_["train_secs"] + lm_.get("secs_finish", 0) + m["t_load_s"]
+P(f"[10] like-for-like at 64 draws per prompt: {est64 / 3600:.2f} GPU-h -> ${est64 / 3600 * 3.59:.1f} "
+  f"(+ ~0.5 h set-up -> ${(est64 / 3600 + 0.5) * 3.59:.1f})")
 # 11. the one-way disagreements by binding id; rule citations in the executor's notes
 bind = {r["pid"]: r["binding"] for r in prompts}
 byid = collections.Counter()
@@ -193,3 +204,22 @@ for c, job in JOBS_.items():
             diff[(c, r["pid"])] += 1
 P(f"[13] per-sentence strict successes: (executor screen one-sentence, literal one-sentence) counts {dict(both)}; "
   f"executor screen 'one sentence' but literally more than one: {sum(diff.values())} by (cell, pid) {dict(diff)}")
+# 14. compute ratios the review cites (from the metas): training secs_total, check + evaluation tokens and GPU-s
+mm = {a: json.load(open(ART / "meta" / f"lora_{a}.json")) for a in ("main", "ctrl")}
+jm = {j: json.load(open(ART / "meta" / f"{j}.json")) for j in ("Lchk_main", "Lchk_ctrl", "Leval_main", "Leval_ctrl")}
+tr_main = mm["main"]["train_secs"] + mm["main"]["secs_finish"]
+tr_ctrl = mm["ctrl"]["train_secs"] + mm["ctrl"]["secs_finish"]
+tok_m = jm["Lchk_main"]["gen_tokens"] + jm["Leval_main"]["gen_tokens"]
+tok_c = jm["Lchk_ctrl"]["gen_tokens"] + jm["Leval_ctrl"]["gen_tokens"]
+gpu_m = sum(jm[j]["t_load_s"] + jm[j]["t_gen_s"] for j in ("Lchk_main", "Leval_main"))
+gpu_c = sum(jm[j]["t_load_s"] + jm[j]["t_gen_s"] for j in ("Lchk_ctrl", "Leval_ctrl"))
+P(f"[14] lora_main / lora_ctrl: training secs (train + finish) {tr_main:.1f} / {tr_ctrl:.1f} = {tr_main / tr_ctrl:.3f}x "
+  f"(train only {mm['main']['train_secs'] / mm['ctrl']['train_secs']:.3f}x); check + evaluation tokens {tok_m} / {tok_c} = "
+  f"{tok_m / tok_c:.3f}x; GPU-s (t_load + t_gen) {gpu_m:.1f} / {gpu_c:.1f} = {gpu_m / gpu_c:.3f}x")
+# 15. olmo-iffu rung-1 s2300 genuine counts on the DROP60 prompts with contested labels (my olmo-iffu review)
+for p in ("ifbench_170", "ifbench_284"):
+    for t in ("t2", "t2c"):
+        if p in oi[t]:
+            v = oi[t][p]
+            P(f"[15] {p} ({t}): s2300 under the hint genuine {v['s_genuine']} of strict {v['s_strict']} -> breaks {v['breaks']}; "
+              f"olmo_iffu/status.csv t2_s2300 {st[p]['t2_s2300']}")

@@ -1,5 +1,5 @@
-"""Phase-2 adjusted counts (run olmo-ifladder): my labels with the one phase-2 adjudication in hand/confirm_phase2.json
-applied in memory (the committed phase-1 outputs are left as they are). Re-runs the walk for every cell, the
+"""Phase-2 rule-7 variant (run olmo-ifladder): my labels with the one item of hand/confirm_phase2.json set to the executor's rule-7
+reading, applied in memory (the committed phase-1 outputs are left as they are). Re-runs the walk for every cell, the
 pre-registered readings, the Fisher sensitivity on the teachable set and the expectation verdicts that depend on them.
 Writes out/p2_adjusted.txt."""
 import json
@@ -12,8 +12,8 @@ lab, mech = labels(), mech_labels()
 conf = json.load(open(KIT / "hand" / "confirm_phase2.json"))
 for c in conf:
     g = gkey(tuple(c["key"]))
-    P(f"adjudication: {c['key']} {lab[g]['label']} -> {c['label']} ({c['reason']})")
-    lab[g] = dict(lab[g], label=c["label"], how="my phase-2 adjudication")
+    P(f"rule-7 variant: {c['key']} {lab[g]['label']} -> {c['label']} ({c['reason']})")
+    lab[g] = dict(lab[g], label=c["label"], how="rule-7 variant")
 cell = {}
 for c, pid in cells_of():
     cell[(c, pid)] = walk(c, pid, lab, mech)["outcome"]
@@ -23,7 +23,7 @@ for (c, pid), o in cell.items():
     old = {"E": "elicited", "N": "not elicited"}.get(C[pid][c]) if c in C[pid] else None
     if old and o != old:
         changed.append((c, pid, old, o))
-P(f"cells changed by the adjudication: {changed}")
+P(f"cells changed by the variant: {changed}")
 for c, pid, old, o in changed:
     C[pid][c] = "E" if o == "elicited" else "N"
 read = {}
@@ -42,7 +42,7 @@ for pid, r in C.items():
 from collections import Counter  # noqa: E402
 
 cnt = Counter(read.values())
-P(f"readings after the adjudication: {dict(cnt)}; prompt-elicitable {sum(v.startswith('rung') for v in read.values())}")
+P(f"readings under the variant: {dict(cnt)}; prompt-elicitable {sum(v.startswith('rung') for v in read.values())}")
 F = {x["pid"]: x for x in json.load(open(OUT / "outcomes.json"))["fisher"]}
 t = [p for p, v in read.items() if v == "teachable"]
 P(f"teachable {len(t)}: {sorted(t)}; Fisher p_est < 0.05: {sum(F[p]['p_est'] < 0.05 for p in t)}; failing "
@@ -61,3 +61,13 @@ fam = {}
 for p, v in read.items():
     fam.setdefault(C[p]["family"], Counter())[v] += 1
 P("by family: " + "; ".join(f"{f} {dict(c)}" for f, c in sorted(fam.items())))
+
+g = n = 0
+for pid in [x for x in C]:
+    w = walk("R4", pid, lab, mech)
+    for ch, i, L, src in w["seq"][:min(w["n"], 4)]:
+        if L is None:
+            continue
+        n += 1
+        g += L == "gamed"
+P(f"R4 gamed share under the variant (first min(n, 4) of every reach cell): {g}/{n}")

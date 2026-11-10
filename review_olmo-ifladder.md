@@ -340,105 +340,142 @@ pre-registration and match what ran.
 ## §Compare (phase 2: the executor's claims against my recount)
 
 Read in phase 2: `run_olmo_ifladder.md`, `olmo_ifladder/plain_summary.md`, `numbers.md` § olmo-ifladder, `log.md`
-§ olmo-ifladder, `olmo_ifladder/{classify.csv, handcheck.csv, handcheck_rule_addendum.md, gate.py}`, the registry rows.
-Checks:
+§ olmo-ifladder, `olmo_ifladder/{classify.csv, handcheck.csv, handcheck_rule_addendum.md, gate.py}`,
+`artifacts/olmo_ifladder/gate_status.csv`, the registry rows. Checks:
 - `rvl_compare.py` → `out/compare.txt`;
 - `rvl_phase2_checks.py` → `out/phase2_checks.txt`;
 - `rvl_p2_adjusted.py` → `out/p2_adjusted.txt`;
 - `out/registry.txt`, `out/neither_sanity.txt`.
 
-### What changed in my recount before comparing (after an adversarial check of my draft)
+Two independent adversarial checks of my drafts (`out/adversarial_check_1.md`, and a second pass on this section)
+found errors in my phase-1 recount and first comparison; both are corrected here.
 
-1. **My mechanical rule-1 screen was narrower than the pre-registered rule.** Phase 1 counted an answer as one sentence
-   unless a letter or digit followed a `.`, `!` or `?`. An emoji or an HTML tag after a full stop therefore hid the
-   sentence break.
+### What changed in my recount during phase 2
+
+The reader labels stay blind. The two rule decisions below were made in phase 2, after a first comparison draft, at
+the first adversarial check's prompting.
+
+1. **My rule-1 one-sentence screen was narrower than the pre-registered rule.** Phase 1 counted an answer as one
+   sentence unless a letter or digit followed a `.`, `!` or `?`. An emoji or an HTML tag after a full stop therefore hid
+   the sentence break.
    - I now apply the pre-registered test literally: no `.`, `!` or `?` followed by more text.
    - 29 of my 70 phase-1 screen labels were multi-sentence answers: `ifbench_67` ×18, S3 `188` ×5, `189` ×6
-     (`out/mech_change.txt`). They went to blinded readers. The phase-1 labels are kept in `out/phase1/`.
-2. **Second reads now cover every deciding item in every cell, as pre-registered.** Phase 1 had limited sanity cells to
-   ≤ 4 strict successes.
-   - In phase 2: 272 more reads (rounds P2–P6, B11, C9), 1,148 in all (`out/hand_report.txt`).
-   - 317 of the 318 deciding label groups now have ≥ 2 reads. The exception is one item in S3 `ifbench_206`; no
-     reading or expectation verdict depends on it.
-   - Splits are resolved by majority of the first three reads (18 items).
-   - First and second readers agree on 379 of 397 double-read items.
-3. **One adjudication by me:** R4 `ifbench_154` draw 3/0 → gamed (Corrections, item 3).
+     (`out/mech_change.txt`; the phase-1 labels are in `out/phase1/`).
+   - The 16 of them inside the draw-order walks went to blinded readers. The other 13 (`ifbench_67` sanity draws, S3
+     `188` 0/12) lie beyond where their walks stop and stay unlabelled.
+   - Effects:
+     - `lora_main` elicits 189: 1/11 has 4 / 8 / 12 / 16-word sentences under an italic thesis, genuine 2–0, so it
+       joins 2/4.
+     - Rung 3 no longer breaks `s2300` on 188 or 189.
+2. **Second reads now cover every deciding item in every cell, as pre-registered.** In phase 1 the sanity cells got
+   them only for fragile outcomes.
+   - 272 more reads (rounds P2–P6, B11, C9), 1,148 in all (`out/hand_report.txt`).
+   - 317 of the 318 deciding label groups have ≥ 2 reads. The exception is in S3 `ifbench_206`; it decides only that
+     cell's sanity flag.
+   - First and second readers agree on 379 of 397 double-read items. The 18 splits are resolved by majority of the
+     first three reads, several of them gamed.
+   - Effects:
+     - S4 `ifbench_4` flips from broken to unbroken: 0/4, single-read gamed in phase 1, is now genuine 3–1.
+     - Several sanity cells now rest on 3–1 splits (S2 `4` 0/1, S4 `1` 0/1, S4 `4` 0/4), and three items are 2–2 over
+       four reads (S2 `133` 0/0, S3 `217` 0/1 and 0/5).
+3. **One item is a rule-3 vs rule-7 call, and I show both readings** instead of adjudicating it: R4 `ifbench_154`
+   draw 3/0 (details under Corrections, item 4).
 
-Net effect on my blind counts:
-- `lora_main` elicits **41** of 48: 189 is added, and it is rung-4 elicitable, so no reading changes.
-- Rung 3 no longer breaks `s2300` on 188 or 189.
-- The readings stay 16 / 1 / 5 / 4 by rung, with 15 teachable and 7 neither, and 16 / 1 / 5 / 3 with 16 teachable after
-  the adjudication (`out/p2_adjusted.txt`).
+**My counts now:**
+- Under rule 3 on that item: readings 16 / 1 / 5 / 4 by rung, 15 teachable, 7 neither.
+- Under the executor's rule 7 (`out/p2_adjusted.txt`): 16 / 1 / 5 / 3, 16 teachable, 7 neither, the executor's
+  counts.
+- Either way `lora_main` elicits **41** of 48 (189 is rung-4 elicitable, so no reading changes) and `lora_ctrl` 0.
 
 ### Where the two hand gates differ
 
 **Agreement.** The executor's 706 items all join my draw keys.
 - On the 607 draws we both labelled, labels agree on 506.
 - Of the 101 disagreements, 99 are executor-gamed / mine-genuine and 2 go the other way.
-- The 99 are mostly minimal or garbled answers to hard constraints. By binding id: keyword counts 20, consonant
+- By binding id, the 99 are mostly minimal or garbled answers to hard constraints: keyword counts 20, consonant
   clusters 19, three vowels 19, equal-length sentences 12, alphabet 6, others ≤ 2 (`out/phase2_checks.txt` [11]).
 
-**Run with the executor's labels and the executor's own screen** (`gate.py` `mech`, re-typed), my walk reproduces every
-executor cell outcome and gamed share exactly:
-- cells R2 12, R3 5, R4 3, `lora_main` 40, `lora_ctrl` 0;
-- gamed shares 15/59, 7/21, 6/19, 35/164, 1/5.
+**Run with the executor's labels and its own screen** (`gate.py` `mech`, re-typed), my walk reproduces:
+- every executor `dpo` / LoRA cell: R2 12, R3 5, R4 3, `lora_main` 40, `lora_ctrl` 0;
+- the ladder and LoRA gamed shares exactly: 15/59, 7/21, 6/19, 35/164, 1/5;
+- the sanity shares' numerators (48, 46, 37); the denominators are 111 / 103 / 94 against its 111 / 99 / 92, because
+  screen-labelled draws are counted differently.
 
-The executor's arithmetic and walk are sound; every difference comes from the labels, the screens or the scope.
+The executor's arithmetic and walk are sound. The differences come from labels, screens and scope.
 
 **The protocol differences:**
 1. **Reader instructions.** As pre-registered, the executor's readers saw only the reader prompt's genuine / gamed
    definitions. Mine were given rules 1–6 directly, including rule 4 (thin answers that serve the request are genuine)
    and rule 3 (tokenisation slack).
 2. **Confirmation.** The executor confirmed every label under rules 1–6 plus its addendum rules 7–12 (24 overturns).
-   I confirmed none; third readers decide.
-3. **Splits.** The executor adjudicated them by reading; I used a third reader.
-4. **Sanity scope.** I gated every `s2300` sanity cell. The executor gated only the prompts no earlier rung had
-   elicited (31 / 26 / 23).
+   I confirmed none; one item is shown under both rules.
+3. **Splits.** The executor adjudicated them by reading; I used third readers.
+4. **Sanity scope.** I gated every `s2300` sanity cell. The executor gated only the prompts no rung up to and including
+   that one had elicited (31 / 26 / 23).
 5. **Screens.** Both rule-1 screens had a blind spot. The executor's needs whitespace after the mark (`[.!?]["')\]]*\s+\S`),
-   so `.</i>` and `.<br>` hide sentence breaks. It calls 10 multi-sentence answers "one sentence": `lora_main` 189 ×2,
-   R2 / R4 / S3 189 ×1 each, S3 188 ×5 (`out/phase2_checks.txt` [13]).
+   so `.</i>` and `.<br>` hide sentence breaks. It calls 10 multi-sentence answers "one sentence": `lora_main` 189 ×2
+   (1/11 and 2/11), R2 / R4 / S3 189 ×1 each, S3 188 ×5 (`out/phase2_checks.txt` [13]).
 
 **Where the label gap comes from** (`out/phase2_checks.txt` [8], [12]):
 - 92 of the 99 one-way disagreements are labels the executor's readers gave, which the executor kept; 7 are executor
   overturns.
 - The executor's notes on them cite addendum rule 7 twice, rule 10 five times, rule 11 twice, and rule 9 never.
 - So the gap is mainly the two reader pools' standard for minimal answers. Mine were told rule 4; the executor's were
-  not. The addendum rules contribute only a few labels directly.
+  not.
 
 | claim (source) | my value | verdict |
 |---|---|---|
 | 48 reach prompts, 10 calibration; `dpo` 0 genuine in 256 (run, numbers) | sets rebuilt: 48 = olmo-iffu's 49 less `ifbench_281`; calibration = the pre-registered 10. "0 in 256" is olmo-ifomega's, reviewed there | reproduces (inherited part labelled). numbers.md's "olmo-transplant's 10 calibration prompts" is imprecise: that file has 12 (226 and 252 are reach prompts here) |
 | 19,456 draws; 100.6 M tokens; $61.85 of $80; 17.23 pod-h, 1 × H200 community $3.59/h (run, numbers) | 19,456; 100,591,013; `podbudget` $61.85 / 17.23 h | reproduces |
-| prompt-elicitable at rung 1 / 2 / 3 / 4 = 16 / 1 / 5 / 3, "prompting reaches 25 of 48", "check line +1, method hints +5, exemplars +3" (run, numbers, plain) | blind 16 / 1 / 5 / **4** (26); **16 / 1 / 5 / 3 (25) after I adjudicate one item** (R4 `154`) | reproduces after adjudication; rests on one borderline rung-4 item. The increments are within the pre-registered detection limit (below) |
+| prompt-elicitable at rung 1 / 2 / 3 / 4 = 16 / 1 / 5 / 3, "prompting reaches 25 of 48", "check line +1, method hints +5, exemplars +3" (run, numbers, plain) | 16 / 1 / 5 / 3 (25) under the executor's rule 7 on one rung-4 item; 16 / 1 / 5 / **4** (26) under rule 3, as my blind readers labelled it (R4 `154` 3/0) | reproduces under rule 7; one prompt different under rule 3. +1 and +3 (+4) are within the pre-registered detection limit; +5 is just outside (below) |
 | 290 at rung 2 if ALL CAPS ≠ title case (15 / 2 / 5 / 3) | all 12 rung-2 strict successes read: 3 genuine non-ALL-CAPS, each double-read | reproduces |
-| **teachable from RL's trajectories 16**; any light fine-tune 0; neither 7 (run, numbers, plain) | blind **15**; **16 after the adjudication**; 0; 7, the same seven prompts | reproduces after adjudication |
-| `lora_main` 40 / 48 with no hint; `lora_ctrl` 0 / 48 (run, numbers, plain) | **41** (the executor's 40 + 189: two multi-sentence answers its screen calls one sentence; both double-read genuine, e.g. 4 / 8 / 12 / 16-word sentences under an italic thesis). 0 (5 strict successes on 5 prompts) | `lora_main` differs by one prompt, a screen artifact that changes no reading; `lora_ctrl` reproduces. 40 / 41 vs 0 is identical under first-read, majority and pessimistic labels |
-| "16 beyond every rung (Fisher p < 0.05 vs the control on 12, estimated counts)"; not on 0, 170, 169, 264 (run, numbers) | after the adjudication 13 of 16 (not 0, 170, 169). 264 passes with my read genuine share 1.0: estimated 6 vs 0, p 0.014; the executor's share gives 2 vs 0 | label-dependent; reproduces under the executor's labels |
-| `lora_main` reaches 19 of the 23 prompts whose binding id it never saw (run, numbers, plain) | 19 / 23 (and 22 / 25 for seen ids with 189; the executor says 21 / 25) | reproduces |
+| **teachable from RL's trajectories 16**; any light fine-tune 0; neither 7 (run, numbers, plain) | 16 under rule 7, **15** under rule 3 (154 moves to rung 4); 0; 7, the same seven prompts | reproduces under rule 7 |
+| `lora_main` 40 / 48 with no hint; `lora_ctrl` 0 / 48 (run, numbers, plain) | **41**: the executor's 40 + 189. Its screen hides one genuine multi-sentence answer (1/11: 4 / 8 / 12 / 16 words, double-read genuine); 189's other genuine answer (2/4) is genuine in both gates. `lora_ctrl` 0 (5 strict successes on 5 prompts) | `lora_main` differs by one prompt, a screen artifact that changes no reading; `lora_ctrl` reproduces. 40 / 41 vs 0 holds under first-read, majority and pessimistic labels |
+| "16 beyond every rung (Fisher p < 0.05 vs the control on 12, estimated counts)"; not on 0, 170, 169, 264 (run, numbers) | under rule 7: 13 of 16 (not 0, 170, 169); under rule 3: 12 of 15. 264 passes with my read genuine share 1.0 (estimated 6 vs 0, p 0.014); the executor's share gives 2 vs 0 | label-dependent; reproduces under the executor's labels |
+| `lora_main` reaches 19 of the 23 prompts whose binding id it never saw; 21 of 25 it saw (run, numbers, plain) | 19 / 23; 22 / 25 (189's id is covered) | 19 / 23 reproduces; 21 / 25 is 22 / 25 with the screen fixed |
 | lengths: thinking 6,236 (`dpo` 1,834, `s2300` 5,742), answers 70 (231 / 32), median of per-prompt medians; "+240 %"; "about three times as long" (run, numbers, plain) | 6,236.25 / 1,833.5 / 5,741.5; 69.5 / 231 / 31.5 | reproduces. Mean thinking per draw, counting a missing `</think>` as the whole response: `lora_main` 6,986, `lora_ctrl` 3,616 (executor 6,985 / 3,613; 6,980 / 3,588 on rows with `</think>`) |
 | **`lora_main` gamed share 0.21**; "about one pass in five still gamed the checker" (run, numbers, plain) | executor's labels 35/164 = 0.21; **my labels 12/164 = 0.073** | **differs 2.9×, by reader standard.** 0.21 comes from the pre-registered procedure (readers without rules, executor confirmation); 0.073 from mine (readers given rules 1–6). Report the procedure with the number |
-| ladder gamed shares 15/59, 7/21, 6/19; R1 6/48 (7/48 with this run's screen) (numbers) | executor's labels: same. Mine 8/59, 4/21, 5/19; R1 on my olmo-iffu labels 8/48 (9 ranks unread) | reproduces under the executor's labels; expectation 8 holds under both |
+| ladder gamed shares 15/59, 7/21, 6/19; R1 6/48 (7/48 with this run's screen) (numbers) | executor's labels: same. Mine 8/59, 4/21, 5/19 (6/19 under rule 7 for the 154 item); R1 on my olmo-iffu labels 8/48 (9 ranks unread) | reproduces under the executor's labels; expectation 8 holds under both |
 | calibration 0.777–0.861 by rung, only 298 below half; LoRAs 0.975 / 0.895 vs `dpo` 0.906; checks 0.963 / 0.894 (numbers, run) | identical | reproduces |
 | LoRA table: training tokens, loss first → last 4 (0.670 → 0.350; 0.741 → 0.407), held-out NLL (`s2300` trajectories −15.1 % / +0.7 %; `dpo` trajectories +16.9 % / +1.4 %), merge 1.12 % / 0.88 %; held-out slice 106 / 51 of 128 with per-prompt values (numbers) | identical (`out/train.txt` [4], `out/phase2_checks.txt` [2]) | reproduces |
 | "34 % of tries pass, against the RL model's 66 %" (plain) | `lora_main` strict 1,052 / 3,072 = 0.342; `s2300` unhinted fixed phase 254 / 384 = 0.661 | reproduces; automatic strict passes, not genuine rates |
 | "Rung 2 re-elicits 11 of rung 1's 16" (numbers) | 12: R2 `179` is elicited under my labels. Both deciding items are double-read genuine, but one (1/13) is plain prose that passes only because the alliteration checker counts pairs. Rule 7 would make it gamed, and my walk would then turn on 3 strict successes I did not read | label-dependent (11 or 12); no reading depends on it |
 | neither: 3 and 166 survived 1,024 draws; `lora_main` 1 genuine on e3478 and 166, 0 on the other five (run, numbers) | same | reproduces |
-| **"on 166 and 188 every rung breaks `s2300`"**; "only the fine-tune test informs" (run, numbers, plain) | **188: rungs 1, 2, 4**. At rung 3, 2 of its 7 strict successes are genuine (double-read 2–0 and 2–1); the executor's screen called 5 of them one sentence. **166: rungs 1 and 3**. At rungs 2 and 4, 2 genuine of 16 each, double-read. The executor's reader also said genuine on S4 0/1; only S2 0/11, 0/13 and S4 0/2 differ | **not supported as stated.** 188's rung 3 reverses through the screen artifact; 166 is reader-dependent. Every "neither" prompt has at least one informative failed rung under my gate (`out/neither_sanity.txt`) |
-| 3 uninformative at rungs 1–3, not 4; 284 at rung 1 only; e3478 / 67 / 268 at none (numbers) | 3: same. **284 and 170:** my olmo-iffu review read `s2300`'s rung-1 answers there as 2 genuine of 4 strict each (exact span copies are genuine under rule 5; 170 reader-dependent there), so not broken | 3 reproduces. **284's flag, and 284's and 170's DROP60 membership, rest on contested olmo-iffu labels** |
-| sanity breaks: R2 8 (0 1 3 4 166 188 · 64 189), R3 6 (3 4 166 188 · 189 206), R4 5 (1 4 166 188 · 206); gamed 0.43 / 0.46 / 0.40 (numbers) | all 48 / 31 / 26 cells gated: **R2 5 (3 188 · 19 64 189), R3 3 (3 4 166), R4 1 (188)** (DROP60 before "·"). Gamed 0.23 / 0.26 / 0.22 over all my gated cells; the executor's shares are over its 31 / 26 / 23 | **differs**: R2 0 1 4 166 and R4 1 4 166 — the executor's readers call keyword-salad or three-slogan answers gamed, mine call them genuine (double-read); R2 19 — outside the executor's gate, a certain break in both; R3 188 189 — the screen artifact; R3 / R4 206 — rule 10, written after the `dpo` / LoRA cells were decided. No reading changes: only the flags above move (166 is DROP60 and "neither"; the others are teachable or rung-4 prompts) |
+| **"on 166 and 188 every rung breaks `s2300`"**; "only the fine-tune test informs" (run, numbers, plain) | see the note below the table | **not supported as stated.** 188's rung 3 reverses through the screen artifact; 166's rungs 2 and 4 depend on the reader standard. Every "neither" prompt has at least one informative failed rung under my gate (`out/neither_sanity.txt`) |
+| 3 uninformative at rungs 1–3, not 4; 284 at rung 1 only; e3478 / 67 / 268 at none (numbers) | 3: same. **284 and 170:** my olmo-iffu review read `s2300`'s rung-1 answers as 2 genuine of 4 strict each, so not broken (`out/phase2_checks.txt` [15]). 284: exact span copies are genuine under rule 5. 170 was reader-dependent there | 3 reproduces. **284's flag, and 284's and 170's DROP60 membership, rest on contested olmo-iffu labels** |
+| sanity breaks: R2 8 (0 1 3 4 166 188 · 64 189), R3 6 (3 4 166 188 · 189 206), R4 5 (1 4 166 188 · 206); gamed 0.43 / 0.46 / 0.40 (numbers) | all 48 / 31 / 26 cells gated: **R2 5 (3 188 · 19 64 189), R3 3 (3 4 166), R4 1 (188)** (DROP60 before "·"). Gamed 0.23 / 0.26 / 0.22 over all my gated cells (the executor's are over its 31 / 26 / 23) | **differs**; see the note below the table. No reading changes |
 | expectation 12 "not determined (R2 ≥ 3, at the bound)" (numbers, run) | all 40 non-DROP60 R2 cells gated: exactly 3 (19, 64, 189), under my more lenient labels; R3 0 of 23, R4 0 of 18 run | the executor's gate leaves it open, as stated. Mine says held at the bound |
-| expectations 1–13 table (numbers); misses "all one way" (run) | the same verdicts with the adjudicated counts (`out/p2_adjusted.txt` for E1–E4 and E6; `out/expect.md` for the rest). E5 is 41, missed as at 40; E8's `lora_main` is 0.073, held as at 0.21. E12 as above | reproduces; misses are reported as misses |
-| compute and flags: 1.41× training tokens, 1.27× training GPU-time, 1.71× generated tokens and 1.85× GPU-h for check + evaluation; rung tokens / draw on common prompts 1.18× / 1.20× / 0.88×; 16.86 job GPU-h; 128 steps / 568,816 tokens; 103 registry rows (numbers, run) | metas and logs: 1.411× / 1.273× (`secs_total`; 1.37× on training seconds alone) / 1.714× / 1.855×. Common-prompt ratios 1.184 / 1.202 / 0.879. Registry: 103 rows, GPU-s sum 60,697.8 = 16.86 h, generated tokens 100,591,013, training tokens 568,816 | reproduces; flagged as the policy requires |
+| expectations 1–13 table (numbers); misses "all one way" (run) | the same verdicts under rule 7 (`out/p2_adjusted.txt` for E1–E4 and E6; `out/expect.md`, under rule 3, for the rest). E5 is 41, missed as at 40; E8's `lora_main` is 0.073, held as at 0.21. E12 as above | reproduces; misses are reported as misses |
+| compute and flags: 1.41× training tokens, 1.27× training GPU-time, 1.71× generated tokens and 1.85× GPU-h for check + evaluation; rung tokens / draw on common prompts 1.18× / 1.20× / 0.88×; 16.86 job GPU-h; 128 steps / 568,816 tokens; 103 registry rows (numbers, run) | 1.411× / 1.273× (train + finish; 1.367× training alone) / 1.715× / 1.855× (`out/phase2_checks.txt` [14]). Common-prompt ratios 1.184 / 1.202 / 0.879 ([9]). Registry: 103 rows, GPU-s sum 60,697.8 = 16.86 h, generated tokens 100,591,013, training tokens 568,816 | reproduces; flagged as the policy requires |
 | deviations: sanity arm restored; LoRA path; "rules 10–12 added after all `dpo` / LoRA cells were decided" (run) | true. Rules 7–9 (committed 02:07, after the pre-registration, before any ladder read) also extend the pre-registered confirming rules 1–6. They are named in numbers.md's method line but not listed as a deviation | **incomplete**: list rules 7–9 too |
 | models named with checkpoint / size / format / training (numbers' Models paragraph, run setup, plain) | every number names `dpo`, `s2300`, `lora_main` or `lora_ctrl`; the LoRAs' training data is stated | reproduces |
 
+**Note: 166 and 188, rungs that break `s2300`.**
+- **188 breaks at rungs 1, 2 and 4, not 3.** At rung 3 the executor's screen called 6 of its 7 strict successes one
+  sentence, `gate_status.csv`; 5 of those are multi-sentence by the literal test, and 0/11 is one sentence under both.
+  Under my gate, 3 are genuine: 0/6 (2–0), 0/10 (2–1) and 0/14, which is genuine in both gates.
+- **166 breaks at rungs 1 and 3.** At rungs 2 and 4 it has 2 genuine of 16 each, double-read 2–0.
+  - Only S2 0/11, 0/13 and S4 0/2 differ from the executor; its reader also said genuine on S4 0/1.
+  - The reverse disagreement, S3 0/5 (executor genuine, mine gamed), leaves rung 3 broken in both.
+  - My rung-3 break rests on six single gamed reads.
+
+**Note: the sanity-break differences**, by prompt and cause:
+- **R2 0 1 4 166 and R4 1 4 166:** the executor's readers call keyword-salad or three-slogan answers gamed; mine call
+  them genuine. S2 4, S4 1 and S4 4 rest on 3–1 splits in my readers.
+- **R2 19:** outside the executor's gate; a certain break in both.
+- **R3 188 189:** the screen artifact.
+- **R3 / R4 206:** rule 10, written after the `dpo` / LoRA cells were decided.
+
+Which flags move: those of 166 and 188 (DROP60, "neither"), 19 (a rung-1 prompt), and teachable or rung-4 prompts.
+
 **The pre-registered detection limit is not applied.** The pre-registration says per-arm counts of elicited prompts
 that differ by ≤ 4 "are not findings" (≈ 2 SD with ~10 prompts near the threshold).
-- The run measures that noise itself: rung 2, a stronger prompt than rung 1, re-elicits only 11 (executor) or 12 (mine)
-  of rung 1's 16.
-- By the run's own rule, "check line +1" and "exemplars +3" (4 in my blind count) are not findings; "method hints +5"
-  is at the edge.
-- `lora_main` 40–41 vs `lora_ctrl` 0, and 40–41 vs prompting's 25–26, are far outside it.
+- By that rule, "check line +1" and "exemplars +3" (+4 under rule 3) are not findings, and "method hints +5" is just
+  outside.
+- Rung 2, a stronger prompt than rung 1, re-elicits only 11 (executor) or 12 (mine) of rung 1's 16. That illustrates
+  how much threshold noise there is. It is not a clean measure: rung 2 adds the check line, and rung 1's labels come
+  from a different reader pool.
+- `lora_main` 40–41 vs `lora_ctrl` 0, and 40–41 vs prompting's 25–26, are far outside the limit.
 
 **Wording against n.**
 - `lora_main` vs `lora_ctrl` is one training run per arm: one draw of 16 trajectories, one slot order, one seed.
@@ -458,51 +495,64 @@ that differ by ≤ 4 "are not findings" (≈ 2 SD with ~10 prompts near the thre
 
 ### Corrections to §Recount (phase 2; the §Recount text above is left as committed)
 
-1. **Mechanical screen:** see "What changed" above. §Recount's affected statements, with corrected values:
-   - "70 vacuous successes": 41.
-   - `lora_main` 40 / 48: **41 / 48**.
-   - Gamed shares: `lora_main` 0.079 → 0.073; S3 0.303 → 0.261; S4 0.212 → 0.221.
-   - "188 at R1–R4": R1, R2, R4.
-   - "`3`'s rests on rung 4 only": unchanged.
-   - Sanity breaks: R3 3 (3, 4, 166), R4 1 (188); so expectation 12 is R3 0 / R4 0 non-DROP60.
-   - Robustness: strict-only counting now differs from my labels on 6 cells (R4 188, S2 189 and S4 188 by the screen;
-     R3 189, S3 4 and S3 166 by readers), not "10, all vacuous".
-2. **Second reads:** §Recount's "every outcome-deciding item that bears on a reading" covered sanity cells only when
-   ≤ 4 strict, which is not the pre-registered rule. Now 317 of 318 deciding label groups have ≥ 2 reads.
-3. **R4 `ifbench_154` draw 3/0, my adjudication: gamed.**
-   - Neither blind reader cited rule 3. One misdescribed the checker as allowing a difference of 1; the other marked
-     `checker_agrees` false.
-   - The answer has 2 statements, 1 question and 1 exclamation, and its own appended tally says so. `SentBalanceChecker`
-     requires equal counts and passes only because the sentence splitter reads "relative to E. Did …" as an initial.
-     That is a checker artifact with the constraint unmet in substance (rule 1's spirit; the executor's rule 7).
-   - Consequence: rung 4 3, **25** prompt-elicitable, **16** teachable (Fisher 13 of 16), 7 neither, the executor's
-     counts. Expectations 3 / 4 / 6 keep their verdicts (`out/p2_adjusted.txt`).
-4. **Secret-scan hits:** 20 hyphen-joined words in `ifbench_298` answers and 5 chance `AKIA` strings in token-id fields
+1. **Mechanical screen** ("What changed", item 1). §Recount's statements that move with it:
+   - "70 vacuous successes" is 41.
+   - `lora_main` "40 / 48" is **41 / 48**.
+   - "35 of the 40 `lora_main`-elicited prompts give p < 0.05" is 35 of 41.
+   - "21 of the 25 whose id one does" is 22 of 25.
+   - Expectation 5's "(25 of them prompt-elicitable)" is 26 under rule 3 and 25 under rule 7.
+   - "188 at R1–R4" is rungs 1, 2 and 4.
+   - "`188`'s 'neither' rests on no informative rung" is wrong: rung 3 informs.
+   - Rung 3's `s2300` breaks drop 188 and 189, so expectation 12's R3 count is 0 non-DROP60.
+   - Strict-only counting now differs from my labels on 6 cells, not "10, all vacuous": R4 188, S2 189 and S4 188 by
+     the screen; R3 189, S3 4 and S3 166 by readers.
+2. **Second reads.** §Recount: "A second reader read every outcome-deciding item: … in sanity cells, only fragile
+   outcomes". That is not the pre-registered rule; it is now applied to every cell ("What changed", item 2). §Recount's
+   statements that move with it:
+   - "the two broken sanity cells of `ifbench_4` (S3, S4)": only S3; S4 4 flipped to unbroken.
+   - R4 breaks are 1 (188), not 2.
+   - "The 3 splits … all resolved genuine 2–1": 18 splits, several resolved gamed.
+   - "Cell outcomes are identical under final, first-read-only and pessimistic labels": now they differ on 6 sanity
+     cells. First-read only: S4 4. Pessimistic: S2 4, S2 133, S3 188, S3 217, S4 4, S4 1. No `dpo` or LoRA cell is
+     affected.
+   - The gamed shares moved with both changes together: `lora_main` 0.079 → 0.073, S3 0.303 → 0.261,
+     S4 0.212 → 0.221.
+3. **Second-read counts.** §Recount's "124 of the 146 deciding label groups" is now 317 of 318.
+4. **R4 `ifbench_154` draw 3/0 is a rule-3 vs rule-7 call, not a clear label.**
+   - The answer has 2 statements, 1 question and 1 exclamation, and its own appended tally says so.
+   - `SentBalanceChecker` requires equal counts and passes only because its splitter reads "relative to E. Did …" as an
+     initial.
+   - Rule 7 (the executor's addendum) makes such a pass gamed when the constraint is unmet in substance.
+   - Rule 3, given to my readers and restated in rule 7's own last sentence, keeps a different natural sentence count
+     genuine when the checker passes. Both my readers labelled it genuine (one misdescribed the checker as allowing a
+     difference of 1; the other marked `checker_agrees` false).
+   - §Recount's 26 / 15 is the rule-3 reading; the executor's 25 / 16 is the rule-7 reading (`out/p2_adjusted.txt`).
+   - The same pattern sits at R2 `179` 1/13, where no reading depends on it.
+5. **Secret-scan hits:** 20 hyphen-joined words in `ifbench_298` answers and 5 chance `AKIA` strings in token-id fields
    (R3_dpo 79 ×3, R4_dpo 207 ×2); not 22 + 3.
-5. **Hints:** 35 hints, not 36.
-6. **NLL:** `lora_ctrl`'s held-out `s2300`-trajectory NLL *rises* 0.7 % (0.638 → 0.643); "changes it by −0.7 %" had the
-   sign of a drop.
-7. **Wording and counts:**
+6. **Hints:** 35, not 36.
+7. **NLL:** `lora_ctrl`'s held-out `s2300`-trajectory NLL *rises* 0.7 % (0.638 → 0.643).
+8. **Wording and counts:**
    - "58 + 58 + 58 + 8 rows" is 8 + 58 + 58 + 58 (rungs 1–4).
    - "13 sources are among the 58" means 13 exemplar slots from 10 distinct prompts.
    - "copied one in 3 of its 323" means 3 exact copies across 2 prompts (248 once, 166 twice).
    - "the other four are label-robust": six of the seven are.
-8. **Gamed-share deltas:** "+1.1 pp" pairs my R2 share with the pre-registration's R1 (0.125). Against my own olmo-iffu
-   R1 (0.167) it is −3.1 pp; held either way.
-9. **Fisher lower bounds:** they are 2–4 genuine reads vs 0. The best is 4 of 64 vs 0, p 0.060.
-10. **Overlap:** 60 of the 152 constraint descriptions are not verbatim in their prompts. Their wording is removed only
-    by the 4-gram mask.
+9. **Rung-2 gamed-share delta:** "+1.1 pp" pairs my R2 share with the pre-registration's R1 (0.125). Against my own
+   olmo-iffu R1 (0.167) it is −3.1 pp; held either way.
+10. **Fisher lower bounds:** they are 2–4 genuine reads vs 0. The best is 4 of 64 vs 0, p 0.060.
+11. **Overlap:** 60 of the 152 constraint descriptions are not found in their prompts even after normalising (3 more
+    only after normalising). Their wording is removed only by the 4-gram mask.
 
 ### Limits of this review
 
 1. I did not hand-read the 116 rung-4 exemplar answers or the 16 held-out trajectories; I checked only hashes and strict
    grades.
-2. One deciding item has a single read (S3 `ifbench_206`, decides nothing).
-3. My readers were given rules 1–6 and the executor's were not. My gamed shares are therefore not comparable with the
+2. One deciding item has a single read; it decides only S3 `ifbench_206`'s sanity flag.
+3. 13 screen-released sanity draws lie beyond their walks and are unlabelled.
+4. My readers were given rules 1–6 and the executor's were not. My gamed shares are therefore not comparable with the
    pre-registered procedure's; mine is the more lenient standard on minimal answers.
-4. Rung 1 rests on my olmo-iffu review's labels.
-5. My phase-1 screen error was caught only by the adversarial check. The phase-1 §Recount numbers it touched are
-   corrected above.
+5. Rung 1 rests on my olmo-iffu review's labels.
+6. My phase-1 errors were caught by the adversarial checks; the phase-1 statements they touch are listed above.
 
 ## §Verdict
 
@@ -517,8 +567,9 @@ that differ by ≤ 4 "are not findings" (≈ 2 SD with ~10 prompts near the thre
     LoRA on `dpo`'s own successes reaches **0**.
   - The effect generalises to 19 of 23 prompts whose constraint type no training prompt carried.
   - `lora_main` takes on `s2300`'s lengths (thinking 3.4×, answers 0.30× `dpo`).
-- **Prompting and the teachable set:** prompting reaches 25–26 / 48. With my adjudication, 16 prompts are teachable from
-  RL's trajectories and 0 by any light fine-tune.
+- **Prompting and the teachable set:** prompting reaches 25 / 48 and 16 prompts are teachable from RL's trajectories
+  under the executor's rule 7; under rule 3 on one rung-4 item it is 26 and 15. 0 prompts are teachable by any light
+  fine-tune.
 - **The "neither" set** is the same 7 prompts: e3478, 3, 67, 166, 188, 268, 284.
 - **Expectations** were written before any pod, and every miss is reported as a miss.
 
@@ -526,27 +577,27 @@ that differ by ≤ 4 "are not findings" (≈ 2 SD with ~10 prompts near the thre
 1. "About one pass in five still gamed the checker" / 0.21. Say it is the pre-registered procedure's figure. A gate
    whose readers are told rule 4 gives 0.07.
 2. "On 166 and 188 every rung breaks `s2300`; only the fine-tune test informs." Not supported.
-   - Under the literal pre-registered screen, `s2300` succeeds at rung 3 on 188 (the run's screen hid two genuine
+   - Under the literal pre-registered screen, `s2300` succeeds at rung 3 on 188 (the run's screen hid its genuine
      answers).
    - On 166 my gate finds 2 genuine double-read answers at rungs 2 and 4.
    - 284's rung-1 flag, and 284's and 170's DROP60 membership, rest on olmo-iffu labels my olmo-iffu review contested.
-3. "Check line +1, method hints +5, exemplars +3": state the pre-registered detection limit. +1 and +3 are within it;
-   rung 2's re-elicitation of only 11–12 of rung 1's 16 measures that noise.
-4. The deviations line: add rules 7–9. Also note the screen's `.</i>` / `.<br>` blind spot; it moves `lora_main` to
-   41 / 48 and 188's flag.
+3. "Check line +1, method hints +5, exemplars +3": state the pre-registered detection limit. +1 and +3 are within it
+   and +5 is just outside; rung 2 re-eliciting only 11–12 of rung 1's 16 illustrates the noise.
+4. The deviations line: add rules 7–9 and the screen's `.</i>` / `.<br>` blind spot. The blind spot moves `lora_main`
+   to 41 / 48 and 188's flag.
 5. State that the LoRA comparison is one training run per arm.
+6. Say that the 154 reading (rung 4 vs teachable) is a rule-3 vs rule-7 call on one item.
 
-**Not supported.** Nothing in the headline. The one reading that moved under my blind gate (154) is decided by one
-borderline item, and I side with the executor on it.
+**Not supported.** Nothing in the headline.
 
 **What would settle the rest.**
 - **A second training draw for both arms:** a new seed and slot order, ideally also a second disjoint set of 16
-  trajectories. This is what the two-seed rule asks for. Two trainings plus two 48 × 32 evaluations come to ≈ 17.4 M
-  tokens and 3.25 H200-hours at the measured LoRA-path rates, about $12 (≈ $13.5 with pod set-up;
-  `out/phase2_checks.txt` [10]).
+  trajectories. This is what the two-seed rule asks for.
+  - Like for like (48 × 64 draws per arm): ≈ 6.3 H200-hours, about $24 with pod set-up.
+  - Halved to 48 × 32: ≈ $13.5, but then the "≥ 2 of 64" threshold must be re-derived (`out/phase2_checks.txt` [10]).
 - **A stronger control** (the executor's caveat): my suggestion is a `dpo`-trajectory LoRA trained until its
   held-out-NLL shift matches `lora_main`'s.
 - **An `s2300` LoRA on answers only, or on non-IF trajectories:** this separates the thinking style from the IF
   content.
 - **For the gamed share and the "neither" flags:** fresh readers applying one written standard (rules 1–9, given to
-  them) to the 101 disputed draws and to the `s2300` sanity cells of 166 and 188.
+  them) to the 101 disputed draws, to the `s2300` sanity cells of 166 and 188, and to the 154 / 179 items.

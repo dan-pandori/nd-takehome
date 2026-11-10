@@ -59,3 +59,8 @@ sync` of the run folder) → `rvl_hygiene_hit` → `rvl_hand need A1 --src` → 
 need / needB / needC`, items, readers) until nothing is needed → `rvl_hand status` → `rvl_classify mine|strict` →
 `rvl_outcomes` → `rvl_tables` → `rvl_sensitivity` → `rvl_hand_report` → `rvl_facts`; phase 2: `rvl_compare` →
 `rvl_phase2_checks` → `rvl_p2_adjusted`.
+
+**Adversarial checks.** Two independent read-only subagents checked the review: `out/adversarial_check_1.md` (19
+findings on the first draft, including my phase-1 screen error) and `out/adversarial_check_2.md` (21 findings on the
+rewritten phase 2). Each finding is addressed in the review: §Compare "What changed", the rewritten §Compare / §Verdict,
+and "Corrections to §Recount", which leave the committed §Recount text as it was.
