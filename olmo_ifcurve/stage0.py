@@ -3,7 +3,7 @@
 (pre-registration "Stage 0"). VPS-side, standard library only. Reads artifacts/olmo_ifcurve/meta/M_<c>_stage0.json,
 the stage-0 rows (cells.py rows M_s0050 M_s1600, built from the stage-0 pull) and the stored jobs' rows.
 
-  stage0.py [--rate 3.59] [--overhead 8]   -> artifacts/olmo_ifcurve/meta/stage0_projection.json + a table on stdout
+  stage0.py [--rate 3.59] [--overhead 8] [--tps N]   -> artifacts/olmo_ifcurve/meta/stage0_projection.json + a table on stdout
 
 Tokens per draw at unsampled checkpoints: piecewise-linear in step between the measured means (stage 0 at 50 / 1,600;
 the stored fixed phase at 100 / 750 / 2,300 for arm A; arm B's reach stratum scaled by the reach / non-reach ratio
@@ -67,17 +67,21 @@ def main():
         tokB[cells.STEP[c]] = mean_tok(rb)
     stored_tps = [1933.6, 1827.9, 1781.3, 1894.9]  # F_s0100_ifb, F_s0750_ifb, F_s2300_ifb, F_dpo_ifb metas
     tp = min(st.median(tps) if tps else 1e9, st.median(stored_tps))
+    if "--tps" in sys.argv:  # measured steady state of this run's large jobs (vLLM logs), when given
+        tp = float(sys.argv[sys.argv.index("--tps") + 1])
     out["tok_per_draw"] = {"nonreach": tokA, "reach": tokB}
     out["tok_per_s_used"] = tp
     jobs = []
     for c in cells.NEW:
         s = cells.STEP[c]
-        jobs.append((f"M_{c}", 176 * 8 * interp(tokA, s) + 48 * 32 * interp(tokB, s)))
+        na = cells.N_A.get(c, 8)  # amendment 1: 4 at s0050-s0500, 8 at s1100 / s1600
+        jobs.append((f"M_{c}", 176 * na * interp(tokA, s) + 48 * 32 * interp(tokB, s)))
     jobs.append(("B_s0100", 1200 * interp(tokB, 100)))
     jobs.append(("B_s0750", 464 * interp(tokB, 750)))
     jobs.append(("B_s2300", 1536 * interp(tokB, 2300)))
     # extension: ~44 prompts x 96 draws at the checkpoint before first genuine (assume the median such step ~ 350)
-    jobs.append(("X_all", 44 * 96 * interp(tokB, 350)))
+    jobs.append(("X_all_128", 44 * 96 * interp(tokB, 350)))
+    jobs.append(("X_all_64_alt", 0.0))  # 64-draw extension = 44 x 32 draws; listed in the note, not summed
     rows, total = [], 0.0
     for j, tok in jobs:
         h = tok / tp / 3600
