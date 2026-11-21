@@ -6,7 +6,7 @@ N=$1; END=$2; SEC=$3; L=~/runs/olmo-ifcurve/poll_$N.log
 export ND_RUN_ID=olmo-ifcurve POD_MINCUDA=12.8
 while [ $(date +%s) -lt $END ]; do
   [ "$(rpbalance 2>/dev/null | cut -d. -f1)" -lt 45 ] && { echo "$(date -u +%T) balance low, stop" >> $L; exit 0; }
-  CONF=("NVIDIA H200|1|COMMUNITY|--public-ip" "NVIDIA H200|2|COMMUNITY|--public-ip")
+  CONF=("NVIDIA H200|1|COMMUNITY|--public-ip" "NVIDIA H200|1|COMMUNITY|" "NVIDIA H200|2|COMMUNITY|--public-ip")
   [ $(date +%s) -ge $SEC ] && CONF+=("NVIDIA H200|1|SECURE|")
   for c in "${CONF[@]}"; do
     IFS='|' read -r POD_GPU C POD_CLOUD X <<< "$c"; export POD_GPU POD_CLOUD POD_EXTRA="--gpu-count $C --volume-in-gb 200 --container-disk-in-gb 60 $X"

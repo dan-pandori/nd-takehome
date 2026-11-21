@@ -3,7 +3,8 @@
 # wait for its meta's .done marker on the pod (every 2 min; meta defaults to <job>.json), pull samples / graded / meta /
 # logs, check the samples file has <rows> rows and the graded file the same count. After the last job (and only if every
 # check passed) pull the pod's env files and logs, then delete the pod. Log ~/runs/olmo-ifcurve/reap_<pod>.log; marker
-# ~/runs/olmo-ifcurve/pulled_<job>[_<meta>] per verified job. Never deletes a pod whose pull or check failed.
+# ~/runs/olmo-ifcurve/pulled_<job>_<meta> per verified job. Never deletes a pod whose pull or check failed; KEEP=1 never
+# deletes it (stage-0 pulls while the queue continues).
 N=$1; shift; L=~/runs/olmo-ifcurve/reap_$N.log; W=/home/dan/work/olmo-ifcurve; export POD_LOCAL_ROOT=$W
 A=artifacts/olmo_ifcurve; R=/workspace/nd-takehome/$A
 log() { echo "$(date -u +%FT%TZ) $*" >> $L; }
@@ -26,4 +27,5 @@ print(n)")
   if [ "$ns" = "$E" ] && [ "$ng" = "$E" ]; then touch ~/runs/olmo-ifcurve/pulled_${J}_${MT%.json}; else ok=0; log "CHECK FAILED $J"; fi
 done
 for d in logs meta; do podpull $N $A/$d > /dev/null 2>&1 || log "PULL_FAIL $d"; done
-if [ $ok = 1 ]; then log "all checks passed; deleting $N"; podrm $N >> $L 2>&1; log "podrm rc=$?"; else log "CHECK FAILED; $N kept"; fi
+if [ "$KEEP" = "1" ]; then log "KEEP=1: $N kept (ok=$ok)"
+elif [ $ok = 1 ]; then log "all checks passed; deleting $N"; podrm $N >> $L 2>&1; log "podrm rc=$?"; else log "CHECK FAILED; $N kept"; fi
