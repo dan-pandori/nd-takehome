@@ -227,3 +227,20 @@ $72 gate but under $80), say so here.
   prompts already elicited would not change any reading). Say "no sanity arm" here to drop it again.
 - *Closed 2026-11-09 19:36 UTC:* no answer was needed; the run finished on these defaults (cut 2 kept, `s2300` sanity arm
   restored) at $61.85 of $80, under the $72 gate. Results: `run_olmo_ifladder.md`, `numbers.md` § olmo-ifladder.
+
+## olmo-ifcurve — 2026-11-21 08:34 UTC: $34.84 lost to 17 orphaned H200 pods (RunPod REST DNS outage + a podnew undo bug); budget?
+
+**What happened.** Since at least 05:52 UTC `rest.runpod.io` returns NXDOMAIN (Cloudflare DoH agrees; `api.runpod.io` and the
+GraphQL API still work). `runpodctl pod create --wait` creates the pod, then fails reading it back over REST; `podnew`'s
+`undo()` calls `runpodctl pod remove` (also REST, also failing) but prints "removed half-created pod" and logs `UNDONE`
+regardless. My poller therefore left 1 community H200 (05:52) and 16 secure H200s (one every ~2 min from 07:59, after the
+secure fallback) running idle, ≈ 7.3 pod-hours. I found them at 08:32 with the deprecated GraphQL listing
+(`runpodctl get pod`), deleted all 17 with `runpodctl remove pod <id>` (GraphQL; works), and verified the account has no
+pods. Balance $173.97 → $139.13. `podbudget` shows $0 for this run because it skips `UNDONE` pods. During the outage
+`podrm`, `killswitch` and the budget / balance watchdogs cannot delete pods either (all use `runpodctl pod remove` /
+`pod list`). I did not edit `~/bin`.
+
+**Question.** Should the $34.84 count against this run's $120? **Default, proceeding on it:** yes. The run's remaining
+budget is $85.16. I create no pod until `rest.runpod.io` resolves again (watcher every 5 min). After every create I check
+the account listing for unregistered pods and delete them over GraphQL. I re-cost at stage 0 and apply the brief's cut
+order as needed to stay within $85. If you restore the budget, say so here and I will add the cut checkpoints back.
