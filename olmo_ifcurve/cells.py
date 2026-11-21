@@ -28,9 +28,11 @@ from pathlib import Path
 
 A = Path("artifacts/olmo_ifcurve")
 ROWS = A / "rows"
-CKPTS = ["dpo", "s0050", "s0100", "s0200", "s0350", "s0500", "s0750", "s1100", "s1600", "s2300"]
-STEP = {c: (0 if c == "dpo" else int(c[1:])) for c in CKPTS}
-NEW = ["s0050", "s0200", "s0350", "s0500", "s1100", "s1600"]
+# amendment 3 (2026-11-21 20:2x UTC): s0350 cancelled before its first draw (the brief's cut 2, under the $40 balance
+# floor, so that the arm-B extension can run); STEP keeps it for reference
+CKPTS = ["dpo", "s0050", "s0100", "s0200", "s0500", "s0750", "s1100", "s1600", "s2300"]
+STEP = {c: (0 if c == "dpo" else int(c[1:])) for c in CKPTS + ["s0350"]}
+NEW = ["s0050", "s0200", "s0500", "s1100", "s1600"]
 STORED = {  # job -> (samples, graded): olmo-ifomega fixed phase, olmo-iffu test 4
     "F_dpo_ifb": "olmo_ifomega", "F_s0100_ifb": "olmo_ifomega", "F_s0750_ifb": "olmo_ifomega",
     "F_s2300_ifb": "olmo_ifomega", "T4_s0750": "olmo_iffu", "T4b_s0750": "olmo_iffu"}

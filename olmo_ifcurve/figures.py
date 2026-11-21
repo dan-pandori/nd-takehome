@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.colors import LinearSegmentedColormap  # noqa: E402
 
 O = Path("olmo_ifcurve")
-CK = ["dpo", "s0050", "s0100", "s0200", "s0350", "s0500", "s0750", "s1100", "s1600", "s2300"]
+CK = ["dpo", "s0050", "s0100", "s0200", "s0500", "s0750", "s1100", "s1600", "s2300"]  # s0350 cancelled (amendment 3)
 STEP = {c: (0 if c == "dpo" else int(c[1:])) for c in CK}
 STORED = {"dpo", "s0100", "s0750", "s2300"}
 INK, INK2, MUTED, GRID, BASE, SURF = "#0b0b0b", "#52514e", "#898781", "#e1e0d9", "#c3c2b7", "#fcfcfb"
@@ -42,7 +42,7 @@ def main():
             ax1.plot([xi], [yi], marker="o", ms=8, mfc=SURF if st else col, mec=col, mew=2, zorder=4)
         ax1.annotate(name, (x[-1], y[-1]), xytext=(8, 0), textcoords="offset points", va="center", color=INK, fontsize=10)
     ax1.set_xlim(0, 2600)
-    ax1.set_xticks([0, 50, 100, 200, 350, 500, 750, 1100, 1600, 2300])
+    ax1.set_xticks([0, 50, 100, 200, 500, 750, 1100, 1600, 2300])
     ax1.tick_params(axis="x", labelsize=8)
     ax1.set_ylim(0, 1)
     ax1.set_xlabel("RL step (square-root scale; 0 = DPO start)", color=INK2)

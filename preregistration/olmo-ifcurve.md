@@ -281,3 +281,22 @@ order: base cells first, extension last.
 
 Pod plan: the four-pod queues of amendment 1 (`acquire3.sh`; ifc-a carries stage 0 then s0050 / s1600; ifc-b B_s0100,
 s0200, s0350; ifc-c s0500, s1100; ifc-d B_s2300, B_s0750). Readings, thresholds and expectations unchanged.
+
+## Amendment 3 — 2026-11-21 20:19 UTC (s0350 cancelled before its first draw)
+
+**Why.** Dan declined a RunPod top-up ("No, run as is", relayed 17:59:43Z), so the binding limit is the $40 balance
+floor, not the $160 budget. At 20:18 the balance was $86.00 (≈ $46 usable). The remaining base cells cost ≈ $40, which
+leaves no room for the arm-B extension. The brief's cut order drops checkpoints 350 and 1,100 (cut 2) before the
+extension goes from 128 to 64 (cut 3).
+
+**Change.**
+- **M_s0350 is cancelled** before its first draw, saving ≈ $9. s0350 is removed from the checkpoint list (`cells.CKPTS`).
+  Every reading uses the nine remaining checkpoints, and "sampled checkpoints between" counts only these.
+- **s1100 is kept.** It had been sampling for 30 min (≈ a quarter done) when this was decided, and the pre-registered
+  shape reading needs its pass@8. This deviates from the brief's cut 2, which drops both checkpoints.
+- **The extension runs at 64 draws per cell (cut 3)** if the balance allows after the base cells: 32 more draws at the
+  checkpoint before each prompt's F1 (≈ $9). "Abrupt" then reads "0 of 64" (95 % bound 4.6 %), and every count is
+  stated with its n. If the balance does not allow even that, the extension is skipped or shortened in a seeded prompt
+  order, as Dan directed, and "abrupt" is reported for prompts with F1 = s0050 (preceded by dpo's 0 in ≥ 256) only.
+
+Everything else is unchanged.
