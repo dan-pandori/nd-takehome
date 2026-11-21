@@ -244,3 +244,10 @@ pods. Balance $173.97 → $139.13. `podbudget` shows $0 for this run because it 
 budget is $85.16. I create no pod until `rest.runpod.io` resolves again (watcher every 5 min). After every create I check
 the account listing for unregistered pods and delete them over GraphQL. I re-cost at stage 0 and apply the brief's cut
 order as needed to stay within $85. If you restore the budget, say so here and I will add the cut checkpoints back.
+- *Update 2026-11-21 09:02 UTC:* `rest.runpod.io` is still NXDOMAIN (podnew cannot create a pod safely). The GraphQL API shows **no
+  community capacity** for H200, H100, B200 or RTX PRO 6000 (only 1 x A100 80 GB); secure H200 is available at $5.29/h.
+  At secure prices the amended core (≈ 22 GPU-h) is ≈ $118, far over the remaining $85; it would also need the brief's
+  cuts 2 (drop 350 / 1,100) and 3 (extension to 64), ≈ $79. **Default, proceeding on it:** wait for REST DNS and a
+  community H200 until **2026-11-21 18:00 UTC**; if none by then, use secure H200s with cuts 2 and 3 added, and keep a
+  community poller running to move work back. If you would rather spend more (restore the $34.84 or allow secure
+  without the extra cuts), say so here.
