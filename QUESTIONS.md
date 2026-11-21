@@ -251,3 +251,13 @@ order as needed to stay within $85. If you restore the budget, say so here and I
   community H200 until **2026-11-21 18:00 UTC**; if none by then, use secure H200s with cuts 2 and 3 added, and keep a
   community poller running to move work back. If you would rather spend more (restore the $34.84 or allow secure
   without the extra cuts), say so here.
+- *Update 2026-11-21 09:55 UTC — root cause:* RunPod **retired REST API v1 (`rest.runpod.io`) on 2026-11-15**; v2 is at
+  `https://api.runpod.io/v2` (docs.runpod.io/api-reference-v2/migrate-from-v1). The host's runpodctl 2.14.0 (built
+  2026-09-10) still calls v1 for `pod create` read-back, `pod list`, `pod remove` and `ssh info`, so **podnew, podrm,
+  podls, killswitch and the budget / balance watchdogs are broken for every run** (the last pod before this run was
+  2026-11-10). The deprecated GraphQL subcommands (`runpodctl get pod`, `runpodctl remove pod`) still work. This run now
+  uses its own REST v2 scripts: `pod/olmo_ifcurve/rp2.py` (stdlib client), `podnew2.sh` / `podrm2.sh` (podnew /
+  podrm equivalents with the same registry and `~/podhours.log` bookkeeping, deletes verified by GET), `orphans.sh`
+  after every create. Tested end to end on a 1 x A100 community pod ($0.02). I did not modify `~/bin` or runpodctl.
+  **Suggestion:** update runpodctl on the host (or port podnew / podrm / killswitch / the watchdogs to v2). Until then,
+  the dollar watchdog cannot delete this run's pods, so I enforce the budget myself.

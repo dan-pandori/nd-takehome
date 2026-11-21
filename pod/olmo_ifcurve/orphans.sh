@@ -1,22 +1,24 @@
 #!/usr/bin/env bash
-# orphans.sh: VPS-side guard (written 2026-11-21 after 17 pods leaked during a RunPod REST DNS outage). List the account's
-# pods with the GraphQL-based `runpodctl get pod`; delete every pod named ifc-* whose id is not the POD_ID of its
-# registry file ~/.config/nd-rl/pods/<name> (`runpodctl remove pod`, GraphQL), and log it with an estimated cost to
-# ~/podhours.log (rate unknown here: 5.29 $/h, the secure H200 price, from its first sighting). Prints the pod count.
+# orphans.sh: VPS-side guard (written 2026-11-21 after 17 pods leaked while RunPod's retired REST v1 broke podnew's undo).
+# List the account's pods with REST v2 (rp2.py list); delete every pod named ifc-* whose id is not the POD_ID of its
+# registry file ~/.config/nd-rl/pods/<name> (rp2.py delete), and log it with its cost from first sighting to
+# ~/podhours.log. Run only when no create is in flight (a pod being created is not registered yet). Prints the ifc count.
 L=~/runs/olmo-ifcurve/orphans.log; S=~/runs/olmo-ifcurve/orphans_seen.txt; touch $S
-out=$(timeout 60 runpodctl get pod 2>/dev/null) || { echo "$(date -u +%FT%TZ) listing failed" >> $L; echo "LIST_FAIL"; exit 1; }
+RP="python3 /home/dan/work/olmo-ifcurve/pod/olmo_ifcurve/rp2.py"
+out=$(timeout 90 $RP list 2>&1) || { echo "$(date -u +%FT%TZ) listing failed: ${out:0:200}" >> $L; echo "LIST_FAIL"; exit 1; }
 n=0
-while read -r id name rest; do
-  [ -z "$id" ] || [ "$id" = "ID" ] && continue
+while read -r id name status cost; do
+  [ -z "$id" ] && continue
   case "$name" in ifc-*) ;; *) continue ;; esac
   n=$((n + 1))
   reg=~/.config/nd-rl/pods/$name
   if [ -f "$reg" ] && grep -q "POD_ID=$id" "$reg"; then continue; fi
   first=$(awk -v i="$id" '$1==i {print $2; exit}' $S); [ -n "$first" ] || first=$(date -u +%FT%TZ)
-  r=$(timeout 60 runpodctl remove pod "$id" 2>&1 | tr '\n' ' ')
-  echo "$(date -u +%FT%TZ) ORPHAN $name $id (first seen $first) -> $r" >> $L
+  r=$($RP delete "$id" 2>&1 | tr '\n' ' ')
+  echo "$(date -u +%FT%TZ) ORPHAN $name $id $status (first seen $first) -> $r" >> $L
   h=$(awk -v a="$(date -u +%s)" -v b="$(date -u -d "$first" +%s)" 'BEGIN{printf "%.4f",(a-b)/3600 + 0.05}')
-  echo "$(date -u +%FT%TZ) olmo-ifcurve orphan-$id $h $(awk -v h="$h" 'BEGIN{printf "%.2f",h*5.29}') NVIDIA H200" >> ~/podhours.log
-done <<< "$(printf '%s\n' "$out" | tr '\t' ' ')"
-printf '%s\n' "$out" | tr '\t' ' ' | awk '$2 ~ /^ifc-/ {print $1, strftime("%Y-%m-%dT%H:%M:%SZ", systime(), 1)}' >> $S
+  c=${cost:-5.29}; [ "$c" = "None" ] && c=5.29
+  echo "$(date -u +%FT%TZ) olmo-ifcurve orphan-$id $h $(awk -v h="$h" -v r="$c" 'BEGIN{printf "%.2f",h*r}') NVIDIA H200" >> ~/podhours.log
+done <<< "$out"
+printf '%s\n' "$out" | awk -v t="$(date -u +%FT%TZ)" '$2 ~ /^ifc-/ {print $1, t}' >> $S
 echo "$n"
