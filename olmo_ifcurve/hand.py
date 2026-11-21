@@ -308,6 +308,9 @@ def armc_sample():
     """{ckpt: [draw, ...]} the seeded arm-C sample of arm-A strict successes and {draw key} needing 2 reads."""
     out, two = {}, set()
     for c in cells.CKPTS:
+        if any(len(cells.draws(c, p, "A")) < cells.N_A.get(c, 8) for p in cells.armA()):
+            out[c] = []  # arm A incomplete at this checkpoint: no sample yet (it is drawn from the full set)
+            continue
         S = [d for p in cells.armA() for d in cells.draws(c, p, "A") if d["strict"]]
         S.sort(key=dkey)
         pick = random.Random(4640 + cells.STEP[c]).sample(S, min(ARMC_N, len(S))) if S else []
