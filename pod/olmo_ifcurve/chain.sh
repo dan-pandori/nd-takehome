@@ -5,7 +5,7 @@
 # before the next pod.
 W=/home/dan/work/olmo-ifcurve; R=~/runs/olmo-ifcurve
 until [ -f $R/ifc-a.created ]; do sleep 30; done
-for spec in "ifc-b|B_s0100:1200 M_s0200:2944 M_s0350:2944" "ifc-c|M_s0500:2944 M_s1100:2944" "ifc-d|B_s2300:1536 B_s0750:464"; do
+for spec in "ifc-b|B_s0100:1200 M_s0200:2240 M_s0350:2240" "ifc-c|M_s0500:2240 M_s1100:2944" "ifc-d|B_s2300:1536 B_s0750:464"; do
   N=${spec%%|*}; J=${spec#*|}
   [ -f $R/stop_chain ] && { echo "$(date -u +%FT%TZ) stop_chain before $N" >> $R/chain.log; exit 0; }
   END=$(( $(date +%s) + 43200 ))

@@ -220,3 +220,31 @@ none may push projected spend past $118. Compute per job (GPU-seconds and type, 
 no training) goes to the results registry and a per-arm table; later checkpoints write ≈ 1.4× the tokens of step 0 at
 equal draws (the models' own lengths under one cap) and are flagged as such. Balance stays ≥ $35 (now $173.97).
 Hard stop 2026-11-23 05:27 UTC (48 h): no new sampling after 2026-11-22 20:00 UTC; pods deleted as their work is pulled.
+
+## Amendment 1 — 2026-11-21 08:37 UTC (before any draw of this run; no new data seen)
+
+**Why.** Between 05:52 and 08:32 UTC, 17 H200 pods were created by this run's poller and left running. RunPod's
+`rest.runpod.io` was NXDOMAIN, so `podnew` failed its read-back and its undo failed silently. The pods ran ≈ 7.3 idle
+pod-hours and cost **$34.84**, now recorded in `~/podhours.log` and `QUESTIONS.md`. By default that counts against this
+run's $120, leaving **$85.16**. The full core (≈ $86 at community prices) no longer fits, and secure H200s ($5.29/h)
+are out. No draw had been made; the only data seen are the stored-checkpoint hand reads (arm C at dpo / 100 / 750 / 2300).
+
+**Changes.**
+1. **The brief's cut 1, partly:** arm A uses 4 draws per prompt at s0050, s0200, s0350 and s0500 (all 218 prompts; for
+   the 42 IFBench reach prompts, the first 4 of their 32). It keeps 8 at s1100 and s1600, because 4 draws cannot estimate
+   pass@8 and the pre-registered shape reading compares pass@8 at 750 / 1,100 / 1,600 with 2,300. pass@8 is therefore
+   reported at dpo, 100, 750, 1,100, 1,600 and 2,300; pass@4 at all ten checkpoints. Cost of keeping 8 at the two late
+   checkpoints: ≈ $5.
+2. **Chunks of 4** in every new job, so a cell can later be topped up from 4 to 8 by resuming with the larger spec (the
+   sampler drops partial chunks). If money allows after the base cells (or Dan restores the budget), s0050–s0500 are
+   topped up to 8 in step order. Specs: `plan/M4.pids` (reach × 32, others × 4) and `plan/M8.pids` (reach × 32,
+   others × 8). Stage 0 = the same 32 seeded prompts at the M4 counts (296 draws per checkpoint).
+3. **Pod creation:** community H200 only. No create while `rest.runpod.io` does not resolve. After every create
+   attempt, a GraphQL listing deletes any unregistered `ifc-*` pod (`pod/olmo_ifcurve/orphans.sh`). Pods are deleted
+   with a GraphQL fallback (`rm.sh`).
+4. **Stage gate re-scaled:** pause and ask if the projected core exceeds 90 % of the remaining budget (≈ $77, the brief's
+   $108 / $120 ratio). Further cuts in the brief's order: checkpoints 350 and 1,100, then the extension to 64. Optional
+   arms only if Dan restores the budget.
+
+Readings, thresholds and expectations are unchanged. Expectation 1's pass@8 intervals at s0050–s0500 can no longer be
+scored and are reported as not measured; s1100 / s1600 stay.

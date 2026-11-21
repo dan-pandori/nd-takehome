@@ -28,4 +28,4 @@ print(n)")
 done
 for d in logs meta; do podpull $N $A/$d > /dev/null 2>&1 || log "PULL_FAIL $d"; done
 if [ "$KEEP" = "1" ]; then log "KEEP=1: $N kept (ok=$ok)"
-elif [ $ok = 1 ]; then log "all checks passed; deleting $N"; podrm $N >> $L 2>&1; log "podrm rc=$?"; else log "CHECK FAILED; $N kept"; fi
+elif [ $ok = 1 ]; then log "all checks passed; deleting $N"; bash $W/pod/olmo_ifcurve/rm.sh $N >> $L 2>&1; log "rm.sh rc=$?"; else log "CHECK FAILED; $N kept"; fi

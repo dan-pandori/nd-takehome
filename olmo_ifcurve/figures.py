@@ -32,7 +32,7 @@ def main():
     ax1 = fig.add_axes([0.06, 0.15, 0.36, 0.75], facecolor=SURF)
     ax1.set_xscale("function", functions=(lambda v: np.sign(v) * np.sqrt(np.abs(v)), lambda v: np.sign(v) * v ** 2))
     for k, col, name in ((1, S1, "pass@1"), (8, S2, "pass@8")):
-        rs = sorted((r for r in pk if int(r["k"]) == k), key=lambda r: STEP[r["ckpt"]])
+        rs = sorted((r for r in pk if int(r["k"]) == k and r["pass_at_k"] != ""), key=lambda r: STEP[r["ckpt"]])
         x = [STEP[r["ckpt"]] for r in rs]
         y = [float(r["pass_at_k"]) for r in rs]
         ax1.fill_between(x, [float(r["lo95"]) for r in rs], [float(r["hi95"]) for r in rs], color=col, alpha=0.13, lw=0)
