@@ -61,7 +61,8 @@ def main():
     R, AA = cells.reach(), cells.armA()
     cls, cls_alt = classes()
     L = hand.Labels()
-    present = [c for c in cells.CKPTS if any(cells.draws(c, p, "A") for p in AA[:20])]
+    # a checkpoint counts only when every arm-A cell has its full N_A draws (a job still sampling does not)
+    present = [c for c in cells.CKPTS if all(len(cells.draws(c, p, "A")) >= cells.N_A.get(c, 8) for p in AA)]
     results, summary = [], {"checkpoints_present": present}
 
     # ------------------------------------------------------------------ arm A
@@ -121,7 +122,8 @@ def main():
                 reps = dv[boots].mean(axis=1)
                 lo, hi = boot_ci(reps, 5, 95)
                 out[f"d{k}"] = {"est": r6(dv.mean()), "lo90": r6(lo), "hi90": r6(hi)}
-            out["sharpening"] = bool(out["d8"]["lo90"] <= 0 and out["d1"]["lo90"] > 0)
+            out["sharpening"] = (None if out["d8"]["lo90"] is None or out["d1"]["lo90"] is None
+                                 else bool(out["d8"]["lo90"] <= 0 and out["d1"]["lo90"] > 0))
             shape[c] = out
         onset = next((c for c in ("s0750", "s1100", "s1600") if shape.get(c, {}).get("sharpening")), None)
         summary["shape"] = {"spans": shape, "onset": onset,
