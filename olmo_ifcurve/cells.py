@@ -7,7 +7,7 @@ VPS-side; standard library only.
   cells.py plans                    olmo_ifcurve/plan/B_s0100.pids, B_s0750.pids, B_s2300.pids (arm-B top-up jobs)
 
 A cell is (checkpoint, pid, arm). Its draws are the first N of the cell's sources, taken in the order of SOURCES and
-then (chunk, i) within a source; N = N_A for arm A (8; 16 for dpo; 4 at s0050-s0500 under amendment 1), 32 for arm B's base, 128 for an extended arm-B cell.
+then (chunk, i) within a source; N = N_A for arm A (8; 16 for dpo; 4 at s0050-s0500 under amendment 1), 32 for arm B's base, N_X (64 under amendment 3) for an extended arm-B cell.
 Draws whose existence depended on earlier outcomes (sequential stopping, hand-gate continuations) are still i.i.d.
 when taken as such a prefix; missing positions are filled by this run's jobs.
 
@@ -47,7 +47,7 @@ SOURCES = {
 # (8 -> 4) at s0050 / s0200 / s0350 / s0500, all 218 prompts (reach ones: the first 4 of their 32); 8 at s1100 / s1600,
 # which the pre-registered shape reading needs, and at the stored checkpoints
 N_A = {"dpo": 16, "s0050": 4, "s0200": 4, "s0350": 4, "s0500": 4}
-N_B, N_X = 32, 128
+N_B, N_X = 32, 64  # amendment 3: extension to 64 per cell (the brief's cut 3), not 128
 FIELDS = ["job", "pid", "chunk", "i", "n_tok", "finish", "strict", "loose", "think_end", "think_tok", "ans_tok",
           "think_words", "ans_words", "ans_key"]
 
@@ -157,7 +157,7 @@ def by_pid(job):
 
 
 def draws(ckpt, pid, arm, ext=True):
-    """The cell's draws in order (list of row dicts). arm "A": first N_A; arm "B": first 32, or first 128 when the cell
+    """The cell's draws in order (list of row dicts). arm "A": first N_A; arm "B": first 32, or first N_X (64, amendment 3) when the cell
     has an extension job (X_<ckpt>) with rows for this pid and ext is True."""
     if arm == "A":
         src, n = SOURCES["A"].get(ckpt, []), N_A.get(ckpt, 8)

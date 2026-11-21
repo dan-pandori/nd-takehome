@@ -11,7 +11,7 @@ Reads needed (arm-B walk per prompt, cells in step order; strict successes in dr
   (b) from F1 on: until 2 genuine (F2), the genuine that sets F2 with 2 reads;
   (c) from F1 on, cells with >= 8 strict: until 8 genuine or 8 impossible, up to the first such cell (F25);
   (d) every cell: its first min(strict, LOOK) strict successes;
-  (e) extension cells (draws 33-128): every strict success, each with 2 reads.
+  (e) extension cells (draws 33-64 under amendment 3): every strict success, each with 2 reads.
   A walk stops escalating at a cell whose decision waits on unread items (later cells get only (d) until then).
   Arm C: random.Random(4640 + step).sample of min(40, n) of a checkpoint's arm-A strict successes; a seeded quarter
   (random.Random(4641 + step)) with 2 reads. Any item whose two reads split gets a third.
