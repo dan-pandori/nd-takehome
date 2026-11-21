@@ -248,3 +248,36 @@ are out. No draw had been made; the only data seen are the stored-checkpoint han
 
 Readings, thresholds and expectations are unchanged. Expectation 1's pass@8 intervals at s0050–s0500 can no longer be
 scored and are reported as not measured; s1100 / s1600 stay.
+
+## Amendment 2 — 2026-11-21 17:49 UTC (before any draw of this run)
+
+**Why.** Dan extended the budget by $40 (relayed 2026-11-21T17:47:47Z): $160 in total. $37.39 is spent (the $34.84
+orphan loss, $0.86 for three pods on a faulty community H200 and a $0.02 tooling test, and $1.69 of unlogged
+one-minute pods and residual billing reconciled against the balance), so **$122.6 remains**. Dan asked me to restore the
+design in this order: cuts 2 and 3 first, then amendment 1's partial cut 1, as far as a projection with a sensible
+margin allows. Since 05:48 the only community H200 on offer has been the faulty one (blacklisted), so pods may be
+**secure H200s ($5.29/h)**. Each acquisition tries one community H200 first.
+
+**Projection at secure prices** (1,850 tok/s; tokens per draw as in the pre-registration):
+- base cells with amendment 1 kept and no cut 2 (all ten checkpoints): 113 M tokens ≈ 17.0 GPU-h ≈ $90;
+- set-up, downloads and tails: ≈ $8.5;
+- extension at 64 draws: ≈ $7; at 128: ≈ $21.
+
+**Decision.**
+1. **Cut 2 is dropped:** all ten checkpoints.
+2. Amendment 1's partial cut 1 stays for now: arm A × 4 at 50–500, × 8 at 1,100 and 1,600.
+3. **The extension size is fixed before its first draw by a rule.** It is 128 (the pre-registered design) if spend so
+   far + the projected extension at 128 (from measured tokens) + $5 ≤ $160. Otherwise 64 (cut 3), with the abrupt
+   criterion then read as "0 of 64".
+4. After that, if spend so far + projected top-up + $5 ≤ $160, arm A is topped up to 8 at 500, 350, 200 and 50, in
+   that order.
+
+Base + extension 64 ≈ **$105.5** (margin ≈ $17); with 128, ≈ $119 (margin ≈ $3).
+
+**RunPod balance.** $136.58 now; above the $35 floor ≈ $101 is usable, less than the plan. QUESTIONS.md asks for a
+top-up. Meanwhile `pod/olmo_ifcurve/floor_guard.sh` stops acquisition and deletes every ifc pod if the balance falls
+below $40 or this run's spend reaches $158. The host's watchdogs cannot delete pods until runpodctl is upgraded. Work
+order: base cells first, extension last.
+
+Pod plan: the four-pod queues of amendment 1 (`acquire3.sh`; ifc-a carries stage 0 then s0050 / s1600; ifc-b B_s0100,
+s0200, s0350; ifc-c s0500, s1100; ifc-d B_s2300, B_s0750). Readings, thresholds and expectations unchanged.

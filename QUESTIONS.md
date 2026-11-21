@@ -261,3 +261,11 @@ order as needed to stay within $85. If you restore the budget, say so here and I
   after every create. Tested end to end on a 1 x A100 community pod ($0.02). I did not modify `~/bin` or runpodctl.
   **Suggestion:** update runpodctl on the host (or port podnew / podrm / killswitch / the watchdogs to v2). Until then,
   the dollar watchdog cannot delete this run's pods, so I enforce the budget myself.
+- *Answered 2026-11-21 17:49 UTC by Dan (relayed 17:47:47Z):* budget extended by $40 to $160 (the $34.84 counts). Re-planned in the
+  pre-registration's amendment 2: all ten checkpoints restored (no cut 2); amendment 1's arm-A cut stays for now; the
+  extension is 128 or 64 by a pre-registered spend rule; arm-A top-ups after that if money remains. Pods are secure
+  H200s unless a healthy community one appears (projection ≈ $105.5 with extension 64).
+- *New, 2026-11-21 17:49 UTC — RunPod top-up:* the plan needs ≈ $105.5 more (≈ $119 with the extension at 128). The account holds
+  $136.58, so ≈ $101 is usable above the $35 floor. **Default, proceeding on it:** start the base cells now (they come
+  first and cost ≈ $98). `floor_guard.sh` stops everything at a $40 balance, so without a top-up the extension may be
+  cut short or not run. A top-up of **≈ $30** would cover the plan with its margin.
