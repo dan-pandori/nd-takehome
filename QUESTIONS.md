@@ -269,3 +269,6 @@ order as needed to stay within $85. If you restore the budget, say so here and I
   $136.58, so ≈ $101 is usable above the $35 floor. **Default, proceeding on it:** start the base cells now (they come
   first and cost ≈ $98). `floor_guard.sh` stops everything at a $40 balance, so without a top-up the extension may be
   cut short or not run. A top-up of **≈ $30** would cover the plan with its margin.
+- *Closed 2026-11-21 18:00 UTC — Dan (relayed 17:59:43Z): "No, run as is."* No top-up. Proceeding on the default: base cells first;
+  floor guard at a $40 balance; the extension shortened or skipped if the balance runs out. The write-up will report
+  whatever the floor cut.
