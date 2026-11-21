@@ -4,7 +4,8 @@
 # RUN CREATED GPU RATE; a line in ~/pods.log), so podrun / podpush / podpull / podbudget work unchanged.
 # env: POD_GPU (NVIDIA H200), POD_COUNT (1), POD_CLOUD (COMMUNITY), POD_VOLUME (200), POD_DISK (60), POD_MINCUDA (12.8),
 # ND_RUN_ID. Any failure after the create deletes the pod and verifies it (GET -> 404 / TERMINATED); a pod that cannot
-# be verified gone is logged ORPHAN in ~/pods.log and printed.
+# be verified gone is logged ORPHAN in ~/pods.log and printed. A pod on a host listed in ~/runs/olmo-ifcurve/bad_hosts.txt
+# (faulty GPU seen before) is deleted at once (exit 3, BAD_HOST).
 . ~/.config/nd-rl/env; export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 N=$1; REG=~/.config/nd-rl/pods/$N; [ -f "$REG" ] && { echo "pod $N already registered"; exit 1; }
 RP="python3 /home/dan/work/olmo-ifcurve/pod/olmo_ifcurve/rp2.py"
@@ -31,6 +32,7 @@ while [ $SECONDS -lt $end ]; do
   sleep 10
 done
 if [ "$ST" != "RUNNING" ] || [ "$HOST" = "-" ] || [ "$PORT" = "-" ]; then echo "podnew2 $N: $ID not running with a direct ssh port ($ST $HOST:$PORT)"; undo; exit 1; fi
+if grep -q "^$HOST " ~/runs/olmo-ifcurve/bad_hosts.txt 2>/dev/null; then echo "podnew2 $N: BAD_HOST $HOST ($ID)"; undo; exit 3; fi
 printf "POD_ID=%q\nPOD_IP=%q\nPOD_PORT=%q\nRUN=%q\nCREATED=%q\nGPU=%q\nRATE=%q\n" "$ID" "$HOST" "$PORT" "${ND_RUN_ID:-unknown}" "$T0" "$GPU" "$RATE" > "$REG"
 echo "$(date -u +%FT%TZ) $N $ID ${ND_RUN_ID:-unknown}" >> ~/pods.log
 S="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o BatchMode=yes -o LogLevel=ERROR -o ConnectTimeout=10 -p $PORT root@$HOST"

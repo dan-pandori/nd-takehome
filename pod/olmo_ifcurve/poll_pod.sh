@@ -16,6 +16,7 @@ while [ $(date +%s) -lt $END ]; do
     echo "$(date -u +%T) $POD_COUNT x $POD_GPU $POD_CLOUD: ${out:0:300}" >> $L
     g=$(bash $W/pod/olmo_ifcurve/orphans.sh 2>&1 | tail -1); echo "$(date -u +%T) orphan check: $g ifc pods listed" >> $L
     if [ -f ~/.config/nd-rl/pods/$N ]; then echo "$c" > ~/runs/olmo-ifcurve/$N.created; exit 0; fi
+    case "$out" in *BAD_HOST*) echo "$(date -u +%T) bad host again; backing off 10 min" >> $L; sleep 600; break ;; esac
   done
   sleep 100
 done
