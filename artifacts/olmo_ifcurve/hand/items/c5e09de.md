@@ -1,0 +1,13 @@
+# Item c5e09de
+
+## Prompt (as the model received it)
+
+Answer with one of the following options: I know or I don't know. Do not give any explanation.Is this a good definition for a machine learning model?: "For neural networks, the model is the collection of weights associated to the connections of the neural network architecture. These weights are collected during training."
+
+## Verifiable constraints
+
+- `format:options` {"options": "I know or I don't know"}: followed (official strict checker)
+
+## Answer
+
+I don't know.

@@ -244,6 +244,11 @@ def walk(L, pid):
         cellinfo = {"n": len(base), "strict": len(S), "ext_n": len(ext), "ext_strict": sum(d["strict"] for d in ext)}
         st["cells"][c] = cellinfo
         need.extend(S[:LOOK])  # (d)
+        if len(base) < cells.N_B:  # cell not (fully) sampled yet: F1 / F2 / F25 cannot be decided past it
+            if not st["blocked"].endswith("unsampled "):
+                b1 = b2 = b25 = True
+                st["blocked"] += f"{c} unsampled "
+            continue
         if not b1 and st["F1"] is None:  # (a)
             g = pend = 0
             for d, (lab, _) in zip(S, labs):
