@@ -8,6 +8,7 @@
 . ~/.config/nd-rl/env; export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 N=$1; REG=~/.config/nd-rl/pods/$N; [ -f "$REG" ] && { echo "pod $N already registered"; exit 1; }
 RP="python3 /home/dan/work/olmo-ifcurve/pod/olmo_ifcurve/rp2.py"
+LK=~/runs/olmo-ifcurve/creating_$N; touch $LK; trap 'rm -f $LK' EXIT   # orphans.sh skips a name being created
 GPU=${POD_GPU:-NVIDIA H200}; T0=$(date -u +%FT%TZ)
 OUT=$($RP create "$N" --gpu "$GPU" --count "${POD_COUNT:-1}" --cloud "${POD_CLOUD:-COMMUNITY}" --disk "${POD_DISK:-60}" \
       --volume "${POD_VOLUME:-200}" --min-cuda "${POD_MINCUDA:-12.8}" 2>&1)

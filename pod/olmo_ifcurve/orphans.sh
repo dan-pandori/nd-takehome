@@ -11,6 +11,7 @@ while read -r id name status cost; do
   [ -z "$id" ] && continue
   case "$name" in ifc-*) ;; *) continue ;; esac
   n=$((n + 1))
+  [ -f ~/runs/olmo-ifcurve/creating_$name ] && continue   # podnew2.sh is creating it
   reg=~/.config/nd-rl/pods/$name
   if [ -f "$reg" ] && grep -q "POD_ID=$id" "$reg"; then continue; fi
   first=$(awk -v i="$id" '$1==i {print $2; exit}' $S); [ -n "$first" ] || first=$(date -u +%FT%TZ)
