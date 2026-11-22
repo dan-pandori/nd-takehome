@@ -416,3 +416,12 @@ OLMO-IFLADDER DONE 2026-11-09T19:55:40Z
 - 2026-11-21 20:19 UTC  Amendment 3: checkpoint 350 cancelled (brief's cut 2, under the $40 floor) so the extension can run at 64 draws. Balance $86.00; pods A (s1600), B (s0200), C (s1100), D (B_s0750) running.
 - 2026-11-22 01:53 UTC  All base cells and both 64-draw extension batches done and gated (F1 for all 48). Account topped up (balance $244.98), so amendment 4 restores the 128-draw extension cells (pods ifc-g/h, ≈ $17; spend $128.59 of $160). Consistency audits of the 46 other reach prompts running; then final analysis and write-up.
 - 2026-11-22 02:28 UTC  Dan added $200 to RunPod (budget stays $160). Amendment 4: extension cells back to 128 (X3 jobs on pods ifc-g / ifc-h, since 01:56). Amendment 5: arm-A top-up to 8 draws at s0500 (T_s0500 on ifc-g). Audits u1–u4 done (79 label changes, rule 14); one F1 moved (ifbench_170 → X4_s1100 extension). Spend $135.02 of $160; projected ≈ $150 when the pods finish (≈ 03:45). Then final reads, analysis and write-up.
+- 2026-11-22 06:22 UTC  **Done.** On Olmo 3.1 Think 32B's RL run (dpo + 8 RL checkpoints; s0350 cancelled):
+  - IFBench strict pass@1 rises at every checkpoint, 0.290 → 0.683. pass@8 reaches 0.872 by step 1,100 with no detectable gain after: sharpening from 1,100 on the checker score. The estimated genuine pass@1 plateaus at ≈ 0.50 after 1,100.
+  - All 48 IF reach prompts get a first genuine success between steps 100 and 2,300. Class medians: prompt-recoverable 500, teachable 750, neither 1,100. The pre-registered reading is "no order" (interval touches 0); on the second success it is "habit first". None is abrupt.
+  - Gamed share: flat on random wins, growing on the reach prompts.
+  - Not brevity first.
+  - Expectations: 5 of 10 fully held, 5 missed in part. Spend $154.67 of $160 ($34.84 lost to orphaned pods: RunPod REST v1 retirement).
+  - Write-up `run_olmo_ifcurve.md`; bucket `hf://buckets/dan-pandori/nd-rl/olmo-ifcurve/`.
+
+OLMO-IFCURVE DONE 2026-11-22T06:22:58Z

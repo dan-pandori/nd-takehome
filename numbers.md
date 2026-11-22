@@ -2546,3 +2546,9 @@ RL-data overlap (inherited from olmo-ifomega's 8-gram scan against Dolci-Think-R
 | 10 | ≤ 0.5 % of arm-A draws hit 32,768 at every checkpoint | **missed** at 1,600 (0.63 %); 1,100 0.46 % |
 
 **Spend:** podbudget $154.67 of $160 (29.72 billed pod-hours), of which $34.84 were 17 orphaned pods (RunPod retired REST v1; QUESTIONS.md), $0.86 a faulty community H200 and a tooling test, $1.69 reconciled unlogged one-minute pods; the rest secure H200s at $5.29/h (no working community H200 was available). Claude sub-agents: 75 tasks (64 reader batches, 11 adjudication / audit tasks); token use not logged per task.
+
+**Bucket:** `hf://buckets/dan-pandori/nd-rl/olmo-ifcurve/artifacts/olmo_ifcurve/` (`samples/` and `graded/`: 25 jobs, every
+draw's text, token ids and grades, listed in `artifacts/MANIFEST.jsonl`; `rows/`, `meta/`, `hand/` with every item, batch,
+reader label and adjudication task, `logs/`). Reused stored draws: `hf://buckets/dan-pandori/nd-rl/olmo-ifomega/artifacts/olmo_ifomega/samples/`
+(`F_dpo_ifb`, `F_s0100_ifb`, `F_s0750_ifb`, `F_s2300_ifb`) and `…/olmo-iffu/artifacts/olmo_iffu/samples/` (`T4_s0750`,
+`T4b_s0750`). No weights were stored.
