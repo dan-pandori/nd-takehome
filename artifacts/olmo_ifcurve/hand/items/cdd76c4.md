@@ -1,0 +1,37 @@
+# Item cdd76c4
+
+## Prompt (as the model received it)
+
+The response should not repeat any word more than 4 times. Write a descriptive, fictional, imaginative screenplay of a medieval king turning his empire's aesthetic into a proto-vaporwave
+
+## Verifiable constraints
+
+- `words:repeats` {"small_n": 4.0}: followed (official strict checker)
+
+## Answer
+
+CHROME MONARCHY  
+
+INT. OBSIDIAN THRONE ROOM DUSK  
+
+MONARCH GARBED IN IRIDESCENT PLATE MAIL SURVEYS HOLOGRAPHIC SCROLLS.  
+
+MONARCH V O OUR AGE DEMANDS SYNTHESIS WITNESS  
+
+PRISMATIC ORB PROJECTS SHIFTING GEOMETRIC FORTRESSES OVER CRUMBLING STONE WALLS.  
+
+COUNSELOR PEOPLE TREMBLE SOVEREIGN WILL YOU ABANDON HERITAGE  
+
+MONARCH NO I REFORGE INITIATE PHASE ONE  
+
+MUSIC SWELLS ANCIENT LUTES FUSED WITH PULSATING TONES  
+
+CUT TO  
+
+EXT SHIFTING REALM NIGHT  
+
+TOWERS SPIRE INTO LUMINESCENT SPIRALS RIVERS FLOW AS NEON RIBBONS PEASANTS DANCE IN HALLUCINATING MISTS  
+
+FADE TO BLACK AS SKY FRACTURES INTO PIXELATIONS  
+
+END

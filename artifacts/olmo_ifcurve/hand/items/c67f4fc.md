@@ -1,0 +1,41 @@
+# Item c67f4fc
+
+## Prompt (as the model received it)
+
+The response should not repeat any word more than 4 times. Write a descriptive, fictional, imaginative screenplay of a medieval king turning his empire's aesthetic into a proto-vaporwave
+
+## Verifiable constraints
+
+- `words:repeats` {"small_n": 4.0}: followed (official strict checker)
+
+## Answer
+
+ETERNAL DUSK  
+
+EXT. CASTLE COURTYARD—EVENING  
+
+NEON-TINTED TOWERS loom. GLASS FLOATS above COBBLESTONES, PROJECTING FRACTAL GEOMETRIC PATTERNS. A CROWD MURMURS SOFTLY.  
+
+KING (MID-40S, WEARING CHROMED ARMOR) ASCENDS A SPIRALING STAIRCASE. HIS VOICE ECHOES:  
+
+“TRANSCEND TIME. EMBRACE HAZE.”  
+
+INT. THRONE ROOM—MOMENTS LATER  
+
+CRT SCREENS FLICKER. A SYNTHETIC ORCHESTRA HUMS. NOBLES DON HOLOGRAPHIC GOWNS—TRANSLUCENT, SHIFTING HUES.  
+
+ONE WHISPERS: “FOG CONSUMES HISTORY.”  
+
+HE REMOVES HIS HELM. EXPOSED SKIN GLOWS FAINTLY.  
+
+“A NEW REALITY… UNBOUND.”  
+
+SUDDEN CUT TO:  
+
+EXT. VILLAGE—DAWN  
+
+DISORIENTED PEASANTS CLUTCH PIXELATED TOOLS. RIVERS FLOW AS LIQUID CRYSTAL.  
+
+FADE TO BLACK.  
+
+END

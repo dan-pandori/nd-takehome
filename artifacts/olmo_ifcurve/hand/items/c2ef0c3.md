@@ -1,0 +1,31 @@
+# Item c2ef0c3
+
+## Prompt (as the model received it)
+
+The response should not repeat any word more than 4 times. Write a descriptive, fictional, imaginative screenplay of a medieval king turning his empire's aesthetic into a proto-vaporwave
+
+## Verifiable constraints
+
+- `words:repeats` {"small_n": 4.0}: followed (official strict checker)
+
+## Answer
+
+REIGN OF CHROMATIC ECHOES  
+
+EXT. CASTLE GROUNDS DAWN  
+
+KINGLISTAN STANDS BEFORE MONOLITH SURFACE HUMS GEOMETRIC PATTERNS PULSE HE TOUCHES IT LIGHT ERUPTS  
+
+INT. THRONE ROOM MOMENTS LATER  
+
+MAJESTIC HALL NOW BATHED AZURE WALLS RIPPLE NEON GRIDS COURTIER GASPS GOWNS SHIFT INTO PIXELATED SILK DISTANT SYNTHWAVE MELODY ECHOES  
+
+HIGH PRIEST WHISPERS WHY LIGHT BENDS  
+
+QUEEN GLANCING NO MORE SHADOWS HERE  
+
+HOLOGRAPHIC STAG MATERIALIZES DAWN BLOOMS VIOLET  
+
+EXT. EMPIRE LATER  
+
+KINGLISTAN SMILES HIS REALM BATHED RETROFUTURISTIC HAZE FADE OUT
