@@ -2499,7 +2499,7 @@ At s2300 (32 fresh draws): ≥ 1 genuine established on 40 of 48, ≥ 2 on 36 (l
 | 1600 | 40 | 10 | 0.250 | 178 | 55 | 0.309 |
 | 2300 | 40 | 11 | 0.275 | 188 | 67 | 0.356 |
 - arm C (primary): early 0.138 (n 160) vs late 0.217 (n 120); early − late -0.079, 90 % [-0.175, 0.015] → **flat**.
-- arm B (secondary): early 0.062 (n 16) vs late 0.306 (n 536); early − late -0.243, 90 % [-0.360, -0.091] → **gaming grows**.
+- arm B (secondary): early 0.0625 (n 16) vs late 0.306 (n 536); early − late -0.243, 90 % [-0.360, -0.091] → **gaming grows**.
 
 ### Arm D — lengths (`olmo_ifcurve/lengths.csv`; medians over arm-A draws; reach = arm-B base draws; half-values rounded half to even)
 
@@ -2518,13 +2518,13 @@ At s2300 (32 fresh draws): ≥ 1 genuine established on 40 of 48, ≥ 2 on 36 (l
 
 ### Hand gate (`olmo_ifcurve/handcheck.csv`, `gate_summary.json`)
 
-1782 items read blind (2104 reads by Claude reader sub-agents, 40-item batches across checkpoints); 296 with ≥ 2 reads (272 first-two agreements; the arm-C seeded quarter 88 / 90), 26 with 3; 209 confirmed by adjudication under rules 1–14 (103 label changes; rules 13–14 dated in `olmo_ifcurve/handcheck_rule_addendum.md`). The 1559 strict successes the gate needed got their labels from: read 1440, inherited 45, screen 74 (1079 genuine, 480 gamed). Other strict successes carry no label (estimated rates use the first-4 share).
+1782 items read blind (2104 reads by Claude reader sub-agents, 40-item batches across checkpoints); 296 with ≥ 2 reads (272 first-two agreements; the arm-C seeded quarter 88 / 90), 26 with 3; 209 confirmed by adjudication under rules 1–14 (103 label changes; rules 13–14 dated in `olmo_ifcurve/handcheck_rule_addendum.md`). The 1559 strict successes the gate needed got their labels from: read 1440, inherited 45, screen 74 (1079 genuine, 480 gamed). 342 further strict successes were read outside that set (beyond the walks' final stopping points, and the superseded s0500 arm-C sample); their labels count in the estimated genuine rates. Every other strict success is unlabelled (estimated rates use the first-4 share).
 
 ### Compute (`olmo_ifcurve/compute.csv`; registry rows ND_RUN_ID=olmo-ifcurve)
 
 27 sampling job runs on 1 × H200 (TP 1): 20.22 GPU-h of load + generation, 116.8 M generated tokens, 21216 draws (all graded by the checkers; no training, no Lean).
 
-**Strict vs estimated genuine pass@1 (arm A; genuine = strict × (1 − the step's arm-C gamed share), 40 strict successes labelled per step (arm C: 349 of 360 read, 11 inherited from identical answers), the rest unlabelled):**
+**Strict vs estimated genuine pass@1 (arm A; genuine = strict × (1 − the step's arm-C gamed share), 40 strict successes labelled per step (arm C: 349 of 360 read, 11 inherited from identical answers), the arm-C gamed share uses only these 40):**
 dpo 0.290 / 0.254 · 50 0.296 / 0.244 · 100 0.315 / 0.268 · 200 0.347 / 0.313 · 500 0.412 / 0.391 · 750 0.512 / 0.410 · 1,100 0.577 / 0.505 · 1,600 0.646 / 0.485 · 2,300 0.683 / 0.496.
 
 **Bounds stated with their tries:** dpo 0 genuine in ≥ 256 draws on each reach prompt (< 1.2 % at 95 %, by the set's definition); an extension cell with 0 genuine of 128 bounds the pre-switch rate below 2.3 % (95 %); 0 of 32 below 8.9 %.
