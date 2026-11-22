@@ -1,0 +1,32 @@
+executor hand files: items in key.csv 1782; reads in labels/ 2104; items with >= 2 reads 296, with 3 26; confirm.csv rows 209; screen.csv rows 236
+executor emergence.csv columns: ['pid', 'class', 'class_154rule3', 'F1', 'F2', 'F1star', 'F25', 'F1_step', 'F2_step', 'category', 'rate_at_F1star', 'blocked', 'ext_ext_ckpt', 'ext_ext_n']
+per-prompt F values that differ (mine vs executor emergence.csv): {'F2': 6, 'F1': 2, 'F25': 5, 'F1s': 3}
+   ifbench_4    F2   mine  1600 executor 750
+   ifbench_170  F1   mine  2300 executor 1600
+   ifbench_170  F25  mine  9999 executor 2300
+   ifbench_170  F1s  mine  1600 executor 1100
+   ifbench_188  F2   mine  9999 executor 1600
+   ifbench_179  F2   mine  1100 executor 750
+   ifbench_179  F25  mine  9999 executor 2300
+   ifbench_268  F1   mine  1600 executor 1100
+   ifbench_268  F1s  mine  1600 executor 1100
+   ifbench_253  F25  mine  1600 executor 1100
+   ifbench_1    F2   mine  1600 executor 1100
+   ifbench_1    F1s  mine   750 executor 500
+   ifbench_203  F25  mine  9999 executor 2300
+   ifbench_206  F2   mine   500 executor 750
+   ifbench_209  F25  mine  9999 executor 2300
+   ifbench_220  F2   mine   500 executor 200
+my walk re-run with the executor's labels vs its emergence.csv: {('F1', True): 48, ('F2', True): 45, ('F25', True): 48, ('F2', False): 3}; incomplete walks (an executor label missing where my walk needs one): []
+registry files: ['20261122T052818Z_nd-rl-agent2_575970.jsonl']
+registry metric sums: {'gpu_seconds': 72808.0, 'gen_tokens': 116786901.0, 'attempts': 21216.0, 'train_steps': 0.0, 'train_tokens': 0.0, 'lean_checks': 0.0, 'verifier_checks': 21216.0}
+last pods.log lines for the run:
+   2026-11-22T00:52:51Z ifc-f wh7juo4w9ai47a olmo-ifcurve UNDONE
+   2026-11-22T00:53:35Z ifc-f 1otj965gldoy02 olmo-ifcurve
+   2026-11-22T01:54:04Z ifc-g 5fkitdjez09ay2 olmo-ifcurve UNDONE
+   2026-11-22T01:54:41Z ifc-g uz6hjd66kbcsxb olmo-ifcurve
+   2026-11-22T01:58:45Z ifc-h 2hnptyysbx0ltb olmo-ifcurve UNDONE
+   2026-11-22T01:59:30Z ifc-h ybbay6xdae45t8 olmo-ifcurve
+s1100 strict 591 unlabelled 279
+s1600 strict 847 unlabelled 515
+s2300 strict 1066 unlabelled 597
