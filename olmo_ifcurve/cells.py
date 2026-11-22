@@ -165,7 +165,7 @@ def draws(ckpt, pid, arm, ext=True):
         src, n = list(SOURCES["B"].get(ckpt, [])), N_B
         # extension jobs: X_<ckpt> (first batch) or X2_<ckpt> (second batch, prompts with F1 after s0750); a prompt has
         # rows in at most one of them
-        xj = [j for j in (f"X_{ckpt}", f"X2_{ckpt}", f"X3_{ckpt}") if by_pid(j).get(pid)]
+        xj = [j for j in (f"X_{ckpt}", f"X2_{ckpt}", f"X3_{ckpt}", f"X4_{ckpt}") if by_pid(j).get(pid)]
         if ext and xj:
             src, n = src + xj, N_X
     out = []

@@ -136,7 +136,7 @@ def main():
         stt, _, _ = hand.walk(L, p)
         rates = {}
         f1star = stt["F1"]
-        ext_info = {}
+        ext_cells = {}
         for c in cells.CKPTS[1:]:
             dr = cells.draws(c, p, "B")
             if not dr:
@@ -160,8 +160,8 @@ def main():
                 SE = [d for d in ext if d["strict"]]
                 le = [L.label(d)[0] for d in SE]
                 eg, eb = le.count("genuine"), le.count("gamed")
-                ext_info = {"ext_ckpt": c, "ext_n": len(dr), "ext_strict": len([d for d in dr if d["strict"]]),
-                            "ext_genuine": g + eg, "ext_unlabelled": (len(S) + len(SE)) - (g + b + eg + eb)}
+                ext_cells[c] = {"ext_ckpt": c, "ext_n": len(dr), "ext_strict": len([d for d in dr if d["strict"]]),
+                                "ext_genuine": g + eg, "ext_unlabelled": (len(S) + len(SE)) - (g + b + eg + eb)}
             results.append({"arm": "B", "ckpt": c, "step": cells.STEP[c], "pid": p, "set": "reach", "class": cls[p],
                             "family": "", "n": len(base), "strict": len(S), "cut": sum(x["finish"] == "length" for x in base),
                             "no_think_end": sum(1 - x["think_end"] for x in base),
@@ -170,6 +170,11 @@ def main():
                             "genuine_est": r6(est), "rate_est": r6(rates[c]), "label_sources": json.dumps(src),
                             "ext_n": len(ext), "ext_strict": sum(d["strict"] for d in ext), "ext_genuine": eg,
                             "ext_gamed": eb})
+        # the pre-registered extension cell is the checkpoint just before F1 (s2300 if never reached); extra draws in any
+        # other cell (ifbench_170's s1600 cell, extended before an audit moved its F1) are reported, not used
+        pre = (cells.CKPTS[cells.CKPTS.index(stt["F1"]) - 1] if stt["F1"] else "s2300")
+        ext_info = ext_cells.get(pre, {})
+        extra_ext = sorted(c for c in ext_cells if c != pre)
         # F1*: the extension cell before F1 (or s2300 for never) with a genuine success
         if ext_info and ext_info.get("ext_genuine", 0) >= 1:
             ec = ext_info["ext_ckpt"]
@@ -201,7 +206,7 @@ def main():
                         "F1_step": cells.STEP[stt["F1"]] if stt["F1"] else NEVER,
                         "F2_step": cells.STEP[stt["F2"]] if stt["F2"] else NEVER,
                         "category": cat, "rate_at_F1star": r6(rate_at), "blocked": stt["blocked"].strip(),
-                        **{f"ext_{k}": v for k, v in ext_info.items()},
+                        **{f"ext_{k}": v for k, v in ext_info.items()}, "extra_ext_cells": " ".join(extra_ext),
                         **{f"rate_{c}": r6(v) for c, v in rates.items()}})
     if em_rows:
         keys = []
