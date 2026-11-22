@@ -314,3 +314,16 @@ comes first.
 128 as pre-registered (`cells.N_X` = 128; abrupt = "0 of 128"). Planned before any X3 draw. The same checkpoints as the
 X / X2 cells, so no F1 moves. Nothing else is restored: s0350 (≈ $11) and the arm-A top-ups at 50–500 (≈ $9) do not
 fit with the $5 margin. If the X3 jobs come in cheaper, the top-ups follow by the same rule, s0500 first.
+
+## Amendment 5 — 2026-11-22 02:28 UTC (arm A topped up to 8 draws at s0500; no new reading)
+
+**Why.** Dan (relayed 2026-11-22T01:43:33Z) added $200 to RunPod so funds are not the limiter. The run budget stays $160,
+and the money goes in the pre-registered order: the extension first (amendment 4, running), then checkpoint 350 or the
+arm-A top-ups, at my choice. Spend $135.02 at 02:27. Projected at the end of the X3 jobs ≈ $149.7 (pods ifc-g / ifc-h
+$5.29/h). Amendment 2's rule (spend + projected + $5 ≤ $160) admits the s0500 top-up (≈ $3.5): 704 draws, the 176
+non-reach prompts × 4, job T_s0500, seed 55500, after X3_s0500 on pod ifc-g. It does not admit s0350 (≈ $11) or the
+s0050 / s0200 top-ups (≈ $6 more).
+
+**Change.** Arm A at s0500 has 8 draws per prompt (reach prompts: the first 8 of their 32; others: M_s0500's 4, then
+T_s0500's 4). pass@8 is therefore measured at dpo, 100, 500, 750, 1,100, 1,600 and 2,300. The arm-C sample at s0500 is
+re-drawn from the 8-draw pool by the same seeded rule.

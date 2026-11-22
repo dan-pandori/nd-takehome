@@ -39,14 +39,14 @@ STORED = {  # job -> (samples, graded): olmo-ifomega fixed phase, olmo-iffu test
 # arm -> checkpoint -> sources in draw order (arm B's extension job X_<ckpt> is appended after the base sources)
 SOURCES = {
     "A": {"dpo": ["F_dpo_ifb"], "s0100": ["F_s0100_ifb"], "s0750": ["F_s0750_ifb"], "s2300": ["F_s2300_ifb"],
-          **{c: [f"M_{c}"] for c in NEW}},
+          **{c: [f"M_{c}"] for c in NEW}, "s0500": ["M_s0500", "T_s0500"]},
     "B": {"s0100": ["F_s0100_ifb", "B_s0100"], "s0750": ["T4_s0750", "T4b_s0750", "B_s0750"], "s2300": ["B_s2300"],
           **{c: [f"M_{c}"] for c in NEW}},
 }
 # arm A draws per prompt: dpo 16 (stored); amendment 1 (2026-11-21, budget after the pod incident): the brief's cut 1
 # (8 -> 4) at s0050 / s0200 / s0350 / s0500, all 218 prompts (reach ones: the first 4 of their 32); 8 at s1100 / s1600,
 # which the pre-registered shape reading needs, and at the stored checkpoints
-N_A = {"dpo": 16, "s0050": 4, "s0200": 4, "s0350": 4, "s0500": 4}
+N_A = {"dpo": 16, "s0050": 4, "s0200": 4, "s0350": 4}  # amendment 5: s0500 topped up to 8 (T_s0500, non-reach prompts)
 N_B, N_X = 32, 128  # amendment 4: extension back to 128 per cell (X_ / X2_ 32 draws, then X3_ 64); amendment 3 had 64
 FIELDS = ["job", "pid", "chunk", "i", "n_tok", "finish", "strict", "loose", "think_end", "think_tok", "ans_tok",
           "think_words", "ans_words", "ans_key"]
