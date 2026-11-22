@@ -2487,7 +2487,7 @@ At s2300 (32 fresh draws): ≥ 1 genuine established on 40 of 48, ≥ 2 on 36 (l
 
 ### Arm C — gamed share of strict successes (`olmo_ifcurve/gaming.csv`)
 
-| step | arm C sample read | gamed | share | arm B first-4 read | gamed | share |
+| step | arm C sample labelled | gamed | share | arm B first-4 labelled | gamed | share |
 |---|---|---|---|---|---|---|
 | 0 | 40 | 5 | 0.125 | 0 | 0 | – |
 | 50 | 40 | 7 | 0.175 | 0 | 0 | – |
@@ -2501,7 +2501,7 @@ At s2300 (32 fresh draws): ≥ 1 genuine established on 40 of 48, ≥ 2 on 36 (l
 - arm C (primary): early 0.138 (n 160) vs late 0.217 (n 120); early − late -0.079, 90 % [-0.175, 0.015] → **flat**.
 - arm B (secondary): early 0.062 (n 16) vs late 0.306 (n 536); early − late -0.243, 90 % [-0.360, -0.091] → **gaming grows**.
 
-### Arm D — lengths (`olmo_ifcurve/lengths.csv`; medians over arm-A draws; reach = arm-B base draws)
+### Arm D — lengths (`olmo_ifcurve/lengths.csv`; medians over arm-A draws; reach = arm-B base draws; half-values rounded half to even)
 
 | step | thinking tokens | answer tokens | answer words | cut at 32,768 | reach thinking | reach answer words |
 |---|---|---|---|---|---|---|
@@ -2518,13 +2518,13 @@ At s2300 (32 fresh draws): ≥ 1 genuine established on 40 of 48, ≥ 2 on 36 (l
 
 ### Hand gate (`olmo_ifcurve/handcheck.csv`, `gate_summary.json`)
 
-1782 items read blind (2104 reads by Claude reader sub-agents, 40-item batches across checkpoints); 296 with ≥ 2 reads (272 first-two agreements), 26 with 3; 209 confirmed by adjudication under rules 1–14 (103 label changes; rules 13–14 dated in `olmo_ifcurve/handcheck_rule_addendum.md`). The 1559 strict successes the gate needed got their labels from: read 1440, inherited 45, screen 74 (1079 genuine, 480 gamed). Other strict successes carry no label (estimated rates use the first-4 share).
+1782 items read blind (2104 reads by Claude reader sub-agents, 40-item batches across checkpoints); 296 with ≥ 2 reads (272 first-two agreements; the arm-C seeded quarter 88 / 90), 26 with 3; 209 confirmed by adjudication under rules 1–14 (103 label changes; rules 13–14 dated in `olmo_ifcurve/handcheck_rule_addendum.md`). The 1559 strict successes the gate needed got their labels from: read 1440, inherited 45, screen 74 (1079 genuine, 480 gamed). Other strict successes carry no label (estimated rates use the first-4 share).
 
 ### Compute (`olmo_ifcurve/compute.csv`; registry rows ND_RUN_ID=olmo-ifcurve)
 
 27 sampling job runs on 1 × H200 (TP 1): 20.22 GPU-h of load + generation, 116.8 M generated tokens, 21216 draws (all graded by the checkers; no training, no Lean).
 
-**Strict vs estimated genuine pass@1 (arm A; genuine = strict × (1 − the step's arm-C gamed share), 40 strict successes read per step, the rest unread):**
+**Strict vs estimated genuine pass@1 (arm A; genuine = strict × (1 − the step's arm-C gamed share), 40 strict successes labelled per step (arm C: 349 of 360 read, 11 inherited from identical answers), the rest unlabelled):**
 dpo 0.290 / 0.254 · 50 0.296 / 0.244 · 100 0.315 / 0.268 · 200 0.347 / 0.313 · 500 0.412 / 0.391 · 750 0.512 / 0.410 · 1,100 0.577 / 0.505 · 1,600 0.646 / 0.485 · 2,300 0.683 / 0.496.
 
 **Bounds stated with their tries:** dpo 0 genuine in ≥ 256 draws on each reach prompt (< 1.2 % at 95 %, by the set's definition); an extension cell with 0 genuine of 128 bounds the pre-switch rate below 2.3 % (95 %); 0 of 32 below 8.9 %.
@@ -2537,12 +2537,12 @@ RL-data overlap (inherited from olmo-ifomega's 8-gram scan against Dolci-Think-R
 | 1 | pass@1 at 50 / 200 / 500 / 1,100 / 1,600 in [0.27, 0.34] / [0.31, 0.42] / [0.40, 0.51] / [0.53, 0.64] / [0.58, 0.68]; pass@8 at 500 / 1,100 / 1,600 in [0.62, 0.78] / [0.80, 0.89] / [0.82, 0.90] | **held** (0.296 / 0.347 / 0.412 / 0.577 / 0.646; 0.656 / 0.872 / 0.872); s0350 and pass@8 at 50 / 200 not measured (amendments 1, 3) |
 | 2 | no pass@1 drop > 0.03 between sampled checkpoints | **held** (monotone) |
 | 3 | shape: sharpening from 1,100 or 1,600 | **held** (from 1,100) |
-| 4 | ≤ 3 of 48 with any genuine at 50 and at 100; F1 ≤ 750 on 28–36; at 2,300 ≥ 1 genuine on ≥ 44 and ≥ 2 on ≥ 40 | 0 / 2 **held**; 35 **held**; **missed** at 2,300: 40 and 36 established (ifbench_1 / 4 all strict successes gamed under rules 13–14, ifbench_166 all gamed, ifbench_280 0 strict; 4 cells partly read, first 4 gamed) |
+| 4 | ≤ 3 of 48 with any genuine at 50 and at 100; F1 ≤ 750 on 28–36; at 2,300 ≥ 1 genuine on ≥ 44 and ≥ 2 on ≥ 40 | 0 / 2 **held** on the 32 base draws (with the extension draws 1 / 4, which would miss at 100); 35 **held**; **missed** at 2,300: 40 and 36 established (lower bounds; with the first-4 estimate 40 and 39) (ifbench_1 / 4 all strict successes gamed under rules 13–14, ifbench_166 all gamed, ifbench_280 0 strict; 4 cells partly read, first 4 gamed) |
 | 5 | median F1 P ≤ 500, T ∈ {500, 750}, N ≥ 1,100; reading "habit first" | medians **held** (500 / 750 / 1,100); reading **missed**: "no order" (the 90 % interval of rest − P is [0, 600], lower end not above 0). With F2 the reading is "habit first" |
-| 6 | gradual ≥ 50 % of prompts with F25, abrupt ≤ 20 %, median earliest rate ≤ 3 / 32 | gradual **missed** (10 / 36 = 28 %); abrupt **held** (0); earliest rate **held** (0.039) |
-| 7 | arm C early and late gamed shares in [0.05, 0.30], "flat"; arm B "gaming first" | arm C **held** (0.138 / 0.217, flat); arm B **missed**: "gaming grows" (0.062 on 16 early items vs 0.306) |
+| 6 | gradual ≥ 50 % of prompts with F25, abrupt ≤ 20 %, median earliest rate ≤ 3 / 32 | gradual **missed** (10 / 36 = 28 %); abrupt **held** (0); earliest rate **held** (0.039 over 48; 0.043 over the 36 with F25; labelled successes only) |
+| 7 | arm C early and late gamed shares in [0.05, 0.30], "flat"; arm B "gaming first" | arm C **held** (0.138 / 0.217, flat); arm B **missed**: "gaming grows" (early 0.0625 on 16 items, ≥ 0.5 missed; late 0.306, ≤ 0.35 held) |
 | 8 | B ∈ {1,100, 1,600}, H ∈ {750, 1,100}, "not brevity first" | **held** (1,600; 750; not brevity first) |
 | 9 | thinking tokens at 50 / 1,600 in [1,900, 2,600] / [4,500, 5,700], no checkpoint > 15 % below its predecessor; answer words at 50 / 500 / 1,100 / 1,600 in [200, 270] / [90, 180] / [55, 95] / [45, 75] | **held** (2,180 / 4,532, the 1,100 → 1,600 drop 14.8 %; 243 / 135 / 73 / 57) |
 | 10 | ≤ 0.5 % of arm-A draws hit 32,768 at every checkpoint | **missed** at 1,600 (0.63 %); 1,100 0.46 % |
 
-**Spend:** podbudget $154.67 of $160 (29.72 billed pod-hours), of which $34.84 were 17 orphaned pods (RunPod retired REST v1; QUESTIONS.md), $0.86 a faulty community H200 and a tooling test, $1.69 reconciled unlogged one-minute pods; the rest secure H200s at $5.29/h (no community H200 was available). Claude reader / auditor sub-agents: ≈ 70 batches of ≈ 100–170 k tokens each.
+**Spend:** podbudget $154.67 of $160 (29.72 billed pod-hours), of which $34.84 were 17 orphaned pods (RunPod retired REST v1; QUESTIONS.md), $0.86 a faulty community H200 and a tooling test, $1.69 reconciled unlogged one-minute pods; the rest secure H200s at $5.29/h (no working community H200 was available). Claude sub-agents: 75 tasks (64 reader batches, 11 adjudication / audit tasks); token use not logged per task.
