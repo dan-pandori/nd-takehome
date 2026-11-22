@@ -41,6 +41,9 @@ tokenizers, numpy) for the grader and tokenizer scripts; `~/.local/share/uv/tool
 | `rvc_audit.py` | same-shape audit with the checkers' own sentence splitter / bullet lines | `out/audit.{txt,json}` |
 | `rvc_hand_report.py` | reads by type, agreement, confirmations, sources | `out/hand_report.{txt,json}` |
 | `rvc_compare.py` | agreement of my labels with the executor's (phase-1 requirement; run after my labels were final) | `out/compare.{txt,json}` |
+| `rvc_misc_facts.py` | RL-data overlap (inherited), arm-C sample reproduction, `F_s0100_ifb` on the reach prompts, pass@8 ceiling | `out/misc_facts.txt` |
+| `rvc_phase2_checks.py`, `rvc_phase2_exec.py` (phase 2) | executor hand-file counts, per-prompt F values vs mine, my walk and readings on the executor's labels (per-cell vs cumulative F2), registry sums, pods | `out/phase2_checks.txt`, `out/phase2_exec.{txt,json}` |
+| `rvc_agree_variants.py`, `rvc_phase2_verify.py` (phase 2) | agreement under my label variants (final / first pass / adjall); numbers quoted in the rewritten §Compare | `out/agree_variants.txt`, `out/phase2_verify.txt` |
 | `rvc_compute.py`, `rvc_compute_ckpt.py` | GPU-seconds per job from `JOB_START` / `JOB_DONE`, tokens, draws, per arm; podhours dollars; tokens per draw by checkpoint | `out/compute.{txt,json}`, `out/compute_ckpt.txt` |
 | `rvc_hygiene.py`, `rvc_hygiene_hit.py` | bucket listing vs my copy vs workspace vs MANIFEST; secret-pattern scan of every object's contents; hit locations (masked) | `out/hygiene.txt`, `out/hygiene_hit.txt` |
 | `rvc_facts.py` | commit, budget, pod and job times cited in the review | `out/facts.txt` |
@@ -59,3 +62,5 @@ Order to reproduce: `rvc_regrade` (all jobs, `xargs -P 3`) → `rvc_gradecmp` �
 (need / needB / needC rounds, `--x2` lookahead) until nothing is needed → `rvc_adjudicate tasks` → adjudicators →
 `rvc_confirm` → `rvc_rule5` → `rvc_adjudicate_prompt` → `rvc_confirm ADJ4` → `rvc_hand.py status` → `rvc_audit` →
 `rvc_hand_report` → `rvc_readings` (and variants) → `rvc_compare`.
+
+**Adversarial check.** `out/adversarial_check_1.md` (33 findings on the first phase-2 draft) and `out/adversarial_check_2.md` (second pass); each finding is addressed in the review's §Compare / Corrections / §Verdict.

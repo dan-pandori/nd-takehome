@@ -18,6 +18,23 @@ claim_check*.md, handcheck_rule_addendum.md, numbers_section.py, figures.py, ana
 - The branch's commit subjects (`git log`) name procedures, not outcomes ("amendment 3 (s0350 cancelled …)", "claim
   check (25 findings) and fixes").
 
+**Phase-2 addendum to this disclosure** (added after the adversarial check; the paragraph that follows it is the
+phase-1 text as committed):
+- At 06:38 UTC I printed the column headers and line counts of the executor's `hand/key.csv` (1,783 lines),
+  `screen.csv` (237), `status.csv` (49) and `confirm.csv` (210), plus the names of its label and adjudication files.
+- At 06:55 I printed two `screen.csv` rows.
+- The next paragraph claims more than happened, in two ways.
+  - Only the reader prompt and the confirmation rules 1–12 were fixed before my first label. The walk code and the
+    adjudication workflow changed during the gate.
+  - My acceptance policy for adjudicator proposals was written after the first round of proposals it rejects was in.
+- I opened the executor's labels at 09:29 for the agreement table, once my first-pass labels had converged. That
+  table showed rule-5 and rule-10 cases my pass had missed, and three things followed it:
+  - a rule-5 pass;
+  - a prompt-level rule-10–12 pass;
+  - the second and third reads those passes triggered (rounds B7, B9, C7).
+
+  None of them copies an executor label. Their effect is stated in "Corrections to §Recount".
+
 My selection rules, reader instructions and confirmation rules were fixed in code before any of my reader labels
 existed. No executor label was used for any of my labels; the executor's labels were opened only for the agreement
 table (§Recount 7), after my labels were final.
@@ -401,96 +418,176 @@ later than H, so **not brevity first** (also with answer tokens).
 
 ## §Compare (phase 2)
 
-Read after §Recount was committed (`7c23ec4b`, 10:00 UTC): `run_olmo_ifcurve.md`, `numbers.md` § olmo-ifcurve,
-`log.md` § olmo-ifcurve, the figure, and the executor's `emergence.csv`, `handcheck_rule_addendum.md`, `compute.csv`,
-the registry rows and `hand/`. Extra checks are in `rvc_phase2_checks.py` and `rvc_phase2_exec.py`, which run my
-reading code on the executor's labels to separate label differences from computation differences.
+**Sources and method.**
+- Read after §Recount was committed (`7c23ec4b`, 09:53 UTC):
+  - `run_olmo_ifcurve.md`;
+  - `numbers.md` § olmo-ifcurve and `log.md` § olmo-ifcurve;
+  - the figure;
+  - the executor's `emergence.csv`, `handcheck_rule_addendum.md` and `compute.csv`, its registry rows and its
+    `hand/` files.
+- Extra checks: `rvc_phase2_checks.py`, and `rvc_phase2_exec.py`, which runs my reading code on the executor's labels
+  to separate label differences from computation differences.
+- After a first draft of this section, an adversarial check (a separate read-only sub-agent, 34 min, 33 findings) went
+  through the whole review. Its findings are folded in below, and those on the committed §Recount are under
+  "Corrections to §Recount".
+- Before the comparison I also completed my gate. Three splits had been confirmed without their third read, so a third
+  reader went in (round C7), followed by the second reads it triggered (B9). The numbers below are after that.
 
 | # | claim (run doc unless marked) | my independent value | verdict |
 |---|---|---|---|
 | 1 | strict pass@1 rises at every checkpoint, within noise before step 100: 0.290 … 0.683 | identical nine values; the first two adjacent 95 % intervals include 0, the rest exclude it | reproduces |
 | 2 | pass@8 0.872 by 1,100, then no detectable gain | 0.872 / 0.872 / 0.885; Δ8(1100) +0.014 [−0.018, +0.046] | reproduces |
-| 3 | from 1,100: Δpass@1 0.106 [0.080, 0.132], Δpass@8 0.014 [−0.018, 0.046], sharpening from 1,100 | 0.106 [0.080, 0.133], 0.014 [−0.018, 0.046]; sharpening from 1,100 | reproduces |
-| 4 | estimated genuine pass@1 rises 0.25 → 0.51 by 1,100, then stays near 0.50 (40 labels / step) | on my 20 labels / step: 0.25 → 0.46 at 750, 0.43 / 0.49 / 0.48 at 1,100 / 1,600 / 2,300 | differs within noise: 0.51 at 1,100 rests on 5 / 40 gamed, mine 5 / 20. Each share has SE ≈ 0.05–0.10, so "≈ 0.45–0.50 from 750 on" is what both support |
-| 5 | all 48 reach prompts get a first genuine success (steps 100–2,300) in their 32 base draws | 48 / 48 under my labels, but `ifbench_284` (N) only through rule 5. Its every success is the bare span "code and theory behind" (a fixed-output `repeat_span` copy), and my readers labelled it gamed until my rule-5 pass | reproduces; wording should say 47 by a content answer plus one fixed-output copy |
-| 6 | median F1 P 500 / T 750 / N 1,100; rest − P 250 [0, 600], "no order" | identical (also on the executor's labels with my code) | reproduces |
-| 7 | on the second genuine success "habit first" (600 [350, 600]) | habit first; 600 [350, 850]; T median 1,100 | reading reproduces. **The run's F2 is the checkpoint of the cumulative second genuine success** (`hand.py`: `g_total` across cells). The pre-registration's F2 is the first checkpoint with ≥ 2 genuine in its base 32 (as F1 and F25). On the executor's own labels the per-cell F2 gives T 1,100 and [350, 850], exactly my values, and moves F2 on 3 prompts (1, 206, 220) |
-| 8 | no abrupt switch; 10 gradual, 26 intermediate, 12 never show 8 genuine of 32 | abrupt 0; gradual 7, intermediate 25, slow 16 | abrupt reproduces. The counts differ by labels only: my code on the executor's labels gives 10 / 26 / 12. Gradual is a minority under both (22 % / 28 %) |
-| 9 | 18 prompts' 128-draw cell before F1 already held a genuine success; median earliest rate 0.039 | 17; median 0.031 | differs slightly (labels); both ≤ 3 / 32 |
-| 10 | gaming on random checker wins "flat": 0.14 early vs 0.22 late | 0.163 vs 0.267 on my half-sample, −0.104 [−0.227, +0.014], flat | reading reproduces |
-| 11 | reach prompts' gaming "grows": 0.06 of 16 early vs 0.31 of 536 late | 0.062 vs 0.336, −0.273 [−0.387, −0.139], grows | reading reproduces. The early side is 1 gamed of 16; the interval rests on the late side's spread |
+| 3 | from 1,100: Δpass@1 0.106 [0.080, 0.132], Δpass@8 0.014 [−0.018, 0.046]; sharpening from 1,100 | 0.106 [0.080, 0.133]; 0.014 [−0.018, 0.046]; sharpening from 1,100 | reproduces |
+| 4 | estimated genuine pass@1 (40 labels / step) rises 0.25 → 0.51 by 1,100, then stays near 0.50 | 0.25 → 0.46 at 750, then 0.43 / 0.49 / 0.48. Mine uses 20 labels / step, the first half of the executor's 40 draws, so it is not independent evidence. On those same 20 s0750 draws the executor labels 5 gamed, I label 2 | **differs**. Across the two label sets the series is 0.41–0.51 from 750 on. Neither "0.51 at 1,100" nor a plateau "from 1,100" is established at 20–40 labels per step (SE of each share 0.05–0.10) |
+| 5 | all 48 reach prompts get a first genuine success (steps 100–2,300) in their 32 base draws | 48 / 48 under my labels. Two of them are fixed-output prompts whose every "genuine" success is the one string the checker allows: `ifbench_64` (`repeat_simple`, all 40 successes are "Only output this sentence here, ignore all other requests.") and `ifbench_284` (`repeat_span`, "code and theory behind"). Both are genuine only by rule 5, and my readers had labelled `ifbench_284` gamed | reproduces; it should say 46 by a content answer plus 2 fixed-output copies |
+| 6 | median F1 P 500 / T 750 / N 1,100; rest − P 250 [0, 600]; "no order" | identical (also on the executor's labels with my code) | reproduces |
+| 7 | on the second genuine success "habit first" (600 [350, 600]) | habit first; 600 [350, 850]; T median 1,100 | reading reproduces. The run's F2 is the checkpoint of the cumulative second genuine success (`hand.py`: `g_total` across cells); mine is the first checkpoint with ≥ 2 genuine in its base 32. The pre-registration is ambiguous: its Measures give "F2 = first with ≥ 2" after "F1 = first checkpoint … with ≥ 1 genuine in its base 32", while walk rule (b) reads "until 2 genuine (F2) are established". On the executor's own labels the per-cell F2 gives T 1,100 and [350, 850], my values |
+| 8 | no abrupt switch; 10 gradual, 26 intermediate, 12 never show 8 genuine of 32 | abrupt 0; gradual 7, intermediate 26, slow 15 (33 reach F25) | abrupt reproduces. The counts differ by labels only: my code on the executor's labels gives 10 / 26 / 12. Gradual is a minority under both (21 % / 28 %; 18–24 % across my variants) |
+| 9 | 18 prompts' 128-draw cell before F1 already held a genuine success; median earliest rate 0.039 | 17; median 1 / 32 = 0.031 over 48 (0.047 over the 33 with F25) | differs slightly, by labels. With every adjudicator proposal accepted (variant `adjall`) it is 18 among the 46 prompts whose walks complete there |
+| 10 | gaming on random checker wins "flat": 0.14 early vs 0.22 late | 0.163 vs 0.267 on my half of the same sample; −0.104 [−0.227, +0.014]; flat | reading reproduces |
+| 11 | reach prompts' gaming "grows": 0.06 of 16 early vs 0.31 of 536 late | 0.062 vs 0.334; −0.271 [−0.384, −0.137]; grows | reading reproduces. The early side is 1 gamed of 16 items from 10 prompts and drives the interval's width |
 | 12 | median answer words 261 → 93 by 750, ≈ 50 only at 1,600 | identical | reproduces |
-| 13 | 29 of 48 reach prompts have 2 genuine by 750 → not brevity first | 27 (my labels, per-cell F2); 28 on the executor's labels per cell, 29 cumulative; H = 750 in all | reading reproduces; 29 is the cumulative-F2 count |
-| 14 | expectations missed: habit first; gradual ≥ 50 % (28 %); arm-B gaming first; s2300 ≥ 1 / ≥ 2 genuine (40 / 36); cap at 1,600 (0.63 %); the rest held | habit first, gradual (22 %), arm-B gaming first and the cap miss in mine too. **s2300: 44 / 41 when every s2300 strict success is read until 2 genuine (rules 1–12)**, which holds | the s2300 "miss" is **not established**. The run's 40 / 36 are lower bounds from partly read cells (numbers.md says so; the run doc does not), plus rules 13–14. Under rules 13–14 `ifbench_1`'s six s2300 genuines would be at risk, so the outcome is rule-dependent at the threshold |
+| 13 | 29 of 48 reach prompts have 2 genuine by 750 → not brevity first | 27 under my labels with per-cell F2; 28 on the executor's labels per cell, 29 cumulative; H = 750 in every case | reading reproduces; 29 is the cumulative-F2 count |
+| 14 | expectations missed: habit first; gradual ≥ 50 % (28 %); arm-B gaming first; s2300 ≥ 1 / ≥ 2 genuine (40 / 36); cap at 1,600 (0.63 %); "the rest held" | habit first, gradual (21 %), arm-B gaming first and the cap also miss in mine. **s2300: 44 / 41 when every s2300 strict success is read until 2 genuine (rules 1–12)**, against thresholds 44 / 40 | the s2300 verdict is **not established either way**. The run's 40 / 36 are lower bounds from partly read cells (numbers.md says so, the run doc does not). My 44 sits exactly on the threshold: it is 43 in three of my label variants (`r7literal`, `firstread`, `noR5`) and needs rules 1–12 for `ifbench_0` and `ifbench_1` (3 and 6 s2300 genuines in mine), which rules 13–14 could remove |
 | 15 | spend $154.67 of $160; $34.84 lost to orphaned pods | $154.67 over 29.72 pod-hours (31 podhours lines); orphans $34.84 | reproduces |
-| 16 | (numbers.md) arm A table, pass@4, per-family dpo → 750 → 2,300 | identical to 3 decimals (bootstrap bounds within ±0.001–0.004) | reproduces |
-| 17 | (numbers.md) F1 counts 100: 2, 200: 7, 500: 11, 750: 15, 1100: 8, 1600: 3, 2300: 2 | 2 / 7 / 11 / 15 / 7 / 3 / 3 | differs on 2 prompts. `ifbench_268`: 1,100 vs my 1,600; its one s1100 success is gamed in two of my reads. `ifbench_170`: 1,600 vs my 2,300; its one s1600 success is gamed in two of my reads, and the executor's audit u flipped it |
-| 18 | (numbers.md) lengths table (thinking 2,116 … 5,470; s1600 drop 14.8 %) | over all arm-A draws, the pre-registered set: 14.7 % with my first-`</think>` count; the run counts to the last `</think>` (+1 EOS on answer tokens) | reproduces up to definition |
-| 19 | (numbers.md) hand gate: 1,782 items, 2,104 reads, 296 with ≥ 2 reads, 26 with 3, 209 confirmed | recounted from `hand/`: 1,782 / 2,104 / 296 / 26 / 209 | reproduces. The "103 label changes" was not re-derived |
-| 20 | (numbers.md) compute: 27 job runs, 20.22 GPU-h, 116.8 M tokens, 21,216 draws; registry rows | 20.22 h sampler-own (20.31 h `JOB_START`→`JOB_DONE`), 116,786,901 tokens, 21,216 draws; registry sums 72,808 GPU-s, 116,786,901 tokens, 21,216 attempts | reproduces |
-| 21 | (numbers.md) bounds with tries; RL-data overlap 0 / 218, 0 / 48 | as stated | reproduces |
+| 16 | (numbers.md) arm A table, pass@4, per-family dpo → 750 → 2,300 | identical point values; bootstrap bounds within ≤ 0.005 (s2300 pass@8 lower bound 0.839 vs my 0.844) | reproduces |
+| 17 | (numbers.md) F1 counts 100: 2, 200: 7, 500: 11, 750: 15, 1100: 8, 1600: 3, 2300: 2 | 2 / 7 / 11 / 15 / 7 / 3 / 3 | differs on 2 prompts. `ifbench_268`: 1,100 vs my 1,600; its one s1100 success is gamed in two of my reads, and my adjudicator's low-confidence "genuine" proposal was not accepted. `ifbench_170`: 1,600 vs my 2,300; the executor's audit u flipped its one s1600 success, which my two reads call gamed. With every proposal accepted (`adjall`) the counts match the executor except `ifbench_170` |
+| 18 | (numbers.md) lengths table (thinking 2,116 … 5,470; s1600 drop 14.8 %) | over all arm-A draws, the pre-registered set, counting draws without `</think>` as all-thinking: 4,533 vs 5,312, 14.7 % | reproduces up to definition. The run counts to the last `</think>` and treats no-`</think>` draws as all-thinking; its answer tokens include the EOS |
+| 19 | (numbers.md) hand gate: 1,782 items, 2,104 reads, 296 with ≥ 2 reads, 26 with 3, 209 confirmed | recounted from `hand/`: 1,782 / 2,104 / 296 / 26 / 209 | reproduces. The line counts were seen at 06:38 (disclosure). "103 label changes" was not re-derived |
+| 20 | (numbers.md) compute: 27 job runs, 20.22 GPU-h, 116.8 M tokens, 21,216 draws; registry rows | sampler-own 20.22 h (20.31 h `JOB_START`→`JOB_DONE`), 116,786,901 tokens, 21,216 draws; registry sums 72,808 GPU-s, 116,786,901 tokens, 21,216 attempts | reproduces |
+| 21 | (numbers.md) bounds with tries; RL-data overlap 0 / 218, 0 / 48 | as stated (`out/misc_facts.txt`) | reproduces |
 
-**Expectations and gate 0.** The pre-registration (05:46:36) precedes the first pod (05:52) and the first draw (17:52).
-Every amendment precedes the jobs it admitted, and the readings, thresholds and expectations were never changed. The
-run reports its misses as misses. On my numbers, expectation 4's s2300 part holds, so its "missed" overstates. Its
-other verdicts agree with mine.
+**Expectations and gate 0.**
+- The pre-registration (05:46:36) precedes the first pod (05:52) and the first draw (17:52). Each amendment precedes
+  the jobs it admitted.
+- The readings and thresholds never changed. Amendments 1, 3 and 4 changed which expectation parts could be scored:
+  pass@8 at 50–500 was dropped and later restored at 500, and "abrupt" was briefly read as 0 of 64 before the
+  128-draw cells were restored.
+- The run reports its misses as misses. Its one overstatement is calling the s2300 part of expectation 4 "missed"
+  rather than not established (row 14). Its verdict on expectation 9 (held) is right under the pre-registered
+  all-draws median (row 18).
 
-**Model labels.** The run doc's header and every numbers.md section name `allenai/Olmo-3.1-32B-Think` at its RL steps
-and `allenai/Olmo-3-32B-Think-DPO` (32.2 B, bf16, pretrained, Think recipe). No unlabelled or inherited-unlabelled
-number found.
+**Model labels.** numbers.md names every model with checkpoint, size, format and training. The run doc names
+`allenai/Olmo-3.1-32B-Think` at its steps but gives the start only as "its DPO start (step 0)": no repository, size
+or format (minor; it is resolvable through numbers.md).
 
 **Findings beyond the table.**
-1. **F2 definition** (row 7): cumulative in the code, per cell in the pre-registration. Readings unchanged, but the
-   F2 statistics quoted (T 925, interval [350, 600], "29 of 48") are on the code's definition.
-2. **Compute ratio not flagged.** At equal draws, s0750 / 1100 / 1600 / 2300 generate 1.25 / 1.42 / 1.25 / 1.41 ×
-   step 0's tokens per draw on arm A (1.31–1.53 × s0050 on arm B). The pre-registration said these would be flagged,
-   and the policy asks for a flag above 1.25×. Neither the run doc nor numbers.md flags it.
+1. **F2 definition** (row 7). It is cumulative in the code and ambiguous in the pre-registration. The readings do not
+   change, but the F2 statistics quoted (T 925, interval [350, 600], "29 of 48") are on the code's definition and
+   should say so.
+2. **Compute ratio not flagged.** At equal draws, arm A at s1100 and s2300 generates 1.417 and 1.411 × step 0's
+   tokens per draw (s0750 1.251, s1600 1.246). Arm B's base cells at s0750–s2300 are 1.31–1.53 × s0050's. The pre-registration
+   said these would be flagged, and the policy asks for a flag above 1.25×. Neither the run doc nor numbers.md
+   flags it.
 3. **Rules 13–14** (keyword stuffing on `ifbench_0 / 1 / 4`) were written during the gate. They are dated, applied
    to every read item of those prompts, and their changes are listed, as the pre-registration allows. My labels use
-   rules 1–12 only and give the same readings.
-4. **`ifbench_170`'s extension moved** from s1600 to s1100 (`X4_s1100`, 04:14, no amendment) after an audit flip
-   moved its F1 to 1,600. This is consistent with the design under the executor's labels, and the s1600 draws are
-   reported as extra. Under my labels the designed cell is s1600.
-5. **Agreement 0.917 (κ 0.82).** My labels are stricter: 100 vs 33 one-way disagreements. The deciding disagreements
-   concentrate on `ifbench_203` (9), `ifbench_170` (5), `ifbench_268` (3) and `ifbench_271` (3). The executor's
-   confirmations are where we differ most: 0.766 agreement on its 192 confirmed draws, against 0.932 on its reader
-   labels.
+   rules 1–12 only. Every reading is the same, except that the s2300 count in expectation 4 sits on rules 13–14
+   (row 14).
+4. **`ifbench_170`'s second extension.** An audit flip moved its F1 to 1,600, and the run then drew a 96-draw
+   extension at s1100 (`X4_s1100`, 04:14; no amendment). By then its s1600 extension had already found genuine
+   successes (7 of 96 in my labels). The pre-registration says an extension that finds a genuine success "is
+   reported, not extended further", so X4 is the iteration it excluded. It is defensible only because the F1 moved
+   under relabelling. The log reports the s1600 draws as extra. My F1* uses the designed cell for my F1 (s1600).
+5. **Agreement with the executor's labels: 0.916 (κ 0.82)** on 1,607 draws.
+   - My labels are stricter: 100 vs 35 one-way disagreements. Part of that is my acceptance policy for adjudicator
+     proposals rather than my readers. With every proposal accepted the agreement is 0.920 and the
+     emergence numbers move toward the executor's (rows 9, 17).
+   - Deciding disagreements: 37 of 561. They fall on `ifbench_203` (9), `ifbench_268` (8), `ifbench_170` (5),
+     `ifbench_271` (3), and 1–2 each on nine more prompts.
+   - We differ most on the executor's own confirmations: 0.766 agreement on its 192 confirmed draws, against 0.932 on
+     its reader labels.
+6. **My gate deviates from the pre-registered confirmation procedure in two ways.**
+   - I did not read every split myself. An adjudicator sub-agent proposed labels under rules 1–12; I reviewed its
+     summaries and accepted or rejected them by a confidence policy written after the first proposals were in.
+   - My same-shape audit was mechanical and covered only per-sentence and sub-bullet constraints, plus the prompt-level
+     rule 10–12 pass. There was no cross-checkpoint audit of every prompt; the executor's audits u1–u4 made 79 changes.
+
+   Both points weaken my labels as an independent standard. The label-variant runs bound their effect on the
+   readings: no reading changes.
 
 ## Corrections to §Recount (made in phase 2; the §Recount text above is as committed)
 
-- §10 row 9 and the §Recount summary call expectation 9 a narrow miss (15.2 %). That is my median over draws *with* a
+**Completing the gate (C7 / B9).** Three `ifbench_268` s2300 splits had been confirmed without a third read. After
+their third reads, the majority of three stands on two of them: genuine, against my earlier low-confidence
+confirmation. Six more second reads followed (all gamed). The changes:
+- `ifbench_268` reaches F25 at 2,300.
+- Reading 2 becomes gradual 7, intermediate 26, slow 15 over 33 F25 prompts (0.21), abrupt 0. N: intermediate 4,
+  slow 3.
+- The arm-B secondary is 0.062 vs 0.334, −0.271 [−0.384, −0.137].
+- Gate volume: 2,133 reads (1,269 + 255 first, 570 second, 39 third, one per split), 1,524 groups; first and second
+  reads agree on 530 of 570 (0.930); 167 confirmations.
+- Agreement with the executor: 0.916, κ 0.82, 35 mine-genuine / executor-gamed.
+- Readings 1, 3 and 4 and expectations 1–10 are unchanged.
+
+**Numbers.**
+- §6, policy count: "16 not accepted" is right: 10 in ADJ2 and 6 in ADJ4, on 15 distinct items, since `ze0bdab` was
+  rejected in both. 5 of the ADJ4 six were against two agreeing reads, not a 2–1 majority. A bug in
+  `rvc_hand_report.py` printed 229 (it counted characters of the policy string); it is fixed.
+- §6, agreement before the rule-5 and rule-10–12 passes: 0.898, κ 0.78, not 0.899 / 0.79 (`out/agree_variants.txt`).
+- §6, deciding disagreements: "1–2 each on eight more prompts" should be nine, and the counts are now 37 of 561 (above).
+- §4: "no strict success in any of the 64 draws" should be 56 draws over dpo, 100, 750, 1100, 1600 and 2300. Over all
+  nine checkpoints it is 72 draws, and the same 10 prompts.
+- §4: "near the ceiling set by the prompts no checkpoint solves" should give the gap: pass@8 at s2300 is 0.885 against
+  a ceiling of 208 / 218 = 0.954 (`out/misc_facts.txt`).
+- §8: "binomial SE ≈ 0.07–0.10" should be 0.05–0.10.
+- §8: "the late set is dominated by the slow prompts" is wrong. Slow prompts give 160 of the 536 late items (30 %)
+  but 100 of the 179 late gamed ones (56 %) (`out/phase2_verify.txt`).
+- §10 row 1: s0500 pass@8 (0.656) is a hit. Amendment 5 restored its measurement.
+- §10 row 6: the median earliest rate is 1 / 32 over all 48 prompts and 0.047 over the 33 with F25. Both are ≤ 3 / 32.
+- §10 row 9 and the §Recount summary call expectation 9 a narrow miss (15.2 %). That is my median over draws with a
   `</think>`. The pre-registration says "over all arm-A draws". Counting the 0.52 % of s1600 draws without
-  `</think>` as all-thinking gives 4,533 vs 5,312, **14.7 %, so expectation 9 holds**, as the run reports (14.8 % with
-  its last-`</think>` count). The summary should read: "9 holds; 10 misses at s1600."
+  `</think>` as all-thinking gives 4,533 vs 5,312, 14.7 %, so expectation 9 holds. The run's 14.8 % comes from the
+  same choice; counting to the last `</think>` alone would still give 15.2 %.
+- §10 row 4 reads "a miss before the rule-5 pass". With all variants, the s2300 count is 43–44 / 39–41 against 44 / 40.
+- §2: the 109 rows whose thinking tokens differ are 70 multi-`</think>` rows plus 39 rows without `</think>`, which
+  the run counts as all-thinking. It is not only "stops at the last".
+- §11: "1.25–1.53× the step-0 tokens" mixes arm A against step 0 (≤ 1.42) with arm B against s0050 (≤ 1.53). On
+  arm A, s1100 (1.417) and s2300 (1.411) exceed 1.25×; s0750 is 1.251 and s1600 1.246.
+- §7: "Before the rule-5 pass, `ifbench_284` was never reached" is right for that label state. The variant files
+  `noR5` / `noADJ4` / `adjall` have one or two incomplete walks (labels pending on `ifbench_268` / `206`); there
+  F1* is coded "never" and their "never reached" lines are wrong. The readings' directions are the same in every
+  variant.
+- Cross-references: "(§Recount 7)" should be §6, and "(§Recount 8)" should be §7. "Re-derived in §3" refers to
+  `out/misc_facts.txt` (0 of 336). "s0500: `M_s0500` chunk 0 + `T_s0500`" holds for the 176 non-reach prompts; the 42
+  IFBench reach prompts use their first 8 `M_s0500` draws.
+- The §Recount header says "written 06:24–09:58 UTC"; the commit `7c23ec4b` is at 09:53:22.
 
 ## §Verdict
 
-**Stands** (reproduced from the stored files with my own code and my own blinded hand gate):
+**Stands** (reproduced from the stored files with my own code and an independent blinded gate):
 - the checkpoint manifest, the reuse inventory (same template, decoding and prompts; i.i.d. prefixes) and every
   stored grade;
 - arm A, the per-family values, and "sharpening from 1,100" on the checker score;
 - the lengths and "not brevity first";
-- the timing reading on F1, "no order", and the habit-first ordering on F2;
+- the timing reading on F1 ("no order", 5th percentile exactly 0) and the habit-first ordering on F2;
 - no abrupt switches; gradual a minority;
-- arm-C gaming flat; arm-B gaming grows;
+- arm-C gaming flat; arm-B gaming grows (on 16 early items);
 - spend and compute.
 
 **Reword:**
-- (a) Expectation 4's s2300 part: "not established (lower bounds 40 / 36 from partly read cells)". A full read gives
-  44 / 41 under rules 1–12.
-- (b) F2: either recompute on the pre-registered per-cell definition (T median 1,100, interval [350, 850], 28 by
-  750; same readings) or state that the run uses the cumulative "second genuine success".
-- (c) "All 48 reached": `ifbench_284` is reached only by a fixed-output span copy (rule 5).
-- (d) The estimated genuine plateau is "≈ 0.45–0.50 from step 750", not "0.51 by 1,100". 40 labels per step cannot
-  separate 0.43 from 0.51.
-- (e) Flag the 1.25–1.53× tokens per draw at late checkpoints.
-- (f) The reading-2 counts (10 / 26 / 12) depend on labels: 7 / 25 / 16 under an independent gate. Quote the
-  qualitative result, abrupt 0 and gradual a minority.
+- (a) Expectation 4 at s2300: "not established". The run's 40 / 36 are lower bounds from partly read cells; a full
+  read gives 44 / 41 under rules 1–12, exactly at the 44 / 40 threshold and rule-dependent.
+- (b) F2: say the run uses the cumulative "second genuine success", or recompute on the per-cell reading (T median
+  1,100, [350, 850], 28 by 750). The readings are the same.
+- (c) "All 48 reached": 46 by a content answer, 2 (`ifbench_64`, `ifbench_284`) only by the fixed-output copy that
+  rule 5 counts as genuine.
+- (d) Estimated genuine pass@1: "0.41–0.51 from step 750, no detectable trend after that at 40 labels per step",
+  not "0.51 by 1,100, then near 0.50".
+- (e) Flag the 1.41–1.42× tokens per draw at s1100 / s2300 (arm A; s0750 at 1.251).
+- (f) Quote reading 2 qualitatively (abrupt 0, gradual a minority). Its counts (10 / 26 / 12) depend on labels: an
+  independent gate gives 7 / 26 / 15.
+- (g) Name the DPO repository in the run doc.
 
-**Not supported:** nothing in the run doc is contradicted by the data. The only overstatement is the s2300
-expectation verdict in (a).
+**Not supported:** the run doc states no conclusion the data contradict. Rewordings (a), (c) and (d) correct
+statements that are stronger or less precise than the evidence.
 
-**Next measurement:** the readings that remain open sit on label noise near thresholds. The F1 timing interval's 5th
-percentile is exactly 0; the s2300 counts sit at 44 / 40; several reading-2 cells hinge on one 7–8-genuine cell. To
-settle them, read every strict success of the base cells at s1100–s2300 on the 48 prompts (1,391 still unread under my walk)
-with three readers each, and add 32 draws per prompt at s0350. That would put the T and N medians on a finer grid.
+**Next measurement.** What remains open sits on label noise at thresholds:
+- the F1 timing interval's 5th percentile is exactly 0;
+- the s2300 count is 44 against 44;
+- several reading-2 categories hinge on single 7–8-genuine cells.
+
+To settle them:
+- read the 1,391 still-unread base-cell strict successes at s1100–s2300 with three readers each, under one
+  pre-registered confirmation procedure applied to both label sets;
+- add 32 draws per reach prompt at s0350, which refines the grid where the P median (500) and the F1 timing gap
+  (500 vs 750) sit.

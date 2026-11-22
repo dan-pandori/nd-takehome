@@ -34,8 +34,11 @@ def main():
                 len(c["reads"]) == 2 and c["reads"][0] != c["reads"][1]):
             T(f"   {json.loads(g)[0]} reads {c['reads']} -> {c['label']}: {c['reason'][:150]}")
     rej = json.load(open(H.HAND / "adj_rejected.json"))
-    T(f"adjudicator proposals not accepted (low-confidence overturns of a 2-1 majority): "
-      f"{sum(len(v) for k, v in rej.items() if k != 'policy')}")
+    lists = {k: v for k, v in rej.items() if isinstance(v, list)}
+    items = [i for v in lists.values() for i in v]
+    T(f"low-confidence adjudicator proposals not accepted (against two agreeing reads or a 2-1 majority): "
+      f"{sum(len(v) for k, v in lists.items() if k.startswith('ADJ'))} proposals "
+      f"({ {k: len(v) for k, v in lists.items()} }); distinct items {len(set(items))}")
     r6 = [g for g, c in conf.items() if c["label"] == "genuine" and "6" in c["reason"].split(" (", 1)[0].replace("rule ", "").split(";")]
     T(f"rule-6 (ALL-CAPS title case, genuine on the primary reading) groups: {len(r6)} {[json.loads(g)[0] for g in r6]}")
     cfa = collections.Counter((r[1], r[2]) for rs in rd.values() for r in rs)

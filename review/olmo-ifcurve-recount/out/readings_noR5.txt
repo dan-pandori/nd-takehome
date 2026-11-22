@@ -30,7 +30,7 @@ READING 3 (gaming among strict successes)
    arm C (my sub-sample of 20 per checkpoint): gamed / labelled (of sampled) dpo:3/20(20) s0050:4/20(20) s0100:3/20(20) s0200:3/20(20) s0500:1/20(20) s0750:2/20(20) s1100:5/20(20) s1600:5/20(20) s2300:6/20(20)
    primary: early 0.163 (n 80), late 0.267 (n 60), early - late -0.104 90 % [-0.227, +0.014] -> flat
    primary, reader-labelled only: early 0.163 (n 80), late 0.267 (n 60)
-   secondary (arm B first min(strict,4), labelled): early 0.062 (n 16), late 0.350 (n 535), diff -0.287 90 % [-0.402, -0.151] -> gaming grows; labelled / first-4 items per ckpt {'s0050': (0, 0), 's0100': (2, 2), 's0200': (14, 14), 's0500': (61, 61), 's0750': (122, 122), 's1100': (170, 170), 's1600': (178, 178), 's2300': (187, 188)}
+   secondary (arm B first min(strict,4), labelled): early 0.062 (n 16), late 0.349 (n 536), diff -0.286 90 % [-0.401, -0.151] -> gaming grows; labelled / first-4 items per ckpt {'s0050': (0, 0), 's0100': (2, 2), 's0200': (14, 14), 's0500': (61, 61), 's0750': (122, 122), 's1100': (170, 170), 's1600': (178, 178), 's2300': (188, 188)}
 
 READING 4 (brevity)
    B = s1600; H = s0750 (F2 <= c on >= 24 of 48); not brevity first
@@ -39,7 +39,7 @@ READING 4 (brevity)
 EXPECTATIONS (labels-dependent)
    4a prompts with any genuine (base + extension) by ckpt: {'s0050': 1, 's0100': 4, 's0200': 11, 's0500': 23, 's0750': 36, 's1100': 41, 's1600': 45, 's2300': 43}; base only: {'s0050': 0, 's0100': 2, 's0200': 8, 's0500': 18, 's0750': 34, 's1100': 40, 's1600': 42, 's2300': 43}
    4b F1 <= 750 on 35 of 48 (expected 28-36)
-   4c s2300 (B_s2300 new draws): >= 1 genuine on 43, >= 2 on 39 of 48 (expected >= 44 / >= 40); prompts with < 2 genuine and unlabelled strict left: ['ifbench_268']
+   4c s2300 (B_s2300 new draws): >= 1 genuine on 43, >= 2 on 40 of 48 (expected >= 44 / >= 40); prompts with < 2 genuine and unlabelled strict left: []
    5  medians F1 P 500 (<= 500?) T 750 (in 500, 750?) N 1600 (>= 1100?); reading no order (expected habit first)
    6  of 32 with F25: gradual 0.22 (>= 0.5?), abrupt 0.00 (<= 0.2?), median rate at F1* 0.0312 (<= 0.0938?)
    7  arm C early 0.163 late 0.267 (each in [0.05, 0.30]?), reading flat (expected flat); secondary gaming grows (expected gaming first: early >= 0.5 if >= 10 items, late <= 0.35)
