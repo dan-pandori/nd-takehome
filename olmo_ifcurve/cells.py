@@ -47,7 +47,7 @@ SOURCES = {
 # (8 -> 4) at s0050 / s0200 / s0350 / s0500, all 218 prompts (reach ones: the first 4 of their 32); 8 at s1100 / s1600,
 # which the pre-registered shape reading needs, and at the stored checkpoints
 N_A = {"dpo": 16, "s0050": 4, "s0200": 4, "s0350": 4, "s0500": 4}
-N_B, N_X = 32, 64  # amendment 3: extension to 64 per cell (the brief's cut 3), not 128
+N_B, N_X = 32, 128  # amendment 4: extension back to 128 per cell (X_ / X2_ 32 draws, then X3_ 64); amendment 3 had 64
 FIELDS = ["job", "pid", "chunk", "i", "n_tok", "finish", "strict", "loose", "think_end", "think_tok", "ans_tok",
           "think_words", "ans_words", "ans_key"]
 
@@ -157,7 +157,7 @@ def by_pid(job):
 
 
 def draws(ckpt, pid, arm, ext=True):
-    """The cell's draws in order (list of row dicts). arm "A": first N_A; arm "B": first 32, or first N_X (64, amendment 3) when the cell
+    """The cell's draws in order (list of row dicts). arm "A": first N_A; arm "B": first 32, or first N_X (128; 64 under amendment 3, 128 again under amendment 4) when the cell
     has an extension job (X_<ckpt>) with rows for this pid and ext is True."""
     if arm == "A":
         src, n = SOURCES["A"].get(ckpt, []), N_A.get(ckpt, 8)
@@ -165,7 +165,7 @@ def draws(ckpt, pid, arm, ext=True):
         src, n = list(SOURCES["B"].get(ckpt, [])), N_B
         # extension jobs: X_<ckpt> (first batch) or X2_<ckpt> (second batch, prompts with F1 after s0750); a prompt has
         # rows in at most one of them
-        xj = [j for j in (f"X_{ckpt}", f"X2_{ckpt}") if by_pid(j).get(pid)]
+        xj = [j for j in (f"X_{ckpt}", f"X2_{ckpt}", f"X3_{ckpt}") if by_pid(j).get(pid)]
         if ext and xj:
             src, n = src + xj, N_X
     out = []
@@ -182,7 +182,7 @@ def cmd_check():
     for c in CKPTS:
         a = [len(draws(c, p, "A")) for p in AA]
         b = [len(draws(c, p, "B")) for p in R] if c != "dpo" else []
-        x = sum(1 for p in R if by_pid(f"X_{c}").get(p) or by_pid(f"X2_{c}").get(p))
+        x = sum(1 for p in R if by_pid(f"X_{c}").get(p) or by_pid(f"X2_{c}").get(p) or by_pid(f"X3_{c}").get(p))
         fa = f"{sum(1 for v in a if v)} {min(a) if a else 0}/{max(a) if a else 0}"
         fb = f"{sum(1 for v in b if v)} {min(b) if b else 0}/{max(b) if b else 0}" if b else "-"
         print(f"{c:6} {fa:28} {fb:28} {x}")

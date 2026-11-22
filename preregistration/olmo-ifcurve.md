@@ -300,3 +300,17 @@ extension goes from 128 to 64 (cut 3).
   order, as Dan directed, and "abrupt" is reported for prompts with F1 = s0050 (preceded by dpo's 0 in ≥ 256) only.
 
 Everything else is unchanged.
+
+## Amendment 4 — 2026-11-22 01:53 UTC (extension cells back to 128; no new reading)
+
+**Why.** Between 23:11 and 01:52 UTC the RunPod balance rose from ≈ $46 to $244.98: the account was topped up. That
+removed the $40-floor constraint behind amendment 3. This run's $160 budget is binding again. Spent: $128.59 (podbudget),
+plus ≈ $1 for the pod still running. Amendment 2's pre-registered rule restores the 128-draw extension if spend so far +
+the projected extension at 128 + $5 ≤ $160: 129.6 + ≈ 17 + 5 ≈ 152 ≤ 160. It holds. Per the brief's cut order (the
+extension is cut after checkpoints 350 / 1,100) and Dan's 17:47 instruction (restore cuts 2 and 3 first), the extension
+comes first.
+
+**Change.** Every one of the 48 extension cells gets 64 more draws (jobs X3_<ckpt>, seed 52000 + step), so the cells are
+128 as pre-registered (`cells.N_X` = 128; abrupt = "0 of 128"). Planned before any X3 draw. The same checkpoints as the
+X / X2 cells, so no F1 moves. Nothing else is restored: s0350 (≈ $11) and the arm-A top-ups at 50–500 (≈ $9) do not
+fit with the $5 margin. If the X3 jobs come in cheaper, the top-ups follow by the same rule, s0500 first.

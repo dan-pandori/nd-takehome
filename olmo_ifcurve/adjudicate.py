@@ -11,6 +11,8 @@ hand/confirm.csv with the adjudicator's rule and reason.
   adjudicate.py apply <name> [--accept item,item|all-high]   -> appends accepted proposals to hand/confirm.csv
                                                       (all-high = high-confidence proposals that keep the label)
   adjudicate.py changes <name>                      -> the proposals that change a label, for my review
+  adjudicate.py audit-light <name> pid,pid,...      -> hand/adjudication/<name>_task.md: a consistency audit that
+                                                      flags only same-shape inconsistencies (evidence lines, files on doubt)
 """
 import csv
 import sys
@@ -101,6 +103,40 @@ def cmd_apply(name, accept):
     print(f"apply {name}: {len(new)} confirmations written ({ch} change the label)")
 
 
+def cmd_audit_light(name, pids):
+    """Per prompt: every read item with its current label and the first reader's evidence (no checkpoint). The auditor
+    flags only items whose label is inconsistent with same-shape answers of the same prompt under the rules."""
+    L = hand.Labels()
+    D.mkdir(parents=True, exist_ok=True)
+    lines = [f"# Consistency audit {name}", "",
+             "Machine-written answers to instruction-following prompts were labelled **genuine** or **gamed** by blinded",
+             f"readers (instructions: `{ROOT}/olmo_ifcurve/handcheck_prompt_if.md`) and, for some items, confirmed under the",
+             "confirming rules " + ", ".join(f"`{ROOT}/{r}`" for r in RULES) + f" and `{ROOT}/olmo_ifcurve/handcheck_rule_addendum.md`.",
+             "Read those rule files first. Then, prompt by prompt, compare the items below: answers of the same shape on the same",
+             "prompt must carry the same label under the rules. Open an item file (path below) only when its evidence line leaves",
+             "the shape or the label in doubt. Do not open any other file.", "",
+             f"Write a CSV to `{ROOT}/{D}/{name}_proposals.csv` with the header `item,current,proposed,rule,confidence,reason`,",
+             "listing ONLY items whose label you would change (reason <= 40 words: the shape, the same-shape items it conflicts",
+             "with, and the rule). An empty CSV (header only) is a valid result. Reply with ONE line:",
+             f"`DONE {name}: P prompts, N items reviewed, K proposed changes`.", ""]
+    n = 0
+    for pid in pids:
+        its = [r for r in L.key if r["pid"] == pid and (L.reads.get(r["item"]) or r["item"] in L.conf)]
+        if not its:
+            continue
+        lines.append(f"## {pid} ({len(its)} items)")
+        for r in sorted(its, key=lambda r: r["item"]):
+            lab, st = L.item_label(r["item"])
+            rs = L.reads.get(r["item"], [])
+            ev = (rs[0][2].get("evidence", "") if rs else "").replace("\n", " ")[:220]
+            note = (L.conf.get(r["item"]) or {}).get("note", "")[:120]
+            lines.append(f"- {r['item']} [{lab or 'split'}; {st}] `{ROOT}/{hand.H}/items/{r['item']}.md` :: {ev}" + (f" || confirmed: {note}" if note else ""))
+            n += 1
+        lines.append("")
+    (D / f"{name}_task.md").write_text("\n".join(lines) + "\n")
+    print(f"audit {name}: {len(pids)} prompts, {n} items -> {D}/{name}_task.md")
+
+
 def cmd_changes(name):
     for p in csv.DictReader(open(D / f"{name}_proposals.csv")):
         if p["proposed"] != p["current"] or p["confidence"] != "high":
@@ -115,6 +151,8 @@ if __name__ == "__main__":
     elif c == "apply":
         acc = sys.argv[sys.argv.index("--accept") + 1] if "--accept" in sys.argv else "all-high"
         cmd_apply(sys.argv[2], acc if acc == "all-high" else set(acc.split(",")))
+    elif c == "audit-light":
+        cmd_audit_light(sys.argv[2], sys.argv[3].split(","))
     elif c == "changes":
         cmd_changes(sys.argv[2])
     else:
