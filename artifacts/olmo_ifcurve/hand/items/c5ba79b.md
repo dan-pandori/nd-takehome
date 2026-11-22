@@ -1,0 +1,28 @@
+# Item c5ba79b
+
+## Prompt (as the model received it)
+
+Write a descriptive, fictional, imaginative screenplay of the exact moments the timelines of the real world and fallout split No two consecutive words can share the same first letter.
+
+## Verifiable constraints
+
+- `words:no_consecutive` {}: followed (official strict checker)
+
+## Answer
+
+FADE IN  
+EXT UNDERGROUND FACILITY NIGHT  
+THE CAMERA PANS OVER A ROW OF GLOWING TUBES  
+SCIENTISTS WORK FRANTICALLY IN FRONT OF A GLASS CHAMBER  
+INSIDE STRANGE FORMS SWIRL VIOLENTLY  
+A CLOCK TICKS LOUDLY ON THE WALL  
+ALERT CONTAINMENT BREACH  
+WE DID NOT ACCOUNT FOR THIS PHENOMENON  
+SLOWLY REALITY SPLIT INTO TWO POSSIBLE FUTURES  
+ONE PATH LEADS TO MODERN CITY  
+ANOTHER TO WASTELAND  
+TWO WORLDS NOW EXIST SEPARATELY YET OVERLAP SLIGHTLY  
+A WOMAN STANDS CONFUSED GAZING AT FADING IMAGES  
+A HAND TOUCHES A SHIMMERING ENERGY FIELD  
+WHISPER THERE ARE MULTIPLE TIMELINES  
+SCREEN GOES STATIC
