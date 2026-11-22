@@ -17,11 +17,11 @@ READING 1 (timing by class; steps; never = 9999)
       N: {1100: 4, 1600: 3}
 
 READING 2 (gradual / abrupt), prompts with F1* <= 2300
-   categories: {'intermediate': 26, 'gradual': 7, 'slow': 15}
+   categories: {'intermediate': 25, 'gradual': 7, 'slow': 16}
       class P: {'gradual': 6, 'intermediate': 15, 'slow': 4}
       class T: {'intermediate': 7, 'slow': 8, 'gradual': 1}
-      class N: {'intermediate': 4, 'slow': 3}
-   of 33 with F25 <= 2300: gradual 0.21, abrupt 0.00; median earliest detectable rate 0.0312 (3/32 = 0.0938)
+      class N: {'intermediate': 3, 'slow': 4}
+   of 32 with F25 <= 2300: gradual 0.22, abrupt 0.00; median earliest detectable rate 0.0312 (3/32 = 0.0938)
 
 READING 3 (gaming among strict successes)
    arm C (my sub-sample of 20 per checkpoint): gamed / labelled (of sampled) dpo:3/20(20) s0050:4/20(20) s0100:3/20(20) s0200:3/20(20) s0500:1/20(20) s0750:2/20(20) s1100:5/20(20) s1600:5/20(20) s2300:6/20(20)
@@ -38,7 +38,7 @@ EXPECTATIONS (labels-dependent)
    4b F1 <= 750 on 35 of 48 (expected 28-36)
    4c s2300 (B_s2300 new draws): >= 1 genuine on 44, >= 2 on 41 of 48 (expected >= 44 / >= 40); prompts with < 2 genuine and unlabelled strict left: []
    5  medians F1 P 500 (<= 500?) T 750 (in 500, 750?) N 1100 (>= 1100?); reading no order (expected habit first)
-   6  of 33 with F25: gradual 0.21 (>= 0.5?), abrupt 0.00 (<= 0.2?), median rate at F1* 0.0312 (<= 0.0938?)
+   6  of 32 with F25: gradual 0.22 (>= 0.5?), abrupt 0.00 (<= 0.2?), median rate at F1* 0.0312 (<= 0.0938?)
    7  arm C early 0.163 late 0.267 (each in [0.05, 0.30]?), reading flat (expected flat); secondary gaming grows (expected gaming first: early >= 0.5 if >= 10 items, late <= 0.35)
    8  B s1600 (in 1100, 1600?) H s0750 (in 750, 1100?) -> not brevity first (expected not)
 

@@ -2843,10 +2843,11 @@
   },
   "ifbench_268": {
    "F1": "s1600",
-   "F1s": null,
-   "F1s_all": null,
+   "F1s": "s1600",
+   "F1s_all": "s1600",
    "F2": "s1600",
    "F25": null,
+   "cat": "slow",
    "cells": {
     "s0050": {
      "est": 0.0,
@@ -2911,19 +2912,24 @@
      "unl": 1
     },
     "s2300": {
-     "est": 0.06696428571428571,
-     "gam": 17,
+     "est": 0.0625,
+     "gam": 18,
      "gen": 2,
      "n": 32,
      "strict": 20,
-     "unl": 1
+     "unl": 0
     }
    },
    "cls": "N",
-   "complete": false,
-   "ext_design": null,
+   "complete": true,
+   "ext_design": "s1100",
    "ext_expected": "s1100",
-   "ext_present": null,
+   "ext_present": false,
+   "prev_desc": "s1100 0/32",
+   "rate_F1s": [
+    2.25,
+    32
+   ],
    "xckpt": [
     "s0750"
    ]
@@ -4614,7 +4620,7 @@
    "ifbench_253": "intermediate",
    "ifbench_264": "gradual",
    "ifbench_267": "intermediate",
-   "ifbench_268": "never",
+   "ifbench_268": "slow",
    "ifbench_269": "intermediate",
    "ifbench_271": "intermediate",
    "ifbench_280": "slow",
@@ -4636,8 +4642,7 @@
   "counts": {
    "gradual": 7,
    "intermediate": 25,
-   "never": 1,
-   "slow": 15
+   "slow": 16
   },
   "median_rate_F1s": 0.03125,
   "n_withF25": 32,

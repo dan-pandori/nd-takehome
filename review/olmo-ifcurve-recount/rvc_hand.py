@@ -367,7 +367,7 @@ def need_third(rnd):
     conf = json.load(open(HAND / "confirm.json")) if (HAND / "confirm.json").exists() else {}
     out = []
     for g, rs in rd.items():
-        if len(rs) == 2 and rs[0][1] != rs[1][1] and g not in pend and json.dumps(list(g)) not in conf:
+        if len(rs) == 2 and rs[0][1] != rs[1][1] and g not in pend:   # every split gets its third read
             out.append(list(rs[0][5]))
     json.dump(out, open(HAND / f"need_{rnd}.json", "w"))
     print(f"{rnd}: {len(out)} third reads needed")

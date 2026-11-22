@@ -1,11 +1,10 @@
-prompts whose walk is not complete (labels pending): 1 ['ifbench_268']
+prompts whose walk is not complete (labels pending): 0 []
 
 EXTENSION PLACEMENT (executor's extension cells vs the checkpoint before my F1)
    prompts whose extension cell is not (only) the checkpoint before my F1: 2
       ifbench_170: my F1 s2300, expected extension at s1600, extension draws at ['s1600', 's1100']
       ifbench_268: my F1 s1600, expected extension at s1100, extension draws at ['s0750']
-   never reached (no genuine in any base cell or extension): ['ifbench_268']
-      ifbench_268: 0 genuine in 8 x 32 base draws + 96 extension draws at s2300 (32 at s2300); 0 of 32 at s2300 -> rate < 0.089 (95 %)
+   never reached (no genuine in any base cell or extension): []
 
 READING 1 (timing by class; steps; never = 9999)
    F1               medians P 500 T 750 N 1100 | med(TuN) - med(P) = 250, 90 % [0, 600] | no order  n={'T': 16, 'P': 25, 'N': 7}
@@ -18,10 +17,10 @@ READING 1 (timing by class; steps; never = 9999)
       N: {1100: 4, 1600: 3}
 
 READING 2 (gradual / abrupt), prompts with F1* <= 2300
-   categories: {'intermediate': 25, 'gradual': 7, 'slow': 15, 'never': 1}
+   categories: {'intermediate': 25, 'gradual': 7, 'slow': 16}
       class P: {'gradual': 6, 'intermediate': 15, 'slow': 4}
       class T: {'intermediate': 7, 'slow': 8, 'gradual': 1}
-      class N: {'intermediate': 3, 'slow': 3, 'never': 1}
+      class N: {'intermediate': 3, 'slow': 4}
    of 32 with F25 <= 2300: gradual 0.22, abrupt 0.00; median earliest detectable rate 0.0312 (3/32 = 0.0938)
 
 READING 3 (gaming among strict successes)

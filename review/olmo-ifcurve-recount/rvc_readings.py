@@ -94,7 +94,7 @@ def variant_labels(name):
     if name == "adjall":   # every adjudicator proposal accepted, including the low-confidence majority overturns
         import glob
         rej = json.load(open(H.HAND / "adj_rejected.json"))
-        rejected = {i for k, v in rej.items() if k != "policy" for i in v}
+        rejected = {i for k, v in rej.items() if k.startswith("ADJ") and isinstance(v, list) for i in v}
         rd = H.reads()
         byitem = {r[4]: g for g, rs in rd.items() for r in rs}
         for f in sorted(glob.glob(str(SCR / "adjud" / "ADJ*_*.json"))):

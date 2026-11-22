@@ -35,7 +35,7 @@ def main():
             T(f"   {json.loads(g)[0]} reads {c['reads']} -> {c['label']}: {c['reason'][:150]}")
     rej = json.load(open(H.HAND / "adj_rejected.json"))
     lists = {k: v for k, v in rej.items() if isinstance(v, list)}
-    items = [i for v in lists.values() for i in v]
+    items = [i for k, v in lists.items() if k.startswith("ADJ") for i in v]
     T(f"low-confidence adjudicator proposals not accepted (against two agreeing reads or a 2-1 majority): "
       f"{sum(len(v) for k, v in lists.items() if k.startswith('ADJ'))} proposals "
       f"({ {k: len(v) for k, v in lists.items()} }); distinct items {len(set(items))}")

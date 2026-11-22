@@ -22,7 +22,22 @@ for c in H.CKA:
     T(f"arm-C half-sample {c}: mine gamed {sum(lab(k) == 'gamed' for k in ks)}, executor gamed {sum(exl(k) == 'gamed' for k in ks)}, "
       f"executor unlabelled {sum(exl(k) is None for k in ks)}")
 adj = list(csv.DictReader(open(OUT / "emergence_adjall.csv")))
-T("adjall F1 counts:", dict(collections.Counter(r["F1"] for r in adj)), "| F1* < F1:", sum(1 for r in adj if r["F1s"] != r["F1"]))
+T("adjall F1 counts:", dict(collections.Counter(r["F1"] for r in adj)), "| F1* < F1 (completed walks only):",
+  sum(1 for r in adj if r["F1s"] != r["F1"] and r["F1s"] != "9999"), "| walks pending:",
+  [r["pid"] for r in adj if r["F1s"] == "9999"])
+fin = list(csv.DictReader(open(OUT / "emergence.csv")))
+T("final F1* < F1:", sum(1 for r in fin if r["F1s"] != r["F1"]))
+fixed = [p for p in H.REACH if p in ("ifbench_64",)]
+ks = [k for c in H.CK for k in H.B[c][p]] if False else None
+import gzip, json as _j
+ans = H.answers()
+for p in ("ifbench_64", "ifbench_284"):
+    succ = [k for c in H.CK for k in H.B[c][p]] + [k for c, kk in H.X.get(p, {}).items() for k in kk]
+    T(f"{p}: strict successes in arm-B cells {len(succ)}, distinct answers {len({ans[k].strip() for k in succ})}")
+early = [(p, k) for c in ("s0050", "s0100", "s0200") for p in H.REACH for k in H.B[c][p][:4] if lab(k)]
+T(f"arm-B early first-4 items {len(early)} from {len({p for p, _ in early})} prompts; gamed {sum(lab(k) == 'gamed' for _, k in early)}")
+unread = {c: sum(1 for p in H.REACH for k in H.B[c][p] if lab(k) is None) for c in ("s1100", "s1600", "s2300")}
+T(f"unread base strict at s1100-s2300: {unread} total {sum(unread.values())}")
 em = {r["pid"]: r for r in csv.DictReader(open(OUT / "emergence.csv"))}
 slow = {p for p, r in em.items() if r["category"] == "slow"}
 items = [(p, k) for c in ("s1100", "s1600", "s2300") for p in H.REACH for k in H.B[c][p][:4] if lab(k)]
