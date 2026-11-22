@@ -1,10 +1,29 @@
-job,ckpt,repo,revision,seed,pids,draws,arms,pod,note
-M_s0050,s0050,allenai/Olmo-3.1-32B-Think,step_0050,46050+46051,plan/S0.pids then plan/M.pids,2944,A+B,,stage 0 (32 seeded prompts; meta M_s0050_stage0.json) then resumed to the full spec (seed + 1)
-M_s1600,s1600,allenai/Olmo-3.1-32B-Think,step_1600,47600+47601,plan/S0.pids then plan/M.pids,2944,A+B,,stage 0 (32 seeded prompts; meta M_s1600_stage0.json) then resumed to the full spec (seed + 1)
-M_s0200,s0200,allenai/Olmo-3.1-32B-Think,step_0200,46200,plan/M.pids,2944,A+B,,
-M_s0350,s0350,allenai/Olmo-3.1-32B-Think,step_0350,46350,plan/M.pids,2944,A+B,,
-M_s0500,s0500,allenai/Olmo-3.1-32B-Think,step_0500,46500,plan/M.pids,2944,A+B,,
-M_s1100,s1100,allenai/Olmo-3.1-32B-Think,step_1100,47100,plan/M.pids,2944,A+B,,
-B_s0100,s0100,allenai/Olmo-3.1-32B-Think,step_0100,46100,plan/B_s0100.pids,1200,B,,42 IFBench reach x 24 (after F_s0100_ifb's 8) + 6 IFEval x 32
-B_s0750,s0750,allenai/Olmo-3.1-32B-Think,step_0750,46750,plan/B_s0750.pids,464,B,,17 IFBench reach x 16 (after T4 / T4b's 16) + 6 IFEval x 32
-B_s2300,s2300,allenai/Olmo-3.1-32B-Think,main,48300,plan/B_s2300.pids,1536,B,,48 reach x 32 (stored s2300 draws selected the set)
+job,run,meta,ckpt,revision,seed,draws,gen_tokens,gpu_seconds,pod,note
+B_s0100,0,B_s0100.json,s0100,step_0100,46100,1200,5763531,3151.9,ifc-b,"reach: 24 after F_s0100_ifb (IFBench), 32 (IFEval)"
+B_s0750,0,B_s0750.json,s0750,step_0750,46750,464,2705387,1875.7,ifc-d,reach top-ups after T4 / T4b; IFEval 32
+B_s2300,0,B_s2300.json,s2300,main,48300,1536,10541451,6145.3,ifc-d,reach 32 fresh
+M_s0050,0,M_s0050.json,s0050,step_0050,46051,1944,8758337,5078.0,ifc-a,"stage 0 (S0.pids, 32 seeded prompts) then resumed with M4.pids"
+M_s0050,0,M_s0050_stage0.json,s0050,step_0050,46050,296,1349863,937.5,ifc-a,"stage 0 (S0.pids, 32 seeded prompts) then resumed with M4.pids"
+M_s0200,0,M_s0200.json,s0200,step_0200,46200,2240,9970467,5313.2,ifc-b,M4.pids
+M_s0500,0,M_s0500.json,s0500,step_0500,46500,2240,10810313,6159.3,ifc-c,M4.pids
+M_s1100,0,M_s1100.json,s1100,step_1100,47100,2944,19224528,11443.9,ifc-c,M8.pids
+M_s1600,0,M_s1600.json,s1600,step_1600,47601,2648,14866953,8478.8,ifc-a,stage 0 (S0.pids) then resumed with M8.pids
+M_s1600,0,M_s1600_stage0.json,s1600,step_1600,47600,296,1896120,1598.6,ifc-a,stage 0 (S0.pids) then resumed with M8.pids
+T_s0500,0,T_s0500.json,s0500,step_0500,55500,704,3200485,1956.5,ifc-g,arm-A top-up to 8 (amendment 5)
+X2_s0100,0,X2_s0100.json,s0100,step_0100,49600,32,381486,522.0,ifc-f,extension batch 2 (32 per cell)
+X2_s0750,0,X2_s0750.json,s0750,step_0750,50250,256,1778373,1230.1,ifc-f,extension batch 2 (32 per cell)
+X2_s1100,0,X2_s1100.json,s1100,step_1100,50600,64,574928,885.5,ifc-f,extension batch 2 (32 per cell)
+X2_s1600,0,X2_s1600.json,s1600,step_1600,51100,96,1063896,884.7,ifc-f,extension batch 2 (32 per cell)
+X3_s0050,0,X3_s0050.json,s0050,step_0050,52050,128,287511,328.7,ifc-g,"extension to 128 (64 per cell, amendment 4)"
+X3_s0100,0,X3_s0100.json,s0100,step_0100,52100,448,3145183,2235.3,ifc-g,"extension to 128 (64 per cell, amendment 4)"
+X3_s0200,0,X3_s0200.json,s0200,step_0200,52200,704,3249208,2030.6,ifc-h,"extension to 128 (64 per cell, amendment 4)"
+X3_s0500,0,X3_s0500.json,s0500,step_0500,52500,960,3973506,2048.6,ifc-g,"extension to 128 (64 per cell, amendment 4)"
+X3_s0750,0,X3_s0750.json,s0750,step_0750,52750,512,3554979,2343.8,ifc-h,"extension to 128 (64 per cell, amendment 4)"
+X3_s1100,0,X3_s1100.json,s1100,step_1100,53100,128,1102045,1398.9,ifc-h,"extension to 128 (64 per cell, amendment 4)"
+X3_s1600,0,X3_s1600.json,s1600,step_1600,53600,192,2108587,1679.8,ifc-h,"extension to 128 (64 per cell, amendment 4)"
+X4_s1100,0,X4_s1100.json,s1100,step_1100,54100,96,1517720,1524.6,ifc-h,ifbench_170 extension after its F1 moved (audits)
+X_s0050,0,X_s0050.json,s0050,step_0050,49050,64,148436,228.2,ifc-e,"extension batch 1 (32 per cell, amendment 3)"
+X_s0100,0,X_s0100.json,s0100,step_0100,49100,192,1147783,814.1,ifc-e,"extension batch 1 (32 per cell, amendment 3)"
+X_s0200,0,X_s0200.json,s0200,step_0200,49200,352,1512654,992.0,ifc-e,"extension batch 1 (32 per cell, amendment 3)"
+X_s0500,0,X_s0500.json,s0500,step_0500,49500,480,2153171,1522.4,ifc-e,"extension batch 1 (32 per cell, amendment 3)"
+M_s0350,,,s0350,step_0350,46350,0,0,0,,cancelled before its first draw (amendment 3)

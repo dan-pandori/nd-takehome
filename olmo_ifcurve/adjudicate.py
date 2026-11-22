@@ -6,7 +6,7 @@ readers) to items the gate flags, seeing the item file and every reader's label 
 proposes a final label. I review every proposal that changes a label (and every low-confidence one) before it goes to
 hand/confirm.csv with the adjudicator's rule and reason.
 
-  adjudicate.py task <name> [--audit pid,pid,...]   -> hand/adjudication/<name>_task.md (items: checker disagreements and
+  adjudicate.py task <name> [--audit pid,pid,...] [--items id,id,...]   -> hand/adjudication/<name>_task.md (items: checker disagreements and
                                                       splits not yet adjudicated; --audit: every read item of these prompts)
   adjudicate.py apply <name> [--accept item,item|all-high]   -> appends accepted proposals to hand/confirm.csv
                                                       (all-high = high-confidence proposals that keep the label)
@@ -34,11 +34,13 @@ def done_items():
     return out
 
 
-def cmd_task(name, audit=None):
+def cmd_task(name, audit=None, only=None):
     L = hand.Labels()
     D.mkdir(parents=True, exist_ok=True)
     seen = done_items()
-    if audit:
+    if only:
+        items = list(only)
+    elif audit:
         items = [r["item"] for r in L.key if r["pid"] in audit and L.reads.get(r["item"])]
     else:
         items = []
@@ -147,7 +149,8 @@ if __name__ == "__main__":
     c = sys.argv[1]
     if c == "task":
         aud = sys.argv[sys.argv.index("--audit") + 1].split(",") if "--audit" in sys.argv else None
-        cmd_task(sys.argv[2], aud)
+        its = sys.argv[sys.argv.index("--items") + 1].split(",") if "--items" in sys.argv else None
+        cmd_task(sys.argv[2], aud, its)
     elif c == "apply":
         acc = sys.argv[sys.argv.index("--accept") + 1] if "--accept" in sys.argv else "all-high"
         cmd_apply(sys.argv[2], acc if acc == "all-high" else set(acc.split(",")))

@@ -2442,3 +2442,107 @@ mean thinking per draw is 1.9× the control's, 6,985 vs 3,613 tokens, and its me
 `hf://buckets/dan-pandori/nd-rl/olmo-ifladder/` (`artifacts/olmo_ifladder/`: every sample's text and token ids, grades,
 metas, logs, hand items / keys / labels, both adapters (`lora/main`, `lora/ctrl`); bulk files in
 `artifacts/MANIFEST.jsonl`; `olmo_ifladder/`, `pod/olmo_ifladder/`); no merged weights.
+
+## olmo-ifcurve — instruction following over Olmo 3.1 Think 32B's RL run (run olmo-ifcurve, 2026-11-21/22)
+
+Models: `dpo` = `allenai/Olmo-3-32B-Think-DPO` main (97604023; the RL start, step 0); `sNNNN` = `allenai/Olmo-3.1-32B-Think` at RL step NNNN (commits in `olmo_ifcurve/checkpoints.csv`; `s2300` = `main` 97ade57a, weights identical to `step_2300` 29884259). All 32.2 B parameters, bf16, pretrained (Olmo 3 / 3.1 Think recipe: SFT → DPO → GRPO-style RL on Dolci-Think-RL), evaluated with vLLM 0.11.0 at the Think RL rollout settings (olmo_thinker template sha eba6e269…, T 1, top-p 1, 32,768 response tokens). Checker: official IFBench / IFEval strict. s0350 was cancelled (amendment 3), so nine checkpoints. Pre-registration with five amendments: `preregistration/olmo-ifcurve.md`.
+
+### Arm A — strict pass@k on the 218 IFBench prompts (`olmo_ifcurve/passk.csv`, prompt-bootstrap 95 %)
+
+| step | draws / prompt | pass@1 | 95 % | pass@4 | pass@8 | 95 % |
+|---|---|---|---|---|---|---|
+| 0 | 16 | 0.290 | 0.240–0.342 | 0.403 | 0.461 | 0.399–0.523 |
+| 50 | 4 | 0.296 | 0.243–0.351 | 0.422 | – | – |
+| 100 | 8 | 0.315 | 0.263–0.368 | 0.441 | 0.505 | 0.440–0.569 |
+| 200 | 4 | 0.347 | 0.292–0.403 | 0.482 | – | – |
+| 500 | 8 | 0.412 | 0.358–0.466 | 0.580 | 0.656 | 0.592–0.720 |
+| 750 | 8 | 0.512 | 0.460–0.564 | 0.714 | 0.794 | 0.739–0.844 |
+| 1100 | 8 | 0.577 | 0.527–0.626 | 0.795 | 0.872 | 0.826–0.913 |
+| 1600 | 8 | 0.646 | 0.597–0.693 | 0.830 | 0.872 | 0.826–0.913 |
+| 2300 | 8 | 0.683 | 0.634–0.731 | 0.844 | 0.885 | 0.839–0.927 |
+
+dpo on its first 8 draws: pass@1 0.290, pass@8 0.459. Stored draws (olmo-ifomega fixed phase) at dpo, 100, 750 and 2,300; new draws elsewhere (s0500: 4 + 4, amendment 5).
+
+**Shape (reading 5): sharpening from s1100.** Remaining gain to 2,300 with paired 90 % intervals:
+- from 750: Δpass@1 0.171 [0.138, 0.205], Δpass@8 0.092 [0.046, 0.138] → sharpening False
+- from 1100: Δpass@1 0.106 [0.080, 0.132], Δpass@8 0.014 [-0.018, 0.046] → sharpening True
+- from 1600: Δpass@1 0.037 [0.018, 0.056], Δpass@8 0.014 [-0.014, 0.041] → sharpening True
+
+Per family (first instruction id), strict pass@1 at dpo → s0750 → s2300: count (n 43) 0.573 → 0.666 → 0.852; custom (n 11) 0.205 → 0.375 → 0.352; format (n 65) 0.309 → 0.637 → 0.737; ratio (n 21) 0.104 → 0.226 → 0.327; repeat (n 6) 0.302 → 0.500 → 0.542; sentence (n 14) 0.107 → 0.393 → 0.652; words (n 58) 0.185 → 0.418 → 0.713.
+
+### Arm B — the 48 reach prompts (`olmo_ifcurve/emergence.csv`, `results.csv`)
+
+F1 = first checkpoint with ≥ 1 genuine success in its 32 base draws: 50: 0, 100: 2, 200: 7, 500: 11, 750: 15, 1100: 8, 1600: 3, 2300: 2, never: 0. dpo has 0 genuine in ≥ 256 on all 48 (the set's definition). F1 ≤ 750 on 35 of 48.
+- prompt-recoverable (25): F1 100×2, 200×5, 500×8, 750×8, 1100×1, 2300×1
+- teachable only (16): F1 200×2, 500×3, 750×7, 1100×2, 1600×1, 2300×1
+- neither (7): F1 1100×5, 1600×2
+
+**Timing primary:F1_step:** medians P 500, T 750, N 1100 (n 25/16/7); rest − P = 250 steps, 90 % [0, 600]; order holds True → **no order**.
+**Timing primary:F2_step:** medians P 500, T 925, N 1600 (n 25/16/7); rest − P = 600 steps, 90 % [350, 600]; order holds True → **habit first**.
+**Timing ifbench_154_rule3:F1_step:** medians P 500, T 750, N 1100 (n 26/15/7); rest − P = 425 steps, 90 % [0, 600]; order holds True → **no order**.
+**Timing ifbench_154_rule3:F2_step:** medians P 625, T 1100, N 1600 (n 26/15/7); rest − P = 475 steps, 90 % [350, 600]; order holds True → **habit first**.
+
+**Gradual / abrupt (reading 2; extension cells 128 draws at the checkpoint before F1, all 48):** gradual 10 (P 7, T 3, N 0), intermediate 26 (P 15, T 8, N 3), slow 12 (P 3, T 5, N 4), abrupt 0. F1\* (any genuine in all draws) is earlier than F1 on 18 prompts (the extension cell held a genuine success). Median genuine rate at F1\*: 0.039.
+At s2300 (32 fresh draws): ≥ 1 genuine established on 40 of 48, ≥ 2 on 36 (lower bounds: cells past F2 / F25 are read only to their first 4 strict successes; 660 s2300 strict successes unread).
+
+### Arm C — gamed share of strict successes (`olmo_ifcurve/gaming.csv`)
+
+| step | arm C sample read | gamed | share | arm B first-4 read | gamed | share |
+|---|---|---|---|---|---|---|
+| 0 | 40 | 5 | 0.125 | 0 | 0 | – |
+| 50 | 40 | 7 | 0.175 | 0 | 0 | – |
+| 100 | 40 | 6 | 0.150 | 2 | 0 | 0.000 |
+| 200 | 40 | 4 | 0.100 | 14 | 1 | 0.071 |
+| 500 | 40 | 2 | 0.050 | 61 | 11 | 0.180 |
+| 750 | 40 | 8 | 0.200 | 122 | 27 | 0.221 |
+| 1100 | 40 | 5 | 0.125 | 170 | 42 | 0.247 |
+| 1600 | 40 | 10 | 0.250 | 178 | 55 | 0.309 |
+| 2300 | 40 | 11 | 0.275 | 188 | 67 | 0.356 |
+- arm C (primary): early 0.138 (n 160) vs late 0.217 (n 120); early − late -0.079, 90 % [-0.175, 0.015] → **flat**.
+- arm B (secondary): early 0.062 (n 16) vs late 0.306 (n 536); early − late -0.243, 90 % [-0.360, -0.091] → **gaming grows**.
+
+### Arm D — lengths (`olmo_ifcurve/lengths.csv`; medians over arm-A draws; reach = arm-B base draws)
+
+| step | thinking tokens | answer tokens | answer words | cut at 32,768 | reach thinking | reach answer words |
+|---|---|---|---|---|---|---|
+| 0 | 2116 | 427 | 261 | 0.06 % | – | – |
+| 50 | 2180 | 392 | 243 | 0.00 % | 2598 | 248 |
+| 100 | 2247 | 362 | 219 | 0.00 % | 3047 | 232 |
+| 200 | 2153 | 294 | 181 | 0.00 % | 2928 | 194 |
+| 500 | 3042 | 219 | 135 | 0.17 % | 4053 | 129 |
+| 750 | 4412 | 146 | 93 | 0.17 % | 5706 | 81 |
+| 1100 | 5318 | 109 | 73 | 0.46 % | 6140 | 56 |
+| 1600 | 4532 | 84 | 57 | 0.63 % | 5106 | 42 |
+| 2300 | 5470 | 74 | 50 | 0.00 % | 6059 | 33 |
+**Brevity (reading 4):** B = 1600 (median answer words within ±20 % of s2300's 50 from then on), H = 750 (≥ 24 of 48 reach prompts with F2 ≤ H) → **not brevity first**.
+
+### Hand gate (`olmo_ifcurve/handcheck.csv`, `gate_summary.json`)
+
+1782 items read blind (2104 reads by Claude reader sub-agents, 40-item batches across checkpoints); 296 with ≥ 2 reads (272 first-two agreements), 26 with 3; 209 confirmed by adjudication under rules 1–14 (103 label changes; rules 13–14 dated in `olmo_ifcurve/handcheck_rule_addendum.md`). The 1559 strict successes the gate needed got their labels from: read 1440, inherited 45, screen 74 (1079 genuine, 480 gamed). Other strict successes carry no label (estimated rates use the first-4 share).
+
+### Compute (`olmo_ifcurve/compute.csv`; registry rows ND_RUN_ID=olmo-ifcurve)
+
+27 sampling job runs on 1 × H200 (TP 1): 20.22 GPU-h of load + generation, 116.8 M generated tokens, 21216 draws (all graded by the checkers; no training, no Lean).
+
+**Strict vs estimated genuine pass@1 (arm A; genuine = strict × (1 − the step's arm-C gamed share), 40 strict successes read per step, the rest unread):**
+dpo 0.290 / 0.254 · 50 0.296 / 0.244 · 100 0.315 / 0.268 · 200 0.347 / 0.313 · 500 0.412 / 0.391 · 750 0.512 / 0.410 · 1,100 0.577 / 0.505 · 1,600 0.646 / 0.485 · 2,300 0.683 / 0.496.
+
+**Bounds stated with their tries:** dpo 0 genuine in ≥ 256 draws on each reach prompt (< 1.2 % at 95 %, by the set's definition); an extension cell with 0 genuine of 128 bounds the pre-switch rate below 2.3 % (95 %); 0 of 32 below 8.9 %.
+RL-data overlap (inherited from olmo-ifomega's 8-gram scan against Dolci-Think-RL-32B): 0 of the 218 and 0 of the 48 prompts flagged.
+
+**Expectations (pre-registration) vs outcomes:**
+
+| # | expectation | outcome |
+|---|---|---|
+| 1 | pass@1 at 50 / 200 / 500 / 1,100 / 1,600 in [0.27, 0.34] / [0.31, 0.42] / [0.40, 0.51] / [0.53, 0.64] / [0.58, 0.68]; pass@8 at 500 / 1,100 / 1,600 in [0.62, 0.78] / [0.80, 0.89] / [0.82, 0.90] | **held** (0.296 / 0.347 / 0.412 / 0.577 / 0.646; 0.656 / 0.872 / 0.872); s0350 and pass@8 at 50 / 200 not measured (amendments 1, 3) |
+| 2 | no pass@1 drop > 0.03 between sampled checkpoints | **held** (monotone) |
+| 3 | shape: sharpening from 1,100 or 1,600 | **held** (from 1,100) |
+| 4 | ≤ 3 of 48 with any genuine at 50 and at 100; F1 ≤ 750 on 28–36; at 2,300 ≥ 1 genuine on ≥ 44 and ≥ 2 on ≥ 40 | 0 / 2 **held**; 35 **held**; **missed** at 2,300: 40 and 36 established (ifbench_1 / 4 all strict successes gamed under rules 13–14, ifbench_166 all gamed, ifbench_280 0 strict; 4 cells partly read, first 4 gamed) |
+| 5 | median F1 P ≤ 500, T ∈ {500, 750}, N ≥ 1,100; reading "habit first" | medians **held** (500 / 750 / 1,100); reading **missed**: "no order" (the 90 % interval of rest − P is [0, 600], lower end not above 0). With F2 the reading is "habit first" |
+| 6 | gradual ≥ 50 % of prompts with F25, abrupt ≤ 20 %, median earliest rate ≤ 3 / 32 | gradual **missed** (10 / 36 = 28 %); abrupt **held** (0); earliest rate **held** (0.039) |
+| 7 | arm C early and late gamed shares in [0.05, 0.30], "flat"; arm B "gaming first" | arm C **held** (0.138 / 0.217, flat); arm B **missed**: "gaming grows" (0.062 on 16 early items vs 0.306) |
+| 8 | B ∈ {1,100, 1,600}, H ∈ {750, 1,100}, "not brevity first" | **held** (1,600; 750; not brevity first) |
+| 9 | thinking tokens at 50 / 1,600 in [1,900, 2,600] / [4,500, 5,700], no checkpoint > 15 % below its predecessor; answer words at 50 / 500 / 1,100 / 1,600 in [200, 270] / [90, 180] / [55, 95] / [45, 75] | **held** (2,180 / 4,532, the 1,100 → 1,600 drop 14.8 %; 243 / 135 / 73 / 57) |
+| 10 | ≤ 0.5 % of arm-A draws hit 32,768 at every checkpoint | **missed** at 1,600 (0.63 %); 1,100 0.46 % |
+
+**Spend:** podbudget $154.67 of $160 (29.72 billed pod-hours), of which $34.84 were 17 orphaned pods (RunPod retired REST v1; QUESTIONS.md), $0.86 a faulty community H200 and a tooling test, $1.69 reconciled unlogged one-minute pods; the rest secure H200s at $5.29/h (no community H200 was available). Claude reader / auditor sub-agents: ≈ 70 batches of ≈ 100–170 k tokens each.

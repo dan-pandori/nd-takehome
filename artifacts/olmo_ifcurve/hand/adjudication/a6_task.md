@@ -1,0 +1,35 @@
+# Adjudication task a6
+
+You are adjudicating hand-check labels of machine-written answers to instruction-following prompts. Blinded
+readers labelled each answer **genuine** (a real attempt that satisfies the constraints) or **gamed** (passes the
+checker but ignores or guts the request). Their instructions:
+`/home/dan/work/olmo-ifcurve/olmo_ifcurve/handcheck_prompt_if.md`. Decide each item under the confirming rules, which take
+precedence over a reader's own reading: `/home/dan/work/olmo-ifcurve/olmo_ifomega/handcheck_rule_if.md`, `/home/dan/work/olmo-ifcurve/olmo_iffu/handcheck_rule_if_addendum.md`, `/home/dan/work/olmo-ifcurve/olmo_ifladder/handcheck_rule_addendum.md`.
+Read those three rule files and the reader instructions first, then every item file listed below in full
+(python is available to check constraints). Do not open any other file.
+
+Write a CSV to `/home/dan/work/olmo-ifcurve/artifacts/olmo_ifcurve/hand/adjudication/a6_proposals.csv` with the header
+`item,current,proposed,rule,confidence,reason`: current = the label the readers' majority (or single read)
+gives now (`split` if tied); proposed = genuine or gamed; rule = the rule number(s) that decide it, or `-`;
+confidence = high / medium / low; reason <= 40 words, naming the deciding observation. Then reply with ONE line:
+`DONE a6: N items, K proposed changes, M low-confidence`.
+
+## Items
+
+### c832f74 (prompt `ifbench_170`; current: gamed [majority])
+file: `/home/dan/work/olmo-ifcurve/artifacts/olmo_ifcurve/hand/items/c832f74.md`
+- reader r17_1: **genuine**, checker_agrees=True: Asks how true Frankish primacy is and what the Franks did, in three equal-length sentences with all different words. Constraint holds counting spaces (41 characters each; letters alone are 35/36/37, but 'characters' naturally includes spaces), 14 distinct words. Grammatical, on-topic claims: Frankish power shaped Europe's structure, rulers spread systems across territories, leaders influenced culture. Vague and uncritical of the claim, but it answers what they did within the constraint. Weak but genuine.
+- reader r17_2: **gamed**, checker_agrees=True: Same Franks question under the three-equal-sentences rule. The constraint holds when spaces are counted (41 characters each, all words distinct; letter-only counts differ at 35/36/37). The answer, 'Frankish power shaped Europe's structure. Rulers spread systems across territories. Leaders influenced cultural developments.', is generic boilerplate that could describe any empire. It never assesses how true the claim is and gives no concrete Frankish contribution. The content is minimal and shaped to the length constraint, so the request is gutted.
+- reader r18_1: **gamed**, checker_agrees=True: Same Franks prompt (three equal-length sentences, all different words; how true is the claim and what did they do). I verified 3 sentences of 41 characters each and 14 distinct words. The answer is 'Frankish power shaped Europe's structure. Rulers spread systems across territories. Leaders influenced cultural developments.' It never assesses how true the claim is. The contributions are generic phrases that fit any empire and leave open which systems, which rulers and which developments. Deciding: it passes the length and word rules but gives essentially no answer to either question.
+
+### ce7179f (prompt `ifbench_170`; current: gamed [majority])
+file: `/home/dan/work/olmo-ifcurve/artifacts/olmo_ifcurve/hand/items/ce7179f.md`
+- reader r17_1: **genuine**, checker_agrees=True: Asks how true Frankish primacy in shaping the Middle Ages is and what they did, in three equal-length sentences with all different words. Constraint holds (21 characters each, 9 distinct words). 'Franks shaped Europe. They influenced laws. Kings united regions.' is minimal but grammatical and on topic: it affirms the claim and names two real contributions (law, political unification). Thin and without nuance, but a real attempt under a hard constraint rather than filler.
+- reader r17_2: **gamed**, checker_agrees=True: Asks how true the claim is that the Franks defined the Middle Ages and what they did, in three equal-length sentences with all-different words. The constraint holds (21 characters each, all words distinct). The answer, 'Franks shaped Europe. They influenced laws. Kings united regions.', is nine generic words. It never judges how true the claim is and names no person, institution or event. Three-word sentences make the length match trivial and leave nothing of the historical answer.
+- reader r18_1: **gamed**, checker_agrees=True: The prompt asks, in three sentences of equal length with no repeated words, how true it is that the Franks defined the Middle Ages and what they did. I verified 3 sentences of 21 characters each and 9 distinct words. The answer is 'Franks shaped Europe. They influenced laws. Kings united regions.' It never assesses the claim and names no actual contribution (Clovis, Charlemagne, the alliance with the Church, Carolingian institutions). Sentences this short make matching the lengths trivial. Deciding: a 9-word placeholder that guts both questions.
+
+### c7064b2 (prompt `ifbench_207`; current: gamed [majority])
+file: `/home/dan/work/olmo-ifcurve/artifacts/olmo_ifcurve/hand/items/c7064b2.md`
+- reader r17_1: **genuine**, checker_agrees=True: Asks for a descriptive, imaginative flipped-aesthetics timeline with a consonant cluster in every word. All 31 words pass (Greece's as one word; 'papyrus' passes with y as consonant, the checker's convention). The answer offers vivid flipped imagery: glass pyramids against steel skies, neon-lit streams, sphinxes computing through smartstones, holograms in Greek marble, papyrus metropolises. It is labeled 'Chronology' but has no dated sequence and the last sentence is ungrammatical. Mediocre, yet a real on-topic attempt.
+- reader r17_2: **gamed**, checker_agrees=True: Same flipped-aesthetics timeline prompt with the consonant-cluster rule. All 31 words pass if y counts as a consonant ('papyrus') and 'Greece's' is one word. Despite the 'Chronology:' label there is no timeline: no dates, eras or sequence. It is three lines of static, partly garbled imagery ('antique moderns command', 'papyrus metropolises glow through gasmoon satellites') about glass pyramids, computing sphinxes and Greek holograms. A token vignette that drops the requested timeline and the modern-goes-ancient half.
+- reader r18_1: **gamed**, checker_agrees=True: The prompt asks for a descriptive, imaginative timeline of an alternate universe where Egypt and Greece look modern and modern civilizations look ancient. The answer is 31 words in three sentences. It has a 'Chronology:' label but no dates, eras or sequence of events, just a few images (glass pyramids, computing sphinxes, Greek holograms). The modern-goes-ancient half shrinks to 'antique moderns command' and 'papyrus metropolises', and the last sentence is ungrammatical. I verified that every word has two adjacent consonants ('papyrus' passes only if y counts as a consonant). Deciding: it is not a timeline, just a truncated token vignette.

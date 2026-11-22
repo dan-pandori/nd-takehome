@@ -1,0 +1,15 @@
+checkpoint,arm,jobs,source run,draws,note
+dpo,A,F_dpo_ifb,olmo-ifomega,16 per prompt (all),"reused: same sampler path, template eba6e269, vLLM 0.11.0, T 1 / top-p 1 / 32,768, olmo_ifomega/problems.jsonl"
+dpo,B,-,olmo-ifomega,0 genuine in >= 256 (definition),not sampled: the reach set is defined by dpo's draws
+s0100,A,F_s0100_ifb,olmo-ifomega,8 per prompt,reused
+s0100,B,F_s0100_ifb + B_s0100,olmo-ifomega + this run,8 stored + 24 new (IFBench); 32 new (IFEval),s0100 never used in selecting the set
+s0750,A,F_s0750_ifb,olmo-ifomega,8 per prompt,reused
+s0750,B,T4_s0750 + T4b_s0750 + B_s0750,olmo-iffu + this run,"T4 chunks 0-1 (16 + 16), T4b for ifbench_19, 16 new on 17 prompts; IFEval 32 new",T4 drawn after the set was fixed; F_s0750 not used for arm B (selection could depend on it)
+s2300,A,F_s2300_ifb,olmo-ifomega,8 per prompt,reused
+s2300,B,B_s2300,this run,32 new,every stored s2300 draw on these prompts was part of their selection
+s0050,A+B,M_s0050,this run,"arm A 4 (50, 200) / 8 (500 with T_s0500, 1100, 1600); reach 32",new
+s0200,A+B,M_s0200,this run,"arm A 4 (50, 200) / 8 (500 with T_s0500, 1100, 1600); reach 32",new
+s0500,A+B,M_s0500 + T_s0500,this run,"arm A 4 (50, 200) / 8 (500 with T_s0500, 1100, 1600); reach 32",new
+s1100,A+B,M_s1100,this run,"arm A 4 (50, 200) / 8 (500 with T_s0500, 1100, 1600); reach 32",new
+s1600,A+B,M_s1600,this run,"arm A 4 (50, 200) / 8 (500 with T_s0500, 1100, 1600); reach 32",new
+all,B ext,X_ / X2_ / X3_ / X4_<ckpt>,this run,96 more draws in the cell before each prompt's F1 (cell 128),amendments 3-4; X4_s1100 for ifbench_170 after its F1 moved
