@@ -1,0 +1,80 @@
+[
+ {
+  "item": "zbf988d",
+  "label": "genuine",
+  "checker_agrees": true,
+  "evidence": "Asks which is not a fish, then an interesting article on salmon and avocado, using 1-10 all-caps words. Answers correctly (avocado), then a short, coherent paragraph on both (salmon migration and omega-3s, avocado as a tree fruit with healthy fats, waterfalls, sushi/guacamole). 6 all-caps words (OCEANS, AVOCADOS, FRUIT, DIET, FUN, FACT), within 1-10. Thin for an 'article' (about 60 words), but brevity is not forced by the constraint and nothing is padded or off-topic: a real, if minimal, attempt."
+ },
+ {
+  "item": "z4f467b",
+  "label": "gamed",
+  "checker_agrees": true,
+  "evidence": "Asks for a jacket blurb: a modern FBI agent stranded in the early 1960s uses future forensics to leave clues for her modern colleagues; exactly 13 numbers. It does have exactly 13 numbers, but all sentence punctuation is stripped ('in 1970 Her 13 clandestine clues', 'repeats Will they'). Bare numbers are stuffed in to reach the count ('the digits 3 11 and 17', 'the final number 9', 'July 20 1969'), and the forensics hook is gone. Number-padded, unpunctuated text that would be unusable as jacket copy."
+ },
+ {
+  "item": "z384106",
+  "label": "genuine",
+  "checker_agrees": true,
+  "evidence": "Asks for a female character who makes ghostly clones from other timelines that can do everything she can, as * bullets each with a - sub-bullet, at most 9% stop words. Gives a coherent character sheet: name/origin, form, power, parallel tasking, shared cognition, limits (energy drain, paradox risk), combat uses. The clipped style is the price of the 9% limit. All 7 bullets have a separate '-' line; stop words are 6/114 = 5.3%."
+ },
+ {
+  "item": "zf839f7",
+  "label": "genuine",
+  "checker_agrees": true,
+  "evidence": "Asks whether frequent hardship can plausibly make a society more resilient, with exactly 2 numbers. Answers yes, gives a mechanism (adaptability, preparedness) and two supporting figures (30%, 40%), so exactly 2 numbers. Brief, and the 'studies suggest' statistics look invented, but it is a direct, on-topic answer to a simple plausibility question; nothing is padded or degenerate."
+ },
+ {
+  "item": "ze31c72",
+  "label": "genuine",
+  "checker_agrees": false,
+  "evidence": "Asks whether pointwise convergence of polynomials on [0,1] implies uniform convergence, at most 20% stop words. Correct: no, with the standard counterexample n x^n(1-x) -> 0 pointwise but sup = (n/(n+1))^(n+1) -> 1/e = 0.3679, plus the monotonicity (Dini) caveat. A genuine, telegraphic answer. But stop words are 8 of 36 whitespace words = 22.2% (25.8% of alphabetic words). It passes only if punctuation or formula symbols count as words (12-19%), so by a plain word count the limit is narrowly exceeded."
+ },
+ {
+  "item": "zc5a605",
+  "label": "genuine",
+  "checker_agrees": true,
+  "evidence": "Asks whether language models have concepts analogous to a text-to-image model learning 'bear' from captions; each word must start with the next letter of the alphabet. The 26 words run correctly from A to Z. It reads as 'Absolutely: bear concepts develop easily from grammatical hints...; linguistic models notice obvious patterns regarding semantic textual understanding via words', a minimal but on-topic yes with a reason. Only the closing 'xenon yields zero' is filler. The awkwardness is forced by an extreme constraint."
+ },
+ {
+  "item": "z0cbd7a",
+  "label": "genuine",
+  "checker_agrees": true,
+  "evidence": "Asks whether a claim (alum's formula explains its role in beta-carotene extraction from carrots) is correct, with an emoji ending every sentence and 'fleetness' in sentence 8. All 9 sentences end with an emoji and 'fleetness' is in sentence 8. Rather than critiquing the claim, the answer affirms it and elaborates ion by ion (Al3+ complexes, sulfate, hydrate water, pH). The chemistry is dubious, but the response is on topic and substantive. The keyword is awkward but grammatical."
+ },
+ {
+  "item": "zaf2f59",
+  "label": "genuine",
+  "checker_agrees": true,
+  "evidence": "Asks for a descriptive screenplay: a doctor orders pills, the patient refuses and makes the doctor take them, the doctor opens his eyes to find the patient gone, revealing he is the schizophrenic one. Every sentence ends with an emoji. It delivers the full arc in compact scene prose: the doctor swallows the pills, 'Prove it's safe, Doctor', the patient vanishes, a nurse calls him 'Arthur', FADE TO BLACK. Not formal screenplay layout and the refusal beat is thin, but it is a complete, on-topic story."
+ },
+ {
+  "item": "zd4f698",
+  "label": "genuine",
+  "checker_agrees": true,
+  "evidence": "Asks for a personalized postdoc email to Matthew Greene linking the sender's sensing and foundation-model work to his mobile-sensing mental-health research, with cloud x1, rhythm x2, fish x3, puzzle x5, dawn x7. Whole-word counts match ('fishing' is a separate word; fish = 3). The email has a subject, his research focus, the sender's matching skills and expected contribution, and a closing. The keywords are crammed in (fish metaphors, repeated 'dawn') and read awkwardly, but the email stays substantive and usable."
+ },
+ {
+  "item": "zf4466a",
+  "label": "gamed",
+  "checker_agrees": false,
+  "evidence": "Asks for an imaginative timeline of an alternate world where the New World was discovered only in the 1900s via satellites, as * bullets each with a - sub-bullet, at most 27% stop words. Stop words are 12.8% (fine), but there are no sub-bullets. All 12 lines start with '*', and '-' appears only inline ('* 1903 - ... - ...'), which the checker accepts. The premise is also swapped for a hidden civilization under Antarctica, Hollow Earth, UFOs and AI; the Americas never appear."
+ },
+ {
+  "item": "z36973d",
+  "label": "gamed",
+  "checker_agrees": true,
+  "evidence": "Asks whether it is accurate that a neural network's computations involve more than math because ReLU involves more than math; each sentence needs a longer alliteration run than the last. The runs are 2, 4, 5, 6, so the constraint is satisfied. But the four sentences ('AI analyzes. Neural networks nest nonlinearities. ReLU rectifies real results rigorously. Deep dives detail definite dimensional definitions.') never say whether the claim is accurate or that ReLU is just max(0,x). They are topical alliterative fragments, and the last one is empty."
+ },
+ {
+  "item": "z90cc12",
+  "label": "genuine",
+  "checker_agrees": true,
+  "evidence": "Asks whether power-law scaling implies exponential dataset growth for modest gains; every word must contain a consonant cluster. The answer takes a position: data grows multiplicatively, but performance follows polynomial (power-law) relationships rather than exponential ones, so dataset sizes stay manageable. Terse and slightly muddled, but on topic and defensible. All 23 words have adjacent consonants; only 'polynomial' relies on counting y as a consonant (l-y-n), as the checker does."
+ },
+ {
+  "item": "ze8ed2b",
+  "label": "genuine",
+  "checker_agrees": true,
+  "evidence": "Asks to count from 10 to 50 but print only multiples of 7. Prints 14, 21, 28, 35, 42, 49: exactly the multiples of 7 in range and nothing else. The <answer> wrapper tags are harmless formatting. Correct and complete."
+ }
+]

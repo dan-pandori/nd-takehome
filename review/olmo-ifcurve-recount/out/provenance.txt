@@ -1,0 +1,77 @@
+[1] vendored checker files compared with my upstream fetch: 11; differing or missing: []
+[2] problems.jsonl sha now 6b416437c97c2a6b / olmo-ifomega bucket copy (2026-11-04 19:52) 6b416437c97c2a6b identical: True
+[3] pids_ifbench 300, exclusions 82 (of them in pids_ifbench 82); arm A mine 218; pids_armA.txt 218; same set True
+    reach: classify.csv 48 (42 IFBench), pids_reach.txt 48, same set True; IFBench reach inside arm A: 42
+    classify.csv `reading` values: {"teachable from RL's trajectories": 16, 'prompt-elicitable at rung 1': 16, 'neither': 7, 'prompt-elicitable at rung 3': 5, 'prompt-elicitable at rung 2': 1, 'prompt-elicitable at rung 4': 3}
+    class P: 25: b19 b64 b78 b79 b128 b133 b136 b173 b179 b186 b187 b189 b204 b211 b220 b226 b252 b253 b267 b280 b290 e1314 e2247 e2447 e2563
+    class T: 16: b0 b1 b4 b154 b169 b170 b203 b206 b207 b209 b217 b248 b264 b269 b271 e2350
+    class N: 7: b3 b67 b166 b188 b268 b284 e3478
+    unclassified: []
+    arm-A families (prefix of the first instruction id): {'format': 65, 'words': 58, 'count': 43, 'ratio': 21, 'sentence': 14, 'custom': 11, 'repeat': 6}
+[2b] pids used by any job: 306; problems.jsonl vs upstream mismatches: []
+    pids used outside arm A and reach: ['ifbench_102', 'ifbench_103', 'ifbench_104', 'ifbench_107', 'ifbench_109', 'ifbench_111', 'ifbench_114', 'ifbench_116', 'ifbench_117', 'ifbench_12'] (count 82)
+[4] job metas: job | name rev seed | samples | T top_p max_tok tp | stop_after lora fill | template ok | vllm torch | gpus | JOB_START sha ok
+    F_dpo_ifb        | dpo main 3001 | 4008 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | None (0 starts)
+    F_s0100_ifb      | s0100 step_0100 3002 | 2400 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | None (0 starts)
+    F_s0750_ifb      | s0750 step_0750 3003 | 2400 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | None (0 starts)
+    F_s2300_ifb      | s2300 main 3004 | 2356 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | None (0 starts)
+    T4_s0750         | s0750 step_0750 7301 | 1088 | 1.0 1.0 32768 1 | 2 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | None (0 starts)
+    T4b_s0750        | s0750 step_0750 7302 | 16 | 1.0 1.0 32768 1 | 2 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | None (0 starts)
+    B_s0100          | s0100 step_0100 46100 | 1200 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    B_s0750          | s0750 step_0750 46750 | 464 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    B_s2300          | s2300 main 48300 | 1536 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    M_s0050          | s0050 step_0050 46051 | 1944 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (2 starts)
+    M_s0050_stage0   | s0050 step_0050 46050 | 296 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (2 starts)
+    M_s0200          | s0200 step_0200 46200 | 2240 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    M_s0500          | s0500 step_0500 46500 | 2240 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    M_s1100          | s1100 step_1100 47100 | 2944 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    M_s1600          | s1600 step_1600 47601 | 2648 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (2 starts)
+    M_s1600_stage0   | s1600 step_1600 47600 | 296 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (2 starts)
+    T_s0500          | s0500 step_0500 55500 | 704 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    X2_s0100         | s0100 step_0100 49600 | 32 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    X2_s0750         | s0750 step_0750 50250 | 256 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    X2_s1100         | s1100 step_1100 50600 | 64 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    X2_s1600         | s1600 step_1600 51100 | 96 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    X3_s0050         | s0050 step_0050 52050 | 128 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    X3_s0100         | s0100 step_0100 52100 | 448 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    X3_s0200         | s0200 step_0200 52200 | 704 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    X3_s0500         | s0500 step_0500 52500 | 960 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    X3_s0750         | s0750 step_0750 52750 | 512 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    X3_s1100         | s1100 step_1100 53100 | 128 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    X3_s1600         | s1600 step_1600 53600 | 192 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    X4_s1100         | s1100 step_1100 54100 | 96 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    X_s0050          | s0050 step_0050 49050 | 64 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    X_s0100          | s0100 step_0100 49100 | 192 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    X_s0200          | s0200 step_0200 49200 | 352 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    X_s0500          | s0500 step_0500 49500 | 480 | 1.0 1.0 32768 1 | 0 None None | True | 0.11.0 2.8.0+cu128 | ['NVIDIA H200'] | True (1 starts)
+    metas with a setting / rev / version / sha problem: []
+    (checkpoint, engine seed) used by more than one meta: []
+[5] new jobs' prompt_sha256_by_pid vs my rebuild: 1576 match, 0 differ []
+    rows' prompt_tokens vs my length: {('B_s0100', 'ok'): 1200, ('B_s0750', 'ok'): 464, ('B_s2300', 'ok'): 1536, ('F_dpo_ifb', 'no field'): 4800, ('F_s0100_ifb', 'no field'): 2400, ('F_s0750_ifb', 'no field'): 2400, ('F_s2300_ifb', 'no field'): 2400, ('M_s0050', 'ok'): 2240, ('M_s0200', 'ok'): 2240, ('M_s0500', 'ok'): 2240, ('M_s1100', 'ok'): 2944, ('M_s1600', 'ok'): 2944, ('T4_s0750', 'ok'): 1088, ('T4b_s0750', 'ok'): 16, ('T_s0500', 'ok'): 704, ('X2_s0100', 'ok'): 32, ('X2_s0750', 'ok'): 256, ('X2_s1100', 'ok'): 64, ('X2_s1600', 'ok'): 96, ('X3_s0050', 'ok'): 128, ('X3_s0100', 'ok'): 448, ('X3_s0200', 'ok'): 704, ('X3_s0500', 'ok'): 960, ('X3_s0750', 'ok'): 512, ('X3_s1100', 'ok'): 128, ('X3_s1600', 'ok'): 192, ('X4_s1100', 'ok'): 96, ('X_s0050', 'ok'): 64, ('X_s0100', 'ok'): 192, ('X_s0200', 'ok'): 352, ('X_s0500', 'ok'): 480}
+    template boundary (ifeval_2247, my rebuild, decoded with specials): '<|im_start|>system\nYou are a helpful AI assistant.<|im_end|>\n<|im_start|>user\nWrite an essay about Alvin and the Chipmunks in English and in all capital letters.<|im_end|>\n<|im_start|>assistant\n<think>'
+[6] plan spec vs rows present (job: pids, spec draws, rows, complete chunks, chunks numbered from)
+    B_s0100    pids  48 spec 1200 rows 1200 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 48}
+    B_s0750    pids  23 spec 464 rows 464 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 23}
+    B_s2300    pids  48 spec 1536 rows 1536 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 48}
+    M_s0050    pids 224 spec 2240 rows 2240 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 224}
+    M_s0200    pids 224 spec 2240 rows 2240 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 224}
+    M_s0500    pids 224 spec 2240 rows 2240 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 224}
+    M_s1100    pids 224 spec 2944 rows 2944 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 224}
+    M_s1600    pids 224 spec 2944 rows 2944 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 224}
+    T_s0500    pids 176 spec 704 rows 704 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 176}
+    X2_s0100   pids   1 spec 32 rows 32 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 1}
+    X2_s0750   pids   8 spec 256 rows 256 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 8}
+    X2_s1100   pids   2 spec 64 rows 64 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 2}
+    X2_s1600   pids   3 spec 96 rows 96 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 3}
+    X3_s0050   pids   2 spec 128 rows 128 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 2}
+    X3_s0100   pids   7 spec 448 rows 448 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 7}
+    X3_s0200   pids  11 spec 704 rows 704 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 11}
+    X3_s0500   pids  15 spec 960 rows 960 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 15}
+    X3_s0750   pids   8 spec 512 rows 512 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 8}
+    X3_s1100   pids   2 spec 128 rows 128 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 2}
+    X3_s1600   pids   3 spec 192 rows 192 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 3}
+    X4_s1100   pids   1 spec 96 rows 96 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 1}
+    X_s0050    pids   2 spec 64 rows 64 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 2}
+    X_s0100    pids   6 spec 192 rows 192 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 6}
+    X_s0200    pids  11 spec 352 rows 352 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 11}
+    X_s0500    pids  15 spec 480 rows 480 | short {} extra [] | chunks != 4 rows {} | min chunk {0: 15}

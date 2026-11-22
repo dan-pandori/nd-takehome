@@ -1,0 +1,57 @@
+prompts whose walk is not complete (labels pending): 1 ['ifbench_268']
+
+EXTENSION PLACEMENT (executor's extension cells vs the checkpoint before my F1)
+   prompts whose extension cell is not (only) the checkpoint before my F1: 3
+      ifbench_170: my F1 s2300, expected extension at s1600, extension draws at ['s1600', 's1100']
+      ifbench_268: my F1 s1600, expected extension at s1100, extension draws at ['s0750']
+      ifbench_284: my F1 None, expected extension at s2300, extension draws at ['s0750']
+   never reached (no genuine in any base cell or extension): ['ifbench_268', 'ifbench_284']
+      ifbench_268: 0 genuine in 8 x 32 base draws + 96 extension draws at s2300 (32 at s2300); 0 of 32 at s2300 -> rate < 0.089 (95 %)
+      ifbench_284: 0 genuine in 8 x 32 base draws + 96 extension draws at s2300 (32 at s2300); 0 of 32 at s2300 -> rate < 0.089 (95 %)
+
+READING 1 (timing by class; steps; never = 9999)
+   F1               medians P 500 T 750 N 1600 | med(TuN) - med(P) = 250, 90 % [0, 600] | no order  n={'T': 16, 'P': 25, 'N': 7}
+   F1 (154 in P)    medians P 500 T 750 N 1600 | med(TuN) - med(P) = 425, 90 % [0, 600] | no order  n={'T': 15, 'P': 26, 'N': 7}
+   F2               medians P 500 T 1100 N 1600 | med(TuN) - med(P) = 600, 90 % [350, 1100] | HABIT FIRST  n={'T': 16, 'P': 25, 'N': 7}
+   F2 (154 in P)    medians P 625 T 1100 N 1600 | med(TuN) - med(P) = 475, 90 % [350, 1100] | HABIT FIRST  n={'T': 15, 'P': 26, 'N': 7}
+   F1 distribution by class:
+      P: {100: 2, 200: 5, 500: 8, 750: 8, 1100: 1, 2300: 1}
+      T: {200: 2, 500: 3, 750: 7, 1100: 2, 2300: 2}
+      N: {1100: 3, 1600: 3, 9999: 1}
+
+READING 2 (gradual / abrupt), prompts with F1* <= 2300
+   categories: {'intermediate': 25, 'gradual': 7, 'slow': 14, 'never': 2}
+      class P: {'gradual': 6, 'intermediate': 15, 'slow': 4}
+      class T: {'intermediate': 7, 'slow': 8, 'gradual': 1}
+      class N: {'intermediate': 3, 'slow': 2, 'never': 2}
+   of 32 with F25 <= 2300: gradual 0.22, abrupt 0.00; median earliest detectable rate 0.0312 (3/32 = 0.0938)
+
+READING 3 (gaming among strict successes)
+   arm C (my sub-sample of 20 per checkpoint): gamed / labelled (of sampled) dpo:3/20(20) s0050:4/20(20) s0100:3/20(20) s0200:3/20(20) s0500:1/20(20) s0750:2/20(20) s1100:5/20(20) s1600:5/20(20) s2300:6/20(20)
+   primary: early 0.163 (n 80), late 0.267 (n 60), early - late -0.104 90 % [-0.227, +0.014] -> flat
+   primary, reader-labelled only: early 0.163 (n 80), late 0.267 (n 60)
+   secondary (arm B first min(strict,4), labelled): early 0.062 (n 16), late 0.350 (n 535), diff -0.287 90 % [-0.402, -0.151] -> gaming grows; labelled / first-4 items per ckpt {'s0050': (0, 0), 's0100': (2, 2), 's0200': (14, 14), 's0500': (61, 61), 's0750': (122, 122), 's1100': (170, 170), 's1600': (178, 178), 's2300': (187, 188)}
+
+READING 4 (brevity)
+   B = s1600; H = s0750 (F2 <= c on >= 24 of 48); not brevity first
+   prompts with F2 <= c: s0050:0 s0100:0 s0200:5 s0500:18 s0750:27 s1100:38 s1600:42 s2300:44
+
+EXPECTATIONS (labels-dependent)
+   4a prompts with any genuine (base + extension) by ckpt: {'s0050': 1, 's0100': 4, 's0200': 11, 's0500': 23, 's0750': 36, 's1100': 41, 's1600': 45, 's2300': 43}; base only: {'s0050': 0, 's0100': 2, 's0200': 8, 's0500': 18, 's0750': 34, 's1100': 40, 's1600': 42, 's2300': 43}
+   4b F1 <= 750 on 35 of 48 (expected 28-36)
+   4c s2300 (B_s2300 new draws): >= 1 genuine on 43, >= 2 on 39 of 48 (expected >= 44 / >= 40); prompts with < 2 genuine and unlabelled strict left: ['ifbench_268']
+   5  medians F1 P 500 (<= 500?) T 750 (in 500, 750?) N 1600 (>= 1100?); reading no order (expected habit first)
+   6  of 32 with F25: gradual 0.22 (>= 0.5?), abrupt 0.00 (<= 0.2?), median rate at F1* 0.0312 (<= 0.0938?)
+   7  arm C early 0.163 late 0.267 (each in [0.05, 0.30]?), reading flat (expected flat); secondary gaming grows (expected gaming first: early >= 0.5 if >= 10 items, late <= 0.35)
+   8  B s1600 (in 1100, 1600?) H s0750 (in 750, 1100?) -> not brevity first (expected not)
+
+estimated genuine pass@1 (arm A strict pass@1 x (1 - my arm-C gamed share)):
+   dpo: strict 0.290 x (1 - 3/20) = 0.246
+   s0050: strict 0.296 x (1 - 4/20) = 0.237
+   s0100: strict 0.315 x (1 - 3/20) = 0.268
+   s0200: strict 0.347 x (1 - 3/20) = 0.295
+   s0500: strict 0.412 x (1 - 1/20) = 0.391
+   s0750: strict 0.512 x (1 - 2/20) = 0.461
+   s1100: strict 0.577 x (1 - 5/20) = 0.433
+   s1600: strict 0.646 x (1 - 5/20) = 0.485
+   s2300: strict 0.683 x (1 - 6/20) = 0.478

@@ -1,0 +1,29 @@
+--- junction F_dpo_ifb ifbench_104 chunk 3 i 0 (prompt 112 ids, row prompt_tokens None):
+    ...'<|im_end|>\n<|im_start|>assistant\n<think>'  ||  "Okay, let's tackle this question about Automatic Speech Recognition (" ...
+    last response ids decoded: '</think>\n\nc)<|endoftext|>'
+--- junction T4_s0750 ifbench_154 chunk 0 i 0 (prompt 96 ids, row prompt_tokens 96):
+    ...'<|im_end|>\n<|im_start|>assistant\n<think>'  ||  'Okay, so the user is asking about geologic principles to' ...
+    last response ids decoded: ' required for the answer.<|endoftext|>'
+--- junction B_s2300 ifbench_64 chunk 3 i 0 (prompt 44 ids, row prompt_tokens 44):
+    ...'<|im_end|>\n<|im_start|>assistant\n<think>'  ||  'Okay, the user is asking me to write Python code to' ...
+    last response ids decoded: ' a filename from filepath.<|endoftext|>'
+--- junction M_s0050 ifbench_44 chunk 0 i 0 (prompt 86 ids, row prompt_tokens 86):
+    ...'<|im_end|>\n<|im_start|>assistant\n<think>'  ||  'Okay, the patient has a stiff and swollen neck with throat' ...
+    last response ids decoded: ' even without respiratory signs.<|endoftext|>'
+--- junction X3_s1600 ifbench_170 chunk 12 i 0 (prompt 109 ids, row prompt_tokens 109):
+    ...'<|im_end|>\n<|im_start|>assistant\n<think>'  ||  'Okay, the user wants a response with three sentences, each' ...
+    last response ids decoded: ' among various scholarly groups.<|endoftext|>'
+rows: 34320
+response opener: {'no <think> opener': 34320}
+special tokens inside response ids: {'final EOS only': 34255, 'none (cut or no EOS)': 47, 'other specials 100257,100264': 3, 'other specials 100257,100264,100265': 4, 'other specials 100257,100265': 3, 'other specials 100264,100265': 5, 'other specials 100276': 1, 'other specials 100264': 1, 'other specials 100265': 1}
+rows with >= 2 '</think>': 71
+cross-tab (finish, ends with EOS 100257, other special ids inside):
+    ('stop', True, ()) 34255
+    ('length', False, ()) 47
+    ('length', False, (100264, 100265)) 5
+    ('stop', True, (100264, 100265)) 4
+    ('stop', True, (100264,)) 3
+    ('stop', True, (100265,)) 3
+    ('length', False, (100276,)) 1
+    ('length', False, (100264,)) 1
+    ('length', False, (100265,)) 1
