@@ -163,8 +163,11 @@ def draws(ckpt, pid, arm, ext=True):
         src, n = SOURCES["A"].get(ckpt, []), N_A.get(ckpt, 8)
     else:
         src, n = list(SOURCES["B"].get(ckpt, [])), N_B
-        if ext and by_pid(f"X_{ckpt}").get(pid):
-            src, n = src + [f"X_{ckpt}"], N_X
+        # extension jobs: X_<ckpt> (first batch) or X2_<ckpt> (second batch, prompts with F1 after s0750); a prompt has
+        # rows in at most one of them
+        xj = [j for j in (f"X_{ckpt}", f"X2_{ckpt}") if by_pid(j).get(pid)]
+        if ext and xj:
+            src, n = src + xj, N_X
     out = []
     for j in src:
         out.extend(by_pid(j).get(pid, []))
@@ -179,7 +182,7 @@ def cmd_check():
     for c in CKPTS:
         a = [len(draws(c, p, "A")) for p in AA]
         b = [len(draws(c, p, "B")) for p in R] if c != "dpo" else []
-        x = sum(1 for p in R if by_pid(f"X_{c}").get(p))
+        x = sum(1 for p in R if by_pid(f"X_{c}").get(p) or by_pid(f"X2_{c}").get(p))
         fa = f"{sum(1 for v in a if v)} {min(a) if a else 0}/{max(a) if a else 0}"
         fb = f"{sum(1 for v in b if v)} {min(b) if b else 0}/{max(b) if b else 0}" if b else "-"
         print(f"{c:6} {fa:28} {fb:28} {x}")
