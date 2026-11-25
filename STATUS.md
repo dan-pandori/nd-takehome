@@ -431,4 +431,5 @@ OLMO-IFCURVE DONE 2026-11-22T06:22:58Z
 - Run start 2026-11-25T04:48:54Z. Brief: nd-rl `followups/BRIEF_olmo-weights.md` (Proposal 47). Budget $50 / 120 pod-hours.
 - Pre-registration `preregistration/olmo-weights.md` committed before the first pod. Manifest: 453 checkpoints,
   13 jobs, 15.17 TB (`olmo_weights/manifest/`). Hash checks done from Hub LFS hashes.
-- Next: stage 0 (one pod, ≤ $3): download throughput and statistics time, then re-cost.
+- Stage 0 done ($0.42): hf_xet ≈ 1 GB/s per pod with 8 files in flight; engine self-test and a numpy cross-check on real 7B / 32B pairs PASS. Re-cost ≈ $4–5 for the full manifest (gate $45): no cuts.
+- Main run: 5 × A40 (secure, $0.59/h) started 05:51 UTC, one job queue each (log.md).

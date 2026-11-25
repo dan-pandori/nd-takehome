@@ -1,0 +1,38 @@
+2026-11-25T05:20:21Z stage0 start
+BENCH xet P 1 files 1 5.0 GB in 22.6 s = 0.220 GB/s sha_ok True sha GB/s/thread 0.398
+BENCH transfer P 1 files 1 5.0 GB in 20.6 s = 0.242 GB/s sha_ok True sha GB/s/thread 0.448
+BENCH xet P 2 files 2 9.6 GB in 22.4 s = 0.429 GB/s sha_ok True sha GB/s/thread 0.405
+BENCH xet P 4 files 4 19.6 GB in 26.9 s = 0.726 GB/s sha_ok True sha GB/s/thread 0.396
+memory.max 49999998976
+shm              24G     0   24G   0% /dev/shm
+overlay          40G   55M   40G   1% /
+BENCH xet P 4 files 4 15.5 GB in 16.0 s = 0.971 GB/s sha_ok True sha GB/s/thread 0.8
+BENCH xet P 8 files 8 39.0 GB in 36.9 s = 1.056 GB/s sha_ok True sha GB/s/thread 0.383
+xet cache 2.3M	/root/.cache/huggingface/xet
+2026-11-25T05:22:56Z engine 7B gpu
+05:23:39 shard 0 member 2/2 7B/s1/2000: downloaded 29.2 GB (0.72 GB/s wall), compute 5 s, disk 19.3 GB
+05:23:43 shard 1 member 2/2 7B/s1/2000: downloaded 29.2 GB (0.65 GB/s wall), compute 9 s, disk 9.3 GB
+05:23:47 shard 2 member 2/2 7B/s1/2000: downloaded 29.2 GB (0.60 GB/s wall), compute 13 s, disk 0.0 GB
+05:23:47 DONE {"job": "s0_7b", "members": 2, "shards_run": [0, 1, 2], "wall_s": 48.8, "compute_s": 13.0, "downloaded_bytes": 29192127424, "download_thread_s": 127.8, "gb_per_s_wall": 0.598, "device": "cuda", "gpu": "NVIDIA A40", "torch": "2.8.0+cu128", "finished": "2026-11-25T05:23:47Z"}
+2026-11-25T05:23:48Z engine 7B cpu
+05:28:38 shard 2 member 2/2 7B/s1/2000: downloaded 0.0 GB (0.00 GB/s wall), compute 288 s, disk 0.0 GB
+05:28:38 DONE {"job": "s0_7b", "members": 2, "shards_run": [0, 1, 2], "wall_s": 288.4, "compute_s": 288.1, "downloaded_bytes": 0, "download_thread_s": 0.0, "gb_per_s_wall": 0.0, "device": "cpu", "gpu": "", "torch": "2.8.0+cu128", "finished": "2026-11-25T05:28:38Z"}
+model.embed_tokens.weight: numel 410738688 rel.err(d2, na2) 3.11e-10; n_eq 3967517 vs 3967517; n_ulp 9597402 vs 9597402; rel change 2.7250e-01
+model.layers.0.self_attn.q_proj.weight: numel 16777216 rel.err(d2, na2) 3.88e-10; n_eq 138549 vs 138549; n_ulp 414937 vs 414937; rel change 3.0147e-01
+model.layers.31.mlp.down_proj.weight: numel 45088768 rel.err(d2, na2) 2.93e-10; n_eq 446000 vs 446000; n_ulp 1338135 vs 1338135; rel change 2.1704e-01
+model.norm.weight: numel 4096 rel.err(d2, na2) 0.00e+00; n_eq 257 vs 257; n_ulp 1258 vs 1258; rel change 1.4849e-02
+lm_head.weight: numel 410738688 rel.err(d2, na2) 4.64e-10; n_eq 2057038 vs 2057038; n_ulp 6170615 vs 6170615; rel change 3.9469e-01
+REALCHECK PASS
+2026-11-25T05:29:12Z engine 32B gpu
+05:35:37 shard 11 member 2/2 32B/s1/1000: downloaded 128.9 GB (0.34 GB/s wall), compute 342 s, disk 11.6 GB
+05:36:12 shard 12 member 2/2 32B/s1/1000: downloaded 128.9 GB (0.31 GB/s wall), compute 378 s, disk 2.1 GB
+05:36:19 shard 13 member 2/2 32B/s1/1000: downloaded 128.9 GB (0.30 GB/s wall), compute 385 s, disk 0.0 GB
+05:36:19 DONE {"job": "s0_32b", "members": 2, "shards_run": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], "wall_s": 424.9, "compute_s": 384.5, "downloaded_bytes": 128934254592, "download_thread_s": 753.4, "gb_per_s_wall": 0.303, "device": "cuda", "gpu": "NVIDIA A40", "torch": "2.8.0+cu128", "finished": "2026-11-25T05:36:19Z"}
+2026-11-25T05:36:20Z engine 32B cpu (shards 0,1)
+05:40:15 shard 1 member 2/2 32B/s1/1000: downloaded 0.0 GB (0.00 GB/s wall), compute 233 s, disk 0.0 GB
+05:40:15 DONE {"job": "s0_32b", "members": 2, "shards_run": [0, 1], "wall_s": 232.9, "compute_s": 232.6, "downloaded_bytes": 0, "download_thread_s": 0.0, "gb_per_s_wall": 0.0, "device": "cpu", "gpu": "", "torch": "2.8.0+cu128", "finished": "2026-11-25T05:40:15Z"}
+model.embed_tokens.weight: numel 513423360 rel.err(d2, na2) 3.33e-10; n_eq 4629990 vs 4629990; n_ulp 11643698 vs 11643698; rel change 2.7838e-01
+model.layers.0.self_attn.q_proj.weight: numel 26214400 rel.err(d2, na2) 3.41e-10; n_eq 223274 vs 223274; n_ulp 670238 vs 670238; rel change 2.5331e-01
+model.norm.weight: numel 5120 rel.err(d2, na2) 0.00e+00; n_eq 0 vs 0; n_ulp 34 vs 34; rel change 1.6994e-02
+REALCHECK PASS
+2026-11-25T05:40:45Z stage0 done
