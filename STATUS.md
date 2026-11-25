@@ -433,3 +433,14 @@ OLMO-IFCURVE DONE 2026-11-22T06:22:58Z
   13 jobs, 15.17 TB (`olmo_weights/manifest/`). Hash checks done from Hub LFS hashes.
 - Stage 0 done ($0.42): hf_xet ≈ 1 GB/s per pod with 8 files in flight; engine self-test and a numpy cross-check on real 7B / 32B pairs PASS. Re-cost ≈ $4–5 for the full manifest (gate $45): no cuts.
 - Main run: 5 × A40 (secure, $0.59/h) started 05:51 UTC, one job queue each (log.md).
+- Done. All 13 jobs (453 checkpoints, 15.17 TB, every shard sha256-checked) on 6 × A40; $3.77 of $50. Write-up
+  `run_olmo_weights.md`, numbers `numbers.md` § olmo-weights, plain summary `olmo_weights/plain_summary.md`,
+  figures `artifacts/olmo_weights/figures/`. Bucket `hf://buckets/dan-pandori/nd-rl/olmo-weights/`.
+- Headline: the LR sets per-step change through pretraining → SFT (0.57–0.87 × LR). RL is ~10× that per unit LR, but
+  it mostly cancels: RL's total move is 31–185× smaller than SFT's, and 65 % / 88 % of weights end within 1 ulp of DPO.
+  The LoRA aligns with RL (cos 0.0053, ~1,000 random sd).
+- Expectations 7 / 12 hit; missed E1, E4, G4, G5, G7.
+- Found: the 32B SFT main (filed as `5e-5-step8000`) is the soup of both runs' finals; 5 RL-Zero branch names are
+  misfiled.
+
+OLMO-WEIGHTS DONE 2026-11-25T07:14:59Z
