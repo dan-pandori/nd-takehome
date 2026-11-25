@@ -281,3 +281,179 @@ Generated tokens, training steps, training tokens and Lean checks are all 0: not
 - `rv_compare.py ROOT pod_out_unzipped OUT.json`
 
 The pod side is `rv_job.sh` (plan.json), `rv_merge_check.py` (merge_plan.json) and `rv_merge3.py`.
+
+## §Comparison (phase 2): the executor's claims against my recount
+
+Phase 2 started after commit `0ffe5c51` (07:58 UTC). I read:
+- `run_olmo_weights.md`;
+- `numbers.md` § olmo-weights;
+- `log.md` § olmo-weights;
+- `olmo_weights/plain_summary.md` and `olmo_weights/README.md`;
+- `artifacts/olmo_weights/tables/*`;
+- Figures 1, 5 and 7;
+- the registry rows.
+
+The executor's files are in the run worktree, since the main checkout `~/nd-takehome` is on another branch. New checks for
+this phase are in `rv_phase2_checks.py` and `rv_spacing.py` (outputs `out/rv_phase2_checks.txt`, `out/rv_spacing.txt`).
+
+| claim (where) | my independent value | verdict |
+|---|---|---|
+| 453 checkpoints, 15.2 TB, A40 pods, $3.77 of $50 (run, numbers) | 453 checkpoints (14.69 TB unique); 15.17 TB downloaded (469 member downloads); 6.56 pod-h, $3.77 | reproduces. "15.2 TB" is the download volume, not the size of the 453 checkpoints |
+| Stage switches are obvious; the LR sets the per-step size (run) | all 4 boundary intervals exceed the interval before them (G3). Per-step ÷ LR is 0.57–0.87 at 1,000-step spacing in every stage | reproduces |
+| Pretraining → SFT: median change per step 0.57–0.87 × LR (1,000-step intervals, both models) (run) | 32B 0.569 / 0.870 / 0.851 / 0.83 (5e-5) / 0.80 (1e-4); 7B 0.725 (31 intervals; executor 0.744 on 32, which include the 3,000 → 4,000 gap and the 814-step last interval) / 0.674 / 0.659 / 0.658 | reproduces. The "stage 1 pairs" row includes 2 non-pair intervals |
+| **RL breaks this pattern: at a constant LR, its change per step grows to about 8–9 × the LR** (run; plain: "about ten times larger than the LR predicts", "an RL step is nearly as large as an SFT step") | 8.12 (32B) and 8.94 (7B) at the native **50- / 25-step** spacing. The ratio depends on spacing (below) | **numbers reproduce; the interpretation is not supported.** At matched spacing RL's per-step ÷ LR is in the band of the other stages |
+| 80 % (32B, per 50 steps) / 92 % (7B, per 25 steps) of weights bitwise unchanged between RL checkpoints (run) | medians 0.801 / 0.924 | reproduces |
+| Of the moved weights, at least three quarters move by ≤ 1 rounding step (run) | 32B: median 0.761, **min 0.599**; 7B: median 0.815, min 0.752 | **differs for 32B.** "About three quarters (median)" is right; "at least" is not |
+| E1: RL's change per step only 1.3–1.9× smaller than SFT's (miss) (run, numbers) | 1.29 (32B, executor's chain without the soup name; the pre-registered chain gives 1.62) and 1.87 (7B) | **miss reproduces.** At matched 1,000-step spacing the ratio is 10.8–13.6× (32B) and 24.6× (7B) |
+| RL consecutive changes cosine −0.2 (run) | −0.221 / −0.198, and −0.219 / −0.236 at 2× spacing | reproduces |
+| E4: S = 0.10 vs 0.39 (32B), 0.07 vs 0.21 (7B) (miss) (run, numbers) | 0.1006 vs 0.393 (0.263 on the pre-registered chain with the soup), 0.0707 vs 0.2086. RL subsampled: 0.240 (12 intervals), 0.084 (43) | miss reproduces. The executor's "RL 0.24 at 12 intervals" is the exact value. The spacing still differs (≈ 200 vs 1,000 steps) |
+| E2: RL total 0.36 % / 0.08 % of ‖θ‖, 31–185× smaller than SFT's (hit) | 0.364 % / 0.0806 %; 31.1× / 185× | reproduces (also from the raw weights for 32B: R3) |
+| E3: 65 % / 88 % within one rounding step of DPO (hit) | 65.20 % / 87.61 % | reproduces (32B from the raw weights: 0.6519792 exactly) |
+| Attention and MLP matrices move 1.1–1.9× the model average in every stage; norms barely move (run) | executor's table pooled by stage: 1.05–1.93; per family 0.96–1.99. In 32B stage 1, v moves 0.96× and o 1.01×. Norm vectors 0.00–0.30× | approximately. "≈ 1–2×" is accurate |
+| DPO's jump concentrates on attention (32B 2.2–2.7×) (run) | q 2.16, k 2.59, v 2.65, o 2.56 vs MLP 0.96–1.42 (7B: attention 1.84–2.15, MLP 1.51–1.84) | reproduces |
+| LoRA cos 0.0053 at 2,300, ≈ 1,000 random sd above chance, control 0.0002 (hit) (run) | 0.0052497 (rounds to 0.0052), z = 1,044 (my own draws: 1,088), control 0.000186; recomputed from raw weights (R3) | reproduces (rounding nit) |
+| LoRA alignment grows during RL; adapter 0.47× RL's final change (run) | 0.00078 (50) → 0.00525 (2,300), near monotone; 0.468 | reproduces |
+| 32B SFT `main` (= `5e-5-step8000`) is the equal-weight soup of both runs' finals; DPO started from it (run, numbers) | Gram fit 0.5000 / 0.5000, residual 10.09; **bit-for-bit** equal to round_bf16 of the mean on the tested tensors (R3); DPO 1.955 from it, ≥ 310 from everything else | reproduces, and more strongly than claimed |
+| Stage 3 started from the stage-2 merge (run, numbers) | 776 vs 1,713 | reproduces |
+| Five RL-Zero branch names hold misfiled weights, excluded (run, numbers) | the same five: IF `step_100` (= 1,000), `step_400` (17.9e-4, beyond `main`); Code `step_100` / `200` (= 1,000 / 2,000), `step_300` (= `main`, beyond 2,900). IF `step_400` lies outside the byte-identical rule, and the executor says so | reproduces |
+| Expectations 7 of 12 hit (run, numbers, log) | E2, E3, E5, G2, G3, G6 hit; E1, E4, G4, G5, G7 miss. **G1 was scored on medians**, which the pre-registration does not specify: RL 46 / 46 intervals > 50 %, but SFT 2 of 18 1,000-step intervals ≥ 10 % (13.0 %, 22.7 %; `tables/expectations.json`: median 0.0665) | **6 or 7 of 12**, depending on the G1 reading. The write-up must say G1 was scored at the median |
+| G4: the stage-3 merge is the equal-thirds average; bf16 rounding exceeds the 1 % threshold (run, numbers: "bf16 rounding of an exact average") | best weights 0.0004 / 0.3327 / 0.3344 / 0.3325; residual 16.7 %. Only **88.07 %** bit-identical to the rounded mean of the released branches (stage-2 merge and SFT soup: 100 %), with a residual 1.22× pure rounding | the miss reproduces. "Rounding of an exact average" is close but not exact: it is the equal-thirds mean up to rounding-level differences, consistent with averaging higher-precision copies |
+| G5 miss; G7 miss (Code) (run, numbers) | 1.955 vs ≥ 310; Code 6.61e-4 vs 6.80e-4 | reproduce |
+| Per-stage, chain, test, merge, main, LoRA-by-step and compute tables (numbers; `tables/*.csv`) | all 452 rows of `tables/intervals.csv` agree with mine to ≤ 4.7e-10 relative (r) and ≤ 5e-11 (lag-1 cosine). The 5,424 module rows both tables share agree to ≤ 5e-10. The stage, chain, test and LoRA values I recomputed agree to the printed precision. The only difference is the 7B stage-1 row (32 vs 31 intervals, 0.744 vs 0.725) | reproduces |
+| Registry: 91 rows; compute table; bucket (numbers) | 91 rows = 13 jobs × 7 metrics; `gpu_seconds` equal `summary.json` for every job; generation, training and Lean metrics 0. The bucket holds 1,981 files with no `.safetensors` | reproduces |
+| RunPod balance $218.24 → $214.36 (numbers) | no stored balance history | not derivable (plausible: $3.77 billed) |
+| Plain summary: the LoRA "taught the starting model most of RL's new tricks" | inherited from `olmo-ifladder` (reviewed: `lora_main` elicits 40–41 of 48 IFBench/IFEval reach prompts on Olmo 3 32B Think DPO, `lora_ctrl` 0). It carries no label | supported, **unlabelled** (policy: inherited claims carry their label) |
+
+### Why "RL breaks this pattern" does not stand
+
+**Per-step ÷ LR falls with checkpoint spacing inside the same run.** The chords come exactly from the stored `o2`,
+`dot_prev` and lags 1–3, which I verified on raw weights (R3).
+
+| run | native spacing | 2× | 3× | 4× | first 1,000 steps (from the stage start) |
+|---|---|---|---|---|---|
+| 32B RL (Olmo 3.1 Think) | 7.98 (50 steps) | 4.96 | 3.75 | 3.15 (200) | **0.97** (1.08 if the lineage after the restart is 900 steps, see below) |
+| 7B RL (Olmo 3 7B Think) | 8.92 (25) | 5.67 | 4.29 | 3.51 (100) | **0.68** |
+| 7B SFT | 0.658 (1,000) | 0.452 | 0.364 | 0.314 (4,000) | 0.86 |
+| 32B SFT 5e-5 / 1e-4 | 0.83 / 0.80 (1,000) | – | – | – | 0.90 / 0.86 |
+| 32B mid-training | ingredient 1: 0.87 (1,000) | – | – | ingredient 2 (same schedule): 0.41 (4,000) | – |
+
+- **Matched spacing.** Over ~1,000 steps, RL's per-step change is 0.7–1.1 × its LR, the same as SFT's 0.86–0.90 over its
+  first 1,000 steps. The 8–9× comes from 25–50-step spacing. When consecutive changes anti-correlate (cosine −0.2), the
+  displacement grows sublinearly with steps (here ∝ L^0.33), so short intervals inflate the per-step rate.
+- **bf16 rounding.** Rounding plausibly adds to this at RL's and DPO's tiny LRs: at 25–50 steps ≥ 60 % of the moved
+  weights move by ≤ 1 ulp. The 7B DPO jump, one 1,172-step interval at LR 8e-8, also gives 8.1× LR.
+  - In the 32B RL run, the per-step rate drops back to the first-interval level after each optimizer restart (next
+    section) and then climbs again. That fits a rounding effect.
+  - The pre-registration listed both mechanisms under G2, but the headline attributes the excess to RL.
+
+**What can be said.**
+- At their released 25–50-step spacing, RL checkpoints differ by ≈ 8–9 × LR per step.
+- Over 1,000 steps, RL moves ≈ 0.7–1.1 × LR per step, as the other stages do.
+- RL's per-step change is ≈ 11–25× smaller than SFT's at matched spacing, which is about their LR ratio.
+- G2, scored as pre-registered (native spacing), is a hit. E1, scored as pre-registered, is a miss.
+
+### New finding: the 32B RL checkpoints are not one line (`Olmo-3.1-32B-Think`, identical to `Olmo-3-32B-Think` for 50–750)
+
+Chords between checkpoints, from the stored statistics (`rv_spacing.py`; units 1e-4 of ‖θ_DPO‖):
+- `step_150` and `step_250` are both "`step_100` + one fresh 50-step move":
+  - each is 3.32 from step 100, the size of DPO → 50 (3.31);
+  - each is 5.42 from step 50;
+  - each is 6.09 from DPO;
+  - they are 4.67 apart, which is √2 × 3.32, so the two moves are orthogonal (cosine 0.008).
+- `step_200` descends from 150 (4.32), not from 250 (6.10).
+- Steps 300 onward descend from 250 (d(250, 300) = 4.40, d(200, 300) = 7.29).
+
+So 150 → 200 is a branch the run abandoned, and the released line restarts from step 100. The 200 → 250 "interval" is a
+jump between branches (its cosine with the interval before is −0.645).
+
+Three intervals show a fresh-optimizer signature (first-interval size, cosine ≈ 0 with the previous interval): DPO → 50,
+100 → 150 and 1,850 → 1,900. The last is a resume without rollback: d(1800, 1900)² = d(1800, 1850)² + d(1850, 1900)².
+The 7B RL chain shows none of this.
+
+**Consequences:**
+- Labels from 250 up probably overstate the optimizer steps along the released lineage by ≈ 100. That is small for
+  per-step rates and ≈ 4 % for totals.
+- **`olmo-ifcurve`'s step-200 point** (Figure 5's pass@1 0.347 and the rug of 7 first-genuine prompts at step 200; same
+  commit `15d5e3cd`) is on the abandoned branch, not on the lineage of steps 250–2,300.
+- The executor did not detect this. Its duplicate rule only covered byte-identical names.
+
+### The brief's three reviewer checks
+
+1. **Seeded recompute from raw checkpoints on a pod:** passed. ‖Δ‖, the ≤ 1-ulp fraction and the cosines (lag-1 and LoRA)
+   agree with the executor's rows to ≤ 3e-8 relative, against the 1e-4 asked; counts are exact (R3).
+2. **Manifest hashes, step and LR sources:** passed (R1, R2), with two caveats:
+   - the 7B long-context script's duration;
+   - the SFT `main` row of `steps_lr.md`, which the executor's own soup finding corrects but `steps_lr.md` still states.
+3. **Figure 1's normalisation and stage marks:** they match the table:
+   - the y-axis is r ÷ optimizer steps;
+   - stage 1 is plotted as its 25 / 32 sampled 1,000-step intervals;
+   - the boundary intervals (s2i1/1000, s3/1000, sft/1000, rl/50 or rl/25) are ringed;
+   - merges and the SFT soup are hollow, and 7B `main`s are diamonds;
+   - DPO is one 1,562.5- / 1,172-step jump;
+   - the plotted extremes equal the table's (32B RL per step 6.6e-6 … 3.7e-5).
+
+   Nit: in the 32B panel, the soup's "merge (0 steps)" label sits on the DPO point.
+
+### Other policy checks
+
+- **Expectations before data.** Committed at 04:48:59 UTC (`a92b8cb7`), before the first pod request (04:55:50);
+  unchanged since. Misses are reported as misses, except for G1's scoring rule.
+- **Models.** Every number in the write-up and `numbers.md` is labelled with repo, branch or commit, except the plain
+  summary's inherited `olmo-ifladder` claim.
+- **Compute rows.** Present and correct; per-arm table in `numbers.md`. No arm comparison is at stake.
+- **Pre-registration declarations.** The language-model standards (hand gate, templates, budgets) and the seed / noise-floor
+  standard do not apply: no text is generated and the statistics are deterministic. The pre-registration says so, and
+  I agree.
+- **Hard constraints.** No secret in the committed or uploaded files (my scan of the run's artifacts and code, including
+  gzipped CSVs, against token patterns and the literal HF token); every count reproduces; no judge issue. No quarantine.
+- **Spend.** $3.77 (executor) + $0.28 (this review) of $50; balance $213.98.
+
+## §Verdict
+
+**What stands:**
+- the manifest and every pre-registered hash check;
+- the step and LR sources;
+- every per-tensor statistic, which reproduces from the raw weights;
+- the distance, straightness, unchanged-fraction and module tables;
+- E2 and E3: RL moves the weights 0.36 % (32B) and 0.08 % (7B) of ‖θ‖ in total, 31–185× less than SFT, and leaves
+  65 % / 88 % of weights within one bf16 step of DPO;
+- E5: the `olmo-ifladder` LoRA points along RL's change (cos 0.00525, ≈ 1,000 random sd, 28× the control) and the
+  alignment grows during RL;
+- G3 and G6, and the misses E1, E4, G4, G5 and G7;
+- the checkpoint findings: the SFT `main` soup (now bit-for-bit), stage 3 from the stage-2 merge, the five misfiled
+  RL-Zero names;
+- the compute and cost.
+
+**Must be reworded:**
+1. **"RL breaks this pattern … 8–9 × the LR"** (run) and the plain summary's "about ten times larger than the LR predicts"
+   and "an RL step is nearly as large as an SFT step". Say that this holds at the released 25–50-step spacing. Over
+   ~1,000 steps RL moves 0.7–1.1 × LR per step, like every other stage, and ≈ 11–25× less per step than SFT. Name
+   spacing (with anti-correlated changes) and bf16 rounding as the causes.
+2. **E1's sentence** needs the same spacing caveat. The miss stands as pre-registered.
+3. **"At least three quarters"** of moved RL weights within one rounding step → "about three quarters (32B median 76 %,
+   range 60–79 %; 7B 75–83 %)".
+4. **"7 of 12"** → say that G1 was scored at the median. Two of the 18 32B SFT 1,000-step intervals have more than 10 %
+   unchanged.
+5. **G4's "bf16 rounding of an exact average"** → "the equal-thirds mean up to rounding-level differences (88 %
+   bit-identical to the rounded mean of the released branches)".
+6. **Minor:**
+   - "1.1–1.9×" → "≈ 1–2×";
+   - 0.0053 → 0.0052;
+   - "15.2 TB" is the download volume (the 453 checkpoints are 14.7 TB);
+   - give the pre-registered-chain values next to the soup-excluded ones (E1 32B 1.62, S_SFT 0.263), as `log.md` does;
+   - label the plain summary's `olmo-ifladder` claim;
+   - `steps_lr.md`'s SFT `main` row is superseded.
+
+**Not supported:** RL's large per-step change relative to its LR as a property of RL.
+
+**Next measurements:**
+- **RL at matched spacing, mid-run.** On a pod (< $1), difference RL checkpoints 1,000 steps apart:
+  - 32B 300 → 1,300 and 1,300 → 2,300;
+  - 7B 375 → 1,375.
+
+  This settles whether mid-run RL also moves ≈ 1 × LR per step at 1,000-step spacing, as the from-start chords say.
+- **Confirm the 32B RL branch point with direct differences.** Use θ_250 − θ_100 against θ_150 − θ_100, and look for a
+  rollback at step 200 in AI2's RL logs. Mark `olmo-ifcurve`'s step-200 point as off-lineage.
+- **Measure the bf16 rounding share of the RL / DPO changes.** Compare per-step change against time since each
+  optimizer restart (the 1,850 → 1,900 reset is a natural experiment), or model flips against the fraction of weights
+  near rounding boundaries.

@@ -1,0 +1,36 @@
+== p32_rl rl
+  spacing 1 interval(s) (~50 steps): median per-step/LR 7.98 (n=46)
+  spacing 2 interval(s) (~100 steps): median per-step/LR 4.96 (n=45)
+  spacing 3 interval(s) (~150 steps): median per-step/LR 3.75 (n=44)
+  spacing 4 interval(s) (~200 steps): median per-step/LR 3.15 (n=43)
+  DPO -> 32B/rl/100 (100 steps): r = 5.102e-04, per-step/LR 2.55
+  DPO -> 32B/rl/200 (200 steps): r = 7.251e-04, per-step/LR 1.81
+  DPO -> 32B/rl/500 (500 steps): r = 1.147e-03, per-step/LR 1.15
+  DPO -> 32B/rl/1000 (1000 steps): r = 1.936e-03, per-step/LR 0.97
+  DPO -> 32B/rl/1400 (1400 steps): r = 3.112e-03, per-step/LR 1.11
+  DPO -> 32B/rl/2000 (2000 steps): r = 3.441e-03, per-step/LR 0.86
+  DPO -> 32B/rl/2300 (2300 steps): r = 3.642e-03, per-step/LR 0.79
+== p7_rl rl
+  spacing 1 interval(s) (~25 steps): median per-step/LR 8.92 (n=55)
+  spacing 2 interval(s) (~50 steps): median per-step/LR 5.67 (n=54)
+  spacing 3 interval(s) (~75 steps): median per-step/LR 4.29 (n=53)
+  spacing 4 interval(s) (~100 steps): median per-step/LR 3.51 (n=52)
+  DPO -> 7B/rl/100 (100 steps): r = 1.434e-04, per-step/LR 1.43
+  DPO -> 7B/rl/200 (200 steps): r = 2.334e-04, per-step/LR 1.17
+  DPO -> 7B/rl/500 (500 steps): r = 4.582e-04, per-step/LR 0.92
+  DPO -> 7B/rl/1000 (1000 steps): r = 6.795e-04, per-step/LR 0.68
+  DPO -> 7B/rl/1375 (1375 steps): r = 7.978e-04, per-step/LR 0.58
+  DPO -> 7B/rlmain (1400 steps): r = 8.064e-04, per-step/LR 0.58
+== p7_sft sft (1,000-step checkpoints)
+  spacing 1 (1000 steps): median per-step/LR 0.658 (n=42)
+  spacing 2 (2000 steps): median per-step/LR 0.452 (n=41)
+  spacing 3 (3000 steps): median per-step/LR 0.364 (n=40)
+  spacing 4 (4000 steps): median per-step/LR 0.314 (n=39)
+== consecutive-change cosine (median) at 1x and 2x checkpoint spacing
+  p32_rl   rl           1x: -0.221 (n=44)   2x: -0.219 (n=42)
+  p7_rl    rl           1x: -0.198 (n=53)   2x: -0.236 (n=51)
+  p7_sft   sft-dpo      1x: -0.060 (n=41)   2x: -0.041 (n=39)
+  p32_sft  sft-1e-4     1x: -0.043 (n=9)   2x: -0.006 (n=7)
+  b7_s2    stage2       1x: -0.097 (n=47)   2x: -0.117 (n=45)
+  b32_s3   stage3       1x: -0.062 (n=10)   2x: -0.085 (n=8)
+  z7_math  rlzero-math  1x: -0.248 (n=17)   2x: -0.239 (n=15)
