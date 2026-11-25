@@ -425,3 +425,10 @@ OLMO-IFLADDER DONE 2026-11-09T19:55:40Z
   - Write-up `run_olmo_ifcurve.md`; bucket `hf://buckets/dan-pandori/nd-rl/olmo-ifcurve/`.
 
 OLMO-IFCURVE DONE 2026-11-22T06:22:58Z
+
+## olmo-weights (executor, started 2026-11-25T04:48:54Z)
+
+- Run start 2026-11-25T04:48:54Z. Brief: nd-rl `followups/BRIEF_olmo-weights.md` (Proposal 47). Budget $50 / 120 pod-hours.
+- Pre-registration `preregistration/olmo-weights.md` committed before the first pod. Manifest: 453 checkpoints,
+  13 jobs, 15.17 TB (`olmo_weights/manifest/`). Hash checks done from Hub LFS hashes.
+- Next: stage 0 (one pod, ≤ $3): download throughput and statistics time, then re-cost.
