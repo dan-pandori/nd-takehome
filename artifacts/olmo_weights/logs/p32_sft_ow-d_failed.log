@@ -1,0 +1,17 @@
+2026-11-25T05:57:58Z start p32_sft try 1
+05:57:59 job p32_sft: 24 members, 14 shards, 101 computations per shard, device cuda, max live set 114.8 GB, cap 165.0 GB, inflight 8
+05:57:59 gpu cache 33.4 GB
+05:59:36 shard 0 member 10/24 32B/sft1e-4/9000: downloaded 74.9 GB (0.77 GB/s wall), compute 26 s, disk 74.9 GB, gpu cache 29.9 GB (loaded 50 GB in 23 s)
+Traceback (most recent call last):
+  File "/workspace/nd-takehome/olmo_weights/engine.py", line 576, in <module>
+    main()
+  File "/workspace/nd-takehome/olmo_weights/engine.py", line 533, in main
+    run_trigger(ready, files, dev, int(a.chunk_melems * 1e6), writers, lora, lora_norms, lora_seen, cache)
+  File "/workspace/nd-takehome/olmo_weights/engine.py", line 317, in run_trigger
+    assert set(keys_of(m)) == set(names), f"tensor sets differ: {m}"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: tensor sets differ: 32B/sft5e-5/8000
+2026-11-25T06:01:08Z end p32_sft try 1 rc 1 shards_done 0
+2026-11-25T06:02:08Z start p32_sft try 2
+06:02:10 job p32_sft: 24 members, 14 shards, 101 computations per shard, device cuda, max live set 114.8 GB, cap 165.0 GB, inflight 8
+06:02:10 gpu cache 33.4 GB

@@ -1,0 +1,185 @@
+{
+ "E1": {
+  "32B": {
+   "median_rl": 1.6244602411259594e-05,
+   "median_sft": 2.0912247813726122e-05,
+   "ratio_sft_over_rl": 1.287335158121891,
+   "hit": false,
+   "n_rl": 45,
+   "n_sft": 9
+  },
+  "7B": {
+   "median_rl": 8.940437282829811e-06,
+   "median_sft": 1.6690017850513647e-05,
+   "ratio_sft_over_rl": 1.8668010660470684,
+   "hit": false,
+   "n_rl": 54,
+   "n_sft": 42
+  }
+ },
+ "E2": {
+  "32B": {
+   "rl_last": "32B/rl/2300",
+   "total_rl": 0.003641905535348414,
+   "total_sft": 0.11314775296551376,
+   "hit": true
+  },
+  "7B": {
+   "rl_last": "7B/rlmain",
+   "total_rl": 0.000806411187432213,
+   "total_sft": 0.14951412254632496,
+   "hit": true
+  }
+ },
+ "E3": {
+  "32B": {
+   "rl_last": "32B/rl/2300",
+   "frac_within_1ulp_of_dpo": 0.6519791530770875,
+   "frac_unchanged": 0.3429621492382577,
+   "hit": true
+  },
+  "7B": {
+   "rl_last": "7B/rlmain",
+   "frac_within_1ulp_of_dpo": 0.8761464017859235,
+   "frac_unchanged": 0.6788533452026785,
+   "hit": true
+  }
+ },
+ "E4": {
+  "32B": {
+   "S_rl": 0.10057304870227021,
+   "S_sft": 0.3934549083284415,
+   "n_rl": 46,
+   "n_sft": 10,
+   "hit": false,
+   "matched": {
+    "n_intervals": 12,
+    "straightness": 0.23992415425719155,
+    "gaps": [
+     3,
+     4
+    ]
+   },
+   "matched_hit": false
+  },
+  "7B": {
+   "S_rl": 0.07066376133141823,
+   "S_sft": 0.20855701543412117,
+   "n_rl": 55,
+   "n_sft": 43,
+   "hit": false,
+   "matched": {
+    "n_intervals": 43,
+    "straightness": 0.0840144646588633,
+    "gaps": [
+     1,
+     2
+    ]
+   },
+   "matched_hit": false
+  }
+ },
+ "G1": {
+  "median_frac_eq_rl": 0.8008291375064156,
+  "median_frac_eq_sft": 0.0665399704006582,
+  "hit": true
+ },
+ "G6": {
+  "median_frac_eq_embed": 0.984609817909337,
+  "mlp": {
+   "gate": 0.8027698320371134,
+   "up": 0.802127210078416,
+   "down": 0.8012631962696711
+  },
+  "hit": true
+ },
+ "G2": {
+  "32B": {
+   "rl": 8.122301205629798,
+   "sft": 0.8234375605318408,
+   "ratio": 9.8638944771766,
+   "hit": true
+  },
+  "7B": {
+   "rl": 8.940437282829812,
+   "sft": 0.6582573808252761,
+   "ratio": 13.581978027532225,
+   "hit": true
+  }
+ },
+ "G3": {
+  "cases": {
+   "32B 32B/s1/656000 -> 32B/s2i1/1000": {
+    "boundary": 0.00017635564668308526,
+    "last_before": 6.163841880912191e-05,
+    "last_before_interval": "32B/s1/655000 -> 32B/s1/656000",
+    "hit": true
+   },
+   "32B 32B/s2merge -> 32B/s3/1000": {
+    "boundary": 0.0001528081835312043,
+    "last_before": 4.961929870790694e-06,
+    "last_before_interval": "32B/s2i1/23000 -> 32B/s2i1/23842",
+    "hit": true
+   },
+   "7B 7B/s1/1413814 -> 7B/s2/1000": {
+    "boundary": 0.00013876909967468668,
+    "last_before": 3.272074235647217e-05,
+    "last_before_interval": "7B/s1/1413000 -> 7B/s1/1413814",
+    "hit": true
+   },
+   "7B 7B/s2/47684 -> 7B/s3/1000": {
+    "boundary": 0.00011358437981956849,
+    "last_before": 3.982523339896354e-06,
+    "last_before_interval": "7B/s2/47600 -> 7B/s2/47684",
+    "hit": true
+   }
+  },
+  "hit": true
+ },
+ "G4": {
+  "stage2_residual_rel": 0.004567726608811546,
+  "stage3_residual_equal_thirds_rel": 0.1672003697059088,
+  "stage3_best_basis": "10000+11000+11921",
+  "hit": false
+ },
+ "G5": {
+  "best_soup": {
+   "a": "32B/sft1e-4/10000",
+   "b": "32B/sft5e-5/8000",
+   "w_on_1e4": -1.2634012191885e-06,
+   "residual": 1.9549557168792917,
+   "residual_half": 155.11454964177136
+  },
+  "rel_to_sftmain": 0.9999999799057128,
+  "hit": false
+ },
+ "G7": {
+  "cases": {
+   "IF": {
+    "rlzero": 0.0010714783121631938,
+    "rl_from_dpo": 0.0006795341970950314,
+    "hit": true
+   },
+   "Math": {
+    "rlzero": 0.0008352599052343326,
+    "rl_from_dpo": 0.0006795341970950314,
+    "hit": true
+   },
+   "Code": {
+    "rlzero": 0.0006612031692678346,
+    "rl_from_dpo": 0.0006795341970950314,
+    "hit": false
+   }
+  },
+  "hit": false
+ },
+ "E5": {
+  "step": 2300,
+  "cos_main": 0.005249727546734973,
+  "cos_ctrl": 0.00018640355029024303,
+  "rand_mean": -5.572653041047315e-07,
+  "rand_sd": 5.030150119683979e-06,
+  "norm_ratio_main": 0.46784603771559324,
+  "hit": true
+ }
+}

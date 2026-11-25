@@ -119,7 +119,16 @@ class Store:
         fn, want, size = c["files"][k], c["sha256"][k], c["sizes"][k]
         dst = self.path(label, k)
         t0 = time.time()
-        if self.a.local_root:
+        pre = self.a.prestaged_map.get(label)
+        if pre:   # restage.py output: the same tensors re-sharded into the reference layout (bytes checked there)
+            src = os.path.join(pre, fn)
+            os.makedirs(os.path.dirname(dst), exist_ok=True)
+            if not os.path.exists(dst):
+                os.symlink(src, dst)
+            rs = {r["file"]: r for r in json.load(open(os.path.join(pre, "restage.json")))["restaged"]}[fn]
+            want, size = rs["sha256"], rs["bytes"]
+            how = "prestaged"
+        elif self.a.local_root:
             src = os.path.join(self.a.local_root, label.replace("/", "_"), fn)
             os.makedirs(os.path.dirname(dst), exist_ok=True)
             if not os.path.exists(dst):
@@ -173,7 +182,13 @@ class Store:
                 return
             sz = os.path.getsize(p) if os.path.exists(p) else 0
             self.bytes_on_disk -= sz
-        if not self.a.keep and not self.a.local_root:
+        pre = self.a.prestaged_map.get(label)
+        if pre:
+            src = os.path.realpath(p)
+            os.remove(p)
+            if not self.a.keep and os.path.exists(src):
+                os.remove(src)
+        elif not self.a.keep and not self.a.local_root:
             os.remove(p)
             cache = os.path.join(os.path.dirname(p), ".cache", "huggingface", "download",
                                  os.path.basename(p) + ".metadata")
@@ -426,7 +441,10 @@ def main():
     ap.add_argument("--verify", type=int, default=1)
     ap.add_argument("--shards", default="", help="comma list of shard indices to run (default all)")
     ap.add_argument("--gpu-cache-gb", type=float, default=-1, help="default: 0.7 x device memory (0 on CPU)")
+    ap.add_argument("--prestaged", action="append", default=[],
+                    help="LABEL=DIR: take LABEL's shard files from DIR (restage.py output, checked against restage.json)")
     a = ap.parse_args()
+    a.prestaged_map = dict(x.split("=", 1) for x in a.prestaged)
     torch.backends.cuda.matmul.allow_tf32 = False
     torch.backends.cudnn.allow_tf32 = False
     torch.set_num_threads(cpu_quota())

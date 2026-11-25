@@ -40,8 +40,9 @@ for k in ["--a", "--b", "--label-a", "--label-b", "--stats"]:
 ap.add_argument("--tensors", default="model.embed_tokens.weight,model.layers.0.self_attn.q_proj.weight,model.norm.weight")
 a = ap.parse_args()
 rows = {}
-for p in glob.glob(os.path.join(a.stats, "shard_*", "iv.csv")):
-    for r in csv.DictReader(open(p)):
+import gzip, io
+for p in glob.glob(os.path.join(a.stats, "shard_*", "iv.csv")) + glob.glob(os.path.join(a.stats, "shard_*", "iv.csv.gz")):
+    for r in csv.DictReader(io.TextIOWrapper(gzip.open(p, "rb")) if p.endswith(".gz") else open(p)):
         if r["a"] == a.label_a and r["b"] == a.label_b:
             rows[r["tensor"]] = r
 ok = True

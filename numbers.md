@@ -2552,3 +2552,191 @@ draw's text, token ids and grades, listed in `artifacts/MANIFEST.jsonl`; `rows/`
 reader label and adjudication task, `logs/`). Reused stored draws: `hf://buckets/dan-pandori/nd-rl/olmo-ifomega/artifacts/olmo_ifomega/samples/`
 (`F_dpo_ifb`, `F_s0100_ifb`, `F_s0750_ifb`, `F_s2300_ifb`) and `…/olmo-iffu/artifacts/olmo_iffu/samples/` (`T4_s0750`,
 `T4b_s0750`). No weights were stored.
+
+
+## olmo-weights — how much Olmo 3's weights move at each stage, pretraining to RL (run olmo-weights, 2026-11-25)
+
+**Models** (released by AI2, bf16 safetensors, pretrained, not trained here; every commit and shard sha256 in
+`olmo_weights/manifest/checkpoints.csv`):
+- **32B, 32.23 B params:** `allenai/Olmo-3-1125-32B` (stages 1–3) → `Olmo-3-32B-Think-SFT` → `Olmo-3-32B-Think-DPO` →
+  `Olmo-3.1-32B-Think` (RL).
+- **7B, 7.30 B params:** `allenai/Olmo-3-1025-7B` → `Olmo-3-7B-Think-SFT` → `Olmo-3-7B-Think-DPO` → `Olmo-3-7B-Think`, and
+  `Olmo-3-7B-RL-Zero-{IF,Math,Code}` from base `main`.
+
+**Measures:**
+- **Relative change:** r = ‖θ_b − θ_a‖ / ‖θ_a‖ (Frobenius over all parameters); per step = r ÷ optimizer steps
+  (`olmo_weights/steps_lr.md`).
+- **Arithmetic:** float32 from the bf16 values (exact differences); sums in float64.
+- **Unchanged:** bitwise-equal bf16; "≤ 1 ulp" means |Δ| ≤ 1 ulp of the earlier value.
+- **Straightness:** S = end distance ÷ path length over the released checkpoints.
+
+**Sources:**
+- per-tensor statistics: `artifacts/olmo_weights/stats/<job>/shard_<k>/*.csv.gz` (`engine.py`);
+- tables: `artifacts/olmo_weights/tables/` (`analyze.py`, `report_tables.py`);
+- figures: `artifacts/olmo_weights/figures/` (`figures.py`).
+
+The 7B "RL" row is Olmo-3-7B-Think; "RL-Zero" rows start from base `main`.
+
+### Per stage (medians over within-stage intervals; `tables/stages.csv`)
+
+| model | stage | intervals | steps / interval | rel. change / interval | rel. change / step (min–max) | mean LR | per step ÷ LR | bitwise unchanged | ≤ 1 ulp | cos(consecutive) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 32B | stage 1 pairs (sampled) | 25 | 1000 | 0.21 | 0.00021 (6.2e-05–0.00044) | 0.000401 | 0.569 | 0.008 | 0.025 | -0.125 |
+| 32B | stage 2 ingredient 1 | 23 | 1000 | 0.0851 | 8.51e-05 (5e-06–0.00017) | 9.85e-05 | 0.87 | 0.018 | 0.053 | -0.061 |
+| 32B | stage 2 ingredient 2 (every 4th) | 5 | 4000 | 0.14 | 3.51e-05 (9.1e-06–6e-05) | 8.55e-05 | 0.41 | 0.011 | 0.032 | -0.113 |
+| 32B | stage 3 | 11 | 1000 | 0.0815 | 8.15e-05 (9.5e-06–0.00015) | 9.58e-05 | 0.851 | 0.019 | 0.055 | -0.066 |
+| 32B | SFT 5e-5 run | 9 | 1000 | 0.0209 | 2.09e-05 (3e-06–3.7e-05) | 2.53e-05 | 0.823 | 0.067 | 0.181 | -0.017 |
+| 32B | SFT 1e-4 | 10 | 1000 | 0.0367 | 3.67e-05 (4.9e-06–7.1e-05) | 4.58e-05 | 0.803 | 0.044 | 0.119 | -0.037 |
+| 32B | RL (3.1 Think) | 45 | 50 | 0.000812 | 1.62e-05 (6.6e-06–3.7e-05) | 2e-06 | 8.12 | 0.801 | 0.952 | -0.221 |
+| 7B | stage 1 pairs (sampled) | 32 | 1000 | 0.109 | 0.000109 (2.9e-05–0.00029) | 0.00017 | 0.744 | 0.015 | 0.045 | -0.109 |
+| 7B | stage 2 | 48 | 1000 | 0.0661 | 6.61e-05 (2.9e-06–0.00014) | 9.87e-05 | 0.673 | 0.021 | 0.060 | -0.098 |
+| 7B | stage 3 | 12 | 1000 | 0.0573 | 5.73e-05 (7.9e-06–0.00011) | 8.71e-05 | 0.658 | 0.025 | 0.074 | -0.094 |
+| 7B | SFT | 42 | 1000 | 0.0167 | 1.67e-05 (1.4e-06–3.1e-05) | 2.54e-05 | 0.658 | 0.086 | 0.213 | -0.057 |
+| 7B | DPO (one interval) | 1 | 1172 | 0.000381 | 3.25e-07 (3.3e-07–3.3e-07) | 4e-08 | 8.13 | 0.793 | 0.916 | +0.000 |
+| 7B | RL (Think) | 54 | 25 | 0.000224 | 8.94e-06 (2.9e-06–1.1e-05) | 1e-06 | 8.94 | 0.924 | 0.985 | -0.198 |
+| 7B | RL-Zero IF | 15 | 100 | 0.00052 | 5.2e-06 (4.7e-06–5.6e-06) | 1e-06 | 5.2 | 0.819 | 0.950 | -0.260 |
+| 7B | RL-Zero Math | 18 | 100 | 0.000474 | 4.74e-06 (2.4e-06–5.8e-06) | 1e-06 | 4.74 | 0.827 | 0.957 | -0.247 |
+| 7B | RL-Zero Code | 25 | 100 | 0.000504 | 5.04e-06 (2.8e-06–7.3e-06) | 1e-06 | 5.04 | 0.841 | 0.965 | -0.244 |
+
+### Distance from each stage's start and straightness (`tables/chains.csv`)
+
+| model | stretch | start → end | intervals | end distance / ‖θ_start‖ | path / ‖θ_start‖ | straightness S | mean cos(consecutive) | excluded names |
+|---|---|---|---|---|---|---|---|---|
+| 32B | stage 1 (sampled) | 32B/s1/0 → 32B/s1/656000 | 48 | 1.67 | 35.2 | 0.0475 | -0.110 |  |
+| 32B | stage 2, ingredient 1 | 32B/s1/656000 → 32B/s2i1/23842 | 24 | 0.378 | 2.21 | 0.171 | -0.057 |  |
+| 32B | stage 2, ingredient 2 (every 4th) | 32B/s1/656000 → 32B/s2i2/23842 | 6 | 0.378 | 1.02 | 0.371 | -0.103 |  |
+| 32B | stage 3 | 32B/s2merge → 32B/s3/11921 | 12 | 0.273 | 1.06 | 0.259 | -0.063 |  |
+| 32B | SFT 5e-5 run | 32B/s3merge → 32B/sft5e-5/10790 | 10 | 0.0868 | 0.221 | 0.393 | -0.034 | ['32B/sft5e-5/8000'] |
+| 32B | SFT 1e-4 | 32B/s3merge → 32B/sft1e-4/10790 | 11 | 0.159 | 0.441 | 0.361 | -0.035 |  |
+| 32B | RL | 32B/dpo → 32B/rl/2300 | 46 | 0.00364 | 0.0362 | 0.101 | -0.206 |  |
+| 7B | stage 1 (sampled) | 7B/s1/0 → 7B/s1/1413814 | 58 | 1.81 | 21.9 | 0.0827 | -0.079 |  |
+| 7B | stage 2 | 7B/s1/1413814 → 7B/s2/47684 | 49 | 0.37 | 3.53 | 0.105 | -0.090 |  |
+| 7B | stage 3 | 7B/s2/47684 → 7B/s3/11921 | 13 | 0.192 | 0.802 | 0.239 | -0.088 |  |
+| 7B | SFT | 7B/s3/11921 → 7B/sft/43000 | 43 | 0.15 | 0.717 | 0.209 | -0.059 |  |
+| 7B | RL | 7B/dpo → 7B/rl/1375 | 55 | 0.000798 | 0.0113 | 0.0707 | -0.191 |  |
+| 7B | RL-Zero IF | 7B/s3/11921 → 7B/zif/1900 | 17 | 0.00135 | 0.00879 | 0.154 | -0.261 | ['7B/zif/100', '7B/zif/400'] |
+| 7B | RL-Zero Math | 7B/s3/11921 → 7B/zmath/1900 | 19 | 0.00123 | 0.0083 | 0.148 | -0.230 |  |
+| 7B | RL-Zero Code | 7B/s3/11921 → 7B/zcode/2900 | 26 | 0.00147 | 0.0124 | 0.119 | -0.243 | ['7B/zcode/100', '7B/zcode/200', '7B/zcode/300'] |
+
+### Expectations (pre-registered; `tables/expectations.json`)
+
+| id | expectation (pre-registered definition) | 32B | 7B | verdict |
+|---|---|---|---|---|
+| E1 | RL change / step ≥ 10× smaller than SFT's (medians) | SFT ÷ RL = 1.29 (2.09e-05 vs 1.62e-05) | 1.87 (1.67e-05 vs 8.94e-06) | **miss** (both) |
+| E2 | RL total from DPO < SFT total from base | 0.00364 vs 0.113 | 0.000806 vs 0.15 | **hit** (both) |
+| E3 | > 50 % of weights within 1 ulp of DPO at RL's end | 0.652 (unchanged 0.343) | 0.876 (unchanged 0.679) | **hit** (both) |
+| E4 | RL straighter than SFT (S, native spacing; matched count in brackets) | RL 0.101 vs SFT 0.393 (RL 0.24 at 12 intervals) | RL 0.0707 vs SFT 0.209 (RL 0.084 at 43) | **miss** (both) |
+| E5 | cos(lora_main, RL) > cos(lora_ctrl, RL); both < 0.1; main > random + 3 sd (step 2,300) | main 0.00525, ctrl 0.000186, random -5.6e-07 ± 5.0e-06 | – | **hit** |
+| G1 | 32B RL intervals > 50 % bitwise unchanged; SFT intervals < 10 % | RL 0.801, SFT 0.0665 | – | **hit** |
+| G2 | change / step ÷ LR ≥ 2× larger for RL than SFT | 8.12 vs 0.823 (9.86×) | 8.94 vs 0.658 (13.6×) | **hit** (both) |
+| G3 | stage 1→2 and 2→3 boundary intervals: larger change / step than the last interval before | 0.000176 vs 6.16e-05; 0.000153 vs 4.96e-06 | 0.000139 vs 3.27e-05; 0.000114 vs 3.98e-06 | **hit** (4 / 4) |
+| G4 | merges are averages: stage-2 residual < 1 % of the ingredients' distance; stage-3 = equal thirds of 10,000 / 11,000 / 11,921 with residual < 1 % | stage 2: 0.00457; stage 3: best basis 10000+11000+11921 (weights 0.333 ± 0.001), residual 0.167 | – | **miss** (stage-3 residual 17 %; same absolute size as stage 2's, 8.6 vs 10.0: bf16 rounding of an exact average) |
+| G5 | 32B DPO did not start from the released SFT main | DPO is 1.95 from SFT main (0.038 % of ‖θ‖); no soup improves on it | – | **miss**: DPO started from the released SFT main, which is itself the soup (see below) |
+| G6 | 32B RL: embedding more often unchanged than every MLP matrix | embed 0.985; gate / up / down 0.803 / 0.802 / 0.801 | – | **hit** |
+| G7 | 7B at step 1,000: each RL-Zero run farther from its start than RL from DPO | – | IF 0.00107, Math 0.000835, Code 0.000661 vs 0.00068 | **miss** (Code) |
+
+### Hash and weight tests (`manifest/hash_checks.json`, `tables/tests.json`)
+
+**By shard hash (Hub LFS sha256, no download):**
+- 32B base `main` = the stage-3 merge `stage3-step11921+11000+10000-nooptim` (`-reshard32` is a byte-identical copy).
+- 7B base `main` = `stage3-step11921`.
+- `allenai/Olmo-3-32B-Think`'s 15 checkpoints = the 3.1 run's `step_0050`–`step_0750` (15 / 15), skipped.
+- 3.1 `main` = `step_2300`.
+- Upload name collisions:
+  - RL-Zero-Code: `step_100` = `step_1000`, `step_200` = `step_2000`, `main` = `step_300`;
+  - RL-Zero-IF: `step_100` = `step_1000`.
+
+**32B SFT `main` is a soup filed under a step name.**
+- The branch `5e-5-step8000` is byte-identical to SFT `main` and uses `main`'s shard layout, not the other 21 branches'.
+- By weights it is the equal-weight average of the two runs' final checkpoints: w = 0.499996 on
+  `1e-4-step10790`, 1 − w on `5e-5-step10790`, residual 10.09 (0.19 % of ‖θ‖, the bf16 floor seen for
+  the stage-2 merge too).
+- It lies ≥ 310 from every real SFT checkpoint, while `5e-5` steps 7,000 → 9,000 are
+  82.5 apart.
+- So the released SFT is the soup the report describes (§4.2). The 5e-5 run's own step 8,000 is not released.
+- Under the pre-registered duplicate rule, the name `5e-5-step8000` is excluded from the 5e-5 run's chain; that run is
+  bridged 7,000 → 9,000.
+- DPO is 1.955 (0.038 % of ‖θ‖) from the soup and nearer to it than to any other SFT checkpoint: DPO started
+  from the released SFT `main`.
+
+**Starts (weights):**
+- Stage 3 started from the stage-2 merge (distance 776), not from stage-1
+  656,000 (1713). The released long-context script's `load_path` names 656,000.
+- The 7B SFT and all three RL-Zero runs are nearer base `main` than `stage3-step11000`:
+  - SFT: 52.1 vs 56.4;
+  - IF: 3.35 vs 22.4;
+  - Math: 0.51 vs 22.2;
+  - Code: 2.07 vs 22.3.
+
+**Merges:**
+- Stage 2: weight on ingredient 2 = 0.5000, residual
+  10.0 (0.46 % of the ingredients' distance
+  2192).
+- Stage 3: the least-squares weights on 10,000 / 11,000 / 11,921 are 0.333 / 0.334 / 0.333, and 9,000 gets 0.0004. So
+  3 checkpoints were merged, as the report and branch name say; the model card says 4.
+
+**`main` branches without a twin** (distance to the last branch):
+- 7B SFT `main`: 4.4e-4 relative, 92 % unchanged.
+- 7B RL `main`: 2.7e-4, 92 % unchanged; distance from DPO 8.06e-4 vs 7.98e-4 at 1,375. Consistent with 25 more steps
+  (report: 1,400).
+- RL-Zero IF / Math `main`: 5.5e-4 / 5.8e-4 from step 1,900. Consistent with step 2,000.
+
+**Duplicate-name exclusions** (pre-registered rule, two passes; `tests.json` → `rlzero_duplicates`):
+- RL-Zero-Code `step_100` / `200` hold steps 1,000 / 2,000.
+- `step_300` lies beyond `step_2900` (15.1e-4 vs 14.7e-4 from base), consistent with the final checkpoint.
+- RL-Zero-IF `step_100` holds step 1,000.
+- RL-Zero-IF `step_400` (no twin) lies at 17.9e-4 from base, beyond IF's own final checkpoint (13.8e-4): excluded as
+  anomalous.
+
+### LoRA against RL (32B; `tables/lora.csv`, per module `lora_modules.csv`, per layer `lora_layers.csv`)
+
+Setup:
+- Adapters: `olmo-ifladder`'s rank-16 `lora_main` / `lora_ctrl` (sha256 `9921a760…` / `4cf06004…`, matching that run's
+  MANIFEST), ΔW = 2·B·A, on `Olmo-3-32B-Think-DPO` `main` (commit 97604023), which is the DPO checkpoint used here.
+- Cosine with θ_t − θ_DPO over the 448 targeted matrices of Olmo 3.1 Think 32B's RL checkpoints.
+- Random baseline: 8 rank-16 draws per matrix at ‖ΔW_main‖.
+
+| RL step | cos lora_main | cos lora_ctrl | random mean ± sd (8 draws) | ‖ΔW_main‖ / ‖θ_t − θ_DPO‖ | ‖ΔW_ctrl‖ / ‖θ_t − θ_DPO‖ |
+|---|---|---|---|---|---|
+| 50 | 0.00078 | 0.00000 | -2.0e-06 ± 4.5e-06 | 5.125 | 4.922 |
+| 100 | 0.00107 | 0.00002 | -5.1e-08 ± 5.6e-06 | 3.330 | 3.199 |
+| 200 | 0.00133 | 0.00008 | -2.2e-06 ± 7.2e-06 | 2.343 | 2.251 |
+| 500 | 0.00280 | 0.00007 | 1.6e-06 ± 6.5e-06 | 1.482 | 1.424 |
+| 750 | 0.00369 | 0.00016 | -5.7e-07 ± 3.8e-06 | 1.083 | 1.040 |
+| 1000 | 0.00423 | 0.00014 | -1.3e-06 ± 7.0e-06 | 0.880 | 0.845 |
+| 1100 | 0.00449 | 0.00015 | -1.9e-06 ± 6.3e-06 | 0.807 | 0.775 |
+| 1500 | 0.00459 | 0.00021 | -2.6e-06 ± 5.0e-06 | 0.536 | 0.515 |
+| 1600 | 0.00472 | 0.00022 | -2.4e-06 ± 5.2e-06 | 0.527 | 0.506 |
+| 2000 | 0.00504 | 0.00019 | -9.6e-07 ± 3.7e-06 | 0.495 | 0.476 |
+| 2300 | 0.00525 | 0.00019 | -5.6e-07 ± 5.0e-06 | 0.468 | 0.449 |
+
+### Compute (`olmo_weights/compute_rows.py`; registry `hf://buckets/dan-pandori/nd-rl/registry/olmo-weights/`, 91 rows)
+
+| job | pod | checkpoints | engine runs | GPU-seconds (A40) | of which compute | TB downloaded | files sha256-checked | ≈ $ |
+|---|---|---|---|---|---|---|---|---|
+| b32_s1 | ow-a | 49 | 1 | 3,613 | 1,908 | 3.16 | 686 | 0.59 |
+| b32_s2 | ow-c | 32 | 1 | 2,461 | 1,394 | 2.06 | 448 | 0.40 |
+| b32_s3 | ow-c | 15 | 1 | 1,157 | 668 | 0.97 | 210 | 0.19 |
+| p32_sft | ow-f | 24 | 1 | 2,175 | 1,409 | 1.48 | 336 | 0.36 |
+| p32_rl | ow-b | 47 | 1 | 3,405 | 2,078 | 3.03 | 658 | 0.56 |
+| b7_s1 | ow-d | 59 | 1 | 992 | 540 | 0.86 | 177 | 0.16 |
+| b7_s2 | ow-d | 50 | 1 | 822 | 453 | 0.73 | 150 | 0.13 |
+| b7_s3 | ow-e | 14 | 1 | 226 | 116 | 0.20 | 42 | 0.04 |
+| p7_sft | ow-e | 47 | 1 | 750 | 425 | 0.69 | 141 | 0.12 |
+| p7_rl | ow-e | 57 | 1 | 884 | 515 | 0.83 | 171 | 0.14 |
+| z7_if | ow-e | 22 | 1 | 372 | 187 | 0.32 | 66 | 0.06 |
+| z7_math | ow-e | 22 | 1 | 349 | 190 | 0.32 | 66 | 0.06 |
+| z7_code | ow-e | 31 | 1 | 491 | 274 | 0.45 | 93 | 0.08 |
+| **total** | | | | 17,698 | | 15.11 | 3244 | 2.89 |
+
+- **Engine time:** GPU-seconds = engine wall time, one job at a time per pod, 1 × NVIDIA A40 secure, billed $0.59/h.
+  No generation, training or Lean (0 rows).
+- **Billed spend:**
+  - `podbudget`: 6.56 pod-hours, **$3.77** of $50; the RunPod balance fell $3.89 ($218.24 → $214.36).
+  - This includes stage 0, setup, an RTX 4000 Ada pod that never received a machine ($0.10), and a first `p32_sft`
+    attempt that stopped on the layout check.
+- **Download:** 15.17 TB in all (the engine's 15.11 TB plus the 0.06 TB re-staged checkpoint).
+- **sha256 checks:** 3,244 shard files against the manifest, plus the 14 originals of the re-staged checkpoint.
+
+**Bucket:** `hf://buckets/dan-pandori/nd-rl/olmo-weights/` (`artifacts/olmo_weights/`: statistics, tables, figures,
+stage 0, logs, re-stage record; `olmo_weights/`: code and manifest). No weights.
