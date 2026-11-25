@@ -1,0 +1,874 @@
+{
+ "seed": 20261125,
+ "universe_sizes": {
+  "7B": 282,
+  "32B": 154
+ },
+ "tasks": [
+  {
+   "kind": "triple",
+   "job": "b7_s1",
+   "chain": "stage1-sampled",
+   "idx": 6,
+   "a2": "7B/s1/4000",
+   "a": "7B/s1/5000",
+   "b": "7B/s1/8000",
+   "s": "7B/s1/0"
+  },
+  {
+   "kind": "triple",
+   "job": "p7_rl",
+   "chain": "rl",
+   "idx": 46,
+   "a2": "7B/rl/1100",
+   "a": "7B/rl/1125",
+   "b": "7B/rl/1150",
+   "s": "7B/dpo"
+  },
+  {
+   "kind": "triple",
+   "job": "p32_rl",
+   "chain": "rl",
+   "idx": 28,
+   "a2": "32B/rl/1300",
+   "a": "32B/rl/1350",
+   "b": "32B/rl/1400",
+   "s": "32B/dpo"
+  },
+  {
+   "kind": "lora",
+   "job": "p32_rl",
+   "chain": "rl",
+   "s": "32B/dpo",
+   "b": "32B/rl/2300"
+  },
+  {
+   "kind": "triple",
+   "job": "p32_sft",
+   "chain": "sft-5e-5",
+   "idx": 9,
+   "a2": "32B/sft5e-5/7000",
+   "a": "32B/sft5e-5/8000",
+   "b": "32B/sft5e-5/9000",
+   "s": "32B/s3merge",
+   "targeted": true
+  },
+  {
+   "kind": "pair",
+   "job": "p32_sft",
+   "chain": "sftmain-to-dpo",
+   "idx": 1,
+   "a": "32B/sft5e-5/8000",
+   "b": "32B/dpo",
+   "targeted": true
+  },
+  {
+   "kind": "triple",
+   "job": "p32_sft",
+   "chain": "sft-1e-4",
+   "idx": 11,
+   "a2": "32B/sft1e-4/9000",
+   "a": "32B/sft1e-4/10000",
+   "b": "32B/sft1e-4/10790",
+   "s": "32B/s3merge"
+  }
+ ],
+ "checkpoints": {
+  "7B/s1/4000": {
+   "repo": "allenai/Olmo-3-1025-7B",
+   "branch": "stage1-step4000",
+   "commit": "d3c4c15315dbef67d8d8e207a743cf5d7a43aa77",
+   "files": [
+    "model-00001-of-00003.safetensors",
+    "model-00002-of-00003.safetensors",
+    "model-00003-of-00003.safetensors"
+   ],
+   "sha256": [
+    "4842140977372fd1bf8c5fc62a345bb13101005fbedafcc7cf5bd61e15652bb0",
+    "3ca5de001c9c2ea0a15f3d44ead726b4364712b09407d215a1a9aaf23bb8a663",
+    "f13f363db74888c2e7d93a097dc045eae4f1d81f3f64e428278009d7943e13f5"
+   ],
+   "sizes": [
+    4969984976,
+    4981161496,
+    4644917240
+   ]
+  },
+  "7B/s1/5000": {
+   "repo": "allenai/Olmo-3-1025-7B",
+   "branch": "stage1-step5000",
+   "commit": "825e84ed82eb78b1b395d0aa0164378f64544f92",
+   "files": [
+    "model-00001-of-00003.safetensors",
+    "model-00002-of-00003.safetensors",
+    "model-00003-of-00003.safetensors"
+   ],
+   "sha256": [
+    "16414e31fdfaa05b53bbd561a87f231a583452b93a014ddc082ac92c6e888ece",
+    "1b9052ff3a77db84c2acb62cc8638f2cefcbebcd5603cb345677d4729dfa11de",
+    "c763ad6aa78868d51961dac9301380574e9ce0100d90f0f5060495492a48c18e"
+   ],
+   "sizes": [
+    4969984976,
+    4981161496,
+    4644917240
+   ]
+  },
+  "7B/s1/8000": {
+   "repo": "allenai/Olmo-3-1025-7B",
+   "branch": "stage1-step8000",
+   "commit": "ebfe7b62b31bfadff464a8926a48a256c9431db7",
+   "files": [
+    "model-00001-of-00003.safetensors",
+    "model-00002-of-00003.safetensors",
+    "model-00003-of-00003.safetensors"
+   ],
+   "sha256": [
+    "675242451b4014675d3409f06a42764f5cbd8839c6eed4791ea509096bea34c3",
+    "d07b0a5d2f5737051bf5947d9ef324c68d3f2726e57ec59a3b194343d32e8d9c",
+    "a78ba3ba62937d5c925b608355ea3be305b7936a5a3381727fab547bf1a2f5a4"
+   ],
+   "sizes": [
+    4969984976,
+    4981161496,
+    4644917240
+   ]
+  },
+  "7B/s1/0": {
+   "repo": "allenai/Olmo-3-1025-7B",
+   "branch": "stage1-step0",
+   "commit": "f129a5d178fd784d802a521d6f388c6df6988fd6",
+   "files": [
+    "model-00001-of-00003.safetensors",
+    "model-00002-of-00003.safetensors",
+    "model-00003-of-00003.safetensors"
+   ],
+   "sha256": [
+    "155b65d2b79db2e57f95257dad9a77f7c5da78053b884f477d1e2f049b4a4780",
+    "c087d27774ba80e981626a1d3378ec0bf4c5c50892e50c41ce7f583f7767d862",
+    "37079753429ba5eec8057f0558c3a0e4e8d977de8f9105c8f364d9310c645eb0"
+   ],
+   "sizes": [
+    4969984976,
+    4981161496,
+    4644917240
+   ]
+  },
+  "7B/rl/1100": {
+   "repo": "allenai/Olmo-3-7B-Think",
+   "branch": "step_1100",
+   "commit": "f9903ff99bf60ae3eebef76446be8b6a9d443dac",
+   "files": [
+    "model-00001-of-00003.safetensors",
+    "model-00002-of-00003.safetensors",
+    "model-00003-of-00003.safetensors"
+   ],
+   "sha256": [
+    "60386a32d050e1547b4654e51b4ca6a1f0f3c5f20e0c75cc9a0f13c897019f78",
+    "7d70f5865603bd5b0f4f3fcd44124cc47ca1e208832b6a26276b7ae2c940bfc8",
+    "9312328485c4cd83b93aa924a6b9d45780f4af1b4db2c5e58912d045a9a505ae"
+   ],
+   "sizes": [
+    4969984976,
+    4981161496,
+    4644917240
+   ]
+  },
+  "7B/rl/1125": {
+   "repo": "allenai/Olmo-3-7B-Think",
+   "branch": "step_1125",
+   "commit": "14af00fea0e84089d65ed63c717ae6d7f418bb49",
+   "files": [
+    "model-00001-of-00003.safetensors",
+    "model-00002-of-00003.safetensors",
+    "model-00003-of-00003.safetensors"
+   ],
+   "sha256": [
+    "3fe46be6667e5bd0ca374af9eba9088e5aeeda2c695b8ae022830289fe174538",
+    "5ed966b02eec17ed1f54c92007b9a9992cfc6de978fd6d47181b6e36c96bf5d8",
+    "3c1ab560676be193aa3a6ab481d2e35deaa3511cfc5c1a9fc60adfcc90fa3d5c"
+   ],
+   "sizes": [
+    4969984976,
+    4981161496,
+    4644917240
+   ]
+  },
+  "7B/rl/1150": {
+   "repo": "allenai/Olmo-3-7B-Think",
+   "branch": "step_1150",
+   "commit": "d7e0c1952ce29e7d9a7ab130c3c2e0bab1e70d4f",
+   "files": [
+    "model-00001-of-00003.safetensors",
+    "model-00002-of-00003.safetensors",
+    "model-00003-of-00003.safetensors"
+   ],
+   "sha256": [
+    "390bf2de3a64c8095a3b53e7dbb889a1a0ece0928c7dd28855f8944e452e4b9b",
+    "151844d9987afda143b86ac3b9b1854dafb0a26d67e4314935a4a9d361cfc834",
+    "7a518f840e2c2634ac11e06249c228fc28ef0bb1603a83f9bccf1dea5cb56ccd"
+   ],
+   "sizes": [
+    4969984976,
+    4981161496,
+    4644917240
+   ]
+  },
+  "7B/dpo": {
+   "repo": "allenai/Olmo-3-7B-Think-DPO",
+   "branch": "main",
+   "commit": "7b18bf927b430ff06376fdfa5610eb3b1b6a5c38",
+   "files": [
+    "model-00001-of-00003.safetensors",
+    "model-00002-of-00003.safetensors",
+    "model-00003-of-00003.safetensors"
+   ],
+   "sha256": [
+    "c3021a8d3a0834b85f3a729c036c44a2237148e8d71c19eab6c474b88fb9614b",
+    "40693e47833b3f0e7cfe1e77c970f6cb7dbbced0149dc507cf997b2dabd30eaf",
+    "d54321b82037a2a7f9c37dd7f7777e2b12cefd39632bd198a5a79f700ab16774"
+   ],
+   "sizes": [
+    4969984976,
+    4981161496,
+    4644917240
+   ]
+  },
+  "32B/rl/1300": {
+   "repo": "allenai/Olmo-3.1-32B-Think",
+   "branch": "step_1300",
+   "commit": "13043aa71327534c6eca7715e847a87afb65c4a9",
+   "files": [
+    "model-00001-of-00014.safetensors",
+    "model-00002-of-00014.safetensors",
+    "model-00003-of-00014.safetensors",
+    "model-00004-of-00014.safetensors",
+    "model-00005-of-00014.safetensors",
+    "model-00006-of-00014.safetensors",
+    "model-00007-of-00014.safetensors",
+    "model-00008-of-00014.safetensors",
+    "model-00009-of-00014.safetensors",
+    "model-00010-of-00014.safetensors",
+    "model-00011-of-00014.safetensors",
+    "model-00012-of-00014.safetensors",
+    "model-00013-of-00014.safetensors",
+    "model-00014-of-00014.safetensors"
+   ],
+   "sha256": [
+    "fde45fa3cfba996f38cff0a0bde76f4c4393e6643511df6a0cb35c41d5b6f567",
+    "418d9e8f1b1abfd0e93ca76b9180bb905ceeafbbd6d169a9c768d70c2d1c2b09",
+    "6d348a2bc5cc8cbaaa0a71ae39b031af73ead5d5a2ef50ccb31d7446487a27fe",
+    "d6e8cea5925ebe0baa4f4fa8de314bc7475b2308a8e778860779860f0b762ecb",
+    "773202eb2fe0b8ebc4a84e003dde712ab6f5069013b8ced64b3abb7a084065d4",
+    "8d8c55de32a764cb219ac30781f682e770cfc874123e153fc5acc4827cf64217",
+    "8713e3397d880eedfe0ec1863cd78e81afae1e0d9229a15f2c1bfc42098933c1",
+    "5e1ef08279a539983e0ca7b01a565236d97b39cdb85c6ea59ee405a260b2c78d",
+    "2f8cfb1ce90a2c11c53f5c9e3df1629ca6a38ddac857ec9c91db3a6e8301a586",
+    "d07d86cf600365b94af744db6d87e559af8ec983d10d82812266f6bf90a36c98",
+    "de9d891ed760eef1927f476676788bfbc7984c48917fd32d68682beb727e2678",
+    "c4d26733f64c87f83f7c0679edf34d1d4796c2ff68207b395cf30e247488cb10",
+    "b9e4b5cf7e553a46e25b3fa674545f1dd588dd3689ade0771bb7a2f71c097578",
+    "cad3eff41df3c673346ac9e7b8c1a6feac2f1a0abf3f8c664962c9feb13ee7cf"
+   ],
+   "sizes": [
+    4990600552,
+    4938975944,
+    4876048688,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4750216928,
+    1026846848
+   ]
+  },
+  "32B/rl/1350": {
+   "repo": "allenai/Olmo-3.1-32B-Think",
+   "branch": "step_1350",
+   "commit": "ab377534118ee49e0ac6c7a8874b6445cf19a3dd",
+   "files": [
+    "model-00001-of-00014.safetensors",
+    "model-00002-of-00014.safetensors",
+    "model-00003-of-00014.safetensors",
+    "model-00004-of-00014.safetensors",
+    "model-00005-of-00014.safetensors",
+    "model-00006-of-00014.safetensors",
+    "model-00007-of-00014.safetensors",
+    "model-00008-of-00014.safetensors",
+    "model-00009-of-00014.safetensors",
+    "model-00010-of-00014.safetensors",
+    "model-00011-of-00014.safetensors",
+    "model-00012-of-00014.safetensors",
+    "model-00013-of-00014.safetensors",
+    "model-00014-of-00014.safetensors"
+   ],
+   "sha256": [
+    "b236394b2e4079a260c6ea3355ffd7b1923c195d991f94f31eb154f4b712e493",
+    "55a921b9436335375057099b886b6f4b1f49ef9cd8b7e09a78ac556c130fb715",
+    "693d0c6354a1e2439d88a975cddbe0dc4c357b76cd2cb0cd04bfbdadbed55b65",
+    "df5c26be0ac012fa0b5ec4ec55d81fcd0f8386955120b42e2eb2238c541ed7ae",
+    "60548d61259bd67d63e0906dbc2e4eebe2f8b5b2b91e321c0496f6d7d80143f4",
+    "8eb657292ca6b2b5166721b28a813c1e3dc7f60665997d2825cdf25973e18f6d",
+    "0d1d709117d8a8869d8eabd189509fa205996be6ecc9bf1d487e5dbd3a7f91e2",
+    "fe32c7aca93b5f0db0330a509d9c922044a1b4a70f0730431bc7a504719ea405",
+    "637332100c4b8fd8757b23ec2fb598ec81a3a5df638d81b275d3ed02fee66979",
+    "abcbde7b0d67bdd320be6a41c574cee93a795ccf62c4abdd4e6849935b6d6a6b",
+    "e8dd5a0a52358aecb78b80890189ff5ca49d61af08031fd67618c86ff31d2ff6",
+    "57f0385d0ce32d6acf3c8db2295676412b16a38a272726912bad0193d35631d9",
+    "a73f479a204bda80c39c08a1f128f3708217dc02fd2e019fcfa2a8cdad8a06c9",
+    "ecc7987fb1c2f605230afa5df160e2e6c93737a65ad77c979ed9b579a2fc77c8"
+   ],
+   "sizes": [
+    4990600552,
+    4938975944,
+    4876048688,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4750216928,
+    1026846848
+   ]
+  },
+  "32B/rl/1400": {
+   "repo": "allenai/Olmo-3.1-32B-Think",
+   "branch": "step_1400",
+   "commit": "e31de2c3e8b2b4449d5bf2643bdb344a029e2b73",
+   "files": [
+    "model-00001-of-00014.safetensors",
+    "model-00002-of-00014.safetensors",
+    "model-00003-of-00014.safetensors",
+    "model-00004-of-00014.safetensors",
+    "model-00005-of-00014.safetensors",
+    "model-00006-of-00014.safetensors",
+    "model-00007-of-00014.safetensors",
+    "model-00008-of-00014.safetensors",
+    "model-00009-of-00014.safetensors",
+    "model-00010-of-00014.safetensors",
+    "model-00011-of-00014.safetensors",
+    "model-00012-of-00014.safetensors",
+    "model-00013-of-00014.safetensors",
+    "model-00014-of-00014.safetensors"
+   ],
+   "sha256": [
+    "86e690fee85262ab23c9674717eeff168c2bc025f7d267e23a6a157ba9f16bb2",
+    "0752dad3df336958904f1c7a4ac9d3a7e530c8f9c6a29eb565a6b7b86f7ca587",
+    "458a5c6e951df27843620d78b7d5a35587c2541727ea6f2899ac44f8d0192f2e",
+    "5b81ba860c1a8f2277e8833a62b6f616861a394817f6a1b6f9a8b66eb168b6e0",
+    "027fa6cd3af93195efaf7fa0e963211916a7632f396969cc890f2804b53aef4c",
+    "3507767504e9121f0e532c095a5f1f944dd75d11faf123e0f2a570d7ba40a315",
+    "14c92f80ecba879ac277385a0ebc4aac274b3f1f575e8bc8e2238bd384df246a",
+    "5554d2aa803570d1f9dd3920ddcf94b9f29c3549148dc6b0214d8ebc9fce814b",
+    "550fd9f3f394a5e7c7d546bedbddc09b8ef7c92da98364eb381739aaa2deec6c",
+    "6330c671f3ee83f0d572e8c91eb9e2e82b4612a2bd0ce2c40b3ebaf2aa40a23b",
+    "a8e4bed3f317fb2d93e0680482844873feabdffab3fc5d8dbb3ea7b25daa43a6",
+    "77f001cf2d0c8121c70255155a99b3a8f0049bc711901ec90922dcc036ef73c1",
+    "7894f1fd8122795bd4780145122c203a0add77ca486c13581c59c62da00e47d9",
+    "0ed4db15ff8c7c7612c9df797dcb2eaaab1d658b96683cb3feafc824aea88d37"
+   ],
+   "sizes": [
+    4990600552,
+    4938975944,
+    4876048688,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4750216928,
+    1026846848
+   ]
+  },
+  "32B/dpo": {
+   "repo": "allenai/Olmo-3-32B-Think-DPO",
+   "branch": "main",
+   "commit": "97604023f2602a7dfe6d31b1fc229985e0002022",
+   "files": [
+    "model-00001-of-00014.safetensors",
+    "model-00002-of-00014.safetensors",
+    "model-00003-of-00014.safetensors",
+    "model-00004-of-00014.safetensors",
+    "model-00005-of-00014.safetensors",
+    "model-00006-of-00014.safetensors",
+    "model-00007-of-00014.safetensors",
+    "model-00008-of-00014.safetensors",
+    "model-00009-of-00014.safetensors",
+    "model-00010-of-00014.safetensors",
+    "model-00011-of-00014.safetensors",
+    "model-00012-of-00014.safetensors",
+    "model-00013-of-00014.safetensors",
+    "model-00014-of-00014.safetensors"
+   ],
+   "sha256": [
+    "af1d34c2db486bc0b3adff2ce27e147480b8282606c40420ca5a69d844bea1f3",
+    "8f21dc7811dda6fbaa6134f1d226c7df0a56106de603e4da156b3b300ecd87f3",
+    "79cf8938421a2680b570d93cfb7a4feea7e9c36f784711c8761a444542197875",
+    "2e8e9d4bd073fba518ddbff58664b7b26429b92c6bd6f0df37011bfe42b98bbd",
+    "244f3a25e83858bfc2844595e2b4b21526c63b96b2d3c198696127be8c775990",
+    "46761c3b51e91be41347e0ab5b2d2d4a673d06126990b19cdc671ed101557a62",
+    "6a7b94f4644d64ba417c3096fde549fb5545a0c510b276d6946851e7e1b6c69f",
+    "e8d02a11d2a751177135875c48f3fce24435c7f8a3eb954ca8cfa1135c6a0586",
+    "2050b344dd77a84796082a60a69489eef9c125d7c71398de73ede4416aa05146",
+    "a3bd1f8f8529a7a585a77fd1f6d5028d1da1e75b723f41c916378e33b91b686a",
+    "f1bafb1b10efd306e6211d9cc342b74f9f01cfd42eaf92ee8906935d3cd8f456",
+    "1cc973bb94dd249f334555b161a69469205e3d2eef2077661ef5bd1de8e512e9",
+    "b6d202af3b755d164bee284117571b26f0ab45b3f94623570ec49335513ea501",
+    "8be58f40a1c759d4b94e2a1cb192d694ea1c934c4ca15f9dac270bb03a85a048"
+   ],
+   "sizes": [
+    4990600552,
+    4938975944,
+    4876048688,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4750216928,
+    1026846848
+   ]
+  },
+  "32B/rl/2300": {
+   "repo": "allenai/Olmo-3.1-32B-Think",
+   "branch": "step_2300",
+   "commit": "29884259e8c87406883e817e0628fa5ce9b529c3",
+   "files": [
+    "model-00001-of-00014.safetensors",
+    "model-00002-of-00014.safetensors",
+    "model-00003-of-00014.safetensors",
+    "model-00004-of-00014.safetensors",
+    "model-00005-of-00014.safetensors",
+    "model-00006-of-00014.safetensors",
+    "model-00007-of-00014.safetensors",
+    "model-00008-of-00014.safetensors",
+    "model-00009-of-00014.safetensors",
+    "model-00010-of-00014.safetensors",
+    "model-00011-of-00014.safetensors",
+    "model-00012-of-00014.safetensors",
+    "model-00013-of-00014.safetensors",
+    "model-00014-of-00014.safetensors"
+   ],
+   "sha256": [
+    "483409492d74c42f1a33f484f6201ce9ff81da5b881b085987f5f57e6b5b3890",
+    "23eaf7c6f1abcc910a133c59c90cd21bed9cdf9fb04c5e356ee16b2e41269482",
+    "f2f7551de812a207f2bb2c8012688d32d5c5781601113ead1b02df211296a9dc",
+    "b90c04a68c44b3019deed83cf07a353af6392d90725ef3bb4790ccb03e316f64",
+    "37cc41a62eb7cce7acea036a5c36886cd7883cb9b76745d881561565f61f789a",
+    "54d19cb772ecbf78345fa372d9a91fb937880865cb60009a81d533d419c18ca1",
+    "82917ae81a5493b51bf6d1290b946e9c461e611e90bee54f99542685a00bb4ec",
+    "a06a34491bc51c42e678e2335eb54b0486b48f55baffcdcfdc3ed171821656ef",
+    "9f0a7b1c9f647981f4bdf98fe5550244537e58cc9d77cd6e56fa187aeced4af9",
+    "7644ab126aba2f5a9053d9ab586f8d45db83d60e3cecfad3e979456151058938",
+    "298c9a587de0f84d6f37e10da08af226eab989d0d32363e94c09a4fe6a7eac1c",
+    "dff97b82d38a7456cd24509f5d800a32baf3ede96ded09f10f34fd919f244ef7",
+    "5335c64eb619de53a052cf2c42f38ed9c1ba71197186d76e81bf64150f3b08c4",
+    "907c2ea0acd7f9bf256e87a579d8f277ba9505f56a7c8352dbca4710ff811885"
+   ],
+   "sizes": [
+    4990600552,
+    4938975944,
+    4876048688,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4750216928,
+    1026846848
+   ]
+  },
+  "32B/sft5e-5/7000": {
+   "repo": "allenai/Olmo-3-32B-Think-SFT",
+   "branch": "5e-5-step7000",
+   "commit": "6851a37159e86e358eb542d99041f3cca9f0ed68",
+   "files": [
+    "model-00001-of-00014.safetensors",
+    "model-00002-of-00014.safetensors",
+    "model-00003-of-00014.safetensors",
+    "model-00004-of-00014.safetensors",
+    "model-00005-of-00014.safetensors",
+    "model-00006-of-00014.safetensors",
+    "model-00007-of-00014.safetensors",
+    "model-00008-of-00014.safetensors",
+    "model-00009-of-00014.safetensors",
+    "model-00010-of-00014.safetensors",
+    "model-00011-of-00014.safetensors",
+    "model-00012-of-00014.safetensors",
+    "model-00013-of-00014.safetensors",
+    "model-00014-of-00014.safetensors"
+   ],
+   "sha256": [
+    "60a377fd83f5aa947c8c4c6f156b1bc7b092589f5dabac11745e3e60f8b026c7",
+    "20493306116705c97902d8a97bbf89346f84a8c732df14adfb9e83d596bde306",
+    "3098e30d25ac4fdbc85b73892fcc85c2b39f4d23ff972b12127327d0581f4c77",
+    "8e9fe213a70ff412ce1d319bb69e2c849524eae0bd990dcd95035398d373f06e",
+    "5129256ad698d4e3028c3168fd9ec16d791808165e2aa13a7e6e9b639178c107",
+    "316439105d361448f76a0d5ef2c4f1deeb93b3799cbd3e451d4d3588660d92b5",
+    "3fb151af53cd00d584d0f0a02c7770983e1c2b2e0df19bfbddfc97bce6fa729e",
+    "4bf853c89aec50cd0123948b75cca7912e2ab3a3421ebe6c444d2ad48f150120",
+    "f18d01b8ec6e0d5431bcc35ed88550a1fe61cd8207d013a51ffefeb0a07529e2",
+    "fa84ef4c8d8bb09dd55230cc2e4af245c842275e7257ce92f308b5dbc2ce89b1",
+    "70b33675c76912e314320461e20be623a45f1779320bbce0ce2986a4960409db",
+    "fe82a03be67f97b80768f5af854f2b3dd52454ee33307ee00ebe85f776478500",
+    "c5b3ba26f9f07879011f3234fdf23bad3ef80a0c245c259064538ea1f0eee79d",
+    "57e0114f80edf7cb0cf60c3a0970cdc1cf912b885cb73c5a09e8984cdc44ad07"
+   ],
+   "sizes": [
+    4990600552,
+    4938975944,
+    4876048688,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4750216928,
+    1026846848
+   ]
+  },
+  "32B/sft5e-5/8000": {
+   "repo": "allenai/Olmo-3-32B-Think-SFT",
+   "branch": "5e-5-step8000",
+   "commit": "83ac724fd18a2fce57f1b445789ffe8a105a4456",
+   "files": [
+    "model-00001-of-00014.safetensors",
+    "model-00002-of-00014.safetensors",
+    "model-00003-of-00014.safetensors",
+    "model-00004-of-00014.safetensors",
+    "model-00005-of-00014.safetensors",
+    "model-00006-of-00014.safetensors",
+    "model-00007-of-00014.safetensors",
+    "model-00008-of-00014.safetensors",
+    "model-00009-of-00014.safetensors",
+    "model-00010-of-00014.safetensors",
+    "model-00011-of-00014.safetensors",
+    "model-00012-of-00014.safetensors",
+    "model-00013-of-00014.safetensors",
+    "model-00014-of-00014.safetensors"
+   ],
+   "sha256": [
+    "bdbf11d8e978ccfe62ed7639749905575263357632d990a29d774dc578486410",
+    "a20cb684fe5f6e646fd1c997932713f2e7c2104c95c42c036cfe8283330f35e4",
+    "2893e98bed222302813002abe92909c25d53177dab279e84a64db4dd8c963ce4",
+    "ac478581db6399f6ab69f10b9c7ef1c1fcdcf3e3d8c418a0bee2683cdffee4ea",
+    "6e5e0162fdd57745e736cd7e08bd5cc4007959d921dc99e4ea8964fdc0c4b90d",
+    "8c438926ba8feb6701a0fe0250284c6b689f34dbd7769bf7767c86eadbd33717",
+    "352a2e07b14352a46d965c3f64ce6b7f9cb9c715e612a03efed8c514c5da97e9",
+    "21b1f6fdc1c120ec4bc83c50506cea35e56a534b198c68a5a31bdee2235cdaaf",
+    "9acab924fac950afd90d70d06de4ab45e95bfe78cb230d90c0067286629baf85",
+    "f5b2bb6dc3b9f8652c1f6cb68dfab67470074db8969b5657d1044b24970cf2cc",
+    "435173632b9e2e2e30c5c92bb9cd3688d227126f8265d5836a70909d0b433df4",
+    "1551001dd0bb633519c8d65d77cb782dad109f79cb788cf10d04795f8b6fd2b1",
+    "0897128c728985a189d6d355f4443e128e855f1db1c976827bad8de9af844614",
+    "e6433c3a0299298fbb6b8b404a38fc89a52b71a3f9cfbefec833064afd98016e"
+   ],
+   "sizes": [
+    4979322864,
+    4876048696,
+    4876048680,
+    4876048696,
+    4876048696,
+    4876048680,
+    4876048696,
+    4876048680,
+    4876048696,
+    4876048680,
+    4876048696,
+    4876048680,
+    4876048672,
+    975220064
+   ]
+  },
+  "32B/sft5e-5/9000": {
+   "repo": "allenai/Olmo-3-32B-Think-SFT",
+   "branch": "5e-5-step9000",
+   "commit": "825bebf1efb884f4edded7396a1729520989ea66",
+   "files": [
+    "model-00001-of-00014.safetensors",
+    "model-00002-of-00014.safetensors",
+    "model-00003-of-00014.safetensors",
+    "model-00004-of-00014.safetensors",
+    "model-00005-of-00014.safetensors",
+    "model-00006-of-00014.safetensors",
+    "model-00007-of-00014.safetensors",
+    "model-00008-of-00014.safetensors",
+    "model-00009-of-00014.safetensors",
+    "model-00010-of-00014.safetensors",
+    "model-00011-of-00014.safetensors",
+    "model-00012-of-00014.safetensors",
+    "model-00013-of-00014.safetensors",
+    "model-00014-of-00014.safetensors"
+   ],
+   "sha256": [
+    "89eeabf904116a447ce6152e20773255c60baea4173bcec5914b88cc83cea0c7",
+    "fd8c6e47fc68b0e3e42285454c9de4cdd522c7b3a7099d1c33044b94b0d08ff5",
+    "6746d9c7d369c2c27057fd1519b345d7e8528fb9624eaba3e68aec1b89e63e3b",
+    "7070f5bc3a2c4c5a07b37ab7547f6cd10af21124f75fc94597cc6a0cbabcc511",
+    "d976d8cf7efd6bb043a1c89d755c1d43e2f9bfa3b10f88fd6e40298e6d334557",
+    "dd47d6bbea17416c7a19d91a1671af0de3face50a06749eaff5dc69b27f47797",
+    "16280df0f47840ca05d6540e4192f7fe7e4c15211b7d0c9c06751826d9ab409c",
+    "520fd58925057f7fc0ccb460b66c77a3adb253cdef50bffbb9767e62fb877582",
+    "c25a0b6b2e9b7e08a8025902162b4807e0359911b3c21ce7f63a862cebc395cf",
+    "16f5f9c81feab1482fb46a5daed59480c362a0993cbd6c1fd4a471e641b46e3e",
+    "66d260fad7b2c0aad8e7f6e0349ed24dfe21de3583d02a165e0576adc7ba220e",
+    "e3d7a93097f61b61378b34f34704ce76b55ab221cb61e8ac8cecd36d85489cf2",
+    "404c454c94e313060a7e8457e432cabf2e998af4dc82989bc39373e44c429a2b",
+    "8eebcc4841508a7b371504aa5cf11ca9a25c9ec9e7209cea24389789ce25ce9c"
+   ],
+   "sizes": [
+    4990600552,
+    4938975944,
+    4876048688,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4750216928,
+    1026846848
+   ]
+  },
+  "32B/s3merge": {
+   "repo": "allenai/Olmo-3-1125-32B",
+   "branch": "stage3-step11921+11000+10000-nooptim",
+   "commit": "fbc60636af58dcc52e73897b7621ee28774e52e7",
+   "files": [
+    "model-00001-of-00014.safetensors",
+    "model-00002-of-00014.safetensors",
+    "model-00003-of-00014.safetensors",
+    "model-00004-of-00014.safetensors",
+    "model-00005-of-00014.safetensors",
+    "model-00006-of-00014.safetensors",
+    "model-00007-of-00014.safetensors",
+    "model-00008-of-00014.safetensors",
+    "model-00009-of-00014.safetensors",
+    "model-00010-of-00014.safetensors",
+    "model-00011-of-00014.safetensors",
+    "model-00012-of-00014.safetensors",
+    "model-00013-of-00014.safetensors",
+    "model-00014-of-00014.safetensors"
+   ],
+   "sha256": [
+    "e19d9bede57adaf4e13cb0f84d9485869660395b6a289218d09a94a9684bbcd1",
+    "75e9c8f2ee24942e17d8f1267dbc2f6d12b0ac5b9588d11db74a36815bd1c147",
+    "7044f03fff906aef4cb0b1718a89a8a837def719d7eebb20856e0f4e620e592c",
+    "14fce5798a609f6fd4cd3589bf3281bd5bbd08903f159fbbfe1d3d5dac11c9de",
+    "541bb6d283cb44409ea53152545ea2e1298483c652e1d46c2c6613bfdf02dfea",
+    "426e5d323c17554ec6f8be25235365302101fea6bbd0aef2ca2096f68e6e08c3",
+    "15983b0b9063182ed9dedca6ef82d5587b9ce88a1cd58f7e5e99b705b62bf3e7",
+    "ca2688248331225ba6cb0b71534419c803af25659e73d34ad78a57f3a7708078",
+    "4e1657f9f4a91222fb87e0fdf0fcab39bf05a1c73971678cea00e7d8abe9c150",
+    "c8b20285b33923da3d9777f38314813b9e593a66a9f042093b5d459e630f83af",
+    "c2965d943f70acf339f37b84e596bdd031f6f052bc2d44615718b303acdb90fd",
+    "9843b60fa1cfa0b6344e7eabc4ba334270a501bcddde2228818228fc0b5e5cef",
+    "b6667e37d81a5d5d0a849734658a6f2148176fa8c0a3bcad314d4d97d5c5586b",
+    "c7a7fdfe6c66166ae417c1c4d35620fe13582bb49accc1a48d51200c5d7d83a2"
+   ],
+   "sizes": [
+    4990600552,
+    4938975944,
+    4876048688,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4750216928,
+    1026846848
+   ]
+  },
+  "32B/sft1e-4/9000": {
+   "repo": "allenai/Olmo-3-32B-Think-SFT",
+   "branch": "1e-4-step9000",
+   "commit": "9807a1f8c641785bfc1e2e5aa718efc6801a4363",
+   "files": [
+    "model-00001-of-00014.safetensors",
+    "model-00002-of-00014.safetensors",
+    "model-00003-of-00014.safetensors",
+    "model-00004-of-00014.safetensors",
+    "model-00005-of-00014.safetensors",
+    "model-00006-of-00014.safetensors",
+    "model-00007-of-00014.safetensors",
+    "model-00008-of-00014.safetensors",
+    "model-00009-of-00014.safetensors",
+    "model-00010-of-00014.safetensors",
+    "model-00011-of-00014.safetensors",
+    "model-00012-of-00014.safetensors",
+    "model-00013-of-00014.safetensors",
+    "model-00014-of-00014.safetensors"
+   ],
+   "sha256": [
+    "d95adf22b33b94b80b3c804c746129a4076ad5fcab2b03a4d0317e53a512b030",
+    "f3657d2026b52c01692c6b0fa1512e3d3cbe45ef5d83d586913304af3a7a5d64",
+    "d3dc429e133cd56c5466fcc804c84d092c3be907132e1644efadde33f9838d57",
+    "3e00612a7841d04ab53a996419c17abbbc4a1d5f16e8ea38437da1f8217a2205",
+    "f5e9522a26da9364001e6a7b4191ae94588928e64544e328e55ac92b1ef02c59",
+    "d519a94b723352d9bb78745a5d2035a3faee26e84b563261da4f9bc35a6579dd",
+    "630080ffb1f225051f5e44cdf456d0a614ad0d720796f3ba7b4472ea6a2926f7",
+    "1c4c5a5eacea64430156afb62ab06b587a4dc0b040750e58491f9c7a6f0ba28f",
+    "c76c08796acd67bbc08fc21c345276db05c7c3e0b046e40b4fd11d049868c345",
+    "5d07aa75f9652b49cf00a002e58730c329acff7f680a828a71def60f0c204874",
+    "0f811b2ba683e7c6df2d09808950b8e94cad7c512925f1abaf3bf82e504bdddb",
+    "9f9a11df241bfed2601687d5907c334b0c3dd77eae509ec213ef87a324bad3a9",
+    "c3ad931555cac08570f7e2d13647faddac044be6120214a28abf824860ba4870",
+    "c9b60a925eeccee23eba6fe2faf6ad2368ca72fe80d5d0c18cb44964839d669d"
+   ],
+   "sizes": [
+    4990600552,
+    4938975944,
+    4876048688,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4750216928,
+    1026846848
+   ]
+  },
+  "32B/sft1e-4/10000": {
+   "repo": "allenai/Olmo-3-32B-Think-SFT",
+   "branch": "1e-4-step10000",
+   "commit": "2477e43261362294380f456fcc3496344ec5c560",
+   "files": [
+    "model-00001-of-00014.safetensors",
+    "model-00002-of-00014.safetensors",
+    "model-00003-of-00014.safetensors",
+    "model-00004-of-00014.safetensors",
+    "model-00005-of-00014.safetensors",
+    "model-00006-of-00014.safetensors",
+    "model-00007-of-00014.safetensors",
+    "model-00008-of-00014.safetensors",
+    "model-00009-of-00014.safetensors",
+    "model-00010-of-00014.safetensors",
+    "model-00011-of-00014.safetensors",
+    "model-00012-of-00014.safetensors",
+    "model-00013-of-00014.safetensors",
+    "model-00014-of-00014.safetensors"
+   ],
+   "sha256": [
+    "6905ce1c2d044c0fb6f9b6796d04c8851282fc14e49818bd16e695c44411c203",
+    "ad8ce36efeeb199e6bed41cde96fb7fb6af914ff1463ec487337e860615904fb",
+    "8ed633b8cdb52e9553512e3eb590900a0af04d403c234ad31d51e4e32a2def91",
+    "d03e35b27072bede464a65cd87796a44b62df914e30bee1226bc84c2796097fa",
+    "e61715b71cdc69477728bc5a0adc017fb7be7fe1c3b47e46917b0b0c98ae5890",
+    "01ada0ce1c7e44478d71f8588e20544a3d9ab95a01bf5563579717c45e7004db",
+    "544ed4741c4c65029c3c6b65c87db600f06b446db039aebb7641502d7f915820",
+    "f62165c256ed26c7bf840bb2c1b2a60c2f27717fd5686a2a3d3ca87ec09867c7",
+    "78087fde4a4340719a9e336c733dcafd37c6d681f53a4df91cf5102438bb50d7",
+    "6d027ed4e0307aba9f9e148dd4077afebae2fd7dfe0aee8ccb2fc0cdfc0c3c7b",
+    "8de7282cfa14b1f7f9bb92cf10d672f26044848fbff67010bde751af79bd7422",
+    "6ab01a2c1ba1c2394e0f6d468f37b01d1db8a9534995c498cd30da009c033c90",
+    "955d35bb1f0121882cf364c04aaf47955f86e21532ac58940652299dc2f74468",
+    "f0fcd5c5ee8b981333ba9cec68d0a4afac5b239c38b05ab1846a889856cab995"
+   ],
+   "sizes": [
+    4990600552,
+    4938975944,
+    4876048688,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4750216928,
+    1026846848
+   ]
+  },
+  "32B/sft1e-4/10790": {
+   "repo": "allenai/Olmo-3-32B-Think-SFT",
+   "branch": "1e-4-step10790",
+   "commit": "ce596536f60d1c402cd49c3a7a3cf3687397ef2d",
+   "files": [
+    "model-00001-of-00014.safetensors",
+    "model-00002-of-00014.safetensors",
+    "model-00003-of-00014.safetensors",
+    "model-00004-of-00014.safetensors",
+    "model-00005-of-00014.safetensors",
+    "model-00006-of-00014.safetensors",
+    "model-00007-of-00014.safetensors",
+    "model-00008-of-00014.safetensors",
+    "model-00009-of-00014.safetensors",
+    "model-00010-of-00014.safetensors",
+    "model-00011-of-00014.safetensors",
+    "model-00012-of-00014.safetensors",
+    "model-00013-of-00014.safetensors",
+    "model-00014-of-00014.safetensors"
+   ],
+   "sha256": [
+    "7b04674c7aa8581791e9c2a09390a3fd69be85557735c1e05c29d5fb5808bc3c",
+    "fa6c7b2547105db8e95867574d2fb02ea431203ee1b6712668ec6bff36c030ce",
+    "8198816937980a911261f41a3bb4d95de9999dfdabf0eab6c06dbf6f915a4bff",
+    "6616a6172255950bbb06dd3265fcb5647f6e22a4ae302fe7764a56567fa98abc",
+    "37eff106eb2b6f0c41a35f11dfbf1af1fd9bc8e2a13755bd9b6681f89b746b0c",
+    "9f627656826e1d65594cb39e9bfd584833646873ad3c75a9d1a88d57261ec8e7",
+    "6d485b2ecc646cf22e92da5f60316f9547664789dacb46bc551dc53d65e50459",
+    "50d38f1ab1b1c916af1aa01cd0776fdc9e60b2036a0b95b5145a82678fcca200",
+    "926e15500bddae1dcb9ea12a3c034c8b2b94379133e3d608b9e20dd1114e6270",
+    "624f23abd08535c2f857ee96e93463ee0424003418ae43e2609d5c4964b4b10a",
+    "76aa5324a500e86cfb99467a7a94962bbbcfa0a0d19f1ab8ae8b0f712a8138f2",
+    "74f7513116b35f6c550227d5587731c2df60e66a51c9320a1911ce0425dd431e",
+    "6d9fea03f5922326e222ac750906309658f96de81c7c1d201393029aaf42cb38",
+    "ec82f92227c770b3e936346a6aee2cfe727d9326c38e6da58158f3b0cb986fb2"
+   ],
+   "sizes": [
+    4990600552,
+    4938975944,
+    4876048688,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4876048704,
+    4750216928,
+    1026846848
+   ]
+  }
+ }
+}
