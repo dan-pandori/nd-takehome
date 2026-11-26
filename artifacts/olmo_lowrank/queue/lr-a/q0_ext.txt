@@ -1,0 +1,3 @@
+python olmo_lowrank/adapters.py f448 --dpo /workspace/models/dpo --rl /workspace/models/s2300 --dst /workspace/models/f448 > artifacts/olmo_lowrank/logs/f448_build.log 2>&1 && cp /workspace/models/f448/f448_check.json artifacts/olmo_lowrank/meta/f448_check.json
+bash pod/olmo_lowrank/job.sh F448 f448 dpo+s2300.448 olmo_lowrank/plan/arm.pids 62026 8 > artifacts/olmo_lowrank/logs/q_F448.log 2>&1
+bash pod/olmo_lowrank/job.sh C16 f448 dpo+s2300.448 olmo_lowrank/plan/arm.pids 62026 8 --lora /workspace/lowrank/adapters/C16 --lora_name C16 --lora_rank 16 > artifacts/olmo_lowrank/logs/q_C16.log 2>&1

@@ -245,7 +245,7 @@ def write_item(item, d, text, p):  # olmo-ifcurve hand.py, verbatim
     (H / "items" / f"{item}.md").write_text(body)
 
 
-def cmd_round(name, size=40):
+def cmd_round(name, size=40, s2300_max=None):
     L = Labels()
     req = needed(L)
     todo_new, todo_read = [], []
@@ -279,6 +279,10 @@ def cmd_round(name, size=40):
             continue
         seen.add(ak)
         new_items.append(d)
+    if s2300_max is not None:  # spread the endpoint's items over rounds, mixed with the arms' (seeded choice)
+        ns = [d for d in new_items if d["job"] == "B_s2300"]
+        keep = set(map(dkey, random.Random(f"olmo-lowrank-s2300-{name}").sample(ns, min(len(ns), s2300_max))))
+        new_items = [d for d in new_items if d["job"] != "B_s2300" or dkey(d) in keep]
     (H / "items").mkdir(parents=True, exist_ok=True)
     used = {r["item"] for r in L.key}
     rng = random.Random(f"olmo-lowrank-items-{len(L.key)}")
@@ -433,7 +437,8 @@ if __name__ == "__main__":
     if cmd == "screen":
         cmd_screen(sys.argv[2:])
     elif cmd == "round":
-        cmd_round(sys.argv[2], int(sys.argv[sys.argv.index("--size") + 1]) if "--size" in sys.argv else 40)
+        cmd_round(sys.argv[2], int(sys.argv[sys.argv.index("--size") + 1]) if "--size" in sys.argv else 40,
+                  int(sys.argv[sys.argv.index("--s2300-max") + 1]) if "--s2300-max" in sys.argv else None)
     elif cmd == "status":
         cmd_status()
     elif cmd == "cells":

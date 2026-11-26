@@ -135,8 +135,10 @@ def main():
                              ("signal_rank", lambda d: d["signal"]), ("spike_count", lambda d: d["spike"])):
                 dr[f"med_{key}"] = q([get(d) for d in db])[0]
             depth_rows.append(dr)
-        if all(d["full_share"] for d in ds):
-            ar = {"job": j, "change": c}
+        dsf = [d for d in ds if d["full_share"]]
+        if dsf:
+            ds = dsf
+            ar = {"job": j, "change": c, "matrices_with_full": len(dsf)}
             for k in KS:
                 e = np.array([abs(d["share"][k] / d["full_share"][k] - 1) for d in ds])
                 ar[f"share_{k}_max_rel_err"], ar[f"share_{k}_med_rel_err"] = float(e.max()), float(np.median(e))
