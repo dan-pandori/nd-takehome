@@ -444,3 +444,9 @@ OLMO-IFCURVE DONE 2026-11-22T06:22:58Z
   misfiled.
 
 OLMO-WEIGHTS DONE 2026-11-25T07:14:59Z
+
+## olmo-lowrank (executor, started 2026-11-26T19:44:05Z)
+
+- Run start 2026-11-26T19:44:05Z. Brief: nd-rl `followups/BRIEF_olmo-lowrank.md` (Proposal 49). Budget $80 / 60 pod-hours,
+  dollars binding; hard stop 2026-11-28T19:44Z.
+- 2026-11-26T20:03:04Z: pre-registration `preregistration/olmo-lowrank.md` written and committed before any pod.
