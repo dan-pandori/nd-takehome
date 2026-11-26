@@ -1,0 +1,61 @@
+{
+ "utc": "2026-11-26T20:47Z",
+ "rate_usd_per_h": 3.59,
+ "measured": {
+  "download_GBps_per_checkpoint": 1.15,
+  "download_parallel_2": "dpo 59 s + s2300 56 s concurrently",
+  "rsvd_choice": {
+   "p": 64,
+   "q": 16
+  },
+  "rsvd_s_per_change_448": 66.0,
+  "exact_svd_fp32_s_per_change_448": 934.5,
+  "gram_full_spectrum_s_per_change_448": 77.7,
+  "svdvals_fp64_s_per_change_448": 1328.9,
+  "adapter_exact_svd_s": 727,
+  "vllm_max_lora_rank_ok": 256,
+  "T256_tok_per_s_steady": "717-1015 (median ~920) at 53-56 running",
+  "T256_kv_cache_tokens": 250080
+ },
+ "assumed": {
+  "plain_tok_per_s": 1750,
+  "lora_tok_per_s": {
+   "dpo": 1750,
+   "T1": 1550,
+   "T4": 1550,
+   "T16": 1450,
+   "T64": 1250,
+   "T256": 900,
+   "F448": 1750,
+   "C16": 1450
+  },
+  "tokens_per_draw": {
+   "dpo": 4450,
+   "T1": 4500,
+   "T4": 4500,
+   "T16": 4800,
+   "T64": 5200,
+   "T256": 5600,
+   "F448": 6500,
+   "C16": 6500
+  }
+ },
+ "part2_gpu_h": {
+  "dpo": 1.11,
+  "T1": 1.257,
+  "T4": 1.257,
+  "T16": 1.424,
+  "T64": 1.771,
+  "T256": 2.614,
+  "F448": 1.589,
+  "C16": 1.903
+ },
+ "part2_gpu_h_total": 12.92,
+ "part1_gpu_h": 1.0,
+ "stage0_gpu_h": 0.75,
+ "setup_idle_gpu_h": 0.8,
+ "projected_usd": 55.56,
+ "projected_usd_plus_10pct": 61.11,
+ "gate_usd": 72,
+ "decision": "proceed (projection under the gate); no cut"
+}

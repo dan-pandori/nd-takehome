@@ -450,3 +450,4 @@ OLMO-WEIGHTS DONE 2026-11-25T07:14:59Z
 - Run start 2026-11-26T19:44:05Z. Brief: nd-rl `followups/BRIEF_olmo-lowrank.md` (Proposal 49). Budget $80 / 60 pod-hours,
   dollars binding; hard stop 2026-11-28T19:44Z.
 - 2026-11-26T20:03:04Z: pre-registration `preregistration/olmo-lowrank.md` written and committed before any pod.
+- 2026-11-26T20:48:43Z: stage 0 done on lr-a (re-cost $56 ≤ $72, proceed); pods lr-b … lr-e being created (Part 1 spectra on lr-e; arms on lr-a … lr-d).

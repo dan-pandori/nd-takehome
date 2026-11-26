@@ -35,24 +35,25 @@ def run(a):
     llm = LLM(model=a.model, tokenizer=a.tokenizer, dtype="bfloat16", generation_config="vllm", max_model_len=4096,
               gpu_memory_utilization=0.9, enable_prefix_caching=False, seed=1, **kw)
     sp = SamplingParams(max_tokens=1, temperature=0.0, prompt_logprobs=0)
-    outs = llm.generate([{"prompt_token_ids": s} for s in seqs], sp, lora_request=lreq)
-    res = []
-    for s, o in zip(seqs, outs):
-        lp = [None] + [float(d[t].logprob) for t, d in zip(s[1:], o.prompt_logprobs[1:])]
-        res.append(lp)
-    json.dump({"model": a.model, "lora": a.lora, "seqs": seqs, "logprobs": res}, open(a.out, "w"))
+    def lps(batch):
+        outs = llm.generate([{"prompt_token_ids": s} for s in batch], sp, lora_request=lreq)
+        return [[None] + [float(d[t].logprob) for t, d in zip(s[1:], o.prompt_logprobs[1:])] for s, o in zip(batch, outs)]
+    res = lps(seqs)
+    single = [lps([s])[0] for s in seqs]  # same engine, one sequence per batch: the batch-composition noise floor
+    json.dump({"model": a.model, "lora": a.lora, "seqs": seqs, "logprobs": res, "logprobs_single": single},
+              open(a.out, "w"))
     print("ZERO_CHECK_RUN_DONE", a.out, len(res), flush=True)
 
 
 def diff(a):
     A, B = json.load(open(a.a)), json.load(open(a.b))
-    d, n, eq = 0.0, 0, 0
-    for x, y in zip(A["logprobs"], B["logprobs"]):
-        for u, v in zip(x[1:], y[1:]):
-            d = max(d, abs(u - v))
-            n += 1
-            eq += u == v
-    print(json.dumps({"tokens": n, "max_abs_logprob_diff": d, "identical": eq}))
+    if a.single:  # A's batched vs A's one-sequence-per-batch log-probs (same engine)
+        B = {"logprobs": A["logprobs_single"]}
+    ds = sorted(abs(u - v) for x, y in zip(A["logprobs"], B["logprobs"]) for u, v in zip(x[1:], y[1:]))
+    n = len(ds)
+    print(json.dumps({"tokens": n, "max_abs_logprob_diff": ds[-1], "identical": sum(1 for d in ds if d == 0),
+                      "mean_abs": sum(ds) / n, "median_abs": ds[n // 2], "p99_abs": ds[int(0.99 * (n - 1))],
+                      "frac_gt_0.01": sum(1 for d in ds if d > 0.01) / n}))
 
 
 def main():
@@ -66,6 +67,7 @@ def main():
     ap.add_argument("--out")
     ap.add_argument("--lora")
     ap.add_argument("--lora_rank", type=int, default=8)
+    ap.add_argument("--single", action="store_true", help="diff: A batched vs A single-sequence")
     a = ap.parse_args()
     run(a) if a.cmd == "run" else diff(a)
 

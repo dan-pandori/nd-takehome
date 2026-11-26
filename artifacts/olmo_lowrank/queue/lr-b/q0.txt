@@ -1,0 +1,2 @@
+bash pod/olmo_lowrank/job.sh dpo dpo main olmo_lowrank/plan/arm.pids 62026 8 > artifacts/olmo_lowrank/logs/q_dpo.log 2>&1
+bash pod/olmo_lowrank/job.sh T1 dpo main olmo_lowrank/plan/arm.pids 62026 8 --lora /workspace/lowrank/adapters/T1 --lora_name T1 --lora_rank 8 > artifacts/olmo_lowrank/logs/q_T1.log 2>&1
