@@ -77,10 +77,12 @@ def build_rows(job):
         grades[(g["pid"], int(g["chunk"]), int(g["i"]))] = g
     out, missing = [], 0
     with gzip.open(sp, "rt") as f:
-        for ln in f:
-            try:
+        it = iter(f)
+        while True:
+            try:  # a running job's file ends in an open gzip member (EOFError) or a partial line
+                ln = next(it)
                 r = json.loads(ln)
-            except json.JSONDecodeError:
+            except (StopIteration, EOFError, json.JSONDecodeError):
                 break
             k = (r["pid"], int(r["chunk"]), int(r["i"]))
             g = grades.get(k)

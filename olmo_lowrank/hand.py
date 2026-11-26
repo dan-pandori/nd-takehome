@@ -98,10 +98,11 @@ def cmd_screen(jobs):
         strict = {(x["pid"], x["chunk"], x["i"]) for x in cells.rows(job) if x["strict"] and x["pid"] in R}
         sp, _ = cells.paths(job)
         with gzip.open(sp, "rt") as fh:
-            for ln in fh:
+            it = iter(fh)
+            while True:
                 try:
-                    r = json.loads(ln)
-                except json.JSONDecodeError:
+                    r = json.loads(next(it))
+                except (StopIteration, EOFError, json.JSONDecodeError):
                     break
                 k = (r["pid"], int(r["chunk"]), int(r["i"]))
                 if k in strict:
@@ -291,10 +292,11 @@ def cmd_round(name, size=40, s2300_max=None):
     for job in sorted({d["job"] for d in new_items}):
         sp, _ = cells.paths(job)
         with gzip.open(sp, "rt") as fh:
-            for ln in fh:
+            it = iter(fh)
+            while True:
                 try:
-                    r = json.loads(ln)
-                except json.JSONDecodeError:
+                    r = json.loads(next(it))
+                except (StopIteration, EOFError, json.JSONDecodeError):
                     break
                 k = (job, r["pid"], int(r["chunk"]), int(r["i"]))
                 if k in want_keys:
