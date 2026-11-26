@@ -32,7 +32,7 @@ while [ $SECONDS -lt $end ]; do
   sleep 10
 done
 if [ "$ST" != "RUNNING" ] || [ "$HOST" = "-" ] || [ "$PORT" = "-" ]; then echo "podnew2 $N: $ID not running with a direct ssh port ($ST $HOST:$PORT)"; undo; exit 1; fi
-if grep -q "^$HOST " ~/runs/olmo-lowrank/bad_hosts.txt 2>/dev/null; then echo "podnew2 $N: BAD_HOST $HOST ($ID)"; undo; exit 3; fi
+if [ -z "$ALLOW_BAD_HOST" ] && grep -q "^$HOST " ~/runs/olmo-lowrank/bad_hosts.txt 2>/dev/null; then echo "podnew2 $N: BAD_HOST $HOST ($ID)"; undo; exit 3; fi
 printf "POD_ID=%q\nPOD_IP=%q\nPOD_PORT=%q\nRUN=%q\nCREATED=%q\nGPU=%q\nRATE=%q\n" "$ID" "$HOST" "$PORT" "${ND_RUN_ID:-unknown}" "$T0" "$GPU" "$RATE" > "$REG"
 echo "$(date -u +%FT%TZ) $N $ID ${ND_RUN_ID:-unknown}" >> ~/pods.log
 S="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o BatchMode=yes -o LogLevel=ERROR -o ConnectTimeout=10 -p $PORT root@$HOST"

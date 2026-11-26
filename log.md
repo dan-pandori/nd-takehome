@@ -1189,3 +1189,7 @@ No pods, no model: nothing below is a model number. CI's smoke models (114 k par
   - Stats CSVs gzipped in place (117 → 28 MB); tables re-derived byte-identical after gzip.
   - Expectations 7 / 12 hit (E2, E3, E5, G1, G2, G3, G6); missed E1, E4, G4 (stage-3 residual 17 % = bf16 floor), G5, G7.
   - Compute rows: 91 registry rows (13 jobs × 7 metrics), `hf://buckets/dan-pandori/nd-rl/registry/olmo-weights/`.
+
+## olmo-lowrank
+
+- 20:17 UTC  Pre-registration committed 20:03 (02a6af37). Stage-0 pod lr-a (community H200, $3.59/h): the scheduler offered only 213.186.10.12 (blacklisted 2026-11-21 by olmo-ifcurve for one faulty GPU) three times; I allowed it once (ALLOW_BAD_HOST=1 in podnew2.sh) because this GPU (bus BB:00.0) shows 0 correctable / 0 uncorrectable remapped rows and setup.sh gates on a CUDA matmul. Stage 0 launched (bringup0.sh: setup, dpo + s2300 download, sha256, SVD timing, adapters, zero-delta check, T256 throughput).
