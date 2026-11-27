@@ -353,3 +353,157 @@ same under every variant.
 - **Not re-checked.** I did not repeat a scan of the evaluation prompts against Olmo 3's RL data; this run reuses
   olmo-ifcurve's prompt sets.
 - **Not a prover run.** No Lean or nd_verify judge is involved.
+
+### Errata to §Recount
+
+Found by an adversarial check of this review (a sub-agent re-derived every number from my kit) after §Recount was
+committed. The text above is left as committed; these corrections apply.
+
+1. **§4 "Floor A is crossed early" is wrong as written.** The median signal rank passes the 256 censoring point from
+   step 500 (392; ≥ 256 in 70 % of matrices at 500, 93 % at 750, 99 % at 1,100, 100 % at 2,300). But N2300 is above
+   floor A in nearly every direction only in the MLP matrices (median 5,120 / 5,041 / 5,116 of 5,120). Elsewhere it is
+   not: q 2,230 / 5,120, o 1,926 / 5,120, k 711 / 1,024, v 825 / 1,024. At step 500 the type medians are 132–911.
+2. **§1 "Models" mis-describes C16.** C16 is F448 plus a negative rank-16 LoRA (model dir `f448`, LoRA rank 16), not
+   `dpo` plus a LoRA.
+3. **§1 zero-delta.** The run-to-run reference (plain run 1 vs run 2, max 0.23) also uses the unstored second-pair file
+   (`zero2_plain.json`), as does the batched-vs-single reference. Only the stored pair's numbers are derivable from
+   stored files: max 0.25 nats, 62 / 1,451 tokens identical. The sentence on `VLLM_ATTENTION_BACKEND=FLASH_ATTN` does
+   not distinguish the pairs: both used that backend.
+4. **§1 "The olmo-ifomega F_* rows store no ids."** They store response ids (decoded in §2) but no prompt ids or
+   `prompt_tokens`.
+5. **§3 accuracy target.** On my sample I compared the randomized σ₁, share₁₆ and share₂₅₆ directly. k = 1, 4, 64 are
+   covered only through the run's `accuracy.csv` (max 1.9e-4).
+6. **§4 LoRA preamble.** "Validated within 1e-4 for k ≤ 16" should read: within 1.3e-4 (main) and 8.2e-3 (ctrl, whose
+   inner products are near zero), as §3's table says.
+7. **§4 "One interval carries most of the top direction" overstates.** I did not measure alignment between the
+   interval's and the net change's top directions. In energy, I_mid's top directions (Σ_m σ₁²) are about a quarter of
+   N1600's or N2300's (8.2 vs 31). Supported: I_mid is unusually concentrated in one direction per matrix (S₁ 0.152
+   against 0.007), and S₁ of the net change jumps after it.
+8. **§4 "About 220 directions"** should read 227 (median).
+9. **§7 table: dpo's pooled A rate is 0.2894** (0.28945), not 0.2895.
+
+## Phase 2: comparison with the executor's write-up
+
+Read from 07:47 UTC, after §Recount was committed (74c8f64b): `run_olmo_lowrank.md`, `numbers.md` § olmo-lowrank,
+`log.md` § olmo-lowrank, `olmo_lowrank/plain_summary.md`, `olmo_lowrank/README.md`, `STATUS.md` § olmo-lowrank, the
+figure and the tables. "Mine" means my independent value from §Recount. "My walk, its labels" means my cell walk and
+bootstrap run on the executor's hand labels (`rvr_execlabels.py`).
+
+### Claims
+
+| # | claim (where) | my value | verdict |
+|---|---|---|---|
+| 1 | Models: released AI2 checkpoints, bf16, none trained; Olmo 3 32B base / SFT / DPO, 3.1 Think RL 50–2,300, s2300 = `main`; 7B for spectra (run, numbers) | §1: the commits, the `main` = pinned shard hashes and the 52 / 52 sampled shard sha256 all match | reproduces |
+| 2 | Top 16 / 256 pieces hold 22 % / 43 % of ‖ΔW‖² of RL's net change; noise baselines 0.75 % / 11 % (run, numbers, STATUS) | 0.218 / 0.428; Gaussian 0.74 % / 10.9 %, floor A 0.75 % / 11.0 % | reproduces |
+| 3 | Median matrix has 227 directions above same-norm rounded noise (run) | 227 [101, 360]; independent floor-B draws move individual counts by ≤ 14 | reproduces |
+| 4 | It grows over RL, 3.3 % → 22 % (run); 5 % at step 500 (plain) | 0.033 → 0.218, 0.048 at 500; Spearman 0.96. Not monotone at the end: N1600 0.265 > N2300 0.218 | reproduces |
+| 5 | "Partly via a near-rank-1 jump at steps 1,100–1,150" (run, plain); "rank-1-dominated" (log) | I_mid S₁ = 0.152, against 0.007 in the early and late intervals. Per matrix, though, the top piece holds a median 14 % of the interval's change (max 61 %; 1.6 % of matrices above 50 %, carrying 1.2 % of its energy). It is largest in late-layer v / o projections (medians 0.46–0.53 in layers 56–63) | **reword**: a jump concentrated in one direction per matrix (~15 % of the interval's ‖ΔW‖², 20× the other intervals), not near-rank-1 |
+| 6 | Mid interval is "3× the late interval's size" (log) | 3.04× in ‖ΔW‖², 1.74× in ‖ΔW‖ | holds in squared norm; say which |
+| 7 | SFT diffuse (3.3 %), DPO most concentrated (35 %), 7B agrees (run, STATUS) | 0.033 / 0.350; 7B 0.036 / 0.333 (RL 0.078) | reproduces |
+| 8 | SFT moved the weights 31× more (32B, olmo-weights) (plain) | 30.6× in ‖ΔW‖ over these 448 matrices | reproduces (labelled inherited number) |
+| 9 | Randomized top-256 accuracy, every matrix: σ₁ 5.5e-5, shares (k ≤ 64) 1.9e-4, k = 256 3.8e-3 (numbers) | the run's `accuracy.csv` gives the same; on my sample against my exact SVD, ≤ 6.5e-6 / 3.2e-5 / 3.4e-3. The log's 22:16 line ("σ₁ ≤ 7e-6, shares ≤ 1.3e-5") understates the run's own maxima | reproduces; log line inconsistent (minor) |
+| 10 | LoRA: lora_main median overlap 0.016 (random 0.003, ctrl 0.007); cosine 0.0052, with the top 16 0.0086; 77 % of ⟨ΔW_lora, ΔW⟩ in the top 16 (run, numbers, log) | 0.0156 / 0.0030 / 0.0070; 0.00525 / 0.00865; 0.77; per-matrix overlaps within 4.3e-5 of my recompute | reproduces |
+| 11 | T_k built from the "exact SVD" (run, numbers); "B A = U_k Σ_k V_kᵀ exactly in fp32" (log); `adapters_svd/` holds the "exact spectra of RL's change" (numbers, README) | The factors come from an fp32 SVD, which is what the pre-registration specified ("exact SVD (fp32, full)"). Against my float64 truncation they agree to ~1e-3 (median 3–9e-4; max 7.4e-3 at a near-tied σ₆₄ / σ₆₅). The "exactly" check compares the factors with the same fp32 SVD. The stored `adapters_svd` spectra deviate from my float64 values by up to 4.2e-4 σ₁; the Gram-route `full_*.npz` deviate by 5.6e-8 σ₁. Served after vLLM's bf16 cast: ~2.4e-3 | reword: "fp32 SVD; ~0.1 % from the exact truncation, ~0.24 % after the bf16 cast" |
+| 12 | G on R: T1 0.00, T4 0.01, T16 0.16, T64 0.61, T256 0.89, F448 0.94, C16 0.50 (run, numbers, STATUS) | my walk, its labels: 0.000 / 0.011 / 0.158 / 0.613 / 0.895 / 0.936 / 0.502, equal to `numbers.md` to 3 dp. Mine: 0.000 / 0.012 / 0.167 / 0.638 / 0.904 / 0.933 / 0.540 | reproduces; with independent labels it differs by ≤ 0.04, inside every interval |
+| 13 | G on A: −0.01 / 0.05 / 0.35 / 0.73 / 0.95 / 1.07 / 0.62; fresh-dpo and R_strict variants (run, numbers) | −0.005 / 0.047 / 0.348 / 0.733 / 0.953 / 1.067 / 0.619; the variants equal mine to ≤ 0.001 | reproduces (`numbers.md`'s T4 0.048 vs 0.0475 is double rounding) |
+| 14 | 95 % half-widths ≤ 0.13 (run) | largest: C16 on R, 0.13 (its labels) or 0.134 (mine) | reproduces |
+| 15 | Readings: none holds, all firm; k₅₀ = 64 on R and A (run, numbers, STATUS) | same under my labels and under every label variant (§7); T16 firmly below 0.5, T64 firmly above on both metrics | reproduces |
+| 16 | "Low-rank carries it fails: T16 recovers too little and **the floor alone (C16)** too much" (run) | C16 removes only the top 16 pieces. By the run's own Part 1, D − D₁₆ still holds ~210 of the median 227 above-floor directions per matrix, and 24 % of N2300's energy lies in above-floor directions beyond the top 16. C16 is "RL's change minus its top 16", not the floor. The wording is inherited: the brief asks "does the floor alone, C16, recover anything?" and the pre-registration calls C16 "the floor only". The plain summary words it correctly | **reword** (fault in the design's label, not the executor's arithmetic) |
+| 17 | k₅₀ = 64, below the median spike count 227 (run) | yes, on the {1, 4, 16, 64, 256} grid; k₅₀ lies in (16, 64] | reproduces |
+| 18 | Expectations: hits E3, E6; misses P1, P2, P3, E1, E2, E5; E4: T16 < 0.3 hit, T256 < 0.5 miss, F448 ≥ 0.75 hit, C16 ≥ 0.5 hit (tentative), "high-rank" call missed (run, numbers) | identical scoring (§4, §7). C16 is 0.502 (its labels) or 0.540 (mine), interval [0.38–0.41, 0.63–0.68] | reproduces. The C16 component sits inside the pre-registration's own ≈ 0.10 resolution, so "unresolved" is the better word than "hit (tentative)" |
+| 19 | Gate: 1,400 items, 1,802 reads, 90 % double-read agreement; 367 read twice (332 agree), 35 thrice, 35 screened, 39 inherited, 119 confirmations (run, numbers) | recounted from `handcheck.csv`, `confirm.csv`, `screen.csv` and the label files: 1,400 / 1,802 / 367 / 332 / 35 / 119, and the same 35 screened draws as mine | reproduces |
+| 20 | Gamed share 0.11–0.32 in arms with ≥ 65 successes (run); "A third of RL's checker-passing answers on the hard prompts were gamed; the truncated models game less (11–23 %)" (plain) | my blind readers: 0.12–0.37 (s2300 0.37; T16 / T64 / T256 0.12 / 0.18 / 0.29; F448 0.36; C16 0.15). Agreement with its labels 0.929; one-sided (82 gamed-by-me / genuine-by-it against 22 the other way; most on ifbench_264, 209, 267; ifbench_1 goes the other way) | the direction reproduces; the levels depend on the reader standard: report "0.11–0.32 (second team 0.12–0.37)" or similar |
+| 21 | Cross-run calibration 206 / 231 (89 %) with olmo-ifcurve's B_s2300 labels, balanced 12 / 13 (numbers, log) | mine against olmo-ifcurve's: 200 / 233 (86 %), 22 gamed-by-me / genuine-there vs 11 | its number is its own; mine is consistent with a stricter second team |
+| 22 | Rule 6 (one ALL-CAPS s2300 item): the strict reading moves G by < 0.01 (numbers) | ≤ 0.004 under my labels (its labels' rule-6 variant not recomputed) | consistent |
+| 23 | Zero-delta: plain vs zero LoRA bitwise identical in the second pair; run-to-run max 0.23 (numbers, log) | The second pair's raw files (`zero2_*.json`) are not stored, only the diff summary. That summary's noise references (run 1 vs run 2, batched vs single) also use them. The stored first pair alone shows plain vs zero-LoRA differing by up to 0.25 nats (median 6e-5; 62 / 1,451 tokens identical). Independent support that the LoRA path changes nothing material: T1 (a rank-1 adapter) matches dpo on the 176 other prompts (250 vs 251 strict of 704) and on A (G −0.005) | "bitwise identical" and "run-to-run max 0.23" are not derivable from stored files. Upload `zero2_*.json` |
+| 24 | Compute: 1,472 draws per arm; T16–C16 flagged at 1.25–1.43× dpo's tokens, ≤ 2.51× H200-seconds (run); GPU-seconds table (numbers) | tokens identical; GPU-seconds from job wall are 0.17–0.42 % above the meta `t_load + t_gen` sums (e.g. dpo 3,834 vs 3,820); T256 / dpo 2.51× either way. The flags appear only in the run doc; `numbers.md`'s table has no token ratios | reproduces |
+| 25 | Spend $55.98 of $80; pods and billed rates (run, numbers, STATUS) | ledger: lr-a $23.27, lr-b $25.85, lr-e (H100) $5.10, faulty-GPU pods $1.76; total $55.98 / 15.33 h | reproduces. My reviewer pod adds $3.13 (A100, 1.43 h) |
+| 26 | Cut share at 32,768 tokens per arm (numbers) | identical (dpo 3, T4 10, T16 14, …) | reproduces |
+| 27 | "48 hard instruction-following prompts that DPO never solved" (plain) | dpo: 0 genuine in the ≥ 256 stored draws per prompt that selected the set, and 0 strict in 768 fresh draws here (16 per prompt, so < 0.39 % at 95 %) | **reword**: state the tries and the bound (policy) |
+| 28 | "Copying the 448 matrices from the RL model recovers everything; the other weights do not matter" (plain) | G(F448) 0.93–0.94 [0.86, 1.03] on R and 1.07 [1.01, 1.13] on A: F448 exceeds s2300's strict rate | **reword**: "the other weights' RL changes are not needed for the gain" ("do not matter" is too strong when F448 differs from s2300 on A) |
+| 29 | "More than half the change is spread over thousands of directions" (plain) | energy-weighted 54 % lies below the floor-B level, the run's aggregate convention; for the median matrix 48 % | holds (energy-weighted); optional: "about half" |
+| 30 | Top 1 or 4 pieces "do nothing" (plain) | T1 0.00 / −0.005; T4 0.012 / 0.047, with the A interval [0.001, 0.093] by mine, [−0.000, 0.093] by its | "nearly nothing" is more exact; fine as a plain-language summary |
+| 32 | "An adapter trained earlier on 16 RL answers points into RL's top directions five times more than chance, but only slightly" (plain) | 5.2× random holds. But the matched control adapter (16 dpo answers) already sits at 2.3× random, so the RL-specific excess is 2.2× (why E5 missed) | add the control |
+| 33 | Part-2 table: R rate of T16 0.075 (numbers) | 0.0755 (`results.csv`); the hand table in the same file gives 0.076 | double rounding (nit) |
+| 31 | Pre-registration before any pod; misses reported as misses | pre-registration committed 20:03:04 (02a6af37), first pod create attempt 20:09:59 (`~/pods.log`); every miss is listed as a miss | holds |
+
+### Policy checks on the write-up
+
+- **Model labels.** Every number in `run_olmo_lowrank.md`, `numbers.md` and the plain summary names its model. The one
+  inherited number (31× SFT move, plain summary) names olmo-weights; I re-derive it as 30.6× over these 448 matrices.
+  The cosine 0.0052 is this run's own measurement (0.00525); only the log notes that it reproduces olmo-weights.
+- **Strict and genuine side by side, with the label sources** (`numbers.md` hand table: readers / screen / inherited).
+  Yes. A rests on strict passes only by design; R_strict is reported beside R.
+- **Token budget and cut share per model.** Reported.
+- **The same confirmation rule both ways.** Yes: the same 8-per-cell scope in every arm and in s2300.
+- **"Never".** The run doc states 0 / 768. The plain summary's "never solved" does not state tries (claim 27).
+- **Overlap with RL training data.** The write-up does not report a scan of the evaluation prompts against Olmo 3's RL
+  data (the prompt sets are olmo-ifcurve's). That is minor, since every arm uses the same prompts, but the policy asks
+  for it.
+- **Compute.** Rows exist in `hf://buckets/dan-pandori/nd-rl/registry/olmo-lowrank/`. `numbers.md` has a per-arm
+  table; the 1.25× flags are in the run doc.
+- **Pre-registration deviation not labelled.** The pre-registration says "Per-prompt consistency audits by sub-agents
+  after each round". The executor ran them once, after the last arm was read (u1–u4; log 00:27, policy fixed before
+  them). Neither the write-up nor the log calls this a deviation.
+- **Reproducibility.** Everything recounted here comes from git or the bucket, with two exceptions: the zero-delta
+  second pair (claim 23), and the cost and pod-time figures, which come from the host's ledgers (`~/podhours.log`,
+  `~/pods.log`).
+- **No hard-constraint violation.** The judge is the official checkers plus the hand gate. Results reproduce from
+  stored files. The secret scan of 341 tracked files and 1,553 bucket objects (every object except the binary adapter
+  tensors) found 0 hits (`out/secret_scan.txt`).
+
+## Verdict
+
+**What stands.**
+- **Part 1.**
+  - Every number reproduces: S_k, baselines, stable / signal / spike medians, the LoRA overlaps and cosines, and the
+    expectation scoring. I recomputed 42 seeded matrices from the raw weights with my own float64 code, and my
+    aggregates over all 672 matrices come from the stored spectra that this recompute validates.
+  - RL's net change at 2,300 is far more concentrated than noise: S₁₆ 29× Gaussian, and a median 227 directions per
+    matrix stand above same-norm rounded noise, carrying 46 % of the energy.
+  - SFT's change is diffuse and DPO's the most concentrated.
+  - lora_main overlaps RL's top-16 subspaces 5× more than chance, but only 2.2× more than lora_ctrl.
+- **Part 2.**
+  - G on A reproduces exactly. G on R reproduces exactly from the executor's labels.
+  - My blind second team gives G within 0.04 of it on every arm.
+  - Under every label variant, none of the three pre-registered readings holds (each failing condition firm), and
+    k₅₀ = 64 on both metrics.
+  - The truncations are what they claim to be (0.1 % from exact; served adapters sha-identical to the bucket), and F448
+    was built as specified.
+- **Expectations.** P1, P2, P3, E1, E2 and E5 missed; E4's high-rank call missed; E3 and E6 hit. All reported as such.
+
+**Must be reworded.**
+1. "Near-rank-1 jump" at 1,100–1,150 (run doc, plain summary; "rank-1-dominated" in the log). Say instead: a jump
+   concentrated in one direction per matrix (~15 % of the interval's ‖ΔW‖², about 20× the other intervals), strongest
+   in late-layer v / o projections.
+2. "The floor alone (C16)" (run doc). C16 is RL's change minus its top 16 pieces. By the run's own spike counts it keeps
+   ~210 above-floor directions per matrix and 24 % of the energy above floor B, so the "low-rank carries it" test
+   cannot say whether the floor itself carries anything.
+3. "Exact SVD" / "exactly in fp32" for the adapters, and "exact spectra" for `adapters_svd/`. The pre-registration
+   specified an fp32 SVD, so the method is as planned; only the word "exact" overstates. Say: fp32 SVD, ≈ 0.1 % from
+   the exact truncation, ≈ 0.24 % after vLLM's bf16 cast.
+4. Zero-delta "bitwise identical" and its run-to-run reference rest on files that were not stored. Upload
+   `zero2_*.json`, or cite what the stored pair shows: ≤ 0.25 nats, median 6e-5. The T1 arm is independent evidence
+   that the LoRA path itself shifts nothing.
+5. Plain summary:
+   - "never solved": give the tries and the bound;
+   - "the other weights do not matter": say "are not needed for the gain";
+   - the LoRA's "five times more than chance": add that the control adapter is at 2.3×.
+6. Gamed shares: say they depend on the reader standard (my blind team: 0.12–0.37 against 0.11–0.32). By the
+   pre-registration's own ≈ 0.10 resolution, two near-threshold values are unresolved rather than hits or misses: E4's
+   C16 component (0.50 / 0.54 against 0.5) and P2 on A (0.348 against 0.3).
+7. Unlabelled deviation: the consistency audits ran once at the end, not after each round as pre-registered.
+
+**Not supported.** Nothing that a conclusion rests on. The only claims not derivable from stored files are the
+second-pair zero-delta identity and its noise references (item 4).
+
+**Next measurement.**
+- **Does the floor carry anything?** The direct test of reading (b) the spectra invite is spike-matched arms:
+  - a variable-rank LoRA keeping each matrix's own above-floor directions (median 227);
+  - its complement, F448 minus those directions, which is the floor proper.
+
+  If the complement recovers little (G ≲ 0.2) while the spike arm recovers most, the gain sits in the spikes. If the
+  complement still recovers a lot, the gain needs the floor too.
+- **Locate k₅₀.** T32 would place it inside (16, 64].
+- **Check F448 > s2300 on A.** A fresh s2300 arm at engine seed 62026 would show whether the firm excess (G 1.07)
+  survives matched sampling.

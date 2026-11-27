@@ -17,3 +17,6 @@ texts). `out/answers_scope.json.gz` (answer texts) is not committed; `rvr_screen
 - `rvr_readings.py`, `rvr_execlabels.py`: G, bootstrap intervals, readings, label sensitivity (`out/readings*`,
   `out/cells_mine.csv`); `rvr_agree.py`: agreement with the executor's and olmo-ifcurve's labels.
 - `rvr_compute.py`: compute and cost from the job logs and `~/podhours.log`.
+- `out/adversarial_check.md`: the adversarial check of my own review (3 errors, 6 imprecise, 16 nits; corrected in
+  the review's "Errata to §Recount" and phase-2 sections); `out/secret_scan.txt`: the secret scan of the run's tracked
+  files and bucket objects.
