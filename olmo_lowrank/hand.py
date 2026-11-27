@@ -273,6 +273,11 @@ def cmd_round(name, size=40, s2300_max=None):
                     it = r["item"]
                     if len(L.reads.get(it, [])) < 2 and L.item_label(it)[1] != "confirmed" and it not in todo_read:
                         todo_read.append(it)
+    if s2300_max is not None:  # spread the endpoint's items over rounds, mixed with the arms' (seeded choice), before
+        # de-duplication so an answer shared with an arm draw is never dropped (ifbench_64 fixed-output answers, r1)
+        ns = sorted((d for d in todo_new if d["job"] == "B_s2300"), key=dkey)
+        keep = set(map(dkey, random.Random(f"olmo-lowrank-s2300-{name}").sample(ns, min(len(ns), s2300_max))))
+        todo_new = [d for d in todo_new if d["job"] != "B_s2300" or dkey(d) in keep]
     seen, new_items = set(), []
     for d in sorted(todo_new, key=dkey):
         ak = (d["pid"], d.get("ans_key"))
@@ -280,10 +285,6 @@ def cmd_round(name, size=40, s2300_max=None):
             continue
         seen.add(ak)
         new_items.append(d)
-    if s2300_max is not None:  # spread the endpoint's items over rounds, mixed with the arms' (seeded choice)
-        ns = [d for d in new_items if d["job"] == "B_s2300"]
-        keep = set(map(dkey, random.Random(f"olmo-lowrank-s2300-{name}").sample(ns, min(len(ns), s2300_max))))
-        new_items = [d for d in new_items if d["job"] != "B_s2300" or dkey(d) in keep]
     (H / "items").mkdir(parents=True, exist_ok=True)
     used = {r["item"] for r in L.key}
     rng = random.Random(f"olmo-lowrank-items-{len(L.key)}")
@@ -377,13 +378,30 @@ def cmd_cells():
         w.writeheader()
         w.writerows(out)
     print("job       draws strict labelled genuine gamed unresolved mean_est_genuine")
+    summ = []
     for job in JOBS:
         xs = [r for r in out if r["job"] == job and r["n"]]
         if not xs:
             continue
+        src = {}
+        for r in xs:
+            for kv in r["sources"].split():
+                k, v = kv.split(":")
+                src[k] = src.get(k, 0) + int(v)
+        g, b = sum(r["genuine"] for r in xs), sum(r["gamed"] for r in xs)
+        summ.append({"job": job, "prompts": len(xs), "draws": sum(r["n"] for r in xs), "strict": sum(r["strict"] for r in xs),
+                     "labelled": g + b, "genuine": g, "gamed": b, "gamed_share": round(b / (g + b), 4) if g + b else "",
+                     "read": src.get("read", 0), "screen": src.get("screen", 0), "inherited": src.get("inherited", 0),
+                     "unresolved": sum(r["unresolved"] for r in xs),
+                     "est_genuine_rate": round(sum(r["est_genuine_rate"] for r in xs) / len(xs), 6)})
         print(f"{job:9s} {sum(r['n'] for r in xs):5d} {sum(r['strict'] for r in xs):6d} {sum(r['labelled'] for r in xs):8d} "
               f"{sum(r['genuine'] for r in xs):7d} {sum(r['gamed'] for r in xs):5d} {sum(r['unresolved'] for r in xs):10d} "
               f"{sum(r['est_genuine_rate'] for r in xs) / len(xs):.4f}")
+    if summ:
+        with open("olmo_lowrank/hand_arm_summary.csv", "w", newline="") as fh:
+            w = csv.DictWriter(fh, fieldnames=list(summ[0]))
+            w.writeheader()
+            w.writerows(summ)
 
 
 def cmd_table():
