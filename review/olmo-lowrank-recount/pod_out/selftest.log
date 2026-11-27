@@ -1,0 +1,21 @@
+bf16_rne vs torch cast (random): 0 mismatches
+bf16_rne vs torch cast (ties): 0 mismatches
+bf16_rne vs torch cast (tiny): 0 mismatches
+bf16_rne vs torch cast (big): 0 mismatches
+negative control (truncation) mismatches: 1995725 (expect ~half of 4e6)
+svals 900x300 gpu: max err / s1 7.1e-14
+svals 900x300 cpu: max err / s1 9.1e-16
+svd_top 900x300 gpu: rank-20 product rel err 1.1e-12
+svd_top 900x300 cpu: rank-20 product rel err 1.0e-13
+svals 300x900 gpu: max err / s1 7.8e-14
+svals 300x900 cpu: max err / s1 2.7e-15
+svd_top 300x900 gpu: rank-20 product rel err 4.5e-13
+svd_top 300x900 cpu: rank-20 product rel err 2.9e-14
+svals 400x400 gpu: max err / s1 9.6e-14
+svals 400x400 cpu: max err / s1 0.0e+00
+svd_top 400x400 gpu: rank-20 product rel err 3.0e-13
+svd_top 400x400 cpu: rank-20 product rel err 3.3e-17
+floor: achieved/target 1.0000014, W+R on the bf16 grid True, unchanged share 0.744
+overlap planted 1.0000 (1), random 0.0084 (~0.0080)
+timing 5120^2 float64: {'values/gpu': 5.08, 'vectors/gpu': 6.03, 'values/cpu': 20.19, 'vectors/cpu': 32.44} -> chosen {'values': 'gpu', 'vectors': 'gpu'}
+SELFTEST PASS

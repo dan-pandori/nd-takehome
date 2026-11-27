@@ -1,0 +1,37 @@
+[1] B_s2300        prompt ids: 48 match my rebuild, 0 differ | rev=main, seed=48300, temperature=1.0, top_p=1.0, max_tokens=32768, vllm=0.11.0, tp=1, lora_rank=None, samples=1536
+[1] C16            prompt ids: 224 match my rebuild, 0 differ | rev=dpo+s2300.448, seed=62026, temperature=1.0, top_p=1.0, max_tokens=32768, vllm=0.11.0, tp=1, lora_rank=16, samples=1472
+[1] F448           prompt ids: 224 match my rebuild, 0 differ | rev=dpo+s2300.448, seed=62026, temperature=1.0, top_p=1.0, max_tokens=32768, vllm=0.11.0, tp=1, lora_rank=None, samples=1472
+[1] F_dpo_ifb      prompt ids: 0 match my rebuild, 0 differ | rev=main, seed=3001, temperature=1.0, top_p=1.0, max_tokens=32768, vllm=0.11.0, tp=1, lora_rank=None, samples=4008
+[1] F_s0100_ifb    prompt ids: 0 match my rebuild, 0 differ | rev=step_0100, seed=3002, temperature=1.0, top_p=1.0, max_tokens=32768, vllm=0.11.0, tp=1, lora_rank=None, samples=2400
+[1] F_s0750_ifb    prompt ids: 0 match my rebuild, 0 differ | rev=step_0750, seed=3003, temperature=1.0, top_p=1.0, max_tokens=32768, vllm=0.11.0, tp=1, lora_rank=None, samples=2400
+[1] F_s2300_ifb    prompt ids: 0 match my rebuild, 0 differ | rev=main, seed=3004, temperature=1.0, top_p=1.0, max_tokens=32768, vllm=0.11.0, tp=1, lora_rank=None, samples=2356
+[1] T1             prompt ids: 224 match my rebuild, 0 differ | rev=main, seed=62026, temperature=1.0, top_p=1.0, max_tokens=32768, vllm=0.11.0, tp=1, lora_rank=8, samples=1472
+[1] T16            prompt ids: 224 match my rebuild, 0 differ | rev=main, seed=62026, temperature=1.0, top_p=1.0, max_tokens=32768, vllm=0.11.0, tp=1, lora_rank=16, samples=1472
+[1] T256           prompt ids: 224 match my rebuild, 0 differ | rev=main, seed=62026, temperature=1.0, top_p=1.0, max_tokens=32768, vllm=0.11.0, tp=1, lora_rank=256, samples=1232
+[1] T256_stage0    prompt ids: 24 match my rebuild, 0 differ | rev=main, seed=62026, temperature=1.0, top_p=1.0, max_tokens=32768, vllm=0.11.0, tp=1, lora_rank=256, samples=240
+[1] T4             prompt ids: 224 match my rebuild, 0 differ | rev=main, seed=62026, temperature=1.0, top_p=1.0, max_tokens=32768, vllm=0.11.0, tp=1, lora_rank=8, samples=1472
+[1] T64            prompt ids: 224 match my rebuild, 0 differ | rev=main, seed=62026, temperature=1.0, top_p=1.0, max_tokens=32768, vllm=0.11.0, tp=1, lora_rank=64, samples=1472
+[1] dpo            prompt ids: 224 match my rebuild, 0 differ | rev=main, seed=62026, temperature=1.0, top_p=1.0, max_tokens=32768, vllm=0.11.0, tp=1, lora_rank=None, samples=1472
+[1] rows dpo         : 1472/1472 rows carry my prompt length
+[1] rows T1          : 1472/1472 rows carry my prompt length
+[1] rows T4          : 1472/1472 rows carry my prompt length
+[1] rows T16         : 1472/1472 rows carry my prompt length
+[1] rows T64         : 1472/1472 rows carry my prompt length
+[1] rows T256        : 1472/1472 rows carry my prompt length
+[1] rows F448        : 1472/1472 rows carry my prompt length
+[1] rows C16         : 1472/1472 rows carry my prompt length
+[1] rows B_s2300     : 1536/1536 rows carry my prompt length
+[1] rows F_s2300_ifb : 0/2400 rows carry my prompt length
+[1] rows F_dpo_ifb   : 0/4800 rows carry my prompt length
+[3] template boundary (my rendered prompt tail | decoded response head):
+    dpo ifeval_1314: ...'<|im_start|>assistant\n<think>' | 'Okay, so the user is asking which of the two,'
+    dpo ifeval_1314: ...'<|im_start|>assistant\n<think>' | 'Okay, the user is asking which of the two, salmon'
+    T16 ifeval_1314: ...'<|im_start|>assistant\n<think>' | 'Okay, so the user is asking which of the two,'
+    T16 ifeval_1314: ...'<|im_start|>assistant\n<think>' | 'Okay, the user is asking which between salmon and avocado isn'
+    F448 ifbench_64: ...'<|im_start|>assistant\n<think>' | 'Okay, the user wants Python code to extract a filename from'
+    F448 ifbench_64: ...'<|im_start|>assistant\n<think>' | 'Okay, the user is asking me to write Python code that'
+    C16 ifeval_2563: ...'<|im_start|>assistant\n<think>' | 'Okay, so the user wants me to rewrite a sentence from'
+    C16 ifeval_2563: ...'<|im_start|>assistant\n<think>' | "Okay, I need to tackle this query. Let's see"
+[4] B_s2300: run copy == my earlier bucket copy: True
+[4] F_s2300_ifb: run copy == my earlier bucket copy: True
+[4] F_dpo_ifb: run copy == my earlier bucket copy: True
