@@ -1,0 +1,49 @@
+Thu Nov 26 21:06:15 UTC 2026
+NVIDIA H200, 143771 MiB, 575.57.08, 5, 16
+	[4mGPU0	CPU Affinity	NUMA Affinity	GPU NUMA ID[0m
+GPU0	 X 	1,3,5,7,9,11	1		N/A
+
+Legend:
+
+  X    = Self
+  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)
+  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node
+  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)
+  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)
+  PIX  = Connection traversing at most a single PCIe bridge
+  NV#  = Connection traversing a bonded set of # NVLinks
+cpu.max  cfs 1360000
+128
+               total        used        free      shared  buff/cache   available
+Mem:            2015          84         824           0        1117        1931
+/dev/md6         20G   12M   20G   1% /workspace
+overlay         150G   16M  150G   1% /
+GPU 0 remapped:
+        Correctable Error                 : 0
+        Uncorrectable Error               : 0
+        Pending                           : No
+Fetching 7 files:   0%|          | 0/7 [00:00<?, ?it/s]Downloading 'tokenizer.json' to '/workspace/models/tok/.cache/huggingface/download/HgM_lKo9sdSCfRtVg7MMFS7EKqo=.5fe172127988c3709a49d8d2ce20e11bb266cd57.incomplete'
+Downloading 'special_tokens_map.json' to '/workspace/models/tok/.cache/huggingface/download/ahkChHUJFxEmOdq5GDFEmerRzCY=.9d133a8f4995ff315a8a3e68dbba03409d214a8e.incomplete'
+Download complete. Moving file to /workspace/models/tok/special_tokens_map.json
+Downloading 'vocab.json' to '/workspace/models/tok/.cache/huggingface/download/j3m-Hy6QvBddw8RXA1uSWl1AJ0c=.51135344eec01a62fc4deaca39c72ac08f5b9709.incomplete'
+Fetching 7 files:  14%|█▍        | 1/7 [00:00<00:02,  2.72it/s]Downloading 'generation_config.json' to '/workspace/models/tok/.cache/huggingface/download/3EVKVggOldJcKSsGjSdoUCN1AyQ=.cf487411468769eeaa85362efc1ce77a1fc0c47b.incomplete'
+Download complete. Moving file to /workspace/models/tok/generation_config.json
+Downloading 'tokenizer_config.json' to '/workspace/models/tok/.cache/huggingface/download/vzaExXFZNBay89bvlQv-ZcI6BTg=.710f4ea23f5ba53b4e854b210f51de6e08af7f3b.incomplete'
+Download complete. Moving file to /workspace/models/tok/tokenizer_config.json
+Downloading 'merges.txt' to '/workspace/models/tok/.cache/huggingface/download/PtHk0z_I45atnj23IIRhTExwT3w=.354558edcdbd64ca7abd407b8be3d5d09d39d781.incomplete'
+Download complete. Moving file to /workspace/models/tok/vocab.json
+Downloading 'config.json' to '/workspace/models/tok/.cache/huggingface/download/8_PA_wEVGiVa2goH2H4KQOQpvVY=.cb8feeab410ef709e2049c027329459f06178e18.incomplete'
+Download complete. Moving file to /workspace/models/tok/config.json
+Download complete. Moving file to /workspace/models/tok/merges.txt
+Download complete. Moving file to /workspace/models/tok/tokenizer.json
+Fetching 7 files: 100%|██████████| 7/7 [00:00<00:00, 11.16it/s]Fetching 7 files: 100%|██████████| 7/7 [00:00<00:00, 11.16it/s]
+fetched allenai/Olmo-3-32B-Think-DPO@main (97604023f2602a7dfe6d31b1fc229985e0002022) in 2 s, 9.3M
+NLTK_OK 3.9.2
+VERSIONS vllm 0.11.0 torch 2.8.0+cu128 transformers 4.57.1 sympy 1.13.3 cuda True 1
+CUDA_ALLOC_OK 0 NVIDIA H200 68719476736.0
+GRADER_OK 0
+TypeError: Protocols with non-method members don't support issubclass()
+VLLM_LORA_RANKS possible_max_ranks = (8, 16, 32, 64, 128, 256, 320, 512)         possible_lora_extra_vocab
+GPU_TEST 1 1
+GPU_OK 1
+SETUP_DONE 2026-11-26T21:08:16Z

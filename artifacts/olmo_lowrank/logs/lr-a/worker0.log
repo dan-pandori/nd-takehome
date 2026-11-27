@@ -1,0 +1,11 @@
+WORKER 0 up 2026-11-26T21:06:13Z at line 1
+LINE_START 0 1 2026-11-26T21:06:13Z :: bash pod/olmo_lowrank/job.sh T256 dpo main olmo_lowrank/plan/arm.pids 62026 8 --lora /workspace/lowrank/adapters/T256 --lora_name T256 --lora_rank 256 > artifacts/olmo_lowrank/logs/q_T256.log 2>&1
+LINE_END 0 1 rc=0 2026-11-26T23:19:04Z
+LINE_START 0 2 2026-11-26T23:19:04Z :: true # T64 moved to lr-b (2026-11-26 22:17 UTC)
+LINE_END 0 2 rc=0 2026-11-26T23:19:04Z
+LINE_START 0 3 2026-11-26T23:19:04Z :: python olmo_lowrank/adapters.py f448 --dpo /workspace/models/dpo --rl /workspace/models/s2300 --dst /workspace/models/f448 > artifacts/olmo_lowrank/logs/f448_build.log 2>&1 && cp /workspace/models/f448/f448_check.json artifacts/olmo_lowrank/meta/f448_check.json
+LINE_END 0 3 rc=0 2026-11-26T23:20:13Z
+LINE_START 0 4 2026-11-26T23:20:13Z :: bash pod/olmo_lowrank/job.sh F448 f448 dpo+s2300.448 olmo_lowrank/plan/arm.pids 62026 8 > artifacts/olmo_lowrank/logs/q_F448.log 2>&1
+LINE_END 0 4 rc=0 2026-11-27T00:50:52Z
+LINE_START 0 5 2026-11-27T00:50:52Z :: bash pod/olmo_lowrank/job.sh C16 f448 dpo+s2300.448 olmo_lowrank/plan/arm.pids 62026 8 --lora /workspace/lowrank/adapters/C16 --lora_name C16 --lora_rank 16 > artifacts/olmo_lowrank/logs/q_C16.log 2>&1
+LINE_END 0 5 rc=0 2026-11-27T02:42:38Z

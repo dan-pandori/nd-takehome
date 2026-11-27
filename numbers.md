@@ -2740,3 +2740,171 @@ Setup:
 
 **Bucket:** `hf://buckets/dan-pandori/nd-rl/olmo-weights/` (`artifacts/olmo_weights/`: statistics, tables, figures,
 stage 0, logs, re-stage record; `olmo_weights/`: code and manifest). No weights.
+
+## olmo-lowrank
+
+Models (released AI2 checkpoints, pretrained, bf16; none trained here): Olmo 3 32B (32.2 B) base `main` (`c2b61dae`), Think SFT `main` (`a6d7f3cf`), Think DPO `main` (`97604023`, `dpo`), Olmo 3.1 32B Think RL steps 50–2,300 (`step_NNNN`; `s2300` = `main` `97ade57a`); Olmo 3 7B (7.3 B) base / SFT / DPO / Think RL steps 25–1,375 / RL-Zero-IF `main`. Commits and shard sha256: `olmo_lowrank/plan/spectra_jobs.json`, `olmo_weights/manifest/checkpoints.csv`. Pod spend $55.98 (podbudget, 15.33 pod-hours).
+
+### Part 1: spectra (source `olmo_lowrank/tables/changes.csv`, from `artifacts/olmo_lowrank/spectra/<job>/rows.csv` and `full_*.npz`; full float64 spectra of every matrix)
+
+S_k = energy-weighted share of Σ‖ΔW‖² in each matrix's top k singular pieces; Gaussian / floor A at the same k. Medians over matrices: stable rank, signal rank (# σ_i above σ₁ of rounding floor A), spike count (# σ_i above σ₁ of matched-norm rounded noise, floor B).
+
+| model | change | matrices | S1 | S16 | S256 | Gaussian S16 | floor A S16 | median stable rank | median signal rank | median spike count |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 32B | N50 | 448 | 0.008 | 0.033 | 0.169 | 0.0076 | 0.0075 | 77.9 | 1 | 124 |
+| 32B | N100 | 448 | 0.010 | 0.041 | 0.194 | 0.0075 | 0.0075 | 64.1 | 12 | 166 |
+| 32B | N500 | 448 | 0.012 | 0.048 | 0.230 | 0.0075 | 0.0075 | 51.8 | 392 | 222 |
+| 32B | N750 | 448 | 0.014 | 0.057 | 0.263 | 0.0074 | 0.0075 | 45.2 | 1005 | 241 |
+| 32B | N1100 | 448 | 0.018 | 0.072 | 0.295 | 0.0074 | 0.0075 | 37.4 | 1552 | 251 |
+| 32B | N1600 | 448 | 0.113 | 0.265 | 0.469 | 0.0075 | 0.0075 | 9.3 | 1948 | 212 |
+| 32B | N2300 | 448 | 0.090 | 0.218 | 0.428 | 0.0075 | 0.0075 | 11.8 | 2305 | 227 |
+| 32B | I_early | 448 | 0.007 | 0.028 | 0.157 | 0.0075 | 0.0075 | 95.8 | 2 | 114 |
+| 32B | I_mid | 448 | 0.152 | 0.221 | 0.334 | 0.0075 | 0.0075 | 7.0 | 580 | 94 |
+| 32B | I_late | 448 | 0.007 | 0.025 | 0.147 | 0.0073 | 0.0075 | 104.0 | 38 | 144 |
+| 32B | K | 448 | 0.129 | 0.292 | 0.454 | 0.0074 | 0.0075 | 8.3 | 2102 | 158 |
+| 32B | SFT | 448 | 0.005 | 0.033 | 0.238 | 0.0072 | 0.0075 | 149.1 | 4925 | 344 |
+| 32B | DPO | 448 | 0.169 | 0.350 | 0.493 | 0.0094 | 0.0075 | 6.4 | 13 | 74 |
+| 7B | N25 | 224 | 0.016 | 0.040 | 0.204 | 0.0116 | 0.0123 | 120.9 | 0 | 11 |
+| 7B | N100 | 224 | 0.016 | 0.047 | 0.218 | 0.0116 | 0.0123 | 89.0 | 7 | 44 |
+| 7B | N500 | 224 | 0.020 | 0.066 | 0.269 | 0.0116 | 0.0123 | 57.9 | 1559 | 127 |
+| 7B | N1000 | 224 | 0.021 | 0.076 | 0.298 | 0.0116 | 0.0123 | 51.3 | 2248 | 156 |
+| 7B | N1375 | 224 | 0.021 | 0.078 | 0.310 | 0.0116 | 0.0123 | 51.6 | 2470 | 171 |
+| 7B | I_early | 224 | 0.007 | 0.025 | 0.190 | 0.0116 | 0.0123 | 205.2 | 0 | 9 |
+| 7B | I_mid | 224 | 0.003 | 0.017 | 0.178 | 0.0116 | 0.0123 | 390.5 | 43 | 18 |
+| 7B | I_late | 224 | 0.002 | 0.015 | 0.175 | 0.0116 | 0.0123 | 562.7 | 530 | 17 |
+| 7B | K | 224 | 0.013 | 0.054 | 0.257 | 0.0116 | 0.0123 | 81.8 | 2416 | 141 |
+| 7B | SFT | 224 | 0.006 | 0.036 | 0.280 | 0.0113 | 0.0123 | 200.3 | 4081 | 266 |
+| 7B | DPO | 224 | 0.145 | 0.333 | 0.501 | 0.0119 | 0.0123 | 7.4 | 1034 | 62 |
+| 7B | ZIF | 224 | 0.084 | 0.233 | 0.515 | 0.0116 | 0.0123 | 11.5 | 2898 | 142 |
+
+Randomized top-256 (p 64, q 16) against the full spectra, every matrix of every change (`olmo_lowrank/tables/accuracy.csv`): max relative error σ₁ 5.5e-05, top-k shares k ≤ 64 1.9e-04, k = 256 3.8e-03.
+
+LoRA overlap with RL's top-16 subspaces (`olmo_lowrank/tables/lora.csv`; 448 matrices; overlap = mean of left and right, random ≈ 16 / n):
+
+| change | adapter | median overlap | left | right | cos(ΔW_lora, ΔW) | cos with top-16 | share of ⟨ΔW_lora, ΔW⟩ in top 16 / 256 |
+|---|---|---|---|---|---|---|---|
+| N100 | ctrl | 0.0110 | 0.0169 | 0.0050 | 0.00002 | 0.00002 | 0.22 / 0.53 |
+| N100 | main | 0.0156 | 0.0226 | 0.0080 | 0.00107 | 0.00435 | 0.82 / 0.98 |
+| N100 | random (r0; r1–r3 alike) | 0.0030 | 0.0031 | 0.0030 |  |  |  /  |
+| N1100 | ctrl | 0.0118 | 0.0182 | 0.0047 | 0.00015 | 0.00042 | 0.77 / 0.94 |
+| N1100 | main | 0.0213 | 0.0313 | 0.0082 | 0.00449 | 0.01400 | 0.84 / 0.97 |
+| N1100 | random (r0; r1–r3 alike) | 0.0030 | 0.0031 | 0.0031 |  |  |  /  |
+| N1600 | ctrl | 0.0064 | 0.0066 | 0.0041 | 0.00022 | 0.00032 | 0.76 / 0.97 |
+| N1600 | main | 0.0139 | 0.0196 | 0.0068 | 0.00472 | 0.00678 | 0.74 / 0.96 |
+| N1600 | random (r0; r1–r3 alike) | 0.0030 | 0.0031 | 0.0031 |  |  |  /  |
+| N2300 | ctrl | 0.0070 | 0.0086 | 0.0042 | 0.00019 | 0.00030 | 0.74 / 0.97 |
+| N2300 | main | 0.0156 | 0.0237 | 0.0068 | 0.00525 | 0.00865 | 0.77 / 0.96 |
+| N2300 | random (r0; r1–r3 alike) | 0.0030 | 0.0031 | 0.0030 |  |  |  /  |
+| N50 | ctrl | 0.0110 | 0.0167 | 0.0051 | 0.00000 | -0.00005 | -2.01 / -1.45 |
+| N50 | main | 0.0155 | 0.0216 | 0.0081 | 0.00078 | 0.00360 | 0.84 / 0.97 |
+| N50 | random (r0; r1–r3 alike) | 0.0030 | 0.0031 | 0.0030 |  |  |  /  |
+| N500 | ctrl | 0.0115 | 0.0177 | 0.0050 | 0.00007 | 0.00017 | 0.51 / 0.92 |
+| N500 | main | 0.0189 | 0.0282 | 0.0084 | 0.00280 | 0.01045 | 0.82 / 0.97 |
+| N500 | random (r0; r1–r3 alike) | 0.0030 | 0.0031 | 0.0031 |  |  |  /  |
+| N750 | ctrl | 0.0117 | 0.0183 | 0.0048 | 0.00016 | 0.00054 | 0.81 / 1.00 |
+| N750 | main | 0.0207 | 0.0307 | 0.0085 | 0.00369 | 0.01281 | 0.83 / 0.97 |
+| N750 | random (r0; r1–r3 alike) | 0.0030 | 0.0031 | 0.0031 |  |  |  /  |
+
+Part-1 expectations (`olmo_lowrank/tables/expectations_part1.json`): P1a hit; P1b miss; E1 miss; E2 miss; E3 hit; E6 hit; P3 miss; E5 miss.
+
+### Part 2: truncation arms (source `olmo_lowrank/results.csv`, `olmo_lowrank/summary.json`)
+
+Arms on `dpo` (T_k: rank-k LoRA of RL's change, exact SVD; F448: the 448 matrices from s2300; C16: F448 minus the top 16). 48 reach prompts × 16 draws, 176 other arm-A prompts × 4; olmo-ifcurve decoding (T 1, top-p 1, 32,768 tokens, vLLM 0.11.0, one H200). R = reach prompts' estimated genuine rate (hand gate), A = 218 prompts' strict pass@1. G = (arm − dpo) / (s2300 − dpo), 95 % paired prompt bootstrap (10,000).
+
+| metric | arm | rate | dpo | s2300 | G | 95 % interval |
+|---|---|---|---|---|---|---|
+| R | T1 | 0.000 | 0.000 | 0.477 | 0.000 | [0.000, 0.000] |
+| R | T4 | 0.005 | 0.000 | 0.477 | 0.011 | [0.003, 0.021] |
+| R | T16 | 0.075 | 0.000 | 0.477 | 0.158 | [0.101, 0.221] |
+| R | T64 | 0.292 | 0.000 | 0.477 | 0.613 | [0.503, 0.730] |
+| R | T256 | 0.427 | 0.000 | 0.477 | 0.895 | [0.796, 1.008] |
+| R | F448 | 0.447 | 0.000 | 0.477 | 0.936 | [0.864, 1.019] |
+| R | C16 | 0.240 | 0.000 | 0.477 | 0.502 | [0.376, 0.634] |
+| A | T1 | 0.287 | 0.289 | 0.691 | -0.005 | [-0.046, 0.035] |
+| A | T4 | 0.308 | 0.289 | 0.691 | 0.048 | [-0.000, 0.093] |
+| A | T16 | 0.429 | 0.289 | 0.691 | 0.348 | [0.279, 0.423] |
+| A | T64 | 0.583 | 0.289 | 0.691 | 0.733 | [0.663, 0.808] |
+| A | T256 | 0.672 | 0.289 | 0.691 | 0.953 | [0.897, 1.012] |
+| A | F448 | 0.717 | 0.289 | 0.691 | 1.067 | [1.012, 1.131] |
+| A | C16 | 0.538 | 0.289 | 0.691 | 0.619 | [0.541, 0.700] |
+| A_fresh_dpo | T1 | 0.287 | 0.288 | 0.691 | -0.001 | [-0.060, 0.053] |
+| A_fresh_dpo | T4 | 0.308 | 0.288 | 0.691 | 0.051 | [-0.011, 0.109] |
+| A_fresh_dpo | T16 | 0.429 | 0.288 | 0.691 | 0.351 | [0.277, 0.428] |
+| A_fresh_dpo | T64 | 0.583 | 0.288 | 0.691 | 0.734 | [0.664, 0.808] |
+| A_fresh_dpo | T256 | 0.672 | 0.288 | 0.691 | 0.953 | [0.897, 1.012] |
+| A_fresh_dpo | F448 | 0.717 | 0.288 | 0.691 | 1.067 | [1.012, 1.130] |
+| A_fresh_dpo | C16 | 0.538 | 0.288 | 0.691 | 0.621 | [0.542, 0.701] |
+| R_strict | T1 | 0.003 | 0.000 | 0.694 | 0.004 | [0.000, 0.010] |
+| R_strict | T4 | 0.006 | 0.000 | 0.694 | 0.009 | [0.002, 0.018] |
+| R_strict | T16 | 0.085 | 0.000 | 0.694 | 0.122 | [0.075, 0.172] |
+| R_strict | T64 | 0.344 | 0.000 | 0.694 | 0.495 | [0.413, 0.575] |
+| R_strict | T256 | 0.549 | 0.000 | 0.694 | 0.792 | [0.725, 0.854] |
+| R_strict | F448 | 0.665 | 0.000 | 0.694 | 0.959 | [0.919, 1.001] |
+| R_strict | C16 | 0.281 | 0.000 | 0.694 | 0.405 | [0.313, 0.493] |
+
+Readings (pre-registered thresholds): low-rank carries it: does not hold; high-rank: does not hold; outside the 448 matrices: does not hold; k50 R 64, A 64.
+
+Hand gate per arm (reach prompts; `olmo_lowrank/hand_arm_summary.csv`, `olmo_lowrank/handcheck.csv`):
+
+| arm | draws | strict | labelled | genuine | gamed | gamed share | from readers / screen / inherited | est. genuine rate |
+|---|---|---|---|---|---|---|---|---|
+| dpo | 768 | 0 | 0 | 0 | 0 |  | 0 / 0 / 0 | 0.000 |
+| T1 | 768 | 2 | 2 | 0 | 2 | 1.00 | 2 / 0 / 0 | 0.000 |
+| T4 | 768 | 5 | 5 | 4 | 1 | 0.20 | 5 / 0 / 0 | 0.005 |
+| T16 | 768 | 65 | 65 | 58 | 7 | 0.11 | 59 / 2 / 4 | 0.076 |
+| T64 | 768 | 264 | 218 | 185 | 33 | 0.15 | 207 / 3 / 8 | 0.292 |
+| T256 | 768 | 422 | 298 | 229 | 69 | 0.23 | 282 / 11 / 5 | 0.427 |
+| F448 | 768 | 511 | 335 | 232 | 103 | 0.31 | 319 / 7 / 9 | 0.447 |
+| C16 | 768 | 216 | 183 | 156 | 27 | 0.15 | 181 / 2 / 0 | 0.240 |
+| B_s2300 | 1536 | 1066 | 368 | 251 | 117 | 0.32 | 345 / 10 / 13 | 0.477 |
+
+Compute (`olmo_lowrank/compute.csv`; registry rows via `olmo_lowrank/compute_rows.py`):
+
+| job | GPU | GPU-seconds | generated tokens | draws | cut at 32,768 |
+|---|---|---|---|---|---|
+| C16 | NVIDIA H200 | 6694 | 9577410 | 1472 | 1 |
+| F448 | NVIDIA H200 | 5430 | 9390637 | 1472 | 0 |
+| T1 | NVIDIA H200 | 4498 | 6856209 | 1472 | 0 |
+| T16 | NVIDIA H200 | 5917 | 8419961 | 1472 | 14 |
+| T256 | NVIDIA H200 | 9589 | 9290432 | 1472 | 2 |
+| T4 | NVIDIA H200 | 4576 | 6920863 | 1472 | 10 |
+| T64 | NVIDIA H200 | 6701 | 9160345 | 1472 | 2 |
+| dpo | NVIDIA H200 | 3820 | 6720092 | 1472 | 3 |
+| spectra_R32 | NVIDIA H100 80GB HBM3 | 2438 | 0 | 0 | 0 |
+| spectra_S32 | NVIDIA H100 80GB HBM3 | 527 | 0 | 0 | 0 |
+| spectra_R7 | NVIDIA H100 80GB HBM3 | 962 | 0 | 0 | 0 |
+| adapters_svd | NVIDIA H200 | 704 | 0 | 0 | 0 |
+
+Expectations (pre-registered; Part 2 on R unless stated): P1 miss (P1a hit: median spike count 227 ≥ 1; P1b miss:
+single 50-step intervals' S16 = 3.4–3.8× floor A's, mid interval 29×); P2 miss (G_R(T16) 0.158; on A 0.348 would be
+inside 0.3–0.7); P3 miss (lora_main median overlap 0.0156 < 0.052); E1 miss (S16 29× Gaussian); E2 miss (SFT S16 0.033
+< RL 0.218); E3 hit (Spearman ρ 0.96 over the 7 net changes); E4: G(T16) < 0.3 hit, G(T256) < 0.5 miss (0.895),
+G(F448) ≥ 0.75 hit, G(C16) ≥ 0.5 hit (0.502, interval 0.376–0.634 straddles 0.5: tentative), its "high-rank" reading
+miss; E5 miss (main / ctrl = 2.2 < 3); E6 hit (7B S16 0.078 < 32B 0.218). Source: `olmo_lowrank/tables/expectations_part1.json`,
+`olmo_lowrank/summary.json`.
+
+Hand gate (`olmo_lowrank/handcheck.csv`): 1,400 items, 1,802 reads (all reach prompts; the first min(strict, 8) strict
+successes per arm × prompt cell, 32-draw cells for `s2300`); 367 items read twice (first two agree on 332, 90 %), 35 read
+three times; 35 draws screened (rule 1), 39 inherited (identical answer). 119 confirmations
+(`artifacts/olmo_lowrank/hand/confirm.csv`): 33 checker disagreements adjudicated under rules 1–14 (7 reader labels
+overruled), 86 high / medium proposals of the four blind consistency audits accepted, 10 low-confidence ones rejected
+(policy fixed before the audits; `log.md`). Unlabelled strict successes beyond the first 8 of a cell take the cell's
+labelled genuine share. Cross-run calibration (`hand.py calib`): on 231 `B_s2300` items with an olmo-ifcurve final label,
+this run agrees on 206 (89 %); of the 25 disagreements, 12 are gamed here / genuine there and 13 the reverse. Rule 6
+(ALL CAPS for title case) decided one label (an `s2300` item): the strict reading moves G by < 0.01.
+
+Cut share at 32,768 tokens (`cells.py check`): dpo 3 / 1,472, T1 0, T4 10, T16 14 (0.95 %), T64 2, T256 2, F448 0,
+C16 1; stored `s2300` rows 0. Zero-delta check (`artifacts/olmo_lowrank/stage0/zero2_diff.txt`): `dpo` plain vs `dpo` +
+an all-zero rank-8 LoRA, prompt log-probs of 1,451 tokens, bitwise identical in the second pair of runs; plain run 1 vs
+run 2 differ by mean 0.010 (max 0.23).
+
+Pods (podbudget, billed rates): lr-a community H200 $3.59/h 6.48 h $23.27 (stage 0, adapters, T256, F448, C16); lr-b
+community H200 7.20 h $25.85 (dpo, T1, T16, T4, T64); lr-e secure H100 80GB $4.39/h 1.16 h $5.10 (Part 1); three pods on
+a faulty H200 GPU (25 uncorrectable remapped rows) $1.76; total $55.98 (RunPod balance fell $56.59, which also covers
+four bad-host pods removed within a minute). Compute rows: `olmo_lowrank/compute.csv`; registry
+`hf://buckets/dan-pandori/nd-rl/registry/olmo-lowrank/`.
+
+Bucket: `hf://buckets/dan-pandori/nd-rl/olmo-lowrank/artifacts/olmo_lowrank/` — `samples/`, `graded/` (every draw's text,
+token ids and grade), `adapters/` (T1–T256, C16, Z8; sha256 in `olmo_lowrank/manifest_adapters.csv`), `spectra/<job>/`
+(`full_*.npz`, `sigma_*.npz`), `adapters_svd/` (exact spectra of RL's change), `hand/items/`. Listed with sha256 in
+`artifacts/MANIFEST.jsonl` (bulk files).

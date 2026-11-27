@@ -451,3 +451,11 @@ OLMO-WEIGHTS DONE 2026-11-25T07:14:59Z
   dollars binding; hard stop 2026-11-28T19:44Z.
 - 2026-11-26T20:03:04Z: pre-registration `preregistration/olmo-lowrank.md` written and committed before any pod.
 - 2026-11-26T20:48:43Z: stage 0 done on lr-a (re-cost $56 ≤ $72, proceed); pods lr-b … lr-e being created (Part 1 spectra on lr-e; arms on lr-a … lr-d).
+- 2026-11-27T05:37:11Z: done. RL's change to Olmo 3 32B (DPO → 3.1 Think step 2,300) is spikes on a floor (top-16 pieces 22 % of
+  ‖ΔW‖², noise 0.75 %; median 227 directions above same-norm noise); SFT's is diffuse (3.3 %), DPO's most concentrated
+  (35 %). Truncation: G (reach genuine / 218 strict) T16 0.16 / 0.35, T64 0.61 / 0.73, T256 0.90 / 0.95, F448 0.94 / 1.07,
+  C16 0.50 / 0.62 → none of the three pre-registered readings holds; k₅₀ = 64. Expectations: P1, P2, P3, E1, E2, E5
+  and E4's "high-rank" call missed; E3, E6 hit. $55.98 of $80. Write-up `run_olmo_lowrank.md`, numbers `numbers.md`
+  § olmo-lowrank, plain summary `olmo_lowrank/plain_summary.md`, bucket `hf://buckets/dan-pandori/nd-rl/olmo-lowrank/`.
+
+OLMO-LOWRANK DONE 2026-11-27T05:37:11Z

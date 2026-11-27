@@ -119,9 +119,6 @@ def panel2(ax):
         for x, g, lo, hi in pts:
             ax.plot([x, x], [lo, hi], color=col, lw=1.2)
             ax.plot([x], [g], marker="o", ms=7, color=col, mec=SURF, mew=1.5, zorder=3)
-        if tk:
-            ax.annotate(lab, (tk[-1][0], tk[-1][1]), xytext=(6, 10 if metric == "R" else -10), textcoords="offset points",
-                        fontsize=8, color=INK, va="center")
     for y, t in ((0.0, "dpo"), (1.0, "s2300")):
         ax.axhline(y, color=MUTED, lw=1)
         ax.annotate(t, (7.45, y), fontsize=8, color=INK2, va="center")
